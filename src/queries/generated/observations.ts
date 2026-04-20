@@ -45,7 +45,7 @@ const injectedRtkApi = api.injectEndpoints({
         params: {
           organizationId: queryArg.organizationId,
           plantingSiteId: queryArg.plantingSiteId,
-          includePlants: queryArg.includePlants,
+          depth: queryArg.depth,
           limit: queryArg.limit,
         },
       }),
@@ -197,7 +197,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/results`,
         params: {
-          includePlants: queryArg.includePlants,
+          depth: queryArg.depth,
         },
       }),
     }),
@@ -236,8 +236,7 @@ export type ListObservationResultsApiResponse = /** status 200 OK */ ListObserva
 export type ListObservationResultsApiArg = {
   organizationId?: number;
   plantingSiteId?: number;
-  /** Whether to include plants in the results. Default to false */
-  includePlants?: boolean;
+  depth?: 'Site' | 'Stratum' | 'Substratum' | 'Plot' | 'Plant';
   /** Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
   limit?: number;
 };
@@ -379,8 +378,7 @@ export type ReplaceObservationPlotApiArg = {
 export type GetObservationResultsApiResponse = /** status 200 OK */ GetObservationResultsResponsePayload;
 export type GetObservationResultsApiArg = {
   observationId: number;
-  /** Whether to include plants in the results. Default to false */
-  includePlants?: boolean;
+  depth?: 'Site' | 'Stratum' | 'Substratum' | 'Plot' | 'Plant';
 };
 export type ObservationPayload = {
   /** Date this observation is scheduled to end. */

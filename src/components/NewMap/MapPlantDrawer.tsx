@@ -23,7 +23,7 @@ const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDraw
   const { format } = useNumberFormatter();
   const { currentData: observationResultResponse } = useGetObservationResultsQuery({
     observationId,
-    includePlants: true,
+    depth: 'Plant',
   });
 
   const { species } = useSpeciesData();
