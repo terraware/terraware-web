@@ -134,6 +134,11 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
         setZoom(map.getZoom());
         loadImages(map);
         onMapLoad?.();
+
+        const mbMap = map.getMap();
+        mbMap.on('idle', () => {
+          map.getContainer().setAttribute('data-map-idle', 'true');
+        });
       }
     },
     [loadImages, mapRef, onMapLoad]
