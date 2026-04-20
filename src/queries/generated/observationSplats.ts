@@ -21,6 +21,12 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.generateSplatRequestPayload,
       }),
     }),
+    deleteObservationSplat: build.mutation<DeleteObservationSplatApiResponse, DeleteObservationSplatApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/observations/${queryArg.observationId}/splats/${queryArg.fileId}`,
+        method: 'DELETE',
+      }),
+    }),
     getObservationSplatFile: build.query<GetObservationSplatFileApiResponse, GetObservationSplatFileApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/splats/${queryArg.fileId}`,
@@ -59,6 +65,12 @@ export type GenerateObservationSplatFileApiResponse =
 export type GenerateObservationSplatFileApiArg = {
   observationId: number;
   generateSplatRequestPayload: GenerateSplatRequestPayload;
+};
+export type DeleteObservationSplatApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type DeleteObservationSplatApiArg = {
+  observationId: number;
+  fileId: number;
 };
 export type GetObservationSplatFileApiResponse = /** status 200 The requested operation succeeded. */
   | object
@@ -138,6 +150,7 @@ export const {
   useListObservationSplatsQuery,
   useLazyListObservationSplatsQuery,
   useGenerateObservationSplatFileMutation,
+  useDeleteObservationSplatMutation,
   useGetObservationSplatFileQuery,
   useLazyGetObservationSplatFileQuery,
   useSetObservationSplatAnnotationsMutation,

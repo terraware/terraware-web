@@ -1,11 +1,11 @@
 import React from 'react';
-import { useLocation } from 'react-router';
 
 import { Grid, useTheme } from '@mui/material';
 
 import DismissibleWrapper from 'src/components/common/DismissibleWrapper';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
 import isEnabled from 'src/features';
+import { useOrganization } from 'src/providers';
 import VirtualWalkthroughMessages from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughMessages';
 
 import VirtualWalkthroughCard from '../TerrawareHomeView/VirtualWalkthroughCard';
@@ -17,11 +17,9 @@ import WelcomeBanner from './WelcomeBanner';
 
 const ParticipantHomeView = () => {
   const theme = useTheme();
-  const location = useLocation();
+  const { selectedOrganization } = useOrganization();
 
   const virtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots');
-  const virtualWalkthroughStatus = (location.state as { virtualWalkthroughStatus?: string } | null)
-    ?.virtualWalkthroughStatus;
 
   return (
     <ParticipantPage>
@@ -32,11 +30,7 @@ const ParticipantHomeView = () => {
 
         {virtualWalkthroughEnabled && (
           <Grid item marginTop={theme.spacing(2)}>
-            <VirtualWalkthroughMessages
-              processingCount={virtualWalkthroughStatus === 'processing' ? 1 : 0}
-              hasUploadFailed={virtualWalkthroughStatus === 'failed'}
-              hasUnableToProcess={virtualWalkthroughStatus === 'unable-to-process'}
-            />
+            <VirtualWalkthroughMessages organizationId={selectedOrganization!.id} />
           </Grid>
         )}
 

@@ -2755,6 +2755,76 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/organizations/{organizationId}/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Uploads a photo or video associated with an organization. */
+        post: operations["uploadOrganizationMediaFile"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/organizations/{organizationId}/media/{fileId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Downloads an organization media file. For videos, this is the raw video file, not a streamable version. */
+        get: operations["downloadOrganizationMediaFile"];
+        /** Updates an organization media file's metadata. */
+        put: operations["updateOrganizationMediaFile"];
+        post?: never;
+        /** Deletes an organization media file. */
+        delete: operations["deleteOrganizationMediaFile"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/organizations/{organizationId}/media/{fileId}/stream": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets Mux stream details for an organization video. */
+        get: operations["getOrganizationMediaFileStream"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/organizations/{organizationId}/media/{fileId}/thumbnail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Downloads a thumbnail image for an organization media file. */
+        get: operations["getOrganizationMediaFileThumbnail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/organizations/{organizationId}/roles": {
         parameters: {
             query?: never;
@@ -2765,6 +2835,92 @@ export interface paths {
         /** Lists the roles in an organization. */
         get: operations["listOrganizationRoles"];
         put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/organizations/{organizationId}/splats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Initiates splat generation from an organization video. */
+        post: operations["generateOrganizationSplat"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/organizations/{organizationId}/splats/{fileId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Downloads a splat model for an organization video. */
+        get: operations["getOrganizationSplatFile"];
+        put?: never;
+        post?: never;
+        /** Deletes a 3D Gaussian splat model for an organization video. */
+        delete: operations["deleteOrganizationSplat"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/organizations/{organizationId}/splats/{fileId}/annotations": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Sets annotations for a splat model of an organization video. */
+        post: operations["setOrganizationSplatAnnotations"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/organizations/{organizationId}/splats/{fileId}/info": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets splat info and annotations for an organization video. */
+        get: operations["getOrganizationSplatInfo"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/organizations/{organizationId}/splats/{fileId}/needsAttention": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Flags a splat as needing administrator attention. */
+        put: operations["setOrganizationSplatNeedsAttention"];
         post?: never;
         delete?: never;
         options?: never;
@@ -4113,7 +4269,8 @@ export interface paths {
         get: operations["getObservationSplatFile"];
         put?: never;
         post?: never;
-        delete?: never;
+        /** Deletes a 3D Gaussian splat model from an observation. */
+        delete: operations["deleteObservationSplat"];
         options?: never;
         head?: never;
         patch?: never;
@@ -7241,6 +7398,7 @@ export interface components {
         };
         GetAllSiteT0DataSetResponsePayload: {
             allSet: boolean;
+            plots: components["schemas"]["MonitoringPlotT0StatusPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         GetApplicationDeliverablesResponsePayload: {
@@ -7412,6 +7570,13 @@ export interface components {
         };
         GetOneAssignedPlotResponsePayload: {
             plot: components["schemas"]["AssignedPlotPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        GetOrganizationMediaStreamResponsePayload: {
+            /** Format: int64 */
+            fileId: number;
+            playbackId: string;
+            playbackToken: string;
             status: components["schemas"]["SuccessOrError"];
         };
         GetOrganizationNurserySummaryResponsePayload: {
@@ -8269,6 +8434,13 @@ export interface components {
             plotNumber: number;
             /** Format: int32 */
             sizeMeters: number;
+        };
+        MonitoringPlotT0StatusPayload: {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            observed: boolean;
+            substratumObserved: boolean;
+            t0set: boolean;
         };
         MonitoringSpeciesSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
             /** Format: int64 */
@@ -10247,7 +10419,7 @@ export interface components {
             cursor?: string;
             fields: string[];
             filters?: components["schemas"]["PrefixedSearch"][];
-            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlots" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
+            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlots" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
             search?: components["schemas"]["SearchNodePayload"];
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
         };
@@ -10342,6 +10514,9 @@ export interface components {
         };
         SetSplatAnnotationsRequestPayload: {
             annotations: components["schemas"]["SetSplatAnnotationRequestPayload"][];
+        };
+        SetSplatNeedsAttentionRequestPayload: {
+            needsAttention: boolean;
         };
         SimpleErrorResponsePayload: {
             error: components["schemas"]["ErrorDetails"];
@@ -11189,6 +11364,10 @@ export interface components {
         UpdateOrganizationInternalTagsRequestPayload: {
             tagIds: number[];
         };
+        UpdateOrganizationMediaRequestPayload: {
+            caption?: string;
+            gpsCoordinates?: components["schemas"]["Point"];
+        };
         UpdateOrganizationRequestPayload: {
             /**
              * @description ISO 3166 alpha-2 code of organization's country.
@@ -11543,6 +11722,14 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
             /** Format: int64 */
             valueId: number;
+        };
+        UploadOrganizationMediaRequestPayload: {
+            caption?: string;
+        };
+        UploadOrganizationMediaResponsePayload: {
+            /** Format: int64 */
+            fileId: number;
+            status: components["schemas"]["SuccessOrError"];
         };
         UploadPlotMediaRequestPayload: {
             caption?: string;
@@ -17739,6 +17926,205 @@ export interface operations {
             };
         };
     };
+    uploadOrganizationMediaFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organizationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                    payload: components["schemas"]["UploadOrganizationMediaRequestPayload"];
+                };
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["UploadOrganizationMediaResponsePayload"];
+                };
+            };
+        };
+    };
+    downloadOrganizationMediaFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organizationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            /** @description The media file does not exist in this organization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    updateOrganizationMediaFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organizationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateOrganizationMediaRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The media file does not exist in this organization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    deleteOrganizationMediaFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organizationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The media file does not exist in this organization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getOrganizationMediaFileStream: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organizationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetOrganizationMediaStreamResponsePayload"];
+                };
+            };
+            /** @description The media file does not exist in this organization, or is not a video. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getOrganizationMediaFileThumbnail: {
+        parameters: {
+            query?: {
+                /** @description Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+                maxWidth?: number;
+                /** @description Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+                maxHeight?: number;
+            };
+            header?: never;
+            path: {
+                organizationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            /** @description The media file does not exist in this organization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
     listOrganizationRoles: {
         parameters: {
             query?: never;
@@ -17757,6 +18143,227 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ListOrganizationRolesResponsePayload"];
+                };
+            };
+        };
+    };
+    generateOrganizationSplat: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organizationId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["GenerateSplatRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The media file does not exist in this organization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getOrganizationSplatFile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organizationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            /** @description The video is still being processed and the model is not ready yet. */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": Record<string, never>;
+                };
+            };
+            /** @description The media file does not exist in this organization. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The system was unable to generate a splat from the requested file. */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    deleteOrganizationSplat: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organizationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The media file does not exist in this organization, or has no splat. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    setOrganizationSplatAnnotations: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organizationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetSplatAnnotationsRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The media file does not exist in this organization, or has no splat. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getOrganizationSplatInfo: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organizationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetObservationSplatInfoResponsePayload"];
+                };
+            };
+            /** @description The media file does not exist in this organization, or has no splat. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    setOrganizationSplatNeedsAttention: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                organizationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetSplatNeedsAttentionRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The media file does not exist in this organization, or has no splat. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
                 };
             };
         };
@@ -20809,6 +21416,38 @@ export interface operations {
             };
             /** @description The system was unable to generate a splat from the requested file. */
             422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    deleteObservationSplat: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The plot observation does not exist, or does not have a splat for the requested file ID. */
+            404: {
                 headers: {
                     [name: string]: unknown;
                 };

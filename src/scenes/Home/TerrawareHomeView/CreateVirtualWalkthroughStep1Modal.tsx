@@ -5,6 +5,12 @@ import { FileChooser, Icon } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useOrganization } from 'src/providers';
+import {
+  UploadOrganizationMediaRequestPayload,
+  useUploadOrganizationMediaFileMutation,
+} from 'src/queries/generated/organizationMedia';
+import { useGenerateOrganizationSplatMutation } from 'src/queries/generated/organizationSplats';
 import strings from 'src/strings';
 
 import CreateVirtualWalkthroughStep2Modal from './CreateVirtualWalkthroughStep2Modal';
@@ -19,8 +25,13 @@ const CreateVirtualWalkthroughStep1Modal = ({
   onClose,
 }: CreateVirtualWalkthroughStep1ModalProps): JSX.Element => {
   const theme = useTheme();
+  const { selectedOrganization } = useOrganization();
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
   const [showStep2, setShowStep2] = useState(false);
+
+  const [uploadMedia, { isLoading: isUploadingMedia }] = useUploadOrganizationMediaFileMutation();
+  const [generateSplat, { isLoading: isGeneratingSplat }] = useGenerateOrganizationSplatMutation();
+  const isUploading = isUploadingMedia || isGeneratingSplat;
 
   const handleSetFiles = (files: File[]) => {
     if (files.length > 0) {
@@ -34,8 +45,29 @@ const CreateVirtualWalkthroughStep1Modal = ({
     setSelectedFile(undefined);
   };
 
-  const handleUpload = () => {
-    // TODO: wire up upload API (upload video, associate with planting site, generate splat)
+  const handleUpload = async () => {
+    if (!selectedFile || !selectedOrganization) {
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append('file', selectedFile);
+    formData.append('payload', new Blob([JSON.stringify({})], { type: 'application/json' }));
+
+    const uploadResult = await uploadMedia({
+      organizationId: selectedOrganization.id,
+      body: formData as unknown as { file: Blob; payload: UploadOrganizationMediaRequestPayload },
+    });
+
+    if ('error' in uploadResult || !uploadResult.data?.fileId) {
+      return;
+    }
+
+    await generateSplat({
+      organizationId: selectedOrganization.id,
+      generateSplatRequestPayload: { fileId: uploadResult.data.fileId },
+    });
+
     handleCloseStep2();
     onClose();
   };
@@ -44,7 +76,7 @@ const CreateVirtualWalkthroughStep1Modal = ({
     <>
       <DialogBox
         onClose={onClose}
-        open={open}
+        open={open && !showStep2}
         title={strings.CREATE_VIRTUAL_WALKTHROUGH}
         size='large'
         middleButtons={[
@@ -106,7 +138,12 @@ const CreateVirtualWalkthroughStep1Modal = ({
       </DialogBox>
 
       {showStep2 && selectedFile && (
-        <CreateVirtualWalkthroughStep2Modal file={selectedFile} onClose={handleCloseStep2} onUpload={handleUpload} />
+        <CreateVirtualWalkthroughStep2Modal
+          file={selectedFile}
+          isUploading={isUploading}
+          onClose={handleCloseStep2}
+          onUpload={() => void handleUpload()}
+        />
       )}
     </>
   );

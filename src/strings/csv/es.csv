@@ -2389,9 +2389,9 @@ VIEWING,Visualización,fb67a07d
 VINE,Enredadera,c39d21fb
 VIRTUAL,Virtual,51d865ab
 VIRTUAL_PLOTS,Parcelas virtuales,74b74d96
-VIRTUAL_WALKTHROUGH_STEP_1,Camine por el área que desea registrar a un ritmo constante.,590d04be
-VIRTUAL_WALKTHROUGH_STEP_2,Recorra toda el área dos veces en formación de espiral.,75ea84f9
-VIRTUAL_WALKTHROUGH_STEP_3,"Mantenga la cámara estable, siempre apuntando al centro.",1db14cb7
+VIRTUAL_WALKTHROUGH_STEP_1,Camine por el área que desea registrar a un ritmo constante.,d9da91c5
+VIRTUAL_WALKTHROUGH_STEP_2,Recorra toda el área en una formación en espiral como se muestra.,5b77fcc9
+VIRTUAL_WALKTHROUGH_STEP_3,"Mantenga la cámara estable, siempre apuntando hacia el centro.",9e4497e3
 VIRTUAL_WALKTHROUGHS,Recorridos virtuales,74c630f5
 VISIT_VIRTUAL_PLOT,Visitar parcela virtual,22d34c8b
 VOTER,Votante: {0},46578e94
@@ -2461,6 +2461,7 @@ YOU_ARE_ABOUT_TO_APPROVE_THIS_SPECIES_DELIVERABLE,"Usted está a punto de aproba
 YOU_ARE_ABOUT_TO_PUBLISH,Va a publicar en el portal del financiador.,8adda943
 YOU_ARE_ABOUT_TO_SUBMIT_THIS_SPECIES_DELIVERABLE,¿Está seguro(a) de que desea enviar esta lista de especies para su aprobación?,47f7bdd3
 YOU_ARE_HERE,Se encuentra aquí,183a5491
+YOU_CAN_NOW_CREATE_VIRTUAL_WALKTHROUGHS,Ahora puede crear Recorridos Virtuales en Terraware. Consulte nuestro {0} para más detalles.,769f02b1
 YOU_HAVE_NOT_UPLOADED_ANY_PHOTOS_OR_VIDEOS,No ha subido ninguna foto ni video,f83261aa
 YOU_HAVE_NOT_UPLOADED_ANY_PLOT_CORNER_PHOTOS,No ha subido ninguna foto de las esquinas de la parcela,4f10d7d3
 YOU_HAVE_UNPUBLISHED_CHANGES,Tiene cambios no publicados,1825c403
