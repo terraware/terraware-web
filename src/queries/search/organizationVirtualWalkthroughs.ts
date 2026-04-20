@@ -41,16 +41,21 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
       transformResponse: (results: SearchOrganizationVirtualWalkthroughsApiResponse) =>
-        results.results.map((result) => ({
-          fileId: Number(result.fileId),
-          splatStatus: result.splatStatus as SplatStatus,
-          needsAttention: result.needsAttention === 'true',
-          type: result.type,
-          contentType: result.contentType,
-          createdTime: result.createdTime,
-          latitude: result.latitude !== undefined ? Number(result.latitude) : undefined,
-          longitude: result.longitude !== undefined ? Number(result.longitude) : undefined,
-        })),
+        results.results
+          .filter(
+            (result): result is SearchOrganizationVirtualWalkthroughApiResult & { splatStatus: string } =>
+              result.splatStatus !== undefined
+          )
+          .map((result) => ({
+            fileId: Number(result.fileId),
+            splatStatus: result.splatStatus as SplatStatus,
+            needsAttention: result.needsAttention === 'true',
+            type: result.type,
+            contentType: result.contentType,
+            createdTime: result.createdTime,
+            latitude: result.latitude !== undefined ? Number(result.latitude) : undefined,
+            longitude: result.longitude !== undefined ? Number(result.longitude) : undefined,
+          })),
       providesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
     }),
   }),
