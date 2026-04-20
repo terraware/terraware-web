@@ -768,7 +768,8 @@ const ObservationMap = ({
               selectedPhotos.find((selected) => 'photo' in selected && selected.photo.fileId === photo.fileId) !==
               undefined,
             properties: {
-              adHocPlotId: adHocPlot.monitoringPlotId,
+              observationId: adHocResults.observationId,
+              monitoringPlotId: adHocPlot.monitoringPlotId,
               photo,
             },
           };
