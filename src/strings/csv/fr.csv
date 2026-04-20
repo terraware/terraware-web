@@ -2373,9 +2373,9 @@ VIDEO_LINK,Lien vidéo,2546979d
 VIDEO_PROCESSING,Traitement de la vidéo,998e847c
 VIDEO_PROCESSING_DESCRIPTION,Il vous reste {0} vidéo(s) en cours de traitement. Cela peut prendre jusqu'à 12 heures.,d85b02f6
 VIDEO_UNABLE_TO_PROCESS,Impossible de traiter la vidéo,3817bfb4
-VIDEO_UNABLE_TO_PROCESS_DESCRIPTION,"Nous n'avons pas pu générer le modèle à partir de la vidéo fournie. Pour des conseils afin d'améliorer votre vidéo, consultez le {0}. Vous pouvez retirer la vidéo du tableau ci-dessous. {1} ou {2}.",a9655e8d
+VIDEO_UNABLE_TO_PROCESS_DESCRIPTION,"Nous n'avons pas pu générer la visite virtuelle à partir de la vidéo fournie. Pour des conseils afin d'améliorer votre vidéo, consultez le {0}. Vous pouvez retirer la vidéo du tableau ci-dessous. {1} ou {2}.",fe362adb
 VIDEO_UPLOAD_FAILED,Échec du téléversement de la vidéo,2406bea0
-VIDEO_UPLOAD_FAILED_DESCRIPTION,"Le téléversement de votre vidéo a échoué. {0}. Pour des conseils afin d'améliorer votre vidéo, consultez le {1}.",0fbf7c0c
+VIDEO_UPLOAD_FAILED_DESCRIPTION,Le téléchargement de votre vidéo a échoué. {0}. Découvrez pourquoi votre vidéo a pu échouer en visitant le {1}.,839af7da
 VIEW,Voir,02cff17a
 VIEW_3D_MODEL,Voir le modèle 3D,fc2e2960
 VIEW_APPLICATION,Voir la demande,bbdc193f

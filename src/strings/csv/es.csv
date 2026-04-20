@@ -2373,9 +2373,9 @@ VIDEO_LINK,Enlace de video,2546979d
 VIDEO_PROCESSING,Procesamiento de video,998e847c
 VIDEO_PROCESSING_DESCRIPTION,Tiene {0} video(s) aún en proceso. Esto puede tardar hasta 12 horas.,d85b02f6
 VIDEO_UNABLE_TO_PROCESS,No se pudo procesar el video,3817bfb4
-VIDEO_UNABLE_TO_PROCESS_DESCRIPTION,"No pudimos generar el modelo a partir del video proporcionado. Para obtener consejos sobre cómo mejorar su video, consulte el {0}. Puede eliminar el video de la tabla a continuación. {1} o {2}.",a9655e8d
+VIDEO_UNABLE_TO_PROCESS_DESCRIPTION,"No pudimos generar el recorrido virtual a partir del video proporcionado. Para obtener consejos sobre cómo mejorar su video, consulte el {0}. Puede eliminar el video de la tabla a continuación. {1} o {2}.",fe362adb
 VIDEO_UPLOAD_FAILED,Error al cargar el video,2406bea0
-VIDEO_UPLOAD_FAILED_DESCRIPTION,"No se pudo cargar su video. {0}. Para obtener consejos sobre cómo mejorar su video, consulte el {1}.",0fbf7c0c
+VIDEO_UPLOAD_FAILED_DESCRIPTION,No se pudo cargar su video. {0}. Descubra por qué su video pudo haber fallado visitando el {1}.,839af7da
 VIEW,Ver,02cff17a
 VIEW_3D_MODEL,Ver modelo 3D,fc2e2960
 VIEW_APPLICATION,Ver solicitud,bbdc193f
