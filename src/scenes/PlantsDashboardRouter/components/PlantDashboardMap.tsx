@@ -74,7 +74,7 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
   useEffect(() => {
     if (plantingSiteId) {
       void getPlantingSite({ id: plantingSiteId }, true);
-      void listObservationResults({ plantingSiteId, includePlants: true }, true);
+      void listObservationResults({ plantingSiteId, depth: 'Plant' }, true);
       void listObservataionSummary({ plantingSiteId, limit: 1 }, true);
     }
   }, [getPlantingSite, listObservataionSummary, listObservationResults, plantingSiteId]);

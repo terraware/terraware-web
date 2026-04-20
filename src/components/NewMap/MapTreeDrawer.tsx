@@ -14,7 +14,7 @@ type MapTreeDrawerProps = {
 
 const MapTreeDrawer = ({ observationId, tree }: MapTreeDrawerProps): JSX.Element | undefined => {
   const { strings } = useLocalization();
-  const { data } = useGetObservationResultsQuery({ observationId, includePlants: true });
+  const { data } = useGetObservationResultsQuery({ observationId, depth: 'Plant' });
 
   const { species } = useSpeciesData();
 
