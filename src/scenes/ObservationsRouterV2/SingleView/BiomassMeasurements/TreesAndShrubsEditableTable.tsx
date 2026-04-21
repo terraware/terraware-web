@@ -212,6 +212,14 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           onSave: (row, value) => saveRecordedTree('isDead', row, value, value === 'true'),
         },
       },
+      {
+        id: 'description',
+        accessorKey: 'description',
+        header: strings.NOTES,
+        editConfig: {
+          onSave: (row, value) => saveRecordedTree('description', row, value),
+        },
+      },
     ],
     [
       saveRecordedTree,
