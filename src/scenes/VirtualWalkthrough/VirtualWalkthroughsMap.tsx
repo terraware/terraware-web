@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef, Marker } from 'react-map-gl/mapbox';
 
-import { Box } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 
 import MapComponent from 'src/components/NewMap';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
@@ -32,6 +32,7 @@ export default function VirtualWalkthroughsMap({
   organizationId,
   pendingPlacementFile,
 }: VirtualWalkthroughsMapProps): JSX.Element {
+  const theme = useTheme();
   const mapRef = useRef<MapRef | null>(null);
   const { mapId, token } = useMapboxToken();
   const { fitBounds } = useMapUtils(mapRef);
@@ -62,6 +63,15 @@ export default function VirtualWalkthroughsMap({
       }
     }
   }, [fitBounds, mapLoaded, plantingSites]);
+
+  useEffect(() => {
+    if (pendingPlacementFile?.latitude !== undefined && pendingPlacementFile?.longitude !== undefined) {
+      mapRef.current?.flyTo({
+        center: [pendingPlacementFile.longitude, pendingPlacementFile.latitude],
+        zoom: 10,
+      });
+    }
+  }, [pendingPlacementFile]);
 
   const pendingMarkerPos = useMemo(() => {
     if (!pendingPlacementFile) {
@@ -197,7 +207,13 @@ export default function VirtualWalkthroughsMap({
 
   const virtualWalkthroughMarkers = useMemo((): MapMarker[] => {
     return mediaFiles
-      .filter((f) => f.splatStatus === 'Ready' && f.latitude !== undefined && f.longitude !== undefined)
+      .filter(
+        (f) =>
+          (f.splatStatus === 'Ready' || f.splatStatus === 'Preparing') &&
+          !f.needsAttention &&
+          f.latitude !== undefined &&
+          f.longitude !== undefined
+      )
       .map(
         (f): MapMarker => ({
           id: `splats/${f.fileId}`,
@@ -224,15 +240,38 @@ export default function VirtualWalkthroughsMap({
     if (!selectedFile) {
       return undefined;
     }
+    const isPreparing = selectedFile.splatStatus === 'Preparing';
     return (
       <Box display='flex' flexDirection='column' width='100%' gap={2}>
         {selectedFile.type !== 'Plot' && (
-          <Box
-            component='img'
-            src={`/api/v1/organizations/${organizationId}/media/${selectedFile.fileId}/thumbnail?maxWidth=377`}
-            alt={strings.THUMBNAIL}
-            sx={{ width: '100%', objectFit: 'cover' }}
-          />
+          <Box sx={{ position: 'relative', width: '100%' }}>
+            <Box
+              component='img'
+              src={`/api/v1/organizations/${organizationId}/media/${selectedFile.fileId}/thumbnail?maxWidth=377`}
+              alt={strings.THUMBNAIL}
+              sx={{ display: 'block', objectFit: 'cover', width: '100%' }}
+            />
+            {isPreparing && (
+              <Box
+                sx={{
+                  alignItems: 'center',
+                  backdropFilter: 'blur(4px)',
+                  backgroundColor: 'rgba(211, 211, 211, 0.75)',
+                  bottom: 0,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  left: 0,
+                  position: 'absolute',
+                  right: 0,
+                  top: 0,
+                }}
+              >
+                <Typography color={theme.palette.TwClrBaseBlack} fontSize='14px' fontWeight={400}>
+                  {strings.PROCESSING_VIDEO}
+                </Typography>
+              </Box>
+            )}
+          </Box>
         )}
 
         <Button
@@ -245,7 +284,7 @@ export default function VirtualWalkthroughsMap({
         />
       </Box>
     );
-  }, [organizationId, selectedFile, strings]);
+  }, [organizationId, selectedFile, strings, theme]);
 
   const draggableMarker =
     pendingPlacementFile && pendingMarkerPos ? (

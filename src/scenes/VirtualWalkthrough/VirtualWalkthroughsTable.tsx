@@ -166,7 +166,7 @@ export default function VirtualWalkthroughsTable({
           </Typography>
         );
       }
-      if (file.splatStatus === 'Ready') {
+      if ((file.splatStatus === 'Ready' || file.splatStatus === 'Preparing') && !file.needsAttention) {
         if (file.latitude !== undefined && file.longitude !== undefined) {
           return <Link onClick={() => onAddToMap(file)}>{strings.UPDATE_LOCATION}</Link>;
         }
