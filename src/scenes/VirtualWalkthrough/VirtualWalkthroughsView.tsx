@@ -1,4 +1,4 @@
-import React, { type JSX } from 'react';
+import React, { type JSX, useCallback, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
@@ -7,7 +7,10 @@ import Card from 'src/components/common/Card';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useSearchVirtualWalkthroughsQuery } from 'src/queries/search/virtualWalkthroughs';
+import {
+  OrganizationVirtualWalkthrough,
+  useSearchVirtualWalkthroughsQuery,
+} from 'src/queries/search/virtualWalkthroughs';
 
 import VirtualWalkthroughMessages from './VirtualWalkthroughMessages';
 import VirtualWalkthroughsMap from './VirtualWalkthroughsMap';
@@ -21,6 +24,18 @@ export default function VirtualWalkthroughsView(): JSX.Element {
   const { data: mediaFiles = [] } = useSearchVirtualWalkthroughsQuery(selectedOrganization?.id ?? 0, {
     skip: !selectedOrganization,
   });
+
+  const [pendingPlacementFile, setPendingPlacementFile] = useState<OrganizationVirtualWalkthrough | undefined>(
+    undefined
+  );
+
+  const handleAddToMap = useCallback((file: OrganizationVirtualWalkthrough) => {
+    setPendingPlacementFile(file);
+  }, []);
+
+  const handlePlacementComplete = useCallback(() => {
+    setPendingPlacementFile(undefined);
+  }, []);
 
   return (
     <TfMain>
@@ -39,11 +54,20 @@ export default function VirtualWalkthroughsView(): JSX.Element {
             borderRadius: '8px',
           }}
         >
-          <VirtualWalkthroughsMap mediaFiles={mediaFiles} organizationId={selectedOrganization?.id ?? 0} />
+          <VirtualWalkthroughsMap
+            mediaFiles={mediaFiles}
+            onPlacementComplete={handlePlacementComplete}
+            organizationId={selectedOrganization?.id ?? 0}
+            pendingPlacementFile={pendingPlacementFile}
+          />
         </Box>
         {selectedOrganization && (
           <Card>
-            <VirtualWalkthroughsTable mediaFiles={mediaFiles} organizationId={selectedOrganization.id} />
+            <VirtualWalkthroughsTable
+              mediaFiles={mediaFiles}
+              onAddToMap={handleAddToMap}
+              organizationId={selectedOrganization.id}
+            />
           </Card>
         )}
       </Box>

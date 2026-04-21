@@ -1,5 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { MapRef } from 'react-map-gl/mapbox';
+import { MapRef, Marker } from 'react-map-gl/mapbox';
 
 import { Box } from '@mui/material';
 
@@ -13,6 +13,7 @@ import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import Button from 'src/components/common/button/Button';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useLocalization } from 'src/providers';
+import { useUpdateOrganizationMediaFileMutation } from 'src/queries/generated/organizationMedia';
 import { OrganizationVirtualWalkthrough } from 'src/queries/search/virtualWalkthroughs';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
@@ -20,12 +21,16 @@ import VirtualWalkthroughModal from './VirtualWalkthroughModal';
 
 type VirtualWalkthroughsMapProps = {
   mediaFiles: OrganizationVirtualWalkthrough[];
+  onPlacementComplete: () => void;
   organizationId: number;
+  pendingPlacementFile: OrganizationVirtualWalkthrough | undefined;
 };
 
 export default function VirtualWalkthroughsMap({
   mediaFiles,
+  onPlacementComplete,
   organizationId,
+  pendingPlacementFile,
 }: VirtualWalkthroughsMapProps): JSX.Element {
   const mapRef = useRef<MapRef | null>(null);
   const { mapId, token } = useMapboxToken();
@@ -37,6 +42,7 @@ export default function VirtualWalkthroughsMap({
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const { strings } = useLocalization();
+  const [updateMedia] = useUpdateOrganizationMediaFileMutation();
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites');
   const { sitesLayerStyle, strataLayerStyle, substrataLayerStyle, virtualPlotStyle } = useMapFeatureStyles();
@@ -56,6 +62,44 @@ export default function VirtualWalkthroughsMap({
       }
     }
   }, [fitBounds, mapLoaded, plantingSites]);
+
+  const pendingMarkerPos = useMemo(() => {
+    if (!pendingPlacementFile) {
+      return undefined;
+    }
+    if (pendingPlacementFile.latitude !== undefined && pendingPlacementFile.longitude !== undefined) {
+      return { lat: pendingPlacementFile.latitude, lng: pendingPlacementFile.longitude };
+    }
+    const points = plantingSites.flatMap(
+      (site) =>
+        site.boundary?.coordinates
+          ?.flat()
+          ?.flat()
+          ?.map(([lng, lat]): MapPoint => ({ lat, lng })) ?? []
+    );
+    if (points.length) {
+      const bbox = getBoundingBoxFromPoints(points);
+      return { lat: (bbox.minLat + bbox.maxLat) / 2, lng: (bbox.minLng + bbox.maxLng) / 2 };
+    }
+    return { lat: 0, lng: 0 };
+  }, [pendingPlacementFile, plantingSites]);
+
+  const handleMarkerDragEnd = useCallback(
+    (e: { lngLat: { lat: number; lng: number } }) => {
+      if (!pendingPlacementFile) {
+        return;
+      }
+      void updateMedia({
+        organizationId,
+        fileId: pendingPlacementFile.fileId,
+        updateOrganizationMediaRequestPayload: {
+          gpsCoordinates: { type: 'Point', coordinates: [e.lngLat.lng, e.lngLat.lat] },
+        },
+      });
+      onPlacementComplete();
+    },
+    [onPlacementComplete, organizationId, pendingPlacementFile, updateMedia]
+  );
 
   const layers = useMemo((): MapLayer[] => {
     return [
@@ -203,6 +247,20 @@ export default function VirtualWalkthroughsMap({
     );
   }, [organizationId, selectedFile, strings]);
 
+  const draggableMarker =
+    pendingPlacementFile && pendingMarkerPos ? (
+      <Marker
+        latitude={pendingMarkerPos.lat}
+        longitude={pendingMarkerPos.lng}
+        draggable
+        anchor='bottom'
+        onDragEnd={handleMarkerDragEnd}
+        style={{ cursor: 'grab' }}
+      >
+        <Box component='img' src='/assets/map-marker.svg' sx={{ width: 32, height: 32 }} />
+      </Marker>
+    ) : null;
+
   return (
     <>
       {modalOpen &&
@@ -233,6 +291,7 @@ export default function VirtualWalkthroughsMap({
         drawerSize='medium'
         drawerChildren={drawerContent}
         setDrawerOpen={setDrawerOpen}
+        additionalComponent={draggableMarker}
       />
     </>
   );

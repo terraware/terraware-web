@@ -6,5 +6,8 @@ api.enhanceEndpoints({
     deleteOrganizationMediaFile: {
       invalidatesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
     },
+    updateOrganizationMediaFile: {
+      invalidatesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
+    },
   },
 });

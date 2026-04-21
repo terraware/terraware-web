@@ -20,6 +20,7 @@ const injectedRtkApi = api.injectEndpoints({
             'longitude',
             'observation_id',
             'monitoringPlot_id',
+            'monitoringPlot_name',
           ],
           search: {
             operation: 'and',
@@ -59,6 +60,7 @@ const injectedRtkApi = api.injectEndpoints({
             longitude: result.longitude !== undefined ? Number(result.longitude) : undefined,
             observationId: result.observation_id !== undefined ? Number(result.observation_id) : undefined,
             monitoringPlotId: result.monitoringPlot_id !== undefined ? Number(result.monitoringPlot_id) : undefined,
+            monitoringPlotName: result.monitoringPlot_name,
           })),
       providesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
     }),
@@ -78,6 +80,7 @@ type SearchVirtualWalkthroughApiResult = {
   longitude?: string;
   observation_id?: string;
   monitoringPlot_id?: string;
+  monitoringPlot_name?: string;
 };
 
 type SearchVirtualWalkthroughsApiResponse = {
@@ -95,6 +98,7 @@ export type OrganizationVirtualWalkthrough = {
   longitude?: number;
   observationId?: number;
   monitoringPlotId?: number;
+  monitoringPlotName?: string;
 };
 
 export { injectedRtkApi as api };
