@@ -88,7 +88,7 @@ const ObservationMapWrapper = ({
           {
             organizationId: selectedOrganization.id,
             plantingSiteId,
-            depth: 'Plant',
+            depth: 'Site',
           },
           true
         );
