@@ -1,8 +1,7 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { IconButton, Tooltip, useTheme } from '@mui/material';
-import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -20,7 +19,6 @@ type TreeRow = ExistingTreePayload & {
 };
 
 export default function TreesAndShrubsEditableTable(): JSX.Element {
-  const theme = useTheme();
   const { species: availableSpecies } = useSpeciesData();
   const params = useParams<{ observationId: string }>();
   const { strings } = useLocalization();
@@ -113,20 +111,6 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const IsDeadCell = useCallback(
     ({ row }: { row: { original: TreeRow } }) => <>{row.original.isDead ? strings.YES : strings.NO}</>,
     [strings.YES, strings.NO]
-  );
-
-  const DescriptionCell = useCallback(
-    ({ row }: { row: { original: TreeRow } }) =>
-      row.original.description ? (
-        <Tooltip title={row.original.description}>
-          <IconButton size='small'>
-            <Icon name='note' style={{ fill: theme.palette.TwClrIcn }} size='medium' />
-          </IconButton>
-        </Tooltip>
-      ) : (
-        <></>
-      ),
-    [theme.palette.TwClrIcn]
   );
 
   const columns = useMemo<EditableTableColumn<TreeRow>[]>(
@@ -232,7 +216,6 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         id: 'description',
         accessorKey: 'description',
         header: strings.NOTES,
-        Cell: DescriptionCell,
         editConfig: {
           onSave: (row, value) => saveRecordedTree('description', row, value),
         },
@@ -247,7 +230,6 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       IsInvasiveCell,
       IsThreatenedCell,
       IsDeadCell,
-      DescriptionCell,
     ]
   );
 
