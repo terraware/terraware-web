@@ -1,5 +1,4 @@
-import React, { useMemo } from 'react';
-import { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
@@ -11,22 +10,37 @@ import GradientSky from 'src/components/GaussianSplat/GradientSky';
 import SplatModel from 'src/components/GaussianSplat/SplatModel';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
 import { useDevicePerformance } from 'src/hooks/useDevicePerformance';
-import { useGetOrganizationSplatInfoQuery } from 'src/queries/generated/organizationSplats';
+import { useLazyListSplatDetailsQuery } from 'src/queries/generated/observationSplats';
+import { useLazyGetOrganizationSplatInfoQuery } from 'src/queries/generated/organizationSplats';
 
 const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
 const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
 
-type VirtualWalkthroughViewerProps = {
-  organizationId: number;
-  fileId: number;
-};
+type VirtualWalkthroughViewerProps =
+  | { organizationId: number; fileId: number; observationId?: never }
+  | { observationId: number; fileId: number; organizationId?: never };
 
-const VirtualWalkthroughViewer = ({ organizationId, fileId }: VirtualWalkthroughViewerProps) => {
+const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: VirtualWalkthroughViewerProps) => {
   const { setCamera } = useCameraPosition();
   const { isHighPerformance } = useDevicePerformance();
-  const { data } = useGetOrganizationSplatInfoQuery({ organizationId, fileId });
 
-  const splatSrc = `/api/v1/organizations/${organizationId}/splats/${fileId}`;
+  const [getOrgSplatInfo, { data: orgData }] = useLazyGetOrganizationSplatInfoQuery();
+  const [getObsSplatInfo, { data: obsData }] = useLazyListSplatDetailsQuery();
+
+  useEffect(() => {
+    if (organizationId !== undefined) {
+      void getOrgSplatInfo({ organizationId, fileId });
+    } else if (observationId !== undefined) {
+      void getObsSplatInfo({ observationId, fileId });
+    }
+  }, [fileId, getObsSplatInfo, getOrgSplatInfo, observationId, organizationId]);
+
+  const data = observationId === undefined ? orgData : obsData;
+
+  const splatSrc =
+    observationId === undefined
+      ? `/api/v1/organizations/${organizationId}/splats/${fileId}`
+      : `/api/v1/tracking/observations/${observationId}/splats/${fileId}`;
 
   const origin: [number, number, number] = useMemo(
     () =>
@@ -65,17 +79,15 @@ const VirtualWalkthroughViewer = ({ organizationId, fileId }: VirtualWalkthrough
   );
 };
 
-type VirtualWalkthroughModalProps = {
-  organizationId: number;
-  fileId: number;
+type VirtualWalkthroughModalProps = VirtualWalkthroughViewerProps & {
   onClose: () => void;
 };
 
-const VirtualWalkthroughModal = ({ organizationId, fileId, onClose }: VirtualWalkthroughModalProps) => {
+const VirtualWalkthroughModal = ({ onClose, ...viewerProps }: VirtualWalkthroughModalProps) => {
   return (
     <OverlayModal open={true} onClose={onClose}>
       <Application style={{ width: '100%', height: '100%', display: 'block', margin: '0 auto' }}>
-        <VirtualWalkthroughViewer organizationId={organizationId} fileId={fileId} />
+        <VirtualWalkthroughViewer {...viewerProps} />
       </Application>
     </OverlayModal>
   );

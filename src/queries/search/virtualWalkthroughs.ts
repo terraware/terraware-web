@@ -3,7 +3,7 @@ import { QueryTagTypes } from '../tags';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    searchOrganizationVirtualWalkthroughs: build.query<OrganizationVirtualWalkthrough[], number>({
+    searchVirtualWalkthroughs: build.query<OrganizationVirtualWalkthrough[], number>({
       query: (organizationId) => ({
         url: '/api/v1/search',
         method: 'POST',
@@ -18,6 +18,8 @@ const injectedRtkApi = api.injectEndpoints({
             'createdTime',
             'latitude',
             'longitude',
+            'observation_id',
+            'monitoringPlot_id',
           ],
           search: {
             operation: 'and',
@@ -40,10 +42,10 @@ const injectedRtkApi = api.injectEndpoints({
           },
         },
       }),
-      transformResponse: (results: SearchOrganizationVirtualWalkthroughsApiResponse) =>
+      transformResponse: (results: SearchVirtualWalkthroughsApiResponse) =>
         results.results
           .filter(
-            (result): result is SearchOrganizationVirtualWalkthroughApiResult & { splatStatus: string } =>
+            (result): result is SearchVirtualWalkthroughApiResult & { splatStatus: string } =>
               result.splatStatus !== undefined
           )
           .map((result) => ({
@@ -55,6 +57,8 @@ const injectedRtkApi = api.injectEndpoints({
             createdTime: result.createdTime,
             latitude: result.latitude !== undefined ? Number(result.latitude) : undefined,
             longitude: result.longitude !== undefined ? Number(result.longitude) : undefined,
+            observationId: result.observation_id !== undefined ? Number(result.observation_id) : undefined,
+            monitoringPlotId: result.monitoringPlot_id !== undefined ? Number(result.monitoringPlot_id) : undefined,
           })),
       providesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
     }),
@@ -63,7 +67,7 @@ const injectedRtkApi = api.injectEndpoints({
 
 export type SplatStatus = 'Preparing' | 'Ready' | 'Errored';
 
-type SearchOrganizationVirtualWalkthroughApiResult = {
+type SearchVirtualWalkthroughApiResult = {
   fileId: string;
   splatStatus?: string;
   needsAttention?: string;
@@ -72,10 +76,12 @@ type SearchOrganizationVirtualWalkthroughApiResult = {
   createdTime?: string;
   latitude?: string;
   longitude?: string;
+  observation_id?: string;
+  monitoringPlot_id?: string;
 };
 
-type SearchOrganizationVirtualWalkthroughsApiResponse = {
-  results: SearchOrganizationVirtualWalkthroughApiResult[];
+type SearchVirtualWalkthroughsApiResponse = {
+  results: SearchVirtualWalkthroughApiResult[];
 };
 
 export type OrganizationVirtualWalkthrough = {
@@ -87,9 +93,10 @@ export type OrganizationVirtualWalkthrough = {
   createdTime?: string;
   latitude?: number;
   longitude?: number;
+  observationId?: number;
+  monitoringPlotId?: number;
 };
 
 export { injectedRtkApi as api };
 
-export const { useSearchOrganizationVirtualWalkthroughsQuery, useLazySearchOrganizationVirtualWalkthroughsQuery } =
-  injectedRtkApi;
+export const { useSearchVirtualWalkthroughsQuery, useLazySearchVirtualWalkthroughsQuery } = injectedRtkApi;

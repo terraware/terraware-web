@@ -6,9 +6,8 @@ import PageHeader from 'src/components/PageHeader';
 import Card from 'src/components/common/Card';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import { useOrganization } from 'src/providers';
-import { useSearchOrganizationVirtualWalkthroughsQuery } from 'src/queries/search/organizationVirtualWalkthroughs';
-import strings from 'src/strings';
+import { useLocalization, useOrganization } from 'src/providers';
+import { useSearchVirtualWalkthroughsQuery } from 'src/queries/search/virtualWalkthroughs';
 
 import VirtualWalkthroughMessages from './VirtualWalkthroughMessages';
 import VirtualWalkthroughsMap from './VirtualWalkthroughsMap';
@@ -17,8 +16,9 @@ import VirtualWalkthroughsTable from './VirtualWalkthroughsTable';
 export default function VirtualWalkthroughsView(): JSX.Element {
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
+  const { strings } = useLocalization();
 
-  const { data: mediaFiles = [] } = useSearchOrganizationVirtualWalkthroughsQuery(selectedOrganization?.id ?? 0, {
+  const { data: mediaFiles = [] } = useSearchVirtualWalkthroughsQuery(selectedOrganization?.id ?? 0, {
     skip: !selectedOrganization,
   });
 

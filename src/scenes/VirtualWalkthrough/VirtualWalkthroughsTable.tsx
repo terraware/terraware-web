@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import MuxPlayer from '@mux/mux-player-react';
@@ -15,23 +15,14 @@ import {
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
 import useTableState from 'src/hooks/useTableState';
+import { useLocalization } from 'src/providers';
+import { useLazyGetObservationMediaStreamQuery } from 'src/queries/generated/observations';
 import {
   useDeleteOrganizationMediaFileMutation,
   useLazyGetOrganizationMediaFileStreamQuery,
 } from 'src/queries/generated/organizationMedia';
 import { useSetOrganizationSplatNeedsAttentionMutation } from 'src/queries/generated/organizationSplats';
-import { OrganizationVirtualWalkthrough } from 'src/queries/search/organizationVirtualWalkthroughs';
-import strings from 'src/strings';
-
-const getStatusLabel = (file: OrganizationVirtualWalkthrough): string => {
-  if (file.needsAttention || file.splatStatus === 'Errored') {
-    return strings.NEEDS_ATTENTION;
-  }
-  if (file.splatStatus === 'Preparing') {
-    return strings.PROCESSING;
-  }
-  return strings.SUCCESSFUL;
-};
+import { OrganizationVirtualWalkthrough } from 'src/queries/search/virtualWalkthroughs';
 
 type VirtualWalkthroughsTableProps = {
   mediaFiles: OrganizationVirtualWalkthrough[];
@@ -45,9 +36,10 @@ export default function VirtualWalkthroughsTable({
   const theme = useTheme();
   const [deleteMediaFile] = useDeleteOrganizationMediaFileMutation();
   const [setNeedsAttention] = useSetOrganizationSplatNeedsAttentionMutation();
-  const [getMediaStream, { data: mediaStreamData }] = useLazyGetOrganizationMediaFileStreamQuery();
-  const [lightboxFileId, setLightboxFileId] = useState<number | undefined>(undefined);
-  const [mediaStream, setMediaStream] = useState<{ playbackId: string; playbackToken: string } | undefined>();
+  const [getOrgMediaStream, { data: orgStreamData, isFetching: orgFetching }] =
+    useLazyGetOrganizationMediaFileStreamQuery();
+  const [getObsMediaStream, { data: obsStreamData, isFetching: obsFetching }] = useLazyGetObservationMediaStreamQuery();
+  const [selectedVideoFile, setSelectedVideoFile] = useState<OrganizationVirtualWalkthrough | undefined>(undefined);
   const {
     columnFilters,
     setColumnFilters,
@@ -56,29 +48,60 @@ export default function VirtualWalkthroughsTable({
     showColumnFilters,
     showGlobalFilter,
   } = useTableState('virtual-walkthroughs-table');
+  const { strings } = useLocalization();
 
-  useEffect(() => {
-    if (mediaStreamData) {
-      setMediaStream({ playbackId: mediaStreamData.playbackId, playbackToken: mediaStreamData.playbackToken });
+  const getStatusLabel = useCallback(
+    (file: OrganizationVirtualWalkthrough): string => {
+      if (file.needsAttention || file.splatStatus === 'Errored') {
+        return strings.NEEDS_ATTENTION;
+      }
+      if (file.splatStatus === 'Preparing') {
+        return strings.PROCESSING;
+      }
+      return strings.SUCCESSFUL;
+    },
+    [strings]
+  );
+
+  const mediaStream = useMemo(() => {
+    if (!selectedVideoFile) {
+      return undefined;
     }
-  }, [mediaStreamData]);
+    const isPlot = selectedVideoFile.type === 'Plot' && selectedVideoFile.observationId;
+    const data = isPlot ? obsStreamData : orgStreamData;
+    const isFetching = isPlot ? obsFetching : orgFetching;
+    if (!data || isFetching) {
+      return undefined;
+    }
+    return { playbackId: data.playbackId, playbackToken: data.playbackToken };
+  }, [obsFetching, obsStreamData, orgFetching, orgStreamData, selectedVideoFile]);
 
   const handleOpenVideo = useCallback(
-    (fileId: number) => {
-      setLightboxFileId(fileId);
-      setMediaStream(undefined);
-      void getMediaStream({ organizationId, fileId });
+    (file: OrganizationVirtualWalkthrough) => {
+      setSelectedVideoFile(file);
+      if (file.type === 'Plot' && file.observationId && file.monitoringPlotId) {
+        void getObsMediaStream({
+          observationId: file.observationId,
+          plotId: file.monitoringPlotId,
+          fileId: file.fileId,
+        });
+      } else {
+        void getOrgMediaStream({ organizationId, fileId: file.fileId });
+      }
     },
-    [getMediaStream, organizationId]
+    [getObsMediaStream, getOrgMediaStream, organizationId]
   );
 
   const handleCloseLightbox = useCallback(() => {
-    setLightboxFileId(undefined);
-    setMediaStream(undefined);
+    setSelectedVideoFile(undefined);
   }, []);
 
   const ThumbnailCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
+      const file = cell.row.original;
+      if (file.type === 'Plot') {
+        return null;
+      }
       const fileId = cell.getValue<number>();
       return (
         <Box
@@ -89,18 +112,21 @@ export default function VirtualWalkthroughsTable({
         />
       );
     },
-    [organizationId]
+    [organizationId, strings]
   );
 
-  const StatusCell = useCallback(({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
-    const file = cell.row.original;
-    return <Typography fontSize='14px'>{getStatusLabel(file)}</Typography>;
-  }, []);
+  const StatusCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
+      const file = cell.row.original;
+      return <Typography fontSize='14px'>{getStatusLabel(file)}</Typography>;
+    },
+    [getStatusLabel]
+  );
 
   const VideoLinkCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
-      const fileId = cell.getValue<number>();
-      return <Link onClick={() => handleOpenVideo(fileId)}>{`media_${fileId}`}</Link>;
+      const file = cell.row.original;
+      return <Link onClick={() => handleOpenVideo(file)}>{`media_${file.fileId}`}</Link>;
     },
     [handleOpenVideo]
   );
@@ -125,19 +151,22 @@ export default function VirtualWalkthroughsTable({
         </Link>
       );
     },
-    [organizationId, setNeedsAttention]
+    [organizationId, setNeedsAttention, strings]
   );
 
-  const LocationCell = useCallback(({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
-    const file = cell.row.original;
-    if (file.latitude !== undefined && file.longitude !== undefined) {
-      return <Typography fontSize='14px'>{`${file.latitude.toFixed(4)}, ${file.longitude.toFixed(4)}`}</Typography>;
-    }
-    if (file.needsAttention) {
-      return <Link>{strings.UPDATE_LOCATION}</Link>;
-    }
-    return <Link>{strings.ADD_TO_MAP}</Link>;
-  }, []);
+  const LocationCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
+      const file = cell.row.original;
+      if (file.latitude !== undefined && file.longitude !== undefined) {
+        return <Typography fontSize='14px'>{`${file.latitude.toFixed(4)}, ${file.longitude.toFixed(4)}`}</Typography>;
+      }
+      if (file.needsAttention) {
+        return <Link>{strings.UPDATE_LOCATION}</Link>;
+      }
+      return <Link>{strings.ADD_TO_MAP}</Link>;
+    },
+    [strings]
+  );
 
   const RemoveCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
@@ -151,7 +180,7 @@ export default function VirtualWalkthroughsTable({
         </Link>
       );
     },
-    [deleteMediaFile, organizationId, theme]
+    [deleteMediaFile, organizationId, theme, strings]
   );
 
   const columns = useMemo((): EditableTableColumn<OrganizationVirtualWalkthrough>[] => {
@@ -198,7 +227,7 @@ export default function VirtualWalkthroughsTable({
         Cell: RemoveCell,
       },
     ];
-  }, [FlagCell, LocationCell, RemoveCell, StatusCell, ThumbnailCell, VideoLinkCell]);
+  }, [FlagCell, LocationCell, RemoveCell, StatusCell, ThumbnailCell, VideoLinkCell, getStatusLabel, strings]);
 
   return (
     <>
@@ -238,7 +267,7 @@ export default function VirtualWalkthroughsTable({
             <MuxPlayer
               accentColor={theme.palette.TwClrBgBrand}
               autoPlay
-              metadata={{ video_title: `Virtual Walkthrough (File ID: ${lightboxFileId})` }}
+              metadata={{ video_title: `Virtual Walkthrough (File ID: ${selectedVideoFile?.fileId})` }}
               playbackId={mediaStream.playbackId}
               playbackToken={mediaStream.playbackToken}
               style={{ aspectRatio: 16 / 9, height: '80vh', maxWidth: '80vw', width: 'auto' }}
@@ -246,7 +275,7 @@ export default function VirtualWalkthroughsTable({
           ) : undefined
         }
         imageSrc=''
-        isOpen={!!lightboxFileId}
+        isOpen={!!selectedVideoFile}
         onClose={handleCloseLightbox}
       />
     </>

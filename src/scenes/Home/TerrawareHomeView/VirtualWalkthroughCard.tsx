@@ -8,7 +8,7 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
 import { useOrganization } from 'src/providers';
-import { useSearchOrganizationVirtualWalkthroughsQuery } from 'src/queries/search/organizationVirtualWalkthroughs';
+import { useSearchVirtualWalkthroughsQuery } from 'src/queries/search/virtualWalkthroughs';
 import strings from 'src/strings';
 
 import CreateVirtualWalkthroughStep1Modal from './CreateVirtualWalkthroughStep1Modal';
@@ -20,7 +20,7 @@ const VirtualWalkthroughCard = (): JSX.Element => {
   const { selectedOrganization } = useOrganization();
   const [modalOpen, setModalOpen] = useState(false);
 
-  const { data: mediaFiles } = useSearchOrganizationVirtualWalkthroughsQuery(selectedOrganization?.id ?? 0, {
+  const { data: mediaFiles } = useSearchVirtualWalkthroughsQuery(selectedOrganization?.id ?? 0, {
     skip: !selectedOrganization,
   });
 

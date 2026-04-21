@@ -12,8 +12,8 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import Button from 'src/components/common/button/Button';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
-import { OrganizationVirtualWalkthrough } from 'src/queries/search/organizationVirtualWalkthroughs';
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
+import { OrganizationVirtualWalkthrough } from 'src/queries/search/virtualWalkthroughs';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import VirtualWalkthroughModal from './VirtualWalkthroughModal';
@@ -36,6 +36,7 @@ export default function VirtualWalkthroughsMap({
   const [selectedFile, setSelectedFile] = useState<OrganizationVirtualWalkthrough | undefined>(undefined);
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
+  const { strings } = useLocalization();
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites');
   const { sitesLayerStyle, strataLayerStyle, substrataLayerStyle, virtualPlotStyle } = useMapFeatureStyles();
@@ -140,7 +141,7 @@ export default function VirtualWalkthroughsMap({
         type: 'multi-select',
       },
     ];
-  }, [plantingSiteLegendGroup, virtualPlotStyle, virtualWalkthroughsVisible]);
+  }, [plantingSiteLegendGroup, virtualPlotStyle, virtualWalkthroughsVisible, strings]);
 
   const selectFile = useCallback(
     (file: OrganizationVirtualWalkthrough) => () => {
@@ -152,14 +153,7 @@ export default function VirtualWalkthroughsMap({
 
   const virtualWalkthroughMarkers = useMemo((): MapMarker[] => {
     return mediaFiles
-      .filter(
-        (f) =>
-          !f.needsAttention &&
-          f.splatStatus !== 'Errored' &&
-          f.splatStatus !== 'Preparing' &&
-          f.latitude !== undefined &&
-          f.longitude !== undefined
-      )
+      .filter((f) => f.splatStatus === 'Ready' && f.latitude !== undefined && f.longitude !== undefined)
       .map(
         (f): MapMarker => ({
           id: `splats/${f.fileId}`,
@@ -188,12 +182,14 @@ export default function VirtualWalkthroughsMap({
     }
     return (
       <Box display='flex' flexDirection='column' width='100%' gap={2}>
-        <Box
-          component='img'
-          src={`/api/v1/organizations/${organizationId}/media/${selectedFile.fileId}/thumbnail?maxWidth=377`}
-          alt={strings.THUMBNAIL}
-          sx={{ width: '100%', objectFit: 'cover' }}
-        />
+        {selectedFile.type !== 'Plot' && (
+          <Box
+            component='img'
+            src={`/api/v1/organizations/${organizationId}/media/${selectedFile.fileId}/thumbnail?maxWidth=377`}
+            alt={strings.THUMBNAIL}
+            sx={{ width: '100%', objectFit: 'cover' }}
+          />
+        )}
 
         <Button
           id='view-3d-model'
@@ -205,17 +201,25 @@ export default function VirtualWalkthroughsMap({
         />
       </Box>
     );
-  }, [organizationId, selectedFile]);
+  }, [organizationId, selectedFile, strings]);
 
   return (
     <>
-      {modalOpen && selectedFile && (
-        <VirtualWalkthroughModal
-          organizationId={organizationId}
-          fileId={selectedFile.fileId}
-          onClose={() => setModalOpen(false)}
-        />
-      )}
+      {modalOpen &&
+        selectedFile &&
+        (selectedFile.type === 'Plot' && selectedFile.observationId ? (
+          <VirtualWalkthroughModal
+            observationId={selectedFile.observationId}
+            fileId={selectedFile.fileId}
+            onClose={() => setModalOpen(false)}
+          />
+        ) : (
+          <VirtualWalkthroughModal
+            organizationId={organizationId}
+            fileId={selectedFile.fileId}
+            onClose={() => setModalOpen(false)}
+          />
+        ))}
       <MapComponent
         mapId={mapId}
         mapRef={mapRef}
