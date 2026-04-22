@@ -3,8 +3,6 @@ import { MapRef, Marker } from 'react-map-gl/mapbox';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
-import { Box } from '@mui/material';
-
 import MapComponent from 'src/components/NewMap';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
 import { MapLayer, MapMarker, MapMarkerGroup, MapNameTag, MapPoint } from 'src/components/NewMap/types';
