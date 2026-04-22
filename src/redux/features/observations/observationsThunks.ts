@@ -202,4 +202,3 @@ export const requestOneObservationResult = createAsyncThunk(
     return rejectWithValue(strings.GENERIC_ERROR);
   }
 );
-
