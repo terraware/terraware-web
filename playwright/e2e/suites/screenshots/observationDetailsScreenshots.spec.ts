@@ -55,6 +55,7 @@ test.describe('ObservationDetailsScreenshots', () => {
 
     await changeToSuperAdmin(context, baseURL);
     await page.goto('/');
+    await page.evaluate(() => localStorage.clear());
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
     await page.getByRole('button', { name: 'Plantings' }).click();

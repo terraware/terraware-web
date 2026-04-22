@@ -56,6 +56,7 @@ test.describe('PlantsDashboardScreenshots', () => {
 
     await changeToSuperAdmin(context, baseURL);
     await page.goto('/');
+    await page.evaluate(() => localStorage.clear());
     await waitFor(page, '#home', 15000);
   });
 
