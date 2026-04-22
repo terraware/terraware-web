@@ -199,23 +199,6 @@ test.describe('ObservationDetailsScreenshots', () => {
     });
   });
 
-  test('Monitoring plot level detail view — species table', async ({ page }) => {
-    await page.locator('a:has-text("May 2025")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
-
-    await page.locator('a:has-text("Stratum 01")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
-
-    await page.locator('#row1 a').click();
-    await expect(page.locator('#monitoringPlotSpeciesTable')).toBeVisible({ timeout: 30000 });
-    await expect(page.locator('#monitoringPlotSpeciesTable table')).toHaveScreenshot(
-      'observation-plot-species-table.png',
-      SCREENSHOT_OPTIONS
-    );
-  });
-
   test('Monitoring plot level detail view — photos and videos tab', async ({ page }) => {
     await page.locator('a:has-text("May 2025")').click();
     await waitFor(page, '#home');

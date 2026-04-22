@@ -11,4 +11,4 @@ docker run --rm --ipc=host --platform linux/amd64 \
   -e TIMEOUT=60000 \
   -e WORKERS=1 \
   "mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-jammy" \
-  npx playwright test e2e/suites/screenshots --project=prod --update-snapshots
+  npx playwright test playwright/e2e/suites/screenshots --project=prod --update-snapshots
