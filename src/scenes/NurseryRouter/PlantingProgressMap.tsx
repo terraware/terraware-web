@@ -19,6 +19,7 @@ type PlantingProgressMapProps = {
 export default function PlantingProgressMap({ plantingSiteId }: PlantingProgressMapProps): JSX.Element {
   const theme = useTheme();
   const snackbar = useSnackbar();
+
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
   const plantingSite = useMemo(() => getPlantingSiteResponse.currentData?.site, [getPlantingSiteResponse]);
 
