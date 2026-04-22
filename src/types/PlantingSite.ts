@@ -55,3 +55,17 @@ export type DraftPlantingSite = MinimalPlantingSite & {
   siteEditStep: SiteEditStep;
   siteType: SiteType;
 };
+
+export type PlantingProgressType = {
+  plantingCompleted: boolean;
+  projectName: string;
+  siteId: number;
+  siteName: string;
+  stratumId: number;
+  stratumName: string;
+  substratumId: number;
+  substratumName: string;
+  targetPlantingDensity: number;
+  totalPlants: number;
+  totalSeedlingsSent: number;
+};

@@ -1,14 +1,14 @@
 import { DateTime } from 'luxon';
 
-import { PlantingProgress } from 'src/redux/features/plantings/plantingsSelectors';
 import strings from 'src/strings';
 import { purposeLabel } from 'src/types/Batch';
+import { PlantingProgressType } from 'src/types/PlantingSite';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
 
 const makePlantingProgressCsv = ({
   plantingProgress,
 }: {
-  plantingProgress: Partial<PlantingProgress>[] | undefined;
+  plantingProgress: Partial<PlantingProgressType>[] | undefined;
 }): Blob => {
   const columnHeadersWithoutStrata = [
     {
@@ -127,7 +127,7 @@ export const exportNurseryWithdrawalResults = async ({
 export const exportNurseryPlantingProgress = async ({
   plantingProgress,
 }: {
-  plantingProgress: Partial<PlantingProgress>[] | undefined;
+  plantingProgress: Partial<PlantingProgressType>[] | undefined;
 }) => {
   const nurseryName = plantingProgress?.[0]?.siteName || strings.UNKNOWN;
   const filename = `${nurseryName}-${strings.PLANTING_PROGRESS}`;

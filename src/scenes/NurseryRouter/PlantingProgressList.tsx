@@ -24,23 +24,8 @@ import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { exportNurseryPlantingProgress } from 'src/scenes/NurseryRouter/exportNurseryData';
 import strings from 'src/strings';
+import { PlantingProgressType } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
-
-// selector to search plantings
-
-type PlantingProgressType = {
-  plantingCompleted: boolean;
-  projectName: string;
-  siteId: number;
-  siteName: string;
-  stratumId: number;
-  stratumName: string;
-  substratumId: number;
-  substratumName: string;
-  targetPlantingDensity: number;
-  totalPlants: number;
-  totalSeedlingsSent: number;
-};
 
 export default function PlantingProgressList(): JSX.Element {
   const theme = useTheme();
