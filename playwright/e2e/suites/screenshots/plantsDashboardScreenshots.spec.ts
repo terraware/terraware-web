@@ -55,8 +55,11 @@ test.describe('PlantsDashboardScreenshots', () => {
     await page.route(/build-version\.txt/, (route) => route.abort());
 
     await changeToSuperAdmin(context, baseURL);
+    await page.addInitScript(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
     await page.goto('/');
-    await page.evaluate(() => localStorage.clear());
     await waitFor(page, '#home', 15000);
   });
 
@@ -86,6 +89,8 @@ test.describe('PlantsDashboardScreenshots', () => {
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
 
     await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
+    await page.waitForLoadState('networkidle');
+    await expect(page.locator('#planting-site-selector').getByPlaceholder('Select...')).toHaveValue('Planting Site');
 
     await expect(page).toHaveScreenshot('plants-dashboard-default.png', {
       ...FULL_PAGE_SCREENSHOT_OPTIONS,

@@ -54,8 +54,11 @@ test.describe('ObservationDetailsScreenshots', () => {
     await page.route(/build-version\.txt/, (route) => route.abort());
 
     await changeToSuperAdmin(context, baseURL);
+    await page.addInitScript(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
     await page.goto('/');
-    await page.evaluate(() => localStorage.clear());
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
     await page.getByRole('button', { name: 'Plantings' }).click();
@@ -203,11 +206,9 @@ test.describe('ObservationDetailsScreenshots', () => {
     await waitFor(page, '#home');
 
     // The species editable table (MonitoringPlotSpeciesEditableTable)
-    await expect(page.getByRole('table').first()).toBeVisible();
-    await expect(page.getByRole('table').first()).toHaveScreenshot(
-      'observation-plot-species-table.png',
-      SCREENSHOT_OPTIONS
-    );
+    const speciesTable = page.getByRole('table').filter({ hasText: 'Pre-Existing' });
+    await expect(speciesTable).toBeVisible();
+    await expect(speciesTable).toHaveScreenshot('observation-plot-species-table.png', SCREENSHOT_OPTIONS);
   });
 
   test('Monitoring plot level detail view — photos and videos tab', async ({ page }) => {
