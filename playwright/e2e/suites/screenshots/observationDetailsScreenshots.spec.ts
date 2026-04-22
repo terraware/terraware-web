@@ -46,7 +46,9 @@ test.describe('ObservationDetailsScreenshots', () => {
   // need a longer timeout than the default (especially in Linux Docker).
   test.describe.configure({ timeout: 120000 });
 
-  test.beforeEach(async ({ page, context, baseURL }) => {
+  test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
+    test.skip(testInfo.project.name !== 'prod', 'Screenshot tests only run against the prod build');
+
     // Abort the app version check so the "Please refresh" banner never appears.
     // Locally the frontend and backend versions can differ, triggering the banner and
     // shifting all page content. CI does not show it, so snapshots must be generated
@@ -210,9 +212,11 @@ test.describe('ObservationDetailsScreenshots', () => {
     await waitFor(page, '#home');
 
     // The species editable table (MonitoringPlotSpeciesEditableTable)
-    const speciesTable = page.getByRole('table').filter({ hasText: 'Pre-Existing' });
-    await expect(speciesTable).toBeVisible();
-    await expect(speciesTable).toHaveScreenshot('observation-plot-species-table.png', SCREENSHOT_OPTIONS);
+    await expect(page.locator('#monitoringPlotSpeciesTable')).toBeVisible();
+    await expect(page.locator('#monitoringPlotSpeciesTable table')).toHaveScreenshot(
+      'observation-plot-species-table.png',
+      SCREENSHOT_OPTIONS
+    );
   });
 
   test('Monitoring plot level detail view — photos and videos tab', async ({ page }) => {

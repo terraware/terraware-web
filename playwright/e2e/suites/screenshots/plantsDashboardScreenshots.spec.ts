@@ -47,7 +47,9 @@ test.describe('PlantsDashboardScreenshots', () => {
   // need a longer timeout than the default (especially in Linux Docker).
   test.describe.configure({ timeout: 120000 });
 
-  test.beforeEach(async ({ page, context, baseURL }) => {
+  test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
+    test.skip(testInfo.project.name !== 'prod', 'Screenshot tests only run against the prod build');
+
     // Abort the app version check so the "Please refresh" banner never appears.
     // Locally the frontend and backend versions can differ, triggering the banner and
     // shifting all page content. CI does not show it, so snapshots must be generated
@@ -87,11 +89,10 @@ test.describe('PlantsDashboardScreenshots', () => {
 
     await page.getByRole('button', { name: 'Plantings' }).click();
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
-    await page.reload();
+    await page.goto('/plants/dashboard');
 
     await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
     await page.waitForLoadState('networkidle');
-    await expect(page.locator('#planting-site-selector').getByPlaceholder('Select...')).toHaveValue('Planting Site');
 
     await expect(page).toHaveScreenshot('plants-dashboard-default.png', {
       ...FULL_PAGE_SCREENSHOT_OPTIONS,

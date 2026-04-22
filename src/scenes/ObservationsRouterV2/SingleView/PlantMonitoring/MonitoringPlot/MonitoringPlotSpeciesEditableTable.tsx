@@ -121,16 +121,18 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
   );
 
   return (
-    <EditableTable
-      clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-      columns={columns}
-      data={speciesWithOptimistic}
-      enableEditing={true}
-      enableSorting={true}
-      enablePagination={false}
-      enableBottomToolbar={false}
-      enableTopToolbar={false}
-      initialSorting={[{ id: 'speciesScientificName', desc: false }]}
-    />
+    <div id='monitoringPlotSpeciesTable'>
+      <EditableTable
+        clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+        columns={columns}
+        data={speciesWithOptimistic}
+        enableEditing={true}
+        enableSorting={true}
+        enablePagination={false}
+        enableBottomToolbar={false}
+        enableTopToolbar={false}
+        initialSorting={[{ id: 'speciesScientificName', desc: false }]}
+      />
+    </div>
   );
 }
