@@ -3,10 +3,11 @@ import React, { type JSX } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import PageHeader from 'src/components/PageHeader';
+import Card from 'src/components/common/Card';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import { useOrganization } from 'src/providers';
-import strings from 'src/strings';
+import { useLocalization, useOrganization } from 'src/providers';
+import { useSearchVirtualWalkthroughsQuery } from 'src/queries/search/virtualWalkthroughs';
 
 import VirtualWalkthroughMessages from './VirtualWalkthroughMessages';
 import VirtualWalkthroughsMap from './VirtualWalkthroughsMap';
@@ -15,6 +16,11 @@ import VirtualWalkthroughsTable from './VirtualWalkthroughsTable';
 export default function VirtualWalkthroughsView(): JSX.Element {
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
+  const { strings } = useLocalization();
+
+  const { data: mediaFiles = [] } = useSearchVirtualWalkthroughsQuery(selectedOrganization?.id ?? 0, {
+    skip: !selectedOrganization,
+  });
 
   return (
     <TfMain>
@@ -31,12 +37,15 @@ export default function VirtualWalkthroughsView(): JSX.Element {
           sx={{
             background: theme.palette.TwClrBg,
             borderRadius: '8px',
-            height: '400px',
           }}
         >
-          <VirtualWalkthroughsMap />
+          <VirtualWalkthroughsMap mediaFiles={mediaFiles} organizationId={selectedOrganization?.id ?? 0} />
         </Box>
-        <VirtualWalkthroughsTable />
+        {selectedOrganization && (
+          <Card>
+            <VirtualWalkthroughsTable mediaFiles={mediaFiles} organizationId={selectedOrganization.id} />
+          </Card>
+        )}
       </Box>
     </TfMain>
   );
