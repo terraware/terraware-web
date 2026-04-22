@@ -6,12 +6,7 @@ import { RootState } from 'src/redux/rootReducer';
 import { ObservationsService } from 'src/services';
 import strings from 'src/strings';
 
-import {
-  setAdHocObservationResultsAction,
-  setAdHocObservationsAction,
-  setObservationsAction,
-  setObservationsResultsAction,
-} from './observationsSlice';
+import { setAdHocObservationsAction, setObservationsAction, setObservationsResultsAction } from './observationsSlice';
 
 /**
  * Fetch observation results
@@ -208,24 +203,3 @@ export const requestOneObservationResult = createAsyncThunk(
   }
 );
 
-/**
- * Fetch observation results
- */
-export const requestAdHocObservationResults = (organizationId: number) => {
-  return async (dispatch: Dispatch, _getState: () => RootState) => {
-    try {
-      const response = await ObservationsService.listAdHocObservationResults(organizationId);
-      const { error, observations } = response;
-      dispatch(
-        setAdHocObservationResultsAction({
-          error,
-          observations,
-        })
-      );
-    } catch (e) {
-      // should not happen, the response above captures any http request errors
-      // eslint-disable-next-line no-console
-      console.error('Error dispatching observations results', e);
-    }
-  };
-};

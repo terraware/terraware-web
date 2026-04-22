@@ -7,12 +7,7 @@ import { TrackingService } from 'src/services';
 import strings from 'src/strings';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
-import {
-  setPlantingSiteAction,
-  setPlantingSitesAction,
-  setPlantingSitesSearchResultsAction,
-  setSiteReportedPlantsAction,
-} from './trackingSlice';
+import { setPlantingSiteAction, setPlantingSitesAction, setPlantingSitesSearchResultsAction } from './trackingSlice';
 
 export type PlotT0Observation = {
   observation_startDate: string;
@@ -99,19 +94,6 @@ export const requestPlantingSitesSearchResults = (organizationId: number) => {
       // should not happen, the response above captures any http request errors
       // eslint-disable-next-line no-console
       console.error('Error dispatching planting sites', e);
-    }
-  };
-};
-
-export const requestSiteReportedPlants = (plantingSiteId: number) => {
-  return async (dispatch: Dispatch, _getState: () => RootState) => {
-    try {
-      const response = await TrackingService.getReportedPlants(plantingSiteId);
-      dispatch(setSiteReportedPlantsAction({ plantingSiteId, data: { site: response.data?.site } }));
-    } catch (e) {
-      // should not happen, the response above captures any http request errors
-      // eslint-disable-next-line no-console
-      console.error('Error dispatching site reported plants request', e);
     }
   };
 };
