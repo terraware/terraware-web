@@ -1,7 +1,7 @@
 import { Page, expect, test } from '@playwright/test';
 
-import { changeToSuperAdmin } from '../utils/userUtils';
-import { selectOrg, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../../utils/userUtils';
+import { selectOrg, waitFor } from '../../utils/utils';
 
 // For element-level screenshots (tables, map containers) where content is uniform
 const SCREENSHOT_OPTIONS = {

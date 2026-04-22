@@ -19,16 +19,16 @@ Replace `<version>` below with that value (e.g. `1.49.1`).
 **Dev snapshots** (dev server must be running on port 3000):
 
 ```bash
-docker run --rm --ipc=host --platform linux/amd64 -v "$(pwd):/work" -w /work -e PLAYWRIGHT_BASE_URL=http://host.docker.internal:3000 -e TIMEOUT=60000 -e WORKERS=1 mcr.microsoft.com/playwright:v<version>-jammy npx playwright test observationDetailsScreenshots --project=dev --update-snapshots
+docker run --rm --ipc=host --platform linux/amd64 -v "$(pwd):/work" -w /work -e PLAYWRIGHT_BASE_URL=http://host.docker.internal:3000 -e TIMEOUT=60000 -e WORKERS=1 mcr.microsoft.com/playwright:v<version>-jammy npx playwright test e2e/suites/screenshots --project=dev --update-snapshots
 ```
 
 **Prod snapshots** (prod stack must be running on port 3001 via `yarn build && yarn server:reset`):
 
 ```bash
-docker run --rm --ipc=host --platform linux/amd64 -v "$(pwd):/work" -w /work -e PLAYWRIGHT_BASE_URL=http://host.docker.internal:3001 -e TIMEOUT=60000 -e WORKERS=1 mcr.microsoft.com/playwright:v<version>-jammy npx playwright test observationDetailsScreenshots --project=prod --update-snapshots
+docker run --rm --ipc=host --platform linux/amd64 -v "$(pwd):/work" -w /work -e PLAYWRIGHT_BASE_URL=http://host.docker.internal:3001 -e TIMEOUT=60000 -e WORKERS=1 mcr.microsoft.com/playwright:v<version>-jammy npx playwright test e2e/suites/screenshots --project=prod --update-snapshots
 ```
 
-Commit the generated files in `playwright/e2e/suites/observationDetailsScreenshots.spec.ts-snapshots/`.
+Commit all generated snapshot directories matching `playwright/e2e/suites/screenshots/*Screenshots.spec.ts-snapshots/`.
 
 ## Creating new test users
 
