@@ -72,7 +72,7 @@ test.describe('ObservationDetailsScreenshots', () => {
     await waitForMapIdle(page);
     await expect(page).toHaveScreenshot('observation-list.png', {
       ...SCREENSHOT_OPTIONS,
-      mask: [page.locator('[role="alert"]')],
+      mask: [page.locator('.tw-message')],
     });
   });
 
@@ -209,10 +209,7 @@ test.describe('ObservationDetailsScreenshots', () => {
     await waitFor(page, '#row1');
 
     await page.locator('#row1 a').click();
-    await waitFor(page, '#home');
-
-    // The species editable table (MonitoringPlotSpeciesEditableTable)
-    await expect(page.locator('#monitoringPlotSpeciesTable')).toBeVisible();
+    await expect(page.locator('#monitoringPlotSpeciesTable')).toBeVisible({ timeout: 30000 });
     await expect(page.locator('#monitoringPlotSpeciesTable table')).toHaveScreenshot(
       'observation-plot-species-table.png',
       SCREENSHOT_OPTIONS

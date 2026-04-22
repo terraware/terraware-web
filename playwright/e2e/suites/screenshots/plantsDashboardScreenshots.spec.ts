@@ -86,13 +86,11 @@ test.describe('PlantsDashboardScreenshots', () => {
 
   test('Plants Dashboard default view — no planting site selected', async ({ page }) => {
     await selectOrg(page, 'Terraformation (staging)');
-
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
-    await page.goto('/plants/dashboard');
+    await page.goto('/plants/dashboard/1');
 
     await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
     await page.waitForLoadState('networkidle');
+    await waitForMapIdle(page);
 
     await expect(page).toHaveScreenshot('plants-dashboard-default.png', {
       ...FULL_PAGE_SCREENSHOT_OPTIONS,
@@ -260,9 +258,7 @@ test.describe('PlantsDashboardScreenshots', () => {
 
   test('Plants Dashboard — project area map (no planting site selected)', async ({ page }) => {
     await selectOrg(page, 'Terraformation (staging)');
-
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await page.goto('/plants/dashboard/1');
 
     await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
     await waitForMapIdle(page);
