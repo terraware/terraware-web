@@ -72,7 +72,7 @@ test.describe('ObservationDetailsScreenshots', () => {
     await waitForMapIdle(page);
     await expect(page).toHaveScreenshot('observation-list.png', {
       ...SCREENSHOT_OPTIONS,
-      mask: [page.locator('.tw-message')],
+      mask: [page.locator('.map-container').first(), page.locator('.tw-message')],
     });
   });
 
