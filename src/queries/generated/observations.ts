@@ -46,6 +46,7 @@ const injectedRtkApi = api.injectEndpoints({
           organizationId: queryArg.organizationId,
           plantingSiteId: queryArg.plantingSiteId,
           depth: queryArg.depth,
+          state: queryArg.state,
           limit: queryArg.limit,
         },
       }),
@@ -237,6 +238,7 @@ export type ListObservationResultsApiArg = {
   organizationId?: number;
   plantingSiteId?: number;
   depth?: 'Site' | 'Stratum' | 'Substratum' | 'Plot' | 'Plant';
+  state?: ('Upcoming' | 'InProgress' | 'Completed' | 'Overdue' | 'Abandoned')[];
   /** Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
   limit?: number;
 };
@@ -893,12 +895,6 @@ export type MergeOtherSpeciesRequestPayload = {
   /** ID of the existing species that the Other species' recorded plants should be merged into. */
   speciesId: number;
 };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: object[];
-    type: 'GeometryCollection';
-  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -922,6 +918,12 @@ export type MultiPolygon = {
 } & GeometryBase & {
     coordinates: number[][][][];
     type: 'MultiPolygon';
+  };
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
+    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type AssignedPlotPayload = {

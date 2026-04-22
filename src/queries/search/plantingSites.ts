@@ -110,10 +110,64 @@ const injectedRtkApi = api.injectEndpoints({
           count: 0,
         },
       }),
+      providesTags: (_results, _error, plotIds) =>
+        plotIds.map((plotId) => ({ type: QueryTagTypes.MonitoringPlots, id: plotId })),
       transformResponse: (results: SearchMonitoringPlotApiResponse) =>
         results.results.map((result) => ({
           id: Number(result.id),
           plotNumber: result.plotNumber,
+        })),
+    }),
+
+    searchObservationDates: build.query<ObservationDatesSearchResult[], SearchObservationDatesApiArgs>({
+      query: (payload) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          fields: ['id', 'startDate', 'endDate'],
+          prefix: 'observations',
+          search: {
+            operation: 'and',
+            children: [
+              {
+                field: 'id',
+                operation: 'field',
+                values: payload.plantingSiteId,
+              },
+              ...(payload.state?.length
+                ? [
+                    {
+                      field: 'state',
+                      operation: 'field',
+                      values: payload.state,
+                    },
+                  ]
+                : []),
+            ],
+          },
+          sortOrder: [
+            {
+              field: 'completedTime',
+              direction: 'Descending',
+            },
+            {
+              field: 'startDate',
+              direction: 'Descending',
+            },
+          ],
+          count: 0,
+        },
+      }),
+      providesTags: (results) => [
+        ...(results?.map((result) => ({ type: QueryTagTypes.Observation, id: result.id })) ?? []),
+        { type: QueryTagTypes.Observation, id: 'LIST' },
+      ],
+      transformResponse: (results: SearchObservationDatesApiResponse) =>
+        results.results.map((result) => ({
+          id: Number(result.id),
+          completedTime: result.completedTime,
+          startDate: result.startDate,
+          endDate: result.endDate,
         })),
     }),
   }),
@@ -156,12 +210,40 @@ export type PlantingSiteSummary = {
 };
 
 type SearchMonitoringPlotApiResponse = {
-  results: MonitoringPlotSearchResult[];
+  results: SearchMonitoringPlotApResult[];
+};
+
+type SearchMonitoringPlotApResult = {
+  id: string;
+  plotNumber: string;
 };
 
 export type MonitoringPlotSearchResult = {
   id: number;
   plotNumber: string;
+};
+
+export type SearchObservationDatesApiArgs = {
+  plantingSiteId: number;
+  state?: ('Upcoming' | 'InProgress' | 'Completed' | 'Overdue' | 'Abandoned')[];
+};
+
+type SearchObservationDatesApiResponse = {
+  results: SearchObservationDatesApiResult[];
+};
+
+type SearchObservationDatesApiResult = {
+  id: string;
+  completedTime: string;
+  startDate: string;
+  endDate: string;
+};
+
+export type ObservationDatesSearchResult = {
+  id: number;
+  completedTime: string;
+  startDate: string;
+  endDate: string;
 };
 
 export { injectedRtkApi as api };
@@ -173,4 +255,6 @@ export const {
   useLazySearchPlantingSitesQuery,
   useSearchMonitoringPlotsQuery,
   useLazySearchMonitoringPlotsQuery,
+  useSearchObservationDatesQuery,
+  useLazySearchObservationDatesQuery,
 } = injectedRtkApi;
