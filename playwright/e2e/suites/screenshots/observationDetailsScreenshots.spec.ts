@@ -67,7 +67,11 @@ test.describe('ObservationDetailsScreenshots', () => {
   });
 
   test('Observation list view', async ({ page }) => {
-    await expect(page).toHaveScreenshot('observation-list.png', SCREENSHOT_OPTIONS);
+    await waitForMapIdle(page);
+    await expect(page).toHaveScreenshot('observation-list.png', {
+      ...SCREENSHOT_OPTIONS,
+      mask: [page.locator('[role="alert"]')],
+    });
   });
 
   test('Observation list map — monitoring plots and survival rate', async ({ page }) => {

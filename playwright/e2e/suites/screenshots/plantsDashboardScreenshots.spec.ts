@@ -87,6 +87,7 @@ test.describe('PlantsDashboardScreenshots', () => {
 
     await page.getByRole('button', { name: 'Plantings' }).click();
     await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await page.reload();
 
     await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
     await page.waitForLoadState('networkidle');
