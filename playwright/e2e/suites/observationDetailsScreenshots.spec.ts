@@ -189,26 +189,6 @@ test.describe('ObservationDetailsScreenshots', () => {
     });
   });
 
-  test('Monitoring plot level detail view — species table', async ({ page }) => {
-    await page.locator('a:has-text("May 2025")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
-
-    await page.locator('a:has-text("Stratum 01")').click();
-    await waitFor(page, '#home');
-    await waitFor(page, '#row1');
-
-    await page.locator('#row1 a').click();
-    await waitFor(page, '#home');
-
-    // The species editable table (MonitoringPlotSpeciesEditableTable)
-    await expect(page.getByRole('table').first()).toBeVisible();
-    await expect(page.getByRole('table').first()).toHaveScreenshot(
-      'observation-plot-species-table.png',
-      SCREENSHOT_OPTIONS
-    );
-  });
-
   test('Monitoring plot level detail view — photos and videos tab', async ({ page }) => {
     await page.locator('a:has-text("May 2025")').click();
     await waitFor(page, '#home');

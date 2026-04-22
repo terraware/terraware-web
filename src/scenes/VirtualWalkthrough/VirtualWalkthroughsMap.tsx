@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { MapRef } from 'react-map-gl/mapbox';
+import { MapRef, Marker } from 'react-map-gl/mapbox';
 
-import { Box } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 
 import MapComponent from 'src/components/NewMap';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
@@ -13,6 +13,7 @@ import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import Button from 'src/components/common/button/Button';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useLocalization } from 'src/providers';
+import { useUpdateOrganizationMediaFileMutation } from 'src/queries/generated/organizationMedia';
 import { OrganizationVirtualWalkthrough } from 'src/queries/search/virtualWalkthroughs';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
@@ -20,13 +21,18 @@ import VirtualWalkthroughModal from './VirtualWalkthroughModal';
 
 type VirtualWalkthroughsMapProps = {
   mediaFiles: OrganizationVirtualWalkthrough[];
+  onPlacementComplete: () => void;
   organizationId: number;
+  pendingPlacementFile: OrganizationVirtualWalkthrough | undefined;
 };
 
 export default function VirtualWalkthroughsMap({
   mediaFiles,
+  onPlacementComplete,
   organizationId,
+  pendingPlacementFile,
 }: VirtualWalkthroughsMapProps): JSX.Element {
+  const theme = useTheme();
   const mapRef = useRef<MapRef | null>(null);
   const { mapId, token } = useMapboxToken();
   const { fitBounds } = useMapUtils(mapRef);
@@ -37,6 +43,7 @@ export default function VirtualWalkthroughsMap({
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const { strings } = useLocalization();
+  const [updateMedia] = useUpdateOrganizationMediaFileMutation();
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites');
   const { sitesLayerStyle, strataLayerStyle, substrataLayerStyle, virtualPlotStyle } = useMapFeatureStyles();
@@ -56,6 +63,53 @@ export default function VirtualWalkthroughsMap({
       }
     }
   }, [fitBounds, mapLoaded, plantingSites]);
+
+  useEffect(() => {
+    if (pendingPlacementFile?.latitude !== undefined && pendingPlacementFile?.longitude !== undefined) {
+      mapRef.current?.flyTo({
+        center: [pendingPlacementFile.longitude, pendingPlacementFile.latitude],
+        zoom: 10,
+      });
+    }
+  }, [pendingPlacementFile]);
+
+  const pendingMarkerPos = useMemo(() => {
+    if (!pendingPlacementFile) {
+      return undefined;
+    }
+    if (pendingPlacementFile.latitude !== undefined && pendingPlacementFile.longitude !== undefined) {
+      return { lat: pendingPlacementFile.latitude, lng: pendingPlacementFile.longitude };
+    }
+    const points = plantingSites.flatMap(
+      (site) =>
+        site.boundary?.coordinates
+          ?.flat()
+          ?.flat()
+          ?.map(([lng, lat]): MapPoint => ({ lat, lng })) ?? []
+    );
+    if (points.length) {
+      const bbox = getBoundingBoxFromPoints(points);
+      return { lat: (bbox.minLat + bbox.maxLat) / 2, lng: (bbox.minLng + bbox.maxLng) / 2 };
+    }
+    return { lat: 0, lng: 0 };
+  }, [pendingPlacementFile, plantingSites]);
+
+  const handleMarkerDragEnd = useCallback(
+    (e: { lngLat: { lat: number; lng: number } }) => {
+      if (!pendingPlacementFile) {
+        return;
+      }
+      void updateMedia({
+        organizationId,
+        fileId: pendingPlacementFile.fileId,
+        updateOrganizationMediaRequestPayload: {
+          gpsCoordinates: { type: 'Point', coordinates: [e.lngLat.lng, e.lngLat.lat] },
+        },
+      });
+      onPlacementComplete();
+    },
+    [onPlacementComplete, organizationId, pendingPlacementFile, updateMedia]
+  );
 
   const layers = useMemo((): MapLayer[] => {
     return [
@@ -153,7 +207,13 @@ export default function VirtualWalkthroughsMap({
 
   const virtualWalkthroughMarkers = useMemo((): MapMarker[] => {
     return mediaFiles
-      .filter((f) => f.splatStatus === 'Ready' && f.latitude !== undefined && f.longitude !== undefined)
+      .filter(
+        (f) =>
+          (f.splatStatus === 'Ready' || f.splatStatus === 'Preparing') &&
+          !f.needsAttention &&
+          f.latitude !== undefined &&
+          f.longitude !== undefined
+      )
       .map(
         (f): MapMarker => ({
           id: `splats/${f.fileId}`,
@@ -180,15 +240,38 @@ export default function VirtualWalkthroughsMap({
     if (!selectedFile) {
       return undefined;
     }
+    const isPreparing = selectedFile.splatStatus === 'Preparing';
     return (
       <Box display='flex' flexDirection='column' width='100%' gap={2}>
         {selectedFile.type !== 'Plot' && (
-          <Box
-            component='img'
-            src={`/api/v1/organizations/${organizationId}/media/${selectedFile.fileId}/thumbnail?maxWidth=377`}
-            alt={strings.THUMBNAIL}
-            sx={{ width: '100%', objectFit: 'cover' }}
-          />
+          <Box sx={{ position: 'relative', width: '100%' }}>
+            <Box
+              component='img'
+              src={`/api/v1/organizations/${organizationId}/media/${selectedFile.fileId}/thumbnail?maxWidth=377`}
+              alt={strings.THUMBNAIL}
+              sx={{ display: 'block', objectFit: 'cover', width: '100%' }}
+            />
+            {isPreparing && (
+              <Box
+                sx={{
+                  alignItems: 'center',
+                  backdropFilter: 'blur(4px)',
+                  backgroundColor: 'rgba(211, 211, 211, 0.75)',
+                  bottom: 0,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  left: 0,
+                  position: 'absolute',
+                  right: 0,
+                  top: 0,
+                }}
+              >
+                <Typography color={theme.palette.TwClrBaseBlack} fontSize='14px' fontWeight={400}>
+                  {strings.PROCESSING_VIDEO}
+                </Typography>
+              </Box>
+            )}
+          </Box>
         )}
 
         <Button
@@ -201,7 +284,21 @@ export default function VirtualWalkthroughsMap({
         />
       </Box>
     );
-  }, [organizationId, selectedFile, strings]);
+  }, [organizationId, selectedFile, strings, theme]);
+
+  const draggableMarker =
+    pendingPlacementFile && pendingMarkerPos ? (
+      <Marker
+        latitude={pendingMarkerPos.lat}
+        longitude={pendingMarkerPos.lng}
+        draggable
+        anchor='bottom'
+        onDragEnd={handleMarkerDragEnd}
+        style={{ cursor: 'grab' }}
+      >
+        <Box component='img' src='/assets/map-marker.svg' sx={{ width: 32, height: 32 }} />
+      </Marker>
+    ) : null;
 
   return (
     <>
@@ -233,6 +330,7 @@ export default function VirtualWalkthroughsMap({
         drawerSize='medium'
         drawerChildren={drawerContent}
         setDrawerOpen={setDrawerOpen}
+        additionalComponent={draggableMarker}
       />
     </>
   );

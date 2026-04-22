@@ -26,11 +26,13 @@ import { OrganizationVirtualWalkthrough } from 'src/queries/search/virtualWalkth
 
 type VirtualWalkthroughsTableProps = {
   mediaFiles: OrganizationVirtualWalkthrough[];
+  onAddToMap: (file: OrganizationVirtualWalkthrough) => void;
   organizationId: number;
 };
 
 export default function VirtualWalkthroughsTable({
   mediaFiles,
+  onAddToMap,
   organizationId,
 }: VirtualWalkthroughsTableProps): JSX.Element {
   const theme = useTheme();
@@ -157,15 +159,22 @@ export default function VirtualWalkthroughsTable({
   const LocationCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
       const file = cell.row.original;
-      if (file.latitude !== undefined && file.longitude !== undefined) {
-        return <Typography fontSize='14px'>{`${file.latitude.toFixed(4)}, ${file.longitude.toFixed(4)}`}</Typography>;
+      if (file.type === 'Plot') {
+        return (
+          <Typography fontSize='14px'>
+            {`${strings.PLOT} ${file.monitoringPlotName ?? file.monitoringPlotId}`}
+          </Typography>
+        );
       }
-      if (file.needsAttention) {
-        return <Link>{strings.UPDATE_LOCATION}</Link>;
+      if ((file.splatStatus === 'Ready' || file.splatStatus === 'Preparing') && !file.needsAttention) {
+        if (file.latitude !== undefined && file.longitude !== undefined) {
+          return <Link onClick={() => onAddToMap(file)}>{strings.UPDATE_LOCATION}</Link>;
+        }
+        return <Link onClick={() => onAddToMap(file)}>{strings.ADD_TO_MAP}</Link>;
       }
-      return <Link>{strings.ADD_TO_MAP}</Link>;
+      return <Box />;
     },
-    [strings]
+    [onAddToMap, strings]
   );
 
   const RemoveCell = useCallback(
