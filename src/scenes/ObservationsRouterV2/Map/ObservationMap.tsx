@@ -172,11 +172,13 @@ const ObservationMap = ({
   const [selectedAdHocObservationId, setSelectedAdHocObservationId] = useState<number | 'all'>('all');
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelectedAdHocObservationId('all');
   }, [adHocObservationResults]);
 
   useEffect(() => {
     if (observationResultsOptions.length) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSelectedObservationId(Number(observationResultsOptions[0].value));
     } else {
       setSelectedObservationId(undefined);
@@ -232,13 +234,6 @@ const ObservationMap = ({
       return [];
     }
   }, [selectedResults]);
-
-  const adHocPlots = useMemo(() => {
-    return selectedAdHocResults
-      .filter((observation) => observation.isAdHoc)
-      .map((observation) => observation.adHocPlot)
-      .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined);
-  }, [selectedAdHocResults]);
 
   const { plantingSiteHistory: selectedHistory } = usePlantingSiteHistory({
     plantingSiteId,
@@ -355,18 +350,21 @@ const ObservationMap = ({
     } else if (selectedHistory) {
       return [
         {
-          features: adHocPlots.map((plot) => ({
-            featureId: `${plot.monitoringPlotId}`,
-            geometry: {
-              type: 'MultiPolygon',
-              coordinates: [plot.boundary?.coordinates ?? []],
-            },
-            label: `${plot.monitoringPlotNumber}`,
-            onClick: selectClickableFeature(selectedHistory.plantingSiteId)('adHocPlots', `${plot.monitoringPlotId}`),
-            selected:
-              selectedFeature?.layerFeatureId.layerId === 'adHocPlots' &&
-              selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
-          })),
+          features: selectedAdHocResults
+            .map((adHocResults) => adHocResults.adHocPlot)
+            .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined)
+            .map((plot) => ({
+              featureId: `${plot.monitoringPlotId}`,
+              geometry: {
+                type: 'MultiPolygon',
+                coordinates: [plot.boundary?.coordinates ?? []],
+              },
+              label: `${plot.monitoringPlotNumber}`,
+              onClick: selectClickableFeature(selectedHistory.plantingSiteId)('adHocPlots', `${plot.monitoringPlotId}`),
+              selected:
+                selectedFeature?.layerFeatureId.layerId === 'adHocPlots' &&
+                selectedFeature?.layerFeatureId.featureId === `${plot.monitoringPlotId}`,
+            })),
           layerId: 'adHocPlots',
           style: adHocPlotsLayerStyle,
           visible: adHocPlotsVisible,
@@ -481,7 +479,6 @@ const ObservationMap = ({
     }
     return [];
   }, [
-    adHocPlots,
     adHocPlotsLayerStyle,
     adHocPlotsVisible,
     plantingSites,
@@ -489,6 +486,7 @@ const ObservationMap = ({
     permanentPlotsLayerStyle,
     permanentPlotsVisible,
     plantingSiteId,
+    selectedAdHocResults,
     selectClickableFeature,
     selectedFeature?.layerFeatureId.featureId,
     selectedFeature?.layerFeatureId.layerId,
@@ -757,23 +755,30 @@ const ObservationMap = ({
     const hasGpsCoordinates = (photo: ObservationMonitoringPlotPhoto): photo is ObservationMonitoringPlotPhotoWithGps =>
       !!photo.gpsCoordinates;
 
-    const adHocPlotPhotos = adHocPlots.flatMap((plot): MapMarker[] =>
-      plot.photos.filter(hasGpsCoordinates).map((photo) => {
-        return {
-          id: `photos/${photo.fileId}`,
-          longitude: photo.gpsCoordinates?.coordinates[1],
-          latitude: photo.gpsCoordinates?.coordinates[0],
-          onClick: selectPhoto(plot.monitoringPlotId, selectedResults.observationId, photo),
-          selected:
-            selectedPhotos.find((selected) => 'photo' in selected && selected.photo.fileId === photo.fileId) !==
-            undefined,
-          properties: {
-            adHocPlotId: plot.monitoringPlotId,
-            photo,
-          },
-        };
-      })
-    );
+    const adHocPlotPhotos = selectedAdHocResults.flatMap((adHocResults) => {
+      const adHocPlot = adHocResults.adHocPlot;
+      if (adHocPlot) {
+        return adHocPlot.photos.filter(hasGpsCoordinates).map((photo) => {
+          return {
+            id: `photos/${photo.fileId}`,
+            longitude: photo.gpsCoordinates?.coordinates[1],
+            latitude: photo.gpsCoordinates?.coordinates[0],
+            onClick: selectPhoto(adHocPlot.monitoringPlotId, adHocResults.observationId, photo),
+            selected:
+              selectedPhotos.find((selected) => 'photo' in selected && selected.photo.fileId === photo.fileId) !==
+              undefined,
+            properties: {
+              observationId: adHocResults.observationId,
+              monitoringPlotId: adHocPlot.monitoringPlotId,
+              photo,
+            },
+          };
+        });
+      } else {
+        return [];
+      }
+    });
+
     const monitoringPlotPhotos = selectedResults.strata
       .flatMap((stratum) => stratum.substrata)
       .flatMap((substratum) => substratum.monitoringPlots)
@@ -797,7 +802,7 @@ const ObservationMap = ({
       );
 
     return [...adHocPlotPhotos, ...monitoringPlotPhotos];
-  }, [adHocPlots, selectPhoto, selectedPhotos, selectedResults]);
+  }, [selectedAdHocResults, selectPhoto, selectedPhotos, selectedResults]);
 
   const selectSplat = useCallback(
     (monitoringPlotId: number, observationId: number, splat: ObservationSplatPayload) => () => {
@@ -813,6 +818,10 @@ const ObservationMap = ({
     if (!selectedResults || !listObservationSplatsResult.data) {
       return [];
     }
+
+    const adHocPlots = selectedAdHocResults
+      .map((adHocResults) => adHocResults.adHocPlot)
+      .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined);
 
     const splats = listObservationSplatsResult.data.splats.filter((splat) => splat.status === 'Ready');
     const allPlots = [
@@ -856,7 +865,7 @@ const ObservationMap = ({
         };
       })
       .filter((marker): marker is MapMarker => marker !== undefined);
-  }, [adHocPlots, listObservationSplatsResult.data, selectSplat, selectedPhotos, selectedResults]);
+  }, [listObservationSplatsResult.data, selectSplat, selectedAdHocResults, selectedPhotos, selectedResults]);
 
   useEffect(() => {
     const virtualPlotParam = searchParams.get('virtualPlot');
@@ -881,6 +890,7 @@ const ObservationMap = ({
           },
         ]);
         selectPlants([]);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSelectedFeature(undefined);
         setDrawerOpen(true);
       }
@@ -959,6 +969,10 @@ const ObservationMap = ({
               return [];
             }
           });
+
+        const adHocPlots = selectedAdHocResults
+          .map((adHocResults) => adHocResults.adHocPlot)
+          .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined);
         const adHocPlotPlants = adHocPlots.flatMap((plot): MapMarker[] => {
           if (plot.plants) {
             const filteredPlants = plot.plants.filter((plant) => plant.status === status);
@@ -986,7 +1000,7 @@ const ObservationMap = ({
         return [];
       }
     },
-    [adHocPlots, isBiomass, selectPlant, selectedPlants, selectedResults]
+    [isBiomass, selectPlant, selectedAdHocResults, selectedPlants, selectedResults]
   );
 
   const markers = useMemo((): MapMarkerGroup[] => {
@@ -1109,6 +1123,7 @@ const ObservationMap = ({
     // Close drawer on data changes, unless virtualPlot param is present
     const virtualPlotParam = searchParams.get('virtualPlot');
     if (!virtualPlotParam) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setDrawerOpenCallback(false);
     }
   }, [plantingSiteId, observationResults, selectedAdHocResults, setDrawerOpenCallback, searchParams]);

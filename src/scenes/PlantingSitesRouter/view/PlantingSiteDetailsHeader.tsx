@@ -8,9 +8,10 @@ import BackToLink from 'src/components/common/BackToLink';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import TooltipButton from 'src/components/common/button/TooltipButton';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import strings from 'src/strings';
 import { MinimalPlantingSite } from 'src/types/Tracking';
+import { isAdmin } from 'src/utils/organization';
 
 export type PlantingSiteDetailsHeaderProps = {
   editDisabled?: boolean;
@@ -30,6 +31,7 @@ export default function PlantingSiteDetailsHeader({
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+  const { selectedOrganization } = useOrganization();
 
   return (
     <Box>
@@ -51,7 +53,7 @@ export default function PlantingSiteDetailsHeader({
         <Typography fontSize='20px' fontWeight={600}>
           {plantingSite?.name} {isDraft && activeLocale ? `(${strings.DRAFT})` : undefined}
         </Typography>
-        {
+        {isAdmin(selectedOrganization) && (
           <Box display='flex' alignItems='center'>
             <TooltipButton
               disabled={editDisabled}
@@ -74,7 +76,7 @@ export default function PlantingSiteDetailsHeader({
               />
             )}
           </Box>
-        }
+        )}
       </Grid>
     </Box>
   );

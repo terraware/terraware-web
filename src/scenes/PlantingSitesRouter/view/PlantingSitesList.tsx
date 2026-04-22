@@ -9,6 +9,7 @@ import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyCountDraftPlantingSitesQuery } from 'src/queries/search/draftPlantingSites';
 import { useLazyCountPlantingSitesQuery } from 'src/queries/search/plantingSites';
+import { isAdmin } from 'src/utils/organization';
 import useQuery from 'src/utils/useQuery';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -91,7 +92,11 @@ const PlantingSitesList = () => {
   }
 
   return (
-    <Page title={strings.PLANTING_SITES} contentStyle={{ display: 'block' }} rightComponent={rightComponent}>
+    <Page
+      title={strings.PLANTING_SITES}
+      contentStyle={{ display: 'block' }}
+      rightComponent={isAdmin(selectedOrganization) ? rightComponent : undefined}
+    >
       {plantingSiteTypeSelectOpen && <PlantingSiteTypeSelect onClose={() => setPlantingSiteTypeSelectOpen(false)} />}
       <Box
         display='flex'

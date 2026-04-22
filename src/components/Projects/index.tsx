@@ -18,6 +18,7 @@ import { useLocalization, useOrganization } from 'src/providers/hooks';
 import ProjectsService from 'src/services/ProjectsService';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
+import { isAdmin } from 'src/utils/organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -97,22 +98,30 @@ export default function ProjectsList(): JSX.Element {
               {strings.PROJECTS}
             </h1>
           </Grid>
-          <Grid
-            item
-            xs={4}
-            sx={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'flex-end',
-            }}
-          >
-            {isMobile ? (
-              <Button id='new-project' icon='plus' onClick={goToNewProject} size='medium' />
-            ) : (
-              <Button id='new-project' label={strings.ADD_PROJECT} icon='plus' onClick={goToNewProject} size='medium' />
-            )}
-          </Grid>
+          {isAdmin(selectedOrganization) && (
+            <Grid
+              item
+              xs={4}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'flex-end',
+              }}
+            >
+              {isMobile ? (
+                <Button id='new-project' icon='plus' onClick={goToNewProject} size='medium' />
+              ) : (
+                <Button
+                  id='new-project'
+                  label={strings.ADD_PROJECT}
+                  icon='plus'
+                  onClick={goToNewProject}
+                  size='medium'
+                />
+              )}
+            </Grid>
+          )}
           <PageSnackbar />
         </Grid>
       </PageHeaderWrapper>

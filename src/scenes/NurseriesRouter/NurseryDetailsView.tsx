@@ -10,6 +10,7 @@ import { useOrganization } from 'src/providers/hooks';
 import { FacilityService } from 'src/services';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
+import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -79,13 +80,15 @@ export default function NurseryDetailsView(): JSX.Element {
           <Typography fontSize='20px' fontWeight={600}>
             {nursery?.name}
           </Typography>
-          <Button
-            icon='iconEdit'
-            label={isMobile ? undefined : strings.EDIT_NURSERY}
-            priority='primary'
-            size='medium'
-            onClick={goToEditNursery}
-          />
+          {isAdmin(selectedOrganization) && (
+            <Button
+              icon='iconEdit'
+              label={isMobile ? undefined : strings.EDIT_NURSERY}
+              priority='primary'
+              size='medium'
+              onClick={goToEditNursery}
+            />
+          )}
         </Grid>
         <Grid item xs={12}>
           <PageSnackbar />
