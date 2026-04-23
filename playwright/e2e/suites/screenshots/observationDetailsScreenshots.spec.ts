@@ -1,7 +1,7 @@
 import { Page, expect, test } from '@playwright/test';
 
-import { changeToSuperAdmin } from '../utils/userUtils';
-import { selectOrg, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../../utils/userUtils';
+import { selectOrg, waitFor } from '../../utils/utils';
 
 // For element-level screenshots (tables, map containers) where content is uniform
 const SCREENSHOT_OPTIONS = {
@@ -46,7 +46,9 @@ test.describe('ObservationDetailsScreenshots', () => {
   // need a longer timeout than the default (especially in Linux Docker).
   test.describe.configure({ timeout: 120000 });
 
-  test.beforeEach(async ({ page, context, baseURL }) => {
+  test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
+    test.skip(testInfo.project.name !== 'prod', 'Screenshot tests only run against the prod build');
+
     // Abort the app version check so the "Please refresh" banner never appears.
     // Locally the frontend and backend versions can differ, triggering the banner and
     // shifting all page content. CI does not show it, so snapshots must be generated
@@ -54,6 +56,10 @@ test.describe('ObservationDetailsScreenshots', () => {
     await page.route(/build-version\.txt/, (route) => route.abort());
 
     await changeToSuperAdmin(context, baseURL);
+    await page.addInitScript(() => {
+      localStorage.clear();
+      sessionStorage.clear();
+    });
     await page.goto('/');
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
@@ -63,7 +69,11 @@ test.describe('ObservationDetailsScreenshots', () => {
   });
 
   test('Observation list view', async ({ page }) => {
-    await expect(page).toHaveScreenshot('observation-list.png', SCREENSHOT_OPTIONS);
+    await waitForMapIdle(page);
+    await expect(page).toHaveScreenshot('observation-list.png', {
+      ...SCREENSHOT_OPTIONS,
+      mask: [page.locator('.map-container').first(), page.locator('.tw-message')],
+    });
   });
 
   test('Observation list map — monitoring plots and survival rate', async ({ page }) => {
