@@ -700,7 +700,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
                 <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
                   <ProjectsDropdown<{ projectId?: number }>
                     availableProjects={availableProjects}
-                    label={strings.FILTER_BY_PROJECT}
+                    label={strings.PROJECT}
                     record={projectRecord}
                     setRecord={(setFn) => {
                       const nextRecord = setFn(projectRecord);
