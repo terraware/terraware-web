@@ -6,6 +6,7 @@ import { OverlayModal } from '@terraware/web-components';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 
 import Application from 'src/components/GaussianSplat/Application';
+import CameraBounds from 'src/components/GaussianSplat/CameraBounds';
 import GradientSky from 'src/components/GaussianSplat/GradientSky';
 import SplatModel from 'src/components/GaussianSplat/SplatModel';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
@@ -56,6 +57,25 @@ const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: Vir
     [data]
   );
 
+  // Derive an exploration radius from the initial camera-to-origin distance,
+  // giving the user 2× that distance to pan in any direction from the origin.
+  const boundsRadius = useMemo(() => {
+    const dx = cameraPosition[0] - origin[0];
+    const dy = cameraPosition[1] - origin[1];
+    const dz = cameraPosition[2] - origin[2];
+    return Math.sqrt(dx * dx + dy * dy + dz * dz) * 2;
+  }, [cameraPosition, origin]);
+
+  const boundsMin = useMemo<[number, number, number]>(
+    () => [origin[0] - boundsRadius, origin[1] - boundsRadius, origin[2] - boundsRadius],
+    [origin, boundsRadius]
+  );
+
+  const boundsMax = useMemo<[number, number, number]>(
+    () => [origin[0] + boundsRadius, origin[1] + boundsRadius, origin[2] + boundsRadius],
+    [origin, boundsRadius]
+  );
+
   useEffect(() => {
     setCamera(origin, cameraPosition);
   }, [origin, cameraPosition, setCamera]);
@@ -72,6 +92,7 @@ const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: Vir
         <Entity name='camera'>
           <Camera clearColor='#EAF8FF' fov={60} />
           <Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} />
+          <CameraBounds boundsMin={boundsMin} boundsMax={boundsMax} />
         </Entity>
       </Entity>
       {splatModel}
