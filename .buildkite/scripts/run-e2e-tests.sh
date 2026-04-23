@@ -3,6 +3,9 @@ set -euo pipefail
 
 .buildkite/scripts/install-deps.sh --node
 
+echo "--- :docker: Download and start backend"
+yarn server:reset
+
 PLAYWRIGHT_VERSION=$(node -e "console.log(require('./node_modules/@playwright/test/package.json').version)")
 
 echo "--- :playwright: Pull Playwright Docker image v${PLAYWRIGHT_VERSION}"
@@ -39,15 +42,11 @@ run_tests() {
   }
 }
 
-# Screenshot tests run against a clean DB so snapshots are not affected by
-# mutations made by other tests (e.g. reportSubmit creates a report config
-# that enables the Reports nav item).
-echo "--- :docker: Reset backend for screenshot tests"
-yarn server:reset
+# Run screenshot tests first so they see a clean DB state before other tests
+# mutate server data (e.g. reportSubmit creates a report config that enables
+# the Reports nav item, which would change the snapshot baseline).
 run_tests "Run screenshot tests" "playwright/e2e/suites/screenshots"
 
-# Reset again before the remaining tests so they also start from a known state.
-echo "--- :docker: Reset backend for remaining e2e tests"
-yarn server:reset
+# The shell inside Docker expands the glob to all spec files directly in the
 # suites directory, excluding the screenshots subdirectory.
 run_tests "Run remaining end-to-end tests" "playwright/e2e/suites/*.spec.ts"
