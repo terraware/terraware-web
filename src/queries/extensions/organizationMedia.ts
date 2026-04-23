@@ -1,12 +1,12 @@
-import { api } from '../generated/organizationSplats';
+import { api } from '../generated/organizationMedia';
 import { QueryTagTypes } from '../tags';
 
 api.enhanceEndpoints({
   endpoints: {
-    generateOrganizationSplat: {
+    deleteOrganizationMediaFile: {
       invalidatesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
     },
-    setOrganizationSplatNeedsAttention: {
+    updateOrganizationMediaFile: {
       invalidatesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
     },
   },

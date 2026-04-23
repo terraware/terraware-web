@@ -10,6 +10,7 @@ const injectedRtkApi = api.injectEndpoints({
           projectId: queryArg.projectId,
           full: queryArg.full,
           includeZones: queryArg.includeZones,
+          simplified: queryArg.simplified,
         },
       }),
     }),
@@ -39,6 +40,7 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/tracking/sites/${queryArg.id}`,
         params: {
           includeZones: queryArg.includeZones,
+          simplified: queryArg.simplified,
         },
       }),
     }),
@@ -50,7 +52,12 @@ const injectedRtkApi = api.injectEndpoints({
       }),
     }),
     getPlantingSiteHistory: build.query<GetPlantingSiteHistoryApiResponse, GetPlantingSiteHistoryApiArg>({
-      query: (queryArg) => ({ url: `/api/v1/tracking/sites/${queryArg.id}/history/${queryArg.historyId}` }),
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/sites/${queryArg.id}/history/${queryArg.historyId}`,
+        params: {
+          simplified: queryArg.simplified,
+        },
+      }),
     }),
     getPlantingSiteReportedPlants: build.query<
       GetPlantingSiteReportedPlantsApiResponse,
@@ -69,6 +76,7 @@ export type ListPlantingSitesApiArg = {
   /** If true, include strata and substrata for each site. */
   full?: boolean;
   includeZones?: boolean;
+  simplified?: boolean;
 };
 export type CreatePlantingSiteApiResponse = /** status 200 OK */ CreatePlantingSiteResponsePayload;
 export type CreatePlantingSiteApiArg = CreatePlantingSiteRequestPayload;
@@ -87,6 +95,7 @@ export type GetPlantingSiteApiResponse = /** status 200 OK */ GetPlantingSiteRes
 export type GetPlantingSiteApiArg = {
   id: number;
   includeZones?: boolean;
+  simplified?: boolean;
 };
 export type UpdatePlantingSiteApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
 export type UpdatePlantingSiteApiArg = {
@@ -97,6 +106,7 @@ export type GetPlantingSiteHistoryApiResponse = /** status 200 OK */ GetPlanting
 export type GetPlantingSiteHistoryApiArg = {
   id: number;
   historyId: number;
+  simplified?: boolean;
 };
 export type GetPlantingSiteReportedPlantsApiResponse =
   /** status 200 OK */ GetPlantingSiteReportedPlantsResponsePayload;

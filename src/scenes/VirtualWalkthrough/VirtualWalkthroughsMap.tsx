@@ -1,28 +1,53 @@
-import React, { type JSX, useEffect, useMemo, useRef, useState } from 'react';
-import { MapRef } from 'react-map-gl/mapbox';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { MapRef, Marker } from 'react-map-gl/mapbox';
+
+import { Box, Typography, useTheme } from '@mui/material';
 
 import MapComponent from 'src/components/NewMap';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
-import { MapLayer, MapNameTag, MapPoint } from 'src/components/NewMap/types';
+import { MapLayer, MapMarker, MapMarkerGroup, MapNameTag, MapPoint } from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
-import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
+import Button from 'src/components/common/button/Button';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import { useLocalization } from 'src/providers';
+import { useUpdateOrganizationMediaFileMutation } from 'src/queries/generated/organizationMedia';
+import { OrganizationVirtualWalkthrough } from 'src/queries/search/virtualWalkthroughs';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
-export default function VirtualWalkthroughsMap(): JSX.Element {
+import VirtualWalkthroughModal from './VirtualWalkthroughModal';
+
+type VirtualWalkthroughsMapProps = {
+  mediaFiles: OrganizationVirtualWalkthrough[];
+  onPlacementComplete: () => void;
+  organizationId: number;
+  pendingPlacementFile: OrganizationVirtualWalkthrough | undefined;
+};
+
+export default function VirtualWalkthroughsMap({
+  mediaFiles,
+  onPlacementComplete,
+  organizationId,
+  pendingPlacementFile,
+}: VirtualWalkthroughsMapProps): JSX.Element {
+  const theme = useTheme();
   const mapRef = useRef<MapRef | null>(null);
   const { mapId, token } = useMapboxToken();
   const { fitBounds } = useMapUtils(mapRef);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<OrganizationVirtualWalkthrough | undefined>(undefined);
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
+  const { strings } = useLocalization();
+  const [updateMedia] = useUpdateOrganizationMediaFileMutation();
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('sites');
-  const { plotPhotosLegendGroup } = usePlotPhotosMapLegend();
-  const { sitesLayerStyle, strataLayerStyle, substrataLayerStyle } = useMapFeatureStyles();
+  const { sitesLayerStyle, strataLayerStyle, substrataLayerStyle, virtualPlotStyle } = useMapFeatureStyles();
+  const [virtualWalkthroughsVisible, setVirtualWalkthroughsVisible] = useState(true);
 
   useEffect(() => {
     if (mapLoaded && plantingSites.length) {
@@ -38,6 +63,53 @@ export default function VirtualWalkthroughsMap(): JSX.Element {
       }
     }
   }, [fitBounds, mapLoaded, plantingSites]);
+
+  useEffect(() => {
+    if (pendingPlacementFile?.latitude !== undefined && pendingPlacementFile?.longitude !== undefined) {
+      mapRef.current?.flyTo({
+        center: [pendingPlacementFile.longitude, pendingPlacementFile.latitude],
+        zoom: 10,
+      });
+    }
+  }, [pendingPlacementFile]);
+
+  const pendingMarkerPos = useMemo(() => {
+    if (!pendingPlacementFile) {
+      return undefined;
+    }
+    if (pendingPlacementFile.latitude !== undefined && pendingPlacementFile.longitude !== undefined) {
+      return { lat: pendingPlacementFile.latitude, lng: pendingPlacementFile.longitude };
+    }
+    const points = plantingSites.flatMap(
+      (site) =>
+        site.boundary?.coordinates
+          ?.flat()
+          ?.flat()
+          ?.map(([lng, lat]): MapPoint => ({ lat, lng })) ?? []
+    );
+    if (points.length) {
+      const bbox = getBoundingBoxFromPoints(points);
+      return { lat: (bbox.minLat + bbox.maxLat) / 2, lng: (bbox.minLng + bbox.maxLng) / 2 };
+    }
+    return { lat: 0, lng: 0 };
+  }, [pendingPlacementFile, plantingSites]);
+
+  const handleMarkerDragEnd = useCallback(
+    (e: { lngLat: { lat: number; lng: number } }) => {
+      if (!pendingPlacementFile) {
+        return;
+      }
+      void updateMedia({
+        organizationId,
+        fileId: pendingPlacementFile.fileId,
+        updateOrganizationMediaRequestPayload: {
+          gpsCoordinates: { type: 'Point', coordinates: [e.lngLat.lng, e.lngLat.lat] },
+        },
+      });
+      onPlacementComplete();
+    },
+    [onPlacementComplete, organizationId, pendingPlacementFile, updateMedia]
+  );
 
   const layers = useMemo((): MapLayer[] => {
     return [
@@ -107,18 +179,159 @@ export default function VirtualWalkthroughsMap(): JSX.Element {
   }, [plantingSites]);
 
   const legends = useMemo((): MapLegendGroup[] => {
-    return [plantingSiteLegendGroup, plotPhotosLegendGroup];
-  }, [plantingSiteLegendGroup, plotPhotosLegendGroup]);
+    return [
+      plantingSiteLegendGroup,
+      {
+        items: [
+          {
+            id: 'virtual-walkthroughs',
+            label: strings.VIRTUAL_WALKTHROUGHS,
+            setVisible: setVirtualWalkthroughsVisible,
+            style: virtualPlotStyle,
+            visible: virtualWalkthroughsVisible,
+          },
+        ],
+        title: strings.PHOTOS_VIDEOS,
+        type: 'multi-select',
+      },
+    ];
+  }, [plantingSiteLegendGroup, virtualPlotStyle, virtualWalkthroughsVisible, strings]);
+
+  const selectFile = useCallback(
+    (file: OrganizationVirtualWalkthrough) => () => {
+      setSelectedFile(file);
+      setDrawerOpen(true);
+    },
+    []
+  );
+
+  const virtualWalkthroughMarkers = useMemo((): MapMarker[] => {
+    return mediaFiles
+      .filter(
+        (f) =>
+          (f.splatStatus === 'Ready' || f.splatStatus === 'Preparing') &&
+          !f.needsAttention &&
+          f.latitude !== undefined &&
+          f.longitude !== undefined
+      )
+      .map(
+        (f): MapMarker => ({
+          id: `splats/${f.fileId}`,
+          latitude: f.latitude!,
+          longitude: f.longitude!,
+          selected: selectedFile?.fileId === f.fileId,
+          onClick: selectFile(f),
+        })
+      );
+  }, [mediaFiles, selectFile, selectedFile]);
+
+  const markers = useMemo((): MapMarkerGroup[] => {
+    return [
+      {
+        markers: virtualWalkthroughMarkers,
+        markerGroupId: 'virtual-walkthroughs',
+        style: virtualPlotStyle,
+        visible: virtualWalkthroughsVisible,
+      },
+    ];
+  }, [virtualPlotStyle, virtualWalkthroughMarkers, virtualWalkthroughsVisible]);
+
+  const drawerContent = useMemo(() => {
+    if (!selectedFile) {
+      return undefined;
+    }
+    const isPreparing = selectedFile.splatStatus === 'Preparing';
+    return (
+      <Box display='flex' flexDirection='column' width='100%' gap={2}>
+        {selectedFile.type !== 'Plot' && (
+          <Box sx={{ position: 'relative', width: '100%' }}>
+            <Box
+              component='img'
+              src={`/api/v1/organizations/${organizationId}/media/${selectedFile.fileId}/thumbnail?maxWidth=377`}
+              alt={strings.THUMBNAIL}
+              sx={{ display: 'block', objectFit: 'cover', width: '100%' }}
+            />
+            {isPreparing && (
+              <Box
+                sx={{
+                  alignItems: 'center',
+                  backdropFilter: 'blur(4px)',
+                  backgroundColor: 'rgba(211, 211, 211, 0.75)',
+                  bottom: 0,
+                  display: 'flex',
+                  justifyContent: 'center',
+                  left: 0,
+                  position: 'absolute',
+                  right: 0,
+                  top: 0,
+                }}
+              >
+                <Typography color={theme.palette.TwClrBaseBlack} fontSize='14px' fontWeight={400}>
+                  {strings.PROCESSING_VIDEO}
+                </Typography>
+              </Box>
+            )}
+          </Box>
+        )}
+
+        <Button
+          id='view-3d-model'
+          label={strings.VIEW_3D_MODEL}
+          onClick={() => setModalOpen(true)}
+          priority='primary'
+          size='medium'
+          disabled={selectedFile.splatStatus !== 'Ready'}
+        />
+      </Box>
+    );
+  }, [organizationId, selectedFile, strings, theme]);
+
+  const draggableMarker =
+    pendingPlacementFile && pendingMarkerPos ? (
+      <Marker
+        latitude={pendingMarkerPos.lat}
+        longitude={pendingMarkerPos.lng}
+        draggable
+        anchor='bottom'
+        onDragEnd={handleMarkerDragEnd}
+        style={{ cursor: 'grab' }}
+      >
+        <Box component='img' src='/assets/map-marker.svg' sx={{ width: 32, height: 32 }} />
+      </Marker>
+    ) : null;
 
   return (
-    <MapComponent
-      mapId={mapId}
-      mapRef={mapRef}
-      token={token ?? ''}
-      mapLayers={layers}
-      nameTags={nameTags}
-      legends={legends}
-      onMapLoad={() => setMapLoaded(true)}
-    />
+    <>
+      {modalOpen &&
+        selectedFile &&
+        (selectedFile.type === 'Plot' && selectedFile.observationId ? (
+          <VirtualWalkthroughModal
+            observationId={selectedFile.observationId}
+            fileId={selectedFile.fileId}
+            onClose={() => setModalOpen(false)}
+          />
+        ) : (
+          <VirtualWalkthroughModal
+            organizationId={organizationId}
+            fileId={selectedFile.fileId}
+            onClose={() => setModalOpen(false)}
+          />
+        ))}
+      <MapComponent
+        mapId={mapId}
+        mapRef={mapRef}
+        token={token ?? ''}
+        mapLayers={layers}
+        mapMarkers={mapLoaded ? markers : undefined}
+        nameTags={nameTags}
+        legends={legends}
+        onMapLoad={() => setMapLoaded(true)}
+        drawerOpen={drawerOpen}
+        drawerSize='medium'
+        drawerChildren={drawerContent}
+        setDrawerOpen={setDrawerOpen}
+        additionalComponent={draggableMarker}
+      />
+    </>
   );
 }

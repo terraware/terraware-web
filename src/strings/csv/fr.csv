@@ -110,6 +110,7 @@ ADD_STANDARD_METRIC_CONFIRMATION,Vous êtes sur le point d’ajouter un indicate
 ADD_SUB_LOCATION,Ajouter un sous-emplacement,d0ad4ffd
 ADD_SUBSET_WEIGHT_AND_COUNT,Ajouter le poids et le nombre de sous-ensembles,e1b6fdf2
 ADD_TEST,Ajouter un test,2a608b3f
+ADD_TO_MAP,Ajouter à la carte,325f5a77
 ADD_TO_PROJECT,Ajouter au projet,3e56c71f
 ADD_VIABILITY,Ajouter la viabilité,a4672790
 ADD_VIABILITY_TEST,Ajouter un test de viabilité,4648a184
@@ -738,6 +739,7 @@ FIRE,Incendie,3daefdd1
 FIRST_ADD_PLANTING_SITE,"Pour afficher le tableau de bord, vous devez détenir un site de plantation.",29adc97e
 FIRST_NAME,Prénom,4728037d
 FIX_HIGHLIGHTED_FIELDS,Remplissez les champs surlignés ci-dessous.,505e80af
+FLAG,Signaler,aafc43da
 FLY,Voler,0747d35f
 FLY_FASTER,Voler plus vite,e24d00c8
 FLY_SLOWER,Voler plus lentement,0271712f
@@ -1035,6 +1037,7 @@ MAPS_GIS_DESCRIPTION,Les cartes présentées ici proviennent de la base de donn�
 MARK_ALL_AS_READ,Marquer tout comme lu,aad72628
 MARK_AS_COMPLETE,Marquer comme complet,63a2256e
 MARK_AS_INCOMPLETE,Marquer comme incomplet,3baf97ae
+MARK_AS_NEEDS_ATTENTION,Marquer comme nécessitant une attention,6a16567f
 MARK_AS_READ,Marquer comme lu,d91d4c14
 MARK_AS_SUBMITTED,Marquer comme soumis,b7f9a33e
 MARK_AS_SUBMITTED_UNDO,Annuler Marquer comme soumis,4ad82823
@@ -1089,6 +1092,7 @@ MONITORING,Surveillance,c607ad35
 MONITORING_PLOT,Placette de suivi,97de3243
 MONITORING_PLOT_TYPE,Type de placette de suivi,5269e047
 MONITORING_PLOTS,Placettes de suivi,42428fbb
+MONITORS,Moniteurs,5783929b
 MONOCULTURE,Monoculture,7499be9c
 MONTH_01,Janvier,735450e1
 MONTH_02,Février,2d7dea43
@@ -1491,6 +1495,7 @@ PROBLEMS,Problèmes,25b5d615
 PROBLEMS_WITH_ENTRIES,Il y a eu un problème avec certaines saisies dans ce formulaire.,86f72cd9
 PROCESSING,Traitement en cours,36f06d3a
 PROCESSING_STATUS_REQUIRED,Statut du traitement *,ac173883
+PROCESSING_VIDEO,Traitement de la vidéo,9a3838de
 PROGRESS,Progrès,c07f21ce
 PROGRESS_NOTES,Notes sur l'état d'avancement,5e670e4a
 PROGRESS_NOTES_DESCRIPTION,Fournissez des informations qui peuvent être publiées à l'intention des bailleurs de fonds.,a42ffda7
@@ -2300,6 +2305,7 @@ UNSPECIFIED,Non spécifié,be62b890
 UPCOMING,À venir,fa1930e2
 UPCOMING_PLANTING_SEASONS,Saisons de plantation à venir,3ad28e65
 UPDATE,Mettre à jour,c4c30980
+UPDATE_LOCATION,Mettre à jour l’emplacement,86b598cd
 UPDATE_NEEDED,Mise à jour nécessaire,7b391dc2
 UPDATE_REQUESTED,Mise à jour demandée,3c56b2c5
 UPDATE_STATUS_WARNING,Vous êtes sur le point de mettre à jour le statut,6ee652b9
@@ -2370,10 +2376,11 @@ VIDEO_LINK,Lien vidéo,2546979d
 VIDEO_PROCESSING,Traitement de la vidéo,998e847c
 VIDEO_PROCESSING_DESCRIPTION,Il vous reste {0} vidéo(s) en cours de traitement. Cela peut prendre jusqu'à 12 heures.,d85b02f6
 VIDEO_UNABLE_TO_PROCESS,Impossible de traiter la vidéo,3817bfb4
-VIDEO_UNABLE_TO_PROCESS_DESCRIPTION,"Nous n'avons pas pu générer le modèle à partir de la vidéo fournie. Pour des conseils afin d'améliorer votre vidéo, consultez le {0}. Vous pouvez retirer la vidéo du tableau ci-dessous. {1} ou {2}.",a9655e8d
+VIDEO_UNABLE_TO_PROCESS_DESCRIPTION,"Nous n'avons pas pu générer la visite virtuelle à partir de la vidéo fournie. Pour des conseils afin d'améliorer votre vidéo, consultez le {0}. Vous pouvez retirer la vidéo du tableau ci-dessous. {1} ou {2}.",fe362adb
 VIDEO_UPLOAD_FAILED,Échec du téléversement de la vidéo,2406bea0
-VIDEO_UPLOAD_FAILED_DESCRIPTION,"Le téléversement de votre vidéo a échoué. {0}. Pour des conseils afin d'améliorer votre vidéo, consultez le {1}.",0fbf7c0c
+VIDEO_UPLOAD_FAILED_DESCRIPTION,Le téléchargement de votre vidéo a échoué. {0}. Découvrez pourquoi votre vidéo a pu échouer en visitant le {1}.,839af7da
 VIEW,Voir,02cff17a
+VIEW_3D_MODEL,Voir le modèle 3D,fc2e2960
 VIEW_APPLICATION,Voir la demande,bbdc193f
 VIEW_FULL_DASHBOARD,Afficher le tableau de bord complet,25189646
 VIEW_HISTORY,Voir l'historique,a1dbe2ca

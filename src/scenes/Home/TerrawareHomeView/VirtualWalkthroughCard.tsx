@@ -8,7 +8,7 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
 import { useOrganization } from 'src/providers';
-import { useSearchOrganizationMediaFilesQuery } from 'src/queries/search/organizationMedia';
+import { useSearchVirtualWalkthroughsQuery } from 'src/queries/search/virtualWalkthroughs';
 import strings from 'src/strings';
 
 import CreateVirtualWalkthroughStep1Modal from './CreateVirtualWalkthroughStep1Modal';
@@ -20,7 +20,7 @@ const VirtualWalkthroughCard = (): JSX.Element => {
   const { selectedOrganization } = useOrganization();
   const [modalOpen, setModalOpen] = useState(false);
 
-  const { data: mediaFiles } = useSearchOrganizationMediaFilesQuery(selectedOrganization?.id ?? 0, {
+  const { data: mediaFiles } = useSearchVirtualWalkthroughsQuery(selectedOrganization?.id ?? 0, {
     skip: !selectedOrganization,
   });
 
@@ -47,7 +47,7 @@ const VirtualWalkthroughCard = (): JSX.Element => {
         <Typography sx={{ color: theme.palette.TwClrTxt, fontSize: '16px', fontWeight: 400, lineHeight: '24px' }}>
           {strings.formatString(strings.YOU_HAVE_X_VIRTUAL_WALKTHROUGHS, readyCount)}
         </Typography>
-        <Link to={APP_PATHS.OBSERVATIONS} fontSize='16px' fontWeight={400}>
+        <Link to={APP_PATHS.VIRTUAL_WALKTHROUGHS} fontSize='16px' fontWeight={400}>
           {strings.VIEW_IN_MAP}
         </Link>
       </>

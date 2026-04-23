@@ -29,7 +29,7 @@ import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import useProjectPlantingSites from 'src/hooks/useProjectPlantingSites';
 import {
-  useLazyListObservationResultsQuery,
+  useLazyGetObservationResultsQuery,
   useLazyListObservationSummariesQuery,
 } from 'src/queries/generated/observations';
 import { PlantingSiteHistoryPayload, useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -68,18 +68,23 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('strata');
   const { plantingSites: projectPlantingSites } = useProjectPlantingSites({ full: true, projectId });
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
-  const [listObservationResults, listObservationResultsResponse] = useLazyListObservationResultsQuery();
+  const [getObservationResult, getObservationResultResponse] = useLazyGetObservationResultsQuery();
   const [listObservataionSummary, listObservataionSummaryResponse] = useLazyListObservationSummariesQuery();
 
   useEffect(() => {
     if (plantingSiteId) {
       void getPlantingSite({ id: plantingSiteId }, true);
-      void listObservationResults({ plantingSiteId, depth: 'Plant' }, true);
       void listObservataionSummary({ plantingSiteId, limit: 1 }, true);
     }
-  }, [getPlantingSite, listObservataionSummary, listObservationResults, plantingSiteId]);
+  }, [getPlantingSite, listObservataionSummary, plantingSiteId]);
 
   const plantingSite = useMemo(() => getPlantingSiteResponse.currentData?.site, [getPlantingSiteResponse]);
+
+  useEffect(() => {
+    if (plantingSite?.latestObservationId) {
+      void getObservationResult({ observationId: plantingSite.latestObservationId, depth: 'Plant' }, true);
+    }
+  }, [getObservationResult, plantingSite]);
 
   const latestSummary = useMemo(() => {
     if (listObservataionSummaryResponse.currentData?.summaries.length) {
@@ -89,16 +94,10 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
     }
   }, [listObservataionSummaryResponse]);
 
-  const latestObservationResult = useMemo(() => {
-    if (listObservationResultsResponse.currentData?.observations.length) {
-      const completedResults = listObservationResultsResponse.currentData?.observations.filter(
-        (result) => result.state === 'Completed' || result.state === 'Abandoned'
-      );
-      return completedResults.length ? completedResults[0] : undefined;
-    } else {
-      return undefined;
-    }
-  }, [listObservationResultsResponse]);
+  const latestObservationResult = useMemo(
+    () => getObservationResultResponse.currentData?.observation,
+    [getObservationResultResponse.currentData?.observation]
+  );
 
   const { plantingSiteHistory } = usePlantingSiteHistory({
     plantingSiteId,

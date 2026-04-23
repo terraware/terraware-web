@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -10,14 +10,12 @@ import PlantingSiteSpeciesCellRenderer from 'src/components/SeedFundReports/Loca
 import { transformNumericValue } from 'src/components/SeedFundReports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
-import useObservationResults from 'src/hooks/useObservationResults';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
+import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { selectPlantingSiteObservationsRequest } from 'src/redux/features/observations/observationsSelectors';
-import { requestPlantingSiteObservations } from 'src/redux/features/observations/observationsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
+import { useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
+import { useSearchObservationDatesQuery } from 'src/queries/search/plantingSites';
 import { ReportPlantingSite } from 'src/types/Report';
 import { GrowthForm } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -31,61 +29,66 @@ type PlantingSiteSpecies = {
   totalPlanted?: number | undefined;
 };
 
-const columns = (): TableColumnType[] => [
-  {
-    key: 'name',
-    name: strings.SPECIES,
-    type: 'string',
-  },
-  {
-    key: 'growthForms',
-    name: strings.GROWTH_FORM,
-    type: 'string',
-  },
-  {
-    key: 'totalPlanted',
-    name: strings.TOTAL_PLANTED_REQUIRED,
-    type: 'string',
-  },
-  { key: 'mortalityRateInField', name: strings.MORTALITY_RATE_IN_FIELD_REQUIRED, type: 'string' },
-];
-
 const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element => {
   const { editable, location, onUpdateLocation, validate } = props;
 
+  const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
-  const dispatch = useAppDispatch();
+
+  const columns = useCallback(
+    (): TableColumnType[] => [
+      {
+        key: 'name',
+        name: strings.SPECIES,
+        type: 'string',
+      },
+      {
+        key: 'growthForms',
+        name: strings.GROWTH_FORM,
+        type: 'string',
+      },
+      {
+        key: 'totalPlanted',
+        name: strings.TOTAL_PLANTED_REQUIRED,
+        type: 'string',
+      },
+      { key: 'mortalityRateInField', name: strings.MORTALITY_RATE_IN_FIELD_REQUIRED, type: 'string' },
+    ],
+    [strings]
+  );
 
   const plantingSiteId = location.id;
   const { plantingSiteReportedPlants } = usePlantingSiteReportedPlants(plantingSiteId);
-  const { latestObservationResult } = useObservationResults({ plantingSiteId });
+
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
-  const [observationsRequestId, setObservationsRequestId] = useState('');
-  const observationsResponse = useAppSelector(selectPlantingSiteObservationsRequest(observationsRequestId));
+  const [getLatestObservation, getLatestObservationResponse] = useLazyGetObservationResultsQuery();
+
+  const { currentData: upcomingObservationDates } = useSearchObservationDatesQuery({
+    plantingSiteId,
+    state: ['Upcoming'],
+  });
+  const { currentData: inProgressObservationDates } = useSearchObservationDatesQuery({
+    plantingSiteId,
+    state: ['InProgress'],
+  });
 
   useEffect(() => {
-    if (plantingSite && plantingSite.id !== -1) {
-      const request = dispatch(requestPlantingSiteObservations({ plantingSiteId: plantingSite.id }));
-      setObservationsRequestId(request.requestId);
+    if (plantingSite?.latestObservationId) {
+      void getLatestObservation(
+        {
+          observationId: plantingSite?.latestObservationId,
+          depth: 'Plot',
+        },
+        true
+      );
     }
-  }, [dispatch, plantingSite]);
+  }, [getLatestObservation, plantingSite?.latestObservationId]);
 
-  const currentObservation = useMemo(() => {
-    const observations = observationsResponse?.status === 'success' ? observationsResponse.data : undefined;
-    return observations?.find(
-      (observation) =>
-        observation.state === 'InProgress' && observation.isAdHoc === false && observation.type === 'Monitoring'
-    );
-  }, [observationsResponse]);
-
-  const nextObservation = useMemo(() => {
-    const observations = observationsResponse?.status === 'success' ? observationsResponse.data : undefined;
-    return observations?.find(
-      (observation) =>
-        observation.state === 'Upcoming' && observation.isAdHoc === false && observation.type === 'Monitoring'
-    );
-  }, [observationsResponse]);
+  const latestObservationResult = useMemo(
+    () => getLatestObservationResponse.currentData?.observation,
+    [getLatestObservationResponse.currentData]
+  );
 
   const { species: allSpecies } = useSpeciesData();
   const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);
@@ -201,14 +204,14 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   }, [plantingSite, plantingDensity]);
 
   const currentNextObservationDates = useMemo(() => {
-    if (currentObservation) {
-      return `${currentObservation.startDate} - ${currentObservation.endDate}`;
+    if (inProgressObservationDates?.length) {
+      return `${inProgressObservationDates[0].startDate} - ${inProgressObservationDates[0].endDate}`;
     }
-    if (nextObservation) {
-      return `${nextObservation.startDate} - ${nextObservation.endDate}`;
+    if (upcomingObservationDates?.length) {
+      return `${upcomingObservationDates[0].startDate} - ${upcomingObservationDates[0].endDate}`;
     }
     return '';
-  }, [currentObservation, nextObservation]);
+  }, [inProgressObservationDates, upcomingObservationDates]);
 
   const latestObservationDateString = useMemo(() => {
     if (latestObservationResult?.completedTime && plantingSite) {
