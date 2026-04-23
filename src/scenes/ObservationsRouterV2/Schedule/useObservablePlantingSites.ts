@@ -12,13 +12,13 @@ const useObservablePlantingSites = () => {
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const allObservations = useMemo(
-    () => listObservationsResponse.data?.observations ?? [],
-    [listObservationsResponse.data?.observations]
+    () => listObservationsResponse.currentData?.observations ?? [],
+    [listObservationsResponse.currentData?.observations]
   );
 
   const allSitesReportedPlants = useMemo(
-    () => listSitesReportedPlantsResponse.data?.sites,
-    [listSitesReportedPlantsResponse.data?.sites]
+    () => listSitesReportedPlantsResponse.currentData?.sites,
+    [listSitesReportedPlantsResponse.currentData?.sites]
   );
   useEffect(() => {
     if (selectedOrganization) {
