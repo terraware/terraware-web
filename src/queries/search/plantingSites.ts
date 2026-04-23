@@ -132,7 +132,7 @@ const injectedRtkApi = api.injectEndpoints({
               {
                 field: 'id',
                 operation: 'field',
-                values: payload.plantingSiteId,
+                values: [payload.plantingSiteId],
               },
               ...(payload.state?.length
                 ? [
