@@ -20,24 +20,17 @@ import useTableState from 'src/hooks/useTableState';
 import { useOrganization } from 'src/providers';
 import { useLazyListPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
 import { useUpdateSubstrataMutation } from 'src/queries/generated/substrata';
-import {
-  PlantingProgress as PlantingProgressType,
-  selectStrataHaveStatistics,
-} from 'src/redux/features/plantings/plantingsSelectors';
+import { PlantingProgress as PlantingProgressType } from 'src/redux/features/plantings/plantingsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
-import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
 import { exportNurseryPlantingProgress } from 'src/scenes/NurseryRouter/exportNurseryData';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export default function PlantingProgressList(): JSX.Element {
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const [showWarningModal, setShowWarningModal] = useState(false);
   const [rowSelection, setRowSelection] = useState({});
-  const defaultTimeZone = useDefaultTimeZone();
   const { selectedOrganization } = useOrganization();
 
   const projects = useAppSelector(selectProjects);
@@ -113,30 +106,6 @@ export default function PlantingProgressList(): JSX.Element {
     [rowSelection, rows]
   );
 
-  const selectedStratumIdsBySiteId = useMemo((): Record<number, Set<number>> | undefined => {
-    if (selectedRows.length > 0) {
-      return selectedRows.reduce((acc: Record<number, Set<number>>, row: any) => {
-        const siteId = row.siteId;
-        if (acc[siteId]) {
-          acc[siteId].add(row.stratumId);
-        } else {
-          acc[siteId] = new Set([row.stratumId]);
-        }
-        return acc;
-      }, {});
-    }
-    return undefined;
-  }, [selectedRows]);
-
-  const substrataStatisticsResult = useAppSelector((state) =>
-    selectStrataHaveStatistics(
-      state,
-      selectedOrganization?.id || -1,
-      selectedStratumIdsBySiteId,
-      defaultTimeZone.get().id
-    )
-  );
-
   const hasStrata = useMemo(() => {
     if (!rows) {
       return undefined;
@@ -186,15 +155,6 @@ export default function PlantingProgressList(): JSX.Element {
     },
     [selectedRows, snackbar, updateSubstratum]
   );
-
-  const onModalSubmit = useCallback(() => {
-    setShowWarningModal(false);
-    void setPlantingCompleted(false);
-  }, [setPlantingCompleted]);
-
-  const onCloseStatsWarningModal = useCallback(() => {
-    setShowWarningModal(false);
-  }, []);
 
   // Cell renderer components
   const TargetPlantingDensityCell = useCallback(({ cell }: { cell: MRT_Cell<Partial<PlantingProgressType>> }) => {
@@ -360,14 +320,6 @@ export default function PlantingProgressList(): JSX.Element {
     ]
   );
 
-  const validateUndoPlantingComplete = useCallback(() => {
-    if (substrataStatisticsResult) {
-      setShowWarningModal(true);
-      return;
-    }
-    void setPlantingCompleted(false);
-  }, [substrataStatisticsResult, setPlantingCompleted]);
-
   const areAllIncompleted = useMemo(
     () => selectedRows.every((row: any) => row.plantingCompleted === false),
     [selectedRows]
@@ -384,9 +336,6 @@ export default function PlantingProgressList(): JSX.Element {
 
   return (
     <Box>
-      {showWarningModal && (
-        <StatsWarningDialog open={showWarningModal} onClose={onCloseStatsWarningModal} onSubmit={onModalSubmit} />
-      )}
       <Box>{isLoading && <BusySpinner withSkrim={true} />}</Box>
       <EditableTable
         key={hasStrata ? 'plantings-progress-table-with-strata' : 'plantings-progress-table-without-strata'}
@@ -435,7 +384,7 @@ export default function PlantingProgressList(): JSX.Element {
               <Box display='flex' gap={1} alignItems='center'>
                 <Button
                   type='passive'
-                  onClick={validateUndoPlantingComplete}
+                  onClick={() => void setPlantingCompleted(false)}
                   disabled={!areAllCompleted}
                   label={strings.UNDO_PLANTING_COMPLETE}
                   priority='secondary'
