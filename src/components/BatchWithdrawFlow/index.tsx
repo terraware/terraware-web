@@ -31,12 +31,11 @@ type FlowStates = 'purpose' | 'select batches' | 'photos';
 type BatchWithdrawFlowProps = {
   batchIds: string[];
   sourcePage?: string;
-  withdrawalCreatedCallback?: () => void;
 };
 
 export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { batchIds, sourcePage, withdrawalCreatedCallback } = props;
+  const { batchIds, sourcePage } = props;
   const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalRequestPurposes;
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
   const [record, setRecord] = useForm<NurseryWithdrawalRequest>({
@@ -134,10 +133,6 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           uploadWithdrawalPhotos({ withdrawalId: withdrawal.id, body: { file: photo } })
         );
         await Promise.allSettled(uploadPhotoPromises);
-      }
-
-      if (withdrawalCreatedCallback) {
-        withdrawalCreatedCallback();
       }
 
       const hasEmptyBatchesAfterWithdrawal = record.batchWithdrawals.some((batchWithdrawal) => {

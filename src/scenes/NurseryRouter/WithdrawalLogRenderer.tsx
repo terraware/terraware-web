@@ -18,7 +18,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
 
-  const { column, row, value, index, onRowClick, reloadData } = props;
+  const { column, row, value, index, onRowClick } = props;
   const { NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
 
   const linkStyles = {
@@ -92,11 +92,7 @@ export default function WithdrawalLogRenderer(props: RendererProps<TableRowType>
           value={
             <>
               {undoWithdrawalModalOpened && (
-                <UndoWithdrawalModal
-                  onClose={() => setUndoWithdrawalModalOpened(false)}
-                  row={row}
-                  reload={reloadData}
-                />
+                <UndoWithdrawalModal onClose={() => setUndoWithdrawalModalOpened(false)} row={row} />
               )}
               <WithdrawalHistoryMenu
                 reassign={rowClick}

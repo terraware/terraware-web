@@ -52,3 +52,16 @@ export const startOfYear = (date: Date): Date => {
 export const endOfYear = (date: Date): Date => {
   return new Date(date.getFullYear(), 12, 0);
 };
+
+export const dayJsLikeToDateStr = (val: unknown): string | undefined => {
+  if (val === null || val === undefined) {
+    return undefined;
+  }
+  if (typeof val === 'object') {
+    const dayjsLike = val as { format?: (f: string) => string; isValid?: () => boolean };
+    if (typeof dayjsLike.format === 'function' && typeof dayjsLike.isValid === 'function') {
+      return dayjsLike.isValid() ? dayjsLike.format('YYYY-MM-DD') : undefined;
+    }
+  }
+  return undefined;
+};

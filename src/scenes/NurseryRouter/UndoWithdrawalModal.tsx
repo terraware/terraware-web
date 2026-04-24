@@ -1,33 +1,26 @@
-import React, { type JSX, useState } from 'react';
+import React, { type JSX } from 'react';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import { NurseryWithdrawalService } from 'src/services';
+import { useUndoBatchWithdrawalMutation } from 'src/queries/generated/nurseryWithdrawals';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface UndoWithdrawalModalProps {
   onClose: () => void;
   row: any;
-  reload?: () => void;
 }
 
 export default function UndoWithdrawalModal(props: UndoWithdrawalModalProps): JSX.Element {
-  const { onClose, row, reload } = props;
+  const { onClose, row } = props;
   const snackbar = useSnackbar();
-  const [busy, setBusy] = useState(false);
+  const [undoWithdrawal, { isLoading }] = useUndoBatchWithdrawalMutation();
 
   const onSubmit = async () => {
-    setBusy(true);
-    const response = await NurseryWithdrawalService.undoNurseryWithdrawal(row.id);
-    setBusy(false);
-    if (response.requestSucceeded) {
-      if (reload) {
-        reload();
-      }
+    try {
+      await undoWithdrawal(row.id).unwrap();
       snackbar.toastSuccess(strings.WITHDRAWAL_UNDONE_DESCRIPTION, strings.WITHDRAWAL_UNDONE);
-      onClose();
-    } else {
+    } catch (e) {
       snackbar.toastError();
     }
   };
@@ -48,7 +41,7 @@ export default function UndoWithdrawalModal(props: UndoWithdrawalModalProps): JS
           key='button-1'
         />,
         <Button
-          disabled={busy}
+          disabled={isLoading}
           id='undoWithdrawal'
           label={strings.UNDO_WITHDRAWAL}
           onClick={() => void onSubmit()}

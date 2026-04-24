@@ -3,21 +3,20 @@ import React, { type JSX } from 'react';
 import { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { useOrganization } from 'src/providers/hooks';
-import strings from 'src/strings';
-import { NurseryWithdrawal } from 'src/types/Batch';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { NurseryWithdrawalPayload } from 'src/queries/generated/nurseryWithdrawals';
+import { SearchNurseryWithdrawalPayload } from 'src/queries/search/nurseries';
 import { purposeLabel } from 'src/types/Batch';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import { WithdrawalSummary } from '../NurseryWithdrawalsDetailsView';
-
 type WithdrawalOverviewProps = {
-  withdrawal?: NurseryWithdrawal;
-  withdrawalSummary?: WithdrawalSummary;
+  withdrawal?: NurseryWithdrawalPayload;
+  withdrawalSummary?: SearchNurseryWithdrawalPayload;
 };
 
 export default function WithdrawalOverview({ withdrawal, withdrawalSummary }: WithdrawalOverviewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
 
   const facilityName = selectedOrganization?.facilities?.find((f) => f.id === withdrawal?.facilityId)?.name;
@@ -44,11 +43,11 @@ export default function WithdrawalOverview({ withdrawal, withdrawalSummary }: Wi
     },
     {
       title: strings.TO_STRATUM,
-      data: withdrawalSummary?.stratumNames ?? '',
+      data: withdrawalSummary?.stratumName ?? '',
     },
     {
       title: strings.TO_SUBSTRATUM,
-      data: withdrawalSummary?.substratumShortNames ?? '',
+      data: withdrawalSummary?.substratumShortName ?? '',
     },
     {
       title: strings.NOTES,

@@ -5,11 +5,7 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useQuery from 'src/utils/useQuery';
 
-type BatchBulkWithdrawViewProps = {
-  withdrawalCreatedCallback?: () => void;
-};
-export default function BatchBulkWithdrawView(props: BatchBulkWithdrawViewProps): JSX.Element | null {
-  const { withdrawalCreatedCallback } = props;
+export default function BatchBulkWithdrawView(): JSX.Element | null {
   const query = useQuery();
   const navigate = useSyncNavigate();
 
@@ -24,11 +20,5 @@ export default function BatchBulkWithdrawView(props: BatchBulkWithdrawViewProps)
     }
   }, [batchIds, navigate]);
 
-  return batchIds ? (
-    <BatchWithdrawFlow
-      batchIds={batchIds}
-      sourcePage={source || undefined}
-      withdrawalCreatedCallback={withdrawalCreatedCallback}
-    />
-  ) : null;
+  return batchIds ? <BatchWithdrawFlow batchIds={batchIds} sourcePage={source || undefined} /> : null;
 }

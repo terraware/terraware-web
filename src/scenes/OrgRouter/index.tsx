@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import { Navigate, Route, Routes } from 'react-router';
 
 import { Box, Slide, useTheme } from '@mui/material';
@@ -109,8 +109,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
     inset: '0px',
   };
 
-  const [withdrawalCreated, setWithdrawalCreated] = useState<boolean>(false);
-
   const reloadProjects = useCallback(() => {
     const populateProjects = () => {
       if (selectedOrganization && !isPlaceholderOrg(selectedOrganization.id)) {
@@ -120,19 +118,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
     populateProjects();
   }, [selectedOrganization, dispatch, activeLocale]);
 
-  const setDefaults = useCallback(() => {
-    if (selectedOrganization && !isPlaceholderOrg(selectedOrganization.id)) {
-      setWithdrawalCreated(false);
-    }
-  }, [selectedOrganization]);
-
   useEffect(() => {
     reloadProjects();
   }, [reloadProjects]);
-
-  useEffect(() => {
-    setDefaults();
-  }, [setDefaults]);
 
   const selectedOrgHasSpecies = useCallback((): boolean => species.length > 0, [species]);
 
@@ -176,18 +164,13 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
       {type !== 'desktop' ? (
         <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
           <Box sx={navBarOpened}>
-            <NavBar
-              setShowNavBar={setShowNavBar}
-              withdrawalCreated={withdrawalCreated}
-              hasPlantingSites={hasPlantingSites}
-            />
+            <NavBar setShowNavBar={setShowNavBar} hasPlantingSites={hasPlantingSites} />
           </Box>
         </Slide>
       ) : (
         <NavBar
           setShowNavBar={setShowNavBar}
           backgroundTransparent={viewHasBackgroundImage()}
-          withdrawalCreated={withdrawalCreated}
           hasPlantingSites={hasPlantingSites}
         />
       )}
@@ -221,14 +204,8 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.SEED_BANKS + '/*'} element={<SeedBanksRouter />} />
             <Route path={APP_PATHS.NURSERIES + '/*'} element={<NurseriesRouter />} />
             <Route path={APP_PATHS.PLANTS_DASHBOARD + '/*'} element={<PlantsDashboardRouter />} />
-            <Route
-              path={APP_PATHS.INVENTORY + '/*'}
-              element={<InventoryRouter setWithdrawalCreated={setWithdrawalCreated} />}
-            />
-            <Route
-              path={APP_PATHS.BATCH_WITHDRAW}
-              element={<BatchBulkWithdrawView withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />}
-            />
+            <Route path={APP_PATHS.INVENTORY + '/*'} element={<InventoryRouter />} />
+            <Route path={APP_PATHS.BATCH_WITHDRAW} element={<BatchBulkWithdrawView />} />
             <Route path={APP_PATHS.PLANTING_SITES + '/*'} element={<PlantingSites />} />
             <Route path={APP_PATHS.NURSERY + '/*'} element={<NurseryRouter />} />
             <Route path={APP_PATHS.PLANTING_PROGRESS} element={<PlantingProgressView />} />
