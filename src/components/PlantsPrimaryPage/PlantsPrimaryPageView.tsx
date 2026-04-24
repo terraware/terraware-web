@@ -253,9 +253,10 @@ export default function PlantsPrimaryPageView({
                       {strings.formatString(
                         strings.X_HA,
                         isRolledUpView ? (
-                          <FormattedNumber value={Math.round(totalArea * 100) / 100} />
+                          <FormattedNumber decimals={1} value={totalArea} />
                         ) : (
                           <FormattedNumber
+                            decimals={1}
                             value={plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa || 0}
                           />
                         )

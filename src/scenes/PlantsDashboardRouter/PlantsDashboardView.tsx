@@ -297,7 +297,7 @@ export default function PlantsDashboardView({
                 {plantingSite?.areaHa !== undefined &&
                   strings.formatString(
                     strings.X_HA_IN_TOTAL_PLANTING_AREA,
-                    <FormattedNumber value={Math.round(plantingSite.areaHa * 100) / 100} />
+                    <FormattedNumber value={plantingSite.areaHa} decimals={1} />
                   )}
               </Typography>
               <PlantDashboardMap plantingSiteId={plantingSite.id} />

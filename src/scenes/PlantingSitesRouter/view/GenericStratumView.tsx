@@ -16,6 +16,7 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import strings from 'src/strings';
 import { MinimalPlantingSite, MinimalStratum } from 'src/types/Tracking';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const columns = (): TableColumnType[] => [
@@ -53,6 +54,7 @@ export default function GenericStratumView({ plantingSite, stratum }: GenericStr
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
+  const numberFormatter = useNumberFormatter();
 
   const searchProps = useMemo<SearchProps>(
     () => ({
@@ -94,7 +96,7 @@ export default function GenericStratumView({ plantingSite, stratum }: GenericStr
             columns={columns}
             rows={stratum?.substrata ?? []}
             orderBy='name'
-            Renderer={DetailsRenderer(timeZone)}
+            Renderer={DetailsRenderer(timeZone, numberFormatter)}
           />
         </Box>
       </Card>
@@ -103,7 +105,7 @@ export default function GenericStratumView({ plantingSite, stratum }: GenericStr
 }
 
 const DetailsRenderer =
-  (timeZone: string) =>
+  (timeZone: string, numberFormatter: ReturnType<typeof useNumberFormatter>) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, value } = props;
@@ -116,7 +118,13 @@ const DetailsRenderer =
     };
 
     if (column.key === 'areaHa') {
-      return <CellRenderer {...props} value={value || ''} sx={textStyles} />;
+      return (
+        <CellRenderer
+          {...props}
+          value={typeof value === 'number' ? numberFormatter.format(value, { decimals: 1 }) : ''}
+          sx={textStyles}
+        />
+      );
     }
 
     if (column.key === 'latestObservationCompletedTime') {

@@ -14,9 +14,9 @@ import PlantingSiteMapLegend from 'src/components/common/PlantingSiteMapLegend';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
+import { useLocalization } from 'src/providers/hooks';
 import { useListPlantingSiteHistoryIdsQuery } from 'src/queries/search/plantingSiteHistories';
 import { MapService } from 'src/services';
-import strings from 'src/strings';
 import { MapEntityId, MapSourceProperties } from 'src/types/Map';
 import { regexMatch } from 'src/utils/search';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -38,6 +38,7 @@ export default function BoundariesAndStrata({
   setView,
   view,
 }: BoundariesAndStrataProps): JSX.Element {
+  const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
@@ -76,6 +77,14 @@ export default function BoundariesAndStrata({
     return total;
   }, [plantingSite]);
 
+  const plantingSiteAreaHaDisplayValue = useMemo(
+    () =>
+      strings
+        .formatString(strings.X_HA, numberFormatter.format(plantingSite?.areaHa || 0, { decimals: 1 }))
+        ?.toString(),
+    [numberFormatter, plantingSite, strings]
+  );
+
   return (
     <Box sx={view === 'map' ? { display: 'flex', flexGrow: 1, flexDirection: 'column' } : undefined}>
       <Box display='flex' flexGrow={0} alignItems='center'>
@@ -97,8 +106,7 @@ export default function BoundariesAndStrata({
               {(plantingSite.areaHa || 0) > 0 && view === 'map' && (
                 <Box display='flex' flexDirection='row' flex={1}>
                   <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
-                    {strings.PLANTING_SITE_AREA}:{' '}
-                    {strings.formatString(strings.X_HA, numberFormatter.format(plantingSite.areaHa || 0))?.toString()}
+                    {strings.PLANTING_SITE_AREA}: {plantingSiteAreaHaDisplayValue}
                   </Typography>
                   <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
                     {strings.PLANTING_COMPLETE_AREA}:{' '}
@@ -121,6 +129,7 @@ type PlantingSiteMapViewProps = {
 };
 
 function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element | null {
+  const { strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { isDesktop } = useDeviceInfo();
   const [includedLayers, setIncludedLayers] = useState<MapLayer[]>(['Planting Site', 'Strata', 'Monitoring Plots']);
@@ -225,7 +234,7 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
               key: strings.AREA_HA,
               value:
                 stratumHistory?.areaHa && stratumHistory?.areaHa > 0
-                  ? numberFormatter.format(stratumHistory?.areaHa)
+                  ? numberFormatter.format(stratumHistory?.areaHa, { decimals: 1 })
                   : '',
             },
             {
@@ -257,7 +266,7 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
               key: strings.AREA_HA,
               value:
                 substratumHistory?.areaHa && substratumHistory?.areaHa > 0
-                  ? numberFormatter.format(substratumHistory?.areaHa)
+                  ? numberFormatter.format(substratumHistory?.areaHa, { decimals: 1 })
                   : '',
             },
             { key: strings.PLANTING_COMPLETE, value: substratum?.plantingCompleted ? strings.YES : strings.NO },
@@ -271,7 +280,7 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
         return null;
       }
     },
-    [numberFormatter, plantingSite, selectedHistory, timeZone]
+    [numberFormatter, plantingSite, selectedHistory, strings, timeZone]
   );
 
   if (!plantingSite?.boundary) {
