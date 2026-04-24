@@ -5,10 +5,14 @@ import { Message } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 import { useDocLinks } from 'src/docLinks';
+import { useUser } from 'src/providers';
 import { useGenerateOrganizationSplatMutation } from 'src/queries/generated/organizationSplats';
 import { useSearchVirtualWalkthroughsQuery } from 'src/queries/search/virtualWalkthroughs';
 import CreateVirtualWalkthroughStep1Modal from 'src/scenes/Home/TerrawareHomeView/CreateVirtualWalkthroughStep1Modal';
 import strings from 'src/strings';
+
+const PREF_UPLOAD_FAILED_IDS = 'virtualWalkthrough.dismissedUploadFailedIds';
+const PREF_ERRORED_FILE_IDS = 'virtualWalkthrough.dismissedErroredFileIds';
 
 type VirtualWalkthroughMessagesProps = {
   organizationId: number;
@@ -22,33 +26,73 @@ const VirtualWalkthroughMessages = ({
   const theme = useTheme();
   const docLinks = useDocLinks();
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [dismissedProcessingIds, setDismissedProcessingIds] = useState<number[]>([]);
 
+  const { userPreferences, updateUserPreferences } = useUser();
   const { data: mediaFiles } = useSearchVirtualWalkthroughsQuery(organizationId);
   const [generateSplat] = useGenerateOrganizationSplatMutation();
 
-  const processingCount = useMemo(
-    () => mediaFiles?.filter((f) => f.splatStatus === 'Preparing').length ?? 0,
+  const processingFiles = useMemo(
+    () => mediaFiles?.filter((f) => f.splatStatus === 'Preparing') ?? [],
     [mediaFiles]
   );
+  const processingCount = processingFiles.length;
+
+  const hasNewProcessingFiles = useMemo(
+    () => processingFiles.some((f) => !dismissedProcessingIds.includes(f.fileId)),
+    [processingFiles, dismissedProcessingIds]
+  );
+
+  const dismissedUploadFailedIds = useMemo(
+    () => (userPreferences[PREF_UPLOAD_FAILED_IDS] as number[] | undefined) ?? [],
+    [userPreferences]
+  );
+
+  const uploadFailedFiles = useMemo(
+    () => mediaFiles?.filter((f) => f.needsAttention && !f.splatStatus) ?? [],
+    [mediaFiles]
+  );
+
   const hasUploadFailed = useMemo(
-    () => mediaFiles?.some((f) => f.needsAttention && !f.splatStatus) ?? false,
+    () => uploadFailedFiles.some((f) => !dismissedUploadFailedIds.includes(f.fileId)),
+    [dismissedUploadFailedIds, uploadFailedFiles]
+  );
+
+  const erroredFiles = useMemo(
+    () => mediaFiles?.filter((f) => f.splatStatus === 'Errored') ?? [],
     [mediaFiles]
   );
 
   const lastErroredFile = useMemo(
-    () =>
-      mediaFiles
-        ?.filter((f) => f.splatStatus === 'Errored')
-        .sort((a, b) => (b.createdTime ?? '').localeCompare(a.createdTime ?? ''))[0],
-    [mediaFiles]
+    () => [...erroredFiles].sort((a, b) => (b.createdTime ?? '').localeCompare(a.createdTime ?? ''))[0],
+    [erroredFiles]
   );
-  const hasUnableToProcess = lastErroredFile !== undefined;
+
+  const dismissedErroredIds = useMemo(
+    () => (userPreferences[PREF_ERRORED_FILE_IDS] as number[] | undefined) ?? [],
+    [userPreferences]
+  );
+
+  const hasUnableToProcess = useMemo(
+    () => erroredFiles.some((f) => !dismissedErroredIds.includes(f.fileId)),
+    [erroredFiles, dismissedErroredIds]
+  );
 
   const handleRetryUpload = useCallback(() => {
     if (lastErroredFile) {
       void generateSplat({ organizationId, generateSplatRequestPayload: { fileId: lastErroredFile.fileId } });
     }
   }, [generateSplat, lastErroredFile, organizationId]);
+
+  const handleDismissUploadFailed = useCallback(() => {
+    const newIds = [...dismissedUploadFailedIds, ...uploadFailedFiles.map((f) => f.fileId)];
+    void updateUserPreferences({ ...userPreferences, [PREF_UPLOAD_FAILED_IDS]: newIds });
+  }, [dismissedUploadFailedIds, updateUserPreferences, uploadFailedFiles, userPreferences]);
+
+  const handleDismissErrored = useCallback(() => {
+    const newIds = [...dismissedErroredIds, ...erroredFiles.map((f) => f.fileId)];
+    void updateUserPreferences({ ...userPreferences, [PREF_ERRORED_FILE_IDS]: newIds });
+  }, [dismissedErroredIds, erroredFiles, updateUserPreferences, userPreferences]);
 
   if (!processingCount && !hasUploadFailed && !hasUnableToProcess) {
     return null;
@@ -93,15 +137,19 @@ const VirtualWalkthroughMessages = ({
           }
           priority='critical'
           type='page'
+          showCloseButton
+          onClose={handleDismissUploadFailed}
         />
       )}
 
-      {processingCount > 0 && (
+      {processingCount > 0 && hasNewProcessingFiles && (
         <Message
           title={strings.VIDEO_PROCESSING}
           body={strings.formatString(strings.VIDEO_PROCESSING_DESCRIPTION, processingCount) as string}
           priority='info'
           type='page'
+          showCloseButton
+          onClose={() => setDismissedProcessingIds((prev) => [...prev, ...processingFiles.map((f) => f.fileId)])}
         />
       )}
 
@@ -129,6 +177,8 @@ const VirtualWalkthroughMessages = ({
           }
           priority='warning'
           type='page'
+          showCloseButton
+          onClose={handleDismissErrored}
         />
       )}
     </Box>
