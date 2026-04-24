@@ -4,12 +4,7 @@ import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { PlantingSite, PlantingSiteReportedPlants, PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import { MonitoringPlotsResponse, requestMonitoringPlots } from './trackingAsyncThunks';
-import {
-  requestListPlantingSites,
-  requestListProjectPlantingSites,
-  requestOnePlantingSite,
-  requestPlantingSiteReportedPlants,
-} from './trackingThunks';
+import { requestListPlantingSites, requestListProjectPlantingSites, requestOnePlantingSite } from './trackingThunks';
 
 // all sites data
 type SitesData = {
@@ -150,17 +145,6 @@ export const plantingSiteSlice = createSlice({
   },
 });
 
-const initialStatePlantingSiteReportedPlants: { [key: string]: StatusT<PlantingSiteReportedPlants> } = {};
-
-export const plantingSiteReportedPlantsSlice = createSlice({
-  name: 'plantingSiteReportedPlantsSlice',
-  initialState: initialStatePlantingSiteReportedPlants,
-  reducers: {},
-  extraReducers: (builder) => {
-    buildReducers(requestPlantingSiteReportedPlants)(builder);
-  },
-});
-
 const trackingReducers = {
   tracking: trackingSlice.reducer,
   plantingSitesSearchResults: plantingSitesSearchResultsSlice.reducer,
@@ -168,7 +152,6 @@ const trackingReducers = {
   monitoringPlots: monitoringPlotsSlice.reducer,
   plantingSite: plantingSiteSlice.reducer,
   plantingSiteList: plantingSiteListSlice.reducer,
-  plantingSiteReportedPlants: plantingSiteReportedPlantsSlice.reducer,
   projectPlantingSites: projectPlantingSiteListSlice.reducer,
 };
 

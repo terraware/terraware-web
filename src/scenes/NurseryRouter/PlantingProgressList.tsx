@@ -20,11 +20,11 @@ import useTableState from 'src/hooks/useTableState';
 import { useOrganization } from 'src/providers';
 import { useLazyListPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
 import { useUpdateSubstrataMutation } from 'src/queries/generated/substrata';
-import { PlantingProgress as PlantingProgressType } from 'src/redux/features/plantings/plantingsSelectors';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { useAppSelector } from 'src/redux/store';
 import { exportNurseryPlantingProgress } from 'src/scenes/NurseryRouter/exportNurseryData';
 import strings from 'src/strings';
+import { PlantingProgressType } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export default function PlantingProgressList(): JSX.Element {
