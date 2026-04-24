@@ -61,8 +61,13 @@ const DEFAULT_SORT_ORDER: SearchSortOrder = {
 };
 
 // Menu cell component that can use hooks
-const MenuCellComponent = ({ row, reloadData }: { row: SearchResponseElement; reloadData: () => void }) => {
-  const [undoModalOpened, setUndoModalOpened] = useState(false);
+const MenuCellComponent = ({
+  row,
+  onUndo,
+}: {
+  row: SearchResponseElement;
+  onUndo: (row: SearchResponseElement) => void;
+}) => {
   const navigate = useSyncNavigate();
   const { NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
 
@@ -76,14 +81,7 @@ const MenuCellComponent = ({ row, reloadData }: { row: SearchResponseElement; re
   }, [navigate, row.delivery_id]);
 
   if (row.purpose !== NURSERY_TRANSFER && !row.undoesWithdrawalId && !row.undoneByWithdrawalId) {
-    return (
-      <>
-        {undoModalOpened && (
-          <UndoWithdrawalModal onClose={() => setUndoModalOpened(false)} row={row} reload={reloadData} />
-        )}
-        <WithdrawalHistoryMenu reassign={handleReassign} withdrawal={row} undo={() => setUndoModalOpened(true)} />
-      </>
-    );
+    return <WithdrawalHistoryMenu reassign={handleReassign} withdrawal={row} undo={() => onUndo(row)} />;
   }
   return null;
 };
@@ -150,6 +148,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const numberFormatter = useNumberFormatter();
   const [reloadTrigger, setReloadTrigger] = useState(0);
+  const [undoModalRow, setUndoModalRow] = useState<SearchResponseElement | null>(null);
 
   const reloadData = useCallback(() => {
     setReloadTrigger((prev) => prev + 1);
@@ -289,13 +288,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     [numberFormatter]
   );
 
-  const MenuCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
-      const row = cell.row.original;
-      return <MenuCellComponent row={row} reloadData={reloadData} />;
-    },
-    [reloadData]
-  );
+  const MenuCell = useCallback(({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+    const row = cell.row.original;
+    return <MenuCellComponent row={row} onUndo={setUndoModalRow} />;
+  }, []);
 
   const columns = useMemo<EditableTableColumn<SearchResponseElement>[]>(
     () => [
@@ -778,99 +774,111 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [dispatch, searchChildren, searchSortOrder, selectedOrganization, pagination, reloadTrigger]);
 
   return (
-    <EditableTable
-      key='nursery-withdrawals-table'
-      clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-      columns={columns}
-      data={rows || []}
-      enableEditing={false}
-      enableSorting={true}
-      enableGlobalFilter={true}
-      enableColumnFilters={true}
-      enableColumnOrdering={true}
-      storageKey={TABLE_STATE_STORAGE_KEY}
-      enablePagination={true}
-      enableTopToolbar={true}
-      enableBottomToolbar={true}
-      initialSorting={sorting}
-      tableOptions={{
-        state: {
-          pagination,
-          sorting,
-          columnFilters,
-          columnVisibility,
-          showColumnFilters,
-          showGlobalFilter,
-          globalFilter: searchValue,
-          density,
-          columnOrder,
-        },
-        onPaginationChange: setPagination,
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        onColumnVisibilityChange: setColumnVisibility,
-        onShowColumnFiltersChange: setShowColumnFilters,
-        onShowGlobalFilterChange: setShowGlobalFilter,
-        onGlobalFilterChange: setSearchValue,
-        onColumnOrderChange: setColumnOrder,
-        onDensityChange,
-        manualPagination: true,
-        manualSorting: true,
-        manualFiltering: true,
-        rowCount: totalRowCount || 0,
-        enableColumnPinning: true,
-        enableColumnActions: true,
-        enableHiding: true,
-        enableGrouping: false,
-        enableColumnDragging: true,
-        positionGlobalFilter: 'right',
-        renderToolbarInternalActions: ({ table }) => (
-          <Box display='flex' gap={0.5}>
-            <Tooltip title={strings.EXPORT}>
-              <IconButton onClick={() => void onExport()}>
-                <Icon name='iconExport' size='medium' />
-              </IconButton>
-            </Tooltip>
-            <MRT_ToggleGlobalFilterButton table={table} />
-            <MRT_ToggleFiltersButton table={table} />
-            <MRT_ShowHideColumnsButton table={table} />
-            <MRT_ToggleDensePaddingButton table={table} />
-            <MRT_ToggleFullScreenButton table={table} />
-          </Box>
-        ),
-        muiTableBodyProps: {
-          sx: {
-            '& tr:nth-of-type(odd) > td': {
-              backgroundColor: theme.palette.TwClrBaseGray025,
+    <>
+      {undoModalRow && (
+        <UndoWithdrawalModal
+          onClose={() => setUndoModalRow(null)}
+          row={undoModalRow}
+          reload={() => {
+            setUndoModalRow(null);
+            reloadData();
+          }}
+        />
+      )}
+      <EditableTable
+        key='nursery-withdrawals-table'
+        clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+        columns={columns}
+        data={rows || []}
+        enableEditing={false}
+        enableSorting={true}
+        enableGlobalFilter={true}
+        enableColumnFilters={true}
+        enableColumnOrdering={true}
+        storageKey={TABLE_STATE_STORAGE_KEY}
+        enablePagination={true}
+        enableTopToolbar={true}
+        enableBottomToolbar={true}
+        initialSorting={sorting}
+        tableOptions={{
+          state: {
+            pagination,
+            sorting,
+            columnFilters,
+            columnVisibility,
+            showColumnFilters,
+            showGlobalFilter,
+            globalFilter: searchValue,
+            density,
+            columnOrder,
+          },
+          onPaginationChange: setPagination,
+          onSortingChange: setSorting,
+          onColumnFiltersChange: setColumnFilters,
+          onColumnVisibilityChange: setColumnVisibility,
+          onShowColumnFiltersChange: setShowColumnFilters,
+          onShowGlobalFilterChange: setShowGlobalFilter,
+          onGlobalFilterChange: setSearchValue,
+          onColumnOrderChange: setColumnOrder,
+          onDensityChange,
+          manualPagination: true,
+          manualSorting: true,
+          manualFiltering: true,
+          rowCount: totalRowCount || 0,
+          enableColumnPinning: true,
+          enableColumnActions: true,
+          enableHiding: true,
+          enableGrouping: false,
+          enableColumnDragging: true,
+          positionGlobalFilter: 'right',
+          renderToolbarInternalActions: ({ table }) => (
+            <Box display='flex' gap={0.5}>
+              <Tooltip title={strings.EXPORT}>
+                <IconButton onClick={() => void onExport()}>
+                  <Icon name='iconExport' size='medium' />
+                </IconButton>
+              </Tooltip>
+              <MRT_ToggleGlobalFilterButton table={table} />
+              <MRT_ToggleFiltersButton table={table} />
+              <MRT_ShowHideColumnsButton table={table} />
+              <MRT_ToggleDensePaddingButton table={table} />
+              <MRT_ToggleFullScreenButton table={table} />
+            </Box>
+          ),
+          muiTableBodyProps: {
+            sx: {
+              '& tr:nth-of-type(odd) > td': {
+                backgroundColor: theme.palette.TwClrBaseGray025,
+              },
             },
           },
-        },
-        muiTablePaperProps: {
-          elevation: 0,
-        },
-        muiTopToolbarProps: {
-          sx: {
-            position: 'relative',
-            '& > .MuiBox-root': {
+          muiTablePaperProps: {
+            elevation: 0,
+          },
+          muiTopToolbarProps: {
+            sx: {
               position: 'relative',
-            },
-            '& .Mui-ToolbarDropZone': {
-              display: 'none',
-            },
-          },
-        },
-        muiTableHeadCellProps: ({ column }) =>
-          column.id === 'menu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
-        muiTableBodyCellProps: ({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` }),
-        muiTableBodyRowProps: {
-          sx: {
-            '& td': {
-              borderBottom: 'none',
+              '& > .MuiBox-root': {
+                position: 'relative',
+              },
+              '& .Mui-ToolbarDropZone': {
+                display: 'none',
+              },
             },
           },
-        },
-      }}
-      sx={{ padding: 0 }}
-    />
+          muiTableHeadCellProps: ({ column }) =>
+            column.id === 'menu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
+          muiTableBodyCellProps: ({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` }),
+          muiTableBodyRowProps: {
+            sx: {
+              '& td': {
+                borderBottom: 'none',
+              },
+            },
+          },
+        }}
+        sx={{ padding: 0 }}
+      />
+    </>
   );
 }
