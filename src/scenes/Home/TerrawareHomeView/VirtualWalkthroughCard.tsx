@@ -24,10 +24,10 @@ const VirtualWalkthroughCard = (): JSX.Element => {
     skip: !selectedOrganization,
   });
 
-  const readyCount = useMemo(() => mediaFiles?.filter((f) => f.splatStatus === 'Ready').length ?? 0, [mediaFiles]);
+  const virtualWalkthroughsCount = useMemo(() => mediaFiles?.length ?? 0, [mediaFiles]);
 
   const message =
-    readyCount === 0 ? (
+    virtualWalkthroughsCount === 0 ? (
       <Typography sx={{ color: theme.palette.TwClrTxt, fontSize: '16px', fontWeight: 400, lineHeight: '24px' }}>
         {strings.formatString(
           strings.YOU_CAN_NOW_CREATE_VIRTUAL_WALKTHROUGHS,
@@ -45,7 +45,7 @@ const VirtualWalkthroughCard = (): JSX.Element => {
     ) : (
       <>
         <Typography sx={{ color: theme.palette.TwClrTxt, fontSize: '16px', fontWeight: 400, lineHeight: '24px' }}>
-          {strings.formatString(strings.YOU_HAVE_X_VIRTUAL_WALKTHROUGHS, readyCount)}
+          {strings.formatString(strings.YOU_HAVE_X_VIRTUAL_WALKTHROUGHS, virtualWalkthroughsCount)}
         </Typography>
         <Link to={APP_PATHS.VIRTUAL_WALKTHROUGHS} fontSize='16px' fontWeight={400}>
           {strings.VIEW_IN_MAP}
