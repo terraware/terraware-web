@@ -3,12 +3,13 @@ import React, { type JSX } from 'react';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useUndoBatchWithdrawalMutation } from 'src/queries/generated/nurseryWithdrawals';
+import { SearchNurseryWithdrawalPayload } from 'src/queries/search/nurseries';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface UndoWithdrawalModalProps {
   onClose: () => void;
-  row: any;
+  row: SearchNurseryWithdrawalPayload;
 }
 
 export default function UndoWithdrawalModal(props: UndoWithdrawalModalProps): JSX.Element {
@@ -18,7 +19,7 @@ export default function UndoWithdrawalModal(props: UndoWithdrawalModalProps): JS
 
   const onSubmit = async () => {
     try {
-      await undoWithdrawal(row.id).unwrap();
+      await undoWithdrawal(row.withdrawalId).unwrap();
       snackbar.toastSuccess(strings.WITHDRAWAL_UNDONE_DESCRIPTION, strings.WITHDRAWAL_UNDONE);
     } catch (e) {
       snackbar.toastError();

@@ -396,7 +396,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     const purposeFilterValue = columnFilters.find((column) => column.id === 'purpose')?.value;
     const nurseryFilterValue = columnFilters.find((column) => column.id === 'nurseryName')?.value;
     const destinationFilterValue = columnFilters.find((column) => column.id === 'destinationName')?.value;
-    const stratumFilterValue = columnFilters.find((column) => column.id === 'stratumNames')?.value;
+    const stratumFilterValue = columnFilters.find((column) => column.id === 'stratumName')?.value;
     const subStratumFilterValue = columnFilters.find((column) => column.id === 'substratumShortName')?.value;
     const speciesFilterValue = columnFilters.find((column) => column.id === 'speciesNames')?.value;
     const totalWithdrawnFilterValue = columnFilters.find((column) => column.id === 'totalWithdrawn')?.value;
@@ -422,7 +422,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
                 ? Number(totalWithdrawnFilterValue[0])
                 : undefined,
             maxValue:
-              totalWithdrawnFilterValue[1] !== undefined && totalWithdrawnFilterValue[0] !== ''
+              totalWithdrawnFilterValue[1] !== undefined && totalWithdrawnFilterValue[1] !== ''
                 ? Number(totalWithdrawnFilterValue[1])
                 : undefined,
           }
