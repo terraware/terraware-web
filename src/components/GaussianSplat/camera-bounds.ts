@@ -19,13 +19,25 @@ export class CameraBoundsScript extends Script {
       return;
     }
 
-    const focus: Vec3 = controls.focusPoint;
-    const clampedX = math.clamp(focus.x, this.boundsMin.x, this.boundsMax.x);
-    const clampedY = math.clamp(focus.y, this.boundsMin.y, this.boundsMax.y);
-    const clampedZ = math.clamp(focus.z, this.boundsMin.z, this.boundsMax.z);
+    const pos = this.entity.getPosition();
+    const clampedX = math.clamp(pos.x, this.boundsMin.x, this.boundsMax.x);
+    const clampedY = math.clamp(pos.y, this.boundsMin.y, this.boundsMax.y);
+    const clampedZ = math.clamp(pos.z, this.boundsMin.z, this.boundsMax.z);
 
-    if (clampedX !== focus.x || clampedY !== focus.y || clampedZ !== focus.z) {
-      controls.focusPoint = new Vec3(clampedX, clampedY, clampedZ);
+    if (clampedX === pos.x && clampedY === pos.y && clampedZ === pos.z) {
+      return;
     }
+
+    // Shift the focus point by the same delta to preserve camera orientation.
+    const focus: Vec3 = controls.focusPoint;
+    const newFocus = new Vec3(focus.x + (clampedX - pos.x), focus.y + (clampedY - pos.y), focus.z + (clampedZ - pos.z));
+
+    // Move the entity to the clamped position first — the focusPoint setter
+    // reads entity position internally to recompute the pose.
+    this.entity.setPosition(clampedX, clampedY, clampedZ);
+
+    // Update CameraControls' internal pose so the clamped position persists
+    // into the next frame (otherwise update() overwrites it from _pose).
+    controls.focusPoint = newFocus;
   }
 }

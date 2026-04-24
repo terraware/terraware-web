@@ -3,6 +3,7 @@ import React, { useEffect, useMemo } from 'react';
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
 import { OverlayModal } from '@terraware/web-components';
+import { Vec2 } from 'playcanvas';
 import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
 
 import Application from 'src/components/GaussianSplat/Application';
@@ -67,12 +68,16 @@ const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: Vir
   }, [cameraPosition, origin]);
 
   const boundsMin = useMemo<[number, number, number]>(
-    () => [origin[0] - boundsRadius, origin[1] - boundsRadius, origin[2] - boundsRadius],
+    // Use origin[1] as the Y floor so the camera cannot move below ground level.
+    // X and Z use the full radius to allow free lateral exploration.
+    () => [origin[0] - boundsRadius, origin[1], origin[2] - boundsRadius],
     [origin, boundsRadius]
   );
 
   const boundsMax = useMemo<[number, number, number]>(
-    () => [origin[0] + boundsRadius, origin[1] + boundsRadius, origin[2] + boundsRadius],
+    // Cap the sky at half the horizontal radius — enough headroom to look up
+    // at the canopy but prevents flying far into the sky.
+    () => [origin[0] + boundsRadius, origin[1] + boundsRadius / 2, origin[2] + boundsRadius],
     [origin, boundsRadius]
   );
 
@@ -91,7 +96,14 @@ const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: Vir
       <Entity name='camera-root'>
         <Entity name='camera'>
           <Camera clearColor='#EAF8FF' fov={60} />
-          <Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} />
+          <Script
+            script={CameraControls}
+            moveSpeed={0.3}
+            moveFastSpeed={0.5}
+            moveSlowSpeed={0.15}
+            rotateSpeed={0.1}
+            pitchRange={new Vec2(-85, 85)}
+          />
           <CameraBounds boundsMin={boundsMin} boundsMax={boundsMax} />
         </Entity>
       </Entity>
