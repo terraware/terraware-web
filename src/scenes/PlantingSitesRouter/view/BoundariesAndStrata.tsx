@@ -77,6 +77,11 @@ export default function BoundariesAndStrata({
     return total;
   }, [plantingSite]);
 
+  const plantingCompleteAreaDisplayValue = useMemo(
+    () => strings.formatString(strings.X_HA, numberFormatter.format(plantingCompleteArea, { decimals: 1 })),
+    [numberFormatter, plantingCompleteArea, strings]
+  );
+
   const plantingSiteAreaHaDisplayValue = useMemo(
     () =>
       strings
@@ -109,8 +114,7 @@ export default function BoundariesAndStrata({
                     {strings.PLANTING_SITE_AREA}: {plantingSiteAreaHaDisplayValue}
                   </Typography>
                   <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
-                    {strings.PLANTING_COMPLETE_AREA}:{' '}
-                    {strings.formatString(strings.X_HA, numberFormatter.format(plantingCompleteArea))?.toString()}
+                    {strings.PLANTING_COMPLETE_AREA}: {plantingCompleteAreaDisplayValue}
                   </Typography>
                 </Box>
               )}

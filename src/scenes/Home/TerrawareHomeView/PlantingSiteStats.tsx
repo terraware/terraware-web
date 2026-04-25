@@ -91,6 +91,11 @@ export const PlantingSiteStats = () => {
     return total;
   }, [plantingSite]);
 
+  const plantingCompleteAreaDisplayValue = useMemo(
+    () => strings.formatString(strings.X_HA, numberFormatter.format(plantingCompleteArea, { decimals: 1 }))?.toString(),
+    [numberFormatter, plantingCompleteArea, strings]
+  );
+
   const latestObservationCompletedTime = useMemo(() => {
     if (plantingSite?.latestObservationCompletedTime) {
       return getDateDisplayValue(plantingSite.latestObservationCompletedTime);
@@ -234,7 +239,7 @@ export const PlantingSiteStats = () => {
               showLink={false}
               showTooltip={true}
               tooltipText={strings.TOTAL_HECTARES_PLANTED_TOOLTIP}
-              value={numberFormatter.format(plantingCompleteArea)}
+              value={plantingCompleteAreaDisplayValue}
             />
           </Grid>
 
