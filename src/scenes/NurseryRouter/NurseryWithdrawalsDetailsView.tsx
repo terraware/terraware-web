@@ -149,7 +149,7 @@ export default function NurseryWithdrawalsDetailsView({ species }: NurseryWithdr
 
   return (
     <TfMain>
-      {undoWithdrawalModalOpened && (
+      {undoWithdrawalModalOpened && withdrawalSummary && (
         <UndoWithdrawalModal onClose={() => setUndoWithdrawalModalOpened(false)} row={withdrawalSummary} />
       )}
       <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
