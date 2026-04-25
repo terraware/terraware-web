@@ -31,7 +31,7 @@ export const useNumberFormatter = (): NumberFormatter => {
       }
       if (options?.decimals !== undefined) {
         return new Intl.NumberFormat(localeToUse, {
-          minimumFractionDigits: options.decimals,
+          minimumFractionDigits: 0,
           maximumFractionDigits: options.decimals,
         }).format(num);
       }
