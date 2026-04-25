@@ -119,7 +119,7 @@ export default function PlantsPrimaryPageView({
       .map((proj) => ({ label: proj.name, value: proj.id }));
     iOptions?.unshift({ label: strings.NO_PROJECT, value: -1 });
     return iOptions;
-  }, [projects, projectsWithPlantingSites]);
+  }, [projects, projectsWithPlantingSites, strings]);
 
   const isRolledUpView = useMemo(() => {
     return projectId !== undefined && selectedPlantingSiteId === -1;
