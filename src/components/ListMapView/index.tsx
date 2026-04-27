@@ -4,7 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
 import ListMapSelector, { View } from 'src/components/common/ListMapSelector';
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers/hooks';
 import { Stratum } from 'src/types/Tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -33,6 +33,7 @@ export default function ListMapView({
   initialView,
   data,
 }: ListMapViewProps): JSX.Element {
+  const { strings } = useLocalization();
   const [view, setView] = useState<View>(initialView);
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
@@ -66,6 +67,16 @@ export default function ListMapView({
     return total;
   }, [data]);
 
+  const plantingSiteAreaHaDisplayValue = useMemo(
+    () => strings.formatString(strings.X_HA, numberFormatter.format(siteAreaHa, { decimals: 1 })),
+    [numberFormatter, siteAreaHa, strings]
+  );
+
+  const plantingCompleteAreaDisplayValue = useMemo(
+    () => strings.formatString(strings.X_HA, numberFormatter.format(plantingCompleteArea, { decimals: 1 })),
+    [numberFormatter, plantingCompleteArea, strings]
+  );
+
   useEffect(() => {
     updateView(initialView);
   }, [initialView, updateView]);
@@ -94,12 +105,10 @@ export default function ListMapView({
               justifyContent='start'
             >
               <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
-                {strings.PLANTING_SITE_AREA}:{' '}
-                {strings.formatString(strings.X_HA, numberFormatter.format(siteAreaHa))?.toString()}
+                {strings.PLANTING_SITE_AREA}: {plantingSiteAreaHaDisplayValue}
               </Typography>
               <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
-                {strings.PLANTING_COMPLETE_AREA}:{' '}
-                {strings.formatString(strings.X_HA, numberFormatter.format(plantingCompleteArea))?.toString()}
+                {strings.PLANTING_COMPLETE_AREA}: {plantingCompleteAreaDisplayValue}
               </Typography>
             </Box>
           )}

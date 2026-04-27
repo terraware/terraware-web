@@ -15,7 +15,6 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazySearchPlantingSitesQuery } from 'src/queries/search/plantingSites';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
-import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 import useMapboxToken from 'src/utils/useMapboxToken';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -23,6 +22,7 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import StatsCardItem from './StatsCardItem';
 
 export const PlantingSiteStats = () => {
+  const { strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { isDesktop } = useDeviceInfo();
   const theme = useTheme();
@@ -69,6 +69,14 @@ export const PlantingSiteStats = () => {
     }
   }, [plantingSiteSummaries, selectedPlantingSiteId]);
 
+  const plantingSiteAreaHaDisplayValue = useMemo(
+    () =>
+      plantingSite?.areaHa
+        ? strings.formatString(strings.X_HA, numberFormatter.format(plantingSite.areaHa, { decimals: 1 }))?.toString()
+        : undefined,
+    [numberFormatter, plantingSite, strings]
+  );
+
   const plantingCompleteArea = useMemo(() => {
     let total = 0;
     if (plantingSite?.strata) {
@@ -82,6 +90,11 @@ export const PlantingSiteStats = () => {
     }
     return total;
   }, [plantingSite]);
+
+  const plantingCompleteAreaDisplayValue = useMemo(
+    () => strings.formatString(strings.X_HA, numberFormatter.format(plantingCompleteArea, { decimals: 1 }))?.toString(),
+    [numberFormatter, plantingCompleteArea, strings]
+  );
 
   const latestObservationCompletedTime = useMemo(() => {
     if (plantingSite?.latestObservationCompletedTime) {
@@ -182,11 +195,7 @@ export const PlantingSiteStats = () => {
               label='Area'
               showLink={false}
               showBorder={!isDesktop}
-              value={
-                plantingSite?.areaHa
-                  ? strings.formatString(strings.X_HA, numberFormatter.format(plantingSite.areaHa))?.toString()
-                  : undefined
-              }
+              value={plantingSiteAreaHaDisplayValue}
             />
           </Grid>
 
@@ -230,7 +239,7 @@ export const PlantingSiteStats = () => {
               showLink={false}
               showTooltip={true}
               tooltipText={strings.TOTAL_HECTARES_PLANTED_TOOLTIP}
-              value={numberFormatter.format(plantingCompleteArea)}
+              value={plantingCompleteAreaDisplayValue}
             />
           </Grid>
 

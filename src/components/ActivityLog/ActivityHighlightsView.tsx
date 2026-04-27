@@ -18,6 +18,7 @@ import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { AcceleratorReport } from 'src/types/AcceleratorReport';
 import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
@@ -96,10 +97,10 @@ const HEIGHT_OFFSET_PX = 204;
 
 const HEIGHT_OFFSET_MOBILE_PX = 240;
 
-const getReportIndicators = (strings: any) => [
+const getReportIndicators = (strings: any, numberFormatter: ReturnType<typeof useNumberFormatter>) => [
   {
     indicator: 'Hectares Planted',
-    formatter: (value: number) => strings.formatString(strings.X_HA, value),
+    formatter: (value: number) => strings.formatString(strings.X_HA, numberFormatter.format(value, { decimals: 1 })),
   },
   { indicator: 'Species Planted', formatter: (value: number) => value },
   { indicator: 'Trees Planted', formatter: (value: number) => value },
@@ -122,6 +123,8 @@ type ActivityHighlightSlide = {
 
 const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: ActivityHighlightsViewProps) => {
   const { activeLocale, strings } = useLocalization();
+  const numberFormatter = useNumberFormatter();
+  const reportIndicators = useMemo(() => getReportIndicators(strings, numberFormatter), [numberFormatter, strings]);
   const theme = useTheme();
   const mapDrawerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<MapRef | null>(null);
@@ -494,7 +497,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
                             flexWrap: 'wrap',
                           }}
                         >
-                          {getReportIndicators(strings).map(({ indicator, formatter }) => {
+                          {reportIndicators.map(({ indicator, formatter }) => {
                             const selIndicator = slide.report?.autoCalculatedIndicators?.find((ind) =>
                               isFunderRoute
                                 ? (ind as PublishedReportPayload['autoCalculatedIndicators'][0]).name === indicator

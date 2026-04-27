@@ -35,7 +35,7 @@ export default function MultiplePlantingSiteMap({ projectId }: MultiplePlantingS
         <Typography fontSize='20px' fontWeight={600}>
           {strings.formatString(
             strings.X_HA_IN_TOTAL_PLANTING_AREA,
-            <FormattedNumber value={Math.round(totalArea * 100) / 100} />
+            <FormattedNumber decimals={1} value={totalArea} />
           )}
         </Typography>
         <PlantDashboardMap projectId={projectId} />
