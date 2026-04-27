@@ -23,6 +23,7 @@ import {
 } from 'src/queries/generated/organizationMedia';
 import { useSetOrganizationSplatNeedsAttentionMutation } from 'src/queries/generated/organizationSplats';
 import { OrganizationVirtualWalkthrough } from 'src/queries/search/virtualWalkthroughs';
+import VirtualWalkthroughModal from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughModal';
 
 type VirtualWalkthroughsTableProps = {
   mediaFiles: OrganizationVirtualWalkthrough[];
@@ -42,6 +43,9 @@ export default function VirtualWalkthroughsTable({
     useLazyGetOrganizationMediaFileStreamQuery();
   const [getObsMediaStream, { data: obsStreamData, isFetching: obsFetching }] = useLazyGetObservationMediaStreamQuery();
   const [selectedVideoFile, setSelectedVideoFile] = useState<OrganizationVirtualWalkthrough | undefined>(undefined);
+  const [walkthroughModalFile, setWalkthroughModalFile] = useState<OrganizationVirtualWalkthrough | undefined>(
+    undefined
+  );
   const {
     columnFilters,
     setColumnFilters,
@@ -105,13 +109,42 @@ export default function VirtualWalkthroughsTable({
         return null;
       }
       const fileId = cell.getValue<number>();
+      const isReady = file.splatStatus === 'Ready';
       return (
         <Box
-          component='img'
-          src={`/api/v1/organizations/${organizationId}/media/${fileId}/thumbnail?maxWidth=64&maxHeight=40`}
-          alt={strings.THUMBNAIL}
-          sx={{ borderRadius: '4px', display: 'block', height: 40, objectFit: 'cover', width: 64 }}
-        />
+          onClick={isReady ? () => setWalkthroughModalFile(file) : undefined}
+          sx={{
+            borderRadius: '4px',
+            cursor: isReady ? 'pointer' : 'default',
+            display: 'inline-block',
+            position: 'relative',
+            '&:hover .icon360-overlay': { display: 'flex' },
+          }}
+        >
+          <Box
+            component='img'
+            src={`/api/v1/organizations/${organizationId}/media/${fileId}/thumbnail?maxWidth=64&maxHeight=40`}
+            alt={strings.THUMBNAIL}
+            sx={{ borderRadius: '4px', display: 'block', height: 40, objectFit: 'cover', width: 64 }}
+          />
+          {isReady && (
+            <Box
+              className='icon360-overlay'
+              sx={{
+                alignItems: 'center',
+                bottom: 0,
+                display: 'none',
+                justifyContent: 'center',
+                left: 0,
+                position: 'absolute',
+                right: 0,
+                top: 0,
+              }}
+            >
+              <Box component='img' src='/assets/360icon.svg' alt='' sx={{ height: 32, width: 32 }} />
+            </Box>
+          )}
+        </Box>
       );
     },
     [organizationId, strings]
@@ -240,6 +273,13 @@ export default function VirtualWalkthroughsTable({
 
   return (
     <>
+      {walkthroughModalFile && (
+        <VirtualWalkthroughModal
+          organizationId={organizationId}
+          fileId={walkthroughModalFile.fileId}
+          onClose={() => setWalkthroughModalFile(undefined)}
+        />
+      )}
       <EditableTable
         columns={columns}
         data={mediaFiles}
