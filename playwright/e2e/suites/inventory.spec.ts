@@ -261,12 +261,12 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('East')).toBeVisible();
     await expect(page.getByText('North')).toBeVisible();
     await expect(page.locator('#row1-purpose')).toContainText('Planting');
-    await expect(page.locator('#row1-facility_name')).toContainText('Nursery');
+    await expect(page.locator('#row1-nurseryName')).toContainText('Nursery');
     await expect(page.locator('#row1-destinationName')).toContainText('Planting Site');
-    await expect(page.locator('#row1-stratumNames')).toContainText('East');
-    await expect(page.locator('#row1-substratumShortNames')).toContainText('North');
+    await expect(page.locator('#row1-stratumName')).toContainText('East');
+    await expect(page.locator('#row1-substratumShortName')).toContainText('North');
     await expect(page.locator('#row1-speciesNames')).toContainText('Kousa Dogwood');
-    await expect(page.locator('#row1-totalWithdrawn\\(raw\\)')).toContainText('60');
+    await expect(page.locator('#row1-totalWithdrawn')).toContainText('60');
   });
 
   test('Plants dashboard after outplanting', async ({ page }, testInfo) => {

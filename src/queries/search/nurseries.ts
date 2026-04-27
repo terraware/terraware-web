@@ -210,7 +210,7 @@ const parseSearchNursertWithdrawalsArgs = (
     },
     count: args.limit,
     cursor: args.offset?.toString(),
-    sortOrder,
+    sortOrder: [...(sortOrder ?? []), { field: 'id', direction: 'Descending' }],
   };
 };
 

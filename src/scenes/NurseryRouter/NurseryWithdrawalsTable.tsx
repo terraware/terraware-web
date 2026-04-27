@@ -52,10 +52,6 @@ const DEFAULT_SORT_ORDER: SearchSortOrderElement[] = [
     field: 'withdrawnDate',
     direction: 'Descending',
   },
-  {
-    field: 'id',
-    direction: 'Ascending',
-  },
 ];
 
 // Menu cell component that can use hooks
