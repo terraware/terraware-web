@@ -249,8 +249,23 @@ export default function VirtualWalkthroughsMap({
               component='img'
               src={`/api/v1/organizations/${organizationId}/media/${selectedFile.fileId}/thumbnail?maxWidth=377`}
               alt={strings.THUMBNAIL}
-              sx={{ display: 'block', objectFit: 'cover', width: '100%' }}
+              sx={{ display: 'block', maxHeight: '160px', objectFit: 'cover', width: '100%' }}
             />
+            {!isPreparing && (
+              <Box
+                component='img'
+                src='/assets/360icon.svg'
+                alt=''
+                sx={{
+                  height: '49px',
+                  left: '50%',
+                  position: 'absolute',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '49px',
+                }}
+              />
+            )}
             {isPreparing && (
               <Box
                 sx={{
