@@ -47,10 +47,16 @@ const TABLE_STATE_STORAGE_KEY = 'nursery-withdrawals-table';
 
 const ITEMS_PER_PAGE = 100;
 
-const DEFAULT_SORT_ORDER: SearchSortOrderElement = {
-  field: 'withdrawnDate',
-  direction: 'Descending',
-};
+const DEFAULT_SORT_ORDER: SearchSortOrderElement[] = [
+  {
+    field: 'withdrawnDate',
+    direction: 'Descending',
+  },
+  {
+    field: 'id',
+    direction: 'Ascending',
+  },
+];
 
 // Menu cell component that can use hooks
 const MenuCellComponent = ({
@@ -436,7 +442,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
               direction: sortingOption.desc ? 'Descending' : 'Ascending',
             })
           )
-        : [DEFAULT_SORT_ORDER];
+        : DEFAULT_SORT_ORDER;
 
     return {
       organizationId: selectedOrganization?.id,

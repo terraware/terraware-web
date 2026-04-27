@@ -143,7 +143,7 @@ test.describe('InventoryTests', () => {
     await expect(page.locator('#row1-ready')).toContainText('0');
     await expect(page.locator('#row1-total')).toContainText('15');
     await page.getByRole('link', { name: 'Withdrawal History' }).click();
-    await expect(page.locator('#row1-speciesScientificNames')).toContainText('Kousa Dogwood');
+    await expect(page.locator('#row1-speciesNames')).toContainText('Kousa Dogwood');
     await expect(page.getByRole('cell', { name: '15', ...exactOptions })).toBeVisible();
   });
 
@@ -265,7 +265,7 @@ test.describe('InventoryTests', () => {
     await expect(page.locator('#row1-destinationName')).toContainText('Planting Site');
     await expect(page.locator('#row1-stratumNames')).toContainText('East');
     await expect(page.locator('#row1-substratumShortNames')).toContainText('North');
-    await expect(page.locator('#row1-speciesScientificNames')).toContainText('Kousa Dogwood');
+    await expect(page.locator('#row1-speciesNames')).toContainText('Kousa Dogwood');
     await expect(page.locator('#row1-totalWithdrawn\\(raw\\)')).toContainText('60');
   });
 
