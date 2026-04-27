@@ -203,10 +203,14 @@ export default function VirtualWalkthroughsTable({
         );
       }
       if ((file.splatStatus === 'Ready' || file.splatStatus === 'Preparing') && !file.needsAttention) {
+        const handleClick = () => {
+          onAddToMap(file);
+          document.getElementById('map-container')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        };
         if (file.latitude !== undefined && file.longitude !== undefined) {
-          return <Link onClick={() => onAddToMap(file)}>{strings.UPDATE_LOCATION}</Link>;
+          return <Link onClick={handleClick}>{strings.UPDATE_LOCATION}</Link>;
         }
-        return <Link onClick={() => onAddToMap(file)}>{strings.ADD_TO_MAP}</Link>;
+        return <Link onClick={handleClick}>{strings.ADD_TO_MAP}</Link>;
       }
       return <Box />;
     },
