@@ -32,10 +32,7 @@ const VirtualWalkthroughMessages = ({
   const { data: mediaFiles } = useSearchVirtualWalkthroughsQuery(organizationId);
   const [generateSplat] = useGenerateOrganizationSplatMutation();
 
-  const processingFiles = useMemo(
-    () => mediaFiles?.filter((f) => f.splatStatus === 'Preparing') ?? [],
-    [mediaFiles]
-  );
+  const processingFiles = useMemo(() => mediaFiles?.filter((f) => f.splatStatus === 'Preparing') ?? [], [mediaFiles]);
   const processingCount = processingFiles.length;
 
   const hasNewProcessingFiles = useMemo(
@@ -58,10 +55,7 @@ const VirtualWalkthroughMessages = ({
     [dismissedUploadFailedIds, uploadFailedFiles]
   );
 
-  const erroredFiles = useMemo(
-    () => mediaFiles?.filter((f) => f.splatStatus === 'Errored') ?? [],
-    [mediaFiles]
-  );
+  const erroredFiles = useMemo(() => mediaFiles?.filter((f) => f.splatStatus === 'Errored') ?? [], [mediaFiles]);
 
   const lastErroredFile = useMemo(
     () => [...erroredFiles].sort((a, b) => (b.createdTime ?? '').localeCompare(a.createdTime ?? ''))[0],
