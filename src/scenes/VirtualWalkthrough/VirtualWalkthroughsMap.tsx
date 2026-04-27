@@ -209,8 +209,8 @@ export default function VirtualWalkthroughsMap({
     []
   );
 
-  const handleClusterClick = useCallback((markers: MapMarker[]) => {
-    const files = markers
+  const handleClusterClick = useCallback((clusteredMarkers: MapMarker[]) => {
+    const files = clusteredMarkers
       .map((m) => m.properties?.file as OrganizationVirtualWalkthrough | undefined)
       .filter((f): f is OrganizationVirtualWalkthrough => f !== undefined);
     if (files.length > 0) {
