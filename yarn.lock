@@ -4055,14 +4055,6 @@
   dependencies:
     eslint-rspack-plugin "^4.3.0"
 
-"@rsbuild/plugin-react@^1.4.5":
-  version "1.4.5"
-  resolved "https://registry.yarnpkg.com/@rsbuild/plugin-react/-/plugin-react-1.4.5.tgz#b9ede1dbca0ccbdd3eec3ca7c7abde2a3927f893"
-  integrity sha512-eS2sXCedgGA/7bLu8yVtn48eE/GyPbXx4Q7OcutB01IQ1D2y8WSMBys4nwfrecy19utvw4NPn4gYDy52316+vg==
-  dependencies:
-    "@rspack/plugin-react-refresh" "^1.6.0"
-    react-refresh "^0.18.0"
-
 "@rsbuild/plugin-react@^2.0.0":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@rsbuild/plugin-react/-/plugin-react-2.0.0.tgz#1f094800d5591fbba92e35ab79ce4ad56e4c76ba"
@@ -4265,14 +4257,6 @@
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@rspack/plugin-react-refresh/-/plugin-react-refresh-2.0.0.tgz#47c73856497d77bfb31eabca7656bdf7c749ccf0"
   integrity sha512-Cf6CxBStNDJbiXMc/GmsvG1G8PRlUpa0MSfWsMTI+e8npzuTN/p8nwLs3shriBZOLciqgkSZpBtPTd10BLpj1g==
-
-"@rspack/plugin-react-refresh@^1.6.0":
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/@rspack/plugin-react-refresh/-/plugin-react-refresh-1.6.1.tgz#a0328492fedd958c2ab93cbfa617c57176553799"
-  integrity sha512-eqqW5645VG3CzGzFgNg5HqNdHVXY+567PGjtDhhrM8t67caxmsSzRmT5qfoEIfBcGgFkH9vEg7kzXwmCYQdQDw==
-  dependencies:
-    error-stack-parser "^2.1.4"
-    html-entities "^2.6.0"
 
 "@rstest/core@^0.9.0":
   version "0.9.0"
@@ -8758,7 +8742,7 @@ error-ex@^1.3.1:
   dependencies:
     is-arrayish "^0.2.1"
 
-error-stack-parser@^2.0.6, error-stack-parser@^2.1.4:
+error-stack-parser@^2.0.6:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/error-stack-parser/-/error-stack-parser-2.1.4.tgz#229cb01cdbfa84440bfa91876285b94680188286"
   integrity sha512-Sk5V6wVazPhq5MhpO+AUxJn5x7XSXGl1R93Vn7i+zS15KDVxQijejNCrz8340/2bgLBjR9GtEG8ZVKONDjcqGQ==
