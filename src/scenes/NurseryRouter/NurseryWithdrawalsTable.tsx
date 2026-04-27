@@ -485,7 +485,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   }, [columnFilters]);
 
-  const onExport = useCallback(() => {
+
+  const onExport = useCallback(async () => {
     if (!selectedOrganization) {
       return;
     }
@@ -503,11 +504,18 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       searchArgs.totalWithdrawn?.maxValue
     );
 
+    const allRows = await searchNurseryWithdrawals({
+      ...searchArgs,
+      limit: totalRowCount || 10000,
+      offset: 0,
+    }).unwrap();
+
     void exportNurseryWithdrawalResults({
       isFiltered,
-      nurseryWithdrawalResults: rows,
+      nurseryWithdrawalResults: allRows,
     });
-  }, [debouncedSearchTerm, rows, searchArgs, selectedOrganization]);
+  }, [debouncedSearchTerm, searchArgs, searchNurseryWithdrawals, selectedOrganization, totalRowCount]);
+
 
   return (
     <>

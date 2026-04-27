@@ -17,14 +17,17 @@ export default function UndoWithdrawalModal(props: UndoWithdrawalModalProps): JS
   const snackbar = useSnackbar();
   const [undoWithdrawal, { isLoading }] = useUndoBatchWithdrawalMutation();
 
+
   const onSubmit = async () => {
     try {
       await undoWithdrawal(row.withdrawalId).unwrap();
       snackbar.toastSuccess(strings.WITHDRAWAL_UNDONE_DESCRIPTION, strings.WITHDRAWAL_UNDONE);
+      onClose();
     } catch (e) {
       snackbar.toastError();
     }
   };
+
 
   return (
     <DialogBox
