@@ -18,17 +18,14 @@ const terrawareColors = (theme: Theme) => [
   theme.palette.TwClrBaseLightGreen300,
 ];
 
-// mulberry32: small, fast, deterministic PRNG. Used only when a seed is set
-// (e.g. by Playwright via window.__CHART_COLOR_SEED__) so screenshot tests
-// can rely on stable chart colors across runs.
+// Simple linear congruential generator — deterministic given the same seed.
+// Used only when a seed is set (e.g. by Playwright via window.__CHART_COLOR_SEED__)
+// so screenshot tests can rely on stable chart colors across runs.
 const createSeededRandom = (seed: number) => {
-  let state = seed >>> 0;
+  let state = Math.abs(Math.floor(seed)) || 1;
   return () => {
-    state = (state + 0x6d2b79f5) >>> 0;
-    let t = state;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    state = (state * 9301 + 49297) % 233280;
+    return state / 233280;
   };
 };
 
