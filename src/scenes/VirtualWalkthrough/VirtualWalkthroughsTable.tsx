@@ -104,6 +104,9 @@ export default function VirtualWalkthroughsTable({
       if (file.type === 'Plot') {
         return null;
       }
+      if (file.splatStatus === 'Preparing') {
+        return null;
+      }
       const fileId = cell.getValue<number>();
       return (
         <Box
