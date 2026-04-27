@@ -485,7 +485,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   }, [columnFilters]);
 
-
   const onExport = useCallback(async () => {
     if (!selectedOrganization) {
       return;
@@ -515,7 +514,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       nurseryWithdrawalResults: allRows,
     });
   }, [debouncedSearchTerm, searchArgs, searchNurseryWithdrawals, selectedOrganization, totalRowCount]);
-
 
   return (
     <>

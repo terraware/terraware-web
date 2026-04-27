@@ -17,7 +17,6 @@ export default function UndoWithdrawalModal(props: UndoWithdrawalModalProps): JS
   const snackbar = useSnackbar();
   const [undoWithdrawal, { isLoading }] = useUndoBatchWithdrawalMutation();
 
-
   const onSubmit = async () => {
     try {
       await undoWithdrawal(row.withdrawalId).unwrap();
@@ -27,7 +26,6 @@ export default function UndoWithdrawalModal(props: UndoWithdrawalModalProps): JS
       snackbar.toastError();
     }
   };
-
 
   return (
     <DialogBox

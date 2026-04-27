@@ -304,7 +304,6 @@ const injectedRtkApi = api.injectEndpoints({
             undoesWithdrawalId: result.undoesWithdrawalId ? Number(result.undoesWithdrawalId) : undefined,
 
             undoneByWithdrawalId: result.undoneByWithdrawalId ? Number(result.undoneByWithdrawalId) : undefined,
-
           })
         ),
     }),
