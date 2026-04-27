@@ -60,6 +60,7 @@ test.describe('PlantsDashboardScreenshots', () => {
     await page.addInitScript(() => {
       localStorage.clear();
       sessionStorage.clear();
+      window.__CHART_COLOR_SEED__ = 1;
     });
     await page.goto('/');
     await waitFor(page, '#home', 15000);
