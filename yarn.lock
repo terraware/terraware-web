@@ -4055,12 +4055,20 @@
   dependencies:
     eslint-rspack-plugin "^4.3.0"
 
-"@rsbuild/plugin-react@^1.1.0", "@rsbuild/plugin-react@^1.4.5":
+"@rsbuild/plugin-react@^1.4.5":
   version "1.4.5"
   resolved "https://registry.yarnpkg.com/@rsbuild/plugin-react/-/plugin-react-1.4.5.tgz#b9ede1dbca0ccbdd3eec3ca7c7abde2a3927f893"
   integrity sha512-eS2sXCedgGA/7bLu8yVtn48eE/GyPbXx4Q7OcutB01IQ1D2y8WSMBys4nwfrecy19utvw4NPn4gYDy52316+vg==
   dependencies:
     "@rspack/plugin-react-refresh" "^1.6.0"
+    react-refresh "^0.18.0"
+
+"@rsbuild/plugin-react@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@rsbuild/plugin-react/-/plugin-react-2.0.0.tgz#1f094800d5591fbba92e35ab79ce4ad56e4c76ba"
+  integrity sha512-/1gzt39EGUSFEqB83g46QoOwsgv172HI18i6au1b6lgIaX4sv9stuX4ijdHbHCp8PqYEq+MyQ99jIQMO6I+etg==
+  dependencies:
+    "@rspack/plugin-react-refresh" "2.0.0"
     react-refresh "^0.18.0"
 
 "@rsbuild/plugin-sass@^1.5.0":
@@ -4074,12 +4082,12 @@
     reduce-configs "^1.1.1"
     sass-embedded "^1.97.3"
 
-"@rsbuild/plugin-svgr@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/@rsbuild/plugin-svgr/-/plugin-svgr-1.3.0.tgz#d37b98d862ada858075f81593903a37401e459b6"
-  integrity sha512-Ubo9U5VFrtTAGXMMNYgqBZUYbSD8tBXYfVi/61UJhzwDJCSTQmDxY/jjeolpEZwznTPUS90wCUSHc85+0Z664Q==
+"@rsbuild/plugin-svgr@^2.0.0":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@rsbuild/plugin-svgr/-/plugin-svgr-2.0.1.tgz#ee4431a0783417a23dcaaa01c2b7f82e07016e0d"
+  integrity sha512-cnBGmwtuhj1ltPBScsQVAvsF29m9xmtKXM3sjWWpDfPISkSTxR/jIRvFOf5qYVY37bJIs41Rxfd+PgrGazIgag==
   dependencies:
-    "@rsbuild/plugin-react" "^1.1.0"
+    "@rsbuild/plugin-react" "^2.0.0"
     "@svgr/core" "8.1.0"
     "@svgr/plugin-jsx" "8.1.0"
     "@svgr/plugin-svgo" "8.1.0"
@@ -4252,6 +4260,11 @@
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@rspack/lite-tapable/-/lite-tapable-1.1.0.tgz#3cfdafeed01078e116bd4f191b684c8b484de425"
   integrity sha512-E2B0JhYFmVAwdDiG14+DW0Di4Ze4Jg10Pc4/lILUrd5DRCaklduz2OvJ5HYQ6G+hd+WTzqQb3QnDNfK4yvAFYw==
+
+"@rspack/plugin-react-refresh@2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@rspack/plugin-react-refresh/-/plugin-react-refresh-2.0.0.tgz#47c73856497d77bfb31eabca7656bdf7c749ccf0"
+  integrity sha512-Cf6CxBStNDJbiXMc/GmsvG1G8PRlUpa0MSfWsMTI+e8npzuTN/p8nwLs3shriBZOLciqgkSZpBtPTd10BLpj1g==
 
 "@rspack/plugin-react-refresh@^1.6.0":
   version "1.6.1"
