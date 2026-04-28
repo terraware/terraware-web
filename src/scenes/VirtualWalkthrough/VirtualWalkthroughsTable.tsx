@@ -288,20 +288,14 @@ export default function VirtualWalkthroughsTable({
 
   return (
     <>
-      {walkthroughModalFile &&
-        (walkthroughModalFile.type === 'Plot' && walkthroughModalFile.observationId ? (
-          <VirtualWalkthroughModal
-            observationId={walkthroughModalFile.observationId}
-            fileId={walkthroughModalFile.fileId}
-            onClose={() => setWalkthroughModalFile(undefined)}
-          />
-        ) : (
-          <VirtualWalkthroughModal
-            organizationId={organizationId}
-            fileId={walkthroughModalFile.fileId}
-            onClose={() => setWalkthroughModalFile(undefined)}
-          />
-        ))}
+      {walkthroughModalFile && (
+        <VirtualWalkthroughModal
+          observationId={walkthroughModalFile.observationId}
+          organizationId={organizationId}
+          fileId={walkthroughModalFile.fileId}
+          onClose={() => setWalkthroughModalFile(undefined)}
+        />
+      )}
       <EditableTable
         columns={columns}
         data={mediaFiles}
