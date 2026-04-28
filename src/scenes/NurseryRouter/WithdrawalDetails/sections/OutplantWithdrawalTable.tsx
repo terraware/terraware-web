@@ -116,11 +116,6 @@ export default function OutplantWithdrawalTable({
           });
       }
 
-      console.log(stratumNames);
-      console.log(speciesStratumMap);
-      console.log(substratumById);
-      console.log(speciesSubstratumMap);
-
       const batchesMap: BatchesRow[] = [];
 
       if (Object.keys(batchToSpeciesMap).length > 0) {
@@ -151,8 +146,6 @@ export default function OutplantWithdrawalTable({
           });
         });
       }
-
-      console.log(batchesMap);
 
       return batchesMap;
     } else {
