@@ -105,14 +105,22 @@ export default function VirtualWalkthroughsTable({
   const ThumbnailCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
       const file = cell.row.original;
-      if (file.type === 'Plot') {
-        return null;
-      }
       if (file.splatStatus === 'Preparing') {
         return null;
       }
       const fileId = cell.getValue<number>();
       const isReady = file.splatStatus === 'Ready';
+
+      let thumbnailSrc: string;
+      if (file.type === 'Plot') {
+        if (!file.observationId || !file.monitoringPlotId) {
+          return null;
+        }
+        thumbnailSrc = `/api/v1/tracking/observations/${file.observationId}/plots/${file.monitoringPlotId}/photos/${fileId}?maxWidth=64&maxHeight=40`;
+      } else {
+        thumbnailSrc = `/api/v1/organizations/${organizationId}/media/${fileId}/thumbnail?maxWidth=64&maxHeight=40`;
+      }
+
       return (
         <Box
           onClick={isReady ? () => setWalkthroughModalFile(file) : undefined}
@@ -126,7 +134,7 @@ export default function VirtualWalkthroughsTable({
         >
           <Box
             component='img'
-            src={`/api/v1/organizations/${organizationId}/media/${fileId}/thumbnail?maxWidth=64&maxHeight=40`}
+            src={thumbnailSrc}
             alt={strings.THUMBNAIL}
             sx={{ borderRadius: '4px', display: 'block', height: 40, objectFit: 'cover', width: 64 }}
           />
@@ -280,13 +288,20 @@ export default function VirtualWalkthroughsTable({
 
   return (
     <>
-      {walkthroughModalFile && (
-        <VirtualWalkthroughModal
-          organizationId={organizationId}
-          fileId={walkthroughModalFile.fileId}
-          onClose={() => setWalkthroughModalFile(undefined)}
-        />
-      )}
+      {walkthroughModalFile &&
+        (walkthroughModalFile.type === 'Plot' && walkthroughModalFile.observationId ? (
+          <VirtualWalkthroughModal
+            observationId={walkthroughModalFile.observationId}
+            fileId={walkthroughModalFile.fileId}
+            onClose={() => setWalkthroughModalFile(undefined)}
+          />
+        ) : (
+          <VirtualWalkthroughModal
+            organizationId={organizationId}
+            fileId={walkthroughModalFile.fileId}
+            onClose={() => setWalkthroughModalFile(undefined)}
+          />
+        ))}
       <EditableTable
         columns={columns}
         data={mediaFiles}
