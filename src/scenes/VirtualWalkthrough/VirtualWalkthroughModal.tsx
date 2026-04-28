@@ -16,11 +16,13 @@ import { useLazyGetOrganizationSplatInfoQuery } from 'src/queries/generated/orga
 const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
 const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
 
-type VirtualWalkthroughViewerProps =
-  | { organizationId: number; fileId: number; observationId?: never }
-  | { observationId: number; fileId: number; organizationId?: never };
+type VirtualWalkthroughViewerProps = {
+  fileId: number;
+  observationId?: number;
+  organizationId?: number;
+};
 
-const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: VirtualWalkthroughViewerProps) => {
+const VirtualWalkthroughViewer = ({ fileId, observationId, organizationId }: VirtualWalkthroughViewerProps) => {
   const { setCamera } = useCameraPosition();
   const { isHighPerformance } = useDevicePerformance();
 
@@ -28,19 +30,19 @@ const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: Vir
   const [getObsSplatInfo, { data: obsData }] = useLazyListSplatDetailsQuery();
 
   useEffect(() => {
-    if (organizationId !== undefined) {
-      void getOrgSplatInfo({ organizationId, fileId });
-    } else if (observationId !== undefined) {
+    if (observationId !== undefined) {
       void getObsSplatInfo({ observationId, fileId });
+    } else if (organizationId !== undefined) {
+      void getOrgSplatInfo({ organizationId, fileId });
     }
   }, [fileId, getObsSplatInfo, getOrgSplatInfo, observationId, organizationId]);
 
-  const data = observationId === undefined ? orgData : obsData;
+  const data = observationId !== undefined ? obsData : orgData;
 
   const splatSrc =
-    observationId === undefined
-      ? `/api/v1/organizations/${organizationId}/splats/${fileId}`
-      : `/api/v1/tracking/observations/${observationId}/splats/${fileId}`;
+    observationId !== undefined
+      ? `/api/v1/tracking/observations/${observationId}/splats/${fileId}`
+      : `/api/v1/organizations/${organizationId}/splats/${fileId}`;
 
   const origin: [number, number, number] = useMemo(
     () =>
