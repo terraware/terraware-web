@@ -4,12 +4,11 @@ import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
 import { useOrganization } from 'src/providers';
+import { BatchPayload, DeliveryPayload, NurseryWithdrawalPayload } from 'src/queries/generated/nurseryWithdrawals';
 import { useLazyListStrataQuery } from 'src/queries/search/strata';
 import { SubstratumPayload, useLazyListSubstrataQuery } from 'src/queries/search/substrata';
 import strings from 'src/strings';
-import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
-import { Delivery } from 'src/types/Tracking';
 import { batchToSpecies } from 'src/utils/batch';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
@@ -17,9 +16,9 @@ import WithdrawalRenderer from './WithdrawalRenderer';
 
 type OutplantWithdrawalTableProps = {
   species: Species[];
-  delivery?: Delivery;
-  batches?: Batch[];
-  withdrawal?: NurseryWithdrawal;
+  delivery?: DeliveryPayload;
+  batches?: BatchPayload[];
+  withdrawal?: NurseryWithdrawalPayload;
 };
 
 const columns = (): TableColumnType[] => [

@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -11,17 +11,13 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { NurseryWithdrawalService } from 'src/services';
+import { useLocalization } from 'src/providers/hooks';
+import { useGetNurseryWithdrawalQuery } from 'src/queries/generated/nurseryWithdrawals';
+import { useSearchNurseryWithdrawalsQuery } from 'src/queries/search/nurseries';
 import strings from 'src/strings';
-import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
-import { Delivery } from 'src/types/Tracking';
-import { isTrue } from 'src/utils/boolean';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import { useNumberFormatter } from 'src/utils/useNumberFormatter';
-import useSnackbar from 'src/utils/useSnackbar';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import UndoWithdrawalModal from './UndoWithdrawalModal';
@@ -48,73 +44,34 @@ type NurseryWithdrawalsDetailsViewProps = {
 };
 
 export default function NurseryWithdrawalsDetailsView({ species }: NurseryWithdrawalsDetailsViewProps): JSX.Element {
-  const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { withdrawalId } = useParams<{ withdrawalId: string }>();
+  const params = useParams<{ withdrawalId: string }>();
+  const withdrawalId = Number(params.withdrawalId);
+
+  const getNurseryWithdrawalResponse = useGetNurseryWithdrawalQuery(withdrawalId);
+  const getNurserySummaryResponse = useSearchNurseryWithdrawalsQuery({ withdrawalId, limit: 1 });
+
+  const withdrawal = useMemo(
+    () => getNurseryWithdrawalResponse.currentData?.withdrawal,
+    [getNurseryWithdrawalResponse.currentData?.withdrawal]
+  );
+  const delivery = useMemo(
+    () => getNurseryWithdrawalResponse.currentData?.delivery,
+    [getNurseryWithdrawalResponse.currentData?.delivery]
+  );
+  const batches = useMemo(
+    () => getNurseryWithdrawalResponse.currentData?.batches,
+    [getNurseryWithdrawalResponse.currentData?.batches]
+  );
+  const withdrawalSummary = useMemo(() => getNurserySummaryResponse.currentData?.[0], [getNurserySummaryResponse]);
+
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
-  const snackbar = useSnackbar();
   const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
   const navigate = useSyncNavigate();
 
-  const [withdrawal, setWithdrawal] = useState<NurseryWithdrawal | undefined>(undefined);
-  const [withdrawalSummary, setWithdrawalSummary] = useState<WithdrawalSummary | undefined>(undefined);
-  const [delivery, setDelivery] = useState<Delivery | undefined>(undefined);
-  const [batches, setBatches] = useState<Batch[] | undefined>(undefined);
   const [undoWithdrawalModalOpened, setUndoWithdrawalModalOpened] = useState(false);
-  const [reload, setReload] = useState(false);
-  const numberFormatter = useNumberFormatter();
-
-  const reloadWithdrawal = () => {
-    setReload(true);
-  };
-
-  useEffect(() => {
-    const updateWithdrawal = async () => {
-      const withdrawalResponse = await NurseryWithdrawalService.getNurseryWithdrawal(Number(withdrawalId));
-      if (!withdrawalResponse.requestSucceeded || withdrawalResponse.error) {
-        setWithdrawal(undefined);
-        setDelivery(undefined);
-        setBatches(undefined);
-        snackbar.toastError();
-      } else {
-        setWithdrawal(withdrawalResponse.withdrawal);
-        setDelivery(withdrawalResponse.delivery);
-        setBatches(withdrawalResponse.batches);
-      }
-      // get summary information
-      if (withdrawalId && selectedOrganization) {
-        const apiSearchResults = await NurseryWithdrawalService.listNurseryWithdrawals(selectedOrganization.id, [
-          {
-            operation: 'field',
-            field: 'id',
-            type: 'Exact',
-            values: [withdrawalId],
-          },
-        ]);
-        if (apiSearchResults && apiSearchResults.length > 0) {
-          const withdrawalSummaryRecord = apiSearchResults[0];
-          setWithdrawalSummary({
-            id: withdrawalSummaryRecord.id as string,
-            delivery_id: withdrawalSummaryRecord.delivery_id as string,
-            withdrawnDate: withdrawalSummaryRecord.withdrawnDate as string,
-            purpose: withdrawalSummaryRecord.purpose as string,
-            facilityName: withdrawalSummaryRecord.facilityName as string,
-            destinationName: withdrawalSummaryRecord.destinationName as string,
-            stratumNames: withdrawalSummaryRecord.stratumNames as string,
-            substratumShortNames: withdrawalSummaryRecord.substratumShortNames as string,
-            scientificNames: withdrawalSummaryRecord.speciesScientificNames as string[],
-            totalWithdrawn: numberFormatter.format((withdrawalSummaryRecord['totalWithdrawn(raw)'] || 0) as number),
-            hasReassignments: isTrue(withdrawalSummaryRecord.hasReassignments),
-          });
-        }
-      }
-    };
-
-    void updateWithdrawal();
-  }, [selectedOrganization, withdrawalId, snackbar, reload, numberFormatter]);
-
   const contentPanelProps = {
     borderRadius: '32px',
     backgroundColor: theme.palette.TwClrBg,
@@ -192,12 +149,8 @@ export default function NurseryWithdrawalsDetailsView({ species }: NurseryWithdr
 
   return (
     <TfMain>
-      {undoWithdrawalModalOpened && (
-        <UndoWithdrawalModal
-          onClose={() => setUndoWithdrawalModalOpened(false)}
-          row={withdrawalSummary}
-          reload={reloadWithdrawal}
-        />
+      {undoWithdrawalModalOpened && withdrawalSummary && (
+        <UndoWithdrawalModal onClose={() => setUndoWithdrawalModalOpened(false)} row={withdrawalSummary} />
       )}
       <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
         <Box marginBottom={theme.spacing(2)}>

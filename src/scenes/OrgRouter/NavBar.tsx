@@ -18,10 +18,10 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import { useLazyCountNurseryWithdrawalsQuery } from 'src/queries/search/nurseries';
 import { requestOrganizationFeatures } from 'src/redux/features/organizations/organizationsAsyncThunks';
 import { listOrganizationFeatures } from 'src/redux/features/organizations/organizationsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { NurseryWithdrawalService } from 'src/services';
 import { isAdmin, isContributor, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -29,20 +29,17 @@ type NavBarProps = {
   backgroundTransparent?: boolean;
   hasPlantingSites?: boolean;
   setShowNavBar: (value: boolean) => void;
-  withdrawalCreated?: boolean;
 };
 
 export default function NavBar({
   backgroundTransparent,
   hasPlantingSites,
   setShowNavBar,
-  withdrawalCreated,
 }: NavBarProps): JSX.Element | null {
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const dispatch = useAppDispatch();
-  const [showNurseryWithdrawals, setShowNurseryWithdrawals] = useState<boolean>(false);
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useSyncNavigate();
   const mixpanel = useMixpanel();
@@ -98,26 +95,17 @@ export default function NavBar({
     [closeNavBar, navigate]
   );
 
-  const checkNurseryWithdrawals = useCallback(() => {
-    if (selectedOrganization) {
-      void NurseryWithdrawalService.hasNurseryWithdrawals(selectedOrganization.id).then((result: boolean) => {
-        setShowNurseryWithdrawals(result);
-      });
-    }
-  }, [selectedOrganization]);
+  const [countNurseryWithdrawals, countNurseryWithdrawalsResponse] = useLazyCountNurseryWithdrawalsQuery();
+  const showNurseryWithdrawals = useMemo(
+    () => !!countNurseryWithdrawalsResponse?.currentData,
+    [countNurseryWithdrawalsResponse?.currentData]
+  );
 
   useEffect(() => {
-    setShowNurseryWithdrawals(false);
     if (selectedOrganization) {
-      checkNurseryWithdrawals();
+      void countNurseryWithdrawals({ organizationId: selectedOrganization.id }, true);
     }
-  }, [selectedOrganization, checkNurseryWithdrawals]);
-
-  useEffect(() => {
-    if (withdrawalCreated && !showNurseryWithdrawals) {
-      checkNurseryWithdrawals();
-    }
-  }, [withdrawalCreated, checkNurseryWithdrawals, showNurseryWithdrawals]);
+  }, [countNurseryWithdrawals, selectedOrganization]);
 
   useEffect(() => {
     if (selectedOrganization && !isContributor(selectedOrganization)) {

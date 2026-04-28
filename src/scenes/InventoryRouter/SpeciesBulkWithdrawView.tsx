@@ -7,12 +7,8 @@ import { useOrganization } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
 import useQuery from 'src/utils/useQuery';
 
-type SpeciesBulkWithdrawViewComponentProps = {
-  withdrawalCreatedCallback?: () => void;
-};
-export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewComponentProps): JSX.Element | null {
+export default function SpeciesBulkWithdrawView(): JSX.Element | null {
   const { selectedOrganization } = useOrganization();
-  const { withdrawalCreatedCallback } = props;
   const [speciesIds, setSpeciesIds] = useState<string[]>();
   const [batchIds, setBatchIds] = useState<string[]>();
   const [source, setSource] = useState<string | null>();
@@ -49,11 +45,5 @@ export default function SpeciesBulkWithdrawView(props: SpeciesBulkWithdrawViewCo
     void populateResults();
   }, [speciesIds, navigate, selectedOrganization]);
 
-  return batchIds ? (
-    <BatchWithdrawFlow
-      batchIds={batchIds}
-      sourcePage={source || undefined}
-      withdrawalCreatedCallback={withdrawalCreatedCallback}
-    />
-  ) : null;
+  return batchIds ? <BatchWithdrawFlow batchIds={batchIds} sourcePage={source || undefined} /> : null;
 }

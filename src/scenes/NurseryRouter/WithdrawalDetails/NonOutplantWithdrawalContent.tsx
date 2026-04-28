@@ -2,20 +2,20 @@ import React, { type JSX } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
-import strings from 'src/strings';
-import { Batch, NurseryWithdrawal } from 'src/types/Batch';
+import { useLocalization } from 'src/providers';
+import { BatchPayload, NurseryWithdrawalPayload } from 'src/queries/generated/nurseryWithdrawals';
+import { SearchNurseryWithdrawalPayload } from 'src/queries/search/nurseries';
 import { Species } from 'src/types/Species';
 
-import { WithdrawalSummary } from '../NurseryWithdrawalsDetailsView';
 import WithdrawalOverview from './WithdrawalOverview';
 import NonOutplantWithdrawalTable from './sections/NonOutplantWithdrawalTable';
 import Photos from './sections/Photos';
 
 type NonOutplantWithdrawalContentProps = {
   species: Species[];
-  withdrawal?: NurseryWithdrawal;
-  withdrawalSummary?: WithdrawalSummary;
-  batches?: Batch[];
+  withdrawal?: NurseryWithdrawalPayload;
+  withdrawalSummary?: SearchNurseryWithdrawalPayload;
+  batches?: BatchPayload[];
 };
 
 export default function NonOutplantWithdrawalContent({
@@ -25,6 +25,7 @@ export default function NonOutplantWithdrawalContent({
   batches,
 }: NonOutplantWithdrawalContentProps): JSX.Element {
   const theme = useTheme();
+  const { strings } = useLocalization();
 
   return (
     <Box display='flex' flexDirection='column'>
