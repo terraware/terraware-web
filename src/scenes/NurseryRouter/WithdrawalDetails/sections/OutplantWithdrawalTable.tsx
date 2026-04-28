@@ -10,7 +10,6 @@ import { SubstratumPayload, useLazyListSubstrataQuery } from 'src/queries/search
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { batchToSpecies } from 'src/utils/batch';
-import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import WithdrawalRenderer from './WithdrawalRenderer';
 
@@ -35,7 +34,6 @@ export default function OutplantWithdrawalTable({
   batches,
   withdrawal,
 }: OutplantWithdrawalTableProps): JSX.Element {
-  const numberFormatter = useNumberFormatter();
   const { selectedOrganization } = useOrganization();
 
   type BatchesRow = {
@@ -96,7 +94,6 @@ export default function OutplantWithdrawalTable({
         ) ?? [];
       const speciesSubstratumMap: Record<number, Record<number, number>> = {};
       const speciesStratumMap: Record<number, Record<number, number>> = {};
-      const rows: { [p: string]: unknown }[] = [];
       for (const sp of speciesList) {
         // for each species add the number of plants in each substratum for delivery type plantings
         speciesSubstratumMap[sp] = {};
@@ -117,17 +114,12 @@ export default function OutplantWithdrawalTable({
               speciesStratumMap[sp][stratumId] += pl.numPlants;
             }
           });
-
-        for (const substratumKey of Object.keys(speciesSubstratumMap[sp])) {
-          const substratumId = Number(substratumKey);
-          rows.push({
-            quantity: numberFormatter.format(speciesSubstratumMap[sp][substratumId]),
-            species: species?.find((x) => x?.id === sp)?.scientificName ?? '',
-            to_stratum: substratumId > -1 ? substratumById[substratumId]?.stratumName ?? '' : '',
-            to_substratum: substratumId > -1 ? substratumById[substratumId]?.name ?? substratumId?.toString() : '',
-          });
-        }
       }
+
+      console.log(stratumNames);
+      console.log(speciesStratumMap);
+      console.log(substratumById);
+      console.log(speciesSubstratumMap);
 
       const batchesMap: BatchesRow[] = [];
 
@@ -160,19 +152,13 @@ export default function OutplantWithdrawalTable({
         });
       }
 
+      console.log(batchesMap);
+
       return batchesMap;
     } else {
       return [];
     }
-  }, [
-    batches,
-    delivery?.plantings,
-    numberFormatter,
-    species,
-    stratumNames,
-    substratumById,
-    withdrawal?.batchWithdrawals,
-  ]);
+  }, [batches, delivery?.plantings, species, stratumNames, substratumById, withdrawal?.batchWithdrawals]);
 
   return (
     <Table
