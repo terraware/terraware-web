@@ -10,7 +10,7 @@ import { parseSearchTerm } from 'src/utils/search';
 import { baseApi as api } from '../baseApi';
 import { QueryTagTypes } from '../tags';
 
-const parseSearchNursertWithdrawalsArgs = (
+const parseSearchNurseryWithdrawalsArgs = (
   args: SearchNurseryWithdrawalsApiArgs,
   fields: string[]
 ): SearchRequestPayload => {
@@ -251,7 +251,7 @@ const injectedRtkApi = api.injectEndpoints({
         return {
           url: '/api/v1/search',
           method: 'POST',
-          body: parseSearchNursertWithdrawalsArgs(args, [
+          body: parseSearchNurseryWithdrawalsArgs(args, [
             'id',
             'delivery_id',
             'withdrawnDate',
@@ -310,7 +310,7 @@ const injectedRtkApi = api.injectEndpoints({
 
     countNurseryWithdrawals: build.query<number, SearchNurseryWithdrawalsApiArgs>({
       query: (args) => {
-        const payload = parseSearchNursertWithdrawalsArgs(args, []);
+        const payload = parseSearchNurseryWithdrawalsArgs(args, []);
         return {
           url: '/api/v1/search/count',
           method: 'POST',

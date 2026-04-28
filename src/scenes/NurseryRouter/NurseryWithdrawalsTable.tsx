@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 
 import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { Dayjs } from 'dayjs';
 import {
   MRT_Cell,
   MRT_PaginationState,
@@ -39,7 +40,6 @@ import {
   purposeLabel,
 } from 'src/types/Batch';
 import { Project } from 'src/types/Project';
-import { dayJsLikeToDateStr } from 'src/utils/dateUtils';
 import useDebounce from 'src/utils/useDebounce';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
@@ -406,8 +406,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     const withdrawnDate =
       dateFilterValue && Array.isArray(dateFilterValue)
         ? {
-            minDate: dateFilterValue[0] ? dayJsLikeToDateStr(dateFilterValue[0]) : undefined,
-            maxDate: dateFilterValue[1] ? dayJsLikeToDateStr(dateFilterValue[1]) : undefined,
+            minDate: dateFilterValue[0] ? (dateFilterValue[0] as Dayjs).format('YYYY-MM-DD') : undefined,
+            maxDate: dateFilterValue[1] ? (dateFilterValue[1] as Dayjs).format('YYYY-MM-DD') : undefined,
           }
         : undefined;
 
