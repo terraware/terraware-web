@@ -23,18 +23,6 @@ const MAP_SCREENSHOT_OPTIONS = {
 };
 
 /**
- * Mask chart canvas elements to avoid pixel-level flakiness from antialiasing
- * and Chart.js rendering differences between runs.
- */
-const chartMasks = (page: Page) => [
-  page.locator('#plantsBySpecies'),
-  page.locator('#speciesByCategory'),
-  page.locator('#plantsPerHaChart'),
-  page.locator('#survivalChart'),
-  page.locator('#plantingDensityByStratum'),
-];
-
-/**
  * Wait for the Mapbox map to finish loading tiles and reach idle state.
  * The map sets data-map-idle="true" on the container once the idle event fires.
  */
@@ -79,10 +67,7 @@ test.describe('PlantsDashboardScreenshots', () => {
       timeout: 5000,
     });
 
-    await expect(page).toHaveScreenshot('plants-dashboard-empty-state.png', {
-      ...FULL_PAGE_SCREENSHOT_OPTIONS,
-      mask: chartMasks(page),
-    });
+    await expect(page).toHaveScreenshot('plants-dashboard-empty-state.png', FULL_PAGE_SCREENSHOT_OPTIONS);
   });
 
   test('Plants Dashboard default view — no planting site selected', async ({ page }) => {
@@ -93,10 +78,7 @@ test.describe('PlantsDashboardScreenshots', () => {
     await page.waitForLoadState('networkidle');
     await waitForMapIdle(page);
 
-    await expect(page).toHaveScreenshot('plants-dashboard-default.png', {
-      ...FULL_PAGE_SCREENSHOT_OPTIONS,
-      mask: chartMasks(page),
-    });
+    await expect(page).toHaveScreenshot('plants-dashboard-default.png', FULL_PAGE_SCREENSHOT_OPTIONS);
   });
 
   test('Plants Dashboard — project area totals with rolled-up view', async ({ page }) => {
@@ -113,10 +95,7 @@ test.describe('PlantsDashboardScreenshots', () => {
 
     await waitForMapIdle(page);
 
-    await expect(page).toHaveScreenshot('plants-dashboard-project-rolled-up.png', {
-      ...FULL_PAGE_SCREENSHOT_OPTIONS,
-      mask: chartMasks(page),
-    });
+    await expect(page).toHaveScreenshot('plants-dashboard-project-rolled-up.png', FULL_PAGE_SCREENSHOT_OPTIONS);
   });
 
   test('Plants Dashboard — planting site with no observations (plants and species card)', async ({ page }) => {
@@ -131,10 +110,7 @@ test.describe('PlantsDashboardScreenshots', () => {
     await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
     await expect(page.getByText('Site Map', { exact: true })).toBeVisible();
 
-    await expect(page).toHaveScreenshot('plants-dashboard-no-observations.png', {
-      ...FULL_PAGE_SCREENSHOT_OPTIONS,
-      mask: chartMasks(page),
-    });
+    await expect(page).toHaveScreenshot('plants-dashboard-no-observations.png', FULL_PAGE_SCREENSHOT_OPTIONS);
   });
 
   test('Plants Dashboard — planting site with no observations (site map)', async ({ page }) => {
@@ -170,10 +146,7 @@ test.describe('PlantsDashboardScreenshots', () => {
     await expect(page.getByText('Survival Rate').first()).toBeVisible();
     await expect(page.getByText('Site Map', { exact: true })).toBeVisible();
 
-    await expect(page).toHaveScreenshot('plants-dashboard-with-observations.png', {
-      ...FULL_PAGE_SCREENSHOT_OPTIONS,
-      mask: chartMasks(page),
-    });
+    await expect(page).toHaveScreenshot('plants-dashboard-with-observations.png', FULL_PAGE_SCREENSHOT_OPTIONS);
   });
 
   test('Plants Dashboard — planting site with observations (stratum trends card)', async ({ page }) => {
@@ -189,10 +162,7 @@ test.describe('PlantsDashboardScreenshots', () => {
     await expect(page.locator('#plantsPerHaChart')).toBeVisible();
     await expect(page.locator('#survivalChart')).toBeVisible();
 
-    await expect(page).toHaveScreenshot('plants-dashboard-stratum-trends.png', {
-      ...FULL_PAGE_SCREENSHOT_OPTIONS,
-      mask: [page.locator('#plantsPerHaChart'), page.locator('#survivalChart')],
-    });
+    await expect(page).toHaveScreenshot('plants-dashboard-stratum-trends.png', FULL_PAGE_SCREENSHOT_OPTIONS);
   });
 
   test('Plants Dashboard — planting site with observations (plant density card)', async ({ page }) => {
@@ -207,10 +177,7 @@ test.describe('PlantsDashboardScreenshots', () => {
     await expect(page.getByText('Observed Density', { exact: true }).first()).toBeVisible();
     await expect(page.locator('#plantingDensityByStratum')).toBeVisible();
 
-    await expect(page).toHaveScreenshot('plants-dashboard-plant-density.png', {
-      ...FULL_PAGE_SCREENSHOT_OPTIONS,
-      mask: [page.locator('#plantingDensityByStratum')],
-    });
+    await expect(page).toHaveScreenshot('plants-dashboard-plant-density.png', FULL_PAGE_SCREENSHOT_OPTIONS);
   });
 
   test('Plants Dashboard — planting site with observations (site map)', async ({ page }) => {

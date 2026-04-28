@@ -23,17 +23,6 @@ const MAP_SCREENSHOT_OPTIONS = {
 };
 
 /**
- * Mask chart canvas elements to avoid pixel-level flakiness from antialiasing
- * and Chart.js rendering differences between runs.
- */
-const chartMasks = (page: Page) => [
-  page.locator('#observationSpeciesTotalChart'),
-  page.locator('#observationSurvivalRateChart'),
-  page.locator('#plotSpeciesTotalChart'),
-  page.locator('#plotSpeciesSurvivalRate'),
-];
-
-/**
  * Wait for the Mapbox map to finish loading tiles and reach idle state.
  * The map sets data-map-idle="true" on the container once the idle event fires.
  */
@@ -113,10 +102,7 @@ test.describe('ObservationDetailsScreenshots', () => {
     await expect(page.locator('#observationSpeciesTotalChart')).toBeVisible();
     await expect(page.locator('#observationSurvivalRateChart')).toBeVisible();
 
-    await expect(page).toHaveScreenshot('observation-detail-level.png', {
-      ...FULL_PAGE_SCREENSHOT_OPTIONS,
-      mask: chartMasks(page),
-    });
+    await expect(page).toHaveScreenshot('observation-detail-level.png', FULL_PAGE_SCREENSHOT_OPTIONS);
   });
 
   test('Observation level detail view — strata table', async ({ page }) => {
@@ -157,9 +143,9 @@ test.describe('ObservationDetailsScreenshots', () => {
 
     await expect(page).toHaveScreenshot('observation-stratum-detail.png', {
       ...FULL_PAGE_SCREENSHOT_OPTIONS,
-      // Also mask the monitoring plot table: it loads async and can shift layout
-      // enough to cause large diffs even when charts are stable
-      mask: [...chartMasks(page), page.getByRole('table').first()],
+      // Mask the monitoring plot table: it loads async and can shift layout
+      // enough to cause large diffs.
+      mask: [page.getByRole('table').first()],
     });
   });
 
@@ -194,10 +180,7 @@ test.describe('ObservationDetailsScreenshots', () => {
     await expect(page.locator('#plotSpeciesTotalChart')).toBeVisible();
     await expect(page.locator('#plotSpeciesSurvivalRate')).toBeVisible();
 
-    await expect(page).toHaveScreenshot('observation-plot-detail-general.png', {
-      ...FULL_PAGE_SCREENSHOT_OPTIONS,
-      mask: chartMasks(page),
-    });
+    await expect(page).toHaveScreenshot('observation-plot-detail-general.png', FULL_PAGE_SCREENSHOT_OPTIONS);
   });
 
   test('Monitoring plot level detail view — photos and videos tab', async ({ page }) => {
