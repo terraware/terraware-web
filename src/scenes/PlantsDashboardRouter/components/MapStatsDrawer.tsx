@@ -230,7 +230,7 @@ const MapStatsDrawer = ({
 
       results.push({
         key: strings.AREA_HA,
-        value: properties.areaHa ? `${numberFormatter.format(properties.areaHa)}` : strings.UNKNOWN,
+        value: properties.areaHa ? `${numberFormatter.format(properties.areaHa, { decimals: 1 })}` : strings.UNKNOWN,
       });
 
       if (properties.observed) {

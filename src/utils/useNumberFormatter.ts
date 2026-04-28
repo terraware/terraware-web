@@ -13,18 +13,31 @@ const getLocaleToUse = (locale?: string) => (locale === 'gx' ? 'fr' : locale || 
 export const useNumberFormatter = (): NumberFormatter => {
   const { activeLocale } = useLocalization();
 
-  const intlFormat = useMemo(() => {
-    let localeToUse = getLocaleToUse(activeLocale ?? undefined);
+  const localeToUse = useMemo(() => {
+    let locale = getLocaleToUse(activeLocale ?? undefined);
     if (activeLocale && supportedLocales) {
       const localeDetails = findLocaleDetails(supportedLocales, activeLocale);
-      localeToUse = localeDetails.id;
+      locale = localeDetails.id;
     }
-    return new Intl.NumberFormat(localeToUse);
+    return locale;
   }, [activeLocale]);
 
+  const intlFormat = useMemo(() => new Intl.NumberFormat(localeToUse), [localeToUse]);
+
   const format = useCallback(
-    (num?: number) => (typeof num === 'undefined' ? '' : intlFormat.format(num)),
-    [intlFormat]
+    (num?: number, options?: { decimals?: number }) => {
+      if (typeof num === 'undefined') {
+        return '';
+      }
+      if (options?.decimals !== undefined) {
+        return new Intl.NumberFormat(localeToUse, {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: options.decimals,
+        }).format(num);
+      }
+      return intlFormat.format(num);
+    },
+    [intlFormat, localeToUse]
   );
 
   return useMemo(() => {

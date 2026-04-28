@@ -12,6 +12,7 @@ import SeedBankSubLocations from 'src/scenes/SeedBanksRouter/SeedBankSubLocation
 import { FacilityService } from 'src/services';
 import strings from 'src/strings';
 import type { Facility } from 'src/types/Facility';
+import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -81,13 +82,15 @@ export default function SeedBankDetailsView(): JSX.Element {
           <Typography fontSize='20px' fontWeight={600} margin={0}>
             {seedBank?.name}
           </Typography>
-          <Button
-            icon='iconEdit'
-            label={isMobile ? undefined : strings.EDIT_SEED_BANK}
-            priority='primary'
-            size='medium'
-            onClick={goToEditSeedBank}
-          />
+          {isAdmin(selectedOrganization) && (
+            <Button
+              icon='iconEdit'
+              label={isMobile ? undefined : strings.EDIT_SEED_BANK}
+              priority='primary'
+              size='medium'
+              onClick={goToEditSeedBank}
+            />
+          )}
         </Grid>
         <Grid item xs={12}>
           <PageSnackbar />

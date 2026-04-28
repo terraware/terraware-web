@@ -54,11 +54,14 @@ export default function ScheduleObservationForm({
   const todayISO = useMemo(() => DateTime.now().startOf('day').toISODate(), []);
 
   const targetObservation = useMemo(
-    () => getObservationResponse.data?.observation,
-    [getObservationResponse.data?.observation]
+    () => getObservationResponse.currentData?.observation,
+    [getObservationResponse.currentData?.observation]
   );
 
-  const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse.data?.site]);
+  const plantingSite = useMemo(
+    () => getPlantingSiteResponse.currentData?.site,
+    [getPlantingSiteResponse.currentData?.site]
+  );
   const selectedSite = useMemo(
     () => observableSites.find((site) => site.id === selectedPlantingSiteId),
     [observableSites, selectedPlantingSiteId]
@@ -74,7 +77,7 @@ export default function ScheduleObservationForm({
     if (targetObservation) {
       void getPlantingSite({ id: targetObservation.plantingSiteId, includeZones: false }, true);
     }
-  });
+  }, [getPlantingSite, targetObservation]);
 
   const [startDate, setStartDate] = useState<string>();
   const [endDate, setEndDate] = useState<string>();

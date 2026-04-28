@@ -21,6 +21,7 @@ import { selectProject, selectProjectRequest } from 'src/redux/features/projects
 import { requestProject, requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
@@ -113,7 +114,11 @@ export default function ProjectView(): JSX.Element {
   );
 
   return (
-    <Page crumbs={crumbs} title={project?.name || ''} rightComponent={rightComponent}>
+    <Page
+      crumbs={crumbs}
+      title={project?.name || ''}
+      rightComponent={isAdmin(selectedOrganization) ? rightComponent : undefined}
+    >
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
         <Grid container>
           <Grid item xs={4}>

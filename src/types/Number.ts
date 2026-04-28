@@ -1,3 +1,3 @@
 export type NumberFormatter = {
-  format: (num?: number) => string;
+  format: (num?: number, options?: { decimals?: number }) => string;
 };

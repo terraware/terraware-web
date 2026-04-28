@@ -20,18 +20,6 @@ LAST_VERSION=$(git tag --list --sort=creatordate 'v[0-9]*' | tail -n2 | head -n1
 .buildkite/scripts/lib/fetch-tag.sh "$THIS_VERSION"
 
 CHANGELOG=$(git log "$LAST_VERSION".."$THIS_VERSION" --pretty=format:"%s")
-LAST_VERSION=$(echo "$TAGS" | tail -n2 | head -n1)
-
-# THIS_VERSION should already be fetched, but check for it in case history isn't linear.
-.buildkite/scripts/lib/fetch-tag.sh "$THIS_VERSION"
-
-if [[ -n "$LAST_VERSION" && "$LAST_VERSION" != "$THIS_VERSION" ]]; then
-    .buildkite/scripts/lib/fetch-tag.sh "$LAST_VERSION"
-    CHANGELOG=$(git log "$LAST_VERSION".."$THIS_VERSION" --pretty=format:"%s")
-else
-    # First release: log everything up to THIS_VERSION
-    CHANGELOG=$(git log "$THIS_VERSION" --pretty=format:"%s")
-fi
 
 echo "--- :slack: Post release notes to Slack"
 
@@ -56,10 +44,10 @@ echo "--- :atlassian-jira: Transition Jira issues"
 if [[ -n "${JIRA_BASE_URL:-}" && -n "${JIRA_USER_EMAIL:-}" && -n "${JIRA_API_TOKEN:-}" ]]; then
     # Fetch the unreleased log from GitHub Pages and extract Jira issue keys
     JIRA_ISSUES=$(curl -s https://terraware.github.io/terraware-web/unreleased.log |
-        grep -Eo 'SW-[0-9]+' |
+        (grep -Eo 'SW-[0-9]+' || true) |
         sort -u)
 
-    JIRA_AUTH=$(echo -n "${JIRA_USER_EMAIL}:${JIRA_API_TOKEN}" | base64)
+    JIRA_AUTH=$(echo -n "${JIRA_USER_EMAIL}:${JIRA_API_TOKEN}" | base64 | tr -d '\n')
 
     for issue in $JIRA_ISSUES; do
         echo "Transitioning $issue..."

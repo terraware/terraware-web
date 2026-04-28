@@ -110,6 +110,7 @@ ADD_STANDARD_METRIC_CONFIRMATION,Está a punto de agregar una métrica estándar
 ADD_SUB_LOCATION,Añadir Sub-Lugar,d0ad4ffd
 ADD_SUBSET_WEIGHT_AND_COUNT,Agregar peso y recuento del subconjunto,e1b6fdf2
 ADD_TEST,Añadir Prueba,2a608b3f
+ADD_TO_MAP,Agregar al mapa,325f5a77
 ADD_TO_PROJECT,Añadir al proyecto,3e56c71f
 ADD_VIABILITY,Añadir Viabilidad,a4672790
 ADD_VIABILITY_TEST,Añadir Prueba de Viabilidad,4648a184
@@ -739,6 +740,7 @@ FIRE,Incendio,3daefdd1
 FIRST_ADD_PLANTING_SITE,"Para ver el tablero, usted debe tener un área de plantación.",29adc97e
 FIRST_NAME,Nombre,4728037d
 FIX_HIGHLIGHTED_FIELDS,Corrija los campos resaltados a continuación.,505e80af
+FLAG,Marcar,aafc43da
 FLY,Volar,0747d35f
 FLY_FASTER,Volar más rápido,e24d00c8
 FLY_SLOWER,Volar más lento,0271712f
@@ -1036,6 +1038,7 @@ MAPS_GIS_DESCRIPTION,Los mapas que se muestran aquí pertenecen a la base de dat
 MARK_ALL_AS_READ,Marcar todo como leído,aad72628
 MARK_AS_COMPLETE,Marcar como completo,63a2256e
 MARK_AS_INCOMPLETE,Marcar como incompleto,3baf97ae
+MARK_AS_NEEDS_ATTENTION,Marcar como requiere atención,6a16567f
 MARK_AS_READ,Marcar como leído,d91d4c14
 MARK_AS_SUBMITTED,Marcar como enviado,b7f9a33e
 MARK_AS_SUBMITTED_UNDO,Deshacer marcar como enviado,4ad82823
@@ -1090,6 +1093,7 @@ MONITORING,Monitoreo,c607ad35
 MONITORING_PLOT,Parcela de vigilancia,97de3243
 MONITORING_PLOT_TYPE,Tipo de parcela de vigilancia,5269e047
 MONITORING_PLOTS,Control de parcelas,42428fbb
+MONITORS,Monitores,5783929b
 MONOCULTURE,Monocultivo,7499be9c
 MONTH_01,Enero,735450e1
 MONTH_02,Febrero,2d7dea43
@@ -1170,11 +1174,13 @@ NO_NURSERIES_NON_ADMIN_MSG,"Antes de poder agregar y administrar el inventario d
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,No se han programado observaciones,c05456cd
 NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Cuando se completen las Observaciones que incluyan parcelas permanentes, estas aparecerán aquí y será necesario establecer los datos t0 para todas las parcelas permanentes para que se puedan calcular las Tasas de Supervivencia.",18f6a079
 NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Añadir un sitio de plantación le permitirá rastrear a dónde van las plantas de semillero al dejar el vivero.,b0104f6c
+NO_PLANTING_SITES_NON_ADMIN_MSG,"Solo los administradores pueden agregar sitios de plantación; por favor, comuníquese con el suyo para recibir asistencia.",8f016d3f
 NO_PLANTING_SITES_TITLE,"Solo un momento, añadamos un sitio de plantación primero.",801ba14c
 NO_PLANTS,No hay plantas.,6706c05b
 NO_PROJECT,Sin proyectos,49f65c3d
 NO_PROJECT_SELECTED,No se seleccionó ningún proyecto,b1bb5cd3
 NO_PROJECT_SPECIFIC_METRICS_TO_SHOW,No hay métricas específicas del proyecto para mostrar.,99964e82
+NO_PROJECTS_NON_ADMIN_MSG,"Solo los administradores pueden agregar proyectos. Por favor, comuníquese con el suyo para recibir asistencia.",e023cbd0
 NO_QUANTITY_SET,No se ha establecido una cantidad.,5922c859
 NO_REASSIGNMENTS,No hay reasignaciones.,8152a9dd
 NO_REASSIGNMENTS_TEXT,Seleccione un nuevo sustrato con cantidad en al menos una fila de lote de plántulas.,f7546414
@@ -1490,6 +1496,7 @@ PROBLEMS,Problemas,25b5d615
 PROBLEMS_WITH_ENTRIES,Se produjo un problema con algunas entradas de este formulario.,86f72cd9
 PROCESSING,Procesando,36f06d3a
 PROCESSING_STATUS_REQUIRED,Estado del procesamiento *,ac173883
+PROCESSING_VIDEO,Procesando video,9a3838de
 PROGRESS,Progreso,c07f21ce
 PROGRESS_NOTES,Notas sobre el progreso,5e670e4a
 PROGRESS_NOTES_DESCRIPTION,Proporcione información que pueda publicarse a los financiadores.,a42ffda7
@@ -2298,6 +2305,7 @@ UNSPECIFIED,No especificado,be62b890
 UPCOMING,Venidero,fa1930e2
 UPCOMING_PLANTING_SEASONS,Próximas temporadas de plantación,3ad28e65
 UPDATE,Actualizar,c4c30980
+UPDATE_LOCATION,Actualizar ubicación,86b598cd
 UPDATE_NEEDED,Actualización necesaria,7b391dc2
 UPDATE_REQUESTED,Actualización solicitada,3c56b2c5
 UPDATE_STATUS_WARNING,Estás a punto de actualizar el estatus,6ee652b9
@@ -2368,10 +2376,11 @@ VIDEO_LINK,Enlace de video,2546979d
 VIDEO_PROCESSING,Procesamiento de video,998e847c
 VIDEO_PROCESSING_DESCRIPTION,Tiene {0} video(s) aún en proceso. Esto puede tardar hasta 12 horas.,d85b02f6
 VIDEO_UNABLE_TO_PROCESS,No se pudo procesar el video,3817bfb4
-VIDEO_UNABLE_TO_PROCESS_DESCRIPTION,"No pudimos generar el modelo a partir del video proporcionado. Para obtener consejos sobre cómo mejorar su video, consulte el {0}. Puede eliminar el video de la tabla a continuación. {1} o {2}.",a9655e8d
+VIDEO_UNABLE_TO_PROCESS_DESCRIPTION,"No pudimos generar el recorrido virtual a partir del video proporcionado. Para obtener consejos sobre cómo mejorar su video, consulte el {0}. Puede eliminar el video de la tabla a continuación. {1} o {2}.",fe362adb
 VIDEO_UPLOAD_FAILED,Error al cargar el video,2406bea0
-VIDEO_UPLOAD_FAILED_DESCRIPTION,"No se pudo cargar su video. {0}. Para obtener consejos sobre cómo mejorar su video, consulte el {1}.",0fbf7c0c
+VIDEO_UPLOAD_FAILED_DESCRIPTION,No se pudo cargar su video. {0}. Descubra por qué su video pudo haber fallado visitando el {1}.,839af7da
 VIEW,Ver,02cff17a
+VIEW_3D_MODEL,Ver modelo 3D,fc2e2960
 VIEW_APPLICATION,Ver solicitud,bbdc193f
 VIEW_FULL_DASHBOARD,Ver panel de control completo,25189646
 VIEW_HISTORY,Ver historial,a1dbe2ca

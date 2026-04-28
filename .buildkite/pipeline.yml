@@ -39,6 +39,7 @@ steps:
     key: 'build-and-test'
     plugins:
       - *shallow-clone
+      - *load-secrets
       - cache#v1.10.0:
           <<: *cache-node-modules-args
           save:

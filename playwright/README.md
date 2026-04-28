@@ -4,31 +4,25 @@ This directory contains the playwright tests and some of the data files used for
 
 ## Updating screenshot snapshots
 
-Some tests use `toHaveScreenshot()`. Snapshots must be generated on Linux x86_64 to match the CI environment. Use the official Playwright Docker image to generate them locally regardless of your host OS.
+Some tests use `toHaveScreenshot()`. Screenshots only run against the prod build and snapshots must be generated on Linux x86_64 to match the CI environment.
 
-> **Apple Silicon (M1/M2/M3) users:** always include `--platform linux/amd64` so Docker uses x86 emulation. Without it, ARM-native font rendering differs from CI's x86 Linux and causes pixel mismatches.
+> **Apple Silicon (M1/M2/M3) users:** the script handles this automatically via `--platform linux/amd64`.
 
-First, confirm your Playwright version:
-
-```bash
-node -e "console.log(require('./node_modules/@playwright/test/package.json').version)"
-```
-
-Replace `<version>` below with that value (e.g. `1.49.1`).
-
-**Dev snapshots** (dev server must be running on port 3000):
+Make sure the prod stack is running first:
 
 ```bash
-docker run --rm --ipc=host --platform linux/amd64 -v "$(pwd):/work" -w /work -e PLAYWRIGHT_BASE_URL=http://host.docker.internal:3000 -e TIMEOUT=60000 -e WORKERS=1 mcr.microsoft.com/playwright:v<version>-jammy npx playwright test observationDetailsScreenshots --project=dev --update-snapshots
+yarn build && yarn server:reset && yarn docker:start:prod
 ```
 
-**Prod snapshots** (prod stack must be running on port 3001 via `yarn build && yarn server:reset`):
+Then run:
 
 ```bash
-docker run --rm --ipc=host --platform linux/amd64 -v "$(pwd):/work" -w /work -e PLAYWRIGHT_BASE_URL=http://host.docker.internal:3001 -e TIMEOUT=60000 -e WORKERS=1 mcr.microsoft.com/playwright:v<version>-jammy npx playwright test observationDetailsScreenshots --project=prod --update-snapshots
+yarn screenshots:update
 ```
 
-Commit the generated files in `playwright/e2e/suites/observationDetailsScreenshots.spec.ts-snapshots/`.
+This uses Docker to generate snapshots that match CI's Linux x86_64 rendering. The Playwright version is detected automatically.
+
+Commit all generated snapshot directories matching `playwright/e2e/suites/screenshots/*Screenshots.spec.ts-snapshots/`.
 
 ## Creating new test users
 

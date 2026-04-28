@@ -448,7 +448,7 @@ export default function NavBar({
         }}
         id='people'
       />
-      {isAdmin(selectedOrganization) && (
+      {isManagerOrHigher(selectedOrganization) && (
         <>
           <NavItem
             label={strings.PROJECTS}

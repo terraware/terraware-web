@@ -12,7 +12,7 @@ import { useOrganization } from 'src/providers/hooks';
 import ImportInventoryModal, { downloadInventoryCsvTemplate } from 'src/scenes/InventoryRouter/ImportInventoryModal';
 import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/edit/PlantingSiteTypeSelect';
 import strings from 'src/strings';
-import { isContributor } from 'src/utils/organization';
+import { isAdmin, isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -150,6 +150,13 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
     ],
   };
 
+  const NO_PLANTING_SITES_NON_ADMIN_CONTENT: PageContent = {
+    title1: strings.PLANTING_SITES,
+    title2: strings.REACH_OUT_TO_ADMIN_TITLE,
+    subtitle: strings.NO_PLANTING_SITES_NON_ADMIN_MSG,
+    listItems: [],
+  };
+
   const NO_SEEDBANKS_CONTENT: PageContent = {
     title1: strings.SEED_BANKS,
     title2: strings.ADD_A_SEED_BANK,
@@ -166,6 +173,13 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
     linkLocation: APP_PATHS.SEED_BANKS_NEW,
   };
 
+  const NO_SEEDBANKS_NON_ADMIN_CONTENT: PageContent = {
+    title1: strings.SEED_BANKS,
+    title2: strings.REACH_OUT_TO_ADMIN_TITLE,
+    subtitle: strings.NO_SEEDBANKS_NON_ADMIN_MSG,
+    listItems: [],
+  };
+
   const NO_NURSERIES_CONTENT: PageContent = {
     title1: strings.NURSERIES,
     title2: strings.ADD_A_NURSERY,
@@ -178,6 +192,13 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
     buttonText: strings.ADD_NURSERY,
     buttonIcon: 'plus',
     linkLocation: APP_PATHS.NURSERIES_NEW,
+  };
+
+  const NO_NURSERIES_NON_ADMIN_CONTENT: PageContent = {
+    title1: strings.NURSERIES,
+    title2: strings.REACH_OUT_TO_ADMIN_TITLE,
+    subtitle: strings.NO_NURSERIES_NON_ADMIN_MSG,
+    listItems: [],
   };
 
   const NO_PROJECTS_CONTENT: PageContent = {
@@ -194,6 +215,13 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
     linkLocation: APP_PATHS.PROJECTS_NEW,
   };
 
+  const NO_PROJECTS_NON_ADMIN_CONTENT: PageContent = {
+    title1: strings.PROJECTS,
+    title2: strings.REACH_OUT_TO_ADMIN_TITLE,
+    subtitle: strings.NO_PROJECTS_NON_ADMIN_MSG,
+    listItems: [],
+  };
+
   const pageContent = (): PageContent => {
     const contributor = isContributor(selectedOrganization);
 
@@ -201,15 +229,15 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
       case 'Species':
         return contributor ? NO_SPECIES_CONTRIBUTOR_CONTENT : NO_SPECIES_CONTENT;
       case 'SeedBanks':
-        return NO_SEEDBANKS_CONTENT;
+        return isAdmin(selectedOrganization) ? NO_SEEDBANKS_CONTENT : NO_SEEDBANKS_NON_ADMIN_CONTENT;
       case 'Nurseries':
-        return NO_NURSERIES_CONTENT;
+        return isAdmin(selectedOrganization) ? NO_NURSERIES_CONTENT : NO_NURSERIES_NON_ADMIN_CONTENT;
       case 'Inventory':
         return NO_INVENTORY_CONTENT;
       case 'PlantingSites':
-        return NO_PLANTING_SITES_CONTENT;
+        return isAdmin(selectedOrganization) ? NO_PLANTING_SITES_CONTENT : NO_PLANTING_SITES_NON_ADMIN_CONTENT;
       case 'Projects':
-        return NO_PROJECTS_CONTENT;
+        return isAdmin(selectedOrganization) ? NO_PROJECTS_CONTENT : NO_PROJECTS_NON_ADMIN_CONTENT;
       default:
         return NO_SEEDBANKS_CONTENT;
     }
