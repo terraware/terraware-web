@@ -4,6 +4,7 @@ import { MapRef, Marker } from 'react-map-gl/mapbox';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import MapComponent from 'src/components/NewMap';
+import MapDrawerPagination from 'src/components/NewMap/MapDrawerPagination';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
 import { MapLayer, MapMarker, MapMarkerGroup, MapNameTag, MapPoint } from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
@@ -39,7 +40,9 @@ export default function VirtualWalkthroughsMap({
   const [mapLoaded, setMapLoaded] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<OrganizationVirtualWalkthrough | undefined>(undefined);
+  const [selectedFiles, setSelectedFiles] = useState<OrganizationVirtualWalkthrough[]>([]);
+  const [selectedFileIndex, setSelectedFileIndex] = useState(0);
+  const selectedFile = selectedFiles[selectedFileIndex];
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const { strings } = useLocalization();
@@ -199,31 +202,79 @@ export default function VirtualWalkthroughsMap({
 
   const selectFile = useCallback(
     (file: OrganizationVirtualWalkthrough) => () => {
-      setSelectedFile(file);
+      setSelectedFiles([file]);
+      setSelectedFileIndex(0);
       setDrawerOpen(true);
     },
     []
   );
 
+  const handleClusterClick = useCallback((clusteredMarkers: MapMarker[]) => {
+    const files = clusteredMarkers
+      .map((m) => m.properties?.file as OrganizationVirtualWalkthrough | undefined)
+      .filter((f): f is OrganizationVirtualWalkthrough => f !== undefined);
+    if (files.length > 0) {
+      setSelectedFiles(files);
+      setSelectedFileIndex(0);
+      setDrawerOpen(true);
+    }
+  }, []);
+
+  const monitoringPlotBoundaries = useMemo(() => {
+    const map = new Map<number, number[][]>();
+    plantingSites.forEach((site) => {
+      site.adHocPlots?.forEach((plot) => {
+        if (plot.boundary?.coordinates?.length) {
+          map.set(plot.id, plot.boundary.coordinates[0]);
+        }
+      });
+      site.strata?.forEach((stratum) => {
+        stratum.substrata?.forEach((substratum) => {
+          substratum.monitoringPlots?.forEach((plot) => {
+            if (plot.boundary?.coordinates?.length) {
+              map.set(plot.id, plot.boundary.coordinates[0]);
+            }
+          });
+        });
+      });
+    });
+    return map;
+  }, [plantingSites]);
+
   const virtualWalkthroughMarkers = useMemo((): MapMarker[] => {
     return mediaFiles
-      .filter(
-        (f) =>
-          (f.splatStatus === 'Ready' || f.splatStatus === 'Preparing') &&
-          !f.needsAttention &&
-          f.latitude !== undefined &&
-          f.longitude !== undefined
-      )
-      .map(
-        (f): MapMarker => ({
+      .filter((f) => (f.splatStatus === 'Ready' || f.splatStatus === 'Preparing') && !f.needsAttention)
+      .map((f): MapMarker | undefined => {
+        let latitude: number;
+        let longitude: number;
+
+        if (f.latitude !== undefined && f.longitude !== undefined) {
+          latitude = f.latitude;
+          longitude = f.longitude;
+        } else if (f.type === 'Plot' && f.monitoringPlotId !== undefined) {
+          const coords = monitoringPlotBoundaries.get(f.monitoringPlotId);
+          if (!coords) {
+            return undefined;
+          }
+          const points = coords.map(([lng, lat]): MapPoint => ({ lat, lng }));
+          const bbox = getBoundingBoxFromPoints(points);
+          latitude = (bbox.maxLat + bbox.minLat) / 2;
+          longitude = (bbox.maxLng + bbox.minLng) / 2;
+        } else {
+          return undefined;
+        }
+
+        return {
           id: `splats/${f.fileId}`,
-          latitude: f.latitude!,
-          longitude: f.longitude!,
+          latitude,
+          longitude,
           selected: selectedFile?.fileId === f.fileId,
           onClick: selectFile(f),
-        })
-      );
-  }, [mediaFiles, selectFile, selectedFile]);
+          properties: { file: f },
+        };
+      })
+      .filter((marker): marker is MapMarker => marker !== undefined);
+  }, [mediaFiles, monitoringPlotBoundaries, selectFile, selectedFile]);
 
   const markers = useMemo((): MapMarkerGroup[] => {
     return [
@@ -232,9 +283,24 @@ export default function VirtualWalkthroughsMap({
         markerGroupId: 'virtual-walkthroughs',
         style: virtualPlotStyle,
         visible: virtualWalkthroughsVisible,
+        onClusterClick: handleClusterClick,
       },
     ];
-  }, [virtualPlotStyle, virtualWalkthroughMarkers, virtualWalkthroughsVisible]);
+  }, [handleClusterClick, virtualPlotStyle, virtualWalkthroughMarkers, virtualWalkthroughsVisible]);
+
+  const drawerHeader = useMemo(() => {
+    if (selectedFiles.length <= 1) {
+      return undefined;
+    }
+    return (
+      <MapDrawerPagination
+        drawerSize='medium'
+        page={selectedFileIndex + 1}
+        setPage={(page) => setSelectedFileIndex(page - 1)}
+        totalPages={selectedFiles.length}
+      />
+    );
+  }, [selectedFileIndex, selectedFiles.length]);
 
   const drawerContent = useMemo(() => {
     if (!selectedFile) {
@@ -249,8 +315,23 @@ export default function VirtualWalkthroughsMap({
               component='img'
               src={`/api/v1/organizations/${organizationId}/media/${selectedFile.fileId}/thumbnail?maxWidth=377`}
               alt={strings.THUMBNAIL}
-              sx={{ display: 'block', objectFit: 'cover', width: '100%' }}
+              sx={{ display: 'block', maxHeight: '160px', objectFit: 'cover', width: '100%' }}
             />
+            {!isPreparing && (
+              <Box
+                component='img'
+                src='/assets/360icon.svg'
+                alt=''
+                sx={{
+                  height: '49px',
+                  left: '50%',
+                  position: 'absolute',
+                  top: '50%',
+                  transform: 'translate(-50%, -50%)',
+                  width: '49px',
+                }}
+              />
+            )}
             {isPreparing && (
               <Box
                 sx={{
@@ -318,6 +399,7 @@ export default function VirtualWalkthroughsMap({
           />
         ))}
       <MapComponent
+        clusterMaxZoom={20}
         mapId={mapId}
         mapRef={mapRef}
         token={token ?? ''}
@@ -328,6 +410,7 @@ export default function VirtualWalkthroughsMap({
         onMapLoad={() => setMapLoaded(true)}
         drawerOpen={drawerOpen}
         drawerSize='medium'
+        drawerHeader={drawerHeader}
         drawerChildren={drawerContent}
         setDrawerOpen={setDrawerOpen}
         additionalComponent={draggableMarker}

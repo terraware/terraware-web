@@ -11,6 +11,7 @@ import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
 import { MinimalPlantingSite, MinimalSubstratum } from 'src/types/Tracking';
+import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 /**
@@ -59,6 +60,7 @@ const columns = (): TableColumnType[] => [
 export default function PlantingSiteDetailsTable({ plantingSite }: PlantingSiteDetailsTableProps): JSX.Element {
   const defaultTimeZone = useDefaultTimeZone();
   const timeZone = plantingSite.timeZone ?? defaultTimeZone.get().id;
+  const numberFormatter = useNumberFormatter();
 
   return (
     <Box>
@@ -67,14 +69,14 @@ export default function PlantingSiteDetailsTable({ plantingSite }: PlantingSiteD
         columns={columns}
         rows={plantingSite.strata ?? []}
         orderBy='name'
-        Renderer={DetailsRenderer(timeZone, plantingSite.id)}
+        Renderer={DetailsRenderer(timeZone, plantingSite.id, numberFormatter)}
       />
     </Box>
   );
 }
 
 const DetailsRenderer =
-  (timeZone: string, plantingSiteId: number) =>
+  (timeZone: string, plantingSiteId: number, numberFormatter: ReturnType<typeof useNumberFormatter>) =>
   // eslint-disable-next-line react/display-name
   (props: RendererProps<TableRowType>): JSX.Element => {
     const { column, row, value } = props;
@@ -121,7 +123,13 @@ const DetailsRenderer =
     }
 
     if (column.key === 'areaHa') {
-      return <CellRenderer {...props} value={value || ''} sx={textStyles} />;
+      return (
+        <CellRenderer
+          {...props}
+          value={typeof value === 'number' ? numberFormatter.format(value, { decimals: 1 }) : ''}
+          sx={textStyles}
+        />
+      );
     }
 
     if (column.key === 'substrata') {

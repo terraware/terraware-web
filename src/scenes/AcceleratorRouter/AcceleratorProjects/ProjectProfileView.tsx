@@ -150,7 +150,7 @@ const ProjectProfileView = ({
         md={isTablet ? 6 : 12}
         backgroundColor={theme.palette.TwClrBaseGray100}
         label={label}
-        value={value && strings.formatString(strings.X_HA, numberFormatter.format(value))?.toString()}
+        value={value && strings.formatString(strings.X_HA, numberFormatter.format(value, { decimals: 1 }))?.toString()}
       />
     );
     switch (acceleratorProject?.phase) {
@@ -192,6 +192,42 @@ const ProjectProfileView = ({
   const reportIndicatorCardFormatter = useCallback(
     (value: number | undefined) => (value ? formatNumberScale(value, value < 999 ? 0 : 1) : '0'),
     []
+  );
+
+  const confirmedReforestableLandDisplayValue = useMemo(
+    () =>
+      projectDetails?.confirmedReforestableLand &&
+      strings
+        .formatString(strings.X_HA, numberFormatter.format(projectDetails.confirmedReforestableLand, { decimals: 1 }))
+        ?.toString(),
+    [numberFormatter, projectDetails, strings]
+  );
+
+  const minProjectAreaDisplayValue = useMemo(
+    () =>
+      projectDetails?.minProjectArea &&
+      strings
+        .formatString(strings.X_HA, numberFormatter.format(projectDetails.minProjectArea, { decimals: 1 }))
+        ?.toString(),
+    [numberFormatter, projectDetails, strings]
+  );
+
+  const projectAreaDisplayValue = useMemo(
+    () =>
+      projectDetails?.projectArea &&
+      strings
+        .formatString(strings.X_HA, numberFormatter.format(projectDetails.projectArea, { decimals: 1 }))
+        ?.toString(),
+    [numberFormatter, projectDetails, strings]
+  );
+
+  const totalExpansionPotentialDisplayValue = useMemo(
+    () =>
+      projectDetails?.totalExpansionPotential &&
+      strings
+        .formatString(strings.X_HA, numberFormatter.format(projectDetails.totalExpansionPotential, { decimals: 1 }))
+        ?.toString(),
+    [numberFormatter, projectDetails, strings]
   );
 
   return (
@@ -414,21 +450,13 @@ const ProjectProfileView = ({
             <ProjectDataDisplay
               label={strings.ELIGIBLE_AREA}
               md={12}
-              value={
-                projectDetails?.confirmedReforestableLand &&
-                strings
-                  .formatString(strings.X_HA, numberFormatter.format(projectDetails.confirmedReforestableLand))
-                  ?.toString()
-              }
+              value={confirmedReforestableLandDisplayValue}
               tooltip={strings.ELIGIBLE_AREA_DESCRIPTION}
             />
             <ProjectDataDisplay
               label={strings.MIN_PROJECT_AREA}
               md={12}
-              value={
-                projectDetails?.minProjectArea &&
-                strings.formatString(strings.X_HA, numberFormatter.format(projectDetails.minProjectArea))?.toString()
-              }
+              value={minProjectAreaDisplayValue}
               tooltip={strings.MIN_PROJECT_AREA_DESCRIPTION}
             />
           </Grid>
@@ -438,21 +466,13 @@ const ProjectProfileView = ({
             <ProjectDataDisplay
               label={strings.PROJECT_AREA}
               md={12}
-              value={
-                projectDetails?.projectArea &&
-                strings.formatString(strings.X_HA, numberFormatter.format(projectDetails.projectArea))?.toString()
-              }
+              value={projectAreaDisplayValue}
               tooltip={strings.PROJECT_AREA_DESCRIPTION}
             />
             <ProjectDataDisplay
               label={strings.EXPANSION_POTENTIAL}
               md={12}
-              value={
-                projectDetails?.totalExpansionPotential &&
-                strings
-                  .formatString(strings.X_HA, numberFormatter.format(projectDetails.totalExpansionPotential))
-                  ?.toString()
-              }
+              value={totalExpansionPotentialDisplayValue}
               tooltip={strings.EXPANSION_POTENTIAL_DESCRIPTION}
             />
           </Grid>

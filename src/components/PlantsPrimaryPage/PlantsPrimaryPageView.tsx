@@ -11,9 +11,8 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
-import { useOrganization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useListProjectsQuery } from 'src/queries/generated/projects';
-import strings from 'src/strings';
 import { PlantingSite } from 'src/types/Tracking';
 
 import SurvivalRateMessageV2 from '../SurvivalRate/SurvivalRateMessageV2';
@@ -68,6 +67,7 @@ export default function PlantsPrimaryPageView({
   actionButton,
   allowAllAsSiteSelection,
 }: PlantsPrimaryPageViewProps): JSX.Element {
+  const { strings } = useLocalization();
   const theme = useTheme();
   const { isDesktop, isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
@@ -119,7 +119,7 @@ export default function PlantsPrimaryPageView({
       .map((proj) => ({ label: proj.name, value: proj.id }));
     iOptions?.unshift({ label: strings.NO_PROJECT, value: -1 });
     return iOptions;
-  }, [projects, projectsWithPlantingSites]);
+  }, [projects, projectsWithPlantingSites, strings]);
 
   const isRolledUpView = useMemo(() => {
     return projectId !== undefined && selectedPlantingSiteId === -1;
@@ -253,9 +253,10 @@ export default function PlantsPrimaryPageView({
                       {strings.formatString(
                         strings.X_HA,
                         isRolledUpView ? (
-                          <FormattedNumber value={Math.round(totalArea * 100) / 100} />
+                          <FormattedNumber decimals={1} value={totalArea} />
                         ) : (
                           <FormattedNumber
+                            decimals={1}
                             value={plantingSites.find((ps) => ps.id === selectedPlantingSiteId)?.areaHa || 0}
                           />
                         )

@@ -4,6 +4,7 @@ import { Box, useTheme } from '@mui/material';
 
 import PageHeader from 'src/components/PageHeader';
 import Card from 'src/components/common/Card';
+import ScrollToTop from 'src/components/common/ScrollToTop';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -39,6 +40,7 @@ export default function VirtualWalkthroughsView(): JSX.Element {
 
   return (
     <TfMain>
+      <ScrollToTop />
       <PageHeader
         back={true}
         backUrl={APP_PATHS.HOME}

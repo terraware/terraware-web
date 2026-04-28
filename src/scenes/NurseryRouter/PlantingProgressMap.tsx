@@ -3,17 +3,12 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { Typography, useTheme } from '@mui/material';
 
 import { PlantingSiteMap } from 'src/components/Map';
-import { useOrganization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { useUpdateSubstrataMutation } from 'src/queries/generated/substrata';
-import { selectStrataHaveStatistics } from 'src/redux/features/plantings/plantingsSelectors';
-import { useAppSelector } from 'src/redux/store';
-import StatsWarningDialog from 'src/scenes/NurseryRouter/StatsWarningModal';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { MapData, MapSourceProperties } from 'src/types/Map';
 import useSnackbar from 'src/utils/useSnackbar';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import PlantingProgressMapDialog from './PlantingProgressMapDialog';
 
@@ -24,8 +19,6 @@ type PlantingProgressMapProps = {
 export default function PlantingProgressMap({ plantingSiteId }: PlantingProgressMapProps): JSX.Element {
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const defaultTimeZone = useDefaultTimeZone();
-  const { selectedOrganization } = useOrganization();
 
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
   const plantingSite = useMemo(() => getPlantingSiteResponse.currentData?.site, [getPlantingSiteResponse]);
@@ -40,18 +33,6 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
 
   const [mapData, setMapData] = useState<MapData | undefined>();
   const [focusEntities, setFocusEntities] = useState<{ sourceId: string; id: number }[]>([]);
-
-  const [stratumIdSelected, setStratumIdSelected] = useState<number>(-1);
-  const [statsWarningDialogProps, setStatsWarningDialogProps] = useState<{ id: number; val: boolean } | undefined>();
-
-  const selectedStratumHasStats = useAppSelector((state) =>
-    selectStrataHaveStatistics(
-      state,
-      selectedOrganization?.id || -1,
-      { [plantingSiteId ?? -1]: new Set([stratumIdSelected]) },
-      defaultTimeZone.get().id
-    )
-  );
 
   useEffect(() => {
     if (!mapData?.site?.entities || plantingSite?.id !== mapData.site.entities[0]?.id) {
@@ -100,62 +81,34 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
     [updateSubstratum]
   );
 
-  const updatePlantingComplete = useCallback(
-    (id: number, val: boolean) => {
-      if (!selectedStratumHasStats) {
-        completeUpdate(id, val);
-      } else {
-        setStatsWarningDialogProps({ id, val });
-        const selectedStratum = plantingSite?.strata?.find((stratum) =>
-          stratum.substrata.map((_substratum) => _substratum.id).includes(id)
-        );
-        setStratumIdSelected(selectedStratum?.id ?? -1);
-      }
-    },
-    [selectedStratumHasStats, completeUpdate, plantingSite?.strata]
-  );
-
   return mapData ? (
-    <>
-      <StatsWarningDialog
-        open={!!statsWarningDialogProps}
-        completeUpdateProps={statsWarningDialogProps}
-        onClose={() => setStatsWarningDialogProps(undefined)}
-        onSubmit={(completeUpdateProps) => {
-          setStatsWarningDialogProps(undefined);
-          if (completeUpdateProps) {
-            completeUpdate(completeUpdateProps.id, completeUpdateProps.val);
-          }
-        }}
-      />
-      <PlantingSiteMap
-        mapData={mapData}
-        focusEntities={focusEntities}
-        contextRenderer={{
-          render: (properties: MapSourceProperties) =>
-            plantingSiteId ? (
-              <PlantingProgressMapDialog
-                substratumId={properties.id}
-                substratumName={properties.name}
-                substratumAreaHa={substrataAreaHa[properties.id]}
-                siteName={plantingSite?.name || ''}
-                plantingComplete={substrataComplete[properties.id]}
-                plantingSiteId={plantingSiteId}
-                onUpdatePlantingComplete={updatePlantingComplete}
-                busy={updateSubstratumResponse.isLoading}
-              />
-            ) : null,
-          anchor: 'bottom',
-          sx: {
-            '.mapboxgl-popup .mapboxgl-popup-content': {
-              borderRadius: '8px',
-              padding: '0',
-              minWidth: '320px',
-            },
+    <PlantingSiteMap
+      mapData={mapData}
+      focusEntities={focusEntities}
+      contextRenderer={{
+        render: (properties: MapSourceProperties) =>
+          plantingSiteId ? (
+            <PlantingProgressMapDialog
+              substratumId={properties.id}
+              substratumName={properties.name}
+              substratumAreaHa={substrataAreaHa[properties.id]}
+              siteName={plantingSite?.name || ''}
+              plantingComplete={substrataComplete[properties.id]}
+              plantingSiteId={plantingSiteId}
+              onUpdatePlantingComplete={completeUpdate}
+              busy={updateSubstratumResponse.isLoading}
+            />
+          ) : null,
+        anchor: 'bottom',
+        sx: {
+          '.mapboxgl-popup .mapboxgl-popup-content': {
+            borderRadius: '8px',
+            padding: '0',
+            minWidth: '320px',
           },
-        }}
-      />
-    </>
+        },
+      }}
+    />
   ) : (
     <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt} textAlign='center'>
       {strings.NO_MAP_DATA}

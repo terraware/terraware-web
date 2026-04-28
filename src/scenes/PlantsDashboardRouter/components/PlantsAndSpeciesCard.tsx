@@ -114,7 +114,7 @@ export default function PlantsAndSpeciesCard({
           <Box flexBasis='100%'>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize='24px' fontWeight={600} paddingRight={1}>
-                {strings.formatString(strings.X_HA, <FormattedNumber value={Math.round(totalPlantedArea * 10) / 10} />)}
+                {strings.formatString(strings.X_HA, <FormattedNumber decimals={1} value={totalPlantedArea} />)}
               </Typography>
               <Tooltip
                 title={
@@ -139,7 +139,10 @@ export default function PlantsAndSpeciesCard({
                 textAlign='right'
                 color={theme.palette.TwClrTxtSecondary}
               >
-                {strings.formatString(strings.TARGET_HECTARES_PLANTED, <FormattedNumber value={totalArea || 0} />)}
+                {strings.formatString(
+                  strings.TARGET_HECTARES_PLANTED,
+                  <FormattedNumber decimals={1} value={totalArea || 0} />
+                )}
               </Typography>
             </Box>
             <Box marginTop={1}>

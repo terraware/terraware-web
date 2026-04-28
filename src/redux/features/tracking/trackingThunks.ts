@@ -7,12 +7,7 @@ import { TrackingService } from 'src/services';
 import strings from 'src/strings';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
-import {
-  setPlantingSiteAction,
-  setPlantingSitesAction,
-  setPlantingSitesSearchResultsAction,
-  setSiteReportedPlantsAction,
-} from './trackingSlice';
+import { setPlantingSiteAction, setPlantingSitesAction, setPlantingSitesSearchResultsAction } from './trackingSlice';
 
 export type PlotT0Observation = {
   observation_startDate: string;
@@ -102,32 +97,6 @@ export const requestPlantingSitesSearchResults = (organizationId: number) => {
     }
   };
 };
-
-export const requestSiteReportedPlants = (plantingSiteId: number) => {
-  return async (dispatch: Dispatch, _getState: () => RootState) => {
-    try {
-      const response = await TrackingService.getReportedPlants(plantingSiteId);
-      dispatch(setSiteReportedPlantsAction({ plantingSiteId, data: { site: response.data?.site } }));
-    } catch (e) {
-      // should not happen, the response above captures any http request errors
-      // eslint-disable-next-line no-console
-      console.error('Error dispatching site reported plants request', e);
-    }
-  };
-};
-
-export const requestPlantingSiteReportedPlants = createAsyncThunk(
-  'tracking/siteReportedPlants',
-  async (plantingSiteId: number, { rejectWithValue }) => {
-    const response = await TrackingService.getReportedPlants(plantingSiteId);
-
-    if (response !== null && response.requestSucceeded && response?.data?.site !== undefined) {
-      return response.data.site;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
 
 export const requestListPlantingSites = createAsyncThunk(
   'tracking/plantingSites',

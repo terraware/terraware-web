@@ -146,7 +146,7 @@ const ObservationMapWrapper = ({
               {plantingSite?.areaHa !== undefined &&
                 strings.formatString(
                   strings.X_HA_IN_TOTAL_PLANTING_AREA,
-                  <FormattedNumber value={Math.round(plantingSite.areaHa * 100) / 100} />
+                  <FormattedNumber decimals={1} value={plantingSite.areaHa} />
                 )}
             </Typography>
           </Box>
