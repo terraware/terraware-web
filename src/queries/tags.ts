@@ -17,6 +17,7 @@ export enum QueryTagTypes {
   ObservationMedia = 'ObservationMedia',
   OrganizationMedia = 'OrganizationMedia',
   ObservationSplats = 'ObservationSplats',
+  Splats = 'Splats',
   PlantingSites = 'PlantingSites',
   ProjectInternalUsers = 'ProjectInternalUsers',
   ProjectModules = 'ProjectModules',

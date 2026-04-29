@@ -4,10 +4,10 @@ import { QueryTagTypes } from '../tags';
 api.enhanceEndpoints({
   endpoints: {
     generateOrganizationSplat: {
-      invalidatesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
+      invalidatesTags: [{ type: QueryTagTypes.Splats, id: 'LIST' }],
     },
     setOrganizationSplatNeedsAttention: {
-      invalidatesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
+      invalidatesTags: [{ type: QueryTagTypes.Splats, id: 'LIST' }],
     },
   },
 });
