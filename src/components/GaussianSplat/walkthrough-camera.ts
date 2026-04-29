@@ -97,11 +97,7 @@ export class WalkthroughCamera extends Script {
       this._lastX = e.clientX;
       this._lastY = e.clientY;
       this._targetYaw -= dx * this.lookSensitivity;
-      this._targetPitch = math.clamp(
-        this._targetPitch + dy * this.lookSensitivity,
-        this.pitchMin,
-        this.pitchMax
-      );
+      this._targetPitch = math.clamp(this._targetPitch + dy * this.lookSensitivity, this.pitchMin, this.pitchMax);
     };
 
     const onPointerUp = (e: PointerEvent) => {
@@ -203,12 +199,9 @@ export class WalkthroughCamera extends Script {
     const slow = this._keys.ControlLeft || this._keys.ControlRight;
     const speed = (fast ? this.moveFastSpeed : slow ? this.moveSlowSpeed : this.moveSpeed) * dt;
 
-    const fwd =
-      (this._keys.KeyW || this._keys.ArrowUp ? 1 : 0) -
-      (this._keys.KeyS || this._keys.ArrowDown ? 1 : 0);
+    const fwd = (this._keys.KeyW || this._keys.ArrowUp ? 1 : 0) - (this._keys.KeyS || this._keys.ArrowDown ? 1 : 0);
     const strafe =
-      (this._keys.KeyD || this._keys.ArrowRight ? 1 : 0) -
-      (this._keys.KeyA || this._keys.ArrowLeft ? 1 : 0);
+      (this._keys.KeyD || this._keys.ArrowRight ? 1 : 0) - (this._keys.KeyA || this._keys.ArrowLeft ? 1 : 0);
 
     const scrollFwd = -this._scrollDelta * this.scrollSpeed;
     this._scrollDelta = 0;
