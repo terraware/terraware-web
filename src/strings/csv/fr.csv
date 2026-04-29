@@ -2284,6 +2284,7 @@ UNABLE_TO_LOAD_NOTIFICATIONS,Impossible de charger les notifications. Réessayez
 UNASSIGNED,Non assigné·e,9acb5519
 UNCLAIMED,Non réclamé,a4964181
 UNDO,Annuler,5f150050
+UNDO_NEEDS_ATTENTION,Annuler le signalement « Nécessite une attention »,686596c0
 UNDO_PLANTING_COMPLETE,Annuler la plantation terminée,05a90be7
 UNDO_WITHDRAWAL,Annuler le retrait,eba70c5e
 UNDO_WITHDRAWAL_CONFIRMATION,Êtes-vous sûr de vouloir annuler ce retrait ?,7f65365c

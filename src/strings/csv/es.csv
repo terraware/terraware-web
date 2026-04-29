@@ -2284,6 +2284,7 @@ UNABLE_TO_LOAD_NOTIFICATIONS,No se han podido cargar las notificaciones. Vuelva 
 UNASSIGNED,Sin asignar,9acb5519
 UNCLAIMED,No reclamado,a4964181
 UNDO,Deshacer,5f150050
+UNDO_NEEDS_ATTENTION,Deshacer Necesita Atención,686596c0
 UNDO_PLANTING_COMPLETE,Deshacer plantación completa,05a90be7
 UNDO_WITHDRAWAL,Deshacer retiro,eba70c5e
 UNDO_WITHDRAWAL_CONFIRMATION,¿Está seguro de que quiere deshacer este retiro?,7f65365c

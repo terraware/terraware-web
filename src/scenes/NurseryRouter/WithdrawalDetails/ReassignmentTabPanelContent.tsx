@@ -3,10 +3,9 @@ import React, { type JSX } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { BatchPayload, DeliveryPayload, NurseryWithdrawalPayload } from 'src/queries/generated/nurseryWithdrawals';
 import strings from 'src/strings';
-import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
-import { Delivery } from 'src/types/Tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
@@ -14,9 +13,9 @@ import OutplantReassignmentTable from './sections/OutplantReassignmentTable';
 
 type ReassignmentTabPanelContentProps = {
   species: Species[];
-  withdrawal?: NurseryWithdrawal;
-  delivery?: Delivery;
-  batches?: Batch[];
+  withdrawal?: NurseryWithdrawalPayload;
+  delivery?: DeliveryPayload;
+  batches?: BatchPayload[];
 };
 
 export default function ReassignmentTabPanelContent({
