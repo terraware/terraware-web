@@ -111,7 +111,7 @@ const parseSearchNurseryWithdrawalsArgs = (
   if (args.destinationNames?.length) {
     searchChildren.push({
       operation: 'field',
-      field: 'destinationNames',
+      field: 'destinationName',
       type: 'Exact',
       values: args.destinationNames,
     });
