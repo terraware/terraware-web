@@ -4,7 +4,7 @@ import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
 import { useLocalization } from 'src/providers';
-import { Batch, NurseryWithdrawal } from 'src/types/Batch';
+import { BatchPayload, NurseryWithdrawalPayload } from 'src/queries/generated/nurseryWithdrawals';
 import { Species } from 'src/types/Species';
 import { batchToSpecies } from 'src/utils/batch';
 
@@ -24,8 +24,8 @@ type SpeciesWithdrawal = {
 
 type NonOutplantWithdrawalTableProps = {
   species: Species[];
-  withdrawal?: NurseryWithdrawal;
-  batches?: Batch[];
+  withdrawal?: NurseryWithdrawalPayload;
+  batches?: BatchPayload[];
 };
 
 export default function NonOutplantWithdrawalTable({

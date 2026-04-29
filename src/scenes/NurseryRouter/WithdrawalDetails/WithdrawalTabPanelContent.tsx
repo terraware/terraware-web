@@ -2,22 +2,22 @@ import React, { type JSX } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
+import { DeliveryPayload } from 'src/queries/generated/deliveries';
+import { BatchPayload, NurseryWithdrawalPayload } from 'src/queries/generated/nurseryWithdrawals';
+import { SearchNurseryWithdrawalPayload } from 'src/queries/search/nurseries';
 import strings from 'src/strings';
-import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
-import { Delivery } from 'src/types/Tracking';
 
-import { WithdrawalSummary } from '../NurseryWithdrawalsDetailsView';
 import WithdrawalOverview from './WithdrawalOverview';
 import OutplantWithdrawalTable from './sections/OutplantWithdrawalTable';
 import Photos from './sections/Photos';
 
 type WithdrawalTabPanelContentProps = {
   species: Species[];
-  withdrawal?: NurseryWithdrawal;
-  withdrawalSummary?: WithdrawalSummary;
-  delivery?: Delivery;
-  batches?: Batch[];
+  withdrawal?: NurseryWithdrawalPayload;
+  withdrawalSummary?: SearchNurseryWithdrawalPayload;
+  delivery?: DeliveryPayload;
+  batches?: BatchPayload[];
 };
 
 export default function WithdrawalTabPanelContent({

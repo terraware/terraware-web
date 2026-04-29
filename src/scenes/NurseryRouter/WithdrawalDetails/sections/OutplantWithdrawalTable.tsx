@@ -4,22 +4,20 @@ import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
 import { useOrganization } from 'src/providers';
+import { BatchPayload, DeliveryPayload, NurseryWithdrawalPayload } from 'src/queries/generated/nurseryWithdrawals';
 import { useLazyListStrataQuery } from 'src/queries/search/strata';
 import { SubstratumPayload, useLazyListSubstrataQuery } from 'src/queries/search/substrata';
 import strings from 'src/strings';
-import { Batch, NurseryWithdrawal } from 'src/types/Batch';
 import { Species } from 'src/types/Species';
-import { Delivery } from 'src/types/Tracking';
 import { batchToSpecies } from 'src/utils/batch';
-import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import WithdrawalRenderer from './WithdrawalRenderer';
 
 type OutplantWithdrawalTableProps = {
   species: Species[];
-  delivery?: Delivery;
-  batches?: Batch[];
-  withdrawal?: NurseryWithdrawal;
+  delivery?: DeliveryPayload;
+  batches?: BatchPayload[];
+  withdrawal?: NurseryWithdrawalPayload;
 };
 
 const columns = (): TableColumnType[] => [
@@ -36,7 +34,6 @@ export default function OutplantWithdrawalTable({
   batches,
   withdrawal,
 }: OutplantWithdrawalTableProps): JSX.Element {
-  const numberFormatter = useNumberFormatter();
   const { selectedOrganization } = useOrganization();
 
   type BatchesRow = {
@@ -97,7 +94,6 @@ export default function OutplantWithdrawalTable({
         ) ?? [];
       const speciesSubstratumMap: Record<number, Record<number, number>> = {};
       const speciesStratumMap: Record<number, Record<number, number>> = {};
-      const rows: { [p: string]: unknown }[] = [];
       for (const sp of speciesList) {
         // for each species add the number of plants in each substratum for delivery type plantings
         speciesSubstratumMap[sp] = {};
@@ -118,16 +114,6 @@ export default function OutplantWithdrawalTable({
               speciesStratumMap[sp][stratumId] += pl.numPlants;
             }
           });
-
-        for (const substratumKey of Object.keys(speciesSubstratumMap[sp])) {
-          const substratumId = Number(substratumKey);
-          rows.push({
-            quantity: numberFormatter.format(speciesSubstratumMap[sp][substratumId]),
-            species: species?.find((x) => x?.id === sp)?.scientificName ?? '',
-            to_stratum: substratumId > -1 ? substratumById[substratumId]?.stratumName ?? '' : '',
-            to_substratum: substratumId > -1 ? substratumById[substratumId]?.name ?? substratumId?.toString() : '',
-          });
-        }
       }
 
       const batchesMap: BatchesRow[] = [];
@@ -165,15 +151,7 @@ export default function OutplantWithdrawalTable({
     } else {
       return [];
     }
-  }, [
-    batches,
-    delivery?.plantings,
-    numberFormatter,
-    species,
-    stratumNames,
-    substratumById,
-    withdrawal?.batchWithdrawals,
-  ]);
+  }, [batches, delivery?.plantings, species, stratumNames, substratumById, withdrawal?.batchWithdrawals]);
 
   return (
     <Table

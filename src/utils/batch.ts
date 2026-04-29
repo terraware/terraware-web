@@ -1,6 +1,6 @@
-import { Batch } from 'src/types/Batch';
+import { BatchPayload } from 'src/queries/generated/nurseryWithdrawals';
 
-export const batchToSpecies = (batches: Batch[]) => {
+export const batchToSpecies = (batches: BatchPayload[]) => {
   return (
     batches?.reduce<{ [key: string]: { speciesId: number; batchNumber: string } }>(
       (acc, batch) => ({

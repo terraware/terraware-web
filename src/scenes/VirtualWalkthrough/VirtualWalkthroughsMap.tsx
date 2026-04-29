@@ -383,21 +383,14 @@ export default function VirtualWalkthroughsMap({
 
   return (
     <>
-      {modalOpen &&
-        selectedFile &&
-        (selectedFile.type === 'Plot' && selectedFile.observationId ? (
-          <VirtualWalkthroughModal
-            observationId={selectedFile.observationId}
-            fileId={selectedFile.fileId}
-            onClose={() => setModalOpen(false)}
-          />
-        ) : (
-          <VirtualWalkthroughModal
-            organizationId={organizationId}
-            fileId={selectedFile.fileId}
-            onClose={() => setModalOpen(false)}
-          />
-        ))}
+      {modalOpen && selectedFile && (
+        <VirtualWalkthroughModal
+          observationId={selectedFile.observationId}
+          organizationId={organizationId}
+          fileId={selectedFile.fileId}
+          onClose={() => setModalOpen(false)}
+        />
+      )}
       <MapComponent
         clusterMaxZoom={20}
         mapId={mapId}

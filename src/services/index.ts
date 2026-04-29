@@ -9,7 +9,6 @@ import LocationService from './LocationService';
 import MapService from './MapService';
 import NurseryBatchService from './NurseryBatchService';
 import NurseryInventoryService from './NurseryInventoryService';
-import NurseryWithdrawalService from './NurseryWithdrawalService';
 import ObservationsService from './ObservationsService';
 import OrganizationService from './OrganizationService';
 import OrganizationUserService from './OrganizationUserService';
@@ -38,7 +37,6 @@ export {
   MapService,
   NurseryBatchService,
   NurseryInventoryService,
-  NurseryWithdrawalService,
   ObservationsService,
   OrganizationService,
   OrganizationUserService,

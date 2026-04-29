@@ -6,12 +6,14 @@ import PageHeader from 'src/components/PageHeader';
 import Card from 'src/components/common/Card';
 import ScrollToTop from 'src/components/common/ScrollToTop';
 import TfMain from 'src/components/common/TfMain';
+import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   OrganizationVirtualWalkthrough,
   useSearchVirtualWalkthroughsQuery,
 } from 'src/queries/search/virtualWalkthroughs';
+import CreateVirtualWalkthroughStep1Modal from 'src/scenes/Home/TerrawareHomeView/CreateVirtualWalkthroughStep1Modal';
 
 import VirtualWalkthroughMessages from './VirtualWalkthroughMessages';
 import VirtualWalkthroughsMap from './VirtualWalkthroughsMap';
@@ -29,6 +31,7 @@ export default function VirtualWalkthroughsView(): JSX.Element {
   const [pendingPlacementFile, setPendingPlacementFile] = useState<OrganizationVirtualWalkthrough | undefined>(
     undefined
   );
+  const [createModalOpen, setCreateModalOpen] = useState(false);
 
   const handleAddToMap = useCallback((file: OrganizationVirtualWalkthrough) => {
     setPendingPlacementFile(file);
@@ -41,12 +44,22 @@ export default function VirtualWalkthroughsView(): JSX.Element {
   return (
     <TfMain>
       <ScrollToTop />
+      <CreateVirtualWalkthroughStep1Modal open={createModalOpen} onClose={() => setCreateModalOpen(false)} />
       <PageHeader
         back={true}
         backUrl={APP_PATHS.HOME}
         backName={strings.HOME}
         title={strings.VIRTUAL_WALKTHROUGHS}
         subtitle=''
+        rightComponent={
+          <Button
+            id='create-virtual-walkthrough'
+            label={strings.CREATE_VIRTUAL_WALKTHROUGH}
+            onClick={() => setCreateModalOpen(true)}
+            priority='primary'
+            size='medium'
+          />
+        }
       />
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: theme.spacing(3) }}>
         {selectedOrganization && <VirtualWalkthroughMessages organizationId={selectedOrganization.id} />}
