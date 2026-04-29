@@ -294,12 +294,12 @@ test.describe('InventoryTests', () => {
       .click();
 
     await expect(page.locator('div').filter({ hasText: /^List$/ })).toBeVisible();
-    await page.waitForTimeout(8000); // Wait for map to load
+    await page.waitForTimeout(6000); // Wait for map to load
     await expect(page.locator('.mapboxgl-canvas')).toBeVisible();
     await page.locator('.mapboxgl-map').click({
       position: {
-        x: 400,
-        y: 200,
+        x: 600,
+        y: 300,
       },
     });
 
