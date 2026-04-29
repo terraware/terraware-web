@@ -16,6 +16,7 @@ import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers';
+import { useSetObservationSplatNeedsAttentionMutation } from 'src/queries/generated/observationSplats';
 import { useLazyGetObservationMediaStreamQuery } from 'src/queries/generated/observations';
 import {
   useDeleteOrganizationMediaFileMutation,
@@ -38,7 +39,8 @@ export default function VirtualWalkthroughsTable({
 }: VirtualWalkthroughsTableProps): JSX.Element {
   const theme = useTheme();
   const [deleteMediaFile] = useDeleteOrganizationMediaFileMutation();
-  const [setNeedsAttention] = useSetOrganizationSplatNeedsAttentionMutation();
+  const [setOrgNeedsAttention] = useSetOrganizationSplatNeedsAttentionMutation();
+  const [setObsNeedsAttention] = useSetObservationSplatNeedsAttentionMutation();
   const [getOrgMediaStream, { data: orgStreamData, isFetching: orgFetching }] =
     useLazyGetOrganizationMediaFileStreamQuery();
   const [getObsMediaStream, { data: obsStreamData, isFetching: obsFetching }] = useLazyGetObservationMediaStreamQuery();
@@ -180,39 +182,30 @@ export default function VirtualWalkthroughsTable({
   const FlagCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
       const file = cell.row.original;
+      const setNeedsAttention = (needsAttention: boolean) => {
+        if (file.type === 'Plot' && file.observationId !== undefined) {
+          void setObsNeedsAttention({
+            observationId: file.observationId,
+            fileId: file.fileId,
+            setSplatNeedsAttentionRequestPayload: { needsAttention },
+          });
+        } else {
+          void setOrgNeedsAttention({
+            organizationId,
+            fileId: file.fileId,
+            setSplatNeedsAttentionRequestPayload: { needsAttention },
+          });
+        }
+      };
       if (file.needsAttention) {
-        return (
-          <Link
-            onClick={() =>
-              void setNeedsAttention({
-                organizationId,
-                fileId: file.fileId,
-                setSplatNeedsAttentionRequestPayload: { needsAttention: false },
-              })
-            }
-          >
-            {strings.UNDO_NEEDS_ATTENTION}
-          </Link>
-        );
+        return <Link onClick={() => setNeedsAttention(false)}>{strings.UNDO_NEEDS_ATTENTION}</Link>;
       }
-      if (file.splatStatus === 'Ready' && !file.needsAttention) {
-        return (
-          <Link
-            onClick={() =>
-              void setNeedsAttention({
-                organizationId,
-                fileId: file.fileId,
-                setSplatNeedsAttentionRequestPayload: { needsAttention: true },
-              })
-            }
-          >
-            {strings.MARK_AS_NEEDS_ATTENTION}
-          </Link>
-        );
+      if (file.splatStatus === 'Ready') {
+        return <Link onClick={() => setNeedsAttention(true)}>{strings.MARK_AS_NEEDS_ATTENTION}</Link>;
       }
       return null;
     },
-    [organizationId, setNeedsAttention, strings]
+    [organizationId, setObsNeedsAttention, setOrgNeedsAttention, strings]
   );
 
   const LocationCell = useCallback(
