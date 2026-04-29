@@ -11,6 +11,9 @@ api.enhanceEndpoints({
     setObservationSplatAnnotations: {
       invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.ObservationSplats, id: payload.fileId }],
     },
+    setObservationSplatNeedsAttention: {
+      invalidatesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
+    },
     generateObservationSplatFile: {
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.ObservationSplats, id: payload.observationId },
