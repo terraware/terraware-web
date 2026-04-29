@@ -29,6 +29,7 @@ const injectedRtkApi = api.injectEndpoints({
             values: [`${plantingSiteId}`],
           },
           sortOrder: [{ field: 'id' }],
+          count: 0,
         },
       }),
       providesTags: (_result, _error, plantingSiteId) => [{ type: QueryTagTypes.PlantingSites, id: plantingSiteId }],

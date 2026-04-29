@@ -21,6 +21,7 @@ const injectedRtkApi = api.injectEndpoints({
               field: 'createdTime',
             },
           ],
+          count: 0,
         },
       }),
       providesTags: (_result, _error, plantingSiteId) => [{ type: QueryTagTypes.PlantingSites, id: plantingSiteId }],

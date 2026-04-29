@@ -41,6 +41,7 @@ const injectedRtkApi = api.injectEndpoints({
               },
             ],
           },
+          count: 0,
         },
       }),
       transformResponse: (results: SearchVirtualWalkthroughsApiResponse) =>

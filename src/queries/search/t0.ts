@@ -57,7 +57,7 @@ const injectedRtkApi = api.injectEndpoints({
               },
             },
           ],
-          count: 1000,
+          count: 0,
         },
       }),
       transformResponse: (results: GetPlotsWithObservationsApiResponse) =>
