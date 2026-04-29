@@ -180,22 +180,37 @@ export default function VirtualWalkthroughsTable({
   const FlagCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
       const file = cell.row.original;
-      if (file.splatStatus !== 'Ready' || file.needsAttention) {
-        return null;
+      if (file.needsAttention) {
+        return (
+          <Link
+            onClick={() =>
+              void setNeedsAttention({
+                organizationId,
+                fileId: file.fileId,
+                setSplatNeedsAttentionRequestPayload: { needsAttention: false },
+              })
+            }
+          >
+            {strings.UNDO_NEEDS_ATTENTION}
+          </Link>
+        );
       }
-      return (
-        <Link
-          onClick={() =>
-            void setNeedsAttention({
-              organizationId,
-              fileId: file.fileId,
-              setSplatNeedsAttentionRequestPayload: { needsAttention: true },
-            })
-          }
-        >
-          {strings.MARK_AS_NEEDS_ATTENTION}
-        </Link>
-      );
+      if (file.splatStatus === 'Ready' && !file.needsAttention) {
+        return (
+          <Link
+            onClick={() =>
+              void setNeedsAttention({
+                organizationId,
+                fileId: file.fileId,
+                setSplatNeedsAttentionRequestPayload: { needsAttention: true },
+              })
+            }
+          >
+            {strings.MARK_AS_NEEDS_ATTENTION}
+          </Link>
+        );
+      }
+      return null;
     },
     [organizationId, setNeedsAttention, strings]
   );
