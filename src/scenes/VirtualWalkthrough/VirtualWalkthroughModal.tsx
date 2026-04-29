@@ -59,24 +59,18 @@ const VirtualWalkthroughViewer = ({ fileId, observationId, organizationId }: Vir
     [data]
   );
 
-  // Derive an exploration radius from the initial camera-to-origin distance.
-  const boundsRadius = useMemo(() => {
+  // Circular exploration radius — half the camera-to-origin distance.
+  const boundsXZRadius = useMemo(() => {
     const dx = cameraPosition[0] - origin[0];
     const dy = cameraPosition[1] - origin[1];
     const dz = cameraPosition[2] - origin[2];
-    return Math.sqrt(dx * dx + dy * dy + dz * dz) * 2;
+    return Math.sqrt(dx * dx + dy * dy + dz * dz) * 0.5;
   }, [cameraPosition, origin]);
 
-  const boundsMin = useMemo(
-    // Lock Y to camera capture height — the splat was captured at human height with no
-    // vertical variation, so there is nothing useful to see above or below.
-    () => new Vec3(origin[0] - boundsRadius, cameraPosition[1], origin[2] - boundsRadius),
-    [origin, cameraPosition, boundsRadius]
-  );
-
-  const boundsMax = useMemo(
-    () => new Vec3(origin[0] + boundsRadius, cameraPosition[1], origin[2] + boundsRadius),
-    [origin, cameraPosition, boundsRadius]
+  // Circle centered on the scene origin, Y locked to camera capture height.
+  const boundsCenter = useMemo(
+    () => new Vec3(origin[0], cameraPosition[1], origin[2]),
+    [origin, cameraPosition]
   );
 
   useEffect(() => {
@@ -94,7 +88,7 @@ const VirtualWalkthroughViewer = ({ fileId, observationId, organizationId }: Vir
       <Entity name='camera-root'>
         <Entity name='camera'>
           <Camera clearColor='#EAF8FF' fov={60} />
-          <Script script={WalkthroughCamera} pitchMin={-85} pitchMax={85} boundsMin={boundsMin} boundsMax={boundsMax} />
+          <Script script={WalkthroughCamera} pitchMin={-30} pitchMax={5} boundsCenter={boundsCenter} boundsXZRadius={boundsXZRadius} />
         </Entity>
       </Entity>
       {splatModel}

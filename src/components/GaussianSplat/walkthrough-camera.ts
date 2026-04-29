@@ -48,10 +48,10 @@ export class WalkthroughCamera extends Script {
   scrollSpeed = 0.001;
 
   /** @attribute */
-  boundsMin = new Vec3(-10, 0, -10);
+  boundsCenter = new Vec3(0, 0, 0);
 
   /** @attribute */
-  boundsMax = new Vec3(10, 0, 10);
+  boundsXZRadius = 10;
 
   // Current (damped) angles applied to the entity each frame.
   private _pitch = 0;
@@ -97,7 +97,7 @@ export class WalkthroughCamera extends Script {
       this._lastX = e.clientX;
       this._lastY = e.clientY;
       this._targetYaw -= dx * this.lookSensitivity;
-      this._targetPitch = math.clamp(this._targetPitch + dy * this.lookSensitivity, this.pitchMin, this.pitchMax);
+      this._targetPitch = math.clamp(this._targetPitch - dy * this.lookSensitivity, this.pitchMin, this.pitchMax);
     };
 
     const onPointerUp = (e: PointerEvent) => {
@@ -162,8 +162,9 @@ export class WalkthroughCamera extends Script {
     const dz = focus.z - position.z;
     const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
     if (len > 0) {
-      // PlayCanvas forward is -Z, so yaw = atan2(dx, -dz).
-      this._yaw = Math.atan2(dx, -dz) * (180 / Math.PI);
+      // PlayCanvas uses right-handed CCW Y rotation: forward = (-sinθ, 0, -cosθ),
+      // so to look toward (dx, 0, dz): θ = atan2(-dx, -dz).
+      this._yaw = Math.atan2(-dx, -dz) * (180 / Math.PI);
       this._pitch = Math.atan2(-dy, Math.sqrt(dx * dx + dz * dz)) * (180 / Math.PI);
       this._pitch = math.clamp(this._pitch, this.pitchMin, this.pitchMax);
     }
@@ -220,11 +221,17 @@ export class WalkthroughCamera extends Script {
       nz += _flatForward.z * (fwd * speed + scrollFwd) + _flatRight.z * strafe * speed;
     }
 
-    this.entity.setPosition(
-      math.clamp(nx, this.boundsMin.x, this.boundsMax.x),
-      math.clamp(pos.y, this.boundsMin.y, this.boundsMax.y),
-      math.clamp(nz, this.boundsMin.z, this.boundsMax.z)
-    );
+    // Circular XZ clamp: project back onto the circle edge if outside.
+    const cdx = nx - this.boundsCenter.x;
+    const cdz = nz - this.boundsCenter.z;
+    const dist = Math.sqrt(cdx * cdx + cdz * cdz);
+    if (dist > this.boundsXZRadius) {
+      const scale = this.boundsXZRadius / dist;
+      nx = this.boundsCenter.x + cdx * scale;
+      nz = this.boundsCenter.z + cdz * scale;
+    }
+
+    this.entity.setPosition(nx, this.boundsCenter.y, nz);
   }
 
   destroy() {
