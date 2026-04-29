@@ -92,13 +92,7 @@ const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: Vir
       <Entity name='camera-root'>
         <Entity name='camera'>
           <Camera clearColor='#EAF8FF' fov={60} />
-          <Script
-            script={WalkthroughCamera}
-            pitchMin={-85}
-            pitchMax={85}
-            boundsMin={boundsMin}
-            boundsMax={boundsMax}
-          />
+          <Script script={WalkthroughCamera} pitchMin={-85} pitchMax={85} boundsMin={boundsMin} boundsMax={boundsMax} />
         </Entity>
       </Entity>
       {splatModel}
