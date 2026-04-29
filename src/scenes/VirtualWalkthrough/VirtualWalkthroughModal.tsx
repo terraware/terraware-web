@@ -68,10 +68,7 @@ const VirtualWalkthroughViewer = ({ fileId, observationId, organizationId }: Vir
   }, [cameraPosition, origin]);
 
   // Circle centered on the scene origin, Y locked to camera capture height.
-  const boundsCenter = useMemo(
-    () => new Vec3(origin[0], cameraPosition[1], origin[2]),
-    [origin, cameraPosition]
-  );
+  const boundsCenter = useMemo(() => new Vec3(origin[0], cameraPosition[1], origin[2]), [origin, cameraPosition]);
 
   useEffect(() => {
     setCamera(origin, cameraPosition);
@@ -88,7 +85,13 @@ const VirtualWalkthroughViewer = ({ fileId, observationId, organizationId }: Vir
       <Entity name='camera-root'>
         <Entity name='camera'>
           <Camera clearColor='#EAF8FF' fov={60} />
-          <Script script={WalkthroughCamera} pitchMin={-30} pitchMax={5} boundsCenter={boundsCenter} boundsXZRadius={boundsXZRadius} />
+          <Script
+            script={WalkthroughCamera}
+            pitchMin={-30}
+            pitchMax={5}
+            boundsCenter={boundsCenter}
+            boundsXZRadius={boundsXZRadius}
+          />
         </Entity>
       </Entity>
       {splatModel}
