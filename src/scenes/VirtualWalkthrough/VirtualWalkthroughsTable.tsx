@@ -179,33 +179,37 @@ export default function VirtualWalkthroughsTable({
     [handleOpenVideo]
   );
 
+  const setNeedsAttention = useCallback(
+    (file: OrganizationVirtualWalkthrough, needsAttention: boolean) => {
+      if (file.type === 'Plot' && file.observationId !== undefined) {
+        void setObsNeedsAttention({
+          observationId: file.observationId,
+          fileId: file.fileId,
+          setSplatNeedsAttentionRequestPayload: { needsAttention },
+        });
+      } else {
+        void setOrgNeedsAttention({
+          organizationId,
+          fileId: file.fileId,
+          setSplatNeedsAttentionRequestPayload: { needsAttention },
+        });
+      }
+    },
+    [organizationId, setObsNeedsAttention, setOrgNeedsAttention]
+  );
+
   const FlagCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
       const file = cell.row.original;
-      const setNeedsAttention = (needsAttention: boolean) => {
-        if (file.type === 'Plot' && file.observationId !== undefined) {
-          void setObsNeedsAttention({
-            observationId: file.observationId,
-            fileId: file.fileId,
-            setSplatNeedsAttentionRequestPayload: { needsAttention },
-          });
-        } else {
-          void setOrgNeedsAttention({
-            organizationId,
-            fileId: file.fileId,
-            setSplatNeedsAttentionRequestPayload: { needsAttention },
-          });
-        }
-      };
       if (file.needsAttention) {
-        return <Link onClick={() => setNeedsAttention(false)}>{strings.UNDO_NEEDS_ATTENTION}</Link>;
+        return <Link onClick={() => setNeedsAttention(file, false)}>{strings.UNDO_NEEDS_ATTENTION}</Link>;
       }
       if (file.splatStatus === 'Ready') {
-        return <Link onClick={() => setNeedsAttention(true)}>{strings.MARK_AS_NEEDS_ATTENTION}</Link>;
+        return <Link onClick={() => setNeedsAttention(file, true)}>{strings.MARK_AS_NEEDS_ATTENTION}</Link>;
       }
       return null;
     },
-    [organizationId, setObsNeedsAttention, setOrgNeedsAttention, strings]
+    [setNeedsAttention, strings]
   );
 
   const LocationCell = useCallback(
