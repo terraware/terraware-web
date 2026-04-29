@@ -188,7 +188,6 @@ test.describe('ObservationDetailsScreenshots', () => {
     await waitFor(page, '#row1');
 
     await page.locator('#row1 a').click();
-    await waitFor(page, '#home');
     await waitFor(page, '#plotSpeciesTotalChart', 10000);
 
     await expect(page.locator('#plotSpeciesTotalChart')).toBeVisible();
