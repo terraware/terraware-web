@@ -293,14 +293,13 @@ test.describe('InventoryTests', () => {
       .filter({ hasText: /^Planting Site$/ })
       .click();
 
-    await page.mouse.down();
     await expect(page.locator('div').filter({ hasText: /^List$/ })).toBeVisible();
-    await page.waitForTimeout(6000); //Wait for map to load
+    await page.waitForTimeout(8000); // Wait for map to load
     await expect(page.locator('.mapboxgl-canvas')).toBeVisible();
     await page.locator('.mapboxgl-map').click({
       position: {
-        x: 526,
-        y: 172,
+        x: 400,
+        y: 200,
       },
     });
 
