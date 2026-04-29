@@ -42,6 +42,8 @@ import {
 import { Project } from 'src/types/Project';
 import useDebounce from 'src/utils/useDebounce';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
+import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 const TABLE_STATE_STORAGE_KEY = 'nursery-withdrawals-table';
 
@@ -84,6 +86,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
+  const navigate = useSyncNavigate();
+  const location = useStateLocation();
+  const query = useQuery();
 
   const projects = useAppSelector(selectProjects);
 
@@ -447,9 +452,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       projectNames: projectFilterValue as string[] | undefined,
       purposes: purposes as NurseryWithdrawalPurpose[] | undefined,
       nurseryName: nurseryFilterValue as string | undefined,
-      destinationNames: destinationFilterValue as string[],
-      stratumNames: stratumFilterValue as string[],
-      substratumNames: subStratumFilterValue as string[],
+      destinationNames: destinationFilterValue as string[] | undefined,
+      stratumNames: stratumFilterValue as string[] | undefined,
+      substratumNames: subStratumFilterValue as string[] | undefined,
       speciesNames: speciesFilterValue as string[],
       totalWithdrawn,
       sortOrder,
@@ -477,9 +482,38 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   // Reset to page 0 when filters change
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   }, [columnFilters]);
+
+  // Apply URL params as column filters once on mount, then strip them from the URL.
+  useEffect(() => {
+    const siteName = query.get('siteName');
+    const substratumNames = query.getAll('substratumName');
+    const stratumNames = query.getAll('stratumName');
+    if (!siteName && substratumNames.length === 0 && stratumNames.length === 0) {
+      return;
+    }
+    const seeded: { id: string; value: unknown }[] = [];
+    if (siteName) {
+      seeded.push({ id: 'destinationName', value: [siteName] });
+    }
+    if (substratumNames.length > 0) {
+      seeded.push({ id: 'substratumShortName', value: substratumNames });
+    }
+    if (stratumNames.length > 0) {
+      seeded.push({ id: 'stratumName', value: stratumNames });
+    }
+    setColumnFilters((curr) => {
+      const ids = new Set(seeded.map((f) => f.id));
+      return [...curr.filter((f) => !ids.has(f.id)), ...seeded];
+    });
+    query.delete('siteName');
+    query.delete('substratumName');
+    query.delete('stratumName');
+    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+    // Run only once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onExport = useCallback(async () => {
     if (!selectedOrganization) {
