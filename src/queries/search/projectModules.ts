@@ -21,6 +21,7 @@ const injectedRtkApi = api.injectEndpoints({
             type: 'Exact',
             values: [moduleId.toString()],
           },
+          count: 0,
         },
       }),
       transformResponse: (results: GetModuleProjectsApiResponse) =>

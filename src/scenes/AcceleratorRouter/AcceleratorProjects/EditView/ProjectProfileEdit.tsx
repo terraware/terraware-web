@@ -452,7 +452,7 @@ const ProjectProfileEdit = () => {
 
   const getOnChangeInternalUser = useCallback(
     (index: number) => (value: string) => {
-      const nextUser = globalUsersOptions?.find((globalUser) => globalUser.value.toString() === value.toString());
+      const nextUser = globalUsersOptions?.find((globalUser) => globalUser.value?.toString() === value?.toString());
       if (nextUser) {
         setInternalUsers((prevUsers) => {
           const internalUsersUpdate = prevUsers?.map((user) => ({ ...user }));
