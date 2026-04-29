@@ -138,16 +138,14 @@ export default function PlantingProgressMapDrawer({
         <FormattedNumber decimals={1} value={view.areaHa ?? 0} />
       </Typography>
       <Typography fontSize='16px' fontWeight={400} marginTop={theme.spacing(1)}>
-        <FormattedNumber value={view.totalPlants} />
-        &nbsp;{strings.SEEDLINGS_SENT}
+        <FormattedNumber value={view.totalPlants} /> {strings.SEEDLINGS_SENT}
       </Typography>
       {view.speciesList.length > 0 && (
         <ul style={{ margin: theme.spacing(1, 0, 0, 0), paddingLeft: theme.spacing(3) }}>
           {view.speciesList.map((reportedSpecies) => (
             <li key={reportedSpecies.id}>
               <Typography fontSize='16px' fontWeight={400}>
-                <FormattedNumber value={reportedSpecies.totalPlants} />
-                &nbsp;{getSpeciesName(reportedSpecies.id)}
+                <FormattedNumber value={reportedSpecies.totalPlants} /> {getSpeciesName(reportedSpecies.id)}
               </Typography>
             </li>
           ))}
