@@ -105,7 +105,7 @@ export default function VirtualWalkthroughsTable({
   const ThumbnailCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
       const file = cell.row.original;
-      if (file.splatStatus === 'Preparing') {
+      if (file.splatStatus === 'Preparing' || file.splatStatus === 'Errored') {
         return null;
       }
       const fileId = cell.getValue<number>();
