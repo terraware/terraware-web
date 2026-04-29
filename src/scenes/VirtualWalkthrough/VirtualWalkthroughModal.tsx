@@ -3,13 +3,12 @@ import React, { useEffect, useMemo } from 'react';
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
 import { OverlayModal } from '@terraware/web-components';
-import { Vec2 } from 'playcanvas';
-import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
+import { Vec3 } from 'playcanvas';
 
 import Application from 'src/components/GaussianSplat/Application';
-import CameraBounds from 'src/components/GaussianSplat/CameraBounds';
 import GradientSky from 'src/components/GaussianSplat/GradientSky';
 import SplatModel from 'src/components/GaussianSplat/SplatModel';
+import { WalkthroughCamera } from 'src/components/GaussianSplat/walkthrough-camera';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
 import { useDevicePerformance } from 'src/hooks/useDevicePerformance';
 import { useLazyListSplatDetailsQuery } from 'src/queries/generated/observationSplats';
@@ -58,8 +57,7 @@ const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: Vir
     [data]
   );
 
-  // Derive an exploration radius from the initial camera-to-origin distance,
-  // giving the user 2× that distance to pan in any direction from the origin.
+  // Derive an exploration radius from the initial camera-to-origin distance.
   const boundsRadius = useMemo(() => {
     const dx = cameraPosition[0] - origin[0];
     const dy = cameraPosition[1] - origin[1];
@@ -67,18 +65,16 @@ const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: Vir
     return Math.sqrt(dx * dx + dy * dy + dz * dz) * 2;
   }, [cameraPosition, origin]);
 
-  const boundsMin = useMemo<[number, number, number]>(
-    // Use origin[1] as the Y floor so the camera cannot move below ground level.
-    // X and Z use the full radius to allow free lateral exploration.
-    () => [origin[0] - boundsRadius, origin[1], origin[2] - boundsRadius],
-    [origin, boundsRadius]
+  const boundsMin = useMemo(
+    // Lock Y to camera capture height — the splat was captured at human height with no
+    // vertical variation, so there is nothing useful to see above or below.
+    () => new Vec3(origin[0] - boundsRadius, cameraPosition[1], origin[2] - boundsRadius),
+    [origin, cameraPosition, boundsRadius]
   );
 
-  const boundsMax = useMemo<[number, number, number]>(
-    // Cap the sky at half the horizontal radius — enough headroom to look up
-    // at the canopy but prevents flying far into the sky.
-    () => [origin[0] + boundsRadius, origin[1] + boundsRadius / 2, origin[2] + boundsRadius],
-    [origin, boundsRadius]
+  const boundsMax = useMemo(
+    () => new Vec3(origin[0] + boundsRadius, cameraPosition[1], origin[2] + boundsRadius),
+    [origin, cameraPosition, boundsRadius]
   );
 
   useEffect(() => {
@@ -97,14 +93,12 @@ const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: Vir
         <Entity name='camera'>
           <Camera clearColor='#EAF8FF' fov={60} />
           <Script
-            script={CameraControls}
-            moveSpeed={0.3}
-            moveFastSpeed={0.5}
-            moveSlowSpeed={0.15}
-            rotateSpeed={0.1}
-            pitchRange={new Vec2(-85, 85)}
+            script={WalkthroughCamera}
+            pitchMin={-85}
+            pitchMax={85}
+            boundsMin={boundsMin}
+            boundsMax={boundsMax}
           />
-          <CameraBounds boundsMin={boundsMin} boundsMax={boundsMax} />
         </Entity>
       </Entity>
       {splatModel}
