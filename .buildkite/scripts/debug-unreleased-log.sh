@@ -42,7 +42,7 @@ while true; do
 
     DEPTH=$((DEPTH + STEP))
     echo "Fetching with depth=$DEPTH"
-    git fetch --depth=$DEPTH origin main
+    git fetch --deepen=$STEP origin "+refs/heads/main:refs/remotes/origin/main"
     echo "  origin/main: $(git rev-parse origin/main)"
     echo "  tag commit:  $(git rev-list -n1 "$LAST_TAG" 2>/dev/null || echo 'unknown')"
     git log origin/main --oneline -5
