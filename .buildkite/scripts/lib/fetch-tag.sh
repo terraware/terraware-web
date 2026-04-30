@@ -30,5 +30,5 @@ while true; do
     DEPTH=$((DEPTH + STEP))
 
     echo "Fetching with depth=$DEPTH"
-    git fetch --depth=$DEPTH
+    git fetch --deepen=$STEP
 done
