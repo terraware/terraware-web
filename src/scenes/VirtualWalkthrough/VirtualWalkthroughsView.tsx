@@ -55,6 +55,7 @@ export default function VirtualWalkthroughsView(): JSX.Element {
           <Button
             id='create-virtual-walkthrough'
             label={strings.CREATE_VIRTUAL_WALKTHROUGH}
+            icon='plus'
             onClick={() => setCreateModalOpen(true)}
             priority='primary'
             size='medium'
