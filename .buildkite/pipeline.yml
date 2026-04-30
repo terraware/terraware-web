@@ -148,6 +148,14 @@ steps:
       - *cache-node-modules
     command: .buildkite/scripts/deploy-docs.sh
 
+  - label: ':git: Debug unreleased log'
+    key: 'debug-unreleased-log'
+    if: "build.branch != 'main'"
+    plugins:
+      - *shallow-clone
+      - *load-secrets
+    command: .buildkite/scripts/debug-unreleased-log.sh
+
   - label: ':vercel: Deploy Vercel preview'
     key: 'vercel-preview'
     depends_on: 'build-and-test'
