@@ -5,6 +5,8 @@ import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 
 import { MapViewStyle, MapViewStyles } from './types';
 
+export const MAP_VIEW_STYLE_CONTROL_Z_INDEX = 10;
+
 type MapViewStyleControlProps = {
   containerId?: string;
   mapViewStyle: MapViewStyle;
@@ -46,7 +48,7 @@ const MapViewStyleControl = ({
         position: 'absolute',
         top: '10px',
         left: '45px',
-        zIndex: 10,
+        zIndex: MAP_VIEW_STYLE_CONTROL_Z_INDEX,
         height: 28,
         backgroundColor: `${theme.palette.TwClrBaseWhite}`,
         borderRadius: '4px',

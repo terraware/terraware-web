@@ -16,8 +16,6 @@ MAX_DEPTH=500
 STEP=50
 DEPTH=0
 
-HEAD_REF="$(git rev-parse HEAD)"
-
 while true; do
     if git merge-base --is-ancestor "$SEARCH_TAG" HEAD >/dev/null 2>&1; then
         echo "Found history from $SEARCH_TAG to HEAD"
@@ -32,5 +30,5 @@ while true; do
     DEPTH=$((DEPTH + STEP))
 
     echo "Fetching with depth=$DEPTH"
-    git fetch --depth=$DEPTH origin "$HEAD_REF"
+    git fetch --deepen=$STEP
 done

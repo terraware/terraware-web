@@ -6,7 +6,8 @@ import ListMapView from 'src/components/ListMapView';
 import Card from 'src/components/common/Card';
 import { View } from 'src/components/common/ListMapSelector';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
-import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { useOrganization } from 'src/providers';
+import { useLazyGetPlantingSiteQuery, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import PlantingProgressList from './PlantingProgressList';
@@ -17,23 +18,39 @@ const initialView: View = 'list';
 export default function PlantingProgress(): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const { selectedOrganization } = useOrganization();
   const [view, setView] = useState<View>(initialView);
 
-  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number>();
+  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>();
 
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
   const plantingSite = useMemo(() => getPlantingSiteResponse.currentData?.site, [getPlantingSiteResponse]);
 
+  const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
+  const allOrgSites = useMemo(
+    () => listPlantingSitesResponse.currentData?.sites ?? [],
+    [listPlantingSitesResponse.currentData?.sites]
+  );
+
   useEffect(() => {
-    if (selectedPlantingSiteId) {
+    if (selectedPlantingSiteId !== undefined) {
       void getPlantingSite({ id: selectedPlantingSiteId }, true);
+    } else if (selectedOrganization) {
+      void listPlantingSites({ organizationId: selectedOrganization.id, full: true, includeZones: false }, true);
     }
-  }, [getPlantingSite, selectedPlantingSiteId]);
+  }, [getPlantingSite, listPlantingSites, selectedPlantingSiteId, selectedOrganization]);
+
+  const aggregatedStrata = useMemo(() => {
+    if (selectedPlantingSiteId === undefined) {
+      return allOrgSites.flatMap((site) => site.strata ?? []);
+    }
+    return plantingSite?.strata;
+  }, [allOrgSites, plantingSite, selectedPlantingSiteId]);
 
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
       <ListMapView
-        data={plantingSite?.strata}
+        data={aggregatedStrata}
         style={{
           display: 'flex',
           flexDirection: 'column',
@@ -44,7 +61,9 @@ export default function PlantingProgress(): JSX.Element {
         list={<PlantingProgressList />}
         map={<PlantingProgressMap plantingSiteId={selectedPlantingSiteId} />}
         onView={setView}
-        search={view === 'map' ? <PlantingSiteSelector onChange={setSelectedPlantingSiteId} /> : undefined}
+        search={
+          view === 'map' ? <PlantingSiteSelector onChange={setSelectedPlantingSiteId} allowAllOption /> : undefined
+        }
       />
     </Card>
   );

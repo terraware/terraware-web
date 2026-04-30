@@ -2,6 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 
 import { Box, Typography, useTheme } from '@mui/material';
 
+import { MAP_VIEW_STYLE_CONTROL_Z_INDEX } from 'src/components/NewMap/MapViewStyleControl';
 import Card from 'src/components/common/Card';
 import ListMapSelector, { View } from 'src/components/common/ListMapSelector';
 import { useLocalization } from 'src/providers/hooks';
@@ -95,7 +96,7 @@ export default function ListMapView({
         alignItems={isMobile ? 'start' : 'center'}
       >
         <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='start' alignItems='center'>
-          <Box>{search}</Box>
+          <Box sx={{ position: 'relative', zIndex: MAP_VIEW_STYLE_CONTROL_Z_INDEX + 1 }}>{search}</Box>
           {data && siteAreaHa > 0 && view === 'map' && (
             <Box
               marginLeft={theme.spacing(2)}

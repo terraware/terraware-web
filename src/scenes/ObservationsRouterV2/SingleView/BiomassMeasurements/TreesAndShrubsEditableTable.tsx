@@ -1,7 +1,8 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { IconButton, useTheme } from '@mui/material';
+import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -12,6 +13,7 @@ import {
   useGetObservationResultsQuery,
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
+import TreeNoteModal from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/TreeNoteModal';
 import { ExistingTreePayload } from 'src/types/Observations';
 
 type TreeRow = ExistingTreePayload & {
@@ -19,6 +21,7 @@ type TreeRow = ExistingTreePayload & {
 };
 
 export default function TreesAndShrubsEditableTable(): JSX.Element {
+  const theme = useTheme();
   const { species: availableSpecies } = useSpeciesData();
   const params = useParams<{ observationId: string }>();
   const { strings } = useLocalization();
@@ -111,6 +114,20 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const IsDeadCell = useCallback(
     ({ row }: { row: { original: TreeRow } }) => <>{row.original.isDead ? strings.YES : strings.NO}</>,
     [strings.YES, strings.NO]
+  );
+
+  const [noteModalRow, setNoteModalRow] = useState<TreeRow | undefined>(undefined);
+
+  const DescriptionCell = useCallback(
+    ({ row }: { row: { original: TreeRow } }) =>
+      row.original.description ? (
+        <IconButton size='small' onClick={() => setNoteModalRow(row.original)}>
+          <Icon name='note' style={{ fill: theme.palette.TwClrIcn }} size='medium' />
+        </IconButton>
+      ) : (
+        <></>
+      ),
+    [theme.palette.TwClrIcn]
   );
 
   const columns = useMemo<EditableTableColumn<TreeRow>[]>(
@@ -216,6 +233,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         id: 'description',
         accessorKey: 'description',
         header: strings.NOTES,
+        Cell: DescriptionCell,
         editConfig: {
           onSave: (row, value) => saveRecordedTree('description', row, value),
         },
@@ -230,6 +248,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       IsInvasiveCell,
       IsThreatenedCell,
       IsDeadCell,
+      DescriptionCell,
     ]
   );
 
@@ -246,16 +265,25 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   }, [availableSpecies, results, optimisticValues]);
 
   return (
-    <EditableTable
-      clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-      columns={columns}
-      data={treesWithData ?? []}
-      enableEditing={true}
-      enableSorting={true}
-      enablePagination={false}
-      enableBottomToolbar={false}
-      enableTopToolbar={false}
-      initialSorting={[{ id: 'speciesName', desc: false }]}
-    />
+    <>
+      {noteModalRow && (
+        <TreeNoteModal
+          description={noteModalRow.description ?? ''}
+          onClose={() => setNoteModalRow(undefined)}
+          onSave={(value) => saveRecordedTree('description', noteModalRow, value)}
+        />
+      )}
+      <EditableTable
+        clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+        columns={columns}
+        data={treesWithData ?? []}
+        enableEditing={true}
+        enableSorting={true}
+        enablePagination={false}
+        enableBottomToolbar={false}
+        enableTopToolbar={false}
+        initialSorting={[{ id: 'speciesName', desc: false }]}
+      />
+    </>
   );
 }

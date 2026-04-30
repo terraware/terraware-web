@@ -64,6 +64,7 @@ const injectedRtkApi = api.injectEndpoints({
             ],
           },
           sortOrder: queryArgs.searchOrder ?? [{ field: 'id' }],
+          count: 0,
         },
       }),
       providesTags: (results) => [

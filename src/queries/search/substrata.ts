@@ -15,6 +15,7 @@ const injectedRtkApi = api.injectEndpoints({
             field: 'plantingSite.organization.id',
             values: [`${organizationId}`],
           },
+          count: 0,
         },
       }),
       transformResponse: (results: ListSubstrataApiResponse) =>
