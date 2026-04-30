@@ -6,14 +6,23 @@ import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites
 import { useLocalization, useOrganization } from 'src/providers';
 import { PreferencesService } from 'src/services';
 
+const ALL_PLANTING_SITES_VALUE = 'all';
+
+type SelectedValue = number | typeof ALL_PLANTING_SITES_VALUE | undefined;
+
 type PlantingSiteSelectorProps = {
-  onChange: (plantingSiteId: number) => void;
+  allowAllOption?: boolean;
   hideNoBoundary?: boolean;
+  onChange: (plantingSiteId: number | undefined) => void;
 };
 
-export default function PlantingSiteSelector({ onChange, hideNoBoundary }: PlantingSiteSelectorProps): JSX.Element {
+export default function PlantingSiteSelector({
+  allowAllOption,
+  hideNoBoundary,
+  onChange,
+}: PlantingSiteSelectorProps): JSX.Element {
   // assume `requestPlantingSites` thunk has been dispatched by consumer
-  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>();
+  const [selectedValue, setSelectedValue] = useState<SelectedValue>();
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
 
@@ -23,17 +32,25 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
     return plantingSites?.filter((ps) => (hideNoBoundary ? !!ps.boundary : true));
   }, [plantingSites, hideNoBoundary]);
 
+  const sortedSites = useMemo(
+    () => filteredPlantingSites?.toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined)) ?? [],
+    [activeLocale, filteredPlantingSites]
+  );
+
   const options = useMemo(() => {
-    return (
-      filteredPlantingSites
-        ?.toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
-        .map((site) => ({ label: site.name, value: site.id })) ?? []
-    );
-  }, [activeLocale, filteredPlantingSites]);
+    const siteOptions: { label: string; value: number | string }[] = sortedSites.map((site) => ({
+      label: site.name,
+      value: site.id,
+    }));
+    if (allowAllOption && siteOptions.length > 1) {
+      return [{ label: strings.ALL_PLANTING_SITES, value: ALL_PLANTING_SITES_VALUE }, ...siteOptions];
+    }
+    return siteOptions;
+  }, [sortedSites, allowAllOption, strings.ALL_PLANTING_SITES]);
 
   const updateAndReloadLastSelectedSite = useCallback(
     async (id: number) => {
-      if (!isNaN(id) && id !== orgPreferences.lastPlantingSiteSelected && selectedOrganization) {
+      if (id !== orgPreferences.lastPlantingSiteSelected && selectedOrganization) {
         await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
           ['lastPlantingSiteSelected']: id,
         });
@@ -45,30 +62,36 @@ export default function PlantingSiteSelector({ onChange, hideNoBoundary }: Plant
 
   const updateSelection = useCallback(
     (newValue: any) => {
+      if (allowAllOption && newValue === ALL_PLANTING_SITES_VALUE) {
+        setSelectedValue(ALL_PLANTING_SITES_VALUE);
+        onChange(undefined);
+        return;
+      }
       const id = Number(newValue);
-      setSelectedPlantingSiteId(isNaN(id) ? -1 : id);
-      onChange(isNaN(id) ? -1 : id);
+      if (isNaN(id)) {
+        return;
+      }
+      setSelectedValue(id);
+      onChange(id);
       void updateAndReloadLastSelectedSite(id);
     },
-    [onChange, updateAndReloadLastSelectedSite]
+    [allowAllOption, onChange, updateAndReloadLastSelectedSite]
   );
 
   useEffect(() => {
-    if (plantingSites && (selectedPlantingSiteId === undefined || selectedPlantingSiteId === -1)) {
-      if (orgPreferences.lastPlantingSiteSelected) {
-        updateSelection(orgPreferences.lastPlantingSiteSelected);
-      } else {
-        updateSelection(plantingSites[0]?.id);
-      }
+    if (!plantingSites || selectedValue !== undefined) {
+      return;
     }
-  }, [selectedPlantingSiteId, updateSelection, orgPreferences.lastPlantingSiteSelected, plantingSites]);
+    const persisted = orgPreferences.lastPlantingSiteSelected as number | undefined;
+    const persistedIsValid = persisted !== undefined && sortedSites.some((s) => s.id === persisted);
+    if (persistedIsValid) {
+      updateSelection(persisted);
+    } else if (sortedSites[0]) {
+      updateSelection(sortedSites[0].id);
+    }
+  }, [selectedValue, updateSelection, orgPreferences.lastPlantingSiteSelected, plantingSites, sortedSites]);
 
   return (
-    <Dropdown
-      placeholder={strings.SELECT}
-      onChange={updateSelection}
-      options={options}
-      selectedValue={selectedPlantingSiteId}
-    />
+    <Dropdown placeholder={strings.SELECT} onChange={updateSelection} options={options} selectedValue={selectedValue} />
   );
 }

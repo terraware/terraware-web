@@ -637,7 +637,14 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
       return;
     }
     const observer = new ResizeObserver(() => {
-      mapRef.current?.resize();
+      try {
+        mapRef.current?.resize();
+      } catch {
+        // Mapbox's internal transform may briefly be undefined while the style is
+        // being swapped (e.g. when changing planting sites). Calling resize() in
+        // that window throws "Cannot set properties of undefined (setting 'width')".
+        // The next render cycle will resize correctly, so swallow the error.
+      }
     });
     observer.observe(mapRef.current.getContainer());
 
@@ -649,7 +656,12 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
       return;
     }
 
-    mapRef.current.resize();
+    try {
+      mapRef.current.resize();
+    } catch {
+      // See note on the ResizeObserver effect above: Mapbox can throw if its
+      // internal transform is mid-swap when resize() runs.
+    }
   }, [drawerOpen, mapRef]);
 
   // Handle clicks outside the map to unfocus
