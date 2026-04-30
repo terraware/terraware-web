@@ -63,7 +63,10 @@ const injectedRtkApi = api.injectEndpoints({
             monitoringPlotId: result.monitoringPlot_id !== undefined ? Number(result.monitoringPlot_id) : undefined,
             monitoringPlotName: result.monitoringPlot_name,
           })),
-      providesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
+      providesTags: [
+        { type: QueryTagTypes.Splats, id: 'LIST' },
+        { type: QueryTagTypes.OrganizationMedia, id: 'LIST' },
+      ],
     }),
   }),
 });
