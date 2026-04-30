@@ -208,7 +208,7 @@ yarn docker:stop:prod
 ## Useful links
 
 - The API Swagger documentation [link](http://localhost:8080/docs)
-- Github deployment information [link](https://github.com/terraware/terraware-web/actions/workflows/workflow.yml)
+- Buildkite pipeline (builds and deployments) [link](https://buildkite.com/terraformation/terraware-web); see also [.buildkite/README.md](.buildkite/README.md)
 - PostgreSQL command line client docs [link](https://www.postgresql.org/docs/current/app-psql.html)
 - Remote backend instructions (running a local FE with staging/production
   BE) [link](https://github.com/terraware/terraware-web/tree/main/remote-backend#readme)
