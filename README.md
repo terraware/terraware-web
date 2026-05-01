@@ -3,8 +3,9 @@
 This is the front end web app for the [Terraware](https://terraware.io/) application
 from [Terraformation](https://terraformation.com/).
 
-The web app provides seed inventory management capabilities - with two main areas of focus: the seed processing workflow
-and monitoring of a seed bank's physical infrastructure.
+Terraware Web is the front end for the Terraware platform. It supports seed bank inventory and processing, nursery
+management, planting sites and observations, and the Accelerator program (deliverables, modules, and variables), along
+with funder-facing views.
 
 ## About this open-source project
 
@@ -26,41 +27,42 @@ but not everything is ready yet.
 
 ## How to Run the App in Development Mode
 
-1. Copy `.env.sample` from the root directory of this repo to the same directory, with the filename `.env`
-   1. If you work for Terraformation and are using existing Keycloak setup, refer to the secrets in the "Onboarding
-      Plan for Frontend WebApp Developers" confluence page
-2. Login to Docker hub
+1. Copy `.env.sample` from the root directory of this repo to the same directory, with the filename `.env`. See
+   `.env.sample` for the full list of supported variables and inline comments.
+   1. If you work for Terraformation and are using the existing Keycloak setup, refer to the secrets in the "Onboarding
+      Plan for Frontend WebApp Developers" Confluence page.
+2. Login to Docker hub:
 
-```shell
-docker login
-```
+   ```shell
+   docker login
+   ```
 
-3. Install dependencies
+3. Install dependencies:
 
-```shell
-yarn
-```
+   ```shell
+   yarn
+   ```
 
-4. Start the app
+4. Start the app:
 
-```shell
-yarn docker:start  # Run the server code
-yarn start         # Run the front-end code
-```
+   ```shell
+   yarn docker:start  # Run the server code
+   yarn start         # Run the front-end code
+   ```
 
-5. Login. If you configured your environment variables correctly then you'll be taken to a keycloak login page. You may
-   also try to login using through this API endpoint.
+5. Login. If you configured your environment variables correctly then you'll be taken to a Keycloak login page.
+   Alternatively, navigate directly to the following URL to start the login flow:
 
-```shell
-http://localhost:8080/api/v1/login?redirect=http://localhost:3000/
-```
+   ```
+   http://localhost:8080/api/v1/login?redirect=http://localhost:3000/
+   ```
 
-6. Stop the app
+6. Stop the app:
 
-```shell
-yarn docker:stop
-# Stop the process running the frontend
-```
+   ```shell
+   yarn docker:stop
+   # Then stop the process running the frontend
+   ```
 
 ### How to Generate Translations
 
@@ -90,9 +92,8 @@ yarn translate:start &
 
 ### How to Generate RTK Query code
 
-The file `./rtk-codegen.config.ts` configures the endpoints to be generated, and the desintation files. You will need to
-update
-this file to generate new sets of API.
+The file `./rtk-codegen.config.ts` configures the endpoints to be generated, and the destination files. You will need to
+update this file to generate new sets of API.
 
 1. Update `./rtk-codegen.config.ts`
 2. Generate new queries
@@ -101,9 +102,8 @@ this file to generate new sets of API.
    yarn generate-queries
    ```
 
-3. Add tags/invalidations
-   This step is neccessary for RTK Query to function correctly. This configures data invalidation behaviors.
-   Add `providedTags`/`invalidateTags` behaviors to endpoints under `src/queries/extensions`
+3. Add tags/invalidations. This step is necessary for RTK Query to function correctly. This configures data invalidation
+   behaviors. Add `providedTags`/`invalidateTags` behaviors to endpoints under `src/queries/extensions`.
 
 ## How to Contribute
 
@@ -113,17 +113,18 @@ completed.
 ```shell
 yarn generate-types  # generate types for any server side API changes
 yarn format          # run code formatter
-yarn lint            # run linter to check for code quality issues
+yarn lint:dev        # run linter for local development (CI runs the stricter `yarn lint`)
 yarn ts              # run the typescript types checker
-yarn translate       # generate translations; requires OpenAI API key
 yarn test            # run the rstest (unit and integration) tests
+# If you added or changed strings in src/strings/csv/en.csv, also run:
+#   yarn translate   # generate translations; requires OPENAI_API_KEY in .env
 # run the end to end tests, see the section below for more details
 ```
 
 Tip: you can run everything except the end-to-end tests using:
 
 ```shell
-yarn generate-types && yarn format && yarn lint && yarn ts && yarn test
+yarn generate-types && yarn format && yarn lint:dev && yarn ts && yarn test
 ```
 
 ## How to Run the End-to-End Tests
@@ -141,7 +142,7 @@ contents of that database and reload them later. You can also rename the existin
 ```shell
 # connect to another local psql database that isn't terraware
 psql postgres
-# rename the existing terraware database to save it's contents
+# rename the existing terraware database to save its contents
 ALTER DATABASE terraware RENAME TO terrawareTEMP;
 ```
 
@@ -207,8 +208,8 @@ yarn docker:stop:prod
 
 ## Useful links
 
-- The API Swagger documentation [link](http://localhost:8080/docs)
-- Buildkite pipeline (builds and deployments) [link](https://buildkite.com/terraformation/terraware-web); see also [.buildkite/README.md](.buildkite/README.md)
-- PostgreSQL command line client docs [link](https://www.postgresql.org/docs/current/app-psql.html)
-- Remote backend instructions (running a local FE with staging/production
-  BE) [link](https://github.com/terraware/terraware-web/tree/main/remote-backend#readme)
+- [The API Swagger documentation](http://localhost:8080/docs)
+- [Buildkite pipeline (builds and deployments)](https://buildkite.com/terraformation/terraware-web); see also
+  [.buildkite/README.md](.buildkite/README.md)
+- [PostgreSQL command line client docs](https://www.postgresql.org/docs/current/app-psql.html)
+- [Remote backend instructions (running a local FE with staging/production BE)](https://github.com/terraware/terraware-web/tree/main/remote-backend#readme)

@@ -3,20 +3,12 @@
 ## Build and Development Commands
 
 - Build: `yarn build`
-- Run: `yarn run`
+- Run: `yarn start` (or `yarn start:dev` to skip the increased Node heap size)
 - Format code: `yarn format`
 - Run all unit tests: `yarn test`
 - TypeScript check: `yarn ts`
-- Run linter:
-
-```shell
-yarn lint \
-  --rule 'react/jsx-no-bind: 0' \
-  --rule 'react-hooks/immutability: 0' \
-  --rule 'react-hooks/refs: 0' \
-  --rule 'react-hooks/set-state-in-effect: 0' \
-  --rule 'react-hooks/static-components: 0'
-```
+- Run linter: `yarn lint:dev` (disables a few `react-hooks` and `react/jsx-no-bind` rules that are noisy during local
+  development; CI runs the stricter `yarn lint`)
 
 ## Tech Stack
 
