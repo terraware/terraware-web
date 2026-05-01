@@ -78,29 +78,29 @@ const makeNurseryWithdrawalResultsCsv = ({
   const columnHeaders = [
     { key: 'withdrawnDate', displayLabel: strings.DATE },
     { key: 'purpose', displayLabel: strings.PURPOSE },
-    { key: 'facility_name', displayLabel: strings.FROM_NURSERY },
+    { key: 'nurseryName', displayLabel: strings.FROM_NURSERY },
     { key: 'destinationName', displayLabel: strings.PLANTING_SITE },
-    { key: 'project_names', displayLabel: strings.PROJECTS },
-    { key: 'stratumNames', displayLabel: strings.TO_STRATUM },
-    { key: 'substratumShortNames', displayLabel: strings.TO_SUBSTRATUM },
-    { key: 'speciesScientificNames', displayLabel: strings.SPECIES },
+    { key: 'projectNames', displayLabel: strings.PROJECTS },
+    { key: 'stratumName', displayLabel: strings.TO_STRATUM },
+    { key: 'substratumShortName', displayLabel: strings.TO_SUBSTRATUM },
+    { key: 'speciesNames', displayLabel: strings.SPECIES },
     { key: 'totalWithdrawn', displayLabel: strings.TOTAL_QUANTITY },
     { key: 'withdrawalActive', displayLabel: strings.WITHDRAWAL_ACTIVE },
   ];
 
   const data = nurseryWithdrawalResults.map((withdrawal) => ({
     withdrawnDate: withdrawal.withdrawnDate,
-    purpose: purposeLabel(withdrawal['purpose(raw)']),
-    facility_name: withdrawal.facility_name,
+    purpose: purposeLabel(withdrawal.purpose),
+    nurseryName: withdrawal.nurseryName,
     destinationName: withdrawal.destinationName,
-    project_names: (withdrawal.project_names as string[] | undefined)?.filter((name: string) => !!name).join(', '),
-    stratumNames: withdrawal.stratumNames,
-    substratumShortNames: withdrawal.substratumShortNames,
-    speciesScientificNames: (withdrawal.speciesScientificNames as string[] | undefined)?.join(', '),
-    totalWithdrawn: withdrawal['totalWithdrawn(raw)'],
+    projectNames: (withdrawal.projectNames as string[] | undefined)?.filter((name: string) => !!name).join(', '),
+    stratumName: withdrawal.stratumName,
+    substratumShortName: withdrawal.substratumShortName,
+    speciesNames: (withdrawal.speciesNames as string[] | undefined)?.join(', '),
+    totalWithdrawn: withdrawal.totalWithdrawn,
     withdrawalActive: withdrawal.undoneByWithdrawalId
       ? strings.NO
-      : withdrawal['purpose(raw)'] === 'Undo'
+      : withdrawal.purpose === 'Undo'
         ? strings.NA
         : strings.YES,
   }));
