@@ -1,11 +1,10 @@
 import { DateTime } from 'luxon';
 
+import { SearchNurseryWithdrawalPayload } from 'src/queries/search/nurseries';
 import strings from 'src/strings';
 import { purposeLabel } from 'src/types/Batch';
 import { PlantingProgressType } from 'src/types/PlantingSite';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
-
-import { SearchNurseryWithdrawalPayload } from '../../queries/search/nurseries';
 
 const makePlantingProgressCsv = ({
   plantingProgress,
