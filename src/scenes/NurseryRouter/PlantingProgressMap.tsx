@@ -219,7 +219,6 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
         layerId={selectedFeature.layerId}
         featureId={selectedFeature.featureId}
         plantingSiteId={selectedFeature.plantingSiteId}
-        onComplete={() => setDrawerOpenCallback(false)}
       />
     );
   }, [selectedFeature, setDrawerOpenCallback]);

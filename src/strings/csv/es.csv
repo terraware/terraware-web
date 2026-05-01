@@ -1413,6 +1413,7 @@ PLANTING,Plantación,3fabf341
 PLANTING_COMPLETE,¿Plantación completa?,e348c8a4
 PLANTING_COMPLETE_AREA,Área total de plantación,25dc3dab
 PLANTING_COMPLETE_CHART,Plantación completada,3bea077e
+PLANTING_COMPLETE_CHECKBOX_TOOLTIP,"Marque o desmarque la casilla para establecer el estado de ""plantación completada"" del sustrato. Marcada indica que la plantación ha sido completada.",a58e34ad
 PLANTING_COMPLETE_DASHBOARD,Plantación completada,3bea077e
 PLANTING_COMPLETE_DASHBOARD_TOOLTIP,"La plantación completada incluye el área y el porcentaje totales del sitio que se marcó como ""Plantación completada"".",b9bda0fe
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,"Porcentaje de ""Plantación completada"" de todos los lugares de plantación relacionados con el proyecto",969947fc

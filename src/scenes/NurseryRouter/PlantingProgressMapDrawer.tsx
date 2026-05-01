@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
+import { Box, Tooltip, Typography, useTheme } from '@mui/material';
+import { Checkbox, Icon } from '@terraware/web-components';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
@@ -15,14 +15,12 @@ import useSnackbar from 'src/utils/useSnackbar';
 type PlantingProgressMapDrawerProps = {
   featureId: string;
   layerId: 'sites' | 'strata' | 'substrata';
-  onComplete?: () => void;
   plantingSiteId: number;
 };
 
 export default function PlantingProgressMapDrawer({
   featureId,
   layerId,
-  onComplete,
   plantingSiteId,
 }: PlantingProgressMapDrawerProps): JSX.Element | null {
   const theme = useTheme();
@@ -119,9 +117,8 @@ export default function PlantingProgressMapDrawer({
       updateSubstratumRequestPayload: { plantingCompleted: !substratum.plantingCompleted },
     })
       .unwrap()
-      .then(() => onComplete?.())
       .catch(() => snackbar.toastError(strings.GENERIC_ERROR));
-  }, [substratum, updateSubstratum, onComplete, snackbar]);
+  }, [substratum, updateSubstratum, snackbar]);
 
   if (!view) {
     return null;
@@ -134,7 +131,12 @@ export default function PlantingProgressMapDrawer({
           {view.name}
         </Typography>
       </Box>
-      <Box padding={theme.spacing(0, 1)}>
+      <Box
+        bgcolor={
+          view.showMarkComplete && substratum?.plantingCompleted ? theme.palette.TwClrBgSuccessTertiary : undefined
+        }
+        padding={theme.spacing(1, 1)}
+      >
         <Box display='flex' justifyContent='space-between' alignItems='baseline'>
           <Typography fontSize='16px' fontWeight={400}>
             {strings.AREA_HA}
@@ -144,6 +146,28 @@ export default function PlantingProgressMapDrawer({
           </Typography>
         </Box>
       </Box>
+      {view.showMarkComplete && substratum && (
+        <Box padding={theme.spacing(1, 1)}>
+          <Checkbox
+            id='planting-complete-checkbox'
+            name='plantingComplete'
+            value={substratum.plantingCompleted}
+            onChange={() => completeUpdate()}
+            label={
+              <Box display='flex' alignItems='center' gap={1}>
+                <Typography fontSize='16px' fontWeight={400}>
+                  {strings.SET_PLANTING_COMPLETE}
+                </Typography>
+                <Tooltip title={strings.PLANTING_COMPLETE_CHECKBOX_TOOLTIP}>
+                  <Box display='flex' alignItems='center'>
+                    <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+                  </Box>
+                </Tooltip>
+              </Box>
+            }
+          />
+        </Box>
+      )}
       <Box
         bgcolor={theme.palette.TwClrBgSecondary}
         display='flex'
@@ -192,16 +216,6 @@ export default function PlantingProgressMapDrawer({
         >
           {strings.SEE_WITHDRAWAL_HISTORY}
         </Link>
-      )}
-      {view.showMarkComplete && substratum && (
-        <Box display='flex' justifyContent='flex-end' marginTop={theme.spacing(3)} padding={theme.spacing(0, 3)}>
-          <Button
-            onClick={completeUpdate}
-            label={substratum.plantingCompleted ? strings.UNDO_PLANTING_COMPLETE : strings.SET_PLANTING_COMPLETE}
-            type={substratum.plantingCompleted ? 'passive' : 'productive'}
-            disabled={updateSubstratumResponse.isLoading}
-          />
-        </Box>
       )}
     </Box>
   );
