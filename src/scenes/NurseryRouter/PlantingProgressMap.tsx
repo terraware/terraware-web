@@ -221,7 +221,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
         plantingSiteId={selectedFeature.plantingSiteId}
       />
     );
-  }, [selectedFeature, setDrawerOpenCallback]);
+  }, [selectedFeature]);
 
   if (!sites.length) {
     return (

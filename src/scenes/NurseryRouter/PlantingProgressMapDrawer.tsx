@@ -153,6 +153,7 @@ export default function PlantingProgressMapDrawer({
             name='plantingComplete'
             value={substratum.plantingCompleted}
             onChange={() => completeUpdate()}
+            disabled={updateSubstratumResponse.isLoading}
             label={
               <Box display='flex' alignItems='center' gap={1}>
                 <Typography fontSize='16px' fontWeight={400}>
