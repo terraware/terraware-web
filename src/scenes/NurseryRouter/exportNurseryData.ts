@@ -5,6 +5,8 @@ import { purposeLabel } from 'src/types/Batch';
 import { PlantingProgressType } from 'src/types/PlantingSite';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
 
+import { SearchNurseryWithdrawalPayload } from '../../queries/search/nurseries';
+
 const makePlantingProgressCsv = ({
   plantingProgress,
 }: {
@@ -68,7 +70,7 @@ const makePlantingProgressCsv = ({
   return makeCsv(columnHeaders, data);
 };
 
-type NurseryWithdrawalResults = any[];
+type NurseryWithdrawalResults = SearchNurseryWithdrawalPayload[];
 
 const makeNurseryWithdrawalResultsCsv = ({
   nurseryWithdrawalResults,
@@ -93,10 +95,10 @@ const makeNurseryWithdrawalResultsCsv = ({
     purpose: purposeLabel(withdrawal.purpose),
     nurseryName: withdrawal.nurseryName,
     destinationName: withdrawal.destinationName,
-    projectNames: (withdrawal.projectNames as string[] | undefined)?.filter((name: string) => !!name).join(', '),
+    projectNames: withdrawal.projectNames?.filter((name: string) => !!name).join(', '),
     stratumName: withdrawal.stratumName,
     substratumShortName: withdrawal.substratumShortName,
-    speciesNames: (withdrawal.speciesNames as string[] | undefined)?.join(', '),
+    speciesNames: withdrawal.speciesNames?.join(', '),
     totalWithdrawn: withdrawal.totalWithdrawn,
     withdrawalActive: withdrawal.undoneByWithdrawalId
       ? strings.NO
