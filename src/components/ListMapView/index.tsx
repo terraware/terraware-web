@@ -104,13 +104,31 @@ export default function ListMapView({
               display='flex'
               flexDirection='row'
               justifyContent='start'
+              alignItems='stretch'
             >
-              <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
-                {strings.PLANTING_SITE_AREA}: {plantingSiteAreaHaDisplayValue}
-              </Typography>
-              <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
-                {strings.PLANTING_COMPLETE_AREA}: {plantingCompleteAreaDisplayValue}
-              </Typography>
+              <Box display='flex' flexDirection='column' alignItems='flex-start' marginRight={theme.spacing(3)}>
+                <Typography fontSize={'16px'} fontWeight={'600'}>
+                  {strings.PLANTING_SITE_AREA}
+                </Typography>
+                <Typography fontSize={'24px'} fontWeight={'600'}>
+                  {plantingSiteAreaHaDisplayValue}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  width: '1px',
+                  backgroundColor: theme.palette.TwClrBrdrTertiary,
+                  marginRight: theme.spacing(3),
+                }}
+              />
+              <Box display='flex' flexDirection='column' alignItems='flex-start'>
+                <Typography fontSize={'16px'} fontWeight={'600'}>
+                  {strings.PLANTING_COMPLETE_AREA}
+                </Typography>
+                <Typography fontSize={'24px'} fontWeight={'600'}>
+                  {plantingCompleteAreaDisplayValue}
+                </Typography>
+              </Box>
             </Box>
           )}
         </Box>
