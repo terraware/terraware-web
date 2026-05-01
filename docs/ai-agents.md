@@ -15,3 +15,8 @@ Agent definitions live in `.claude/agents/`. Each agent is a Markdown file with 
 Both **Claude Code** and **GitHub Copilot** read agent files from `.claude/agents/`. Agents are available as subagents that either tool can invoke during conversations, using the agent name defined in the YAML frontmatter at the top of each file (e.g., `docs-agent`, `test-agent`, `security-agent`).
 
 Both tools also read `AGENTS.md` at the project root for shared configuration (tech stack, code style, workflow instructions) that applies to all agents.
+
+## Shared instructions
+
+Both tools read [AGENTS.md](../AGENTS.md) at the repo root for shared configuration (tech stack, code style, workflow).
+[CLAUDE.md](../CLAUDE.md) is a thin pointer that re-exports `AGENTS.md` for Claude Code.
