@@ -303,7 +303,7 @@ test.describe('InventoryTests', () => {
       },
     });
 
-    await expect(page.getByText('60 Seedlings Sent')).toBeVisible();
+    await expect(page.getByText('Seedlings Withdrawn for Planting')).toBeVisible();
     await expect(page.getByText('Kousa Dogwood')).toBeVisible();
     await page.getByRole('link', { name: 'See Withdrawal History' }).click();
     await expect(page.locator('thead').getByText('Planting Site')).toBeVisible();

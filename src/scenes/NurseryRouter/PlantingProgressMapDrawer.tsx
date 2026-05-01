@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
+import { Box, Tooltip, Typography, useTheme } from '@mui/material';
+import { Checkbox, Icon } from '@terraware/web-components';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
@@ -15,14 +15,12 @@ import useSnackbar from 'src/utils/useSnackbar';
 type PlantingProgressMapDrawerProps = {
   featureId: string;
   layerId: 'sites' | 'strata' | 'substrata';
-  onComplete?: () => void;
   plantingSiteId: number;
 };
 
 export default function PlantingProgressMapDrawer({
   featureId,
   layerId,
-  onComplete,
   plantingSiteId,
 }: PlantingProgressMapDrawerProps): JSX.Element | null {
   const theme = useTheme();
@@ -119,37 +117,92 @@ export default function PlantingProgressMapDrawer({
       updateSubstratumRequestPayload: { plantingCompleted: !substratum.plantingCompleted },
     })
       .unwrap()
-      .then(() => onComplete?.())
       .catch(() => snackbar.toastError(strings.GENERIC_ERROR));
-  }, [substratum, updateSubstratum, onComplete, snackbar]);
+  }, [substratum, updateSubstratum, snackbar]);
 
   if (!view) {
     return null;
   }
 
   return (
-    <Box display='flex' flexDirection='column' padding={theme.spacing(3)}>
-      <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(2)}>
-        {view.name}
-      </Typography>
-      <Typography fontSize='16px' fontWeight={400}>
-        {strings.AREA_HA}
-        {': '}
-        <FormattedNumber decimals={1} value={view.areaHa ?? 0} />
-      </Typography>
-      <Typography fontSize='16px' fontWeight={400} marginTop={theme.spacing(1)}>
-        <FormattedNumber value={view.totalPlants} /> {strings.SEEDLINGS_SENT}
-      </Typography>
+    <Box display='flex' flexDirection='column'>
+      <Box bgcolor={theme.palette.TwClrBgSecondary} padding={theme.spacing(1, 1, 1, 1)} marginBottom={theme.spacing(1)}>
+        <Typography fontSize='16px' fontWeight={600}>
+          {view.name}
+        </Typography>
+      </Box>
+      <Box
+        bgcolor={
+          view.showMarkComplete && substratum?.plantingCompleted ? theme.palette.TwClrBgSuccessTertiary : undefined
+        }
+        padding={theme.spacing(1, 1)}
+      >
+        <Box display='flex' justifyContent='space-between' alignItems='baseline'>
+          <Typography fontSize='16px' fontWeight={400}>
+            {strings.AREA_HA}
+          </Typography>
+          <Typography fontSize='16px' fontWeight={400}>
+            <FormattedNumber decimals={1} value={view.areaHa ?? 0} />
+          </Typography>
+        </Box>
+      </Box>
+      {view.showMarkComplete && substratum && (
+        <Box padding={theme.spacing(1, 1)}>
+          <Checkbox
+            id='planting-complete-checkbox'
+            name='plantingComplete'
+            value={substratum.plantingCompleted}
+            onChange={() => completeUpdate()}
+            disabled={updateSubstratumResponse.isLoading}
+            label={
+              <Box display='flex' alignItems='center' gap={1}>
+                <Typography fontSize='16px' fontWeight={400}>
+                  {strings.SET_PLANTING_COMPLETE}
+                </Typography>
+                <Tooltip title={strings.PLANTING_COMPLETE_CHECKBOX_TOOLTIP}>
+                  <Box display='flex' alignItems='center'>
+                    <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+                  </Box>
+                </Tooltip>
+              </Box>
+            }
+          />
+        </Box>
+      )}
+      <Box
+        bgcolor={theme.palette.TwClrBgSecondary}
+        display='flex'
+        justifyContent='space-between'
+        alignItems='baseline'
+        marginTop={theme.spacing(1)}
+        padding={theme.spacing(1, 1)}
+      >
+        <Typography fontSize='14px' fontWeight={600}>
+          {strings.SEEDLINGS_WITHDRAWN_FOR_PLANTING}
+        </Typography>
+        <Typography fontSize='16px' fontWeight={600}>
+          <FormattedNumber value={view.totalPlants} />
+        </Typography>
+      </Box>
       {view.speciesList.length > 0 && (
-        <ul style={{ margin: theme.spacing(1, 0, 0, 0), paddingLeft: theme.spacing(3) }}>
+        <Box marginTop={theme.spacing(1)} padding={theme.spacing(0, 1)}>
           {view.speciesList.map((reportedSpecies) => (
-            <li key={reportedSpecies.id}>
+            <Box
+              key={reportedSpecies.id}
+              display='flex'
+              justifyContent='space-between'
+              alignItems='baseline'
+              padding={theme.spacing(1, 0)}
+            >
               <Typography fontSize='16px' fontWeight={400}>
-                <FormattedNumber value={reportedSpecies.totalPlants} /> {getSpeciesName(reportedSpecies.id)}
+                {getSpeciesName(reportedSpecies.id)}
               </Typography>
-            </li>
+              <Typography fontSize='16px' fontWeight={400}>
+                <FormattedNumber value={reportedSpecies.totalPlants} />
+              </Typography>
+            </Box>
           ))}
-        </ul>
+        </Box>
       )}
       {view.showWithdrawalHistory && withdrawalHistoryUrl && (
         <Link
@@ -158,21 +211,12 @@ export default function PlantingProgressMapDrawer({
             textAlign: 'left',
             fontSize: '16px',
             fontWeight: 400,
-            marginTop: theme.spacing(3),
+            marginTop: theme.spacing(1),
+            padding: theme.spacing(0, 1),
           }}
         >
           {strings.SEE_WITHDRAWAL_HISTORY}
         </Link>
-      )}
-      {view.showMarkComplete && substratum && (
-        <Box display='flex' justifyContent='flex-end' marginTop={theme.spacing(3)}>
-          <Button
-            onClick={completeUpdate}
-            label={substratum.plantingCompleted ? strings.UNDO_PLANTING_COMPLETE : strings.SET_PLANTING_COMPLETE}
-            type={substratum.plantingCompleted ? 'passive' : 'productive'}
-            disabled={updateSubstratumResponse.isLoading}
-          />
-        </Box>
       )}
     </Box>
   );

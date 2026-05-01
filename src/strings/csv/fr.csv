@@ -1412,6 +1412,7 @@ PLANTING,Plantation,3fabf341
 PLANTING_COMPLETE,Plantation terminée ?,e348c8a4
 PLANTING_COMPLETE_AREA,Zone de plantation complète,25dc3dab
 PLANTING_COMPLETE_CHART,Plantation terminée,3bea077e
+PLANTING_COMPLETE_CHECKBOX_TOOLTIP,Cochez ou décochez la case pour définir le statut « plantation terminée » du substrat. Une case cochée indique que la plantation a été réalisée.,a58e34ad
 PLANTING_COMPLETE_DASHBOARD,Plantation terminée,3bea077e
 PLANTING_COMPLETE_DASHBOARD_TOOLTIP,Plantation terminée comprend la surface totale et le pourcentage du site qui ont été marqués comme « Plantation terminée ».,b9bda0fe
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,Pourcentage de « plantation terminée » de tous les sites de plantation associés au projet,969947fc
@@ -1834,6 +1835,7 @@ SEEDLINGS,Semis,c87d3813
 SEEDLINGS_PLURAL,semis,8c6852cb
 SEEDLINGS_SENT,Plantules envoyées,60a58d4a
 SEEDLINGS_SINGULAR,semis,16e3be66
+SEEDLINGS_WITHDRAWN_FOR_PLANTING,Semis retirés pour la plantation,5207ff63
 SEEDS,Semences,f6362924
 SEEDS_DASHBOARD,Tableau de bord des semis,1d59654c
 SEEDS_GERMINATED,Semences germées,4395857c
