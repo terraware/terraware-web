@@ -124,8 +124,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       'destinationName',
       'projectNames',
       'purpose',
-      'speciesScientificNames',
-      'substratumShortNames',
+      'speciesNames',
+      'substratumShortName',
     ],
     persistFilters: true,
   });
