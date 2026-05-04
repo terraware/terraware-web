@@ -79,7 +79,7 @@ export default function PlantingProgressMapDrawer({
         totalPlants: stratumStats?.totalPlants ?? 0,
         speciesList: stratumStats?.species ?? [],
         substratumNamesForFilter: substratumNames,
-        showWithdrawalHistory: true,
+        showWithdrawalHistory: !!stratumStats?.totalPlants,
         showMarkComplete: false,
       };
     }
@@ -92,7 +92,7 @@ export default function PlantingProgressMapDrawer({
         totalPlants: substratumStats?.totalPlants ?? 0,
         speciesList: substratumStats?.species ?? [],
         substratumNamesForFilter: [substratumName],
-        showWithdrawalHistory: true,
+        showWithdrawalHistory: !!substratumStats?.totalPlants,
         showMarkComplete: true,
       };
     }
