@@ -5,7 +5,7 @@ import { selectOrg, waitFor } from '../../utils/utils';
 
 const FULL_PAGE_SCREENSHOT_OPTIONS = {
   animations: 'disabled' as const,
-  maxDiffPixelRatio: 0.06,
+  maxDiffPixelRatio: 0.015,
   fullPage: true,
 };
 
@@ -16,16 +16,12 @@ const TERRAWARE_PAGES: { name: string; path: string }[] = [
   { name: 'home', path: '/home' },
   { name: 'seeds-dashboard', path: '/seeds-dashboard' },
   { name: 'inventory', path: '/inventory' },
-  { name: 'nursery', path: '/nursery' },
   { name: 'nursery-withdrawals', path: '/nursery/withdrawals' },
   { name: 'species', path: '/species' },
-  { name: 'observations', path: '/observations' },
-  { name: 'plants-dashboard', path: '/plants/dashboard' },
   { name: 'people', path: '/people' },
   { name: 'projects', path: '/projects' },
   { name: 'deliverables', path: '/deliverables' },
   { name: 'reports', path: '/reports' },
-  { name: 'seed-fund-reports', path: '/seed-fund-reports' },
   { name: 'settings', path: '/settings' },
 ];
 

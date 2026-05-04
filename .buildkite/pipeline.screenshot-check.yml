@@ -10,20 +10,6 @@
 # the Buildkite build page.
 
 common:
-  - &cache-common-args
-    backend: s3
-    compression: tgz
-    restore: pipeline
-
-  - &cache-node-modules-args
-    <<: *cache-common-args
-    path: 'node_modules'
-    manifest: 'yarn.lock'
-
-  - &cache-node-modules
-    cache#v1.10.0:
-      <<: *cache-node-modules-args
-
   - &load-secrets
     seek-oss/aws-sm#v2.4.1:
       json-to-env:
@@ -48,11 +34,6 @@ steps:
     plugins:
       - *shallow-clone
       - *load-secrets
-      - cache#v1.10.0:
-          <<: *cache-node-modules-args
-          save:
-            - file
-            - branch
       - artifacts#v1.9.4:
           upload: 'dist'
           compressed: 'dist.tgz'
@@ -63,11 +44,6 @@ steps:
     depends_on: 'build'
     plugins:
       - *shallow-clone
-      - *cache-node-modules
-      - cache#v1.10.0:
-          <<: *cache-common-args
-          path: '.cache/ms-playwright'
-          manifest: 'yarn.lock'
       - *restore-dist
       - *load-secrets
     command: .buildkite/scripts/run-screenshot-check.sh

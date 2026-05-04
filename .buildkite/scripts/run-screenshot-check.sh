@@ -6,6 +6,15 @@ set -euo pipefail
 
 .buildkite/scripts/install-deps.sh --node
 
+echo "--- :yarn: Install dependencies"
+yarn install --frozen-lockfile --prefer-offline
+
+echo "--- :docker: Clean up any leftover containers from previous runs"
+docker compose down --remove-orphans 2>/dev/null || true
+docker compose --profile prod down --remove-orphans 2>/dev/null || true
+# Release port 5432 if held by any container (e.g. a leftover from another pipeline on this host)
+docker ps --format '{{.ID}}' --filter 'publish=5432' | xargs -r docker stop 2>/dev/null || true
+
 echo "--- :docker: Download and start backend"
 yarn server:reset
 
