@@ -1,5 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
-import { useSearchParams } from 'react-router';
+import { useNavigate, useSearchParams } from 'react-router';
 
 import { Box } from '@mui/material';
 
@@ -11,7 +11,8 @@ import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization } from 'src/providers';
 import { ObservationSplatPayload } from 'src/queries/generated/observationSplats';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
-import VirtualPlotModal from 'src/scenes/ObservationsRouterV2/SingleView/PlantMonitoring/MonitoringPlot/VirtualPlotModal';
+import VirtualPlotData from 'src/scenes/ObservationsRouterV2/SingleView/PlantMonitoring/MonitoringPlot/VirtualPlotData';
+import VirtualWalkthroughModal from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughModal';
 import { ObservationMonitoringPlotPhotoWithGps } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -32,6 +33,7 @@ const MapPhotoDrawer = ({
   splat,
 }: MapPhotoDrawerProps): JSX.Element | undefined => {
   const { activeLocale, strings } = useLocalization();
+  const navigate = useNavigate();
 
   const { format } = useNumberFormatter();
   const { data } = useGetObservationResultsQuery({ observationId });
@@ -213,6 +215,17 @@ const MapPhotoDrawer = ({
     setSearchParams(params, { replace: true });
   }, [searchParams, setSearchParams]);
 
+  const handleToggleFullScreen = useCallback(() => {
+    if (!splat) {
+      return;
+    }
+    const path = APP_PATHS.OBSERVATION_VIRTUAL_MONITORING_PLOT.replace(':observationId', observationId.toString())
+      .replace(':stratumName', stratumName)
+      .replace(':monitoringPlotId', monitoringPlotId.toString())
+      .replace(':fileId', splat.fileId.toString());
+    void navigate(path);
+  }, [navigate, observationId, stratumName, monitoringPlotId, splat]);
+
   if (photo && photoUrl) {
     return (
       <Box display={'flex'} flexDirection={'column'} width={'100%'}>
@@ -224,14 +237,13 @@ const MapPhotoDrawer = ({
     return (
       <>
         {virtualPlotOpen && result && monitoringPlot && (
-          <VirtualPlotModal
-            monitoringPlot={monitoringPlot}
-            plantingSiteId={result.plantingSiteId}
+          <VirtualWalkthroughModal
             observationId={observationId}
             fileId={splat.fileId}
-            stratumName={stratumName}
-            monitoringPlotId={monitoringPlotId}
+            editable={true}
+            onToggleFullScreen={handleToggleFullScreen}
             onClose={handleCloseVirtualPlot}
+            belowComponent={<VirtualPlotData monitoringPlot={monitoringPlot} plantingSiteId={result.plantingSiteId} />}
           />
         )}
         <Box display={'flex'} flexDirection={'column'} width={'100%'} gap={2}>

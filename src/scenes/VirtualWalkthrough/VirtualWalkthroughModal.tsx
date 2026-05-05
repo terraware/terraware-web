@@ -1,105 +1,19 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 
-import { Entity } from '@playcanvas/react';
-import { Camera, Script } from '@playcanvas/react/components';
 import { OverlayModal } from '@terraware/web-components';
-import { Vec3 } from 'playcanvas';
 
 import Application from 'src/components/GaussianSplat/Application';
-import GradientSky from 'src/components/GaussianSplat/GradientSky';
-import SplatModel from 'src/components/GaussianSplat/SplatModel';
-import { WalkthroughCamera } from 'src/components/GaussianSplat/walkthrough-camera';
-import { useCameraPosition } from 'src/hooks/useCameraPosition';
-import { useDevicePerformance } from 'src/hooks/useDevicePerformance';
-import { useLazyListSplatDetailsQuery } from 'src/queries/generated/observationSplats';
-import { useLazyGetOrganizationSplatInfoQuery } from 'src/queries/generated/organizationSplats';
 
-const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
-const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
-
-type VirtualWalkthroughViewerProps = {
-  fileId: number;
-  observationId?: number;
-  organizationId?: number;
-};
-
-const VirtualWalkthroughViewer = ({ fileId, observationId, organizationId }: VirtualWalkthroughViewerProps) => {
-  const { setCamera } = useCameraPosition();
-  const { isHighPerformance } = useDevicePerformance();
-
-  const [getOrgSplatInfo, { data: orgData }] = useLazyGetOrganizationSplatInfoQuery();
-  const [getObsSplatInfo, { data: obsData }] = useLazyListSplatDetailsQuery();
-
-  useEffect(() => {
-    if (observationId !== undefined) {
-      void getObsSplatInfo({ observationId, fileId });
-    } else if (organizationId !== undefined) {
-      void getOrgSplatInfo({ organizationId, fileId });
-    }
-  }, [fileId, getObsSplatInfo, getOrgSplatInfo, observationId, organizationId]);
-
-  const data = observationId !== undefined ? obsData : orgData;
-
-  const splatSrc =
-    observationId !== undefined
-      ? `/api/v1/tracking/observations/${observationId}/splats/${fileId}`
-      : `/api/v1/organizations/${organizationId}/splats/${fileId}`;
-
-  const origin: [number, number, number] = useMemo(
-    () =>
-      data?.originPosition
-        ? [data.originPosition.x, data.originPosition.y, data.originPosition.z]
-        : DEFAULT_FOCUS_POINT,
-    [data]
-  );
-
-  const cameraPosition: [number, number, number] = useMemo(
-    () =>
-      data?.cameraPosition ? [data.cameraPosition.x, data.cameraPosition.y, data.cameraPosition.z] : DEFAULT_POSITION,
-    [data]
-  );
-
-  // Circular exploration radius — half the camera-to-origin distance.
-  const boundsXZRadius = useMemo(() => {
-    const dx = cameraPosition[0] - origin[0];
-    const dy = cameraPosition[1] - origin[1];
-    const dz = cameraPosition[2] - origin[2];
-    return Math.sqrt(dx * dx + dy * dy + dz * dz) * 0.5;
-  }, [cameraPosition, origin]);
-
-  // Circle centered on the scene origin, Y locked to camera capture height.
-  const boundsCenter = useMemo(() => new Vec3(origin[0], cameraPosition[1], origin[2]), [origin, cameraPosition]);
-
-  useEffect(() => {
-    setCamera(origin, cameraPosition);
-  }, [origin, cameraPosition, setCamera]);
-
-  const splatModel = useMemo(
-    () => <SplatModel key='splat' splatSrc={splatSrc} rotation={[-180, 0, 0]} revealRain={isHighPerformance} />,
-    [isHighPerformance, splatSrc]
-  );
-
-  return (
-    <>
-      <GradientSky topColor='#FFFFFF' horizonColor='#EAF8FF' groundColor='#C3BDB7' />
-      <Entity name='camera-root'>
-        <Entity name='camera'>
-          <Camera clearColor='#EAF8FF' fov={60} />
-          <Script script={WalkthroughCamera} boundsCenter={boundsCenter} boundsXZRadius={boundsXZRadius} />
-        </Entity>
-      </Entity>
-      {splatModel}
-    </>
-  );
-};
+import VirtualWalkthroughViewer, { VirtualWalkthroughViewerProps } from './VirtualWalkthroughViewer';
 
 type VirtualWalkthroughModalProps = VirtualWalkthroughViewerProps & {
-  onClose: () => void;
+  onClose?: () => void;
+  belowComponent?: React.ReactNode;
 };
 
-const VirtualWalkthroughModal = ({ onClose, ...viewerProps }: VirtualWalkthroughModalProps) => {
+const VirtualWalkthroughModal = ({ onClose, belowComponent, ...viewerProps }: VirtualWalkthroughModalProps) => {
   return (
-    <OverlayModal open={true} onClose={onClose}>
+    <OverlayModal open={true} onClose={onClose} belowComponent={belowComponent}>
       <Application style={{ width: '100%', height: '100%', display: 'block', margin: '0 auto' }}>
         <VirtualWalkthroughViewer {...viewerProps} />
       </Application>

@@ -1,4 +1,5 @@
-import React, { type JSX, useCallback, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router';
 
 import { Box, useTheme } from '@mui/material';
 
@@ -16,6 +17,7 @@ import {
 import CreateVirtualWalkthroughStep1Modal from 'src/scenes/Home/TerrawareHomeView/CreateVirtualWalkthroughStep1Modal';
 
 import VirtualWalkthroughMessages from './VirtualWalkthroughMessages';
+import VirtualWalkthroughModal from './VirtualWalkthroughModal';
 import VirtualWalkthroughsMap from './VirtualWalkthroughsMap';
 import VirtualWalkthroughsTable from './VirtualWalkthroughsTable';
 
@@ -28,10 +30,26 @@ export default function VirtualWalkthroughsView(): JSX.Element {
     skip: !selectedOrganization,
   });
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [pendingPlacementFile, setPendingPlacementFile] = useState<OrganizationVirtualWalkthrough | undefined>(
     undefined
   );
   const [createModalOpen, setCreateModalOpen] = useState(false);
+
+  const virtualWalkthroughParam = searchParams.get('virtualWalkthrough');
+  const virtualWalkthroughModalFile = useMemo(
+    () =>
+      virtualWalkthroughParam
+        ? mediaFiles.find((f) => f.fileId === Number(virtualWalkthroughParam) && f.splatStatus === 'Ready')
+        : undefined,
+    [virtualWalkthroughParam, mediaFiles]
+  );
+
+  const handleCloseVirtualWalkthroughModal = useCallback(() => {
+    const params = new URLSearchParams(searchParams);
+    params.delete('virtualWalkthrough');
+    setSearchParams(params, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   const handleAddToMap = useCallback((file: OrganizationVirtualWalkthrough) => {
     setPendingPlacementFile(file);
@@ -45,6 +63,14 @@ export default function VirtualWalkthroughsView(): JSX.Element {
     <TfMain>
       <ScrollToTop />
       <CreateVirtualWalkthroughStep1Modal open={createModalOpen} onClose={() => setCreateModalOpen(false)} />
+      {virtualWalkthroughModalFile && (
+        <VirtualWalkthroughModal
+          fileId={virtualWalkthroughModalFile.fileId}
+          observationId={virtualWalkthroughModalFile.observationId}
+          organizationId={selectedOrganization?.id}
+          onClose={handleCloseVirtualWalkthroughModal}
+        />
+      )}
       <PageHeader
         back={true}
         backUrl={APP_PATHS.HOME}
