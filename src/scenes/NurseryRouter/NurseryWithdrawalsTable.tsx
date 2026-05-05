@@ -294,7 +294,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         accessorKey: 'purpose',
         enableEditing: false,
         filterVariant: 'multi-select',
-        filterSelectOptions: NurseryWithdrawalPurposesValues,
+        filterSelectOptions: NurseryWithdrawalPurposesValues.map(purposeLabel),
         filterFn: () => true,
         Cell: PurposeCell,
       },
