@@ -3,10 +3,9 @@ import { Page, expect, test } from '@playwright/test';
 import { changeToSuperAdmin } from '../../utils/userUtils';
 import { selectOrg, waitFor } from '../../utils/utils';
 
-const FULL_PAGE_SCREENSHOT_OPTIONS = {
+const SCREENSHOT_OPTIONS = {
   animations: 'disabled' as const,
   maxDiffPixelRatio: 0.015,
-  fullPage: true,
 };
 
 // Mask canvas (charts, maps) and Mapbox overlays to avoid non-deterministic pixel diffs.
@@ -35,6 +34,29 @@ const ACCELERATOR_PAGES: { name: string; path: string }[] = [
   { name: 'accelerator-funding-entities', path: '/accelerator/funding-entities' },
 ];
 
+// viewport is applied inside the test (after beforeEach runs at desktop size) so that
+// the org-selector dropdown — which is hidden on smaller viewports — remains reachable
+// during the setup phase.
+const addPageTests = (
+  pages: { name: string; path: string }[],
+  screenshotSuffix: string,
+  viewport?: { width: number; height: number }
+) => {
+  for (const { name, path } of pages) {
+    test(`page-${name}`, async ({ page }) => {
+      if (viewport) {
+        await page.setViewportSize(viewport);
+      }
+      await page.goto(path);
+      await page.waitForLoadState('networkidle', { timeout: 30000 });
+      await expect(page).toHaveScreenshot(`page-${name}${screenshotSuffix}.png`, {
+        ...SCREENSHOT_OPTIONS,
+        mask: pageMasks(page),
+      });
+    });
+  }
+};
+
 test.describe('AllPagesScreenshots', () => {
   test.describe.configure({ timeout: 240000 });
 
@@ -57,28 +79,26 @@ test.describe('AllPagesScreenshots', () => {
   });
 
   test.describe('Terraware pages', () => {
-    for (const { name, path } of TERRAWARE_PAGES) {
-      test(`page-${name}`, async ({ page }) => {
-        await page.goto(path);
-        await page.waitForLoadState('networkidle', { timeout: 30000 });
-        await expect(page).toHaveScreenshot(`page-${name}.png`, {
-          ...FULL_PAGE_SCREENSHOT_OPTIONS,
-          mask: pageMasks(page),
-        });
-      });
-    }
+    addPageTests(TERRAWARE_PAGES, '');
   });
 
   test.describe('Accelerator console pages', () => {
-    for (const { name, path } of ACCELERATOR_PAGES) {
-      test(`page-${name}`, async ({ page }) => {
-        await page.goto(path);
-        await page.waitForLoadState('networkidle', { timeout: 30000 });
-        await expect(page).toHaveScreenshot(`page-${name}.png`, {
-          ...FULL_PAGE_SCREENSHOT_OPTIONS,
-          mask: pageMasks(page),
-        });
-      });
-    }
+    addPageTests(ACCELERATOR_PAGES, '');
+  });
+
+  test.describe('Terraware pages - tablet', () => {
+    addPageTests(TERRAWARE_PAGES, '-tablet', { width: 768, height: 1024 });
+  });
+
+  test.describe('Accelerator console pages - tablet', () => {
+    addPageTests(ACCELERATOR_PAGES, '-tablet', { width: 768, height: 1024 });
+  });
+
+  test.describe('Terraware pages - mobile', () => {
+    addPageTests(TERRAWARE_PAGES, '-mobile', { width: 390, height: 844 });
+  });
+
+  test.describe('Accelerator console pages - mobile', () => {
+    addPageTests(ACCELERATOR_PAGES, '-mobile', { width: 390, height: 844 });
   });
 });
