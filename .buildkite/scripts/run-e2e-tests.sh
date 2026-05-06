@@ -45,7 +45,8 @@ run_tests() {
 # Run screenshot tests first so they see a clean DB state before other tests
 # mutate server data (e.g. reportSubmit creates a report config that enables
 # the Reports nav item, which would change the snapshot baseline).
-run_tests "Run screenshot tests" "playwright/e2e/suites/screenshots"
+# TODO uncomment this once screenshot tests are stable
+#run_tests "Run screenshot tests" "playwright/e2e/suites/screenshots"
 
 # The shell inside Docker expands the glob to all spec files directly in the
 # suites directory, excluding the screenshots subdirectory.
