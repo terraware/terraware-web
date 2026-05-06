@@ -172,10 +172,10 @@ test.describe('ObservationDetailsScreenshots', () => {
 
     await page.locator('a:has-text("Stratum 01")').click();
     await waitFor(page, '#home');
-    await waitFor(page, '#row1');
+    await page.locator('#row1 a').waitFor({ state: 'visible' });
 
     await page.locator('#row1 a').click();
-    await waitFor(page, '#home');
+    await page.waitForURL(/\/plot\//);
 
     await expect(page.locator('#plotSpeciesTotalChart')).toBeVisible();
     await expect(page.locator('#plotSpeciesSurvivalRate')).toBeVisible();
@@ -190,10 +190,10 @@ test.describe('ObservationDetailsScreenshots', () => {
 
     await page.locator('a:has-text("Stratum 01")').click();
     await waitFor(page, '#home');
-    await waitFor(page, '#row1');
+    await page.locator('#row1 a').waitFor({ state: 'visible' });
 
     await page.locator('#row1 a').click();
-    await waitFor(page, '#home');
+    await page.waitForURL(/\/plot\//);
 
     await page.getByRole('tab', { name: 'Photos & Videos' }).click();
 
