@@ -16,6 +16,7 @@ import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers';
+import { useSetObservationSplatNeedsAttentionMutation } from 'src/queries/generated/observationSplats';
 import { useLazyGetObservationMediaStreamQuery } from 'src/queries/generated/observations';
 import {
   useDeleteOrganizationMediaFileMutation,
@@ -38,7 +39,8 @@ export default function VirtualWalkthroughsTable({
 }: VirtualWalkthroughsTableProps): JSX.Element {
   const theme = useTheme();
   const [deleteMediaFile] = useDeleteOrganizationMediaFileMutation();
-  const [setNeedsAttention] = useSetOrganizationSplatNeedsAttentionMutation();
+  const [setOrgNeedsAttention] = useSetOrganizationSplatNeedsAttentionMutation();
+  const [setObsNeedsAttention] = useSetObservationSplatNeedsAttentionMutation();
   const [getOrgMediaStream, { data: orgStreamData, isFetching: orgFetching }] =
     useLazyGetOrganizationMediaFileStreamQuery();
   const [getObsMediaStream, { data: obsStreamData, isFetching: obsFetching }] = useLazyGetObservationMediaStreamQuery();
@@ -105,14 +107,22 @@ export default function VirtualWalkthroughsTable({
   const ThumbnailCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
       const file = cell.row.original;
-      if (file.type === 'Plot') {
-        return null;
-      }
-      if (file.splatStatus === 'Preparing') {
+      if (file.splatStatus === 'Preparing' || file.splatStatus === 'Errored') {
         return null;
       }
       const fileId = cell.getValue<number>();
       const isReady = file.splatStatus === 'Ready';
+
+      let thumbnailSrc: string;
+      if (file.type === 'Plot') {
+        if (!file.observationId || !file.monitoringPlotId) {
+          return null;
+        }
+        thumbnailSrc = `/api/v1/tracking/observations/${file.observationId}/plots/${file.monitoringPlotId}/photos/${fileId}?maxWidth=64&maxHeight=40`;
+      } else {
+        thumbnailSrc = `/api/v1/organizations/${organizationId}/media/${fileId}/thumbnail?maxWidth=64&maxHeight=40`;
+      }
+
       return (
         <Box
           onClick={isReady ? () => setWalkthroughModalFile(file) : undefined}
@@ -126,7 +136,7 @@ export default function VirtualWalkthroughsTable({
         >
           <Box
             component='img'
-            src={`/api/v1/organizations/${organizationId}/media/${fileId}/thumbnail?maxWidth=64&maxHeight=40`}
+            src={thumbnailSrc}
             alt={strings.THUMBNAIL}
             sx={{ borderRadius: '4px', display: 'block', height: 40, objectFit: 'cover', width: 64 }}
           />
@@ -169,27 +179,37 @@ export default function VirtualWalkthroughsTable({
     [handleOpenVideo]
   );
 
+  const setNeedsAttention = useCallback(
+    (file: OrganizationVirtualWalkthrough, needsAttention: boolean) => {
+      if (file.type === 'Plot' && file.observationId !== undefined) {
+        void setObsNeedsAttention({
+          observationId: file.observationId,
+          fileId: file.fileId,
+          setSplatNeedsAttentionRequestPayload: { needsAttention },
+        });
+      } else {
+        void setOrgNeedsAttention({
+          organizationId,
+          fileId: file.fileId,
+          setSplatNeedsAttentionRequestPayload: { needsAttention },
+        });
+      }
+    },
+    [organizationId, setObsNeedsAttention, setOrgNeedsAttention]
+  );
+
   const FlagCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
       const file = cell.row.original;
-      if (file.splatStatus !== 'Ready' || file.needsAttention) {
-        return null;
+      if (file.needsAttention) {
+        return <Link onClick={() => setNeedsAttention(file, false)}>{strings.UNDO_NEEDS_ATTENTION}</Link>;
       }
-      return (
-        <Link
-          onClick={() =>
-            void setNeedsAttention({
-              organizationId,
-              fileId: file.fileId,
-              setSplatNeedsAttentionRequestPayload: { needsAttention: true },
-            })
-          }
-        >
-          {strings.MARK_AS_NEEDS_ATTENTION}
-        </Link>
-      );
+      if (file.splatStatus === 'Ready') {
+        return <Link onClick={() => setNeedsAttention(file, true)}>{strings.MARK_AS_NEEDS_ATTENTION}</Link>;
+      }
+      return null;
     },
-    [organizationId, setNeedsAttention, strings]
+    [setNeedsAttention, strings]
   );
 
   const LocationCell = useCallback(
@@ -282,6 +302,7 @@ export default function VirtualWalkthroughsTable({
     <>
       {walkthroughModalFile && (
         <VirtualWalkthroughModal
+          observationId={walkthroughModalFile.observationId}
           organizationId={organizationId}
           fileId={walkthroughModalFile.fileId}
           onClose={() => setWalkthroughModalFile(undefined)}

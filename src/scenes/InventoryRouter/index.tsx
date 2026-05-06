@@ -11,11 +11,7 @@ import InventoryV2View from 'src/scenes/InventoryRouter/InventoryV2View';
 import SpeciesBulkWithdrawView from 'src/scenes/InventoryRouter/SpeciesBulkWithdrawView';
 import { selectedOrgHasFacilityType } from 'src/utils/organization';
 
-interface InventoryRouterProps {
-  setWithdrawalCreated: (value: boolean) => void;
-}
-
-const InventoryRouter = ({ setWithdrawalCreated }: InventoryRouterProps) => {
+const InventoryRouter = () => {
   const { selectedOrganization } = useOrganization();
   const { species } = useSpeciesData();
 
@@ -31,10 +27,7 @@ const InventoryRouter = ({ setWithdrawalCreated }: InventoryRouterProps) => {
         }
       />
       <Route path={'/new'} element={<InventoryCreateView />} />
-      <Route
-        path={'/withdraw'}
-        element={<SpeciesBulkWithdrawView withdrawalCreatedCallback={() => setWithdrawalCreated(true)} />}
-      />
+      <Route path={'/withdraw'} element={<SpeciesBulkWithdrawView />} />
       <Route path={'/batch/:batchId'} element={<InventoryBatchView origin='Batches' species={species} />} />
       <Route
         path={'/nursery/:nurseryId/batch/:batchId'}

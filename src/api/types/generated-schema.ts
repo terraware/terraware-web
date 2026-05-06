@@ -4313,6 +4313,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/observations/{observationId}/splats/{fileId}/needsAttention": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /** Flags a splat as needing administrator attention. */
+        put: operations["setObservationSplatNeedsAttention"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/sites": {
         parameters: {
             query?: never;
@@ -20588,8 +20605,8 @@ export interface operations {
             query?: {
                 organizationId?: number;
                 plantingSiteId?: number;
-                /** @description Whether to include plants in the results. Default to false */
-                includePlants?: boolean;
+                depth?: "Site" | "Stratum" | "Substratum" | "Plot" | "Plant";
+                state?: ("Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned")[];
                 /** @description Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
                 limit?: number;
             };
@@ -21282,8 +21299,7 @@ export interface operations {
     getObservationResults: {
         parameters: {
             query?: {
-                /** @description Whether to include plants in the results. Default to false */
-                includePlants?: boolean;
+                depth?: "Site" | "Stratum" | "Substratum" | "Plot" | "Plant";
             };
             header?: never;
             path: {
@@ -21525,6 +21541,42 @@ export interface operations {
             };
         };
     };
+    setObservationSplatNeedsAttention: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                observationId: number;
+                fileId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SetSplatNeedsAttentionRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The plot observation does not exist, or does not have a splat for the requested file ID. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
     listPlantingSites: {
         parameters: {
             query?: {
@@ -21533,6 +21585,7 @@ export interface operations {
                 /** @description If true, include strata and substrata for each site. */
                 full?: boolean;
                 includeZones?: boolean;
+                simplified?: boolean;
             };
             header?: never;
             path?: never;
@@ -21626,6 +21679,7 @@ export interface operations {
         parameters: {
             query?: {
                 includeZones?: boolean;
+                simplified?: boolean;
             };
             header?: never;
             path: {
@@ -21705,7 +21759,9 @@ export interface operations {
     };
     getPlantingSiteHistory: {
         parameters: {
-            query?: never;
+            query?: {
+                simplified?: boolean;
+            };
             header?: never;
             path: {
                 id: number;

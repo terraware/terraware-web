@@ -21,7 +21,7 @@ const usePlantingSiteMapLegend = (defaultLayer?: PlantingSiteMapLayer, disabled?
       items: [
         {
           id: 'sites',
-          label: strings.SITE,
+          label: strings.PLANTING_SITE,
           style: sitesLayerStyle,
         },
         {

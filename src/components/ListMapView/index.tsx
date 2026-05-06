@@ -2,6 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 
 import { Box, Typography, useTheme } from '@mui/material';
 
+import { MAP_VIEW_STYLE_CONTROL_Z_INDEX } from 'src/components/NewMap/MapViewStyleControl';
 import Card from 'src/components/common/Card';
 import ListMapSelector, { View } from 'src/components/common/ListMapSelector';
 import { useLocalization } from 'src/providers/hooks';
@@ -95,7 +96,7 @@ export default function ListMapView({
         alignItems={isMobile ? 'start' : 'center'}
       >
         <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} justifyContent='start' alignItems='center'>
-          <Box>{search}</Box>
+          <Box sx={{ position: 'relative', zIndex: MAP_VIEW_STYLE_CONTROL_Z_INDEX + 1 }}>{search}</Box>
           {data && siteAreaHa > 0 && view === 'map' && (
             <Box
               marginLeft={theme.spacing(2)}
@@ -103,13 +104,31 @@ export default function ListMapView({
               display='flex'
               flexDirection='row'
               justifyContent='start'
+              alignItems='stretch'
             >
-              <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
-                {strings.PLANTING_SITE_AREA}: {plantingSiteAreaHaDisplayValue}
-              </Typography>
-              <Typography fontSize={'16px'} fontWeight={'600'} marginRight={theme.spacing(3)}>
-                {strings.PLANTING_COMPLETE_AREA}: {plantingCompleteAreaDisplayValue}
-              </Typography>
+              <Box display='flex' flexDirection='column' alignItems='flex-start' marginRight={theme.spacing(3)}>
+                <Typography fontSize={'16px'} fontWeight={'600'}>
+                  {strings.PLANTING_SITE_AREA}
+                </Typography>
+                <Typography fontSize={'24px'} fontWeight={'600'}>
+                  {plantingSiteAreaHaDisplayValue}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  width: '1px',
+                  backgroundColor: theme.palette.TwClrBrdrTertiary,
+                  marginRight: theme.spacing(3),
+                }}
+              />
+              <Box display='flex' flexDirection='column' alignItems='flex-start'>
+                <Typography fontSize={'16px'} fontWeight={'600'}>
+                  {strings.PLANTING_COMPLETE_AREA}
+                </Typography>
+                <Typography fontSize={'24px'} fontWeight={'600'}>
+                  {plantingCompleteAreaDisplayValue}
+                </Typography>
+              </Box>
             </Box>
           )}
         </Box>

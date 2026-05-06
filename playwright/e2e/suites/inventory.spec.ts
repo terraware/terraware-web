@@ -143,7 +143,7 @@ test.describe('InventoryTests', () => {
     await expect(page.locator('#row1-ready')).toContainText('0');
     await expect(page.locator('#row1-total')).toContainText('15');
     await page.getByRole('link', { name: 'Withdrawal History' }).click();
-    await expect(page.locator('#row1-speciesScientificNames')).toContainText('Kousa Dogwood');
+    await expect(page.locator('#row1-speciesNames')).toContainText('Kousa Dogwood');
     await expect(page.getByRole('cell', { name: '15', ...exactOptions })).toBeVisible();
   });
 
@@ -261,12 +261,12 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('East')).toBeVisible();
     await expect(page.getByText('North')).toBeVisible();
     await expect(page.locator('#row1-purpose')).toContainText('Planting');
-    await expect(page.locator('#row1-facility_name')).toContainText('Nursery');
+    await expect(page.locator('#row1-nurseryName')).toContainText('Nursery');
     await expect(page.locator('#row1-destinationName')).toContainText('Planting Site');
-    await expect(page.locator('#row1-stratumNames')).toContainText('East');
-    await expect(page.locator('#row1-substratumShortNames')).toContainText('North');
-    await expect(page.locator('#row1-speciesScientificNames')).toContainText('Kousa Dogwood');
-    await expect(page.locator('#row1-totalWithdrawn\\(raw\\)')).toContainText('60');
+    await expect(page.locator('#row1-stratumName')).toContainText('East');
+    await expect(page.locator('#row1-substratumShortName')).toContainText('North');
+    await expect(page.locator('#row1-speciesNames')).toContainText('Kousa Dogwood');
+    await expect(page.locator('#row1-totalWithdrawn')).toContainText('60');
   });
 
   test('Plants dashboard after outplanting', async ({ page }, testInfo) => {
@@ -293,18 +293,17 @@ test.describe('InventoryTests', () => {
       .filter({ hasText: /^Planting Site$/ })
       .click();
 
-    await page.mouse.down();
     await expect(page.locator('div').filter({ hasText: /^List$/ })).toBeVisible();
-    await page.waitForTimeout(6000); //Wait for map to load
+    await page.waitForTimeout(6000); // Wait for map to load
     await expect(page.locator('.mapboxgl-canvas')).toBeVisible();
     await page.locator('.mapboxgl-map').click({
       position: {
-        x: 526,
-        y: 172,
+        x: 600,
+        y: 300,
       },
     });
 
-    await expect(page.getByText('60 Seedlings Sent')).toBeVisible();
+    await expect(page.getByText('Seedlings Withdrawn for Planting')).toBeVisible();
     await expect(page.getByText('Kousa Dogwood')).toBeVisible();
     await page.getByRole('link', { name: 'See Withdrawal History' }).click();
     await expect(page.locator('thead').getByText('Planting Site')).toBeVisible();

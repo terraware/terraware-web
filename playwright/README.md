@@ -31,7 +31,7 @@ Follow these steps to create new test users and give them the correct permission
 1. Run `yarn server:reset` to ensure you don't have data modifications locally
 1. In terraware, change to super admin by updating cookie using e2e/utils/userUtils.ts
 1. Go to Settings/People in the navbar. Add Person
-1. Run this get the link from the text email for adding the user
+1. Run this to get the link from the text email for adding the user:
    `docker logs terraware-web-terraware-server-1 | grep auth.staging.terraware.io | head -1`
 1. Paste this link into an incognito window and create the user on staging keycloak (recommend using password of
    `password`). Close the window once it gets to the Check Email page.

@@ -9,8 +9,8 @@ export const useCameraPosition = () => {
   const setCamera = useCallback(
     (focus: [number, number, number], position?: [number, number, number]) => {
       const camera = app.root.findByName('camera');
-      // @ts-expect-error - cameraControls and its script are added dynamically to the camera entity
-      const controls = camera?.script?.cameraControls;
+      // @ts-expect-error - scripts are added dynamically to the camera entity
+      const controls = camera?.script?.cameraControls ?? camera?.script?.walkthroughCamera;
       if (controls && camera) {
         controls.reset(new Vec3(focus), position ? new Vec3(position) : camera.getPosition());
       }
@@ -20,8 +20,8 @@ export const useCameraPosition = () => {
 
   const getCameraState = useCallback(() => {
     const camera = app.root.findByName('camera');
-    // @ts-expect-error - cameraControls and its script are added dynamically to the camera entity
-    const controls = camera?.script?.cameraControls;
+    // @ts-expect-error - scripts are added dynamically to the camera entity
+    const controls = camera?.script?.cameraControls ?? camera?.script?.walkthroughCamera;
     if (camera && controls) {
       const position = camera.getPosition();
       const focusPoint = controls?.focusPoint;

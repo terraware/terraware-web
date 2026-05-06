@@ -1413,6 +1413,7 @@ PLANTING,Plantación,3fabf341
 PLANTING_COMPLETE,¿Plantación completa?,e348c8a4
 PLANTING_COMPLETE_AREA,Área total de plantación,25dc3dab
 PLANTING_COMPLETE_CHART,Plantación completada,3bea077e
+PLANTING_COMPLETE_CHECKBOX_TOOLTIP,"Marque o desmarque la casilla para establecer el estado de ""plantación completada"" del sustrato. Marcada indica que la plantación ha sido completada.",a58e34ad
 PLANTING_COMPLETE_DASHBOARD,Plantación completada,3bea077e
 PLANTING_COMPLETE_DASHBOARD_TOOLTIP,"La plantación completada incluye el área y el porcentaje totales del sitio que se marcó como ""Plantación completada"".",b9bda0fe
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,"Porcentaje de ""Plantación completada"" de todos los lugares de plantación relacionados con el proyecto",969947fc
@@ -1835,6 +1836,7 @@ SEEDLINGS,Plántulas,c87d3813
 SEEDLINGS_PLURAL,plántulas,8c6852cb
 SEEDLINGS_SENT,Plántulas enviadas,60a58d4a
 SEEDLINGS_SINGULAR,plántula,16e3be66
+SEEDLINGS_WITHDRAWN_FOR_PLANTING,Plántulas retiradas para plantación,5207ff63
 SEEDS,Semillas,f6362924
 SEEDS_DASHBOARD,Panel de control de semillas,1d59654c
 SEEDS_GERMINATED,Semillas germinadas,4395857c
@@ -2284,6 +2286,7 @@ UNABLE_TO_LOAD_NOTIFICATIONS,No se han podido cargar las notificaciones. Vuelva 
 UNASSIGNED,Sin asignar,9acb5519
 UNCLAIMED,No reclamado,a4964181
 UNDO,Deshacer,5f150050
+UNDO_NEEDS_ATTENTION,Deshacer Necesita Atención,686596c0
 UNDO_PLANTING_COMPLETE,Deshacer plantación completa,05a90be7
 UNDO_WITHDRAWAL,Deshacer retiro,eba70c5e
 UNDO_WITHDRAWAL_CONFIRMATION,¿Está seguro de que quiere deshacer este retiro?,7f65365c

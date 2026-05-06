@@ -28,6 +28,7 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, withdrawalId) => [
         { type: QueryTagTypes.NurseryWithdrawals, id: withdrawalId },
         { type: QueryTagTypes.NurseryWithdrawals, id: 'LIST' },
+        { type: QueryTagTypes.PlantingSites },
       ],
     },
   },

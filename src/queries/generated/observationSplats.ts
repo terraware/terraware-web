@@ -47,6 +47,16 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/splats/${queryArg.fileId}/info`,
       }),
     }),
+    setObservationSplatNeedsAttention: build.mutation<
+      SetObservationSplatNeedsAttentionApiResponse,
+      SetObservationSplatNeedsAttentionApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/observations/${queryArg.observationId}/splats/${queryArg.fileId}/needsAttention`,
+        method: 'PUT',
+        body: queryArg.setSplatNeedsAttentionRequestPayload,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -91,6 +101,13 @@ export type ListSplatDetailsApiResponse =
 export type ListSplatDetailsApiArg = {
   observationId: number;
   fileId: number;
+};
+export type SetObservationSplatNeedsAttentionApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type SetObservationSplatNeedsAttentionApiArg = {
+  observationId: number;
+  fileId: number;
+  setSplatNeedsAttentionRequestPayload: SetSplatNeedsAttentionRequestPayload;
 };
 export type ObservationSplatPayload = {
   fileId: number;
@@ -146,6 +163,9 @@ export type GetObservationSplatInfoResponsePayload = {
   originPosition?: CoordinatePayload;
   status: SuccessOrError;
 };
+export type SetSplatNeedsAttentionRequestPayload = {
+  needsAttention: boolean;
+};
 export const {
   useListObservationSplatsQuery,
   useLazyListObservationSplatsQuery,
@@ -156,4 +176,5 @@ export const {
   useSetObservationSplatAnnotationsMutation,
   useListSplatDetailsQuery,
   useLazyListSplatDetailsQuery,
+  useSetObservationSplatNeedsAttentionMutation,
 } = injectedRtkApi;

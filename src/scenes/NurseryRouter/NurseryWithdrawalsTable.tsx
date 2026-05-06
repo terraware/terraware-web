@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 
 import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { Dayjs } from 'dayjs';
 import {
   MRT_Cell,
   MRT_PaginationState,
@@ -19,33 +20,26 @@ import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
+import { SearchSortOrderElement } from 'src/queries/generated/search';
 import {
-  selectNurseryWithdrawalsCount,
-  selectNurseryWithdrawalsFilterOptions,
-  selectNurseryWithdrawalsList,
-} from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsSelectors';
-import {
-  requestCountNurseryWithdrawals,
-  requestListNurseryWithdrawals,
-  requestNurseryWithdrawalsFilterOptions,
-} from 'src/redux/features/nurseryWithdrawals/nurseryWithdrawalsThunks';
+  SearchNurseryWithdrawalPayload,
+  SearchNurseryWithdrawalsApiArgs,
+  useLazyCountNurseryWithdrawalsQuery,
+  useLazySearchNurseryWithdrawalsFilterOptionsQuery,
+  useLazySearchNurseryWithdrawalsQuery,
+} from 'src/queries/search/nurseries';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppSelector } from 'src/redux/store';
 import UndoWithdrawalModal from 'src/scenes/NurseryRouter/UndoWithdrawalModal';
 import WithdrawalHistoryMenu from 'src/scenes/NurseryRouter/WithdrawalHistoryMenu';
 import { exportNurseryWithdrawalResults } from 'src/scenes/NurseryRouter/exportNurseryData';
-import { NurseryWithdrawalPurpose, NurseryWithdrawalPurposes, purposeLabel } from 'src/types/Batch';
-import { Project } from 'src/types/Project';
 import {
-  AndNodePayload,
-  FieldNodePayload,
-  NotNodePayload,
-  OrNodePayload,
-  SearchNodePayload,
-  SearchResponseElement,
-  SearchSortOrder,
-} from 'src/types/Search';
-import { parseSearchTerm } from 'src/utils/search';
+  NurseryWithdrawalPurpose,
+  NurseryWithdrawalPurposes,
+  NurseryWithdrawalPurposesValues,
+  purposeLabel,
+} from 'src/types/Batch';
+import { Project } from 'src/types/Project';
 import useDebounce from 'src/utils/useDebounce';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
@@ -55,30 +49,32 @@ const TABLE_STATE_STORAGE_KEY = 'nursery-withdrawals-table';
 
 const ITEMS_PER_PAGE = 100;
 
-const DEFAULT_SORT_ORDER: SearchSortOrder = {
-  field: 'withdrawnDate',
-  direction: 'Descending',
-};
+const DEFAULT_SORT_ORDER: SearchSortOrderElement[] = [
+  {
+    field: 'withdrawnDate',
+    direction: 'Descending',
+  },
+];
 
 // Menu cell component that can use hooks
 const MenuCellComponent = ({
   row,
   onUndo,
 }: {
-  row: SearchResponseElement;
-  onUndo: (row: SearchResponseElement) => void;
+  row: SearchNurseryWithdrawalPayload;
+  onUndo: (row: SearchNurseryWithdrawalPayload) => void;
 }) => {
   const navigate = useSyncNavigate();
   const { NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
 
   const handleReassign = useCallback(() => {
-    if (row.delivery_id) {
+    if (row.deliveryId) {
       navigate({
-        pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', String(row.delivery_id)),
+        pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', String(row.deliveryId)),
         search: '?fromWithdrawal',
       });
     }
-  }, [navigate, row.delivery_id]);
+  }, [navigate, row.deliveryId]);
 
   if (row.purpose !== NURSERY_TRANSFER && !row.undoesWithdrawalId && !row.undoneByWithdrawalId) {
     return <WithdrawalHistoryMenu reassign={handleReassign} withdrawal={row} undo={() => onUndo(row)} />;
@@ -93,20 +89,25 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const navigate = useSyncNavigate();
   const location = useStateLocation();
   const query = useQuery();
-  const substratumParam = query.get('substratumName');
-  const siteParam = query.get('siteName');
-  const dispatch = useAppDispatch();
 
   const projects = useAppSelector(selectProjects);
 
-  const [listRequestId, setListRequestId] = useState<string>('');
-  const withdrawalsListResult = useAppSelector(selectNurseryWithdrawalsList(listRequestId));
-  const [countRequestId, setCountRequestId] = useState<string>('');
-  const countResult = useAppSelector(selectNurseryWithdrawalsCount(countRequestId));
-  const [filterOptionsRequestId, setFilterOptionsRequestId] = useState<string>('');
-  const filterOptionsResult = useAppSelector(selectNurseryWithdrawalsFilterOptions(filterOptionsRequestId));
+  const [undoModalRow, setUndoModalRow] = useState<SearchNurseryWithdrawalPayload>();
+  const [searchFilterOptions, searchFilterOptionsResponse] = useLazySearchNurseryWithdrawalsFilterOptionsQuery();
+  const [searchNurseryWithdrawals, searchNurseryWithdrawalsResponse] = useLazySearchNurseryWithdrawalsQuery();
+  const [countNurseryWithdrawals, searchCountNurseryWithdrawalsResponse] = useLazyCountNurseryWithdrawalsQuery();
+  const rows = useMemo(() => searchNurseryWithdrawalsResponse?.data ?? [], [searchNurseryWithdrawalsResponse]);
+  const totalRowCount = useMemo(
+    () => searchCountNurseryWithdrawalsResponse.currentData ?? 0,
+    [searchCountNurseryWithdrawalsResponse]
+  );
 
-  const [filters, setFilters] = useState<Record<string, SearchNodePayload>>({});
+  useEffect(() => {
+    if (selectedOrganization) {
+      void searchFilterOptions(selectedOrganization.id);
+    }
+  }, [searchFilterOptions, selectedOrganization]);
+
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
@@ -126,10 +127,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   } = useTableState(TABLE_STATE_STORAGE_KEY, {
     persistedMultiSelectColumnIds: [
       'destinationName',
-      'project_names',
+      'projectNames',
       'purpose',
-      'speciesScientificNames',
-      'substratumShortNames',
+      'speciesNames',
+      'substratumShortName',
     ],
     persistFilters: true,
   });
@@ -147,36 +148,22 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   ]);
 
   const numberFormatter = useNumberFormatter();
-  const [reloadTrigger, setReloadTrigger] = useState(0);
-  const [undoModalRow, setUndoModalRow] = useState<SearchResponseElement | null>(null);
-
-  const reloadData = useCallback(() => {
-    setReloadTrigger((prev) => prev + 1);
-  }, []);
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      const request = dispatch(requestNurseryWithdrawalsFilterOptions({ organizationId: selectedOrganization.id }));
-      setFilterOptionsRequestId(request.requestId);
-    }
-  }, [dispatch, selectedOrganization]);
 
   const { nurseryNames, destinationNames, stratumOptions, substratumOptions, speciesOptions } = useMemo(() => {
-    if (filterOptionsResult?.status === 'success' && filterOptionsResult.data) {
-      const toStrings = (key: string) =>
-        (filterOptionsResult.data![key]?.values ?? [])
-          .filter((v): v is string => typeof v === 'string' && v !== '')
-          .sort();
-      return {
-        nurseryNames: toStrings('facility_name'),
-        destinationNames: toStrings('destinationName'),
-        stratumOptions: toStrings('stratumNames'),
-        substratumOptions: toStrings('substratumShortNames'),
-        speciesOptions: toStrings('batchWithdrawals.batch_species_scientificName'),
-      };
-    }
-    return { nurseryNames: [], destinationNames: [], stratumOptions: [], substratumOptions: [], speciesOptions: [] };
-  }, [filterOptionsResult]);
+    return {
+      nurseryNames: searchFilterOptionsResponse.currentData?.nurseryNames ?? [],
+      destinationNames: searchFilterOptionsResponse.currentData?.destinationNames ?? [],
+      stratumOptions: searchFilterOptionsResponse.currentData?.stratumNames ?? [],
+      substratumOptions: searchFilterOptionsResponse.currentData?.substratumNames ?? [],
+      speciesOptions: searchFilterOptionsResponse.currentData?.speciesNames ?? [],
+    };
+  }, [
+    searchFilterOptionsResponse.currentData?.destinationNames,
+    searchFilterOptionsResponse.currentData?.nurseryNames,
+    searchFilterOptionsResponse.currentData?.speciesNames,
+    searchFilterOptionsResponse.currentData?.stratumNames,
+    searchFilterOptionsResponse.currentData?.substratumNames,
+  ]);
 
   // Get all project names for filter (from all available projects, not just current results)
   const uniqueProjectNames = useMemo(() => {
@@ -189,11 +176,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     return Array.from(new Set(projectNames)).sort();
   }, [projects]);
 
-  // Get all withdrawal purposes for filter
-  const purposeOptions = useMemo(() => {
-    return Object.values(NurseryWithdrawalPurposes).map((purpose) => purposeLabel(purpose));
-  }, []);
-
   // Create reverse mapping from label to value for filtering
   const purposeLabelToValue = useMemo(() => {
     const map: Record<string, NurseryWithdrawalPurpose> = {};
@@ -205,7 +187,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   // Cell renderer components
   const WithdrawnDateCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+    ({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
       const row = cell.row.original;
       const value = cell.getValue() as string;
       const linkStyles = {
@@ -214,7 +196,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         textDecoration: 'none',
         ...(row.undoneByWithdrawalId ? { textDecoration: 'line-through' } : {}),
       };
-      const withdrawalDetailLocation = APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(':withdrawalId', String(row.id));
+      const withdrawalDetailLocation = APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(
+        ':withdrawalId',
+        String(row.withdrawalId)
+      );
       return (
         <Link to={withdrawalDetailLocation} style={linkStyles}>
           {value}
@@ -225,7 +210,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   );
 
   const PurposeCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+    ({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
       const row = cell.row.original;
       const value = cell.getValue() as NurseryWithdrawalPurpose;
       const linkStyles = {
@@ -254,24 +239,24 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     [theme, strings]
   );
 
-  const SpeciesScientificNamesCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+  const SpeciesNamesCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
       const value = cell.getValue() as string[] | undefined;
       return value ? <TextTruncated stringList={value} moreText={strings.TRUNCATED_TEXT_MORE_LINK} /> : null;
     },
     [strings]
   );
 
-  const StratumNamesCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+  const StratumNameCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
       const value = cell.getValue() as string | undefined;
       return value ? <TextTruncated stringList={[value]} moreText={strings.TRUNCATED_TEXT_MORE_LINK} /> : null;
     },
     [strings]
   );
 
-  const SubstratumNamesCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+  const SubstratumNameCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
       const value = cell.getValue();
       return value ? (
         <TextTruncated stringList={[value as string]} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />
@@ -281,19 +266,19 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   );
 
   const TotalWithdrawnCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+    ({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
       const value = cell.getValue() as number | undefined;
       return value !== undefined ? <span>{numberFormatter.format(value || 0)}</span> : null;
     },
     [numberFormatter]
   );
 
-  const MenuCell = useCallback(({ cell }: { cell: MRT_Cell<SearchResponseElement> }) => {
+  const MenuCell = useCallback(({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
     const row = cell.row.original;
     return <MenuCellComponent row={row} onUndo={setUndoModalRow} />;
   }, []);
 
-  const columns = useMemo<EditableTableColumn<SearchResponseElement>[]>(
+  const columns = useMemo<EditableTableColumn<SearchNurseryWithdrawalPayload>[]>(
     () => [
       {
         id: 'withdrawnDate',
@@ -301,7 +286,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         accessorKey: 'withdrawnDate',
         enableEditing: false,
         filterVariant: 'date-range',
-        sortUndefined: 'last',
         Cell: WithdrawnDateCell,
       },
       {
@@ -310,21 +294,17 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         accessorKey: 'purpose',
         enableEditing: false,
         filterVariant: 'multi-select',
-        filterSelectOptions: purposeOptions,
-        enableColumnFilterModes: false,
-        sortUndefined: 'last',
+        filterSelectOptions: NurseryWithdrawalPurposesValues.map(purposeLabel),
         filterFn: () => true,
         Cell: PurposeCell,
       },
       {
-        id: 'facility_name',
+        id: 'nurseryName',
         header: strings.FROM_NURSERY,
-        accessorKey: 'facility_name',
+        accessorKey: 'nurseryName',
         enableEditing: false,
         filterVariant: 'select',
         filterSelectOptions: nurseryNames,
-        enableColumnFilterModes: false,
-        sortUndefined: 'last',
         filterFn: () => true,
       },
       {
@@ -334,19 +314,15 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: destinationNames,
-        enableColumnFilterModes: false,
-        sortUndefined: 'last',
         filterFn: () => true,
       },
       {
-        id: 'project_names',
+        id: 'projectNames',
         header: strings.PROJECTS,
-        accessorKey: 'project_names',
+        accessorKey: 'projectNames',
         enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: uniqueProjectNames,
-        enableColumnFilterModes: false,
-        sortUndefined: 'last',
         filterFn: () => true, // Disable client-side filtering, handled by backend
         Cell: ({ cell }) => {
           const value = cell.getValue() as string[] | undefined;
@@ -354,54 +330,46 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         },
       },
       {
-        id: 'stratumNames',
+        id: 'stratumName',
         header: strings.TO_STRATUM,
-        accessorKey: 'stratumNames',
+        accessorKey: 'stratumName',
         enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: stratumOptions,
-        enableColumnFilterModes: false,
-        sortUndefined: 'last',
         filterFn: () => true,
-        Cell: StratumNamesCell,
+        Cell: StratumNameCell,
       },
       {
-        id: 'substratumShortNames',
+        id: 'substratumShortName',
         header: strings.TO_SUBSTRATUM,
-        accessorKey: 'substratumShortNames',
+        accessorKey: 'substratumShortName',
         enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: substratumOptions,
-        enableColumnFilterModes: false,
-        sortUndefined: 'last',
         filterFn: () => true,
-        Cell: SubstratumNamesCell,
+        Cell: SubstratumNameCell,
       },
       {
-        id: 'speciesScientificNames',
+        id: 'speciesNames',
         header: strings.SPECIES,
-        accessorKey: 'speciesScientificNames',
+        accessorKey: 'speciesNames',
         enableEditing: false,
         filterVariant: 'multi-select',
         filterSelectOptions: speciesOptions,
-        enableColumnFilterModes: false,
-        sortUndefined: 'last',
         filterFn: () => true,
-        Cell: SpeciesScientificNamesCell,
+        Cell: SpeciesNamesCell,
       },
       {
-        id: 'totalWithdrawn(raw)',
+        id: 'totalWithdrawn',
         header: strings.TOTAL_QUANTITY,
-        accessorKey: 'totalWithdrawn(raw)',
+        accessorKey: 'totalWithdrawn',
         enableEditing: false,
         filterVariant: 'range',
-        sortUndefined: 'last',
         Cell: TotalWithdrawnCell,
       },
       {
         id: 'menu',
         header: '',
-        accessorKey: 'menu',
         enableEditing: false,
         enableColumnFilter: false,
         enableSorting: false,
@@ -413,378 +381,173 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     ],
     [
       strings,
-      nurseryNames,
-      destinationNames,
-      substratumOptions,
-      speciesOptions,
-      uniqueProjectNames,
-      purposeOptions,
       WithdrawnDateCell,
       PurposeCell,
-      StratumNamesCell,
+      nurseryNames,
+      destinationNames,
+      uniqueProjectNames,
       stratumOptions,
-      SubstratumNamesCell,
-      SpeciesScientificNamesCell,
+      StratumNameCell,
+      substratumOptions,
+      SubstratumNameCell,
+      speciesOptions,
+      SpeciesNamesCell,
       TotalWithdrawnCell,
       MenuCell,
     ]
   );
 
-  // Convert MRT column filters to backend search format
-  const columnFilterNodes: SearchNodePayload[] = useMemo(() => {
-    return columnFilters
-      .filter((filter) => !(Array.isArray(filter.value) && filter.value.length === 0))
-      .map((filter) => {
-        const fieldNames =
-          filter.id === 'project_names'
-            ? ['batchWithdrawals.batch_project_name', 'batchWithdrawals.destinationBatchProjectName']
-            : filter.id === 'speciesScientificNames'
-              ? ['batchWithdrawals.batch_species_scientificName']
-              : [filter.id];
-        let filterValue = filter.value;
+  const searchArgs: SearchNurseryWithdrawalsApiArgs = useMemo(() => {
+    const dateFilterValue = columnFilters.find((column) => column.id === 'withdrawnDate')?.value;
+    const projectFilterValue = columnFilters.find((column) => column.id === 'projectNames')?.value;
+    const purposeFilterValue = columnFilters.find((column) => column.id === 'purpose')?.value;
+    const nurseryFilterValue = columnFilters.find((column) => column.id === 'nurseryName')?.value;
+    const destinationFilterValue = columnFilters.find((column) => column.id === 'destinationName')?.value;
+    const stratumFilterValue = columnFilters.find((column) => column.id === 'stratumName')?.value;
+    const subStratumFilterValue = columnFilters.find((column) => column.id === 'substratumShortName')?.value;
+    const speciesFilterValue = columnFilters.find((column) => column.id === 'speciesNames')?.value;
+    const totalWithdrawnFilterValue = columnFilters.find((column) => column.id === 'totalWithdrawn')?.value;
 
-        // For purpose filter, convert label back to value
-        if (filter.id === 'purpose') {
-          if (typeof filterValue === 'string') {
-            filterValue = purposeLabelToValue[filterValue] || filterValue;
-          } else if (Array.isArray(filterValue)) {
-            filterValue = filterValue.map((v) => (typeof v === 'string' ? purposeLabelToValue[v] || v : v));
+    const withdrawnDate =
+      dateFilterValue && Array.isArray(dateFilterValue)
+        ? {
+            minDate: dateFilterValue[0] ? (dateFilterValue[0] as Dayjs).format('YYYY-MM-DD') : undefined,
+            maxDate: dateFilterValue[1] ? (dateFilterValue[1] as Dayjs).format('YYYY-MM-DD') : undefined,
           }
-        }
+        : undefined;
 
-        // Find the column definition to check filter type
-        const column = columns.find((col) => col.id === filter.id);
-        const isSelectFilter = column?.filterVariant === 'select';
-        const isMultiSelectFilter = column?.filterVariant === 'multi-select';
+    const purposes =
+      purposeFilterValue && Array.isArray(purposeFilterValue)
+        ? purposeFilterValue.map((v) => (typeof v === 'string' ? purposeLabelToValue[v] || v : v))
+        : undefined;
 
-        // Handle different filter types
-        if (Array.isArray(filterValue)) {
-          // Multi-select filter: OR across selected values
-          if (isMultiSelectFilter && filterValue.length > 0) {
-            const selected = filterValue.filter((v) => v !== undefined && v !== '');
-            if (selected.length === 1) {
-              return {
-                operation: 'or',
-                children: fieldNames.map((fieldName) => ({
-                  operation: 'field',
-                  field: fieldName,
-                  type: 'Exact',
-                  values: [selected[0]],
-                })),
-              };
-            }
-            return {
-              operation: 'or',
-              children: selected.flatMap((v) =>
-                fieldNames.map((fieldName) => ({
-                  operation: 'field',
-                  field: fieldName,
-                  type: 'Exact',
-                  values: [v],
-                }))
-              ),
-            } as OrNodePayload;
+    const totalWithdrawn =
+      totalWithdrawnFilterValue && Array.isArray(totalWithdrawnFilterValue)
+        ? {
+            minValue:
+              totalWithdrawnFilterValue[0] !== undefined && totalWithdrawnFilterValue[0] !== ''
+                ? Number(totalWithdrawnFilterValue[0])
+                : undefined,
+            maxValue:
+              totalWithdrawnFilterValue[1] !== undefined && totalWithdrawnFilterValue[1] !== ''
+                ? Number(totalWithdrawnFilterValue[1])
+                : undefined,
           }
-          // Range filter (e.g., numbers or dates)
-          if (filterValue.length === 2) {
-            const children: SearchNodePayload[] = [];
-            const isDateRange = column?.filterVariant === 'date-range';
+        : undefined;
 
-            if (isDateRange) {
-              // Date-range: single Range node with YYYY-MM-DD values.
-              // MRT uses dayjs as its date adapter, so filter values are dayjs objects.
-              const toDateStr = (val: unknown): string | null => {
-                if (val === null || val === undefined) {
-                  return null;
-                }
-                if (typeof val === 'object') {
-                  const dayjsLike = val as { format?: (f: string) => string; isValid?: () => boolean };
-                  if (typeof dayjsLike.format === 'function' && typeof dayjsLike.isValid === 'function') {
-                    return dayjsLike.isValid() ? dayjsLike.format('YYYY-MM-DD') : null;
-                  }
-                }
-                return null;
-              };
-              const minDate = toDateStr(filterValue[0]);
-              const maxDate = toDateStr(filterValue[1]);
-              if (!minDate && !maxDate) {
-                return { operation: 'or', children: [] } as OrNodePayload;
-              }
-              return {
-                operation: 'field',
-                field: fieldNames[0],
-                type: 'Range',
-                values: [minDate ?? '1900-01-01', maxDate ?? '9999-12-31'],
-              } as FieldNodePayload;
-            }
+    const sortOrder =
+      sorting.length > 0
+        ? sorting.map(
+            (sortingOption): SearchSortOrderElement => ({
+              field: sortingOption.id,
+              direction: sortingOption.desc ? 'Descending' : 'Ascending',
+            })
+          )
+        : DEFAULT_SORT_ORDER;
 
-            const minStr = filterValue[0] !== undefined && filterValue[0] !== '' ? String(filterValue[0]) : undefined;
-            const maxStr = filterValue[1] !== undefined && filterValue[1] !== '' ? String(filterValue[1]) : undefined;
-
-            if (minStr !== undefined) {
-              fieldNames.forEach((fieldName) => {
-                children.push({
-                  operation: 'field',
-                  field: fieldName,
-                  type: 'Range',
-                  values: [minStr, '999999999'],
-                });
-              });
-            }
-            if (maxStr !== undefined) {
-              fieldNames.forEach((fieldName) => {
-                children.push({
-                  operation: 'field',
-                  field: fieldName,
-                  type: 'Range',
-                  values: ['0', maxStr],
-                });
-              });
-            }
-            return children.length > 1
-              ? { operation: 'and', children }
-              : children[0] || {
-                  operation: 'or',
-                  children: fieldNames.map((fieldName) => ({
-                    operation: 'field',
-                    field: fieldName,
-                    type: 'Exact',
-                    values: [],
-                  })),
-                };
-          }
-        } else if (typeof filterValue === 'string') {
-          // Text or select filter
-          return {
-            operation: 'or',
-            children: fieldNames.map((fieldName) => ({
-              operation: 'field',
-              field: fieldName,
-              type: isSelectFilter ? 'Exact' : 'Fuzzy',
-              values: [filterValue],
-            })),
-          } as OrNodePayload;
-        }
-        return {
-          operation: 'or',
-          children: fieldNames.map((fieldName) => ({
-            operation: 'field',
-            field: fieldName,
-            type: 'Exact',
-            values: [String(filterValue)],
-          })),
-        } as OrNodePayload;
-      })
-      .filter(
-        (node): node is SearchNodePayload =>
-          !(node.operation === 'or' && (node as OrNodePayload).children?.length === 0)
-      );
-  }, [columnFilters, columns, purposeLabelToValue]);
-
-  const searchChildren: SearchNodePayload[] = useMemo(() => {
-    const { type, values } = parseSearchTerm(debouncedSearchTerm);
-    const finalSearchValueChildren: SearchNodePayload[] = [];
-    const searchValueChildren: SearchNodePayload[] = [];
-    if (debouncedSearchTerm) {
-      const fromNurseryNode: FieldNodePayload = {
-        operation: 'field',
-        field: 'facility_name',
-        type,
-        values,
-      };
-      searchValueChildren.push(fromNurseryNode);
-
-      const destinationNurseryNode: FieldNodePayload = {
-        operation: 'field',
-        field: 'destinationName',
-        type,
-        values,
-      };
-      searchValueChildren.push(destinationNurseryNode);
-
-      const speciesNameNode: FieldNodePayload = {
-        operation: 'field',
-        field: 'batchWithdrawals.batch_species_scientificName',
-        type,
-        values,
-      };
-      searchValueChildren.push(speciesNameNode);
-    }
-
-    const filterValueChildren: SearchNodePayload[] = [...Object.values(filters), ...columnFilterNodes];
-
-    if (searchValueChildren.length) {
-      const searchValueNodes: OrNodePayload = {
-        operation: 'or',
-        children: searchValueChildren,
-      };
-
-      if (filterValueChildren.length) {
-        const filterValueNodes: AndNodePayload = {
-          operation: 'and',
-          children: filterValueChildren,
-        };
-
-        finalSearchValueChildren.push({
-          operation: 'and',
-          children: [filterValueNodes, searchValueNodes],
-        });
-      } else {
-        finalSearchValueChildren.push(searchValueNodes);
-      }
-    } else if (filterValueChildren.length) {
-      const filterValueNodes: AndNodePayload = {
-        operation: 'and',
-        children: filterValueChildren,
-      };
-      finalSearchValueChildren.push(filterValueNodes);
-    }
-
-    // If the batch was deleted before we added the server-side logic to deal with deleting batches
-    // that have withdrawals, there won't be any batchWithdrawals values. In that case, we can't
-    // show the species name or the total withdrawn. Filter withdrawals without batches out since
-    // they're useless to show.
-    const batchExistsNode: NotNodePayload = {
-      operation: 'not',
-      child: {
-        operation: 'field',
-        field: 'batchWithdrawals.batch_id',
-        type: 'Exact',
-        values: [null],
-      },
+    return {
+      organizationId: selectedOrganization?.id,
+      searchTerm: debouncedSearchTerm,
+      withdrawnDate,
+      projectNames: projectFilterValue as string[] | undefined,
+      purposes: purposes as NurseryWithdrawalPurpose[] | undefined,
+      nurseryName: nurseryFilterValue as string | undefined,
+      destinationNames: destinationFilterValue as string[] | undefined,
+      stratumNames: stratumFilterValue as string[] | undefined,
+      substratumNames: subStratumFilterValue as string[] | undefined,
+      speciesNames: speciesFilterValue as string[],
+      totalWithdrawn,
+      sortOrder,
     };
-    finalSearchValueChildren.push(batchExistsNode);
+  }, [columnFilters, debouncedSearchTerm, purposeLabelToValue, selectedOrganization?.id, sorting]);
 
-    return finalSearchValueChildren;
-  }, [filters, debouncedSearchTerm, columnFilterNodes]);
+  useEffect(() => {
+    if (searchArgs.organizationId) {
+      void countNurseryWithdrawals(searchArgs, true);
+    }
+  }, [searchArgs, countNurseryWithdrawals, searchNurseryWithdrawals]);
+
+  useEffect(() => {
+    if (searchArgs.organizationId) {
+      void searchNurseryWithdrawals(
+        {
+          ...searchArgs,
+          limit: pagination.pageSize,
+          offset: pagination.pageIndex * pagination.pageSize,
+        },
+        true
+      );
+    }
+  }, [pagination.pageIndex, pagination.pageSize, searchArgs, searchNurseryWithdrawals]);
 
   // Reset to page 0 when filters change
   useEffect(() => {
     setPagination((prev) => ({ ...prev, pageIndex: 0 }));
   }, [columnFilters]);
 
-  const totalRowCount = countResult?.status === 'success' && countResult?.data ? countResult.data : undefined;
-
-  const rows =
-    withdrawalsListResult?.status === 'success' && withdrawalsListResult?.data ? withdrawalsListResult.data : undefined;
-
+  // Apply URL params as column filters once on mount, then strip them from the URL.
   useEffect(() => {
-    if (siteParam) {
-      query.delete('siteName');
-      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
-      setFilters((curr) => ({
-        ...curr,
-        destinationName: {
-          field: 'destinationName',
-          operation: 'field',
-          type: 'Exact',
-          values: [siteParam],
-        },
-      }));
+    const siteName = query.get('siteName');
+    const substratumNames = query.getAll('substratumName');
+    const stratumNames = query.getAll('stratumName');
+    if (!siteName && substratumNames.length === 0 && stratumNames.length === 0) {
+      return;
     }
-  }, [siteParam, query, location, navigate]);
-
-  useEffect(() => {
-    if (substratumParam) {
-      query.delete('substratumName');
-      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
-      setFilters((curr) => ({
-        ...curr,
-        substratumShortNames: {
-          field: 'substratumShortNames',
-          operation: 'field',
-          type: 'Exact',
-          values: [substratumParam],
-        },
-      }));
+    const seeded: { id: string; value: unknown }[] = [];
+    if (siteName) {
+      seeded.push({ id: 'destinationName', value: [siteName] });
     }
-  }, [substratumParam, query, location, navigate]);
-
-  // Derive search sort order from sorting state
-  const searchSortOrder = useMemo((): SearchSortOrder => {
-    if (sorting.length > 0) {
-      const sortField = sorting[0];
-      const orderByStr =
-        sortField.id === 'speciesScientificNames'
-          ? 'batchWithdrawals.batch_species_scientificName'
-          : sortField.id === 'project_names'
-            ? 'batchWithdrawals.batch_project_name'
-            : sortField.id;
-      return {
-        field: orderByStr,
-        direction: sortField.desc ? 'Descending' : 'Ascending',
-      };
+    if (substratumNames.length > 0) {
+      seeded.push({ id: 'substratumShortName', value: substratumNames });
     }
-    return DEFAULT_SORT_ORDER;
-  }, [sorting]);
+    if (stratumNames.length > 0) {
+      seeded.push({ id: 'stratumName', value: stratumNames });
+    }
+    setColumnFilters((curr) => {
+      const ids = new Set(seeded.map((f) => f.id));
+      return [...curr.filter((f) => !ids.has(f.id)), ...seeded];
+    });
+    query.delete('siteName');
+    query.delete('substratumName');
+    query.delete('stratumName');
+    navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
+    // Run only once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const onExport = useCallback(async () => {
     if (!selectedOrganization) {
       return;
     }
-    const isFiltered = debouncedSearchTerm !== '' || columnFilterNodes.length > 0 || Object.keys(filters).length > 0;
-    const allRows = await dispatch(
-      requestListNurseryWithdrawals({
-        organizationId: selectedOrganization.id,
-        searchCriteria: searchChildren,
-        sortOrder: searchSortOrder,
-        limit: totalRowCount || 10000,
-        offset: 0,
-      })
-    ).unwrap();
+    const isFiltered = !!(
+      debouncedSearchTerm !== '' ||
+      searchArgs.nurseryName ||
+      searchArgs.destinationNames?.length ||
+      searchArgs.projectNames?.length ||
+      searchArgs.purposes?.length ||
+      searchArgs.stratumNames?.length ||
+      searchArgs.substratumNames?.length ||
+      searchArgs.withdrawnDate?.maxDate ||
+      searchArgs.withdrawnDate?.minDate ||
+      searchArgs.totalWithdrawn?.minValue ||
+      searchArgs.totalWithdrawn?.maxValue
+    );
+
+    const allRows = await searchNurseryWithdrawals({
+      ...searchArgs,
+      limit: totalRowCount || 10000,
+      offset: 0,
+    }).unwrap();
+
     void exportNurseryWithdrawalResults({
       isFiltered,
       nurseryWithdrawalResults: allRows,
     });
-  }, [
-    columnFilterNodes,
-    debouncedSearchTerm,
-    dispatch,
-    filters,
-    searchChildren,
-    searchSortOrder,
-    selectedOrganization,
-    totalRowCount,
-  ]);
-
-  // Request count for pagination
-  useEffect(() => {
-    if (selectedOrganization) {
-      const request = dispatch(
-        requestCountNurseryWithdrawals({ organizationId: selectedOrganization.id, searchCriteria: searchChildren })
-      );
-      setCountRequestId(request.requestId);
-    }
-  }, [dispatch, searchChildren, selectedOrganization]);
-
-  // Fetch data when pagination or sort changes
-  useEffect(() => {
-    if (selectedOrganization) {
-      const request = dispatch(
-        requestListNurseryWithdrawals({
-          organizationId: selectedOrganization.id,
-          searchCriteria: searchChildren,
-          sortOrder: searchSortOrder,
-          limit: pagination.pageSize,
-          offset: pagination.pageIndex * pagination.pageSize,
-        })
-      );
-      setListRequestId(request.requestId);
-    }
-  }, [dispatch, searchChildren, searchSortOrder, selectedOrganization, pagination, reloadTrigger]);
+  }, [debouncedSearchTerm, searchArgs, searchNurseryWithdrawals, selectedOrganization, totalRowCount]);
 
   return (
     <>
-      {undoModalRow && (
-        <UndoWithdrawalModal
-          onClose={() => setUndoModalRow(null)}
-          row={undoModalRow}
-          reload={() => {
-            setUndoModalRow(null);
-            reloadData();
-          }}
-        />
-      )}
+      {undoModalRow && <UndoWithdrawalModal onClose={() => setUndoModalRow(undefined)} row={undoModalRow} />}
       <EditableTable
         key='nursery-withdrawals-table'
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}

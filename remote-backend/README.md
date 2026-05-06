@@ -9,21 +9,21 @@ a remote backend, e.g., if you want to test how a UI change works with a real-wo
 Here's how to set that up using Docker Desktop on MacOS.
 
 1. From the directory of this readme, generate a self-signed certificate. The following command should work. You'll only
-   need
-   to do this once.
-   1. You might need to change `--` to `-` for all params in this request if it fails
+   need to do this once.
 
-```shell
-openssl req \
---x509 \
---nodes \
---days 3650 \
---subj "/C=US/ST=HI/O=Terraformation/CN=localhost" \
---addext "subjectAltName=DNS:localhost" \
---newkey rsa:2048 \
---keyout self-signed.key \
---out self-signed.crt
-```
+   ```shell
+   openssl req \
+   --x509 \
+   --nodes \
+   --days 3650 \
+   --subj "/C=US/ST=HI/O=Terraformation/CN=localhost" \
+   --addext "subjectAltName=DNS:localhost" \
+   --newkey rsa:2048 \
+   --keyout self-signed.key \
+   --out self-signed.crt
+   ```
+
+   If you have a very old `openssl`, drop one dash from each long option (e.g., `-x509` instead of `--x509`).
 
 2. Figure out the server URL you want to use, e.g., `https://terraware.io` for production.
 3. Set `PUBLIC_TERRAWARE_API` to that URL in the `.env` file in the repo root directory.

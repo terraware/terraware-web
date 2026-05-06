@@ -3,11 +3,12 @@ import React, { useEffect, useMemo } from 'react';
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
 import { OverlayModal } from '@terraware/web-components';
-import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
+import { Vec3 } from 'playcanvas';
 
 import Application from 'src/components/GaussianSplat/Application';
 import GradientSky from 'src/components/GaussianSplat/GradientSky';
 import SplatModel from 'src/components/GaussianSplat/SplatModel';
+import { WalkthroughCamera } from 'src/components/GaussianSplat/walkthrough-camera';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
 import { useDevicePerformance } from 'src/hooks/useDevicePerformance';
 import { useLazyListSplatDetailsQuery } from 'src/queries/generated/observationSplats';
@@ -16,11 +17,13 @@ import { useLazyGetOrganizationSplatInfoQuery } from 'src/queries/generated/orga
 const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
 const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
 
-type VirtualWalkthroughViewerProps =
-  | { organizationId: number; fileId: number; observationId?: never }
-  | { observationId: number; fileId: number; organizationId?: never };
+type VirtualWalkthroughViewerProps = {
+  fileId: number;
+  observationId?: number;
+  organizationId?: number;
+};
 
-const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: VirtualWalkthroughViewerProps) => {
+const VirtualWalkthroughViewer = ({ fileId, observationId, organizationId }: VirtualWalkthroughViewerProps) => {
   const { setCamera } = useCameraPosition();
   const { isHighPerformance } = useDevicePerformance();
 
@@ -28,19 +31,19 @@ const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: Vir
   const [getObsSplatInfo, { data: obsData }] = useLazyListSplatDetailsQuery();
 
   useEffect(() => {
-    if (organizationId !== undefined) {
-      void getOrgSplatInfo({ organizationId, fileId });
-    } else if (observationId !== undefined) {
+    if (observationId !== undefined) {
       void getObsSplatInfo({ observationId, fileId });
+    } else if (organizationId !== undefined) {
+      void getOrgSplatInfo({ organizationId, fileId });
     }
   }, [fileId, getObsSplatInfo, getOrgSplatInfo, observationId, organizationId]);
 
-  const data = observationId === undefined ? orgData : obsData;
+  const data = observationId !== undefined ? obsData : orgData;
 
   const splatSrc =
-    observationId === undefined
-      ? `/api/v1/organizations/${organizationId}/splats/${fileId}`
-      : `/api/v1/tracking/observations/${observationId}/splats/${fileId}`;
+    observationId !== undefined
+      ? `/api/v1/tracking/observations/${observationId}/splats/${fileId}`
+      : `/api/v1/organizations/${organizationId}/splats/${fileId}`;
 
   const origin: [number, number, number] = useMemo(
     () =>
@@ -55,6 +58,17 @@ const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: Vir
       data?.cameraPosition ? [data.cameraPosition.x, data.cameraPosition.y, data.cameraPosition.z] : DEFAULT_POSITION,
     [data]
   );
+
+  // Circular exploration radius — half the camera-to-origin distance.
+  const boundsXZRadius = useMemo(() => {
+    const dx = cameraPosition[0] - origin[0];
+    const dy = cameraPosition[1] - origin[1];
+    const dz = cameraPosition[2] - origin[2];
+    return Math.sqrt(dx * dx + dy * dy + dz * dz) * 0.5;
+  }, [cameraPosition, origin]);
+
+  // Circle centered on the scene origin, Y locked to camera capture height.
+  const boundsCenter = useMemo(() => new Vec3(origin[0], cameraPosition[1], origin[2]), [origin, cameraPosition]);
 
   useEffect(() => {
     setCamera(origin, cameraPosition);
@@ -71,7 +85,7 @@ const VirtualWalkthroughViewer = ({ fileId, organizationId, observationId }: Vir
       <Entity name='camera-root'>
         <Entity name='camera'>
           <Camera clearColor='#EAF8FF' fov={60} />
-          <Script script={CameraControls} moveSpeed={0.3} moveFastSpeed={0.5} moveSlowSpeed={0.15} rotateSpeed={0.1} />
+          <Script script={WalkthroughCamera} boundsCenter={boundsCenter} boundsXZRadius={boundsXZRadius} />
         </Entity>
       </Entity>
       {splatModel}
