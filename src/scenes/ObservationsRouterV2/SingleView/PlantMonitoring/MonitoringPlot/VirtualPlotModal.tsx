@@ -92,6 +92,8 @@ const VirtualPlotModal = ({
           annotations={annotations}
           editable={true}
           onToggleFullScreen={handleToggleFullScreen}
+          groundColor={data?.groundColor}
+          skyColor={data?.skyColor}
         />
       </Application>
     </OverlayModal>

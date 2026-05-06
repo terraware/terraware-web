@@ -26,6 +26,8 @@ interface VirtualMonitoringPlotProps {
   editable?: boolean;
   isFullScreen?: boolean;
   onToggleFullScreen?: () => void;
+  groundColor?: string;
+  skyColor?: string;
 }
 
 const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
@@ -40,6 +42,8 @@ const VirtualMonitoringPlot = ({
   editable = false,
   isFullScreen = false,
   onToggleFullScreen,
+  groundColor,
+  skyColor,
 }: VirtualMonitoringPlotProps) => {
   const { setCamera } = useCameraPosition();
   const { isHighPerformance } = useDevicePerformance();
@@ -170,7 +174,11 @@ const VirtualMonitoringPlot = ({
 
   return (
     <>
-      <GradientSky topColor='#FFFFFF' horizonColor='#EAF8FF' groundColor='#C3BDB7' />
+      <GradientSky
+        topColor={skyColor || '#FFFFFF'}
+        horizonColor={skyColor || '#EAF8FF'}
+        groundColor={groundColor || '#C3BDB7'}
+      />
 
       <Entity name='camera-root'>
         <Entity name='camera'>
