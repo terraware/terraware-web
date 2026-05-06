@@ -149,6 +149,8 @@ const VirtualMonitoringPlotPage = () => {
             annotations={annotations}
             isFullScreen={true}
             onToggleFullScreen={handleToggleFullScreen}
+            groundColor={data?.groundColor}
+            skyColor={data?.skyColor}
           />
         </Application>
       </Box>
