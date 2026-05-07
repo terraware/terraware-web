@@ -38,6 +38,7 @@ import {
   ExistingTreePayload,
   ObservationMonitoringPlotResultsPayload,
   ObservationResultsPayload,
+  useLazyGetObservationResultsQuery,
 } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import {
@@ -128,6 +129,7 @@ const ObservationMap = ({
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const [listObservationSplats, listObservationSplatsResult] = useLazyListObservationSplatsQuery();
+  const [getObservation, getObservationResponse] = useLazyGetObservationResultsQuery();
 
   useEffect(() => {
     if (selectedOrganization && plantingSiteId !== undefined) {
@@ -170,6 +172,12 @@ const ObservationMap = ({
 
   const [selectedObservationId, setSelectedObservationId] = useState<number>();
   const [selectedAdHocObservationId, setSelectedAdHocObservationId] = useState<number | 'all'>('all');
+
+  useEffect(() => {
+    if (selectedObservationId) {
+      void getObservation({ observationId: selectedObservationId, depth: 'Plant' }, true);
+    }
+  }, [getObservation, selectedObservationId]);
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -216,14 +224,14 @@ const ObservationMap = ({
   }, [adHocObservationResults, selectedAdHocObservationId]);
 
   const selectedResults = useMemo(() => {
-    if (observationResults.length) {
-      return observationResults.find((observation) => observation.observationId === selectedObservationId);
+    if (selectedObservationId) {
+      return getObservationResponse.currentData?.observation;
     } else if (selectedAdHocResults.length) {
       return selectedAdHocResults[0];
     } else {
       return undefined;
     }
-  }, [observationResults, selectedAdHocResults, selectedObservationId]);
+  }, [getObservationResponse, selectedAdHocResults, selectedObservationId]);
 
   const monitoringPlots = useMemo(() => {
     if (selectedResults) {
