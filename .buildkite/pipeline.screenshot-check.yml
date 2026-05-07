@@ -1,8 +1,6 @@
 # Weekly screenshot regression pipeline.
 #
-# This pipeline runs automatically every Wednesday at 23:00 UTC via the
-# "terraware-web screenshot check" Buildkite pipeline, which is scheduled
-# with cron interval: 0 23 * * 3 on the main branch.
+# This pipeline runs automatically via the `terraware-web screenshot check` Buildkite pipeline using a cron schedule
 #
 # When visual differences are detected the screenshot-check step fails,
 # which triggers a Buildkite email notification to the configured recipients.

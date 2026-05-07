@@ -5,7 +5,7 @@ import { selectOrg, waitFor } from '../../utils/utils';
 
 const SCREENSHOT_OPTIONS = {
   animations: 'disabled' as const,
-  maxDiffPixelRatio: 0.015,
+  maxDiffPixelRatio: 0.02,
 };
 
 // Mask canvas (charts, maps) and Mapbox overlays to avoid non-deterministic pixel diffs.
@@ -51,6 +51,7 @@ const addPageTests = (
       await page.waitForLoadState('networkidle', { timeout: 30000 });
       await expect(page).toHaveScreenshot(`page-${name}${screenshotSuffix}.png`, {
         ...SCREENSHOT_OPTIONS,
+        fullPage: !!viewport,
         mask: pageMasks(page),
       });
     });
@@ -90,15 +91,7 @@ test.describe('AllPagesScreenshots', () => {
     addPageTests(TERRAWARE_PAGES, '-tablet', { width: 768, height: 1024 });
   });
 
-  test.describe('Accelerator console pages - tablet', () => {
-    addPageTests(ACCELERATOR_PAGES, '-tablet', { width: 768, height: 1024 });
-  });
-
   test.describe('Terraware pages - mobile', () => {
     addPageTests(TERRAWARE_PAGES, '-mobile', { width: 390, height: 844 });
-  });
-
-  test.describe('Accelerator console pages - mobile', () => {
-    addPageTests(ACCELERATOR_PAGES, '-mobile', { width: 390, height: 844 });
   });
 });

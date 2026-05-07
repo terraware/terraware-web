@@ -43,7 +43,7 @@
     "playwright:run:prod": "yarn run playwright test playwright/e2e/suites/screenshots --project=prod && yarn run playwright test 'playwright/e2e/suites/*.spec.ts' --project=prod",
     "test:e2e": "yarn run wait-on -t 60000 http://localhost:3001 && NODE_OPTIONS=--max-old-space-size=16384 yarn run playwright:run:prod",
     "screenshots:update": "./scripts/update-screenshots.sh",
-    "screenshots:update:all-pages": "playwright test playwright/e2e/suites/screenshots/allPagesScreenshots.spec.ts --project=prod --update-snapshots",
+    "screenshots:update:all-pages": "./scripts/update-screenshots-all-pages.sh",
     "screenshots:check": "./scripts/screenshot-weekly-check.sh",
     "dump:local": "./scripts/dump.sh local",
     "dump:docker": "./scripts/dump.sh docker",
