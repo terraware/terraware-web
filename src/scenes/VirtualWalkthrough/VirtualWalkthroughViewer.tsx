@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
+import { useApp } from '@playcanvas/react/hooks';
 import { Color, Vec3 } from 'playcanvas';
 import { XrControllers } from 'playcanvas/scripts/esm/xr-controllers.mjs';
 
@@ -46,10 +47,12 @@ const VirtualWalkthroughViewer = ({
 }: VirtualWalkthroughViewerProps) => {
   const { setCamera } = useCameraPosition();
   const { isHighPerformance } = useDevicePerformance();
+  const app = useApp();
 
   const [showAnnotations, setShowAnnotations] = useState(true);
   const [autoRotate, setAutoRotate] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
+  const [isFreeFly, setIsFreeFly] = useState(false);
   const [selectedAnnotationIndex, setSelectedAnnotationIndex] = useState(-1);
   const [localAnnotations, setLocalAnnotations] = useState<AnnotationProps[]>([]);
   const [getOrgSplatInfo, { data: orgData }] = useLazyGetOrganizationSplatInfoQuery();
@@ -117,6 +120,31 @@ const VirtualWalkthroughViewer = ({
       ) ?? [],
     [data?.annotations]
   );
+
+  const boundsXZRadius = useMemo(() => {
+    const dx = defaultCameraPosition[0] - origin[0];
+    const dy = defaultCameraPosition[1] - origin[1];
+    const dz = defaultCameraPosition[2] - origin[2];
+    return Math.sqrt(dx * dx + dy * dy + dz * dz) * 0.5;
+  }, [defaultCameraPosition, origin]);
+
+  const boundsCenter = useMemo(
+    () => new Vec3(origin[0], defaultCameraPosition[1], origin[2]),
+    [origin, defaultCameraPosition]
+  );
+
+  const handleToggleFreeFly = useCallback(() => {
+    const newFreeFly = !isFreeFly;
+    // @ts-expect-error - scripts are added dynamically to the camera entity
+    const walkthroughCam = app.root.findByName('camera')?.script?.walkthroughCamera;
+    if (walkthroughCam) {
+      walkthroughCam.freeFly = newFreeFly;
+    }
+    if (!newFreeFly) {
+      setCamera(origin, defaultCameraPosition);
+    }
+    setIsFreeFly(newFreeFly);
+  }, [isFreeFly, app, setCamera, origin, defaultCameraPosition]);
 
   useEffect(() => {
     setLocalAnnotations(apiAnnotations);
@@ -245,7 +273,12 @@ const VirtualWalkthroughViewer = ({
       <Entity name='camera-root'>
         <Entity name='camera'>
           <Camera clearColor='#EAF8FF' fov={60} />
-          <Script script={WalkthroughCamera} boundsCenter={boundsCenter} boundsXZRadius={boundsXZRadius} />
+          <Script
+            script={WalkthroughCamera}
+            boundsCenter={boundsCenter}
+            boundsXZRadius={boundsXZRadius}
+            enableFly={!isTextFieldFocused}
+          />
         </Entity>
         <Script script={XrControllers} enabled={!isEdit} />
         <Script script={TfXrNavigation} enabled={!isEdit} enableTeleport={false} />
@@ -305,6 +338,8 @@ const VirtualWalkthroughViewer = ({
         editable={editable}
         isFullScreen={isFullScreen}
         onToggleFullScreen={onToggleFullScreen}
+        isFreeFly={isFreeFly}
+        onToggleFreeFly={handleToggleFreeFly}
       />
     </>
   );

@@ -8,7 +8,7 @@ import { CameraComponent, XRSPACE_LOCAL, XRTYPE_AR, XRTYPE_VR } from 'playcanvas
 
 import useBoolean from 'src/hooks/useBoolean';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { getRgbaFromHex } from 'src/utils/color';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -40,6 +40,8 @@ export interface SplatControlsProps {
   canSave?: boolean;
   isFullScreen?: boolean;
   onToggleFullScreen?: () => void;
+  isFreeFly?: boolean;
+  onToggleFreeFly?: () => void;
 }
 
 const SplatControls = ({
@@ -64,10 +66,14 @@ const SplatControls = ({
   canSave = true,
   isFullScreen = false,
   onToggleFullScreen,
+  isFreeFly,
+  onToggleFreeFly,
 }: SplatControlsProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
   const app = useApp();
+  const { isAllowed } = useUser();
+  const isSuperAdmin = isAllowed('FREE_FLY_VIRTUAL_WALKTHROUGH');
   const { setCamera } = useCameraPosition();
   const [isArAvailable, setIsArAvailable] = useState(false);
   const [isVrAvailable, setIsVrAvailable] = useState(false);
@@ -224,6 +230,9 @@ const SplatControls = ({
         {isArAvailable && !isEdit && <Button label={strings.AR} onClick={handleAr} />}
         {isVrAvailable && !isEdit && <Button label={strings.VR} onClick={handleVr} />}
         {editable && !isEdit && onToggleEdit && <Button label={strings.EDIT} onClick={handleEdit} />}
+        {isSuperAdmin && !isEdit && onToggleFreeFly && (
+          <Button label={isFreeFly ? strings.BOUNDED_FLY : strings.FREE_FLY} onClick={onToggleFreeFly} />
+        )}
         {isEdit && onCancel && <Button label={strings.CANCEL} onClick={onCancel} />}
         {isEdit && onSave && <Button label={strings.SAVE} onClick={onSave} disabled={!canSave} />}
       </Box>

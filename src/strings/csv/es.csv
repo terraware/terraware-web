@@ -257,6 +257,7 @@ BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todos los á
 BOOLEAN_TRUE,verdadero,54415086
 BOUNDARIES,Límites,e40b0600
 BOUNDARIES_AND_STRATA,Límites y Estratos,87db24b5
+BOUNDED_FLY,Vuelo delimitado,9e3c46ae
 BUDGET_DOCUMENT_XLS,Documento presupuestario (.XLS),6eface4e
 BUDGET_NARRATIVE_SUMMARY,Resumen narrativo del presupuesto,075fcdb3
 BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS,"Proporcione una descripción de alto nivel de su presupuesto en relación con los datos reales, señalando cualquier discrepancia importante y enumerando a los contribuyentes. (Media página como máximo).",3a2e7928
@@ -752,6 +753,7 @@ FOR_LAB_GERMINATION,Para germinación en laboratorio,401f658e
 FOR_NURSERY_GERMINATION,Para germinación en vivero,ec2b91cc
 FORB,Hierba de hoja ancha,98c76e90
 FORESTRY,Silvicultura,e5cd15f6
+FREE_FLY,Vuelo libre,3eb18bf0
 FREEZER,Congelador,18226170
 FREEZER_1,Congelador 1,953b9b90
 FREEZER_2,Congelador 2,8e57368e
