@@ -126,6 +126,14 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>
             <Grid item xs={gridLeftSide} sx={categoryStyle}>
+              {strings.RECEIVED_DATE}
+            </Grid>
+            <Grid item xs={gridRightSide} sx={valueStyle}>
+              {accession.receivedDate}
+            </Grid>
+          </Grid>
+          <Grid item xs={12} sx={gridRowStyle}>
+            <Grid item xs={gridLeftSide} sx={categoryStyle}>
               {strings.COLLECTORS}
             </Grid>
             <Grid item xs={gridRightSide} sx={valueStyle}>

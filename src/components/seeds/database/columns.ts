@@ -60,6 +60,12 @@ function columns(): DatabaseColumn[] {
       filter: { type: 'date_range' },
     },
     {
+      key: 'receivedDate',
+      name: strings.RECEIVED_DATE,
+      type: 'date',
+      filter: { type: 'date_range' },
+    },
+    {
       key: 'collectionSiteName',
       name: strings.COLLECTING_SITE,
       type: 'string',
