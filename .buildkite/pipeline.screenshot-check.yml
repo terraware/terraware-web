@@ -1,0 +1,54 @@
+# Weekly screenshot regression pipeline.
+#
+# This pipeline runs automatically via the `terraware-web screenshot check` Buildkite pipeline using a cron schedule
+#
+# When visual differences are detected the screenshot-check step fails,
+# which triggers a Buildkite email notification to the configured recipients.
+# Diff images and the full HTML report are available as build artifacts on
+# the Buildkite build page.
+
+common:
+  - &load-secrets
+    seek-oss/aws-sm#v2.4.1:
+      json-to-env:
+        - secret-id: 'buildkite_build_secrets'
+        - secret-id: 'terraware_web_build_secrets'
+
+  - &restore-dist
+    artifacts#v1.9.4:
+      download: 'dist'
+      compressed: 'dist.tgz'
+
+  - &shallow-clone
+    peakon/git-shallow-clone#v0.0.1:
+      depth: 1
+
+agents:
+  queue: 'x86-8core'
+
+steps:
+  - label: ':yarn: Build production bundle'
+    key: 'build'
+    plugins:
+      - *shallow-clone
+      - *load-secrets
+      - artifacts#v1.9.4:
+          upload: 'dist'
+          compressed: 'dist.tgz'
+    command: .buildkite/scripts/build-for-screenshots.sh
+
+  - label: ':camera_with_flash: Screenshot regression check'
+    key: 'screenshot-check'
+    depends_on: 'build'
+    plugins:
+      - *shallow-clone
+      - *restore-dist
+      - *load-secrets
+    command: .buildkite/scripts/run-screenshot-check.sh
+    artifact_paths:
+      - 'playwright/test-results/**/*'
+      - 'playwright-report/**/*'
+    env:
+      SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
+      SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware

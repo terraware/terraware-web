@@ -45,8 +45,12 @@ run_tests() {
 # Run screenshot tests first so they see a clean DB state before other tests
 # mutate server data (e.g. reportSubmit creates a report config that enables
 # the Reports nav item, which would change the snapshot baseline).
+
 # TODO uncomment this once screenshot tests are stable
-#run_tests "Run screenshot tests" "playwright/e2e/suites/screenshots"
+# AllPagesScreenshots is excluded here — it runs only in the dedicated weekly
+# screenshot-check pipeline (.buildkite/pipeline.screenshot-check.yml).
+#run_tests "Run screenshot tests" "playwright/e2e/suites/screenshots --grep-invert AllPagesScreenshots"
+
 
 # The shell inside Docker expands the glob to all spec files directly in the
 # suites directory, excluding the screenshots subdirectory.
