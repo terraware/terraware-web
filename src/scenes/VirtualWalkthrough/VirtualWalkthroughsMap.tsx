@@ -307,13 +307,19 @@ export default function VirtualWalkthroughsMap({
       return undefined;
     }
     const isPreparing = selectedFile.splatStatus === 'Preparing';
+    const thumbnailSrc =
+      selectedFile.type === 'Plot'
+        ? selectedFile.observationId && selectedFile.monitoringPlotId
+          ? `/api/v1/tracking/observations/${selectedFile.observationId}/plots/${selectedFile.monitoringPlotId}/photos/${selectedFile.fileId}?maxWidth=377`
+          : undefined
+        : `/api/v1/organizations/${organizationId}/media/${selectedFile.fileId}/thumbnail?maxWidth=377`;
     return (
       <Box display='flex' flexDirection='column' width='100%' gap={2}>
-        {selectedFile.type !== 'Plot' && (
+        {thumbnailSrc && (
           <Box sx={{ position: 'relative', width: '100%' }}>
             <Box
               component='img'
-              src={`/api/v1/organizations/${organizationId}/media/${selectedFile.fileId}/thumbnail?maxWidth=377`}
+              src={thumbnailSrc}
               alt={strings.THUMBNAIL}
               sx={{ display: 'block', maxHeight: '160px', objectFit: 'cover', width: '100%' }}
             />
