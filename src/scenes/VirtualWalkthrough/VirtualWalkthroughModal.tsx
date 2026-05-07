@@ -81,7 +81,11 @@ const VirtualWalkthroughViewer = ({ fileId, observationId, organizationId }: Vir
 
   return (
     <>
-      <GradientSky topColor='#FFFFFF' horizonColor='#EAF8FF' groundColor='#C3BDB7' />
+      <GradientSky
+        topColor={data?.skyColor || '#FFFFFF'}
+        horizonColor={data?.skyColor || '#EAF8FF'}
+        groundColor={data?.groundColor || '#C3BDB7'}
+      />
       <Entity name='camera-root'>
         <Entity name='camera'>
           <Camera clearColor='#EAF8FF' fov={60} />
