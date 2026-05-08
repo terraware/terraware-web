@@ -55,6 +55,7 @@ const VirtualWalkthroughViewer = ({
   const [isFreeFly, setIsFreeFly] = useState(false);
   const [selectedAnnotationIndex, setSelectedAnnotationIndex] = useState(-1);
   const [localAnnotations, setLocalAnnotations] = useState<AnnotationProps[]>([]);
+  const [isTextFieldFocused, setIsTextFieldFocused] = useState(false);
   const [getOrgSplatInfo, { data: orgData }] = useLazyGetOrganizationSplatInfoQuery();
   const [getObsSplatInfo, { data: obsData }] = useLazyListSplatDetailsQuery();
   const [saveObservationAnnotations] = useSetObservationSplatAnnotationsMutation();
@@ -121,18 +122,6 @@ const VirtualWalkthroughViewer = ({
     [data?.annotations]
   );
 
-  const boundsXZRadius = useMemo(() => {
-    const dx = defaultCameraPosition[0] - origin[0];
-    const dy = defaultCameraPosition[1] - origin[1];
-    const dz = defaultCameraPosition[2] - origin[2];
-    return Math.sqrt(dx * dx + dy * dy + dz * dz) * 0.5;
-  }, [defaultCameraPosition, origin]);
-
-  const boundsCenter = useMemo(
-    () => new Vec3(origin[0], defaultCameraPosition[1], origin[2]),
-    [origin, defaultCameraPosition]
-  );
-
   const handleToggleFreeFly = useCallback(() => {
     const newFreeFly = !isFreeFly;
     // @ts-expect-error - scripts are added dynamically to the camera entity
@@ -141,10 +130,10 @@ const VirtualWalkthroughViewer = ({
       walkthroughCam.freeFly = newFreeFly;
     }
     if (!newFreeFly) {
-      setCamera(origin, defaultCameraPosition);
+      setCamera(origin, cameraPosition);
     }
     setIsFreeFly(newFreeFly);
-  }, [isFreeFly, app, setCamera, origin, defaultCameraPosition]);
+  }, [isFreeFly, app, setCamera, origin, cameraPosition]);
 
   useEffect(() => {
     setLocalAnnotations(apiAnnotations);
@@ -333,7 +322,7 @@ const VirtualWalkthroughViewer = ({
         hasSelectedAnnotation={selectedAnnotationIndex >= 0}
         selectedAnnotation={selectedAnnotationIndex >= 0 ? localAnnotations[selectedAnnotationIndex] : null}
         onAnnotationUpdate={handleAnnotationUpdate}
-        onTextFieldFocus={() => undefined}
+        onTextFieldFocus={setIsTextFieldFocused}
         canSave={canSave}
         editable={editable}
         isFullScreen={isFullScreen}
