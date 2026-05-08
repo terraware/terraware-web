@@ -2376,6 +2376,7 @@ VIABILITY_TESTING,Ensayo de viabilidad,cb87d231
 VIABILITY_TESTING_EMPTY_MESSAGE,El Ensayo de viabilidad te ayuda a monitorear la calidad de la semilla. Realizar una prueba de germinación en vivero o laboratorio o una prueba de corte en sus semillas.,d0729b19
 VIABILITY_TESTS,Pruebas de viabilidad,097a958c
 VIDEO_LINK,Enlace de video,2546979d
+VIDEO_MAX_DURATION_EXCEEDED,El video debe tener menos de 6 minutos.,0704b995
 VIDEO_PROCESSING,Procesamiento de video,998e847c
 VIDEO_PROCESSING_DESCRIPTION,Tiene {0} video(s) aún en proceso. Esto puede tardar hasta 12 horas.,d85b02f6
 VIDEO_UNABLE_TO_PROCESS,No se pudo procesar el video,3817bfb4
