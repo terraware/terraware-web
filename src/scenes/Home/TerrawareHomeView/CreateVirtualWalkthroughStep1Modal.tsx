@@ -28,16 +28,44 @@ const CreateVirtualWalkthroughStep1Modal = ({
   const { selectedOrganization } = useOrganization();
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
   const [showStep2, setShowStep2] = useState(false);
+  const [durationError, setDurationError] = useState(false);
 
   const [uploadMedia, { isLoading: isUploadingMedia }] = useUploadOrganizationMediaFileMutation();
   const [generateSplat, { isLoading: isGeneratingSplat }] = useGenerateOrganizationSplatMutation();
   const isUploading = isUploadingMedia || isGeneratingSplat;
 
-  const handleSetFiles = (files: File[]) => {
-    if (files.length > 0) {
-      setSelectedFile(files[0]);
-      setShowStep2(true);
+  const getVideoDuration = (file: File): Promise<number> =>
+    new Promise((resolve, reject) => {
+      const video = document.createElement('video');
+      const url = URL.createObjectURL(file);
+      video.onloadedmetadata = () => {
+        URL.revokeObjectURL(url);
+        resolve(video.duration);
+      };
+      video.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error('Could not read video metadata'));
+      };
+      video.src = url;
+    });
+
+  const handleSetFiles = async (files: File[]) => {
+    if (files.length === 0) {
+      return;
     }
+    const file = files[0];
+    try {
+      const duration = await getVideoDuration(file);
+      if (duration > 6 * 60) {
+        setDurationError(true);
+        return;
+      }
+    } catch {
+      // If duration can't be read, allow the upload to proceed
+    }
+    setDurationError(false);
+    setSelectedFile(file);
+    setShowStep2(true);
   };
 
   const handleCloseStep2 = () => {
@@ -130,10 +158,15 @@ const CreateVirtualWalkthroughStep1Modal = ({
             acceptFileType='video/mp4, video/quicktime'
             chooseFileText={strings.CHOOSE_FILE}
             multipleSelection={false}
-            setFiles={handleSetFiles}
+            setFiles={(files) => void handleSetFiles(files)}
             uploadDescription={strings.UPLOAD_VIDEO_DESCRIPTION_FORMATS}
             uploadText={strings.UPLOAD_FILES}
           />
+          {durationError && (
+            <Typography sx={{ color: theme.palette.TwClrTxtDanger, fontSize: '14px' }}>
+              {strings.VIDEO_MAX_DURATION_EXCEEDED}
+            </Typography>
+          )}
         </Box>
       </DialogBox>
 
