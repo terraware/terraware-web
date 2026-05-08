@@ -70,6 +70,7 @@ const DEFAULT_COLUMN_ORDER = [
   'state',
   'collectionSiteName',
   'collectedDate',
+  'receivedDate',
   'ageMonths',
   'estimatedWeightGrams',
   'estimatedCount',
@@ -110,6 +111,7 @@ const ALL_ACCESSION_FIELDS = [
   'species_commonName',
   'species_familyName',
   'collectedDate',
+  'receivedDate',
   'collectionSiteName',
   'collectionSiteLandowner',
   'collectionSiteNotes',
@@ -469,6 +471,24 @@ export default function Database(props: DatabaseProps): JSX.Element {
         filterFn: makeDateRangeFilterFn<SearchResponseElementWithId>('collectedDate'),
         Cell: ({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
           const dateStr = (cell.row.original as Record<string, unknown>).collectedDate as string | null;
+          return dateStr ? <span>{dateStr}</span> : null;
+        },
+      },
+      {
+        id: 'receivedDate',
+        header: strings.RECEIVED_DATE,
+        accessorFn: (row) => {
+          const dateStr = (row as Record<string, unknown>).receivedDate as string | null;
+          if (!dateStr) {
+            return null;
+          }
+          const [y, m, d] = dateStr.split('-').map(Number);
+          return new Date(y, m - 1, d);
+        },
+        filterVariant: 'date-range',
+        filterFn: makeDateRangeFilterFn<SearchResponseElementWithId>('receivedDate'),
+        Cell: ({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
+          const dateStr = (cell.row.original as Record<string, unknown>).receivedDate as string | null;
           return dateStr ? <span>{dateStr}</span> : null;
         },
       },
