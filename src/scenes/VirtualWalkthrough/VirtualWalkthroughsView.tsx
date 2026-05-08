@@ -1,4 +1,5 @@
-import React, { type JSX, useCallback, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router';
 
 import { Box, useTheme } from '@mui/material';
 
@@ -9,13 +10,16 @@ import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
 import {
   OrganizationVirtualWalkthrough,
   useSearchVirtualWalkthroughsQuery,
 } from 'src/queries/search/virtualWalkthroughs';
 import CreateVirtualWalkthroughStep1Modal from 'src/scenes/Home/TerrawareHomeView/CreateVirtualWalkthroughStep1Modal';
+import VirtualPlotData from 'src/scenes/ObservationsRouterV2/SingleView/PlantMonitoring/MonitoringPlot/VirtualPlotData';
 
 import VirtualWalkthroughMessages from './VirtualWalkthroughMessages';
+import VirtualWalkthroughModal from './VirtualWalkthroughModal';
 import VirtualWalkthroughsMap from './VirtualWalkthroughsMap';
 import VirtualWalkthroughsTable from './VirtualWalkthroughsTable';
 
@@ -28,10 +32,50 @@ export default function VirtualWalkthroughsView(): JSX.Element {
     skip: !selectedOrganization,
   });
 
+  const [searchParams, setSearchParams] = useSearchParams();
   const [pendingPlacementFile, setPendingPlacementFile] = useState<OrganizationVirtualWalkthrough | undefined>(
     undefined
   );
   const [createModalOpen, setCreateModalOpen] = useState(false);
+
+  const virtualWalkthroughParam = searchParams.get('virtualWalkthrough');
+  const virtualWalkthroughModalFile = useMemo(
+    () =>
+      virtualWalkthroughParam
+        ? mediaFiles.find((f) => f.fileId === Number(virtualWalkthroughParam) && f.splatStatus === 'Ready')
+        : undefined,
+    [virtualWalkthroughParam, mediaFiles]
+  );
+
+  const isPlotFile = virtualWalkthroughModalFile?.type === 'Plot';
+  const [getObservationResults, { data: observationResultsData }] = useLazyGetObservationResultsQuery();
+
+  useEffect(() => {
+    if (isPlotFile && virtualWalkthroughModalFile?.observationId) {
+      void getObservationResults({ observationId: virtualWalkthroughModalFile.observationId });
+    }
+  }, [getObservationResults, isPlotFile, virtualWalkthroughModalFile?.observationId]);
+
+  const virtualPlotBelowComponent = useMemo(() => {
+    if (!isPlotFile || !observationResultsData) {
+      return undefined;
+    }
+    const results = observationResultsData.observation;
+    const monitoringPlot = results.strata
+      .flatMap((s) => s.substrata)
+      .flatMap((sub) => sub.monitoringPlots)
+      .find((plot) => plot.monitoringPlotId === virtualWalkthroughModalFile?.monitoringPlotId);
+    if (!monitoringPlot) {
+      return undefined;
+    }
+    return <VirtualPlotData monitoringPlot={monitoringPlot} plantingSiteId={results.plantingSiteId} />;
+  }, [isPlotFile, observationResultsData, virtualWalkthroughModalFile?.monitoringPlotId]);
+
+  const handleCloseVirtualWalkthroughModal = useCallback(() => {
+    const params = new URLSearchParams(searchParams);
+    params.delete('virtualWalkthrough');
+    setSearchParams(params, { replace: true });
+  }, [searchParams, setSearchParams]);
 
   const handleAddToMap = useCallback((file: OrganizationVirtualWalkthrough) => {
     setPendingPlacementFile(file);
@@ -45,6 +89,16 @@ export default function VirtualWalkthroughsView(): JSX.Element {
     <TfMain>
       <ScrollToTop />
       <CreateVirtualWalkthroughStep1Modal open={createModalOpen} onClose={() => setCreateModalOpen(false)} />
+      {virtualWalkthroughModalFile && (
+        <VirtualWalkthroughModal
+          fileId={virtualWalkthroughModalFile.fileId}
+          observationId={virtualWalkthroughModalFile.observationId}
+          organizationId={selectedOrganization?.id}
+          onClose={handleCloseVirtualWalkthroughModal}
+          editable={true}
+          belowComponent={virtualPlotBelowComponent}
+        />
+      )}
       <PageHeader
         back={true}
         backUrl={APP_PATHS.HOME}

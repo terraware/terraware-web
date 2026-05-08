@@ -1,5 +1,5 @@
-import React, { type JSX, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import { useParams, useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Tabs, Tooltip } from '@terraware/web-components';
@@ -11,10 +11,12 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import VirtualWalkthroughModal from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughModal';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import MonitoringPlotObservationDataTab from './MonitoringPlotObservationDataTab';
 import MonitoringPlotPhotosTab from './MonitoringPlotPhotosTab';
+import VirtualPlotData from './VirtualPlotData';
 
 const MonitoringPlotDetails = (): JSX.Element => {
   const theme = useTheme();
@@ -177,8 +179,27 @@ const MonitoringPlotDetails = (): JSX.Element => {
     viewIdentifier: 'monitoringPlotObservation',
   });
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const virtualWalkthroughParam = searchParams.get('virtualWalkthrough');
+  const virtualWalkthroughFileId = virtualWalkthroughParam ? Number(virtualWalkthroughParam) : undefined;
+
+  const handleCloseVirtualWalkthroughModal = useCallback(() => {
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete('virtualWalkthrough');
+    setSearchParams(nextParams, { replace: true });
+  }, [searchParams, setSearchParams]);
+
   return (
     <Page crumbs={crumbs} title={title}>
+      {virtualWalkthroughFileId && monitoringPlot && results && (
+        <VirtualWalkthroughModal
+          observationId={observationId}
+          fileId={virtualWalkthroughFileId}
+          editable={true}
+          onClose={handleCloseVirtualWalkthroughModal}
+          belowComponent={<VirtualPlotData monitoringPlot={monitoringPlot} plantingSiteId={results.plantingSiteId} />}
+        />
+      )}
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
       <Box width='100%'>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />

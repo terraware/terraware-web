@@ -2,8 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
-import { Color } from 'playcanvas';
-import { CameraControls } from 'playcanvas/scripts/esm/camera-controls.mjs';
+import { Color, Vec3 } from 'playcanvas';
 import { XrControllers } from 'playcanvas/scripts/esm/xr-controllers.mjs';
 
 import Annotation, { AnnotationProps } from 'src/components/GaussianSplat/Annotation';
@@ -13,62 +12,115 @@ import SplatControls from 'src/components/GaussianSplat/SplatControls';
 import SplatModel from 'src/components/GaussianSplat/SplatModel';
 import { TfAnnotationManager } from 'src/components/GaussianSplat/TfAnnotationManager';
 import { TfXrNavigation } from 'src/components/GaussianSplat/TfXrNavigation';
+import { WalkthroughCamera } from 'src/components/GaussianSplat/walkthrough-camera';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
 import { useDevicePerformance } from 'src/hooks/useDevicePerformance';
-import { useSetObservationSplatAnnotationsMutation } from 'src/queries/generated/observationSplats';
-
-interface VirtualMonitoringPlotProps {
-  observationId: string;
-  fileId: string;
-  startingCameraPosition?: [number, number, number];
-  splatOrigin?: [number, number, number];
-  annotations?: AnnotationProps[];
-  editable?: boolean;
-  isFullScreen?: boolean;
-  onToggleFullScreen?: () => void;
-  groundColor?: string;
-  skyColor?: string;
-}
+import {
+  useLazyListSplatDetailsQuery,
+  useSetObservationSplatAnnotationsMutation,
+} from 'src/queries/generated/observationSplats';
+import {
+  useLazyGetOrganizationSplatInfoQuery,
+  useSetOrganizationSplatAnnotationsMutation,
+} from 'src/queries/generated/organizationSplats';
 
 const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
 const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
 
-const VirtualMonitoringPlot = ({
-  observationId,
+export type VirtualWalkthroughViewerProps = {
+  fileId: number;
+  observationId?: number;
+  organizationId?: number;
+  editable?: boolean;
+  isFullScreen?: boolean;
+  onToggleFullScreen?: () => void;
+};
+
+const VirtualWalkthroughViewer = ({
   fileId,
-  startingCameraPosition = undefined,
-  splatOrigin = undefined,
-  annotations = [],
+  observationId,
+  organizationId,
   editable = false,
   isFullScreen = false,
   onToggleFullScreen,
-  groundColor,
-  skyColor,
-}: VirtualMonitoringPlotProps) => {
+}: VirtualWalkthroughViewerProps) => {
   const { setCamera } = useCameraPosition();
   const { isHighPerformance } = useDevicePerformance();
+
   const [showAnnotations, setShowAnnotations] = useState(true);
   const [autoRotate, setAutoRotate] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
-  const [selectedAnnotationIndex, setSelectedAnnotationIndex] = useState<number>(-1);
-  const [localAnnotations, setLocalAnnotations] = useState(annotations);
-  const [isTextFieldFocused, setIsTextFieldFocused] = useState(false);
-  const [saveAnnotations] = useSetObservationSplatAnnotationsMutation();
+  const [selectedAnnotationIndex, setSelectedAnnotationIndex] = useState(-1);
+  const [localAnnotations, setLocalAnnotations] = useState<AnnotationProps[]>([]);
+  const [getOrgSplatInfo, { data: orgData }] = useLazyGetOrganizationSplatInfoQuery();
+  const [getObsSplatInfo, { data: obsData }] = useLazyListSplatDetailsQuery();
+  const [saveObservationAnnotations] = useSetObservationSplatAnnotationsMutation();
+  const [saveOrganizationAnnotations] = useSetOrganizationSplatAnnotationsMutation();
 
-  const splatSrc = useMemo(
-    () => `/api/v1/tracking/observations/${observationId}/splats/${fileId}`,
-    [observationId, fileId]
+  useEffect(() => {
+    if (observationId !== undefined) {
+      void getObsSplatInfo({ observationId, fileId });
+    } else if (organizationId !== undefined) {
+      void getOrgSplatInfo({ organizationId, fileId });
+    }
+  }, [fileId, getObsSplatInfo, getOrgSplatInfo, observationId, organizationId]);
+
+  const data = observationId !== undefined ? obsData : orgData;
+
+  const splatSrc =
+    observationId !== undefined
+      ? `/api/v1/tracking/observations/${observationId}/splats/${fileId}`
+      : `/api/v1/organizations/${organizationId}/splats/${fileId}`;
+
+  const origin: [number, number, number] = useMemo(
+    () =>
+      data?.originPosition
+        ? [data.originPosition.x, data.originPosition.y, data.originPosition.z]
+        : DEFAULT_FOCUS_POINT,
+    [data]
   );
 
-  const origin: [number, number, number] = useMemo(() => splatOrigin || DEFAULT_FOCUS_POINT, [splatOrigin]);
-  const defaultCameraPosition: [number, number, number] = useMemo(
-    () => startingCameraPosition || DEFAULT_POSITION,
-    [startingCameraPosition]
+  const cameraPosition: [number, number, number] = useMemo(
+    () =>
+      data?.cameraPosition ? [data.cameraPosition.x, data.cameraPosition.y, data.cameraPosition.z] : DEFAULT_POSITION,
+    [data]
+  );
+
+  const boundsXZRadius = useMemo(() => {
+    const dx = cameraPosition[0] - origin[0];
+    const dy = cameraPosition[1] - origin[1];
+    const dz = cameraPosition[2] - origin[2];
+    return Math.sqrt(dx * dx + dy * dy + dz * dz) * 0.5;
+  }, [cameraPosition, origin]);
+
+  const boundsCenter = useMemo(() => new Vec3(origin[0], cameraPosition[1], origin[2]), [origin, cameraPosition]);
+
+  useEffect(() => {
+    setCamera(origin, cameraPosition);
+  }, [origin, cameraPosition, setCamera]);
+
+  const apiAnnotations = useMemo<AnnotationProps[]>(
+    () =>
+      data?.annotations?.map(
+        (annotation) =>
+          ({
+            ...annotation,
+            position: [annotation.position.x, annotation.position.y, annotation.position.z] as [number, number, number],
+            cameraPosition: annotation.cameraPosition
+              ? ([annotation.cameraPosition.x, annotation.cameraPosition.y, annotation.cameraPosition.z] as [
+                  number,
+                  number,
+                  number,
+                ])
+              : undefined,
+          }) as AnnotationProps
+      ) ?? [],
+    [data?.annotations]
   );
 
   useEffect(() => {
-    setCamera(origin, defaultCameraPosition);
-  }, [origin, defaultCameraPosition, setCamera]);
+    setLocalAnnotations(apiAnnotations);
+  }, [apiAnnotations]);
 
   useEffect(() => {
     if (!isEdit) {
@@ -76,17 +128,12 @@ const VirtualMonitoringPlot = ({
     }
   }, [isEdit]);
 
-  useEffect(() => {
-    setLocalAnnotations(annotations);
-  }, [annotations]);
-
   const handleAnnotationPositionChange = useCallback(
     (position: [number, number, number]) => {
       setLocalAnnotations((prev) => {
         if (selectedAnnotationIndex === -1) {
           return prev;
         }
-
         const updated = [...prev];
         updated[selectedAnnotationIndex] = { ...updated[selectedAnnotationIndex], position };
         return updated;
@@ -96,41 +143,57 @@ const VirtualMonitoringPlot = ({
   );
 
   const handleSave = useCallback(() => {
+    const annotations = localAnnotations.map((annotation) => ({
+      ...annotation,
+      position: {
+        x: annotation.position[0],
+        y: annotation.position[1],
+        z: annotation.position[2],
+      },
+      cameraPosition: annotation.cameraPosition
+        ? {
+            x: annotation.cameraPosition[0],
+            y: annotation.cameraPosition[1],
+            z: annotation.cameraPosition[2],
+          }
+        : undefined,
+    }));
+
     const saveAndClose = async () => {
-      await saveAnnotations({
-        observationId: Number(observationId),
-        fileId: Number(fileId),
-        setSplatAnnotationsRequestPayload: {
-          annotations: localAnnotations.map((annotation) => ({
-            ...annotation,
-            position: {
-              x: annotation.position[0],
-              y: annotation.position[1],
-              z: annotation.position[2],
-            },
-            cameraPosition: annotation.cameraPosition
-              ? { x: annotation.cameraPosition[0], y: annotation.cameraPosition[1], z: annotation.cameraPosition[2] }
-              : undefined,
-          })),
-        },
-      });
+      if (observationId !== undefined) {
+        await saveObservationAnnotations({
+          observationId,
+          fileId,
+          setSplatAnnotationsRequestPayload: { annotations },
+        });
+      } else if (organizationId !== undefined) {
+        await saveOrganizationAnnotations({
+          organizationId,
+          fileId,
+          setSplatAnnotationsRequestPayload: { annotations },
+        });
+      }
       setIsEdit(false);
       setSelectedAnnotationIndex(-1);
     };
     void saveAndClose();
-  }, [observationId, fileId, saveAnnotations, localAnnotations]);
+  }, [
+    observationId,
+    organizationId,
+    fileId,
+    saveObservationAnnotations,
+    saveOrganizationAnnotations,
+    localAnnotations,
+  ]);
 
   const handleCancel = useCallback(() => {
-    setLocalAnnotations(annotations);
+    setLocalAnnotations(apiAnnotations);
     setIsEdit(false);
     setSelectedAnnotationIndex(-1);
-  }, [annotations]);
+  }, [apiAnnotations]);
 
   const handleAddAnnotation = useCallback(() => {
-    const newAnnotation: AnnotationProps = {
-      position: origin,
-      title: '',
-    };
+    const newAnnotation: AnnotationProps = { position: origin, title: '' };
     setLocalAnnotations((prev) => [...prev, newAnnotation]);
     setSelectedAnnotationIndex(localAnnotations.length);
   }, [origin, localAnnotations]);
@@ -161,36 +224,28 @@ const VirtualMonitoringPlot = ({
     [selectedAnnotationIndex]
   );
 
-  const canSave = useMemo(() => {
-    return localAnnotations.every((annotation) => annotation.title && annotation.title.trim() !== '');
-  }, [localAnnotations]);
+  const canSave = useMemo(
+    () => localAnnotations.every((annotation) => annotation.title && annotation.title.trim() !== ''),
+    [localAnnotations]
+  );
 
-  /* When a rerender occurs, the splat model disappears (https://github.com/playcanvas/react/pull/298 and https://github.com/playcanvas/react/issues/302)
-  The key should include items that cause the SplatModel to rerender. Remove them (and the useMemo) once the PR is merged and we're on a version that includes it */
   const splatModel = useMemo(
-    () => <SplatModel key={'splat'} splatSrc={splatSrc} rotation={[-180, 0, 0]} revealRain={isHighPerformance} />,
+    () => <SplatModel key='splat' splatSrc={splatSrc} rotation={[-180, 0, 0]} revealRain={isHighPerformance} />,
     [isHighPerformance, splatSrc]
   );
 
   return (
     <>
       <GradientSky
-        topColor={skyColor || '#FFFFFF'}
-        horizonColor={skyColor || '#EAF8FF'}
-        groundColor={groundColor || '#C3BDB7'}
+        topColor={data?.skyColor || '#FFFFFF'}
+        horizonColor={data?.skyColor || '#EAF8FF'}
+        groundColor={data?.groundColor || '#C3BDB7'}
       />
 
       <Entity name='camera-root'>
         <Entity name='camera'>
           <Camera clearColor='#EAF8FF' fov={60} />
-          <Script
-            script={CameraControls}
-            moveSpeed={0.3}
-            moveFastSpeed={0.5}
-            moveSlowSpeed={0.15}
-            rotateSpeed={0.1}
-            enableFly={!isTextFieldFocused}
-          />
+          <Script script={WalkthroughCamera} boundsCenter={boundsCenter} boundsXZRadius={boundsXZRadius} />
         </Entity>
         <Script script={XrControllers} enabled={!isEdit} />
         <Script script={TfXrNavigation} enabled={!isEdit} enableTeleport={false} />
@@ -227,9 +282,10 @@ const VirtualMonitoringPlot = ({
           onPositionChange={handleAnnotationPositionChange}
         />
       ))}
+
       <SplatControls
         defaultCameraFocus={origin}
-        defaultCameraPosition={defaultCameraPosition}
+        defaultCameraPosition={cameraPosition}
         showAnnotations={showAnnotations}
         onToggleAnnotations={setShowAnnotations}
         autoRotate={autoRotate}
@@ -244,7 +300,7 @@ const VirtualMonitoringPlot = ({
         hasSelectedAnnotation={selectedAnnotationIndex >= 0}
         selectedAnnotation={selectedAnnotationIndex >= 0 ? localAnnotations[selectedAnnotationIndex] : null}
         onAnnotationUpdate={handleAnnotationUpdate}
-        onTextFieldFocus={setIsTextFieldFocused}
+        onTextFieldFocus={() => undefined}
         canSave={canSave}
         editable={editable}
         isFullScreen={isFullScreen}
@@ -254,4 +310,4 @@ const VirtualMonitoringPlot = ({
   );
 };
 
-export default VirtualMonitoringPlot;
+export default VirtualWalkthroughViewer;

@@ -11,7 +11,8 @@ import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization } from 'src/providers';
 import { ObservationSplatPayload } from 'src/queries/generated/observationSplats';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
-import VirtualPlotModal from 'src/scenes/ObservationsRouterV2/SingleView/PlantMonitoring/MonitoringPlot/VirtualPlotModal';
+import VirtualPlotData from 'src/scenes/ObservationsRouterV2/SingleView/PlantMonitoring/MonitoringPlot/VirtualPlotData';
+import VirtualWalkthroughModal from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughModal';
 import { ObservationMonitoringPlotPhotoWithGps } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -35,7 +36,7 @@ const MapPhotoDrawer = ({
 
   const { format } = useNumberFormatter();
   const { data } = useGetObservationResultsQuery({ observationId });
-  const [virtualPlotOpen, setVirtualPlotOpen] = useBoolean(false);
+  const [virtualWalkthroughOpen, setVirtualWalkthroughOpen] = useBoolean(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
 
@@ -68,15 +69,6 @@ const MapPhotoDrawer = ({
 
     return [...monitoringPlots, ...adHocPlots].find((plot) => plot.monitoringPlotId === monitoringPlotId);
   }, [monitoringPlotId, resultAdHocPlot, resultStrata]);
-
-  const stratumName = useMemo(() => {
-    const stratum = resultStrata?.find((_stratum) =>
-      _stratum.substrata.some((substratum) =>
-        substratum.monitoringPlots.some((plot) => plot.monitoringPlotId === monitoringPlotId)
-      )
-    );
-    return stratum?.name ?? '';
-  }, [monitoringPlotId, resultStrata]);
 
   const monitoringPlotClaimedByName = monitoringPlot?.claimedByName;
 
@@ -174,42 +166,42 @@ const MapPhotoDrawer = ({
     strings,
   ]);
 
-  const virtualPlotParamValue = searchParams.get('virtualPlot');
+  const virtualWalkthroughParamValue = searchParams.get('virtualWalkthrough');
 
   useEffect(() => {
     const shouldBeOpen =
-      virtualPlotParamValue &&
+      virtualWalkthroughParamValue &&
       isVirtualPlotsEnabled &&
       Boolean(splat && result && monitoringPlot) &&
-      Number(virtualPlotParamValue) === splat?.fileId;
+      Number(virtualWalkthroughParamValue) === splat?.fileId;
 
-    if (shouldBeOpen && !virtualPlotOpen) {
-      setVirtualPlotOpen(true);
-    } else if (!shouldBeOpen && virtualPlotOpen) {
-      setVirtualPlotOpen(false);
+    if (shouldBeOpen && !virtualWalkthroughOpen) {
+      setVirtualWalkthroughOpen(true);
+    } else if (!shouldBeOpen && virtualWalkthroughOpen) {
+      setVirtualWalkthroughOpen(false);
     }
   }, [
-    virtualPlotParamValue,
+    virtualWalkthroughParamValue,
     monitoringPlotId,
     splat,
     result,
     monitoringPlot,
-    virtualPlotOpen,
-    setVirtualPlotOpen,
+    virtualWalkthroughOpen,
+    setVirtualWalkthroughOpen,
     isVirtualPlotsEnabled,
   ]);
 
-  const handleOpenVirtualPlot = useCallback(() => {
+  const handleOpenVirtualWalkthrough = useCallback(() => {
     if (splat) {
       const params = new URLSearchParams(searchParams);
-      params.set('virtualPlot', splat.fileId.toString());
+      params.set('virtualWalkthrough', splat.fileId.toString());
       setSearchParams(params, { replace: true });
     }
   }, [splat, searchParams, setSearchParams]);
 
-  const handleCloseVirtualPlot = useCallback(() => {
+  const handleCloseVirtualWalkthrough = useCallback(() => {
     const params = new URLSearchParams(searchParams);
-    params.delete('virtualPlot');
+    params.delete('virtualWalkthrough');
     setSearchParams(params, { replace: true });
   }, [searchParams, setSearchParams]);
 
@@ -223,15 +215,13 @@ const MapPhotoDrawer = ({
   } else if (splat) {
     return (
       <>
-        {virtualPlotOpen && result && monitoringPlot && (
-          <VirtualPlotModal
-            monitoringPlot={monitoringPlot}
-            plantingSiteId={result.plantingSiteId}
+        {virtualWalkthroughOpen && result && monitoringPlot && (
+          <VirtualWalkthroughModal
             observationId={observationId}
             fileId={splat.fileId}
-            stratumName={stratumName}
-            monitoringPlotId={monitoringPlotId}
-            onClose={handleCloseVirtualPlot}
+            editable={true}
+            onClose={handleCloseVirtualWalkthrough}
+            belowComponent={<VirtualPlotData monitoringPlot={monitoringPlot} plantingSiteId={result.plantingSiteId} />}
           />
         )}
         <Box display={'flex'} flexDirection={'column'} width={'100%'} gap={2}>
@@ -240,7 +230,7 @@ const MapPhotoDrawer = ({
           <Button
             id='visit-virtual-plot'
             label={strings.VISIT_VIRTUAL_PLOT}
-            onClick={handleOpenVirtualPlot}
+            onClick={handleOpenVirtualWalkthrough}
             priority='primary'
             size='medium'
           />

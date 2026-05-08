@@ -876,15 +876,15 @@ const ObservationMap = ({
   }, [listObservationSplatsResult.data, selectSplat, selectedAdHocResults, selectedPhotos, selectedResults]);
 
   useEffect(() => {
-    const virtualPlotParam = searchParams.get('virtualPlot');
+    const virtualWalkthroughParam = searchParams.get('virtualWalkthrough');
     if (
-      virtualPlotParam &&
+      virtualWalkthroughParam &&
       selectedResults &&
       listObservationSplatsResult.data &&
       selectedPhotos.length === 0 &&
       isVirtualPlotsEnabled
     ) {
-      const targetSplatFileId = Number(virtualPlotParam);
+      const targetSplatFileId = Number(virtualWalkthroughParam);
       const splats = listObservationSplatsResult.data.splats.filter((splat) => splat.status === 'Ready');
       const matchingSplat = splats.find((splat) => splat.fileId === targetSplatFileId);
 
@@ -1129,8 +1129,8 @@ const ObservationMap = ({
 
   useEffect(() => {
     // Close drawer on data changes, unless virtualPlot param is present
-    const virtualPlotParam = searchParams.get('virtualPlot');
-    if (!virtualPlotParam) {
+    const virtualWalkthroughParam = searchParams.get('virtualWalkthrough');
+    if (!virtualWalkthroughParam) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
       setDrawerOpenCallback(false);
     }

@@ -1,5 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef, Marker } from 'react-map-gl/mapbox';
+import { useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -17,8 +18,6 @@ import { useLocalization } from 'src/providers';
 import { useUpdateOrganizationMediaFileMutation } from 'src/queries/generated/organizationMedia';
 import { OrganizationVirtualWalkthrough } from 'src/queries/search/virtualWalkthroughs';
 import useMapboxToken from 'src/utils/useMapboxToken';
-
-import VirtualWalkthroughModal from './VirtualWalkthroughModal';
 
 type VirtualWalkthroughsMapProps = {
   mediaFiles: OrganizationVirtualWalkthrough[];
@@ -38,8 +37,8 @@ export default function VirtualWalkthroughsMap({
   const { mapId, token } = useMapboxToken();
   const { fitBounds } = useMapUtils(mapRef);
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [, setSearchParams] = useSearchParams();
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<OrganizationVirtualWalkthrough[]>([]);
   const [selectedFileIndex, setSelectedFileIndex] = useState(0);
   const selectedFile = selectedFiles[selectedFileIndex];
@@ -364,14 +363,20 @@ export default function VirtualWalkthroughsMap({
         <Button
           id='view-3d-model'
           label={strings.VIEW_3D_MODEL}
-          onClick={() => setModalOpen(true)}
+          onClick={() =>
+            setSearchParams((prev) => {
+              const p = new URLSearchParams(prev);
+              p.set('virtualWalkthrough', selectedFile.fileId.toString());
+              return p;
+            })
+          }
           priority='primary'
           size='medium'
           disabled={selectedFile.splatStatus !== 'Ready'}
         />
       </Box>
     );
-  }, [organizationId, selectedFile, strings, theme]);
+  }, [organizationId, selectedFile, setSearchParams, strings, theme]);
 
   const draggableMarker =
     pendingPlacementFile && pendingMarkerPos ? (
@@ -389,14 +394,6 @@ export default function VirtualWalkthroughsMap({
 
   return (
     <>
-      {modalOpen && selectedFile && (
-        <VirtualWalkthroughModal
-          observationId={selectedFile.observationId}
-          organizationId={organizationId}
-          fileId={selectedFile.fileId}
-          onClose={() => setModalOpen(false)}
-        />
-      )}
       <MapComponent
         clusterMaxZoom={20}
         mapId={mapId}

@@ -82,6 +82,12 @@ export class AutoRotator extends Script {
   private cameraControls: any = null;
 
   /**
+   * Reference to the WalkthroughCamera script (used when CameraControls is absent).
+   * @private
+   */
+  private walkthroughCamera: any = null;
+
+  /**
    * Bound event handlers for cleanup.
    * @private
    */
@@ -112,7 +118,8 @@ export class AutoRotator extends Script {
 
     this.cameraEntity = this.entity.findByName('camera');
     if (this.cameraEntity) {
-      this.cameraControls = this.cameraEntity.script?.cameraControls;
+      this.cameraControls = this.cameraEntity.script?.cameraControls ?? null;
+      this.walkthroughCamera = this.cameraEntity.script?.walkthroughCamera ?? null;
     }
   }
 
@@ -121,13 +128,15 @@ export class AutoRotator extends Script {
    * Runs after CameraControls updates.
    */
   postUpdate(dt: number) {
-    if (!this.cameraControls || !this.cameraControls._pose) {
+    const hasControls = this.cameraControls && this.cameraControls._pose;
+    const hasWalkthrough = !!this.walkthroughCamera;
+
+    if (!hasControls && !hasWalkthrough) {
       return;
     }
 
-    const pose = this.cameraControls._pose;
-    const currentPitch = pose.angles.x;
-    const currentYaw = pose.angles.y;
+    const currentPitch = hasControls ? this.cameraControls._pose.angles.x : this.walkthroughCamera.currentPitch;
+    const currentYaw = hasControls ? this.cameraControls._pose.angles.y : this.walkthroughCamera.currentYaw;
 
     // Initialize angles on first frame
     if (this.pitch === null || this.yaw === null) {
@@ -139,9 +148,8 @@ export class AutoRotator extends Script {
     if (this.hasStartedRotating && !this.isCurrentlyRotating && this.pitch !== null && this.yaw !== null) {
       const pitchDiff = Math.abs(this.pitch - currentPitch);
       const yawDiff = Math.abs(this.yaw - currentYaw);
-      const angleThreshold = 0.1;
 
-      if (pitchDiff > angleThreshold || yawDiff > angleThreshold) {
+      if (pitchDiff > 0.1 || yawDiff > 0.1) {
         this.pitch = currentPitch;
         this.yaw = currentYaw;
         this.timer = 0;
@@ -164,29 +172,27 @@ export class AutoRotator extends Script {
       const fadeIn = this.smoothStep(time / this.startFadeInTime);
       const yawDelta = dt * fadeIn * this.speed;
 
-      // Calculate orbit position around focus point
-      const focusPoint = pose.getFocus(new Vec3());
-      const offset = new Vec3().sub2(pose.position.clone(), focusPoint);
-
-      const rotationQuat = new Quat().setFromAxisAngle(Vec3.UP, yawDelta);
-      const rotatedOffset = new Vec3();
-      rotationQuat.transformVector(offset, rotatedOffset);
-
-      const newPos = new Vec3().add2(focusPoint, rotatedOffset);
-
-      // Update pose and controller state
-      pose.look(newPos, focusPoint);
-
-      if (this.cameraControls._controller?.attach) {
-        this.cameraControls._controller.attach(pose, false);
+      if (hasControls) {
+        const pose = this.cameraControls._pose;
+        const focusPoint = pose.getFocus(new Vec3());
+        const offset = new Vec3().sub2(pose.position.clone(), focusPoint);
+        const rotationQuat = new Quat().setFromAxisAngle(Vec3.UP, yawDelta);
+        const rotatedOffset = new Vec3();
+        rotationQuat.transformVector(offset, rotatedOffset);
+        const newPos = new Vec3().add2(focusPoint, rotatedOffset);
+        pose.look(newPos, focusPoint);
+        if (this.cameraControls._controller?.attach) {
+          this.cameraControls._controller.attach(pose, false);
+        }
+        this.cameraEntity.setPosition(pose.position);
+        this.cameraEntity.setEulerAngles(pose.angles);
+        this.pitch = pose.angles.x;
+        this.yaw = pose.angles.y;
+      } else {
+        this.walkthroughCamera.orbitStep(yawDelta);
+        this.pitch = this.walkthroughCamera.currentPitch;
+        this.yaw = this.walkthroughCamera.currentYaw;
       }
-
-      this.cameraEntity.setPosition(pose.position);
-      this.cameraEntity.setEulerAngles(pose.angles);
-
-      // Store current angles to avoid detecting our own rotation as user input
-      this.pitch = pose.angles.x;
-      this.yaw = pose.angles.y;
     }
   }
 

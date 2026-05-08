@@ -1,4 +1,5 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import MuxPlayer from '@mux/mux-player-react';
@@ -24,7 +25,6 @@ import {
 } from 'src/queries/generated/organizationMedia';
 import { useSetOrganizationSplatNeedsAttentionMutation } from 'src/queries/generated/organizationSplats';
 import { OrganizationVirtualWalkthrough } from 'src/queries/search/virtualWalkthroughs';
-import VirtualWalkthroughModal from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughModal';
 
 type VirtualWalkthroughsTableProps = {
   mediaFiles: OrganizationVirtualWalkthrough[];
@@ -38,6 +38,7 @@ export default function VirtualWalkthroughsTable({
   organizationId,
 }: VirtualWalkthroughsTableProps): JSX.Element {
   const theme = useTheme();
+  const [, setSearchParams] = useSearchParams();
   const [deleteMediaFile] = useDeleteOrganizationMediaFileMutation();
   const [setOrgNeedsAttention] = useSetOrganizationSplatNeedsAttentionMutation();
   const [setObsNeedsAttention] = useSetObservationSplatNeedsAttentionMutation();
@@ -45,9 +46,6 @@ export default function VirtualWalkthroughsTable({
     useLazyGetOrganizationMediaFileStreamQuery();
   const [getObsMediaStream, { data: obsStreamData, isFetching: obsFetching }] = useLazyGetObservationMediaStreamQuery();
   const [selectedVideoFile, setSelectedVideoFile] = useState<OrganizationVirtualWalkthrough | undefined>(undefined);
-  const [walkthroughModalFile, setWalkthroughModalFile] = useState<OrganizationVirtualWalkthrough | undefined>(
-    undefined
-  );
   const {
     columnFilters,
     setColumnFilters,
@@ -104,6 +102,17 @@ export default function VirtualWalkthroughsTable({
     setSelectedVideoFile(undefined);
   }, []);
 
+  const handleOpenWalkthrough = useCallback(
+    (fileId: number) => {
+      setSearchParams((prev) => {
+        const p = new URLSearchParams(prev);
+        p.set('virtualWalkthrough', fileId.toString());
+        return p;
+      });
+    },
+    [setSearchParams]
+  );
+
   const ThumbnailCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
       const file = cell.row.original;
@@ -125,7 +134,7 @@ export default function VirtualWalkthroughsTable({
 
       return (
         <Box
-          onClick={isReady ? () => setWalkthroughModalFile(file) : undefined}
+          onClick={isReady ? () => handleOpenWalkthrough(fileId) : undefined}
           sx={{
             borderRadius: '4px',
             cursor: isReady ? 'pointer' : 'default',
@@ -160,7 +169,7 @@ export default function VirtualWalkthroughsTable({
         </Box>
       );
     },
-    [organizationId, strings]
+    [handleOpenWalkthrough, organizationId, strings]
   );
 
   const StatusCell = useCallback(
@@ -300,14 +309,6 @@ export default function VirtualWalkthroughsTable({
 
   return (
     <>
-      {walkthroughModalFile && (
-        <VirtualWalkthroughModal
-          observationId={walkthroughModalFile.observationId}
-          organizationId={organizationId}
-          fileId={walkthroughModalFile.fileId}
-          onClose={() => setWalkthroughModalFile(undefined)}
-        />
-      )}
       <EditableTable
         columns={columns}
         data={mediaFiles}

@@ -176,6 +176,36 @@ export class WalkthroughCamera extends Script {
     this.entity.setEulerAngles(this._pitch, this._yaw, 0);
   }
 
+  get currentYaw(): number {
+    return this._targetYaw;
+  }
+
+  get currentPitch(): number {
+    return this._targetPitch;
+  }
+
+  /**
+   * Orbit the camera by `yawDelta` degrees around `boundsCenter`.
+   * Called by AutoRotator
+   */
+  orbitStep(yawDelta: number) {
+    const pos = this.entity.getPosition();
+    const dx = pos.x - this.boundsCenter.x;
+    const dz = pos.z - this.boundsCenter.z;
+    const radius = Math.sqrt(dx * dx + dz * dz) || this.boundsXZRadius * 0.5;
+    const currentAngle = Math.atan2(dz, dx);
+    const newAngle = currentAngle + (yawDelta * Math.PI) / 180;
+    const nx = this.boundsCenter.x + radius * Math.cos(newAngle);
+    const nz = this.boundsCenter.z + radius * Math.sin(newAngle);
+    this.entity.setPosition(nx, pos.y, nz);
+
+    const faceDx = this.boundsCenter.x - nx;
+    const faceDz = this.boundsCenter.z - nz;
+    this._yaw = Math.atan2(-faceDx, -faceDz) * (180 / Math.PI);
+    this._targetYaw = this._yaw;
+    this.entity.setEulerAngles(this._pitch, this._yaw, 0);
+  }
+
   /**
    * Returns the point directly in front of the camera.
    * Compatible with the useCameraPosition hook's focusPoint read.
