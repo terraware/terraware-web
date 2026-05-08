@@ -19,7 +19,10 @@ import {
   useLazyListSplatDetailsQuery,
   useSetObservationSplatAnnotationsMutation,
 } from 'src/queries/generated/observationSplats';
-import { useLazyGetOrganizationSplatInfoQuery } from 'src/queries/generated/organizationSplats';
+import {
+  useLazyGetOrganizationSplatInfoQuery,
+  useSetOrganizationSplatAnnotationsMutation,
+} from 'src/queries/generated/organizationSplats';
 
 const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
 const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
@@ -51,7 +54,8 @@ const VirtualWalkthroughViewer = ({
   const [localAnnotations, setLocalAnnotations] = useState<AnnotationProps[]>([]);
   const [getOrgSplatInfo, { data: orgData }] = useLazyGetOrganizationSplatInfoQuery();
   const [getObsSplatInfo, { data: obsData }] = useLazyListSplatDetailsQuery();
-  const [saveAnnotations] = useSetObservationSplatAnnotationsMutation();
+  const [saveObservationAnnotations] = useSetObservationSplatAnnotationsMutation();
+  const [saveOrganizationAnnotations] = useSetOrganizationSplatAnnotationsMutation();
 
   useEffect(() => {
     if (observationId !== undefined) {
@@ -139,36 +143,48 @@ const VirtualWalkthroughViewer = ({
   );
 
   const handleSave = useCallback(() => {
-    if (observationId === undefined) {
-      return;
-    }
+    const annotations = localAnnotations.map((annotation) => ({
+      ...annotation,
+      position: {
+        x: annotation.position[0],
+        y: annotation.position[1],
+        z: annotation.position[2],
+      },
+      cameraPosition: annotation.cameraPosition
+        ? {
+            x: annotation.cameraPosition[0],
+            y: annotation.cameraPosition[1],
+            z: annotation.cameraPosition[2],
+          }
+        : undefined,
+    }));
+
     const saveAndClose = async () => {
-      await saveAnnotations({
-        observationId,
-        fileId,
-        setSplatAnnotationsRequestPayload: {
-          annotations: localAnnotations.map((annotation) => ({
-            ...annotation,
-            position: {
-              x: annotation.position[0],
-              y: annotation.position[1],
-              z: annotation.position[2],
-            },
-            cameraPosition: annotation.cameraPosition
-              ? {
-                  x: annotation.cameraPosition[0],
-                  y: annotation.cameraPosition[1],
-                  z: annotation.cameraPosition[2],
-                }
-              : undefined,
-          })),
-        },
-      });
+      if (observationId !== undefined) {
+        await saveObservationAnnotations({
+          observationId,
+          fileId,
+          setSplatAnnotationsRequestPayload: { annotations },
+        });
+      } else if (organizationId !== undefined) {
+        await saveOrganizationAnnotations({
+          organizationId,
+          fileId,
+          setSplatAnnotationsRequestPayload: { annotations },
+        });
+      }
       setIsEdit(false);
       setSelectedAnnotationIndex(-1);
     };
     void saveAndClose();
-  }, [observationId, fileId, saveAnnotations, localAnnotations]);
+  }, [
+    observationId,
+    organizationId,
+    fileId,
+    saveObservationAnnotations,
+    saveOrganizationAnnotations,
+    localAnnotations,
+  ]);
 
   const handleCancel = useCallback(() => {
     setLocalAnnotations(apiAnnotations);

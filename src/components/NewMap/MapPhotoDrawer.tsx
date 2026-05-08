@@ -1,5 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 
 import { Box } from '@mui/material';
 
@@ -33,11 +33,10 @@ const MapPhotoDrawer = ({
   splat,
 }: MapPhotoDrawerProps): JSX.Element | undefined => {
   const { activeLocale, strings } = useLocalization();
-  const navigate = useNavigate();
 
   const { format } = useNumberFormatter();
   const { data } = useGetObservationResultsQuery({ observationId });
-  const [virtualPlotOpen, setVirtualPlotOpen] = useBoolean(false);
+  const [virtualWalkthroughOpen, setVirtualWalkthroughOpen] = useBoolean(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
 
@@ -70,15 +69,6 @@ const MapPhotoDrawer = ({
 
     return [...monitoringPlots, ...adHocPlots].find((plot) => plot.monitoringPlotId === monitoringPlotId);
   }, [monitoringPlotId, resultAdHocPlot, resultStrata]);
-
-  const stratumName = useMemo(() => {
-    const stratum = resultStrata?.find((_stratum) =>
-      _stratum.substrata.some((substratum) =>
-        substratum.monitoringPlots.some((plot) => plot.monitoringPlotId === monitoringPlotId)
-      )
-    );
-    return stratum?.name ?? '';
-  }, [monitoringPlotId, resultStrata]);
 
   const monitoringPlotClaimedByName = monitoringPlot?.claimedByName;
 
@@ -176,55 +166,44 @@ const MapPhotoDrawer = ({
     strings,
   ]);
 
-  const virtualPlotParamValue = searchParams.get('virtualPlot');
+  const virtualWalkthroughParamValue = searchParams.get('virtualWalkthrough');
 
   useEffect(() => {
     const shouldBeOpen =
-      virtualPlotParamValue &&
+      virtualWalkthroughParamValue &&
       isVirtualPlotsEnabled &&
       Boolean(splat && result && monitoringPlot) &&
-      Number(virtualPlotParamValue) === splat?.fileId;
+      Number(virtualWalkthroughParamValue) === splat?.fileId;
 
-    if (shouldBeOpen && !virtualPlotOpen) {
-      setVirtualPlotOpen(true);
-    } else if (!shouldBeOpen && virtualPlotOpen) {
-      setVirtualPlotOpen(false);
+    if (shouldBeOpen && !virtualWalkthroughOpen) {
+      setVirtualWalkthroughOpen(true);
+    } else if (!shouldBeOpen && virtualWalkthroughOpen) {
+      setVirtualWalkthroughOpen(false);
     }
   }, [
-    virtualPlotParamValue,
+    virtualWalkthroughParamValue,
     monitoringPlotId,
     splat,
     result,
     monitoringPlot,
-    virtualPlotOpen,
-    setVirtualPlotOpen,
+    virtualWalkthroughOpen,
+    setVirtualWalkthroughOpen,
     isVirtualPlotsEnabled,
   ]);
 
-  const handleOpenVirtualPlot = useCallback(() => {
+  const handleOpenVirtualWalkthrough = useCallback(() => {
     if (splat) {
       const params = new URLSearchParams(searchParams);
-      params.set('virtualPlot', splat.fileId.toString());
+      params.set('virtualWalkthrough', splat.fileId.toString());
       setSearchParams(params, { replace: true });
     }
   }, [splat, searchParams, setSearchParams]);
 
-  const handleCloseVirtualPlot = useCallback(() => {
+  const handleCloseVirtualWalkthrough = useCallback(() => {
     const params = new URLSearchParams(searchParams);
-    params.delete('virtualPlot');
+    params.delete('virtualWalkthrough');
     setSearchParams(params, { replace: true });
   }, [searchParams, setSearchParams]);
-
-  const handleToggleFullScreen = useCallback(() => {
-    if (!splat) {
-      return;
-    }
-    const path = APP_PATHS.OBSERVATION_VIRTUAL_MONITORING_PLOT.replace(':observationId', observationId.toString())
-      .replace(':stratumName', stratumName)
-      .replace(':monitoringPlotId', monitoringPlotId.toString())
-      .replace(':fileId', splat.fileId.toString());
-    void navigate(path);
-  }, [navigate, observationId, stratumName, monitoringPlotId, splat]);
 
   if (photo && photoUrl) {
     return (
@@ -236,13 +215,12 @@ const MapPhotoDrawer = ({
   } else if (splat) {
     return (
       <>
-        {virtualPlotOpen && result && monitoringPlot && (
+        {virtualWalkthroughOpen && result && monitoringPlot && (
           <VirtualWalkthroughModal
             observationId={observationId}
             fileId={splat.fileId}
             editable={true}
-            onToggleFullScreen={handleToggleFullScreen}
-            onClose={handleCloseVirtualPlot}
+            onClose={handleCloseVirtualWalkthrough}
             belowComponent={<VirtualPlotData monitoringPlot={monitoringPlot} plantingSiteId={result.plantingSiteId} />}
           />
         )}
@@ -252,7 +230,7 @@ const MapPhotoDrawer = ({
           <Button
             id='visit-virtual-plot'
             label={strings.VISIT_VIRTUAL_PLOT}
-            onClick={handleOpenVirtualPlot}
+            onClick={handleOpenVirtualWalkthrough}
             priority='primary'
             size='medium'
           />
