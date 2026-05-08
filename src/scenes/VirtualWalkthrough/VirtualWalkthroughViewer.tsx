@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
+import { useApp } from '@playcanvas/react/hooks';
 import { Color, Vec3 } from 'playcanvas';
 import { XrControllers } from 'playcanvas/scripts/esm/xr-controllers.mjs';
 
@@ -46,12 +47,15 @@ const VirtualWalkthroughViewer = ({
 }: VirtualWalkthroughViewerProps) => {
   const { setCamera } = useCameraPosition();
   const { isHighPerformance } = useDevicePerformance();
+  const app = useApp();
 
   const [showAnnotations, setShowAnnotations] = useState(true);
   const [autoRotate, setAutoRotate] = useState(true);
   const [isEdit, setIsEdit] = useState(false);
+  const [isFreeFly, setIsFreeFly] = useState(false);
   const [selectedAnnotationIndex, setSelectedAnnotationIndex] = useState(-1);
   const [localAnnotations, setLocalAnnotations] = useState<AnnotationProps[]>([]);
+  const [isTextFieldFocused, setIsTextFieldFocused] = useState(false);
   const [getOrgSplatInfo, { data: orgData }] = useLazyGetOrganizationSplatInfoQuery();
   const [getObsSplatInfo, { data: obsData }] = useLazyListSplatDetailsQuery();
   const [saveObservationAnnotations] = useSetObservationSplatAnnotationsMutation();
@@ -117,6 +121,19 @@ const VirtualWalkthroughViewer = ({
       ) ?? [],
     [data?.annotations]
   );
+
+  const handleToggleFreeFly = useCallback(() => {
+    const newFreeFly = !isFreeFly;
+    // @ts-expect-error - scripts are added dynamically to the camera entity
+    const walkthroughCam = app.root.findByName('camera')?.script?.walkthroughCamera;
+    if (walkthroughCam) {
+      walkthroughCam.freeFly = newFreeFly;
+    }
+    if (!newFreeFly) {
+      setCamera(origin, cameraPosition);
+    }
+    setIsFreeFly(newFreeFly);
+  }, [isFreeFly, app, setCamera, origin, cameraPosition]);
 
   useEffect(() => {
     setLocalAnnotations(apiAnnotations);
@@ -245,7 +262,12 @@ const VirtualWalkthroughViewer = ({
       <Entity name='camera-root'>
         <Entity name='camera'>
           <Camera clearColor='#EAF8FF' fov={60} />
-          <Script script={WalkthroughCamera} boundsCenter={boundsCenter} boundsXZRadius={boundsXZRadius} />
+          <Script
+            script={WalkthroughCamera}
+            boundsCenter={boundsCenter}
+            boundsXZRadius={boundsXZRadius}
+            enableFly={!isTextFieldFocused}
+          />
         </Entity>
         <Script script={XrControllers} enabled={!isEdit} />
         <Script script={TfXrNavigation} enabled={!isEdit} enableTeleport={false} />
@@ -300,11 +322,13 @@ const VirtualWalkthroughViewer = ({
         hasSelectedAnnotation={selectedAnnotationIndex >= 0}
         selectedAnnotation={selectedAnnotationIndex >= 0 ? localAnnotations[selectedAnnotationIndex] : null}
         onAnnotationUpdate={handleAnnotationUpdate}
-        onTextFieldFocus={() => undefined}
+        onTextFieldFocus={setIsTextFieldFocused}
         canSave={canSave}
         editable={editable}
         isFullScreen={isFullScreen}
         onToggleFullScreen={onToggleFullScreen}
+        isFreeFly={isFreeFly}
+        onToggleFreeFly={handleToggleFreeFly}
       />
     </>
   );

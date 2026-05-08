@@ -53,6 +53,12 @@ export class WalkthroughCamera extends Script {
   /** @attribute */
   boundsXZRadius = 10;
 
+  /** @attribute */
+  freeFly = false;
+
+  /** @attribute */
+  enableFly = true;
+
   // Current (damped) angles applied to the entity each frame.
   private _pitch = 0;
   private _yaw = 0;
@@ -226,42 +232,55 @@ export class WalkthroughCamera extends Script {
 
     this.entity.setEulerAngles(this._pitch, this._yaw, 0);
 
-    const fast = this._keys.ShiftLeft || this._keys.ShiftRight;
-    const slow = this._keys.ControlLeft || this._keys.ControlRight;
-    const speed = (fast ? this.moveFastSpeed : slow ? this.moveSlowSpeed : this.moveSpeed) * dt;
-
-    const fwd = (this._keys.KeyW || this._keys.ArrowUp ? 1 : 0) - (this._keys.KeyS || this._keys.ArrowDown ? 1 : 0);
-    const strafe =
-      (this._keys.KeyD || this._keys.ArrowRight ? 1 : 0) - (this._keys.KeyA || this._keys.ArrowLeft ? 1 : 0);
-
-    const scrollFwd = -this._scrollDelta * this.scrollSpeed;
-    this._scrollDelta = 0;
-
     const pos = this.entity.getPosition();
     let nx = pos.x;
+    let ny = pos.y;
     let nz = pos.z;
 
-    if (fwd !== 0 || strafe !== 0 || scrollFwd !== 0) {
-      // Use yaw-only rotation so movement is always horizontal.
-      _quat.setFromEulerAngles(0, this._yaw, 0);
-      _quat.transformVector(Vec3.FORWARD, _flatForward);
-      _quat.transformVector(Vec3.RIGHT, _flatRight);
+    if (this.enableFly) {
+      const fast = this._keys.ShiftLeft || this._keys.ShiftRight;
+      const slow = this._keys.ControlLeft || this._keys.ControlRight;
+      const speed = (fast ? this.moveFastSpeed : slow ? this.moveSlowSpeed : this.moveSpeed) * dt;
 
-      nx += _flatForward.x * (fwd * speed + scrollFwd) + _flatRight.x * strafe * speed;
-      nz += _flatForward.z * (fwd * speed + scrollFwd) + _flatRight.z * strafe * speed;
+      const fwd = (this._keys.KeyW || this._keys.ArrowUp ? 1 : 0) - (this._keys.KeyS || this._keys.ArrowDown ? 1 : 0);
+      const strafe =
+        (this._keys.KeyD || this._keys.ArrowRight ? 1 : 0) - (this._keys.KeyA || this._keys.ArrowLeft ? 1 : 0);
+
+      const scrollFwd = -this._scrollDelta * this.scrollSpeed;
+
+      if (fwd !== 0 || strafe !== 0 || scrollFwd !== 0) {
+        // Use yaw-only rotation so movement is always horizontal.
+        _quat.setFromEulerAngles(0, this._yaw, 0);
+        _quat.transformVector(Vec3.FORWARD, _flatForward);
+        _quat.transformVector(Vec3.RIGHT, _flatRight);
+
+        nx += _flatForward.x * (fwd * speed + scrollFwd) + _flatRight.x * strafe * speed;
+        nz += _flatForward.z * (fwd * speed + scrollFwd) + _flatRight.z * strafe * speed;
+      }
+
+      if (this.freeFly) {
+        const up = (this._keys.KeyE ? 1 : 0) - (this._keys.KeyQ ? 1 : 0);
+        if (up !== 0) {
+          ny += up * speed;
+        }
+      }
     }
 
-    // Circular XZ clamp: project back onto the circle edge if outside.
-    const cdx = nx - this.boundsCenter.x;
-    const cdz = nz - this.boundsCenter.z;
-    const dist = Math.sqrt(cdx * cdx + cdz * cdz);
-    if (dist > this.boundsXZRadius) {
-      const scale = this.boundsXZRadius / dist;
-      nx = this.boundsCenter.x + cdx * scale;
-      nz = this.boundsCenter.z + cdz * scale;
+    this._scrollDelta = 0;
+
+    if (!this.freeFly) {
+      // Circular XZ clamp: project back onto the circle edge if outside.
+      const cdx = nx - this.boundsCenter.x;
+      const cdz = nz - this.boundsCenter.z;
+      const dist = Math.sqrt(cdx * cdx + cdz * cdz);
+      if (dist > this.boundsXZRadius) {
+        const scale = this.boundsXZRadius / dist;
+        nx = this.boundsCenter.x + cdx * scale;
+        nz = this.boundsCenter.z + cdz * scale;
+      }
     }
 
-    this.entity.setPosition(nx, this.boundsCenter.y, nz);
+    this.entity.setPosition(nx, this.freeFly ? ny : this.boundsCenter.y, nz);
   }
 
   destroy() {

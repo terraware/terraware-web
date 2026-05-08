@@ -59,6 +59,7 @@ type PermissionAcceleratorProject =
   | 'PUBLISH_PROJECT_DETAILS';
 type PermissionProjectModules = 'UPDATE_PROJECT_MODULES';
 type PermissionSurvivalRate = 'EDIT_SURVIVAL_RATE_SETTINGS';
+type PermissionVirtualWalkthrough = 'FREE_FLY_VIRTUAL_WALKTHROUGH';
 
 export type GlobalRolePermission =
   | PermissionAcceleratorReports
@@ -73,7 +74,8 @@ export type GlobalRolePermission =
   | PermissionOrganization
   | PermissionAcceleratorProject
   | PermissionProjectModules
-  | PermissionSurvivalRate;
+  | PermissionSurvivalRate
+  | PermissionVirtualWalkthrough;
 
 type PermissionCheckFn<T = any> = (user: User, permission: GlobalRolePermission, metadata?: T) => boolean;
 
@@ -323,6 +325,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   UPDATE_SUBMISSION_STATUS: TFExpertPlus,
   VIEW_CONSOLE: ReadOnlyPlus,
   VIEW_ACCELERATOR_PROJECT_SCORING_VOTING: TFExpertPlus,
+  FREE_FLY_VIRTUAL_WALKTHROUGH: SuperAdminPlus,
 };
 
 /**
