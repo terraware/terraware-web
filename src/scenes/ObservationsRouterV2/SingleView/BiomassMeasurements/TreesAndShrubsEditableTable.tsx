@@ -119,14 +119,11 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const [noteModalRow, setNoteModalRow] = useState<TreeRow | undefined>(undefined);
 
   const DescriptionCell = useCallback(
-    ({ row }: { row: { original: TreeRow } }) =>
-      row.original.description ? (
-        <IconButton size='small' onClick={() => setNoteModalRow(row.original)}>
-          <Icon name='note' style={{ fill: theme.palette.TwClrIcn }} size='medium' />
-        </IconButton>
-      ) : (
-        <></>
-      ),
+    ({ row }: { row: { original: TreeRow } }) => (
+      <IconButton size='small' onClick={() => setNoteModalRow(row.original)}>
+        <Icon name='note' style={{ fill: theme.palette.TwClrIcn }} size='medium' />
+      </IconButton>
+    ),
     [theme.palette.TwClrIcn]
   );
 
