@@ -1,2 +1,3 @@
+78459886 SW-8345 Reject video uploads if length is greater than 6 minutes (#5675)
 8d859abc Update dependency simple-git to v3.36.0 [SECURITY] (#5671)
 9f224813 Update dependency axios to v1.15.2 [SECURITY] (#5670)
