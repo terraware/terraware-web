@@ -186,7 +186,7 @@ export class WalkthroughCamera extends Script {
 
   /**
    * Orbit the camera by `yawDelta` degrees around `boundsCenter`.
-   * Called by AutoRotator when WalkthroughCamera is active instead of CameraControls.
+   * Called by AutoRotator
    */
   orbitStep(yawDelta: number) {
     const pos = this.entity.getPosition();

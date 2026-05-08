@@ -101,7 +101,7 @@ const VirtualWalkthroughViewer = ({
 
   const apiAnnotations = useMemo<AnnotationProps[]>(
     () =>
-      obsData?.annotations?.map(
+      data?.annotations?.map(
         (annotation) =>
           ({
             ...annotation,
@@ -115,7 +115,7 @@ const VirtualWalkthroughViewer = ({
               : undefined,
           }) as AnnotationProps
       ) ?? [],
-    [obsData?.annotations]
+    [data?.annotations]
   );
 
   useEffect(() => {
