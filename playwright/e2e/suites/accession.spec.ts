@@ -192,7 +192,7 @@ test.describe('AccessionTests', () => {
       await page.getByRole('button', { name: 'Withdraw' }).click();
 
       await page.getByPlaceholder('Select...').first().click();
-      await page.getByText('Planting').click();
+      await page.getByText('Planting', { exact: true }).click();
       await page.getByLabel('Seed Count', { exact: true }).check();
       await page.locator('#withdrawnQuantity').getByRole('spinbutton').fill('100');
       await page.locator('#saveWithdraw').click();
