@@ -50,7 +50,7 @@ import SelectSeedBankModal from '../../../scenes/SeedBanksRouter/SelectSeedBankM
 import ImportAccessionsModal from './ImportAccessionsModal';
 
 const TABLE_STATE_STORAGE_KEY = 'accessions-database-table';
-const PREF_DISMISSED_CHECKIN_IDS = 'dismissedCheckinAccessionIds';
+const PREF_DISMISSED_CHECKIN_IDS = 'dismissedCheckInAccessionIds';
 
 const DEFAULT_VISIBLE_COLUMNS = [
   'accessionNumber',
@@ -272,22 +272,22 @@ export default function Database(props: DatabaseProps): JSX.Element {
     navigate(APP_PATHS.CHECKIN);
   };
 
-  const dismissedCheckinIds = useMemo(
+  const dismissedCheckInIds = useMemo(
     () => (userPreferences[PREF_DISMISSED_CHECKIN_IDS] as string[] | undefined) ?? [],
     [userPreferences]
   );
 
   const hasNewPendingAccessions = useMemo(
-    () => (pendingAccessions ?? []).some((a) => !dismissedCheckinIds.includes(a.id)),
-    [dismissedCheckinIds, pendingAccessions]
+    () => (pendingAccessions ?? []).some((a) => !dismissedCheckInIds.includes(a.id)),
+    [dismissedCheckInIds, pendingAccessions]
   );
 
   const dismissCheckInBanner = useCallback(() => {
     const knownIds = new Set((searchResults ?? []).map((a) => a.id));
-    const prunedExisting = dismissedCheckinIds.filter((id) => knownIds.has(id));
+    const prunedExisting = dismissedCheckInIds.filter((id) => knownIds.has(id));
     const newIds = Array.from(new Set([...prunedExisting, ...(pendingAccessions ?? []).map((a) => a.id)]));
     void updateUserPreferences({ ...userPreferences, [PREF_DISMISSED_CHECKIN_IDS]: newIds });
-  }, [dismissedCheckinIds, pendingAccessions, searchResults, updateUserPreferences, userPreferences]);
+  }, [dismissedCheckInIds, pendingAccessions, searchResults, updateUserPreferences, userPreferences]);
 
   const onSeedBankForImportSelected = (selectedFacilityOnModal: Facility | undefined) => {
     setSelectSeedBankForImportModalOpen(false);
