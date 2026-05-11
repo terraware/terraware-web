@@ -179,7 +179,7 @@ test.describe('AccessionTests', () => {
       await expect(page.locator('#row1-batchNumber')).toContainText('2-1-002');
     });
 
-    test('Withdraw to Outplant', async ({ page }, testInfo) => {
+    test('Withdraw to Plant', async ({ page }, testInfo) => {
       await page.getByRole('button', { name: 'Seeds' }).click();
       await page.getByRole('button', { name: 'Accessions' }).click();
 
@@ -192,7 +192,7 @@ test.describe('AccessionTests', () => {
       await page.getByRole('button', { name: 'Withdraw' }).click();
 
       await page.getByPlaceholder('Select...').first().click();
-      await page.getByText('Out-planting').click();
+      await page.getByText('Planting', { exact: true }).click();
       await page.getByLabel('Seed Count', { exact: true }).check();
       await page.locator('#withdrawnQuantity').getByRole('spinbutton').fill('100');
       await page.locator('#saveWithdraw').click();
