@@ -90,14 +90,23 @@ const VirtualWalkthroughViewer = ({
     [data]
   );
 
-  const boundsXZRadius = useMemo(() => {
+  const sceneBoundsRadius = useMemo(() => {
+    if (data?.sceneBounds?.m !== undefined) {
+      return data.sceneBounds.m;
+    }
     const dx = cameraPosition[0] - origin[0];
     const dy = cameraPosition[1] - origin[1];
     const dz = cameraPosition[2] - origin[2];
     return Math.sqrt(dx * dx + dy * dy + dz * dz) * 0.5;
-  }, [cameraPosition, origin]);
+  }, [cameraPosition, data?.sceneBounds, origin]);
 
-  const boundsCenter = useMemo(() => new Vec3(origin[0], cameraPosition[1], origin[2]), [origin, cameraPosition]);
+  const sceneBoundsCenter = useMemo(
+    () =>
+      data?.sceneBounds
+        ? new Vec3(data.sceneBounds.x, data.sceneBounds.y, data.sceneBounds.z)
+        : new Vec3(origin[0], cameraPosition[1], origin[2]),
+    [data?.sceneBounds, origin, cameraPosition]
+  );
 
   const groundPlane = useMemo<Vec3[]>(
     () => (data?.groundPlane?.length === 3 ? data.groundPlane.map((p) => new Vec3(p.x, p.y, p.z)) : []),
@@ -281,8 +290,8 @@ const VirtualWalkthroughViewer = ({
           <Camera clearColor='#EAF8FF' fov={60} />
           <Script
             script={WalkthroughCamera}
-            boundsCenter={boundsCenter}
-            boundsXZRadius={boundsXZRadius}
+            boundsCenter={sceneBoundsCenter}
+            boundsRadius={sceneBoundsRadius}
             enableFly={!isTextFieldFocused}
           />
         </Entity>

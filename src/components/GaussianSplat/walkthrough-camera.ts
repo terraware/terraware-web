@@ -59,7 +59,7 @@ export class WalkthroughCamera extends Script {
   boundsCenter = new Vec3(0, 0, 0);
 
   /** @attribute */
-  boundsXZRadius = 10;
+  boundsRadius = 10;
 
   /** @attribute */
   freeFly = false;
@@ -258,12 +258,14 @@ export class WalkthroughCamera extends Script {
     const pos = this.entity.getPosition();
     const dx = pos.x - this.boundsCenter.x;
     const dz = pos.z - this.boundsCenter.z;
-    const radius = Math.sqrt(dx * dx + dz * dz) || this.boundsXZRadius * 0.5;
+    const radius = Math.sqrt(dx * dx + dz * dz) || this.boundsRadius * 0.5;
     const currentAngle = Math.atan2(dz, dx);
     const newAngle = currentAngle + (yawDelta * Math.PI) / 180;
     const nx = this.boundsCenter.x + radius * Math.cos(newAngle);
     const nz = this.boundsCenter.z + radius * Math.sin(newAngle);
-    const ny = this._hasGroundPlane ? yOnPlane(nx, nz, this._planeNormal, this._planePoint, pos.y) : pos.y;
+    const ny = this._hasGroundPlane
+      ? yOnPlane(nx, nz, this._planeNormal, this._planePoint, this.boundsCenter.y)
+      : this.boundsCenter.y;
     this.entity.setPosition(nx, ny, nz);
 
     const faceDx = this.boundsCenter.x - nx;
@@ -336,8 +338,8 @@ export class WalkthroughCamera extends Script {
       const cdx = nx - this.boundsCenter.x;
       const cdz = nz - this.boundsCenter.z;
       const dist = Math.sqrt(cdx * cdx + cdz * cdz);
-      if (dist > this.boundsXZRadius) {
-        const scale = this.boundsXZRadius / dist;
+      if (dist > this.boundsRadius) {
+        const scale = this.boundsRadius / dist;
         nx = this.boundsCenter.x + cdx * scale;
         nz = this.boundsCenter.z + cdz * scale;
       }
