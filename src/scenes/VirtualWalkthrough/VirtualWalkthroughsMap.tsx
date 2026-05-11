@@ -320,7 +320,7 @@ export default function VirtualWalkthroughsMap({
               component='img'
               src={thumbnailSrc}
               alt={strings.THUMBNAIL}
-              sx={{ display: 'block', maxHeight: '160px', objectFit: 'cover', width: '100%' }}
+              sx={{ aspectRatio: '3 / 2', display: 'block', objectFit: 'cover', width: '100%' }}
             />
             {!isPreparing && (
               <Box
@@ -328,6 +328,7 @@ export default function VirtualWalkthroughsMap({
                 src='/assets/360icon.svg'
                 alt=''
                 sx={{
+                  borderRadius: '8px',
                   height: '49px',
                   left: '50%',
                   position: 'absolute',
