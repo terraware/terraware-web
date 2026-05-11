@@ -205,7 +205,7 @@
     "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-jest-react": "^0.1.0",
     "eslint-plugin-jsdoc": "^62.0.0",
-    "eslint-plugin-n": "^17.15.0",
+    "eslint-plugin-n": "^18.0.0",
     "eslint-plugin-prefer-arrow": "^1.2.3",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
