@@ -24,6 +24,18 @@ echo "Preview deployed to: ${preview_url}"
 
 echo "--- :vercel: Alias deployment to branch URL"
 branch_slug=$(echo "$BUILDKITE_BRANCH" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9-]/-/g')
+
+# DNS labels are limited to 63 characters. The "terraware-web-" prefix is
+# 14 characters, leaving 49 for the slug. For longer branch names, truncate
+# and append a hash of the original branch so the alias stays unique.
+max_slug_length=49
+if [ ${#branch_slug} -gt $max_slug_length ]; then
+  hash=$(echo -n "$BUILDKITE_BRANCH" | shasum | cut -c1-8)
+  truncated="${branch_slug:0:$((max_slug_length - ${#hash} - 1))}"
+  truncated="${truncated%-}"
+  branch_slug="${truncated}-${hash}"
+fi
+
 branch_url="terraware-web-${branch_slug}.vercel.app"
 npx vercel alias set "$preview_url" "$branch_url" --token="$VERCEL_TOKEN" --scope="$VERCEL_ORG_ID"
 
