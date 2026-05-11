@@ -1,3 +1,4 @@
+7bda28b4 Update dependency eslint-plugin-n to v18 (#5681)
 76c63764 Bump @babel/plugin-transform-modules-systemjs from 7.28.5 to 7.29.4 (#5680)
 79b09c91 Update dependency react-test-renderer to v19.2.6 (#5685)
 ff37f10c Bump fast-uri from 3.1.0 to 3.1.2 (#5679)
