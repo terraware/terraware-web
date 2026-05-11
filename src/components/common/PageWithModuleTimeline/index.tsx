@@ -9,7 +9,7 @@ import ModuleTimeline, { ModuleTimelineProps } from './ModuleTimeline';
 
 const PageWithModuleTimeline = (props: PageProps & ModuleTimelineProps) => {
   const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
+  const { isDesktop } = useDeviceInfo();
   const { contentStyle, titleStyle, titleContainerStyle } = props;
 
   const desktopContainerStyles = {
@@ -29,7 +29,7 @@ const PageWithModuleTimeline = (props: PageProps & ModuleTimelineProps) => {
       >
         <Page
           {...props}
-          containerStyles={isMobile ? {} : desktopContainerStyles}
+          containerStyles={isDesktop ? desktopContainerStyles : {}}
           contentStyle={contentStyle}
           titleStyle={titleStyle}
           titleContainerStyle={titleContainerStyle}
