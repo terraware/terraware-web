@@ -10,7 +10,7 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Icon from 'src/components/common/icon/Icon';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import strings from 'src/strings';
-import { FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
+import { FieldNodePayload, FieldValuesPayload, SearchNodePayload } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -337,12 +337,14 @@ export default function Filters(props: Props): JSX.Element {
 
 function getSearchTermFilter(searchCols: DatabaseColumn[], searchTerm: string): Record<string, SearchNodePayload> {
   const orNode: SearchNodePayload = {
-    children: searchCols.map((col) => ({
-      operation: 'field',
-      field: col.key,
-      type: col.searchType ?? 'Fuzzy',
-      values: [searchTerm],
-    })),
+    children: searchCols.map(
+      (col): FieldNodePayload => ({
+        operation: 'field',
+        field: col.key,
+        type: col.searchType === 'ExactOrFuzzy' ? 'PartialOrFuzzy' : col.searchType ?? 'Fuzzy',
+        values: [searchTerm],
+      })
+    ),
     operation: 'or',
   };
 
