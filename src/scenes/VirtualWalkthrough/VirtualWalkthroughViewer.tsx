@@ -99,9 +99,26 @@ const VirtualWalkthroughViewer = ({
 
   const boundsCenter = useMemo(() => new Vec3(origin[0], cameraPosition[1], origin[2]), [origin, cameraPosition]);
 
+  const groundPlane = useMemo<Vec3[]>(
+    () => (data?.groundPlane?.length === 3 ? data.groundPlane.map((p) => new Vec3(p.x, p.y, p.z)) : []),
+    [data?.groundPlane]
+  );
+
   useEffect(() => {
     setCamera(origin, cameraPosition);
   }, [origin, cameraPosition, setCamera]);
+
+  useEffect(() => {
+    if (!groundPlane.length) {
+      return;
+    }
+    // @ts-expect-error - scripts are added dynamically to the camera entity
+    const walkthroughCam = app.root.findByName('camera')?.script?.walkthroughCamera;
+    if (walkthroughCam) {
+      // Should be changed to a react prop if shallowEquals in playcanavas/react is fixed (see https://github.com/playcanvas/react/pull/298)
+      walkthroughCam.groundPlane = groundPlane;
+    }
+  }, [groundPlane, app]);
 
   const apiAnnotations = useMemo<AnnotationProps[]>(
     () =>

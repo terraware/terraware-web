@@ -17,6 +17,14 @@ const _quat = new Quat();
 const _flatForward = new Vec3();
 const _flatRight = new Vec3();
 
+/** Compute Y on the plane defined by `normal` passing through `point` at world XZ coords (x, z). */
+const yOnPlane = (x: number, z: number, normal: Vec3, point: Vec3, fallback: number): number => {
+  if (Math.abs(normal.y) < 1e-6) {
+    return fallback;
+  }
+  return point.y - (normal.x * (x - point.x) + normal.z * (z - point.z)) / normal.y;
+};
+
 /** Frame-rate-independent damping lerp rate — matches PlayCanvas CameraControls. */
 const dampRate = (damping: number, dt: number) => 1 - Math.pow(damping, dt * 1000);
 
@@ -59,6 +67,19 @@ export class WalkthroughCamera extends Script {
   /** @attribute */
   enableFly = true;
 
+  /**
+   * Three world-space points defining the ground plane.
+   * When provided, the camera Y position is derived from this plane during non-freeFly movement.
+   *
+   * Not a React prop — must be set directly on the script instance via useEffect. The @playcanvas/react
+   * Script component is wrapped in memo() whose shallowEquals comparator returns early on the first prop
+   * with a .equals() method (Vec3), so any prop listed after boundsCenter is never compared and the
+   * component won't re-render when it changes. Set via:
+   *   app.root.findByName('camera')?.script?.walkthroughCamera.groundPlane = points
+   * Should be updated if shallowEquals is fixed (see https://github.com/playcanvas/react/pull/298)
+   */
+  groundPlane: Vec3[] = [];
+
   // Current (damped) angles applied to the entity each frame.
   private _pitch = 0;
   private _yaw = 0;
@@ -73,6 +94,44 @@ export class WalkthroughCamera extends Script {
   private _scrollDelta = 0;
   private _keys: Partial<Record<string, boolean>> = {};
   private _removeListeners: (() => void)[] = [];
+
+  // Cached plane derived from groundPlane attribute. Computed once when 3 points become available.
+  private _planeNormal = new Vec3(0, 1, 0);
+  private _planePoint = new Vec3(0, 0, 0);
+  private _hasGroundPlane = false;
+
+  private _syncGroundPlane() {
+    if (this._hasGroundPlane || this.groundPlane.length < 3) {
+      return;
+    }
+    const p0 = this.groundPlane[0];
+    const p1 = this.groundPlane[1];
+    const p2 = this.groundPlane[2];
+    const v1x = p1.x - p0.x;
+    const v1y = p1.y - p0.y;
+    const v1z = p1.z - p0.z;
+    const v2x = p2.x - p0.x;
+    const v2y = p2.y - p0.y;
+    const v2z = p2.z - p0.z;
+    let nx = v1y * v2z - v1z * v2y;
+    let ny = v1z * v2x - v1x * v2z;
+    let nz = v1x * v2y - v1y * v2x;
+    const len = Math.sqrt(nx * nx + ny * ny + nz * nz);
+    if (len < 1e-10) {
+      return;
+    }
+    nx /= len;
+    ny /= len;
+    nz /= len;
+    if (ny < 0) {
+      nx = -nx;
+      ny = -ny;
+      nz = -nz;
+    }
+    this._planeNormal.set(nx, ny, nz);
+    this._planePoint.set(p0.x, p0.y, p0.z);
+    this._hasGroundPlane = true;
+  }
 
   initialize() {
     // Start horizontal; reset() will set the correct pose once splat data loads.
@@ -195,6 +254,7 @@ export class WalkthroughCamera extends Script {
    * Called by AutoRotator
    */
   orbitStep(yawDelta: number) {
+    this._syncGroundPlane();
     const pos = this.entity.getPosition();
     const dx = pos.x - this.boundsCenter.x;
     const dz = pos.z - this.boundsCenter.z;
@@ -203,7 +263,8 @@ export class WalkthroughCamera extends Script {
     const newAngle = currentAngle + (yawDelta * Math.PI) / 180;
     const nx = this.boundsCenter.x + radius * Math.cos(newAngle);
     const nz = this.boundsCenter.z + radius * Math.sin(newAngle);
-    this.entity.setPosition(nx, pos.y, nz);
+    const ny = this._hasGroundPlane ? yOnPlane(nx, nz, this._planeNormal, this._planePoint, pos.y) : pos.y;
+    this.entity.setPosition(nx, ny, nz);
 
     const faceDx = this.boundsCenter.x - nx;
     const faceDz = this.boundsCenter.z - nz;
@@ -224,6 +285,8 @@ export class WalkthroughCamera extends Script {
   }
 
   update(dt: number) {
+    this._syncGroundPlane();
+
     // Lerp current angles toward targets using the same damping as CameraControls.
     const r = dampRate(this.rotateDamping, dt);
     this._pitch += (this._targetPitch - this._pitch) * r;
@@ -280,7 +343,10 @@ export class WalkthroughCamera extends Script {
       }
     }
 
-    this.entity.setPosition(nx, this.freeFly ? ny : this.boundsCenter.y, nz);
+    const groundY = this._hasGroundPlane
+      ? yOnPlane(nx, nz, this._planeNormal, this._planePoint, this.boundsCenter.y)
+      : this.boundsCenter.y;
+    this.entity.setPosition(nx, this.freeFly ? ny : groundY, nz);
   }
 
   destroy() {

@@ -6049,6 +6049,7 @@ export interface components {
             plants: components["schemas"]["RecordedPlantPayload"][];
         };
         CoordinatePayload: {
+            m?: number;
             x: number;
             y: number;
             z: number;
@@ -7582,7 +7583,11 @@ export interface components {
         GetObservationSplatInfoResponsePayload: {
             annotations: components["schemas"]["SplatAnnotationPayload"][];
             cameraPosition?: components["schemas"]["CoordinatePayload"];
+            groundColor?: string;
+            groundPlane?: components["schemas"]["CoordinatePayload"][];
             originPosition?: components["schemas"]["CoordinatePayload"];
+            sceneBounds?: components["schemas"]["CoordinatePayload"];
+            skyColor?: string;
             status: components["schemas"]["SuccessOrError"];
         };
         GetOneAssignedPlotResponsePayload: {
