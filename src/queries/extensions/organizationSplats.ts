@@ -6,8 +6,29 @@ api.enhanceEndpoints({
     generateOrganizationSplat: {
       invalidatesTags: [{ type: QueryTagTypes.Splats, id: 'LIST' }],
     },
+    deleteOrganizationSplat: {
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.Splats, id: payload.fileId },
+        { type: QueryTagTypes.Splats, id: 'LIST' },
+      ],
+    },
+    getOrganizationSplatFile: {
+      providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Splats, id: payload.fileId }],
+    },
+    setOrganizationSplatAnnotations: {
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.Splats, id: payload.fileId },
+        { type: QueryTagTypes.Splats, id: 'LIST' },
+      ],
+    },
+    getOrganizationSplatInfo: {
+      providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Splats, id: payload.fileId }],
+    },
     setOrganizationSplatNeedsAttention: {
-      invalidatesTags: [{ type: QueryTagTypes.Splats, id: 'LIST' }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.Splats, id: payload.fileId },
+        { type: QueryTagTypes.Splats, id: 'LIST' },
+      ],
     },
   },
 });
