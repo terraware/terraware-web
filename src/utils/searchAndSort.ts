@@ -263,7 +263,7 @@ export type SearchAndSortFn<T extends Record<string, unknown>> = (
 ) => T[];
 /**
  * In-memory search (filter) and sort on a result list using the Search API search and sortOrder interfaces
- * The search currently supports `Exact`, 'Fuzzy', and 'Range' type searches. 'ExactOrFuzzy' is not supported
+ * The search currently supports `Exact`, 'Fuzzy', and 'Range' type searches. 'PartialOrFuzzy' is not supported
  * Range searches work with dates and numbers, automatically detecting the field type
  * If the result type contains number fields, those must be supplied in the `sortOrderConfig` if you wish to sort on them
  * @param results         The list of results you want to search and sort

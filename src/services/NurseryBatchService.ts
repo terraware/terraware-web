@@ -283,7 +283,7 @@ const getAllBatches = async (
   }
 
   if (query) {
-    const { type, values } = parseSearchTerm(query, 'ExactOrFuzzy');
+    const { type, values } = parseSearchTerm(query, 'PartialOrFuzzy');
     const searchValueChildren: FieldNodePayload[] = [];
     searchValueChildren.push({
       operation: 'field',
