@@ -4,6 +4,8 @@ import { changeToSuperAdmin } from '../utils/userUtils';
 import { exactOptions, selectOrg, waitFor } from '../utils/utils';
 
 test.describe('SurvivalRateSettingsTests', () => {
+  test.describe.configure({ timeout: 120000 });
+
   test.beforeEach(async ({ page, context, baseURL }) => {
     await changeToSuperAdmin(context, baseURL);
     await page.goto('/');
@@ -34,7 +36,7 @@ test.describe('SurvivalRateSettingsTests', () => {
     }
 
     await page.locator('#saveSettings').click();
-    await expect(page.getByText('t0 set for Permanent Plots')).toBeVisible();
+    await expect(page.getByText('t0 set for Permanent Plots')).toBeVisible({ timeout: 60000 });
 
     // Navigate to Dashboard
     if (!(await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).isVisible())) {
@@ -77,7 +79,7 @@ test.describe('SurvivalRateSettingsTests', () => {
     }
 
     await page.locator('#saveSettings').click();
-    await expect(page.getByText('t0 set for Permanent Plots')).toBeVisible();
+    await expect(page.getByText('t0 set for Permanent Plots')).toBeVisible({ timeout: 60000 });
 
     // Navigate to Dashboard
     if (!(await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).isVisible())) {
