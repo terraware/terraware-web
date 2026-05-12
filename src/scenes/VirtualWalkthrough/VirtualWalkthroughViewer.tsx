@@ -294,7 +294,7 @@ const VirtualWalkthroughViewer = ({
       />
       {localAnnotations.map((annotation, index) => (
         <Annotation
-          key={`${index}-${annotation.title}-${annotation.label ?? ''}`}
+          key={`annotation-${index}`}
           {...annotation}
           index={index}
           visible={showAnnotations}
