@@ -16,10 +16,7 @@ api.enhanceEndpoints({
       providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Splats, id: payload.fileId }],
     },
     setOrganizationSplatAnnotations: {
-      invalidatesTags: (_results, _error, payload) => [
-        { type: QueryTagTypes.Splats, id: payload.fileId },
-        { type: QueryTagTypes.Splats, id: 'LIST' },
-      ],
+      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Splats, id: payload.fileId }],
     },
     getOrganizationSplatInfo: {
       providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Splats, id: payload.fileId }],
