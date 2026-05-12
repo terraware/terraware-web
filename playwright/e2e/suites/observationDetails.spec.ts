@@ -117,7 +117,7 @@ test.describe('ObservationDetailsTests', () => {
     await waitFor(page, '#home');
 
     // details — longer timeout since observation data requires an API call after page load
-    await expect(page.getByText('Observed by Super Admin on 2025-05-29 at 6:50 PM')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Observed by Super Admin on 2025-05-29 at 6:50 PM')).toBeVisible({ timeout: 30000 });
     await page.getByText('Plot Info').hover();
     await expect(page.getByText('Stratum: Stratum 01')).toBeVisible();
     await expect(page.getByText('Substratum: Substratum A')).toBeVisible();

@@ -34,7 +34,7 @@ export type FieldNodePayload = {
   operation: 'field';
 } & SearchNodePayloadBase & {
     field: string;
-    type?: 'Exact' | 'ExactOrFuzzy' | 'Fuzzy' | 'PhraseMatch' | 'Range';
+    type?: 'Exact' | 'Fuzzy' | 'Partial' | 'PartialOrFuzzy' | 'PhraseMatch' | 'Range';
     /** List of values to match. For exact, fuzzy and phrase match searches, a list of at least one value to search for; the list may include null to match accessions where the field does not have a value. For range searches, the list must contain exactly two values, the minimum and maximum; one of the values may be null to search for all values above a minimum or below a maximum. */
     values: (string | null)[];
   };

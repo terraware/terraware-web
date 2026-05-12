@@ -20,12 +20,14 @@ export type TerrawarePath =
   | '/inventory'
   | '/inventory/new'
   | '/inventory/batch'
+  | '/inventory/withdraw'
   | '/batch/withdraw'
   | '/nursery/withdrawals'
   | '/plants/planting-progress'
   | '/observations'
   | '/observations.*tab=biomassMeasurements'
   | '/observations.*/biomassMeasurements'
+  | '/observations.*type=biomass'
   | '/observations.*/survival-rate-settings'
   | '/planting-sites'
   | '/seedbanks'
@@ -69,6 +71,7 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/19718072250004-Managing-Seedling-Inventory',
     '/inventory/batch':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718072250004-Managing-Seedling-Inventory',
+    '/inventory/withdraw': 'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
     '/batch/withdraw': 'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
     '/nursery/withdrawals':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
@@ -80,6 +83,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Biomass-Monitoring-Observations',
     '/observations.*/biomassMeasurements':
       'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Biomass-Monitoring-Observations',
+    '/observations.*type=biomass':
+      'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Biomass-Monitoring-Observations',
     '/observations.*/survival-rate-settings':
       'https://knowledge.terraformation.com/hc/en-us/articles/42721719640980-Survival-Rate-Calculations',
     '/planting-sites': 'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Managing-Planting-Sites',
@@ -89,7 +94,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/modules': 'https://knowledge.terraformation.com/hc/en-us/articles/29551087572500-Modules',
     '/deliverables': 'https://knowledge.terraformation.com/hc/en-us/articles/29426531812116-Deliverables',
     '/applications': 'https://knowledge.terraformation.com/hc/en-us/articles/29426659306516-Application',
-    '/plants/dashboard': 'https://knowledge.terraformation.com/hc/en-us/articles/32283415407252-Plants-Dashboard',
+    '/plants/dashboard':
+      'https://knowledge.terraformation.com/hc/en-us/articles/19718249140372-Tracking-Planting-Progress',
     '/activity-log': 'https://knowledge.terraformation.com/hc/en-us/articles/43760232788244-Activity-log',
     '/seed-fund-reports':
       'https://knowledge.terraformation.com/hc/en-us/articles/24425452156180-Seed-Fund-Reports-for-Projects',
@@ -123,6 +129,7 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/19718072250004-Managing-Seedling-Inventory',
     '/inventory/batch':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718072250004-Managing-Seedling-Inventory',
+    '/inventory/withdraw': 'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
     '/batch/withdraw': 'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
     '/nursery/withdrawals':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
@@ -134,6 +141,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Biomass-Monitoring-Observations',
     '/observations.*/biomassMeasurements':
       'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Biomass-Monitoring-Observations',
+    '/observations.*type=biomass':
+      'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Biomass-Monitoring-Observations',
     '/observations.*/survival-rate-settings':
       'https://knowledge.terraformation.com/hc/en-us/articles/42721719640980-Survival-Rate-Calculations',
     '/planting-sites': 'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Managing-Planting-Sites',
@@ -143,7 +152,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/modules': 'https://knowledge.terraformation.com/hc/en-us/articles/29551087572500-Modules',
     '/deliverables': 'https://knowledge.terraformation.com/hc/en-us/articles/29426531812116-Deliverables',
     '/applications': 'https://knowledge.terraformation.com/hc/en-us/articles/29426659306516-Application',
-    '/plants/dashboard': 'https://knowledge.terraformation.com/hc/en-us/articles/32283415407252-Plants-Dashboard',
+    '/plants/dashboard':
+      'https://knowledge.terraformation.com/hc/en-us/articles/19718249140372-Tracking-Planting-Progress',
     '/activity-log': 'https://knowledge.terraformation.com/hc/en-us/articles/43760232788244-Activity-log',
     '/seed-fund-reports':
       'https://knowledge.terraformation.com/hc/en-us/articles/24425452156180-Seed-Fund-Reports-for-Projects',
@@ -177,6 +187,7 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/19718072250004-Managing-Seedling-Inventory',
     '/inventory/batch':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718072250004-Managing-Seedling-Inventory',
+    '/inventory/withdraw': 'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
     '/batch/withdraw': 'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
     '/nursery/withdrawals':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
@@ -188,6 +199,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
       'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Biomass-Monitoring-Observations',
     '/observations.*/biomassMeasurements':
       'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Biomass-Monitoring-Observations',
+    '/observations.*type=biomass':
+      'https://knowledge.terraformation.com/hc/en-us/articles/36072166476052-Biomass-Monitoring-Observations',
     '/observations.*/survival-rate-settings':
       'https://knowledge.terraformation.com/hc/en-us/articles/42721719640980-Survival-Rate-Calculations',
     '/planting-sites': 'https://knowledge.terraformation.com/hc/en-us/articles/27918882767892-Managing-Planting-Sites',
@@ -197,7 +210,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/modules': 'https://knowledge.terraformation.com/hc/en-us/articles/29551087572500-Modules',
     '/deliverables': 'https://knowledge.terraformation.com/hc/en-us/articles/29426531812116-Deliverables',
     '/applications': 'https://knowledge.terraformation.com/hc/en-us/articles/29426659306516-Application',
-    '/plants/dashboard': 'https://knowledge.terraformation.com/hc/en-us/articles/32283415407252-Plants-Dashboard',
+    '/plants/dashboard':
+      'https://knowledge.terraformation.com/hc/en-us/articles/19718249140372-Tracking-Planting-Progress',
     '/activity-log': 'https://knowledge.terraformation.com/hc/en-us/articles/43760232788244-Activity-log',
     '/seed-fund-reports':
       'https://knowledge.terraformation.com/hc/en-us/articles/24425452156180-Seed-Fund-Reports-for-Projects',

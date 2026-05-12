@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { memo, useEffect } from 'react';
 
 import { Entity } from '@playcanvas/react';
 import { GSplat } from '@playcanvas/react/components';
@@ -64,4 +64,4 @@ const SplatModel = ({
   );
 };
 
-export default SplatModel;
+export default memo(SplatModel);
