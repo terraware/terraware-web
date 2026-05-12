@@ -43,7 +43,7 @@ export default function VirtualWalkthroughsTable({
   const theme = useTheme();
   const [, setSearchParams] = useSearchParams();
   const [deleteOrganizationSplat] = useDeleteOrganizationSplatMutation();
-  const [deleteObserationSplat] = useDeleteObservationSplatMutation();
+  const [deleteObservationSplat] = useDeleteObservationSplatMutation();
   const [setOrgSplatNeedsAttention] = useSetOrganizationSplatNeedsAttentionMutation();
   const [setObsSplatNeedsAttention] = useSetObservationSplatNeedsAttentionMutation();
   const [getOrgMediaStream, { data: orgStreamData, isFetching: orgFetching }] =
@@ -214,7 +214,7 @@ export default function VirtualWalkthroughsTable({
   const deleteSplat = useCallback(
     (file: OrganizationVirtualWalkthrough) => {
       if (file.type === 'Plot' && file.observationId !== undefined) {
-        void deleteObserationSplat({
+        void deleteObservationSplat({
           observationId: file.observationId,
           fileId: file.fileId,
         });
@@ -225,7 +225,7 @@ export default function VirtualWalkthroughsTable({
         });
       }
     },
-    [deleteObserationSplat, deleteOrganizationSplat, organizationId]
+    [deleteObservationSplat, deleteOrganizationSplat, organizationId]
   );
 
   const FlagCell = useCallback(
