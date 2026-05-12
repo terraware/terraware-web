@@ -17,13 +17,16 @@ import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers';
-import { useSetObservationSplatNeedsAttentionMutation } from 'src/queries/generated/observationSplats';
-import { useLazyGetObservationMediaStreamQuery } from 'src/queries/generated/observations';
 import {
-  useDeleteOrganizationMediaFileMutation,
-  useLazyGetOrganizationMediaFileStreamQuery,
-} from 'src/queries/generated/organizationMedia';
-import { useSetOrganizationSplatNeedsAttentionMutation } from 'src/queries/generated/organizationSplats';
+  useDeleteObservationSplatMutation,
+  useSetObservationSplatNeedsAttentionMutation,
+} from 'src/queries/generated/observationSplats';
+import { useLazyGetObservationMediaStreamQuery } from 'src/queries/generated/observations';
+import { useLazyGetOrganizationMediaFileStreamQuery } from 'src/queries/generated/organizationMedia';
+import {
+  useDeleteOrganizationSplatMutation,
+  useSetOrganizationSplatNeedsAttentionMutation,
+} from 'src/queries/generated/organizationSplats';
 import { OrganizationVirtualWalkthrough } from 'src/queries/search/virtualWalkthroughs';
 
 type VirtualWalkthroughsTableProps = {
@@ -39,9 +42,10 @@ export default function VirtualWalkthroughsTable({
 }: VirtualWalkthroughsTableProps): JSX.Element {
   const theme = useTheme();
   const [, setSearchParams] = useSearchParams();
-  const [deleteMediaFile] = useDeleteOrganizationMediaFileMutation();
-  const [setOrgNeedsAttention] = useSetOrganizationSplatNeedsAttentionMutation();
-  const [setObsNeedsAttention] = useSetObservationSplatNeedsAttentionMutation();
+  const [deleteOrganizationSplat] = useDeleteOrganizationSplatMutation();
+  const [deleteObserationSplat] = useDeleteObservationSplatMutation();
+  const [setOrgSplatNeedsAttention] = useSetOrganizationSplatNeedsAttentionMutation();
+  const [setObsSplatNeedsAttention] = useSetObservationSplatNeedsAttentionMutation();
   const [getOrgMediaStream, { data: orgStreamData, isFetching: orgFetching }] =
     useLazyGetOrganizationMediaFileStreamQuery();
   const [getObsMediaStream, { data: obsStreamData, isFetching: obsFetching }] = useLazyGetObservationMediaStreamQuery();
@@ -191,20 +195,37 @@ export default function VirtualWalkthroughsTable({
   const setNeedsAttention = useCallback(
     (file: OrganizationVirtualWalkthrough, needsAttention: boolean) => {
       if (file.type === 'Plot' && file.observationId !== undefined) {
-        void setObsNeedsAttention({
+        void setObsSplatNeedsAttention({
           observationId: file.observationId,
           fileId: file.fileId,
           setSplatNeedsAttentionRequestPayload: { needsAttention },
         });
       } else {
-        void setOrgNeedsAttention({
+        void setOrgSplatNeedsAttention({
           organizationId,
           fileId: file.fileId,
           setSplatNeedsAttentionRequestPayload: { needsAttention },
         });
       }
     },
-    [organizationId, setObsNeedsAttention, setOrgNeedsAttention]
+    [organizationId, setObsSplatNeedsAttention, setOrgSplatNeedsAttention]
+  );
+
+  const deleteSplat = useCallback(
+    (file: OrganizationVirtualWalkthrough) => {
+      if (file.type === 'Plot' && file.observationId !== undefined) {
+        void deleteObserationSplat({
+          observationId: file.observationId,
+          fileId: file.fileId,
+        });
+      } else {
+        void deleteOrganizationSplat({
+          organizationId,
+          fileId: file.fileId,
+        });
+      }
+    },
+    [deleteObserationSplat, deleteOrganizationSplat, organizationId]
   );
 
   const FlagCell = useCallback(
@@ -248,17 +269,14 @@ export default function VirtualWalkthroughsTable({
 
   const RemoveCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
-      const fileId = cell.getValue<number>();
+      const file = cell.row.original;
       return (
-        <Link
-          onClick={() => void deleteMediaFile({ organizationId, fileId })}
-          style={{ color: theme.palette.TwClrTxtDanger }}
-        >
+        <Link onClick={() => deleteSplat(file)} style={{ color: theme.palette.TwClrTxtDanger }}>
           {strings.REMOVE}
         </Link>
       );
     },
-    [deleteMediaFile, organizationId, theme, strings]
+    [theme.palette.TwClrTxtDanger, strings.REMOVE, deleteSplat]
   );
 
   const columns = useMemo((): EditableTableColumn<OrganizationVirtualWalkthrough>[] => {
