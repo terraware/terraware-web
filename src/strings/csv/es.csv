@@ -316,7 +316,7 @@ CHECK_DATE_REQUIRED,Fecha de evaluación *,f21d44e5
 CHECK_IN,Comprobar,1b4b654e
 CHECK_IN_ALL,Ingresar todas,3f860ccf
 CHECK_IN_ALL_CONFIRM,¿Estás seguro de que deseas ingresar todas las accesiones? Esta acción no se puede deshacer.,a6fc6547
-CHECK_IN_MESSAGE,"{0} nuevas accesiones deberían haber llegado al banco de semillas. Por favor, verifique su llegada y regístrelas.",b39ff957
+CHECK_IN_MESSAGE,"Se han entregado nuevas accesiones en el banco de semillas. Por favor, revíselas e ingréselas.",bcc0d0fa
 CHECK_THAT_ALL_REQUIRED_QUESTIONS_ARE_FILLED_OUT_BEFORE_SUBMITTING,Verifique que todas las preguntas obligatorias estén rellenadas antes de enviar,04ee0048
 CHECKED_IN,¡Comprobado!,1e7ea963
 CHECKIN_ACCESSIONS,Registro de accesiones,3046e6fd
