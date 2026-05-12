@@ -1,3 +1,5 @@
+7cf1d07b SW-8226: Accessions: Make Check-in Accessions banner dismissable and add link to view in kebab menu (#5684)
+78eee338 Updated search types to match BE API (#5692)
 2d154bb6 SW-7654 Fix some Knowledge Base links (#5694)
 39b310eb SW-8349 Adding new annotations to a splat causes the model to disappear (#5690)
 b7f60f3f SW-8344 Home page is missing indent on tablet (#5688)
