@@ -159,7 +159,7 @@ export type CreateNurseryWithdrawalRequestPayload = {
   withdrawnDate: string;
 };
 export type CrsProperties = {
-  /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is Longitude/Latitude EPSG:4326, which is the coordinate system +for GeoJSON. */
+  /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is Longitude/Latitude EPSG:4326, which is the coordinate system for GeoJSON. */
   name: string;
 };
 export type Crs = {
