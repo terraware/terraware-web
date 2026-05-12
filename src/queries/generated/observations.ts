@@ -48,6 +48,7 @@ const injectedRtkApi = api.injectEndpoints({
           depth: queryArg.depth,
           state: queryArg.state,
           limit: queryArg.limit,
+          useNewTables: queryArg.useNewTables,
         },
       }),
     }),
@@ -199,6 +200,7 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/results`,
         params: {
           depth: queryArg.depth,
+          useNewTables: queryArg.useNewTables,
         },
       }),
     }),
@@ -241,6 +243,8 @@ export type ListObservationResultsApiArg = {
   state?: ('Upcoming' | 'InProgress' | 'Completed' | 'Overdue' | 'Abandoned')[];
   /** Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
   limit?: number;
+  /** If true, read aggregated metrics from the new observation results tables instead of computing them from species totals. */
+  useNewTables?: boolean;
 };
 export type ListObservationSummariesApiResponse = /** status 200 OK */ ListObservationSummariesResponsePayload;
 export type ListObservationSummariesApiArg = {
@@ -381,6 +385,8 @@ export type GetObservationResultsApiResponse = /** status 200 OK */ GetObservati
 export type GetObservationResultsApiArg = {
   observationId: number;
   depth?: 'Site' | 'Stratum' | 'Substratum' | 'Plot' | 'Plant';
+  /** If true, read aggregated metrics from the new observation results tables instead of computing them from species totals. */
+  useNewTables?: boolean;
 };
 export type ObservationPayload = {
   /** Date this observation is scheduled to end. */
@@ -460,7 +466,7 @@ export type BiomassSpeciesPayload = {
   speciesId?: number;
 };
 export type CrsProperties = {
-  /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is Longitude/Latitude EPSG:4326, which is the coordinate system +for GeoJSON. */
+  /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is Longitude/Latitude EPSG:4326, which is the coordinate system for GeoJSON. */
   name: string;
 };
 export type Crs = {
@@ -895,6 +901,12 @@ export type MergeOtherSpeciesRequestPayload = {
   /** ID of the existing species that the Other species' recorded plants should be merged into. */
   speciesId: number;
 };
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: object[];
+    type: 'GeometryCollection';
+  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -918,12 +930,6 @@ export type MultiPolygon = {
 } & GeometryBase & {
     coordinates: number[][][][];
     type: 'MultiPolygon';
-  };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
-    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type AssignedPlotPayload = {
