@@ -311,16 +311,18 @@ const VirtualWalkthroughViewer = ({
 
       {splatModel}
 
-      <Script
-        script={TfAnnotationManager}
-        enabled={localAnnotations.length > 0}
-        hotspotSize={30}
-        maxWorldSize={0.05}
-        opacity={1}
-        hotspotColor={new Color().fromString('#ffffff')}
-        hoverColor={new Color().fromString('#ffffff')}
-        hotspotBackgroundColor='#2C8658'
-      />
+      {localAnnotations.length > 0 && (
+        <Script
+          script={TfAnnotationManager}
+          enabled={true}
+          hotspotSize={30}
+          maxWorldSize={0.05}
+          opacity={1}
+          hotspotColor={new Color().fromString('#ffffff')}
+          hoverColor={new Color().fromString('#ffffff')}
+          hotspotBackgroundColor='#2C8658'
+        />
+      )}
       {localAnnotations.map((annotation, index) => (
         <Annotation
           key={`annotation-${index}`}
