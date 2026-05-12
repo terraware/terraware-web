@@ -158,7 +158,28 @@ export type CreateNurseryWithdrawalRequestPayload = {
   substratumId?: number;
   withdrawnDate: string;
 };
+export type CrsProperties = {
+  /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is Longitude/Latitude EPSG:4326, which is the coordinate system +for GeoJSON. */
+  name: string;
+};
+export type Crs = {
+  properties: CrsProperties;
+  type: 'name';
+};
+export type GeometryBase = {
+  crs?: Crs;
+  type: 'Point' | 'LineString' | 'Polygon' | 'MultiPoint' | 'MultiLineString' | 'MultiPolygon' | 'GeometryCollection';
+};
+export type Point = {
+  type: 'Point';
+} & GeometryBase & {
+    /** A single position consisting of X, Y, and optional Z values in the coordinate system specified by the crs field. */
+    coordinates: number[];
+    type: 'Point';
+  };
 export type NurseryWithdrawalPhotoPayload = {
+  capturedTime?: string;
+  gpsCoordinates?: Point;
   id: number;
 };
 export type ListWithdrawalPhotosResponsePayload = {

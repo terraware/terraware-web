@@ -7582,6 +7582,7 @@ export interface components {
         };
         GetObservationSplatInfoResponsePayload: {
             annotations: components["schemas"]["SplatAnnotationPayload"][];
+            averageCameraHeight?: number;
             cameraPosition?: components["schemas"]["CoordinatePayload"];
             groundColor?: string;
             groundPlane?: components["schemas"]["CoordinatePayload"][];
@@ -8912,6 +8913,9 @@ export interface components {
             withdrawnDate: string;
         };
         NurseryWithdrawalPhotoPayload: {
+            /** Format: date-time */
+            capturedTime?: string;
+            gpsCoordinates?: components["schemas"]["Point"];
             /** Format: int64 */
             id: number;
         };

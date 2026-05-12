@@ -67,6 +67,9 @@ export class WalkthroughCamera extends Script {
   /** @attribute */
   enableFly = true;
 
+  /** @attribute */
+  averageCameraHeight = 0;
+
   /**
    * Three world-space points defining the ground plane.
    * When provided, the camera Y position is derived from this plane during non-freeFly movement.
@@ -264,7 +267,7 @@ export class WalkthroughCamera extends Script {
     const nx = this.boundsCenter.x + radius * Math.cos(newAngle);
     const nz = this.boundsCenter.z + radius * Math.sin(newAngle);
     const ny = this._hasGroundPlane
-      ? yOnPlane(nx, nz, this._planeNormal, this._planePoint, this.boundsCenter.y)
+      ? yOnPlane(nx, nz, this._planeNormal, this._planePoint, this.boundsCenter.y) + this.averageCameraHeight
       : this.boundsCenter.y;
     this.entity.setPosition(nx, ny, nz);
 
@@ -346,7 +349,7 @@ export class WalkthroughCamera extends Script {
     }
 
     const groundY = this._hasGroundPlane
-      ? yOnPlane(nx, nz, this._planeNormal, this._planePoint, this.boundsCenter.y)
+      ? yOnPlane(nx, nz, this._planeNormal, this._planePoint, this.boundsCenter.y) + this.averageCameraHeight
       : this.boundsCenter.y;
     this.entity.setPosition(nx, this.freeFly ? ny : groundY, nz);
   }

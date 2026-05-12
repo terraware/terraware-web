@@ -113,6 +113,8 @@ const VirtualWalkthroughViewer = ({
     [data?.groundPlane]
   );
 
+  const averageCameraHeight = data?.averageCameraHeight ?? 0;
+
   useEffect(() => {
     setCamera(origin, cameraPosition);
   }, [origin, cameraPosition, setCamera]);
@@ -293,6 +295,7 @@ const VirtualWalkthroughViewer = ({
             boundsCenter={sceneBoundsCenter}
             boundsRadius={sceneBoundsRadius}
             enableFly={!isTextFieldFocused}
+            averageCameraHeight={averageCameraHeight}
           />
         </Entity>
         <Script script={XrControllers} enabled={!isEdit} />
