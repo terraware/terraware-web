@@ -82,7 +82,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const hasObservationsResults = useMemo(() => !!countObservationsResult, [countObservationsResult]);
   const hasPlantingSites = useMemo(() => !!countPlantingSitesResult.data, [countPlantingSitesResult.data]);
 
-  const isVirtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots');
+  const isVirtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots', selectedOrganization?.id);
 
   const contentStyles = {
     height: '100%',

@@ -88,7 +88,7 @@ const ObservationMap = ({
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
 
-  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
+  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots', selectedOrganization?.id);
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend(
     'substrata',

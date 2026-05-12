@@ -1,16 +1,17 @@
 import { useMemo, useState } from 'react';
 
 import isEnabled from 'src/features';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 
 import { MapMultiSelectLegendGroup } from './MapLegend';
 import useMapFeatureStyles from './useMapFeatureStyles';
 
 const usePlotPhotosMapLegend = (disabled?: boolean) => {
   const { strings } = useLocalization();
+  const { selectedOrganization } = useOrganization();
   const [plotPhotosVisible, setPlotPhotosVisible] = useState<boolean>(false);
   const [virtualPlotVisible, setVirtualPlotVisible] = useState<boolean>(false);
-  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
+  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots', selectedOrganization?.id);
 
   const { plotPhotoStyle, virtualPlotStyle } = useMapFeatureStyles();
   const plotPhotosLegendGroup = useMemo((): MapMultiSelectLegendGroup => {

@@ -6,6 +6,7 @@ import { Button } from '@terraware/web-components';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import MediaItem, { MediaFile } from 'src/components/common/MediaItem';
 import isEnabled from 'src/features';
+import { useOrganization } from 'src/providers';
 import {
   useGenerateObservationSplatFileMutation,
   useListObservationSplatsQuery,
@@ -33,13 +34,14 @@ export default function MonitoringPlotPhotosWithActions({
   photos,
 }: MonitoringPlotPhotosWithActionsProps): JSX.Element {
   const theme = useTheme();
+  const { selectedOrganization } = useOrganization();
   const [lightboxFileId, setLightboxFileId] = useState<number | undefined>(undefined);
   const [generateObservationSplatFile] = useGenerateObservationSplatFileMutation();
   const snackbar = useSnackbar();
   const { data } = useListObservationSplatsQuery({ observationId });
   const observationSplats = useMemo(() => data?.splats || [], [data]);
 
-  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
+  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots', selectedOrganization?.id);
 
   const rootMediaUrl = useMemo(
     () =>

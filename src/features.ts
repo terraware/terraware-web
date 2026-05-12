@@ -15,6 +15,8 @@ export type Feature = {
   allowInternalProduction: boolean;
   description: string[];
   disclosure: string[];
+  // if set, the feature is enabled only for these organization IDs and cannot be toggled by users
+  allowedOrganizationIds?: number[];
   get?: () => boolean;
   set?: (val: boolean) => void;
 };
@@ -43,6 +45,7 @@ export const OPT_IN_FEATURES: Feature[] = [
     allowInternalProduction: false,
     description: ['Support for virtual monitoring plots'],
     disclosure: ['This is a WIP'],
+    allowedOrganizationIds: [243, 123],
   },
 ];
 
@@ -68,6 +71,10 @@ export default function isEnabled(name: FeatureName, organizationId?: number) {
 
   if (feature.get) {
     return feature.get();
+  }
+
+  if (feature.allowedOrganizationIds !== undefined) {
+    return organizationId !== undefined && feature.allowedOrganizationIds.includes(organizationId);
   }
 
   if (!feature.active || feature.enabled) {

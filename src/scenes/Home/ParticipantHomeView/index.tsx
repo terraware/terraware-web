@@ -19,7 +19,7 @@ const ParticipantHomeView = () => {
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
 
-  const virtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots');
+  const virtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots', selectedOrganization?.id);
 
   return (
     <ParticipantPage>

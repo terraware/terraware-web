@@ -44,7 +44,7 @@ const TerrawareHomeView = () => {
   const seedBankSummary = useSeedBankSummary();
   const orgNurserySummary = useOrgNurserySummary();
   const showAcceleratorCard = orgPreferences.showAcceleratorCard !== false;
-  const virtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots');
+  const virtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots', selectedOrganization?.id);
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
