@@ -27,7 +27,10 @@ const injectedRtkApi = api.injectEndpoints({
           contentType: result.contentType,
           createdTime: result.createdTime,
         })),
-      providesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
+      providesTags: [
+        { type: QueryTagTypes.OrganizationMedia, id: 'LIST' },
+        { type: QueryTagTypes.Splats, id: 'LIST' },
+      ],
     }),
   }),
 });
