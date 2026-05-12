@@ -315,7 +315,7 @@ CHECK_DATE_REQUIRED,Date de vérification *,f21d44e5
 CHECK_IN,Vérifier,1b4b654e
 CHECK_IN_ALL,Enregistrez tout,3f860ccf
 CHECK_IN_ALL_CONFIRM,Êtes-vous sûr de vouloir enregistrer toutes les accessions ? Cette action est irréversible.,a6fc6547
-CHECK_IN_MESSAGE,{0} nouvelles accessions devraient avoir été déposées à la banque de semences. Veuillez vérifier leur arrivée et les enregistrer.,b39ff957
+CHECK_IN_MESSAGE,De nouvelles accessions ont été déposées à la banque de semences. Veuillez les examiner et les enregistrer.,bcc0d0fa
 CHECK_THAT_ALL_REQUIRED_QUESTIONS_ARE_FILLED_OUT_BEFORE_SUBMITTING,Vérifiez que toutes les questions requises sont renseignées avant de soumettre le document,04ee0048
 CHECKED_IN,Enregistré !,1e7ea963
 CHECKIN_ACCESSIONS,Vérifier les accessions,3046e6fd

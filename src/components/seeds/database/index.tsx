@@ -28,7 +28,7 @@ import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -50,6 +50,7 @@ import SelectSeedBankModal from '../../../scenes/SeedBanksRouter/SelectSeedBankM
 import ImportAccessionsModal from './ImportAccessionsModal';
 
 const TABLE_STATE_STORAGE_KEY = 'accessions-database-table';
+const PREF_DISMISSED_CHECKIN_IDS = 'dismissedCheckInAccessionIds';
 
 const DEFAULT_VISIBLE_COLUMNS = [
   'accessionNumber',
@@ -145,6 +146,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
 
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
+  const { userPreferences, updateUserPreferences } = useUser();
   const numberFormatter = useNumberFormatter();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -270,6 +272,23 @@ export default function Database(props: DatabaseProps): JSX.Element {
     navigate(APP_PATHS.CHECKIN);
   };
 
+  const dismissedCheckInIds = useMemo(
+    () => (userPreferences[PREF_DISMISSED_CHECKIN_IDS] as string[] | undefined) ?? [],
+    [userPreferences]
+  );
+
+  const hasNewPendingAccessions = useMemo(
+    () => (pendingAccessions ?? []).some((a) => !dismissedCheckInIds.includes(a.id)),
+    [dismissedCheckInIds, pendingAccessions]
+  );
+
+  const dismissCheckInBanner = useCallback(() => {
+    const knownIds = new Set((searchResults ?? []).map((a) => a.id));
+    const prunedExisting = dismissedCheckInIds.filter((id) => knownIds.has(id));
+    const newIds = Array.from(new Set([...prunedExisting, ...(pendingAccessions ?? []).map((a) => a.id)]));
+    void updateUserPreferences({ ...userPreferences, [PREF_DISMISSED_CHECKIN_IDS]: newIds });
+  }, [dismissedCheckInIds, pendingAccessions, searchResults, updateUserPreferences, userPreferences]);
+
   const onSeedBankForImportSelected = (selectedFacilityOnModal: Facility | undefined) => {
     setSelectSeedBankForImportModalOpen(false);
     if (selectedFacilityOnModal) {
@@ -285,6 +304,8 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const onOptionItemClick = (optionItem: DropdownItem) => {
     if (optionItem.value === 'import') {
       setSelectSeedBankForImportModalOpen(true);
+    } else if (optionItem.value === 'checkin') {
+      handleViewCollections();
     }
   };
 
@@ -707,20 +728,25 @@ export default function Database(props: DatabaseProps): JSX.Element {
                     ))}
                   <OptionsMenu
                     onOptionItemClick={onOptionItemClick}
-                    optionItems={[{ label: strings.IMPORT, value: 'import' }]}
+                    optionItems={[
+                      { label: strings.CHECKIN_ACCESSIONS, value: 'checkin' },
+                      { label: strings.IMPORT, value: 'import' },
+                    ]}
                   />
                 </>
               ) : undefined
             }
           >
             {null}
-            {pendingAccessions && pendingAccessions.length > 0 && (
+            {hasNewPendingAccessions && (
               <Grid item xs={12}>
                 <Message
+                  onClose={dismissCheckInBanner}
+                  showCloseButton
                   type='page'
                   priority='info'
                   title={strings.CHECKIN_ACCESSIONS}
-                  body={strings.formatString(strings.CHECK_IN_MESSAGE, pendingAccessions.length).toString()}
+                  body={strings.formatString(strings.CHECK_IN_MESSAGE, (pendingAccessions ?? []).length).toString()}
                   pageButtons={[
                     <Button
                       key='1'
