@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
@@ -173,18 +173,6 @@ const VirtualWalkthroughViewer = ({
     }
   }, [isEdit]);
 
-  // Force fresh playcanvas scripts each time annotations come back from empty,
-  // so the TfAnnotationManager's hotspot mesh and per-annotation entities are
-  // recreated cleanly (avoids stale GPU buffers in prod builds).
-  const [annotationSessionKey, setAnnotationSessionKey] = useState(0);
-  const prevAnnotationCountRef = useRef(0);
-  useEffect(() => {
-    if (prevAnnotationCountRef.current === 0 && localAnnotations.length > 0) {
-      setAnnotationSessionKey((k) => k + 1);
-    }
-    prevAnnotationCountRef.current = localAnnotations.length;
-  }, [localAnnotations.length]);
-
   const handleAnnotationPositionChange = useCallback(
     (position: [number, number, number]) => {
       setLocalAnnotations((prev) => {
@@ -325,7 +313,6 @@ const VirtualWalkthroughViewer = ({
 
       {localAnnotations.length > 0 && (
         <Script
-          key={`tf-annotation-manager-${annotationSessionKey}`}
           script={TfAnnotationManager}
           enabled={true}
           hotspotSize={30}
@@ -338,7 +325,7 @@ const VirtualWalkthroughViewer = ({
       )}
       {localAnnotations.map((annotation, index) => (
         <Annotation
-          key={`annotation-${annotationSessionKey}-${index}`}
+          key={`annotation-${index}`}
           {...annotation}
           index={index}
           visible={showAnnotations}
