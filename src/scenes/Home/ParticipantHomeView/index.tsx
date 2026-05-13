@@ -4,7 +4,7 @@ import { Grid, useTheme } from '@mui/material';
 
 import DismissibleWrapper from 'src/components/common/DismissibleWrapper';
 import ParticipantPage from 'src/components/common/PageWithModuleTimeline/ParticipantPage';
-import isEnabled from 'src/features';
+import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useOrganization } from 'src/providers';
 import VirtualWalkthroughMessages from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughMessages';
 
@@ -18,8 +18,9 @@ import WelcomeBanner from './WelcomeBanner';
 const ParticipantHomeView = () => {
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
+  const orgFeatures = useOrganizationFeatures();
 
-  const virtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots');
+  const virtualWalkthroughEnabled = !!orgFeatures?.virtualWalkthrough?.enabled;
 
   return (
     <ParticipantPage>
