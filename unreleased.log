@@ -1,3 +1,4 @@
+2c534b73 SW-8349 Fix disapearing model when adding/deleting annotations (#5697)
 00473bbf Replaced organaization features redux with RTK and hook (#5700)
 c0281554 Updated RTK tags for splats and media (#5699)
 7850be6f SW-8332 Updated remove splats endpoint (#5698)
