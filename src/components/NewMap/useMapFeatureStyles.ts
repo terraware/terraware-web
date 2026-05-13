@@ -93,6 +93,15 @@ const useMapFeatureStyles = () => {
     []
   );
 
+  const withdrawalPhotoStyle = useMemo(
+    (): MapIconComponentStyle => ({
+      iconColor: '#0072B2',
+      iconName: 'iconPhoto',
+      type: 'icon',
+    }),
+    []
+  );
+
   const livePlantStyle = useMemo(
     (): MapIconComponentStyle => ({
       iconColor: '#40B0A6',
@@ -153,6 +162,7 @@ const useMapFeatureStyles = () => {
     survivalRateMoreThan75,
     temporaryPlotsLayerStyle,
     strataLayerStyle,
+    withdrawalPhotoStyle,
   };
 };
 

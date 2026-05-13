@@ -32,6 +32,14 @@ const parseSearchNurseryWithdrawalsArgs = (
     });
   }
 
+  if (args.plantingSiteId) {
+    searchChildren.push({
+      operation: 'field',
+      field: 'delivery.plantings.plantingSite.id',
+      values: [`${args.plantingSiteId}`],
+    });
+  }
+
   if (args.searchTerm) {
     const { type, values } = parseSearchTerm(args.searchTerm);
     searchChildren.push({
@@ -344,6 +352,7 @@ export type NurseryWithdrawalFilterOptions = {
 export type SearchNurseryWithdrawalsApiArgs = {
   organizationId?: number;
   withdrawalId?: number;
+  plantingSiteId?: number;
   searchTerm?: string;
   withdrawnDate?: { minDate?: string; maxDate?: string };
   purposes?: NurseryWithdrawalPurpose[];

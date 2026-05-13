@@ -152,7 +152,7 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
   const selectPhoto = useCallback(
     (monitoringPlotId: number, observationId: number, photo: ObservationMonitoringPlotPhotoWithGps) => () => {
       setSelectedFeature(undefined);
-      selectPhotos([{ monitoringPlotId, observationId, photo }]);
+      selectPhotos([{ kind: 'plot-photo', monitoringPlotId, observationId, photo }]);
       selectPlants([]);
       setDrawerOpen(true);
     },
@@ -167,7 +167,7 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
             const observationId = marker.properties.observationId as number;
             const monitoringPlotId = marker.properties.monitoringPlotId as number;
             const photo = marker.properties.photo as ObservationMonitoringPlotPhotoWithGps;
-            return { monitoringPlotId, observationId, photo };
+            return { kind: 'plot-photo', monitoringPlotId, observationId, photo };
           }
         })
         .filter((photo): photo is PlotPhoto => photo !== undefined);
@@ -463,8 +463,9 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
             latitude: photo.gpsCoordinates?.coordinates[0],
             onClick: selectPhoto(plot.monitoringPlotId, latestObservationResult.observationId, photo),
             selected:
-              selectedPhotos.find((selected) => 'photo' in selected && selected.photo.fileId === photo.fileId) !==
-              undefined,
+              selectedPhotos.find(
+                (selected) => selected.kind === 'plot-photo' && selected.photo.fileId === photo.fileId
+              ) !== undefined,
             properties: {
               monitoringPlotId: plot.monitoringPlotId,
               observationId: latestObservationResult.observationId,
