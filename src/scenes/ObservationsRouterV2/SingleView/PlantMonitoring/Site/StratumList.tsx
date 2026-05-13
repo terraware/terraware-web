@@ -16,9 +16,9 @@ import {
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useOneObservationResults } from 'src/hooks/observations';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers/hooks';
-import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -57,7 +57,7 @@ export default function StratumList(): JSX.Element {
     showGlobalFilter,
   } = useTableState(STORAGE_KEY, { persistFilters: true });
 
-  const { data: observationResultsResponse, isLoading } = useGetObservationResultsQuery({ observationId });
+  const { data: observationResultsResponse, isLoading } = useOneObservationResults({ observationId });
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
 
   useEffect(() => {

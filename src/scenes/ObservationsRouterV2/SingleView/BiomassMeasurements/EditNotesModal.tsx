@@ -4,10 +4,10 @@ import { useParams } from 'react-router';
 import { Box } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
+import { useOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import {
   QuadratUpdateOperationPayload,
-  useGetObservationResultsQuery,
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
 import useForm from 'src/utils/useForm';
@@ -24,7 +24,7 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
   const { strings } = useLocalization();
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({
+  const { data: observationResultsResponse } = useOneObservationResults({
     observationId,
   });
   const observationResults = useMemo(

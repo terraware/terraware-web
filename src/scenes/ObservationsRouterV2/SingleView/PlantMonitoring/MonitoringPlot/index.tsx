@@ -8,8 +8,8 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import { APP_PATHS } from 'src/constants';
+import { useOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
-import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import VirtualWalkthroughModal from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughModal';
 import useStickyTabs from 'src/utils/useStickyTabs';
@@ -25,7 +25,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
   const observationId = Number(params.observationId);
   const stratumName = params.stratumName;
   const monitoringPlotId = Number(params.monitoringPlotId);
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
+  const { data: observationResultsResponse } = useOneObservationResults({ observationId });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);

@@ -10,11 +10,11 @@ import PlantingSiteSpeciesCellRenderer from 'src/components/SeedFundReports/Loca
 import { transformNumericValue } from 'src/components/SeedFundReports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
+import { useOneObservationResults } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useSearchObservationDatesQuery } from 'src/queries/search/plantingSites';
 import { ReportPlantingSite } from 'src/types/Report';
 import { GrowthForm } from 'src/types/Species';
@@ -62,7 +62,10 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
 
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
-  const [getLatestObservation, getLatestObservationResponse] = useLazyGetObservationResultsQuery();
+  const getLatestObservationResponse = useOneObservationResults({
+    observationId: plantingSite?.latestObservationId,
+    depth: 'Plot',
+  });
 
   const { currentData: upcomingObservationDates } = useSearchObservationDatesQuery({
     plantingSiteId,
@@ -72,18 +75,6 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
     plantingSiteId,
     state: ['InProgress'],
   });
-
-  useEffect(() => {
-    if (plantingSite?.latestObservationId) {
-      void getLatestObservation(
-        {
-          observationId: plantingSite?.latestObservationId,
-          depth: 'Plot',
-        },
-        true
-      );
-    }
-  }, [getLatestObservation, plantingSite?.latestObservationId]);
 
   const latestObservationResult = useMemo(
     () => getLatestObservationResponse.currentData?.observation,

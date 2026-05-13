@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
 import { Box, useTheme } from '@mui/material';
@@ -9,8 +9,8 @@ import ScrollToTop from 'src/components/common/ScrollToTop';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import { useOneObservationResults } from 'src/hooks/observations';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
 import {
   OrganizationVirtualWalkthrough,
   useSearchVirtualWalkthroughsQuery,
@@ -48,13 +48,9 @@ export default function VirtualWalkthroughsView(): JSX.Element {
   );
 
   const isPlotFile = virtualWalkthroughModalFile?.type === 'Plot';
-  const [getObservationResults, { data: observationResultsData }] = useLazyGetObservationResultsQuery();
-
-  useEffect(() => {
-    if (isPlotFile && virtualWalkthroughModalFile?.observationId) {
-      void getObservationResults({ observationId: virtualWalkthroughModalFile.observationId });
-    }
-  }, [getObservationResults, isPlotFile, virtualWalkthroughModalFile?.observationId]);
+  const { data: observationResultsData } = useOneObservationResults({
+    observationId: isPlotFile ? virtualWalkthroughModalFile?.observationId : undefined,
+  });
 
   const virtualPlotBelowComponent = useMemo(() => {
     if (!isPlotFile || !observationResultsData) {

@@ -4,13 +4,9 @@ import { MapRef } from 'react-map-gl/mapbox';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import { useListObservationResults, useOneObservationResults } from 'src/hooks/observations';
 import { useLocalization, useOrganization } from 'src/providers';
-import {
-  ObservationResultsPayload,
-  useLazyGetObservationResultsQuery,
-  useLazyListAdHocObservationResultsQuery,
-  useLazyListObservationResultsQuery,
-} from 'src/queries/generated/observations';
+import { ObservationResultsPayload, useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -48,8 +44,6 @@ const ObservationMapWrapper = ({
   }, [isMapVisible]);
 
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
-  const [getObservationResult, getObservationResultResponse] = useLazyGetObservationResultsQuery();
-  const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
   const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
   const [selectedObservationResults, setSelectedObservationResults] = useState<ObservationResultsPayload[]>([]);
   const [selectedAdHocObservationResults, setSelectedAdHocObservationResults] = useState<ObservationResultsPayload[]>(
@@ -67,11 +61,13 @@ const ObservationMapWrapper = ({
     [getPlantingSiteResult.data?.site, plantingSiteId]
   );
 
-  useEffect(() => {
-    if (observationId) {
-      void getObservationResult({ observationId });
-    }
-  }, [getObservationResult, observationId]);
+  const getObservationResultResponse = useOneObservationResults({ observationId });
+
+  const listObservationsResultsResponse = useListObservationResults({
+    organizationId: plantingSiteId !== undefined && !observationId && !isBiomass ? selectedOrganization?.id : undefined,
+    plantingSiteId,
+    depth: 'Site',
+  });
 
   useEffect(() => {
     if (selectedOrganization && plantingSiteId !== undefined && !observationId) {
@@ -83,25 +79,8 @@ const ObservationMapWrapper = ({
         },
         true
       );
-      if (!isBiomass) {
-        void listObservationResults(
-          {
-            organizationId: selectedOrganization.id,
-            plantingSiteId,
-            depth: 'Site',
-          },
-          true
-        );
-      }
     }
-  }, [
-    isBiomass,
-    listAdHocObservationResults,
-    listObservationResults,
-    observationId,
-    plantingSiteId,
-    selectedOrganization,
-  ]);
+  }, [listAdHocObservationResults, observationId, plantingSiteId, selectedOrganization]);
 
   const singleObservationResult = useMemo(
     () => getObservationResultResponse.data?.observation,

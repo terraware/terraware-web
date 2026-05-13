@@ -3,9 +3,10 @@ import React, { type JSX, useMemo } from 'react';
 import { Box } from '@mui/material';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
+import { useOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { ExistingTreePayload, useGetObservationResultsQuery } from 'src/queries/generated/observations';
+import { ExistingTreePayload } from 'src/queries/generated/observations';
 
 type MapTreeDrawerProps = {
   observationId: number;
@@ -14,7 +15,7 @@ type MapTreeDrawerProps = {
 
 const MapTreeDrawer = ({ observationId, tree }: MapTreeDrawerProps): JSX.Element | undefined => {
   const { strings } = useLocalization();
-  const { data } = useGetObservationResultsQuery({ observationId, depth: 'Plant' });
+  const { data } = useOneObservationResults({ observationId, depth: 'Plant' });
 
   const { species } = useSpeciesData();
 

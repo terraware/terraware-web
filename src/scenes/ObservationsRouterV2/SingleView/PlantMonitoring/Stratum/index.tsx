@@ -10,8 +10,8 @@ import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import { useOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
-import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
@@ -29,7 +29,7 @@ const StratumDetails = (): JSX.Element => {
   const observationId = Number(params.observationId);
   const stratumName = params.stratumName;
 
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
+  const { data: observationResultsResponse } = useOneObservationResults({ observationId });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const stratumResult = useMemo(
