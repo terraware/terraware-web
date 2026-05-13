@@ -312,29 +312,31 @@ const VirtualWalkthroughViewer = ({
       {splatModel}
 
       {localAnnotations.length > 0 && (
-        <Script
-          script={TfAnnotationManager}
-          enabled={true}
-          hotspotSize={30}
-          maxWorldSize={0.05}
-          opacity={1}
-          hotspotColor={new Color().fromString('#ffffff')}
-          hoverColor={new Color().fromString('#ffffff')}
-          hotspotBackgroundColor='#2C8658'
-        />
+        <Entity name='annotations-root'>
+          <Script
+            script={TfAnnotationManager}
+            enabled={true}
+            hotspotSize={30}
+            maxWorldSize={0.05}
+            opacity={1}
+            hotspotColor={new Color().fromString('#ffffff')}
+            hoverColor={new Color().fromString('#ffffff')}
+            hotspotBackgroundColor='#2C8658'
+          />
+          {localAnnotations.map((annotation, index) => (
+            <Annotation
+              key={`annotation-${index}`}
+              {...annotation}
+              index={index}
+              visible={showAnnotations}
+              isEdit={isEdit}
+              isSelected={selectedAnnotationIndex === index}
+              onSelect={() => setSelectedAnnotationIndex(index)}
+              onPositionChange={handleAnnotationPositionChange}
+            />
+          ))}
+        </Entity>
       )}
-      {localAnnotations.map((annotation, index) => (
-        <Annotation
-          key={`annotation-${index}`}
-          {...annotation}
-          index={index}
-          visible={showAnnotations}
-          isEdit={isEdit}
-          isSelected={selectedAnnotationIndex === index}
-          onSelect={() => setSelectedAnnotationIndex(index)}
-          onPositionChange={handleAnnotationPositionChange}
-        />
-      ))}
 
       <SplatControls
         defaultCameraFocus={origin}
