@@ -29,7 +29,7 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
-import isEnabled from 'src/features';
+import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -88,7 +88,8 @@ const ObservationMap = ({
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
 
-  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots', selectedOrganization?.id);
+  const orgFeatures = useOrganizationFeatures();
+  const isVirtualPlotsEnabled = !!orgFeatures?.virtualWalkthrough?.enabled;
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend(
     'substrata',

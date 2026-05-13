@@ -123,7 +123,7 @@ export default function OptInFeaturesView({ refresh }: OptInFeaturesViewProps): 
             >
               Opt-in to see experimental or work-in-progress features
             </Box>
-            {OPT_IN_FEATURES.filter((f) => f.active && f.allowedOrganizationIds === undefined).map((f, i) => (
+            {OPT_IN_FEATURES.filter((f) => f.active).map((f, i) => (
               <Stack
                 spacing={2}
                 sx={{

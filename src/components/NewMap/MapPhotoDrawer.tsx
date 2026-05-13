@@ -6,9 +6,9 @@ import { Box } from '@mui/material';
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
-import { useLocalization, useOrganization } from 'src/providers';
+import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
+import { useLocalization } from 'src/providers';
 import { ObservationSplatPayload } from 'src/queries/generated/observationSplats';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import VirtualPlotData from 'src/scenes/ObservationsRouterV2/SingleView/PlantMonitoring/MonitoringPlot/VirtualPlotData';
@@ -33,13 +33,13 @@ const MapPhotoDrawer = ({
   splat,
 }: MapPhotoDrawerProps): JSX.Element | undefined => {
   const { activeLocale, strings } = useLocalization();
-  const { selectedOrganization } = useOrganization();
+  const orgFeatures = useOrganizationFeatures();
 
   const { format } = useNumberFormatter();
   const { data } = useGetObservationResultsQuery({ observationId });
   const [virtualWalkthroughOpen, setVirtualWalkthroughOpen] = useBoolean(false);
   const [searchParams, setSearchParams] = useSearchParams();
-  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots', selectedOrganization?.id);
+  const isVirtualPlotsEnabled = !!orgFeatures?.virtualWalkthrough?.enabled;
 
   const photoUrl = useMemo(() => {
     if (!photo) {
