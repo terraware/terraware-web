@@ -2,7 +2,6 @@ import { paths } from 'src/api/types/generated-schema';
 import {
   ManagedLocationType,
   Organization,
-  OrganizationFeature,
   OrganizationRoleInfo,
   OrganizationWithInternalTags,
   UpdateOrganizationInternalTagsRequestPayload,
@@ -26,16 +25,6 @@ export type OrganizationsData = {
 };
 
 export type OrganizationsResponse = Response & OrganizationsData;
-
-export type OrganizationFeaturesData = {
-  applications: OrganizationFeature;
-  deliverables: OrganizationFeature;
-  modules: OrganizationFeature;
-  reports: OrganizationFeature;
-  seedFundReports: OrganizationFeature;
-};
-
-export type OrganizationFeaturesResponse = Response & OrganizationFeaturesData;
 
 export type OrganizationRoles = {
   roles: OrganizationRoleInfo[];
@@ -67,7 +56,6 @@ export type OrganizationsInternalTagsResponse = Response & OrganizationsInternal
 // endpoint
 const ORGANIZATIONS_ENDPOINT = '/api/v1/organizations';
 const ORGANIZATION_ENDPOINT = '/api/v1/organizations/{organizationId}';
-const ORGANIZATION_FEATURES_ENDPOINT = '/api/v1/organizations/{organizationId}/features';
 const ORGANIZATION_ROLES_ENDPOINT = '/api/v1/organizations/{organizationId}/roles';
 const ORGANIZATION_INTERNAL_TAGS_ENDPOINT = '/api/v1/internalTags/organizations/{organizationId}';
 const ORGANIZATIONS_INTERNAL_TAGS_ENDPOINT = '/api/v1/internalTags/organizations';
@@ -83,9 +71,6 @@ type CreateOrganizationRequestPayload =
 type UpdateOrganizationRequestPayload =
   paths[typeof ORGANIZATION_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
-type OrganizationFeaturesResponsePayload =
-  paths[typeof ORGANIZATION_FEATURES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
 type OrganizationRolesServerResponse =
   paths[typeof ORGANIZATION_ROLES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
@@ -100,7 +85,6 @@ type UpdateResponse =
 
 const httpOrganizations = HttpService.root(ORGANIZATIONS_ENDPOINT);
 const httpOrganization = HttpService.root(ORGANIZATION_ENDPOINT);
-const httpOrganizationFeatures = HttpService.root(ORGANIZATION_FEATURES_ENDPOINT);
 const httpOrganizationRoles = HttpService.root(ORGANIZATION_ROLES_ENDPOINT);
 const httpOrganizationInternalTags = HttpService.root(ORGANIZATION_INTERNAL_TAGS_ENDPOINT);
 const httpOrganizationsInternalTags = HttpService.root(ORGANIZATIONS_INTERNAL_TAGS_ENDPOINT);
@@ -125,36 +109,6 @@ const getOrganizations = async (): Promise<OrganizationsResponse> => {
       response.error = 'GenericError';
     }
   }
-
-  return response;
-};
-
-const DEFAULT_ORGANIZATION_FEATURE_PAYLOAD: OrganizationFeature = {
-  enabled: false,
-  projectIds: [],
-};
-
-/**
- * get organization features
- */
-const getOrganizationFeatures = async (organizationId: number): Promise<OrganizationFeaturesResponse> => {
-  const response: OrganizationFeaturesResponse = await httpOrganizationFeatures.get<
-    OrganizationFeaturesResponsePayload,
-    OrganizationFeaturesData
-  >(
-    {
-      urlReplacements: {
-        '{organizationId}': organizationId.toString(),
-      },
-    },
-    (data) => ({
-      applications: data?.applications || DEFAULT_ORGANIZATION_FEATURE_PAYLOAD,
-      deliverables: data?.deliverables || DEFAULT_ORGANIZATION_FEATURE_PAYLOAD,
-      modules: data?.modules || DEFAULT_ORGANIZATION_FEATURE_PAYLOAD,
-      reports: data?.reports || DEFAULT_ORGANIZATION_FEATURE_PAYLOAD,
-      seedFundReports: data?.seedFundReports || DEFAULT_ORGANIZATION_FEATURE_PAYLOAD,
-    })
-  );
 
   return response;
 };
@@ -349,7 +303,6 @@ const OrganizationService = {
   createOrganization,
   deleteOrganization,
   getAllOrganizationsInternalTags,
-  getOrganizationFeatures,
   getOrganizationInternalTags,
   getOrganizationRoles,
   getOrganizations,

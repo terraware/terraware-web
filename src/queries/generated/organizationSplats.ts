@@ -99,6 +99,7 @@ export type GenerateSplatRequestPayload = {
   fileId: number;
 };
 export type CoordinatePayload = {
+  m?: number;
   x: number;
   y: number;
   z: number;
@@ -125,9 +126,12 @@ export type SplatAnnotationPayload = {
 };
 export type GetObservationSplatInfoResponsePayload = {
   annotations: SplatAnnotationPayload[];
+  averageCameraHeight?: number;
   cameraPosition?: CoordinatePayload;
   groundColor?: string;
+  groundPlane?: CoordinatePayload[];
   originPosition?: CoordinatePayload;
+  sceneBounds?: CoordinatePayload;
   skyColor?: string;
   status: SuccessOrError;
 };

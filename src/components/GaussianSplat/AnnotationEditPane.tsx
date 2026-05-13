@@ -98,7 +98,7 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate, onTextFieldFocus }:
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <Typography sx={{ fontWeight: 600 }}>{strings.EDIT_ANNOTATION}</Typography>
 
-            <Tooltip title={strings.ANNOTATION_TITLE_TOOLTIP} placement='top'>
+            <Tooltip title={strings.ANNOTATION_TITLE_TOOLTIP} placement='top' disableFocusListener>
               <Textfield
                 id='annotation-title'
                 label={strings.TITLE}
@@ -112,7 +112,7 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate, onTextFieldFocus }:
               />
             </Tooltip>
 
-            <Tooltip title={strings.ANNOTATION_DESCRIPTION_TOOLTIP} placement='top'>
+            <Tooltip title={strings.ANNOTATION_DESCRIPTION_TOOLTIP} placement='top' disableFocusListener>
               <Textfield
                 id='annotation-body'
                 label={strings.DESCRIPTION}
@@ -125,7 +125,7 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate, onTextFieldFocus }:
               />
             </Tooltip>
 
-            <Tooltip title={strings.ANNOTATION_LABEL_TOOLTIP} placement='top'>
+            <Tooltip title={strings.ANNOTATION_LABEL_TOOLTIP} placement='top' disableFocusListener>
               <Textfield
                 id='annotation-label'
                 label={strings.LABEL}

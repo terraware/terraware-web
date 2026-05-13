@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useMixpanel } from 'react-mixpanel-browser';
 import { useMatch } from 'react-router';
 
@@ -14,15 +14,13 @@ import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import { useLazyCountNurseryWithdrawalsQuery } from 'src/queries/search/nurseries';
-import { requestOrganizationFeatures } from 'src/redux/features/organizations/organizationsAsyncThunks';
-import { listOrganizationFeatures } from 'src/redux/features/organizations/organizationsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { isAdmin, isContributor, isManagerOrHigher } from 'src/utils/organization';
+import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type NavBarProps = {
@@ -39,13 +37,11 @@ export default function NavBar({
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const dispatch = useAppDispatch();
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useSyncNavigate();
   const mixpanel = useMixpanel();
 
-  const [orgFeaturesRequestId, setOrgFeaturesRequestId] = useState<string>('');
-  const orgFeatures = useAppSelector(listOrganizationFeatures(orgFeaturesRequestId));
+  const orgFeatures = useOrganizationFeatures();
 
   const { isAllowedViewConsole } = useAcceleratorConsole();
   const { strings } = useLocalization();
@@ -108,13 +104,6 @@ export default function NavBar({
   }, [countNurseryWithdrawals, selectedOrganization]);
 
   useEffect(() => {
-    if (selectedOrganization && !isContributor(selectedOrganization)) {
-      const request = dispatch(requestOrganizationFeatures({ organizationId: selectedOrganization.id }));
-      setOrgFeaturesRequestId(request.requestId);
-    }
-  }, [dispatch, selectedOrganization]);
-
-  useEffect(() => {
     if (!currentAcceleratorProject && projectsWithModules && projectsWithModules.length > 0) {
       setCurrentAcceleratorProject(projectsWithModules[0].id);
     }
@@ -150,7 +139,7 @@ export default function NavBar({
 
   const deliverablesMenu = useMemo<JSX.Element | null>(
     () =>
-      orgFeatures?.data?.deliverables?.enabled ? (
+      orgFeatures?.deliverables?.enabled ? (
         <NavItem
           label={strings.DELIVERABLES}
           icon='iconSubmit'
@@ -163,7 +152,7 @@ export default function NavBar({
         />
       ) : null,
     [
-      orgFeatures?.data?.deliverables?.enabled,
+      orgFeatures?.deliverables?.enabled,
       strings.DELIVERABLES,
       isDeliverablesRoute,
       mixpanel,
@@ -175,7 +164,7 @@ export default function NavBar({
   const reportsMenu = useMemo<JSX.Element | null>(
     () =>
       isAllowed('READ_REPORTS', { organization: selectedOrganization }) &&
-      !!orgFeatures?.data?.reports?.enabled &&
+      !!orgFeatures?.reports?.enabled &&
       allAcceleratorProjects.length > 0 ? (
         <NavItem
           icon='iconGraphReport'
@@ -192,7 +181,7 @@ export default function NavBar({
       closeAndNavigateTo,
       isAllowed,
       isReportsRoute,
-      orgFeatures?.data?.reports?.enabled,
+      orgFeatures,
       selectedOrganization,
       strings.REPORTS,
     ]
@@ -216,7 +205,7 @@ export default function NavBar({
 
   const modulesMenu = useMemo<JSX.Element | null>(
     () =>
-      currentAcceleratorProject && !!orgFeatures?.data?.modules?.enabled && isManagerOrHigher(selectedOrganization) ? (
+      currentAcceleratorProject && !!orgFeatures?.modules?.enabled && isManagerOrHigher(selectedOrganization) ? (
         <NavItem
           icon='iconModule'
           label={strings.MODULES}
@@ -235,7 +224,7 @@ export default function NavBar({
       currentAcceleratorProject,
       isProjectModulesRoute,
       mixpanel,
-      orgFeatures?.data?.modules?.enabled,
+      orgFeatures,
       selectedOrganization,
       strings.MODULES,
     ]
@@ -266,7 +255,7 @@ export default function NavBar({
 
   const applicationMenu = useMemo<JSX.Element | null>(
     () =>
-      orgFeatures?.data?.applications?.enabled ? (
+      orgFeatures?.applications?.enabled ? (
         <NavItem
           label={
             <Box
@@ -296,7 +285,7 @@ export default function NavBar({
     [
       closeAndNavigateTo,
       isApplicationRoute,
-      orgFeatures?.data?.applications?.enabled,
+      orgFeatures,
       strings.APPLICATION,
       theme.palette.TwClrIcnSecondary,
       theme.palette.TwClrTxt,

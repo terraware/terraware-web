@@ -50,9 +50,23 @@ steps:
           compressed: 'dist.tgz'
     command: .buildkite/scripts/build-and-test.sh
 
+  - label: ':vercel: Deploy Vercel preview'
+    key: 'vercel-preview'
+    depends_on: 'build-and-test'
+    if: "build.branch != 'main' && build.tag == null"
+    soft_fail: true
+    plugins:
+      - *shallow-clone
+      - *load-secrets
+      - *cache-node-modules
+      - *restore-dist
+    command: .buildkite/scripts/deploy-vercel.sh
+
   - label: ':playwright: Run end-to-end tests'
     key: 'e2e-tests'
-    depends_on: 'build-and-test'
+    depends_on:
+      - step: 'vercel-preview'
+        allow_failure: true
     if: "build.branch != 'main' && build.tag == null"
     plugins:
       - *shallow-clone
@@ -147,14 +161,3 @@ steps:
       - *load-secrets
       - *cache-node-modules
     command: .buildkite/scripts/deploy-docs.sh
-
-  - label: ':vercel: Deploy Vercel preview'
-    key: 'vercel-preview'
-    depends_on: 'build-and-test'
-    if: "build.branch != 'main' && build.tag == null"
-    plugins:
-      - *shallow-clone
-      - *load-secrets
-      - *cache-node-modules
-      - *restore-dist
-    command: .buildkite/scripts/deploy-vercel.sh
