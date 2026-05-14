@@ -1,3 +1,4 @@
+890b9ba1 SW-8353 Wire useNewTables to New Observation Results Tables feature flag (#5702)
 943aa461 SW-8355 Feature flag (#5703)
 7ccb08f2 Enable virtual walkthroughs through organization features (#5701)
 2c534b73 SW-8349 Fix disapearing model when adding/deleting annotations (#5697)
