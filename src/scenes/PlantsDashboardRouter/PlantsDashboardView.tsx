@@ -9,6 +9,7 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePlantingSite from 'src/hooks/usePlantingSite';
@@ -60,6 +61,7 @@ export default function PlantsDashboardView({
   const latestObservationCompletedTime = useMemo(() => {
     return plantingSite?.latestObservationCompletedTime;
   }, [plantingSite]);
+  const isWeightedSurvivalRatesEnabled = isEnabled('Weighted Survival Rates');
 
   const [listSummaries, listSummariesResponse] = useLazyListObservationSummariesQuery();
 
@@ -161,7 +163,7 @@ export default function PlantsDashboardView({
 
   const renderSurvivalRate = useCallback(
     () =>
-      plantingSite ? (
+      plantingSite || (isWeightedSurvivalRatesEnabled && projectId) ? (
         <>
           <Grid item xs={12}>
             <Box
@@ -180,11 +182,19 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <SurvivalRateCard plantingSiteId={plantingSite?.id} />
+            <SurvivalRateCard plantingSiteId={plantingSite?.id} projectId={projectId} />
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, isMobile, hasObservationResults, renderLatestObservationLink, strings]
+    [
+      plantingSite,
+      isMobile,
+      hasObservationResults,
+      renderLatestObservationLink,
+      strings,
+      projectId,
+      isWeightedSurvivalRatesEnabled,
+    ]
   );
 
   const renderTotalPlantsAndSpecies = () => (
