@@ -7,7 +7,7 @@ import ErrorBoundary from 'src/ErrorBoundary';
 import ProjectsRouter from 'src/components/Projects/Router';
 import SeedFundReportsRouter from 'src/components/SeedFundReports/Router';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
+import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import ApplicationProvider from 'src/providers/Application';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
@@ -82,7 +82,8 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const hasObservationsResults = useMemo(() => !!countObservationsResult, [countObservationsResult]);
   const hasPlantingSites = useMemo(() => !!countPlantingSitesResult.data, [countPlantingSitesResult.data]);
 
-  const isVirtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots');
+  const orgFeatures = useOrganizationFeatures();
+  const isVirtualWalkthroughEnabled = !!orgFeatures?.virtualWalkthrough?.enabled;
 
   const contentStyles = {
     height: '100%',

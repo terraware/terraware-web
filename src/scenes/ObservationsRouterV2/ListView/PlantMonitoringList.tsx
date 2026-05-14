@@ -20,14 +20,12 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
+import { useListObservationResults } from 'src/hooks/observations';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
-import {
-  useLazyListAdHocObservationResultsQuery,
-  useLazyListObservationResultsQuery,
-} from 'src/queries/generated/observations';
+import { useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/observations';
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { useLazyGetAllT0SiteDataSetQuery } from 'src/queries/generated/t0';
 import { useLazyGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
@@ -157,7 +155,11 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const adHocTableState = useTableState(ADHOC_STORAGE_KEY, { persistFilters: true });
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
-  const [listObservationResults, listObservationsResultsResponse] = useLazyListObservationResultsQuery();
+  const listObservationsResultsResponse = useListObservationResults({
+    organizationId: selectedPlotSelection !== 'adHoc' ? selectedOrganization?.id : undefined,
+    plantingSiteId,
+    depth: 'Stratum',
+  });
   const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
   const [getT0SiteDataSet, getT0SiteDataSetResponse] = useLazyGetAllT0SiteDataSetQuery();
   const [getPlotsWithObservations, getPlotsWithObservationsResponse] = useLazyGetPlotsWithObservationsQuery();
@@ -186,34 +188,17 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   );
 
   useEffect(() => {
-    if (selectedOrganization) {
-      if (selectedPlotSelection === 'adHoc') {
-        void listAdHocObservationResults(
-          {
-            organizationId: selectedOrganization.id,
-            plantingSiteId,
-            includePlants: true,
-          },
-          true
-        );
-      } else {
-        void listObservationResults(
-          {
-            organizationId: selectedOrganization.id,
-            plantingSiteId,
-            depth: 'Stratum',
-          },
-          true
-        );
-      }
+    if (selectedOrganization && selectedPlotSelection === 'adHoc') {
+      void listAdHocObservationResults(
+        {
+          organizationId: selectedOrganization.id,
+          plantingSiteId,
+          includePlants: true,
+        },
+        true
+      );
     }
-  }, [
-    listAdHocObservationResults,
-    listObservationResults,
-    selectedPlotSelection,
-    selectedOrganization,
-    plantingSiteId,
-  ]);
+  }, [listAdHocObservationResults, selectedPlotSelection, selectedOrganization, plantingSiteId]);
 
   useEffect(() => {
     if (plantingSiteId) {

@@ -23,5 +23,6 @@ export type ListOrganizationFeaturesResponsePayload = {
   reports: OrganizationFeaturePayload;
   seedFundReports: OrganizationFeaturePayload;
   status: SuccessOrError;
+  virtualWalkthrough: OrganizationFeaturePayload;
 };
 export const { useListOrganizationFeaturesQuery, useLazyListOrganizationFeaturesQuery } = injectedRtkApi;

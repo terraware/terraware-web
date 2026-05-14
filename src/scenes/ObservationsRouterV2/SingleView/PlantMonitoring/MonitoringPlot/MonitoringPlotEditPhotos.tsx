@@ -8,13 +8,13 @@ import { isVideoFile } from 'src/components/ActivityLog/ActivityMediaForm';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   DeletePlotPhotoApiArg,
   UpdatePlotPhotoApiArg,
   UploadOtherPlotMediaApiArg,
   useDeletePlotPhotoMutation,
-  useGetObservationResultsQuery,
   useUpdatePlotPhotoMutation,
   useUploadOtherPlotMediaMutation,
 } from 'src/queries/generated/observations';
@@ -46,7 +46,7 @@ const MonitoringPlotEditPhotos = () => {
 
   const snackbar = useSnackbar();
 
-  const { data: getObservationResultsApiResponse } = useGetObservationResultsQuery({ observationId });
+  const { data: getObservationResultsApiResponse } = useGetOneObservationResults({ observationId });
 
   const observationResults = useMemo(
     () => getObservationResultsApiResponse?.observation,

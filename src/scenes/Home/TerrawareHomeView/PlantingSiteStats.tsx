@@ -8,11 +8,11 @@ import AddLink from 'src/components/common/AddLink';
 import Link from 'src/components/common/Link';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { APP_PATHS } from 'src/constants';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazySearchPlantingSitesQuery } from 'src/queries/search/plantingSites';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import { isAdmin } from 'src/utils/organization';
@@ -37,7 +37,9 @@ export const PlantingSiteStats = () => {
   const { plantingSite } = usePlantingSite(selectedPlantingSiteId);
   const { plantingSiteReportedPlants } = usePlantingSiteReportedPlants(selectedPlantingSiteId);
   const [search, { data: plantingSiteSummariesData }] = useLazySearchPlantingSitesQuery();
-  const [getObservationResults, getObservationResultsResponse] = useLazyGetObservationResultsQuery();
+  const getObservationResultsResponse = useGetOneObservationResults({
+    observationId: plantingSite?.latestObservationId,
+  });
 
   const plantingSiteSummaries = useMemo(() => plantingSiteSummariesData ?? [], [plantingSiteSummariesData]);
   const latestObservationResult = useMemo(
@@ -55,12 +57,6 @@ export const PlantingSiteStats = () => {
       );
     }
   }, [search, selectedOrganization]);
-
-  useEffect(() => {
-    if (plantingSite && plantingSite.latestObservationId) {
-      void getObservationResults({ observationId: plantingSite.latestObservationId }, true);
-    }
-  }, [getObservationResults, plantingSite]);
 
   useEffect(() => {
     if (plantingSiteSummaries.length && selectedPlantingSiteId === undefined) {

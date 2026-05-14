@@ -1,7 +1,11 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots';
+export type FeatureName =
+  | 'Show Production View'
+  | 'Virtual Monitoring Plots'
+  | 'Weighted Survival Rates'
+  | 'New Observation Results Tables';
 
 export type Feature = {
   name: FeatureName;
@@ -42,6 +46,24 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for virtual monitoring plots'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Weighted Survival Rates',
+    preferenceName: 'weightedSurvivalRates',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Average strata survival rate on a weighted basis for planting sites'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'New Observation Results Tables',
+    preferenceName: 'newObservationResultsTables',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Use new observation results tables for observation results APIs'],
     disclosure: ['This is a WIP'],
   },
 ];

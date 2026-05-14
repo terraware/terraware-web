@@ -4,13 +4,13 @@ import { useParams } from 'react-router';
 import { TextField } from '@mui/material';
 import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   BiomassSpeciesUpdateOperationPayload,
   QuadratSpeciesUpdateOperationPayload,
   UpdateObservationRequestPayload,
-  useGetObservationResultsQuery,
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
 
@@ -43,7 +43,7 @@ export default function QuadratSpeciesEditableTable({
 
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const [update] = useUpdateCompletedObservationPlotMutation();
   const [optimisticValues, setOptimisticValues] = useState<Record<string, Partial<SpeciesRow>>>({});

@@ -29,7 +29,8 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
-import isEnabled from 'src/features';
+import { useGetOneObservationResults } from 'src/hooks/observations';
+import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -38,7 +39,6 @@ import {
   ExistingTreePayload,
   ObservationMonitoringPlotResultsPayload,
   ObservationResultsPayload,
-  useLazyGetObservationResultsQuery,
 } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import {
@@ -88,7 +88,8 @@ const ObservationMap = ({
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
 
-  const isVirtualPlotsEnabled = isEnabled('Virtual Monitoring Plots');
+  const orgFeatures = useOrganizationFeatures();
+  const isVirtualPlotsEnabled = !!orgFeatures?.virtualWalkthrough?.enabled;
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend(
     'substrata',
@@ -129,7 +130,6 @@ const ObservationMap = ({
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const [listObservationSplats, listObservationSplatsResult] = useLazyListObservationSplatsQuery();
-  const [getObservation, getObservationResponse] = useLazyGetObservationResultsQuery();
 
   useEffect(() => {
     if (selectedOrganization && plantingSiteId !== undefined) {
@@ -173,11 +173,10 @@ const ObservationMap = ({
   const [selectedObservationId, setSelectedObservationId] = useState<number>();
   const [selectedAdHocObservationId, setSelectedAdHocObservationId] = useState<number | 'all'>('all');
 
-  useEffect(() => {
-    if (selectedObservationId) {
-      void getObservation({ observationId: selectedObservationId, depth: 'Plant' }, true);
-    }
-  }, [getObservation, selectedObservationId]);
+  const getObservationResponse = useGetOneObservationResults({
+    observationId: selectedObservationId,
+    depth: 'Plant',
+  });
 
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect

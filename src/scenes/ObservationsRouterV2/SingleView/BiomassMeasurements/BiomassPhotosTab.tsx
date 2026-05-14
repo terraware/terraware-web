@@ -6,9 +6,9 @@ import { Button } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import EventLog from 'src/scenes/ObservationsRouterV2/SingleView/EventLog';
 import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouterV2/SingleView/MonitoringPlotPhotosWithActions';
@@ -20,7 +20,7 @@ const BiomassPhotosTab = () => {
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
 
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
 
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);

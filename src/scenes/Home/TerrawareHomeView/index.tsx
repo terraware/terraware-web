@@ -10,9 +10,9 @@ import Link from 'src/components/common/Link';
 import PageCard from 'src/components/common/PageCard';
 import TfMain from 'src/components/common/TfMain';
 import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
+import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
@@ -44,7 +44,8 @@ const TerrawareHomeView = () => {
   const seedBankSummary = useSeedBankSummary();
   const orgNurserySummary = useOrgNurserySummary();
   const showAcceleratorCard = orgPreferences.showAcceleratorCard !== false;
-  const virtualWalkthroughEnabled = isEnabled('Virtual Monitoring Plots');
+  const orgFeatures = useOrganizationFeatures();
+  const virtualWalkthroughEnabled = !!orgFeatures?.virtualWalkthrough?.enabled;
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 

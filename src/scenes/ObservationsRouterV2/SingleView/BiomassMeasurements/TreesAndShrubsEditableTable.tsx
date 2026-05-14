@@ -4,13 +4,13 @@ import { useParams } from 'react-router';
 import { IconButton, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   BiomassSpeciesUpdateOperationPayload,
   RecordedTreeUpdateOperationPayload,
   UpdateObservationRequestPayload,
-  useGetObservationResultsQuery,
   useUpdateCompletedObservationPlotMutation,
 } from 'src/queries/generated/observations';
 import TreeNoteModal from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/TreeNoteModal';
@@ -27,7 +27,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const { strings } = useLocalization();
 
   const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
 
   const [update] = useUpdateCompletedObservationPlotMutation();
