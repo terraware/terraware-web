@@ -5215,6 +5215,8 @@ export interface components {
             isHiddenOnMap: boolean;
             /** Format: int32 */
             listPosition: number;
+            /** @description If this file is from an observation, additional observation-specific data about it. */
+            observation?: components["schemas"]["ObservationActivityMediaFilePayload"];
             /** @enum {string} */
             type: "Photo" | "Video";
         };
@@ -5309,7 +5311,8 @@ export interface components {
         AdminUpdateActivityRequestPayload: {
             /** Format: date */
             date: string;
-            description: string;
+            /** @description Required for user-created activities; optional for system-generated ones. */
+            description?: string;
             isHighlight: boolean;
             /** @enum {string} */
             status: "Not Verified" | "Verified" | "Do Not Use";
@@ -8920,6 +8923,15 @@ export interface components {
             /** Format: int64 */
             id: number;
         };
+        /** @description If this file is from an observation, additional observation-specific data about it. */
+        ObservationActivityMediaFilePayload: {
+            /** Format: int64 */
+            monitoringPlotNumber: number;
+            /** @enum {string} */
+            position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            /** @enum {string} */
+            type: "Plot" | "Quadrat" | "Soil";
+        };
         ObservationBirdnetResultPayload: {
             /** Format: int64 */
             fileId: number;
@@ -10446,7 +10458,7 @@ export interface components {
             cursor?: string;
             fields: string[];
             filters?: components["schemas"]["PrefixedSearch"][];
-            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
+            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
             search?: components["schemas"]["SearchNodePayload"];
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
         };
@@ -11158,7 +11170,8 @@ export interface components {
         UpdateActivityRequestPayload: {
             /** Format: date */
             date: string;
-            description: string;
+            /** @description Required for user-created activities; optional for system-generated ones. */
+            description?: string;
             /** @enum {string} */
             status: "Not Verified" | "Verified" | "Do Not Use";
             /** @enum {string} */
