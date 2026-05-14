@@ -77,7 +77,7 @@ export default function OutplantWithdrawalTable({
 
   useEffect(() => {
     if (selectedOrganization) {
-      void listStrata(selectedOrganization.id, true);
+      void listStrata({ organizationId: selectedOrganization.id }, true);
       void listSubstrata(selectedOrganization.id, true);
     }
   }, [listStrata, listSubstrata, selectedOrganization]);
