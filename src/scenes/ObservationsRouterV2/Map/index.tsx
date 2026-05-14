@@ -4,7 +4,7 @@ import { MapRef } from 'react-map-gl/mapbox';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { useListObservationResults, useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults, useListObservationResults } from 'src/hooks/observations';
 import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationResultsPayload, useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -61,7 +61,7 @@ const ObservationMapWrapper = ({
     [getPlantingSiteResult.data?.site, plantingSiteId]
   );
 
-  const getObservationResultResponse = useOneObservationResults({ observationId });
+  const getObservationResultResponse = useGetOneObservationResults({ observationId });
 
   const listObservationsResultsResponse = useListObservationResults({
     organizationId: plantingSiteId !== undefined && !observationId && !isBiomass ? selectedOrganization?.id : undefined,

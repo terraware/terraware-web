@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { Box } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import {
   QuadratUpdateOperationPayload,
@@ -24,7 +24,7 @@ const EditNotesModal = ({ onClose }: EditNotesModalProps) => {
   const { strings } = useLocalization();
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useOneObservationResults({
+  const { data: observationResultsResponse } = useGetOneObservationResults({
     observationId,
   });
   const observationResults = useMemo(

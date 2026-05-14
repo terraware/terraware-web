@@ -9,7 +9,7 @@ import ScrollToTop from 'src/components/common/ScrollToTop';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   OrganizationVirtualWalkthrough,
@@ -48,7 +48,7 @@ export default function VirtualWalkthroughsView(): JSX.Element {
   );
 
   const isPlotFile = virtualWalkthroughModalFile?.type === 'Plot';
-  const { data: observationResultsData } = useOneObservationResults({
+  const { data: observationResultsData } = useGetOneObservationResults({
     observationId: isPlotFile ? virtualWalkthroughModalFile?.observationId : undefined,
   });
 

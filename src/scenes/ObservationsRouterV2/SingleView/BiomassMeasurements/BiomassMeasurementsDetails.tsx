@@ -8,7 +8,7 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getShortDate } from 'src/utils/dateFormatter';
@@ -37,7 +37,7 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
     return crumbsData;
   }, [strings.OBSERVATIONS]);
 
-  const { data: observationResultsResponse } = useOneObservationResults({ observationId });
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
 
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);

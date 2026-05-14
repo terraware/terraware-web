@@ -11,7 +11,7 @@ import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import ObservationMapWrapper from 'src/scenes/ObservationsRouterV2/Map';
@@ -56,7 +56,7 @@ const SiteDetails = (): JSX.Element => {
     return crumbsData;
   }, [strings.OBSERVATIONS]);
 
-  const { data: observationResultsResponse } = useOneObservationResults({ observationId });
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
 
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);

@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { IconButton, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
@@ -27,7 +27,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const { strings } = useLocalization();
 
   const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useOneObservationResults({ observationId });
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
 
   const [update] = useUpdateCompletedObservationPlotMutation();

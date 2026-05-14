@@ -10,7 +10,7 @@ import PlantingSiteSpeciesCellRenderer from 'src/components/SeedFundReports/Loca
 import { transformNumericValue } from 'src/components/SeedFundReports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useLocalization } from 'src/providers';
@@ -62,7 +62,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
 
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
-  const getLatestObservationResponse = useOneObservationResults({
+  const getLatestObservationResponse = useGetOneObservationResults({
     observationId: plantingSite?.latestObservationId,
     depth: 'Plot',
   });

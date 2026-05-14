@@ -6,7 +6,7 @@ import { Button } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -23,7 +23,7 @@ const MonitoringPlotPhotosTab = () => {
   const monitoringPlotId = Number(params.monitoringPlotId);
   const navigate = useSyncNavigate();
 
-  const { data: observationResultsResponse } = useOneObservationResults({ observationId });
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
 
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);

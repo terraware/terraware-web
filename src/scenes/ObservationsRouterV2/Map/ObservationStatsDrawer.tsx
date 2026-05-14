@@ -6,7 +6,7 @@ import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -50,7 +50,7 @@ const ObservationStatsDrawer = ({
   const { selectedOrganization } = useOrganization();
   const replaceObservationPlotEnabled = isManagerOrHigher(selectedOrganization);
 
-  const { data: observationResultsResponse, isLoading: observationResultsLoading } = useOneObservationResults({
+  const { data: observationResultsResponse, isLoading: observationResultsLoading } = useGetOneObservationResults({
     observationId,
   });
   const { plantingSite, isLoading: plantingSiteLoading } = usePlantingSite(plantingSiteId);

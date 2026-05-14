@@ -4,7 +4,7 @@ import { Box, CircularProgress } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
 import { getShortDate } from 'src/utils/dateFormatter';
@@ -30,7 +30,7 @@ const BiomassObservationStatsDrawer = ({
   const { activeLocale, strings } = useLocalization();
   const defaultTimezone = useDefaultTimeZone().get().id;
 
-  const { data: observationResultsResponse, isLoading: observationResultsLoading } = useOneObservationResults({
+  const { data: observationResultsResponse, isLoading: observationResultsLoading } = useGetOneObservationResults({
     observationId,
   });
   const { plantingSite, isLoading: plantingSiteLoading } = usePlantingSite(plantingSiteId);

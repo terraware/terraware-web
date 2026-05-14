@@ -4,7 +4,7 @@ import { useParams } from 'react-router';
 import { Box } from '@mui/material';
 import { Button, DialogBox, DropdownItem, MultiSelect, Textfield } from '@terraware/web-components';
 
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import {
   ObservationPlotUpdateOperationPayload,
@@ -35,7 +35,7 @@ const EditMonitoringPlotQualitativeDataModal = ({ initialFormData, open, setOpen
   const observationId = Number(params.observationId);
   const monitoringPlotId = Number(params.monitoringPlotId);
 
-  const { data: observationResultsResponse } = useOneObservationResults({ observationId });
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const monitoringPlot = useMemo(
     () =>

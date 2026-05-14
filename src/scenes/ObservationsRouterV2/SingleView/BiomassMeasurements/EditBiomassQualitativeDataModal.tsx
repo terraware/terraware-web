@@ -13,7 +13,7 @@ import {
 } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import {
   BiomassUpdateOperationPayload,
@@ -45,7 +45,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
 
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useOneObservationResults({ observationId });
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [update] = useUpdateCompletedObservationPlotMutation();
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
 

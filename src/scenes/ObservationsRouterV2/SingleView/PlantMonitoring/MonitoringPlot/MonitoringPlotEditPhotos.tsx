@@ -8,7 +8,7 @@ import { isVideoFile } from 'src/components/ActivityLog/ActivityMediaForm';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
   DeletePlotPhotoApiArg,
@@ -46,7 +46,7 @@ const MonitoringPlotEditPhotos = () => {
 
   const snackbar = useSnackbar();
 
-  const { data: getObservationResultsApiResponse } = useOneObservationResults({ observationId });
+  const { data: getObservationResultsApiResponse } = useGetOneObservationResults({ observationId });
 
   const observationResults = useMemo(
     () => getObservationResultsApiResponse?.observation,

@@ -3,7 +3,7 @@ import { Route, Routes, useParams } from 'react-router';
 
 import { BusySpinner } from '@terraware/web-components';
 
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 
 import MonitoringPlotDetails from './MonitoringPlot';
 import MonitoringPlotEditPhotos from './MonitoringPlot/MonitoringPlotEditPhotos';
@@ -14,7 +14,7 @@ const PlantMonitoringView = (): JSX.Element => {
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
 
-  const { data: observationResultsResponse, isLoading: observationResultsLoading } = useOneObservationResults({
+  const { data: observationResultsResponse, isLoading: observationResultsLoading } = useGetOneObservationResults({
     observationId,
   });
 

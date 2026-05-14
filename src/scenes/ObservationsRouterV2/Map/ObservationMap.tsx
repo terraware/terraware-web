@@ -29,7 +29,7 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
@@ -173,7 +173,7 @@ const ObservationMap = ({
   const [selectedObservationId, setSelectedObservationId] = useState<number>();
   const [selectedAdHocObservationId, setSelectedAdHocObservationId] = useState<number | 'all'>('all');
 
-  const getObservationResponse = useOneObservationResults({
+  const getObservationResponse = useGetOneObservationResults({
     observationId: selectedObservationId,
     depth: 'Plant',
   });

@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import MonitoringPlotPhotos from 'src/scenes/ObservationsRouterV2/SingleView/MonitoringPlotPhotos';
 import { ObservationMonitoringPlotPosition, getQuadratLabel } from 'src/types/Observations';
@@ -20,7 +20,7 @@ const QuadratComponent = ({ position }: QuadratComponentProps) => {
   const { strings } = useLocalization();
 
   const observationId = Number(params.observationId);
-  const { data: observationResultsResponse } = useOneObservationResults({ observationId });
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const monitoringPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
   const biomassMeasurements = useMemo(() => results?.biomassMeasurements, [results?.biomassMeasurements]);

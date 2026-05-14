@@ -5,12 +5,12 @@ import { useLazyGetObservationResultsQuery } from 'src/queries/generated/observa
 
 import { ObservationDepth } from './types';
 
-type UseOneObservationResultsArgs = {
+type UseGetOneObservationResultsArgs = {
   observationId: number | undefined;
   depth?: ObservationDepth;
 };
 
-const useOneObservationResults = ({ observationId, depth }: UseOneObservationResultsArgs) => {
+const useGetOneObservationResults = ({ observationId, depth }: UseGetOneObservationResultsArgs) => {
   const useNewTables = isEnabled('New Observation Results Tables');
   const [getObservationResults, result] = useLazyGetObservationResultsQuery();
 
@@ -23,4 +23,4 @@ const useOneObservationResults = ({ observationId, depth }: UseOneObservationRes
   return result;
 };
 
-export default useOneObservationResults;
+export default useGetOneObservationResults;

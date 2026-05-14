@@ -8,7 +8,7 @@ import AddLink from 'src/components/common/AddLink';
 import Link from 'src/components/common/Link';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
 import { APP_PATHS } from 'src/constants';
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -37,7 +37,7 @@ export const PlantingSiteStats = () => {
   const { plantingSite } = usePlantingSite(selectedPlantingSiteId);
   const { plantingSiteReportedPlants } = usePlantingSiteReportedPlants(selectedPlantingSiteId);
   const [search, { data: plantingSiteSummariesData }] = useLazySearchPlantingSitesQuery();
-  const getObservationResultsResponse = useOneObservationResults({
+  const getObservationResultsResponse = useGetOneObservationResults({
     observationId: plantingSite?.latestObservationId,
   });
 

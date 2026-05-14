@@ -6,7 +6,7 @@ import { Box } from '@mui/material';
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import useBoolean from 'src/hooks/useBoolean';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useLocalization } from 'src/providers';
@@ -36,7 +36,7 @@ const MapPhotoDrawer = ({
   const orgFeatures = useOrganizationFeatures();
 
   const { format } = useNumberFormatter();
-  const { data } = useOneObservationResults({ observationId });
+  const { data } = useGetOneObservationResults({ observationId });
   const [virtualWalkthroughOpen, setVirtualWalkthroughOpen] = useBoolean(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const isVirtualPlotsEnabled = !!orgFeatures?.virtualWalkthrough?.enabled;

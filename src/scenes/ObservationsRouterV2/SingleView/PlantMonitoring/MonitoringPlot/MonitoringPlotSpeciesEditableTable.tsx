@@ -3,7 +3,7 @@ import { useParams } from 'react-router';
 
 import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 
-import { useOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import {
   MonitoringSpeciesUpdateOperationPayload,
@@ -24,7 +24,7 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
   const observationId = Number(params.observationId);
   const monitoringPlotId = Number(params.monitoringPlotId);
 
-  const { data: observationResultsResponse } = useOneObservationResults({ observationId });
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const monitoringPlot = useMemo(
     () =>
