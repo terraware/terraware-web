@@ -6,8 +6,8 @@ import { Button, Icon, IconTooltip } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
-import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import ObservationDataNumbers from 'src/scenes/ObservationsRouterV2/SingleView/BiomassMeasurements/ObservationDataNumbers';
@@ -37,7 +37,7 @@ const MonitoringPlotObservationDataTab = () => {
   const monitoringPlotId = Number(params.monitoringPlotId);
 
   const [getPlantingSite, plantingSiteResponse] = useLazyGetPlantingSiteQuery();
-  const { data: observationResultsResponse } = useGetObservationResultsQuery({ observationId });
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const monitoringPlot = useMemo(
     () =>
