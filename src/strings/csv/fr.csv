@@ -938,6 +938,7 @@ KG,kg,152e8624
 KG_KILOGRAMS,kg (kilogrammes),d64c7670
 KILOGRAMS,Kilogramme,a2ba1914
 KNOWLEDGE_BASE,Base de connaissances,81690eb8
+KNOWLEDGE_BASE_ARTICLE_SURVIVAL_RATES,Article de la base de connaissances sur les taux de survie,5477d6bb
 LAB,Laboratoire,251d5706
 LAB_GERMINATION,Germination en laboratoire,ebeb9362
 LABEL,Étiquette,85def946
@@ -2420,6 +2421,7 @@ WEIGHT_MILLIGRAMS,Poids (mg),c1b46396
 WEIGHT_OUNCES,Poids (onces),e0818b90
 WEIGHT_POUNDS,Poids (livres),6ad0d2ab
 WEIGHT_SYSTEM_SELECTED,Système de poids : {0},bc15e8bc
+WEIGHTED_SURVIVAL_RATE_TOOLTIP,"Le taux de survie moyen pondéré par strate est une moyenne pondérée par surface, calculée sur l’ensemble des strates pour lesquelles Terraware peut calculer un taux de survie. Pour plus d’informations, consultez le {0}.",b013f56c
 WELCOME,Bienvenue !,09fd702c
 WELCOME_PERSON,"Bienvenue, {0} !",db783c9d
 WELCOME_TO_TERRAWARE_PERSON,"Bienvenue à Terraware, {0} !",0832a4dc

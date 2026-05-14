@@ -939,6 +939,7 @@ KG,kg,152e8624
 KG_KILOGRAMS,kg (kilogramos),d64c7670
 KILOGRAMS,Kilogramos,a2ba1914
 KNOWLEDGE_BASE,Base de conocimientos,81690eb8
+KNOWLEDGE_BASE_ARTICLE_SURVIVAL_RATES,Artículo de la Base de Conocimientos sobre tasas de supervivencia,5477d6bb
 LAB,Laboratorio,251d5706
 LAB_GERMINATION,Germinación en laboratorio,ebeb9362
 LABEL,Etiqueta,85def946
@@ -2420,6 +2421,7 @@ WEIGHT_MILLIGRAMS,Peso (mg),c1b46396
 WEIGHT_OUNCES,Peso (Oz),e0818b90
 WEIGHT_POUNDS,Peso (lb),6ad0d2ab
 WEIGHT_SYSTEM_SELECTED,Sistema de pesaje: {0},bc15e8bc
+WEIGHTED_SURVIVAL_RATE_TOOLTIP,"La Tasa de Supervivencia Promedio por Estrato es un promedio ponderado por área calculado a través de todos los estratos para los cuales Terraware puede calcular una tasa de supervivencia. Para más información, consulte el {0}.",b013f56c
 WELCOME,¡Bienvenido!,09fd702c
 WELCOME_PERSON,"¡Bienvenido, {0}!",db783c9d
 WELCOME_TO_TERRAWARE_PERSON,"¡Bienvenido a Terraware, {0}!",0832a4dc
