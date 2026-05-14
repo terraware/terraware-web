@@ -1,7 +1,7 @@
-import React, { type JSX, useMemo, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Dropdown, Icon, Tooltip } from '@terraware/web-components';
+import { Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
@@ -16,6 +16,7 @@ type PlantingSiteTrendsCardProps = {
 
 export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteTrendsCardProps): JSX.Element {
   const theme = useTheme();
+  const [strataOptions, setStrataOptions] = useState<DropdownItem[]>();
   const [selectedPlantsPerHaStratum, setSelectedPlantsPerHaStratum] = useState<number>();
   const [selectedSurvivalStratum, setSelectedSurvivalStratum] = useState<number>();
   const { isDesktop, isMobile } = useDeviceInfo();
@@ -28,34 +29,35 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
   );
   const observationSummaries = observationSummariesQuery.data?.summaries;
 
-  const strataOptions = useMemo(
-    () => plantingSite?.strata?.map((_stratum) => ({ label: _stratum.name, value: _stratum.id })),
-    [plantingSite]
-  );
-
-  const activePlantsPerHaStratum = selectedPlantsPerHaStratum ?? strataOptions?.[0]?.value;
-  const activeSurvivalStratum = selectedSurvivalStratum ?? strataOptions?.[0]?.value;
+  useEffect(() => {
+    const stratumOpts = plantingSite?.strata?.map((_stratum) => ({ label: _stratum.name, value: _stratum.id }));
+    if (stratumOpts) {
+      setStrataOptions(stratumOpts);
+      setSelectedPlantsPerHaStratum(stratumOpts[0].value);
+      setSelectedSurvivalStratum(stratumOpts[0].value);
+    }
+  }, [plantingSite]);
 
   const plantsChartData: ChartData = useMemo(() => {
     const filteredSummaries = observationSummaries?.filter((sc) => {
-      const stratum = sc.strata.find((_stratum) => _stratum.stratumId === activePlantsPerHaStratum);
+      const stratum = sc.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
       if (stratum?.plantingDensity !== undefined) {
         return true;
       }
     });
     const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
     const values = filteredSummaries?.map((sm) => {
-      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === activePlantsPerHaStratum);
+      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
       return stratum?.plantingDensity || 0;
     });
 
     const minValues = filteredSummaries?.map((sm) => {
-      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === activePlantsPerHaStratum);
+      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
       return (stratum?.plantingDensity || 0) - (stratum?.plantingDensityStdDev || 0);
     });
 
     const maxValues = filteredSummaries?.map((sm) => {
-      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === activePlantsPerHaStratum);
+      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
       return (stratum?.plantingDensity || 0) + (stratum?.plantingDensityStdDev || 0);
     });
 
@@ -85,18 +87,18 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
         },
       ],
     };
-  }, [observationSummaries, activePlantsPerHaStratum]);
+  }, [observationSummaries, selectedPlantsPerHaStratum]);
 
   const survivalChartData: ChartData = useMemo(() => {
     const filteredSummaries = observationSummaries?.filter((sc) => {
-      const stratum = sc.strata.find((_stratum) => _stratum.stratumId === activePlantsPerHaStratum);
+      const stratum = sc.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
       if (stratum?.survivalRate !== undefined) {
         return true;
       }
     });
     const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
     const values = filteredSummaries?.map((sm) => {
-      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === activeSurvivalStratum);
+      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === selectedSurvivalStratum);
       return stratum?.survivalRate || 0;
     });
 
@@ -111,7 +113,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
         },
       ],
     };
-  }, [observationSummaries, activePlantsPerHaStratum, activeSurvivalStratum]);
+  }, [observationSummaries, selectedPlantsPerHaStratum, selectedSurvivalStratum]);
 
   return (
     <Card
@@ -139,7 +141,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
             placeholder={strings.SELECT}
             options={strataOptions}
             onChange={(newValue) => setSelectedPlantsPerHaStratum(Number(newValue))}
-            selectedValue={activePlantsPerHaStratum}
+            selectedValue={selectedPlantsPerHaStratum}
           />
         </Box>
         <Box id='legend-container-th' sx={{ marginTop: 3 }} />
@@ -188,7 +190,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
             placeholder={strings.SELECT}
             options={strataOptions}
             onChange={(newValue) => setSelectedSurvivalStratum(Number(newValue))}
-            selectedValue={activeSurvivalStratum}
+            selectedValue={selectedSurvivalStratum}
           />
         </Box>
         <Box id='legend-container-mr' sx={{ marginTop: 3 }} />
