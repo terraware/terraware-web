@@ -84,10 +84,11 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
                     strings.WEIGHTED_SURVIVAL_RATE_TOOLTIP,
                     <Link
                       to={knowledgeBaseLinks['/observations.*/survival-rate-settings']}
-                      fontSize={'14px'}
+                      fontSize={'11px'}
                       target='_blank'
+                      style={{ color: '#FFF', lineHeight: '16,5px' }}
                     >
-                      {strings.KNOWLEDGE_BASE_ARTICAL_SURVIVAL_RATES}
+                      {strings.KNOWLEDGE_BASE_ARTICLE_SURVIVAL_RATES}
                     </Link>
                   )
                 : strings.SURVIVAL_RATE_TOOLTIP

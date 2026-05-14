@@ -163,7 +163,7 @@ export default function PlantsDashboardView({
 
   const renderSurvivalRate = useCallback(
     () =>
-      plantingSite || (isWeightedSurvivalRatesEnabled && projectId) ? (
+      plantingSite || (isWeightedSurvivalRatesEnabled && !!projectId) ? (
         <>
           <Grid item xs={12}>
             <Box
@@ -455,7 +455,9 @@ export default function PlantsDashboardView({
         {renderTotalPlantsAndSpecies()}
         {hasObservationResults && selectedPlantingSiteId !== -1 && renderPlantingSiteTrends()}
         {selectedPlantingSiteId !== -1 && hasObservationResults && renderPlantingProgressAndDensity()}
-        {hasObservationResults && selectedPlantingSiteId !== -1 && renderSurvivalRate()}
+        {((hasObservationResults && selectedPlantingSiteId !== -1) ||
+          (isWeightedSurvivalRatesEnabled && !!projectId && !plantingSite)) &&
+          renderSurvivalRate()}
         {selectedPlantingSiteId !== -1 && hasStrata && renderStratumLevelData()}
         {selectedPlantingSiteId !== -1 && hasPolygons && !hasStrata && renderSimpleSiteMap()}
         {(selectedPlantingSiteId === -1 || !plantingSite) && renderMapWithSites()}
