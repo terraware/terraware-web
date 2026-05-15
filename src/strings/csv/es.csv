@@ -1446,6 +1446,8 @@ PLANTING_SITE_TYPE,Tipo de sitio de plantación,4f94b3c8
 PLANTING_SITE_TYPE_DETAILED,Detallado,6a25500b
 PLANTING_SITE_TYPE_SIMPLE,Sencillo,33e02624
 PLANTING_SITES,Sitios de plantación,3799d2eb
+PLANTING_WITHDRAWAL_DATE,Fecha de Retiro de Plantación,bf2739c8
+PLANTING_WITHDRAWALS,Retiros de Plantación,3c64a0e3
 PLANTINGS,Plantaciones,51a94883
 PLANTINGS_REQUIRE_PLANTING_SITES,Es necesario asignar un sitio de plantación a las plantaciones.,e83e8ad2
 PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS,Las plantaciones requieren lotes con plántulas que están «Listas para plantar».,ed590a8b
