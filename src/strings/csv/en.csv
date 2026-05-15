@@ -2422,6 +2422,7 @@ WEIGHT_OUNCES,Weight (oz),
 WEIGHT_POUNDS,Weight (lb),
 WEIGHT_SYSTEM_SELECTED,Weight system: {0},
 WEIGHTED_SURVIVAL_RATE_TOOLTIP,"The Average Strata Survival Rate is an area weighted average calculated across all strata for which Terraware can calculate a survival rate. For more information, see the {0}."
+WEIGHTED_SURVIVAL_RATE_SETTINGS_INFO,"{0} For every permanent plot, select or enter the data that will be used to provide the initial plant density per plot for survival rate calculations. This “t0 planting data” must be set for all plots. Observations including the permanent plot can be used for the plot’s t0 planting data. For subsequent Observations, Terraware will use this t0 data to calculate survival rates at the Plot, Substratum, and Stratum levels. If not all permanent plots have been observed, Planting Site survival rates will not be calculated until those plots have been observed and have t0 data set. t0 data will be able to be set only after those plots have been observed. If temporary plots are used for survival rate calculations, t0 data must be set for all strata. If the t0 data selected or entered for a plot or stratum is changed, survival rates will be recalculated based on the new selection.",
 WELCOME,Welcome!,
 WELCOME_PERSON,"Welcome, {0}!",
 WELCOME_TO_TERRAWARE_PERSON,"Welcome to Terraware, {0}!",
