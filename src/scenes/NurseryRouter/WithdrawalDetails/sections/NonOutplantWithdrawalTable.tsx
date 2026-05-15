@@ -42,7 +42,7 @@ export default function NonOutplantWithdrawalTable({
       { key: 'germinating', name: strings.GERMINATION_ESTABLISHMENT, type: 'number' as const },
       { key: 'activeGrowth', name: strings.ACTIVE_GROWTH, type: 'number' as const },
       {
-        key: 'hardeningOffQuantity',
+        key: 'hardeningOff',
         name: strings.HARDENING_OFF,
         type: 'number' as const,
       },
