@@ -70,8 +70,8 @@ const injectedRtkApi = api.injectEndpoints({
           count: 0,
         },
       }),
-      transformResponse: (results: GetStratumPlantDensityTrendApiResponse) =>
-        results.results.map((result) => ({
+      transformResponse: (response: GetStratumPlantDensityTrendApiResponse) =>
+        response.results.map((result) => ({
           observationId: Number(result.observation_id),
           completedTime: result.observation_completedTime,
           plantDensity: Number(result.plantDensity),
