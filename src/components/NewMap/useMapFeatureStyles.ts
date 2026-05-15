@@ -95,11 +95,11 @@ const useMapFeatureStyles = () => {
 
   const withdrawalPhotoStyle = useMemo(
     (): MapIconComponentStyle => ({
-      iconColor: '#0072B2',
+      iconColor: theme.palette.TwClrBaseBlue600 as string,
       iconName: 'iconPhoto',
       type: 'icon',
     }),
-    []
+    [theme]
   );
 
   const livePlantStyle = useMemo(
