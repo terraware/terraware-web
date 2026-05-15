@@ -101,7 +101,7 @@ const ObservationMap = ({
     plantMarkersLegendGroup: plantMakersLegendGroup,
   } = usePlantMarkersMapLegend(plantingSiteId === undefined);
   const { plotPhotosVisible, plotPhotosLegendGroup, virtualPlotVisible, setVirtualPlotVisible } =
-    usePlotPhotosMapLegend(plantingSiteId === undefined);
+    usePlotPhotosMapLegend({ disabled: plantingSiteId === undefined });
   const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
   const { adHocPlotsVisible, permanentPlotsVisible, temporaryPlotsVisible, monitoringPlotsLegendGroup } =
     useMonitoringPlotsMapLegend(plantingSiteId === undefined, isBiomass, isBiomass, false, true);

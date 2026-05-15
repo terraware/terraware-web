@@ -1,3 +1,4 @@
+import { Point } from 'src/queries/generated/nurseryWithdrawals';
 import {
   SearchCountApiResponse,
   SearchNodePayload,
@@ -11,7 +12,7 @@ import { baseApi as api } from '../baseApi';
 import { QueryTagTypes } from '../tags';
 
 export type WithdrawalPhotoSearchEntry = {
-  gpsCoordinates: { type: 'Point'; coordinates: [number, number] };
+  gpsCoordinates: Point;
   photoId: number;
   withdrawalId: number;
   withdrawnDate: string;
@@ -353,17 +354,30 @@ const injectedRtkApi = api.injectEndpoints({
       }),
       providesTags: [{ type: QueryTagTypes.NurseryWithdrawals, id: 'List' }],
       transformResponse: (response: SearchNurseryWithdrawalPhotosApiResponse): WithdrawalPhotoSearchEntry[] =>
-        response.results
-          .filter((result) => !!result.gpsCoordinate && !!result.withdrawal?.id && !!result.withdrawal?.withdrawnDate)
-          .map((result) => {
-            const point = JSON.parse(result.gpsCoordinate!) as { type: 'Point'; coordinates: [number, number] };
-            return {
+        response.results.flatMap((result): WithdrawalPhotoSearchEntry[] => {
+          if (!result.gpsCoordinate || !result.withdrawal?.id || !result.withdrawal.withdrawnDate || !result.fileId) {
+            return [];
+          }
+
+          let point: Point;
+          try {
+            point = JSON.parse(result.gpsCoordinate) as Point;
+          } catch {
+            return [];
+          }
+          if (point?.type !== 'Point' || !Array.isArray(point.coordinates) || point.coordinates.length < 2) {
+            return [];
+          }
+
+          return [
+            {
               gpsCoordinates: point,
               photoId: Number(result.fileId),
-              withdrawalId: Number(result.withdrawal!.id),
-              withdrawnDate: result.withdrawal!.withdrawnDate!,
-            };
-          }),
+              withdrawalId: Number(result.withdrawal.id),
+              withdrawnDate: result.withdrawal.withdrawnDate,
+            },
+          ];
+        }),
     }),
   }),
 });

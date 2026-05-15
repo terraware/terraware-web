@@ -7,12 +7,12 @@ import { Point } from 'src/queries/generated/nurseryWithdrawals';
 import { getShortDate } from 'src/utils/dateFormatter';
 
 import MapPhotoDrawer from './MapPhotoDrawer';
-import { useFormatGps } from './formatGps';
+import { useFormatGPS } from './useFormatGPS';
 
 const PHOTO_URL = '/api/v1/nursery/withdrawals/:withdrawalId/photos/:photoId';
 
 type WithdrawalPhotoDrawerContentProps = {
-  gpsCoordinates?: Point;
+  gpsCoordinates: Point;
   photoId: number;
   withdrawalId: number;
   withdrawnDate: string;
@@ -25,7 +25,7 @@ const WithdrawalPhotoDrawerContent = ({
   withdrawnDate,
 }: WithdrawalPhotoDrawerContentProps): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
-  const formatGps = useFormatGps();
+  const formatGPS = useFormatGPS();
 
   const photoUrl = useMemo(
     () => PHOTO_URL.replace(':withdrawalId', `${withdrawalId}`).replace(':photoId', `${photoId}`),
@@ -46,12 +46,10 @@ const WithdrawalPhotoDrawerContent = ({
       },
       {
         key: strings.LOCATION,
-        value: gpsCoordinates
-          ? formatGps(gpsCoordinates.coordinates[0], gpsCoordinates.coordinates[1])
-          : strings.UNKNOWN,
+        value: formatGPS(gpsCoordinates.coordinates[0], gpsCoordinates.coordinates[1]),
       },
     ],
-    [activeLocale, formatGps, gpsCoordinates, strings, withdrawalUrl, withdrawnDate]
+    [activeLocale, formatGPS, gpsCoordinates, strings, withdrawalUrl, withdrawnDate]
   );
 
   return <MapPhotoDrawer imageUrl={photoUrl} rows={rows} />;

@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box } from '@mui/material';
 
@@ -9,7 +9,8 @@ import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { RecordedPlant } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
-import { useNumberFormatter } from 'src/utils/useNumberFormatter';
+
+import { useFormatGPS } from './useFormatGPS';
 
 type MapPlantDrawerProps = {
   monitoringPlotId: number;
@@ -20,7 +21,6 @@ type MapPlantDrawerProps = {
 const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDrawerProps): JSX.Element | undefined => {
   const { activeLocale, strings } = useLocalization();
 
-  const { format } = useNumberFormatter();
   const { currentData: observationResultResponse } = useGetOneObservationResults({
     observationId,
     depth: 'Plant',
@@ -55,21 +55,7 @@ const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDraw
     return monitoringPlotClaimedByName;
   }, [monitoringPlotClaimedByName]);
 
-  const formatGPS = useCallback(
-    (lon: number, lat: number): string => {
-      const latHemisphere = lat >= 0 ? 'N' : 'S';
-      const lonHemisphere = lon >= 0 ? 'E' : 'W';
-
-      const latAbs = Math.abs(lat).toFixed(4);
-      const lonAbs = Math.abs(lon).toFixed(4);
-
-      const latFormatted = format(Number(latAbs));
-      const lonFormatted = format(Number(lonAbs));
-
-      return `${latFormatted}° ${latHemisphere}, ${lonFormatted}° ${lonHemisphere}`;
-    },
-    [format]
-  );
+  const formatGPS = useFormatGPS();
 
   const plantStatus = useMemo(() => {
     switch (plant.status) {

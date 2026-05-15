@@ -91,12 +91,10 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
 
   const withdrawalPhotos = useWithdrawalPhotosForPlantingSite({
     enabled: withdrawalPhotosVisible,
-    organizationId: selectedOrganization?.id,
     plantingSiteId,
   });
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelectedFeature(undefined);
     setDrawerOpen(false);
     selectPhotos([]);

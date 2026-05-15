@@ -13,9 +13,7 @@ type UsePlotPhotosMapLegendOptions = {
   withdrawalsDisabled?: boolean;
 };
 
-const usePlotPhotosMapLegend = (optionsOrDisabled?: boolean | UsePlotPhotosMapLegendOptions) => {
-  const options: UsePlotPhotosMapLegendOptions =
-    typeof optionsOrDisabled === 'object' ? optionsOrDisabled : { disabled: optionsOrDisabled };
+const usePlotPhotosMapLegend = (options: UsePlotPhotosMapLegendOptions = {}) => {
   const { disabled, includeObservations = true, includeWithdrawals = false, withdrawalsDisabled } = options;
 
   const { strings } = useLocalization();

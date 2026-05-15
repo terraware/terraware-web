@@ -179,6 +179,11 @@ export type Point = {
     coordinates: number[];
     type: 'Point';
   };
+export type ObservationActivityMediaFilePayload = {
+  monitoringPlotNumber: number;
+  position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+  type: 'Plot' | 'Quadrat' | 'Soil';
+};
 export type ActivityMediaFilePayload = {
   caption?: string;
   capturedDate: string;
@@ -188,6 +193,8 @@ export type ActivityMediaFilePayload = {
   isCoverPhoto: boolean;
   isHiddenOnMap: boolean;
   listPosition: number;
+  /** If this file is from an observation, additional observation-specific data about it. */
+  observation?: ObservationActivityMediaFilePayload;
   type: 'Photo' | 'Video';
 };
 export type ActivityPayload = {
@@ -298,7 +305,8 @@ export type SimpleSuccessResponsePayload = {
 };
 export type AdminUpdateActivityRequestPayload = {
   date: string;
-  description: string;
+  /** Required for user-created activities; optional for system-generated ones. */
+  description?: string;
   isHighlight: boolean;
   status: 'Not Verified' | 'Verified' | 'Do Not Use';
   type:
@@ -313,7 +321,8 @@ export type AdminUpdateActivityRequestPayload = {
 };
 export type UpdateActivityRequestPayload = {
   date: string;
-  description: string;
+  /** Required for user-created activities; optional for system-generated ones. */
+  description?: string;
   status: 'Not Verified' | 'Verified' | 'Do Not Use';
   type:
     | 'Seed Collection'

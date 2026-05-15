@@ -28,7 +28,7 @@ export type WithdrawalPhoto = {
   withdrawalId: number;
   photoId: number;
   withdrawnDate: string;
-  gpsCoordinates?: Point;
+  gpsCoordinates: Point;
 };
 
 export type MapDrawerPhotoItem = PlotPhoto | PlotSplat | WithdrawalPhoto;

@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
-export const useFormatGps = () => {
+export const useFormatGPS = () => {
   const { format } = useNumberFormatter();
 
   return useCallback(

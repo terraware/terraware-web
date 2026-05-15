@@ -16,7 +16,7 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import MapPhotoDrawer from './MapPhotoDrawer';
-import { useFormatGps } from './formatGps';
+import { useFormatGPS } from './useFormatGPS';
 
 const PHOTO_URL = '/api/v1/tracking/observations/:observationId/plots/:monitoringPlotId/photos/:fileId';
 
@@ -41,7 +41,7 @@ const ObservationPhotoDrawerContent = ({
   const [searchParams, setSearchParams] = useSearchParams();
   const orgFeatures = useOrganizationFeatures();
   const isVirtualPlotsEnabled = !!orgFeatures?.virtualWalkthrough?.enabled;
-  const formatGps = useFormatGps();
+  const formatGPS = useFormatGPS();
 
   const photoUrl = useMemo(() => {
     if (!photo) {
@@ -102,7 +102,7 @@ const ObservationPhotoDrawerContent = ({
         },
         {
           key: strings.LOCATION,
-          value: formatGps(photo.gpsCoordinates.coordinates[0], photo.gpsCoordinates.coordinates[1]),
+          value: formatGPS(photo.gpsCoordinates.coordinates[0], photo.gpsCoordinates.coordinates[1]),
         },
       ];
     } else if (result && splat && monitoringPlot) {
@@ -142,7 +142,7 @@ const ObservationPhotoDrawerContent = ({
   }, [
     activeLocale,
     format,
-    formatGps,
+    formatGPS,
     monitoringPlot,
     monitoringPlotId,
     observationUrl,
