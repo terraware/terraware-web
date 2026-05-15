@@ -21,6 +21,7 @@ import { isAfter } from 'src/utils/dateUtils';
 
 import EmptyPlantingSiteMap from './components/EmptyPlantingSiteMap';
 import MultiplePlantingSiteMap from './components/MultiplePlantingSiteMap';
+import NewPlantingSiteTrendsCard from './components/NewPlantingSiteTrendsCard';
 import PlantDashboardMap from './components/PlantDashboardMap';
 import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
@@ -265,7 +266,11 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <PlantingSiteTrendsCard plantingSiteId={plantingSite?.id} />
+            {isEnabled('New Observation Results Tables') ? (
+              <NewPlantingSiteTrendsCard plantingSiteId={plantingSite?.id} />
+            ) : (
+              <PlantingSiteTrendsCard plantingSiteId={plantingSite?.id} />
+            )}
           </Grid>
         </>
       ) : undefined,
