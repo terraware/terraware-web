@@ -6,6 +6,7 @@ import { Box, Slide, useTheme } from '@mui/material';
 import ErrorBoundary from 'src/ErrorBoundary';
 import ProjectsRouter from 'src/components/Projects/Router';
 import SeedFundReportsRouter from 'src/components/SeedFundReports/Router';
+import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
@@ -226,7 +227,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />
             )}
 
-            <Route path='*' element={<Navigate to={APP_PATHS.HOME} />} />
+            <Route path='*' element={orgFeatures ? <Navigate to={APP_PATHS.HOME} /> : <BlockingSpinner />} />
           </Routes>
         </ErrorBoundary>
       </Box>
