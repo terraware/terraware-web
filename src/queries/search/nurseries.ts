@@ -344,23 +344,9 @@ const injectedRtkApi = api.injectEndpoints({
           prefix: 'nurseryWithdrawalPhotos',
           fields: ['fileId', 'gpsCoordinate', 'withdrawal.id', 'withdrawal.withdrawnDate'],
           search: {
-            operation: 'and',
-            children: [
-              {
-                operation: 'field',
-                field: 'withdrawal.delivery.plantings.plantingSite.id',
-                values: [`${plantingSiteId}`],
-              },
-              {
-                operation: 'not',
-                child: {
-                  operation: 'field',
-                  field: 'gpsCoordinate',
-                  type: 'Exact',
-                  values: [null],
-                },
-              },
-            ],
+            operation: 'field',
+            field: 'withdrawal.delivery.plantings.plantingSite.id',
+            values: [`${plantingSiteId}`],
           },
           count: 0,
         },
