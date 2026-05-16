@@ -4055,12 +4055,12 @@
     "@types/babel__core" "^7.20.5"
     reduce-configs "^1.1.1"
 
-"@rsbuild/plugin-eslint@^1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@rsbuild/plugin-eslint/-/plugin-eslint-1.2.1.tgz#b7a50a801e1cf822bbe8394153083b8953ce4c04"
-  integrity sha512-INkwQ3b7O7ySsCmNnlN77WjuAETWz6YVdxVlH8oh7JhyHCxXAZhQxPBrQi9ZTuQ37VRFTAFmWlZhkKfHVcEQPg==
+"@rsbuild/plugin-eslint@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@rsbuild/plugin-eslint/-/plugin-eslint-2.0.0.tgz#8208a71276208d8237e1b4caa86994d3dc69830e"
+  integrity sha512-SRVPDkPRJEbFbEeFs54mY9x7dQO+hxYHeB1HMgIW5B91mZI2qv/NOrgIHit3s6gUz8J/guUXn9HcRk3efovuEw==
   dependencies:
-    eslint-rspack-plugin "^4.3.0"
+    eslint-rspack-plugin "5.0.0"
 
 "@rsbuild/plugin-react@^2.0.0":
   version "2.0.0"
@@ -5726,14 +5726,6 @@
   version "9.6.1"
   resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-9.6.1.tgz#d5795ad732ce81715f27f75da913004a56751584"
   integrity sha512-FXx2pKgId/WyYo2jXw63kk7/+TY7u7AziEJxJAnSFzHlqTAS3Ync6SvgYAN/k4/PQpnnVuzoMuVnByKK2qp0ag==
-  dependencies:
-    "@types/estree" "*"
-    "@types/json-schema" "*"
-
-"@types/eslint@^8.56.10":
-  version "8.56.12"
-  resolved "https://registry.yarnpkg.com/@types/eslint/-/eslint-8.56.12.tgz#1657c814ffeba4d2f84c0d4ba0f44ca7ea1ca53a"
-  integrity sha512-03ruubjWyOHlmljCVoxSuNDdmfZDzsrrz0P2LeJsOXr+ZwFQ+0yQIwNCwt/GYhV7Z31fgtXJTAEs+FYlEL851g==
   dependencies:
     "@types/estree" "*"
     "@types/json-schema" "*"
@@ -9168,16 +9160,13 @@ eslint-plugin-storybook@^0.12.0:
     "@typescript-eslint/utils" "^8.8.1"
     ts-dedent "^2.2.0"
 
-eslint-rspack-plugin@^4.3.0:
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/eslint-rspack-plugin/-/eslint-rspack-plugin-4.3.0.tgz#d6a80ae9b83d1dc965c87d2495ebfc2712a329c1"
-  integrity sha512-hI/jE/EH8cfOgR59dVgA6TJ8EWejZss3ZMsSudR4K4YK3TzE/rzQN0VT6WvvOE/Tyo4+4fQaqtEMWP3x/7rocg==
+eslint-rspack-plugin@5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/eslint-rspack-plugin/-/eslint-rspack-plugin-5.0.0.tgz#f662873ab5f0dab952943e2f39ed4dc6972061d6"
+  integrity sha512-uB5zLeNW24MFVlDegBvwAO6taf1RKNCTfOv/jUusiCG6rsR+AvcQiiicTlYbdBc47UrjzPlh0yEV9Elq03IFxA==
   dependencies:
-    "@types/eslint" "^8.56.10"
-    jest-worker "^29.7.0"
     micromatch "^4.0.8"
     normalize-path "^3.0.0"
-    schema-utils "^4.2.0"
     tinyglobby "^0.2.15"
 
 eslint-scope@5.1.1, eslint-scope@^5.1.1:
@@ -15084,7 +15073,7 @@ schema-utils@^4.0.0:
     ajv-formats "^2.1.1"
     ajv-keywords "^5.1.0"
 
-schema-utils@^4.2.0, schema-utils@^4.3.0, schema-utils@^4.3.3:
+schema-utils@^4.3.0, schema-utils@^4.3.3:
   version "4.3.3"
   resolved "https://registry.yarnpkg.com/schema-utils/-/schema-utils-4.3.3.tgz#5b1850912fa31df90716963d45d9121fdfc09f46"
   integrity sha512-eflK8wEtyOE6+hsaRVPxvUKYCpRgzLqDTb8krvAsRIwOGlHoSgYLgBXoubGgLd2fT41/OUYdb48v4k4WWHQurA==
