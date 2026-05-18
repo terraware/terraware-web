@@ -55,4 +55,3 @@ steps:
 
 notify:
   - email: 'constanza@terraformation.com'
-    if: build.state == "failed"
