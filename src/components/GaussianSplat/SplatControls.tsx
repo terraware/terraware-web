@@ -4,6 +4,7 @@ import { Fullscreen, FullscreenExit } from '@mui/icons-material';
 import { Box, IconButton, useTheme } from '@mui/material';
 import { useApp } from '@playcanvas/react/hooks';
 import { Icon } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 import { CameraComponent, XRSPACE_LOCAL, XRTYPE_AR, XRTYPE_VR } from 'playcanvas';
 
 import useBoolean from 'src/hooks/useBoolean';
@@ -71,6 +72,7 @@ const SplatControls = ({
 }: SplatControlsProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
+  const { isDesktop } = useDeviceInfo();
   const app = useApp();
   const { isAllowed } = useUser();
   const isSuperAdmin = isAllowed('FREE_FLY_VIRTUAL_WALKTHROUGH');
@@ -229,8 +231,8 @@ const SplatControls = ({
       >
         {isArAvailable && !isEdit && <Button label={strings.AR} onClick={handleAr} />}
         {isVrAvailable && !isEdit && <Button label={strings.VR} onClick={handleVr} />}
-        {editable && !isEdit && onToggleEdit && <Button label={strings.EDIT} onClick={handleEdit} />}
-        {isSuperAdmin && !isEdit && onToggleFreeFly && (
+        {isDesktop && editable && !isEdit && onToggleEdit && <Button label={strings.EDIT} onClick={handleEdit} />}
+        {isDesktop && isSuperAdmin && !isEdit && onToggleFreeFly && (
           <Button label={isFreeFly ? strings.BOUNDED_FLY : strings.FREE_FLY} onClick={onToggleFreeFly} />
         )}
         {isEdit && onCancel && <Button label={strings.CANCEL} onClick={onCancel} />}
