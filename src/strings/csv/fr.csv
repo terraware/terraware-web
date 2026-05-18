@@ -266,6 +266,7 @@ BUG_REPORT,Rapport de bug,5fab1616
 BUG_REPORT_DESCRIPTION,Faites-nous part d'un problème que vous avez rencontré lors de l'utilisation de Terraware.,0030b91e
 BUG_REPORT_INSTRUCTIONS,Fournissez une description détaillée du problème rencontré. (Où le problème s'est-il produit ? Qu'avez-vous fait avant de rencontrer le problème ? À quoi vous attendiez-vous ?),b2ca26aa
 BY,Par,e8fbe470
+BY_ACCESSION,Par accession,61b8fb95
 BY_BATCH,Par lot,68c5092f
 BY_NURSERY,Par pépinière,a0a2faa5
 BY_SPECIES,Par espèce,602624ab
@@ -2243,6 +2244,7 @@ TOTAL_READY_TO_PLANT_QUANTITY,Quantité totale de plantes prêtes à être plant
 TOTAL_SEED_COUNT,Nombre total de semences,be979b1e
 TOTAL_SEEDLINGS_COUNT,Nombre total de semis,1aad5bd0
 TOTAL_SEEDLINGS_SENT,Total des plantules envoyées,12a7f16d
+TOTAL_SEEDS,Nombre total de semences,b61cfde7
 TOTAL_SEEDS_GERMINATED,Total des semences germées,f0aabea9
 TOTAL_SEEDS_GERMINATED_ERROR,La quantité germée ne doit pas être supérieure à la quantité testée.,1fa23391
 TOTAL_SEEDS_STORED,Nombre total de semences stockées,4861bb25
