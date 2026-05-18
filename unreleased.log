@@ -1,3 +1,4 @@
+559b50e0 SW-8356 Update plants dashboard label (#5721)
 f80fbf34 SW-8364 Species filter in Batches table in By Nursery details should be a selector (#5720)
 b336fe5b Only show Edit and Free-fly buttons on desktop (#5718)
 6dd12d33 Update dependency @rsbuild/plugin-eslint to v2 (#5717)
