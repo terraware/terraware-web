@@ -380,6 +380,15 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
           .map((project) => project.name)
           .filter((name): name is string => !!name)
           .sort();
+      } else if (col.key === 'species_scientificName') {
+        columnDef.filterVariant = 'select';
+        columnDef.filterSelectOptions = Array.from(
+          new Set(
+            filteredBatches
+              .map((row: any) => row[col.key])
+              .filter((val): val is string => typeof val === 'string' && val !== '')
+          )
+        ).sort();
       } else {
         columnDef.filterVariant = 'text';
       }
@@ -402,7 +411,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
       return columnDef;
     });
-  }, [columns, projects, BatchNumberCell, WithdrawCell, QuantityCell, QuantitiesMenuCell]);
+  }, [columns, projects, filteredBatches, BatchNumberCell, WithdrawCell, QuantityCell, QuantitiesMenuCell]);
 
   const {
     columnOrder,
