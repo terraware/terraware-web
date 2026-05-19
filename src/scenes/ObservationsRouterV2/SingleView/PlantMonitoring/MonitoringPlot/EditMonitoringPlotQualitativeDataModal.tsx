@@ -7,7 +7,6 @@ import { Button, DialogBox, DropdownItem, Icon, MultiSelect, Textfield, Tooltip 
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import {
-  ObservationMonitoringPlotCoordinatesPayload,
   ObservationPlotUpdateOperationPayload,
   UpdateCompletedObservationPlotApiArg,
   UpdatePlotObservationApiArg,
