@@ -3,17 +3,31 @@ import { QueryTagTypes } from '../tags';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    listStrata: build.query<StratumPayload[], number>({
-      query: (organizationId) => ({
+    listStrata: build.query<StratumPayload[], ListStrataArgs>({
+      query: (args) => ({
         url: '/api/v1/search',
         method: 'POST',
         body: {
           prefix: 'strata',
           fields: ['id', 'name', 'plantingSite_id'],
           search: {
-            operation: 'field',
-            field: 'plantingSite.organization.id',
-            values: [`${organizationId}`],
+            operation: 'and',
+            children: [
+              {
+                operation: 'field',
+                field: 'plantingSite.organization.id',
+                values: [`${args.organizationId}`],
+              },
+              ...(args.plantingSiteId
+                ? [
+                    {
+                      operation: 'field',
+                      field: 'plantingSite.id',
+                      values: [`${args.plantingSiteId}`],
+                    },
+                  ]
+                : []),
+            ],
           },
           count: 0,
         },
@@ -29,8 +43,85 @@ const injectedRtkApi = api.injectEndpoints({
         ...(results ? results.map((result) => ({ type: QueryTagTypes.PlantingSites, id: result.id })) : []),
       ],
     }),
+
+    getStratumPlantDensityTrend: build.query<StratumPlantDensity[], number>({
+      query: (stratumId) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          prefix: 'observationStratumResult',
+          fields: ['observation_id', 'observation_completedTime', 'plantDensity', 'plantDensityStdDev'],
+          search: {
+            operation: 'and',
+            children: [
+              {
+                operation: 'field',
+                field: 'stratum_id',
+                values: [`${stratumId}`],
+              },
+              {
+                operation: 'field',
+                field: 'observation_state',
+                values: ['Completed', 'Abandoned'],
+              },
+            ],
+          },
+          sortOrder: [{ field: 'observation_completedTime' }],
+          count: 0,
+        },
+      }),
+      transformResponse: (response: GetStratumPlantDensityTrendApiResponse) =>
+        response.results.map((result) => ({
+          observationId: Number(result.observation_id),
+          completedTime: result.observation_completedTime,
+          plantDensity: Number(result.plantDensity),
+          plantDensityStdDev: Number(result.plantDensityStdDev),
+        })),
+      providesTags: [{ type: QueryTagTypes.Observation }],
+    }),
+
+    getStratumSurvivalRateTrend: build.query<StratumSurvivalRate[], number>({
+      query: (stratumId) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          prefix: 'observationStratumResult',
+          fields: ['observation_id', 'observation_completedTime', 'survivalRate', 'survivalRateStdDev'],
+          search: {
+            operation: 'and',
+            children: [
+              {
+                operation: 'field',
+                field: 'stratum_id',
+                values: [`${stratumId}`],
+              },
+              {
+                operation: 'field',
+                field: 'observation_state',
+                values: ['Completed', 'Abandoned'],
+              },
+            ],
+          },
+          sortOrder: [{ field: 'observation_completedTime' }],
+          count: 0,
+        },
+      }),
+      transformResponse: (results: GetStratumSurvivalRateTrendApiResponse) =>
+        results.results.map((result) => ({
+          observationId: Number(result.observation_id),
+          completedTime: result.observation_completedTime,
+          survivalRate: Number(result.survivalRate),
+          survivalRateStdDev: Number(result.survivalRateStdDev),
+        })),
+      providesTags: [{ type: QueryTagTypes.Observation }],
+    }),
   }),
 });
+
+export type ListStrataArgs = {
+  organizationId: number;
+  plantingSiteId?: number;
+};
 
 type ListStrataApiResult = {
   id: string;
@@ -48,4 +139,47 @@ export type StratumPayload = {
   plantingSiteId: number;
 };
 
-export const { useListStrataQuery, useLazyListStrataQuery } = injectedRtkApi;
+type StratumPlantDensityTrendApiResult = {
+  observation_id: string;
+  observation_completedTime: string;
+  plantDensity: string;
+  plantDensityStdDev: string;
+};
+
+type GetStratumPlantDensityTrendApiResponse = {
+  results: StratumPlantDensityTrendApiResult[];
+};
+
+export type StratumPlantDensity = {
+  observationId: number;
+  completedTime: string;
+  plantDensity: number;
+  plantDensityStdDev: number;
+};
+
+type StratumSurvivalRateTrendApiResult = {
+  observation_id: string;
+  observation_completedTime: string;
+  survivalRate: string;
+  survivalRateStdDev: string;
+};
+
+type GetStratumSurvivalRateTrendApiResponse = {
+  results: StratumSurvivalRateTrendApiResult[];
+};
+
+export type StratumSurvivalRate = {
+  observationId: number;
+  completedTime: string;
+  survivalRate: number;
+  survivalRateStdDev: number;
+};
+
+export const {
+  useListStrataQuery,
+  useLazyListStrataQuery,
+  useGetStratumPlantDensityTrendQuery,
+  useLazyGetStratumPlantDensityTrendQuery,
+  useGetStratumSurvivalRateTrendQuery,
+  useLazyGetStratumSurvivalRateTrendQuery,
+} = injectedRtkApi;

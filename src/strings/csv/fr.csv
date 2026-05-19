@@ -213,6 +213,7 @@ ATTACHMENTS,Annexes,e7695404
 AUTO_CALCULATED_INDICATORS,Indicateurs calculés automatiquement,3b7057e0
 AUTO_ROTATE,Rotation automatique,15ce1a40
 AVAILABLE,disponible,716e496f
+AVERAGE_STRATA_SURVIVAL_RATE,Taux moyen de survie des strates du projet,eba4d7ea
 AVERAGE_WOOD_DENSITY,Densité moyenne du bois (kb/m3),b413c9a9
 AWAITING_CHECK_IN,En attente d'enregistrement,11dee61b
 AWAITING_PROCESSING,En attente de traitement,802b73ca
@@ -2423,6 +2424,7 @@ WEIGHT_MILLIGRAMS,Poids (mg),c1b46396
 WEIGHT_OUNCES,Poids (onces),e0818b90
 WEIGHT_POUNDS,Poids (livres),6ad0d2ab
 WEIGHT_SYSTEM_SELECTED,Système de poids : {0},bc15e8bc
+WEIGHTED_SURVIVAL_RATE_SETTINGS_INFO,"{0} Pour chaque placette permanente, sélectionnez ou saisissez les données qui seront utilisées pour fournir la densité initiale de plants par placette pour le calcul du taux de survie. Ces « données de plantation t0 » doivent être définies pour toutes les placettes. Les observations incluant la placette permanente peuvent être utilisées pour les données de plantation t0 de la placette. Pour les observations ultérieures, Terraware utilisera ces données t0 pour calculer les taux de survie aux niveaux de la placette, du substrat et de la strate. Si toutes les placettes permanentes n'ont pas été observées, les taux de survie du site de plantation ne seront pas calculés tant que ces placettes n'auront pas été observées et que les données t0 n'auront pas été définies. Les données t0 ne pourront être définies qu'après l'observation de ces placettes. Si des placettes temporaires sont utilisées pour le calcul des taux de survie, les données t0 doivent être définies pour toutes les strates. Si les données t0 sélectionnées ou saisies pour une placette ou une strate sont modifiées, les taux de survie seront recalculés en fonction de la nouvelle sélection.",8a79fb3d
 WEIGHTED_SURVIVAL_RATE_TOOLTIP,"Le taux de survie moyen pondéré par strate est une moyenne pondérée par surface, calculée sur l’ensemble des strates pour lesquelles Terraware peut calculer un taux de survie. Pour plus d’informations, consultez le {0}.",b013f56c
 WELCOME,Bienvenue !,09fd702c
 WELCOME_PERSON,"Bienvenue, {0} !",db783c9d

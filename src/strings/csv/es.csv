@@ -214,6 +214,7 @@ ATTACHMENTS,Archivos adjuntos,e7695404
 AUTO_CALCULATED_INDICATORS,Indicadores calculados automáticamente,3b7057e0
 AUTO_ROTATE,Rotación automática,15ce1a40
 AVAILABLE,disponible,716e496f
+AVERAGE_STRATA_SURVIVAL_RATE,Tasa promedio de supervivencia de estratos del proyecto,eba4d7ea
 AVERAGE_WOOD_DENSITY,Densidad promedio de la madera (kb/m3),b413c9a9
 AWAITING_CHECK_IN,Pendiente de facturación,11dee61b
 AWAITING_PROCESSING,Pendiente procesamiento,802b73ca
@@ -2423,6 +2424,7 @@ WEIGHT_MILLIGRAMS,Peso (mg),c1b46396
 WEIGHT_OUNCES,Peso (Oz),e0818b90
 WEIGHT_POUNDS,Peso (lb),6ad0d2ab
 WEIGHT_SYSTEM_SELECTED,Sistema de pesaje: {0},bc15e8bc
+WEIGHTED_SURVIVAL_RATE_SETTINGS_INFO,"{0} Para cada parcela permanente, seleccione o ingrese los datos que se utilizarán para proporcionar la densidad inicial de plantas por parcela para los cálculos de la tasa de supervivencia. Estos “datos de plantación t0” deben establecerse para todas las parcelas. Las observaciones que incluyan la parcela permanente pueden utilizarse como datos de plantación t0 de la parcela. Para las observaciones posteriores, Terraware utilizará estos datos t0 para calcular las tasas de supervivencia a nivel de Parcela, Subestrato y Estrato. Si no se han observado todas las parcelas permanentes, las tasas de supervivencia del Sitio de Plantación no se calcularán hasta que esas parcelas hayan sido observadas y tengan los datos t0 establecidos. Los datos t0 solo podrán establecerse después de que esas parcelas hayan sido observadas. Si se utilizan parcelas temporales para los cálculos de la tasa de supervivencia, los datos t0 deben establecerse para todos los estratos. Si se cambia la selección o ingreso de los datos t0 para una parcela o estrato, las tasas de supervivencia se recalcularán en función de la nueva selección.",8a79fb3d
 WEIGHTED_SURVIVAL_RATE_TOOLTIP,"La Tasa de Supervivencia Promedio por Estrato es un promedio ponderado por área calculado a través de todos los estratos para los cuales Terraware puede calcular una tasa de supervivencia. Para más información, consulte el {0}.",b013f56c
 WELCOME,¡Bienvenido!,09fd702c
 WELCOME_PERSON,"¡Bienvenido, {0}!",db783c9d
