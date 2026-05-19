@@ -124,7 +124,7 @@ test.describe('ObservationDetailsTests', () => {
     await expect(page.getByText('Plot Type: Permanent')).toBeVisible();
     await expect(page.getByText('Location: 15.6977629, 38.44150597')).toBeVisible();
     await expect(page.locator('p:has-text("Total Plants")')).toBeVisible();
-    await expect(page.getByText('85')).toBeVisible();
+    await expect(page.getByText('85', { exact: true })).toBeVisible();
     await expect(page.locator('p').filter({ hasText: /^Species$/ })).toBeVisible();
     await expect(page.getByText('7', { exact: true })).toBeVisible();
     await expect(page.locator('p:has-text("Plant Density")')).toBeVisible();
