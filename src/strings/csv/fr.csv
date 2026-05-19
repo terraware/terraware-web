@@ -622,6 +622,7 @@ EDITING_ACTIVITY_FOR_PROJECT,Modification de l’activité pour {0},0fa99727
 EDITING_SPECIES_DATA_FOR_ORGANIZATION,Modification des données de l'espèce pour {0},a9817671
 EDITING_SPECIES_DATA_FOR_ORGANIZATION_WARNING,Vous êtes en train de modifier les données de l'espèce pour {0}. Toute modification apportée ici sera immédiatement répercutée dans sa base de données.,2fb0b00d
 ELECTRICAL_LINES,Lignes électriques,f89c6623
+ELEVATION,Altitude,776ffeea
 ELIGIBLE_AREA,Zone éligible,48d6b529
 ELIGIBLE_AREA_DESCRIPTION,Superficie maximale de terrain répondant aux exigences de Verra pour la zone du projet.,7aa4c3b4
 ELIGIBLE_AREA_HA,Zone éligible (ha),02f04c77
