@@ -1,3 +1,4 @@
+import { Point } from 'src/queries/generated/nurseryWithdrawals';
 import {
   SearchCountApiResponse,
   SearchNodePayload,
@@ -9,6 +10,14 @@ import { parseSearchTerm } from 'src/utils/search';
 
 import { baseApi as api } from '../baseApi';
 import { QueryTagTypes } from '../tags';
+
+export type WithdrawalPhotoSearchEntry = {
+  capturedLocalTime?: string;
+  gpsCoordinates: Point;
+  photoId: number;
+  withdrawalId: number;
+  withdrawnDate: string;
+};
 
 const parseSearchNurseryWithdrawalsArgs = (
   args: SearchNurseryWithdrawalsApiArgs,
@@ -29,6 +38,14 @@ const parseSearchNurseryWithdrawalsArgs = (
       operation: 'field',
       field: 'id',
       values: [`${args.withdrawalId}`],
+    });
+  }
+
+  if (args.plantingSiteId) {
+    searchChildren.push({
+      operation: 'field',
+      field: 'delivery.plantings.plantingSite.id',
+      values: [`${args.plantingSiteId}`],
     });
   }
 
@@ -320,6 +337,50 @@ const injectedRtkApi = api.injectEndpoints({
       providesTags: [{ type: QueryTagTypes.NurseryWithdrawals, id: 'List' }],
       transformResponse: (response: SearchCountApiResponse) => response.count,
     }),
+
+    searchNurseryWithdrawalPhotos: build.query<WithdrawalPhotoSearchEntry[], SearchNurseryWithdrawalPhotosApiArgs>({
+      query: ({ plantingSiteId }) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          prefix: 'nurseryWithdrawalPhotos',
+          fields: ['capturedLocalTime', 'fileId', 'gpsCoordinate', 'withdrawal.id', 'withdrawal.withdrawnDate'],
+          search: {
+            operation: 'field',
+            field: 'withdrawal.delivery.plantings.plantingSite.id',
+            values: [`${plantingSiteId}`],
+          },
+          count: 0,
+        },
+      }),
+      providesTags: [{ type: QueryTagTypes.NurseryWithdrawals, id: 'List' }],
+      transformResponse: (response: SearchNurseryWithdrawalPhotosApiResponse): WithdrawalPhotoSearchEntry[] =>
+        response.results.flatMap((result): WithdrawalPhotoSearchEntry[] => {
+          if (!result.gpsCoordinate || !result.withdrawal?.id || !result.withdrawal.withdrawnDate || !result.fileId) {
+            return [];
+          }
+
+          let point: Point;
+          try {
+            point = JSON.parse(result.gpsCoordinate) as Point;
+          } catch {
+            return [];
+          }
+          if (point?.type !== 'Point' || !Array.isArray(point.coordinates) || point.coordinates.length < 2) {
+            return [];
+          }
+
+          return [
+            {
+              capturedLocalTime: result.capturedLocalTime,
+              gpsCoordinates: point,
+              photoId: Number(result.fileId),
+              withdrawalId: Number(result.withdrawal.id),
+              withdrawnDate: result.withdrawal.withdrawnDate,
+            },
+          ];
+        }),
+    }),
   }),
 });
 
@@ -341,9 +402,28 @@ export type NurseryWithdrawalFilterOptions = {
   speciesNames: string[];
 };
 
+export type SearchNurseryWithdrawalPhotosApiArgs = {
+  plantingSiteId: number;
+};
+
+type NurseryWithdrawalPhotoApiResult = {
+  capturedLocalTime?: string;
+  fileId?: string;
+  gpsCoordinate?: string;
+  withdrawal?: {
+    id?: string;
+    withdrawnDate?: string;
+  };
+};
+
+type SearchNurseryWithdrawalPhotosApiResponse = {
+  results: NurseryWithdrawalPhotoApiResult[];
+};
+
 export type SearchNurseryWithdrawalsApiArgs = {
   organizationId?: number;
   withdrawalId?: number;
+  plantingSiteId?: number;
   searchTerm?: string;
   withdrawnDate?: { minDate?: string; maxDate?: string };
   purposes?: NurseryWithdrawalPurpose[];
@@ -415,4 +495,6 @@ export const {
   useLazySearchNurseryWithdrawalsQuery,
   useCountNurseryWithdrawalsQuery,
   useLazyCountNurseryWithdrawalsQuery,
+  useSearchNurseryWithdrawalPhotosQuery,
+  useLazySearchNurseryWithdrawalPhotosQuery,
 } = injectedRtkApi;

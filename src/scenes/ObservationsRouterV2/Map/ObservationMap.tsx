@@ -101,7 +101,7 @@ const ObservationMap = ({
     plantMarkersLegendGroup: plantMakersLegendGroup,
   } = usePlantMarkersMapLegend(plantingSiteId === undefined);
   const { plotPhotosVisible, plotPhotosLegendGroup, virtualPlotVisible, setVirtualPlotVisible } =
-    usePlotPhotosMapLegend(plantingSiteId === undefined);
+    usePlotPhotosMapLegend({ disabled: plantingSiteId === undefined });
   const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
   const { adHocPlotsVisible, permanentPlotsVisible, temporaryPlotsVisible, monitoringPlotsLegendGroup } =
     useMonitoringPlotsMapLegend(plantingSiteId === undefined, isBiomass, isBiomass, false, true);
@@ -640,7 +640,7 @@ const ObservationMap = ({
 
   const selectPhoto = useCallback(
     (monitoringPlotId: number, observationId: number, photo: ObservationMonitoringPlotPhotoWithGps) => () => {
-      selectPhotos([{ monitoringPlotId, observationId, photo }]);
+      selectPhotos([{ kind: 'plot-photo', monitoringPlotId, observationId, photo }]);
       selectPlants([]);
       selectTrees([]);
       setSelectedFeature(undefined);
@@ -657,7 +657,7 @@ const ObservationMap = ({
             const observationId = marker.properties.observationId as number;
             const monitoringPlotId = marker.properties.monitoringPlotId as number;
             const photo = marker.properties.photo as ObservationMonitoringPlotPhotoWithGps;
-            return { monitoringPlotId, observationId, photo };
+            return { kind: 'plot-photo', monitoringPlotId, observationId, photo };
           }
         })
         .filter((photo): photo is PlotPhoto => photo !== undefined);
@@ -678,7 +678,7 @@ const ObservationMap = ({
             const observationId = marker.properties.observationId as number;
             const monitoringPlotId = marker.properties.monitoringPlotId as number;
             const splat = marker.properties.splat as ObservationSplatPayload;
-            return { monitoringPlotId, observationId, splat };
+            return { kind: 'plot-splat', monitoringPlotId, observationId, splat };
           }
         })
         .filter((photo): photo is PlotSplat => photo !== undefined);
@@ -772,8 +772,9 @@ const ObservationMap = ({
             latitude: photo.gpsCoordinates?.coordinates[0],
             onClick: selectPhoto(adHocPlot.monitoringPlotId, adHocResults.observationId, photo),
             selected:
-              selectedPhotos.find((selected) => 'photo' in selected && selected.photo.fileId === photo.fileId) !==
-              undefined,
+              selectedPhotos.find(
+                (selected) => selected.kind === 'plot-photo' && selected.photo.fileId === photo.fileId
+              ) !== undefined,
             properties: {
               observationId: adHocResults.observationId,
               monitoringPlotId: adHocPlot.monitoringPlotId,
@@ -797,8 +798,9 @@ const ObservationMap = ({
             latitude: photo.gpsCoordinates?.coordinates[0],
             onClick: selectPhoto(plot.monitoringPlotId, selectedResults.observationId, photo),
             selected:
-              selectedPhotos.find((selected) => 'photo' in selected && selected.photo.fileId === photo.fileId) !==
-              undefined,
+              selectedPhotos.find(
+                (selected) => selected.kind === 'plot-photo' && selected.photo.fileId === photo.fileId
+              ) !== undefined,
             properties: {
               monitoringPlotId: plot.monitoringPlotId,
               observationId: selectedResults.observationId,
@@ -813,7 +815,7 @@ const ObservationMap = ({
 
   const selectSplat = useCallback(
     (monitoringPlotId: number, observationId: number, splat: ObservationSplatPayload) => () => {
-      selectPhotos([{ monitoringPlotId, observationId, splat }]);
+      selectPhotos([{ kind: 'plot-splat', monitoringPlotId, observationId, splat }]);
       selectPlants([]);
       setSelectedFeature(undefined);
       setDrawerOpen(true);
@@ -862,8 +864,9 @@ const ObservationMap = ({
           latitude,
           onClick: selectSplat(splat.monitoringPlotId, selectedResults.observationId, splat),
           selected:
-            selectedPhotos.find((selected) => 'splat' in selected && selected.splat?.fileId === splat.fileId) !==
-            undefined,
+            selectedPhotos.find(
+              (selected) => selected.kind === 'plot-splat' && selected.splat?.fileId === splat.fileId
+            ) !== undefined,
           properties: {
             monitoringPlotId: splat.monitoringPlotId,
             observationId: selectedResults.observationId,
@@ -891,6 +894,7 @@ const ObservationMap = ({
         setVirtualPlotVisible(true);
         selectPhotos([
           {
+            kind: 'plot-splat',
             monitoringPlotId: matchingSplat.monitoringPlotId,
             observationId: selectedResults.observationId,
             splat: matchingSplat,

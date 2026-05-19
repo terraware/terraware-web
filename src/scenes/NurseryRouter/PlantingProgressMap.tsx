@@ -5,10 +5,20 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import MapComponent from 'src/components/NewMap';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
-import { MapLayer, MapLayerFeature, MapNameTag, MapPoint } from 'src/components/NewMap/types';
+import {
+  MapLayer,
+  MapLayerFeature,
+  MapMarker,
+  MapMarkerGroup,
+  MapNameTag,
+  MapPoint,
+} from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
+import useMapPhotoDrawer from 'src/components/NewMap/useMapPhotoDrawer';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
+import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
+import useWithdrawalPhotosForPlantingSite from 'src/components/NewMap/useWithdrawalPhotosForPlantingSite';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import { useOrganization } from 'src/providers';
 import {
@@ -38,8 +48,16 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   const { fitBounds } = useMapUtils(mapRef);
   const { selectedOrganization } = useOrganization();
 
-  const { sitesLayerStyle, strataLayerStyle, substrataLayerStyle } = useMapFeatureStyles();
+  const { sitesLayerStyle, strataLayerStyle, substrataLayerStyle, withdrawalPhotoStyle } = useMapFeatureStyles();
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('substrata');
+
+  const { plotPhotosLegendGroup, withdrawalPhotosVisible } = usePlotPhotosMapLegend({
+    includeObservations: false,
+    includeWithdrawals: true,
+    withdrawalsDisabled: plantingSiteId === undefined,
+  });
+
+  const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
 
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
   const singleSite = useMemo(() => getPlantingSiteResponse.currentData?.site, [getPlantingSiteResponse]);
@@ -71,29 +89,38 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   const [selectedFeature, setSelectedFeature] = useState<SelectedFeature | undefined>();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
+  const withdrawalPhotos = useWithdrawalPhotosForPlantingSite({
+    enabled: withdrawalPhotosVisible,
+    plantingSiteId,
+  });
+
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setSelectedFeature(undefined);
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDrawerOpen(false);
-  }, [plantingSiteId]);
+    selectPhotos([]);
+  }, [plantingSiteId, selectPhotos]);
 
   const selectFeature = useCallback(
     (siteId: number, layerId: 'sites' | 'strata' | 'substrata', featureId: string) => () => {
       setSelectedFeature({ layerId, featureId, plantingSiteId: siteId });
+      selectPhotos([]);
       setDrawerOpen(true);
     },
-    []
+    [selectPhotos]
   );
 
-  const setDrawerOpenCallback = useCallback((open: boolean) => {
-    if (open) {
-      setDrawerOpen(true);
-    } else {
-      setDrawerOpen(false);
-      setSelectedFeature(undefined);
-    }
-  }, []);
+  const setDrawerOpenCallback = useCallback(
+    (open: boolean) => {
+      if (open) {
+        setDrawerOpen(true);
+      } else {
+        setDrawerOpen(false);
+        setSelectedFeature(undefined);
+        selectPhotos([]);
+      }
+    },
+    [selectPhotos]
+  );
 
   const extractFeaturesFromSite = useCallback(
     (
@@ -208,9 +235,54 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
     }
   }, [fitBounds, sites]);
 
-  const legends = useMemo((): MapLegendGroup[] => [plantingSiteLegendGroup], [plantingSiteLegendGroup]);
+  const legends = useMemo(
+    (): MapLegendGroup[] => [plantingSiteLegendGroup, plotPhotosLegendGroup],
+    [plantingSiteLegendGroup, plotPhotosLegendGroup]
+  );
+
+  const withdrawalPhotoMarkers = useMemo(
+    (): MapMarker[] =>
+      withdrawalPhotos.map((entry) => ({
+        id: `withdrawal-photo/${entry.withdrawalId}/${entry.photoId}`,
+        longitude: entry.gpsCoordinates.coordinates[0],
+        latitude: entry.gpsCoordinates.coordinates[1],
+        onClick: () => {
+          setSelectedFeature(undefined);
+          selectPhotos([
+            {
+              kind: 'withdrawal-photo',
+              capturedLocalTime: entry.capturedLocalTime,
+              withdrawalId: entry.withdrawalId,
+              photoId: entry.photoId,
+              withdrawnDate: entry.withdrawnDate,
+              gpsCoordinates: entry.gpsCoordinates,
+            },
+          ]);
+          setDrawerOpen(true);
+        },
+        selected: selectedPhotos.some(
+          (p) => p.kind === 'withdrawal-photo' && p.photoId === entry.photoId && p.withdrawalId === entry.withdrawalId
+        ),
+      })),
+    [selectPhotos, selectedPhotos, withdrawalPhotos]
+  );
+
+  const mapMarkers = useMemo(
+    (): MapMarkerGroup[] => [
+      {
+        markerGroupId: 'withdrawal-photos',
+        markers: withdrawalPhotoMarkers,
+        style: withdrawalPhotoStyle,
+        visible: withdrawalPhotosVisible,
+      },
+    ],
+    [withdrawalPhotoMarkers, withdrawalPhotoStyle, withdrawalPhotosVisible]
+  );
 
   const drawerContent = useMemo(() => {
+    if (selectedPhotos.length > 0) {
+      return photoDrawerContent;
+    }
     if (!selectedFeature) {
       return undefined;
     }
@@ -221,7 +293,9 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
         plantingSiteId={selectedFeature.plantingSiteId}
       />
     );
-  }, [selectedFeature]);
+  }, [photoDrawerContent, selectedFeature, selectedPhotos.length]);
+
+  const drawerSize = selectedPhotos.length > 0 ? photoDrawerSize : 'small';
 
   if (!sites.length) {
     return (
@@ -234,11 +308,13 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   return token ? (
     <MapComponent
       drawerChildren={drawerContent}
+      drawerHeader={selectedPhotos.length > 0 ? photoDrawerHeader : undefined}
       drawerOpen={drawerOpen}
-      drawerSize='small'
+      drawerSize={drawerSize}
       legends={legends}
       mapId={mapId}
       mapLayers={layers}
+      mapMarkers={mapMarkers}
       mapRef={mapRef}
       nameTags={nameTags}
       onTokenExpired={refreshToken}
