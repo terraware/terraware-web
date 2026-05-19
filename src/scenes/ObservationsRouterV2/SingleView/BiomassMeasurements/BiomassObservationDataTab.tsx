@@ -36,15 +36,6 @@ const BiomassObservationDataTab = () => {
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const monitoringPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
-  const plotLocation = useMemo(() => {
-    const swCoordinatesLat = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
-    const swCoordinatesLong = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
-    if (swCoordinatesLat && swCoordinatesLong) {
-      return `${swCoordinatesLat}, ${swCoordinatesLong}`;
-    } else {
-      return undefined;
-    }
-  }, [monitoringPlot?.boundary?.coordinates]);
   const biomassMeasurement = useMemo(() => results?.biomassMeasurements, [results?.biomassMeasurements]);
 
   useEffect(() => {
@@ -106,11 +97,6 @@ const BiomassObservationDataTab = () => {
       label: strings.SPECIES,
       tooltip: strings.BIOMASS_PLOT_SPECIES_TOOLTIP,
       value: biomassMeasurement?.treeSpeciesCount,
-    },
-    {
-      label: strings.PLOT_LOCATION,
-      tooltip: strings.BIOMASS_PLOT_LOCATION_TOOLTIP,
-      value: plotLocation,
     },
   ];
 

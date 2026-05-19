@@ -2,7 +2,7 @@ import React, { type JSX, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Tabs } from '@terraware/web-components';
+import { Tabs, Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -55,15 +55,44 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
         ? getDateDisplayValue(results.completedTime, plantingSite?.timeZone ?? defaultTimezone)
         : undefined;
       const observationDate = getShortDate(completedDate ?? results.startDate, activeLocale);
+      const swCoordinatesLat = results.adHocPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
+      const swCoordinatesLong = results.adHocPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
+      const hasLocation = swCoordinatesLat !== undefined && swCoordinatesLong !== undefined;
       return (
-        <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
-          {observationDate} ({plantingSite?.name ?? ''})
-        </Typography>
+        <Box display='flex' alignItems={'end'}>
+          <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+            {observationDate} ({plantingSite?.name ?? ''})
+          </Typography>
+          {hasLocation && (
+            <Tooltip
+              placement='bottom'
+              title={
+                <Box>
+                  <Typography>
+                    {strings.LOCATION}: {swCoordinatesLat}, {swCoordinatesLong}
+                  </Typography>
+                  <Typography>
+                    {strings.ELEVATION}: {results.adHocPlot?.elevationMeters}
+                  </Typography>
+                </Box>
+              }
+            >
+              <Typography
+                fontSize='16px'
+                color={theme.palette.TwClrTxtBrand}
+                fontWeight={400}
+                paddingLeft={theme.spacing(1)}
+              >
+                {strings.PLOT_INFO}
+              </Typography>
+            </Tooltip>
+          )}
+        </Box>
       );
     } else {
       return undefined;
     }
-  }, [activeLocale, defaultTimezone, plantingSite?.name, plantingSite?.timeZone, results, theme.palette.TwClrTxt]);
+  }, [activeLocale, defaultTimezone, plantingSite?.name, plantingSite?.timeZone, results, strings, theme]);
 
   const tabs = useMemo(() => {
     return [

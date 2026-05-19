@@ -126,6 +126,9 @@ const MonitoringPlotDetails = (): JSX.Element => {
               <Typography>
                 {strings.LOCATION}: {swCoordinatesLat}, {swCoordinatesLng}
               </Typography>
+              <Typography>
+                {strings.ELEVATION}: {monitoringPlot?.elevationMeters}
+              </Typography>
             </Box>
           }
         >
@@ -140,23 +143,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
         </Tooltip>
       </Box>
     );
-  }, [
-    monitoringPlot?.boundary?.coordinates,
-    monitoringPlot?.isAdHoc,
-    monitoringPlot?.isPermanent,
-    monitoringPlot?.monitoringPlotNumber,
-    stratum?.name,
-    strings.AD_HOC,
-    strings.LOCATION,
-    strings.PERMANENT,
-    strings.PLOT_INFO,
-    strings.PLOT_TYPE,
-    strings.STRATUM,
-    strings.SUBSTRATUM,
-    strings.TEMPORARY,
-    substratum?.name,
-    theme,
-  ]);
+  }, [monitoringPlot, stratum?.name, strings, substratum?.name, theme]);
 
   const tabs = useMemo(() => {
     return [
