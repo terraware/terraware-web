@@ -95,7 +95,7 @@ const useMapFeatureStyles = () => {
 
   const withdrawalPhotoStyle = useMemo(
     (): MapIconComponentStyle => ({
-      iconColor: theme.palette.TwClrBaseBlue600 as string,
+      iconColor: theme.palette.TwClrBasePink300 as string,
       iconName: 'iconPhoto',
       type: 'icon',
     }),
