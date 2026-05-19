@@ -959,6 +959,7 @@ LAST_OBSERVED,Dernière observation,3dad61de
 LAST_REPORT_PUBLISHED,Rapport {0} publié {1},0199dbf5
 LAST_UPDATED,Dernière mise à jour,9ea41799
 LATEST_OBSERVATION,Dernière observation,52d53fd1
+LATITUDE,Latitude,f9f93f4a
 LATITUDE_LONGITUDE,"Latitude, longitude",fb596189
 LB,livres,7ca2fa65
 LB_POUNDS,livres,9e3b82a5
@@ -1020,6 +1021,7 @@ LOG_FRAME_AND_ME_PLAN_URL,URL du cadre logique et du plan de suivi et évaluatio
 LOG_OUT,Déconnexion,48c18649
 LOGGING,Exploitation forestière,b34b2e6e
 LONG_TERM_PERMANENT,Long terme/Permanent,566657d6
+LONGITUDE,Longitude,bec9ea21
 LOOK,Regarder,e006bd6f
 LOSS_RATE,Taux de perte,544aa2af
 LOW,Faible,ddedeca3
@@ -1286,6 +1288,7 @@ OBSERVED_BY_ON,Observé par {0} le {1} à {2},c8b41186
 OBSERVED_DENSITY,Densité observée,c5003c27
 OBSERVED_DENSITY_PER_STRATUM,Densité observée par strate,db5f3cf7
 OBSERVED_DENSITY_TOOLTIP,La densité observée est basée sur le nombre de plants observés dans les strates qui ont été observées au moins une fois lors de cette observation.,328dc9f7
+OBSERVED_GPS_COORDINATES,Coordonnées GPS observées,efbe8b32
 OBSERVED_PLANTS,Plantes observées,375e69c3
 OBSERVED_SPECIES,Espèces observées,922020f2
 OBSERVER,Observateur,89ceb806
@@ -1303,6 +1306,8 @@ OPPORTUNITIES_INSTRUCTIONS,"Il peut s'agir des possibilités de développement d
 OPPORTUNITIES_REQUIRED,Opportunités *,8d418e65
 OPT_IN,Fonctionnalités Opt-In,cbb9300b
 OPTIONAL,Facultatif,9f75363c
+OPTIONAL_GPS_COORDINATES_OF_PLOT,Optionnel : coordonnées GPS de la parcelle,c15f1313
+OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,Indiquez les coordonnées GPS de l’angle sud-ouest si la zone observée ne correspond pas à l’emplacement de parcelle attribué.,21dfccef
 OR,OU,38d8953d
 ORBIT,Orbiter,8e3af3cb
 ORG_NOTIFICATION_ACTION,"Pour modifier les préférences, rendez-vous [Paramètres > Organisation]",5cbf22d7

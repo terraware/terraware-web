@@ -1,15 +1,18 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box } from '@mui/material';
-import { Button, DialogBox, DropdownItem, MultiSelect, Textfield } from '@terraware/web-components';
+import { Box, useTheme } from '@mui/material';
+import { Button, DialogBox, DropdownItem, Icon, MultiSelect, Textfield, Tooltip } from '@terraware/web-components';
 
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import {
+  ObservationMonitoringPlotCoordinatesPayload,
   ObservationPlotUpdateOperationPayload,
   UpdateCompletedObservationPlotApiArg,
+  UpdatePlotObservationApiArg,
   useUpdateCompletedObservationPlotMutation,
+  useUpdatePlotObservationMutation,
 } from 'src/queries/generated/observations';
 import { getPlotConditionsOptions } from 'src/redux/features/observations/utils';
 import EditQualitativeDataConfirmationModal from 'src/scenes/ObservationsRouterV2/EditQualitativeDataConfirmationModal';
@@ -20,6 +23,8 @@ import useSnackbar from 'src/utils/useSnackbar';
 export type MonitoringPlotQualitativeFormData = {
   conditions: PlotCondition[];
   notes?: string;
+  latitude?: string;
+  longitude?: string;
 };
 
 type EditQualitativeDataModalProps = {
@@ -30,6 +35,7 @@ type EditQualitativeDataModalProps = {
 
 const EditMonitoringPlotQualitativeDataModal = ({ initialFormData, open, setOpen }: EditQualitativeDataModalProps) => {
   const { activeLocale, strings } = useLocalization();
+  const theme = useTheme();
   const snackbar = useSnackbar();
   const params = useParams<{ observationId: string; monitoringPlotId: string }>();
   const observationId = Number(params.observationId);
@@ -48,6 +54,7 @@ const EditMonitoringPlotQualitativeDataModal = ({ initialFormData, open, setOpen
     [monitoringPlotId, results?.adHocPlot, results?.isAdHoc, results?.strata]
   );
   const [update] = useUpdateCompletedObservationPlotMutation();
+  const [updateCoordinates] = useUpdatePlotObservationMutation();
 
   const plotConditionsMap = useMemo(() => {
     const options = getPlotConditionsOptions(activeLocale);
@@ -129,8 +136,36 @@ const EditMonitoringPlotQualitativeDataModal = ({ initialFormData, open, setOpen
           },
         };
 
+        const trimmedLat = record.latitude?.trim() ?? '';
+        const trimmedLng = record.longitude?.trim() ?? '';
+        const parsedLat = trimmedLat === '' ? NaN : Number(trimmedLat);
+        const parsedLng = trimmedLng === '' ? NaN : Number(trimmedLng);
+        const hasCoordinates = Number.isFinite(parsedLat) && Number.isFinite(parsedLng);
+
+        let coordinatesPayload: UpdatePlotObservationApiArg | undefined;
+        if (hasCoordinates) {
+          coordinatesPayload = {
+            observationId,
+            plotId: monitoringPlot.monitoringPlotId,
+            updatePlotObservationRequestPayload: {
+              coordinates: [
+                {
+                  position: 'SouthwestCorner',
+                  gpsCoordinates: {
+                    type: 'Point',
+                    coordinates: [parsedLng, parsedLat],
+                  },
+                },
+              ],
+            },
+          };
+        }
+
         try {
           await update(updatePayload).unwrap();
+          if (coordinatesPayload) {
+            await updateCoordinates(coordinatesPayload).unwrap();
+          }
           setShowConfirmationModalOpened(false);
           setOpen(false);
         } catch (e) {
@@ -140,7 +175,18 @@ const EditMonitoringPlotQualitativeDataModal = ({ initialFormData, open, setOpen
         }
       }
     })();
-  }, [monitoringPlot, observationId, record.conditions, record.notes, update, setOpen, snackbar]);
+  }, [
+    monitoringPlot,
+    observationId,
+    record.conditions,
+    record.notes,
+    record.latitude,
+    record.longitude,
+    update,
+    updateCoordinates,
+    setOpen,
+    snackbar,
+  ]);
   return (
     open && (
       <>
@@ -195,6 +241,33 @@ const EditMonitoringPlotQualitativeDataModal = ({ initialFormData, open, setOpen
                 sx={{ paddingTop: '16px' }}
                 onChange={onChangeHandler('notes')}
               />
+
+              <Box sx={{ paddingTop: '16px' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, paddingBottom: '8px' }}>
+                  <Box>{strings.OPTIONAL_GPS_COORDINATES_OF_PLOT}</Box>
+                  <Tooltip title={strings.OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP}>
+                    <Box display='flex'>
+                      <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+                    </Box>
+                  </Tooltip>
+                </Box>
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                  <Textfield
+                    type='number'
+                    label={strings.LATITUDE}
+                    value={record.latitude}
+                    id='latitude'
+                    onChange={onChangeHandler('latitude')}
+                  />
+                  <Textfield
+                    type='number'
+                    label={strings.LONGITUDE}
+                    value={record.longitude}
+                    id='longitude'
+                    onChange={onChangeHandler('longitude')}
+                  />
+                </Box>
+              </Box>
             </Box>
           </DialogBox>
         )}

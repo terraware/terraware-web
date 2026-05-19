@@ -131,16 +131,26 @@ const MonitoringPlotObservationDataTab = () => {
   const [showPageMessage, setShowPageMessage] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
 
+  const observedCoordinate = useMemo(() => {
+    const coords = monitoringPlot?.coordinates ?? [];
+    return coords.find((c) => c.position === 'SouthwestCorner') ?? coords[0];
+  }, [monitoringPlot?.coordinates]);
+
+  const observedLatitude = observedCoordinate?.gpsCoordinates?.coordinates?.[1];
+  const observedLongitude = observedCoordinate?.gpsCoordinates?.coordinates?.[0];
+
   const initialQualitativeData = useMemo((): MonitoringPlotQualitativeFormData | undefined => {
     if (monitoringPlot) {
       return {
         conditions: monitoringPlot.conditions,
         notes: monitoringPlot.notes,
+        latitude: observedLatitude !== undefined ? String(observedLatitude) : undefined,
+        longitude: observedLongitude !== undefined ? String(observedLongitude) : undefined,
       };
     } else {
       return undefined;
     }
-  }, [monitoringPlot]);
+  }, [monitoringPlot, observedLatitude, observedLongitude]);
 
   const onEditQualitativeData = useCallback(() => {
     setEditQualitativeDataModalOpen(true);
@@ -165,6 +175,13 @@ const MonitoringPlotObservationDataTab = () => {
     {
       label: strings.FIELD_NOTES,
       value: monitoringPlot?.notes || '- -',
+    },
+    {
+      label: strings.OBSERVED_GPS_COORDINATES,
+      value:
+        observedLatitude !== undefined && observedLongitude !== undefined
+          ? `${observedLatitude}, ${observedLongitude}`
+          : '- -',
     },
   ];
 
