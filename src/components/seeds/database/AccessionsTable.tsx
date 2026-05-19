@@ -502,103 +502,105 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
     URL.revokeObjectURL(url);
   }, []);
 
-  return (
-    <Card>
-      {searchResults !== undefined ? (
-        searchResults !== null ? (
-          <EditableTable
-            clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-            columns={editableColumns}
-            data={searchResults ?? []}
-            enableEditing={false}
-            enableSorting={true}
-            enableGlobalFilter={true}
-            enableColumnFilters={true}
-            enableColumnOrdering={true}
-            storageKey={TABLE_STATE_STORAGE_KEY}
-            enablePagination={true}
-            enableTopToolbar={true}
-            enableBottomToolbar={true}
-            tableOptions={{
-              defaultColumn: {
-                enableEditing: false,
-                filterVariant: 'text',
-                sortUndefined: 'last',
-              },
-              state: {
-                sorting,
-                columnOrder,
-                columnVisibility,
-                density,
-                columnFilters,
-                pagination,
-                showColumnFilters,
-                showGlobalFilter,
-              },
-              onSortingChange: setSorting,
-              onPaginationChange,
-              onColumnOrderChange: setColumnOrder,
-              onColumnVisibilityChange: setColumnVisibility,
-              onColumnFiltersChange: setColumnFilters,
-              onShowColumnFiltersChange: setShowColumnFilters,
-              onShowGlobalFilterChange: setShowGlobalFilter,
-              onDensityChange,
-              enableColumnPinning: true,
-              enableColumnActions: true,
-              enableHiding: true,
-              enableColumnDragging: true,
-              positionGlobalFilter: 'right',
-              getRowId: (row) => String(row.id),
-              renderToolbarInternalActions: ({ table }) => (
-                <Box display='flex' gap={0.5}>
-                  <Tooltip title={strings.EXPORT}>
-                    <IconButton onClick={() => downloadReportHandler(table)}>
-                      <Icon name='iconExport' size='medium' />
-                    </IconButton>
-                  </Tooltip>
-                  <MRT_ToggleGlobalFilterButton table={table} />
-                  <MRT_ToggleFiltersButton table={table} />
-                  <MRT_ShowHideColumnsButton table={table} />
-                  <MRT_ToggleDensePaddingButton table={table} />
-                  <MRT_ToggleFullScreenButton table={table} />
-                </Box>
-              ),
-              muiTableBodyCellProps: ({ row, column, table }) => {
-                const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
-                return { id: `row${visualIndex + 1}-${column.id}` };
-              },
-              muiTableBodyProps: {
-                sx: {
-                  '& tr:nth-of-type(odd) > td': {
-                    backgroundColor: theme.palette.TwClrBaseGray025,
-                  },
-                },
-              },
-              muiTablePaperProps: {
-                elevation: 0,
-              },
-              muiTopToolbarProps: {
-                sx: {
-                  position: 'relative',
-                  '& > .MuiBox-root': {
-                    position: 'relative',
-                  },
-                  '& .Mui-ToolbarDropZone': {
-                    display: 'none',
-                  },
-                },
-              },
-            }}
-            sx={{ padding: 0 }}
-          />
-        ) : (
-          <Box sx={{ padding: '32px', textAlign: 'center' }}>{strings.GENERIC_ERROR}</Box>
-        )
-      ) : (
+  if (searchResults === undefined) {
+    return (
+      <Card>
         <Box sx={{ display: 'flex', justifyContent: 'center', padding: '32px' }}>
           <CircularProgress />
         </Box>
-      )}
+      </Card>
+    );
+  } else if (searchResults === null) {
+    return (
+      <Card>
+        <Box sx={{ padding: '32px', textAlign: 'center' }}>{strings.GENERIC_ERROR}</Box>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <EditableTable
+        clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+        columns={editableColumns}
+        data={searchResults}
+        enableEditing={false}
+        enableGlobalFilter={true}
+        enableColumnFilters={true}
+        enableColumnOrdering={true}
+        storageKey={TABLE_STATE_STORAGE_KEY}
+        tableOptions={{
+          defaultColumn: {
+            enableEditing: false,
+            filterVariant: 'text',
+            sortUndefined: 'last',
+          },
+          state: {
+            sorting,
+            columnOrder,
+            columnVisibility,
+            density,
+            columnFilters,
+            pagination,
+            showColumnFilters,
+            showGlobalFilter,
+          },
+          onSortingChange: setSorting,
+          onPaginationChange,
+          onColumnOrderChange: setColumnOrder,
+          onColumnVisibilityChange: setColumnVisibility,
+          onColumnFiltersChange: setColumnFilters,
+          onShowColumnFiltersChange: setShowColumnFilters,
+          onShowGlobalFilterChange: setShowGlobalFilter,
+          onDensityChange,
+          enableColumnPinning: true,
+          enableColumnActions: true,
+          enableHiding: true,
+          enableColumnDragging: true,
+          positionGlobalFilter: 'right',
+          getRowId: (row) => String(row.id),
+          renderToolbarInternalActions: ({ table }) => (
+            <Box display='flex' gap={0.5}>
+              <Tooltip title={strings.EXPORT}>
+                <IconButton onClick={() => downloadReportHandler(table)}>
+                  <Icon name='iconExport' size='medium' />
+                </IconButton>
+              </Tooltip>
+              <MRT_ToggleGlobalFilterButton table={table} />
+              <MRT_ToggleFiltersButton table={table} />
+              <MRT_ShowHideColumnsButton table={table} />
+              <MRT_ToggleDensePaddingButton table={table} />
+              <MRT_ToggleFullScreenButton table={table} />
+            </Box>
+          ),
+          muiTableBodyCellProps: ({ row, column, table }) => {
+            const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
+            return { id: `row${visualIndex + 1}-${column.id}` };
+          },
+          muiTableBodyProps: {
+            sx: {
+              '& tr:nth-of-type(odd) > td': {
+                backgroundColor: theme.palette.TwClrBaseGray025,
+              },
+            },
+          },
+          muiTablePaperProps: {
+            elevation: 0,
+          },
+          muiTopToolbarProps: {
+            sx: {
+              position: 'relative',
+              '& > .MuiBox-root': {
+                position: 'relative',
+              },
+              '& .Mui-ToolbarDropZone': {
+                display: 'none',
+              },
+            },
+          },
+        }}
+        sx={{ padding: 0 }}
+      />
     </Card>
   );
 }

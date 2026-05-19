@@ -16,7 +16,10 @@ import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers/hooks';
+import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
+import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
@@ -42,6 +45,16 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
+  const projects = useAppSelector(selectProjects);
+
+  const uniqueProjectNames = useMemo(
+    () =>
+      (projects || [])
+        .map((p: Project) => p.name)
+        .filter((name): name is string => !!name)
+        .sort(),
+    [projects]
+  );
 
   const {
     columnFilters,
@@ -64,6 +77,7 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: {},
     defaultSorting: [{ id: 'speciesName', desc: false }],
+    persistedMultiSelectColumnIds: ['project_name'],
   });
 
   const speciesRows = useMemo<SpeciesRow[]>(() => {
@@ -142,115 +156,130 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
         id: 'project_name',
         header: strings.PROJECT,
         accessorKey: 'project_name',
-        filterVariant: 'text',
+        filterVariant: 'multi-select',
+        filterSelectOptions: uniqueProjectNames,
+        filterFn: (row: SpeciesRow, columnId, filterValue: string[]) => {
+          if (!filterValue.length) {
+            return true;
+          }
+          const cellValue =
+            ((row as unknown as { getValue: (id: string) => unknown }).getValue(columnId) as string) ?? '';
+          const rowProjects = cellValue
+            .split(', ')
+            .map((p) => p.trim())
+            .filter((p) => p.length > 0);
+          return rowProjects.some((p) => filterValue.includes(p));
+        },
       },
       {
         id: 'totalSeeds',
         header: strings.TOTAL_SEEDS,
         accessorKey: 'totalSeeds',
-        filterVariant: 'text',
+        filterVariant: 'range',
         Cell: SpeciesNumericCell,
       },
       {
         id: 'totalWithdrawn',
         header: strings.TOTAL_WITHDRAWN,
         accessorKey: 'totalWithdrawn',
-        filterVariant: 'text',
+        filterVariant: 'range',
         Cell: SpeciesNumericCell,
       },
     ];
-  }, [activeLocale, SpeciesNameCell, SpeciesNumericCell]);
+  }, [activeLocale, uniqueProjectNames, SpeciesNameCell, SpeciesNumericCell]);
 
-  return (
-    <Card>
-      {searchResults !== undefined ? (
-        searchResults !== null ? (
-          <EditableTable
-            clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-            columns={speciesColumns}
-            data={speciesRows}
-            enableEditing={false}
-            enableSorting={true}
-            enableGlobalFilter={true}
-            enableColumnFilters={true}
-            enableColumnOrdering={true}
-            storageKey={TABLE_STATE_STORAGE_KEY}
-            enablePagination={true}
-            enableTopToolbar={true}
-            enableBottomToolbar={true}
-            tableOptions={{
-              defaultColumn: {
-                enableEditing: false,
-                filterVariant: 'text',
-                sortUndefined: 'last',
-              },
-              state: {
-                sorting,
-                columnOrder,
-                columnVisibility,
-                density,
-                columnFilters,
-                pagination,
-                showColumnFilters,
-                showGlobalFilter,
-              },
-              onSortingChange: setSorting,
-              onPaginationChange,
-              onColumnOrderChange: setColumnOrder,
-              onColumnVisibilityChange: setColumnVisibility,
-              onColumnFiltersChange: setColumnFilters,
-              onShowColumnFiltersChange: setShowColumnFilters,
-              onShowGlobalFilterChange: setShowGlobalFilter,
-              onDensityChange,
-              enableColumnPinning: true,
-              enableColumnActions: true,
-              enableHiding: true,
-              enableColumnDragging: true,
-              positionGlobalFilter: 'right',
-              getRowId: (row) => row.id,
-              renderToolbarInternalActions: ({ table }) => (
-                <Box display='flex' gap={0.5}>
-                  <MRT_ToggleGlobalFilterButton table={table} />
-                  <MRT_ToggleFiltersButton table={table} />
-                  <MRT_ShowHideColumnsButton table={table} />
-                  <MRT_ToggleDensePaddingButton table={table} />
-                  <MRT_ToggleFullScreenButton table={table} />
-                </Box>
-              ),
-              muiTableBodyCellProps: ({ row, column, table }) => {
-                const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
-                return { id: `row${visualIndex + 1}-${column.id}` };
-              },
-              muiTableBodyProps: {
-                sx: {
-                  '& tr:nth-of-type(odd) > td': {
-                    backgroundColor: theme.palette.TwClrBaseGray025,
-                  },
-                },
-              },
-              muiTablePaperProps: { elevation: 0 },
-              muiTopToolbarProps: {
-                sx: {
-                  position: 'relative',
-                  '& > .MuiBox-root': {
-                    position: 'relative',
-                  },
-                  '& .Mui-ToolbarDropZone': {
-                    display: 'none',
-                  },
-                },
-              },
-            }}
-            sx={{ padding: 0 }}
-          />
-        ) : (
-          <Box sx={{ padding: '32px', textAlign: 'center' }}>{strings.GENERIC_ERROR}</Box>
-        )
-      ) : (
+  if (searchResults === undefined) {
+    return (
+      <Card>
         <Box sx={{ display: 'flex', justifyContent: 'center', padding: '32px' }}>
           <CircularProgress />
         </Box>
-      )}
+      </Card>
+    );
+  } else if (searchResults === null) {
+    return (
+      <Card>
+        <Box sx={{ padding: '32px', textAlign: 'center' }}>{strings.GENERIC_ERROR}</Box>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <EditableTable
+        clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+        columns={speciesColumns}
+        data={speciesRows}
+        enableEditing={false}
+        enableGlobalFilter={true}
+        enableColumnFilters={true}
+        enableColumnOrdering={true}
+        storageKey={TABLE_STATE_STORAGE_KEY}
+        tableOptions={{
+          defaultColumn: {
+            enableEditing: false,
+            filterVariant: 'text',
+            sortUndefined: 'last',
+          },
+          state: {
+            sorting,
+            columnOrder,
+            columnVisibility,
+            density,
+            columnFilters,
+            pagination,
+            showColumnFilters,
+            showGlobalFilter,
+          },
+          onSortingChange: setSorting,
+          onPaginationChange,
+          onColumnOrderChange: setColumnOrder,
+          onColumnVisibilityChange: setColumnVisibility,
+          onColumnFiltersChange: setColumnFilters,
+          onShowColumnFiltersChange: setShowColumnFilters,
+          onShowGlobalFilterChange: setShowGlobalFilter,
+          onDensityChange,
+          enableColumnPinning: true,
+          enableColumnActions: true,
+          enableHiding: true,
+          enableColumnDragging: true,
+          positionGlobalFilter: 'right',
+          getRowId: (row) => row.id,
+          renderToolbarInternalActions: ({ table }) => (
+            <Box display='flex' gap={0.5}>
+              <MRT_ToggleGlobalFilterButton table={table} />
+              <MRT_ToggleFiltersButton table={table} />
+              <MRT_ShowHideColumnsButton table={table} />
+              <MRT_ToggleDensePaddingButton table={table} />
+              <MRT_ToggleFullScreenButton table={table} />
+            </Box>
+          ),
+          muiTableBodyCellProps: ({ row, column, table }) => {
+            const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
+            return { id: `row${visualIndex + 1}-${column.id}` };
+          },
+          muiTableBodyProps: {
+            sx: {
+              '& tr:nth-of-type(odd) > td': {
+                backgroundColor: theme.palette.TwClrBaseGray025,
+              },
+            },
+          },
+          muiTablePaperProps: { elevation: 0 },
+          muiTopToolbarProps: {
+            sx: {
+              position: 'relative',
+              '& > .MuiBox-root': {
+                position: 'relative',
+              },
+              '& .Mui-ToolbarDropZone': {
+                display: 'none',
+              },
+            },
+          },
+        }}
+        sx={{ padding: 0 }}
+      />
     </Card>
   );
 }
