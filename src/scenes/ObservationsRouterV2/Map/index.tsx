@@ -5,9 +5,9 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { useGetOneObservationResults, useListObservationResults } from 'src/hooks/observations';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationResultsPayload, useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/observations';
-import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import ObservationMap from './ObservationMap';
@@ -43,23 +43,13 @@ const ObservationMapWrapper = ({
     }
   }, [isMapVisible]);
 
-  const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
   const [selectedObservationResults, setSelectedObservationResults] = useState<ObservationResultsPayload[]>([]);
   const [selectedAdHocObservationResults, setSelectedAdHocObservationResults] = useState<ObservationResultsPayload[]>(
     []
   );
 
-  useEffect(() => {
-    if (plantingSiteId !== undefined) {
-      void getPlantingSite({ id: plantingSiteId, includeZones: false }, true);
-    }
-  }, [getPlantingSite, isBiomass, plantingSiteId, selectedOrganization]);
-
-  const plantingSite = useMemo(
-    () => (plantingSiteId !== undefined ? getPlantingSiteResult.data?.site : undefined),
-    [getPlantingSiteResult.data?.site, plantingSiteId]
-  );
+  const { plantingSite } = usePlantingSite(plantingSiteId);
 
   const getObservationResultResponse = useGetOneObservationResults({ observationId });
 

@@ -32,15 +32,15 @@ import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
-import { useLocalization, useOrganization } from 'src/providers';
+import { useLocalization } from 'src/providers';
 import { ObservationSplatPayload, useLazyListObservationSplatsQuery } from 'src/queries/generated/observationSplats';
 import {
   ExistingTreePayload,
   ObservationMonitoringPlotResultsPayload,
   ObservationResultsPayload,
 } from 'src/queries/generated/observations';
-import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import {
   ObservationMonitoringPlotPhoto,
   ObservationMonitoringPlotPhotoWithGps,
@@ -82,7 +82,6 @@ const ObservationMap = ({
   const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { mapId, token } = useMapboxToken();
-  const { selectedOrganization } = useOrganization();
   const { fitBounds } = useMapUtils(mapRef);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
@@ -128,16 +127,9 @@ const ObservationMap = ({
   const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
-  const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const [listObservationSplats, listObservationSplatsResult] = useLazyListObservationSplatsQuery();
 
-  useEffect(() => {
-    if (selectedOrganization && plantingSiteId !== undefined) {
-      void getPlantingSite({ id: plantingSiteId, includeZones: false }, true);
-    }
-  }, [getPlantingSite, plantingSiteId, selectedOrganization]);
-
-  const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
+  const { plantingSite } = usePlantingSite(plantingSiteId);
 
   const observationResultsOptions = useMemo((): MapDropdownLegendItem[] => {
     return observationResults.map((observation): MapDropdownLegendItem => {
@@ -224,13 +216,14 @@ const ObservationMap = ({
 
   const selectedResults = useMemo(() => {
     if (selectedObservationId) {
-      return getObservationResponse.currentData?.observation;
+      const results = getObservationResponse.currentData?.observation;
+      return results?.plantingSiteId === plantingSiteId ? results : undefined;
     } else if (selectedAdHocResults.length) {
       return selectedAdHocResults[0];
     } else {
       return undefined;
     }
-  }, [getObservationResponse, selectedAdHocResults, selectedObservationId]);
+  }, [getObservationResponse, plantingSiteId, selectedAdHocResults, selectedObservationId]);
 
   const monitoringPlots = useMemo(() => {
     if (selectedResults) {

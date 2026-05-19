@@ -27,10 +27,11 @@ import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import { useGetOneObservationResults } from 'src/hooks/observations';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import useProjectPlantingSites from 'src/hooks/useProjectPlantingSites';
 import { useLazyListObservationSummariesQuery } from 'src/queries/generated/observations';
-import { PlantingSiteHistoryPayload, useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { PlantingSiteHistoryPayload } from 'src/queries/generated/plantingSites';
 import { MapService } from 'src/services';
 import {
   ObservationMonitoringPlotPhoto,
@@ -65,17 +66,15 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
 
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('strata');
   const { plantingSites: projectPlantingSites } = useProjectPlantingSites({ full: true, projectId });
-  const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
   const [listObservataionSummary, listObservataionSummaryResponse] = useLazyListObservationSummariesQuery();
 
   useEffect(() => {
     if (plantingSiteId) {
-      void getPlantingSite({ id: plantingSiteId }, true);
       void listObservataionSummary({ plantingSiteId, limit: 1 }, true);
     }
-  }, [getPlantingSite, listObservataionSummary, plantingSiteId]);
+  }, [listObservataionSummary, plantingSiteId]);
 
-  const plantingSite = useMemo(() => getPlantingSiteResponse.currentData?.site, [getPlantingSiteResponse]);
+  const { plantingSite } = usePlantingSite(plantingSiteId);
 
   const getObservationResultResponse = useGetOneObservationResults({
     observationId: plantingSite?.latestObservationId,
@@ -90,10 +89,10 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
     }
   }, [listObservataionSummaryResponse]);
 
-  const latestObservationResult = useMemo(
-    () => getObservationResultResponse.currentData?.observation,
-    [getObservationResultResponse.currentData?.observation]
-  );
+  const latestObservationResult = useMemo(() => {
+    const results = getObservationResultResponse.currentData?.observation;
+    return results?.plantingSiteId === plantingSiteId ? results : undefined;
+  }, [getObservationResultResponse, plantingSiteId]);
 
   const { plantingSiteHistory } = usePlantingSiteHistory({
     plantingSiteId,
