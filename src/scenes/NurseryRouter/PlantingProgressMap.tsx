@@ -251,6 +251,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
           selectPhotos([
             {
               kind: 'withdrawal-photo',
+              capturedLocalTime: entry.capturedLocalTime,
               withdrawalId: entry.withdrawalId,
               photoId: entry.photoId,
               withdrawnDate: entry.withdrawnDate,

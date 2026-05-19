@@ -25,6 +25,7 @@ export type PlotSplat = {
 
 export type WithdrawalPhoto = {
   kind: 'withdrawal-photo';
+  capturedLocalTime?: string;
   withdrawalId: number;
   photoId: number;
   withdrawnDate: string;
@@ -78,6 +79,7 @@ const useMapPhotoDrawer = () => {
       case 'withdrawal-photo':
         return (
           <WithdrawalPhotoDrawerContent
+            capturedLocalTime={selected.capturedLocalTime}
             withdrawalId={selected.withdrawalId}
             photoId={selected.photoId}
             withdrawnDate={selected.withdrawnDate}

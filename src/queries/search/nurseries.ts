@@ -12,6 +12,7 @@ import { baseApi as api } from '../baseApi';
 import { QueryTagTypes } from '../tags';
 
 export type WithdrawalPhotoSearchEntry = {
+  capturedLocalTime?: string;
   gpsCoordinates: Point;
   photoId: number;
   withdrawalId: number;
@@ -343,7 +344,7 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'POST',
         body: {
           prefix: 'nurseryWithdrawalPhotos',
-          fields: ['fileId', 'gpsCoordinate', 'withdrawal.id', 'withdrawal.withdrawnDate'],
+          fields: ['capturedLocalTime', 'fileId', 'gpsCoordinate', 'withdrawal.id', 'withdrawal.withdrawnDate'],
           search: {
             operation: 'field',
             field: 'withdrawal.delivery.plantings.plantingSite.id',
@@ -371,6 +372,7 @@ const injectedRtkApi = api.injectEndpoints({
 
           return [
             {
+              capturedLocalTime: result.capturedLocalTime,
               gpsCoordinates: point,
               photoId: Number(result.fileId),
               withdrawalId: Number(result.withdrawal.id),
@@ -405,6 +407,7 @@ export type SearchNurseryWithdrawalPhotosApiArgs = {
 };
 
 type NurseryWithdrawalPhotoApiResult = {
+  capturedLocalTime?: string;
   fileId?: string;
   gpsCoordinate?: string;
   withdrawal?: {
