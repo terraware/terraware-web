@@ -117,7 +117,7 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
     defaultSorting: [{ id: 'accessionNumber', desc: false }],
-    persistedMultiSelectColumnIds: ['facility_name', 'project_name', 'state', 'subLocation_name'],
+    persistedMultiSelectColumnIds: ['facility_name', 'project_name', 'state', 'subLocation_name', 'speciesName'],
     persistFilters: true,
     persistSorting: true,
   });
@@ -126,9 +126,19 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
     const facilityId = query.get('facilityId');
     const subLocationName = query.get('subLocationName');
     const filterState = query.get('accessions_filter_state');
+    const speciesId = query.get('speciesId');
 
-    if (!facilityId && !subLocationName && !filterState) {
+    if (!facilityId && !subLocationName && !filterState && !speciesId) {
       return;
+    }
+
+    let resolvedSpeciesName: string | undefined;
+    if (speciesId) {
+      if (!searchResults) {
+        return;
+      }
+      const match = searchResults.find((r) => String(r.species_id) === speciesId);
+      resolvedSpeciesName = match?.speciesName as string | undefined;
     }
 
     const urlFilters: MRT_ColumnFiltersState = [];
@@ -152,6 +162,11 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
       query.delete('accessions_filter_state');
     }
 
+    if (speciesId && resolvedSpeciesName) {
+      urlFilters.push({ id: 'speciesName', value: [resolvedSpeciesName] });
+      query.delete('speciesId');
+    }
+
     if (urlFilters.length > 0) {
       setColumnFilters((prev) => {
         const newIds = new Set(urlFilters.map((f) => f.id));
@@ -160,7 +175,7 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
       setShowColumnFilters(true);
       navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     }
-  }, [location, navigate, query, selectedOrganization, setColumnFilters, setShowColumnFilters]);
+  }, [location, navigate, query, searchResults, selectedOrganization, setColumnFilters, setShowColumnFilters]);
 
   const uniqueStates = useMemo(() => ACCESSION_2_STATES as string[], []);
 
@@ -171,6 +186,11 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
 
   const uniqueSubLocationNames = useMemo(
     () => Array.from(new Set(searchResults?.map((r) => r.subLocation_name as string).filter(Boolean))).sort(),
+    [searchResults]
+  );
+
+  const uniqueSpeciesNames = useMemo(
+    () => Array.from(new Set(searchResults?.map((r) => r.speciesName as string).filter(Boolean))).sort(),
     [searchResults]
   );
 
@@ -267,7 +287,8 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
         id: 'speciesName',
         header: strings.SPECIES,
         accessorKey: 'speciesName',
-        filterVariant: 'text',
+        filterVariant: 'multi-select',
+        filterSelectOptions: uniqueSpeciesNames,
       },
       {
         id: 'project_name',
@@ -469,6 +490,7 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
     uniqueStates,
     uniqueFacilityNames,
     uniqueSubLocationNames,
+    uniqueSpeciesNames,
     uniqueProjectNames,
     AccessionNumberCell,
     ViabilityCell,
