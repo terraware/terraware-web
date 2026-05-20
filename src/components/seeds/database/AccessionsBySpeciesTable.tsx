@@ -77,7 +77,7 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: {},
     defaultSorting: [{ id: 'speciesName', desc: false }],
-    persistedMultiSelectColumnIds: ['project_name'],
+    persistedMultiSelectColumnIds: ['project_name', 'speciesName'],
   });
 
   const speciesRows = useMemo<SpeciesRow[]>(() => {
@@ -88,6 +88,10 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
     for (const accession of searchResults) {
       const speciesId = accession.species_id as number | undefined;
       const speciesName = (accession.speciesName as string) ?? '';
+      // Skip accessions that have neither a species ID nor a species name.
+      if (speciesId === undefined && !speciesName) {
+        continue;
+      }
       const key = speciesId !== undefined ? `id:${speciesId}` : `name:${speciesName}`;
       const existing = grouped.get(key);
       const seeds = Number(accession['estimatedCount(raw)'] ?? 0) || 0;
@@ -114,13 +118,19 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
     return Array.from(grouped.values());
   }, [searchResults]);
 
+  const uniqueSpeciesNames = useMemo(
+    () => Array.from(new Set(speciesRows.map((r) => r.speciesName).filter((name): name is string => !!name))).sort(),
+    [speciesRows]
+  );
+
   const SpeciesNameCell = useCallback(({ cell }: { cell: MRT_Cell<SpeciesRow> }) => {
     const row = cell.row.original;
-    if (!row.speciesId) {
+    if (row.speciesId === undefined) {
       return <span>{row.speciesName || strings.DELETED_SPECIES}</span>;
     }
+    const params = new URLSearchParams({ tab: 'byAccession', speciesId: String(row.speciesId) });
     return (
-      <Link fontSize='16px' to={APP_PATHS.SPECIES_DETAILS.replace(':speciesId', String(row.speciesId))}>
+      <Link fontSize='16px' to={`${APP_PATHS.ACCESSIONS}?${params.toString()}`}>
         {row.speciesName}
       </Link>
     );
@@ -143,7 +153,8 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
         id: 'speciesName',
         header: strings.SPECIES,
         accessorKey: 'speciesName',
-        filterVariant: 'text',
+        filterVariant: 'multi-select',
+        filterSelectOptions: uniqueSpeciesNames,
         Cell: SpeciesNameCell,
       },
       {
@@ -186,7 +197,7 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
         Cell: SpeciesNumericCell,
       },
     ];
-  }, [activeLocale, uniqueProjectNames, SpeciesNameCell, SpeciesNumericCell]);
+  }, [activeLocale, uniqueProjectNames, uniqueSpeciesNames, SpeciesNameCell, SpeciesNumericCell]);
 
   if (searchResults === undefined) {
     return (
