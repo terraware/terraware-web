@@ -72,7 +72,7 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
                     {strings.LOCATION}: {swCoordinatesLat}, {swCoordinatesLong}
                   </Typography>
                   <Typography>
-                    {strings.ELEVATION}: {results.adHocPlot?.elevationMeters}
+                    {strings.ELEVATION}: {results.adHocPlot?.elevationMeters} {strings.METERS}
                   </Typography>
                 </Box>
               }

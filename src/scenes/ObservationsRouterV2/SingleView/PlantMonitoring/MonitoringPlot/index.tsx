@@ -127,7 +127,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
                 {strings.LOCATION}: {swCoordinatesLat}, {swCoordinatesLng}
               </Typography>
               <Typography>
-                {strings.ELEVATION}: {monitoringPlot?.elevationMeters}
+                {strings.ELEVATION}: {monitoringPlot?.elevationMeters} {strings.METERS}
               </Typography>
             </Box>
           }
