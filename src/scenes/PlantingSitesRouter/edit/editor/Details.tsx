@@ -13,7 +13,6 @@ import { OnValidate } from './types';
 export type DetailsProps = {
   onChange: (id: string, value: unknown) => void;
   onValidate?: OnValidate;
-  plantingSeasons?: UpdatedPlantingSeason[];
   setPlantingSeasons: (plantingSeasons: UpdatedPlantingSeason[]) => void;
   setPlantingSite: (setFn: (previousValue: DraftPlantingSite) => DraftPlantingSite) => void;
   site: DraftPlantingSite;
@@ -22,7 +21,6 @@ export type DetailsProps = {
 export default function Details({
   onChange,
   onValidate,
-  plantingSeasons,
   setPlantingSeasons,
   setPlantingSite,
   site,
@@ -35,7 +33,6 @@ export default function Details({
       <DraftSiteDetailsInputForm
         onChange={onChange}
         onValidate={onValidate?.apply}
-        plantingSeasons={plantingSeasons}
         record={site}
         setPlantingSeasons={setPlantingSeasons}
         setRecord={setPlantingSite}

@@ -24,7 +24,6 @@ import PlantingSeasonsEdit from '../PlantingSeasonsEdit';
 export type DraftSiteDetailsInputFormProps = {
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean) => void;
-  plantingSeasons?: UpdatedPlantingSeason[];
   record: DraftPlantingSite;
   setPlantingSeasons: (plantingSeasons: UpdatedPlantingSeason[]) => void;
   setRecord: (setFn: (previousValue: DraftPlantingSite) => DraftPlantingSite) => void;
@@ -33,8 +32,6 @@ export type DraftSiteDetailsInputFormProps = {
 export default function DraftSiteDetailsInputForm({
   onChange,
   onValidate,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  plantingSeasons,
   record,
   setPlantingSeasons,
   setRecord,

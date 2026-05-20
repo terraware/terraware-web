@@ -357,7 +357,6 @@ export default function Editor(props: EditorProps): JSX.Element {
               <Details
                 onChange={onChange}
                 onValidate={onValidate}
-                plantingSeasons={plantingSeasons}
                 setPlantingSeasons={setPlantingSeasons}
                 setPlantingSite={setPlantingSite}
                 site={plantingSite}
