@@ -54,4 +54,4 @@ steps:
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
 
 notify:
-  - email: 'constanza@terraformation.com'
+  - email: 'software-eng@terraformation.com'
