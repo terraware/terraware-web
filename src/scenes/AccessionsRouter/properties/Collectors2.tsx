@@ -6,7 +6,7 @@ import { Box, IconButton, useTheme } from '@mui/material';
 import AddLink from 'src/components/common/AddLink';
 import Autocomplete from 'src/components/common/Autocomplete';
 import { useOrganization } from 'src/providers/hooks';
-import { SeedBankService } from 'src/services';
+import { useLazyGetCollectorsQuery } from 'src/queries/search/accessions';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 
@@ -18,17 +18,15 @@ interface Props {
 export default function Collectors2({ collectors = [''], onChange }: Props): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const [collectorsList, setCollectorsList] = useState<string[]>([...collectors]);
-  const [collectorsOpt, setCollectorsOpt] = useState<string[]>();
   const theme = useTheme();
 
+  const [fetchCollectors, collectorsResult] = useLazyGetCollectorsQuery();
   useEffect(() => {
     if (selectedOrganization) {
-      const populateCollectors = async () => {
-        setCollectorsOpt(await SeedBankService.getCollectors(selectedOrganization.id));
-      };
-      void populateCollectors();
+      void fetchCollectors(selectedOrganization.id);
     }
-  }, [selectedOrganization]);
+  }, [fetchCollectors, selectedOrganization]);
+  const collectorsOpt = collectorsResult.data;
 
   const getNonEmptyCollectors = (updatedCollectors: string[]) => updatedCollectors.filter((collector) => !!collector);
 

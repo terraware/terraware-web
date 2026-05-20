@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 
 import { Dropdown } from '@terraware/web-components';
 
-import { SearchResponseAccession } from 'src/services/SeedBankService';
+import { SearchResponseAccession } from 'src/queries/search/accessions';
 import strings from 'src/strings';
 
 type AccessionsDropdownProps<T extends { accessionId?: number; speciesId?: number } | undefined> = {

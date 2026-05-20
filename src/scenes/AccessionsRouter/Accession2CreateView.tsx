@@ -14,7 +14,8 @@ import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import SeedBankService, { AccessionPostRequestBody } from 'src/services/SeedBankService';
+import { useUploadPhotoMutation } from 'src/queries/generated/accessionsV1';
+import { CreateAccessionRequestPayloadV2Write, useCreateAccessionMutation } from 'src/queries/generated/accessionsV2';
 import strings from 'src/strings';
 import { accessionCreateStates } from 'src/types/Accession';
 import { Facility } from 'src/types/Facility';
@@ -60,6 +61,8 @@ export default function CreateAccession(): JSX.Element | null {
   const [receivedDateError, setReceivedDateError] = useState<string>();
   const [photos, setPhotos] = useState<File[]>([]);
   const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [createAccession] = useCreateAccessionMutation();
+  const [uploadPhoto] = useUploadPhotoMutation();
 
   const onPhotosChanged = (photosList: File[]) => {
     setPhotos(photosList);
@@ -73,14 +76,15 @@ export default function CreateAccession(): JSX.Element | null {
     setReceivedDateError(error);
   };
 
-  const defaultAccession = (): AccessionPostRequestBody =>
+  const defaultAccession = (): CreateAccessionRequestPayloadV2Write =>
     ({
       state: 'Awaiting Check-In',
       collectedDate: getTodaysDateFormatted(timeZone),
       receivedDate: getTodaysDateFormatted(timeZone),
-    }) as AccessionPostRequestBody;
+    }) as CreateAccessionRequestPayloadV2Write;
 
-  const [record, setRecord, onChange, onChangeCallback] = useForm<AccessionPostRequestBody>(defaultAccession());
+  const [record, setRecord, onChange, onChangeCallback] =
+    useForm<CreateAccessionRequestPayloadV2Write>(defaultAccession());
 
   const { availableProjects } = useProjects();
 
@@ -113,7 +117,7 @@ export default function CreateAccession(): JSX.Element | null {
   }, [tz]);
 
   useEffect(() => {
-    setRecord((previousRecord: AccessionPostRequestBody): AccessionPostRequestBody => {
+    setRecord((previousRecord: CreateAccessionRequestPayloadV2Write): CreateAccessionRequestPayloadV2Write => {
       return {
         ...previousRecord,
         receivedDate: getTodaysDateFormatted(timeZone),
@@ -144,21 +148,27 @@ export default function CreateAccession(): JSX.Element | null {
       return;
     }
     setIsSaving(true);
-    const response = await SeedBankService.createAccession(record);
-    if (response.requestSucceeded) {
+    try {
+      const response = await createAccession(record).unwrap();
+      const accessionId = response.accession.id;
       if (photos.length) {
         // upload photos
-        await SeedBankService.uploadAccessionPhotos(response.id, photos);
+        await Promise.all(
+          photos.map((photo) =>
+            uploadPhoto({ id: accessionId, photoFilename: photo.name, body: { file: photo } }).unwrap()
+          )
+        );
       }
 
       navigate(accessionsDatabase, { replace: true });
       navigate({
-        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', response.id.toString()),
+        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', accessionId.toString()),
       });
-    } else {
+    } catch {
       snackbar.toastError();
+    } finally {
+      setIsSaving(false);
     }
-    setIsSaving(false);
   };
 
   const gridSize = () => (isMobile ? 12 : 6);
@@ -239,7 +249,7 @@ export default function CreateAccession(): JSX.Element | null {
           </Grid>
 
           <Box sx={marginTop}>
-            <ProjectsDropdown<AccessionPostRequestBody>
+            <ProjectsDropdown<CreateAccessionRequestPayloadV2Write>
               record={record}
               setRecord={setRecord}
               availableProjects={availableProjects}

@@ -6,13 +6,13 @@ import AddLink from 'src/components/common/AddLink';
 import Autocomplete from 'src/components/common/Autocomplete';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import { useLocalization } from 'src/providers';
-import { AccessionPostRequestBody } from 'src/services/SeedBankService';
+import { CreateAccessionRequestPayloadV2Write } from 'src/queries/generated/accessionsV2';
 import strings from 'src/strings';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type Accession2AddressProps = {
-  record: AccessionPostRequestBody;
+  record: CreateAccessionRequestPayloadV2Write;
   onChange: (id: string, value?: any) => void;
   opened?: boolean;
 };

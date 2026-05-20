@@ -1,10 +1,10 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useEffect } from 'react';
 
 import { Box } from '@mui/material';
 
 import Autocomplete from 'src/components/common/Autocomplete';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { SeedBankService } from 'src/services';
+import { useLazyGetCollectionSiteNamesQuery } from 'src/queries/search/accessions';
 import strings from 'src/strings';
 
 interface Props {
@@ -15,16 +15,14 @@ interface Props {
 export default function CollectionSiteName({ collectionSiteName = '', onChange }: Props): JSX.Element | null {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const [options, setOptions] = useState<string[]>();
 
+  const [fetchCollectionSiteNames, collectionSiteNamesResult] = useLazyGetCollectionSiteNamesQuery();
   useEffect(() => {
     if (selectedOrganization) {
-      const populateCollectionSiteNames = async () => {
-        setOptions(await SeedBankService.getCollectionSiteNames(selectedOrganization.id));
-      };
-      void populateCollectionSiteNames();
+      void fetchCollectionSiteNames(selectedOrganization.id);
     }
-  }, [selectedOrganization]);
+  }, [fetchCollectionSiteNames, selectedOrganization]);
+  const options = collectionSiteNamesResult.data;
 
   return !activeLocale ? null : (
     <Box mb={2} display='flex' alignItems='center' sx={{ display: 'block', position: 'relative' }}>
