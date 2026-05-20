@@ -9,6 +9,7 @@ import {
 import { UnitType } from 'src/units';
 
 import { baseApi as api } from '../baseApi';
+import { QueryTagTypes } from '../tags';
 
 export type SearchResponseAccession = {
   id: string;
@@ -84,6 +85,13 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
       transformResponse: (response: SearchResponse<SearchResponseElement>) => response?.results ?? [],
+      providesTags: (result) => [
+        ...(result ?? [])
+          .map((r) => r.id)
+          .filter((id): id is string => typeof id === 'string')
+          .map((id) => ({ type: QueryTagTypes.Accessions as const, id })),
+        { type: QueryTagTypes.Accessions, id: 'LIST' },
+      ],
     }),
     getPendingAccessions: build.query<SearchResponseElementWithId[], GetPendingAccessionsApiArg>({
       query: (organizationId) => ({
@@ -105,6 +113,10 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
       transformResponse: (response: SearchResponse<SearchResponseElementWithId>) => response?.results ?? [],
+      providesTags: (result) => [
+        ...(result ?? []).map((r) => ({ type: QueryTagTypes.Accessions as const, id: r.id })),
+        { type: QueryTagTypes.Accessions, id: 'PENDING' },
+      ],
     }),
     getCollectors: build.query<string[], GetCollectorsApiArg>({
       query: (organizationId) => ({
@@ -119,6 +131,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
       transformResponse: (response: SearchValuesResponse) =>
         (response?.results?.collectors_name?.values ?? []).filter((v): v is string => v !== null),
+      providesTags: [{ type: QueryTagTypes.Accessions, id: 'LIST' }],
     }),
     getCollectionSiteNames: build.query<string[], GetCollectionSiteNamesApiArg>({
       query: (organizationId) => ({
@@ -133,6 +146,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
       transformResponse: (response: SearchValuesResponse) =>
         (response?.results?.collectionSiteName?.values ?? []).filter((v): v is string => v !== null),
+      providesTags: [{ type: QueryTagTypes.Accessions, id: 'LIST' }],
     }),
     getAccessionForSpecies: build.query<SearchResponseAccession[], GetAccessionForSpeciesApiArg>({
       query: ({ organizationId, speciesId }) => {
@@ -167,6 +181,10 @@ const injectedRtkApi = api.injectEndpoints({
         };
       },
       transformResponse: (response: SearchResponse<SearchResponseAccession>) => response?.results ?? [],
+      providesTags: (result) => [
+        ...(result ?? []).map((r) => ({ type: QueryTagTypes.Accessions as const, id: r.id })),
+        { type: QueryTagTypes.Accessions, id: 'LIST' },
+      ],
     }),
   }),
   overrideExisting: false,

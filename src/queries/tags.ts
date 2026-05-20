@@ -1,5 +1,6 @@
 export enum QueryTagTypes {
   AcceleratorProjects = 'AcceleratorProjects',
+  Accessions = 'Accessions',
   Activities = 'Activities',
   Deliveries = 'Deliveries',
   FunderActivities = 'FunderActivities',
