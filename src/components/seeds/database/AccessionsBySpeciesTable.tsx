@@ -88,6 +88,10 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
     for (const accession of searchResults) {
       const speciesId = accession.species_id as number | undefined;
       const speciesName = (accession.speciesName as string) ?? '';
+      // Skip accessions that have neither a species ID nor a species name.
+      if (speciesId === undefined && !speciesName) {
+        continue;
+      }
       const key = speciesId !== undefined ? `id:${speciesId}` : `name:${speciesName}`;
       const existing = grouped.get(key);
       const seeds = Number(accession['estimatedCount(raw)'] ?? 0) || 0;
