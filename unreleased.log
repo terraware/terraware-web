@@ -1,3 +1,4 @@
+43ae8d0a SW-8398 Removed unused code and strip out unneccessary data from update planting sites (#5729)
 a850cd01 SW-5197 Improvements to "By species" tab in accessions (#5727)
 ddbf8e48 SW-4232 Add optional alternate recorded/observed GPS coordinate fields to plot observation details page (#5725)
 451168eb SW-8326 Release screenshot test email notification (#5719)
