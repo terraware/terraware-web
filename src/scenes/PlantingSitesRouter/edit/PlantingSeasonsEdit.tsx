@@ -8,7 +8,6 @@ import DatePicker from 'src/components/common/DatePicker';
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
-import { TimeZoneDescription } from 'src/types/TimeZones';
 
 // Minimum length of a planting season.
 const minDuration: DurationLike = { weeks: 4 };
@@ -60,7 +59,7 @@ type Props = {
   setShowSaveValidationErrors: (showErrors: boolean) => void;
 
   /** Effective time zone of the planting site, possibly inherited from its organization. */
-  timeZone: TimeZoneDescription;
+  timeZoneId: string;
 };
 
 /** Calculated metadata for each row in the edit UI. */
@@ -88,13 +87,13 @@ export default function PlantingSeasonsEdit(props: Props): JSX.Element {
     setPlantingSeasonsValid,
     setShowSaveValidationErrors,
     showSaveValidationErrors,
-    timeZone,
+    timeZoneId,
   } = props;
   const [loaded, setLoaded] = useState(false);
   const [rows, setRows] = useState<EditableRow[]>([]);
 
   // Luxon DateTime factory options to use planting site's time zone.
-  const dateTimeOptions = useMemo(() => ({ zone: timeZone.id }), [timeZone]);
+  const dateTimeOptions = useMemo(() => ({ zone: timeZoneId }), [timeZoneId]);
 
   // Converts a JavaScript Date object to a Luxon DateTime in the site's time zone.
   const jsDateToDateTime = useCallback((date: Date) => DateTime.fromJSDate(date, dateTimeOptions), [dateTimeOptions]);
@@ -263,7 +262,7 @@ export default function PlantingSeasonsEdit(props: Props): JSX.Element {
               minDate={minStartDate.toISODate()}
               maxDate={maxStartDate.toISODate()}
               errorText={metadataForRows[index].startDateError}
-              defaultTimeZone={timeZone.id}
+              defaultTimeZone={timeZoneId}
             />
           </Grid>
           <Grid item xs={5}>
@@ -276,7 +275,7 @@ export default function PlantingSeasonsEdit(props: Props): JSX.Element {
               minDate={metadataForRows[index].minEndDate}
               maxDate={metadataForRows[index].maxEndDate}
               errorText={metadataForRows[index].endDateError}
-              defaultTimeZone={timeZone.id}
+              defaultTimeZone={timeZoneId}
             />
           </Grid>
           <Grid item xs={2}>

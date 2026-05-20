@@ -8,33 +8,34 @@ import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
-import { UpdatePlantingSiteRequestPayload } from 'src/queries/generated/plantingSites';
 import { selectDraftPlantingSites } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
 import { requestSearchDrafts } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { TimeZoneDescription } from 'src/types/TimeZones';
+import { UpdatedPlantingSeason } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import PlantingSeasonsEdit from './PlantingSeasonsEdit';
+import PlantingSeasonsEdit from '../PlantingSeasonsEdit';
 
-export type DetailsInputFormProps = {
+export type DraftSiteDetailsInputFormProps = {
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean) => void;
-  plantingSiteId?: number;
-  record: UpdatePlantingSiteRequestPayload;
-  setRecord: (setFn: (previousValue: UpdatePlantingSiteRequestPayload) => UpdatePlantingSiteRequestPayload) => void;
+  record: DraftPlantingSite;
+  setPlantingSeasons: (plantingSeasons: UpdatedPlantingSeason[]) => void;
+  setRecord: (setFn: (previousValue: DraftPlantingSite) => DraftPlantingSite) => void;
 };
 
-export default function DetailsInputForm({
+export default function DraftSiteDetailsInputForm({
   onChange,
   onValidate,
-  plantingSiteId,
   record,
+  setPlantingSeasons,
   setRecord,
-}: DetailsInputFormProps): JSX.Element {
+}: DraftSiteDetailsInputFormProps): JSX.Element {
   const defaultTimeZoneId = useDefaultTimeZone().get().id;
   const { isMobile } = useDeviceInfo();
   const [validateInput, setValidateInput] = useState<boolean>(false);
@@ -50,9 +51,9 @@ export default function DetailsInputForm({
 
   const usedNames = useMemo(() => {
     const allSites = [...(plantingSites || []), ...(draftSites?.data || [])];
-    const otherSiteNames = allSites.filter((site) => Number(site.id) !== plantingSiteId).map((site) => site.name);
+    const otherSiteNames = allSites.filter((site) => Number(site.id) !== record.id).map((site) => site.name);
     return new Set(otherSiteNames);
-  }, [draftSites?.data, plantingSiteId, plantingSites]);
+  }, [draftSites, plantingSites, record.id]);
 
   const checkErrors = useCallback(() => {
     let hasNameError = true;
@@ -119,12 +120,6 @@ export default function DetailsInputForm({
     return record.timeZone ?? selectedOrganization?.timeZone ?? defaultTimeZoneId;
   }, [defaultTimeZoneId, record.timeZone, selectedOrganization?.timeZone]);
 
-  const setPlantingSeasons = useCallback(
-    (seasons: UpdatePlantingSiteRequestPayload['plantingSeasons']) =>
-      setRecord((prev) => ({ ...prev, plantingSeasons: seasons })),
-    [setRecord]
-  );
-
   return (
     <Grid container display='flex' spacing={3} flexGrow={0}>
       <Grid item xs={gridSize()}>
@@ -154,7 +149,7 @@ export default function DetailsInputForm({
           tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
         />
       </Grid>
-      {record.plantingSeasons && (
+      {record.strata && (
         <Grid item xs={gridSize()}>
           <TextField
             label={strings.UPCOMING_PLANTING_SEASONS}
