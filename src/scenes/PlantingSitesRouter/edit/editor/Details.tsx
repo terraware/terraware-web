@@ -2,11 +2,11 @@ import React, { type JSX } from 'react';
 
 import { Box } from '@mui/material';
 
-import DetailsInputForm from 'src/scenes/PlantingSitesRouter/edit/DetailsInputForm';
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { UpdatedPlantingSeason } from 'src/types/Tracking';
 
+import DraftSiteDetailsInputForm from './DraftSiteDetailsInputForm';
 import StepTitleDescription from './StepTitleDescription';
 import { OnValidate } from './types';
 
@@ -27,10 +27,12 @@ export default function Details({
   setPlantingSite,
   site,
 }: DetailsProps): JSX.Element {
+  const { strings } = useLocalization();
+
   return (
     <Box display='flex' flexDirection='column'>
       <StepTitleDescription description={[]} title={strings.DETAILS} />
-      <DetailsInputForm<DraftPlantingSite>
+      <DraftSiteDetailsInputForm
         onChange={onChange}
         onValidate={onValidate?.apply}
         plantingSeasons={plantingSeasons}
