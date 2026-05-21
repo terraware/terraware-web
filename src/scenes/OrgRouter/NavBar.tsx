@@ -13,6 +13,7 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -65,6 +66,7 @@ export default function NavBar({
   const isPlantingSitesRoute = useMatch({ path: APP_PATHS.PLANTING_SITES + '/', end: false });
   const isPlantsDashboardRoute = useMatch({ path: APP_PATHS.PLANTS_DASHBOARD + '/', end: false });
   const isPlantingProgressRoute = useMatch({ path: APP_PATHS.PLANTING_PROGRESS + '/', end: false });
+  const isPlantingSeasonsRoute = useMatch({ path: APP_PATHS.PLANTING_SEASONS + '/', end: false });
   const isWithdrawalLogRoute = useMatch({ path: APP_PATHS.NURSERY_WITHDRAWALS + '/', end: false });
   const isReassignmentRoute = useMatch({ path: APP_PATHS.NURSERY_REASSIGNMENT + '/', end: false });
   const isReportsRoute = useMatch({ path: APP_PATHS.REPORTS + '/', end: false });
@@ -74,6 +76,8 @@ export default function NavBar({
   const isProjectRoute = useMatch({ path: APP_PATHS.PROJECT_VIEW + '/', end: true });
   const isProjectModulesRoute = useMatch({ path: APP_PATHS.PROJECT_MODULES + '/', end: false });
   const isActivityLogRoute = useMatch({ path: APP_PATHS.ACTIVITY_LOG + '/', end: false });
+
+  const isPlantingSeasonsEnabled = isEnabled('Planting Seasons');
 
   const closeNavBar = useCallback(() => {
     if (!isDesktop) {
@@ -381,6 +385,16 @@ export default function NavBar({
 
           {hasPlantingSites === true ? (
             <>
+              {isPlantingSeasonsEnabled && (
+                <NavItem
+                  label={strings.PLANTING_SEASONS}
+                  selected={!!isPlantingSeasonsRoute}
+                  onClick={() => {
+                    closeAndNavigateTo(APP_PATHS.PLANTING_SEASONS);
+                  }}
+                  id='planting-seasons'
+                />
+              )}
               <NavItem
                 label={strings.PLANTING_PROGRESS}
                 selected={!!isPlantingProgressRoute}

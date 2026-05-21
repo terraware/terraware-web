@@ -90,6 +90,7 @@ ADD_PHOTOS,Añadir fotos,612b31b1
 ADD_PHOTOS_DESCRIPTION,Tome una foto (o fotos) de los lotes que serán plantados en el sustrato seleccionado. Asegúrese de incluir todo el retiro en la(s) foto(s).,8fea0b64
 ADD_PHOTOS_DESCRIPTION_OPTIONAL,Tome una foto opcional (o fotos) de los lotes.,5b1fa829
 ADD_PLANT_SITE_DESCRIPTION,Añadir Planta y Descripción del Sitio,af2cccc4
+ADD_PLANTING_SEASON,Agregar temporada de plantación,28e2d556
 ADD_PLANTING_SITE,Añadir Sitio de Plantación,9525532c
 ADD_PLANTING_SITE_DETAILED_SITE,"Seleccione esta opción si el sitio es relativamente grande, con múltiples estratos (capas de vegetación) y condiciones de crecimiento. Los sitios de plantación con más de una capa de vegetación tendrán varios estratos.",2ca39951
 ADD_PLANTING_SITE_SIMPLE_SITE,"Seleccionar si el sitio de plantación es relativamente chico, con un solo estrato.",d6732c11
@@ -1031,6 +1032,7 @@ LOW,Bajo,ddedeca3
 LOWEST,Más baja,b651e8a7
 MAKE_HIGHLIGHT,Crear destacado,c3fda88f
 MANAGE_COLUMNS,Gestionar columnas,1dba3733
+MANAGE_PLANTING_SITE_GOALS_WITHIN_PLANTING_SEASONS,Gestionar los objetivos del sitio de plantación dentro de las temporadas de plantación.,09b93599
 MANAGED_LOCATION_TYPE_NURSERY,Vivero,2a9dbfec
 MANAGED_LOCATION_TYPE_PLANTING_SITE,Sitio de plantación,ee55d884
 MANAGED_LOCATION_TYPE_SEED_BANK,Banco de semillas/Recolección de semillas,d096b836
@@ -1182,6 +1184,7 @@ NO_NOTIFICATIONS,No hay notificaciones que mostrar.,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Antes de poder agregar y administrar el inventario de su vivero, necesitará contar con un vivero y especies dentro de Terraware. Solo los administradores pueden agregar viveros; contáctese con el suyo para obtener ayuda.",93c44729
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,No se han programado observaciones,c05456cd
 NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Cuando se completen las Observaciones que incluyan parcelas permanentes, estas aparecerán aquí y será necesario establecer los datos t0 para todas las parcelas permanentes para que se puedan calcular las Tasas de Supervivencia.",18f6a079
+NO_PLANTING_SEASONS_HAVE_BEEN_CREATED,No se han creado temporadas de plantación.,bda5b0d9
 NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Añadir un sitio de plantación le permitirá rastrear a dónde van las plantas de semillero al dejar el vivero.,b0104f6c
 NO_PLANTING_SITES_NON_ADMIN_MSG,"Solo los administradores pueden agregar sitios de plantación; por favor, comuníquese con el suyo para recibir asistencia.",8f016d3f
 NO_PLANTING_SITES_TITLE,"Solo un momento, añadamos un sitio de plantación primero.",801ba14c
@@ -1439,6 +1442,7 @@ PLANTING_SEASON_END_OUT_OF_RANGE,Debe ser entre 4 semanas y 1 año de la fecha d
 PLANTING_SEASON_NO_OVERLAP,Se superpone con la temporada de plantación {0} - {1},f1549979
 PLANTING_SEASON_START,Inicio de temporada de plantación,10f5de94
 PLANTING_SEASON_START_OUT_OF_RANGE,Debe estar a 1 año de la fecha actual.,d69ba8fe
+PLANTING_SEASONS,Temporadas de plantación,58d50e9a
 PLANTING_SITE,Sitio de plantación,ee55d884
 PLANTING_SITE_AREA,Área de la zona de plantación,53766ba3
 PLANTING_SITE_CREATE_DETAILED_HELP,"Si usted es un socio o participante acelerador de Terraformation, puede [contactarnos] para colaborar en un sitio de plantación detallado.",26cde7ca
