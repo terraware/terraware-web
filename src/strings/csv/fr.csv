@@ -1310,7 +1310,7 @@ OPPORTUNITIES_REQUIRED,Opportunités *,8d418e65
 OPT_IN,Fonctionnalités Opt-In,cbb9300b
 OPTIONAL,Facultatif,9f75363c
 OPTIONAL_GPS_COORDINATES_OF_PLOT,Optionnel : coordonnées GPS de la parcelle,c15f1313
-OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,Indiquez les coordonnées GPS de l’angle sud-ouest si la zone observée ne correspond pas à l’emplacement de parcelle attribué.,21dfccef
+OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,Indiquez les coordonnées GPS de l’angle sud-ouest si la zone observée ne correspond pas à l’emplacement initial de la parcelle.,d5180b23
 OR,OU,38d8953d
 ORBIT,Orbiter,8e3af3cb
 ORG_NOTIFICATION_ACTION,"Pour modifier les préférences, rendez-vous [Paramètres > Organisation]",5cbf22d7
