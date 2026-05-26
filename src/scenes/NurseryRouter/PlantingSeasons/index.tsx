@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem, Separator } from '@terraware/web-components';
@@ -9,6 +9,8 @@ import Card from 'src/components/common/Card';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useStickyPlantingSiteId from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
+
+import AddPlantingSeasonModal from './AddPlantingSeasonModal';
 
 const PlantingSeasons = (): JSX.Element => {
   const { strings } = useLocalization();
@@ -56,12 +58,21 @@ const PlantingSeasons = (): JSX.Element => {
     [isMobile, plantingSiteOptions, selectPlantingSite, selectedPlantingSiteId, strings, theme]
   );
 
+  const [addModalOpen, setAddModalOpen] = useState(false);
+
   const onAddPlantingSeason = useCallback(() => {
-    // TODO
+    setAddModalOpen(true);
+  }, []);
+
+  const onCloseAddModal = useCallback(() => {
+    setAddModalOpen(false);
   }, []);
 
   return (
     <Page title={isMobile ? strings.PLANTING_SEASONS : titleArea} leftComponent={isMobile ? titleArea : undefined}>
+      {addModalOpen && (
+        <AddPlantingSeasonModal onClose={onCloseAddModal} initialPlantingSiteId={selectedPlantingSiteId} />
+      )}
       <Card style={{ width: '100%' }} radius={theme.spacing(1)}>
         <Box
           sx={{

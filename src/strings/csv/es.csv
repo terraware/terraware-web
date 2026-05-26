@@ -387,6 +387,8 @@ COOKIES_ACCEPT,Aceptar cookies,78702f3c
 COOKIES_DECLINE,Rechazar cookies,faf87a51
 COOKIES_DESCRIPTION,"Terraware usa cookies de rendimiento para analizar y mejorar la calidad del sitio, además de perfeccionar su experiencia de usuario.",911fd969
 COOKIES_LEARN_MORE,Obtenga más información sobre nuestra política de cookies.,340de1a9
+COPY_PREVIOUS_SEASON,Copiar temporada anterior,3ee53a4e
+COPYING_SPECIES_ACROSS_SUBSTRATUM,"Copiando {0} especies a través de {1} sustratos, con todos los objetivos establecidos en 0",a1d245fa
 COUNT,Recuento,59ea1127
 COUNTRY,País,cac01305
 COUNTRY_ONLY,Solo en el campo,d621bf13
@@ -398,6 +400,7 @@ CREATE_NEW_PROJECT,Crear proyecto nuevo,b709ff33
 CREATE_ORGANIZATION,Crear organización,589326d1
 CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES,¿Gestiona su organización alguno de los siguientes aspectos? Marque todo lo que corresponda.,d76409a4
 CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE,¿Cuál de las siguientes opciones describe mejor su organización?,ac93bf9a
+CREATE_SEASON,Crear temporada,413117ea
 CREATE_SPECIES_LIST,Crear lista de especies,e2fa4ff0
 CREATE_VIRTUAL_PLOT,Crear Parcela Virtual,aea239a2
 CREATE_VIRTUAL_WALKTHROUGH,Crear Recorrido Virtual,5e786aea
@@ -1822,6 +1825,9 @@ SDG_16,"16. Paz, Justicia e Instituciones Sólidas.",e0e9a0ba
 SDG_17,17. Alianzas para los Objetivos,3b9b74f8
 SEARCH,Búsqueda,9f30c236
 SEARCH_OR_SELECT,Busque o Seleccione,cbd7f4ed
+SEASON_NAME,Nombre de la temporada,74218855
+SEASON_NAME_REQUIRED,Nombre de la temporada *,809a9261
+SEASON_TO_COPY,Temporada a copiar,fd2a6498
 SECTION_OWNER_ASSIGNED,Sección asignada por el propietario,2756744b
 SECTIONS_USED,Secciones utilizadas,4e682124
 SEE_ALL_ACCESSIONS,Ver todas las accesiones,2d1b160b
