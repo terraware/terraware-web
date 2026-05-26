@@ -96,6 +96,14 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
       setEndDateError(strings.REQUIRED_FIELD);
       hasErrors = true;
     }
+    if (startDate && endDate) {
+      const start = DateTime.fromISO(startDate);
+      const end = DateTime.fromISO(endDate);
+      if (end <= start) {
+        setEndDateError(strings.RECORDING_DATE_ERROR);
+        hasErrors = true;
+      }
+    }
     if (hasErrors) {
       return;
     }
