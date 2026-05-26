@@ -90,6 +90,7 @@ ADD_PHOTOS,Ajouter des photos,612b31b1
 ADD_PHOTOS_DESCRIPTION,Prenez une ou plusieurs photos des lots qui seront plantés sur le substrat sélectionné. Veillez à inclure l'ensemble du retrait dans la ou les photos.,8fea0b64
 ADD_PHOTOS_DESCRIPTION_OPTIONAL,Prenez une (ou plusieurs) photo(s) facultative(s) des lots.,5b1fa829
 ADD_PLANT_SITE_DESCRIPTION,Ajouter une description de la plante et du site,af2cccc4
+ADD_PLANTING_SEASON,Ajouter une saison de plantation,28e2d556
 ADD_PLANTING_SITE,Ajouter un site de plantation,9525532c
 ADD_PLANTING_SITE_DETAILED_SITE,"Sélectionnez cette option si le site est relativement vaste, avec plusieurs strates (couches de végétation) et des conditions de croissance variées. Les sites de plantation comportant plus d'une couche de végétation auront plusieurs strates.",2ca39951
 ADD_PLANTING_SITE_SIMPLE_SITE,"Sélectionner si le site de plantation est relativement petit, avec une seule strate.",d6732c11
@@ -1030,6 +1031,7 @@ LOW,Faible,ddedeca3
 LOWEST,Les plus faibles,b651e8a7
 MAKE_HIGHLIGHT,Créer une mise en avant,c3fda88f
 MANAGE_COLUMNS,Gérer les colonnes,1dba3733
+MANAGE_PLANTING_SITE_GOALS_WITHIN_PLANTING_SEASONS,Gérer les objectifs du site de plantation au sein des saisons de plantation.,09b93599
 MANAGED_LOCATION_TYPE_NURSERY,Pépinière,2a9dbfec
 MANAGED_LOCATION_TYPE_PLANTING_SITE,Site de plantation,ee55d884
 MANAGED_LOCATION_TYPE_SEED_BANK,Banque de semences/collecte de semences,d096b836
@@ -1181,6 +1183,7 @@ NO_NOTIFICATIONS,Aucune notification à afficher,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer votre inventaire de pépinières, vous devez avoir une pépinière et des espèces dans Terraware. Seuls les administrateurs peuvent ajouter des pépinières ; veuillez contacter le vôtre pour obtenir de l'aide.",93c44729
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,Aucune observation n'a été planifiée,c05456cd
 NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Lorsque des observations comprenant des placettes permanentes sont terminées, celles-ci apparaîtront ici, et les données t0 devront être définies pour toutes les placettes permanentes afin que les taux de survie puissent être calculés.",18f6a079
+NO_PLANTING_SEASONS_HAVE_BEEN_CREATED,Aucune saison de plantation n’a été créée.,bda5b0d9
 NO_PLANTING_SITES_DESCRIPTION,Commencez par ajouter un site de plantation. L'ajout d'un site de plantation vous permettra de savoir où vont les semis après avoir quitté la pépinière.,b0104f6c
 NO_PLANTING_SITES_NON_ADMIN_MSG,Seuls les administrateurs peuvent ajouter des sites de plantation ; veuillez contacter le vôtre pour obtenir de l'aide.,8f016d3f
 NO_PLANTING_SITES_TITLE,"Un instant, ajoutons d'abord un site de plantation.",801ba14c
@@ -1438,6 +1441,7 @@ PLANTING_SEASON_END_OUT_OF_RANGE,Elle doit se situer entre 4 semaines et 1 an ap
 PLANTING_SEASON_NO_OVERLAP,Chevauche la saison de plantation {0} - {1},f1549979
 PLANTING_SEASON_START,Début de la saison de plantation,10f5de94
 PLANTING_SEASON_START_OUT_OF_RANGE,Doit se situer dans l'année qui suit la date actuelle.,d69ba8fe
+PLANTING_SEASONS,Saisons de plantation,58d50e9a
 PLANTING_SITE,Site de plantation,ee55d884
 PLANTING_SITE_AREA,Zone du site de plantation,53766ba3
 PLANTING_SITE_CREATE_DETAILED_HELP,"Si vous êtes un partenaire de Terraformation ou un participant à l'accélérateur, vous pouvez [nous contacter] pour travailler ensemble sur un site de plantation détaillé.",26cde7ca
