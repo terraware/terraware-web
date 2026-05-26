@@ -5,7 +5,8 @@ export type FeatureName =
   | 'Show Production View'
   | 'Virtual Monitoring Plots'
   | 'Weighted Survival Rates'
-  | 'New Observation Results Tables';
+  | 'New Observation Results Tables'
+  | 'Planting Seasons';
 
 export type Feature = {
   name: FeatureName;
@@ -64,6 +65,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Use new observation results tables for observation results APIs'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Planting Seasons',
+    preferenceName: 'plantingSeasons',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Support for planning planting seasons'],
     disclosure: ['This is a WIP'],
   },
 ];
