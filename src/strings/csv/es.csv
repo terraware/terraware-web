@@ -1902,6 +1902,7 @@ SET_UP_SEED_BANK,Establecer banco de semillas,6f047a89
 SETTINGS,Ajustes,38560978
 SHIFT,Shift,4d173d2a
 SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52
+SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Mostrar especies con todas las accesiones agotadas,656a843d
 SHRUB,Arbusto,af50871c
 SHRUBS,Arbustos,377018f6
 SILVOPASTURE,Sistema selvopastoril,9d942e38
