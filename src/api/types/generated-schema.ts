@@ -5228,6 +5228,8 @@ export interface components {
             id: number;
             isHighlight: boolean;
             media: components["schemas"]["ActivityMediaFilePayload"][];
+            /** Format: int64 */
+            observationId?: number;
             /** Format: date-time */
             publishedTime?: string;
             /** @enum {string} */
@@ -5256,6 +5258,8 @@ export interface components {
             isHiddenOnMap: boolean;
             /** Format: int32 */
             listPosition: number;
+            /** @description If this file is from an observation, additional observation-specific data about it. */
+            observation?: components["schemas"]["ObservationActivityMediaFilePayload"];
             /** @enum {string} */
             type: "Photo" | "Video";
         };
@@ -5275,6 +5279,8 @@ export interface components {
             modifiedBy: number;
             /** Format: date-time */
             modifiedTime: string;
+            /** Format: int64 */
+            observationId?: number;
             /** Format: int64 */
             publishedBy?: number;
             /** Format: date-time */
@@ -7298,6 +7304,8 @@ export interface components {
             isHiddenOnMap: boolean;
             /** Format: int32 */
             listPosition: number;
+            /** @description If this file is from an observation, additional observation-specific data about it. */
+            observation?: components["schemas"]["ObservationActivityMediaFilePayload"];
             /** @enum {string} */
             type: "Photo" | "Video";
         };
@@ -7309,6 +7317,8 @@ export interface components {
             id: number;
             isHighlight: boolean;
             media: components["schemas"]["FunderActivityMediaFilePayload"][];
+            /** Format: int64 */
+            observationId?: number;
             /** @enum {string} */
             type: "Seed Collection" | "Nursery and Propagule Operations" | "Planting" | "Monitoring" | "Site Visit" | "Social Impact" | "Drone Flight" | "Others";
         };

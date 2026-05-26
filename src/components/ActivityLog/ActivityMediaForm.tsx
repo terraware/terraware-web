@@ -1,17 +1,25 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, FormControlLabel, Grid, Radio, Typography, useTheme } from '@mui/material';
-import { Button, Checkbox, FileChooser, Textfield } from '@terraware/web-components';
+import { Button, Checkbox, DialogBox, Dropdown, FileChooser, IconTooltip, Textfield } from '@terraware/web-components';
 
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
+import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { ActivityMediaFile, AdminActivityMediaFile } from 'src/types/Activity';
+import {
+  ActivityMediaFile,
+  AdminActivityMediaFile,
+  isCaptionReadOnly,
+  isObservationMedia,
+  isUndeletableObservationPhoto,
+} from 'src/types/Activity';
 import { shouldShowHeicPlaceholder } from 'src/utils/images';
 
 type NewActivityMediaFile = Omit<ActivityMediaFile, 'capturedDate' | 'fileId'> & {
   file: File;
+  monitoringPlotId?: number;
 };
 
 export type NewActivityMediaItem = {
@@ -37,13 +45,16 @@ type ActivityPhotoPreviewProps = {
   currentPosition: number;
   focused?: boolean;
   isLast?: boolean;
+  isObsActivity: boolean;
   maxPosition: number;
   mediaItem: ActivityMediaItem;
   onClick?: () => void;
   onCoverPhotoChange: (isCover: boolean) => void;
   onDelete: () => void;
   onHiddenOnMapChange: (isHidden: boolean) => void;
+  onPlotChange: (plotId: number | null) => void;
   onPositionChange: (newPosition: number) => void;
+  plotOptions?: { plotId: number; plotNumber: number }[];
   setCaption: (caption: string) => void;
 };
 
@@ -52,13 +63,16 @@ const ActivityPhotoPreview = ({
   currentPosition,
   focused,
   isLast,
+  isObsActivity,
   maxPosition,
   mediaItem,
   onClick,
   onCoverPhotoChange,
   onDelete,
   onHiddenOnMapChange,
+  onPlotChange,
   onPositionChange,
+  plotOptions,
   setCaption,
 }: ActivityPhotoPreviewProps) => {
   const { strings } = useLocalization();
@@ -112,6 +126,25 @@ const ActivityPhotoPreview = ({
   }, [mediaItem, strings]);
 
   const isHiddenOnMap = useMemo(() => mediaItem.data.isHiddenOnMap, [mediaItem]);
+
+  const isObsMedia = useMemo(() => mediaItem.type === 'existing' && isObservationMedia(mediaItem.data), [mediaItem]);
+
+  const isUndeletable = useMemo(
+    () => isObsMedia && mediaItem.type === 'existing' && isUndeletableObservationPhoto(mediaItem.data),
+    [isObsMedia, mediaItem]
+  );
+
+  const isCaptionRO = useMemo(
+    () => isObsMedia && mediaItem.type === 'existing' && isCaptionReadOnly(mediaItem.data),
+    [isObsMedia, mediaItem]
+  );
+
+  const obsMonitoringPlotNumber = useMemo(() => {
+    if (mediaItem.type === 'existing' && isObsMedia) {
+      return mediaItem.data.observation?.monitoringPlotNumber;
+    }
+    return undefined;
+  }, [isObsMedia, mediaItem]);
 
   const setCaptionCallback = useCallback(
     (value: any) => {
@@ -258,6 +291,31 @@ const ActivityPhotoPreview = ({
               )}
             </Box>
 
+            {isObsMedia && obsMonitoringPlotNumber !== undefined && (
+              <Box marginBottom={theme.spacing(1)}>
+                <Typography fontSize='14px' sx={{ color: theme.palette.TwClrTxtSecondary }}>
+                  {strings.MONITORING_PLOT}
+                </Typography>
+                <Typography fontSize='16px' fontWeight={500}>
+                  {obsMonitoringPlotNumber}
+                </Typography>
+              </Box>
+            )}
+
+            {isObsActivity && mediaItem.type === 'new' && (
+              <Box marginBottom={theme.spacing(1)}>
+                <Dropdown
+                  fullWidth
+                  label={strings.MONITORING_PLOT}
+                  onChange={(value) => onPlotChange(value !== null && value !== undefined ? Number(value) : null)}
+                  options={plotOptions?.map((p) => ({ label: String(p.plotNumber), value: String(p.plotId) })) ?? []}
+                  selectedValue={
+                    mediaItem.data.monitoringPlotId !== undefined ? String(mediaItem.data.monitoringPlotId) : null
+                  }
+                />
+              </Box>
+            )}
+
             <Box
               display='flex'
               flexDirection='row'
@@ -294,33 +352,67 @@ const ActivityPhotoPreview = ({
               )}
             </Box>
 
-            <Button
-              icon='iconTrashCan'
-              label={strings.DELETE}
-              onClick={onDelete}
-              priority='ghost'
-              style={{
-                justifyContent: 'flex-start',
-                marginBottom: 0,
-                marginLeft: '-8px',
-                marginTop: 0,
-                maxWidth: '160px',
-                paddingLeft: '8px',
-              }}
-              type='destructive'
-            />
+            {isUndeletable ? (
+              <Box alignItems='center' display='flex' gap={1}>
+                <Button
+                  disabled
+                  icon='iconTrashCan'
+                  label={strings.DELETE}
+                  onClick={() => undefined}
+                  priority='ghost'
+                  style={{
+                    justifyContent: 'flex-start',
+                    marginBottom: 0,
+                    marginLeft: '-8px',
+                    marginTop: 0,
+                    maxWidth: '160px',
+                    paddingLeft: '8px',
+                  }}
+                  type='destructive'
+                />
+                <IconTooltip title={strings.OBSERVATION_PHOTO_CANNOT_DELETE_TOOLTIP} />
+              </Box>
+            ) : (
+              <Button
+                icon='iconTrashCan'
+                label={strings.DELETE}
+                onClick={onDelete}
+                priority='ghost'
+                style={{
+                  justifyContent: 'flex-start',
+                  marginBottom: 0,
+                  marginLeft: '-8px',
+                  marginTop: 0,
+                  maxWidth: '160px',
+                  paddingLeft: '8px',
+                }}
+                type='destructive'
+              />
+            )}
           </Box>
         </Grid>
 
         <Grid item xs={12}>
-          <Textfield
-            id={`caption-${mediaItem.type === 'new' ? mediaItem.data.file.name : mediaItem.data.fileId}`}
-            label={strings.CAPTION}
-            onChange={setCaptionCallback}
-            type='text'
-            value={caption}
-            maxLength={200}
-          />
+          {isCaptionRO ? (
+            <Box>
+              <Typography
+                fontSize='14px'
+                sx={{ color: theme.palette.TwClrTxtSecondary, marginBottom: theme.spacing(1) }}
+              >
+                {strings.CAPTION}
+              </Typography>
+              <Typography fontSize='16px'>{caption || '—'}</Typography>
+            </Box>
+          ) : (
+            <Textfield
+              id={`caption-${mediaItem.type === 'new' ? mediaItem.data.file.name : mediaItem.data.fileId}`}
+              label={strings.CAPTION}
+              onChange={setCaptionCallback}
+              type='text'
+              value={caption}
+              maxLength={200}
+            />
+          )}
         </Grid>
       </Grid>
     </Box>
@@ -332,6 +424,7 @@ export interface ActivityMediaFormProps {
   focusedFileId?: number;
   maxFiles?: number;
   mediaItems: ActivityMediaItem[];
+  observationId?: number;
   onClickMediaItem: (fileId: number) => () => void;
   onChangeMediaItems: React.Dispatch<React.SetStateAction<ActivityMediaItem[]>>;
 }
@@ -341,10 +434,37 @@ export default function ActivityMediaForm({
   focusedFileId,
   maxFiles = MAX_FILES,
   mediaItems,
+  observationId,
   onClickMediaItem,
   onChangeMediaItems,
 }: ActivityMediaFormProps): JSX.Element {
   const { strings } = useLocalization();
+
+  const isObsActivity = observationId !== undefined;
+
+  const { data: observationResultsData } = useGetObservationResultsQuery(
+    { observationId: observationId as number },
+    { skip: !observationId }
+  );
+
+  const plotOptions = useMemo(() => {
+    const fromStrata =
+      observationResultsData?.observation.strata.flatMap((stratum) =>
+        stratum.substrata.flatMap((substratum) =>
+          substratum.monitoringPlots.map((plot) => ({
+            plotId: plot.monitoringPlotId,
+            plotNumber: plot.monitoringPlotNumber,
+          }))
+        )
+      ) ?? [];
+    const adHocPlot = observationResultsData?.observation.adHocPlot;
+    if (adHocPlot) {
+      fromStrata.push({ plotId: adHocPlot.monitoringPlotId, plotNumber: adHocPlot.monitoringPlotNumber });
+    }
+    return fromStrata;
+  }, [observationResultsData]);
+
+  const [deleteConfirmationIndex, setDeleteConfirmationIndex] = useState<number | undefined>();
 
   const visibleMediaItems = useMemo(
     () => mediaItems.filter((item) => item.type === 'new' || !item.isDeleted),
@@ -477,6 +597,45 @@ export default function ActivityMediaForm({
     [mediaItems, onChangeMediaItems]
   );
 
+  const handleDeleteRequest = useCallback(
+    (index: number) => () => {
+      const mediaItem = mediaItems[index];
+      if (
+        mediaItem.type === 'existing' &&
+        isObservationMedia(mediaItem.data) &&
+        !isUndeletableObservationPhoto(mediaItem.data)
+      ) {
+        setDeleteConfirmationIndex(index);
+      } else {
+        getDeletePhoto(index)();
+      }
+    },
+    [mediaItems, getDeletePhoto]
+  );
+
+  const confirmDeleteObservationMedia = useCallback(() => {
+    if (deleteConfirmationIndex !== undefined) {
+      getDeletePhoto(deleteConfirmationIndex)();
+      setDeleteConfirmationIndex(undefined);
+    }
+  }, [deleteConfirmationIndex, getDeletePhoto]);
+
+  const getUpdatePlotId = useCallback(
+    (index: number) => (plotId: number | null) => {
+      const updatedItems = mediaItems.map((mediaItem, i) => {
+        if (index !== i || mediaItem.type !== 'new') {
+          return mediaItem;
+        }
+        return {
+          ...mediaItem,
+          data: { ...mediaItem.data, monitoringPlotId: plotId ?? undefined },
+        };
+      });
+      onChangeMediaItems(updatedItems);
+    },
+    [mediaItems, onChangeMediaItems]
+  );
+
   const getUpdatePosition = useCallback(
     (currentIndex: number) => (newPosition: number) => {
       const targetIndex = newPosition - 1;
@@ -516,6 +675,32 @@ export default function ActivityMediaForm({
 
   return (
     <>
+      {deleteConfirmationIndex !== undefined && (
+        <DialogBox
+          onClose={() => setDeleteConfirmationIndex(undefined)}
+          open={true}
+          title={strings.DELETE_OBSERVATION_PHOTO_TITLE}
+          size='medium'
+          middleButtons={[
+            <Button
+              id='cancelDeleteObservationPhoto'
+              key='button-cancel'
+              label={strings.CANCEL}
+              onClick={() => setDeleteConfirmationIndex(undefined)}
+              priority='secondary'
+              type='passive'
+            />,
+            <Button
+              id='confirmDeleteObservationPhoto'
+              key='button-confirm'
+              label={strings.DELETE}
+              onClick={confirmDeleteObservationMedia}
+              type='destructive'
+            />,
+          ]}
+          message={strings.DELETE_OBSERVATION_PHOTO_MESSAGE}
+        />
+      )}
       <Grid item xs={12}>
         {!fileLimitReached && (
           <FileChooser
@@ -550,14 +735,17 @@ export default function ActivityMediaForm({
               currentPosition={currentPosition}
               focused={mediaItem.type === 'existing' && mediaItem.data.fileId === focusedFileId}
               isLast={visibleIndex === visibleMediaItems.length - 1}
+              isObsActivity={isObsActivity}
               key={`photo-${index}`}
               maxPosition={visibleMediaItems.length}
               onClick={mediaItem.type === 'existing' ? onClickMediaItem(mediaItem.data.fileId) : undefined}
               onCoverPhotoChange={getSetCoverPhoto(index)}
-              onDelete={getDeletePhoto(index)}
+              onDelete={handleDeleteRequest(index)}
               onHiddenOnMapChange={getSetHiddenOnMap(index)}
+              onPlotChange={getUpdatePlotId(index)}
               onPositionChange={getUpdatePosition(visibleIndex)}
               mediaItem={mediaItem}
+              plotOptions={plotOptions}
               setCaption={getUpdatePhotoCaption(index)}
             />
           );

@@ -2,13 +2,15 @@ import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } fr
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button, Checkbox, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
+import { Button, Checkbox, Dropdown, DropdownItem, Icon, IconTooltip, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
 
 import Card from 'src/components/common/Card';
 import DatePicker from 'src/components/common/DatePicker';
+import Link from 'src/components/common/Link';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -26,6 +28,7 @@ import {
   useLazyGetActivityQuery,
   useUpdateActivityMutation,
 } from 'src/queries/generated/activities';
+import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { requestSyncActivityMedia } from 'src/redux/features/activities/activitiesAsyncThunks';
 import { selectSyncActivityMedia } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -42,7 +45,9 @@ import {
   UpdateActivityRequestPayload,
   activityStatusTagLabel,
   activityTypeLabel,
+  isObservationActivity,
 } from 'src/types/Activity';
+import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useForm from 'src/utils/useForm';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -119,6 +124,26 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     }
     return undefined;
   }, [adminGetData, getData]);
+
+  const isObsActivity = useMemo(() => isObservationActivity(activity?.payload ?? {}), [activity]);
+
+  const { data: observationResultsData } = useGetObservationResultsQuery(
+    { observationId: activity?.payload.observationId as number },
+    { skip: !activity?.payload.observationId }
+  );
+
+  const observationUrl = useMemo(
+    () =>
+      isObsActivity && activity?.payload.observationId
+        ? APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', String(activity.payload.observationId))
+        : undefined,
+    [activity, isObsActivity]
+  );
+
+  const observationLivePlants = useMemo(
+    () => getObservationSpeciesLivePlantsCount(observationResultsData?.observation.species),
+    [observationResultsData]
+  );
 
   const syncActivityMediaRequest = useAppSelector(selectSyncActivityMedia(syncMediaRequestId));
 
@@ -209,7 +234,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   ]);
 
   const validateForm = useCallback((): boolean => {
-    if (!record?.date || !record?.description || !record?.type) {
+    if (!record?.date || (!isObsActivity && !record?.description) || !record?.type) {
       return false;
     }
 
@@ -227,7 +252,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     }
 
     return true;
-  }, [record, mediaItems, snackbar, strings]);
+  }, [isObsActivity, record, mediaItems, snackbar, strings]);
 
   const syncMediaFiles = useCallback(
     (newActivityId: number) => {
@@ -267,11 +292,11 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         await adminUpdateActivity({
           id: activity.payload.id,
           adminUpdateActivityRequestPayload: {
-            date: record?.date as string,
+            date: isObsActivity ? activity.payload.date : (record?.date as string),
             description: record?.description as string,
             isHighlight: !!record?.isHighlight,
             status: record?.status as AdminActivityPayload['status'],
-            type: record?.type as AdminActivityPayload['type'],
+            type: isObsActivity ? activity.payload.type : (record?.type as AdminActivityPayload['type']),
           },
         }).unwrap();
         syncMediaFiles(activity.payload.id);
@@ -280,10 +305,10 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         await updateActivity({
           activityId: activity.payload.id,
           updateActivityRequestPayload: {
-            date: record?.date as string,
+            date: isObsActivity ? activity.payload.date : (record?.date as string),
             description: record?.description as string,
             status: (activity.payload as ActivityPayload).status,
-            type: record?.type as ActivityPayload['type'],
+            type: isObsActivity ? activity.payload.type : (record?.type as ActivityPayload['type']),
           },
         }).unwrap();
         syncMediaFiles(activity.payload.id);
@@ -320,6 +345,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     createActivity,
     isAcceleratorRoute,
     isEditing,
+    isObsActivity,
     projectId,
     record,
     snackbar,
@@ -599,42 +625,94 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             </Grid>
 
             <Grid item lg={6} xs={12}>
-              <Dropdown
-                errorText={validateFields && !record?.type ? strings.REQUIRED_FIELD : ''}
-                fullWidth
-                label={strings.ACTIVITY_TYPE}
-                onChange={onChangeActivityType}
-                options={activityTypeOptions}
-                required
-                selectedValue={record.type}
-              />
+              <Box display='flex' alignItems='center' gap={1}>
+                <Box flex={1}>
+                  <Dropdown
+                    disabled={isObsActivity}
+                    errorText={validateFields && !record?.type && !isObsActivity ? strings.REQUIRED_FIELD : ''}
+                    fullWidth
+                    label={strings.ACTIVITY_TYPE}
+                    onChange={onChangeActivityType}
+                    options={activityTypeOptions}
+                    required={!isObsActivity}
+                    selectedValue={record.type}
+                  />
+                </Box>
+                {isObsActivity && <IconTooltip title={strings.OBSERVATION_TYPE_DATE_READONLY_TOOLTIP} />}
+              </Box>
             </Grid>
 
             <Grid item lg={5} xs={12}>
-              <DatePicker
-                aria-label={strings.DATE}
-                defaultTimeZone={userTimeZone?.id}
-                errorText={validateFields && !record?.date ? strings.REQUIRED_FIELD : ''}
-                id='date'
-                label={strings.DATE_REQUIRED}
-                onDateChange={onChangeDate}
-                sx={{ '& .MuiInputBase-input': { paddingRight: 0 } }}
-                value={record.date}
-              />
+              <Box display='flex' alignItems='center' gap={1}>
+                <Box flex={1}>
+                  <DatePicker
+                    aria-label={strings.DATE}
+                    defaultTimeZone={userTimeZone?.id}
+                    disabled={isObsActivity}
+                    errorText={validateFields && !record?.date && !isObsActivity ? strings.REQUIRED_FIELD : ''}
+                    id='date'
+                    label={strings.DATE_REQUIRED}
+                    onDateChange={onChangeDate}
+                    sx={{ '& .MuiInputBase-input': { paddingRight: 0 } }}
+                    value={record.date}
+                  />
+                </Box>
+                {isObsActivity && <IconTooltip title={strings.OBSERVATION_TYPE_DATE_READONLY_TOOLTIP} />}
+              </Box>
             </Grid>
 
             <Grid item xs={12}>
               <Textfield
-                errorText={validateFields && !record?.description ? strings.REQUIRED_FIELD : ''}
+                errorText={validateFields && !record?.description && !isObsActivity ? strings.REQUIRED_FIELD : ''}
                 id='description'
                 label={strings.DESCRIPTION}
                 onChange={onChangeCallback('description')}
-                required
+                required={!isObsActivity}
                 sx={{ '& .textfield-value': { minHeight: '80px' } }}
                 type='textarea'
                 value={record?.description}
               />
             </Grid>
+
+            {isObsActivity && (
+              <Grid item xs={12}>
+                <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(2)}>
+                  {strings.OBSERVATION_DETAILS}
+                </Typography>
+                {observationUrl && (
+                  <Box marginBottom={theme.spacing(2)}>
+                    <Link to={observationUrl}>{strings.VIEW_OBSERVATION}</Link>
+                  </Box>
+                )}
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={4}>
+                    <OverviewItemCard
+                      isEditable={false}
+                      title={strings.LIVE_PLANTS}
+                      contents={observationLivePlants?.toString() ?? null}
+                    />
+                  </Grid>
+                  {!!observationResultsData?.observation.plantingDensity && (
+                    <Grid item xs={12} sm={4}>
+                      <OverviewItemCard
+                        isEditable={false}
+                        title={strings.PLANT_DENSITY}
+                        contents={observationResultsData.observation.plantingDensity.toString()}
+                      />
+                    </Grid>
+                  )}
+                  {observationResultsData?.observation.survivalRate !== undefined && (
+                    <Grid item xs={12} sm={4}>
+                      <OverviewItemCard
+                        isEditable={false}
+                        title={strings.SURVIVAL_RATE}
+                        contents={`${observationResultsData.observation.survivalRate}%`}
+                      />
+                    </Grid>
+                  )}
+                </Grid>
+              </Grid>
+            )}
 
             {isAcceleratorRoute && (
               <Grid item xs={12} sm={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
@@ -675,6 +753,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               activityId={activityId}
               focusedFileId={focusedFileId}
               mediaItems={mediaItems}
+              observationId={activity?.payload.observationId}
               onClickMediaItem={onFileClicked}
               onChangeMediaItems={setMediaItems}
             />

@@ -6,6 +6,9 @@ import { Button, DialogBox, Icon } from '@terraware/web-components';
 
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
+import Link from 'src/components/common/Link';
+import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useFunderPortal from 'src/hooks/useFunderPortal';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -20,12 +23,14 @@ import {
   useLazyGetActivityMedia1Query,
   useLazyGetActivityMediaStreamQuery,
 } from 'src/queries/generated/funderActivities';
+import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
-import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
+import { ActivityMediaFile, activityTypeLabel, isObservationActivity } from 'src/types/Activity';
+import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -337,6 +342,26 @@ const ActivityDetailView = ({
     ? isAllowed('EDIT_ACTIVITIES')
     : isAllowed('EDIT_ACTIVITIES', { organization: selectedOrganization });
 
+  const isObsActivity = useMemo(() => isObservationActivity(activity.payload), [activity.payload]);
+
+  const { data: observationResultsData } = useGetObservationResultsQuery(
+    { observationId: activity.payload.observationId as number },
+    { skip: !activity.payload.observationId }
+  );
+
+  const observationUrl = useMemo(
+    () =>
+      isObsActivity && activity.payload.observationId
+        ? APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', String(activity.payload.observationId))
+        : undefined,
+    [activity.payload.observationId, isObsActivity]
+  );
+
+  const observationLivePlants = useMemo(
+    () => getObservationSpeciesLivePlantsCount(observationResultsData?.observation.species),
+    [observationResultsData]
+  );
+
   const [lightboxMediaFileId, setLightboxMediaFileId] = useState<number | undefined>(undefined);
   const [publishActivityModalOpened, setPublishActivityModalOpened] = useState(false);
   const snackbar = useSnackbar();
@@ -549,6 +574,46 @@ const ActivityDetailView = ({
       <Grid item xs={12}>
         <Typography>{activity.payload.description}</Typography>
       </Grid>
+
+      {isObsActivity && (
+        <Grid item xs={12}>
+          <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(2)}>
+            {strings.OBSERVATION_DETAILS}
+          </Typography>
+          {observationUrl && (
+            <Box marginBottom={theme.spacing(2)}>
+              <Link to={observationUrl}>{strings.VIEW_OBSERVATION}</Link>
+            </Box>
+          )}
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={4}>
+              <OverviewItemCard
+                isEditable={false}
+                title={strings.LIVE_PLANTS}
+                contents={observationLivePlants?.toString() ?? null}
+              />
+            </Grid>
+            {!!observationResultsData?.observation.plantingDensity && (
+              <Grid item xs={12} sm={4}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.PLANT_DENSITY}
+                  contents={observationResultsData.observation.plantingDensity.toString()}
+                />
+              </Grid>
+            )}
+            {observationResultsData?.observation.survivalRate !== undefined && (
+              <Grid item xs={12} sm={4}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.SURVIVAL_RATE}
+                  contents={`${observationResultsData.observation.survivalRate}%`}
+                />
+              </Grid>
+            )}
+          </Grid>
+        </Grid>
+      )}
 
       {activity.payload.media.map((mediaFile, index) => (
         <Grid item key={index} lg={6} xs={12}>
