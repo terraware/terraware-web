@@ -115,7 +115,7 @@ const injectedRtkApi = api.injectEndpoints({
       transformResponse: (response: SearchResponse<SearchResponseElementWithId>) => response?.results ?? [],
       providesTags: (result) => [
         ...(result ?? []).map((r) => ({ type: QueryTagTypes.Accessions as const, id: r.id })),
-        { type: QueryTagTypes.Accessions, id: 'PENDING' },
+        { type: QueryTagTypes.Accessions, id: 'LIST' },
       ],
     }),
     getCollectors: build.query<string[], GetCollectorsApiArg>({

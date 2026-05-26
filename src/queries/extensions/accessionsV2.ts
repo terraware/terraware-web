@@ -4,10 +4,7 @@ import { QueryTagTypes } from '../tags';
 api.enhanceEndpoints({
   endpoints: {
     createAccession: {
-      invalidatesTags: [
-        { type: QueryTagTypes.Accessions, id: 'LIST' },
-        { type: QueryTagTypes.Accessions, id: 'PENDING' },
-      ],
+      invalidatesTags: [{ type: QueryTagTypes.Accessions, id: 'LIST' }],
     },
     getAccession: {
       providesTags: (_results, _error, id) => [{ type: QueryTagTypes.Accessions, id }],
@@ -19,43 +16,75 @@ api.enhanceEndpoints({
       ],
     },
     resolveAccessionsListUpload: {
-      invalidatesTags: [
-        { type: QueryTagTypes.Accessions, id: 'LIST' },
-        { type: QueryTagTypes.Accessions, id: 'PENDING' },
-      ],
+      invalidatesTags: [{ type: QueryTagTypes.Accessions, id: 'LIST' }],
     },
     createNurseryTransferWithdrawal: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Accessions, id: payload.accessionId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' },
+        { type: QueryTagTypes.Accessions, id: payload.accessionId },
+      ],
     },
     listViabilityTests: {
-      providesTags: (_results, _error, accessionId) => [{ type: QueryTagTypes.Accessions, id: accessionId }],
+      providesTags: (results) => [
+        ...(results?.viabilityTests ?? []).map((vt) => ({ type: QueryTagTypes.ViabilityTests as const, id: vt.id })),
+        { type: QueryTagTypes.ViabilityTests, id: 'LIST' },
+      ],
     },
     createViabilityTest: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Accessions, id: payload.accessionId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.ViabilityTests, id: 'LIST' },
+        { type: QueryTagTypes.Accessions, id: payload.accessionId },
+      ],
     },
     updateViabilityTest: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Accessions, id: payload.accessionId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.ViabilityTests, id: payload.viabilityTestId },
+        { type: QueryTagTypes.ViabilityTests, id: 'LIST' },
+        { type: QueryTagTypes.Accessions, id: payload.accessionId },
+      ],
     },
     deleteViabilityTest: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Accessions, id: payload.accessionId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.ViabilityTests, id: payload.viabilityTestId },
+        { type: QueryTagTypes.ViabilityTests, id: 'LIST' },
+        { type: QueryTagTypes.Accessions, id: payload.accessionId },
+      ],
     },
     getViabilityTest: {
-      providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Accessions, id: payload.accessionId }],
+      providesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.ViabilityTests, id: payload.viabilityTestId },
+      ],
     },
     listWithdrawals: {
-      providesTags: (_results, _error, accessionId) => [{ type: QueryTagTypes.Accessions, id: accessionId }],
+      providesTags: (results) => [
+        ...(results?.withdrawals ?? []).map((w) => ({ type: QueryTagTypes.AccessionWithdrawals as const, id: w.id })),
+        { type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' },
+      ],
     },
     createWithdrawal: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Accessions, id: payload.accessionId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' },
+        { type: QueryTagTypes.Accessions, id: payload.accessionId },
+      ],
     },
     updateWithdrawal: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Accessions, id: payload.accessionId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.AccessionWithdrawals, id: payload.withdrawalId },
+        { type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' },
+        { type: QueryTagTypes.Accessions, id: payload.accessionId },
+      ],
     },
     deleteWithdrawal: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Accessions, id: payload.accessionId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.AccessionWithdrawals, id: payload.withdrawalId },
+        { type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' },
+        { type: QueryTagTypes.Accessions, id: payload.accessionId },
+      ],
     },
     getWithdrawal: {
-      providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Accessions, id: payload.accessionId }],
+      providesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.AccessionWithdrawals, id: payload.withdrawalId },
+      ],
     },
   },
 });

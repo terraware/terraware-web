@@ -19,7 +19,6 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, id) => [
         { type: QueryTagTypes.Accessions, id },
         { type: QueryTagTypes.Accessions, id: 'LIST' },
-        { type: QueryTagTypes.Accessions, id: 'PENDING' },
       ],
     },
     getAccessionHistory: {
@@ -29,7 +28,6 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, id) => [
         { type: QueryTagTypes.Accessions, id },
         { type: QueryTagTypes.Accessions, id: 'LIST' },
-        { type: QueryTagTypes.Accessions, id: 'PENDING' },
       ],
     },
   },
