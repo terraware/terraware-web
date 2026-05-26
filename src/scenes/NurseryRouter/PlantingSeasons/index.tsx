@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem, Separator } from '@terraware/web-components';
@@ -6,6 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import useBoolean from 'src/hooks/useBoolean';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useStickyPlantingSiteId from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
@@ -58,15 +59,7 @@ const PlantingSeasons = (): JSX.Element => {
     [isMobile, plantingSiteOptions, selectPlantingSite, selectedPlantingSiteId, strings, theme]
   );
 
-  const [addModalOpen, setAddModalOpen] = useState(false);
-
-  const onAddPlantingSeason = useCallback(() => {
-    setAddModalOpen(true);
-  }, []);
-
-  const onCloseAddModal = useCallback(() => {
-    setAddModalOpen(false);
-  }, []);
+  const [addModalOpen, , onAddPlantingSeason, onCloseAddModal] = useBoolean(false);
 
   return (
     <Page title={isMobile ? strings.PLANTING_SEASONS : titleArea} leftComponent={isMobile ? titleArea : undefined}>

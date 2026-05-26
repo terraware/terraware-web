@@ -2971,6 +2971,65 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/planting-seasons": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lists the planting seasons for a planting site. */
+        get: operations["listPlantingSeasons"];
+        put?: never;
+        /**
+         * Creates a new planting season.
+         * @description If fromPlantingSeasonId is specified, copy all species/substrata over to the new season (with quantities of 0).
+         */
+        post: operations["createPlantingSeason"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/planting-seasons/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets information about a specific planting season. */
+        get: operations["getPlantingSeason"];
+        /** Updates an existing planting season. */
+        put: operations["updatePlantingSeason"];
+        post?: never;
+        /** Deletes a planting season. */
+        delete: operations["deletePlantingSeason"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/planting-seasons/{plantingSeasonId}/species-targets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets all species targets for a planting season. */
+        get: operations["getSpeciesTargets"];
+        /** Creates or updates the target quantity for a species in a substratum for a planting season. */
+        put: operations["upsertSpeciesTarget"];
+        post?: never;
+        /** Deletes a species target for a planting season. */
+        delete: operations["deleteSpeciesTarget"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/projects": {
         parameters: {
             query?: never;
@@ -6457,6 +6516,22 @@ export interface components {
             /** @enum {string} */
             speciesNativeCategory?: "Native" | "Non-native";
         };
+        CreatePlantingSeasonRequestPayload: {
+            /** Format: date */
+            endDate: string;
+            /** Format: int64 */
+            fromPlantingSeasonId?: number;
+            name: string;
+            /** Format: int64 */
+            plantingSiteId: number;
+            /** Format: date */
+            startDate: string;
+        };
+        CreatePlantingSeasonResponsePayload: {
+            /** Format: int64 */
+            id: number;
+            status: components["schemas"]["SuccessOrError"];
+        };
         CreatePlantingSiteRequestPayload: {
             boundary?: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
             description?: string;
@@ -7625,6 +7700,10 @@ export interface components {
             participantProjectsForSpecies: components["schemas"]["ParticipantProjectForSpeciesPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        GetPlantingSeasonResponsePayload: {
+            season: components["schemas"]["PlantingSeasonPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
         GetPlantingSiteHistoryResponsePayload: {
             site: components["schemas"]["PlantingSiteHistoryPayload"];
             status: components["schemas"]["SuccessOrError"];
@@ -8244,6 +8323,10 @@ export interface components {
             photos: components["schemas"]["ListPhotosResponseElement"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        ListPlantingSeasonsResponsePayload: {
+            seasons: components["schemas"]["PlantingSeasonPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         ListPlantingSiteReportedPlantsResponsePayload: {
             sites: components["schemas"]["PlantingSiteReportedPlantsPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -8330,6 +8413,10 @@ export interface components {
         ListSpeciesResponsePayload: {
             species: components["schemas"]["SpeciesResponseElement"][];
             status: components["schemas"]["SuccessOrError"];
+        };
+        ListSpeciesTargetsResponsePayload: {
+            status: components["schemas"]["SuccessOrError"];
+            targets: components["schemas"]["SpeciesTargetPayload"][];
         };
         ListSubLocationsResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
@@ -10738,6 +10825,14 @@ export interface components {
              */
             totalWithdrawn: number;
         };
+        SpeciesTargetPayload: {
+            /** Format: int32 */
+            quantity: number;
+            /** Format: int64 */
+            speciesId: number;
+            /** Format: int64 */
+            substratumId: number;
+        };
         SplatAnnotationPayload: {
             bodyText?: string;
             cameraPosition?: components["schemas"]["CoordinatePayload"];
@@ -11445,6 +11540,13 @@ export interface components {
             /** @enum {string} */
             submissionStatus: "Not Submitted" | "In Review" | "Needs Translation" | "Approved" | "Rejected" | "Not Needed" | "Completed";
         };
+        UpdatePlantingSeasonRequestPayload: {
+            /** Format: date */
+            endDate: string;
+            name: string;
+            /** Format: date */
+            startDate: string;
+        };
         UpdatePlantingSiteRequestPayload: {
             /** @description Site boundary. Ignored if this is a detailed planting site. */
             boundary?: Omit<components["schemas"]["MultiPolygon"], "type">;
@@ -11819,6 +11921,14 @@ export interface components {
             /** Format: int64 */
             id: number;
             status: components["schemas"]["SuccessOrError"];
+        };
+        UpsertPlantingSeasonSpeciesTargetRequestPayload: {
+            /** Format: int32 */
+            quantity: number;
+            /** Format: int64 */
+            speciesId: number;
+            /** Format: int64 */
+            substratumId: number;
         };
         UpsertProjectScoresRequestPayload: {
             /** @enum {string} */
@@ -18561,6 +18671,231 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    listPlantingSeasons: {
+        parameters: {
+            query: {
+                plantingSiteId: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListPlantingSeasonsResponsePayload"];
+                };
+            };
+        };
+    };
+    createPlantingSeason: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreatePlantingSeasonRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreatePlantingSeasonResponsePayload"];
+                };
+            };
+        };
+    };
+    getPlantingSeason: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetPlantingSeasonResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    updatePlantingSeason: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePlantingSeasonRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    deletePlantingSeason: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getSpeciesTargets: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSeasonId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListSpeciesTargetsResponsePayload"];
+                };
+            };
+        };
+    };
+    upsertSpeciesTarget: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSeasonId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpsertPlantingSeasonSpeciesTargetRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    deleteSpeciesTarget: {
+        parameters: {
+            query: {
+                substratumId: number;
+                speciesId: number;
+            };
+            header?: never;
+            path: {
+                plantingSeasonId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
         };
