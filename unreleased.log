@@ -1,3 +1,4 @@
+95f36c16 Update dependency @rstest/coverage-istanbul to ^0.10.0 (#5735)
 d916617a Update dependency eslint-plugin-jsdoc to v63 (#5737)
 7b8b5500 Update Node.js to v24.16.0 (#5736)
 ae31b1eb Update dependency @rstest/core to ^0.10.0 (#5734)
