@@ -7304,8 +7304,6 @@ export interface components {
             isHiddenOnMap: boolean;
             /** Format: int32 */
             listPosition: number;
-            /** @description If this file is from an observation, additional observation-specific data about it. */
-            observation?: components["schemas"]["ObservationActivityMediaFilePayload"];
             /** @enum {string} */
             type: "Photo" | "Video";
         };
@@ -7317,8 +7315,6 @@ export interface components {
             id: number;
             isHighlight: boolean;
             media: components["schemas"]["FunderActivityMediaFilePayload"][];
-            /** Format: int64 */
-            observationId?: number;
             /** @enum {string} */
             type: "Seed Collection" | "Nursery and Propagule Operations" | "Planting" | "Monitoring" | "Site Visit" | "Social Impact" | "Drone Flight" | "Others";
         };
