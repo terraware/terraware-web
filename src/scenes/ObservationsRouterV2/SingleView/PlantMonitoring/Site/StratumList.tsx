@@ -20,6 +20,7 @@ import { useGetOneObservationResults } from 'src/hooks/observations';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers/hooks';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const STORAGE_KEY = 'observation-site-stratum-table';
@@ -72,7 +73,7 @@ export default function StratumList(): JSX.Element {
   const rows = useMemo((): StratumRow[] => {
     if (observationResultsResponse) {
       return observationResultsResponse.observation.strata.map((stratum): StratumRow => {
-        const totalLive = stratum.species.reduce((total, plotSpecies) => total + plotSpecies.totalLive, 0);
+        const totalLive = getObservationSpeciesLivePlantsCount(stratum.species);
         return {
           observationId: observationResultsResponse.observation.observationId,
           stratumName: stratum.name,
