@@ -84,10 +84,19 @@ export type UpsertSpeciesTargetApiArg = {
   plantingSeasonId: number;
   upsertPlantingSeasonSpeciesTargetRequestPayload: UpsertPlantingSeasonSpeciesTargetRequestPayload;
 };
+export type SpeciesTargetPayload = {
+  quantity: number;
+  speciesId: number;
+  substratumId: number;
+};
 export type PlantingSeasonPayload = {
   endDate: string;
   id: number;
+  name: string;
+  plantingSiteId: number;
+  speciesTargets: SpeciesTargetPayload[];
   startDate: string;
+  status: 'Active' | 'Upcoming' | 'Past End Date' | 'Closed';
 };
 export type SuccessOrError = 'ok' | 'error';
 export type ListPlantingSeasonsResponsePayload = {
@@ -123,11 +132,6 @@ export type UpdatePlantingSeasonRequestPayload = {
   endDate: string;
   name: string;
   startDate: string;
-};
-export type SpeciesTargetPayload = {
-  quantity: number;
-  speciesId: number;
-  substratumId: number;
 };
 export type ListSpeciesTargetsResponsePayload = {
   status: SuccessOrError;
