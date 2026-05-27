@@ -12,6 +12,7 @@ import useStickyPlantingSiteId from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
 
 import AddPlantingSeasonModal from './AddPlantingSeasonModal';
+import PlantingSeasonBox from './PlantingSeasonBox';
 
 const PlantingSeasons = (): JSX.Element => {
   const { strings } = useLocalization();
@@ -61,35 +62,71 @@ const PlantingSeasons = (): JSX.Element => {
 
   const [addModalOpen, , onAddPlantingSeason, onCloseAddModal] = useBoolean(false);
 
+  const seasonRows = useMemo(() => {
+    const sites =
+      selectedPlantingSiteId === -1
+        ? plantingSites
+        : plantingSites.filter((site) => site.id === selectedPlantingSiteId);
+    return sites
+      .flatMap((site) =>
+        (site.plantingSeasons ?? []).map((season) => ({
+          site,
+          season,
+        }))
+      )
+      .sort((a, b) => a.season.startDate.localeCompare(b.season.startDate));
+  }, [plantingSites, selectedPlantingSiteId]);
+
+  const addButton = (
+    <Button
+      id='addPlantingSeason'
+      icon='plus'
+      label={strings.ADD_PLANTING_SEASON}
+      onClick={onAddPlantingSeason}
+      size='medium'
+    />
+  );
+
   return (
-    <Page title={isMobile ? strings.PLANTING_SEASONS : titleArea} leftComponent={isMobile ? titleArea : undefined}>
+    <Page
+      title={isMobile ? strings.PLANTING_SEASONS : titleArea}
+      leftComponent={isMobile ? titleArea : undefined}
+      rightComponent={seasonRows.length > 0 ? addButton : undefined}
+    >
       {addModalOpen && (
         <AddPlantingSeasonModal onClose={onCloseAddModal} initialPlantingSiteId={selectedPlantingSiteId} />
       )}
-      <Card style={{ width: '100%' }} radius={theme.spacing(1)}>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            padding: theme.spacing(6),
-            gap: theme.spacing(2),
-          }}
-        >
-          <Box component='img' src='/assets/calendar.svg' alt='' sx={{ width: 64, height: 64 }} />
-          <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
-            {strings.NO_PLANTING_SEASONS_HAVE_BEEN_CREATED}
-          </Typography>
-          <Button
-            id='addPlantingSeason'
-            icon='plus'
-            label={strings.ADD_PLANTING_SEASON}
-            onClick={onAddPlantingSeason}
-            size='medium'
-          />
+      {seasonRows.length === 0 ? (
+        <Card style={{ width: '100%' }} radius={theme.spacing(1)}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: theme.spacing(6),
+              gap: theme.spacing(2),
+            }}
+          >
+            <Box component='img' src='/assets/calendar.svg' alt='' sx={{ width: 64, height: 64 }} />
+            <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
+              {strings.NO_PLANTING_SEASONS_HAVE_BEEN_CREATED}
+            </Typography>
+            {addButton}
+          </Box>
+        </Card>
+      ) : (
+        <Box sx={{ width: '100%' }}>
+          {seasonRows.map(({ site, season }) => (
+            <PlantingSeasonBox
+              key={`${site.id}-${season.id}`}
+              season={season}
+              plantingSiteName={site.name}
+              strata={site.strata ?? []}
+            />
+          ))}
         </Box>
-      </Card>
+      )}
     </Page>
   );
 };

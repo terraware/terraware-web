@@ -67,6 +67,11 @@ export type Point = {
     coordinates: number[];
     type: 'Point';
   };
+export type FunderObservationActivityMediaFilePayload = {
+  monitoringPlotNumber: number;
+  position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+  type: 'Plot' | 'Quadrat' | 'Soil';
+};
 export type FunderActivityMediaFilePayload = {
   caption?: string;
   capturedDate: string;
@@ -76,7 +81,14 @@ export type FunderActivityMediaFilePayload = {
   isCoverPhoto: boolean;
   isHiddenOnMap: boolean;
   listPosition: number;
+  observation?: FunderObservationActivityMediaFilePayload;
   type: 'Photo' | 'Video';
+};
+export type FunderActivityObservationPayload = {
+  completedTime: string;
+  livePlants?: number;
+  plantDensity?: number;
+  survivalRate?: number;
 };
 export type FunderActivityPayload = {
   date: string;
@@ -84,6 +96,7 @@ export type FunderActivityPayload = {
   id: number;
   isHighlight: boolean;
   media: FunderActivityMediaFilePayload[];
+  observation?: FunderActivityObservationPayload;
   type:
     | 'Seed Collection'
     | 'Nursery and Propagule Operations'
