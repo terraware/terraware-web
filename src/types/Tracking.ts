@@ -40,7 +40,7 @@ export type MonitoringPlotSearchResult = {
 };
 
 // planting seasons
-export type PlantingSeason = components['schemas']['PlantingSeasonPayload'];
+export type SimplePlantingSeason = components['schemas']['SimplePlantingSeasonPayload'];
 export type UpdatedPlantingSeason = components['schemas']['UpdatedPlantingSeasonPayload'];
 
 export type Location = {
@@ -65,7 +65,7 @@ export type MinimalPlantingSite = Location & {
   id: number;
   name: string;
   organizationId: number;
-  plantingSeasons: PlantingSeason[];
+  plantingSeasons: SimplePlantingSeason[];
   strata?: MinimalStratum[];
   projectId?: number;
 };
