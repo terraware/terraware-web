@@ -155,14 +155,21 @@ const useObservationExports = () => {
             const allSpecies = monitoringPlot.unknownSpecies
               ? [...monitoringPlot.species, monitoringPlot.unknownSpecies]
               : monitoringPlot.species;
-            const [totalDead, totalExisting, totalLive] = allSpecies.reduce(
-              (acc, observedSpecies) => [
-                acc[0] + observedSpecies.totalDead,
-                acc[1] + observedSpecies.totalExisting,
-                acc[2] + observedSpecies.totalLive,
-              ],
-              [0, 0, 0]
-            );
+            const [totalDead, totalExisting, totalLive] =
+              allSpecies.length > 0
+                ? allSpecies.reduce(
+                    (acc, observedSpecies) => [
+                      acc[0] + observedSpecies.totalDead,
+                      acc[1] + observedSpecies.totalExisting,
+                      acc[2] + observedSpecies.totalLive,
+                    ],
+                    [0, 0, 0]
+                  )
+                : [undefined, undefined, undefined];
+            const totalPlants =
+              totalDead !== undefined && totalExisting !== undefined && totalLive !== undefined
+                ? totalDead + totalExisting + totalLive
+                : undefined;
 
             const pathPattern = APP_PATHS.OBSERVATION_MONITORING_PLOT_DETAILS_V2;
             const detailsLink = new URL(
@@ -207,7 +214,7 @@ const useObservationExports = () => {
               totalDead,
               totalExisting,
               totalLive,
-              totalPlants: totalDead + totalExisting + totalLive,
+              totalPlants,
               totalSpecies: monitoringPlot.totalSpecies,
               stratumName: stratum.name,
             };

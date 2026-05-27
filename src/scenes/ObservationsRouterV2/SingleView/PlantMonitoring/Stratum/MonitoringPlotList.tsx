@@ -24,6 +24,7 @@ import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { useReassignPlotModal } from 'src/scenes/ObservationsRouterV2/Reassign';
 import { ObservationState, getPlotStatus } from 'src/types/Observations';
+import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { isManagerOrHigher } from 'src/utils/organization';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -120,7 +121,7 @@ export default function MonitoringPlotList(): JSX.Element {
     if (observationResult && stratumResult) {
       return stratumResult.substrata.flatMap((substratum) =>
         substratum.monitoringPlots.map((plot): MonitoringPlotRow => {
-          const totalLive = plot.species.reduce((total, plotSpecies) => total + plotSpecies.totalLive, 0);
+          const totalLive = getObservationSpeciesLivePlantsCount(plot.species);
           return {
             observationId,
             observationState: observationResult.state,

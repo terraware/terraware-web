@@ -4,13 +4,13 @@ import { ObservationSpeciesResults, ObservationSpeciesResultsPayload } from 'src
 export const getObservationSpeciesLivePlantsCount = (
   species: ObservationSpeciesResults[] | ObservationSpeciesResultsPayload[] | undefined
 ): number | undefined => {
-  return species?.reduce((sum, s) => sum + (s.totalLive || 0), 0);
+  return species && species.length > 0 ? species.reduce((sum, s) => sum + (s.totalLive || 0), 0) : undefined;
 };
 
 export const getObservationSpeciesDeadPlantsCount = (
   species: ObservationSpeciesResults[] | ObservationSpeciesResultsPayload[] | undefined
 ): number | undefined => {
-  return species?.reduce((sum, s) => sum + (s.totalDead || 0), 0);
+  return species && species.length > 0 ? species?.reduce((sum, s) => sum + (s.totalDead || 0), 0) : undefined;
 };
 
 export const getBiomassObservationLiveTreeCount = (
