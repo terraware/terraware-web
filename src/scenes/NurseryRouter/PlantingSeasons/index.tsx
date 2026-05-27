@@ -18,7 +18,7 @@ const PlantingSeasons = (): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
-  const { plantingSites } = useOrganizationPlantingSites();
+  const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('planting-seasons', -1);
 
   const plantingSiteOptions = useMemo((): DropdownItem[] => {

@@ -13,6 +13,7 @@ import { useLocalization, useOrganization } from 'src/providers';
 import {
   CreatePlantingSeasonRequestPayload,
   useCreatePlantingSeasonMutation,
+  useGetSpeciesTargetsQuery,
 } from 'src/queries/generated/plantingSeasons';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
@@ -41,6 +42,13 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
     startDate: undefined,
     endDate: undefined,
   });
+
+  const { data: speciesTargets } = useGetSpeciesTargetsQuery(record.fromPlantingSeasonId!, {
+    skip: !record.fromPlantingSeasonId,
+  });
+
+  const speciesCount = new Set(speciesTargets?.targets.map((t) => t.speciesId)).size;
+  const substrataCount = new Set(speciesTargets?.targets.map((t) => t.substratumId)).size;
 
   const [validate, setValidate] = useState<boolean>(false);
 
@@ -174,7 +182,7 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
             />
             {record.fromPlantingSeasonId !== undefined && (
               <Typography sx={{ color: theme.palette.TwClrTxtWarning, fontSize: '14px', marginTop: theme.spacing(1) }}>
-                {strings.formatString(strings.COPYING_SPECIES_ACROSS_SUBSTRATUM, 0, 0)}
+                {strings.formatString(strings.COPYING_SPECIES_ACROSS_SUBSTRATUM, speciesCount, substrataCount)}
               </Typography>
             )}
           </Grid>
