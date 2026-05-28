@@ -144,7 +144,7 @@ export type MultiPolygon = {
     coordinates: number[][][][];
     type: 'MultiPolygon';
   };
-export type PlantingSeasonPayload = {
+export type SimplePlantingSeasonPayload = {
   endDate: string;
   id: number;
   startDate: string;
@@ -219,7 +219,7 @@ export type PlantingSitePayload = {
   latestObservationId?: number;
   name: string;
   organizationId: number;
-  plantingSeasons: PlantingSeasonPayload[];
+  plantingSeasons: SimplePlantingSeasonPayload[];
   /** Use strata instead */
   plantingZones?: PlantingZonePayload[];
   projectId?: number;

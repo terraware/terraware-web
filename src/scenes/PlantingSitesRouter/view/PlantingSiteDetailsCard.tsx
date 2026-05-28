@@ -7,7 +7,7 @@ import { DateTime } from 'luxon';
 
 import { useProjects } from 'src/hooks/useProjects';
 import strings from 'src/strings';
-import { MinimalPlantingSite, PlantingSeason } from 'src/types/Tracking';
+import { MinimalPlantingSite, SimplePlantingSeason } from 'src/types/Tracking';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export type PlantingSiteDetailsCardProps = {
@@ -27,7 +27,7 @@ export default function PlantingSiteDetailsCard({ plantingSite }: PlantingSiteDe
     return 4;
   };
 
-  const plantingSeasons = useMemo<PlantingSeason[]>(() => {
+  const plantingSeasons = useMemo<SimplePlantingSeason[]>(() => {
     if (plantingSite.plantingSeasons) {
       const today = DateTime.fromJSDate(new Date(), { zone: tz.id }).toISODate();
       if (today) {

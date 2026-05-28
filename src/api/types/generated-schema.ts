@@ -9628,8 +9628,14 @@ export interface components {
             endDate: string;
             /** Format: int64 */
             id: number;
+            name: string;
+            /** Format: int64 */
+            plantingSiteId: number;
+            speciesTargets: components["schemas"]["SpeciesTargetPayload"][];
             /** Format: date */
             startDate: string;
+            /** @enum {string} */
+            status: "Active" | "Upcoming" | "Past End Date" | "Closed";
         };
         PlantingSiteHistoryPayload: {
             areaHa?: number;
@@ -9707,7 +9713,7 @@ export interface components {
             name: string;
             /** Format: int64 */
             organizationId: number;
-            plantingSeasons: components["schemas"]["PlantingSeasonPayload"][];
+            plantingSeasons: components["schemas"]["SimplePlantingSeasonPayload"][];
             /**
              * @deprecated
              * @description Use strata instead
@@ -10667,6 +10673,14 @@ export interface components {
         SimpleErrorResponsePayload: {
             error: components["schemas"]["ErrorDetails"];
             status: components["schemas"]["SuccessOrError"];
+        };
+        SimplePlantingSeasonPayload: {
+            /** Format: date */
+            endDate: string;
+            /** Format: int64 */
+            id: number;
+            /** Format: date */
+            startDate: string;
         };
         SimpleSuccessResponsePayload: {
             status: components["schemas"]["SuccessOrError"];

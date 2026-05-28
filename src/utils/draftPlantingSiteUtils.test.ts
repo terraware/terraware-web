@@ -1,4 +1,4 @@
-import { MultiPolygon, PlantingSeason, MinimalStratum } from 'src/types/Tracking';
+import { MultiPolygon, SimplePlantingSeason, MinimalStratum } from 'src/types/Tracking';
 import { DraftPlantingSite, DraftPlantingSitePayload } from 'src/types/PlantingSite';
 import { fromDraft, toDraft } from './draftPlantingSiteUtils';
 
@@ -122,7 +122,7 @@ const substratum22: MultiPolygon = {
   ],
 };
 
-const plantingSeasons: PlantingSeason[] = [{ id: 1, startDate: '2024-01-01', endDate: '2024-02-01' }];
+const plantingSeasons: SimplePlantingSeason[] = [{ id: 1, startDate: '2024-01-01', endDate: '2024-02-01' }];
 
 const strata: MinimalStratum[] = [
   {
