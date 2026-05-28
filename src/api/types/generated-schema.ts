@@ -3551,23 +3551,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/seedbank/values": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** List the values of a set of search fields for a set of accessions matching certain filter criteria. */
-        post: operations["listFieldValues"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/species": {
         parameters: {
             query?: never;
@@ -5275,9 +5258,22 @@ export interface components {
             /** Format: int32 */
             listPosition: number;
             /** @description If this file is from an observation, additional observation-specific data about it. */
-            observation?: components["schemas"]["ObservationActivityMediaFilePayload"];
+            observation?: components["schemas"]["ActivityObservationMediaFilePayload"];
             /** @enum {string} */
             type: "Photo" | "Video";
+        };
+        /** @description If this file is from an observation, additional observation-specific data about it. */
+        ActivityObservationMediaFilePayload: {
+            /** Format: int64 */
+            monitoringPlotNumber: number;
+            /** @enum {string} */
+            position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            /** @enum {string} */
+            type: "Plot" | "Quadrat" | "Soil";
+        };
+        ActivityObservationPayload: {
+            /** Format: int64 */
+            observationId: number;
         };
         ActivityPayload: {
             /** Format: date */
@@ -5287,6 +5283,7 @@ export interface components {
             id: number;
             isHighlight: boolean;
             media: components["schemas"]["ActivityMediaFilePayload"][];
+            observation?: components["schemas"]["ActivityObservationPayload"];
             /** Format: date-time */
             publishedTime?: string;
             /** @enum {string} */
@@ -5315,8 +5312,21 @@ export interface components {
             isHiddenOnMap: boolean;
             /** Format: int32 */
             listPosition: number;
+            observation?: components["schemas"]["AdminActivityObservationMediaFilePayload"];
             /** @enum {string} */
             type: "Photo" | "Video";
+        };
+        AdminActivityObservationMediaFilePayload: {
+            /** Format: int64 */
+            monitoringPlotNumber: number;
+            /** @enum {string} */
+            position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+            /** @enum {string} */
+            type: "Plot" | "Quadrat" | "Soil";
+        };
+        AdminActivityObservationPayload: {
+            /** Format: int64 */
+            observationId: number;
         };
         AdminActivityPayload: {
             /** Format: int64 */
@@ -5334,6 +5344,7 @@ export interface components {
             modifiedBy: number;
             /** Format: date-time */
             modifiedTime: string;
+            observation?: components["schemas"]["AdminActivityObservationPayload"];
             /** Format: int64 */
             publishedBy?: number;
             /** Format: date-time */
@@ -7358,8 +7369,8 @@ export interface components {
         FieldValuesPayload: {
             /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
             partial: boolean;
-            /** @description List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
-            values: (string | null)[];
+            /** @description All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
+            values: string[];
         };
         FunderActivityMediaFilePayload: {
             caption?: string;
@@ -8256,20 +8267,6 @@ export interface components {
             facilities: components["schemas"]["FacilityPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
-        ListFieldValuesRequestPayload: {
-            /** Format: int64 */
-            facilityId?: number;
-            fields: string[];
-            /** Format: int64 */
-            organizationId?: number;
-            search?: components["schemas"]["SearchNodePayload"];
-        };
-        ListFieldValuesResponsePayload: {
-            results: {
-                [key: string]: components["schemas"]["FieldValuesPayload"];
-            };
-            status: components["schemas"]["SuccessOrError"];
-        };
         ListFundingEntitiesPayload: {
             fundingEntities: components["schemas"]["FundingEntityPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -9030,15 +9027,6 @@ export interface components {
             /** Format: int64 */
             id: number;
         };
-        /** @description If this file is from an observation, additional observation-specific data about it. */
-        ObservationActivityMediaFilePayload: {
-            /** Format: int64 */
-            monitoringPlotNumber: number;
-            /** @enum {string} */
-            position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
-            /** @enum {string} */
-            type: "Plot" | "Quadrat" | "Soil";
-        };
         ObservationBirdnetResultPayload: {
             /** Format: int64 */
             fileId: number;
@@ -9628,8 +9616,14 @@ export interface components {
             endDate: string;
             /** Format: int64 */
             id: number;
+            name: string;
+            /** Format: int64 */
+            plantingSiteId: number;
+            speciesTargets: components["schemas"]["SpeciesTargetPayload"][];
             /** Format: date */
             startDate: string;
+            /** @enum {string} */
+            status: "Active" | "Upcoming" | "Past End Date" | "Closed";
         };
         PlantingSiteHistoryPayload: {
             areaHa?: number;
@@ -9707,7 +9701,7 @@ export interface components {
             name: string;
             /** Format: int64 */
             organizationId: number;
-            plantingSeasons: components["schemas"]["PlantingSeasonPayload"][];
+            plantingSeasons: components["schemas"]["SimplePlantingSeasonPayload"][];
             /**
              * @deprecated
              * @description Use strata instead
@@ -10554,6 +10548,7 @@ export interface components {
         SearchCountResponsePayload: {
             /** Format: int64 */
             count: number;
+            status: components["schemas"]["SuccessOrError"];
         };
         /** @description A search criterion. The search will return results that match this criterion. The criterion can be composed of other search criteria to form arbitrary Boolean search expressions. TYPESCRIPT-OVERRIDE-TYPE-WITH-ANY */
         SearchNodePayload: {
@@ -10574,6 +10569,7 @@ export interface components {
             results: {
                 [key: string]: unknown;
             }[];
+            status: components["schemas"]["SuccessOrError"];
         };
         SearchSortOrderElement: {
             field: string;
@@ -10583,6 +10579,7 @@ export interface components {
             results: {
                 [key: string]: components["schemas"]["FieldValuesPayload"];
             };
+            status: components["schemas"]["SuccessOrError"];
         };
         SectionVariablePayload: Omit<WithRequired<components["schemas"]["VariablePayload"], "id" | "internalOnly" | "isList" | "isRequired" | "name" | "stableId" | "type">, "type"> & {
             children: components["schemas"]["SectionVariablePayload"][];
@@ -10668,6 +10665,14 @@ export interface components {
             error: components["schemas"]["ErrorDetails"];
             status: components["schemas"]["SuccessOrError"];
         };
+        SimplePlantingSeasonPayload: {
+            /** Format: date */
+            endDate: string;
+            /** Format: int64 */
+            id: number;
+            /** Format: date */
+            startDate: string;
+        };
         SimpleSuccessResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
         };
@@ -10715,6 +10720,7 @@ export interface components {
              */
             problemType?: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
             scientificName: string;
+            status: components["schemas"]["SuccessOrError"];
             /** @description If this is not the accepted name for the species, the name to suggest as an alternative. */
             suggestedScientificName?: string;
         };
@@ -19988,30 +19994,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SummarizeAccessionSearchResponsePayload"];
-                };
-            };
-        };
-    };
-    listFieldValues: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["ListFieldValuesRequestPayload"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ListFieldValuesResponsePayload"];
                 };
             };
         };

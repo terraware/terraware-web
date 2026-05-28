@@ -337,6 +337,7 @@ CLIMATE,Clima,63ba44ee
 CLIMATE_IMPACT,Impacto climático,876c48a4
 CLOSE,Cerrar,e6e3f022
 CLOSE_AND_EDIT,Cerrar y editar,1c3ea202
+CLOSED,Cerrado,7b8d0429
 COLLECTED_DATE,Fecha de recolección,3f1515d8
 COLLECTED_FROM,Recolectado de,ffc6ad60
 COLLECTING_SITE,Lugar de recolección,7491b42b
@@ -1374,6 +1375,7 @@ PARTIAL_ERRORS,Fallaron algunas de las solicitudes. Puede intentar de nuevo más
 PARTIAL_ERRORS_TITLE,Errores parciales,3fca63bf
 PARTICIPANT,Participante,911243e3
 PASSED_PRESCREEN,Prueba de preselección aprobada,fef6edd4
+PAST_END_DATE,Fecha de finalización pasada,b3c6f181
 PENDING,Pendiente,e95f9f79
 PEOPLE,Personas,84bc8e64
 PEOPLE_CARD_DESCRIPTION,¡No podemos hacerlo solos! Añada personas a su organización y asígneles funciones.,9205bab5

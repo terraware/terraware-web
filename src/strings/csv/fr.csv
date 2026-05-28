@@ -336,6 +336,7 @@ CLIMATE,Climat,63ba44ee
 CLIMATE_IMPACT,Impact sur le climat,876c48a4
 CLOSE,Fermer,e6e3f022
 CLOSE_AND_EDIT,Fermer et modifier,1c3ea202
+CLOSED,Fermé,7b8d0429
 COLLECTED_DATE,Date de la collecte,3f1515d8
 COLLECTED_FROM,Collecté à partir de,ffc6ad60
 COLLECTING_SITE,Site de collecte,7491b42b
@@ -1373,6 +1374,7 @@ PARTIAL_ERRORS,Certaines demandes ont échoué. Vous pouvez réessayer plus tard
 PARTIAL_ERRORS_TITLE,Erreurs partielles,3fca63bf
 PARTICIPANT,Participant,911243e3
 PASSED_PRESCREEN,Présélection réussie,fef6edd4
+PAST_END_DATE,Après la date de fin,b3c6f181
 PENDING,En attente,e95f9f79
 PEOPLE,Personnes,84bc8e64
 PEOPLE_CARD_DESCRIPTION,Nous ne pouvons pas le faire seuls ! Ajoutez des personnes à votre organisation et attribuez-leur des rôles.,9205bab5
