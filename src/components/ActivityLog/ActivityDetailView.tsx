@@ -344,6 +344,10 @@ const ActivityDetailView = ({
 
   const isObsActivity = useMemo(() => isObservationActivity(activity.payload), [activity.payload]);
 
+  // Funder activities include observation stats directly on the payload (no observationId or API call needed)
+  const funderObsPayload = activity.type === 'funder' ? activity.payload.observation : undefined;
+  const showObsPanel = isObsActivity || funderObsPayload !== undefined;
+
   const { data: observationResultsData } = useGetObservationResultsQuery(
     { observationId: activity.payload.observation?.observationId as number },
     { skip: !activity.payload.observation?.observationId }
@@ -357,10 +361,21 @@ const ActivityDetailView = ({
     [activity.payload.observation?.observationId, isObsActivity]
   );
 
-  const observationLivePlants = useMemo(
-    () => getObservationSpeciesLivePlantsCount(observationResultsData?.observation.species),
-    [observationResultsData]
+  const obsLivePlants = useMemo(
+    () =>
+      funderObsPayload !== undefined
+        ? funderObsPayload.livePlants
+        : getObservationSpeciesLivePlantsCount(observationResultsData?.observation.species),
+    [funderObsPayload, observationResultsData]
   );
+
+  const obsPlantDensity =
+    funderObsPayload !== undefined
+      ? funderObsPayload.plantDensity
+      : observationResultsData?.observation.plantingDensity;
+
+  const obsSurvivalRate =
+    funderObsPayload !== undefined ? funderObsPayload.survivalRate : observationResultsData?.observation.survivalRate;
 
   const [lightboxMediaFileId, setLightboxMediaFileId] = useState<number | undefined>(undefined);
   const [publishActivityModalOpened, setPublishActivityModalOpened] = useState(false);
@@ -575,7 +590,7 @@ const ActivityDetailView = ({
         <Typography>{activity.payload.description}</Typography>
       </Grid>
 
-      {isObsActivity && (
+      {showObsPanel && (
         <Grid item xs={12}>
           <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(2)}>
             {strings.OBSERVATION_DETAILS}
@@ -590,25 +605,21 @@ const ActivityDetailView = ({
               <OverviewItemCard
                 isEditable={false}
                 title={strings.LIVE_PLANTS}
-                contents={observationLivePlants?.toString() ?? null}
+                contents={obsLivePlants?.toString() ?? null}
               />
             </Grid>
-            {!!observationResultsData?.observation.plantingDensity && (
+            {!!obsPlantDensity && (
               <Grid item xs={12} sm={4}>
                 <OverviewItemCard
                   isEditable={false}
                   title={strings.PLANT_DENSITY}
-                  contents={observationResultsData.observation.plantingDensity.toString()}
+                  contents={obsPlantDensity.toString()}
                 />
               </Grid>
             )}
-            {observationResultsData?.observation.survivalRate !== undefined && (
+            {obsSurvivalRate !== undefined && (
               <Grid item xs={12} sm={4}>
-                <OverviewItemCard
-                  isEditable={false}
-                  title={strings.SURVIVAL_RATE}
-                  contents={`${observationResultsData.observation.survivalRate}%`}
-                />
+                <OverviewItemCard isEditable={false} title={strings.SURVIVAL_RATE} contents={`${obsSurvivalRate}%`} />
               </Grid>
             )}
           </Grid>
