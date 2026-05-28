@@ -345,16 +345,16 @@ const ActivityDetailView = ({
   const isObsActivity = useMemo(() => isObservationActivity(activity.payload), [activity.payload]);
 
   const { data: observationResultsData } = useGetObservationResultsQuery(
-    { observationId: activity.payload.observationId as number },
-    { skip: !activity.payload.observationId }
+    { observationId: activity.payload.observation?.observationId as number },
+    { skip: !activity.payload.observation?.observationId }
   );
 
   const observationUrl = useMemo(
     () =>
-      isObsActivity && activity.payload.observationId
-        ? APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', String(activity.payload.observationId))
+      isObsActivity && activity.payload.observation?.observationId
+        ? APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', String(activity.payload.observation.observationId))
         : undefined,
-    [activity.payload.observationId, isObsActivity]
+    [activity.payload.observation?.observationId, isObsActivity]
   );
 
   const observationLivePlants = useMemo(

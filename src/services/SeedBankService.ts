@@ -168,7 +168,7 @@ const getCollectors = async (organizationId: number): Promise<string[] | undefin
   try {
     const collectors =
       (await searchFieldValues(['collectors_name'], {}, organizationId))?.collectors_name?.values || [];
-    return collectors.filter((collector) => collector !== null) as string[];
+    return collectors.filter((collector) => collector !== null);
   } catch {
     return undefined;
   }
@@ -181,7 +181,7 @@ const getCollectionSiteNames = async (organizationId: number): Promise<string[] 
   try {
     const collectionSiteNames =
       (await searchFieldValues(['collectionSiteName'], {}, organizationId))?.collectionSiteName?.values || [];
-    return collectionSiteNames.filter((collectionSiteName) => collectionSiteName !== null) as string[];
+    return collectionSiteNames.filter((collectionSiteName) => collectionSiteName !== null);
   } catch {
     return undefined;
   }

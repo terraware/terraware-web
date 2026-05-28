@@ -106,7 +106,9 @@ export const activityTypeLabel = (activityType: ActivityType, strings: typeof de
   }
 };
 
-export type ObservationActivityMedia = components['schemas']['ObservationActivityMediaFilePayload'];
+// All three observation media payload variants (Activity, Admin, Funder) are structurally identical;
+// we alias one of them as the canonical type for the shared helpers below.
+export type ObservationActivityMedia = components['schemas']['AdminActivityObservationMediaFilePayload'];
 
 /**
  * Returns true when the activity was automatically created from a TW observation.
@@ -114,8 +116,9 @@ export type ObservationActivityMedia = components['schemas']['ObservationActivit
  * also create Monitoring activities manually, which should not be treated as observation activities.
  */
 export const isObservationActivity = (activity: {
-  observationId?: number;
-}): activity is { observationId: number } & typeof activity => activity.observationId !== undefined;
+  observation?: { observationId?: number };
+}): activity is typeof activity & { observation: { observationId: number } } =>
+  activity.observation?.observationId !== undefined;
 
 /** Returns true when the given activity media file originated from an observation. */
 export const isObservationMedia = (media: {
