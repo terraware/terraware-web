@@ -179,7 +179,7 @@ export type Point = {
     coordinates: number[];
     type: 'Point';
   };
-export type ObservationActivityMediaFilePayload = {
+export type ActivityObservationMediaFilePayload = {
   monitoringPlotNumber: number;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
   type: 'Plot' | 'Quadrat' | 'Soil';
@@ -194,8 +194,11 @@ export type ActivityMediaFilePayload = {
   isHiddenOnMap: boolean;
   listPosition: number;
   /** If this file is from an observation, additional observation-specific data about it. */
-  observation?: ObservationActivityMediaFilePayload;
+  observation?: ActivityObservationMediaFilePayload;
   type: 'Photo' | 'Video';
+};
+export type ActivityObservationPayload = {
+  observationId: number;
 };
 export type ActivityPayload = {
   date: string;
@@ -203,6 +206,7 @@ export type ActivityPayload = {
   id: number;
   isHighlight: boolean;
   media: ActivityMediaFilePayload[];
+  observation?: ActivityObservationPayload;
   publishedTime?: string;
   status: 'Not Verified' | 'Verified' | 'Do Not Use';
   type:
@@ -238,6 +242,11 @@ export type CreateActivityRequestPayload = {
     | 'Drone Flight'
     | 'Others';
 };
+export type AdminActivityObservationMediaFilePayload = {
+  monitoringPlotNumber: number;
+  position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+  type: 'Plot' | 'Quadrat' | 'Soil';
+};
 export type AdminActivityMediaFilePayload = {
   caption?: string;
   capturedDate: string;
@@ -249,7 +258,11 @@ export type AdminActivityMediaFilePayload = {
   isCoverPhoto: boolean;
   isHiddenOnMap: boolean;
   listPosition: number;
+  observation?: AdminActivityObservationMediaFilePayload;
   type: 'Photo' | 'Video';
+};
+export type AdminActivityObservationPayload = {
+  observationId: number;
 };
 export type AdminActivityPayload = {
   createdBy: number;
@@ -261,6 +274,7 @@ export type AdminActivityPayload = {
   media: AdminActivityMediaFilePayload[];
   modifiedBy: number;
   modifiedTime: string;
+  observation?: AdminActivityObservationPayload;
   publishedBy?: number;
   publishedTime?: string;
   status: 'Not Verified' | 'Verified' | 'Do Not Use';

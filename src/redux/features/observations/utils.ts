@@ -127,43 +127,6 @@ const speciesReverseMap = (ary: any[]): Record<number, SpeciesValue> =>
     {} as Record<number, SpeciesValue>
   );
 
-// merge observation
-export const mergeObservations = (
-  observations: ObservationResultsPayload[],
-  defaultTimeZone: string,
-  plantingSites?: PlantingSite[],
-  speciesData?: Species[]
-): ObservationResults[] => {
-  const sites = sitesReverseMap(plantingSites ?? []);
-  const species = speciesReverseMap(speciesData ?? []);
-
-  return observations
-    .filter((observation) => sites[observation.plantingSiteId])
-    .map((observation: ObservationResultsPayload): ObservationResults => {
-      const { plantingSiteId } = observation;
-      const site = sites[plantingSiteId];
-      const timeZone = site.timeZone ?? defaultTimeZone;
-
-      const mergedStrata = mergeStrata(observation.strata, species, timeZone);
-      const mergedSpecies = mergeSpecies(observation.species, species);
-
-      return {
-        ...observation,
-        plantingSiteName: site.name,
-        boundary: site.boundary,
-        completedDate: observation.completedTime ? getDateDisplayValue(observation.completedTime, site.timeZone) : '',
-        startDate: getDateDisplayValue(observation.startDate, site.timeZone),
-        strata: mergedStrata,
-        species: mergedSpecies,
-        timeZone,
-        totalLive: getObservationSpeciesLivePlantsCount(observation.species),
-        totalPlants: observation.strata.reduce((acc, curr) => acc + curr.totalPlants, 0),
-        hasObservedPermanentPlots: mergedStrata.some((stratum) => stratum.hasObservedPermanentPlots),
-        hasObservedTemporaryPlots: mergedStrata.some((stratum) => stratum.hasObservedTemporaryPlots),
-      };
-    });
-};
-
 const StatusWeights: Record<MonitoringPlotStatus, number> = {
   Completed: 1,
   Claimed: 2,
@@ -261,40 +224,6 @@ export const has25mPlots = (substrata: ObservationSubstratumResults[] | Observat
   return substrata
     ?.flatMap((substratum: { monitoringPlots: any[] }) => substratum.monitoringPlots.flatMap((plot) => plot.sizeMeters))
     .some((size: number) => size.toString() === '25');
-};
-
-export const mergeAdHocObservations = (
-  observations: ObservationResultsPayload[],
-  defaultTimeZone: string,
-  plantingSites?: PlantingSite[]
-): AdHocObservationResults[] => {
-  const sites = sitesReverseMap(plantingSites ?? []);
-
-  return observations
-    .filter((observation) => sites[observation.plantingSiteId])
-    .filter((observation) => observation.adHocPlot)
-    .map((observation: ObservationResultsPayload): AdHocObservationResults => {
-      const { plantingSiteId } = observation;
-      const site = sites[plantingSiteId];
-      const species = speciesReverseMap([]);
-      const adHocPlot = observation.adHocPlot!;
-      const timeZone = site.timeZone ?? defaultTimeZone;
-
-      const mergedStrata = mergeStrata(observation.strata, species, site.timeZone ?? defaultTimeZone);
-
-      return {
-        ...observation,
-        adHocPlot,
-        boundary: site.boundary,
-        plantingSiteName: site.name,
-        strata: mergedStrata,
-        plotName: adHocPlot.monitoringPlotName,
-        plotNumber: adHocPlot.monitoringPlotNumber,
-        timeZone,
-        totalLive: getObservationSpeciesLivePlantsCount(adHocPlot.species),
-        totalPlants: observation.strata.reduce((acc, curr) => acc + curr.totalPlants, 0),
-      };
-    });
 };
 
 export const getConditionString = (
