@@ -1,4 +1,4 @@
-import React, { type JSX, useMemo, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Checkbox, Dropdown, DropdownItem } from '@terraware/web-components';
@@ -14,6 +14,7 @@ import {
   CreatePlantingSeasonRequestPayload,
   useCreatePlantingSeasonMutation,
   useGetSpeciesTargetsQuery,
+  useLazyListPlantingSeasonsQuery,
 } from 'src/queries/generated/plantingSeasons';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
@@ -69,18 +70,29 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
     [plantingSites, activeLocale]
   );
 
-  const selectedSite = useMemo(
-    () => plantingSites.find((site) => site.id === record.plantingSiteId),
-    [plantingSites, record.plantingSiteId]
+  const [listPlantingSeasons, { data: plantingSeasonsData }] = useLazyListPlantingSeasonsQuery();
+
+  useEffect(() => {
+    if (record.plantingSiteId) {
+      void listPlantingSeasons({ plantingSiteId: record.plantingSiteId });
+    }
+  }, [listPlantingSeasons, record.plantingSiteId]);
+
+  const seasonsForSelectedSite = useMemo(
+    () =>
+      record.plantingSiteId
+        ? (plantingSeasonsData?.seasons ?? []).filter((s) => s.plantingSiteId === record.plantingSiteId)
+        : [],
+    [plantingSeasonsData, record.plantingSiteId]
   );
 
   const seasonToCopyOptions = useMemo<DropdownItem[]>(
     () =>
-      (selectedSite?.plantingSeasons ?? []).map((season) => ({
+      seasonsForSelectedSite.map((season) => ({
         label: strings.formatString(strings.DATE_RANGE, season.startDate, season.endDate).toString(),
         value: season.id,
       })),
-    [selectedSite]
+    [seasonsForSelectedSite]
   );
 
   const onChangePlantingSite = (value: any) => {
@@ -158,7 +170,7 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
             id='copyPreviousSeason'
             name='copyPreviousSeason'
             label={strings.COPY_PREVIOUS_SEASON}
-            disabled={(selectedSite?.plantingSeasons?.length ?? 0) === 0}
+            disabled={seasonsForSelectedSite.length === 0}
             value={record.copyPrevious}
             onChange={(value) =>
               setRecord((prev) => ({
