@@ -7424,7 +7424,7 @@ export interface components {
             /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
             partial: boolean;
             /** @description All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
-            values: string[];
+            values: (string | null)[];
         };
         FunderActivityMediaFilePayload: {
             caption?: string;

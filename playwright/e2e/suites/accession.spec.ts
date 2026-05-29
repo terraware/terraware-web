@@ -97,7 +97,9 @@ test.describe('AccessionTests', () => {
     await expect(page.getByRole('main')).toContainText('~500 ct');
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByLabel('History')).toContainText('Super Admin created accession');
-    await expect(page.getByLabel('History')).toContainText('Super Admin updated the status to Awaiting Processing');
+    await expect(page.getByLabel('History')).toContainText(
+      'Super Admin checked in the accession and updated the status to Awaiting Processing'
+    );
     await expect(page.getByLabel('History')).toContainText('Super Admin updated the status to Processing');
     await expect(page.getByLabel('History')).toContainText('Super Admin updated the status to Drying');
     await expect(page.getByLabel('History')).toContainText('Super Admin updated the quantity to 500 grams');
