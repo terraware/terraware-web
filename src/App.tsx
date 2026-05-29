@@ -1,6 +1,5 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
-import { MixpanelProvider } from 'react-mixpanel-browser';
-import { useMixpanel } from 'react-mixpanel-browser';
+import { MixpanelProvider, useMixpanel } from 'react-mixpanel-browser';
 import { Provider } from 'react-redux';
 
 import { Box, CssBaseline, StyledEngineProvider, useTheme } from '@mui/material';
@@ -13,6 +12,7 @@ import TopBarContent from 'src/components/TopBar/TopBarContent';
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useAppVersion } from 'src/hooks/useAppVersion';
+import { MixpanelUserProfile } from 'src/mixpanelEvents';
 import { useLocalization, useUser } from 'src/providers';
 import { store } from 'src/redux/store';
 import AcceleratorRouter from 'src/scenes/AcceleratorRouter';
@@ -27,6 +27,11 @@ import DisclaimerProvider from './providers/Disclaimer/Provider';
 import ApplicationPortalRouter from './scenes/ApplicationRouter/portal';
 
 // Mixpanel setup
+// The SDK initializes opted-out (no cookies, no localStorage, no network) until
+// the consent effect below flips it on. The track_pageview config auto-tracks
+// SPA route changes; the first pageview after consent is captured by an explicit
+// track_pageview() call once we opt in (the auto-pageview that fired during
+// init itself was dropped because we were still opted out at the time).
 const MIXPANEL_TOKEN = import.meta.env.PUBLIC_MIXPANEL_TOKEN;
 const MIXPANEL_CONFIG = {
   opt_out_persistence_by_default: true,
@@ -50,16 +55,28 @@ function AppContent() {
   useEffect(() => {
     if (user && mixpanel) {
       if (user.cookiesConsented === true) {
+        const profile: MixpanelUserProfile = {
+          $email: user.email,
+          $first_name: user.firstName,
+          $last_name: user.lastName,
+          $country_code: user.countryCode,
+          $timezone: user.timeZone,
+          locale: user.locale,
+          email_notifs_enabled: user.emailNotificationsEnabled,
+          user_type: user.userType,
+          global_roles: user.globalRoles,
+          is_internal_user: user.globalRoles.length > 0,
+        };
         mixpanel.opt_in_tracking();
         mixpanel.identify(user.id);
-        mixpanel.people.set({
-          $email: user.email,
-          $locale: user.locale,
-          $emailNotifsEnabled: user.emailNotificationsEnabled,
-          $countryCode: user.countryCode,
-        });
+        mixpanel.people.set(profile);
+        // Capture the current page: the auto-pageview from SDK init was dropped
+        // because we were opted out at the time. Subsequent SPA route changes
+        // are picked up by the track_pageview config now that we're opted in.
+        mixpanel.track_pageview();
       } else {
         mixpanel.opt_out_tracking();
+        mixpanel.reset();
       }
     }
   }, [user, mixpanel]);
