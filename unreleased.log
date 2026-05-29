@@ -1,3 +1,4 @@
+77de41d1 Set Mixpanel token per tier (#5750)
 87c9af2d SW-8406 List planting seasons view (#5742)
 5be72068 Cleanup Mixpanel instrumentation (#5747)
 7360f001 Fix type errors from OpenAPI schema changes (#5746)
