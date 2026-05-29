@@ -65,7 +65,6 @@ export type MinimalPlantingSite = Location & {
   id: number;
   name: string;
   organizationId: number;
-  plantingSeasons: SimplePlantingSeason[];
   strata?: MinimalStratum[];
   projectId?: number;
 };

@@ -24,7 +24,6 @@ const createDraftSiteWith = (): DraftPlantingSite => {
     id: 1,
     name: 'test',
     organizationId: 2,
-    plantingSeasons: [],
     siteEditStep: 'details',
     siteType: 'simple',
   };

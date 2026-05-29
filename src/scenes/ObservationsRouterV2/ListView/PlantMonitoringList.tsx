@@ -21,12 +21,11 @@ import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
 import { useListObservationResults } from 'src/hooks/observations';
-import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import useOrganizationPlantingSites, { OrganizationPlantingSite } from 'src/hooks/useOrganizationPlantingSites';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/observations';
-import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { useLazyGetAllT0SiteDataSetQuery } from 'src/queries/generated/t0';
 import { useLazyGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
 import { AdHocObservationResults, ObservationState, getStatus } from 'src/types/Observations';
@@ -182,7 +181,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           sites[site.id] = site;
           return sites;
         },
-        {} as { [siteId: number]: PlantingSitePayload }
+        {} as { [siteId: number]: OrganizationPlantingSite }
       ),
     [plantingSites]
   );

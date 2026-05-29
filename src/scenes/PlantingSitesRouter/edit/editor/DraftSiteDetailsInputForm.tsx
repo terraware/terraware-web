@@ -16,16 +16,11 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { TimeZoneDescription } from 'src/types/TimeZones';
-import { UpdatedPlantingSeason } from 'src/types/Tracking';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-
-import PlantingSeasonsEdit from '../PlantingSeasonsEdit';
 
 export type DraftSiteDetailsInputFormProps = {
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean) => void;
   record: DraftPlantingSite;
-  setPlantingSeasons: (plantingSeasons: UpdatedPlantingSeason[]) => void;
   setRecord: (setFn: (previousValue: DraftPlantingSite) => DraftPlantingSite) => void;
 };
 
@@ -33,15 +28,11 @@ export default function DraftSiteDetailsInputForm({
   onChange,
   onValidate,
   record,
-  setPlantingSeasons,
   setRecord,
 }: DraftSiteDetailsInputFormProps): JSX.Element {
-  const defaultTimeZoneId = useDefaultTimeZone().get().id;
   const { isMobile } = useDeviceInfo();
   const [validateInput, setValidateInput] = useState<boolean>(false);
   const [nameError, setNameError] = useState('');
-  const [plantingSeasonsValid, setPlantingSeasonsValid] = useState(true);
-  const [showSaveValidationErrors, setShowSaveValidationErrors] = useState(false);
   const { availableProjects } = useProjects(record);
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
@@ -56,27 +47,17 @@ export default function DraftSiteDetailsInputForm({
   }, [draftSites, plantingSites, record.id]);
 
   const checkErrors = useCallback(() => {
-    let hasNameError = true;
-    let hasSeasonsError = true;
-
     if (!record.name) {
       setNameError(strings.REQUIRED_FIELD);
-    } else if (usedNames?.has(record.name) === true) {
+      return true;
+    }
+    if (usedNames?.has(record.name) === true) {
       setNameError(strings.SITE_WITH_NAME_EXISTS);
-    } else {
-      setNameError('');
-      hasNameError = false;
+      return true;
     }
-
-    if (!plantingSeasonsValid) {
-      setShowSaveValidationErrors(true);
-    } else {
-      setShowSaveValidationErrors(false);
-      hasSeasonsError = false;
-    }
-
-    return hasNameError || hasSeasonsError;
-  }, [plantingSeasonsValid, record.name, usedNames]);
+    setNameError('');
+    return false;
+  }, [record.name, usedNames]);
 
   useEffect(() => {
     if (!plantingSites && selectedOrganization) {
@@ -116,10 +97,6 @@ export default function DraftSiteDetailsInputForm({
     return 4;
   };
 
-  const effectiveTimeZoneId = useMemo(() => {
-    return record.timeZone ?? selectedOrganization?.timeZone ?? defaultTimeZoneId;
-  }, [defaultTimeZoneId, record.timeZone, selectedOrganization?.timeZone]);
-
   return (
     <Grid container display='flex' spacing={3} flexGrow={0}>
       <Grid item xs={gridSize()}>
@@ -149,24 +126,6 @@ export default function DraftSiteDetailsInputForm({
           tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
         />
       </Grid>
-      {record.strata && (
-        <Grid item xs={gridSize()}>
-          <TextField
-            label={strings.UPCOMING_PLANTING_SEASONS}
-            id='upcomingPlantingSeasons'
-            type='text'
-            display={true}
-          />
-          <PlantingSeasonsEdit
-            plantingSeasons={record.plantingSeasons}
-            setPlantingSeasons={setPlantingSeasons}
-            setPlantingSeasonsValid={setPlantingSeasonsValid}
-            setShowSaveValidationErrors={setShowSaveValidationErrors}
-            showSaveValidationErrors={showSaveValidationErrors}
-            timeZoneId={effectiveTimeZoneId}
-          />
-        </Grid>
-      )}
       <Grid item xs={gridSize()}>
         <ProjectsDropdown availableProjects={availableProjects} record={record} setRecord={setRecord} allowUnselect />
       </Grid>
