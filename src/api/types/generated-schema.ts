@@ -3011,6 +3011,60 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/planting-seasons/{id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Closes a planting season. */
+        post: operations["closePlantingSeason"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/planting-seasons/{plantingSeasonId}/scheduled-dates": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets all scheduled dates for a planting season. */
+        get: operations["getScheduledPlantingDates"];
+        put?: never;
+        /** Creates a new scheduled date for a planting season. */
+        post: operations["createScheduledPlantingDate"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/planting-seasons/{plantingSeasonId}/scheduled-dates/{scheduledPlantingDateId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets a single scheduled date for a planting season. */
+        get: operations["getSingleScheduledPlantingDate"];
+        /** Updates a scheduled date for a planting season. */
+        put: operations["updateScheduledPlantingDate"];
+        post?: never;
+        /** Deletes a scheduled date for a planting season. */
+        delete: operations["deleteScheduledPlantingDate"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/planting-seasons/{plantingSeasonId}/species-targets": {
         parameters: {
             query?: never;
@@ -7874,6 +7928,10 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
             version: components["schemas"]["DocumentSavedVersionPayload"];
         };
+        GetScheduledDateResponsePayload: {
+            scheduledDate: components["schemas"]["ScheduledDatePayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
         GetSeedBankV1: {
             /** Format: date */
             buildCompletedDate?: string;
@@ -8425,6 +8483,10 @@ export interface components {
         };
         ListReportsResponsePayload: {
             reports: components["schemas"]["ListReportsResponseElement"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListScheduledDatesResponsePayload: {
+            scheduledDates: components["schemas"]["ScheduledDatePayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         ListSpeciesResponsePayload: {
@@ -9090,7 +9152,7 @@ export interface components {
              * Format: int32
              * @description Number of live plants per hectare.
              */
-            plantingDensity: number;
+            plantingDensity?: number;
             plants?: components["schemas"]["RecordedPlantPayload"][];
             /**
              * Format: int32
@@ -9109,12 +9171,12 @@ export interface components {
              * Format: int32
              * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
              */
-            totalPlants: number;
+            totalPlants?: number;
             /**
              * Format: int32
              * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
              */
-            totalSpecies: number;
+            totalSpecies?: number;
             /** @description Information about plants of unknown species, if any were observed. */
             unknownSpecies?: components["schemas"]["ObservationSpeciesResultsPayload"];
         };
@@ -9230,7 +9292,7 @@ export interface components {
              * Format: int32
              * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots.
              */
-            plantingDensity: number;
+            plantingDensity?: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
             /** Format: int64 */
@@ -9248,9 +9310,9 @@ export interface components {
             /** Format: int32 */
             survivalRateStdDev?: number;
             /** Format: int32 */
-            totalPlants: number;
+            totalPlants?: number;
             /** Format: int32 */
-            totalSpecies: number;
+            totalSpecies?: number;
             /** @enum {string} */
             type: "Monitoring" | "Biomass Measurements";
         };
@@ -9269,7 +9331,7 @@ export interface components {
             certainty: "Known" | "Other" | "Unknown";
             /**
              * Format: int32
-             * @description Number of live plants observed in permanent plots in this observation, not including existing plants. 0 if ths is a plot-level result for a temporary monitoring plot.
+             * @description Number of live plants observed in permanent plots in this observation, not including existing plants. 0 if this is a plot-level result for a temporary monitoring plot.
              */
             permanentLive: number;
             /**
@@ -9328,7 +9390,7 @@ export interface components {
              * Format: int32
              * @description Estimated planting density for the stratum based on the observed planting densities of monitoring plots.
              */
-            plantingDensity: number;
+            plantingDensity?: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
@@ -9347,12 +9409,12 @@ export interface components {
              * Format: int32
              * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
              */
-            totalPlants: number;
+            totalPlants?: number;
             /**
              * Format: int32
              * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
              */
-            totalSpecies: number;
+            totalSpecies?: number;
         };
         /** @description Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point. */
         ObservationSubstratumResultsPayload: {
@@ -9372,7 +9434,7 @@ export interface components {
              * Format: int32
              * @description Estimated planting density for the substratum based on the observed planting densities of monitoring plots.
              */
-            plantingDensity: number;
+            plantingDensity?: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
@@ -9389,12 +9451,12 @@ export interface components {
              * Format: int32
              * @description Total number of plants recorded. Includes all plants, regardless of live/dead status or species.
              */
-            totalPlants: number;
+            totalPlants?: number;
             /**
              * Format: int32
              * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
              */
-            totalSpecies: number;
+            totalSpecies?: number;
         };
         ObservationUpdateOperationPayload: {
             type: string;
@@ -9658,7 +9720,7 @@ export interface components {
              * Format: int32
              * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots.
              */
-            plantingDensity: number;
+            plantingDensity?: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
             /** Format: int64 */
@@ -9677,12 +9739,12 @@ export interface components {
              * Format: int32
              * @description Total number of plants recorded from the latest observations of each substratum within each stratum. Includes all plants, regardless of live/dead status or species.
              */
-            totalPlants: number;
+            totalPlants?: number;
             /**
              * Format: int32
              * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
              */
-            totalSpecies: number;
+            totalSpecies?: number;
         };
         PlantingSitePayload: {
             adHocPlots: components["schemas"]["MonitoringPlotPayload"][];
@@ -10533,6 +10595,26 @@ export interface components {
             id: number;
             status: components["schemas"]["SuccessOrError"];
         };
+        ScheduledDatePayload: {
+            /** Format: date */
+            date: string;
+            /** Format: int64 */
+            scheduledPlantingDateId: number;
+            species: components["schemas"]["ScheduledPlantingDateSpeciesPayload"][];
+        };
+        ScheduledPlantingDateRequestPayload: {
+            /** Format: date */
+            date: string;
+            species: components["schemas"]["ScheduledPlantingDateSpeciesPayload"][];
+        };
+        ScheduledPlantingDateSpeciesPayload: {
+            /** Format: int32 */
+            quantity: number;
+            /** Format: int64 */
+            speciesId: number;
+            /** Format: int64 */
+            substratumId: number;
+        };
         Score: {
             /** @enum {string} */
             category: "Carbon" | "Finance" | "Forestry" | "Legal" | "Social Impact" | "GIS" | "Climate Impact" | "Expansion Potential" | "Experience and Understanding" | "Operational Capacity" | "Responsiveness and Attention to Detail" | "Values Alignment";
@@ -10560,7 +10642,7 @@ export interface components {
             cursor?: string;
             fields: string[];
             filters?: components["schemas"]["PrefixedSearch"][];
-            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
+            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingSeasonScheduledDates" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "scheduledPlantingDateSpeciesTable" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
             search?: components["schemas"]["SearchNodePayload"];
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
         };
@@ -10905,7 +10987,7 @@ export interface components {
              * Format: int32
              * @description Estimated planting density for the stratum based on the observed planting densities of monitoring plots.
              */
-            plantingDensity: number;
+            plantingDensity?: number;
             /** Format: int32 */
             plantingDensityStdDev?: number;
             /** @description Combined list of observed species and their statuses from the latest observation of each substratum. */
@@ -10925,12 +11007,12 @@ export interface components {
              * Format: int32
              * @description Total number of plants recorded from the latest observations of each substratum. Includes all plants, regardless of live/dead status or species.
              */
-            totalPlants: number;
+            totalPlants?: number;
             /**
              * Format: int32
              * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
              */
-            totalSpecies: number;
+            totalSpecies?: number;
         };
         StratumReportedPlantsResponsePayload: {
             /** Format: int64 */
@@ -18703,8 +18785,9 @@ export interface operations {
     };
     listPlantingSeasons: {
         parameters: {
-            query: {
-                plantingSiteId: number;
+            query?: {
+                plantingSiteId?: number;
+                organizationId?: number;
             };
             header?: never;
             path?: never;
@@ -18840,6 +18923,176 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    closePlantingSeason: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getScheduledPlantingDates: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSeasonId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListScheduledDatesResponsePayload"];
+                };
+            };
+        };
+    };
+    createScheduledPlantingDate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSeasonId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScheduledPlantingDateRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getSingleScheduledPlantingDate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSeasonId: number;
+                scheduledPlantingDateId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetScheduledDateResponsePayload"];
+                };
+            };
+        };
+    };
+    updateScheduledPlantingDate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSeasonId: number;
+                scheduledPlantingDateId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ScheduledPlantingDateRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    deleteScheduledPlantingDate: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSeasonId: number;
+                scheduledPlantingDateId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
         };
