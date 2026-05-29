@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { IconName } from '@terraware/web-components';
@@ -15,6 +14,7 @@ import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -37,7 +37,7 @@ const TerrawareHomeView = () => {
   const { user } = useUser();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { isTablet, isMobile, isDesktop } = useDeviceInfo();
-  const mixpanel = useMixpanel();
+  const trackEvent = useTrackEvent();
   const navigate = useSyncNavigate();
   const { goToNewAccession } = useNavigateTo();
   const { species } = useSpeciesData();
@@ -304,7 +304,7 @@ const TerrawareHomeView = () => {
                                 fontWeight={400}
                                 target='_blank'
                                 onClick={() => {
-                                  mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
+                                  trackEvent(MIXPANEL_EVENTS.ACCELERATOR_TF_LINK_CLICKED);
                                   window.open(ACCELERATOR_LINK, '_blank');
                                 }}
                                 style={{ verticalAlign: 'baseline' }}
@@ -322,7 +322,7 @@ const TerrawareHomeView = () => {
                       primaryButtonProps={{
                         label: strings.APPLY_TO_ACCELERATOR,
                         onClick: () => {
-                          mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
+                          trackEvent(MIXPANEL_EVENTS.ACCELERATOR_APPLY_BUTTON_CLICKED);
                           setIsNewApplicationModalOpen(true);
                         },
                         type: 'productive',
@@ -402,7 +402,7 @@ const TerrawareHomeView = () => {
                           fontSize='16px'
                           target='_blank'
                           onClick={() => {
-                            mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
+                            trackEvent(MIXPANEL_EVENTS.ACCELERATOR_TF_LINK_CLICKED);
                             window.open(ACCELERATOR_LINK, '_blank');
                           }}
                         >
@@ -413,7 +413,7 @@ const TerrawareHomeView = () => {
                       linkText={strings.START_NEW_APPLICATION}
                       linkStyle={'button-primary'}
                       onClick={() => {
-                        mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
+                        trackEvent(MIXPANEL_EVENTS.ACCELERATOR_APPLY_BUTTON_CLICKED);
                         setIsNewApplicationModalOpen(true);
                       }}
                     />
