@@ -307,16 +307,21 @@ const injectedRtkApi = api.injectEndpoints({
             substratumShortName: result.substratumShortNames,
             totalWithdrawn: Number(result['totalWithdrawn(raw)']),
             hasReassignments: Boolean(result.hasReassignments),
-            projectNames: result.batchWithdrawals
-              .flatMap((batchWithdrawal) => [
-                batchWithdrawal.batch_project_name,
-                batchWithdrawal.destinationBatchProjectName,
-              ])
-              .filter((projectName): projectName is string => projectName !== undefined)
-              .sort(),
-            speciesNames: result.batchWithdrawals
-              .map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName)
-              .sort(),
+            projectNames: Array.from(
+              new Set(
+                (result.batchWithdrawals ?? [])
+                  .flatMap((batchWithdrawal) => [
+                    batchWithdrawal.batch_project_name,
+                    batchWithdrawal.destinationBatchProjectName,
+                  ])
+                  .filter((projectName): projectName is string => projectName !== undefined)
+              )
+            ).sort(),
+            speciesNames: Array.from(
+              new Set(
+                (result.batchWithdrawals ?? []).map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName)
+              )
+            ).sort(),
             undoesWithdrawalDate: result.undoesWithdrawalDate,
             undoesWithdrawalId: result.undoesWithdrawalId ? Number(result.undoesWithdrawalId) : undefined,
 
