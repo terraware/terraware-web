@@ -1,26 +1,16 @@
 import { DropdownItem } from '@terraware/web-components';
-import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import strings from 'src/strings';
 import {
   AdHocObservationResults,
-  MonitoringPlotStatus,
   ObservationMonitoringPlotResults,
-  ObservationMonitoringPlotResultsPayload,
   ObservationResults,
-  ObservationResultsPayload,
-  ObservationSpeciesResults,
-  ObservationSpeciesResultsPayload,
   ObservationStratumResults,
-  ObservationStratumResultsPayload,
   ObservationSubstratumResults,
-  ObservationSubstratumResultsPayload,
   PlotCondition,
 } from 'src/types/Observations';
-import { Species } from 'src/types/Species';
-import { MultiPolygon, PlantingSite } from 'src/types/Tracking';
+import { MultiPolygon } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
-import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import { regexMatch } from 'src/utils/search';
 
 // utils
@@ -92,138 +82,10 @@ export const searchPlots = (search: string, observations?: AdHocObservationResul
   );
 };
 
-type SpeciesValue = {
-  commonName?: string;
-  scientificName: string;
-};
-
 export type Value = {
   name: string;
   boundary: MultiPolygon;
   timeZone?: string;
-};
-
-/** Returns a map of site IDs to name, boundary, and timeZone for each site. */
-const sitesReverseMap = (ary: PlantingSite[]): Record<number, Value> =>
-  ary.reduce(
-    (acc, curr) => {
-      const { id, name, boundary, timeZone } = curr;
-      if (boundary) {
-        acc[id] = { name, boundary, timeZone };
-      }
-      return acc;
-    },
-    {} as Record<number, Value>
-  );
-
-// species reverse map
-const speciesReverseMap = (ary: any[]): Record<number, SpeciesValue> =>
-  ary.reduce(
-    (acc, curr) => {
-      const { id, commonName, scientificName } = curr;
-      acc[id] = { commonName, scientificName };
-      return acc;
-    },
-    {} as Record<number, SpeciesValue>
-  );
-
-const StatusWeights: Record<MonitoringPlotStatus, number> = {
-  Completed: 1,
-  Claimed: 2,
-  Unclaimed: 3,
-  'Not Observed': 4,
-};
-
-/** Merges additional data into the results of a stratum observation. */
-const mergeStrata = (
-  stratumObservations: ObservationStratumResultsPayload[],
-  species: Record<number, SpeciesValue>,
-  timeZone?: string
-): ObservationStratumResults[] => {
-  return stratumObservations.map((stratumObservation: ObservationStratumResultsPayload): ObservationStratumResults => {
-    const monitoringPlots: ObservationMonitoringPlotResultsPayload[] = stratumObservation.substrata.flatMap(
-      (substratum: ObservationSubstratumResultsPayload) => substratum.monitoringPlots
-    );
-    const status: MonitoringPlotStatus | undefined = monitoringPlots.reduce(
-      (acc: MonitoringPlotStatus | undefined, mp: ObservationMonitoringPlotResultsPayload) => {
-        if (!acc || StatusWeights[mp.status] > StatusWeights[acc]) {
-          return mp.status;
-        } else {
-          return acc;
-        }
-      },
-      undefined
-    );
-
-    return {
-      ...stratumObservation,
-      stratumName: stratumObservation.name,
-      completedDate: stratumObservation.completedTime
-        ? getDateDisplayValue(stratumObservation.completedTime, timeZone)
-        : undefined,
-      species: mergeSpecies(stratumObservation.species, species),
-      substrata: mergeSubstrata(stratumObservation.substrata, species, timeZone),
-      status,
-      hasObservedPermanentPlots: stratumObservation.substrata.some((substrata) =>
-        substrata.monitoringPlots.some((plot) => plot.isPermanent && plot.completedTime)
-      ),
-      hasObservedTemporaryPlots: stratumObservation.substrata.some((substrata) =>
-        substrata.monitoringPlots.some((plot) => !plot.isPermanent && plot.completedTime)
-      ),
-    };
-  });
-};
-
-// merge substratum
-const mergeSubstrata = (
-  substratumObservations: ObservationSubstratumResultsPayload[],
-  species: Record<number, SpeciesValue>,
-  timeZone?: string
-): ObservationSubstratumResults[] => {
-  return substratumObservations.map(
-    (substratumObservation: ObservationSubstratumResultsPayload): ObservationSubstratumResults => {
-      return {
-        ...substratumObservation,
-        substratumName: substratumObservation.name,
-        monitoringPlots: substratumObservation.monitoringPlots.map(
-          (monitoringPlot: ObservationMonitoringPlotResultsPayload) => {
-            return {
-              ...monitoringPlot,
-              species: mergeSpecies(monitoringPlot.species, species),
-              completedDate: monitoringPlot.completedTime
-                ? getDateDisplayValue(monitoringPlot.completedTime, timeZone)
-                : undefined,
-            };
-          }
-        ),
-      };
-    }
-  );
-};
-
-const mergeSpecies = (
-  speciesObservations: ObservationSpeciesResultsPayload[],
-  species: Record<number, SpeciesValue>
-): ObservationSpeciesResults[] => {
-  return speciesObservations
-    .filter(
-      (speciesObservation: ObservationSpeciesResultsPayload) =>
-        species[speciesObservation.speciesId ?? -1] || speciesObservation.speciesName
-    )
-    .map(
-      (speciesObservation: ObservationSpeciesResultsPayload): ObservationSpeciesResults => ({
-        ...speciesObservation,
-        speciesCommonName:
-          species[speciesObservation.speciesId ?? -1]?.commonName ?? speciesObservation.speciesName ?? '',
-        speciesScientificName: species[speciesObservation.speciesId ?? -1]?.scientificName ?? '',
-      })
-    );
-};
-
-export const has25mPlots = (substrata: ObservationSubstratumResults[] | ObservationSubstratumResultsPayload[]) => {
-  return substrata
-    ?.flatMap((substratum: { monitoringPlots: any[] }) => substratum.monitoringPlots.flatMap((plot) => plot.sizeMeters))
-    .some((size: number) => size.toString() === '25');
 };
 
 export const getConditionString = (
