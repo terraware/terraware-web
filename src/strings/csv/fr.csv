@@ -336,6 +336,7 @@ CLIMATE,Climat,63ba44ee
 CLIMATE_IMPACT,Impact sur le climat,876c48a4
 CLOSE,Fermer,e6e3f022
 CLOSE_AND_EDIT,Fermer et modifier,1c3ea202
+CLOSED,Fermé,7b8d0429
 COLLECTED_DATE,Date de la collecte,3f1515d8
 COLLECTED_FROM,Collecté à partir de,ffc6ad60
 COLLECTING_SITE,Site de collecte,7491b42b
@@ -993,6 +994,7 @@ LEAVE_ORGANIZATION,Quitter l'organisation,ce40fab6
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_PERMANENT_PLOTS,Vous quittez l’écran de modification des Parcelles Permanentes. Toute modification non enregistrée des Parcelles Permanentes ne sera pas sauvegardée. Êtes-vous sûr de vouloir quitter ?,3df033ef
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_TEMPORARY_PLOTS,Vous quittez l’écran de modification des Parcelles Temporaires. Toute modification non enregistrée des Parcelles Temporaires ne sera pas sauvegardée. Êtes-vous sûr de vouloir quitter ?,a4409ad0
 LEFT_MOUSE,Bouton gauche de la souris,b034e4dc
+LEFT_TO_PLANT,Restant à transplanter,30af8cf9
 LEGAL,Juridique,dc8b5907
 LEGEND,Légende,d312e5fb
 LESS_THAN_FIFTY_PERCENT,< 50 %,d26d7627
@@ -1372,6 +1374,7 @@ PARTIAL_ERRORS,Certaines demandes ont échoué. Vous pouvez réessayer plus tard
 PARTIAL_ERRORS_TITLE,Erreurs partielles,3fca63bf
 PARTICIPANT,Participant,911243e3
 PASSED_PRESCREEN,Présélection réussie,fef6edd4
+PAST_END_DATE,Après la date de fin,b3c6f181
 PENDING,En attente,e95f9f79
 PEOPLE,Personnes,84bc8e64
 PEOPLE_CARD_DESCRIPTION,Nous ne pouvons pas le faire seuls ! Ajoutez des personnes à votre organisation et attribuez-leur des rôles.,9205bab5
@@ -1436,6 +1439,7 @@ PLANTING_COMPLETE_DASHBOARD_TOOLTIP,Plantation terminée comprend la surface tot
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,Pourcentage de « plantation terminée » de tous les sites de plantation associés au projet,969947fc
 PLANTING_COMPLETE_TOOLTIP,La plantation a-t-elle été achevée dans ce substrat ?,a6bfac66
 PLANTING_DENSITY,Densité de plantation,2d5d3bcb
+PLANTING_GOAL,Objectif de plantation,a97123a1
 PLANTING_PROGRESS,Progression de la plantation,58616da9
 PLANTING_PROGRESS_PERCENT,Progression de la plantation (%),0d372a57
 PLANTING_SEASON_END,Fin de la saison de plantation,414309c0
@@ -2475,6 +2479,7 @@ WITHDRAWAL_UNDONE_DESCRIPTION,Le retrait a été annulé et les quantités ont �
 WITHDRAWALS,Retraits,270c7f9e
 WITHDRAWN,Retiré,2f74b8e9
 WITHDRAWN_BY,Retiré par,4cf942fb
+WITHDRAWN_FOR_PLANTING,Retiré pour la plantation,dd024a58
 WITHDRAWN_QUANTITY_ERROR,Dépasse la quantité restante,8c911341
 WITHDRAWN_QUANTITY_GREATER_THAN_ZERO_ERROR,La quantité retirée doit être supérieure à 0,75e6b589
 WOOD_DENSITY_LEVEL,Niveau de densité du bois,83a6a766
