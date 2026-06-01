@@ -1,3 +1,4 @@
+e0dfddb1 Add some seed bank and nursery mixpanel events (#5758)
 e553fda7 Rename old Mixpanel events and use new hook (#5751)
 81e0f8e8 SW-7733 Accessions API (#5728)
 a84d7d1b SW-8425 Project level highest and lowest survival rate strata are not shown (#5757)
