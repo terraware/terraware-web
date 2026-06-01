@@ -1,7 +1,7 @@
 import getDateDisplayValue from '@terraware/web-components/utils/date';
 import sanitize from 'sanitize-filename';
 
-import { OrganizationPlantingSite } from 'src/hooks/useOrganizationPlantingSites';
+import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import strings from 'src/strings';
 import { AdHocObservationResults } from 'src/types/Observations';
@@ -9,7 +9,7 @@ import { downloadCsv, makeCsv } from 'src/utils/csv';
 
 interface ExportAdHocObservationsResultsParams {
   adHocObservationsResults: AdHocObservationResults[];
-  plantingSite?: OrganizationPlantingSite;
+  plantingSite?: PlantingSitePayload;
 }
 
 const makeAdHocObservationsCsv = (adHocObservations: AdHocObservationResults[]): Blob => {

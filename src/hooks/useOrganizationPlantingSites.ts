@@ -8,11 +8,6 @@ type UseOrganizationPlantingSitesProps = {
   organizationId?: number;
 };
 
-export type OrganizationPlantingSite = Omit<PlantingSitePayload, 'plantingSeasons'>;
-
-const stripPlantingSeasons = ({ plantingSeasons: _omit, ...rest }: PlantingSitePayload): OrganizationPlantingSite =>
-  rest;
-
 const useOrganizationPlantingSites = (props?: UseOrganizationPlantingSitesProps) => {
   const { full, organizationId: organizationIdProp } = props ?? {};
   const { activeLocale, strings } = useLocalization();
@@ -21,11 +16,11 @@ const useOrganizationPlantingSites = (props?: UseOrganizationPlantingSitesProps)
 
   const orgId = organizationIdProp ?? selectedOrganization?.id;
 
-  const plantingSites = useMemo<OrganizationPlantingSite[]>(
+  const plantingSites = useMemo(
     () =>
-      (listPlantingSitesResponse.currentData?.sites ?? [])
-        .map(stripPlantingSeasons)
-        .toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined)),
+      (listPlantingSitesResponse.currentData?.sites ?? []).toSorted((a, b) =>
+        a.name.localeCompare(b.name, activeLocale || undefined)
+      ),
     [activeLocale, listPlantingSitesResponse]
   );
 
@@ -42,9 +37,9 @@ const useOrganizationPlantingSites = (props?: UseOrganizationPlantingSitesProps)
     reload(true);
   }, [reload]);
 
-  const plantingSitesWithAllSitesOption = useMemo<OrganizationPlantingSite[]>(() => {
+  const plantingSitesWithAllSitesOption = useMemo(() => {
     if (orgId) {
-      const allOption: OrganizationPlantingSite = {
+      const allOption: PlantingSitePayload = {
         adHocPlots: [],
         id: -1,
         name: strings.ALL_PLANTING_SITES,

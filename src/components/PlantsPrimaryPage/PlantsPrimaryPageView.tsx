@@ -10,8 +10,9 @@ import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import useOrganizationPlantingSites, { OrganizationPlantingSite } from 'src/hooks/useOrganizationPlantingSites';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useLocalization, useOrganization } from 'src/providers';
+import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { useListProjectsQuery } from 'src/queries/generated/projects';
 
 import SurvivalRateMessageV2 from '../SurvivalRate/SurvivalRateMessageV2';
@@ -28,8 +29,8 @@ export type ButtonProps = {
 export type PlantsPrimaryPageViewProps = {
   actionButton?: ButtonProps;
   children: React.ReactNode; // primary content for this page
-  onSelect: (plantingSite?: OrganizationPlantingSite) => void; // planting site selected, id of -1 refers to All
-  plantingSites: OrganizationPlantingSite[] | undefined;
+  onSelect: (plantingSite?: PlantingSitePayload) => void; // planting site selected, id of -1 refers to All
+  plantingSites: PlantingSitePayload[] | undefined;
   selectedPlantingSiteId?: number;
   style?: Record<string, string | number>;
   text?: string; // optional text to show at the bottom of the header
@@ -78,7 +79,7 @@ export default function PlantsPrimaryPageView({
   const projects = projectsData?.projects;
   const { plantingSitesWithAllSitesOption, isLoading, isSuccess } = useOrganizationPlantingSites({ organizationId });
 
-  const [delayedIsOrganizationPlantingSiteSet, setDelayedIsOrganizationPlantingSiteSet] = useState(false);
+  const [delayedIsPlantingSitePayloadSet, setDelayedIsPlantingSitePayloadSet] = useState(false);
 
   const hasSites = useMemo(() => {
     return (
@@ -89,19 +90,19 @@ export default function PlantsPrimaryPageView({
 
   const plantingSiteSelected = useMemo(() => selectedPlantingSiteId !== undefined, [selectedPlantingSiteId]);
 
-  const isOrganizationPlantingSiteSet = useMemo(() => {
+  const isPlantingSitePayloadSet = useMemo(() => {
     return isSuccess && ((hasSites && plantingSiteSelected) || (!hasSites && !plantingSiteSelected));
   }, [isSuccess, hasSites, plantingSiteSelected]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setDelayedIsOrganizationPlantingSiteSet(isOrganizationPlantingSiteSet);
+      setDelayedIsPlantingSitePayloadSet(isPlantingSitePayloadSet);
     }, 1000);
 
     return () => clearTimeout(timer); // Cancel timeout if dependencies change
-  }, [isOrganizationPlantingSiteSet]);
+  }, [isPlantingSitePayloadSet]);
 
-  const projectsWithOrganizationPlantingSites = useMemo(() => {
+  const projectsWithPlantingSitePayloads = useMemo(() => {
     if (!plantingSitesWithAllSitesOption) {
       return [];
     }
@@ -114,21 +115,21 @@ export default function PlantsPrimaryPageView({
 
   const projectsOptions = useMemo(() => {
     const iOptions = projects
-      ?.filter((p) => projectsWithOrganizationPlantingSites.includes(p.id))
+      ?.filter((p) => projectsWithPlantingSitePayloads.includes(p.id))
       .map((proj) => ({ label: proj.name, value: proj.id }));
     iOptions?.unshift({ label: strings.NO_PROJECT, value: -1 });
     return iOptions;
-  }, [projects, projectsWithOrganizationPlantingSites, strings]);
+  }, [projects, projectsWithPlantingSitePayloads, strings]);
 
   const isRolledUpView = useMemo(() => {
     return projectId !== undefined && selectedPlantingSiteId === -1;
   }, [projectId, selectedPlantingSiteId]);
 
-  const onChangeOrganizationPlantingSiteId = useCallback(
+  const onChangePlantingSitePayloadId = useCallback(
     (siteId: number) => {
-      const selectedOrganizationPlantingSite = plantingSites?.find((ps) => ps.id === siteId);
-      if (selectedOrganizationPlantingSite) {
-        onSelect(selectedOrganizationPlantingSite);
+      const selectedPlantingSite = plantingSites?.find((ps) => ps.id === siteId);
+      if (selectedPlantingSite) {
+        onSelect(selectedPlantingSite);
       }
     },
     [onSelect, plantingSites]
@@ -201,7 +202,7 @@ export default function PlantsPrimaryPageView({
           {showSurvivalRateMessage && selectedPlantingSiteId && selectedPlantingSiteId > 0 && (
             <SurvivalRateMessageV2 selectedPlantingSiteId={selectedPlantingSiteId} />
           )}
-          {(isAcceleratorRoute || (!isAcceleratorRoute && options.length > 0)) && isOrganizationPlantingSiteSet && (
+          {(isAcceleratorRoute || (!isAcceleratorRoute && options.length > 0)) && isPlantingSitePayloadSet && (
             <Card radius={'8px'} style={{ 'margin-bottom': '32px' }}>
               <Grid container alignItems={'center'} spacing={4}>
                 <Grid item xs={isDesktop ? 3 : 12}>
@@ -235,7 +236,7 @@ export default function PlantsPrimaryPageView({
                       <Dropdown
                         placeholder={strings.SELECT}
                         id='planting-site-selector'
-                        onChange={(newValue) => onChangeOrganizationPlantingSiteId(Number(newValue))}
+                        onChange={(newValue) => onChangePlantingSitePayloadId(Number(newValue))}
                         options={options}
                         selectedValue={selectedPlantingSiteId}
                         fullWidth
@@ -263,7 +264,7 @@ export default function PlantsPrimaryPageView({
                     </Typography>
                   </Box>
                 </Grid>
-                {!delayedIsOrganizationPlantingSiteSet ? (
+                {!delayedIsPlantingSitePayloadSet ? (
                   <CircularProgress sx={{ margin: 'auto' }} />
                 ) : (
                   <Grid item xs={isDesktop ? 6 : 12}>
@@ -275,7 +276,7 @@ export default function PlantsPrimaryPageView({
               </Grid>
             </Card>
           )}
-          {!hasSites && !isAcceleratorRoute && !isLoading && delayedIsOrganizationPlantingSiteSet && (
+          {!hasSites && !isAcceleratorRoute && !isLoading && delayedIsPlantingSitePayloadSet && (
             <PlantsDashboardEmptyMessage />
           )}
         </>
@@ -324,7 +325,7 @@ export default function PlantsPrimaryPageView({
                     <Dropdown
                       placeholder={strings.SELECT}
                       id='planting-site-selector'
-                      onChange={(newValue: string) => onChangeOrganizationPlantingSiteId(Number(newValue))}
+                      onChange={(newValue: string) => onChangePlantingSitePayloadId(Number(newValue))}
                       options={options}
                       selectedValue={selectedPlantingSiteId}
                       className='planting-site-selector-container'
@@ -354,7 +355,7 @@ export default function PlantsPrimaryPageView({
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      {newHeader && (!delayedIsOrganizationPlantingSiteSet || isLoading) ? (
+      {newHeader && (!delayedIsPlantingSitePayloadSet || isLoading) ? (
         <CircularProgress sx={{ margin: 'auto' }} />
       ) : (
         <Box ref={contentRef} sx={style}>

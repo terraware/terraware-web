@@ -3,9 +3,9 @@ import { useParams } from 'react-router';
 
 import _ from 'lodash';
 
-import { OrganizationPlantingSite } from 'src/hooks/useOrganizationPlantingSites';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { CachedUserService, PreferencesService } from 'src/services';
 
 import PlantsPrimaryPageView, { ButtonProps } from './PlantsPrimaryPageView';
@@ -17,7 +17,7 @@ export type PlantsPrimaryPageProps = {
   lastVisitedPreferenceName: string;
   pagePath: string;
   plantsSitePreferences?: Record<string, unknown>;
-  plantingSitesData: OrganizationPlantingSite[];
+  plantingSitesData: PlantingSitePayload[];
   setPlantsSitePreferences: (preferences: Record<string, unknown>) => void;
   style?: Record<string, string | number>;
   title: string;
@@ -59,7 +59,7 @@ export default function PlantsPrimaryPage({
 }: PlantsPrimaryPageProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const [selectedPlantingSite, setSelectedPlantingSite] = useState<OrganizationPlantingSite>();
+  const [selectedPlantingSite, setSelectedPlantingSite] = useState<PlantingSitePayload>();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const navigate = useSyncNavigate();
 
@@ -74,7 +74,7 @@ export default function PlantsPrimaryPage({
     }
   }, [plantsSitePreferences, lastVisitedPreferenceName, selectedOrganization]);
 
-  const plantingSitesList = useMemo((): OrganizationPlantingSite[] => {
+  const plantingSitesList = useMemo((): PlantingSitePayload[] => {
     const projectSites = projectId
       ? plantingSitesData.filter((site) => site.projectId === projectId || site.id === -1)
       : plantingSitesData;
@@ -94,7 +94,7 @@ export default function PlantsPrimaryPage({
   }, [activeLocale, allowAllAsSiteSelection, plantingSitesData, projectId]);
 
   const setActivePlantingSite = useCallback(
-    (site: OrganizationPlantingSite | undefined) => {
+    (site: PlantingSitePayload | undefined) => {
       if (site) {
         setSelectedPlantingSite(site);
         if (projectId === undefined) {

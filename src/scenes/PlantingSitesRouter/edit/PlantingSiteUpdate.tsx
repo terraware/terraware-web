@@ -8,7 +8,6 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
-import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import {
   UpdatePlantingSiteRequestPayload,
   useGetPlantingSiteQuery,
@@ -33,7 +32,6 @@ export default function UpdatePlantingSite({ plantingSiteId }: UpdatePlantingSit
 
   const [update, updateResult] = useUpdatePlantingSiteMutation();
   const { currentData: plantingSiteData, isLoading } = useGetPlantingSiteQuery({ id: plantingSiteId });
-  const [listPlantingSeasons, { data: plantingSeasonsData }] = useLazyListPlantingSeasonsQuery();
   const [record, setRecord, onChange] = useForm<UpdatePlantingSiteRequestPayload>({
     name: '',
   });
@@ -41,23 +39,16 @@ export default function UpdatePlantingSite({ plantingSiteId }: UpdatePlantingSit
   const plantingSite = useMemo(() => plantingSiteData?.site, [plantingSiteData?.site]);
 
   useEffect(() => {
-    void listPlantingSeasons({ plantingSiteId });
-  }, [listPlantingSeasons, plantingSiteId]);
-
-  useEffect(() => {
     if (plantingSite) {
       setRecord({
         description: plantingSite.description,
         name: plantingSite.name,
-        plantingSeasons: (plantingSeasonsData?.seasons ?? [])
-          .filter((s) => s.plantingSiteId === plantingSiteId)
-          .map(({ id, startDate, endDate }) => ({ id, startDate, endDate })),
         projectId: plantingSite.projectId,
         survivalRateIncludesTempPlots: plantingSite.survivalRateIncludesTempPlots,
         timeZone: plantingSite.timeZone,
       });
     }
-  }, [plantingSite, plantingSeasonsData, plantingSiteId, setRecord]);
+  }, [plantingSite, plantingSiteId, setRecord]);
 
   const goBack = useCallback(() => {
     if (plantingSiteId) {
