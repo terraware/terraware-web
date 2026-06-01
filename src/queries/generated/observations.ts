@@ -507,6 +507,8 @@ export type NewTrunkPayload = {
   isDead: boolean;
   /** Measured in meters. */
   pointOfMeasurement: number;
+  /** Measured in centimeters. */
+  treeCrownDiameter?: number;
 };
 export type NewTreeWithTrunksPayload = {
   growthForm: 'tree';
@@ -708,9 +710,12 @@ export type ExistingTreePayload = {
   isThreatened: boolean;
   /** Measured in meters. */
   pointOfMeasurement?: number;
+  /** Measured in centimeters. */
   shrubDiameter?: number;
   speciesId?: number;
   speciesName?: string;
+  /** Measured in centimeters. */
+  treeCrownDiameter?: number;
   treeGrowthForm: 'Tree' | 'Shrub' | 'Trunk';
   treeNumber: number;
   trunkNumber: number;
@@ -1060,6 +1065,8 @@ export type RecordedTreeUpdateOperationPayload = {
     recordedTreeId: number;
     /** Only valid for Shrub growth form. */
     shrubDiameter?: number;
+    /** Only valid for Tree and Trunk growth forms. */
+    treeCrownDiameter?: number;
   };
 export type UpdateObservationRequestPayload = {
   /** List of changes to make to different parts of the observation. Changes are all-or-nothing; if any of them fails, none of them is applied. */

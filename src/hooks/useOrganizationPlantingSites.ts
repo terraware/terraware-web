@@ -44,7 +44,6 @@ const useOrganizationPlantingSites = (props?: UseOrganizationPlantingSitesProps)
         id: -1,
         name: strings.ALL_PLANTING_SITES,
         organizationId: orgId,
-        plantingSeasons: [],
       };
       return [allOption, ...plantingSites];
     }

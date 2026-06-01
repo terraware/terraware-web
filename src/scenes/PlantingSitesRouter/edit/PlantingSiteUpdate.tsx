@@ -43,7 +43,6 @@ export default function UpdatePlantingSite({ plantingSiteId }: UpdatePlantingSit
       setRecord({
         description: plantingSite.description,
         name: plantingSite.name,
-        plantingSeasons: plantingSite.plantingSeasons,
         projectId: plantingSite.projectId,
         survivalRateIncludesTempPlots: plantingSite.survivalRateIncludesTempPlots,
         timeZone: plantingSite.timeZone,

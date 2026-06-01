@@ -17,7 +17,6 @@ export default function PlantingSiteDraftCreate(): JSX.Element {
       id: -1,
       name: '',
       organizationId: selectedOrganization?.id || -1,
-      plantingSeasons: [],
       siteEditStep: 'details',
       siteType,
     }),
