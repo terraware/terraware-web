@@ -7052,7 +7052,7 @@ export interface components {
         };
         EventLogEntryPayload: {
             action: components["schemas"]["CreatedActionPayload"] | components["schemas"]["DeletedActionPayload"] | components["schemas"]["FieldUpdatedActionPayload"];
-            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
+            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
             /** Format: date-time */
             timestamp: string;
             /** Format: int64 */
@@ -8314,11 +8314,13 @@ export interface components {
             /** Format: int64 */
             organizationId: number;
             /** Format: int64 */
+            plantingSeasonId?: number;
+            /** Format: int64 */
             plantingSiteId?: number;
             /** Format: int64 */
             projectId?: number;
             /** @description If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
-            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "Project" | "RecordedTree")[];
+            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "PlantingSeason" | "Project" | "RecordedTree")[];
         };
         ListEventLogEntriesResponsePayload: {
             events: components["schemas"]["EventLogEntryPayload"][];
@@ -9692,6 +9694,16 @@ export interface components {
             startDate: string;
             /** @enum {string} */
             status: "Active" | "Upcoming" | "Past End Date" | "Closed";
+        };
+        PlantingSeasonSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            plantingSeasonId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlantingSeason";
         };
         PlantingSiteHistoryPayload: {
             areaHa?: number;
