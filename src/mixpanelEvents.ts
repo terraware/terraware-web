@@ -87,4 +87,20 @@ export type MixpanelEventPropertyMap = {
     has_photos: boolean;
     has_project_assigned: boolean;
   };
+  [MIXPANEL_EVENTS.ACCESSION_VIABILITY_TEST_RECORDED]: {
+    test_type: string;
+  };
+  [MIXPANEL_EVENTS.ACCESSION_WITHDRAWN]: {
+    purpose: string;
+    quantity?: number;
+  };
+  [MIXPANEL_EVENTS.BATCH_CREATED]: {
+    species_id?: number;
+    from_accession: boolean;
+  };
+  [MIXPANEL_EVENTS.BATCH_WITHDRAWN]: {
+    purpose: string;
+    batch_count: number;
+    has_photos: boolean;
+  };
 };

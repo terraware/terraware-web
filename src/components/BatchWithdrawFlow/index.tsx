@@ -7,6 +7,8 @@ import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization } from 'src/providers/hooks';
 import {
   NurseryWithdrawalPayload,
@@ -49,6 +51,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   const [filterProjectId, setFilterProjectId] = useState<number>();
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
+  const trackEvent = useTrackEvent();
 
   const [createBatchWithdrawal] = useCreateBatchWithdrawalMutation();
   const [uploadWithdrawalPhotos] = useUploadWithdrawalPhotoMutation();
@@ -128,6 +131,11 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     try {
       const withdrawalResponse = await createBatchWithdrawal(record).unwrap();
       const { withdrawal } = withdrawalResponse;
+      trackEvent(MIXPANEL_EVENTS.BATCH_WITHDRAWN, {
+        purpose: record.purpose,
+        batch_count: record.batchWithdrawals.length,
+        has_photos: photos.length > 0,
+      });
       if (photos.length) {
         const uploadPhotoPromises = photos.map((photo) =>
           uploadWithdrawalPhotos({ withdrawalId: withdrawal.id, body: { file: photo } })

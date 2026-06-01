@@ -8,6 +8,8 @@ import AddLink from 'src/components/common/AddLink';
 import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import CountWithdrawal from 'src/scenes/AccessionsRouter/withdraw/CountWithdrawal';
 import WeightWithdrawal from 'src/scenes/AccessionsRouter/withdraw/WeightWithdrawal';
@@ -39,6 +41,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { onClose, open, accession, reload, user } = props;
+  const trackEvent = useTrackEvent();
 
   const newViabilityTesting: ViabilityTestPostRequest = {
     testType: 'Lab',
@@ -274,6 +277,10 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
         }
 
         if (response.requestSucceeded) {
+          trackEvent(MIXPANEL_EVENTS.ACCESSION_WITHDRAWN, {
+            purpose: isNurseryTransfer ? 'Nursery' : record.purpose || 'Other',
+            quantity: estimatedWithdrawalQty,
+          });
           reload();
           onCloseHandler();
         } else {
@@ -297,6 +304,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     setIndividualError,
     snackbar,
     strings,
+    trackEvent,
     viabilityTesting,
     withdrawalQty,
   ]);
