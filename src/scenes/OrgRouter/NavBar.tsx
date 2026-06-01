@@ -1,5 +1,4 @@
 import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
-import { useMixpanel } from 'react-mixpanel-browser';
 import { useMatch } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -17,6 +16,7 @@ import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
@@ -40,7 +40,7 @@ export default function NavBar({
   const theme = useTheme();
   const { isDesktop, isMobile } = useDeviceInfo();
   const navigate = useSyncNavigate();
-  const mixpanel = useMixpanel();
+  const trackEvent = useTrackEvent();
 
   const orgFeatures = useOrganizationFeatures();
 
@@ -149,7 +149,7 @@ export default function NavBar({
           icon='iconSubmit'
           selected={!!isDeliverablesRoute}
           onClick={() => {
-            mixpanel?.track(MIXPANEL_EVENTS.PART_EX_LEFT_NAV_DELIVERABLES);
+            trackEvent(MIXPANEL_EVENTS.PARTICIPANT_DELIVERABLES_NAV_CLICKED);
             closeAndNavigateTo(isDeliverablesRoute && !isDeliverableViewRoute ? '' : APP_PATHS.DELIVERABLES);
           }}
           id='deliverables'
@@ -159,7 +159,7 @@ export default function NavBar({
       orgFeatures?.deliverables?.enabled,
       strings.DELIVERABLES,
       isDeliverablesRoute,
-      mixpanel,
+      trackEvent,
       closeAndNavigateTo,
       isDeliverableViewRoute,
     ]
@@ -215,7 +215,7 @@ export default function NavBar({
           label={strings.MODULES}
           selected={!!isProjectModulesRoute}
           onClick={() => {
-            mixpanel?.track(MIXPANEL_EVENTS.PART_EX_LEFT_NAV_MODULES);
+            trackEvent(MIXPANEL_EVENTS.PARTICIPANT_MODULES_NAV_CLICKED);
             closeAndNavigateTo(
               APP_PATHS.PROJECT_MODULES.replace(':projectId', currentAcceleratorProject.id.toString())
             );
@@ -227,7 +227,7 @@ export default function NavBar({
       closeAndNavigateTo,
       currentAcceleratorProject,
       isProjectModulesRoute,
-      mixpanel,
+      trackEvent,
       orgFeatures,
       selectedOrganization,
       strings.MODULES,

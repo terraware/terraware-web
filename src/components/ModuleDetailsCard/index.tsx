@@ -1,5 +1,4 @@
 import React, { ReactNode, useMemo } from 'react';
-import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, Card, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -8,6 +7,7 @@ import { DateTime } from 'luxon';
 
 import Link from 'src/components/common/Link';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
@@ -107,7 +107,7 @@ const ModuleDetailsCard = ({
 }: ModuleDetailsCardProp) => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const mixpanel = useMixpanel();
+  const trackEvent = useTrackEvent();
 
   const { goToModuleContent } = useNavigateTo();
 
@@ -267,7 +267,7 @@ const ModuleDetailsCard = ({
               <Link
                 fontSize='16px'
                 onClick={() => {
-                  mixpanel?.track(MIXPANEL_EVENTS.ACCELERATOR_MDDULE_ADDITIONAL_LINK, {
+                  trackEvent(MIXPANEL_EVENTS.ACCELERATOR_MODULE_ADDITIONAL_LINK_CLICKED, {
                     type: content.type,
                     moduleId: module.id,
                   });

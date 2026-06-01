@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useMixpanel } from 'react-mixpanel-browser';
 
 import { TableColumnType } from '@terraware/web-components';
 
 import { FilterConfig, FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
@@ -130,7 +130,7 @@ const DeliverablesTable = ({
   const projectParam = query.get('projectId');
   const navigate = useSyncNavigate();
   const location = useStateLocation();
-  const mixpanel = useMixpanel();
+  const trackEvent = useTrackEvent();
 
   const fuzzySearchColumns = useMemo(
     () => (isAcceleratorRoute ? ['name', 'projectDealName'] : ['name', 'projectName']),
@@ -255,14 +255,14 @@ const DeliverablesTable = ({
   const ofFilterAppliedHandler = (filter?: string, values?: (string | number | null)[]) => {
     if (values && values.length) {
       if ((filter === 'status' || filter === 'category') && isAcceleratorRoute) {
-        mixpanel?.track(MIXPANEL_EVENTS.CONSOLE_DELIVERABLES_LIST_FILTER, {
+        trackEvent(MIXPANEL_EVENTS.CONSOLE_DELIVERABLES_FILTER_APPLIED, {
           filter,
           values,
         });
         return;
       }
       if (!isAcceleratorRoute) {
-        mixpanel?.track(MIXPANEL_EVENTS.PART_EX_DELIVERABLES_LIST_FILTER, {
+        trackEvent(MIXPANEL_EVENTS.PARTICIPANT_DELIVERABLES_FILTER_APPLIED, {
           filter,
           values,
         });

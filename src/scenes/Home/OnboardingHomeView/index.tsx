@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, Container, Grid, Typography } from '@mui/material';
 import { IconName } from '@terraware/web-components';
@@ -10,6 +9,7 @@ import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -27,7 +27,7 @@ const OnboardingHomeView = () => {
   const { user } = useUser();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
   const { isMobile, isDesktop } = useDeviceInfo();
-  const mixpanel = useMixpanel();
+  const trackEvent = useTrackEvent();
   const navigate = useSyncNavigate();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const showAcceleratorCard = orgPreferences.showAcceleratorCard !== false;
@@ -185,7 +185,7 @@ const OnboardingHomeView = () => {
                                 fontWeight={400}
                                 target='_blank'
                                 onClick={() => {
-                                  mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_TF_LINK);
+                                  trackEvent(MIXPANEL_EVENTS.ACCELERATOR_TF_LINK_CLICKED);
                                   window.open(ACCELERATOR_LINK, '_blank');
                                 }}
                                 style={{ verticalAlign: 'baseline' }}
@@ -203,7 +203,7 @@ const OnboardingHomeView = () => {
                       primaryButtonProps={{
                         label: strings.APPLY_TO_ACCELERATOR,
                         onClick: () => {
-                          mixpanel?.track(MIXPANEL_EVENTS.HOME_ACCELERATOR_APPLY_BUTTON);
+                          trackEvent(MIXPANEL_EVENTS.ACCELERATOR_APPLY_BUTTON_CLICKED);
                           setIsNewApplicationModalOpen(true);
                         },
                         type: 'productive',

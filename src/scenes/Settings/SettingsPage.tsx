@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Box, useTheme } from '@mui/material';
 import { Button, DropdownItem, Tabs } from '@terraware/web-components';
@@ -10,6 +9,7 @@ import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TitleDescription from 'src/components/common/TitleDescription';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useUser, useUserFundingEntity } from 'src/providers';
 import MyAccountForm from 'src/scenes/MyAccountRouter/MyAccountForm';
@@ -17,7 +17,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 
 const SettingsPage = () => {
   const { activeLocale, strings } = useLocalization();
-  const mixpanel = useMixpanel();
+  const trackEvent = useTrackEvent();
   const theme = useTheme();
   const { user, reloadUser } = useUser();
   const { userFundingEntity } = useUserFundingEntity();
@@ -90,14 +90,14 @@ const SettingsPage = () => {
   const onChangeTabHandler = useCallback(
     (tab: string) => {
       if (tab !== 'my-account') {
-        mixpanel?.track(MIXPANEL_EVENTS.SETTINGS_TAB, {
+        trackEvent(MIXPANEL_EVENTS.SETTINGS_TAB_CLICKED, {
           tab,
         });
       }
       setIsEditingAccount(false);
       onChangeTab(tab);
     },
-    [mixpanel, onChangeTab]
+    [trackEvent, onChangeTab]
   );
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
