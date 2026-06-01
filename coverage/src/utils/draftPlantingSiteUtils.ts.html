@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.47% </span>
+                <span class="strong">90% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>19/21</span>
+                <span class='fraction'>18/20</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.88% </span>
+                <span class="strong">88.23% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>16/18</span>
+                <span class='fraction'>15/17</span>
             </div>
         
             
@@ -160,12 +160,7 @@
 <a name='L95'></a><a href='#L95'>95</a>
 <a name='L96'></a><a href='#L96'>96</a>
 <a name='L97'></a><a href='#L97'>97</a>
-<a name='L98'></a><a href='#L98'>98</a>
-<a name='L99'></a><a href='#L99'>99</a>
-<a name='L100'></a><a href='#L100'>100</a>
-<a name='L101'></a><a href='#L101'>101</a>
-<a name='L102'></a><a href='#L102'>102</a>
-<a name='L103'></a><a href='#L103'>103</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L98'></a><a href='#L98'>98</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -194,12 +189,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -233,10 +226,8 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -256,7 +247,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -274,7 +264,7 @@
   SiteEditStep,
   SiteType,
 } from 'src/types/PlantingSite';
-import { MinimalStratum, MultiPolygon, SimplePlantingSeason } from 'src/types/Tracking';
+import { MinimalStratum, MultiPolygon } from 'src/types/Tracking';
 &nbsp;
 /**
  * Utils to convert from DraftPlantingSitePayload `data` JSON
@@ -291,7 +281,6 @@ export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload =&g
     id,
     name,
     organizationId,
-    plantingSeasons,
     strata,
     projectId,
     siteEditStep,
@@ -303,7 +292,6 @@ export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload =&g
   const data: Record&lt;string, any&gt; = {
     boundary,
     exclusion,
-    plantingSeasons,
     strata,
     siteEditStep,
     siteType,
@@ -332,7 +320,6 @@ export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite =&
 &nbsp;
   const boundary: MultiPolygon | undefined = data.boundary as MultiPolygon | undefined;
   const exclusion: MultiPolygon | undefined = data.exclusion as MultiPolygon | undefined;
-  const plantingSeasons: SimplePlantingSeason[] = data.plantingSeasons as SimplePlantingSeason[];
   const strata: MinimalStratum[] | undefined = data.strata as MinimalStratum[] | undefined;
   const siteEditStep: SiteEditStep = data.siteEditStep as SiteEditStep;
   const siteType: SiteType = data.siteType as SiteType;
@@ -345,7 +332,6 @@ export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite =&
     id,
     name,
     organizationId,
-    plantingSeasons,
     strata,
     projectId,
     siteEditStep,
@@ -355,7 +341,7 @@ export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite =&
 };
 &nbsp;
 export const fromDraftToCreate = <span class="fstat-no" title="function not covered" >(site: DraftPlantingSite): CreatePlantingSiteRequestPayload =&gt; {</span>
-  const { boundary, description, exclusion, name, organizationId, plantingSeasons, strata, projectId, timeZone } = <span class="cstat-no" title="statement not covered" >site;</span>
+  const { boundary, description, exclusion, name, organizationId, strata, projectId, timeZone } = <span class="cstat-no" title="statement not covered" >site;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return {</span>
     boundary,
@@ -363,7 +349,6 @@ export const fromDraftToCreate = <span class="fstat-no" title="function not cove
     exclusion,
     name,
     organizationId,
-    plantingSeasons,
     strata,
     projectId,
     timeZone,
@@ -376,7 +361,7 @@ export const fromDraftToCreate = <span class="fstat-no" title="function not cove
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-06-01T12:58:42.397Z
+                at 2026-06-01T13:20:52.272Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
