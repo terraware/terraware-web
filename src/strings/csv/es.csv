@@ -605,6 +605,7 @@ EDIT_ORGANIZATION,Editar organización,56332548
 EDIT_PERMANENT_PLOTS,Editar Parcelas Permanentes,b78a9922
 EDIT_PERSON,Editar persona,5ec719a6
 EDIT_PHOTOS_AND_VIDEOS,Editar fotos y videos,d87a88ba
+EDIT_PLANTING_SEASON,Editar temporada de plantación,b9eeb92a
 EDIT_PLANTING_SITE,Editar sitio de plantación,71f7ea28
 EDIT_PROJECT,Editar proyecto,88eb63cb
 EDIT_QUANTITY,Editar cantidad,1d60ca38
@@ -1439,10 +1440,12 @@ PLANTING_COMPLETE_DASHBOARD,Plantación completada,3bea077e
 PLANTING_COMPLETE_DASHBOARD_TOOLTIP,"La plantación completada incluye el área y el porcentaje totales del sitio que se marcó como ""Plantación completada"".",b9bda0fe
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,"Porcentaje de ""Plantación completada"" de todos los lugares de plantación relacionados con el proyecto",969947fc
 PLANTING_COMPLETE_TOOLTIP,¿Se ha completado la plantación en este sustrato?,a6bfac66
+PLANTING_DATES,Fechas de plantación,e8aa47b1
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
 PLANTING_GOAL,Meta de plantación,a97123a1
 PLANTING_PROGRESS,Avance de plantación,58616da9
 PLANTING_PROGRESS_PERCENT,Progreso de la plantación (%),0d372a57
+PLANTING_PROGRESS_TOOLTIP,Progreso de los retiros en relación con la meta de plantación para esta temporada.,4cc685ea
 PLANTING_SEASON_END,Término de temporada de plantación,414309c0
 PLANTING_SEASON_END_IN_PAST,La fecha de término no puede estar en el pasado.,b2729d4d
 PLANTING_SEASON_END_OUT_OF_RANGE,Debe ser entre 4 semanas y 1 año de la fecha de inicio.,fcca5463
@@ -2011,12 +2014,14 @@ SPECIES_PROBLEM_NAME_NOT_FOUND,No se encontró el nombre,6f1d18da
 SPECIES_REQUIRED,Especie *,1d0d4b75
 SPECIES_SCIENTIFIC_NAME,Nombre científico de la especie,bc37b10f
 SPECIES_SELECTED,Especie seleccionada,820edb46
+SPECIES_SUMMARY,Resumen de especies,fb639865
 SPECIES_SURVIVAL,Supervivencia de Especies,20e77844
 SPECIES_SURVIVAL_BREAKDOWN,Desglose de Supervivencia de Especies,837eaa3b
 SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,El desglose de supervivencia muestra el porcentaje de plantas por especie que siguen vivas desde la plantación inicial.,adb3d43d
 SPECIES_SURVIVAL_TOOLTIP,"Supervivencia de especies muestra las especies con las tasas de supervivencia más altas y más bajas, entre las estratas que fueron observadas.",5dde50a6
 SPECIES_TABLE_INSTRUCTIONS,Haga clic en un número de la tabla para editarlo.,7f5a3f3e
 SPECIES_TABLE_INSTRUCTIONS_NOTE,"NOTA: Cuando se cambian los números, los números originales y las ubicaciones de las plantas observadas no se actualizarán en los mapas. Por favor, cambie los números con discreción.",3d4cd792
+SPECIES_TARGETS,Objetivos de especies,96d27e04
 SPECIES_TOOLTIP,Especies cuyas densidades de plantas se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,6e5f03ec
 SPECIES_USAGE,Uso de la especie,0669cb85
 SPECIES_VALUE_CHANGED_FROM_TO,El valor de {1} de la especie {0} cambió de {2} a {3},e3330648
