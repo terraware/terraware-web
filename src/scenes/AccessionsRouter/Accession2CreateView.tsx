@@ -13,6 +13,8 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useUploadPhotoMutation } from 'src/queries/generated/accessionsV1';
 import { CreateAccessionRequestPayloadV2Write, useCreateAccessionMutation } from 'src/queries/generated/accessionsV2';
@@ -63,6 +65,7 @@ export default function CreateAccession(): JSX.Element | null {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [createAccession] = useCreateAccessionMutation();
   const [uploadPhoto] = useUploadPhotoMutation();
+  const trackEvent = useTrackEvent();
 
   const onPhotosChanged = (photosList: File[]) => {
     setPhotos(photosList);
@@ -159,6 +162,13 @@ export default function CreateAccession(): JSX.Element | null {
           )
         );
       }
+
+      trackEvent(MIXPANEL_EVENTS.ACCESSION_CREATED, {
+        species_id: record.speciesId,
+        initial_state: record.state,
+        has_photos: photos.length > 0,
+        has_project_assigned: record.projectId !== null && record.projectId !== undefined,
+      });
 
       navigate(accessionsDatabase, { replace: true });
       navigate({

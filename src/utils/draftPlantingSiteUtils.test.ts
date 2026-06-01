@@ -1,4 +1,4 @@
-import { MultiPolygon, PlantingSeason, MinimalStratum } from 'src/types/Tracking';
+import { MultiPolygon, MinimalStratum } from 'src/types/Tracking';
 import { DraftPlantingSite, DraftPlantingSitePayload } from 'src/types/PlantingSite';
 import { fromDraft, toDraft } from './draftPlantingSiteUtils';
 
@@ -122,8 +122,6 @@ const substratum22: MultiPolygon = {
   ],
 };
 
-const plantingSeasons: PlantingSeason[] = [{ id: 1, startDate: '2024-01-01', endDate: '2024-02-01' }];
-
 const strata: MinimalStratum[] = [
   {
     boundary: stratum1,
@@ -178,7 +176,6 @@ describe('fromDraft', () => {
       id: 1,
       name: 'draft site',
       organizationId: 3,
-      plantingSeasons: [],
       siteEditStep: 'details',
       siteType: 'simple',
     };
@@ -189,7 +186,6 @@ describe('fromDraft', () => {
       data: {
         boundary: undefined,
         exclusion: undefined,
-        plantingSeasons: [],
         strata: undefined,
         siteEditStep: 'details',
         siteType: 'simple',
@@ -213,7 +209,6 @@ describe('fromDraft', () => {
       id: 1,
       name: 'draft site',
       organizationId: 3,
-      plantingSeasons,
       strata,
       projectId: 6,
       siteEditStep: 'substratum_boundaries',
@@ -226,7 +221,6 @@ describe('fromDraft', () => {
       data: {
         boundary,
         exclusion,
-        plantingSeasons,
         strata,
         siteEditStep: 'substratum_boundaries',
         siteType: 'detailed',
@@ -250,7 +244,6 @@ describe('toDraft', () => {
       data: {
         boundary: undefined,
         exclusion: undefined,
-        plantingSeasons: [],
         strata: undefined,
         siteEditStep: 'details',
         siteType: 'simple',
@@ -272,7 +265,6 @@ describe('toDraft', () => {
       id: 1,
       name: 'draft site',
       organizationId: 3,
-      plantingSeasons: [],
       strata: undefined,
       projectId: undefined,
       siteEditStep: 'details',
@@ -287,7 +279,6 @@ describe('toDraft', () => {
       data: {
         boundary,
         exclusion,
-        plantingSeasons,
         strata,
         siteEditStep: 'substratum_boundaries',
         siteType: 'detailed',
@@ -310,7 +301,6 @@ describe('toDraft', () => {
       id: 1,
       name: 'draft site',
       organizationId: 3,
-      plantingSeasons,
       strata,
       projectId: 6,
       siteEditStep: 'substratum_boundaries',

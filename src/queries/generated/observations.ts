@@ -507,6 +507,8 @@ export type NewTrunkPayload = {
   isDead: boolean;
   /** Measured in meters. */
   pointOfMeasurement: number;
+  /** Measured in centimeters. */
+  treeCrownDiameter?: number;
 };
 export type NewTreeWithTrunksPayload = {
   growthForm: 'tree';
@@ -604,7 +606,7 @@ export type ObservationMonitoringPlotMediaPayload = {
 };
 export type ObservationSpeciesResultsPayload = {
   certainty: 'Known' | 'Other' | 'Unknown';
-  /** Number of live plants observed in permanent plots in this observation, not including existing plants. 0 if ths is a plot-level result for a temporary monitoring plot. */
+  /** Number of live plants observed in permanent plots in this observation, not including existing plants. 0 if this is a plot-level result for a temporary monitoring plot. */
   permanentLive: number;
   /** If certainty is Known, the ID of the species. Null if certainty is Other or Unknown. */
   speciesId?: number;
@@ -666,7 +668,7 @@ export type ObservationMonitoringPlotResultsPayload = {
   overlapsWithPlotIds: number[];
   photos: ObservationMonitoringPlotMediaPayload[];
   /** Number of live plants per hectare. */
-  plantingDensity: number;
+  plantingDensity?: number;
   plants?: RecordedPlantPayload[];
   /** Length of each edge of the monitoring plot in meters. */
   sizeMeters: number;
@@ -675,9 +677,9 @@ export type ObservationMonitoringPlotResultsPayload = {
   /** If this is a permanent monitoring plot in this observation, percentage of plants that have survived since t0 data. */
   survivalRate?: number;
   /** Total number of plants recorded. Includes all plants, regardless of live/dead status or species. */
-  totalPlants: number;
+  totalPlants?: number;
   /** Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total. */
-  totalSpecies: number;
+  totalSpecies?: number;
   /** Information about plants of unknown species, if any were observed. */
   unknownSpecies?: ObservationSpeciesResultsPayload;
 };
@@ -708,9 +710,12 @@ export type ExistingTreePayload = {
   isThreatened: boolean;
   /** Measured in meters. */
   pointOfMeasurement?: number;
+  /** Measured in centimeters. */
   shrubDiameter?: number;
   speciesId?: number;
   speciesName?: string;
+  /** Measured in centimeters. */
+  treeCrownDiameter?: number;
   treeGrowthForm: 'Tree' | 'Shrub' | 'Trunk';
   treeNumber: number;
   trunkNumber: number;
@@ -746,7 +751,7 @@ export type ObservationSubstratumResultsPayload = {
   monitoringPlots: ObservationMonitoringPlotResultsPayload[];
   name: string;
   /** Estimated planting density for the substratum based on the observed planting densities of monitoring plots. */
-  plantingDensity: number;
+  plantingDensity?: number;
   plantingDensityStdDev?: number;
   species: ObservationSpeciesResultsPayload[];
   /** ID of the substratum. Absent if the substratum was deleted after the observation. */
@@ -754,9 +759,9 @@ export type ObservationSubstratumResultsPayload = {
   survivalRate?: number;
   survivalRateStdDev?: number;
   /** Total number of plants recorded. Includes all plants, regardless of live/dead status or species. */
-  totalPlants: number;
+  totalPlants?: number;
   /** Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total. */
-  totalSpecies: number;
+  totalSpecies?: number;
 };
 export type ObservationStratumResultsPayload = {
   /** Area of this stratum in hectares. */
@@ -766,7 +771,7 @@ export type ObservationStratumResultsPayload = {
   estimatedPlants?: number;
   name: string;
   /** Estimated planting density for the stratum based on the observed planting densities of monitoring plots. */
-  plantingDensity: number;
+  plantingDensity?: number;
   plantingDensityStdDev?: number;
   species: ObservationSpeciesResultsPayload[];
   /** ID of the stratum. Absent if the stratum was deleted after the observation. */
@@ -776,9 +781,9 @@ export type ObservationStratumResultsPayload = {
   survivalRate?: number;
   survivalRateStdDev?: number;
   /** Total number of plants recorded. Includes all plants, regardless of live/dead status or species. */
-  totalPlants: number;
+  totalPlants?: number;
   /** Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total. */
-  totalSpecies: number;
+  totalSpecies?: number;
 };
 export type ObservationResultsPayload = {
   adHocPlot?: ObservationMonitoringPlotResultsPayload;
@@ -791,7 +796,7 @@ export type ObservationResultsPayload = {
   isAdHoc: boolean;
   observationId: number;
   /** Estimated planting density for the site, based on the observed planting densities of monitoring plots. */
-  plantingDensity: number;
+  plantingDensity?: number;
   plantingDensityStdDev?: number;
   plantingSiteHistoryId?: number;
   plantingSiteId: number;
@@ -801,8 +806,8 @@ export type ObservationResultsPayload = {
   strata: ObservationStratumResultsPayload[];
   survivalRate?: number;
   survivalRateStdDev?: number;
-  totalPlants: number;
-  totalSpecies: number;
+  totalPlants?: number;
+  totalSpecies?: number;
   type: 'Monitoring' | 'Biomass Measurements';
 };
 export type ListAdHocObservationResultsResponsePayload = {
@@ -823,7 +828,7 @@ export type StratumObservationSummaryPayload = {
   /** The latest time of the observations used in this summary. */
   latestObservationTime: string;
   /** Estimated planting density for the stratum based on the observed planting densities of monitoring plots. */
-  plantingDensity: number;
+  plantingDensity?: number;
   plantingDensityStdDev?: number;
   /** Combined list of observed species and their statuses from the latest observation of each substratum. */
   species: ObservationSpeciesResultsPayload[];
@@ -834,9 +839,9 @@ export type StratumObservationSummaryPayload = {
   survivalRate?: number;
   survivalRateStdDev?: number;
   /** Total number of plants recorded from the latest observations of each substratum. Includes all plants, regardless of live/dead status or species. */
-  totalPlants: number;
+  totalPlants?: number;
   /** Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total. */
-  totalSpecies: number;
+  totalSpecies?: number;
 };
 export type PlantingSiteObservationSummaryPayload = {
   /** The earliest time of the observations used in this summary. */
@@ -846,7 +851,7 @@ export type PlantingSiteObservationSummaryPayload = {
   /** The latest time of the observations used in this summary. */
   latestObservationTime: string;
   /** Estimated planting density for the site, based on the observed planting densities of monitoring plots. */
-  plantingDensity: number;
+  plantingDensity?: number;
   plantingDensityStdDev?: number;
   plantingSiteId: number;
   /** Combined list of observed species and their statuses from the latest observation of each substratum within each stratum. */
@@ -856,9 +861,9 @@ export type PlantingSiteObservationSummaryPayload = {
   survivalRate?: number;
   survivalRateStdDev?: number;
   /** Total number of plants recorded from the latest observations of each substratum within each stratum. Includes all plants, regardless of live/dead status or species. */
-  totalPlants: number;
+  totalPlants?: number;
   /** Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total. */
-  totalSpecies: number;
+  totalSpecies?: number;
 };
 export type ListObservationSummariesResponsePayload = {
   status: SuccessOrError;
@@ -1060,6 +1065,8 @@ export type RecordedTreeUpdateOperationPayload = {
     recordedTreeId: number;
     /** Only valid for Shrub growth form. */
     shrubDiameter?: number;
+    /** Only valid for Tree and Trunk growth forms. */
+    treeCrownDiameter?: number;
   };
 export type UpdateObservationRequestPayload = {
   /** List of changes to make to different parts of the observation. Changes are all-or-nothing; if any of them fails, none of them is applied. */

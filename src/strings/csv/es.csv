@@ -90,6 +90,7 @@ ADD_PHOTOS,Añadir fotos,612b31b1
 ADD_PHOTOS_DESCRIPTION,Tome una foto (o fotos) de los lotes que serán plantados en el sustrato seleccionado. Asegúrese de incluir todo el retiro en la(s) foto(s).,8fea0b64
 ADD_PHOTOS_DESCRIPTION_OPTIONAL,Tome una foto opcional (o fotos) de los lotes.,5b1fa829
 ADD_PLANT_SITE_DESCRIPTION,Añadir Planta y Descripción del Sitio,af2cccc4
+ADD_PLANTING_SEASON,Agregar temporada de plantación,28e2d556
 ADD_PLANTING_SITE,Añadir Sitio de Plantación,9525532c
 ADD_PLANTING_SITE_DETAILED_SITE,"Seleccione esta opción si el sitio es relativamente grande, con múltiples estratos (capas de vegetación) y condiciones de crecimiento. Los sitios de plantación con más de una capa de vegetación tendrán varios estratos.",2ca39951
 ADD_PLANTING_SITE_SIMPLE_SITE,"Seleccionar si el sitio de plantación es relativamente chico, con un solo estrato.",d6732c11
@@ -214,7 +215,8 @@ ATTACHMENTS,Archivos adjuntos,e7695404
 AUTO_CALCULATED_INDICATORS,Indicadores calculados automáticamente,3b7057e0
 AUTO_ROTATE,Rotación automática,15ce1a40
 AVAILABLE,disponible,716e496f
-AVERAGE_STRATA_SURVIVAL_RATE,Tasa promedio de supervivencia de estratos del proyecto,eba4d7ea
+AVERAGE_PROJECT_STRATA_SURVIVAL_RATE,Tasa promedio de supervivencia por estrato del proyecto,eba4d7ea
+AVERAGE_STRATA_SURVIVAL_RATE,Tasa promedio de supervivencia por estrato,1aab76e2
 AVERAGE_WOOD_DENSITY,Densidad promedio de la madera (kb/m3),b413c9a9
 AWAITING_CHECK_IN,Pendiente de facturación,11dee61b
 AWAITING_PROCESSING,Pendiente procesamiento,802b73ca
@@ -336,6 +338,7 @@ CLIMATE,Clima,63ba44ee
 CLIMATE_IMPACT,Impacto climático,876c48a4
 CLOSE,Cerrar,e6e3f022
 CLOSE_AND_EDIT,Cerrar y editar,1c3ea202
+CLOSED,Cerrado,7b8d0429
 COLLECTED_DATE,Fecha de recolección,3f1515d8
 COLLECTED_FROM,Recolectado de,ffc6ad60
 COLLECTING_SITE,Lugar de recolección,7491b42b
@@ -386,6 +389,8 @@ COOKIES_ACCEPT,Aceptar cookies,78702f3c
 COOKIES_DECLINE,Rechazar cookies,faf87a51
 COOKIES_DESCRIPTION,"Terraware usa cookies de rendimiento para analizar y mejorar la calidad del sitio, además de perfeccionar su experiencia de usuario.",911fd969
 COOKIES_LEARN_MORE,Obtenga más información sobre nuestra política de cookies.,340de1a9
+COPY_PREVIOUS_SEASON,Copiar temporada anterior,3ee53a4e
+COPYING_SPECIES_ACROSS_SUBSTRATUM,"Copiando {0} especies en {1} sustratos, con todos los objetivos establecidos en 0",7dd36cb4
 COUNT,Recuento,59ea1127
 COUNTRY,País,cac01305
 COUNTRY_ONLY,Solo en el campo,d621bf13
@@ -397,6 +402,7 @@ CREATE_NEW_PROJECT,Crear proyecto nuevo,b709ff33
 CREATE_ORGANIZATION,Crear organización,589326d1
 CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES,¿Gestiona su organización alguno de los siguientes aspectos? Marque todo lo que corresponda.,d76409a4
 CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE,¿Cuál de las siguientes opciones describe mejor su organización?,ac93bf9a
+CREATE_SEASON,Crear temporada,413117ea
 CREATE_SPECIES_LIST,Crear lista de especies,e2fa4ff0
 CREATE_VIRTUAL_PLOT,Crear Parcela Virtual,aea239a2
 CREATE_VIRTUAL_WALKTHROUGH,Crear Recorrido Virtual,5e786aea
@@ -600,6 +606,7 @@ EDIT_ORGANIZATION,Editar organización,56332548
 EDIT_PERMANENT_PLOTS,Editar Parcelas Permanentes,b78a9922
 EDIT_PERSON,Editar persona,5ec719a6
 EDIT_PHOTOS_AND_VIDEOS,Editar fotos y videos,d87a88ba
+EDIT_PLANTING_SEASON,Editar temporada de plantación,b9eeb92a
 EDIT_PLANTING_SITE,Editar sitio de plantación,71f7ea28
 EDIT_PROJECT,Editar proyecto,88eb63cb
 EDIT_QUANTITY,Editar cantidad,1d60ca38
@@ -962,6 +969,7 @@ LAST_OBSERVED,Última observación,3dad61de
 LAST_REPORT_PUBLISHED,Informe {0} publicado {1},0199dbf5
 LAST_UPDATED,Última actualización,9ea41799
 LATEST_OBSERVATION,Última observación,52d53fd1
+LATITUDE,Latitud,f9f93f4a
 LATITUDE_LONGITUDE,"Latitud, longitud",fb596189
 LB,lb,7ca2fa65
 LB_POUNDS,lb (libras),9e3b82a5
@@ -989,6 +997,7 @@ LEAVE_ORGANIZATION,Salir de la organización,ce40fab6
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_PERMANENT_PLOTS,Está saliendo de la pantalla de edición de Parcelas Permanentes. Cualquier cambio no guardado en las Parcelas Permanentes no se guardará. ¿Está seguro de que desea salir?,3df033ef
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_TEMPORARY_PLOTS,Está saliendo de la pantalla de edición de Parcelas Temporales. Cualquier cambio no guardado en las Parcelas Temporales no se guardará. ¿Está seguro de que desea salir?,a4409ad0
 LEFT_MOUSE,Botón izquierdo del ratón,b034e4dc
+LEFT_TO_PLANT,Por plantar,30af8cf9
 LEGAL,Legal,dc8b5907
 LEGEND,Leyenda,d312e5fb
 LESS_THAN_FIFTY_PERCENT,< 50%,d26d7627
@@ -1023,12 +1032,14 @@ LOG_FRAME_AND_ME_PLAN_URL,URL del marco lógico y del plan de seguimiento y eval
 LOG_OUT,Cerrar sesión,48c18649
 LOGGING,Tala,b34b2e6e
 LONG_TERM_PERMANENT,A largo plazo/permanente,566657d6
+LONGITUDE,Longitud,bec9ea21
 LOOK,Mirar,e006bd6f
 LOSS_RATE,Tasa de pérdidas,544aa2af
 LOW,Bajo,ddedeca3
 LOWEST,Más baja,b651e8a7
 MAKE_HIGHLIGHT,Crear destacado,c3fda88f
 MANAGE_COLUMNS,Gestionar columnas,1dba3733
+MANAGE_PLANTING_SITE_GOALS_WITHIN_PLANTING_SEASONS,Gestionar los objetivos del sitio de plantación dentro de las temporadas de plantación.,09b93599
 MANAGED_LOCATION_TYPE_NURSERY,Vivero,2a9dbfec
 MANAGED_LOCATION_TYPE_PLANTING_SITE,Sitio de plantación,ee55d884
 MANAGED_LOCATION_TYPE_SEED_BANK,Banco de semillas/Recolección de semillas,d096b836
@@ -1180,6 +1191,7 @@ NO_NOTIFICATIONS,No hay notificaciones que mostrar.,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Antes de poder agregar y administrar el inventario de su vivero, necesitará contar con un vivero y especies dentro de Terraware. Solo los administradores pueden agregar viveros; contáctese con el suyo para obtener ayuda.",93c44729
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,No se han programado observaciones,c05456cd
 NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Cuando se completen las Observaciones que incluyan parcelas permanentes, estas aparecerán aquí y será necesario establecer los datos t0 para todas las parcelas permanentes para que se puedan calcular las Tasas de Supervivencia.",18f6a079
+NO_PLANTING_SEASONS_HAVE_BEEN_CREATED,No se han creado temporadas de plantación.,bda5b0d9
 NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Añadir un sitio de plantación le permitirá rastrear a dónde van las plantas de semillero al dejar el vivero.,b0104f6c
 NO_PLANTING_SITES_NON_ADMIN_MSG,"Solo los administradores pueden agregar sitios de plantación; por favor, comuníquese con el suyo para recibir asistencia.",8f016d3f
 NO_PLANTING_SITES_TITLE,"Solo un momento, añadamos un sitio de plantación primero.",801ba14c
@@ -1290,6 +1302,7 @@ OBSERVED_BY_ON,Observado por {0} el {1} a las {2},c8b41186
 OBSERVED_DENSITY,Densidad constatada,c5003c27
 OBSERVED_DENSITY_PER_STRATUM,Densidad Observada por Estrato,db5f3cf7
 OBSERVED_DENSITY_TOOLTIP,La densidad observada se basa en el número de plantas observadas dentro de los estratos que fueron observados al menos una vez en esta Observación.,328dc9f7
+OBSERVED_GPS_COORDINATES,Coordenadas GPS observadas,efbe8b32
 OBSERVED_PLANTS,Plantas observadas,375e69c3
 OBSERVED_SPECIES,Especies observadas,922020f2
 OBSERVER,Observador,89ceb806
@@ -1307,6 +1320,8 @@ OPPORTUNITIES_INSTRUCTIONS,"Puede incluir oportunidades de expansión del proyec
 OPPORTUNITIES_REQUIRED,Oportunidades *,8d418e65
 OPT_IN,Funciones Opt-In,cbb9300b
 OPTIONAL,Opcional,9f75363c
+OPTIONAL_GPS_COORDINATES_OF_PLOT,Opcional: Coordenadas GPS de la parcela,c15f1313
+OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,"Proporcione las coordenadas GPS de la esquina suroeste, si el área observada no corresponde a la ubicación original de la parcela.",d5180b23
 OR,O,38d8953d
 ORBIT,Orbitar,8e3af3cb
 ORG_NOTIFICATION_ACTION,"Para cambiar la preferencia, ve a [Ajustes > Organización]",5cbf22d7
@@ -1362,6 +1377,7 @@ PARTIAL_ERRORS,Fallaron algunas de las solicitudes. Puede intentar de nuevo más
 PARTIAL_ERRORS_TITLE,Errores parciales,3fca63bf
 PARTICIPANT,Participante,911243e3
 PASSED_PRESCREEN,Prueba de preselección aprobada,fef6edd4
+PAST_END_DATE,Fecha de finalización pasada,b3c6f181
 PENDING,Pendiente,e95f9f79
 PEOPLE,Personas,84bc8e64
 PEOPLE_CARD_DESCRIPTION,¡No podemos hacerlo solos! Añada personas a su organización y asígneles funciones.,9205bab5
@@ -1425,15 +1441,19 @@ PLANTING_COMPLETE_DASHBOARD,Plantación completada,3bea077e
 PLANTING_COMPLETE_DASHBOARD_TOOLTIP,"La plantación completada incluye el área y el porcentaje totales del sitio que se marcó como ""Plantación completada"".",b9bda0fe
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,"Porcentaje de ""Plantación completada"" de todos los lugares de plantación relacionados con el proyecto",969947fc
 PLANTING_COMPLETE_TOOLTIP,¿Se ha completado la plantación en este sustrato?,a6bfac66
+PLANTING_DATES,Fechas de plantación,e8aa47b1
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
+PLANTING_GOAL,Meta de plantación,a97123a1
 PLANTING_PROGRESS,Avance de plantación,58616da9
 PLANTING_PROGRESS_PERCENT,Progreso de la plantación (%),0d372a57
+PLANTING_PROGRESS_TOOLTIP,Progreso de los retiros en relación con la meta de plantación para esta temporada.,4cc685ea
 PLANTING_SEASON_END,Término de temporada de plantación,414309c0
 PLANTING_SEASON_END_IN_PAST,La fecha de término no puede estar en el pasado.,b2729d4d
 PLANTING_SEASON_END_OUT_OF_RANGE,Debe ser entre 4 semanas y 1 año de la fecha de inicio.,fcca5463
 PLANTING_SEASON_NO_OVERLAP,Se superpone con la temporada de plantación {0} - {1},f1549979
 PLANTING_SEASON_START,Inicio de temporada de plantación,10f5de94
 PLANTING_SEASON_START_OUT_OF_RANGE,Debe estar a 1 año de la fecha actual.,d69ba8fe
+PLANTING_SEASONS,Temporadas de plantación,58d50e9a
 PLANTING_SITE,Sitio de plantación,ee55d884
 PLANTING_SITE_AREA,Área de la zona de plantación,53766ba3
 PLANTING_SITE_CREATE_DETAILED_HELP,"Si usted es un socio o participante acelerador de Terraformation, puede [contactarnos] para colaborar en un sitio de plantación detallado.",26cde7ca
@@ -1813,6 +1833,9 @@ SDG_16,"16. Paz, Justicia e Instituciones Sólidas.",e0e9a0ba
 SDG_17,17. Alianzas para los Objetivos,3b9b74f8
 SEARCH,Búsqueda,9f30c236
 SEARCH_OR_SELECT,Busque o Seleccione,cbd7f4ed
+SEASON_NAME,Nombre de la temporada,74218855
+SEASON_NAME_REQUIRED,Nombre de la temporada *,809a9261
+SEASON_TO_COPY,Temporada a copiar,fd2a6498
 SECTION_OWNER_ASSIGNED,Sección asignada por el propietario,2756744b
 SECTIONS_USED,Secciones utilizadas,4e682124
 SEE_ALL_ACCESSIONS,Ver todas las accesiones,2d1b160b
@@ -1893,6 +1916,7 @@ SET_UP_SEED_BANK,Establecer banco de semillas,6f047a89
 SETTINGS,Ajustes,38560978
 SHIFT,Shift,4d173d2a
 SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52
+SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Mostrar especies con todas las accesiones agotadas,656a843d
 SHRUB,Arbusto,af50871c
 SHRUBS,Arbustos,377018f6
 SILVOPASTURE,Sistema selvopastoril,9d942e38
@@ -1991,12 +2015,14 @@ SPECIES_PROBLEM_NAME_NOT_FOUND,No se encontró el nombre,6f1d18da
 SPECIES_REQUIRED,Especie *,1d0d4b75
 SPECIES_SCIENTIFIC_NAME,Nombre científico de la especie,bc37b10f
 SPECIES_SELECTED,Especie seleccionada,820edb46
+SPECIES_SUMMARY,Resumen de especies,fb639865
 SPECIES_SURVIVAL,Supervivencia de Especies,20e77844
 SPECIES_SURVIVAL_BREAKDOWN,Desglose de Supervivencia de Especies,837eaa3b
 SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,El desglose de supervivencia muestra el porcentaje de plantas por especie que siguen vivas desde la plantación inicial.,adb3d43d
 SPECIES_SURVIVAL_TOOLTIP,"Supervivencia de especies muestra las especies con las tasas de supervivencia más altas y más bajas, entre las estratas que fueron observadas.",5dde50a6
 SPECIES_TABLE_INSTRUCTIONS,Haga clic en un número de la tabla para editarlo.,7f5a3f3e
 SPECIES_TABLE_INSTRUCTIONS_NOTE,"NOTA: Cuando se cambian los números, los números originales y las ubicaciones de las plantas observadas no se actualizarán en los mapas. Por favor, cambie los números con discreción.",3d4cd792
+SPECIES_TARGETS,Objetivos de especies,96d27e04
 SPECIES_TOOLTIP,Especies cuyas densidades de plantas se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,6e5f03ec
 SPECIES_USAGE,Uso de la especie,0669cb85
 SPECIES_VALUE_CHANGED_FROM_TO,El valor de {1} de la especie {0} cambió de {2} a {3},e3330648
@@ -2459,6 +2485,7 @@ WITHDRAWAL_UNDONE_DESCRIPTION,Se deshizo el retiro y las cantidades se devolvier
 WITHDRAWALS,Retiros,270c7f9e
 WITHDRAWN,Retirada,2f74b8e9
 WITHDRAWN_BY,Extraída por,4cf942fb
+WITHDRAWN_FOR_PLANTING,Retirado para plantación,dd024a58
 WITHDRAWN_QUANTITY_ERROR,Excede la cantidad restante,8c911341
 WITHDRAWN_QUANTITY_GREATER_THAN_ZERO_ERROR,La cantidad de retiro tiene que ser mayor de 0.,75e6b589
 WOOD_DENSITY_LEVEL,Nivel de densidad de la madera,83a6a766

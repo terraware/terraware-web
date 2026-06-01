@@ -1,4 +1,4 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Grid, List, ListItem, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
@@ -6,8 +6,9 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
 
 import { useProjects } from 'src/hooks/useProjects';
+import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import strings from 'src/strings';
-import { MinimalPlantingSite, PlantingSeason } from 'src/types/Tracking';
+import { MinimalPlantingSite } from 'src/types/Tracking';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 export type PlantingSiteDetailsCardProps = {
@@ -27,15 +28,20 @@ export default function PlantingSiteDetailsCard({ plantingSite }: PlantingSiteDe
     return 4;
   };
 
-  const plantingSeasons = useMemo<PlantingSeason[]>(() => {
-    if (plantingSite.plantingSeasons) {
-      const today = DateTime.fromJSDate(new Date(), { zone: tz.id }).toISODate();
-      if (today) {
-        return plantingSite.plantingSeasons.filter((plantingSeason) => plantingSeason.endDate >= today);
-      }
+  const [listPlantingSeasons, { data: plantingSeasonsData }] = useLazyListPlantingSeasonsQuery();
+
+  useEffect(() => {
+    void listPlantingSeasons({ plantingSiteId: plantingSite.id });
+  }, [listPlantingSeasons, plantingSite.id]);
+
+  const plantingSeasons = useMemo(() => {
+    const seasons = plantingSeasonsData?.seasons ?? [];
+    const today = DateTime.fromJSDate(new Date(), { zone: tz.id }).toISODate();
+    if (!today) {
+      return [];
     }
-    return [];
-  }, [plantingSite, tz.id]);
+    return seasons.filter((season) => season.plantingSiteId === plantingSite.id && season.endDate >= today);
+  }, [plantingSeasonsData, plantingSite.id, tz.id]);
 
   return (
     <Grid container>

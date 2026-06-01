@@ -49,7 +49,7 @@ export type AdHocObservationResults = Omit<ObservationResultsPayload, 'strata' |
     plotNumber?: number;
     timeZone: string;
     totalLive: number | undefined;
-    totalPlants: number;
+    totalPlants: number | undefined;
   };
 
 export type ObservationResultsWithLastObv = Omit<

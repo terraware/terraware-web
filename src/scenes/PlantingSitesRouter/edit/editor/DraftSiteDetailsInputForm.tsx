@@ -8,30 +8,28 @@ import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
-import { UpdatePlantingSiteRequestPayload } from 'src/queries/generated/plantingSites';
 import { selectDraftPlantingSites } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
 import { requestSearchDrafts } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 
-export type DetailsInputFormProps = {
+export type DraftSiteDetailsInputFormProps = {
   onChange: (id: string, value: unknown) => void;
   onValidate?: (hasErrors: boolean) => void;
-  plantingSiteId?: number;
-  record: UpdatePlantingSiteRequestPayload;
-  setRecord: (setFn: (previousValue: UpdatePlantingSiteRequestPayload) => UpdatePlantingSiteRequestPayload) => void;
+  record: DraftPlantingSite;
+  setRecord: (setFn: (previousValue: DraftPlantingSite) => DraftPlantingSite) => void;
 };
 
-export default function DetailsInputForm({
+export default function DraftSiteDetailsInputForm({
   onChange,
   onValidate,
-  plantingSiteId,
   record,
   setRecord,
-}: DetailsInputFormProps): JSX.Element {
+}: DraftSiteDetailsInputFormProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const [validateInput, setValidateInput] = useState<boolean>(false);
   const [nameError, setNameError] = useState('');
@@ -44,9 +42,9 @@ export default function DetailsInputForm({
 
   const usedNames = useMemo(() => {
     const allSites = [...(plantingSites || []), ...(draftSites?.data || [])];
-    const otherSiteNames = allSites.filter((site) => Number(site.id) !== plantingSiteId).map((site) => site.name);
+    const otherSiteNames = allSites.filter((site) => Number(site.id) !== record.id).map((site) => site.name);
     return new Set(otherSiteNames);
-  }, [draftSites?.data, plantingSiteId, plantingSites]);
+  }, [draftSites, plantingSites, record.id]);
 
   const checkErrors = useCallback(() => {
     if (!record.name) {

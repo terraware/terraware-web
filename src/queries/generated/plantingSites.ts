@@ -144,11 +144,6 @@ export type MultiPolygon = {
     coordinates: number[][][][];
     type: 'MultiPolygon';
   };
-export type PlantingSeasonPayload = {
-  endDate: string;
-  id: number;
-  startDate: string;
-};
 export type PlantingSubzonePayload = {
   areaHa: number;
   boundary: MultiPolygon;
@@ -219,7 +214,6 @@ export type PlantingSitePayload = {
   latestObservationId?: number;
   name: string;
   organizationId: number;
-  plantingSeasons: PlantingSeasonPayload[];
   /** Use strata instead */
   plantingZones?: PlantingZonePayload[];
   projectId?: number;
@@ -236,10 +230,6 @@ export type ListPlantingSitesResponsePayload = {
 export type CreatePlantingSiteResponsePayload = {
   id: number;
   status: SuccessOrError;
-};
-export type NewPlantingSeasonPayload = {
-  endDate: string;
-  startDate: string;
 };
 export type NewSubstratumPayload = {
   boundary: MultiPolygon | Polygon;
@@ -259,7 +249,6 @@ export type CreatePlantingSiteRequestPayload = {
   exclusion?: MultiPolygon | Polygon;
   name: string;
   organizationId: number;
-  plantingSeasons?: NewPlantingSeasonPayload[];
   projectId?: number;
   /** List of strata to create. If present and not empty, "boundary" must also be specified. */
   strata?: NewStratumPayload[];
@@ -341,18 +330,11 @@ export type GetPlantingSiteResponsePayload = {
   site: PlantingSitePayload;
   status: SuccessOrError;
 };
-export type UpdatedPlantingSeasonPayload = {
-  endDate: string;
-  /** If present, the start and end dates of an existing planting season will be updated. Otherwise a new planting season will be created. */
-  id?: number;
-  startDate: string;
-};
 export type UpdatePlantingSiteRequestPayload = {
   /** Site boundary. Ignored if this is a detailed planting site. */
   boundary?: MultiPolygon;
   description?: string;
   name: string;
-  plantingSeasons?: UpdatedPlantingSeasonPayload[];
   projectId?: number;
   survivalRateIncludesTempPlots?: boolean;
   /** Time zone name in IANA tz database format */

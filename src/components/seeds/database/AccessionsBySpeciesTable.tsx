@@ -1,7 +1,7 @@
-import React, { type JSX, useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, CircularProgress, useTheme } from '@mui/material';
-import { EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { Box, CircularProgress, Popover, Tooltip, Typography, useTheme } from '@mui/material';
+import { Button, Checkbox, EditableTable, EditableTableColumn } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_ShowHideColumnsButton,
@@ -30,12 +30,13 @@ export type SpeciesRow = {
   species_commonName: string;
   project_name: string;
   totalSeeds: number;
-  totalWithdrawn: number;
+  accessionCount: number;
+  usedUpAccessionCount: number;
 };
 
 const TABLE_STATE_STORAGE_KEY = 'accessions-database-species-table-v3';
 
-const DEFAULT_COLUMN_ORDER = ['speciesName', 'species_commonName', 'project_name', 'totalSeeds', 'totalWithdrawn'];
+const DEFAULT_COLUMN_ORDER = ['speciesName', 'species_commonName', 'project_name', 'totalSeeds'];
 
 type AccessionsBySpeciesTableProps = {
   searchResults: SearchResponseElementWithId[] | null | undefined;
@@ -77,10 +78,31 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
     defaultColumnVisibility: {},
     defaultSorting: [{ id: 'speciesName', desc: false }],
-    persistedMultiSelectColumnIds: ['project_name'],
+    persistedMultiSelectColumnIds: ['project_name', 'speciesName'],
   });
 
-  const speciesRows = useMemo<SpeciesRow[]>(() => {
+  const [showAllUsedUp, setShowAllUsedUp] = useState(false);
+  const [draftShowAllUsedUp, setDraftShowAllUsedUp] = useState(false);
+  const [filterAnchorEl, setFilterAnchorEl] = useState<null | HTMLElement>(null);
+  const filterOpen = Boolean(filterAnchorEl);
+  useEffect(() => {
+    if (filterOpen) {
+      setDraftShowAllUsedUp(showAllUsedUp);
+    }
+  }, [filterOpen, showAllUsedUp]);
+  const handleFilterClick = useCallback((event?: React.MouseEvent<HTMLButtonElement>) => {
+    if (event) {
+      setFilterAnchorEl(event.currentTarget);
+    }
+  }, []);
+  const handleFilterClose = useCallback(() => setFilterAnchorEl(null), []);
+  const handleFilterReset = useCallback(() => setDraftShowAllUsedUp(false), []);
+  const handleFilterApply = useCallback(() => {
+    setShowAllUsedUp(draftShowAllUsedUp);
+    setFilterAnchorEl(null);
+  }, [draftShowAllUsedUp]);
+
+  const allSpeciesRows = useMemo<SpeciesRow[]>(() => {
     if (!searchResults) {
       return [];
     }
@@ -88,14 +110,21 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
     for (const accession of searchResults) {
       const speciesId = accession.species_id as number | undefined;
       const speciesName = (accession.speciesName as string) ?? '';
+      // Skip accessions that have neither a species ID nor a species name.
+      if (speciesId === undefined && !speciesName) {
+        continue;
+      }
       const key = speciesId !== undefined ? `id:${speciesId}` : `name:${speciesName}`;
       const existing = grouped.get(key);
       const seeds = Number(accession['estimatedCount(raw)'] ?? 0) || 0;
-      const withdrawn = Number(accession['totalWithdrawnCount(raw)'] ?? 0) || 0;
+      const isUsedUp = accession.state === 'Used Up';
       const projectName = (accession.project_name as string) ?? '';
       if (existing) {
         existing.totalSeeds += seeds;
-        existing.totalWithdrawn += withdrawn;
+        existing.accessionCount += 1;
+        if (isUsedUp) {
+          existing.usedUpAccessionCount += 1;
+        }
         if (projectName && !existing.project_name.split(', ').includes(projectName)) {
           existing.project_name = existing.project_name ? `${existing.project_name}, ${projectName}` : projectName;
         }
@@ -107,20 +136,35 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
           species_commonName: (accession.species_commonName as string) ?? '',
           project_name: projectName,
           totalSeeds: seeds,
-          totalWithdrawn: withdrawn,
+          accessionCount: 1,
+          usedUpAccessionCount: isUsedUp ? 1 : 0,
         });
       }
     }
     return Array.from(grouped.values());
   }, [searchResults]);
 
+  const speciesRows = useMemo<SpeciesRow[]>(() => {
+    if (showAllUsedUp) {
+      return allSpeciesRows;
+    }
+
+    return allSpeciesRows.filter((row) => row.usedUpAccessionCount < row.accessionCount);
+  }, [allSpeciesRows, showAllUsedUp]);
+
+  const uniqueSpeciesNames = useMemo(
+    () => Array.from(new Set(speciesRows.map((r) => r.speciesName).filter((name): name is string => !!name))).sort(),
+    [speciesRows]
+  );
+
   const SpeciesNameCell = useCallback(({ cell }: { cell: MRT_Cell<SpeciesRow> }) => {
     const row = cell.row.original;
-    if (!row.speciesId) {
+    if (row.speciesId === undefined) {
       return <span>{row.speciesName || strings.DELETED_SPECIES}</span>;
     }
+    const params = new URLSearchParams({ tab: 'byAccession', speciesId: String(row.speciesId) });
     return (
-      <Link fontSize='16px' to={APP_PATHS.SPECIES_DETAILS.replace(':speciesId', String(row.speciesId))}>
+      <Link fontSize='16px' to={`${APP_PATHS.ACCESSIONS}?${params.toString()}`}>
         {row.speciesName}
       </Link>
     );
@@ -143,7 +187,8 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
         id: 'speciesName',
         header: strings.SPECIES,
         accessorKey: 'speciesName',
-        filterVariant: 'text',
+        filterVariant: 'multi-select',
+        filterSelectOptions: uniqueSpeciesNames,
         Cell: SpeciesNameCell,
       },
       {
@@ -178,15 +223,8 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
         filterVariant: 'range',
         Cell: SpeciesNumericCell,
       },
-      {
-        id: 'totalWithdrawn',
-        header: strings.TOTAL_WITHDRAWN,
-        accessorKey: 'totalWithdrawn',
-        filterVariant: 'range',
-        Cell: SpeciesNumericCell,
-      },
     ];
-  }, [activeLocale, uniqueProjectNames, SpeciesNameCell, SpeciesNumericCell]);
+  }, [activeLocale, uniqueProjectNames, uniqueSpeciesNames, SpeciesNameCell, SpeciesNumericCell]);
 
   if (searchResults === undefined) {
     return (
@@ -247,6 +285,69 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
           getRowId: (row) => row.id,
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
+              <Tooltip title={strings.FILTER}>
+                <Button
+                  id='filterAccessionsBySpecies'
+                  onClick={handleFilterClick}
+                  type='passive'
+                  priority='ghost'
+                  icon='filter'
+                />
+              </Tooltip>
+              <Popover
+                id='accessions-by-species-filter-popover'
+                open={filterOpen}
+                anchorEl={filterAnchorEl}
+                onClose={handleFilterClose}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'center' }}
+                sx={{
+                  '& .MuiPaper-root': {
+                    borderRadius: '8px',
+                    overflow: 'visible',
+                    width: '480px',
+                  },
+                }}
+              >
+                <Box display='flex' flexDirection='column'>
+                  <Box
+                    sx={{
+                      background: theme.palette.TwClrBgSecondary,
+                      borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                      borderRadius: theme.spacing(1, 1, 0, 0),
+                      padding: theme.spacing(2, 3),
+                    }}
+                  >
+                    <Typography fontSize='20px' fontWeight={600}>
+                      {strings.FILTERS}
+                    </Typography>
+                  </Box>
+                  <Box padding={theme.spacing(2, 3)}>
+                    <Checkbox
+                      id='showAllUsedUp'
+                      name='showAllUsedUp'
+                      label={strings.SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP}
+                      value={draftShowAllUsedUp}
+                      onChange={setDraftShowAllUsedUp}
+                    />
+                  </Box>
+                  <Box
+                    display='flex'
+                    justifyContent='flex-end'
+                    gap={1}
+                    sx={{
+                      background: theme.palette.TwClrBgSecondary,
+                      borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                      borderRadius: theme.spacing(0, 0, 1, 1),
+                      padding: theme.spacing(2, 3),
+                    }}
+                  >
+                    <Button onClick={handleFilterClose} type='passive' priority='secondary' label={strings.CANCEL} />
+                    <Button onClick={handleFilterReset} type='passive' priority='secondary' label={strings.RESET} />
+                    <Button onClick={handleFilterApply} type='productive' priority='primary' label={strings.APPLY} />
+                  </Box>
+                </Box>
+              </Popover>
               <MRT_ToggleGlobalFilterButton table={table} />
               <MRT_ToggleFiltersButton table={table} />
               <MRT_ShowHideColumnsButton table={table} />

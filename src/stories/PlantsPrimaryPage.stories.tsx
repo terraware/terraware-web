@@ -27,9 +27,9 @@ export const ActionButton = PlantsPrimaryPageViewTemplate.bind({});
 Default.args = {
   title: 'Cloudforest Sites',
   plantingSites: [
-    { name: 'Monteverde', id: 5, organizationId: 1, adHocPlots: [], plantingSeasons: [] },
-    { name: 'Amazon', id: 99, organizationId: 1, adHocPlots: [], plantingSeasons: [] },
-    { name: 'Congo', id: 3, organizationId: 1, adHocPlots: [], plantingSeasons: [] },
+    { name: 'Monteverde', id: 5, organizationId: 1, adHocPlots: [] },
+    { name: 'Amazon', id: 99, organizationId: 1, adHocPlots: [] },
+    { name: 'Congo', id: 3, organizationId: 1, adHocPlots: [] },
   ],
   selectedPlantingSiteId: 99,
 };

@@ -39,10 +39,6 @@ export type MonitoringPlotSearchResult = {
   plotNumber: number;
 };
 
-// planting seasons
-export type PlantingSeason = components['schemas']['PlantingSeasonPayload'];
-export type UpdatedPlantingSeason = components['schemas']['UpdatedPlantingSeasonPayload'];
-
 export type Location = {
   timeZone?: string;
 };
@@ -65,7 +61,6 @@ export type MinimalPlantingSite = Location & {
   id: number;
   name: string;
   organizationId: number;
-  plantingSeasons: PlantingSeason[];
   strata?: MinimalStratum[];
   projectId?: number;
 };

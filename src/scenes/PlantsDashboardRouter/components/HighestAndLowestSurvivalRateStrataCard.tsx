@@ -1,61 +1,161 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import usePlantingSite from 'src/hooks/usePlantingSite';
-import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
+import {
+  useLazyListObservationSummariesQuery,
+  useListObservationSummariesQuery,
+} from 'src/queries/generated/observations';
+import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { StratumObservationSummary } from 'src/types/Observations';
 
 type HighestAndLowestSurvivalRateStrataCardProps = {
-  plantingSiteId: number;
+  plantingSiteId?: number;
+  projectId?: number;
+};
+
+type StratumWithSite = {
+  stratumId: number;
+  survivalRate: number;
+  site: PlantingSitePayload;
 };
 
 export default function HighestAndLowestSurvivalRateStrataCard({
   plantingSiteId,
+  projectId,
 }: HighestAndLowestSurvivalRateStrataCardProps): JSX.Element {
   const theme = useTheme();
+  const isProjectView = !plantingSiteId && projectId !== undefined;
+
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
   const observationSummariesQuery = useListObservationSummariesQuery(
     { plantingSiteId: plantingSiteId ?? -1 },
     { skip: !plantingSiteId || plantingSiteId === -1 }
   );
-  const observationSummaries = observationSummariesQuery.data?.summaries;
+
+  const [listProjectSites, listProjectSitesResponse] = useLazyListPlantingSitesQuery();
+  const [listSummariesForSite] = useLazyListObservationSummariesQuery();
+  const [projectSiteSummaries, setProjectSiteSummaries] = useState<
+    { site: PlantingSitePayload; strata: StratumObservationSummary[] }[]
+  >([]);
+
+  useEffect(() => {
+    if (isProjectView && projectId) {
+      void listProjectSites({ projectId, full: true, includeZones: false }, true);
+    }
+  }, [isProjectView, listProjectSites, projectId]);
+
+  const projectSites = useMemo(
+    () => (isProjectView ? listProjectSitesResponse.currentData?.sites ?? [] : []),
+    [isProjectView, listProjectSitesResponse]
+  );
+
+  useEffect(() => {
+    if (!isProjectView) {
+      return;
+    }
+    let cancelled = false;
+    void Promise.all(
+      projectSites.map(async (site) => {
+        try {
+          const result = await listSummariesForSite({ plantingSiteId: site.id }, true).unwrap();
+          return { site, strata: result.summaries[0]?.strata ?? [] };
+        } catch {
+          return { site, strata: [] as StratumObservationSummary[] };
+        }
+      })
+    ).then((results) => {
+      if (!cancelled) {
+        setProjectSiteSummaries(results);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [isProjectView, listSummariesForSite, projectSites]);
 
   const survivalRateData = useMemo(() => {
-    type Acc = {
-      highestRate: number;
-      lowestRate: number;
-      highestId: number | undefined;
-      lowestId: number | undefined;
-    };
-    const initial: Acc = { highestRate: 0, lowestRate: Infinity, highestId: undefined, lowestId: undefined };
-    const result = (observationSummaries?.[0]?.strata ?? []).reduce((acc: Acc, stratum: StratumObservationSummary) => {
-      if (stratum.survivalRate === undefined) {
-        return acc;
-      }
+    const candidates: StratumWithSite[] = isProjectView
+      ? projectSiteSummaries.flatMap(({ site, strata }) =>
+          strata
+            .filter((stratum) => stratum.survivalRate !== undefined)
+            .map((stratum) => ({
+              stratumId: stratum.stratumId,
+              survivalRate: stratum.survivalRate as number,
+              site,
+            }))
+        )
+      : (observationSummariesQuery.data?.summaries?.[0]?.strata ?? [])
+          .filter((stratum) => stratum.survivalRate !== undefined && plantingSite)
+          .map((stratum) => ({
+            stratumId: stratum.stratumId,
+            survivalRate: stratum.survivalRate as number,
+            site: plantingSite as PlantingSitePayload,
+          }));
+
+    if (candidates.length === 0) {
       return {
-        highestRate: stratum.survivalRate >= acc.highestRate ? stratum.survivalRate : acc.highestRate,
-        highestId: stratum.survivalRate >= acc.highestRate ? stratum.stratumId : acc.highestId,
-        lowestRate: stratum.survivalRate < acc.lowestRate ? stratum.survivalRate : acc.lowestRate,
-        lowestId: stratum.survivalRate < acc.lowestRate ? stratum.stratumId : acc.lowestId,
+        highestSurvivalRate: undefined,
+        lowestSurvivalRate: undefined,
+        highestStratum: undefined,
+        lowestStratum: undefined,
       };
-    }, initial);
+    }
+
+    let highest = candidates[0];
+    let lowest = candidates[0];
+    for (const c of candidates) {
+      if (c.survivalRate >= highest.survivalRate) {
+        highest = c;
+      }
+      if (c.survivalRate < lowest.survivalRate) {
+        lowest = c;
+      }
+    }
 
     return {
-      lowestSurvivalRate: result.lowestId !== undefined ? result.lowestRate : undefined,
-      highestSurvivalRate: result.highestId !== undefined ? result.highestRate : undefined,
-      highestStratum: plantingSite?.strata?.find((s) => s.id === result.highestId),
-      lowestStratum: plantingSite?.strata?.find((s) => s.id === result.lowestId),
+      highestSurvivalRate: highest.survivalRate,
+      lowestSurvivalRate: lowest.survivalRate,
+      highestStratum: highest.site.strata?.find((s) => s.id === highest.stratumId),
+      lowestStratum: lowest.site.strata?.find((s) => s.id === lowest.stratumId),
+      highestSite: highest.site,
+      lowestSite: lowest.site,
     };
-  }, [observationSummaries, plantingSite]);
+  }, [isProjectView, observationSummariesQuery.data?.summaries, plantingSite, projectSiteSummaries]);
 
   const highestSurvivalRate = survivalRateData.highestSurvivalRate;
   const lowestSurvivalRate = survivalRateData.lowestSurvivalRate;
   const highestStratum = survivalRateData.highestStratum;
   const lowestStratum = survivalRateData.lowestStratum;
+  const highestSite = survivalRateData.highestSite;
+  const lowestSite = survivalRateData.lowestSite;
+
+  const highestStratumLabel = useMemo(
+    () =>
+      highestStratum
+        ? isProjectView && highestSite
+          ? `${highestStratum.name} (${highestSite.name})`
+          : highestStratum.name
+        : undefined,
+    [highestStratum, highestSite, isProjectView]
+  );
+
+  const lowestStratumLabel = useMemo(
+    () =>
+      lowestStratum
+        ? isProjectView && lowestSite
+          ? `${lowestStratum.name} (${lowestSite.name})`
+          : lowestStratum.name
+        : undefined,
+    [lowestStratum, lowestSite, isProjectView]
+  );
+
+  const isSameStratum =
+    highestStratum && lowestStratum && highestStratum.id === lowestStratum.id && highestSite?.id === lowestSite?.id;
 
   return (
     <Box>
@@ -73,20 +173,20 @@ export default function HighestAndLowestSurvivalRateStrataCard({
               {strings.HIGHEST}
             </Typography>
             <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
-              {highestStratum.name}
+              {highestStratumLabel}
             </Typography>
             <Typography fontSize='24px' fontWeight={600}>
               <FormattedNumber value={highestSurvivalRate} />%
             </Typography>
           </Box>
-          {(!lowestStratum || lowestStratum.id === highestStratum.id) && (
+          {(!lowestStratum || isSameStratum) && (
             <Typography fontWeight={400} fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginTop={1}>
               {strings.SINGLE_STRATUM_SURVIVAL_RATE_MESSAGE}
             </Typography>
           )}
         </>
       )}
-      {lowestStratum && lowestStratum.id !== highestStratum?.id && (
+      {lowestStratum && !isSameStratum && (
         <Box
           sx={{
             backgroundColor: '#CB4D4533',
@@ -98,7 +198,7 @@ export default function HighestAndLowestSurvivalRateStrataCard({
             {strings.LOWEST}
           </Typography>
           <Typography fontSize='24px' fontWeight={600} paddingY={theme.spacing(1)}>
-            {lowestStratum.name}
+            {lowestStratumLabel}
           </Typography>
           <Typography fontSize='24px' fontWeight={600}>
             <FormattedNumber value={lowestSurvivalRate || 0} />%

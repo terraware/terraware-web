@@ -19,7 +19,6 @@ import useDraftPlantingSiteUpdate from 'src/scenes/PlantingSitesRouter/hooks/use
 import strings from 'src/strings';
 import { DraftPlantingSite, OptionalSiteEditStep } from 'src/types/PlantingSite';
 import { SiteEditStep } from 'src/types/PlantingSite';
-import { UpdatedPlantingSeason } from 'src/types/Tracking';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -84,7 +83,6 @@ export default function Editor(props: EditorProps): JSX.Element {
     initializeOptionalStepsStatus(site)
   );
   const [plantingSite, setPlantingSite, onChange] = useForm({ ...site });
-  const [plantingSeasons, setPlantingSeasons] = useState<UpdatedPlantingSeason[]>(site.plantingSeasons);
 
   const { reload } = useOrganizationPlantingSites();
 
@@ -217,7 +215,6 @@ export default function Editor(props: EditorProps): JSX.Element {
             const draft: DraftPlantingSite = {
               ...plantingSite,
               ...(data ?? {}),
-              plantingSeasons: plantingSeasons.map((season: UpdatedPlantingSeason) => ({ ...season, id: -1 })),
               siteEditStep: nextStep,
             };
 
@@ -246,7 +243,6 @@ export default function Editor(props: EditorProps): JSX.Element {
       finalize,
       getCurrentStepIndex,
       onValidate,
-      plantingSeasons,
       plantingSite,
       steps,
       updateDraft,
@@ -357,8 +353,6 @@ export default function Editor(props: EditorProps): JSX.Element {
               <Details
                 onChange={onChange}
                 onValidate={onValidate}
-                plantingSeasons={plantingSeasons}
-                setPlantingSeasons={setPlantingSeasons}
                 setPlantingSite={setPlantingSite}
                 site={plantingSite}
               />

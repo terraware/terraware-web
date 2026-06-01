@@ -243,7 +243,10 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         const observationDate = completedDate ?? observationResult.startDate;
         const adHocPlot = observationResult.adHocPlot;
         const species = selectedPlotSelection === 'adHoc' ? adHocPlot?.species ?? [] : observationResult.species;
-        const totalLive = species.reduce((total, plantSpecies) => (total += plantSpecies.totalLive), 0);
+        const totalLive =
+          species.length > 0
+            ? species.reduce((total, plantSpecies) => (total += plantSpecies.totalLive), 0)
+            : undefined;
 
         const totalPlants =
           selectedPlotSelection === 'adHoc' ? adHocPlot?.totalPlants ?? 0 : observationResult.totalPlants;

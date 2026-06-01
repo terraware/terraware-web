@@ -8,6 +8,7 @@ import ProjectsRouter from 'src/components/Projects/Router';
 import SeedFundReportsRouter from 'src/components/SeedFundReports/Router';
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import ApplicationProvider from 'src/providers/Application';
@@ -32,6 +33,7 @@ import MyAccountRouter from 'src/scenes/MyAccountRouter';
 import NurseriesRouter from 'src/scenes/NurseriesRouter';
 import NurseryRouter from 'src/scenes/NurseryRouter';
 import PlantingProgressView from 'src/scenes/NurseryRouter/PlantingProgressView';
+import PlantingSeasonsRouter from 'src/scenes/NurseryRouter/PlantingSeasons';
 import ObservationRouterV2 from 'src/scenes/ObservationsRouterV2';
 import OptInFeaturesView from 'src/scenes/OptInFeatures';
 import NavBar from 'src/scenes/OrgRouter/NavBar';
@@ -85,6 +87,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
 
   const orgFeatures = useOrganizationFeatures();
   const isVirtualWalkthroughEnabled = !!orgFeatures?.virtualWalkthrough?.enabled;
+  const isPlantingSeasonsEnabled = isEnabled('Planting Seasons');
 
   const contentStyles = {
     height: '100%',
@@ -211,6 +214,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.PLANTING_SITES + '/*'} element={<PlantingSites />} />
             <Route path={APP_PATHS.NURSERY + '/*'} element={<NurseryRouter />} />
             <Route path={APP_PATHS.PLANTING_PROGRESS} element={<PlantingProgressView />} />
+            {isPlantingSeasonsEnabled && (
+              <Route path={APP_PATHS.PLANTING_SEASONS + '/*'} element={<PlantingSeasonsRouter />} />
+            )}
             <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
             <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
             <Route path={APP_PATHS.REPORTS + '/*'} element={<AcceleratorReportsRouter />} />
