@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
@@ -6,6 +6,8 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useUser } from 'src/providers';
 import { SavableBatch, requestSaveBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
@@ -27,6 +29,10 @@ export default function InventoryCreateView(): JSX.Element {
   const [doValidateBatch, setDoValidateBatch] = useState<boolean>(false);
   const [requestId, setRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
+  const trackEvent = useTrackEvent();
+  // The thunk dispatch doesn't expose batch input on success; capture the source
+  // of this create (fresh batch vs transferred from an accession) at dispatch time.
+  const fromAccessionRef = useRef<boolean>(false);
 
   const batchesRequest = useAppSelector(selectBatchesRequest(requestId));
 
@@ -34,6 +40,7 @@ export default function InventoryCreateView(): JSX.Element {
     (batchDetails: { batch: SavableBatch; organizationId: number; timezone: string } | false) => {
       setDoValidateBatch(false);
       if (batchDetails) {
+        fromAccessionRef.current = batchDetails.batch.accessionId !== undefined;
         setBusy(true);
         const request = dispatch(requestSaveBatch(batchDetails));
         setRequestId(request.requestId);
@@ -60,6 +67,10 @@ export default function InventoryCreateView(): JSX.Element {
   useEffect(() => {
     if (batchesRequest?.status === 'success') {
       setBusy(false);
+      trackEvent(MIXPANEL_EVENTS.BATCH_CREATED, {
+        species_id: batchesRequest?.data?.batch?.speciesId,
+        from_accession: fromAccessionRef.current,
+      });
       navigate(inventoryLocation, { replace: true });
 
       const batchId = batchesRequest?.data?.batch?.id;
@@ -92,7 +103,7 @@ export default function InventoryCreateView(): JSX.Element {
       snackbar.toastError(strings.GENERIC_ERROR);
       setDoValidateBatch(false);
     }
-  }, [batchesRequest, navigate, inventoryLocation, originInventoryViewType, snackbar, strings]);
+  }, [batchesRequest, navigate, inventoryLocation, originInventoryViewType, snackbar, strings, trackEvent]);
 
   return (
     <TfMain>
