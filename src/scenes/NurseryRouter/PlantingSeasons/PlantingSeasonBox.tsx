@@ -1,16 +1,19 @@
 import React, { type JSX, useMemo } from 'react';
 
 import { Box, Divider, Typography, useTheme } from '@mui/material';
-import { Badge, Icon } from '@terraware/web-components';
-import { BadgeProps } from '@terraware/web-components/components/Badge';
+import { Icon } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { PlantingSeasonPayload, useGetSpeciesTargetsQuery } from 'src/queries/generated/plantingSeasons';
 import { StratumResponsePayload } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { getMediumDate } from 'src/utils/dateFormatter';
+
+import PlantingSeasonStatusBadge from './PlantingSeasonStatusBadge';
 
 type PlantingSeasonBoxProps = {
   season: PlantingSeasonPayload;
@@ -32,39 +35,6 @@ const PlantingSeasonBox = ({
   const { isMobile } = useDeviceInfo();
 
   const { data: speciesTargets } = useGetSpeciesTargetsQuery(season.id);
-
-  const statusBadgeProps = useMemo((): BadgeProps => {
-    switch (season.status) {
-      case 'Active':
-        return {
-          backgroundColor: theme.palette.TwClrBgSuccessTertiary,
-          borderColor: theme.palette.TwClrBrdrSuccess,
-          labelColor: theme.palette.TwClrTxtSuccess,
-          label: strings.ACTIVE,
-        };
-      case 'Upcoming':
-        return {
-          backgroundColor: theme.palette.TwClrBgWarningTertiary,
-          borderColor: theme.palette.TwClrBrdrWarning,
-          labelColor: theme.palette.TwClrTxtWarning,
-          label: strings.UPCOMING,
-        };
-      case 'Past End Date':
-        return {
-          backgroundColor: theme.palette.TwClrBgDangerTertiary,
-          borderColor: theme.palette.TwClrBrdrDanger,
-          labelColor: theme.palette.TwClrTxtDanger,
-          label: strings.PAST_END_DATE,
-        };
-      case 'Closed':
-        return {
-          backgroundColor: theme.palette.TwClrBgInfoTertiary,
-          borderColor: theme.palette.TwClrBrdrInfo,
-          labelColor: theme.palette.TwClrTxtInfo,
-          label: strings.CLOSED,
-        };
-    }
-  }, [season.status, theme]);
 
   const plantingGoal = useMemo(() => {
     const targets = speciesTargets?.targets;
@@ -96,10 +66,14 @@ const PlantingSeasonBox = ({
         <Box flex={1}>
           <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
             <Icon name='iconCalendar' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
-            <Typography fontSize='18px' fontWeight={600}>
+            <Link
+              fontSize='18px'
+              fontWeight={600}
+              to={APP_PATHS.PLANTING_SEASONS_VIEW.replace(':plantingSeasonId', season.id.toString())}
+            >
               {season.name}
-            </Typography>
-            {season.status && <Badge {...statusBadgeProps} />}
+            </Link>
+            <PlantingSeasonStatusBadge status={season.status} />
           </Box>
           <Box display='flex' alignItems='center' gap={theme.spacing(2)} marginTop={theme.spacing(1)}>
             <Typography color={theme.palette.TwClrTxtSecondary}>{plantingSiteName}</Typography>

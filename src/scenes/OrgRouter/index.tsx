@@ -33,7 +33,7 @@ import MyAccountRouter from 'src/scenes/MyAccountRouter';
 import NurseriesRouter from 'src/scenes/NurseriesRouter';
 import NurseryRouter from 'src/scenes/NurseryRouter';
 import PlantingProgressView from 'src/scenes/NurseryRouter/PlantingProgressView';
-import PlantingSeasonsView from 'src/scenes/NurseryRouter/PlantingSeasons';
+import PlantingSeasonsRouter from 'src/scenes/NurseryRouter/PlantingSeasons';
 import ObservationRouterV2 from 'src/scenes/ObservationsRouterV2';
 import OptInFeaturesView from 'src/scenes/OptInFeatures';
 import NavBar from 'src/scenes/OrgRouter/NavBar';
@@ -214,7 +214,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.PLANTING_SITES + '/*'} element={<PlantingSites />} />
             <Route path={APP_PATHS.NURSERY + '/*'} element={<NurseryRouter />} />
             <Route path={APP_PATHS.PLANTING_PROGRESS} element={<PlantingProgressView />} />
-            {isPlantingSeasonsEnabled && <Route path={APP_PATHS.PLANTING_SEASONS} element={<PlantingSeasonsView />} />}
+            {isPlantingSeasonsEnabled && (
+              <Route path={APP_PATHS.PLANTING_SEASONS + '/*'} element={<PlantingSeasonsRouter />} />
+            )}
             <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
             <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
             <Route path={APP_PATHS.REPORTS + '/*'} element={<AcceleratorReportsRouter />} />

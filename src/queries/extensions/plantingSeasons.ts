@@ -4,10 +4,33 @@ import { QueryTagTypes } from '../tags';
 api.enhanceEndpoints({
   endpoints: {
     listPlantingSeasons: {
-      providesTags: [{ type: QueryTagTypes.PlantingSeasons, id: 'LIST' }],
+      providesTags: (results) => [
+        ...(results ? results.seasons.map((season) => ({ type: QueryTagTypes.PlantingSeasons, id: season.id })) : []),
+        { type: QueryTagTypes.PlantingSeasons, id: 'LIST' },
+      ],
+    },
+    getPlantingSeason: {
+      providesTags: (_result, _error, plantingSeasonId) => [
+        { type: QueryTagTypes.PlantingSeasons, id: plantingSeasonId },
+      ],
     },
     createPlantingSeason: {
-      invalidatesTags: [{ type: QueryTagTypes.PlantingSeasons, id: 'LIST' }],
+      invalidatesTags: (result) => [
+        ...(result ? [{ type: QueryTagTypes.PlantingSeasons, id: result.id }] : []),
+        { type: QueryTagTypes.PlantingSeasons, id: 'LIST' },
+      ],
+    },
+    updatePlantingSeason: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: QueryTagTypes.PlantingSeasons, id: arg.id },
+        { type: QueryTagTypes.PlantingSeasons, id: 'LIST' },
+      ],
+    },
+    deletePlantingSeason: {
+      invalidatesTags: (_result, _error, plantingSeasonId) => [
+        { type: QueryTagTypes.PlantingSeasons, id: plantingSeasonId },
+        { type: QueryTagTypes.PlantingSeasons, id: 'LIST' },
+      ],
     },
   },
 });
