@@ -124,6 +124,7 @@ export enum APP_PATHS {
   PLANTS_DASHBOARD = '/plants/dashboard',
   PLANTING_PROGRESS = '/plants/planting-progress',
   PLANTING_SEASONS = '/plants/planting-seasons',
+  PLANTING_SEASONS_VIEW = '/plants/planting-seasons/:plantingSeasonId',
   PLANTING_SITE_DASHBOARD = '/plants/dashboard/:plantingSiteId',
   PLANTING_SITES = '/planting-sites',
   PLANTING_SITES_DRAFT_EDIT = '/planting-sites/draft/:plantingSiteId/edit',

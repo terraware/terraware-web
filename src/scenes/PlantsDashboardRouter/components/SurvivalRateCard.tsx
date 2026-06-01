@@ -75,7 +75,11 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
       <Box flexBasis='100%'>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {isWeightedSurvivalRatesEnabled ? strings.AVERAGE_STRATA_SURVIVAL_RATE : strings.SURVIVAL_RATE}
+            {isWeightedSurvivalRatesEnabled
+              ? isProjectView
+                ? strings.AVERAGE_PROJECT_STRATA_SURVIVAL_RATE
+                : strings.AVERAGE_STRATA_SURVIVAL_RATE
+              : strings.SURVIVAL_RATE}
           </Typography>
           <Tooltip
             title={
@@ -138,59 +142,61 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
           </Box>
         )}
       </Box>
-      <div style={separatorStyles} />
-      {plantingSiteId && (
-        <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
-          <Box display={'flex'} alignItems={'center'}>
-            <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-              {strings.STRATUM_SURVIVAL}
-            </Typography>
-            <Tooltip title={strings.STRATUM_SURVIVAL_TOOLTIP}>
-              <Box display='flex'>
-                <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
-              </Box>
-            </Tooltip>
+      {(plantingSiteId || (isWeightedSurvivalRatesEnabled && isProjectView)) && (
+        <>
+          <div style={separatorStyles} />
+          <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
+            <Box display={'flex'} alignItems={'center'}>
+              <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+                {strings.STRATUM_SURVIVAL}
+              </Typography>
+              <Tooltip title={strings.STRATUM_SURVIVAL_TOOLTIP}>
+                <Box display='flex'>
+                  <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+                </Box>
+              </Tooltip>
+            </Box>
+            <Box paddingTop={2}>
+              <HighestAndLowestSurvivalRateStrataCard plantingSiteId={plantingSiteId} projectId={projectId} />
+            </Box>
           </Box>
-          <Box paddingTop={2}>
-            <HighestAndLowestSurvivalRateStrataCard plantingSiteId={plantingSiteId} />
-          </Box>
-        </Box>
+        </>
       )}
-      <div style={separatorStyles} />
       {plantingSiteId && (
-        <Box flexBasis='100%' marginTop={isDesktop ? 0 : 6}>
-          <Box display={'flex'} alignItems={'center'}>
-            <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-              {strings.SPECIES_SURVIVAL}
-            </Typography>
-            <Tooltip title={strings.SPECIES_SURVIVAL_TOOLTIP}>
-              <Box display='flex'>
-                <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
-              </Box>
-            </Tooltip>
+        <>
+          <div style={separatorStyles} />
+          <Box flexBasis='100%' marginTop={isDesktop ? 0 : 6}>
+            <Box display={'flex'} alignItems={'center'}>
+              <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+                {strings.SPECIES_SURVIVAL}
+              </Typography>
+              <Tooltip title={strings.SPECIES_SURVIVAL_TOOLTIP}>
+                <Box display='flex'>
+                  <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+                </Box>
+              </Tooltip>
+            </Box>
+            <Box paddingTop={2}>
+              <HighestAndLowestSurvivalRateSpeciesCard plantingSiteId={plantingSiteId} />
+            </Box>
           </Box>
-          <Box paddingTop={2}>
-            <HighestAndLowestSurvivalRateSpeciesCard plantingSiteId={plantingSiteId} />
+          <div style={separatorStyles} />
+          <Box flexBasis='100%' marginTop={isDesktop ? 0 : 6}>
+            <Box display={'flex'} alignItems={'center'}>
+              <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+                {strings.SPECIES_SURVIVAL_BREAKDOWN}
+              </Typography>
+              <Tooltip title={strings.SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP}>
+                <Box display='flex'>
+                  <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+                </Box>
+              </Tooltip>
+            </Box>
+            <Box paddingTop={2}>
+              <LiveDeadPlantsPerSpeciesCard plantingSiteId={plantingSiteId} />
+            </Box>
           </Box>
-        </Box>
-      )}
-      <div style={separatorStyles} />
-      {plantingSiteId && (
-        <Box flexBasis='100%' marginTop={isDesktop ? 0 : 6}>
-          <Box display={'flex'} alignItems={'center'}>
-            <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-              {strings.SPECIES_SURVIVAL_BREAKDOWN}
-            </Typography>
-            <Tooltip title={strings.SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP}>
-              <Box display='flex'>
-                <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
-              </Box>
-            </Tooltip>
-          </Box>
-          <Box paddingTop={2}>
-            <LiveDeadPlantsPerSpeciesCard plantingSiteId={plantingSiteId} />
-          </Box>
-        </Box>
+        </>
       )}
     </Card>
   );

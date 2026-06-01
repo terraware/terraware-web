@@ -14,10 +14,11 @@ import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import { useLazyGetAccessionsListUploadTemplateQuery } from 'src/queries/generated/accessionsV2';
+import { useLazyGetPendingAccessionsQuery, useLazySearchAccessionsQuery } from 'src/queries/search/accessions';
 import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import SeedBankService from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { SearchResponseElementWithId } from 'src/types/Search';
@@ -87,8 +88,6 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const projects = useAppSelector(selectProjects);
   const contentRef = useRef(null);
 
-  const [searchResults, setSearchResults] = useState<SearchResponseElementWithId[] | null>();
-  const [pendingAccessions, setPendingAccessions] = useState<SearchResponseElementWithId[] | null>();
   const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>();
   const [selectSeedBankForImportModalOpen, setSelectSeedBankForImportModalOpen] = useState(false);
   const [openImportModal, setOpenImportModal] = useState(false);
@@ -99,35 +98,27 @@ export default function Database(props: DatabaseProps): JSX.Element {
     }
   }, [activeLocale, dispatch, selectedOrganization]);
 
-  const fetchAccessions = useCallback(async () => {
-    if (!selectedOrganization) {
-      return;
-    }
-    try {
-      const apiResponse = await SeedBankService.searchAccessions({
-        organizationId: selectedOrganization.id,
-        fields: ALL_ACCESSION_FIELDS,
-      });
-      setSearchResults(apiResponse as SearchResponseElementWithId[] | null);
-    } catch (error) {
-      setSearchResults(null);
-    }
-  }, [selectedOrganization]);
-
+  const [fetchAccessions, searchAccessionsResult] = useLazySearchAccessionsQuery();
   useEffect(() => {
-    void fetchAccessions();
-  }, [fetchAccessions]);
-
-  useEffect(() => {
-    if (!selectedOrganization) {
-      return;
+    if (selectedOrganization) {
+      void fetchAccessions({ organizationId: selectedOrganization.id, fields: ALL_ACCESSION_FIELDS });
     }
-    const populatePendingAccessions = async () => {
-      const data = await SeedBankService.getPendingAccessions(selectedOrganization.id);
-      setPendingAccessions(data);
-    };
-    void populatePendingAccessions();
-  }, [selectedOrganization]);
+  }, [fetchAccessions, selectedOrganization]);
+  const searchResults: SearchResponseElementWithId[] | null | undefined = searchAccessionsResult.isError
+    ? null
+    : (searchAccessionsResult.data as SearchResponseElementWithId[] | undefined);
+
+  const [fetchPendingAccessions, pendingAccessionsResult] = useLazyGetPendingAccessionsQuery();
+  useEffect(() => {
+    if (selectedOrganization) {
+      void fetchPendingAccessions(selectedOrganization.id);
+    }
+  }, [fetchPendingAccessions, selectedOrganization]);
+  const pendingAccessions: SearchResponseElementWithId[] | null | undefined = pendingAccessionsResult.isError
+    ? null
+    : pendingAccessionsResult.data;
+
+  const [fetchAccessionsListUploadTemplate] = useLazyGetAccessionsListUploadTemplateQuery();
 
   const isOnboarded = hasSeedBanks && hasSpecies;
 
@@ -195,7 +186,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
           title: strings.IMPORT_ACCESSIONS_ALT_TITLE,
           text: strings.IMPORT_ACCESSIONS_WITH_TEMPLATE,
           linkText: strings.DOWNLOAD_THE_CSV_TEMPLATE,
-          onLinkClick: () => downloadCsvTemplateHandler(SeedBankService.downloadAccessionsTemplate),
+          onLinkClick: () => downloadCsvTemplateHandler(() => fetchAccessionsListUploadTemplate().unwrap()),
           buttonText: strings.IMPORT_ACCESSIONS,
           onClick: () => setSelectSeedBankForImportModalOpen(true),
         },

@@ -117,11 +117,11 @@ const ObservationPhotoDrawerContent = ({
         },
         {
           key: strings.PLANTS,
-          value: monitoringPlot.totalPlants.toString(),
+          value: monitoringPlot.totalPlants !== undefined ? monitoringPlot.totalPlants.toString() : '',
         },
         {
           key: strings.SPECIES,
-          value: monitoringPlot.totalSpecies.toString(),
+          value: monitoringPlot.totalSpecies !== undefined ? monitoringPlot.totalSpecies.toString() : '',
         },
         {
           key: strings.PLANTING_DENSITY,

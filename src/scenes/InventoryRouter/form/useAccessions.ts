@@ -1,27 +1,27 @@
 import { useEffect, useMemo } from 'react';
 
 import { useOrganization } from 'src/providers';
-import { selectAccessions } from 'src/redux/features/accessions/accessionsSelectors';
-import { requestAccessions } from 'src/redux/features/accessions/accessionsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { SearchResponseAccession } from 'src/services/SeedBankService';
+import { SearchResponseAccession, useLazyGetAccessionForSpeciesQuery } from 'src/queries/search/accessions';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const useAccessions = (record?: { accessionId?: number }, speciesId?: number, excludeUsedUp?: boolean) => {
-  const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
 
-  const accessionsResponseData = useAppSelector(selectAccessions(selectedOrganization?.id || -1, speciesId));
+  const [fetchAccessions, accessionsResult] = useLazyGetAccessionForSpeciesQuery();
+  useEffect(() => {
+    if (selectedOrganization) {
+      void fetchAccessions({ organizationId: selectedOrganization.id, speciesId: speciesId ?? -1 });
+    }
+  }, [fetchAccessions, selectedOrganization, speciesId]);
+
   const availableAccessions = useMemo(
     () =>
-      (accessionsResponseData &&
-        accessionsResponseData.accessions?.filter(
-          (accession) =>
-            (accession.remainingUnits === 'Seeds' && Number(accession['remainingQuantity(raw)']) > 0) ||
-            Number(accession['estimatedCount(raw)']) > 0
-        )) ||
-      [],
-    [accessionsResponseData]
+      (accessionsResult.data ?? []).filter(
+        (accession) =>
+          (accession.remainingUnits === 'Seeds' && Number(accession['remainingQuantity(raw)']) > 0) ||
+          Number(accession['estimatedCount(raw)']) > 0
+      ),
+    [accessionsResult.data]
   );
   const accessionId = record?.accessionId;
   const selectedAccession = useMemo<SearchResponseAccession | undefined>(
@@ -31,12 +31,6 @@ export const useAccessions = (record?: { accessionId?: number }, speciesId?: num
         : undefined,
     [availableAccessions, accessionId]
   );
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void dispatch(requestAccessions(selectedOrganization.id, speciesId));
-    }
-  }, [dispatch, selectedOrganization, speciesId]);
 
   return { availableAccessions, selectedAccession };
 };

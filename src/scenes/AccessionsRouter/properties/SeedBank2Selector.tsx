@@ -3,8 +3,8 @@ import React, { type JSX, useEffect, useState } from 'react';
 import { Grid, useTheme } from '@mui/material';
 
 import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { CreateAccessionRequestPayloadV2Write } from 'src/queries/generated/accessionsV2';
 import { SubLocationService } from 'src/services';
-import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { Facility, SubLocation } from 'src/types/Facility';
 import { getAllSeedBanks } from 'src/utils/organization';
@@ -13,7 +13,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { FacilitySelector, SubLocationSelector } from './index';
 
 type SeedBank2SelectorProps = {
-  record: AccessionPostRequestBody;
+  record: CreateAccessionRequestPayloadV2Write;
   onChange: (id: string, value?: any) => void;
   validate?: boolean;
 };

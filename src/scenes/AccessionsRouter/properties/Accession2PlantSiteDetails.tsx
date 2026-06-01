@@ -4,14 +4,14 @@ import { Box, Grid, useTheme } from '@mui/material';
 
 import AddLink from 'src/components/common/AddLink';
 import Textfield from 'src/components/common/Textfield/Textfield';
-import { AccessionPostRequestBody } from 'src/services/SeedBankService';
+import { CreateAccessionRequestPayloadV2Write } from 'src/queries/generated/accessionsV2';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { CollectionSource } from './index';
 
 type Accession2PlantSiteDetailsProps = {
-  record: AccessionPostRequestBody;
+  record: CreateAccessionRequestPayloadV2Write;
   onChange: (id: string, value?: any) => void;
   opened?: boolean;
 };

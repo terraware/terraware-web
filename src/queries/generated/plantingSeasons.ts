@@ -6,7 +6,8 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/api/v1/planting-seasons`,
         params: {
-          plantingSiteId: queryArg,
+          plantingSiteId: queryArg.plantingSiteId,
+          organizationId: queryArg.organizationId,
         },
       }),
     }),
@@ -24,6 +25,49 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/planting-seasons/${queryArg.id}`,
         method: 'PUT',
         body: queryArg.updatePlantingSeasonRequestPayload,
+      }),
+    }),
+    closePlantingSeason: build.mutation<ClosePlantingSeasonApiResponse, ClosePlantingSeasonApiArg>({
+      query: (queryArg) => ({ url: `/api/v1/planting-seasons/${queryArg}/close`, method: 'POST' }),
+    }),
+    getScheduledPlantingDates: build.query<GetScheduledPlantingDatesApiResponse, GetScheduledPlantingDatesApiArg>({
+      query: (queryArg) => ({ url: `/api/v1/planting-seasons/${queryArg}/scheduled-dates` }),
+    }),
+    createScheduledPlantingDate: build.mutation<
+      CreateScheduledPlantingDateApiResponse,
+      CreateScheduledPlantingDateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/planting-seasons/${queryArg.plantingSeasonId}/scheduled-dates`,
+        method: 'POST',
+        body: queryArg.scheduledPlantingDateRequestPayload,
+      }),
+    }),
+    deleteScheduledPlantingDate: build.mutation<
+      DeleteScheduledPlantingDateApiResponse,
+      DeleteScheduledPlantingDateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/planting-seasons/${queryArg.plantingSeasonId}/scheduled-dates/${queryArg.scheduledPlantingDateId}`,
+        method: 'DELETE',
+      }),
+    }),
+    getSingleScheduledPlantingDate: build.query<
+      GetSingleScheduledPlantingDateApiResponse,
+      GetSingleScheduledPlantingDateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/planting-seasons/${queryArg.plantingSeasonId}/scheduled-dates/${queryArg.scheduledPlantingDateId}`,
+      }),
+    }),
+    updateScheduledPlantingDate: build.mutation<
+      UpdateScheduledPlantingDateApiResponse,
+      UpdateScheduledPlantingDateApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/planting-seasons/${queryArg.plantingSeasonId}/scheduled-dates/${queryArg.scheduledPlantingDateId}`,
+        method: 'PUT',
+        body: queryArg.scheduledPlantingDateRequestPayload,
       }),
     }),
     deleteSpeciesTarget: build.mutation<DeleteSpeciesTargetApiResponse, DeleteSpeciesTargetApiArg>({
@@ -52,7 +96,10 @@ const injectedRtkApi = api.injectEndpoints({
 export { injectedRtkApi as api };
 export type ListPlantingSeasonsApiResponse =
   /** status 200 The requested operation succeeded. */ ListPlantingSeasonsResponsePayload;
-export type ListPlantingSeasonsApiArg = number;
+export type ListPlantingSeasonsApiArg = {
+  plantingSiteId?: number;
+  organizationId?: number;
+};
 export type CreatePlantingSeasonApiResponse =
   /** status 200 The requested operation succeeded. */ CreatePlantingSeasonResponsePayload;
 export type CreatePlantingSeasonApiArg = CreatePlantingSeasonRequestPayload;
@@ -67,6 +114,37 @@ export type UpdatePlantingSeasonApiResponse =
 export type UpdatePlantingSeasonApiArg = {
   id: number;
   updatePlantingSeasonRequestPayload: UpdatePlantingSeasonRequestPayload;
+};
+export type ClosePlantingSeasonApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type ClosePlantingSeasonApiArg = number;
+export type GetScheduledPlantingDatesApiResponse =
+  /** status 200 The requested operation succeeded. */ ListScheduledDatesResponsePayload;
+export type GetScheduledPlantingDatesApiArg = number;
+export type CreateScheduledPlantingDateApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type CreateScheduledPlantingDateApiArg = {
+  plantingSeasonId: number;
+  scheduledPlantingDateRequestPayload: ScheduledPlantingDateRequestPayload;
+};
+export type DeleteScheduledPlantingDateApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type DeleteScheduledPlantingDateApiArg = {
+  plantingSeasonId: number;
+  scheduledPlantingDateId: number;
+};
+export type GetSingleScheduledPlantingDateApiResponse =
+  /** status 200 The requested operation succeeded. */ GetScheduledDateResponsePayload;
+export type GetSingleScheduledPlantingDateApiArg = {
+  plantingSeasonId: number;
+  scheduledPlantingDateId: number;
+};
+export type UpdateScheduledPlantingDateApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateScheduledPlantingDateApiArg = {
+  plantingSeasonId: number;
+  scheduledPlantingDateId: number;
+  scheduledPlantingDateRequestPayload: ScheduledPlantingDateRequestPayload;
 };
 export type DeleteSpeciesTargetApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
@@ -133,6 +211,28 @@ export type UpdatePlantingSeasonRequestPayload = {
   name: string;
   startDate: string;
 };
+export type ScheduledPlantingDateSpeciesPayload = {
+  quantity: number;
+  speciesId: number;
+  substratumId: number;
+};
+export type ScheduledDatePayload = {
+  date: string;
+  scheduledPlantingDateId: number;
+  species: ScheduledPlantingDateSpeciesPayload[];
+};
+export type ListScheduledDatesResponsePayload = {
+  scheduledDates: ScheduledDatePayload[];
+  status: SuccessOrError;
+};
+export type ScheduledPlantingDateRequestPayload = {
+  date: string;
+  species: ScheduledPlantingDateSpeciesPayload[];
+};
+export type GetScheduledDateResponsePayload = {
+  scheduledDate: ScheduledDatePayload;
+  status: SuccessOrError;
+};
 export type ListSpeciesTargetsResponsePayload = {
   status: SuccessOrError;
   targets: SpeciesTargetPayload[];
@@ -150,6 +250,14 @@ export const {
   useGetPlantingSeasonQuery,
   useLazyGetPlantingSeasonQuery,
   useUpdatePlantingSeasonMutation,
+  useClosePlantingSeasonMutation,
+  useGetScheduledPlantingDatesQuery,
+  useLazyGetScheduledPlantingDatesQuery,
+  useCreateScheduledPlantingDateMutation,
+  useDeleteScheduledPlantingDateMutation,
+  useGetSingleScheduledPlantingDateQuery,
+  useLazyGetSingleScheduledPlantingDateQuery,
+  useUpdateScheduledPlantingDateMutation,
   useDeleteSpeciesTargetMutation,
   useGetSpeciesTargetsQuery,
   useLazyGetSpeciesTargetsQuery,

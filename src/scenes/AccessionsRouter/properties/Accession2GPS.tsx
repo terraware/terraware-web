@@ -6,14 +6,14 @@ import _ from 'lodash';
 
 import AddLink from 'src/components/common/AddLink';
 import Textfield from 'src/components/common/Textfield/Textfield';
+import { CreateAccessionRequestPayloadV2Write } from 'src/queries/generated/accessionsV2';
 import AccessionService from 'src/services/AccessionService';
-import { AccessionPostRequestBody } from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { Geolocation } from 'src/types/Accession';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 
 type Accession2GPSProps = {
-  record: AccessionPostRequestBody;
+  record: CreateAccessionRequestPayloadV2Write;
   onChange: (id: string, value?: any) => void;
   opened?: boolean;
 };

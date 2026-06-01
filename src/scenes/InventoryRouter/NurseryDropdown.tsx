@@ -2,13 +2,13 @@ import React, { type JSX } from 'react';
 
 import { Dropdown } from '@terraware/web-components';
 
-import { AccessionPostRequestBody } from 'src/services/SeedBankService';
+import { CreateAccessionRequestPayloadV2Write } from 'src/queries/generated/accessionsV2';
 import strings from 'src/strings';
 import { getAllNurseries } from 'src/utils/organization';
 
 import { useOrganization } from '../../providers/hooks';
 
-interface NurseryDropdownProps<T extends AccessionPostRequestBody> {
+interface NurseryDropdownProps<T extends CreateAccessionRequestPayloadV2Write> {
   record: T;
   label: string;
   setRecord: React.Dispatch<React.SetStateAction<T>>;
@@ -17,7 +17,7 @@ interface NurseryDropdownProps<T extends AccessionPostRequestBody> {
   validate?: boolean;
 }
 
-export default function NurseryDropdown<T extends AccessionPostRequestBody>(
+export default function NurseryDropdown<T extends CreateAccessionRequestPayloadV2Write>(
   props: NurseryDropdownProps<T>
 ): JSX.Element {
   const { selectedOrganization } = useOrganization();

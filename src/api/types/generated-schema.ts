@@ -6604,7 +6604,6 @@ export interface components {
             name: string;
             /** Format: int64 */
             organizationId: number;
-            plantingSeasons?: components["schemas"]["NewPlantingSeasonPayload"][];
             /** Format: int64 */
             projectId?: number;
             /** @description List of strata to create. If present and not empty, "boundary" must also be specified. */
@@ -7311,11 +7310,19 @@ export interface components {
             isThreatened: boolean;
             /** @description Measured in meters. */
             pointOfMeasurement?: number;
-            /** Format: int32 */
+            /**
+             * Format: int32
+             * @description Measured in centimeters.
+             */
             shrubDiameter?: number;
             /** Format: int64 */
             speciesId?: number;
             speciesName?: string;
+            /**
+             * Format: int32
+             * @description Measured in centimeters.
+             */
+            treeCrownDiameter?: number;
             /** @enum {string} */
             treeGrowthForm: "Tree" | "Shrub" | "Trunk";
             /** Format: int32 */
@@ -7424,7 +7431,7 @@ export interface components {
             /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
             partial: boolean;
             /** @description All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
-            values: string[];
+            values: (string | null)[];
         };
         FunderActivityMediaFilePayload: {
             caption?: string;
@@ -8846,12 +8853,6 @@ export interface components {
              */
             type: "Number";
         };
-        NewPlantingSeasonPayload: {
-            /** Format: date */
-            endDate: string;
-            /** Format: date */
-            startDate: string;
-        };
         NewSectionTextValuePayload: Omit<components["schemas"]["NewValuePayload"], "type"> & {
             /** @description Citation for this chunk of text. If you want text with multiple citations at different positions, you can split it into multiple text values and put a citation on each of them. */
             citation?: string;
@@ -8960,6 +8961,11 @@ export interface components {
             isDead: boolean;
             /** @description Measured in meters. */
             pointOfMeasurement: number;
+            /**
+             * Format: int32
+             * @description Measured in centimeters.
+             */
+            treeCrownDiameter?: number;
         };
         /** @description Supertype for payloads that represent new variable values. See the descriptions of individual payload types for more details. */
         NewValuePayload: {
@@ -9763,7 +9769,6 @@ export interface components {
             name: string;
             /** Format: int64 */
             organizationId: number;
-            plantingSeasons: components["schemas"]["SimplePlantingSeasonPayload"][];
             /**
              * @deprecated
              * @description Use strata instead
@@ -10343,6 +10348,11 @@ export interface components {
              * @description Only valid for Shrub growth form.
              */
             shrubDiameter?: number;
+            /**
+             * Format: int32
+             * @description Only valid for Tree and Trunk growth forms.
+             */
+            treeCrownDiameter?: number;
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -10746,14 +10756,6 @@ export interface components {
         SimpleErrorResponsePayload: {
             error: components["schemas"]["ErrorDetails"];
             status: components["schemas"]["SuccessOrError"];
-        };
-        SimplePlantingSeasonPayload: {
-            /** Format: date */
-            endDate: string;
-            /** Format: int64 */
-            id: number;
-            /** Format: date */
-            startDate: string;
         };
         SimpleSuccessResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
@@ -11660,7 +11662,6 @@ export interface components {
             boundary?: Omit<components["schemas"]["MultiPolygon"], "type">;
             description?: string;
             name: string;
-            plantingSeasons?: components["schemas"]["UpdatedPlantingSeasonPayload"][];
             /** Format: int64 */
             projectId?: number;
             survivalRateIncludesTempPlots?: boolean;
@@ -11922,17 +11923,6 @@ export interface components {
             withdrawnByUserId?: number;
             /** @description Quantity of seeds withdrawn. For viability testing withdrawals, this is always the same as the test's "seedsTested" value. Otherwise, it is a user-supplied value. If this quantity is in weight and the remaining quantity of the accession is in seeds or vice versa, the accession must have a subset weight and count. */
             withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
-        };
-        UpdatedPlantingSeasonPayload: {
-            /** Format: date */
-            endDate: string;
-            /**
-             * Format: int64
-             * @description If present, the start and end dates of an existing planting season will be updated. Otherwise a new planting season will be created.
-             */
-            id?: number;
-            /** Format: date */
-            startDate: string;
         };
         UpgradeManifestRequestPayload: {
             /**

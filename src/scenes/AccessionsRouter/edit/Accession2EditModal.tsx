@@ -8,8 +8,8 @@ import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useDeletePhotoMutation, useUploadPhotoMutation } from 'src/queries/generated/accessionsV1';
 import AccessionService from 'src/services/AccessionService';
-import SeedBankService from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { getSeedBank } from 'src/utils/organization';
@@ -55,6 +55,8 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
   const [photoFilenames, setPhotoFilenames] = useState<string[]>([]);
   const [newPhotos, setNewPhotos] = useState<File[]>([]);
   const [photoFilenamesToRemove, setPhotoFilenamesToRemove] = useState<string[]>([]);
+  const [uploadPhoto] = useUploadPhotoMutation();
+  const [deletePhoto] = useDeletePhotoMutation();
 
   const onPhotosChanged = (photosList: File[]) => {
     setNewPhotos(photosList);
@@ -72,12 +74,18 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
 
   const updatePhotos = async () => {
     if (newPhotos.length) {
-      await SeedBankService.uploadAccessionPhotos(record.id, newPhotos);
+      await Promise.all(
+        newPhotos.map((photo) =>
+          uploadPhoto({ id: record.id, photoFilename: photo.name, body: { file: photo } }).unwrap()
+        )
+      );
       setNewPhotos([]);
     }
 
     if (photoFilenamesToRemove.length) {
-      await SeedBankService.deleteAccessionPhotos(record.id, photoFilenamesToRemove);
+      await Promise.all(
+        photoFilenamesToRemove.map((photoFilename) => deletePhoto({ id: record.id, photoFilename }).unwrap())
+      );
       setPhotoFilenamesToRemove([]);
     }
   };

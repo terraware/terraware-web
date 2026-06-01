@@ -21,6 +21,17 @@ export const getLongDate = (date: string, locale: string | undefined | null): st
   }).format(new Date(date));
 
 /**
+ * Returns <Mon> <Day>, <Year> (eg. Jul 1, 2023)
+ */
+export const getMediumDate = (date: string, locale: string | undefined | null): string =>
+  new Intl.DateTimeFormat(locale || 'en-US', {
+    day: 'numeric',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(date));
+
+/**
  * Returns <Month> <Day>, <Year> at <Hour>:<Minute>:<Second> <AM/PM> (eg. July 1, 2023 at 2:00:00 PM)
  */
 export const getLongDateTime = (date: string, locale: string | undefined | null): string =>
