@@ -1,5 +1,7 @@
 export enum QueryTagTypes {
   AcceleratorProjects = 'AcceleratorProjects',
+  AccessionWithdrawals = 'AccessionWithdrawals',
+  Accessions = 'Accessions',
   Activities = 'Activities',
   Deliveries = 'Deliveries',
   FunderActivities = 'FunderActivities',
@@ -28,6 +30,7 @@ export enum QueryTagTypes {
   ReportMedia = 'ReportMedia',
   Reports = 'Reports',
   T0 = 'T0',
+  ViabilityTests = 'ViabilityTests',
 }
 
 export const QUERY_TAGS = Object.values(QueryTagTypes);

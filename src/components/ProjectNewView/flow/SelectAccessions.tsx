@@ -17,7 +17,7 @@ import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import Table from 'src/components/common/table';
 import { useLocalization } from 'src/providers';
-import { SeedBankService } from 'src/services';
+import { useLazySearchAccessionsQuery } from 'src/queries/search/accessions';
 import strings from 'src/strings';
 import { ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
 import { stateName } from 'src/types/Accession';
@@ -97,9 +97,10 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
+  const [searchAccessions] = useLazySearchAccessionsQuery();
 
   const getSearchResults = useCallback(
-    (
+    async (
       organizationId: number,
       searchFields: SearchNodePayload[],
       searchSortOrder?: SearchSortOrder,
@@ -133,14 +134,19 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
         };
       }
 
-      return SeedBankService.searchAccessions<SearchResponseAccession>({
-        organizationId,
-        fields: SEARCH_FIELDS_ACCESSIONS as string[],
-        searchCriteria,
-        sortOrder: searchSortOrder,
-      });
+      try {
+        const data = await searchAccessions({
+          organizationId,
+          fields: SEARCH_FIELDS_ACCESSIONS as string[],
+          searchCriteria,
+          sortOrder: searchSortOrder,
+        }).unwrap();
+        return data as SearchResponseAccession[];
+      } catch {
+        return null;
+      }
     },
-    []
+    [searchAccessions]
   );
 
   const getSearchFields = useCallback(

@@ -11,7 +11,7 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
-import { SeedBankService } from 'src/services';
+import { useLazyGetPendingAccessionsQuery } from 'src/queries/search/accessions';
 import { AccessionService } from 'src/services';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
@@ -36,14 +36,20 @@ export default function CheckIn(): JSX.Element {
   const [busy, setBusy] = useState(false);
   const userCanEdit = !isContributor(selectedOrganization);
 
+  const [fetchPendingAccessions] = useLazyGetPendingAccessionsQuery();
   const reloadData = useCallback(() => {
     const populatePendingAccessions = async () => {
       if (selectedOrganization) {
-        setPendingAccessions(await SeedBankService.getPendingAccessions(selectedOrganization.id));
+        try {
+          const data = await fetchPendingAccessions(selectedOrganization.id).unwrap();
+          setPendingAccessions(data);
+        } catch {
+          setPendingAccessions(null);
+        }
       }
     };
     void populatePendingAccessions();
-  }, [selectedOrganization]);
+  }, [fetchPendingAccessions, selectedOrganization]);
 
   useEffect(() => {
     reloadData();

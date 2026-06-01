@@ -1,12 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 
-import { RootState } from 'src/redux/rootReducer';
+import { api as accessionsSearchApi } from 'src/queries/search/accessions';
 import { NurseryBatchService } from 'src/services';
 import AccessionService from 'src/services/AccessionService';
 import { Response } from 'src/services/HttpService';
 import { BatchData, UpdateBatchRequestPayloadWithId } from 'src/services/NurseryBatchService';
-import { SearchResponseAccession } from 'src/services/SeedBankService';
 import strings from 'src/strings';
 import { Batch, CreateBatchRequestPayload, NurseryTransfer } from 'src/types/Batch';
 
@@ -16,7 +15,7 @@ export const requestSaveBatch = createAsyncThunk(
   'batches/save',
   async (
     request: { batch: SavableBatch; organizationId: number; timezone?: string },
-    { rejectWithValue, getState }
+    { dispatch, rejectWithValue }
   ) => {
     const { batch, organizationId, timezone } = request;
 
@@ -27,13 +26,13 @@ export const requestSaveBatch = createAsyncThunk(
       if (batch.accessionId) {
         // Extra validation to ensure an accession ID matches the given species
         if (batch.accessionId && batch.speciesId) {
-          const orgIdSpeciesId = `${organizationId}-${batch.speciesId}`;
-          const accessionsResponseData = (getState() as RootState).accessions[orgIdSpeciesId] || {};
-          if (
-            !(accessionsResponseData.accessions || []).find(
-              (accession: SearchResponseAccession) => Number(accession.id) === batch.accessionId
-            )
-          ) {
+          const accessionsForSpecies = await dispatch(
+            accessionsSearchApi.endpoints.getAccessionForSpecies.initiate({
+              organizationId,
+              speciesId: batch.speciesId,
+            })
+          ).unwrap();
+          if (!(accessionsForSpecies ?? []).some((accession) => Number(accession.id) === batch.accessionId)) {
             // The species requested does not apply to this accession
             return rejectWithValue(strings.GENERIC_ERROR);
           }
