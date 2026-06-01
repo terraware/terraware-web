@@ -24,6 +24,8 @@ import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useBoolean from 'src/hooks/useBoolean';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useUser } from 'src/providers';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import {
@@ -48,6 +50,11 @@ const ReportView = () => {
   const reportId = Number(pathParams.reportId);
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { isAllowed } = useUser();
+  const trackEvent = useTrackEvent();
+
+  useEffect(() => {
+    trackEvent(MIXPANEL_EVENTS.REPORT_VIEWED, { is_funder_view: false });
+  }, [trackEvent]);
   const [showApproveDialog, , openApprovalDialog, closeApproveDialog] = useBoolean(false);
   const [showRejectDialog, , openRejectDialog, closeRejectDialog] = useBoolean(false);
   const { crumbs: acceleratorProjectCrumbs, acceleratorProject, project } = useAcceleratorProjectData();

@@ -1,5 +1,7 @@
 import { useCallback } from 'react';
 
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { MergeOtherSpeciesRequestPayload, useMergeOtherSpeciesMutation } from 'src/queries/generated/observations';
 import { MergeOtherSpeciesPayloadPartial } from 'src/scenes/ObservationsRouterV2/SingleView/MatchSpeciesModal';
@@ -19,6 +21,7 @@ export function useOnSaveMergedSpeciesRtk(
   const snackbar = useSnackbar();
   const { strings } = useLocalization();
   const [mergeOtherSpecies] = useMergeOtherSpeciesMutation();
+  const trackEvent = useTrackEvent();
   const { observationId, onComplete } = props;
 
   return useCallback(
@@ -42,6 +45,7 @@ export function useOnSaveMergedSpeciesRtk(
           try {
             const results = await Promise.all(promises);
             if (results.every((result) => result.status === 'ok')) {
+              trackEvent(MIXPANEL_EVENTS.SPECIES_MERGED, { count: mergeSpeciesPayloads.length });
               snackbar.toastSuccess(strings.SPECIES_MATCHED);
               onComplete?.();
             } else {
@@ -57,6 +61,6 @@ export function useOnSaveMergedSpeciesRtk(
 
       void mergeManySpecies();
     },
-    [mergeOtherSpecies, observationId, onComplete, snackbar, strings.SPECIES_MATCHED]
+    [mergeOtherSpecies, observationId, onComplete, snackbar, strings.SPECIES_MATCHED, trackEvent]
   );
 }

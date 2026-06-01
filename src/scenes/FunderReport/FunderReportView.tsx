@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -11,6 +11,9 @@ import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
+import useFunderPortal from 'src/hooks/useFunderPortal';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { PublishedReportIndicatorPayload, PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { ReportCommonIndicatorPayload } from 'src/queries/generated/reports';
@@ -26,6 +29,17 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const { strings } = useLocalization();
+  const { isFunderRoute } = useFunderPortal();
+  const trackEvent = useTrackEvent();
+
+  // Fire REPORT_VIEWED only when this component is mounted as a top-level view
+  // in the funder portal. When it's rendered inside the accelerator ReportView
+  // (as a published-preview), that parent already fires REPORT_VIEWED.
+  useEffect(() => {
+    if (isFunderRoute) {
+      trackEvent(MIXPANEL_EVENTS.REPORT_VIEWED, { is_funder_view: true });
+    }
+  }, [isFunderRoute, trackEvent]);
 
   const year = useMemo(() => {
     return selectedReport?.startDate?.split('-')[0];

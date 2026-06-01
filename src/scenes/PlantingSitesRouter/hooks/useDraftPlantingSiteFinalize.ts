@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { selectDraftPlantingSiteEdit } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
 import { requestDeleteDraft } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -29,6 +31,7 @@ export default function useDraftPlantingSiteFinalize(
   const dispatch = useAppDispatch();
   const [draft, setDraft] = useState<DraftPlantingSite>();
   const snackbar = useSnackbar();
+  const trackEvent = useTrackEvent();
 
   const { create, result: createResult } = usePlantingSiteCreate();
 
@@ -81,10 +84,14 @@ export default function useDraftPlantingSiteFinalize(
       snackbar.toastError(strings.GENERIC_ERROR);
     } else if (createResult?.status === 'success') {
       if (draft) {
+        trackEvent(MIXPANEL_EVENTS.PLANTING_SITE_CREATED, {
+          num_strata: draft.strata?.length,
+          has_boundary: draft.boundary !== undefined && draft.boundary !== null,
+        });
         _deleteDraft(draft);
       }
     }
-  }, [_createFromDraft, draft, onError, createResult, _deleteDraft, snackbar]);
+  }, [_createFromDraft, draft, onError, createResult, _deleteDraft, snackbar, trackEvent]);
 
   useEffect(() => {
     if (deleteDraftResult?.status === 'success') {

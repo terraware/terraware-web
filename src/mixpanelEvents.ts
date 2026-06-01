@@ -19,13 +19,10 @@ export enum MIXPANEL_EVENTS {
 
   // --- Planting & plants ---
   PLANTING_SITE_CREATED = 'Planting Site Created',
-  PLANTING_SITE_PUBLISHED = 'Planting Site Published',
-  DELIVERY_RECORDED = 'Delivery Recorded',
   SURVIVAL_RATE_VIEWED = 'Survival Rate Viewed',
 
   // --- Observations ---
   OBSERVATION_SCHEDULED = 'Observation Scheduled',
-  OBSERVATION_SUBMITTED = 'Observation Submitted',
   SPECIES_MERGED = 'Species Merged',
 
   // --- Organization & people ---
@@ -102,5 +99,37 @@ export type MixpanelEventPropertyMap = {
     purpose: string;
     batch_count: number;
     has_photos: boolean;
+  };
+  [MIXPANEL_EVENTS.PLANTING_SITE_CREATED]: {
+    num_strata?: number;
+    has_boundary: boolean;
+  };
+  [MIXPANEL_EVENTS.SURVIVAL_RATE_VIEWED]: {
+    is_project_view: boolean;
+  };
+  [MIXPANEL_EVENTS.OBSERVATION_SCHEDULED]: {
+    duration_days?: number;
+  };
+  [MIXPANEL_EVENTS.SPECIES_MERGED]: {
+    count: number;
+  };
+  [MIXPANEL_EVENTS.ORGANIZATION_CREATED]: {
+    organization_type?: string;
+    has_country_code: boolean;
+    num_managed_locations: number;
+  };
+  [MIXPANEL_EVENTS.USER_INVITED]: {
+    role: string;
+  };
+  [MIXPANEL_EVENTS.USER_ROLE_UPDATED]: {
+    new_role: string;
+  };
+  [MIXPANEL_EVENTS.REPORT_VIEWED]: {
+    is_funder_view: boolean;
+  };
+  [MIXPANEL_EVENTS.REPORT_DOWNLOADED]: {
+    report_type: string;
+    format: string;
+    row_count?: number;
   };
 };

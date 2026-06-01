@@ -1,4 +1,4 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
@@ -9,7 +9,9 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useKnowledgeBaseLinks } from 'src/knowledgeBaseLinks';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import { useListAcceleratorReportsQuery } from 'src/queries/generated/reports';
 import strings from 'src/strings';
@@ -29,6 +31,11 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
   const isWeightedSurvivalRatesEnabled = isEnabled('Weighted Survival Rates');
   const isProjectView = !plantingSiteId && projectId;
   const knowledgeBaseLinks = useKnowledgeBaseLinks();
+  const trackEvent = useTrackEvent();
+
+  useEffect(() => {
+    trackEvent(MIXPANEL_EVENTS.SURVIVAL_RATE_VIEWED, { is_project_view: !!isProjectView });
+  }, [isProjectView, trackEvent]);
 
   const observationSummariesQuery = useListObservationSummariesQuery(
     { plantingSiteId: plantingSiteId || -1 },
