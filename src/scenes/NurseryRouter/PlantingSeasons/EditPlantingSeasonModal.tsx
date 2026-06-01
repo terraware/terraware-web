@@ -9,14 +9,16 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useOrganization } from 'src/providers';
 import { PlantingSeasonPayload, useUpdatePlantingSeasonMutation } from 'src/queries/generated/plantingSeasons';
+import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type EditPlantingSeasonModalProps = {
   onClose: () => void;
   plantingSeason: PlantingSeasonPayload;
-  plantingSiteName: string;
+  plantingSite: PlantingSitePayload;
 };
 
 type PlantingSeasonForm = {
@@ -28,10 +30,11 @@ type PlantingSeasonForm = {
 const EditPlantingSeasonModal = ({
   onClose,
   plantingSeason,
-  plantingSiteName,
+  plantingSite,
 }: EditPlantingSeasonModalProps): JSX.Element => {
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
+  const defaultTimeZone = useDefaultTimeZone().get().id;
   const snackbar = useSnackbar();
   const [updatePlantingSeason, { isLoading }] = useUpdatePlantingSeasonMutation();
 
@@ -43,7 +46,10 @@ const EditPlantingSeasonModal = ({
 
   const [validate, setValidate] = useState<boolean>(false);
 
-  const timeZoneId = useMemo(() => selectedOrganization?.timeZone ?? 'Etc/UTC', [selectedOrganization]);
+  const timeZoneId = useMemo(
+    () => plantingSite.timeZone ?? selectedOrganization?.timeZone ?? defaultTimeZone,
+    [plantingSite.timeZone, selectedOrganization, defaultTimeZone]
+  );
 
   const endDateBeforeStart = useMemo(() => {
     if (!record.startDate || !record.endDate) {
@@ -107,7 +113,7 @@ const EditPlantingSeasonModal = ({
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
         <Grid item xs={12}>
-          <Typography fontWeight={600}>{plantingSiteName}</Typography>
+          <Typography fontWeight={600}>{plantingSite.name}</Typography>
         </Grid>
         <Grid item xs={12}>
           <TextField

@@ -116,7 +116,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
         <EditPlantingSeasonModal
           onClose={() => setEditModalOpen(false)}
           plantingSeason={season}
-          plantingSiteName={plantingSite.name}
+          plantingSite={plantingSite}
         />
       )}
       <PageHeaderWrapper>
