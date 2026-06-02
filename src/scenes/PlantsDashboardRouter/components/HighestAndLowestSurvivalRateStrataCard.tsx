@@ -1,16 +1,13 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import usePlantingSite from 'src/hooks/usePlantingSite';
-import {
-  useLazyListObservationSummariesQuery,
-  useListObservationSummariesQuery,
-} from 'src/queries/generated/observations';
-import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import useProjectSiteObservationSummaries from 'src/hooks/useProjectSiteObservationSummaries';
+import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
+import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
-import { StratumObservationSummary } from 'src/types/Observations';
 
 type HighestAndLowestSurvivalRateStrataCardProps = {
   plantingSiteId?: number;
@@ -37,51 +34,12 @@ export default function HighestAndLowestSurvivalRateStrataCard({
     { skip: !plantingSiteId || plantingSiteId === -1 }
   );
 
-  const [listProjectSites, listProjectSitesResponse] = useLazyListPlantingSitesQuery();
-  const [listSummariesForSite] = useLazyListObservationSummariesQuery();
-  const [projectSiteSummaries, setProjectSiteSummaries] = useState<
-    { site: PlantingSitePayload; strata: StratumObservationSummary[] }[]
-  >([]);
-
-  useEffect(() => {
-    if (isProjectView && projectId) {
-      void listProjectSites({ projectId, full: true, includeZones: false }, true);
-    }
-  }, [isProjectView, listProjectSites, projectId]);
-
-  const projectSites = useMemo(
-    () => (isProjectView ? listProjectSitesResponse.currentData?.sites ?? [] : []),
-    [isProjectView, listProjectSitesResponse]
-  );
-
-  useEffect(() => {
-    if (!isProjectView) {
-      return;
-    }
-    let cancelled = false;
-    void Promise.all(
-      projectSites.map(async (site) => {
-        try {
-          const result = await listSummariesForSite({ plantingSiteId: site.id }, true).unwrap();
-          return { site, strata: result.summaries[0]?.strata ?? [] };
-        } catch {
-          return { site, strata: [] as StratumObservationSummary[] };
-        }
-      })
-    ).then((results) => {
-      if (!cancelled) {
-        setProjectSiteSummaries(results);
-      }
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [isProjectView, listSummariesForSite, projectSites]);
+  const projectSiteSummaries = useProjectSiteObservationSummaries(projectId, isProjectView);
 
   const survivalRateData = useMemo(() => {
     const candidates: StratumWithSite[] = isProjectView
-      ? projectSiteSummaries.flatMap(({ site, strata }) =>
-          strata
+      ? projectSiteSummaries.flatMap(({ site, summary }) =>
+          (summary?.strata ?? [])
             .filter((stratum) => stratum.survivalRate !== undefined)
             .map((stratum) => ({
               stratumId: stratum.stratumId,
