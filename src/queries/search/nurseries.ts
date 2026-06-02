@@ -251,6 +251,7 @@ const injectedRtkApi = api.injectEndpoints({
             field: 'facility_organization_id',
             values: [`${organizationId}`],
           },
+          count: 0,
         },
       }),
       providesTags: [{ type: QueryTagTypes.NurseryWithdrawals }],
