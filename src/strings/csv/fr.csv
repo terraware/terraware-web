@@ -487,6 +487,10 @@ DELETE_PROJECT_CONFIRM,Êtes-vous sûr de vouloir supprimer ce projet ? Toutes l
 DELETE_SEEDLINGS_BATCHES,Supprimer les lots de semis,a5916585
 DELETE_SEEDLINGS_BATCHES_MSG,"La suppression de lots sans retraits les supprimera complètement. La suppression de lots avec retraits ramènera leurs quantités restantes à 0, retirera ces quantités de l’inventaire et marquera les lots comme vides. Les retraits passés continueront d’apparaître dans l’historique des retraits.",4f9bf36f
 DELETE_SPECIES,Supprimer l'espèce,b3dd3256
+DELETE_SPECIES_GOAL,Supprimer l'objectif d'espèce,38e5960e
+DELETE_SPECIES_GOAL_CONFIRM,"Vous êtes sur le point de supprimer l'espèce {0} en tant qu'objectif pour ce substrat. La quantité sera retirée de l'objectif total de plantation pour cette saison, et la pépinière sera informée afin d'ajuster les plants attribués, si nécessaire.
+
+Êtes-vous sûr de vouloir supprimer cet objectif d'espèce ?",931b5120
 DELETE_STATISTICS,Supprimer les statistiques,881bc71c
 DELETE_VIABILITY_TEST,Supprimer le test de viabilité,db53dffa
 DELETE_VIABILITY_TEST_MESSAGE,Vous vous apprêtez à supprimer le test de viabilité {0}.,ceace778
@@ -939,6 +943,7 @@ IUCN_NOT_EVALUATED,Non évalué (NE),93c14c32
 IUCN_VULNERABLE,Vulnérable (VU),ed5dcc89
 JOIN,Rejoindre,43eb6054
 JOIN_EVENT_NAME,Rejoindre {0},14c4bd8e
+JUST_SAVED,Enregistré à l’instant,d426eaa3
 KEEP_ORIGINAL,Garder l'original,21773616
 KEY,Légende,b46ab088
 KEY_LESSONS,Principales leçons tirées,24ee85f1
@@ -1206,6 +1211,7 @@ NO_SEEDBANKS_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer vos accessions, v
 NO_SPECIES,Aucune espèce,1616e61b
 NO_SPECIES_CONTRIBUTOR_MSG,"Aucune espèce ne figure dans votre liste d'espèces pour le moment. Seuls les administrateurs peuvent ajouter des espèces, contactez donc le vôtre pour obtenir de l'aide.",32a4f50e
 NO_SPECIES_DESCRIPTION,"Il semble que vous n'ayez ajouté aucune espèce pour le moment. Le fait de disposer d'une liste principale des espèces permet de rationaliser la saisie des données relatives aux semences et aux plantes au sein de votre organisation. Vous pouvez ajouter des espèces manuellement et individuellement, ou importer des données à partir d'un fichier CSV.",048a81f6
+NO_SPECIES_TARGETS_FOR_SUBSTRATUM,Aucun objectif d’espèces n’a été défini pour ce substrat.,53b1322b
 NO_SUB_LOCATIONS,Modifiez cette banque de semences pour ajouter des sous-emplacements.,963dba11
 NO_SUB_LOCATIONS_NURSERY,Modifier cette pépinière pour ajouter des sous-emplacements.,8a939067
 NO_TEMPORARY_PLOTS_SURVIVAL_TOOLTIP,Aucune Observation terminée n'inclut de placettes temporaires dans un substrat de site de plantation.,fdf09cc6
@@ -1801,6 +1807,7 @@ SAVE_VERSION,Enregistrer la version,5afacff0
 SAVE_VERSION_ELLIPSIS,Enregistrer la version...,f3ac25ba
 SAVE_VERSION_MESSAGE,"Sauvegarder une version équivaut à créer une capture d'écran de l'état actuel du document. Vous pouvez continuer à modifier le document, mais vous ne pouvez pas modifier la version enregistrée.",90b2fd9b
 SAVED,Sauvegardé,3324fd4d
+SAVING,Enregistrement en cours...,d4ce4849
 SCARIFY,Scarification,b34359c6
 SCHEDULE_OBSERVATION,Planifier une observation,9d1a4cfc
 SCHEDULE_OBSERVATION_MESSAGE,Sélectionnez les strates et sous-strates à inclure dans l'observation :,3dc66640
@@ -1893,6 +1900,7 @@ SELECT_SEED_BANK,Sélectionnez la banque de semences,9780c8e6
 SELECT_SEED_BANK_INFO,Les accessions nécessitent un emplacement de conservation dans une banque de semences. Veuillez sélectionner une banque de semences.,f040ea62
 SELECT_SEEDLINGS_BATCHES_FOR_PROJECT,Sélectionner les lots de semis pour {0},1823e205
 SELECT_SEEDLINGS_BATCHES_FOR_PROJECT_DESCRIPTION,Utilisez la colonne des cases à cocher pour sélectionner les lots de semi qui doivent être ajoutés à {0}.,54222918
+SELECT_SPECIES,Sélectionner les espèces,d19ac8ee
 SELECT_VOTE,Sélectionner le vote,5114a633
 SELECTED_COLUMNS,Colonnes sélectionnées,ca9dc436
 SELECTED_SPECIES_IN_USE,"L'espèce sélectionnée pour suppression est utilisée (dans une Accession, un Inventaire et/ou une Observation) et ne peut pas être supprimée.",cdd9b0e1
@@ -1908,6 +1916,7 @@ SESSION_IS_STARTING_SOON,La session va bientôt commencer.,c3abc7d1
 SESSION_SLIDES,Diapositives de la session,7748a514
 SET_PLANTING_COMPLETE,Plantation terminée,3bea077e
 SET_REMINDER,Définir un rappel,ad81e3b3
+SET_SPECIES_TARGETS_DESCRIPTION,Définissez les objectifs d’espèces par substrat du site de plantation. Les objectifs peuvent être modifiés à tout moment et sont visibles par le gestionnaire d’inventaire dans la planification de l’inventaire.,216e3add
 SET_T0_DATA_IN_THE,Voir {0},194994e4
 SET_UP,Configurer,6096080e
 SET_UP_NURSERY,Créer une pépinière,25ab7370
@@ -2153,6 +2162,8 @@ TARGET_DENSITY,Densité cible,239e7748
 TARGET_HECTARES_PLANTED,Cible : {0} ha,8c7d580d
 TARGET_PLANTING_DENSITY,Densité de plantation cible,4f350d39
 TARGET_PLANTING_DENSITY_TOOLTIP,Densité de plantation cible pour le stratum (plants par hectare).,042cc8ff
+TARGET_PLANTS,plantes cibles,ff0517a3
+TARGET_QUANTITY,Quantité cible,73c71da9
 TARGETS,Cibles,afd4bbf9
 TEMPLATE,Modèle,28afe27c
 TEMPLATES,Modèles,a66a976a

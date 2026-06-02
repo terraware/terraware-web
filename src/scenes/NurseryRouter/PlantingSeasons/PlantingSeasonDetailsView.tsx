@@ -21,6 +21,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 
 import EditPlantingSeasonModal from './EditPlantingSeasonModal';
 import PlantingSeasonStatusBadge from './PlantingSeasonStatusBadge';
+import SpeciesTargetsTab from './SpeciesTargetsTab';
 
 const PlantingSeasonDetailsView = (): JSX.Element => {
   const theme = useTheme();
@@ -89,7 +90,8 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
       {
         id: 'species-targets',
         label: strings.SPECIES_TARGETS,
-        children: <Box />,
+        children:
+          season && plantingSite ? <SpeciesTargetsTab plantingSeason={season} plantingSite={plantingSite} /> : <Box />,
       },
       {
         id: 'planting-dates',
@@ -97,7 +99,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
         children: <Box />,
       },
     ],
-    []
+    [season, plantingSite]
   );
 
   const { activeTab, onChangeTab } = useStickyTabs({
