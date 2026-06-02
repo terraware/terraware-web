@@ -20,6 +20,7 @@ import { getMediumDate } from 'src/utils/dateFormatter';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import EditPlantingSeasonModal from './EditPlantingSeasonModal';
+import PlantingDatesTab from './PlantingDatesTab';
 import PlantingSeasonStatusBadge from './PlantingSeasonStatusBadge';
 import SpeciesTargetsTab from './SpeciesTargetsTab';
 
@@ -96,7 +97,8 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
       {
         id: 'planting-dates',
         label: strings.PLANTING_DATES,
-        children: <Box />,
+        children:
+          season && plantingSite ? <PlantingDatesTab plantingSeason={season} plantingSite={plantingSite} /> : <Box />,
       },
     ],
     [season, plantingSite]
