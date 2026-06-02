@@ -25,6 +25,8 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
@@ -107,6 +109,7 @@ type SpeciesListProps = {
 export default function SpeciesListView({ reloadData, species }: SpeciesListProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
+  const trackEvent = useTrackEvent();
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
@@ -271,6 +274,11 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const downloadReportHandler = (table: MRT_TableInstance<SpeciesSearchResultRow>) => {
     const filteredRows = table.getSortedRowModel().rows;
+    trackEvent(MIXPANEL_EVENTS.REPORT_DOWNLOADED, {
+      report_type: 'species_list',
+      format: 'csv',
+      row_count: filteredRows.length,
+    });
     const visibleColumns = table
       .getVisibleLeafColumns()
       .filter((col) => !col.id.startsWith('mrt-') && col.id !== 'problems' && typeof col.columnDef.header === 'string');

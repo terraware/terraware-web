@@ -6,6 +6,8 @@ import { Checkbox, Dropdown } from '@terraware/web-components';
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import Button from 'src/components/common/button/Button';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers/hooks';
 import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
@@ -39,6 +41,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const { isApplication, onCancel, onSuccess, open } = props;
   const theme = useTheme();
   const snackbar = useSnackbar();
+  const trackEvent = useTrackEvent();
   const [nameError, setNameError] = useState('');
   const [timeZoneError, setTimeZoneError] = useState('');
   const [countryError, setCountryError] = useState('');
@@ -133,11 +136,16 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
       return;
     }
 
-    const response = await OrganizationService.createOrganization(
-      newOrganization,
-      ManagedLocationTypes.filter((locationType: ManagedLocationType) => locationTypes[locationType])
+    const selectedLocationTypes = ManagedLocationTypes.filter(
+      (locationType: ManagedLocationType) => locationTypes[locationType]
     );
+    const response = await OrganizationService.createOrganization(newOrganization, selectedLocationTypes);
     if (response.requestSucceeded && response.organization) {
+      trackEvent(MIXPANEL_EVENTS.ORGANIZATION_CREATED, {
+        organization_type: newOrganization.organizationType,
+        has_country_code: !!newOrganization.countryCode,
+        num_managed_locations: selectedLocationTypes.length,
+      });
       onSuccess(response.organization);
     } else {
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);

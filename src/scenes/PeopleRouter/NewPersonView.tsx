@@ -11,6 +11,8 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS, EMAIL_REGEX } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization } from 'src/providers/hooks';
 import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
@@ -22,6 +24,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export default function PersonView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const trackEvent = useTrackEvent();
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const [emailError, setEmailError] = useState('');
@@ -96,6 +99,9 @@ export default function PersonView(): JSX.Element {
         newPerson.id,
         newPerson.role
       );
+      if (response.requestSucceeded) {
+        trackEvent(MIXPANEL_EVENTS.USER_ROLE_UPDATED, { new_role: newPerson.role });
+      }
       successMessage = response.requestSucceeded ? strings.CHANGES_SAVED : null;
       userId = newPerson.id;
     } else {
@@ -115,6 +121,7 @@ export default function PersonView(): JSX.Element {
         }
       }
       if (response.requestSucceeded) {
+        trackEvent(MIXPANEL_EVENTS.USER_INVITED, { role: newPerson.role });
         userId = response.userId;
       }
       successMessage = response.requestSucceeded ? strings.PERSON_ADDED : null;
