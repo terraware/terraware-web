@@ -4,6 +4,7 @@ import { Grid } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { SubLocationService } from 'src/services';
 import AccessionService from 'src/services/AccessionService';
@@ -35,6 +36,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
     : [];
   const [subLocations, setSubLocations] = useState<SubLocation[]>([]);
   const snackbar = useSnackbar();
+  const markSubmitted = useTrackModalAbandonment('accession_edit_location');
 
   const newRecord = {
     facilityId: accession.facilityId || 0,
@@ -68,6 +70,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
       ...record,
     });
     if (response.requestSucceeded) {
+      markSubmitted();
       reload();
       onClose();
     } else {

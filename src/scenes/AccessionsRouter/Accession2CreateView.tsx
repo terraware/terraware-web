@@ -147,6 +147,19 @@ export default function CreateAccession(): JSX.Element | null {
 
   const saveAccession = async () => {
     if (hasErrors()) {
+      const missingFields = MANDATORY_FIELDS.filter((field: MandatoryField) => !record[field]);
+      const fieldsWithErrors: string[] = [...missingFields];
+      if (collectedDateError) {
+        fieldsWithErrors.push('collectedDate');
+      }
+      if (receivedDateError) {
+        fieldsWithErrors.push('receivedDate');
+      }
+      trackEvent(MIXPANEL_EVENTS.FORM_VALIDATION_FAILED, {
+        form_name: 'accession_create',
+        error_count: fieldsWithErrors.length,
+        fields_with_errors: fieldsWithErrors,
+      });
       setValidateFields(true);
       return;
     }
@@ -175,6 +188,7 @@ export default function CreateAccession(): JSX.Element | null {
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', accessionId.toString()),
       });
     } catch {
+      trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'accession' });
       snackbar.toastError();
     } finally {
       setIsSaving(false);

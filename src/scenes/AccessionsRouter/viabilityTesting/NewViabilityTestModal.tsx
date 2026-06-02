@@ -17,6 +17,7 @@ import TooltipLearnMoreModal, {
 import AddLink from 'src/components/common/AddLink';
 import DatePicker from 'src/components/common/DatePicker';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization } from 'src/providers/hooks';
 import { OrganizationUserService } from 'src/services';
@@ -49,6 +50,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const { selectedOrganization } = useOrganization();
   const trackEvent = useTrackEvent();
   const { onClose, open, accession, user, reload, viabilityTest } = props;
+  const markSubmitted = useTrackModalAbandonment(viabilityTest ? 'viability_test_edit' : 'viability_test_create');
 
   const [record, setRecord, onChange, onChangeCallback] = useForm(viabilityTest);
   const [users, setUsers] = useState<OrganizationUser[]>();
@@ -337,6 +339,10 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const saveTest = async () => {
     if (record) {
       if (hasErrors()) {
+        trackEvent(MIXPANEL_EVENTS.FORM_VALIDATION_FAILED, {
+          form_name: record.id === -1 ? 'viability_test_create' : 'viability_test_edit',
+          error_count: 1,
+        });
         setValidateFields(true);
         return;
       }
@@ -360,6 +366,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
             test_type: record.testType,
           });
         }
+        markSubmitted();
         reload();
         onCloseHandler();
         const cutTestEdited =
@@ -373,6 +380,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           setOpenViabilityResultModal(true);
         }
       } else {
+        trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'viability_test' });
         snackbar.toastError();
       }
     }

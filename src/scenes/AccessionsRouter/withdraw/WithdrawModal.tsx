@@ -9,6 +9,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import CountWithdrawal from 'src/scenes/AccessionsRouter/withdraw/CountWithdrawal';
@@ -42,6 +43,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const { selectedOrganization } = useOrganization();
   const { onClose, open, accession, reload, user } = props;
   const trackEvent = useTrackEvent();
+  const markSubmitted = useTrackModalAbandonment('accession_withdraw');
 
   const newViabilityTesting: ViabilityTestPostRequest = {
     testType: 'Lab',
@@ -247,10 +249,27 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
       let response;
       if (record) {
         if (isNurseryTransfer && nurseryTransferRecord.destinationFacilityId === -1) {
+          trackEvent(MIXPANEL_EVENTS.FORM_VALIDATION_FAILED, {
+            form_name: 'accession_withdraw',
+            error_count: 1,
+            fields_with_errors: ['destinationFacilityId'],
+          });
           setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);
           return;
         }
         if (fieldsErrors.date || (isNurseryTransfer && fieldsErrors.readyByDate)) {
+          const errored: string[] = [];
+          if (fieldsErrors.date) {
+            errored.push('date');
+          }
+          if (isNurseryTransfer && fieldsErrors.readyByDate) {
+            errored.push('readyByDate');
+          }
+          trackEvent(MIXPANEL_EVENTS.FORM_VALIDATION_FAILED, {
+            form_name: 'accession_withdraw',
+            error_count: errored.length,
+            fields_with_errors: errored,
+          });
           return;
         }
 
@@ -281,9 +300,11 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
             purpose: isNurseryTransfer ? 'Nursery' : record.purpose || 'Other',
             quantity: estimatedWithdrawalQty,
           });
+          markSubmitted();
           reload();
           onCloseHandler();
         } else {
+          trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'accession_withdrawal' });
           snackbar.toastError();
         }
       }
@@ -301,6 +322,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     onCloseHandler,
     record,
     reload,
+    markSubmitted,
     setIndividualError,
     snackbar,
     strings,
