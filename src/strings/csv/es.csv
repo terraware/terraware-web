@@ -490,6 +490,10 @@ DELETE_PROJECT_CONFIRM,¿Está seguro de que quiere borrar este proyecto? Se eli
 DELETE_SEEDLINGS_BATCHES,Borrar Lotes de Plántulas,a5916585
 DELETE_SEEDLINGS_BATCHES_MSG,"Eliminar lotes sin retiros los eliminará completamente. Eliminar lotes con retiros establecerá sus cantidades restantes en 0, eliminará esas cantidades del inventario y marcará los lotes como vacíos. Los retiros anteriores seguirán apareciendo en el historial de retiros.",4f9bf36f
 DELETE_SPECIES,Borrar Especie,b3dd3256
+DELETE_SPECIES_GOAL,Eliminar objetivo de especie,38e5960e
+DELETE_SPECIES_GOAL_CONFIRM,"Está a punto de eliminar la especie {0} como objetivo para este sustrato. La cantidad se eliminará del objetivo total de plantación para esta temporada y se notificará al vivero para que ajuste las plantas asignadas, si es necesario.
+
+¿Está seguro de que desea eliminar este objetivo de especie?",931b5120
 DELETE_STATISTICS,Eliminar estadísticas,881bc71c
 DELETE_VIABILITY_TEST,Eliminar prueba de viabilidad,db53dffa
 DELETE_VIABILITY_TEST_MESSAGE,Está a punto de borrar la prueba de viabilidad {0}.,ceace778
@@ -942,6 +946,7 @@ IUCN_NOT_EVALUATED,No evaluada (NE),93c14c32
 IUCN_VULNERABLE,Vulnerable (VU),ed5dcc89
 JOIN,Únase,43eb6054
 JOIN_EVENT_NAME,Únase {0},14c4bd8e
+JUST_SAVED,Guardado recientemente,d426eaa3
 KEEP_ORIGINAL,Conservar original,21773616
 KEY,Clave,b46ab088
 KEY_LESSONS,Lecciones clave aprendidas,24ee85f1
@@ -1210,6 +1215,7 @@ NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de poder agregar y administrar sus accesiones,
 NO_SPECIES,Ninguna especie,1616e61b
 NO_SPECIES_CONTRIBUTOR_MSG,"Aún no hay especies en su lista de especies. Solo los administradores pueden añadir especies, así que por favor contacte con el suyo para que le ayude.",32a4f50e
 NO_SPECIES_DESCRIPTION,Parece que aún no ha añadido ninguna especie. Disponer de una lista maestra de especies ayuda a agilizar la introducción de datos sobre semillas y plantas en su organización. Puede añadir especies manual e individualmente o importar datos desde un CSV.,048a81f6
+NO_SPECIES_TARGETS_FOR_SUBSTRATUM,No se han establecido objetivos de especies para este sustrato.,53b1322b
 NO_SUB_LOCATIONS,Edite este banco de semillas para añadir sublocalizaciones.,963dba11
 NO_SUB_LOCATIONS_NURSERY,Edite este vivero para añadir sublocalizaciones.,8a939067
 NO_TEMPORARY_PLOTS_SURVIVAL_TOOLTIP,No hay Observaciones completadas que incluyan parcelas temporales dentro de un sustrato de Sitio de Plantación.,fdf09cc6
@@ -1808,6 +1814,7 @@ SAVE_VERSION,Guardar versión,5afacff0
 SAVE_VERSION_ELLIPSIS,Guardar versión...,f3ac25ba
 SAVE_VERSION_MESSAGE,"Guardar una versión equivale a crear una captura de pantalla del aspecto actual del documento. Puede seguir editando el documento, pero no podrá editar la versión guardada.",90b2fd9b
 SAVED,Guardado,3324fd4d
+SAVING,Guardando...,d4ce4849
 SCARIFY,Escarificar,b34359c6
 SCHEDULE_OBSERVATION,Programar observación,9d1a4cfc
 SCHEDULE_OBSERVATION_MESSAGE,Seleccione los estratos y subestratos que desea incluir en la observación:,3dc66640
@@ -1900,6 +1907,7 @@ SELECT_SEED_BANK,Banco de semillas seleccionado,9780c8e6
 SELECT_SEED_BANK_INFO,Las accesiones requieren un lugar de almacenamiento en un banco de semillas. Seleccione un banco de semillas.,f040ea62
 SELECT_SEEDLINGS_BATCHES_FOR_PROJECT,Seleccione los lotes de plántulas para {0},1823e205
 SELECT_SEEDLINGS_BATCHES_FOR_PROJECT_DESCRIPTION,Use la columna de la casilla de verificación para seleccionar los lotes de plántulas que deben añadirse a {0}.,54222918
+SELECT_SPECIES,Seleccionar especies,d19ac8ee
 SELECT_VOTE,Seleccionar voto,5114a633
 SELECTED_COLUMNS,Columnas seleccionadas,ca9dc436
 SELECTED_SPECIES_IN_USE,"La especie seleccionada para eliminar está en uso (en una Accesión, Inventario y/o Observación) y no puede ser eliminada.",cdd9b0e1
@@ -1915,6 +1923,7 @@ SESSION_IS_STARTING_SOON,La sesión comienza pronto.,c3abc7d1
 SESSION_SLIDES,Diapositivas de la sesión,7748a514
 SET_PLANTING_COMPLETE,Plantación completa,3bea077e
 SET_REMINDER,Establecer recordatorio,ad81e3b3
+SET_SPECIES_TARGETS_DESCRIPTION,Establezca objetivos de especies por sustrato del sitio de plantación. Los objetivos pueden actualizarse en cualquier momento y son visibles para el Gestor de Inventario en la Planificación de Inventario.,216e3add
 SET_T0_DATA_IN_THE,Ver {0},194994e4
 SET_UP,Configurar,6096080e
 SET_UP_NURSERY,Establecer vivero,25ab7370
@@ -2159,6 +2168,8 @@ TARGET_DENSITY,Densidad objetivo,239e7748
 TARGET_HECTARES_PLANTED,Objetivo: {0} ha,8c7d580d
 TARGET_PLANTING_DENSITY,Densidad de plantación objetivo,4f350d39
 TARGET_PLANTING_DENSITY_TOOLTIP,Densidad de plantación objetivo para el estrato (plantas por hectárea).,042cc8ff
+TARGET_PLANTS,plantas objetivo,ff0517a3
+TARGET_QUANTITY,Cantidad objetivo,73c71da9
 TARGETS,Objetivos,afd4bbf9
 TEMPLATE,Plantilla,28afe27c
 TEMPLATES,Plantillas,a66a976a

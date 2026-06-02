@@ -9,6 +9,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   CreatePlantingSeasonRequestPayload,
@@ -34,6 +35,7 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const snackbar = useSnackbar();
   const [createPlantingSeason, { isLoading }] = useCreatePlantingSeasonMutation();
+  const markSubmitted = useTrackModalAbandonment('planting_season_add');
 
   const [record, setRecord, onChange] = useForm<PlantingSeasonForm>({
     plantingSiteId: initialPlantingSiteId && initialPlantingSiteId > 0 ? initialPlantingSiteId : undefined,
@@ -121,6 +123,7 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
         plantingSiteId,
         startDate,
       }).unwrap();
+      markSubmitted();
       onClose();
     } catch (e) {
       snackbar.toastError();

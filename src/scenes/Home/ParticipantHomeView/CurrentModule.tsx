@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react';
-import { useMixpanel } from 'react-mixpanel-browser';
 
 import { DateTime } from 'luxon';
 
@@ -9,6 +8,7 @@ import useListProjectModules from 'src/hooks/useListProjectModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectModuleDeliverables from 'src/hooks/useProjectModuleDeliverables';
 import useProjectModuleEvents from 'src/hooks/useProjectModuleEvents';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -27,7 +27,7 @@ const ModuleDetailsCardWrapper = ({ moduleId, project }: ModuleDetailsCardWrappe
   const { getProjectModule, projectModule } = useGetProjectModule();
   const { deliverables, listProjectModuleDeliverables } = useProjectModuleDeliverables();
   const { events, listProjectModuleEvents } = useProjectModuleEvents();
-  const mixpanel = useMixpanel();
+  const trackEvent = useTrackEvent();
 
   useEffect(() => {
     if (project.id) {
@@ -52,14 +52,14 @@ const ModuleDetailsCardWrapper = ({ moduleId, project }: ModuleDetailsCardWrappe
       events?.map((event) => ({
         ...event,
         onClick: () => {
-          mixpanel?.track(MIXPANEL_EVENTS.ACCELERATOR_MDDULE_SESSION_EVENT_LINK, {
+          trackEvent(MIXPANEL_EVENTS.ACCELERATOR_MODULE_SESSION_EVENT_LINK_CLICKED, {
             eventId: event.id,
             type: event.type,
           });
           goToModuleEventSession(project.id, moduleId, event.id);
         },
       })),
-    [events, goToModuleEventSession, project, moduleId, mixpanel]
+    [events, goToModuleEventSession, project, moduleId, trackEvent]
   );
 
   const moduleDetails = useMemo(

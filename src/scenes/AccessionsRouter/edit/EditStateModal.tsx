@@ -2,6 +2,7 @@ import React, { type JSX, useEffect, useState } from 'react';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import AccessionService from 'src/services/AccessionService';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
@@ -21,6 +22,7 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
   const { onClose, open, accession, reload } = props;
   const [record, setRecord, onChange] = useForm(accession);
   const [editUsedUpStatus] = useState<boolean>(accession.state === 'Used Up');
+  const markSubmitted = useTrackModalAbandonment('accession_edit_state');
 
   useEffect(() => {
     setRecord(accession);
@@ -30,6 +32,7 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
     if (record) {
       const response = await AccessionService.updateAccession(record);
       if (response.requestSucceeded) {
+        markSubmitted();
         reload();
       }
       onClose();

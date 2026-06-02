@@ -7,6 +7,9 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import DatePicker from 'src/components/common/DatePicker';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { NurseryBatchService } from 'src/services';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
@@ -38,6 +41,8 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
   const { selectedOrganization } = useOrganization();
   const numberFormatter = useNumberFormatter();
   const snackbar = useSnackbar();
+  const trackEvent = useTrackEvent();
+  const markSubmitted = useTrackModalAbandonment('batch_details_edit');
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 
@@ -175,6 +180,8 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
       }
 
       if (response.requestSucceeded && responseQuantities.requestSucceeded) {
+        trackEvent(MIXPANEL_EVENTS.BATCH_QUANTITY_EDITED);
+        markSubmitted();
         await updatePhotos();
         reload();
         onCloseHandler();
@@ -182,7 +189,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
         snackbar.toastError();
       }
     }
-  }, [record, hasErrors, updatePhotos, reload, onCloseHandler, snackbar]);
+  }, [record, hasErrors, updatePhotos, reload, onCloseHandler, snackbar, trackEvent, markSubmitted]);
 
   const handleSaveBatch = useCallback(() => {
     void saveBatch();

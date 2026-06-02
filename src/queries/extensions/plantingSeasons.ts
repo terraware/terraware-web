@@ -32,5 +32,20 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.PlantingSeasons, id: 'LIST' },
       ],
     },
+    getSpeciesTargets: {
+      providesTags: (_result, _error, plantingSeasonId) => [
+        { type: QueryTagTypes.PlantingSeasons, id: `${plantingSeasonId}-targets` },
+      ],
+    },
+    upsertSpeciesTarget: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-targets` },
+      ],
+    },
+    deleteSpeciesTarget: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-targets` },
+      ],
+    },
   },
 });

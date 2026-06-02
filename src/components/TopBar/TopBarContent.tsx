@@ -18,6 +18,7 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import useFunderPortal from 'src/hooks/useFunderPortal';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser, useUserFundingEntity } from 'src/providers/hooks';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -40,6 +41,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   const { isApplicationPortal } = useApplicationPortal();
   const { isFunderRoute } = useFunderPortal();
   const mixpanel = useMixpanel();
+  const trackEvent = useTrackEvent();
 
   const logoStyles = {
     width: 137,
@@ -71,7 +73,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
   };
 
   const handleTopBarClick = () => {
-    mixpanel?.track(MIXPANEL_EVENTS.TOP_BAR_HOME);
+    trackEvent(MIXPANEL_EVENTS.TOP_BAR_HOME_CLICKED);
     navigate(APP_PATHS.HOME);
   };
 

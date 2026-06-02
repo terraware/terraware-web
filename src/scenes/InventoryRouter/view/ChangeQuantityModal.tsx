@@ -5,6 +5,7 @@ import { BusySpinner, Dropdown, Icon, Textfield } from '@terraware/web-component
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { NurseryBatchService } from 'src/services';
 import { ChangeBatchStatusesRequestPayload } from 'src/services/NurseryBatchService';
 import strings from 'src/strings';
@@ -30,6 +31,7 @@ export default function ChangeQuantityModal({
   const { type } = modalValues;
   const snackbar = useSnackbar();
   const numberFormatter = useNumberFormatter();
+  const markSubmitted = useTrackModalAbandonment('batch_quantity_change');
 
   const [nextPhase, setNextPhase] = useState<ChangeBatchStatusesRequestPayload['newPhase']>(
     type === 'germinating' ? 'ActiveGrowth' : type === 'active-growth' ? 'HardeningOff' : 'Ready'
@@ -109,6 +111,7 @@ export default function ChangeQuantityModal({
     setSaving(false);
 
     if (response.requestSucceeded) {
+      markSubmitted();
       if (reload) {
         reload();
       }
@@ -116,7 +119,7 @@ export default function ChangeQuantityModal({
     } else {
       snackbar.toastError();
     }
-  }, [movedValue, nextPhase, onCloseHandler, record, reload, row, snackbar, type]);
+  }, [markSubmitted, movedValue, nextPhase, onCloseHandler, record, reload, row, snackbar, type]);
 
   const onSave = useCallback(() => {
     void onSubmit();

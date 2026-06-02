@@ -1,11 +1,11 @@
 import React from 'react';
 import { useCallback } from 'react';
-import { useMixpanel } from 'react-mixpanel-browser';
 
 import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import strings from 'src/strings';
 import { DeliverableToDoItem } from 'src/types/DeliverableToDoItem';
@@ -21,7 +21,7 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
   const { projectId } = useToDoData();
   const { goToDeliverable, goToModuleEventSession } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
-  const mixpanel = useMixpanel();
+  const trackEvent = useTrackEvent();
 
   const handleOnClick = useCallback(() => {
     if (projectId === -1) {
@@ -34,7 +34,7 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
       case 'Recorded Session': {
         const event = toDo as EventToDoItem;
 
-        mixpanel?.track(MIXPANEL_EVENTS.PART_EX_TO_DO_UPCOMING_VIEW_EVENT, {
+        trackEvent(MIXPANEL_EVENTS.PARTICIPANT_TODO_EVENT_VIEWED, {
           id: event.id,
           type: event.type,
           status: event.status,
@@ -44,7 +44,7 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
       }
       case 'Deliverable': {
         const deliverable = toDo as DeliverableToDoItem;
-        mixpanel?.track(MIXPANEL_EVENTS.PART_EX_TO_DO_UPCOMING_VIEW_DELIVERABLE, {
+        trackEvent(MIXPANEL_EVENTS.PARTICIPANT_TODO_DELIVERABLE_VIEWED, {
           id: deliverable.id,
           type: deliverable.type,
           category: deliverable.category,
@@ -54,7 +54,7 @@ const ToDoCta = ({ toDo }: ToDoCtaProps) => {
         return goToDeliverable(deliverable.id, deliverable.projectId);
       }
     }
-  }, [goToDeliverable, goToModuleEventSession, projectId, toDo, mixpanel]);
+  }, [goToDeliverable, goToModuleEventSession, projectId, toDo, trackEvent]);
 
   return (
     <Button

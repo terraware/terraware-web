@@ -11,6 +11,8 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS, EMAIL_REGEX } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization } from 'src/providers/hooks';
 import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
@@ -22,6 +24,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export default function PersonView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const trackEvent = useTrackEvent();
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const [emailError, setEmailError] = useState('');
@@ -76,13 +79,24 @@ export default function PersonView(): JSX.Element {
 
   const saveUser = async () => {
     setPageError(undefined);
+    const formName = personSelectedToEdit ? 'person_edit' : 'person_invite';
 
     if (newPerson.email === '') {
+      trackEvent(MIXPANEL_EVENTS.FORM_VALIDATION_FAILED, {
+        form_name: formName,
+        error_count: 1,
+        fields_with_errors: ['email_empty'],
+      });
       setEmailError(strings.REQUIRED_FIELD);
       return;
     }
 
     if (!EMAIL_REGEX.test(newPerson.email)) {
+      trackEvent(MIXPANEL_EVENTS.FORM_VALIDATION_FAILED, {
+        form_name: formName,
+        error_count: 1,
+        fields_with_errors: ['email_format'],
+      });
       setEmailError(strings.INCORRECT_EMAIL_FORMAT);
       return;
     }
@@ -96,6 +110,11 @@ export default function PersonView(): JSX.Element {
         newPerson.id,
         newPerson.role
       );
+      if (response.requestSucceeded) {
+        trackEvent(MIXPANEL_EVENTS.USER_ROLE_UPDATED, { new_role: newPerson.role });
+      } else {
+        trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'user_role_update' });
+      }
       successMessage = response.requestSucceeded ? strings.CHANGES_SAVED : null;
       userId = newPerson.id;
     } else {
@@ -103,6 +122,10 @@ export default function PersonView(): JSX.Element {
         ...newPerson,
       });
       if (!response.requestSucceeded) {
+        trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, {
+          entity_type: 'user_invitation',
+          error_details: response.errorDetails,
+        });
         if (response.errorDetails === 'PRE_EXISTING_USER') {
           setRepeatedEmail(newPerson.email);
           setPageError('REPEATED_EMAIL');
@@ -115,6 +138,7 @@ export default function PersonView(): JSX.Element {
         }
       }
       if (response.requestSucceeded) {
+        trackEvent(MIXPANEL_EVENTS.USER_INVITED, { role: newPerson.role });
         userId = response.userId;
       }
       successMessage = response.requestSucceeded ? strings.PERSON_ADDED : null;

@@ -7,6 +7,8 @@ import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization } from 'src/providers/hooks';
 import {
   NurseryWithdrawalPayload,
@@ -49,9 +51,29 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   const [filterProjectId, setFilterProjectId] = useState<number>();
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
+  const trackEvent = useTrackEvent();
 
   const [createBatchWithdrawal] = useCreateBatchWithdrawalMutation();
   const [uploadWithdrawalPhotos] = useUploadWithdrawalPhotoMutation();
+
+  // Funnel anchor: fires once when the flow mounts. Lets us measure overall
+  // funnel entry volume + segment by which page the user came from.
+  useEffect(() => {
+    trackEvent(MIXPANEL_EVENTS.BATCH_WITHDRAWAL_STARTED, {
+      batch_count: batchIds.length,
+      source_page: sourcePage,
+    });
+    // Intentionally empty dep array beyond trackEvent: we want this once per
+    // mount, not on every batchIds/sourcePage re-reference.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trackEvent]);
+
+  // Funnel step marker: fires on each flowState change (including the initial
+  // 'purpose' on mount). Building a Mixpanel funnel on this event + `step`
+  // property shows drop-off between every step in the multi-step flow.
+  useEffect(() => {
+    trackEvent(MIXPANEL_EVENTS.BATCH_WITHDRAWAL_STEP_REACHED, { step: flowState });
+  }, [flowState, trackEvent]);
 
   useEffect(() => {
     if (selectedOrganization) {
@@ -121,6 +143,11 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       });
 
     if (record.batchWithdrawals.length === 0) {
+      trackEvent(MIXPANEL_EVENTS.FORM_VALIDATION_FAILED, {
+        form_name: 'batch_withdraw',
+        error_count: 1,
+        fields_with_errors: ['no_batches_selected'],
+      });
       snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
       return;
     }
@@ -128,6 +155,11 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     try {
       const withdrawalResponse = await createBatchWithdrawal(record).unwrap();
       const { withdrawal } = withdrawalResponse;
+      trackEvent(MIXPANEL_EVENTS.BATCH_WITHDRAWN, {
+        purpose: record.purpose,
+        batch_count: record.batchWithdrawals.length,
+        has_photos: photos.length > 0,
+      });
       if (photos.length) {
         const uploadPhotoPromises = photos.map((photo) =>
           uploadWithdrawalPhotos({ withdrawalId: withdrawal.id, body: { file: photo } })
@@ -159,6 +191,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
         onWithdrawSuccess(withdrawal);
       }
     } catch {
+      trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'batch_withdrawal' });
       snackbar.toastError();
     }
   };

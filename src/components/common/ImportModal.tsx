@@ -3,6 +3,7 @@ import React, { type JSX, useEffect, useRef, useState } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { useOrganization } from 'src/providers/hooks';
 import { ImportModuleResponsePayload } from 'src/services/ModuleService';
 import strings from 'src/strings';
@@ -90,6 +91,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   const [uploadId, setUploadId] = useState<number>();
   const theme = useTheme();
   const snackbar = useSnackbar();
+  const markSubmitted = useTrackModalAbandonment('import_modal');
 
   const spacingStyles = { marginRight: theme.spacing(2) };
 
@@ -162,6 +164,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       if (fileStatus.details.status === 'Invalid') {
         setError(getErrors());
       } else if (fileStatus.details.status === 'Completed') {
+        markSubmitted();
         setCompleted(true);
       }
     } else if (fileStatus?.details.status === 'Awaiting User Action') {
@@ -169,7 +172,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
       clearUploadInterval();
       setWarning(true);
     }
-  }, [fileStatus, uploadInterval]);
+  }, [fileStatus, uploadInterval, markSubmitted]);
 
   const dropHandler = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -221,6 +224,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
             onClose(false);
           } else {
             setLoading(false);
+            markSubmitted();
             setCompleted(true);
           }
         }

@@ -1,4 +1,4 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
@@ -9,9 +9,11 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import useProjectSiteObservationSummaries from 'src/hooks/useProjectSiteObservationSummaries';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useKnowledgeBaseLinks } from 'src/knowledgeBaseLinks';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
-import { useListAcceleratorReportsQuery } from 'src/queries/generated/reports';
 import strings from 'src/strings';
 
 import HighestAndLowestSurvivalRateSpeciesCard from './HighestAndLowestSurvivalRateSpeciesCard';
@@ -29,6 +31,11 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
   const isWeightedSurvivalRatesEnabled = isEnabled('Weighted Survival Rates');
   const isProjectView = !plantingSiteId && projectId;
   const knowledgeBaseLinks = useKnowledgeBaseLinks();
+  const trackEvent = useTrackEvent();
+
+  useEffect(() => {
+    trackEvent(MIXPANEL_EVENTS.SURVIVAL_RATE_VIEWED, { is_project_view: !!isProjectView });
+  }, [isProjectView, trackEvent]);
 
   const observationSummariesQuery = useListObservationSummariesQuery(
     { plantingSiteId: plantingSiteId || -1 },
@@ -36,22 +43,29 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
   );
   const observationSummaries = observationSummariesQuery.data?.summaries;
 
-  const acceleratorReportsQuery = useListAcceleratorReportsQuery(
-    { projectId: projectId || -1, includeIndicators: true },
-    { skip: !(isWeightedSurvivalRatesEnabled && isProjectView) }
+  const projectSiteSummaries = useProjectSiteObservationSummaries(
+    projectId,
+    Boolean(isWeightedSurvivalRatesEnabled && isProjectView)
   );
 
   const weightedSurvivalRate = useMemo(() => {
-    const reports = acceleratorReportsQuery.data?.reports;
-    if (!reports?.length) {
+    const validStrata = projectSiteSummaries.flatMap(({ site, summary }) =>
+      (summary?.strata ?? [])
+        .map((stratum) => {
+          const areaHa = site.strata?.find((s) => s.id === stratum.stratumId)?.areaHa;
+          return { areaHa, survivalRate: stratum.survivalRate };
+        })
+        .filter(
+          (entry): entry is { areaHa: number; survivalRate: number } =>
+            entry.survivalRate !== undefined && entry.areaHa !== undefined && entry.areaHa > 0
+        )
+    );
+    const totalArea = validStrata.reduce((sum, stratum) => sum + stratum.areaHa, 0);
+    if (totalArea === 0) {
       return undefined;
     }
-    const latestReport = [...reports].sort((a, b) => b.startDate.localeCompare(a.startDate))[0];
-    const survivalRateIndicator = latestReport.autoCalculatedIndicators?.find(
-      (indicator) => indicator.indicator === 'Survival Rate'
-    );
-    return survivalRateIndicator?.systemValue;
-  }, [acceleratorReportsQuery.data?.reports]);
+    return Math.round(validStrata.reduce((sum, stratum) => sum + stratum.survivalRate * stratum.areaHa, 0) / totalArea);
+  }, [projectSiteSummaries]);
 
   const separatorStyles = {
     width: '1px',

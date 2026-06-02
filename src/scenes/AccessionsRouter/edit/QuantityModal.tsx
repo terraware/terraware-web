@@ -9,6 +9,7 @@ import ConvertedValue from 'src/components/ConvertedValue';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Link from 'src/components/common/Link';
 import Button from 'src/components/common/button/Button';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { useUser } from 'src/providers';
 import AccessionService from 'src/services/AccessionService';
 import strings from 'src/strings';
@@ -67,6 +68,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const [totalWeightError, setTotalWeightError] = useState('');
   const [remainingQuantityNotes, setRemainingQuantityNotes] = useState<string>('');
   const [remainingQuantityNotesError, setRemainingQuantityNotesError] = useState<boolean>(false);
+  const markSubmitted = useTrackModalAbandonment('accession_edit_quantity');
 
   const quantityChanged = useMemo(() => {
     if (!accession.remainingQuantity) {
@@ -134,6 +136,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
     }
     const response = await AccessionService.updateAccession(record, false, remainingQuantityNotes);
     if (response.requestSucceeded) {
+      markSubmitted();
       reload();
       onCloseHandler();
     } else {

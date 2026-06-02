@@ -2,6 +2,7 @@ import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import BatchDetailsForm from 'src/scenes/InventoryRouter/form/BatchDetailsForm';
 import strings from 'src/strings';
@@ -23,6 +24,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
+  const markSubmitted = useTrackModalAbandonment('batch_details_view');
 
   const [doValidateBatch, setDoValidateBatch] = useState<boolean>(false);
   const [requestId, setRequestId] = useState('');
@@ -48,6 +50,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   useEffect(() => {
     if (batchesRequest?.status === 'success') {
+      markSubmitted();
       setBusy(false);
       reload();
       onClose();
@@ -56,7 +59,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
       snackbar.toastError(strings.GENERIC_ERROR);
       setDoValidateBatch(false);
     }
-  }, [batchesRequest, reload, onClose, snackbar]);
+  }, [batchesRequest, reload, onClose, snackbar, markSubmitted]);
 
   return (
     <>
