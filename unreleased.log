@@ -1,3 +1,5 @@
+4ba65660 Add friction tracking mixpanel events (#5763)
+5bf59eb9 SW-8421 Species Target tab (#5762)
 7bc6d37c SW-8429 Withdrawals: Withdrawals table - Species column filter only showing first 26 species (#5761)
 c297f5cc SW-8424 Project level average strata survival rate calculation seems incorrect (#5760)
 ceb47866 Add org admin and observation mixpanel event tracking (#5759)
