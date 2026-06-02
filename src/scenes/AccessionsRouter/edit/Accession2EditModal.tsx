@@ -7,6 +7,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useDeletePhotoMutation, useUploadPhotoMutation } from 'src/queries/generated/accessionsV1';
 import AccessionService from 'src/services/AccessionService';
@@ -57,6 +58,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
   const [photoFilenamesToRemove, setPhotoFilenamesToRemove] = useState<string[]>([]);
   const [uploadPhoto] = useUploadPhotoMutation();
   const [deletePhoto] = useDeletePhotoMutation();
+  const markSubmitted = useTrackModalAbandonment('accession_edit');
 
   const onPhotosChanged = (photosList: File[]) => {
     setNewPhotos(photosList);
@@ -113,6 +115,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
       setLoading(true);
       const response = await AccessionService.updateAccession(record);
       if (response.requestSucceeded && accession) {
+        markSubmitted();
         await updatePhotos();
         reload();
         onCloseHandler();

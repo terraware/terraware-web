@@ -8,6 +8,7 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useProjects } from 'src/hooks/useProjects';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   requestCreateApplication,
@@ -44,6 +45,7 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
   const dispatch = useAppDispatch();
   const { toastSuccess } = useSnackbar();
   const { goToApplication } = useNavigateTo();
+  const markSubmitted = useTrackModalAbandonment('application_create');
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [projectNameError, setProjectNameError] = useState<string>('');
@@ -164,11 +166,12 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
   const onApplicationCreated = useCallback(
     (applicationId: number) => {
       if (activeLocale) {
+        markSubmitted();
         toastSuccess(strings.SUCCESS);
       }
       goToApplication(applicationId);
     },
-    [activeLocale, goToApplication, toastSuccess]
+    [activeLocale, goToApplication, markSubmitted, toastSuccess]
   );
 
   useEffect(() => {

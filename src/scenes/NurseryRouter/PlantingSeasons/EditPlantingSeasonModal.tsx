@@ -7,6 +7,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { useOrganization } from 'src/providers';
 import { PlantingSeasonPayload, useUpdatePlantingSeasonMutation } from 'src/queries/generated/plantingSeasons';
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
@@ -37,6 +38,7 @@ const EditPlantingSeasonModal = ({
   const defaultTimeZone = useDefaultTimeZone().get().id;
   const snackbar = useSnackbar();
   const [updatePlantingSeason, { isLoading }] = useUpdatePlantingSeasonMutation();
+  const markSubmitted = useTrackModalAbandonment('planting_season_edit');
 
   const [record, , onChange] = useForm<PlantingSeasonForm>({
     name: plantingSeason.name,
@@ -81,6 +83,7 @@ const EditPlantingSeasonModal = ({
           endDate,
         },
       }).unwrap();
+      markSubmitted();
       onClose();
     } catch (e) {
       snackbar.toastError();

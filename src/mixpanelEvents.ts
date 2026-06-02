@@ -14,6 +14,8 @@ export enum MIXPANEL_EVENTS {
 
   // --- Nursery / inventory ---
   BATCH_CREATED = 'Batch Created',
+  BATCH_WITHDRAWAL_STARTED = 'Batch Withdrawal Started',
+  BATCH_WITHDRAWAL_STEP_REACHED = 'Batch Withdrawal Step Reached',
   BATCH_WITHDRAWN = 'Batch Withdrawn',
   BATCH_QUANTITY_EDITED = 'Batch Quantity Edited',
 
@@ -54,6 +56,11 @@ export enum MIXPANEL_EVENTS {
   // --- Generic UI / Navigation ---
   TOP_BAR_HOME_CLICKED = 'Top Bar Home Clicked',
   SETTINGS_TAB_CLICKED = 'Settings Tab Clicked',
+
+  // --- Friction / failure (Phase 2) ---
+  FORM_VALIDATION_FAILED = 'Form Validation Failed',
+  SAVE_FAILED = 'Save Failed',
+  MODAL_ABANDONED = 'Modal Abandoned',
 }
 
 // Shape of the user profile written via mixpanel.people.set(). Keys prefixed with
@@ -95,6 +102,13 @@ export type MixpanelEventPropertyMap = {
     species_id?: number;
     from_accession: boolean;
   };
+  [MIXPANEL_EVENTS.BATCH_WITHDRAWAL_STARTED]: {
+    batch_count: number;
+    source_page?: string;
+  };
+  [MIXPANEL_EVENTS.BATCH_WITHDRAWAL_STEP_REACHED]: {
+    step: string;
+  };
   [MIXPANEL_EVENTS.BATCH_WITHDRAWN]: {
     purpose: string;
     batch_count: number;
@@ -131,5 +145,18 @@ export type MixpanelEventPropertyMap = {
     report_type: string;
     format: string;
     row_count?: number;
+  };
+  [MIXPANEL_EVENTS.FORM_VALIDATION_FAILED]: {
+    form_name: string;
+    error_count: number;
+    fields_with_errors?: string[];
+  };
+  [MIXPANEL_EVENTS.SAVE_FAILED]: {
+    entity_type: string;
+    error_details?: string;
+  };
+  [MIXPANEL_EVENTS.MODAL_ABANDONED]: {
+    modal_name: string;
+    time_open_seconds: number;
   };
 };

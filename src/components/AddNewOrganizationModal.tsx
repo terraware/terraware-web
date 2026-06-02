@@ -7,6 +7,7 @@ import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import Button from 'src/components/common/button/Button';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers/hooks';
 import { OrganizationService } from 'src/services';
@@ -42,6 +43,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const theme = useTheme();
   const snackbar = useSnackbar();
   const trackEvent = useTrackEvent();
+  const markSubmitted = useTrackModalAbandonment('organization_create');
   const [nameError, setNameError] = useState('');
   const [timeZoneError, setTimeZoneError] = useState('');
   const [countryError, setCountryError] = useState('');
@@ -103,36 +105,48 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
 
   const saveOrganization = async () => {
     let hasErrors = false;
+    const fieldsWithErrors: string[] = [];
 
     if (newOrganization.name === '') {
       setNameError(strings.REQUIRED_FIELD);
+      fieldsWithErrors.push('name');
       hasErrors = true;
     }
 
     if (!newOrganization.timeZone) {
       setTimeZoneError(strings.REQUIRED_FIELD);
+      fieldsWithErrors.push('timeZone');
       hasErrors = true;
     }
 
     if (!newOrganization.countryCode) {
       setCountryError(strings.REQUIRED_FIELD);
+      fieldsWithErrors.push('countryCode');
       hasErrors = true;
     }
 
     if (hasStates && !newOrganization.countrySubdivisionCode) {
       setStateError(strings.REQUIRED_FIELD);
+      fieldsWithErrors.push('countrySubdivisionCode');
       hasErrors = true;
     }
 
     if (!newOrganization.organizationType) {
       setOrganizationTypeError(strings.REQUIRED_FIELD);
+      fieldsWithErrors.push('organizationType');
       hasErrors = true;
     } else if (newOrganization.organizationType === 'Other' && !newOrganization.organizationTypeDetails?.trim()) {
       setOrganizationTypeDetailsError(strings.REQUIRED_FIELD);
+      fieldsWithErrors.push('organizationTypeDetails');
       hasErrors = true;
     }
 
     if (hasErrors) {
+      trackEvent(MIXPANEL_EVENTS.FORM_VALIDATION_FAILED, {
+        form_name: 'organization_create',
+        error_count: fieldsWithErrors.length,
+        fields_with_errors: fieldsWithErrors,
+      });
       return;
     }
 
@@ -146,8 +160,10 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
         has_country_code: !!newOrganization.countryCode,
         num_managed_locations: selectedLocationTypes.length,
       });
+      markSubmitted();
       onSuccess(response.organization);
     } else {
+      trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'organization' });
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);
     }
     onCancel();

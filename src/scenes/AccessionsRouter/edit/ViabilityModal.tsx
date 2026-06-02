@@ -7,6 +7,7 @@ import { preventDefaultEvent } from '@terraware/web-components/utils';
 import AddLink from 'src/components/common/AddLink';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import AccessionService from 'src/services/AccessionService';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
@@ -29,6 +30,7 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
   const [record, setRecord, , onChangeCallback] = useForm(accession);
   const [error, setError] = useForm('');
   const snackbar = useSnackbar();
+  const markSubmitted = useTrackModalAbandonment('viability_edit_legacy');
 
   const saveQuantity = async () => {
     if (record.viabilityPercent) {
@@ -43,6 +45,7 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
     setError('');
     const response = await AccessionService.updateAccession(record);
     if (response.requestSucceeded) {
+      markSubmitted();
       reload();
       onCloseHandler();
     } else {
