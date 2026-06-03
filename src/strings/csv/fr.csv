@@ -197,6 +197,7 @@ APPROVED,Approuvé,b279ed0b
 APPROX_SYMBOL,~,acb59e95
 AR,RA,25a8e55a
 ARE_YOU_SURE,Êtes-vous sûr ?,d4536b91
+ARE_YOU_SURE_DELETE,Êtes-vous sûr de vouloir supprimer ?,a7f716f0
 AREA_HA,Superficie (ha),8ab5d500
 AREA_NOT_OBSERVED,Zone non observée,9eeddab4
 ARROW_KEYS,Touches fléchées,5cefb475
@@ -343,6 +344,9 @@ CLIMATE,Climat,63ba44ee
 CLIMATE_IMPACT,Impact sur le climat,876c48a4
 CLOSE,Fermer,e6e3f022
 CLOSE_AND_EDIT,Fermer et modifier,1c3ea202
+CLOSE_PLANTING_SEASON,Clore la saison de plantation,fc3b2abc
+CLOSE_PLANTING_SEASON_CONFIRM,Vous êtes sur le point de clore {0}. La clôture marquera la saison comme terminée et empêchera toute modification ultérieure. Cette action est irréversible.,ee1f53f1
+CLOSE_SEASON,Clore la saison,72b4448a
 CLOSED,Fermé,7b8d0429
 COLLECTED_DATE,Date de la collecte,3f1515d8
 COLLECTED_FROM,Collecté à partir de,ffc6ad60
@@ -484,12 +488,15 @@ DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,Tous les financeurs associés à cette ent
 DELETE_FUNDING_ENTITY_MESSAGE,Vous êtes sur le point de supprimer {0}.,4a41e34f
 DELETE_ORGANIZATION,Supprimer l'organisation,91c84420
 DELETE_ORGANIZATION_MSG,Voulez-vous vraiment supprimer {0} ?,a932473f
+DELETE_PLANTING_SEASON,Supprimer la saison de plantation,dda3774d
+DELETE_PLANTING_SEASON_CONFIRM,"Vous êtes sur le point de supprimer {0}. La suppression de la saison entraînera la suppression définitive de tous les objectifs et dates, mais les retraits de plantation resteront inchangés. Cette action est irréversible.",a49b8872
 DELETE_PLANTING_SITE,Supprimer un site de plantation,aa2a58c0
 DELETE_PLANTING_SITE_CONTACT_US,Veuillez [nous contacter] pour supprimer le site de plantation.,ba8291e0
 DELETE_PLANTING_SITE_IN_USE_MESSAGE,Le site de plantation {0} a des plantations attribuées.,78094ae2
 DELETE_PLANTING_SITE_MESSAGE,Vous êtes sur le point de supprimer le site de plantation {0}.,59883616
 DELETE_PROJECT,Supprimer le projet,d8b9108a
 DELETE_PROJECT_CONFIRM,Êtes-vous sûr de vouloir supprimer ce projet ? Toutes les catégories du projet seront supprimées.,c769e450
+DELETE_SEASON,Supprimer la saison,c49c9788
 DELETE_SEEDLINGS_BATCHES,Supprimer les lots de semis,a5916585
 DELETE_SEEDLINGS_BATCHES_MSG,"La suppression de lots sans retraits les supprimera complètement. La suppression de lots avec retraits ramènera leurs quantités restantes à 0, retirera ces quantités de l’inventaire et marquera les lots comme vides. Les retraits passés continueront d’apparaître dans l’historique des retraits.",4f9bf36f
 DELETE_SPECIES,Supprimer l'espèce,b3dd3256

@@ -198,6 +198,7 @@ APPROVED,Aprobado,b279ed0b
 APPROX_SYMBOL,~,acb59e95
 AR,RA,25a8e55a
 ARE_YOU_SURE,¿Está seguro(a)?,d4536b91
+ARE_YOU_SURE_DELETE,¿Está seguro de que desea eliminar?,a7f716f0
 AREA_HA,Área (ha),8ab5d500
 AREA_NOT_OBSERVED,Área no observada,9eeddab4
 ARROW_KEYS,Flechas del teclado,5cefb475
@@ -344,6 +345,9 @@ CLIMATE,Clima,63ba44ee
 CLIMATE_IMPACT,Impacto climático,876c48a4
 CLOSE,Cerrar,e6e3f022
 CLOSE_AND_EDIT,Cerrar y editar,1c3ea202
+CLOSE_PLANTING_SEASON,Cerrar temporada de plantación,fc3b2abc
+CLOSE_PLANTING_SEASON_CONFIRM,"Está a punto de cerrar {0}. Al cerrar, la temporada se marcará como cerrada y no se podrán realizar más cambios. Esta acción no se puede deshacer.",ee1f53f1
+CLOSE_SEASON,Cerrar temporada,72b4448a
 CLOSED,Cerrado,7b8d0429
 COLLECTED_DATE,Fecha de recolección,3f1515d8
 COLLECTED_FROM,Recolectado de,ffc6ad60
@@ -485,12 +489,15 @@ DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,Se eliminarán todos los financiadores aso
 DELETE_FUNDING_ENTITY_MESSAGE,Va a eliminar {0}.,4a41e34f
 DELETE_ORGANIZATION,Borrar Organización,91c84420
 DELETE_ORGANIZATION_MSG,¿Está seguro de que deseas borrar {0}?,a932473f
+DELETE_PLANTING_SEASON,Eliminar temporada de plantación,dda3774d
+DELETE_PLANTING_SEASON_CONFIRM,"Está a punto de eliminar {0}. Al eliminar la temporada, se eliminarán permanentemente todos los objetivos y fechas, pero los retiros de plantación permanecerán intactos. Esta acción no se puede deshacer.",a49b8872
 DELETE_PLANTING_SITE,Borrar sitio de plantación,aa2a58c0
 DELETE_PLANTING_SITE_CONTACT_US,"Por favor, [póngase en contacto con nosotros] para eliminar el sitio de plantación.",ba8291e0
 DELETE_PLANTING_SITE_IN_USE_MESSAGE,El sitio de plantación {0} tiene plantaciones asignadas.,78094ae2
 DELETE_PLANTING_SITE_MESSAGE,Está a punto de borrar el sitio de plantación {0}.,59883616
 DELETE_PROJECT,Borrar proyecto,d8b9108a
 DELETE_PROJECT_CONFIRM,¿Está seguro de que quiere borrar este proyecto? Se eliminará toda la categorización del proyecto.,c769e450
+DELETE_SEASON,Eliminar temporada,c49c9788
 DELETE_SEEDLINGS_BATCHES,Borrar Lotes de Plántulas,a5916585
 DELETE_SEEDLINGS_BATCHES_MSG,"Eliminar lotes sin retiros los eliminará completamente. Eliminar lotes con retiros establecerá sus cantidades restantes en 0, eliminará esas cantidades del inventario y marcará los lotes como vacíos. Los retiros anteriores seguirán apareciendo en el historial de retiros.",4f9bf36f
 DELETE_SPECIES,Borrar Especie,b3dd3256

@@ -32,6 +32,12 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.PlantingSeasons, id: 'LIST' },
       ],
     },
+    closePlantingSeason: {
+      invalidatesTags: (_result, _error, plantingSeasonId) => [
+        { type: QueryTagTypes.PlantingSeasons, id: plantingSeasonId },
+        { type: QueryTagTypes.PlantingSeasons, id: 'LIST' },
+      ],
+    },
     getSpeciesTargets: {
       providesTags: (_result, _error, plantingSeasonId) => [
         { type: QueryTagTypes.PlantingSeasons, id: `${plantingSeasonId}-targets` },
