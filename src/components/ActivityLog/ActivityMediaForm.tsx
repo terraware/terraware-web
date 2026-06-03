@@ -280,15 +280,15 @@ const ActivityPhotoPreview = ({
 
         <Grid item sm={true} xs={12}>
           <Box display='flex' flexDirection='column'>
+            {isUndeletable && undeletableMessage && (
+              <Box display='flex' alignItems='center' gap={1} marginBottom={theme.spacing(2)} width='100%'>
+                <Icon name='info' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
+                <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+                  {undeletableMessage}
+                </Typography>
+              </Box>
+            )}
             <Box alignItems='center' display='flex' flexDirection='row' gap={1} marginBottom={theme.spacing(2)}>
-              {isUndeletable && undeletableMessage && (
-                <Box display='flex' alignItems='center' gap={1} marginBottom={theme.spacing(2)} width='100%'>
-                  <Icon name='info' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
-                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
-                    {undeletableMessage}
-                  </Typography>
-                </Box>
-              )}
               <Button
                 disabled={currentPosition <= 1}
                 icon='caretUp'
