@@ -15,8 +15,12 @@ function objectToFormData(value: Record<string, unknown>) {
 
     if (val instanceof Blob) {
       formData.append(key, val);
+
+    } else if (typeof val === 'object') {
+      formData.append(key, JSON.stringify(val));
     } else {
       formData.append(key, String(val));
+
     }
   }
 
