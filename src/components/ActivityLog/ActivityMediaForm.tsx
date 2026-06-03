@@ -1,7 +1,16 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, FormControlLabel, Grid, Radio, Typography, useTheme } from '@mui/material';
-import { Button, Checkbox, DialogBox, Dropdown, FileChooser, Icon, Textfield } from '@terraware/web-components';
+import {
+  Button,
+  Checkbox,
+  DialogBox,
+  Dropdown,
+  FileChooser,
+  Icon,
+  IconTooltip,
+  Textfield,
+} from '@terraware/web-components';
 
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -131,8 +140,8 @@ const ActivityPhotoPreview = ({
   const isObsMedia = useMemo(() => mediaItem.type === 'existing' && isObservationMedia(mediaItem.data), [mediaItem]);
 
   const isUndeletable = useMemo(
-    () => isObsActivity && isObsMedia && mediaItem.type === 'existing' && isUndeletableObservationPhoto(mediaItem.data),
-    [isObsActivity, isObsMedia, mediaItem]
+    () => isObsMedia && mediaItem.type === 'existing' && isUndeletableObservationPhoto(mediaItem.data),
+    [isObsMedia, mediaItem]
   );
 
   const undeletableMessage = useMemo(() => {
@@ -377,7 +386,29 @@ const ActivityPhotoPreview = ({
               )}
             </Box>
 
-            {isUndeletable ? null : (
+            {isUndeletable ? (
+              isObsActivity ? null : (
+                <Box alignItems='center' display='flex' gap={1}>
+                  <Button
+                    disabled
+                    icon='iconTrashCan'
+                    label={strings.DELETE}
+                    onClick={() => undefined}
+                    priority='ghost'
+                    style={{
+                      justifyContent: 'flex-start',
+                      marginBottom: 0,
+                      marginLeft: '-8px',
+                      marginTop: 0,
+                      maxWidth: '160px',
+                      paddingLeft: '8px',
+                    }}
+                    type='destructive'
+                  />
+                  <IconTooltip title={strings.OBSERVATION_PHOTO_CANNOT_DELETE_TOOLTIP} />
+                </Box>
+              )
+            ) : (
               <Button
                 icon='iconTrashCan'
                 label={strings.DELETE}
