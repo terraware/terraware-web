@@ -10,6 +10,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import Card from 'src/components/common/Card';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import Link from 'src/components/common/Link';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
@@ -32,6 +33,7 @@ import DeletePlantingSeasonModal from './DeletePlantingSeasonModal';
 import EditPlantingSeasonModal from './EditPlantingSeasonModal';
 import PlantingDatesTab from './PlantingDatesTab';
 import PlantingSeasonStatusBadge from './PlantingSeasonStatusBadge';
+import SpeciesSummaryDrawer from './SpeciesSummaryDrawer';
 import SpeciesTargetsTab from './SpeciesTargetsTab';
 
 const PlantingSeasonDetailsView = (): JSX.Element => {
@@ -65,6 +67,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
   const [editModalOpen, setEditModalOpen] = useState(false);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [closeModalOpen, setCloseModalOpen] = useState(false);
+  const [speciesSummaryOpen, setSpeciesSummaryOpen] = useState(false);
 
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
@@ -292,9 +295,23 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
               priority='ghost'
               type='passive'
             />
+          <Box display='flex' flexDirection='column' alignItems='flex-end' gap={theme.spacing(2)}>
+            <Box display='flex' gap={theme.spacing(4)} alignItems='flex-start'>
+              {numberColumn(strings.PLANTING_GOAL, plantingGoal)}
+              {numberColumn(strings.WITHDRAWN_FOR_PLANTING, undefined)}
+              {numberColumn(strings.LEFT_TO_PLANT, undefined)}
+            </Box>
+            <Link style={{ fontSize: '16px' }} onClick={() => setSpeciesSummaryOpen(true)}>
+              {strings.SPECIES_SUMMARY}
+            </Link>
           </Box>
         </Box>
       </Card>
+      <SpeciesSummaryDrawer
+        open={speciesSummaryOpen}
+        onClose={() => setSpeciesSummaryOpen(false)}
+        speciesTargets={speciesTargets?.targets ?? []}
+      />
       <Box marginTop={theme.spacing(3)}>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>

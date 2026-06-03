@@ -102,6 +102,18 @@ export type OrganizationSubjectPayload = {
 } & EventSubjectPayloadBase & {
     organizationId: number;
   };
+export type PlantingSeasonScheduledDateSubjectPayload = {
+  type: 'PlantingSeasonScheduledDate';
+} & EventSubjectPayloadBase & {
+    plantingSeasonId: number;
+    plantingSiteId: number;
+    scheduledPlantingDateId: number;
+  };
+export type PlantingSeasonSubjectPayload = {
+  type: 'PlantingSeason';
+} & EventSubjectPayloadBase & {
+    plantingSeasonId: number;
+  };
 export type ProjectSubjectPayload = {
   type: 'Project';
 } & EventSubjectPayloadBase & {
@@ -129,6 +141,8 @@ export type EventLogEntryPayload = {
     | ObservationPlotMediaSubjectPayload
     | ObservationPlotSubjectPayload
     | OrganizationSubjectPayload
+    | PlantingSeasonScheduledDateSubjectPayload
+    | PlantingSeasonSubjectPayload
     | ProjectSubjectPayload
     | RecordedTreeSubjectPayload;
   timestamp: string;
@@ -145,6 +159,7 @@ export type ListEventLogEntriesRequestPayload = {
   monitoringPlotId?: number;
   observationId?: number;
   organizationId: number;
+  plantingSeasonId?: number;
   plantingSiteId?: number;
   projectId?: number;
   /** If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
@@ -157,6 +172,8 @@ export type ListEventLogEntriesRequestPayload = {
     | 'ObservationPlot'
     | 'ObservationPlotMedia'
     | 'Organization'
+    | 'PlantingSeason'
+    | 'PlantingSeasonScheduledDate'
     | 'Project'
     | 'RecordedTree'
   )[];
