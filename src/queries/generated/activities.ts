@@ -266,7 +266,10 @@ export type AdminActivityMediaFilePayload = {
   type: 'Photo' | 'Video';
 };
 export type AdminActivityObservationPayload = {
+  isAdHoc: boolean;
+  monitoringPlotNumber?: number;
   observationId: number;
+  observationType: 'Monitoring' | 'Biomass Measurements';
 };
 export type AdminActivityPayload = {
   createdBy: number;
