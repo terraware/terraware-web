@@ -30,7 +30,13 @@ import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
-import { ActivityMediaFile, activityTypeLabel, isObservationActivity } from 'src/types/Activity';
+import {
+  ActivityMediaFile,
+  activityTypeLabel,
+  isObservationActivity,
+  isUndeletableObservationPhoto,
+} from 'src/types/Activity';
+import { getPositionLabel, getQuadratLabel } from 'src/types/Observations';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -206,6 +212,23 @@ const ActivityMediaItem = ({
     [mediaFile.fileId, setLightboxImageId]
   );
 
+  const obsPhotoTypeLabel = useMemo(() => {
+    const obs = mediaFile.observation;
+    if (!obs || !isUndeletableObservationPhoto(mediaFile)) {
+      return undefined;
+    }
+    if (obs.type === 'Plot' && obs.position) {
+      return getPositionLabel(obs.position);
+    }
+    if (obs.type === 'Quadrat' && obs.position) {
+      return getQuadratLabel(obs.position);
+    }
+    if (obs.type === 'Soil') {
+      return strings.SOIL;
+    }
+    return undefined;
+  }, [mediaFile, strings]);
+
   const handleImageError = useCallback(async () => {
     // only check for 412 error if this is a video
     if (mediaFile.type === 'Video') {
@@ -285,9 +308,9 @@ const ActivityMediaItem = ({
           {activity.payload.date}
         </Typography>
 
-        {mediaFile.caption && (
+        {(mediaFile.caption || obsPhotoTypeLabel) && (
           <Typography component='div' sx={captionStyles}>
-            {mediaFile.caption}
+            {obsPhotoTypeLabel ?? mediaFile.caption}
           </Typography>
         )}
       </Box>
