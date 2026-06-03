@@ -9,8 +9,8 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
 import Card from 'src/components/common/Card';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
-import OptionsMenu from 'src/components/common/OptionsMenu';
 import Link from 'src/components/common/Link';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
@@ -284,22 +284,18 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
               </Box>
             </Box>
           </Box>
-          <Box display='flex' gap={theme.spacing(4)} alignItems='flex-start'>
-            {numberColumn(strings.PLANTING_GOAL, plantingGoal)}
-            {numberColumn(strings.WITHDRAWN_FOR_PLANTING, undefined)}
-            {numberColumn(strings.LEFT_TO_PLANT, undefined)}
-            <OptionsMenu
-              optionItems={optionItems}
-              onOptionItemClick={onOptionItemClick}
-              size='small'
-              priority='ghost'
-              type='passive'
-            />
           <Box display='flex' flexDirection='column' alignItems='flex-end' gap={theme.spacing(2)}>
             <Box display='flex' gap={theme.spacing(4)} alignItems='flex-start'>
               {numberColumn(strings.PLANTING_GOAL, plantingGoal)}
               {numberColumn(strings.WITHDRAWN_FOR_PLANTING, undefined)}
               {numberColumn(strings.LEFT_TO_PLANT, undefined)}
+              <OptionsMenu
+                optionItems={optionItems}
+                onOptionItemClick={onOptionItemClick}
+                size='small'
+                priority='ghost'
+                type='passive'
+              />
             </Box>
             <Link style={{ fontSize: '16px' }} onClick={() => setSpeciesSummaryOpen(true)}>
               {strings.SPECIES_SUMMARY}
