@@ -5343,8 +5343,16 @@ export interface components {
             type: "Plot" | "Quadrat" | "Soil";
         };
         ActivityObservationPayload: {
+            isAdHoc: boolean;
+            /**
+             * Format: int64
+             * @description If this was an ad-hoc observation, its plot number. Not set for assigned observations because they can include multiple plots.
+             */
+            monitoringPlotNumber?: number;
             /** Format: int64 */
             observationId: number;
+            /** @enum {string} */
+            observationType: "Monitoring" | "Biomass Measurements";
         };
         ActivityPayload: {
             /** Format: date */
@@ -7074,7 +7082,7 @@ export interface components {
         };
         EventLogEntryPayload: {
             action: components["schemas"]["CreatedActionPayload"] | components["schemas"]["DeletedActionPayload"] | components["schemas"]["FieldUpdatedActionPayload"];
-            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
+            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
             /** Format: date-time */
             timestamp: string;
             /** Format: int64 */
@@ -7474,8 +7482,16 @@ export interface components {
         FunderActivityObservationPayload: {
             /** Format: date-time */
             completedTime: string;
+            isAdHoc: boolean;
             /** Format: int32 */
             livePlants?: number;
+            /**
+             * Format: int64
+             * @description If this was an ad-hoc observation, its plot number. Not set for assigned observations because they can include multiple plots.
+             */
+            monitoringPlotNumber?: number;
+            /** @enum {string} */
+            observationType: "Monitoring" | "Biomass Measurements";
             /** Format: int32 */
             plantDensity?: number;
             /** Format: int32 */
@@ -7575,7 +7591,7 @@ export interface components {
             type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon" | "GeometryCollection";
         };
         GeometryCollection: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
-            geometries: Record<string, never>[];
+            geometries: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
             /** @enum {string} */
             type: "GeometryCollection";
         } & {
@@ -8342,7 +8358,7 @@ export interface components {
             /** Format: int64 */
             projectId?: number;
             /** @description If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
-            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "PlantingSeason" | "PlantingSeasonScheduledDate" | "Project" | "RecordedTree")[];
+            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "PlantingSeason" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "Project" | "RecordedTree")[];
         };
         ListEventLogEntriesResponsePayload: {
             events: components["schemas"]["EventLogEntryPayload"][];
@@ -9718,6 +9734,29 @@ export interface components {
             startDate: string;
             /** @enum {string} */
             status: "Active" | "Upcoming" | "Past End Date" | "Closed";
+        };
+        PlantingSeasonScheduledDateSpeciesSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            plantingSeasonId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            /** Format: int64 */
+            scheduledPlantingDateId: number;
+            scientificName?: string;
+            /** Format: int64 */
+            speciesId: number;
+            stratumName: string;
+            /** Format: int64 */
+            substratumHistoryId: number;
+            /** Format: int64 */
+            substratumId: number;
+            substratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlantingSeasonScheduledDateSpecies";
         };
         PlantingSeasonScheduledDateSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
             /** Format: int64 */
