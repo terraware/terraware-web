@@ -2,23 +2,33 @@ import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
-import { Button, Icon, Tabs } from '@terraware/web-components';
+import { Button, DropdownItem, Icon, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
 import Card from 'src/components/common/Card';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import { useLazyGetPlantingSeasonQuery, useLazyGetSpeciesTargetsQuery } from 'src/queries/generated/plantingSeasons';
+import {
+  useClosePlantingSeasonMutation,
+  useDeletePlantingSeasonMutation,
+  useLazyGetPlantingSeasonQuery,
+  useLazyGetSpeciesTargetsQuery,
+} from 'src/queries/generated/plantingSeasons';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { getMediumDate } from 'src/utils/dateFormatter';
+import useSnackbar from 'src/utils/useSnackbar';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
+import ClosePlantingSeasonModal from './ClosePlantingSeasonModal';
+import DeletePlantingSeasonModal from './DeletePlantingSeasonModal';
 import EditPlantingSeasonModal from './EditPlantingSeasonModal';
 import PlantingDatesTab from './PlantingDatesTab';
 import PlantingSeasonStatusBadge from './PlantingSeasonStatusBadge';
@@ -53,6 +63,50 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
   const plantingSite = plantingSiteData?.site;
 
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [closeModalOpen, setCloseModalOpen] = useState(false);
+
+  const navigate = useSyncNavigate();
+  const snackbar = useSnackbar();
+  const [deletePlantingSeason, { isLoading: isDeleting }] = useDeletePlantingSeasonMutation();
+  const [closePlantingSeason, { isLoading: isClosing }] = useClosePlantingSeasonMutation();
+
+  const onConfirmDelete = async () => {
+    try {
+      await deletePlantingSeason(seasonIdNumber).unwrap();
+      setDeleteModalOpen(false);
+      navigate(APP_PATHS.PLANTING_SEASONS);
+    } catch (e) {
+      snackbar.toastError();
+    }
+  };
+
+  const onConfirmClose = async () => {
+    try {
+      await closePlantingSeason(seasonIdNumber).unwrap();
+      setCloseModalOpen(false);
+    } catch (e) {
+      snackbar.toastError();
+    }
+  };
+
+  const isClosed = plantingSeasonData?.season?.status === 'Closed';
+
+  const optionItems = useMemo<DropdownItem[]>(
+    () => [
+      { label: strings.DELETE_PLANTING_SEASON, value: 'delete' },
+      ...(isClosed ? [] : [{ label: strings.CLOSE_PLANTING_SEASON, value: 'close' }]),
+    ],
+    [isClosed]
+  );
+
+  const onOptionItemClick = (item: DropdownItem) => {
+    if (item.value === 'delete') {
+      setDeleteModalOpen(true);
+    } else if (item.value === 'close') {
+      setCloseModalOpen(true);
+    }
+  };
 
   const plantingGoal = useMemo(() => {
     const targets = speciesTargets?.targets;
@@ -123,6 +177,20 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
           plantingSite={plantingSite}
         />
       )}
+      <DeletePlantingSeasonModal
+        open={deleteModalOpen}
+        seasonName={season.name}
+        onClose={() => setDeleteModalOpen(false)}
+        onConfirm={() => void onConfirmDelete()}
+        busy={isDeleting}
+      />
+      <ClosePlantingSeasonModal
+        open={closeModalOpen}
+        seasonName={season.name}
+        onClose={() => setCloseModalOpen(false)}
+        onConfirm={() => void onConfirmClose()}
+        busy={isClosing}
+      />
       <PageHeaderWrapper>
         <BackToLink
           id='back'
@@ -139,19 +207,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
               <Typography fontSize='20px' fontWeight={600}>
                 {season.name}
               </Typography>
-              <Button
-                icon='iconEdit'
-                onClick={() => setEditModalOpen(true)}
-                priority='ghost'
-                size='small'
-                type='passive'
-              />
-              <PlantingSeasonStatusBadge status={season.status} />
-            </Box>
-            <Box display='flex' alignItems='center' gap={theme.spacing(2)} marginTop={theme.spacing(1)}>
-              <Typography color={theme.palette.TwClrTxtSecondary}>{plantingSite.name}</Typography>
-              <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
-                <Typography color={theme.palette.TwClrTxt}>{dateRange}</Typography>
+              {!isClosed && (
                 <Button
                   icon='iconEdit'
                   onClick={() => setEditModalOpen(true)}
@@ -159,6 +215,22 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
                   size='small'
                   type='passive'
                 />
+              )}
+              <PlantingSeasonStatusBadge status={season.status} />
+            </Box>
+            <Box display='flex' alignItems='center' gap={theme.spacing(2)} marginTop={theme.spacing(1)}>
+              <Typography color={theme.palette.TwClrTxtSecondary}>{plantingSite.name}</Typography>
+              <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
+                <Typography color={theme.palette.TwClrTxt}>{dateRange}</Typography>
+                {!isClosed && (
+                  <Button
+                    icon='iconEdit'
+                    onClick={() => setEditModalOpen(true)}
+                    priority='ghost'
+                    size='small'
+                    type='passive'
+                  />
+                )}
               </Box>
             </Box>
             <Box marginY={theme.spacing(2)}>
@@ -213,6 +285,13 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
             {numberColumn(strings.PLANTING_GOAL, plantingGoal)}
             {numberColumn(strings.WITHDRAWN_FOR_PLANTING, undefined)}
             {numberColumn(strings.LEFT_TO_PLANT, undefined)}
+            <OptionsMenu
+              optionItems={optionItems}
+              onOptionItemClick={onOptionItemClick}
+              size='small'
+              priority='ghost'
+              type='passive'
+            />
           </Box>
         </Box>
       </Card>

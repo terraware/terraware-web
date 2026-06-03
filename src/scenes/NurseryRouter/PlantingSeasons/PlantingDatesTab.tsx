@@ -48,20 +48,21 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
 
   const [editing, setEditing] = useState<EditingState | undefined>();
 
+  const readOnly = plantingSeason.status === 'Closed';
   const scheduledDates = scheduledDatesData?.scheduledDates ?? [];
   const speciesTargets = speciesTargetsData?.targets ?? [];
 
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
       {scheduledDates.length === 0 && !editing ? (
-        <EmptyState onAdd={() => setEditing({ mode: 'add' })} />
+        <EmptyState onAdd={() => setEditing({ mode: 'add' })} readOnly={readOnly} />
       ) : (
         <>
           <Box display='flex' alignItems='center' justifyContent='space-between' marginBottom={theme.spacing(2)}>
             <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
               {strings.PLANTING_DATES_TAB_DESCRIPTION}
             </Typography>
-            {!editing && (
+            {!editing && !readOnly && (
               <Button
                 icon='plus'
                 label={strings.ADD_DATE}
@@ -71,7 +72,7 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
               />
             )}
           </Box>
-          {editing ? (
+          {editing && !readOnly ? (
             <PlantingDateForm
               key={editing.mode === 'edit' ? editing.scheduledDate.scheduledPlantingDateId : 'new'}
               plantingSeason={plantingSeason}
@@ -91,6 +92,7 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
                   scheduledDate={scheduledDate}
                   plantingSite={plantingSite}
                   onEdit={() => setEditing({ mode: 'edit', scheduledDate })}
+                  readOnly={readOnly}
                 />
               ))}
             </Box>
@@ -101,7 +103,7 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
   );
 };
 
-const EmptyState = ({ onAdd }: { onAdd: () => void }): JSX.Element => {
+const EmptyState = ({ onAdd, readOnly }: { onAdd: () => void; readOnly: boolean }): JSX.Element => {
   const theme = useTheme();
   return (
     <Box
@@ -116,7 +118,7 @@ const EmptyState = ({ onAdd }: { onAdd: () => void }): JSX.Element => {
       <Typography fontSize='16px' color={theme.palette.TwClrBaseBlack}>
         {strings.NO_PLANTING_DATES_SCHEDULED}
       </Typography>
-      <Button icon='plus' label={strings.ADD_PLANTING_DATE} onClick={onAdd} size='medium' />
+      {!readOnly && <Button icon='plus' label={strings.ADD_PLANTING_DATE} onClick={onAdd} size='medium' />}
     </Box>
   );
 };
@@ -125,9 +127,15 @@ type PlantingDateListItemProps = {
   scheduledDate: ScheduledDatePayload;
   plantingSite: PlantingSitePayload;
   onEdit: () => void;
+  readOnly: boolean;
 };
 
-const PlantingDateListItem = ({ scheduledDate, plantingSite, onEdit }: PlantingDateListItemProps): JSX.Element => {
+const PlantingDateListItem = ({
+  scheduledDate,
+  plantingSite,
+  onEdit,
+  readOnly,
+}: PlantingDateListItemProps): JSX.Element => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
@@ -193,7 +201,9 @@ const PlantingDateListItem = ({ scheduledDate, plantingSite, onEdit }: PlantingD
           ))}
         </Box>
       </Box>
-      <Button icon='iconEdit' label={strings.EDIT} onClick={onEdit} priority='secondary' type='productive' />
+      {!readOnly && (
+        <Button icon='iconEdit' label={strings.EDIT} onClick={onEdit} priority='secondary' type='productive' />
+      )}
     </Box>
   );
 };
