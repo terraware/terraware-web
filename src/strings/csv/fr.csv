@@ -145,6 +145,7 @@ ALL,Tout,832a8cf5
 ALL_ACCESSIONS_CHECKED_IN,Toutes les accessions ont été enregistrées avec succès !,cbdf5c0a
 ALL_MODULES,Tous les modules,b2571c5e
 ALL_OBSERVATIONS,Toutes les observations,22e68887
+ALL_PLANTING_SEASONS,Toutes les saisons de plantation,7b594902
 ALL_PLANTING_SITES,Tous les sites de plantation,344a80c6
 ALL_PROJECT_ZONES,Toutes les zones du projet,4c578acc
 ALL_PROJECTS,Tous les projets,4eb0ec5d
@@ -152,6 +153,8 @@ ALL_SECTIONS,Toutes les sections,d3d73b24
 ALL_SPECIES,Toutes les espèces,5622801f
 ALL_VARIABLES,Toutes les variables,1fe9cddb
 ALLOCATED,Alloué,1105670f
+ALLOCATED_FOR_TARGET,Alloué pour l'objectif,b2860a99
+ALLOCATED_FOR_TARGET_TOOLTIP,Pourcentage de l'objectif total par espèce qui a été alloué.,b2c6ce5b
 ALLOCATED_TOOLTIP,Nombre de plants de cette espèce que la pépinière a prévu de fournir.,6001e68d
 ALREADY_INVITED_PERSON_ERROR,Il semble que vous ayez déjà ajouté ou invité cette personne. Veuillez saisir une adresse électronique unique ou accéder au profil de la personne existante.,67ec2d39
 AMOUNT_EST_COUNT,Quantité (nombre estimé),e203609b
@@ -219,6 +222,7 @@ ATTACHMENTS,Annexes,e7695404
 AUTO_CALCULATED_INDICATORS,Indicateurs calculés automatiquement,3b7057e0
 AUTO_ROTATE,Rotation automatique,15ce1a40
 AVAILABLE,disponible,716e496f
+AVAILABLE_TITLE,Disponible,b84c21ed
 AVAILABLE_TO_SCHEDULE,Disponible à planifier,00da4780
 AVAILABLE_TO_SCHEDULE_TOOLTIP,"Nombre de plants disponibles à planifier pour la plantation, parmi les plants alloués et non déjà planifiés.",7f914f3e
 AVERAGE_PROJECT_STRATA_SURVIVAL_RATE,Taux moyen de survie des strates du projet,eba4d7ea
@@ -697,6 +701,7 @@ EVENT_NAME_SLIDES,{0} Diapositives,a06fe761
 EVENT_RECORDED_SESSION_DESCRIPTION_1,"Regardez cette session enregistrée à tout moment. Vous pouvez regarder la session plus d’une fois, si nécessaire.",1fe65a8a
 EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Haut-parleurs ou casque – intégré, branché sur le port USB ou sans fil Bluetooth",b87be889
 EVENTS,Evénements,a18b73bc
+EXCEEDS_AVAILABLE_X,Dépasse le disponible ({0}),4391f9df
 EXCEEDS_GOAL,Dépasse l'objectif,4488fd7c
 EXCLUSION_AREAS,Zones d'exclusion,08c7d391
 EXISTING,Existant,fa67ac1d
@@ -938,6 +943,11 @@ INVENTORY,Inventaire,001c6bdb
 INVENTORY_IMPORT_COMPLETE,Importation des données d'inventaire achevée !,760bba82
 INVENTORY_ONBOARDING_NURSERIES_MSG,Définir les pépinières affectées à l'inventaire des semis,393e62d3
 INVENTORY_ONBOARDING_SPECIES_MSG,Définir une liste d'espèces utilisées dans votre inventaire des semis,bafd0703
+INVENTORY_PLANNING,Planification des stocks,2e1d8c1f
+INVENTORY_PLANNING_ALLOCATED_TOOLTIP,Nombre de plants de cette espèce prévus pour atteindre les objectifs des saisons de plantation.,8ae090b0
+INVENTORY_PLANNING_AVAILABLE_TOOLTIP,Nombre de semis de cette espèce en phase d'acclimatation et prêts à être plantés.,94c83729
+INVENTORY_PLANNING_DESCRIPTION,Planifiez et allouez les stocks pour les objectifs par espèce des saisons de plantation.,d56eab8b
+INVENTORY_PLANNING_TARGET_TOOLTIP,Nombre de plants de cette espèce définis comme objectifs pour les saisons de plantation.,724d5222
 INVENTORY_WITHDRAWALS,Retraits d'inventaire,cefda57f
 INVESTMENT_COMMITTEE_VOTES,Votes du comité d'investissement,a7c64c6c
 INVITATION_PENDING,Invitation en attente,6b64d319
@@ -1181,6 +1191,7 @@ NEW,Nouveau,b8096e3b
 NEW_ACCESSION,Ajouter une adhésion,6d0d1602
 NEW_APP_VERSION,Veuillez actualiser pour utiliser la dernière version de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualisez pour obtenir la dernière version de Terraware.,6235c190
+NEW_SPECIES_TARGETS_ADDED,De nouveaux objectifs par espèce ont été ajoutés pour {0},9348d3bf
 NEW_STRATUM,Nouvelle strate,84292d1f
 NEW_SUBSTRATUM,Nouveau substrat,90a1ddc3
 NEW_TEMPLATE_MODAL_DESCRIPTION,Une nouvelle version a été publiée pour le documentTemplate de ce document. Souhaitez-vous la mettre à jour ?,c11ed4d2
@@ -1192,6 +1203,7 @@ NEXT_STEPS_INSTRUCTIONS,Résumez les phases suivantes de votre projet. (Un quart
 NEXT_STEPS_REQUIRED,Prochaines étapes *,33f00368
 NICE,Génial !,d5008f62
 NO,Non,3c5beb81
+NO_ACTIVE_PLANTING_SEASONS_FOR_FILTERS,Il n’y a aucune saison de plantation active pour le site de plantation sélectionné.,2f97b045
 NO_ACTIVITIES_TO_SHOW,Aucune activité à afficher.,1b075899
 NO_AVAILABLE_PROJECTS_FOR_SPECIES,Il n'y a pas d'autres projets disponibles pour cette espèce.,071c6205
 NO_BATCHES_TO_WITHDRAW_FROM,Il n'y a pas de lots dont les quantités peuvent être retirés.,dc94bdcc

@@ -62,6 +62,7 @@ export default function NavBar({
   const isSeedBanksRoute = useMatch({ path: APP_PATHS.SEED_BANKS + '/', end: false });
   const isNurseriesRoute = useMatch({ path: APP_PATHS.NURSERIES + '/', end: false });
   const isInventoryRoute = useMatch({ path: APP_PATHS.INVENTORY + '/', end: false });
+  const isInventoryPlanningRoute = useMatch({ path: APP_PATHS.INVENTORY_PLANNING + '/', end: false });
   const isBatchWithdrawRoute = useMatch({ path: APP_PATHS.BATCH_WITHDRAW + '/', end: false });
   const isPlantingSitesRoute = useMatch({ path: APP_PATHS.PLANTING_SITES + '/', end: false });
   const isPlantsDashboardRoute = useMatch({ path: APP_PATHS.PLANTS_DASHBOARD + '/', end: false });
@@ -126,6 +127,18 @@ export default function NavBar({
       />
     );
 
+    const inventoryPlanningMenu = (
+      <NavItem
+        label={strings.INVENTORY_PLANNING}
+        selected={!!isInventoryPlanningRoute}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.INVENTORY_PLANNING);
+        }}
+        id='inventoryplanning'
+        key='inventoryplanning'
+      />
+    );
+
     const withdrawalLogMenu = (
       <NavItem
         label={strings.WITHDRAWALS}
@@ -138,7 +151,14 @@ export default function NavBar({
       />
     );
 
-    return showNurseryWithdrawals ? [inventoryMenu, withdrawalLogMenu] : [inventoryMenu];
+    const items = [inventoryMenu];
+    if (isPlantingSeasonsEnabled) {
+      items.push(inventoryPlanningMenu);
+    }
+    if (showNurseryWithdrawals) {
+      items.push(withdrawalLogMenu);
+    }
+    return items;
   };
 
   const deliverablesMenu = useMemo<JSX.Element | null>(

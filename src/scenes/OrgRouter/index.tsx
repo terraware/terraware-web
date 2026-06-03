@@ -27,6 +27,7 @@ import CheckIn from 'src/scenes/CheckIn';
 import DeliverablesRouter from 'src/scenes/DeliverablesRouter';
 import HelpSupportRouter from 'src/scenes/HelpSupportRouter';
 import Home from 'src/scenes/Home';
+import InventoryPlanningRouter from 'src/scenes/InventoryPlanningRouter';
 import InventoryRouter from 'src/scenes/InventoryRouter';
 import ModulesRouter from 'src/scenes/ModulesRouter';
 import MyAccountRouter from 'src/scenes/MyAccountRouter';
@@ -216,6 +217,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.PLANTING_PROGRESS} element={<PlantingProgressView />} />
             {isPlantingSeasonsEnabled && (
               <Route path={APP_PATHS.PLANTING_SEASONS + '/*'} element={<PlantingSeasonsRouter />} />
+            )}
+            {isPlantingSeasonsEnabled && (
+              <Route path={APP_PATHS.INVENTORY_PLANNING + '/*'} element={<InventoryPlanningRouter />} />
             )}
             <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
             <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
