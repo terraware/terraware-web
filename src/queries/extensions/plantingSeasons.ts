@@ -32,6 +32,12 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.PlantingSeasons, id: 'LIST' },
       ],
     },
+    closePlantingSeason: {
+      invalidatesTags: (_result, _error, plantingSeasonId) => [
+        { type: QueryTagTypes.PlantingSeasons, id: plantingSeasonId },
+        { type: QueryTagTypes.PlantingSeasons, id: 'LIST' },
+      ],
+    },
     getSpeciesTargets: {
       providesTags: (_result, _error, plantingSeasonId) => [
         { type: QueryTagTypes.PlantingSeasons, id: `${plantingSeasonId}-targets` },
@@ -40,11 +46,38 @@ api.enhanceEndpoints({
     upsertSpeciesTarget: {
       invalidatesTags: (_result, _error, arg) => [
         { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-targets` },
+        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-summary` },
       ],
     },
     deleteSpeciesTarget: {
       invalidatesTags: (_result, _error, arg) => [
         { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-targets` },
+        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-summary` },
+      ],
+    },
+    upsertAllocatedSpecies: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-summary` },
+      ],
+    },
+    getScheduledPlantingDates: {
+      providesTags: (_result, _error, plantingSeasonId) => [
+        { type: QueryTagTypes.PlantingSeasons, id: `${plantingSeasonId}-dates` },
+      ],
+    },
+    createScheduledPlantingDate: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-dates` },
+      ],
+    },
+    updateScheduledPlantingDate: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-dates` },
+      ],
+    },
+    deleteScheduledPlantingDate: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-dates` },
       ],
     },
   },

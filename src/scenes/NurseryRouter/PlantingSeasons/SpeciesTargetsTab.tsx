@@ -34,6 +34,8 @@ const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabPr
   const { data: speciesTargetsData } = useGetSpeciesTargetsQuery(plantingSeason.id);
   const { species } = useSpeciesData();
 
+  const readOnly = plantingSeason.status === 'Closed';
+
   const targetsBySubstratum = useMemo(() => {
     const map = new Map<number, SpeciesTargetPayload[]>();
     (speciesTargetsData?.targets ?? []).forEach((target) => {
@@ -46,9 +48,11 @@ const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabPr
 
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-      <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginBottom={theme.spacing(2)}>
-        {strings.SET_SPECIES_TARGETS_DESCRIPTION}
-      </Typography>
+      {!readOnly && (
+        <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginBottom={theme.spacing(2)}>
+          {strings.SET_SPECIES_TARGETS_DESCRIPTION}
+        </Typography>
+      )}
       {(plantingSite.strata ?? []).map((stratum) => (
         <StratumSection
           key={stratum.id}
@@ -56,6 +60,7 @@ const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabPr
           targetsBySubstratum={targetsBySubstratum}
           species={species}
           plantingSeasonId={plantingSeason.id}
+          readOnly={readOnly}
         />
       ))}
     </Card>
@@ -67,6 +72,7 @@ type StratumSectionProps = {
   targetsBySubstratum: Map<number, SpeciesTargetPayload[]>;
   species: Species[];
   plantingSeasonId: number;
+  readOnly: boolean;
 };
 
 const StratumSection = ({
@@ -74,6 +80,7 @@ const StratumSection = ({
   targetsBySubstratum,
   species,
   plantingSeasonId,
+  readOnly,
 }: StratumSectionProps): JSX.Element => {
   const theme = useTheme();
 
@@ -110,6 +117,7 @@ const StratumSection = ({
           targets={targetsBySubstratum.get(substratum.id) ?? []}
           species={species}
           plantingSeasonId={plantingSeasonId}
+          readOnly={readOnly}
         />
       ))}
     </Box>
@@ -121,9 +129,16 @@ type SubstratumSectionProps = {
   targets: SpeciesTargetPayload[];
   species: Species[];
   plantingSeasonId: number;
+  readOnly: boolean;
 };
 
-const SubstratumSection = ({ substratum, targets, species, plantingSeasonId }: SubstratumSectionProps): JSX.Element => {
+const SubstratumSection = ({
+  substratum,
+  targets,
+  species,
+  plantingSeasonId,
+  readOnly,
+}: SubstratumSectionProps): JSX.Element => {
   const theme = useTheme();
   const [addingSpecies, setAddingSpecies] = useState(false);
 
@@ -159,7 +174,7 @@ const SubstratumSection = ({ substratum, targets, species, plantingSeasonId }: S
         <Box>
           <Box
             display='grid'
-            gridTemplateColumns='1fr 1fr 40px'
+            gridTemplateColumns={readOnly ? '1fr 1fr' : '1fr 1fr 40px'}
             sx={{
               padding: theme.spacing(1, 2),
               borderBottom: `2px solid ${theme.palette.TwClrBrdrSecondary}`,
@@ -171,7 +186,7 @@ const SubstratumSection = ({ substratum, targets, species, plantingSeasonId }: S
             <Typography fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxt}>
               {strings.TARGET_QUANTITY}
             </Typography>
-            <Box />
+            {!readOnly && <Box />}
           </Box>
           {targets.map((target, index) => (
             <SpeciesTargetRow
@@ -180,29 +195,32 @@ const SubstratumSection = ({ substratum, targets, species, plantingSeasonId }: S
               species={species}
               plantingSeasonId={plantingSeasonId}
               index={index}
+              readOnly={readOnly}
             />
           ))}
         </Box>
       )}
-      <Box>
-        {addingSpecies ? (
-          <AddSpeciesRow
-            substratumId={substratum.id}
-            plantingSeasonId={plantingSeasonId}
-            availableSpecies={availableSpecies}
-            onClose={() => setAddingSpecies(false)}
-          />
-        ) : (
-          <Button
-            icon='iconAdd'
-            label={strings.ADD_SPECIES}
-            onClick={() => setAddingSpecies(true)}
-            priority='ghost'
-            type='productive'
-            disabled={availableSpecies.length === 0}
-          />
-        )}
-      </Box>
+      {!readOnly && (
+        <Box>
+          {addingSpecies ? (
+            <AddSpeciesRow
+              substratumId={substratum.id}
+              plantingSeasonId={plantingSeasonId}
+              availableSpecies={availableSpecies}
+              onClose={() => setAddingSpecies(false)}
+            />
+          ) : (
+            <Button
+              icon='iconAdd'
+              label={strings.ADD_SPECIES}
+              onClick={() => setAddingSpecies(true)}
+              priority='ghost'
+              type='productive'
+              disabled={availableSpecies.length === 0}
+            />
+          )}
+        </Box>
+      )}
     </Box>
   );
 };
@@ -212,9 +230,16 @@ type SpeciesTargetRowProps = {
   species: Species[];
   plantingSeasonId: number;
   index: number;
+  readOnly: boolean;
 };
 
-const SpeciesTargetRow = ({ target, species, plantingSeasonId, index }: SpeciesTargetRowProps): JSX.Element => {
+const SpeciesTargetRow = ({
+  target,
+  species,
+  plantingSeasonId,
+  index,
+  readOnly,
+}: SpeciesTargetRowProps): JSX.Element => {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const [editing, setEditing] = useState(false);
@@ -269,7 +294,7 @@ const SpeciesTargetRow = ({ target, species, plantingSeasonId, index }: SpeciesT
   return (
     <Box
       display='grid'
-      gridTemplateColumns='1fr 1fr 40px'
+      gridTemplateColumns={readOnly ? '1fr 1fr' : '1fr 1fr 40px'}
       alignItems='center'
       sx={{
         padding: theme.spacing(1, 2),
@@ -287,7 +312,11 @@ const SpeciesTargetRow = ({ target, species, plantingSeasonId, index }: SpeciesT
         )}
       </Box>
       <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
-        {editing ? (
+        {readOnly ? (
+          <Typography fontSize='16px' fontWeight={400}>
+            {target.quantity.toLocaleString()}
+          </Typography>
+        ) : editing ? (
           <TextField
             id={`target-${target.substratumId}-${target.speciesId}`}
             type='number'
@@ -317,20 +346,24 @@ const SpeciesTargetRow = ({ target, species, plantingSeasonId, index }: SpeciesT
           </>
         )}
       </Box>
-      <Button
-        icon='iconTrashCan'
-        onClick={() => setConfirmingDelete(true)}
-        priority='ghost'
-        size='small'
-        type='passive'
-        disabled={isDeleting}
-      />
-      <DeleteSpeciesGoalModal
-        open={confirmingDelete}
-        speciesName={speciesInfo?.scientificName ?? `#${target.speciesId}`}
-        onClose={() => setConfirmingDelete(false)}
-        onConfirm={() => void onDelete()}
-      />
+      {!readOnly && (
+        <>
+          <Button
+            icon='iconTrashCan'
+            onClick={() => setConfirmingDelete(true)}
+            priority='ghost'
+            size='small'
+            type='passive'
+            disabled={isDeleting}
+          />
+          <DeleteSpeciesGoalModal
+            open={confirmingDelete}
+            speciesName={speciesInfo?.scientificName ?? `#${target.speciesId}`}
+            onClose={() => setConfirmingDelete(false)}
+            onConfirm={() => void onDelete()}
+          />
+        </>
+      )}
     </Box>
   );
 };

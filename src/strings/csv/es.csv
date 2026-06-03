@@ -64,6 +64,7 @@ ADD_ADDRESS,Añadir dirección,8262aa95
 ADD_AN_ACCESSION,Añadir una accesión,e4b619b4
 ADD_ANNOTATION,Agregar anotación,91742a0f
 ADD_BATCH,Añadir lote,0d9f7a4a
+ADD_DATE,Agregar fecha,5c2a04af
 ADD_DOCUMENT,Añadir documento,af87beed
 ADD_FUNDING_ENTITY,Agregar entidad financiadora,47c0142d
 ADD_GPS_COORDINATES,Añadir coordenadas GPS,d87d2fa2
@@ -90,6 +91,7 @@ ADD_PHOTOS,Añadir fotos,612b31b1
 ADD_PHOTOS_DESCRIPTION,Tome una foto (o fotos) de los lotes que serán plantados en el sustrato seleccionado. Asegúrese de incluir todo el retiro en la(s) foto(s).,8fea0b64
 ADD_PHOTOS_DESCRIPTION_OPTIONAL,Tome una foto opcional (o fotos) de los lotes.,5b1fa829
 ADD_PLANT_SITE_DESCRIPTION,Añadir Planta y Descripción del Sitio,af2cccc4
+ADD_PLANTING_DATE,Agregar fecha de plantación,6af7c9df
 ADD_PLANTING_SEASON,Agregar temporada de plantación,28e2d556
 ADD_PLANTING_SITE,Añadir Sitio de Plantación,9525532c
 ADD_PLANTING_SITE_DETAILED_SITE,"Seleccione esta opción si el sitio es relativamente grande, con múltiples estratos (capas de vegetación) y condiciones de crecimiento. Los sitios de plantación con más de una capa de vegetación tendrán varios estratos.",2ca39951
@@ -149,6 +151,8 @@ ALL_PROJECTS,Todos los proyectos,4eb0ec5d
 ALL_SECTIONS,Todas las secciones,d3d73b24
 ALL_SPECIES,Todas las especies,5622801f
 ALL_VARIABLES,Todas las variables,1fe9cddb
+ALLOCATED,Asignado,1105670f
+ALLOCATED_TOOLTIP,Cantidad de plantas de esta especie que el vivero ha planeado cumplir.,6001e68d
 ALREADY_INVITED_PERSON_ERROR,Parece que ya añadió o invitó a esta persona. Por favor ingrese un correo electrónico único o vaya al perfil existente de la persona.,67ec2d39
 AMOUNT_EST_COUNT,Cantidad (recuento estimado),e203609b
 AMOUNT_REMAINING,Cantidad ({0} restantes),349aa6d6
@@ -194,6 +198,7 @@ APPROVED,Aprobado,b279ed0b
 APPROX_SYMBOL,~,acb59e95
 AR,RA,25a8e55a
 ARE_YOU_SURE,¿Está seguro(a)?,d4536b91
+ARE_YOU_SURE_DELETE,¿Está seguro de que desea eliminar?,a7f716f0
 AREA_HA,Área (ha),8ab5d500
 AREA_NOT_OBSERVED,Área no observada,9eeddab4
 ARROW_KEYS,Flechas del teclado,5cefb475
@@ -215,6 +220,8 @@ ATTACHMENTS,Archivos adjuntos,e7695404
 AUTO_CALCULATED_INDICATORS,Indicadores calculados automáticamente,3b7057e0
 AUTO_ROTATE,Rotación automática,15ce1a40
 AVAILABLE,disponible,716e496f
+AVAILABLE_TO_SCHEDULE,Disponible para programar,00da4780
+AVAILABLE_TO_SCHEDULE_TOOLTIP,"Cantidad de plantas disponibles para programar la plantación, del grupo de plantas asignadas y no ya programadas.",7f914f3e
 AVERAGE_PROJECT_STRATA_SURVIVAL_RATE,Tasa promedio de supervivencia por estrato del proyecto,eba4d7ea
 AVERAGE_STRATA_SURVIVAL_RATE,Tasa promedio de supervivencia por estrato,1aab76e2
 AVERAGE_WOOD_DENSITY,Densidad promedio de la madera (kb/m3),b413c9a9
@@ -338,6 +345,9 @@ CLIMATE,Clima,63ba44ee
 CLIMATE_IMPACT,Impacto climático,876c48a4
 CLOSE,Cerrar,e6e3f022
 CLOSE_AND_EDIT,Cerrar y editar,1c3ea202
+CLOSE_PLANTING_SEASON,Cerrar temporada de plantación,fc3b2abc
+CLOSE_PLANTING_SEASON_CONFIRM,"Está a punto de cerrar {0}. Al cerrar, la temporada se marcará como cerrada y no se podrán realizar más cambios. Esta acción no se puede deshacer.",ee1f53f1
+CLOSE_SEASON,Cerrar temporada,72b4448a
 CLOSED,Cerrado,7b8d0429
 COLLECTED_DATE,Fecha de recolección,3f1515d8
 COLLECTED_FROM,Recolectado de,ffc6ad60
@@ -481,12 +491,15 @@ DELETE_OBSERVATION_PHOTO_MESSAGE,Esta foto también se eliminará de la observac
 DELETE_OBSERVATION_PHOTO_TITLE,Eliminar foto de la observación,e92e9851
 DELETE_ORGANIZATION,Borrar Organización,91c84420
 DELETE_ORGANIZATION_MSG,¿Está seguro de que deseas borrar {0}?,a932473f
+DELETE_PLANTING_SEASON,Eliminar temporada de plantación,dda3774d
+DELETE_PLANTING_SEASON_CONFIRM,"Está a punto de eliminar {0}. Al eliminar la temporada, se eliminarán permanentemente todos los objetivos y fechas, pero los retiros de plantación permanecerán intactos. Esta acción no se puede deshacer.",a49b8872
 DELETE_PLANTING_SITE,Borrar sitio de plantación,aa2a58c0
 DELETE_PLANTING_SITE_CONTACT_US,"Por favor, [póngase en contacto con nosotros] para eliminar el sitio de plantación.",ba8291e0
 DELETE_PLANTING_SITE_IN_USE_MESSAGE,El sitio de plantación {0} tiene plantaciones asignadas.,78094ae2
 DELETE_PLANTING_SITE_MESSAGE,Está a punto de borrar el sitio de plantación {0}.,59883616
 DELETE_PROJECT,Borrar proyecto,d8b9108a
 DELETE_PROJECT_CONFIRM,¿Está seguro de que quiere borrar este proyecto? Se eliminará toda la categorización del proyecto.,c769e450
+DELETE_SEASON,Eliminar temporada,c49c9788
 DELETE_SEEDLINGS_BATCHES,Borrar Lotes de Plántulas,a5916585
 DELETE_SEEDLINGS_BATCHES_MSG,"Eliminar lotes sin retiros los eliminará completamente. Eliminar lotes con retiros establecerá sus cantidades restantes en 0, eliminará esas cantidades del inventario y marcará los lotes como vacíos. Los retiros anteriores seguirán apareciendo en el historial de retiros.",4f9bf36f
 DELETE_SPECIES,Borrar Especie,b3dd3256
@@ -687,6 +700,7 @@ EVENT_NAME_SLIDES,Diapositivas de {0},a06fe761
 EVENT_RECORDED_SESSION_DESCRIPTION_1,Puedes ver esta sesión grabada cuando quieras y las veces que necesites.,1fe65a8a
 EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Altavoces o auriculares: integrados, con conexión USB o inalámbricos con tecnología Bluetooth.",b87be889
 EVENTS,Eventos,a18b73bc
+EXCEEDS_GOAL,Supera la meta,4488fd7c
 EXCLUSION_AREAS,Zonas de exclusión,08c7d391
 EXISTING,Existente,fa67ac1d
 EXISTING_PROJECT_ACCESSIONS_BODY,"Hay accesiones que ya se añadieron a un proyecto existente. Si selecciona dichas accesiones aquí, reemplazará el proyecto con {0} (en vez de crear una asociación adicional).",a23f695b
@@ -1005,6 +1019,7 @@ LEAVING_SURVIVAL_RATE_EDIT_SCREEN_PERMANENT_PLOTS,Está saliendo de la pantalla 
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_TEMPORARY_PLOTS,Está saliendo de la pantalla de edición de Parcelas Temporales. Cualquier cambio no guardado en las Parcelas Temporales no se guardará. ¿Está seguro de que desea salir?,a4409ad0
 LEFT_MOUSE,Botón izquierdo del ratón,b034e4dc
 LEFT_TO_PLANT,Por plantar,30af8cf9
+LEFT_TO_PLANT_TOOLTIP,"Cantidad de plantas que quedan por plantar, es decir, que aún deben retirarse para plantar y cumplir el objetivo de la especie en este sustrato.",ded53f18
 LEGAL,Legal,dc8b5907
 LEGEND,Leyenda,d312e5fb
 LESS_THAN_FIFTY_PERCENT,< 50%,d26d7627
@@ -1199,6 +1214,7 @@ NO_NOTIFICATIONS,No hay notificaciones que mostrar.,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Antes de poder agregar y administrar el inventario de su vivero, necesitará contar con un vivero y especies dentro de Terraware. Solo los administradores pueden agregar viveros; contáctese con el suyo para obtener ayuda.",93c44729
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,No se han programado observaciones,c05456cd
 NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Cuando se completen las Observaciones que incluyan parcelas permanentes, estas aparecerán aquí y será necesario establecer los datos t0 para todas las parcelas permanentes para que se puedan calcular las Tasas de Supervivencia.",18f6a079
+NO_PLANTING_DATES_SCHEDULED,No se han programado fechas de plantación.,92de1320
 NO_PLANTING_SEASONS_HAVE_BEEN_CREATED,No se han creado temporadas de plantación.,bda5b0d9
 NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Añadir un sitio de plantación le permitirá rastrear a dónde van las plantas de semillero al dejar el vivero.,b0104f6c
 NO_PLANTING_SITES_NON_ADMIN_MSG,"Solo los administradores pueden agregar sitios de plantación; por favor, comuníquese con el suyo para recibir asistencia.",8f016d3f
@@ -1245,6 +1261,7 @@ NOT_VERIFIED,No verificado,fbd9066a
 NOT_YET,Aún no,77976aa8
 NOTE_ANY_ISSUES,¿Todo lo anterior parece correcto? Anote cualquier problema.,133db1c4
 NOTE_COLON,Nota:,00769bbe
+NOTE_FOR_NURSERY,Nota para el vivero,c5e4405c
 NOTES,Notas,953783ac
 NOTES_AFTER,Notas (después),a4cfe728
 NOTES_BEFORE,Notas (antes),a4b844ff
@@ -1456,6 +1473,7 @@ PLANTING_COMPLETE_DASHBOARD_TOOLTIP,"La plantación completada incluye el área 
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,"Porcentaje de ""Plantación completada"" de todos los lugares de plantación relacionados con el proyecto",969947fc
 PLANTING_COMPLETE_TOOLTIP,¿Se ha completado la plantación en este sustrato?,a6bfac66
 PLANTING_DATES,Fechas de plantación,e8aa47b1
+PLANTING_DATES_TAB_DESCRIPTION,"Las fechas de plantación especifican cuándo y dónde se plantan las plantas. Haga clic en ""Guardar y notificar al vivero"" cuando esté listo para que el vivero retire las plantas.",47ee4b8f
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
 PLANTING_GOAL,Meta de plantación,a97123a1
 PLANTING_PROGRESS,Avance de plantación,58616da9
@@ -1626,6 +1644,8 @@ QUADRAT_PHOTOS,Fotos de cuadrantes,be63ed72
 QUADRAT_PHOTOS_CANNOT_BE_DELETED,No se pueden eliminar las fotos de cuadrantes,24cf5aff
 QUANTITY,Cantidad,5130efc1
 QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,La cantidad debe ser mayor o igual a 0,5a55f459
+QUANTITY_TO_PLANT,Cantidad a plantar,14ee1db4
+QUANTITY_TO_PLANT_TOOLTIP,Cantidad de plántulas programadas para plantar en esta fecha de plantación.,2bc0e7ce
 QUARTER_YEAR,T{0} {1},637ce0a5
 QUARTERLY,Trimestral,f69e32e0
 QUARTERLY_HIGHLIGHTS,Aspectos destacados trimestrales,863a818b
@@ -1689,6 +1709,7 @@ REGION_SUB_SAHARAN_AFRICA,África subsahariana,2103e526
 REINTRODUCED,Reintroducida/s,f4f1eb2e
 REINTRODUCED_DESCRIPTION,"Plantas que fueron trasplantadas desde un vivero, invernadero u otro sitio a un lugar de restauración.",ebd1c97e
 REMAINING,Restante/s,47ea00be
+REMAINING_IN_GOAL,Restante en la meta,0500723f
 REMAINING_QUANTITY_NOTES_PLACEHOLDER,Notas requeridas para cambios de cantidad,3603466e
 REMAINING_SEEDS,Semillas restantes,475182eb
 REMOVE,Eliminar,fe1f68f8
@@ -1806,6 +1827,7 @@ SATELLITE,Satélite,14d51868
 SAVE,Guardar,526a3e42
 SAVE_AND_CLOSE,Guardar y cerrar,aaa98fc6
 SAVE_AND_NEXT,Guardar y Continuar,1ca9d40a
+SAVE_AND_NOTIFY_NURSERY,Guardar y notificar al vivero,78cb028e
 SAVE_CHANGES,Guardar los cambios,cb5e8c33
 SAVE_OBSERVATION_DATA,Guardar datos de observación,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Sus ediciones reemplazarán cualquier dato ingresado previamente. ¿Está seguro de que desea realizar estos cambios?,b1657c44
@@ -2073,6 +2095,7 @@ STORAGE,Almacenamiento,bba4a98a
 STORED,Almacenada,f74eae19
 STORING,Almacenamiento,2e386dbc
 STRATA,Estratos,3149f6f8
+STRATA_LABEL,Estratos,3149f6f8
 STRATIFICATION,Estratificación,f19a442c
 STRATUM,Estrato,79b6bcfe
 STRATUM_BOUNDARIES,Límites del estrato,418d687a
@@ -2106,6 +2129,7 @@ SUBSET_WEIGHT_POSITIVE,El peso del subconjunto tiene que ser un número positivo
 SUBSET_WEIGHT_REQUIRED,Usted debe introducir un peso y un recuento del subconjunto para determinar el recuento de semillas aproximado al extraerlas a un vivero. Esto puede hacerse editando la cantidad de esta accesión.,18baf19c
 SUBSHRUB,Subarbusto,f13ec462
 SUBSTRATA,Subestratos,6dda38f7
+SUBSTRATA_LABEL,Subestratos,6dda38f7
 SUBSTRATE,Sustrato,74ff28de
 SUBSTRATE_AFTER,Sustrato (después),4f743cf7
 SUBSTRATE_BEFORE,Sustrato (antes),34fc5273
@@ -2322,6 +2346,7 @@ TOTAL_WITHDRAWN_WEIGHT_KILOGRAMS,Total de extraídos (kg),49e5f907
 TOTAL_WITHDRAWN_WEIGHT_MILLIGRAMS,Total de extraídos (mg),fcaf5ce8
 TOTAL_WITHDRAWN_WEIGHT_OUNCES,Total de extraídos (oz),4ec6a8f1
 TOTAL_WITHDRAWN_WEIGHT_POUNDS,Total de extraídos (lb),893058af
+TOTALS,Totales,61f4cdef
 TOUCH_DRAG,Tocar y arrastrar,ff6d48d2
 TREATMENT,Tratamiento,d92a8264
 TREATMENT_AFTER,Tratamiento (después),47efd418
@@ -2522,6 +2547,7 @@ X_HA,{0} hectáreas,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha en la Superficie total de plantación,586af003
 X_HECTARES,{0} hectáreas,6f24cf52
 X_HECTARES_HA,{0} hectáreas (ha),e2af9d30
+X_SPECIES_Y_PLANTS,"{0} especies, {1} plantas",81dea858
 XR_ERROR,"Se produjo un error al habilitar el modo XR. Por favor, actualice la página e intente nuevamente.",935ea96d
 YEAR,Año,484bf433
 YES,Sí,d8b0d802

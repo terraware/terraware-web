@@ -30,6 +30,13 @@ const injectedRtkApi = api.injectEndpoints({
     closePlantingSeason: build.mutation<ClosePlantingSeasonApiResponse, ClosePlantingSeasonApiArg>({
       query: (queryArg) => ({ url: `/api/v1/planting-seasons/${queryArg}/close`, method: 'POST' }),
     }),
+    upsertAllocatedSpecies: build.mutation<UpsertAllocatedSpeciesApiResponse, UpsertAllocatedSpeciesApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/planting-seasons/${queryArg.plantingSeasonId}/allocated-species`,
+        method: 'PUT',
+        body: queryArg.upsertPlantingSeasonAllocatedSpeciesRequestPayload,
+      }),
+    }),
     getScheduledPlantingDates: build.query<GetScheduledPlantingDatesApiResponse, GetScheduledPlantingDatesApiArg>({
       query: (queryArg) => ({ url: `/api/v1/planting-seasons/${queryArg}/scheduled-dates` }),
     }),
@@ -118,6 +125,12 @@ export type UpdatePlantingSeasonApiArg = {
 export type ClosePlantingSeasonApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
 export type ClosePlantingSeasonApiArg = number;
+export type UpsertAllocatedSpeciesApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpsertAllocatedSpeciesApiArg = {
+  plantingSeasonId: number;
+  upsertPlantingSeasonAllocatedSpeciesRequestPayload: UpsertPlantingSeasonAllocatedSpeciesRequestPayload;
+};
 export type GetScheduledPlantingDatesApiResponse =
   /** status 200 The requested operation succeeded. */ ListScheduledDatesResponsePayload;
 export type GetScheduledPlantingDatesApiArg = number;
@@ -211,6 +224,10 @@ export type UpdatePlantingSeasonRequestPayload = {
   name: string;
   startDate: string;
 };
+export type UpsertPlantingSeasonAllocatedSpeciesRequestPayload = {
+  quantity: number;
+  speciesId: number;
+};
 export type ScheduledPlantingDateSpeciesPayload = {
   quantity: number;
   speciesId: number;
@@ -251,6 +268,7 @@ export const {
   useLazyGetPlantingSeasonQuery,
   useUpdatePlantingSeasonMutation,
   useClosePlantingSeasonMutation,
+  useUpsertAllocatedSpeciesMutation,
   useGetScheduledPlantingDatesQuery,
   useLazyGetScheduledPlantingDatesQuery,
   useCreateScheduledPlantingDateMutation,
