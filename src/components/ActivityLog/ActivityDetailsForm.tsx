@@ -2,14 +2,13 @@ import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } fr
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Button, Checkbox, Dropdown, DropdownItem, Icon, IconTooltip, Textfield } from '@terraware/web-components';
+import { Button, Checkbox, Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 import { DateTime } from 'luxon';
 
 import Card from 'src/components/common/Card';
 import DatePicker from 'src/components/common/DatePicker';
-import Link from 'src/components/common/Link';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
@@ -132,18 +131,45 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     { skip: !activity?.payload.observation?.observationId }
   );
 
-  const observationUrl = useMemo(
+  const obsSpecies = useMemo(
     () =>
-      isObsActivity && activity?.payload.observation?.observationId
-        ? APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', String(activity.payload.observation.observationId))
-        : undefined,
-    [activity, isObsActivity]
-  );
-
-  const observationLivePlants = useMemo(
-    () => getObservationSpeciesLivePlantsCount(observationResultsData?.observation.species),
+      observationResultsData?.observation.species?.length
+        ? observationResultsData.observation.species
+        : observationResultsData?.observation.adHocPlot?.species,
     [observationResultsData]
   );
+
+  const observationLivePlants = useMemo(() => getObservationSpeciesLivePlantsCount(obsSpecies), [obsSpecies]);
+
+  const observationPlantDensity =
+    observationResultsData?.observation.plantingDensity ??
+    observationResultsData?.observation.adHocPlot?.plantingDensity;
+
+  const observationSurvivalRate =
+    observationResultsData?.observation.survivalRate ?? observationResultsData?.observation.adHocPlot?.survivalRate;
+
+  const obsMonthYear = useMemo(() => {
+    if (!isObsActivity || !activity?.payload.date) {
+      return undefined;
+    }
+    const dt = DateTime.fromISO(activity.payload.date);
+    return dt.isValid ? dt.toFormat('LLLL yyyy') : undefined;
+  }, [activity?.payload.date, isObsActivity]);
+
+  const obsIsAdHoc = observationResultsData?.observation.isAdHoc ?? false;
+  const obsPlotNumber = observationResultsData?.observation.adHocPlot?.monitoringPlotNumber;
+
+  const obsTitle = useMemo(() => {
+    if (!isObsActivity) {
+      return undefined;
+    }
+    if (obsIsAdHoc) {
+      return obsPlotNumber !== undefined
+        ? `${strings.AD_HOC} ${strings.OBSERVATION}: ${strings.PLOT} ${obsPlotNumber}`
+        : undefined;
+    }
+    return obsMonthYear ? `${strings.OBSERVATION}: ${obsMonthYear}` : undefined;
+  }, [isObsActivity, obsIsAdHoc, obsMonthYear, obsPlotNumber, strings]);
 
   const syncActivityMediaRequest = useAppSelector(selectSyncActivityMedia(syncMediaRequestId));
 
@@ -624,41 +650,78 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               </Box>
             </Grid>
 
-            <Grid item lg={6} xs={12}>
-              <Box display='flex' alignItems='center' gap={1}>
-                <Box flex={1}>
-                  <Dropdown
-                    disabled={isObsActivity}
-                    errorText={validateFields && !record?.type && !isObsActivity ? strings.REQUIRED_FIELD : ''}
-                    fullWidth
-                    label={strings.ACTIVITY_TYPE}
-                    onChange={onChangeActivityType}
-                    options={activityTypeOptions}
-                    required={!isObsActivity}
-                    selectedValue={record.type}
-                  />
+            {isObsActivity && obsMonthYear && (
+              <Grid item xs={12}>
+                <Box display='flex' alignItems='flex-start' gap={1}>
+                  <Icon name='info' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
+                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+                    {strings.formatString(strings.OBSERVATION_ACTIVITY_AUTO_CREATED_INFO, obsMonthYear)}
+                  </Typography>
                 </Box>
-                {isObsActivity && <IconTooltip title={strings.OBSERVATION_TYPE_DATE_READONLY_TOOLTIP} />}
-              </Box>
+              </Grid>
+            )}
+
+            {isObsActivity && obsTitle && (
+              <Grid item xs={12}>
+                <Typography fontSize='16px' fontWeight={500}>
+                  {obsTitle}
+                </Typography>
+              </Grid>
+            )}
+
+            <Grid item lg={6} xs={12}>
+              {isObsActivity ? (
+                <Box>
+                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' marginBottom={1}>
+                    {strings.ACTIVITY_TYPE}
+                  </Typography>
+                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='16px' fontWeight={500}>
+                    {record.type ? activityTypeLabel(record.type, strings) : ''}
+                  </Typography>
+                </Box>
+              ) : (
+                <Box display='flex' alignItems='center' gap={1}>
+                  <Box flex={1}>
+                    <Dropdown
+                      errorText={validateFields && !record?.type && !isObsActivity ? strings.REQUIRED_FIELD : ''}
+                      fullWidth
+                      label={strings.ACTIVITY_TYPE}
+                      onChange={onChangeActivityType}
+                      options={activityTypeOptions}
+                      required
+                      selectedValue={record.type}
+                    />
+                  </Box>
+                </Box>
+              )}
             </Grid>
 
             <Grid item lg={5} xs={12}>
-              <Box display='flex' alignItems='center' gap={1}>
-                <Box flex={1}>
-                  <DatePicker
-                    aria-label={strings.DATE}
-                    defaultTimeZone={userTimeZone?.id}
-                    disabled={isObsActivity}
-                    errorText={validateFields && !record?.date && !isObsActivity ? strings.REQUIRED_FIELD : ''}
-                    id='date'
-                    label={strings.DATE_REQUIRED}
-                    onDateChange={onChangeDate}
-                    sx={{ '& .MuiInputBase-input': { paddingRight: 0 } }}
-                    value={record.date}
-                  />
+              {isObsActivity ? (
+                <Box>
+                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' marginBottom={1}>
+                    {strings.DATE}
+                  </Typography>
+                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='16px' fontWeight={500}>
+                    {record.date ?? ''}
+                  </Typography>
                 </Box>
-                {isObsActivity && <IconTooltip title={strings.OBSERVATION_TYPE_DATE_READONLY_TOOLTIP} />}
-              </Box>
+              ) : (
+                <Box display='flex' alignItems='center' gap={1}>
+                  <Box flex={1}>
+                    <DatePicker
+                      aria-label={strings.DATE}
+                      defaultTimeZone={userTimeZone?.id}
+                      errorText={validateFields && !record?.date ? strings.REQUIRED_FIELD : ''}
+                      id='date'
+                      label={strings.DATE_REQUIRED}
+                      onDateChange={onChangeDate}
+                      sx={{ '& .MuiInputBase-input': { paddingRight: 0 } }}
+                      value={record.date}
+                    />
+                  </Box>
+                </Box>
+              )}
             </Grid>
 
             <Grid item xs={12}>
@@ -675,42 +738,36 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             </Grid>
 
             {isObsActivity && (
-              <Grid item xs={12}>
-                <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(2)}>
-                  {strings.OBSERVATION_DETAILS}
-                </Typography>
-                {observationUrl && (
-                  <Box marginBottom={theme.spacing(2)}>
-                    <Link to={observationUrl}>{strings.VIEW_OBSERVATION}</Link>
-                  </Box>
-                )}
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={4}>
-                    <OverviewItemCard
-                      isEditable={false}
-                      title={strings.LIVE_PLANTS}
-                      contents={observationLivePlants?.toString() ?? null}
-                    />
-                  </Grid>
-                  {!!observationResultsData?.observation.plantingDensity && (
-                    <Grid item xs={12} sm={4}>
-                      <OverviewItemCard
-                        isEditable={false}
-                        title={strings.PLANT_DENSITY}
-                        contents={observationResultsData.observation.plantingDensity.toString()}
-                      />
-                    </Grid>
-                  )}
-                  {observationResultsData?.observation.survivalRate !== undefined && (
-                    <Grid item xs={12} sm={4}>
-                      <OverviewItemCard
-                        isEditable={false}
-                        title={strings.SURVIVAL_RATE}
-                        contents={`${observationResultsData.observation.survivalRate}%`}
-                      />
-                    </Grid>
-                  )}
-                </Grid>
+              <Grid item xs={12} sm={4}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.LIVE_PLANTS}
+                  contents={observationLivePlants?.toString() ?? null}
+                  sx={{ padding: 0 }}
+                  valueColor={theme.palette.TwClrTxtSecondary}
+                />
+              </Grid>
+            )}
+            {isObsActivity && !!observationPlantDensity && (
+              <Grid item xs={12} sm={4}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.PLANT_DENSITY}
+                  contents={observationPlantDensity.toString()}
+                  sx={{ padding: 0 }}
+                  valueColor={theme.palette.TwClrTxtSecondary}
+                />
+              </Grid>
+            )}
+            {isObsActivity && observationSurvivalRate !== undefined && (
+              <Grid item xs={12} sm={4}>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.SURVIVAL_RATE}
+                  contents={`${observationSurvivalRate}%`}
+                  sx={{ padding: 0 }}
+                  valueColor={theme.palette.TwClrTxtSecondary}
+                />
               </Grid>
             )}
 

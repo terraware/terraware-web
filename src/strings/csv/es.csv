@@ -1286,6 +1286,7 @@ NURSERY_REQUIRED,Vivero *,809fa5b6
 NURSERY_TRANSFER,Traslado de vivero,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Las transferencias de vivero requieren de un vivero fuente y uno meta.,7fe70d84
 OBSERVATION,Observación,ac4f24f0
+OBSERVATION_ACTIVITY_AUTO_CREATED_INFO,Esta actividad fue creada automáticamente a partir de la Observación {0}. Los datos extraídos de la observación no pueden editarse aquí.,785c7f71
 OBSERVATION_DATA,Datos de observación,7e9f4079
 OBSERVATION_DATE,Fecha de observación,62a4f110
 OBSERVATION_DETAILS,Detalles de la observación,3233a88a
@@ -1297,6 +1298,7 @@ OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para el {
 OBSERVATION_EVENTS,Incidencias de observación,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Observaciones previas se muestra con opacidad disminuida,03c6ea26
 OBSERVATION_PERIOD_WARN,El periodo de observación no puede superar los dos meses.,364a36c6
+OBSERVATION_PHOTO_CANNOT_DELETE_INFO,No se pueden eliminar las fotos de las esquinas de la parcela.,f045e547
 OBSERVATION_PHOTO_CANNOT_DELETE_TOOLTIP,Esta foto fue tomada durante la observación y no se puede eliminar.,c127ed8e
 OBSERVATION_PHOTOS_VIDEOS,Fotos/Vídeos de observación,95e219ea
 OBSERVATION_RESCHEDULED,Observación reprogramada,583d8d94
@@ -1619,6 +1621,7 @@ PUBLISHED_REPORT_CONSOLE_WARNING,Está viendo el último informe publicado tal y
 PURPOSE,Propósito,ff06abab
 PURPOSE_REQUIRED,Propósito *,3f585469
 QUADRAT,Cuadrante,ff115cb6
+QUADRAT_PHOTO_CANNOT_DELETE_INFO,No se pueden eliminar las fotos de cuadrantes.,264a9867
 QUADRAT_PHOTOS,Fotos de cuadrantes,be63ed72
 QUADRAT_PHOTOS_CANNOT_BE_DELETED,No se pueden eliminar las fotos de cuadrantes,24cf5aff
 QUANTITY,Cantidad,5130efc1
@@ -1989,6 +1992,7 @@ SOIL_ASSESSMENT_DESCRIPTION_NOTES,Descripción/Notas de la Evaluación del Suelo
 SOIL_EROSION,Erosión del suelo,5620daeb
 SOIL_PHOTO,Foto del suelo,5a089072
 SOIL_PHOTO_CANNOT_BE_DELETED,No se puede eliminar la foto del suelo,5b7af46a
+SOIL_PHOTO_CANNOT_DELETE_INFO,No se pueden eliminar las fotos de suelo.,07d41270
 SOMETHING_WENT_WRONG,Algo no salió como se esperaba.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si usted está teniendo problemas con Terraware, infórmenos sobre los mismos y los corregiremos.",c506e77d
 SOMETHING_WENT_WRONG_TITLE,Algo no salió como se esperaba...,bf2e66a4

@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, FormControlLabel, Grid, Radio, Typography, useTheme } from '@mui/material';
-import { Button, Checkbox, DialogBox, Dropdown, FileChooser, IconTooltip, Textfield } from '@terraware/web-components';
+import { Button, Checkbox, DialogBox, Dropdown, FileChooser, Icon, Textfield } from '@terraware/web-components';
 
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -12,6 +12,7 @@ import {
   ActivityMediaFile,
   AdminActivityMediaFile,
   isCaptionReadOnly,
+  isCornerPhoto,
   isObservationMedia,
   isUndeletableObservationPhoto,
 } from 'src/types/Activity';
@@ -130,9 +131,25 @@ const ActivityPhotoPreview = ({
   const isObsMedia = useMemo(() => mediaItem.type === 'existing' && isObservationMedia(mediaItem.data), [mediaItem]);
 
   const isUndeletable = useMemo(
-    () => isObsMedia && mediaItem.type === 'existing' && isUndeletableObservationPhoto(mediaItem.data),
-    [isObsMedia, mediaItem]
+    () => isObsActivity && isObsMedia && mediaItem.type === 'existing' && isUndeletableObservationPhoto(mediaItem.data),
+    [isObsActivity, isObsMedia, mediaItem]
   );
+
+  const undeletableMessage = useMemo(() => {
+    if (!isUndeletable || mediaItem.type !== 'existing') {
+      return undefined;
+    }
+    if (isCornerPhoto(mediaItem.data)) {
+      return strings.OBSERVATION_PHOTO_CANNOT_DELETE_INFO;
+    }
+    if (mediaItem.data.observation?.type === 'Quadrat') {
+      return strings.QUADRAT_PHOTO_CANNOT_DELETE_INFO;
+    }
+    if (mediaItem.data.observation?.type === 'Soil') {
+      return strings.SOIL_PHOTO_CANNOT_DELETE_INFO;
+    }
+    return strings.OBSERVATION_PHOTO_CANNOT_DELETE_INFO;
+  }, [isUndeletable, mediaItem, strings]);
 
   const isCaptionRO = useMemo(
     () => isObsMedia && mediaItem.type === 'existing' && isCaptionReadOnly(mediaItem.data),
@@ -255,6 +272,14 @@ const ActivityPhotoPreview = ({
         <Grid item sm={true} xs={12}>
           <Box display='flex' flexDirection='column'>
             <Box alignItems='center' display='flex' flexDirection='row' gap={1} marginBottom={theme.spacing(2)}>
+              {isUndeletable && undeletableMessage && (
+                <Box display='flex' alignItems='center' gap={1} marginBottom={theme.spacing(2)} width='100%'>
+                  <Icon name='info' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
+                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+                    {undeletableMessage}
+                  </Typography>
+                </Box>
+              )}
               <Button
                 disabled={currentPosition <= 1}
                 icon='caretUp'
@@ -352,27 +377,7 @@ const ActivityPhotoPreview = ({
               )}
             </Box>
 
-            {isUndeletable ? (
-              <Box alignItems='center' display='flex' gap={1}>
-                <Button
-                  disabled
-                  icon='iconTrashCan'
-                  label={strings.DELETE}
-                  onClick={() => undefined}
-                  priority='ghost'
-                  style={{
-                    justifyContent: 'flex-start',
-                    marginBottom: 0,
-                    marginLeft: '-8px',
-                    marginTop: 0,
-                    maxWidth: '160px',
-                    paddingLeft: '8px',
-                  }}
-                  type='destructive'
-                />
-                <IconTooltip title={strings.OBSERVATION_PHOTO_CANNOT_DELETE_TOOLTIP} />
-              </Box>
-            ) : (
+            {isUndeletable ? null : (
               <Button
                 icon='iconTrashCan'
                 label={strings.DELETE}
