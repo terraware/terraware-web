@@ -30,7 +30,7 @@ const SpeciesSummaryDrawer = ({ open, onClose, plantingSeasonId }: SpeciesSummar
 
   useEffect(() => {
     if (open) {
-      void getSummary(plantingSeasonId);
+      void getSummary(plantingSeasonId, true);
     }
   }, [open, plantingSeasonId, getSummary]);
 
