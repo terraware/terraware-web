@@ -5404,8 +5404,13 @@ export interface components {
             type: "Plot" | "Quadrat" | "Soil";
         };
         AdminActivityObservationPayload: {
+            isAdHoc: boolean;
+            /** Format: int64 */
+            monitoringPlotNumber?: number;
             /** Format: int64 */
             observationId: number;
+            /** @enum {string} */
+            observationType: "Monitoring" | "Biomass Measurements";
         };
         AdminActivityPayload: {
             /** Format: int64 */
