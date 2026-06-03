@@ -305,9 +305,16 @@ const ActivityMediaItem = ({
       )}
 
       <Box className='info-panel' onClick={onClickMediaItem(mediaFile.fileId)} sx={infoPanelStyles}>
-        <Typography component='div' fontSize='16px' lineHeight='16px'>
-          {activity.payload.date}
-        </Typography>
+        <Box alignItems='center' display='flex' justifyContent='space-between'>
+          <Typography component='div' fontSize='16px' lineHeight='16px'>
+            {activity.payload.date}
+          </Typography>
+          {mediaFile.observation?.monitoringPlotNumber !== undefined && (
+            <Typography component='div' fontSize='16px' lineHeight='16px'>
+              {strings.PLOT} {mediaFile.observation.monitoringPlotNumber}
+            </Typography>
+          )}
+        </Box>
 
         {(mediaFile.caption || obsPhotoTypeLabel) && (
           <Typography component='div' sx={captionStyles}>
