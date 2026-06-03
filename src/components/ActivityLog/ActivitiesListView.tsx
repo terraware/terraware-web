@@ -79,23 +79,20 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
 
   const activityType = useMemo(() => activityTypeLabel(activity.payload.type, strings), [activity, strings]);
 
-  // Workaround until BE adds isAdHoc/monitoringPlotNumber to the observation activity payload.
-  // All media from a single-plot (ad hoc) observation share the same monitoringPlotNumber,
-  // while assigned observations have media from multiple plots.
   const obsListTitle = useMemo(() => {
-    if (!isObservationActivity(activity.payload)) {
+    const obs = activity.payload.observation;
+    if (!isObservationActivity(activity.payload) && obs === undefined) {
       return undefined;
     }
-    const plotNumbers = new Set(
-      activity.payload.media.map((m) => m.observation?.monitoringPlotNumber).filter((n): n is number => n !== undefined)
-    );
-    if (plotNumbers.size === 1) {
-      const plotNumber = [...plotNumbers][0];
-      return `${activityType} - ${strings.AD_HOC} ${strings.PLOT} ${plotNumber}`;
+    if (obs?.isAdHoc && obs.monitoringPlotNumber !== undefined) {
+      return `${activityType} - ${strings.AD_HOC} ${strings.PLOT} ${obs.monitoringPlotNumber}`;
     }
-    const dt = DateTime.fromISO(activity.payload.date);
-    const monthYear = dt.isValid ? dt.toFormat('LLLL yyyy') : activity.payload.date;
-    return `${activityType} - ${strings.OBSERVATION} ${monthYear}`;
+    if (obs && !obs.isAdHoc) {
+      const dt = DateTime.fromISO(activity.payload.date);
+      const monthYear = dt.isValid ? dt.toFormat('LLLL yyyy') : activity.payload.date;
+      return `${activityType} - ${strings.OBSERVATION} ${monthYear}`;
+    }
+    return undefined;
   }, [activity.payload, activityType, strings]);
 
   const coverPhotoURL = useMemo(() => {
