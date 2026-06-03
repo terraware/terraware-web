@@ -68,7 +68,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const [totalWeightError, setTotalWeightError] = useState('');
   const [remainingQuantityNotes, setRemainingQuantityNotes] = useState<string>('');
   const [remainingQuantityNotesError, setRemainingQuantityNotesError] = useState<boolean>(false);
-  const markSubmitted = useTrackModalAbandonment('accession_edit_quantity');
+  const markSubmitted = useTrackModalAbandonment('accession_edit_quantity', open);
 
   const quantityChanged = useMemo(() => {
     if (!accession.remainingQuantity) {

@@ -43,7 +43,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const theme = useTheme();
   const snackbar = useSnackbar();
   const trackEvent = useTrackEvent();
-  const markSubmitted = useTrackModalAbandonment('organization_create');
+  const markSubmitted = useTrackModalAbandonment('organization_create', open);
   const [nameError, setNameError] = useState('');
   const [timeZoneError, setTimeZoneError] = useState('');
   const [countryError, setCountryError] = useState('');
