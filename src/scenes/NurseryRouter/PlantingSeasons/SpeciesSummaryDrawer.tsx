@@ -1,48 +1,69 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Box, Drawer, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { SpeciesTargetPayload } from 'src/queries/generated/plantingSeasons';
+import { useLazyGetPlantingSeasonSpeciesSummaryQuery } from 'src/queries/search/plantingSeasons';
 import strings from 'src/strings';
 
 type SpeciesSummaryDrawerProps = {
   open: boolean;
   onClose: () => void;
-  speciesTargets: SpeciesTargetPayload[];
+  plantingSeasonId: number;
 };
 
-type SummaryRow = {
+type DisplayRow = {
   speciesId: number;
   scientificName: string;
   commonName?: string;
   target: number;
+  allocated: number;
+  withdrawn: number;
+  leftToPlant: number;
 };
 
-const SpeciesSummaryDrawer = ({ open, onClose, speciesTargets }: SpeciesSummaryDrawerProps): JSX.Element => {
+const SpeciesSummaryDrawer = ({ open, onClose, plantingSeasonId }: SpeciesSummaryDrawerProps): JSX.Element => {
   const theme = useTheme();
   const { species } = useSpeciesData();
+  const [getSummary, { data: summaryRows }] = useLazyGetPlantingSeasonSpeciesSummaryQuery();
 
-  const rows = useMemo<SummaryRow[]>(() => {
-    const targetsBySpecies = new Map<number, number>();
-    speciesTargets.forEach((target) => {
-      targetsBySpecies.set(target.speciesId, (targetsBySpecies.get(target.speciesId) ?? 0) + target.quantity);
-    });
-    return [...targetsBySpecies.entries()]
-      .map(([speciesId, target]) => {
-        const speciesInfo = species.find((s) => s.id === speciesId);
+  useEffect(() => {
+    if (open) {
+      void getSummary(plantingSeasonId, true);
+    }
+  }, [open, plantingSeasonId, getSummary]);
+
+  const rows = useMemo<DisplayRow[]>(() => {
+    return (summaryRows ?? [])
+      .map((row) => {
+        const speciesInfo = species.find((s) => s.id === row.speciesId);
         return {
-          speciesId,
-          scientificName: speciesInfo?.scientificName ?? `#${speciesId}`,
-          commonName: speciesInfo?.commonName,
-          target,
+          speciesId: row.speciesId,
+          scientificName: row.scientificName ?? speciesInfo?.scientificName ?? `#${row.speciesId}`,
+          commonName: row.commonName ?? speciesInfo?.commonName,
+          target: row.target,
+          allocated: row.allocated,
+          withdrawn: row.withdrawn,
+          leftToPlant: row.leftToPlant,
         };
       })
       .sort((a, b) => a.scientificName.localeCompare(b.scientificName));
-  }, [speciesTargets, species]);
+  }, [summaryRows, species]);
 
-  const totalTarget = useMemo(() => rows.reduce((sum, r) => sum + r.target, 0), [rows]);
+  const totals = useMemo(
+    () =>
+      rows.reduce(
+        (acc, r) => ({
+          target: acc.target + r.target,
+          allocated: acc.allocated + r.allocated,
+          withdrawn: acc.withdrawn + r.withdrawn,
+          leftToPlant: acc.leftToPlant + r.leftToPlant,
+        }),
+        { target: 0, allocated: 0, withdrawn: 0, leftToPlant: 0 }
+      ),
+    [rows]
+  );
 
   return (
     <Drawer
@@ -120,16 +141,13 @@ const SpeciesSummaryDrawer = ({ open, onClose, speciesTargets }: SpeciesSummaryD
               {row.target.toLocaleString()}
             </Typography>
             <Typography fontSize='16px' textAlign='right'>
-              {/* TODO: get from api */}
-              {'-'}
+              {row.allocated.toLocaleString()}
             </Typography>
             <Typography fontSize='16px' textAlign='right'>
-              {/* TODO: get from api */}
-              {'-'}
+              {row.withdrawn.toLocaleString()}
             </Typography>
             <Typography fontSize='16px' textAlign='right'>
-              {/* TODO: get from api */}
-              {'-'}
+              {row.leftToPlant.toLocaleString()}
             </Typography>
           </Box>
         ))}
@@ -147,16 +165,16 @@ const SpeciesSummaryDrawer = ({ open, onClose, speciesTargets }: SpeciesSummaryD
             {strings.TOTALS}
           </Typography>
           <Typography fontSize='16px' fontWeight={600} textAlign='right'>
-            {totalTarget.toLocaleString()}
+            {totals.target.toLocaleString()}
           </Typography>
           <Typography fontSize='16px' fontWeight={600} textAlign='right'>
-            {'-'}
+            {totals.allocated.toLocaleString()}
           </Typography>
           <Typography fontSize='16px' fontWeight={600} textAlign='right'>
-            {'-'}
+            {totals.withdrawn.toLocaleString()}
           </Typography>
           <Typography fontSize='16px' fontWeight={600} textAlign='right'>
-            {'-'}
+            {totals.leftToPlant.toLocaleString()}
           </Typography>
         </Box>
       </Box>

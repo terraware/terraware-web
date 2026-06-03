@@ -306,7 +306,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
       <SpeciesSummaryDrawer
         open={speciesSummaryOpen}
         onClose={() => setSpeciesSummaryOpen(false)}
-        speciesTargets={speciesTargets?.targets ?? []}
+        plantingSeasonId={seasonIdNumber}
       />
       <Box marginTop={theme.spacing(3)}>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />

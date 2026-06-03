@@ -46,11 +46,18 @@ api.enhanceEndpoints({
     upsertSpeciesTarget: {
       invalidatesTags: (_result, _error, arg) => [
         { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-targets` },
+        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-summary` },
       ],
     },
     deleteSpeciesTarget: {
       invalidatesTags: (_result, _error, arg) => [
         { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-targets` },
+        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-summary` },
+      ],
+    },
+    upsertAllocatedSpecies: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-summary` },
       ],
     },
     getScheduledPlantingDates: {
