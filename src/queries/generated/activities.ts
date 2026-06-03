@@ -186,7 +186,7 @@ export type ActivityObservationMediaFilePayload = {
 };
 export type ActivityMediaFilePayload = {
   caption?: string;
-  capturedDate: string;
+  capturedDate?: string;
   fileId: number;
   fileName: string;
   geolocation?: Point;
@@ -249,7 +249,7 @@ export type AdminActivityObservationMediaFilePayload = {
 };
 export type AdminActivityMediaFilePayload = {
   caption?: string;
-  capturedDate: string;
+  capturedDate?: string;
   createdBy: number;
   createdTime: string;
   fileId: number;

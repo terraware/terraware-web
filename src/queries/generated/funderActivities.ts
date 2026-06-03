@@ -74,7 +74,7 @@ export type FunderObservationActivityMediaFilePayload = {
 };
 export type FunderActivityMediaFilePayload = {
   caption?: string;
-  capturedDate: string;
+  capturedDate?: string;
   fileId: number;
   fileName: string;
   geolocation?: Point;

@@ -2329,6 +2329,7 @@ TOTAL_WITHDRAWN_WEIGHT_KILOGRAMS,Total de extraídos (kg),49e5f907
 TOTAL_WITHDRAWN_WEIGHT_MILLIGRAMS,Total de extraídos (mg),fcaf5ce8
 TOTAL_WITHDRAWN_WEIGHT_OUNCES,Total de extraídos (oz),4ec6a8f1
 TOTAL_WITHDRAWN_WEIGHT_POUNDS,Total de extraídos (lb),893058af
+TOTALS,Totales,61f4cdef
 TOUCH_DRAG,Tocar y arrastrar,ff6d48d2
 TREATMENT,Tratamiento,d92a8264
 TREATMENT_AFTER,Tratamiento (después),47efd418

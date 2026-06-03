@@ -9,6 +9,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
 import Card from 'src/components/common/Card';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
+import Link from 'src/components/common/Link';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
@@ -22,6 +23,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 import EditPlantingSeasonModal from './EditPlantingSeasonModal';
 import PlantingDatesTab from './PlantingDatesTab';
 import PlantingSeasonStatusBadge from './PlantingSeasonStatusBadge';
+import SpeciesSummaryDrawer from './SpeciesSummaryDrawer';
 import SpeciesTargetsTab from './SpeciesTargetsTab';
 
 const PlantingSeasonDetailsView = (): JSX.Element => {
@@ -53,6 +55,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
   const plantingSite = plantingSiteData?.site;
 
   const [editModalOpen, setEditModalOpen] = useState(false);
+  const [speciesSummaryOpen, setSpeciesSummaryOpen] = useState(false);
 
   const plantingGoal = useMemo(() => {
     const targets = speciesTargets?.targets;
@@ -209,13 +212,23 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
               </Box>
             </Box>
           </Box>
-          <Box display='flex' gap={theme.spacing(4)} alignItems='flex-start'>
-            {numberColumn(strings.PLANTING_GOAL, plantingGoal)}
-            {numberColumn(strings.WITHDRAWN_FOR_PLANTING, undefined)}
-            {numberColumn(strings.LEFT_TO_PLANT, undefined)}
+          <Box display='flex' flexDirection='column' alignItems='flex-end' gap={theme.spacing(2)}>
+            <Box display='flex' gap={theme.spacing(4)} alignItems='flex-start'>
+              {numberColumn(strings.PLANTING_GOAL, plantingGoal)}
+              {numberColumn(strings.WITHDRAWN_FOR_PLANTING, undefined)}
+              {numberColumn(strings.LEFT_TO_PLANT, undefined)}
+            </Box>
+            <Link style={{ fontSize: '16px' }} onClick={() => setSpeciesSummaryOpen(true)}>
+              {strings.SPECIES_SUMMARY}
+            </Link>
           </Box>
         </Box>
       </Card>
+      <SpeciesSummaryDrawer
+        open={speciesSummaryOpen}
+        onClose={() => setSpeciesSummaryOpen(false)}
+        speciesTargets={speciesTargets?.targets ?? []}
+      />
       <Box marginTop={theme.spacing(3)}>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>
