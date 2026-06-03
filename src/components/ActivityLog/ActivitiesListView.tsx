@@ -4,6 +4,7 @@ import { MapRef } from 'react-map-gl/mapbox';
 import { Box, Grid, Pagination, Tooltip, Typography, useTheme } from '@mui/material';
 import { Icon, PillList, PillListItem } from '@terraware/web-components';
 import { ColumnHeader } from 'export-to-csv';
+import { DateTime } from 'luxon';
 
 import { MapPoint } from 'src/components/NewMap/types';
 import useMapDrawer from 'src/components/NewMap/useMapDrawer';
@@ -41,6 +42,7 @@ import {
   ActivityType,
   activityStatusTagLabel,
   activityTypeLabel,
+  isObservationActivity,
 } from 'src/types/Activity';
 import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
 import { groupActivitiesByQuarter } from 'src/utils/activityUtils';
@@ -76,6 +78,25 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
   const coverPhoto = useMemo(() => activity.payload.media.find((file) => file.isCoverPhoto), [activity]);
 
   const activityType = useMemo(() => activityTypeLabel(activity.payload.type, strings), [activity, strings]);
+
+  // Workaround until BE adds isAdHoc/monitoringPlotNumber to the observation activity payload.
+  // All media from a single-plot (ad hoc) observation share the same monitoringPlotNumber,
+  // while assigned observations have media from multiple plots.
+  const obsListTitle = useMemo(() => {
+    if (!isObservationActivity(activity.payload)) {
+      return undefined;
+    }
+    const plotNumbers = new Set(
+      activity.payload.media.map((m) => m.observation?.monitoringPlotNumber).filter((n): n is number => n !== undefined)
+    );
+    if (plotNumbers.size === 1) {
+      const plotNumber = [...plotNumbers][0];
+      return `${activityType} - ${strings.AD_HOC} ${strings.PLOT} ${plotNumber}`;
+    }
+    const dt = DateTime.fromISO(activity.payload.date);
+    const monthYear = dt.isValid ? dt.toFormat('LLLL yyyy') : activity.payload.date;
+    return `${activityType} - ${strings.OBSERVATION} ${monthYear}`;
+  }, [activity.payload, activityType, strings]);
 
   const coverPhotoURL = useMemo(() => {
     const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
@@ -117,7 +138,7 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
       <Grid item xs={true}>
         <Box display='flex' justifyContent={'space-between'} alignItems={'center'}>
           <Typography color={theme.palette.TwClrTxtBrand} fontSize='20px' fontWeight='600' lineHeight='28px'>
-            {activityType}
+            {obsListTitle ?? activityType}
           </Typography>
           {isDesktop && (
             <Grid item xs='auto'>
