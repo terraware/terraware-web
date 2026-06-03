@@ -97,7 +97,7 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
           </Typography>
           <Tooltip
             title={
-              isWeightedSurvivalRatesEnabled && isProjectView
+              isWeightedSurvivalRatesEnabled
                 ? strings.formatString(
                     strings.WEIGHTED_SURVIVAL_RATE_TOOLTIP,
                     <Link
