@@ -58,7 +58,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
   const [photoFilenamesToRemove, setPhotoFilenamesToRemove] = useState<string[]>([]);
   const [uploadPhoto] = useUploadPhotoMutation();
   const [deletePhoto] = useDeletePhotoMutation();
-  const markSubmitted = useTrackModalAbandonment('accession_edit');
+  const markSubmitted = useTrackModalAbandonment('accession_edit', open);
 
   const onPhotosChanged = (photosList: File[]) => {
     setNewPhotos(photosList);

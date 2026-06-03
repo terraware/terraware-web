@@ -35,7 +35,7 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const snackbar = useSnackbar();
   const [createPlantingSeason, { isLoading }] = useCreatePlantingSeasonMutation();
-  const markSubmitted = useTrackModalAbandonment('planting_season_add');
+  const markSubmitted = useTrackModalAbandonment('planting_season_add', true);
 
   const [record, setRecord, onChange] = useForm<PlantingSeasonForm>({
     plantingSiteId: initialPlantingSiteId && initialPlantingSiteId > 0 ? initialPlantingSiteId : undefined,

@@ -30,7 +30,7 @@ export default function ViabilityDialog(props: ViabilityDialogProps): JSX.Elemen
   const [record, setRecord, , onChangeCallback] = useForm(accession);
   const [error, setError] = useForm('');
   const snackbar = useSnackbar();
-  const markSubmitted = useTrackModalAbandonment('viability_edit_legacy');
+  const markSubmitted = useTrackModalAbandonment('viability_edit_legacy', open);
 
   const saveQuantity = async () => {
     if (record.viabilityPercent) {

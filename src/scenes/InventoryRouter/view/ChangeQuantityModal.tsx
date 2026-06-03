@@ -31,7 +31,7 @@ export default function ChangeQuantityModal({
   const { type } = modalValues;
   const snackbar = useSnackbar();
   const numberFormatter = useNumberFormatter();
-  const markSubmitted = useTrackModalAbandonment('batch_quantity_change');
+  const markSubmitted = useTrackModalAbandonment('batch_quantity_change', true);
 
   const [nextPhase, setNextPhase] = useState<ChangeBatchStatusesRequestPayload['newPhase']>(
     type === 'germinating' ? 'ActiveGrowth' : type === 'active-growth' ? 'HardeningOff' : 'Ready'

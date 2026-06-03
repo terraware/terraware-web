@@ -43,7 +43,7 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const { selectedOrganization } = useOrganization();
   const { onClose, open, accession, reload, user } = props;
   const trackEvent = useTrackEvent();
-  const markSubmitted = useTrackModalAbandonment('accession_withdraw');
+  const markSubmitted = useTrackModalAbandonment('accession_withdraw', open);
 
   const newViabilityTesting: ViabilityTestPostRequest = {
     testType: 'Lab',
