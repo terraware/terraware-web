@@ -3,6 +3,7 @@ import React, { CSSProperties, type JSX, useCallback, useEffect, useMemo, useSta
 import { Box, Grid, IconButton, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import MuxPlayer from '@mux/mux-player-react';
 import { Button, DialogBox, Icon } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
@@ -361,21 +362,64 @@ const ActivityDetailView = ({
     [activity.payload.observation?.observationId, isObsActivity]
   );
 
+  const obsIsAdHoc = observationResultsData?.observation.isAdHoc ?? false;
+  const obsPlotNumber = observationResultsData?.observation.adHocPlot?.monitoringPlotNumber;
+  const obsCompletedTime =
+    funderObsPayload !== undefined ? funderObsPayload.completedTime : observationResultsData?.observation.completedTime;
+
+  const obsCompletedMonthYear = useMemo(() => {
+    if (!obsCompletedTime) {
+      return undefined;
+    }
+    const dt = DateTime.fromISO(obsCompletedTime);
+    return dt.isValid ? dt.toFormat('LLLL yyyy') : undefined;
+  }, [obsCompletedTime]);
+
+  const obsTitle = useMemo(() => {
+    if (!showObsPanel) {
+      return undefined;
+    }
+    if (funderObsPayload !== undefined) {
+      return obsCompletedMonthYear ? { prefix: `${strings.OBSERVATION}: `, suffix: obsCompletedMonthYear } : undefined;
+    }
+    if (!isObsActivity) {
+      return undefined;
+    }
+    if (obsIsAdHoc) {
+      return obsPlotNumber !== undefined
+        ? {
+            prefix: `${strings.AD_HOC} ${strings.OBSERVATION}: `,
+            suffix: `${strings.PLOT} ${obsPlotNumber}`,
+          }
+        : undefined;
+    }
+    return obsCompletedMonthYear ? { prefix: `${strings.OBSERVATION}: `, suffix: obsCompletedMonthYear } : undefined;
+  }, [funderObsPayload, isObsActivity, obsCompletedMonthYear, obsIsAdHoc, obsPlotNumber, showObsPanel, strings]);
+
+  const obsSpecies = useMemo(
+    () =>
+      observationResultsData?.observation.species?.length
+        ? observationResultsData.observation.species
+        : observationResultsData?.observation.adHocPlot?.species,
+    [observationResultsData]
+  );
+
   const obsLivePlants = useMemo(
     () =>
-      funderObsPayload !== undefined
-        ? funderObsPayload.livePlants
-        : getObservationSpeciesLivePlantsCount(observationResultsData?.observation.species),
-    [funderObsPayload, observationResultsData]
+      funderObsPayload !== undefined ? funderObsPayload.livePlants : getObservationSpeciesLivePlantsCount(obsSpecies),
+    [funderObsPayload, obsSpecies]
   );
 
   const obsPlantDensity =
     funderObsPayload !== undefined
       ? funderObsPayload.plantDensity
-      : observationResultsData?.observation.plantingDensity;
+      : observationResultsData?.observation.plantingDensity ??
+        observationResultsData?.observation.adHocPlot?.plantingDensity;
 
   const obsSurvivalRate =
-    funderObsPayload !== undefined ? funderObsPayload.survivalRate : observationResultsData?.observation.survivalRate;
+    funderObsPayload !== undefined
+      ? funderObsPayload.survivalRate
+      : observationResultsData?.observation.survivalRate ?? observationResultsData?.observation.adHocPlot?.survivalRate;
 
   const [lightboxMediaFileId, setLightboxMediaFileId] = useState<number | undefined>(undefined);
   const [publishActivityModalOpened, setPublishActivityModalOpened] = useState(false);
@@ -569,7 +613,20 @@ const ActivityDetailView = ({
       <Grid item>
         <Box display='flex' flexDirection='row' alignItems='center'>
           <Typography fontSize='24px' fontWeight={600} lineHeight='32px'>
-            {activityType}
+            {obsTitle ? (
+              <>
+                {obsTitle.prefix}
+                {observationUrl ? (
+                  <Link to={observationUrl} fontSize='24px' fontWeight={600} lineHeight='32px'>
+                    {obsTitle.suffix}
+                  </Link>
+                ) : (
+                  obsTitle.suffix
+                )}
+              </>
+            ) : (
+              activityType
+            )}
           </Typography>
           <Box paddingX={isAcceleratorRoute ? theme.spacing(3) : theme.spacing(1.5)}>
             {isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}
@@ -586,45 +643,42 @@ const ActivityDetailView = ({
         </Typography>
       </Grid>
 
-      <Grid item xs={12}>
-        <Typography>{activity.payload.description}</Typography>
-      </Grid>
-
       {showObsPanel && (
-        <Grid item xs={12}>
-          <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(2)}>
-            {strings.OBSERVATION_DETAILS}
-          </Typography>
-          {observationUrl && (
-            <Box marginBottom={theme.spacing(2)}>
-              <Link to={observationUrl}>{strings.VIEW_OBSERVATION}</Link>
-            </Box>
-          )}
-          <Grid container spacing={2}>
+        <>
+          <Grid item xs={12} sm={4}>
+            <OverviewItemCard
+              isEditable={false}
+              title={strings.LIVE_PLANTS}
+              contents={obsLivePlants?.toString() ?? null}
+              sx={{ padding: 0 }}
+            />
+          </Grid>
+          {!!obsPlantDensity && (
             <Grid item xs={12} sm={4}>
               <OverviewItemCard
                 isEditable={false}
-                title={strings.LIVE_PLANTS}
-                contents={obsLivePlants?.toString() ?? null}
+                title={strings.PLANT_DENSITY}
+                contents={obsPlantDensity.toString()}
+                sx={{ padding: 0 }}
               />
             </Grid>
-            {!!obsPlantDensity && (
-              <Grid item xs={12} sm={4}>
-                <OverviewItemCard
-                  isEditable={false}
-                  title={strings.PLANT_DENSITY}
-                  contents={obsPlantDensity.toString()}
-                />
-              </Grid>
-            )}
-            {obsSurvivalRate !== undefined && (
-              <Grid item xs={12} sm={4}>
-                <OverviewItemCard isEditable={false} title={strings.SURVIVAL_RATE} contents={`${obsSurvivalRate}%`} />
-              </Grid>
-            )}
-          </Grid>
-        </Grid>
+          )}
+          {obsSurvivalRate !== undefined && (
+            <Grid item xs={12} sm={4}>
+              <OverviewItemCard
+                isEditable={false}
+                title={strings.SURVIVAL_RATE}
+                contents={`${obsSurvivalRate}%`}
+                sx={{ padding: 0 }}
+              />
+            </Grid>
+          )}
+        </>
       )}
+
+      <Grid item xs={12}>
+        <Typography>{activity.payload.description}</Typography>
+      </Grid>
 
       {activity.payload.media.map((mediaFile, index) => (
         <Grid item key={index} lg={6} xs={12}>
