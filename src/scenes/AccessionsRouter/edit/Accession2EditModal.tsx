@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
@@ -7,7 +7,9 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useDeletePhotoMutation, useUploadPhotoMutation } from 'src/queries/generated/accessionsV1';
 import AccessionService from 'src/services/AccessionService';
@@ -59,6 +61,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
   const [uploadPhoto] = useUploadPhotoMutation();
   const [deletePhoto] = useDeletePhotoMutation();
   const markSubmitted = useTrackModalAbandonment('accession_edit', open);
+  const trackEvent = useTrackEvent();
 
   const onPhotosChanged = (photosList: File[]) => {
     setNewPhotos(photosList);
@@ -74,7 +77,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
     setPhotoFilenamesToRemove(_photoFilenamesToRemove);
   };
 
-  const updatePhotos = async () => {
+  const updatePhotos = useCallback(async () => {
     if (newPhotos.length) {
       await Promise.all(
         newPhotos.map((photo) =>
@@ -90,46 +93,52 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
       );
       setPhotoFilenamesToRemove([]);
     }
-  };
+  }, [deletePhoto, newPhotos, photoFilenamesToRemove, record.id, uploadPhoto]);
 
   const onCollectedDateError = (error?: string) => {
     setCollectedDateError(error);
   };
 
-  const hasErrors = () => {
+  const hasErrors = useCallback(() => {
     const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record || !record[field]);
     return missingRequiredField || collectedDateError;
-  };
+  }, [collectedDateError, record]);
 
   useEffect(() => {
     setRecord(accession);
     setPhotoFilenames([...(accession?.photoFilenames || [])]);
   }, [accession, setRecord]);
 
-  const saveAccession = async () => {
+  const onCloseHandler = useCallback(() => {
+    setLoading(false);
+    onClose();
+  }, [onClose]);
+
+  const saveAccession = useCallback(async () => {
     if (record) {
-      if (hasErrors()) {
-        setValidateFields(true);
-        return;
-      }
-      setLoading(true);
-      const response = await AccessionService.updateAccession(record);
-      if (response.requestSucceeded && accession) {
-        markSubmitted();
-        await updatePhotos();
-        reload();
-        onCloseHandler();
-      } else {
+      try {
+        if (hasErrors()) {
+          setValidateFields(true);
+          return;
+        }
+        setLoading(true);
+        const response = await AccessionService.updateAccession(record);
+        if (response.requestSucceeded && accession) {
+          markSubmitted();
+          await updatePhotos();
+          reload();
+          onCloseHandler();
+        } else {
+          snackbar.toastError();
+          onCloseHandler();
+        }
+      } catch {
+        trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'accession' });
         snackbar.toastError();
         onCloseHandler();
       }
     }
-  };
-
-  const onCloseHandler = () => {
-    setLoading(false);
-    onClose();
-  };
+  }, [accession, hasErrors, markSubmitted, onCloseHandler, record, reload, snackbar, trackEvent, updatePhotos]);
 
   return !activeLocale ? null : (
     <DialogBox
