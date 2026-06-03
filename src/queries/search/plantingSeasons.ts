@@ -68,7 +68,11 @@ const injectedRtkApi = api.injectEndpoints({
           );
         });
 
-        const speciesIds = new Set<number>([...targetBySpecies.keys(), ...withdrawnBySpecies.keys()]);
+        const speciesIds = new Set<number>([
+          ...targetBySpecies.keys(),
+          ...allocatedBySpecies.keys(),
+          ...withdrawnBySpecies.keys(),
+        ]);
 
         return [...speciesIds].map((speciesId) => {
           const target = targetBySpecies.get(speciesId) ?? 0;
