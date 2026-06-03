@@ -217,14 +217,15 @@ const ActivityMediaItem = ({
     if (!obs || !isUndeletableObservationPhoto(mediaFile)) {
       return undefined;
     }
+    const plotPrefix = `${obs.monitoringPlotNumber} `;
     if (obs.type === 'Plot' && obs.position) {
-      return getPositionLabel(obs.position);
+      return `${plotPrefix}${getPositionLabel(obs.position)}`;
     }
     if (obs.type === 'Quadrat' && obs.position) {
-      return getQuadratLabel(obs.position);
+      return `${plotPrefix}${getQuadratLabel(obs.position)}`;
     }
     if (obs.type === 'Soil') {
-      return strings.SOIL;
+      return `${plotPrefix}${strings.SOIL}`;
     }
     return undefined;
   }, [mediaFile, strings]);
