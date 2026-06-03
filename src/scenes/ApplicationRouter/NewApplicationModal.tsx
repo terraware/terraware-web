@@ -45,7 +45,7 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
   const dispatch = useAppDispatch();
   const { toastSuccess } = useSnackbar();
   const { goToApplication } = useNavigateTo();
-  const markSubmitted = useTrackModalAbandonment('application_create');
+  const markSubmitted = useTrackModalAbandonment('application_create', open);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [projectNameError, setProjectNameError] = useState<string>('');

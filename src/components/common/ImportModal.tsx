@@ -91,7 +91,7 @@ export default function ImportSpeciesModal(props: ImportSpeciesModalProps): JSX.
   const [uploadId, setUploadId] = useState<number>();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const markSubmitted = useTrackModalAbandonment('import_modal');
+  const markSubmitted = useTrackModalAbandonment('import_modal', open);
 
   const spacingStyles = { marginRight: theme.spacing(2) };
 
