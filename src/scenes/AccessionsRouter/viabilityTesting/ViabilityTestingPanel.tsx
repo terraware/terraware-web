@@ -1,26 +1,27 @@
 import React, { type JSX } from 'react';
+import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import useAccession from 'src/hooks/useAccession';
 import strings from 'src/strings';
-import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/types/Accession';
 
 import ViabilityTestingDatabase from './ViabilityTestingDatabase';
 
 type ViabilityTestingPanelProps = {
-  accession: Accession;
   canAddTest: boolean;
-  reload: () => void;
   setNewViabilityTestOpened: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedTest: React.Dispatch<React.SetStateAction<ViabilityTest | undefined>>;
   setViewViabilityTestModalOpened: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps): JSX.Element {
-  const { accession, canAddTest, setNewViabilityTestOpened, setSelectedTest, setViewViabilityTestModalOpened } = props;
+  const { canAddTest, setNewViabilityTestOpened, setSelectedTest, setViewViabilityTestModalOpened } = props;
+  const { accessionId } = useParams<{ accessionId: string }>();
+  const { accession } = useAccession(Number(accessionId));
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
@@ -31,7 +32,7 @@ export default function ViabilityTestingPanel(props: ViabilityTestingPanelProps)
 
   return (
     <>
-      {accession?.viabilityTests ? (
+      {accession && accession.viabilityTests ? (
         <Box>
           <ViabilityTestingDatabase
             accession={accession}

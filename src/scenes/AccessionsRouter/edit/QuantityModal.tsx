@@ -1,4 +1,5 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Dropdown, Icon, Textfield } from '@terraware/web-components';
@@ -9,9 +10,10 @@ import ConvertedValue from 'src/components/ConvertedValue';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Link from 'src/components/common/Link';
 import Button from 'src/components/common/button/Button';
+import useAccession from 'src/hooks/useAccession';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { useUser } from 'src/providers';
-import AccessionService from 'src/services/AccessionService';
+import { useUpdateAccessionMutation } from 'src/queries/generated/accessionsV2';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { Unit, isUnitInPreferredSystem, usePreferredWeightUnits } from 'src/units';
@@ -23,9 +25,7 @@ import EditState from './EditState';
 
 export interface QuantityModalProps {
   open: boolean;
-  accession: Accession;
   onClose: () => void;
-  reload: () => void;
   statusEdit?: boolean;
   title: string;
 }
@@ -51,8 +51,29 @@ function UnitsSelector(props: UnitsSelectorProps): JSX.Element {
   );
 }
 
-export default function QuantityModal(props: QuantityModalProps): JSX.Element {
-  const { onClose, open, accession, reload, statusEdit } = props;
+export default function QuantityModal({ open, onClose, statusEdit, title }: QuantityModalProps): JSX.Element | null {
+  const { accessionId } = useParams<{ accessionId: string }>();
+  const { accession } = useAccession(Number(accessionId));
+
+  if (!accession) {
+    return null;
+  }
+
+  return (
+    <QuantityModalForm accession={accession} open={open} onClose={onClose} statusEdit={statusEdit} title={title} />
+  );
+}
+
+interface QuantityModalFormProps {
+  open: boolean;
+  accession: Accession;
+  onClose: () => void;
+  statusEdit?: boolean;
+  title: string;
+}
+
+function QuantityModalForm(props: QuantityModalFormProps): JSX.Element {
+  const { onClose, open, accession, statusEdit } = props;
 
   const [record, setRecord, onChange] = useForm(accession);
   const [isSubsetOpen, setIsSubsetOpen] = useState(false);
@@ -69,6 +90,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const [remainingQuantityNotes, setRemainingQuantityNotes] = useState<string>('');
   const [remainingQuantityNotesError, setRemainingQuantityNotesError] = useState<boolean>(false);
   const markSubmitted = useTrackModalAbandonment('accession_edit_quantity', open);
+  const [updateAccession] = useUpdateAccessionMutation();
 
   const quantityChanged = useMemo(() => {
     if (!accession.remainingQuantity) {
@@ -92,7 +114,7 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
   const validate = () => {
     let hasErrors = false;
 
-    const quantity = parseFloat(record.remainingQuantity?.quantity as unknown as string);
+    const quantity = parseFloat(String(record.remainingQuantity?.quantity ?? ''));
     if (isNaN(quantity) || quantity < 0) {
       setQuantityError(true);
       hasErrors = true;
@@ -134,12 +156,16 @@ export default function QuantityModal(props: QuantityModalProps): JSX.Element {
     if (!validate()) {
       return;
     }
-    const response = await AccessionService.updateAccession(record, false, remainingQuantityNotes);
-    if (response.requestSucceeded) {
+    const payload = { ...record, remainingQuantityNotes };
+    try {
+      await updateAccession({
+        id: record.id,
+        simulate: false,
+        updateAccessionRequestPayloadV2: payload,
+      }).unwrap();
       markSubmitted();
-      reload();
       onCloseHandler();
-    } else {
+    } catch {
       snackbar.toastError();
     }
   };

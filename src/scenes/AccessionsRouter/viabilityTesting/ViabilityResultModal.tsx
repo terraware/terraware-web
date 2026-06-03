@@ -1,11 +1,12 @@
 import React, { type JSX } from 'react';
+import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
-import AccessionService from 'src/services/AccessionService';
+import useAccession from 'src/hooks/useAccession';
+import { useUpdateAccessionMutation } from 'src/queries/generated/accessionsV2';
 import strings from 'src/strings';
-import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -13,27 +14,29 @@ import { getCutTestViabilityPercent } from './utils';
 
 export interface ViabilityResultModalProps {
   open: boolean;
-  accession: Accession;
   onClose: () => void;
-  reload: () => void;
   viabilityTest: ViabilityTest;
 }
 
 export default function ViabilityResultModal(props: ViabilityResultModalProps): JSX.Element {
-  const { onClose, open, accession, reload, viabilityTest } = props;
+  const { onClose, open, viabilityTest } = props;
   const theme = useTheme();
+  const { accessionId } = useParams<{ accessionId: string }>();
+  const { accession } = useAccession(Number(accessionId));
 
   const snackbar = useSnackbar();
+  const [updateAccession] = useUpdateAccessionMutation();
 
   const saveResult = async () => {
     if (accession) {
       const newAccession = { ...accession, viabilityPercent: getViabilityPercent() };
-      const response = await AccessionService.updateAccession(newAccession);
-
-      if (response.requestSucceeded) {
-        reload();
+      try {
+        await updateAccession({
+          id: newAccession.id,
+          updateAccessionRequestPayloadV2: newAccession,
+        }).unwrap();
         onClose();
-      } else {
+      } catch {
         snackbar.toastError();
       }
     }

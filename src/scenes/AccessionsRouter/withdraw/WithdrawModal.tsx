@@ -1,4 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Dropdown, SelectT, Textfield } from '@terraware/web-components';
@@ -8,15 +9,21 @@ import AddLink from 'src/components/common/AddLink';
 import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import useAccession from 'src/hooks/useAccession';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
+import {
+  useCreateNurseryTransferWithdrawalMutation,
+  useCreateViabilityTestMutation,
+  useCreateWithdrawalMutation,
+} from 'src/queries/generated/accessionsV2';
 import CountWithdrawal from 'src/scenes/AccessionsRouter/withdraw/CountWithdrawal';
 import WeightWithdrawal from 'src/scenes/AccessionsRouter/withdraw/WeightWithdrawal';
 import WithdrawDateWarningModal from 'src/scenes/AccessionsRouter/withdraw/WithdrawDateWarningModal';
 import { OrganizationUserService } from 'src/services';
-import AccessionService, { ViabilityTestPostRequest } from 'src/services/AccessionService';
+import { ViabilityTestPostRequest } from 'src/services/AccessionService';
 import { Accession, Withdrawal, treatments, withdrawalTypes } from 'src/types/Accession';
 import { NurseryTransfer } from 'src/types/Batch';
 import { Facility } from 'src/types/Facility';
@@ -32,18 +39,34 @@ import { withdrawalPurposes } from 'src/utils/withdrawalPurposes';
 
 export interface WithdrawDialogProps {
   open: boolean;
-  accession: Accession;
   onClose: () => void;
-  reload: () => void;
   user: User;
 }
 
-export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element {
+export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element | null {
+  const { accessionId } = useParams<{ accessionId: string }>();
+  const { accession } = useAccession(Number(accessionId));
+
+  if (!accession) {
+    return null;
+  }
+
+  return <WithdrawDialogForm {...props} accession={accession} />;
+}
+
+interface WithdrawDialogFormProps extends WithdrawDialogProps {
+  accession: Accession;
+}
+
+function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const { onClose, open, accession, reload, user } = props;
+  const { onClose, open, accession, user } = props;
   const trackEvent = useTrackEvent();
   const markSubmitted = useTrackModalAbandonment('accession_withdraw', open);
+  const [createNurseryTransferWithdrawal] = useCreateNurseryTransferWithdrawalMutation();
+  const [createViabilityTest] = useCreateViabilityTestMutation();
+  const [createWithdrawal] = useCreateWithdrawalMutation();
 
   const newViabilityTesting: ViabilityTestPostRequest = {
     testType: 'Lab',
@@ -246,7 +269,6 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   const saveWithdrawalHandler = useCallback(async () => {
     setWithdrawalButtonEnabled(false);
     try {
-      let response;
       if (record) {
         if (isNurseryTransfer && nurseryTransferRecord.destinationFacilityId === -1) {
           trackEvent(MIXPANEL_EVENTS.FORM_VALIDATION_FAILED, {
@@ -273,37 +295,45 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
           return;
         }
 
-        if (isNurseryTransfer) {
-          nurseryTransferRecord.germinatingQuantity = estimatedWithdrawalQty;
-          response = await AccessionService.transferToNursery(nurseryTransferRecord, accession.id);
-        } else if (record.purpose === 'Viability Testing') {
-          viabilityTesting.seedsTested = estimatedWithdrawalQty;
-          viabilityTesting.startDate = record.date;
-          response = await AccessionService.createViabilityTest(viabilityTesting, accession.id);
-        } else {
-          let units: UnitType;
-          if (isByWeight) {
-            if (accession.remainingQuantity?.units === 'Seeds') {
-              units = 'Grams';
-            } else {
-              units = accession.remainingQuantity?.units || 'Grams';
-            }
+        try {
+          if (isNurseryTransfer) {
+            nurseryTransferRecord.germinatingQuantity = estimatedWithdrawalQty;
+            await createNurseryTransferWithdrawal({
+              accessionId: accession.id,
+              createNurseryTransferRequestPayload: nurseryTransferRecord,
+            }).unwrap();
+          } else if (record.purpose === 'Viability Testing') {
+            viabilityTesting.seedsTested = estimatedWithdrawalQty;
+            viabilityTesting.startDate = record.date;
+            await createViabilityTest({
+              accessionId: accession.id,
+              createViabilityTestRequestPayload: viabilityTesting,
+            }).unwrap();
           } else {
-            units = 'Seeds';
+            let units: UnitType;
+            if (isByWeight) {
+              if (accession.remainingQuantity?.units === 'Seeds') {
+                units = 'Grams';
+              } else {
+                units = accession.remainingQuantity?.units || 'Grams';
+              }
+            } else {
+              units = 'Seeds';
+            }
+            record.withdrawnQuantity = { quantity: withdrawalQty, units };
+            await createWithdrawal({
+              accessionId: accession.id,
+              createWithdrawalRequestPayload: record,
+            }).unwrap();
           }
-          record.withdrawnQuantity = { quantity: withdrawalQty, units };
-          response = await AccessionService.createWithdrawal(record, accession.id);
-        }
 
-        if (response.requestSucceeded) {
           trackEvent(MIXPANEL_EVENTS.ACCESSION_WITHDRAWN, {
             purpose: isNurseryTransfer ? 'Nursery' : record.purpose || 'Other',
             quantity: estimatedWithdrawalQty,
           });
           markSubmitted();
-          reload();
           onCloseHandler();
-        } else {
+        } catch {
           trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'accession_withdrawal' });
           snackbar.toastError();
         }
@@ -314,6 +344,9 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
   }, [
     accession.id,
     accession.remainingQuantity?.units,
+    createNurseryTransferWithdrawal,
+    createViabilityTest,
+    createWithdrawal,
     estimatedWithdrawalQty,
     fieldsErrors,
     isByWeight,
@@ -321,7 +354,6 @@ export default function WithdrawDialog(props: WithdrawDialogProps): JSX.Element 
     nurseryTransferRecord,
     onCloseHandler,
     record,
-    reload,
     markSubmitted,
     setIndividualError,
     snackbar,

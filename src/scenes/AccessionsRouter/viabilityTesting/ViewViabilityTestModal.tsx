@@ -13,7 +13,6 @@ import TooltipLearnMoreModal, {
   TooltipLearnMoreModalData,
 } from 'src/components/TooltipLearnMoreModal';
 import strings from 'src/strings';
-import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/types/Accession';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import { getFullTestType } from 'src/utils/viabilityTest';
@@ -23,17 +22,15 @@ import ObservationsChart from './ObservationsChart';
 
 export interface ViewViabilityTestModalProps {
   open: boolean;
-  accession: Accession;
   isEditable: boolean;
   onClose: () => void;
   viabilityTest: ViabilityTest;
   onEdit: () => void;
-  reload: () => void;
 }
 
 export default function ViewViabilityTestModal(props: ViewViabilityTestModalProps): JSX.Element {
   const theme = useTheme();
-  const { onClose, open, accession, isEditable, viabilityTest, onEdit, reload } = props;
+  const { onClose, open, isEditable, viabilityTest, onEdit } = props;
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
   const { isMobile } = useDeviceInfo();
   const numberFormatter = useNumberFormatter();
@@ -68,11 +65,9 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
     return (
       <DeleteViabilityTestModal
         open={openDeleteModal}
-        accession={accession}
         viabilityTest={viabilityTest}
         onCancel={() => setOpenDeleteModal(false)}
         onDone={() => {
-          reload();
           onCloseHandler();
         }}
       />

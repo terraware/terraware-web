@@ -1,26 +1,24 @@
 import React, { type JSX, useMemo, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
 import PhotosList from 'src/components/common/PhotosList';
+import useAccession from 'src/hooks/useAccession';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
-import { Accession } from 'src/types/Accession';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import Accession2EditModal from '../edit/Accession2EditModal';
 
-type DetailPanelProps = {
-  accession?: Accession;
-  reload: () => void;
-};
-export default function DetailPanel(props: DetailPanelProps): JSX.Element {
+export default function DetailPanel(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { countries } = useLocalization();
-  const { accession, reload } = props;
+  const { accessionId: accessionIdParam } = useParams<{ accessionId: string }>();
+  const { accession } = useAccession(Number(accessionIdParam));
   const userCanEdit = !isContributor(selectedOrganization);
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -104,12 +102,7 @@ export default function DetailPanel(props: DetailPanelProps): JSX.Element {
   return accession ? (
     <>
       {openEditAccessionModal && (
-        <Accession2EditModal
-          accession={accession}
-          open={openEditAccessionModal}
-          onClose={() => setOpenEditAccessionModal(false)}
-          reload={reload}
-        />
+        <Accession2EditModal open={openEditAccessionModal} onClose={() => setOpenEditAccessionModal(false)} />
       )}
       <Grid container>
         <Grid item xs={9}>

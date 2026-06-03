@@ -1,32 +1,39 @@
 import React, { type JSX } from 'react';
+import { useParams } from 'react-router';
 
 import { Typography } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import { AccessionService } from 'src/services';
+import useAccession from 'src/hooks/useAccession';
+import { useDeleteViabilityTestMutation } from 'src/queries/generated/accessionsV2';
 import strings from 'src/strings';
-import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface DeleteViabilityTestModalProps {
   open: boolean;
-  accession: Accession;
   viabilityTest: ViabilityTest;
   onCancel: () => void;
   onDone: () => void;
 }
 
-export default function DeleteViabilityTestModal(props: DeleteViabilityTestModalProps): JSX.Element {
-  const { onCancel, open, accession, viabilityTest, onDone } = props;
+export default function DeleteViabilityTestModal(props: DeleteViabilityTestModalProps): JSX.Element | null {
+  const { onCancel, open, viabilityTest, onDone } = props;
+  const { accessionId } = useParams<{ accessionId: string }>();
+  const { accession } = useAccession(Number(accessionId));
   const snackbar = useSnackbar();
+  const [deleteViabilityTest] = useDeleteViabilityTestMutation();
+
+  if (!accession) {
+    return null;
+  }
 
   const deleteHandler = async () => {
-    const response = await AccessionService.deleteViabilityTest(accession.id, viabilityTest.id);
-    if (response.requestSucceeded) {
+    try {
+      await deleteViabilityTest({ accessionId: accession.id, viabilityTestId: viabilityTest.id }).unwrap();
       onDone();
-    } else {
+    } catch {
       snackbar.toastError();
     }
   };

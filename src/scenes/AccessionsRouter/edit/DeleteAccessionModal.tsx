@@ -1,32 +1,39 @@
 import React, { type JSX } from 'react';
+import { useParams } from 'react-router';
 
 import { Typography } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import useAccession from 'src/hooks/useAccession';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import AccessionService from 'src/services/AccessionService';
+import { useDeleteApiV1SeedbankAccessionsByIdMutation } from 'src/queries/generated/accessionsV1';
 import strings from 'src/strings';
-import { Accession } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface DeleteAccessionModalProps {
   open: boolean;
-  accession: Accession;
   onClose: () => void;
 }
 
-export default function DeleteAccessionModal(props: DeleteAccessionModalProps): JSX.Element {
-  const { onClose, open, accession } = props;
+export default function DeleteAccessionModal(props: DeleteAccessionModalProps): JSX.Element | null {
+  const { onClose, open } = props;
+  const { accessionId } = useParams<{ accessionId: string }>();
+  const { accession } = useAccession(Number(accessionId));
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
+  const [deleteAccession] = useDeleteApiV1SeedbankAccessionsByIdMutation();
+
+  if (!accession) {
+    return null;
+  }
 
   const deleteHandler = async () => {
-    const response = await AccessionService.deleteAccession(accession.id);
-    if (response.requestSucceeded) {
+    try {
+      await deleteAccession(accession.id).unwrap();
       navigate(APP_PATHS.ACCESSIONS);
-    } else {
+    } catch {
       snackbar.toastError();
     }
   };

@@ -1,28 +1,47 @@
 import React, { type JSX, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import useAccession from 'src/hooks/useAccession';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
-import AccessionService from 'src/services/AccessionService';
+import { useUpdateAccessionMutation } from 'src/queries/generated/accessionsV2';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import useForm from 'src/utils/useForm';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import EditState from './EditState';
 import QuantityModal from './QuantityModal';
 
 export interface EditStateModalProps {
   open: boolean;
-  accession: Accession;
   onClose: () => void;
-  reload: () => void;
 }
 
-export default function EditStateModal(props: EditStateModalProps): JSX.Element {
-  const { onClose, open, accession, reload } = props;
+export default function EditStateModal({ open, onClose }: EditStateModalProps): JSX.Element | null {
+  const { accessionId } = useParams<{ accessionId: string }>();
+  const { accession } = useAccession(Number(accessionId));
+
+  if (!accession) {
+    return null;
+  }
+
+  return <EditStateModalForm accession={accession} open={open} onClose={onClose} />;
+}
+
+interface EditStateModalFormProps {
+  open: boolean;
+  accession: Accession;
+  onClose: () => void;
+}
+
+function EditStateModalForm({ accession, open, onClose }: EditStateModalFormProps): JSX.Element {
   const [record, setRecord, onChange] = useForm(accession);
   const [editUsedUpStatus] = useState<boolean>(accession.state === 'Used Up');
   const markSubmitted = useTrackModalAbandonment('accession_edit_state', open);
+  const snackbar = useSnackbar();
+  const [updateAccession] = useUpdateAccessionMutation();
 
   useEffect(() => {
     setRecord(accession);
@@ -30,26 +49,21 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
 
   const saveState = async () => {
     if (record) {
-      const response = await AccessionService.updateAccession(record);
-      if (response.requestSucceeded) {
+      try {
+        await updateAccession({
+          id: record.id,
+          updateAccessionRequestPayloadV2: record,
+        }).unwrap();
         markSubmitted();
-        reload();
+      } catch {
+        snackbar.toastError();
       }
       onClose();
     }
   };
 
   if (editUsedUpStatus) {
-    return (
-      <QuantityModal
-        open={editUsedUpStatus}
-        onClose={onClose}
-        accession={accession}
-        reload={reload}
-        statusEdit={true}
-        title={strings.EDIT_STATUS}
-      />
-    );
+    return <QuantityModal open={editUsedUpStatus} onClose={onClose} statusEdit={true} title={strings.EDIT_STATUS} />;
   }
 
   return (
