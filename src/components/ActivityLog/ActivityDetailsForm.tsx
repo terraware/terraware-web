@@ -156,8 +156,8 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     return dt.isValid ? dt.toFormat('LLLL yyyy') : undefined;
   }, [activity?.payload.date, isObsActivity]);
 
-  const obsIsAdHoc = observationResultsData?.observation.isAdHoc ?? false;
-  const obsPlotNumber = observationResultsData?.observation.adHocPlot?.monitoringPlotNumber;
+  const obsIsAdHoc = activity?.payload.observation?.isAdHoc ?? false;
+  const obsPlotNumber = activity?.payload.observation?.monitoringPlotNumber;
 
   const obsTitle = useMemo(() => {
     if (!isObsActivity) {

@@ -385,8 +385,8 @@ const ActivityDetailView = ({
     [activity.payload.observation?.observationId, isObsActivity]
   );
 
-  const obsIsAdHoc = observationResultsData?.observation.isAdHoc ?? false;
-  const obsPlotNumber = observationResultsData?.observation.adHocPlot?.monitoringPlotNumber;
+  const obsIsAdHoc = activity.payload.observation?.isAdHoc ?? false;
+  const obsPlotNumber = activity.payload.observation?.monitoringPlotNumber;
   const obsCompletedTime =
     funderObsPayload !== undefined ? funderObsPayload.completedTime : observationResultsData?.observation.completedTime;
 
