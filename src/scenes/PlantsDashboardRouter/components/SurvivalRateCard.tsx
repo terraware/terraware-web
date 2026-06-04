@@ -8,7 +8,6 @@ import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useProjectSiteObservationSummaries from 'src/hooks/useProjectSiteObservationSummaries';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useKnowledgeBaseLinks } from 'src/knowledgeBaseLinks';
@@ -28,7 +27,6 @@ type SurvivalRateCardProps = {
 export default function SurvivalRateCard({ plantingSiteId, projectId }: SurvivalRateCardProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const isWeightedSurvivalRatesEnabled = isEnabled('Weighted Survival Rates');
   const isProjectView = !plantingSiteId && projectId;
   const knowledgeBaseLinks = useKnowledgeBaseLinks();
   const trackEvent = useTrackEvent();
@@ -43,10 +41,7 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
   );
   const observationSummaries = observationSummariesQuery.data?.summaries;
 
-  const projectSiteSummaries = useProjectSiteObservationSummaries(
-    projectId,
-    Boolean(isWeightedSurvivalRatesEnabled && isProjectView)
-  );
+  const projectSiteSummaries = useProjectSiteObservationSummaries(projectId, Boolean(isProjectView));
 
   const weightedSurvivalRate = useMemo(() => {
     const validStrata = projectSiteSummaries.flatMap(({ site, summary }) =>
@@ -89,28 +84,20 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
       <Box flexBasis='100%'>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {isWeightedSurvivalRatesEnabled
-              ? isProjectView
-                ? strings.AVERAGE_PROJECT_STRATA_SURVIVAL_RATE
-                : strings.AVERAGE_STRATA_SURVIVAL_RATE
-              : strings.SURVIVAL_RATE}
+            {isProjectView ? strings.AVERAGE_PROJECT_STRATA_SURVIVAL_RATE : strings.AVERAGE_STRATA_SURVIVAL_RATE}
           </Typography>
           <Tooltip
-            title={
-              isWeightedSurvivalRatesEnabled
-                ? strings.formatString(
-                    strings.WEIGHTED_SURVIVAL_RATE_TOOLTIP,
-                    <Link
-                      to={knowledgeBaseLinks['/observations.*/survival-rate-settings']}
-                      fontSize={'11px'}
-                      target='_blank'
-                      style={{ color: '#FFF', lineHeight: '16,5px' }}
-                    >
-                      {strings.KNOWLEDGE_BASE_ARTICLE_SURVIVAL_RATES}
-                    </Link>
-                  )
-                : strings.SURVIVAL_RATE_TOOLTIP
-            }
+            title={strings.formatString(
+              strings.WEIGHTED_SURVIVAL_RATE_TOOLTIP,
+              <Link
+                to={knowledgeBaseLinks['/observations.*/survival-rate-settings']}
+                fontSize={'11px'}
+                target='_blank'
+                style={{ color: '#FFF', lineHeight: '16,5px' }}
+              >
+                {strings.KNOWLEDGE_BASE_ARTICLE_SURVIVAL_RATES}
+              </Link>
+            )}
           >
             <Box display='flex'>
               <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
@@ -119,8 +106,7 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
         </Box>
         <Box data-testid='survival-rate-value' display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
           {(() => {
-            const displayValue =
-              isWeightedSurvivalRatesEnabled && isProjectView ? weightedSurvivalRate : latestSummary?.survivalRate;
+            const displayValue = isProjectView ? weightedSurvivalRate : latestSummary?.survivalRate;
             return displayValue !== undefined ? (
               <>
                 <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
@@ -156,7 +142,7 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
           </Box>
         )}
       </Box>
-      {(plantingSiteId || (isWeightedSurvivalRatesEnabled && isProjectView)) && (
+      {(plantingSiteId || isProjectView) && (
         <>
           <div style={separatorStyles} />
           <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
