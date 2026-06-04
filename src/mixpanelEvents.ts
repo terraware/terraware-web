@@ -21,7 +21,6 @@ export enum MIXPANEL_EVENTS {
 
   // --- Planting & plants ---
   PLANTING_SITE_CREATED = 'Planting Site Created',
-  SURVIVAL_RATE_VIEWED = 'Survival Rate Viewed',
 
   // --- Observations ---
   OBSERVATION_SCHEDULED = 'Observation Scheduled',
@@ -118,9 +117,6 @@ export type MixpanelEventPropertyMap = {
     num_strata?: number;
     has_boundary: boolean;
   };
-  [MIXPANEL_EVENTS.SURVIVAL_RATE_VIEWED]: {
-    is_project_view: boolean;
-  };
   [MIXPANEL_EVENTS.OBSERVATION_SCHEDULED]: {
     duration_days?: number;
   };
@@ -139,7 +135,7 @@ export type MixpanelEventPropertyMap = {
     new_role: string;
   };
   [MIXPANEL_EVENTS.REPORT_VIEWED]: {
-    is_funder_view: boolean;
+    viewer_persona: 'accelerator_admin' | 'funder' | 'forester';
   };
   [MIXPANEL_EVENTS.REPORT_DOWNLOADED]: {
     report_type: string;

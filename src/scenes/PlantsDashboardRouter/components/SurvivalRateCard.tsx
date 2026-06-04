@@ -9,9 +9,7 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useLatestSiteObservationResult } from 'src/hooks/observations';
-import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useKnowledgeBaseLinks } from 'src/knowledgeBaseLinks';
-import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLazyGetAggregatedTrackingStatsQuery } from 'src/queries/generated/stats';
 import strings from 'src/strings';
 
@@ -29,12 +27,6 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
   const { isDesktop } = useDeviceInfo();
   const isProjectView = !plantingSiteId && typeof projectId === 'number';
   const knowledgeBaseLinks = useKnowledgeBaseLinks();
-  const trackEvent = useTrackEvent();
-
-  useEffect(() => {
-    trackEvent(MIXPANEL_EVENTS.SURVIVAL_RATE_VIEWED, { is_project_view: !!isProjectView });
-  }, [isProjectView, trackEvent]);
-
   const { observation: latestObservationResult, isLoading: isLoadingObservation } = useLatestSiteObservationResult(
     plantingSiteId,
     'Stratum'

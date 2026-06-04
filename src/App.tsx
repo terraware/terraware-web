@@ -13,7 +13,7 @@ import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useAppVersion } from 'src/hooks/useAppVersion';
 import { MixpanelUserProfile } from 'src/mixpanelEvents';
-import { useLocalization, useUser } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { store } from 'src/redux/store';
 import AcceleratorRouter from 'src/scenes/AcceleratorRouter';
 import FunderRouter from 'src/scenes/FunderRouter';
@@ -44,6 +44,7 @@ function AppContent() {
   useAppVersion();
   const { isDesktop, type } = useDeviceInfo();
   const { user, isAllowed } = useUser();
+  const { selectedOrganization } = useOrganization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { isApplicationPortal } = useApplicationPortal();
   const { isFunderRoute } = useFunderPortal();
@@ -80,6 +81,21 @@ function AppContent() {
       }
     }
   }, [user, mixpanel]);
+
+  // Keep org context registered as super properties whenever the active
+  // organization changes. Re-registering with new values overwrites the old
+  // ones so every subsequent event (including auto-pageviews, which
+  // `useTrackEvent` can't reach) carries the current org.
+  useEffect(() => {
+    if (user && mixpanel && user.cookiesConsented === true) {
+      mixpanel.register({
+        organization_id: selectedOrganization?.id,
+        organization_role: selectedOrganization?.role,
+        user_type: user.userType,
+        is_internal_user: user.globalRoles.length > 0,
+      });
+    }
+  }, [user, mixpanel, selectedOrganization]);
 
   useEffect(() => {
     if (type === 'mobile' || type === 'tablet') {

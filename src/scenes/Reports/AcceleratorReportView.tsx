@@ -20,6 +20,8 @@ import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useGetAcceleratorReportQuery, useSubmitAcceleratorReportMutation } from 'src/queries/generated/reports';
@@ -31,6 +33,11 @@ const AcceleratorReportView = () => {
   const { strings } = useLocalization();
   const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
   const theme = useTheme();
+  const trackEvent = useTrackEvent();
+
+  useEffect(() => {
+    trackEvent(MIXPANEL_EVENTS.REPORT_VIEWED, { viewer_persona: 'forester' });
+  }, [trackEvent]);
 
   const { goToAcceleratorReportEdit } = useNavigateTo();
 
