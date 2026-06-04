@@ -66,6 +66,7 @@ type ActivityPhotoPreviewProps = {
   onPositionChange: (newPosition: number) => void;
   plotOptions?: { plotId: number; plotNumber: number }[];
   setCaption: (caption: string) => void;
+  validateFields?: boolean;
 };
 
 const ActivityPhotoPreview = ({
@@ -84,6 +85,7 @@ const ActivityPhotoPreview = ({
   onPositionChange,
   plotOptions,
   setCaption,
+  validateFields,
 }: ActivityPhotoPreviewProps) => {
   const { strings } = useLocalization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
@@ -339,10 +341,14 @@ const ActivityPhotoPreview = ({
             {isObsActivity && mediaItem.type === 'new' && (
               <Box marginBottom={theme.spacing(1)}>
                 <Dropdown
+                  errorText={
+                    validateFields && mediaItem.data.monitoringPlotId === undefined ? strings.REQUIRED_FIELD : ''
+                  }
                   fullWidth
                   label={strings.MONITORING_PLOT}
                   onChange={(value) => onPlotChange(value !== null && value !== undefined ? Number(value) : null)}
                   options={plotOptions?.map((p) => ({ label: String(p.plotNumber), value: String(p.plotId) })) ?? []}
+                  required
                   selectedValue={
                     mediaItem.data.monitoringPlotId !== undefined ? String(mediaItem.data.monitoringPlotId) : null
                   }
@@ -463,6 +469,7 @@ export interface ActivityMediaFormProps {
   observationId?: number;
   onClickMediaItem: (fileId: number) => () => void;
   onChangeMediaItems: React.Dispatch<React.SetStateAction<ActivityMediaItem[]>>;
+  validateFields?: boolean;
 }
 
 export default function ActivityMediaForm({
@@ -473,6 +480,7 @@ export default function ActivityMediaForm({
   observationId,
   onClickMediaItem,
   onChangeMediaItems,
+  validateFields,
 }: ActivityMediaFormProps): JSX.Element {
   const { strings } = useLocalization();
 
@@ -783,6 +791,7 @@ export default function ActivityMediaForm({
               mediaItem={mediaItem}
               plotOptions={plotOptions}
               setCaption={getUpdatePhotoCaption(index)}
+              validateFields={validateFields}
             />
           );
         })}

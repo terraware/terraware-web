@@ -265,6 +265,10 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     }
 
     const newMediaFiles = mediaItems.filter((item): item is NewActivityMediaItem => item.type === 'new');
+
+    if (isObsActivity && newMediaFiles.some((item) => item.data.monitoringPlotId === undefined)) {
+      return false;
+    }
     const MAX_FILE_SIZE_GB = 5;
     const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_GB * 1024 * 1024 * 1024;
 
@@ -813,6 +817,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               observationId={activity?.payload.observation?.observationId}
               onClickMediaItem={onFileClicked}
               onChangeMediaItems={setMediaItems}
+              validateFields={validateFields}
             />
           </Grid>
         </MapSplitView>
