@@ -259,29 +259,32 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     [projectName, strings, isEditing, secondaryHeader]
   );
 
-  const navToActivityLog = useCallback(() => {
-    const editingActivityId = isEditing ? activityId : undefined;
+  const navToActivityLog = useCallback(
+    (afterDelete = false) => {
+      const editingActivityId = isEditing && !afterDelete ? activityId : undefined;
 
-    if (
-      isAcceleratorRoute &&
-      source === APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
-    ) {
-      goToAcceleratorProject(projectId, editingActivityId, 'activityLog');
-    } else if (isAcceleratorRoute) {
-      goToAcceleratorActivityLog(editingActivityId);
-    } else {
-      goToActivityLog(editingActivityId);
-    }
-  }, [
-    activityId,
-    goToAcceleratorActivityLog,
-    goToActivityLog,
-    goToAcceleratorProject,
-    isAcceleratorRoute,
-    isEditing,
-    projectId,
-    source,
-  ]);
+      if (
+        isAcceleratorRoute &&
+        source === APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', projectId.toString())
+      ) {
+        goToAcceleratorProject(projectId, editingActivityId, 'activityLog');
+      } else if (isAcceleratorRoute) {
+        goToAcceleratorActivityLog(editingActivityId);
+      } else {
+        goToActivityLog(editingActivityId);
+      }
+    },
+    [
+      activityId,
+      goToAcceleratorActivityLog,
+      goToActivityLog,
+      goToAcceleratorProject,
+      isAcceleratorRoute,
+      isEditing,
+      projectId,
+      source,
+    ]
+  );
 
   const validateForm = useCallback((): boolean => {
     if (!record?.date || (!isObsActivity && !record?.description) || !record?.type) {
@@ -592,7 +595,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       await deleteActivity(activityId).unwrap();
       setBusy(false);
       snackbar.toastSuccess(strings.ACTIVITY_DELETED);
-      navToActivityLog();
+      navToActivityLog(true);
     } catch {
       setBusy(false);
       snackbar.toastError(strings.GENERIC_ERROR);
