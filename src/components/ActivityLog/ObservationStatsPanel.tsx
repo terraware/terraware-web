@@ -26,7 +26,7 @@ export default function ObservationStatsPanel({
         <OverviewItemCard
           isEditable={false}
           title={strings.LIVE_PLANTS}
-          contents={livePlants?.toString() ?? null}
+          contents={(livePlants ?? 0).toString()}
           sx={{ padding: 0 }}
           valueColor={valueColor}
         />
