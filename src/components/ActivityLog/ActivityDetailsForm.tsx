@@ -18,6 +18,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import { baseApi } from 'src/queries/baseApi';
 import {
   useAdminCreateActivityMutation,
   useAdminUpdateActivityMutation,
@@ -28,6 +29,7 @@ import {
   useUpdateActivityMutation,
 } from 'src/queries/generated/activities';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
+import { QueryTagTypes } from 'src/queries/tags';
 import { requestSyncActivityMedia } from 'src/redux/features/activities/activitiesAsyncThunks';
 import { selectSyncActivityMedia } from 'src/redux/features/activities/activitiesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -446,10 +448,18 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       snackbar.toastError(strings.GENERIC_ERROR);
       navToActivityLog();
     } else if (syncActivityMediaRequest?.status === 'success') {
+      if (activityId !== undefined) {
+        dispatch(
+          baseApi.util.invalidateTags([
+            { type: QueryTagTypes.Activities, id: activityId },
+            { type: QueryTagTypes.Activities, id: 'LIST' },
+          ])
+        );
+      }
       setBusy(false);
       navToActivityLog();
     }
-  }, [navToActivityLog, snackbar, strings.GENERIC_ERROR, syncActivityMediaRequest]);
+  }, [activityId, dispatch, navToActivityLog, snackbar, strings.GENERIC_ERROR, syncActivityMediaRequest]);
 
   const activityTypeOptions = useMemo(() => {
     return ACTIVITY_TYPES.map((activityType: ActivityType) => ({
