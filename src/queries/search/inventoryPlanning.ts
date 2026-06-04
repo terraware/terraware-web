@@ -93,7 +93,7 @@ const injectedRtkApi = api.injectEndpoints({
           },
         };
       },
-      providesTags: [{ type: QueryTagTypes.PlantingSeasons, id: 'LIST' }],
+      providesTags: [{ type: QueryTagTypes.InventoryPlanning, id: 'LIST' }],
       transformResponse: (response: InventoryPlanningSeasonSearchResponse) => response.results,
     }),
 
