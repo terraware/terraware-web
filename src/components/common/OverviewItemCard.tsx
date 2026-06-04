@@ -18,7 +18,6 @@ type OverviewItemCardProps = {
   className?: string;
   grid?: boolean;
   sx?: SxProps;
-  valueColor?: string;
 };
 
 export default function OverviewItemCard({
@@ -31,7 +30,6 @@ export default function OverviewItemCard({
   className,
   grid,
   sx,
-  valueColor,
 }: OverviewItemCardProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -74,7 +72,7 @@ export default function OverviewItemCard({
         <Box
           sx={{
             alignItems: isMobile ? 'flex-start' : 'center',
-            color: valueColor ?? theme.palette.TwClrTxt,
+            color: theme.palette.TwClrTxt,
             display: 'flex',
             fontSize: '16px',
             fontWeight: 500,

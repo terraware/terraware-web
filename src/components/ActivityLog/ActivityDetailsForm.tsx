@@ -9,7 +9,6 @@ import { DateTime } from 'luxon';
 
 import Card from 'src/components/common/Card';
 import DatePicker from 'src/components/common/DatePicker';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -62,6 +61,7 @@ import ActivityMediaForm, {
   ExistingActivityMediaItem,
   NewActivityMediaItem,
 } from './ActivityMediaForm';
+import ActivityStatField from './ActivityStatField';
 import ActivityStatusBadges from './ActivityStatusBadges';
 import DeleteActivityModal from './DeleteActivityModal';
 import MapSplitView from './MapSplitView';
@@ -719,12 +719,10 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
             <Grid item lg={6} xs={12}>
               {isObsActivity ? (
-                <OverviewItemCard
-                  isEditable={false}
+                <ActivityStatField
                   title={strings.ACTIVITY_TYPE}
                   contents={record.type ? activityTypeLabel(record.type, strings) : ''}
-                  sx={{ padding: 0 }}
-                  valueColor={theme.palette.TwClrTxtSecondary}
+                  isEditing
                 />
               ) : (
                 <Box display='flex' alignItems='center' gap={1}>
@@ -745,13 +743,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
             <Grid item lg={5} xs={12}>
               {isObsActivity ? (
-                <OverviewItemCard
-                  isEditable={false}
-                  title={strings.DATE}
-                  contents={record.date ?? ''}
-                  sx={{ padding: 0 }}
-                  valueColor={theme.palette.TwClrTxtSecondary}
-                />
+                <ActivityStatField title={strings.DATE} contents={record.date ?? ''} isEditing />
               ) : (
                 <Box display='flex' alignItems='center' gap={1}>
                   <Box flex={1}>
@@ -785,10 +777,10 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
             {isObsActivity && (
               <ObservationStatsPanel
+                isEditing
                 livePlants={observationLivePlants}
                 plantDensity={observationPlantDensity}
                 survivalRate={observationSurvivalRate}
-                valueColor={theme.palette.TwClrTxtSecondary}
               />
             )}
 
