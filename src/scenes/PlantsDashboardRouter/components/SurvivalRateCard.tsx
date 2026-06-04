@@ -84,7 +84,7 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
       <Box flexBasis='100%'>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            isProjectView ? strings.AVERAGE_PROJECT_STRATA_SURVIVAL_RATE : strings.AVERAGE_STRATA_SURVIVAL_RATE
+            {isProjectView ? strings.AVERAGE_PROJECT_STRATA_SURVIVAL_RATE : strings.AVERAGE_STRATA_SURVIVAL_RATE}
           </Typography>
           <Tooltip
             title={strings.formatString(
