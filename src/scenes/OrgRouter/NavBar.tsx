@@ -20,6 +20,7 @@ import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { useLazyCountNurseryWithdrawalsQuery } from 'src/queries/search/nurseries';
 import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -108,6 +109,18 @@ export default function NavBar({
     }
   }, [countNurseryWithdrawals, selectedOrganization]);
 
+  const [listPlantingSeasonsForNav, plantingSeasonsForNavResponse] = useLazyListPlantingSeasonsQuery();
+  const hasPlantingSeasonWithTargets = useMemo(
+    () => (plantingSeasonsForNavResponse?.currentData?.seasons ?? []).some((s) => s.speciesTargets.length > 0),
+    [plantingSeasonsForNavResponse?.currentData]
+  );
+
+  useEffect(() => {
+    if (isPlantingSeasonsEnabled && selectedOrganization) {
+      void listPlantingSeasonsForNav({ organizationId: selectedOrganization.id }, true);
+    }
+  }, [isPlantingSeasonsEnabled, listPlantingSeasonsForNav, selectedOrganization]);
+
   useEffect(() => {
     if (!currentAcceleratorProject && projectsWithModules && projectsWithModules.length > 0) {
       setCurrentAcceleratorProject(projectsWithModules[0].id);
@@ -152,7 +165,7 @@ export default function NavBar({
     );
 
     const items = [inventoryMenu];
-    if (isPlantingSeasonsEnabled) {
+    if (isPlantingSeasonsEnabled && hasPlantingSeasonWithTargets) {
       items.push(inventoryPlanningMenu);
     }
     if (showNurseryWithdrawals) {

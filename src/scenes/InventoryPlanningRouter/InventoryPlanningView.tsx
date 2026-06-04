@@ -44,7 +44,7 @@ const InventoryPlanningView = (): JSX.Element => {
 
   useEffect(() => {
     if (organizationId) {
-      void listPlantingSeasons({ organizationId });
+      void listPlantingSeasons({ organizationId }, true);
     }
   }, [listPlantingSeasons, organizationId]);
 
@@ -468,16 +468,18 @@ const SeasonDetailRow = ({
             <Typography fontSize='16px' color={allocatedColor} fontWeight={600}>
               {season.allocated.toLocaleString(activeLocale || undefined)}
             </Typography>
-            <Button
-              icon='iconEdit'
-              onClick={() => {
-                setDraftValue(season.allocated.toString());
-                setEditing(true);
-              }}
-              priority='ghost'
-              size='small'
-              type='passive'
-            />
+            {season.status !== 'Closed' && (
+              <Button
+                icon='iconEdit'
+                onClick={() => {
+                  setDraftValue(season.allocated.toString());
+                  setEditing(true);
+                }}
+                priority='ghost'
+                size='small'
+                type='passive'
+              />
+            )}
           </>
         )}
       </Box>

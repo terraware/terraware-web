@@ -8,6 +8,8 @@ export type InventoryPlanningArgs = {
   speciesId?: number;
 };
 
+export type PlantingSeasonStatus = 'Active' | 'Upcoming' | 'Past End Date' | 'Closed';
+
 export type InventoryPlanningSeasonRow = {
   plantingSeasonId: number;
   plantingSeasonName: string;
@@ -15,6 +17,7 @@ export type InventoryPlanningSeasonRow = {
   plantingSiteName: string;
   startDate: string;
   endDate: string;
+  status: PlantingSeasonStatus;
   target: number;
   allocated: number;
 };
@@ -71,6 +74,7 @@ const injectedRtkApi = api.injectEndpoints({
               'name',
               'startDate',
               'endDate',
+              'status',
               'plantingSite_id',
               'plantingSite_name',
               'speciesTargets.species_id',
@@ -89,7 +93,7 @@ const injectedRtkApi = api.injectEndpoints({
           },
         };
       },
-      providesTags: [{ type: QueryTagTypes.PlantingSeasons, id: 'INVENTORY_PLANNING' }],
+      providesTags: [{ type: QueryTagTypes.PlantingSeasons, id: 'LIST' }],
       transformResponse: (response: InventoryPlanningSeasonSearchResponse) => response.results,
     }),
 
@@ -127,7 +131,6 @@ const injectedRtkApi = api.injectEndpoints({
           count: 0,
         },
       }),
-      providesTags: [{ type: QueryTagTypes.NurseryWithdrawals }],
       transformResponse: (response: InventoryPlanningAvailableResponse): Map<number, number> => {
         const map = new Map<number, number>();
         response.results.forEach((s) => {
@@ -158,6 +161,7 @@ export type InventoryPlanningSeasonSearch = {
   name: string;
   startDate: string;
   endDate: string;
+  status: PlantingSeasonStatus;
   plantingSite_id: string;
   plantingSite_name: string;
   speciesTargets?: InventoryPlanningSpeciesTargetSearch[];
@@ -244,6 +248,7 @@ export const aggregateInventoryPlanningRows = (
         plantingSiteName: season.plantingSite_name,
         startDate: season.startDate,
         endDate: season.endDate,
+        status: season.status,
         target,
         allocated,
       });
