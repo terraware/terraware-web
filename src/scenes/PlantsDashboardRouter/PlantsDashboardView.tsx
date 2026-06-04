@@ -62,7 +62,6 @@ export default function PlantsDashboardView({
   const latestObservationCompletedTime = useMemo(() => {
     return plantingSite?.latestObservationCompletedTime;
   }, [plantingSite]);
-  const isWeightedSurvivalRatesEnabled = isEnabled('Weighted Survival Rates');
 
   const [listSummaries, listSummariesResponse] = useLazyListObservationSummariesQuery();
 
@@ -164,7 +163,7 @@ export default function PlantsDashboardView({
 
   const renderSurvivalRate = useCallback(
     () =>
-      plantingSite || (isWeightedSurvivalRatesEnabled && !!projectId) ? (
+      plantingSite || !!projectId ? (
         <>
           <Grid item xs={12}>
             <Box
@@ -187,15 +186,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [
-      plantingSite,
-      isMobile,
-      hasObservationResults,
-      renderLatestObservationLink,
-      strings,
-      projectId,
-      isWeightedSurvivalRatesEnabled,
-    ]
+    [plantingSite, isMobile, hasObservationResults, renderLatestObservationLink, strings, projectId]
   );
 
   const renderTotalPlantsAndSpecies = () => (
@@ -460,8 +451,7 @@ export default function PlantsDashboardView({
         {renderTotalPlantsAndSpecies()}
         {hasObservationResults && selectedPlantingSiteId !== -1 && renderPlantingSiteTrends()}
         {selectedPlantingSiteId !== -1 && hasObservationResults && renderPlantingProgressAndDensity()}
-        {((hasObservationResults && selectedPlantingSiteId !== -1) ||
-          (isWeightedSurvivalRatesEnabled && !!projectId && !plantingSite)) &&
+        {((hasObservationResults && selectedPlantingSiteId !== -1) || (!!projectId && !plantingSite)) &&
           renderSurvivalRate()}
         {selectedPlantingSiteId !== -1 && hasStrata && renderStratumLevelData()}
         {selectedPlantingSiteId !== -1 && hasPolygons && !hasStrata && renderSimpleSiteMap()}
