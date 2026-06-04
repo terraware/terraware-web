@@ -762,6 +762,15 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               )}
             </Grid>
 
+            {isObsActivity && (
+              <ObservationStatsPanel
+                isEditing
+                livePlants={observationLivePlants}
+                plantDensity={observationPlantDensity}
+                survivalRate={observationSurvivalRate}
+              />
+            )}
+
             <Grid item xs={12}>
               <Textfield
                 errorText={validateFields && !record?.description && !isObsActivity ? strings.REQUIRED_FIELD : ''}
@@ -774,15 +783,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                 value={record?.description}
               />
             </Grid>
-
-            {isObsActivity && (
-              <ObservationStatsPanel
-                isEditing
-                livePlants={observationLivePlants}
-                plantDensity={observationPlantDensity}
-                survivalRate={observationSurvivalRate}
-              />
-            )}
 
             {isAcceleratorRoute && (
               <Grid item xs={12} sm={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
