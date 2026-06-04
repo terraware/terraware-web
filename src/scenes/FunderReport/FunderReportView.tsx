@@ -37,7 +37,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
   // (as a published-preview), that parent already fires REPORT_VIEWED.
   useEffect(() => {
     if (isFunderRoute) {
-      trackEvent(MIXPANEL_EVENTS.REPORT_VIEWED, { is_funder_view: true });
+      trackEvent(MIXPANEL_EVENTS.REPORT_VIEWED, { viewer_persona: 'funder' });
     }
   }, [isFunderRoute, trackEvent]);
 
