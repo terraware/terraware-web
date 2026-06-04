@@ -1,3 +1,4 @@
+05a76e65 Update dependency react-router to v7.15.0 [SECURITY] (#5772)
 13e20f2e Fix false-positive modal abandoned events (#5769)
 0d95101a Use search api for species summary drawer (#5768)
 22d1da28 SW-8437 Delete/Close planting season modals (#5766)
