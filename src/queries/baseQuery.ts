@@ -15,12 +15,12 @@ function objectToFormData(value: Record<string, unknown>) {
 
     if (val instanceof Blob) {
       formData.append(key, val);
-
     } else if (typeof val === 'object') {
-      formData.append(key, JSON.stringify(val));
+      // Object parts default to application/json in the OpenAPI multipart encoding, so send them as
+      // a JSON blob rather than a plain text field for the backend to deserialize correctly.
+      formData.append(key, new Blob([JSON.stringify(val)], { type: 'application/json' }));
     } else {
       formData.append(key, String(val));
-
     }
   }
 

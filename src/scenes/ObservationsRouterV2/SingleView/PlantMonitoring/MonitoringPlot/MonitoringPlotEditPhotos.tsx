@@ -157,19 +157,15 @@ const MonitoringPlotEditPhotos = () => {
         setLoading(true);
         const promises = mediaItems.map((mediaItem) => {
           if (mediaItem.type === 'new') {
-            const formData = new FormData();
-            formData.append('file', mediaItem.data.file);
-
-            const payloadData = {
-              caption: mediaItem.data.caption,
-              type: undefined,
-            };
-            formData.append('payload', new Blob([JSON.stringify(payloadData)], { type: 'application/json' }));
-
             const payload: UploadOtherPlotMediaApiArg = {
               observationId,
               plotId: monitoringPlotId,
-              body: formData as any,
+              body: {
+                file: mediaItem.data.file,
+                payload: {
+                  caption: mediaItem.data.caption,
+                },
+              },
             };
             return upload(payload).unwrap();
           } else if (mediaItem.type === 'existing' && mediaItem.isDeleted) {
