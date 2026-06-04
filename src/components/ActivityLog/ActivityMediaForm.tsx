@@ -508,6 +508,25 @@ export default function ActivityMediaForm({
     return fromStrata;
   }, [observationResultsData]);
 
+  // Auto-select the plot when there is exactly one option available
+  useEffect(() => {
+    if (plotOptions.length !== 1) {
+      return;
+    }
+    const soloPlotId = plotOptions[0].plotId;
+    const hasUnassigned = mediaItems.some((item) => item.type === 'new' && item.data.monitoringPlotId === undefined);
+    if (!hasUnassigned) {
+      return;
+    }
+    onChangeMediaItems((prev) =>
+      prev.map((item) =>
+        item.type === 'new' && item.data.monitoringPlotId === undefined
+          ? { ...item, data: { ...item.data, monitoringPlotId: soloPlotId } }
+          : item
+      )
+    );
+  }, [plotOptions, mediaItems, onChangeMediaItems]);
+
   const [deleteConfirmationIndex, setDeleteConfirmationIndex] = useState<number | undefined>();
 
   const visibleMediaItems = useMemo(
