@@ -102,19 +102,6 @@ export type OrganizationSubjectPayload = {
 } & EventSubjectPayloadBase & {
     organizationId: number;
   };
-export type PlantingSeasonScheduledDateSpeciesSubjectPayload = {
-  type: 'PlantingSeasonScheduledDateSpecies';
-} & EventSubjectPayloadBase & {
-    plantingSeasonId: number;
-    plantingSiteId: number;
-    scheduledPlantingDateId: number;
-    scientificName?: string;
-    speciesId: number;
-    stratumName: string;
-    substratumHistoryId: number;
-    substratumId: number;
-    substratumName: string;
-  };
 export type PlantingSeasonScheduledDateSubjectPayload = {
   type: 'PlantingSeasonScheduledDate';
 } & EventSubjectPayloadBase & {
@@ -154,7 +141,6 @@ export type EventLogEntryPayload = {
     | ObservationPlotMediaSubjectPayload
     | ObservationPlotSubjectPayload
     | OrganizationSubjectPayload
-    | PlantingSeasonScheduledDateSpeciesSubjectPayload
     | PlantingSeasonScheduledDateSubjectPayload
     | PlantingSeasonSubjectPayload
     | ProjectSubjectPayload
@@ -188,7 +174,6 @@ export type ListEventLogEntriesRequestPayload = {
     | 'Organization'
     | 'PlantingSeason'
     | 'PlantingSeasonScheduledDate'
-    | 'PlantingSeasonScheduledDateSpecies'
     | 'Project'
     | 'RecordedTree'
   )[];
