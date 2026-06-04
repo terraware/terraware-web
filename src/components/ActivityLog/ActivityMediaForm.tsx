@@ -41,6 +41,7 @@ export type ExistingActivityMediaItem = {
   data: ActivityMediaFile | AdminActivityMediaFile;
   isModified?: boolean;
   isDeleted?: boolean;
+  monitoringPlotId?: number;
 };
 
 export type ActivityMediaItem = NewActivityMediaItem | ExistingActivityMediaItem;
@@ -172,6 +173,19 @@ const ActivityPhotoPreview = ({
     }
     return undefined;
   }, [isObsMedia, mediaItem]);
+
+  const selectedPlotId = useMemo(() => {
+    if (mediaItem.type === 'new') {
+      return mediaItem.data.monitoringPlotId;
+    }
+    if (mediaItem.monitoringPlotId !== undefined) {
+      return mediaItem.monitoringPlotId;
+    }
+    if (obsMonitoringPlotNumber !== undefined) {
+      return plotOptions?.find((p) => p.plotNumber === obsMonitoringPlotNumber)?.plotId;
+    }
+    return undefined;
+  }, [mediaItem, obsMonitoringPlotNumber, plotOptions]);
 
   const setCaptionCallback = useCallback(
     (value: any) => {
@@ -326,35 +340,6 @@ const ActivityPhotoPreview = ({
               )}
             </Box>
 
-            {isObsMedia && obsMonitoringPlotNumber !== undefined && (
-              <Box marginBottom={theme.spacing(1)}>
-                <Typography fontSize='14px' sx={{ color: theme.palette.TwClrTxtSecondary }}>
-                  {strings.MONITORING_PLOT}
-                </Typography>
-                <Typography fontSize='16px' fontWeight={500}>
-                  {obsMonitoringPlotNumber}
-                </Typography>
-              </Box>
-            )}
-
-            {isObsActivity && mediaItem.type === 'new' && (
-              <Box marginBottom={theme.spacing(1)}>
-                <Dropdown
-                  errorText={
-                    validateFields && mediaItem.data.monitoringPlotId === undefined ? strings.REQUIRED_FIELD : ''
-                  }
-                  fullWidth
-                  label={strings.MONITORING_PLOT}
-                  onChange={(value) => onPlotChange(value !== null && value !== undefined ? Number(value) : null)}
-                  options={plotOptions?.map((p) => ({ label: String(p.plotNumber), value: String(p.plotId) })) ?? []}
-                  required
-                  selectedValue={
-                    mediaItem.data.monitoringPlotId !== undefined ? String(mediaItem.data.monitoringPlotId) : null
-                  }
-                />
-              </Box>
-            )}
-
             <Box
               display='flex'
               flexDirection='row'
@@ -434,26 +419,43 @@ const ActivityPhotoPreview = ({
         </Grid>
 
         <Grid item xs={12}>
-          {isCaptionRO ? (
-            <Box>
-              <Typography
-                fontSize='14px'
-                sx={{ color: theme.palette.TwClrTxtSecondary, marginBottom: theme.spacing(1) }}
-              >
-                {strings.CAPTION}
-              </Typography>
-              <Typography fontSize='16px'>{caption || '—'}</Typography>
+          <Box alignItems='flex-start' display='flex' gap={1}>
+            <Box flex={1}>
+              {isCaptionRO ? (
+                <Box>
+                  <Typography
+                    fontSize='14px'
+                    sx={{ color: theme.palette.TwClrTxtSecondary, marginBottom: theme.spacing(1) }}
+                  >
+                    {strings.CAPTION}
+                  </Typography>
+                  <Typography fontSize='16px'>{caption || '—'}</Typography>
+                </Box>
+              ) : (
+                <Textfield
+                  id={`caption-${mediaItem.type === 'new' ? mediaItem.data.file.name : mediaItem.data.fileId}`}
+                  label={strings.CAPTION}
+                  onChange={setCaptionCallback}
+                  type='text'
+                  value={caption}
+                  maxLength={200}
+                />
+              )}
             </Box>
-          ) : (
-            <Textfield
-              id={`caption-${mediaItem.type === 'new' ? mediaItem.data.file.name : mediaItem.data.fileId}`}
-              label={strings.CAPTION}
-              onChange={setCaptionCallback}
-              type='text'
-              value={caption}
-              maxLength={200}
-            />
-          )}
+            {isObsActivity && !isUndeletable && (
+              <Box flexShrink={0} width='120px'>
+                <Dropdown
+                  errorText={validateFields && selectedPlotId === undefined ? strings.REQUIRED_FIELD : ''}
+                  fullWidth
+                  label={strings.MONITORING_PLOT}
+                  onChange={(value) => onPlotChange(value !== null && value !== undefined ? Number(value) : null)}
+                  options={plotOptions?.map((p) => ({ label: String(p.plotNumber), value: String(p.plotId) })) ?? []}
+                  required
+                  selectedValue={selectedPlotId !== undefined ? String(selectedPlotId) : null}
+                />
+              </Box>
+            )}
+          </Box>
         </Grid>
       </Grid>
     </Box>
@@ -667,13 +669,21 @@ export default function ActivityMediaForm({
   const getUpdatePlotId = useCallback(
     (index: number) => (plotId: number | null) => {
       const updatedItems = mediaItems.map((mediaItem, i) => {
-        if (index !== i || mediaItem.type !== 'new') {
+        if (index !== i) {
           return mediaItem;
         }
-        return {
-          ...mediaItem,
-          data: { ...mediaItem.data, monitoringPlotId: plotId ?? undefined },
-        };
+        if (mediaItem.type === 'new') {
+          return {
+            ...mediaItem,
+            data: { ...mediaItem.data, monitoringPlotId: plotId ?? undefined },
+          };
+        } else {
+          return {
+            ...mediaItem,
+            monitoringPlotId: plotId ?? undefined,
+            isModified: true,
+          };
+        }
       });
       onChangeMediaItems(updatedItems);
     },
