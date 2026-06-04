@@ -54,6 +54,7 @@ type ActivityPhotoPreviewProps = {
   activityId?: number;
   currentPosition: number;
   focused?: boolean;
+  isAdHoc?: boolean;
   isLast?: boolean;
   isObsActivity: boolean;
   maxPosition: number;
@@ -73,6 +74,7 @@ const ActivityPhotoPreview = ({
   activityId,
   currentPosition,
   focused,
+  isAdHoc,
   isLast,
   isObsActivity,
   maxPosition,
@@ -442,7 +444,7 @@ const ActivityPhotoPreview = ({
                 />
               )}
             </Box>
-            {isObsActivity && !isUndeletable && (
+            {isObsActivity && !isUndeletable && !isAdHoc && mediaItem.type === 'new' && (
               <Box flexShrink={0} width='120px'>
                 <Dropdown
                   errorText={validateFields && selectedPlotId === undefined ? strings.REQUIRED_FIELD : ''}
@@ -465,6 +467,7 @@ const ActivityPhotoPreview = ({
 export interface ActivityMediaFormProps {
   activityId?: number;
   focusedFileId?: number;
+  isAdHoc?: boolean;
   maxFiles?: number;
   mediaItems: ActivityMediaItem[];
   obsConfirmContext?: { monthYear: string; projectName: string };
@@ -478,6 +481,7 @@ export interface ActivityMediaFormProps {
 export default function ActivityMediaForm({
   activityId,
   focusedFileId,
+  isAdHoc,
   maxFiles = MAX_FILES,
   mediaItems,
   obsConfirmContext,
@@ -796,6 +800,7 @@ export default function ActivityMediaForm({
               activityId={activityId}
               currentPosition={currentPosition}
               focused={mediaItem.type === 'existing' && mediaItem.data.fileId === focusedFileId}
+              isAdHoc={isAdHoc}
               isLast={visibleIndex === visibleMediaItems.length - 1}
               isObsActivity={isObsActivity}
               key={`photo-${index}`}

@@ -822,6 +822,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             <ActivityMediaForm
               activityId={activityId}
               focusedFileId={focusedFileId}
+              isAdHoc={obsIsAdHoc}
               mediaItems={mediaItems}
               obsConfirmContext={
                 isObsActivity && obsMonthYear && projectName ? { monthYear: obsMonthYear, projectName } : undefined
