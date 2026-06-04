@@ -8,7 +8,6 @@ import { DateTime } from 'luxon';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
-import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useFunderPortal from 'src/hooks/useFunderPortal';
@@ -43,6 +42,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import ActivityStatusBadges from './ActivityStatusBadges';
+import ObservationStatsPanel from './ObservationStatsPanel';
 import { TypedActivity } from './types';
 
 type ActivityMediaItemProps = {
@@ -675,36 +675,11 @@ const ActivityDetailView = ({
       </Grid>
 
       {showObsPanel && (
-        <>
-          <Grid item xs={12} sm={4}>
-            <OverviewItemCard
-              isEditable={false}
-              title={strings.LIVE_PLANTS}
-              contents={obsLivePlants?.toString() ?? null}
-              sx={{ padding: 0 }}
-            />
-          </Grid>
-          {!!obsPlantDensity && (
-            <Grid item xs={12} sm={4}>
-              <OverviewItemCard
-                isEditable={false}
-                title={strings.PLANT_DENSITY}
-                contents={obsPlantDensity.toString()}
-                sx={{ padding: 0 }}
-              />
-            </Grid>
-          )}
-          {obsSurvivalRate !== undefined && (
-            <Grid item xs={12} sm={4}>
-              <OverviewItemCard
-                isEditable={false}
-                title={strings.SURVIVAL_RATE}
-                contents={`${obsSurvivalRate}%`}
-                sx={{ padding: 0 }}
-              />
-            </Grid>
-          )}
-        </>
+        <ObservationStatsPanel
+          livePlants={obsLivePlants}
+          plantDensity={obsPlantDensity}
+          survivalRate={obsSurvivalRate}
+        />
       )}
 
       <Grid item xs={12}>

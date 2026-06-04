@@ -65,6 +65,7 @@ import ActivityMediaForm, {
 import ActivityStatusBadges from './ActivityStatusBadges';
 import DeleteActivityModal from './DeleteActivityModal';
 import MapSplitView from './MapSplitView';
+import ObservationStatsPanel from './ObservationStatsPanel';
 import { TypedActivity } from './types';
 
 interface ActivityDetailsFormProps {
@@ -150,23 +151,25 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const observationSurvivalRate =
     observationResultsData?.observation.survivalRate ?? observationResultsData?.observation.adHocPlot?.survivalRate;
 
-  const obsPlotNumberToIdMap = useMemo<Record<number, number>>(() => {
-    const map: Record<number, number> = {};
+  const { obsPlotNumberToIdMap, obsPlotOptions } = useMemo(() => {
+    const plotNumberToIdMap: Record<number, number> = {};
+    const plotOptions: { plotId: number; plotNumber: number }[] = [];
     const obs = observationResultsData?.observation;
-    if (!obs) {
-      return map;
+    if (obs) {
+      obs.strata?.forEach((stratum) =>
+        stratum.substrata?.forEach((substratum) =>
+          substratum.monitoringPlots?.forEach((plot) => {
+            plotNumberToIdMap[plot.monitoringPlotNumber] = plot.monitoringPlotId;
+            plotOptions.push({ plotId: plot.monitoringPlotId, plotNumber: plot.monitoringPlotNumber });
+          })
+        )
+      );
+      if (obs.adHocPlot) {
+        plotNumberToIdMap[obs.adHocPlot.monitoringPlotNumber] = obs.adHocPlot.monitoringPlotId;
+        plotOptions.push({ plotId: obs.adHocPlot.monitoringPlotId, plotNumber: obs.adHocPlot.monitoringPlotNumber });
+      }
     }
-    obs.strata?.forEach((stratum) =>
-      stratum.substrata?.forEach((substratum) =>
-        substratum.monitoringPlots?.forEach((plot) => {
-          map[plot.monitoringPlotNumber] = plot.monitoringPlotId;
-        })
-      )
-    );
-    if (obs.adHocPlot) {
-      map[obs.adHocPlot.monitoringPlotNumber] = obs.adHocPlot.monitoringPlotId;
-    }
-    return map;
+    return { obsPlotNumberToIdMap: plotNumberToIdMap, obsPlotOptions: plotOptions };
   }, [observationResultsData]);
 
   const obsMonthYear = useMemo(() => {
@@ -713,14 +716,13 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
             <Grid item lg={6} xs={12}>
               {isObsActivity ? (
-                <Box>
-                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' marginBottom={1}>
-                    {strings.ACTIVITY_TYPE}
-                  </Typography>
-                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='16px' fontWeight={500}>
-                    {record.type ? activityTypeLabel(record.type, strings) : ''}
-                  </Typography>
-                </Box>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.ACTIVITY_TYPE}
+                  contents={record.type ? activityTypeLabel(record.type, strings) : ''}
+                  sx={{ padding: 0 }}
+                  valueColor={theme.palette.TwClrTxtSecondary}
+                />
               ) : (
                 <Box display='flex' alignItems='center' gap={1}>
                   <Box flex={1}>
@@ -740,14 +742,13 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
             <Grid item lg={5} xs={12}>
               {isObsActivity ? (
-                <Box>
-                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' marginBottom={1}>
-                    {strings.DATE}
-                  </Typography>
-                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='16px' fontWeight={500}>
-                    {record.date ?? ''}
-                  </Typography>
-                </Box>
+                <OverviewItemCard
+                  isEditable={false}
+                  title={strings.DATE}
+                  contents={record.date ?? ''}
+                  sx={{ padding: 0 }}
+                  valueColor={theme.palette.TwClrTxtSecondary}
+                />
               ) : (
                 <Box display='flex' alignItems='center' gap={1}>
                   <Box flex={1}>
@@ -780,37 +781,12 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             </Grid>
 
             {isObsActivity && (
-              <Grid item xs={12} sm={4}>
-                <OverviewItemCard
-                  isEditable={false}
-                  title={strings.LIVE_PLANTS}
-                  contents={observationLivePlants?.toString() ?? null}
-                  sx={{ padding: 0 }}
-                  valueColor={theme.palette.TwClrTxtSecondary}
-                />
-              </Grid>
-            )}
-            {isObsActivity && !!observationPlantDensity && (
-              <Grid item xs={12} sm={4}>
-                <OverviewItemCard
-                  isEditable={false}
-                  title={strings.PLANT_DENSITY}
-                  contents={observationPlantDensity.toString()}
-                  sx={{ padding: 0 }}
-                  valueColor={theme.palette.TwClrTxtSecondary}
-                />
-              </Grid>
-            )}
-            {isObsActivity && observationSurvivalRate !== undefined && (
-              <Grid item xs={12} sm={4}>
-                <OverviewItemCard
-                  isEditable={false}
-                  title={strings.SURVIVAL_RATE}
-                  contents={`${observationSurvivalRate}%`}
-                  sx={{ padding: 0 }}
-                  valueColor={theme.palette.TwClrTxtSecondary}
-                />
-              </Grid>
+              <ObservationStatsPanel
+                livePlants={observationLivePlants}
+                plantDensity={observationPlantDensity}
+                survivalRate={observationSurvivalRate}
+                valueColor={theme.palette.TwClrTxtSecondary}
+              />
             )}
 
             {isAcceleratorRoute && (
@@ -856,6 +832,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                 isObsActivity && obsMonthYear && projectName ? { monthYear: obsMonthYear, projectName } : undefined
               }
               observationId={activity?.payload.observation?.observationId}
+              plotOptions={obsPlotOptions}
               onClickMediaItem={onFileClicked}
               onChangeMediaItems={setMediaItems}
               validateFields={validateFields}

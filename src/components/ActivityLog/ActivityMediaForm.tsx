@@ -15,7 +15,6 @@ import {
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
-import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import {
   ActivityMediaFile,
@@ -468,6 +467,7 @@ export interface ActivityMediaFormProps {
   mediaItems: ActivityMediaItem[];
   obsConfirmContext?: { monthYear: string; projectName: string };
   observationId?: number;
+  plotOptions?: { plotId: number; plotNumber: number }[];
   onClickMediaItem: (fileId: number) => () => void;
   onChangeMediaItems: React.Dispatch<React.SetStateAction<ActivityMediaItem[]>>;
   validateFields?: boolean;
@@ -480,6 +480,7 @@ export default function ActivityMediaForm({
   mediaItems,
   obsConfirmContext,
   observationId,
+  plotOptions,
   onClickMediaItem,
   onChangeMediaItems,
   validateFields,
@@ -488,31 +489,9 @@ export default function ActivityMediaForm({
 
   const isObsActivity = observationId !== undefined;
 
-  const { data: observationResultsData } = useGetObservationResultsQuery(
-    { observationId: observationId as number },
-    { skip: !observationId }
-  );
-
-  const plotOptions = useMemo(() => {
-    const fromStrata =
-      observationResultsData?.observation.strata.flatMap((stratum) =>
-        stratum.substrata.flatMap((substratum) =>
-          substratum.monitoringPlots.map((plot) => ({
-            plotId: plot.monitoringPlotId,
-            plotNumber: plot.monitoringPlotNumber,
-          }))
-        )
-      ) ?? [];
-    const adHocPlot = observationResultsData?.observation.adHocPlot;
-    if (adHocPlot) {
-      fromStrata.push({ plotId: adHocPlot.monitoringPlotId, plotNumber: adHocPlot.monitoringPlotNumber });
-    }
-    return fromStrata;
-  }, [observationResultsData]);
-
   // Auto-select the plot when there is exactly one option available
   useEffect(() => {
-    if (plotOptions.length !== 1) {
+    if (!plotOptions || plotOptions.length !== 1) {
       return;
     }
     const soloPlotId = plotOptions[0].plotId;
