@@ -466,6 +466,7 @@ export interface ActivityMediaFormProps {
   focusedFileId?: number;
   maxFiles?: number;
   mediaItems: ActivityMediaItem[];
+  obsConfirmContext?: { monthYear: string; projectName: string };
   observationId?: number;
   onClickMediaItem: (fileId: number) => () => void;
   onChangeMediaItems: React.Dispatch<React.SetStateAction<ActivityMediaItem[]>>;
@@ -477,6 +478,7 @@ export default function ActivityMediaForm({
   focusedFileId,
   maxFiles = MAX_FILES,
   mediaItems,
+  obsConfirmContext,
   observationId,
   onClickMediaItem,
   onChangeMediaItems,
@@ -663,17 +665,17 @@ export default function ActivityMediaForm({
   const handleDeleteRequest = useCallback(
     (index: number) => () => {
       const mediaItem = mediaItems[index];
-      if (
+      const needsConfirmation =
         mediaItem.type === 'existing' &&
-        isObservationMedia(mediaItem.data) &&
-        !isUndeletableObservationPhoto(mediaItem.data)
-      ) {
+        (obsConfirmContext !== undefined ||
+          (isObservationMedia(mediaItem.data) && !isUndeletableObservationPhoto(mediaItem.data)));
+      if (needsConfirmation) {
         setDeleteConfirmationIndex(index);
       } else {
         getDeletePhoto(index)();
       }
     },
-    [mediaItems, getDeletePhoto]
+    [mediaItems, getDeletePhoto, obsConfirmContext]
   );
 
   const confirmDeleteObservationMedia = useCallback(() => {
@@ -742,7 +744,7 @@ export default function ActivityMediaForm({
         <DialogBox
           onClose={() => setDeleteConfirmationIndex(undefined)}
           open={true}
-          title={strings.DELETE_OBSERVATION_PHOTO_TITLE}
+          title={obsConfirmContext ? strings.SAVE_PHOTOS_AND_VIDEOS : strings.DELETE_OBSERVATION_PHOTO_TITLE}
           size='medium'
           middleButtons={[
             <Button
@@ -756,12 +758,20 @@ export default function ActivityMediaForm({
             <Button
               id='confirmDeleteObservationPhoto'
               key='button-confirm'
-              label={strings.DELETE}
+              label={obsConfirmContext ? strings.CONTINUE : strings.DELETE}
               onClick={confirmDeleteObservationMedia}
               type='destructive'
             />,
           ]}
-          message={strings.DELETE_OBSERVATION_PHOTO_MESSAGE}
+          message={
+            obsConfirmContext
+              ? strings.formatString(
+                  strings.SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,
+                  obsConfirmContext.monthYear,
+                  obsConfirmContext.projectName
+                )
+              : strings.DELETE_OBSERVATION_PHOTO_MESSAGE
+          }
         />
       )}
       <Grid item xs={12}>

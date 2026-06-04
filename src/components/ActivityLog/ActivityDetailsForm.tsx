@@ -150,13 +150,32 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const observationSurvivalRate =
     observationResultsData?.observation.survivalRate ?? observationResultsData?.observation.adHocPlot?.survivalRate;
 
+  const obsPlotNumberToIdMap = useMemo<Record<number, number>>(() => {
+    const map: Record<number, number> = {};
+    const obs = observationResultsData?.observation;
+    if (!obs) {
+      return map;
+    }
+    obs.strata?.forEach((stratum) =>
+      stratum.substrata?.forEach((substratum) =>
+        substratum.monitoringPlots?.forEach((plot) => {
+          map[plot.monitoringPlotNumber] = plot.monitoringPlotId;
+        })
+      )
+    );
+    if (obs.adHocPlot) {
+      map[obs.adHocPlot.monitoringPlotNumber] = obs.adHocPlot.monitoringPlotId;
+    }
+    return map;
+  }, [observationResultsData]);
+
   const obsMonthYear = useMemo(() => {
     if (!isObsActivity || !activity?.payload.date) {
       return undefined;
     }
     const dt = DateTime.fromISO(activity.payload.date);
     return dt.isValid ? dt.toFormat('LLLL yyyy') : undefined;
-  }, [activity?.payload.date, isObsActivity]);
+  }, [activity, isObsActivity]);
 
   const obsIsAdHoc = activity?.payload.observation?.isAdHoc ?? false;
   const obsPlotNumber = activity?.payload.observation?.monitoringPlotNumber;
@@ -298,6 +317,8 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           requestSyncActivityMedia({
             activityId: newActivityId,
             mediaItems,
+            observationId: activity?.payload.observation?.observationId,
+            plotNumberToIdMap: obsPlotNumberToIdMap,
           })
         );
         setSyncMediaRequestId(request.requestId);
@@ -307,7 +328,14 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         navToActivityLog();
       }
     },
-    [dispatch, mediaItems, setBusy, navToActivityLog]
+    [
+      dispatch,
+      mediaItems,
+      setBusy,
+      navToActivityLog,
+      activity?.payload.observation?.observationId,
+      obsPlotNumberToIdMap,
+    ]
   );
 
   const saveActivity = useCallback(async () => {
@@ -824,6 +852,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
               activityId={activityId}
               focusedFileId={focusedFileId}
               mediaItems={mediaItems}
+              obsConfirmContext={
+                isObsActivity && obsMonthYear && projectName ? { monthYear: obsMonthYear, projectName } : undefined
+              }
               observationId={activity?.payload.observation?.observationId}
               onClickMediaItem={onFileClicked}
               onChangeMediaItems={setMediaItems}

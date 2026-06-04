@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { ActivityMediaItem } from 'src/components/ActivityLog/ActivityMediaForm';
 import ActivityService from 'src/services/ActivityService';
 import FileService from 'src/services/FileService';
+import ObservationsService from 'src/services/ObservationsService';
 import strings from 'src/strings';
 import {
   ActivityMediaFile,
@@ -269,8 +270,16 @@ export const requestGetFileForToken = createAsyncThunk(
 
 export const requestSyncActivityMedia = createAsyncThunk(
   'activities/syncMedia',
-  async (request: { activityId: number; mediaItems: ActivityMediaItem[] }, { rejectWithValue }) => {
-    const { activityId, mediaItems } = request;
+  async (
+    request: {
+      activityId: number;
+      mediaItems: ActivityMediaItem[];
+      observationId?: number;
+      plotNumberToIdMap?: Record<number, number>;
+    },
+    { rejectWithValue }
+  ) => {
+    const { activityId, mediaItems, observationId, plotNumberToIdMap } = request;
     const results: SyncActivityMediaResult[] = [];
 
     // delete existing media items marked for deletion
@@ -279,7 +288,24 @@ export const requestSyncActivityMedia = createAsyncThunk(
     for (const item of itemsToDelete) {
       if (item.type === 'existing') {
         try {
-          const deleteResponse = await ActivityService.deleteActivityMedia(activityId, item.data.fileId);
+          let deleteResponse;
+
+          if (
+            observationId !== undefined &&
+            plotNumberToIdMap !== undefined &&
+            item.data.observation?.monitoringPlotNumber !== undefined
+          ) {
+            // Observation activity: delete via the observation endpoint.
+            const plotId = plotNumberToIdMap[item.data.observation.monitoringPlotNumber];
+            if (plotId !== undefined) {
+              deleteResponse = await ObservationsService.deletePlotMedia(observationId, plotId, item.data.fileId);
+            }
+          }
+
+          if (deleteResponse === undefined) {
+            // Non-observation activity or plot ID could not be resolved: fall back to activity endpoint.
+            deleteResponse = await ActivityService.deleteActivityMedia(activityId, item.data.fileId);
+          }
 
           results.push({
             ...(deleteResponse?.requestSucceeded ? {} : { error: 'Delete request failed' }),
@@ -337,19 +363,44 @@ export const requestSyncActivityMedia = createAsyncThunk(
           // upload the file
           const formData = new FormData();
           formData.append('file', item.data.file);
-          const uploadResponse = await ActivityService.uploadActivityMedia(activityId, formData);
 
-          if (!uploadResponse?.requestSucceeded || !uploadResponse?.data?.fileId) {
-            results.push({
-              error: 'File upload failed',
-              operation: 'upload',
-              success: false,
-            });
-            continue;
+          let uploadedFileId: number | undefined;
+
+          if (observationId !== undefined && item.data.monitoringPlotId !== undefined) {
+            // Observation activity: upload via observation endpoint so the file is
+            // associated with the observation (it will appear in the activity automatically).
+            const obsUploadResponse = await ObservationsService.uploadOtherPlotMedia(
+              observationId,
+              item.data.monitoringPlotId,
+              formData
+            );
+
+            if (!obsUploadResponse?.requestSucceeded || !obsUploadResponse?.data?.fileId) {
+              results.push({
+                error: 'File upload failed',
+                operation: 'upload',
+                success: false,
+              });
+              continue;
+            }
+            uploadedFileId = obsUploadResponse.data.fileId;
+          } else {
+            // Non-observation activity: upload directly to the activity endpoint.
+            const actUploadResponse = await ActivityService.uploadActivityMedia(activityId, formData);
+
+            if (!actUploadResponse?.requestSucceeded || !actUploadResponse?.data?.fileId) {
+              results.push({
+                error: 'File upload failed',
+                operation: 'upload',
+                success: false,
+              });
+              continue;
+            }
+            uploadedFileId = actUploadResponse.data.fileId;
           }
 
           // update the metadata
-          const updateResponse = await ActivityService.updateActivityMedia(activityId, uploadResponse.data.fileId, {
+          const updateResponse = await ActivityService.updateActivityMedia(activityId, uploadedFileId, {
             caption: item.data.caption,
             isCoverPhoto: item.data.isCoverPhoto,
             isHiddenOnMap: item.data.isHiddenOnMap,
@@ -359,7 +410,7 @@ export const requestSyncActivityMedia = createAsyncThunk(
           if (!updateResponse?.requestSucceeded) {
             results.push({
               error: 'Metadata update failed after upload',
-              fileId: uploadResponse.data.fileId,
+              fileId: uploadedFileId,
               operation: 'upload',
               success: false,
             });
@@ -367,7 +418,7 @@ export const requestSyncActivityMedia = createAsyncThunk(
           }
 
           results.push({
-            fileId: uploadResponse.data.fileId,
+            fileId: uploadedFileId,
             operation: 'upload',
             success: true,
           });
