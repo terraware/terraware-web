@@ -292,9 +292,7 @@ const PlantingDateForm = ({
     const payload = {
       date,
       species: speciesPayload,
-      ...(notifyOptions
-        ? { createNurseryRequest: true, nurseryRequestNotes: notifyOptions.note }
-        : {}),
+      ...(notifyOptions ? { createNurseryRequest: true, nurseryRequestNotes: notifyOptions.note } : {}),
     };
     try {
       if (isEditing && editingScheduledDate) {
