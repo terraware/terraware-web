@@ -198,7 +198,11 @@ export type ActivityMediaFilePayload = {
   type: 'Photo' | 'Video';
 };
 export type ActivityObservationPayload = {
+  isAdHoc: boolean;
+  /** If this was an ad-hoc observation, its plot number. Not set for assigned observations because they can include multiple plots. */
+  monitoringPlotNumber?: number;
   observationId: number;
+  observationType: 'Monitoring' | 'Biomass Measurements';
 };
 export type ActivityPayload = {
   date: string;
@@ -262,7 +266,10 @@ export type AdminActivityMediaFilePayload = {
   type: 'Photo' | 'Video';
 };
 export type AdminActivityObservationPayload = {
+  isAdHoc: boolean;
+  monitoringPlotNumber?: number;
   observationId: number;
+  observationType: 'Monitoring' | 'Biomass Measurements';
 };
 export type AdminActivityPayload = {
   createdBy: number;
