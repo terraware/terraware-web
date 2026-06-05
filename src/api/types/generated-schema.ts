@@ -2197,6 +2197,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/globalRoles/invite": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Invite a new accelerator admin by email and assign global roles.
+         * @description If the email is unknown, creates an unregistered user row and emails a registration link. If the email already maps to a user, the user's global roles are replaced with the supplied set and no email is sent.
+         */
+        post: operations["inviteGlobalRolesUser"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/globalRoles/users": {
         parameters: {
             query?: never;
@@ -5620,12 +5640,7 @@ export interface components {
         AssignSiteT0TempDataRequestPayload: {
             /** Format: int64 */
             plantingSiteId: number;
-            strata?: components["schemas"]["StratumT0DataPayload"][];
-            /**
-             * @deprecated
-             * @description Use strata instead
-             */
-            zones?: components["schemas"]["ZoneT0DataPayload"][];
+            strata: components["schemas"]["StratumT0DataPayload"][];
         };
         AssignTerraformationContactRequestPayload: {
             /** Format: int64 */
@@ -7729,6 +7744,10 @@ export interface components {
             projects: components["schemas"]["FunderProjectDetailsPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        GetGlobalRolesUserResponsePayload: {
+            status: components["schemas"]["SuccessOrError"];
+            user: components["schemas"]["UserWithGlobalRolesPayload"];
+        };
         GetMapboxTokenResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             token: string;
@@ -8225,6 +8244,10 @@ export interface components {
         InviteFundingEntityFunderResponsePayload: {
             email: string;
             status: components["schemas"]["SuccessOrError"];
+        };
+        InviteGlobalRolesUserRequestPayload: {
+            email: string;
+            globalRoles: ("Super-Admin" | "Accelerator Admin" | "TF Expert" | "Read Only")[];
         };
         LineString: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
             coordinates: number[][];
@@ -10875,7 +10898,6 @@ export interface components {
             plots: components["schemas"]["PlotT0DataPayload"][];
             strata: components["schemas"]["StratumT0DataPayload"][];
             survivalRateIncludesTempPlots: boolean;
-            zones: components["schemas"]["ZoneT0DataPayload"][];
         };
         SpeciesDensityPayload: {
             density: number;
@@ -12316,15 +12338,6 @@ export interface components {
         YearlyIndicatorTargetPayload: {
             target?: number;
             year: number;
-        };
-        /**
-         * @deprecated
-         * @description Use strata instead
-         */
-        ZoneT0DataPayload: {
-            densityData: components["schemas"]["SpeciesDensityPayload"][];
-            /** Format: int64 */
-            plantingZoneId: number;
         };
     };
     responses: never;
@@ -17116,6 +17129,39 @@ export interface operations {
                 };
                 content: {
                     "application/json": string;
+                };
+            };
+        };
+    };
+    inviteGlobalRolesUser: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InviteGlobalRolesUserRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetGlobalRolesUserResponsePayload"];
+                };
+            };
+            /** @description The request was not valid. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
                 };
             };
         };
