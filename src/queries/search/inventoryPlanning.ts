@@ -134,7 +134,7 @@ const injectedRtkApi = api.injectEndpoints({
           count: 0,
         },
       }),
-      providesTags: [{ type: QueryTagTypes.SpeciesInventory, id: 'LIST' }],
+      providesTags: [{ type: QueryTagTypes.InventoryPlanning, id: 'LIST' }],
       transformResponse: (response: InventoryPlanningAvailableResponse): Map<number, number> => {
         const map = new Map<number, number>();
         response.results.forEach((s) => {

@@ -22,7 +22,6 @@ export enum QueryTagTypes {
   Splats = 'Splats',
   PlantingSeasonDates = 'PlantingSeasonDates',
   PlantingSeasons = 'PlantingSeasons',
-  SpeciesInventory = 'SpeciesInventory',
   PlantingSites = 'PlantingSites',
   ProjectInternalUsers = 'ProjectInternalUsers',
   ProjectModules = 'ProjectModules',
