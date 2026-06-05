@@ -283,23 +283,30 @@ const PlantingDateForm = ({
     });
   };
 
-  const performSave = async () => {
+  const performSave = async (notifyOptions?: { note: string }) => {
     if (!date) {
       setValidate(true);
       return false;
     }
     const speciesPayload = buildPayloadSpecies();
+    const payload = {
+      date,
+      species: speciesPayload,
+      ...(notifyOptions
+        ? { createNurseryRequest: true, nurseryRequestNotes: notifyOptions.note }
+        : {}),
+    };
     try {
       if (isEditing && editingScheduledDate) {
         await updateScheduledPlantingDate({
           plantingSeasonId: plantingSeason.id,
           scheduledPlantingDateId: editingScheduledDate.scheduledPlantingDateId,
-          scheduledPlantingDateRequestPayload: { date, species: speciesPayload },
+          scheduledPlantingDateRequestPayload: payload,
         }).unwrap();
       } else {
         await createScheduledPlantingDate({
           plantingSeasonId: plantingSeason.id,
-          scheduledPlantingDateRequestPayload: { date, species: speciesPayload },
+          scheduledPlantingDateRequestPayload: payload,
         }).unwrap();
       }
       return true;
@@ -315,8 +322,8 @@ const PlantingDateForm = ({
     }
   };
 
-  const onSaveAndNotify = async () => {
-    if (await performSave()) {
+  const onSaveAndNotify = async (note: string) => {
+    if (await performSave({ note })) {
       setNotifyModalOpen(false);
       onClose();
     }
@@ -398,7 +405,7 @@ const PlantingDateForm = ({
         <SaveAndNotifyNurseryModal
           open={true}
           onClose={() => setNotifyModalOpen(false)}
-          onConfirm={() => void onSaveAndNotify()}
+          onConfirm={(note) => void onSaveAndNotify(note)}
           busy={isSaving}
         />
       )}

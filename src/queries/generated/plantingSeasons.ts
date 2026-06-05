@@ -243,7 +243,9 @@ export type ListScheduledDatesResponsePayload = {
   status: SuccessOrError;
 };
 export type ScheduledPlantingDateRequestPayload = {
+  createNurseryRequest?: boolean;
   date: string;
+  nurseryRequestNotes?: string;
   species: ScheduledPlantingDateSpeciesPayload[];
 };
 export type GetScheduledDateResponsePayload = {
