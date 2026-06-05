@@ -29,13 +29,9 @@ import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
-import {
-  ActivityMediaFile,
-  activityTypeLabel,
-  isObservationActivity,
-  isUndeletableObservationPhoto,
-} from 'src/types/Activity';
+import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import { getPositionLabel, getQuadratLabel } from 'src/types/Observations';
+import { isObservationActivity, isUndeletableObservationPhoto } from 'src/utils/activityUtils';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';

@@ -45,8 +45,8 @@ import {
   UpdateActivityRequestPayload,
   activityStatusTagLabel,
   activityTypeLabel,
-  isObservationActivity,
 } from 'src/types/Activity';
+import { isObservationActivity } from 'src/utils/activityUtils';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useForm from 'src/utils/useForm';
 import useQuery from 'src/utils/useQuery';

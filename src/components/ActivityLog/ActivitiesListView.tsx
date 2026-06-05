@@ -42,10 +42,9 @@ import {
   ActivityType,
   activityStatusTagLabel,
   activityTypeLabel,
-  isObservationActivity,
 } from 'src/types/Activity';
 import { FieldOptionsMap, SearchNodePayload } from 'src/types/Search';
-import { groupActivitiesByQuarter } from 'src/utils/activityUtils';
+import { groupActivitiesByQuarter, isObservationActivity } from 'src/utils/activityUtils';
 import { CsvData } from 'src/utils/csv';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';

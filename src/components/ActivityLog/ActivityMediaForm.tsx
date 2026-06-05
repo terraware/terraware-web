@@ -16,14 +16,13 @@ import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
+import { ActivityMediaFile, AdminActivityMediaFile } from 'src/types/Activity';
 import {
-  ActivityMediaFile,
-  AdminActivityMediaFile,
   isCaptionReadOnly,
   isCornerPhoto,
   isObservationMedia,
   isUndeletableObservationPhoto,
-} from 'src/types/Activity';
+} from 'src/utils/activityUtils';
 import { shouldShowHeicPlaceholder } from 'src/utils/images';
 
 type NewActivityMediaFile = Omit<ActivityMediaFile, 'capturedDate' | 'fileId'> & {
