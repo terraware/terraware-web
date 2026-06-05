@@ -30,57 +30,57 @@ api.enhanceEndpoints({
       invalidatesTags: (_result, _error, plantingSeasonId) => [
         { type: QueryTagTypes.PlantingSeasons, id: plantingSeasonId },
         { type: QueryTagTypes.PlantingSeasons, id: 'LIST' },
+        { type: QueryTagTypes.PlantingSeasonDates, id: plantingSeasonId },
       ],
     },
     closePlantingSeason: {
       invalidatesTags: (_result, _error, plantingSeasonId) => [
         { type: QueryTagTypes.PlantingSeasons, id: plantingSeasonId },
         { type: QueryTagTypes.PlantingSeasons, id: 'LIST' },
+        { type: QueryTagTypes.PlantingSeasonDates, id: plantingSeasonId },
       ],
     },
     getSpeciesTargets: {
       providesTags: (_result, _error, plantingSeasonId) => [
-        { type: QueryTagTypes.PlantingSeasons, id: `${plantingSeasonId}-targets` },
+        { type: QueryTagTypes.PlantingSeasons, id: plantingSeasonId },
       ],
     },
     upsertSpeciesTarget: {
       invalidatesTags: (_result, _error, arg) => [
-        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-targets` },
-        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-summary` },
+        { type: QueryTagTypes.PlantingSeasons, id: arg.plantingSeasonId },
         { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
       ],
     },
     deleteSpeciesTarget: {
       invalidatesTags: (_result, _error, arg) => [
-        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-targets` },
-        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-summary` },
+        { type: QueryTagTypes.PlantingSeasons, id: arg.plantingSeasonId },
         { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
       ],
     },
     upsertAllocatedSpecies: {
       invalidatesTags: (_result, _error, arg) => [
-        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-summary` },
+        { type: QueryTagTypes.PlantingSeasons, id: arg.plantingSeasonId },
         { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
       ],
     },
     getScheduledPlantingDates: {
       providesTags: (_result, _error, plantingSeasonId) => [
-        { type: QueryTagTypes.PlantingSeasons, id: `${plantingSeasonId}-dates` },
+        { type: QueryTagTypes.PlantingSeasonDates, id: plantingSeasonId },
       ],
     },
     createScheduledPlantingDate: {
       invalidatesTags: (_result, _error, arg) => [
-        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-dates` },
+        { type: QueryTagTypes.PlantingSeasonDates, id: arg.plantingSeasonId },
       ],
     },
     updateScheduledPlantingDate: {
       invalidatesTags: (_result, _error, arg) => [
-        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-dates` },
+        { type: QueryTagTypes.PlantingSeasonDates, id: arg.plantingSeasonId },
       ],
     },
     deleteScheduledPlantingDate: {
       invalidatesTags: (_result, _error, arg) => [
-        { type: QueryTagTypes.PlantingSeasons, id: `${arg.plantingSeasonId}-dates` },
+        { type: QueryTagTypes.PlantingSeasonDates, id: arg.plantingSeasonId },
       ],
     },
   },

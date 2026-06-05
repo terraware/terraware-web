@@ -93,7 +93,10 @@ const injectedRtkApi = api.injectEndpoints({
           },
         };
       },
-      providesTags: [{ type: QueryTagTypes.InventoryPlanning, id: 'LIST' }],
+      providesTags: [
+        { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
+        { type: QueryTagTypes.PlantingSeasons, id: 'LIST' },
+      ],
       transformResponse: (response: InventoryPlanningSeasonSearchResponse) => response.results,
     }),
 
@@ -131,6 +134,7 @@ const injectedRtkApi = api.injectEndpoints({
           count: 0,
         },
       }),
+      providesTags: [{ type: QueryTagTypes.SpeciesInventory, id: 'LIST' }],
       transformResponse: (response: InventoryPlanningAvailableResponse): Map<number, number> => {
         const map = new Map<number, number>();
         response.results.forEach((s) => {
