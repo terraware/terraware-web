@@ -1483,6 +1483,7 @@ PLANTING_GOAL,Meta de plantación,a97123a1
 PLANTING_PROGRESS,Avance de plantación,58616da9
 PLANTING_PROGRESS_PERCENT,Progreso de la plantación (%),0d372a57
 PLANTING_PROGRESS_TOOLTIP,Progreso de los retiros en relación con la meta de plantación para esta temporada.,4cc685ea
+PLANTING_SEASON,Temporada de plantación,45c5c9f9
 PLANTING_SEASON_END,Término de temporada de plantación,414309c0
 PLANTING_SEASON_END_IN_PAST,La fecha de término no puede estar en el pasado.,b2729d4d
 PLANTING_SEASON_END_OUT_OF_RANGE,Debe ser entre 4 semanas y 1 año de la fecha de inicio.,fcca5463
