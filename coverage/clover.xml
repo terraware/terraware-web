@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1780687732620" clover="3.2.0">
-  <project timestamp="1780687732620" name="All files">
-    <metrics statements="1882" coveredstatements="1182" conditionals="936" coveredconditionals="398" methods="485" coveredmethods="198" elements="3303" coveredelements="1778" complexity="0" loc="1882" ncloc="1882" packages="17" files="40" classes="40"/>
+<coverage generated="1780688312504" clover="3.2.0">
+  <project timestamp="1780688312504" name="All files">
+    <metrics statements="1883" coveredstatements="1183" conditionals="936" coveredconditionals="398" methods="485" coveredmethods="198" elements="3304" coveredelements="1779" complexity="0" loc="1883" ncloc="1883" packages="17" files="40" classes="40"/>
     <package name="src">
-      <metrics statements="164" coveredstatements="164" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+      <metrics statements="165" coveredstatements="165" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
       <file name="constants.ts" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-01fe9d1de56580606-1/terraformation/terraware-web/src/constants.ts">
-        <metrics statements="164" coveredstatements="164" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <metrics statements="165" coveredstatements="165" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
         <line num="0" count="1" type="stmt"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
@@ -170,6 +170,7 @@
         <line num="167" count="1" type="stmt"/>
         <line num="168" count="1" type="stmt"/>
         <line num="169" count="1" type="stmt"/>
+        <line num="170" count="1" type="stmt"/>
       </file>
     </package>
     <package name="src.api.helpers">
