@@ -50,7 +50,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
   const { selectedOrganization } = useOrganization();
   const trackEvent = useTrackEvent();
   const { onClose, open, accession, user, reload, viabilityTest } = props;
-  const markSubmitted = useTrackModalAbandonment(viabilityTest ? 'viability_test_edit' : 'viability_test_create');
+  const markSubmitted = useTrackModalAbandonment(viabilityTest ? 'viability_test_edit' : 'viability_test_create', open);
 
   const [record, setRecord, onChange, onChangeCallback] = useForm(viabilityTest);
   const [users, setUsers] = useState<OrganizationUser[]>();

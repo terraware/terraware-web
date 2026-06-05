@@ -86,7 +86,11 @@ export type FunderActivityMediaFilePayload = {
 };
 export type FunderActivityObservationPayload = {
   completedTime: string;
+  isAdHoc: boolean;
   livePlants?: number;
+  /** If this was an ad-hoc observation, its plot number. Not set for assigned observations because they can include multiple plots. */
+  monitoringPlotNumber?: number;
+  observationType: 'Monitoring' | 'Biomass Measurements';
   plantDensity?: number;
   survivalRate?: number;
 };

@@ -42,7 +42,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
   const numberFormatter = useNumberFormatter();
   const snackbar = useSnackbar();
   const trackEvent = useTrackEvent();
-  const markSubmitted = useTrackModalAbandonment('batch_details_edit');
+  const markSubmitted = useTrackModalAbandonment('batch_details_edit', true);
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
 

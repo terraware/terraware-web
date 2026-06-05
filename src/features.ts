@@ -4,7 +4,6 @@ import env from 'src/utils/useEnvironment';
 export type FeatureName =
   | 'Show Production View'
   | 'Virtual Monitoring Plots'
-  | 'Weighted Survival Rates'
   | 'New Observation Results Tables'
   | 'Planting Seasons';
 
@@ -47,15 +46,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for virtual monitoring plots'],
-    disclosure: ['This is a WIP'],
-  },
-  {
-    name: 'Weighted Survival Rates',
-    preferenceName: 'weightedSurvivalRates',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Average strata survival rate on a weighted basis for planting sites'],
     disclosure: ['This is a WIP'],
   },
   {

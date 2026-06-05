@@ -6,10 +6,7 @@ import { FileChooser, Icon } from '@terraware/web-components';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useOrganization } from 'src/providers';
-import {
-  UploadOrganizationMediaRequestPayload,
-  useUploadOrganizationMediaFileMutation,
-} from 'src/queries/generated/organizationMedia';
+import { useUploadOrganizationMediaFileMutation } from 'src/queries/generated/organizationMedia';
 import { useGenerateOrganizationSplatMutation } from 'src/queries/generated/organizationSplats';
 import strings from 'src/strings';
 
@@ -78,13 +75,9 @@ const CreateVirtualWalkthroughStep1Modal = ({
       return;
     }
 
-    const formData = new FormData();
-    formData.append('file', selectedFile);
-    formData.append('payload', new Blob([JSON.stringify({})], { type: 'application/json' }));
-
     const uploadResult = await uploadMedia({
       organizationId: selectedOrganization.id,
-      body: formData as unknown as { file: Blob; payload: UploadOrganizationMediaRequestPayload },
+      body: { file: selectedFile, payload: {} },
     });
 
     if ('error' in uploadResult || !uploadResult.data?.fileId) {

@@ -38,7 +38,7 @@ const EditPlantingSeasonModal = ({
   const defaultTimeZone = useDefaultTimeZone().get().id;
   const snackbar = useSnackbar();
   const [updatePlantingSeason, { isLoading }] = useUpdatePlantingSeasonMutation();
-  const markSubmitted = useTrackModalAbandonment('planting_season_edit');
+  const markSubmitted = useTrackModalAbandonment('planting_season_edit', true);
 
   const [record, , onChange] = useForm<PlantingSeasonForm>({
     name: plantingSeason.name,

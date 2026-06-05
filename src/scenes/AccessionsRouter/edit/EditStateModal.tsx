@@ -22,7 +22,7 @@ export default function EditStateModal(props: EditStateModalProps): JSX.Element 
   const { onClose, open, accession, reload } = props;
   const [record, setRecord, onChange] = useForm(accession);
   const [editUsedUpStatus] = useState<boolean>(accession.state === 'Used Up');
-  const markSubmitted = useTrackModalAbandonment('accession_edit_state');
+  const markSubmitted = useTrackModalAbandonment('accession_edit_state', open);
 
   useEffect(() => {
     setRecord(accession);

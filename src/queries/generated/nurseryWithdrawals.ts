@@ -129,6 +129,7 @@ export type NurseryWithdrawalPayload = {
   notes?: string;
   plantingSeasonId?: number;
   purpose: 'Nursery Transfer' | 'Dead' | 'Out Plant' | 'Other' | 'Undo';
+  scheduledPlantingDateRequestId?: number;
   /** If purpose is "Undo", the ID of the withdrawal this one undoes. */
   undoesWithdrawalId?: number;
   /** If this withdrawal was undone, the ID of the withdrawal that undid it. */
@@ -157,6 +158,8 @@ export type CreateNurseryWithdrawalRequestPayload = {
   purpose: 'Nursery Transfer' | 'Dead' | 'Out Plant' | 'Other';
   /** If purpose is "Nursery Transfer", the estimated ready-by date to use for the batches that are created at the other nursery. */
   readyByDate?: string;
+  /** The ID of the planting date request's scheduled planting date, if this withdrawal should be associated with a request. Planting season id must be specified if this is specified. */
+  scheduledPlantingDateRequestId?: number;
   /** If purpose is "Out Plant", the ID of the substratum to which the seedlings were delivered. Must be specified if the planting site has substrata, but must be omitted or set to null if the planting site has no substrata. */
   substratumId?: number;
   withdrawnDate: string;

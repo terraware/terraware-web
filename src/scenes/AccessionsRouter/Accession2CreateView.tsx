@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -128,24 +128,22 @@ export default function CreateAccession(): JSX.Element | null {
     });
   }, [timeZone, setRecord]);
 
-  const accessionsDatabase = {
-    pathname: APP_PATHS.ACCESSIONS,
-  };
-
   const marginTop = {
     marginTop: theme.spacing(2),
   };
 
   const goToAccessions = () => {
-    navigate(accessionsDatabase);
+    navigate({
+      pathname: APP_PATHS.ACCESSIONS,
+    });
   };
 
-  const hasErrors = () => {
+  const hasErrors = useCallback(() => {
     const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
     return missingRequiredField || collectedDateError || receivedDateError;
-  };
+  }, [collectedDateError, receivedDateError, record]);
 
-  const saveAccession = async () => {
+  const saveAccession = useCallback(async () => {
     if (hasErrors()) {
       const missingFields = MANDATORY_FIELDS.filter((field: MandatoryField) => !record[field]);
       const fieldsWithErrors: string[] = [...missingFields];
@@ -183,7 +181,12 @@ export default function CreateAccession(): JSX.Element | null {
         has_project_assigned: record.projectId !== null && record.projectId !== undefined,
       });
 
-      navigate(accessionsDatabase, { replace: true });
+      navigate(
+        {
+          pathname: APP_PATHS.ACCESSIONS,
+        },
+        { replace: true }
+      );
       navigate({
         pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', accessionId.toString()),
       });
@@ -193,7 +196,18 @@ export default function CreateAccession(): JSX.Element | null {
     } finally {
       setIsSaving(false);
     }
-  };
+  }, [
+    collectedDateError,
+    createAccession,
+    hasErrors,
+    navigate,
+    photos,
+    receivedDateError,
+    record,
+    snackbar,
+    trackEvent,
+    uploadPhoto,
+  ]);
 
   const gridSize = () => (isMobile ? 12 : 6);
 

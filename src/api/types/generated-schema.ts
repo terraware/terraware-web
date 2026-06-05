@@ -5343,8 +5343,16 @@ export interface components {
             type: "Plot" | "Quadrat" | "Soil";
         };
         ActivityObservationPayload: {
+            isAdHoc: boolean;
+            /**
+             * Format: int64
+             * @description If this was an ad-hoc observation, its plot number. Not set for assigned observations because they can include multiple plots.
+             */
+            monitoringPlotNumber?: number;
             /** Format: int64 */
             observationId: number;
+            /** @enum {string} */
+            observationType: "Monitoring" | "Biomass Measurements";
         };
         ActivityPayload: {
             /** Format: date */
@@ -5396,8 +5404,13 @@ export interface components {
             type: "Plot" | "Quadrat" | "Soil";
         };
         AdminActivityObservationPayload: {
+            isAdHoc: boolean;
+            /** Format: int64 */
+            monitoringPlotNumber?: number;
             /** Format: int64 */
             observationId: number;
+            /** @enum {string} */
+            observationType: "Monitoring" | "Biomass Measurements";
         };
         AdminActivityPayload: {
             /** Format: int64 */
@@ -6554,6 +6567,11 @@ export interface components {
             readyByDate?: string;
             /**
              * Format: int64
+             * @description The ID of the planting date request's scheduled planting date, if this withdrawal should be associated with a request. Planting season id must be specified if this is specified.
+             */
+            scheduledPlantingDateRequestId?: number;
+            /**
+             * Format: int64
              * @description If purpose is "Out Plant", the ID of the substratum to which the seedlings were delivered. Must be specified if the planting site has substrata, but must be omitted or set to null if the planting site has no substrata.
              */
             substratumId?: number;
@@ -7074,7 +7092,7 @@ export interface components {
         };
         EventLogEntryPayload: {
             action: components["schemas"]["CreatedActionPayload"] | components["schemas"]["DeletedActionPayload"] | components["schemas"]["FieldUpdatedActionPayload"];
-            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
+            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
             /** Format: date-time */
             timestamp: string;
             /** Format: int64 */
@@ -7474,8 +7492,16 @@ export interface components {
         FunderActivityObservationPayload: {
             /** Format: date-time */
             completedTime: string;
+            isAdHoc: boolean;
             /** Format: int32 */
             livePlants?: number;
+            /**
+             * Format: int64
+             * @description If this was an ad-hoc observation, its plot number. Not set for assigned observations because they can include multiple plots.
+             */
+            monitoringPlotNumber?: number;
+            /** @enum {string} */
+            observationType: "Monitoring" | "Biomass Measurements";
             /** Format: int32 */
             plantDensity?: number;
             /** Format: int32 */
@@ -8342,7 +8368,7 @@ export interface components {
             /** Format: int64 */
             projectId?: number;
             /** @description If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
-            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "PlantingSeason" | "PlantingSeasonScheduledDate" | "Project" | "RecordedTree")[];
+            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "PlantingSeason" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "Project" | "RecordedTree")[];
         };
         ListEventLogEntriesResponsePayload: {
             events: components["schemas"]["EventLogEntryPayload"][];
@@ -9101,6 +9127,8 @@ export interface components {
             plantingSeasonId?: number;
             /** @enum {string} */
             purpose: "Nursery Transfer" | "Dead" | "Out Plant" | "Other" | "Undo";
+            /** Format: int64 */
+            scheduledPlantingDateRequestId?: number;
             /**
              * Format: int64
              * @description If purpose is "Undo", the ID of the withdrawal this one undoes.
@@ -9339,6 +9367,7 @@ export interface components {
             strata: components["schemas"]["ObservationStratumResultsPayload"][];
             /** Format: int32 */
             survivalRate?: number;
+            survivalRateCalculationInProgress: boolean;
             /** Format: int32 */
             survivalRateStdDev?: number;
             /** Format: int32 */
@@ -9718,6 +9747,29 @@ export interface components {
             startDate: string;
             /** @enum {string} */
             status: "Active" | "Upcoming" | "Past End Date" | "Closed";
+        };
+        PlantingSeasonScheduledDateSpeciesSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            plantingSeasonId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            /** Format: int64 */
+            scheduledPlantingDateId: number;
+            scientificName?: string;
+            /** Format: int64 */
+            speciesId: number;
+            stratumName: string;
+            /** Format: int64 */
+            substratumHistoryId: number;
+            /** Format: int64 */
+            substratumId: number;
+            substratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlantingSeasonScheduledDateSpecies";
         };
         PlantingSeasonScheduledDateSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
             /** Format: int64 */
@@ -10663,8 +10715,10 @@ export interface components {
             species: components["schemas"]["ScheduledPlantingDateSpeciesPayload"][];
         };
         ScheduledPlantingDateRequestPayload: {
+            createNurseryRequest?: boolean;
             /** Format: date */
             date: string;
+            nurseryRequestNotes?: string;
             species: components["schemas"]["ScheduledPlantingDateSpeciesPayload"][];
         };
         ScheduledPlantingDateSpeciesPayload: {
@@ -10702,7 +10756,7 @@ export interface components {
             cursor?: string;
             fields: string[];
             filters?: components["schemas"]["PrefixedSearch"][];
-            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingSeasonAllocatedSpeciesTable" | "plantingSeasonScheduledDates" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "scheduledPlantingDateSpeciesTable" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
+            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingDateRequestSpecies" | "plantingDateRequests" | "plantingSeasonAllocatedSpeciesTable" | "plantingSeasonScheduledDates" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "scheduledPlantingDateSpeciesTable" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
             search?: components["schemas"]["SearchNodePayload"];
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
         };

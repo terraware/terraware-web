@@ -24,7 +24,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
-  const markSubmitted = useTrackModalAbandonment('batch_details_view');
+  const markSubmitted = useTrackModalAbandonment('batch_details_view', true);
 
   const [doValidateBatch, setDoValidateBatch] = useState<boolean>(false);
   const [requestId, setRequestId] = useState('');

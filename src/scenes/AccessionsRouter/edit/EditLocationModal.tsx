@@ -36,7 +36,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
     : [];
   const [subLocations, setSubLocations] = useState<SubLocation[]>([]);
   const snackbar = useSnackbar();
-  const markSubmitted = useTrackModalAbandonment('accession_edit_location');
+  const markSubmitted = useTrackModalAbandonment('accession_edit_location', open);
 
   const newRecord = {
     facilityId: accession.facilityId || 0,
