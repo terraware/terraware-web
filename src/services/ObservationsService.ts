@@ -26,9 +26,17 @@ const OBSERVATION_EXPORT_ENDPOINT = '/api/v1/tracking/observations/{observationI
 const REPLACE_OBSERVATION_PLOT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace';
 const PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDPOINT = '/api/v1/tracking/observations/results/summaries';
 const ABANDON_OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}/abandon';
+const OBSERVATION_OTHER_MEDIA_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/otherMedia';
+const OBSERVATION_PLOT_PHOTO_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos/{fileId}';
 
 type AdHocObservationsPayload =
   paths[typeof AD_HOC_OBSERVATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+
+type UploadOtherPlotMediaResponse =
+  paths[typeof OBSERVATION_OTHER_MEDIA_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+
+type DeletePlotPhotoResponse =
+  paths[typeof OBSERVATION_PLOT_PHOTO_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 
 type AdHocObservationResultsPayload =
   paths[typeof AD_HOC_OBSERVATION_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -459,6 +467,34 @@ const abandonObservation = async (observationId: number): Promise<Response> => {
   });
 };
 
+const uploadOtherPlotMedia = async (
+  observationId: number,
+  plotId: number,
+  mediaData: FormData
+): Promise<Response2<UploadOtherPlotMediaResponse>> => {
+  return HttpService.root(OBSERVATION_OTHER_MEDIA_ENDPOINT).post2<UploadOtherPlotMediaResponse>({
+    entity: mediaData,
+    urlReplacements: {
+      '{observationId}': observationId.toString(),
+      '{plotId}': plotId.toString(),
+    },
+  });
+};
+
+const deletePlotMedia = async (
+  observationId: number,
+  plotId: number,
+  fileId: number
+): Promise<Response2<DeletePlotPhotoResponse>> => {
+  return HttpService.root(OBSERVATION_PLOT_PHOTO_ENDPOINT).delete2<DeletePlotPhotoResponse>({
+    urlReplacements: {
+      '{observationId}': observationId.toString(),
+      '{plotId}': plotId.toString(),
+      '{fileId}': fileId.toString(),
+    },
+  });
+};
+
 const listAdHocObservationResults = async (
   organizationId: number,
   plantingSiteId?: number
@@ -500,6 +536,8 @@ const ObservationsService = {
   getOneObservationResult: getOneObservationResults,
   getPlantingSiteObservationsSummaries,
   abandonObservation,
+  deletePlotMedia,
+  uploadOtherPlotMedia,
   listAdHocObservationResults,
   listPlantingSiteObservations,
   listPlantingSiteObservationResults,

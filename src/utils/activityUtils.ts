@@ -1,3 +1,4 @@
+import { components } from 'src/api/types/generated-schema';
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import defaultStrings from 'src/strings';
 
@@ -53,3 +54,53 @@ export function groupActivitiesByQuarter(
     activities: groups[quarterKey],
   }));
 }
+
+// All three observation media payload variants (Activity, Admin, Funder) are structurally identical;
+// we alias one of them as the canonical type for the shared helpers below.
+export type ObservationActivityMedia = components['schemas']['AdminActivityObservationMediaFilePayload'];
+
+/**
+ * Returns true when the activity was automatically created from a TW observation.
+ * Use this (not `type === 'Monitoring'`) to gate observation-specific behavior — users can
+ * also create Monitoring activities manually, which should not be treated as observation activities.
+ */
+export const isObservationActivity = (activity: {
+  observation?: { observationId?: number };
+}): activity is typeof activity & { observation: { observationId: number } } =>
+  activity.observation?.observationId !== undefined;
+
+/** Returns true when the given activity media file originated from an observation. */
+export const isObservationMedia = (media: {
+  observation?: ObservationActivityMedia;
+}): media is typeof media & { observation: ObservationActivityMedia } => media.observation !== undefined;
+
+/** Returns true for corner photos (position is set). Corner captions are read-only and undeletable. */
+export const isCornerPhoto = (media: { observation?: ObservationActivityMedia }): boolean =>
+  media.observation?.position !== undefined;
+
+/**
+ * Returns true for media types that cannot be deleted per PRD: corner, quadrat, and soil photos.
+ * Plot-type photos without a corner position may be deletable depending on whether they were
+ * uploaded as part of the original observation (determined from observation results by fileId).
+ */
+export const isUndeletableObservationPhoto = (media: { observation?: ObservationActivityMedia }): boolean => {
+  if (!media.observation) {
+    return false;
+  }
+  return (
+    media.observation.position !== undefined ||
+    media.observation.type === 'Quadrat' ||
+    media.observation.type === 'Soil'
+  );
+};
+
+/**
+ * Returns true for media types whose captions are not editable per PRD: corner and quadrat photos.
+ * Soil and plot-type photos have editable captions.
+ */
+export const isCaptionReadOnly = (media: { observation?: ObservationActivityMedia }): boolean => {
+  if (!media.observation) {
+    return false;
+  }
+  return media.observation.position !== undefined || media.observation.type === 'Quadrat';
+};

@@ -490,6 +490,8 @@ DELETE_CONFIRMATION_MODAL_MAIN_TEXT,Êtes-vous sûr de vouloir supprimer l'espè
 DELETE_FUNDING_ENTITY,Supprimer l’entité de financement,7d8a1f95
 DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,Tous les financeurs associés à cette entité de financement seront supprimés.,cedce711
 DELETE_FUNDING_ENTITY_MESSAGE,Vous êtes sur le point de supprimer {0}.,4a41e34f
+DELETE_OBSERVATION_PHOTO_MESSAGE,Cette photo sera également supprimée de l'observation associée. Cette action est irréversible.,cd60484f
+DELETE_OBSERVATION_PHOTO_TITLE,Supprimer la photo de l'observation,e92e9851
 DELETE_ORGANIZATION,Supprimer l'organisation,91c84420
 DELETE_ORGANIZATION_MSG,Voulez-vous vraiment supprimer {0} ?,a932473f
 DELETE_PLANTING_SEASON,Supprimer la saison de plantation,dda3774d
@@ -1138,6 +1140,7 @@ MODULES_FOR_PROJECT,Modules pour {0},5d950bb2
 MODULES_IMPORT_COMPLETE,Importation des données des modules terminée !,76a99df8
 MONITORING,Surveillance,c607ad35
 MONITORING_PLOT,Placette de suivi,97de3243
+MONITORING_PLOT_REQUIRED,La parcelle de suivi est requise.,ba488e0f
 MONITORING_PLOT_TYPE,Type de placette de suivi,5269e047
 MONITORING_PLOTS,Placettes de suivi,42428fbb
 MONITORS,Moniteurs,5783929b
@@ -1311,8 +1314,10 @@ NURSERY_REQUIRED,Pépinière *,809fa5b6
 NURSERY_TRANSFER,Transfert de pépinière,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Les transferts de pépinières nécessitent une pépinière d'origine et une pépinière de destination.,7fe70d84
 OBSERVATION,Observation,ac4f24f0
+OBSERVATION_ACTIVITY_AUTO_CREATED_INFO,Cette activité a été créée automatiquement à partir de l’Observation {0}. Les données extraites de l’observation ne peuvent pas être modifiées ici.,785c7f71
 OBSERVATION_DATA,Données d’observation,7e9f4079
 OBSERVATION_DATE,Date de l’observation,62a4f110
+OBSERVATION_DETAILS,Détails de l'observation,3233a88a
 OBSERVATION_END_DATE,Date de fin de l'observation,7997df5c
 OBSERVATION_ENDED,Observation terminée,dc4f5f65
 OBSERVATION_ENDED_MESSAGE,L'observation {0} est terminée.,95cf320e
@@ -1321,11 +1326,14 @@ OBSERVATION_EVENT_SCHEDULED,Un événement d'observation est prévu pour le {0} 
 OBSERVATION_EVENTS,Événements d'observation,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Les observations antérieures apparaissent avec une opacité décroissante.,03c6ea26
 OBSERVATION_PERIOD_WARN,La période d'observation ne peut excéder deux mois.,364a36c6
+OBSERVATION_PHOTO_CANNOT_DELETE_INFO,Les photos des coins de la parcelle ne peuvent pas être supprimées.,f045e547
+OBSERVATION_PHOTO_CANNOT_DELETE_TOOLTIP,Cette photo a été prise lors de l'observation et ne peut pas être supprimée.,c127ed8e
 OBSERVATION_PHOTOS_VIDEOS,Photos/Vidéos d'observation,95e219ea
 OBSERVATION_RESCHEDULED,Observation reportée !,583d8d94
 OBSERVATION_SCHEDULED,Observation programmée !,2022ad09
 OBSERVATION_SMALL_SITE_WARNING,Vous planifiez une observation pour un site potentiellement trop petit pour l'attribution de parcelles de surveillance. Vous serez averti·e si l'attribution de parcelles de surveillance et le début de l'observation posent des problèmes. Vous pouvez également effectuer une observation ad hoc des parcelles pour ce site.,5fa79765
 OBSERVATION_START_DATE,Date de début de l'observation,b1807781
+OBSERVATION_TYPE_DATE_READONLY_TOOLTIP,Le type d'activité et la date sont définis à partir de l'observation liée et ne peuvent pas être modifiés.,6c0c2ca8
 OBSERVATIONS,Observations,8169f17c
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,Il n'y a actuellement aucune observation relative à une parcelle désignée.,90adba3a
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Des observations avec des parcelles désignées peuvent être programmées pour les sites de plantations desquelles des végétaux furent précédemment alloués par le biais de retraits d'inventaire.,535c7f37
@@ -1642,6 +1650,7 @@ PUBLISHED_REPORT_CONSOLE_WARNING,"Vous consultez le dernier rapport publié, cel
 PURPOSE,But,ff06abab
 PURPOSE_REQUIRED,But *,3f585469
 QUADRAT,Carré d’échantillonnage,ff115cb6
+QUADRAT_PHOTO_CANNOT_DELETE_INFO,Les photos de quadrat ne peuvent pas être supprimées.,264a9867
 QUADRAT_PHOTOS,Photos de quadrat,be63ed72
 QUADRAT_PHOTOS_CANNOT_BE_DELETED,Les photos de quadrats ne peuvent pas être supprimées.,24cf5aff
 QUANTITY,Quantité,5130efc1
@@ -1834,7 +1843,9 @@ SAVE_CHANGES,Sauvegarder les modifications,cb5e8c33
 SAVE_OBSERVATION_DATA,Enregistrer les données d'observation,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Vos modifications remplaceront toutes les données saisies précédemment. Êtes-vous sûr de vouloir effectuer ces modifications ?,b1657c44
 SAVE_PHOTOS_AND_VIDEOS,Enregistrer les photos et vidéos,d38ce0cc
-SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,Vous apportez des modifications aux photos et vidéos associées à cette parcelle d’observation. Êtes-vous sûr de vouloir effectuer ces modifications ?,8cfdcf97
+SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,"Vous êtes sur le point de modifier les photos et vidéos associées à une Observation dans {0} pour {1}.
+
+Êtes-vous sûr de vouloir effectuer ces modifications ?",81b6df07
 SAVE_PLANT_DENSITY,Enregistrer la densité de plantation,73135113
 SAVE_PROJECT_BOUNDARIES,Sauvegarder les limites du projet,d206ddd9
 SAVE_VERSION,Enregistrer la version,5afacff0
@@ -2016,6 +2027,7 @@ SOIL_ASSESSMENT_DESCRIPTION_NOTES,Description/Notes de l’évaluation du sol,c6
 SOIL_EROSION,Érosion des sols,5620daeb
 SOIL_PHOTO,Photo du sol,5a089072
 SOIL_PHOTO_CANNOT_BE_DELETED,La photo du sol ne peut pas être supprimée.,5b7af46a
+SOIL_PHOTO_CANNOT_DELETE_INFO,Les photos de sol ne peuvent pas être supprimées.,07d41270
 SOMETHING_WENT_WRONG,Une erreur s'est produite.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si vous avez des difficultés à utiliser Terraware, veuillez nous signaler tout problème que vous rencontrez et nous ferons le nécessaire pour y remédier.",c506e77d
 SOMETHING_WENT_WRONG_TITLE,Une erreur s'est produite...,bf2e66a4
@@ -2475,6 +2487,7 @@ VIEW_HISTORY,Voir l'historique,a1dbe2ca
 VIEW_IN_MAP,Afficher sur la carte,510d8388
 VIEW_INTERNAL_REPORT_FORM,Afficher le formulaire de rapport interne,67f51c8a
 VIEW_MAP,Voir la carte,8ef1dcc4
+VIEW_OBSERVATION,Voir l'observation,9edac640
 VIEW_PLANTING_PROGRESS,Voir l'avancement des plantations,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Voir la soumission de la présélection,7dadf2e6
 VIEW_PUBLISHED_FUNDER_REPORT,Afficher le rapport publié destiné aux donateurs,8dbc3bb4

@@ -1,17 +1,33 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, FormControlLabel, Grid, Radio, Typography, useTheme } from '@mui/material';
-import { Button, Checkbox, FileChooser, Textfield } from '@terraware/web-components';
+import {
+  Button,
+  Checkbox,
+  DialogBox,
+  Dropdown,
+  FileChooser,
+  Icon,
+  IconTooltip,
+  Textfield,
+} from '@terraware/web-components';
 
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { ActivityMediaFile, AdminActivityMediaFile } from 'src/types/Activity';
+import {
+  isCaptionReadOnly,
+  isCornerPhoto,
+  isObservationMedia,
+  isUndeletableObservationPhoto,
+} from 'src/utils/activityUtils';
 import { shouldShowHeicPlaceholder } from 'src/utils/images';
 
 type NewActivityMediaFile = Omit<ActivityMediaFile, 'capturedDate' | 'fileId'> & {
   file: File;
+  monitoringPlotId?: number;
 };
 
 export type NewActivityMediaItem = {
@@ -24,6 +40,7 @@ export type ExistingActivityMediaItem = {
   data: ActivityMediaFile | AdminActivityMediaFile;
   isModified?: boolean;
   isDeleted?: boolean;
+  monitoringPlotId?: number;
 };
 
 export type ActivityMediaItem = NewActivityMediaItem | ExistingActivityMediaItem;
@@ -36,30 +53,40 @@ type ActivityPhotoPreviewProps = {
   activityId?: number;
   currentPosition: number;
   focused?: boolean;
+  isAdHoc?: boolean;
   isLast?: boolean;
+  isObsActivity: boolean;
   maxPosition: number;
   mediaItem: ActivityMediaItem;
   onClick?: () => void;
   onCoverPhotoChange: (isCover: boolean) => void;
   onDelete: () => void;
   onHiddenOnMapChange: (isHidden: boolean) => void;
+  onPlotChange: (plotId: number | null) => void;
   onPositionChange: (newPosition: number) => void;
+  plotOptions?: { plotId: number; plotNumber: number }[];
   setCaption: (caption: string) => void;
+  validateFields?: boolean;
 };
 
 const ActivityPhotoPreview = ({
   activityId,
   currentPosition,
   focused,
+  isAdHoc,
   isLast,
+  isObsActivity,
   maxPosition,
   mediaItem,
   onClick,
   onCoverPhotoChange,
   onDelete,
   onHiddenOnMapChange,
+  onPlotChange,
   onPositionChange,
+  plotOptions,
   setCaption,
+  validateFields,
 }: ActivityPhotoPreviewProps) => {
   const { strings } = useLocalization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
@@ -112,6 +139,54 @@ const ActivityPhotoPreview = ({
   }, [mediaItem, strings]);
 
   const isHiddenOnMap = useMemo(() => mediaItem.data.isHiddenOnMap, [mediaItem]);
+
+  const isObsMedia = useMemo(() => mediaItem.type === 'existing' && isObservationMedia(mediaItem.data), [mediaItem]);
+
+  const isUndeletable = useMemo(
+    () => isObsMedia && mediaItem.type === 'existing' && isUndeletableObservationPhoto(mediaItem.data),
+    [isObsMedia, mediaItem]
+  );
+
+  const undeletableMessage = useMemo(() => {
+    if (!isUndeletable || mediaItem.type !== 'existing') {
+      return undefined;
+    }
+    if (isCornerPhoto(mediaItem.data)) {
+      return strings.OBSERVATION_PHOTO_CANNOT_DELETE_INFO;
+    }
+    if (mediaItem.data.observation?.type === 'Quadrat') {
+      return strings.QUADRAT_PHOTO_CANNOT_DELETE_INFO;
+    }
+    if (mediaItem.data.observation?.type === 'Soil') {
+      return strings.SOIL_PHOTO_CANNOT_DELETE_INFO;
+    }
+    return strings.OBSERVATION_PHOTO_CANNOT_DELETE_INFO;
+  }, [isUndeletable, mediaItem, strings]);
+
+  const isCaptionRO = useMemo(
+    () => isObsMedia && mediaItem.type === 'existing' && isCaptionReadOnly(mediaItem.data),
+    [isObsMedia, mediaItem]
+  );
+
+  const obsMonitoringPlotNumber = useMemo(() => {
+    if (mediaItem.type === 'existing' && isObsMedia) {
+      return mediaItem.data.observation?.monitoringPlotNumber;
+    }
+    return undefined;
+  }, [isObsMedia, mediaItem]);
+
+  const selectedPlotId = useMemo(() => {
+    if (mediaItem.type === 'new') {
+      return mediaItem.data.monitoringPlotId;
+    }
+    if (mediaItem.monitoringPlotId !== undefined) {
+      return mediaItem.monitoringPlotId;
+    }
+    if (obsMonitoringPlotNumber !== undefined) {
+      return plotOptions?.find((p) => p.plotNumber === obsMonitoringPlotNumber)?.plotId;
+    }
+    return undefined;
+  }, [mediaItem, obsMonitoringPlotNumber, plotOptions]);
 
   const setCaptionCallback = useCallback(
     (value: any) => {
@@ -221,6 +296,14 @@ const ActivityPhotoPreview = ({
 
         <Grid item sm={true} xs={12}>
           <Box display='flex' flexDirection='column'>
+            {isUndeletable && undeletableMessage && (
+              <Box display='flex' alignItems='center' gap={1} marginBottom={theme.spacing(2)} width='100%'>
+                <Icon name='info' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
+                <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+                  {undeletableMessage}
+                </Typography>
+              </Box>
+            )}
             <Box alignItems='center' display='flex' flexDirection='row' gap={1} marginBottom={theme.spacing(2)}>
               <Button
                 disabled={currentPosition <= 1}
@@ -294,33 +377,86 @@ const ActivityPhotoPreview = ({
               )}
             </Box>
 
-            <Button
-              icon='iconTrashCan'
-              label={strings.DELETE}
-              onClick={onDelete}
-              priority='ghost'
-              style={{
-                justifyContent: 'flex-start',
-                marginBottom: 0,
-                marginLeft: '-8px',
-                marginTop: 0,
-                maxWidth: '160px',
-                paddingLeft: '8px',
-              }}
-              type='destructive'
-            />
+            {isUndeletable ? (
+              isObsActivity ? null : (
+                <Box alignItems='center' display='flex' gap={1}>
+                  <Button
+                    disabled
+                    icon='iconTrashCan'
+                    label={strings.DELETE}
+                    onClick={() => undefined}
+                    priority='ghost'
+                    style={{
+                      justifyContent: 'flex-start',
+                      marginBottom: 0,
+                      marginLeft: '-8px',
+                      marginTop: 0,
+                      maxWidth: '160px',
+                      paddingLeft: '8px',
+                    }}
+                    type='destructive'
+                  />
+                  <IconTooltip title={strings.OBSERVATION_PHOTO_CANNOT_DELETE_TOOLTIP} />
+                </Box>
+              )
+            ) : (
+              <Button
+                icon='iconTrashCan'
+                label={strings.DELETE}
+                onClick={onDelete}
+                priority='ghost'
+                style={{
+                  justifyContent: 'flex-start',
+                  marginBottom: 0,
+                  marginLeft: '-8px',
+                  marginTop: 0,
+                  maxWidth: '160px',
+                  paddingLeft: '8px',
+                }}
+                type='destructive'
+              />
+            )}
           </Box>
         </Grid>
 
         <Grid item xs={12}>
-          <Textfield
-            id={`caption-${mediaItem.type === 'new' ? mediaItem.data.file.name : mediaItem.data.fileId}`}
-            label={strings.CAPTION}
-            onChange={setCaptionCallback}
-            type='text'
-            value={caption}
-            maxLength={200}
-          />
+          <Box alignItems='flex-start' display='flex' gap={1}>
+            <Box flex={1}>
+              {isCaptionRO ? (
+                <Box>
+                  <Typography
+                    fontSize='14px'
+                    sx={{ color: theme.palette.TwClrTxtSecondary, marginBottom: theme.spacing(1) }}
+                  >
+                    {strings.CAPTION}
+                  </Typography>
+                  <Typography fontSize='16px'>{caption || '—'}</Typography>
+                </Box>
+              ) : (
+                <Textfield
+                  id={`caption-${mediaItem.type === 'new' ? mediaItem.data.file.name : mediaItem.data.fileId}`}
+                  label={strings.CAPTION}
+                  onChange={setCaptionCallback}
+                  type='text'
+                  value={caption}
+                  maxLength={200}
+                />
+              )}
+            </Box>
+            {isObsActivity && !isUndeletable && !isAdHoc && mediaItem.type === 'new' && (
+              <Box flexShrink={0} width='120px'>
+                <Dropdown
+                  errorText={validateFields && selectedPlotId === undefined ? strings.REQUIRED_FIELD : ''}
+                  fullWidth
+                  label={strings.MONITORING_PLOT}
+                  onChange={(value) => onPlotChange(value !== null && value !== undefined ? Number(value) : null)}
+                  options={plotOptions?.map((p) => ({ label: String(p.plotNumber), value: String(p.plotId) })) ?? []}
+                  required
+                  selectedValue={selectedPlotId !== undefined ? String(selectedPlotId) : null}
+                />
+              </Box>
+            )}
+          </Box>
         </Grid>
       </Grid>
     </Box>
@@ -330,21 +466,54 @@ const ActivityPhotoPreview = ({
 export interface ActivityMediaFormProps {
   activityId?: number;
   focusedFileId?: number;
+  isAdHoc?: boolean;
   maxFiles?: number;
   mediaItems: ActivityMediaItem[];
+  obsConfirmContext?: { monthYear: string; projectName: string };
+  observationId?: number;
+  plotOptions?: { plotId: number; plotNumber: number }[];
   onClickMediaItem: (fileId: number) => () => void;
   onChangeMediaItems: React.Dispatch<React.SetStateAction<ActivityMediaItem[]>>;
+  validateFields?: boolean;
 }
 
 export default function ActivityMediaForm({
   activityId,
   focusedFileId,
+  isAdHoc,
   maxFiles = MAX_FILES,
   mediaItems,
+  obsConfirmContext,
+  observationId,
+  plotOptions,
   onClickMediaItem,
   onChangeMediaItems,
+  validateFields,
 }: ActivityMediaFormProps): JSX.Element {
   const { strings } = useLocalization();
+
+  const isObsActivity = observationId !== undefined;
+
+  // Auto-select the plot when there is exactly one option available
+  useEffect(() => {
+    if (!plotOptions || plotOptions.length !== 1) {
+      return;
+    }
+    const soloPlotId = plotOptions[0].plotId;
+    const hasUnassigned = mediaItems.some((item) => item.type === 'new' && item.data.monitoringPlotId === undefined);
+    if (!hasUnassigned) {
+      return;
+    }
+    onChangeMediaItems((prev) =>
+      prev.map((item) =>
+        item.type === 'new' && item.data.monitoringPlotId === undefined
+          ? { ...item, data: { ...item.data, monitoringPlotId: soloPlotId } }
+          : item
+      )
+    );
+  }, [plotOptions, mediaItems, onChangeMediaItems]);
+
+  const [deleteConfirmationIndex, setDeleteConfirmationIndex] = useState<number | undefined>();
 
   const visibleMediaItems = useMemo(
     () => mediaItems.filter((item) => item.type === 'new' || !item.isDeleted),
@@ -477,6 +646,53 @@ export default function ActivityMediaForm({
     [mediaItems, onChangeMediaItems]
   );
 
+  const handleDeleteRequest = useCallback(
+    (index: number) => () => {
+      const mediaItem = mediaItems[index];
+      const needsConfirmation =
+        mediaItem.type === 'existing' &&
+        (obsConfirmContext !== undefined ||
+          (isObservationMedia(mediaItem.data) && !isUndeletableObservationPhoto(mediaItem.data)));
+      if (needsConfirmation) {
+        setDeleteConfirmationIndex(index);
+      } else {
+        getDeletePhoto(index)();
+      }
+    },
+    [mediaItems, getDeletePhoto, obsConfirmContext]
+  );
+
+  const confirmDeleteObservationMedia = useCallback(() => {
+    if (deleteConfirmationIndex !== undefined) {
+      getDeletePhoto(deleteConfirmationIndex)();
+      setDeleteConfirmationIndex(undefined);
+    }
+  }, [deleteConfirmationIndex, getDeletePhoto]);
+
+  const getUpdatePlotId = useCallback(
+    (index: number) => (plotId: number | null) => {
+      const updatedItems = mediaItems.map((mediaItem, i) => {
+        if (index !== i) {
+          return mediaItem;
+        }
+        if (mediaItem.type === 'new') {
+          return {
+            ...mediaItem,
+            data: { ...mediaItem.data, monitoringPlotId: plotId ?? undefined },
+          };
+        } else {
+          return {
+            ...mediaItem,
+            monitoringPlotId: plotId ?? undefined,
+            isModified: true,
+          };
+        }
+      });
+      onChangeMediaItems(updatedItems);
+    },
+    [mediaItems, onChangeMediaItems]
+  );
+
   const getUpdatePosition = useCallback(
     (currentIndex: number) => (newPosition: number) => {
       const targetIndex = newPosition - 1;
@@ -516,6 +732,40 @@ export default function ActivityMediaForm({
 
   return (
     <>
+      {deleteConfirmationIndex !== undefined && (
+        <DialogBox
+          onClose={() => setDeleteConfirmationIndex(undefined)}
+          open={true}
+          title={obsConfirmContext ? strings.SAVE_PHOTOS_AND_VIDEOS : strings.DELETE_OBSERVATION_PHOTO_TITLE}
+          size='medium'
+          middleButtons={[
+            <Button
+              id='cancelDeleteObservationPhoto'
+              key='button-cancel'
+              label={strings.CANCEL}
+              onClick={() => setDeleteConfirmationIndex(undefined)}
+              priority='secondary'
+              type='passive'
+            />,
+            <Button
+              id='confirmDeleteObservationPhoto'
+              key='button-confirm'
+              label={obsConfirmContext ? strings.CONTINUE : strings.DELETE}
+              onClick={confirmDeleteObservationMedia}
+              type='destructive'
+            />,
+          ]}
+          message={
+            obsConfirmContext
+              ? strings.formatString(
+                  strings.SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,
+                  obsConfirmContext.monthYear,
+                  obsConfirmContext.projectName
+                )
+              : strings.DELETE_OBSERVATION_PHOTO_MESSAGE
+          }
+        />
+      )}
       <Grid item xs={12}>
         {!fileLimitReached && (
           <FileChooser
@@ -549,16 +799,21 @@ export default function ActivityMediaForm({
               activityId={activityId}
               currentPosition={currentPosition}
               focused={mediaItem.type === 'existing' && mediaItem.data.fileId === focusedFileId}
+              isAdHoc={isAdHoc}
               isLast={visibleIndex === visibleMediaItems.length - 1}
+              isObsActivity={isObsActivity}
               key={`photo-${index}`}
               maxPosition={visibleMediaItems.length}
               onClick={mediaItem.type === 'existing' ? onClickMediaItem(mediaItem.data.fileId) : undefined}
               onCoverPhotoChange={getSetCoverPhoto(index)}
-              onDelete={getDeletePhoto(index)}
+              onDelete={handleDeleteRequest(index)}
               onHiddenOnMapChange={getSetHiddenOnMap(index)}
+              onPlotChange={getUpdatePlotId(index)}
               onPositionChange={getUpdatePosition(visibleIndex)}
               mediaItem={mediaItem}
+              plotOptions={plotOptions}
               setCaption={getUpdatePhotoCaption(index)}
+              validateFields={validateFields}
             />
           );
         })}

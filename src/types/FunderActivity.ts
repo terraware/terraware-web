@@ -1,3 +1,10 @@
 import { components } from 'src/api/types/generated-schema';
 
-export type FunderActivity = components['schemas']['FunderActivityPayload'];
+// FunderActivityObservationPayload contains summary metrics but no observationId.
+// The `observationId?: never` intersection keeps the TypedActivity union type-safe
+// when code accesses `.observation?.observationId` across all payload variants.
+type FunderActivityObservation = components['schemas']['FunderActivityObservationPayload'] & { observationId?: never };
+
+export type FunderActivity = Omit<components['schemas']['FunderActivityPayload'], 'observation'> & {
+  observation?: FunderActivityObservation;
+};
