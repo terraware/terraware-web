@@ -20,6 +20,7 @@ import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { useLazyCountNurseryWithdrawalsQuery } from 'src/queries/search/nurseries';
 import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -62,6 +63,7 @@ export default function NavBar({
   const isSeedBanksRoute = useMatch({ path: APP_PATHS.SEED_BANKS + '/', end: false });
   const isNurseriesRoute = useMatch({ path: APP_PATHS.NURSERIES + '/', end: false });
   const isInventoryRoute = useMatch({ path: APP_PATHS.INVENTORY + '/', end: false });
+  const isInventoryPlanningRoute = useMatch({ path: APP_PATHS.INVENTORY_PLANNING + '/', end: false });
   const isBatchWithdrawRoute = useMatch({ path: APP_PATHS.BATCH_WITHDRAW + '/', end: false });
   const isPlantingSitesRoute = useMatch({ path: APP_PATHS.PLANTING_SITES + '/', end: false });
   const isPlantsDashboardRoute = useMatch({ path: APP_PATHS.PLANTS_DASHBOARD + '/', end: false });
@@ -107,6 +109,18 @@ export default function NavBar({
     }
   }, [countNurseryWithdrawals, selectedOrganization]);
 
+  const [listPlantingSeasonsForNav, plantingSeasonsForNavResponse] = useLazyListPlantingSeasonsQuery();
+  const hasPlantingSeasonWithTargets = useMemo(
+    () => (plantingSeasonsForNavResponse?.currentData?.seasons ?? []).some((s) => s.speciesTargets.length > 0),
+    [plantingSeasonsForNavResponse?.currentData]
+  );
+
+  useEffect(() => {
+    if (isPlantingSeasonsEnabled && selectedOrganization) {
+      void listPlantingSeasonsForNav({ organizationId: selectedOrganization.id }, true);
+    }
+  }, [isPlantingSeasonsEnabled, listPlantingSeasonsForNav, selectedOrganization]);
+
   useEffect(() => {
     if (!currentAcceleratorProject && projectsWithModules && projectsWithModules.length > 0) {
       setCurrentAcceleratorProject(projectsWithModules[0].id);
@@ -126,6 +140,18 @@ export default function NavBar({
       />
     );
 
+    const inventoryPlanningMenu = (
+      <NavItem
+        label={strings.INVENTORY_PLANNING}
+        selected={!!isInventoryPlanningRoute}
+        onClick={() => {
+          closeAndNavigateTo(APP_PATHS.INVENTORY_PLANNING);
+        }}
+        id='inventoryplanning'
+        key='inventoryplanning'
+      />
+    );
+
     const withdrawalLogMenu = (
       <NavItem
         label={strings.WITHDRAWALS}
@@ -138,7 +164,14 @@ export default function NavBar({
       />
     );
 
-    return showNurseryWithdrawals ? [inventoryMenu, withdrawalLogMenu] : [inventoryMenu];
+    const items = [inventoryMenu];
+    if (isPlantingSeasonsEnabled && hasPlantingSeasonWithTargets) {
+      items.push(inventoryPlanningMenu);
+    }
+    if (showNurseryWithdrawals) {
+      items.push(withdrawalLogMenu);
+    }
+    return items;
   };
 
   const deliverablesMenu = useMemo<JSX.Element | null>(

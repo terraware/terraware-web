@@ -97,6 +97,7 @@ export enum APP_PATHS {
   INVENTORY_NEW = '/inventory/new',
   INVENTORY_ITEM_FOR_NURSERY = '/inventory/nursery/:nurseryId',
   INVENTORY_ITEM_FOR_SPECIES = '/inventory/:speciesId',
+  INVENTORY_PLANNING = '/inventory-planning',
   INVENTORY_WITHDRAW = '/inventory/withdraw',
   MY_ACCOUNT = '/myaccount',
   MY_ACCOUNT_EDIT = '/myaccount/edit',

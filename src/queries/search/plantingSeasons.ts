@@ -33,7 +33,7 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
       providesTags: (_result, _error, plantingSeasonId) => [
-        { type: QueryTagTypes.PlantingSeasons, id: `${plantingSeasonId}-summary` },
+        { type: QueryTagTypes.PlantingSeasons, id: plantingSeasonId },
       ],
       transformResponse: (response: PlantingSeasonSummaryApiResponse): PlantingSeasonSpeciesSummaryRow[] => {
         const season = response.results[0];
