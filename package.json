@@ -223,7 +223,7 @@
     "playwright": "^1.55.1",
     "prettier": "^3.0.3",
     "prop-types": "^15.8.1",
-    "react-test-renderer": "19.2.6",
+    "react-test-renderer": "19.2.7",
     "sass": "^1.99.0",
     "storybook": "^7.0.12",
     "ts-node": "^10.9.2",
