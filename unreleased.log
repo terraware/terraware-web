@@ -1,3 +1,5 @@
+d1aaa024 SW-7479 Don't show empty batch message for historical withdrawals (#5785)
+67ab977c SW-7484 Don't send batch PUT request when nothing has been changed (#5784)
 810c6e79 Update dependency js-yaml to v4.2.0 (#5782)
 15d42959 Update react monorepo to v19.2.7 (#5781)
 edbcb9c9 SW-8339: FE: Observations in Activity Log (#5776)
