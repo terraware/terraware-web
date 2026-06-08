@@ -16,6 +16,8 @@ import { PlantingDateRequestRow, useLazyListPlantingDateRequestsQuery } from 'sr
 import strings from 'src/strings';
 import { getMediumDate } from 'src/utils/dateFormatter';
 
+import WithdrawFromBatchesModal from './WithdrawFromBatchesModal';
+
 const PlantingDateRequestsTabContent = (): JSX.Element => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
@@ -70,6 +72,13 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
   );
 
   const rows = requests ?? [];
+  const [withdrawRequest, setWithdrawRequest] = useState<PlantingDateRequestRow | undefined>(undefined);
+
+  const onWithdrawn = () => {
+    if (organizationId) {
+      void listPlantingDateRequests({ organizationId, plantingSiteId, plantingSeasonId, speciesId }, false);
+    }
+  };
 
   return (
     <Card flushMobile>
@@ -112,8 +121,23 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
 
       <Divider />
       {rows.map((row) => (
-        <PlantingDateRequestListItem key={row.scheduledPlantingDateId} row={row} activeLocale={activeLocale} />
+        <PlantingDateRequestListItem
+          key={row.scheduledPlantingDateId}
+          row={row}
+          activeLocale={activeLocale}
+          onWithdrawClick={() => setWithdrawRequest(row)}
+        />
       ))}
+      {withdrawRequest && (
+        <WithdrawFromBatchesModal
+          open={true}
+          onClose={() => setWithdrawRequest(undefined)}
+          onWithdrawn={onWithdrawn}
+          request={withdrawRequest}
+          plantingSiteId={withdrawRequest.plantingSiteId}
+          plantingSeasonId={withdrawRequest.plantingSeasonId}
+        />
+      )}
     </Card>
   );
 };
@@ -121,9 +145,14 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
 type PlantingDateRequestListItemProps = {
   row: PlantingDateRequestRow;
   activeLocale: string | null;
+  onWithdrawClick: () => void;
 };
 
-const PlantingDateRequestListItem = ({ row, activeLocale }: PlantingDateRequestListItemProps): JSX.Element => {
+const PlantingDateRequestListItem = ({
+  row,
+  activeLocale,
+  onWithdrawClick,
+}: PlantingDateRequestListItemProps): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [showAllSpecies, setShowAllSpecies] = useState(false);
@@ -191,7 +220,7 @@ const PlantingDateRequestListItem = ({ row, activeLocale }: PlantingDateRequestL
       >
         <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
           <RequestStatusBadge status={row.status} />
-          <Button label={strings.WITHDRAW} onClick={() => undefined} priority='secondary' type='productive' />
+          <Button label={strings.WITHDRAW} onClick={onWithdrawClick} priority='secondary' type='productive' />
         </Box>
         <Box display='flex' gap={theme.spacing(3)} alignItems='flex-start'>
           <NumberColumn label={strings.SPECIES} value={row.speciesCount} activeLocale={activeLocale} />

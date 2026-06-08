@@ -409,6 +409,8 @@ COUNTRY,Pays,cac01305
 COUNTRY_ONLY,Pays uniquement,d621bf13
 COUNTRY_REQUIRED,Pays *,2b4fcea0
 COVER_PHOTO,Photo de couverture,22acbe1c
+COVERAGE,Couverture,3714c4d8
+COVERED,Couverte,e35075ab
 CREATE,Créer,24731958
 CREATE_NEW_ORGANIZATION,Créer une nouvelle organisation,a0e026b8
 CREATE_NEW_PROJECT,Créer un nouveau projet,b709ff33
@@ -703,6 +705,7 @@ EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Haut-parleurs ou casque – intég
 EVENTS,Evénements,a18b73bc
 EXCEEDS_AVAILABLE_X,Dépasse le disponible ({0}),4391f9df
 EXCEEDS_GOAL,Dépasse l'objectif,4488fd7c
+EXCEEDS_READY_TO_PLANT,Dépasse le prêt à planter ({0}),42faa655
 EXCLUSION_AREAS,Zones d'exclusion,08c7d391
 EXISTING,Existant,fa67ac1d
 EXISTING_PROJECT_ACCESSIONS_BODY,"Certaines accessions ont déjà été ajoutées à un projet existant. Si vous sélectionnez ces accessions ici, vous remplacerez le projet par {0} (au lieu de créer une association supplémentaire).",a23f695b
@@ -1261,6 +1264,7 @@ NOT_ACCEPTED,Non accepté,c3102621
 NOT_APPLICABLE_FOR_AD_HOC_PLOTS,Non applicable aux parcelles ad hoc,3e9df420
 NOT_CALCULATED_FOR_TEMPORARY_PLOTS,Non calculé pour les parcelles temporaires.,ca983c30
 NOT_COMPLETE,Pas terminé,a8606bc8
+NOT_COVERED,Non couverte,c01864d7
 NOT_ENOUGH_SEEDS_IN_ACCESSION,Pas assez de semences dans l'accession,1d7be036
 NOT_NEEDED,Non nécessaire,dc4188cf
 NOT_OBSERVED,Non observé,4a9890a2
@@ -1309,6 +1313,8 @@ NURSERY_GERMINATION,Germination en pépinière,f661d6d4
 NURSERY_MEDIA,Médias pour les pépinières,7bc6581b
 NURSERY_MORTALITY_RATE,Taux de mortalité de la pépinière,feb99b18
 NURSERY_REQUIRED,Pépinière *,809fa5b6
+NURSERY_SUMMARY,Résumé de la pépinière,b46357cf
+NURSERY_SUMMARY_TOOLTIP,Le résumé de la pépinière affiche la couverture des espèces dans la pépinière sélectionnée pour les espèces demandées à la date de plantation.,005fc84a
 NURSERY_TRANSFER,Transfert de pépinière,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Les transferts de pépinières nécessitent une pépinière d'origine et une pépinière de destination.,7fe70d84
 OBSERVATION,Observation,ac4f24f0
@@ -1411,6 +1417,7 @@ PAPER_PETRI_DISH,Boîte de Petri en papier,d478bf2a
 PARTIAL,Partiel,d8250603
 PARTIAL_ERRORS,Certaines demandes ont échoué. Vous pouvez réessayer plus tard.,2d39959f
 PARTIAL_ERRORS_TITLE,Erreurs partielles,3fca63bf
+PARTIALLY_COVERED,Partiellement couverte,0b41aed4
 PARTICIPANT,Participant,911243e3
 PASSED_PRESCREEN,Présélection réussie,fef6edd4
 PAST_END_DATE,Après la date de fin,b3c6f181
@@ -1643,10 +1650,12 @@ PUBLISH_TO_FUNDER_PORTAL,Publier sur le portail des financeurs,ec2ddbec
 PUBLISHED,Publié,baa0bfba
 PUBLISHED_REPORT_CONSOLE_WARNING,"Vous consultez le dernier rapport publié, celui fourni aux donateurs sur leur portail.",64413dc4
 PURPOSE,But,ff06abab
+PURPOSE_AND_DESTINATION,But et destination,bd78a61c
 PURPOSE_REQUIRED,But *,3f585469
 QUADRAT,Carré d’échantillonnage,ff115cb6
 QUADRAT_PHOTOS,Photos de quadrat,be63ed72
 QUADRAT_PHOTOS_CANNOT_BE_DELETED,Les photos de quadrats ne peuvent pas être supprimées.,24cf5aff
+QUANTITIES,Quantités,bd99b2de
 QUANTITY,Quantité,5130efc1
 QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,La quantité doit être supérieure ou égale à 0,5a55f459
 QUANTITY_TO_PLANT,Quantité à planter,14ee1db4
@@ -1790,6 +1799,7 @@ REQUEST_REASSIGNMENT_REASON_TOOLTIP,Fournissez une justification pour la réaffe
 REQUEST_UPDATE,Demander une mise à jour,bce207eb
 REQUEST_UPDATE_ACTION,Demander une mise à jour...,790ef713
 REQUEST_UPDATE_REASON,Fournissez une raison pour demander la mise à jour.,52430788
+REQUESTED,Demandé,17e828cc
 REQUESTED_PLANTS,Plantes demandées,4c4fac82
 REQUESTS,Demandes,9ecfc0e8
 REQUESTS_X,Demandes ({0}),b70edf58
@@ -1930,6 +1940,7 @@ SELECT_AT_LEAST_ONE_SUBSTRATUM,Sélectionnez au moins une sous-strate,85a3b3d7
 SELECT_BATCHES,Sélectionnez les lots,d15588c6
 SELECT_BUTTON,Sélectionnez,4e21939d
 SELECT_EXISTING_PROJECT,Sélectionner un projet existant,e3ffeef2
+SELECT_NURSERY,Sélectionner une pépinière,7af1b6f6
 SELECT_PLANTING_SITE_FOR_3D_MODEL,Sélectionnez un site de plantation à associer au modèle 3D,b0c50942
 SELECT_PLANTING_SITE_TYPE,Sélectionnez le type de site de plantation,e0ce7f80
 SELECT_PLANTING_SITE_TYPE_DESCRIPTION_1,Veuillez sélectionner le type de site de plantation à ajouter.,727f5a68
