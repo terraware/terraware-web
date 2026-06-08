@@ -229,7 +229,7 @@ const RequestStatusBadge = ({ status }: { status: string }): JSX.Element | null 
   const theme = useTheme();
   const badgeProps = useMemo((): BadgeProps | undefined => {
     switch (status) {
-      case 'Request Pending':
+      case 'Pending':
         return {
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
@@ -243,7 +243,7 @@ const RequestStatusBadge = ({ status }: { status: string }): JSX.Element | null 
           labelColor: theme.palette.TwClrTxtWarning,
           label: strings.PARTIAL,
         };
-      case 'Completed':
+      case 'Fulfilled':
         return {
           backgroundColor: theme.palette.TwClrBgSuccessTertiary,
           borderColor: theme.palette.TwClrBrdrSuccess,
