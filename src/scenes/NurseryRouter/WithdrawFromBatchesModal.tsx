@@ -341,6 +341,7 @@ const Step1Content = ({
             value={withdrawDate}
             onDateChange={(value?: DateTime) => setWithdrawDate(value?.toISODate() ?? '')}
             aria-label='withdraw-date'
+            sx={{ textAlign: 'left' }}
           />
         </Box>
       )}
@@ -363,6 +364,7 @@ const Step1Content = ({
           selectedValue={facilityId}
           onChange={(value) => setFacilityId(value !== undefined && value !== '' ? Number(value) : undefined)}
           fullWidth
+          sx={{ textAlign: 'left' }}
         />
       </Box>
 
@@ -390,7 +392,7 @@ const Step1Content = ({
             padding={theme.spacing(1, 2)}
             sx={{ borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
           >
-            <Typography fontSize='14px' fontWeight={600}>
+            <Typography fontSize='14px' fontWeight={600} textAlign='left'>
               {strings.SPECIES}
             </Typography>
             <Typography fontSize='14px' fontWeight={600} textAlign='right'>
@@ -431,9 +433,11 @@ const Step1Content = ({
                 }}
               >
                 <Box>
-                  <Typography fontSize='14px'>{s.scientificName}</Typography>
+                  <Typography fontSize='14px' textAlign='left'>
+                    {s.scientificName}
+                  </Typography>
                   {s.commonName && (
-                    <Typography fontSize='12px' color={theme.palette.TwClrTxtSecondary}>
+                    <Typography fontSize='12px' color={theme.palette.TwClrTxtSecondary} textAlign='left'>
                       {s.commonName}
                     </Typography>
                   )}
@@ -490,19 +494,19 @@ const Step2Content = ({
       {substrata.map((substratum) => (
         <Box key={substratum.substratumId} display='flex' flexDirection='column' gap={theme.spacing(2)}>
           <Box display='flex' gap={theme.spacing(6)}>
-            <Box>
-              <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+            <Box flexGrow={1}>
+              <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} textAlign='left'>
                 {`${strings.STRATUM} *`}
               </Typography>
-              <Typography fontSize='16px' fontWeight={600}>
+              <Typography fontSize='16px' fontWeight={500} textAlign='left'>
                 {substratum.stratumName}
               </Typography>
             </Box>
-            <Box>
-              <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+            <Box flexGrow={1}>
+              <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} textAlign='left'>
                 {`${strings.SUBSTRATUM} *`}
               </Typography>
-              <Typography fontSize='16px' fontWeight={600}>
+              <Typography fontSize='16px' fontWeight={500} textAlign='left'>
                 {substratum.substratumName}
               </Typography>
             </Box>
@@ -515,7 +519,7 @@ const Step2Content = ({
                 sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}`, borderRadius: '8px' }}
               >
                 <Box padding={theme.spacing(1.5, 2)} sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}>
-                  <Typography fontSize='16px' fontWeight={600}>
+                  <Typography fontSize='16px' fontWeight={400} textAlign='left'>
                     {s.scientificName}
                     {s.commonName ? ` (${s.commonName})` : ''}
                   </Typography>
@@ -527,7 +531,7 @@ const Step2Content = ({
                   padding={theme.spacing(1, 2)}
                   sx={{ borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
                 >
-                  <Typography fontSize='14px' fontWeight={600}>
+                  <Typography fontSize='14px' fontWeight={600} textAlign='left'>
                     {strings.SEEDLING_BATCH}
                   </Typography>
                   <Typography fontSize='14px' fontWeight={600} textAlign='right'>
@@ -561,11 +565,13 @@ const Step2Content = ({
                         alignItems='center'
                         padding={theme.spacing(1, 2)}
                       >
-                        <Typography fontSize='14px'>{batch.batchNumber}</Typography>
-                        <Typography fontSize='14px' textAlign='right'>
+                        <Typography fontSize='16px' textAlign='left'>
+                          {batch.batchNumber}
+                        </Typography>
+                        <Typography fontSize='16px' textAlign='right'>
                           {s.quantity.toLocaleString()}
                         </Typography>
-                        <Typography fontSize='14px' textAlign='right'>
+                        <Typography fontSize='16px' textAlign='right'>
                           {batch.readyQuantity.toLocaleString()}
                         </Typography>
                         <Box>
