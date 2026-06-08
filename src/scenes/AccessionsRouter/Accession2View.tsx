@@ -109,6 +109,7 @@ export default function Accession2View(): JSX.Element {
     return tz.id;
   }, [accession?.facilityId, selectedOrganization, locationTimeZone]);
 
+  // TODO: Remove this hook once project assign endpoint correctly invalidates accession
   const reloadData = useCallback(() => {
     if (accessionId) {
       void refetchAccession();
