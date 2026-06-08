@@ -48,7 +48,7 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
       { label: strings.ALL_PLANTING_SITES, value: 'all' },
       ...(plantingSitesData?.sites ?? []).map((s) => ({ label: s.name, value: s.id })),
     ],
-    [plantingSitesData]
+    [plantingSitesData, strings]
   );
 
   const plantingSeasonOptions = useMemo<DropdownItem[]>(() => {
@@ -58,14 +58,14 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
       { label: strings.ALL_PLANTING_SEASONS, value: 'all' },
       ...filteredSeasons.map((s) => ({ label: s.name, value: s.id })),
     ];
-  }, [plantingSeasonsData, plantingSiteId]);
+  }, [plantingSeasonsData, plantingSiteId, strings]);
 
   const speciesOptions = useMemo<DropdownItem[]>(
     () => [
       { label: strings.ALL_SPECIES, value: 'all' },
       ...species.map((s) => ({ label: s.scientificName, value: s.id })),
     ],
-    [species]
+    [species, strings]
   );
 
   const rows = requests ?? [];
