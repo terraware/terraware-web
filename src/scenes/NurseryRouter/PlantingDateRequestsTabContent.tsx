@@ -13,12 +13,11 @@ import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { PlantingDateRequestRow, useLazyListPlantingDateRequestsQuery } from 'src/queries/search/plantingDateRequests';
-import strings from 'src/strings';
 import { getMediumDate } from 'src/utils/dateFormatter';
 
 const PlantingDateRequestsTabContent = (): JSX.Element => {
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { species } = useSpeciesData();
   const organizationId = selectedOrganization?.id;
@@ -125,6 +124,7 @@ type PlantingDateRequestListItemProps = {
 
 const PlantingDateRequestListItem = ({ row, activeLocale }: PlantingDateRequestListItemProps): JSX.Element => {
   const theme = useTheme();
+  const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const [showAllSpecies, setShowAllSpecies] = useState(false);
 
@@ -227,6 +227,7 @@ const NumberColumn = ({
 
 const RequestStatusBadge = ({ status }: { status: string }): JSX.Element | null => {
   const theme = useTheme();
+  const { strings } = useLocalization();
   const badgeProps = useMemo((): BadgeProps | undefined => {
     switch (status) {
       case 'Pending':
@@ -258,7 +259,7 @@ const RequestStatusBadge = ({ status }: { status: string }): JSX.Element | null 
           label: status,
         };
     }
-  }, [status, theme]);
+  }, [status, theme, strings]);
 
   if (!badgeProps) {
     return null;
