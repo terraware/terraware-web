@@ -169,6 +169,11 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
         return;
       }
 
+      if (batch === record) {
+        onCloseHandler();
+        return;
+      }
+
       let responseQuantities = { requestSucceeded: true };
 
       const response = await NurseryBatchService.updateBatch(record);
@@ -189,7 +194,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
         snackbar.toastError();
       }
     }
-  }, [record, hasErrors, updatePhotos, reload, onCloseHandler, snackbar, trackEvent, markSubmitted]);
+  }, [record, hasErrors, updatePhotos, reload, onCloseHandler, snackbar, trackEvent, markSubmitted, batch]);
 
   const handleSaveBatch = useCallback(() => {
     void saveBatch();
