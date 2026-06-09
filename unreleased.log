@@ -1,3 +1,4 @@
+439a67e5 Migrate accessions to RTK Query and fetch via useAccession (#5775)
 8e940685 SW-8428: Survival Rate Settings: Species lists not appearing in alphabetical order (#5787)
 d1aaa024 SW-7479 Don't show empty batch message for historical withdrawals (#5785)
 67ab977c SW-7484 Don't send batch PUT request when nothing has been changed (#5784)
