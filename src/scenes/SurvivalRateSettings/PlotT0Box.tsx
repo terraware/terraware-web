@@ -26,7 +26,6 @@ const PlotT0Box = ({ plot, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
   const { speciesById } = useSpeciesData();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
-  console.log('speciesById', speciesById);
 
   const getPlotTotalDensity = useMemo(() => {
     const total = t0Plot?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
