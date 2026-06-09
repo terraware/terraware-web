@@ -1,41 +1,28 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useEffect } from 'react';
+import { useParams } from 'react-router';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
-import _ from 'lodash';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization } from 'src/providers/hooks';
-import AccessionService, { AccessionHistoryEntry } from 'src/services/AccessionService';
+import { useGetAccessionHistoryQuery } from 'src/queries/generated/accessionsV1';
+import { AccessionHistoryEntry } from 'src/services/AccessionService';
 import strings from 'src/strings';
-import { Accession } from 'src/types/Accession';
 import useSnackbar from 'src/utils/useSnackbar';
 
-interface Accession2HistoryProps {
-  accession: Accession;
-}
-
-export default function Accession2History(props: Accession2HistoryProps): JSX.Element {
-  const { activeLocale } = useLocalization();
-  const { accession } = props;
-  const [history, setHistory] = useState<AccessionHistoryEntry[]>();
+export default function Accession2History(): JSX.Element {
+  const { accessionId } = useParams<{ accessionId: string }>();
   const theme = useTheme();
   const snackbar = useSnackbar();
 
+  const { currentData, isError } = useGetAccessionHistoryQuery(Number(accessionId), { skip: !accessionId });
+  const history: AccessionHistoryEntry[] | undefined = isError ? [] : currentData?.history;
+
   useEffect(() => {
-    const loadHistory = async () => {
-      const response = await AccessionService.getAccessionHistory(accession.id);
-      if (response.requestSucceeded) {
-        if (!_.isEqual(history, response.history)) {
-          setHistory(response.history);
-        }
-      } else {
-        setHistory([]);
-        snackbar.toastError();
-      }
-    };
-    void loadHistory();
-  }, [accession, activeLocale, snackbar, history]);
+    if (isError) {
+      snackbar.toastError();
+    }
+  }, [isError, snackbar]);
 
   const HistoryText = (item: AccessionHistoryEntry) => (
     <Typography fontWeight={500}>

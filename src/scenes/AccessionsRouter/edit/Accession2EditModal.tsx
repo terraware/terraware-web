@@ -1,4 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
@@ -7,12 +8,13 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
+import useAccession from 'src/hooks/useAccession';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useDeletePhotoMutation, useUploadPhotoMutation } from 'src/queries/generated/accessionsV1';
-import AccessionService from 'src/services/AccessionService';
+import { useUpdateAccessionMutation } from 'src/queries/generated/accessionsV2';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { getSeedBank } from 'src/utils/organization';
@@ -32,17 +34,31 @@ import CollectionSiteName from '../properties/CollectionSiteName';
 
 export interface Accession2EditModalProps {
   open: boolean;
-  accession: Accession;
   onClose: () => void;
-  reload: () => void;
 }
 
 const MANDATORY_FIELDS = ['speciesId', 'collectedDate'] as const;
 
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
-export default function Accession2EditModal(props: Accession2EditModalProps): JSX.Element | null {
-  const { onClose, open, accession, reload } = props;
+export default function Accession2EditModal({ open, onClose }: Accession2EditModalProps): JSX.Element | null {
+  const { accessionId } = useParams<{ accessionId: string }>();
+  const { accession } = useAccession(Number(accessionId));
+
+  if (!accession) {
+    return null;
+  }
+
+  return <Accession2EditModalForm accession={accession} open={open} onClose={onClose} />;
+}
+
+interface Accession2EditModalFormProps {
+  open: boolean;
+  accession: Accession;
+  onClose: () => void;
+}
+
+function Accession2EditModalForm({ accession, open, onClose }: Accession2EditModalFormProps): JSX.Element | null {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -60,6 +76,7 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
   const [photoFilenamesToRemove, setPhotoFilenamesToRemove] = useState<string[]>([]);
   const [uploadPhoto] = useUploadPhotoMutation();
   const [deletePhoto] = useDeletePhotoMutation();
+  const [updateAccession] = useUpdateAccessionMutation();
   const markSubmitted = useTrackModalAbandonment('accession_edit', open);
   const trackEvent = useTrackEvent();
 
@@ -122,23 +139,20 @@ export default function Accession2EditModal(props: Accession2EditModalProps): JS
           return;
         }
         setLoading(true);
-        const response = await AccessionService.updateAccession(record);
-        if (response.requestSucceeded && accession) {
-          markSubmitted();
-          await updatePhotos();
-          reload();
-          onCloseHandler();
-        } else {
-          snackbar.toastError();
-          onCloseHandler();
-        }
+        await updateAccession({
+          id: record.id,
+          updateAccessionRequestPayloadV2: record,
+        }).unwrap();
+        markSubmitted();
+        await updatePhotos();
+        onCloseHandler();
       } catch {
         trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'accession' });
         snackbar.toastError();
         onCloseHandler();
       }
     }
-  }, [accession, hasErrors, markSubmitted, onCloseHandler, record, reload, snackbar, trackEvent, updatePhotos]);
+  }, [hasErrors, markSubmitted, onCloseHandler, record, snackbar, trackEvent, updateAccession, updatePhotos]);
 
   return !activeLocale ? null : (
     <DialogBox

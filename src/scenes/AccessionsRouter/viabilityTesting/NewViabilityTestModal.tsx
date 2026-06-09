@@ -1,4 +1,5 @@
 import React, { type JSX, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Close } from '@mui/icons-material';
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
@@ -16,12 +17,14 @@ import TooltipLearnMoreModal, {
 } from 'src/components/TooltipLearnMoreModal';
 import AddLink from 'src/components/common/AddLink';
 import DatePicker from 'src/components/common/DatePicker';
+import useAccession from 'src/hooks/useAccession';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization } from 'src/providers/hooks';
+import { useCreateViabilityTestMutation, useUpdateViabilityTestMutation } from 'src/queries/generated/accessionsV2';
 import { OrganizationUserService } from 'src/services';
-import AccessionService, { ViabilityTestPostRequest } from 'src/services/AccessionService';
+import { ViabilityTestPostRequest } from 'src/services/AccessionService';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { TEST_TYPES, seedTypes, testMethods, treatments } from 'src/types/Accession';
@@ -39,18 +42,33 @@ import ViabilityResultModal from './ViabilityResultModal';
 
 export interface NewViabilityTestModalProps {
   open: boolean;
-  accession: Accession;
   onClose: () => void;
-  reload: () => void;
   user: User;
   viabilityTest: ViabilityTest | undefined;
 }
 
-export default function NewViabilityTestModal(props: NewViabilityTestModalProps): JSX.Element {
+export default function NewViabilityTestModal(props: NewViabilityTestModalProps): JSX.Element | null {
+  const { accessionId } = useParams<{ accessionId: string }>();
+  const { accession } = useAccession(Number(accessionId));
+
+  if (!accession) {
+    return null;
+  }
+
+  return <NewViabilityTestModalForm {...props} accession={accession} />;
+}
+
+interface NewViabilityTestModalFormProps extends NewViabilityTestModalProps {
+  accession: Accession;
+}
+
+function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const trackEvent = useTrackEvent();
-  const { onClose, open, accession, user, reload, viabilityTest } = props;
+  const { onClose, open, accession, user, viabilityTest } = props;
   const markSubmitted = useTrackModalAbandonment(viabilityTest ? 'viability_test_edit' : 'viability_test_create', open);
+  const [createViabilityTest] = useCreateViabilityTestMutation();
+  const [updateViabilityTest] = useUpdateViabilityTestMutation();
 
   const [record, setRecord, onChange, onChangeCallback] = useForm(viabilityTest);
   const [users, setUsers] = useState<OrganizationUser[]>();
@@ -353,21 +371,24 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       if (!validSubstrates.find((substrate) => substrate.value === record.substrate)) {
         record.substrate = undefined;
       }
-      let response;
       const isCreate = record.id === -1;
-      if (isCreate) {
-        response = await AccessionService.createViabilityTest(record, accession.id);
-      } else {
-        response = await AccessionService.updateViabilityTest(record, accession.id, record.id);
-      }
-      if (response.requestSucceeded) {
+      try {
         if (isCreate) {
+          await createViabilityTest({
+            accessionId: accession.id,
+            createViabilityTestRequestPayload: record,
+          }).unwrap();
           trackEvent(MIXPANEL_EVENTS.ACCESSION_VIABILITY_TEST_RECORDED, {
             test_type: record.testType,
           });
+        } else {
+          await updateViabilityTest({
+            accessionId: accession.id,
+            viabilityTestId: record.id,
+            updateViabilityTestRequestPayload: record,
+          }).unwrap();
         }
         markSubmitted();
-        reload();
         onCloseHandler();
         const cutTestEdited =
           record.testType === 'Cut' &&
@@ -379,7 +400,7 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
           setSavedRecord({ ...record });
           setOpenViabilityResultModal(true);
         }
-      } else {
+      } catch {
         trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'viability_test' });
         snackbar.toastError();
       }
@@ -498,8 +519,6 @@ export default function NewViabilityTestModal(props: NewViabilityTestModalProps)
       {openViabilityResultModal && savedRecord && (
         <ViabilityResultModal
           open={openViabilityResultModal}
-          reload={reload}
-          accession={accession}
           onClose={() => {
             setOpenViabilityResultModal(false);
           }}

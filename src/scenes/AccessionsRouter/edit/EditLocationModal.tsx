@@ -1,13 +1,15 @@
 import React, { type JSX, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Grid } from '@mui/material';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import useAccession from 'src/hooks/useAccession';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useUpdateAccessionMutation } from 'src/queries/generated/accessionsV2';
 import { SubLocationService } from 'src/services';
-import AccessionService from 'src/services/AccessionService';
 import strings from 'src/strings';
 import theme from 'src/theme';
 import { Accession } from 'src/types/Accession';
@@ -20,15 +22,29 @@ import { FacilitySelector, SubLocationSelector } from '../properties';
 
 export interface EditLocationModalProps {
   open: boolean;
-  accession: Accession;
   onClose: () => void;
-  reload: () => void;
 }
 
-export default function EditLocationModal(props: EditLocationModalProps): JSX.Element {
+export default function EditLocationModal({ open, onClose }: EditLocationModalProps): JSX.Element | null {
+  const { accessionId } = useParams<{ accessionId: string }>();
+  const { accession } = useAccession(Number(accessionId));
+
+  if (!accession) {
+    return null;
+  }
+
+  return <EditLocationModalForm accession={accession} open={open} onClose={onClose} />;
+}
+
+interface EditLocationModalFormProps {
+  open: boolean;
+  accession: Accession;
+  onClose: () => void;
+}
+
+function EditLocationModalForm({ accession, open, onClose }: EditLocationModalFormProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
-  const { onClose, open, accession, reload } = props;
   const seedBanks: Facility[] = selectedOrganization
     ? selectedOrganization
       ? getAllSeedBanks(selectedOrganization)
@@ -37,6 +53,7 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
   const [subLocations, setSubLocations] = useState<SubLocation[]>([]);
   const snackbar = useSnackbar();
   const markSubmitted = useTrackModalAbandonment('accession_edit_location', open);
+  const [updateAccession] = useUpdateAccessionMutation();
 
   const newRecord = {
     facilityId: accession.facilityId || 0,
@@ -65,15 +82,15 @@ export default function EditLocationModal(props: EditLocationModalProps): JSX.El
   }, [activeLocale, record.facilityId]);
 
   const saveLocation = async () => {
-    const response = await AccessionService.updateAccession({
-      ...accession,
-      ...record,
-    });
-    if (response.requestSucceeded) {
+    const updatedAccession = { ...accession, facilityId: record.facilityId, subLocation: record.subLocation };
+    try {
+      await updateAccession({
+        id: accession.id,
+        updateAccessionRequestPayloadV2: updatedAccession,
+      }).unwrap();
       markSubmitted();
-      reload();
       onClose();
-    } else {
+    } catch {
       snackbar.toastError();
     }
   };
