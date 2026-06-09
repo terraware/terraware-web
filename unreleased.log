@@ -1,3 +1,5 @@
+ecfb36e8 SW-8459: Photo title for required photos should show up above the photo (#5789)
+13e7ad6e SW-8462: Deleting observation activities should be disabled for all user types (#5788)
 a1d047fa  SW-8455 Requests tab on Withdrawals page (#5780)
 439a67e5 Migrate accessions to RTK Query and fetch via useAccession (#5775)
 8e940685 SW-8428: Survival Rate Settings: Species lists not appearing in alphabetical order (#5787)
