@@ -83,12 +83,12 @@ const MonitoringPlotPhotoPreview = ({
     >
       {mediaItem.data.type === 'Plot' && mediaItem.data.position && (
         <Typography marginBottom={3} color={theme.palette.TwClrBaseBlack}>
-          {monitoringPlotName} {getPositionLabel(mediaItem.data.position)}
+          {monitoringPlotName} {getPositionLabel(mediaItem.data.position, strings)}
         </Typography>
       )}
       {mediaItem.data.type === 'Quadrat' && mediaItem.data.position && (
         <Typography marginBottom={3} color={theme.palette.TwClrBaseBlack}>
-          {getQuadratLabel(mediaItem.data.position)}
+          {getQuadratLabel(mediaItem.data.position, strings)}
         </Typography>
       )}
       <Box display='flex' flexDirection='column' gap={2}>

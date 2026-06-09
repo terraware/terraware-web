@@ -1,4 +1,5 @@
 import {
+  getObsPhotoTypeLabel,
   isCaptionReadOnly,
   isCornerPhoto,
   isObservationActivity,
@@ -95,5 +96,59 @@ describe('isCaptionReadOnly', () => {
 
   test('returns false when observation is absent', () => {
     expect(isCaptionReadOnly({})).toBe(false);
+  });
+});
+
+describe('getObsPhotoTypeLabel', () => {
+  const strings = {
+    NORTHEAST_CORNER: 'Northeast corner',
+    NORTHWEST_CORNER: 'Northwest corner',
+    SOUTHEAST_CORNER: 'Southeast corner',
+    SOUTHWEST_CORNER: 'Southwest corner',
+    PHOTO_NORTHEAST_QUADRAT: 'Northeast Quadrat',
+    PHOTO_NORTHWEST_QUADRAT: 'Northwest Quadrat',
+    PHOTO_SOUTHEAST_QUADRAT: 'Southeast Quadrat',
+    PHOTO_SOUTHWEST_QUADRAT: 'Southwest Quadrat',
+    SOIL: 'Soil',
+  } as Parameters<typeof getObsPhotoTypeLabel>[1];
+
+  test('returns undefined when observation is absent', () => {
+    expect(getObsPhotoTypeLabel({}, strings)).toBeUndefined();
+  });
+
+  test('returns undefined for a deletable plot photo (no position)', () => {
+    expect(getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 3, type: 'Plot' } }, strings)).toBeUndefined();
+  });
+
+  test.each([
+    ['NortheastCorner', '5 Northeast corner'],
+    ['NorthwestCorner', '5 Northwest corner'],
+    ['SoutheastCorner', '5 Southeast corner'],
+    ['SouthwestCorner', '5 Southwest corner'],
+  ] as const)('returns plot prefix + corner label for position %s', (position, expected) => {
+    expect(
+      getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 5, type: 'Plot', position } }, strings)
+    ).toBe(expected);
+  });
+
+  test.each([
+    ['NortheastCorner', '2 Northeast Quadrat'],
+    ['NorthwestCorner', '2 Northwest Quadrat'],
+    ['SoutheastCorner', '2 Southeast Quadrat'],
+    ['SouthwestCorner', '2 Southwest Quadrat'],
+  ] as const)('returns plot prefix + quadrat label for quadrat position %s', (position, expected) => {
+    expect(
+      getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 2, type: 'Quadrat', position } }, strings)
+    ).toBe(expected);
+  });
+
+  test('returns undefined for quadrat photo without a position', () => {
+    expect(
+      getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 2, type: 'Quadrat' } }, strings)
+    ).toBeUndefined();
+  });
+
+  test('returns plot prefix + Soil for soil photos', () => {
+    expect(getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 7, type: 'Soil' } }, strings)).toBe('7 Soil');
   });
 });

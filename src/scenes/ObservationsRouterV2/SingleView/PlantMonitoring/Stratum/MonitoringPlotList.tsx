@@ -130,7 +130,7 @@ export default function MonitoringPlotList(): JSX.Element {
             stratumName: stratumResult.name,
             substratumName: substratum.name,
             completedDate: plot.completedTime,
-            status: getPlotStatus(plot.status),
+            status: getPlotStatus(plot.status, strings),
             isPermanent: plot.isPermanent,
             sizeMeters: plot.sizeMeters,
             totalLive,

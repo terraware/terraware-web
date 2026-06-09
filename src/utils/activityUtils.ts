@@ -116,10 +116,10 @@ export const getObsPhotoTypeLabel = (
   }
   const plotPrefix = `${obs.monitoringPlotNumber} `;
   if (obs.type === 'Plot' && obs.position) {
-    return `${plotPrefix}${getPositionLabel(obs.position)}`;
+    return `${plotPrefix}${getPositionLabel(obs.position, strings)}`;
   }
   if (obs.type === 'Quadrat' && obs.position) {
-    return `${plotPrefix}${getQuadratLabel(obs.position)}`;
+    return `${plotPrefix}${getQuadratLabel(obs.position, strings)}`;
   }
   if (obs.type === 'Soil') {
     return `${plotPrefix}${strings.SOIL}`;
