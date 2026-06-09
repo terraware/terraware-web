@@ -155,6 +155,7 @@ const PlantingDateRequestListItem = ({
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [showAllSpecies, setShowAllSpecies] = useState(false);
+  const { strings } = useLocalization();
 
   const speciesPreviewLimit = 4;
   const displayedSpecies = showAllSpecies ? row.speciesNames : row.speciesNames.slice(0, speciesPreviewLimit);

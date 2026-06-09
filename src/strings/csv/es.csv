@@ -493,6 +493,8 @@ DELETE_CONFIRMATION_MODAL_MAIN_TEXT,¿Está seguro de que desea eliminar la espe
 DELETE_FUNDING_ENTITY,Eliminar entidad financiadora,7d8a1f95
 DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,Se eliminarán todos los financiadores asociados a esta entidad financiadora.,cedce711
 DELETE_FUNDING_ENTITY_MESSAGE,Va a eliminar {0}.,4a41e34f
+DELETE_OBSERVATION_PHOTO_MESSAGE,Esta foto también se eliminará de la observación vinculada. Esta acción no se puede deshacer.,cd60484f
+DELETE_OBSERVATION_PHOTO_TITLE,Eliminar foto de la observación,e92e9851
 DELETE_ORGANIZATION,Borrar Organización,91c84420
 DELETE_ORGANIZATION_MSG,¿Está seguro de que deseas borrar {0}?,a932473f
 DELETE_PLANTING_SEASON,Eliminar temporada de plantación,dda3774d
@@ -1142,6 +1144,7 @@ MODULES_FOR_PROJECT,Módulos para {0},5d950bb2
 MODULES_IMPORT_COMPLETE,¡Completada la importación de datos de los módulos!,76a99df8
 MONITORING,Monitoreo,c607ad35
 MONITORING_PLOT,Parcela de vigilancia,97de3243
+MONITORING_PLOT_REQUIRED,La parcela de monitoreo es obligatoria.,ba488e0f
 MONITORING_PLOT_TYPE,Tipo de parcela de vigilancia,5269e047
 MONITORING_PLOTS,Control de parcelas,42428fbb
 MONITORS,Monitores,5783929b
@@ -1319,8 +1322,10 @@ NURSERY_SUMMARY_TOOLTIP,El Resumen del Vivero muestra la cobertura de especies e
 NURSERY_TRANSFER,Traslado de vivero,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Las transferencias de vivero requieren de un vivero fuente y uno meta.,7fe70d84
 OBSERVATION,Observación,ac4f24f0
+OBSERVATION_ACTIVITY_AUTO_CREATED_INFO,Esta actividad fue creada automáticamente a partir de la observación {0}. Los datos extraídos de la observación no se pueden editar aquí.,785c7f71
 OBSERVATION_DATA,Datos de observación,7e9f4079
 OBSERVATION_DATE,Fecha de observación,62a4f110
+OBSERVATION_DETAILS,Detalles de la observación,3233a88a
 OBSERVATION_END_DATE,Fecha de finalización de la observación,7997df5c
 OBSERVATION_ENDED,Observación finalizada,dc4f5f65
 OBSERVATION_ENDED_MESSAGE,La observación {0} ha finalizado.,95cf320e
@@ -1329,11 +1334,14 @@ OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para el {
 OBSERVATION_EVENTS,Incidencias de observación,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Observaciones previas se muestra con opacidad disminuida,03c6ea26
 OBSERVATION_PERIOD_WARN,El periodo de observación no puede superar los dos meses.,364a36c6
+OBSERVATION_PHOTO_CANNOT_DELETE_INFO,No se pueden eliminar las fotos de las esquinas de la parcela.,f045e547
+OBSERVATION_PHOTO_CANNOT_DELETE_TOOLTIP,Esta foto fue tomada durante la observación y no se puede eliminar.,c127ed8e
 OBSERVATION_PHOTOS_VIDEOS,Fotos/Vídeos de observación,95e219ea
 OBSERVATION_RESCHEDULED,Observación reprogramada,583d8d94
 OBSERVATION_SCHEDULED,Observación programada,2022ad09
 OBSERVATION_SMALL_SITE_WARNING,Está programando una Observación para un lugar que posiblemente sea demasiado pequeño para la asignación de zonas de seguimiento. Se le notificará si hay problemas con la asignación de las zonas de seguimiento y el inicio de la Observación. También puede realizar una Observación de zona ad hoc para este lugar.,5fa79765
 OBSERVATION_START_DATE,Fecha de inicio de la observación,b1807781
+OBSERVATION_TYPE_DATE_READONLY_TOOLTIP,El tipo de actividad y la fecha se establecen a partir de la observación vinculada y no se pueden modificar.,6c0c2ca8
 OBSERVATIONS,Observaciones,8169f17c
 OBSERVATIONS_EMPTY_STATE_MESSAGE_1,En este momento no hay observaciones de parcelas asignadas.,90adba3a
 OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Las observaciones con parcelas asignadas pueden programarse para los sitios de plantación a los que se hayan destinado plantas a través de retiros de inventario.,535c7f37
@@ -1654,6 +1662,7 @@ PURPOSE,Propósito,ff06abab
 PURPOSE_AND_DESTINATION,Propósito y Destino,bd78a61c
 PURPOSE_REQUIRED,Propósito *,3f585469
 QUADRAT,Cuadrante,ff115cb6
+QUADRAT_PHOTO_CANNOT_DELETE_INFO,No se pueden eliminar las fotos del cuadrante.,264a9867
 QUADRAT_PHOTOS,Fotos de cuadrantes,be63ed72
 QUADRAT_PHOTOS_CANNOT_BE_DELETED,No se pueden eliminar las fotos de cuadrantes,24cf5aff
 QUANTITIES,Cantidades,bd99b2de
@@ -1853,7 +1862,9 @@ SAVE_CHANGES,Guardar los cambios,cb5e8c33
 SAVE_OBSERVATION_DATA,Guardar datos de observación,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Sus ediciones reemplazarán cualquier dato ingresado previamente. ¿Está seguro de que desea realizar estos cambios?,b1657c44
 SAVE_PHOTOS_AND_VIDEOS,Guardar fotos y videos,d38ce0cc
-SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,Está realizando cambios en las fotos y videos asociados a esta parcela de observación. ¿Está seguro de que desea realizar estos cambios?,8cfdcf97
+SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,"Está a punto de realizar cambios en las fotos y videos asociados con una observación en {0} para {1}.
+
+¿Está seguro de que desea realizar estos cambios?",b9887b3e
 SAVE_PLANT_DENSITY,Guardar densidad de plantas,73135113
 SAVE_PROJECT_BOUNDARIES,Guardar límites del proyecto,d206ddd9
 SAVE_VERSION,Guardar versión,5afacff0
@@ -2036,6 +2047,7 @@ SOIL_ASSESSMENT_DESCRIPTION_NOTES,Descripción/Notas de la Evaluación del Suelo
 SOIL_EROSION,Erosión del suelo,5620daeb
 SOIL_PHOTO,Foto del suelo,5a089072
 SOIL_PHOTO_CANNOT_BE_DELETED,No se puede eliminar la foto del suelo,5b7af46a
+SOIL_PHOTO_CANNOT_DELETE_INFO,No se pueden eliminar las fotos del suelo.,07d41270
 SOMETHING_WENT_WRONG,Algo no salió como se esperaba.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si usted está teniendo problemas con Terraware, infórmenos sobre los mismos y los corregiremos.",c506e77d
 SOMETHING_WENT_WRONG_TITLE,Algo no salió como se esperaba...,bf2e66a4
@@ -2494,6 +2506,7 @@ VIEW_HISTORY,Ver historial,a1dbe2ca
 VIEW_IN_MAP,Ver en el Mapa,510d8388
 VIEW_INTERNAL_REPORT_FORM,Ver el formulario de informe interno,67f51c8a
 VIEW_MAP,Ver mapa,8ef1dcc4
+VIEW_OBSERVATION,Ver observación,9edac640
 VIEW_PLANTING_PROGRESS,Ver el progreso de la siembra,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Ver envío previo a la pantalla,7dadf2e6
 VIEW_PUBLISHED_FUNDER_REPORT,Ver el informe de financiación publicado,8dbc3bb4
