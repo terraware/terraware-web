@@ -18,6 +18,7 @@ import { useLocalization } from 'src/providers/hooks';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { ActivityMediaFile, AdminActivityMediaFile } from 'src/types/Activity';
 import {
+  getObsPhotoTypeLabel,
   isCaptionReadOnly,
   isCornerPhoto,
   isObservationMedia,
@@ -163,6 +164,11 @@ const ActivityPhotoPreview = ({
     return strings.OBSERVATION_PHOTO_CANNOT_DELETE_INFO;
   }, [isUndeletable, mediaItem, strings]);
 
+  const obsPhotoTypeLabel = useMemo(
+    () => (isUndeletable && mediaItem.type === 'existing' ? getObsPhotoTypeLabel(mediaItem.data, strings) : undefined),
+    [isUndeletable, mediaItem, strings]
+  );
+
   const isCaptionRO = useMemo(
     () => isObsMedia && mediaItem.type === 'existing' && isCaptionReadOnly(mediaItem.data),
     [isObsMedia, mediaItem]
@@ -252,6 +258,11 @@ const ActivityPhotoPreview = ({
       paddingBottom='24px'
       width='100%'
     >
+      {obsPhotoTypeLabel && (
+        <Typography fontSize='16px' fontWeight={500} marginBottom={theme.spacing(2)}>
+          {obsPhotoTypeLabel}
+        </Typography>
+      )}
       <Grid container spacing={2} textAlign='left'>
         <Grid item sm='auto' xs={12}>
           <Box position='relative'>
