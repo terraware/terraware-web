@@ -144,7 +144,7 @@ export default function MonitoringPlotList(): JSX.Element {
     } else {
       return [];
     }
-  }, [observationId, observationResult, stratumResult]);
+  }, [observationId, observationResult, stratumResult, strings]);
 
   const hasSmallPlots = useMemo(() => rows.some((row) => row.sizeMeters === 25), [rows]);
 

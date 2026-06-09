@@ -269,7 +269,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           completedDate,
         };
       }),
-    [observationResults, plantingSitesById, selectedPlotSelection]
+    [observationResults, plantingSitesById, selectedPlotSelection, strings]
   );
 
   const uniqueStatuses = useMemo(
