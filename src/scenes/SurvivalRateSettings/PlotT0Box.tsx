@@ -44,6 +44,12 @@ const PlotT0Box = ({ plot, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
     return plot.observationPlots.find((op) => op.observation_id === t0Plot?.observationId?.toString());
   }, [plot.observationPlots, t0Plot?.observationId]);
 
+  const sortedDensityData = [...(t0Plot?.densityData ?? [])].sort((a, b) => {
+    const nameA = species.find((sp) => sp.id === a.speciesId)?.scientificName ?? '';
+    const nameB = species.find((sp) => sp.id === b.speciesId)?.scientificName ?? '';
+    return nameA.localeCompare(nameB, activeLocale ?? undefined);
+  });
+
   return (
     <>
       <Box
@@ -127,7 +133,7 @@ const PlotT0Box = ({ plot, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {t0Plot.densityData.map((densityData, index) => (
+                      {sortedDensityData.map((densityData, index) => (
                         <tr key={index}>
                           <td style={{ paddingRight: '64px' }}>
                             {species.find((sp) => sp.id === densityData.speciesId)?.scientificName}

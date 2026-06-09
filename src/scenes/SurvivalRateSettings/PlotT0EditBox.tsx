@@ -43,7 +43,7 @@ const PlotT0EditBox = ({
   const [t0Origin, setT0Origin] = useState<string>('useObservation');
 
   const { species } = useSpeciesData();
-  const locale = useLocalization().activeLocale;
+  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const { plantingSite } = usePlantingSite(plantingSiteId);
   const defaultTimeZone = useDefaultTimeZone().get();
@@ -85,12 +85,12 @@ const PlotT0EditBox = ({
         const timeZone = plantingSite?.timeZone ?? defaultTimeZone.id;
         const completedDate = getDateDisplayValue(option.observationCompletedTime, timeZone);
         return option?.observationCompletedTime
-          ? `${getShortDate(option.observationCompletedTime, locale)} ${strings.COMPLETED_ON} ${completedDate}`
+          ? `${getShortDate(option.observationCompletedTime, activeLocale)} ${strings.COMPLETED_ON} ${completedDate}`
           : '';
       }
       return '';
     },
-    [defaultTimeZone.id, locale, plantingSite?.timeZone]
+    [defaultTimeZone.id, activeLocale, plantingSite?.timeZone]
   );
 
   const displayLabelObservation = useCallback(
@@ -99,12 +99,12 @@ const PlotT0EditBox = ({
         const timeZone = plantingSite?.timeZone ?? defaultTimeZone.id;
         const completedDate = getDateDisplayValue(option.observationCompletedTime, timeZone);
         return option?.observationCompletedTime
-          ? `${getShortDate(option.observationCompletedTime, locale)} ${strings.COMPLETED_ON} ${completedDate}`
+          ? `${getShortDate(option.observationCompletedTime, activeLocale)} ${strings.COMPLETED_ON} ${completedDate}`
           : '';
       }
       return '';
     },
-    [defaultTimeZone.id, locale, plantingSite?.timeZone]
+    [defaultTimeZone.id, activeLocale, plantingSite?.timeZone]
   );
 
   const toTObservation = useCallback(
@@ -344,6 +344,38 @@ const PlotT0EditBox = ({
     [plotToSave?.densityData]
   );
 
+  const sortedObservationSpecies = useMemo(() => {
+    if (!selectedObservationSpecies?.species) {
+      return [];
+    }
+    return [...selectedObservationSpecies.species].sort((a, b) => {
+      const nameA = species.find((sp) => sp.id === a.speciesId)?.scientificName ?? '';
+      const nameB = species.find((sp) => sp.id === b.speciesId)?.scientificName ?? '';
+      return nameA.localeCompare(nameB, activeLocale ?? undefined);
+    });
+  }, [activeLocale, selectedObservationSpecies?.species, species]);
+
+  const sortedWithdrawnSpecies = useMemo(() => {
+    if (!withdrawnSpeciesPlot?.species) {
+      return [];
+    }
+    return [...withdrawnSpeciesPlot.species].sort((a, b) => {
+      const nameA = species.find((sp) => sp.id === a.speciesId)?.scientificName ?? '';
+      const nameB = species.find((sp) => sp.id === b.speciesId)?.scientificName ?? '';
+      return nameA.localeCompare(nameB, activeLocale ?? undefined);
+    });
+  }, [activeLocale, withdrawnSpeciesPlot?.species, species]);
+
+  const sortedNewSpeciesRows = useMemo(() => {
+    return [...newSpeciesRows].sort((a, b) => {
+      const nameA =
+        a.speciesId !== undefined ? species.find((sp) => sp.id === a.speciesId)?.scientificName ?? '' : '\uffff';
+      const nameB =
+        b.speciesId !== undefined ? species.find((sp) => sp.id === b.speciesId)?.scientificName ?? '' : '\uffff';
+      return nameA.localeCompare(nameB, activeLocale ?? undefined);
+    });
+  }, [activeLocale, newSpeciesRows, species]);
+
   return (
     <>
       <Box
@@ -441,7 +473,7 @@ const PlotT0EditBox = ({
                           </tr>
                         </thead>
                         <tbody>
-                          {selectedObservationSpecies?.species.map((sp, index) => {
+                          {sortedObservationSpecies.map((sp, index) => {
                             return (
                               <tr key={index}>
                                 <td>{species.find((iSp) => sp.speciesId === iSp.id)?.scientificName}</td>
@@ -518,7 +550,7 @@ const PlotT0EditBox = ({
                   </tr>
                 </thead>
                 <tbody>
-                  {withdrawnSpeciesPlot?.species.map((withdrawnSpecies, index) => (
+                  {sortedWithdrawnSpecies.map((withdrawnSpecies, index) => (
                     <tr key={index}>
                       <td>{species.find((sp) => sp.id === withdrawnSpecies.speciesId)?.scientificName}</td>
                       <td>
@@ -556,7 +588,7 @@ const PlotT0EditBox = ({
                       </td>
                     </tr>
                   )}
-                  {newSpeciesRows.map((row) => {
+                  {sortedNewSpeciesRows.map((row) => {
                     return (
                       <tr key={row.id}>
                         <td>

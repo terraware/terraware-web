@@ -5,6 +5,7 @@ import { Button, Checkbox, Icon, IconTooltip, SelectT } from '@terraware/web-com
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import TextField from 'src/components/common/TextField';
+import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
@@ -30,6 +31,7 @@ const StratumT0EditBox = ({
 }: StratumT0EditBoxProps) => {
   const theme = useTheme();
   const { species } = useSpeciesData();
+  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
 
   const [selectedWithdrawalCheckboxes, setSelectedWithdrawalCheckboxes] = useState<Set<number>>(new Set());
@@ -267,6 +269,24 @@ const StratumT0EditBox = ({
     [stratumToSave?.densityData]
   );
 
+  const sortedAllWithdrawnSpecies = useMemo(() => {
+    return [...allWithdrawnSpecies].sort((a, b) => {
+      const nameA = species.find((sp) => sp.id === a.speciesId)?.scientificName ?? '';
+      const nameB = species.find((sp) => sp.id === b.speciesId)?.scientificName ?? '';
+      return nameA.localeCompare(nameB, activeLocale ?? undefined);
+    });
+  }, [activeLocale, allWithdrawnSpecies, species]);
+
+  const sortedNewSpeciesRows = useMemo(() => {
+    return [...newSpeciesRows].sort((a, b) => {
+      const nameA =
+        a.speciesId !== undefined ? species.find((sp) => sp.id === a.speciesId)?.scientificName ?? '' : '\uffff';
+      const nameB =
+        b.speciesId !== undefined ? species.find((sp) => sp.id === b.speciesId)?.scientificName ?? '' : '\uffff';
+      return nameA.localeCompare(nameB, activeLocale ?? undefined);
+    });
+  }, [activeLocale, newSpeciesRows, species]);
+
   return (
     <>
       <Box
@@ -318,7 +338,7 @@ const StratumT0EditBox = ({
               </tr>
             </thead>
             <tbody>
-              {allWithdrawnSpecies.map((withdrawnSpecies, index) => (
+              {sortedAllWithdrawnSpecies.map((withdrawnSpecies, index) => (
                 <tr key={index}>
                   <td>{species.find((sp) => sp.id === withdrawnSpecies.speciesId)?.scientificName}</td>
                   <td>
@@ -356,7 +376,7 @@ const StratumT0EditBox = ({
                   </td>
                 </tr>
               )}
-              {newSpeciesRows.map((row) => {
+              {sortedNewSpeciesRows.map((row) => {
                 return (
                   <tr key={row.id}>
                     <td>

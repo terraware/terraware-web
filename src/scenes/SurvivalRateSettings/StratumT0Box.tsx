@@ -4,6 +4,7 @@ import { Box, Divider, Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
@@ -19,6 +20,7 @@ type StratumT0BoxProps = {
 const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Stratum }: StratumT0BoxProps) => {
   const theme = useTheme();
   const { species } = useSpeciesData();
+  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
 
   const stratumTotalDensity = useMemo(() => {
@@ -48,6 +50,12 @@ const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Stratum }
       }
     });
   }, [allWithdrawnSpecies, t0Stratum?.densityData]);
+
+  const sortedDensityData = [...(t0Stratum?.densityData ?? [])].sort((a, b) => {
+    const nameA = species.find((sp) => sp.id === a.speciesId)?.scientificName ?? '';
+    const nameB = species.find((sp) => sp.id === b.speciesId)?.scientificName ?? '';
+    return nameA.localeCompare(nameB, activeLocale ?? undefined);
+  });
 
   return (
     <>
@@ -101,7 +109,7 @@ const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Stratum }
                       </tr>
                     </thead>
                     <tbody>
-                      {t0Stratum.densityData.map((densityData, index) => (
+                      {sortedDensityData.map((densityData, index) => (
                         <tr key={index}>
                           <td style={{ paddingRight: '64px' }}>
                             {species.find((sp) => sp.id === densityData.speciesId)?.scientificName}
