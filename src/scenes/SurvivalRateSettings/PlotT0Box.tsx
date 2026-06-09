@@ -23,9 +23,10 @@ type PlotT0BoxProps = {
 
 const PlotT0Box = ({ plot, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
   const theme = useTheme();
-  const { species } = useSpeciesData();
+  const { species, speciesById } = useSpeciesData();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
+  console.log('speciesById', speciesById);
 
   const getPlotTotalDensity = useMemo(() => {
     const total = t0Plot?.densityData.reduce((sum, density) => sum + density.plotDensity, 0);
@@ -45,8 +46,8 @@ const PlotT0Box = ({ plot, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
   }, [plot.observationPlots, t0Plot?.observationId]);
 
   const sortedDensityData = [...(t0Plot?.densityData ?? [])].sort((a, b) => {
-    const nameA = species.find((sp) => sp.id === a.speciesId)?.scientificName ?? '';
-    const nameB = species.find((sp) => sp.id === b.speciesId)?.scientificName ?? '';
+    const nameA = speciesById[a.speciesId]?.scientificName ?? '';
+    const nameB = speciesById[b.speciesId]?.scientificName ?? '';
     return nameA.localeCompare(nameB, activeLocale ?? undefined);
   });
 
@@ -135,9 +136,7 @@ const PlotT0Box = ({ plot, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
                     <tbody>
                       {sortedDensityData.map((densityData, index) => (
                         <tr key={index}>
-                          <td style={{ paddingRight: '64px' }}>
-                            {species.find((sp) => sp.id === densityData.speciesId)?.scientificName}
-                          </td>
+                          <td style={{ paddingRight: '64px' }}>{speciesById[densityData.speciesId]?.scientificName}</td>
                           <td>{roundToDecimal(densityData.plotDensity, 1)}</td>
                         </tr>
                       ))}

@@ -42,7 +42,7 @@ const PlotT0EditBox = ({
   const theme = useTheme();
   const [t0Origin, setT0Origin] = useState<string>('useObservation');
 
-  const { species } = useSpeciesData();
+  const { species, speciesById } = useSpeciesData();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const { plantingSite } = usePlantingSite(plantingSiteId);
@@ -329,9 +329,9 @@ const PlotT0EditBox = ({
 
   const speciesSelectedValueHandler = useCallback(
     (row: AddedSpecies) => {
-      return species.find((s) => s.id.toString() === row.speciesId?.toString());
+      return row.speciesId !== undefined ? speciesById[row.speciesId] : undefined;
     },
-    [species]
+    [speciesById]
   );
 
   const densityValue = useCallback(
@@ -349,32 +349,30 @@ const PlotT0EditBox = ({
       return [];
     }
     return [...selectedObservationSpecies.species].sort((a, b) => {
-      const nameA = species.find((sp) => sp.id === a.speciesId)?.scientificName ?? '';
-      const nameB = species.find((sp) => sp.id === b.speciesId)?.scientificName ?? '';
+      const nameA = speciesById[a.speciesId]?.scientificName ?? '';
+      const nameB = speciesById[b.speciesId]?.scientificName ?? '';
       return nameA.localeCompare(nameB, activeLocale ?? undefined);
     });
-  }, [activeLocale, selectedObservationSpecies?.species, species]);
+  }, [activeLocale, selectedObservationSpecies?.species, speciesById]);
 
   const sortedWithdrawnSpecies = useMemo(() => {
     if (!withdrawnSpeciesPlot?.species) {
       return [];
     }
     return [...withdrawnSpeciesPlot.species].sort((a, b) => {
-      const nameA = species.find((sp) => sp.id === a.speciesId)?.scientificName ?? '';
-      const nameB = species.find((sp) => sp.id === b.speciesId)?.scientificName ?? '';
+      const nameA = speciesById[a.speciesId]?.scientificName ?? '';
+      const nameB = speciesById[b.speciesId]?.scientificName ?? '';
       return nameA.localeCompare(nameB, activeLocale ?? undefined);
     });
-  }, [activeLocale, withdrawnSpeciesPlot?.species, species]);
+  }, [activeLocale, withdrawnSpeciesPlot?.species, speciesById]);
 
   const sortedNewSpeciesRows = useMemo(() => {
     return [...newSpeciesRows].sort((a, b) => {
-      const nameA =
-        a.speciesId !== undefined ? species.find((sp) => sp.id === a.speciesId)?.scientificName ?? '' : '\uffff';
-      const nameB =
-        b.speciesId !== undefined ? species.find((sp) => sp.id === b.speciesId)?.scientificName ?? '' : '\uffff';
+      const nameA = a.speciesId !== undefined ? speciesById[a.speciesId]?.scientificName ?? '' : '\uffff';
+      const nameB = b.speciesId !== undefined ? speciesById[b.speciesId]?.scientificName ?? '' : '\uffff';
       return nameA.localeCompare(nameB, activeLocale ?? undefined);
     });
-  }, [activeLocale, newSpeciesRows, species]);
+  }, [activeLocale, newSpeciesRows, speciesById]);
 
   return (
     <>
@@ -476,7 +474,7 @@ const PlotT0EditBox = ({
                           {sortedObservationSpecies.map((sp, index) => {
                             return (
                               <tr key={index}>
-                                <td>{species.find((iSp) => sp.speciesId === iSp.id)?.scientificName}</td>
+                                <td>{speciesById[sp.speciesId]?.scientificName}</td>
                                 <td>{roundToDecimal(sp.density, 1)}</td>
                               </tr>
                             );
@@ -552,7 +550,7 @@ const PlotT0EditBox = ({
                 <tbody>
                   {sortedWithdrawnSpecies.map((withdrawnSpecies, index) => (
                     <tr key={index}>
-                      <td>{species.find((sp) => sp.id === withdrawnSpecies.speciesId)?.scientificName}</td>
+                      <td>{speciesById[withdrawnSpecies.speciesId]?.scientificName}</td>
                       <td>
                         <TextField
                           type='number'

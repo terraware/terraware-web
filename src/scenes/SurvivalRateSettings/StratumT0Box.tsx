@@ -19,7 +19,7 @@ type StratumT0BoxProps = {
 
 const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Stratum }: StratumT0BoxProps) => {
   const theme = useTheme();
-  const { species } = useSpeciesData();
+  const { speciesById } = useSpeciesData();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
 
@@ -52,8 +52,8 @@ const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Stratum }
   }, [allWithdrawnSpecies, t0Stratum?.densityData]);
 
   const sortedDensityData = [...(t0Stratum?.densityData ?? [])].sort((a, b) => {
-    const nameA = species.find((sp) => sp.id === a.speciesId)?.scientificName ?? '';
-    const nameB = species.find((sp) => sp.id === b.speciesId)?.scientificName ?? '';
+    const nameA = speciesById[a.speciesId]?.scientificName ?? '';
+    const nameB = speciesById[b.speciesId]?.scientificName ?? '';
     return nameA.localeCompare(nameB, activeLocale ?? undefined);
   });
 
@@ -111,9 +111,7 @@ const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Stratum }
                     <tbody>
                       {sortedDensityData.map((densityData, index) => (
                         <tr key={index}>
-                          <td style={{ paddingRight: '64px' }}>
-                            {species.find((sp) => sp.id === densityData.speciesId)?.scientificName}
-                          </td>
+                          <td style={{ paddingRight: '64px' }}>{speciesById[densityData.speciesId]?.scientificName}</td>
                           <td>{roundToDecimal(densityData.density, 1)}</td>
                         </tr>
                       ))}

@@ -6,6 +6,7 @@ export type SpeciesData = {
   acceleratorOrganizationId?: number;
   setAcceleratorOrganizationId: (organizationId: number) => void;
   species: Species[];
+  speciesById: Record<number, Species>;
   inUseSpecies: Species[];
   reload: () => void;
 };
@@ -15,6 +16,7 @@ export const SpeciesContext = createContext<SpeciesData>({
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   setAcceleratorOrganizationId: () => {},
   species: [],
+  speciesById: {},
   inUseSpecies: [],
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   reload: () => {},
