@@ -67,6 +67,7 @@ const SpeciesProvider = ({ children }: Props) => {
       acceleratorOrganizationId,
       setAcceleratorOrganizationId,
       species,
+      speciesById: Object.fromEntries(species.map((s) => [s.id, s])),
       inUseSpecies,
       reload,
     }),

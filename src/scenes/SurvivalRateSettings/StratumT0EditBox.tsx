@@ -5,6 +5,7 @@ import { Button, Checkbox, Icon, IconTooltip, SelectT } from '@terraware/web-com
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import TextField from 'src/components/common/TextField';
+import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
@@ -29,7 +30,8 @@ const StratumT0EditBox = ({
   setRecord,
 }: StratumT0EditBoxProps) => {
   const theme = useTheme();
-  const { species } = useSpeciesData();
+  const { species, speciesById } = useSpeciesData();
+  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
 
   const [selectedWithdrawalCheckboxes, setSelectedWithdrawalCheckboxes] = useState<Set<number>>(new Set());
@@ -250,9 +252,9 @@ const StratumT0EditBox = ({
 
   const speciesSelectedValueHandler = useCallback(
     (row: AddedSpecies) => {
-      return species.find((s) => s.id.toString() === row.speciesId?.toString());
+      return row.speciesId !== undefined ? speciesById[row.speciesId] : undefined;
     },
-    [species]
+    [speciesById]
   );
 
   const densityValue = useCallback(
@@ -266,6 +268,22 @@ const StratumT0EditBox = ({
     },
     [stratumToSave?.densityData]
   );
+
+  const sortedAllWithdrawnSpecies = useMemo(() => {
+    return [...allWithdrawnSpecies].sort((a, b) => {
+      const nameA = speciesById[a.speciesId]?.scientificName ?? '';
+      const nameB = speciesById[b.speciesId]?.scientificName ?? '';
+      return nameA.localeCompare(nameB, activeLocale ?? undefined);
+    });
+  }, [activeLocale, allWithdrawnSpecies, speciesById]);
+
+  const sortedNewSpeciesRows = useMemo(() => {
+    return [...newSpeciesRows].sort((a, b) => {
+      const nameA = a.speciesId !== undefined ? speciesById[a.speciesId]?.scientificName ?? '' : '\uffff';
+      const nameB = b.speciesId !== undefined ? speciesById[b.speciesId]?.scientificName ?? '' : '\uffff';
+      return nameA.localeCompare(nameB, activeLocale ?? undefined);
+    });
+  }, [activeLocale, newSpeciesRows, speciesById]);
 
   return (
     <>
@@ -318,9 +336,9 @@ const StratumT0EditBox = ({
               </tr>
             </thead>
             <tbody>
-              {allWithdrawnSpecies.map((withdrawnSpecies, index) => (
+              {sortedAllWithdrawnSpecies.map((withdrawnSpecies, index) => (
                 <tr key={index}>
-                  <td>{species.find((sp) => sp.id === withdrawnSpecies.speciesId)?.scientificName}</td>
+                  <td>{speciesById[withdrawnSpecies.speciesId]?.scientificName}</td>
                   <td>
                     <TextField
                       type='number'
@@ -356,7 +374,7 @@ const StratumT0EditBox = ({
                   </td>
                 </tr>
               )}
-              {newSpeciesRows.map((row) => {
+              {sortedNewSpeciesRows.map((row) => {
                 return (
                   <tr key={row.id}>
                     <td>
