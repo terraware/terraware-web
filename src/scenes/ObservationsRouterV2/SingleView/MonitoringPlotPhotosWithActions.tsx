@@ -6,11 +6,11 @@ import { Button } from '@terraware/web-components';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import MediaItem, { MediaFile } from 'src/components/common/MediaItem';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
+import { useLocalization } from 'src/providers/hooks';
 import {
   useGenerateObservationSplatFileMutation,
   useListObservationSplatsQuery,
 } from 'src/queries/generated/observationSplats';
-import strings from 'src/strings';
 import { ObservationMonitoringPlotPhoto, getPositionLabel, getQuadratLabel } from 'src/types/Observations';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -32,6 +32,7 @@ export default function MonitoringPlotPhotosWithActions({
   plantingSiteName,
   photos,
 }: MonitoringPlotPhotosWithActionsProps): JSX.Element {
+  const { strings } = useLocalization();
   const theme = useTheme();
   const orgFeatures = useOrganizationFeatures();
   const [lightboxFileId, setLightboxFileId] = useState<number | undefined>(undefined);
@@ -130,11 +131,13 @@ export default function MonitoringPlotPhotosWithActions({
             <Box key={mediaFile.fileId} position='relative'>
               {!!monitoringPlotName && mediaFile.position && (
                 <Typography color={theme.palette.TwClrBaseBlack}>
-                  {monitoringPlotName} {getPositionLabel(mediaFile.position)}
+                  {monitoringPlotName} {getPositionLabel(mediaFile.position, strings)}
                 </Typography>
               )}
               {mediaFile.isQuadrat && (
-                <Typography color={theme.palette.TwClrBaseBlack}>{getQuadratLabel(mediaFile.position)}</Typography>
+                <Typography color={theme.palette.TwClrBaseBlack}>
+                  {getQuadratLabel(mediaFile.position, strings)}
+                </Typography>
               )}
               <MediaItem
                 mediaFile={mediaFile}

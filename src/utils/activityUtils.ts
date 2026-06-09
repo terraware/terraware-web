@@ -1,6 +1,7 @@
 import { components } from 'src/api/types/generated-schema';
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import defaultStrings from 'src/strings';
+import { getPositionLabel, getQuadratLabel } from 'src/types/Observations';
 
 export type GroupedActivities = {
   quarter: string;
@@ -103,4 +104,25 @@ export const isCaptionReadOnly = (media: { observation?: ObservationActivityMedi
     return false;
   }
   return media.observation.position !== undefined || media.observation.type === 'Quadrat';
+};
+
+export const getObsPhotoTypeLabel = (
+  media: { observation?: ObservationActivityMedia },
+  strings: typeof defaultStrings
+): string | undefined => {
+  const obs = media.observation;
+  if (!obs || !isUndeletableObservationPhoto(media)) {
+    return undefined;
+  }
+  const plotPrefix = `${obs.monitoringPlotNumber} `;
+  if (obs.type === 'Plot' && obs.position) {
+    return `${plotPrefix}${getPositionLabel(obs.position, strings)}`;
+  }
+  if (obs.type === 'Quadrat' && obs.position) {
+    return `${plotPrefix}${getQuadratLabel(obs.position, strings)}`;
+  }
+  if (obs.type === 'Soil') {
+    return `${plotPrefix}${strings.SOIL}`;
+  }
+  return undefined;
 };

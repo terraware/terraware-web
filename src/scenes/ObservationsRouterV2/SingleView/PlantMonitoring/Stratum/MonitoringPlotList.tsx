@@ -130,7 +130,7 @@ export default function MonitoringPlotList(): JSX.Element {
             stratumName: stratumResult.name,
             substratumName: substratum.name,
             completedDate: plot.completedTime,
-            status: getPlotStatus(plot.status),
+            status: getPlotStatus(plot.status, strings),
             isPermanent: plot.isPermanent,
             sizeMeters: plot.sizeMeters,
             totalLive,
@@ -144,7 +144,7 @@ export default function MonitoringPlotList(): JSX.Element {
     } else {
       return [];
     }
-  }, [observationId, observationResult, stratumResult]);
+  }, [observationId, observationResult, stratumResult, strings]);
 
   const hasSmallPlots = useMemo(() => rows.some((row) => row.sizeMeters === 25), [rows]);
 

@@ -30,8 +30,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
-import { getPositionLabel, getQuadratLabel } from 'src/types/Observations';
-import { isObservationActivity, isUndeletableObservationPhoto } from 'src/utils/activityUtils';
+import { getObsPhotoTypeLabel, isObservationActivity } from 'src/utils/activityUtils';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -208,23 +207,7 @@ const ActivityMediaItem = ({
     [mediaFile.fileId, setLightboxImageId]
   );
 
-  const obsPhotoTypeLabel = useMemo(() => {
-    const obs = mediaFile.observation;
-    if (!obs || !isUndeletableObservationPhoto(mediaFile)) {
-      return undefined;
-    }
-    const plotPrefix = `${obs.monitoringPlotNumber} `;
-    if (obs.type === 'Plot' && obs.position) {
-      return `${plotPrefix}${getPositionLabel(obs.position)}`;
-    }
-    if (obs.type === 'Quadrat' && obs.position) {
-      return `${plotPrefix}${getQuadratLabel(obs.position)}`;
-    }
-    if (obs.type === 'Soil') {
-      return `${plotPrefix}${strings.SOIL}`;
-    }
-    return undefined;
-  }, [mediaFile, strings]);
+  const obsPhotoTypeLabel = useMemo(() => getObsPhotoTypeLabel(mediaFile, strings), [mediaFile, strings]);
 
   const handleImageError = useCallback(async () => {
     // only check for 412 error if this is a video

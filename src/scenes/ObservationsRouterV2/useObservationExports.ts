@@ -208,7 +208,7 @@ const useObservationExports = () => {
               southeastLongitude: plotCoordinates[1][0],
               southwestLatitude: plotCoordinates[0][1],
               southwestLongitude: plotCoordinates[0][0],
-              status: getPlotStatus(monitoringPlot.status),
+              status: getPlotStatus(monitoringPlot.status, strings),
               substratumName: substratum.name,
               survivalRate: monitoringPlot.survivalRate,
               totalDead,
