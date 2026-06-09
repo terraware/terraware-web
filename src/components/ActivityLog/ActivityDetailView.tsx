@@ -295,9 +295,15 @@ const ActivityMediaItem = ({
           )}
         </Box>
 
-        {(mediaFile.caption || obsPhotoTypeLabel) && (
+        {obsPhotoTypeLabel && (
           <Typography component='div' sx={captionStyles}>
-            {obsPhotoTypeLabel ?? mediaFile.caption}
+            {obsPhotoTypeLabel}
+          </Typography>
+        )}
+
+        {mediaFile.caption && (
+          <Typography component='div' sx={captionStyles}>
+            {mediaFile.caption}
           </Typography>
         )}
       </Box>
