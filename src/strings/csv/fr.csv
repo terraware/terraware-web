@@ -1194,6 +1194,7 @@ NEW,Nouveau,b8096e3b
 NEW_ACCESSION,Ajouter une adhésion,6d0d1602
 NEW_APP_VERSION,Veuillez actualiser pour utiliser la dernière version de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualisez pour obtenir la dernière version de Terraware.,6235c190
+NEW_PLANTING_WITHDRAWAL_REQUESTS_RECEIVED,Nouvelles demandes de retrait de plantation reçues pour {0},0da4cdcd
 NEW_SPECIES_TARGETS_ADDED,De nouveaux objectifs par espèce ont été ajoutés pour {0},9348d3bf
 NEW_STRATUM,Nouvelle strate,84292d1f
 NEW_SUBSTRATUM,Nouveau substrat,90a1ddc3
@@ -1415,6 +1416,7 @@ PAGINATION_FOOTER_RANGE,{0} à {1} sur {2},ce14c917
 PAN,Déplacer,34177007
 PAPER,Papier,df5f30a1
 PAPER_PETRI_DISH,Boîte de Petri en papier,d478bf2a
+PARTIAL,Partiel,d8250603
 PARTIAL_ERRORS,Certaines demandes ont échoué. Vous pouvez réessayer plus tard.,2d39959f
 PARTIAL_ERRORS_TITLE,Erreurs partielles,3fca63bf
 PARTICIPANT,Participant,911243e3
@@ -1490,6 +1492,7 @@ PLANTING_GOAL,Objectif de plantation,a97123a1
 PLANTING_PROGRESS,Progression de la plantation,58616da9
 PLANTING_PROGRESS_PERCENT,Progression de la plantation (%),0d372a57
 PLANTING_PROGRESS_TOOLTIP,Avancement des retraits par rapport à l'objectif de plantation pour cette saison.,4cc685ea
+PLANTING_SEASON,Saison de plantation,45c5c9f9
 PLANTING_SEASON_END,Fin de la saison de plantation,414309c0
 PLANTING_SEASON_END_IN_PAST,La date de fin ne peut pas être passée.,b2729d4d
 PLANTING_SEASON_END_OUT_OF_RANGE,Elle doit se situer entre 4 semaines et 1 an après la date de début.,fcca5463
@@ -1789,12 +1792,16 @@ REPORTS_SETTINGS_EDIT_SUBTITLE,"Les rapports peuvent être générés au niveau 
 REPORTS_SETTINGS_GENERATE_FOR_ORG,Générer un rapport pour {0},491ef6ab
 REPORTS_SETTINGS_GENERATE_FOR_PROJECT,Générer un rapport de projet pour,91439ec3
 REPORTS_SETUP_CTA,Configurer les rapports,389cb962
+REQUEST_PENDING,Demande en attente,3255d145
 REQUEST_REASSIGNMENT,Demander une réaffectation,9cc0038f
 REQUEST_REASSIGNMENT_DURATION_TOOLTIP,Sélectionnez « Temporaire » si la réaffectation doit concerner uniquement cette Observation. Sélectionnez « Long terme/Permanent » si la réaffectation doit s'appliquer à toutes les Observations futures ; la parcelle sera alors retirée du groupe de parcelles disponibles pour l'affectation.,9b42a97e
 REQUEST_REASSIGNMENT_REASON_TOOLTIP,Fournissez une justification pour la réaffectation de l'emplacement de cette parcelle.,0ecb1f62
 REQUEST_UPDATE,Demander une mise à jour,bce207eb
 REQUEST_UPDATE_ACTION,Demander une mise à jour...,790ef713
 REQUEST_UPDATE_REASON,Fournissez une raison pour demander la mise à jour.,52430788
+REQUESTED_PLANTS,Plantes demandées,4c4fac82
+REQUESTS,Demandes,9ecfc0e8
+REQUESTS_X,Demandes ({0}),b70edf58
 REQUIRED,Requis,ede65856
 REQUIRED_FIELD,Champ requis,4e1802b3
 REQUIRED_QUESTION_MARK,Obligatoire ?,d99ba5a7
@@ -1819,6 +1826,7 @@ REVIEW_APPLICATION_COMPLETE,Veuillez passer en revue toutes vos questions avant 
 REVIEW_APPLICATION_INCOMPLETE,Vous devez remplir toutes les sections avant de pouvoir soumettre votre candidature à notre équipe d'accélérateurs.,72dfa69f
 REVIEW_APPLICATION_STATUS_TEXT,Les exigences pour {0} sont {1},c2e62252
 REVIEW_ERRORS,Voir les erreurs,ef336499
+REVIEW_PENDING_REQUESTS_DESCRIPTION,Examinez les demandes en attente pour les dates de plantation et enregistrez les retraits pour les satisfaire.,a1dc2166
 REVIEW_YOUR_ACCOUNT_SETTING,Voir les paramètres de votre compte,26593a52
 REVIEW_YOUR_APPLICATION,Examiner votre demande,a364de57
 REVIEW_YOUR_ORGANIZATION_SETTING,Voir les paramètres de votre organisation,49991b07
@@ -2547,6 +2555,7 @@ WITHDRAWALS,Retraits,270c7f9e
 WITHDRAWN,Retiré,2f74b8e9
 WITHDRAWN_BY,Retiré par,4cf942fb
 WITHDRAWN_FOR_PLANTING,Retiré pour la plantation,dd024a58
+WITHDRAWN_PLANTS,Plantes retirées,5d81e2ad
 WITHDRAWN_QUANTITY_ERROR,Dépasse la quantité restante,8c911341
 WITHDRAWN_QUANTITY_GREATER_THAN_ZERO_ERROR,La quantité retirée doit être supérieure à 0,75e6b589
 WOOD_DENSITY_LEVEL,Niveau de densité du bois,83a6a766

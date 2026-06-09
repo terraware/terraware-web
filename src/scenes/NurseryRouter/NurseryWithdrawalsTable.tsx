@@ -317,6 +317,13 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         filterFn: () => true,
       },
       {
+        id: 'plantingSeasonName',
+        header: strings.PLANTING_SEASON,
+        accessorKey: 'plantingSeasonName',
+        enableEditing: false,
+        enableColumnFilter: false,
+      },
+      {
         id: 'projectNames',
         header: strings.PROJECTS,
         accessorKey: 'projectNames',

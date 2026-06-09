@@ -284,6 +284,7 @@ const injectedRtkApi = api.injectEndpoints({
             'batchWithdrawals.batch_project_name',
             'batchWithdrawals.batch_species_scientificName',
             'batchWithdrawals.destinationBatchProjectName',
+            'plantingSeason_name',
             'undoesWithdrawalId',
             'undoneByWithdrawalId',
             'undoesWithdrawalDate',
@@ -323,6 +324,7 @@ const injectedRtkApi = api.injectEndpoints({
                 (result.batchWithdrawals ?? []).map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName)
               )
             ).sort(),
+            plantingSeasonName: result.plantingSeason_name,
             undoesWithdrawalDate: result.undoesWithdrawalDate,
             undoesWithdrawalId: result.undoesWithdrawalId ? Number(result.undoesWithdrawalId) : undefined,
 
@@ -464,6 +466,7 @@ type NurseryWithdrawalApiResult = {
   'totalWithdrawn(raw)': string;
   hasReassignments: string;
   batchWithdrawals: NurseryWithdrawalBatchApiResult[];
+  plantingSeason_name?: string;
   undoesWithdrawalId?: string;
   undoneByWithdrawalId?: string;
   undoesWithdrawalDate?: string;
@@ -486,6 +489,7 @@ export type SearchNurseryWithdrawalPayload = {
   totalWithdrawn: number;
   speciesNames?: string[];
   projectNames?: string[];
+  plantingSeasonName?: string;
   hasReassignments: boolean;
   undoesWithdrawalId?: number;
   undoneByWithdrawalId?: number;

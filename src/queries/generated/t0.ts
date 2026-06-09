@@ -64,22 +64,15 @@ export type StratumT0DataPayload = {
   densityData: SpeciesDensityPayload[];
   stratumId: number;
 };
-export type ZoneT0DataPayload = {
-  densityData: SpeciesDensityPayload[];
-  plantingZoneId: number;
-};
 export type AssignSiteT0TempDataRequestPayload = {
   plantingSiteId: number;
-  strata?: StratumT0DataPayload[];
-  /** Use strata instead */
-  zones?: ZoneT0DataPayload[];
+  strata: StratumT0DataPayload[];
 };
 export type SiteT0DataResponsePayload = {
   plantingSiteId: number;
   plots: PlotT0DataPayload[];
   strata: StratumT0DataPayload[];
   survivalRateIncludesTempPlots: boolean;
-  zones: ZoneT0DataPayload[];
 };
 export type GetSiteT0DataResponsePayload = {
   data: SiteT0DataResponsePayload;

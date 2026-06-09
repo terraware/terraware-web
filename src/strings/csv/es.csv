@@ -1195,6 +1195,7 @@ NEW,Nuevo,b8096e3b
 NEW_ACCESSION,Añadir accesión,6d0d1602
 NEW_APP_VERSION,Actualice para usar la versión más reciente de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualice para obtener la versión más reciente de Terraware.,6235c190
+NEW_PLANTING_WITHDRAWAL_REQUESTS_RECEIVED,Nuevas solicitudes de retiro de plantas recibidas para {0},0da4cdcd
 NEW_SPECIES_TARGETS_ADDED,Se han añadido nuevos objetivos de especies para {0},9348d3bf
 NEW_STRATUM,Nuevo Estrato,84292d1f
 NEW_SUBSTRATUM,Nuevo Sustrato,90a1ddc3
@@ -1416,6 +1417,7 @@ PAGINATION_FOOTER_RANGE,{0} para {1} de {2},ce14c917
 PAN,Desplazar,34177007
 PAPER,Papel,df5f30a1
 PAPER_PETRI_DISH,Placa petri de papel,d478bf2a
+PARTIAL,Parcial,d8250603
 PARTIAL_ERRORS,Fallaron algunas de las solicitudes. Puede intentar de nuevo más tarde.,2d39959f
 PARTIAL_ERRORS_TITLE,Errores parciales,3fca63bf
 PARTICIPANT,Participante,911243e3
@@ -1491,6 +1493,7 @@ PLANTING_GOAL,Meta de plantación,a97123a1
 PLANTING_PROGRESS,Avance de plantación,58616da9
 PLANTING_PROGRESS_PERCENT,Progreso de la plantación (%),0d372a57
 PLANTING_PROGRESS_TOOLTIP,Progreso de los retiros en relación con la meta de plantación para esta temporada.,4cc685ea
+PLANTING_SEASON,Temporada de plantación,45c5c9f9
 PLANTING_SEASON_END,Término de temporada de plantación,414309c0
 PLANTING_SEASON_END_IN_PAST,La fecha de término no puede estar en el pasado.,b2729d4d
 PLANTING_SEASON_END_OUT_OF_RANGE,Debe ser entre 4 semanas y 1 año de la fecha de inicio.,fcca5463
@@ -1790,12 +1793,16 @@ REPORTS_SETTINGS_EDIT_SUBTITLE,"Los informes pueden generarse a nivel de organiz
 REPORTS_SETTINGS_GENERATE_FOR_ORG,Generar informes para {0},491ef6ab
 REPORTS_SETTINGS_GENERATE_FOR_PROJECT,Generar informe de proyecto para,91439ec3
 REPORTS_SETUP_CTA,Configure los informes.,389cb962
+REQUEST_PENDING,Solicitud pendiente,3255d145
 REQUEST_REASSIGNMENT,Solicitud de reasignación,9cc0038f
 REQUEST_REASSIGNMENT_DURATION_TOOLTIP,Seleccione “Temporal” si la reasignación debe aplicarse solo a esta Observación. Seleccione “A largo plazo/permanente” si la reasignación debe aplicarse a todas las Observaciones futuras; la parcela será eliminada del grupo de parcelas disponibles para asignación.,9b42a97e
 REQUEST_REASSIGNMENT_REASON_TOOLTIP,Proporcione una justificación para la reasignación de la ubicación de esta parcela.,0ecb1f62
 REQUEST_UPDATE,Solicitar actualización,bce207eb
 REQUEST_UPDATE_ACTION,Solicitar actualización...,790ef713
 REQUEST_UPDATE_REASON,Indique el motivo por el que solicita la actualización.,52430788
+REQUESTED_PLANTS,Plantas solicitadas,4c4fac82
+REQUESTS,Solicitudes,9ecfc0e8
+REQUESTS_X,Solicitudes ({0}),b70edf58
 REQUIRED,Obligatorio,ede65856
 REQUIRED_FIELD,Campo obligatorio,4e1802b3
 REQUIRED_QUESTION_MARK,¿Es obligatorio?,d99ba5a7
@@ -1820,6 +1827,7 @@ REVIEW_APPLICATION_COMPLETE,"Por favor, revisa todas tus preguntas antes de envi
 REVIEW_APPLICATION_INCOMPLETE,Debes completar todas las secciones antes de poder enviar tu solicitud a nuestro equipo de aceleración.,72dfa69f
 REVIEW_APPLICATION_STATUS_TEXT,Los requisitos para {0} son {1},c2e62252
 REVIEW_ERRORS,Revisar errores,ef336499
+REVIEW_PENDING_REQUESTS_DESCRIPTION,Revise las solicitudes pendientes para Fechas de Plantación y registre los retiros para cumplirlas.,a1dc2166
 REVIEW_YOUR_ACCOUNT_SETTING,Revise la configuración de su cuenta,26593a52
 REVIEW_YOUR_APPLICATION,Revisa tu solicitud,a364de57
 REVIEW_YOUR_ORGANIZATION_SETTING,Revise la configuración de su organización,49991b07
@@ -2547,6 +2555,7 @@ WITHDRAWALS,Retiros,270c7f9e
 WITHDRAWN,Retirada,2f74b8e9
 WITHDRAWN_BY,Extraída por,4cf942fb
 WITHDRAWN_FOR_PLANTING,Retirado para plantación,dd024a58
+WITHDRAWN_PLANTS,Plantas retiradas,5d81e2ad
 WITHDRAWN_QUANTITY_ERROR,Excede la cantidad restante,8c911341
 WITHDRAWN_QUANTITY_GREATER_THAN_ZERO_ERROR,La cantidad de retiro tiene que ser mayor de 0.,75e6b589
 WOOD_DENSITY_LEVEL,Nivel de densidad de la madera,83a6a766
