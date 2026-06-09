@@ -31,7 +31,6 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
-import { userHasOrgAccess } from 'src/utils/acl';
 import { getObsPhotoTypeLabel, isObservationActivity } from 'src/utils/activityUtils';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useQuery from 'src/utils/useQuery';
@@ -368,8 +367,13 @@ const ActivityDetailView = ({
   });
 
   const hasOrgAccess = useMemo(
-    () => userHasOrgAccess(isAcceleratorRoute, organizations, projectData?.project.organizationId),
-    [isAcceleratorRoute, organizations, projectData?.project.organizationId]
+    () =>
+      isAllowed('VIEW_ORG_OBSERVATIONS', {
+        organizations,
+        project: projectData?.project,
+        isAcceleratorRoute,
+      }),
+    [isAcceleratorRoute, isAllowed, organizations, projectData?.project]
   );
 
   // Funder activities include observation stats directly on the payload (no observationId or API call needed)

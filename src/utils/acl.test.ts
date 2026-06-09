@@ -1,7 +1,8 @@
 import { User } from 'src/types/User';
-import { isAllowed, userHasOrgAccess } from './acl';
+import { isAllowed } from './acl';
 import { GLOBAL_ROLE_ACCELERATOR_ADMIN, GLOBAL_ROLE_READ_ONLY, GLOBAL_ROLE_SUPER_ADMIN, GLOBAL_ROLE_TF_EXPERT } from 'src/types/GlobalRoles';
 import { Organization } from 'src/types/Organization';
+import { ProjectPayload } from 'src/queries/generated/projects';
 
 describe('isAllowed', () => {
   it('has the correct permissions for a user with the Super Admin global role', () => {
@@ -99,30 +100,26 @@ describe('isAllowed', () => {
     expect(isAllowed(user, 'ASSIGN_GLOBAL_ROLE_TO_USER', { roleToSet: GLOBAL_ROLE_TF_EXPERT })).toBeFalsy();
     expect(isAllowed(user, 'ASSIGN_GLOBAL_ROLE_TO_USER', { roleToSet: GLOBAL_ROLE_READ_ONLY })).toBeFalsy();
   });
-});
 
-describe('userHasOrgAccess', () => {
-  const org = (id: number): Organization => ({ id, name: `Org ${id}`, totalUsers: 1 });
+  it('has the correct permissions for VIEW_ORG_OBSERVATIONS', () => {
+    const noRolesUser: User = {
+      id: 1,
+      emailNotificationsEnabled: false,
+      email: 'mock@email.com',
+      globalRoles: [],
+      userType: 'Individual',
+    };
+    const org = (id: number): Organization => ({ id, name: `Org ${id}`, totalUsers: 1 });
+    const project = (organizationId: number) => ({ id: 1, name: 'Project', organizationId } as ProjectPayload);
 
-  it('returns true when not in an accelerator route, regardless of org membership', () => {
-    expect(userHasOrgAccess(false, [], 42)).toBeTruthy();
-    expect(userHasOrgAccess(false, [], undefined)).toBeTruthy();
-    expect(userHasOrgAccess(false, [org(1)], 99)).toBeTruthy();
-  });
+    // Non-accelerator route: always allowed regardless of org membership
+    expect(isAllowed(noRolesUser, 'VIEW_ORG_OBSERVATIONS', { organizations: [], project: undefined, isAcceleratorRoute: false })).toBeTruthy();
+    expect(isAllowed(noRolesUser, 'VIEW_ORG_OBSERVATIONS', { organizations: [org(1)], project: project(1), isAcceleratorRoute: false })).toBeTruthy();
 
-  it('returns true in an accelerator route when the user belongs to the org', () => {
-    expect(userHasOrgAccess(true, [org(1), org(2)], 2)).toBeTruthy();
-  });
-
-  it('returns false in an accelerator route when the user does not belong to the org', () => {
-    expect(userHasOrgAccess(true, [org(1), org(2)], 3)).toBeFalsy();
-  });
-
-  it('returns false in an accelerator route when the user has no orgs', () => {
-    expect(userHasOrgAccess(true, [], 1)).toBeFalsy();
-  });
-
-  it('returns false in an accelerator route when organizationId is undefined', () => {
-    expect(userHasOrgAccess(true, [org(1)], undefined)).toBeFalsy();
+    // Accelerator route: allowed only when the project's org is in the user's orgs
+    expect(isAllowed(noRolesUser, 'VIEW_ORG_OBSERVATIONS', { organizations: [org(1), org(2)], project: project(2), isAcceleratorRoute: true })).toBeTruthy();
+    expect(isAllowed(noRolesUser, 'VIEW_ORG_OBSERVATIONS', { organizations: [org(1), org(2)], project: project(3), isAcceleratorRoute: true })).toBeFalsy();
+    expect(isAllowed(noRolesUser, 'VIEW_ORG_OBSERVATIONS', { organizations: [], project: project(1), isAcceleratorRoute: true })).toBeFalsy();
+    expect(isAllowed(noRolesUser, 'VIEW_ORG_OBSERVATIONS', { organizations: [org(1)], project: undefined, isAcceleratorRoute: true })).toBeFalsy();
   });
 });

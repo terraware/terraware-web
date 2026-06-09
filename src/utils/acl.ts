@@ -1,3 +1,4 @@
+import { ProjectPayload } from 'src/queries/generated/projects';
 import {
   GLOBAL_ROLE_ACCELERATOR_ADMIN,
   GLOBAL_ROLE_READ_ONLY,
@@ -33,7 +34,8 @@ type PermissionActivities =
   | 'DELETE_ACTIVITIES_NON_PUBLISHED'
   | 'DELETE_ACTIVITIES_PUBLISHED'
   | 'EDIT_ACTIVITIES'
-  | 'READ_ACTIVITIES';
+  | 'READ_ACTIVITIES'
+  | 'VIEW_ORG_OBSERVATIONS';
 type PermissionApplication =
   | 'READ_ALL_APPLICATIONS'
   | 'UPDATE_APPLICATION_INTERNAL_COMMENTS'
@@ -220,6 +222,25 @@ const isAllowedManageFundingEntities: PermissionCheckFn = (user: User): boolean 
 };
 
 /**
+ * Function related to org access for viewing activities, since the permission also applies to
+ * org roles, we need to check the passed-in organization. The caller is responsible for resolving
+ * the organization object from their list before passing it as metadata.
+ */
+type ViewOrgObservationsMetadata = {
+  isAcceleratorRoute: boolean;
+  organizations: Organization[] | undefined;
+  project: ProjectPayload | undefined;
+};
+const isAllowedViewOrgObservations: PermissionCheckFn<ViewOrgObservationsMetadata> = (
+  _user: User,
+  __: GlobalRolePermission,
+  metadata?: ViewOrgObservationsMetadata
+): boolean => {
+  const organization = metadata?.organizations?.find((org) => org.id === metadata?.project?.organizationId);
+  return !metadata?.isAcceleratorRoute || isMember(organization);
+};
+
+/**
  * Function related to reading activities, since the permission also applies to
  * org roles, we need to check the passed-in organization
  */
@@ -325,6 +346,7 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   UPDATE_SUBMISSION_STATUS: TFExpertPlus,
   VIEW_CONSOLE: ReadOnlyPlus,
   VIEW_ACCELERATOR_PROJECT_SCORING_VOTING: TFExpertPlus,
+  VIEW_ORG_OBSERVATIONS: isAllowedViewOrgObservations,
   FREE_FLY_VIRTUAL_WALKTHROUGH: SuperAdminPlus,
 };
 
@@ -351,14 +373,3 @@ export const isAllowed: PermissionCheckFn = (
     return acl(user, permission, metadata);
   }
 };
-
-/**
- * Returns true if the user is a member of the given organization (by ID).
- * In non-accelerator contexts, access is always granted since the user is already
- * scoped to their own organization.
- */
-export const userHasOrgAccess = (
-  isAcceleratorRoute: boolean,
-  organizations: Organization[],
-  organizationId: number | undefined
-): boolean => !isAcceleratorRoute || organizations.some((org) => org.id === organizationId);
