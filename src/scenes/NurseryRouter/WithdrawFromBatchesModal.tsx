@@ -19,6 +19,7 @@ import strings from 'src/strings';
 import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import NurserySummaryRow from './NurserySummaryRow';
 import RequestSpeciesBox from './RequestSpeciesBox';
 
 type WithdrawFromBatchesModalProps = {
@@ -410,55 +411,14 @@ const Step1Content = ({
               {strings.COVERAGE}
             </Typography>
           </Box>
-          {requestSpecies.map((s, index) => {
-            const ready = readyBySpecies.get(s.speciesId) ?? 0;
-            const coverage =
-              ready === 0 ? 'NOT_COVERED' : ready >= s.requestedQuantity ? 'COVERED' : 'PARTIALLY_COVERED';
-            const coverageColor =
-              coverage === 'COVERED'
-                ? theme.palette.TwClrTxtSuccess
-                : coverage === 'PARTIALLY_COVERED'
-                  ? theme.palette.TwClrTxtWarning
-                  : theme.palette.TwClrTxtDanger;
-            const coverageLabel =
-              coverage === 'COVERED'
-                ? strings.COVERED
-                : coverage === 'PARTIALLY_COVERED'
-                  ? strings.PARTIALLY_COVERED
-                  : strings.NOT_COVERED;
-            return (
-              <Box
-                key={s.speciesId}
-                display='grid'
-                gridTemplateColumns='2fr 1fr 1fr 1fr'
-                gap={theme.spacing(1)}
-                padding={theme.spacing(1, 2)}
-                sx={{
-                  backgroundColor: index % 2 === 0 ? theme.palette.TwClrBgSecondary : 'transparent',
-                }}
-              >
-                <Box>
-                  <Typography fontSize='14px' textAlign='left'>
-                    {s.scientificName}
-                  </Typography>
-                  {s.commonName && (
-                    <Typography fontSize='12px' color={theme.palette.TwClrTxtSecondary} textAlign='left'>
-                      {s.commonName}
-                    </Typography>
-                  )}
-                </Box>
-                <Typography fontSize='14px' textAlign='right'>
-                  {s.requestedQuantity.toLocaleString()}
-                </Typography>
-                <Typography fontSize='14px' textAlign='right'>
-                  {ready.toLocaleString()}
-                </Typography>
-                <Typography fontSize='14px' textAlign='right' color={coverageColor} fontWeight={600}>
-                  {coverageLabel}
-                </Typography>
-              </Box>
-            );
-          })}
+          {requestSpecies.map((s, index) => (
+            <NurserySummaryRow
+              key={s.speciesId}
+              species={s}
+              ready={readyBySpecies.get(s.speciesId) ?? 0}
+              index={index}
+            />
+          ))}
         </Box>
       )}
     </Box>
