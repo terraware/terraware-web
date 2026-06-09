@@ -19,7 +19,6 @@ import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { ActivityMediaFile, AdminActivityMediaFile } from 'src/types/Activity';
 import {
   getObsPhotoTypeLabel,
-  isCaptionReadOnly,
   isCornerPhoto,
   isObservationMedia,
   isUndeletableObservationPhoto,
@@ -167,11 +166,6 @@ const ActivityPhotoPreview = ({
   const obsPhotoTypeLabel = useMemo(
     () => (isUndeletable && mediaItem.type === 'existing' ? getObsPhotoTypeLabel(mediaItem.data, strings) : undefined),
     [isUndeletable, mediaItem, strings]
-  );
-
-  const isCaptionRO = useMemo(
-    () => isObsMedia && mediaItem.type === 'existing' && isCaptionReadOnly(mediaItem.data),
-    [isObsMedia, mediaItem]
   );
 
   const obsMonitoringPlotNumber = useMemo(() => {
@@ -433,26 +427,14 @@ const ActivityPhotoPreview = ({
         <Grid item xs={12}>
           <Box alignItems='flex-start' display='flex' gap={1}>
             <Box flex={1}>
-              {isCaptionRO ? (
-                <Box>
-                  <Typography
-                    fontSize='14px'
-                    sx={{ color: theme.palette.TwClrTxtSecondary, marginBottom: theme.spacing(1) }}
-                  >
-                    {strings.CAPTION}
-                  </Typography>
-                  <Typography fontSize='16px'>{caption || '—'}</Typography>
-                </Box>
-              ) : (
-                <Textfield
-                  id={`caption-${mediaItem.type === 'new' ? mediaItem.data.file.name : mediaItem.data.fileId}`}
-                  label={strings.CAPTION}
-                  onChange={setCaptionCallback}
-                  type='text'
-                  value={caption}
-                  maxLength={200}
-                />
-              )}
+              <Textfield
+                id={`caption-${mediaItem.type === 'new' ? mediaItem.data.file.name : mediaItem.data.fileId}`}
+                label={strings.CAPTION}
+                onChange={setCaptionCallback}
+                type='text'
+                value={caption}
+                maxLength={200}
+              />
             </Box>
             {isObsActivity && !isUndeletable && !isAdHoc && mediaItem.type === 'new' && (
               <Box flexShrink={0} width='120px'>
