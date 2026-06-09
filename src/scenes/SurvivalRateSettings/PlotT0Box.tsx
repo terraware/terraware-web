@@ -23,7 +23,7 @@ type PlotT0BoxProps = {
 
 const PlotT0Box = ({ plot, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
   const theme = useTheme();
-  const { species, speciesById } = useSpeciesData();
+  const { speciesById } = useSpeciesData();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   console.log('speciesById', speciesById);
