@@ -40,6 +40,8 @@ api.enhanceEndpoints({
       invalidatesTags: (result) => [
         ...(result ? [{ type: QueryTagTypes.Observation, id: result.observationId }] : []),
         { type: QueryTagTypes.Observation, id: 'LIST' },
+        { type: QueryTagTypes.Activities, id: 'LIST' },
+        { type: QueryTagTypes.FunderActivities, id: 'LIST' },
       ],
     },
     listObservationResults: {
@@ -72,6 +74,8 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, observationId) => [
         { type: QueryTagTypes.Observation, id: observationId },
         { type: QueryTagTypes.Observation, id: 'LIST' },
+        { type: QueryTagTypes.Activities, id: 'LIST' },
+        { type: QueryTagTypes.FunderActivities, id: 'LIST' },
       ],
     },
     mergeOtherSpecies: {
@@ -90,13 +94,23 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.Observation, id: payload.observationId },
         { type: QueryTagTypes.Observation, id: 'LIST' },
+        { type: QueryTagTypes.Activities, id: 'LIST' },
+        { type: QueryTagTypes.FunderActivities, id: 'LIST' },
       ],
     },
     completePlotObservation: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.Observation, id: payload.observationId },
+        { type: QueryTagTypes.Activities, id: 'LIST' },
+        { type: QueryTagTypes.FunderActivities, id: 'LIST' },
+      ],
     },
     updatePlotObservation: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.Observation, id: payload.observationId },
+        { type: QueryTagTypes.Activities, id: 'LIST' },
+        { type: QueryTagTypes.FunderActivities, id: 'LIST' },
+      ],
     },
     claimMonitoringPlot: {
       invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
