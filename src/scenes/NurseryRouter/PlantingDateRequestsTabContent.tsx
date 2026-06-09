@@ -73,12 +73,6 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
   const rows = requests ?? [];
   const [withdrawRequest, setWithdrawRequest] = useState<PlantingDateRequestRow | undefined>(undefined);
 
-  const onWithdrawn = () => {
-    if (organizationId) {
-      void listPlantingDateRequests({ organizationId, plantingSiteId, plantingSeasonId, speciesId }, false);
-    }
-  };
-
   return (
     <Card flushMobile>
       <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginBottom={theme.spacing(2)}>
@@ -131,7 +125,6 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
         <WithdrawFromBatchesModal
           open={true}
           onClose={() => setWithdrawRequest(undefined)}
-          onWithdrawn={onWithdrawn}
           request={withdrawRequest}
           plantingSiteId={withdrawRequest.plantingSiteId}
           plantingSeasonId={withdrawRequest.plantingSeasonId}

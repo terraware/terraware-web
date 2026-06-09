@@ -4,7 +4,12 @@ import { QueryTagTypes } from '../tags';
 api.enhanceEndpoints({
   endpoints: {
     createBatchWithdrawal: {
-      invalidatesTags: [{ type: QueryTagTypes.NurseryWithdrawals, id: 'LIST' }, { type: QueryTagTypes.PlantingSites }],
+      invalidatesTags: [
+        { type: QueryTagTypes.NurseryWithdrawals, id: 'LIST' },
+        { type: QueryTagTypes.PlantingSites },
+        { type: QueryTagTypes.PlantingSeasonDates, id: 'REQUESTS' },
+        { type: QueryTagTypes.Batches, id: 'LIST' },
+      ],
     },
     getNurseryWithdrawal: {
       providesTags: (_results, _error, withdrawalId) => [{ type: QueryTagTypes.NurseryWithdrawals, id: withdrawalId }],

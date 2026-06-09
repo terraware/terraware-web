@@ -52,7 +52,7 @@ const injectedRtkApi = api.injectEndpoints({
           count: 0,
         },
       }),
-      providesTags: [{ type: QueryTagTypes.NurseryWithdrawals, id: 'BATCHES_FOR_WITHDRAW' }],
+      providesTags: [{ type: QueryTagTypes.Batches, id: 'LIST' }],
       transformResponse: (response: BatchSearchResponse): BatchForWithdraw[] =>
         response.results.map(
           (result): BatchForWithdraw => ({

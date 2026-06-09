@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Step, StepLabel, Stepper, Tooltip, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Icon } from '@terraware/web-components';
@@ -7,7 +7,6 @@ import { DateTime } from 'luxon';
 import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
-import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
@@ -20,10 +19,11 @@ import strings from 'src/strings';
 import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import RequestSpeciesBox from './RequestSpeciesBox';
+
 type WithdrawFromBatchesModalProps = {
   open: boolean;
   onClose: () => void;
-  onWithdrawn: () => void;
   request: PlantingDateRequestRow;
   plantingSiteId: number;
   plantingSeasonId: number;
@@ -34,7 +34,6 @@ type FlowStep = 0 | 1 | 2;
 const WithdrawFromBatchesModal = ({
   open,
   onClose,
-  onWithdrawn,
   request,
   plantingSiteId,
   plantingSeasonId,
@@ -70,10 +69,10 @@ const WithdrawFromBatchesModal = ({
     }
   }, [facilityId, speciesIds, listBatches]);
 
-  // Reset draft when nursery changes
-  useEffect(() => {
+  const handleFacilityChange = useCallback((id: number | undefined) => {
+    setFacilityId(id);
     setWithdrawByBatchSubstratum({});
-  }, [facilityId]);
+  }, []);
 
   const readyBySpecies = useMemo(() => {
     const map = new Map<number, number>();
@@ -116,20 +115,16 @@ const WithdrawFromBatchesModal = ({
   const canGoNextFromStep1 = facilityId !== undefined && !!withdrawDate;
   const canGoNextFromStep2 = totalWithdrawing > 0 && !anyOverReady;
 
-  const reset = () => {
+  const handleClose = useCallback(() => {
     setStep(0);
     setFacilityId(undefined);
     setWithdrawDate(DateTime.local().toISODate() ?? '');
     setWithdrawByBatchSubstratum({});
     setPhotoFiles([]);
-  };
-
-  const handleClose = () => {
-    reset();
     onClose();
-  };
+  }, [onClose]);
 
-  const onSubmit = async () => {
+  const onSubmit = useCallback(async () => {
     if (!facilityId) {
       return;
     }
@@ -183,12 +178,23 @@ const WithdrawFromBatchesModal = ({
         );
       }
 
-      onWithdrawn();
       handleClose();
     } catch (e) {
       snackbar.toastError();
     }
-  };
+  }, [
+    createBatchWithdrawal,
+    facilityId,
+    handleClose,
+    photoFiles,
+    plantingSeasonId,
+    plantingSiteId,
+    request.scheduledPlantingDateId,
+    snackbar,
+    uploadWithdrawalPhotos,
+    withdrawByBatchSubstratum,
+    withdrawDate,
+  ]);
 
   const middleButtons: JSX.Element[] = useMemo(() => {
     const cancelButton = (
@@ -233,8 +239,7 @@ const WithdrawFromBatchesModal = ({
         disabled={isSaving || !canGoNextFromStep2}
       />,
     ];
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [step, canGoNextFromStep1, canGoNextFromStep2, isSaving]);
+  }, [handleClose, isSaving, step, canGoNextFromStep2, canGoNextFromStep1, onSubmit]);
 
   const stepLabels = [strings.PURPOSE_AND_DESTINATION, strings.QUANTITIES, strings.ADD_PHOTOS];
 
@@ -283,7 +288,7 @@ const WithdrawFromBatchesModal = ({
       {step === 0 && (
         <Step1Content
           facilityId={facilityId}
-          setFacilityId={setFacilityId}
+          setFacilityId={handleFacilityChange}
           withdrawDate={withdrawDate}
           setWithdrawDate={setWithdrawDate}
           nurseryOptions={nurseryOptions}
@@ -511,97 +516,18 @@ const Step2Content = ({
               </Typography>
             </Box>
           </Box>
-          {substratum.species.map((s) => {
-            const speciesBatches = batchesBySpecies.get(s.speciesId) ?? [];
-            return (
-              <Box
-                key={s.speciesId}
-                sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}`, borderRadius: '8px' }}
-              >
-                <Box padding={theme.spacing(1.5, 2)} sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}>
-                  <Typography fontSize='16px' fontWeight={400} textAlign='left'>
-                    {s.scientificName}
-                    {s.commonName ? ` (${s.commonName})` : ''}
-                  </Typography>
-                </Box>
-                <Box
-                  display='grid'
-                  gridTemplateColumns='2fr 1fr 1fr 1fr'
-                  gap={theme.spacing(1)}
-                  padding={theme.spacing(1, 2)}
-                  sx={{ borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
-                >
-                  <Typography fontSize='14px' fontWeight={600} textAlign='left'>
-                    {strings.SEEDLING_BATCH}
-                  </Typography>
-                  <Typography fontSize='14px' fontWeight={600} textAlign='right'>
-                    {strings.REQUESTED}
-                  </Typography>
-                  <Typography fontSize='14px' fontWeight={600} textAlign='right'>
-                    {strings.READY_TO_PLANT}
-                  </Typography>
-                  <Typography fontSize='14px' fontWeight={600} textAlign='right'>
-                    {strings.WITHDRAW}
-                  </Typography>
-                </Box>
-                {speciesBatches.length === 0 ? (
-                  <Box padding={theme.spacing(2)}>
-                    <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
-                      -
-                    </Typography>
-                  </Box>
-                ) : (
-                  speciesBatches.map((batch) => {
-                    const key = cellKey(batch.batchId, substratum.substratumId);
-                    const value = withdrawByBatchSubstratum[key] ?? 0;
-                    const batchTotal = totalByBatch.get(batch.batchId) ?? 0;
-                    const exceeds = batchTotal > batch.readyQuantity;
-                    return (
-                      <Box
-                        key={batch.batchId}
-                        display='grid'
-                        gridTemplateColumns='2fr 1fr 1fr 1fr'
-                        gap={theme.spacing(1)}
-                        alignItems='center'
-                        padding={theme.spacing(1, 2)}
-                      >
-                        <Typography fontSize='16px' textAlign='left'>
-                          {batch.batchNumber}
-                        </Typography>
-                        <Typography fontSize='16px' textAlign='right'>
-                          {s.quantity.toLocaleString()}
-                        </Typography>
-                        <Typography fontSize='16px' textAlign='right'>
-                          {batch.readyQuantity.toLocaleString()}
-                        </Typography>
-                        <Box>
-                          <TextField
-                            id={`withdraw-${batch.batchId}-${substratum.substratumId}`}
-                            type='number'
-                            label=''
-                            value={value.toString()}
-                            onChange={(v) =>
-                              setWithdrawByBatchSubstratum((prev) => ({
-                                ...prev,
-                                [key]: Math.max(0, Number(v ?? 0)),
-                              }))
-                            }
-                            min={0}
-                            max={batch.readyQuantity}
-                            errorText={
-                              exceeds
-                                ? strings.formatString(strings.EXCEEDS_READY_TO_PLANT, batch.readyQuantity).toString()
-                                : ''
-                            }
-                          />
-                        </Box>
-                      </Box>
-                    );
-                  })
-                )}
-              </Box>
-            );
-          })}
+          {substratum.species.map((s) => (
+            <RequestSpeciesBox
+              key={s.speciesId}
+              species={s}
+              substratumId={substratum.substratumId}
+              batches={batchesBySpecies.get(s.speciesId) ?? []}
+              withdrawByBatchSubstratum={withdrawByBatchSubstratum}
+              totalByBatch={totalByBatch}
+              setWithdrawByBatchSubstratum={setWithdrawByBatchSubstratum}
+              cellKey={cellKey}
+            />
+          ))}
         </Box>
       ))}
     </Box>
