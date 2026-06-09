@@ -351,3 +351,14 @@ export const isAllowed: PermissionCheckFn = (
     return acl(user, permission, metadata);
   }
 };
+
+/**
+ * Returns true if the user is a member of the given organization (by ID).
+ * In non-accelerator contexts, access is always granted since the user is already
+ * scoped to their own organization.
+ */
+export const userHasOrgAccess = (
+  isAcceleratorRoute: boolean,
+  organizations: Organization[],
+  organizationId: number | undefined
+): boolean => !isAcceleratorRoute || organizations.some((org) => org.id === organizationId);

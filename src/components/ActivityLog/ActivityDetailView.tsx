@@ -31,6 +31,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
+import { userHasOrgAccess } from 'src/utils/acl';
 import { getObsPhotoTypeLabel, isObservationActivity } from 'src/utils/activityUtils';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useQuery from 'src/utils/useQuery';
@@ -366,8 +367,8 @@ const ActivityDetailView = ({
     skip: !isAcceleratorRoute || !isObsActivity,
   });
 
-  const userHasOrgAccess = useMemo(
-    () => !isAcceleratorRoute || organizations.some((org) => org.id === projectData?.project.organizationId),
+  const hasOrgAccess = useMemo(
+    () => userHasOrgAccess(isAcceleratorRoute, organizations, projectData?.project.organizationId),
     [isAcceleratorRoute, organizations, projectData?.project.organizationId]
   );
 
@@ -382,10 +383,10 @@ const ActivityDetailView = ({
 
   const observationUrl = useMemo(
     () =>
-      isObsActivity && activity.payload.observation?.observationId && userHasOrgAccess
+      isObsActivity && activity.payload.observation?.observationId && hasOrgAccess
         ? APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', String(activity.payload.observation.observationId))
         : undefined,
-    [activity.payload.observation?.observationId, isObsActivity, userHasOrgAccess]
+    [activity.payload.observation?.observationId, isObsActivity, hasOrgAccess]
   );
 
   const obsIsAdHoc = activity.payload.observation?.isAdHoc ?? false;
