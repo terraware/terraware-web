@@ -1,3 +1,4 @@
+c4f0b2eb SW-8463: Needed to reload page to see caption updates (#5791)
 1d933bdf SW-8458: Caption for required photos should be editable (#5790)
 ecfb36e8 SW-8459: Photo title for required photos should show up above the photo (#5789)
 13e7ad6e SW-8462: Deleting observation activities should be disabled for all user types (#5788)
