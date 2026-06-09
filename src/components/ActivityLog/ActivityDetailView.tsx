@@ -24,6 +24,7 @@ import {
   useLazyGetActivityMediaStreamQuery,
 } from 'src/queries/generated/funderActivities';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
+import { useGetProjectQuery } from 'src/queries/generated/projects';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -350,7 +351,7 @@ const ActivityDetailView = ({
   const location = useStateLocation();
   const theme = useTheme();
   const { goToAcceleratorActivityEdit, goToActivityEdit } = useNavigateTo();
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, organizations } = useOrganization();
 
   const verifiedByUser = useAppSelector(
     selectUser(activity.type === 'admin' ? activity.payload.verifiedBy : undefined)
@@ -360,6 +361,15 @@ const ActivityDetailView = ({
     : isAllowed('EDIT_ACTIVITIES', { organization: selectedOrganization });
 
   const isObsActivity = useMemo(() => isObservationActivity(activity.payload), [activity.payload]);
+
+  const { data: projectData } = useGetProjectQuery(projectId, {
+    skip: !isAcceleratorRoute || !isObsActivity,
+  });
+
+  const userHasOrgAccess = useMemo(
+    () => !isAcceleratorRoute || organizations.some((org) => org.id === projectData?.project.organizationId),
+    [isAcceleratorRoute, organizations, projectData?.project.organizationId]
+  );
 
   // Funder activities include observation stats directly on the payload (no observationId or API call needed)
   const funderObsPayload = activity.type === 'funder' ? activity.payload.observation : undefined;
@@ -372,10 +382,10 @@ const ActivityDetailView = ({
 
   const observationUrl = useMemo(
     () =>
-      isObsActivity && activity.payload.observation?.observationId
+      isObsActivity && activity.payload.observation?.observationId && userHasOrgAccess
         ? APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', String(activity.payload.observation.observationId))
         : undefined,
-    [activity.payload.observation?.observationId, isObsActivity]
+    [activity.payload.observation?.observationId, isObsActivity, userHasOrgAccess]
   );
 
   const obsIsAdHoc = activity.payload.observation?.isAdHoc ?? false;
