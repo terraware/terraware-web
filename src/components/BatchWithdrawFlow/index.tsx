@@ -19,9 +19,10 @@ import { NurseryBatchService } from 'src/services';
 import strings from 'src/strings';
 import { NurseryWithdrawalRequest, NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 import { SearchResponseElement } from 'src/types/Search';
-import { isContributor } from 'src/utils/organization';
+import { getNurseryById, isContributor } from 'src/utils/organization';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import EmptyBatchesInfoModal from './EmptyBatchesInfoModal';
 import AddPhotos from './flow/AddPhotos';
@@ -39,6 +40,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   const { selectedOrganization } = useOrganization();
   const { batchIds, sourcePage } = props;
   const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalRequestPurposes;
+  const locationTimeZone = useLocationTimeZone();
   const [flowState, setFlowState] = useState<FlowStates>('purpose');
   const [record, setRecord] = useForm<NurseryWithdrawalRequest>({
     batchWithdrawals: [],
@@ -167,6 +169,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
         await Promise.allSettled(uploadPhotoPromises);
       }
 
+      const nursery = selectedOrganization ? getNurseryById(selectedOrganization, record.facilityId) : undefined;
+      const timeZone = locationTimeZone.get(nursery).id;
+
       const hasEmptyBatchesAfterWithdrawal = record.batchWithdrawals.some((batchWithdrawal) => {
         const {
           batchId,
@@ -181,7 +186,8 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           Number(sourceBatch['germinatingQuantity(raw)']) === Number(germinatingQuantityWithdrawn) &&
           Number(sourceBatch['activeGrowthQuantity(raw)']) === Number(activeGrowthQuantityWithdrawn) &&
           Number(sourceBatch['hardeningOffQuantity(raw)']) === Number(hardeningOffQuantityWithdrawn) &&
-          Number(sourceBatch['readyQuantity(raw)']) === Number(readyQuantityWithdrawn)
+          Number(sourceBatch['readyQuantity(raw)']) === Number(readyQuantityWithdrawn) &&
+          record.withdrawnDate === getTodaysDateFormatted(timeZone)
         );
       });
 

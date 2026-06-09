@@ -3,9 +3,12 @@ import React, { CSSProperties, type JSX, useCallback, useEffect, useMemo, useSta
 import { Box, Grid, IconButton, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import MuxPlayer from '@mux/mux-player-react';
 import { Button, DialogBox, Icon } from '@terraware/web-components';
+import { DateTime } from 'luxon';
 
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
+import Link from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useFunderPortal from 'src/hooks/useFunderPortal';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -20,17 +23,22 @@ import {
   useLazyGetActivityMedia1Query,
   useLazyGetActivityMediaStreamQuery,
 } from 'src/queries/generated/funderActivities';
+import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
+import { getPositionLabel, getQuadratLabel } from 'src/types/Observations';
+import { isObservationActivity, isUndeletableObservationPhoto } from 'src/utils/activityUtils';
+import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import ActivityStatusBadges from './ActivityStatusBadges';
+import ObservationStatsPanel from './ObservationStatsPanel';
 import { TypedActivity } from './types';
 
 type ActivityMediaItemProps = {
@@ -200,6 +208,24 @@ const ActivityMediaItem = ({
     [mediaFile.fileId, setLightboxImageId]
   );
 
+  const obsPhotoTypeLabel = useMemo(() => {
+    const obs = mediaFile.observation;
+    if (!obs || !isUndeletableObservationPhoto(mediaFile)) {
+      return undefined;
+    }
+    const plotPrefix = `${obs.monitoringPlotNumber} `;
+    if (obs.type === 'Plot' && obs.position) {
+      return `${plotPrefix}${getPositionLabel(obs.position)}`;
+    }
+    if (obs.type === 'Quadrat' && obs.position) {
+      return `${plotPrefix}${getQuadratLabel(obs.position)}`;
+    }
+    if (obs.type === 'Soil') {
+      return `${plotPrefix}${strings.SOIL}`;
+    }
+    return undefined;
+  }, [mediaFile, strings]);
+
   const handleImageError = useCallback(async () => {
     // only check for 412 error if this is a video
     if (mediaFile.type === 'Video') {
@@ -275,13 +301,20 @@ const ActivityMediaItem = ({
       )}
 
       <Box className='info-panel' onClick={onClickMediaItem(mediaFile.fileId)} sx={infoPanelStyles}>
-        <Typography component='div' fontSize='16px' lineHeight='16px'>
-          {activity.payload.date}
-        </Typography>
+        <Box alignItems='center' display='flex' justifyContent='space-between'>
+          <Typography component='div' fontSize='16px' lineHeight='16px'>
+            {activity.payload.date}
+          </Typography>
+          {mediaFile.observation?.monitoringPlotNumber !== undefined && (
+            <Typography component='div' fontSize='16px' lineHeight='16px'>
+              {strings.PLOT} {mediaFile.observation.monitoringPlotNumber}
+            </Typography>
+          )}
+        </Box>
 
-        {mediaFile.caption && (
+        {(mediaFile.caption || obsPhotoTypeLabel) && (
           <Typography component='div' sx={captionStyles}>
-            {mediaFile.caption}
+            {obsPhotoTypeLabel ?? mediaFile.caption}
           </Typography>
         )}
       </Box>
@@ -336,6 +369,84 @@ const ActivityDetailView = ({
   const isAllowedEditActivities = isAcceleratorRoute
     ? isAllowed('EDIT_ACTIVITIES')
     : isAllowed('EDIT_ACTIVITIES', { organization: selectedOrganization });
+
+  const isObsActivity = useMemo(() => isObservationActivity(activity.payload), [activity.payload]);
+
+  // Funder activities include observation stats directly on the payload (no observationId or API call needed)
+  const funderObsPayload = activity.type === 'funder' ? activity.payload.observation : undefined;
+  const showObsPanel = isObsActivity || funderObsPayload !== undefined;
+
+  const { data: observationResultsData } = useGetObservationResultsQuery(
+    { observationId: activity.payload.observation?.observationId as number },
+    { skip: !activity.payload.observation?.observationId }
+  );
+
+  const observationUrl = useMemo(
+    () =>
+      isObsActivity && activity.payload.observation?.observationId
+        ? APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', String(activity.payload.observation.observationId))
+        : undefined,
+    [activity.payload.observation?.observationId, isObsActivity]
+  );
+
+  const obsIsAdHoc = activity.payload.observation?.isAdHoc ?? false;
+  const obsPlotNumber = activity.payload.observation?.monitoringPlotNumber;
+  const obsCompletedTime =
+    funderObsPayload !== undefined ? funderObsPayload.completedTime : observationResultsData?.observation.completedTime;
+
+  const obsCompletedMonthYear = useMemo(() => {
+    if (!obsCompletedTime) {
+      return undefined;
+    }
+    const dt = DateTime.fromISO(obsCompletedTime);
+    return dt.isValid ? dt.toFormat('LLLL yyyy') : undefined;
+  }, [obsCompletedTime]);
+
+  const obsTitle = useMemo(() => {
+    if (!showObsPanel) {
+      return undefined;
+    }
+    if (funderObsPayload !== undefined) {
+      return obsCompletedMonthYear ? { prefix: `${strings.OBSERVATION}: `, suffix: obsCompletedMonthYear } : undefined;
+    }
+    if (!isObsActivity) {
+      return undefined;
+    }
+    if (obsIsAdHoc) {
+      return obsPlotNumber !== undefined
+        ? {
+            prefix: `${strings.AD_HOC} ${strings.OBSERVATION}: `,
+            suffix: `${strings.PLOT} ${obsPlotNumber}`,
+          }
+        : undefined;
+    }
+    return obsCompletedMonthYear ? { prefix: `${strings.OBSERVATION}: `, suffix: obsCompletedMonthYear } : undefined;
+  }, [funderObsPayload, isObsActivity, obsCompletedMonthYear, obsIsAdHoc, obsPlotNumber, showObsPanel, strings]);
+
+  const obsSpecies = useMemo(
+    () =>
+      observationResultsData?.observation.species?.length
+        ? observationResultsData.observation.species
+        : observationResultsData?.observation.adHocPlot?.species,
+    [observationResultsData]
+  );
+
+  const obsLivePlants = useMemo(
+    () =>
+      funderObsPayload !== undefined ? funderObsPayload.livePlants : getObservationSpeciesLivePlantsCount(obsSpecies),
+    [funderObsPayload, obsSpecies]
+  );
+
+  const obsPlantDensity =
+    funderObsPayload !== undefined
+      ? funderObsPayload.plantDensity
+      : observationResultsData?.observation.plantingDensity ??
+        observationResultsData?.observation.adHocPlot?.plantingDensity;
+
+  const obsSurvivalRate =
+    funderObsPayload !== undefined
+      ? funderObsPayload.survivalRate
+      : observationResultsData?.observation.survivalRate ?? observationResultsData?.observation.adHocPlot?.survivalRate;
 
   const [lightboxMediaFileId, setLightboxMediaFileId] = useState<number | undefined>(undefined);
   const [publishActivityModalOpened, setPublishActivityModalOpened] = useState(false);
@@ -529,7 +640,20 @@ const ActivityDetailView = ({
       <Grid item>
         <Box display='flex' flexDirection='row' alignItems='center'>
           <Typography fontSize='24px' fontWeight={600} lineHeight='32px'>
-            {activityType}
+            {obsTitle ? (
+              <>
+                {obsTitle.prefix}
+                {observationUrl ? (
+                  <Link to={observationUrl} fontSize='24px' fontWeight={600} lineHeight='32px'>
+                    {obsTitle.suffix}
+                  </Link>
+                ) : (
+                  obsTitle.suffix
+                )}
+              </>
+            ) : (
+              activityType
+            )}
           </Typography>
           <Box paddingX={isAcceleratorRoute ? theme.spacing(3) : theme.spacing(1.5)}>
             {isAcceleratorRoute && <ActivityStatusBadges activity={activity} />}
@@ -545,6 +669,14 @@ const ActivityDetailView = ({
           {activity.payload.date} {verifiedByLabel}
         </Typography>
       </Grid>
+
+      {showObsPanel && (
+        <ObservationStatsPanel
+          livePlants={obsLivePlants}
+          plantDensity={obsPlantDensity}
+          survivalRate={obsSurvivalRate}
+        />
+      )}
 
       <Grid item xs={12}>
         <Typography>{activity.payload.description}</Typography>

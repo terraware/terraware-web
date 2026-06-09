@@ -23,7 +23,7 @@ type PlotT0BoxProps = {
 
 const PlotT0Box = ({ plot, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
   const theme = useTheme();
-  const { species } = useSpeciesData();
+  const { speciesById } = useSpeciesData();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
 
@@ -43,6 +43,12 @@ const PlotT0Box = ({ plot, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
   const observationPlot = useMemo(() => {
     return plot.observationPlots.find((op) => op.observation_id === t0Plot?.observationId?.toString());
   }, [plot.observationPlots, t0Plot?.observationId]);
+
+  const sortedDensityData = [...(t0Plot?.densityData ?? [])].sort((a, b) => {
+    const nameA = speciesById[a.speciesId]?.scientificName ?? '';
+    const nameB = speciesById[b.speciesId]?.scientificName ?? '';
+    return nameA.localeCompare(nameB, activeLocale ?? undefined);
+  });
 
   return (
     <>
@@ -127,11 +133,9 @@ const PlotT0Box = ({ plot, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
                       </tr>
                     </thead>
                     <tbody>
-                      {t0Plot.densityData.map((densityData, index) => (
+                      {sortedDensityData.map((densityData, index) => (
                         <tr key={index}>
-                          <td style={{ paddingRight: '64px' }}>
-                            {species.find((sp) => sp.id === densityData.speciesId)?.scientificName}
-                          </td>
+                          <td style={{ paddingRight: '64px' }}>{speciesById[densityData.speciesId]?.scientificName}</td>
                           <td>{roundToDecimal(densityData.plotDensity, 1)}</td>
                         </tr>
                       ))}

@@ -3,7 +3,6 @@ import { useParams } from 'react-router';
 
 import { Box, Grid, Link as LinkMUI, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Icon, Tabs } from '@terraware/web-components';
-import _ from 'lodash';
 import { DateTime } from 'luxon';
 
 import ConvertedValue from 'src/components/ConvertedValue';
@@ -15,9 +14,12 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import useAccession from 'src/hooks/useAccession';
 import { useLocalization, useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
-import { AccessionService, FacilityService } from 'src/services';
+import { useCheckInMutation } from 'src/queries/generated/accessionsV1';
+import { useUpdateAccessionMutation } from 'src/queries/generated/accessionsV2';
+import { FacilityService } from 'src/services';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/types/Accession';
@@ -48,14 +50,13 @@ export default function Accession2View(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { userPreferences } = useUser();
   const { accessionId } = useParams<{ accessionId: string }>();
-  const [accession, setAccession] = useState<Accession>();
+  const { accession, refetch: refetchAccession } = useAccession(Number(accessionId));
   const [openEditLocationModal, setOpenEditLocationModal] = useState(false);
   const [openEditStateModal, setOpenEditStateModal] = useState(false);
   const [openEndDryingReminderModal, setOpenEndDryingReminderModal] = useState(false);
   const [openDeleteAccession, setOpenDeleteAccession] = useState(false);
   const [openWithdrawModal, setOpenWithdrawModal] = useState(false);
   const [openQuantityModal, setOpenQuantityModal] = useState(false);
-  const [hasPendingTests, setHasPendingTests] = useState(false);
   const [openViabilityModal, setOpenViabilityModal] = useState(false);
   const [openNewViabilityTest, setOpenNewViabilityTest] = useState(false);
   const [openViewViabilityTestModal, setOpenViewViabilityTestModal] = useState(false);
@@ -71,6 +72,13 @@ export default function Accession2View(): JSX.Element {
   const { activeLocale } = useLocalization();
   const locationTimeZone = useLocationTimeZone();
   const numberFormatter = useNumberFormatter();
+  const [updateAccession] = useUpdateAccessionMutation();
+  const [checkIn] = useCheckInMutation();
+
+  const hasPendingTests = useMemo(
+    () => accession?.viabilityTests?.some((test) => test.testType !== 'Cut' && !test.endDate) || false,
+    [accession]
+  );
 
   const fullSizeButtonStyles = {
     width: '100%',
@@ -101,42 +109,27 @@ export default function Accession2View(): JSX.Element {
     return tz.id;
   }, [accession?.facilityId, selectedOrganization, locationTimeZone]);
 
+  // TODO: Remove this hook once project assign endpoint correctly invalidates accession
   const reloadData = useCallback(() => {
-    const populateAccession = async () => {
-      if (accessionId) {
-        const response = await AccessionService.getAccession(parseInt(accessionId, 10));
-        if (response.requestSucceeded) {
-          if (!_.isEqual(response.accession, accession)) {
-            setAccession(response.accession);
-            setHasPendingTests(
-              response.accession?.viabilityTests?.some((test) => test.testType !== 'Cut' && !test.endDate) || false
-            );
-          }
-        } else {
-          snackbar.toastError();
-        }
-      }
-    };
-
-    if (accessionId !== undefined) {
-      void populateAccession();
-    } else {
-      setAccession(undefined);
+    if (accessionId) {
+      void refetchAccession();
     }
-  }, [accessionId, accession, snackbar]);
+  }, [accessionId, refetchAccession]);
 
   const onProjectUnAssign = useCallback(async () => {
-    const response = await AccessionService.updateAccession({ ...accession, projectId: undefined } as Accession);
-    if (response.requestSucceeded) {
-      void reloadData();
-    } else {
+    if (!accession) {
+      return;
+    }
+    const updatedAccession = { ...accession, projectId: undefined };
+    try {
+      await updateAccession({
+        id: accession.id,
+        updateAccessionRequestPayloadV2: updatedAccession,
+      }).unwrap();
+    } catch {
       snackbar.toastError();
     }
-  }, [accession, reloadData, snackbar]);
-
-  useEffect(() => {
-    reloadData();
-  }, [accessionId, reloadData]);
+  }, [accession, snackbar, updateAccession]);
 
   useEffect(() => {
     if (activeLocale) {
@@ -185,8 +178,7 @@ export default function Accession2View(): JSX.Element {
   const checkInAccession = async () => {
     if (accession) {
       try {
-        await AccessionService.checkInAccession(accession.id);
-        reloadData();
+        await checkIn(accession.id).unwrap();
         snackbar.toastSuccess(
           strings.formatString(strings.ACCESSION_NUMBER_CHECKED_IN, accession.accessionNumber.toString())
         );
@@ -334,7 +326,7 @@ export default function Accession2View(): JSX.Element {
               padding: themeObj.spacing(3),
             }}
           >
-            <DetailPanel accession={accession} reload={reloadData} />
+            <DetailPanel />
           </Box>
         ),
       },
@@ -361,7 +353,7 @@ export default function Accession2View(): JSX.Element {
                 : {},
             }}
           >
-            {accession && <Accession2History accession={accession} />}
+            <Accession2History />
           </Box>
         ),
       },
@@ -376,21 +368,17 @@ export default function Accession2View(): JSX.Element {
               padding: themeObj.spacing(3),
             }}
           >
-            {accession && (
-              <ViabilityTestingPanel
-                accession={accession}
-                reload={reloadData}
-                canAddTest={viabilityEditable}
-                setNewViabilityTestOpened={setOpenNewViabilityTest}
-                setViewViabilityTestModalOpened={setOpenViewViabilityTestModal}
-                setSelectedTest={setSelectedTest}
-              />
-            )}
+            <ViabilityTestingPanel
+              canAddTest={viabilityEditable}
+              setNewViabilityTestOpened={setOpenNewViabilityTest}
+              setViewViabilityTestModalOpened={setOpenViewViabilityTestModal}
+              setSelectedTest={setSelectedTest}
+            />
           </Box>
         ),
       },
     ];
-  }, [accession, reloadData, activeLocale, themeObj, viabilityEditable, isMobile, hasPendingTests]);
+  }, [activeLocale, themeObj, viabilityEditable, isMobile, hasPendingTests]);
 
   const { activeTab, onChangeTab, setActiveTab } = useStickyTabs({
     defaultTab: 'detail',
@@ -405,7 +393,6 @@ export default function Accession2View(): JSX.Element {
           {selectedTest && (
             <ViewViabilityTestModal
               open={openViewViabilityTestModal}
-              accession={accession}
               isEditable={userCanEdit}
               viabilityTest={selectedTest}
               onClose={() => {
@@ -413,15 +400,12 @@ export default function Accession2View(): JSX.Element {
                 setSelectedTest(undefined);
               }}
               onEdit={() => setOpenNewViabilityTest(true)}
-              reload={reloadData}
             />
           )}
 
           {user && (
             <NewViabilityTestModal
               open={openNewViabilityTest}
-              reload={reloadData}
-              accession={accession}
               onClose={() => {
                 setOpenNewViabilityTest(false);
                 setSelectedTest(undefined);
@@ -432,58 +416,32 @@ export default function Accession2View(): JSX.Element {
           )}
 
           {openEditLocationModal && (
-            <EditLocationModal
-              open={openEditLocationModal}
-              onClose={() => setOpenEditLocationModal(false)}
-              accession={accession}
-              reload={reloadData}
-            />
+            <EditLocationModal open={openEditLocationModal} onClose={() => setOpenEditLocationModal(false)} />
           )}
           {openEditStateModal && (
-            <EditStateModal
-              open={openEditStateModal}
-              onClose={() => setOpenEditStateModal(false)}
-              accession={accession}
-              reload={reloadData}
-            />
+            <EditStateModal open={openEditStateModal} onClose={() => setOpenEditStateModal(false)} />
           )}
           {openEndDryingReminderModal && (
             <EndDryingReminderModal
               open={openEndDryingReminderModal}
               onClose={() => setOpenEndDryingReminderModal(false)}
-              accession={accession}
-              reload={reloadData}
             />
           )}
           {openDeleteAccession && (
-            <DeleteAccessionModal
-              open={openDeleteAccession}
-              onClose={() => setOpenDeleteAccession(false)}
-              accession={accession}
-            />
+            <DeleteAccessionModal open={openDeleteAccession} onClose={() => setOpenDeleteAccession(false)} />
           )}
           {user && openWithdrawModal && (
-            <WithdrawModal
-              open={openWithdrawModal}
-              onClose={() => setOpenWithdrawModal(false)}
-              accession={accession}
-              reload={reloadData}
-              user={user}
-            />
+            <WithdrawModal open={openWithdrawModal} onClose={() => setOpenWithdrawModal(false)} user={user} />
           )}
           <QuantityModal
             open={openQuantityModal}
             onClose={() => setOpenQuantityModal(false)}
-            accession={accession}
-            reload={reloadData}
             title={accession?.remainingQuantity?.quantity !== undefined ? strings.EDIT_QUANTITY : strings.ADD_QUANTITY}
           />
           {openViabilityModal && (
             <ViabilityModal
               open={openViabilityModal}
               onClose={() => setOpenViabilityModal(false)}
-              accession={accession}
-              reload={reloadData}
               setNewViabilityTestOpened={setOpenNewViabilityTest}
               changeTab={setActiveTab}
               title={accession?.viabilityPercent?.toString() ? strings.EDIT_VIABILITY : strings.ADD_VIABILITY}

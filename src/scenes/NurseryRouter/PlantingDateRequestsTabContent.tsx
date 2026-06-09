@@ -13,14 +13,13 @@ import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { PlantingDateRequestRow, useLazyListPlantingDateRequestsQuery } from 'src/queries/search/plantingDateRequests';
-import strings from 'src/strings';
 import { getMediumDate } from 'src/utils/dateFormatter';
 
 import WithdrawFromBatchesModal from './WithdrawFromBatchesModal';
 
 const PlantingDateRequestsTabContent = (): JSX.Element => {
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { species } = useSpeciesData();
   const organizationId = selectedOrganization?.id;
@@ -51,7 +50,7 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
       { label: strings.ALL_PLANTING_SITES, value: 'all' },
       ...(plantingSitesData?.sites ?? []).map((s) => ({ label: s.name, value: s.id })),
     ],
-    [plantingSitesData]
+    [plantingSitesData, strings]
   );
 
   const plantingSeasonOptions = useMemo<DropdownItem[]>(() => {
@@ -61,14 +60,14 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
       { label: strings.ALL_PLANTING_SEASONS, value: 'all' },
       ...filteredSeasons.map((s) => ({ label: s.name, value: s.id })),
     ];
-  }, [plantingSeasonsData, plantingSiteId]);
+  }, [plantingSeasonsData, plantingSiteId, strings]);
 
   const speciesOptions = useMemo<DropdownItem[]>(
     () => [
       { label: strings.ALL_SPECIES, value: 'all' },
       ...species.map((s) => ({ label: s.scientificName, value: s.id })),
     ],
-    [species]
+    [species, strings]
   );
 
   const rows = requests ?? [];
@@ -256,6 +255,7 @@ const NumberColumn = ({
 
 const RequestStatusBadge = ({ status }: { status: string }): JSX.Element | null => {
   const theme = useTheme();
+  const { strings } = useLocalization();
   const badgeProps = useMemo((): BadgeProps | undefined => {
     switch (status) {
       case 'Pending':
@@ -287,7 +287,7 @@ const RequestStatusBadge = ({ status }: { status: string }): JSX.Element | null 
           label: status,
         };
     }
-  }, [status, theme]);
+  }, [status, theme, strings]);
 
   if (!badgeProps) {
     return null;

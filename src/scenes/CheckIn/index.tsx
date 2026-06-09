@@ -11,8 +11,8 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
+import { useCheckInMutation } from 'src/queries/generated/accessionsV1';
 import { useLazyGetPendingAccessionsQuery } from 'src/queries/search/accessions';
-import { AccessionService } from 'src/services';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { SearchResponseElement } from 'src/types/Search';
@@ -37,6 +37,7 @@ export default function CheckIn(): JSX.Element {
   const userCanEdit = !isContributor(selectedOrganization);
 
   const [fetchPendingAccessions] = useLazyGetPendingAccessionsQuery();
+  const [checkIn] = useCheckInMutation();
   const reloadData = useCallback(() => {
     const populatePendingAccessions = async () => {
       if (selectedOrganization) {
@@ -58,7 +59,7 @@ export default function CheckIn(): JSX.Element {
   const checkInAccession = async (accession: Accession) => {
     if (accession) {
       try {
-        await AccessionService.checkInAccession(accession.id);
+        await checkIn(accession.id).unwrap();
         reloadData();
         snackbar.toastSuccess(
           strings.formatString(strings.ACCESSION_NUMBER_CHECKED_IN, accession.accessionNumber.toString())
@@ -74,9 +75,7 @@ export default function CheckIn(): JSX.Element {
     if (pendingAccessions) {
       try {
         setBusy(true);
-        await Promise.all(
-          (pendingAccessions || []).map((accession) => AccessionService.checkInAccession(Number(accession.id)))
-        );
+        await Promise.all((pendingAccessions || []).map((accession) => checkIn(Number(accession.id)).unwrap()));
         setBusy(false);
         reloadData();
         setCheckInAllConfirmationDialogOpen(false);
