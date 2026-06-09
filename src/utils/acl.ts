@@ -222,7 +222,7 @@ const isAllowedManageFundingEntities: PermissionCheckFn = (user: User): boolean 
 };
 
 /**
- * Function related to org access for viewing activities, since the permission also applies to
+ * Function related to org access for viewing observations, since the permission also applies to
  * org roles, we need to check the passed-in organization. The caller is responsible for resolving
  * the organization object from their list before passing it as metadata.
  */
