@@ -56,6 +56,7 @@ type ActivityPhotoPreviewProps = {
   isAdHoc?: boolean;
   isLast?: boolean;
   isObsActivity: boolean;
+  itemIndex: number;
   maxPosition: number;
   mediaItem: ActivityMediaItem;
   onClick?: () => void;
@@ -76,6 +77,7 @@ const ActivityPhotoPreview = ({
   isAdHoc,
   isLast,
   isObsActivity,
+  itemIndex,
   maxPosition,
   mediaItem,
   onClick,
@@ -246,7 +248,11 @@ const ActivityPhotoPreview = ({
     <Box
       bgcolor={focused ? theme.palette.TwClrBgSecondary : undefined}
       borderBottom={isLast ? 'none' : `1px solid ${theme.palette.TwClrBgSecondary}`}
-      id={mediaItem.type === 'existing' ? `activity-media-item-${mediaItem.data.fileId}` : undefined}
+      id={
+        mediaItem.type === 'existing'
+          ? `activity-media-item-${mediaItem.data.fileId}`
+          : `activity-media-item-new-${itemIndex}`
+      }
       marginBottom='24px'
       onClick={onClick}
       paddingBottom='24px'
@@ -795,6 +801,7 @@ export default function ActivityMediaForm({
               isAdHoc={isAdHoc}
               isLast={visibleIndex === visibleMediaItems.length - 1}
               isObsActivity={isObsActivity}
+              itemIndex={index}
               key={`photo-${index}`}
               maxPosition={visibleMediaItems.length}
               onClick={mediaItem.type === 'existing' ? onClickMediaItem(mediaItem.data.fileId) : undefined}
