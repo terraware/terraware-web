@@ -9,6 +9,7 @@ import { Tabs } from '@terraware/web-components';
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
+import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { useListPlantingDateRequestsQuery } from 'src/queries/search/plantingDateRequests';
 import strings from 'src/strings';
@@ -22,29 +23,32 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
   const contentRef = useRef(null);
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization?.id;
+  const isPlantingSeasonsEnabled = isEnabled('Planting Seasons');
 
   const { data: requests } = useListPlantingDateRequestsQuery(
     { organizationId: organizationId ?? 0 },
-    { skip: !organizationId }
+    { skip: !organizationId || !isPlantingSeasonsEnabled }
   );
 
   const requestsCount = requests?.length ?? 0;
 
-  const tabs = useMemo(
-    () => [
+  const tabs = useMemo(() => {
+    const baseTabs = [
       {
         id: 'withdrawals',
         label: strings.WITHDRAWALS,
         children: <NurseryWithdrawals />,
       },
-      {
+    ];
+    if (isPlantingSeasonsEnabled) {
+      baseTabs.push({
         id: 'requests',
         label: strings.formatString(strings.REQUESTS_X, requestsCount).toString(),
         children: <PlantingDateRequestsTabContent />,
-      },
-    ],
-    [requestsCount]
-  );
+      });
+    }
+    return baseTabs;
+  }, [isPlantingSeasonsEnabled, requestsCount]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'withdrawals',
