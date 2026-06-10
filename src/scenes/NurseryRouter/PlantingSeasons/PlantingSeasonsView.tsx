@@ -81,7 +81,7 @@ const PlantingSeasonsView = (): JSX.Element => {
         const site = sitesById.get(season.plantingSiteId);
         return site ? [{ site, season }] : [];
       })
-      .sort((a, b) => a.season.startDate.localeCompare(b.season.startDate));
+      .sort((a, b) => b.season.startDate.localeCompare(a.season.startDate));
   }, [plantingSeasonsData, plantingSites, selectedPlantingSiteId]);
 
   const addButton = (
