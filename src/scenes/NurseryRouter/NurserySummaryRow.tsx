@@ -1,0 +1,74 @@
+import React, { type JSX, useMemo } from 'react';
+
+import { Box, Typography, useTheme } from '@mui/material';
+
+import { useLocalization } from 'src/providers';
+import { PlantingDateRequestSpeciesDetail } from 'src/queries/search/plantingDateRequests';
+
+export type NurserySummaryRowProps = {
+  species: PlantingDateRequestSpeciesDetail;
+  ready: number;
+  index: number;
+};
+
+type Coverage = 'COVERED' | 'PARTIALLY_COVERED' | 'NOT_COVERED';
+
+const NurserySummaryRow = ({ species, ready, index }: NurserySummaryRowProps): JSX.Element => {
+  const theme = useTheme();
+  const { strings } = useLocalization();
+
+  const coverage: Coverage = useMemo(() => {
+    if (ready === 0) {
+      return 'NOT_COVERED';
+    }
+    return ready >= species.requestedQuantity ? 'COVERED' : 'PARTIALLY_COVERED';
+  }, [ready, species.requestedQuantity]);
+
+  const coverageColor =
+    coverage === 'COVERED'
+      ? theme.palette.TwClrTxtSuccess
+      : coverage === 'PARTIALLY_COVERED'
+        ? theme.palette.TwClrTxtWarning
+        : theme.palette.TwClrTxtDanger;
+
+  const coverageLabel =
+    coverage === 'COVERED'
+      ? strings.COVERED
+      : coverage === 'PARTIALLY_COVERED'
+        ? strings.PARTIALLY_COVERED
+        : strings.NOT_COVERED;
+
+  return (
+    <Box
+      display='grid'
+      gridTemplateColumns='2fr 1fr 1fr 1fr'
+      gap={theme.spacing(1)}
+      padding={theme.spacing(1, 2)}
+      sx={{
+        backgroundColor: index % 2 === 0 ? theme.palette.TwClrBgSecondary : 'transparent',
+      }}
+    >
+      <Box>
+        <Typography fontSize='14px' textAlign='left'>
+          {species.scientificName}
+        </Typography>
+        {species.commonName && (
+          <Typography fontSize='12px' color={theme.palette.TwClrTxtSecondary} textAlign='left'>
+            {species.commonName}
+          </Typography>
+        )}
+      </Box>
+      <Typography fontSize='14px' textAlign='right'>
+        {species.requestedQuantity.toLocaleString()}
+      </Typography>
+      <Typography fontSize='14px' textAlign='right'>
+        {ready.toLocaleString()}
+      </Typography>
+      <Typography fontSize='14px' textAlign='right' color={coverageColor} fontWeight={600}>
+        {coverageLabel}
+      </Typography>
+    </Box>
+  );
+};
+
+export default NurserySummaryRow;
