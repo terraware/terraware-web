@@ -751,7 +751,7 @@ export default function ActivityMediaForm({
           message={
             obsConfirmContext
               ? strings.formatString(
-                  strings.SAVE_OBSERVATION_ACTIVITY_PHOTOS_AND_VIDEOS_DESCRIPTION,
+                  strings.DELETE_OBSERVATION_ACTIVITY_PHOTO_MESSAGE,
                   obsConfirmContext.monthYear,
                   obsConfirmContext.projectName
                 )
