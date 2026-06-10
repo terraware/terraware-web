@@ -1,6 +1,6 @@
 import { components } from 'src/api/types/generated-schema';
 import { ObservationMonitoringPlotMediaPayload } from 'src/queries/generated/observations';
-import strings from 'src/strings';
+import defaultStrings from 'src/strings';
 
 import { MultiPolygon } from './Tracking';
 
@@ -117,7 +117,7 @@ export type ObservationSpeciesResults = ObservationSpeciesResultsPayload & {
   speciesScientificName: string;
 };
 
-export const getStatus = (state: ObservationState): string => {
+export const getStatus = (state: ObservationState, strings: typeof defaultStrings): string => {
   switch (state) {
     case 'Completed':
       return strings.COMPLETED;
@@ -132,7 +132,7 @@ export const getStatus = (state: ObservationState): string => {
   }
 };
 
-export const getPlotStatus = (status?: MonitoringPlotStatus): string => {
+export const getPlotStatus = (status: MonitoringPlotStatus | undefined, strings: typeof defaultStrings): string => {
   switch (status) {
     case 'Completed':
       return strings.COMPLETED;
@@ -147,7 +147,10 @@ export const getPlotStatus = (status?: MonitoringPlotStatus): string => {
   }
 };
 
-export const getReplaceObservationPlotDuration = (duration: ReplaceObservationPlotDuration): string => {
+export const getReplaceObservationPlotDuration = (
+  duration: ReplaceObservationPlotDuration,
+  strings: typeof defaultStrings
+): string => {
   switch (duration) {
     case 'Temporary':
       return strings.TEMPORARY;
@@ -194,7 +197,10 @@ export type ExistingMonitoringPlotMediaItem = {
 
 export type MonitoringPlotMediaItem = NewMonitoringPlotMediaItem | ExistingMonitoringPlotMediaItem;
 
-export const getPositionLabel = (position: ObservationMonitoringPlotPosition): string => {
+export const getPositionLabel = (
+  position: ObservationMonitoringPlotPosition,
+  strings: typeof defaultStrings
+): string => {
   switch (position) {
     case 'NortheastCorner':
       return strings.NORTHEAST_CORNER;
@@ -209,7 +215,10 @@ export const getPositionLabel = (position: ObservationMonitoringPlotPosition): s
   }
 };
 
-export const getQuadratLabel = (position: ObservationMonitoringPlotPosition): string => {
+export const getQuadratLabel = (
+  position: ObservationMonitoringPlotPosition,
+  strings: typeof defaultStrings
+): string => {
   switch (position) {
     case 'NortheastCorner':
       return strings.PHOTO_NORTHEAST_QUADRAT;

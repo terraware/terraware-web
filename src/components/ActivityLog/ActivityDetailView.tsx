@@ -24,14 +24,14 @@ import {
   useLazyGetActivityMediaStreamQuery,
 } from 'src/queries/generated/funderActivities';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
+import { useGetProjectQuery } from 'src/queries/generated/projects';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
-import { getPositionLabel, getQuadratLabel } from 'src/types/Observations';
-import { isObservationActivity, isUndeletableObservationPhoto } from 'src/utils/activityUtils';
+import { getObsPhotoTypeLabel, isObservationActivity } from 'src/utils/activityUtils';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -208,23 +208,7 @@ const ActivityMediaItem = ({
     [mediaFile.fileId, setLightboxImageId]
   );
 
-  const obsPhotoTypeLabel = useMemo(() => {
-    const obs = mediaFile.observation;
-    if (!obs || !isUndeletableObservationPhoto(mediaFile)) {
-      return undefined;
-    }
-    const plotPrefix = `${obs.monitoringPlotNumber} `;
-    if (obs.type === 'Plot' && obs.position) {
-      return `${plotPrefix}${getPositionLabel(obs.position)}`;
-    }
-    if (obs.type === 'Quadrat' && obs.position) {
-      return `${plotPrefix}${getQuadratLabel(obs.position)}`;
-    }
-    if (obs.type === 'Soil') {
-      return `${plotPrefix}${strings.SOIL}`;
-    }
-    return undefined;
-  }, [mediaFile, strings]);
+  const obsPhotoTypeLabel = useMemo(() => getObsPhotoTypeLabel(mediaFile, strings), [mediaFile, strings]);
 
   const handleImageError = useCallback(async () => {
     // only check for 412 error if this is a video
@@ -312,9 +296,15 @@ const ActivityMediaItem = ({
           )}
         </Box>
 
-        {(mediaFile.caption || obsPhotoTypeLabel) && (
+        {obsPhotoTypeLabel && (
           <Typography component='div' sx={captionStyles}>
-            {obsPhotoTypeLabel ?? mediaFile.caption}
+            {obsPhotoTypeLabel}
+          </Typography>
+        )}
+
+        {mediaFile.caption && (
+          <Typography component='div' sx={captionStyles}>
+            {mediaFile.caption}
           </Typography>
         )}
       </Box>
@@ -361,7 +351,7 @@ const ActivityDetailView = ({
   const location = useStateLocation();
   const theme = useTheme();
   const { goToAcceleratorActivityEdit, goToActivityEdit } = useNavigateTo();
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, organizations } = useOrganization();
 
   const verifiedByUser = useAppSelector(
     selectUser(activity.type === 'admin' ? activity.payload.verifiedBy : undefined)
@@ -371,6 +361,20 @@ const ActivityDetailView = ({
     : isAllowed('EDIT_ACTIVITIES', { organization: selectedOrganization });
 
   const isObsActivity = useMemo(() => isObservationActivity(activity.payload), [activity.payload]);
+
+  const { data: projectData } = useGetProjectQuery(projectId, {
+    skip: !isAcceleratorRoute || !isObsActivity,
+  });
+
+  const hasOrgAccess = useMemo(
+    () =>
+      isAllowed('VIEW_ORG_OBSERVATIONS', {
+        organizations,
+        project: projectData?.project,
+        isAcceleratorRoute,
+      }),
+    [isAcceleratorRoute, isAllowed, organizations, projectData?.project]
+  );
 
   // Funder activities include observation stats directly on the payload (no observationId or API call needed)
   const funderObsPayload = activity.type === 'funder' ? activity.payload.observation : undefined;
@@ -383,10 +387,10 @@ const ActivityDetailView = ({
 
   const observationUrl = useMemo(
     () =>
-      isObsActivity && activity.payload.observation?.observationId
+      isObsActivity && activity.payload.observation?.observationId && hasOrgAccess
         ? APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', String(activity.payload.observation.observationId))
         : undefined,
-    [activity.payload.observation?.observationId, isObsActivity]
+    [activity.payload.observation?.observationId, isObsActivity, hasOrgAccess]
   );
 
   const obsIsAdHoc = activity.payload.observation?.isAdHoc ?? false;

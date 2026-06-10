@@ -18,7 +18,7 @@ import { useLocalization } from 'src/providers/hooks';
 import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { ActivityMediaFile, AdminActivityMediaFile } from 'src/types/Activity';
 import {
-  isCaptionReadOnly,
+  getObsPhotoTypeLabel,
   isCornerPhoto,
   isObservationMedia,
   isUndeletableObservationPhoto,
@@ -163,9 +163,9 @@ const ActivityPhotoPreview = ({
     return strings.OBSERVATION_PHOTO_CANNOT_DELETE_INFO;
   }, [isUndeletable, mediaItem, strings]);
 
-  const isCaptionRO = useMemo(
-    () => isObsMedia && mediaItem.type === 'existing' && isCaptionReadOnly(mediaItem.data),
-    [isObsMedia, mediaItem]
+  const obsPhotoTypeLabel = useMemo(
+    () => (isUndeletable && mediaItem.type === 'existing' ? getObsPhotoTypeLabel(mediaItem.data, strings) : undefined),
+    [isUndeletable, mediaItem, strings]
   );
 
   const obsMonitoringPlotNumber = useMemo(() => {
@@ -252,6 +252,11 @@ const ActivityPhotoPreview = ({
       paddingBottom='24px'
       width='100%'
     >
+      {obsPhotoTypeLabel && (
+        <Typography fontSize='16px' fontWeight={500} marginBottom={theme.spacing(2)}>
+          {obsPhotoTypeLabel}
+        </Typography>
+      )}
       <Grid container spacing={2} textAlign='left'>
         <Grid item sm='auto' xs={12}>
           <Box position='relative'>
@@ -422,26 +427,14 @@ const ActivityPhotoPreview = ({
         <Grid item xs={12}>
           <Box alignItems='flex-start' display='flex' gap={1}>
             <Box flex={1}>
-              {isCaptionRO ? (
-                <Box>
-                  <Typography
-                    fontSize='14px'
-                    sx={{ color: theme.palette.TwClrTxtSecondary, marginBottom: theme.spacing(1) }}
-                  >
-                    {strings.CAPTION}
-                  </Typography>
-                  <Typography fontSize='16px'>{caption || '—'}</Typography>
-                </Box>
-              ) : (
-                <Textfield
-                  id={`caption-${mediaItem.type === 'new' ? mediaItem.data.file.name : mediaItem.data.fileId}`}
-                  label={strings.CAPTION}
-                  onChange={setCaptionCallback}
-                  type='text'
-                  value={caption}
-                  maxLength={200}
-                />
-              )}
+              <Textfield
+                id={`caption-${mediaItem.type === 'new' ? mediaItem.data.file.name : mediaItem.data.fileId}`}
+                label={strings.CAPTION}
+                onChange={setCaptionCallback}
+                type='text'
+                value={caption}
+                maxLength={200}
+              />
             </Box>
             {isObsActivity && !isUndeletable && !isAdHoc && mediaItem.type === 'new' && (
               <Box flexShrink={0} width='120px'>
@@ -758,7 +751,7 @@ export default function ActivityMediaForm({
           message={
             obsConfirmContext
               ? strings.formatString(
-                  strings.SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,
+                  strings.DELETE_OBSERVATION_ACTIVITY_PHOTO_MESSAGE,
                   obsConfirmContext.monthYear,
                   obsConfirmContext.projectName
                 )

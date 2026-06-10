@@ -28,7 +28,7 @@ const QuadratComponent = ({ position }: QuadratComponentProps) => {
   return (
     <Box>
       <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingBottom={2}>
-        {getQuadratLabel(position)}
+        {getQuadratLabel(position, strings)}
       </Typography>
       <Box display={'flex'}>
         <MonitoringPlotPhotos

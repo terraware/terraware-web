@@ -56,7 +56,7 @@ export default function MonitoringPlotCellRenderer(props: RendererProps<TableRow
   }
 
   if (column.key === 'status') {
-    return <CellRenderer {...props} value={getPlotStatus(value as MonitoringPlotStatus)} />;
+    return <CellRenderer {...props} value={getPlotStatus(value as MonitoringPlotStatus, strings)} />;
   }
 
   if (column.key === 'isPermanent') {

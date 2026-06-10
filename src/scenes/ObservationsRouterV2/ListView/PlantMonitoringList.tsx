@@ -258,7 +258,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           observationId: observationResult.observationId,
           observationDate,
           observationState: observationResult.state,
-          state: getStatus(observationResult.state),
+          state: getStatus(observationResult.state, strings),
           plantingSiteName: plantingSite?.name,
           strata: strataNames.join('\r'),
           totalLive,
@@ -269,7 +269,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           completedDate,
         };
       }),
-    [observationResults, plantingSitesById, selectedPlotSelection]
+    [observationResults, plantingSitesById, selectedPlotSelection, strings]
   );
 
   const uniqueStatuses = useMemo(

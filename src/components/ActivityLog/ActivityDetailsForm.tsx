@@ -663,7 +663,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         >
           <Grid container spacing={2} textAlign='left'>
             <Grid item xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
-              {isEditing && activity && isAllowedDeleteActivitiesNonPublished && (
+              {isEditing && activity && !isObsActivity && isAllowedDeleteActivitiesNonPublished && (
                 <Button
                   label={strings.DELETE_ACTIVITY}
                   onClick={handleDeleteActivity}

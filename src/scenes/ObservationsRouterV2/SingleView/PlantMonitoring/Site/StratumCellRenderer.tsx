@@ -4,11 +4,13 @@ import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
+import { useLocalization } from 'src/providers';
 import { MonitoringPlotStatus, getPlotStatus } from 'src/types/Observations';
 
 export default function StratumCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
   const NO_DATA_FIELDS = ['totalPlants', 'totalSpecies'];
   const { column, row, value } = props;
+  const { strings } = useLocalization();
   const observationId = row.observationId as number;
   const stratumName = row.stratumName as string;
   if (column.key === 'stratumName') {
@@ -38,7 +40,7 @@ export default function StratumCellRenderer(props: RendererProps<TableRowType>):
   }
 
   if (column.key === 'status') {
-    return <CellRenderer {...props} value={getPlotStatus(value as MonitoringPlotStatus)} />;
+    return <CellRenderer {...props} value={getPlotStatus(value as MonitoringPlotStatus, strings)} />;
   }
 
   return <CellRenderer {...props} />;
