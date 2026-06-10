@@ -116,7 +116,7 @@ const injectedRtkApi = api.injectEndpoints({
           },
         };
       },
-      providesTags: [{ type: QueryTagTypes.PlantingSeasonDates, id: 'REQUESTS' }],
+      providesTags: [{ type: QueryTagTypes.PlantingDateRequests, id: 'LIST' }],
       transformResponse: (response: PlantingDateRequestsApiResponse): PlantingDateRequestRow[] =>
         response.results.map((result): PlantingDateRequestRow => {
           const speciesEntries = result.plantingDateRequestSpecies ?? [];

@@ -7,7 +7,7 @@ api.enhanceEndpoints({
       invalidatesTags: [
         { type: QueryTagTypes.NurseryWithdrawals, id: 'LIST' },
         { type: QueryTagTypes.PlantingSites },
-        { type: QueryTagTypes.PlantingSeasonDates, id: 'REQUESTS' },
+        { type: QueryTagTypes.PlantingDateRequests, id: 'LIST' },
         { type: QueryTagTypes.Batches, id: 'LIST' },
       ],
     },
