@@ -490,6 +490,9 @@ DELETE_CONFIRMATION_MODAL_MAIN_TEXT,Êtes-vous sûr de vouloir supprimer l'espè
 DELETE_FUNDING_ENTITY,Supprimer l’entité de financement,7d8a1f95
 DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,Tous les financeurs associés à cette entité de financement seront supprimés.,cedce711
 DELETE_FUNDING_ENTITY_MESSAGE,Vous êtes sur le point de supprimer {0}.,4a41e34f
+DELETE_OBSERVATION_ACTIVITY_PHOTO_MESSAGE,"Vous êtes sur le point de modifier les photos et vidéos associées à une Observation dans {0} pour {1}.
+
+Êtes-vous sûr de vouloir effectuer ces modifications ?",b9887b3e
 DELETE_OBSERVATION_PHOTO_MESSAGE,Cette photo sera également supprimée de l'observation associée. Cette action est irréversible.,cd60484f
 DELETE_OBSERVATION_PHOTO_TITLE,Supprimer la photo de l'observation,e92e9851
 DELETE_ORGANIZATION,Supprimer l'organisation,91c84420
@@ -1851,9 +1854,7 @@ SAVE_CHANGES,Sauvegarder les modifications,cb5e8c33
 SAVE_OBSERVATION_DATA,Enregistrer les données d'observation,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Vos modifications remplaceront toutes les données saisies précédemment. Êtes-vous sûr de vouloir effectuer ces modifications ?,b1657c44
 SAVE_PHOTOS_AND_VIDEOS,Enregistrer les photos et vidéos,d38ce0cc
-SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,"Vous êtes sur le point de modifier les photos et vidéos associées à une Observation dans {0} pour {1}.
-
-Êtes-vous sûr de vouloir effectuer ces modifications ?",81b6df07
+SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,Vous êtes en train de modifier les photos et vidéos associées à cette parcelle d’Observation. Êtes-vous sûr de vouloir effectuer ces modifications ?,8cfdcf97
 SAVE_PLANT_DENSITY,Enregistrer la densité de plantation,73135113
 SAVE_PROJECT_BOUNDARIES,Sauvegarder les limites du projet,d206ddd9
 SAVE_VERSION,Enregistrer la version,5afacff0
