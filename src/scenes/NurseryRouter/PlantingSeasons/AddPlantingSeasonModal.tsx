@@ -94,7 +94,7 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
   const seasonToCopyOptions = useMemo<DropdownItem[]>(
     () =>
       seasonsForSelectedSite.map((season) => ({
-        label: strings.formatString(strings.DATE_RANGE, season.startDate, season.endDate).toString(),
+        label: season.name,
         value: season.id,
       })),
     [seasonsForSelectedSite]
