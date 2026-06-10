@@ -275,7 +275,7 @@ const PurposeAndDestinationStep = ({
         <Box maxWidth='320px'>
           <Dropdown
             id='to-nursery'
-            label={strings.FROM_NURSERY_REQUIRED}
+            label={strings.TO_NURSERY_REQUIRED}
             options={toNurseryOptions}
             selectedValue={draft.destinationFacilityId}
             onChange={(value) => onChange({ destinationFacilityId: value !== undefined ? Number(value) : undefined })}
