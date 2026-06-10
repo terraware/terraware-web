@@ -1668,7 +1668,6 @@ PUBLISHED_REPORT_CONSOLE_WARNING,You are viewing the latest published report as 
 PURPOSE,Purpose,
 PURPOSE_AND_DESTINATION,Purpose & Destination,
 PURPOSE_REQUIRED,Purpose *,
-PURPOSE_REQUIRED,Purpose *,
 QUADRAT,Quadrat,"Not a misspelling of ""quadrant."" A quadrat is a 1-meter-square area used for ecological surveys."
 QUADRAT_PHOTO_CANNOT_DELETE_INFO,Quadrat photos cannot be deleted.,
 QUADRAT_PHOTOS,Quadrat Photos,

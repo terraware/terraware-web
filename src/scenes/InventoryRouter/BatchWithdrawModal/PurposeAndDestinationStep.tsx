@@ -8,7 +8,7 @@ import DatePicker from 'src/components/common/DatePicker';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
-import { useLazyGetPlantingSiteQuery, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { SpeciesTargetForSubstratum } from 'src/queries/search/speciesTargetsForSubstratum';
 import { NurseryWithdrawalPurpose, NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 
@@ -35,20 +35,20 @@ const PurposeAndDestinationStep = ({
 
   const [listPlantingSites, { data: plantingSitesData }] = useLazyListPlantingSitesQuery();
   const [listPlantingSeasons, { data: plantingSeasonsData }] = useLazyListPlantingSeasonsQuery();
-  const [getPlantingSite, { data: plantingSiteData }] = useLazyGetPlantingSiteQuery();
 
   useEffect(() => {
     if (organizationId) {
-      void listPlantingSites({ organizationId }, true);
+      // `full: true` returns each site's strata/substrata, which we need to
+      // populate the Stratum/Substratum dropdowns without a second request.
+      void listPlantingSites({ organizationId, full: true }, true);
       void listPlantingSeasons({ organizationId }, true);
     }
   }, [organizationId, listPlantingSites, listPlantingSeasons]);
 
-  useEffect(() => {
-    if (draft.plantingSiteId) {
-      void getPlantingSite({ id: draft.plantingSiteId }, true);
-    }
-  }, [draft.plantingSiteId, getPlantingSite]);
+  const selectedPlantingSite = useMemo(
+    () => (plantingSitesData?.sites ?? []).find((s) => s.id === draft.plantingSiteId),
+    [plantingSitesData, draft.plantingSiteId]
+  );
 
   // From: Nursery options are restricted to nurseries that hold at least one
   // of the selected batches — a withdrawal can only span a single facility.
@@ -82,9 +82,9 @@ const PurposeAndDestinationStep = ({
   }, [plantingSeasonsData, draft.plantingSiteId]);
 
   // The "Planting Season (optional)" selector is shown only when the org has
-  // any planting season with species targets (regardless of status).
+  // any non-closed planting season with species targets.
   const showPlantingSeasonSelector = useMemo(
-    () => (plantingSeasonsData?.seasons ?? []).some((s) => s.speciesTargets.length > 0),
+    () => (plantingSeasonsData?.seasons ?? []).some((s) => s.status !== 'Closed' && s.speciesTargets.length > 0),
     [plantingSeasonsData]
   );
 
@@ -101,7 +101,7 @@ const PurposeAndDestinationStep = ({
   );
 
   const { stratumOptions, substratumOptions } = useMemo(() => {
-    const allStrata = plantingSiteData?.site?.strata ?? [];
+    const allStrata = selectedPlantingSite?.strata ?? [];
     if (selectedSeason) {
       const allowedSubstratumIds = new Set(selectedSeason.speciesTargets.map((t) => t.substratumId));
       const filteredStrata = allStrata
@@ -124,7 +124,7 @@ const PurposeAndDestinationStep = ({
         allStrata.find((s) => s.id === draft.stratumId)?.substrata.map((sub) => ({ label: sub.name, value: sub.id })) ??
         [],
     };
-  }, [plantingSiteData, selectedSeason, draft.stratumId]);
+  }, [selectedPlantingSite, selectedSeason, draft.stratumId]);
 
   // Default From: Nursery to the batches' nursery if they all share one.
   useEffect(() => {
@@ -134,8 +134,7 @@ const PurposeAndDestinationStep = ({
         onChange({ fromFacilityId: uniqueIds[0] });
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [batches]);
+  }, [batches, draft.fromFacilityId, onChange]);
 
   const purpose = draft.purpose;
   const isPlanting = purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
