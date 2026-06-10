@@ -157,6 +157,7 @@ ALLOCATED_FOR_TARGET,Alloué pour l'objectif,b2860a99
 ALLOCATED_FOR_TARGET_TOOLTIP,Pourcentage de l'objectif total par espèce qui a été alloué.,b2c6ce5b
 ALLOCATED_TOOLTIP,Nombre de plants de cette espèce que la pépinière a prévu de fournir.,6001e68d
 ALREADY_INVITED_PERSON_ERROR,Il semble que vous ayez déjà ajouté ou invité cette personne. Veuillez saisir une adresse électronique unique ou accéder au profil de la personne existante.,67ec2d39
+ALREADY_WITHDRAWN,Déjà retiré,aa003cd7
 AMOUNT_EST_COUNT,Quantité (nombre estimé),e203609b
 AMOUNT_REMAINING,Montant ({0} restant),349aa6d6
 ANIMAL_DAMAGE,Dommages causés par les animaux,754d26fb
@@ -1214,6 +1215,7 @@ NEXT_STEPS_REQUIRED,Prochaines étapes *,33f00368
 NICE,Génial !,d5008f62
 NO,Non,3c5beb81
 NO_ACTIVE_PLANTING_SEASONS_FOR_FILTERS,Il n’y a aucune saison de plantation active pour le site de plantation sélectionné.,2f97b045
+NO_ACTIVE_SEASONS_FOR_SITE,Aucune saison active pour le site de plantation sélectionné,7909d317
 NO_ACTIVITIES_TO_SHOW,Aucune activité à afficher.,1b075899
 NO_AVAILABLE_PROJECTS_FOR_SPECIES,Il n'y a pas d'autres projets disponibles pour cette espèce.,071c6205
 NO_BATCHES_TO_WITHDRAW_FROM,Il n'y a pas de lots dont les quantités peuvent être retirés.,dc94bdcc
@@ -1278,12 +1280,14 @@ NOT_SET,Non défini,6b047afe
 NOT_SUBMITTED,Non soumis,e40a2b1d
 NOT_VERIFIED,Non vérifié,fbd9066a
 NOT_YET,Pas encore,77976aa8
+NOT_YET_WITHDRAWN,Pas encore retiré,3b0fb56f
 NOTE_ANY_ISSUES,Est-ce que tout ce qui précède vous semble correct ? Signalez tout problème.,133db1c4
 NOTE_COLON,Note :,00769bbe
 NOTE_FOR_NURSERY,Note pour la pépinière,c5e4405c
 NOTES,Notes,953783ac
 NOTES_AFTER,Notes (après),a4cfe728
 NOTES_BEFORE,Notes (avant),a4b844ff
+NOTES_OPTIONAL,Notes (optionnel),e7b49e90
 NOTIFICATIONS,Notifications,535ca7ec
 NUMBER_OF_LIVE_PLANTS_PER_SPECIES,Nombre de plantes vivantes par espèce,82f354e1
 NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plantes vivantes par espèce indique le nombre de plantes vivantes par espèce enregistrées. Ce nombre ne comprend que les plantes enregistrées comme étant vivantes. Il n'inclut pas les plantes enregistrées comme préexistantes ou enregistrées comme « Impossible à déterminer » (inconnues).,6b3e7e54
@@ -1507,6 +1511,8 @@ PLANTING_SEASON_END,Fin de la saison de plantation,414309c0
 PLANTING_SEASON_END_IN_PAST,La date de fin ne peut pas être passée.,b2729d4d
 PLANTING_SEASON_END_OUT_OF_RANGE,Elle doit se situer entre 4 semaines et 1 an après la date de début.,fcca5463
 PLANTING_SEASON_NO_OVERLAP,Chevauche la saison de plantation {0} - {1},f1549979
+PLANTING_SEASON_OPTIONAL,Saison de plantation (optionnel),607dcd9a
+PLANTING_SEASON_OPTIONAL_TOOLTIP,Sélectionnez une saison de plantation parmi les saisons actives pour le site. Sélectionnez ensuite un stratum et un substratum dans la saison.,2fed80e5
 PLANTING_SEASON_START,Début de la saison de plantation,10f5de94
 PLANTING_SEASON_START_OUT_OF_RANGE,Doit se situer dans l'année qui suit la date actuelle.,d69ba8fe
 PLANTING_SEASONS,Saisons de plantation,58d50e9a
@@ -2100,6 +2106,7 @@ SPECIES_TARGETS,Objectifs par espèce,96d27e04
 SPECIES_TOOLTIP,Espèces dont les densités de plantation seront utilisées pour calculer les taux de survie des parcelles et des espèces.,6e5f03ec
 SPECIES_USAGE,Utilisation des espèces,0669cb85
 SPECIES_VALUE_CHANGED_FROM_TO,La valeur {1} de l'espèce {0} a été modifiée de {2} à {3},e3330648
+SPECIES_WITH_TARGETS_IN_SEASON_DESCRIPTION,Espèces avec des objectifs dans la saison et le stratum/substratum sélectionnés,466cff52
 STAFF,Personnel,6b242686
 STAKEHOLDERS_AND_COMMUNITY_IMPACT,Parties prenantes et impact communautaire,a0af66ae
 STANDARD,Norme,88d7d08c
@@ -2578,6 +2585,8 @@ WORKERS_VOLUNTEERS,Volontaires *,339666d2
 WORKSHOP,Atelier,8092cd5c
 WORKSHOPS,Ateliers,1a6fc46c
 WOULD_YOU_LIKE_TO_CONTINUE,Souhaitez-vous continuer ?,9ca4c77f
+X_BATCH,{0} lot,9d74cde8
+X_BATCHES,{0} lots,a7a1d48d
 X_HA,{0} ha,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha dans la superficie totale de plantation,586af003
 X_HECTARES,{0} hectares,6f24cf52
