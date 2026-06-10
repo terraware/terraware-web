@@ -1,12 +1,10 @@
-import React, { type JSX, useEffect, useMemo } from 'react';
+import React, { type JSX } from 'react';
 
-import { Grid, List, ListItem, useTheme } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useDeviceInfo } from '@terraware/web-components/utils';
-import { DateTime } from 'luxon';
 
 import { useProjects } from 'src/hooks/useProjects';
-import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import strings from 'src/strings';
 import { MinimalPlantingSite } from 'src/types/Tracking';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -27,21 +25,6 @@ export default function PlantingSiteDetailsCard({ plantingSite }: PlantingSiteDe
     }
     return 4;
   };
-
-  const [listPlantingSeasons, { data: plantingSeasonsData }] = useLazyListPlantingSeasonsQuery();
-
-  useEffect(() => {
-    void listPlantingSeasons({ plantingSiteId: plantingSite.id });
-  }, [listPlantingSeasons, plantingSite.id]);
-
-  const plantingSeasons = useMemo(() => {
-    const seasons = plantingSeasonsData?.seasons ?? [];
-    const today = DateTime.fromJSDate(new Date(), { zone: tz.id }).toISODate();
-    if (!today) {
-      return [];
-    }
-    return seasons.filter((season) => season.plantingSiteId === plantingSite.id && season.endDate >= today);
-  }, [plantingSeasonsData, plantingSite.id, tz.id]);
 
   return (
     <Grid container>
@@ -67,23 +50,6 @@ export default function PlantingSiteDetailsCard({ plantingSite }: PlantingSiteDe
           display={true}
         />
       </Grid>
-      {plantingSite.strata && (
-        <Grid item xs={gridSize()}>
-          <TextField
-            label={strings.UPCOMING_PLANTING_SEASONS}
-            id='upcomingPlantingSeasons'
-            type='text'
-            display={true}
-          />
-          <List dense={true}>
-            {plantingSeasons.map((plantingSeason) => (
-              <ListItem disableGutters={true} key={plantingSeason.id}>
-                {strings.formatString(strings.DATE_RANGE, plantingSeason.startDate, plantingSeason.endDate)}
-              </ListItem>
-            ))}
-          </List>
-        </Grid>
-      )}
       <Grid item xs={gridSize()} display='flex'>
         <TextField display={true} id='project' label={strings.PROJECT} type='text' value={selectedProject?.name} />
       </Grid>
