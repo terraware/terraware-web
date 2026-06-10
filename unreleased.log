@@ -1,3 +1,4 @@
+3c6fd577 SW-8460: Scroll down to error field when there's an error upon a user saving edits (#5802)
 012957d0 Update planting seasons api calls (#5800)
 e4f01d5d SW-8477 In Add Season dialog, Season to copy selector should only include seasons with species (#5799)
 12f9aef6 SW-8476 In Add Season dialog, when copying past season, selector should include season names, not date ranges (#5798)
