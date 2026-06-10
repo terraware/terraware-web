@@ -8,7 +8,9 @@ import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
@@ -36,6 +38,7 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
   const snackbar = useSnackbar();
   const [createPlantingSeason, { isLoading }] = useCreatePlantingSeasonMutation();
   const markSubmitted = useTrackModalAbandonment('planting_season_add', true);
+  const navigate = useSyncNavigate();
 
   const [record, setRecord, onChange] = useForm<PlantingSeasonForm>({
     plantingSiteId: initialPlantingSiteId && initialPlantingSiteId > 0 ? initialPlantingSiteId : undefined,
@@ -116,7 +119,7 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
       return;
     }
     try {
-      await createPlantingSeason({
+      const response = await createPlantingSeason({
         endDate,
         fromPlantingSeasonId: copyPrevious ? fromPlantingSeasonId : undefined,
         name: name.trim(),
@@ -125,6 +128,9 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
       }).unwrap();
       markSubmitted();
       onClose();
+      if (response?.id) {
+        navigate(APP_PATHS.PLANTING_SEASONS_VIEW.replace(':plantingSeasonId', String(response.id)));
+      }
     } catch (e) {
       snackbar.toastError();
     }
