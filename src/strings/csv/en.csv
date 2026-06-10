@@ -492,6 +492,9 @@ DELETE_FUNDING_ENTITY,Delete Funding Entity,
 DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,All Funders associated with this Funding Entity will be deleted.,
 DELETE_FUNDING_ENTITY_MESSAGE,You’re about to delete {0}.,
 DELETE_OBSERVATION_PHOTO_MESSAGE,This photo will also be removed from the linked observation. This action cannot be undone.,
+DELETE_OBSERVATION_ACTIVITY_PHOTO_MESSAGE,"You are about to make changes to photos and videos associated with an Observation in {0} for {1}.
+
+Are you sure you want to make these changes?",
 DELETE_OBSERVATION_PHOTO_TITLE,Remove Photo from Observation,
 DELETE_ORGANIZATION,Delete Organization,
 DELETE_ORGANIZATION_MSG,Are you sure you want to delete {0}?,
@@ -1850,9 +1853,7 @@ SAVE_CHANGES,Save Changes,
 SAVE_OBSERVATION_DATA,Save Observation Data,
 SAVE_OBSERVATION_DATA_DESCRIPTION,Your edits will replace any previously entered data. Are you sure you want to make these edits?,
 SAVE_PHOTOS_AND_VIDEOS,Save Photos & Videos,
-SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,"You are about to make changes to photos and videos associated with an Observation in {0} for {1}.
-
-Are you sure you want to make these changes?",
+SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,You are making changes to the photos and videos associated with this Observation plot. Are you sure you want to make these changes?,
 SAVE_PLANT_DENSITY,Save Plant Density,
 SAVE_PROJECT_BOUNDARIES,Save Project Boundaries,
 SAVE_VERSION,Save Version,
