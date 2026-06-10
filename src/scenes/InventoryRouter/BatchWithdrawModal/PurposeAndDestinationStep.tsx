@@ -1,0 +1,312 @@
+import React, { type JSX, useEffect, useMemo } from 'react';
+
+import { Box, FormControlLabel, Radio, RadioGroup, Tooltip, Typography, useTheme } from '@mui/material';
+import { Dropdown, DropdownItem, Icon } from '@terraware/web-components';
+import { DateTime } from 'luxon';
+
+import DatePicker from 'src/components/common/DatePicker';
+import TextField from 'src/components/common/Textfield/Textfield';
+import { useLocalization, useOrganization } from 'src/providers';
+import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
+import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import { SpeciesTargetForSubstratum } from 'src/queries/search/speciesTargetsForSubstratum';
+import { NurseryWithdrawalPurpose, NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
+
+import SpeciesTargetsTable from './SpeciesTargetsTable';
+import { BatchInfo, BatchWithdrawDraft } from './types';
+
+type PurposeAndDestinationStepProps = {
+  batches: BatchInfo[];
+  draft: BatchWithdrawDraft;
+  speciesTargets?: SpeciesTargetForSubstratum[];
+  onChange: (next: Partial<BatchWithdrawDraft>) => void;
+};
+
+const PurposeAndDestinationStep = ({
+  batches,
+  draft,
+  speciesTargets,
+  onChange,
+}: PurposeAndDestinationStepProps): JSX.Element => {
+  const theme = useTheme();
+  const { strings } = useLocalization();
+  const { selectedOrganization } = useOrganization();
+  const organizationId = selectedOrganization?.id;
+
+  const [listPlantingSites, { data: plantingSitesData }] = useLazyListPlantingSitesQuery();
+  const [listPlantingSeasons, { data: plantingSeasonsData }] = useLazyListPlantingSeasonsQuery();
+
+  useEffect(() => {
+    if (organizationId) {
+      // `full: true` returns each site's strata/substrata, which we need to
+      // populate the Stratum/Substratum dropdowns without a second request.
+      void listPlantingSites({ organizationId, full: true }, true);
+      void listPlantingSeasons({ organizationId }, true);
+    }
+  }, [organizationId, listPlantingSites, listPlantingSeasons]);
+
+  const selectedPlantingSite = useMemo(
+    () => (plantingSitesData?.sites ?? []).find((s) => s.id === draft.plantingSiteId),
+    [plantingSitesData, draft.plantingSiteId]
+  );
+
+  // From: Nursery options are restricted to nurseries that hold at least one
+  // of the selected batches — a withdrawal can only span a single facility.
+  const fromNurseryOptions = useMemo<DropdownItem[]>(() => {
+    const facilityIdsInSelection = new Set(batches.map((b) => b.facilityId));
+    const nurseries = (selectedOrganization?.facilities ?? []).filter(
+      (f) => f.type === 'Nursery' && facilityIdsInSelection.has(f.id)
+    );
+    return nurseries.map((f) => ({ label: f.name, value: f.id }));
+  }, [selectedOrganization, batches]);
+
+  // To: Nursery (for transfers) excludes the From: Nursery; uses every nursery
+  // in the org since destinations aren't constrained by the selected batches.
+  const toNurseryOptions = useMemo<DropdownItem[]>(() => {
+    const nurseries = (selectedOrganization?.facilities ?? []).filter((f) => f.type === 'Nursery');
+    return nurseries.filter((f) => f.id !== draft.fromFacilityId).map((f) => ({ label: f.name, value: f.id }));
+  }, [selectedOrganization, draft.fromFacilityId]);
+
+  const plantingSiteOptions = useMemo<DropdownItem[]>(
+    () => (plantingSitesData?.sites ?? []).map((s) => ({ label: s.name, value: s.id })),
+    [plantingSitesData]
+  );
+
+  // Active seasons for the selected planting site.
+  const activeSeasonsForSite = useMemo(() => {
+    const seasons = plantingSeasonsData?.seasons ?? [];
+    if (!draft.plantingSiteId) {
+      return [];
+    }
+    return seasons.filter((s) => s.plantingSiteId === draft.plantingSiteId && s.status === 'Active');
+  }, [plantingSeasonsData, draft.plantingSiteId]);
+
+  // The "Planting Season (optional)" selector is shown only when the org has
+  // any non-closed planting season with species targets.
+  const showPlantingSeasonSelector = useMemo(
+    () => (plantingSeasonsData?.seasons ?? []).some((s) => s.status !== 'Closed' && s.speciesTargets.length > 0),
+    [plantingSeasonsData]
+  );
+
+  const plantingSeasonOptions = useMemo<DropdownItem[]>(
+    () => activeSeasonsForSite.map((s) => ({ label: s.name, value: s.id })),
+    [activeSeasonsForSite]
+  );
+
+  // Stratum/Substratum options come from either the selected season's targets
+  // or the planting site itself.
+  const selectedSeason = useMemo(
+    () => activeSeasonsForSite.find((s) => s.id === draft.plantingSeasonId),
+    [activeSeasonsForSite, draft.plantingSeasonId]
+  );
+
+  const { stratumOptions, substratumOptions } = useMemo(() => {
+    const allStrata = selectedPlantingSite?.strata ?? [];
+    if (selectedSeason) {
+      const allowedSubstratumIds = new Set(selectedSeason.speciesTargets.map((t) => t.substratumId));
+      const filteredStrata = allStrata
+        .map((str) => ({
+          ...str,
+          substrata: str.substrata.filter((sub) => allowedSubstratumIds.has(sub.id)),
+        }))
+        .filter((str) => str.substrata.length > 0);
+      return {
+        stratumOptions: filteredStrata.map((s) => ({ label: s.name, value: s.id })),
+        substratumOptions:
+          filteredStrata
+            .find((s) => s.id === draft.stratumId)
+            ?.substrata.map((sub) => ({ label: sub.name, value: sub.id })) ?? [],
+      };
+    }
+    return {
+      stratumOptions: allStrata.map((s) => ({ label: s.name, value: s.id })),
+      substratumOptions:
+        allStrata.find((s) => s.id === draft.stratumId)?.substrata.map((sub) => ({ label: sub.name, value: sub.id })) ??
+        [],
+    };
+  }, [selectedPlantingSite, selectedSeason, draft.stratumId]);
+
+  // Default From: Nursery to the batches' nursery if they all share one.
+  useEffect(() => {
+    if (draft.fromFacilityId === undefined && batches.length > 0) {
+      const uniqueIds = Array.from(new Set(batches.map((b) => b.facilityId)));
+      if (uniqueIds.length === 1) {
+        onChange({ fromFacilityId: uniqueIds[0] });
+      }
+    }
+  }, [batches, draft.fromFacilityId, onChange]);
+
+  const purpose = draft.purpose;
+  const isPlanting = purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
+  const isNurseryTransfer = purpose === NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER;
+
+  return (
+    <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
+      <Box display='flex' alignItems='center' gap={theme.spacing(2)} flexWrap='wrap'>
+        <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrTxtSecondary}>
+          {strings.PURPOSE_REQUIRED}
+        </Typography>
+        <RadioGroup
+          row
+          value={purpose}
+          onChange={(_event, value) => onChange({ purpose: value as NurseryWithdrawalPurpose })}
+        >
+          <FormControlLabel
+            value={NurseryWithdrawalRequestPurposes.OUTPLANT}
+            control={<Radio />}
+            label={strings.PLANTING}
+          />
+          <FormControlLabel
+            value={NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER}
+            control={<Radio />}
+            label={strings.NURSERY_TRANSFER}
+          />
+          <FormControlLabel value={NurseryWithdrawalRequestPurposes.DEAD} control={<Radio />} label={strings.DEAD} />
+          <FormControlLabel value={NurseryWithdrawalRequestPurposes.OTHER} control={<Radio />} label={strings.OTHER} />
+        </RadioGroup>
+      </Box>
+
+      <Box maxWidth='320px'>
+        <Dropdown
+          id='from-nursery'
+          label={strings.FROM_NURSERY_REQUIRED}
+          options={fromNurseryOptions}
+          selectedValue={draft.fromFacilityId}
+          onChange={(value) => onChange({ fromFacilityId: value !== undefined ? Number(value) : undefined })}
+          fullWidth
+          sx={{ textAlign: 'left' }}
+        />
+      </Box>
+
+      {isPlanting && (
+        <Box maxWidth='320px'>
+          <Dropdown
+            id='to-planting-site'
+            label={strings.TO_PLANTING_SITE_REQUIRED}
+            options={plantingSiteOptions}
+            selectedValue={draft.plantingSiteId}
+            onChange={(value) =>
+              onChange({
+                plantingSiteId: value !== undefined ? Number(value) : undefined,
+                plantingSeasonId: undefined,
+                stratumId: undefined,
+                substratumId: undefined,
+              })
+            }
+            fullWidth
+            sx={{ textAlign: 'left' }}
+          />
+        </Box>
+      )}
+
+      {isPlanting && showPlantingSeasonSelector && (
+        <Box maxWidth={draft.plantingSiteId !== undefined && plantingSeasonOptions.length === 0 ? undefined : '320px'}>
+          <Box display='flex' alignItems='center' gap={theme.spacing(0.5)} marginBottom={theme.spacing(0.5)}>
+            <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+              {strings.PLANTING_SEASON_OPTIONAL}
+            </Typography>
+            <Tooltip title={strings.PLANTING_SEASON_OPTIONAL_TOOLTIP}>
+              <Box display='flex' alignItems='center'>
+                <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+              </Box>
+            </Tooltip>
+          </Box>
+          {draft.plantingSiteId !== undefined && plantingSeasonOptions.length === 0 ? (
+            <Typography fontSize='16px' fontWeight={500} textAlign={'left'}>
+              {strings.NO_ACTIVE_SEASONS_FOR_SITE}
+            </Typography>
+          ) : (
+            <Dropdown
+              id='planting-season'
+              label=''
+              options={plantingSeasonOptions}
+              selectedValue={draft.plantingSeasonId}
+              onChange={(value) =>
+                onChange({
+                  plantingSeasonId: value !== undefined && value !== '' ? Number(value) : undefined,
+                  stratumId: undefined,
+                  substratumId: undefined,
+                })
+              }
+              fullWidth
+              sx={{ textAlign: 'left' }}
+            />
+          )}
+        </Box>
+      )}
+
+      {isPlanting && draft.plantingSiteId !== undefined && (
+        <Box display='flex' gap={theme.spacing(2)} flexWrap='wrap'>
+          <Box flex={1} minWidth='240px'>
+            <Dropdown
+              id='stratum'
+              label={strings.STRATUM_REQUIRED}
+              options={stratumOptions}
+              selectedValue={draft.stratumId}
+              onChange={(value) =>
+                onChange({
+                  stratumId: value !== undefined ? Number(value) : undefined,
+                  substratumId: undefined,
+                })
+              }
+              fullWidth
+              sx={{ textAlign: 'left' }}
+            />
+          </Box>
+          <Box flex={1} minWidth='240px'>
+            <Dropdown
+              id='substratum'
+              label={strings.SUBSTRATUM_REQUIRED}
+              options={substratumOptions}
+              selectedValue={draft.substratumId}
+              onChange={(value) => onChange({ substratumId: value !== undefined ? Number(value) : undefined })}
+              fullWidth
+              disabled={draft.stratumId === undefined}
+              sx={{ textAlign: 'left' }}
+            />
+          </Box>
+        </Box>
+      )}
+
+      {isPlanting && speciesTargets && speciesTargets.length > 0 && <SpeciesTargetsTable rows={speciesTargets} />}
+
+      {isNurseryTransfer && (
+        <Box maxWidth='320px'>
+          <Dropdown
+            id='to-nursery'
+            label={strings.TO_NURSERY_REQUIRED}
+            options={toNurseryOptions}
+            selectedValue={draft.destinationFacilityId}
+            onChange={(value) => onChange({ destinationFacilityId: value !== undefined ? Number(value) : undefined })}
+            fullWidth
+            sx={{ textAlign: 'left' }}
+          />
+        </Box>
+      )}
+
+      <Box maxWidth='320px'>
+        <DatePicker
+          id='withdraw-date'
+          label={strings.WITHDRAW_DATE_REQUIRED}
+          value={draft.withdrawnDate}
+          onDateChange={(value?: DateTime) => onChange({ withdrawnDate: value?.toISODate() ?? '' })}
+          aria-label='withdraw-date'
+          sx={{ textAlign: 'left' }}
+        />
+      </Box>
+
+      <Box>
+        <TextField
+          id='notes'
+          type='textarea'
+          label={strings.NOTES_OPTIONAL}
+          value={draft.notes}
+          onChange={(value) => onChange({ notes: String(value ?? '') })}
+          sx={{ textAlign: 'left' }}
+        />
+      </Box>
+    </Box>
+  );
+};
+
+export default PurposeAndDestinationStep;

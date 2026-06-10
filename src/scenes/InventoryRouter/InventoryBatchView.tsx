@@ -9,6 +9,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import { requestFetchBatch } from 'src/redux/features/batches/batchesAsyncThunks';
@@ -24,6 +25,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 import BatchDetails from './BatchDetails';
 import BatchHistory from './BatchHistory';
 import BatchSummary from './BatchSummary';
+import BatchWithdrawModal from './BatchWithdrawModal';
 
 export type OriginPage = 'Nursery' | 'Species' | 'Batches' | 'InventoryAdd';
 
@@ -52,6 +54,23 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
       Number(batch?.hardeningOffQuantity) +
       Number(batch?.germinatingQuantity) >
     0;
+
+  const isPlantingSeasonsEnabled = isEnabled('Planting Seasons');
+  const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
+
+  const openWithdraw = () => {
+    if (!batchId) {
+      return;
+    }
+    if (isPlantingSeasonsEnabled) {
+      setWithdrawModalOpen(true);
+    } else {
+      navigate({
+        pathname: APP_PATHS.BATCH_WITHDRAW,
+        search: `?batchId=${batchId.toString()}&source=${window.location.pathname}`,
+      });
+    }
+  };
 
   useEffect(() => {
     if (speciesId) {
@@ -184,17 +203,15 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
           </Box>
           {isWithdrawable && batchId && (
             <Box margin={isMobile ? theme.spacing(2, 2, 0, 2) : 0} display='flex' flexGrow={isMobile ? 1 : 0}>
-              <Button
-                label={strings.WITHDRAW}
-                onClick={() =>
-                  navigate({
-                    pathname: APP_PATHS.BATCH_WITHDRAW,
-                    search: `?batchId=${batchId.toString()}&source=${window.location.pathname}`,
-                  })
-                }
-                style={isMobile ? { width: '100%' } : {}}
-              />
+              <Button label={strings.WITHDRAW} onClick={openWithdraw} style={isMobile ? { width: '100%' } : {}} />
             </Box>
+          )}
+          {batchId && (
+            <BatchWithdrawModal
+              open={withdrawModalOpen}
+              onClose={() => setWithdrawModalOpen(false)}
+              batchIds={[Number(batchId)]}
+            />
           )}
           <Grid item xs={12}>
             <PageSnackbar />

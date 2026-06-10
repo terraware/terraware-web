@@ -20,6 +20,7 @@ import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -37,6 +38,7 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import BatchWithdrawModal from './BatchWithdrawModal';
 import ChangeQuantityModal from './view/ChangeQuantityModal';
 import DeleteBatchesModal from './view/DeleteBatchesModal';
 import QuantitiesMenu from './view/QuantitiesMenu';
@@ -88,6 +90,8 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     type: 'germinating',
     openChangeQuantityModal: false,
   });
+  const [withdrawModalBatchIds, setWithdrawModalBatchIds] = useState<number[] | undefined>(undefined);
+  const isPlantingSeasonsEnabled = isEnabled('Planting Seasons');
 
   const tableStateStorageKey = `inventoryTable_${origin.toLowerCase()}`;
 
@@ -262,7 +266,31 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     [nurseries]
   );
 
-  const withdrawInventory = () => {
+  const withdrawInventory = async () => {
+    if (isPlantingSeasonsEnabled) {
+      let batchIds: number[] = [];
+      if (origin === 'Species') {
+        const selectedSpeciesIds = selectedRows.filter((row) => row.id).map((row) => Number(row.id));
+        if (!selectedSpeciesIds.length || !selectedOrganization) {
+          return;
+        }
+        const searchResponse = await NurseryBatchService.getBatchIdsForSpecies(
+          selectedOrganization.id,
+          selectedSpeciesIds
+        );
+        batchIds = (searchResponse ?? []).map((sr) => Number(sr.id));
+      } else if (origin === 'Nursery') {
+        batchIds = selectedRows.flatMap((row) => row.batchIds).map((b) => Number(b));
+      } else {
+        batchIds = selectedRows.filter((r) => r.id).map((row) => Number(row.batchId));
+      }
+      if (batchIds.length === 0) {
+        return;
+      }
+      setWithdrawModalBatchIds(batchIds);
+      return;
+    }
+
     const path = origin === 'Species' ? APP_PATHS.INVENTORY_WITHDRAW : APP_PATHS.BATCH_WITHDRAW;
 
     const speciesIds = selectedRows.filter((row) => row.id).map((row) => `speciesId=${String(row.id)}`);
@@ -271,11 +299,11 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       return;
     }
 
-    const batchIds =
+    const batchIdsParams =
       origin === 'Nursery'
         ? selectedRows.flatMap((row) => row.batchIds).map((b) => `batchId=${String(b)}`)
         : selectedRows.filter((r) => r.id).map((row) => `batchId=${String(row.batchId)}`);
-    const searchParams = origin === 'Species' ? speciesIds.join('&') : batchIds.join('&');
+    const searchParams = origin === 'Species' ? speciesIds.join('&') : batchIdsParams.join('&');
 
     navigate({
       pathname: path,
@@ -617,6 +645,13 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           reload={reloadData}
         />
       )}
+      {withdrawModalBatchIds && (
+        <BatchWithdrawModal
+          open={true}
+          onClose={() => setWithdrawModalBatchIds(undefined)}
+          batchIds={withdrawModalBatchIds}
+        />
+      )}
       <Box>
         <Search
           filters={filters}
@@ -699,7 +734,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                           <span>
                             <Button
                               type='passive'
-                              onClick={withdrawInventory}
+                              onClick={() => void withdrawInventory()}
                               disabled={!isSelectionWithdrawable()}
                               label={strings.WITHDRAW}
                               priority='secondary'

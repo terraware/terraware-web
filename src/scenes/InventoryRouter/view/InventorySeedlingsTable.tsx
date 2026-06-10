@@ -16,6 +16,7 @@ import {
 import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -33,6 +34,7 @@ import useForm from 'src/utils/useForm';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import BatchWithdrawModal from '../BatchWithdrawModal';
 import { OriginPage } from '../InventoryBatchView';
 import BatchDetailsModal from './BatchDetailsModal';
 import ChangeQuantityModal from './ChangeQuantityModal';
@@ -245,12 +247,23 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     return `?${batchIds.join('&')}&source=${window.location.pathname}`;
   }, [selectedRows]);
 
+  const isPlantingSeasonsEnabled = isEnabled('Planting Seasons');
+  const [withdrawModalBatchIds, setWithdrawModalBatchIds] = useState<number[] | undefined>(undefined);
+
   const bulkWithdrawSelectedRows = useCallback(() => {
+    if (isPlantingSeasonsEnabled) {
+      const ids = selectedRows.map((row) => Number(row.id));
+      if (ids.length === 0) {
+        return;
+      }
+      setWithdrawModalBatchIds(ids);
+      return;
+    }
     navigate({
       pathname: APP_PATHS.BATCH_WITHDRAW,
       search: getSelectedRowsAsQueryParams(),
     });
-  }, [navigate, getSelectedRowsAsQueryParams]);
+  }, [isPlantingSeasonsEnabled, selectedRows, navigate, getSelectedRowsAsQueryParams]);
 
   const totalSelectedQuantity = useMemo<number>(
     () =>
@@ -328,19 +341,23 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         <Button
           id='withdraw-batch'
           label={strings.WITHDRAW}
-          onClick={() =>
-            navigate({
-              pathname: APP_PATHS.BATCH_WITHDRAW,
-              search: `?batchId=${batch.id as string | number}&source=${window.location.pathname}`,
-            })
-          }
+          onClick={() => {
+            if (isPlantingSeasonsEnabled) {
+              setWithdrawModalBatchIds([Number(batch.id)]);
+            } else {
+              navigate({
+                pathname: APP_PATHS.BATCH_WITHDRAW,
+                search: `?batchId=${batch.id as string | number}&source=${window.location.pathname}`,
+              });
+            }
+          }}
           size='small'
           priority='secondary'
           disabled={totalQuantity === 0}
         />
       );
     },
-    [navigate, strings]
+    [navigate, strings, isPlantingSeasonsEnabled]
   );
 
   const QuantityCell = useCallback(
@@ -453,6 +470,13 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
           onClose={() => setOpenDeleteModal(false)}
           onSubmit={deleteSelectedBatches}
         />
+        {withdrawModalBatchIds && (
+          <BatchWithdrawModal
+            open={true}
+            onClose={() => setWithdrawModalBatchIds(undefined)}
+            batchIds={withdrawModalBatchIds}
+          />
+        )}
         {modalValues.openChangeQuantityModal && modalValues.batch && (
           <ChangeQuantityModal
             onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
