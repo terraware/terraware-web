@@ -86,7 +86,9 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
   const seasonsForSelectedSite = useMemo(
     () =>
       record.plantingSiteId
-        ? (plantingSeasonsData?.seasons ?? []).filter((s) => s.plantingSiteId === record.plantingSiteId)
+        ? (plantingSeasonsData?.seasons ?? []).filter(
+            (s) => s.plantingSiteId === record.plantingSiteId && s.speciesTargets.length > 0
+          )
         : [],
     [plantingSeasonsData, record.plantingSiteId]
   );
