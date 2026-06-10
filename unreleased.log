@@ -1,3 +1,4 @@
+12f9aef6 SW-8476 In Add Season dialog, when copying past season, selector should include season names, not date ranges (#5798)
 57c85a74 SW-8482 Update batch withdrawals to use new modals (#5794)
 d1751df0 SW-8472 After creating new Planting Season, user should be directed to Planting Season, not back to list (#5797)
 562783a0 SW-8468 Planting Season Card - whole card should be clickable (#5795)
