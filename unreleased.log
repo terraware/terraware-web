@@ -1,3 +1,4 @@
+b49f482a SW-8469: Editing Photos & Videos in Observations shows additional data in alert (#5793)
 4c5094ac SW-8466: Disable link to observation if the console user is not in the project Org (#5792)
 c4f0b2eb SW-8463: Needed to reload page to see caption updates (#5791)
 1d933bdf SW-8458: Caption for required photos should be editable (#5790)
