@@ -68,6 +68,9 @@ import MapSplitView from './MapSplitView';
 import ObservationStatsPanel from './ObservationStatsPanel';
 import { TypedActivity } from './types';
 
+const MAX_FILE_SIZE_GB = 5;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_GB * 1024 * 1024 * 1024;
+
 interface ActivityDetailsFormProps {
   activityId?: number;
   projectId: number;
@@ -296,8 +299,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     if (isObsActivity && newMediaFiles.some((item) => item.data.monitoringPlotId === undefined)) {
       return false;
     }
-    const MAX_FILE_SIZE_GB = 5;
-    const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_GB * 1024 * 1024 * 1024;
 
     for (const mediaItem of newMediaFiles) {
       const file = mediaItem.data.file;
@@ -344,9 +345,36 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     ]
   );
 
+  const scrollToFirstError = useCallback(() => {
+    if (!isObsActivity) {
+      if (!record?.type) {
+        scrollToElementById('activity-type-field');
+        return;
+      }
+      if (!record?.date) {
+        scrollToElementById('date');
+        return;
+      }
+      if (!record?.description) {
+        scrollToElementById('description');
+        return;
+      }
+    }
+
+    const firstInvalidIndex = mediaItems.findIndex(
+      (item) =>
+        item.type === 'new' &&
+        ((isObsActivity && item.data.monitoringPlotId === undefined) || item.data.file.size > MAX_FILE_SIZE_BYTES)
+    );
+    if (firstInvalidIndex !== -1) {
+      scrollToElementById(`activity-media-item-new-${firstInvalidIndex}`);
+    }
+  }, [isObsActivity, mediaItems, record, scrollToElementById]);
+
   const saveActivity = useCallback(async () => {
     if (!validateForm()) {
       setValidateFields(true);
+      scrollToFirstError();
       return;
     }
 
@@ -414,6 +442,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     isObsActivity,
     projectId,
     record,
+    scrollToFirstError,
     snackbar,
     strings.GENERIC_ERROR,
     syncMediaFiles,
@@ -726,7 +755,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                 />
               ) : (
                 <Box display='flex' alignItems='center' gap={1}>
-                  <Box flex={1}>
+                  <Box flex={1} id='activity-type-field'>
                     <Dropdown
                       errorText={validateFields && !record?.type && !isObsActivity ? strings.REQUIRED_FIELD : ''}
                       fullWidth
