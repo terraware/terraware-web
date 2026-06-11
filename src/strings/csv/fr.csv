@@ -404,6 +404,7 @@ COOKIES_DECLINE,Refuser les cookies,faf87a51
 COOKIES_DESCRIPTION,Terraware utilise des cookies de performance pour analyser et améliorer la qualité du site et améliorer votre expérience d'utilisateur.,911fd969
 COOKIES_LEARN_MORE,En savoir plus sur notre utilisation des cookies.,340de1a9
 COPY_PREVIOUS_SEASON,Copier la saison précédente,3ee53a4e
+COPY_PREVIOUS_SEASON_TOOLTIP,Sélectionnez une saison précédemment créée qui contient les espèces que vous souhaitez utiliser pour la nouvelle saison.,d2a50b9b
 COPYING_SPECIES_ACROSS_SUBSTRATUM,"Copie de {0} espèces sur {1} substrats, avec toutes les cibles définies à 0",7dd36cb4
 COUNT,Compte,59ea1127
 COUNTRY,Pays,cac01305
