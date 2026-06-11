@@ -50,4 +50,4 @@ export const getSettingsLandingSection = (organization?: Organization): Settings
 
 export const getSettingsLandingPath = (organization?: Organization): string =>
   SECTION_PATHS[getSettingsLandingSection(organization)];
-  // ?? SECTION_PATHS.people;
+// ?? SECTION_PATHS.people;
