@@ -1501,7 +1501,7 @@ PLANTING_COMPLETE_DASHBOARD_TOOLTIP,"La plantación completada incluye el área 
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,"Porcentaje de ""Plantación completada"" de todos los lugares de plantación relacionados con el proyecto",969947fc
 PLANTING_COMPLETE_TOOLTIP,¿Se ha completado la plantación en este sustrato?,a6bfac66
 PLANTING_DATES,Fechas de plantación,e8aa47b1
-PLANTING_DATES_TAB_DESCRIPTION,"Las fechas de plantación especifican cuándo y dónde se plantan las plantas. Haga clic en ""Guardar y notificar al vivero"" cuando esté listo para que el vivero retire las plantas.",47ee4b8f
+PLANTING_DATES_TAB_DESCRIPTION,"Las fechas de plantación especifican cuándo y dónde se plantan las plantas. Haga clic en ""Guardar y Solicitar"" cuando esté listo para que el vivero retire las plantas.",c144ee5c
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
 PLANTING_GOAL,Meta de plantación,a97123a1
 PLANTING_PROGRESS,Avance de plantación,58616da9
@@ -1866,7 +1866,8 @@ SATELLITE,Satélite,14d51868
 SAVE,Guardar,526a3e42
 SAVE_AND_CLOSE,Guardar y cerrar,aaa98fc6
 SAVE_AND_NEXT,Guardar y Continuar,1ca9d40a
-SAVE_AND_NOTIFY_NURSERY,Guardar y notificar al vivero,78cb028e
+SAVE_AND_REQUEST,Guardar y solicitar,fa423722
+SAVE_AND_REQUEST_TOOLTIP,Guardar y Solicitar enviará una solicitud de retiro de plantas al Vivero para esta fecha de plantación.,9f9b8d4e
 SAVE_CHANGES,Guardar los cambios,cb5e8c33
 SAVE_OBSERVATION_DATA,Guardar datos de observación,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Sus ediciones reemplazarán cualquier dato ingresado previamente. ¿Está seguro de que desea realizar estos cambios?,b1657c44
@@ -1874,6 +1875,7 @@ SAVE_PHOTOS_AND_VIDEOS,Guardar fotos y videos,d38ce0cc
 SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,Está realizando cambios en las fotos y videos asociados a esta parcela de Observación. ¿Está seguro de que desea realizar estos cambios?,8cfdcf97
 SAVE_PLANT_DENSITY,Guardar densidad de plantas,73135113
 SAVE_PROJECT_BOUNDARIES,Guardar límites del proyecto,d206ddd9
+SAVE_TOOLTIP,Guardar solo actualizará la información editada y no enviará una solicitud de retiro de plantas al Vivero para esta fecha de plantación.,0a966017
 SAVE_VERSION,Guardar versión,5afacff0
 SAVE_VERSION_ELLIPSIS,Guardar versión...,f3ac25ba
 SAVE_VERSION_MESSAGE,"Guardar una versión equivale a crear una captura de pantalla del aspecto actual del documento. Puede seguir editando el documento, pero no podrá editar la versión guardada.",90b2fd9b

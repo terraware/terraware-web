@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { Box, Checkbox, Divider, Tooltip, Typography, useTheme } from '@mui/material';
-import { Button, Dropdown, DropdownItem, Icon } from '@terraware/web-components';
+import { Box, Checkbox, Divider, Typography, useTheme } from '@mui/material';
+import { Button, Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
 
@@ -396,12 +396,20 @@ const PlantingDateForm = ({
           />
         )}
         <Button label={strings.CANCEL} onClick={onClose} priority='secondary' type='passive' disabled={isSaving} />
-        <Button label={strings.SAVE} onClick={() => void onSave()} priority='secondary' disabled={isSaving} />
-        <Button
-          label={strings.SAVE_AND_NOTIFY_NURSERY}
-          onClick={() => setNotifyModalOpen(true)}
-          disabled={isSaving || !date}
-        />
+        <Tooltip title={strings.SAVE_TOOLTIP}>
+          <span>
+            <Button label={strings.SAVE} onClick={() => void onSave()} priority='secondary' disabled={isSaving} />
+          </span>
+        </Tooltip>
+        <Tooltip title={strings.SAVE_AND_REQUEST_TOOLTIP}>
+          <span>
+            <Button
+              label={strings.SAVE_AND_REQUEST}
+              onClick={() => setNotifyModalOpen(true)}
+              disabled={isSaving || !date}
+            />
+          </span>
+        </Tooltip>
       </Box>
 
       {notifyModalOpen && (

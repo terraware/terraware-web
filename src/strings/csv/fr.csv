@@ -1500,7 +1500,7 @@ PLANTING_COMPLETE_DASHBOARD_TOOLTIP,Plantation terminée comprend la surface tot
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,Pourcentage de « plantation terminée » de tous les sites de plantation associés au projet,969947fc
 PLANTING_COMPLETE_TOOLTIP,La plantation a-t-elle été achevée dans ce substrat ?,a6bfac66
 PLANTING_DATES,Dates de plantation,e8aa47b1
-PLANTING_DATES_TAB_DESCRIPTION,Les dates de plantation indiquent quand et où les plants sont plantés. Cliquez sur « Enregistrer et notifier la pépinière » lorsque vous êtes prêt à ce que la pépinière retire les plants.,47ee4b8f
+PLANTING_DATES_TAB_DESCRIPTION,Les dates de plantation indiquent quand et où les plants sont mis en terre. Cliquez sur « Enregistrer et demander » lorsque vous êtes prêt pour que la pépinière retire les plants.,c144ee5c
 PLANTING_DENSITY,Densité de plantation,2d5d3bcb
 PLANTING_GOAL,Objectif de plantation,a97123a1
 PLANTING_PROGRESS,Progression de la plantation,58616da9
@@ -1865,7 +1865,8 @@ SATELLITE,Satellite,14d51868
 SAVE,Sauvegarder,526a3e42
 SAVE_AND_CLOSE,Enregistrer et fermer,aaa98fc6
 SAVE_AND_NEXT,Sauvegarder et suivant,1ca9d40a
-SAVE_AND_NOTIFY_NURSERY,Enregistrer et notifier la pépinière,78cb028e
+SAVE_AND_REQUEST,Enregistrer et demander,fa423722
+SAVE_AND_REQUEST_TOOLTIP,Enregistrer et demander enverra une demande de retrait de plants à la pépinière pour cette date de plantation.,9f9b8d4e
 SAVE_CHANGES,Sauvegarder les modifications,cb5e8c33
 SAVE_OBSERVATION_DATA,Enregistrer les données d'observation,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Vos modifications remplaceront toutes les données saisies précédemment. Êtes-vous sûr de vouloir effectuer ces modifications ?,b1657c44
@@ -1873,6 +1874,7 @@ SAVE_PHOTOS_AND_VIDEOS,Enregistrer les photos et vidéos,d38ce0cc
 SAVE_PHOTOS_AND_VIDEOS_DESCRIPTION,Vous êtes en train de modifier les photos et vidéos associées à cette parcelle d’Observation. Êtes-vous sûr de vouloir effectuer ces modifications ?,8cfdcf97
 SAVE_PLANT_DENSITY,Enregistrer la densité de plantation,73135113
 SAVE_PROJECT_BOUNDARIES,Sauvegarder les limites du projet,d206ddd9
+SAVE_TOOLTIP,Enregistrer mettra uniquement à jour les informations modifiées et n’enverra pas de demande de retrait de plants à la pépinière pour cette date de plantation.,0a966017
 SAVE_VERSION,Enregistrer la version,5afacff0
 SAVE_VERSION_ELLIPSIS,Enregistrer la version...,f3ac25ba
 SAVE_VERSION_MESSAGE,"Sauvegarder une version équivaut à créer une capture d'écran de l'état actuel du document. Vous pouvez continuer à modifier le document, mais vous ne pouvez pas modifier la version enregistrée.",90b2fd9b
