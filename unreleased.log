@@ -1,5 +1,3 @@
-9f89d243 SW-8479 Planting Dates: Update "Save & Request" copy and implement tooltips (#5806)
-80bc149b SW-8495 Substrata display: Group in two column layout (#5805)
 14a174db SW-8471 Sort planting seasons by end date too (#5804)
 e0c9d336 SW-8483 If selected Planting Site does not have any seasons, do not show "Copy previous season" option (#5801)
 cc1c280f Feature flag for observations in activity log (#5803)
