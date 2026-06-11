@@ -1,3 +1,4 @@
+e0c9d336 SW-8483 If selected Planting Site does not have any seasons, do not show "Copy previous season" option (#5801)
 cc1c280f Feature flag for observations in activity log (#5803)
 3c6fd577 SW-8460: Scroll down to error field when there's an error upon a user saving edits (#5802)
 012957d0 Update planting seasons api calls (#5800)
