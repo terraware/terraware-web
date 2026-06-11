@@ -59,7 +59,6 @@ export default function NavBar({
   const isHomeRoute = useMatch({ path: APP_PATHS.HOME + '/', end: false });
   const isPeopleRoute = useMatch({ path: APP_PATHS.PEOPLE + '/', end: false });
   const isSpeciesRoute = useMatch({ path: APP_PATHS.SPECIES + '/', end: false });
-  const isOrganizationRoute = useMatch({ path: APP_PATHS.ORGANIZATION + '/', end: false });
   const isSeedBanksRoute = useMatch({ path: APP_PATHS.SEED_BANKS + '/', end: false });
   const isNurseriesRoute = useMatch({ path: APP_PATHS.NURSERIES + '/', end: false });
   const isInventoryRoute = useMatch({ path: APP_PATHS.INVENTORY + '/', end: false });
@@ -452,17 +451,6 @@ export default function NavBar({
       </NavItem>
 
       <NavSection title={strings.SETTINGS.toUpperCase()} />
-      {isAdmin(selectedOrganization) && (
-        <NavItem
-          label={strings.ORGANIZATION}
-          icon='organizationNav'
-          selected={!!isOrganizationRoute}
-          onClick={() => {
-            closeAndNavigateTo(isOrganizationRoute ? '' : APP_PATHS.ORGANIZATION);
-          }}
-          id='organization'
-        />
-      )}
       <NavItem
         label={strings.PEOPLE}
         icon='peopleNav'

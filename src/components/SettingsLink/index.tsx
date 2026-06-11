@@ -6,14 +6,19 @@ import { Icon, Tooltip } from '@terraware/web-components';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import strings from 'src/strings';
 
-const SettingsLink = () => {
+type SettingsLinkProps = {
+  // Optional override for where the cog navigates
+  onClick?: () => void;
+};
+
+const SettingsLink = ({ onClick }: SettingsLinkProps) => {
   const theme = useTheme();
   const { goToSettings } = useNavigateTo();
 
   return (
     <div>
       <Tooltip title={strings.SETTINGS}>
-        <IconButton id='settings-button' onClick={goToSettings}>
+        <IconButton id='settings-button' onClick={onClick ?? goToSettings}>
           <Icon name='iconSettings' size='medium' fillColor={theme.palette.TwClrIcn} />
         </IconButton>
       </Tooltip>

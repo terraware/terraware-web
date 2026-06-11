@@ -1,11 +1,10 @@
 import React, { type JSX, useEffect, useState } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import TextField from 'src/components/common/Textfield/Textfield';
-import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -72,12 +71,26 @@ export default function OrganizationView(): JSX.Element {
   };
 
   return (
-    <TfMain>
-      <Box margin={theme.spacing(0, 3, 2, 3)}>
-        <Box display='flex' justifyContent='space-between' alignItems='center'>
-          <Typography margin={0} fontSize='24px' fontWeight={600}>
-            {strings.ORGANIZATION}
-          </Typography>
+    <Box
+      component='main'
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        paddingRight: theme.spacing(4),
+      }}
+    >
+      <PageSnackbar />
+      <Grid
+        container
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: theme.spacing(1),
+          padding: theme.spacing(3, 4),
+          margin: 0,
+        }}
+      >
+        <Grid item xs={12} paddingBottom={theme.spacing(2)} sx={{ display: 'flex', justifyContent: 'flex-end' }}>
           <Button
             icon='iconEdit'
             label={isMobile ? undefined : strings.EDIT_ORGANIZATION}
@@ -85,18 +98,7 @@ export default function OrganizationView(): JSX.Element {
             size='medium'
             onClick={goToEditOrganization}
           />
-        </Box>
-        <PageSnackbar />
-      </Box>
-      <Grid
-        container
-        sx={{
-          backgroundColor: theme.palette.TwClrBg,
-          borderRadius: '32px',
-          padding: theme.spacing(3),
-          margin: 0,
-        }}
-      >
+        </Grid>
         <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>
           <TextField
             label={strings.ORGANIZATION_NAME}
@@ -187,6 +189,6 @@ export default function OrganizationView(): JSX.Element {
           />
         </Grid>
       </Grid>
-    </TfMain>
+    </Box>
   );
 }
