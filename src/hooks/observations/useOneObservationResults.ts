@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import isEnabled from 'src/features';
 import { useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
@@ -14,11 +14,28 @@ const useGetOneObservationResults = ({ observationId, depth }: UseGetOneObservat
   const useNewTables = isEnabled('New Observation Results Tables');
   const [getObservationResults, result] = useLazyGetObservationResultsQuery();
 
+  const reload = useCallback(
+    (preferCacheValue: boolean = true) => {
+      if (observationId !== undefined) {
+        void getObservationResults({ observationId, depth, useNewTables }, preferCacheValue);
+      }
+    },
+    [depth, getObservationResults, observationId, useNewTables]
+  );
+
   useEffect(() => {
-    if (observationId !== undefined) {
-      void getObservationResults({ observationId, depth, useNewTables }, true);
+    reload();
+  }, [depth, getObservationResults, observationId, reload, useNewTables]);
+
+  useEffect(() => {
+    if (result.currentData?.observation.survivalRateCalculationInProgress) {
+      const timeout = setTimeout(() => {
+        reload(false);
+      }, 60000);
+
+      return () => clearTimeout(timeout);
     }
-  }, [depth, getObservationResults, observationId, useNewTables]);
+  }, [reload, result.currentData?.observation.survivalRateCalculationInProgress]);
 
   return result;
 };
