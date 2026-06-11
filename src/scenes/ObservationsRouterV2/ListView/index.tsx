@@ -6,6 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
+import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
@@ -164,6 +165,11 @@ const ObservationListView = (): JSX.Element => {
       <ObservationsEventsNotification />
       {activeTab === 'plantMonitoring' && (
         <SurvivalRateMessageV2
+          selectedPlantingSiteId={selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId}
+        />
+      )}
+      {activeTab === 'plantMonitoring' && (
+        <SurvivalRateRecalculationMessage
           selectedPlantingSiteId={selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId}
         />
       )}

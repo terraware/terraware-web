@@ -527,6 +527,20 @@ export type NewBiomassMeasurementPayload = {
   smallTreeCountHigh: number;
   smallTreeCountLow: number;
   soilAssessment: string;
+  soilType?:
+    | 'Clay'
+    | 'SandyClay'
+    | 'SandyClayLoam'
+    | 'ClayLoam'
+    | 'SiltyClay'
+    | 'SiltyClayLoam'
+    | 'SandyLoam'
+    | 'LoamySand'
+    | 'Sand'
+    | 'Loam'
+    | 'SiltLoam'
+    | 'Silt'
+    | 'Unknown';
   /** List of herbaceous and tree species. Includes all recorded quadrat and additional herbaceous species and recorded tree species. Species not assigned to a quadrat or recorded trees will be saved as an additional herbaceous species. */
   species: BiomassSpeciesPayload[];
   /** Low or high tide. Required for Mangrove forest. */
@@ -732,6 +746,20 @@ export type ExistingBiomassMeasurementPayload = {
   smallTreeCountHigh: number;
   smallTreeCountLow: number;
   soilAssessment: string;
+  soilType?:
+    | 'Clay'
+    | 'SandyClay'
+    | 'SandyClayLoam'
+    | 'ClayLoam'
+    | 'SiltyClay'
+    | 'SiltyClayLoam'
+    | 'SandyLoam'
+    | 'LoamySand'
+    | 'Sand'
+    | 'Loam'
+    | 'SiltLoam'
+    | 'Silt'
+    | 'Unknown';
   /** Low or high tide. */
   tide?: 'Low' | 'High';
   /** Time when ide is observed. */
@@ -993,6 +1021,20 @@ export type BiomassUpdateOperationPayload = {
     smallTreeCountHigh?: number;
     smallTreeCountLow?: number;
     soilAssessment?: string;
+    soilType?:
+      | 'Clay'
+      | 'SandyClay'
+      | 'SandyClayLoam'
+      | 'ClayLoam'
+      | 'SiltyClay'
+      | 'SiltyClayLoam'
+      | 'SandyLoam'
+      | 'LoamySand'
+      | 'Sand'
+      | 'Loam'
+      | 'SiltLoam'
+      | 'Silt'
+      | 'Unknown';
     tide?: 'Low' | 'High';
     tideTime?: string;
     waterDepth?: number;

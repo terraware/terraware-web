@@ -9,6 +9,7 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import ListMapView from 'src/components/ListMapView';
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
+import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
@@ -152,6 +153,7 @@ const SiteDetails = (): JSX.Element => {
         />
       )}
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
+      <SurvivalRateRecalculationMessage selectedPlantingSiteId={results?.plantingSiteId} />
       <Card radius='24px' style={{ width: '100%' }}>
         <ObservationDataNumbers items={items} isCompleted={!!results?.completedTime} />
         <Box display='flex' gap={3} flexDirection={isDesktop ? 'row' : 'column'} flexWrap='wrap' marginBottom={3}>

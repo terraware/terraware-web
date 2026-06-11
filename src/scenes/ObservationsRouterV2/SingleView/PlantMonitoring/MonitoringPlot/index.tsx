@@ -7,6 +7,7 @@ import { Tabs, Tooltip } from '@terraware/web-components';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
+import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
@@ -188,6 +189,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
         />
       )}
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
+      <SurvivalRateRecalculationMessage selectedPlantingSiteId={results?.plantingSiteId} />
       <Box width='100%'>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>
