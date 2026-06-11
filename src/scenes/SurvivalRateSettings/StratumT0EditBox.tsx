@@ -66,10 +66,12 @@ const StratumT0EditBox = ({
   }, [allWithdrawnSpecies, stratumData]);
 
   const [newSpeciesRows, setNewSpeciesRows] = useState<AddedSpecies[]>(initialNewSpecies);
+  const [sessionAddedRowIds, setSessionAddedRowIds] = useState<Set<string>>(new Set());
 
   const onAddNewSpecies = useCallback(() => {
     const newRowId = `new-species-${crypto.randomUUID()}`;
     setNewSpeciesRows((prev) => [...prev, { id: newRowId, density: '' }]);
+    setSessionAddedRowIds((prev) => new Set([...prev, newRowId]));
   }, []);
 
   const availableSpecies = useMemo(() => {
@@ -278,12 +280,15 @@ const StratumT0EditBox = ({
   }, [activeLocale, allWithdrawnSpecies, speciesById]);
 
   const sortedNewSpeciesRows = useMemo(() => {
-    return [...newSpeciesRows].sort((a, b) => {
+    const preExisting = newSpeciesRows.filter((row) => !sessionAddedRowIds.has(row.id));
+    const sessionAdded = newSpeciesRows.filter((row) => sessionAddedRowIds.has(row.id));
+    const sorted = [...preExisting].sort((a, b) => {
       const nameA = a.speciesId !== undefined ? speciesById[a.speciesId]?.scientificName ?? '' : '\uffff';
       const nameB = b.speciesId !== undefined ? speciesById[b.speciesId]?.scientificName ?? '' : '\uffff';
       return nameA.localeCompare(nameB, activeLocale ?? undefined);
     });
-  }, [activeLocale, newSpeciesRows, speciesById]);
+    return [...sorted, ...sessionAdded];
+  }, [activeLocale, newSpeciesRows, sessionAddedRowIds, speciesById]);
 
   return (
     <>
