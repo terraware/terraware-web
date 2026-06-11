@@ -118,6 +118,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
     }
     return targets.reduce((sum, t) => sum + t.quantity, 0);
   }, [speciesTargets]);
+  const hasSpeciesTargets = (speciesTargets?.targets.length ?? 0) > 0;
 
   const dateRange = useMemo(() => {
     if (!season) {
@@ -134,10 +135,10 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
 
   const numberColumn = (label: string, value: number | undefined) => (
     <Box textAlign='right' minWidth='120px'>
-      <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+      <Typography fontSize='14px' color={theme.palette.TwClrBaseBlack} fontWeight={500}>
         {label}
       </Typography>
-      <Typography fontSize='24px' fontWeight={600}>
+      <Typography fontSize='24px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
         {value === undefined ? '-' : value.toLocaleString(activeLocale || undefined)}
       </Typography>
     </Box>
@@ -311,9 +312,14 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
                 type='passive'
               />
             </Box>
-            <Link style={{ fontSize: '16px' }} onClick={() => setSpeciesSummaryOpen(true)}>
-              {strings.SPECIES_SUMMARY}
-            </Link>
+            {hasSpeciesTargets && (
+              <Link
+                style={{ fontSize: '16px', textDecoration: 'underline' }}
+                onClick={() => setSpeciesSummaryOpen(true)}
+              >
+                {strings.SPECIES_SUMMARY}
+              </Link>
+            )}
           </Box>
         </Box>
       </Card>
