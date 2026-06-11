@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { Checkbox, Dropdown, DropdownItem } from '@terraware/web-components';
+import { Checkbox, Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import DatePicker from 'src/components/common/DatePicker';
@@ -182,7 +182,7 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
           />
         </Grid>
         {seasonsForSelectedSite.length > 0 && (
-          <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingBottom: 0 } }}>
+          <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingBottom: 0 } }} display={'flex'} alignItems='end'>
             <Checkbox
               id='copyPreviousSeason'
               name='copyPreviousSeason'
@@ -196,6 +196,11 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
                 }))
               }
             />
+            <Box paddingLeft={1}>
+              <Tooltip title={strings.COPY_PREVIOUS_SEASON_TOOLTIP}>
+                <Icon name='info' size='small' fillColor={theme.palette.TwClrTxtSecondary} />
+              </Tooltip>
+            </Box>
           </Grid>
         )}
         {record.copyPrevious && (
