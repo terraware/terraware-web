@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 
 import isEnabled from 'src/features';
 import { useLazyListObservationResultsQuery } from 'src/queries/generated/observations';
@@ -24,11 +24,44 @@ const useListObservationResults = ({
   const useNewTables = isEnabled('New Observation Results Tables');
   const [listObservationResults, result] = useLazyListObservationResultsQuery();
 
+  const reload = useCallback(
+    (preferCacheValue: boolean = true) => {
+      if (organizationId !== undefined) {
+        void listObservationResults(
+          { organizationId, plantingSiteId, depth, state, limit, useNewTables },
+          preferCacheValue
+        );
+      }
+    },
+    [depth, limit, listObservationResults, organizationId, plantingSiteId, state, useNewTables]
+  );
+
   useEffect(() => {
-    if (organizationId !== undefined) {
-      void listObservationResults({ organizationId, plantingSiteId, depth, state, limit, useNewTables }, true);
+    reload();
+  }, [depth, limit, listObservationResults, organizationId, plantingSiteId, reload, state, useNewTables]);
+
+  useEffect(() => {
+    const observationResults = result.currentData?.observations ?? [];
+    if (observationResults.every((observationResult) => !observationResult.survivalRateCalculationInProgress)) {
+      return;
     }
-  }, [depth, limit, listObservationResults, organizationId, plantingSiteId, state, useNewTables]);
+
+    const timeout = setTimeout(() => {
+      reload(false);
+    }, 60000);
+
+    return () => clearTimeout(timeout);
+  }, [
+    depth,
+    limit,
+    listObservationResults,
+    organizationId,
+    plantingSiteId,
+    reload,
+    result.currentData?.observations,
+    state,
+    useNewTables,
+  ]);
 
   return result;
 };
