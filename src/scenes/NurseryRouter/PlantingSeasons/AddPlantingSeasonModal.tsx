@@ -103,7 +103,12 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
   );
 
   const onChangePlantingSite = (value: any) => {
-    setRecord((prev) => ({ ...prev, plantingSiteId: Number(value), fromPlantingSeasonId: undefined }));
+    setRecord((prev) => ({
+      ...prev,
+      plantingSiteId: Number(value),
+      copyPrevious: false,
+      fromPlantingSeasonId: undefined,
+    }));
   };
 
   const onChangeStartDate = (value?: DateTime) => {
@@ -176,22 +181,23 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
             fullWidth
           />
         </Grid>
-        <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingBottom: 0 } }}>
-          <Checkbox
-            id='copyPreviousSeason'
-            name='copyPreviousSeason'
-            label={strings.COPY_PREVIOUS_SEASON}
-            disabled={seasonsForSelectedSite.length === 0}
-            value={record.copyPrevious}
-            onChange={(value) =>
-              setRecord((prev) => ({
-                ...prev,
-                copyPrevious: value,
-                fromPlantingSeasonId: value ? prev.fromPlantingSeasonId : undefined,
-              }))
-            }
-          />
-        </Grid>
+        {seasonsForSelectedSite.length > 0 && (
+          <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingBottom: 0 } }}>
+            <Checkbox
+              id='copyPreviousSeason'
+              name='copyPreviousSeason'
+              label={strings.COPY_PREVIOUS_SEASON}
+              value={record.copyPrevious}
+              onChange={(value) =>
+                setRecord((prev) => ({
+                  ...prev,
+                  copyPrevious: value,
+                  fromPlantingSeasonId: value ? prev.fromPlantingSeasonId : undefined,
+                }))
+              }
+            />
+          </Grid>
+        )}
         {record.copyPrevious && (
           <Grid item xs={12}>
             <Dropdown
