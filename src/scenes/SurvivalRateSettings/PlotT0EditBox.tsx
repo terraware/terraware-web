@@ -73,7 +73,6 @@ const PlotT0EditBox = ({
   }, [t0Plot, withdrawnSpeciesPlot]);
 
   const [newSpeciesRows, setNewSpeciesRows] = useState<AddedSpecies[]>(initialNewSpecies);
-  const [sessionAddedRowIds, setSessionAddedRowIds] = useState<Set<string>>(new Set());
 
   const isEqualObservation = useCallback(
     (a: ObservationSpeciesDensityPayload, b: ObservationSpeciesDensityPayload) => a.observationId === b.observationId,
@@ -115,7 +114,6 @@ const PlotT0EditBox = ({
 
   useEffect(() => {
     setNewSpeciesRows(initialNewSpecies);
-    setSessionAddedRowIds(new Set());
   }, [initialNewSpecies]);
 
   useEffect(() => {
@@ -259,7 +257,6 @@ const PlotT0EditBox = ({
   const onAddNewSpecies = useCallback(() => {
     const newRowId = `new-species-${crypto.randomUUID()}`;
     setNewSpeciesRows((prev) => [...prev, { id: newRowId, density: '' }]);
-    setSessionAddedRowIds((prev) => new Set([...prev, newRowId]));
   }, []);
 
   const onNewSpeciesChange = useCallback(
@@ -369,16 +366,18 @@ const PlotT0EditBox = ({
     });
   }, [activeLocale, withdrawnSpeciesPlot?.species, speciesById]);
 
+  const initialNewSpeciesIds = useMemo(() => new Set(initialNewSpecies.map((row) => row.id)), [initialNewSpecies]);
+
   const sortedNewSpeciesRows = useMemo(() => {
-    const preExisting = newSpeciesRows.filter((row) => !sessionAddedRowIds.has(row.id));
-    const sessionAdded = newSpeciesRows.filter((row) => sessionAddedRowIds.has(row.id));
+    const preExisting = newSpeciesRows.filter((row) => initialNewSpeciesIds.has(row.id));
+    const sessionAdded = newSpeciesRows.filter((row) => !initialNewSpeciesIds.has(row.id));
     const sorted = [...preExisting].sort((a, b) => {
       const nameA = a.speciesId !== undefined ? speciesById[a.speciesId]?.scientificName ?? '' : '\uffff';
       const nameB = b.speciesId !== undefined ? speciesById[b.speciesId]?.scientificName ?? '' : '\uffff';
       return nameA.localeCompare(nameB, activeLocale ?? undefined);
     });
     return [...sorted, ...sessionAdded];
-  }, [activeLocale, newSpeciesRows, sessionAddedRowIds, speciesById]);
+  }, [activeLocale, initialNewSpeciesIds, newSpeciesRows, speciesById]);
 
   return (
     <>
