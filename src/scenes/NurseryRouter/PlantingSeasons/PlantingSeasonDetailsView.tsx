@@ -272,11 +272,25 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
                 </Typography>
                 <Box>
                   {substrataNames.length > 0 ? (
-                    substrataNames.map((name) => (
-                      <Typography key={name} fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxtSecondary}>
-                        {name}
-                      </Typography>
-                    ))
+                    <Box display='flex' flexDirection='column'>
+                      {Array.from({ length: Math.ceil(substrataNames.length / 2) }, (_, i) => {
+                        const pair = substrataNames.slice(i * 2, i * 2 + 2);
+                        return (
+                          <Box key={i} display='flex' gap='8px'>
+                            {pair.map((name) => (
+                              <Typography
+                                key={name}
+                                fontSize='14px'
+                                fontWeight={600}
+                                color={theme.palette.TwClrTxtSecondary}
+                              >
+                                {name}
+                              </Typography>
+                            ))}
+                          </Box>
+                        );
+                      })}
+                    </Box>
                   ) : (
                     <Typography fontSize='14px'>{'-'}</Typography>
                   )}
