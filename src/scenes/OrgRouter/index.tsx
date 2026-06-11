@@ -202,7 +202,14 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
                 </SettingsLayout>
               }
             />
-            <Route path={APP_PATHS.PEOPLE + '/*'} element={<PeopleRouter />} />
+            <Route
+              path={APP_PATHS.PEOPLE + '/*'}
+              element={
+                <SettingsLayout activeSection='people'>
+                  <PeopleRouter />
+                </SettingsLayout>
+              }
+            />
             {/* modules router *must* come before the projects router,
             or else the path will be picked up by the projects router */}
             <Route path={APP_PATHS.PROJECT_MODULES + '/*'} element={<ModulesRouter />} />
