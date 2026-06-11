@@ -6,9 +6,8 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import PageSnackbar from 'src/components/PageSnackbar';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useTimeZones } from 'src/providers/hooks';
+import EditOrganizationModal from 'src/scenes/OrganizationRouter/EditOrganizationModal';
 import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import { organizationTypeLabel } from 'src/types/Organization';
@@ -18,10 +17,10 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 
 export default function OrganizationView(): JSX.Element {
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, reloadOrganizations } = useOrganization();
   const theme = useTheme();
-  const navigate = useSyncNavigate();
   const [people, setPeople] = useState<OrganizationUser[]>();
+  const [editModalOpen, setEditModalOpen] = useState(false);
   const { isMobile } = useDeviceInfo();
   const { countries } = useLocalization();
   const timeZones = useTimeZones();
@@ -39,13 +38,6 @@ export default function OrganizationView(): JSX.Element {
       void populatePeople();
     }
   }, [selectedOrganization]);
-
-  const goToEditOrganization = () => {
-    const editOrganizationLocation = {
-      pathname: APP_PATHS.ORGANIZATION_EDIT,
-    };
-    navigate(editOrganizationLocation);
-  };
 
   const organizationState = () => {
     if (countries && selectedOrganization?.countryCode && selectedOrganization?.countrySubdivisionCode) {
@@ -81,6 +73,14 @@ export default function OrganizationView(): JSX.Element {
       }}
     >
       <PageSnackbar />
+      {selectedOrganization && (
+        <EditOrganizationModal
+          organization={selectedOrganization}
+          open={editModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          reloadOrganizationData={reloadOrganizations}
+        />
+      )}
       <Grid
         container
         sx={{
@@ -96,7 +96,7 @@ export default function OrganizationView(): JSX.Element {
             label={isMobile ? undefined : strings.EDIT_ORGANIZATION}
             priority='primary'
             size='medium'
-            onClick={goToEditOrganization}
+            onClick={() => setEditModalOpen(true)}
           />
         </Grid>
         <Grid item xs={gridSize()} paddingBottom={theme.spacing(4)}>

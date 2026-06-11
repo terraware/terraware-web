@@ -116,7 +116,6 @@ export enum APP_PATHS {
   OBSERVATION_STRATUM_DETAILS_V2 = '/observations/:observationId/stratum/:stratumName',
   OBSERVATIONS = '/observations',
   OPT_IN = '/opt-in',
-  ORGANIZATION_EDIT = '/organization/edit',
   ORGANIZATION = '/organization',
   PEOPLE = '/people',
   PEOPLE_EDIT = '/people/:personId/edit',
