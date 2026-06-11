@@ -21,7 +21,7 @@ const SaveAndNotifyNurseryModal = ({ open, onClose, onConfirm, busy }: SaveAndNo
     <DialogBox
       onClose={onClose}
       open={open}
-      title={strings.SAVE_AND_NOTIFY_NURSERY}
+      title={strings.SAVE_AND_REQUEST}
       size='medium'
       skrim={true}
       middleButtons={[
@@ -38,7 +38,7 @@ const SaveAndNotifyNurseryModal = ({ open, onClose, onConfirm, busy }: SaveAndNo
         <Button
           key='confirm-notify-nursery'
           id='confirmNotifyNursery'
-          label={strings.SAVE_AND_NOTIFY_NURSERY}
+          label={strings.SAVE_AND_REQUEST}
           onClick={() => onConfirm(note)}
           size='medium'
           disabled={busy}
