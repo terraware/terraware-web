@@ -1,13 +1,12 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Grid } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
 
-import { Crumb } from 'src/components/BreadCrumbs';
-import Page from 'src/components/Page';
 import CannotDeleteApplicationProject from 'src/components/ProjectView/CannotDeleteApplicationProject';
 import DeleteConfirmationDialog from 'src/components/ProjectView/DeleteConfirmationDialog';
+import BackToLink from 'src/components/common/BackToLink';
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -20,18 +19,18 @@ import { requestProjectDelete } from 'src/redux/features/projects/projectsAsyncT
 import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { requestProject, requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 export default function ProjectView(): JSX.Element {
   const dispatch = useAppDispatch();
+  const theme = useTheme();
 
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
   const location = useStateLocation();
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { allApplications } = useApplicationData();
   const pathParams = useParams<{ projectId: string }>();
@@ -90,37 +89,76 @@ export default function ProjectView(): JSX.Element {
     }
   }, [selectedOrganization, projectDeleteRequest, snackbar, goToProjects, dispatch]);
 
-  const rightComponent = useMemo(
-    () => (
-      <>
-        <Button label={strings.EDIT_PROJECT} icon='iconEdit' onClick={goToEditProject} size='medium' id='editProject' />
-        <OptionsMenu
-          onOptionItemClick={onOptionItemClick}
-          optionItems={[{ label: activeLocale ? strings.DELETE : '', value: 'delete', type: 'destructive' }]}
-        />
-      </>
-    ),
-    [goToEditProject, onOptionItemClick, activeLocale]
-  );
-
-  const crumbs: Crumb[] = useMemo(
-    () => [
-      {
-        name: activeLocale ? strings.PROJECTS : '',
-        to: APP_PATHS.PROJECTS,
-      },
-    ],
-    [activeLocale]
+  const rightComponents = useMemo(
+    () =>
+      isAdmin(selectedOrganization) && (
+        <Grid item>
+          <Button
+            label={strings.EDIT_PROJECT}
+            icon='iconEdit'
+            onClick={goToEditProject}
+            size='medium'
+            id='editProject'
+          />
+          <OptionsMenu
+            onOptionItemClick={onOptionItemClick}
+            optionItems={[{ label: strings.DELETE, value: 'delete', type: 'destructive' }]}
+          />
+        </Grid>
+      ),
+    [goToEditProject, onOptionItemClick, selectedOrganization, strings]
   );
 
   return (
-    <Page
-      crumbs={crumbs}
-      title={project?.name || ''}
-      rightComponent={isAdmin(selectedOrganization) ? rightComponent : undefined}
+    <Box
+      component='main'
+      sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingRight: theme.spacing(4) }}
     >
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
-        <Grid container>
+        <Grid container padding={theme.spacing(0, 0, 2, 0)}>
+          <Grid item xs={12}>
+            <BackToLink
+              id='back'
+              to={APP_PATHS.PROJECTS}
+              name={strings.PROJECTS}
+              style={{ marginBottom: theme.spacing(3) }}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={12}
+            paddingLeft={theme.spacing(3)}
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Grid item>
+              <Typography
+                fontSize='24px'
+                fontWeight={600}
+                margin={0}
+                sx={{
+                  wordBreak: 'break-all',
+                }}
+              >
+                {project?.name || ''}
+              </Typography>
+            </Grid>
+            {rightComponents}
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          sx={{
+            backgroundColor: theme.palette.TwClrBg,
+            borderRadius: theme.spacing(1),
+            padding: theme.spacing(3, 4),
+            margin: 0,
+          }}
+        >
           <Grid item xs={4}>
             <TextField label={strings.NAME} id='name' type='text' value={project?.name} display={true} />
           </Grid>
@@ -144,6 +182,6 @@ export default function ProjectView(): JSX.Element {
           onSubmit={onDeleteConfirmationDialogSubmit}
         />
       )}
-    </Page>
+    </Box>
   );
 }

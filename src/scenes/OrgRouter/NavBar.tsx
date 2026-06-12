@@ -72,8 +72,6 @@ export default function NavBar({
   const isReportsRoute = useMatch({ path: APP_PATHS.REPORTS + '/', end: false });
   const isSeedFundReportsRoute = useMatch({ path: APP_PATHS.SEED_FUND_REPORTS + '/', end: false });
   const isObservationsRoute = useMatch({ path: APP_PATHS.OBSERVATIONS + '/', end: false });
-  const isProjectsRoute = useMatch({ path: APP_PATHS.PROJECTS + '/', end: true });
-  const isProjectRoute = useMatch({ path: APP_PATHS.PROJECT_VIEW + '/', end: true });
   const isProjectModulesRoute = useMatch({ path: APP_PATHS.PROJECT_MODULES + '/', end: false });
   const isActivityLogRoute = useMatch({ path: APP_PATHS.ACTIVITY_LOG + '/', end: false });
 
@@ -451,16 +449,7 @@ export default function NavBar({
 
       {isManagerOrHigher(selectedOrganization) && (
         <>
-          <NavSection title={strings.SETTINGS.toUpperCase()} />
-          <NavItem
-            label={strings.PROJECTS}
-            icon='iconFolder'
-            selected={!!(isProjectsRoute || isProjectRoute)}
-            onClick={() => {
-              closeAndNavigateTo(APP_PATHS.PROJECTS);
-            }}
-            id='projects'
-          />
+          <NavSection />
           <NavItem label={strings.LOCATIONS} icon='iconMyLocation' id='locations'>
             <SubNavbar>
               <NavItem

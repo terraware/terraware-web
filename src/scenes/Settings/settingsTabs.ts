@@ -1,16 +1,15 @@
 import { APP_PATHS } from 'src/constants';
 import { Organization } from 'src/types/Organization';
-import { isAdmin } from 'src/utils/organization';
+import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 
-export type SettingsSection = 'organization' | 'people';
-// | 'projects';
+export type SettingsSection = 'organization' | 'people' | 'projects';
 
 export const SETTINGS_TAB_SESSION_KEY = 'tab-org-settings';
 
 export const SECTION_PATHS: Record<SettingsSection, string> = {
   organization: APP_PATHS.ORGANIZATION,
   people: APP_PATHS.PEOPLE,
-  // projects: APP_PATHS.PROJECTS,
+  projects: APP_PATHS.PROJECTS,
 };
 
 export const getAllowedSections = (organization?: Organization): SettingsSection[] => {
@@ -19,9 +18,9 @@ export const getAllowedSections = (organization?: Organization): SettingsSection
     sections.push('organization');
   }
   sections.push('people');
-  // if (isManagerOrHigher(organization)) {
-  //   sections.push('projects');
-  // }
+  if (isManagerOrHigher(organization)) {
+    sections.push('projects');
+  }
   return sections;
 };
 
