@@ -735,14 +735,18 @@ const SpeciesRow = ({
 }: SpeciesRowProps): JSX.Element => {
   const theme = useTheme();
   const [editing, setEditing] = useState(false);
+  const [quantityFocused, setQuantityFocused] = useState(false);
   const [draftQuantity, setDraftQuantity] = useState<string>(draft.quantity.toString());
   const speciesInfo = useMemo(() => species.find((s) => s.id === draft.speciesId), [species, draft.speciesId]);
   const availableToSchedule = Math.max(0, target - scheduledOther);
   const leftToPlant = Math.max(0, availableToSchedule - draft.quantity);
-  const exceedsGoal = target > 0 && draft.quantity > availableToSchedule;
+  const parsedDraftQuantity = Math.max(0, Number(draftQuantity));
+  const quantityToValidate = Number.isNaN(parsedDraftQuantity) ? draft.quantity : parsedDraftQuantity;
+  const exceedsGoal = target > 0 && quantityToValidate > availableToSchedule;
   const hasNumbers = draft.quantity > 0;
 
   const commitQuantity = () => {
+    setQuantityFocused(false);
     const parsed = Math.max(0, Number(draftQuantity));
     const next = Number.isNaN(parsed) ? draft.quantity : parsed;
     if (next !== draft.quantity) {
@@ -789,8 +793,9 @@ const SpeciesRow = ({
             value={draftQuantity}
             onChange={(value) => setDraftQuantity(String(value ?? ''))}
             onBlur={commitQuantity}
+            onFocus={() => setQuantityFocused(true)}
             min={0}
-            errorText={exceedsGoal ? strings.EXCEEDS_GOAL : ''}
+            errorText={quantityFocused && exceedsGoal ? strings.EXCEEDS_GOAL : ''}
             autoFocus
           />
         ) : (
