@@ -1,4 +1,4 @@
-import React, { type JSX, useMemo, useState } from 'react';
+import React, { type JSX, useMemo, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem } from '@terraware/web-components';
@@ -106,9 +106,11 @@ const StratumSection = ({
         <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxtSecondary}>
           {stratum.name}
         </Typography>
-        <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
-          {`${stratumTotal.toLocaleString()} ${strings.TARGET_PLANTS}`}
-        </Typography>
+        {(stratumTotal || 0) > 0 && (
+          <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+            {`${stratumTotal.toLocaleString()} ${strings.TARGET_PLANTS}`}
+          </Typography>
+        )}
       </Box>
       {stratum.substrata.map((substratum) => (
         <SubstratumSection
@@ -162,9 +164,11 @@ const SubstratumSection = ({
         <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxtSecondary}>
           {substratum.name}
         </Typography>
-        <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
-          {`${substratumTotal.toLocaleString()} ${strings.TARGET_PLANTS}`}
-        </Typography>
+        {substratumTotal > 0 && (
+          <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+            {`${substratumTotal.toLocaleString()} ${strings.TARGET_PLANTS}`}
+          </Typography>
+        )}
       </Box>
       {targets.length === 0 ? (
         <Box padding={theme.spacing(2)} textAlign='center'>
@@ -383,6 +387,7 @@ const AddSpeciesRow = ({
 }: AddSpeciesRowProps): JSX.Element => {
   const theme = useTheme();
   const snackbar = useSnackbar();
+  const rowRef = useRef<HTMLDivElement>(null);
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | undefined>();
   const [quantity, setQuantity] = useState<string>('0');
   const [upsertSpeciesTarget, { isLoading }] = useUpsertSpeciesTargetMutation();
@@ -419,8 +424,21 @@ const AddSpeciesRow = ({
     }
   };
 
+  const scrollRowIntoView = () => {
+    rowRef.current?.scrollIntoView({ block: 'center' });
+  };
+
   return (
-    <Box display='flex' alignItems='flex-end' gap={theme.spacing(2)} flexWrap='wrap'>
+    <Box
+      ref={rowRef}
+      display='flex'
+      alignItems='flex-end'
+      gap={theme.spacing(2)}
+      flexWrap='wrap'
+      onFocusCapture={scrollRowIntoView}
+      onMouseDownCapture={scrollRowIntoView}
+      onTouchStartCapture={scrollRowIntoView}
+    >
       <Box flex={1} minWidth='200px'>
         <Dropdown
           id={`add-species-${substratumId}`}

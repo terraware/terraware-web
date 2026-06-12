@@ -154,7 +154,7 @@ const EditPlantingSeasonModal = ({
                     ? !record.endDate
                       ? strings.REQUIRED_FIELD
                       : endDateBeforeStart
-                        ? strings.RECORDING_DATE_ERROR
+                        ? strings.END_DATE_ERROR
                         : ''
                     : ''
                 }

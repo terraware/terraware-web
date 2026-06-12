@@ -673,6 +673,7 @@ EMPTY_BATCH,Lot vide,585f2912
 EMPTY_BATCHES_AFTER_WITHDRAW,"Un ou plusieurs lots sont maintenant vides et n'apparaîtront pas dans les tableaux de lots. Pour voir les lots vides, cliquez sur le filtre du tableau et cochez « Afficher les lots vides ».",7b7ab93c
 END,Fin,43bef655
 END_DATE,Date de fin,bfc71620
+END_DATE_ERROR,La date de fin doit être postérieure à la date de début,055a3a36
 END_DATE_REQUIRED,Date de fin *,aaf37070
 END_DRYING_REMINDER,Rappel de fin de séchage,f62cf150
 END_DRYING_REMINDER_OFF,Rappel de fin de séchage désactivé,dae3f806
