@@ -1,3 +1,4 @@
+0868c4fa Sort organization picker options alphabetically (#5832)
 fed552ad SW-8506: Observation activity name and data takes 6 seconds to load (much longer than the rest of the page) (#5819)
 f964f61f SW-8463: Needed to reload page to see caption updates (FOLLOW-UP) (#5818)
 b36dc3de SW-8428: Survival Rate Settings: Species lists not appearing in alphabetical order (#5814)
