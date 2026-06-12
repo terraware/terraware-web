@@ -527,6 +527,20 @@ export type NewBiomassMeasurementPayload = {
   smallTreeCountHigh: number;
   smallTreeCountLow: number;
   soilAssessment: string;
+  soilType?:
+    | 'Clay'
+    | 'SandyClay'
+    | 'SandyClayLoam'
+    | 'ClayLoam'
+    | 'SiltyClay'
+    | 'SiltyClayLoam'
+    | 'SandyLoam'
+    | 'LoamySand'
+    | 'Sand'
+    | 'Loam'
+    | 'SiltLoam'
+    | 'Silt'
+    | 'Unknown';
   /** List of herbaceous and tree species. Includes all recorded quadrat and additional herbaceous species and recorded tree species. Species not assigned to a quadrat or recorded trees will be saved as an additional herbaceous species. */
   species: BiomassSpeciesPayload[];
   /** Low or high tide. Required for Mangrove forest. */
@@ -572,6 +586,8 @@ export type CompleteAdHocObservationRequestPayload = {
     | 'SteepSlope'
     | 'WaterBodies'
   )[];
+  /** Use longitude first in coordinate system. Defaults to false. */
+  lngFirst?: boolean;
   notes?: string;
   /** Observation type for this observation. */
   observationType: 'Monitoring' | 'Biomass Measurements';
@@ -732,6 +748,20 @@ export type ExistingBiomassMeasurementPayload = {
   smallTreeCountHigh: number;
   smallTreeCountLow: number;
   soilAssessment: string;
+  soilType?:
+    | 'Clay'
+    | 'SandyClay'
+    | 'SandyClayLoam'
+    | 'ClayLoam'
+    | 'SiltyClay'
+    | 'SiltyClayLoam'
+    | 'SandyLoam'
+    | 'LoamySand'
+    | 'Sand'
+    | 'Loam'
+    | 'SiltLoam'
+    | 'Silt'
+    | 'Unknown';
   /** Low or high tide. */
   tide?: 'Low' | 'High';
   /** Time when ide is observed. */
@@ -907,12 +937,6 @@ export type MergeOtherSpeciesRequestPayload = {
   /** ID of the existing species that the Other species' recorded plants should be merged into. */
   speciesId: number;
 };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: object[];
-    type: 'GeometryCollection';
-  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -936,6 +960,12 @@ export type MultiPolygon = {
 } & GeometryBase & {
     coordinates: number[][][][];
     type: 'MultiPolygon';
+  };
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
+    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type AssignedPlotPayload = {
@@ -993,6 +1023,20 @@ export type BiomassUpdateOperationPayload = {
     smallTreeCountHigh?: number;
     smallTreeCountLow?: number;
     soilAssessment?: string;
+    soilType?:
+      | 'Clay'
+      | 'SandyClay'
+      | 'SandyClayLoam'
+      | 'ClayLoam'
+      | 'SiltyClay'
+      | 'SiltyClayLoam'
+      | 'SandyLoam'
+      | 'LoamySand'
+      | 'Sand'
+      | 'Loam'
+      | 'SiltLoam'
+      | 'Silt'
+      | 'Unknown';
     tide?: 'Low' | 'High';
     tideTime?: string;
     waterDepth?: number;
@@ -1103,6 +1147,8 @@ export type CompletePlotObservationRequestPayload = {
     | 'SteepSlope'
     | 'WaterBodies'
   )[];
+  /** Use longitude first in coordinate system. Defaults to false. */
+  lngFirst?: boolean;
   notes?: string;
   /** Date and time the observation was performed in the field. */
   observedTime: string;
@@ -1130,6 +1176,8 @@ export type UploadPlotMediaRequestPayload = {
 export type UploadPlotPhotoRequestPayload = {
   caption?: string;
   gpsCoordinates: Point;
+  /** Use longitude first in coordinate system. Defaults to false. */
+  lngFirst?: boolean;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
   /** Type of observation plot photo. */
   type?: 'Plot' | 'Quadrat' | 'Soil';
