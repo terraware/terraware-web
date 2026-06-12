@@ -23,15 +23,21 @@ export default function ObservationStatsPanel({
 
   return (
     <>
-      <Grid item xs={12} sm={4}>
-        <ActivityStatField title={strings.LIVE_PLANTS} contents={(livePlants ?? 0).toString()} isEditing={isEditing} />
-      </Grid>
-      {!!plantDensity && (
+      {typeof livePlants === 'number' && (
+        <Grid item xs={12} sm={4}>
+          <ActivityStatField
+            title={strings.LIVE_PLANTS}
+            contents={(livePlants ?? 0).toString()}
+            isEditing={isEditing}
+          />
+        </Grid>
+      )}
+      {typeof plantDensity === 'number' && (
         <Grid item xs={12} sm={4}>
           <ActivityStatField title={strings.PLANT_DENSITY} contents={plantDensity.toString()} isEditing={isEditing} />
         </Grid>
       )}
-      {survivalRate !== undefined && (
+      {typeof survivalRate === 'number' && (
         <Grid item xs={12} sm={4}>
           <ActivityStatField title={strings.SURVIVAL_RATE} contents={`${survivalRate}%`} isEditing={isEditing} />
         </Grid>
