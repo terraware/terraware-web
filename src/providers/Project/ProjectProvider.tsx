@@ -4,9 +4,7 @@ import { useParams } from 'react-router';
 import { BusySpinner } from '@terraware/web-components';
 
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { selectProject } from 'src/redux/features/projects/projectsSelectors';
-import { requestProject } from 'src/redux/features/projects/projectsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetProjectQuery } from 'src/queries/generated/projects';
 
 import { ProjectContext, ProjectData } from './ProjectContext';
 
@@ -15,19 +13,19 @@ export type Props = {
 };
 
 const ProjectProvider = ({ children }: Props) => {
-  const dispatch = useAppDispatch();
   const pathParams = useParams<{ projectId: string }>();
   const pathProjectId = Number(pathParams.projectId);
   const { goToAcceleratorProjectList } = useNavigateTo();
 
   const projectId = !isNaN(pathProjectId) ? pathProjectId : -1;
-  const project = useAppSelector(selectProject(projectId));
+  const { data, refetch } = useGetProjectQuery(projectId, { skip: projectId === -1 });
+  const project = data?.project;
 
   const reload = useCallback(() => {
     if (projectId !== -1) {
-      void dispatch(requestProject(projectId));
+      void refetch();
     }
-  }, [dispatch, projectId]);
+  }, [projectId, refetch]);
 
   const projectData = useMemo<ProjectData>(
     () => ({
@@ -41,10 +39,8 @@ const ProjectProvider = ({ children }: Props) => {
   useEffect(() => {
     if (pathProjectId === -1) {
       goToAcceleratorProjectList();
-    } else if (!isNaN(pathProjectId)) {
-      reload();
     }
-  }, [dispatch, goToAcceleratorProjectList, pathProjectId, reload]);
+  }, [goToAcceleratorProjectList, pathProjectId]);
 
   if (projectData.projectId === -1) {
     return <BusySpinner withSkrim />;
