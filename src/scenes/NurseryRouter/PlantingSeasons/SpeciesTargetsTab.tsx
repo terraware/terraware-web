@@ -164,9 +164,11 @@ const SubstratumSection = ({
         <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxtSecondary}>
           {substratum.name}
         </Typography>
-        <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
-          {`${substratumTotal.toLocaleString()} ${strings.TARGET_PLANTS}`}
-        </Typography>
+        {substratumTotal > 0 && (
+          <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+            {`${substratumTotal.toLocaleString()} ${strings.TARGET_PLANTS}`}
+          </Typography>
+        )}
       </Box>
       {targets.length === 0 ? (
         <Box padding={theme.spacing(2)} textAlign='center'>
