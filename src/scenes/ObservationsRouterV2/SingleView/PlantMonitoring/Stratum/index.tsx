@@ -93,7 +93,7 @@ const StratumDetails = (): JSX.Element => {
     {
       label: strings.PLANT_DENSITY,
       tooltip: strings.PLANT_DENSITY_MISSING_TOOLTIP,
-      value: stratumResult?.plantingDensity,
+      value: stratumResult?.observedDensity,
     },
     {
       label: strings.SURVIVAL_RATE,

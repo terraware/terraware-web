@@ -125,7 +125,7 @@ const SiteDetails = (): JSX.Element => {
     { label: strings.LIVE_PLANTS, tooltip: strings.TOOLTIP_LIVE_PLANTS, value: livePlants },
     { label: strings.DEAD_PLANTS, tooltip: strings.PLOT_DEAD_PLANTS_TOOLTIP, value: deadPlants },
     { label: strings.SPECIES, tooltip: strings.PLOT_SPECIES_TOOLTIP, value: results?.totalSpecies },
-    { label: strings.PLANT_DENSITY, tooltip: strings.PLANT_DENSITY_MISSING_TOOLTIP, value: results?.plantingDensity },
+    { label: strings.PLANT_DENSITY, tooltip: strings.PLANT_DENSITY_MISSING_TOOLTIP, value: results?.observedDensity },
     {
       label: strings.SURVIVAL_RATE,
       tooltip: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,

@@ -800,6 +800,8 @@ export type ObservationStratumResultsPayload = {
   /** Estimated number of plants in stratum based on estimated planting density and stratum area. Only present if all the substrata in the stratum have been marked as having completed planting. */
   estimatedPlants?: number;
   name: string;
+  /** Planting density for the stratum based only on the plots observed in this observation, without carrying forward last-observed data for substrata that weren't observed. In contrast to plantingDensity, which uses each substratum's most recent observation. */
+  observedDensity?: number;
   /** Estimated planting density for the stratum based on the observed planting densities of monitoring plots. */
   plantingDensity?: number;
   plantingDensityStdDev?: number;
@@ -825,6 +827,8 @@ export type ObservationResultsPayload = {
   /** Percentage of plants of all species that were dead in this site's permanent monitoring plots. */
   isAdHoc: boolean;
   observationId: number;
+  /** Planting density for the site based only on the plots observed in this observation, without carrying forward last-observed data for substrata that weren't observed. In contrast to plantingDensity, which uses each substratum's most recent observation. */
+  observedDensity?: number;
   /** Estimated planting density for the site, based on the observed planting densities of monitoring plots. */
   plantingDensity?: number;
   plantingDensityStdDev?: number;

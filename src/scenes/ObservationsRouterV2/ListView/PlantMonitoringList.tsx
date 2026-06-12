@@ -264,7 +264,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           totalLive,
           totalPlants,
           totalSpecies,
-          plantingDensity: observationResult.plantingDensity,
+          plantingDensity: observationResult.observedDensity,
           survivalRate: observationResult.survivalRate,
           completedDate,
         };
