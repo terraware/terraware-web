@@ -70,9 +70,6 @@ export default function ProjectView(): JSX.Element {
     setRequestId(dispatched.requestId);
   }, [dispatch, projectId]);
 
-  const openEditModal = useCallback(() => setIsEditModalOpen(true), []);
-  const closeEditModal = useCallback(() => setIsEditModalOpen(false), []);
-
   const reloadProject = useCallback(() => {
     void dispatch(requestProject(projectId));
   }, [dispatch, projectId]);
@@ -96,14 +93,20 @@ export default function ProjectView(): JSX.Element {
     () =>
       isAdmin(selectedOrganization) && (
         <Grid item>
-          <Button label={strings.EDIT_PROJECT} icon='iconEdit' onClick={openEditModal} size='medium' id='editProject' />
+          <Button
+            label={strings.EDIT_PROJECT}
+            icon='iconEdit'
+            onClick={() => setIsEditModalOpen(true)}
+            size='medium'
+            id='editProject'
+          />
           <OptionsMenu
             onOptionItemClick={onOptionItemClick}
             optionItems={[{ label: strings.DELETE, value: 'delete', type: 'destructive' }]}
           />
         </Grid>
       ),
-    [openEditModal, onOptionItemClick, selectedOrganization, strings]
+    [onOptionItemClick, selectedOrganization, strings]
   );
 
   return (
@@ -111,7 +114,7 @@ export default function ProjectView(): JSX.Element {
       {isAdmin(selectedOrganization) && (
         <ProjectEditModal
           open={isEditModalOpen}
-          onClose={closeEditModal}
+          onClose={() => setIsEditModalOpen(false)}
           project={project}
           reload={reloadProject}
         />

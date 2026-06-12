@@ -7,7 +7,6 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
-import { requestProject } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
@@ -63,11 +62,10 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
     } else if (projectUpdateRequest.status === 'success' && project) {
       setRequestId('');
       snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
-      void dispatch(requestProject(project.id));
       reload();
       onClose();
     }
-  }, [projectUpdateRequest, snackbar, dispatch, project, reload, onClose]);
+  }, [projectUpdateRequest, snackbar, project, reload, onClose]);
 
   return (
     <DialogBox
