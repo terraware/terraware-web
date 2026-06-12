@@ -674,6 +674,7 @@ EMPTY_BATCH,Lote vacío,585f2912
 EMPTY_BATCHES_AFTER_WITHDRAW,"Uno o más lotes ahora están vacíos y no aparecerán en las tablas de lotes. Para ver los lotes vacíos, haga clic en el filtro de tabla y marque ""Mostrar lotes vacíos"".",7b7ab93c
 END,Fin,43bef655
 END_DATE,Fecha de finalización,bfc71620
+END_DATE_ERROR,La fecha de finalización debe ser posterior a la fecha de inicio,055a3a36
 END_DATE_REQUIRED,Fecha de finalización *,aaf37070
 END_DRYING_REMINDER,Recordatorio de final de secado,f62cf150
 END_DRYING_REMINDER_OFF,Recordatorio de final de secado desactivado,dae3f806
