@@ -42,3 +42,11 @@ src/strings/strings-*.js
 
 # test gaussian splat models
 public/assets/models/test
+
+# Share Claude Code skills and agents, but not local configuration
+.claude/*
+!.claude/skills
+!.claude/agents
+
+# Claude Superpowers Plugin
+docs/superpowers

@@ -50,7 +50,7 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'POST',
         body: {
           prefix: 'observationStratumResult',
-          fields: ['observation_id', 'observation_completedTime', 'plantDensity', 'plantDensityStdDev'],
+          fields: ['observation_id', 'observation_completedTime', 'plantDensity(raw)', 'plantDensityStdDev(raw)'],
           search: {
             operation: 'and',
             children: [
@@ -74,8 +74,8 @@ const injectedRtkApi = api.injectEndpoints({
         response.results.map((result) => ({
           observationId: Number(result.observation_id),
           completedTime: result.observation_completedTime,
-          plantDensity: Number(result.plantDensity),
-          plantDensityStdDev: Number(result.plantDensityStdDev),
+          plantDensity: Number(result['plantDensity(raw)']),
+          plantDensityStdDev: Number(result['plantDensityStdDev(raw)']),
         })),
       providesTags: [{ type: QueryTagTypes.Observation }],
     }),
@@ -86,7 +86,7 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'POST',
         body: {
           prefix: 'observationStratumResult',
-          fields: ['observation_id', 'observation_completedTime', 'survivalRate', 'survivalRateStdDev'],
+          fields: ['observation_id', 'observation_completedTime', 'survivalRate(raw)', 'survivalRateStdDev(raw)'],
           search: {
             operation: 'and',
             children: [
@@ -110,8 +110,8 @@ const injectedRtkApi = api.injectEndpoints({
         results.results.map((result) => ({
           observationId: Number(result.observation_id),
           completedTime: result.observation_completedTime,
-          survivalRate: Number(result.survivalRate),
-          survivalRateStdDev: Number(result.survivalRateStdDev),
+          survivalRate: Number(result['survivalRate(raw)']),
+          survivalRateStdDev: Number(result['survivalRateStdDev(raw)']),
         })),
       providesTags: [{ type: QueryTagTypes.Observation }],
     }),
@@ -142,8 +142,8 @@ export type StratumPayload = {
 type StratumPlantDensityTrendApiResult = {
   observation_id: string;
   observation_completedTime: string;
-  plantDensity: string;
-  plantDensityStdDev: string;
+  'plantDensity(raw)': string;
+  'plantDensityStdDev(raw)': string;
 };
 
 type GetStratumPlantDensityTrendApiResponse = {
@@ -160,8 +160,8 @@ export type StratumPlantDensity = {
 type StratumSurvivalRateTrendApiResult = {
   observation_id: string;
   observation_completedTime: string;
-  survivalRate: string;
-  survivalRateStdDev: string;
+  'survivalRate(raw)': string;
+  'survivalRateStdDev(raw)': string;
 };
 
 type GetStratumSurvivalRateTrendApiResponse = {
