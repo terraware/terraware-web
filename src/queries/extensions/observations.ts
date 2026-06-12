@@ -119,19 +119,35 @@ api.enhanceEndpoints({
       providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.ObservationMedia, id: payload.fileId }],
     },
     uploadOtherPlotMedia: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.Observation, id: payload.observationId },
+        { type: QueryTagTypes.Activities },
+        { type: QueryTagTypes.FunderActivities },
+      ],
     },
     uploadPlotPhoto: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.Observation, id: payload.observationId },
+        { type: QueryTagTypes.Activities },
+        { type: QueryTagTypes.FunderActivities },
+      ],
     },
     deletePlotPhoto: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.Observation, id: payload.observationId },
+        { type: QueryTagTypes.Activities },
+        { type: QueryTagTypes.FunderActivities },
+      ],
     },
     getPlotPhoto: {
       providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.ObservationMedia, id: payload.fileId }],
     },
     updatePlotPhoto: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.Observation, id: payload.observationId },
+        { type: QueryTagTypes.Activities },
+        { type: QueryTagTypes.FunderActivities },
+      ],
     },
     releaseMonitoringPlot: {
       invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
