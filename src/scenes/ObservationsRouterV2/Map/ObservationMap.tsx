@@ -761,8 +761,8 @@ const ObservationMap = ({
         return adHocPlot.photos.filter(hasGpsCoordinates).map((photo) => {
           return {
             id: `photos/${photo.fileId}`,
-            longitude: photo.gpsCoordinates?.coordinates[1],
-            latitude: photo.gpsCoordinates?.coordinates[0],
+            longitude: photo.gpsCoordinates?.coordinates[0],
+            latitude: photo.gpsCoordinates?.coordinates[1],
             onClick: selectPhoto(adHocPlot.monitoringPlotId, adHocResults.observationId, photo),
             selected:
               selectedPhotos.find(
@@ -787,8 +787,8 @@ const ObservationMap = ({
         plot.photos.filter(hasGpsCoordinates).map((photo) => {
           return {
             id: `photos/${photo.fileId}`,
-            longitude: photo.gpsCoordinates?.coordinates[1],
-            latitude: photo.gpsCoordinates?.coordinates[0],
+            longitude: photo.gpsCoordinates?.coordinates[0],
+            latitude: photo.gpsCoordinates?.coordinates[1],
             onClick: selectPhoto(plot.monitoringPlotId, selectedResults.observationId, photo),
             selected:
               selectedPhotos.find(
@@ -958,8 +958,8 @@ const ObservationMap = ({
               return filteredPlants.map(
                 (plant): MapMarker => ({
                   id: `plants/${plant.id}`,
-                  longitude: plant.gpsCoordinates.coordinates[1],
-                  latitude: plant.gpsCoordinates.coordinates[0],
+                  longitude: plant.gpsCoordinates.coordinates[0],
+                  latitude: plant.gpsCoordinates.coordinates[1],
                   onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
                   selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
                   properties: {

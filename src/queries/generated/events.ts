@@ -102,6 +102,26 @@ export type OrganizationSubjectPayload = {
 } & EventSubjectPayloadBase & {
     organizationId: number;
   };
+export type PlantingDateRequestSpeciesSubjectPayload = {
+  type: 'PlantingDateRequestSpecies';
+} & EventSubjectPayloadBase & {
+    plantingSeasonId: number;
+    plantingSiteId: number;
+    scheduledPlantingDateId: number;
+    scientificName?: string;
+    speciesId: number;
+    stratumName: string;
+    substratumHistoryId: number;
+    substratumId: number;
+    substratumName: string;
+  };
+export type PlantingDateRequestSubjectPayload = {
+  type: 'PlantingDateRequest';
+} & EventSubjectPayloadBase & {
+    plantingSeasonId: number;
+    plantingSiteId: number;
+    scheduledPlantingDateId: number;
+  };
 export type PlantingSeasonScheduledDateSpeciesSubjectPayload = {
   type: 'PlantingSeasonScheduledDateSpecies';
 } & EventSubjectPayloadBase & {
@@ -121,6 +141,18 @@ export type PlantingSeasonScheduledDateSubjectPayload = {
     plantingSeasonId: number;
     plantingSiteId: number;
     scheduledPlantingDateId: number;
+  };
+export type PlantingSeasonSpeciesTargetSubjectPayload = {
+  type: 'PlantingSeasonSpeciesTarget';
+} & EventSubjectPayloadBase & {
+    plantingSeasonId: number;
+    plantingSiteId: number;
+    scientificName?: string;
+    speciesId: number;
+    stratumName: string;
+    substratumHistoryId: number;
+    substratumId: number;
+    substratumName: string;
   };
 export type PlantingSeasonSubjectPayload = {
   type: 'PlantingSeason';
@@ -154,8 +186,11 @@ export type EventLogEntryPayload = {
     | ObservationPlotMediaSubjectPayload
     | ObservationPlotSubjectPayload
     | OrganizationSubjectPayload
+    | PlantingDateRequestSpeciesSubjectPayload
+    | PlantingDateRequestSubjectPayload
     | PlantingSeasonScheduledDateSpeciesSubjectPayload
     | PlantingSeasonScheduledDateSubjectPayload
+    | PlantingSeasonSpeciesTargetSubjectPayload
     | PlantingSeasonSubjectPayload
     | ProjectSubjectPayload
     | RecordedTreeSubjectPayload;
@@ -186,9 +221,12 @@ export type ListEventLogEntriesRequestPayload = {
     | 'ObservationPlot'
     | 'ObservationPlotMedia'
     | 'Organization'
+    | 'PlantingDateRequest'
+    | 'PlantingDateRequestSpecies'
     | 'PlantingSeason'
     | 'PlantingSeasonScheduledDate'
     | 'PlantingSeasonScheduledDateSpecies'
+    | 'PlantingSeasonSpeciesTarget'
     | 'Project'
     | 'RecordedTree'
   )[];

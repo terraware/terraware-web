@@ -55,8 +55,8 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
         ? getDateDisplayValue(results.completedTime, plantingSite?.timeZone ?? defaultTimezone)
         : undefined;
       const observationDate = getShortDate(completedDate ?? results.startDate, activeLocale);
-      const swCoordinatesLat = results.adHocPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
-      const swCoordinatesLong = results.adHocPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
+      const swCoordinatesLat = results.adHocPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
+      const swCoordinatesLong = results.adHocPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
       const hasLocation = swCoordinatesLat !== undefined && swCoordinatesLong !== undefined;
       return (
         <Box display='flex' alignItems={'end'}>
