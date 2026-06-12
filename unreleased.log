@@ -1,3 +1,6 @@
+fed552ad SW-8506: Observation activity name and data takes 6 seconds to load (much longer than the rest of the page) (#5819)
+f964f61f SW-8463: Needed to reload page to see caption updates (FOLLOW-UP) (#5818)
+b36dc3de SW-8428: Survival Rate Settings: Species lists not appearing in alphabetical order (#5814)
 b2ccd680 SW-8474 Used raw number in search plant density and survival rate (#5826)
 f8ed8c7f SW-8470 Add species dropdown not visible (#5824)
 9501cd37 SW-8475 Remove substratum total number if no substrata (#5823)
