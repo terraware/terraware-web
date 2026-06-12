@@ -71,6 +71,7 @@ export default function ProjectView(): JSX.Element {
   }, [dispatch, projectId]);
 
   const openEditModal = useCallback(() => setIsEditModalOpen(true), []);
+  const closeEditModal = useCallback(() => setIsEditModalOpen(false), []);
 
   const reloadProject = useCallback(() => {
     void dispatch(requestProject(projectId));
@@ -110,7 +111,7 @@ export default function ProjectView(): JSX.Element {
       {isAdmin(selectedOrganization) && (
         <ProjectEditModal
           open={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
+          onClose={closeEditModal}
           project={project}
           reload={reloadProject}
         />

@@ -58,8 +58,10 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
     }
 
     if (projectUpdateRequest.status === 'error') {
+      setRequestId('');
       snackbar.toastError();
     } else if (projectUpdateRequest.status === 'success' && project) {
+      setRequestId('');
       snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
       void dispatch(requestProject(project.id));
       reload();
