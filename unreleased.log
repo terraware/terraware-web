@@ -1,3 +1,4 @@
+b5fb91ae Ignore claude-related files (#5811)
 665f81e5 SW-8298 Fixed flipped coordinates for plants and photos (#5816)
 76f46c27 Set cookie consent time to prevent banner from popping up in e2e test (#5825)
 9a753ffc SW-8475 Empty state for Planting Season not to design spec (#5810)
