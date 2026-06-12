@@ -401,7 +401,7 @@ const PlantingDateForm = ({
             <Button label={strings.SAVE} onClick={() => void onSave()} priority='secondary' disabled={isSaving} />
           </span>
         </Tooltip>
-        <Tooltip title={strings.SAVE_AND_REQUEST_TOOLTIP}>
+        <Tooltip title={strings.SAVE_AND_REQUEST_TOOLTIP} slotProps={{ tooltip: { sx: { maxWidth: '262px' } } }}>
           <span>
             <Button
               label={strings.SAVE_AND_REQUEST}
