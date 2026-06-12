@@ -14,6 +14,18 @@ const injectedRtkApi = api.injectEndpoints({
     createPlantingSeason: build.mutation<CreatePlantingSeasonApiResponse, CreatePlantingSeasonApiArg>({
       query: (queryArg) => ({ url: `/api/v1/planting-seasons`, method: 'POST', body: queryArg }),
     }),
+    getPlantingSeasonNotifications: build.query<
+      GetPlantingSeasonNotificationsApiResponse,
+      GetPlantingSeasonNotificationsApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/planting-seasons/notifications`,
+        params: {
+          organizationId: queryArg.organizationId,
+          notificationCategory: queryArg.notificationCategory,
+        },
+      }),
+    }),
     deletePlantingSeason: build.mutation<DeletePlantingSeasonApiResponse, DeletePlantingSeasonApiArg>({
       query: (queryArg) => ({ url: `/api/v1/planting-seasons/${queryArg}`, method: 'DELETE' }),
     }),
@@ -110,6 +122,12 @@ export type ListPlantingSeasonsApiArg = {
 export type CreatePlantingSeasonApiResponse =
   /** status 200 The requested operation succeeded. */ CreatePlantingSeasonResponsePayload;
 export type CreatePlantingSeasonApiArg = CreatePlantingSeasonRequestPayload;
+export type GetPlantingSeasonNotificationsApiResponse =
+  /** status 200 The requested operation succeeded. */ GetPlantingSeasonNotificationsResponsePayload;
+export type GetPlantingSeasonNotificationsApiArg = {
+  organizationId: number;
+  notificationCategory: 'InventoryPlanning' | 'PlantingSeasonPlanning';
+};
 export type DeletePlantingSeasonApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
 export type DeletePlantingSeasonApiArg = number;
@@ -205,6 +223,27 @@ export type CreatePlantingSeasonRequestPayload = {
   plantingSiteId: number;
   startDate: string;
 };
+export type PlantingSeasonNotificationPayload = {
+  speciesScientificNames?: string[];
+  type:
+    | 'PlantingSeasonClosed'
+    | 'PlantingSeasonPastEndDate'
+    | 'SpeciesTargetsAdded'
+    | 'SpeciesTargetsUpdated'
+    | 'AllocationQuantitiesUpdated'
+    | 'SeasonWithdrawalRecorded';
+};
+export type PlantingSeasonNotificationGroupPayload = {
+  lastEventLogId: number;
+  notifications: PlantingSeasonNotificationPayload[];
+  plantingSeasonId: number;
+  plantingSeasonName: string;
+  plantingSiteName: string;
+};
+export type GetPlantingSeasonNotificationsResponsePayload = {
+  notifications: PlantingSeasonNotificationGroupPayload[];
+  status: SuccessOrError;
+};
 export type SimpleSuccessResponsePayload = {
   status: SuccessOrError;
 };
@@ -228,7 +267,8 @@ export type UpsertPlantingSeasonAllocatedSpeciesRequestPayload = {
   quantity: number;
   speciesId: number;
 };
-export type ScheduledPlantingDateSpeciesPayload = {
+export type ScheduledPlantingDateSpeciesResponsePayload = {
+  allocatedQuantity: number;
   quantity: number;
   speciesId: number;
   substratumId: number;
@@ -236,11 +276,16 @@ export type ScheduledPlantingDateSpeciesPayload = {
 export type ScheduledDatePayload = {
   date: string;
   scheduledPlantingDateId: number;
-  species: ScheduledPlantingDateSpeciesPayload[];
+  species: ScheduledPlantingDateSpeciesResponsePayload[];
 };
 export type ListScheduledDatesResponsePayload = {
   scheduledDates: ScheduledDatePayload[];
   status: SuccessOrError;
+};
+export type ScheduledPlantingDateSpeciesPayload = {
+  quantity: number;
+  speciesId: number;
+  substratumId: number;
 };
 export type ScheduledPlantingDateRequestPayload = {
   createNurseryRequest?: boolean;
@@ -265,6 +310,8 @@ export const {
   useListPlantingSeasonsQuery,
   useLazyListPlantingSeasonsQuery,
   useCreatePlantingSeasonMutation,
+  useGetPlantingSeasonNotificationsQuery,
+  useLazyGetPlantingSeasonNotificationsQuery,
   useDeletePlantingSeasonMutation,
   useGetPlantingSeasonQuery,
   useLazyGetPlantingSeasonQuery,

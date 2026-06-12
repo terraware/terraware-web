@@ -27,8 +27,8 @@ const PlantingSeasonBox = ({
   season,
   plantingSiteName,
   strata,
-  withdrawnForPlanting = 0,
-  leftToPlant = 0,
+  withdrawnForPlanting,
+  leftToPlant,
 }: PlantingSeasonBoxProps): JSX.Element => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
@@ -52,10 +52,10 @@ const PlantingSeasonBox = ({
 
   const numberColumn = (label: string, value: number | undefined) => (
     <Box textAlign='right' minWidth='120px'>
-      <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+      <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrTxt}>
         {label}
       </Typography>
-      <Typography fontSize='24px' fontWeight={600}>
+      <Typography fontSize='24px' fontWeight={600} color={theme.palette.TwClrTxt}>
         {value === undefined ? '-' : value.toLocaleString(activeLocale || undefined)}
       </Typography>
     </Box>
