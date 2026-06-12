@@ -106,9 +106,11 @@ const StratumSection = ({
         <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxtSecondary}>
           {stratum.name}
         </Typography>
-        <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
-          {`${stratumTotal.toLocaleString()} ${strings.TARGET_PLANTS}`}
-        </Typography>
+        {(stratumTotal || 0) > 0 && (
+          <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+            {`${stratumTotal.toLocaleString()} ${strings.TARGET_PLANTS}`}
+          </Typography>
+        )}
       </Box>
       {stratum.substrata.map((substratum) => (
         <SubstratumSection
