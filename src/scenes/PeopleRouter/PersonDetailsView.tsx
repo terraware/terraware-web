@@ -75,53 +75,53 @@ export default function PersonDetailsView(): JSX.Element {
         }}
       >
         {isAdmin(selectedOrganization) && (
-        <PersonModal
-          open={editPersonModalOpened}
-          onClose={() => setEditPersonModalOpened(false)}
-          person={person}
-          reload={() => void populatePersonData()}
-        />
-      )}
-      <Grid container padding={theme.spacing(0, 0, 2, 0)}>
-        <Grid item xs={12}>
-          <BackToLink
-            id='back'
-            to={APP_PATHS.PEOPLE}
-            name={strings.PEOPLE}
-            style={{ marginBottom: theme.spacing(3) }}
+          <PersonModal
+            open={editPersonModalOpened}
+            onClose={() => setEditPersonModalOpened(false)}
+            person={person}
+            reload={() => void populatePersonData()}
           />
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          padding={theme.spacing(0, 3)}
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-          }}
-        >
-          <Grid item xs={9}>
-            <Typography
-              fontSize='24px'
-              fontWeight={600}
-              margin={0}
-              sx={{
-                wordBreak: 'break-all',
-              }}
-            >
-              {person?.email}
-            </Typography>
+        )}
+        <Grid container padding={theme.spacing(0, 0, 2, 0)}>
+          <Grid item xs={12}>
+            <BackToLink
+              id='back'
+              to={APP_PATHS.PEOPLE}
+              name={strings.PEOPLE}
+              style={{ marginBottom: theme.spacing(3) }}
+            />
           </Grid>
-          <Grid item xs={3}>
-            {isAdmin(selectedOrganization) &&
-              (isMobile ? (
-                <Button
-                  icon='iconEdit'
-                  priority='primary'
-                  size='medium'
-                  onClick={() => setEditPersonModalOpened(true)}
+          <Grid
+            item
+            xs={12}
+            padding={theme.spacing(0, 3)}
+            sx={{
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Grid item xs={9}>
+              <Typography
+                fontSize='24px'
+                fontWeight={600}
+                margin={0}
+                sx={{
+                  wordBreak: 'break-all',
+                }}
+              >
+                {person?.email}
+              </Typography>
+            </Grid>
+            <Grid item xs={3}>
+              {isAdmin(selectedOrganization) &&
+                (isMobile ? (
+                  <Button
+                    icon='iconEdit'
+                    priority='primary'
+                    size='medium'
+                    onClick={() => setEditPersonModalOpened(true)}
                     style={{ float: 'right' }}
                   />
                 ) : (
