@@ -1,3 +1,4 @@
+861dea60 SW-8479 Fix tooltip width (#5821)
 aaa546ac SW-8484 Change end date error message (#5820)
 b5fb91ae Ignore claude-related files (#5811)
 665f81e5 SW-8298 Fixed flipped coordinates for plants and photos (#5816)
