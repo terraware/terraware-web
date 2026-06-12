@@ -1,4 +1,4 @@
-import React, { type JSX, useMemo, useState } from 'react';
+import React, { type JSX, useMemo, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem } from '@terraware/web-components';
@@ -387,6 +387,7 @@ const AddSpeciesRow = ({
 }: AddSpeciesRowProps): JSX.Element => {
   const theme = useTheme();
   const snackbar = useSnackbar();
+  const rowRef = useRef<HTMLDivElement>(null);
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | undefined>();
   const [quantity, setQuantity] = useState<string>('0');
   const [upsertSpeciesTarget, { isLoading }] = useUpsertSpeciesTargetMutation();
@@ -423,8 +424,21 @@ const AddSpeciesRow = ({
     }
   };
 
+  const scrollRowIntoView = () => {
+    rowRef.current?.scrollIntoView({ block: 'center' });
+  };
+
   return (
-    <Box display='flex' alignItems='flex-end' gap={theme.spacing(2)} flexWrap='wrap'>
+    <Box
+      ref={rowRef}
+      display='flex'
+      alignItems='flex-end'
+      gap={theme.spacing(2)}
+      flexWrap='wrap'
+      onFocusCapture={scrollRowIntoView}
+      onMouseDownCapture={scrollRowIntoView}
+      onTouchStartCapture={scrollRowIntoView}
+    >
       <Box flex={1} minWidth='200px'>
         <Dropdown
           id={`add-species-${substratumId}`}
