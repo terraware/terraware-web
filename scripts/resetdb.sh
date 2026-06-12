@@ -65,6 +65,10 @@ WHERE prefix ~ '^\d{2}-';
 UPDATE accelerator.project_modules
 SET end_date = CURRENT_DATE + 1
 WHERE module_id = 1000;
+
+UPDATE users
+SET cookies_consented = true,
+    cookies_consented_time = DATE_TRUNC('year', CURRENT_DATE) + TIME '20:12:54.827407+00';
 "
 docker compose exec postgres psql -d terraware -U postgres -c "$UPDATE_STRING"
 
