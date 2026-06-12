@@ -74,8 +74,8 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, observationId) => [
         { type: QueryTagTypes.Observation, id: observationId },
         { type: QueryTagTypes.Observation, id: 'LIST' },
-        { type: QueryTagTypes.Activities, id: 'LIST' },
-        { type: QueryTagTypes.FunderActivities, id: 'LIST' },
+        { type: QueryTagTypes.Activities },
+        { type: QueryTagTypes.FunderActivities },
       ],
     },
     mergeOtherSpecies: {
@@ -94,22 +94,22 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.Observation, id: payload.observationId },
         { type: QueryTagTypes.Observation, id: 'LIST' },
-        { type: QueryTagTypes.Activities, id: 'LIST' },
-        { type: QueryTagTypes.FunderActivities, id: 'LIST' },
+        { type: QueryTagTypes.Activities },
+        { type: QueryTagTypes.FunderActivities },
       ],
     },
     completePlotObservation: {
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.Observation, id: payload.observationId },
-        { type: QueryTagTypes.Activities, id: 'LIST' },
-        { type: QueryTagTypes.FunderActivities, id: 'LIST' },
+        { type: QueryTagTypes.Activities },
+        { type: QueryTagTypes.FunderActivities },
       ],
     },
     updatePlotObservation: {
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.Observation, id: payload.observationId },
-        { type: QueryTagTypes.Activities, id: 'LIST' },
-        { type: QueryTagTypes.FunderActivities, id: 'LIST' },
+        { type: QueryTagTypes.Activities },
+        { type: QueryTagTypes.FunderActivities },
       ],
     },
     claimMonitoringPlot: {
