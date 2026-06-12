@@ -14,10 +14,9 @@ import {
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers/hooks';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
@@ -46,7 +45,7 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
-  const projects = useAppSelector(selectProjects);
+  const { availableProjects: projects } = useProjects();
 
   const uniqueProjectNames = useMemo(
     () =>

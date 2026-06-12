@@ -5,6 +5,8 @@ import { Grid } from '@mui/material';
 import DialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import { baseApi } from 'src/queries/baseApi';
+import { QueryTagTypes } from 'src/queries/tags';
 import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -62,10 +64,11 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
     } else if (projectUpdateRequest.status === 'success' && project) {
       setRequestId('');
       snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
+      void dispatch(baseApi.util.invalidateTags([{ type: QueryTagTypes.Projects, id: 'LIST' }]));
       reload();
       onClose();
     }
-  }, [projectUpdateRequest, snackbar, project, reload, onClose]);
+  }, [dispatch, projectUpdateRequest, snackbar, project, reload, onClose]);
 
   return (
     <DialogBox

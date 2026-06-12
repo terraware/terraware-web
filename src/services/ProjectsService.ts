@@ -1,5 +1,5 @@
 import { components, paths } from 'src/api/types/generated-schema';
-import HttpService, { Response, Response2 } from 'src/services/HttpService';
+import HttpService, { Response2 } from 'src/services/HttpService';
 import SearchService from 'src/services/SearchService';
 import { CreateProjectRequest, Project, UpdateProjectRequest } from 'src/types/Project';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
@@ -13,9 +13,6 @@ const PROJECTS_ENDPOINT = '/api/v1/projects';
 const PROJECT_ENDPOINT = '/api/v1/projects/{id}';
 const PROJECT_ASSIGN_ENDPOINT = '/api/v1/projects/{id}/assign';
 
-type ListProjectsResponsePayload =
-  paths[typeof PROJECTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
 type CreateProjectResponsePayload =
   paths[typeof PROJECTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 type GetProjectResponsePayload = paths[typeof PROJECT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -27,35 +24,7 @@ export type DeleteProjectResponsePayload =
 export type AssignProjectRequestPayload = components['schemas']['AssignProjectRequestPayload'];
 export type AssignProjectResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
 
-/**
- * exported type
- */
-export type ProjectsData = {
-  projects?: Project[];
-};
-
 const httpProjects = HttpService.root(PROJECTS_ENDPOINT);
-
-/**
- * List all projects
- */
-const listProjects = async (organizationId?: number, locale?: string | null): Promise<ProjectsData & Response> => {
-  const params: { organizationId?: string } = {};
-  if (typeof organizationId === 'number') {
-    params.organizationId = organizationId.toString();
-  }
-
-  const response: ProjectsData & Response = await httpProjects.get<ListProjectsResponsePayload, ProjectsData>(
-    {
-      params,
-    },
-    (data) => ({
-      projects: data?.projects.sort((a, b) => a.name.localeCompare(b.name, locale || undefined)),
-    })
-  );
-
-  return response;
-};
 
 /**
  * Search projects
@@ -155,7 +124,6 @@ const deleteProject = (projectId: number) =>
  * Exported functions
  */
 const ProjectsService = {
-  listProjects,
   searchProjects,
   createProject,
   assignProjectToEntities,

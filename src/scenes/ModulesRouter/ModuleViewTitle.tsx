@@ -2,8 +2,7 @@ import React from 'react';
 
 import { Box, Typography } from '@mui/material';
 
-import { selectProject } from 'src/redux/features/projects/projectsSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { useProjects } from 'src/hooks/useProjects';
 import { ProjectModule } from 'src/types/Module';
 import { getDateRangeString } from 'src/utils/dateFormatter';
 
@@ -13,7 +12,7 @@ type ModulePageTitleProps = {
 };
 
 const ModuleViewTitle = ({ module, projectId }: ModulePageTitleProps) => {
-  const project = useAppSelector(selectProject(projectId));
+  const { selectedProject: project } = useProjects({ projectId });
 
   return (
     <Box alignItems='center' display='flex' flexDirection='row' flexWrap='wrap' marginTop='16px' width='100%'>

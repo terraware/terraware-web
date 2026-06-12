@@ -6,9 +6,8 @@ import { Icon } from '@terraware/web-components';
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
 import Link from 'src/components/common/Link';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { useProjects } from 'src/hooks/useProjects';
 import { useOrganization } from 'src/providers';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { useAppSelector } from 'src/redux/store';
 import { AssignProjectRequestPayload } from 'src/services/ProjectsService';
 import strings from 'src/strings';
 import { isMember } from 'src/utils/organization';
@@ -30,7 +29,7 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
   const userCanEdit = isMember(selectedOrganization);
   const theme = useTheme();
 
-  const projects = useAppSelector(selectProjects);
+  const { availableProjects: projects } = useProjects();
   const entityProject = projects?.find((project) => project.id === entity?.projectId);
 
   const [isProjectAssignModalOpen, setIsProjectAssignModalOpen] = useState<boolean>(false);

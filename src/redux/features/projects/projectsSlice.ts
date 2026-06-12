@@ -22,11 +22,6 @@ export const projectsSlice = createSlice({
   name: 'projectsSlice',
   initialState,
   reducers: {
-    setProjectsAction: (state, action: PayloadAction<Data>) => {
-      const data: Data = action.payload;
-      state.error = data.error;
-      state.projects = data.projects;
-    },
     setProjectAction: (state, action: PayloadAction<Data>) => {
       const data: Data = action.payload;
       const payloadProjects = data.projects || [];
@@ -42,7 +37,7 @@ export const projectsSlice = createSlice({
   },
 });
 
-export const { setProjectsAction, setProjectAction } = projectsSlice.actions;
+export const { setProjectAction } = projectsSlice.actions;
 
 type ProjectsResponsesUnion = UpdateProjectResponsePayload;
 type ProjectsRequestsState = Record<string, StatusT<ProjectsResponsesUnion>>;

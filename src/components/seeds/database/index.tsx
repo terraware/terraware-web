@@ -12,13 +12,11 @@ import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import { useLazyGetAccessionsListUploadTemplateQuery } from 'src/queries/generated/accessionsV2';
 import { useLazyGetPendingAccessionsQuery, useLazySearchAccessionsQuery } from 'src/queries/search/accessions';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { SearchResponseElementWithId } from 'src/types/Search';
@@ -84,19 +82,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const { goToNewAccession } = useNavigateTo();
-  const dispatch = useAppDispatch();
-  const projects = useAppSelector(selectProjects);
+  const { availableProjects: projects } = useProjects();
   const contentRef = useRef(null);
 
   const [selectedFacility, setSelectedFacility] = useState<Facility | undefined>();
   const [selectSeedBankForImportModalOpen, setSelectSeedBankForImportModalOpen] = useState(false);
   const [openImportModal, setOpenImportModal] = useState(false);
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
-    }
-  }, [activeLocale, dispatch, selectedOrganization]);
 
   const [fetchAccessions, searchAccessionsResult] = useLazySearchAccessionsQuery();
   useEffect(() => {

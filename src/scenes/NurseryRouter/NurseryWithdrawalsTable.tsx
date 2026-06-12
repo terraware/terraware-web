@@ -17,6 +17,7 @@ import {
 
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
+import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -28,8 +29,6 @@ import {
   useLazySearchNurseryWithdrawalsFilterOptionsQuery,
   useLazySearchNurseryWithdrawalsQuery,
 } from 'src/queries/search/nurseries';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { useAppSelector } from 'src/redux/store';
 import UndoWithdrawalModal from 'src/scenes/NurseryRouter/UndoWithdrawalModal';
 import WithdrawalHistoryMenu from 'src/scenes/NurseryRouter/WithdrawalHistoryMenu';
 import { exportNurseryWithdrawalResults } from 'src/scenes/NurseryRouter/exportNurseryData';
@@ -90,7 +89,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const location = useStateLocation();
   const query = useQuery();
 
-  const projects = useAppSelector(selectProjects);
+  const { availableProjects: projects } = useProjects();
 
   const [undoModalRow, setUndoModalRow] = useState<SearchNurseryWithdrawalPayload>();
   const [searchFilterOptions, searchFilterOptionsResponse] = useLazySearchNurseryWithdrawalsFilterOptionsQuery();

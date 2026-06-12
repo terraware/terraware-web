@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { PillListItem, Textfield } from '@terraware/web-components';
@@ -8,10 +8,7 @@ import ProjectEntityFilter, {
   EntitySpecificFilterConfig,
 } from 'src/components/ProjectNewView/flow/ProjectEntityFilter';
 import { ProjectEntityFilters } from 'src/components/ProjectNewView/flow/useProjectEntitySelection';
-import { useLocalization, useOrganization } from 'src/providers';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useProjects } from 'src/hooks/useProjects';
 import strings from 'src/strings';
 
 interface ProjectEntitySearchProps {
@@ -27,12 +24,9 @@ export type PillListItemWithEmptyValue = PillListItem<string> & { emptyValue: un
 export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JSX.Element | null {
   const { searchValue, onSearch, entitySpecificFilterConfigs, filters, setFilters } = props;
 
-  const dispatch = useAppDispatch();
   const theme = useTheme();
-  const { selectedOrganization } = useOrganization();
-  const { activeLocale } = useLocalization();
 
-  const projects = useAppSelector(selectProjects);
+  const { availableProjects: projects } = useProjects();
 
   const projectEntityFilterConfig: EntitySpecificFilterConfig | undefined = useMemo(
     () =>
@@ -85,12 +79,6 @@ export default function ProjectEntitySearch(props: ProjectEntitySearchProps): JS
     },
     [filterPillData, setFilters]
   );
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
-    }
-  }, [activeLocale, dispatch, selectedOrganization]);
 
   return (
     <Grid container>

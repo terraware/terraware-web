@@ -1,13 +1,11 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox } from '@terraware/web-components';
 
+import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { ReportsSettings } from 'src/services/ReportSettingsService';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
@@ -28,18 +26,11 @@ interface ReportsSettingsCheckboxConfig {
 }
 
 const ReportSettingsEditFormFields = ({ isEditing, onChange, reportsSettings }: ReportSettingsEditFormFieldsProps) => {
-  const dispatch = useAppDispatch();
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const { selectedOrganization } = useOrganization();
 
-  const projects = useAppSelector(selectProjects);
-
-  useEffect(() => {
-    if (!projects && selectedOrganization) {
-      void dispatch(requestProjects(selectedOrganization.id));
-    }
-  }, [dispatch, projects, selectedOrganization]);
+  const { availableProjects: projects } = useProjects();
 
   const renderCheckbox = useCallback(
     ({ label, key, value, index }: ReportsSettingsCheckboxConfig) => {
