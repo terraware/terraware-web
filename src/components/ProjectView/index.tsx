@@ -110,10 +110,7 @@ export default function ProjectView(): JSX.Element {
   );
 
   return (
-    <Box
-      component='main'
-      sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', paddingRight: theme.spacing(4) }}
-    >
+    <Box component='main' sx={{ display: 'flex', flexDirection: 'column', paddingRight: theme.spacing(4) }}>
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
         <Grid container padding={theme.spacing(0, 0, 2, 0)}>
           <Grid item xs={12}>
