@@ -64,8 +64,7 @@ export default function OrganizationsDropdown(): JSX.Element {
         anchor={<p style={{ fontSize: '16px' }}>{selectedOrganization?.name}</p>}
         menuSections={[
           organizations
-            ?.slice()
-            .sort((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+            ?.toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
             .map((organization) => ({ label: organization.name, value: organization.id.toString() })) || [],
           [{ label: strings.CREATE_NEW_ORGANIZATION, value: '0' }],
         ]}
