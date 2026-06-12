@@ -1,4 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation } from 'react-router';
 
 import { Box, Grid, useTheme } from '@mui/material';
 
@@ -26,6 +27,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import CannotRemovePeopleDialog from './CannotRemovePeopleModal';
+import PersonModal from './PersonModal';
 import RemovePeopleDialog from './RemovePeopleModal';
 import TableCellRenderer from './TableCellRenderer';
 
@@ -36,6 +38,8 @@ export default function PeopleListView(): JSX.Element {
   const theme = useTheme();
   const { user } = useUser();
   const navigate = useSyncNavigate();
+  const location = useLocation();
+  const [addPersonModalOpened, setAddPersonModalOpened] = useState(false);
   const [selectedPeopleRows, setSelectedPeopleRows] = useState<OrganizationUser[]>([]);
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const [removePeopleModalOpened, setRemovePeopleModalOpened] = useState(false);
@@ -236,12 +240,15 @@ export default function PeopleListView(): JSX.Element {
 
   const isClickable = useCallback(() => false, []);
 
-  const goToNewPerson = () => {
-    const newPersonLocation = {
-      pathname: APP_PATHS.PEOPLE_NEW,
-    };
-    navigate(newPersonLocation);
+  const openAddPersonModal = () => {
+    setAddPersonModalOpened(true);
   };
+
+  useEffect(() => {
+    if ((location.state as { openAddPerson?: boolean } | null)?.openAddPerson) {
+      setAddPersonModalOpened(true);
+    }
+  }, [location.state]);
 
   const openDeleteOrgModal = () => {
     setDeleteOrgModalOpened(true);
@@ -412,6 +419,13 @@ export default function PeopleListView(): JSX.Element {
           />
         </>
       )}
+      {isAdmin(selectedOrganization) && (
+        <PersonModal
+          open={addPersonModalOpened}
+          onClose={() => setAddPersonModalOpened(false)}
+          reload={() => void refreshSearch()}
+        />
+      )}
       <PageSnackbar />
       <Card flushMobile radius={theme.spacing(1)} style={{ padding: theme.spacing(3, 4) }}>
         <Grid container ref={contentRef}>
@@ -442,9 +456,15 @@ export default function PeopleListView(): JSX.Element {
             </Box>
             {isAdmin(selectedOrganization) &&
               (isMobile ? (
-                <Button id='new-person' icon='plus' onClick={goToNewPerson} size='medium' />
+                <Button id='new-person' icon='plus' onClick={openAddPersonModal} size='medium' />
               ) : (
-                <Button id='new-person' label={strings.ADD_PERSON} icon='plus' onClick={goToNewPerson} size='medium' />
+                <Button
+                  id='new-person'
+                  label={strings.ADD_PERSON}
+                  icon='plus'
+                  onClick={openAddPersonModal}
+                  size='medium'
+                />
               ))}
           </Grid>
 

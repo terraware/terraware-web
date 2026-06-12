@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -18,43 +18,38 @@ import { OrganizationUser } from 'src/types/User';
 import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import PersonModal from './PersonModal';
+
 export default function PersonDetailsView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const { personId } = useParams<{ personId: string }>();
   const [person, setPerson] = useState<OrganizationUser>();
+  const [editPersonModalOpened, setEditPersonModalOpened] = useState(false);
   const { isMobile } = useDeviceInfo();
 
-  useEffect(() => {
+  const populatePersonData = useCallback(async () => {
     if (selectedOrganization) {
-      const populatePersonData = async () => {
-        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-        if (response.requestSucceeded) {
-          const selectedUser = response.users.find((user) => user.id.toString() === personId);
-          if (selectedUser) {
-            setPerson(selectedUser);
-          } else {
-            navigate(APP_PATHS.PEOPLE);
-          }
+      const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+      if (response.requestSucceeded) {
+        const selectedUser = response.users.find((user) => user.id.toString() === personId);
+        if (selectedUser) {
+          setPerson(selectedUser);
+        } else {
+          navigate(APP_PATHS.PEOPLE);
         }
-      };
-      void populatePersonData();
+      }
     }
   }, [personId, selectedOrganization, navigate]);
+
+  useEffect(() => {
+    void populatePersonData();
+  }, [populatePersonData]);
 
   const getDateAdded = () => {
     if (person?.addedTime) {
       return getDateDisplayValue(person.addedTime);
-    }
-  };
-
-  const goToEditPerson = () => {
-    if (personId) {
-      const newLocation = {
-        pathname: APP_PATHS.PEOPLE_EDIT.replace(':personId', personId),
-      };
-      navigate(newLocation);
     }
   };
 
@@ -79,46 +74,54 @@ export default function PersonDetailsView(): JSX.Element {
           margin: 0,
         }}
       >
-        <Grid container padding={theme.spacing(0, 0, 2, 0)}>
-          <Grid item xs={12}>
-            <BackToLink
-              id='back'
-              to={APP_PATHS.PEOPLE}
-              name={strings.PEOPLE}
-              style={{ marginBottom: theme.spacing(3) }}
-            />
+        {isAdmin(selectedOrganization) && (
+        <PersonModal
+          open={editPersonModalOpened}
+          onClose={() => setEditPersonModalOpened(false)}
+          person={person}
+          reload={() => void populatePersonData()}
+        />
+      )}
+      <Grid container padding={theme.spacing(0, 0, 2, 0)}>
+        <Grid item xs={12}>
+          <BackToLink
+            id='back'
+            to={APP_PATHS.PEOPLE}
+            name={strings.PEOPLE}
+            style={{ marginBottom: theme.spacing(3) }}
+          />
+        </Grid>
+        <Grid
+          item
+          xs={12}
+          padding={theme.spacing(0, 3)}
+          sx={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Grid item xs={9}>
+            <Typography
+              fontSize='24px'
+              fontWeight={600}
+              margin={0}
+              sx={{
+                wordBreak: 'break-all',
+              }}
+            >
+              {person?.email}
+            </Typography>
           </Grid>
-          <Grid
-            item
-            xs={12}
-            padding={theme.spacing(0, 3)}
-            sx={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-            }}
-          >
-            <Grid item xs={9}>
-              <Typography
-                fontSize='24px'
-                fontWeight={600}
-                margin={0}
-                sx={{
-                  wordBreak: 'break-all',
-                }}
-              >
-                {person?.email}
-              </Typography>
-            </Grid>
-            <Grid item xs={3}>
-              {isAdmin(selectedOrganization) &&
-                (isMobile ? (
-                  <Button
-                    icon='iconEdit'
-                    priority='primary'
-                    size='medium'
-                    onClick={goToEditPerson}
+          <Grid item xs={3}>
+            {isAdmin(selectedOrganization) &&
+              (isMobile ? (
+                <Button
+                  icon='iconEdit'
+                  priority='primary'
+                  size='medium'
+                  onClick={() => setEditPersonModalOpened(true)}
                     style={{ float: 'right' }}
                   />
                 ) : (
@@ -127,7 +130,7 @@ export default function PersonDetailsView(): JSX.Element {
                     icon='iconEdit'
                     priority='primary'
                     size='medium'
-                    onClick={goToEditPerson}
+                    onClick={() => setEditPersonModalOpened(true)}
                     style={{ float: 'right' }}
                   />
                 ))}

@@ -89,7 +89,7 @@ const OnboardingHomeView = () => {
             buttonProps: {
               label: strings.ADD_PEOPLE,
               onClick: () => {
-                navigate(APP_PATHS.PEOPLE_NEW);
+                navigate(APP_PATHS.PEOPLE, { state: { openAddPerson: true } });
               },
             },
             secondaryButtonProps: {
