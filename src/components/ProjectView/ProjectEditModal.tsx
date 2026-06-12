@@ -5,11 +5,7 @@ import { Grid } from '@mui/material';
 import DialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import { baseApi } from 'src/queries/baseApi';
-import { QueryTagTypes } from 'src/queries/tags';
-import { requestProjectUpdate } from 'src/redux/features/projects/projectsAsyncThunks';
-import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useUpdateProjectMutation } from 'src/queries/generated/projects';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -22,14 +18,12 @@ export type ProjectEditModalProps = {
 };
 
 export default function ProjectEditModal({ open, onClose, project, reload }: ProjectEditModalProps): JSX.Element {
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [validateFields, setValidateFields] = useState(false);
-  const [requestId, setRequestId] = useState('');
-  const projectUpdateRequest = useAppSelector((state) => selectProjectRequest(state, requestId));
+  const [updateProject, { isError, isSuccess, reset }] = useUpdateProjectMutation();
 
   useEffect(() => {
     if (open) {
@@ -49,26 +43,20 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
       return;
     }
 
-    const dispatched = dispatch(requestProjectUpdate({ projectId: project.id, project: { name, description } }));
-    setRequestId(dispatched.requestId);
+    void updateProject({ id: project.id, updateProjectRequestPayload: { name, description } });
   };
 
   useEffect(() => {
-    if (!projectUpdateRequest) {
-      return;
-    }
-
-    if (projectUpdateRequest.status === 'error') {
-      setRequestId('');
+    if (isError) {
+      reset();
       snackbar.toastError();
-    } else if (projectUpdateRequest.status === 'success' && project) {
-      setRequestId('');
+    } else if (isSuccess && project) {
+      reset();
       snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
-      void dispatch(baseApi.util.invalidateTags([{ type: QueryTagTypes.Projects, id: 'LIST' }]));
       reload();
       onClose();
     }
-  }, [dispatch, projectUpdateRequest, snackbar, project, reload, onClose]);
+  }, [isError, isSuccess, reset, snackbar, project, reload, onClose]);
 
   return (
     <DialogBox

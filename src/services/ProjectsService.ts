@@ -1,7 +1,7 @@
 import { components, paths } from 'src/api/types/generated-schema';
 import HttpService, { Response2 } from 'src/services/HttpService';
 import SearchService from 'src/services/SearchService';
-import { CreateProjectRequest, Project, UpdateProjectRequest } from 'src/types/Project';
+import { CreateProjectRequest, Project } from 'src/types/Project';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { parseSearchTerm } from 'src/utils/search';
 
@@ -15,8 +15,6 @@ const PROJECT_ASSIGN_ENDPOINT = '/api/v1/projects/{id}/assign';
 
 type CreateProjectResponsePayload =
   paths[typeof PROJECTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-export type UpdateProjectResponsePayload =
-  paths[typeof PROJECT_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 export type DeleteProjectResponsePayload =
   paths[typeof PROJECT_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 
@@ -97,13 +95,6 @@ const assignProjectToEntities = (projectId: number, entities: AssignProjectReque
     entity: entities,
   });
 
-const updateProject = (projectId: number, payload: UpdateProjectRequest) =>
-  httpProjects.put2<UpdateProjectResponsePayload>({
-    url: PROJECT_ENDPOINT,
-    urlReplacements: { '{id}': `${projectId}` },
-    entity: payload,
-  });
-
 const deleteProject = (projectId: number) =>
   httpProjects.delete2<DeleteProjectResponsePayload>({
     url: PROJECT_ENDPOINT,
@@ -117,7 +108,6 @@ const ProjectsService = {
   searchProjects,
   createProject,
   assignProjectToEntities,
-  updateProject,
   deleteProject,
 };
 
