@@ -1,7 +1,6 @@
 import React, { type JSX } from 'react';
 import { Route, Routes } from 'react-router';
 
-import ProjectEditView from 'src/components/ProjectEditView';
 import ProjectNewView from 'src/components/ProjectNewView';
 import ProjectView from 'src/components/ProjectView';
 import Projects from 'src/components/Projects';
@@ -30,7 +29,6 @@ export default function ProjectsRouter({
       <Route path={'/*'} element={getProjectsView()} />
       <Route path={'/new'} element={<ProjectNewView reloadData={reloadProjects} />} />
       <Route path={'/:projectId'} element={<ProjectView />} />
-      <Route path={'/:projectId/edit'} element={<ProjectEditView />} />
     </Routes>
   );
 }

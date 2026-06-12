@@ -6,6 +6,7 @@ import { DropdownItem } from '@terraware/web-components';
 
 import CannotDeleteApplicationProject from 'src/components/ProjectView/CannotDeleteApplicationProject';
 import DeleteConfirmationDialog from 'src/components/ProjectView/DeleteConfirmationDialog';
+import ProjectEditModal from 'src/components/ProjectView/ProjectEditModal';
 import BackToLink from 'src/components/common/BackToLink';
 import Card from 'src/components/common/Card';
 import OptionsMenu from 'src/components/common/OptionsMenu';
@@ -39,6 +40,7 @@ export default function ProjectView(): JSX.Element {
   const project = useAppSelector(selectProject(projectId));
 
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
   const [requestId, setRequestId] = useState<string>('');
   const projectDeleteRequest = useAppSelector((state) => selectProjectRequest(state, requestId));
 
@@ -68,11 +70,11 @@ export default function ProjectView(): JSX.Element {
     setRequestId(dispatched.requestId);
   }, [dispatch, projectId]);
 
-  const goToEditProject = useCallback(() => {
-    if (pathParams.projectId) {
-      navigate(getLocation(APP_PATHS.PROJECT_EDIT.replace(':projectId', pathParams.projectId), location));
-    }
-  }, [navigate, location, pathParams.projectId]);
+  const openEditModal = useCallback(() => setIsEditModalOpen(true), []);
+
+  const reloadProject = useCallback(() => {
+    void dispatch(requestProject(projectId));
+  }, [dispatch, projectId]);
 
   const goToProjects = useCallback(() => navigate(getLocation(APP_PATHS.PROJECTS, location)), [navigate, location]);
 
@@ -93,24 +95,26 @@ export default function ProjectView(): JSX.Element {
     () =>
       isAdmin(selectedOrganization) && (
         <Grid item>
-          <Button
-            label={strings.EDIT_PROJECT}
-            icon='iconEdit'
-            onClick={goToEditProject}
-            size='medium'
-            id='editProject'
-          />
+          <Button label={strings.EDIT_PROJECT} icon='iconEdit' onClick={openEditModal} size='medium' id='editProject' />
           <OptionsMenu
             onOptionItemClick={onOptionItemClick}
             optionItems={[{ label: strings.DELETE, value: 'delete', type: 'destructive' }]}
           />
         </Grid>
       ),
-    [goToEditProject, onOptionItemClick, selectedOrganization, strings]
+    [openEditModal, onOptionItemClick, selectedOrganization, strings]
   );
 
   return (
     <Box component='main' sx={{ display: 'flex', flexDirection: 'column', paddingRight: theme.spacing(4) }}>
+      {isAdmin(selectedOrganization) && (
+        <ProjectEditModal
+          open={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          project={project}
+          reload={reloadProject}
+        />
+      )}
       <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, borderRadius: '24px' }}>
         <Grid container padding={theme.spacing(0, 0, 2, 0)}>
           <Grid item xs={12}>
