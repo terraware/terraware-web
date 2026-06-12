@@ -4,22 +4,8 @@ import { Response2 } from 'src/services/HttpService';
 import ProjectsService, {
   AssignProjectRequestPayload,
   AssignProjectResponsePayload,
-  DeleteProjectResponsePayload,
 } from 'src/services/ProjectsService';
 import strings from 'src/strings';
-
-export const requestProjectDelete = createAsyncThunk(
-  'projects/delete',
-  async (request: { projectId: number }, { rejectWithValue }) => {
-    const response: Response2<DeleteProjectResponsePayload> = await ProjectsService.deleteProject(request.projectId);
-
-    if (response !== null && response.requestSucceeded) {
-      return response.data;
-    }
-
-    return rejectWithValue(strings.GENERIC_ERROR);
-  }
-);
 
 export const requestProjectAssign = createAsyncThunk(
   'project/assign',
