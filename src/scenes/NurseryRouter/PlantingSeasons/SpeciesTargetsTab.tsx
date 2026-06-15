@@ -502,28 +502,34 @@ const AddSpeciesRow = ({
           min={0}
         />
       </Box>
-      <Box
-        display='flex'
-        flexDirection={isMobile ? 'column' : 'row'}
-        gap={isMobile ? theme.spacing(1) : theme.spacing(2)}
-        width={isMobile ? '100%' : undefined}
-      >
-        <Button
-          label={strings.ADD}
-          onClick={() => void onSave()}
-          disabled={isLoading || selectedSpeciesId === undefined}
-          style={isMobile ? { margin: 0, width: '100%' } : undefined}
-          sx={isMobile ? { justifyContent: 'center' } : undefined}
-        />
-        <Button
-          label={strings.CANCEL}
-          onClick={onClose}
-          priority='secondary'
-          type='passive'
-          style={isMobile ? { margin: 0, width: '100%' } : undefined}
-          sx={isMobile ? { justifyContent: 'center' } : undefined}
-        />
-      </Box>
+      {isMobile ? (
+        <Box display='flex' flexDirection='column' gap={theme.spacing(1)} width='100%'>
+          <Button
+            label={strings.ADD}
+            onClick={() => void onSave()}
+            disabled={isLoading || selectedSpeciesId === undefined}
+            style={{ margin: 0, width: '100%' }}
+            sx={{ justifyContent: 'center' }}
+          />
+          <Button
+            label={strings.CANCEL}
+            onClick={onClose}
+            priority='secondary'
+            type='passive'
+            style={{ margin: 0, width: '100%' }}
+            sx={{ justifyContent: 'center' }}
+          />
+        </Box>
+      ) : (
+        <>
+          <Button
+            label={strings.ADD}
+            onClick={() => void onSave()}
+            disabled={isLoading || selectedSpeciesId === undefined}
+          />
+          <Button label={strings.CANCEL} onClick={onClose} priority='secondary' type='passive' />
+        </>
+      )}
     </Box>
   );
 };
