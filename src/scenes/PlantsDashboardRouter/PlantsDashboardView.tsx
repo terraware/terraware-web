@@ -8,13 +8,13 @@ import { DateTime } from 'luxon';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
-import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
+import { APP_PATHS } from 'src/constants';
+import { useLatestSiteObservationResult, useSiteObservedArea } from 'src/hooks/observations';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { useLazyListObservationSummariesQuery } from 'src/queries/generated/observations';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 import { isAfter } from 'src/utils/dateUtils';
 
@@ -61,18 +61,7 @@ export default function PlantsDashboardView({
     return plantingSite?.latestObservationCompletedTime;
   }, [plantingSite]);
 
-  const [listSummaries, listSummariesResponse] = useLazyListObservationSummariesQuery();
-
-  useEffect(() => {
-    if (plantingSite?.id) {
-      void listSummaries({ plantingSiteId: plantingSite.id, limit: 1 }, true);
-    }
-  }, [listSummaries, plantingSite]);
-
-  const latestSummary = useMemo(
-    () => listSummariesResponse.currentData?.summaries[0],
-    [listSummariesResponse.currentData?.summaries]
-  );
+  const { observation: latestObservationResult } = useLatestSiteObservationResult(selectedPlantingSiteId, 'Substratum');
   const hasObservationResults = useMemo(() => !!latestObservationResultId, [latestObservationResultId]);
 
   const onPreferences = useCallback(
@@ -123,8 +112,8 @@ export default function PlantsDashboardView({
   ]);
 
   const showSurvivalRateMessage = useMemo(() => {
-    return hasObservationResults && latestSummary?.survivalRate === undefined;
-  }, [hasObservationResults, latestSummary]);
+    return hasObservationResults && latestObservationResult?.survivalRate === undefined;
+  }, [hasObservationResults, latestObservationResult]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -340,45 +329,37 @@ export default function PlantsDashboardView({
     [plantingSite]
   );
 
-  const summariesHectares = useMemo(() => {
-    const totalSquareMeters =
-      latestSummary?.strata
-        .flatMap((_stratum) =>
-          _stratum.substrata.flatMap((_substratum) =>
-            _substratum.monitoringPlots.map((mp) => mp.sizeMeters * mp.sizeMeters)
-          )
-        )
-        .reduce((acc, area) => acc + area, 0) ?? 0;
+  const observedHectares = useSiteObservedArea(plantingSite);
 
-    return totalSquareMeters * SQ_M_TO_HECTARES;
-  }, [latestSummary]);
+  const observationDateRange = useMemo(() => {
+    const times = (plantingSite?.strata ?? [])
+      .flatMap((stratum) => stratum.substrata)
+      .map((substratum) => substratum.latestObservationCompletedTime)
+      .filter((time): time is string => !!time)
+      .sort();
+    return { earliest: times[0], latest: times[times.length - 1] };
+  }, [plantingSite]);
 
   const getDashboardSubhead = useCallback(() => {
     if (!plantingSite) {
       return strings.FIRST_ADD_PLANTING_SITE;
     }
 
-    const earliestDate = latestSummary?.earliestObservationTime
-      ? getDateDisplayValue(latestSummary?.earliestObservationTime)
-      : undefined;
-    const latestDate = latestSummary?.latestObservationTime
-      ? getDateDisplayValue(latestSummary?.latestObservationTime)
-      : undefined;
+    const earliestDate = observationDateRange.earliest ? getDateDisplayValue(observationDateRange.earliest) : undefined;
+    const latestDate = observationDateRange.latest ? getDateDisplayValue(observationDateRange.latest) : undefined;
     return !earliestDate || !latestDate || earliestDate === latestDate
       ? (strings.formatString(
           strings.DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,
-          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={summariesHectares} />)}</b>,
+          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={observedHectares} />)}</b>,
           <b>{renderLatestObservationLink()}</b>
         ) as string)
       : (strings.formatString(
           strings.DASHBOARD_HEADER_TEXT_V2,
-          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={summariesHectares} />)}</b>,
-          <b>
-            {latestSummary?.earliestObservationTime ? getDateDisplayValue(latestSummary?.earliestObservationTime) : ''}
-          </b>,
-          <b>{latestSummary?.latestObservationTime ? getDateDisplayValue(latestSummary?.latestObservationTime) : ''}</b>
+          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={observedHectares} />)}</b>,
+          <b>{observationDateRange.earliest ? getDateDisplayValue(observationDateRange.earliest) : ''}</b>,
+          <b>{observationDateRange.latest ? getDateDisplayValue(observationDateRange.latest) : ''}</b>
         ) as string);
-  }, [plantingSite, latestSummary, renderLatestObservationLink, summariesHectares, strings]);
+  }, [plantingSite, observationDateRange, renderLatestObservationLink, observedHectares, strings]);
 
   const onSelect = useCallback((nextPlantingSiteId: number) => {
     setSelectedPlantingSiteId(nextPlantingSiteId);
