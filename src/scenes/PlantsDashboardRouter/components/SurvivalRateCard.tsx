@@ -8,11 +8,10 @@ import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import useProjectSiteObservationSummaries from 'src/hooks/useProjectSiteObservationSummaries';
+import { useLatestSiteObservationResult, useProjectSiteObservationResults } from 'src/hooks/observations';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useKnowledgeBaseLinks } from 'src/knowledgeBaseLinks';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 
 import HighestAndLowestSurvivalRateSpeciesCard from './HighestAndLowestSurvivalRateSpeciesCard';
@@ -35,17 +34,16 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
     trackEvent(MIXPANEL_EVENTS.SURVIVAL_RATE_VIEWED, { is_project_view: !!isProjectView });
   }, [isProjectView, trackEvent]);
 
-  const observationSummariesQuery = useListObservationSummariesQuery(
-    { plantingSiteId: plantingSiteId || -1 },
-    { skip: plantingSiteId === -1 || !plantingSiteId }
+  const { observation: latestObservationResult, isLoading: isLoadingObservation } = useLatestSiteObservationResult(
+    plantingSiteId === -1 ? undefined : plantingSiteId,
+    'Stratum'
   );
-  const observationSummaries = observationSummariesQuery.data?.summaries;
 
-  const projectSiteSummaries = useProjectSiteObservationSummaries(projectId, Boolean(isProjectView));
+  const projectSiteResults = useProjectSiteObservationResults(projectId, Boolean(isProjectView));
 
   const weightedSurvivalRate = useMemo(() => {
-    const validStrata = projectSiteSummaries.flatMap(({ site, summary }) =>
-      (summary?.strata ?? [])
+    const validStrata = projectSiteResults.flatMap(({ site, result }) =>
+      (result?.strata ?? [])
         .map((stratum) => {
           const areaHa = site.strata?.find((s) => s.id === stratum.stratumId)?.areaHa;
           return { areaHa, survivalRate: stratum.survivalRate };
@@ -60,7 +58,7 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
       return undefined;
     }
     return Math.round(validStrata.reduce((sum, stratum) => sum + stratum.survivalRate * stratum.areaHa, 0) / totalArea);
-  }, [projectSiteSummaries]);
+  }, [projectSiteResults]);
 
   const separatorStyles = {
     width: '1px',
@@ -70,14 +68,9 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
     marginLeft: '24px',
   };
 
-  const latestSummary = useMemo(
-    () => (observationSummaries && observationSummaries.length > 0 ? observationSummaries[0] : undefined),
-    [observationSummaries]
-  );
-
   return (
     <Card
-      busy={observationSummariesQuery.isFetching}
+      busy={isLoadingObservation}
       radius='8px'
       style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
     >
@@ -106,7 +99,7 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
         </Box>
         <Box data-testid='survival-rate-value' display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
           {(() => {
-            const displayValue = isProjectView ? weightedSurvivalRate : latestSummary?.survivalRate;
+            const displayValue = isProjectView ? weightedSurvivalRate : latestObservationResult?.survivalRate;
             return displayValue !== undefined ? (
               <>
                 <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
@@ -124,7 +117,7 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
           })()}
         </Box>
 
-        {latestSummary?.survivalRate === undefined && (
+        {latestObservationResult?.survivalRate === undefined && (
           <Box>
             {plantingSiteId && (
               <Typography>
