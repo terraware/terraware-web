@@ -1998,6 +1998,7 @@ SET_UP,Configurer,6096080e
 SET_UP_NURSERY,Créer une pépinière,25ab7370
 SET_UP_SEED_BANK,Créer une banque de semences,6f047a89
 SETTINGS,Paramètres,38560978
+SETTINGS_FOR,Paramètres pour {0},da07c7b6
 SHIFT,Maj,4d173d2a
 SHOW_COLOR_KEY,Afficher la légende des couleurs,7ba69c52
 SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Afficher les espèces dont toutes les accessions sont épuisées,656a843d

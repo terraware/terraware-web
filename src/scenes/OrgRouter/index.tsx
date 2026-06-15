@@ -55,6 +55,8 @@ import useEnvironment from 'src/utils/useEnvironment';
 import useStateLocation from 'src/utils/useStateLocation';
 
 import ActivityLogRouter from '../ActivityLogRouter';
+import SettingsLayout from '../Settings/SettingsLayout';
+import SettingsRedirect from '../Settings/SettingsRedirect';
 
 interface OrgRouterProps {
   showNavBar: boolean;
@@ -192,7 +194,14 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.CHECKIN} element={<CheckIn />} />
             <Route path={APP_PATHS.ACCESSIONS + '/*'} element={<AccessionsRouter />} />
             <Route path={APP_PATHS.SPECIES + '/*'} element={<SpeciesRouter />} />
-            <Route path={APP_PATHS.ORGANIZATION + '/*'} element={<OrganizationRouter />} />
+            <Route
+              path={APP_PATHS.ORGANIZATION + '/*'}
+              element={
+                <SettingsLayout activeSection='organization'>
+                  <OrganizationRouter />
+                </SettingsLayout>
+              }
+            />
             <Route path={APP_PATHS.PEOPLE + '/*'} element={<PeopleRouter />} />
             {/* modules router *must* come before the projects router,
             or else the path will be picked up by the projects router */}
@@ -223,6 +232,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             )}
             <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
             <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
+            <Route path={APP_PATHS.SETTINGS} element={<SettingsRedirect />} />
             <Route path={APP_PATHS.REPORTS + '/*'} element={<AcceleratorReportsRouter />} />
             <Route path={APP_PATHS.SEED_FUND_REPORTS + '/*'} element={<SeedFundReportsRouter />} />
             <Route path={APP_PATHS.OBSERVATIONS + '/*'} element={<ObservationRouterV2 />} />
