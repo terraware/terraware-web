@@ -50,6 +50,11 @@ export default function SmallDeviceUserMenu({
   const { isProduction } = useEnvironment();
   const iconLetter = user?.firstName?.charAt(0) || user?.lastName?.charAt(0) || user?.email?.charAt(0);
 
+  const sortedOrganizations = useMemo(
+    () => organizations?.toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined)),
+    [organizations, activeLocale]
+  );
+
   const iconStyles = {
     alignItems: 'center',
     backgroundColor: '#F1F0EC',
@@ -282,27 +287,25 @@ export default function SmallDeviceUserMenu({
                       </Typography>
                       {hasOrganizations ? (
                         <div>
-                          {organizations
-                            ?.toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
-                            .map((org, index) => {
-                              return (
-                                <MenuItem
-                                  onClick={(e) => {
-                                    selectOrganization(org);
-                                    handleClose(e);
-                                  }}
-                                  key={`item-${index}`}
-                                  sx={[
-                                    menuItemStyles,
-                                    selectedOrganization?.id === org.id && {
-                                      backgroundColor: theme.palette.TwClrBgGhostActive,
-                                    },
-                                  ]}
-                                >
-                                  {org.name}
-                                </MenuItem>
-                              );
-                            })}
+                          {sortedOrganizations?.map((org, index) => {
+                            return (
+                              <MenuItem
+                                onClick={(e) => {
+                                  selectOrganization(org);
+                                  handleClose(e);
+                                }}
+                                key={`item-${index}`}
+                                sx={[
+                                  menuItemStyles,
+                                  selectedOrganization?.id === org.id && {
+                                    backgroundColor: theme.palette.TwClrBgGhostActive,
+                                  },
+                                ]}
+                              >
+                                {org.name}
+                              </MenuItem>
+                            );
+                          })}
                         </div>
                       ) : null}
                       <MenuItem
