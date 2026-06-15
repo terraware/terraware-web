@@ -10,7 +10,7 @@ import PlantingSiteSpeciesCellRenderer from 'src/components/SeedFundReports/Loca
 import { transformNumericValue } from 'src/components/SeedFundReports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
-import { useGetOneObservationResults } from 'src/hooks/observations';
+import { useLatestSiteObservationResult } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useLocalization } from 'src/providers';
@@ -62,10 +62,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
 
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
-  const getLatestObservationResponse = useGetOneObservationResults({
-    observationId: plantingSite?.latestObservationId,
-    depth: 'Plot',
-  });
+  const { observation: latestObservationResult } = useLatestSiteObservationResult(plantingSiteId, 'Plot');
 
   const { currentData: upcomingObservationDates } = useSearchObservationDatesQuery({
     plantingSiteId,
@@ -75,11 +72,6 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
     plantingSiteId,
     state: ['InProgress'],
   });
-
-  const latestObservationResult = useMemo(
-    () => getLatestObservationResponse.currentData?.observation,
-    [getLatestObservationResponse.currentData]
-  );
 
   const { species: allSpecies } = useSpeciesData();
   const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);
