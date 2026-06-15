@@ -1,13 +1,17 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
+import { Dropdown, Icon, Tooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import Chart, { ChartData } from 'src/components/common/Chart/Chart';
-import usePlantingSite from 'src/hooks/usePlantingSite';
-import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
+import { useOrganization } from 'src/providers';
+import {
+  useLazyGetStratumPlantDensityTrendQuery,
+  useLazyGetStratumSurvivalRateTrendQuery,
+  useLazyListStrataQuery,
+} from 'src/queries/search/strata';
 import strings from 'src/strings';
 
 type PlantingSiteTrendsCardProps = {
@@ -16,108 +20,101 @@ type PlantingSiteTrendsCardProps = {
 
 export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteTrendsCardProps): JSX.Element {
   const theme = useTheme();
-  const [strataOptions, setStrataOptions] = useState<DropdownItem[]>();
+  const { isDesktop, isMobile } = useDeviceInfo();
+  const { selectedOrganization } = useOrganization();
+
   const [selectedPlantsPerHaStratum, setSelectedPlantsPerHaStratum] = useState<number>();
   const [selectedSurvivalStratum, setSelectedSurvivalStratum] = useState<number>();
-  const { isDesktop, isMobile } = useDeviceInfo();
 
-  const { plantingSite } = usePlantingSite(plantingSiteId);
-
-  const observationSummariesQuery = useListObservationSummariesQuery(
-    { plantingSiteId: plantingSiteId ?? -1 },
-    { skip: !plantingSiteId || plantingSiteId === -1 }
-  );
-  const observationSummaries = observationSummariesQuery.data?.summaries;
+  const [listStrata, listStrataResponse] = useLazyListStrataQuery();
+  const [getPlantDensityTrend, plantDensityTrendResponse] = useLazyGetStratumPlantDensityTrendQuery();
+  const [getSurvivalRateTrend, survivalRateTrendResponse] = useLazyGetStratumSurvivalRateTrendQuery();
 
   useEffect(() => {
-    const stratumOpts = plantingSite?.strata?.map((_stratum) => ({ label: _stratum.name, value: _stratum.id }));
-    if (stratumOpts) {
-      setStrataOptions(stratumOpts);
-      setSelectedPlantsPerHaStratum(stratumOpts[0].value);
-      setSelectedSurvivalStratum(stratumOpts[0].value);
+    if (selectedOrganization?.id && plantingSiteId && plantingSiteId !== -1) {
+      void listStrata({ organizationId: selectedOrganization.id, plantingSiteId }, true);
     }
-  }, [plantingSite]);
+  }, [listStrata, plantingSiteId, selectedOrganization?.id]);
+
+  const strataOptions = useMemo(
+    () => listStrataResponse.currentData?.map((stratum) => ({ label: stratum.name, value: stratum.id })),
+    [listStrataResponse.currentData]
+  );
+
+  const activePlantsPerHaStratum = selectedPlantsPerHaStratum ?? strataOptions?.[0]?.value;
+  const activeSurvivalStratum = selectedSurvivalStratum ?? strataOptions?.[0]?.value;
+
+  useEffect(() => {
+    if (activePlantsPerHaStratum !== undefined) {
+      void getPlantDensityTrend(activePlantsPerHaStratum, true);
+    }
+  }, [activePlantsPerHaStratum, getPlantDensityTrend]);
+
+  useEffect(() => {
+    if (activeSurvivalStratum !== undefined) {
+      void getSurvivalRateTrend(activeSurvivalStratum, true);
+    }
+  }, [activeSurvivalStratum, getSurvivalRateTrend]);
 
   const plantsChartData: ChartData = useMemo(() => {
-    const filteredSummaries = observationSummaries?.filter((sc) => {
-      const stratum = sc.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
-      if (stratum?.plantingDensity !== undefined) {
-        return true;
-      }
-    });
-    const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
-    const values = filteredSummaries?.map((sm) => {
-      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
-      return stratum?.plantingDensity || 0;
-    });
-
-    const minValues = filteredSummaries?.map((sm) => {
-      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
-      return (stratum?.plantingDensity || 0) - (stratum?.plantingDensityStdDev || 0);
-    });
-
-    const maxValues = filteredSummaries?.map((sm) => {
-      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
-      return (stratum?.plantingDensity || 0) + (stratum?.plantingDensityStdDev || 0);
-    });
+    const rows = plantDensityTrendResponse.currentData ?? [];
+    const labels = rows.map((row) => row.completedTime);
+    const values = rows.map((row) => row.plantDensity);
+    const minValues = rows.map((row) => row.plantDensity - row.plantDensityStdDev);
+    const maxValues = rows.map((row) => row.plantDensity + row.plantDensityStdDev);
 
     return {
-      labels: labels ?? [],
+      labels,
       datasets: [
         {
-          values: minValues ?? [],
+          values: minValues,
           label: strings.STANDARD_DEVIATION,
           pointRadius: 0,
           borderWidth: 0,
         },
         {
-          values: maxValues ?? [],
+          values: maxValues,
           pointRadius: 0,
           borderWidth: 0,
           fill: {
-            target: 0, // fill to dataset 0
+            target: 0,
             above: '#B8A0D64D',
           },
         },
         {
-          values: values ?? [],
+          values,
           label: strings.ACTUAL,
-          pointRadius: values?.length === 1 ? 4 : 0,
+          pointRadius: values.length === 1 ? 4 : 0,
           color: '#B8A0D6',
         },
       ],
     };
-  }, [observationSummaries, selectedPlantsPerHaStratum]);
+  }, [plantDensityTrendResponse.currentData]);
 
   const survivalChartData: ChartData = useMemo(() => {
-    const filteredSummaries = observationSummaries?.filter((sc) => {
-      const stratum = sc.strata.find((_stratum) => _stratum.stratumId === selectedPlantsPerHaStratum);
-      if (stratum?.survivalRate !== undefined) {
-        return true;
-      }
-    });
-    const labels = filteredSummaries?.map((sm) => sm.latestObservationTime);
-    const values = filteredSummaries?.map((sm) => {
-      const stratum = sm.strata.find((_stratum) => _stratum.stratumId === selectedSurvivalStratum);
-      return stratum?.survivalRate || 0;
-    });
+    const rows = survivalRateTrendResponse.currentData ?? [];
+    const labels = rows.map((row) => row.completedTime);
+    const values = rows.map((row) => row.survivalRate);
 
     return {
-      labels: labels ?? [],
+      labels,
       datasets: [
         {
-          values: values ?? [],
+          values,
           label: strings.ACTUAL,
-          pointRadius: values?.length === 1 ? 4 : 0,
+          pointRadius: values.length === 1 ? 4 : 0,
           color: '#D29AB4',
         },
       ],
     };
-  }, [observationSummaries, selectedPlantsPerHaStratum, selectedSurvivalStratum]);
+  }, [survivalRateTrendResponse.currentData]);
+
+  const isBusy =
+    listStrataResponse.isFetching || plantDensityTrendResponse.isFetching || survivalRateTrendResponse.isFetching;
 
   return (
     <Card
-      busy={observationSummariesQuery.isFetching}
+      busy={isBusy}
       radius='8px'
       style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
     >
@@ -141,7 +138,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
             placeholder={strings.SELECT}
             options={strataOptions}
             onChange={(newValue) => setSelectedPlantsPerHaStratum(Number(newValue))}
-            selectedValue={selectedPlantsPerHaStratum}
+            selectedValue={activePlantsPerHaStratum}
           />
         </Box>
         <Box id='legend-container-th' sx={{ marginTop: 3 }} />
@@ -190,7 +187,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
             placeholder={strings.SELECT}
             options={strataOptions}
             onChange={(newValue) => setSelectedSurvivalStratum(Number(newValue))}
-            selectedValue={selectedSurvivalStratum}
+            selectedValue={activeSurvivalStratum}
           />
         </Box>
         <Box id='legend-container-mr' sx={{ marginTop: 3 }} />

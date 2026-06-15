@@ -4,7 +4,6 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import sanitize from 'sanitize-filename';
 
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
@@ -26,7 +25,6 @@ const useObservationExports = () => {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const defaultTimeZone = useDefaultTimeZone().get().id;
-  const useNewTables = isEnabled('New Observation Results Tables');
   const [getObservationResults] = useLazyGetObservationResultsQuery();
   const [exportBiomassPlots] = useLazyExportBiomassPlotsCsvQuery();
   const [exportBiomassSpecies] = useLazyExportBiomassSpeciesCsvQuery();
@@ -292,7 +290,7 @@ const useObservationExports = () => {
 
   const downloadObservationResults = useCallback(
     async (observationId: number) => {
-      const results = await getObservationResults({ observationId, depth: 'Plant', useNewTables }, true).unwrap();
+      const results = await getObservationResults({ observationId, depth: 'Plant', useNewTables: true }, true).unwrap();
       const observationResults = results.observation;
 
       const siteResults = await getPlantingSite(
@@ -326,7 +324,6 @@ const useObservationExports = () => {
     [
       getObservationResults,
       getPlantingSite,
-      useNewTables,
       makeObservationCsv,
       makePlotSpeciesCsv,
       selectedOrganization?.timeZone,
@@ -338,7 +335,7 @@ const useObservationExports = () => {
 
   const downloadObservationCsv = useCallback(
     async (observationId: number) => {
-      const results = await getObservationResults({ observationId, depth: 'Plant', useNewTables }, true).unwrap();
+      const results = await getObservationResults({ observationId, depth: 'Plant', useNewTables: true }, true).unwrap();
       const observationResults = results.observation;
 
       const siteResults = await getPlantingSite(
@@ -372,7 +369,6 @@ const useObservationExports = () => {
       defaultTimeZone,
       getObservationResults,
       getPlantingSite,
-      useNewTables,
       makeObservationCsv,
       selectedOrganization?.timeZone,
     ]
@@ -381,7 +377,7 @@ const useObservationExports = () => {
   const downloadObservationGpx = useCallback(
     async (observationId: number) => {
       const content = await exportObservationGpx(observationId, true).unwrap();
-      const results = await getObservationResults({ observationId, depth: 'Plant', useNewTables }, true).unwrap();
+      const results = await getObservationResults({ observationId, depth: 'Plant', useNewTables: true }, true).unwrap();
       const observationResults = results.observation;
 
       const siteResults = await getPlantingSite(
@@ -414,14 +410,13 @@ const useObservationExports = () => {
       exportObservationGpx,
       getObservationResults,
       getPlantingSite,
-      useNewTables,
       selectedOrganization?.timeZone,
     ]
   );
 
   const downloadBiomassObservationDetails = useCallback(
     async (observationId: number) => {
-      const results = await getObservationResults({ observationId, depth: 'Plant', useNewTables }, true).unwrap();
+      const results = await getObservationResults({ observationId, depth: 'Plant', useNewTables: true }, true).unwrap();
       const observationResults = results.observation;
 
       const siteResults = await getPlantingSite(
@@ -461,7 +456,6 @@ const useObservationExports = () => {
       exportBiomassTreesShrubs,
       getObservationResults,
       getPlantingSite,
-      useNewTables,
       strings.BIOMASS_OBSERVATION_FILENAME_PREFIX,
       strings.PLOT,
       strings.SPECIES_CLASSIFICATION,
