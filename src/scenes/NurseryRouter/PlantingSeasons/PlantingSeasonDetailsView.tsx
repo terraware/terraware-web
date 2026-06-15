@@ -23,6 +23,7 @@ import {
   useLazyGetSpeciesTargetsQuery,
 } from 'src/queries/generated/plantingSeasons';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { useGetPlantingSeasonSpeciesSummaryQuery } from 'src/queries/search/plantingSeasons';
 import strings from 'src/strings';
 import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -46,6 +47,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
   const [getPlantingSeason, { data: plantingSeasonData }] = useLazyGetPlantingSeasonQuery();
   const [getPlantingSite, { data: plantingSiteData }] = useLazyGetPlantingSiteQuery();
   const [getSpeciesTargets, { data: speciesTargets }] = useLazyGetSpeciesTargetsQuery();
+  const { data: speciesSummary } = useGetPlantingSeasonSpeciesSummaryQuery(seasonIdNumber, { skip: !plantingSeasonId });
 
   useEffect(() => {
     if (plantingSeasonId) {
@@ -112,12 +114,31 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
   };
 
   const plantingGoal = useMemo(() => {
+    if (speciesSummary && speciesSummary.length > 0) {
+      return speciesSummary.reduce((sum, target) => sum + target.target, 0);
+    }
+
     const targets = speciesTargets?.targets;
     if (!targets || targets.length === 0) {
       return undefined;
     }
     return targets.reduce((sum, t) => sum + t.quantity, 0);
-  }, [speciesTargets]);
+  }, [speciesSummary, speciesTargets]);
+
+  const withdrawnForPlantingTotal = useMemo(() => {
+    if (!speciesSummary || speciesSummary.length === 0) {
+      return undefined;
+    }
+    return speciesSummary.reduce((sum, target) => sum + target.withdrawn, 0);
+  }, [speciesSummary]);
+
+  const leftToPlantTotal = useMemo(() => {
+    if (!speciesSummary || speciesSummary.length === 0) {
+      return undefined;
+    }
+    return speciesSummary.reduce((sum, target) => sum + target.leftToPlant, 0);
+  }, [speciesSummary]);
+
   const hasSpeciesTargets = (speciesTargets?.targets.length ?? 0) > 0;
 
   const dateRange = useMemo(() => {
@@ -302,8 +323,8 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
           <Box display='flex' flexDirection='column' alignItems='flex-end' gap={theme.spacing(2)}>
             <Box display='flex' gap={theme.spacing(4)} alignItems='flex-start'>
               {numberColumn(strings.PLANTING_GOAL, plantingGoal)}
-              {numberColumn(strings.WITHDRAWN_FOR_PLANTING, undefined)}
-              {numberColumn(strings.LEFT_TO_PLANT, undefined)}
+              {numberColumn(strings.WITHDRAWN_FOR_PLANTING, withdrawnForPlantingTotal)}
+              {numberColumn(strings.LEFT_TO_PLANT, leftToPlantTotal)}
               <OptionsMenu
                 optionItems={optionItems}
                 onOptionItemClick={onOptionItemClick}
