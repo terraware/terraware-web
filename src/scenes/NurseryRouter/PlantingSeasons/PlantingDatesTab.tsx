@@ -52,6 +52,7 @@ const compareSpeciesScientificNames = (
 
 const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProps): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const { species } = useSpeciesData();
   const { data: scheduledDatesData } = useGetScheduledPlantingDatesQuery(plantingSeason.id);
   const { data: speciesTargetsData } = useGetSpeciesTargetsQuery(plantingSeason.id);
@@ -61,6 +62,17 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
   const readOnly = plantingSeason.status === 'Closed';
   const scheduledDates = scheduledDatesData?.scheduledDates ?? [];
   const speciesTargets = speciesTargetsData?.targets ?? [];
+  const mobileAddDateButtonSx = isMobile
+    ? {
+        borderRadius: '28px',
+        borderWidth: '2px',
+        fontSize: '16px',
+        fontWeight: 600,
+        justifyContent: 'center',
+        minHeight: '52px',
+        width: '100%',
+      }
+    : undefined;
 
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
@@ -68,8 +80,19 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
         <EmptyState onAdd={() => setEditing({ mode: 'add' })} readOnly={readOnly} />
       ) : (
         <>
-          <Box display='flex' alignItems='center' justifyContent='space-between' marginBottom={theme.spacing(2)}>
-            <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+          <Box
+            display='flex'
+            flexDirection={isMobile ? 'column' : 'row'}
+            alignItems={isMobile ? 'stretch' : 'center'}
+            justifyContent='space-between'
+            gap={isMobile ? theme.spacing(3) : theme.spacing(2)}
+            marginBottom={theme.spacing(2)}
+          >
+            <Typography
+              fontSize={isMobile ? '16px' : '14px'}
+              lineHeight={isMobile ? '24px' : undefined}
+              color={theme.palette.TwClrTxtSecondary}
+            >
               {strings.PLANTING_DATES_TAB_DESCRIPTION}
             </Typography>
             {!editing && !readOnly && (
@@ -79,6 +102,8 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
                 onClick={() => setEditing({ mode: 'add' })}
                 priority='secondary'
                 type='productive'
+                size={isMobile ? 'medium' : undefined}
+                sx={mobileAddDateButtonSx}
               />
             )}
           </Box>
@@ -115,6 +140,40 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
 
 const EmptyState = ({ onAdd, readOnly }: { onAdd: () => void; readOnly: boolean }): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
+  const mobileAddPlantingDateButtonSx = isMobile
+    ? {
+        borderRadius: '28px',
+        borderWidth: '2px',
+        fontSize: '16px',
+        fontWeight: 600,
+        justifyContent: 'center',
+        minHeight: '52px',
+        width: '100%',
+      }
+    : undefined;
+
+  if (isMobile) {
+    return (
+      <Box display='flex' flexDirection='column' alignItems='stretch' gap={theme.spacing(3)}>
+        <Typography fontSize='16px' lineHeight='24px' color={theme.palette.TwClrTxtSecondary}>
+          {strings.PLANTING_DATES_TAB_DESCRIPTION}
+        </Typography>
+        {!readOnly && (
+          <Button
+            icon='plus'
+            label={strings.ADD_PLANTING_DATE}
+            onClick={onAdd}
+            priority='secondary'
+            type='productive'
+            size='medium'
+            sx={mobileAddPlantingDateButtonSx}
+          />
+        )}
+      </Box>
+    );
+  }
+
   return (
     <Box
       display='flex'
