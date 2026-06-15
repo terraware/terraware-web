@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { BusySpinner } from '@terraware/web-components';
@@ -18,22 +18,15 @@ const ProjectProvider = ({ children }: Props) => {
   const { goToAcceleratorProjectList } = useNavigateTo();
 
   const projectId = !isNaN(pathProjectId) ? pathProjectId : -1;
-  const { data, refetch } = useGetProjectQuery(projectId, { skip: projectId === -1 });
+  const { data } = useGetProjectQuery(projectId, { skip: projectId === -1 });
   const project = data?.project;
-
-  const reload = useCallback(() => {
-    if (projectId !== -1) {
-      void refetch();
-    }
-  }, [projectId, refetch]);
 
   const projectData = useMemo<ProjectData>(
     () => ({
       project,
       projectId,
-      reload,
     }),
-    [project, projectId, reload]
+    [project, projectId]
   );
 
   useEffect(() => {
