@@ -1,7 +1,7 @@
-import { components, paths } from 'src/api/types/generated-schema';
-import HttpService, { Response2 } from 'src/services/HttpService';
+import { components } from 'src/api/types/generated-schema';
+import HttpService from 'src/services/HttpService';
 import SearchService from 'src/services/SearchService';
-import { CreateProjectRequest, Project } from 'src/types/Project';
+import { Project } from 'src/types/Project';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { parseSearchTerm } from 'src/utils/search';
 
@@ -11,9 +11,6 @@ import { parseSearchTerm } from 'src/utils/search';
 
 const PROJECTS_ENDPOINT = '/api/v1/projects';
 const PROJECT_ASSIGN_ENDPOINT = '/api/v1/projects/{id}/assign';
-
-type CreateProjectResponsePayload =
-  paths[typeof PROJECTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 export type AssignProjectRequestPayload = components['schemas']['AssignProjectRequestPayload'];
 export type AssignProjectResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
@@ -77,14 +74,6 @@ const searchProjects = async (organizationId: number, query?: string): Promise<P
   return response ? (response as Project[]) : null;
 };
 
-/**
- * Create a project
- */
-const createProject = (project: CreateProjectRequest): Promise<Response2<CreateProjectResponsePayload>> =>
-  httpProjects.post2({
-    entity: project,
-  });
-
 const assignProjectToEntities = (projectId: number, entities: AssignProjectRequestPayload) =>
   httpProjects.post2<AssignProjectResponsePayload>({
     url: PROJECT_ASSIGN_ENDPOINT,
@@ -97,7 +86,6 @@ const assignProjectToEntities = (projectId: number, entities: AssignProjectReque
  */
 const ProjectsService = {
   searchProjects,
-  createProject,
   assignProjectToEntities,
 };
 

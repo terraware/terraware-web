@@ -7,6 +7,7 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
+import { useCreateProjectMutation } from 'src/queries/generated/projects';
 import { SearchResponseBatches } from 'src/services/NurseryBatchService';
 import ProjectsService from 'src/services/ProjectsService';
 import strings from 'src/strings';
@@ -34,6 +35,8 @@ export default function ProjectNewView({ reloadData }: ProjectNewViewProps): JSX
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
 
+  const [createProject, { data: createdProject, isError, isSuccess }] = useCreateProjectMutation();
+
   const [record, setRecord] = useForm<CreateProjectRequest>({
     name: '',
     organizationId: selectedOrganization?.id || -1,
@@ -52,46 +55,58 @@ export default function ProjectNewView({ reloadData }: ProjectNewViewProps): JSX
     navigate({ pathname: APP_PATHS.PROJECTS });
   }, [navigate]);
 
-  const saveProject = useCallback(async () => {
-    // first create the project
-    let projectId = -1;
-    const response = await ProjectsService.createProject(record);
-    if (!response.requestSucceeded || !response.data) {
-      snackbar.toastError();
-      return;
-    } else {
-      projectId = response.data.id;
-    }
+  const saveProject = useCallback(() => {
+    void createProject(record);
+  }, [createProject, record]);
 
-    if (!projectId) {
-      snackbar.toastError();
-      return;
-    }
-
-    await ProjectsService.assignProjectToEntities(projectId, {
-      accessionIds: projectAccessions.map((entity) => Number(entity.id)),
-      batchIds: projectBatches.map((entity) => Number(entity.id)),
-      plantingSiteIds: projectPlantingSites.map((entity) => Number(entity.id)),
-    });
-
-    reloadData();
-
-    // set snackbar with status
-    snackbar.toastSuccess(
-      getFormattedSuccessMessages(record.name, projectAccessions, projectBatches, projectPlantingSites),
-      strings.formatString(strings.PROJECT_ADDED, record.name) as string
-    );
-
-    // redirect to projects
-    goToProjects();
-  }, [goToProjects, projectAccessions, projectBatches, projectPlantingSites, record, reloadData, snackbar]);
-
-  // If we get to the end of the flowState (there are no more valid steps available), save the project and redirect
+  // If we get to the end of the flowState (there are no more valid steps available), create the project
   useEffect(() => {
     if (!flowState) {
-      void saveProject();
+      saveProject();
     }
   }, [flowState, saveProject]);
+
+  // Once the project is created, assign the selected entities and redirect to the projects list
+  useEffect(() => {
+    if (isError) {
+      snackbar.toastError();
+      return;
+    }
+
+    if (!isSuccess || !createdProject) {
+      return;
+    }
+
+    const assignAndRedirect = async () => {
+      await ProjectsService.assignProjectToEntities(createdProject.id, {
+        accessionIds: projectAccessions.map((entity) => Number(entity.id)),
+        batchIds: projectBatches.map((entity) => Number(entity.id)),
+        plantingSiteIds: projectPlantingSites.map((entity) => Number(entity.id)),
+      });
+
+      reloadData();
+
+      snackbar.toastSuccess(
+        getFormattedSuccessMessages(record.name, projectAccessions, projectBatches, projectPlantingSites),
+        strings.formatString(strings.PROJECT_ADDED, record.name) as string
+      );
+
+      goToProjects();
+    };
+
+    void assignAndRedirect();
+  }, [
+    createdProject,
+    goToProjects,
+    isError,
+    isSuccess,
+    projectAccessions,
+    projectBatches,
+    projectPlantingSites,
+    record,
+    reloadData,
+    snackbar,
+  ]);
 
   useEffect(() => {
     setSaveText(getSaveText(flowState, hasAccessions, hasBatches, hasPlantingSites));

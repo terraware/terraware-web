@@ -1,5 +1,6 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { api as projectsApi } from 'src/queries/generated/projects';
 import ApplicationService from 'src/services/ApplicationService';
 import strings from 'src/strings';
 import { Application, ApplicationReview } from 'src/types/Application';
@@ -24,13 +25,21 @@ export const requestCreateApplication = createAsyncThunk(
 
 export const requestCreateProjectApplication = createAsyncThunk(
   'applications/createProject',
-  async (request: { projectName: string; organizationId: number }, { rejectWithValue }) => {
+  async (request: { projectName: string; organizationId: number }, { dispatch, rejectWithValue }) => {
     const { projectName, organizationId } = request;
 
-    const response = await ApplicationService.createProjectApplication(projectName, organizationId);
+    try {
+      const project = await dispatch(
+        projectsApi.endpoints.createProject.initiate({ name: projectName, organizationId })
+      ).unwrap();
 
-    if (response.requestSucceeded && response.data) {
-      return response.data.id;
+      const response = await ApplicationService.createApplication(project.id);
+
+      if (response.requestSucceeded && response.data) {
+        return response.data.id;
+      }
+    } catch {
+      return rejectWithValue(strings.GENERIC_ERROR);
     }
 
     return rejectWithValue(strings.GENERIC_ERROR);
