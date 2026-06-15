@@ -150,6 +150,7 @@ ALL_PLANTING_SITES,Tous les sites de plantation,344a80c6
 ALL_PROJECT_ZONES,Toutes les zones du projet,4c578acc
 ALL_PROJECTS,Tous les projets,4eb0ec5d
 ALL_SECTIONS,Toutes les sections,d3d73b24
+ALL_SITES,Tous les sites,8c420082
 ALL_SPECIES,Toutes les espèces,5622801f
 ALL_VARIABLES,Toutes les variables,1fe9cddb
 ALLOCATED,Alloué,1105670f
@@ -2341,6 +2342,7 @@ TOTAL,Total,ecba5453
 TOTAL_ACTIVE_ACCESSIONS,Total des accessions actives,8950dbea
 TOTAL_DENSITY_TOOLTIP,Densité totale de plantation (plants/ha) des valeurs saisies ci-dessus.,edb8e740
 TOTAL_DENSITY_VIEW_TOOLTIP,Total des densités de plantation de toutes les espèces répertoriées,04705106
+TOTAL_GOAL,Objectif total,b6468a48
 TOTAL_HECTARES_PLANTED,Nombre total d’hectares plantés,5410325f
 TOTAL_HECTARES_PLANTED_TOOLTIP,Il s’agit du nombre total d’hectares marqués comme « Plantation terminée » dans ce site de plantation.,1dd1dbf3
 TOTAL_NUMBER_OF_PLANTS,Nombre total de plantes,c6ba8c94
