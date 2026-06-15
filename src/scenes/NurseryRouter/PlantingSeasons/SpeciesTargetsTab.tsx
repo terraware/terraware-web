@@ -148,7 +148,11 @@ const SubstratumSection = ({
 
   const usedSpeciesIds = useMemo(() => new Set(targets.map((t) => t.speciesId)), [targets]);
 
-  const availableSpecies = useMemo(() => species.filter((s) => !usedSpeciesIds.has(s.id)), [species, usedSpeciesIds]);
+  const availableSpecies = useMemo(
+    () =>
+      species.filter((s) => !usedSpeciesIds.has(s.id)).sort((a, b) => a.scientificName.localeCompare(b.scientificName)),
+    [species, usedSpeciesIds]
+  );
 
   return (
     <Box marginBottom={theme.spacing(3)}>

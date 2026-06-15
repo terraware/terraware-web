@@ -580,7 +580,11 @@ const SpeciesTable = ({
   const theme = useTheme();
   const [addingSpecies, setAddingSpecies] = useState(false);
   const usedSpeciesIds = useMemo(() => new Set(substratumSpecies.map((s) => s.speciesId)), [substratumSpecies]);
-  const availableSpecies = useMemo(() => species.filter((s) => !usedSpeciesIds.has(s.id)), [species, usedSpeciesIds]);
+  const availableSpecies = useMemo(
+    () =>
+      species.filter((s) => !usedSpeciesIds.has(s.id)).sort((a, b) => a.scientificName.localeCompare(b.scientificName)),
+    [species, usedSpeciesIds]
+  );
 
   return (
     <Box>
