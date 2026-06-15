@@ -640,9 +640,7 @@ const SpeciesTable = ({
       >
         <HeaderCell label={strings.SPECIES} />
         <HeaderCell label={strings.QUANTITY_TO_PLANT} tooltip={strings.QUANTITY_TO_PLANT_TOOLTIP} />
-        <HeaderCell label={strings.ALLOCATED} tooltip={strings.ALLOCATED_TOOLTIP} />
         <HeaderCell label={strings.AVAILABLE_TO_SCHEDULE} tooltip={strings.AVAILABLE_TO_SCHEDULE_TOOLTIP} />
-        <HeaderCell label={strings.LEFT_TO_PLANT} tooltip={strings.LEFT_TO_PLANT_TOOLTIP} />
         <Box />
       </Box>
       {sortedSubstratumSpecies.map((draft, index) => (
@@ -794,7 +792,6 @@ const SpeciesRow = ({
   const speciesInfo = useMemo(() => species.find((s) => s.id === draft.speciesId), [species, draft.speciesId]);
   const targetRemaining = Math.max(0, target - scheduledOther);
   const availableToSchedule = Math.max(0, allocated - scheduledOther);
-  const leftToPlant = Math.max(0, targetRemaining - draft.quantity);
   const exceedsGoal = target > 0 && draft.quantity > targetRemaining;
   const hasNumbers = draft.quantity > 0;
 
@@ -867,9 +864,7 @@ const SpeciesRow = ({
           </>
         )}
       </Box>
-      <Typography fontSize='14px'>{hasNumbers ? allocated.toLocaleString() : ''}</Typography>
       <Typography fontSize='14px'>{hasNumbers ? availableToSchedule.toLocaleString() : ''}</Typography>
-      <Typography fontSize='14px'>{hasNumbers ? leftToPlant.toLocaleString() : ''}</Typography>
       <Button icon='iconTrashCan' onClick={removeRow} priority='ghost' size='small' type='passive' />
     </Box>
   );
