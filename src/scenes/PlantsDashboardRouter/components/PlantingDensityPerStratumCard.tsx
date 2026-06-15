@@ -5,8 +5,8 @@ import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import BarChart from 'src/components/common/Chart/BarChart';
 import { ChartDataset } from 'src/components/common/Chart/Chart';
+import { useLatestSiteObservationResult } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
-import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 import { truncate } from 'src/utils/text';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -24,11 +24,7 @@ export default function PlantingDensityPerStratumCard({
   const numberFormatter = useNumberFormatter();
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
-  const observationSummariesQuery = useListObservationSummariesQuery(
-    { plantingSiteId: plantingSiteId ?? -1 },
-    { skip: !plantingSiteId || plantingSiteId === -1 }
-  );
-  const observationSummaries = observationSummariesQuery.data?.summaries;
+  const { observation: latestObservationResult } = useLatestSiteObservationResult(plantingSiteId, 'Stratum');
 
   const tooltipRenderer = useCallback(
     (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
@@ -53,8 +49,8 @@ export default function PlantingDensityPerStratumCard({
       plantingSite.strata?.forEach((stratum) => {
         stratumDensities[stratum.name] = [stratum.targetPlantingDensity];
 
-        if (observationSummaries && observationSummaries.length > 0) {
-          const stratumFromObs = observationSummaries[0].strata.find(
+        if (latestObservationResult) {
+          const stratumFromObs = latestObservationResult.strata.find(
             (obsStratum) => obsStratum.stratumId === stratum.id
           );
           stratumDensities[stratum.name].push(stratumFromObs?.plantingDensity ?? null);
@@ -74,7 +70,7 @@ export default function PlantingDensityPerStratumCard({
         tooltipTitles: [] as string[],
       };
     }
-  }, [plantingSite, observationSummaries]);
+  }, [plantingSite, latestObservationResult]);
 
   const chartData = useMemo(() => {
     if (!labels?.length || !targets?.length) {
