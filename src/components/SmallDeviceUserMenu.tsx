@@ -20,7 +20,7 @@ import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import { getRgbaFromHex } from 'src/utils/color';
@@ -37,6 +37,7 @@ export default function SmallDeviceUserMenu({
   onLogout,
   hasOrganizations,
 }: SmallDeviceUserMenuProps): JSX.Element | null {
+  const { activeLocale } = useLocalization();
   const { selectedOrganization, setSelectedOrganization, organizations, redirectAndNotify, reloadOrganizations } =
     useOrganization();
   const { user } = useUser();
@@ -281,25 +282,27 @@ export default function SmallDeviceUserMenu({
                       </Typography>
                       {hasOrganizations ? (
                         <div>
-                          {organizations?.map((org, index) => {
-                            return (
-                              <MenuItem
-                                onClick={(e) => {
-                                  selectOrganization(org);
-                                  handleClose(e);
-                                }}
-                                key={`item-${index}`}
-                                sx={[
-                                  menuItemStyles,
-                                  selectedOrganization?.id === org.id && {
-                                    backgroundColor: theme.palette.TwClrBgGhostActive,
-                                  },
-                                ]}
-                              >
-                                {org.name}
-                              </MenuItem>
-                            );
-                          })}
+                          {organizations
+                            ?.toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+                            .map((org, index) => {
+                              return (
+                                <MenuItem
+                                  onClick={(e) => {
+                                    selectOrganization(org);
+                                    handleClose(e);
+                                  }}
+                                  key={`item-${index}`}
+                                  sx={[
+                                    menuItemStyles,
+                                    selectedOrganization?.id === org.id && {
+                                      backgroundColor: theme.palette.TwClrBgGhostActive,
+                                    },
+                                  ]}
+                                >
+                                  {org.name}
+                                </MenuItem>
+                              );
+                            })}
                         </div>
                       ) : null}
                       <MenuItem
