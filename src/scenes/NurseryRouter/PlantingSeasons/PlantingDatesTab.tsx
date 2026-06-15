@@ -218,7 +218,7 @@ type PlantingDateFormProps = {
   onClose: () => void;
 };
 
-type SpeciesDraft = { speciesId: number; quantity: number };
+type SpeciesDraft = { speciesId: number; quantity: number; allocatedQuantity?: number };
 type SubstratumDraft = { selected: boolean; species: SpeciesDraft[] };
 
 const PlantingDateForm = ({
@@ -249,7 +249,11 @@ const PlantingDateForm = ({
       editingScheduledDate.species.forEach((s) => {
         const existing = drafts[s.substratumId] ?? { selected: true, species: [] };
         existing.selected = true;
-        existing.species.push({ speciesId: s.speciesId, quantity: s.quantity });
+        existing.species.push({
+          speciesId: s.speciesId,
+          quantity: s.quantity,
+          allocatedQuantity: s.allocatedQuantity,
+        });
         drafts[s.substratumId] = existing;
       });
     }
@@ -493,6 +497,16 @@ const SubstratumDraftSection = ({
   const selected = draft?.selected ?? false;
   const substratumSpecies = draft?.species ?? [];
 
+  const allocatedBySpecies = useMemo(() => {
+    const map = new Map<number, number>();
+    scheduledDates.forEach((scheduledDate) => {
+      scheduledDate.species.forEach((s) => {
+        map.set(s.speciesId, s.allocatedQuantity);
+      });
+    });
+    return map;
+  }, [scheduledDates]);
+
   // Pre-populate species rows from species targets when the substratum is selected
   useEffect(() => {
     if (!selected) {
@@ -506,9 +520,20 @@ const SubstratumDraftSection = ({
       return;
     }
     onUpdateSubstratumSpecies(substratum.id, () =>
-      targetsForSubstratum.map((t) => ({ speciesId: t.speciesId, quantity: 0 }))
+      targetsForSubstratum.map((t) => ({
+        speciesId: t.speciesId,
+        quantity: 0,
+        allocatedQuantity: allocatedBySpecies.get(t.speciesId),
+      }))
     );
-  }, [selected, substratum.id, substratumSpecies.length, speciesTargets, onUpdateSubstratumSpecies]);
+  }, [
+    allocatedBySpecies,
+    selected,
+    substratum.id,
+    substratumSpecies.length,
+    speciesTargets,
+    onUpdateSubstratumSpecies,
+  ]);
 
   const scheduledOtherBySpecies = useMemo(() => {
     const map = new Map<number, number>();
@@ -551,6 +576,7 @@ const SubstratumDraftSection = ({
             substratumSpecies={substratumSpecies}
             species={species}
             targetsBySpecies={targetsBySpecies}
+            allocatedBySpecies={allocatedBySpecies}
             scheduledOtherBySpecies={scheduledOtherBySpecies}
             onUpdateSubstratumSpecies={onUpdateSubstratumSpecies}
           />
@@ -565,6 +591,7 @@ type SpeciesTableProps = {
   substratumSpecies: SpeciesDraft[];
   species: Species[];
   targetsBySpecies: Map<number, number>;
+  allocatedBySpecies: Map<number, number>;
   scheduledOtherBySpecies: Map<number, number>;
   onUpdateSubstratumSpecies: (substratumId: number, updater: (species: SpeciesDraft[]) => SpeciesDraft[]) => void;
 };
@@ -574,6 +601,7 @@ const SpeciesTable = ({
   substratumSpecies,
   species,
   targetsBySpecies,
+  allocatedBySpecies,
   scheduledOtherBySpecies,
   onUpdateSubstratumSpecies,
 }: SpeciesTableProps): JSX.Element => {
@@ -604,6 +632,7 @@ const SpeciesTable = ({
           index={index}
           species={species}
           target={targetsBySpecies.get(draft.speciesId) ?? 0}
+          allocated={draft.allocatedQuantity ?? allocatedBySpecies.get(draft.speciesId) ?? 0}
           scheduledOther={scheduledOtherBySpecies.get(draft.speciesId) ?? 0}
           onUpdateSubstratumSpecies={onUpdateSubstratumSpecies}
         />
@@ -614,7 +643,10 @@ const SpeciesTable = ({
             substratumId={substratumId}
             availableSpecies={availableSpecies}
             onAdd={(speciesId, quantity) => {
-              onUpdateSubstratumSpecies(substratumId, (current) => [...current, { speciesId, quantity }]);
+              onUpdateSubstratumSpecies(substratumId, (current) => [
+                ...current,
+                { speciesId, quantity, allocatedQuantity: allocatedBySpecies.get(speciesId) },
+              ]);
               setAddingSpecies(false);
             }}
             onCancel={() => setAddingSpecies(false)}
@@ -720,6 +752,7 @@ type SpeciesRowProps = {
   index: number;
   species: Species[];
   target: number;
+  allocated: number;
   scheduledOther: number;
   onUpdateSubstratumSpecies: (substratumId: number, updater: (species: SpeciesDraft[]) => SpeciesDraft[]) => void;
 };
@@ -730,6 +763,7 @@ const SpeciesRow = ({
   index,
   species,
   target,
+  allocated,
   scheduledOther,
   onUpdateSubstratumSpecies,
 }: SpeciesRowProps): JSX.Element => {
@@ -737,9 +771,10 @@ const SpeciesRow = ({
   const [editing, setEditing] = useState(false);
   const [draftQuantity, setDraftQuantity] = useState<string>(draft.quantity.toString());
   const speciesInfo = useMemo(() => species.find((s) => s.id === draft.speciesId), [species, draft.speciesId]);
-  const availableToSchedule = Math.max(0, target - scheduledOther);
-  const leftToPlant = Math.max(0, availableToSchedule - draft.quantity);
-  const exceedsGoal = target > 0 && draft.quantity > availableToSchedule;
+  const targetRemaining = Math.max(0, target - scheduledOther);
+  const availableToSchedule = Math.max(0, allocated - scheduledOther);
+  const leftToPlant = Math.max(0, targetRemaining - draft.quantity);
+  const exceedsGoal = target > 0 && draft.quantity > targetRemaining;
   const hasNumbers = draft.quantity > 0;
 
   const commitQuantity = () => {
@@ -750,7 +785,7 @@ const SpeciesRow = ({
         current.map((s) => (s.speciesId === draft.speciesId ? { ...s, quantity: next } : s))
       );
     }
-    const nextExceedsGoal = target > 0 && next > availableToSchedule;
+    const nextExceedsGoal = target > 0 && next > targetRemaining;
     if (!nextExceedsGoal) {
       setEditing(false);
     }
@@ -811,8 +846,7 @@ const SpeciesRow = ({
           </>
         )}
       </Box>
-      {/* TODO: replace with allocated value when available in the api */}
-      <Typography fontSize='14px'>{hasNumbers ? target.toLocaleString() : ''}</Typography>
+      <Typography fontSize='14px'>{hasNumbers ? allocated.toLocaleString() : ''}</Typography>
       <Typography fontSize='14px'>{hasNumbers ? availableToSchedule.toLocaleString() : ''}</Typography>
       <Typography fontSize='14px'>{hasNumbers ? leftToPlant.toLocaleString() : ''}</Typography>
       <Button icon='iconTrashCan' onClick={removeRow} priority='ghost' size='small' type='passive' />
