@@ -27,7 +27,6 @@ import organizationUsersReducers from './features/organizationUser/organizationU
 import plantingSiteReducers from './features/plantingSite/plantingSiteSlice';
 import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
 import projectToDoReducers from './features/projectToDo/projectToDoSlice';
-import projectsReducers from './features/projects/projectsSlice';
 import reportsSettingsReducers from './features/reportsSettings/reportsSettingsSlice';
 import scoresReducers from './features/scores/scoresSlice';
 import snackbarReducers from './features/snackbar/snackbarSlice';
@@ -66,7 +65,6 @@ export const reducers = {
   ...organizationUsersReducers,
   ...acceleratorProjectSpeciesReducers,
   ...plantingSiteReducers,
-  ...projectsReducers,
   ...projectSpeciesReducers,
   ...projectToDoReducers,
   ...reportsSettingsReducers,

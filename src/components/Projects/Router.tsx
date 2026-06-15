@@ -11,14 +11,9 @@ import SettingsLayout from '../../scenes/Settings/SettingsLayout';
 export type ProjectsRouterProps = {
   isPlaceholderOrg: () => boolean;
   selectedOrgHasProjects: () => boolean;
-  reloadProjects: () => void;
 };
 
-export default function ProjectsRouter({
-  isPlaceholderOrg,
-  selectedOrgHasProjects,
-  reloadProjects,
-}: ProjectsRouterProps): JSX.Element {
+export default function ProjectsRouter({ isPlaceholderOrg, selectedOrgHasProjects }: ProjectsRouterProps): JSX.Element {
   const getProjectsView = (): JSX.Element => {
     if (!isPlaceholderOrg() && selectedOrgHasProjects()) {
       return <Projects />;
@@ -29,7 +24,7 @@ export default function ProjectsRouter({
   return (
     <Routes>
       <Route path={'/*'} element={<SettingsLayout activeSection='projects'>{getProjectsView()}</SettingsLayout>} />
-      <Route path={'/new'} element={<ProjectNewView reloadData={reloadProjects} />} />
+      <Route path={'/new'} element={<ProjectNewView />} />
       <Route
         path={'/:projectId'}
         element={

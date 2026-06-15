@@ -7,9 +7,8 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
-import { useCreateProjectMutation } from 'src/queries/generated/projects';
+import { useAssignProjectMutation, useCreateProjectMutation } from 'src/queries/generated/projects';
 import { SearchResponseBatches } from 'src/services/NurseryBatchService';
-import ProjectsService from 'src/services/ProjectsService';
 import strings from 'src/strings';
 import { CreateProjectRequest } from 'src/types/Project';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
@@ -26,16 +25,13 @@ import { getFormattedSuccessMessages } from './toasts';
 export type FlowStates = 'label' | 'accessions' | 'batches' | 'plantingSites';
 const STATE_ORDER: FlowStates[] = ['label', 'accessions', 'batches', 'plantingSites'];
 
-type ProjectNewViewProps = {
-  reloadData: () => void;
-};
-
-export default function ProjectNewView({ reloadData }: ProjectNewViewProps): JSX.Element {
+export default function ProjectNewView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
 
   const [createProject, { data: createdProject, isError, isSuccess }] = useCreateProjectMutation();
+  const [assignProject, { isError: isAssignError, isSuccess: isAssignSuccess }] = useAssignProjectMutation();
 
   const [record, setRecord] = useForm<CreateProjectRequest>({
     name: '',
@@ -66,7 +62,7 @@ export default function ProjectNewView({ reloadData }: ProjectNewViewProps): JSX
     }
   }, [flowState, saveProject]);
 
-  // Once the project is created, assign the selected entities and redirect to the projects list
+  // Once the project is created, assign the selected entities
   useEffect(() => {
     if (isError) {
       snackbar.toastError();
@@ -77,34 +73,50 @@ export default function ProjectNewView({ reloadData }: ProjectNewViewProps): JSX
       return;
     }
 
-    const assignAndRedirect = async () => {
-      await ProjectsService.assignProjectToEntities(createdProject.id, {
+    void assignProject({
+      id: createdProject.id,
+      assignProjectRequestPayload: {
         accessionIds: projectAccessions.map((entity) => Number(entity.id)),
         batchIds: projectBatches.map((entity) => Number(entity.id)),
         plantingSiteIds: projectPlantingSites.map((entity) => Number(entity.id)),
-      });
-
-      reloadData();
-
-      snackbar.toastSuccess(
-        getFormattedSuccessMessages(record.name, projectAccessions, projectBatches, projectPlantingSites),
-        strings.formatString(strings.PROJECT_ADDED, record.name) as string
-      );
-
-      goToProjects();
-    };
-
-    void assignAndRedirect();
+      },
+    });
   }, [
+    assignProject,
     createdProject,
-    goToProjects,
     isError,
     isSuccess,
     projectAccessions,
     projectBatches,
     projectPlantingSites,
+    snackbar,
+  ]);
+
+  // Once the entities are assigned, notify and redirect to the projects list
+  useEffect(() => {
+    if (isAssignError) {
+      snackbar.toastError();
+      return;
+    }
+
+    if (!isAssignSuccess) {
+      return;
+    }
+
+    snackbar.toastSuccess(
+      getFormattedSuccessMessages(record.name, projectAccessions, projectBatches, projectPlantingSites),
+      strings.formatString(strings.PROJECT_ADDED, record.name) as string
+    );
+
+    goToProjects();
+  }, [
+    goToProjects,
+    isAssignError,
+    isAssignSuccess,
+    projectAccessions,
+    projectBatches,
+    projectPlantingSites,
     record,
-    reloadData,
     snackbar,
   ]);
 

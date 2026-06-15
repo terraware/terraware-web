@@ -8,7 +8,7 @@ import Link from 'src/components/common/Link';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useProjects } from 'src/hooks/useProjects';
 import { useOrganization } from 'src/providers';
-import { AssignProjectRequestPayload } from 'src/services/ProjectsService';
+import { AssignProjectRequestPayload } from 'src/queries/generated/projects';
 import strings from 'src/strings';
 import { isMember } from 'src/utils/organization';
 
