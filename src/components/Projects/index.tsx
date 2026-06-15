@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
+import React, { type JSX, useMemo, useRef, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 
@@ -12,11 +12,11 @@ import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import ProjectsService from 'src/services/ProjectsService';
+import { useListProjectsQuery } from 'src/queries/generated/projects';
 import strings from 'src/strings';
-import { Project } from 'src/types/Project';
+import { SearchNodePayload } from 'src/types/Search';
 import { isAdmin } from 'src/utils/organization';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import { searchAndSort } from 'src/utils/searchAndSort';
 import useDebounce from 'src/utils/useDebounce';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -33,37 +33,34 @@ export default function ProjectsList(): JSX.Element {
   const navigate = useSyncNavigate();
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
-  const [results, setResults] = useState<Project[]>();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const { activeLocale } = useLocalization();
 
-  const search = useCallback(
-    async (searchTerm: string) => {
-      if (selectedOrganization) {
-        const projects = await ProjectsService.searchProjects(selectedOrganization.id, searchTerm);
-        if (projects) {
-          return projects;
-        }
-      }
-    },
-    [selectedOrganization]
-  );
+  const { data: projectsData } = useListProjectsQuery(selectedOrganization?.id, {
+    skip: selectedOrganization === undefined,
+  });
 
-  useEffect(() => {
-    const refreshSearch = async () => {
-      const requestId = Math.random().toString();
-      setRequestId('searchProjects', requestId);
-      const projectsResults = await search(debouncedSearchTerm);
-      if (getRequestId('searchProjects') === requestId) {
-        setResults(projectsResults);
-      }
-    };
-
-    if (activeLocale) {
-      void refreshSearch();
+  const results = useMemo(() => {
+    if (!activeLocale || !projectsData?.projects) {
+      return undefined;
     }
-  }, [debouncedSearchTerm, search, activeLocale]);
+
+    const searchNode: SearchNodePayload | undefined = debouncedSearchTerm
+      ? {
+          operation: 'or',
+          children: [
+            { operation: 'field', field: 'name', type: 'Fuzzy', values: [debouncedSearchTerm] },
+            { operation: 'field', field: 'description', type: 'Fuzzy', values: [debouncedSearchTerm] },
+          ],
+        }
+      : undefined;
+
+    return searchAndSort(projectsData.projects, searchNode, {
+      locale: activeLocale,
+      sortOrder: { field: 'name' },
+    });
+  }, [activeLocale, debouncedSearchTerm, projectsData]);
 
   const goToNewProject = () => {
     const newProjectLocation = {
