@@ -29,6 +29,16 @@ type SpeciesTargetsTabProps = {
   plantingSite: PlantingSitePayload;
 };
 
+const compareSpeciesScientificNames = (
+  speciesById: Map<number, Species>,
+  firstSpeciesId: number,
+  secondSpeciesId: number
+): number => {
+  const firstName = speciesById.get(firstSpeciesId)?.scientificName ?? `#${firstSpeciesId}`;
+  const secondName = speciesById.get(secondSpeciesId)?.scientificName ?? `#${secondSpeciesId}`;
+  return firstName.localeCompare(secondName) || firstSpeciesId - secondSpeciesId;
+};
+
 const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabProps): JSX.Element => {
   const theme = useTheme();
   const { data: speciesTargetsData } = useGetSpeciesTargetsQuery(plantingSeason.id);
@@ -148,7 +158,20 @@ const SubstratumSection = ({
 
   const usedSpeciesIds = useMemo(() => new Set(targets.map((t) => t.speciesId)), [targets]);
 
-  const availableSpecies = useMemo(() => species.filter((s) => !usedSpeciesIds.has(s.id)), [species, usedSpeciesIds]);
+  const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species]);
+
+  const availableSpecies = useMemo(
+    () =>
+      species
+        .filter((s) => !usedSpeciesIds.has(s.id))
+        .sort((a, b) => compareSpeciesScientificNames(speciesById, a.id, b.id)),
+    [species, speciesById, usedSpeciesIds]
+  );
+
+  const sortedTargets = useMemo(
+    () => [...targets].sort((a, b) => compareSpeciesScientificNames(speciesById, a.speciesId, b.speciesId)),
+    [speciesById, targets]
+  );
 
   return (
     <Box marginBottom={theme.spacing(3)}>
@@ -192,7 +215,7 @@ const SubstratumSection = ({
             </Typography>
             {!readOnly && <Box />}
           </Box>
-          {targets.map((target, index) => (
+          {sortedTargets.map((target, index) => (
             <SpeciesTargetRow
               key={`${target.substratumId}-${target.speciesId}`}
               target={target}

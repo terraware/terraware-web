@@ -40,6 +40,16 @@ type PlantingDatesTabProps = {
 
 type EditingState = { mode: 'add' } | { mode: 'edit'; scheduledDate: ScheduledDatePayload };
 
+const compareSpeciesScientificNames = (
+  speciesById: Map<number, Species>,
+  firstSpeciesId: number,
+  secondSpeciesId: number
+): number => {
+  const firstName = speciesById.get(firstSpeciesId)?.scientificName ?? `#${firstSpeciesId}`;
+  const secondName = speciesById.get(secondSpeciesId)?.scientificName ?? `#${secondSpeciesId}`;
+  return firstName.localeCompare(secondName) || firstSpeciesId - secondSpeciesId;
+};
+
 const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProps): JSX.Element => {
   const theme = useTheme();
   const { species } = useSpeciesData();
@@ -580,7 +590,18 @@ const SpeciesTable = ({
   const theme = useTheme();
   const [addingSpecies, setAddingSpecies] = useState(false);
   const usedSpeciesIds = useMemo(() => new Set(substratumSpecies.map((s) => s.speciesId)), [substratumSpecies]);
-  const availableSpecies = useMemo(() => species.filter((s) => !usedSpeciesIds.has(s.id)), [species, usedSpeciesIds]);
+  const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species]);
+  const availableSpecies = useMemo(
+    () =>
+      species
+        .filter((s) => !usedSpeciesIds.has(s.id))
+        .sort((a, b) => compareSpeciesScientificNames(speciesById, a.id, b.id)),
+    [species, speciesById, usedSpeciesIds]
+  );
+  const sortedSubstratumSpecies = useMemo(
+    () => [...substratumSpecies].sort((a, b) => compareSpeciesScientificNames(speciesById, a.speciesId, b.speciesId)),
+    [speciesById, substratumSpecies]
+  );
 
   return (
     <Box>
@@ -596,7 +617,7 @@ const SpeciesTable = ({
         <HeaderCell label={strings.LEFT_TO_PLANT} tooltip={strings.LEFT_TO_PLANT_TOOLTIP} />
         <Box />
       </Box>
-      {substratumSpecies.map((draft, index) => (
+      {sortedSubstratumSpecies.map((draft, index) => (
         <SpeciesRow
           key={draft.speciesId}
           substratumId={substratumId}
