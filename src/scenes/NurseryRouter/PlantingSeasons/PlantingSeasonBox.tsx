@@ -101,7 +101,7 @@ const PlantingSeasonBox = ({
               <Typography color={theme.palette.TwClrTxt}>{dateRange}</Typography>
             </Box>
             <Divider sx={{ marginY: theme.spacing(2) }} />
-            <Box display='flex' gap={theme.spacing(6)} flexWrap='wrap'>
+            <Box display='flex' gap={theme.spacing(3)} flexWrap='wrap'>
               <Box display='flex' gap={theme.spacing(2)}>
                 <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
                   {strings.STRATA}
