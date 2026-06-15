@@ -243,6 +243,7 @@ const PlantingDateForm = ({
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
+  const { isMobile } = useDeviceInfo();
   const [createScheduledPlantingDate, { isLoading: isCreating }] = useCreateScheduledPlantingDateMutation();
   const [updateScheduledPlantingDate, { isLoading: isUpdating }] = useUpdateScheduledPlantingDateMutation();
   const [deleteScheduledPlantingDate, { isLoading: isDeleting }] = useDeleteScheduledPlantingDateMutation();
@@ -271,6 +272,20 @@ const PlantingDateForm = ({
   });
   const [validate, setValidate] = useState(false);
   const [notifyModalOpen, setNotifyModalOpen] = useState(false);
+
+  const mobileFooterButtonSx = isMobile
+    ? {
+        borderRadius: '28px',
+        borderWidth: '2px',
+        fontSize: '16px',
+        fontWeight: 600,
+        justifyContent: 'center',
+        margin: 0,
+        minHeight: '52px',
+        width: '100%',
+      }
+    : undefined;
+  const tooltipButtonWrapperStyle = isMobile ? { display: 'block', width: '100%' } : undefined;
 
   const updateSubstratum = (substratumId: number, updater: (draft: SubstratumDraft) => SubstratumDraft) => {
     setSubstrataDrafts((prev) => ({
@@ -399,7 +414,14 @@ const PlantingDateForm = ({
         />
       ))}
 
-      <Box display='flex' justifyContent='flex-end' gap={theme.spacing(1)} marginTop={theme.spacing(2)}>
+      <Box
+        display='flex'
+        flexDirection={isMobile ? 'column' : 'row'}
+        alignItems={isMobile ? 'stretch' : 'center'}
+        justifyContent='flex-end'
+        gap={isMobile ? theme.spacing(1.5) : theme.spacing(1)}
+        marginTop={theme.spacing(2)}
+      >
         {isEditing && (
           <Button
             label={strings.DELETE}
@@ -407,20 +429,41 @@ const PlantingDateForm = ({
             priority='secondary'
             type='destructive'
             disabled={isSaving}
+            size={isMobile ? 'medium' : undefined}
+            sx={mobileFooterButtonSx}
           />
         )}
-        <Button label={strings.CANCEL} onClick={onClose} priority='secondary' type='passive' disabled={isSaving} />
+        <Button
+          label={strings.CANCEL}
+          onClick={onClose}
+          priority='secondary'
+          type='passive'
+          disabled={isSaving}
+          size={isMobile ? 'medium' : undefined}
+          sx={mobileFooterButtonSx}
+        />
         <Tooltip title={strings.SAVE_TOOLTIP}>
-          <span>
-            <Button label={strings.SAVE} onClick={() => void onSave()} priority='secondary' disabled={isSaving} />
+          <span style={tooltipButtonWrapperStyle}>
+            <Button
+              label={strings.SAVE}
+              onClick={() => void onSave()}
+              priority='secondary'
+              type={isMobile ? 'passive' : 'productive'}
+              disabled={isSaving}
+              size={isMobile ? 'medium' : undefined}
+              sx={mobileFooterButtonSx}
+            />
           </span>
         </Tooltip>
         <Tooltip title={strings.SAVE_AND_REQUEST_TOOLTIP} slotProps={{ tooltip: { sx: { maxWidth: '262px' } } }}>
-          <span>
+          <span style={tooltipButtonWrapperStyle}>
             <Button
               label={strings.SAVE_AND_REQUEST}
               onClick={() => setNotifyModalOpen(true)}
               disabled={isSaving || !date}
+              priority={isMobile ? 'secondary' : 'primary'}
+              size={isMobile ? 'medium' : undefined}
+              sx={mobileFooterButtonSx}
             />
           </span>
         </Tooltip>
@@ -616,6 +659,7 @@ const SpeciesTable = ({
   onUpdateSubstratumSpecies,
 }: SpeciesTableProps): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const [addingSpecies, setAddingSpecies] = useState(false);
   const usedSpeciesIds = useMemo(() => new Set(substratumSpecies.map((s) => s.speciesId)), [substratumSpecies]);
   const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species]);
@@ -632,56 +676,58 @@ const SpeciesTable = ({
   );
 
   return (
-    <Box>
-      <Box
-        display='grid'
-        gridTemplateColumns='2fr 1fr 1fr 1fr 1fr 40px'
-        sx={{ padding: theme.spacing(1, 2), borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
-      >
-        <HeaderCell label={strings.SPECIES} />
-        <HeaderCell label={strings.QUANTITY_TO_PLANT} tooltip={strings.QUANTITY_TO_PLANT_TOOLTIP} />
-        <HeaderCell label={strings.ALLOCATED} tooltip={strings.ALLOCATED_TOOLTIP} />
-        <HeaderCell label={strings.AVAILABLE_TO_SCHEDULE} tooltip={strings.AVAILABLE_TO_SCHEDULE_TOOLTIP} />
-        <HeaderCell label={strings.LEFT_TO_PLANT} tooltip={strings.LEFT_TO_PLANT_TOOLTIP} />
-        <Box />
-      </Box>
-      {sortedSubstratumSpecies.map((draft, index) => (
-        <SpeciesRow
-          key={draft.speciesId}
-          substratumId={substratumId}
-          draft={draft}
-          index={index}
-          species={species}
-          target={targetsBySpecies.get(draft.speciesId) ?? 0}
-          allocated={draft.allocatedQuantity ?? allocatedBySpecies.get(draft.speciesId) ?? 0}
-          scheduledOther={scheduledOtherBySpecies.get(draft.speciesId) ?? 0}
-          onUpdateSubstratumSpecies={onUpdateSubstratumSpecies}
-        />
-      ))}
-      <Box padding={theme.spacing(1, 2)}>
-        {addingSpecies ? (
-          <AddSpeciesRow
+    <Box sx={{ overflowX: isMobile ? 'auto' : 'visible', WebkitOverflowScrolling: 'touch' }}>
+      <Box minWidth={isMobile ? '760px' : undefined}>
+        <Box
+          display='grid'
+          gridTemplateColumns='2fr 1fr 1fr 1fr 1fr 40px'
+          sx={{ padding: theme.spacing(1, 2), borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
+        >
+          <HeaderCell label={strings.SPECIES} />
+          <HeaderCell label={strings.QUANTITY_TO_PLANT} tooltip={strings.QUANTITY_TO_PLANT_TOOLTIP} />
+          <HeaderCell label={strings.ALLOCATED} tooltip={strings.ALLOCATED_TOOLTIP} />
+          <HeaderCell label={strings.AVAILABLE_TO_SCHEDULE} tooltip={strings.AVAILABLE_TO_SCHEDULE_TOOLTIP} />
+          <HeaderCell label={strings.LEFT_TO_PLANT} tooltip={strings.LEFT_TO_PLANT_TOOLTIP} />
+          <Box />
+        </Box>
+        {sortedSubstratumSpecies.map((draft, index) => (
+          <SpeciesRow
+            key={draft.speciesId}
             substratumId={substratumId}
-            availableSpecies={availableSpecies}
-            onAdd={(speciesId, quantity) => {
-              onUpdateSubstratumSpecies(substratumId, (current) => [
-                ...current,
-                { speciesId, quantity, allocatedQuantity: allocatedBySpecies.get(speciesId) },
-              ]);
-              setAddingSpecies(false);
-            }}
-            onCancel={() => setAddingSpecies(false)}
+            draft={draft}
+            index={index}
+            species={species}
+            target={targetsBySpecies.get(draft.speciesId) ?? 0}
+            allocated={draft.allocatedQuantity ?? allocatedBySpecies.get(draft.speciesId) ?? 0}
+            scheduledOther={scheduledOtherBySpecies.get(draft.speciesId) ?? 0}
+            onUpdateSubstratumSpecies={onUpdateSubstratumSpecies}
           />
-        ) : (
-          <Button
-            icon='iconAdd'
-            label={strings.ADD_SPECIES}
-            onClick={() => setAddingSpecies(true)}
-            priority='ghost'
-            type='productive'
-            disabled={availableSpecies.length === 0}
-          />
-        )}
+        ))}
+        <Box padding={theme.spacing(1, 2)}>
+          {addingSpecies ? (
+            <AddSpeciesRow
+              substratumId={substratumId}
+              availableSpecies={availableSpecies}
+              onAdd={(speciesId, quantity) => {
+                onUpdateSubstratumSpecies(substratumId, (current) => [
+                  ...current,
+                  { speciesId, quantity, allocatedQuantity: allocatedBySpecies.get(speciesId) },
+                ]);
+                setAddingSpecies(false);
+              }}
+              onCancel={() => setAddingSpecies(false)}
+            />
+          ) : (
+            <Button
+              icon='iconAdd'
+              label={strings.ADD_SPECIES}
+              onClick={() => setAddingSpecies(true)}
+              priority='ghost'
+              type='productive'
+              disabled={availableSpecies.length === 0}
+            />
+          )}
+        </Box>
       </Box>
     </Box>
   );
