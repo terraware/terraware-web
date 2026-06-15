@@ -104,7 +104,7 @@ const PlantingSeasonBox = ({
             <Box
               display='grid'
               gridTemplateColumns={
-                isMobile ? 'max-content minmax(0, 1fr)' : 'max-content 220px max-content minmax(0, 1fr)'
+                isMobile ? 'max-content minmax(0, 1fr)' : 'max-content 180px max-content minmax(0, 1fr)'
               }
               columnGap={theme.spacing(2)}
               rowGap={theme.spacing(1)}
