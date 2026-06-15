@@ -2,6 +2,7 @@ import React, { type JSX, useMemo, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -425,6 +426,7 @@ const AddSpeciesRow = ({
   onClose,
 }: AddSpeciesRowProps): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
   const rowRef = useRef<HTMLDivElement>(null);
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | undefined>();
@@ -500,12 +502,28 @@ const AddSpeciesRow = ({
           min={0}
         />
       </Box>
-      <Button
-        label={strings.ADD}
-        onClick={() => void onSave()}
-        disabled={isLoading || selectedSpeciesId === undefined}
-      />
-      <Button label={strings.CANCEL} onClick={onClose} priority='secondary' type='passive' />
+      <Box
+        display='flex'
+        flexDirection={isMobile ? 'column' : 'row'}
+        gap={isMobile ? theme.spacing(1) : theme.spacing(2)}
+        width={isMobile ? '100%' : undefined}
+      >
+        <Button
+          label={strings.ADD}
+          onClick={() => void onSave()}
+          disabled={isLoading || selectedSpeciesId === undefined}
+          style={isMobile ? { margin: 0, width: '100%' } : undefined}
+          sx={isMobile ? { justifyContent: 'center' } : undefined}
+        />
+        <Button
+          label={strings.CANCEL}
+          onClick={onClose}
+          priority='secondary'
+          type='passive'
+          style={isMobile ? { margin: 0, width: '100%' } : undefined}
+          sx={isMobile ? { justifyContent: 'center' } : undefined}
+        />
+      </Box>
     </Box>
   );
 };
