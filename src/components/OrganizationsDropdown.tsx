@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 
@@ -16,6 +16,16 @@ export default function OrganizationsDropdown(): JSX.Element {
     useOrganization();
   const navigate = useSyncNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
+
+  const menuSections = useMemo(() => {
+    const orgSections = organizations
+      ?.toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+      ?.map((organization) => ({
+        label: organization.name,
+        value: organization.id.toString(),
+      }));
+    return [orgSections || [], [{ label: strings.CREATE_NEW_ORGANIZATION, value: '0' }]];
+  }, [activeLocale, organizations]);
 
   const selectOrganization = (newlySelectedOrg: Organization) => {
     setSelectedOrganization((currentlySelectedOrg: Organization | undefined) => {
@@ -62,12 +72,7 @@ export default function OrganizationsDropdown(): JSX.Element {
       />
       <PopoverMenu
         anchor={<p style={{ fontSize: '16px' }}>{selectedOrganization?.name}</p>}
-        menuSections={[
-          organizations
-            ?.toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
-            .map((organization) => ({ label: organization.name, value: organization.id.toString() })) || [],
-          [{ label: strings.CREATE_NEW_ORGANIZATION, value: '0' }],
-        ]}
+        menuSections={menuSections}
         onClick={changeOrganization}
       />
     </div>
