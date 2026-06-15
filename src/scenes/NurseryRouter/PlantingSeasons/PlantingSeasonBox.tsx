@@ -141,37 +141,32 @@ const PlantingSeasonBox = ({ season, plantingSiteName, strata }: PlantingSeasonB
     </Box>
   );
 
-  const desktopNamesSection = (label: string, names: string[], twoColumn = false) => (
-    <Box display='flex' gap={theme.spacing(2)}>
-      <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
-        {label}
-      </Typography>
-      <Box>
-        {names.length > 0 ? (
-          twoColumn ? (
-            <Box display='flex' flexDirection='column'>
-              {Array.from({ length: Math.ceil(names.length / 2) }, (_, i) => {
-                const pair = names.slice(i * 2, i * 2 + 2);
-                return (
-                  <Box key={i} display='flex' gap='8px'>
-                    {pair.map((name) => (
-                      <Typography key={name} fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxtSecondary}>
-                        {name}
-                      </Typography>
-                    ))}
-                  </Box>
-                );
-              })}
+  const desktopNamesList = (names: string[], twoColumn = false) => {
+    if (names.length === 0) {
+      return <Typography fontSize='14px'>{'-'}</Typography>;
+    }
+
+    if (!twoColumn) {
+      return namesList(names);
+    }
+
+    return (
+      <Box display='flex' flexDirection='column'>
+        {Array.from({ length: Math.ceil(names.length / 2) }, (_, i) => {
+          const pair = names.slice(i * 2, i * 2 + 2);
+          return (
+            <Box key={i} display='flex' gap='8px' flexWrap='wrap'>
+              {pair.map((name) => (
+                <Typography key={name} fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxtSecondary}>
+                  {name}
+                </Typography>
+              ))}
             </Box>
-          ) : (
-            namesList(names)
-          )
-        ) : (
-          <Typography fontSize='14px'>{'-'}</Typography>
-        )}
+          );
+        })}
       </Box>
-    </Box>
-  );
+    );
+  };
 
   return (
     <Box
@@ -245,9 +240,21 @@ const PlantingSeasonBox = ({ season, plantingSiteName, strata }: PlantingSeasonB
                 <Typography color={theme.palette.TwClrTxt}>{dateRange}</Typography>
               </Box>
               <Divider sx={{ marginY: theme.spacing(2) }} />
-              <Box display='flex' gap={theme.spacing(6)} flexWrap='wrap'>
-                {desktopNamesSection(strings.STRATA, strataNames)}
-                {desktopNamesSection(strings.SUBSTRATA, substrataNames, true)}
+              <Box
+                display='grid'
+                gridTemplateColumns='max-content minmax(160px, 180px) max-content minmax(0, 1fr)'
+                columnGap={theme.spacing(2)}
+                rowGap={theme.spacing(1)}
+                alignItems='start'
+              >
+                <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+                  {strings.STRATA}
+                </Typography>
+                <Box minWidth={0}>{desktopNamesList(strataNames)}</Box>
+                <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+                  {strings.SUBSTRATA}
+                </Typography>
+                <Box minWidth={0}>{desktopNamesList(substrataNames, true)}</Box>
               </Box>
             </Box>
             <Box display='flex' gap={theme.spacing(4)} alignItems='flex-start'>

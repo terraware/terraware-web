@@ -29,6 +29,16 @@ type SpeciesTargetsTabProps = {
   plantingSite: PlantingSitePayload;
 };
 
+const compareSpeciesScientificNames = (
+  speciesById: Map<number, Species>,
+  firstSpeciesId: number,
+  secondSpeciesId: number
+): number => {
+  const firstName = speciesById.get(firstSpeciesId)?.scientificName ?? `#${firstSpeciesId}`;
+  const secondName = speciesById.get(secondSpeciesId)?.scientificName ?? `#${secondSpeciesId}`;
+  return firstName.localeCompare(secondName) || firstSpeciesId - secondSpeciesId;
+};
+
 const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabProps): JSX.Element => {
   const theme = useTheme();
   const { data: speciesTargetsData } = useGetSpeciesTargetsQuery(plantingSeason.id);
@@ -47,13 +57,22 @@ const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabPr
   }, [speciesTargetsData]);
 
   return (
-    <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+    <Box>
       {!readOnly && (
-        <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginBottom={theme.spacing(2)}>
-          {strings.SET_SPECIES_TARGETS_DESCRIPTION}
-        </Typography>
+        <Box
+          sx={{
+            backgroundColor: theme.palette.TwClrBaseWhite,
+            borderTopLeftRadius: '24px',
+            borderTopRightRadius: '24px',
+          }}
+          padding={theme.spacing(3, 3, 0, 3)}
+        >
+          <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+            {strings.SET_SPECIES_TARGETS_DESCRIPTION}
+          </Typography>
+        </Box>
       )}
-      {(plantingSite.strata ?? []).map((stratum) => (
+      {(plantingSite.strata ?? []).map((stratum, index) => (
         <StratumSection
           key={stratum.id}
           stratum={stratum}
@@ -61,9 +80,10 @@ const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabPr
           species={species}
           plantingSeasonId={plantingSeason.id}
           readOnly={readOnly}
+          isFirst={index === 0}
         />
       ))}
-    </Card>
+    </Box>
   );
 };
 
@@ -73,6 +93,7 @@ type StratumSectionProps = {
   species: Species[];
   plantingSeasonId: number;
   readOnly: boolean;
+  isFirst: boolean;
 };
 
 const StratumSection = ({
@@ -81,6 +102,7 @@ const StratumSection = ({
   species,
   plantingSeasonId,
   readOnly,
+  isFirst,
 }: StratumSectionProps): JSX.Element => {
   const theme = useTheme();
 
@@ -92,10 +114,14 @@ const StratumSection = ({
   }, [stratum, targetsBySubstratum]);
 
   return (
-    <Box marginBottom={theme.spacing(2)}>
+    <Card
+      flushMobile
+      radius={isFirst ? `0 0 ${theme.spacing(3)} ${theme.spacing(3)}` : undefined}
+      style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingBottom: 0, marginBottom: 3 }}
+    >
       <Box
         sx={{
-          backgroundColor: theme.palette.TwClrBgSecondary,
+          backgroundColor: theme.palette.TwClrBaseGray025,
           borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
           padding: theme.spacing(1, 2),
           display: 'flex',
@@ -103,11 +129,11 @@ const StratumSection = ({
           gap: theme.spacing(1),
         }}
       >
-        <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxtSecondary}>
+        <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
           {stratum.name}
         </Typography>
         {(stratumTotal || 0) > 0 && (
-          <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+          <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrBaseBlack}>
             {`${stratumTotal.toLocaleString()} ${strings.TARGET_PLANTS}`}
           </Typography>
         )}
@@ -122,7 +148,7 @@ const StratumSection = ({
           readOnly={readOnly}
         />
       ))}
-    </Box>
+    </Card>
   );
 };
 
@@ -148,13 +174,26 @@ const SubstratumSection = ({
 
   const usedSpeciesIds = useMemo(() => new Set(targets.map((t) => t.speciesId)), [targets]);
 
-  const availableSpecies = useMemo(() => species.filter((s) => !usedSpeciesIds.has(s.id)), [species, usedSpeciesIds]);
+  const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species]);
+
+  const availableSpecies = useMemo(
+    () =>
+      species
+        .filter((s) => !usedSpeciesIds.has(s.id))
+        .sort((a, b) => compareSpeciesScientificNames(speciesById, a.id, b.id)),
+    [species, speciesById, usedSpeciesIds]
+  );
+
+  const sortedTargets = useMemo(
+    () => [...targets].sort((a, b) => compareSpeciesScientificNames(speciesById, a.speciesId, b.speciesId)),
+    [speciesById, targets]
+  );
 
   return (
     <Box marginBottom={theme.spacing(3)}>
       <Box
         sx={{
-          backgroundColor: theme.palette.TwClrBgSecondary,
+          backgroundColor: theme.palette.TwClrBaseGray025,
           padding: theme.spacing(1, 2),
           display: 'flex',
           alignItems: 'center',
@@ -180,7 +219,7 @@ const SubstratumSection = ({
             display='grid'
             gridTemplateColumns={readOnly ? '1fr 1fr' : '1fr 1fr 40px'}
             sx={{
-              padding: theme.spacing(1, 2),
+              padding: theme.spacing(2, 2),
               borderBottom: `2px solid ${theme.palette.TwClrBrdrSecondary}`,
             }}
           >
@@ -192,7 +231,7 @@ const SubstratumSection = ({
             </Typography>
             {!readOnly && <Box />}
           </Box>
-          {targets.map((target, index) => (
+          {sortedTargets.map((target, index) => (
             <SpeciesTargetRow
               key={`${target.substratumId}-${target.speciesId}`}
               target={target}
