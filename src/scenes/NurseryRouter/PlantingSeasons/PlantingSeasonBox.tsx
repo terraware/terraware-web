@@ -101,52 +101,56 @@ const PlantingSeasonBox = ({
               <Typography color={theme.palette.TwClrTxt}>{dateRange}</Typography>
             </Box>
             <Divider sx={{ marginY: theme.spacing(2) }} />
-            <Box display='flex' gap={theme.spacing(6)} flexWrap='wrap'>
-              <Box display='flex' gap={theme.spacing(2)}>
-                <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
-                  {strings.STRATA}
-                </Typography>
-                <Box>
-                  {strataNames.length > 0 ? (
-                    strataNames.map((name) => (
-                      <Typography key={name} fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxtSecondary}>
-                        {name}
-                      </Typography>
-                    ))
-                  ) : (
-                    <Typography fontSize='14px'>{'-'}</Typography>
-                  )}
-                </Box>
+            <Box
+              display='grid'
+              gridTemplateColumns={
+                isMobile ? 'max-content minmax(0, 1fr)' : 'max-content 180px max-content minmax(0, 1fr)'
+              }
+              columnGap={theme.spacing(2)}
+              rowGap={theme.spacing(1)}
+              alignItems='start'
+            >
+              <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+                {strings.STRATA}
+              </Typography>
+              <Box minWidth={0}>
+                {strataNames.length > 0 ? (
+                  strataNames.map((name) => (
+                    <Typography key={name} fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxtSecondary}>
+                      {name}
+                    </Typography>
+                  ))
+                ) : (
+                  <Typography fontSize='14px'>{'-'}</Typography>
+                )}
               </Box>
-              <Box display='flex' gap={theme.spacing(2)}>
-                <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
-                  {strings.SUBSTRATA}
-                </Typography>
-                <Box>
-                  {substrataNames.length > 0 ? (
-                    <Box display='flex' flexDirection='column'>
-                      {Array.from({ length: Math.ceil(substrataNames.length / 2) }, (_, i) => {
-                        const pair = substrataNames.slice(i * 2, i * 2 + 2);
-                        return (
-                          <Box key={i} display='flex' gap='8px'>
-                            {pair.map((name) => (
-                              <Typography
-                                key={name}
-                                fontSize='14px'
-                                fontWeight={600}
-                                color={theme.palette.TwClrTxtSecondary}
-                              >
-                                {name}
-                              </Typography>
-                            ))}
-                          </Box>
-                        );
-                      })}
-                    </Box>
-                  ) : (
-                    <Typography fontSize='14px'>{'-'}</Typography>
-                  )}
-                </Box>
+              <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+                {strings.SUBSTRATA}
+              </Typography>
+              <Box minWidth={0}>
+                {substrataNames.length > 0 ? (
+                  <Box display='flex' flexDirection='column'>
+                    {Array.from({ length: Math.ceil(substrataNames.length / 2) }, (_, i) => {
+                      const pair = substrataNames.slice(i * 2, i * 2 + 2);
+                      return (
+                        <Box key={i} display='flex' gap='8px' flexWrap='wrap'>
+                          {pair.map((name) => (
+                            <Typography
+                              key={name}
+                              fontSize='14px'
+                              fontWeight={600}
+                              color={theme.palette.TwClrTxtSecondary}
+                            >
+                              {name}
+                            </Typography>
+                          ))}
+                        </Box>
+                      );
+                    })}
+                  </Box>
+                ) : (
+                  <Typography fontSize='14px'>{'-'}</Typography>
+                )}
               </Box>
             </Box>
           </Box>
