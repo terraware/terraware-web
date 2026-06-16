@@ -233,7 +233,9 @@ const PlantingSeasonBox = ({ season, plantingSiteName, strata }: PlantingSeasonB
                 <Typography fontSize='18px' fontWeight={600}>
                   {season.name}
                 </Typography>
-                <PlantingSeasonStatusBadge status={season.status} />
+                <Box paddingLeft={2}>
+                  <PlantingSeasonStatusBadge status={season.status} />
+                </Box>
               </Box>
               <Box display='flex' alignItems='center' gap={theme.spacing(2)} marginTop={theme.spacing(1)}>
                 <Typography color={theme.palette.TwClrTxtSecondary}>{plantingSiteName}</Typography>
