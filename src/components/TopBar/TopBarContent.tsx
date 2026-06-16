@@ -22,7 +22,6 @@ import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser, useUserFundingEntity } from 'src/providers/hooks';
 import { getSettingsLandingPath } from 'src/scenes/Settings/settingsTabs';
-import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import FunderBreadcrumbs from './FunderBreadcrumbs';
@@ -113,7 +112,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       <Box sx={rightStyles}>
         <KnowledgeBaseLink />
         <NotificationsDropdown organizationId={selectedOrganization?.id} reloadOrganizationData={reloadOrganizations} />
-        {(userFundingEntity || isAdmin(selectedOrganization)) && (
+        {(userFundingEntity || selectedOrganization) && (
           <SettingsLink onClick={selectedOrganization ? goToOrgSettings : undefined} />
         )}
         <div style={separatorStyles} />
@@ -156,7 +155,7 @@ export default function TopBarContent(props: TopBarProps): JSX.Element | null {
       <Grid item xs={5} sx={rightStyles}>
         <KnowledgeBaseLink />
         <NotificationsDropdown organizationId={selectedOrganization?.id} reloadOrganizationData={reloadOrganizations} />
-        {(userFundingEntity || isAdmin(selectedOrganization)) && (
+        {(userFundingEntity || selectedOrganization) && (
           <SettingsLink onClick={selectedOrganization ? goToOrgSettings : undefined} />
         )}
         <SmallDeviceUserMenu onLogout={onHandleLogout} hasOrganizations={organizations && organizations.length > 0} />

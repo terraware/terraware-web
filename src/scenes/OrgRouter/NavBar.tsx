@@ -57,7 +57,6 @@ export default function NavBar({
   const isDeliverablesRoute = useMatch({ path: APP_PATHS.DELIVERABLES + '/', end: false });
   const isDeliverableViewRoute = useMatch({ path: APP_PATHS.DELIVERABLE_VIEW + '/', end: false });
   const isHomeRoute = useMatch({ path: APP_PATHS.HOME + '/', end: false });
-  const isPeopleRoute = useMatch({ path: APP_PATHS.PEOPLE + '/', end: false });
   const isSpeciesRoute = useMatch({ path: APP_PATHS.SPECIES + '/', end: false });
   const isSeedBanksRoute = useMatch({ path: APP_PATHS.SEED_BANKS + '/', end: false });
   const isNurseriesRoute = useMatch({ path: APP_PATHS.NURSERIES + '/', end: false });
@@ -450,18 +449,9 @@ export default function NavBar({
         </SubNavbar>
       </NavItem>
 
-      <NavSection title={strings.SETTINGS.toUpperCase()} />
-      <NavItem
-        label={strings.PEOPLE}
-        icon='peopleNav'
-        selected={!!isPeopleRoute}
-        onClick={() => {
-          closeAndNavigateTo(APP_PATHS.PEOPLE);
-        }}
-        id='people'
-      />
       {isManagerOrHigher(selectedOrganization) && (
         <>
+          <NavSection title={strings.SETTINGS.toUpperCase()} />
           <NavItem
             label={strings.PROJECTS}
             icon='iconFolder'
