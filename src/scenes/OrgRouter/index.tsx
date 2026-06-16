@@ -16,11 +16,8 @@ import ApplicationProvider from 'src/providers/Application';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import SpeciesProvider from 'src/providers/Species/SpeciesProvider';
-import { baseApi } from 'src/queries/baseApi';
 import { useLazyCountObservationsQuery } from 'src/queries/search/observations';
 import { useLazyCountPlantingSitesQuery } from 'src/queries/search/plantingSites';
-import { QueryTagTypes } from 'src/queries/tags';
-import { useAppDispatch } from 'src/redux/store';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import ApplicationRouter from 'src/scenes/ApplicationRouter';
 import BatchBulkWithdrawView from 'src/scenes/BatchBulkWithdrawView';
@@ -64,7 +61,6 @@ interface OrgRouterProps {
 }
 
 const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
-  const dispatch = useAppDispatch();
   const { type } = useDeviceInfo();
   const { isProduction } = useEnvironment();
   const { reloadUserPreferences: reloadPreferences } = useUser();
@@ -115,10 +111,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
     zIndex: 1300,
     inset: '0px',
   };
-
-  const reloadProjects = useCallback(() => {
-    void dispatch(baseApi.util.invalidateTags([{ type: QueryTagTypes.Projects, id: 'LIST' }]));
-  }, [dispatch]);
 
   const selectedOrgHasSpecies = useCallback((): boolean => species.length > 0, [species]);
 
@@ -207,7 +199,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               path={APP_PATHS.PROJECTS + '/*'}
               element={
                 <ProjectsRouter
-                  reloadProjects={reloadProjects}
                   isPlaceholderOrg={() => (selectedOrganization ? isPlaceholderOrg(selectedOrganization.id) : true)}
                   selectedOrgHasProjects={selectedOrgHasProjects}
                 />

@@ -6,10 +6,7 @@ import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useProjects } from 'src/hooks/useProjects';
-import { requestProjectAssign } from 'src/redux/features/projects/projectsAsyncThunks';
-import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { AssignProjectRequestPayload } from 'src/services/ProjectsService';
+import { AssignProjectRequestPayload, useAssignProjectMutation } from 'src/queries/generated/projects';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -26,14 +23,12 @@ interface ProjectAssignModalProps<T extends ProjectAssignableEntity> {
 function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAssignModalProps<T>) {
   const { onClose, isModalOpen, assignPayloadCreator, reloadEntity, onUnAssign } = props;
 
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
   const { availableProjects } = useProjects(props.entity);
   const [entity, setEntity] = useState(props.entity);
 
-  const [requestId, setRequestId] = useState('');
-  const projectRequest = useAppSelector((state) => selectProjectRequest(state, requestId));
+  const [assignProject, { isSuccess, isError }] = useAssignProjectMutation();
 
   const handleSave = useCallback(() => {
     if (onUnAssign && !entity.projectId) {
@@ -41,12 +36,14 @@ function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAss
     }
 
     if (entity.projectId && props.entity.projectId !== entity.projectId) {
-      const request = dispatch(requestProjectAssign({ projectId: entity.projectId, entities: assignPayloadCreator() }));
-      setRequestId(request.requestId);
+      void assignProject({
+        id: entity.projectId,
+        assignProjectRequestPayload: assignPayloadCreator(),
+      });
     }
 
     onClose();
-  }, [entity.projectId, props.entity.projectId, onClose, dispatch, assignPayloadCreator, onUnAssign]);
+  }, [entity.projectId, props.entity.projectId, onClose, assignProject, assignPayloadCreator, onUnAssign]);
 
   const handleUpdateProject = useCallback(
     (setFn: (previousEntity: T) => T) => {
@@ -57,16 +54,14 @@ function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAss
   );
 
   useEffect(() => {
-    if (projectRequest?.status === 'success') {
-      setRequestId('');
-
+    if (isSuccess) {
       if (reloadEntity) {
         reloadEntity();
       }
-    } else if (projectRequest?.status === 'error') {
+    } else if (isError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [projectRequest, props, reloadEntity, snackbar]);
+  }, [isSuccess, isError, reloadEntity, snackbar]);
 
   return (
     <DialogBox
