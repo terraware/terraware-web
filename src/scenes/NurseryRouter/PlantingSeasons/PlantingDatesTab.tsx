@@ -1,6 +1,6 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { Box, Checkbox, Divider, Typography, useTheme } from '@mui/material';
+import { Box, Checkbox, Divider, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem, Icon, Tooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
@@ -322,8 +322,18 @@ type PlantingDateFormProps = {
   onClose: () => void;
 };
 
-type SpeciesDraft = { speciesId: number; quantity: number; allocatedQuantity?: number };
+type SpeciesDraft = {
+  id: string;
+  speciesId?: number;
+  quantity: number;
+  quantityInput?: string;
+  allocatedQuantity?: number;
+  isNew?: boolean;
+};
 type SubstratumDraft = { selected: boolean; species: SpeciesDraft[] };
+
+const getSpeciesDraftQuantity = (draft: SpeciesDraft): number =>
+  Math.max(0, Number(draft.quantityInput ?? draft.quantity));
 
 const quantityTextFieldSx = {
   width: '208px',
@@ -364,6 +374,7 @@ const PlantingDateForm = ({
         const existing = drafts[s.substratumId] ?? { selected: true, species: [] };
         existing.selected = true;
         existing.species.push({
+          id: `${s.substratumId}-${s.speciesId}`,
           speciesId: s.speciesId,
           quantity: s.quantity,
           allocatedQuantity: s.allocatedQuantity,
@@ -403,21 +414,65 @@ const PlantingDateForm = ({
         return [];
       }
       const substratumId = Number(substratumIdStr);
-      return draft.species
-        .filter((s) => s.quantity > 0)
-        .map(
-          (s): ScheduledPlantingDateSpeciesPayload => ({
-            quantity: s.quantity,
+      return draft.species.flatMap((s) => {
+        const quantity = getSpeciesDraftQuantity(s);
+        if (s.speciesId === undefined || Number.isNaN(quantity) || quantity <= 0) {
+          return [];
+        }
+        return [
+          {
+            quantity,
             speciesId: s.speciesId,
             substratumId,
-          })
-        );
+          },
+        ];
+      });
     });
   };
+
+  const hasNewSpeciesDraftErrors = useMemo(() => {
+    const targetsBySubstratumAndSpecies = new Map<string, number>();
+    speciesTargets.forEach((target) => {
+      targetsBySubstratumAndSpecies.set(`${target.substratumId}-${target.speciesId}`, target.quantity);
+    });
+
+    const scheduledOtherBySubstratumAndSpecies = new Map<string, number>();
+    scheduledDates.forEach((scheduledDate) => {
+      if (scheduledDate.scheduledPlantingDateId === editingScheduledDate?.scheduledPlantingDateId) {
+        return;
+      }
+      scheduledDate.species.forEach((scheduledSpecies) => {
+        const key = `${scheduledSpecies.substratumId}-${scheduledSpecies.speciesId}`;
+        scheduledOtherBySubstratumAndSpecies.set(
+          key,
+          (scheduledOtherBySubstratumAndSpecies.get(key) ?? 0) + scheduledSpecies.quantity
+        );
+      });
+    });
+
+    return Object.entries(substrataDrafts).some(([substratumIdStr, substratumDraft]) => {
+      if (!substratumDraft.selected) {
+        return false;
+      }
+      return substratumDraft.species.some((speciesDraft) => {
+        if (!speciesDraft.isNew || speciesDraft.speciesId === undefined) {
+          return false;
+        }
+        const key = `${substratumIdStr}-${speciesDraft.speciesId}`;
+        const target = targetsBySubstratumAndSpecies.get(key) ?? 0;
+        const scheduledOther = scheduledOtherBySubstratumAndSpecies.get(key) ?? 0;
+        const quantity = getSpeciesDraftQuantity(speciesDraft);
+        return target > 0 && !Number.isNaN(quantity) && quantity > Math.max(0, target - scheduledOther);
+      });
+    });
+  }, [editingScheduledDate?.scheduledPlantingDateId, scheduledDates, speciesTargets, substrataDrafts]);
 
   const performSave = async (notifyOptions?: { note: string }) => {
     if (!date) {
       setValidate(true);
+      return false;
+    }
+    if (hasNewSpeciesDraftErrors) {
       return false;
     }
     const speciesPayload = buildPayloadSpecies();
@@ -552,7 +607,7 @@ const PlantingDateForm = ({
               onClick={() => void onSave()}
               priority='secondary'
               type={isMobile ? 'passive' : 'productive'}
-              disabled={isSaving}
+              disabled={isSaving || hasNewSpeciesDraftErrors}
               size={isMobile ? 'medium' : undefined}
               sx={mobileFooterButtonSx}
             />
@@ -563,7 +618,7 @@ const PlantingDateForm = ({
             <Button
               label={strings.SAVE_AND_REQUEST}
               onClick={() => setNotifyModalOpen(true)}
-              disabled={isSaving || !date}
+              disabled={isSaving || !date || hasNewSpeciesDraftErrors}
               priority={isMobile ? 'secondary' : 'primary'}
               size={isMobile ? 'medium' : undefined}
               sx={mobileFooterButtonSx}
@@ -677,6 +732,7 @@ const SubstratumDraftSection = ({
     }
     onUpdateSubstratumSpecies(substratum.id, () =>
       targetsForSubstratum.map((t) => ({
+        id: `${substratum.id}-${t.speciesId}`,
         speciesId: t.speciesId,
         quantity: 0,
         allocatedQuantity: allocatedBySpecies.get(t.speciesId),
@@ -763,8 +819,13 @@ const SpeciesTable = ({
 }: SpeciesTableProps): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const [addingSpecies, setAddingSpecies] = useState(false);
-  const usedSpeciesIds = useMemo(() => new Set(substratumSpecies.map((s) => s.speciesId)), [substratumSpecies]);
+  const usedSpeciesIds = useMemo(
+    () =>
+      new Set(
+        substratumSpecies.map((s) => s.speciesId).filter((speciesId): speciesId is number => speciesId !== undefined)
+      ),
+    [substratumSpecies]
+  );
   const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species]);
   const availableSpecies = useMemo(
     () =>
@@ -774,9 +835,20 @@ const SpeciesTable = ({
     [species, speciesById, usedSpeciesIds]
   );
   const sortedSubstratumSpecies = useMemo(
-    () => [...substratumSpecies].sort((a, b) => compareSpeciesScientificNames(speciesById, a.speciesId, b.speciesId)),
+    () =>
+      substratumSpecies
+        .filter((draft): draft is SpeciesDraft & { speciesId: number } => !draft.isNew && draft.speciesId !== undefined)
+        .sort((a, b) => compareSpeciesScientificNames(speciesById, a.speciesId, b.speciesId)),
     [speciesById, substratumSpecies]
   );
+  const newSpeciesDrafts = useMemo(() => substratumSpecies.filter((draft) => draft.isNew), [substratumSpecies]);
+
+  const addSpeciesDraft = () => {
+    onUpdateSubstratumSpecies(substratumId, (current) => [
+      ...current,
+      { id: `new-species-${crypto.randomUUID()}`, quantity: 0, quantityInput: '0', isNew: true },
+    ]);
+  };
 
   return (
     <Box sx={{ overflowX: isMobile ? 'auto' : 'visible', WebkitOverflowScrolling: 'touch' }}>
@@ -793,7 +865,7 @@ const SpeciesTable = ({
         </Box>
         {sortedSubstratumSpecies.map((draft, index) => (
           <SpeciesRow
-            key={draft.speciesId}
+            key={draft.id}
             substratumId={substratumId}
             draft={draft}
             index={index}
@@ -804,32 +876,38 @@ const SpeciesTable = ({
             onUpdateSubstratumSpecies={onUpdateSubstratumSpecies}
           />
         ))}
-        <Box padding={theme.spacing(1, 2)}>
-          {addingSpecies ? (
+        {newSpeciesDrafts.map((draft) => (
+          <Box key={draft.id} padding={theme.spacing(1, 2)}>
             <AddSpeciesRow
               substratumId={substratumId}
+              draft={draft}
+              species={species}
               availableSpecies={availableSpecies}
               targetsBySpecies={targetsBySpecies}
               scheduledOtherBySpecies={scheduledOtherBySpecies}
-              onAdd={(speciesId, quantity) => {
-                onUpdateSubstratumSpecies(substratumId, (current) => [
-                  ...current,
-                  { speciesId, quantity, allocatedQuantity: allocatedBySpecies.get(speciesId) },
-                ]);
-                setAddingSpecies(false);
-              }}
-              onCancel={() => setAddingSpecies(false)}
+              allocatedBySpecies={allocatedBySpecies}
+              onChange={(updatedDraft) =>
+                onUpdateSubstratumSpecies(substratumId, (current) =>
+                  current.map((currentDraft) => (currentDraft.id === draft.id ? updatedDraft : currentDraft))
+                )
+              }
+              onRemove={() =>
+                onUpdateSubstratumSpecies(substratumId, (current) =>
+                  current.filter((currentDraft) => currentDraft.id !== draft.id)
+                )
+              }
             />
-          ) : (
-            <Button
-              icon='iconAdd'
-              label={strings.ADD_SPECIES}
-              onClick={() => setAddingSpecies(true)}
-              priority='ghost'
-              type='productive'
-              disabled={availableSpecies.length === 0}
-            />
-          )}
+          </Box>
+        ))}
+        <Box padding={theme.spacing(1, 2)}>
+          <Button
+            icon='iconAdd'
+            label={strings.ADD_SPECIES}
+            onClick={addSpeciesDraft}
+            priority='ghost'
+            type='productive'
+            disabled={availableSpecies.length === 0}
+          />
         </Box>
       </Box>
     </Box>
@@ -838,49 +916,63 @@ const SpeciesTable = ({
 
 type AddSpeciesRowProps = {
   substratumId: number;
+  draft: SpeciesDraft;
+  species: Species[];
   availableSpecies: Species[];
   targetsBySpecies: Map<number, number>;
   scheduledOtherBySpecies: Map<number, number>;
-  onAdd: (speciesId: number, quantity: number) => void;
-  onCancel: () => void;
+  allocatedBySpecies: Map<number, number>;
+  onChange: (draft: SpeciesDraft) => void;
+  onRemove: () => void;
 };
 
 const AddSpeciesRow = ({
   substratumId,
+  draft,
+  species,
   availableSpecies,
   targetsBySpecies,
   scheduledOtherBySpecies,
-  onAdd,
-  onCancel,
+  allocatedBySpecies,
+  onChange,
+  onRemove,
 }: AddSpeciesRowProps): JSX.Element => {
   const theme = useTheme();
-  const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | undefined>();
-  const [quantity, setQuantity] = useState<string>('0');
+  const selectedSpeciesId = draft.speciesId;
   const target = selectedSpeciesId === undefined ? 0 : targetsBySpecies.get(selectedSpeciesId) ?? 0;
   const scheduledOther = selectedSpeciesId === undefined ? 0 : scheduledOtherBySpecies.get(selectedSpeciesId) ?? 0;
   const availableToSchedule = Math.max(0, target - scheduledOther);
-  const parsedQuantity = Math.max(0, Number(quantity));
+  const quantity = draft.quantityInput ?? draft.quantity.toString();
+  const parsedQuantity = getSpeciesDraftQuantity(draft);
   const quantityToValidate = Number.isNaN(parsedQuantity) ? 0 : parsedQuantity;
   const exceedsGoal = selectedSpeciesId !== undefined && target > 0 && quantityToValidate > availableToSchedule;
+  const selectedSpecies = selectedSpeciesId === undefined ? undefined : species.find((s) => s.id === selectedSpeciesId);
 
-  const options = useMemo<DropdownItem[]>(
-    () =>
-      availableSpecies.map((s) => ({
-        label: s.scientificName,
-        value: s.id,
-      })),
-    [availableSpecies]
-  );
+  const options = useMemo<DropdownItem[]>(() => {
+    const speciesOptions = selectedSpecies ? [selectedSpecies, ...availableSpecies] : availableSpecies;
+    return speciesOptions.map((s) => ({
+      label: s.scientificName,
+      value: s.id,
+    }));
+  }, [availableSpecies, selectedSpecies]);
 
-  const onConfirm = () => {
-    if (selectedSpeciesId === undefined) {
-      return;
-    }
-    const parsed = Math.max(0, Number(quantity));
-    if (Number.isNaN(parsed) || exceedsGoal) {
-      return;
-    }
-    onAdd(selectedSpeciesId, parsed);
+  const onSpeciesChange = (value: string | number) => {
+    const speciesId = Number(value);
+    onChange({
+      ...draft,
+      speciesId,
+      allocatedQuantity: allocatedBySpecies.get(speciesId),
+    });
+  };
+
+  const onQuantityChange = (value: unknown) => {
+    const quantityInput = String(value ?? '');
+    const parsed = getSpeciesDraftQuantity({ ...draft, quantityInput });
+    onChange({
+      ...draft,
+      quantity: Number.isNaN(parsed) ? 0 : parsed,
+      quantityInput,
+    });
   };
 
   return (
@@ -892,7 +984,7 @@ const AddSpeciesRow = ({
           placeholder={strings.SELECT_SPECIES}
           options={options}
           selectedValue={selectedSpeciesId}
-          onChange={(value) => setSelectedSpeciesId(Number(value))}
+          onChange={onSpeciesChange}
           fullWidth
           autocomplete
         />
@@ -903,14 +995,15 @@ const AddSpeciesRow = ({
           type='number'
           label={strings.QUANTITY_TO_PLANT}
           value={quantity}
-          onChange={(value) => setQuantity(String(value ?? ''))}
+          onChange={onQuantityChange}
           min={0}
           errorText={exceedsGoal ? strings.EXCEEDS_GOAL : ''}
           sx={quantityTextFieldSx}
         />
       </Box>
-      <Button label={strings.SAVE} onClick={onConfirm} disabled={selectedSpeciesId === undefined || exceedsGoal} />
-      <Button label={strings.CANCEL} onClick={onCancel} priority='secondary' type='passive' />
+      <IconButton aria-label={strings.REMOVE} size='small' onClick={onRemove}>
+        <Icon name='iconSubtract' size='medium' fillColor={theme.palette.TwClrIcn} />
+      </IconButton>
     </Box>
   );
 };

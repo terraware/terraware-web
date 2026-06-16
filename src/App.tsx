@@ -2,7 +2,7 @@ import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { MixpanelProvider, useMixpanel } from 'react-mixpanel-browser';
 import { Provider } from 'react-redux';
 
-import { Box, CssBaseline, StyledEngineProvider, useTheme } from '@mui/material';
+import { Box, CssBaseline, GlobalStyles, StyledEngineProvider, useTheme } from '@mui/material';
 
 import AppBootstrap from 'src/AppBootstrap';
 import CookieConsentBanner from 'src/components/CookieConsentBanner';
@@ -93,22 +93,37 @@ function AppContent() {
   // updated. Declare the dependency here so the app rerenders when the locale changes.
   useLocalization();
 
+  const appBackgroundImage = useMemo(
+    () =>
+      'linear-gradient(180deg,' +
+      `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
+      `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`,
+    [theme]
+  );
+
+  const documentBackgroundStyles = useMemo(
+    () => ({
+      html: {
+        backgroundColor: theme.palette.TwClrBaseGray025,
+      },
+      body: {
+        backgroundAttachment: 'fixed',
+        backgroundColor: theme.palette.TwClrBaseGray025,
+        backgroundImage: appBackgroundImage,
+      },
+    }),
+    [appBackgroundImage, theme]
+  );
+
   const mainBoxStyles = useMemo(() => {
     return {
       backgroundColor: theme.palette.TwClrBaseGray025,
-      backgroundImage:
-        'linear-gradient(180deg,' +
-        `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
-        `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`,
+      backgroundImage: appBackgroundImage,
       backgroundAttachment: 'fixed',
       minHeight: '100vh',
       '& .navbar': {
         backgroundColor: isDesktop ? theme.palette.TwClrBaseGray025 : theme.palette.TwClrBaseWhite,
-        backgroundImage: isDesktop
-          ? 'linear-gradient(180deg,' +
-            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)} 0%,` +
-            `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.4)} 100%)`
-          : null,
+        backgroundImage: isDesktop ? appBackgroundImage : null,
         backgroundAttachment: 'fixed',
         paddingRight: isDesktop ? '8px' : undefined,
         marginTop: isDesktop ? '96px' : '0px',
@@ -124,11 +139,12 @@ function AppContent() {
         },
       },
     };
-  }, [isDesktop, theme]);
+  }, [appBackgroundImage, isDesktop, theme]);
 
   return (
     <StyledEngineProvider injectFirst>
       <CssBaseline />
+      <GlobalStyles styles={documentBackgroundStyles} />
       <ToastSnackbar />
       <CookieConsentBanner />
       <TopBar>
