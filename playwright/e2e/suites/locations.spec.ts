@@ -131,9 +131,14 @@ test.describe('LocationTests', () => {
     await expect(page.getByText('Organization TypeUniversity')).toBeVisible();
     await expect(page.getByText('Organization Websitefakeuniversity.edu')).toBeVisible();
     await page.getByRole('button', { name: 'Edit Organization' }).click();
-    await page.getByText('This is my new organization').click();
-    await page.getByText('This is my new organization').dblclick();
-    await page.getByText('This is my new organization').fill('This is my old organization');
+    const descriptionBox = page
+      .getByText('Edit Organization')
+      .locator('../..')
+      .locator('textarea')
+      .getByText('This is my new organization');
+    await descriptionBox.click();
+    await descriptionBox.dblclick();
+    await descriptionBox.fill('This is my old organization');
     await page.locator('.textfield-container > .textfield-value').click();
     await page.getByText('Non-Governmental').click();
     await page.getByRole('button', { name: 'Save' }).click();
