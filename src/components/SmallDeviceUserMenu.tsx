@@ -20,7 +20,7 @@ import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import { getRgbaFromHex } from 'src/utils/color';
@@ -37,6 +37,7 @@ export default function SmallDeviceUserMenu({
   onLogout,
   hasOrganizations,
 }: SmallDeviceUserMenuProps): JSX.Element | null {
+  const { activeLocale } = useLocalization();
   const { selectedOrganization, setSelectedOrganization, organizations, redirectAndNotify, reloadOrganizations } =
     useOrganization();
   const { user } = useUser();
@@ -48,6 +49,11 @@ export default function SmallDeviceUserMenu({
   const anchorRef = React.useRef<HTMLButtonElement>(null);
   const { isProduction } = useEnvironment();
   const iconLetter = user?.firstName?.charAt(0) || user?.lastName?.charAt(0) || user?.email?.charAt(0);
+
+  const sortedOrganizations = useMemo(
+    () => organizations?.toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined)),
+    [organizations, activeLocale]
+  );
 
   const iconStyles = {
     alignItems: 'center',
@@ -281,7 +287,7 @@ export default function SmallDeviceUserMenu({
                       </Typography>
                       {hasOrganizations ? (
                         <div>
-                          {organizations?.map((org, index) => {
+                          {sortedOrganizations?.map((org, index) => {
                             return (
                               <MenuItem
                                 onClick={(e) => {

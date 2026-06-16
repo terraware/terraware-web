@@ -81,7 +81,7 @@ export default function StratumList(): JSX.Element {
           totalLive,
           totalPlants: stratum.totalPlants,
           totalSpecies: stratum.totalSpecies,
-          plantingDensity: stratum.plantingDensity,
+          plantingDensity: stratum.observedDensity,
           survivalRate: stratum.survivalRate,
         };
       });

@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, Divider, Tooltip, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Icon, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -23,6 +23,7 @@ import {
   useLazyGetSpeciesTargetsQuery,
 } from 'src/queries/generated/plantingSeasons';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { useGetPlantingSeasonSpeciesSummaryQuery } from 'src/queries/search/plantingSeasons';
 import strings from 'src/strings';
 import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -46,6 +47,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
   const [getPlantingSeason, { data: plantingSeasonData }] = useLazyGetPlantingSeasonQuery();
   const [getPlantingSite, { data: plantingSiteData }] = useLazyGetPlantingSiteQuery();
   const [getSpeciesTargets, { data: speciesTargets }] = useLazyGetSpeciesTargetsQuery();
+  const { data: speciesSummary } = useGetPlantingSeasonSpeciesSummaryQuery(seasonIdNumber, { skip: !plantingSeasonId });
 
   useEffect(() => {
     if (plantingSeasonId) {
@@ -112,12 +114,31 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
   };
 
   const plantingGoal = useMemo(() => {
+    if (speciesSummary && speciesSummary.length > 0) {
+      return speciesSummary.reduce((sum, target) => sum + target.target, 0);
+    }
+
     const targets = speciesTargets?.targets;
     if (!targets || targets.length === 0) {
       return undefined;
     }
     return targets.reduce((sum, t) => sum + t.quantity, 0);
-  }, [speciesTargets]);
+  }, [speciesSummary, speciesTargets]);
+
+  const withdrawnForPlantingTotal = useMemo(() => {
+    if (!speciesSummary || speciesSummary.length === 0) {
+      return undefined;
+    }
+    return speciesSummary.reduce((sum, target) => sum + target.withdrawn, 0);
+  }, [speciesSummary]);
+
+  const leftToPlantTotal = useMemo(() => {
+    if (!speciesSummary || speciesSummary.length === 0) {
+      return undefined;
+    }
+    return speciesSummary.reduce((sum, target) => sum + target.leftToPlant, 0);
+  }, [speciesSummary]);
+
   const hasSpeciesTargets = (speciesTargets?.targets.length ?? 0) > 0;
 
   const dateRange = useMemo(() => {
@@ -133,14 +154,80 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
     [plantingSite]
   );
 
-  const numberColumn = (label: string, value: number | undefined) => (
-    <Box textAlign='right' minWidth='120px'>
-      <Typography fontSize='14px' color={theme.palette.TwClrBaseBlack} fontWeight={500}>
+  const numberColumn = (
+    label: string,
+    value: number | undefined,
+    align: 'left' | 'center' | 'right' = 'right',
+    highlight = false
+  ) => {
+    const justifyContent = align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
+
+    return (
+      <Box
+        textAlign={isMobile ? align : 'right'}
+        sx={isMobile ? { minWidth: 0 } : { minWidth: '120px' }}
+        minWidth={isMobile ? undefined : '120px'}
+      >
+        <Typography
+          fontSize='14px'
+          color={theme.palette.TwClrTxt}
+          fontWeight={500}
+          lineHeight='20px'
+          sx={
+            isMobile
+              ? {
+                  alignItems: 'flex-end',
+                  display: 'flex',
+                  justifyContent,
+                  minHeight: '40px',
+                }
+              : undefined
+          }
+        >
+          {label}
+        </Typography>
+        <Typography
+          fontSize='24px'
+          fontWeight={600}
+          lineHeight='32px'
+          color={highlight && value !== undefined ? theme.palette.TwClrTxtBrand : theme.palette.TwClrTxt}
+          sx={highlight && value !== undefined ? { textDecoration: 'underline' } : undefined}
+        >
+          {value === undefined ? '-' : value.toLocaleString(activeLocale || undefined)}
+        </Typography>
+      </Box>
+    );
+  };
+
+  const namesList = (names: string[]) =>
+    names.length > 0 ? (
+      names.map((name) => (
+        <Typography
+          key={name}
+          fontSize='14px'
+          fontWeight={600}
+          lineHeight='20px'
+          color={theme.palette.TwClrTxtSecondary}
+        >
+          {name}
+        </Typography>
+      ))
+    ) : (
+      <Typography fontSize='14px'>{'-'}</Typography>
+    );
+
+  const mobileNamesSection = (label: string, names: string[]) => (
+    <Box>
+      <Typography
+        fontSize='14px'
+        fontWeight={400}
+        lineHeight='20px'
+        color={theme.palette.TwClrTxtSecondary}
+        marginBottom={theme.spacing(0.75)}
+      >
         {label}
       </Typography>
-      <Typography fontSize='24px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
-        {value === undefined ? '-' : value.toLocaleString(activeLocale || undefined)}
-      </Typography>
+      <Box>{namesList(names)}</Box>
     </Box>
   );
 
@@ -204,28 +291,61 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
         <PageSnackbar />
       </PageHeaderWrapper>
       <Card style={{ width: '100%', marginTop: theme.spacing(3) }} radius={theme.spacing(1)}>
-        <Box display='flex' flexDirection={isMobile ? 'column' : 'row'} gap={theme.spacing(2)}>
-          <Box flex={1}>
-            <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
+        {isMobile ? (
+          <Box display='flex' flexDirection='column'>
+            <Box display='flex' alignItems='flex-start' gap={theme.spacing(1)}>
               <Icon name='iconCalendar' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
-              <Typography fontSize='20px' fontWeight={600}>
+              <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
                 {season.name}
               </Typography>
-              {!isClosed && (
-                <Button
-                  icon='iconEdit'
-                  onClick={() => setEditModalOpen(true)}
-                  priority='ghost'
-                  size='small'
-                  type='passive'
-                />
-              )}
+            </Box>
+            <Typography color={theme.palette.TwClrTxtSecondary} marginTop={theme.spacing(1)}>
+              {plantingSite.name}
+            </Typography>
+            <Typography color={theme.palette.TwClrTxt} marginTop={theme.spacing(0.5)}>
+              {dateRange}
+            </Typography>
+            <Box marginTop={theme.spacing(1)}>
               <PlantingSeasonStatusBadge status={season.status} />
             </Box>
-            <Box display='flex' alignItems='center' gap={theme.spacing(2)} marginTop={theme.spacing(1)}>
-              <Typography color={theme.palette.TwClrTxtSecondary}>{plantingSite.name}</Typography>
+            <Divider sx={{ marginY: theme.spacing(2) }} />
+            <Box marginBottom={theme.spacing(2)}>
+              <ProgressChart value={0} target={plantingGoal ?? 0} />
+            </Box>
+            <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
+              {mobileNamesSection(strings.STRATA, strataNames)}
+              {mobileNamesSection(strings.SUBSTRATA, substrataNames)}
+            </Box>
+            <Box
+              display='grid'
+              gridTemplateColumns='repeat(3, minmax(0, 1fr))'
+              gap={theme.spacing(1)}
+              marginTop={theme.spacing(3)}
+              alignItems='end'
+            >
+              {numberColumn(strings.PLANTING_GOAL, plantingGoal, 'left')}
+              {numberColumn(strings.WITHDRAWN_FOR_PLANTING, withdrawnForPlantingTotal, 'center', true)}
+              {numberColumn(strings.LEFT_TO_PLANT, leftToPlantTotal, 'right')}
+            </Box>
+            {hasSpeciesTargets && (
+              <Box marginTop={theme.spacing(3)}>
+                <Link
+                  style={{ fontSize: '16px', textDecoration: 'underline' }}
+                  onClick={() => setSpeciesSummaryOpen(true)}
+                >
+                  {strings.SPECIES_SUMMARY}
+                </Link>
+              </Box>
+            )}
+          </Box>
+        ) : (
+          <Box display='flex' flexDirection='row' gap={theme.spacing(2)}>
+            <Box flex={1}>
               <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
-                <Typography color={theme.palette.TwClrTxt}>{dateRange}</Typography>
+                <Icon name='iconCalendar' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                <Typography fontSize='20px' fontWeight={600}>
+                  {season.name}
+                </Typography>
                 {!isClosed && (
                   <Button
                     icon='iconEdit'
@@ -235,93 +355,109 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
                     type='passive'
                   />
                 )}
+                <PlantingSeasonStatusBadge status={season.status} />
               </Box>
-            </Box>
-            <Box marginY={theme.spacing(2)}>
-              <Box display='flex' alignItems='center' gap={theme.spacing(0.5)} marginBottom={theme.spacing(0.5)}>
-                <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt}>
-                  {strings.PLANTING_PROGRESS}
-                </Typography>
-                <Tooltip title={strings.PLANTING_PROGRESS_TOOLTIP}>
-                  <Box display='flex' alignItems='center'>
-                    <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
-                  </Box>
-                </Tooltip>
-              </Box>
-              <ProgressChart value={0} target={plantingGoal ?? 0} />
-            </Box>
-            <Box display='flex' gap={theme.spacing(6)} flexWrap='wrap'>
-              <Box display='flex' gap={theme.spacing(2)}>
-                <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
-                  {strings.STRATA}
-                </Typography>
-                <Box>
-                  {strataNames.length > 0 ? (
-                    strataNames.map((name) => (
-                      <Typography key={name} fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxtSecondary}>
-                        {name}
-                      </Typography>
-                    ))
-                  ) : (
-                    <Typography fontSize='14px'>{'-'}</Typography>
+              <Box display='flex' alignItems='center' gap={theme.spacing(2)} marginTop={theme.spacing(1)}>
+                <Typography color={theme.palette.TwClrTxtSecondary}>{plantingSite.name}</Typography>
+                <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
+                  <Typography color={theme.palette.TwClrTxt}>{dateRange}</Typography>
+                  {!isClosed && (
+                    <Button
+                      icon='iconEdit'
+                      onClick={() => setEditModalOpen(true)}
+                      priority='ghost'
+                      size='small'
+                      type='passive'
+                    />
                   )}
                 </Box>
               </Box>
-              <Box display='flex' gap={theme.spacing(2)}>
-                <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
-                  {strings.SUBSTRATA}
-                </Typography>
-                <Box>
-                  {substrataNames.length > 0 ? (
-                    <Box display='flex' flexDirection='column'>
-                      {Array.from({ length: Math.ceil(substrataNames.length / 2) }, (_, i) => {
-                        const pair = substrataNames.slice(i * 2, i * 2 + 2);
-                        return (
-                          <Box key={i} display='flex' gap='8px'>
-                            {pair.map((name) => (
-                              <Typography
-                                key={name}
-                                fontSize='14px'
-                                fontWeight={600}
-                                color={theme.palette.TwClrTxtSecondary}
-                              >
-                                {name}
-                              </Typography>
-                            ))}
-                          </Box>
-                        );
-                      })}
+              <Box marginY={theme.spacing(2)}>
+                <Box display='flex' alignItems='center' gap={theme.spacing(0.5)} marginBottom={theme.spacing(0.5)}>
+                  <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt}>
+                    {strings.PLANTING_PROGRESS}
+                  </Typography>
+                  <Tooltip title={strings.PLANTING_PROGRESS_TOOLTIP}>
+                    <Box display='flex' alignItems='center'>
+                      <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
                     </Box>
-                  ) : (
-                    <Typography fontSize='14px'>{'-'}</Typography>
-                  )}
+                  </Tooltip>
+                </Box>
+                <ProgressChart value={0} target={plantingGoal ?? 0} />
+              </Box>
+              <Box display='flex' gap={theme.spacing(6)} flexWrap='wrap'>
+                <Box display='flex' gap={theme.spacing(2)}>
+                  <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+                    {strings.STRATA}
+                  </Typography>
+                  <Box>
+                    {strataNames.length > 0 ? (
+                      strataNames.map((name) => (
+                        <Typography key={name} fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxtSecondary}>
+                          {name}
+                        </Typography>
+                      ))
+                    ) : (
+                      <Typography fontSize='14px'>{'-'}</Typography>
+                    )}
+                  </Box>
+                </Box>
+                <Box display='flex' gap={theme.spacing(2)}>
+                  <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+                    {strings.SUBSTRATA}
+                  </Typography>
+                  <Box>
+                    {substrataNames.length > 0 ? (
+                      <Box display='flex' flexDirection='column'>
+                        {Array.from({ length: Math.ceil(substrataNames.length / 2) }, (_, i) => {
+                          const pair = substrataNames.slice(i * 2, i * 2 + 2);
+                          return (
+                            <Box key={i} display='flex' gap='8px'>
+                              {pair.map((name) => (
+                                <Typography
+                                  key={name}
+                                  fontSize='14px'
+                                  fontWeight={600}
+                                  color={theme.palette.TwClrTxtSecondary}
+                                >
+                                  {name}
+                                </Typography>
+                              ))}
+                            </Box>
+                          );
+                        })}
+                      </Box>
+                    ) : (
+                      <Typography fontSize='14px'>{'-'}</Typography>
+                    )}
+                  </Box>
                 </Box>
               </Box>
             </Box>
-          </Box>
-          <Box display='flex' flexDirection='column' alignItems='flex-end' gap={theme.spacing(2)}>
-            <Box display='flex' gap={theme.spacing(4)} alignItems='flex-start'>
-              {numberColumn(strings.PLANTING_GOAL, plantingGoal)}
-              {numberColumn(strings.WITHDRAWN_FOR_PLANTING, undefined)}
-              {numberColumn(strings.LEFT_TO_PLANT, undefined)}
-              <OptionsMenu
-                optionItems={optionItems}
-                onOptionItemClick={onOptionItemClick}
-                size='small'
-                priority='ghost'
-                type='passive'
-              />
+            <Box display='flex' flexDirection='column' alignItems='flex-end' gap={theme.spacing(2)}>
+              <Box display='flex' gap={theme.spacing(4)} alignItems='flex-start'>
+                {numberColumn(strings.PLANTING_GOAL, plantingGoal)}
+                {numberColumn(strings.WITHDRAWN_FOR_PLANTING, withdrawnForPlantingTotal)}
+                {numberColumn(strings.LEFT_TO_PLANT, leftToPlantTotal)}
+                <OptionsMenu
+                  optionItems={optionItems}
+                  onOptionItemClick={onOptionItemClick}
+                  size='small'
+                  priority='ghost'
+                  type='passive'
+                />
+              </Box>
+              {hasSpeciesTargets && (
+                <Link
+                  style={{ fontSize: '16px', textDecoration: 'underline' }}
+                  onClick={() => setSpeciesSummaryOpen(true)}
+                >
+                  {strings.SPECIES_SUMMARY}
+                </Link>
+              )}
             </Box>
-            {hasSpeciesTargets && (
-              <Link
-                style={{ fontSize: '16px', textDecoration: 'underline' }}
-                onClick={() => setSpeciesSummaryOpen(true)}
-              >
-                {strings.SPECIES_SUMMARY}
-              </Link>
-            )}
           </Box>
-        </Box>
+        )}
       </Card>
       <SpeciesSummaryDrawer
         open={speciesSummaryOpen}

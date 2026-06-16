@@ -3012,6 +3012,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/planting-seasons/notifications": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Lists all notifications for an organization */
+        get: operations["getPlantingSeasonNotifications"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/planting-seasons/{id}": {
         parameters: {
             query?: never;
@@ -4583,6 +4600,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets aggregated statistics about planting sites. */
+        get: operations["getAggregatedTrackingStats"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/substrata/{id}": {
         parameters: {
             query?: never;
@@ -6124,6 +6158,8 @@ export interface components {
             smallTreeCountLow?: number;
             soilAssessment?: string;
             /** @enum {string} */
+            soilType?: "Clay" | "SandyClay" | "SandyClayLoam" | "ClayLoam" | "SiltyClay" | "SiltyClayLoam" | "SandyLoam" | "LoamySand" | "Sand" | "Loam" | "SiltLoam" | "Silt" | "Unknown";
+            /** @enum {string} */
             tide?: "Low" | "High";
             /** Format: date-time */
             tideTime?: string;
@@ -6182,6 +6218,8 @@ export interface components {
             /** @description Biomass Measurements. Required for biomass measurement observations */
             biomassMeasurements?: components["schemas"]["NewBiomassMeasurementPayload"];
             conditions: ("AnimalDamage" | "FastGrowth" | "FavorableWeather" | "Fungus" | "Pests" | "SeedProduction" | "UnfavorableWeather" | "NaturalRegenerationWoody" | "Logging" | "Fire" | "Mining" | "Grazing" | "Infrastructure" | "ElectricalLines" | "SoilErosion" | "DifficultAccessibility" | "Contamination" | "SteepSlope" | "WaterBodies")[];
+            /** @description Use longitude first in coordinate system. Defaults to false. */
+            lngFirst?: boolean;
             notes?: string;
             /**
              * @description Observation type for this observation.
@@ -6212,6 +6250,8 @@ export interface components {
         };
         CompletePlotObservationRequestPayload: {
             conditions: ("AnimalDamage" | "FastGrowth" | "FavorableWeather" | "Fungus" | "Pests" | "SeedProduction" | "UnfavorableWeather" | "NaturalRegenerationWoody" | "Logging" | "Fire" | "Mining" | "Grazing" | "Infrastructure" | "ElectricalLines" | "SoilErosion" | "DifficultAccessibility" | "Contamination" | "SteepSlope" | "WaterBodies")[];
+            /** @description Use longitude first in coordinate system. Defaults to false. */
+            lngFirst?: boolean;
             notes?: string;
             /**
              * Format: date-time
@@ -7107,7 +7147,7 @@ export interface components {
         };
         EventLogEntryPayload: {
             action: components["schemas"]["CreatedActionPayload"] | components["schemas"]["DeletedActionPayload"] | components["schemas"]["FieldUpdatedActionPayload"];
-            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
+            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingDateRequestSpeciesSubjectPayload"] | components["schemas"]["PlantingDateRequestSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSpeciesTargetSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
             /** Format: date-time */
             timestamp: string;
             /** Format: int64 */
@@ -7157,6 +7197,8 @@ export interface components {
             /** Format: int32 */
             smallTreeCountLow: number;
             soilAssessment: string;
+            /** @enum {string} */
+            soilType?: "Clay" | "SandyClay" | "SandyClayLoam" | "ClayLoam" | "SiltyClay" | "SiltyClayLoam" | "SandyLoam" | "LoamySand" | "Sand" | "Loam" | "SiltLoam" | "Silt" | "Unknown";
             /**
              * @description Low or high tide.
              * @enum {string}
@@ -7859,6 +7901,10 @@ export interface components {
             participantProjectsForSpecies: components["schemas"]["ParticipantProjectForSpeciesPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        GetPlantingSeasonNotificationsResponsePayload: {
+            notifications: components["schemas"]["PlantingSeasonNotificationGroupPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
         GetPlantingSeasonResponsePayload: {
             season: components["schemas"]["PlantingSeasonPayload"];
             status: components["schemas"]["SuccessOrError"];
@@ -8391,7 +8437,7 @@ export interface components {
             /** Format: int64 */
             projectId?: number;
             /** @description If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
-            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "PlantingSeason" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "Project" | "RecordedTree")[];
+            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "PlantingDateRequest" | "PlantingDateRequestSpecies" | "PlantingSeason" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "PlantingSeasonSpeciesTarget" | "Project" | "RecordedTree")[];
         };
         ListEventLogEntriesResponsePayload: {
             events: components["schemas"]["EventLogEntryPayload"][];
@@ -8813,6 +8859,8 @@ export interface components {
             /** Format: int32 */
             smallTreeCountLow: number;
             soilAssessment: string;
+            /** @enum {string} */
+            soilType?: "Clay" | "SandyClay" | "SandyClayLoam" | "ClayLoam" | "SiltyClay" | "SiltyClayLoam" | "SandyLoam" | "LoamySand" | "Sand" | "Loam" | "SiltLoam" | "Silt" | "Unknown";
             /** @description List of herbaceous and tree species. Includes all recorded quadrat and additional herbaceous species and recorded tree species. Species not assigned to a quadrat or recorded trees will be saved as an additional herbaceous species. */
             species: components["schemas"]["BiomassSpeciesPayload"][];
             /**
@@ -9734,6 +9782,43 @@ export interface components {
             phase: "Phase 0 - Due Diligence" | "Phase 1 - Feasibility Study" | "Phase 2 - Plan and Scale" | "Phase 3 - Implement and Monitor" | "Pre-Screen" | "Application";
             votes: components["schemas"]["VoteSelection"][];
         };
+        PlantingDateRequestSpeciesSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            plantingSeasonId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            /** Format: int64 */
+            scheduledPlantingDateId: number;
+            scientificName?: string;
+            /** Format: int64 */
+            speciesId: number;
+            stratumName: string;
+            /** Format: int64 */
+            substratumHistoryId: number;
+            /** Format: int64 */
+            substratumId: number;
+            substratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlantingDateRequestSpecies";
+        };
+        PlantingDateRequestSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            plantingSeasonId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            /** Format: int64 */
+            scheduledPlantingDateId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlantingDateRequest";
+        };
         PlantingPayload: {
             /** Format: int64 */
             id: number;
@@ -9756,6 +9841,20 @@ export interface components {
             substratumId?: number;
             /** @enum {string} */
             type: "Delivery" | "Reassignment From" | "Reassignment To" | "Undo";
+        };
+        PlantingSeasonNotificationGroupPayload: {
+            /** Format: int64 */
+            lastEventLogId: number;
+            notifications: components["schemas"]["PlantingSeasonNotificationPayload"][];
+            /** Format: int64 */
+            plantingSeasonId: number;
+            plantingSeasonName: string;
+            plantingSiteName: string;
+        };
+        PlantingSeasonNotificationPayload: {
+            speciesScientificNames?: string[];
+            /** @enum {string} */
+            type: "PlantingSeasonClosed" | "PlantingSeasonPastEndDate" | "SpeciesTargetsAdded" | "SpeciesTargetsUpdated" | "AllocationQuantitiesUpdated" | "SeasonWithdrawalRecorded";
         };
         PlantingSeasonPayload: {
             /** Format: date */
@@ -9807,6 +9906,27 @@ export interface components {
              * @enum {string}
              */
             type: "PlantingSeasonScheduledDate";
+        };
+        PlantingSeasonSpeciesTargetSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            plantingSeasonId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            scientificName?: string;
+            /** Format: int64 */
+            speciesId: number;
+            stratumName: string;
+            /** Format: int64 */
+            substratumHistoryId: number;
+            /** Format: int64 */
+            substratumId: number;
+            substratumName: string;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlantingSeasonSpeciesTarget";
         };
         PlantingSeasonSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
             /** Format: int64 */
@@ -10735,7 +10855,7 @@ export interface components {
             date: string;
             /** Format: int64 */
             scheduledPlantingDateId: number;
-            species: components["schemas"]["ScheduledPlantingDateSpeciesPayload"][];
+            species: components["schemas"]["ScheduledPlantingDateSpeciesResponsePayload"][];
         };
         ScheduledPlantingDateRequestPayload: {
             createNurseryRequest?: boolean;
@@ -10745,6 +10865,16 @@ export interface components {
             species: components["schemas"]["ScheduledPlantingDateSpeciesPayload"][];
         };
         ScheduledPlantingDateSpeciesPayload: {
+            /** Format: int32 */
+            quantity: number;
+            /** Format: int64 */
+            speciesId: number;
+            /** Format: int64 */
+            substratumId: number;
+        };
+        ScheduledPlantingDateSpeciesResponsePayload: {
+            /** Format: int32 */
+            allocatedQuantity: number;
             /** Format: int32 */
             quantity: number;
             /** Format: int64 */
@@ -11417,6 +11547,14 @@ export interface components {
             /** @description Name of timeseries. This must be the name of a timeseries that has already been created for the device. */
             timeseriesName: string;
             values: components["schemas"]["TimeseriesValuePayload"][];
+        };
+        TrackingStatsResponsePayload: {
+            status: components["schemas"]["SuccessOrError"];
+            /**
+             * Format: int32
+             * @description Aggregate survival rate. Not present if there have been no observations of the specified planting sites.
+             */
+            survivalRate?: number;
         };
         UpdateAcceleratorReportConfigPayload: {
             /** Format: uri */
@@ -12116,6 +12254,8 @@ export interface components {
         UploadPlotPhotoRequestPayload: {
             caption?: string;
             gpsCoordinates: components["schemas"]["Point"];
+            /** @description Use longitude first in coordinate system. Defaults to false. */
+            lngFirst?: boolean;
             /** @enum {string} */
             position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
             /**
@@ -18976,6 +19116,29 @@ export interface operations {
             };
         };
     };
+    getPlantingSeasonNotifications: {
+        parameters: {
+            query: {
+                organizationId: number;
+                notificationCategory: "InventoryPlanning" | "PlantingSeasonPlanning";
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetPlantingSeasonNotificationsResponsePayload"];
+                };
+            };
+        };
+    };
     getPlantingSeason: {
         parameters: {
             query?: never;
@@ -22598,6 +22761,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GetPlantingSiteReportedPlantsResponsePayload"];
+                };
+            };
+        };
+    };
+    getAggregatedTrackingStats: {
+        parameters: {
+            query?: {
+                /** @description Organization ID to summarize. Ignored if projectId is supplied. */
+                organizationId?: number;
+                projectId?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["TrackingStatsResponsePayload"];
                 };
             };
         };

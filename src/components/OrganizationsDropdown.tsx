@@ -1,20 +1,31 @@
-import React, { type JSX, useCallback, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { DropdownItem, PopoverMenu } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 
 import AddNewOrganizationModal from './AddNewOrganizationModal';
 
 export default function OrganizationsDropdown(): JSX.Element {
+  const { activeLocale } = useLocalization();
   const { selectedOrganization, setSelectedOrganization, organizations, redirectAndNotify, reloadOrganizations } =
     useOrganization();
   const navigate = useSyncNavigate();
   const [newOrganizationModalOpened, setNewOrganizationModalOpened] = useState(false);
+
+  const menuSections = useMemo(() => {
+    const orgSections = organizations
+      ?.toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+      ?.map((organization) => ({
+        label: organization.name,
+        value: organization.id.toString(),
+      }));
+    return [orgSections || [], [{ label: strings.CREATE_NEW_ORGANIZATION, value: '0' }]];
+  }, [activeLocale, organizations]);
 
   const selectOrganization = (newlySelectedOrg: Organization) => {
     setSelectedOrganization((currentlySelectedOrg: Organization | undefined) => {
@@ -61,10 +72,7 @@ export default function OrganizationsDropdown(): JSX.Element {
       />
       <PopoverMenu
         anchor={<p style={{ fontSize: '16px' }}>{selectedOrganization?.name}</p>}
-        menuSections={[
-          organizations?.map((organization) => ({ label: organization.name, value: organization.id.toString() })) || [],
-          [{ label: strings.CREATE_NEW_ORGANIZATION, value: '0' }],
-        ]}
+        menuSections={menuSections}
         onClick={changeOrganization}
       />
     </div>

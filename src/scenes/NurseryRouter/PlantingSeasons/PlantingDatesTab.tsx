@@ -40,8 +40,19 @@ type PlantingDatesTabProps = {
 
 type EditingState = { mode: 'add' } | { mode: 'edit'; scheduledDate: ScheduledDatePayload };
 
+const compareSpeciesScientificNames = (
+  speciesById: Map<number, Species>,
+  firstSpeciesId: number,
+  secondSpeciesId: number
+): number => {
+  const firstName = speciesById.get(firstSpeciesId)?.scientificName ?? `#${firstSpeciesId}`;
+  const secondName = speciesById.get(secondSpeciesId)?.scientificName ?? `#${secondSpeciesId}`;
+  return firstName.localeCompare(secondName) || firstSpeciesId - secondSpeciesId;
+};
+
 const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProps): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const { species } = useSpeciesData();
   const { data: scheduledDatesData } = useGetScheduledPlantingDatesQuery(plantingSeason.id);
   const { data: speciesTargetsData } = useGetSpeciesTargetsQuery(plantingSeason.id);
@@ -51,6 +62,17 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
   const readOnly = plantingSeason.status === 'Closed';
   const scheduledDates = scheduledDatesData?.scheduledDates ?? [];
   const speciesTargets = speciesTargetsData?.targets ?? [];
+  const mobileAddDateButtonSx = isMobile
+    ? {
+        borderRadius: '28px',
+        borderWidth: '2px',
+        fontSize: '16px',
+        fontWeight: 600,
+        justifyContent: 'center',
+        minHeight: '52px',
+        width: '100%',
+      }
+    : undefined;
 
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
@@ -58,8 +80,19 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
         <EmptyState onAdd={() => setEditing({ mode: 'add' })} readOnly={readOnly} />
       ) : (
         <>
-          <Box display='flex' alignItems='center' justifyContent='space-between' marginBottom={theme.spacing(2)}>
-            <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+          <Box
+            display='flex'
+            flexDirection={isMobile ? 'column' : 'row'}
+            alignItems={isMobile ? 'stretch' : 'center'}
+            justifyContent='space-between'
+            gap={isMobile ? theme.spacing(3) : theme.spacing(2)}
+            marginBottom={theme.spacing(2)}
+          >
+            <Typography
+              fontSize={isMobile ? '16px' : '14px'}
+              lineHeight={isMobile ? '24px' : undefined}
+              color={theme.palette.TwClrTxtSecondary}
+            >
               {strings.PLANTING_DATES_TAB_DESCRIPTION}
             </Typography>
             {!editing && !readOnly && (
@@ -69,6 +102,8 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
                 onClick={() => setEditing({ mode: 'add' })}
                 priority='secondary'
                 type='productive'
+                size={isMobile ? 'medium' : undefined}
+                sx={mobileAddDateButtonSx}
               />
             )}
           </Box>
@@ -105,6 +140,40 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
 
 const EmptyState = ({ onAdd, readOnly }: { onAdd: () => void; readOnly: boolean }): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
+  const mobileAddPlantingDateButtonSx = isMobile
+    ? {
+        borderRadius: '28px',
+        borderWidth: '2px',
+        fontSize: '16px',
+        fontWeight: 600,
+        justifyContent: 'center',
+        minHeight: '52px',
+        width: '100%',
+      }
+    : undefined;
+
+  if (isMobile) {
+    return (
+      <Box display='flex' flexDirection='column' alignItems='stretch' gap={theme.spacing(3)}>
+        <Typography fontSize='16px' lineHeight='24px' color={theme.palette.TwClrTxtSecondary}>
+          {strings.PLANTING_DATES_TAB_DESCRIPTION}
+        </Typography>
+        {!readOnly && (
+          <Button
+            icon='plus'
+            label={strings.ADD_PLANTING_DATE}
+            onClick={onAdd}
+            priority='secondary'
+            type='productive'
+            size='medium'
+            sx={mobileAddPlantingDateButtonSx}
+          />
+        )}
+      </Box>
+    );
+  }
+
   return (
     <Box
       display='flex'
@@ -218,7 +287,7 @@ type PlantingDateFormProps = {
   onClose: () => void;
 };
 
-type SpeciesDraft = { speciesId: number; quantity: number };
+type SpeciesDraft = { speciesId: number; quantity: number; allocatedQuantity?: number };
 type SubstratumDraft = { selected: boolean; species: SpeciesDraft[] };
 
 const PlantingDateForm = ({
@@ -233,6 +302,7 @@ const PlantingDateForm = ({
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
+  const { isMobile } = useDeviceInfo();
   const [createScheduledPlantingDate, { isLoading: isCreating }] = useCreateScheduledPlantingDateMutation();
   const [updateScheduledPlantingDate, { isLoading: isUpdating }] = useUpdateScheduledPlantingDateMutation();
   const [deleteScheduledPlantingDate, { isLoading: isDeleting }] = useDeleteScheduledPlantingDateMutation();
@@ -249,7 +319,11 @@ const PlantingDateForm = ({
       editingScheduledDate.species.forEach((s) => {
         const existing = drafts[s.substratumId] ?? { selected: true, species: [] };
         existing.selected = true;
-        existing.species.push({ speciesId: s.speciesId, quantity: s.quantity });
+        existing.species.push({
+          speciesId: s.speciesId,
+          quantity: s.quantity,
+          allocatedQuantity: s.allocatedQuantity,
+        });
         drafts[s.substratumId] = existing;
       });
     }
@@ -257,6 +331,20 @@ const PlantingDateForm = ({
   });
   const [validate, setValidate] = useState(false);
   const [notifyModalOpen, setNotifyModalOpen] = useState(false);
+
+  const mobileFooterButtonSx = isMobile
+    ? {
+        borderRadius: '28px',
+        borderWidth: '2px',
+        fontSize: '16px',
+        fontWeight: 600,
+        justifyContent: 'center',
+        margin: 0,
+        minHeight: '52px',
+        width: '100%',
+      }
+    : undefined;
+  const tooltipButtonWrapperStyle = isMobile ? { display: 'block', width: '100%' } : undefined;
 
   const updateSubstratum = (substratumId: number, updater: (draft: SubstratumDraft) => SubstratumDraft) => {
     setSubstrataDrafts((prev) => ({
@@ -385,7 +473,14 @@ const PlantingDateForm = ({
         />
       ))}
 
-      <Box display='flex' justifyContent='flex-end' gap={theme.spacing(1)} marginTop={theme.spacing(2)}>
+      <Box
+        display='flex'
+        flexDirection={isMobile ? 'column' : 'row'}
+        alignItems={isMobile ? 'stretch' : 'center'}
+        justifyContent='flex-end'
+        gap={isMobile ? theme.spacing(1.5) : theme.spacing(1)}
+        marginTop={theme.spacing(2)}
+      >
         {isEditing && (
           <Button
             label={strings.DELETE}
@@ -393,20 +488,41 @@ const PlantingDateForm = ({
             priority='secondary'
             type='destructive'
             disabled={isSaving}
+            size={isMobile ? 'medium' : undefined}
+            sx={mobileFooterButtonSx}
           />
         )}
-        <Button label={strings.CANCEL} onClick={onClose} priority='secondary' type='passive' disabled={isSaving} />
+        <Button
+          label={strings.CANCEL}
+          onClick={onClose}
+          priority='secondary'
+          type='passive'
+          disabled={isSaving}
+          size={isMobile ? 'medium' : undefined}
+          sx={mobileFooterButtonSx}
+        />
         <Tooltip title={strings.SAVE_TOOLTIP}>
-          <span>
-            <Button label={strings.SAVE} onClick={() => void onSave()} priority='secondary' disabled={isSaving} />
+          <span style={tooltipButtonWrapperStyle}>
+            <Button
+              label={strings.SAVE}
+              onClick={() => void onSave()}
+              priority='secondary'
+              type={isMobile ? 'passive' : 'productive'}
+              disabled={isSaving}
+              size={isMobile ? 'medium' : undefined}
+              sx={mobileFooterButtonSx}
+            />
           </span>
         </Tooltip>
         <Tooltip title={strings.SAVE_AND_REQUEST_TOOLTIP} slotProps={{ tooltip: { sx: { maxWidth: '262px' } } }}>
-          <span>
+          <span style={tooltipButtonWrapperStyle}>
             <Button
               label={strings.SAVE_AND_REQUEST}
               onClick={() => setNotifyModalOpen(true)}
               disabled={isSaving || !date}
+              priority={isMobile ? 'secondary' : 'primary'}
+              size={isMobile ? 'medium' : undefined}
+              sx={mobileFooterButtonSx}
             />
           </span>
         </Tooltip>
@@ -493,6 +609,16 @@ const SubstratumDraftSection = ({
   const selected = draft?.selected ?? false;
   const substratumSpecies = draft?.species ?? [];
 
+  const allocatedBySpecies = useMemo(() => {
+    const map = new Map<number, number>();
+    scheduledDates.forEach((scheduledDate) => {
+      scheduledDate.species.forEach((s) => {
+        map.set(s.speciesId, s.allocatedQuantity);
+      });
+    });
+    return map;
+  }, [scheduledDates]);
+
   // Pre-populate species rows from species targets when the substratum is selected
   useEffect(() => {
     if (!selected) {
@@ -506,9 +632,20 @@ const SubstratumDraftSection = ({
       return;
     }
     onUpdateSubstratumSpecies(substratum.id, () =>
-      targetsForSubstratum.map((t) => ({ speciesId: t.speciesId, quantity: 0 }))
+      targetsForSubstratum.map((t) => ({
+        speciesId: t.speciesId,
+        quantity: 0,
+        allocatedQuantity: allocatedBySpecies.get(t.speciesId),
+      }))
     );
-  }, [selected, substratum.id, substratumSpecies.length, speciesTargets, onUpdateSubstratumSpecies]);
+  }, [
+    allocatedBySpecies,
+    selected,
+    substratum.id,
+    substratumSpecies.length,
+    speciesTargets,
+    onUpdateSubstratumSpecies,
+  ]);
 
   const scheduledOtherBySpecies = useMemo(() => {
     const map = new Map<number, number>();
@@ -551,6 +688,7 @@ const SubstratumDraftSection = ({
             substratumSpecies={substratumSpecies}
             species={species}
             targetsBySpecies={targetsBySpecies}
+            allocatedBySpecies={allocatedBySpecies}
             scheduledOtherBySpecies={scheduledOtherBySpecies}
             onUpdateSubstratumSpecies={onUpdateSubstratumSpecies}
           />
@@ -565,6 +703,7 @@ type SpeciesTableProps = {
   substratumSpecies: SpeciesDraft[];
   species: Species[];
   targetsBySpecies: Map<number, number>;
+  allocatedBySpecies: Map<number, number>;
   scheduledOtherBySpecies: Map<number, number>;
   onUpdateSubstratumSpecies: (substratumId: number, updater: (species: SpeciesDraft[]) => SpeciesDraft[]) => void;
 };
@@ -574,61 +713,78 @@ const SpeciesTable = ({
   substratumSpecies,
   species,
   targetsBySpecies,
+  allocatedBySpecies,
   scheduledOtherBySpecies,
   onUpdateSubstratumSpecies,
 }: SpeciesTableProps): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const [addingSpecies, setAddingSpecies] = useState(false);
   const usedSpeciesIds = useMemo(() => new Set(substratumSpecies.map((s) => s.speciesId)), [substratumSpecies]);
-  const availableSpecies = useMemo(() => species.filter((s) => !usedSpeciesIds.has(s.id)), [species, usedSpeciesIds]);
+  const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species]);
+  const availableSpecies = useMemo(
+    () =>
+      species
+        .filter((s) => !usedSpeciesIds.has(s.id))
+        .sort((a, b) => compareSpeciesScientificNames(speciesById, a.id, b.id)),
+    [species, speciesById, usedSpeciesIds]
+  );
+  const sortedSubstratumSpecies = useMemo(
+    () => [...substratumSpecies].sort((a, b) => compareSpeciesScientificNames(speciesById, a.speciesId, b.speciesId)),
+    [speciesById, substratumSpecies]
+  );
 
   return (
-    <Box>
-      <Box
-        display='grid'
-        gridTemplateColumns='2fr 1fr 1fr 1fr 1fr 40px'
-        sx={{ padding: theme.spacing(1, 2), borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
-      >
-        <HeaderCell label={strings.SPECIES} />
-        <HeaderCell label={strings.QUANTITY_TO_PLANT} tooltip={strings.QUANTITY_TO_PLANT_TOOLTIP} />
-        <HeaderCell label={strings.ALLOCATED} tooltip={strings.ALLOCATED_TOOLTIP} />
-        <HeaderCell label={strings.AVAILABLE_TO_SCHEDULE} tooltip={strings.AVAILABLE_TO_SCHEDULE_TOOLTIP} />
-        <HeaderCell label={strings.LEFT_TO_PLANT} tooltip={strings.LEFT_TO_PLANT_TOOLTIP} />
-        <Box />
-      </Box>
-      {substratumSpecies.map((draft, index) => (
-        <SpeciesRow
-          key={draft.speciesId}
-          substratumId={substratumId}
-          draft={draft}
-          index={index}
-          species={species}
-          target={targetsBySpecies.get(draft.speciesId) ?? 0}
-          scheduledOther={scheduledOtherBySpecies.get(draft.speciesId) ?? 0}
-          onUpdateSubstratumSpecies={onUpdateSubstratumSpecies}
-        />
-      ))}
-      <Box padding={theme.spacing(1, 2)}>
-        {addingSpecies ? (
-          <AddSpeciesRow
+    <Box sx={{ overflowX: isMobile ? 'auto' : 'visible', WebkitOverflowScrolling: 'touch' }}>
+      <Box minWidth={isMobile ? '600px' : undefined}>
+        <Box
+          display='grid'
+          gridTemplateColumns='2fr 1fr 1fr 40px'
+          sx={{ padding: theme.spacing(1, 2), borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
+        >
+          <HeaderCell label={strings.SPECIES} />
+          <HeaderCell label={strings.QUANTITY_TO_PLANT} tooltip={strings.QUANTITY_TO_PLANT_TOOLTIP} />
+          <HeaderCell label={strings.AVAILABLE_TO_SCHEDULE} tooltip={strings.AVAILABLE_TO_SCHEDULE_TOOLTIP} />
+          <Box />
+        </Box>
+        {sortedSubstratumSpecies.map((draft, index) => (
+          <SpeciesRow
+            key={draft.speciesId}
             substratumId={substratumId}
-            availableSpecies={availableSpecies}
-            onAdd={(speciesId, quantity) => {
-              onUpdateSubstratumSpecies(substratumId, (current) => [...current, { speciesId, quantity }]);
-              setAddingSpecies(false);
-            }}
-            onCancel={() => setAddingSpecies(false)}
+            draft={draft}
+            index={index}
+            species={species}
+            target={targetsBySpecies.get(draft.speciesId) ?? 0}
+            allocated={draft.allocatedQuantity ?? allocatedBySpecies.get(draft.speciesId) ?? 0}
+            scheduledOther={scheduledOtherBySpecies.get(draft.speciesId) ?? 0}
+            onUpdateSubstratumSpecies={onUpdateSubstratumSpecies}
           />
-        ) : (
-          <Button
-            icon='iconAdd'
-            label={strings.ADD_SPECIES}
-            onClick={() => setAddingSpecies(true)}
-            priority='ghost'
-            type='productive'
-            disabled={availableSpecies.length === 0}
-          />
-        )}
+        ))}
+        <Box padding={theme.spacing(1, 2)}>
+          {addingSpecies ? (
+            <AddSpeciesRow
+              substratumId={substratumId}
+              availableSpecies={availableSpecies}
+              onAdd={(speciesId, quantity) => {
+                onUpdateSubstratumSpecies(substratumId, (current) => [
+                  ...current,
+                  { speciesId, quantity, allocatedQuantity: allocatedBySpecies.get(speciesId) },
+                ]);
+                setAddingSpecies(false);
+              }}
+              onCancel={() => setAddingSpecies(false)}
+            />
+          ) : (
+            <Button
+              icon='iconAdd'
+              label={strings.ADD_SPECIES}
+              onClick={() => setAddingSpecies(true)}
+              priority='ghost'
+              type='productive'
+              disabled={availableSpecies.length === 0}
+            />
+          )}
+        </Box>
       </Box>
     </Box>
   );
@@ -720,6 +876,7 @@ type SpeciesRowProps = {
   index: number;
   species: Species[];
   target: number;
+  allocated: number;
   scheduledOther: number;
   onUpdateSubstratumSpecies: (substratumId: number, updater: (species: SpeciesDraft[]) => SpeciesDraft[]) => void;
 };
@@ -739,10 +896,10 @@ const SpeciesRow = ({
   const [draftQuantity, setDraftQuantity] = useState<string>(draft.quantity.toString());
   const speciesInfo = useMemo(() => species.find((s) => s.id === draft.speciesId), [species, draft.speciesId]);
   const availableToSchedule = Math.max(0, target - scheduledOther);
-  const leftToPlant = Math.max(0, availableToSchedule - draft.quantity);
   const parsedDraftQuantity = Math.max(0, Number(draftQuantity));
   const quantityToValidate = Number.isNaN(parsedDraftQuantity) ? draft.quantity : parsedDraftQuantity;
   const exceedsGoal = target > 0 && quantityToValidate > availableToSchedule;
+  const targetRemaining = Math.max(0, target - scheduledOther);
   const hasNumbers = draft.quantity > 0;
 
   const commitQuantity = () => {
@@ -754,7 +911,7 @@ const SpeciesRow = ({
         current.map((s) => (s.speciesId === draft.speciesId ? { ...s, quantity: next } : s))
       );
     }
-    const nextExceedsGoal = target > 0 && next > availableToSchedule;
+    const nextExceedsGoal = target > 0 && next > targetRemaining;
     if (!nextExceedsGoal) {
       setEditing(false);
     }
@@ -767,7 +924,7 @@ const SpeciesRow = ({
   return (
     <Box
       display='grid'
-      gridTemplateColumns='2fr 1fr 1fr 1fr 1fr 40px'
+      gridTemplateColumns='2fr 1fr 1fr 40px'
       alignItems='center'
       sx={{
         padding: theme.spacing(1, 2),
@@ -816,10 +973,7 @@ const SpeciesRow = ({
           </>
         )}
       </Box>
-      {/* TODO: replace with allocated value when available in the api */}
-      <Typography fontSize='14px'>{hasNumbers ? target.toLocaleString() : ''}</Typography>
       <Typography fontSize='14px'>{hasNumbers ? availableToSchedule.toLocaleString() : ''}</Typography>
-      <Typography fontSize='14px'>{hasNumbers ? leftToPlant.toLocaleString() : ''}</Typography>
       <Button icon='iconTrashCan' onClick={removeRow} priority='ghost' size='small' type='passive' />
     </Box>
   );

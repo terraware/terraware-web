@@ -150,6 +150,7 @@ ALL_PLANTING_SITES,Todos los terrenos de plantación,344a80c6
 ALL_PROJECT_ZONES,Todas las áreas del proyecto,4c578acc
 ALL_PROJECTS,Todos los proyectos,4eb0ec5d
 ALL_SECTIONS,Todas las secciones,d3d73b24
+ALL_SITES,Todos los sitios,8c420082
 ALL_SPECIES,Todas las especies,5622801f
 ALL_VARIABLES,Todas las variables,1fe9cddb
 ALLOCATED,Asignado,1105670f
@@ -1998,6 +1999,7 @@ SET_UP,Configurar,6096080e
 SET_UP_NURSERY,Establecer vivero,25ab7370
 SET_UP_SEED_BANK,Establecer banco de semillas,6f047a89
 SETTINGS,Ajustes,38560978
+SETTINGS_FOR,Configuración para {0},da07c7b6
 SHIFT,Shift,4d173d2a
 SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52
 SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Mostrar especies con todas las accesiones agotadas,656a843d
@@ -2341,6 +2343,7 @@ TOTAL,Total,ecba5453
 TOTAL_ACTIVE_ACCESSIONS,Total de accesiones activas,8950dbea
 TOTAL_DENSITY_TOOLTIP,Densidad total de plantas (plantas/ha) de los valores ingresados arriba.,edb8e740
 TOTAL_DENSITY_VIEW_TOOLTIP,Total de las densidades de plantas de todas las especies listadas,04705106
+TOTAL_GOAL,Meta total,b6468a48
 TOTAL_HECTARES_PLANTED,Total de hectáreas plantadas,5410325f
 TOTAL_HECTARES_PLANTED_TOOLTIP,"Este es el número total de hectáreas marcadas con ""Plantación completa"" en este lugar de plantación.",1dd1dbf3
 TOTAL_NUMBER_OF_PLANTS,Número total de plantas,c6ba8c94

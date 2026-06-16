@@ -277,13 +277,18 @@ const StratumT0EditBox = ({
     });
   }, [activeLocale, allWithdrawnSpecies, speciesById]);
 
+  const initialNewSpeciesIds = useMemo(() => new Set(initialNewSpecies.map((row) => row.id)), [initialNewSpecies]);
+
   const sortedNewSpeciesRows = useMemo(() => {
-    return [...newSpeciesRows].sort((a, b) => {
+    const preExisting = newSpeciesRows.filter((row) => initialNewSpeciesIds.has(row.id));
+    const sessionAdded = newSpeciesRows.filter((row) => !initialNewSpeciesIds.has(row.id));
+    const sorted = [...preExisting].sort((a, b) => {
       const nameA = a.speciesId !== undefined ? speciesById[a.speciesId]?.scientificName ?? '' : '\uffff';
       const nameB = b.speciesId !== undefined ? speciesById[b.speciesId]?.scientificName ?? '' : '\uffff';
       return nameA.localeCompare(nameB, activeLocale ?? undefined);
     });
-  }, [activeLocale, newSpeciesRows, speciesById]);
+    return [...sorted, ...sessionAdded];
+  }, [activeLocale, initialNewSpeciesIds, newSpeciesRows, speciesById]);
 
   return (
     <>

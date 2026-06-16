@@ -395,16 +395,11 @@ const ActivityDetailView = ({
 
   const obsIsAdHoc = activity.payload.observation?.isAdHoc ?? false;
   const obsPlotNumber = activity.payload.observation?.monitoringPlotNumber;
-  const obsCompletedTime =
-    funderObsPayload !== undefined ? funderObsPayload.completedTime : observationResultsData?.observation.completedTime;
 
   const obsCompletedMonthYear = useMemo(() => {
-    if (!obsCompletedTime) {
-      return undefined;
-    }
-    const dt = DateTime.fromISO(obsCompletedTime);
+    const dt = DateTime.fromISO(activity.payload.date);
     return dt.isValid ? dt.toFormat('LLLL yyyy') : undefined;
-  }, [obsCompletedTime]);
+  }, [activity.payload.date]);
 
   const obsTitle = useMemo(() => {
     if (!showObsPanel) {
