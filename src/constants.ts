@@ -118,8 +118,6 @@ export enum APP_PATHS {
   OPT_IN = '/opt-in',
   ORGANIZATION = '/organization',
   PEOPLE = '/people',
-  PEOPLE_EDIT = '/people/:personId/edit',
-  PEOPLE_NEW = '/people/new',
   PEOPLE_VIEW = '/people/:personId',
   PLANTS_DASHBOARD = '/plants/dashboard',
   PLANTING_PROGRESS = '/plants/planting-progress',
