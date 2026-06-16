@@ -1,3 +1,5 @@
+31ac6c0a SW-8511 Not enough space between "Allocated" and "Allocated for Target" columns (#5858)
+308a9970 SW-8378 Change Edit Org page to a modal (#5813)
 158ca896 SW-8485 Page title alignment with content below seems to be off (#5857)
 18032000 SW-8478 Species selector and Quantity fields should not be as wide (#5856)
 550ad7b8 SW-8509 Planting Season filter not limiting Species in Species filter (#5855)
