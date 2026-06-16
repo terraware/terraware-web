@@ -81,13 +81,33 @@ const InventoryPlanningView = (): JSX.Element => {
     ];
   }, [plantingSeasonsData, plantingSiteId]);
 
-  const speciesOptions = useMemo<DropdownItem[]>(
-    () => [
+  const selectedPlantingSeasonSpeciesIds = useMemo<Set<number> | undefined>(() => {
+    if (plantingSeasonId === undefined) {
+      return undefined;
+    }
+    const selectedPlantingSeason = plantingSeasonsData?.seasons?.find((s) => s.id === plantingSeasonId);
+    return new Set(selectedPlantingSeason?.speciesTargets.map((target) => target.speciesId) ?? []);
+  }, [plantingSeasonId, plantingSeasonsData]);
+
+  const speciesOptions = useMemo<DropdownItem[]>(() => {
+    const filteredSpecies = selectedPlantingSeasonSpeciesIds
+      ? species.filter((s) => selectedPlantingSeasonSpeciesIds.has(s.id))
+      : species;
+    return [
       { label: strings.ALL_SPECIES, value: 'all' },
-      ...species.map((s) => ({ label: s.scientificName, value: s.id })),
-    ],
-    [species]
-  );
+      ...filteredSpecies.map((s) => ({ label: s.scientificName, value: s.id })),
+    ];
+  }, [selectedPlantingSeasonSpeciesIds, species]);
+
+  useEffect(() => {
+    if (
+      speciesId !== undefined &&
+      selectedPlantingSeasonSpeciesIds &&
+      !selectedPlantingSeasonSpeciesIds.has(speciesId)
+    ) {
+      setSpeciesId(undefined);
+    }
+  }, [selectedPlantingSeasonSpeciesIds, speciesId]);
 
   const bannerSeason = useMemo(() => {
     if (bannerDismissed || !plantingSeasonsData?.seasons?.length) {
