@@ -45,6 +45,8 @@ import PlantsDashboardRouter from 'src/scenes/PlantsDashboardRouter';
 import AcceleratorReportsRouter from 'src/scenes/Reports';
 import SeedBanksRouter from 'src/scenes/SeedBanksRouter';
 import SeedsDashboard from 'src/scenes/SeedsDashboard';
+import SettingsLayout from 'src/scenes/Settings/SettingsLayout';
+import SettingsRedirect from 'src/scenes/Settings/SettingsRedirect';
 import SpeciesRouter from 'src/scenes/Species';
 import VirtualWalkthroughsView from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughsView';
 import { Project } from 'src/types/Project';
@@ -55,8 +57,6 @@ import useEnvironment from 'src/utils/useEnvironment';
 import useStateLocation from 'src/utils/useStateLocation';
 
 import ActivityLogRouter from '../ActivityLogRouter';
-import SettingsLayout from '../Settings/SettingsLayout';
-import SettingsRedirect from '../Settings/SettingsRedirect';
 
 interface OrgRouterProps {
   showNavBar: boolean;
@@ -216,11 +216,13 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route
               path={APP_PATHS.PROJECTS + '/*'}
               element={
-                <ProjectsRouter
-                  reloadProjects={reloadProjects}
-                  isPlaceholderOrg={() => (selectedOrganization ? isPlaceholderOrg(selectedOrganization.id) : true)}
-                  selectedOrgHasProjects={selectedOrgHasProjects}
-                />
+                <SettingsLayout activeSection='projects'>
+                  <ProjectsRouter
+                    reloadProjects={reloadProjects}
+                    isPlaceholderOrg={() => (selectedOrganization ? isPlaceholderOrg(selectedOrganization.id) : true)}
+                    selectedOrgHasProjects={selectedOrgHasProjects}
+                  />
+                </SettingsLayout>
               }
             />
             <Route path={APP_PATHS.SEED_BANKS + '/*'} element={<SeedBanksRouter />} />

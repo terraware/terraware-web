@@ -1,18 +1,15 @@
 import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import ProjectCellRenderer from 'src/components/Projects/ProjectCellRenderer';
 import Card from 'src/components/common/Card';
-import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextField from 'src/components/common/Textfield/Textfield';
-import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
-import { APP_PATHS } from 'src/constants';
-import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
+import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import ProjectsService from 'src/services/ProjectsService';
@@ -84,32 +81,45 @@ export default function ProjectsList(): JSX.Element {
   };
 
   return (
-    <TfMain>
-      <PageHeaderWrapper nextElement={contentRef.current}>
-        <Grid container paddingBottom={theme.spacing(2)} paddingLeft={isMobile ? 0 : theme.spacing(3)}>
-          <Grid item xs={8}>
-            <h1
-              style={{
-                margin: 0,
-                fontSize: '24px',
-                fontWeight: 600,
-              }}
-            >
-              {strings.PROJECTS}
-            </h1>
-          </Grid>
-          {isAdmin(selectedOrganization) && (
-            <Grid
-              item
-              xs={4}
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'flex-end',
-              }}
-            >
-              {isMobile ? (
+    <Box
+      component='main'
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        paddingRight: theme.spacing(4),
+      }}
+    >
+      <PageSnackbar />
+      <Card flushMobile radius={theme.spacing(1)} style={{ padding: theme.spacing(3, 4) }}>
+        <Grid container ref={contentRef}>
+          <Grid
+            item
+            xs={12}
+            marginBottom='16px'
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}
+          >
+            <Box sx={{ display: 'flex' }}>
+              <TextField
+                placeholder={strings.SEARCH}
+                iconLeft='search'
+                label=''
+                id='search'
+                type='text'
+                onChange={(value) => onChangeSearch('search', value)}
+                value={temporalSearchValue}
+                iconRight='cancel'
+                onClickRightIcon={clearSearch}
+                sx={{ width: '300px' }}
+              />
+              <TableSettingsButton />
+            </Box>
+            {isAdmin(selectedOrganization) &&
+              (isMobile ? (
                 <Button id='new-project' icon='plus' onClick={goToNewProject} size='medium' />
               ) : (
                 <Button
@@ -119,35 +129,7 @@ export default function ProjectsList(): JSX.Element {
                   onClick={goToNewProject}
                   size='medium'
                 />
-              )}
-            </Grid>
-          )}
-          <PageSnackbar />
-        </Grid>
-      </PageHeaderWrapper>
-      <Card flushMobile>
-        <Grid container ref={contentRef}>
-          <Grid
-            item
-            xs={12}
-            marginBottom='16px'
-            sx={{
-              display: 'flex',
-            }}
-          >
-            <TextField
-              placeholder={strings.SEARCH}
-              iconLeft='search'
-              label=''
-              id='search'
-              type='text'
-              onChange={(value) => onChangeSearch('search', value)}
-              value={temporalSearchValue}
-              iconRight='cancel'
-              onClickRightIcon={clearSearch}
-              sx={{ width: '300px' }}
-            />
-            <TableSettingsButton />
+              ))}
           </Grid>
 
           <Grid item xs={12}>
@@ -172,6 +154,6 @@ export default function ProjectsList(): JSX.Element {
           </Grid>
         </Grid>
       </Card>
-    </TfMain>
+    </Box>
   );
 }
