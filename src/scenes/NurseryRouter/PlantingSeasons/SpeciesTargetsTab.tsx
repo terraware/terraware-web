@@ -1,7 +1,7 @@
 import React, { type JSX, useMemo, useRef, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
-import { Button, Dropdown, DropdownItem } from '@terraware/web-components';
+import { Box, IconButton, Typography, useTheme } from '@mui/material';
+import { Button, Dropdown, DropdownItem, Icon } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
@@ -41,6 +41,14 @@ const compareSpeciesScientificNames = (
 };
 
 const targetQuantityTextFieldSx = { width: '70px' };
+
+type AddedSpeciesTargetRow = {
+  id: string;
+  speciesId?: number;
+  quantity: string;
+  saved: boolean;
+  savedSpeciesId?: number;
+};
 
 const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabProps): JSX.Element => {
   const theme = useTheme();
@@ -171,11 +179,24 @@ const SubstratumSection = ({
   readOnly,
 }: SubstratumSectionProps): JSX.Element => {
   const theme = useTheme();
-  const [addingSpecies, setAddingSpecies] = useState(false);
+  const [addedSpeciesRows, setAddedSpeciesRows] = useState<AddedSpeciesTargetRow[]>([]);
 
   const substratumTotal = useMemo(() => targets.reduce((sum, t) => sum + t.quantity, 0), [targets]);
 
-  const usedSpeciesIds = useMemo(() => new Set(targets.map((t) => t.speciesId)), [targets]);
+  const addedSpeciesIds = useMemo(
+    () =>
+      new Set(
+        addedSpeciesRows
+          .flatMap((row) => [row.speciesId, row.savedSpeciesId])
+          .filter((speciesId): speciesId is number => speciesId !== undefined)
+      ),
+    [addedSpeciesRows]
+  );
+
+  const usedSpeciesIds = useMemo(
+    () => new Set([...targets.map((t) => t.speciesId), ...addedSpeciesIds]),
+    [addedSpeciesIds, targets]
+  );
 
   const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species]);
 
@@ -188,9 +209,27 @@ const SubstratumSection = ({
   );
 
   const sortedTargets = useMemo(
-    () => [...targets].sort((a, b) => compareSpeciesScientificNames(speciesById, a.speciesId, b.speciesId)),
-    [speciesById, targets]
+    () =>
+      targets
+        .filter((target) => !addedSpeciesIds.has(target.speciesId))
+        .sort((a, b) => compareSpeciesScientificNames(speciesById, a.speciesId, b.speciesId)),
+    [addedSpeciesIds, speciesById, targets]
   );
+
+  const addSpeciesRow = () => {
+    setAddedSpeciesRows((current) => [
+      ...current,
+      { id: `new-species-target-${crypto.randomUUID()}`, quantity: '', saved: false },
+    ]);
+  };
+
+  const updateAddedSpeciesRow = (row: AddedSpeciesTargetRow) => {
+    setAddedSpeciesRows((current) => current.map((currentRow) => (currentRow.id === row.id ? row : currentRow)));
+  };
+
+  const removeAddedSpeciesRow = (rowId: string) => {
+    setAddedSpeciesRows((current) => current.filter((row) => row.id !== rowId));
+  };
 
   return (
     <Box marginBottom={theme.spacing(3)}>
@@ -248,23 +287,26 @@ const SubstratumSection = ({
       )}
       {!readOnly && (
         <Box>
-          {addingSpecies ? (
+          {addedSpeciesRows.map((row) => (
             <AddSpeciesRow
+              key={row.id}
+              row={row}
               substratumId={substratum.id}
               plantingSeasonId={plantingSeasonId}
+              species={species}
               availableSpecies={availableSpecies}
-              onClose={() => setAddingSpecies(false)}
+              onChange={updateAddedSpeciesRow}
+              onRemove={() => removeAddedSpeciesRow(row.id)}
             />
-          ) : (
-            <Button
-              icon='iconAdd'
-              label={strings.ADD_SPECIES}
-              onClick={() => setAddingSpecies(true)}
-              priority='ghost'
-              type='productive'
-              disabled={availableSpecies.length === 0}
-            />
-          )}
+          ))}
+          <Button
+            icon='iconAdd'
+            label={strings.ADD_SPECIES}
+            onClick={addSpeciesRow}
+            priority='ghost'
+            type='productive'
+            disabled={availableSpecies.length === 0}
+          />
         </Box>
       )}
     </Box>
@@ -416,53 +458,93 @@ const SpeciesTargetRow = ({
 };
 
 type AddSpeciesRowProps = {
+  row: AddedSpeciesTargetRow;
   substratumId: number;
   plantingSeasonId: number;
+  species: Species[];
   availableSpecies: Species[];
-  onClose: () => void;
+  onChange: (row: AddedSpeciesTargetRow) => void;
+  onRemove: () => void;
 };
 
 const AddSpeciesRow = ({
+  row,
   substratumId,
   plantingSeasonId,
+  species,
   availableSpecies,
-  onClose,
+  onChange,
+  onRemove,
 }: AddSpeciesRowProps): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
   const rowRef = useRef<HTMLDivElement>(null);
-  const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | undefined>();
-  const [quantity, setQuantity] = useState<string>('0');
-  const [upsertSpeciesTarget, { isLoading }] = useUpsertSpeciesTargetMutation();
+  const [upsertSpeciesTarget, { isLoading: isUpserting }] = useUpsertSpeciesTargetMutation();
+  const [deleteSpeciesTarget, { isLoading: isDeleting }] = useDeleteSpeciesTargetMutation();
+  const selectedSpeciesId = row.speciesId;
+  const selectedSpecies = selectedSpeciesId === undefined ? undefined : species.find((s) => s.id === selectedSpeciesId);
+  const isSaving = isUpserting || isDeleting;
 
-  const options = useMemo<DropdownItem[]>(
-    () =>
-      availableSpecies.map((s) => ({
-        label: s.scientificName,
-        value: s.id,
-      })),
-    [availableSpecies]
-  );
+  const options = useMemo<DropdownItem[]>(() => {
+    const speciesOptions = selectedSpecies ? [selectedSpecies, ...availableSpecies] : availableSpecies;
+    return speciesOptions.map((s) => ({
+      label: s.scientificName,
+      value: s.id,
+    }));
+  }, [availableSpecies, selectedSpecies]);
 
-  const onSave = async () => {
-    if (selectedSpeciesId === undefined) {
+  const saveIfComplete = async (nextRow: AddedSpeciesTargetRow) => {
+    if (nextRow.speciesId === undefined || nextRow.quantity === '') {
       return;
     }
-    const parsed = Number(quantity);
+    const parsed = Number(nextRow.quantity);
     if (Number.isNaN(parsed) || parsed < 0) {
       return;
     }
+    const previousSavedSpeciesId = nextRow.savedSpeciesId;
     try {
       await upsertSpeciesTarget({
         plantingSeasonId,
         upsertPlantingSeasonSpeciesTargetRequestPayload: {
           quantity: parsed,
-          speciesId: selectedSpeciesId,
+          speciesId: nextRow.speciesId,
           substratumId,
         },
       }).unwrap();
-      onClose();
+      if (previousSavedSpeciesId !== undefined && previousSavedSpeciesId !== nextRow.speciesId) {
+        await deleteSpeciesTarget({ plantingSeasonId, speciesId: previousSavedSpeciesId, substratumId }).unwrap();
+      }
+      onChange({ ...nextRow, saved: true, savedSpeciesId: nextRow.speciesId });
+    } catch (e) {
+      snackbar.toastError();
+    }
+  };
+
+  const onSpeciesChange = (value: string | number | undefined) => {
+    if (value === undefined || value === '') {
+      onChange({ ...row, speciesId: undefined, saved: false, savedSpeciesId: undefined });
+      return;
+    }
+
+    const speciesId = Number(value);
+    const nextRow = { ...row, speciesId, saved: row.savedSpeciesId === speciesId };
+    onChange(nextRow);
+    void saveIfComplete(nextRow);
+  };
+
+  const onQuantityChange = (value: unknown) => {
+    onChange({ ...row, quantity: String(value ?? '') });
+  };
+
+  const onRemoveClick = async () => {
+    if (row.savedSpeciesId === undefined) {
+      onRemove();
+      return;
+    }
+    try {
+      await deleteSpeciesTarget({ plantingSeasonId, speciesId: row.savedSpeciesId, substratumId }).unwrap();
+      onRemove();
     } catch (e) {
       snackbar.toastError();
     }
@@ -485,55 +567,33 @@ const AddSpeciesRow = ({
     >
       <Box width={isMobile ? '100%' : '300px'}>
         <Dropdown
-          id={`add-species-${substratumId}`}
+          id={`add-species-${row.id}`}
           label={strings.SPECIES}
           placeholder={strings.SELECT_SPECIES}
           options={options}
           selectedValue={selectedSpeciesId}
-          onChange={(value) => setSelectedSpeciesId(Number(value))}
+          onChange={onSpeciesChange}
           fullWidth
           autocomplete
+          disabled={isSaving}
         />
       </Box>
       <Box width='70px'>
         <TextField
-          id={`add-quantity-${substratumId}`}
+          id={`add-quantity-${row.id}`}
           type='number'
           label={strings.TARGET_QUANTITY}
-          value={quantity}
-          onChange={(value) => setQuantity(String(value ?? ''))}
+          value={row.quantity}
+          onChange={onQuantityChange}
+          onBlur={() => void saveIfComplete(row)}
           min={0}
           sx={targetQuantityTextFieldSx}
+          disabled={isSaving}
         />
       </Box>
-      {isMobile ? (
-        <Box display='flex' flexDirection='column' gap={theme.spacing(1)} width='100%'>
-          <Button
-            label={strings.ADD}
-            onClick={() => void onSave()}
-            disabled={isLoading || selectedSpeciesId === undefined}
-            style={{ margin: 0, width: '100%' }}
-            sx={{ justifyContent: 'center' }}
-          />
-          <Button
-            label={strings.CANCEL}
-            onClick={onClose}
-            priority='secondary'
-            type='passive'
-            style={{ margin: 0, width: '100%' }}
-            sx={{ justifyContent: 'center' }}
-          />
-        </Box>
-      ) : (
-        <>
-          <Button
-            label={strings.ADD}
-            onClick={() => void onSave()}
-            disabled={isLoading || selectedSpeciesId === undefined}
-          />
-          <Button label={strings.CANCEL} onClick={onClose} priority='secondary' type='passive' />
-        </>
-      )}
+      <IconButton aria-label={strings.REMOVE} size='small' onClick={() => void onRemoveClick()} disabled={isSaving}>
+        <Icon name='iconSubtract' size='medium' fillColor={theme.palette.TwClrIcn} />
+      </IconButton>
     </Box>
   );
 };
