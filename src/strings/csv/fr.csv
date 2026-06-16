@@ -226,7 +226,7 @@ AUTO_ROTATE,Rotation automatique,15ce1a40
 AVAILABLE,disponible,716e496f
 AVAILABLE_TITLE,Disponible,b84c21ed
 AVAILABLE_TO_SCHEDULE,Disponible à planifier,00da4780
-AVAILABLE_TO_SCHEDULE_TOOLTIP,"Nombre de plants disponibles à planifier pour la plantation, parmi les plants alloués et non déjà planifiés.",7f914f3e
+AVAILABLE_TO_SCHEDULE_TOOLTIP,"Nombre de plants de cette espèce alloués par la pépinière, moins le nombre figurant dans les Dates de plantation enregistrées.",9f01f803
 AVERAGE_PROJECT_STRATA_SURVIVAL_RATE,Taux moyen de survie des strates du projet,eba4d7ea
 AVERAGE_STRATA_SURVIVAL_RATE,Taux moyen de survie des strates,1aab76e2
 AVERAGE_WOOD_DENSITY,Densité moyenne du bois (kb/m3),b413c9a9
@@ -1680,7 +1680,7 @@ QUANTITIES,Quantités,bd99b2de
 QUANTITY,Quantité,5130efc1
 QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,La quantité doit être supérieure ou égale à 0,5a55f459
 QUANTITY_TO_PLANT,Quantité à planter,14ee1db4
-QUANTITY_TO_PLANT_TOOLTIP,Nombre de semis prévus pour être plantés à cette date de plantation.,2bc0e7ce
+QUANTITY_TO_PLANT_TOOLTIP,Nombre de plants prévus pour être plantés à cette Date de plantation.,d031febb
 QUARTER_YEAR,T{0} {1},637ce0a5
 QUARTERLY,Trimestriel,f69e32e0
 QUARTERLY_HIGHLIGHTS,Faits saillants trimestriels,863a818b
