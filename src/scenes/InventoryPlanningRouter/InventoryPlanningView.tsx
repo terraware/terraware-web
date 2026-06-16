@@ -72,22 +72,56 @@ const InventoryPlanningView = (): JSX.Element => {
     [plantingSitesData]
   );
 
-  const plantingSeasonOptions = useMemo<DropdownItem[]>(() => {
+  const eligiblePlantingSeasons = useMemo(() => {
     const allSeasons = plantingSeasonsData?.seasons ?? [];
-    const filteredSeasons = plantingSiteId ? allSeasons.filter((s) => s.plantingSiteId === plantingSiteId) : allSeasons;
-    return [
-      { label: strings.ALL_PLANTING_SEASONS, value: 'all' },
-      ...filteredSeasons.map((s) => ({ label: s.name, value: s.id })),
-    ];
+    return allSeasons.filter(
+      (season) =>
+        season.status === 'Active' &&
+        season.speciesTargets.length > 0 &&
+        (plantingSiteId === undefined || season.plantingSiteId === plantingSiteId)
+    );
   }, [plantingSeasonsData, plantingSiteId]);
 
-  const speciesOptions = useMemo<DropdownItem[]>(
-    () => [
+  const plantingSeasonOptions = useMemo<DropdownItem[]>(() => {
+    return [
+      { label: strings.ALL_PLANTING_SEASONS, value: 'all' },
+      ...eligiblePlantingSeasons.map((s) => ({ label: s.name, value: s.id })),
+    ];
+  }, [eligiblePlantingSeasons]);
+
+  useEffect(() => {
+    if (plantingSeasonId !== undefined && !eligiblePlantingSeasons.some((season) => season.id === plantingSeasonId)) {
+      setPlantingSeasonId(undefined);
+    }
+  }, [eligiblePlantingSeasons, plantingSeasonId]);
+
+  const selectedPlantingSeasonSpeciesIds = useMemo<Set<number> | undefined>(() => {
+    if (plantingSeasonId === undefined) {
+      return undefined;
+    }
+    const selectedPlantingSeason = plantingSeasonsData?.seasons?.find((s) => s.id === plantingSeasonId);
+    return new Set(selectedPlantingSeason?.speciesTargets.map((target) => target.speciesId) ?? []);
+  }, [plantingSeasonId, plantingSeasonsData]);
+
+  const speciesOptions = useMemo<DropdownItem[]>(() => {
+    const filteredSpecies = selectedPlantingSeasonSpeciesIds
+      ? species.filter((s) => selectedPlantingSeasonSpeciesIds.has(s.id))
+      : species;
+    return [
       { label: strings.ALL_SPECIES, value: 'all' },
-      ...species.map((s) => ({ label: s.scientificName, value: s.id })),
-    ],
-    [species]
-  );
+      ...filteredSpecies.map((s) => ({ label: s.scientificName, value: s.id })),
+    ];
+  }, [selectedPlantingSeasonSpeciesIds, species]);
+
+  useEffect(() => {
+    if (
+      speciesId !== undefined &&
+      selectedPlantingSeasonSpeciesIds &&
+      !selectedPlantingSeasonSpeciesIds.has(speciesId)
+    ) {
+      setSpeciesId(undefined);
+    }
+  }, [selectedPlantingSeasonSpeciesIds, speciesId]);
 
   const bannerSeason = useMemo(() => {
     if (bannerDismissed || !plantingSeasonsData?.seasons?.length) {
