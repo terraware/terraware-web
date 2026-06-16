@@ -216,13 +216,11 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route
               path={APP_PATHS.PROJECTS + '/*'}
               element={
-                <SettingsLayout activeSection='projects'>
-                  <ProjectsRouter
-                    reloadProjects={reloadProjects}
-                    isPlaceholderOrg={() => (selectedOrganization ? isPlaceholderOrg(selectedOrganization.id) : true)}
-                    selectedOrgHasProjects={selectedOrgHasProjects}
-                  />
-                </SettingsLayout>
+                <ProjectsRouter
+                  reloadProjects={reloadProjects}
+                  isPlaceholderOrg={() => (selectedOrganization ? isPlaceholderOrg(selectedOrganization.id) : true)}
+                  selectedOrgHasProjects={selectedOrgHasProjects}
+                />
               }
             />
             <Route path={APP_PATHS.SEED_BANKS + '/*'} element={<SeedBanksRouter />} />

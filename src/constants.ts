@@ -133,7 +133,6 @@ export enum APP_PATHS {
   PLANTING_SITES_NEW = '/planting-sites/new',
   PLANTING_SITES_STRATUM_VIEW = '/planting-sites/:plantingSiteId/stratum/:stratumId',
   PLANTING_SITES_VIEW = '/planting-sites/:plantingSiteId',
-  PROJECT_EDIT = '/projects/:projectId/edit',
   PROJECT_MODULE = '/projects/:projectId/modules/:moduleId',
   PROJECT_MODULE_ADDITIONAL_RESOURCES = '/projects/:projectId/modules/:moduleId/additionalResources',
   PROJECT_MODULE_PREPARATION_MATERIALS = '/projects/:projectId/modules/:moduleId/preparationMaterials',
