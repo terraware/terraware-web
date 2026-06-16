@@ -1,3 +1,4 @@
+ac64e602 Removed "New Observation Results Table" feature flag (#5852)
 276e548a SW-8378 Change Add/Edit Person page to a modal (#5828)
 db20b821 SW-8378 Move People to settings cog (#5815)
 31ac6c0a SW-8511 Not enough space between "Allocated" and "Allocated for Target" columns (#5858)
