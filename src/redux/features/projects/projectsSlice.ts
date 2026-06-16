@@ -1,4 +1,4 @@
-import { ActionReducerMapBuilder, PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import {
@@ -7,37 +7,6 @@ import {
   requestProjectUpdate,
 } from 'src/redux/features/projects/projectsAsyncThunks';
 import { UpdateProjectResponsePayload } from 'src/services/ProjectsService';
-import { Project } from 'src/types/Project';
-
-// Define a type for the slice state
-type Data = {
-  error?: string;
-  projects?: Project[];
-};
-
-// Define the initial state
-const initialState: Data = {};
-
-export const projectsSlice = createSlice({
-  name: 'projectsSlice',
-  initialState,
-  reducers: {
-    setProjectAction: (state, action: PayloadAction<Data>) => {
-      const data: Data = action.payload;
-      const payloadProjects = data.projects || [];
-      state.error = data.error;
-      state.projects = [
-        // Filter out the newly fetched project from state, if it exists
-        ...(state.projects || []).filter(
-          (project) => !payloadProjects.map((_project) => _project.id).includes(project.id)
-        ),
-        ...payloadProjects,
-      ];
-    },
-  },
-});
-
-export const { setProjectAction } = projectsSlice.actions;
 
 type ProjectsResponsesUnion = UpdateProjectResponsePayload;
 type ProjectsRequestsState = Record<string, StatusT<ProjectsResponsesUnion>>;
@@ -56,7 +25,6 @@ export const projectsRequestsSlice = createSlice({
 });
 
 const projectsReducers = {
-  projects: projectsSlice.reducer,
   projectsRequests: projectsRequestsSlice.reducer,
 };
 

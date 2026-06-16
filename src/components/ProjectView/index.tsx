@@ -17,10 +17,10 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { baseApi } from 'src/queries/baseApi';
+import { useGetProjectQuery } from 'src/queries/generated/projects';
 import { QueryTagTypes } from 'src/queries/tags';
 import { requestProjectDelete } from 'src/redux/features/projects/projectsAsyncThunks';
-import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
-import { requestProject } from 'src/redux/features/projects/projectsThunks';
+import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -39,7 +39,8 @@ export default function ProjectView(): JSX.Element {
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
 
-  const project = useAppSelector(selectProject(projectId));
+  const { data, refetch } = useGetProjectQuery(projectId, { skip: !projectId || isNaN(projectId) });
+  const project = data?.project;
 
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
@@ -51,12 +52,6 @@ export default function ProjectView(): JSX.Element {
       return !!allApplications.find((application) => application.projectId === projectId);
     }
   }, [allApplications, projectId]);
-
-  useEffect(() => {
-    if (!project) {
-      void dispatch(requestProject(projectId));
-    }
-  }, [projectId, project, dispatch]);
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
     switch (optionItem.value) {
@@ -73,8 +68,8 @@ export default function ProjectView(): JSX.Element {
   }, [dispatch, projectId]);
 
   const reloadProject = useCallback(() => {
-    void dispatch(requestProject(projectId));
-  }, [dispatch, projectId]);
+    void refetch();
+  }, [refetch]);
 
   const goToProjects = useCallback(() => navigate(getLocation(APP_PATHS.PROJECTS, location)), [navigate, location]);
 

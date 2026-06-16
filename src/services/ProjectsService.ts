@@ -15,7 +15,6 @@ const PROJECT_ASSIGN_ENDPOINT = '/api/v1/projects/{id}/assign';
 
 type CreateProjectResponsePayload =
   paths[typeof PROJECTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-type GetProjectResponsePayload = paths[typeof PROJECT_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 export type UpdateProjectResponsePayload =
   paths[typeof PROJECT_ENDPOINT]['put']['responses'][200]['content']['application/json'];
 export type DeleteProjectResponsePayload =
@@ -91,15 +90,6 @@ const createProject = (project: CreateProjectRequest): Promise<Response2<CreateP
     entity: project,
   });
 
-const getProject = (projectId: number): Promise<Response2<Project>> =>
-  httpProjects.get<GetProjectResponsePayload, { data: Project | undefined }>(
-    {
-      url: PROJECT_ENDPOINT,
-      urlReplacements: { '{id}': `${projectId}` },
-    },
-    (response) => ({ data: response?.project })
-  );
-
 const assignProjectToEntities = (projectId: number, entities: AssignProjectRequestPayload) =>
   httpProjects.post2<AssignProjectResponsePayload>({
     url: PROJECT_ASSIGN_ENDPOINT,
@@ -127,7 +117,6 @@ const ProjectsService = {
   searchProjects,
   createProject,
   assignProjectToEntities,
-  getProject,
   updateProject,
   deleteProject,
 };

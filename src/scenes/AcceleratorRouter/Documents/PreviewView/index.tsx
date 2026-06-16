@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useDocumentProducerData } from 'src/providers/DocumentProducer/Context';
-import { selectProject } from 'src/redux/features/projects/projectsSelectors';
-import { requestProject } from 'src/redux/features/projects/projectsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetProjectQuery } from 'src/queries/generated/projects';
 
 import PreviewDocument from './PreviewDocument';
 
@@ -13,20 +11,14 @@ export type PreviewProps = {
 };
 
 export default function Preview({ close }: PreviewProps) {
-  const dispatch = useAppDispatch();
   const { document: doc, projectId } = useDocumentProducerData();
 
   const [newWindow, setNewWindow] = useState<Window | null>(null);
   const [containerEl, setContainerEl] = useState<HTMLElement | null>(null);
   const [initialized, setInitialized] = useState(false);
 
-  const project = useAppSelector(selectProject(projectId));
-
-  useEffect(() => {
-    if (projectId !== -1) {
-      void dispatch(requestProject(projectId));
-    }
-  }, [dispatch, projectId]);
+  const { data } = useGetProjectQuery(projectId, { skip: projectId === -1 });
+  const project = data?.project;
 
   useEffect(() => {
     const win = window.open('/preview.html', '_blank');
