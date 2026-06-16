@@ -1,9 +1,5 @@
 import { components } from 'src/api/types/generated-schema';
 import HttpService from 'src/services/HttpService';
-import SearchService from 'src/services/SearchService';
-import { Project } from 'src/types/Project';
-import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
-import { parseSearchTerm } from 'src/utils/search';
 
 /**
  * Projects related services
@@ -17,63 +13,6 @@ export type AssignProjectResponsePayload = components['schemas']['SimpleSuccessR
 
 const httpProjects = HttpService.root(PROJECTS_ENDPOINT);
 
-/**
- * Search projects
- */
-const searchProjects = async (organizationId: number, query?: string): Promise<Project[] | null> => {
-  const searchField: OrNodePayload | null = query
-    ? (() => {
-        const { type, values } = parseSearchTerm(query);
-        return {
-          operation: 'or',
-          children: [
-            {
-              operation: 'field',
-              field: 'name',
-              type,
-              values,
-            },
-            {
-              operation: 'field',
-              field: 'description',
-              type,
-              values,
-            },
-          ],
-        };
-      })()
-    : null;
-
-  const searchParams: SearchRequestPayload = {
-    prefix: 'projects',
-    fields: ['name', 'description', 'id', 'organization_id'],
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'organization_id',
-          type: 'Exact',
-          values: [organizationId],
-        },
-      ],
-    },
-    sortOrder: [
-      {
-        field: 'name',
-      },
-    ],
-    count: 0,
-  };
-
-  if (searchField) {
-    searchParams.search.children.push(searchField);
-  }
-
-  const response = await SearchService.search(searchParams);
-  return response ? (response as Project[]) : null;
-};
-
 const assignProjectToEntities = (projectId: number, entities: AssignProjectRequestPayload) =>
   httpProjects.post2<AssignProjectResponsePayload>({
     url: PROJECT_ASSIGN_ENDPOINT,
@@ -85,7 +24,6 @@ const assignProjectToEntities = (projectId: number, entities: AssignProjectReque
  * Exported functions
  */
 const ProjectsService = {
-  searchProjects,
   assignProjectToEntities,
 };
 
