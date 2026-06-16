@@ -52,7 +52,7 @@ const PlantingSeasonsView = (): JSX.Element => {
   );
 
   const desktopTitleArea = (
-    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', paddingLeft: theme.spacing(3) }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%', paddingLeft: theme.spacing(1) }}>
       <Box sx={{ alignItems: 'center', display: 'flex', width: '100%' }}>
         <Typography fontSize='24px' fontWeight='600'>
           {strings.PLANTING_SEASONS}
