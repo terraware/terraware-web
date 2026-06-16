@@ -9,7 +9,6 @@ import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePlantingSite from 'src/hooks/usePlantingSite';
@@ -21,7 +20,6 @@ import { isAfter } from 'src/utils/dateUtils';
 
 import EmptyPlantingSiteMap from './components/EmptyPlantingSiteMap';
 import MultiplePlantingSiteMap from './components/MultiplePlantingSiteMap';
-import NewPlantingSiteTrendsCard from './components/NewPlantingSiteTrendsCard';
 import PlantDashboardMap from './components/PlantDashboardMap';
 import PlantingDensityCard from './components/PlantingDensityCard';
 import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
@@ -257,11 +255,7 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            {isEnabled('New Observation Results Tables') ? (
-              <NewPlantingSiteTrendsCard plantingSiteId={plantingSite?.id} />
-            ) : (
-              <PlantingSiteTrendsCard plantingSiteId={plantingSite?.id} />
-            )}
+            <PlantingSiteTrendsCard plantingSiteId={plantingSite?.id} />
           </Grid>
         </>
       ) : undefined,

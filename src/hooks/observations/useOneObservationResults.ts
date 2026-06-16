@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 
-import isEnabled from 'src/features';
 import { useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
 
 import { ObservationDepth } from './types';
@@ -11,14 +10,13 @@ type UseGetOneObservationResultsArgs = {
 };
 
 const useGetOneObservationResults = ({ observationId, depth }: UseGetOneObservationResultsArgs) => {
-  const useNewTables = isEnabled('New Observation Results Tables');
   const [getObservationResults, result] = useLazyGetObservationResultsQuery();
 
   useEffect(() => {
     if (observationId !== undefined) {
-      void getObservationResults({ observationId, depth, useNewTables }, true);
+      void getObservationResults({ observationId, depth, useNewTables: true }, true);
     }
-  }, [depth, getObservationResults, observationId, useNewTables]);
+  }, [depth, getObservationResults, observationId]);
 
   return result;
 };

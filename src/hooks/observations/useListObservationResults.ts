@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 
-import isEnabled from 'src/features';
 import { useLazyListObservationResultsQuery } from 'src/queries/generated/observations';
 import { ObservationState } from 'src/types/Observations';
 
@@ -21,14 +20,13 @@ const useListObservationResults = ({
   state,
   limit,
 }: UseListObservationResultsArgs) => {
-  const useNewTables = isEnabled('New Observation Results Tables');
   const [listObservationResults, result] = useLazyListObservationResultsQuery();
 
   useEffect(() => {
     if (organizationId !== undefined) {
-      void listObservationResults({ organizationId, plantingSiteId, depth, state, limit, useNewTables }, true);
+      void listObservationResults({ organizationId, plantingSiteId, depth, state, limit, useNewTables: true }, true);
     }
-  }, [depth, limit, listObservationResults, organizationId, plantingSiteId, state, useNewTables]);
+  }, [depth, limit, listObservationResults, organizationId, plantingSiteId, state]);
 
   return result;
 };
