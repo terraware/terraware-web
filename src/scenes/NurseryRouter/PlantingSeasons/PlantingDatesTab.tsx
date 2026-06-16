@@ -290,6 +290,15 @@ type PlantingDateFormProps = {
 type SpeciesDraft = { speciesId: number; quantity: number; allocatedQuantity?: number };
 type SubstratumDraft = { selected: boolean; species: SpeciesDraft[] };
 
+const quantityTextFieldSx = {
+  width: '208px',
+  maxWidth: '100%',
+  minWidth: 0,
+  '& .textfield-error-text': {
+    minWidth: 0,
+  },
+};
+
 const PlantingDateForm = ({
   plantingSeason,
   plantingSite,
@@ -765,6 +774,8 @@ const SpeciesTable = ({
             <AddSpeciesRow
               substratumId={substratumId}
               availableSpecies={availableSpecies}
+              targetsBySpecies={targetsBySpecies}
+              scheduledOtherBySpecies={scheduledOtherBySpecies}
               onAdd={(speciesId, quantity) => {
                 onUpdateSubstratumSpecies(substratumId, (current) => [
                   ...current,
@@ -793,14 +804,29 @@ const SpeciesTable = ({
 type AddSpeciesRowProps = {
   substratumId: number;
   availableSpecies: Species[];
+  targetsBySpecies: Map<number, number>;
+  scheduledOtherBySpecies: Map<number, number>;
   onAdd: (speciesId: number, quantity: number) => void;
   onCancel: () => void;
 };
 
-const AddSpeciesRow = ({ substratumId, availableSpecies, onAdd, onCancel }: AddSpeciesRowProps): JSX.Element => {
+const AddSpeciesRow = ({
+  substratumId,
+  availableSpecies,
+  targetsBySpecies,
+  scheduledOtherBySpecies,
+  onAdd,
+  onCancel,
+}: AddSpeciesRowProps): JSX.Element => {
   const theme = useTheme();
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | undefined>();
   const [quantity, setQuantity] = useState<string>('0');
+  const target = selectedSpeciesId === undefined ? 0 : targetsBySpecies.get(selectedSpeciesId) ?? 0;
+  const scheduledOther = selectedSpeciesId === undefined ? 0 : scheduledOtherBySpecies.get(selectedSpeciesId) ?? 0;
+  const availableToSchedule = Math.max(0, target - scheduledOther);
+  const parsedQuantity = Math.max(0, Number(quantity));
+  const quantityToValidate = Number.isNaN(parsedQuantity) ? 0 : parsedQuantity;
+  const exceedsGoal = selectedSpeciesId !== undefined && target > 0 && quantityToValidate > availableToSchedule;
 
   const options = useMemo<DropdownItem[]>(
     () =>
@@ -816,7 +842,7 @@ const AddSpeciesRow = ({ substratumId, availableSpecies, onAdd, onCancel }: AddS
       return;
     }
     const parsed = Math.max(0, Number(quantity));
-    if (Number.isNaN(parsed)) {
+    if (Number.isNaN(parsed) || exceedsGoal) {
       return;
     }
     onAdd(selectedSpeciesId, parsed);
@@ -844,9 +870,11 @@ const AddSpeciesRow = ({ substratumId, availableSpecies, onAdd, onCancel }: AddS
           value={quantity}
           onChange={(value) => setQuantity(String(value ?? ''))}
           min={0}
+          errorText={exceedsGoal ? strings.EXCEEDS_GOAL : ''}
+          sx={quantityTextFieldSx}
         />
       </Box>
-      <Button label={strings.SAVE} onClick={onConfirm} disabled={selectedSpeciesId === undefined} />
+      <Button label={strings.SAVE} onClick={onConfirm} disabled={selectedSpeciesId === undefined || exceedsGoal} />
       <Button label={strings.CANCEL} onClick={onCancel} priority='secondary' type='passive' />
     </Box>
   );
@@ -887,20 +915,22 @@ const SpeciesRow = ({
   index,
   species,
   target,
-  allocated,
   scheduledOther,
   onUpdateSubstratumSpecies,
 }: SpeciesRowProps): JSX.Element => {
   const theme = useTheme();
   const [editing, setEditing] = useState(false);
+  const [quantityFocused, setQuantityFocused] = useState(false);
   const [draftQuantity, setDraftQuantity] = useState<string>(draft.quantity.toString());
   const speciesInfo = useMemo(() => species.find((s) => s.id === draft.speciesId), [species, draft.speciesId]);
-  const targetRemaining = Math.max(0, target - scheduledOther);
-  const availableToSchedule = Math.max(0, allocated - scheduledOther);
-  const exceedsGoal = target > 0 && draft.quantity > targetRemaining;
+  const availableToSchedule = Math.max(0, target - scheduledOther);
+  const parsedDraftQuantity = Math.max(0, Number(draftQuantity));
+  const quantityToValidate = Number.isNaN(parsedDraftQuantity) ? draft.quantity : parsedDraftQuantity;
+  const exceedsGoal = target > 0 && quantityToValidate > availableToSchedule;
   const hasNumbers = draft.quantity > 0;
 
   const commitQuantity = () => {
+    setQuantityFocused(false);
     const parsed = Math.max(0, Number(draftQuantity));
     const next = Number.isNaN(parsed) ? draft.quantity : parsed;
     if (next !== draft.quantity) {
@@ -908,10 +938,7 @@ const SpeciesRow = ({
         current.map((s) => (s.speciesId === draft.speciesId ? { ...s, quantity: next } : s))
       );
     }
-    const nextExceedsGoal = target > 0 && next > targetRemaining;
-    if (!nextExceedsGoal) {
-      setEditing(false);
-    }
+    setEditing(false);
   };
 
   const removeRow = () => {
@@ -947,9 +974,11 @@ const SpeciesRow = ({
             value={draftQuantity}
             onChange={(value) => setDraftQuantity(String(value ?? ''))}
             onBlur={commitQuantity}
+            onFocus={() => setQuantityFocused(true)}
             min={0}
-            errorText={exceedsGoal ? strings.EXCEEDS_GOAL : ''}
+            errorText={quantityFocused && exceedsGoal ? strings.EXCEEDS_GOAL : ''}
             autoFocus
+            sx={quantityTextFieldSx}
           />
         ) : (
           <>
