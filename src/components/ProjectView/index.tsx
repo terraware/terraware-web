@@ -16,18 +16,12 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
-import { baseApi } from 'src/queries/baseApi';
-import { useGetProjectQuery } from 'src/queries/generated/projects';
-import { QueryTagTypes } from 'src/queries/tags';
-import { requestProjectDelete } from 'src/redux/features/projects/projectsAsyncThunks';
-import { selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useDeleteProjectMutation, useGetProjectQuery } from 'src/queries/generated/projects';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 export default function ProjectView(): JSX.Element {
-  const dispatch = useAppDispatch();
   const theme = useTheme();
 
   const snackbar = useSnackbar();
@@ -42,10 +36,10 @@ export default function ProjectView(): JSX.Element {
   const { data, refetch } = useGetProjectQuery(projectId, { skip: !projectId || isNaN(projectId) });
   const project = data?.project;
 
+  const [deleteProject, { isError: isDeleteError, isSuccess: isDeleteSuccess }] = useDeleteProjectMutation();
+
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-  const [requestId, setRequestId] = useState<string>('');
-  const projectDeleteRequest = useAppSelector((state) => selectProjectRequest(state, requestId));
 
   const projectHasApplication = useMemo(() => {
     if (projectId && allApplications !== undefined) {
@@ -63,9 +57,8 @@ export default function ProjectView(): JSX.Element {
 
   const onDeleteConfirmationDialogClose = useCallback(() => setIsDeleteConfirmationOpen(false), []);
   const onDeleteConfirmationDialogSubmit = useCallback(() => {
-    const dispatched = dispatch(requestProjectDelete({ projectId }));
-    setRequestId(dispatched.requestId);
-  }, [dispatch, projectId]);
+    void deleteProject(projectId);
+  }, [deleteProject, projectId]);
 
   const reloadProject = useCallback(() => {
     void refetch();
@@ -74,17 +67,12 @@ export default function ProjectView(): JSX.Element {
   const goToProjects = useCallback(() => navigate(getLocation(APP_PATHS.PROJECTS, location)), [navigate, location]);
 
   useEffect(() => {
-    if (!projectDeleteRequest) {
-      return;
-    }
-
-    if (projectDeleteRequest.status === 'error') {
+    if (isDeleteError) {
       snackbar.toastError();
-    } else if (projectDeleteRequest.status === 'success' && selectedOrganization) {
-      void dispatch(baseApi.util.invalidateTags([{ type: QueryTagTypes.Projects, id: 'LIST' }]));
+    } else if (isDeleteSuccess && selectedOrganization) {
       goToProjects();
     }
-  }, [selectedOrganization, projectDeleteRequest, snackbar, goToProjects, dispatch]);
+  }, [selectedOrganization, isDeleteError, isDeleteSuccess, snackbar, goToProjects]);
 
   const rightComponents = useMemo(
     () =>

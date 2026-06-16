@@ -18,5 +18,11 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.Projects, id: 'LIST' },
       ],
     },
+    deleteProject: {
+      invalidatesTags: (_result, _error, projectId) => [
+        { type: QueryTagTypes.Projects, id: projectId },
+        { type: QueryTagTypes.Projects, id: 'LIST' },
+      ],
+    },
   },
 });

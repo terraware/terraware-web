@@ -10,13 +10,10 @@ import { parseSearchTerm } from 'src/utils/search';
  */
 
 const PROJECTS_ENDPOINT = '/api/v1/projects';
-const PROJECT_ENDPOINT = '/api/v1/projects/{id}';
 const PROJECT_ASSIGN_ENDPOINT = '/api/v1/projects/{id}/assign';
 
 type CreateProjectResponsePayload =
   paths[typeof PROJECTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-export type DeleteProjectResponsePayload =
-  paths[typeof PROJECT_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
 
 export type AssignProjectRequestPayload = components['schemas']['AssignProjectRequestPayload'];
 export type AssignProjectResponsePayload = components['schemas']['SimpleSuccessResponsePayload'];
@@ -95,12 +92,6 @@ const assignProjectToEntities = (projectId: number, entities: AssignProjectReque
     entity: entities,
   });
 
-const deleteProject = (projectId: number) =>
-  httpProjects.delete2<DeleteProjectResponsePayload>({
-    url: PROJECT_ENDPOINT,
-    urlReplacements: { '{id}': `${projectId}` },
-  });
-
 /**
  * Exported functions
  */
@@ -108,7 +99,6 @@ const ProjectsService = {
   searchProjects,
   createProject,
   assignProjectToEntities,
-  deleteProject,
 };
 
 export default ProjectsService;
