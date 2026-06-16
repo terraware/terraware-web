@@ -24,6 +24,9 @@ import strings from 'src/strings';
 import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
+const inventoryPlanningTableGridTemplateColumns = '40px 2fr 1fr 1fr 1fr 1.5fr';
+const allocatedForTargetCellSx = { paddingLeft: 8 };
+
 const InventoryPlanningView = (): JSX.Element => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
@@ -186,7 +189,7 @@ const SpeciesTable = ({ rows, activeLocale }: SpeciesTableProps): JSX.Element =>
     <Box>
       <Box
         display='grid'
-        gridTemplateColumns='40px 2fr 1fr 1fr 1fr 1.5fr'
+        gridTemplateColumns={inventoryPlanningTableGridTemplateColumns}
         gap={theme.spacing(1)}
         sx={{
           padding: theme.spacing(1, 2),
@@ -198,7 +201,9 @@ const SpeciesTable = ({ rows, activeLocale }: SpeciesTableProps): JSX.Element =>
         <HeaderCell label={strings.AVAILABLE_TITLE} tooltip={strings.INVENTORY_PLANNING_AVAILABLE_TOOLTIP} alignEnd />
         <HeaderCell label={strings.TARGET} tooltip={strings.INVENTORY_PLANNING_TARGET_TOOLTIP} alignEnd />
         <HeaderCell label={strings.ALLOCATED} tooltip={strings.INVENTORY_PLANNING_ALLOCATED_TOOLTIP} alignEnd />
-        <HeaderCell label={strings.ALLOCATED_FOR_TARGET} tooltip={strings.ALLOCATED_FOR_TARGET_TOOLTIP} />
+        <Box sx={allocatedForTargetCellSx}>
+          <HeaderCell label={strings.ALLOCATED_FOR_TARGET} tooltip={strings.ALLOCATED_FOR_TARGET_TOOLTIP} />
+        </Box>
       </Box>
       {rows.length === 0 && (
         <Box padding={theme.spacing(4, 2)} textAlign='center'>
@@ -294,7 +299,7 @@ const SpeciesRow = ({ row, index, expanded, onToggle, activeLocale }: SpeciesRow
     <>
       <Box
         display='grid'
-        gridTemplateColumns='40px 2fr 1fr 1fr 1fr 1.5fr'
+        gridTemplateColumns={inventoryPlanningTableGridTemplateColumns}
         gap={theme.spacing(1)}
         alignItems='center'
         onClick={onToggle}
@@ -327,7 +332,7 @@ const SpeciesRow = ({ row, index, expanded, onToggle, activeLocale }: SpeciesRow
         <Typography fontSize='16px' textAlign='right'>
           {row.allocated > 0 ? row.allocated.toLocaleString(activeLocale || undefined) : '-'}
         </Typography>
-        <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
+        <Box display='flex' alignItems='center' gap={theme.spacing(1)} sx={allocatedForTargetCellSx}>
           <Box
             flex={1}
             sx={{
@@ -418,7 +423,7 @@ const SeasonDetailRow = ({
   return (
     <Box
       display='grid'
-      gridTemplateColumns='40px 2fr 1fr 1fr 1fr 1.5fr'
+      gridTemplateColumns={inventoryPlanningTableGridTemplateColumns}
       gap={theme.spacing(1)}
       alignItems='center'
       sx={{ padding: theme.spacing(1.5, 2), backgroundColor }}
