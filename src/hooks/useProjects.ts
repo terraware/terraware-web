@@ -1,19 +1,28 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
-import { useOrganization } from 'src/providers';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useLocalization, useOrganization } from 'src/providers';
+import { useListProjectsQuery } from 'src/queries/generated/projects';
 import { Project } from 'src/types/Project';
 
 import useAcceleratorConsole from './useAcceleratorConsole';
 
 export const useProjects = (record?: { projectId?: number }) => {
-  const dispatch = useAppDispatch();
+  const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
-  const availableProjects = useAppSelector(selectProjects);
+  const organizationId = isAcceleratorRoute ? undefined : selectedOrganization?.id;
+  const { data } = useListProjectsQuery(organizationId, {
+    skip: !isAcceleratorRoute && selectedOrganization === undefined,
+  });
+
+  const availableProjects = useMemo<Project[] | undefined>(
+    () =>
+      data?.projects
+        ? [...data.projects].sort((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+        : undefined,
+    [activeLocale, data]
+  );
 
   const getProjectName = useCallback(
     (projectId: number) => (availableProjects?.find((project: Project) => project.id === projectId) || {}).name || '',
@@ -28,19 +37,6 @@ export const useProjects = (record?: { projectId?: number }) => {
         : undefined,
     [availableProjects, recordProjectId]
   );
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void dispatch(requestProjects(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization]);
-
-  // fetch all projects in the accelerator route
-  useEffect(() => {
-    if (isAcceleratorRoute) {
-      void dispatch(requestProjects());
-    }
-  }, [isAcceleratorRoute, dispatch]);
 
   return { availableProjects, getProjectName, selectedProject };
 };

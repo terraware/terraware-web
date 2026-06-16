@@ -8,10 +8,9 @@ import FilterMultiSelectContainer from 'src/components/common/FilterMultiSelectC
 import Table from 'src/components/common/table';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
 import { SortOrder } from 'src/components/common/table/sort';
+import { useProjects } from 'src/hooks/useProjects';
 import { SearchSortOrderElement } from 'src/queries/generated/search';
 import { PlantingSiteSummary } from 'src/queries/search/plantingSites';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { PlantingSitesFilters } from 'src/types/PlantingSite';
 import { Project } from 'src/types/Project';
@@ -58,7 +57,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
 
   const theme = useTheme();
 
-  const projects = useAppSelector(selectProjects);
+  const { availableProjects: projects } = useProjects();
 
   const [isPresorted, setIsPresorted] = useState<boolean>(true);
 

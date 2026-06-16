@@ -10,16 +10,17 @@ import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
-import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useProjects } from 'src/hooks/useProjects';
+import { useOrganization, useUser } from 'src/providers';
 import ApplicationProvider from 'src/providers/Application';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import SpeciesProvider from 'src/providers/Species/SpeciesProvider';
+import { baseApi } from 'src/queries/baseApi';
 import { useLazyCountObservationsQuery } from 'src/queries/search/observations';
 import { useLazyCountPlantingSitesQuery } from 'src/queries/search/plantingSites';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { QueryTagTypes } from 'src/queries/tags';
+import { useAppDispatch } from 'src/redux/store';
 import AccessionsRouter from 'src/scenes/AccessionsRouter';
 import ApplicationRouter from 'src/scenes/ApplicationRouter';
 import BatchBulkWithdrawView from 'src/scenes/BatchBulkWithdrawView';
@@ -49,7 +50,6 @@ import SettingsLayout from 'src/scenes/Settings/SettingsLayout';
 import SettingsRedirect from 'src/scenes/Settings/SettingsRedirect';
 import SpeciesRouter from 'src/scenes/Species';
 import VirtualWalkthroughsView from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughsView';
-import { Project } from 'src/types/Project';
 import { getRgbaFromHex } from 'src/utils/color';
 import { isPlaceholderOrg, selectedOrgHasFacilityType } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -65,7 +65,6 @@ interface OrgRouterProps {
 
 const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const dispatch = useAppDispatch();
-  const { activeLocale } = useLocalization();
   const { type } = useDeviceInfo();
   const { isProduction } = useEnvironment();
   const { reloadUserPreferences: reloadPreferences } = useUser();
@@ -73,7 +72,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { species } = useSpeciesData();
-  const projects: Project[] | undefined = useAppSelector(selectProjects);
+  const { availableProjects: projects } = useProjects();
 
   const [countPlantingSites, countPlantingSitesResult] = useLazyCountPlantingSitesQuery();
   const [countObservations, countObservationsResult] = useLazyCountObservationsQuery();
@@ -118,17 +117,8 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   };
 
   const reloadProjects = useCallback(() => {
-    const populateProjects = () => {
-      if (selectedOrganization && !isPlaceholderOrg(selectedOrganization.id)) {
-        void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
-      }
-    };
-    populateProjects();
-  }, [selectedOrganization, dispatch, activeLocale]);
-
-  useEffect(() => {
-    reloadProjects();
-  }, [reloadProjects]);
+    void dispatch(baseApi.util.invalidateTags([{ type: QueryTagTypes.Projects, id: 'LIST' }]));
+  }, [dispatch]);
 
   const selectedOrgHasSpecies = useCallback((): boolean => species.length > 0, [species]);
 

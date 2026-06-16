@@ -6,11 +6,10 @@ import { TableColumnType } from '@terraware/web-components/components/table/type
 
 import TooltipButton from 'src/components/common/button/TooltipButton';
 import Table from 'src/components/common/table';
+import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
 import { requestGetProjectsForSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
 import { selectProjectsForSpeciesRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorProjectForSpecies } from 'src/types/AcceleratorProjectSpecies';
@@ -59,7 +58,7 @@ export default function SpeciesProjectsTable({
   const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
-  const allProjects = useAppSelector(selectProjects);
+  const { availableProjects: allProjects } = useProjects();
 
   const [requestId, setRequestId] = useState('');
   const projectsForSpeciesRequest = useAppSelector(selectProjectsForSpeciesRequest(requestId));
@@ -69,12 +68,6 @@ export default function SpeciesProjectsTable({
   const [showRemoveDialog, setShowRemoveDialog] = useState(false);
   const [reload, setReload] = useState(false);
   const [openedAddToProjectModal, setOpenedAddToProjectModal] = useState(false);
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void dispatch(requestProjects(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization]);
 
   useEffect(() => {
     const request = dispatch(requestGetProjectsForSpecies({ speciesId }));

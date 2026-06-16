@@ -2,8 +2,8 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { useParams } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
+import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { selectProject } from 'src/redux/features/projects/projectsSelectors';
 import { requestProjectVotesGet } from 'src/redux/features/votes/votesAsyncThunks';
 import { selectProjectVotes } from 'src/redux/features/votes/votesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -25,7 +25,7 @@ const VotingProvider = ({ children }: Props): JSX.Element => {
 
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
-  const project = useAppSelector(selectProject(projectId));
+  const { selectedProject: project } = useProjects({ projectId });
 
   const phase: Phase = (query.get('phase') as Phase) || project?.phase || 'Phase 1 - Feasibility Study'; // default to phase 1?
 

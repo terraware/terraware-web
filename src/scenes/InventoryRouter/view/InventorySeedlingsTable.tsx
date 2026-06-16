@@ -17,12 +17,10 @@ import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton'
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import { NurseryBatchService } from 'src/services';
@@ -76,8 +74,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const dispatch = useAppDispatch();
-  const projects = useAppSelector(selectProjects);
+  const { availableProjects: projects } = useProjects();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const snackbar = useSnackbar();
@@ -103,12 +100,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         .filter((row): row is SearchResponseElement => row !== undefined),
     [rowSelection, filteredBatches]
   );
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
-    }
-  }, [dispatch, selectedOrganization, activeLocale]);
 
   useEffect(() => {
     if (

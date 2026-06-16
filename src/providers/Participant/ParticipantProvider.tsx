@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import useListProjectModules from 'src/hooks/useListProjectModules';
+import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { requestListOrgProjectsAndModules } from 'src/redux/features/modules/modulesAsyncThunks';
 import { selectModuleOrgProjects } from 'src/redux/features/modules/modulesSelectors';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { Project } from 'src/types/Project';
 
@@ -29,7 +28,7 @@ const ParticipantProvider = ({ children }: Props) => {
   const [listModuleProjectsRequestId, setListModuleProjectsRequestId] = useState<string>('');
 
   const moduleProjectsListRequest = useAppSelector(selectModuleOrgProjects(listModuleProjectsRequestId));
-  const projects = useAppSelector(selectProjects);
+  const { availableProjects: projects } = useProjects();
 
   const { listProjectModules, projectModules, isLoading: listModulesIsLoading } = useListProjectModules();
 
@@ -71,9 +70,8 @@ const ParticipantProvider = ({ children }: Props) => {
       setOrgHasModules(undefined);
       setOrgHasParticipants(undefined);
       setAcceleratorProjects([]);
-      void dispatch(requestProjects(selectedOrganization.id, activeLocale));
     }
-  }, [activeLocale, dispatch, selectedOrganization]);
+  }, [activeLocale, selectedOrganization]);
 
   useEffect(() => {
     const nextAcceleratorProjects = (projects || []).filter((project) => !!project.phase);

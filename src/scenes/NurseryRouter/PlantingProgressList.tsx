@@ -16,12 +16,11 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
 import { useOrganization } from 'src/providers';
 import { useLazyListPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
 import { useUpdateSubstrataMutation } from 'src/queries/generated/substrata';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { useAppSelector } from 'src/redux/store';
 import { exportNurseryPlantingProgress } from 'src/scenes/NurseryRouter/exportNurseryData';
 import strings from 'src/strings';
 import { PlantingProgressType } from 'src/types/PlantingSite';
@@ -33,7 +32,7 @@ export default function PlantingProgressList(): JSX.Element {
   const [rowSelection, setRowSelection] = useState({});
   const { selectedOrganization } = useOrganization();
 
-  const projects = useAppSelector(selectProjects);
+  const { availableProjects: projects } = useProjects();
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const [listReportedPlants, listReportedPlantsResponse] = useLazyListPlantingSiteReportedPlantsQuery();
   const [updateSubstratum, { isLoading }] = useUpdateSubstrataMutation();

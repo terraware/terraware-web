@@ -7,10 +7,9 @@ import { PillList } from '@terraware/web-components';
 
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
+import { useProjects } from 'src/hooks/useProjects';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { requestProjects } from 'src/redux/features/projects/projectsThunks';
 import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
 import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -89,7 +88,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
   const origin = props.origin || 'Species';
 
   const { species } = useSpeciesData();
-  const projects = useAppSelector(selectProjects);
+  const { availableProjects: projects } = useProjects();
   const nurseries = useMemo<Facility[]>(
     () => (selectedOrganization ? getAllNurseries(selectedOrganization) : []),
     [selectedOrganization]
@@ -99,12 +98,6 @@ export default function Search(props: SearchProps): JSX.Element | null {
   useEffect(() => {
     void dispatch(requestSubLocations(filters.facilityIds ?? []));
   }, [filters.facilityIds, dispatch]);
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void dispatch(requestProjects(selectedOrganization.id, activeLocale || undefined));
-    }
-  }, [dispatch, activeLocale, selectedOrganization]);
 
   useEffect(() => {
     if (origin !== 'Nursery' || !species.length) {

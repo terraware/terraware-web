@@ -21,10 +21,9 @@ import Divisor from 'src/components/common/Divisor';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import { useProjects } from 'src/hooks/useProjects';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useOrganization } from 'src/providers/hooks';
-import { selectProjects } from 'src/redux/features/projects/projectsSelectors';
-import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { BatchWithdrawalPayload, NurseryWithdrawalPurposes, NurseryWithdrawalRequest } from 'src/types/Batch';
 import { Facility } from 'src/types/Facility';
@@ -60,7 +59,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
   const { plantingSites, isLoading } = useOrganizationPlantingSites({ full: true });
 
   const { species } = useSpeciesData();
-  const projects = useAppSelector(selectProjects);
+  const { availableProjects: projects } = useProjects();
 
   const [isNurseryTransfer, setIsNurseryTransfer] = useState(contributor ? true : false);
   const [isOutplant, setIsOutplant] = useState(nurseryWithdrawal.purpose === OUTPLANT);

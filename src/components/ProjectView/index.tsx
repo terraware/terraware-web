@@ -16,9 +16,11 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
+import { baseApi } from 'src/queries/baseApi';
+import { QueryTagTypes } from 'src/queries/tags';
 import { requestProjectDelete } from 'src/redux/features/projects/projectsAsyncThunks';
 import { selectProject, selectProjectRequest } from 'src/redux/features/projects/projectsSelectors';
-import { requestProject, requestProjects } from 'src/redux/features/projects/projectsThunks';
+import { requestProject } from 'src/redux/features/projects/projectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -84,7 +86,7 @@ export default function ProjectView(): JSX.Element {
     if (projectDeleteRequest.status === 'error') {
       snackbar.toastError();
     } else if (projectDeleteRequest.status === 'success' && selectedOrganization) {
-      void dispatch(requestProjects(selectedOrganization.id));
+      void dispatch(baseApi.util.invalidateTags([{ type: QueryTagTypes.Projects, id: 'LIST' }]));
       goToProjects();
     }
   }, [selectedOrganization, projectDeleteRequest, snackbar, goToProjects, dispatch]);
