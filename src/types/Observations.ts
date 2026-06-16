@@ -1,5 +1,8 @@
 import { components } from 'src/api/types/generated-schema';
-import { ObservationMonitoringPlotMediaPayload } from 'src/queries/generated/observations';
+import {
+  ObservationMonitoringPlotMediaPayload,
+  ObservationResultsPayload as RtkObservationResultsPayload,
+} from 'src/queries/generated/observations';
 import defaultStrings from 'src/strings';
 
 import { MultiPolygon } from './Tracking';
@@ -27,7 +30,7 @@ type Boundary = {
 // expanded information on an observation including observed results down to monitoring plot level detail
 // requires navigating a tree of stratum results -> substratum results -> ( species results | monitoring plot results )
 export type ObservationResultsPayload = components['schemas']['ObservationResultsPayload'];
-export type ObservationResults = Omit<ObservationResultsPayload, 'species'> &
+export type ObservationResults = Omit<RtkObservationResultsPayload, 'species'> &
   Boundary & {
     completedDate?: string;
     plantingSiteName: string;
@@ -40,7 +43,7 @@ export type ObservationResults = Omit<ObservationResultsPayload, 'species'> &
     hasObservedTemporaryPlots: boolean;
   };
 
-export type AdHocObservationResults = Omit<ObservationResultsPayload, 'strata' | 'adHocPlot'> &
+export type AdHocObservationResults = Omit<RtkObservationResultsPayload, 'strata' | 'adHocPlot'> &
   Boundary & {
     adHocPlot: components['schemas']['ObservationMonitoringPlotResultsPayload'];
     plantingSiteName: string;
