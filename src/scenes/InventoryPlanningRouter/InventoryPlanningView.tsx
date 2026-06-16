@@ -299,12 +299,15 @@ type SpeciesRowProps = {
   activeLocale: string | null;
 };
 
+const getAllocationPercent = (target: number, allocated: number): number =>
+  target > 0 ? (allocated / target) * 100 : 0;
+
 const getAllocationColor = (target: number, allocated: number, theme: Theme): string | undefined => {
   const palette = theme.palette;
   if (target <= 0 || allocated <= 0) {
     return palette.TwClrTxt;
   }
-  const percent = (allocated / target) * 100;
+  const percent = getAllocationPercent(target, allocated);
   if (percent >= 76) {
     return palette.TwClrTxtSuccess;
   }
@@ -314,20 +317,28 @@ const getAllocationColor = (target: number, allocated: number, theme: Theme): st
   return palette.TwClrTxtDanger;
 };
 
+const getAllocationProgressBarColor = (target: number, allocated: number, theme: Theme): string | undefined => {
+  const palette = theme.palette;
+  if (target <= 0 || allocated <= 0) {
+    return palette.TwClrBgTertiary;
+  }
+  const percent = getAllocationPercent(target, allocated);
+  if (percent >= 76) {
+    return '#0C8A20';
+  }
+  if (percent >= 25) {
+    return '#FFAB00';
+  }
+  return '#CC3931';
+};
+
 const SpeciesRow = ({ row, index, expanded, onToggle, activeLocale }: SpeciesRowProps): JSX.Element => {
   const theme = useTheme();
 
   const availableColor =
     row.target > 0 && row.available < row.target ? theme.palette.TwClrTxtDanger : theme.palette.TwClrTxtSuccess;
-  const percent = row.target > 0 ? Math.round((row.allocated / row.target) * 100) : 0;
-  const barColor =
-    row.target <= 0 || row.allocated <= 0
-      ? theme.palette.TwClrBgTertiary
-      : percent >= 76
-        ? theme.palette.TwClrIcnSuccess
-        : percent >= 25
-          ? theme.palette.TwClrIcnWarning
-          : theme.palette.TwClrIcnDanger;
+  const percent = Math.round(getAllocationPercent(row.target, row.allocated));
+  const barColor = getAllocationProgressBarColor(row.target, row.allocated, theme);
 
   return (
     <>
