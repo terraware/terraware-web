@@ -1,3 +1,5 @@
+ddb78f3f Migrate delete project to rtk query (#5836)
+b2ba7c95 SW-8470 Remove add/delete buttons and automatically save (#5873)
 9c9ac2b8 Migrate update project to rtk query (#5835)
 06c9a5e7 Migrate get project to rtk query (#5834)
 1967c9d4 SW-8500 Improve more mobile styles in Planting Dates tab (#5860)
