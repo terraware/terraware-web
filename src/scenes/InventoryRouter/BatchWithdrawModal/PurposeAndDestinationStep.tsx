@@ -17,6 +17,7 @@ import { BatchInfo, BatchWithdrawDraft } from './types';
 
 type PurposeAndDestinationStepProps = {
   batches: BatchInfo[];
+  contributor: boolean;
   draft: BatchWithdrawDraft;
   speciesTargets?: SpeciesTargetForSubstratum[];
   onChange: (next: Partial<BatchWithdrawDraft>) => void;
@@ -24,6 +25,7 @@ type PurposeAndDestinationStepProps = {
 
 const PurposeAndDestinationStep = ({
   batches,
+  contributor,
   draft,
   speciesTargets,
   onChange,
@@ -33,7 +35,8 @@ const PurposeAndDestinationStep = ({
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization?.id;
 
-  const [listPlantingSites, { data: plantingSitesData }] = useLazyListPlantingSitesQuery();
+  const [listPlantingSites, { data: plantingSitesData, isFetching: isPlantingSitesLoading }] =
+    useLazyListPlantingSitesQuery();
   const [listPlantingSeasons, { data: plantingSeasonsData }] = useLazyListPlantingSeasonsQuery();
 
   useEffect(() => {
@@ -45,9 +48,11 @@ const PurposeAndDestinationStep = ({
     }
   }, [organizationId, listPlantingSites, listPlantingSeasons]);
 
+  const plantingSites = useMemo(() => plantingSitesData?.sites ?? [], [plantingSitesData]);
+
   const selectedPlantingSite = useMemo(
-    () => (plantingSitesData?.sites ?? []).find((s) => s.id === draft.plantingSiteId),
-    [plantingSitesData, draft.plantingSiteId]
+    () => plantingSites.find((s) => s.id === draft.plantingSiteId),
+    [plantingSites, draft.plantingSiteId]
   );
 
   // From: Nursery options are restricted to nurseries that hold at least one
@@ -68,8 +73,8 @@ const PurposeAndDestinationStep = ({
   }, [selectedOrganization, draft.fromFacilityId]);
 
   const plantingSiteOptions = useMemo<DropdownItem[]>(
-    () => (plantingSitesData?.sites ?? []).map((s) => ({ label: s.name, value: s.id })),
-    [plantingSitesData]
+    () => plantingSites.map((s) => ({ label: s.name, value: s.id })),
+    [plantingSites]
   );
 
   // Active seasons for the selected planting site.
@@ -140,6 +145,32 @@ const PurposeAndDestinationStep = ({
   const isPlanting = purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
   const isNurseryTransfer = purpose === NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER;
 
+  useEffect(() => {
+    if (draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT) {
+      const hasReadyQuantities = batches.some((batch) => {
+        if (draft.fromFacilityId !== undefined && batch.facilityId !== draft.fromFacilityId) {
+          return false;
+        }
+        return batch.readyQuantity > 0;
+      });
+
+      if (!hasReadyQuantities) {
+        onChange({ purpose: NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER });
+        return;
+      }
+    }
+  }, [batches, draft.fromFacilityId, draft.purpose, onChange]);
+
+  useEffect(() => {
+    if (
+      draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT &&
+      !isPlantingSitesLoading &&
+      plantingSites.length === 0
+    ) {
+      onChange({ purpose: NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER });
+    }
+  }, [draft.purpose, isPlantingSitesLoading, onChange, plantingSites.length]);
+
   return (
     <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
       <Box display='flex' alignItems='center' gap={theme.spacing(2)} flexWrap='wrap'>
@@ -151,11 +182,13 @@ const PurposeAndDestinationStep = ({
           value={purpose}
           onChange={(_event, value) => onChange({ purpose: value as NurseryWithdrawalPurpose })}
         >
-          <FormControlLabel
-            value={NurseryWithdrawalRequestPurposes.OUTPLANT}
-            control={<Radio />}
-            label={strings.PLANTING}
-          />
+          {!contributor && (
+            <FormControlLabel
+              value={NurseryWithdrawalRequestPurposes.OUTPLANT}
+              control={<Radio />}
+              label={strings.PLANTING}
+            />
+          )}
           <FormControlLabel
             value={NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER}
             control={<Radio />}

@@ -48,6 +48,8 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   const [createBatchWithdrawal, { isLoading: isCreating }] = useCreateBatchWithdrawalMutation();
   const [uploadWithdrawalPhoto] = useUploadWithdrawalPhotoMutation();
 
+  const contributor = isContributor(selectedOrganization);
+
   const defaultDraft = useCallback(
     (): BatchWithdrawDraft => ({
       purpose: isContributor(selectedOrganization)
@@ -415,6 +417,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
             {step === 0 && (
               <PurposeAndDestinationStep
                 batches={batches}
+                contributor={contributor}
                 draft={draft}
                 speciesTargets={speciesTargets}
                 onChange={updateDraft}
