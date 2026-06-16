@@ -1,3 +1,4 @@
+703e95b6 Migrate assign project to rtk query (#5848)
 b7013245 Migrate search projects to rtk query (#5847)
 6ef8e50e Migrate create project to rtk query (#5846)
 ddb78f3f Migrate delete project to rtk query (#5836)
