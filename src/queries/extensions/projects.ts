@@ -12,5 +12,11 @@ api.enhanceEndpoints({
     getProject: {
       providesTags: (_result, _error, projectId) => [{ type: QueryTagTypes.Projects, id: projectId }],
     },
+    updateProject: {
+      invalidatesTags: (_result, _error, payload) => [
+        { type: QueryTagTypes.Projects, id: payload.id },
+        { type: QueryTagTypes.Projects, id: 'LIST' },
+      ],
+    },
   },
 });
