@@ -40,6 +40,8 @@ const compareSpeciesScientificNames = (
   return firstName.localeCompare(secondName) || firstSpeciesId - secondSpeciesId;
 };
 
+const targetQuantityTextFieldSx = { width: '70px' };
+
 const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabProps): JSX.Element => {
   const theme = useTheme();
   const { data: speciesTargetsData } = useGetSpeciesTargetsQuery(plantingSeason.id);
@@ -370,6 +372,7 @@ const SpeciesTargetRow = ({
             onBlur={() => void onSave()}
             min={0}
             autoFocus
+            sx={targetQuantityTextFieldSx}
           />
         ) : (
           <>
@@ -480,7 +483,7 @@ const AddSpeciesRow = ({
       onMouseDownCapture={scrollRowIntoView}
       onTouchStartCapture={scrollRowIntoView}
     >
-      <Box flex={1} minWidth='200px'>
+      <Box width={isMobile ? '100%' : '300px'}>
         <Dropdown
           id={`add-species-${substratumId}`}
           label={strings.SPECIES}
@@ -492,7 +495,7 @@ const AddSpeciesRow = ({
           autocomplete
         />
       </Box>
-      <Box minWidth='160px'>
+      <Box width='70px'>
         <TextField
           id={`add-quantity-${substratumId}`}
           type='number'
@@ -500,6 +503,7 @@ const AddSpeciesRow = ({
           value={quantity}
           onChange={(value) => setQuantity(String(value ?? ''))}
           min={0}
+          sx={targetQuantityTextFieldSx}
         />
       </Box>
       {isMobile ? (
