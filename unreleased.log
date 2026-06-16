@@ -1,5 +1,3 @@
-18032000 SW-8478 Species selector and Quantity fields should not be as wide (#5856)
-550ad7b8 SW-8509 Planting Season filter not limiting Species in Species filter (#5855)
 c1140441 SW-8507 Update tooltips (#5854)
 030dfa98 SW-8481 Exceeds goal field validation should disappear after focus is out of the input field (#5831)
 d7f943b2 SW-8494 Planting Goal number missing in mobile Planting Season view (#5850)
