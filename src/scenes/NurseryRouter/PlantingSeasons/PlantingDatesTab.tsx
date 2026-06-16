@@ -211,17 +211,21 @@ const PlantingDateListItem = ({
 
   const totalPlants = scheduledDate.species.reduce((sum, s) => sum + s.quantity, 0);
   const distinctSpecies = new Set(scheduledDate.species.map((s) => s.speciesId)).size;
-  const mobileEditButtonSx = isMobile
-    ? {
-        borderRadius: '28px',
-        borderWidth: '2px',
-        fontSize: '16px',
-        fontWeight: 600,
-        justifyContent: 'center',
-        minHeight: '44px',
-        width: '100%',
-      }
-    : undefined;
+  const mobileEditButtonSx = useMemo(
+    () =>
+      isMobile
+        ? {
+            borderRadius: '28px',
+            borderWidth: '2px',
+            fontSize: '16px',
+            fontWeight: 600,
+            justifyContent: 'center',
+            minHeight: '44px',
+            width: '100%',
+          }
+        : undefined,
+    [isMobile]
+  );
 
   const { strataNames, substrataNames } = useMemo(() => {
     const substratumIds = new Set(scheduledDate.species.map((s) => s.substratumId));
