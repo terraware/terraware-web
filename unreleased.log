@@ -1,3 +1,4 @@
+030dfa98 SW-8481 Exceeds goal field validation should disappear after focus is out of the input field (#5831)
 d7f943b2 SW-8494 Planting Goal number missing in mobile Planting Season view (#5850)
 7fadae58 SW-8378 Move Organization to settings cog (#5812)
 156cf3f8 Sort organization picker options alphabetically (mobile) (#5853)
