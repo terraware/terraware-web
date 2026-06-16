@@ -211,6 +211,17 @@ const PlantingDateListItem = ({
 
   const totalPlants = scheduledDate.species.reduce((sum, s) => sum + s.quantity, 0);
   const distinctSpecies = new Set(scheduledDate.species.map((s) => s.speciesId)).size;
+  const mobileEditButtonSx = isMobile
+    ? {
+        borderRadius: '28px',
+        borderWidth: '2px',
+        fontSize: '16px',
+        fontWeight: 600,
+        justifyContent: 'center',
+        minHeight: '44px',
+        width: '100%',
+      }
+    : undefined;
 
   const { strataNames, substrataNames } = useMemo(() => {
     const substratumIds = new Set(scheduledDate.species.map((s) => s.substratumId));
@@ -246,7 +257,13 @@ const PlantingDateListItem = ({
           {strings.formatString(strings.X_SPECIES_Y_PLANTS, distinctSpecies, totalPlants).toString()}
         </Typography>
       </Box>
-      <Box flex={1} display='flex' gap={theme.spacing(2)}>
+      <Box
+        flex={1}
+        width={isMobile ? '100%' : undefined}
+        display='flex'
+        flexDirection={isMobile ? 'column' : 'row'}
+        gap={isMobile ? theme.spacing(0.75) : theme.spacing(2)}
+      >
         <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
           {strings.STRATA_LABEL}
         </Typography>
@@ -258,7 +275,13 @@ const PlantingDateListItem = ({
           ))}
         </Box>
       </Box>
-      <Box flex={1} display='flex' gap={theme.spacing(2)}>
+      <Box
+        flex={1}
+        width={isMobile ? '100%' : undefined}
+        display='flex'
+        flexDirection={isMobile ? 'column' : 'row'}
+        gap={isMobile ? theme.spacing(0.75) : theme.spacing(2)}
+      >
         <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
           {strings.SUBSTRATA_LABEL}
         </Typography>
@@ -271,7 +294,15 @@ const PlantingDateListItem = ({
         </Box>
       </Box>
       {!readOnly && (
-        <Button icon='iconEdit' label={strings.EDIT} onClick={onEdit} priority='secondary' type='productive' />
+        <Button
+          icon='iconEdit'
+          label={strings.EDIT}
+          onClick={onEdit}
+          priority='secondary'
+          type='productive'
+          size={isMobile ? 'medium' : undefined}
+          sx={mobileEditButtonSx}
+        />
       )}
     </Box>
   );
@@ -882,18 +913,35 @@ const AddSpeciesRow = ({
 
 const HeaderCell = ({ label, tooltip }: { label: string; tooltip?: string }): JSX.Element => {
   const theme = useTheme();
+  const labelParts = label.split(' ');
+  const lastLabelPart = labelParts.pop();
+  const leadingLabel = labelParts.join(' ');
+
   return (
-    <Box display='flex' alignItems='center' gap={theme.spacing(0.5)}>
-      <Typography fontSize='14px' fontWeight={600}>
-        {label}
+    <Box>
+      <Typography component='span' fontSize='14px' fontWeight={600} lineHeight='20px'>
+        {tooltip && lastLabelPart ? (
+          <>
+            {leadingLabel ? `${leadingLabel} ` : ''}
+            <Box component='span' sx={{ whiteSpace: 'nowrap' }}>
+              {lastLabelPart}
+              <Tooltip title={tooltip}>
+                <Box
+                  component='span'
+                  display='inline-flex'
+                  alignItems='center'
+                  marginLeft={theme.spacing(0.5)}
+                  sx={{ verticalAlign: 'text-bottom' }}
+                >
+                  <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+                </Box>
+              </Tooltip>
+            </Box>
+          </>
+        ) : (
+          label
+        )}
       </Typography>
-      {tooltip && (
-        <Tooltip title={tooltip}>
-          <Box display='flex' alignItems='center'>
-            <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
-          </Box>
-        </Tooltip>
-      )}
     </Box>
   );
 };
