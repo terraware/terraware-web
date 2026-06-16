@@ -5,7 +5,7 @@ import { DialogBoxSize } from '@terraware/web-components/components/DialogBox/Di
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Checkbox from 'src/components/common/Checkbox';
-import DialogBox from 'src/components/common/ScrollableDialogBox';
+import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
 import { useDisclaimerData } from 'src/providers/Disclaimer/Context';
@@ -75,7 +75,7 @@ const DisclaimerModal = ({ open, setOpen, onCancel, onConfirm }: DisclaimerModal
   }, [activeLocale, agreed, onConfirm]);
 
   return (
-    <DialogBox
+    <ScrollableDialogBox
       onClose={onClose}
       open={open}
       title={strings.FUNDER_DISCLAIMER_TITLE}
@@ -104,7 +104,7 @@ const DisclaimerModal = ({ open, setOpen, onCancel, onConfirm }: DisclaimerModal
           />
         </Box>
       )}
-    </DialogBox>
+    </ScrollableDialogBox>
   );
 };
 

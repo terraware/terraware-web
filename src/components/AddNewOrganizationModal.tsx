@@ -25,7 +25,7 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import DialogBox from './common/ScrollableDialogBox';
+import ScrollableDialogBox from './common/ScrollableDialogBox';
 import TextField from './common/Textfield/Textfield';
 
 type LocationTypesSelected = Record<ManagedLocationType, boolean>;
@@ -182,7 +182,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   };
 
   return (
-    <DialogBox
+    <ScrollableDialogBox
       onClose={onCancelWrapper}
       open={open}
       title={strings.ADD_ORGANIZATION}
@@ -321,6 +321,6 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           {strings.ADD_NEW_ORGANIZATION_FOOTNOTE}
         </Typography>
       </Grid>
-    </DialogBox>
+    </ScrollableDialogBox>
   );
 }

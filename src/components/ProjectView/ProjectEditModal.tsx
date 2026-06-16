@@ -2,7 +2,7 @@ import React, { type JSX, useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
 
-import DialogBox from 'src/components/common/ScrollableDialogBox';
+import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useUpdateProjectMutation } from 'src/queries/generated/projects';
@@ -59,7 +59,7 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
   }, [isError, isSuccess, reset, snackbar, project, reload, onClose]);
 
   return (
-    <DialogBox
+    <ScrollableDialogBox
       onClose={onClose}
       open={open}
       title={project?.name ?? strings.EDIT_PROJECT}
@@ -98,6 +98,6 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
           />
         </Grid>
       </Grid>
-    </DialogBox>
+    </ScrollableDialogBox>
   );
 }

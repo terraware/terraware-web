@@ -4,7 +4,7 @@ import { Box, Grid, Typography } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 
 import ErrorBox from 'src/components/common/ErrorBox/ErrorBox';
-import DialogBox from 'src/components/common/ScrollableDialogBox';
+import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS, EMAIL_REGEX } from 'src/constants';
@@ -176,7 +176,7 @@ export default function PersonModal({ open, onClose, person, reload }: PersonMod
   }
 
   return (
-    <DialogBox
+    <ScrollableDialogBox
       onClose={onClose}
       open={open}
       title={person ? person.email : strings.ADD_PERSON}
@@ -266,6 +266,6 @@ export default function PersonModal({ open, onClose, person, reload }: PersonMod
           />
         </Grid>
       </Grid>
-    </DialogBox>
+    </ScrollableDialogBox>
   );
 }

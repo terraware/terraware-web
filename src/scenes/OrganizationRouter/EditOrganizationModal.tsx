@@ -5,7 +5,7 @@ import { Dropdown } from '@terraware/web-components';
 
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
-import DialogBox from 'src/components/common/ScrollableDialogBox';
+import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useLocalization, useTimeZones } from 'src/providers';
@@ -121,11 +121,13 @@ export default function EditOrganizationModal({
   };
 
   return (
-    <DialogBox
+    <ScrollableDialogBox
       onClose={onClose}
       open={open}
       title={strings.EDIT_ORGANIZATION}
       size='medium'
+      maxHeight={'calc(100vh - 120px)'}
+      scrolled
       middleButtons={[
         <Button
           id='cancelEditOrg'
@@ -231,6 +233,6 @@ export default function EditOrganizationModal({
           />
         </Grid>
       </Grid>
-    </DialogBox>
+    </ScrollableDialogBox>
   );
 }

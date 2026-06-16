@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback } from 'react';
 
-import DialogBox from 'src/components/common/ScrollableDialogBox';
+import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 
@@ -19,7 +19,7 @@ const VariableHistoryModal = ({ open, projectId, setOpen, variableId }: Variable
   }, [setOpen]);
 
   return (
-    <DialogBox
+    <ScrollableDialogBox
       onClose={onClose}
       open={open}
       title={strings.VARIABLE_HISTORY}
@@ -28,7 +28,7 @@ const VariableHistoryModal = ({ open, projectId, setOpen, variableId }: Variable
       style={{ zIndex: 1301 }}
     >
       <VariableHistoryTable projectId={projectId} variableId={variableId} />
-    </DialogBox>
+    </ScrollableDialogBox>
   );
 };
 
