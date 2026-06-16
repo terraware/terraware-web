@@ -40,7 +40,7 @@ const compareSpeciesScientificNames = (
   return firstName.localeCompare(secondName) || firstSpeciesId - secondSpeciesId;
 };
 
-const targetQuantityTextFieldSx = { width: '70px' };
+const targetQuantityTextFieldSx = { width: '100px' };
 
 type AddedSpeciesTargetRow = {
   id: string;
@@ -578,7 +578,7 @@ const AddSpeciesRow = ({
           disabled={isSaving}
         />
       </Box>
-      <Box width='70px'>
+      <Box width='100px'>
         <TextField
           id={`add-quantity-${row.id}`}
           type='number'
