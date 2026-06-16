@@ -72,14 +72,28 @@ const InventoryPlanningView = (): JSX.Element => {
     [plantingSitesData]
   );
 
-  const plantingSeasonOptions = useMemo<DropdownItem[]>(() => {
+  const eligiblePlantingSeasons = useMemo(() => {
     const allSeasons = plantingSeasonsData?.seasons ?? [];
-    const filteredSeasons = plantingSiteId ? allSeasons.filter((s) => s.plantingSiteId === plantingSiteId) : allSeasons;
+    return allSeasons.filter(
+      (season) =>
+        season.status === 'Active' &&
+        season.speciesTargets.length > 0 &&
+        (plantingSiteId === undefined || season.plantingSiteId === plantingSiteId)
+    );
+  }, [plantingSeasonsData, plantingSiteId]);
+
+  const plantingSeasonOptions = useMemo<DropdownItem[]>(() => {
     return [
       { label: strings.ALL_PLANTING_SEASONS, value: 'all' },
-      ...filteredSeasons.map((s) => ({ label: s.name, value: s.id })),
+      ...eligiblePlantingSeasons.map((s) => ({ label: s.name, value: s.id })),
     ];
-  }, [plantingSeasonsData, plantingSiteId]);
+  }, [eligiblePlantingSeasons]);
+
+  useEffect(() => {
+    if (plantingSeasonId !== undefined && !eligiblePlantingSeasons.some((season) => season.id === plantingSeasonId)) {
+      setPlantingSeasonId(undefined);
+    }
+  }, [eligiblePlantingSeasons, plantingSeasonId]);
 
   const selectedPlantingSeasonSpeciesIds = useMemo<Set<number> | undefined>(() => {
     if (plantingSeasonId === undefined) {
