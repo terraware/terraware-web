@@ -927,7 +927,6 @@ const SpeciesRow = ({
   const parsedDraftQuantity = Math.max(0, Number(draftQuantity));
   const quantityToValidate = Number.isNaN(parsedDraftQuantity) ? draft.quantity : parsedDraftQuantity;
   const exceedsGoal = target > 0 && quantityToValidate > availableToSchedule;
-  const targetRemaining = Math.max(0, target - scheduledOther);
   const hasNumbers = draft.quantity > 0;
 
   const commitQuantity = () => {
@@ -939,10 +938,7 @@ const SpeciesRow = ({
         current.map((s) => (s.speciesId === draft.speciesId ? { ...s, quantity: next } : s))
       );
     }
-    const nextExceedsGoal = target > 0 && next > targetRemaining;
-    if (!nextExceedsGoal) {
-      setEditing(false);
-    }
+    setEditing(false);
   };
 
   const removeRow = () => {
