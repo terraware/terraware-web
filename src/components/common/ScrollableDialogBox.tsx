@@ -3,7 +3,11 @@ import React, { type JSX } from 'react';
 import { Box, useTheme } from '@mui/material';
 import DialogBox, { Props as DialogBoxProps } from '@terraware/web-components/components/DialogBox/DialogBox';
 
-export default function ScrollableDialogBox(props: DialogBoxProps): JSX.Element {
+export type ScrollableDialogBoxProps = DialogBoxProps & {
+  maxHeight?: number | string;
+};
+
+export default function ScrollableDialogBox({ maxHeight = 'none', ...props }: ScrollableDialogBoxProps): JSX.Element {
   const theme = useTheme();
   return (
     <Box
@@ -16,7 +20,7 @@ export default function ScrollableDialogBox(props: DialogBoxProps): JSX.Element 
           paddingBottom: theme.spacing(3),
         },
         '& .dialog-box': {
-          maxHeight: 'none',
+          maxHeight,
         },
       }}
     >
