@@ -1,3 +1,4 @@
+8df69cb6 SW-8519 Fix Dialog box will not scroll (#5888)
 cb18641b SW-7672 drive PlantDashboardMap styling from observation results (#5869)
 73815629 SW-7672 migrate MapStatsDrawer to observation results (#5868)
 53d17bab SW-8470 Add new row to table when adding a new target on species target tab (#5882)
