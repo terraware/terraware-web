@@ -338,8 +338,10 @@ const getSpeciesDraftQuantity = (draft: SpeciesDraft): number =>
 const quantityExceedsAvailableToSchedule = (quantity: number, target: number, scheduledOther: number): boolean =>
   !Number.isNaN(quantity) && quantity > Math.max(0, target - scheduledOther);
 
+const speciesTableGridColumns = 'minmax(200px, 2fr) 120px minmax(132px, 1fr) 40px';
+
 const quantityTextFieldSx = {
-  width: '208px',
+  width: '100px',
   maxWidth: '100%',
   minWidth: 0,
   '& .textfield-error-text': {
@@ -858,8 +860,12 @@ const SpeciesTable = ({
       <Box minWidth={isMobile ? '600px' : undefined}>
         <Box
           display='grid'
-          gridTemplateColumns='2fr 1fr 1fr 40px'
-          sx={{ padding: theme.spacing(1, 2), borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
+          gridTemplateColumns={speciesTableGridColumns}
+          sx={{
+            columnGap: theme.spacing(2),
+            padding: theme.spacing(1, 2),
+            borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+          }}
         >
           <HeaderCell label={strings.SPECIES} />
           <HeaderCell label={strings.QUANTITY_TO_PLANT} tooltip={strings.QUANTITY_TO_PLANT_TOOLTIP} />
@@ -1095,9 +1101,10 @@ const SpeciesRow = ({
   return (
     <Box
       display='grid'
-      gridTemplateColumns='2fr 1fr 1fr 40px'
+      gridTemplateColumns={speciesTableGridColumns}
       alignItems='center'
       sx={{
+        columnGap: theme.spacing(2),
         padding: theme.spacing(1, 2),
         backgroundColor: index % 2 === 0 ? theme.palette.TwClrBgSecondary : 'transparent',
       }}
