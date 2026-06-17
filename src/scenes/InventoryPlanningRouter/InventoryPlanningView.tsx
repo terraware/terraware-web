@@ -245,7 +245,7 @@ const SpeciesTable = ({ rows, activeLocale }: SpeciesTableProps): JSX.Element =>
           <HeaderCell label={strings.TARGET} tooltip={strings.INVENTORY_PLANNING_TARGET_TOOLTIP} alignEnd />
           <HeaderCell label={strings.ALLOCATED} tooltip={strings.INVENTORY_PLANNING_ALLOCATED_TOOLTIP} alignEnd />
           <Box sx={allocatedForTargetCellSx}>
-            <HeaderCell label={strings.ALLOCATED_FOR_TARGET} tooltip={strings.ALLOCATED_FOR_TARGET_TOOLTIP} />
+            <HeaderCell label={strings.ALLOCATED_FOR_TARGET} tooltip={strings.ALLOCATED_FOR_TARGET_TOOLTIP} alignEnd />
           </Box>
         </Box>
         {rows.length === 0 && (
@@ -506,7 +506,7 @@ const SeasonDetailRow = ({
       </Typography>
       <Box display='flex' justifyContent='flex-end' alignItems='center' gap={theme.spacing(1)}>
         {editing ? (
-          <Box minWidth='120px'>
+          <Box width='100px'>
             <TextField
               id={`alloc-${season.plantingSeasonId}-${speciesId}`}
               type='number'
