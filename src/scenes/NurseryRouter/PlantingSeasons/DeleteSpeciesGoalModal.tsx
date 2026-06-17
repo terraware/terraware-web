@@ -56,6 +56,9 @@ const DeleteSpeciesGoalModal = ({
       <Typography component='div' fontSize='16px' textAlign='center'>
         {message}
       </Typography>
+      <Typography component='div' fontSize='16px' textAlign='center' marginTop={2}>
+        {strings.ARE_YOU_SURE_DELETE_GOAL}
+      </Typography>
     </DialogBox>
   );
 };
