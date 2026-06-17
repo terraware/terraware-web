@@ -33,7 +33,7 @@ const SeedlingBatchBox = ({
   const { strings } = useLocalization();
 
   return (
-    <Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}`, borderRadius: '8px' }}>
+    <Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}>
       <Box padding={theme.spacing(1.5, 2)} sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}>
         <Typography fontSize='16px' fontWeight={400}>
           {speciesName}

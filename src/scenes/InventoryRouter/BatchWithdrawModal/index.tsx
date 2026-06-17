@@ -379,7 +379,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         ) : (
           <>
             <Box
-              sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: theme.spacing(2), borderRadius: '8px' }}
+              sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: theme.spacing(2) }}
               marginBottom={theme.spacing(3)}
             >
               {speciesSummary.map((s, i) => (
