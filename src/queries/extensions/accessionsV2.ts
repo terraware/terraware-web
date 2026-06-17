@@ -1,10 +1,30 @@
 import { api } from '../generated/accessionsV2';
 import { QueryTagTypes } from '../tags';
 
+const csvTemplateResponseHandler = async (response: Response): Promise<string> => {
+  const text = await response.text();
+
+  try {
+    const parsed = JSON.parse(text);
+    return typeof parsed === 'string' ? parsed : text;
+  } catch {
+    return text;
+  }
+};
+
 api.enhanceEndpoints({
   endpoints: {
     createAccession: {
       invalidatesTags: [{ type: QueryTagTypes.Accessions, id: 'LIST' }],
+    },
+    getAccessionsListUploadTemplate: {
+      query: () => ({
+        url: '/api/v2/seedbank/accessions/uploads/template',
+        headers: {
+          accept: 'text/csv',
+        },
+        responseHandler: csvTemplateResponseHandler,
+      }),
     },
     getAccession: {
       providesTags: (_results, _error, id) => [{ type: QueryTagTypes.Accessions, id }],
