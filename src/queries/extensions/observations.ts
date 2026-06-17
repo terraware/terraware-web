@@ -30,10 +30,10 @@ api.enhanceEndpoints({
       keepUnusedDataFor: 0,
       providesTags: (results) => [
         ...(results
-          ? results.observations.map((observation) => ({
-              type: QueryTagTypes.Observation,
-              id: observation.observationId,
-            }))
+          ? results.observations.flatMap((observation) => [
+              { type: QueryTagTypes.Observation, id: observation.observationId },
+              { type: QueryTagTypes.PlantingSiteSurvivalRate, id: observation.plantingSiteId },
+            ])
           : []),
         { type: QueryTagTypes.Observation, id: 'LIST' },
       ],
@@ -136,7 +136,10 @@ api.enhanceEndpoints({
     getObservationResults: {
       providesTags: (observationResults) =>
         observationResults
-          ? [{ type: QueryTagTypes.Observation, id: observationResults.observation.observationId }]
+          ? [
+              { type: QueryTagTypes.Observation, id: observationResults.observation.observationId },
+              { type: QueryTagTypes.PlantingSiteSurvivalRate, id: observationResults.observation.plantingSiteId },
+            ]
           : [],
     },
   },
