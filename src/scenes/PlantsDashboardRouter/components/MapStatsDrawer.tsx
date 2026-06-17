@@ -4,11 +4,11 @@ import { Box, CircularProgress } from '@mui/material';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
+import { useLatestSiteObservationResult } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useLocalization } from 'src/providers';
-import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type MapStatsProperties = {
@@ -45,17 +45,14 @@ const MapStatsDrawer = ({
     plantingSiteHistoryId,
   });
   const { plantingSite, isLoading: isLoadingPlantingSite } = usePlantingSite(plantingSiteId);
-  const { currentData: observationSummariesData, isFetching: isLoadingObservationSummaries } =
-    useListObservationSummariesQuery({ plantingSiteId, limit: 1 });
-  const observationSummaries = useMemo(() => observationSummariesData?.summaries, [observationSummariesData]);
+  const { observation: latestObservationResult, isLoading: isLoadingObservation } = useLatestSiteObservationResult(
+    plantingSiteId,
+    'Plot'
+  );
 
   const isLoading = useMemo(
-    () =>
-      isLoadingPlantingSiteReportedPlants ||
-      isLoadingPlantingSite ||
-      isLoadingSiteHistory ||
-      isLoadingObservationSummaries,
-    [isLoadingObservationSummaries, isLoadingPlantingSite, isLoadingPlantingSiteReportedPlants, isLoadingSiteHistory]
+    () => isLoadingPlantingSiteReportedPlants || isLoadingPlantingSite || isLoadingSiteHistory || isLoadingObservation,
+    [isLoadingObservation, isLoadingPlantingSite, isLoadingPlantingSiteReportedPlants, isLoadingSiteHistory]
   );
 
   const [delayedLoading, setDelayedLoading] = useState(isLoading);
@@ -76,11 +73,6 @@ const MapStatsDrawer = ({
 
     return () => clearTimeout(timeout);
   }, [isLoading]);
-
-  const latestSummary = useMemo(
-    () => (observationSummaries && observationSummaries.length > 0 ? observationSummaries[0] : undefined),
-    [observationSummaries]
-  );
 
   const findStratum = useCallback(() => {
     if (layerFeatureId.layerId === 'sites') {
@@ -138,21 +130,21 @@ const MapStatsDrawer = ({
       return {
         type: strings.SITE,
         areaHa: plantingSiteHistory?.areaHa ?? plantingSite?.areaHa,
-        survivalRate: latestSummary?.survivalRate,
+        survivalRate: latestObservationResult?.survivalRate,
         name: plantingSite?.name,
-        observed: latestSummary !== undefined,
-        observedPlants: latestSummary?.totalPlants,
-        observedSpecies: latestSummary?.totalSpecies,
+        observed: latestObservationResult !== undefined,
+        observedPlants: latestObservationResult?.totalPlants,
+        observedSpecies: latestObservationResult?.totalSpecies,
         plantedPlants: plantingSiteReportedPlants?.totalPlants,
         plantedSpecies: plantingSiteReportedPlants?.species.length,
-        plantingDensity: latestSummary?.plantingDensity,
+        plantingDensity: latestObservationResult?.plantingDensity,
       };
     } else if (layerFeatureId.layerId === 'strata') {
       const stratumHistory = plantingSiteHistory?.strata?.find(
         (_stratumHistory) => _stratumHistory.name === layerFeatureId.featureId
       );
       const stratum = findStratum();
-      const stratumSummary = latestSummary?.strata.find((_stratum) => _stratum.stratumId === stratum?.id);
+      const stratumSummary = latestObservationResult?.strata.find((_stratum) => _stratum.stratumId === stratum?.id);
       const stratumStats = plantingSiteReportedPlants?.strata.find((_stratum) => _stratum.id === stratum?.id);
 
       return {
@@ -178,7 +170,7 @@ const MapStatsDrawer = ({
 
       const stratum = findStratum();
       const substratum = findSubstratum();
-      const substratumSummary = latestSummary?.strata
+      const substratumSummary = latestObservationResult?.strata
         .flatMap((_stratum) => _stratum.substrata)
         .find((_substratum) => _substratum.substratumId === substratum?.id);
       const substratumStats = plantingSiteReportedPlants?.strata
@@ -204,7 +196,7 @@ const MapStatsDrawer = ({
   }, [
     findStratum,
     findSubstratum,
-    latestSummary,
+    latestObservationResult,
     layerFeatureId,
     plantingSite,
     plantingSiteHistory,
