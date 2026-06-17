@@ -1,3 +1,4 @@
+5a266cfb Migrated list ad-hoc observations call to use existing endpoints with a flag (#5886)
 32e9c2b4 SW-8500 Fix mobile input too big (#5890)
 30857bbc SW-8514 When “Planting” is the selected Purpose only the Nurseries with Ready to Plant plants should be shown in the Nursery selector (#5889)
 1a1f339f SW-7672 remove deprecated observation summary code (#5872)
