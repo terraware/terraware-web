@@ -1,3 +1,4 @@
+891e9592 Removed useNewTables flag (#5887)
 489248ab Remove feature flag for Observations in Activity Log (#5891)
 5a266cfb Migrated list ad-hoc observations call to use existing endpoints with a flag (#5886)
 32e9c2b4 SW-8500 Fix mobile input too big (#5890)
