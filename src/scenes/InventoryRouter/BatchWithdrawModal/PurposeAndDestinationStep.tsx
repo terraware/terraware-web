@@ -77,13 +77,15 @@ const PurposeAndDestinationStep = ({
     [plantingSites]
   );
 
-  // Active seasons for the selected planting site.
-  const activeSeasonsForSite = useMemo(() => {
+  // Non-closed seasons with species targets for the selected planting site.
+  const selectableSeasonsForSite = useMemo(() => {
     const seasons = plantingSeasonsData?.seasons ?? [];
     if (!draft.plantingSiteId) {
       return [];
     }
-    return seasons.filter((s) => s.plantingSiteId === draft.plantingSiteId && s.status === 'Active');
+    return seasons.filter(
+      (s) => s.plantingSiteId === draft.plantingSiteId && s.status !== 'Closed' && s.speciesTargets.length > 0
+    );
   }, [plantingSeasonsData, draft.plantingSiteId]);
 
   // The "Planting Season (optional)" selector is shown only when the org has
@@ -94,15 +96,15 @@ const PurposeAndDestinationStep = ({
   );
 
   const plantingSeasonOptions = useMemo<DropdownItem[]>(
-    () => activeSeasonsForSite.map((s) => ({ label: s.name, value: s.id })),
-    [activeSeasonsForSite]
+    () => selectableSeasonsForSite.map((s) => ({ label: s.name, value: s.id })),
+    [selectableSeasonsForSite]
   );
 
   // Stratum/Substratum options come from either the selected season's targets
   // or the planting site itself.
   const selectedSeason = useMemo(
-    () => activeSeasonsForSite.find((s) => s.id === draft.plantingSeasonId),
-    [activeSeasonsForSite, draft.plantingSeasonId]
+    () => selectableSeasonsForSite.find((s) => s.id === draft.plantingSeasonId),
+    [selectableSeasonsForSite, draft.plantingSeasonId]
   );
 
   const { stratumOptions, substratumOptions } = useMemo(() => {
