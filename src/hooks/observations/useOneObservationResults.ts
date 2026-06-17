@@ -14,7 +14,7 @@ const useGetOneObservationResults = ({ observationId, depth }: UseGetOneObservat
 
   useEffect(() => {
     if (observationId !== undefined) {
-      void getObservationResults({ observationId, depth, useNewTables: true }, true);
+      void getObservationResults({ observationId, depth }, true);
     }
   }, [depth, getObservationResults, observationId]);
 

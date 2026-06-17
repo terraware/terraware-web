@@ -290,7 +290,7 @@ const useObservationExports = () => {
 
   const downloadObservationResults = useCallback(
     async (observationId: number) => {
-      const results = await getObservationResults({ observationId, depth: 'Plant', useNewTables: true }, true).unwrap();
+      const results = await getObservationResults({ observationId, depth: 'Plant' }, true).unwrap();
       const observationResults = results.observation;
 
       const siteResults = await getPlantingSite(
@@ -335,7 +335,7 @@ const useObservationExports = () => {
 
   const downloadObservationCsv = useCallback(
     async (observationId: number) => {
-      const results = await getObservationResults({ observationId, depth: 'Plant', useNewTables: true }, true).unwrap();
+      const results = await getObservationResults({ observationId, depth: 'Plant' }, true).unwrap();
       const observationResults = results.observation;
 
       const siteResults = await getPlantingSite(
@@ -377,7 +377,7 @@ const useObservationExports = () => {
   const downloadObservationGpx = useCallback(
     async (observationId: number) => {
       const content = await exportObservationGpx(observationId, true).unwrap();
-      const results = await getObservationResults({ observationId, depth: 'Plant', useNewTables: true }, true).unwrap();
+      const results = await getObservationResults({ observationId, depth: 'Plant' }, true).unwrap();
       const observationResults = results.observation;
 
       const siteResults = await getPlantingSite(
@@ -416,7 +416,7 @@ const useObservationExports = () => {
 
   const downloadBiomassObservationDetails = useCallback(
     async (observationId: number) => {
-      const results = await getObservationResults({ observationId, depth: 'Plant', useNewTables: true }, true).unwrap();
+      const results = await getObservationResults({ observationId, depth: 'Plant' }, true).unwrap();
       const observationResults = results.observation;
 
       const siteResults = await getPlantingSite(
