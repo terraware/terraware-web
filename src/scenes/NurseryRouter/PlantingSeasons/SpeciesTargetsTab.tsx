@@ -1,8 +1,7 @@
-import React, { type JSX, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, IconButton, Typography, useTheme } from '@mui/material';
-import { Button, Dropdown, DropdownItem, Icon } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Button, Dropdown, DropdownItem } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -41,14 +40,7 @@ const compareSpeciesScientificNames = (
 };
 
 const targetQuantityTextFieldSx = { width: '100px' };
-
-type AddedSpeciesTargetRow = {
-  id: string;
-  speciesId?: number;
-  quantity: string;
-  saved: boolean;
-  savedSpeciesId?: number;
-};
+const justSavedDurationMs = 3000;
 
 const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabProps): JSX.Element => {
   const theme = useTheme();
@@ -116,6 +108,9 @@ const StratumSection = ({
   isFirst,
 }: StratumSectionProps): JSX.Element => {
   const theme = useTheme();
+  const [savingSpeciesCount, setSavingSpeciesCount] = useState(0);
+  const [justSaved, setJustSaved] = useState(false);
+  const justSavedTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const stratumTotal = useMemo(() => {
     return stratum.substrata.reduce((sum, substratum) => {
@@ -123,6 +118,36 @@ const StratumSection = ({
       return sum + targets.reduce((s, t) => s + t.quantity, 0);
     }, 0);
   }, [stratum, targetsBySubstratum]);
+
+  const onSpeciesTargetSavingChange = useCallback((isSaving: boolean) => {
+    if (isSaving) {
+      setJustSaved(false);
+      if (justSavedTimeoutRef.current) {
+        clearTimeout(justSavedTimeoutRef.current);
+      }
+    }
+
+    setSavingSpeciesCount((current) => Math.max(0, current + (isSaving ? 1 : -1)));
+  }, []);
+
+  const onSpeciesTargetSaved = useCallback(() => {
+    setJustSaved(true);
+    if (justSavedTimeoutRef.current) {
+      clearTimeout(justSavedTimeoutRef.current);
+    }
+    justSavedTimeoutRef.current = setTimeout(() => setJustSaved(false), justSavedDurationMs);
+  }, []);
+
+  useEffect(
+    () => () => {
+      if (justSavedTimeoutRef.current) {
+        clearTimeout(justSavedTimeoutRef.current);
+      }
+    },
+    []
+  );
+
+  const saveStatusText = savingSpeciesCount > 0 ? strings.SAVING : justSaved ? strings.JUST_SAVED : undefined;
 
   return (
     <Card
@@ -148,6 +173,11 @@ const StratumSection = ({
             {`${stratumTotal.toLocaleString()} ${strings.TARGET_PLANTS}`}
           </Typography>
         )}
+        {saveStatusText && (
+          <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrBaseBlack}>
+            {saveStatusText}
+          </Typography>
+        )}
       </Box>
       {stratum.substrata.map((substratum) => (
         <SubstratumSection
@@ -157,6 +187,8 @@ const StratumSection = ({
           species={species}
           plantingSeasonId={plantingSeasonId}
           readOnly={readOnly}
+          onSpeciesTargetSavingChange={onSpeciesTargetSavingChange}
+          onSpeciesTargetSaved={onSpeciesTargetSaved}
         />
       ))}
     </Card>
@@ -169,6 +201,8 @@ type SubstratumSectionProps = {
   species: Species[];
   plantingSeasonId: number;
   readOnly: boolean;
+  onSpeciesTargetSavingChange: (isSaving: boolean) => void;
+  onSpeciesTargetSaved: () => void;
 };
 
 const SubstratumSection = ({
@@ -177,26 +211,15 @@ const SubstratumSection = ({
   species,
   plantingSeasonId,
   readOnly,
+  onSpeciesTargetSavingChange,
+  onSpeciesTargetSaved,
 }: SubstratumSectionProps): JSX.Element => {
   const theme = useTheme();
-  const [addedSpeciesRows, setAddedSpeciesRows] = useState<AddedSpeciesTargetRow[]>([]);
+  const [addingSpecies, setAddingSpecies] = useState(false);
 
   const substratumTotal = useMemo(() => targets.reduce((sum, t) => sum + t.quantity, 0), [targets]);
 
-  const addedSpeciesIds = useMemo(
-    () =>
-      new Set(
-        addedSpeciesRows
-          .flatMap((row) => [row.speciesId, row.savedSpeciesId])
-          .filter((speciesId): speciesId is number => speciesId !== undefined)
-      ),
-    [addedSpeciesRows]
-  );
-
-  const usedSpeciesIds = useMemo(
-    () => new Set([...targets.map((t) => t.speciesId), ...addedSpeciesIds]),
-    [addedSpeciesIds, targets]
-  );
+  const usedSpeciesIds = useMemo(() => new Set(targets.map((t) => t.speciesId)), [targets]);
 
   const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species]);
 
@@ -209,27 +232,11 @@ const SubstratumSection = ({
   );
 
   const sortedTargets = useMemo(
-    () =>
-      targets
-        .filter((target) => !addedSpeciesIds.has(target.speciesId))
-        .sort((a, b) => compareSpeciesScientificNames(speciesById, a.speciesId, b.speciesId)),
-    [addedSpeciesIds, speciesById, targets]
+    () => [...targets].sort((a, b) => compareSpeciesScientificNames(speciesById, a.speciesId, b.speciesId)),
+    [speciesById, targets]
   );
 
-  const addSpeciesRow = () => {
-    setAddedSpeciesRows((current) => [
-      ...current,
-      { id: `new-species-target-${crypto.randomUUID()}`, quantity: '', saved: false },
-    ]);
-  };
-
-  const updateAddedSpeciesRow = (row: AddedSpeciesTargetRow) => {
-    setAddedSpeciesRows((current) => current.map((currentRow) => (currentRow.id === row.id ? row : currentRow)));
-  };
-
-  const removeAddedSpeciesRow = (rowId: string) => {
-    setAddedSpeciesRows((current) => current.filter((row) => row.id !== rowId));
-  };
+  const hasSpeciesTargetRows = targets.length > 0 || addingSpecies;
 
   return (
     <Box marginBottom={theme.spacing(3)}>
@@ -251,7 +258,7 @@ const SubstratumSection = ({
           </Typography>
         )}
       </Box>
-      {targets.length === 0 ? (
+      {!hasSpeciesTargetRows ? (
         <Box padding={theme.spacing(2)} textAlign='center'>
           <Typography fontSize='14px'>{strings.NO_SPECIES_TARGETS_FOR_SUBSTRATUM}</Typography>
         </Box>
@@ -281,32 +288,35 @@ const SubstratumSection = ({
               plantingSeasonId={plantingSeasonId}
               index={index}
               readOnly={readOnly}
+              onSpeciesTargetSavingChange={onSpeciesTargetSavingChange}
+              onSpeciesTargetSaved={onSpeciesTargetSaved}
             />
           ))}
+          {addingSpecies && (
+            <AddSpeciesRow
+              substratumId={substratum.id}
+              plantingSeasonId={plantingSeasonId}
+              availableSpecies={availableSpecies}
+              index={sortedTargets.length}
+              onRemove={() => setAddingSpecies(false)}
+              onSpeciesTargetSavingChange={onSpeciesTargetSavingChange}
+              onSpeciesTargetSaved={onSpeciesTargetSaved}
+            />
+          )}
         </Box>
       )}
       {!readOnly && (
         <Box>
-          {addedSpeciesRows.map((row) => (
-            <AddSpeciesRow
-              key={row.id}
-              row={row}
-              substratumId={substratum.id}
-              plantingSeasonId={plantingSeasonId}
-              species={species}
-              availableSpecies={availableSpecies}
-              onChange={updateAddedSpeciesRow}
-              onRemove={() => removeAddedSpeciesRow(row.id)}
+          {!addingSpecies && (
+            <Button
+              icon='iconAdd'
+              label={strings.ADD_SPECIES}
+              onClick={() => setAddingSpecies(true)}
+              priority='ghost'
+              type='productive'
+              disabled={availableSpecies.length === 0}
             />
-          ))}
-          <Button
-            icon='iconAdd'
-            label={strings.ADD_SPECIES}
-            onClick={addSpeciesRow}
-            priority='ghost'
-            type='productive'
-            disabled={availableSpecies.length === 0}
-          />
+          )}
         </Box>
       )}
     </Box>
@@ -319,6 +329,8 @@ type SpeciesTargetRowProps = {
   plantingSeasonId: number;
   index: number;
   readOnly: boolean;
+  onSpeciesTargetSavingChange: (isSaving: boolean) => void;
+  onSpeciesTargetSaved: () => void;
 };
 
 const SpeciesTargetRow = ({
@@ -327,6 +339,8 @@ const SpeciesTargetRow = ({
   plantingSeasonId,
   index,
   readOnly,
+  onSpeciesTargetSavingChange,
+  onSpeciesTargetSaved,
 }: SpeciesTargetRowProps): JSX.Element => {
   const theme = useTheme();
   const snackbar = useSnackbar();
@@ -349,6 +363,8 @@ const SpeciesTargetRow = ({
       setEditing(false);
       return;
     }
+    let saved = false;
+    onSpeciesTargetSavingChange(true);
     try {
       await upsertSpeciesTarget({
         plantingSeasonId,
@@ -358,24 +374,37 @@ const SpeciesTargetRow = ({
           substratumId: target.substratumId,
         },
       }).unwrap();
+      saved = true;
     } catch (e) {
       snackbar.toastError();
       setDraftQuantity(target.quantity.toString());
     } finally {
+      onSpeciesTargetSavingChange(false);
+      if (saved) {
+        onSpeciesTargetSaved();
+      }
       setEditing(false);
     }
   };
 
   const onDelete = async () => {
+    let saved = false;
+    onSpeciesTargetSavingChange(true);
     try {
       await deleteSpeciesTarget({
         plantingSeasonId,
         speciesId: target.speciesId,
         substratumId: target.substratumId,
       }).unwrap();
+      saved = true;
       setConfirmingDelete(false);
     } catch (e) {
       snackbar.toastError();
+    } finally {
+      onSpeciesTargetSavingChange(false);
+      if (saved) {
+        onSpeciesTargetSaved();
+      }
     }
   };
 
@@ -399,7 +428,7 @@ const SpeciesTargetRow = ({
           </Typography>
         )}
       </Box>
-      <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
+      <Box display='flex' alignItems='center' gap={theme.spacing(0.5)}>
         {readOnly ? (
           <Typography fontSize='16px' fontWeight={400}>
             {target.quantity.toLocaleString()}
@@ -458,96 +487,92 @@ const SpeciesTargetRow = ({
 };
 
 type AddSpeciesRowProps = {
-  row: AddedSpeciesTargetRow;
   substratumId: number;
   plantingSeasonId: number;
-  species: Species[];
   availableSpecies: Species[];
-  onChange: (row: AddedSpeciesTargetRow) => void;
+  index: number;
   onRemove: () => void;
+  onSpeciesTargetSavingChange: (isSaving: boolean) => void;
+  onSpeciesTargetSaved: () => void;
 };
 
 const AddSpeciesRow = ({
-  row,
   substratumId,
   plantingSeasonId,
-  species,
   availableSpecies,
-  onChange,
+  index,
   onRemove,
+  onSpeciesTargetSavingChange,
+  onSpeciesTargetSaved,
 }: AddSpeciesRowProps): JSX.Element => {
   const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
   const rowRef = useRef<HTMLDivElement>(null);
+  const skipQuantityBlurSaveRef = useRef(false);
+  const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | undefined>();
+  const [quantity, setQuantity] = useState<string>('');
   const [upsertSpeciesTarget, { isLoading: isUpserting }] = useUpsertSpeciesTargetMutation();
-  const [deleteSpeciesTarget, { isLoading: isDeleting }] = useDeleteSpeciesTargetMutation();
-  const selectedSpeciesId = row.speciesId;
-  const selectedSpecies = selectedSpeciesId === undefined ? undefined : species.find((s) => s.id === selectedSpeciesId);
-  const isSaving = isUpserting || isDeleting;
 
-  const options = useMemo<DropdownItem[]>(() => {
-    const speciesOptions = selectedSpecies ? [selectedSpecies, ...availableSpecies] : availableSpecies;
-    return speciesOptions.map((s) => ({
-      label: s.scientificName,
-      value: s.id,
-    }));
-  }, [availableSpecies, selectedSpecies]);
+  const options = useMemo<DropdownItem[]>(
+    () =>
+      availableSpecies.map((s) => ({
+        label: s.scientificName,
+        value: s.id,
+      })),
+    [availableSpecies]
+  );
 
-  const saveIfComplete = async (nextRow: AddedSpeciesTargetRow) => {
-    if (nextRow.speciesId === undefined || nextRow.quantity === '') {
+  const onSave = async () => {
+    if (skipQuantityBlurSaveRef.current) {
+      skipQuantityBlurSaveRef.current = false;
       return;
     }
-    const parsed = Number(nextRow.quantity);
+    if (selectedSpeciesId === undefined || quantity === '') {
+      return;
+    }
+    const parsed = Number(quantity);
     if (Number.isNaN(parsed) || parsed < 0) {
       return;
     }
-    const previousSavedSpeciesId = nextRow.savedSpeciesId;
+    let saved = false;
+    onSpeciesTargetSavingChange(true);
     try {
       await upsertSpeciesTarget({
         plantingSeasonId,
         upsertPlantingSeasonSpeciesTargetRequestPayload: {
           quantity: parsed,
-          speciesId: nextRow.speciesId,
+          speciesId: selectedSpeciesId,
           substratumId,
         },
       }).unwrap();
-      if (previousSavedSpeciesId !== undefined && previousSavedSpeciesId !== nextRow.speciesId) {
-        await deleteSpeciesTarget({ plantingSeasonId, speciesId: previousSavedSpeciesId, substratumId }).unwrap();
-      }
-      onChange({ ...nextRow, saved: true, savedSpeciesId: nextRow.speciesId });
+      saved = true;
+      onRemove();
     } catch (e) {
       snackbar.toastError();
+    } finally {
+      onSpeciesTargetSavingChange(false);
+      if (saved) {
+        onSpeciesTargetSaved();
+      }
     }
   };
 
   const onSpeciesChange = (value: string | number | undefined) => {
     if (value === undefined || value === '') {
-      onChange({ ...row, speciesId: undefined, saved: false, savedSpeciesId: undefined });
+      setSelectedSpeciesId(undefined);
+      setQuantity('');
       return;
     }
 
     const speciesId = Number(value);
-    const nextRow = { ...row, speciesId, saved: row.savedSpeciesId === speciesId };
-    onChange(nextRow);
-    void saveIfComplete(nextRow);
+    setSelectedSpeciesId(speciesId);
+    if (speciesId !== selectedSpeciesId) {
+      setQuantity('');
+    }
   };
 
   const onQuantityChange = (value: unknown) => {
-    onChange({ ...row, quantity: String(value ?? '') });
-  };
-
-  const onRemoveClick = async () => {
-    if (row.savedSpeciesId === undefined) {
-      onRemove();
-      return;
-    }
-    try {
-      await deleteSpeciesTarget({ plantingSeasonId, speciesId: row.savedSpeciesId, substratumId }).unwrap();
-      onRemove();
-    } catch (e) {
-      snackbar.toastError();
-    }
+    setQuantity(String(value ?? ''));
   };
 
   const scrollRowIntoView = () => {
@@ -557,43 +582,66 @@ const AddSpeciesRow = ({
   return (
     <Box
       ref={rowRef}
-      display='flex'
-      alignItems='flex-end'
-      gap={theme.spacing(2)}
-      flexWrap='wrap'
+      display='grid'
+      gridTemplateColumns='1fr 1fr 40px'
+      alignItems='center'
       onFocusCapture={scrollRowIntoView}
       onMouseDownCapture={scrollRowIntoView}
       onTouchStartCapture={scrollRowIntoView}
+      sx={{
+        padding: theme.spacing(1, 2),
+        backgroundColor: index % 2 === 0 ? theme.palette.TwClrBgSecondary : 'transparent',
+      }}
     >
-      <Box width={isMobile ? '100%' : '300px'}>
+      <Box maxWidth='100%' width='300px'>
         <Dropdown
-          id={`add-species-${row.id}`}
-          label={strings.SPECIES}
+          id={`add-species-${substratumId}`}
           placeholder={strings.SELECT_SPECIES}
           options={options}
           selectedValue={selectedSpeciesId}
           onChange={onSpeciesChange}
           fullWidth
           autocomplete
-          disabled={isSaving}
+          disabled={isUpserting}
         />
       </Box>
       <Box width='100px'>
-        <TextField
-          id={`add-quantity-${row.id}`}
-          type='number'
-          label={strings.TARGET_QUANTITY}
-          value={row.quantity}
-          onChange={onQuantityChange}
-          onBlur={() => void saveIfComplete(row)}
-          min={0}
-          sx={targetQuantityTextFieldSx}
-          disabled={isSaving}
+        {selectedSpeciesId !== undefined && (
+          <TextField
+            id={`add-quantity-${substratumId}`}
+            type='number'
+            label=''
+            value={quantity}
+            onChange={onQuantityChange}
+            onBlur={() => void onSave()}
+            min={0}
+            autoFocus
+            sx={targetQuantityTextFieldSx}
+            disabled={isUpserting}
+          />
+        )}
+      </Box>
+      <Box
+        display='contents'
+        onMouseDown={(event) => {
+          event.preventDefault();
+          skipQuantityBlurSaveRef.current = true;
+        }}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            skipQuantityBlurSaveRef.current = true;
+          }
+        }}
+      >
+        <Button
+          icon='iconTrashCan'
+          onClick={onRemove}
+          priority='ghost'
+          size='small'
+          type='passive'
+          disabled={isUpserting}
         />
       </Box>
-      <IconButton aria-label={strings.REMOVE} size='small' onClick={() => void onRemoveClick()} disabled={isSaving}>
-        <Icon name='iconSubtract' size='medium' fillColor={theme.palette.TwClrIcn} />
-      </IconButton>
     </Box>
   );
 };
