@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Box, FormControlLabel, Radio, RadioGroup, Tooltip, Typography, useTheme } from '@mui/material';
-import { Dropdown, DropdownItem, Icon } from '@terraware/web-components';
+import { Dropdown, DropdownItem, Icon, IconTooltip } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import DatePicker from 'src/components/common/DatePicker';
@@ -145,31 +145,34 @@ const PurposeAndDestinationStep = ({
   const isPlanting = purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
   const isNurseryTransfer = purpose === NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER;
 
-  useEffect(() => {
-    if (draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT) {
-      const hasReadyQuantities = batches.some((batch) => {
-        if (draft.fromFacilityId !== undefined && batch.facilityId !== draft.fromFacilityId) {
-          return false;
-        }
-        return batch.readyQuantity > 0;
-      });
+  const hasReadyQuantities = useMemo(
+    () =>
+      batches.some(
+        (batch) =>
+          (draft.fromFacilityId === undefined || batch.facilityId === draft.fromFacilityId) && batch.readyQuantity > 0
+      ),
+    [batches, draft.fromFacilityId]
+  );
 
-      if (!hasReadyQuantities) {
-        onChange({ purpose: NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER });
-        return;
-      }
-    }
-  }, [batches, draft.fromFacilityId, draft.purpose, onChange]);
+  const noReadySeedlings = !hasReadyQuantities;
+  const plantingSitesDisabled = !isPlantingSitesLoading && plantingSites.length === 0;
+  const outplantDisabled = noReadySeedlings || plantingSitesDisabled;
 
   useEffect(() => {
-    if (
-      draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT &&
-      !isPlantingSitesLoading &&
-      plantingSites.length === 0
-    ) {
+    if (draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT && outplantDisabled) {
       onChange({ purpose: NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER });
     }
-  }, [draft.purpose, isPlantingSitesLoading, onChange, plantingSites.length]);
+  }, [draft.purpose, onChange, outplantDisabled]);
+
+  const outplantLabel = (
+    <>
+      {strings.PLANTING}
+      {noReadySeedlings && <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS} />}
+      {!noReadySeedlings && plantingSitesDisabled && (
+        <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_PLANTING_SITES} />
+      )}
+    </>
+  );
 
   return (
     <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
@@ -186,7 +189,8 @@ const PurposeAndDestinationStep = ({
             <FormControlLabel
               value={NurseryWithdrawalRequestPurposes.OUTPLANT}
               control={<Radio />}
-              label={strings.PLANTING}
+              label={outplantLabel}
+              disabled={outplantDisabled}
             />
           )}
           <FormControlLabel
