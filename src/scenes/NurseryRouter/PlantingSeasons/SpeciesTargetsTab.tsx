@@ -1,8 +1,7 @@
-import React, { type JSX, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, IconButton, Typography, useTheme } from '@mui/material';
-import { Button, Dropdown, DropdownItem, Icon } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Button, Dropdown, DropdownItem } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -41,6 +40,7 @@ const compareSpeciesScientificNames = (
 };
 
 const targetQuantityTextFieldSx = { width: '100px' };
+const justSavedDurationMs = 3000;
 
 const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabProps): JSX.Element => {
   const theme = useTheme();
@@ -108,6 +108,9 @@ const StratumSection = ({
   isFirst,
 }: StratumSectionProps): JSX.Element => {
   const theme = useTheme();
+  const [savingSpeciesCount, setSavingSpeciesCount] = useState(0);
+  const [justSaved, setJustSaved] = useState(false);
+  const justSavedTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const stratumTotal = useMemo(() => {
     return stratum.substrata.reduce((sum, substratum) => {
@@ -115,6 +118,36 @@ const StratumSection = ({
       return sum + targets.reduce((s, t) => s + t.quantity, 0);
     }, 0);
   }, [stratum, targetsBySubstratum]);
+
+  const onSpeciesTargetSavingChange = useCallback((isSaving: boolean) => {
+    if (isSaving) {
+      setJustSaved(false);
+      if (justSavedTimeoutRef.current) {
+        clearTimeout(justSavedTimeoutRef.current);
+      }
+    }
+
+    setSavingSpeciesCount((current) => Math.max(0, current + (isSaving ? 1 : -1)));
+  }, []);
+
+  const onSpeciesTargetSaved = useCallback(() => {
+    setJustSaved(true);
+    if (justSavedTimeoutRef.current) {
+      clearTimeout(justSavedTimeoutRef.current);
+    }
+    justSavedTimeoutRef.current = setTimeout(() => setJustSaved(false), justSavedDurationMs);
+  }, []);
+
+  useEffect(
+    () => () => {
+      if (justSavedTimeoutRef.current) {
+        clearTimeout(justSavedTimeoutRef.current);
+      }
+    },
+    []
+  );
+
+  const saveStatusText = savingSpeciesCount > 0 ? strings.SAVING : justSaved ? strings.JUST_SAVED : undefined;
 
   return (
     <Card
@@ -140,6 +173,11 @@ const StratumSection = ({
             {`${stratumTotal.toLocaleString()} ${strings.TARGET_PLANTS}`}
           </Typography>
         )}
+        {saveStatusText && (
+          <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrBaseBlack}>
+            {saveStatusText}
+          </Typography>
+        )}
       </Box>
       {stratum.substrata.map((substratum) => (
         <SubstratumSection
@@ -149,6 +187,8 @@ const StratumSection = ({
           species={species}
           plantingSeasonId={plantingSeasonId}
           readOnly={readOnly}
+          onSpeciesTargetSavingChange={onSpeciesTargetSavingChange}
+          onSpeciesTargetSaved={onSpeciesTargetSaved}
         />
       ))}
     </Card>
@@ -161,6 +201,8 @@ type SubstratumSectionProps = {
   species: Species[];
   plantingSeasonId: number;
   readOnly: boolean;
+  onSpeciesTargetSavingChange: (isSaving: boolean) => void;
+  onSpeciesTargetSaved: () => void;
 };
 
 const SubstratumSection = ({
@@ -169,6 +211,8 @@ const SubstratumSection = ({
   species,
   plantingSeasonId,
   readOnly,
+  onSpeciesTargetSavingChange,
+  onSpeciesTargetSaved,
 }: SubstratumSectionProps): JSX.Element => {
   const theme = useTheme();
   const [addingSpecies, setAddingSpecies] = useState(false);
@@ -192,6 +236,8 @@ const SubstratumSection = ({
     [speciesById, targets]
   );
 
+  const hasSpeciesTargetRows = targets.length > 0 || addingSpecies;
+
   return (
     <Box marginBottom={theme.spacing(3)}>
       <Box
@@ -212,7 +258,7 @@ const SubstratumSection = ({
           </Typography>
         )}
       </Box>
-      {targets.length === 0 ? (
+      {!hasSpeciesTargetRows ? (
         <Box padding={theme.spacing(2)} textAlign='center'>
           <Typography fontSize='14px'>{strings.NO_SPECIES_TARGETS_FOR_SUBSTRATUM}</Typography>
         </Box>
@@ -242,20 +288,26 @@ const SubstratumSection = ({
               plantingSeasonId={plantingSeasonId}
               index={index}
               readOnly={readOnly}
+              onSpeciesTargetSavingChange={onSpeciesTargetSavingChange}
+              onSpeciesTargetSaved={onSpeciesTargetSaved}
             />
           ))}
-        </Box>
-      )}
-      {!readOnly && (
-        <Box>
-          {addingSpecies ? (
+          {addingSpecies && (
             <AddSpeciesRow
               substratumId={substratum.id}
               plantingSeasonId={plantingSeasonId}
               availableSpecies={availableSpecies}
-              onClose={() => setAddingSpecies(false)}
+              index={sortedTargets.length}
+              onRemove={() => setAddingSpecies(false)}
+              onSpeciesTargetSavingChange={onSpeciesTargetSavingChange}
+              onSpeciesTargetSaved={onSpeciesTargetSaved}
             />
-          ) : (
+          )}
+        </Box>
+      )}
+      {!readOnly && (
+        <Box>
+          {!addingSpecies && (
             <Button
               icon='iconAdd'
               label={strings.ADD_SPECIES}
@@ -277,6 +329,8 @@ type SpeciesTargetRowProps = {
   plantingSeasonId: number;
   index: number;
   readOnly: boolean;
+  onSpeciesTargetSavingChange: (isSaving: boolean) => void;
+  onSpeciesTargetSaved: () => void;
 };
 
 const SpeciesTargetRow = ({
@@ -285,6 +339,8 @@ const SpeciesTargetRow = ({
   plantingSeasonId,
   index,
   readOnly,
+  onSpeciesTargetSavingChange,
+  onSpeciesTargetSaved,
 }: SpeciesTargetRowProps): JSX.Element => {
   const theme = useTheme();
   const snackbar = useSnackbar();
@@ -307,6 +363,8 @@ const SpeciesTargetRow = ({
       setEditing(false);
       return;
     }
+    let saved = false;
+    onSpeciesTargetSavingChange(true);
     try {
       await upsertSpeciesTarget({
         plantingSeasonId,
@@ -316,24 +374,37 @@ const SpeciesTargetRow = ({
           substratumId: target.substratumId,
         },
       }).unwrap();
+      saved = true;
     } catch (e) {
       snackbar.toastError();
       setDraftQuantity(target.quantity.toString());
     } finally {
+      onSpeciesTargetSavingChange(false);
+      if (saved) {
+        onSpeciesTargetSaved();
+      }
       setEditing(false);
     }
   };
 
   const onDelete = async () => {
+    let saved = false;
+    onSpeciesTargetSavingChange(true);
     try {
       await deleteSpeciesTarget({
         plantingSeasonId,
         speciesId: target.speciesId,
         substratumId: target.substratumId,
       }).unwrap();
+      saved = true;
       setConfirmingDelete(false);
     } catch (e) {
       snackbar.toastError();
+    } finally {
+      onSpeciesTargetSavingChange(false);
+      if (saved) {
+        onSpeciesTargetSaved();
+      }
     }
   };
 
@@ -419,23 +490,28 @@ type AddSpeciesRowProps = {
   substratumId: number;
   plantingSeasonId: number;
   availableSpecies: Species[];
-  onClose: () => void;
+  index: number;
+  onRemove: () => void;
+  onSpeciesTargetSavingChange: (isSaving: boolean) => void;
+  onSpeciesTargetSaved: () => void;
 };
 
 const AddSpeciesRow = ({
   substratumId,
   plantingSeasonId,
   availableSpecies,
-  onClose,
+  index,
+  onRemove,
+  onSpeciesTargetSavingChange,
+  onSpeciesTargetSaved,
 }: AddSpeciesRowProps): JSX.Element => {
   const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
   const rowRef = useRef<HTMLDivElement>(null);
+  const skipQuantityBlurSaveRef = useRef(false);
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | undefined>();
   const [quantity, setQuantity] = useState<string>('');
   const [upsertSpeciesTarget, { isLoading: isUpserting }] = useUpsertSpeciesTargetMutation();
-  const canSave = selectedSpeciesId !== undefined && quantity !== '';
 
   const options = useMemo<DropdownItem[]>(
     () =>
@@ -447,6 +523,10 @@ const AddSpeciesRow = ({
   );
 
   const onSave = async () => {
+    if (skipQuantityBlurSaveRef.current) {
+      skipQuantityBlurSaveRef.current = false;
+      return;
+    }
     if (selectedSpeciesId === undefined || quantity === '') {
       return;
     }
@@ -454,6 +534,8 @@ const AddSpeciesRow = ({
     if (Number.isNaN(parsed) || parsed < 0) {
       return;
     }
+    let saved = false;
+    onSpeciesTargetSavingChange(true);
     try {
       await upsertSpeciesTarget({
         plantingSeasonId,
@@ -463,19 +545,30 @@ const AddSpeciesRow = ({
           substratumId,
         },
       }).unwrap();
-      onClose();
+      saved = true;
+      onRemove();
     } catch (e) {
       snackbar.toastError();
+    } finally {
+      onSpeciesTargetSavingChange(false);
+      if (saved) {
+        onSpeciesTargetSaved();
+      }
     }
   };
 
   const onSpeciesChange = (value: string | number | undefined) => {
     if (value === undefined || value === '') {
       setSelectedSpeciesId(undefined);
+      setQuantity('');
       return;
     }
 
-    setSelectedSpeciesId(Number(value));
+    const speciesId = Number(value);
+    setSelectedSpeciesId(speciesId);
+    if (speciesId !== selectedSpeciesId) {
+      setQuantity('');
+    }
   };
 
   const onQuantityChange = (value: unknown) => {
@@ -489,18 +582,20 @@ const AddSpeciesRow = ({
   return (
     <Box
       ref={rowRef}
-      display='flex'
-      alignItems='flex-end'
-      gap={theme.spacing(2)}
-      flexWrap='wrap'
+      display='grid'
+      gridTemplateColumns='1fr 1fr 40px'
+      alignItems='center'
       onFocusCapture={scrollRowIntoView}
       onMouseDownCapture={scrollRowIntoView}
       onTouchStartCapture={scrollRowIntoView}
+      sx={{
+        padding: theme.spacing(1, 2),
+        backgroundColor: index % 2 === 0 ? theme.palette.TwClrBgSecondary : 'transparent',
+      }}
     >
-      <Box width={isMobile ? '100%' : '300px'}>
+      <Box maxWidth='100%' width='300px'>
         <Dropdown
           id={`add-species-${substratumId}`}
-          label={strings.SPECIES}
           placeholder={strings.SELECT_SPECIES}
           options={options}
           selectedValue={selectedSpeciesId}
@@ -511,40 +606,35 @@ const AddSpeciesRow = ({
         />
       </Box>
       <Box width='100px'>
-        <TextField
-          id={`add-quantity-${substratumId}`}
-          type='number'
-          label={strings.TARGET_QUANTITY}
-          value={quantity}
-          onChange={onQuantityChange}
-          min={0}
-          sx={targetQuantityTextFieldSx}
-          disabled={isUpserting}
-        />
+        {selectedSpeciesId !== undefined && (
+          <TextField
+            id={`add-quantity-${substratumId}`}
+            type='number'
+            label=''
+            value={quantity}
+            onChange={onQuantityChange}
+            onBlur={() => void onSave()}
+            min={0}
+            autoFocus
+            sx={targetQuantityTextFieldSx}
+            disabled={isUpserting}
+          />
+        )}
       </Box>
-      <Box display='flex' alignItems='center'>
-        <IconButton
-          aria-label={strings.ADD}
-          disabled={isUpserting || !canSave}
-          onClick={() => void onSave()}
-          size='small'
-          sx={{
-            padding: 0,
-            '&.Mui-disabled': {
-              opacity: 0.5,
-            },
-          }}
-        >
-          <Icon name='iconAdd' size='medium' fillColor={theme.palette.TwClrIcnBrand} />
-        </IconButton>
+      <Box
+        display='contents'
+        onMouseDown={(event) => {
+          event.preventDefault();
+          skipQuantityBlurSaveRef.current = true;
+        }}
+      >
         <Button
-          label={strings.CANCEL}
-          onClick={onClose}
+          icon='iconTrashCan'
+          onClick={onRemove}
           priority='ghost'
-          type='productive'
+          size='small'
+          type='passive'
           disabled={isUpserting}
-          style={{ margin: 0 }}
-          sx={{ minWidth: 'auto', paddingLeft: 0, paddingRight: 0 }}
         />
       </Box>
     </Box>
