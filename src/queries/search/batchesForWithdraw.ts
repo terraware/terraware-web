@@ -4,6 +4,8 @@ import { QueryTagTypes } from '../tags';
 export type BatchForWithdraw = {
   batchId: number;
   batchNumber: string;
+  facilityId: number;
+  facilityName: string;
   speciesId: number;
   scientificName: string;
   commonName?: string;
@@ -11,57 +13,75 @@ export type BatchForWithdraw = {
 };
 
 export type ListBatchesForWithdrawArgs = {
-  facilityId: number;
+  organizationId: number;
+  facilityId?: number;
   speciesIds: number[];
 };
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     listBatchesForWithdraw: build.query<BatchForWithdraw[], ListBatchesForWithdrawArgs>({
-      query: (args) => ({
-        url: '/api/v1/search',
-        method: 'POST',
-        body: {
-          prefix: 'batches',
-          fields: [
-            'id',
-            'batchNumber',
-            'species_id',
-            'species_scientificName',
-            'species_commonName',
-            'readyQuantity(raw)',
-          ],
-          search: {
-            operation: 'and',
-            children: [
-              {
-                operation: 'field',
-                field: 'facility_id',
-                type: 'Exact',
-                values: [`${args.facilityId}`],
-              },
-              {
-                operation: 'field',
-                field: 'species_id',
-                type: 'Exact',
-                values: args.speciesIds.map(String),
-              },
-            ],
+      query: (args) => {
+        const filters = [
+          {
+            operation: 'field',
+            field: 'facility_organization_id',
+            type: 'Exact',
+            values: [`${args.organizationId}`],
           },
-          sortOrder: [{ field: 'batchNumber', direction: 'Ascending' }],
-          count: 0,
-        },
-      }),
+          {
+            operation: 'field',
+            field: 'species_id',
+            type: 'Exact',
+            values: args.speciesIds.map(String),
+          },
+        ];
+
+        if (args.facilityId) {
+          filters.push({
+            operation: 'field',
+            field: 'facility_id',
+            type: 'Exact',
+            values: [`${args.facilityId}`],
+          });
+        }
+
+        return {
+          url: '/api/v1/search',
+          method: 'POST',
+          body: {
+            prefix: 'batches',
+            fields: [
+              'id',
+              'batchNumber',
+              'facility_id',
+              'facility_name',
+              'species_id',
+              'species_scientificName',
+              'species_commonName',
+              'readyQuantity(raw)',
+            ],
+            search: {
+              operation: 'and',
+              children: filters,
+            },
+            sortOrder: [{ field: 'batchNumber', direction: 'Ascending' }],
+            count: 0,
+          },
+        };
+      },
       providesTags: [{ type: QueryTagTypes.Batches, id: 'LIST' }],
       transformResponse: (response: BatchSearchResponse): BatchForWithdraw[] =>
         response.results.map(
           (result): BatchForWithdraw => ({
             batchId: Number(result.id),
             batchNumber: result.batchNumber,
+            facilityId: Number(result.facility_id),
+            facilityName: result.facility_name,
             speciesId: Number(result.species_id),
             scientificName: result.species_scientificName,
             commonName: result.species_commonName,
-            readyQuantity: Number(result['readyQuantity(raw)']),
+            readyQuantity: Number(result['readyQuantity(raw)'] ?? 0),
           })
         ),
     }),
@@ -71,6 +91,8 @@ const injectedRtkApi = api.injectEndpoints({
 type BatchSearchResult = {
   id: string;
   batchNumber: string;
+  facility_id: string;
+  facility_name: string;
   species_id: string;
   species_scientificName: string;
   species_commonName?: string;

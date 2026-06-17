@@ -13,7 +13,11 @@ import {
   useCreateBatchWithdrawalMutation,
   useUploadWithdrawalPhotoMutation,
 } from 'src/queries/generated/nurseryWithdrawals';
-import { BatchForWithdraw, useLazyListBatchesForWithdrawQuery } from 'src/queries/search/batchesForWithdraw';
+import {
+  BatchForWithdraw,
+  useLazyListBatchesForWithdrawQuery,
+  useListBatchesForWithdrawQuery,
+} from 'src/queries/search/batchesForWithdraw';
 import { PlantingDateRequestRow } from 'src/queries/search/plantingDateRequests';
 import strings from 'src/strings';
 import { getMediumDate } from 'src/utils/dateFormatter';
@@ -53,45 +57,69 @@ const WithdrawFromBatchesModal = ({
 
   const cellKey = (batchId: number, substratumId: number) => `${batchId}-${substratumId}`;
 
-  const [listBatches, { data: batches }] = useLazyListBatchesForWithdrawQuery();
+  const [listBatches, { currentData: batches }] = useLazyListBatchesForWithdrawQuery();
   const [createBatchWithdrawal, { isLoading: isSaving }] = useCreateBatchWithdrawalMutation();
   const [uploadWithdrawalPhotos] = useUploadWithdrawalPhotoMutation();
 
   const speciesIds = useMemo(() => request.species.map((s) => s.speciesId), [request.species]);
+  const organizationId = selectedOrganization?.id;
+
+  const { currentData: batchesForNurseryOptions, isFetching: isFetchingNurseryOptions } =
+    useListBatchesForWithdrawQuery(
+      { organizationId: organizationId ?? 0, speciesIds },
+      { skip: !open || !organizationId || speciesIds.length === 0 }
+    );
 
   const nurseryOptions = useMemo<DropdownItem[]>(() => {
-    const nurseries = (selectedOrganization?.facilities ?? []).filter((f) => f.type === 'Nursery');
+    const nurseryIdsWithReadyPlants = new Set(
+      (batchesForNurseryOptions ?? []).filter((batch) => batch.readyQuantity > 0).map((batch) => batch.facilityId)
+    );
+    const nurseries = (selectedOrganization?.facilities ?? []).filter(
+      (f) => f.type === 'Nursery' && nurseryIdsWithReadyPlants.has(f.id)
+    );
     return nurseries.map((f) => ({ label: f.name, value: f.id }));
-  }, [selectedOrganization]);
-
-  useEffect(() => {
-    if (facilityId && speciesIds.length > 0) {
-      void listBatches({ facilityId, speciesIds }, true);
-    }
-  }, [facilityId, speciesIds, listBatches]);
+  }, [batchesForNurseryOptions, selectedOrganization]);
 
   const handleFacilityChange = useCallback((id: number | undefined) => {
     setFacilityId(id);
     setWithdrawByBatchSubstratum({});
   }, []);
 
+  useEffect(() => {
+    if (facilityId && organizationId && speciesIds.length > 0) {
+      void listBatches({ organizationId, facilityId, speciesIds }, true);
+    }
+  }, [facilityId, organizationId, speciesIds, listBatches]);
+
+  useEffect(() => {
+    if (facilityId === undefined || isFetchingNurseryOptions) {
+      return;
+    }
+
+    if (!nurseryOptions.some((option) => Number(option.value) === facilityId)) {
+      handleFacilityChange(undefined);
+    }
+  }, [facilityId, handleFacilityChange, isFetchingNurseryOptions, nurseryOptions]);
+
+  const readyBatches = useMemo(() => (batches ?? []).filter((batch) => batch.readyQuantity > 0), [batches]);
+
   const readyBySpecies = useMemo(() => {
     const map = new Map<number, number>();
-    (batches ?? []).forEach((b) => {
+    readyBatches.forEach((b) => {
       map.set(b.speciesId, (map.get(b.speciesId) ?? 0) + b.readyQuantity);
     });
     return map;
-  }, [batches]);
+  }, [readyBatches]);
 
   const batchesBySpecies = useMemo(() => {
     const map = new Map<number, BatchForWithdraw[]>();
-    (batches ?? []).forEach((b) => {
+    readyBatches.forEach((b) => {
       const existing = map.get(b.speciesId) ?? [];
       existing.push(b);
       map.set(b.speciesId, existing);
     });
     return map;
-  }, [batches]);
+  }, [readyBatches]);
 
   const totalWithdrawing = useMemo(
     () => Object.values(withdrawByBatchSubstratum).reduce((sum, v) => sum + (Number.isFinite(v) ? v : 0), 0),
@@ -109,8 +137,8 @@ const WithdrawFromBatchesModal = ({
   }, [withdrawByBatchSubstratum]);
 
   const anyOverReady = useMemo(
-    () => (batches ?? []).some((b) => (totalByBatch.get(b.batchId) ?? 0) > b.readyQuantity),
-    [batches, totalByBatch]
+    () => readyBatches.some((b) => (totalByBatch.get(b.batchId) ?? 0) > b.readyQuantity),
+    [readyBatches, totalByBatch]
   );
 
   const canGoNextFromStep1 = facilityId !== undefined && !!withdrawDate;

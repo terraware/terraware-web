@@ -55,15 +55,24 @@ const PurposeAndDestinationStep = ({
     [plantingSites, draft.plantingSiteId]
   );
 
+  const purpose = draft.purpose;
+  const isPlanting = purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
+  const isNurseryTransfer = purpose === NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER;
+
+  const eligibleBatchesForFromNursery = useMemo(
+    () => (isPlanting ? batches.filter((batch) => batch.readyQuantity > 0) : batches),
+    [batches, isPlanting]
+  );
+
   // From: Nursery options are restricted to nurseries that hold at least one
   // of the selected batches — a withdrawal can only span a single facility.
   const fromNurseryOptions = useMemo<DropdownItem[]>(() => {
-    const facilityIdsInSelection = new Set(batches.map((b) => b.facilityId));
+    const facilityIdsInSelection = new Set(eligibleBatchesForFromNursery.map((b) => b.facilityId));
     const nurseries = (selectedOrganization?.facilities ?? []).filter(
       (f) => f.type === 'Nursery' && facilityIdsInSelection.has(f.id)
     );
     return nurseries.map((f) => ({ label: f.name, value: f.id }));
-  }, [selectedOrganization, batches]);
+  }, [eligibleBatchesForFromNursery, selectedOrganization]);
 
   // To: Nursery (for transfers) excludes the From: Nursery; uses every nursery
   // in the org since destinations aren't constrained by the selected batches.
@@ -135,17 +144,22 @@ const PurposeAndDestinationStep = ({
 
   // Default From: Nursery to the batches' nursery if they all share one.
   useEffect(() => {
-    if (draft.fromFacilityId === undefined && batches.length > 0) {
-      const uniqueIds = Array.from(new Set(batches.map((b) => b.facilityId)));
+    if (draft.fromFacilityId === undefined && eligibleBatchesForFromNursery.length > 0) {
+      const uniqueIds = Array.from(new Set(eligibleBatchesForFromNursery.map((b) => b.facilityId)));
       if (uniqueIds.length === 1) {
         onChange({ fromFacilityId: uniqueIds[0] });
       }
     }
-  }, [batches, draft.fromFacilityId, onChange]);
+  }, [draft.fromFacilityId, eligibleBatchesForFromNursery, onChange]);
 
-  const purpose = draft.purpose;
-  const isPlanting = purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
-  const isNurseryTransfer = purpose === NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER;
+  useEffect(() => {
+    if (
+      draft.fromFacilityId !== undefined &&
+      !fromNurseryOptions.some((option) => Number(option.value) === draft.fromFacilityId)
+    ) {
+      onChange({ fromFacilityId: undefined });
+    }
+  }, [draft.fromFacilityId, fromNurseryOptions, onChange]);
 
   const hasReadyQuantities = useMemo(
     () =>
