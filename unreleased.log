@@ -1,3 +1,4 @@
+1a1f339f3 SW-7672 remove deprecated observation summary code (#5872)
 a8c225f99 SW-7672 consolidate latest-observation lookups onto useLatestSiteObservationResult (#5871)
 4d06f4b77 SW-7672 migrate PlantsDashboardView off observation summaries (#5870)
 8df69cb67 SW-8519 Fix Dialog box will not scroll (#5888)
