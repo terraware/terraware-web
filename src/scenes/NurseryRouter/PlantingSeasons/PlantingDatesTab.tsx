@@ -1072,7 +1072,6 @@ const SpeciesRow = ({
   const parsedDraftQuantity = Math.max(0, Number(draftQuantity));
   const quantityToValidate = Number.isNaN(parsedDraftQuantity) ? draft.quantity : parsedDraftQuantity;
   const exceedsGoal = target > 0 && quantityToValidate > availableToSchedule;
-  const hasNumbers = draft.quantity > 0;
 
   const commitQuantity = () => {
     setQuantityFocused(false);
@@ -1143,7 +1142,7 @@ const SpeciesRow = ({
           </>
         )}
       </Box>
-      <Typography fontSize='14px'>{hasNumbers ? availableToSchedule.toLocaleString() : ''}</Typography>
+      <Typography fontSize='14px'>{quantityFocused ? availableToSchedule.toLocaleString() : ''}</Typography>
       <Button icon='iconTrashCan' onClick={removeRow} priority='ghost' size='small' type='passive' />
     </Box>
   );
