@@ -627,6 +627,11 @@ const AddSpeciesRow = ({
           event.preventDefault();
           skipQuantityBlurSaveRef.current = true;
         }}
+        onKeyDown={(event) => {
+          if (event.key === 'Enter' || event.key === ' ') {
+            skipQuantityBlurSaveRef.current = true;
+          }
+        }}
       >
         <Button
           icon='iconTrashCan'
