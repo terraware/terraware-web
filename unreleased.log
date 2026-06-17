@@ -1,4 +1,3 @@
-2f4c572a SW-8513 Spacing off in Quantities step (#5876)
 c96dcbe7 SW-8498 Available to Schedule numbers should only show during Quantity input focus (#5875)
 f042d0ab SW-8378 Make Edit Org modal scrollable (#5874)
 703e95b6 Migrate assign project to rtk query (#5848)
