@@ -51,6 +51,12 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.updatePlantingSiteRequestPayload,
       }),
     }),
+    getSurvivalRateCalculationInProgress: build.query<
+      GetSurvivalRateCalculationInProgressApiResponse,
+      GetSurvivalRateCalculationInProgressApiArg
+    >({
+      query: (queryArg) => ({ url: `/api/v1/tracking/sites/${queryArg}/calculationInProgress` }),
+    }),
     getPlantingSiteHistory: build.query<GetPlantingSiteHistoryApiResponse, GetPlantingSiteHistoryApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/tracking/sites/${queryArg.id}/history/${queryArg.historyId}`,
@@ -102,6 +108,9 @@ export type UpdatePlantingSiteApiArg = {
   id: number;
   updatePlantingSiteRequestPayload: UpdatePlantingSiteRequestPayload;
 };
+export type GetSurvivalRateCalculationInProgressApiResponse =
+  /** status 200 OK */ GetSurvivalRateCalculationInProgressResponsePayload;
+export type GetSurvivalRateCalculationInProgressApiArg = number;
 export type GetPlantingSiteHistoryApiResponse = /** status 200 OK */ GetPlantingSiteHistoryResponsePayload;
 export type GetPlantingSiteHistoryApiArg = {
   id: number;
@@ -178,6 +187,7 @@ export type SubstratumResponsePayload = {
   id: number;
   latestObservationCompletedTime?: string;
   latestObservationId?: number;
+  latestObservationNumPlots?: number;
   monitoringPlots: MonitoringPlotPayload[];
   name: string;
   /** When any monitoring plot in the substratum was most recently observed. */
@@ -340,6 +350,10 @@ export type UpdatePlantingSiteRequestPayload = {
   /** Time zone name in IANA tz database format */
   timeZone?: string;
 };
+export type GetSurvivalRateCalculationInProgressResponsePayload = {
+  calculationInProgress: boolean;
+  status: SuccessOrError;
+};
 export type MonitoringPlotHistoryPayload = {
   boundary: Polygon;
   id: number;
@@ -393,6 +407,8 @@ export const {
   useGetPlantingSiteQuery,
   useLazyGetPlantingSiteQuery,
   useUpdatePlantingSiteMutation,
+  useGetSurvivalRateCalculationInProgressQuery,
+  useLazyGetSurvivalRateCalculationInProgressQuery,
   useGetPlantingSiteHistoryQuery,
   useLazyGetPlantingSiteHistoryQuery,
   useGetPlantingSiteReportedPlantsQuery,
