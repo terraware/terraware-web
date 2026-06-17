@@ -3,8 +3,8 @@ import React, { type JSX, useCallback, useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import { useLatestSiteObservationResult } from 'src/hooks/observations';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 import { ObservationSpeciesResultsPayload } from 'src/types/Observations';
 
@@ -18,11 +18,7 @@ export default function HighestAndLowestSurvivalRateSpeciesCard({
   const theme = useTheme();
   const { species } = useSpeciesData();
 
-  const observationSummariesQuery = useListObservationSummariesQuery(
-    { plantingSiteId: plantingSiteId ?? -1 },
-    { skip: !plantingSiteId || plantingSiteId === -1 }
-  );
-  const observationSummaries = observationSummariesQuery.data?.summaries;
+  const { observation: latestObservationResult } = useLatestSiteObservationResult(plantingSiteId, 'Substratum');
 
   const getSpeciesName = useCallback(
     (observationSpecies: ObservationSpeciesResultsPayload) => {
@@ -44,7 +40,7 @@ export default function HighestAndLowestSurvivalRateSpeciesCard({
       lowestName: string | undefined;
     };
     const initial: Acc = { highestRate: 0, lowestRate: Infinity, highestName: undefined, lowestName: undefined };
-    const result = (observationSummaries?.[0]?.species ?? []).reduce(
+    const result = (latestObservationResult?.species ?? []).reduce(
       (acc: Acc, observationSpecies: ObservationSpeciesResultsPayload) => {
         const speciesName = getSpeciesName(observationSpecies);
         if (observationSpecies.survivalRate === undefined || speciesName === undefined) {
@@ -68,7 +64,7 @@ export default function HighestAndLowestSurvivalRateSpeciesCard({
       highestSurvivalRate: result.highestName ? result.highestRate : undefined,
       highestSpeciesName: result.highestName,
     };
-  }, [observationSummaries, getSpeciesName]);
+  }, [latestObservationResult, getSpeciesName]);
 
   const highestSurvivalRate = survivalRateData.highestSurvivalRate;
   const lowestSurvivalRate = survivalRateData.lowestSurvivalRate;

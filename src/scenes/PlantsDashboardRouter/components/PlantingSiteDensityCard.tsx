@@ -4,8 +4,8 @@ import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import { useLatestSiteObservationResult } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
-import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import strings from 'src/strings';
 
 type PlantingDensityCardProps = {
@@ -16,27 +16,23 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingDens
   const theme = useTheme();
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
-  const observationSummariesQuery = useListObservationSummariesQuery(
-    { plantingSiteId: plantingSiteId ?? -1 },
-    { skip: !plantingSiteId || plantingSiteId === -1 }
-  );
-  const observationSummaries = observationSummariesQuery.data?.summaries;
+  const { observation: latestObservationResult, isLoading } = useLatestSiteObservationResult(plantingSiteId, 'Plot');
 
   const everySubstratumHasObservation = useMemo(() => {
-    if (!observationSummaries || observationSummaries.length === 0 || !plantingSite) {
+    if (!latestObservationResult || !plantingSite) {
       return true;
     }
 
     const allSubstrata = plantingSite.strata?.flatMap((stratum) => stratum.substrata);
-    const allSubstrataObserved = observationSummaries[0].strata.flatMap((stratum) => stratum.substrata);
+    const allSubstrataObserved = latestObservationResult.strata.flatMap((stratum) => stratum.substrata);
     return allSubstrata?.every((substratum) =>
       allSubstrataObserved.find(
         (substratumObv) => substratumObv.substratumId === substratum.id && substratumObv.monitoringPlots.length > 0
       )
     );
-  }, [observationSummaries, plantingSite]);
+  }, [latestObservationResult, plantingSite]);
 
-  if (observationSummariesQuery.isFetching) {
+  if (isLoading) {
     return (
       <Box display='flex' justifyContent='center'>
         <CircularProgress />
@@ -47,7 +43,7 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingDens
   return (
     <Box>
       <Typography fontSize='48px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
-        <FormattedNumber value={observationSummaries?.[0]?.plantingDensity ?? 0} />
+        <FormattedNumber value={latestObservationResult?.plantingDensity ?? 0} />
       </Typography>
       <Typography fontSize='16px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
         {`${strings.PLANTS_PER_HECTARE.charAt(0).toUpperCase()}${strings.PLANTS_PER_HECTARE.slice(1)}`}

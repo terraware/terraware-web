@@ -5,9 +5,9 @@ import { Dropdown } from '@terraware/web-components';
 import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import PieChart from 'src/components/common/Chart/PieChart';
+import { useLatestSiteObservationResult } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type LiveDeadPlantsPerSpeciesCardProps = {
@@ -27,11 +27,10 @@ export default function LiveDeadPlantsPerSpeciesCard({
   >();
   const theme = useTheme();
 
-  const observationSummariesQuery = useListObservationSummariesQuery(
-    { plantingSiteId },
-    { skip: plantingSiteId === -1 }
+  const { observation: latestObservationResult } = useLatestSiteObservationResult(
+    plantingSiteId === -1 ? undefined : plantingSiteId,
+    'Substratum'
   );
-  const observationSummaries = observationSummariesQuery.data?.summaries;
   const { strings, activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
 
@@ -40,10 +39,10 @@ export default function LiveDeadPlantsPerSpeciesCard({
   }, [strings]);
 
   useEffect(() => {
-    if (observationSummaries?.[0]) {
+    if (latestObservationResult) {
       const filterFn = (sp: any) => sp.survivalRate !== undefined && sp.survivalRate !== null;
 
-      const speciesNames = observationSummaries[0].species
+      const speciesNames = latestObservationResult.species
         .filter(filterFn)
         .map((sp) => ({
           label:
@@ -59,11 +58,11 @@ export default function LiveDeadPlantsPerSpeciesCard({
         setSelectedSpecies(speciesNames[0].value);
       }
     }
-  }, [observationSummaries, availableSpecies, activeLocale]);
+  }, [latestObservationResult, availableSpecies, activeLocale]);
 
   const values = useMemo<number[] | undefined>(() => {
     if (selectedSpecies) {
-      const selectedObservationSpecies = observationSummaries?.[0]?.species.find(
+      const selectedObservationSpecies = latestObservationResult?.species.find(
         (sp) => sp.speciesId?.toString() === selectedSpecies
       );
 
@@ -78,7 +77,7 @@ export default function LiveDeadPlantsPerSpeciesCard({
     } else {
       return [];
     }
-  }, [selectedSpecies, observationSummaries]);
+  }, [selectedSpecies, latestObservationResult]);
 
   const tooltipRenderer = useCallback(
     (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
@@ -90,10 +89,10 @@ export default function LiveDeadPlantsPerSpeciesCard({
   );
 
   const allSpeciesNoValues = useMemo(() => {
-    return observationSummaries?.[0]?.species.every((sp) => {
+    return latestObservationResult?.species.every((sp) => {
       return !sp.survivalRate;
     });
-  }, [observationSummaries]);
+  }, [latestObservationResult]);
 
   return (
     <Box display='flex' flexDirection='column'>
