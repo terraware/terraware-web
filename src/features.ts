@@ -1,11 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'Virtual Monitoring Plots'
-  | 'Planting Seasons'
-  | 'Observations in Activity Log';
+export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots' | 'Planting Seasons';
 
 export type Feature = {
   name: FeatureName;
@@ -55,15 +51,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for planning planting seasons'],
-    disclosure: ['This is a WIP'],
-  },
-  {
-    name: 'Observations in Activity Log',
-    preferenceName: 'observationsInActivityLog',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Show observation-generated activities in the Activity Log.'],
     disclosure: ['This is a WIP'],
   },
 ];

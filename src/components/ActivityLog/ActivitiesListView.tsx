@@ -20,7 +20,6 @@ import {
   defaultPillValueRenderer,
 } from 'src/components/common/SearchFiltersWrapperV2';
 import IconFilters from 'src/components/common/SearchFiltersWrapperV2/IconFilters';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useClientSideFilter from 'src/hooks/useClientSideFiltering';
 import useFunderPortal from 'src/hooks/useFunderPortal';
@@ -286,21 +285,16 @@ const ActivitiesListView = ({
     }
   }, [filters]);
 
-  const observationsInActivityLogEnabled = isEnabled('Observations in Activity Log');
-
   const filteredActivitiesUnsorted = useClientSideFilter(activities, search);
 
   const filteredActivities = useMemo(() => {
-    const withObsFilter = observationsInActivityLogEnabled
-      ? filteredActivitiesUnsorted
-      : filteredActivitiesUnsorted.filter((a) => !isObservationActivity(a.payload));
     // Ensure activities are sorted by date descending before pagination
-    return [...withObsFilter].sort((a, b) => {
+    return [...filteredActivitiesUnsorted].sort((a, b) => {
       const dateA = new Date(a.payload.date).getTime();
       const dateB = new Date(b.payload.date).getTime();
       return dateB - dateA;
     });
-  }, [filteredActivitiesUnsorted, observationsInActivityLogEnabled]);
+  }, [filteredActivitiesUnsorted]);
 
   const busy = useMemo(() => {
     if (isFunderRoute) {
