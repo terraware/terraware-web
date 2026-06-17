@@ -44,7 +44,7 @@ const useProjectSiteObservationResults = (
         }
         try {
           const response = await getObservationResults(
-            { observationId: site.latestObservationId, depth: 'Stratum', useNewTables: true },
+            { observationId: site.latestObservationId, depth: 'Stratum' },
             true
           ).unwrap();
           return { site, result: response.observation };

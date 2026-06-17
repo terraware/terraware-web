@@ -27,7 +27,6 @@ const injectedRtkApi = api.injectEndpoints({
           depth: queryArg.depth,
           state: queryArg.state,
           limit: queryArg.limit,
-          useNewTables: queryArg.useNewTables,
           isAdHoc: queryArg.isAdHoc,
         },
       }),
@@ -171,7 +170,6 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/tracking/observations/${queryArg.observationId}/results`,
         params: {
           depth: queryArg.depth,
-          useNewTables: queryArg.useNewTables,
         },
       }),
     }),
@@ -200,8 +198,6 @@ export type ListObservationResultsApiArg = {
   state?: ('Upcoming' | 'InProgress' | 'Completed' | 'Overdue' | 'Abandoned')[];
   /** Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
   limit?: number;
-  /** If true, read aggregated metrics from the new observation results tables instead of computing them from species totals. */
-  useNewTables?: boolean;
   /** If true, return results of ad-hoc observations instead of scheduled ones. */
   isAdHoc?: boolean;
 };
@@ -338,8 +334,6 @@ export type GetObservationResultsApiResponse = /** status 200 OK */ GetObservati
 export type GetObservationResultsApiArg = {
   observationId: number;
   depth?: 'Site' | 'Stratum' | 'Substratum' | 'Plot' | 'Plant';
-  /** If true, read aggregated metrics from the new observation results tables instead of computing them from species totals. */
-  useNewTables?: boolean;
 };
 export type ObservationPayload = {
   /** Date this observation is scheduled to end. */

@@ -24,7 +24,7 @@ const useListObservationResults = ({
 
   useEffect(() => {
     if (organizationId !== undefined) {
-      void listObservationResults({ organizationId, plantingSiteId, depth, state, limit, useNewTables: true }, true);
+      void listObservationResults({ organizationId, plantingSiteId, depth, state, limit }, true);
     }
   }, [depth, limit, listObservationResults, organizationId, plantingSiteId, state]);
 
