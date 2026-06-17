@@ -5,6 +5,10 @@ export const DEFAULT_SEARCH_DEBOUNCE_MS = 250;
 
 export const SQ_M_TO_HECTARES = 1 / 10000;
 
+// Side length in meters of a monitoring plot. All non-ad-hoc monitoring plots are this size
+// (enforced by the backend), so observed area can be derived from a plot count.
+export const MONITORING_PLOT_SIZE = 30;
+
 export const TERRAWARE_MOBILE_APP_IOS_APP_STORE_LINK = 'https://apps.apple.com/us/app/terraware/id1568369900';
 export const TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK =
   'https://play.google.com/store/apps/details?id=com.terraformation.seedcollector';
