@@ -1,3 +1,4 @@
+4d06f4b7 SW-7672 migrate PlantsDashboardView off observation summaries (#5870)
 8df69cb6 SW-8519 Fix Dialog box will not scroll (#5888)
 cb18641b SW-7672 drive PlantDashboardMap styling from observation results (#5869)
 73815629 SW-7672 migrate MapStatsDrawer to observation results (#5868)
