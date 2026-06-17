@@ -1,3 +1,4 @@
+5bfcd12c SW-7672 migrate survival-rate dashboard cards to observation results (#5867)
 96310a48 SW-7672 migrate species/density dashboard cards to observation results (#5866)
 415240ef SW-7672 add useSiteObservedArea hook (#5865)
 c5894831 SW-7672 add useProjectSiteObservationResults hook (#5864)
