@@ -3,25 +3,6 @@ import { QueryTagTypes } from '../tags';
 
 api.enhanceEndpoints({
   endpoints: {
-    listAdHocObservations: {
-      providesTags: (results) => [
-        ...(results
-          ? results.observations.map((observation) => ({ type: QueryTagTypes.Observation, id: observation.id }))
-          : []),
-        { type: QueryTagTypes.Observation, id: 'LIST' },
-      ],
-    },
-    listAdHocObservationResults: {
-      providesTags: (results) => [
-        ...(results
-          ? results.observations.map((observation) => ({
-              type: QueryTagTypes.Observation,
-              id: observation.observationId,
-            }))
-          : []),
-        { type: QueryTagTypes.Observation, id: 'LIST' },
-      ],
-    },
     listObservations: {
       providesTags: (results) => [
         ...(results
@@ -56,9 +37,6 @@ api.enhanceEndpoints({
           : []),
         { type: QueryTagTypes.Observation, id: 'LIST' },
       ],
-    },
-    listObservationSummaries: {
-      providesTags: [QueryTagTypes.Observation],
     },
     getObservation: {
       providesTags: (observation) =>

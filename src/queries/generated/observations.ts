@@ -8,37 +8,16 @@ const injectedRtkApi = api.injectEndpoints({
         params: {
           organizationId: queryArg.organizationId,
           plantingSiteId: queryArg.plantingSiteId,
+          isAdHoc: queryArg.isAdHoc,
         },
       }),
     }),
     scheduleObservation: build.mutation<ScheduleObservationApiResponse, ScheduleObservationApiArg>({
       query: (queryArg) => ({ url: `/api/v1/tracking/observations`, method: 'POST', body: queryArg }),
     }),
-    listAdHocObservations: build.query<ListAdHocObservationsApiResponse, ListAdHocObservationsApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/tracking/observations/adHoc`,
-        params: {
-          organizationId: queryArg.organizationId,
-          plantingSiteId: queryArg.plantingSiteId,
-        },
-      }),
-    }),
     completeAdHocObservation: build.mutation<CompleteAdHocObservationApiResponse, CompleteAdHocObservationApiArg>({
       query: (queryArg) => ({ url: `/api/v1/tracking/observations/adHoc`, method: 'POST', body: queryArg }),
     }),
-    listAdHocObservationResults: build.query<ListAdHocObservationResultsApiResponse, ListAdHocObservationResultsApiArg>(
-      {
-        query: (queryArg) => ({
-          url: `/api/v1/tracking/observations/adHoc/results`,
-          params: {
-            organizationId: queryArg.organizationId,
-            plantingSiteId: queryArg.plantingSiteId,
-            includePlants: queryArg.includePlants,
-            limit: queryArg.limit,
-          },
-        }),
-      }
-    ),
     listObservationResults: build.query<ListObservationResultsApiResponse, ListObservationResultsApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/tracking/observations/results`,
@@ -49,15 +28,7 @@ const injectedRtkApi = api.injectEndpoints({
           state: queryArg.state,
           limit: queryArg.limit,
           useNewTables: queryArg.useNewTables,
-        },
-      }),
-    }),
-    listObservationSummaries: build.query<ListObservationSummariesApiResponse, ListObservationSummariesApiArg>({
-      query: (queryArg) => ({
-        url: `/api/v1/tracking/observations/results/summaries`,
-        params: {
-          plantingSiteId: queryArg.plantingSiteId,
-          limit: queryArg.limit,
+          isAdHoc: queryArg.isAdHoc,
         },
       }),
     }),
@@ -214,27 +185,13 @@ export type ListObservationsApiArg = {
   organizationId?: number;
   /** Limit results to observations of a specific planting site. Required if organizationId is not specified. */
   plantingSiteId?: number;
+  /** If true, return ad-hoc observations instead of scheduled ones. */
+  isAdHoc?: boolean;
 };
 export type ScheduleObservationApiResponse = /** status 200 OK */ ScheduleObservationResponsePayload;
 export type ScheduleObservationApiArg = ScheduleObservationRequestPayload;
-export type ListAdHocObservationsApiResponse = /** status 200 OK */ ListAdHocObservationsResponsePayload;
-export type ListAdHocObservationsApiArg = {
-  /** Limit results to observations of planting sites in a specific organization. Ignored if plantingSiteId is specified. */
-  organizationId?: number;
-  /** Limit results to observations of a specific planting site. Required if organizationId is not specified. */
-  plantingSiteId?: number;
-};
 export type CompleteAdHocObservationApiResponse = /** status 200 OK */ CompleteAdHocObservationResponsePayload;
 export type CompleteAdHocObservationApiArg = CompleteAdHocObservationRequestPayload;
-export type ListAdHocObservationResultsApiResponse = /** status 200 OK */ ListAdHocObservationResultsResponsePayload;
-export type ListAdHocObservationResultsApiArg = {
-  organizationId?: number;
-  plantingSiteId?: number;
-  /** Whether to include plants in the results. Default to false */
-  includePlants?: boolean;
-  /** Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
-  limit?: number;
-};
 export type ListObservationResultsApiResponse = /** status 200 OK */ ListObservationResultsResponsePayload;
 export type ListObservationResultsApiArg = {
   organizationId?: number;
@@ -245,12 +202,8 @@ export type ListObservationResultsApiArg = {
   limit?: number;
   /** If true, read aggregated metrics from the new observation results tables instead of computing them from species totals. */
   useNewTables?: boolean;
-};
-export type ListObservationSummariesApiResponse = /** status 200 OK */ ListObservationSummariesResponsePayload;
-export type ListObservationSummariesApiArg = {
-  plantingSiteId: number;
-  /** Maximum number of results to return. Results are always returned in order of observations completion time, newest first, so setting this to 1 will return the summaries including the most recently completed observation. */
-  limit?: number;
+  /** If true, return results of ad-hoc observations instead of scheduled ones. */
+  isAdHoc?: boolean;
 };
 export type GetObservationApiResponse = /** status 200 OK */ GetObservationResponsePayload;
 export type GetObservationApiArg = number;
@@ -436,10 +389,6 @@ export type ScheduleObservationRequestPayload = {
   requestedSubzoneIds?: number[];
   /** The start date for this observation, can be up to a year from the date this schedule request occurs on. */
   startDate: string;
-};
-export type ListAdHocObservationsResponsePayload = {
-  observations: ObservationPayload[];
-  status: SuccessOrError;
 };
 export type CompleteAdHocObservationResponsePayload = {
   observationId: number;
@@ -844,65 +793,9 @@ export type ObservationResultsPayload = {
   totalSpecies?: number;
   type: 'Monitoring' | 'Biomass Measurements';
 };
-export type ListAdHocObservationResultsResponsePayload = {
-  observations: ObservationResultsPayload[];
-  status: SuccessOrError;
-};
 export type ListObservationResultsResponsePayload = {
   observations: ObservationResultsPayload[];
   status: SuccessOrError;
-};
-export type StratumObservationSummaryPayload = {
-  /** Area of this stratum in hectares. */
-  areaHa: number;
-  /** The earliest time of the observations used in this summary. */
-  earliestObservationTime: string;
-  /** Estimated number of plants in stratum based on estimated planting density and stratum area. Only present if all the substrata in the stratum have been marked as having completed planting. */
-  estimatedPlants?: number;
-  /** The latest time of the observations used in this summary. */
-  latestObservationTime: string;
-  /** Estimated planting density for the stratum based on the observed planting densities of monitoring plots. */
-  plantingDensity?: number;
-  plantingDensityStdDev?: number;
-  /** Combined list of observed species and their statuses from the latest observation of each substratum. */
-  species: ObservationSpeciesResultsPayload[];
-  stratumId: number;
-  /** List of substratum observations used in this summary. */
-  substrata: ObservationSubstratumResultsPayload[];
-  /** Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point. */
-  survivalRate?: number;
-  survivalRateStdDev?: number;
-  /** Total number of plants recorded from the latest observations of each substratum. Includes all plants, regardless of live/dead status or species. */
-  totalPlants?: number;
-  /** Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total. */
-  totalSpecies?: number;
-};
-export type PlantingSiteObservationSummaryPayload = {
-  /** The earliest time of the observations used in this summary. */
-  earliestObservationTime: string;
-  /** Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the substrata in the site have been marked as having completed planting. */
-  estimatedPlants?: number;
-  /** The latest time of the observations used in this summary. */
-  latestObservationTime: string;
-  /** Estimated planting density for the site, based on the observed planting densities of monitoring plots. */
-  plantingDensity?: number;
-  plantingDensityStdDev?: number;
-  plantingSiteId: number;
-  /** Combined list of observed species and their statuses from the latest observation of each substratum within each stratum. */
-  species: ObservationSpeciesResultsPayload[];
-  strata: StratumObservationSummaryPayload[];
-  /** Percentage of plants of all species in this site's permanent monitoring plots that have survived since the t0 point. */
-  survivalRate?: number;
-  survivalRateStdDev?: number;
-  /** Total number of plants recorded from the latest observations of each substratum within each stratum. Includes all plants, regardless of live/dead status or species. */
-  totalPlants?: number;
-  /** Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total. */
-  totalSpecies?: number;
-};
-export type ListObservationSummariesResponsePayload = {
-  status: SuccessOrError;
-  /** History of rollup summaries of planting site observations in order of observation time, latest first.  */
-  summaries: PlantingSiteObservationSummaryPayload[];
 };
 export type GetObservationResponsePayload = {
   observation: ObservationPayload;
@@ -940,12 +833,6 @@ export type MergeOtherSpeciesRequestPayload = {
   /** ID of the existing species that the Other species' recorded plants should be merged into. */
   speciesId: number;
 };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: object[];
-    type: 'GeometryCollection';
-  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -969,6 +856,12 @@ export type MultiPolygon = {
 } & GeometryBase & {
     coordinates: number[][][][];
     type: 'MultiPolygon';
+  };
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
+    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type AssignedPlotPayload = {
@@ -1207,15 +1100,9 @@ export const {
   useListObservationsQuery,
   useLazyListObservationsQuery,
   useScheduleObservationMutation,
-  useListAdHocObservationsQuery,
-  useLazyListAdHocObservationsQuery,
   useCompleteAdHocObservationMutation,
-  useListAdHocObservationResultsQuery,
-  useLazyListAdHocObservationResultsQuery,
   useListObservationResultsQuery,
   useLazyListObservationResultsQuery,
-  useListObservationSummariesQuery,
-  useLazyListObservationSummariesQuery,
   useGetObservationQuery,
   useLazyGetObservationQuery,
   useRescheduleObservationMutation,

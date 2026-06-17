@@ -7,7 +7,7 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import { useGetOneObservationResults, useListObservationResults } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization, useOrganization } from 'src/providers';
-import { ObservationResultsPayload, useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/observations';
+import { ObservationResultsPayload, useLazyListObservationResultsQuery } from 'src/queries/generated/observations';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import ObservationMap from './ObservationMap';
@@ -43,7 +43,7 @@ const ObservationMapWrapper = ({
     }
   }, [isMapVisible]);
 
-  const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
+  const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListObservationResultsQuery();
   const [selectedObservationResults, setSelectedObservationResults] = useState<ObservationResultsPayload[]>([]);
   const [selectedAdHocObservationResults, setSelectedAdHocObservationResults] = useState<ObservationResultsPayload[]>(
     []
@@ -65,7 +65,8 @@ const ObservationMapWrapper = ({
         {
           organizationId: selectedOrganization.id,
           plantingSiteId,
-          includePlants: true,
+          depth: 'Plant',
+          isAdHoc: true,
         },
         true
       );
