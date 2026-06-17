@@ -12,6 +12,7 @@ import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessa
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
+import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import ObservationMapWrapper from 'src/scenes/ObservationsRouterV2/Map';
@@ -61,6 +62,9 @@ const SiteDetails = (): JSX.Element => {
 
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
+
+  // Poll for survival rate recalculation and refresh observation results when it completes.
+  useSurvivalRateCalculationInProgress(results?.plantingSiteId);
 
   useEffect(() => {
     if (results?.plantingSiteId) {
