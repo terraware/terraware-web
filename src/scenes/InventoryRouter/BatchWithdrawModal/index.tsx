@@ -358,7 +358,13 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
             <Step key={label}>
               <StepLabel
                 sx={{
-                  '.MuiStepIcon-root.Mui-active, .MuiStepIcon-root.Mui-completed': {
+                  '.MuiStepIcon-root': {
+                    fill: theme.palette.TwClrBgTertiary,
+                  },
+                  '.MuiStepIcon-root.Mui-active': {
+                    fill: theme.palette.TwClrIcnSecondary,
+                  },
+                  '.MuiStepIcon-root.Mui-completed': {
                     fill: theme.palette.TwClrTxtBrand,
                   },
                   '.MuiStepLabel-label': {

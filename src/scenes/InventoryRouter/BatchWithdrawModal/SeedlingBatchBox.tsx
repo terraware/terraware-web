@@ -31,22 +31,24 @@ const SeedlingBatchBox = ({
 }: SeedlingBatchBoxProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
+  const tableColumns = 'minmax(180px, 2fr) minmax(120px, 1fr) 112px';
+  const withdrawInputSx = { justifySelf: 'end', width: '100px' };
 
   return (
     <Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}`, borderRadius: '8px' }}>
       <Box padding={theme.spacing(1.5, 2)} sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}>
-        <Typography fontSize='16px' fontWeight={400}>
+        <Typography fontSize='16px' fontWeight={400} textAlign='left'>
           {speciesName}
         </Typography>
       </Box>
       <Box
         display='grid'
-        gridTemplateColumns='2fr 1fr 1fr'
-        gap={theme.spacing(1)}
+        gridTemplateColumns={tableColumns}
+        gap={theme.spacing(4)}
         padding={theme.spacing(1, 2)}
         sx={{ borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
       >
-        <Typography fontSize='14px' fontWeight={600}>
+        <Typography fontSize='14px' fontWeight={600} textAlign='left'>
           {strings.SEEDLING_BATCH}
         </Typography>
         <Typography fontSize='14px' fontWeight={600} textAlign='right'>
@@ -63,22 +65,23 @@ const SeedlingBatchBox = ({
           <Box
             key={batch.batchId}
             display='grid'
-            gridTemplateColumns='2fr 1fr 1fr'
-            gap={theme.spacing(1)}
+            gridTemplateColumns={tableColumns}
+            gap={theme.spacing(4)}
             alignItems='center'
             padding={theme.spacing(1, 2)}
           >
-            <Typography fontSize='16px' color={theme.palette.TwClrTxtBrand}>
+            <Typography fontSize='16px' color={theme.palette.TwClrTxtBrand} textAlign='left'>
               {batch.batchNumber}
             </Typography>
             <Typography fontSize='16px' textAlign='right'>
               {batch.readyQuantity.toLocaleString()}
             </Typography>
-            <Box>
+            <Box sx={withdrawInputSx}>
               <TextField
                 id={`withdraw-${batch.batchId}`}
                 type='number'
                 label=''
+                sx={{ width: '100%' }}
                 value={value.toString()}
                 onChange={(v) =>
                   setWithdrawByBatch((prev) => ({
