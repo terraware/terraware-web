@@ -1,3 +1,4 @@
+ca5bcdbd SW-7672 add useLatestSiteObservationResult hook (#5863)
 c4937a07 Fix modal showing "\n" (#5884)
 9cd396d1 SW-7672 regenerate API types for latestObservationNumPlots (#5862)
 d191d39d SW-8481 Show Exceeds target for species with no target (#5883)
