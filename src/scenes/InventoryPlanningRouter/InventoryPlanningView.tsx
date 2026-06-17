@@ -25,7 +25,15 @@ import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
 const inventoryPlanningTableGridTemplateColumns = '40px 2fr 1fr 1fr 1fr 1.5fr';
+const inventoryPlanningTableMinWidth = '960px';
 const allocatedForTargetCellSx = { paddingLeft: 8 };
+const allocatedForTargetBarSx = {
+  width: '100px',
+  maxWidth: 'calc(100% - 48px)',
+  flexShrink: 1,
+  height: '12px',
+  borderRadius: '6px',
+};
 
 const InventoryPlanningView = (): JSX.Element => {
   const theme = useTheme();
@@ -220,42 +228,44 @@ const SpeciesTable = ({ rows, activeLocale }: SpeciesTableProps): JSX.Element =>
   };
 
   return (
-    <Box>
-      <Box
-        display='grid'
-        gridTemplateColumns={inventoryPlanningTableGridTemplateColumns}
-        gap={theme.spacing(1)}
-        sx={{
-          padding: theme.spacing(1, 2),
-          borderBottom: `2px solid ${theme.palette.TwClrBrdrSecondary}`,
-        }}
-      >
-        <Box />
-        <HeaderCell label={strings.SPECIES} />
-        <HeaderCell label={strings.AVAILABLE_TITLE} tooltip={strings.INVENTORY_PLANNING_AVAILABLE_TOOLTIP} alignEnd />
-        <HeaderCell label={strings.TARGET} tooltip={strings.INVENTORY_PLANNING_TARGET_TOOLTIP} alignEnd />
-        <HeaderCell label={strings.ALLOCATED} tooltip={strings.INVENTORY_PLANNING_ALLOCATED_TOOLTIP} alignEnd />
-        <Box sx={allocatedForTargetCellSx}>
-          <HeaderCell label={strings.ALLOCATED_FOR_TARGET} tooltip={strings.ALLOCATED_FOR_TARGET_TOOLTIP} />
+    <Box sx={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+      <Box minWidth={inventoryPlanningTableMinWidth}>
+        <Box
+          display='grid'
+          gridTemplateColumns={inventoryPlanningTableGridTemplateColumns}
+          gap={theme.spacing(1)}
+          sx={{
+            padding: theme.spacing(1, 2),
+            borderBottom: `2px solid ${theme.palette.TwClrBrdrSecondary}`,
+          }}
+        >
+          <Box />
+          <HeaderCell label={strings.SPECIES} />
+          <HeaderCell label={strings.AVAILABLE_TITLE} tooltip={strings.INVENTORY_PLANNING_AVAILABLE_TOOLTIP} alignEnd />
+          <HeaderCell label={strings.TARGET} tooltip={strings.INVENTORY_PLANNING_TARGET_TOOLTIP} alignEnd />
+          <HeaderCell label={strings.ALLOCATED} tooltip={strings.INVENTORY_PLANNING_ALLOCATED_TOOLTIP} alignEnd />
+          <Box sx={allocatedForTargetCellSx}>
+            <HeaderCell label={strings.ALLOCATED_FOR_TARGET} tooltip={strings.ALLOCATED_FOR_TARGET_TOOLTIP} />
+          </Box>
         </Box>
+        {rows.length === 0 && (
+          <Box padding={theme.spacing(4, 2)} textAlign='center'>
+            <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+              {strings.NO_ACTIVE_PLANTING_SEASONS_FOR_FILTERS}
+            </Typography>
+          </Box>
+        )}
+        {rows.map((row, index) => (
+          <SpeciesRow
+            key={row.speciesId}
+            row={row}
+            index={index}
+            expanded={expandedSpeciesIds.has(row.speciesId)}
+            onToggle={() => toggle(row.speciesId)}
+            activeLocale={activeLocale}
+          />
+        ))}
       </Box>
-      {rows.length === 0 && (
-        <Box padding={theme.spacing(4, 2)} textAlign='center'>
-          <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
-            {strings.NO_ACTIVE_PLANTING_SEASONS_FOR_FILTERS}
-          </Typography>
-        </Box>
-      )}
-      {rows.map((row, index) => (
-        <SpeciesRow
-          key={row.speciesId}
-          row={row}
-          index={index}
-          expanded={expandedSpeciesIds.has(row.speciesId)}
-          onToggle={() => toggle(row.speciesId)}
-          activeLocale={activeLocale}
-        />
-      ))}
     </Box>
   );
 };
@@ -377,12 +387,16 @@ const SpeciesRow = ({ row, index, expanded, onToggle, activeLocale }: SpeciesRow
         <Typography fontSize='16px' textAlign='right'>
           {row.allocated > 0 ? row.allocated.toLocaleString(activeLocale || undefined) : '-'}
         </Typography>
-        <Box display='flex' alignItems='center' gap={theme.spacing(1)} sx={allocatedForTargetCellSx}>
+        <Box
+          display='flex'
+          alignItems='center'
+          justifyContent='flex-end'
+          gap={theme.spacing(1)}
+          sx={allocatedForTargetCellSx}
+        >
           <Box
-            flex={1}
             sx={{
-              height: '8px',
-              borderRadius: '4px',
+              ...allocatedForTargetBarSx,
               backgroundColor: theme.palette.TwClrBgTertiary,
               overflow: 'hidden',
             }}
