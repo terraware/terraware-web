@@ -167,10 +167,6 @@ export const getReplaceObservationPlotDuration = (
 export type RecordedPlant = components['schemas']['RecordedPlantPayload'];
 export type RecordedPlantStatus = RecordedPlant['status'];
 
-export type ObservationSummary = components['schemas']['PlantingSiteObservationSummaryPayload'];
-
-export type StratumObservationSummary = components['schemas']['StratumObservationSummaryPayload'];
-
 export type ExistingTreePayload = components['schemas']['ExistingTreePayload'];
 
 export type BiomassSpeciesPayload = components['schemas']['BiomassSpeciesPayload'];

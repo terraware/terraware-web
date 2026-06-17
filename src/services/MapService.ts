@@ -12,7 +12,6 @@ import {
   ObservationResultsWithLastObv,
   ObservationStratumResults,
   ObservationSubstratumResults,
-  ObservationSummary,
 } from 'src/types/Observations';
 import { MinimalPlantingSite, MultiPolygon, PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
@@ -363,40 +362,6 @@ const extractSubstrataFromHistory = (site: PlantingSiteHistory): MapSourceBaseDa
   };
 };
 
-const extractSubstrataFromHistoryAndResult = (
-  site: PlantingSite,
-  history: PlantingSiteHistory,
-  result: ObservationSummary
-): MapSourceBaseData => {
-  const allSubstrataData =
-    history.strata?.flatMap((stratumHistory) => {
-      const { stratumId, substrata } = stratumHistory;
-      const stratum = site.strata?.find((_stratum) => _stratum.id === stratumId);
-      const stratumResult = result.strata.find((_stratum) => _stratum.stratumId === stratumId);
-      return substrata.map((substratumHistory) => {
-        const { id, substratumId, name, fullName, boundary } = substratumHistory;
-        const substratum = stratum?.substrata?.find((_substratum) => _substratum.id === substratumId);
-        const substratumResult = stratumResult?.substrata?.find(
-          (_substratum) => _substratum.substratumId === substratumId
-        );
-        const recency = substratum?.latestObservationCompletedTime
-          ? getRecencyFromTime(substratum.latestObservationCompletedTime)
-          : -1;
-        const survivalRate = substratumResult?.survivalRate;
-        return {
-          properties: { id, name, fullName, type: 'substratum', stratumId, recency, survivalRate },
-          boundary: getPolygons(boundary),
-          id,
-        };
-      });
-    }) || [];
-
-  return {
-    entities: allSubstrataData.flatMap((f) => f),
-    id: 'substrata',
-  };
-};
-
 /**
  * Get boundary polygons for a map entity
  */
@@ -663,24 +628,6 @@ const getMapDataFromPlantingSiteHistory = (plantingSite: PlantingSite, history: 
 };
 
 /**
- * Extract Planting Site, Strata, Substrata from planting site data and results
- */
-const getMapDataFromPlantingSiteFromHistoryAndResults = (
-  plantingSite: PlantingSite,
-  history: PlantingSiteHistory,
-  result: ObservationSummary
-): MapData => {
-  return {
-    site: extractPlantingSiteFromHistory(plantingSite, history),
-    stratum: extractStrataFromHistory(history),
-    substratum: extractSubstrataFromHistoryAndResult(plantingSite, history, result),
-    permanentPlot: undefined,
-    temporaryPlot: undefined,
-    adHocPlot: undefined,
-  };
-};
-
-/**
  * Extract Planting Site, Strata, Substrata, and Plots from an ObservationResult
  */
 const getMapDataFromObservation = (
@@ -836,7 +783,6 @@ const MapService = {
   getMapDataFromPlantingSite,
   getMapDataFromPlantingSites,
   getMapDataFromPlantingSiteHistory,
-  getMapDataFromPlantingSiteFromHistoryAndResults,
   getMapDataFromObservation,
   getPlantingSiteBoundingBox,
   getMapEntityGeometry,

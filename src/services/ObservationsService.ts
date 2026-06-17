@@ -24,7 +24,6 @@ const OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}';
 const OBSERVATION_RESULTS_ENDPOINT = '/api/v1/tracking/observations/{observationId}/results';
 const OBSERVATION_EXPORT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots';
 const REPLACE_OBSERVATION_PLOT_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/replace';
-const PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDPOINT = '/api/v1/tracking/observations/results/summaries';
 const ABANDON_OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observationId}/abandon';
 const OBSERVATION_OTHER_MEDIA_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/otherMedia';
 const OBSERVATION_PLOT_PHOTO_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos/{fileId}';
@@ -52,9 +51,6 @@ type GetOneObservationRepsonsePayload =
 
 type GetOneObservationResultsRepsonsePayload =
   paths[typeof OBSERVATION_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-export type GetPlantingSiteObservationSummariesPayload =
-  paths[typeof PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 /**
  * exported response type
@@ -447,18 +443,6 @@ const getOneObservationResults = async (
   });
 };
 
-const getPlantingSiteObservationsSummaries = async (
-  plantingSiteId: number
-): Promise<Response2<GetPlantingSiteObservationSummariesPayload>> => {
-  return HttpService.root(
-    PLANTING_SITE_OBSERVATIONS_SUMMARIES_ENDPOINT
-  ).get2<GetPlantingSiteObservationSummariesPayload>({
-    params: {
-      plantingSiteId: plantingSiteId.toString(),
-    },
-  });
-};
-
 const abandonObservation = async (observationId: number): Promise<Response> => {
   return await HttpService.root(ABANDON_OBSERVATION_ENDPOINT).post({
     urlReplacements: {
@@ -534,7 +518,6 @@ const ObservationsService = {
   scheduleObservation,
   getOneObservation,
   getOneObservationResult: getOneObservationResults,
-  getPlantingSiteObservationsSummaries,
   abandonObservation,
   deletePlotMedia,
   uploadOtherPlotMedia,
