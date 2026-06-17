@@ -335,6 +335,9 @@ type SubstratumDraft = { selected: boolean; species: SpeciesDraft[] };
 const getSpeciesDraftQuantity = (draft: SpeciesDraft): number =>
   Math.max(0, Number(draft.quantityInput ?? draft.quantity));
 
+const quantityExceedsAvailableToSchedule = (quantity: number, target: number, scheduledOther: number): boolean =>
+  !Number.isNaN(quantity) && quantity > Math.max(0, target - scheduledOther);
+
 const quantityTextFieldSx = {
   width: '208px',
   maxWidth: '100%',
@@ -462,7 +465,7 @@ const PlantingDateForm = ({
         const target = targetsBySubstratumAndSpecies.get(key) ?? 0;
         const scheduledOther = scheduledOtherBySubstratumAndSpecies.get(key) ?? 0;
         const quantity = getSpeciesDraftQuantity(speciesDraft);
-        return target > 0 && !Number.isNaN(quantity) && quantity > Math.max(0, target - scheduledOther);
+        return quantityExceedsAvailableToSchedule(quantity, target, scheduledOther);
       });
     });
   }, [editingScheduledDate?.scheduledPlantingDateId, scheduledDates, speciesTargets, substrataDrafts]);
@@ -941,11 +944,11 @@ const AddSpeciesRow = ({
   const selectedSpeciesId = draft.speciesId;
   const target = selectedSpeciesId === undefined ? 0 : targetsBySpecies.get(selectedSpeciesId) ?? 0;
   const scheduledOther = selectedSpeciesId === undefined ? 0 : scheduledOtherBySpecies.get(selectedSpeciesId) ?? 0;
-  const availableToSchedule = Math.max(0, target - scheduledOther);
   const quantity = draft.quantityInput ?? draft.quantity.toString();
   const parsedQuantity = getSpeciesDraftQuantity(draft);
   const quantityToValidate = Number.isNaN(parsedQuantity) ? 0 : parsedQuantity;
-  const exceedsGoal = selectedSpeciesId !== undefined && target > 0 && quantityToValidate > availableToSchedule;
+  const exceedsGoal =
+    selectedSpeciesId !== undefined && quantityExceedsAvailableToSchedule(quantityToValidate, target, scheduledOther);
   const selectedSpecies = selectedSpeciesId === undefined ? undefined : species.find((s) => s.id === selectedSpeciesId);
 
   const options = useMemo<DropdownItem[]>(() => {
@@ -976,7 +979,7 @@ const AddSpeciesRow = ({
   };
 
   return (
-    <Box display='flex' alignItems='flex-end' gap={theme.spacing(2)} flexWrap='wrap'>
+    <Box display='flex' alignItems='flex-start' gap={theme.spacing(2)} flexWrap='wrap'>
       <Box flex={1} minWidth='200px'>
         <Dropdown
           id={`add-species-${substratumId}`}
@@ -997,11 +1000,11 @@ const AddSpeciesRow = ({
           value={quantity}
           onChange={onQuantityChange}
           min={0}
-          errorText={exceedsGoal ? strings.EXCEEDS_GOAL : ''}
+          errorText={exceedsGoal ? strings.EXCEEDS_TARGET : ''}
           sx={quantityTextFieldSx}
         />
       </Box>
-      <IconButton aria-label={strings.REMOVE} size='small' onClick={onRemove}>
+      <IconButton aria-label={strings.REMOVE} size='small' onClick={onRemove} sx={{ marginTop: theme.spacing(3.5) }}>
         <Icon name='iconSubtract' size='medium' fillColor={theme.palette.TwClrIcn} />
       </IconButton>
     </Box>
@@ -1071,7 +1074,7 @@ const SpeciesRow = ({
   const availableToSchedule = Math.max(0, target - scheduledOther);
   const parsedDraftQuantity = Math.max(0, Number(draftQuantity));
   const quantityToValidate = Number.isNaN(parsedDraftQuantity) ? draft.quantity : parsedDraftQuantity;
-  const exceedsGoal = target > 0 && quantityToValidate > availableToSchedule;
+  const exceedsGoal = quantityExceedsAvailableToSchedule(quantityToValidate, target, scheduledOther);
 
   const commitQuantity = () => {
     setQuantityFocused(false);
@@ -1120,7 +1123,7 @@ const SpeciesRow = ({
             onBlur={commitQuantity}
             onFocus={() => setQuantityFocused(true)}
             min={0}
-            errorText={quantityFocused && exceedsGoal ? strings.EXCEEDS_GOAL : ''}
+            errorText={quantityFocused && exceedsGoal ? strings.EXCEEDS_TARGET : ''}
             autoFocus
             sx={quantityTextFieldSx}
           />

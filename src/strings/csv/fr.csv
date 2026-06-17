@@ -713,8 +713,8 @@ EVENT_RECORDED_SESSION_DESCRIPTION_1,"Regardez cette session enregistrée à tou
 EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Haut-parleurs ou casque – intégré, branché sur le port USB ou sans fil Bluetooth",b87be889
 EVENTS,Evénements,a18b73bc
 EXCEEDS_AVAILABLE_X,Dépasse le disponible ({0}),4391f9df
-EXCEEDS_GOAL,Dépasse l'objectif,4488fd7c
 EXCEEDS_READY_TO_PLANT,Dépasse le prêt à planter ({0}),42faa655
+EXCEEDS_TARGET,Dépasse l'objectif,edcff874
 EXCLUSION_AREAS,Zones d'exclusion,08c7d391
 EXISTING,Existant,fa67ac1d
 EXISTING_PROJECT_ACCESSIONS_BODY,"Certaines accessions ont déjà été ajoutées à un projet existant. Si vous sélectionnez ces accessions ici, vous remplacerez le projet par {0} (au lieu de créer une association supplémentaire).",a23f695b
