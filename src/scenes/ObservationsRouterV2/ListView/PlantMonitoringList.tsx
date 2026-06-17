@@ -25,7 +25,7 @@ import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/observations';
+import { useLazyListObservationResultsQuery } from 'src/queries/generated/observations';
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { useLazyGetAllT0SiteDataSetQuery } from 'src/queries/generated/t0';
 import { useLazyGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
@@ -160,7 +160,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
     plantingSiteId,
     depth: 'Stratum',
   });
-  const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListAdHocObservationResultsQuery();
+  const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListObservationResultsQuery();
   const [getT0SiteDataSet, getT0SiteDataSetResponse] = useLazyGetAllT0SiteDataSetQuery();
   const [getPlotsWithObservations, getPlotsWithObservationsResponse] = useLazyGetPlotsWithObservationsQuery();
 
@@ -193,7 +193,8 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         {
           organizationId: selectedOrganization.id,
           plantingSiteId,
-          includePlants: true,
+          depth: 'Plant',
+          isAdHoc: true,
         },
         true
       );

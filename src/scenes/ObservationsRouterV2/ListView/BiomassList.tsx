@@ -21,7 +21,7 @@ import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { useLazyListAdHocObservationResultsQuery } from 'src/queries/generated/observations';
+import { useLazyListObservationResultsQuery } from 'src/queries/generated/observations';
 import { ObservationsService } from 'src/services';
 import { downloadCsv } from 'src/utils/csv';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
@@ -84,7 +84,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   } = useTableState(STORAGE_KEY, { persistFilters: true });
 
   const { plantingSites } = useOrganizationPlantingSites();
-  const [listAdHocObservationResults, adHocObservationsResultsResponse] = useLazyListAdHocObservationResultsQuery();
+  const [listAdHocObservationResults, adHocObservationsResultsResponse] = useLazyListObservationResultsQuery();
 
   const plantingSitesNames = useMemo(
     () =>
@@ -101,7 +101,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   useEffect(() => {
     if (selectedOrganization) {
       void listAdHocObservationResults(
-        { plantingSiteId, organizationId: selectedOrganization.id, includePlants: true },
+        { plantingSiteId, organizationId: selectedOrganization.id, depth: 'Plant', isAdHoc: true },
         true
       );
     }

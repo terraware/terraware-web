@@ -22,6 +22,7 @@ const injectedRtkApi = api.injectEndpoints({
         url: `/api/v1/planting-seasons/notifications`,
         params: {
           organizationId: queryArg.organizationId,
+          plantingSeasonId: queryArg.plantingSeasonId,
           notificationCategory: queryArg.notificationCategory,
         },
       }),
@@ -125,7 +126,8 @@ export type CreatePlantingSeasonApiArg = CreatePlantingSeasonRequestPayload;
 export type GetPlantingSeasonNotificationsApiResponse =
   /** status 200 The requested operation succeeded. */ GetPlantingSeasonNotificationsResponsePayload;
 export type GetPlantingSeasonNotificationsApiArg = {
-  organizationId: number;
+  organizationId?: number;
+  plantingSeasonId?: number;
   notificationCategory: 'InventoryPlanning' | 'PlantingSeasonPlanning';
 };
 export type DeletePlantingSeasonApiResponse =

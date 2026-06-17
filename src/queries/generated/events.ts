@@ -167,6 +167,15 @@ export type PlantingSeasonSubjectPayload = {
 } & EventSubjectPayloadBase & {
     plantingSeasonId: number;
   };
+export type PlantingSeasonWithdrawalSubjectPayload = {
+  type: 'PlantingSeasonWithdrawal';
+} & EventSubjectPayloadBase & {
+    facilityId: number;
+    plantingSeasonId: number;
+    plantingSiteId: number;
+    withdrawalDate: string;
+    withdrawalId: number;
+  };
 export type ProjectSubjectPayload = {
   type: 'Project';
 } & EventSubjectPayloadBase & {
@@ -201,6 +210,7 @@ export type EventLogEntryPayload = {
     | PlantingSeasonScheduledDateSubjectPayload
     | PlantingSeasonSpeciesTargetSubjectPayload
     | PlantingSeasonSubjectPayload
+    | PlantingSeasonWithdrawalSubjectPayload
     | ProjectSubjectPayload
     | RecordedTreeSubjectPayload;
   timestamp: string;
@@ -237,6 +247,7 @@ export type ListEventLogEntriesRequestPayload = {
     | 'PlantingSeasonScheduledDate'
     | 'PlantingSeasonScheduledDateSpecies'
     | 'PlantingSeasonSpeciesTarget'
+    | 'PlantingSeasonWithdrawal'
     | 'Project'
     | 'RecordedTree'
   )[];
