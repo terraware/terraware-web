@@ -160,6 +160,25 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
     []
   );
 
+  const soilTypeOptions = useMemo(
+    () => [
+      { label: strings.SOIL_TYPE_CLAY, value: 'Clay' },
+      { label: strings.SOIL_TYPE_SANDY_CLAY, value: 'SandyClay' },
+      { label: strings.SOIL_TYPE_SANDY_CLAY_LOAM, value: 'SandyClayLoam' },
+      { label: strings.SOIL_TYPE_CLAY_LOAM, value: 'ClayLoam' },
+      { label: strings.SOIL_TYPE_SILTY_CLAY, value: 'SiltyClay' },
+      { label: strings.SOIL_TYPE_SILTY_CLAY_LOAM, value: 'SiltyClayLoam' },
+      { label: strings.SOIL_TYPE_SANDY_LOAM, value: 'SandyLoam' },
+      { label: strings.SOIL_TYPE_LOAMY_SAND, value: 'LoamySand' },
+      { label: strings.SOIL_TYPE_SAND, value: 'Sand' },
+      { label: strings.SOIL_TYPE_LOAM, value: 'Loam' },
+      { label: strings.SOIL_TYPE_SILT_LOAM, value: 'SiltLoam' },
+      { label: strings.SOIL_TYPE_SILT, value: 'Silt' },
+      { label: strings.SOIL_TYPE_UNKNOWN, value: 'Unknown' },
+    ],
+    [strings]
+  );
+
   const isMangrove = useMemo(() => {
     return record.biomassMeasurement.forestType === 'Mangrove';
   }, [record]);
@@ -180,6 +199,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
         type: 'Biomass',
         description: record.biomassMeasurement?.description,
         soilAssessment: record.biomassMeasurement?.soilAssessment,
+        soilType: record.biomassMeasurement?.soilType,
         forestType: record.biomassMeasurement?.forestType,
         ph: record.biomassMeasurement?.ph,
         salinity: record.biomassMeasurement?.salinity,
@@ -402,6 +422,14 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                   />
                 </Box>
               </Box>
+
+              <Dropdown
+                label={strings.SOIL_TYPE}
+                selectedValue={record.biomassMeasurement?.soilType}
+                options={soilTypeOptions}
+                onChange={onChangeHandler('biomassMeasurement.soilType')}
+                sx={{ paddingTop: '16px' }}
+              />
             </Box>
           </DialogBox>
         )}

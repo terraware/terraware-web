@@ -77,6 +77,27 @@ const BiomassObservationDataTab = () => {
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
 
   const soilPhoto = monitoringPlot?.media.find((m) => m.type === 'Soil');
+
+  const soilTypeLabels: Record<string, string> = useMemo(
+    () => ({
+      Clay: strings.SOIL_TYPE_CLAY,
+      SandyClay: strings.SOIL_TYPE_SANDY_CLAY,
+      SandyClayLoam: strings.SOIL_TYPE_SANDY_CLAY_LOAM,
+      ClayLoam: strings.SOIL_TYPE_CLAY_LOAM,
+      SiltyClay: strings.SOIL_TYPE_SILTY_CLAY,
+      SiltyClayLoam: strings.SOIL_TYPE_SILTY_CLAY_LOAM,
+      SandyLoam: strings.SOIL_TYPE_SANDY_LOAM,
+      LoamySand: strings.SOIL_TYPE_LOAMY_SAND,
+      Sand: strings.SOIL_TYPE_SAND,
+      Loam: strings.SOIL_TYPE_LOAM,
+      SiltLoam: strings.SOIL_TYPE_SILT_LOAM,
+      Silt: strings.SOIL_TYPE_SILT,
+      Unknown: strings.SOIL_TYPE_UNKNOWN,
+    }),
+    [strings]
+  );
+
+  const soilTypeLabel = biomassMeasurement?.soilType ? soilTypeLabels[biomassMeasurement.soilType] : undefined;
   const items = [
     {
       label: strings.TOTAL_PLANTS,
@@ -288,6 +309,9 @@ const BiomassObservationDataTab = () => {
               type='text'
               display={true}
             />
+          </Box>
+          <Box>
+            <Textfield id='soilType' label={strings.SOIL_TYPE} value={soilTypeLabel} type='text' display />
           </Box>
         </Box>
       </Box>
