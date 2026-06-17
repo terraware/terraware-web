@@ -252,6 +252,7 @@ const WithdrawFromBatchesModal = ({
       size='large'
       skrim
       middleButtons={middleButtons}
+      scrolled
     >
       <Stepper activeStep={step} sx={{ margin: theme.spacing(1, 0, 3) }}>
         {stepLabels.map((label, index) => (
