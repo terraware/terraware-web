@@ -1,3 +1,6 @@
+6e0dda10 SW-8518 Inventory Withdrawals: Remove rounded corners (#5880)
+0efdf8ae SW-8516 Inventory Withdrawals: Incorrect Planting Seasons showing in Planting Season selector (#5879)
+df322ab8 SW-8515 Allocated for Target bars size not to design spec (#5878)
 4bc2f742 SW-8514 Should not be able to do Planting Withdrawals from batches that have 0 Ready to Plant (#5877)
 2f4c572a SW-8513 Spacing off in Quantities step (#5876)
 c96dcbe7 SW-8498 Available to Schedule numbers should only show during Quantity input focus (#5875)
