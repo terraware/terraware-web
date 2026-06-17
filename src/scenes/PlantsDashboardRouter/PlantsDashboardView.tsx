@@ -8,8 +8,8 @@ import { DateTime } from 'luxon';
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
-import { APP_PATHS } from 'src/constants';
-import { useLatestSiteObservationResult, useSiteObservedArea } from 'src/hooks/observations';
+import { APP_PATHS, MONITORING_PLOT_SIZE, SQ_M_TO_HECTARES } from 'src/constants';
+import { useLatestSiteObservationResult } from 'src/hooks/observations';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePlantingSite from 'src/hooks/usePlantingSite';
@@ -329,7 +329,13 @@ export default function PlantsDashboardView({
     [plantingSite]
   );
 
-  const observedHectares = useSiteObservedArea(plantingSite);
+  const observedHectares = useMemo(() => {
+    const totalPlots = (plantingSite?.strata ?? [])
+      .flatMap((stratum) => stratum.substrata)
+      .reduce((sum, substratum) => sum + (substratum.latestObservationNumPlots ?? 0), 0);
+
+    return totalPlots * MONITORING_PLOT_SIZE * MONITORING_PLOT_SIZE * SQ_M_TO_HECTARES;
+  }, [plantingSite]);
 
   const observationDateRange = useMemo(() => {
     const times = (plantingSite?.strata ?? [])
