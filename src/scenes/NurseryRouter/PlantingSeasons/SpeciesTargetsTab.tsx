@@ -42,14 +42,6 @@ const compareSpeciesScientificNames = (
 
 const targetQuantityTextFieldSx = { width: '100px' };
 
-type AddedSpeciesTargetRow = {
-  id: string;
-  speciesId?: number;
-  quantity: string;
-  saved: boolean;
-  savedSpeciesId?: number;
-};
-
 const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabProps): JSX.Element => {
   const theme = useTheme();
   const { data: speciesTargetsData } = useGetSpeciesTargetsQuery(plantingSeason.id);
@@ -179,24 +171,11 @@ const SubstratumSection = ({
   readOnly,
 }: SubstratumSectionProps): JSX.Element => {
   const theme = useTheme();
-  const [addedSpeciesRows, setAddedSpeciesRows] = useState<AddedSpeciesTargetRow[]>([]);
+  const [addingSpecies, setAddingSpecies] = useState(false);
 
   const substratumTotal = useMemo(() => targets.reduce((sum, t) => sum + t.quantity, 0), [targets]);
 
-  const addedSpeciesIds = useMemo(
-    () =>
-      new Set(
-        addedSpeciesRows
-          .flatMap((row) => [row.speciesId, row.savedSpeciesId])
-          .filter((speciesId): speciesId is number => speciesId !== undefined)
-      ),
-    [addedSpeciesRows]
-  );
-
-  const usedSpeciesIds = useMemo(
-    () => new Set([...targets.map((t) => t.speciesId), ...addedSpeciesIds]),
-    [addedSpeciesIds, targets]
-  );
+  const usedSpeciesIds = useMemo(() => new Set(targets.map((t) => t.speciesId)), [targets]);
 
   const speciesById = useMemo(() => new Map(species.map((s) => [s.id, s])), [species]);
 
@@ -209,27 +188,9 @@ const SubstratumSection = ({
   );
 
   const sortedTargets = useMemo(
-    () =>
-      targets
-        .filter((target) => !addedSpeciesIds.has(target.speciesId))
-        .sort((a, b) => compareSpeciesScientificNames(speciesById, a.speciesId, b.speciesId)),
-    [addedSpeciesIds, speciesById, targets]
+    () => [...targets].sort((a, b) => compareSpeciesScientificNames(speciesById, a.speciesId, b.speciesId)),
+    [speciesById, targets]
   );
-
-  const addSpeciesRow = () => {
-    setAddedSpeciesRows((current) => [
-      ...current,
-      { id: `new-species-target-${crypto.randomUUID()}`, quantity: '', saved: false },
-    ]);
-  };
-
-  const updateAddedSpeciesRow = (row: AddedSpeciesTargetRow) => {
-    setAddedSpeciesRows((current) => current.map((currentRow) => (currentRow.id === row.id ? row : currentRow)));
-  };
-
-  const removeAddedSpeciesRow = (rowId: string) => {
-    setAddedSpeciesRows((current) => current.filter((row) => row.id !== rowId));
-  };
 
   return (
     <Box marginBottom={theme.spacing(3)}>
@@ -287,26 +248,23 @@ const SubstratumSection = ({
       )}
       {!readOnly && (
         <Box>
-          {addedSpeciesRows.map((row) => (
+          {addingSpecies ? (
             <AddSpeciesRow
-              key={row.id}
-              row={row}
               substratumId={substratum.id}
               plantingSeasonId={plantingSeasonId}
-              species={species}
               availableSpecies={availableSpecies}
-              onChange={updateAddedSpeciesRow}
-              onRemove={() => removeAddedSpeciesRow(row.id)}
+              onClose={() => setAddingSpecies(false)}
             />
-          ))}
-          <Button
-            icon='iconAdd'
-            label={strings.ADD_SPECIES}
-            onClick={addSpeciesRow}
-            priority='ghost'
-            type='productive'
-            disabled={availableSpecies.length === 0}
-          />
+          ) : (
+            <Button
+              icon='iconAdd'
+              label={strings.ADD_SPECIES}
+              onClick={() => setAddingSpecies(true)}
+              priority='ghost'
+              type='productive'
+              disabled={availableSpecies.length === 0}
+            />
+          )}
         </Box>
       )}
     </Box>
@@ -399,7 +357,7 @@ const SpeciesTargetRow = ({
           </Typography>
         )}
       </Box>
-      <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
+      <Box display='flex' alignItems='center' gap={theme.spacing(0.5)}>
         {readOnly ? (
           <Typography fontSize='16px' fontWeight={400}>
             {target.quantity.toLocaleString()}
@@ -458,64 +416,54 @@ const SpeciesTargetRow = ({
 };
 
 type AddSpeciesRowProps = {
-  row: AddedSpeciesTargetRow;
   substratumId: number;
   plantingSeasonId: number;
-  species: Species[];
   availableSpecies: Species[];
-  onChange: (row: AddedSpeciesTargetRow) => void;
-  onRemove: () => void;
+  onClose: () => void;
 };
 
 const AddSpeciesRow = ({
-  row,
   substratumId,
   plantingSeasonId,
-  species,
   availableSpecies,
-  onChange,
-  onRemove,
+  onClose,
 }: AddSpeciesRowProps): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
   const rowRef = useRef<HTMLDivElement>(null);
+  const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | undefined>();
+  const [quantity, setQuantity] = useState<string>('');
   const [upsertSpeciesTarget, { isLoading: isUpserting }] = useUpsertSpeciesTargetMutation();
-  const [deleteSpeciesTarget, { isLoading: isDeleting }] = useDeleteSpeciesTargetMutation();
-  const selectedSpeciesId = row.speciesId;
-  const selectedSpecies = selectedSpeciesId === undefined ? undefined : species.find((s) => s.id === selectedSpeciesId);
-  const isSaving = isUpserting || isDeleting;
+  const canSave = selectedSpeciesId !== undefined && quantity !== '';
 
-  const options = useMemo<DropdownItem[]>(() => {
-    const speciesOptions = selectedSpecies ? [selectedSpecies, ...availableSpecies] : availableSpecies;
-    return speciesOptions.map((s) => ({
-      label: s.scientificName,
-      value: s.id,
-    }));
-  }, [availableSpecies, selectedSpecies]);
+  const options = useMemo<DropdownItem[]>(
+    () =>
+      availableSpecies.map((s) => ({
+        label: s.scientificName,
+        value: s.id,
+      })),
+    [availableSpecies]
+  );
 
-  const saveIfComplete = async (nextRow: AddedSpeciesTargetRow) => {
-    if (nextRow.speciesId === undefined || nextRow.quantity === '') {
+  const onSave = async () => {
+    if (selectedSpeciesId === undefined || quantity === '') {
       return;
     }
-    const parsed = Number(nextRow.quantity);
+    const parsed = Number(quantity);
     if (Number.isNaN(parsed) || parsed < 0) {
       return;
     }
-    const previousSavedSpeciesId = nextRow.savedSpeciesId;
     try {
       await upsertSpeciesTarget({
         plantingSeasonId,
         upsertPlantingSeasonSpeciesTargetRequestPayload: {
           quantity: parsed,
-          speciesId: nextRow.speciesId,
+          speciesId: selectedSpeciesId,
           substratumId,
         },
       }).unwrap();
-      if (previousSavedSpeciesId !== undefined && previousSavedSpeciesId !== nextRow.speciesId) {
-        await deleteSpeciesTarget({ plantingSeasonId, speciesId: previousSavedSpeciesId, substratumId }).unwrap();
-      }
-      onChange({ ...nextRow, saved: true, savedSpeciesId: nextRow.speciesId });
+      onClose();
     } catch (e) {
       snackbar.toastError();
     }
@@ -523,31 +471,15 @@ const AddSpeciesRow = ({
 
   const onSpeciesChange = (value: string | number | undefined) => {
     if (value === undefined || value === '') {
-      onChange({ ...row, speciesId: undefined, saved: false, savedSpeciesId: undefined });
+      setSelectedSpeciesId(undefined);
       return;
     }
 
-    const speciesId = Number(value);
-    const nextRow = { ...row, speciesId, saved: row.savedSpeciesId === speciesId };
-    onChange(nextRow);
-    void saveIfComplete(nextRow);
+    setSelectedSpeciesId(Number(value));
   };
 
   const onQuantityChange = (value: unknown) => {
-    onChange({ ...row, quantity: String(value ?? '') });
-  };
-
-  const onRemoveClick = async () => {
-    if (row.savedSpeciesId === undefined) {
-      onRemove();
-      return;
-    }
-    try {
-      await deleteSpeciesTarget({ plantingSeasonId, speciesId: row.savedSpeciesId, substratumId }).unwrap();
-      onRemove();
-    } catch (e) {
-      snackbar.toastError();
-    }
+    setQuantity(String(value ?? ''));
   };
 
   const scrollRowIntoView = () => {
@@ -567,7 +499,7 @@ const AddSpeciesRow = ({
     >
       <Box width={isMobile ? '100%' : '300px'}>
         <Dropdown
-          id={`add-species-${row.id}`}
+          id={`add-species-${substratumId}`}
           label={strings.SPECIES}
           placeholder={strings.SELECT_SPECIES}
           options={options}
@@ -575,25 +507,46 @@ const AddSpeciesRow = ({
           onChange={onSpeciesChange}
           fullWidth
           autocomplete
-          disabled={isSaving}
+          disabled={isUpserting}
         />
       </Box>
       <Box width='100px'>
         <TextField
-          id={`add-quantity-${row.id}`}
+          id={`add-quantity-${substratumId}`}
           type='number'
           label={strings.TARGET_QUANTITY}
-          value={row.quantity}
+          value={quantity}
           onChange={onQuantityChange}
-          onBlur={() => void saveIfComplete(row)}
           min={0}
           sx={targetQuantityTextFieldSx}
-          disabled={isSaving}
+          disabled={isUpserting}
         />
       </Box>
-      <IconButton aria-label={strings.REMOVE} size='small' onClick={() => void onRemoveClick()} disabled={isSaving}>
-        <Icon name='iconSubtract' size='medium' fillColor={theme.palette.TwClrIcn} />
-      </IconButton>
+      <Box display='flex' alignItems='center'>
+        <IconButton
+          aria-label={strings.ADD}
+          disabled={isUpserting || !canSave}
+          onClick={() => void onSave()}
+          size='small'
+          sx={{
+            padding: 0,
+            '&.Mui-disabled': {
+              opacity: 0.5,
+            },
+          }}
+        >
+          <Icon name='iconAdd' size='medium' fillColor={theme.palette.TwClrIcnBrand} />
+        </IconButton>
+        <Button
+          label={strings.CANCEL}
+          onClick={onClose}
+          priority='ghost'
+          type='productive'
+          disabled={isUpserting}
+          style={{ margin: 0 }}
+          sx={{ minWidth: 'auto', paddingLeft: 0, paddingRight: 0 }}
+        />
+      </Box>
     </Box>
   );
 };
