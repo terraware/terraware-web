@@ -139,13 +139,16 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     return batches.filter((b) => b.facilityId === draft.fromFacilityId);
   }, [batches, draft.fromFacilityId]);
 
+  // Match the old withdrawal flow: only show batches with ready-to-plant seedlings.
+  const readyToPlantBatches = useMemo(() => displayedBatches?.filter((b) => b.readyQuantity > 0), [displayedBatches]);
+
   // Species summary in the header
   const speciesSummary = useMemo(() => {
-    if (!displayedBatches) {
+    if (!readyToPlantBatches) {
       return [];
     }
     const bySpecies = new Map<number, { name: string; batchNumbers: string[] }>();
-    displayedBatches.forEach((b) => {
+    readyToPlantBatches.forEach((b) => {
       const existing = bySpecies.get(b.speciesId);
       if (existing) {
         existing.batchNumbers.push(b.batchNumber);
@@ -157,7 +160,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       }
     });
     return [...bySpecies.values()];
-  }, [displayedBatches]);
+  }, [readyToPlantBatches]);
 
   // Step 1 validation: purpose-specific destination + withdraw date.
   const canGoNextFromStep1 = useMemo(() => {
@@ -174,25 +177,24 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   }, [draft]);
 
   const canGoNextFromStep2 = useMemo(() => {
-    if (!displayedBatches) {
+    if (!readyToPlantBatches) {
       return false;
     }
     let total = 0;
-    const overReady = displayedBatches.some((b) => {
+    const overReady = readyToPlantBatches.some((b) => {
       const ready = draft.withdrawByBatch[b.batchId]?.readyQuantityWithdrawn ?? 0;
       total += ready;
       return ready > b.readyQuantity;
     });
     return total > 0 && !overReady;
-  }, [displayedBatches, draft.withdrawByBatch]);
+  }, [readyToPlantBatches, draft.withdrawByBatch]);
 
   const onSubmit = useCallback(async () => {
-    if (draft.fromFacilityId === undefined || !displayedBatches) {
+    if (draft.fromFacilityId === undefined || !readyToPlantBatches) {
       return;
     }
-    // Only submit quantities for batches that belong to the selected nursery —
-    // a withdrawal can only span a single facility.
-    const allowedBatchIds = new Set(displayedBatches.map((b) => b.batchId));
+    // Only submit quantities for ready-to-plant batches that belong to the selected nursery.
+    const allowedBatchIds = new Set(readyToPlantBatches.map((b) => b.batchId));
     const batchWithdrawals = Object.entries(draft.withdrawByBatch)
       .filter(([batchIdStr]) => allowedBatchIds.has(Number(batchIdStr)))
       .map(([batchIdStr, q]) => ({
@@ -254,10 +256,8 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         strings.formatString(
           strings.BATCH_WITHDRAW_SUCCESS,
           numBatches,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (numBatches === 1 ? strings.BATCHES_SINGULAR : strings.BATCHES_PLURAL) as any,
           totalWithdrawn,
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
           (totalWithdrawn === 1 ? strings.SEEDLINGS_SINGULAR : strings.SEEDLINGS_PLURAL) as any
         ) as string
       );
@@ -268,7 +268,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       const drainedABatchToday =
         draft.withdrawnDate === today &&
         batchWithdrawals.some((bw) => {
-          const source = displayedBatches.find((b) => b.batchId === bw.batchId);
+          const source = readyToPlantBatches.find((b) => b.batchId === bw.batchId);
           return (
             source &&
             bw.germinatingQuantityWithdrawn === source.germinatingQuantity &&
@@ -286,7 +286,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     } catch (e) {
       snackbar.toastError();
     }
-  }, [createBatchWithdrawal, displayedBatches, draft, handleClose, snackbar, strings, uploadWithdrawalPhoto]);
+  }, [createBatchWithdrawal, draft, handleClose, readyToPlantBatches, snackbar, strings, uploadWithdrawalPhoto]);
 
   const middleButtons: JSX.Element[] = useMemo(() => {
     const cancel = (
@@ -429,9 +429,9 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
                 onChange={updateDraft}
               />
             )}
-            {step === 1 && displayedBatches && (
+            {step === 1 && readyToPlantBatches && (
               <QuantitiesStep
-                batches={displayedBatches}
+                batches={readyToPlantBatches}
                 draft={draft}
                 speciesTargets={speciesTargets}
                 setWithdrawByBatch={setWithdrawByBatch}
