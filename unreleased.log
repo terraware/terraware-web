@@ -1,3 +1,4 @@
+9cd396d1 SW-7672 regenerate API types for latestObservationNumPlots (#5862)
 d191d39d SW-8481 Show Exceeds target for species with no target (#5883)
 14cbec74 SW-8545 Accessions: Import template not downloading (#5881)
 6e0dda10 SW-8518 Inventory Withdrawals: Remove rounded corners (#5880)
