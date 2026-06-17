@@ -3,9 +3,8 @@ import React, { type JSX, useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import { useLatestSiteObservationResult, useProjectSiteObservationResults } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
-import useProjectSiteObservationSummaries from 'src/hooks/useProjectSiteObservationSummaries';
-import { useListObservationSummariesQuery } from 'src/queries/generated/observations';
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 
@@ -29,28 +28,25 @@ export default function HighestAndLowestSurvivalRateStrataCard({
 
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
-  const observationSummariesQuery = useListObservationSummariesQuery(
-    { plantingSiteId: plantingSiteId ?? -1 },
-    { skip: !plantingSiteId || plantingSiteId === -1 }
-  );
+  const { observation: latestObservationResult } = useLatestSiteObservationResult(plantingSiteId, 'Stratum');
 
-  const projectSiteSummaries = useProjectSiteObservationSummaries(projectId, isProjectView);
+  const projectSiteResults = useProjectSiteObservationResults(projectId, isProjectView);
 
   const survivalRateData = useMemo(() => {
     const candidates: StratumWithSite[] = isProjectView
-      ? projectSiteSummaries.flatMap(({ site, summary }) =>
-          (summary?.strata ?? [])
-            .filter((stratum) => stratum.survivalRate !== undefined)
+      ? projectSiteResults.flatMap(({ site, result }) =>
+          (result?.strata ?? [])
+            .filter((stratum) => stratum.survivalRate !== undefined && stratum.stratumId !== undefined)
             .map((stratum) => ({
-              stratumId: stratum.stratumId,
+              stratumId: stratum.stratumId as number,
               survivalRate: stratum.survivalRate as number,
               site,
             }))
         )
-      : (observationSummariesQuery.data?.summaries?.[0]?.strata ?? [])
-          .filter((stratum) => stratum.survivalRate !== undefined && plantingSite)
+      : (latestObservationResult?.strata ?? [])
+          .filter((stratum) => stratum.survivalRate !== undefined && stratum.stratumId !== undefined && plantingSite)
           .map((stratum) => ({
-            stratumId: stratum.stratumId,
+            stratumId: stratum.stratumId as number,
             survivalRate: stratum.survivalRate as number,
             site: plantingSite as PlantingSitePayload,
           }));
@@ -83,7 +79,7 @@ export default function HighestAndLowestSurvivalRateStrataCard({
       highestSite: highest.site,
       lowestSite: lowest.site,
     };
-  }, [isProjectView, observationSummariesQuery.data?.summaries, plantingSite, projectSiteSummaries]);
+  }, [isProjectView, latestObservationResult, plantingSite, projectSiteResults]);
 
   const highestSurvivalRate = survivalRateData.highestSurvivalRate;
   const lowestSurvivalRate = survivalRateData.lowestSurvivalRate;
