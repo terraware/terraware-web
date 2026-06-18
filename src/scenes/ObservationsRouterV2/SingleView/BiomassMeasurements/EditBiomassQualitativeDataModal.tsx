@@ -424,6 +424,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
               </Box>
 
               <Dropdown
+                fullWidth
                 label={strings.SOIL_TYPE}
                 selectedValue={record.biomassMeasurement?.soilType}
                 options={soilTypeOptions}
