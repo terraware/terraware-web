@@ -6,6 +6,7 @@ import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/ut
 import { DateTime } from 'luxon';
 
 import PlantsPrimaryPage from 'src/components/PlantsPrimaryPage';
+import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS, MONITORING_PLOT_SIZE, SQ_M_TO_HECTARES } from 'src/constants';
@@ -65,7 +66,7 @@ export default function PlantsDashboardView({
   const { observation: latestObservationResult } = useLatestSiteObservationResult(selectedPlantingSiteId, 'Substratum');
 
   // Poll for survival rate recalculation and refresh observation results when it completes.
-  useSurvivalRateCalculationInProgress(plantingSite?.id);
+  const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(plantingSite?.id);
   const hasObservationResults = useMemo(() => !!latestObservationResultId, [latestObservationResultId]);
 
   const onPreferences = useCallback(
@@ -156,6 +157,11 @@ export default function PlantsDashboardView({
     () =>
       plantingSite || !!projectId ? (
         <>
+          {survivalRateRecalculationInProgress && (
+            <Grid item xs={12}>
+              <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
+            </Grid>
+          )}
           <Grid item xs={12}>
             <Box
               sx={{
@@ -177,7 +183,15 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, isMobile, hasObservationResults, renderLatestObservationLink, strings, projectId]
+    [
+      plantingSite,
+      isMobile,
+      hasObservationResults,
+      renderLatestObservationLink,
+      strings,
+      projectId,
+      survivalRateRecalculationInProgress,
+    ]
   );
 
   const renderTotalPlantsAndSpecies = () => (

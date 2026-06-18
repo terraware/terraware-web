@@ -6,6 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
+import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
@@ -36,7 +37,9 @@ const ObservationListView = (): JSX.Element => {
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('observations-list', -1);
 
   // Poll for survival rate recalculation and refresh observation results when it completes.
-  useSurvivalRateCalculationInProgress(selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId);
+  const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(
+    selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId
+  );
 
   const [countObservations, countObservationsResult] = useLazyCountObservationsQuery();
   const hasObservationsResults = useMemo(() => !!countObservationsResult.data, [countObservationsResult]);
@@ -167,9 +170,12 @@ const ObservationListView = (): JSX.Element => {
     >
       <ObservationsEventsNotification />
       {activeTab === 'plantMonitoring' && (
-        <SurvivalRateMessageV2
-          selectedPlantingSiteId={selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId}
-        />
+        <>
+          <SurvivalRateMessageV2
+            selectedPlantingSiteId={selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId}
+          />
+          <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
+        </>
       )}
       <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs}>
         {hasObservationsResults && (

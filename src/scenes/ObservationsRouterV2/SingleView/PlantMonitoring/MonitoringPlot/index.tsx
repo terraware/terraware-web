@@ -7,6 +7,7 @@ import { Tabs, Tooltip } from '@terraware/web-components';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
+import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
@@ -32,7 +33,9 @@ const MonitoringPlotDetails = (): JSX.Element => {
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
 
   // Poll for survival rate recalculation and refresh observation results when it completes.
-  useSurvivalRateCalculationInProgress(results?.plantingSiteId);
+  const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(
+    results?.plantingSiteId
+  );
 
   const monitoringPlot = useMemo(
     () =>
@@ -193,6 +196,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
         />
       )}
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
+      <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
       <Box width='100%'>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>

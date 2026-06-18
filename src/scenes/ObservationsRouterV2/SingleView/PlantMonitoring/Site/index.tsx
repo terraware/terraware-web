@@ -9,6 +9,7 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import ListMapView from 'src/components/ListMapView';
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
+import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
@@ -64,7 +65,9 @@ const SiteDetails = (): JSX.Element => {
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
 
   // Poll for survival rate recalculation and refresh observation results when it completes.
-  useSurvivalRateCalculationInProgress(results?.plantingSiteId);
+  const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(
+    results?.plantingSiteId
+  );
 
   useEffect(() => {
     if (results?.plantingSiteId) {
@@ -156,6 +159,7 @@ const SiteDetails = (): JSX.Element => {
         />
       )}
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
+      <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
       <Card radius='24px' style={{ width: '100%' }}>
         <ObservationDataNumbers items={items} isCompleted={!!results?.completedTime} />
         <Box display='flex' gap={3} flexDirection={isDesktop ? 'row' : 'column'} flexWrap='wrap' marginBottom={3}>
