@@ -349,6 +349,25 @@ const quantityTextFieldSx = {
   },
 };
 
+const addSpeciesQuantityTextFieldSx = {
+  ...quantityTextFieldSx,
+  paddingBottom: '48px',
+  position: 'relative',
+  '&& .textfield-label': {
+    display: 'none',
+    height: 0,
+    lineHeight: 0,
+    margin: 0,
+    marginBottom: 0,
+  },
+  '& .textfield-label-container': {
+    left: 0,
+    marginTop: 0,
+    position: 'absolute',
+    top: 'calc(100% - 44px)',
+  },
+};
+
 const PlantingDateForm = ({
   plantingSeason,
   plantingSite,
@@ -435,49 +454,9 @@ const PlantingDateForm = ({
     });
   };
 
-  const hasNewSpeciesDraftErrors = useMemo(() => {
-    const targetsBySubstratumAndSpecies = new Map<string, number>();
-    speciesTargets.forEach((target) => {
-      targetsBySubstratumAndSpecies.set(`${target.substratumId}-${target.speciesId}`, target.quantity);
-    });
-
-    const scheduledOtherBySubstratumAndSpecies = new Map<string, number>();
-    scheduledDates.forEach((scheduledDate) => {
-      if (scheduledDate.scheduledPlantingDateId === editingScheduledDate?.scheduledPlantingDateId) {
-        return;
-      }
-      scheduledDate.species.forEach((scheduledSpecies) => {
-        const key = `${scheduledSpecies.substratumId}-${scheduledSpecies.speciesId}`;
-        scheduledOtherBySubstratumAndSpecies.set(
-          key,
-          (scheduledOtherBySubstratumAndSpecies.get(key) ?? 0) + scheduledSpecies.quantity
-        );
-      });
-    });
-
-    return Object.entries(substrataDrafts).some(([substratumIdStr, substratumDraft]) => {
-      if (!substratumDraft.selected) {
-        return false;
-      }
-      return substratumDraft.species.some((speciesDraft) => {
-        if (!speciesDraft.isNew || speciesDraft.speciesId === undefined) {
-          return false;
-        }
-        const key = `${substratumIdStr}-${speciesDraft.speciesId}`;
-        const target = targetsBySubstratumAndSpecies.get(key) ?? 0;
-        const scheduledOther = scheduledOtherBySubstratumAndSpecies.get(key) ?? 0;
-        const quantity = getSpeciesDraftQuantity(speciesDraft);
-        return quantityExceedsAvailableToSchedule(quantity, target, scheduledOther);
-      });
-    });
-  }, [editingScheduledDate?.scheduledPlantingDateId, scheduledDates, speciesTargets, substrataDrafts]);
-
   const performSave = async (notifyOptions?: { note: string }) => {
     if (!date) {
       setValidate(true);
-      return false;
-    }
-    if (hasNewSpeciesDraftErrors) {
       return false;
     }
     const speciesPayload = buildPayloadSpecies();
@@ -612,7 +591,7 @@ const PlantingDateForm = ({
               onClick={() => void onSave()}
               priority='secondary'
               type={isMobile ? 'passive' : 'productive'}
-              disabled={isSaving || hasNewSpeciesDraftErrors}
+              disabled={isSaving}
               size={isMobile ? 'medium' : undefined}
               sx={mobileFooterButtonSx}
             />
@@ -623,7 +602,7 @@ const PlantingDateForm = ({
             <Button
               label={strings.SAVE_AND_REQUEST}
               onClick={() => setNotifyModalOpen(true)}
-              disabled={isSaving || !date || hasNewSpeciesDraftErrors}
+              disabled={isSaving || !date}
               priority={isMobile ? 'secondary' : 'primary'}
               size={isMobile ? 'medium' : undefined}
               sx={mobileFooterButtonSx}
@@ -851,7 +830,7 @@ const SpeciesTable = ({
   const addSpeciesDraft = () => {
     onUpdateSubstratumSpecies(substratumId, (current) => [
       ...current,
-      { id: `new-species-${crypto.randomUUID()}`, quantity: 0, quantityInput: '0', isNew: true },
+      { id: `new-species-${crypto.randomUUID()}`, quantity: 0, quantityInput: '', isNew: true },
     ]);
   };
 
@@ -947,6 +926,7 @@ const AddSpeciesRow = ({
   onRemove,
 }: AddSpeciesRowProps): JSX.Element => {
   const theme = useTheme();
+  const [quantityFocused, setQuantityFocused] = useState(false);
   const selectedSpeciesId = draft.speciesId;
   const target = selectedSpeciesId === undefined ? 0 : targetsBySpecies.get(selectedSpeciesId) ?? 0;
   const scheduledOther = selectedSpeciesId === undefined ? 0 : scheduledOtherBySpecies.get(selectedSpeciesId) ?? 0;
@@ -986,10 +966,9 @@ const AddSpeciesRow = ({
 
   return (
     <Box display='flex' alignItems='flex-start' gap={theme.spacing(2)} flexWrap='wrap'>
-      <Box flex={1} minWidth='200px'>
+      <Box maxWidth='100%' width='300px'>
         <Dropdown
           id={`add-species-${substratumId}`}
-          label={strings.SPECIES}
           placeholder={strings.SELECT_SPECIES}
           options={options}
           selectedValue={selectedSpeciesId}
@@ -998,21 +977,24 @@ const AddSpeciesRow = ({
           autocomplete
         />
       </Box>
-      <Box minWidth='160px'>
+      <Box display='flex' alignItems='flex-start' gap={theme.spacing(1)}>
         <TextField
           id={`add-quantity-${substratumId}`}
           type='number'
-          label={strings.QUANTITY_TO_PLANT}
+          label=''
           value={quantity}
+          placeholder={strings.INDICATOR_TYPE_GOAL}
           onChange={onQuantityChange}
+          onBlur={() => setQuantityFocused(false)}
+          onFocus={() => setQuantityFocused(true)}
           min={0}
-          errorText={exceedsGoal ? strings.EXCEEDS_TARGET : ''}
-          sx={quantityTextFieldSx}
+          errorText={quantityFocused && exceedsGoal ? strings.EXCEEDS_TARGET : ''}
+          sx={addSpeciesQuantityTextFieldSx}
         />
+        <IconButton aria-label={strings.REMOVE} size='small' onClick={onRemove} sx={{ flexShrink: 0, marginTop: 0 }}>
+          <Icon name='iconSubtract' size='medium' fillColor={theme.palette.TwClrIcn} />
+        </IconButton>
       </Box>
-      <IconButton aria-label={strings.REMOVE} size='small' onClick={onRemove} sx={{ marginTop: theme.spacing(3.5) }}>
-        <Icon name='iconSubtract' size='medium' fillColor={theme.palette.TwClrIcn} />
-      </IconButton>
     </Box>
   );
 };
