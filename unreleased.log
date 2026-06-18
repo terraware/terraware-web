@@ -1,3 +1,4 @@
+de684fce Poll survival rate recalculation and auto-refresh observation results (#5893)
 c5951975 Add PlantingSiteObservations cache tag to observation results (#5892)
 891e9592 Removed useNewTables flag (#5887)
 489248ab Remove feature flag for Observations in Activity Log (#5891)
