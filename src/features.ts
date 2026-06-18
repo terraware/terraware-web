@@ -1,7 +1,11 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots' | 'Planting Seasons';
+export type FeatureName =
+  | 'Show Production View'
+  | 'Virtual Monitoring Plots'
+  | 'Planting Seasons'
+  | 'Additional Biomass Fields';
 
 export type Feature = {
   name: FeatureName;
@@ -51,6 +55,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for planning planting seasons'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Additional Biomass Fields',
+    preferenceName: 'additionalBiomassObservationFields',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Additional Biomass Fields'],
     disclosure: ['This is a WIP'],
   },
 ];

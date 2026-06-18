@@ -6,6 +6,7 @@ import { Button, Icon, Textfield, Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
+import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -29,6 +30,7 @@ import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 const BiomassObservationDataTab = () => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const isAdditionalBiomassFieldsEnabled = isEnabled('Additional Biomass Fields');
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
 
@@ -77,6 +79,27 @@ const BiomassObservationDataTab = () => {
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
 
   const soilPhoto = monitoringPlot?.media.find((m) => m.type === 'Soil');
+
+  const soilTypeLabels: Record<string, string> = useMemo(
+    () => ({
+      Clay: strings.SOIL_TYPE_CLAY,
+      SandyClay: strings.SOIL_TYPE_SANDY_CLAY,
+      SandyClayLoam: strings.SOIL_TYPE_SANDY_CLAY_LOAM,
+      ClayLoam: strings.SOIL_TYPE_CLAY_LOAM,
+      SiltyClay: strings.SOIL_TYPE_SILTY_CLAY,
+      SiltyClayLoam: strings.SOIL_TYPE_SILTY_CLAY_LOAM,
+      SandyLoam: strings.SOIL_TYPE_SANDY_LOAM,
+      LoamySand: strings.SOIL_TYPE_LOAMY_SAND,
+      Sand: strings.SOIL_TYPE_SAND,
+      Loam: strings.SOIL_TYPE_LOAM,
+      SiltLoam: strings.SOIL_TYPE_SILT_LOAM,
+      Silt: strings.SOIL_TYPE_SILT,
+      Unknown: strings.SOIL_TYPE_UNKNOWN,
+    }),
+    [strings]
+  );
+
+  const soilTypeLabel = biomassMeasurement?.soilType ? soilTypeLabels[biomassMeasurement.soilType] : undefined;
   const items = [
     {
       label: strings.TOTAL_PLANTS,
@@ -289,6 +312,11 @@ const BiomassObservationDataTab = () => {
               display={true}
             />
           </Box>
+          {isAdditionalBiomassFieldsEnabled && (
+            <Box>
+              <Textfield display id='soilType' label={strings.SOIL_TYPE} type='text' value={soilTypeLabel} />
+            </Box>
+          )}
         </Box>
       </Box>
       <Box paddingTop={2}>

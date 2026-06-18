@@ -13,6 +13,7 @@ import {
 } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
+import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import {
@@ -42,6 +43,7 @@ type EditQualitativeDataModalProps = {
 const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: EditQualitativeDataModalProps) => {
   const { activeLocale, strings } = useLocalization();
   const snackbar = useSnackbar();
+  const isAdditionalBiomassFieldsEnabled = isEnabled('Additional Biomass Fields');
 
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
@@ -160,6 +162,25 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
     []
   );
 
+  const soilTypeOptions = useMemo(
+    () => [
+      { label: strings.SOIL_TYPE_CLAY, value: 'Clay' },
+      { label: strings.SOIL_TYPE_SANDY_CLAY, value: 'SandyClay' },
+      { label: strings.SOIL_TYPE_SANDY_CLAY_LOAM, value: 'SandyClayLoam' },
+      { label: strings.SOIL_TYPE_CLAY_LOAM, value: 'ClayLoam' },
+      { label: strings.SOIL_TYPE_SILTY_CLAY, value: 'SiltyClay' },
+      { label: strings.SOIL_TYPE_SILTY_CLAY_LOAM, value: 'SiltyClayLoam' },
+      { label: strings.SOIL_TYPE_SANDY_LOAM, value: 'SandyLoam' },
+      { label: strings.SOIL_TYPE_LOAMY_SAND, value: 'LoamySand' },
+      { label: strings.SOIL_TYPE_SAND, value: 'Sand' },
+      { label: strings.SOIL_TYPE_LOAM, value: 'Loam' },
+      { label: strings.SOIL_TYPE_SILT_LOAM, value: 'SiltLoam' },
+      { label: strings.SOIL_TYPE_SILT, value: 'Silt' },
+      { label: strings.SOIL_TYPE_UNKNOWN, value: 'Unknown' },
+    ],
+    [strings]
+  );
+
   const isMangrove = useMemo(() => {
     return record.biomassMeasurement.forestType === 'Mangrove';
   }, [record]);
@@ -180,6 +201,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
         type: 'Biomass',
         description: record.biomassMeasurement?.description,
         soilAssessment: record.biomassMeasurement?.soilAssessment,
+        soilType: isAdditionalBiomassFieldsEnabled ? record.biomassMeasurement?.soilType : undefined,
         forestType: record.biomassMeasurement?.forestType,
         ph: record.biomassMeasurement?.ph,
         salinity: record.biomassMeasurement?.salinity,
@@ -215,7 +237,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
         }
       }
     })();
-  }, [record, results, setOpen, update, observationId, snackbar]);
+  }, [isAdditionalBiomassFieldsEnabled, record, results, setOpen, update, observationId, snackbar]);
 
   return (
     open && (
@@ -402,6 +424,16 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                   />
                 </Box>
               </Box>
+
+              {isAdditionalBiomassFieldsEnabled && (
+                <Dropdown
+                  label={strings.SOIL_TYPE}
+                  selectedValue={record.biomassMeasurement?.soilType}
+                  options={soilTypeOptions}
+                  onChange={onChangeHandler('biomassMeasurement.soilType')}
+                  sx={{ paddingTop: '16px' }}
+                />
+              )}
             </Box>
           </DialogBox>
         )}

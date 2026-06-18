@@ -2059,6 +2059,20 @@ SOIL_EROSION,Érosion des sols,5620daeb
 SOIL_PHOTO,Photo du sol,5a089072
 SOIL_PHOTO_CANNOT_BE_DELETED,La photo du sol ne peut pas être supprimée.,5b7af46a
 SOIL_PHOTO_CANNOT_DELETE_INFO,Les photos du sol ne peuvent pas être supprimées.,07d41270
+SOIL_TYPE,Type de sol,2191bdd9
+SOIL_TYPE_CLAY,Argile,ad81489c
+SOIL_TYPE_CLAY_LOAM,Terre argilo-limoneuse,c48d63cc
+SOIL_TYPE_LOAM,Terre franche,337d0cfe
+SOIL_TYPE_LOAMY_SAND,Sable limoneux,acb59d81
+SOIL_TYPE_SAND,Sable,5d54e2e8
+SOIL_TYPE_SANDY_CLAY,Argile sableuse,d2041371
+SOIL_TYPE_SANDY_CLAY_LOAM,Terre argilo-sableuse,cfba52e9
+SOIL_TYPE_SANDY_LOAM,Terre sableuse,293533f8
+SOIL_TYPE_SILT,Limon,576ca2c1
+SOIL_TYPE_SILT_LOAM,Terre limoneuse,b540d046
+SOIL_TYPE_SILTY_CLAY,Argile limoneuse,99ec02c4
+SOIL_TYPE_SILTY_CLAY_LOAM,Terre argilo-limoneuse,e8c051d9
+SOIL_TYPE_UNKNOWN,Inconnu,97ccc176
 SOMETHING_WENT_WRONG,Une erreur s'est produite.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si vous avez des difficultés à utiliser Terraware, veuillez nous signaler tout problème que vous rencontrez et nous ferons le nécessaire pour y remédier.",c506e77d
 SOMETHING_WENT_WRONG_TITLE,Une erreur s'est produite...,bf2e66a4
