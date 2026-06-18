@@ -2060,7 +2060,7 @@ SOIL_EROSION,Erosión del suelo,5620daeb
 SOIL_PHOTO,Foto del suelo,5a089072
 SOIL_PHOTO_CANNOT_BE_DELETED,No se puede eliminar la foto del suelo,5b7af46a
 SOIL_PHOTO_CANNOT_DELETE_INFO,No se pueden eliminar las fotos del suelo.,07d41270
-SOIL_TYPE,Tipo de suelo,aa27a7a9
+SOIL_TYPE,Tipo de suelo,2191bdd9
 SOIL_TYPE_CLAY,Arcilla,ad81489c
 SOIL_TYPE_CLAY_LOAM,Franco arcilloso,c48d63cc
 SOIL_TYPE_LOAM,Franco,337d0cfe
