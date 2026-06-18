@@ -13,6 +13,7 @@ import { useLatestSiteObservationResult } from 'src/hooks/observations';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePlantingSite from 'src/hooks/usePlantingSite';
+import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
@@ -62,6 +63,9 @@ export default function PlantsDashboardView({
   }, [plantingSite]);
 
   const { observation: latestObservationResult } = useLatestSiteObservationResult(selectedPlantingSiteId, 'Substratum');
+
+  // Poll for survival rate recalculation and refresh observation results when it completes.
+  useSurvivalRateCalculationInProgress(plantingSite?.id);
   const hasObservationResults = useMemo(() => !!latestObservationResultId, [latestObservationResultId]);
 
   const onPreferences = useCallback(

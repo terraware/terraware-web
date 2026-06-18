@@ -10,6 +10,7 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useStickyPlantingSiteId from 'src/hooks/useStickyPlantingSiteId';
+import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyCountObservationsQuery } from 'src/queries/search/observations';
@@ -33,6 +34,9 @@ const ObservationListView = (): JSX.Element => {
   const observableSites = useObservablePlantingSites();
   const { plantingSites } = useOrganizationPlantingSites();
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('observations-list', -1);
+
+  // Poll for survival rate recalculation and refresh observation results when it completes.
+  useSurvivalRateCalculationInProgress(selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId);
 
   const [countObservations, countObservationsResult] = useLazyCountObservationsQuery();
   const hasObservationsResults = useMemo(() => !!countObservationsResult.data, [countObservationsResult]);
