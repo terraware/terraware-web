@@ -368,18 +368,16 @@ const Step1Content = ({
 
   return (
     <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
-      {facilityId !== undefined && (
-        <Box maxWidth='320px'>
-          <DatePicker
-            id='withdraw-date'
-            label={strings.WITHDRAW_DATE_REQUIRED}
-            value={withdrawDate}
-            onDateChange={(value?: DateTime) => setWithdrawDate(value?.toISODate() ?? '')}
-            aria-label='withdraw-date'
-            sx={{ textAlign: 'left' }}
-          />
-        </Box>
-      )}
+      <Box maxWidth='320px'>
+        <DatePicker
+          id='withdraw-date'
+          label={strings.WITHDRAW_DATE_REQUIRED}
+          value={withdrawDate}
+          onDateChange={(value?: DateTime) => setWithdrawDate(value?.toISODate() ?? '')}
+          aria-label='withdraw-date'
+          sx={{ textAlign: 'left' }}
+        />
+      </Box>
       <Box maxWidth='320px'>
         <Box display='flex' alignItems='center' gap={theme.spacing(0.5)} marginBottom={theme.spacing(0.5)}>
           <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
@@ -400,6 +398,7 @@ const Step1Content = ({
           onChange={(value) => setFacilityId(value !== undefined && value !== '' ? Number(value) : undefined)}
           fullWidth
           sx={{ textAlign: 'left' }}
+          fixedMenu
         />
       </Box>
 
