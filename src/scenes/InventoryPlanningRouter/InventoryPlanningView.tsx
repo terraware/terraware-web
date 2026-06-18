@@ -78,9 +78,11 @@ const InventoryPlanningView = (): JSX.Element => {
   const plantingSiteOptions = useMemo<DropdownItem[]>(
     () => [
       { label: strings.ALL_PLANTING_SITES, value: 'all' },
-      ...(plantingSitesData?.sites ?? []).map((s) => ({ label: s.name, value: s.id })),
+      ...(plantingSitesData?.sites ?? [])
+        .toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+        .map((s) => ({ label: s.name, value: s.id })),
     ],
-    [plantingSitesData]
+    [activeLocale, plantingSitesData]
   );
 
   const eligiblePlantingSeasons = useMemo(() => {
@@ -96,9 +98,11 @@ const InventoryPlanningView = (): JSX.Element => {
   const plantingSeasonOptions = useMemo<DropdownItem[]>(() => {
     return [
       { label: strings.ALL_PLANTING_SEASONS, value: 'all' },
-      ...eligiblePlantingSeasons.map((s) => ({ label: s.name, value: s.id })),
+      ...eligiblePlantingSeasons
+        .toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+        .map((s) => ({ label: s.name, value: s.id })),
     ];
-  }, [eligiblePlantingSeasons]);
+  }, [activeLocale, eligiblePlantingSeasons]);
 
   useEffect(() => {
     if (plantingSeasonId !== undefined && !eligiblePlantingSeasons.some((season) => season.id === plantingSeasonId)) {
@@ -120,9 +124,11 @@ const InventoryPlanningView = (): JSX.Element => {
       : species;
     return [
       { label: strings.ALL_SPECIES, value: 'all' },
-      ...filteredSpecies.map((s) => ({ label: s.scientificName, value: s.id })),
+      ...filteredSpecies
+        .toSorted((a, b) => a.scientificName.localeCompare(b.scientificName, activeLocale || undefined))
+        .map((s) => ({ label: s.scientificName, value: s.id })),
     ];
-  }, [selectedPlantingSeasonSpeciesIds, species]);
+  }, [activeLocale, selectedPlantingSeasonSpeciesIds, species]);
 
   useEffect(() => {
     if (
