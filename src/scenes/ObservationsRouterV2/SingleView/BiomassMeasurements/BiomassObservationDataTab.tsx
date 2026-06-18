@@ -311,7 +311,7 @@ const BiomassObservationDataTab = () => {
             />
           </Box>
           <Box>
-            <Textfield id='soilType' label={strings.SOIL_TYPE} value={soilTypeLabel} type='text' display />
+            <Textfield display id='soilType' label={strings.SOIL_TYPE} type='text' value={soilTypeLabel} />
           </Box>
         </Box>
       </Box>
