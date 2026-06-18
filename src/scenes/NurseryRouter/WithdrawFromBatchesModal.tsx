@@ -470,7 +470,18 @@ const Step2Content = ({
 }: Step2ContentProps): JSX.Element => {
   const theme = useTheme();
 
-  if (substrata.length === 0) {
+  const withdrawableSubstrata = useMemo(
+    () =>
+      substrata
+        .map((substratum) => ({
+          ...substratum,
+          species: substratum.species.filter((species) => (batchesBySpecies.get(species.speciesId)?.length ?? 0) > 0),
+        }))
+        .filter((substratum) => substratum.species.length > 0),
+    [batchesBySpecies, substrata]
+  );
+
+  if (withdrawableSubstrata.length === 0) {
     return (
       <Box padding={theme.spacing(2)}>
         <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
@@ -482,7 +493,7 @@ const Step2Content = ({
 
   return (
     <Box display='flex' flexDirection='column' gap={theme.spacing(3)}>
-      {substrata.map((substratum) => (
+      {withdrawableSubstrata.map((substratum) => (
         <Box key={substratum.substratumId} display='flex' flexDirection='column' gap={theme.spacing(2)}>
           <Box display='flex' gap={theme.spacing(6)}>
             <Box flexGrow={1}>
