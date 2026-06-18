@@ -7,6 +7,10 @@ import { useLocalization } from 'src/providers';
 import { BatchForWithdraw } from 'src/queries/search/batchesForWithdraw';
 import { PlantingDateRequestSubstratumSpecies } from 'src/queries/search/plantingDateRequests';
 
+const batchGridTemplateColumns = '2fr 1fr 1fr 1fr';
+const withdrawColumnSx = { gridColumn: 4 };
+const withdrawInputSx = { gridColumn: 4, justifySelf: 'end', width: '100px' };
+
 export type RequestSpeciesBoxProps = {
   species: PlantingDateRequestSubstratumSpecies;
   substratumId: number;
@@ -36,16 +40,22 @@ const RequestSpeciesBox = ({
         sx={{
           backgroundColor: theme.palette.TwClrBgSecondary,
           borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
         }}
       >
         <Typography fontSize='16px' fontWeight={400} textAlign='left'>
           {species.scientificName}
           {species.commonName ? ` (${species.commonName})` : ''}
         </Typography>
+        <Typography fontSize='14px' fontWeight={600}>
+          {species.quantity.toLocaleString()} {strings.REQUESTED}
+        </Typography>
       </Box>
       <Box
         display='grid'
-        gridTemplateColumns='2fr 1fr 1fr 1fr'
+        gridTemplateColumns={batchGridTemplateColumns}
         gap={theme.spacing(1)}
         padding={theme.spacing(1, 2)}
         sx={{
@@ -56,12 +66,9 @@ const RequestSpeciesBox = ({
           {strings.SEEDLING_BATCH}
         </Typography>
         <Typography fontSize='14px' fontWeight={600} textAlign='right'>
-          {strings.REQUESTED}
-        </Typography>
-        <Typography fontSize='14px' fontWeight={600} textAlign='right'>
           {strings.READY_TO_PLANT}
         </Typography>
-        <Typography fontSize='14px' fontWeight={600} textAlign='right'>
+        <Typography fontSize='14px' fontWeight={600} textAlign='right' sx={withdrawColumnSx}>
           {strings.WITHDRAW}
         </Typography>
       </Box>
@@ -81,7 +88,7 @@ const RequestSpeciesBox = ({
             <Box
               key={batch.batchId}
               display='grid'
-              gridTemplateColumns='2fr 1fr 1fr 1fr'
+              gridTemplateColumns={batchGridTemplateColumns}
               gap={theme.spacing(1)}
               alignItems='center'
               padding={theme.spacing(1, 2)}
@@ -90,12 +97,9 @@ const RequestSpeciesBox = ({
                 {batch.batchNumber}
               </Typography>
               <Typography fontSize='16px' textAlign='right'>
-                {species.quantity.toLocaleString()}
-              </Typography>
-              <Typography fontSize='16px' textAlign='right'>
                 {batch.readyQuantity.toLocaleString()}
               </Typography>
-              <Box>
+              <Box sx={withdrawInputSx}>
                 <TextField
                   id={`withdraw-${batch.batchId}-${substratumId}`}
                   type='number'
