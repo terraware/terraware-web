@@ -237,7 +237,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
         }
       }
     })();
-  }, [record, results, setOpen, update, observationId, snackbar]);
+  }, [isAdditionalBiomassFieldsEnabled, record, results, setOpen, update, observationId, snackbar]);
 
   return (
     open && (
