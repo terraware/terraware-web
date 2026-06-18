@@ -1,3 +1,4 @@
+e770be9d Show survival rate recalculation in-progress banner (#5894)
 de684fce Poll survival rate recalculation and auto-refresh observation results (#5893)
 c5951975 Add PlantingSiteObservations cache tag to observation results (#5892)
 891e9592 Removed useNewTables flag (#5887)
