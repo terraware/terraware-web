@@ -36,7 +36,13 @@ const SeedlingBatchBox = ({
 
   return (
     <Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}>
-      <Box padding={theme.spacing(1.5, 2)} sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}>
+      <Box
+        padding={theme.spacing(1.5, 2)}
+        sx={{
+          backgroundColor: theme.palette.TwClrBgSecondary,
+          borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+        }}
+      >
         <Typography fontSize='16px' fontWeight={400} textAlign='left'>
           {speciesName}
         </Typography>
@@ -46,7 +52,9 @@ const SeedlingBatchBox = ({
         gridTemplateColumns={tableColumns}
         gap={theme.spacing(4)}
         padding={theme.spacing(1, 2)}
-        sx={{ borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
+        sx={{
+          backgroundColor: theme.palette.TwClrBgSecondary,
+        }}
       >
         <Typography fontSize='14px' fontWeight={600} textAlign='left'>
           {strings.SEEDLING_BATCH}

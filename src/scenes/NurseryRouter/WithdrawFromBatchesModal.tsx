@@ -404,16 +404,11 @@ const Step1Content = ({
       </Box>
 
       {facilityId !== undefined && (
-        <Box
-          marginTop={theme.spacing(2)}
-          sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}`, borderRadius: '8px' }}
-        >
+        <Box marginTop={theme.spacing(2)} sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}>
           <Box
             padding={theme.spacing(1.5, 2)}
             sx={{
               backgroundColor: theme.palette.TwClrBgSecondary,
-              borderTopLeftRadius: '8px',
-              borderTopRightRadius: '8px',
             }}
           >
             <Typography fontSize='16px' fontWeight={600}>
