@@ -2,7 +2,6 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
-import isEnabled from 'src/features';
 import {
   Button,
   DatePicker,
@@ -14,6 +13,7 @@ import {
 } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
+import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import {
@@ -43,7 +43,7 @@ type EditQualitativeDataModalProps = {
 const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: EditQualitativeDataModalProps) => {
   const { activeLocale, strings } = useLocalization();
   const snackbar = useSnackbar();
-  const isAdditionalBiomassFieldsEnabled = isEnabled('Additional Biomass Observation Fields');
+  const isAdditionalBiomassFieldsEnabled = isEnabled('Additional Biomass Fields');
 
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);

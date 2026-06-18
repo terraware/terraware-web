@@ -2,11 +2,11 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import isEnabled from 'src/features';
 import { Button, Icon, Textfield, Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
+import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -30,7 +30,7 @@ import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 const BiomassObservationDataTab = () => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const isAdditionalBiomassFieldsEnabled = isEnabled('Additional Biomass Observation Fields');
+  const isAdditionalBiomassFieldsEnabled = isEnabled('Additional Biomass Fields');
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
 

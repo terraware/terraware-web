@@ -5,7 +5,7 @@ export type FeatureName =
   | 'Show Production View'
   | 'Virtual Monitoring Plots'
   | 'Planting Seasons'
-  | 'Additional Biomass Observation Fields';
+  | 'Additional Biomass Fields';
 
 export type Feature = {
   name: FeatureName;
@@ -58,12 +58,12 @@ export const OPT_IN_FEATURES: Feature[] = [
     disclosure: ['This is a WIP'],
   },
   {
-    name: 'Additional Biomass Observation Fields',
+    name: 'Additional Biomass Fields',
     preferenceName: 'additionalBiomassObservationFields',
     active: true,
     enabled: false,
     allowInternalProduction: false,
-    description: ['Additional biomass observation fields'],
+    description: ['Additional Biomass Fields'],
     disclosure: ['This is a WIP'],
   },
 ];
