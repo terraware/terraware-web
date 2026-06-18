@@ -385,11 +385,6 @@ const Step1Content = ({
           <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
             {strings.FROM_NURSERY_REQUIRED}
           </Typography>
-          <Tooltip title={strings.NURSERY_SUMMARY_TOOLTIP}>
-            <Box display='flex' alignItems='center'>
-              <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
-            </Box>
-          </Tooltip>
         </Box>
         <Dropdown
           id='nursery'
@@ -411,9 +406,16 @@ const Step1Content = ({
               backgroundColor: theme.palette.TwClrBgSecondary,
             }}
           >
-            <Typography fontSize='16px' fontWeight={600}>
-              {strings.NURSERY_SUMMARY}
-            </Typography>
+            <Box display='flex' alignItems='center' gap={theme.spacing(0.5)}>
+              <Typography fontSize='16px' fontWeight={400} textAlign={'left'}>
+                {strings.NURSERY_SUMMARY}
+              </Typography>
+              <Tooltip title={strings.NURSERY_SUMMARY_TOOLTIP}>
+                <Box display='flex' alignItems='center'>
+                  <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+                </Box>
+              </Tooltip>
+            </Box>
           </Box>
           <Box
             display='grid'
