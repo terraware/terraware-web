@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import isEnabled from 'src/features';
 import { Button, Icon, Textfield, Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
@@ -29,6 +30,7 @@ import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 const BiomassObservationDataTab = () => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const isAdditionalBiomassFieldsEnabled = isEnabled('Additional Biomass Observation Fields');
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
 
@@ -310,9 +312,11 @@ const BiomassObservationDataTab = () => {
               display={true}
             />
           </Box>
-          <Box>
-            <Textfield display id='soilType' label={strings.SOIL_TYPE} type='text' value={soilTypeLabel} />
-          </Box>
+          {isAdditionalBiomassFieldsEnabled && (
+            <Box>
+              <Textfield display id='soilType' label={strings.SOIL_TYPE} type='text' value={soilTypeLabel} />
+            </Box>
+          )}
         </Box>
       </Box>
       <Box paddingTop={2}>

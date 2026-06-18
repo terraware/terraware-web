@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
+import isEnabled from 'src/features';
 import {
   Button,
   DatePicker,
@@ -42,6 +43,7 @@ type EditQualitativeDataModalProps = {
 const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: EditQualitativeDataModalProps) => {
   const { activeLocale, strings } = useLocalization();
   const snackbar = useSnackbar();
+  const isAdditionalBiomassFieldsEnabled = isEnabled('Additional Biomass Observation Fields');
 
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
@@ -199,7 +201,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
         type: 'Biomass',
         description: record.biomassMeasurement?.description,
         soilAssessment: record.biomassMeasurement?.soilAssessment,
-        soilType: record.biomassMeasurement?.soilType,
+        soilType: isAdditionalBiomassFieldsEnabled ? record.biomassMeasurement?.soilType : undefined,
         forestType: record.biomassMeasurement?.forestType,
         ph: record.biomassMeasurement?.ph,
         salinity: record.biomassMeasurement?.salinity,
@@ -423,14 +425,15 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                 </Box>
               </Box>
 
-              <Dropdown
-                fullWidth
-                label={strings.SOIL_TYPE}
-                selectedValue={record.biomassMeasurement?.soilType}
-                options={soilTypeOptions}
-                onChange={onChangeHandler('biomassMeasurement.soilType')}
-                sx={{ paddingTop: '16px' }}
-              />
+              {isAdditionalBiomassFieldsEnabled && (
+                <Dropdown
+                  label={strings.SOIL_TYPE}
+                  selectedValue={record.biomassMeasurement?.soilType}
+                  options={soilTypeOptions}
+                  onChange={onChangeHandler('biomassMeasurement.soilType')}
+                  sx={{ paddingTop: '16px' }}
+                />
+              )}
             </Box>
           </DialogBox>
         )}
