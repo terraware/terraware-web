@@ -10,7 +10,7 @@ import strings from 'src/strings';
 
 type HighestAndLowestSurvivalRateStrataCardProps = {
   plantingSiteId?: number;
-  projectId?: number;
+  projectId?: number | 'all';
 };
 
 type StratumWithSite = {
@@ -24,13 +24,16 @@ export default function HighestAndLowestSurvivalRateStrataCard({
   projectId,
 }: HighestAndLowestSurvivalRateStrataCardProps): JSX.Element {
   const theme = useTheme();
-  const isProjectView = !plantingSiteId && projectId !== undefined;
+  const isProjectView = !plantingSiteId && typeof projectId === 'number';
 
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
   const { observation: latestObservationResult } = useLatestSiteObservationResult(plantingSiteId, 'Stratum');
 
-  const projectSiteResults = useProjectSiteObservationResults(projectId, isProjectView);
+  const projectSiteResults = useProjectSiteObservationResults(
+    typeof projectId === 'number' ? projectId : undefined,
+    isProjectView
+  );
 
   const survivalRateData = useMemo(() => {
     const candidates: StratumWithSite[] = isProjectView

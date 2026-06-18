@@ -31,7 +31,7 @@ export default function PlantingSiteTrendsCard({ plantingSiteId }: PlantingSiteT
   const [getSurvivalRateTrend, survivalRateTrendResponse] = useLazyGetStratumSurvivalRateTrendQuery();
 
   useEffect(() => {
-    if (selectedOrganization?.id && plantingSiteId && plantingSiteId !== -1) {
+    if (selectedOrganization?.id && plantingSiteId) {
       void listStrata({ organizationId: selectedOrganization.id, plantingSiteId }, true);
     }
   }, [listStrata, plantingSiteId, selectedOrganization?.id]);

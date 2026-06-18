@@ -20,13 +20,13 @@ import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
 
 type SurvivalRateCardProps = {
   plantingSiteId?: number;
-  projectId?: number;
+  projectId?: number | 'all';
 };
 
 export default function SurvivalRateCard({ plantingSiteId, projectId }: SurvivalRateCardProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const isProjectView = !plantingSiteId && projectId;
+  const isProjectView = !plantingSiteId && typeof projectId === 'number';
   const knowledgeBaseLinks = useKnowledgeBaseLinks();
   const trackEvent = useTrackEvent();
 
@@ -35,11 +35,14 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
   }, [isProjectView, trackEvent]);
 
   const { observation: latestObservationResult, isLoading: isLoadingObservation } = useLatestSiteObservationResult(
-    plantingSiteId === -1 ? undefined : plantingSiteId,
+    plantingSiteId,
     'Stratum'
   );
 
-  const projectSiteResults = useProjectSiteObservationResults(projectId, Boolean(isProjectView));
+  const projectSiteResults = useProjectSiteObservationResults(
+    typeof projectId === 'number' ? projectId : undefined,
+    isProjectView
+  );
 
   const weightedSurvivalRate = useMemo(() => {
     const validStrata = projectSiteResults.flatMap(({ site, result }) =>
