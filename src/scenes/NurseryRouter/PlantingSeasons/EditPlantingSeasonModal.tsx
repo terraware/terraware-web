@@ -141,7 +141,6 @@ const EditPlantingSeasonModal = ({
         </Grid>
         <Grid item xs={6}>
           <Box sx={{ alignItems: 'flex-end', display: 'flex', gap: theme.spacing(1) }}>
-            <Typography sx={{ paddingBottom: theme.spacing(1.25) }}>{strings.TO}</Typography>
             <Box sx={{ flex: 1 }}>
               <DatePicker
                 id='endDate'
