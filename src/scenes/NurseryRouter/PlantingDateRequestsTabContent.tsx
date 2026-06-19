@@ -48,9 +48,11 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
   const plantingSiteOptions = useMemo<DropdownItem[]>(
     () => [
       { label: strings.ALL_PLANTING_SITES, value: 'all' },
-      ...(plantingSitesData?.sites ?? []).map((s) => ({ label: s.name, value: s.id })),
+      ...(plantingSitesData?.sites ?? [])
+        .toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+        .map((s) => ({ label: s.name, value: s.id })),
     ],
-    [plantingSitesData, strings]
+    [activeLocale, plantingSitesData, strings]
   );
 
   const plantingSeasonOptions = useMemo<DropdownItem[]>(() => {
@@ -58,16 +60,20 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
     const filteredSeasons = plantingSiteId ? allSeasons.filter((s) => s.plantingSiteId === plantingSiteId) : allSeasons;
     return [
       { label: strings.ALL_PLANTING_SEASONS, value: 'all' },
-      ...filteredSeasons.map((s) => ({ label: s.name, value: s.id })),
+      ...filteredSeasons
+        .toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+        .map((s) => ({ label: s.name, value: s.id })),
     ];
-  }, [plantingSeasonsData, plantingSiteId, strings]);
+  }, [activeLocale, plantingSeasonsData, plantingSiteId, strings]);
 
   const speciesOptions = useMemo<DropdownItem[]>(
     () => [
       { label: strings.ALL_SPECIES, value: 'all' },
-      ...species.map((s) => ({ label: s.scientificName, value: s.id })),
+      ...species
+        .toSorted((a, b) => a.scientificName.localeCompare(b.scientificName, activeLocale || undefined))
+        .map((s) => ({ label: s.scientificName, value: s.id })),
     ],
-    [species, strings]
+    [activeLocale, species, strings]
   );
 
   const rows = requests ?? [];
