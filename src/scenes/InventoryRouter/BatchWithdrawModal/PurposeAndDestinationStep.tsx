@@ -15,6 +15,8 @@ import { NurseryWithdrawalPurpose, NurseryWithdrawalRequestPurposes } from 'src/
 import SpeciesTargetsTable from './SpeciesTargetsTable';
 import { BatchInfo, BatchWithdrawDraft } from './types';
 
+const NO_PLANTING_SEASON_VALUE = 'no-planting-season';
+
 type PurposeAndDestinationStepProps = {
   batches: BatchInfo[];
   contributor: boolean;
@@ -112,8 +114,11 @@ const PurposeAndDestinationStep = ({
   );
 
   const plantingSeasonOptions = useMemo<DropdownItem[]>(
-    () => selectableSeasonsForSite.map((s) => ({ label: s.name, value: s.id })),
-    [selectableSeasonsForSite]
+    () => [
+      { label: strings.NO_SEASON, value: NO_PLANTING_SEASON_VALUE },
+      ...selectableSeasonsForSite.map((s) => ({ label: s.name, value: s.id })),
+    ],
+    [selectableSeasonsForSite, strings.NO_SEASON]
   );
 
   // Stratum/Substratum options come from either the selected season's targets
@@ -261,7 +266,9 @@ const PurposeAndDestinationStep = ({
       )}
 
       {isPlanting && showPlantingSeasonSelector && (
-        <Box maxWidth={draft.plantingSiteId !== undefined && plantingSeasonOptions.length === 0 ? undefined : '320px'}>
+        <Box
+          maxWidth={draft.plantingSiteId !== undefined && selectableSeasonsForSite.length === 0 ? undefined : '320px'}
+        >
           <Box display='flex' alignItems='center' gap={theme.spacing(0.5)} marginBottom={theme.spacing(0.5)}>
             <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
               {strings.PLANTING_SEASON_OPTIONAL}
@@ -272,7 +279,7 @@ const PurposeAndDestinationStep = ({
               </Box>
             </Tooltip>
           </Box>
-          {draft.plantingSiteId !== undefined && plantingSeasonOptions.length === 0 ? (
+          {draft.plantingSiteId !== undefined && selectableSeasonsForSite.length === 0 ? (
             <Typography fontSize='16px' fontWeight={500} textAlign={'left'}>
               {strings.NO_ACTIVE_SEASONS_FOR_SITE}
             </Typography>
@@ -281,10 +288,13 @@ const PurposeAndDestinationStep = ({
               id='planting-season'
               label=''
               options={plantingSeasonOptions}
-              selectedValue={draft.plantingSeasonId}
+              selectedValue={draft.plantingSeasonId ?? NO_PLANTING_SEASON_VALUE}
               onChange={(value) =>
                 onChange({
-                  plantingSeasonId: value !== undefined && value !== '' ? Number(value) : undefined,
+                  plantingSeasonId:
+                    value !== undefined && value !== '' && value !== NO_PLANTING_SEASON_VALUE
+                      ? Number(value)
+                      : undefined,
                   stratumId: undefined,
                   substratumId: undefined,
                 })
