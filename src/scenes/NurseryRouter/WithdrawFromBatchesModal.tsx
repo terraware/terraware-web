@@ -383,11 +383,6 @@ const Step1Content = ({
           <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
             {strings.FROM_NURSERY_REQUIRED}
           </Typography>
-          <Tooltip title={strings.NURSERY_SUMMARY_TOOLTIP}>
-            <Box display='flex' alignItems='center'>
-              <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
-            </Box>
-          </Tooltip>
         </Box>
         <Dropdown
           id='nursery'
@@ -403,21 +398,23 @@ const Step1Content = ({
       </Box>
 
       {facilityId !== undefined && (
-        <Box
-          marginTop={theme.spacing(2)}
-          sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}`, borderRadius: '8px' }}
-        >
+        <Box marginTop={theme.spacing(2)} sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}>
           <Box
             padding={theme.spacing(1.5, 2)}
             sx={{
               backgroundColor: theme.palette.TwClrBgSecondary,
-              borderTopLeftRadius: '8px',
-              borderTopRightRadius: '8px',
             }}
           >
-            <Typography fontSize='16px' fontWeight={600}>
-              {strings.NURSERY_SUMMARY}
-            </Typography>
+            <Box display='flex' alignItems='center' gap={theme.spacing(0.5)}>
+              <Typography fontSize='16px' fontWeight={400} textAlign={'left'}>
+                {strings.NURSERY_SUMMARY}
+              </Typography>
+              <Tooltip title={strings.NURSERY_SUMMARY_TOOLTIP}>
+                <Box display='flex' alignItems='center'>
+                  <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+                </Box>
+              </Tooltip>
+            </Box>
           </Box>
           <Box
             display='grid'
@@ -472,7 +469,18 @@ const Step2Content = ({
 }: Step2ContentProps): JSX.Element => {
   const theme = useTheme();
 
-  if (substrata.length === 0) {
+  const withdrawableSubstrata = useMemo(
+    () =>
+      substrata
+        .map((substratum) => ({
+          ...substratum,
+          species: substratum.species.filter((species) => (batchesBySpecies.get(species.speciesId)?.length ?? 0) > 0),
+        }))
+        .filter((substratum) => substratum.species.length > 0),
+    [batchesBySpecies, substrata]
+  );
+
+  if (withdrawableSubstrata.length === 0) {
     return (
       <Box padding={theme.spacing(2)}>
         <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
@@ -484,7 +492,7 @@ const Step2Content = ({
 
   return (
     <Box display='flex' flexDirection='column' gap={theme.spacing(3)}>
-      {substrata.map((substratum) => (
+      {withdrawableSubstrata.map((substratum) => (
         <Box key={substratum.substratumId} display='flex' flexDirection='column' gap={theme.spacing(2)}>
           <Box display='flex' gap={theme.spacing(6)}>
             <Box flexGrow={1}>
