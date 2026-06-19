@@ -1,3 +1,4 @@
+c8c94b8a SW-8551 Cap the Allocated for Target progress bar at 100% (#5911)
 db3796d7 Bump form-data from 4.0.4 to 4.0.6 (#5907)
 cf5f6920 Update dependency @babel/core to v7.29.6 [SECURITY] (#5906)
 67337df3 SW-8431 Exceed validation shouldn't block add (#5903)
