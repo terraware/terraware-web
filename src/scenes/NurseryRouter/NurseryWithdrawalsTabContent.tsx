@@ -6,7 +6,7 @@ import NurseryWithdrawalsTable from './NurseryWithdrawalsTable';
 
 export default function NurseryWithdrawalsTabContent(): JSX.Element {
   return (
-    <Card flushMobile>
+    <Card flushMobile radius={'8px'}>
       <NurseryWithdrawalsTable />
     </Card>
   );

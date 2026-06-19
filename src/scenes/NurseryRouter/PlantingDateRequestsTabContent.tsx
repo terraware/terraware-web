@@ -80,7 +80,7 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
   const [withdrawRequest, setWithdrawRequest] = useState<PlantingDateRequestRow | undefined>(undefined);
 
   return (
-    <Card flushMobile>
+    <Card flushMobile radius='8px'>
       <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginBottom={theme.spacing(2)}>
         {strings.REVIEW_PENDING_REQUESTS_DESCRIPTION}
       </Typography>
