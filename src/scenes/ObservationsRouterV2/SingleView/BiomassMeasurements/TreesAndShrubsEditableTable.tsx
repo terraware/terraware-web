@@ -304,6 +304,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         enableBottomToolbar={false}
         enableTopToolbar={false}
         initialSorting={[{ id: 'speciesName', desc: false }]}
+        sx={{ '&& .Mui-TableHeadCell-Content-Wrapper': { whiteSpace: 'nowrap' } }}
       />
     </>
   );
