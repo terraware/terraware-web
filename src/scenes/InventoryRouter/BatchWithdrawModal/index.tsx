@@ -394,8 +394,13 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
                   display='grid'
                   gridTemplateColumns='110px 1fr'
                   gap={theme.spacing(2)}
-                  paddingY={theme.spacing(0.5)}
+                  paddingBottom={i === speciesSummary.length - 1 ? 0 : theme.spacing(1)}
+                  marginBottom={i === speciesSummary.length - 1 ? 0 : theme.spacing(1)}
                   textAlign={'left'}
+                  sx={{
+                    borderBottom:
+                      i === speciesSummary.length - 1 ? undefined : `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                  }}
                 >
                   <Box>
                     <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingBottom={1}>
@@ -414,7 +419,13 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
                     <Typography fontSize='14px' paddingBottom={1}>
                       {s.name}
                     </Typography>
-                    <Typography fontSize='14px'>{s.batchNumbers.join('  ')}</Typography>
+                    <Box display='flex' flexWrap='wrap' columnGap={theme.spacing(2)} rowGap={theme.spacing(1)}>
+                      {s.batchNumbers.map((batchNumber, batchIndex) => (
+                        <Typography key={`${batchNumber}-${batchIndex}`} component='span' fontSize='14px'>
+                          {batchNumber}
+                        </Typography>
+                      ))}
+                    </Box>
                   </Box>
                 </Box>
               ))}
