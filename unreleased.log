@@ -1,3 +1,5 @@
+f48031a4 SW-8542 Withdraw from Batches: Multiple batches styling needed (#5908)
+fccf1eb2 SW-8556 Withdrawal/Request Panel: update corner radius to 8px (#5913)
 4771697c SW-8552 Remove the "To" In the Edit Planting Season dialog (#5912)
 c8c94b8a SW-8551 Cap the Allocated for Target progress bar at 100% (#5911)
 db3796d7 Bump form-data from 4.0.4 to 4.0.6 (#5907)
