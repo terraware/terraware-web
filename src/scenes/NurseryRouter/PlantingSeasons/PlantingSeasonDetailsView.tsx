@@ -36,6 +36,7 @@ import PlantingDatesTab from './PlantingDatesTab';
 import PlantingSeasonStatusBadge from './PlantingSeasonStatusBadge';
 import SpeciesSummaryDrawer from './SpeciesSummaryDrawer';
 import SpeciesTargetsTab from './SpeciesTargetsTab';
+import { getTargetLocationNames } from './targetLocationNames';
 
 const PlantingSeasonDetailsView = (): JSX.Element => {
   const theme = useTheme();
@@ -148,10 +149,9 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
     return `${getMediumDate(season.startDate, activeLocale)} - ${getMediumDate(season.endDate, activeLocale)}`;
   }, [season, activeLocale]);
 
-  const strataNames = useMemo(() => (plantingSite?.strata ?? []).map((s) => s.name), [plantingSite]);
-  const substrataNames = useMemo(
-    () => (plantingSite?.strata ?? []).flatMap((s) => s.substrata.map((sub) => sub.fullName)),
-    [plantingSite]
+  const { strataNames, substrataNames } = useMemo(
+    () => getTargetLocationNames(plantingSite?.strata ?? [], speciesTargets?.targets ?? season?.speciesTargets ?? []),
+    [plantingSite?.strata, season?.speciesTargets, speciesTargets?.targets]
   );
 
   const numberColumn = (

@@ -15,6 +15,7 @@ import strings from 'src/strings';
 import { getMediumDate } from 'src/utils/dateFormatter';
 
 import PlantingSeasonStatusBadge from './PlantingSeasonStatusBadge';
+import { getTargetLocationNames } from './targetLocationNames';
 
 type PlantingSeasonBoxProps = {
   season: PlantingSeasonPayload;
@@ -58,8 +59,10 @@ const PlantingSeasonBox = ({ season, plantingSiteName, strata }: PlantingSeasonB
 
   const dateRange = `${getMediumDate(season.startDate, activeLocale)} - ${getMediumDate(season.endDate, activeLocale)}`;
 
-  const strataNames = useMemo(() => strata.map((s) => s.name), [strata]);
-  const substrataNames = useMemo(() => strata.flatMap((s) => s.substrata.map((sub) => sub.fullName)), [strata]);
+  const { strataNames, substrataNames } = useMemo(
+    () => getTargetLocationNames(strata, season.speciesTargets ?? []),
+    [season.speciesTargets, strata]
+  );
 
   const numberColumn = (
     label: string,
