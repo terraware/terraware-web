@@ -58,6 +58,11 @@ const PurposeAndDestinationStep = ({
   const purpose = draft.purpose;
   const isPlanting = purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
   const isNurseryTransfer = purpose === NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER;
+  const shouldShowSpeciesTargets =
+    isPlanting &&
+    draft.plantingSeasonId !== undefined &&
+    draft.stratumId !== undefined &&
+    draft.substratumId !== undefined;
 
   const eligibleBatchesForFromNursery = useMemo(
     () => (isPlanting ? batches.filter((batch) => batch.readyQuantity > 0) : batches),
@@ -321,7 +326,9 @@ const PurposeAndDestinationStep = ({
         </Box>
       )}
 
-      {isPlanting && speciesTargets && speciesTargets.length > 0 && <SpeciesTargetsTable rows={speciesTargets} />}
+      {shouldShowSpeciesTargets && speciesTargets && speciesTargets.length > 0 && (
+        <SpeciesTargetsTable rows={speciesTargets} />
+      )}
 
       {isNurseryTransfer && (
         <Box maxWidth='320px'>
