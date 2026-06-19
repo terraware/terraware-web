@@ -52,15 +52,13 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
 
   const defaultDraft = useCallback(
     (): BatchWithdrawDraft => ({
-      purpose: isContributor(selectedOrganization)
-        ? NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER
-        : NurseryWithdrawalRequestPurposes.OUTPLANT,
+      purpose: NurseryWithdrawalRequestPurposes.DEAD,
       withdrawnDate: todayIso(),
       notes: '',
       withdrawByBatch: {},
       photos: [],
     }),
-    [selectedOrganization]
+    []
   );
 
   const [draft, setDraft] = useState<BatchWithdrawDraft>(defaultDraft);

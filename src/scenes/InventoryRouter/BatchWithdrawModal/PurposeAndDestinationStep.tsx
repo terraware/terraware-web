@@ -219,6 +219,7 @@ const PurposeAndDestinationStep = ({
           value={purpose}
           onChange={(_event, value) => onChange({ purpose: value as NurseryWithdrawalPurpose })}
         >
+          <FormControlLabel value={NurseryWithdrawalRequestPurposes.DEAD} control={<Radio />} label={strings.DEAD} />
           {!contributor && (
             <FormControlLabel
               value={NurseryWithdrawalRequestPurposes.OUTPLANT}
@@ -232,7 +233,6 @@ const PurposeAndDestinationStep = ({
             control={<Radio />}
             label={strings.NURSERY_TRANSFER}
           />
-          <FormControlLabel value={NurseryWithdrawalRequestPurposes.DEAD} control={<Radio />} label={strings.DEAD} />
           <FormControlLabel value={NurseryWithdrawalRequestPurposes.OTHER} control={<Radio />} label={strings.OTHER} />
         </RadioGroup>
       </Box>
