@@ -975,6 +975,7 @@ const AddSpeciesRow = ({
           onChange={onSpeciesChange}
           fullWidth
           autocomplete
+          hideClearIcon
         />
       </Box>
       <Box display='flex' alignItems='flex-start' gap={theme.spacing(1)}>

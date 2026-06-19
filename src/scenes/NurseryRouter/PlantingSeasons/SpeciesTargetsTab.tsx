@@ -602,6 +602,7 @@ const AddSpeciesRow = ({
           onChange={onSpeciesChange}
           fullWidth
           autocomplete
+          hideClearIcon
           disabled={isUpserting}
         />
       </Box>
