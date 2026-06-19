@@ -1,4 +1,3 @@
-67337df3 SW-8431 Exceed validation shouldn't block add (#5903)
 b6da8dca SW-8540 In Nursery Summary, switch the ordering of the "Ready to Plant" and "Requested" columns (#5902)
 ea543188 SW-8530 Planting Season cards are showing Strata/Substrata that are not part of the season or date (#5901)
 1dafbae5 SW-8523 Columns in Quantities table not to design spec (#5900)
