@@ -1,3 +1,4 @@
+4771697c SW-8552 Remove the "To" In the Edit Planting Season dialog (#5912)
 c8c94b8a SW-8551 Cap the Allocated for Target progress bar at 100% (#5911)
 db3796d7 Bump form-data from 4.0.4 to 4.0.6 (#5907)
 cf5f6920 Update dependency @babel/core to v7.29.6 [SECURITY] (#5906)
