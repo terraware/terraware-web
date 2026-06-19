@@ -35,8 +35,10 @@ const PurposeAndDestinationStep = ({
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization?.id;
 
-  const [listPlantingSites, { data: plantingSitesData, isFetching: isPlantingSitesLoading }] =
-    useLazyListPlantingSitesQuery();
+  const [
+    listPlantingSites,
+    { data: plantingSitesData, isFetching: isPlantingSitesLoading, isUninitialized: isPlantingSitesUninitialized },
+  ] = useLazyListPlantingSitesQuery();
   const [listPlantingSeasons, { data: plantingSeasonsData }] = useLazyListPlantingSeasonsQuery();
 
   useEffect(() => {
@@ -176,7 +178,8 @@ const PurposeAndDestinationStep = ({
   );
 
   const noReadySeedlings = !hasReadyQuantities;
-  const plantingSitesDisabled = !isPlantingSitesLoading && plantingSites.length === 0;
+  const plantingSitesLoaded = !isPlantingSitesUninitialized && !isPlantingSitesLoading;
+  const plantingSitesDisabled = plantingSitesLoaded && plantingSites.length === 0;
   const outplantDisabled = noReadySeedlings || plantingSitesDisabled;
 
   useEffect(() => {
