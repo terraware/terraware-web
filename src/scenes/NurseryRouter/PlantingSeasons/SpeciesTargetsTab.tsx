@@ -65,8 +65,8 @@ const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabPr
         <Box
           sx={{
             backgroundColor: theme.palette.TwClrBaseWhite,
-            borderTopLeftRadius: '24px',
-            borderTopRightRadius: '24px',
+            borderTopLeftRadius: '8px',
+            borderTopRightRadius: '8px',
           }}
           padding={theme.spacing(3, 3, 0, 3)}
         >
@@ -152,7 +152,7 @@ const StratumSection = ({
   return (
     <Card
       flushMobile
-      radius={isFirst ? `0 0 ${theme.spacing(3)} ${theme.spacing(3)}` : undefined}
+      radius={isFirst ? `0 0 ${theme.spacing(1)} ${theme.spacing(1)}` : theme.spacing(1)}
       style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingBottom: 0, marginBottom: 3 }}
     >
       <Box
@@ -602,6 +602,7 @@ const AddSpeciesRow = ({
           onChange={onSpeciesChange}
           fullWidth
           autocomplete
+          hideClearIcon
           disabled={isUpserting}
         />
       </Box>

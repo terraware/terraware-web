@@ -462,7 +462,7 @@ const SeasonDetailRow = ({
   const draftIsValid = !Number.isNaN(parsedDraft) && parsedDraft >= 0;
   const exceedsAvailable = draftIsValid && parsedDraft > available;
 
-  const onSave = async () => {
+  const onSave = async (dismissExceedsAvailableError = false) => {
     if (!draftIsValid) {
       setDraftValue(season.allocated.toString());
       setEditing(false);
@@ -481,7 +481,7 @@ const SeasonDetailRow = ({
         return;
       }
     }
-    if (!exceedsAvailable) {
+    if (!exceedsAvailable || dismissExceedsAvailableError) {
       setEditing(false);
     }
   };
@@ -525,7 +525,7 @@ const SeasonDetailRow = ({
                   void onSave();
                 }
               }}
-              onBlur={() => void onSave()}
+              onBlur={() => void onSave(true)}
               min={0}
               autoFocus
               disabled={isSaving}
