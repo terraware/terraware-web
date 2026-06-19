@@ -354,6 +354,7 @@ const SpeciesRow = ({ row, index, expanded, onToggle, activeLocale }: SpeciesRow
   const availableColor =
     row.target > 0 && row.available < row.target ? theme.palette.TwClrTxtDanger : theme.palette.TwClrTxtSuccess;
   const percent = Math.round(getAllocationPercent(row.target, row.allocated));
+  const displayedPercent = Math.min(100, percent);
   const barColor = getAllocationProgressBarColor(row.target, row.allocated, theme);
 
   return (
@@ -409,14 +410,14 @@ const SpeciesRow = ({ row, index, expanded, onToggle, activeLocale }: SpeciesRow
           >
             <Box
               sx={{
-                width: `${Math.min(100, percent)}%`,
+                width: `${displayedPercent}%`,
                 height: '100%',
                 backgroundColor: barColor,
               }}
             />
           </Box>
           <Typography fontSize='14px' minWidth='40px' textAlign='right'>
-            {`${percent}%`}
+            {`${displayedPercent}%`}
           </Typography>
         </Box>
       </Box>
