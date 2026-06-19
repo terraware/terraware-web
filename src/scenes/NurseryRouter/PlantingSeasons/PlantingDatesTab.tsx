@@ -983,7 +983,6 @@ const AddSpeciesRow = ({
           type='number'
           label=''
           value={quantity}
-          placeholder={strings.INDICATOR_TYPE_GOAL}
           onChange={onQuantityChange}
           onBlur={() => setQuantityFocused(false)}
           onFocus={() => setQuantityFocused(true)}
