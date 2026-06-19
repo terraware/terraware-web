@@ -2003,6 +2003,7 @@ SHIFT,Shift,4d173d2a
 SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52
 SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Mostrar especies con todas las accesiones agotadas,656a843d
 SHRUB,Arbusto,af50871c
+SHRUB_CROWN_DIAMETER_CM,Diámetro de la copa del arbusto (cm),61918163
 SHRUBS,Arbustos,377018f6
 SILVOPASTURE,Sistema selvopastoril,9d942e38
 SIMPLE_SITE,Terreno sencillo,760ab731
@@ -2415,6 +2416,7 @@ TREATMENT,Tratamiento,d92a8264
 TREATMENT_AFTER,Tratamiento (después),47efd418
 TREATMENT_BEFORE,Tratamiento (antes),311905d8
 TREE,Árbol,786d8845
+TREE_CROWN_DIAMETER_CM,Diámetro de la copa del árbol (cm),f69d14ce
 TREES_AND_SHRUBS,Árboles y arbustos,e40ed4ab
 TREES_AND_SHRUBS_TABLE_INSTRUCTIONS,Haga clic en un número de la tabla para editarlo,0c733b0b
 TREES_PLANTED,Árboles plantados,cd803b87

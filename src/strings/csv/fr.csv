@@ -2002,6 +2002,7 @@ SHIFT,Maj,4d173d2a
 SHOW_COLOR_KEY,Afficher la légende des couleurs,7ba69c52
 SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Afficher les espèces dont toutes les accessions sont épuisées,656a843d
 SHRUB,Arbuste,af50871c
+SHRUB_CROWN_DIAMETER_CM,Diamètre de la couronne de l’arbuste (cm),61918163
 SHRUBS,Arbustes,377018f6
 SILVOPASTURE,Sylviculture,9d942e38
 SIMPLE_SITE,Site simple,760ab731
@@ -2415,6 +2416,7 @@ TREATMENT,Traitement,d92a8264
 TREATMENT_AFTER,Traitement (après),47efd418
 TREATMENT_BEFORE,Traitement (avant),311905d8
 TREE,Arbre,786d8845
+TREE_CROWN_DIAMETER_CM,Diamètre de la couronne de l’arbre (cm),f69d14ce
 TREES_AND_SHRUBS,Arbres et arbustes,e40ed4ab
 TREES_AND_SHRUBS_TABLE_INSTRUCTIONS,Cliquez sur un nombre dans le tableau pour le modifier,0c733b0b
 TREES_PLANTED,Arbres plantés,cd803b87

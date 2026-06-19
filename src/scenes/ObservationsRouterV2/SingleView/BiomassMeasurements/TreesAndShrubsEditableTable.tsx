@@ -29,6 +29,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const observationId = Number(params.observationId);
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
+  const forestType = results?.biomassMeasurements?.forestType;
 
   const [update] = useUpdateCompletedObservationPlotMutation();
   const [optimisticValues, setOptimisticValues] = useState<Record<number, Partial<TreeRow>>>({});
@@ -116,6 +117,17 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [strings.YES, strings.NO]
   );
 
+  const TreeCrownDiameterCell = useCallback(
+    ({ row }: { row: { original: TreeRow } }) => (
+      <>
+        {row.original.treeGrowthForm !== 'Shrub' && forestType === 'Mangrove'
+          ? row.original.treeCrownDiameter ?? ''
+          : ''}
+      </>
+    ),
+    [forestType]
+  );
+
   const [noteModalRow, setNoteModalRow] = useState<TreeRow | undefined>(undefined);
 
   const DescriptionCell = useCallback(
@@ -177,9 +189,19 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         },
       },
       {
+        id: 'treeCrownDiameter',
+        accessorKey: 'treeCrownDiameter',
+        header: strings.TREE_CROWN_DIAMETER_CM,
+        Cell: TreeCrownDiameterCell,
+        enableEditing: (row) => row.original.treeGrowthForm !== 'Shrub' && forestType === 'Mangrove',
+        editConfig: {
+          onSave: (row, value) => saveRecordedTree('treeCrownDiameter', row, value),
+        },
+      },
+      {
         id: 'shrubDiameter',
         accessorKey: 'shrubDiameter',
-        header: strings.CROWN_DIAMETER_CM,
+        header: strings.SHRUB_CROWN_DIAMETER_CM,
         editConfig: {
           onSave: (row, value) => saveRecordedTree('shrubDiameter', row, value),
         },
@@ -240,8 +262,10 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       saveRecordedTree,
       saveBiomassSpecies,
       strings,
+      forestType,
       TreeNumberCell,
       GrowthFormCell,
+      TreeCrownDiameterCell,
       IsInvasiveCell,
       IsThreatenedCell,
       IsDeadCell,
