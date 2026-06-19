@@ -33,7 +33,7 @@ const PurposeAndDestinationStep = ({
   onChange,
 }: PurposeAndDestinationStepProps): JSX.Element => {
   const theme = useTheme();
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization?.id;
 
@@ -91,8 +91,11 @@ const PurposeAndDestinationStep = ({
   }, [selectedOrganization, draft.fromFacilityId]);
 
   const plantingSiteOptions = useMemo<DropdownItem[]>(
-    () => plantingSites.map((s) => ({ label: s.name, value: s.id })),
-    [plantingSites]
+    () =>
+      plantingSites
+        .toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+        .map((s) => ({ label: s.name, value: s.id })),
+    [activeLocale, plantingSites]
   );
 
   // Non-closed seasons with species targets for the selected planting site.
@@ -116,9 +119,11 @@ const PurposeAndDestinationStep = ({
   const plantingSeasonOptions = useMemo<DropdownItem[]>(
     () => [
       { label: strings.NO_SEASON, value: NO_PLANTING_SEASON_VALUE },
-      ...selectableSeasonsForSite.map((s) => ({ label: s.name, value: s.id })),
+      ...selectableSeasonsForSite
+        .toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+        .map((s) => ({ label: s.name, value: s.id })),
     ],
-    [selectableSeasonsForSite, strings.NO_SEASON]
+    [activeLocale, selectableSeasonsForSite, strings.NO_SEASON]
   );
 
   // Stratum/Substratum options come from either the selected season's targets
