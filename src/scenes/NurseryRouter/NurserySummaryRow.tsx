@@ -59,10 +59,10 @@ const NurserySummaryRow = ({ species, ready, index }: NurserySummaryRowProps): J
         )}
       </Box>
       <Typography fontSize='14px' textAlign='right'>
-        {species.requestedQuantity.toLocaleString()}
+        {ready.toLocaleString()}
       </Typography>
       <Typography fontSize='14px' textAlign='right'>
-        {ready.toLocaleString()}
+        {species.requestedQuantity.toLocaleString()}
       </Typography>
       <Typography fontSize='14px' textAlign='right' color={coverageColor} fontWeight={600}>
         {coverageLabel}

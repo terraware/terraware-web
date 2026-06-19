@@ -427,10 +427,10 @@ const Step1Content = ({
               {strings.SPECIES}
             </Typography>
             <Typography fontSize='14px' fontWeight={600} textAlign='right'>
-              {strings.REQUESTED}
+              {strings.READY_TO_PLANT}
             </Typography>
             <Typography fontSize='14px' fontWeight={600} textAlign='right'>
-              {strings.READY_TO_PLANT}
+              {strings.REQUESTED}
             </Typography>
             <Typography fontSize='14px' fontWeight={600} textAlign='right'>
               {strings.COVERAGE}
