@@ -75,7 +75,7 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
     : undefined;
 
   return (
-    <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+    <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }} radius='8px'>
       {scheduledDates.length === 0 && !editing ? (
         <EmptyState onAdd={() => setEditing({ mode: 'add' })} readOnly={readOnly} />
       ) : (
