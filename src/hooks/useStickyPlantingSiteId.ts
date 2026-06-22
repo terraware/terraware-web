@@ -23,6 +23,7 @@ const useStickyPlantingSiteId = (preferenceName: string) => {
         const storedPlantingSiteId = stickyPlantingSite.plantingSiteId;
         const isAllPlantingSites =
           storedPlantingSiteId === ALL_PLANTING_SITES || Number(storedPlantingSiteId) === LEGACY_ALL_PLANTING_SITES;
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setSelectedPlantingSiteId(isAllPlantingSites ? ALL_PLANTING_SITES : Number(storedPlantingSiteId));
       }
     }

@@ -2,28 +2,22 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { DropdownItem } from '@terraware/web-components';
-import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
-import { DateTime } from 'luxon';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import Link from 'src/components/common/Link';
-import { APP_PATHS, MONITORING_PLOT_SIZE, SQ_M_TO_HECTARES } from 'src/constants';
-import { useLatestSiteObservationResult } from 'src/hooks/observations';
+import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePlantingSite from 'src/hooks/usePlantingSite';
-import useStickyPlantingSiteId, { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
+import useStickyPlantingSiteId, { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
 import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
-import { useListProjectsQuery } from 'src/queries/generated/projects';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
-import { isAfter } from 'src/utils/dateUtils';
 
 import EmptyPlantingSiteMap from './components/EmptyPlantingSiteMap';
+import LatestObservationLink from './components/LatestObservationLink';
 import MultiplePlantingSiteMap from './components/MultiplePlantingSiteMap';
 import PlantDashboardMap from './components/PlantDashboardMap';
 import PlantingDensityCard from './components/PlantingDensityCard';
@@ -31,6 +25,7 @@ import PlantingSiteTrendsCard from './components/PlantingSiteTrendsCard';
 import PlantsAndSpeciesCard from './components/PlantsAndSpeciesCard';
 import PlantsDashboardHeader from './components/PlantsDashboardHeader';
 import SurvivalRateCard from './components/SurvivalRateCard';
+import useDashboardPlantingSites from './useDashboardPlantingSites';
 
 type PlantsDashboardViewProps = {
   projectId?: number;
@@ -46,7 +41,7 @@ export default function PlantsDashboardView({
   projectId: acceleratorProjectId,
   organizationId,
 }: PlantsDashboardViewProps): JSX.Element {
-  const { strings, activeLocale } = useLocalization();
+  const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -60,43 +55,11 @@ export default function PlantsDashboardView({
 
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId(PREFERENCE_NAME);
 
-  const { acceleratorOrganizationId, setAcceleratorOrganizationId } = useSpeciesData();
-  const { plantingSites, isLoading, isSuccess } = useOrganizationPlantingSites({
-    organizationId: isAcceleratorRoute ? acceleratorOrganizationId : undefined,
-  });
+  const { setAcceleratorOrganizationId } = useSpeciesData();
 
-  const { data: projectsData } = useListProjectsQuery(selectedOrganization?.id, { skip: !selectedOrganization });
-
-  // Sites available for selection, scoped to the chosen project (if any).
-  const projectSites = useMemo(
-    () => (isProjectSelected ? plantingSites.filter((site) => site.projectId === projectId) : plantingSites),
-    [isProjectSelected, plantingSites, projectId]
-  );
-
-  const allowAllSitesOption = isAcceleratorRoute || isProjectSelected;
-  const showAllSitesOption = allowAllSitesOption && projectSites.length > 1;
-
-  const plantingSiteOptions = useMemo((): DropdownItem[] => {
-    const siteOptions = projectSites.map((site) => ({ label: site.name, value: site.id }));
-    return showAllSitesOption
-      ? [{ label: strings.ALL_PLANTING_SITES, value: ALL_PLANTING_SITES }, ...siteOptions]
-      : siteOptions;
-  }, [projectSites, showAllSitesOption, strings]);
-
-  const projectIdsWithSites = useMemo(
-    () => Array.from(new Set(plantingSites.map((site) => site.projectId))),
-    [plantingSites]
-  );
-
-  const projectOptions = useMemo((): DropdownItem[] => {
-    const options: DropdownItem[] =
-      projectsData?.projects
-        ?.filter((project) => projectIdsWithSites.includes(project.id))
-        .map((project) => ({ label: project.name, value: project.id }))
-        .sort((a, b) => a.label.localeCompare(b.label, activeLocale || undefined)) ?? [];
-    options.unshift({ label: strings.NO_PROJECT, value: ALL_PLANTING_SITES });
-    return options;
-  }, [activeLocale, projectIdsWithSites, projectsData, strings]);
+  // The header owns selection normalization; the view only needs `showAllSitesOption` to label the
+  // totals section. The scoped query is shared (RTK cache) with the header.
+  const { showAllSitesOption } = useDashboardPlantingSites(projectId);
 
   // Keep the URL :plantingSiteId param in sync with the selection in org mode (no project selected),
   // so a specific site stays bookmarkable/deep-linkable.
@@ -124,74 +87,13 @@ export default function PlantsDashboardView({
     }
   }, [navigate, orgMode, plantingSiteIdParam, selectedPlantingSiteId]);
 
-  // Normalize the selection to a value that is valid for the current options: fall back to 'all' when
-  // it is offered, otherwise the first available site.
-  useEffect(() => {
-    if (!isSuccess) {
-      return;
-    }
-    const validSiteIds = new Set(projectSites.map((site) => site.id));
-    const isValid =
-      selectedPlantingSiteId === ALL_PLANTING_SITES ? showAllSitesOption : validSiteIds.has(selectedPlantingSiteId);
-    if (!isValid) {
-      const fallback: PlantingSiteId | undefined = showAllSitesOption ? ALL_PLANTING_SITES : projectSites[0]?.id;
-      if (fallback !== undefined && fallback !== selectedPlantingSiteId) {
-        selectPlantingSite(fallback);
-      }
-    }
-  }, [isSuccess, projectSites, selectPlantingSite, selectedPlantingSiteId, showAllSitesOption]);
-
   const { plantingSite } = usePlantingSite(
     selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId
-  );
-  const latestObservationResultId = useMemo(() => plantingSite?.latestObservationId, [plantingSite]);
-  const latestObservationCompletedTime = useMemo(() => plantingSite?.latestObservationCompletedTime, [plantingSite]);
-
-  const { observation: latestObservationResult } = useLatestSiteObservationResult(
-    selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId,
-    'Substratum'
   );
 
   // Poll for survival rate recalculation and refresh observation results when it completes.
   const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(plantingSite?.id);
-  const hasObservationResults = useMemo(() => !!latestObservationResultId, [latestObservationResultId]);
-
-  const totalArea = useMemo(() => projectSites.reduce((sum, site) => sum + (site.areaHa ?? 0), 0), [projectSites]);
-  const isRolledUpView = isProjectSelected && selectedPlantingSiteId === ALL_PLANTING_SITES;
-  const displayAreaHa = useMemo(() => {
-    if (isRolledUpView) {
-      return totalArea;
-    }
-    return plantingSites.find((site) => site.id === selectedPlantingSiteId)?.areaHa ?? 0;
-  }, [isRolledUpView, plantingSites, selectedPlantingSiteId, totalArea]);
-
-  const siteBoundaryModifiedTime = useMemo(() => {
-    if (plantingSite?.strata?.length) {
-      return plantingSite.strata.reduce(
-        (maxTime, stratum) => (isAfter(stratum.boundaryModifiedTime, maxTime) ? stratum.boundaryModifiedTime : maxTime),
-        plantingSite.strata[0].boundaryModifiedTime
-      );
-    }
-    return undefined;
-  }, [plantingSite]);
-
-  const geometryChangedNote = useMemo(() => {
-    if (latestObservationCompletedTime && siteBoundaryModifiedTime) {
-      return isAfter(siteBoundaryModifiedTime, latestObservationCompletedTime);
-    } else {
-      return false;
-    }
-  }, [latestObservationCompletedTime, siteBoundaryModifiedTime]);
-
-  const geometryChangedDate = useMemo(() => {
-    const dt = siteBoundaryModifiedTime ? DateTime.fromISO(siteBoundaryModifiedTime) : undefined;
-    return dt?.isValid ? dt.toFormat('LLLL d, yyyy') : undefined;
-  }, [siteBoundaryModifiedTime]);
-
-  const latestObservationDate = useMemo(() => {
-    const dt = latestObservationCompletedTime ? DateTime.fromISO(latestObservationCompletedTime) : undefined;
-    return dt?.isValid ? dt.toFormat('LLLL d, yyyy') : undefined;
-  }, [latestObservationCompletedTime]);
+  const hasObservationResults = useMemo(() => !!plantingSite?.latestObservationId, [plantingSite]);
 
   useEffect(() => {
     if (organizationId) {
@@ -199,18 +101,7 @@ export default function PlantsDashboardView({
     } else if (!isAcceleratorRoute && selectedOrganization?.id) {
       setAcceleratorOrganizationId(selectedOrganization?.id);
     }
-  }, [
-    acceleratorOrganizationId,
-    isAcceleratorRoute,
-    organizationId,
-    selectedOrganization?.id,
-    setAcceleratorOrganizationId,
-  ]);
-
-  const showSurvivalRateMessage = useMemo(
-    () => hasObservationResults && latestObservationResult?.survivalRate === undefined,
-    [hasObservationResults, latestObservationResult]
-  );
+  }, [isAcceleratorRoute, organizationId, selectedOrganization?.id, setAcceleratorOrganizationId]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -219,31 +110,6 @@ export default function PlantsDashboardView({
       </Typography>
     </Grid>
   );
-
-  const renderLatestObservationLink = useCallback(() => {
-    return plantingSite?.latestObservationId && plantingSite.latestObservationCompletedTime ? (
-      isAcceleratorRoute ? (
-        <Typography fontSize={'16px'} display={'inline'}>
-          {strings.formatString(
-            strings.DATE_OBSERVATION,
-            DateTime.fromISO(plantingSite.latestObservationCompletedTime).toFormat('yyyy-MM-dd')
-          )}
-        </Typography>
-      ) : (
-        <Link
-          fontSize={'16px'}
-          to={APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', plantingSite.latestObservationId.toString())}
-        >
-          {strings.formatString(
-            strings.DATE_OBSERVATION,
-            DateTime.fromISO(plantingSite.latestObservationCompletedTime).toFormat('yyyy-MM-dd')
-          )}
-        </Link>
-      )
-    ) : (
-      ''
-    );
-  }, [plantingSite, isAcceleratorRoute, strings]);
 
   const renderSurvivalRate = useCallback(
     () =>
@@ -266,7 +132,9 @@ export default function PlantsDashboardView({
                 {strings.SURVIVAL_RATE}
               </Typography>
               {hasObservationResults && (
-                <Typography>{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}</Typography>
+                <Typography>
+                  {strings.formatString(strings.AS_OF_X, <LatestObservationLink plantingSite={plantingSite} />)}
+                </Typography>
               )}
             </Box>
           </Grid>
@@ -279,7 +147,6 @@ export default function PlantsDashboardView({
       plantingSite,
       isMobile,
       hasObservationResults,
-      renderLatestObservationLink,
       strings,
       projectId,
       isProjectSelected,
@@ -299,7 +166,9 @@ export default function PlantsDashboardView({
           }}
         >
           <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-            {selectedPlantingSiteId === ALL_PLANTING_SITES ? strings.PROJECT_AREA_TOTALS : strings.PLANTING_SITE_TOTALS}
+            {selectedPlantingSiteId === ALL_PLANTING_SITES && showAllSitesOption
+              ? strings.PROJECT_AREA_TOTALS
+              : strings.PLANTING_SITE_TOTALS}
           </Typography>
         </Box>
       </Grid>
@@ -329,7 +198,9 @@ export default function PlantsDashboardView({
                 {strings.PLANT_DENSITY}
               </Typography>
               {hasObservationResults && (
-                <Typography>{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}</Typography>
+                <Typography>
+                  {strings.formatString(strings.AS_OF_X, <LatestObservationLink plantingSite={plantingSite} />)}
+                </Typography>
               )}
             </Box>
           </Grid>
@@ -338,7 +209,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, isMobile, hasObservationResults, renderLatestObservationLink, strings, theme]
+    [plantingSite, isMobile, hasObservationResults, strings, theme]
   );
 
   const renderPlantingSiteTrends = useCallback(
@@ -378,7 +249,9 @@ export default function PlantsDashboardView({
                 {strings.SITE_MAP}
               </Typography>
               {hasObservationResults && (
-                <Typography>{strings.formatString(strings.AS_OF_X, renderLatestObservationLink())}</Typography>
+                <Typography>
+                  {strings.formatString(strings.AS_OF_X, <LatestObservationLink plantingSite={plantingSite} />)}
+                </Typography>
               )}
             </Box>
           </Grid>
@@ -405,7 +278,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [hasObservationResults, isMobile, plantingSite, renderLatestObservationLink, strings, theme]
+    [hasObservationResults, isMobile, plantingSite, strings, theme]
   );
 
   const renderSimpleSiteMap = useCallback(
@@ -440,73 +313,12 @@ export default function PlantsDashboardView({
     [plantingSite]
   );
 
-  const observedHectares = useMemo(() => {
-    const totalPlots = (plantingSite?.strata ?? [])
-      .flatMap((stratum) => stratum.substrata)
-      .reduce((sum, substratum) => sum + (substratum.latestObservationNumPlots ?? 0), 0);
-
-    return totalPlots * MONITORING_PLOT_SIZE * MONITORING_PLOT_SIZE * SQ_M_TO_HECTARES;
-  }, [plantingSite]);
-
-  const observationDateRange = useMemo(() => {
-    const times = (plantingSite?.strata ?? [])
-      .flatMap((stratum) => stratum.substrata)
-      .map((substratum) => substratum.latestObservationCompletedTime)
-      .filter((time): time is string => !!time)
-      .sort();
-    return { earliest: times[0], latest: times[times.length - 1] };
-  }, [plantingSite]);
-
-  const getDashboardSubhead = useCallback(() => {
-    if (!plantingSite) {
-      return strings.FIRST_ADD_PLANTING_SITE;
-    }
-
-    const earliestDate = observationDateRange.earliest ? getDateDisplayValue(observationDateRange.earliest) : undefined;
-    const latestDate = observationDateRange.latest ? getDateDisplayValue(observationDateRange.latest) : undefined;
-    return !earliestDate || !latestDate || earliestDate === latestDate
-      ? (strings.formatString(
-          strings.DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,
-          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={observedHectares} />)}</b>,
-          <b>{renderLatestObservationLink()}</b>
-        ) as string)
-      : (strings.formatString(
-          strings.DASHBOARD_HEADER_TEXT_V2,
-          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={observedHectares} />)}</b>,
-          <b>{observationDateRange.earliest ? getDateDisplayValue(observationDateRange.earliest) : ''}</b>,
-          <b>{observationDateRange.latest ? getDateDisplayValue(observationDateRange.latest) : ''}</b>
-        ) as string);
-  }, [plantingSite, observationDateRange, renderLatestObservationLink, observedHectares, strings]);
-
-  const headerText =
-    selectedPlantingSiteId !== ALL_PLANTING_SITES
-      ? plantingSite
-        ? latestObservationResultId
-          ? getDashboardSubhead()
-          : undefined
-        : getDashboardSubhead()
-      : undefined;
-
   return (
     <PlantsDashboardHeader
-      title={isAcceleratorRoute ? '' : strings.PLANTS_DASHBOARD}
-      text={headerText}
-      isAcceleratorRoute={isAcceleratorRoute}
-      hasSites={plantingSites.length > 0}
-      isLoading={isLoading}
       selectedPlantingSiteId={selectedPlantingSiteId}
-      plantingSiteOptions={plantingSiteOptions}
       onSelectPlantingSite={selectPlantingSite}
-      showAllSitesDivider={showAllSitesOption}
       projectId={projectId}
-      projectOptions={projectOptions}
       onSelectProject={setProjectId}
-      displayAreaHa={displayAreaHa}
-      showGeometryNote={geometryChangedNote}
-      latestObservationId={latestObservationResultId}
-      geometryChangedDate={geometryChangedDate}
-      latestObservationDate={latestObservationDate}
-      showSurvivalRateMessage={showSurvivalRateMessage}
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}

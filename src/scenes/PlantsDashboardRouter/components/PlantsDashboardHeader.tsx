@@ -1,8 +1,9 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, GlobalStyles, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, Message } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
+import { DateTime } from 'luxon';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
@@ -11,85 +12,209 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import PlantsDashboardEmptyMessage from 'src/components/emptyStatePages/PlantsDashboardEmptyMessage';
-import { APP_PATHS } from 'src/constants';
+import { APP_PATHS, MONITORING_PLOT_SIZE, SQ_M_TO_HECTARES } from 'src/constants';
+import { useLatestSiteObservationResult } from 'src/hooks/observations';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import usePlantingSite from 'src/hooks/usePlantingSite';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
+import { useListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import { useListProjectsQuery } from 'src/queries/generated/projects';
+import { isAfter } from 'src/utils/dateUtils';
+
+import useDashboardPlantingSites from '../useDashboardPlantingSites';
+import LatestObservationLink from './LatestObservationLink';
 
 export type PlantsDashboardHeaderProps = {
-  title: string;
-  text?: string;
   children: React.ReactNode;
-  style?: Record<string, string | number>;
-
-  isAcceleratorRoute: boolean;
-  hasSites: boolean;
-  isLoading: boolean;
-
-  // Planting-site selector
   selectedPlantingSiteId: PlantingSiteId;
-  plantingSiteOptions: DropdownItem[];
   onSelectPlantingSite: (plantingSiteId: PlantingSiteId) => void;
-  // Show the divider above the leading 'all' option.
-  showAllSitesDivider: boolean;
-
-  // Project selector
   projectId: number | typeof ALL_PLANTING_SITES;
-  projectOptions?: DropdownItem[];
-  onSelectProject?: (projectId: number | typeof ALL_PLANTING_SITES) => void;
-
-  // Total planting area to display in the header card.
-  displayAreaHa: number;
-
-  // Messages
-  showGeometryNote?: boolean;
-  latestObservationId?: number;
-  geometryChangedDate?: string;
-  latestObservationDate?: string;
-  showSurvivalRateMessage?: boolean;
+  onSelectProject: (projectId: number | typeof ALL_PLANTING_SITES) => void;
 };
 
 export default function PlantsDashboardHeader({
-  title,
-  text,
   children,
-  style,
-  isAcceleratorRoute,
-  hasSites,
-  isLoading,
   selectedPlantingSiteId,
-  plantingSiteOptions,
   onSelectPlantingSite,
-  showAllSitesDivider,
   projectId,
-  projectOptions,
   onSelectProject,
-  displayAreaHa,
-  showGeometryNote,
-  latestObservationId,
-  geometryChangedDate,
-  latestObservationDate,
-  showSurvivalRateMessage,
 }: PlantsDashboardHeaderProps): JSX.Element {
-  const { strings } = useLocalization();
+  const { strings, activeLocale } = useLocalization();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
+  const { isAcceleratorRoute } = useAcceleratorConsole();
+  const { selectedOrganization } = useOrganization();
 
-  const singleSiteMode = isAcceleratorRoute && plantingSiteOptions.length === 1;
+  const { organizationId, plantingSites, showAllSitesOption, isLoading, isSuccess } =
+    useDashboardPlantingSites(projectId);
+
+  // Org-wide sites power the project dropdown's "projects with sites" list and the empty state.
+  const { currentData: orgSitesData } = useListPlantingSitesQuery(
+    { organizationId, includeZones: false },
+    { skip: organizationId === undefined || isAcceleratorRoute }
+  );
+  const orgSites = useMemo(() => orgSitesData?.sites ?? [], [orgSitesData]);
+
+  const { data: projectsData } = useListProjectsQuery(selectedOrganization?.id, { skip: !selectedOrganization });
+
+  const isProjectSelected = typeof projectId === 'number';
   const isSiteSelected = typeof selectedPlantingSiteId === 'number';
+
+  const plantingSiteOptions = useMemo((): DropdownItem[] => {
+    const siteOptions = plantingSites.map((site) => ({ label: site.name, value: site.id }));
+    return showAllSitesOption
+      ? [{ label: strings.ALL_PLANTING_SITES, value: ALL_PLANTING_SITES }, ...siteOptions]
+      : siteOptions;
+  }, [plantingSites, showAllSitesOption, strings]);
+
+  const projectIdsWithSites = useMemo(() => Array.from(new Set(orgSites.map((site) => site.projectId))), [orgSites]);
+
+  const projectOptions = useMemo((): DropdownItem[] => {
+    const options: DropdownItem[] =
+      projectsData?.projects
+        ?.filter((project) => projectIdsWithSites.includes(project.id))
+        .map((project) => ({ label: project.name, value: project.id }))
+        .sort((a, b) => a.label.localeCompare(b.label, activeLocale || undefined)) ?? [];
+    options.unshift({ label: strings.NO_PROJECT, value: ALL_PLANTING_SITES });
+    return options;
+  }, [activeLocale, projectIdsWithSites, projectsData, strings]);
+
+  const hasValidSelection =
+    selectedPlantingSiteId === ALL_PLANTING_SITES
+      ? showAllSitesOption
+      : plantingSites.some((site) => site.id === selectedPlantingSiteId);
+  const isReady = useMemo(
+    () => isSuccess && (plantingSites.length === 0 || hasValidSelection),
+    [hasValidSelection, isSuccess, plantingSites.length]
+  );
+
+  // Normalize the selection to a valid option (co-located with the readiness check so they share the
+  // same data): fall back to 'all' when it is offered, otherwise the first available site.
+  useEffect(() => {
+    if (!isSuccess) {
+      return;
+    }
+    const validSiteIds = new Set(plantingSites.map((site) => site.id));
+    const isValid =
+      selectedPlantingSiteId === ALL_PLANTING_SITES ? showAllSitesOption : validSiteIds.has(selectedPlantingSiteId);
+    if (!isValid) {
+      const fallback: PlantingSiteId | undefined = showAllSitesOption ? ALL_PLANTING_SITES : plantingSites[0]?.id;
+      if (fallback !== undefined && fallback !== selectedPlantingSiteId) {
+        onSelectPlantingSite(fallback);
+      }
+    }
+  }, [isSuccess, plantingSites, onSelectPlantingSite, selectedPlantingSiteId, showAllSitesOption]);
+
+  const { plantingSite } = usePlantingSite(
+    selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId
+  );
+  const { observation: latestObservationResult } = useLatestSiteObservationResult(
+    selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId,
+    'Substratum'
+  );
+
+  const latestObservationId = plantingSite?.latestObservationId;
+  const hasObservationResults = !!latestObservationId;
+  const showSurvivalRateMessage = hasObservationResults && latestObservationResult?.survivalRate === undefined;
+
+  const latestObservationCompletedTime = plantingSite?.latestObservationCompletedTime;
+  const siteBoundaryModifiedTime = useMemo(() => {
+    if (plantingSite?.strata?.length) {
+      return plantingSite.strata.reduce(
+        (maxTime, stratum) => (isAfter(stratum.boundaryModifiedTime, maxTime) ? stratum.boundaryModifiedTime : maxTime),
+        plantingSite.strata[0].boundaryModifiedTime
+      );
+    }
+    return undefined;
+  }, [plantingSite]);
+
+  const showGeometryNote = useMemo(
+    () =>
+      latestObservationCompletedTime && siteBoundaryModifiedTime
+        ? isAfter(siteBoundaryModifiedTime, latestObservationCompletedTime)
+        : false,
+    [latestObservationCompletedTime, siteBoundaryModifiedTime]
+  );
+
+  const geometryChangedDate = useMemo(() => {
+    const dt = siteBoundaryModifiedTime ? DateTime.fromISO(siteBoundaryModifiedTime) : undefined;
+    return dt?.isValid ? dt.toFormat('LLLL d, yyyy') : undefined;
+  }, [siteBoundaryModifiedTime]);
+
+  const latestObservationDate = useMemo(() => {
+    const dt = latestObservationCompletedTime ? DateTime.fromISO(latestObservationCompletedTime) : undefined;
+    return dt?.isValid ? dt.toFormat('LLLL d, yyyy') : undefined;
+  }, [latestObservationCompletedTime]);
+
+  const observedHectares = useMemo(() => {
+    const totalPlots = (plantingSite?.strata ?? [])
+      .flatMap((stratum) => stratum.substrata)
+      .reduce((sum, substratum) => sum + (substratum.latestObservationNumPlots ?? 0), 0);
+    return totalPlots * MONITORING_PLOT_SIZE * MONITORING_PLOT_SIZE * SQ_M_TO_HECTARES;
+  }, [plantingSite]);
+
+  const observationDateRange = useMemo(() => {
+    const times = (plantingSite?.strata ?? [])
+      .flatMap((stratum) => stratum.substrata)
+      .map((substratum) => substratum.latestObservationCompletedTime)
+      .filter((time): time is string => !!time)
+      .sort();
+    return { earliest: times[0], latest: times[times.length - 1] };
+  }, [plantingSite]);
+
+  // Summary of the selected site's latest observations, shown as the header subhead.
+  const observationSummary = useMemo(() => {
+    if (!plantingSite) {
+      return undefined;
+    }
+
+    const earliestDate = observationDateRange.earliest ? getDateDisplayValue(observationDateRange.earliest) : undefined;
+    const latestDate = observationDateRange.latest ? getDateDisplayValue(observationDateRange.latest) : undefined;
+    return !earliestDate || !latestDate || earliestDate === latestDate
+      ? (strings.formatString(
+          strings.DASHBOARD_HEADER_TEXT_SINGLE_OBSERVATION,
+          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={observedHectares} />)}</b>,
+          <b>
+            <LatestObservationLink plantingSite={plantingSite} />
+          </b>
+        ) as string)
+      : (strings.formatString(
+          strings.DASHBOARD_HEADER_TEXT_V2,
+          <b>{strings.formatString(strings.X_HECTARES, <FormattedNumber value={observedHectares} />)}</b>,
+          <b>{observationDateRange.earliest ? getDateDisplayValue(observationDateRange.earliest) : ''}</b>,
+          <b>{observationDateRange.latest ? getDateDisplayValue(observationDateRange.latest) : ''}</b>
+        ) as string);
+  }, [plantingSite, observationDateRange, observedHectares, strings]);
+
+  const headerText = useMemo(() => {
+    if (plantingSites.length === 0) {
+      return strings.FIRST_ADD_PLANTING_SITE;
+    }
+    return latestObservationId ? observationSummary : undefined;
+  }, [latestObservationId, observationSummary, plantingSites.length, strings]);
+
+  const totalArea = useMemo(() => plantingSites.reduce((sum, site) => sum + (site.areaHa ?? 0), 0), [plantingSites]);
+  const isRolledUpView = isProjectSelected && selectedPlantingSiteId === ALL_PLANTING_SITES;
+  const displayAreaHa = isRolledUpView
+    ? totalArea
+    : plantingSites.find((site) => site.id === selectedPlantingSiteId)?.areaHa ?? 0;
+
+  const title = isAcceleratorRoute ? '' : strings.PLANTS_DASHBOARD;
+  const singleSiteMode = isAcceleratorRoute && plantingSiteOptions.length === 1;
 
   // Mirror the legacy 1s settle delay before revealing content, so the dashboard does not flicker
   // between loading and empty/ready states while the planting site payload is resolving.
-  const isReady = (isAcceleratorRoute || plantingSiteOptions.length > 0) && hasSites;
   const [delayedIsReady, setDelayedIsReady] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => setDelayedIsReady(isReady), 1000);
     return () => clearTimeout(timer);
   }, [isReady]);
 
-  const showProjectSelector = !isAcceleratorRoute && (projectOptions?.length ?? 0) > 1 && !!onSelectProject;
+  const showProjectSelector = !isAcceleratorRoute && projectOptions.length > 1;
   const showSelectorCard = (isAcceleratorRoute || plantingSiteOptions.length > 0) && isReady;
 
-  const Wrapper = typeof projectId === 'number' ? Box : TfMain;
+  const Wrapper = isProjectSelected ? Box : TfMain;
 
   return (
     <Wrapper>
@@ -141,7 +266,7 @@ export default function PlantsDashboardHeader({
                     placeholder={strings.NO_PROJECT_SELECTED}
                     id='project-selector'
                     onChange={(newValue) =>
-                      onSelectProject?.(newValue === ALL_PLANTING_SITES ? ALL_PLANTING_SITES : Number(newValue))
+                      onSelectProject(newValue === ALL_PLANTING_SITES ? ALL_PLANTING_SITES : Number(newValue))
                     }
                     options={projectOptions}
                     selectedValue={projectId}
@@ -155,7 +280,7 @@ export default function PlantsDashboardHeader({
                 </Typography>
               ) : (
                 <>
-                  {showAllSitesDivider && (
+                  {showAllSitesOption && (
                     <GlobalStyles
                       styles={{
                         '.planting-site-selector-container .options-container li:first-of-type': {
@@ -192,18 +317,18 @@ export default function PlantsDashboardHeader({
             ) : (
               <Grid item xs={isDesktop ? 6 : 12}>
                 <Typography fontSize='16px' marginTop={theme.spacing(1)}>
-                  {text}
+                  {headerText}
                 </Typography>
               </Grid>
             )}
           </Grid>
         </Card>
       )}
-      {!hasSites && !isAcceleratorRoute && !isLoading && delayedIsReady && <PlantsDashboardEmptyMessage />}
+      {orgSites.length === 0 && !isAcceleratorRoute && !isLoading && delayedIsReady && <PlantsDashboardEmptyMessage />}
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
-      {!delayedIsReady || isLoading ? <CircularProgress sx={{ margin: 'auto' }} /> : <Box sx={style}>{children}</Box>}
+      {!delayedIsReady || isLoading ? <CircularProgress sx={{ margin: 'auto' }} /> : <Box>{children}</Box>}
     </Wrapper>
   );
 }
