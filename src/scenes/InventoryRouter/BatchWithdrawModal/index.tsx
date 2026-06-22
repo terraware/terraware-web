@@ -380,7 +380,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     ];
   }, [step, strings, canGoNextFromStep1, canGoNextFromStep2, handleClose, isCreating, onSubmit]);
 
-  const stepLabels = [strings.PURPOSE_AND_DESTINATION, strings.QUANTITIES, strings.ADD_PHOTOS];
+  const stepLabels = [strings.PURPOSE, strings.QUANTITIES, strings.PHOTOS];
 
   return (
     <>
