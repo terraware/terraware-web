@@ -1,3 +1,4 @@
+e1a4867b Update dependency @rsbuild/plugin-babel to v2 (#5917)
 f8d8320f Update babel monorepo to v8 (#5916)
 e3299a4c Update Node.js to v24.17.0 (#5915)
 436a8b14 SW-7792: Biomass Monitoring Observations: Add field for Crown Diameter for mangrove trees (#5904)
