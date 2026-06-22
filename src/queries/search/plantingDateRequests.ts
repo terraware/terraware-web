@@ -24,7 +24,6 @@ export type PlantingDateRequestSubstratum = {
 };
 
 export type PlantingDateRequestRow = {
-  scheduledPlantingDateId: number;
   date: string;
   plantingSeasonId: number;
   plantingSeasonName: string;
@@ -175,7 +174,6 @@ const injectedRtkApi = api.injectEndpoints({
           );
 
           return {
-            scheduledPlantingDateId: Number(result.scheduledPlantingDate_id ?? result.id),
             date: result.date,
             plantingSeasonId: Number(result.scheduledPlantingDate_plantingSeason_id),
             plantingSeasonName: result.scheduledPlantingDate_plantingSeason_name,
@@ -214,8 +212,6 @@ type PlantingDateRequestWithdrawalApiResult = {
 };
 
 type PlantingDateRequestApiResult = {
-  id: string;
-  scheduledPlantingDate_id?: string;
   scheduledPlantingDate_plantingSeason_id: string;
   scheduledPlantingDate_plantingSeason_name: string;
   scheduledPlantingDate_plantingSeason_plantingSite_id: string;

@@ -13,6 +13,7 @@ import {
   useCreateBatchWithdrawalMutation,
   useUploadWithdrawalPhotoMutation,
 } from 'src/queries/generated/nurseryWithdrawals';
+import { ScheduledDatePayload, useGetScheduledPlantingDatesQuery } from 'src/queries/generated/plantingSeasons';
 import {
   BatchForWithdraw,
   useLazyListBatchesForWithdrawQuery,
@@ -25,6 +26,24 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import NurserySummaryRow from './NurserySummaryRow';
 import RequestSpeciesBox from './RequestSpeciesBox';
+
+const scheduledDateSpeciesKey = ({ quantity, speciesId, substratumId }: ScheduledDatePayload['species'][0]) =>
+  `${substratumId}-${speciesId}-${quantity}`;
+
+const requestSpeciesKey = (substratumId: number, species: PlantingDateRequestRow['substrata'][0]['species'][0]) =>
+  `${substratumId}-${species.speciesId}-${species.quantity}`;
+
+const scheduledDateMatchesRequest = (scheduledDate: ScheduledDatePayload, request: PlantingDateRequestRow): boolean => {
+  const scheduledSpeciesKeys = scheduledDate.species.map(scheduledDateSpeciesKey).sort();
+  const requestSpeciesKeys = request.substrata
+    .flatMap((substratum) => substratum.species.map((species) => requestSpeciesKey(substratum.substratumId, species)))
+    .sort();
+
+  return (
+    scheduledSpeciesKeys.length === requestSpeciesKeys.length &&
+    scheduledSpeciesKeys.every((key, index) => key === requestSpeciesKeys[index])
+  );
+};
 
 type WithdrawFromBatchesModalProps = {
   open: boolean;
@@ -60,6 +79,7 @@ const WithdrawFromBatchesModal = ({
   const [listBatches, { currentData: batches }] = useLazyListBatchesForWithdrawQuery();
   const [createBatchWithdrawal, { isLoading: isSaving }] = useCreateBatchWithdrawalMutation();
   const [uploadWithdrawalPhotos] = useUploadWithdrawalPhotoMutation();
+  const { data: scheduledDatesData } = useGetScheduledPlantingDatesQuery(plantingSeasonId, { skip: !open });
 
   const speciesIds = useMemo(() => request.species.map((s) => s.speciesId), [request.species]);
   const organizationId = selectedOrganization?.id;
@@ -144,6 +164,17 @@ const WithdrawFromBatchesModal = ({
   const canGoNextFromStep1 = facilityId !== undefined && !!withdrawDate;
   const canGoNextFromStep2 = totalWithdrawing > 0 && !anyOverReady;
 
+  const scheduledPlantingDateId = useMemo(() => {
+    const dateMatches = (scheduledDatesData?.scheduledDates ?? []).filter(
+      (scheduledDate) => scheduledDate.date === request.date
+    );
+    if (dateMatches.length === 1) {
+      return dateMatches[0].scheduledPlantingDateId;
+    }
+    return dateMatches.find((scheduledDate) => scheduledDateMatchesRequest(scheduledDate, request))
+      ?.scheduledPlantingDateId;
+  }, [request, scheduledDatesData]);
+
   const handleClose = useCallback(() => {
     setStep(0);
     setFacilityId(undefined);
@@ -154,7 +185,8 @@ const WithdrawFromBatchesModal = ({
   }, [onClose]);
 
   const onSubmit = useCallback(async () => {
-    if (!facilityId) {
+    if (!facilityId || scheduledPlantingDateId === undefined) {
+      snackbar.toastError();
       return;
     }
     try {
@@ -187,7 +219,7 @@ const WithdrawFromBatchesModal = ({
           plantingSiteId,
           plantingSeasonId,
           substratumId,
-          scheduledPlantingDateRequestId: request.scheduledPlantingDateId,
+          scheduledPlantingDateRequestId: scheduledPlantingDateId,
           withdrawnDate: withdrawDate,
         }).unwrap();
         if (response?.withdrawal?.id) {
@@ -218,7 +250,7 @@ const WithdrawFromBatchesModal = ({
     photoFiles,
     plantingSeasonId,
     plantingSiteId,
-    request.scheduledPlantingDateId,
+    scheduledPlantingDateId,
     snackbar,
     uploadWithdrawalPhotos,
     withdrawByBatchSubstratum,
@@ -265,10 +297,10 @@ const WithdrawFromBatchesModal = ({
         key='withdraw'
         label={strings.WITHDRAW}
         onClick={() => void onSubmit()}
-        disabled={isSaving || !canGoNextFromStep2}
+        disabled={isSaving || !canGoNextFromStep2 || scheduledPlantingDateId === undefined}
       />,
     ];
-  }, [handleClose, isSaving, step, canGoNextFromStep2, canGoNextFromStep1, onSubmit]);
+  }, [handleClose, isSaving, step, canGoNextFromStep2, canGoNextFromStep1, onSubmit, scheduledPlantingDateId]);
 
   const stepLabels = [strings.PURPOSE, strings.QUANTITIES, strings.PHOTOS];
 
