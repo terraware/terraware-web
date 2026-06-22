@@ -275,19 +275,16 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     searchFilterOptionsResponse.currentData?.substratumNames,
   ]);
 
-  const plantingSeasonNames = useMemo(() => {
-    return Array.from(new Set((plantingSeasonsResponse.currentData?.seasons ?? []).map((season) => season.name))).sort(
-      (a, b) => a.localeCompare(b)
-    );
-  }, [plantingSeasonsResponse.currentData?.seasons]);
-
-  const plantingSeasonNameToIds = useMemo(() => {
+  const { plantingSeasonNames, plantingSeasonNameToIds } = useMemo(() => {
     const idsByName = new Map<string, number[]>();
     (plantingSeasonsResponse.currentData?.seasons ?? []).forEach((season) => {
       idsByName.set(season.name, [...(idsByName.get(season.name) ?? []), season.id]);
     });
 
-    return idsByName;
+    return {
+      plantingSeasonNameToIds: idsByName,
+      plantingSeasonNames: Array.from(idsByName.keys()).sort((a, b) => a.localeCompare(b)),
+    };
   }, [plantingSeasonsResponse.currentData?.seasons]);
 
   // Get all project names for filter (from all available projects, not just current results)
