@@ -1235,6 +1235,7 @@ NO_MAP_DATA,Aucune donnée cartographique n'est affichée pour ce site de planta
 NO_NOTIFICATIONS,Aucune notification à afficher,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer votre inventaire de pépinières, vous devez avoir une pépinière et des espèces dans Terraware. Seuls les administrateurs peuvent ajouter des pépinières ; veuillez contacter le vôtre pour obtenir de l'aide.",93c44729
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,Aucune observation n'a été planifiée,c05456cd
+NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE,Il n'y a aucune demande en attente pour le site de plantation sélectionné.,10a348ac
 NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Lorsque des observations comprenant des placettes permanentes sont terminées, celles-ci apparaîtront ici, et les données t0 devront être définies pour toutes les placettes permanentes afin que les taux de survie puissent être calculés.",18f6a079
 NO_PLANTING_DATES_SCHEDULED,Aucune date de plantation n'a été planifiée.,92de1320
 NO_PLANTING_SEASONS_HAVE_BEEN_CREATED,Aucune saison de plantation n’a été créée.,bda5b0d9

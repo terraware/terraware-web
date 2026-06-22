@@ -1236,6 +1236,7 @@ NO_MAP_DATA,No hay datos cartográficos que mostrar para este sitio de plantaci�
 NO_NOTIFICATIONS,No hay notificaciones que mostrar.,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Antes de poder agregar y administrar el inventario de su vivero, necesitará contar con un vivero y especies dentro de Terraware. Solo los administradores pueden agregar viveros; contáctese con el suyo para obtener ayuda.",93c44729
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,No se han programado observaciones,c05456cd
+NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE,No hay solicitudes pendientes para el Sitio de Plantación seleccionado.,10a348ac
 NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Cuando se completen las Observaciones que incluyan parcelas permanentes, estas aparecerán aquí y será necesario establecer los datos t0 para todas las parcelas permanentes para que se puedan calcular las Tasas de Supervivencia.",18f6a079
 NO_PLANTING_DATES_SCHEDULED,No se han programado fechas de plantación.,92de1320
 NO_PLANTING_SEASONS_HAVE_BEEN_CREATED,No se han creado temporadas de plantación.,bda5b0d9
