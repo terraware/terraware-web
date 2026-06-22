@@ -1250,6 +1250,7 @@ NO_PROJECTS_NON_ADMIN_MSG,"Solo los administradores pueden agregar proyectos. Po
 NO_QUANTITY_SET,No se ha establecido una cantidad.,5922c859
 NO_REASSIGNMENTS,No hay reasignaciones.,8152a9dd
 NO_REASSIGNMENTS_TEXT,Seleccione un nuevo sustrato con cantidad en al menos una fila de lote de plántulas.,f7546414
+NO_SEASON,Sin temporada,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de poder agregar y administrar sus accesiones, necesitará contar con un banco de semillas y especies dentro de Terraware. Solo los administradores pueden agregar bancos de semillas; contáctese con el suyo para obtener ayuda.",814348fe
 NO_SPECIES,Ninguna especie,1616e61b
 NO_SPECIES_CONTRIBUTOR_MSG,"Aún no hay especies en su lista de especies. Solo los administradores pueden añadir especies, así que por favor contacte con el suyo para que le ayude.",32a4f50e

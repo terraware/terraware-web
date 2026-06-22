@@ -1249,6 +1249,7 @@ NO_PROJECTS_NON_ADMIN_MSG,Seuls les administrateurs peuvent ajouter des projets.
 NO_QUANTITY_SET,Pas de quantité définie,5922c859
 NO_REASSIGNMENTS,Aucune réaffectation,8152a9dd
 NO_REASSIGNMENTS_TEXT,Sélectionnez un nouveau substrat avec une quantité dans au moins une ligne de lot de semis.,f7546414
+NO_SEASON,Aucune saison,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer vos accessions, vous devez disposer d'une banque de semences et d'espèces dans Terraware. Seuls les administrateurs peuvent ajouter des banques de semences ; veuillez contacter le vôtre pour obtenir de l'aide.",814348fe
 NO_SPECIES,Aucune espèce,1616e61b
 NO_SPECIES_CONTRIBUTOR_MSG,"Aucune espèce ne figure dans votre liste d'espèces pour le moment. Seuls les administrateurs peuvent ajouter des espèces, contactez donc le vôtre pour obtenir de l'aide.",32a4f50e

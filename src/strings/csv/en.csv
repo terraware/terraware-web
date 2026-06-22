@@ -1250,6 +1250,7 @@ NO_PROJECTS_NON_ADMIN_MSG,Only admins can add projects; please reach out to your
 NO_QUANTITY_SET,No quantity set,
 NO_REASSIGNMENTS,No Reassignments,
 NO_REASSIGNMENTS_TEXT,Select a new substratum with quantity in at least one seedlings batch row.,
+NO_SEASON,No Season,
 NO_SEEDBANKS_NON_ADMIN_MSG,"Before you can add and manage your accessions, you’ll need to have a seed bank and species within Terraware. Only admins can add seed banks; please reach out to yours for assistance.",
 NO_SPECIES,No Species,
 NO_SPECIES_CONTRIBUTOR_MSG,"There are no species in your species list yet. Only admins can add species, so please reach out to yours for assistance.",

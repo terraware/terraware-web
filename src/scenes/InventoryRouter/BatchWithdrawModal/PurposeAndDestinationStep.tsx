@@ -15,6 +15,8 @@ import { NurseryWithdrawalPurpose, NurseryWithdrawalRequestPurposes } from 'src/
 import SpeciesTargetsTable from './SpeciesTargetsTable';
 import { BatchInfo, BatchWithdrawDraft } from './types';
 
+const NO_PLANTING_SEASON_VALUE = 'no-planting-season';
+
 type PurposeAndDestinationStepProps = {
   batches: BatchInfo[];
   contributor: boolean;
@@ -31,12 +33,14 @@ const PurposeAndDestinationStep = ({
   onChange,
 }: PurposeAndDestinationStepProps): JSX.Element => {
   const theme = useTheme();
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization?.id;
 
-  const [listPlantingSites, { data: plantingSitesData, isFetching: isPlantingSitesLoading }] =
-    useLazyListPlantingSitesQuery();
+  const [
+    listPlantingSites,
+    { data: plantingSitesData, isFetching: isPlantingSitesLoading, isUninitialized: isPlantingSitesUninitialized },
+  ] = useLazyListPlantingSitesQuery();
   const [listPlantingSeasons, { data: plantingSeasonsData }] = useLazyListPlantingSeasonsQuery();
 
   useEffect(() => {
@@ -58,6 +62,11 @@ const PurposeAndDestinationStep = ({
   const purpose = draft.purpose;
   const isPlanting = purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
   const isNurseryTransfer = purpose === NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER;
+  const shouldShowSpeciesTargets =
+    isPlanting &&
+    draft.plantingSeasonId !== undefined &&
+    draft.stratumId !== undefined &&
+    draft.substratumId !== undefined;
 
   const eligibleBatchesForFromNursery = useMemo(
     () => (isPlanting ? batches.filter((batch) => batch.readyQuantity > 0) : batches),
@@ -82,8 +91,11 @@ const PurposeAndDestinationStep = ({
   }, [selectedOrganization, draft.fromFacilityId]);
 
   const plantingSiteOptions = useMemo<DropdownItem[]>(
-    () => plantingSites.map((s) => ({ label: s.name, value: s.id })),
-    [plantingSites]
+    () =>
+      plantingSites
+        .toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+        .map((s) => ({ label: s.name, value: s.id })),
+    [activeLocale, plantingSites]
   );
 
   // Non-closed seasons with species targets for the selected planting site.
@@ -105,8 +117,13 @@ const PurposeAndDestinationStep = ({
   );
 
   const plantingSeasonOptions = useMemo<DropdownItem[]>(
-    () => selectableSeasonsForSite.map((s) => ({ label: s.name, value: s.id })),
-    [selectableSeasonsForSite]
+    () => [
+      { label: strings.NO_SEASON, value: NO_PLANTING_SEASON_VALUE },
+      ...selectableSeasonsForSite
+        .toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
+        .map((s) => ({ label: s.name, value: s.id })),
+    ],
+    [activeLocale, selectableSeasonsForSite, strings.NO_SEASON]
   );
 
   // Stratum/Substratum options come from either the selected season's targets
@@ -171,7 +188,8 @@ const PurposeAndDestinationStep = ({
   );
 
   const noReadySeedlings = !hasReadyQuantities;
-  const plantingSitesDisabled = !isPlantingSitesLoading && plantingSites.length === 0;
+  const plantingSitesLoaded = !isPlantingSitesUninitialized && !isPlantingSitesLoading;
+  const plantingSitesDisabled = plantingSitesLoaded && plantingSites.length === 0;
   const outplantDisabled = noReadySeedlings || plantingSitesDisabled;
 
   useEffect(() => {
@@ -201,6 +219,7 @@ const PurposeAndDestinationStep = ({
           value={purpose}
           onChange={(_event, value) => onChange({ purpose: value as NurseryWithdrawalPurpose })}
         >
+          <FormControlLabel value={NurseryWithdrawalRequestPurposes.DEAD} control={<Radio />} label={strings.DEAD} />
           {!contributor && (
             <FormControlLabel
               value={NurseryWithdrawalRequestPurposes.OUTPLANT}
@@ -214,7 +233,6 @@ const PurposeAndDestinationStep = ({
             control={<Radio />}
             label={strings.NURSERY_TRANSFER}
           />
-          <FormControlLabel value={NurseryWithdrawalRequestPurposes.DEAD} control={<Radio />} label={strings.DEAD} />
           <FormControlLabel value={NurseryWithdrawalRequestPurposes.OTHER} control={<Radio />} label={strings.OTHER} />
         </RadioGroup>
       </Box>
@@ -253,7 +271,9 @@ const PurposeAndDestinationStep = ({
       )}
 
       {isPlanting && showPlantingSeasonSelector && (
-        <Box maxWidth={draft.plantingSiteId !== undefined && plantingSeasonOptions.length === 0 ? undefined : '320px'}>
+        <Box
+          maxWidth={draft.plantingSiteId !== undefined && selectableSeasonsForSite.length === 0 ? undefined : '320px'}
+        >
           <Box display='flex' alignItems='center' gap={theme.spacing(0.5)} marginBottom={theme.spacing(0.5)}>
             <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
               {strings.PLANTING_SEASON_OPTIONAL}
@@ -264,7 +284,7 @@ const PurposeAndDestinationStep = ({
               </Box>
             </Tooltip>
           </Box>
-          {draft.plantingSiteId !== undefined && plantingSeasonOptions.length === 0 ? (
+          {draft.plantingSiteId !== undefined && selectableSeasonsForSite.length === 0 ? (
             <Typography fontSize='16px' fontWeight={500} textAlign={'left'}>
               {strings.NO_ACTIVE_SEASONS_FOR_SITE}
             </Typography>
@@ -273,10 +293,13 @@ const PurposeAndDestinationStep = ({
               id='planting-season'
               label=''
               options={plantingSeasonOptions}
-              selectedValue={draft.plantingSeasonId}
+              selectedValue={draft.plantingSeasonId ?? NO_PLANTING_SEASON_VALUE}
               onChange={(value) =>
                 onChange({
-                  plantingSeasonId: value !== undefined && value !== '' ? Number(value) : undefined,
+                  plantingSeasonId:
+                    value !== undefined && value !== '' && value !== NO_PLANTING_SEASON_VALUE
+                      ? Number(value)
+                      : undefined,
                   stratumId: undefined,
                   substratumId: undefined,
                 })
@@ -321,7 +344,9 @@ const PurposeAndDestinationStep = ({
         </Box>
       )}
 
-      {isPlanting && speciesTargets && speciesTargets.length > 0 && <SpeciesTargetsTable rows={speciesTargets} />}
+      {shouldShowSpeciesTargets && speciesTargets && speciesTargets.length > 0 && (
+        <SpeciesTargetsTable rows={speciesTargets} />
+      )}
 
       {isNurseryTransfer && (
         <Box maxWidth='320px'>

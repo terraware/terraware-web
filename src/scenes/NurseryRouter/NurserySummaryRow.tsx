@@ -49,7 +49,7 @@ const NurserySummaryRow = ({ species, ready, index }: NurserySummaryRowProps): J
       }}
     >
       <Box>
-        <Typography fontSize='14px' textAlign='left'>
+        <Typography fontSize='16px' textAlign='left'>
           {species.scientificName}
         </Typography>
         {species.commonName && (
@@ -58,13 +58,13 @@ const NurserySummaryRow = ({ species, ready, index }: NurserySummaryRowProps): J
           </Typography>
         )}
       </Box>
-      <Typography fontSize='14px' textAlign='right'>
+      <Typography fontSize='16px' textAlign='right'>
         {ready.toLocaleString()}
       </Typography>
-      <Typography fontSize='14px' textAlign='right'>
+      <Typography fontSize='16px' textAlign='right'>
         {species.requestedQuantity.toLocaleString()}
       </Typography>
-      <Typography fontSize='14px' textAlign='right' color={coverageColor} fontWeight={600}>
+      <Typography fontSize='16px' textAlign='right' color={coverageColor} fontWeight={600}>
         {coverageLabel}
       </Typography>
     </Box>

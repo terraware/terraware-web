@@ -3,6 +3,7 @@ import React, { type JSX, useMemo } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import { SpeciesTargetForSubstratum } from 'src/queries/search/speciesTargetsForSubstratum';
+import { NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 
 import SeedlingBatchBox from './SeedlingBatchBox';
 import SpeciesTargetsTable from './SpeciesTargetsTable';
@@ -19,6 +20,11 @@ export type QuantitiesStepProps = {
 
 const QuantitiesStep = ({ batches, draft, speciesTargets, setWithdrawByBatch }: QuantitiesStepProps): JSX.Element => {
   const theme = useTheme();
+  const shouldShowSpeciesTargets =
+    draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT &&
+    draft.plantingSeasonId !== undefined &&
+    draft.stratumId !== undefined &&
+    draft.substratumId !== undefined;
 
   // Group batches by species so we can render one box per species, sorted by
   // scientific name for stable order.
@@ -38,7 +44,9 @@ const QuantitiesStep = ({ batches, draft, speciesTargets, setWithdrawByBatch }: 
 
   return (
     <Box display='flex' flexDirection='column' gap={theme.spacing(3)}>
-      {speciesTargets && speciesTargets.length > 0 && <SpeciesTargetsTable rows={speciesTargets} />}
+      {shouldShowSpeciesTargets && speciesTargets && speciesTargets.length > 0 && (
+        <SpeciesTargetsTable rows={speciesTargets} />
+      )}
       {batchesBySpecies.map((group) => (
         <SeedlingBatchBox
           key={group.speciesName}

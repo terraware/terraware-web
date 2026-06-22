@@ -44,7 +44,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   const [batches, setBatches] = useState<BatchInfo[] | undefined>(undefined);
   const [showEmptyBatchesModal, setShowEmptyBatchesModal] = useState(false);
 
-  const [listSpeciesTargets, { data: speciesTargets }] = useLazyListSpeciesTargetsForSubstratumQuery();
+  const [listSpeciesTargets, speciesTargetsResult] = useLazyListSpeciesTargetsForSubstratumQuery();
   const [createBatchWithdrawal, { isLoading: isCreating }] = useCreateBatchWithdrawalMutation();
   const [uploadWithdrawalPhoto] = useUploadWithdrawalPhotoMutation();
 
@@ -52,15 +52,13 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
 
   const defaultDraft = useCallback(
     (): BatchWithdrawDraft => ({
-      purpose: isContributor(selectedOrganization)
-        ? NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER
-        : NurseryWithdrawalRequestPurposes.OUTPLANT,
+      purpose: NurseryWithdrawalRequestPurposes.DEAD,
       withdrawnDate: todayIso(),
       notes: '',
       withdrawByBatch: {},
       photos: [],
     }),
-    [selectedOrganization]
+    []
   );
 
   const [draft, setDraft] = useState<BatchWithdrawDraft>(defaultDraft);
@@ -102,7 +100,24 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       // A withdrawal is bound to a single nursery; clear quantities when the
       // From: Nursery changes so the user re-enters them for the new batches.
       const nurseryChanged = 'fromFacilityId' in next && next.fromFacilityId !== prev.fromFacilityId;
-      return { ...prev, ...next, ...(nurseryChanged ? { withdrawByBatch: {} } : {}) };
+      const purposeChangedAwayFromPlanting =
+        'purpose' in next &&
+        next.purpose !== prev.purpose &&
+        next.purpose !== NurseryWithdrawalRequestPurposes.OUTPLANT;
+      const resetPlantingTargets = nurseryChanged || purposeChangedAwayFromPlanting;
+      return {
+        ...prev,
+        ...next,
+        ...(nurseryChanged ? { withdrawByBatch: {} } : {}),
+        ...(resetPlantingTargets
+          ? {
+              plantingSiteId: undefined,
+              plantingSeasonId: undefined,
+              stratumId: undefined,
+              substratumId: undefined,
+            }
+          : {}),
+      };
     });
   }, []);
 
@@ -113,12 +128,44 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     []
   );
 
-  // Fetch species targets whenever season + substratum are picked.
-  useEffect(() => {
-    if (draft.plantingSeasonId !== undefined && draft.substratumId !== undefined) {
-      void listSpeciesTargets({ plantingSeasonId: draft.plantingSeasonId, substratumId: draft.substratumId }, true);
+  const selectedSpeciesTargetArgs = useMemo(() => {
+    if (
+      draft.purpose !== NurseryWithdrawalRequestPurposes.OUTPLANT ||
+      draft.plantingSeasonId === undefined ||
+      draft.stratumId === undefined ||
+      draft.substratumId === undefined
+    ) {
+      return undefined;
     }
-  }, [draft.plantingSeasonId, draft.substratumId, listSpeciesTargets]);
+
+    return {
+      plantingSeasonId: draft.plantingSeasonId,
+      substratumId: draft.substratumId,
+    };
+  }, [draft.plantingSeasonId, draft.purpose, draft.stratumId, draft.substratumId]);
+
+  // Fetch species targets whenever planting purpose + season + substratum are picked.
+  useEffect(() => {
+    if (selectedSpeciesTargetArgs) {
+      void listSpeciesTargets(selectedSpeciesTargetArgs, true);
+    }
+  }, [listSpeciesTargets, selectedSpeciesTargetArgs]);
+
+  const visibleSpeciesTargets = useMemo(() => {
+    if (!selectedSpeciesTargetArgs) {
+      return undefined;
+    }
+
+    const requestArgs = speciesTargetsResult.originalArgs;
+    if (
+      requestArgs?.plantingSeasonId !== selectedSpeciesTargetArgs.plantingSeasonId ||
+      requestArgs?.substratumId !== selectedSpeciesTargetArgs.substratumId
+    ) {
+      return undefined;
+    }
+
+    return speciesTargetsResult.currentData;
+  }, [selectedSpeciesTargetArgs, speciesTargetsResult.currentData, speciesTargetsResult.originalArgs]);
 
   const handleClose = useCallback(() => {
     setStep(0);
@@ -333,7 +380,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     ];
   }, [step, strings, canGoNextFromStep1, canGoNextFromStep2, handleClose, isCreating, onSubmit]);
 
-  const stepLabels = [strings.PURPOSE_AND_DESTINATION, strings.QUANTITIES, strings.ADD_PHOTOS];
+  const stepLabels = [strings.PURPOSE, strings.QUANTITIES, strings.PHOTOS];
 
   return (
     <>
@@ -436,7 +483,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
                 batches={batches}
                 contributor={contributor}
                 draft={draft}
-                speciesTargets={speciesTargets}
+                speciesTargets={visibleSpeciesTargets}
                 onChange={updateDraft}
               />
             )}
@@ -444,7 +491,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
               <QuantitiesStep
                 batches={readyToPlantBatches}
                 draft={draft}
-                speciesTargets={speciesTargets}
+                speciesTargets={visibleSpeciesTargets}
                 setWithdrawByBatch={setWithdrawByBatch}
               />
             )}
