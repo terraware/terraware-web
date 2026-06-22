@@ -39,11 +39,34 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
     }
   }, [listPlantingSites, listPlantingSeasons, organizationId]);
 
+  const plantingSeasonsForSelectedSite = useMemo(() => {
+    const allSeasons = plantingSeasonsData?.seasons ?? [];
+    return plantingSiteId ? allSeasons.filter((s) => Number(s.plantingSiteId) === plantingSiteId) : allSeasons;
+  }, [plantingSeasonsData, plantingSiteId]);
+
+  const selectedPlantingSiteHasNoSeasons =
+    plantingSiteId !== undefined &&
+    plantingSeasonsData?.seasons !== undefined &&
+    plantingSeasonsForSelectedSite.length === 0;
+
+  const effectivePlantingSeasonId = selectedPlantingSiteHasNoSeasons ? undefined : plantingSeasonId;
+  const effectiveSpeciesId = selectedPlantingSiteHasNoSeasons ? undefined : speciesId;
+
   useEffect(() => {
     if (organizationId) {
-      void listPlantingDateRequests({ organizationId, plantingSiteId, plantingSeasonId, speciesId }, true);
+      void listPlantingDateRequests(
+        { organizationId, plantingSiteId, plantingSeasonId: effectivePlantingSeasonId, speciesId: effectiveSpeciesId },
+        true
+      );
     }
-  }, [listPlantingDateRequests, organizationId, plantingSiteId, plantingSeasonId, speciesId]);
+  }, [listPlantingDateRequests, organizationId, plantingSiteId, effectivePlantingSeasonId, effectiveSpeciesId]);
+
+  useEffect(() => {
+    if (selectedPlantingSiteHasNoSeasons) {
+      setPlantingSeasonId(undefined);
+      setSpeciesId(undefined);
+    }
+  }, [selectedPlantingSiteHasNoSeasons]);
 
   const plantingSiteOptions = useMemo<DropdownItem[]>(
     () => [
@@ -56,24 +79,24 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
   );
 
   const plantingSeasonOptions = useMemo<DropdownItem[]>(() => {
-    const allSeasons = plantingSeasonsData?.seasons ?? [];
-    const filteredSeasons = plantingSiteId ? allSeasons.filter((s) => s.plantingSiteId === plantingSiteId) : allSeasons;
     return [
       { label: strings.ALL_PLANTING_SEASONS, value: 'all' },
-      ...filteredSeasons
+      ...plantingSeasonsForSelectedSite
         .toSorted((a, b) => a.name.localeCompare(b.name, activeLocale || undefined))
         .map((s) => ({ label: s.name, value: s.id })),
     ];
-  }, [activeLocale, plantingSeasonsData, plantingSiteId, strings]);
+  }, [activeLocale, plantingSeasonsForSelectedSite, strings]);
 
   const speciesOptions = useMemo<DropdownItem[]>(
     () => [
       { label: strings.ALL_SPECIES, value: 'all' },
-      ...species
-        .toSorted((a, b) => a.scientificName.localeCompare(b.scientificName, activeLocale || undefined))
-        .map((s) => ({ label: s.scientificName, value: s.id })),
+      ...(selectedPlantingSiteHasNoSeasons
+        ? []
+        : species
+            .toSorted((a, b) => a.scientificName.localeCompare(b.scientificName, activeLocale || undefined))
+            .map((s) => ({ label: s.scientificName, value: s.id }))),
     ],
-    [activeLocale, species, strings]
+    [activeLocale, selectedPlantingSiteHasNoSeasons, species, strings]
   );
 
   const rows = requests ?? [];
@@ -92,7 +115,11 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
             label=''
             options={plantingSiteOptions}
             selectedValue={plantingSiteId ?? 'all'}
-            onChange={(value) => setPlantingSiteId(value === 'all' ? undefined : Number(value))}
+            onChange={(value) => {
+              setPlantingSiteId(value === 'all' ? undefined : Number(value));
+              setPlantingSeasonId(undefined);
+              setSpeciesId(undefined);
+            }}
             fullWidth
           />
         </Box>
@@ -101,7 +128,7 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
             id='filter-planting-season'
             label=''
             options={plantingSeasonOptions}
-            selectedValue={plantingSeasonId ?? 'all'}
+            selectedValue={effectivePlantingSeasonId ?? 'all'}
             onChange={(value) => setPlantingSeasonId(value === 'all' ? undefined : Number(value))}
             fullWidth
           />
@@ -111,7 +138,7 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
             id='filter-species'
             label=''
             options={speciesOptions}
-            selectedValue={speciesId ?? 'all'}
+            selectedValue={effectiveSpeciesId ?? 'all'}
             onChange={(value) => setSpeciesId(value === 'all' ? undefined : Number(value))}
             fullWidth
           />
@@ -119,14 +146,22 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
       </Box>
 
       <Divider />
-      {rows.map((row) => (
-        <PlantingDateRequestListItem
-          key={row.scheduledPlantingDateId}
-          row={row}
-          activeLocale={activeLocale}
-          onWithdrawClick={() => setWithdrawRequest(row)}
-        />
-      ))}
+      {selectedPlantingSiteHasNoSeasons ? (
+        <Box padding={theme.spacing(4, 2)} textAlign='center'>
+          <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+            {strings.NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE}
+          </Typography>
+        </Box>
+      ) : (
+        rows.map((row) => (
+          <PlantingDateRequestListItem
+            key={row.scheduledPlantingDateId}
+            row={row}
+            activeLocale={activeLocale}
+            onWithdrawClick={() => setWithdrawRequest(row)}
+          />
+        ))
+      )}
       {withdrawRequest && (
         <WithdrawFromBatchesModal
           open={true}
@@ -170,14 +205,14 @@ const PlantingDateRequestListItem = ({
     >
       <Box flex={1}>
         <Box display='flex' alignItems='center' gap={theme.spacing(1)} flexWrap='wrap'>
-          <Typography fontSize='16px' fontWeight={500}>
+          <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt}>
             {getMediumDate(row.date, activeLocale)}
           </Typography>
           <Link
             fontSize='16px'
             to={APP_PATHS.PLANTING_SEASONS_VIEW.replace(':plantingSeasonId', String(row.plantingSeasonId))}
           >
-            {`${row.plantingSeasonName},`}
+            {row.plantingSeasonName}
           </Link>
           <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
             {row.plantingSiteName}
