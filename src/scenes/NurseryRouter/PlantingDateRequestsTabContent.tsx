@@ -205,14 +205,14 @@ const PlantingDateRequestListItem = ({
     >
       <Box flex={1}>
         <Box display='flex' alignItems='center' gap={theme.spacing(1)} flexWrap='wrap'>
-          <Typography fontSize='16px' fontWeight={500}>
+          <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt}>
             {getMediumDate(row.date, activeLocale)}
           </Typography>
           <Link
             fontSize='16px'
             to={APP_PATHS.PLANTING_SEASONS_VIEW.replace(':plantingSeasonId', String(row.plantingSeasonId))}
           >
-            {`${row.plantingSeasonName},`}
+            {row.plantingSeasonName}
           </Link>
           <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
             {row.plantingSiteName}
