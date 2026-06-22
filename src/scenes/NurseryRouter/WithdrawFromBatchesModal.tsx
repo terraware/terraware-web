@@ -270,7 +270,7 @@ const WithdrawFromBatchesModal = ({
     ];
   }, [handleClose, isSaving, step, canGoNextFromStep2, canGoNextFromStep1, onSubmit]);
 
-  const stepLabels = [strings.PURPOSE_AND_DESTINATION, strings.QUANTITIES, strings.ADD_PHOTOS];
+  const stepLabels = [strings.PURPOSE, strings.QUANTITIES, strings.PHOTOS];
 
   return (
     <DialogBox
