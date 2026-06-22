@@ -85,6 +85,28 @@ const injectedRtkApi = api.injectEndpoints({
         })),
     }),
 
+    searchPlantingSiteProjects: build.query<number[], number>({
+      query: (organizationId) => ({
+        url: '/api/v1/search/values',
+        method: 'POST',
+        body: {
+          prefix: 'plantingSites',
+          fields: ['project_id'],
+          search: {
+            operation: 'field',
+            field: 'organization.id',
+            values: [`${organizationId}`],
+          },
+        },
+      }),
+      providesTags: [
+        { type: QueryTagTypes.PlantingSites, id: 'LIST' },
+        { type: QueryTagTypes.Projects, id: 'LIST' },
+      ],
+      transformResponse: (results: ListPlantingSiteProjectsApiResult) =>
+        results.results.project_id.values.map((value) => Number(value)).filter((value) => value > 0 && !isNaN(value)),
+    }),
+
     searchMonitoringPlots: build.query<MonitoringPlotSearchResult[], number[]>({
       query: (monitoringPlotIds) => ({
         url: '/api/v1/search',
@@ -190,6 +212,14 @@ type ListPlantingSiteSummariesApiResponse = {
   results: PlantingSiteSummaryApiResult[];
 };
 
+type ListPlantingSiteProjectsApiResult = {
+  results: {
+    project_id: {
+      values: (string | null)[];
+    };
+  };
+};
+
 export type SearchPlantingSiteSummariesApiArgs = {
   organizationId: number;
   projectIds?: number[];
@@ -254,6 +284,8 @@ export const {
   useLazyCountPlantingSitesQuery,
   useSearchPlantingSitesQuery,
   useLazySearchPlantingSitesQuery,
+  useSearchPlantingSiteProjectsQuery,
+  useLazySearchPlantingSiteProjectsQuery,
   useSearchMonitoringPlotsQuery,
   useLazySearchMonitoringPlotsQuery,
   useSearchObservationDatesQuery,

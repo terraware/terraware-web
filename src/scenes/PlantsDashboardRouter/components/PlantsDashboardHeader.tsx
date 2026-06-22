@@ -18,8 +18,8 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { useListProjectsQuery } from 'src/queries/generated/projects';
+import { useLazySearchPlantingSiteProjectsQuery } from 'src/queries/search/plantingSites';
 import { isAfter } from 'src/utils/dateUtils';
 
 import useDashboardPlantingSites from '../useDashboardPlantingSites';
@@ -49,12 +49,13 @@ export default function PlantsDashboardHeader({
   const { organizationId, plantingSites, showAllSitesOption, isLoading, isSuccess } =
     useDashboardPlantingSites(projectId);
 
-  // Org-wide sites power the project dropdown's "projects with sites" list and the empty state.
-  const { currentData: orgSitesData } = useListPlantingSitesQuery(
-    { organizationId, includeZones: false },
-    { skip: organizationId === undefined || isAcceleratorRoute }
-  );
-  const orgSites = useMemo(() => orgSitesData?.sites ?? [], [orgSitesData]);
+  // Project ids that have at least one planting site, used to populate the project dropdown.
+  const [searchPlantingSiteProjects, { currentData: projectIdsWithSites }] = useLazySearchPlantingSiteProjectsQuery();
+  useEffect(() => {
+    if (organizationId !== undefined && !isAcceleratorRoute) {
+      void searchPlantingSiteProjects(organizationId, true);
+    }
+  }, [isAcceleratorRoute, organizationId, searchPlantingSiteProjects]);
 
   const { data: projectsData } = useListProjectsQuery(selectedOrganization?.id, { skip: !selectedOrganization });
 
@@ -68,12 +69,10 @@ export default function PlantsDashboardHeader({
       : siteOptions;
   }, [plantingSites, showAllSitesOption, strings]);
 
-  const projectIdsWithSites = useMemo(() => Array.from(new Set(orgSites.map((site) => site.projectId))), [orgSites]);
-
   const projectOptions = useMemo((): DropdownItem[] => {
     const options: DropdownItem[] =
       projectsData?.projects
-        ?.filter((project) => projectIdsWithSites.includes(project.id))
+        ?.filter((project) => (projectIdsWithSites ?? []).includes(project.id))
         .map((project) => ({ label: project.name, value: project.id }))
         .sort((a, b) => a.label.localeCompare(b.label, activeLocale || undefined)) ?? [];
     options.unshift({ label: strings.NO_PROJECT, value: ALL_PLANTING_SITES });
@@ -322,7 +321,9 @@ export default function PlantsDashboardHeader({
           </Grid>
         </Card>
       )}
-      {orgSites.length === 0 && !isAcceleratorRoute && !isLoading && delayedIsReady && <PlantsDashboardEmptyMessage />}
+      {plantingSites.length === 0 && !isAcceleratorRoute && !isLoading && delayedIsReady && (
+        <PlantsDashboardEmptyMessage />
+      )}
       <Grid item xs={12}>
         <PageSnackbar />
       </Grid>
