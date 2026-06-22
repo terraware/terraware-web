@@ -32,8 +32,7 @@ type PlantsDashboardViewProps = {
   organizationId?: number;
 };
 
-// 'all' projects means no project filter (the legacy "No Project" option).
-type ProjectId = number | typeof ALL_PLANTING_SITES;
+type ProjectId = number | 'all';
 
 const PREFERENCE_NAME = 'plants.dashboard.lastVisitedPlantingSite';
 
@@ -48,7 +47,7 @@ export default function PlantsDashboardView({
   const navigate = useSyncNavigate();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
-  const [projectId, setProjectId] = useState<ProjectId>(acceleratorProjectId ?? ALL_PLANTING_SITES);
+  const [projectId, setProjectId] = useState<ProjectId>(acceleratorProjectId ?? 'all');
   const isProjectSelected = typeof projectId === 'number';
 
   const { plantingSiteId: plantingSiteIdParam } = useParams<{ plantingSiteId: string }>();

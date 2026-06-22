@@ -203,8 +203,6 @@ export default function PlantsDashboardHeader({
   const title = isAcceleratorRoute ? '' : strings.PLANTS_DASHBOARD;
   const singleSiteMode = isAcceleratorRoute && plantingSiteOptions.length === 1;
 
-  // Mirror the legacy 1s settle delay before revealing content, so the dashboard does not flicker
-  // between loading and empty/ready states while the planting site payload is resolving.
   const [delayedIsReady, setDelayedIsReady] = useState(false);
   useEffect(() => {
     const timer = setTimeout(() => setDelayedIsReady(isReady), 1000);
