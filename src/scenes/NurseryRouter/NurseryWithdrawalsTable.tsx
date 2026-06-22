@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router';
 
 import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
@@ -6,6 +6,7 @@ import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-compone
 import { Dayjs } from 'dayjs';
 import {
   MRT_Cell,
+  MRT_ColumnOrderState,
   MRT_PaginationState,
   MRT_ShowHideColumnsButton,
   MRT_SortingState,
@@ -13,6 +14,7 @@ import {
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
   MRT_ToggleGlobalFilterButton,
+  MRT_VisibilityState,
 } from 'material-react-table';
 
 import TextTruncated from 'src/components/common/TextTruncated';
@@ -21,6 +23,7 @@ import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { SearchSortOrderElement } from 'src/queries/generated/search';
 import {
   SearchNurseryWithdrawalPayload,
@@ -47,6 +50,22 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 const TABLE_STATE_STORAGE_KEY = 'nursery-withdrawals-table';
 
 const ITEMS_PER_PAGE = 100;
+const PLANTING_SEASON_COLUMN_ID = 'plantingSeasonName';
+const MENU_COLUMN_ID = 'menu';
+const DEFAULT_COLUMN_VISIBILITY: MRT_VisibilityState = { [PLANTING_SEASON_COLUMN_ID]: false };
+const DEFAULT_COLUMN_ORDER: MRT_ColumnOrderState = [
+  'withdrawnDate',
+  'purpose',
+  'nurseryName',
+  'destinationName',
+  'projectNames',
+  'stratumName',
+  'substratumShortName',
+  'speciesNames',
+  'totalWithdrawn',
+  PLANTING_SEASON_COLUMN_ID,
+  MENU_COLUMN_ID,
+];
 
 const DEFAULT_SORT_ORDER: SearchSortOrderElement[] = [
   {
@@ -81,6 +100,37 @@ const MenuCellComponent = ({
   return null;
 };
 
+const normalizeMenuColumnOrder = (columnOrder: MRT_ColumnOrderState): MRT_ColumnOrderState => {
+  const sourceOrder = columnOrder.length > 0 ? columnOrder : DEFAULT_COLUMN_ORDER;
+  const seen = new Set<string>();
+  const uniqueColumnOrder = sourceOrder.filter((columnId) => {
+    if (seen.has(columnId)) {
+      return false;
+    }
+    seen.add(columnId);
+    return true;
+  });
+  const missingColumnIds = DEFAULT_COLUMN_ORDER.filter((columnId) => !seen.has(columnId));
+
+  return [
+    ...uniqueColumnOrder.filter((columnId) => columnId !== MENU_COLUMN_ID),
+    ...missingColumnIds.filter((columnId) => columnId !== MENU_COLUMN_ID),
+    MENU_COLUMN_ID,
+  ];
+};
+
+const movePlantingSeasonBeforeMenu = (columnOrder: MRT_ColumnOrderState): MRT_ColumnOrderState => {
+  const normalizedColumnOrder = normalizeMenuColumnOrder(columnOrder);
+
+  return [
+    ...normalizedColumnOrder.filter(
+      (columnId) => columnId !== PLANTING_SEASON_COLUMN_ID && columnId !== MENU_COLUMN_ID
+    ),
+    PLANTING_SEASON_COLUMN_ID,
+    MENU_COLUMN_ID,
+  ];
+};
+
 export default function NurseryWithdrawalsTable(): JSX.Element {
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
@@ -92,6 +142,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const { availableProjects: projects } = useProjects();
 
   const [undoModalRow, setUndoModalRow] = useState<SearchNurseryWithdrawalPayload>();
+  const [listPlantingSeasons, plantingSeasonsResponse] = useLazyListPlantingSeasonsQuery();
   const [searchFilterOptions, searchFilterOptionsResponse] = useLazySearchNurseryWithdrawalsFilterOptionsQuery();
   const [searchNurseryWithdrawals, searchNurseryWithdrawalsResponse] = useLazySearchNurseryWithdrawalsQuery();
   const [countNurseryWithdrawals, searchCountNurseryWithdrawalsResponse] = useLazyCountNurseryWithdrawalsQuery();
@@ -103,9 +154,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   useEffect(() => {
     if (selectedOrganization) {
+      void listPlantingSeasons({ organizationId: selectedOrganization.id }, true);
       void searchFilterOptions(selectedOrganization.id);
     }
-  }, [searchFilterOptions, selectedOrganization]);
+  }, [listPlantingSeasons, searchFilterOptions, selectedOrganization]);
 
   const [searchValue, setSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(searchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
@@ -124,6 +176,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     showColumnFilters,
     showGlobalFilter,
   } = useTableState(TABLE_STATE_STORAGE_KEY, {
+    defaultColumnOrder: DEFAULT_COLUMN_ORDER,
+    defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
     persistedMultiSelectColumnIds: [
       'destinationName',
       'projectNames',
@@ -133,6 +187,63 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     ],
     persistFilters: true,
   });
+
+  const normalizedColumnOrder = useMemo(() => normalizeMenuColumnOrder(columnOrder), [columnOrder]);
+  const normalizedColumnVisibility = useMemo(
+    () =>
+      PLANTING_SEASON_COLUMN_ID in columnVisibility
+        ? columnVisibility
+        : { ...columnVisibility, [PLANTING_SEASON_COLUMN_ID]: false },
+    [columnVisibility]
+  );
+  const plantingSeasonVisible = normalizedColumnVisibility[PLANTING_SEASON_COLUMN_ID] === true;
+  const previousPlantingSeasonVisible = useRef(plantingSeasonVisible);
+
+  useEffect(() => {
+    if (JSON.stringify(columnOrder) !== JSON.stringify(normalizedColumnOrder)) {
+      setColumnOrder(normalizedColumnOrder);
+    }
+  }, [columnOrder, normalizedColumnOrder, setColumnOrder]);
+
+  useEffect(() => {
+    if (!(PLANTING_SEASON_COLUMN_ID in columnVisibility)) {
+      setColumnVisibility(normalizedColumnVisibility);
+    }
+  }, [columnVisibility, normalizedColumnVisibility, setColumnVisibility]);
+
+  useEffect(() => {
+    if (plantingSeasonVisible && !previousPlantingSeasonVisible.current) {
+      setColumnOrder((currentColumnOrder) => movePlantingSeasonBeforeMenu(currentColumnOrder));
+    }
+    previousPlantingSeasonVisible.current = plantingSeasonVisible;
+  }, [plantingSeasonVisible, setColumnOrder]);
+
+  const handleColumnOrderChange = useCallback(
+    (updater: React.SetStateAction<MRT_ColumnOrderState>) => {
+      setColumnOrder((currentColumnOrder) =>
+        normalizeMenuColumnOrder(typeof updater === 'function' ? updater(currentColumnOrder) : updater)
+      );
+    },
+    [setColumnOrder]
+  );
+
+  const handleColumnVisibilityChange = useCallback(
+    (updater: React.SetStateAction<typeof columnVisibility>) => {
+      setColumnVisibility((currentColumnVisibility) => {
+        const currentVisibility = {
+          ...currentColumnVisibility,
+          [PLANTING_SEASON_COLUMN_ID]:
+            currentColumnVisibility[PLANTING_SEASON_COLUMN_ID] ?? DEFAULT_COLUMN_VISIBILITY[PLANTING_SEASON_COLUMN_ID],
+        };
+        const nextVisibility = typeof updater === 'function' ? updater(currentVisibility) : updater;
+
+        return PLANTING_SEASON_COLUMN_ID in nextVisibility
+          ? nextVisibility
+          : { ...nextVisibility, [PLANTING_SEASON_COLUMN_ID]: false };
+      });
+    },
+    [setColumnVisibility]
+  );
 
   // Material React Table state
   const [pagination, setPagination] = useState<MRT_PaginationState>({
@@ -163,6 +274,18 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     searchFilterOptionsResponse.currentData?.stratumNames,
     searchFilterOptionsResponse.currentData?.substratumNames,
   ]);
+
+  const { plantingSeasonNames, plantingSeasonNameToIds } = useMemo(() => {
+    const idsByName = new Map<string, number[]>();
+    (plantingSeasonsResponse.currentData?.seasons ?? []).forEach((season) => {
+      idsByName.set(season.name, [...(idsByName.get(season.name) ?? []), season.id]);
+    });
+
+    return {
+      plantingSeasonNameToIds: idsByName,
+      plantingSeasonNames: Array.from(idsByName.keys()).sort((a, b) => a.localeCompare(b)),
+    };
+  }, [plantingSeasonsResponse.currentData?.seasons]);
 
   // Get all project names for filter (from all available projects, not just current results)
   const uniqueProjectNames = useMemo(() => {
@@ -316,13 +439,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         filterFn: () => true,
       },
       {
-        id: 'plantingSeasonName',
-        header: strings.PLANTING_SEASON,
-        accessorKey: 'plantingSeasonName',
-        enableEditing: false,
-        enableColumnFilter: false,
-      },
-      {
         id: 'projectNames',
         header: strings.PROJECTS,
         accessorKey: 'projectNames',
@@ -374,7 +490,16 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         Cell: TotalWithdrawnCell,
       },
       {
-        id: 'menu',
+        id: PLANTING_SEASON_COLUMN_ID,
+        header: strings.PLANTING_SEASON,
+        accessorKey: 'plantingSeasonName',
+        enableEditing: false,
+        filterVariant: 'select',
+        filterSelectOptions: plantingSeasonNames,
+        filterFn: () => true,
+      },
+      {
+        id: MENU_COLUMN_ID,
         header: '',
         enableEditing: false,
         enableColumnFilter: false,
@@ -399,6 +524,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       speciesOptions,
       SpeciesNamesCell,
       TotalWithdrawnCell,
+      plantingSeasonNames,
       MenuCell,
     ]
   );
@@ -409,6 +535,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     const purposeFilterValue = columnFilters.find((column) => column.id === 'purpose')?.value;
     const nurseryFilterValue = columnFilters.find((column) => column.id === 'nurseryName')?.value;
     const destinationFilterValue = columnFilters.find((column) => column.id === 'destinationName')?.value;
+    const plantingSeasonFilterValue = columnFilters.find((column) => column.id === PLANTING_SEASON_COLUMN_ID)?.value;
     const stratumFilterValue = columnFilters.find((column) => column.id === 'stratumName')?.value;
     const subStratumFilterValue = columnFilters.find((column) => column.id === 'substratumShortName')?.value;
     const speciesFilterValue = columnFilters.find((column) => column.id === 'speciesNames')?.value;
@@ -459,13 +586,22 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       purposes: purposes as NurseryWithdrawalPurpose[] | undefined,
       nurseryName: nurseryFilterValue as string | undefined,
       destinationNames: destinationFilterValue as string[] | undefined,
+      plantingSeasonIds:
+        typeof plantingSeasonFilterValue === 'string' ? plantingSeasonNameToIds.get(plantingSeasonFilterValue) : [],
       stratumNames: stratumFilterValue as string[] | undefined,
       substratumNames: subStratumFilterValue as string[] | undefined,
       speciesNames: speciesFilterValue as string[],
       totalWithdrawn,
       sortOrder,
     };
-  }, [columnFilters, debouncedSearchTerm, purposeLabelToValue, selectedOrganization?.id, sorting]);
+  }, [
+    columnFilters,
+    debouncedSearchTerm,
+    plantingSeasonNameToIds,
+    purposeLabelToValue,
+    selectedOrganization?.id,
+    sorting,
+  ]);
 
   useEffect(() => {
     if (searchArgs.organizationId) {
@@ -529,6 +665,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       debouncedSearchTerm !== '' ||
       searchArgs.nurseryName ||
       searchArgs.destinationNames?.length ||
+      searchArgs.plantingSeasonIds?.length ||
       searchArgs.projectNames?.length ||
       searchArgs.purposes?.length ||
       searchArgs.stratumNames?.length ||
@@ -574,21 +711,21 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
             pagination,
             sorting,
             columnFilters,
-            columnVisibility,
+            columnVisibility: normalizedColumnVisibility,
             showColumnFilters,
             showGlobalFilter,
             globalFilter: searchValue,
             density,
-            columnOrder,
+            columnOrder: normalizedColumnOrder,
           },
           onPaginationChange: setPagination,
           onSortingChange: setSorting,
           onColumnFiltersChange: setColumnFilters,
-          onColumnVisibilityChange: setColumnVisibility,
+          onColumnVisibilityChange: handleColumnVisibilityChange,
           onShowColumnFiltersChange: setShowColumnFilters,
           onShowGlobalFilterChange: setShowGlobalFilter,
           onGlobalFilterChange: setSearchValue,
-          onColumnOrderChange: setColumnOrder,
+          onColumnOrderChange: handleColumnOrderChange,
           onDensityChange,
           manualPagination: true,
           manualSorting: true,
@@ -636,7 +773,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
             },
           },
           muiTableHeadCellProps: ({ column }) =>
-            column.id === 'menu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
+            column.id === MENU_COLUMN_ID ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
           muiTableBodyCellProps: ({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` }),
           muiTableBodyRowProps: {
             sx: {

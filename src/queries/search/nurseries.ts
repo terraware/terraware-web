@@ -134,6 +134,15 @@ const parseSearchNurseryWithdrawalsArgs = (
     });
   }
 
+  if (args.plantingSeasonIds?.length) {
+    searchChildren.push({
+      operation: 'field',
+      field: 'plantingSeason_id',
+      type: 'Exact',
+      values: args.plantingSeasonIds.map(String),
+    });
+  }
+
   if (args.stratumNames?.length) {
     searchChildren.push({
       operation: 'field',
@@ -211,6 +220,13 @@ const parseSearchNurseryWithdrawalsArgs = (
           {
             ...orderOption,
             field: 'batchWithdrawals.batch_species_scientificName',
+          },
+        ];
+      case 'plantingSeasonName':
+        return [
+          {
+            ...orderOption,
+            field: 'plantingSeason_name',
           },
         ];
       default:
@@ -438,6 +454,7 @@ export type SearchNurseryWithdrawalsApiArgs = {
   projectNames?: string[];
   nurseryName?: string;
   destinationNames?: string[];
+  plantingSeasonIds?: number[];
   stratumNames?: string[];
   substratumNames?: string[];
   speciesNames?: string[];
