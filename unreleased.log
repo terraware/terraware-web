@@ -1,3 +1,4 @@
+7dd3ae40 SW-8564 Reduce the space between the “Batch” and “Total” columns (#5930)
 0ad0be9d SW-8561 Add project dropdown to Planting Date Withdrawal Request flow (#5929)
 f1c77f06 SW-8450 Use BE calculated project level average strata survival rate on plants dashboard (#5928)
 6f6fb5c9 SW-8572 Available to Schedule numbers still not correct (#5927)
