@@ -39,29 +39,21 @@ const NurserySummaryRow = ({ species, ready, index }: NurserySummaryRowProps): J
         : strings.NOT_COVERED;
 
   return (
-    <Box
-      display='grid'
-      gridTemplateColumns='2fr 1fr 1fr 1fr'
-      gap={theme.spacing(1)}
-      padding={theme.spacing(1, 2)}
-      sx={{
-        backgroundColor: index % 2 === 0 ? theme.palette.TwClrBgSecondary : 'transparent',
-      }}
-    >
+    <Box display='grid' gridTemplateColumns='2fr 1fr 1fr 1fr' gap={theme.spacing(1)} padding={theme.spacing(1, 2)}>
       <Box>
-        <Typography fontSize='16px' textAlign='left'>
+        <Typography fontSize='16px' color={theme.palette.TwClrBaseBlack} textAlign='left' fontWeight={400}>
           {species.scientificName}
         </Typography>
         {species.commonName && (
-          <Typography fontSize='12px' color={theme.palette.TwClrTxtSecondary} textAlign='left'>
-            {species.commonName}
+          <Typography fontSize='16px' color={theme.palette.TwClrTxt} textAlign='left' fontWeight={400}>
+            ({species.commonName})
           </Typography>
         )}
       </Box>
-      <Typography fontSize='16px' textAlign='right'>
+      <Typography fontSize='16px' textAlign='right' color={theme.palette.TwClrTxt}>
         {ready.toLocaleString()}
       </Typography>
-      <Typography fontSize='16px' textAlign='right'>
+      <Typography fontSize='16px' textAlign='right' color={theme.palette.TwClrTxt}>
         {species.requestedQuantity.toLocaleString()}
       </Typography>
       <Typography fontSize='16px' textAlign='right' color={coverageColor} fontWeight={600}>

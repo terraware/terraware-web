@@ -402,11 +402,12 @@ const Step1Content = ({
           <Box
             padding={theme.spacing(1.5, 2)}
             sx={{
+              borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
               backgroundColor: theme.palette.TwClrBgSecondary,
             }}
           >
             <Box display='flex' alignItems='center' gap={theme.spacing(0.5)}>
-              <Typography fontSize='16px' fontWeight={400} textAlign={'left'}>
+              <Typography fontSize='16px' fontWeight={400} textAlign={'left'} color={theme.palette.TwClrTxt}>
                 {strings.NURSERY_SUMMARY}
               </Typography>
               <Tooltip title={strings.NURSERY_SUMMARY_TOOLTIP}>
@@ -421,18 +422,20 @@ const Step1Content = ({
             gridTemplateColumns='2fr 1fr 1fr 1fr'
             gap={theme.spacing(1)}
             padding={theme.spacing(1, 2)}
-            sx={{ borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
+            sx={{
+              backgroundColor: theme.palette.TwClrBgSecondary,
+            }}
           >
-            <Typography fontSize='14px' fontWeight={600} textAlign='left'>
+            <Typography fontSize='14px' fontWeight={600} textAlign='left' color={theme.palette.TwClrTxt}>
               {strings.SPECIES}
             </Typography>
-            <Typography fontSize='14px' fontWeight={600} textAlign='right'>
+            <Typography fontSize='14px' fontWeight={600} textAlign='right' color={theme.palette.TwClrTxt}>
               {strings.READY_TO_PLANT}
             </Typography>
-            <Typography fontSize='14px' fontWeight={600} textAlign='right'>
+            <Typography fontSize='14px' fontWeight={600} textAlign='right' color={theme.palette.TwClrTxt}>
               {strings.REQUESTED}
             </Typography>
-            <Typography fontSize='14px' fontWeight={600} textAlign='right'>
+            <Typography fontSize='14px' fontWeight={600} textAlign='right' color={theme.palette.TwClrTxt}>
               {strings.COVERAGE}
             </Typography>
           </Box>
