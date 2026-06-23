@@ -44,10 +44,13 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
     return plantingSiteId ? allSeasons.filter((s) => Number(s.plantingSiteId) === plantingSiteId) : allSeasons;
   }, [plantingSeasonsData, plantingSiteId]);
 
-  const selectedPlantingSiteHasNoSeasons =
-    plantingSiteId !== undefined &&
-    plantingSeasonsData?.seasons !== undefined &&
-    plantingSeasonsForSelectedSite.length === 0;
+  const selectedPlantingSiteHasNoSeasons = useMemo(
+    () =>
+      plantingSiteId !== undefined &&
+      plantingSeasonsData?.seasons !== undefined &&
+      plantingSeasonsForSelectedSite.length === 0,
+    [plantingSiteId, plantingSeasonsData?.seasons, plantingSeasonsForSelectedSite]
+  );
 
   const effectivePlantingSeasonId = selectedPlantingSiteHasNoSeasons ? undefined : plantingSeasonId;
   const effectiveSpeciesId = selectedPlantingSiteHasNoSeasons ? undefined : speciesId;
