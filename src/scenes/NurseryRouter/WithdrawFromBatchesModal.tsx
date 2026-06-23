@@ -400,6 +400,15 @@ const Step1Content = ({
 
   return (
     <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
+      <Box display='grid' gridTemplateColumns='66px 1fr' gap={theme.spacing(3)} maxWidth='320px' alignItems={'center'}>
+        <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} textAlign='left'>
+          {strings.PURPOSE_REQUIRED}
+        </Typography>
+        <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxt} textAlign='left'>
+          {strings.PLANTING}
+        </Typography>
+      </Box>
+
       <Box maxWidth='320px'>
         <DatePicker
           id='withdraw-date'
