@@ -204,6 +204,7 @@ export default function MapSplitView({
       {topComponent}
 
       <MapComponent
+        clusterMaxZoom={20}
         containerStyle={
           isDesktop
             ? {
