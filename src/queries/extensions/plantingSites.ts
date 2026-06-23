@@ -36,6 +36,7 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.PlantingSites, id: 'LIST' },
         // this mutation is called to change the survivalRateIncludesTempPlots, which is included in the T0 response for a site
         { type: QueryTagTypes.T0, id: siteApiArg.id },
+        { type: QueryTagTypes.TrackingStats },
       ],
     },
     getPlantingSiteHistory: {

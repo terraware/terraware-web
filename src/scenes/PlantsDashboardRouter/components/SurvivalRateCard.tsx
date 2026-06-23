@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo } from 'react';
+import React, { type JSX, useEffect } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
@@ -8,10 +8,11 @@ import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { useLatestSiteObservationResult, useProjectSiteObservationResults } from 'src/hooks/observations';
+import { useLatestSiteObservationResult } from 'src/hooks/observations';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useKnowledgeBaseLinks } from 'src/knowledgeBaseLinks';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
+import { useLazyGetAggregatedTrackingStatsQuery } from 'src/queries/generated/stats';
 import strings from 'src/strings';
 
 import HighestAndLowestSurvivalRateSpeciesCard from './HighestAndLowestSurvivalRateSpeciesCard';
@@ -39,29 +40,13 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
     'Stratum'
   );
 
-  const projectSiteResults = useProjectSiteObservationResults(
-    typeof projectId === 'number' ? projectId : undefined,
-    isProjectView
-  );
+  const [getAggregatedTrackingStats, trackingStatsResponse] = useLazyGetAggregatedTrackingStatsQuery();
 
-  const weightedSurvivalRate = useMemo(() => {
-    const validStrata = projectSiteResults.flatMap(({ site, result }) =>
-      (result?.strata ?? [])
-        .map((stratum) => {
-          const areaHa = site.strata?.find((s) => s.id === stratum.stratumId)?.areaHa;
-          return { areaHa, survivalRate: stratum.survivalRate };
-        })
-        .filter(
-          (entry): entry is { areaHa: number; survivalRate: number } =>
-            entry.survivalRate !== undefined && entry.areaHa !== undefined && entry.areaHa > 0
-        )
-    );
-    const totalArea = validStrata.reduce((sum, stratum) => sum + stratum.areaHa, 0);
-    if (totalArea === 0) {
-      return undefined;
+  useEffect(() => {
+    if (isProjectView && typeof projectId === 'number') {
+      void getAggregatedTrackingStats({ projectId }, true);
     }
-    return Math.round(validStrata.reduce((sum, stratum) => sum + stratum.survivalRate * stratum.areaHa, 0) / totalArea);
-  }, [projectSiteResults]);
+  }, [getAggregatedTrackingStats, isProjectView, projectId]);
 
   const separatorStyles = {
     width: '1px',
@@ -73,7 +58,7 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
 
   return (
     <Card
-      busy={isLoadingObservation}
+      busy={isProjectView ? trackingStatsResponse.isFetching : isLoadingObservation}
       radius='8px'
       style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
     >
@@ -102,7 +87,9 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
         </Box>
         <Box data-testid='survival-rate-value' display='flex' sx={{ flexFlow: 'row wrap' }} marginTop={1}>
           {(() => {
-            const displayValue = isProjectView ? weightedSurvivalRate : latestObservationResult?.survivalRate;
+            const displayValue = isProjectView
+              ? trackingStatsResponse.currentData?.survivalRate
+              : latestObservationResult?.survivalRate;
             return displayValue !== undefined ? (
               <>
                 <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
