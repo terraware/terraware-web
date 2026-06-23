@@ -4,13 +4,16 @@ import { Box, FormControlLabel, Radio, RadioGroup, Tooltip, Typography, useTheme
 import { Dropdown, DropdownItem, Icon, IconTooltip } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
+import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import DatePicker from 'src/components/common/DatePicker';
 import TextField from 'src/components/common/Textfield/Textfield';
+import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { SpeciesTargetForSubstratum } from 'src/queries/search/speciesTargetsForSubstratum';
 import { NurseryWithdrawalPurpose, NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
+import { Project } from 'src/types/Project';
 
 import SpeciesTargetsTable from './SpeciesTargetsTable';
 import { BatchInfo, BatchWithdrawDraft } from './types';
@@ -36,6 +39,7 @@ const PurposeAndDestinationStep = ({
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization?.id;
+  const { availableProjects: projects } = useProjects();
 
   const [
     listPlantingSites,
@@ -89,6 +93,19 @@ const PurposeAndDestinationStep = ({
     const nurseries = (selectedOrganization?.facilities ?? []).filter((f) => f.type === 'Nursery');
     return nurseries.filter((f) => f.id !== draft.fromFacilityId).map((f) => ({ label: f.name, value: f.id }));
   }, [selectedOrganization, draft.fromFacilityId]);
+
+  const availableProjectsForBatches = useMemo<Project[] | undefined>(
+    () =>
+      projects?.filter((project: Project) =>
+        batches.some(
+          (batch) =>
+            batch.projectId === project.id &&
+            (draft.fromFacilityId === undefined || batch.facilityId === draft.fromFacilityId) &&
+            (!isPlanting || batch.readyQuantity > 0)
+        )
+      ),
+    [batches, draft.fromFacilityId, isPlanting, projects]
+  );
 
   const nurseryTransferDisabled = toNurseryOptions.length === 0;
 
@@ -180,6 +197,16 @@ const PurposeAndDestinationStep = ({
     }
   }, [draft.fromFacilityId, fromNurseryOptions, onChange]);
 
+  useEffect(() => {
+    if (
+      draft.projectId !== undefined &&
+      availableProjectsForBatches &&
+      !availableProjectsForBatches.some((project) => project.id === draft.projectId)
+    ) {
+      onChange({ projectId: undefined });
+    }
+  }, [availableProjectsForBatches, draft.projectId, onChange]);
+
   const hasReadyQuantities = useMemo(
     () =>
       batches.some(
@@ -266,6 +293,20 @@ const PurposeAndDestinationStep = ({
           sx={{ textAlign: 'left' }}
         />
       </Box>
+
+      {batches.length > 1 && (availableProjectsForBatches?.length ?? 0) > 0 && (
+        <Box maxWidth='320px' textAlign='left'>
+          <ProjectsDropdown<{ projectId?: number }>
+            availableProjects={availableProjectsForBatches}
+            label={strings.PROJECT}
+            record={{ projectId: draft.projectId }}
+            setRecord={(setFn) => {
+              const nextRecord = setFn({ projectId: draft.projectId });
+              onChange({ projectId: nextRecord.projectId });
+            }}
+          />
+        </Box>
+      )}
 
       {isPlanting && (
         <Box maxWidth='320px'>

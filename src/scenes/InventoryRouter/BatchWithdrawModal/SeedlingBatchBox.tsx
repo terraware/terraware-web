@@ -73,12 +73,14 @@ const SeedlingBatchBox = ({
     },
   ];
 
-  const updateQuantity = (batchId: number, field: keyof BatchWithdrawQuantities, value: unknown) => {
+  const updateQuantity = (batchId: number, field: keyof BatchWithdrawQuantities, rawValue: unknown) => {
+    const numericValue = Number(rawValue ?? 0);
+    const value = Number.isFinite(numericValue) ? Math.max(0, numericValue) : 0;
     setWithdrawByBatch((prev) => ({
       ...prev,
       [batchId]: {
         ...(prev[batchId] ?? emptyQuantities()),
-        [field]: Math.max(0, Number(value ?? 0)),
+        [field]: value,
       },
     }));
   };

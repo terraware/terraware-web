@@ -55,6 +55,7 @@ const batchQuantityForField = (batch: BatchInfo, field: keyof BatchWithdrawQuant
     case 'readyQuantityWithdrawn':
       return batch.readyQuantity;
   }
+  return 0;
 };
 
 const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps): JSX.Element => {
@@ -112,6 +113,8 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
             hardeningOffQuantity: Number(b['hardeningOffQuantity(raw)'] ?? 0),
             readyQuantity: Number(b['readyQuantity(raw)'] ?? 0),
             totalQuantity: Number(b['totalQuantity(raw)'] ?? 0),
+            projectId: b.project_id !== undefined && b.project_id !== null ? Number(b.project_id) : undefined,
+            projectName: b.project_name ? String(b.project_name) : undefined,
           })
         )
         .filter((batch) => batch.totalQuantity + batch.germinatingQuantity > 0);
@@ -128,6 +131,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       // A withdrawal is bound to a single nursery; clear quantities when the
       // From: Nursery changes so the user re-enters them for the new batches.
       const nurseryChanged = 'fromFacilityId' in next && next.fromFacilityId !== prev.fromFacilityId;
+      const projectChanged = 'projectId' in next && next.projectId !== prev.projectId;
       const nextPurpose = next.purpose ?? prev.purpose;
       const purposeChanged = 'purpose' in next && nextPurpose !== prev.purpose;
       const plantingModeChanged =
@@ -140,7 +144,8 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       return {
         ...prev,
         ...next,
-        ...(nurseryChanged || plantingModeChanged ? { withdrawByBatch: {} } : {}),
+        ...(nurseryChanged || projectChanged || plantingModeChanged ? { withdrawByBatch: {} } : {}),
+        ...(nurseryChanged ? { destinationFacilityId: undefined, projectId: undefined } : {}),
         ...(resetPlantingTargets
           ? {
               plantingSiteId: undefined,
@@ -220,9 +225,19 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
 
   const isPlanting = draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
 
+  const projectFilteredBatches = useMemo(() => {
+    if (!displayedBatches) {
+      return undefined;
+    }
+    if (draft.projectId === undefined) {
+      return displayedBatches;
+    }
+    return displayedBatches.filter((b) => b.projectId === draft.projectId);
+  }, [displayedBatches, draft.projectId]);
+
   const quantityStepBatches = useMemo(
-    () => (isPlanting ? displayedBatches?.filter((b) => b.readyQuantity > 0) : displayedBatches),
-    [displayedBatches, isPlanting]
+    () => (isPlanting ? projectFilteredBatches?.filter((b) => b.readyQuantity > 0) : projectFilteredBatches),
+    [isPlanting, projectFilteredBatches]
   );
 
   // Species summary in the header
