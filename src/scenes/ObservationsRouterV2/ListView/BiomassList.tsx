@@ -19,6 +19,7 @@ import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useLazyListObservationResultsQuery } from 'src/queries/generated/observations';
@@ -59,7 +60,7 @@ const BiomassActionsMenuContent = ({ observationId }: { observationId: number })
 };
 
 export type BiomassListProps = {
-  plantingSiteId?: number;
+  plantingSiteId?: PlantingSiteId;
 };
 
 export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.Element {
@@ -101,7 +102,12 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   useEffect(() => {
     if (selectedOrganization) {
       void listAdHocObservationResults(
-        { plantingSiteId, organizationId: selectedOrganization.id, depth: 'Plant', isAdHoc: true },
+        {
+          plantingSiteId: plantingSiteId === ALL_PLANTING_SITES ? undefined : plantingSiteId,
+          organizationId: selectedOrganization.id,
+          depth: 'Plant',
+          isAdHoc: true,
+        },
         true
       );
     }
@@ -228,11 +234,15 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     if (!selectedOrganization) {
       return;
     }
-    const content = await ObservationsService.exportBiomassObservationsCsv(selectedOrganization.id, plantingSiteId);
+    const content = await ObservationsService.exportBiomassObservationsCsv(
+      selectedOrganization.id,
+      plantingSiteId === ALL_PLANTING_SITES ? undefined : plantingSiteId
+    );
     if (content !== null) {
-      const siteName = plantingSiteId
-        ? plantingSitesNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
-        : strings.ALL_PLANTING_SITES;
+      const siteName =
+        typeof plantingSiteId === 'number'
+          ? plantingSitesNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
+          : strings.ALL_PLANTING_SITES;
       const filename = sanitize(`${siteName}-${strings.BIOMASS_MONITORING}`);
       downloadCsv(filename, content);
     }

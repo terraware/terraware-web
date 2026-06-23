@@ -8,7 +8,7 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import useBoolean from 'src/hooks/useBoolean';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
-import useStickyPlantingSiteId from 'src/hooks/useStickyPlantingSiteId';
+import useStickyPlantingSiteId, { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 
@@ -22,7 +22,7 @@ const PlantingSeasonsView = (): JSX.Element => {
   const { selectedOrganization } = useOrganization();
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
-  const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('planting-seasons', -1);
+  const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('planting-seasons');
 
   const [listPlantingSeasons, { data: plantingSeasonsData }] = useLazyListPlantingSeasonsQuery();
 
@@ -37,7 +37,10 @@ const PlantingSeasonsView = (): JSX.Element => {
       .map((site) => ({ label: site.name, value: site.id }))
       .sort((a, b) => a.label.localeCompare(b.label));
 
-    return [{ label: isMobile ? strings.ALL_SITES : strings.ALL_PLANTING_SITES, value: -1 }, ...sitesOptions];
+    return [
+      { label: isMobile ? strings.ALL_SITES : strings.ALL_PLANTING_SITES, value: ALL_PLANTING_SITES },
+      ...sitesOptions,
+    ];
   }, [isMobile, plantingSites, strings]);
 
   const plantingSiteDropdown = (
@@ -46,7 +49,9 @@ const PlantingSeasonsView = (): JSX.Element => {
       required
       selectedValue={selectedPlantingSiteId}
       options={plantingSiteOptions}
-      onChange={(value: any) => selectPlantingSite(Number(value))}
+      onChange={(value: string) =>
+        selectPlantingSite(value === ALL_PLANTING_SITES ? ALL_PLANTING_SITES : Number(value))
+      }
       sx={{ flex: 1, maxWidth: isMobile ? '280px' : '400px' }}
     />
   );
@@ -75,7 +80,9 @@ const PlantingSeasonsView = (): JSX.Element => {
     const sitesById = new Map(plantingSites.map((site) => [site.id, site]));
     const seasons = plantingSeasonsData?.seasons ?? [];
     return seasons
-      .filter((season) => selectedPlantingSiteId === -1 || season.plantingSiteId === selectedPlantingSiteId)
+      .filter(
+        (season) => selectedPlantingSiteId === ALL_PLANTING_SITES || season.plantingSiteId === selectedPlantingSiteId
+      )
       .flatMap((season) => {
         const site = sitesById.get(season.plantingSiteId);
         return site ? [{ site, season }] : [];
@@ -124,7 +131,10 @@ const PlantingSeasonsView = (): JSX.Element => {
       rightComponentGridSize={isMobile ? 0 : undefined}
     >
       {addModalOpen && (
-        <AddPlantingSeasonModal onClose={onCloseAddModal} initialPlantingSiteId={selectedPlantingSiteId} />
+        <AddPlantingSeasonModal
+          onClose={onCloseAddModal}
+          initialPlantingSiteId={selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId}
+        />
       )}
       {seasonRows.length === 0 ? (
         <Card style={{ width: '100%' }} radius={theme.spacing(1)}>

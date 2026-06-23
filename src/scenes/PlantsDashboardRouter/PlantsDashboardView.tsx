@@ -14,6 +14,7 @@ import { useLatestSiteObservationResult } from 'src/hooks/observations';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePlantingSite from 'src/hooks/usePlantingSite';
+import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -47,7 +48,7 @@ export default function PlantsDashboardView({
 
   const { plantingSiteId: plantingSiteIdParam } = useParams<{ plantingSiteId: string }>();
   const initialPlantingSiteId = plantingSiteIdParam ? Number(plantingSiteIdParam) : undefined;
-  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<number | undefined>(
+  const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<PlantingSiteId | undefined>(
     initialPlantingSiteId && !isNaN(initialPlantingSiteId) ? initialPlantingSiteId : undefined
   );
 
@@ -55,7 +56,9 @@ export default function PlantsDashboardView({
   const { plantingSitesWithAllSitesOption } = useOrganizationPlantingSites({
     organizationId: isAcceleratorRoute ? acceleratorOrganizationId : undefined,
   });
-  const { plantingSite } = usePlantingSite(selectedPlantingSiteId);
+  const { plantingSite } = usePlantingSite(
+    selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId
+  );
   const latestObservationResultId = useMemo(() => {
     return plantingSite?.latestObservationId;
   }, [plantingSite]);
@@ -63,7 +66,10 @@ export default function PlantsDashboardView({
     return plantingSite?.latestObservationCompletedTime;
   }, [plantingSite]);
 
-  const { observation: latestObservationResult } = useLatestSiteObservationResult(selectedPlantingSiteId, 'Substratum');
+  const { observation: latestObservationResult } = useLatestSiteObservationResult(
+    selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId,
+    'Substratum'
+  );
 
   // Poll for survival rate recalculation and refresh observation results when it completes.
   const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(plantingSite?.id);
@@ -206,13 +212,13 @@ export default function PlantsDashboardView({
           }}
         >
           <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
-            {selectedPlantingSiteId === -1 ? strings.PROJECT_AREA_TOTALS : strings.PLANTING_SITE_TOTALS}
+            {selectedPlantingSiteId === ALL_PLANTING_SITES ? strings.PROJECT_AREA_TOTALS : strings.PLANTING_SITE_TOTALS}
           </Typography>
         </Box>
       </Grid>
       <Grid item xs={12}>
         <PlantsAndSpeciesCard
-          plantingSiteId={selectedPlantingSiteId !== -1 ? plantingSite?.id : undefined}
+          plantingSiteId={selectedPlantingSiteId !== ALL_PLANTING_SITES ? plantingSite?.id : undefined}
           projectId={projectId}
         />
       </Grid>
@@ -386,7 +392,8 @@ export default function PlantsDashboardView({
   }, [plantingSite, observationDateRange, renderLatestObservationLink, observedHectares, strings]);
 
   const onSelect = useCallback((nextPlantingSiteId: number) => {
-    setSelectedPlantingSiteId(nextPlantingSiteId);
+    // PlantsPrimaryPage represents "all planting sites" with the synthetic site id -1.
+    setSelectedPlantingSiteId(nextPlantingSiteId === -1 ? ALL_PLANTING_SITES : nextPlantingSiteId);
   }, []);
 
   const onSelectProject = useCallback((newProjectId: number) => {
@@ -417,7 +424,7 @@ export default function PlantsDashboardView({
     <PlantsPrimaryPage
       title={isAcceleratorRoute ? '' : strings.PLANTS_DASHBOARD}
       text={
-        selectedPlantingSiteId !== -1
+        selectedPlantingSiteId !== ALL_PLANTING_SITES
           ? plantingSite
             ? latestObservationResultId
               ? getDashboardSubhead()
@@ -448,13 +455,13 @@ export default function PlantsDashboardView({
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}
-        {hasObservationResults && selectedPlantingSiteId !== -1 && renderPlantingSiteTrends()}
-        {selectedPlantingSiteId !== -1 && hasObservationResults && renderPlantingProgressAndDensity()}
-        {((hasObservationResults && selectedPlantingSiteId !== -1) || (!!projectId && !plantingSite)) &&
+        {hasObservationResults && selectedPlantingSiteId !== ALL_PLANTING_SITES && renderPlantingSiteTrends()}
+        {selectedPlantingSiteId !== ALL_PLANTING_SITES && hasObservationResults && renderPlantingProgressAndDensity()}
+        {((hasObservationResults && selectedPlantingSiteId !== ALL_PLANTING_SITES) || (!!projectId && !plantingSite)) &&
           renderSurvivalRate()}
-        {selectedPlantingSiteId !== -1 && hasStrata && renderStratumLevelData()}
-        {selectedPlantingSiteId !== -1 && hasPolygons && !hasStrata && renderSimpleSiteMap()}
-        {(selectedPlantingSiteId === -1 || !plantingSite) && renderMapWithSites()}
+        {selectedPlantingSiteId !== ALL_PLANTING_SITES && hasStrata && renderStratumLevelData()}
+        {selectedPlantingSiteId !== ALL_PLANTING_SITES && hasPolygons && !hasStrata && renderSimpleSiteMap()}
+        {(selectedPlantingSiteId === ALL_PLANTING_SITES || !plantingSite) && renderMapWithSites()}
       </Grid>
     </PlantsPrimaryPage>
   );

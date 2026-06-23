@@ -22,6 +22,7 @@ import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent'
 import { APP_PATHS } from 'src/constants';
 import { useListObservationResults } from 'src/hooks/observations';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -117,7 +118,7 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
 };
 
 export type PlantMonitoringListProps = {
-  plantingSiteId?: number;
+  plantingSiteId?: PlantingSiteId;
 };
 
 const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
@@ -192,7 +193,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       void listAdHocObservationResults(
         {
           organizationId: selectedOrganization.id,
-          plantingSiteId,
+          plantingSiteId: plantingSiteId === ALL_PLANTING_SITES ? undefined : plantingSiteId,
           depth: 'Plant',
           isAdHoc: true,
         },
@@ -202,7 +203,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   }, [listAdHocObservationResults, selectedPlotSelection, selectedOrganization, plantingSiteId]);
 
   useEffect(() => {
-    if (plantingSiteId) {
+    if (typeof plantingSiteId === 'number') {
       void getT0SiteDataSet(plantingSiteId, true);
       void getPlotsWithObservations(plantingSiteId, true);
     }
@@ -287,7 +288,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   );
 
   const navigateToSurvivalRateSettings = useCallback(() => {
-    if (plantingSiteId) {
+    if (typeof plantingSiteId === 'number') {
       navigate({
         pathname: APP_PATHS.SURVIVAL_RATE_SETTINGS_V2.replace(':plantingSiteId', plantingSiteId.toString()),
       });
@@ -554,7 +555,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       };
     });
 
-    const selectedSite = plantingSiteId ? plantingSitesById[plantingSiteId] : undefined;
+    const selectedSite = typeof plantingSiteId === 'number' ? plantingSitesById[plantingSiteId] : undefined;
     void exportAdHocObservationsResults({ adHocObservationsResults, plantingSite: selectedSite });
   }, [defaultTimezone, listAdHocObservationResultsResponse, plantingSiteId, plantingSitesById]);
 
@@ -579,7 +580,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           fixedMenu
           fullWidth
         />
-        {plantingSiteId && selectedPlotSelection === 'assigned' && rows.length > 0 && (
+        {typeof plantingSiteId === 'number' && selectedPlotSelection === 'assigned' && rows.length > 0 && (
           <Box display='flex' alignItems='center'>
             <Link
               onClick={navigateToSurvivalRateSettings}

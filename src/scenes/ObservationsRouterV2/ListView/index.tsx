@@ -10,7 +10,7 @@ import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/Surviv
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
-import useStickyPlantingSiteId from 'src/hooks/useStickyPlantingSiteId';
+import useStickyPlantingSiteId, { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
 import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -34,12 +34,14 @@ const ObservationListView = (): JSX.Element => {
 
   const observableSites = useObservablePlantingSites();
   const { plantingSites } = useOrganizationPlantingSites();
-  const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('observations-list', -1);
+  const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('observations-list');
+
+  // The data layer treats `undefined` as "all planting sites", so translate the selection for queries.
+  const plantingSiteIdFilter = selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId;
 
   // Poll for survival rate recalculation and refresh observation results when it completes.
-  const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(
-    selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId
-  );
+  const { inProgress: survivalRateRecalculationInProgress } =
+    useSurvivalRateCalculationInProgress(plantingSiteIdFilter);
 
   const [countObservations, countObservationsResult] = useLazyCountObservationsQuery();
   const hasObservationsResults = useMemo(() => !!countObservationsResult.data, [countObservationsResult]);
@@ -57,7 +59,7 @@ const ObservationListView = (): JSX.Element => {
         ? [
             {
               label: strings.ALL_PLANTING_SITES,
-              value: -1,
+              value: ALL_PLANTING_SITES,
             },
           ]
         : [];
@@ -82,7 +84,9 @@ const ObservationListView = (): JSX.Element => {
           required
           selectedValue={selectedPlantingSiteId}
           options={plantingSiteOptions}
-          onChange={(value: any) => selectPlantingSite(Number(value))}
+          onChange={(value: string) =>
+            selectPlantingSite(value === ALL_PLANTING_SITES ? ALL_PLANTING_SITES : Number(value))
+          }
           sx={{ flex: 1, maxWidth: '400px' }}
         />
       </Box>
@@ -90,21 +94,21 @@ const ObservationListView = (): JSX.Element => {
     [isMobile, strings, theme, selectedPlantingSiteId, plantingSiteOptions, selectPlantingSite]
   );
 
-  const tabs = useMemo(() => {
-    const siteId = selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId;
-    return [
+  const tabs = useMemo(
+    () => [
       {
         id: 'plantMonitoring',
         label: strings.PLANT_MONITORING,
-        children: <PlantMonitoringList plantingSiteId={siteId} />,
+        children: <PlantMonitoringList plantingSiteId={selectedPlantingSiteId} />,
       },
       {
         id: 'biomassMeasurements',
         label: strings.BIOMASS_MONITORING,
-        children: <BiomassList plantingSiteId={siteId} />,
+        children: <BiomassList plantingSiteId={selectedPlantingSiteId} />,
       },
-    ];
-  }, [selectedPlantingSiteId, strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]);
+    ],
+    [selectedPlantingSiteId, strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]
+  );
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'plantMonitoring',
@@ -134,14 +138,13 @@ const ObservationListView = (): JSX.Element => {
   }, [navigate, scheduleObservationEnabled, strings.SCHEDULE_OBSERVATION]);
 
   useEffect(() => {
-    const siteId = selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId;
     if (selectedOrganization) {
       if (activeTab === 'biomassMeasurements') {
         void countObservations(
           {
             organizationId: selectedOrganization.id,
             observationType: 'Biomass Measurements',
-            plantingSiteId: siteId,
+            plantingSiteId: plantingSiteIdFilter,
             state: ['Abandoned', 'Completed', 'InProgress', 'Overdue'],
           },
           true
@@ -151,14 +154,14 @@ const ObservationListView = (): JSX.Element => {
           {
             organizationId: selectedOrganization.id,
             observationType: 'Monitoring',
-            plantingSiteId: siteId,
+            plantingSiteId: plantingSiteIdFilter,
             state: ['Abandoned', 'Completed', 'InProgress', 'Overdue'],
           },
           true
         );
       }
     }
-  }, [activeTab, countObservations, selectedOrganization, selectedPlantingSiteId]);
+  }, [activeTab, countObservations, selectedOrganization, plantingSiteIdFilter]);
 
   return (
     <Page
@@ -171,9 +174,7 @@ const ObservationListView = (): JSX.Element => {
       <ObservationsEventsNotification />
       {activeTab === 'plantMonitoring' && (
         <>
-          <SurvivalRateMessageV2
-            selectedPlantingSiteId={selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId}
-          />
+          <SurvivalRateMessageV2 selectedPlantingSiteId={plantingSiteIdFilter} />
           <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
         </>
       )}
@@ -182,7 +183,7 @@ const ObservationListView = (): JSX.Element => {
           <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
             <ObservationMapWrapper
               isBiomass={isBiomass}
-              plantingSiteId={selectedPlantingSiteId === -1 ? undefined : selectedPlantingSiteId}
+              plantingSiteId={plantingSiteIdFilter}
               selectPlantingSiteId={selectPlantingSite}
             />
           </Card>
