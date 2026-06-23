@@ -155,7 +155,7 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
       ) : (
         rows.map((row) => (
           <PlantingDateRequestListItem
-            key={row.scheduledPlantingDateId}
+            key={`${row.plantingSeasonId}-${row.date}`}
             row={row}
             activeLocale={activeLocale}
             onWithdrawClick={() => setWithdrawRequest(row)}
