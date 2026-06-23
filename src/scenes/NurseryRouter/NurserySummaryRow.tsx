@@ -13,7 +13,7 @@ export type NurserySummaryRowProps = {
 
 type Coverage = 'COVERED' | 'PARTIALLY_COVERED' | 'NOT_COVERED';
 
-const NurserySummaryRow = ({ species, ready, index }: NurserySummaryRowProps): JSX.Element => {
+const NurserySummaryRow = ({ species, ready }: NurserySummaryRowProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
 
