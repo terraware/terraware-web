@@ -33,14 +33,11 @@ const SeedlingBatchBox = ({
 }: SeedlingBatchBoxProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
-  const plantingTableColumns = 'minmax(180px, 2fr) minmax(120px, 1fr) 112px';
-  const phaseTableColumns = '160px 72px repeat(4, 168px)';
-  const phaseTableMinWidth = '1016px';
-  const tableColumns = isPlanting ? plantingTableColumns : phaseTableColumns;
+  const tableColumns = isPlanting ? 'minmax(180px, 2fr) minmax(120px, 1fr) 112px' : '160px 72px repeat(4, 168px)';
   const tableGap = isPlanting ? theme.spacing(4) : theme.spacing(2);
   const tableSx = {
     boxSizing: 'border-box' as const,
-    ...(isPlanting ? {} : { minWidth: phaseTableMinWidth }),
+    ...(isPlanting ? {} : { minWidth: '1016px' }),
   };
   const withdrawInputSx = { justifySelf: 'end', width: '100px' };
   const phaseInputSx = { width: '90px', flexShrink: 0 };
