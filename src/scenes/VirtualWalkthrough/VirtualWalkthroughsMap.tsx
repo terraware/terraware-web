@@ -208,6 +208,14 @@ export default function VirtualWalkthroughsMap({
     []
   );
 
+  const handleDrawerOpenChange = useCallback((open: boolean) => {
+    setDrawerOpen(open);
+    if (!open) {
+      setSelectedFiles([]);
+      setSelectedFileIndex(0);
+    }
+  }, []);
+
   const handleClusterClick = useCallback((clusteredMarkers: MapMarker[]) => {
     const files = clusteredMarkers
       .map((m) => m.properties?.file as OrganizationVirtualWalkthrough | undefined)
@@ -408,7 +416,7 @@ export default function VirtualWalkthroughsMap({
         drawerSize='medium'
         drawerHeader={drawerHeader}
         drawerChildren={drawerContent}
-        setDrawerOpen={setDrawerOpen}
+        setDrawerOpen={handleDrawerOpenChange}
         additionalComponent={draggableMarker}
       />
     </>
