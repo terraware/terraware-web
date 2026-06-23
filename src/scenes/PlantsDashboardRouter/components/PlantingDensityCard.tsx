@@ -35,32 +35,12 @@ export default function PlantingDensityCard({
       radius='8px'
       style={{ display: 'flex', 'justify-content': 'space-between', flexDirection: isDesktop ? 'row' : 'column' }}
     >
-      {plantingSiteId !== -1 && (
+      {hasObservations && (
         <>
-          {hasObservations && (
-            <>
-              <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
-                <Box display={'flex'} alignItems={'center'}>
-                  <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-                    {strings.OBSERVED_DENSITY}
-                  </Typography>
-                  <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
-                    <Box display='flex'>
-                      <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
-                    </Box>
-                  </Tooltip>
-                </Box>
-                <Box paddingTop={2}>
-                  <PlantingSiteDensityCard plantingSiteId={plantingSiteId} />
-                </Box>
-              </Box>
-              <div style={separatorStyles} />
-            </>
-          )}
           <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-                {strings.OBSERVED_DENSITY_PER_STRATUM}
+                {strings.OBSERVED_DENSITY}
               </Typography>
               <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
                 <Box display='flex'>
@@ -68,12 +48,28 @@ export default function PlantingDensityCard({
                 </Box>
               </Tooltip>
             </Box>
-            <Box paddingTop={1}>
-              <PlantingDensityPerStratumCard plantingSiteId={plantingSiteId} />
+            <Box paddingTop={2}>
+              <PlantingSiteDensityCard plantingSiteId={plantingSiteId} />
             </Box>
           </Box>
+          <div style={separatorStyles} />
         </>
       )}
+      <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
+        <Box display={'flex'} alignItems={'center'}>
+          <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
+            {strings.OBSERVED_DENSITY_PER_STRATUM}
+          </Typography>
+          <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
+            <Box display='flex'>
+              <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
+            </Box>
+          </Tooltip>
+        </Box>
+        <Box paddingTop={1}>
+          <PlantingDensityPerStratumCard plantingSiteId={plantingSiteId} />
+        </Box>
+      </Box>
     </Card>
   );
 }

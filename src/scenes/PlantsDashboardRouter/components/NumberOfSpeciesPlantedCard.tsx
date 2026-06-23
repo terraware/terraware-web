@@ -59,7 +59,7 @@ const processConservationCategories = (
 
 type NumberOfSpeciesPlantedCardProps = {
   plantingSiteId?: number;
-  projectId?: number;
+  projectId?: number | 'all';
 };
 
 export default function NumberOfSpeciesPlantedCard({
@@ -75,7 +75,7 @@ export default function NumberOfSpeciesPlantedCard({
     }
   }, [getPlantingSite, plantingSiteId]);
 
-  if (projectId && plantingSiteId === undefined) {
+  if (typeof projectId === 'number' && plantingSiteId === undefined) {
     return <RolledUpCard projectId={projectId} />;
   } else if (plantingSite && !plantingSite?.strata?.length) {
     return <SiteWithoutStrataCard plantingSiteId={plantingSite.id} />;

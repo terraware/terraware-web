@@ -27,10 +27,7 @@ export default function LiveDeadPlantsPerSpeciesCard({
   >();
   const theme = useTheme();
 
-  const { observation: latestObservationResult } = useLatestSiteObservationResult(
-    plantingSiteId === -1 ? undefined : plantingSiteId,
-    'Substratum'
-  );
+  const { observation: latestObservationResult } = useLatestSiteObservationResult(plantingSiteId, 'Substratum');
   const { strings, activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
 

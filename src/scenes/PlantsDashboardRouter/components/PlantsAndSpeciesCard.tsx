@@ -24,7 +24,7 @@ export default function PlantsAndSpeciesCard({
   projectId,
 }: {
   plantingSiteId?: number;
-  projectId?: number;
+  projectId?: number | 'all';
 }): JSX.Element {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -40,7 +40,7 @@ export default function PlantsAndSpeciesCard({
   useEffect(() => {
     if (plantingSiteId) {
       void getPlantingSite({ id: plantingSiteId, includeZones: false }, true);
-    } else if (projectId) {
+    } else if (typeof projectId === 'number') {
       void listPlantingSites({ projectId, full: true, includeZones: false }, true);
       void listPlantingSiteReportedPlants({ projectId }, true);
     }
@@ -73,7 +73,7 @@ export default function PlantsAndSpeciesCard({
   }, [projectPlantingSites]);
 
   const totalArea = useMemo(() => {
-    if (projectId && plantingSiteId === undefined) {
+    if (typeof projectId === 'number' && plantingSiteId === undefined) {
       return totalAreaRolledUp;
     } else {
       return plantingSite?.areaHa ?? 0;
@@ -94,7 +94,7 @@ export default function PlantsAndSpeciesCard({
     }, 0) || 0;
 
   const totalPlantedArea = useMemo(() => {
-    if (projectId && plantingSiteId === undefined) {
+    if (typeof projectId === 'number' && plantingSiteId === undefined) {
       return projectTotalPlanted;
     } else if (plantingSiteId && plantingSite) {
       return calculatePlantingSitePlantedArea(plantingSite);
@@ -163,7 +163,7 @@ export default function PlantsAndSpeciesCard({
           <Box flexBasis='100%'>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'24px'} fontWeight={600} paddingRight={1}>
-                {projectId && plantingSiteId === undefined ? (
+                {typeof projectId === 'number' && plantingSiteId === undefined ? (
                   <FormattedNumber
                     value={projectReportedPlants.reduce((sum, sitePlants) => sum + sitePlants.totalPlants, 0)}
                   />
@@ -193,7 +193,7 @@ export default function PlantsAndSpeciesCard({
           <Box>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'24px'} fontWeight={600} paddingRight={1}>
-                {projectId && plantingSiteId === undefined ? (
+                {typeof projectId === 'number' && plantingSiteId === undefined ? (
                   <FormattedNumber value={projectTotalSpecies} />
                 ) : (
                   <FormattedNumber value={plantingSiteReportedPlants?.species?.length ?? 0} />

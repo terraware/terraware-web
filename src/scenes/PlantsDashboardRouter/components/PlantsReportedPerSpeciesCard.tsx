@@ -22,7 +22,7 @@ const MAX_SPECIES_NAME_LENGTH = 20;
 type PlantsReportedPerSpeciesCardProps = {
   newVersion?: boolean;
   plantingSiteId?: number;
-  projectId?: number;
+  projectId?: number | 'all';
 };
 
 export default function PlantsReportedPerSpeciesCard({
@@ -39,7 +39,7 @@ export default function PlantsReportedPerSpeciesCard({
     }
   }, [getPlantingSite, plantingSiteId]);
 
-  if (projectId && plantingSiteId === undefined) {
+  if (typeof projectId === 'number' && plantingSiteId === undefined) {
     return <RolledUpCard projectId={projectId} />;
   } else if (plantingSite && !plantingSite?.strata?.length) {
     return <SiteWithoutStrataCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
@@ -118,9 +118,7 @@ const RolledUpCard = ({ projectId }: { projectId: number }): JSX.Element => {
   const values = useMemo(() => Object.values(speciesQuantities), [speciesQuantities]);
   const tooltipTitles = useMemo(() => Object.keys(speciesQuantities), [speciesQuantities]);
 
-  return (
-    <ChartData plantingSiteId={-1} tooltipTitles={tooltipTitles} labels={labels} values={values} newVersion={true} />
-  );
+  return <ChartData tooltipTitles={tooltipTitles} labels={labels} values={values} newVersion={true} />;
 };
 
 const SiteWithoutStrataCard = ({

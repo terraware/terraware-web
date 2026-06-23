@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
 
 import { useLocalization, useOrganization } from 'src/providers';
-import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 
 type UseOrganizationPlantingSitesProps = {
   full?: boolean;
@@ -10,7 +10,7 @@ type UseOrganizationPlantingSitesProps = {
 
 const useOrganizationPlantingSites = (props?: UseOrganizationPlantingSitesProps) => {
   const { full, organizationId: organizationIdProp } = props ?? {};
-  const { activeLocale, strings } = useLocalization();
+  const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const [listPlantingSites, listPlantingSitesResponse] = useLazyListPlantingSitesQuery();
 
@@ -37,24 +37,10 @@ const useOrganizationPlantingSites = (props?: UseOrganizationPlantingSitesProps)
     reload(true);
   }, [reload]);
 
-  const plantingSitesWithAllSitesOption = useMemo(() => {
-    if (orgId) {
-      const allOption: PlantingSitePayload = {
-        adHocPlots: [],
-        id: -1,
-        name: strings.ALL_PLANTING_SITES,
-        organizationId: orgId,
-      };
-      return [allOption, ...plantingSites];
-    }
-    return plantingSites;
-  }, [orgId, plantingSites, strings.ALL_PLANTING_SITES]);
-
   return {
     isLoading: listPlantingSitesResponse.isFetching,
     isSuccess: listPlantingSitesResponse.isSuccess,
     plantingSites,
-    plantingSitesWithAllSitesOption,
     reload,
   };
 };
