@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Divider, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, Tooltip, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Icon, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -41,7 +41,7 @@ import { getTargetLocationNames } from './targetLocationNames';
 const PlantingSeasonDetailsView = (): JSX.Element => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isTablet } = useDeviceInfo();
   const { plantingSeasonId } = useParams<{ plantingSeasonId: string }>();
   const seasonIdNumber = Number(plantingSeasonId);
 
@@ -141,6 +141,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
   }, [speciesSummary]);
 
   const hasSpeciesTargets = (speciesTargets?.targets.length ?? 0) > 0;
+  const plantingProgressValue = withdrawnForPlantingTotal ?? 0;
 
   const dateRange = useMemo(() => {
     if (!season) {
@@ -160,11 +161,14 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
     align: 'left' | 'center' | 'right' = 'right',
     highlight = false
   ) => {
+    const compactLayout = isMobile || isTablet;
     const justifyContent = align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
+    const valueFontSize = isTablet ? '20px' : '24px';
+    const valueLineHeight = isTablet ? '28px' : '32px';
 
     return (
       <Box
-        textAlign={isMobile ? align : 'right'}
+        textAlign={compactLayout ? align : 'right'}
         sx={isMobile ? { minWidth: 0 } : { minWidth: '120px' }}
         minWidth={isMobile ? undefined : '120px'}
       >
@@ -174,7 +178,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
           fontWeight={500}
           lineHeight='20px'
           sx={
-            isMobile
+            compactLayout
               ? {
                   alignItems: 'flex-end',
                   display: 'flex',
@@ -187,9 +191,9 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
           {label}
         </Typography>
         <Typography
-          fontSize='24px'
+          fontSize={valueFontSize}
           fontWeight={600}
-          lineHeight='32px'
+          lineHeight={valueLineHeight}
           color={highlight && value !== undefined ? theme.palette.TwClrTxtBrand : theme.palette.TwClrTxt}
           sx={highlight && value !== undefined ? { textDecoration: 'underline' } : undefined}
         >
@@ -212,6 +216,25 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
           {name}
         </Typography>
       ))
+    ) : (
+      <Typography fontSize='14px'>{'-'}</Typography>
+    );
+
+  const twoColumnNamesList = (names: string[]) =>
+    names.length > 0 ? (
+      <Box display='grid' gridTemplateColumns='repeat(2, max-content)' columnGap={theme.spacing(2)}>
+        {names.map((name) => (
+          <Typography
+            key={name}
+            fontSize='14px'
+            fontWeight={600}
+            lineHeight='20px'
+            color={theme.palette.TwClrTxtSecondary}
+          >
+            {name}
+          </Typography>
+        ))}
+      </Box>
     ) : (
       <Typography fontSize='14px'>{'-'}</Typography>
     );
@@ -290,14 +313,20 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
         />
         <PageSnackbar />
       </PageHeaderWrapper>
-      <Card style={{ width: '100%', marginTop: theme.spacing(3) }} radius={theme.spacing(1)}>
+      <Card
+        style={{ width: '100%', marginTop: theme.spacing(3), ...(isTablet ? { padding: theme.spacing(2) } : {}) }}
+        radius={theme.spacing(1)}
+      >
         {isMobile ? (
           <Box display='flex' flexDirection='column'>
             <Box display='flex' alignItems='flex-start' gap={theme.spacing(1)}>
               <Icon name='iconCalendar' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
-              <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
-                {season.name}
-              </Typography>
+              <Box display='flex' alignItems='center' gap={theme.spacing(1)} flexWrap='wrap' minWidth={0}>
+                <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                  {season.name}
+                </Typography>
+                <PlantingSeasonStatusBadge status={season.status} />
+              </Box>
             </Box>
             <Typography color={theme.palette.TwClrTxtSecondary} marginTop={theme.spacing(1)}>
               {plantingSite.name}
@@ -305,14 +334,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
             <Typography color={theme.palette.TwClrTxt} marginTop={theme.spacing(0.5)}>
               {dateRange}
             </Typography>
-            <Box marginTop={theme.spacing(1)}>
-              <PlantingSeasonStatusBadge status={season.status} />
-            </Box>
-            <Divider sx={{ marginY: theme.spacing(2) }} />
-            <Box marginBottom={theme.spacing(2)}>
-              <ProgressChart value={0} target={plantingGoal ?? 0} />
-            </Box>
-            <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
+            <Box display='flex' flexDirection='column' gap={theme.spacing(2)} marginTop={theme.spacing(2)}>
               {mobileNamesSection(strings.STRATA, strataNames)}
               {mobileNamesSection(strings.SUBSTRATA, substrataNames)}
             </Box>
@@ -337,6 +359,85 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
                 </Link>
               </Box>
             )}
+            <Box marginTop={theme.spacing(hasSpeciesTargets ? 2 : 3)}>
+              <Box display='flex' alignItems='center' gap={theme.spacing(0.5)} marginBottom={theme.spacing(0.5)}>
+                <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt}>
+                  {strings.PLANTING_PROGRESS}
+                </Typography>
+                <Tooltip title={strings.PLANTING_PROGRESS_TOOLTIP}>
+                  <Box display='flex' alignItems='center'>
+                    <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+                  </Box>
+                </Tooltip>
+              </Box>
+              <ProgressChart value={plantingProgressValue} target={plantingGoal ?? 0} />
+            </Box>
+          </Box>
+        ) : isTablet ? (
+          <Box display='flex' flexDirection='column'>
+            <Box display='flex' alignItems='center' gap={theme.spacing(1)} flexWrap='wrap'>
+              <Icon name='iconCalendar' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+              <Typography fontSize='16px' lineHeight='24px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                {season.name}
+              </Typography>
+              <PlantingSeasonStatusBadge status={season.status} />
+            </Box>
+            <Box
+              display='flex'
+              alignItems='center'
+              gap={theme.spacing(2)}
+              marginTop={theme.spacing(0.5)}
+              flexWrap='wrap'
+            >
+              <Typography fontSize='14px' lineHeight='20px' color={theme.palette.TwClrTxtSecondary}>
+                {plantingSite.name}
+              </Typography>
+              <Typography fontSize='14px' lineHeight='20px' color={theme.palette.TwClrTxt}>
+                {dateRange}
+              </Typography>
+            </Box>
+            <Box display='flex' gap={theme.spacing(6)} flexWrap='wrap' marginTop={theme.spacing(2)} alignItems='start'>
+              <Box display='flex' flexDirection='column' gap={theme.spacing(0.75)}>
+                <Typography fontSize='14px' lineHeight='20px' color={theme.palette.TwClrTxtSecondary}>
+                  {strings.STRATA}
+                </Typography>
+                <Box>{namesList(strataNames)}</Box>
+              </Box>
+              <Box display='flex' flexDirection='column' gap={theme.spacing(0.75)}>
+                <Typography fontSize='14px' lineHeight='20px' color={theme.palette.TwClrTxtSecondary}>
+                  {strings.SUBSTRATA}
+                </Typography>
+                {twoColumnNamesList(substrataNames)}
+              </Box>
+            </Box>
+            <Box display='flex' gap={theme.spacing(6)} flexWrap='wrap' marginTop={theme.spacing(2)} alignItems='end'>
+              {numberColumn(strings.PLANTING_GOAL, plantingGoal, 'left')}
+              {numberColumn(strings.WITHDRAWN_FOR_PLANTING, withdrawnForPlantingTotal, 'left', true)}
+              {numberColumn(strings.LEFT_TO_PLANT, leftToPlantTotal, 'left')}
+            </Box>
+            {hasSpeciesTargets && (
+              <Box marginTop={theme.spacing(2)}>
+                <Link
+                  style={{ fontSize: '14px', textDecoration: 'underline' }}
+                  onClick={() => setSpeciesSummaryOpen(true)}
+                >
+                  {strings.SPECIES_SUMMARY}
+                </Link>
+              </Box>
+            )}
+            <Box marginTop={theme.spacing(hasSpeciesTargets ? 2 : 3)}>
+              <Box display='flex' alignItems='center' gap={theme.spacing(0.5)} marginBottom={theme.spacing(0.5)}>
+                <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxt}>
+                  {strings.PLANTING_PROGRESS}
+                </Typography>
+                <Tooltip title={strings.PLANTING_PROGRESS_TOOLTIP}>
+                  <Box display='flex' alignItems='center'>
+                    <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+                  </Box>
+                </Tooltip>
+              </Box>
+              <ProgressChart value={plantingProgressValue} target={plantingGoal ?? 0} />
+            </Box>
           </Box>
         ) : (
           <Box display='flex' flexDirection='row' gap={theme.spacing(2)}>
@@ -383,7 +484,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
                     </Box>
                   </Tooltip>
                 </Box>
-                <ProgressChart value={0} target={plantingGoal ?? 0} />
+                <ProgressChart value={plantingProgressValue} target={plantingGoal ?? 0} />
               </Box>
               <Box display='flex' gap={theme.spacing(6)} flexWrap='wrap'>
                 <Box display='flex' gap={theme.spacing(2)}>
