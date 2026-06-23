@@ -497,14 +497,25 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
         return;
       }
 
+      // Clusters without a drawer handler keep the original behavior: zoom in
+      // one level per click to progressively decluster the markers.
+      if (!cluster.onClick) {
+        map.easeTo({
+          center: { lat: cluster.latitude, lon: cluster.longitude },
+          zoom: map.getZoom() + 1,
+          duration: 500,
+        });
+        return;
+      }
+
       // First click on a not-yet-selected cluster opens the paginated drawer.
-      if (cluster.onClick && !cluster.selected) {
+      if (!cluster.selected) {
         cluster.onClick();
         return;
       }
 
-      // Second click (cluster already selected) or a cluster with no drawer
-      // handler: fit the map to just this cluster's markers so they spread apart.
+      // Second click (cluster already selected): fit the map to just this
+      // cluster's markers so they spread apart.
       const bounds = getBoundingBoxFromPoints(
         cluster.markers.map((marker) => ({ lat: marker.latitude, lng: marker.longitude }))
       );
