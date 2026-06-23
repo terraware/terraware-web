@@ -34,6 +34,30 @@ type FlowStep = 0 | 1 | 2;
 
 const todayIso = () => DateTime.local().toISODate() ?? '';
 
+const withdrawalQuantityFields = (isPlanting: boolean): (keyof BatchWithdrawQuantities)[] =>
+  isPlanting
+    ? ['readyQuantityWithdrawn']
+    : [
+        'germinatingQuantityWithdrawn',
+        'activeGrowthQuantityWithdrawn',
+        'hardeningOffQuantityWithdrawn',
+        'readyQuantityWithdrawn',
+      ];
+
+const batchQuantityForField = (batch: BatchInfo, field: keyof BatchWithdrawQuantities): number => {
+  switch (field) {
+    case 'germinatingQuantityWithdrawn':
+      return batch.germinatingQuantity;
+    case 'activeGrowthQuantityWithdrawn':
+      return batch.activeGrowthQuantity;
+    case 'hardeningOffQuantityWithdrawn':
+      return batch.hardeningOffQuantity;
+    case 'readyQuantityWithdrawn':
+      return batch.readyQuantity;
+  }
+  return 0;
+};
+
 const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -74,8 +98,8 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         setBatches([]);
         return;
       }
-      setBatches(
-        results.map(
+      const withdrawableBatches = results
+        .map(
           (b): BatchInfo => ({
             batchId: Number(b.id),
             batchNumber: String(b.batchNumber ?? ''),
@@ -88,27 +112,40 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
             activeGrowthQuantity: Number(b['activeGrowthQuantity(raw)'] ?? 0),
             hardeningOffQuantity: Number(b['hardeningOffQuantity(raw)'] ?? 0),
             readyQuantity: Number(b['readyQuantity(raw)'] ?? 0),
+            totalQuantity: Number(b['totalQuantity(raw)'] ?? 0),
+            projectId: b.project_id !== undefined && b.project_id !== null ? Number(b.project_id) : undefined,
+            projectName: b.project_name ? String(b.project_name) : undefined,
           })
         )
-      );
+        .filter((batch) => batch.totalQuantity + batch.germinatingQuantity > 0);
+      if (withdrawableBatches.length === 0) {
+        snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM);
+      }
+      setBatches(withdrawableBatches);
     };
     void populate();
-  }, [open, selectedOrganization, batchIds]);
+  }, [open, selectedOrganization, batchIds, snackbar, strings]);
 
   const updateDraft = useCallback((next: Partial<BatchWithdrawDraft>) => {
     setDraft((prev) => {
       // A withdrawal is bound to a single nursery; clear quantities when the
       // From: Nursery changes so the user re-enters them for the new batches.
       const nurseryChanged = 'fromFacilityId' in next && next.fromFacilityId !== prev.fromFacilityId;
+      const projectChanged = 'projectId' in next && next.projectId !== prev.projectId;
+      const nextPurpose = next.purpose ?? prev.purpose;
+      const purposeChanged = 'purpose' in next && nextPurpose !== prev.purpose;
+      const plantingModeChanged =
+        purposeChanged &&
+        (nextPurpose === NurseryWithdrawalRequestPurposes.OUTPLANT) !==
+          (prev.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT);
       const purposeChangedAwayFromPlanting =
-        'purpose' in next &&
-        next.purpose !== prev.purpose &&
-        next.purpose !== NurseryWithdrawalRequestPurposes.OUTPLANT;
+        purposeChanged && nextPurpose !== NurseryWithdrawalRequestPurposes.OUTPLANT;
       const resetPlantingTargets = nurseryChanged || purposeChangedAwayFromPlanting;
       return {
         ...prev,
         ...next,
-        ...(nurseryChanged ? { withdrawByBatch: {} } : {}),
+        ...(nurseryChanged || projectChanged || plantingModeChanged ? { withdrawByBatch: {} } : {}),
+        ...(nurseryChanged ? { destinationFacilityId: undefined, projectId: undefined } : {}),
         ...(resetPlantingTargets
           ? {
               plantingSiteId: undefined,
@@ -186,16 +223,30 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     return batches.filter((b) => b.facilityId === draft.fromFacilityId);
   }, [batches, draft.fromFacilityId]);
 
-  // Match the old withdrawal flow: only show batches with ready-to-plant seedlings.
-  const readyToPlantBatches = useMemo(() => displayedBatches?.filter((b) => b.readyQuantity > 0), [displayedBatches]);
+  const isPlanting = draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
+
+  const projectFilteredBatches = useMemo(() => {
+    if (!displayedBatches) {
+      return undefined;
+    }
+    if (draft.projectId === undefined) {
+      return displayedBatches;
+    }
+    return displayedBatches.filter((b) => b.projectId === draft.projectId);
+  }, [displayedBatches, draft.projectId]);
+
+  const quantityStepBatches = useMemo(
+    () => (isPlanting ? projectFilteredBatches?.filter((b) => b.readyQuantity > 0) : projectFilteredBatches),
+    [isPlanting, projectFilteredBatches]
+  );
 
   // Species summary in the header
   const speciesSummary = useMemo(() => {
-    if (!readyToPlantBatches) {
+    if (!quantityStepBatches) {
       return [];
     }
     const bySpecies = new Map<number, { name: string; batchNumbers: string[] }>();
-    readyToPlantBatches.forEach((b) => {
+    quantityStepBatches.forEach((b) => {
       const existing = bySpecies.get(b.speciesId);
       if (existing) {
         existing.batchNumbers.push(b.batchNumber);
@@ -207,7 +258,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       }
     });
     return [...bySpecies.values()];
-  }, [readyToPlantBatches]);
+  }, [quantityStepBatches]);
 
   // Step 1 validation: purpose-specific destination + withdraw date.
   const canGoNextFromStep1 = useMemo(() => {
@@ -224,32 +275,39 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   }, [draft]);
 
   const canGoNextFromStep2 = useMemo(() => {
-    if (!readyToPlantBatches) {
+    if (!quantityStepBatches) {
       return false;
     }
     let total = 0;
-    const overReady = readyToPlantBatches.some((b) => {
-      const ready = draft.withdrawByBatch[b.batchId]?.readyQuantityWithdrawn ?? 0;
-      total += ready;
-      return ready > b.readyQuantity;
+    const fields = withdrawalQuantityFields(isPlanting);
+    const overAvailable = quantityStepBatches.some((b) => {
+      const quantities = draft.withdrawByBatch[b.batchId];
+      if (!quantities) {
+        return false;
+      }
+      return fields.some((field) => {
+        const quantity = quantities[field] ?? 0;
+        total += quantity;
+        return quantity > batchQuantityForField(b, field);
+      });
     });
-    return total > 0 && !overReady;
-  }, [readyToPlantBatches, draft.withdrawByBatch]);
+    return total > 0 && !overAvailable;
+  }, [draft.withdrawByBatch, isPlanting, quantityStepBatches]);
 
   const onSubmit = useCallback(async () => {
-    if (draft.fromFacilityId === undefined || !readyToPlantBatches) {
+    if (draft.fromFacilityId === undefined || !quantityStepBatches) {
       return;
     }
-    // Only submit quantities for ready-to-plant batches that belong to the selected nursery.
-    const allowedBatchIds = new Set(readyToPlantBatches.map((b) => b.batchId));
+    const isOutPlant = draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
+    const allowedBatchIds = new Set(quantityStepBatches.map((b) => b.batchId));
     const batchWithdrawals = Object.entries(draft.withdrawByBatch)
       .filter(([batchIdStr]) => allowedBatchIds.has(Number(batchIdStr)))
       .map(([batchIdStr, q]) => ({
         batchId: Number(batchIdStr),
         readyQuantityWithdrawn: q.readyQuantityWithdrawn || 0,
-        hardeningOffQuantityWithdrawn: q.hardeningOffQuantityWithdrawn || 0,
-        activeGrowthQuantityWithdrawn: q.activeGrowthQuantityWithdrawn || 0,
-        germinatingQuantityWithdrawn: q.germinatingQuantityWithdrawn || 0,
+        hardeningOffQuantityWithdrawn: isOutPlant ? 0 : q.hardeningOffQuantityWithdrawn || 0,
+        activeGrowthQuantityWithdrawn: isOutPlant ? 0 : q.activeGrowthQuantityWithdrawn || 0,
+        germinatingQuantityWithdrawn: isOutPlant ? 0 : q.germinatingQuantityWithdrawn || 0,
       }))
       .filter(
         (bw) =>
@@ -265,7 +323,6 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       return;
     }
 
-    const isOutPlant = draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
     const isNurseryTransfer = draft.purpose === NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER;
 
     try {
@@ -315,7 +372,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       const drainedABatchToday =
         draft.withdrawnDate === today &&
         batchWithdrawals.some((bw) => {
-          const source = readyToPlantBatches.find((b) => b.batchId === bw.batchId);
+          const source = quantityStepBatches.find((b) => b.batchId === bw.batchId);
           return (
             source &&
             bw.germinatingQuantityWithdrawn === source.germinatingQuantity &&
@@ -333,7 +390,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     } catch (e) {
       snackbar.toastError();
     }
-  }, [createBatchWithdrawal, draft, handleClose, readyToPlantBatches, snackbar, strings, uploadWithdrawalPhoto]);
+  }, [createBatchWithdrawal, draft, handleClose, quantityStepBatches, snackbar, strings, uploadWithdrawalPhoto]);
 
   const middleButtons: JSX.Element[] = useMemo(() => {
     const cancel = (
@@ -487,9 +544,9 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
                 onChange={updateDraft}
               />
             )}
-            {step === 1 && readyToPlantBatches && (
+            {step === 1 && quantityStepBatches && (
               <QuantitiesStep
-                batches={readyToPlantBatches}
+                batches={quantityStepBatches}
                 draft={draft}
                 speciesTargets={visibleSpeciesTargets}
                 setWithdrawByBatch={setWithdrawByBatch}

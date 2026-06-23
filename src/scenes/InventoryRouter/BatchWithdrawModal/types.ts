@@ -12,12 +12,16 @@ export type BatchInfo = {
   activeGrowthQuantity: number;
   hardeningOffQuantity: number;
   readyQuantity: number;
+  totalQuantity: number;
+  projectId?: number;
+  projectName?: string;
 };
 
 export type BatchWithdrawDraft = {
   purpose: NurseryWithdrawalPurpose;
   fromFacilityId?: number;
   destinationFacilityId?: number;
+  projectId?: number;
   plantingSiteId?: number;
   plantingSeasonId?: number;
   stratumId?: number;
