@@ -100,6 +100,12 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
   );
 
   const rows = requests ?? [];
+  const hasNoRequests = requests !== undefined && rows.length === 0;
+  const emptyStateMessage = selectedPlantingSiteHasNoSeasons
+    ? strings.NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE
+    : hasNoRequests
+      ? strings.NO_PENDING_REQUESTS
+      : undefined;
   const [withdrawRequest, setWithdrawRequest] = useState<PlantingDateRequestRow | undefined>(undefined);
 
   return (
@@ -146,10 +152,10 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
       </Box>
 
       <Divider />
-      {selectedPlantingSiteHasNoSeasons ? (
+      {emptyStateMessage ? (
         <Box padding={theme.spacing(4, 2)} textAlign='center'>
           <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
-            {strings.NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE}
+            {emptyStateMessage}
           </Typography>
         </Box>
       ) : (
