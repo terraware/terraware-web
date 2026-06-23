@@ -1,3 +1,4 @@
+72ecc37e Fixed sticky planting site ID to have strict 'all' | numbers type (#5895)
 e1ecf14d SW-8521 When selected Planting Site has no requests, do not show any seasons or species in filters and display a message (#5920)
 fc61a784 SW-8550 Planting Season column appearing on wrong side and lacking ability to filter (#5910)
 f0687404 SW-8546 Season Species table showing up when it should not be (#5909)
