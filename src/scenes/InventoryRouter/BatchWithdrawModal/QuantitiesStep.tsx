@@ -52,6 +52,7 @@ const QuantitiesStep = ({ batches, draft, speciesTargets, setWithdrawByBatch }: 
           key={group.speciesName}
           speciesName={group.speciesName}
           batches={group.batches}
+          isPlanting={draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT}
           withdrawByBatch={draft.withdrawByBatch}
           setWithdrawByBatch={setWithdrawByBatch}
         />

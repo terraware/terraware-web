@@ -90,6 +90,8 @@ const PurposeAndDestinationStep = ({
     return nurseries.filter((f) => f.id !== draft.fromFacilityId).map((f) => ({ label: f.name, value: f.id }));
   }, [selectedOrganization, draft.fromFacilityId]);
 
+  const nurseryTransferDisabled = toNurseryOptions.length === 0;
+
   const plantingSiteOptions = useMemo<DropdownItem[]>(
     () =>
       plantingSites
@@ -198,12 +200,27 @@ const PurposeAndDestinationStep = ({
     }
   }, [draft.purpose, onChange, outplantDisabled]);
 
+  useEffect(() => {
+    if (draft.purpose === NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER && nurseryTransferDisabled) {
+      onChange({ destinationFacilityId: undefined, purpose: NurseryWithdrawalRequestPurposes.DEAD });
+    }
+  }, [draft.purpose, nurseryTransferDisabled, onChange]);
+
   const outplantLabel = (
     <>
       {strings.PLANTING}
       {noReadySeedlings && <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS} />}
       {!noReadySeedlings && plantingSitesDisabled && (
         <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_PLANTING_SITES} />
+      )}
+    </>
+  );
+
+  const nurseryTransferLabel = (
+    <>
+      {strings.NURSERY_TRANSFER}
+      {nurseryTransferDisabled && (
+        <IconTooltip placement='top' title={strings.NURSERY_TRANSFERS_REQUIRE_DESTINATIONS} />
       )}
     </>
   );
@@ -231,7 +248,8 @@ const PurposeAndDestinationStep = ({
           <FormControlLabel
             value={NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER}
             control={<Radio />}
-            label={strings.NURSERY_TRANSFER}
+            label={nurseryTransferLabel}
+            disabled={nurseryTransferDisabled}
           />
           <FormControlLabel value={NurseryWithdrawalRequestPurposes.OTHER} control={<Radio />} label={strings.OTHER} />
         </RadioGroup>

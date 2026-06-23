@@ -12,6 +12,7 @@ export type BatchInfo = {
   activeGrowthQuantity: number;
   hardeningOffQuantity: number;
   readyQuantity: number;
+  totalQuantity: number;
 };
 
 export type BatchWithdrawDraft = {
