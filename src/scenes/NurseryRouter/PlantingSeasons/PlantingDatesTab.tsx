@@ -26,6 +26,7 @@ import {
   StratumResponsePayload,
   SubstratumResponsePayload,
 } from 'src/queries/generated/plantingSites';
+import { useGetPlantingSeasonSpeciesSummaryQuery } from 'src/queries/search/plantingSeasons';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { getMediumDate } from 'src/utils/dateFormatter';
@@ -56,12 +57,25 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
   const { species } = useSpeciesData();
   const { data: scheduledDatesData } = useGetScheduledPlantingDatesQuery(plantingSeason.id);
   const { data: speciesTargetsData } = useGetSpeciesTargetsQuery(plantingSeason.id);
+  const { data: speciesSummary } = useGetPlantingSeasonSpeciesSummaryQuery(plantingSeason.id);
 
   const [editing, setEditing] = useState<EditingState | undefined>();
 
   const readOnly = plantingSeason.status === 'Closed';
-  const scheduledDates = scheduledDatesData?.scheduledDates ?? [];
-  const speciesTargets = speciesTargetsData?.targets ?? [];
+  const scheduledDates = useMemo(() => scheduledDatesData?.scheduledDates ?? [], [scheduledDatesData?.scheduledDates]);
+  const speciesTargets = useMemo(() => speciesTargetsData?.targets ?? [], [speciesTargetsData?.targets]);
+  const allocatedBySpecies = useMemo(() => {
+    const map = new Map<number, number>();
+    scheduledDates.forEach((scheduledDate) => {
+      scheduledDate.species.forEach((s) => {
+        map.set(s.speciesId, s.allocatedQuantity);
+      });
+    });
+    speciesSummary?.forEach((row) => {
+      map.set(row.speciesId, row.allocated);
+    });
+    return map;
+  }, [scheduledDates, speciesSummary]);
   const mobileAddDateButtonSx = isMobile
     ? {
         borderRadius: '28px',
@@ -115,6 +129,7 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
               species={species}
               speciesTargets={speciesTargets}
               scheduledDates={scheduledDates}
+              allocatedBySpecies={allocatedBySpecies}
               editingScheduledDate={editing.mode === 'edit' ? editing.scheduledDate : undefined}
               onClose={() => setEditing(undefined)}
             />
@@ -318,6 +333,7 @@ type PlantingDateFormProps = {
   species: Species[];
   speciesTargets: SpeciesTargetPayload[];
   scheduledDates: ScheduledDatePayload[];
+  allocatedBySpecies: Map<number, number>;
   editingScheduledDate?: ScheduledDatePayload;
   onClose: () => void;
 };
@@ -335,8 +351,11 @@ type SubstratumDraft = { selected: boolean; species: SpeciesDraft[] };
 const getSpeciesDraftQuantity = (draft: SpeciesDraft): number =>
   Math.max(0, Number(draft.quantityInput ?? draft.quantity));
 
-const quantityExceedsAvailableToSchedule = (quantity: number, target: number, scheduledOther: number): boolean =>
-  !Number.isNaN(quantity) && quantity > Math.max(0, target - scheduledOther);
+const getAvailableToSchedule = (allocated: number, scheduledOther: number): number =>
+  Math.max(0, allocated - scheduledOther);
+
+const quantityExceedsAvailableToSchedule = (quantity: number, availableToSchedule: number): boolean =>
+  !Number.isNaN(quantity) && quantity > availableToSchedule;
 
 const speciesTableGridColumns = 'minmax(200px, 2fr) 120px minmax(132px, 1fr) 40px';
 
@@ -374,6 +393,7 @@ const PlantingDateForm = ({
   species,
   speciesTargets,
   scheduledDates,
+  allocatedBySpecies,
   editingScheduledDate,
   onClose,
 }: PlantingDateFormProps): JSX.Element => {
@@ -546,6 +566,7 @@ const PlantingDateForm = ({
           species={species}
           speciesTargets={speciesTargets}
           scheduledDates={scheduledDates}
+          allocatedBySpecies={allocatedBySpecies}
           excludeScheduledDateId={editingScheduledDate?.scheduledPlantingDateId}
           onToggleSubstratum={(substratumId, selected) =>
             updateSubstratum(substratumId, (draft) => ({ ...draft, selected }))
@@ -629,6 +650,7 @@ type StratumDraftSectionProps = {
   species: Species[];
   speciesTargets: SpeciesTargetPayload[];
   scheduledDates: ScheduledDatePayload[];
+  allocatedBySpecies: Map<number, number>;
   excludeScheduledDateId?: number;
   onToggleSubstratum: (substratumId: number, selected: boolean) => void;
   onUpdateSubstratumSpecies: (substratumId: number, updater: (species: SpeciesDraft[]) => SpeciesDraft[]) => void;
@@ -640,6 +662,7 @@ const StratumDraftSection = ({
   species,
   speciesTargets,
   scheduledDates,
+  allocatedBySpecies,
   excludeScheduledDateId,
   onToggleSubstratum,
   onUpdateSubstratumSpecies,
@@ -658,6 +681,7 @@ const StratumDraftSection = ({
           species={species}
           speciesTargets={speciesTargets}
           scheduledDates={scheduledDates}
+          allocatedBySpecies={allocatedBySpecies}
           excludeScheduledDateId={excludeScheduledDateId}
           onToggleSubstratum={onToggleSubstratum}
           onUpdateSubstratumSpecies={onUpdateSubstratumSpecies}
@@ -673,6 +697,7 @@ type SubstratumDraftSectionProps = {
   species: Species[];
   speciesTargets: SpeciesTargetPayload[];
   scheduledDates: ScheduledDatePayload[];
+  allocatedBySpecies: Map<number, number>;
   excludeScheduledDateId?: number;
   onToggleSubstratum: (substratumId: number, selected: boolean) => void;
   onUpdateSubstratumSpecies: (substratumId: number, updater: (species: SpeciesDraft[]) => SpeciesDraft[]) => void;
@@ -684,6 +709,7 @@ const SubstratumDraftSection = ({
   species,
   speciesTargets,
   scheduledDates,
+  allocatedBySpecies,
   excludeScheduledDateId,
   onToggleSubstratum,
   onUpdateSubstratumSpecies,
@@ -691,16 +717,6 @@ const SubstratumDraftSection = ({
   const theme = useTheme();
   const selected = draft?.selected ?? false;
   const substratumSpecies = draft?.species ?? [];
-
-  const allocatedBySpecies = useMemo(() => {
-    const map = new Map<number, number>();
-    scheduledDates.forEach((scheduledDate) => {
-      scheduledDate.species.forEach((s) => {
-        map.set(s.speciesId, s.allocatedQuantity);
-      });
-    });
-    return map;
-  }, [scheduledDates]);
 
   // Pre-populate species rows from species targets when the substratum is selected
   useEffect(() => {
@@ -738,20 +754,11 @@ const SubstratumDraftSection = ({
         return;
       }
       scheduledDate.species.forEach((s) => {
-        if (s.substratumId !== substratum.id) {
-          return;
-        }
         map.set(s.speciesId, (map.get(s.speciesId) ?? 0) + s.quantity);
       });
     });
     return map;
-  }, [scheduledDates, excludeScheduledDateId, substratum.id]);
-
-  const targetsBySpecies = useMemo(() => {
-    const map = new Map<number, number>();
-    speciesTargets.filter((t) => t.substratumId === substratum.id).forEach((t) => map.set(t.speciesId, t.quantity));
-    return map;
-  }, [speciesTargets, substratum.id]);
+  }, [scheduledDates, excludeScheduledDateId]);
 
   return (
     <Box marginBottom={theme.spacing(1)}>
@@ -771,7 +778,6 @@ const SubstratumDraftSection = ({
             substratumId={substratum.id}
             substratumSpecies={substratumSpecies}
             species={species}
-            targetsBySpecies={targetsBySpecies}
             allocatedBySpecies={allocatedBySpecies}
             scheduledOtherBySpecies={scheduledOtherBySpecies}
             onUpdateSubstratumSpecies={onUpdateSubstratumSpecies}
@@ -786,7 +792,6 @@ type SpeciesTableProps = {
   substratumId: number;
   substratumSpecies: SpeciesDraft[];
   species: Species[];
-  targetsBySpecies: Map<number, number>;
   allocatedBySpecies: Map<number, number>;
   scheduledOtherBySpecies: Map<number, number>;
   onUpdateSubstratumSpecies: (substratumId: number, updater: (species: SpeciesDraft[]) => SpeciesDraft[]) => void;
@@ -796,7 +801,6 @@ const SpeciesTable = ({
   substratumId,
   substratumSpecies,
   species,
-  targetsBySpecies,
   allocatedBySpecies,
   scheduledOtherBySpecies,
   onUpdateSubstratumSpecies,
@@ -858,7 +862,6 @@ const SpeciesTable = ({
             draft={draft}
             index={index}
             species={species}
-            target={targetsBySpecies.get(draft.speciesId) ?? 0}
             allocated={draft.allocatedQuantity ?? allocatedBySpecies.get(draft.speciesId) ?? 0}
             scheduledOther={scheduledOtherBySpecies.get(draft.speciesId) ?? 0}
             onUpdateSubstratumSpecies={onUpdateSubstratumSpecies}
@@ -871,7 +874,6 @@ const SpeciesTable = ({
               draft={draft}
               species={species}
               availableSpecies={availableSpecies}
-              targetsBySpecies={targetsBySpecies}
               scheduledOtherBySpecies={scheduledOtherBySpecies}
               allocatedBySpecies={allocatedBySpecies}
               onChange={(updatedDraft) =>
@@ -907,7 +909,6 @@ type AddSpeciesRowProps = {
   draft: SpeciesDraft;
   species: Species[];
   availableSpecies: Species[];
-  targetsBySpecies: Map<number, number>;
   scheduledOtherBySpecies: Map<number, number>;
   allocatedBySpecies: Map<number, number>;
   onChange: (draft: SpeciesDraft) => void;
@@ -919,7 +920,6 @@ const AddSpeciesRow = ({
   draft,
   species,
   availableSpecies,
-  targetsBySpecies,
   scheduledOtherBySpecies,
   allocatedBySpecies,
   onChange,
@@ -928,13 +928,15 @@ const AddSpeciesRow = ({
   const theme = useTheme();
   const [quantityFocused, setQuantityFocused] = useState(false);
   const selectedSpeciesId = draft.speciesId;
-  const target = selectedSpeciesId === undefined ? 0 : targetsBySpecies.get(selectedSpeciesId) ?? 0;
+  const allocated =
+    selectedSpeciesId === undefined ? 0 : draft.allocatedQuantity ?? allocatedBySpecies.get(selectedSpeciesId) ?? 0;
   const scheduledOther = selectedSpeciesId === undefined ? 0 : scheduledOtherBySpecies.get(selectedSpeciesId) ?? 0;
+  const availableToSchedule = getAvailableToSchedule(allocated, scheduledOther);
   const quantity = draft.quantityInput ?? draft.quantity.toString();
   const parsedQuantity = getSpeciesDraftQuantity(draft);
   const quantityToValidate = Number.isNaN(parsedQuantity) ? 0 : parsedQuantity;
   const exceedsGoal =
-    selectedSpeciesId !== undefined && quantityExceedsAvailableToSchedule(quantityToValidate, target, scheduledOther);
+    selectedSpeciesId !== undefined && quantityExceedsAvailableToSchedule(quantityToValidate, availableToSchedule);
   const selectedSpecies = selectedSpeciesId === undefined ? undefined : species.find((s) => s.id === selectedSpeciesId);
 
   const options = useMemo<DropdownItem[]>(() => {
@@ -988,7 +990,11 @@ const AddSpeciesRow = ({
           onBlur={() => setQuantityFocused(false)}
           onFocus={() => setQuantityFocused(true)}
           min={0}
-          errorText={quantityFocused && exceedsGoal ? strings.EXCEEDS_TARGET : ''}
+          errorText={
+            quantityFocused && exceedsGoal
+              ? strings.formatString(strings.EXCEEDS_AVAILABLE_X, availableToSchedule).toString()
+              : ''
+          }
           sx={addSpeciesQuantityTextFieldSx}
         />
         <IconButton aria-label={strings.REMOVE} size='small' onClick={onRemove} sx={{ flexShrink: 0, marginTop: 0 }}>
@@ -1039,7 +1045,6 @@ type SpeciesRowProps = {
   draft: SpeciesDraft;
   index: number;
   species: Species[];
-  target: number;
   allocated: number;
   scheduledOther: number;
   onUpdateSubstratumSpecies: (substratumId: number, updater: (species: SpeciesDraft[]) => SpeciesDraft[]) => void;
@@ -1050,7 +1055,7 @@ const SpeciesRow = ({
   draft,
   index,
   species,
-  target,
+  allocated,
   scheduledOther,
   onUpdateSubstratumSpecies,
 }: SpeciesRowProps): JSX.Element => {
@@ -1059,10 +1064,10 @@ const SpeciesRow = ({
   const [quantityFocused, setQuantityFocused] = useState(false);
   const [draftQuantity, setDraftQuantity] = useState<string>(draft.quantity.toString());
   const speciesInfo = useMemo(() => species.find((s) => s.id === draft.speciesId), [species, draft.speciesId]);
-  const availableToSchedule = Math.max(0, target - scheduledOther);
+  const availableToSchedule = getAvailableToSchedule(allocated, scheduledOther);
   const parsedDraftQuantity = Math.max(0, Number(draftQuantity));
   const quantityToValidate = Number.isNaN(parsedDraftQuantity) ? draft.quantity : parsedDraftQuantity;
-  const exceedsGoal = quantityExceedsAvailableToSchedule(quantityToValidate, target, scheduledOther);
+  const exceedsGoal = quantityExceedsAvailableToSchedule(quantityToValidate, availableToSchedule);
 
   const commitQuantity = () => {
     setQuantityFocused(false);
@@ -1112,7 +1117,11 @@ const SpeciesRow = ({
             onBlur={commitQuantity}
             onFocus={() => setQuantityFocused(true)}
             min={0}
-            errorText={quantityFocused && exceedsGoal ? strings.EXCEEDS_TARGET : ''}
+            errorText={
+              quantityFocused && exceedsGoal
+                ? strings.formatString(strings.EXCEEDS_AVAILABLE_X, availableToSchedule).toString()
+                : ''
+            }
             autoFocus
             sx={quantityTextFieldSx}
           />
