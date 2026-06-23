@@ -62,7 +62,7 @@ const BiomassObservationStatsDrawer = ({
   const rows = useMemo((): MapDrawerTableRow[] => {
     if (properties) {
       return [
-        { key: strings.TREES_TRUNKS, value: `${properties.numTrees}` },
+        { key: strings.TREES_STEMS, value: `${properties.numTrees}` },
         { key: strings.SHRUBS, value: `${properties.numShrubs}` },
         { key: strings.SPECIES, value: `${properties.numSpecies}` },
         { key: strings.DATE, value: `${properties.numSpecies}` },

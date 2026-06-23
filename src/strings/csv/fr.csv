@@ -2422,7 +2422,7 @@ TREE_CROWN_DIAMETER_CM,Diamètre de la couronne de l’arbre (cm),f69d14ce
 TREES_AND_SHRUBS,Arbres et arbustes,e40ed4ab
 TREES_AND_SHRUBS_TABLE_INSTRUCTIONS,Cliquez sur un nombre dans le tableau pour le modifier,0c733b0b
 TREES_PLANTED,Arbres plantés,cd803b87
-TREES_TRUNKS,Arbres / troncs,029487f6
+TREES_STEMS,Arbres/Tiges,1925e3b8
 TRUNCATED_TEXT_MORE_LINK,plus,9c3efa68
 TRY_AGAIN,Réessayer,1e18e638
 TUTORIAL_PREFIX,Tutoriel : {0},71025393
