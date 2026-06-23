@@ -32,6 +32,7 @@ import {
   stylesUrl,
 } from './types';
 import { useMaintainLayerOrder } from './useMaintainLayerOrder';
+import { getBoundingBoxFromPoints, isBoundsValid } from './utils';
 
 export type MapBoxProps = {
   additionalComponent?: React.ReactNode;
@@ -109,7 +110,6 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
   const { isDesktop } = useDeviceInfo();
   const [cursor, setCursor] = useState<MapCursor>('auto');
   const [hoverFeatureId, setHoverFeatureId] = useState<string>();
-  const [zoom, setZoom] = useState<number>();
   const [focused, setFocused] = useState<boolean>(false);
 
   const loadImages = useCallback(
@@ -131,7 +131,6 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
     (map: MapRef | null) => {
       if (map !== null) {
         mapRef.current = map;
-        setZoom(map.getZoom());
         loadImages(map);
         onMapLoad?.();
 
@@ -146,7 +145,6 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
 
   const onMove = useCallback(
     (view: ViewStateChangeEvent) => {
-      setZoom(view.viewState.zoom);
       onMapMove?.(view);
     },
     [onMapMove]
@@ -492,24 +490,39 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
   );
 
   const onMarkerClusterClick = useCallback(
-    (latitude: number, longitude: number, onClusterClick?: () => void) => (event: MarkerEvent<MouseEvent>) => {
+    (cluster: MapMarkerCluster) => (event: MarkerEvent<MouseEvent>) => {
+      event.originalEvent.stopPropagation();
       const map = mapRef.current;
-      if (map && zoom) {
-        if (clusterMaxZoom && onClusterClick && zoom >= clusterMaxZoom) {
-          // On max zoom
-          onClusterClick();
-          event.originalEvent.stopPropagation();
-        } else {
-          mapRef.current?.easeTo({
-            center: { lat: latitude, lon: longitude },
-            zoom: (zoom ?? 10) + 1,
+      if (!map) {
+        return;
+      }
+
+      // First click on a not-yet-selected cluster opens the paginated drawer.
+      if (cluster.onClick && !cluster.selected) {
+        cluster.onClick();
+        return;
+      }
+
+      // Second click (cluster already selected) or a cluster with no drawer
+      // handler: fit the map to just this cluster's markers so they spread apart.
+      const bounds = getBoundingBoxFromPoints(
+        cluster.markers.map((marker) => ({ lat: marker.latitude, lng: marker.longitude }))
+      );
+      if (isBoundsValid(bounds)) {
+        map.fitBounds(
+          [
+            { lat: bounds.minLat, lng: bounds.minLng },
+            { lat: bounds.maxLat, lng: bounds.maxLng },
+          ],
+          {
+            maxZoom: clusterMaxZoom,
+            padding: 50,
             duration: 500,
-          });
-          event.originalEvent.stopPropagation();
-        }
+          }
+        );
       }
     },
-    [clusterMaxZoom, mapRef, zoom]
+    [clusterMaxZoom, mapRef]
   );
 
   const markersComponents = useMemo(() => {
@@ -549,7 +562,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
               longitude={cluster.longitude}
               latitude={cluster.latitude}
               anchor='center'
-              onClick={onMarkerClusterClick(cluster.latitude, cluster.longitude, cluster.onClick)}
+              onClick={onMarkerClusterClick(cluster)}
               style={{ backgroundColor: cluster.selected ? markerGroup.style.iconColor : theme.palette.TwClrBg }}
             >
               <p className='count'>{cluster.size}</p>
