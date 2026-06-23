@@ -22,6 +22,7 @@ api.enhanceEndpoints({
           type: QueryTagTypes.PlantingSiteSurvivalRate,
           id: payload.plantingSiteId,
         },
+        { type: QueryTagTypes.TrackingStats },
       ],
     },
     assignT0TempSiteData: {
@@ -31,6 +32,7 @@ api.enhanceEndpoints({
           type: QueryTagTypes.PlantingSiteSurvivalRate,
           id: payload.plantingSiteId,
         },
+        { type: QueryTagTypes.TrackingStats },
       ],
     },
   },

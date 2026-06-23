@@ -31,7 +31,12 @@ const useSurvivalRateCalculationInProgress = (plantingSiteId: number | undefined
   const wasInProgress = useRef(false);
   useEffect(() => {
     if (wasInProgress.current && !inProgress && plantingSiteId !== undefined) {
-      dispatch(baseApi.util.invalidateTags([{ type: QueryTagTypes.PlantingSiteSurvivalRate, id: plantingSiteId }]));
+      dispatch(
+        baseApi.util.invalidateTags([
+          { type: QueryTagTypes.PlantingSiteSurvivalRate, id: plantingSiteId },
+          { type: QueryTagTypes.TrackingStats },
+        ])
+      );
     }
     wasInProgress.current = inProgress;
   }, [inProgress, dispatch, plantingSiteId]);

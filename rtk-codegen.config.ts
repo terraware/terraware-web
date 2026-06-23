@@ -99,6 +99,9 @@ const config: ConfigFile = {
     './src/queries/generated/plantingSeasons.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/planting-seasons'),
     },
+    './src/queries/generated/stats.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/stats'),
+    },
     // Disable regenerating Search API until OpenAPI annotation fix is completed.
     // './src/queries/generated/search.ts': {
     //   filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/search'),
