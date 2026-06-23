@@ -10,6 +10,8 @@ export type BatchForWithdraw = {
   scientificName: string;
   commonName?: string;
   readyQuantity: number;
+  projectId?: number;
+  projectName?: string;
 };
 
 export type ListBatchesForWithdrawArgs = {
@@ -60,6 +62,8 @@ const injectedRtkApi = api.injectEndpoints({
               'species_scientificName',
               'species_commonName',
               'readyQuantity(raw)',
+              'project_id',
+              'project_name',
             ],
             search: {
               operation: 'and',
@@ -82,6 +86,8 @@ const injectedRtkApi = api.injectEndpoints({
             scientificName: result.species_scientificName,
             commonName: result.species_commonName,
             readyQuantity: Number(result['readyQuantity(raw)'] ?? 0),
+            projectId: result.project_id ? Number(result.project_id) : undefined,
+            projectName: result.project_name,
           })
         ),
     }),
@@ -97,6 +103,8 @@ type BatchSearchResult = {
   species_scientificName: string;
   species_commonName?: string;
   'readyQuantity(raw)': string;
+  project_id?: string;
+  project_name?: string;
 };
 
 type BatchSearchResponse = {

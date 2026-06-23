@@ -4,10 +4,12 @@ import { Box, Step, StepLabel, Stepper, Tooltip, Typography, useTheme } from '@m
 import { Dropdown, DropdownItem, Icon } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
+import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import Button from 'src/components/common/button/Button';
+import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   useCreateBatchWithdrawalMutation,
@@ -21,6 +23,7 @@ import {
 } from 'src/queries/search/batchesForWithdraw';
 import { PlantingDateRequestRow } from 'src/queries/search/plantingDateRequests';
 import strings from 'src/strings';
+import { Project } from 'src/types/Project';
 import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -66,9 +69,11 @@ const WithdrawFromBatchesModal = ({
   const { activeLocale } = useLocalization();
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
+  const { availableProjects: projects } = useProjects();
 
   const [step, setStep] = useState<FlowStep>(0);
   const [facilityId, setFacilityId] = useState<number | undefined>(undefined);
+  const [projectId, setProjectId] = useState<number | undefined>(undefined);
   const [withdrawDate, setWithdrawDate] = useState<string>(DateTime.local().toISODate() ?? '');
   // Keyed by `${batchId}-${substratumId}` so the same batch can be split across substrata.
   const [withdrawByBatchSubstratum, setWithdrawByBatchSubstratum] = useState<Record<string, number>>({});
@@ -102,6 +107,12 @@ const WithdrawFromBatchesModal = ({
 
   const handleFacilityChange = useCallback((id: number | undefined) => {
     setFacilityId(id);
+    setProjectId(undefined);
+    setWithdrawByBatchSubstratum({});
+  }, []);
+
+  const handleProjectChange = useCallback((id: number | undefined) => {
+    setProjectId(id);
     setWithdrawByBatchSubstratum({});
   }, []);
 
@@ -121,7 +132,39 @@ const WithdrawFromBatchesModal = ({
     }
   }, [facilityId, handleFacilityChange, isFetchingNurseryOptions, nurseryOptions]);
 
-  const readyBatches = useMemo(() => (batches ?? []).filter((batch) => batch.readyQuantity > 0), [batches]);
+  const availableProjectsForBatches = useMemo<Project[] | undefined>(
+    () =>
+      projects?.filter((project: Project) =>
+        (batchesForNurseryOptions ?? []).some(
+          (batch) =>
+            batch.readyQuantity > 0 &&
+            batch.projectId === project.id &&
+            (facilityId === undefined || batch.facilityId === facilityId)
+        )
+      ),
+    [batchesForNurseryOptions, facilityId, projects]
+  );
+
+  useEffect(() => {
+    if (
+      projectId !== undefined &&
+      availableProjectsForBatches &&
+      !availableProjectsForBatches.some((project) => project.id === projectId)
+    ) {
+      handleProjectChange(undefined);
+    }
+  }, [availableProjectsForBatches, handleProjectChange, projectId]);
+
+  const readyBatches = useMemo(
+    () =>
+      (batches ?? []).filter(
+        (batch) =>
+          batch.readyQuantity > 0 &&
+          (facilityId === undefined || batch.facilityId === facilityId) &&
+          (projectId === undefined || batch.projectId === projectId)
+      ),
+    [batches, facilityId, projectId]
+  );
 
   const readyBySpecies = useMemo(() => {
     const map = new Map<number, number>();
@@ -178,6 +221,7 @@ const WithdrawFromBatchesModal = ({
   const handleClose = useCallback(() => {
     setStep(0);
     setFacilityId(undefined);
+    setProjectId(undefined);
     setWithdrawDate(DateTime.local().toISODate() ?? '');
     setWithdrawByBatchSubstratum({});
     setPhotoFiles([]);
@@ -351,9 +395,12 @@ const WithdrawFromBatchesModal = ({
         <Step1Content
           facilityId={facilityId}
           setFacilityId={handleFacilityChange}
+          projectId={projectId}
+          setProjectId={handleProjectChange}
           withdrawDate={withdrawDate}
           setWithdrawDate={setWithdrawDate}
           nurseryOptions={nurseryOptions}
+          projectOptions={availableProjectsForBatches}
           requestSpecies={request.species}
           readyBySpecies={readyBySpecies}
         />
@@ -380,9 +427,12 @@ const WithdrawFromBatchesModal = ({
 type Step1ContentProps = {
   facilityId: number | undefined;
   setFacilityId: (id: number | undefined) => void;
+  projectId: number | undefined;
+  setProjectId: (id: number | undefined) => void;
   withdrawDate: string;
   setWithdrawDate: (date: string) => void;
   nurseryOptions: DropdownItem[];
+  projectOptions?: Project[];
   requestSpecies: PlantingDateRequestRow['species'];
   readyBySpecies: Map<number, number>;
 };
@@ -390,9 +440,12 @@ type Step1ContentProps = {
 const Step1Content = ({
   facilityId,
   setFacilityId,
+  projectId,
+  setProjectId,
   withdrawDate,
   setWithdrawDate,
   nurseryOptions,
+  projectOptions,
   requestSpecies,
   readyBySpecies,
 }: Step1ContentProps): JSX.Element => {
@@ -419,23 +472,34 @@ const Step1Content = ({
           sx={{ textAlign: 'left' }}
         />
       </Box>
-      <Box maxWidth='320px'>
-        <Box display='flex' alignItems='center' gap={theme.spacing(0.5)} marginBottom={theme.spacing(0.5)}>
-          <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
-            {strings.FROM_NURSERY_REQUIRED}
-          </Typography>
+      <Box display='flex' gap={theme.spacing(2)} flexWrap='wrap'>
+        <Box flex={1} minWidth='240px' maxWidth='320px'>
+          <Dropdown
+            id='nursery'
+            label={strings.FROM_NURSERY_REQUIRED}
+            placeholder={strings.SELECT_NURSERY}
+            options={nurseryOptions}
+            selectedValue={facilityId}
+            onChange={(value) => setFacilityId(value !== undefined && value !== '' ? Number(value) : undefined)}
+            fullWidth
+            sx={{ textAlign: 'left' }}
+            fixedMenu
+          />
         </Box>
-        <Dropdown
-          id='nursery'
-          label=''
-          placeholder={strings.SELECT_NURSERY}
-          options={nurseryOptions}
-          selectedValue={facilityId}
-          onChange={(value) => setFacilityId(value !== undefined && value !== '' ? Number(value) : undefined)}
-          fullWidth
-          sx={{ textAlign: 'left' }}
-          fixedMenu
-        />
+
+        {facilityId !== undefined && (projectOptions?.length ?? 0) > 0 && (
+          <Box flex={1} minWidth='240px' maxWidth='320px' textAlign='left'>
+            <ProjectsDropdown<{ projectId?: number }>
+              availableProjects={projectOptions}
+              label={strings.PROJECT}
+              record={{ projectId }}
+              setRecord={(setFn) => {
+                const nextRecord = setFn({ projectId });
+                setProjectId(nextRecord.projectId);
+              }}
+            />
+          </Box>
+        )}
       </Box>
 
       {facilityId !== undefined && (
