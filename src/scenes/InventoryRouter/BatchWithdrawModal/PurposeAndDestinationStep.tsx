@@ -282,31 +282,33 @@ const PurposeAndDestinationStep = ({
         </RadioGroup>
       </Box>
 
-      <Box maxWidth='320px'>
-        <Dropdown
-          id='from-nursery'
-          label={strings.FROM_NURSERY_REQUIRED}
-          options={fromNurseryOptions}
-          selectedValue={draft.fromFacilityId}
-          onChange={(value) => onChange({ fromFacilityId: value !== undefined ? Number(value) : undefined })}
-          fullWidth
-          sx={{ textAlign: 'left' }}
-        />
-      </Box>
-
-      {batches.length > 1 && (availableProjectsForBatches?.length ?? 0) > 0 && (
-        <Box maxWidth='320px' textAlign='left'>
-          <ProjectsDropdown<{ projectId?: number }>
-            availableProjects={availableProjectsForBatches}
-            label={strings.PROJECT}
-            record={{ projectId: draft.projectId }}
-            setRecord={(setFn) => {
-              const nextRecord = setFn({ projectId: draft.projectId });
-              onChange({ projectId: nextRecord.projectId });
-            }}
+      <Box display='flex' gap={theme.spacing(2)} flexWrap='wrap'>
+        <Box flex={1} minWidth='240px' maxWidth='320px'>
+          <Dropdown
+            id='from-nursery'
+            label={strings.FROM_NURSERY_REQUIRED}
+            options={fromNurseryOptions}
+            selectedValue={draft.fromFacilityId}
+            onChange={(value) => onChange({ fromFacilityId: value !== undefined ? Number(value) : undefined })}
+            fullWidth
+            sx={{ textAlign: 'left' }}
           />
         </Box>
-      )}
+
+        {batches.length > 1 && (availableProjectsForBatches?.length ?? 0) > 0 && (
+          <Box flex={1} minWidth='240px' maxWidth='320px' textAlign='left'>
+            <ProjectsDropdown<{ projectId?: number }>
+              availableProjects={availableProjectsForBatches}
+              label={strings.PROJECT}
+              record={{ projectId: draft.projectId }}
+              setRecord={(setFn) => {
+                const nextRecord = setFn({ projectId: draft.projectId });
+                onChange({ projectId: nextRecord.projectId });
+              }}
+            />
+          </Box>
+        )}
+      </Box>
 
       {isPlanting && (
         <Box maxWidth='320px'>
