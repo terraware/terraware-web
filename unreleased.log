@@ -1,3 +1,4 @@
+82b70dfa SW-8569 Mobile and tablet Updates (#5922)
 de7f6381 Folded PlantsPrimaryPage into plant dashboard and header (#5896)
 72ecc37e Fixed sticky planting site ID to have strict 'all' | numbers type (#5895)
 e1ecf14d SW-8521 When selected Planting Site has no requests, do not show any seasons or species in filters and display a message (#5920)
