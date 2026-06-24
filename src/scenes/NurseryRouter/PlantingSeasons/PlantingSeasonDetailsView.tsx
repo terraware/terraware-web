@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, Tooltip, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { Button, DropdownItem, Icon, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -42,6 +42,8 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { isMobile, isTablet } = useDeviceInfo();
+  const isBelowLargeDesktop = useMediaQuery(theme.breakpoints.down('lg'));
+  const showTabletLayout = isTablet || (!isMobile && isBelowLargeDesktop);
   const { plantingSeasonId } = useParams<{ plantingSeasonId: string }>();
   const seasonIdNumber = Number(plantingSeasonId);
 
@@ -161,10 +163,10 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
     align: 'left' | 'center' | 'right' = 'right',
     highlight = false
   ) => {
-    const compactLayout = isMobile || isTablet;
+    const compactLayout = isMobile || showTabletLayout;
     const justifyContent = align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
-    const valueFontSize = isTablet ? '20px' : '24px';
-    const valueLineHeight = isTablet ? '28px' : '32px';
+    const valueFontSize = showTabletLayout ? '20px' : '24px';
+    const valueLineHeight = showTabletLayout ? '28px' : '32px';
 
     return (
       <Box
@@ -314,7 +316,11 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
         <PageSnackbar />
       </PageHeaderWrapper>
       <Card
-        style={{ width: '100%', marginTop: theme.spacing(3), ...(isTablet ? { padding: theme.spacing(2) } : {}) }}
+        style={{
+          width: '100%',
+          marginTop: theme.spacing(3),
+          ...(showTabletLayout ? { padding: theme.spacing(2) } : {}),
+        }}
         radius={theme.spacing(1)}
       >
         {isMobile ? (
@@ -373,7 +379,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
               <ProgressChart value={plantingProgressValue} target={plantingGoal ?? 0} />
             </Box>
           </Box>
-        ) : isTablet ? (
+        ) : showTabletLayout ? (
           <Box display='flex' flexDirection='column'>
             <Box display='flex' alignItems='center' gap={theme.spacing(1)} flexWrap='wrap'>
               <Icon name='iconCalendar' size='small' fillColor={theme.palette.TwClrIcnSecondary} />

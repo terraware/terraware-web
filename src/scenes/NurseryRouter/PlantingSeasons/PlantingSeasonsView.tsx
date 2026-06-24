@@ -18,7 +18,8 @@ import PlantingSeasonBox from './PlantingSeasonBox';
 const PlantingSeasonsView = (): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isTablet } = useDeviceInfo();
+  const isCompact = isMobile || isTablet;
   const { selectedOrganization } = useOrganization();
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
@@ -38,10 +39,10 @@ const PlantingSeasonsView = (): JSX.Element => {
       .sort((a, b) => a.label.localeCompare(b.label));
 
     return [
-      { label: isMobile ? strings.ALL_SITES : strings.ALL_PLANTING_SITES, value: ALL_PLANTING_SITES },
+      { label: isCompact ? strings.ALL_SITES : strings.ALL_PLANTING_SITES, value: ALL_PLANTING_SITES },
       ...sitesOptions,
     ];
-  }, [isMobile, plantingSites, strings]);
+  }, [isCompact, plantingSites, strings]);
 
   const plantingSiteDropdown = (
     <Dropdown
@@ -52,7 +53,7 @@ const PlantingSeasonsView = (): JSX.Element => {
       onChange={(value: string) =>
         selectPlantingSite(value === ALL_PLANTING_SITES ? ALL_PLANTING_SITES : Number(value))
       }
-      sx={{ flex: 1, maxWidth: isMobile ? '280px' : '400px' }}
+      sx={{ flex: 1, maxWidth: isCompact ? '280px' : '400px' }}
     />
   );
 
@@ -125,10 +126,10 @@ const PlantingSeasonsView = (): JSX.Element => {
 
   return (
     <Page
-      title={isMobile ? mobileTitleArea : desktopTitleArea}
-      rightComponent={!isMobile && seasonRows.length > 0 ? addButton() : undefined}
-      leftComponentGridSize={isMobile ? 0 : undefined}
-      rightComponentGridSize={isMobile ? 0 : undefined}
+      title={isCompact ? mobileTitleArea : desktopTitleArea}
+      rightComponent={!isCompact && seasonRows.length > 0 ? addButton() : undefined}
+      leftComponentGridSize={isCompact ? 0 : undefined}
+      rightComponentGridSize={isCompact ? 0 : undefined}
     >
       {addModalOpen && (
         <AddPlantingSeasonModal

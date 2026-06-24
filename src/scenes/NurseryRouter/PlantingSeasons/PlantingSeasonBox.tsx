@@ -26,7 +26,8 @@ type PlantingSeasonBoxProps = {
 const PlantingSeasonBox = ({ season, plantingSiteName, strata }: PlantingSeasonBoxProps): JSX.Element => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isTablet } = useDeviceInfo();
+  const isCompact = isMobile || isTablet;
   const navigate = useSyncNavigate();
 
   const { data: speciesSummary } = useGetPlantingSeasonSpeciesSummaryQuery(season.id);
@@ -74,9 +75,9 @@ const PlantingSeasonBox = ({ season, plantingSiteName, strata }: PlantingSeasonB
 
     return (
       <Box
-        textAlign={isMobile ? align : 'right'}
-        sx={isMobile ? { minWidth: 0 } : { minWidth: '120px' }}
-        minWidth={isMobile ? undefined : '120px'}
+        textAlign={isCompact ? align : 'right'}
+        sx={isCompact ? { minWidth: 0 } : { minWidth: '120px' }}
+        minWidth={isCompact ? undefined : '120px'}
       >
         <Typography
           fontSize='14px'
@@ -84,7 +85,7 @@ const PlantingSeasonBox = ({ season, plantingSiteName, strata }: PlantingSeasonB
           color={theme.palette.TwClrTxt}
           lineHeight='20px'
           sx={
-            isMobile
+            isCompact
               ? {
                   alignItems: 'flex-end',
                   display: 'flex',
@@ -194,13 +195,16 @@ const PlantingSeasonBox = ({ season, plantingSiteName, strata }: PlantingSeasonB
       }}
     >
       <Card style={{ width: '100%' }} radius={theme.spacing(1)}>
-        {isMobile ? (
+        {isCompact ? (
           <Box display='flex' flexDirection='column'>
             <Box display='flex' alignItems='flex-start' gap={theme.spacing(1)}>
               <Icon name='iconCalendar' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
-              <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
-                {season.name}
-              </Typography>
+              <Box display='flex' alignItems='center' gap={theme.spacing(1)} flexWrap='wrap' minWidth={0}>
+                <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                  {season.name}
+                </Typography>
+                {isTablet && <PlantingSeasonStatusBadge status={season.status} />}
+              </Box>
             </Box>
             <Typography color={theme.palette.TwClrTxtSecondary} marginTop={theme.spacing(1)}>
               {plantingSiteName}
@@ -208,9 +212,11 @@ const PlantingSeasonBox = ({ season, plantingSiteName, strata }: PlantingSeasonB
             <Typography color={theme.palette.TwClrTxt} marginTop={theme.spacing(0.5)}>
               {dateRange}
             </Typography>
-            <Box marginTop={theme.spacing(1)}>
-              <PlantingSeasonStatusBadge status={season.status} />
-            </Box>
+            {isMobile && (
+              <Box marginTop={theme.spacing(1)}>
+                <PlantingSeasonStatusBadge status={season.status} />
+              </Box>
+            )}
             <Divider sx={{ marginY: theme.spacing(2) }} />
             <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
               {mobileNamesSection(strings.STRATA, strataNames)}
