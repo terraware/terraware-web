@@ -147,7 +147,10 @@ const BiomassObservationDataTab = () => {
     },
     {
       label: strings.WATER_DEPTH_CM,
-      value: biomassMeasurement?.waterDepth,
+      value:
+        isAdditionalBiomassFieldsEnabled && biomassMeasurement?.waterDepth === null
+          ? strings.NO_WATER
+          : (biomassMeasurement?.waterDepth ?? undefined),
     },
     {
       label: strings.SALINITY_PPT,

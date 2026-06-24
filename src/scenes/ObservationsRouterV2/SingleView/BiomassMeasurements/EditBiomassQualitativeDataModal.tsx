@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import {
   Button,
+  Checkbox,
   DatePicker,
   DialogBox,
   Dropdown,
@@ -64,6 +65,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
 
   const [record, setRecord] = useForm<BiomassQualitativeFormData>(initialFormData);
   const [showConfirmationModalOpened, setShowConfirmationModalOpened] = useState(false);
+  const [formError, setFormError] = useState<string | undefined>();
 
   const onAddPlotCondition = useCallback(
     (conditionId: PlotCondition) => {
@@ -185,6 +187,21 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
     return record.biomassMeasurement.forestType === 'Mangrove';
   }, [record]);
 
+  const noWater = isAdditionalBiomassFieldsEnabled && record.biomassMeasurement.waterDepth === null;
+
+  const onChangeNoWater = useCallback(
+    (checked: boolean) => {
+      setRecord((prev) => ({
+        ...prev,
+        biomassMeasurement: {
+          ...prev.biomassMeasurement,
+          waterDepth: checked ? null : undefined,
+        },
+      }));
+    },
+    [setRecord]
+  );
+
   const smallTreeCountValue = useMemo(
     () =>
       smallTreeCountOptions.find(
@@ -267,7 +284,18 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
               <Button
                 id='saveData'
                 label={strings.SAVE}
-                onClick={() => setShowConfirmationModalOpened(true)}
+                onClick={() => {
+                  if (isAdditionalBiomassFieldsEnabled) {
+                    const waterDepth = record.biomassMeasurement.waterDepth;
+                    const waterDepthValid = waterDepth === null || (typeof waterDepth === 'number' && waterDepth > 0);
+                    if (isMangrove && !waterDepthValid) {
+                      setFormError(strings.WATER_DEPTH_REQUIRED_FOR_MANGROVE);
+                      return;
+                    }
+                    setFormError(undefined);
+                  }
+                  setShowConfirmationModalOpened(true);
+                }}
                 size='medium'
                 key='button-2'
               />,
@@ -317,13 +345,29 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                 <>
                   <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
                     <Box sx={{ flex: 1 }}>
-                      <Textfield
-                        type='text'
-                        label={strings.WATER_DEPTH_CM}
-                        value={record.biomassMeasurement?.waterDepth}
-                        id={'waterDepth'}
-                        onChange={onChangeHandler('biomassMeasurement.waterDepth')}
-                      />
+                      {!noWater && (
+                        <Textfield
+                          type='text'
+                          label={strings.WATER_DEPTH_CM}
+                          value={record.biomassMeasurement?.waterDepth ?? undefined}
+                          id={'waterDepth'}
+                          onChange={onChangeHandler('biomassMeasurement.waterDepth')}
+                        />
+                      )}
+                      {isAdditionalBiomassFieldsEnabled && (
+                        <Checkbox
+                          id='noWater'
+                          name='noWater'
+                          label={strings.NO_WATER}
+                          value={noWater}
+                          onChange={onChangeNoWater}
+                        />
+                      )}
+                      {formError && !noWater && (
+                        <Typography color='error' variant='caption'>
+                          {formError}
+                        </Typography>
+                      )}
                     </Box>
 
                     <Box sx={{ flex: 1 }}>
