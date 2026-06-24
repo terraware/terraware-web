@@ -17,7 +17,6 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
-import { baseApi } from 'src/queries/baseApi';
 import {
   useAdminCreateActivityMutation,
   useAdminUpdateActivityMutation,
@@ -28,8 +27,6 @@ import {
   useUpdateActivityMutation,
 } from 'src/queries/generated/activities';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
-import { QueryTagTypes } from 'src/queries/tags';
-import { useAppDispatch } from 'src/redux/store';
 import {
   ACTIVITY_STATUSES,
   ACTIVITY_TYPES,
@@ -84,7 +81,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const { isAllowed } = useUser();
 
   const userTimeZone = useUserTimeZone();
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
@@ -196,7 +192,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     return obsMonthYear ? `${strings.OBSERVATION}: ${obsMonthYear}` : undefined;
   }, [isObsActivity, obsIsAdHoc, obsMonthYear, obsPlotNumber, strings]);
 
-  const { syncActivityMedia } = useSyncActivityMedia();
+  const syncActivityMedia = useSyncActivityMedia();
 
   const [adminCreateActivity] = useAdminCreateActivityMutation();
   const [createActivity] = useCreateActivityMutation();
@@ -337,19 +333,11 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         navToActivityLog();
         return;
       }
-
-      dispatch(
-        baseApi.util.invalidateTags([
-          { type: QueryTagTypes.Activities, id: newActivityId },
-          { type: QueryTagTypes.Activities, id: 'LIST' },
-        ])
-      );
       setBusy(false);
       navToActivityLog();
     },
     [
       activity?.payload.observation?.observationId,
-      dispatch,
       mediaItems,
       navToActivityLog,
       obsPlotNumberToIdMap,

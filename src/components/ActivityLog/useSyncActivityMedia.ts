@@ -1,12 +1,15 @@
 import { useCallback } from 'react';
 
 import { ActivityMediaItem } from 'src/components/ActivityLog/ActivityMediaForm';
+import { baseApi } from 'src/queries/baseApi';
 import {
   useDeleteActivityMediaMutation,
   useUpdateActivityMediaMutation,
   useUploadActivityMediaMutation,
 } from 'src/queries/generated/activities';
 import { useDeletePlotPhotoMutation, useUploadOtherPlotMediaMutation } from 'src/queries/generated/observations';
+import { QueryTagTypes } from 'src/queries/tags';
+import { useAppDispatch } from 'src/redux/store';
 
 export type SyncActivityMediaResult = {
   error?: string;
@@ -31,13 +34,15 @@ export type SyncActivityMediaRequest = {
 };
 
 const useSyncActivityMedia = () => {
+  const dispatch = useAppDispatch();
+
   const [deleteActivityMedia] = useDeleteActivityMediaMutation();
   const [updateActivityMedia] = useUpdateActivityMediaMutation();
   const [uploadActivityMedia] = useUploadActivityMediaMutation();
   const [deletePlotPhoto] = useDeletePlotPhotoMutation();
   const [uploadOtherPlotMedia] = useUploadOtherPlotMediaMutation();
 
-  const syncActivityMedia = useCallback(
+  return useCallback(
     async ({
       activityId,
       mediaItems,
@@ -158,6 +163,13 @@ const useSyncActivityMedia = () => {
               operation: 'upload',
               success: false,
             });
+          } finally {
+            dispatch(
+              baseApi.util.invalidateTags([
+                { type: QueryTagTypes.Activities, id: activityId },
+                { type: QueryTagTypes.Activities, id: 'LIST' },
+              ])
+            );
           }
         }
       }
@@ -170,10 +182,8 @@ const useSyncActivityMedia = () => {
         uploadedCount: results.filter((result) => result.success && result.operation === 'upload').length,
       };
     },
-    [deleteActivityMedia, deletePlotPhoto, updateActivityMedia, uploadActivityMedia, uploadOtherPlotMedia]
+    [deleteActivityMedia, deletePlotPhoto, dispatch, updateActivityMedia, uploadActivityMedia, uploadOtherPlotMedia]
   );
-
-  return { syncActivityMedia };
 };
 
 export default useSyncActivityMedia;
