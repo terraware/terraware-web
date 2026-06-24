@@ -29,9 +29,7 @@ import {
 } from 'src/queries/generated/activities';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { QueryTagTypes } from 'src/queries/tags';
-import { requestSyncActivityMedia } from 'src/redux/features/activities/activitiesAsyncThunks';
-import { selectSyncActivityMedia } from 'src/redux/features/activities/activitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppDispatch } from 'src/redux/store';
 import {
   ACTIVITY_STATUSES,
   ACTIVITY_TYPES,
@@ -67,6 +65,7 @@ import DeleteActivityModal from './DeleteActivityModal';
 import MapSplitView from './MapSplitView';
 import ObservationStatsPanel from './ObservationStatsPanel';
 import { TypedActivity } from './types';
+import useSyncActivityMedia from './useSyncActivityMedia';
 
 const MAX_FILE_SIZE_GB = 5;
 const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_GB * 1024 * 1024 * 1024;
@@ -102,7 +101,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
   const [mediaItems, setMediaItems] = useState<ActivityMediaItem[]>([]);
   const [validateFields, setValidateFields] = useState<boolean>(false);
-  const [syncMediaRequestId, setSyncMediaRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
   const [deleteActivityModalOpen, setDeleteActivityModalOpen] = useState<boolean>(false);
 
@@ -198,7 +196,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     return obsMonthYear ? `${strings.OBSERVATION}: ${obsMonthYear}` : undefined;
   }, [isObsActivity, obsIsAdHoc, obsMonthYear, obsPlotNumber, strings]);
 
-  const syncActivityMediaRequest = useAppSelector(selectSyncActivityMedia(syncMediaRequestId));
+  const { syncActivityMedia } = useSyncActivityMedia();
 
   const [adminCreateActivity] = useAdminCreateActivityMutation();
   const [createActivity] = useCreateActivityMutation();
@@ -313,35 +311,52 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   }, [isObsActivity, record, mediaItems, snackbar, strings]);
 
   const syncMediaFiles = useCallback(
-    (newActivityId: number) => {
+    async (newActivityId: number) => {
       // Only sync if there are any media operations to perform
       const hasMediaOperations = mediaItems.some(
         (item) => item.type === 'new' || (item.type === 'existing' && (item.isDeleted || item.isModified))
       );
 
-      if (hasMediaOperations) {
-        const request = dispatch(
-          requestSyncActivityMedia({
-            activityId: newActivityId,
-            mediaItems,
-            observationId: activity?.payload.observation?.observationId,
-            plotNumberToIdMap: obsPlotNumberToIdMap,
-          })
-        );
-        setSyncMediaRequestId(request.requestId);
-      } else {
+      if (!hasMediaOperations) {
         // No media operations needed
         setBusy(false);
         navToActivityLog();
+        return;
       }
+
+      const response = await syncActivityMedia({
+        activityId: newActivityId,
+        mediaItems,
+        observationId: activity?.payload.observation?.observationId,
+        plotNumberToIdMap: obsPlotNumberToIdMap,
+      });
+
+      if (!response.allSuccessful) {
+        setBusy(false);
+        snackbar.toastError(strings.GENERIC_ERROR);
+        navToActivityLog();
+        return;
+      }
+
+      dispatch(
+        baseApi.util.invalidateTags([
+          { type: QueryTagTypes.Activities, id: newActivityId },
+          { type: QueryTagTypes.Activities, id: 'LIST' },
+        ])
+      );
+      setBusy(false);
+      navToActivityLog();
     },
     [
+      activity?.payload.observation?.observationId,
       dispatch,
       mediaItems,
-      setBusy,
       navToActivityLog,
-      activity?.payload.observation?.observationId,
       obsPlotNumberToIdMap,
+      setBusy,
+      snackbar,
+      strings.GENERIC_ERROR,
+      syncActivityMedia,
     ]
   );
 
@@ -393,7 +408,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             type: isObsActivity ? activity.payload.type : (record?.type as AdminActivityPayload['type']),
           },
         }).unwrap();
-        syncMediaFiles(activity.payload.id);
+        await syncMediaFiles(activity.payload.id);
       } else if (isEditing && !isAcceleratorRoute && activity) {
         // update activity
         await updateActivity({
@@ -405,7 +420,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
             type: isObsActivity ? activity.payload.type : (record?.type as ActivityPayload['type']),
           },
         }).unwrap();
-        syncMediaFiles(activity.payload.id);
+        await syncMediaFiles(activity.payload.id);
       } else if (!isEditing && isAcceleratorRoute) {
         // admin create activity
         const result = await adminCreateActivity({
@@ -416,7 +431,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           status: record?.status as AdminCreateActivityRequestPayload['status'],
           type: record?.type as AdminCreateActivityRequestPayload['type'],
         }).unwrap();
-        syncMediaFiles(result.activity.id);
+        await syncMediaFiles(result.activity.id);
       } else {
         // create activity
         const result = await createActivity({
@@ -425,7 +440,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
           projectId,
           type: record?.type as CreateActivityRequestPayload['type'],
         }).unwrap();
-        syncMediaFiles(result.activity.id);
+        await syncMediaFiles(result.activity.id);
       }
     } catch {
       setBusy(false);
@@ -503,26 +518,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       setMediaItems(existingMediaItems);
     }
   }, [isEditing, activity]);
-
-  // handle sync media responses
-  useEffect(() => {
-    if (syncActivityMediaRequest?.status === 'error') {
-      setBusy(false);
-      snackbar.toastError(strings.GENERIC_ERROR);
-      navToActivityLog();
-    } else if (syncActivityMediaRequest?.status === 'success') {
-      if (activityId !== undefined) {
-        dispatch(
-          baseApi.util.invalidateTags([
-            { type: QueryTagTypes.Activities, id: activityId },
-            { type: QueryTagTypes.Activities, id: 'LIST' },
-          ])
-        );
-      }
-      setBusy(false);
-      navToActivityLog();
-    }
-  }, [activityId, dispatch, navToActivityLog, snackbar, strings.GENERIC_ERROR, syncActivityMediaRequest]);
 
   const activityTypeOptions = useMemo(() => {
     return ACTIVITY_TYPES.map((activityType: ActivityType) => ({
