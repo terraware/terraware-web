@@ -252,6 +252,18 @@ const PurposeAndDestinationStep = ({
     </>
   );
 
+  const fieldRowSx = {
+    display: 'flex',
+    gap: theme.spacing(2),
+    flexWrap: 'wrap',
+  } as const;
+
+  const fieldCellSx = {
+    flex: `0 1 calc((100% - ${theme.spacing(2)}) / 2)`,
+    minWidth: '240px',
+    maxWidth: '320px',
+  } as const;
+
   return (
     <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
       <Box display='flex' alignItems='center' gap={theme.spacing(2)} flexWrap='wrap'>
@@ -282,8 +294,8 @@ const PurposeAndDestinationStep = ({
         </RadioGroup>
       </Box>
 
-      <Box display='flex' gap={theme.spacing(2)} flexWrap='wrap'>
-        <Box flex={1} minWidth='240px' maxWidth='320px'>
+      <Box sx={fieldRowSx}>
+        <Box sx={fieldCellSx}>
           <Dropdown
             id='from-nursery'
             label={strings.FROM_NURSERY_REQUIRED}
@@ -296,7 +308,7 @@ const PurposeAndDestinationStep = ({
         </Box>
 
         {batches.length > 1 && (availableProjectsForBatches?.length ?? 0) > 0 && (
-          <Box flex={1} minWidth='240px' maxWidth='320px' textAlign='left'>
+          <Box sx={fieldCellSx} textAlign='left'>
             <ProjectsDropdown<{ projectId?: number }>
               availableProjects={availableProjectsForBatches}
               label={strings.PROJECT}
@@ -311,56 +323,17 @@ const PurposeAndDestinationStep = ({
       </Box>
 
       {isPlanting && (
-        <Box maxWidth='320px'>
-          <Dropdown
-            id='to-planting-site'
-            label={strings.TO_PLANTING_SITE_REQUIRED}
-            options={plantingSiteOptions}
-            selectedValue={draft.plantingSiteId}
-            onChange={(value) =>
-              onChange({
-                plantingSiteId: value !== undefined ? Number(value) : undefined,
-                plantingSeasonId: undefined,
-                stratumId: undefined,
-                substratumId: undefined,
-              })
-            }
-            fullWidth
-            sx={{ textAlign: 'left' }}
-          />
-        </Box>
-      )}
-
-      {isPlanting && showPlantingSeasonSelector && (
-        <Box
-          maxWidth={draft.plantingSiteId !== undefined && selectableSeasonsForSite.length === 0 ? undefined : '320px'}
-        >
-          <Box display='flex' alignItems='center' gap={theme.spacing(0.5)} marginBottom={theme.spacing(0.5)}>
-            <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
-              {strings.PLANTING_SEASON_OPTIONAL}
-            </Typography>
-            <Tooltip title={strings.PLANTING_SEASON_OPTIONAL_TOOLTIP}>
-              <Box display='flex' alignItems='center'>
-                <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
-              </Box>
-            </Tooltip>
-          </Box>
-          {draft.plantingSiteId !== undefined && selectableSeasonsForSite.length === 0 ? (
-            <Typography fontSize='16px' fontWeight={500} textAlign={'left'}>
-              {strings.NO_ACTIVE_SEASONS_FOR_SITE}
-            </Typography>
-          ) : (
+        <Box sx={fieldRowSx}>
+          <Box sx={fieldCellSx}>
             <Dropdown
-              id='planting-season'
-              label=''
-              options={plantingSeasonOptions}
-              selectedValue={draft.plantingSeasonId ?? NO_PLANTING_SEASON_VALUE}
+              id='to-planting-site'
+              label={strings.TO_PLANTING_SITE_REQUIRED}
+              options={plantingSiteOptions}
+              selectedValue={draft.plantingSiteId}
               onChange={(value) =>
                 onChange({
-                  plantingSeasonId:
-                    value !== undefined && value !== '' && value !== NO_PLANTING_SEASON_VALUE
-                      ? Number(value)
-                      : undefined,
+                  plantingSiteId: value !== undefined ? Number(value) : undefined,
+                  plantingSeasonId: undefined,
                   stratumId: undefined,
                   substratumId: undefined,
                 })
@@ -368,13 +341,54 @@ const PurposeAndDestinationStep = ({
               fullWidth
               sx={{ textAlign: 'left' }}
             />
-          )}
+          </Box>
+        </Box>
+      )}
+
+      {isPlanting && showPlantingSeasonSelector && (
+        <Box sx={fieldRowSx}>
+          <Box sx={fieldCellSx}>
+            <Box display='flex' alignItems='center' gap={theme.spacing(0.5)} marginBottom={theme.spacing(0.5)}>
+              <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+                {strings.PLANTING_SEASON_OPTIONAL}
+              </Typography>
+              <Tooltip title={strings.PLANTING_SEASON_OPTIONAL_TOOLTIP}>
+                <Box display='flex' alignItems='center'>
+                  <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+                </Box>
+              </Tooltip>
+            </Box>
+            {draft.plantingSiteId !== undefined && selectableSeasonsForSite.length === 0 ? (
+              <Typography fontSize='16px' fontWeight={500} textAlign={'left'}>
+                {strings.NO_ACTIVE_SEASONS_FOR_SITE}
+              </Typography>
+            ) : (
+              <Dropdown
+                id='planting-season'
+                label=''
+                options={plantingSeasonOptions}
+                selectedValue={draft.plantingSeasonId ?? NO_PLANTING_SEASON_VALUE}
+                onChange={(value) =>
+                  onChange({
+                    plantingSeasonId:
+                      value !== undefined && value !== '' && value !== NO_PLANTING_SEASON_VALUE
+                        ? Number(value)
+                        : undefined,
+                    stratumId: undefined,
+                    substratumId: undefined,
+                  })
+                }
+                fullWidth
+                sx={{ textAlign: 'left' }}
+              />
+            )}
+          </Box>
         </Box>
       )}
 
       {isPlanting && draft.plantingSiteId !== undefined && (
-        <Box display='flex' gap={theme.spacing(2)} flexWrap='wrap'>
-          <Box flex={1} minWidth='240px'>
+        <Box sx={fieldRowSx}>
+          <Box sx={fieldCellSx}>
             <Dropdown
               id='stratum'
               label={strings.STRATUM_REQUIRED}
@@ -390,7 +404,7 @@ const PurposeAndDestinationStep = ({
               sx={{ textAlign: 'left' }}
             />
           </Box>
-          <Box flex={1} minWidth='240px'>
+          <Box sx={fieldCellSx}>
             <Dropdown
               id='substratum'
               label={strings.SUBSTRATUM_REQUIRED}
@@ -410,28 +424,32 @@ const PurposeAndDestinationStep = ({
       )}
 
       {isNurseryTransfer && (
-        <Box maxWidth='320px'>
-          <Dropdown
-            id='to-nursery'
-            label={strings.TO_NURSERY_REQUIRED}
-            options={toNurseryOptions}
-            selectedValue={draft.destinationFacilityId}
-            onChange={(value) => onChange({ destinationFacilityId: value !== undefined ? Number(value) : undefined })}
-            fullWidth
-            sx={{ textAlign: 'left' }}
-          />
+        <Box sx={fieldRowSx}>
+          <Box sx={fieldCellSx}>
+            <Dropdown
+              id='to-nursery'
+              label={strings.TO_NURSERY_REQUIRED}
+              options={toNurseryOptions}
+              selectedValue={draft.destinationFacilityId}
+              onChange={(value) => onChange({ destinationFacilityId: value !== undefined ? Number(value) : undefined })}
+              fullWidth
+              sx={{ textAlign: 'left' }}
+            />
+          </Box>
         </Box>
       )}
 
-      <Box maxWidth='320px'>
-        <DatePicker
-          id='withdraw-date'
-          label={strings.WITHDRAW_DATE_REQUIRED}
-          value={draft.withdrawnDate}
-          onDateChange={(value?: DateTime) => onChange({ withdrawnDate: value?.toISODate() ?? '' })}
-          aria-label='withdraw-date'
-          sx={{ textAlign: 'left' }}
-        />
+      <Box sx={fieldRowSx}>
+        <Box sx={fieldCellSx}>
+          <DatePicker
+            id='withdraw-date'
+            label={strings.WITHDRAW_DATE_REQUIRED}
+            value={draft.withdrawnDate}
+            onDateChange={(value?: DateTime) => onChange({ withdrawnDate: value?.toISODate() ?? '' })}
+            aria-label='withdraw-date'
+            sx={{ textAlign: 'left', width: '100%' }}
+          />
+        </Box>
       </Box>
 
       <Box>
