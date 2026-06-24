@@ -1517,6 +1517,16 @@ PLANTING_SEASON_END,Término de temporada de plantación,414309c0
 PLANTING_SEASON_END_IN_PAST,La fecha de término no puede estar en el pasado.,b2729d4d
 PLANTING_SEASON_END_OUT_OF_RANGE,Debe ser entre 4 semanas y 1 año de la fecha de inicio.,fcca5463
 PLANTING_SEASON_NO_OVERLAP,Se superpone con la temporada de plantación {0} - {1},f1549979
+PLANTING_SEASON_NOTIFICATION_ALLOCATION_QUANTITIES_UPDATED,El vivero ha actualizado las cantidades asignadas para esta temporada.,eff34e46
+PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_CLOSED,La temporada ha sido cerrada y sus objetivos de especies ya no aparecen como necesarios ni solicitados.,e2d75939
+PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_PAST_END_DATE,La fecha de finalización de esta temporada ha pasado. Extienda la temporada o ciérrela si la plantación está completa.,e6ffad3c
+PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED,Se han recibido nuevas solicitudes de retiro para plantación.,e587d761
+PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY,Se ha recibido una solicitud nueva o actualizada de retiro de plantación.,71130ddd
+PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY_WITH_DATES,Se ha recibido una nueva solicitud o una actualización de retiro de plantación para {0}.,beed313d
+PLANTING_SEASON_NOTIFICATION_SEASON_WITHDRAWAL_RECORDED,Se han registrado nuevos retiros de plantación para esta temporada; el progreso de plantación ha sido actualizado.,0e81a27a
+PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_ADDED_FOR_SEASON,Se han agregado nuevos objetivos de especies para esta temporada.,f2882419
+PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_UPDATED,Objetivos de especies actualizados para {0},9d708c47
+PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_UPDATED_FOR_SEASON,Objetivos de especies actualizados para esta temporada.,c480159e
 PLANTING_SEASON_OPTIONAL,Temporada de plantación (opcional),607dcd9a
 PLANTING_SEASON_OPTIONAL_TOOLTIP,Seleccione una temporada de plantación de las temporadas activas para el sitio. Luego seleccione un estrato y subestrato en la temporada.,2fed80e5
 PLANTING_SEASON_START,Inicio de temporada de plantación,10f5de94

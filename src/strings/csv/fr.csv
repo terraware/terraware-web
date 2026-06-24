@@ -1516,6 +1516,16 @@ PLANTING_SEASON_END,Fin de la saison de plantation,414309c0
 PLANTING_SEASON_END_IN_PAST,La date de fin ne peut pas être passée.,b2729d4d
 PLANTING_SEASON_END_OUT_OF_RANGE,Elle doit se situer entre 4 semaines et 1 an après la date de début.,fcca5463
 PLANTING_SEASON_NO_OVERLAP,Chevauche la saison de plantation {0} - {1},f1549979
+PLANTING_SEASON_NOTIFICATION_ALLOCATION_QUANTITIES_UPDATED,La pépinière a mis à jour les quantités allouées pour cette saison.,eff34e46
+PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_CLOSED,La saison a été clôturée et ses objectifs d'espèces n'apparaissent plus comme nécessaires ou demandés.,e2d75939
+PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_PAST_END_DATE,La date de fin de cette saison est dépassée. Prolongez la saison ou clôturez-la si la plantation est terminée.,e6ffad3c
+PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED,Nouvelles demandes de retrait de plantation reçues.,e587d761
+PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY,Nouvelle demande de retrait de plantation ou demande mise à jour reçue.,71130ddd
+PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY_WITH_DATES,Nouvelle demande de retrait de plantation ou demande mise à jour reçue pour {0}.,beed313d
+PLANTING_SEASON_NOTIFICATION_SEASON_WITHDRAWAL_RECORDED,De nouveaux retraits de plantation ont été enregistrés pour cette saison — l’avancement de la plantation a été mis à jour.,0e81a27a
+PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_ADDED_FOR_SEASON,De nouveaux objectifs d’espèces ont été ajoutés pour cette saison.,f2882419
+PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_UPDATED,Objectifs d'espèces mis à jour pour {0},9d708c47
+PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_UPDATED_FOR_SEASON,Objectifs d'espèces mis à jour pour cette saison.,c480159e
 PLANTING_SEASON_OPTIONAL,Saison de plantation (optionnel),607dcd9a
 PLANTING_SEASON_OPTIONAL_TOOLTIP,Sélectionnez une saison de plantation parmi les saisons actives pour le site. Sélectionnez ensuite un stratum et un substratum dans la saison.,2fed80e5
 PLANTING_SEASON_START,Début de la saison de plantation,10f5de94
