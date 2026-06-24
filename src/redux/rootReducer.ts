@@ -4,7 +4,6 @@ import { rtkReducers } from 'src/queries/reducers';
 
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
 import acceleratorProjectSpeciesReducers from './features/acceleratorProjectSpecies/acceleratorProjectSpeciesSlice';
-import activityReducers from './features/activities/activitiesSlice';
 import appVersionReducers from './features/appVersion/appVersionSlice';
 import applicationReducers from './features/application/applicationSlice';
 import batchesReducers from './features/batches/batchesSlice';
@@ -43,7 +42,6 @@ import votesReducers from './features/votes/votesSlice';
 // assembly of app reducers
 export const reducers = {
   ...acceleratorReducers,
-  ...activityReducers,
   ...applicationReducers,
   ...appVersionReducers,
   ...batchesReducers,
