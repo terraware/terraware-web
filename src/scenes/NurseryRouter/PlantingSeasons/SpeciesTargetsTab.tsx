@@ -2,6 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } fr
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem } from '@terraware/web-components';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import TextField from 'src/components/common/Textfield/Textfield';
@@ -41,6 +42,14 @@ const compareSpeciesScientificNames = (
 
 const targetQuantityTextFieldSx = { width: '100px' };
 const justSavedDurationMs = 3000;
+
+const getSpeciesTargetGridColumns = (readOnly: boolean, isMobile: boolean): string => {
+  if (isMobile) {
+    return readOnly ? 'minmax(0, 1fr) 112px' : 'minmax(0, 1fr) 112px 40px';
+  }
+
+  return readOnly ? '1fr 1fr' : '1fr 1fr 40px';
+};
 
 const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabProps): JSX.Element => {
   const theme = useTheme();
@@ -215,6 +224,7 @@ const SubstratumSection = ({
   onSpeciesTargetSaved,
 }: SubstratumSectionProps): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const [addingSpecies, setAddingSpecies] = useState(false);
 
   const substratumTotal = useMemo(() => targets.reduce((sum, t) => sum + t.quantity, 0), [targets]);
@@ -237,6 +247,8 @@ const SubstratumSection = ({
   );
 
   const hasSpeciesTargetRows = targets.length > 0 || addingSpecies;
+  const speciesTargetGridColumns = getSpeciesTargetGridColumns(readOnly, isMobile);
+  const mobileSpeciesTargetColumnGap = isMobile ? theme.spacing(3) : undefined;
 
   return (
     <Box marginBottom={theme.spacing(3)}>
@@ -266,8 +278,9 @@ const SubstratumSection = ({
         <Box>
           <Box
             display='grid'
-            gridTemplateColumns={readOnly ? '1fr 1fr' : '1fr 1fr 40px'}
+            gridTemplateColumns={speciesTargetGridColumns}
             sx={{
+              columnGap: mobileSpeciesTargetColumnGap,
               padding: theme.spacing(2, 2),
               borderBottom: `2px solid ${theme.palette.TwClrBrdrSecondary}`,
             }}
@@ -343,6 +356,7 @@ const SpeciesTargetRow = ({
   onSpeciesTargetSaved,
 }: SpeciesTargetRowProps): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
   const [editing, setEditing] = useState(false);
   const [draftQuantity, setDraftQuantity] = useState<string>(target.quantity.toString());
@@ -411,14 +425,15 @@ const SpeciesTargetRow = ({
   return (
     <Box
       display='grid'
-      gridTemplateColumns={readOnly ? '1fr 1fr' : '1fr 1fr 40px'}
+      gridTemplateColumns={getSpeciesTargetGridColumns(readOnly, isMobile)}
       alignItems='center'
       sx={{
+        columnGap: isMobile ? theme.spacing(3) : undefined,
         padding: theme.spacing(1, 2),
         backgroundColor: index % 2 === 0 ? theme.palette.TwClrBgSecondary : 'transparent',
       }}
     >
-      <Box>
+      <Box minWidth={0}>
         <Typography fontSize='16px' fontWeight={400} color={theme.palette.TwClrBaseBlack}>
           {speciesInfo?.scientificName ?? `#${target.speciesId}`}
         </Typography>
@@ -506,12 +521,15 @@ const AddSpeciesRow = ({
   onSpeciesTargetSaved,
 }: AddSpeciesRowProps): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
   const rowRef = useRef<HTMLDivElement>(null);
   const skipQuantityBlurSaveRef = useRef(false);
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | undefined>();
   const [quantity, setQuantity] = useState<string>('');
   const [upsertSpeciesTarget, { isLoading: isUpserting }] = useUpsertSpeciesTargetMutation();
+  const showQuantityInput = selectedSpeciesId !== undefined;
+  const showQuantitySlot = !isMobile || showQuantityInput;
 
   const options = useMemo<DropdownItem[]>(
     () =>
@@ -582,9 +600,11 @@ const AddSpeciesRow = ({
   return (
     <Box
       ref={rowRef}
-      display='grid'
-      gridTemplateColumns='1fr 1fr 40px'
+      display={isMobile ? 'flex' : 'grid'}
+      gridTemplateColumns={isMobile ? undefined : '1fr 1fr 40px'}
       alignItems='center'
+      flexWrap={isMobile ? 'wrap' : undefined}
+      gap={isMobile ? theme.spacing(1) : undefined}
       onFocusCapture={scrollRowIntoView}
       onMouseDownCapture={scrollRowIntoView}
       onTouchStartCapture={scrollRowIntoView}
@@ -593,7 +613,12 @@ const AddSpeciesRow = ({
         backgroundColor: index % 2 === 0 ? theme.palette.TwClrBgSecondary : 'transparent',
       }}
     >
-      <Box maxWidth='100%' width='300px'>
+      <Box
+        maxWidth='100%'
+        width={isMobile ? (showQuantityInput ? '100%' : undefined) : '300px'}
+        flex={isMobile && !showQuantityInput ? '1 1 0' : undefined}
+        flexBasis={isMobile && showQuantityInput ? '100%' : undefined}
+      >
         <Dropdown
           id={`add-species-${substratumId}`}
           placeholder={strings.SELECT_SPECIES}
@@ -606,24 +631,26 @@ const AddSpeciesRow = ({
           disabled={isUpserting}
         />
       </Box>
-      <Box width='100px'>
-        {selectedSpeciesId !== undefined && (
-          <TextField
-            id={`add-quantity-${substratumId}`}
-            type='number'
-            label=''
-            value={quantity}
-            onChange={onQuantityChange}
-            onBlur={() => void onSave()}
-            min={0}
-            autoFocus
-            sx={targetQuantityTextFieldSx}
-            disabled={isUpserting}
-          />
-        )}
-      </Box>
+      {showQuantitySlot && (
+        <Box width='100px' flexShrink={0}>
+          {showQuantityInput && (
+            <TextField
+              id={`add-quantity-${substratumId}`}
+              type='number'
+              label=''
+              value={quantity}
+              onChange={onQuantityChange}
+              onBlur={() => void onSave()}
+              min={0}
+              autoFocus
+              sx={targetQuantityTextFieldSx}
+              disabled={isUpserting}
+            />
+          )}
+        </Box>
+      )}
       <Box
-        display='contents'
+        display={isMobile ? 'flex' : 'contents'}
         onMouseDown={(event) => {
           event.preventDefault();
           skipQuantityBlurSaveRef.current = true;
