@@ -23,6 +23,7 @@ import { Species } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import DeleteSpeciesGoalModal from './DeleteSpeciesGoalModal';
+import PlantingSeasonEventLog from './PlantingSeasonEventLog';
 
 type SpeciesTargetsTabProps = {
   plantingSeason: PlantingSeasonPayload;
@@ -86,6 +87,7 @@ const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabPr
           isFirst={index === 0}
         />
       ))}
+      <PlantingSeasonEventLog plantingSeasonId={plantingSeason.id} />
     </Box>
   );
 };
