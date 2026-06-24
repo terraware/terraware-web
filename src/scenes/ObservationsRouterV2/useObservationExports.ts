@@ -7,6 +7,7 @@ import { APP_PATHS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
+  useLazyExportBiomassObservationsCsvQuery,
   useLazyExportBiomassPlotsCsvQuery,
   useLazyExportBiomassSpeciesCsvQuery,
   useLazyExportBiomassTreesShrubsCsvQuery,
@@ -29,6 +30,7 @@ const useObservationExports = () => {
   const [exportBiomassPlots] = useLazyExportBiomassPlotsCsvQuery();
   const [exportBiomassSpecies] = useLazyExportBiomassSpeciesCsvQuery();
   const [exportBiomassTreesShrubs] = useLazyExportBiomassTreesShrubsCsvQuery();
+  const [exportBiomassObservations] = useLazyExportBiomassObservationsCsvQuery();
   const [exportObservationGpx] = useLazyExportObservationGpxQuery();
   const [getPlantingSite] = useLazyGetPlantingSiteQuery();
 
@@ -463,11 +465,29 @@ const useObservationExports = () => {
     ]
   );
 
+  const downloadBiomassObservations = useCallback(
+    async (siteName: string, plantingSiteId?: number) => {
+      if (!selectedOrganization) {
+        return;
+      }
+
+      const content = await exportBiomassObservations(
+        { organizationId: selectedOrganization.id, plantingSiteId },
+        true
+      ).unwrap();
+
+      const fileName = sanitize(`${siteName}-${strings.BIOMASS_MONITORING}`);
+      downloadCsv(fileName, content);
+    },
+    [exportBiomassObservations, selectedOrganization, strings.BIOMASS_MONITORING]
+  );
+
   return {
     downloadObservationResults,
     downloadObservationCsv,
     downloadObservationGpx,
     downloadBiomassObservationDetails,
+    downloadBiomassObservations,
   };
 };
 
