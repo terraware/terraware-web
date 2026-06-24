@@ -60,6 +60,18 @@ export default function MapSplitView({
     [onActivityMarkerClick]
   );
 
+  // Clicking a cluster behaves like clicking a single marker: every marker in a cluster belongs to
+  // the same activity, so reuse the first marker's activity to highlight it and scroll the list.
+  const onActivityClusterClick = useCallback(
+    (clusterMarkers: MapMarker[]) => {
+      const firstMarker = clusterMarkers[0];
+      if (firstMarker?.properties) {
+        onActivityMarkerClick?.(firstMarker.properties.activityId, firstMarker.properties.fileId);
+      }
+    },
+    [onActivityMarkerClick]
+  );
+
   const [initialMapViewState, setInitialMapViewState] = useState((): MapViewState | undefined => {
     const latParam = searchParams.get('lat');
     const lngParam = searchParams.get('lng');
@@ -94,6 +106,7 @@ export default function MapSplitView({
               longitude: media.geolocation.coordinates[0],
               latitude: media.geolocation.coordinates[1],
               onClick: onActivityMarkerClickCallback(activity.payload.id, media.fileId),
+              properties: { activityId: activity.payload.id, fileId: media.fileId },
               selected: activityMarkerHighlighted?.(activity.payload.id, media.fileId) ?? false,
             };
           } else {
@@ -105,6 +118,7 @@ export default function MapSplitView({
       return {
         markers,
         markerGroupId: `activity-${activity.payload.id}`,
+        onClusterClick: onActivityClusterClick,
         style: {
           iconColor: activityTypeColor(activity.payload.type),
           iconName: 'iconPhoto',
@@ -113,7 +127,7 @@ export default function MapSplitView({
         visible: true,
       };
     });
-  }, [activities, activityMarkerHighlighted, onActivityMarkerClickCallback]);
+  }, [activities, activityMarkerHighlighted, onActivityClusterClick, onActivityMarkerClickCallback]);
 
   const siteFeatures = useMemo((): MapLayerFeature[] => {
     return (
