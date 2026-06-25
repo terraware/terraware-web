@@ -57,6 +57,12 @@ const injectedRtkApi = api.injectEndpoints({
             type: 'Exact',
             values: [`${args.organizationId}`],
           },
+          {
+            operation: 'field',
+            field: 'status',
+            type: 'Exact',
+            values: ['Pending', 'Partial'],
+          },
         ];
         if (args.plantingSiteId) {
           filters.push({
