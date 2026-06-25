@@ -67,7 +67,7 @@ const getScheduledPlantingDateRequestMessage = (
     return strings.PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED;
   }
 
-  const dates = notification.dates?.map((date) => getMediumDate(date, activeLocale)).join(', ');
+  const dates = notification.dates?.map((date) => getMediumDate(date, activeLocale))?.join(', ');
 
   return dates
     ? strings.formatString(
