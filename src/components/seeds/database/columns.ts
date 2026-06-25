@@ -54,8 +54,9 @@ function columns(): DatabaseColumn[] {
       filter: { type: 'search' },
     },
     {
+      // use the collected date for filtering the collectedTime, since it supports date_range
       key: 'collectedDate',
-      name: strings.COLLECTION_DATE,
+      name: strings.COLLECTION_TIME,
       type: 'date',
       filter: { type: 'date_range' },
     },
