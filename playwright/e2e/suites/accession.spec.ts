@@ -24,7 +24,7 @@ test.describe('AccessionTests', () => {
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Coconut' }).locator('div').click();
 
-    await page.getByLabel('Collection Date').fill('2023-12-31');
+    await page.getByLabel('Collection Time').fill('12/31/2023 01:05 AM');
 
     await page.getByPlaceholder('Collectors').click();
     await page.getByLabel('Close').click();
