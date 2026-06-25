@@ -23,9 +23,15 @@ const injectedRtkApi = api.injectEndpoints({
         params: {
           organizationId: queryArg.organizationId,
           plantingSeasonId: queryArg.plantingSeasonId,
-          notificationCategory: queryArg.notificationCategory,
+          notificationPage: queryArg.notificationPage,
         },
       }),
+    }),
+    dismissPlantingSeasonNotifications: build.mutation<
+      DismissPlantingSeasonNotificationsApiResponse,
+      DismissPlantingSeasonNotificationsApiArg
+    >({
+      query: (queryArg) => ({ url: `/api/v1/planting-seasons/notifications/dismiss`, method: 'POST', body: queryArg }),
     }),
     deletePlantingSeason: build.mutation<DeletePlantingSeasonApiResponse, DeletePlantingSeasonApiArg>({
       query: (queryArg) => ({ url: `/api/v1/planting-seasons/${queryArg}`, method: 'DELETE' }),
@@ -128,8 +134,11 @@ export type GetPlantingSeasonNotificationsApiResponse =
 export type GetPlantingSeasonNotificationsApiArg = {
   organizationId?: number;
   plantingSeasonId?: number;
-  notificationCategory: 'InventoryPlanning' | 'PlantingSeasonPlanning';
+  notificationPage: 'InventoryPlanning' | 'PlantingSeasonPlanning' | 'Inventory' | 'Withdrawals';
 };
+export type DismissPlantingSeasonNotificationsApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type DismissPlantingSeasonNotificationsApiArg = DismissPlantingSeasonNotificationsRequestPayload;
 export type DeletePlantingSeasonApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
 export type DeletePlantingSeasonApiArg = number;
@@ -226,17 +235,21 @@ export type CreatePlantingSeasonRequestPayload = {
   startDate: string;
 };
 export type PlantingSeasonNotificationPayload = {
+  dates?: string[];
   speciesScientificNames?: string[];
   type:
+    | 'AllocationQuantitiesUpdated'
     | 'PlantingSeasonClosed'
     | 'PlantingSeasonPastEndDate'
+    | 'SeasonWithdrawalRecorded'
+    | 'ScheduledPlantingDateRequested'
     | 'SpeciesTargetsAdded'
-    | 'SpeciesTargetsUpdated'
-    | 'AllocationQuantitiesUpdated'
-    | 'SeasonWithdrawalRecorded';
+    | 'SpeciesTargetsUpdated';
 };
 export type PlantingSeasonNotificationGroupPayload = {
+  /** The last event log id returned for the list of notifications within the specified page. This can be used to dismiss the notifications for this page. */
   lastEventLogId: number;
+  notificationPage: 'InventoryPlanning' | 'PlantingSeasonPlanning' | 'Inventory' | 'Withdrawals';
   notifications: PlantingSeasonNotificationPayload[];
   plantingSeasonId: number;
   plantingSeasonName: string;
@@ -248,6 +261,12 @@ export type GetPlantingSeasonNotificationsResponsePayload = {
 };
 export type SimpleSuccessResponsePayload = {
   status: SuccessOrError;
+};
+export type DismissPlantingSeasonNotificationsRequestPayload = {
+  /** The last event log id returned for the list of notifications within the specified page. All notifications up to and including this event will be dismissed. */
+  lastEventLogId: number;
+  notificationPage: 'InventoryPlanning' | 'PlantingSeasonPlanning' | 'Inventory' | 'Withdrawals';
+  plantingSeasonId: number;
 };
 export type ErrorDetails = {
   message: string;
@@ -314,6 +333,7 @@ export const {
   useCreatePlantingSeasonMutation,
   useGetPlantingSeasonNotificationsQuery,
   useLazyGetPlantingSeasonNotificationsQuery,
+  useDismissPlantingSeasonNotificationsMutation,
   useDeletePlantingSeasonMutation,
   useGetPlantingSeasonQuery,
   useLazyGetPlantingSeasonQuery,

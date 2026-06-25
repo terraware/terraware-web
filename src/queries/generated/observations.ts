@@ -491,7 +491,7 @@ export type NewBiomassMeasurementPayload = {
   /** Time when ide is observed. Required for Mangrove forest. */
   tideTime?: string;
   trees: (NewShrubPayload | NewTreeWithTrunksPayload)[];
-  /** Measured in centimeters. Required for Mangrove forest. Null means no water. */
+  /** Measured in centimeters. Only valid for Mangrove forests. A null value indicates that there was no water. */
   waterDepth?: number;
 };
 export type RecordedPlantPayload = {
@@ -711,7 +711,7 @@ export type ExistingBiomassMeasurementPayload = {
   tideTime?: string;
   treeSpeciesCount: number;
   trees: ExistingTreePayload[];
-  /** Measured in centimeters. Null means no water. */
+  /** Measured in centimeters. Only valid for Mangrove forests. A null value indicates that there was no water. */
   waterDepth?: number;
 };
 export type ObservationSubstratumResultsPayload = {
@@ -827,6 +827,12 @@ export type MergeOtherSpeciesRequestPayload = {
   /** ID of the existing species that the Other species' recorded plants should be merged into. */
   speciesId: number;
 };
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: object[];
+    type: 'GeometryCollection';
+  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -850,12 +856,6 @@ export type MultiPolygon = {
 } & GeometryBase & {
     coordinates: number[][][][];
     type: 'MultiPolygon';
-  };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
-    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type AssignedPlotPayload = {

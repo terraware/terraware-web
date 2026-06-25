@@ -9,6 +9,7 @@ export type InventoryPlanningArgs = {
 };
 
 export type PlantingSeasonStatus = 'Active' | 'Upcoming' | 'Past End Date' | 'Closed';
+export const inventoryPlanningPlantingSeasonStatuses: PlantingSeasonStatus[] = ['Active', 'Upcoming', 'Past End Date'];
 
 export type InventoryPlanningSeasonRow = {
   plantingSeasonId: number;
@@ -41,6 +42,11 @@ const injectedRtkApi = api.injectEndpoints({
             operation: 'field',
             field: 'plantingSite_organization_id',
             values: [`${args.organizationId}`],
+          },
+          {
+            operation: 'field',
+            field: 'status',
+            values: inventoryPlanningPlantingSeasonStatuses,
           },
         ];
         if (args.plantingSiteId) {

@@ -8,6 +8,7 @@ import { Tabs } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import PlantingSeasonNotificationBanners from 'src/components/common/PlantingSeasonNotificationBanners';
 import TfMain from 'src/components/common/TfMain';
 import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
@@ -71,6 +72,13 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
             <PageSnackbar />
           </PageHeaderWrapper>
           <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1} maxWidth='100%'>
+            {isPlantingSeasonsEnabled && (
+              <PlantingSeasonNotificationBanners
+                organizationId={organizationId}
+                notificationPage='Withdrawals'
+                marginBottom={theme.spacing(3)}
+              />
+            )}
             <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
           </Box>
         </Grid>

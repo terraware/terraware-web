@@ -44,6 +44,12 @@ const compareSpeciesScientificNames = (
 const targetQuantityTextFieldSx = { width: '100px' };
 const justSavedDurationMs = 3000;
 
+const submitQuantityOnEnter = (key: string) => {
+  if (key === 'Enter' && document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur();
+  }
+};
+
 const getSpeciesTargetGridColumns = (readOnly: boolean, isMobile: boolean): string => {
   if (isMobile) {
     return readOnly ? 'minmax(0, 1fr) 112px' : 'minmax(0, 1fr) 112px 40px';
@@ -458,6 +464,7 @@ const SpeciesTargetRow = ({
             value={draftQuantity}
             onChange={(value) => setDraftQuantity(String(value ?? ''))}
             onBlur={() => void onSave()}
+            onKeyDown={submitQuantityOnEnter}
             min={0}
             autoFocus
             sx={targetQuantityTextFieldSx}
@@ -643,6 +650,7 @@ const AddSpeciesRow = ({
               value={quantity}
               onChange={onQuantityChange}
               onBlur={() => void onSave()}
+              onKeyDown={submitQuantityOnEnter}
               min={0}
               autoFocus
               sx={targetQuantityTextFieldSx}
