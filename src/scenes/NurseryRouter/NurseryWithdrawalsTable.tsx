@@ -6,6 +6,7 @@ import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-compone
 import { Dayjs } from 'dayjs';
 import {
   MRT_Cell,
+  MRT_ColumnFiltersState,
   MRT_ColumnOrderState,
   MRT_PaginationState,
   MRT_ShowHideColumnsButton,
@@ -51,6 +52,8 @@ const TABLE_STATE_STORAGE_KEY = 'nursery-withdrawals-table';
 
 const ITEMS_PER_PAGE = 100;
 const PLANTING_SEASON_COLUMN_ID = 'plantingSeasonName';
+const PLANTING_SEASON_ID_QUERY_PARAM = 'plantingSeasonId';
+const PURPOSE_QUERY_PARAM = 'purpose';
 const MENU_COLUMN_ID = 'menu';
 const DEFAULT_COLUMN_VISIBILITY: MRT_VisibilityState = { [PLANTING_SEASON_COLUMN_ID]: false };
 const DEFAULT_COLUMN_ORDER: MRT_ColumnOrderState = [
@@ -147,6 +150,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const [searchNurseryWithdrawals, searchNurseryWithdrawalsResponse] = useLazySearchNurseryWithdrawalsQuery();
   const [countNurseryWithdrawals, searchCountNurseryWithdrawalsResponse] = useLazyCountNurseryWithdrawalsQuery();
   const rows = useMemo(() => searchNurseryWithdrawalsResponse?.data ?? [], [searchNurseryWithdrawalsResponse]);
+  const [linkedPlantingSeasonIds, setLinkedPlantingSeasonIds] = useState<number[]>([]);
+  const seededPlantingSeasonFromUrl = useRef(false);
   const totalRowCount = useMemo(
     () => searchCountNurseryWithdrawalsResponse.currentData ?? 0,
     [searchCountNurseryWithdrawalsResponse]
@@ -286,6 +291,55 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       plantingSeasonNames: Array.from(idsByName.keys()).sort((a, b) => a.localeCompare(b)),
     };
   }, [plantingSeasonsResponse.currentData?.seasons]);
+
+  const plantingSeasonFilterValue = useMemo(
+    () => columnFilters.find((column) => column.id === PLANTING_SEASON_COLUMN_ID)?.value,
+    [columnFilters]
+  );
+
+  useEffect(() => {
+    if (seededPlantingSeasonFromUrl.current || linkedPlantingSeasonIds.length === 0) {
+      return;
+    }
+
+    const seasonName = plantingSeasonsResponse.currentData?.seasons.find((season) =>
+      linkedPlantingSeasonIds.includes(season.id)
+    )?.name;
+
+    if (!seasonName) {
+      return;
+    }
+
+    seededPlantingSeasonFromUrl.current = true;
+    setColumnFilters((curr) => [
+      ...curr.filter((filter) => filter.id !== PLANTING_SEASON_COLUMN_ID),
+      { id: PLANTING_SEASON_COLUMN_ID, value: seasonName },
+    ]);
+    setColumnVisibility((curr) => ({ ...curr, [PLANTING_SEASON_COLUMN_ID]: true }));
+    setShowColumnFilters(true);
+  }, [
+    linkedPlantingSeasonIds,
+    plantingSeasonsResponse.currentData?.seasons,
+    setColumnFilters,
+    setColumnVisibility,
+    setShowColumnFilters,
+  ]);
+
+  useEffect(() => {
+    if (!seededPlantingSeasonFromUrl.current || linkedPlantingSeasonIds.length === 0) {
+      return;
+    }
+
+    if (typeof plantingSeasonFilterValue !== 'string') {
+      setLinkedPlantingSeasonIds([]);
+      return;
+    }
+
+    const idsForVisibleFilter = plantingSeasonNameToIds.get(plantingSeasonFilterValue) ?? [];
+    if (!idsForVisibleFilter.some((id) => linkedPlantingSeasonIds.includes(id))) {
+      setLinkedPlantingSeasonIds([]);
+    }
+  }, [linkedPlantingSeasonIds, plantingSeasonFilterValue, plantingSeasonNameToIds]);
 
   // Get all project names for filter (from all available projects, not just current results)
   const uniqueProjectNames = useMemo(() => {
@@ -535,7 +589,6 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     const purposeFilterValue = columnFilters.find((column) => column.id === 'purpose')?.value;
     const nurseryFilterValue = columnFilters.find((column) => column.id === 'nurseryName')?.value;
     const destinationFilterValue = columnFilters.find((column) => column.id === 'destinationName')?.value;
-    const plantingSeasonFilterValue = columnFilters.find((column) => column.id === PLANTING_SEASON_COLUMN_ID)?.value;
     const stratumFilterValue = columnFilters.find((column) => column.id === 'stratumName')?.value;
     const subStratumFilterValue = columnFilters.find((column) => column.id === 'substratumShortName')?.value;
     const speciesFilterValue = columnFilters.find((column) => column.id === 'speciesNames')?.value;
@@ -568,6 +621,13 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           }
         : undefined;
 
+    const plantingSeasonIdsForFilter =
+      typeof plantingSeasonFilterValue === 'string' ? plantingSeasonNameToIds.get(plantingSeasonFilterValue) ?? [] : [];
+    const shouldUseLinkedPlantingSeasonIds =
+      linkedPlantingSeasonIds.length > 0 &&
+      (typeof plantingSeasonFilterValue !== 'string' ||
+        plantingSeasonIdsForFilter.some((id) => linkedPlantingSeasonIds.includes(id)));
+
     const sortOrder =
       sorting.length > 0
         ? sorting.map(
@@ -586,8 +646,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       purposes: purposes as NurseryWithdrawalPurpose[] | undefined,
       nurseryName: nurseryFilterValue as string | undefined,
       destinationNames: destinationFilterValue as string[] | undefined,
-      plantingSeasonIds:
-        typeof plantingSeasonFilterValue === 'string' ? plantingSeasonNameToIds.get(plantingSeasonFilterValue) : [],
+      plantingSeasonIds: shouldUseLinkedPlantingSeasonIds ? linkedPlantingSeasonIds : plantingSeasonIdsForFilter,
       stratumNames: stratumFilterValue as string[] | undefined,
       substratumNames: subStratumFilterValue as string[] | undefined,
       speciesNames: speciesFilterValue as string[],
@@ -597,6 +656,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [
     columnFilters,
     debouncedSearchTerm,
+    linkedPlantingSeasonIds,
+    plantingSeasonFilterValue,
     plantingSeasonNameToIds,
     purposeLabelToValue,
     selectedOrganization?.id,
@@ -632,10 +693,22 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     const siteName = query.get('siteName');
     const substratumNames = query.getAll('substratumName');
     const stratumNames = query.getAll('stratumName');
-    if (!siteName && substratumNames.length === 0 && stratumNames.length === 0) {
+    const purposeValues = query.getAll(PURPOSE_QUERY_PARAM);
+    const plantingSeasonIds = query
+      .getAll(PLANTING_SEASON_ID_QUERY_PARAM)
+      .map((id) => Number(id))
+      .filter((id) => Number.isFinite(id));
+
+    if (
+      !siteName &&
+      substratumNames.length === 0 &&
+      stratumNames.length === 0 &&
+      purposeValues.length === 0 &&
+      plantingSeasonIds.length === 0
+    ) {
       return;
     }
-    const seeded: { id: string; value: unknown }[] = [];
+    const seeded: MRT_ColumnFiltersState = [];
     if (siteName) {
       seeded.push({ id: 'destinationName', value: [siteName] });
     }
@@ -645,13 +718,36 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     if (stratumNames.length > 0) {
       seeded.push({ id: 'stratumName', value: stratumNames });
     }
-    setColumnFilters((curr) => {
-      const ids = new Set(seeded.map((f) => f.id));
-      return [...curr.filter((f) => !ids.has(f.id)), ...seeded];
-    });
+    if (purposeValues.length > 0) {
+      const purposeLabels = Array.from(
+        new Set(
+          purposeValues.map((purpose) =>
+            NurseryWithdrawalPurposesValues.includes(purpose as NurseryWithdrawalPurpose)
+              ? purposeLabel(purpose as NurseryWithdrawalPurpose)
+              : purpose
+          )
+        )
+      );
+      seeded.push({ id: 'purpose', value: purposeLabels });
+    }
+    if (plantingSeasonIds.length > 0) {
+      setLinkedPlantingSeasonIds(plantingSeasonIds);
+    }
+    if (seeded.length > 0 || plantingSeasonIds.length > 0) {
+      setColumnFilters((curr) => {
+        const ids = new Set(seeded.map((f) => f.id));
+        if (plantingSeasonIds.length > 0) {
+          ids.add(PLANTING_SEASON_COLUMN_ID);
+        }
+        return [...curr.filter((f) => !ids.has(f.id)), ...seeded];
+      });
+    }
+    setShowColumnFilters(true);
     query.delete('siteName');
     query.delete('substratumName');
     query.delete('stratumName');
+    query.delete(PURPOSE_QUERY_PARAM);
+    query.delete(PLANTING_SEASON_ID_QUERY_PARAM);
     navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     // Run only once on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps

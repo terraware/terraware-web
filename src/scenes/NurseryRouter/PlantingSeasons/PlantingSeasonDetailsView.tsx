@@ -25,6 +25,7 @@ import {
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { useGetPlantingSeasonSpeciesSummaryQuery } from 'src/queries/search/plantingSeasons';
 import strings from 'src/strings';
+import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStickyTabs from 'src/utils/useStickyTabs';
@@ -144,6 +145,15 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
 
   const hasSpeciesTargets = (speciesTargets?.targets.length ?? 0) > 0;
   const plantingProgressValue = withdrawnForPlantingTotal ?? 0;
+  const withdrawnForPlantingUrl = useMemo(() => {
+    const params = new URLSearchParams({
+      plantingSeasonId: String(seasonIdNumber),
+      purpose: NurseryWithdrawalPurposes.OUTPLANT,
+      tab: 'withdrawals',
+    });
+
+    return `${APP_PATHS.NURSERY_WITHDRAWALS}?${params.toString()}`;
+  }, [seasonIdNumber]);
 
   const dateRange = useMemo(() => {
     if (!season) {
@@ -161,12 +171,16 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
     label: string,
     value: number | undefined,
     align: 'left' | 'center' | 'right' = 'right',
-    highlight = false
+    highlight = false,
+    to?: string
   ) => {
     const compactLayout = isMobile || showTabletLayout;
     const justifyContent = align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
     const valueFontSize = showTabletLayout ? '20px' : '24px';
     const valueLineHeight = showTabletLayout ? '28px' : '32px';
+    const valueColor = (highlight || to) && value !== undefined ? theme.palette.TwClrTxtBrand : theme.palette.TwClrTxt;
+    const valueText = value === undefined ? '-' : value.toLocaleString(activeLocale || undefined);
+    const valueStyle = (highlight || to) && value !== undefined ? { textDecoration: 'underline' } : undefined;
 
     return (
       <Box
@@ -192,15 +206,27 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
         >
           {label}
         </Typography>
-        <Typography
-          fontSize={valueFontSize}
-          fontWeight={600}
-          lineHeight={valueLineHeight}
-          color={highlight && value !== undefined ? theme.palette.TwClrTxtBrand : theme.palette.TwClrTxt}
-          sx={highlight && value !== undefined ? { textDecoration: 'underline' } : undefined}
-        >
-          {value === undefined ? '-' : value.toLocaleString(activeLocale || undefined)}
-        </Typography>
+        {to && value !== undefined ? (
+          <Link
+            to={to}
+            fontSize={valueFontSize}
+            fontWeight={600}
+            lineHeight={valueLineHeight}
+            style={{ color: valueColor, ...valueStyle }}
+          >
+            {valueText}
+          </Link>
+        ) : (
+          <Typography
+            fontSize={valueFontSize}
+            fontWeight={600}
+            lineHeight={valueLineHeight}
+            color={valueColor}
+            sx={valueStyle}
+          >
+            {valueText}
+          </Typography>
+        )}
       </Box>
     );
   };
@@ -352,7 +378,13 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
               alignItems='end'
             >
               {numberColumn(strings.PLANTING_GOAL, plantingGoal, 'left')}
-              {numberColumn(strings.WITHDRAWN_FOR_PLANTING, withdrawnForPlantingTotal, 'center', true)}
+              {numberColumn(
+                strings.WITHDRAWN_FOR_PLANTING,
+                withdrawnForPlantingTotal,
+                'center',
+                true,
+                withdrawnForPlantingUrl
+              )}
               {numberColumn(strings.LEFT_TO_PLANT, leftToPlantTotal, 'right')}
             </Box>
             {hasSpeciesTargets && (
@@ -418,7 +450,13 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
             </Box>
             <Box display='flex' gap={theme.spacing(6)} flexWrap='wrap' marginTop={theme.spacing(2)} alignItems='end'>
               {numberColumn(strings.PLANTING_GOAL, plantingGoal, 'left')}
-              {numberColumn(strings.WITHDRAWN_FOR_PLANTING, withdrawnForPlantingTotal, 'left', true)}
+              {numberColumn(
+                strings.WITHDRAWN_FOR_PLANTING,
+                withdrawnForPlantingTotal,
+                'left',
+                true,
+                withdrawnForPlantingUrl
+              )}
               {numberColumn(strings.LEFT_TO_PLANT, leftToPlantTotal, 'left')}
             </Box>
             {hasSpeciesTargets && (
@@ -544,7 +582,13 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
             <Box display='flex' flexDirection='column' alignItems='flex-end' gap={theme.spacing(2)}>
               <Box display='flex' gap={theme.spacing(4)} alignItems='flex-start'>
                 {numberColumn(strings.PLANTING_GOAL, plantingGoal)}
-                {numberColumn(strings.WITHDRAWN_FOR_PLANTING, withdrawnForPlantingTotal)}
+                {numberColumn(
+                  strings.WITHDRAWN_FOR_PLANTING,
+                  withdrawnForPlantingTotal,
+                  'right',
+                  true,
+                  withdrawnForPlantingUrl
+                )}
                 {numberColumn(strings.LEFT_TO_PLANT, leftToPlantTotal)}
                 <OptionsMenu
                   optionItems={optionItems}
