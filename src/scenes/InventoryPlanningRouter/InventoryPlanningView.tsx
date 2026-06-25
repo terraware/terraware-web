@@ -18,6 +18,7 @@ import {
   InventoryPlanningSeasonRow,
   InventoryPlanningSpeciesRow,
   aggregateInventoryPlanningRows,
+  inventoryPlanningPlantingSeasonStatuses,
   useListInventoryPlanningSeasonsQuery,
   useListInventoryPlanningSpeciesAvailableQuery,
 } from 'src/queries/search/inventoryPlanning';
@@ -89,7 +90,7 @@ const InventoryPlanningView = (): JSX.Element => {
     const allSeasons = plantingSeasonsData?.seasons ?? [];
     return allSeasons.filter(
       (season) =>
-        season.status === 'Active' &&
+        inventoryPlanningPlantingSeasonStatuses.includes(season.status) &&
         season.speciesTargets.length > 0 &&
         (plantingSiteId === undefined || season.plantingSiteId === plantingSiteId)
     );
