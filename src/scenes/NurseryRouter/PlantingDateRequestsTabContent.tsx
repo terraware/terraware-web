@@ -41,7 +41,12 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
 
   const plantingSeasonsForSelectedSite = useMemo(() => {
     const allSeasons = plantingSeasonsData?.seasons ?? [];
-    return plantingSiteId ? allSeasons.filter((s) => Number(s.plantingSiteId) === plantingSiteId) : allSeasons;
+    return allSeasons.filter(
+      (s) =>
+        s.status !== 'Closed' &&
+        s.status !== 'Past End Date' &&
+        (plantingSiteId === undefined || Number(s.plantingSiteId) === plantingSiteId)
+    );
   }, [plantingSeasonsData, plantingSiteId]);
 
   const selectedPlantingSiteHasNoSeasons = useMemo(
