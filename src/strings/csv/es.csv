@@ -204,7 +204,7 @@ APPROX_SYMBOL,~,acb59e95
 AR,RA,25a8e55a
 ARE_YOU_SURE,¿Está seguro(a)?,d4536b91
 ARE_YOU_SURE_DELETE,¿Está seguro de que desea eliminar?,a7f716f0
-ARE_YOU_SURE_DELETE_GOAL,¿Está seguro de que desea eliminar este objetivo de especie?,9051d875
+ARE_YOU_SURE_DELETE_TARGET,¿Está seguro de que desea eliminar este objetivo de especie?,8f7cb65e
 AREA_HA,Área (ha),8ab5d500
 AREA_NOT_OBSERVED,Área no observada,9eeddab4
 ARROW_KEYS,Flechas del teclado,5cefb475
@@ -516,8 +516,8 @@ DELETE_SEASON,Eliminar temporada,c49c9788
 DELETE_SEEDLINGS_BATCHES,Borrar Lotes de Plántulas,a5916585
 DELETE_SEEDLINGS_BATCHES_MSG,"Eliminar lotes sin retiros los eliminará completamente. Eliminar lotes con retiros establecerá sus cantidades restantes en 0, eliminará esas cantidades del inventario y marcará los lotes como vacíos. Los retiros anteriores seguirán apareciendo en el historial de retiros.",4f9bf36f
 DELETE_SPECIES,Borrar Especie,b3dd3256
-DELETE_SPECIES_GOAL,Eliminar objetivo de especie,38e5960e
-DELETE_SPECIES_GOAL_CONFIRM,"Está a punto de eliminar la especie {0} como objetivo para este sustrato. La cantidad se eliminará del objetivo total de plantación para esta temporada y se notificará al vivero para que ajuste las plantas asignadas, si es necesario.",99092075
+DELETE_SPECIES_TARGET,Eliminar objetivo de especie,bffd4971
+DELETE_SPECIES_TARGET_CONFIRM,"Está a punto de eliminar la especie {0} como objetivo para este sustrato. La cantidad se eliminará del objetivo total de plantación para esta temporada y se notificará al vivero para que ajuste las plantas asignadas, si es necesario.",93b5a604
 DELETE_STATISTICS,Eliminar estadísticas,881bc71c
 DELETE_VIABILITY_TEST,Eliminar prueba de viabilidad,db53dffa
 DELETE_VIABILITY_TEST_MESSAGE,Está a punto de borrar la prueba de viabilidad {0}.,ceace778
