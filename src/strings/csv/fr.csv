@@ -203,7 +203,7 @@ APPROX_SYMBOL,~,acb59e95
 AR,RA,25a8e55a
 ARE_YOU_SURE,Êtes-vous sûr ?,d4536b91
 ARE_YOU_SURE_DELETE,Êtes-vous sûr de vouloir supprimer ?,a7f716f0
-ARE_YOU_SURE_DELETE_GOAL,Êtes-vous sûr de vouloir supprimer cet objectif d'espèce ?,9051d875
+ARE_YOU_SURE_DELETE_TARGET,Êtes-vous sûr de vouloir supprimer cet objectif d'espèce ?,8f7cb65e
 AREA_HA,Superficie (ha),8ab5d500
 AREA_NOT_OBSERVED,Zone non observée,9eeddab4
 ARROW_KEYS,Touches fléchées,5cefb475
@@ -515,8 +515,8 @@ DELETE_SEASON,Supprimer la saison,c49c9788
 DELETE_SEEDLINGS_BATCHES,Supprimer les lots de semis,a5916585
 DELETE_SEEDLINGS_BATCHES_MSG,"La suppression de lots sans retraits les supprimera complètement. La suppression de lots avec retraits ramènera leurs quantités restantes à 0, retirera ces quantités de l’inventaire et marquera les lots comme vides. Les retraits passés continueront d’apparaître dans l’historique des retraits.",4f9bf36f
 DELETE_SPECIES,Supprimer l'espèce,b3dd3256
-DELETE_SPECIES_GOAL,Supprimer l'objectif d'espèce,38e5960e
-DELETE_SPECIES_GOAL_CONFIRM,"Vous êtes sur le point de supprimer l'espèce {0} en tant qu'objectif pour ce substrat. La quantité sera retirée de l'objectif total de plantation pour cette saison, et la pépinière sera informée afin d'ajuster les plants attribués, si nécessaire.",99092075
+DELETE_SPECIES_TARGET,Supprimer l'objectif d'espèce,bffd4971
+DELETE_SPECIES_TARGET_CONFIRM,"Vous êtes sur le point de supprimer l'espèce {0} en tant qu'objectif pour ce substrat. La quantité sera retirée de l'objectif total de plantation pour cette saison, et la pépinière sera informée afin d'ajuster les plants alloués, si nécessaire.",93b5a604
 DELETE_STATISTICS,Supprimer les statistiques,881bc71c
 DELETE_VIABILITY_TEST,Supprimer le test de viabilité,db53dffa
 DELETE_VIABILITY_TEST_MESSAGE,Vous vous apprêtez à supprimer le test de viabilité {0}.,ceace778

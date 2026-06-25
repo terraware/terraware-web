@@ -1,7 +1,9 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
 
+import { baseApi } from 'src/queries/baseApi';
 import { api as accessionsSearchApi } from 'src/queries/search/accessions';
+import { QueryTagTypes } from 'src/queries/tags';
 import { NurseryBatchService } from 'src/services';
 import AccessionService from 'src/services/AccessionService';
 import { Response } from 'src/services/HttpService';
@@ -80,6 +82,7 @@ export const requestSaveBatch = createAsyncThunk(
     }
 
     if (response && response.requestSucceeded && responseQuantities.requestSucceeded) {
+      dispatch(baseApi.util.invalidateTags([{ type: QueryTagTypes.InventoryPlanning, id: 'LIST' }]));
       return {
         ...response.data,
       };

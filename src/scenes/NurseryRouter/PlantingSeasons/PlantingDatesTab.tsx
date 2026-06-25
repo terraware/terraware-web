@@ -32,6 +32,7 @@ import { Species } from 'src/types/Species';
 import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import PlantingSeasonEventLog from './PlantingSeasonEventLog';
 import SaveAndNotifyNurseryModal from './SaveAndNotifyNurseryModal';
 
 type PlantingDatesTabProps = {
@@ -89,67 +90,70 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
     : undefined;
 
   return (
-    <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }} radius='8px'>
-      {scheduledDates.length === 0 && !editing ? (
-        <EmptyState onAdd={() => setEditing({ mode: 'add' })} readOnly={readOnly} />
-      ) : (
-        <>
-          <Box
-            display='flex'
-            flexDirection={isMobile ? 'column' : 'row'}
-            alignItems={isMobile ? 'stretch' : 'center'}
-            justifyContent='space-between'
-            gap={isMobile ? theme.spacing(3) : theme.spacing(2)}
-            marginBottom={theme.spacing(2)}
-          >
-            <Typography
-              fontSize={isMobile ? '16px' : '14px'}
-              lineHeight={isMobile ? '24px' : undefined}
-              color={theme.palette.TwClrTxtSecondary}
+    <Box display='flex' flexDirection='column' gap={theme.spacing(3)}>
+      <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }} radius='8px'>
+        {scheduledDates.length === 0 && !editing ? (
+          <EmptyState onAdd={() => setEditing({ mode: 'add' })} readOnly={readOnly} />
+        ) : (
+          <>
+            <Box
+              display='flex'
+              flexDirection={isMobile ? 'column' : 'row'}
+              alignItems={isMobile ? 'stretch' : 'center'}
+              justifyContent='space-between'
+              gap={isMobile ? theme.spacing(3) : theme.spacing(2)}
+              marginBottom={theme.spacing(2)}
             >
-              {strings.PLANTING_DATES_TAB_DESCRIPTION}
-            </Typography>
-            {!editing && !readOnly && (
-              <Button
-                icon='plus'
-                label={strings.ADD_DATE}
-                onClick={() => setEditing({ mode: 'add' })}
-                priority='secondary'
-                type='productive'
-                size={isMobile ? 'medium' : undefined}
-                sx={mobileAddDateButtonSx}
-              />
-            )}
-          </Box>
-          {editing && !readOnly ? (
-            <PlantingDateForm
-              key={editing.mode === 'edit' ? editing.scheduledDate.scheduledPlantingDateId : 'new'}
-              plantingSeason={plantingSeason}
-              plantingSite={plantingSite}
-              species={species}
-              speciesTargets={speciesTargets}
-              scheduledDates={scheduledDates}
-              allocatedBySpecies={allocatedBySpecies}
-              editingScheduledDate={editing.mode === 'edit' ? editing.scheduledDate : undefined}
-              onClose={() => setEditing(undefined)}
-            />
-          ) : (
-            <Box>
-              <Divider />
-              {scheduledDates.map((scheduledDate) => (
-                <PlantingDateListItem
-                  key={scheduledDate.scheduledPlantingDateId}
-                  scheduledDate={scheduledDate}
-                  plantingSite={plantingSite}
-                  onEdit={() => setEditing({ mode: 'edit', scheduledDate })}
-                  readOnly={readOnly}
+              <Typography
+                fontSize={isMobile ? '16px' : '14px'}
+                lineHeight={isMobile ? '24px' : undefined}
+                color={theme.palette.TwClrTxtSecondary}
+              >
+                {strings.PLANTING_DATES_TAB_DESCRIPTION}
+              </Typography>
+              {!editing && !readOnly && (
+                <Button
+                  icon='plus'
+                  label={strings.ADD_DATE}
+                  onClick={() => setEditing({ mode: 'add' })}
+                  priority='secondary'
+                  type='productive'
+                  size={isMobile ? 'medium' : undefined}
+                  sx={mobileAddDateButtonSx}
                 />
-              ))}
+              )}
             </Box>
-          )}
-        </>
-      )}
-    </Card>
+            {editing && !readOnly ? (
+              <PlantingDateForm
+                key={editing.mode === 'edit' ? editing.scheduledDate.scheduledPlantingDateId : 'new'}
+                plantingSeason={plantingSeason}
+                plantingSite={plantingSite}
+                species={species}
+                speciesTargets={speciesTargets}
+                scheduledDates={scheduledDates}
+                allocatedBySpecies={allocatedBySpecies}
+                editingScheduledDate={editing.mode === 'edit' ? editing.scheduledDate : undefined}
+                onClose={() => setEditing(undefined)}
+              />
+            ) : (
+              <Box>
+                <Divider />
+                {scheduledDates.map((scheduledDate) => (
+                  <PlantingDateListItem
+                    key={scheduledDate.scheduledPlantingDateId}
+                    scheduledDate={scheduledDate}
+                    plantingSite={plantingSite}
+                    onEdit={() => setEditing({ mode: 'edit', scheduledDate })}
+                    readOnly={readOnly}
+                  />
+                ))}
+              </Box>
+            )}
+          </>
+        )}
+      </Card>
+      <PlantingSeasonEventLog plantingSeasonId={plantingSeason.id} />
+    </Box>
   );
 };
 
@@ -356,6 +360,12 @@ const getAvailableToSchedule = (allocated: number, scheduledOther: number): numb
 
 const quantityExceedsAvailableToSchedule = (quantity: number, availableToSchedule: number): boolean =>
   !Number.isNaN(quantity) && quantity > availableToSchedule;
+
+const submitQuantityOnEnter = (key: string) => {
+  if (key === 'Enter' && document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur();
+  }
+};
 
 const speciesTableGridColumns = 'minmax(200px, 2fr) 120px minmax(132px, 1fr) 40px';
 
@@ -988,6 +998,7 @@ const AddSpeciesRow = ({
           value={quantity}
           onChange={onQuantityChange}
           onBlur={() => setQuantityFocused(false)}
+          onKeyDown={submitQuantityOnEnter}
           onFocus={() => setQuantityFocused(true)}
           min={0}
           errorText={
@@ -1115,6 +1126,7 @@ const SpeciesRow = ({
             value={draftQuantity}
             onChange={(value) => setDraftQuantity(String(value ?? ''))}
             onBlur={commitQuantity}
+            onKeyDown={submitQuantityOnEnter}
             onFocus={() => setQuantityFocused(true)}
             min={0}
             errorText={
