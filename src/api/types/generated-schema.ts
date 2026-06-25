@@ -3019,10 +3019,33 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Lists all notifications for an organization */
+        /**
+         * Lists all planting season notifications for the specified page.
+         * @description If plantingSeasonId is specified, only returns notifications for that specific Planting Season (within the specified page).
+         */
         get: operations["getPlantingSeasonNotifications"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/planting-seasons/notifications/dismiss": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Dismisses planting season notifications for the specified page.
+         * @description Dismisses all notifications for the planting season and page up to and including the specified event log id. The event log id should be the lastEventLogId returned by the notifications listing endpoint.
+         */
+        post: operations["dismissPlantingSeasonNotifications"];
         delete?: never;
         options?: never;
         head?: never;
@@ -3209,6 +3232,26 @@ export interface paths {
         get: operations["getInternalUsers"];
         /** Assign a user with global roles with an internal role for a project. */
         put: operations["updateInternalUser"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/public/statistics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Gets aggregate statistics about the Terraware platform.
+         * @description These statistics are aggregated across all organizations and do not require authentication. Organizations that are internal to Terraformation are excluded.
+         */
+        get: operations["getPublicStatistics"];
+        put?: never;
         post?: never;
         delete?: never;
         options?: never;
@@ -3659,6 +3702,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/seedbank/values": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** List the values of a set of search fields for a set of accessions matching certain filter criteria. */
+        post: operations["listFieldValues"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/species": {
         parameters: {
             query?: never;
@@ -4043,28 +4103,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Gets a list of ad-hoc observations of planting sites. */
-        get: operations["listAdHocObservations"];
+        get?: never;
         put?: never;
         /** Records a new completed ad-hoc observation. */
         post: operations["completeAdHocObservation"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/tracking/observations/adHoc/results": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Gets a list of the results of ad-hoc observations. */
-        get: operations["listAdHocObservationResults"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -4080,23 +4122,6 @@ export interface paths {
         };
         /** Gets a list of the results of observations. */
         get: operations["listObservationResults"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/tracking/observations/results/summaries": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Gets the rollup observation summaries of a planting site */
-        get: operations["listObservationSummaries"];
         put?: never;
         post?: never;
         delete?: never;
@@ -4558,6 +4583,23 @@ export interface paths {
          * @description Planting site should not have any plantings.
          */
         delete: operations["deletePlantingSite"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/sites/{id}/calculationInProgress": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get whether a survival rate recalculation is in progress for a planting site */
+        get: operations["getSurvivalRateCalculationInProgress"];
+        put?: never;
+        post?: never;
+        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -6996,6 +7038,17 @@ export interface components {
             /** Format: date-time */
             effectiveOn: string;
         };
+        DismissPlantingSeasonNotificationsRequestPayload: {
+            /**
+             * Format: int64
+             * @description The last event log id returned for the list of notifications within the specified page. All notifications up to and including this event will be dismissed.
+             */
+            lastEventLogId: number;
+            /** @enum {string} */
+            notificationPage: "InventoryPlanning" | "PlantingSeasonPlanning" | "Inventory" | "Withdrawals";
+            /** Format: int64 */
+            plantingSeasonId: number;
+        };
         /** @description History entry about the creation of the document. This is always the last element in the reverse-chronological list of history events. It has the same information as the createdBy and createdTime fields in DocumentPayload. */
         DocumentHistoryCreatedPayload: Omit<WithRequired<components["schemas"]["DocumentHistoryPayload"], "createdBy" | "createdTime" | "type">, "type"> & {
             /**
@@ -7147,7 +7200,7 @@ export interface components {
         };
         EventLogEntryPayload: {
             action: components["schemas"]["CreatedActionPayload"] | components["schemas"]["DeletedActionPayload"] | components["schemas"]["FieldUpdatedActionPayload"];
-            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingDateRequestSpeciesSubjectPayload"] | components["schemas"]["PlantingDateRequestSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSpeciesTargetSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
+            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingDateRequestSpeciesSubjectPayload"] | components["schemas"]["PlantingDateRequestSubjectPayload"] | components["schemas"]["PlantingSeasonAllocatedSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSpeciesTargetSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["PlantingSeasonWithdrawalSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
             /** Format: date-time */
             timestamp: string;
             /** Format: int64 */
@@ -7188,9 +7241,10 @@ export interface components {
             forestType: "Terrestrial" | "Mangrove";
             /** Format: int32 */
             herbaceousCoverPercent: number;
+            /** @description Only valid for Mangrove forests. A null value indicates that there was no water. */
             ph?: number;
             quadrats: components["schemas"]["ExistingBiomassQuadratPayload"][];
-            /** @description Measured in ppt */
+            /** @description Measured in ppt. Only valid for Mangrove forests. A null value indicates that there was no water. */
             salinity?: number;
             /** Format: int32 */
             smallTreeCountHigh: number;
@@ -7200,13 +7254,13 @@ export interface components {
             /** @enum {string} */
             soilType?: "Clay" | "SandyClay" | "SandyClayLoam" | "ClayLoam" | "SiltyClay" | "SiltyClayLoam" | "SandyLoam" | "LoamySand" | "Sand" | "Loam" | "SiltLoam" | "Silt" | "Unknown";
             /**
-             * @description Low or high tide.
+             * @description Low or high tide. Only valid for Mangrove forests. A null value indicates that there was no water.
              * @enum {string}
              */
             tide?: "Low" | "High";
             /**
              * Format: date-time
-             * @description Time when ide is observed.
+             * @description Time when tide is observed. Only valid for Mangrove forests. A null value indicates that there was no water.
              */
             tideTime?: string;
             /** Format: int32 */
@@ -7214,7 +7268,7 @@ export interface components {
             trees: components["schemas"]["ExistingTreePayload"][];
             /**
              * Format: int32
-             * @description Measured in centimeters.
+             * @description Measured in centimeters. Only valid for Mangrove forests. A null value indicates that there was no water.
              */
             waterDepth?: number;
         };
@@ -7976,6 +8030,10 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
             votes: components["schemas"]["ProjectVotesPayload"];
         };
+        GetPublicStatisticsResponsePayload: {
+            statistics: components["schemas"]["PublicStatisticsPayload"];
+            status: components["schemas"]["SuccessOrError"];
+        };
         GetPublishedProjectResponsePayload: {
             projects: components["schemas"]["PublishedProjectPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -8104,6 +8162,10 @@ export interface components {
         GetSubLocationResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             subLocation: components["schemas"]["SubLocationPayload"];
+        };
+        GetSurvivalRateCalculationInProgressResponsePayload: {
+            calculationInProgress: boolean;
+            status: components["schemas"]["SuccessOrError"];
         };
         GetUploadStatusDetailsPayload: {
             errors?: components["schemas"]["UploadProblemPayload"][];
@@ -8329,14 +8391,6 @@ export interface components {
             activities: components["schemas"]["ActivityPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
-        ListAdHocObservationResultsResponsePayload: {
-            observations: components["schemas"]["ObservationResultsPayload"][];
-            status: components["schemas"]["SuccessOrError"];
-        };
-        ListAdHocObservationsResponsePayload: {
-            observations: components["schemas"]["ObservationPayload"][];
-            status: components["schemas"]["SuccessOrError"];
-        };
         ListAllInternalTagsResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             tags: components["schemas"]["InternalTagPayload"][];
@@ -8437,7 +8491,7 @@ export interface components {
             /** Format: int64 */
             projectId?: number;
             /** @description If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
-            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "PlantingDateRequest" | "PlantingDateRequestSpecies" | "PlantingSeason" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "PlantingSeasonSpeciesTarget" | "Project" | "RecordedTree")[];
+            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "PlantingDateRequest" | "PlantingDateRequestSpecies" | "PlantingSeason" | "PlantingSeasonAllocatedSpecies" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "PlantingSeasonSpeciesTarget" | "PlantingSeasonWithdrawal" | "Project" | "RecordedTree")[];
         };
         ListEventLogEntriesResponsePayload: {
             events: components["schemas"]["EventLogEntryPayload"][];
@@ -8449,6 +8503,20 @@ export interface components {
         };
         ListFacilitiesResponse: {
             facilities: components["schemas"]["FacilityPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        ListFieldValuesRequestPayload: {
+            /** Format: int64 */
+            facilityId?: number;
+            fields: string[];
+            /** Format: int64 */
+            organizationId?: number;
+            search?: components["schemas"]["SearchNodePayload"];
+        };
+        ListFieldValuesResponsePayload: {
+            results: {
+                [key: string]: components["schemas"]["SeedbankValuesPayload"];
+            };
             status: components["schemas"]["SuccessOrError"];
         };
         ListFundingEntitiesPayload: {
@@ -8470,11 +8538,6 @@ export interface components {
         ListObservationSplatsResponsePayload: {
             splats: components["schemas"]["ObservationSplatPayload"][];
             status: components["schemas"]["SuccessOrError"];
-        };
-        ListObservationSummariesResponsePayload: {
-            status: components["schemas"]["SuccessOrError"];
-            /** @description History of rollup summaries of planting site observations in order of observation time, latest first.  */
-            summaries: components["schemas"]["PlantingSiteObservationSummaryPayload"][];
         };
         ListObservationsResponsePayload: {
             observations: components["schemas"]["ObservationPayload"][];
@@ -8842,17 +8905,17 @@ export interface components {
             /** Format: date */
             reportingStartDate: string;
         };
-        /** @description Biomass Measurements. Required for biomass measurement observations */
+        /** @description Measurements for terrestrial and mangrove biomass observations. Water measurements must either all be present or all be absent if forestType is Mangrove. */
         NewBiomassMeasurementPayload: {
             description?: string;
             /** @enum {string} */
             forestType: "Terrestrial" | "Mangrove";
             /** Format: int32 */
             herbaceousCoverPercent: number;
-            /** @description Required for Mangrove forest. */
+            /** @description Only valid for Mangrove forests. A null value indicates that there was no water. */
             ph?: number;
             quadrats: components["schemas"]["NewBiomassQuadratPayload"][];
-            /** @description Measured in ppt. Required for Mangrove forest. */
+            /** @description Measured in ppt. Only valid for Mangrove forests. A null value indicates that there was no water. */
             salinity?: number;
             /** Format: int32 */
             smallTreeCountHigh: number;
@@ -8864,19 +8927,19 @@ export interface components {
             /** @description List of herbaceous and tree species. Includes all recorded quadrat and additional herbaceous species and recorded tree species. Species not assigned to a quadrat or recorded trees will be saved as an additional herbaceous species. */
             species: components["schemas"]["BiomassSpeciesPayload"][];
             /**
-             * @description Low or high tide. Required for Mangrove forest.
+             * @description Low or high tide. Only valid for Mangrove forests. A null value indicates that there was no water.
              * @enum {string}
              */
             tide?: "Low" | "High";
             /**
              * Format: date-time
-             * @description Time when ide is observed. Required for Mangrove forest.
+             * @description Time when tide is observed. Only valid for Mangrove forests. A null value indicates that there was no water.
              */
             tideTime?: string;
             trees: (components["schemas"]["NewShrubPayload"] | components["schemas"]["NewTreeWithTrunksPayload"])[];
             /**
              * Format: int32
-             * @description Measured in centimeters. Required for Mangrove forest.
+             * @description Measured in centimeters. Only valid for Mangrove forests. A null value indicates that there was no water.
              */
             waterDepth?: number;
         };
@@ -9421,6 +9484,11 @@ export interface components {
             observationId: number;
             /**
              * Format: int32
+             * @description Planting density for the site based only on the plots observed in this observation, without carrying forward last-observed data for substrata that weren't observed. In contrast to plantingDensity, which uses each substratum's most recent observation.
+             */
+            observedDensity?: number;
+            /**
+             * Format: int32
              * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots.
              */
             plantingDensity?: number;
@@ -9438,7 +9506,6 @@ export interface components {
             strata: components["schemas"]["ObservationStratumResultsPayload"][];
             /** Format: int32 */
             survivalRate?: number;
-            survivalRateCalculationInProgress: boolean;
             /** Format: int32 */
             survivalRateStdDev?: number;
             /** Format: int32 */
@@ -9518,6 +9585,11 @@ export interface components {
              */
             estimatedPlants?: number;
             name: string;
+            /**
+             * Format: int32
+             * @description Planting density for the stratum based only on the plots observed in this observation, without carrying forward last-observed data for substrata that weren't observed. In contrast to plantingDensity, which uses each substratum's most recent observation.
+             */
+            observedDensity?: number;
             /**
              * Format: int32
              * @description Estimated planting density for the stratum based on the observed planting densities of monitoring plots.
@@ -9842,9 +9914,29 @@ export interface components {
             /** @enum {string} */
             type: "Delivery" | "Reassignment From" | "Reassignment To" | "Undo";
         };
-        PlantingSeasonNotificationGroupPayload: {
+        PlantingSeasonAllocatedSpeciesSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
             /** Format: int64 */
+            plantingSeasonId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            scientificName?: string;
+            /** Format: int64 */
+            speciesId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlantingSeasonAllocatedSpecies";
+        };
+        PlantingSeasonNotificationGroupPayload: {
+            /**
+             * Format: int64
+             * @description The last event log id returned for the list of notifications within the specified page. This can be used to dismiss the notifications for this page.
+             */
             lastEventLogId: number;
+            /** @enum {string} */
+            notificationPage: "InventoryPlanning" | "PlantingSeasonPlanning" | "Inventory" | "Withdrawals";
             notifications: components["schemas"]["PlantingSeasonNotificationPayload"][];
             /** Format: int64 */
             plantingSeasonId: number;
@@ -9852,9 +9944,10 @@ export interface components {
             plantingSiteName: string;
         };
         PlantingSeasonNotificationPayload: {
+            dates?: string[];
             speciesScientificNames?: string[];
             /** @enum {string} */
-            type: "PlantingSeasonClosed" | "PlantingSeasonPastEndDate" | "SpeciesTargetsAdded" | "SpeciesTargetsUpdated" | "AllocationQuantitiesUpdated" | "SeasonWithdrawalRecorded";
+            type: "AllocationQuantitiesUpdated" | "PlantingSeasonClosed" | "PlantingSeasonPastEndDate" | "SeasonWithdrawalRecorded" | "ScheduledPlantingDateRequested" | "SpeciesTargetsAdded" | "SpeciesTargetsUpdated";
         };
         PlantingSeasonPayload: {
             /** Format: date */
@@ -9938,6 +10031,24 @@ export interface components {
              */
             type: "PlantingSeason";
         };
+        PlantingSeasonWithdrawalSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            facilityId: number;
+            /** Format: int64 */
+            plantingSeasonId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            /** Format: date */
+            withdrawalDate: string;
+            /** Format: int64 */
+            withdrawalId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "PlantingSeasonWithdrawal";
+        };
         PlantingSiteHistoryPayload: {
             areaHa?: number;
             boundary: components["schemas"]["MultiPolygon"];
@@ -9949,53 +10060,6 @@ export interface components {
             /** Format: int64 */
             plantingSiteId: number;
             strata: components["schemas"]["StratumHistoryResponsePayload"][];
-        };
-        /** @description History of rollup summaries of planting site observations in order of observation time, latest first.  */
-        PlantingSiteObservationSummaryPayload: {
-            /**
-             * Format: date-time
-             * @description The earliest time of the observations used in this summary.
-             */
-            earliestObservationTime: string;
-            /**
-             * Format: int32
-             * @description Estimated total number of live plants at the site, based on the estimated planting density and site size. Only present if all the substrata in the site have been marked as having completed planting.
-             */
-            estimatedPlants?: number;
-            /**
-             * Format: date-time
-             * @description The latest time of the observations used in this summary.
-             */
-            latestObservationTime: string;
-            /**
-             * Format: int32
-             * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots.
-             */
-            plantingDensity?: number;
-            /** Format: int32 */
-            plantingDensityStdDev?: number;
-            /** Format: int64 */
-            plantingSiteId: number;
-            /** @description Combined list of observed species and their statuses from the latest observation of each substratum within each stratum. */
-            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
-            strata: components["schemas"]["StratumObservationSummaryPayload"][];
-            /**
-             * Format: int32
-             * @description Percentage of plants of all species in this site's permanent monitoring plots that have survived since the t0 point.
-             */
-            survivalRate?: number;
-            /** Format: int32 */
-            survivalRateStdDev?: number;
-            /**
-             * Format: int32
-             * @description Total number of plants recorded from the latest observations of each substratum within each stratum. Includes all plants, regardless of live/dead status or species.
-             */
-            totalPlants?: number;
-            /**
-             * Format: int32
-             * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
-             */
-            totalSpecies?: number;
         };
         PlantingSitePayload: {
             adHocPlots: components["schemas"]["MonitoringPlotPayload"][];
@@ -10335,6 +10399,19 @@ export interface components {
         };
         ProjectVotesPayload: {
             phases: components["schemas"]["PhaseVotes"][];
+        };
+        PublicStatisticsPayload: {
+            totalAreaUnderRestorationHa: number;
+            /** Format: int32 */
+            totalCountries: number;
+            /** Format: int32 */
+            totalOrganizations: number;
+            /** Format: int32 */
+            totalPlantings: number;
+            /** Format: int64 */
+            totalSeedlingsInNurseries: number;
+            /** Format: int64 */
+            totalSeedsInStorage: number;
         };
         PublishProjectProfileRequestPayload: {
             details: components["schemas"]["FunderProjectDetailsPayload"];
@@ -10973,6 +11050,12 @@ export interface components {
             /** @enum {string} */
             units: "Seeds" | "Grams" | "Milligrams" | "Kilograms" | "Ounces" | "Pounds";
         };
+        SeedbankValuesPayload: {
+            /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
+            partial: boolean;
+            /** @description List of values in the matching accessions. If there are accessions where the field has no value, this list will contain null (an actual null value, not the string "null"). */
+            values: (string | null)[];
+        };
         SelectOptionPayload: {
             description?: string;
             /** Format: int64 */
@@ -11223,55 +11306,6 @@ export interface components {
             stratumId?: number;
             substrata: components["schemas"]["SubstratumHistoryResponsePayload"][];
         };
-        StratumObservationSummaryPayload: {
-            /** @description Area of this stratum in hectares. */
-            areaHa: number;
-            /**
-             * Format: date-time
-             * @description The earliest time of the observations used in this summary.
-             */
-            earliestObservationTime: string;
-            /**
-             * Format: int32
-             * @description Estimated number of plants in stratum based on estimated planting density and stratum area. Only present if all the substrata in the stratum have been marked as having completed planting.
-             */
-            estimatedPlants?: number;
-            /**
-             * Format: date-time
-             * @description The latest time of the observations used in this summary.
-             */
-            latestObservationTime: string;
-            /**
-             * Format: int32
-             * @description Estimated planting density for the stratum based on the observed planting densities of monitoring plots.
-             */
-            plantingDensity?: number;
-            /** Format: int32 */
-            plantingDensityStdDev?: number;
-            /** @description Combined list of observed species and their statuses from the latest observation of each substratum. */
-            species: components["schemas"]["ObservationSpeciesResultsPayload"][];
-            /** Format: int64 */
-            stratumId: number;
-            /** @description List of substratum observations used in this summary. */
-            substrata: components["schemas"]["ObservationSubstratumResultsPayload"][];
-            /**
-             * Format: int32
-             * @description Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point.
-             */
-            survivalRate?: number;
-            /** Format: int32 */
-            survivalRateStdDev?: number;
-            /**
-             * Format: int32
-             * @description Total number of plants recorded from the latest observations of each substratum. Includes all plants, regardless of live/dead status or species.
-             */
-            totalPlants?: number;
-            /**
-             * Format: int32
-             * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
-             */
-            totalSpecies?: number;
-        };
         StratumReportedPlantsResponsePayload: {
             /** Format: int64 */
             id: number;
@@ -11396,6 +11430,8 @@ export interface components {
             latestObservationCompletedTime?: string;
             /** Format: int64 */
             latestObservationId?: number;
+            /** Format: int32 */
+            latestObservationNumPlots?: number;
             monitoringPlots: components["schemas"]["MonitoringPlotPayload"][];
             name: string;
             /**
@@ -19119,8 +19155,9 @@ export interface operations {
     getPlantingSeasonNotifications: {
         parameters: {
             query: {
-                organizationId: number;
-                notificationCategory: "InventoryPlanning" | "PlantingSeasonPlanning";
+                organizationId?: number;
+                plantingSeasonId?: number;
+                notificationPage: "InventoryPlanning" | "PlantingSeasonPlanning" | "Inventory" | "Withdrawals";
             };
             header?: never;
             path?: never;
@@ -19135,6 +19172,30 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GetPlantingSeasonNotificationsResponsePayload"];
+                };
+            };
+        };
+    };
+    dismissPlantingSeasonNotifications: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["DismissPlantingSeasonNotificationsRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
         };
@@ -19710,6 +19771,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    getPublicStatistics: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetPublicStatisticsResponsePayload"];
                 };
             };
         };
@@ -20595,6 +20676,30 @@ export interface operations {
             };
         };
     };
+    listFieldValues: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ListFieldValuesRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListFieldValuesResponsePayload"];
+                };
+            };
+        };
+    };
     listSpecies: {
         parameters: {
             query: {
@@ -21439,6 +21544,8 @@ export interface operations {
                 organizationId?: number;
                 /** @description Limit results to observations of a specific planting site. Required if organizationId is not specified. */
                 plantingSiteId?: number;
+                /** @description If true, return ad-hoc observations instead of scheduled ones. */
+                isAdHoc?: boolean;
             };
             header?: never;
             path?: never;
@@ -21481,31 +21588,6 @@ export interface operations {
             };
         };
     };
-    listAdHocObservations: {
-        parameters: {
-            query?: {
-                /** @description Limit results to observations of planting sites in a specific organization. Ignored if plantingSiteId is specified. */
-                organizationId?: number;
-                /** @description Limit results to observations of a specific planting site. Required if organizationId is not specified. */
-                plantingSiteId?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ListAdHocObservationsResponsePayload"];
-                };
-            };
-        };
-    };
     completeAdHocObservation: {
         parameters: {
             query?: never;
@@ -21530,33 +21612,6 @@ export interface operations {
             };
         };
     };
-    listAdHocObservationResults: {
-        parameters: {
-            query?: {
-                organizationId?: number;
-                plantingSiteId?: number;
-                /** @description Whether to include plants in the results. Default to false */
-                includePlants?: boolean;
-                /** @description Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ListAdHocObservationResultsResponsePayload"];
-                };
-            };
-        };
-    };
     listObservationResults: {
         parameters: {
             query?: {
@@ -21566,8 +21621,8 @@ export interface operations {
                 state?: ("Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned")[];
                 /** @description Maximum number of results to return. Results are always returned in order of completion time, newest first, so setting this to 1 will return the results of the most recently completed observation. */
                 limit?: number;
-                /** @description If true, read aggregated metrics from the new observation results tables instead of computing them from species totals. */
-                useNewTables?: boolean;
+                /** @description If true, return results of ad-hoc observations instead of scheduled ones. */
+                isAdHoc?: boolean;
             };
             header?: never;
             path?: never;
@@ -21582,30 +21637,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ListObservationResultsResponsePayload"];
-                };
-            };
-        };
-    };
-    listObservationSummaries: {
-        parameters: {
-            query: {
-                plantingSiteId: number;
-                /** @description Maximum number of results to return. Results are always returned in order of observations completion time, newest first, so setting this to 1 will return the summaries including the most recently completed observation. */
-                limit?: number;
-            };
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ListObservationSummariesResponsePayload"];
                 };
             };
         };
@@ -22259,8 +22290,6 @@ export interface operations {
         parameters: {
             query?: {
                 depth?: "Site" | "Stratum" | "Substratum" | "Plot" | "Plant";
-                /** @description If true, read aggregated metrics from the new observation results tables instead of computing them from species totals. */
-                useNewTables?: boolean;
             };
             header?: never;
             path: {
@@ -22714,6 +22743,28 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    getSurvivalRateCalculationInProgress: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetSurvivalRateCalculationInProgressResponsePayload"];
                 };
             };
         };

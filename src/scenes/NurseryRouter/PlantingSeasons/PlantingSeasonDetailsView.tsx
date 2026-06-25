@@ -12,10 +12,11 @@ import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import PlantingSeasonNotificationBanners from 'src/components/common/PlantingSeasonNotificationBanners';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import {
   useClosePlantingSeasonMutation,
   useDeletePlantingSeasonMutation,
@@ -41,6 +42,7 @@ import { getTargetLocationNames } from './targetLocationNames';
 const PlantingSeasonDetailsView = (): JSX.Element => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
+  const { selectedOrganization } = useOrganization();
   const { isMobile, isTablet } = useDeviceInfo();
   const isBelowLargeDesktop = useMediaQuery(theme.breakpoints.down('lg'));
   const showTabletLayout = isTablet || (!isMobile && isBelowLargeDesktop);
@@ -566,6 +568,12 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
           </Box>
         )}
       </Card>
+      <PlantingSeasonNotificationBanners
+        organizationId={selectedOrganization?.id}
+        plantingSeasonId={seasonIdNumber}
+        notificationPage='PlantingSeasonPlanning'
+        marginTop={theme.spacing(3)}
+      />
       <SpeciesSummaryDrawer
         open={speciesSummaryOpen}
         onClose={() => setSpeciesSummaryOpen(false)}
