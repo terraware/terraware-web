@@ -166,7 +166,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
       ...prev,
       biomassMeasurement: {
         ...prev.biomassMeasurement,
-        waterDepth: null,
+        waterDepth: undefined,
         salinity: undefined,
         ph: undefined,
         tide: undefined,
