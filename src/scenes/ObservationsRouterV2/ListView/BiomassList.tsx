@@ -65,7 +65,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const defaultTimezone = useDefaultTimeZone().get().id;
-  const { downloadBiomassObservations } = useObservationExports();
+  const { downloadBiomassObservationsCsv } = useObservationExports();
 
   const {
     columnFilters,
@@ -233,8 +233,8 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
       typeof plantingSiteId === 'number'
         ? plantingSitesNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
         : strings.ALL_PLANTING_SITES;
-    await downloadBiomassObservations(siteName, plantingSiteId === ALL_PLANTING_SITES ? undefined : plantingSiteId);
-  }, [downloadBiomassObservations, plantingSiteId, plantingSitesNames, strings.ALL_PLANTING_SITES]);
+    await downloadBiomassObservationsCsv(siteName, plantingSiteId === ALL_PLANTING_SITES ? undefined : plantingSiteId);
+  }, [downloadBiomassObservationsCsv, plantingSiteId, plantingSitesNames, strings.ALL_PLANTING_SITES]);
 
   const handleExportClick = useCallback(() => {
     void onExportBiomassObservations();

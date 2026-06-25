@@ -465,7 +465,7 @@ const useObservationExports = () => {
     ]
   );
 
-  const downloadBiomassObservations = useCallback(
+  const downloadBiomassObservationsCsv = useCallback(
     async (siteName: string, plantingSiteId?: number) => {
       if (!selectedOrganization) {
         return;
@@ -487,7 +487,7 @@ const useObservationExports = () => {
     downloadObservationCsv,
     downloadObservationGpx,
     downloadBiomassObservationDetails,
-    downloadBiomassObservations,
+    downloadBiomassObservationsCsv,
   };
 };
 
