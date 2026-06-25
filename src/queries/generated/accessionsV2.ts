@@ -309,6 +309,8 @@ export type AccessionPayloadV2 = {
   active: 'Inactive' | 'Active';
   bagNumbers?: string[];
   collectedDate?: string;
+  /** Date and time the seeds were collected. */
+  collectedTime?: string;
   collectionSiteCity?: string;
   collectionSiteCoordinates?: Geolocation[];
   collectionSiteCountryCode?: string;
@@ -370,6 +372,8 @@ export type AccessionPayloadV2Read = {
   active: 'Inactive' | 'Active';
   bagNumbers?: string[];
   collectedDate?: string;
+  /** Date and time the seeds were collected. */
+  collectedTime?: string;
   collectionSiteCity?: string;
   collectionSiteCoordinates?: Geolocation[];
   collectionSiteCountryCode?: string;
@@ -437,6 +441,8 @@ export type CreateAccessionRequestPayloadV2 = {};
 export type CreateAccessionRequestPayloadV2Write = {
   bagNumbers?: string[];
   collectedDate?: string;
+  /** Date and time the seeds were collected. */
+  collectedTime?: string;
   collectionSiteCity?: string;
   collectionSiteCoordinates?: Geolocation[];
   collectionSiteCountryCode?: string;
@@ -710,6 +716,8 @@ export type UpdateAccessionRequestPayloadV2Read = {
 export type UpdateAccessionRequestPayloadV2Write = {
   bagNumbers?: string[];
   collectedDate?: string;
+  /** Date and time the seeds were collected. */
+  collectedTime?: string;
   collectionSiteCity?: string;
   collectionSiteCoordinates?: Geolocation[];
   collectionSiteCountryCode?: string;

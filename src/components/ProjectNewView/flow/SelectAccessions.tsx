@@ -2,6 +2,7 @@ import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { FormButton, Message, TableColumnType } from '@terraware/web-components';
+import { RendererProps } from '@terraware/web-components/components/table/types';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { FlowStates } from 'src/components/ProjectNewView';
@@ -16,6 +17,7 @@ import {
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import Table from 'src/components/common/table';
+import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { useLocalization } from 'src/providers';
 import { useLazySearchAccessionsQuery } from 'src/queries/search/accessions';
 import strings from 'src/strings';
@@ -23,6 +25,7 @@ import { ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
 import { stateName } from 'src/types/Accession';
 import { CreateProjectRequest } from 'src/types/Project';
 import { SearchCriteria, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 
 type SelectAccessionsProps = {
   project: CreateProjectRequest;
@@ -56,14 +59,14 @@ const columns = (): TableColumnType[] => [
     name: strings.STATUS,
     type: 'string',
   },
-  { key: 'collectedDate', name: strings.COLLECTION_DATE, type: 'string' },
+  { key: 'collectedTime', name: strings.COLLECTION_TIME, type: 'string' },
   { key: 'collectionSiteName', name: strings.COLLECTION_SITE, type: 'string' },
 ];
 
 const SEARCH_FIELDS_ACCESSIONS: (keyof SearchResponseAccession)[] = [
   'accessionNumber',
   'speciesName',
-  'collectedDate',
+  'collectedTime',
   'receivedDate',
   'state',
   'id',
@@ -74,7 +77,7 @@ const SEARCH_FIELDS_ACCESSIONS: (keyof SearchResponseAccession)[] = [
 export interface SearchResponseAccession extends SearchResponseElement {
   accessionNumber: string;
   speciesName: string;
-  collectedDate: string;
+  collectedTime: string;
   receivedDate: string;
   state: AccessionState;
   id: string;
@@ -182,6 +185,14 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
     getSearchResults,
     getSearchFields,
   });
+
+  const renderer = useCallback((rendererProps: RendererProps<SearchResponseAccession>) => {
+    if (rendererProps.column.key === 'collectedTime' && rendererProps.value) {
+      const ms = new Date(rendererProps.value as string).getTime();
+      return <span>{getDateTimeDisplayValue(ms)}</span>;
+    }
+    return CellRenderer(rendererProps);
+  }, []);
 
   const entitySpecificFilterConfigs: EntitySpecificFilterConfig[] = useMemo(
     () => [
@@ -292,6 +303,7 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
                     orderBy='accessionNumber'
                     showCheckbox={true}
                     showTopBar={true}
+                    Renderer={renderer}
                   />
                 </Box>
               </Grid>

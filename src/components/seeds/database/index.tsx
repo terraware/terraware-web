@@ -42,7 +42,7 @@ const ALL_ACCESSION_FIELDS = [
   'project_name',
   'species_commonName',
   'species_familyName',
-  'collectedDate',
+  'collectedTime',
   'receivedDate',
   'collectionSiteName',
   'collectionSiteLandowner',

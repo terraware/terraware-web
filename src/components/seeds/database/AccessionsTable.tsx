@@ -25,6 +25,7 @@ import { ACCESSION_2_STATES } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
 import { makeCsv } from 'src/utils/csv';
+import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -39,7 +40,7 @@ const DEFAULT_VISIBLE_COLUMNS = [
   'project_name',
   'state',
   'collectionSiteName',
-  'collectedDate',
+  'collectedTime',
   'ageMonths',
   'estimatedWeightGrams',
   'estimatedCount',
@@ -51,7 +52,7 @@ const DEFAULT_COLUMN_ORDER = [
   'project_name',
   'state',
   'collectionSiteName',
-  'collectedDate',
+  'collectedTime',
   'receivedDate',
   'ageMonths',
   'estimatedWeightGrams',
@@ -310,21 +311,20 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
         filterVariant: 'text',
       },
       {
-        id: 'collectedDate',
-        header: strings.COLLECTION_DATE,
+        id: 'collectedTime',
+        header: strings.COLLECTION_TIME,
         accessorFn: (row) => {
-          const dateStr = (row as Record<string, unknown>).collectedDate as string | null;
-          if (!dateStr) {
+          const dateTimeStr = (row as Record<string, unknown>).collectedTime as string | null;
+          if (!dateTimeStr) {
             return null;
           }
-          const [y, m, d] = dateStr.split('-').map(Number);
-          return new Date(y, m - 1, d);
+          return getDateTimeDisplayValue(new Date(dateTimeStr).getTime());
         },
         filterVariant: 'date-range',
-        filterFn: makeDateRangeFilterFn<SearchResponseElementWithId>('collectedDate'),
+        filterFn: makeDateRangeFilterFn<SearchResponseElementWithId>('collectedTime'),
         Cell: ({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
-          const dateStr = (cell.row.original as Record<string, unknown>).collectedDate as string | null;
-          return dateStr ? <span>{dateStr}</span> : null;
+          const dateTimeStr = (cell.row.original as Record<string, unknown>).collectedTime as string | null;
+          return dateTimeStr ? <span>{getDateTimeDisplayValue(new Date(dateTimeStr).getTime())}</span> : null;
         },
       },
       {

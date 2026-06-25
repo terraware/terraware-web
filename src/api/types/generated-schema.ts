@@ -5329,6 +5329,11 @@ export interface components {
             bagNumbers?: string[];
             /** Format: date */
             collectedDate?: string;
+            /**
+             * Format: date-time
+             * @description Date and time the seeds were collected.
+             */
+            collectedTime?: string;
             collectionSiteCity?: string;
             collectionSiteCoordinates?: components["schemas"]["Geolocation"][];
             collectionSiteCountryCode?: string;
@@ -6315,6 +6320,11 @@ export interface components {
             bagNumbers?: string[];
             /** Format: date */
             collectedDate?: string;
+            /**
+             * Format: date-time
+             * @description Date and time the seeds were collected.
+             */
+            collectedTime?: string;
             collectionSiteCity?: string;
             collectionSiteCoordinates?: components["schemas"]["Geolocation"][];
             collectionSiteCountryCode?: string;
@@ -11620,6 +11630,11 @@ export interface components {
             bagNumbers?: string[];
             /** Format: date */
             collectedDate?: string;
+            /**
+             * Format: date-time
+             * @description Date and time the seeds were collected.
+             */
+            collectedTime?: string;
             collectionSiteCity?: string;
             collectionSiteCoordinates?: components["schemas"]["Geolocation"][];
             collectionSiteCountryCode?: string;

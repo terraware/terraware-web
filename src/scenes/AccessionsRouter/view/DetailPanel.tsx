@@ -9,6 +9,7 @@ import useAccession from 'src/hooks/useAccession';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
+import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -111,10 +112,10 @@ export default function DetailPanel(): JSX.Element {
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>
             <Grid item xs={gridLeftSide} sx={categoryStyle}>
-              {strings.COLLECTION_DATE}
+              {strings.COLLECTION_TIME}
             </Grid>
             <Grid item xs={gridRightSide} sx={valueStyle}>
-              {accession.collectedDate}
+              {accession.collectedTime ? getDateTimeDisplayValue(new Date(accession.collectedTime).getTime()) : '- -'}
             </Grid>
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>
