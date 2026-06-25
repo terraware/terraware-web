@@ -46,6 +46,7 @@ UPDATE_STRING="
 UPDATE seedbank.accessions
 SET number = TO_CHAR(CURRENT_DATE, 'YY') || '-1-2-001',
     collected_date = DATE_TRUNC('year', CURRENT_DATE),
+    collected_time = DATE_TRUNC('year', CURRENT_DATE),
     received_date = DATE_TRUNC('year', CURRENT_DATE),
     created_time = DATE_TRUNC('year', CURRENT_DATE) + TIME '20:12:54.827407+00',
     modified_time = DATE_TRUNC('year', CURRENT_DATE) + TIME '20:12:54.827407+00'

@@ -355,7 +355,6 @@ CLOSE_PLANTING_SEASON,Clore la saison de plantation,fc3b2abc
 CLOSE_PLANTING_SEASON_CONFIRM,Vous êtes sur le point de clore {0}. La clôture marquera la saison comme terminée et empêchera toute modification ultérieure. Cette action est irréversible.,ee1f53f1
 CLOSE_SEASON,Clore la saison,72b4448a
 CLOSED,Fermé,7b8d0429
-COLLECTED_DATE,Date de la collecte,3f1515d8
 COLLECTED_FROM,Collecté à partir de,ffc6ad60
 COLLECTING_SITE,Site de collecte,7491b42b
 COLLECTION_SITE,Nom du site de collection,32b625d7

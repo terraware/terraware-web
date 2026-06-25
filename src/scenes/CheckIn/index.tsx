@@ -16,6 +16,7 @@ import { useLazyGetPendingAccessionsQuery } from 'src/queries/search/accessions'
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { SearchResponseElement } from 'src/types/Search';
+import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -225,10 +226,10 @@ export default function CheckIn(): JSX.Element {
                     </Grid>
                     <Grid item xs={isMobile ? 16 : 2} marginBottom={isMobile ? theme.spacing(3) : 0}>
                       <TextField
-                        label={strings.COLLECTED_DATE}
+                        label={strings.COLLECTION_TIME}
                         id='collected'
                         type='text'
-                        value={result.collectedDate as string}
+                        value={getDateTimeDisplayValue(new Date(result.collectedTime as string).getTime())}
                         display={true}
                       />
                     </Grid>

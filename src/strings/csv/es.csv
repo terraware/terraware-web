@@ -356,7 +356,6 @@ CLOSE_PLANTING_SEASON,Cerrar temporada de plantación,fc3b2abc
 CLOSE_PLANTING_SEASON_CONFIRM,"Está a punto de cerrar {0}. Al cerrar, la temporada se marcará como cerrada y no se podrán realizar más cambios. Esta acción no se puede deshacer.",ee1f53f1
 CLOSE_SEASON,Cerrar temporada,72b4448a
 CLOSED,Cerrado,7b8d0429
-COLLECTED_DATE,Fecha de recolección,3f1515d8
 COLLECTED_FROM,Recolectado de,ffc6ad60
 COLLECTING_SITE,Lugar de recolección,7491b42b
 COLLECTION_SITE,Nombre del lugar de recolección,32b625d7
