@@ -316,14 +316,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       { id: PLANTING_SEASON_COLUMN_ID, value: seasonName },
     ]);
     setColumnVisibility((curr) => ({ ...curr, [PLANTING_SEASON_COLUMN_ID]: true }));
-    setShowColumnFilters(true);
-  }, [
-    linkedPlantingSeasonIds,
-    plantingSeasonsResponse.currentData?.seasons,
-    setColumnFilters,
-    setColumnVisibility,
-    setShowColumnFilters,
-  ]);
+  }, [linkedPlantingSeasonIds, plantingSeasonsResponse.currentData?.seasons, setColumnFilters, setColumnVisibility]);
 
   useEffect(() => {
     if (!seededPlantingSeasonFromUrl.current || linkedPlantingSeasonIds.length === 0) {
@@ -690,10 +683,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   // Apply URL params as column filters once on mount, then strip them from the URL.
   useEffect(() => {
-    const siteName = query.get('siteName');
-    const substratumNames = query.getAll('substratumName');
-    const stratumNames = query.getAll('stratumName');
-    const purposeValues = query.getAll(PURPOSE_QUERY_PARAM);
+    const siteName = query.get('siteName') || undefined;
+    const substratumNames = query.getAll('substratumName').filter(Boolean);
+    const stratumNames = query.getAll('stratumName').filter(Boolean);
+    const purposeValues = query.getAll(PURPOSE_QUERY_PARAM).filter(Boolean);
     const plantingSeasonIds = query
       .getAll(PLANTING_SEASON_ID_QUERY_PARAM)
       .map((id) => Number(id))
@@ -734,15 +727,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       setLinkedPlantingSeasonIds(plantingSeasonIds);
     }
     if (seeded.length > 0 || plantingSeasonIds.length > 0) {
-      setColumnFilters((curr) => {
-        const ids = new Set(seeded.map((f) => f.id));
-        if (plantingSeasonIds.length > 0) {
-          ids.add(PLANTING_SEASON_COLUMN_ID);
-        }
-        return [...curr.filter((f) => !ids.has(f.id)), ...seeded];
-      });
+      setColumnFilters(seeded);
     }
-    setShowColumnFilters(true);
     query.delete('siteName');
     query.delete('substratumName');
     query.delete('stratumName');
