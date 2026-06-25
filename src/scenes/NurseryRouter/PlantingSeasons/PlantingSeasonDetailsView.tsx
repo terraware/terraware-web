@@ -206,9 +206,10 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
         >
           {label}
         </Typography>
-        {to && value !== undefined ? (
+        {to ? (
           <Link
-            to={to}
+            disabled={value === undefined}
+            to={value === undefined ? undefined : to}
             fontSize={valueFontSize}
             fontWeight={600}
             lineHeight={valueLineHeight}
