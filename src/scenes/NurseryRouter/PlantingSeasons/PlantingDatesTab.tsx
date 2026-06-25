@@ -361,6 +361,12 @@ const getAvailableToSchedule = (allocated: number, scheduledOther: number): numb
 const quantityExceedsAvailableToSchedule = (quantity: number, availableToSchedule: number): boolean =>
   !Number.isNaN(quantity) && quantity > availableToSchedule;
 
+const submitQuantityOnEnter = (key: string) => {
+  if (key === 'Enter' && document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur();
+  }
+};
+
 const speciesTableGridColumns = 'minmax(200px, 2fr) 120px minmax(132px, 1fr) 40px';
 
 const quantityTextFieldSx = {
@@ -992,6 +998,7 @@ const AddSpeciesRow = ({
           value={quantity}
           onChange={onQuantityChange}
           onBlur={() => setQuantityFocused(false)}
+          onKeyDown={submitQuantityOnEnter}
           onFocus={() => setQuantityFocused(true)}
           min={0}
           errorText={
@@ -1119,6 +1126,7 @@ const SpeciesRow = ({
             value={draftQuantity}
             onChange={(value) => setDraftQuantity(String(value ?? ''))}
             onBlur={commitQuantity}
+            onKeyDown={submitQuantityOnEnter}
             onFocus={() => setQuantityFocused(true)}
             min={0}
             errorText={

@@ -1,10 +1,11 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Box, Theme, Tooltip, Typography, useTheme } from '@mui/material';
-import { Button, Dropdown, DropdownItem, Icon, Message } from '@terraware/web-components';
+import { Button, Dropdown, DropdownItem, Icon } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import PlantingSeasonNotificationBanners from 'src/components/common/PlantingSeasonNotificationBanners';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -46,7 +47,6 @@ const InventoryPlanningView = (): JSX.Element => {
   const [plantingSiteId, setPlantingSiteId] = useState<number | undefined>(undefined);
   const [plantingSeasonId, setPlantingSeasonId] = useState<number | undefined>(undefined);
   const [speciesId, setSpeciesId] = useState<number | undefined>(undefined);
-  const [bannerDismissed, setBannerDismissed] = useState(false);
 
   const { data: plantingSitesData } = useListPlantingSitesQuery(
     { organizationId: organizationId ?? 0 },
@@ -141,36 +141,14 @@ const InventoryPlanningView = (): JSX.Element => {
     }
   }, [selectedPlantingSeasonSpeciesIds, speciesId]);
 
-  const bannerSeason = useMemo(() => {
-    if (bannerDismissed || !plantingSeasonsData?.seasons?.length) {
-      return undefined;
-    }
-    return plantingSeasonsData.seasons.find((s) => s.status === 'Active') ?? plantingSeasonsData.seasons[0];
-  }, [plantingSeasonsData, bannerDismissed]);
-
   return (
     <Page title={strings.INVENTORY_PLANNING} description={strings.INVENTORY_PLANNING_DESCRIPTION}>
       <Box sx={{ width: '100%' }}>
-        {bannerSeason && (
-          <Box marginTop={theme.spacing(2)}>
-            <Message
-              type='page'
-              priority='info'
-              body={
-                <span>
-                  {strings.formatString(
-                    strings.NEW_SPECIES_TARGETS_ADDED,
-                    <span key='season-name' style={{ fontWeight: 600 }}>
-                      {bannerSeason.name}
-                    </span>
-                  )}
-                </span>
-              }
-              showCloseButton
-              onClose={() => setBannerDismissed(true)}
-            />
-          </Box>
-        )}
+        <PlantingSeasonNotificationBanners
+          organizationId={organizationId}
+          notificationPage='InventoryPlanning'
+          marginTop={theme.spacing(2)}
+        />
 
         <Card style={{ marginTop: theme.spacing(3) }} radius={theme.spacing(1)}>
           <Box display='flex' gap={theme.spacing(2)} flexWrap='wrap' marginBottom={theme.spacing(2)}>

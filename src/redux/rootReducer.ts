@@ -4,7 +4,6 @@ import { rtkReducers } from 'src/queries/reducers';
 
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
 import acceleratorProjectSpeciesReducers from './features/acceleratorProjectSpecies/acceleratorProjectSpeciesSlice';
-import activityReducers from './features/activities/activitiesSlice';
 import appVersionReducers from './features/appVersion/appVersionSlice';
 import applicationReducers from './features/application/applicationSlice';
 import batchesReducers from './features/batches/batchesSlice';
@@ -22,7 +21,6 @@ import locationReducers from './features/location/locationSlice';
 import matrixViewReducers from './features/matrixView/matrixViewSlice';
 import messageReducers from './features/message/messageSlice';
 import moduleReducers from './features/modules/modulesSlice';
-import observationsReducers from './features/observations/observationsSlice';
 import organizationUsersReducers from './features/organizationUser/organizationUsersSlice';
 import plantingSiteReducers from './features/plantingSite/plantingSiteSlice';
 import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
@@ -43,7 +41,6 @@ import votesReducers from './features/votes/votesSlice';
 // assembly of app reducers
 export const reducers = {
   ...acceleratorReducers,
-  ...activityReducers,
   ...applicationReducers,
   ...appVersionReducers,
   ...batchesReducers,
@@ -61,7 +58,6 @@ export const reducers = {
   ...messageReducers,
   ...matrixViewReducers,
   ...moduleReducers,
-  ...observationsReducers,
   ...organizationUsersReducers,
   ...acceleratorProjectSpeciesReducers,
   ...plantingSiteReducers,

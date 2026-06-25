@@ -203,7 +203,7 @@ APPROX_SYMBOL,~,acb59e95
 AR,RA,25a8e55a
 ARE_YOU_SURE,Êtes-vous sûr ?,d4536b91
 ARE_YOU_SURE_DELETE,Êtes-vous sûr de vouloir supprimer ?,a7f716f0
-ARE_YOU_SURE_DELETE_GOAL,Êtes-vous sûr de vouloir supprimer cet objectif d'espèce ?,9051d875
+ARE_YOU_SURE_DELETE_TARGET,Êtes-vous sûr de vouloir supprimer cet objectif d'espèce ?,8f7cb65e
 AREA_HA,Superficie (ha),8ab5d500
 AREA_NOT_OBSERVED,Zone non observée,9eeddab4
 ARROW_KEYS,Touches fléchées,5cefb475
@@ -515,8 +515,8 @@ DELETE_SEASON,Supprimer la saison,c49c9788
 DELETE_SEEDLINGS_BATCHES,Supprimer les lots de semis,a5916585
 DELETE_SEEDLINGS_BATCHES_MSG,"La suppression de lots sans retraits les supprimera complètement. La suppression de lots avec retraits ramènera leurs quantités restantes à 0, retirera ces quantités de l’inventaire et marquera les lots comme vides. Les retraits passés continueront d’apparaître dans l’historique des retraits.",4f9bf36f
 DELETE_SPECIES,Supprimer l'espèce,b3dd3256
-DELETE_SPECIES_GOAL,Supprimer l'objectif d'espèce,38e5960e
-DELETE_SPECIES_GOAL_CONFIRM,"Vous êtes sur le point de supprimer l'espèce {0} en tant qu'objectif pour ce substrat. La quantité sera retirée de l'objectif total de plantation pour cette saison, et la pépinière sera informée afin d'ajuster les plants attribués, si nécessaire.",99092075
+DELETE_SPECIES_TARGET,Supprimer l'objectif d'espèce,bffd4971
+DELETE_SPECIES_TARGET_CONFIRM,"Vous êtes sur le point de supprimer l'espèce {0} en tant qu'objectif pour ce substrat. La quantité sera retirée de l'objectif total de plantation pour cette saison, et la pépinière sera informée afin d'ajuster les plants alloués, si nécessaire.",93b5a604
 DELETE_STATISTICS,Supprimer les statistiques,881bc71c
 DELETE_VIABILITY_TEST,Supprimer le test de viabilité,db53dffa
 DELETE_VIABILITY_TEST_MESSAGE,Vous vous apprêtez à supprimer le test de viabilité {0}.,ceace778
@@ -1516,6 +1516,16 @@ PLANTING_SEASON_END,Fin de la saison de plantation,414309c0
 PLANTING_SEASON_END_IN_PAST,La date de fin ne peut pas être passée.,b2729d4d
 PLANTING_SEASON_END_OUT_OF_RANGE,Elle doit se situer entre 4 semaines et 1 an après la date de début.,fcca5463
 PLANTING_SEASON_NO_OVERLAP,Chevauche la saison de plantation {0} - {1},f1549979
+PLANTING_SEASON_NOTIFICATION_ALLOCATION_QUANTITIES_UPDATED,La pépinière a mis à jour les quantités allouées pour cette saison.,eff34e46
+PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_CLOSED,La saison a été clôturée et ses objectifs d'espèces n'apparaissent plus comme nécessaires ou demandés.,e2d75939
+PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_PAST_END_DATE,La date de fin de cette saison est dépassée. Prolongez la saison ou clôturez-la si la plantation est terminée.,e6ffad3c
+PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED,Nouvelles demandes de retrait de plantation reçues.,e587d761
+PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY,Nouvelle demande de retrait de plantation ou demande mise à jour reçue.,71130ddd
+PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY_WITH_DATES,Nouvelle demande de retrait de plantation ou demande mise à jour reçue pour {0}.,beed313d
+PLANTING_SEASON_NOTIFICATION_SEASON_WITHDRAWAL_RECORDED,De nouveaux retraits de plantation ont été enregistrés pour cette saison — l’avancement de la plantation a été mis à jour.,0e81a27a
+PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_ADDED_FOR_SEASON,De nouveaux objectifs d’espèces ont été ajoutés pour cette saison.,f2882419
+PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_UPDATED,Objectifs d'espèces mis à jour pour {0},9d708c47
+PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_UPDATED_FOR_SEASON,Objectifs d'espèces mis à jour pour cette saison.,c480159e
 PLANTING_SEASON_OPTIONAL,Saison de plantation (optionnel),607dcd9a
 PLANTING_SEASON_OPTIONAL_TOOLTIP,Sélectionnez une saison de plantation parmi les saisons actives pour le site. Sélectionnez ensuite un stratum et un substratum dans la saison.,2fed80e5
 PLANTING_SEASON_START,Début de la saison de plantation,10f5de94

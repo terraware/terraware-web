@@ -20,7 +20,7 @@ const DeleteSpeciesGoalModal = ({
   onConfirm,
 }: DeleteSpeciesGoalModalProps): JSX.Element => {
   const message = strings.formatString(
-    strings.DELETE_SPECIES_GOAL_CONFIRM,
+    strings.DELETE_SPECIES_TARGET_CONFIRM,
     <Typography component='span' fontWeight={600} key='species-name'>
       {speciesName}
     </Typography>
@@ -30,7 +30,7 @@ const DeleteSpeciesGoalModal = ({
     <DialogBox
       onClose={onClose}
       open={open}
-      title={strings.DELETE_SPECIES_GOAL}
+      title={strings.DELETE_SPECIES_TARGET}
       size='medium'
       skrim={true}
       middleButtons={[
@@ -57,7 +57,7 @@ const DeleteSpeciesGoalModal = ({
         {message}
       </Typography>
       <Typography component='div' fontSize='16px' textAlign='center' marginTop={2}>
-        {strings.ARE_YOU_SURE_DELETE_GOAL}
+        {strings.ARE_YOU_SURE_DELETE_TARGET}
       </Typography>
     </DialogBox>
   );

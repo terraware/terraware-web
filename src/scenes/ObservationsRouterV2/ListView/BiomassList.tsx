@@ -11,7 +11,6 @@ import {
   MRT_ToggleFullScreenButton,
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
-import sanitize from 'sanitize-filename';
 
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
@@ -23,8 +22,6 @@ import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlan
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useLazyListObservationResultsQuery } from 'src/queries/generated/observations';
-import { ObservationsService } from 'src/services';
-import { downloadCsv } from 'src/utils/csv';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -68,6 +65,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const defaultTimezone = useDefaultTimeZone().get().id;
+  const { downloadBiomassObservationsCsv } = useObservationExports();
 
   const {
     columnFilters,
@@ -231,28 +229,12 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   );
 
   const onExportBiomassObservations = useCallback(async () => {
-    if (!selectedOrganization) {
-      return;
-    }
-    const content = await ObservationsService.exportBiomassObservationsCsv(
-      selectedOrganization.id,
-      plantingSiteId === ALL_PLANTING_SITES ? undefined : plantingSiteId
-    );
-    if (content !== null) {
-      const siteName =
-        typeof plantingSiteId === 'number'
-          ? plantingSitesNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
-          : strings.ALL_PLANTING_SITES;
-      const filename = sanitize(`${siteName}-${strings.BIOMASS_MONITORING}`);
-      downloadCsv(filename, content);
-    }
-  }, [
-    plantingSiteId,
-    plantingSitesNames,
-    selectedOrganization,
-    strings.ALL_PLANTING_SITES,
-    strings.BIOMASS_MONITORING,
-  ]);
+    const siteName =
+      typeof plantingSiteId === 'number'
+        ? plantingSitesNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
+        : strings.ALL_PLANTING_SITES;
+    await downloadBiomassObservationsCsv(siteName, plantingSiteId === ALL_PLANTING_SITES ? undefined : plantingSiteId);
+  }, [downloadBiomassObservationsCsv, plantingSiteId, plantingSitesNames, strings.ALL_PLANTING_SITES]);
 
   const handleExportClick = useCallback(() => {
     void onExportBiomassObservations();

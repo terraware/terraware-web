@@ -8,6 +8,7 @@ import EmptyMessage from 'src/components/common/EmptyMessage';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import PlantingSeasonNotificationBanners from 'src/components/common/PlantingSeasonNotificationBanners';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -323,7 +324,14 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
         }}
       >
         {isOnboarded ? (
-          <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
+          <>
+            <PlantingSeasonNotificationBanners
+              organizationId={selectedOrganization?.id}
+              notificationPage='Inventory'
+              marginBottom={theme.spacing(3)}
+            />
+            <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
+          </>
         ) : (
           <Container maxWidth={false} sx={{ padding: '32px 0' }}>
             {!isMobile && <Grid item xs={12} padding={theme.spacing(3)} />}

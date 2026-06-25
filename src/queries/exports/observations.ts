@@ -140,6 +140,73 @@ const injectedRtkApi = api.injectEndpoints({
       }),
       providesTags: (_results, _errors, observationId) => [{ type: QueryTagTypes.Observation, id: observationId }],
     }),
+    exportBiomassObservationsCsv: build.query<string, ExportBiomassObservationsApiArg>({
+      query: ({ organizationId, plantingSiteId }) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        headers: {
+          accept: 'text/csv',
+        },
+        body: {
+          prefix: 'observationPlots',
+          fields: [
+            'monitoringPlot_plotNumber',
+            'monitoringPlot_plantingSite_name',
+            'completedTime',
+            'biomassDetails_description',
+            'monitoringPlot_southwestLatitude',
+            'monitoringPlot_southwestLongitude',
+            'monitoringPlot_northwestLatitude',
+            'monitoringPlot_northwestLongitude',
+            'monitoringPlot_southeastLatitude',
+            'monitoringPlot_southeastLongitude',
+            'monitoringPlot_northeastLatitude',
+            'monitoringPlot_northeastLongitude',
+            'biomassDetails_forestType',
+            'biomassDetails_herbaceousCoverPercent',
+            'biomassDetails_ph',
+            'biomassDetails_smallTreesCountLow',
+            'biomassDetails_smallTreesCountHigh',
+            'biomassDetails_salinity',
+            'biomassDetails_soilAssessment',
+            'biomassDetails_tide',
+            'biomassDetails_tideTime',
+            'biomassDetails_waterDepth',
+            'biomassDetails_numPlants',
+            'biomassDetails_numSpecies',
+            'conditions.condition',
+            'notes',
+          ],
+          sortOrder: [{ field: 'monitoringPlot_plotNumber', direction: 'Descending' }],
+          search: {
+            operation: 'and',
+            children: [
+              {
+                operation: 'field',
+                type: 'Exact',
+                field: 'observation_type(raw)',
+                values: ['Biomass Measurements'],
+              },
+              plantingSiteId && plantingSiteId > 0
+                ? {
+                    operation: 'field',
+                    type: 'Exact',
+                    field: 'monitoringPlot_plantingSite_id',
+                    values: [`${plantingSiteId}`],
+                  }
+                : {
+                    operation: 'field',
+                    type: 'Exact',
+                    field: 'monitoringPlot_plantingSite_organization_id',
+                    values: [`${organizationId}`],
+                  },
+            ],
+          },
+          count: 0,
+        },
+        responseHandler: 'text',
+      }),
+    }),
   }),
 });
 
@@ -159,4 +226,6 @@ export const {
   useLazyExportBiomassSpeciesCsvQuery,
   useExportBiomassTreesShrubsCsvQuery,
   useLazyExportBiomassTreesShrubsCsvQuery,
+  useExportBiomassObservationsCsvQuery,
+  useLazyExportBiomassObservationsCsvQuery,
 } = injectedRtkApi;
