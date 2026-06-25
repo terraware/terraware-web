@@ -1,3 +1,4 @@
+ddef8077 Delete unused activities redux feature (#5941)
 5973a5f5 Replace requestSyncActivityMedia thunk with RTK Query hook (#5940)
 9fe8beff Migrate biomass observations CSV export to RTK Query (#5939)
 4ec4a1d3 SW-8578 After new inventory of species is added Inventory Planning page should refresh (#5945)
