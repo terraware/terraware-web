@@ -46,6 +46,8 @@ export type ListPlantingDateRequestsArgs = {
   speciesId?: number;
 };
 
+const includedPlantingSeasonStatuses = ['Active', 'Upcoming', 'Past End Date'];
+
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
     listPlantingDateRequests: build.query<PlantingDateRequestRow[], ListPlantingDateRequestsArgs>({
@@ -56,6 +58,12 @@ const injectedRtkApi = api.injectEndpoints({
             field: 'scheduledPlantingDate_plantingSeason_plantingSite_organization_id',
             type: 'Exact',
             values: [`${args.organizationId}`],
+          },
+          {
+            operation: 'field',
+            field: 'scheduledPlantingDate_plantingSeason_status',
+            type: 'Exact',
+            values: includedPlantingSeasonStatuses,
           },
         ];
         if (args.plantingSiteId) {

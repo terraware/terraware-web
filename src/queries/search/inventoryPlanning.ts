@@ -9,7 +9,7 @@ export type InventoryPlanningArgs = {
 };
 
 export type PlantingSeasonStatus = 'Active' | 'Upcoming' | 'Past End Date' | 'Closed';
-export const inventoryPlanningPlantingSeasonStatuses: PlantingSeasonStatus[] = ['Active', 'Upcoming'];
+export const inventoryPlanningPlantingSeasonStatuses: PlantingSeasonStatus[] = ['Active', 'Upcoming', 'Past End Date'];
 
 export type InventoryPlanningSeasonRow = {
   plantingSeasonId: number;
