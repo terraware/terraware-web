@@ -111,6 +111,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
   const [cursor, setCursor] = useState<MapCursor>('auto');
   const [hoverFeatureId, setHoverFeatureId] = useState<string>();
   const [focused, setFocused] = useState<boolean>(false);
+  const [zoom, setZoom] = useState<number | undefined>(undefined);
 
   const loadImages = useCallback(
     (map: MapRef) => {
@@ -137,6 +138,8 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
         const mbMap = map.getMap();
         mbMap.on('idle', () => {
           map.getContainer().setAttribute('data-map-idle', 'true');
+          // Seed/refresh the zoom so markers cluster on initial load and after the view settles.
+          setZoom(mbMap.getZoom());
         });
       }
     },
@@ -145,6 +148,9 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
 
   const onMove = useCallback(
     (view: ViewStateChangeEvent) => {
+      // Track the zoom so markers recluster live as the user zooms. setZoom is a no-op when the
+      // value is unchanged, so panning (which keeps zoom constant) does not trigger reclustering.
+      setZoom(view.viewState.zoom);
       onMapMove?.(view);
     },
     [onMapMove]
@@ -160,19 +166,6 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
         (marker) =>
           marker.latitude >= -90 && marker.latitude <= 90 && marker.longitude >= -180 && marker.longitude < 180
       );
-
-      if (process.env.NODE_ENV === 'development') {
-        if (filteredMarkers.length !== markers.length) {
-          const invalidMarkers = markers.filter(
-            (marker) => filteredMarkers.find((validMarker) => marker.id === validMarker.id) === undefined
-          );
-
-          const invalidMarkerIds = invalidMarkers.map((marker) => marker.id).join(', ');
-
-          // eslint-disable-next-line no-console
-          console.log(`[MAP] Markers with invalid IDs: ${invalidMarkerIds}`);
-        }
-      }
 
       const visited = new Set<string>();
       const markerPixels: Record<string, Point> = {};
@@ -526,12 +519,19 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
   );
 
   const markersComponents = useMemo(() => {
+    const map = mapRef.current;
+    // `zoom` is read here so the clusters recompute whenever the map is zoomed: cluster membership
+    // is derived from the on-screen pixel distance between markers, which only changes with zoom.
+    if (!map || zoom === undefined) {
+      return [];
+    }
+
     return markerGroups?.flatMap((markerGroup) => {
       if (!markerGroup.visible) {
         return [];
       }
 
-      const clusteredMarkers = clusterMarkers(mapRef.current, markerGroup.markers, markerGroup.onClusterClick);
+      const clusteredMarkers = clusterMarkers(map, markerGroup.markers, markerGroup.onClusterClick);
 
       return clusteredMarkers.map((cluster, i) => {
         if (cluster.size === 1) {
@@ -576,7 +576,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
         }
       });
     });
-  }, [clusterMarkers, markerGroups, mapRef, onMarkerClick, onMarkerClusterClick, theme]);
+  }, [clusterMarkers, markerGroups, mapRef, onMarkerClick, onMarkerClusterClick, theme, zoom]);
 
   const nameTagMarkers = useMemo(() => {
     if (nameTags?.length) {
