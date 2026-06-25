@@ -492,7 +492,7 @@ export type NewBiomassMeasurementPayload = {
   tideTime?: string;
   trees: (NewShrubPayload | NewTreeWithTrunksPayload)[];
   /** Measured in centimeters. Required for Mangrove forest. Null means no water. */
-  waterDepth?: number | null;
+  waterDepth?: number;
 };
 export type RecordedPlantPayload = {
   certainty: 'Known' | 'Other' | 'Unknown';
@@ -712,7 +712,7 @@ export type ExistingBiomassMeasurementPayload = {
   treeSpeciesCount: number;
   trees: ExistingTreePayload[];
   /** Measured in centimeters. Null means no water. */
-  waterDepth?: number | null;
+  waterDepth?: number;
 };
 export type ObservationSubstratumResultsPayload = {
   /** Area of this substratum in hectares. */
@@ -929,7 +929,7 @@ export type BiomassUpdateOperationPayload = {
       | 'Unknown';
     tide?: 'Low' | 'High';
     tideTime?: string;
-    waterDepth?: number | null;
+    waterDepth?: number;
   };
 export type MonitoringSpeciesUpdateOperationPayload = {
   type: 'MonitoringSpecies';

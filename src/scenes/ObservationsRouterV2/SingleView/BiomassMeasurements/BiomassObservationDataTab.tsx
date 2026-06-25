@@ -195,10 +195,7 @@ const BiomassObservationDataTab = () => {
       return {
         conditions: monitoringPlot.conditions,
         notes: monitoringPlot.notes,
-        biomassMeasurement: {
-          ...biomassMeasurement,
-          waterDepth: biomassMeasurement.waterDepth ?? undefined,
-        },
+        biomassMeasurement,
       };
     } else {
       return undefined;
