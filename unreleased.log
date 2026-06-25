@@ -1,3 +1,5 @@
+e53c2ef5 SW-8577 After inputting a number in the quantity field, clicking Enter/Return should enter the number (#5944)
+6ce6faef SW-8585 Withdrawal Request: Completed requests should not show in Requests list (#5948)
 3516be8c SW-8581 Delete Species Goal: Update dialog copy (#5947)
 4dc58561 Fixed clustering issue and handle activity log cluster click (#5938)
 d23148a1 SW-8568 Tablet View: Updates (#5937)
