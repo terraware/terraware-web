@@ -176,11 +176,6 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
   ) => {
     const compactLayout = isMobile || showTabletLayout;
     const justifyContent = align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
-    const valueFontSize = showTabletLayout ? '20px' : '24px';
-    const valueLineHeight = showTabletLayout ? '28px' : '32px';
-    const valueColor = (highlight || to) && value !== undefined ? theme.palette.TwClrTxtBrand : theme.palette.TwClrTxt;
-    const valueText = value === undefined ? '-' : value.toLocaleString(activeLocale || undefined);
-    const valueStyle = (highlight || to) && value !== undefined ? { textDecoration: 'underline' } : undefined;
 
     return (
       <Box
@@ -206,28 +201,19 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
         >
           {label}
         </Typography>
-        {to ? (
-          <Link
-            disabled={value === undefined}
-            to={value === undefined ? undefined : to}
-            fontSize={valueFontSize}
-            fontWeight={600}
-            lineHeight={valueLineHeight}
-            style={{ color: valueColor, ...valueStyle }}
-          >
-            {valueText}
-          </Link>
-        ) : (
-          <Typography
-            fontSize={valueFontSize}
-            fontWeight={600}
-            lineHeight={valueLineHeight}
-            color={valueColor}
-            sx={valueStyle}
-          >
-            {valueText}
-          </Typography>
-        )}
+        <Link
+          to={value === undefined ? undefined : to}
+          fontSize={showTabletLayout ? '20px' : '24px'}
+          fontWeight={600}
+          lineHeight={showTabletLayout ? '28px' : '32px'}
+          style={{
+            color: (highlight || to) && value !== undefined ? theme.palette.TwClrTxtBrand : theme.palette.TwClrTxt,
+            pointerEvents: to && value !== undefined ? undefined : 'none',
+            ...((highlight || to) && value !== undefined ? { textDecoration: 'underline' } : undefined),
+          }}
+        >
+          {value === undefined ? '-' : value.toLocaleString(activeLocale || undefined)}
+        </Link>
       </Box>
     );
   };
