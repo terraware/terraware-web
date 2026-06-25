@@ -54,12 +54,7 @@ const getSortedSpeciesNames = (notification: PlantingSeasonNotificationPayload, 
 
 const SpeciesNamesList = ({ names }: { names: string[] }): JSX.Element => (
   <Box component='span' sx={{ fontStyle: 'italic', fontWeight: 600 }}>
-    {names.map((name, index) => (
-      <React.Fragment key={name}>
-        {index > 0 ? ', ' : ''}
-        {name}
-      </React.Fragment>
-    ))}
+    {names.join(', ')}
   </Box>
 );
 
