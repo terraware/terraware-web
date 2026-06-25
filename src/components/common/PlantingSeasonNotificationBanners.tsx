@@ -37,14 +37,6 @@ type NotificationGroupBodyProps = {
   showPageContext: boolean;
 };
 
-type PlantingSeasonNotificationPayloadWithRequestDetails = PlantingSeasonNotificationPayload & {
-  date?: string;
-  dates?: string[];
-  nurseryRequestNotes?: string;
-  notes?: string;
-  scheduledPlantingDates?: string[];
-};
-
 const notificationSortOrder: Record<PlantingSeasonNotificationType, number> = {
   SpeciesTargetsAdded: 1,
   SpeciesTargetsUpdated: 2,
@@ -71,16 +63,6 @@ const SpeciesNamesList = ({ names }: { names: string[] }): JSX.Element => (
   </Box>
 );
 
-const getScheduledPlantingDateLabels = (
-  notification: PlantingSeasonNotificationPayloadWithRequestDetails,
-  activeLocale: string | null
-) => {
-  const dates =
-    notification.dates ?? notification.scheduledPlantingDates ?? (notification.date ? [notification.date] : []);
-
-  return dates.toSorted().map((date) => getMediumDate(date, activeLocale));
-};
-
 const getScheduledPlantingDateRequestMessage = (
   notification: PlantingSeasonNotificationPayload,
   notificationPage: PlantingSeasonNotificationPage,
@@ -90,28 +72,14 @@ const getScheduledPlantingDateRequestMessage = (
     return strings.PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED;
   }
 
-  const notificationWithRequestDetails = notification as PlantingSeasonNotificationPayloadWithRequestDetails;
-  const dateLabels = getScheduledPlantingDateLabels(notificationWithRequestDetails, activeLocale);
-  const notes = notificationWithRequestDetails.notes ?? notificationWithRequestDetails.nurseryRequestNotes;
+  const dates = notification.dates?.map((date) => getMediumDate(date, activeLocale)).join(', ');
 
-  return (
-    <>
-      {dateLabels.length > 0
-        ? strings.formatString(
-            strings.PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY_WITH_DATES,
-            dateLabels.join(', ')
-          )
-        : strings.PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY}
-      {notes && (
-        <Box component='span' sx={{ display: 'block', marginTop: 0.5 }}>
-          <Typography component='span' fontWeight={600}>
-            {strings.NOTE_COLON}
-          </Typography>
-          {` ${notes}`}
-        </Box>
-      )}
-    </>
-  );
+  return dates
+    ? strings.formatString(
+        strings.PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY_WITH_DATES,
+        dates
+      )
+    : strings.PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY;
 };
 
 const ContextPrefix = ({ group }: { group: PlantingSeasonNotificationGroupPayload }): JSX.Element => {

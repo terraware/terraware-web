@@ -235,6 +235,7 @@ export type CreatePlantingSeasonRequestPayload = {
   startDate: string;
 };
 export type PlantingSeasonNotificationPayload = {
+  dates?: string[];
   speciesScientificNames?: string[];
   type:
     | 'AllocationQuantitiesUpdated'

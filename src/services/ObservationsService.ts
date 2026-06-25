@@ -28,17 +28,11 @@ const ABANDON_OBSERVATION_ENDPOINT = '/api/v1/tracking/observations/{observation
 const OBSERVATION_OTHER_MEDIA_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/otherMedia';
 const OBSERVATION_PLOT_PHOTO_ENDPOINT = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/photos/{fileId}';
 
-type AdHocObservationsPayload =
-  paths[typeof AD_HOC_OBSERVATIONS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
 type UploadOtherPlotMediaResponse =
   paths[typeof OBSERVATION_OTHER_MEDIA_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 type DeletePlotPhotoResponse =
   paths[typeof OBSERVATION_PLOT_PHOTO_ENDPOINT]['delete']['responses'][200]['content']['application/json'];
-
-type AdHocObservationResultsPayload =
-  paths[typeof AD_HOC_OBSERVATION_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 type ObservationResultsResponsePayload =
   paths[typeof OBSERVATIONS_RESULTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
@@ -302,30 +296,6 @@ const listPlantingSiteObservations = async (
   return response;
 };
 
-const listPlantingSiteAdHocObservations = async (
-  plantingSiteId: number
-): Promise<Response2<AdHocObservationsPayload>> => {
-  const response = await httpAdHocObservations.get2<ObservationsResponsePayload>({
-    params: {
-      plantingSiteId: plantingSiteId.toString(),
-    },
-  });
-
-  return response;
-};
-
-const listPlantingSiteAdHocObservationResults = async (
-  plantingSiteId: number
-): Promise<Response2<AdHocObservationResultsPayload>> => {
-  const response = await httpAdHocObservationResults.get2<AdHocObservationResultsPayload>({
-    params: {
-      plantingSiteId: plantingSiteId.toString(),
-    },
-  });
-
-  return response;
-};
-
 /**
  * List organization  observations results
  */
@@ -345,30 +315,6 @@ const listOrganizationObservations = async (
   organizationId: number
 ): Promise<Response2<ObservationsResponsePayload>> => {
   const response = await httpObservations.get2<ObservationsResponsePayload>({
-    params: {
-      organizationId: organizationId.toString(),
-    },
-  });
-
-  return response;
-};
-
-const listOrganizationAdHocObservations = async (
-  organizationId: number
-): Promise<Response2<AdHocObservationsPayload>> => {
-  const response = await httpAdHocObservations.get2<ObservationsResponsePayload>({
-    params: {
-      organizationId: organizationId.toString(),
-    },
-  });
-
-  return response;
-};
-
-const listOrganizationAdHocObservationResults = async (
-  organizationId: number
-): Promise<Response2<AdHocObservationResultsPayload>> => {
-  const response = await httpAdHocObservationResults.get2<AdHocObservationResultsPayload>({
     params: {
       organizationId: organizationId.toString(),
     },
@@ -524,12 +470,8 @@ const ObservationsService = {
   listAdHocObservationResults,
   listPlantingSiteObservations,
   listPlantingSiteObservationResults,
-  listPlantingSiteAdHocObservations,
-  listPlantingSiteAdHocObservationResults,
   listOrganizationObservations,
   listOrganizationObservationResults,
-  listOrganizationAdHocObservations,
-  listOrganizationAdHocObservationResults,
 };
 
 export default ObservationsService;

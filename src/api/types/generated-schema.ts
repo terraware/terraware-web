@@ -3239,6 +3239,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/public/statistics": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Gets aggregate statistics about the Terraware platform.
+         * @description These statistics are aggregated across all organizations and do not require authentication. Organizations that are internal to Terraformation are excluded.
+         */
+        get: operations["getPublicStatistics"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/reports": {
         parameters: {
             query?: never;
@@ -7221,9 +7241,10 @@ export interface components {
             forestType: "Terrestrial" | "Mangrove";
             /** Format: int32 */
             herbaceousCoverPercent: number;
+            /** @description Only valid for Mangrove forests. A null value indicates that there was no water. */
             ph?: number;
             quadrats: components["schemas"]["ExistingBiomassQuadratPayload"][];
-            /** @description Measured in ppt */
+            /** @description Measured in ppt. Only valid for Mangrove forests. A null value indicates that there was no water. */
             salinity?: number;
             /** Format: int32 */
             smallTreeCountHigh: number;
@@ -7233,13 +7254,13 @@ export interface components {
             /** @enum {string} */
             soilType?: "Clay" | "SandyClay" | "SandyClayLoam" | "ClayLoam" | "SiltyClay" | "SiltyClayLoam" | "SandyLoam" | "LoamySand" | "Sand" | "Loam" | "SiltLoam" | "Silt" | "Unknown";
             /**
-             * @description Low or high tide.
+             * @description Low or high tide. Only valid for Mangrove forests. A null value indicates that there was no water.
              * @enum {string}
              */
             tide?: "Low" | "High";
             /**
              * Format: date-time
-             * @description Time when ide is observed.
+             * @description Time when tide is observed. Only valid for Mangrove forests. A null value indicates that there was no water.
              */
             tideTime?: string;
             /** Format: int32 */
@@ -8008,6 +8029,10 @@ export interface components {
         GetProjectVotesResponsePayload: {
             status: components["schemas"]["SuccessOrError"];
             votes: components["schemas"]["ProjectVotesPayload"];
+        };
+        GetPublicStatisticsResponsePayload: {
+            statistics: components["schemas"]["PublicStatisticsPayload"];
+            status: components["schemas"]["SuccessOrError"];
         };
         GetPublishedProjectResponsePayload: {
             projects: components["schemas"]["PublishedProjectPayload"][];
@@ -8880,17 +8905,17 @@ export interface components {
             /** Format: date */
             reportingStartDate: string;
         };
-        /** @description Biomass Measurements. Required for biomass measurement observations */
+        /** @description Measurements for terrestrial and mangrove biomass observations. Water measurements must either all be present or all be absent if forestType is Mangrove. */
         NewBiomassMeasurementPayload: {
             description?: string;
             /** @enum {string} */
             forestType: "Terrestrial" | "Mangrove";
             /** Format: int32 */
             herbaceousCoverPercent: number;
-            /** @description Required for Mangrove forest. */
+            /** @description Only valid for Mangrove forests. A null value indicates that there was no water. */
             ph?: number;
             quadrats: components["schemas"]["NewBiomassQuadratPayload"][];
-            /** @description Measured in ppt. Required for Mangrove forest. */
+            /** @description Measured in ppt. Only valid for Mangrove forests. A null value indicates that there was no water. */
             salinity?: number;
             /** Format: int32 */
             smallTreeCountHigh: number;
@@ -8902,13 +8927,13 @@ export interface components {
             /** @description List of herbaceous and tree species. Includes all recorded quadrat and additional herbaceous species and recorded tree species. Species not assigned to a quadrat or recorded trees will be saved as an additional herbaceous species. */
             species: components["schemas"]["BiomassSpeciesPayload"][];
             /**
-             * @description Low or high tide. Required for Mangrove forest.
+             * @description Low or high tide. Only valid for Mangrove forests. A null value indicates that there was no water.
              * @enum {string}
              */
             tide?: "Low" | "High";
             /**
              * Format: date-time
-             * @description Time when ide is observed. Required for Mangrove forest.
+             * @description Time when tide is observed. Only valid for Mangrove forests. A null value indicates that there was no water.
              */
             tideTime?: string;
             trees: (components["schemas"]["NewShrubPayload"] | components["schemas"]["NewTreeWithTrunksPayload"])[];
@@ -9919,6 +9944,7 @@ export interface components {
             plantingSiteName: string;
         };
         PlantingSeasonNotificationPayload: {
+            dates?: string[];
             speciesScientificNames?: string[];
             /** @enum {string} */
             type: "AllocationQuantitiesUpdated" | "PlantingSeasonClosed" | "PlantingSeasonPastEndDate" | "SeasonWithdrawalRecorded" | "ScheduledPlantingDateRequested" | "SpeciesTargetsAdded" | "SpeciesTargetsUpdated";
@@ -10373,6 +10399,19 @@ export interface components {
         };
         ProjectVotesPayload: {
             phases: components["schemas"]["PhaseVotes"][];
+        };
+        PublicStatisticsPayload: {
+            totalAreaUnderRestorationHa: number;
+            /** Format: int32 */
+            totalCountries: number;
+            /** Format: int32 */
+            totalOrganizations: number;
+            /** Format: int32 */
+            totalPlantings: number;
+            /** Format: int64 */
+            totalSeedlingsInNurseries: number;
+            /** Format: int64 */
+            totalSeedsInStorage: number;
         };
         PublishProjectProfileRequestPayload: {
             details: components["schemas"]["FunderProjectDetailsPayload"];
@@ -19732,6 +19771,26 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    getPublicStatistics: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetPublicStatisticsResponsePayload"];
                 };
             };
         };
