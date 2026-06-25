@@ -967,6 +967,7 @@ INVITE_FUNDER,Invite Funder,
 INVITE_FUNDER_DESCRIPTION,Provide an email address to invite a Funder to the Funder Portal under this Funding Entity. An invitation email to create an account will be sent to the email address. First Name and Last Name will be provided by the account holder.,
 INVITED,Invited,
 IS_DECIMAL,Is Decimal,
+IS_THERE_WATER_IN_THIS_PLOT,Is there water in this plot?,
 ISSUE,Issue,
 IUCN_CRITICALLY_ENDANGERED,Critically Endangered (CR),IUCN conservation category. Keep the two-letter code as is; only translate the description.
 IUCN_DATA_DEFICIENT,Data Deficient (DD),IUCN conservation category. Keep the two-letter code as is; only translate the description.
@@ -2565,6 +2566,7 @@ VR,VR,Virtual Reality
 WATER_BODIES,Water Bodies,
 WATER_DEPTH_CM,Water Depth (cm),
 WATER_DEPTH_REQUIRED_FOR_MANGROVE,"Water depth is required for mangrove observations. Enter a value or check ""No Water"".",
+WATER_FIELDS_WILL_BE_CLEARED,"Selecting ""No"" will clear the water depth, salinity, pH, tide, and tide measurement time fields.",
 WEIGHT,Weight,
 WEIGHT_GRAMS,Weight (g),
 WEIGHT_KILOGRAMS,Weight (kg),

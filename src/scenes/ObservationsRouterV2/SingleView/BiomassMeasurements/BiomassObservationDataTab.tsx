@@ -123,6 +123,8 @@ const BiomassObservationDataTab = () => {
     },
   ];
 
+  const hasWater = !isAdditionalBiomassFieldsEnabled || typeof biomassMeasurement?.waterDepth === 'number';
+
   const extraItems = [
     {
       label: strings.PLOT_DESCRIPTION,
@@ -145,31 +147,35 @@ const BiomassObservationDataTab = () => {
       label: strings.HERBACEOUS_COVER_PERCENT,
       value: biomassMeasurement?.herbaceousCoverPercent,
     },
-    {
-      label: strings.WATER_DEPTH_CM,
-      value:
-        isAdditionalBiomassFieldsEnabled && biomassMeasurement?.waterDepth === null
-          ? strings.NO_WATER
-          : (biomassMeasurement?.waterDepth ?? undefined),
-    },
-    {
-      label: strings.SALINITY_PPT,
-      value: biomassMeasurement?.salinity,
-    },
-    {
-      label: strings.PH,
-      value: biomassMeasurement?.ph,
-    },
-    {
-      label: strings.TIDE,
-      value: biomassMeasurement?.tide,
-    },
-    {
-      label: strings.MEASUREMENT_TIME,
-      value: biomassMeasurement?.tideTime
-        ? getDateTimeDisplayValue(new Date(biomassMeasurement?.tideTime).getTime())
-        : '- -',
-    },
+    ...(isAdditionalBiomassFieldsEnabled
+      ? [{ label: strings.IS_THERE_WATER_IN_THIS_PLOT, value: hasWater ? strings.YES : strings.NO }]
+      : []),
+    ...(hasWater
+      ? [
+          {
+            label: strings.WATER_DEPTH_CM,
+            value: biomassMeasurement?.waterDepth ?? undefined,
+          },
+          {
+            label: strings.SALINITY_PPT,
+            value: biomassMeasurement?.salinity,
+          },
+          {
+            label: strings.PH,
+            value: biomassMeasurement?.ph,
+          },
+          {
+            label: strings.TIDE,
+            value: biomassMeasurement?.tide,
+          },
+          {
+            label: strings.MEASUREMENT_TIME,
+            value: biomassMeasurement?.tideTime
+              ? getDateTimeDisplayValue(new Date(biomassMeasurement?.tideTime).getTime())
+              : '- -',
+          },
+        ]
+      : []),
     {
       label: strings.PLOT_CONDITIONS,
       value: monitoringPlot?.conditions?.map((condition) => getConditionString(condition)).join(', ') || '- -',

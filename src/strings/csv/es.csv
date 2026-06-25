@@ -967,6 +967,7 @@ INVITE_FUNDER,Invitar financiador,d885523f
 INVITE_FUNDER_DESCRIPTION,Ingrese un correo electrónico para invitar a un financiador al Portal de Financiación bajo esta entidad. Se enviará un correo de invitación para crear una cuenta. El nombre y el apellido serán ingresados por el titular de la cuenta.,306732c9
 INVITED,Invitado,d40f4749
 IS_DECIMAL,Es decimal,c18644f0
+IS_THERE_WATER_IN_THIS_PLOT,¿Hay agua en esta parcela?,6fd4553f
 ISSUE,Problema,5468a635
 IUCN_CRITICALLY_ENDANGERED,En peligro crítico (CR),424daaa8
 IUCN_DATA_DEFICIENT,Datos insuficientes (DD),445f6cd0
@@ -2565,6 +2566,7 @@ VR,RV,98fd7fc5
 WATER_BODIES,Cuerpos de agua,c13f37d6
 WATER_DEPTH_CM,Profundidad del agua (cm),de1ca335
 WATER_DEPTH_REQUIRED_FOR_MANGROVE,"Se requiere la profundidad del agua para las observaciones de manglares. Ingrese un valor o seleccione ""Sin agua"".",6e89b127
+WATER_FIELDS_WILL_BE_CLEARED,"Si selecciona ""No"", se borrarán los campos de profundidad del agua, salinidad, pH, marea y hora de medición de la marea.",02c0af42
 WEIGHT,Peso,8d79d02a
 WEIGHT_GRAMS,Peso (g),7f5ac0db
 WEIGHT_KILOGRAMS,Peso (kg),222d89cc
