@@ -380,20 +380,12 @@ const quantityTextFieldSx = {
 
 const addSpeciesQuantityTextFieldSx = {
   ...quantityTextFieldSx,
-  paddingBottom: '48px',
-  position: 'relative',
   '&& .textfield-label': {
     display: 'none',
     height: 0,
     lineHeight: 0,
     margin: 0,
     marginBottom: 0,
-  },
-  '& .textfield-label-container': {
-    left: 0,
-    marginTop: 0,
-    position: 'absolute',
-    top: 'calc(100% - 44px)',
   },
 };
 
@@ -878,7 +870,7 @@ const SpeciesTable = ({
           />
         ))}
         {newSpeciesDrafts.map((draft) => (
-          <Box key={draft.id} padding={theme.spacing(1, 2)}>
+          <Box key={draft.id} padding={theme.spacing(1, 1.5)}>
             <AddSpeciesRow
               substratumId={substratumId}
               draft={draft}
@@ -899,7 +891,7 @@ const SpeciesTable = ({
             />
           </Box>
         ))}
-        <Box padding={theme.spacing(1, 2)}>
+        <Box padding={theme.spacing(0, 2, 1, 0)}>
           <Button
             icon='iconAdd'
             label={strings.ADD_SPECIES}
@@ -977,8 +969,8 @@ const AddSpeciesRow = ({
   };
 
   return (
-    <Box display='flex' alignItems='flex-start' gap={theme.spacing(2)} flexWrap='wrap'>
-      <Box maxWidth='100%' width='300px'>
+    <Box display='flex' alignItems='flex-start' gap={'56px'} flexWrap='wrap'>
+      <Box maxWidth='100%' width='260px'>
         <Dropdown
           id={`add-species-${substratumId}`}
           placeholder={strings.SELECT_SPECIES}
