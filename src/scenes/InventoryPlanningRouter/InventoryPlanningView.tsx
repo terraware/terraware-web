@@ -191,7 +191,9 @@ const InventoryPlanningView = (): JSX.Element => {
         <InventoryPlanningEventLog
           organizationId={organizationId}
           plantingSiteId={plantingSiteId}
+          plantingSites={plantingSitesData?.sites}
           plantingSeasonId={plantingSeasonId}
+          plantingSeasons={plantingSeasonsData?.seasons}
           speciesId={speciesId}
         />
       </Box>

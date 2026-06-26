@@ -29,11 +29,13 @@ const transformInventoryPlanningEvents = (
   speciesId?: number
 ): EventLogEntryPayload[] => {
   return orderEvents(
-    results.events.filter(
-      (event) =>
-        speciesId === undefined ||
-        (event.subject.type === 'PlantingSeasonAllocatedSpecies' && event.subject.speciesId === speciesId)
-    )
+    results.events
+      .filter((event) => event.action.type !== 'Created')
+      .filter(
+        (event) =>
+          speciesId === undefined ||
+          (event.subject.type === 'PlantingSeasonAllocatedSpecies' && event.subject.speciesId === speciesId)
+      )
   );
 };
 
