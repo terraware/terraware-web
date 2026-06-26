@@ -3,6 +3,7 @@ import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
+import { DateTime } from 'luxon';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import PageForm from 'src/components/common/PageForm';
@@ -75,11 +76,6 @@ export default function CreateAccession(): JSX.Element | null {
     setCollectedTimeError(error);
   };
 
-  const onCollectedTimeChange = (id: string, value: string | null) => {
-    onChange(id, value);
-    onChange('collectedDate', value ? value.split('T')[0] : null);
-  };
-
   const onReceivedDateError = (error?: string) => {
     setReceivedDateError(error);
   };
@@ -87,7 +83,7 @@ export default function CreateAccession(): JSX.Element | null {
   const defaultAccession = (): CreateAccessionRequestPayloadV2Write =>
     ({
       state: 'Awaiting Check-In',
-      collectedTime: getTodaysDateFormatted(timeZone),
+      collectedTime: DateTime.local().setZone(timeZone).toISO(),
       receivedDate: getTodaysDateFormatted(timeZone),
     }) as CreateAccessionRequestPayloadV2Write;
 
@@ -253,7 +249,7 @@ export default function CreateAccession(): JSX.Element | null {
               <SpeciesSelector record={record} setRecord={setRecord} validate={validateFields} />
             </Grid>
             <CollectedReceivedDate2
-              onChange={onCollectedTimeChange}
+              onChange={onChange}
               validate={validateFields}
               timeZone={timeZone}
               value={record.collectedTime}

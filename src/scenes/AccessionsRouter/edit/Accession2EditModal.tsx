@@ -116,11 +116,6 @@ function Accession2EditModalForm({ accession, open, onClose }: Accession2EditMod
     setCollectedTimeError(error);
   };
 
-  const onCollectedTimeChange = (id: string, value: string | null) => {
-    onChange(id, value);
-    onChange('collectedDate', value ? value.split('T')[0] : null);
-  };
-
   const hasErrors = useCallback(() => {
     const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record || !record[field]);
     return missingRequiredField || collectedTimeError;
@@ -222,7 +217,7 @@ function Accession2EditModalForm({ accession, open, onClose }: Accession2EditMod
             tooltipTitle={record.hasDeliveries ? strings.TOOLTIP_ACCESSIONS_HAS_DELIVERIES : undefined}
           />
           <CollectedReceivedDate2
-            onChange={onCollectedTimeChange}
+            onChange={onChange}
             validate={validateFields}
             timeZone={timeZone}
             id='collectedTime'

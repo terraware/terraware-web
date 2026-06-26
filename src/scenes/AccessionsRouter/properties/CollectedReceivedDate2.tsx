@@ -20,11 +20,6 @@ interface Props {
   value?: string;
 }
 
-export type Dates = {
-  collectedDate?: any;
-  receivedDate?: any;
-};
-
 export default function CollectedReceivedDate2({
   dateError,
   id,
@@ -67,7 +62,7 @@ export default function CollectedReceivedDate2({
   const changeDateTime = (newValue?: DateTime) => {
     const formattedValue = newValue
       ? includeTime
-        ? newValue.toUTC().toISO({ suppressMilliseconds: true }) ?? undefined
+        ? newValue.toUTC().toISO() ?? undefined
         : getDateDisplayValue(newValue.toMillis(), timeZone)
       : undefined;
 
