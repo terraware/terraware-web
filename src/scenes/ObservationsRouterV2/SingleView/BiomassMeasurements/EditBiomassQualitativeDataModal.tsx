@@ -68,6 +68,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
     typeof initialFormData.biomassMeasurement.waterDepth === 'number' ? 'Yes' : 'No'
   );
   const [showWaterClearConfirm, setShowWaterClearConfirm] = useState(false);
+  const [validateFields, setValidateFields] = useState(false);
 
   const hasWater = !isAdditionalBiomassFieldsEnabled || waterPresence === 'Yes';
 
@@ -233,6 +234,47 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
     return record.biomassMeasurement.forestType === 'Mangrove';
   }, [record]);
 
+  const waterFieldsRequired = isAdditionalBiomassFieldsEnabled && isMangrove && waterPresence === 'Yes';
+
+  const waterDepthError = useMemo(() => {
+    if (!validateFields || !waterFieldsRequired) {
+      return '';
+    }
+    const raw = record.biomassMeasurement?.waterDepth;
+    const num = typeof raw === 'string' ? parseFloat(raw) : raw;
+    return num === null || num === undefined || typeof num !== 'number' || isNaN(num) || num <= 0
+      ? strings.REQUIRED_FIELD
+      : '';
+  }, [validateFields, waterFieldsRequired, record.biomassMeasurement?.waterDepth, strings.REQUIRED_FIELD]);
+
+  const salinityError =
+    validateFields && waterFieldsRequired && !record.biomassMeasurement?.salinity ? strings.REQUIRED_FIELD : '';
+  const phError =
+    validateFields && waterFieldsRequired && !record.biomassMeasurement?.ph ? strings.REQUIRED_FIELD : '';
+  const tideError =
+    validateFields && waterFieldsRequired && !record.biomassMeasurement?.tide ? strings.REQUIRED_FIELD : '';
+  const tideTimeError =
+    validateFields && waterFieldsRequired && !record.biomassMeasurement?.tideTime ? strings.REQUIRED_FIELD : '';
+
+  const isValid = useMemo(() => {
+    if (!waterFieldsRequired) {
+      return true;
+    }
+    const raw = record.biomassMeasurement?.waterDepth;
+    const num = typeof raw === 'string' ? parseFloat(raw) : raw;
+    return (
+      num !== null &&
+      num !== undefined &&
+      typeof num === 'number' &&
+      !isNaN(num) &&
+      num > 0 &&
+      !!record.biomassMeasurement?.salinity &&
+      !!record.biomassMeasurement?.ph &&
+      !!record.biomassMeasurement?.tide &&
+      !!record.biomassMeasurement?.tideTime
+    );
+  }, [waterFieldsRequired, record.biomassMeasurement]);
+
   const smallTreeCountValue = useMemo(
     () =>
       smallTreeCountOptions.find(
@@ -344,7 +386,12 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
               <Button
                 id='saveData'
                 label={strings.SAVE}
-                onClick={() => setShowConfirmationModalOpened(true)}
+                onClick={() => {
+                  setValidateFields(true);
+                  if (isValid) {
+                    setShowConfirmationModalOpened(true);
+                  }
+                }}
                 size='medium'
                 key='button-2'
               />,
@@ -411,6 +458,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                             value={record.biomassMeasurement?.waterDepth ?? undefined}
                             id={'waterDepth'}
                             onChange={onChangeHandler('biomassMeasurement.waterDepth')}
+                            errorText={waterDepthError}
                           />
                         </Box>
 
@@ -421,6 +469,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                             value={record.biomassMeasurement?.salinity}
                             id={'salinity'}
                             onChange={onChangeHandler('biomassMeasurement.salinity')}
+                            errorText={salinityError}
                           />
                         </Box>
                       </Box>
@@ -433,6 +482,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                             value={record.biomassMeasurement?.ph}
                             id={'ph'}
                             onChange={onChangeHandler('biomassMeasurement.ph')}
+                            errorText={phError}
                           />
                         </Box>
 
@@ -446,6 +496,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                               { label: strings.LOW, value: 'Low' },
                               { label: strings.HIGH, value: 'High' },
                             ]}
+                            errorText={tideError}
                           />
                         </Box>
                       </Box>
@@ -460,6 +511,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                         aria-label='date-picker'
                         showTime={true}
                         sx={{ paddingTop: '16px' }}
+                        errorText={tideTimeError}
                       />
                     </>
                   )}
