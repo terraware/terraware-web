@@ -18,10 +18,10 @@ import { Accession } from 'src/types/Accession';
 import { SearchResponseElement } from 'src/types/Search';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { getAllSeedBanks, isContributor } from 'src/utils/organization';
-import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation from 'src/utils/useStateLocation';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import CheckInAllConfirmationDialog from './CheckInAllConfirmationDialog';
 
@@ -32,7 +32,10 @@ export default function CheckIn(): JSX.Element {
   const facilityNameToTz = useMemo(
     () =>
       Object.fromEntries(
-        (selectedOrganization ? getAllSeedBanks(selectedOrganization) : []).map((sb) => [sb.name, locationTimeZone.get(sb).id])
+        (selectedOrganization ? getAllSeedBanks(selectedOrganization) : []).map((sb) => [
+          sb.name,
+          locationTimeZone.get(sb).id,
+        ])
       ),
     [selectedOrganization, locationTimeZone]
   );
@@ -238,7 +241,10 @@ export default function CheckIn(): JSX.Element {
                         label={strings.COLLECTION_TIME}
                         id='collected'
                         type='text'
-                        value={getDateTimeDisplayValue(new Date(result.collectedTime as string).getTime(), facilityNameToTz[result.facility_name as string])}
+                        value={getDateTimeDisplayValue(
+                          new Date(result.collectedTime as string).getTime(),
+                          facilityNameToTz[result.facility_name as string]
+                        )}
                         display={true}
                       />
                     </Grid>
