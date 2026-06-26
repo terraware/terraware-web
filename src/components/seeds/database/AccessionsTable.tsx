@@ -27,6 +27,7 @@ import { SearchResponseElementWithId } from 'src/types/Search';
 import { makeCsv } from 'src/utils/csv';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { getAllSeedBanks } from 'src/utils/organization';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
@@ -92,6 +93,14 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
+  const locationTimeZone = useLocationTimeZone();
+  const facilityNameToTz = useMemo(
+    () =>
+      Object.fromEntries(
+        (selectedOrganization ? getAllSeedBanks(selectedOrganization) : []).map((sb) => [sb.name, locationTimeZone.get(sb).id])
+      ),
+    [selectedOrganization, locationTimeZone]
+  );
   const navigate = useSyncNavigate();
   const query = useQuery();
   const location = useStateLocation();
@@ -318,13 +327,17 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
           if (!dateTimeStr) {
             return null;
           }
-          return getDateTimeDisplayValue(new Date(dateTimeStr).getTime());
+          const facilityName = (row as Record<string, unknown>).facility_name as string | undefined;
+          const tz = facilityName ? facilityNameToTz[facilityName] : undefined;
+          return getDateTimeDisplayValue(new Date(dateTimeStr).getTime(), tz);
         },
         filterVariant: 'date-range',
         filterFn: makeDateRangeFilterFn<SearchResponseElementWithId>('collectedTime'),
         Cell: ({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
           const dateTimeStr = (cell.row.original as Record<string, unknown>).collectedTime as string | null;
-          return dateTimeStr ? <span>{getDateTimeDisplayValue(new Date(dateTimeStr).getTime())}</span> : null;
+          const facilityName = (cell.row.original as Record<string, unknown>).facility_name as string | undefined;
+          const tz = facilityName ? facilityNameToTz[facilityName] : undefined;
+          return dateTimeStr ? <span>{getDateTimeDisplayValue(new Date(dateTimeStr).getTime(), tz)}</span> : null;
         },
       },
       {
@@ -487,6 +500,7 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
     ];
   }, [
     activeLocale,
+    facilityNameToTz,
     uniqueStates,
     uniqueFacilityNames,
     uniqueSubLocationNames,

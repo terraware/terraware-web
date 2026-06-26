@@ -18,7 +18,7 @@ import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import Table from 'src/components/common/table';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useLazySearchAccessionsQuery } from 'src/queries/search/accessions';
 import strings from 'src/strings';
 import { ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
@@ -26,6 +26,8 @@ import { stateName } from 'src/types/Accession';
 import { CreateProjectRequest } from 'src/types/Project';
 import { SearchCriteria, SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
+import { getAllSeedBanks } from 'src/utils/organization';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type SelectAccessionsProps = {
   project: CreateProjectRequest;
@@ -72,6 +74,7 @@ const SEARCH_FIELDS_ACCESSIONS: (keyof SearchResponseAccession)[] = [
   'id',
   'collectionSiteName',
   'project_name',
+  'facility_name',
 ];
 
 export interface SearchResponseAccession extends SearchResponseElement {
@@ -83,6 +86,7 @@ export interface SearchResponseAccession extends SearchResponseElement {
   id: string;
   collectionSiteName?: string;
   project_name?: string;
+  facility_name?: string;
 }
 
 export default function SelectAccessions(props: SelectAccessionsProps): JSX.Element | null {
@@ -100,6 +104,15 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
+  const { selectedOrganization } = useOrganization();
+  const locationTimeZone = useLocationTimeZone();
+  const facilityNameToTz = useMemo(
+    () =>
+      Object.fromEntries(
+        (selectedOrganization ? getAllSeedBanks(selectedOrganization) : []).map((sb) => [sb.name, locationTimeZone.get(sb).id])
+      ),
+    [selectedOrganization, locationTimeZone]
+  );
   const [searchAccessions] = useLazySearchAccessionsQuery();
 
   const getSearchResults = useCallback(
@@ -186,13 +199,17 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
     getSearchFields,
   });
 
-  const renderer = useCallback((rendererProps: RendererProps<SearchResponseAccession>) => {
-    if (rendererProps.column.key === 'collectedTime' && rendererProps.value) {
-      const ms = new Date(rendererProps.value as string).getTime();
-      return <span>{getDateTimeDisplayValue(ms)}</span>;
-    }
-    return CellRenderer(rendererProps);
-  }, []);
+  const renderer = useCallback(
+    (rendererProps: RendererProps<SearchResponseAccession>) => {
+      if (rendererProps.column.key === 'collectedTime' && rendererProps.value) {
+        const ms = new Date(rendererProps.value as string).getTime();
+        const tz = rendererProps.row.facility_name ? facilityNameToTz[rendererProps.row.facility_name] : undefined;
+        return <span>{getDateTimeDisplayValue(ms, tz)}</span>;
+      }
+      return CellRenderer(rendererProps);
+    },
+    [facilityNameToTz]
+  );
 
   const entitySpecificFilterConfigs: EntitySpecificFilterConfig[] = useMemo(
     () => [

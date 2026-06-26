@@ -10,7 +10,8 @@ import { useLocalization, useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
-import { isContributor } from 'src/utils/organization';
+import { getSeedBank, isContributor } from 'src/utils/organization';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import Accession2EditModal from '../edit/Accession2EditModal';
@@ -23,6 +24,8 @@ export default function DetailPanel(): JSX.Element {
   const userCanEdit = !isContributor(selectedOrganization);
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const seedBank = selectedOrganization && accession ? getSeedBank(selectedOrganization, accession.facilityId) : undefined;
+  const timeZone = useLocationTimeZone().get(seedBank).id;
 
   const headerStyle = {
     fontSize: '16px',
@@ -115,7 +118,7 @@ export default function DetailPanel(): JSX.Element {
               {strings.COLLECTION_TIME}
             </Grid>
             <Grid item xs={gridRightSide} sx={valueStyle}>
-              {accession.collectedTime ? getDateTimeDisplayValue(new Date(accession.collectedTime).getTime()) : '- -'}
+              {accession.collectedTime ? getDateTimeDisplayValue(new Date(accession.collectedTime).getTime(), timeZone) : '- -'}
             </Grid>
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>
