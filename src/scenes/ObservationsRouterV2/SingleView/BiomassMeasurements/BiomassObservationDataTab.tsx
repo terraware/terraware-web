@@ -147,32 +147,28 @@ const BiomassObservationDataTab = () => {
       label: strings.HERBACEOUS_COVER_PERCENT,
       value: biomassMeasurement?.herbaceousCoverPercent,
     },
-    ...(hasWater
-      ? [
-          {
-            label: strings.WATER_DEPTH_CM,
-            value: biomassMeasurement?.waterDepth || strings.NO_WATER,
-          },
-          {
-            label: strings.SALINITY_PPT,
-            value: biomassMeasurement?.salinity ?? '- -',
-          },
-          {
-            label: strings.PH,
-            value: biomassMeasurement?.ph ?? '- -',
-          },
-          {
-            label: strings.TIDE,
-            value: biomassMeasurement?.tide ?? '- -',
-          },
-          {
-            label: strings.MEASUREMENT_TIME,
-            value: biomassMeasurement?.tideTime
-              ? getDateTimeDisplayValue(new Date(biomassMeasurement?.tideTime).getTime())
-              : '- -',
-          },
-        ]
-      : []),
+    {
+      label: strings.WATER_DEPTH_CM,
+      value: isAdditionalBiomassFieldsEnabled && !hasWater ? strings.NO_WATER : biomassMeasurement?.waterDepth ?? undefined,
+    },
+    {
+      label: strings.SALINITY_PPT,
+      value: biomassMeasurement?.salinity ?? '- -',
+    },
+    {
+      label: strings.PH,
+      value: biomassMeasurement?.ph ?? '- -',
+    },
+    {
+      label: strings.TIDE,
+      value: biomassMeasurement?.tide ?? '- -',
+    },
+    {
+      label: strings.MEASUREMENT_TIME,
+      value: biomassMeasurement?.tideTime
+        ? getDateTimeDisplayValue(new Date(biomassMeasurement?.tideTime).getTime())
+        : '- -',
+    },
     {
       label: strings.PLOT_CONDITIONS,
       value: monitoringPlot?.conditions?.map((condition) => getConditionString(condition)).join(', ') || '- -',
