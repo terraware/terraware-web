@@ -698,6 +698,7 @@ EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Est. total de plantes (densité de plantatio
 ESTIMATED_BUDGET,Budget prévisionnel,23c1c02a
 ESTIMATED_READY_DATE,Date estimée de disponibilité,d37bedd1
 EVENT,Événement,cc849cd0
+EVENT_ADDED,{0} a été ajouté,b6bc301d
 EVENT_CALL_DESCRIPTION_1,"En cliquant sur « {0} », vous ouvrirez une fenêtre de navigateur pour participer à un appel vidéo Google Meet.",f8c40b21
 EVENT_CALL_DESCRIPTION_2,"Pour ce {0}, il vous faudra :",89f84f4b
 EVENT_CALL_REQUIREMENTS_INTERNET,Une connexion internet sur votre appareil - haut débit avec ou sans fil (3G ou 4G/LTE),0f7a1688
