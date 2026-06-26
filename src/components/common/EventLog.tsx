@@ -50,6 +50,12 @@ const EventLog = ({
         );
       }
       if (event.action.type === 'Created') {
+        if (
+          event.subject.type === 'PlantingSeasonScheduledDateSpecies' ||
+          event.subject.type === 'PlantingDateRequestSpecies'
+        ) {
+          return strings.formatString(strings.EVENT_ADDED, event.subject.fullText);
+        }
         return strings.formatString(strings.EVENT_CREATED, event.subject.fullText);
       }
       if (event.action.type === 'Deleted') {

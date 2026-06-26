@@ -699,6 +699,7 @@ EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Total estimado de plantas (Densidad de plant
 ESTIMATED_BUDGET,Presupuesto estimado,23c1c02a
 ESTIMATED_READY_DATE,Fecha estimada de finalización,d37bedd1
 EVENT,Evento,cc849cd0
+EVENT_ADDED,{0} ha sido añadido,b6bc301d
 EVENT_CALL_DESCRIPTION_1,"Hacer clic en ""{0}"" abrirá una ventana del navegador para unirse a una videollamada de Google Meet.",f8c40b21
 EVENT_CALL_DESCRIPTION_2,Para este {0} necesitarás:,89f84f4b
 EVENT_CALL_REQUIREMENTS_INTERNET,Una conexión a internet en tu dispositivo: banda ancha por cable o inalámbrica (3G o 4G/LTE),0f7a1688

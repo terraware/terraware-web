@@ -699,6 +699,7 @@ EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Est. Total Plants (Plant Density × Area), E
 ESTIMATED_BUDGET,Estimated Budget,
 ESTIMATED_READY_DATE,Estimated Ready Date,
 EVENT,Event,
+EVENT_ADDED,{0} added,
 EVENT_CALL_DESCRIPTION_1,"Clicking ""{0}"" will open up a browser window to join a Google Meet video call.",
 EVENT_CALL_DESCRIPTION_2,For this {0} you will need:,{0} is an event type such as Workshop
 EVENT_CALL_REQUIREMENTS_INTERNET,An internet connection on your device - broadband wired or wireless (3G or 4G/LTE),
