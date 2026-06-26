@@ -109,7 +109,10 @@ export default function SelectAccessions(props: SelectAccessionsProps): JSX.Elem
   const facilityNameToTz = useMemo(
     () =>
       Object.fromEntries(
-        (selectedOrganization ? getAllSeedBanks(selectedOrganization) : []).map((sb) => [sb.name, locationTimeZone.get(sb).id])
+        (selectedOrganization ? getAllSeedBanks(selectedOrganization) : []).map((sb) => [
+          sb.name,
+          locationTimeZone.get(sb).id,
+        ])
       ),
     [selectedOrganization, locationTimeZone]
   );

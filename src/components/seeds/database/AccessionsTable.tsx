@@ -27,11 +27,11 @@ import { SearchResponseElementWithId } from 'src/types/Search';
 import { makeCsv } from 'src/utils/csv';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { getAllSeedBanks } from 'src/utils/organization';
-import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const TABLE_STATE_STORAGE_KEY = 'accessions-database-table';
 
@@ -97,7 +97,10 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
   const facilityNameToTz = useMemo(
     () =>
       Object.fromEntries(
-        (selectedOrganization ? getAllSeedBanks(selectedOrganization) : []).map((sb) => [sb.name, locationTimeZone.get(sb).id])
+        (selectedOrganization ? getAllSeedBanks(selectedOrganization) : []).map((sb) => [
+          sb.name,
+          locationTimeZone.get(sb).id,
+        ])
       ),
     [selectedOrganization, locationTimeZone]
   );
