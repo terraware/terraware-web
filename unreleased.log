@@ -1,3 +1,5 @@
+ccc3f5cd SW-8441 Use event added instead of event created in some cases (#5955)
+18737877 SW-8586 Filter species selector by season (#5957)
 cb552787 SW-8578 Refresh after editing inventory (#5956)
 33fe96a4 Suppress dotenv output in playwright tests (#5954)
 49d60d0d SW-8579 Inventory Planning: Closed Season still shows in table (#5946)
