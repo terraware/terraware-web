@@ -255,22 +255,31 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
   const tideTimeError =
     validateFields && waterFieldsRequired && !record.biomassMeasurement?.tideTime ? strings.REQUIRED_FIELD : '';
 
+  const forestTypeError = validateFields && !record.biomassMeasurement?.forestType ? strings.REQUIRED_FIELD : '';
+  const smallTreesError =
+    validateFields && record.biomassMeasurement?.smallTreeCountLow === undefined ? strings.REQUIRED_FIELD : '';
+  const soilAssessmentError =
+    validateFields && !record.biomassMeasurement?.soilAssessment ? strings.REQUIRED_FIELD : '';
+
   const isValid = useMemo(() => {
-    if (!waterFieldsRequired) {
-      return true;
-    }
     const raw = record.biomassMeasurement?.waterDepth;
     const num = typeof raw === 'string' ? parseFloat(raw) : raw;
+    const waterValid =
+      !waterFieldsRequired ||
+      (num !== null &&
+        num !== undefined &&
+        typeof num === 'number' &&
+        !isNaN(num) &&
+        num > 0 &&
+        !!record.biomassMeasurement?.salinity &&
+        !!record.biomassMeasurement?.ph &&
+        !!record.biomassMeasurement?.tide &&
+        !!record.biomassMeasurement?.tideTime);
     return (
-      num !== null &&
-      num !== undefined &&
-      typeof num === 'number' &&
-      !isNaN(num) &&
-      num > 0 &&
-      !!record.biomassMeasurement?.salinity &&
-      !!record.biomassMeasurement?.ph &&
-      !!record.biomassMeasurement?.tide &&
-      !!record.biomassMeasurement?.tideTime
+      !!record.biomassMeasurement?.forestType &&
+      record.biomassMeasurement?.smallTreeCountLow !== undefined &&
+      !!record.biomassMeasurement?.soilAssessment &&
+      waterValid
     );
   }, [waterFieldsRequired, record.biomassMeasurement]);
 
@@ -413,6 +422,8 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                 options={forestTypeOptions}
                 onChange={onChangeHandler('biomassMeasurement.forestType')}
                 sx={{ paddingTop: '16px' }}
+                required
+                errorText={forestTypeError}
               />
 
               <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
@@ -423,6 +434,8 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                     options={smallTreeCountOptions}
                     onChange={onChangeNumberOfSmallTrees}
                     id={'numberOfSmallTrees'}
+                    required
+                    errorText={smallTreesError}
                   />
                 </Box>
 
@@ -445,6 +458,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                       options={waterPresenceOptions}
                       onChange={onChangeWaterPresence}
                       sx={{ paddingTop: '16px' }}
+                      required
                     />
                   )}
                   {hasWater && (
@@ -566,6 +580,8 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                     id={'soilAssessment'}
                     onChange={onChangeHandler('biomassMeasurement.soilAssessment')}
                     sx={{ height: '100%', 'flex-flow': 'column !important', '.textfield-value': { flex: 1 } }}
+                    required
+                    errorText={soilAssessmentError}
                   />
                 </Box>
               </Box>
