@@ -50,7 +50,6 @@ const EventLog = ({
         );
       }
       if (event.action.type === 'Created') {
-        console.log('event', event);
         if (
           event.subject.type === 'PlantingSeasonScheduledDateSpecies' ||
           event.subject.type === 'PlantingDateRequestSpecies'
