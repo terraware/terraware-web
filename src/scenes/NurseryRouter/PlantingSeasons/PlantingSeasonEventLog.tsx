@@ -5,12 +5,14 @@ import { useTheme } from '@mui/material';
 import Card from 'src/components/common/Card';
 import EventLog from 'src/components/common/EventLog';
 import { useOrganization } from 'src/providers';
-import { EventLogEntryPayload } from 'src/queries/generated/events';
-import { useLazyListPlantingSeasonEventsQuery } from 'src/queries/plantingSeasons/events';
+import { type EventLogEntryPayload } from 'src/queries/generated/events';
+import { type EventSubject, useLazyListPlantingSeasonEventsQuery } from 'src/queries/plantingSeasons/events';
 
 type PlantingSeasonEventLogProps = {
   plantingSeasonId: number;
 };
+
+const excludedSubjects: EventSubject[] = ['PlantingSeasonAllocatedSpecies'];
 
 const PlantingSeasonEventLog = ({ plantingSeasonId }: PlantingSeasonEventLogProps): JSX.Element | null => {
   const theme = useTheme();
@@ -20,7 +22,7 @@ const PlantingSeasonEventLog = ({ plantingSeasonId }: PlantingSeasonEventLogProp
 
   useEffect(() => {
     if (organizationId !== undefined) {
-      void listPlantingSeasonEvents({ organizationId, plantingSeasonId }, true);
+      void listPlantingSeasonEvents({ excludedSubjects, organizationId, plantingSeasonId }, true);
     }
   }, [listPlantingSeasonEvents, organizationId, plantingSeasonId]);
 

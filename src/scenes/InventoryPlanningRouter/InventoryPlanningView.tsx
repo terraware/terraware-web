@@ -26,6 +26,8 @@ import strings from 'src/strings';
 import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import InventoryPlanningEventLog from './InventoryPlanningEventLog';
+
 const inventoryPlanningTableGridTemplateColumns = '40px 2fr 1fr 1fr 1fr 1.5fr';
 const inventoryPlanningTableMinWidth = '960px';
 const allocatedForTargetCellSx = { paddingLeft: 8 };
@@ -186,6 +188,12 @@ const InventoryPlanningView = (): JSX.Element => {
 
           <SpeciesTable rows={rows} activeLocale={activeLocale} />
         </Card>
+        <InventoryPlanningEventLog
+          organizationId={organizationId}
+          plantingSiteId={plantingSiteId}
+          plantingSeasonId={plantingSeasonId}
+          speciesId={speciesId}
+        />
       </Box>
     </Page>
   );
