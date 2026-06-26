@@ -6,6 +6,9 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import { useLocalization } from 'src/providers';
+import { baseApi } from 'src/queries/baseApi';
+import { QueryTagTypes } from 'src/queries/tags';
+import { useAppDispatch } from 'src/redux/store';
 import ChangeQuantityModal from 'src/scenes/InventoryRouter/view/ChangeQuantityModal';
 import { NurseryBatchService } from 'src/services';
 import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
@@ -29,6 +32,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
   const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
   const numberFormatter = useNumberFormatter();
+  const dispatch = useAppDispatch();
 
   const [photoUrls, setPhotoUrls] = useState<string[]>([]);
   const [openEditBatchModal, setOpenEditBatchModal] = useState(false);
@@ -89,9 +93,14 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
     setModalValues({ openChangeQuantityModal: true, type: 'hardening-off' });
   }, [setModalValues]);
 
+  const handleUpdate = useCallback(() => {
+    dispatch(baseApi.util.invalidateTags([{ type: QueryTagTypes.InventoryPlanning, id: 'LIST' }]));
+    onUpdate();
+  }, [dispatch, onUpdate]);
+
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-      {openEditBatchModal && <BatchDetailsModal batch={batch} onClose={closeEditModal} reload={onUpdate} />}
+      {openEditBatchModal && <BatchDetailsModal batch={batch} onClose={closeEditModal} reload={handleUpdate} />}
 
       <Box sx={{ display: 'flex', alignItems: 'center' }} marginBottom={theme.spacing(1)}>
         <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} sx={{ flexGrow: 1 }}>
@@ -108,7 +117,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         <ChangeQuantityModal
           modalValues={modalValues}
           onClose={onCloseChangeQuantityModal}
-          reload={onUpdate}
+          reload={handleUpdate}
           row={batchWithRawQtys}
         />
       )}
