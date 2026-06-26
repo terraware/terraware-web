@@ -249,8 +249,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
 
   const salinityError =
     validateFields && waterFieldsRequired && !record.biomassMeasurement?.salinity ? strings.REQUIRED_FIELD : '';
-  const phError =
-    validateFields && waterFieldsRequired && !record.biomassMeasurement?.ph ? strings.REQUIRED_FIELD : '';
+  const phError = validateFields && waterFieldsRequired && !record.biomassMeasurement?.ph ? strings.REQUIRED_FIELD : '';
   const tideError =
     validateFields && waterFieldsRequired && !record.biomassMeasurement?.tide ? strings.REQUIRED_FIELD : '';
   const tideTimeError =
@@ -459,6 +458,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                             id={'waterDepth'}
                             onChange={onChangeHandler('biomassMeasurement.waterDepth')}
                             errorText={waterDepthError}
+                            required
                           />
                         </Box>
 
@@ -470,6 +470,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                             id={'salinity'}
                             onChange={onChangeHandler('biomassMeasurement.salinity')}
                             errorText={salinityError}
+                            required
                           />
                         </Box>
                       </Box>
@@ -483,6 +484,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                             id={'ph'}
                             onChange={onChangeHandler('biomassMeasurement.ph')}
                             errorText={phError}
+                            required
                           />
                         </Box>
 
@@ -497,13 +499,14 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                               { label: strings.HIGH, value: 'High' },
                             ]}
                             errorText={tideError}
+                            required
                           />
                         </Box>
                       </Box>
 
                       <DatePicker
                         id='startTime'
-                        label={strings.MEASUREMENT_TIME}
+                        label={`${strings.MEASUREMENT_TIME} *`}
                         value={record.biomassMeasurement?.tideTime}
                         onDateChange={(value?: DateTime) => {
                           onChangeHandler('biomassMeasurement.tideTime')(value?.toISO());
