@@ -9,7 +9,6 @@ import { QueryTagTypes } from '../tags';
 export type EventSubject = NonNullable<ListEventLogEntriesRequestPayload['subjects']>[number];
 
 export type ListPlantingSeasonEventsArgs = {
-  excludedSubjects?: EventSubject[];
   organizationId: number;
   plantingSeasonId: number;
 };
@@ -21,21 +20,21 @@ export type ListInventoryPlanningEventsArgs = {
   speciesId?: number;
 };
 
-const transformEvents = (
+const orderEvents = (events: EventLogEntryPayload[]): EventLogEntryPayload[] => {
+  return events.map((event) => ({ ...event })).reverse();
+};
+
+const transformInventoryPlanningEvents = (
   results: ListEventLogEntriesApiResponse,
-  excludedSubjects?: EventSubject[],
   speciesId?: number
 ): EventLogEntryPayload[] => {
-  const excludedSubjectsSet = new Set(excludedSubjects ?? []);
-  return results.events
-    .filter((event) => !excludedSubjectsSet.has(event.subject.type))
-    .filter(
+  return orderEvents(
+    results.events.filter(
       (event) =>
         speciesId === undefined ||
         (event.subject.type === 'PlantingSeasonAllocatedSpecies' && event.subject.speciesId === speciesId)
     )
-    .map((event) => ({ ...event }))
-    .reverse();
+  );
 };
 
 const injectedRtkApi = api.injectEndpoints({
@@ -47,14 +46,22 @@ const injectedRtkApi = api.injectEndpoints({
         body: {
           organizationId,
           plantingSeasonId,
+          subjects: [
+            'PlantingDateRequest',
+            'PlantingDateRequestSpecies',
+            'PlantingSeason',
+            'PlantingSeasonScheduledDate',
+            'PlantingSeasonScheduledDateSpecies',
+            'PlantingSeasonSpeciesTarget',
+            'PlantingSeasonWithdrawal',
+          ] satisfies EventSubject[],
         },
       }),
       providesTags: (_results, _error, { plantingSeasonId }) => [
         { type: QueryTagTypes.PlantingSeasons, id: plantingSeasonId },
         { type: QueryTagTypes.PlantingSeasonDates, id: plantingSeasonId },
       ],
-      transformResponse: (results: ListEventLogEntriesApiResponse, _meta, { excludedSubjects }) =>
-        transformEvents(results, excludedSubjects),
+      transformResponse: (results: ListEventLogEntriesApiResponse) => orderEvents(results.events),
     }),
     listInventoryPlanningEvents: build.query<EventLogEntryPayload[], ListInventoryPlanningEventsArgs>({
       query: ({ organizationId, plantingSeasonId, plantingSiteId }) => ({
@@ -69,7 +76,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
       providesTags: [{ type: QueryTagTypes.InventoryPlanning, id: 'LIST' }],
       transformResponse: (results: ListEventLogEntriesApiResponse, _meta, { speciesId }) =>
-        transformEvents(results, undefined, speciesId),
+        transformInventoryPlanningEvents(results, speciesId),
     }),
   }),
 });
