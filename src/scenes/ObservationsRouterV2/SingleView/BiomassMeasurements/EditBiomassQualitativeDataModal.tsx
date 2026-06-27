@@ -64,13 +64,13 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
 
   const [record, setRecord] = useForm<BiomassQualitativeFormData>(initialFormData);
   const [showConfirmationModalOpened, setShowConfirmationModalOpened] = useState(false);
-  const [waterPresence, setWaterPresence] = useState<'Yes' | 'No'>(() =>
-    typeof initialFormData.biomassMeasurement.waterDepth === 'number' ? 'Yes' : 'No'
+  const [waterPresence, setWaterPresence] = useState<boolean>(
+    () => typeof initialFormData.biomassMeasurement.waterDepth === 'number'
   );
   const [showWaterClearConfirm, setShowWaterClearConfirm] = useState(false);
   const [validateFields, setValidateFields] = useState(false);
 
-  const hasWater = !isAdditionalBiomassFieldsEnabled || waterPresence === 'Yes';
+  const hasWater = !isAdditionalBiomassFieldsEnabled || waterPresence;
 
   const onAddPlotCondition = useCallback(
     (conditionId: PlotCondition) => {
@@ -145,7 +145,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
   const onChangeWaterPresence = useCallback(
     (value: unknown) => {
       if (value === 'Yes') {
-        setWaterPresence('Yes');
+        setWaterPresence(true);
         setRecord((prev) => ({
           ...prev,
           biomassMeasurement: {
@@ -161,7 +161,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
   );
 
   const confirmClearWaterFields = useCallback(() => {
-    setWaterPresence('No');
+    setWaterPresence(false);
     setShowWaterClearConfirm(false);
     setRecord((prev) => ({
       ...prev,
@@ -234,7 +234,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
     return record.biomassMeasurement.forestType === 'Mangrove';
   }, [record]);
 
-  const waterFieldsRequired = isAdditionalBiomassFieldsEnabled && isMangrove && waterPresence === 'Yes';
+  const waterFieldsRequired = isAdditionalBiomassFieldsEnabled && isMangrove && waterPresence;
 
   const waterDepthError = useMemo(() => {
     if (!validateFields || !waterFieldsRequired) {
@@ -454,7 +454,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                   {isAdditionalBiomassFieldsEnabled && (
                     <Dropdown
                       label={strings.IS_THERE_WATER_IN_THIS_PLOT}
-                      selectedValue={waterPresence}
+                      selectedValue={waterPresence ? 'Yes' : 'No'}
                       options={waterPresenceOptions}
                       onChange={onChangeWaterPresence}
                       sx={{ paddingTop: '16px' }}
