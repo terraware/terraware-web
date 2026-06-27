@@ -6192,8 +6192,8 @@ export interface components {
             forestType?: "Terrestrial" | "Mangrove";
             /** Format: int32 */
             herbaceousCoverPercent?: number;
-            ph?: number;
-            salinity?: number;
+            ph?: number | null;
+            salinity?: number | null;
             /** Format: int32 */
             smallTreeCountHigh?: number;
             /** Format: int32 */
@@ -6202,11 +6202,11 @@ export interface components {
             /** @enum {string} */
             soilType?: "Clay" | "SandyClay" | "SandyClayLoam" | "ClayLoam" | "SiltyClay" | "SiltyClayLoam" | "SandyLoam" | "LoamySand" | "Sand" | "Loam" | "SiltLoam" | "Silt" | "Unknown";
             /** @enum {string} */
-            tide?: "Low" | "High";
+            tide?: "Low" | "High" | null;
             /** Format: date-time */
-            tideTime?: string;
+            tideTime?: string | null;
             /** Format: int32 */
-            waterDepth?: number;
+            waterDepth?: number | null;
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript

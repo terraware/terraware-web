@@ -301,13 +301,13 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
         soilAssessment: record.biomassMeasurement?.soilAssessment,
         soilType: isAdditionalBiomassFieldsEnabled ? record.biomassMeasurement?.soilType : undefined,
         forestType: record.biomassMeasurement?.forestType,
-        ph: record.biomassMeasurement?.ph,
-        salinity: record.biomassMeasurement?.salinity,
+        ph: record.biomassMeasurement?.ph ?? null,
+        salinity: record.biomassMeasurement?.salinity ?? null,
         smallTreeCountHigh: record.biomassMeasurement?.smallTreeCountHigh,
         smallTreeCountLow: record.biomassMeasurement?.smallTreeCountLow,
-        tide: record.biomassMeasurement?.tide,
-        tideTime: record.biomassMeasurement?.tideTime,
-        waterDepth: record.biomassMeasurement?.waterDepth,
+        tide: record.biomassMeasurement?.tide ?? null,
+        tideTime: record.biomassMeasurement?.tideTime ?? null,
+        waterDepth: record.biomassMeasurement?.waterDepth ?? null,
         herbaceousCoverPercent: record.biomassMeasurement?.herbaceousCoverPercent,
       };
 

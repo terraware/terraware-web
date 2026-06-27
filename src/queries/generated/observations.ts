@@ -908,8 +908,8 @@ export type BiomassUpdateOperationPayload = {
     description?: string;
     forestType?: 'Terrestrial' | 'Mangrove';
     herbaceousCoverPercent?: number;
-    ph?: number;
-    salinity?: number;
+    ph?: number | null;
+    salinity?: number | null;
     smallTreeCountHigh?: number;
     smallTreeCountLow?: number;
     soilAssessment?: string;
@@ -927,9 +927,9 @@ export type BiomassUpdateOperationPayload = {
       | 'SiltLoam'
       | 'Silt'
       | 'Unknown';
-    tide?: 'Low' | 'High';
-    tideTime?: string;
-    waterDepth?: number;
+    tide?: 'Low' | 'High' | null;
+    tideTime?: string | null;
+    waterDepth?: number | null;
   };
 export type MonitoringSpeciesUpdateOperationPayload = {
   type: 'MonitoringSpecies';
