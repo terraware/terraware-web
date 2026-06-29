@@ -1,3 +1,5 @@
+230192f3 SW-8591 Add change history in Inventory Planning View (#5958)
+07455982 SW-8589 Planting Dates Add Species improvements (#5960)
 4b917d32 SW-8435 Withdrawals Table: In the Planting Site column filter, a blank option appears at the bottom of the list (#5959)
 ccc3f5cd SW-8441 Use event added instead of event created in some cases (#5955)
 18737877 SW-8586 Filter species selector by season (#5957)
