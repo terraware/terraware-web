@@ -65,7 +65,7 @@ const InventoryPlanningEventLog = ({
 
   const renderEventDescription = useCallback(
     (event: EventLogEntryPayload): ReactNode => {
-      if (event.subject.type === 'PlantingSeasonAllocatedSpecies' && event.action.type === 'FieldUpdated') {
+      if (event.subject.type === 'PlantingSeasonAllocatedSpecies') {
         const season = plantingSeasonsById.get(event.subject.plantingSeasonId);
         const plantingSite = plantingSitesById.get(event.subject.plantingSiteId);
         const seasonName = season?.name ?? event.subject.shortText;
@@ -80,14 +80,25 @@ const InventoryPlanningEventLog = ({
           </Link>
         );
 
-        return strings.formatString<string | JSX.Element>(
-          strings.PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE_CHANGED,
-          event.subject.scientificName ?? event.subject.shortText,
-          seasonLink,
-          plantingSiteName,
-          renderChangedFrom(event.action.changedFrom),
-          renderChangedTo(event.action.changedTo)
-        );
+        if (event.action.type === 'Created') {
+          return strings.formatString<string | JSX.Element>(
+            strings.PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE,
+            event.subject.scientificName ?? event.subject.shortText,
+            seasonLink,
+            plantingSiteName
+          );
+        }
+
+        if (event.action.type === 'FieldUpdated') {
+          return strings.formatString<string | JSX.Element>(
+            strings.PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE_CHANGED,
+            event.subject.scientificName ?? event.subject.shortText,
+            seasonLink,
+            plantingSiteName,
+            renderChangedFrom(event.action.changedFrom),
+            renderChangedTo(event.action.changedTo)
+          );
+        }
       }
 
       return null;

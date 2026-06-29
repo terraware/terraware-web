@@ -133,6 +133,7 @@ export type PlantingSeasonAllocatedSpeciesSubjectPayload = {
 export type PlantingSeasonScheduledDateSpeciesSubjectPayload = {
   type: 'PlantingSeasonScheduledDateSpecies';
 } & EventSubjectPayloadBase & {
+    activeDate: string;
     plantingSeasonId: number;
     plantingSiteId: number;
     scheduledPlantingDateId: number;
