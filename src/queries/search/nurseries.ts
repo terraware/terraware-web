@@ -273,7 +273,9 @@ const injectedRtkApi = api.injectEndpoints({
       providesTags: [{ type: QueryTagTypes.NurseryWithdrawals }],
       transformResponse: (result: SearchNurseryWithdrawalFilterOptionsApiResponse) => ({
         nurseryNames: result.results.facility_name.values,
-        destinationNames: result.results.destinationName.values,
+        destinationNames: result.results.destinationName.values.filter(
+          (value) => typeof value === 'string' && value.trim() !== ''
+        ),
         stratumNames: result.results.stratumNames.values,
         substratumNames: result.results.substratumShortNames.values,
         speciesNames: result.results.batchWithdrawals_batch_species_scientificName.values,
