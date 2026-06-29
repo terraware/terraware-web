@@ -1,3 +1,4 @@
+3bb06410 Update dependency js-yaml to v5 (#5964)
 4e43561a SW-8593 Add configurable and filterable "Planting Date" column, hidden by default (#5967)
 5b5228c3 Update dependency @rsbuild/plugin-sass to v2 (#5963)
 41031835 Update Node.js to v24.18.0 (#5962)
