@@ -1030,8 +1030,6 @@ const AddSpeciesRow = ({
           <Icon name='iconSubtract' size='medium' fillColor={theme.palette.TwClrIcn} />
         </IconButton>
       </Box>
-      <Box />
-      <Box />
     </Box>
   );
 };
