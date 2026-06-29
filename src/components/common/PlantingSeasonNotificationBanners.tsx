@@ -3,6 +3,7 @@ import React, { type JSX } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
+import { API_PULL_INTERVAL } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import {
   PlantingSeasonNotificationGroupPayload,
@@ -168,7 +169,10 @@ const PlantingSeasonNotificationBanners = ({
   const skip = organizationId === undefined && plantingSeasonId === undefined;
   const { data, refetch } = useGetPlantingSeasonNotificationsQuery(
     { organizationId, plantingSeasonId, notificationPage },
-    { skip }
+    {
+      pollingInterval: !import.meta.env.PUBLIC_DISABLE_RECURRENT_REQUESTS ? API_PULL_INTERVAL : undefined,
+      skip,
+    }
   );
   const [dismissPlantingSeasonNotifications] = useDismissPlantingSeasonNotificationsMutation();
 
