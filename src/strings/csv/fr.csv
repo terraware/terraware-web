@@ -1205,7 +1205,7 @@ NEW_ACCESSION,Ajouter une adhésion,6d0d1602
 NEW_APP_VERSION,Veuillez actualiser pour utiliser la dernière version de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualisez pour obtenir la dernière version de Terraware.,6235c190
 NEW_PLANTING_WITHDRAWAL_REQUESTS_RECEIVED,Nouvelles demandes de retrait de plantation reçues pour {0},0da4cdcd
-NEW_SPECIES_TARGETS_ADDED,De nouveaux objectifs par espèce ont été ajoutés pour {0},9348d3bf
+NEW_SPECIES_TARGETS_ADDED,Nouveaux objectifs d'espèces ajoutés pour {0},2289b20d
 NEW_STRATUM,Nouvelle strate,84292d1f
 NEW_SUBSTRATUM,Nouveau substrat,90a1ddc3
 NEW_TEMPLATE_MODAL_DESCRIPTION,Une nouvelle version a été publiée pour le documentTemplate de ce document. Souhaitez-vous la mettre à jour ?,c11ed4d2
@@ -1521,7 +1521,7 @@ PLANTING_SEASON_END_IN_PAST,La date de fin ne peut pas être passée.,b2729d4d
 PLANTING_SEASON_END_OUT_OF_RANGE,Elle doit se situer entre 4 semaines et 1 an après la date de début.,fcca5463
 PLANTING_SEASON_NO_OVERLAP,Chevauche la saison de plantation {0} - {1},f1549979
 PLANTING_SEASON_NOTIFICATION_ALLOCATION_QUANTITIES_UPDATED,La pépinière a mis à jour les quantités allouées pour cette saison.,eff34e46
-PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_CLOSED,La saison a été clôturée et ses objectifs d'espèces n'apparaissent plus comme nécessaires ou demandés.,e2d75939
+PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_CLOSED,La saison est terminée et ses espèces ne sont plus nécessaires ni demandées.,54133045
 PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_PAST_END_DATE,La date de fin de cette saison est dépassée. Prolongez la saison ou clôturez-la si la plantation est terminée.,e6ffad3c
 PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED,Nouvelles demandes de retrait de plantation reçues.,e587d761
 PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY,Nouvelle demande de retrait de plantation ou demande mise à jour reçue.,71130ddd

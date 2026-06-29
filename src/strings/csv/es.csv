@@ -1206,7 +1206,7 @@ NEW_ACCESSION,Añadir accesión,6d0d1602
 NEW_APP_VERSION,Actualice para usar la versión más reciente de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualice para obtener la versión más reciente de Terraware.,6235c190
 NEW_PLANTING_WITHDRAWAL_REQUESTS_RECEIVED,Nuevas solicitudes de retiro de plantas recibidas para {0},0da4cdcd
-NEW_SPECIES_TARGETS_ADDED,Se han añadido nuevos objetivos de especies para {0},9348d3bf
+NEW_SPECIES_TARGETS_ADDED,Nuevos objetivos de especies añadidos para {0},2289b20d
 NEW_STRATUM,Nuevo Estrato,84292d1f
 NEW_SUBSTRATUM,Nuevo Sustrato,90a1ddc3
 NEW_TEMPLATE_MODAL_DESCRIPTION,Se publicó una nueva versión para documentTemplate de este documento. ¿Quiere actualizar?,c11ed4d2
@@ -1522,7 +1522,7 @@ PLANTING_SEASON_END_IN_PAST,La fecha de término no puede estar en el pasado.,b2
 PLANTING_SEASON_END_OUT_OF_RANGE,Debe ser entre 4 semanas y 1 año de la fecha de inicio.,fcca5463
 PLANTING_SEASON_NO_OVERLAP,Se superpone con la temporada de plantación {0} - {1},f1549979
 PLANTING_SEASON_NOTIFICATION_ALLOCATION_QUANTITIES_UPDATED,El vivero ha actualizado las cantidades asignadas para esta temporada.,eff34e46
-PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_CLOSED,La temporada ha sido cerrada y sus objetivos de especies ya no aparecen como necesarios ni solicitados.,e2d75939
+PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_CLOSED,La temporada ha finalizado y sus especies ya no son necesarias ni solicitadas.,54133045
 PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_PAST_END_DATE,La fecha de finalización de esta temporada ha pasado. Extienda la temporada o ciérrela si la plantación está completa.,e6ffad3c
 PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED,Se han recibido nuevas solicitudes de retiro para plantación.,e587d761
 PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY,Se ha recibido una solicitud nueva o actualizada de retiro de plantación.,71130ddd
