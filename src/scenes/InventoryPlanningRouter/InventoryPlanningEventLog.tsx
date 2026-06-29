@@ -80,11 +80,11 @@ const InventoryPlanningEventLog = ({
           </Link>
         );
 
-        return strings.formatString(
+        return strings.formatString<string | JSX.Element>(
           strings.PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE_CHANGED,
-          <>{event.subject.scientificName ?? event.subject.shortText}</>,
+          event.subject.scientificName ?? event.subject.shortText,
           seasonLink,
-          <>{plantingSiteName}</>,
+          plantingSiteName,
           renderChangedFrom(event.action.changedFrom),
           renderChangedTo(event.action.changedTo)
         );
