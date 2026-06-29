@@ -138,6 +138,12 @@ const normalizeColumnVisibility = (columnVisibility: MRT_VisibilityState): MRT_V
     columnVisibility
   );
 
+const getHiddenByDefaultColumnVisibility = (columnVisibility: MRT_VisibilityState): Record<string, boolean> =>
+  HIDDEN_BY_DEFAULT_COLUMN_IDS.reduce<Record<string, boolean>>(
+    (visibility, columnId) => ({ ...visibility, [columnId]: columnVisibility[columnId] === true }),
+    {}
+  );
+
 const getDateFilterValue = (dateFilterValue: unknown): { minDate?: string; maxDate?: string } | undefined => {
   if (!dateFilterValue || !Array.isArray(dateFilterValue)) {
     return undefined;
@@ -220,8 +226,11 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const normalizedColumnOrder = useMemo(() => normalizeMenuColumnOrder(columnOrder), [columnOrder]);
   const normalizedColumnVisibility = useMemo(() => normalizeColumnVisibility(columnVisibility), [columnVisibility]);
-  const plantingSeasonVisible = normalizedColumnVisibility[PLANTING_SEASON_COLUMN_ID] === true;
-  const previousPlantingSeasonVisible = useRef(plantingSeasonVisible);
+  const hiddenByDefaultColumnVisibility = useMemo(
+    () => getHiddenByDefaultColumnVisibility(normalizedColumnVisibility),
+    [normalizedColumnVisibility]
+  );
+  const previousHiddenByDefaultColumnVisibility = useRef(hiddenByDefaultColumnVisibility);
 
   useEffect(() => {
     if (JSON.stringify(columnOrder) !== JSON.stringify(normalizedColumnOrder)) {
@@ -236,11 +245,16 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [columnVisibility, normalizedColumnVisibility, setColumnVisibility]);
 
   useEffect(() => {
-    if (plantingSeasonVisible && !previousPlantingSeasonVisible.current) {
+    const newlyVisibleHiddenByDefaultColumn = HIDDEN_BY_DEFAULT_COLUMN_IDS.some(
+      (columnId) =>
+        hiddenByDefaultColumnVisibility[columnId] && !previousHiddenByDefaultColumnVisibility.current[columnId]
+    );
+
+    if (newlyVisibleHiddenByDefaultColumn) {
       setColumnOrder((currentColumnOrder) => moveHiddenByDefaultColumnsBeforeMenu(currentColumnOrder));
     }
-    previousPlantingSeasonVisible.current = plantingSeasonVisible;
-  }, [plantingSeasonVisible, setColumnOrder]);
+    previousHiddenByDefaultColumnVisibility.current = hiddenByDefaultColumnVisibility;
+  }, [hiddenByDefaultColumnVisibility, setColumnOrder]);
 
   const handleColumnOrderChange = useCallback(
     (updater: React.SetStateAction<MRT_ColumnOrderState>) => {
