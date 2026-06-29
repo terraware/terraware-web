@@ -2,36 +2,34 @@ import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 import getDateDisplayValue, { isInTheFuture } from '@terraware/web-components/utils/date';
+import { DateTime } from 'luxon';
 
 import DatePicker from 'src/components/common/DatePicker';
 import strings from 'src/strings';
 
 interface Props {
-  onChange: (id: string, value: string | null) => void;
-  id: string;
-  validate?: boolean;
-  timeZone: string;
-  label: string;
-  onDateError: (error: string) => void;
   dateError?: string;
+  id: string;
+  label: string;
   maxDate?: Date;
+  includeTime?: boolean;
+  onChange: (id: string, value: string | null) => void;
+  onDateError: (error: string) => void;
+  timeZone: string;
+  validate?: boolean;
   value?: string;
 }
 
-export type Dates = {
-  collectedDate?: any;
-  receivedDate?: any;
-};
-
 export default function CollectedReceivedDate2({
+  dateError,
   id,
   label,
-  onChange,
-  validate,
-  timeZone,
-  dateError,
+  includeTime = false,
   maxDate,
+  onChange,
   onDateError,
+  timeZone,
+  validate,
   value,
 }: Props): JSX.Element {
   const theme = useTheme();
@@ -61,12 +59,15 @@ export default function CollectedReceivedDate2({
     [timeZone, validate, onDateError]
   );
 
-  const changeDate = (newValue?: any) => {
-    setDateValue(newValue);
+  const changeDateTime = (newValue?: DateTime) => {
+    const formattedValue = newValue
+      ? includeTime
+        ? newValue.toUTC().toISO() ?? undefined
+        : getDateDisplayValue(newValue.toMillis(), timeZone)
+      : undefined;
 
-    const date = newValue ? getDateDisplayValue(newValue.getTime(), timeZone) : null;
-
-    onChange(id, date);
+    setDateValue(formattedValue);
+    onChange(id, formattedValue ?? null);
   };
 
   useEffect(() => {
@@ -80,10 +81,11 @@ export default function CollectedReceivedDate2({
         label={label}
         aria-label={label}
         value={dateValue}
-        onChange={(newValue) => changeDate(newValue)}
+        onDateChange={(newValue) => changeDateTime(newValue)}
         errorText={validate ? dateError : ''}
         maxDate={maxDate}
         defaultTimeZone={timeZone}
+        showTime={includeTime}
       />
     </Grid>
   );
