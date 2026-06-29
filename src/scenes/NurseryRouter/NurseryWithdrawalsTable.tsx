@@ -129,8 +129,7 @@ const normalizeMenuColumnOrder = (columnOrder: MRT_ColumnOrderState): MRT_Column
   ];
 };
 
-const isHiddenByDefaultColumn = (columnId: string): boolean =>
-  HIDDEN_BY_DEFAULT_COLUMN_IDS.some((hiddenColumnId) => hiddenColumnId === columnId);
+const isHiddenByDefaultColumn = (columnId: string): boolean => HIDDEN_BY_DEFAULT_COLUMN_IDS.includes(columnId);
 
 const normalizeColumnVisibility = (columnVisibility: MRT_VisibilityState): MRT_VisibilityState =>
   HIDDEN_BY_DEFAULT_COLUMN_IDS.reduce(
