@@ -25,11 +25,13 @@ import { ACCESSION_2_STATES } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
 import { makeCsv } from 'src/utils/csv';
+import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { getAllSeedBanks } from 'src/utils/organization';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 const TABLE_STATE_STORAGE_KEY = 'accessions-database-table';
 
@@ -39,7 +41,7 @@ const DEFAULT_VISIBLE_COLUMNS = [
   'project_name',
   'state',
   'collectionSiteName',
-  'collectedDate',
+  'collectedTime',
   'ageMonths',
   'estimatedWeightGrams',
   'estimatedCount',
@@ -51,7 +53,7 @@ const DEFAULT_COLUMN_ORDER = [
   'project_name',
   'state',
   'collectionSiteName',
-  'collectedDate',
+  'collectedTime',
   'receivedDate',
   'ageMonths',
   'estimatedWeightGrams',
@@ -91,6 +93,17 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
+  const locationTimeZone = useLocationTimeZone();
+  const facilityNameToTz = useMemo(
+    () =>
+      Object.fromEntries(
+        (selectedOrganization ? getAllSeedBanks(selectedOrganization) : []).map((sb) => [
+          sb.name,
+          locationTimeZone.get(sb).id,
+        ])
+      ),
+    [selectedOrganization, locationTimeZone]
+  );
   const navigate = useSyncNavigate();
   const query = useQuery();
   const location = useStateLocation();
@@ -310,21 +323,24 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
         filterVariant: 'text',
       },
       {
-        id: 'collectedDate',
-        header: strings.COLLECTION_DATE,
+        id: 'collectedTime',
+        header: strings.COLLECTION_TIME,
         accessorFn: (row) => {
-          const dateStr = (row as Record<string, unknown>).collectedDate as string | null;
-          if (!dateStr) {
+          const dateTimeStr = (row as Record<string, unknown>).collectedTime as string | null;
+          if (!dateTimeStr) {
             return null;
           }
-          const [y, m, d] = dateStr.split('-').map(Number);
-          return new Date(y, m - 1, d);
+          const facilityName = (row as Record<string, unknown>).facility_name as string | undefined;
+          const tz = facilityName ? facilityNameToTz[facilityName] : undefined;
+          return getDateTimeDisplayValue(new Date(dateTimeStr).getTime(), tz);
         },
         filterVariant: 'date-range',
-        filterFn: makeDateRangeFilterFn<SearchResponseElementWithId>('collectedDate'),
+        filterFn: makeDateRangeFilterFn<SearchResponseElementWithId>('collectedTime'),
         Cell: ({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
-          const dateStr = (cell.row.original as Record<string, unknown>).collectedDate as string | null;
-          return dateStr ? <span>{dateStr}</span> : null;
+          const dateTimeStr = (cell.row.original as Record<string, unknown>).collectedTime as string | null;
+          const facilityName = (cell.row.original as Record<string, unknown>).facility_name as string | undefined;
+          const tz = facilityName ? facilityNameToTz[facilityName] : undefined;
+          return dateTimeStr ? <span>{getDateTimeDisplayValue(new Date(dateTimeStr).getTime(), tz)}</span> : null;
         },
       },
       {
@@ -487,6 +503,7 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
     ];
   }, [
     activeLocale,
+    facilityNameToTz,
     uniqueStates,
     uniqueFacilityNames,
     uniqueSubLocationNames,

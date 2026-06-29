@@ -363,6 +363,8 @@ COLLECTION_DATE,Fecha de recolección,37db5c5f
 COLLECTION_DATE_REQUIRED,Fecha de recolección *,e9fbd2db
 COLLECTION_SITE,Nombre del lugar de recolección,32b625d7
 COLLECTION_SOURCE,Tipo de fuente de la planta,292a47fa
+COLLECTION_TIME,Hora de recolección,71a111d9
+COLLECTION_TIME_REQUIRED,Hora de recolección *,5c57b5c3
 COLLECTOR,Recolector,cf2069b8
 COLLECTORS,Recolectores,55432568
 COLOR,Color,e96df902

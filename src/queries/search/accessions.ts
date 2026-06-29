@@ -99,7 +99,15 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'POST',
         body: {
           prefix: 'accessions',
-          fields: ['accessionNumber', 'speciesName', 'collectionSiteName', 'collectedDate', 'receivedDate', 'id'],
+          fields: [
+            'accessionNumber',
+            'speciesName',
+            'collectionSiteName',
+            'collectedTime',
+            'receivedDate',
+            'id',
+            'facility_name',
+          ],
           search: buildOrgSearch(organizationId, [
             {
               operation: 'field',

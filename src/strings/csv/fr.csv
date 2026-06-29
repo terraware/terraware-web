@@ -362,6 +362,8 @@ COLLECTION_DATE,Date de collecte,37db5c5f
 COLLECTION_DATE_REQUIRED,Date de collecte *,e9fbd2db
 COLLECTION_SITE,Nom du site de collection,32b625d7
 COLLECTION_SOURCE,Type de source végétale,292a47fa
+COLLECTION_TIME,Heure de collecte,71a111d9
+COLLECTION_TIME_REQUIRED,Heure de collecte *,5c57b5c3
 COLLECTOR,Collecteur,cf2069b8
 COLLECTORS,Collecteurs,55432568
 COLOR,Couleur,e96df902
