@@ -43,6 +43,7 @@ import {
   purposeLabel,
 } from 'src/types/Batch';
 import { Project } from 'src/types/Project';
+import { getMediumDate } from 'src/utils/dateFormatter';
 import useDebounce from 'src/utils/useDebounce';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useQuery from 'src/utils/useQuery';
@@ -51,11 +52,16 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 const TABLE_STATE_STORAGE_KEY = 'nursery-withdrawals-table';
 
 const ITEMS_PER_PAGE = 100;
+const PLANTING_DATE_COLUMN_ID = 'plantingDate';
 const PLANTING_SEASON_COLUMN_ID = 'plantingSeasonName';
 const PLANTING_SEASON_ID_QUERY_PARAM = 'plantingSeasonId';
 const PURPOSE_QUERY_PARAM = 'purpose';
 const MENU_COLUMN_ID = 'menu';
-const DEFAULT_COLUMN_VISIBILITY: MRT_VisibilityState = { [PLANTING_SEASON_COLUMN_ID]: false };
+const HIDDEN_BY_DEFAULT_COLUMN_IDS = [PLANTING_SEASON_COLUMN_ID, PLANTING_DATE_COLUMN_ID];
+const DEFAULT_COLUMN_VISIBILITY: MRT_VisibilityState = {
+  [PLANTING_SEASON_COLUMN_ID]: false,
+  [PLANTING_DATE_COLUMN_ID]: false,
+};
 const DEFAULT_COLUMN_ORDER: MRT_ColumnOrderState = [
   'withdrawnDate',
   'purpose',
@@ -67,6 +73,7 @@ const DEFAULT_COLUMN_ORDER: MRT_ColumnOrderState = [
   'speciesNames',
   'totalWithdrawn',
   PLANTING_SEASON_COLUMN_ID,
+  PLANTING_DATE_COLUMN_ID,
   MENU_COLUMN_ID,
 ];
 
@@ -122,14 +129,38 @@ const normalizeMenuColumnOrder = (columnOrder: MRT_ColumnOrderState): MRT_Column
   ];
 };
 
-const movePlantingSeasonBeforeMenu = (columnOrder: MRT_ColumnOrderState): MRT_ColumnOrderState => {
+const isHiddenByDefaultColumn = (columnId: string): boolean => HIDDEN_BY_DEFAULT_COLUMN_IDS.includes(columnId);
+
+const normalizeColumnVisibility = (columnVisibility: MRT_VisibilityState): MRT_VisibilityState =>
+  HIDDEN_BY_DEFAULT_COLUMN_IDS.reduce(
+    (visibility, columnId) =>
+      columnId in visibility ? visibility : { ...visibility, [columnId]: DEFAULT_COLUMN_VISIBILITY[columnId] ?? false },
+    columnVisibility
+  );
+
+const getHiddenByDefaultColumnVisibility = (columnVisibility: MRT_VisibilityState): Record<string, boolean> =>
+  HIDDEN_BY_DEFAULT_COLUMN_IDS.reduce<Record<string, boolean>>(
+    (visibility, columnId) => ({ ...visibility, [columnId]: columnVisibility[columnId] === true }),
+    {}
+  );
+
+const getDateFilterValue = (dateFilterValue: unknown): { minDate?: string; maxDate?: string } | undefined => {
+  if (!dateFilterValue || !Array.isArray(dateFilterValue)) {
+    return undefined;
+  }
+
+  const minDate = dateFilterValue[0] ? (dateFilterValue[0] as Dayjs).format('YYYY-MM-DD') : undefined;
+  const maxDate = dateFilterValue[1] ? (dateFilterValue[1] as Dayjs).format('YYYY-MM-DD') : undefined;
+
+  return minDate || maxDate ? { minDate, maxDate } : undefined;
+};
+
+const moveHiddenByDefaultColumnsBeforeMenu = (columnOrder: MRT_ColumnOrderState): MRT_ColumnOrderState => {
   const normalizedColumnOrder = normalizeMenuColumnOrder(columnOrder);
 
   return [
-    ...normalizedColumnOrder.filter(
-      (columnId) => columnId !== PLANTING_SEASON_COLUMN_ID && columnId !== MENU_COLUMN_ID
-    ),
-    PLANTING_SEASON_COLUMN_ID,
+    ...normalizedColumnOrder.filter((columnId) => !isHiddenByDefaultColumn(columnId) && columnId !== MENU_COLUMN_ID),
+    ...HIDDEN_BY_DEFAULT_COLUMN_IDS,
     MENU_COLUMN_ID,
   ];
 };
@@ -137,7 +168,7 @@ const movePlantingSeasonBeforeMenu = (columnOrder: MRT_ColumnOrderState): MRT_Co
 export default function NurseryWithdrawalsTable(): JSX.Element {
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const navigate = useSyncNavigate();
   const location = useStateLocation();
   const query = useQuery();
@@ -194,15 +225,12 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   });
 
   const normalizedColumnOrder = useMemo(() => normalizeMenuColumnOrder(columnOrder), [columnOrder]);
-  const normalizedColumnVisibility = useMemo(
-    () =>
-      PLANTING_SEASON_COLUMN_ID in columnVisibility
-        ? columnVisibility
-        : { ...columnVisibility, [PLANTING_SEASON_COLUMN_ID]: false },
-    [columnVisibility]
+  const normalizedColumnVisibility = useMemo(() => normalizeColumnVisibility(columnVisibility), [columnVisibility]);
+  const hiddenByDefaultColumnVisibility = useMemo(
+    () => getHiddenByDefaultColumnVisibility(normalizedColumnVisibility),
+    [normalizedColumnVisibility]
   );
-  const plantingSeasonVisible = normalizedColumnVisibility[PLANTING_SEASON_COLUMN_ID] === true;
-  const previousPlantingSeasonVisible = useRef(plantingSeasonVisible);
+  const previousHiddenByDefaultColumnVisibility = useRef(hiddenByDefaultColumnVisibility);
 
   useEffect(() => {
     if (JSON.stringify(columnOrder) !== JSON.stringify(normalizedColumnOrder)) {
@@ -211,17 +239,22 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   }, [columnOrder, normalizedColumnOrder, setColumnOrder]);
 
   useEffect(() => {
-    if (!(PLANTING_SEASON_COLUMN_ID in columnVisibility)) {
+    if (HIDDEN_BY_DEFAULT_COLUMN_IDS.some((columnId) => !(columnId in columnVisibility))) {
       setColumnVisibility(normalizedColumnVisibility);
     }
   }, [columnVisibility, normalizedColumnVisibility, setColumnVisibility]);
 
   useEffect(() => {
-    if (plantingSeasonVisible && !previousPlantingSeasonVisible.current) {
-      setColumnOrder((currentColumnOrder) => movePlantingSeasonBeforeMenu(currentColumnOrder));
+    const newlyVisibleHiddenByDefaultColumn = HIDDEN_BY_DEFAULT_COLUMN_IDS.some(
+      (columnId) =>
+        hiddenByDefaultColumnVisibility[columnId] && !previousHiddenByDefaultColumnVisibility.current[columnId]
+    );
+
+    if (newlyVisibleHiddenByDefaultColumn) {
+      setColumnOrder((currentColumnOrder) => moveHiddenByDefaultColumnsBeforeMenu(currentColumnOrder));
     }
-    previousPlantingSeasonVisible.current = plantingSeasonVisible;
-  }, [plantingSeasonVisible, setColumnOrder]);
+    previousHiddenByDefaultColumnVisibility.current = hiddenByDefaultColumnVisibility;
+  }, [hiddenByDefaultColumnVisibility, setColumnOrder]);
 
   const handleColumnOrderChange = useCallback(
     (updater: React.SetStateAction<MRT_ColumnOrderState>) => {
@@ -235,16 +268,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const handleColumnVisibilityChange = useCallback(
     (updater: React.SetStateAction<typeof columnVisibility>) => {
       setColumnVisibility((currentColumnVisibility) => {
-        const currentVisibility = {
-          ...currentColumnVisibility,
-          [PLANTING_SEASON_COLUMN_ID]:
-            currentColumnVisibility[PLANTING_SEASON_COLUMN_ID] ?? DEFAULT_COLUMN_VISIBILITY[PLANTING_SEASON_COLUMN_ID],
-        };
+        const currentVisibility = normalizeColumnVisibility(currentColumnVisibility);
         const nextVisibility = typeof updater === 'function' ? updater(currentVisibility) : updater;
 
-        return PLANTING_SEASON_COLUMN_ID in nextVisibility
-          ? nextVisibility
-          : { ...nextVisibility, [PLANTING_SEASON_COLUMN_ID]: false };
+        return normalizeColumnVisibility(nextVisibility);
       });
     },
     [setColumnVisibility]
@@ -442,6 +469,14 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     [numberFormatter]
   );
 
+  const PlantingDateCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
+      const value = cell.getValue() as string | undefined;
+      return value ? <span>{getMediumDate(value, activeLocale)}</span> : null;
+    },
+    [activeLocale]
+  );
+
   const MenuCell = useCallback(({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
     const row = cell.row.original;
     return <MenuCellComponent row={row} onUndo={setUndoModalRow} />;
@@ -546,6 +581,14 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         filterFn: () => true,
       },
       {
+        id: PLANTING_DATE_COLUMN_ID,
+        header: strings.PLANTING_DATE,
+        accessorKey: 'plantingDate',
+        enableEditing: false,
+        filterVariant: 'date-range',
+        Cell: PlantingDateCell,
+      },
+      {
         id: MENU_COLUMN_ID,
         header: '',
         enableEditing: false,
@@ -572,6 +615,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       SpeciesNamesCell,
       TotalWithdrawnCell,
       plantingSeasonNames,
+      PlantingDateCell,
       MenuCell,
     ]
   );
@@ -586,14 +630,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     const subStratumFilterValue = columnFilters.find((column) => column.id === 'substratumShortName')?.value;
     const speciesFilterValue = columnFilters.find((column) => column.id === 'speciesNames')?.value;
     const totalWithdrawnFilterValue = columnFilters.find((column) => column.id === 'totalWithdrawn')?.value;
+    const plantingDateFilterValue = columnFilters.find((column) => column.id === PLANTING_DATE_COLUMN_ID)?.value;
 
-    const withdrawnDate =
-      dateFilterValue && Array.isArray(dateFilterValue)
-        ? {
-            minDate: dateFilterValue[0] ? (dateFilterValue[0] as Dayjs).format('YYYY-MM-DD') : undefined,
-            maxDate: dateFilterValue[1] ? (dateFilterValue[1] as Dayjs).format('YYYY-MM-DD') : undefined,
-          }
-        : undefined;
+    const withdrawnDate = getDateFilterValue(dateFilterValue);
+    const plantingDate = getDateFilterValue(plantingDateFilterValue);
 
     const purposes =
       purposeFilterValue && Array.isArray(purposeFilterValue)
@@ -640,6 +680,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       nurseryName: nurseryFilterValue as string | undefined,
       destinationNames: destinationFilterValue as string[] | undefined,
       plantingSeasonIds: shouldUseLinkedPlantingSeasonIds ? linkedPlantingSeasonIds : plantingSeasonIdsForFilter,
+      plantingDate,
       stratumNames: stratumFilterValue as string[] | undefined,
       substratumNames: subStratumFilterValue as string[] | undefined,
       speciesNames: speciesFilterValue as string[],
@@ -750,6 +791,8 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       searchArgs.plantingSeasonIds?.length ||
       searchArgs.projectNames?.length ||
       searchArgs.purposes?.length ||
+      searchArgs.plantingDate?.maxDate ||
+      searchArgs.plantingDate?.minDate ||
       searchArgs.stratumNames?.length ||
       searchArgs.substratumNames?.length ||
       searchArgs.withdrawnDate?.maxDate ||
