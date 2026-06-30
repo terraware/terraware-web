@@ -1,3 +1,4 @@
+335c7ec8 SW-8441 Improve some events copy (#5970)
 03f60d02 SW-7489 Change CollectedDate to CollectedTime in CheckIn page (#5953)
 10785e68 SW-7489 Change CollectedDate edit field to DateTime (#5952)
 5f4d5003 SW-7489 Change accession tables to display collected time (#5951)
