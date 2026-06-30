@@ -1,3 +1,4 @@
+6fcac2d9 SW-8584 Show spinner while planting seasons data is loading (#5975)
 09acccca Revert "Update dependency js-yaml to v5" (#5976)
 b4582fd8 SW-8595 Allow saving species that have 0 quantity (#5973)
 c193d064 SW-8595 Planting Dates: Not able to delete species when there is just one in a substratum (#5972)
