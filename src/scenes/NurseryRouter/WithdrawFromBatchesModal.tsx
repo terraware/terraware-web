@@ -453,6 +453,10 @@ const Step1Content = ({
   readyBySpecies,
 }: Step1ContentProps): JSX.Element => {
   const theme = useTheme();
+  const requestedSpecies = useMemo(
+    () => requestSpecies.filter((species) => species.requestedQuantity > 0),
+    [requestSpecies]
+  );
 
   return (
     <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
@@ -547,7 +551,7 @@ const Step1Content = ({
               {strings.COVERAGE}
             </Typography>
           </Box>
-          {requestSpecies.map((s, index) => (
+          {requestedSpecies.map((s, index) => (
             <NurserySummaryRow
               key={s.speciesId}
               species={s}
