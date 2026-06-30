@@ -55,7 +55,21 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
   );
 
   const effectivePlantingSeasonId = selectedPlantingSiteHasNoSeasons ? undefined : plantingSeasonId;
-  const effectiveSpeciesId = selectedPlantingSiteHasNoSeasons ? undefined : speciesId;
+
+  const speciesIdsForSelectedPlantingSeasons = useMemo(() => {
+    const selectedSeasons =
+      effectivePlantingSeasonId === undefined
+        ? plantingSeasonsForSelectedSite
+        : plantingSeasonsForSelectedSite.filter((s) => s.id === effectivePlantingSeasonId);
+
+    return new Set(selectedSeasons.flatMap((s) => s.speciesTargets.map((target) => target.speciesId)));
+  }, [effectivePlantingSeasonId, plantingSeasonsForSelectedSite]);
+
+  const selectedSpeciesIsUnavailable =
+    speciesId !== undefined &&
+    plantingSeasonsData?.seasons !== undefined &&
+    !speciesIdsForSelectedPlantingSeasons.has(speciesId);
+  const effectiveSpeciesId = selectedPlantingSiteHasNoSeasons || selectedSpeciesIsUnavailable ? undefined : speciesId;
 
   useEffect(() => {
     if (organizationId) {
@@ -70,8 +84,10 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
     if (selectedPlantingSiteHasNoSeasons) {
       setPlantingSeasonId(undefined);
       setSpeciesId(undefined);
+    } else if (selectedSpeciesIsUnavailable) {
+      setSpeciesId(undefined);
     }
-  }, [selectedPlantingSiteHasNoSeasons]);
+  }, [selectedPlantingSiteHasNoSeasons, selectedSpeciesIsUnavailable]);
 
   const plantingSiteOptions = useMemo<DropdownItem[]>(
     () => [
@@ -98,10 +114,11 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
       ...(selectedPlantingSiteHasNoSeasons
         ? []
         : species
+            .filter((s) => speciesIdsForSelectedPlantingSeasons.has(s.id))
             .toSorted((a, b) => a.scientificName.localeCompare(b.scientificName, activeLocale || undefined))
             .map((s) => ({ label: s.scientificName, value: s.id }))),
     ],
-    [activeLocale, selectedPlantingSiteHasNoSeasons, species, strings]
+    [activeLocale, selectedPlantingSiteHasNoSeasons, species, speciesIdsForSelectedPlantingSeasons, strings]
   );
 
   const rows = requests ?? [];

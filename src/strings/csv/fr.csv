@@ -355,13 +355,12 @@ CLOSE_PLANTING_SEASON,Clore la saison de plantation,fc3b2abc
 CLOSE_PLANTING_SEASON_CONFIRM,Vous êtes sur le point de clore {0}. La clôture marquera la saison comme terminée et empêchera toute modification ultérieure. Cette action est irréversible.,ee1f53f1
 CLOSE_SEASON,Clore la saison,72b4448a
 CLOSED,Fermé,7b8d0429
-COLLECTED_DATE,Date de la collecte,3f1515d8
 COLLECTED_FROM,Collecté à partir de,ffc6ad60
 COLLECTING_SITE,Site de collecte,7491b42b
-COLLECTION_DATE,Date de collecte,37db5c5f
-COLLECTION_DATE_REQUIRED,Date de collecte *,e9fbd2db
 COLLECTION_SITE,Nom du site de collection,32b625d7
 COLLECTION_SOURCE,Type de source végétale,292a47fa
+COLLECTION_TIME,Heure de collecte,71a111d9
+COLLECTION_TIME_REQUIRED,Heure de collecte *,5c57b5c3
 COLLECTOR,Collecteur,cf2069b8
 COLLECTORS,Collecteurs,55432568
 COLOR,Couleur,e96df902
@@ -698,6 +697,7 @@ EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Est. total de plantes (densité de plantatio
 ESTIMATED_BUDGET,Budget prévisionnel,23c1c02a
 ESTIMATED_READY_DATE,Date estimée de disponibilité,d37bedd1
 EVENT,Événement,cc849cd0
+EVENT_ADDED,{0} a été ajouté,b6bc301d
 EVENT_CALL_DESCRIPTION_1,"En cliquant sur « {0} », vous ouvrirez une fenêtre de navigateur pour participer à un appel vidéo Google Meet.",f8c40b21
 EVENT_CALL_DESCRIPTION_2,"Pour ce {0}, il vous faudra :",89f84f4b
 EVENT_CALL_REQUIREMENTS_INTERNET,Une connexion internet sur votre appareil - haut débit avec ou sans fil (3G ou 4G/LTE),0f7a1688
@@ -1205,7 +1205,7 @@ NEW_ACCESSION,Ajouter une adhésion,6d0d1602
 NEW_APP_VERSION,Veuillez actualiser pour utiliser la dernière version de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualisez pour obtenir la dernière version de Terraware.,6235c190
 NEW_PLANTING_WITHDRAWAL_REQUESTS_RECEIVED,Nouvelles demandes de retrait de plantation reçues pour {0},0da4cdcd
-NEW_SPECIES_TARGETS_ADDED,De nouveaux objectifs par espèce ont été ajoutés pour {0},9348d3bf
+NEW_SPECIES_TARGETS_ADDED,Nouveaux objectifs d'espèces ajoutés pour {0},2289b20d
 NEW_STRATUM,Nouvelle strate,84292d1f
 NEW_SUBSTRATUM,Nouveau substrat,90a1ddc3
 NEW_TEMPLATE_MODAL_DESCRIPTION,Une nouvelle version a été publiée pour le documentTemplate de ce document. Souhaitez-vous la mettre à jour ?,c11ed4d2
@@ -1506,6 +1506,10 @@ PLANTING_COMPLETE_DASHBOARD,Plantation terminée,3bea077e
 PLANTING_COMPLETE_DASHBOARD_TOOLTIP,Plantation terminée comprend la surface totale et le pourcentage du site qui ont été marqués comme « Plantation terminée ».,b9bda0fe
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,Pourcentage de « plantation terminée » de tous les sites de plantation associés au projet,969947fc
 PLANTING_COMPLETE_TOOLTIP,La plantation a-t-elle été achevée dans ce substrat ?,a6bfac66
+PLANTING_DATE,Date de plantation,544c699c
+PLANTING_DATE_ADDED,Date de plantation ajoutée : {0}.,187cb611
+PLANTING_DATE_DELETED,Date de plantation supprimée : {0}.,6a287532
+PLANTING_DATE_SPECIES_UPDATED,Espèce de la date de plantation mise à jour : {0} dans {1} modifiée de {2} à {3}.,d4138b44
 PLANTING_DATES,Dates de plantation,e8aa47b1
 PLANTING_DATES_TAB_DESCRIPTION,Les dates de plantation indiquent quand et où les plants sont mis en terre. Cliquez sur « Enregistrer et demander » lorsque vous êtes prêt pour que la pépinière retire les plants.,c144ee5c
 PLANTING_DENSITY,Densité de plantation,2d5d3bcb
@@ -1519,7 +1523,7 @@ PLANTING_SEASON_END_IN_PAST,La date de fin ne peut pas être passée.,b2729d4d
 PLANTING_SEASON_END_OUT_OF_RANGE,Elle doit se situer entre 4 semaines et 1 an après la date de début.,fcca5463
 PLANTING_SEASON_NO_OVERLAP,Chevauche la saison de plantation {0} - {1},f1549979
 PLANTING_SEASON_NOTIFICATION_ALLOCATION_QUANTITIES_UPDATED,La pépinière a mis à jour les quantités allouées pour cette saison.,eff34e46
-PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_CLOSED,La saison a été clôturée et ses objectifs d'espèces n'apparaissent plus comme nécessaires ou demandés.,e2d75939
+PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_CLOSED,La saison est terminée et ses espèces ne sont plus nécessaires ni demandées.,54133045
 PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_PAST_END_DATE,La date de fin de cette saison est dépassée. Prolongez la saison ou clôturez-la si la plantation est terminée.,e6ffad3c
 PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED,Nouvelles demandes de retrait de plantation reçues.,e587d761
 PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY,Nouvelle demande de retrait de plantation ou demande mise à jour reçue.,71130ddd
@@ -1558,6 +1562,7 @@ PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS,Les plantations nécessitent des lots
 PLANTS,Plantes,f6cde0c3
 PLANTS_DASHBOARD,Tableau de bord des plantes,65ec62dd
 PLANTS_DASHBOARD_ICON,Icône du tableau de bord des plantes,576ad8cc
+PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE_CHANGED,Plantes de {0} attribuées à {1} pour {2} modifiées de {3} à {4}.,99015caf
 PLANTS_PER_HA,Plantes par ha,1b8bb685
 PLANTS_PER_HA_LC,plants/ha,606dca50
 PLANTS_PER_HA_TOOLTIP,"La rubrique « Tendance des plantes par hectare » représente le nombre de plantes par hectare, tel qu'il a été observé au cours de toutes les observations.",95449181
@@ -2137,6 +2142,9 @@ SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,La répartition de la survie indique le pourc
 SPECIES_SURVIVAL_TOOLTIP,La survie des espèces affiche les espèces ayant les taux de survie les plus élevés et les plus faibles parmi les strates observées.,5dde50a6
 SPECIES_TABLE_INSTRUCTIONS,Cliquez sur un nombre dans le tableau pour le modifier.,7f5a3f3e
 SPECIES_TABLE_INSTRUCTIONS_NOTE,"REMARQUE : Lorsque les nombres sont modifiés, les nombres et emplacements d'origine des plantes observées ne seront pas mis à jour sur les cartes. Veuillez modifier les nombres avec discernement.",3d4cd792
+SPECIES_TARGET_ADDED,Objectif d'espèce ajouté : {0} dans {1}.,024829c9
+SPECIES_TARGET_DELETED,Objectif d'espèce supprimé : {0} dans {1}.,fd85928a
+SPECIES_TARGET_UPDATED,Objectif d'espèce mis à jour : {0} dans {1} modifié de {2} à {3}.,f14397fe
 SPECIES_TARGETS,Objectifs par espèce,96d27e04
 SPECIES_TOOLTIP,Espèces dont les densités de plantation seront utilisées pour calculer les taux de survie des parcelles et des espèces.,6e5f03ec
 SPECIES_USAGE,Utilisation des espèces,0669cb85

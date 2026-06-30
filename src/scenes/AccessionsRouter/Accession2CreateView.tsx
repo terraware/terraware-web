@@ -3,6 +3,7 @@ import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils/date';
+import { DateTime } from 'luxon';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import PageForm from 'src/components/common/PageForm';
@@ -42,7 +43,7 @@ const SubTitleStyle = {
   fontWeight: 600,
 };
 
-const MANDATORY_FIELDS = ['speciesId', 'collectedDate', 'receivedDate', 'state', 'facilityId'] as const;
+const MANDATORY_FIELDS = ['speciesId', 'collectedTime', 'receivedDate', 'state', 'facilityId'] as const;
 
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
@@ -59,7 +60,7 @@ export default function CreateAccession(): JSX.Element | null {
   const tz = useLocationTimeZone().get(selectedSeedBank);
   const [timeZone, setTimeZone] = useState<string>(tz.id);
   const { selectedOrganization } = useOrganization();
-  const [collectedDateError, setCollectedDateError] = useState<string>();
+  const [collectedTimeError, setCollectedTimeError] = useState<string>();
   const [receivedDateError, setReceivedDateError] = useState<string>();
   const [photos, setPhotos] = useState<File[]>([]);
   const [isSaving, setIsSaving] = useState<boolean>(false);
@@ -71,8 +72,8 @@ export default function CreateAccession(): JSX.Element | null {
     setPhotos(photosList);
   };
 
-  const onCollectedDateError = (error?: string) => {
-    setCollectedDateError(error);
+  const onCollectedTimeError = (error?: string) => {
+    setCollectedTimeError(error);
   };
 
   const onReceivedDateError = (error?: string) => {
@@ -82,7 +83,7 @@ export default function CreateAccession(): JSX.Element | null {
   const defaultAccession = (): CreateAccessionRequestPayloadV2Write =>
     ({
       state: 'Awaiting Check-In',
-      collectedDate: getTodaysDateFormatted(timeZone),
+      collectedTime: DateTime.local().setZone(timeZone).toISO(),
       receivedDate: getTodaysDateFormatted(timeZone),
     }) as CreateAccessionRequestPayloadV2Write;
 
@@ -140,15 +141,15 @@ export default function CreateAccession(): JSX.Element | null {
 
   const hasErrors = useCallback(() => {
     const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record[field]);
-    return missingRequiredField || collectedDateError || receivedDateError;
-  }, [collectedDateError, receivedDateError, record]);
+    return missingRequiredField || collectedTimeError || receivedDateError;
+  }, [collectedTimeError, receivedDateError, record]);
 
   const saveAccession = useCallback(async () => {
     if (hasErrors()) {
       const missingFields = MANDATORY_FIELDS.filter((field: MandatoryField) => !record[field]);
       const fieldsWithErrors: string[] = [...missingFields];
-      if (collectedDateError) {
-        fieldsWithErrors.push('collectedDate');
+      if (collectedTimeError) {
+        fieldsWithErrors.push('collectedTime');
       }
       if (receivedDateError) {
         fieldsWithErrors.push('receivedDate');
@@ -197,7 +198,7 @@ export default function CreateAccession(): JSX.Element | null {
       setIsSaving(false);
     }
   }, [
-    collectedDateError,
+    collectedTimeError,
     createAccession,
     hasErrors,
     navigate,
@@ -251,12 +252,13 @@ export default function CreateAccession(): JSX.Element | null {
               onChange={onChange}
               validate={validateFields}
               timeZone={timeZone}
-              value={record.collectedDate}
-              id='collectedDate'
-              onDateError={onCollectedDateError}
-              label={strings.COLLECTION_DATE_REQUIRED}
+              value={record.collectedTime}
+              id='collectedTime'
+              includeTime={true}
+              onDateError={onCollectedTimeError}
+              label={strings.COLLECTION_TIME_REQUIRED}
               maxDate={new Date()}
-              dateError={collectedDateError}
+              dateError={collectedTimeError}
             />
             <Grid item xs={12} sx={marginTop}>
               <Collectors2 collectors={record.collectors} onChange={onChange} />

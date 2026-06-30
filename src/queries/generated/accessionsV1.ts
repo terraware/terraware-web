@@ -185,6 +185,8 @@ export type AccessionPayloadV2 = {
   active: 'Inactive' | 'Active';
   bagNumbers?: string[];
   collectedDate?: string;
+  /** Date and time the seeds were collected. */
+  collectedTime?: string;
   collectionSiteCity?: string;
   collectionSiteCoordinates?: Geolocation[];
   collectionSiteCountryCode?: string;
@@ -246,6 +248,8 @@ export type AccessionPayloadV2Read = {
   active: 'Inactive' | 'Active';
   bagNumbers?: string[];
   collectedDate?: string;
+  /** Date and time the seeds were collected. */
+  collectedTime?: string;
   collectionSiteCity?: string;
   collectionSiteCoordinates?: Geolocation[];
   collectionSiteCountryCode?: string;

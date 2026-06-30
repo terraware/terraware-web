@@ -356,13 +356,12 @@ CLOSE_PLANTING_SEASON,Cerrar temporada de plantación,fc3b2abc
 CLOSE_PLANTING_SEASON_CONFIRM,"Está a punto de cerrar {0}. Al cerrar, la temporada se marcará como cerrada y no se podrán realizar más cambios. Esta acción no se puede deshacer.",ee1f53f1
 CLOSE_SEASON,Cerrar temporada,72b4448a
 CLOSED,Cerrado,7b8d0429
-COLLECTED_DATE,Fecha de recolección,3f1515d8
 COLLECTED_FROM,Recolectado de,ffc6ad60
 COLLECTING_SITE,Lugar de recolección,7491b42b
-COLLECTION_DATE,Fecha de recolección,37db5c5f
-COLLECTION_DATE_REQUIRED,Fecha de recolección *,e9fbd2db
 COLLECTION_SITE,Nombre del lugar de recolección,32b625d7
 COLLECTION_SOURCE,Tipo de fuente de la planta,292a47fa
+COLLECTION_TIME,Hora de recolección,71a111d9
+COLLECTION_TIME_REQUIRED,Hora de recolección *,5c57b5c3
 COLLECTOR,Recolector,cf2069b8
 COLLECTORS,Recolectores,55432568
 COLOR,Color,e96df902
@@ -699,6 +698,7 @@ EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Total estimado de plantas (Densidad de plant
 ESTIMATED_BUDGET,Presupuesto estimado,23c1c02a
 ESTIMATED_READY_DATE,Fecha estimada de finalización,d37bedd1
 EVENT,Evento,cc849cd0
+EVENT_ADDED,{0} ha sido añadido,b6bc301d
 EVENT_CALL_DESCRIPTION_1,"Hacer clic en ""{0}"" abrirá una ventana del navegador para unirse a una videollamada de Google Meet.",f8c40b21
 EVENT_CALL_DESCRIPTION_2,Para este {0} necesitarás:,89f84f4b
 EVENT_CALL_REQUIREMENTS_INTERNET,Una conexión a internet en tu dispositivo: banda ancha por cable o inalámbrica (3G o 4G/LTE),0f7a1688
@@ -1206,7 +1206,7 @@ NEW_ACCESSION,Añadir accesión,6d0d1602
 NEW_APP_VERSION,Actualice para usar la versión más reciente de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualice para obtener la versión más reciente de Terraware.,6235c190
 NEW_PLANTING_WITHDRAWAL_REQUESTS_RECEIVED,Nuevas solicitudes de retiro de plantas recibidas para {0},0da4cdcd
-NEW_SPECIES_TARGETS_ADDED,Se han añadido nuevos objetivos de especies para {0},9348d3bf
+NEW_SPECIES_TARGETS_ADDED,Nuevos objetivos de especies añadidos para {0},2289b20d
 NEW_STRATUM,Nuevo Estrato,84292d1f
 NEW_SUBSTRATUM,Nuevo Sustrato,90a1ddc3
 NEW_TEMPLATE_MODAL_DESCRIPTION,Se publicó una nueva versión para documentTemplate de este documento. ¿Quiere actualizar?,c11ed4d2
@@ -1507,6 +1507,10 @@ PLANTING_COMPLETE_DASHBOARD,Plantación completada,3bea077e
 PLANTING_COMPLETE_DASHBOARD_TOOLTIP,"La plantación completada incluye el área y el porcentaje totales del sitio que se marcó como ""Plantación completada"".",b9bda0fe
 PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,"Porcentaje de ""Plantación completada"" de todos los lugares de plantación relacionados con el proyecto",969947fc
 PLANTING_COMPLETE_TOOLTIP,¿Se ha completado la plantación en este sustrato?,a6bfac66
+PLANTING_DATE,Fecha de plantación,544c699c
+PLANTING_DATE_ADDED,Fecha de plantación agregada: {0}.,187cb611
+PLANTING_DATE_DELETED,Fecha de plantación eliminada: {0}.,6a287532
+PLANTING_DATE_SPECIES_UPDATED,Especie de fecha de plantación actualizada: {0} en {1} cambió de {2} a {3}.,d4138b44
 PLANTING_DATES,Fechas de plantación,e8aa47b1
 PLANTING_DATES_TAB_DESCRIPTION,"Las fechas de plantación especifican cuándo y dónde se plantan las plantas. Haga clic en ""Guardar y Solicitar"" cuando esté listo para que el vivero retire las plantas.",c144ee5c
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
@@ -1520,7 +1524,7 @@ PLANTING_SEASON_END_IN_PAST,La fecha de término no puede estar en el pasado.,b2
 PLANTING_SEASON_END_OUT_OF_RANGE,Debe ser entre 4 semanas y 1 año de la fecha de inicio.,fcca5463
 PLANTING_SEASON_NO_OVERLAP,Se superpone con la temporada de plantación {0} - {1},f1549979
 PLANTING_SEASON_NOTIFICATION_ALLOCATION_QUANTITIES_UPDATED,El vivero ha actualizado las cantidades asignadas para esta temporada.,eff34e46
-PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_CLOSED,La temporada ha sido cerrada y sus objetivos de especies ya no aparecen como necesarios ni solicitados.,e2d75939
+PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_CLOSED,La temporada ha finalizado y sus especies ya no son necesarias ni solicitadas.,54133045
 PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_PAST_END_DATE,La fecha de finalización de esta temporada ha pasado. Extienda la temporada o ciérrela si la plantación está completa.,e6ffad3c
 PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED,Se han recibido nuevas solicitudes de retiro para plantación.,e587d761
 PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY,Se ha recibido una solicitud nueva o actualizada de retiro de plantación.,71130ddd
@@ -1559,6 +1563,7 @@ PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS,Las plantaciones requieren lotes con 
 PLANTS,Plantas,f6cde0c3
 PLANTS_DASHBOARD,Panel de plantas,65ec62dd
 PLANTS_DASHBOARD_ICON,Icono de Tablero de plantas,576ad8cc
+PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE_CHANGED,Plantas de {0} asignadas a {1} para {2} cambiaron de {3} a {4}.,99015caf
 PLANTS_PER_HA,Plantas por hectárea,1b8bb685
 PLANTS_PER_HA_LC,plantas/ha,606dca50
 PLANTS_PER_HA_TOOLTIP,"La ""Tendencia de plantas por hectárea"" representa la cantidad de plantas por hectárea registradas en todas las observaciones.",95449181
@@ -2138,6 +2143,9 @@ SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,El desglose de supervivencia muestra el porce
 SPECIES_SURVIVAL_TOOLTIP,"Supervivencia de especies muestra las especies con las tasas de supervivencia más altas y más bajas, entre las estratas que fueron observadas.",5dde50a6
 SPECIES_TABLE_INSTRUCTIONS,Haga clic en un número de la tabla para editarlo.,7f5a3f3e
 SPECIES_TABLE_INSTRUCTIONS_NOTE,"NOTA: Cuando se cambian los números, los números originales y las ubicaciones de las plantas observadas no se actualizarán en los mapas. Por favor, cambie los números con discreción.",3d4cd792
+SPECIES_TARGET_ADDED,Meta de especie agregada: {0} en {1}.,024829c9
+SPECIES_TARGET_DELETED,Meta de especie eliminada: {0} en {1}.,fd85928a
+SPECIES_TARGET_UPDATED,Meta de especie actualizada: {0} en {1} cambió de {2} a {3}.,f14397fe
 SPECIES_TARGETS,Objetivos de especies,96d27e04
 SPECIES_TOOLTIP,Especies cuyas densidades de plantas se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,6e5f03ec
 SPECIES_USAGE,Uso de la especie,0669cb85

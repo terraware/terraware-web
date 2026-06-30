@@ -17,6 +17,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import { useLazyGetAccessionsListUploadTemplateQuery } from 'src/queries/generated/accessionsV2';
 import { useLazyGetPendingAccessionsQuery, useLazySearchAccessionsQuery } from 'src/queries/search/accessions';
+import SelectSeedBankModal from 'src/scenes/SeedBanksRouter/SelectSeedBankModal';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { SearchResponseElementWithId } from 'src/types/Search';
@@ -24,7 +25,6 @@ import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
-import SelectSeedBankModal from '../../../scenes/SeedBanksRouter/SelectSeedBankModal';
 import AccessionsBySpeciesTable from './AccessionsBySpeciesTable';
 import AccessionsTable from './AccessionsTable';
 import ImportAccessionsModal from './ImportAccessionsModal';
@@ -42,7 +42,7 @@ const ALL_ACCESSION_FIELDS = [
   'project_name',
   'species_commonName',
   'species_familyName',
-  'collectedDate',
+  'collectedTime',
   'receivedDate',
   'collectionSiteName',
   'collectionSiteLandowner',

@@ -37,7 +37,7 @@ export interface Accession2EditModalProps {
   onClose: () => void;
 }
 
-const MANDATORY_FIELDS = ['speciesId', 'collectedDate'] as const;
+const MANDATORY_FIELDS = ['speciesId', 'collectedTime'] as const;
 
 type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
@@ -69,7 +69,7 @@ function Accession2EditModalForm({ accession, open, onClose }: Accession2EditMod
   const selectedSeedBank = selectedOrganization ? getSeedBank(selectedOrganization, record.facilityId) : undefined;
   const tz = useLocationTimeZone().get(selectedSeedBank);
   const timeZone = tz.id;
-  const [collectedDateError, setCollectedDateError] = useState<string>();
+  const [collectedTimeError, setCollectedTimeError] = useState<string>();
   const [loading, setLoading] = useState(false);
   const [photoFilenames, setPhotoFilenames] = useState<string[]>([]);
   const [newPhotos, setNewPhotos] = useState<File[]>([]);
@@ -112,14 +112,14 @@ function Accession2EditModalForm({ accession, open, onClose }: Accession2EditMod
     }
   }, [deletePhoto, newPhotos, photoFilenamesToRemove, record.id, uploadPhoto]);
 
-  const onCollectedDateError = (error?: string) => {
-    setCollectedDateError(error);
+  const onCollectedTimeError = (error?: string) => {
+    setCollectedTimeError(error);
   };
 
   const hasErrors = useCallback(() => {
     const missingRequiredField = MANDATORY_FIELDS.some((field: MandatoryField) => !record || !record[field]);
-    return missingRequiredField || collectedDateError;
-  }, [collectedDateError, record]);
+    return missingRequiredField || collectedTimeError;
+  }, [collectedTimeError, record]);
 
   useEffect(() => {
     setRecord(accession);
@@ -220,12 +220,13 @@ function Accession2EditModalForm({ accession, open, onClose }: Accession2EditMod
             onChange={onChange}
             validate={validateFields}
             timeZone={timeZone}
-            id='collectedDate'
-            onDateError={onCollectedDateError}
-            label={strings.COLLECTION_DATE_REQUIRED}
+            id='collectedTime'
+            includeTime={true}
+            onDateError={onCollectedTimeError}
+            label={strings.COLLECTION_TIME_REQUIRED}
             maxDate={new Date()}
-            dateError={collectedDateError}
-            value={record.collectedDate}
+            dateError={collectedTimeError}
+            value={record.collectedTime}
           />
           <Grid item xs={12}>
             <Collectors2 onChange={onChange} collectors={record.collectors} />

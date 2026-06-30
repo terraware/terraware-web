@@ -261,6 +261,37 @@ const PlantingDateListItem = ({
     return { strataNames: [...strataSet], substrataNames: [...substrataSet] };
   }, [scheduledDate, plantingSite]);
 
+  const locationNamesList = (names: string[], twoColumn = false) => {
+    if (names.length === 0) {
+      return <Typography fontSize='14px'>{'-'}</Typography>;
+    }
+
+    if (!twoColumn) {
+      return names.map((name) => (
+        <Typography key={name} fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxtSecondary}>
+          {name}
+        </Typography>
+      ));
+    }
+
+    return (
+      <Box display='flex' flexDirection='column'>
+        {Array.from({ length: Math.ceil(names.length / 2) }, (_, i) => {
+          const pair = names.slice(i * 2, i * 2 + 2);
+          return (
+            <Box key={i} display='flex' gap='8px' flexWrap='wrap'>
+              {pair.map((name) => (
+                <Typography key={name} fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxtSecondary}>
+                  {name}
+                </Typography>
+              ))}
+            </Box>
+          );
+        })}
+      </Box>
+    );
+  };
+
   return (
     <Box
       display='flex'
@@ -290,13 +321,7 @@ const PlantingDateListItem = ({
         <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
           {strings.STRATA_LABEL}
         </Typography>
-        <Box>
-          {strataNames.map((name) => (
-            <Typography key={name} fontSize='14px' fontWeight={600}>
-              {name}
-            </Typography>
-          ))}
-        </Box>
+        <Box>{locationNamesList(strataNames)}</Box>
       </Box>
       <Box
         flex={1}
@@ -308,13 +333,7 @@ const PlantingDateListItem = ({
         <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
           {strings.SUBSTRATA_LABEL}
         </Typography>
-        <Box>
-          {substrataNames.map((name) => (
-            <Typography key={name} fontSize='14px' fontWeight={600}>
-              {name}
-            </Typography>
-          ))}
-        </Box>
+        <Box>{locationNamesList(substrataNames, !isMobile)}</Box>
       </Box>
       {!readOnly && (
         <Button
@@ -367,7 +386,7 @@ const submitQuantityOnEnter = (key: string) => {
   }
 };
 
-const speciesTableGridColumns = 'minmax(200px, 2fr) 120px minmax(132px, 1fr) 40px';
+const speciesTableGridColumns = '260px 120px minmax(132px, 1fr) 40px';
 
 const quantityTextFieldSx = {
   width: '100px',
@@ -380,20 +399,12 @@ const quantityTextFieldSx = {
 
 const addSpeciesQuantityTextFieldSx = {
   ...quantityTextFieldSx,
-  paddingBottom: '48px',
-  position: 'relative',
   '&& .textfield-label': {
     display: 'none',
     height: 0,
     lineHeight: 0,
     margin: 0,
     marginBottom: 0,
-  },
-  '& .textfield-label-container': {
-    left: 0,
-    marginTop: 0,
-    position: 'absolute',
-    top: 'calc(100% - 44px)',
   },
 };
 
@@ -878,28 +889,27 @@ const SpeciesTable = ({
           />
         ))}
         {newSpeciesDrafts.map((draft) => (
-          <Box key={draft.id} padding={theme.spacing(1, 2)}>
-            <AddSpeciesRow
-              substratumId={substratumId}
-              draft={draft}
-              species={species}
-              availableSpecies={availableSpecies}
-              scheduledOtherBySpecies={scheduledOtherBySpecies}
-              allocatedBySpecies={allocatedBySpecies}
-              onChange={(updatedDraft) =>
-                onUpdateSubstratumSpecies(substratumId, (current) =>
-                  current.map((currentDraft) => (currentDraft.id === draft.id ? updatedDraft : currentDraft))
-                )
-              }
-              onRemove={() =>
-                onUpdateSubstratumSpecies(substratumId, (current) =>
-                  current.filter((currentDraft) => currentDraft.id !== draft.id)
-                )
-              }
-            />
-          </Box>
+          <AddSpeciesRow
+            key={draft.id}
+            substratumId={substratumId}
+            draft={draft}
+            species={species}
+            availableSpecies={availableSpecies}
+            scheduledOtherBySpecies={scheduledOtherBySpecies}
+            allocatedBySpecies={allocatedBySpecies}
+            onChange={(updatedDraft) =>
+              onUpdateSubstratumSpecies(substratumId, (current) =>
+                current.map((currentDraft) => (currentDraft.id === draft.id ? updatedDraft : currentDraft))
+              )
+            }
+            onRemove={() =>
+              onUpdateSubstratumSpecies(substratumId, (current) =>
+                current.filter((currentDraft) => currentDraft.id !== draft.id)
+              )
+            }
+          />
         ))}
-        <Box padding={theme.spacing(1, 2)}>
+        <Box padding={theme.spacing(0, 2, 1, 0)}>
           <Button
             icon='iconAdd'
             label={strings.ADD_SPECIES}
@@ -977,8 +987,16 @@ const AddSpeciesRow = ({
   };
 
   return (
-    <Box display='flex' alignItems='flex-start' gap={theme.spacing(2)} flexWrap='wrap'>
-      <Box maxWidth='100%' width='300px'>
+    <Box
+      display='grid'
+      gridTemplateColumns={speciesTableGridColumns}
+      alignItems='flex-start'
+      sx={{
+        columnGap: theme.spacing(2),
+        padding: theme.spacing(1, 2),
+      }}
+    >
+      <Box maxWidth='100%' width='260px'>
         <Dropdown
           id={`add-species-${substratumId}`}
           placeholder={strings.SELECT_SPECIES}

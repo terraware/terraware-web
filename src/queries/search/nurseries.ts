@@ -107,6 +107,17 @@ const parseSearchNurseryWithdrawalsArgs = (
     });
   }
 
+  if (args.plantingDate) {
+    const minDate = args.plantingDate.minDate ?? '1900-01-01';
+    const maxDate = args.plantingDate.maxDate ?? '9999-12-31';
+    searchChildren.push({
+      operation: 'field',
+      field: 'plantingDateRequest_date',
+      type: 'Range',
+      values: [minDate, maxDate],
+    });
+  }
+
   if (args.purposes?.length) {
     searchChildren.push({
       operation: 'field',
@@ -229,6 +240,13 @@ const parseSearchNurseryWithdrawalsArgs = (
             field: 'plantingSeason_name',
           },
         ];
+      case 'plantingDate':
+        return [
+          {
+            ...orderOption,
+            field: 'plantingDateRequest_date',
+          },
+        ];
       default:
         return [orderOption];
     }
@@ -273,7 +291,9 @@ const injectedRtkApi = api.injectEndpoints({
       providesTags: [{ type: QueryTagTypes.NurseryWithdrawals }],
       transformResponse: (result: SearchNurseryWithdrawalFilterOptionsApiResponse) => ({
         nurseryNames: result.results.facility_name.values,
-        destinationNames: result.results.destinationName.values,
+        destinationNames: result.results.destinationName.values.filter(
+          (value) => typeof value === 'string' && value.trim() !== ''
+        ),
         stratumNames: result.results.stratumNames.values,
         substratumNames: result.results.substratumShortNames.values,
         speciesNames: result.results.batchWithdrawals_batch_species_scientificName.values,
@@ -301,6 +321,7 @@ const injectedRtkApi = api.injectEndpoints({
             'batchWithdrawals.batch_species_scientificName',
             'batchWithdrawals.destinationBatchProjectName',
             'plantingSeason_name',
+            'plantingDateRequest_date',
             'undoesWithdrawalId',
             'undoneByWithdrawalId',
             'undoesWithdrawalDate',
@@ -341,6 +362,7 @@ const injectedRtkApi = api.injectEndpoints({
               )
             ).sort(),
             plantingSeasonName: result.plantingSeason_name,
+            plantingDate: result.plantingDateRequest_date,
             undoesWithdrawalDate: result.undoesWithdrawalDate,
             undoesWithdrawalId: result.undoesWithdrawalId ? Number(result.undoesWithdrawalId) : undefined,
 
@@ -455,6 +477,7 @@ export type SearchNurseryWithdrawalsApiArgs = {
   nurseryName?: string;
   destinationNames?: string[];
   plantingSeasonIds?: number[];
+  plantingDate?: { minDate?: string; maxDate?: string };
   stratumNames?: string[];
   substratumNames?: string[];
   speciesNames?: string[];
@@ -484,6 +507,7 @@ type NurseryWithdrawalApiResult = {
   hasReassignments: string;
   batchWithdrawals: NurseryWithdrawalBatchApiResult[];
   plantingSeason_name?: string;
+  plantingDateRequest_date?: string;
   undoesWithdrawalId?: string;
   undoneByWithdrawalId?: string;
   undoesWithdrawalDate?: string;
@@ -507,6 +531,7 @@ export type SearchNurseryWithdrawalPayload = {
   speciesNames?: string[];
   projectNames?: string[];
   plantingSeasonName?: string;
+  plantingDate?: string;
   hasReassignments: boolean;
   undoesWithdrawalId?: number;
   undoneByWithdrawalId?: number;

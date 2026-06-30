@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Container, Grid, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -16,16 +16,29 @@ import { useLazyGetPendingAccessionsQuery } from 'src/queries/search/accessions'
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { SearchResponseElement } from 'src/types/Search';
-import { isContributor } from 'src/utils/organization';
+import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
+import { getAllSeedBanks, isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation from 'src/utils/useStateLocation';
+import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import CheckInAllConfirmationDialog from './CheckInAllConfirmationDialog';
 
 export default function CheckIn(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { isMobile } = useDeviceInfo();
+  const locationTimeZone = useLocationTimeZone();
+  const facilityNameToTz = useMemo(
+    () =>
+      Object.fromEntries(
+        (selectedOrganization ? getAllSeedBanks(selectedOrganization) : []).map((sb) => [
+          sb.name,
+          locationTimeZone.get(sb).id,
+        ])
+      ),
+    [selectedOrganization, locationTimeZone]
+  );
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const location = useStateLocation();
@@ -225,10 +238,13 @@ export default function CheckIn(): JSX.Element {
                     </Grid>
                     <Grid item xs={isMobile ? 16 : 2} marginBottom={isMobile ? theme.spacing(3) : 0}>
                       <TextField
-                        label={strings.COLLECTED_DATE}
+                        label={strings.COLLECTION_TIME}
                         id='collected'
                         type='text'
-                        value={result.collectedDate as string}
+                        value={getDateTimeDisplayValue(
+                          new Date(result.collectedTime as string).getTime(),
+                          facilityNameToTz[result.facility_name as string]
+                        )}
                         display={true}
                       />
                     </Grid>
