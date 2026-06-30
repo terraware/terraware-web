@@ -380,15 +380,18 @@ const WithdrawFromBatchesModal = ({
       </Stepper>
 
       <Box
-        display='flex'
-        justifyContent='center'
-        gap={theme.spacing(3)}
+        display='grid'
+        gridTemplateColumns='repeat(3, minmax(0, 1fr))'
+        alignItems='center'
+        columnGap={theme.spacing(3)}
         marginBottom={theme.spacing(3)}
         color={theme.palette.TwClrTxtSecondary}
       >
-        <Typography>{request.plantingSiteName}</Typography>
-        <Typography>{request.plantingSeasonName}</Typography>
-        <Typography>{getMediumDate(request.date, activeLocale)}</Typography>
+        <Typography textAlign='center'>{request.plantingSiteName}</Typography>
+        <Typography textAlign='center'>{request.plantingSeasonName}</Typography>
+        <Typography textAlign='center' sx={{ whiteSpace: 'nowrap' }}>
+          {getMediumDate(request.date, activeLocale)}
+        </Typography>
       </Box>
 
       {step === 0 && (

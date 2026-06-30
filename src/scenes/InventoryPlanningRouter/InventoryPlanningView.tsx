@@ -144,7 +144,13 @@ const InventoryPlanningView = (): JSX.Element => {
   }, [selectedPlantingSeasonSpeciesIds, speciesId]);
 
   return (
-    <Page title={strings.INVENTORY_PLANNING} description={strings.INVENTORY_PLANNING_DESCRIPTION}>
+    <Page
+      title={strings.INVENTORY_PLANNING}
+      description={strings.INVENTORY_PLANNING_DESCRIPTION}
+      titleContainerStyle={{ paddingX: 3 }}
+      titleStyle={{ paddingLeft: 0 }}
+      descriptionStyle={{ paddingLeft: 0 }}
+    >
       <Box sx={{ width: '100%' }}>
         <PlantingSeasonNotificationBanners
           organizationId={organizationId}

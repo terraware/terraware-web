@@ -369,7 +369,7 @@ type SpeciesDraft = {
   allocatedQuantity?: number;
   isNew?: boolean;
 };
-type SubstratumDraft = { selected: boolean; species: SpeciesDraft[] };
+type SubstratumDraft = { selected: boolean; species: SpeciesDraft[]; speciesInitialized?: boolean };
 
 const getSpeciesDraftQuantity = (draft: SpeciesDraft): number =>
   Math.max(0, Number(draft.quantityInput ?? draft.quantity));
@@ -436,8 +436,9 @@ const PlantingDateForm = ({
     const drafts: Record<number, SubstratumDraft> = {};
     if (editingScheduledDate) {
       editingScheduledDate.species.forEach((s) => {
-        const existing = drafts[s.substratumId] ?? { selected: true, species: [] };
+        const existing = drafts[s.substratumId] ?? { selected: true, species: [], speciesInitialized: true };
         existing.selected = true;
+        existing.speciesInitialized = true;
         existing.species.push({
           id: `${s.substratumId}-${s.speciesId}`,
           speciesId: s.speciesId,
@@ -481,7 +482,7 @@ const PlantingDateForm = ({
       const substratumId = Number(substratumIdStr);
       return draft.species.flatMap((s) => {
         const quantity = getSpeciesDraftQuantity(s);
-        if (s.speciesId === undefined || Number.isNaN(quantity) || quantity <= 0) {
+        if (s.speciesId === undefined || Number.isNaN(quantity)) {
           return [];
         }
         return [
@@ -593,7 +594,11 @@ const PlantingDateForm = ({
             updateSubstratum(substratumId, (draft) => ({ ...draft, selected }))
           }
           onUpdateSubstratumSpecies={(substratumId, updater) =>
-            updateSubstratum(substratumId, (draft) => ({ ...draft, species: updater(draft.species) }))
+            updateSubstratum(substratumId, (draft) => ({
+              ...draft,
+              species: updater(draft.species),
+              speciesInitialized: true,
+            }))
           }
         />
       ))}
@@ -738,10 +743,14 @@ const SubstratumDraftSection = ({
   const theme = useTheme();
   const selected = draft?.selected ?? false;
   const substratumSpecies = draft?.species ?? [];
+  const speciesInitialized = draft?.speciesInitialized ?? false;
 
   // Pre-populate species rows from species targets when the substratum is selected
   useEffect(() => {
     if (!selected) {
+      return;
+    }
+    if (speciesInitialized) {
       return;
     }
     if (substratumSpecies.length > 0) {
@@ -762,6 +771,7 @@ const SubstratumDraftSection = ({
   }, [
     allocatedBySpecies,
     selected,
+    speciesInitialized,
     substratum.id,
     substratumSpecies.length,
     speciesTargets,
