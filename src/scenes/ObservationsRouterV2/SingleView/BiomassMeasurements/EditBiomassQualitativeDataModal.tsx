@@ -64,6 +64,13 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
 
   const [record, setRecord] = useForm<BiomassQualitativeFormData>(initialFormData);
   const [showConfirmationModalOpened, setShowConfirmationModalOpened] = useState(false);
+  const [waterPresence, setWaterPresence] = useState<boolean>(
+    () => typeof initialFormData.biomassMeasurement.waterDepth === 'number'
+  );
+  const [showWaterClearConfirm, setShowWaterClearConfirm] = useState(false);
+  const [validateFields, setValidateFields] = useState(false);
+
+  const hasWater = !isAdditionalBiomassFieldsEnabled || waterPresence;
 
   const onAddPlotCondition = useCallback(
     (conditionId: PlotCondition) => {
@@ -135,6 +142,40 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
     [setRecord]
   );
 
+  const onChangeWaterPresence = useCallback(
+    (value: unknown) => {
+      if (value === 'Yes') {
+        setWaterPresence(true);
+        setRecord((prev) => ({
+          ...prev,
+          biomassMeasurement: {
+            ...prev.biomassMeasurement,
+            waterDepth: typeof prev.biomassMeasurement.waterDepth === 'number' ? prev.biomassMeasurement.waterDepth : 0,
+          },
+        }));
+      } else {
+        setShowWaterClearConfirm(true);
+      }
+    },
+    [setRecord]
+  );
+
+  const confirmClearWaterFields = useCallback(() => {
+    setWaterPresence(false);
+    setShowWaterClearConfirm(false);
+    setRecord((prev) => ({
+      ...prev,
+      biomassMeasurement: {
+        ...prev.biomassMeasurement,
+        waterDepth: undefined,
+        salinity: undefined,
+        ph: undefined,
+        tide: undefined,
+        tideTime: undefined,
+      },
+    }));
+  }, [setRecord]);
+
   const forestTypeOptions = useMemo(
     () => [
       {
@@ -147,6 +188,14 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
       },
     ],
     [strings.MANGROVE, strings.TERRESTRIAL]
+  );
+
+  const waterPresenceOptions = useMemo(
+    () => [
+      { label: strings.YES, value: 'Yes' },
+      { label: strings.NO, value: 'No' },
+    ],
+    [strings.YES, strings.NO]
   );
 
   const smallTreeCountOptions = useMemo(
@@ -185,6 +234,55 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
     return record.biomassMeasurement.forestType === 'Mangrove';
   }, [record]);
 
+  const waterFieldsRequired = isAdditionalBiomassFieldsEnabled && isMangrove && waterPresence;
+
+  const waterDepthError = useMemo(() => {
+    if (!validateFields || !waterFieldsRequired) {
+      return '';
+    }
+    const raw = record.biomassMeasurement?.waterDepth;
+    const num = typeof raw === 'string' ? parseFloat(raw) : raw;
+    return num === null || num === undefined || typeof num !== 'number' || isNaN(num) || num <= 0
+      ? strings.REQUIRED_FIELD
+      : '';
+  }, [validateFields, waterFieldsRequired, record.biomassMeasurement?.waterDepth, strings.REQUIRED_FIELD]);
+
+  const salinityError =
+    validateFields && waterFieldsRequired && !record.biomassMeasurement?.salinity ? strings.REQUIRED_FIELD : '';
+  const phError = validateFields && waterFieldsRequired && !record.biomassMeasurement?.ph ? strings.REQUIRED_FIELD : '';
+  const tideError =
+    validateFields && waterFieldsRequired && !record.biomassMeasurement?.tide ? strings.REQUIRED_FIELD : '';
+  const tideTimeError =
+    validateFields && waterFieldsRequired && !record.biomassMeasurement?.tideTime ? strings.REQUIRED_FIELD : '';
+
+  const forestTypeError = validateFields && !record.biomassMeasurement?.forestType ? strings.REQUIRED_FIELD : '';
+  const smallTreesError =
+    validateFields && record.biomassMeasurement?.smallTreeCountLow === undefined ? strings.REQUIRED_FIELD : '';
+  const soilAssessmentError =
+    validateFields && !record.biomassMeasurement?.soilAssessment ? strings.REQUIRED_FIELD : '';
+
+  const isValid = useMemo(() => {
+    const raw = record.biomassMeasurement?.waterDepth;
+    const num = typeof raw === 'string' ? parseFloat(raw) : raw;
+    const waterValid =
+      !waterFieldsRequired ||
+      (num !== null &&
+        num !== undefined &&
+        typeof num === 'number' &&
+        !isNaN(num) &&
+        num > 0 &&
+        !!record.biomassMeasurement?.salinity &&
+        !!record.biomassMeasurement?.ph &&
+        !!record.biomassMeasurement?.tide &&
+        !!record.biomassMeasurement?.tideTime);
+    return (
+      !!record.biomassMeasurement?.forestType &&
+      record.biomassMeasurement?.smallTreeCountLow !== undefined &&
+      !!record.biomassMeasurement?.soilAssessment &&
+      waterValid
+    );
+  }, [waterFieldsRequired, record.biomassMeasurement]);
+
   const smallTreeCountValue = useMemo(
     () =>
       smallTreeCountOptions.find(
@@ -203,13 +301,13 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
         soilAssessment: record.biomassMeasurement?.soilAssessment,
         soilType: isAdditionalBiomassFieldsEnabled ? record.biomassMeasurement?.soilType : undefined,
         forestType: record.biomassMeasurement?.forestType,
-        ph: record.biomassMeasurement?.ph,
-        salinity: record.biomassMeasurement?.salinity,
+        ph: record.biomassMeasurement?.ph ?? null,
+        salinity: record.biomassMeasurement?.salinity ?? null,
         smallTreeCountHigh: record.biomassMeasurement?.smallTreeCountHigh,
         smallTreeCountLow: record.biomassMeasurement?.smallTreeCountLow,
-        tide: record.biomassMeasurement?.tide,
-        tideTime: record.biomassMeasurement?.tideTime,
-        waterDepth: record.biomassMeasurement?.waterDepth,
+        tide: record.biomassMeasurement?.tide ?? null,
+        tideTime: record.biomassMeasurement?.tideTime ?? null,
+        waterDepth: record.biomassMeasurement?.waterDepth ?? null,
         herbaceousCoverPercent: record.biomassMeasurement?.herbaceousCoverPercent,
       };
 
@@ -248,7 +346,36 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
             onSubmit={saveEditedData}
           />
         )}
-        {!showConfirmationModalOpened && (
+        {showWaterClearConfirm && (
+          <DialogBox
+            onClose={() => setShowWaterClearConfirm(false)}
+            open={true}
+            title={strings.IS_THERE_WATER_IN_THIS_PLOT}
+            size='medium'
+            middleButtons={[
+              <Button
+                id='cancelClearWater'
+                label={strings.CANCEL}
+                priority='secondary'
+                type='passive'
+                onClick={() => setShowWaterClearConfirm(false)}
+                size='medium'
+                key='button-1'
+              />,
+              <Button
+                id='confirmClearWater'
+                label={strings.CONTINUE}
+                type='destructive'
+                onClick={confirmClearWaterFields}
+                size='medium'
+                key='button-2'
+              />,
+            ]}
+            skrim={true}
+            message={strings.WATER_FIELDS_WILL_BE_CLEARED}
+          />
+        )}
+        {!showConfirmationModalOpened && !showWaterClearConfirm && (
           <DialogBox
             onClose={() => setOpen(false)}
             open={true}
@@ -267,7 +394,12 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
               <Button
                 id='saveData'
                 label={strings.SAVE}
-                onClick={() => setShowConfirmationModalOpened(true)}
+                onClick={() => {
+                  setValidateFields(true);
+                  if (isValid) {
+                    setShowConfirmationModalOpened(true);
+                  }
+                }}
                 size='medium'
                 key='button-2'
               />,
@@ -290,6 +422,8 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                 options={forestTypeOptions}
                 onChange={onChangeHandler('biomassMeasurement.forestType')}
                 sx={{ paddingTop: '16px' }}
+                required
+                errorText={forestTypeError}
               />
 
               <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
@@ -300,6 +434,8 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                     options={smallTreeCountOptions}
                     onChange={onChangeNumberOfSmallTrees}
                     id={'numberOfSmallTrees'}
+                    required
+                    errorText={smallTreesError}
                   />
                 </Box>
 
@@ -315,64 +451,87 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
               </Box>
               {isMangrove && (
                 <>
-                  <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
-                    <Box sx={{ flex: 1 }}>
-                      <Textfield
-                        type='text'
-                        label={strings.WATER_DEPTH_CM}
-                        value={record.biomassMeasurement?.waterDepth}
-                        id={'waterDepth'}
-                        onChange={onChangeHandler('biomassMeasurement.waterDepth')}
-                      />
-                    </Box>
+                  {isAdditionalBiomassFieldsEnabled && (
+                    <Dropdown
+                      label={strings.IS_THERE_WATER_IN_THIS_PLOT}
+                      selectedValue={waterPresence ? 'Yes' : 'No'}
+                      options={waterPresenceOptions}
+                      onChange={onChangeWaterPresence}
+                      sx={{ paddingTop: '16px' }}
+                      required
+                    />
+                  )}
+                  {hasWater && (
+                    <>
+                      <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
+                        <Box sx={{ flex: 1 }}>
+                          <Textfield
+                            type='text'
+                            label={strings.WATER_DEPTH_CM}
+                            value={record.biomassMeasurement?.waterDepth ?? undefined}
+                            id={'waterDepth'}
+                            onChange={onChangeHandler('biomassMeasurement.waterDepth')}
+                            errorText={waterDepthError}
+                            required
+                          />
+                        </Box>
 
-                    <Box sx={{ flex: 1 }}>
-                      <Textfield
-                        type='text'
-                        label={strings.SALINITY_PPT}
-                        value={record.biomassMeasurement?.salinity}
-                        id={'salinity'}
-                        onChange={onChangeHandler('biomassMeasurement.salinity')}
-                      />
-                    </Box>
-                  </Box>
+                        <Box sx={{ flex: 1 }}>
+                          <Textfield
+                            type='text'
+                            label={strings.SALINITY_PPT}
+                            value={record.biomassMeasurement?.salinity}
+                            id={'salinity'}
+                            onChange={onChangeHandler('biomassMeasurement.salinity')}
+                            errorText={salinityError}
+                            required
+                          />
+                        </Box>
+                      </Box>
 
-                  <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
-                    <Box sx={{ flex: 1 }}>
-                      <Textfield
-                        type='text'
-                        label={strings.PH}
-                        value={record.biomassMeasurement?.ph}
-                        id={'ph'}
-                        onChange={onChangeHandler('biomassMeasurement.ph')}
-                      />
-                    </Box>
+                      <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
+                        <Box sx={{ flex: 1 }}>
+                          <Textfield
+                            type='text'
+                            label={strings.PH}
+                            value={record.biomassMeasurement?.ph}
+                            id={'ph'}
+                            onChange={onChangeHandler('biomassMeasurement.ph')}
+                            errorText={phError}
+                            required
+                          />
+                        </Box>
 
-                    <Box sx={{ flex: 1 }}>
-                      <Dropdown
-                        label={strings.TIDE}
-                        selectedValue={record.biomassMeasurement?.tide}
-                        id={'tide'}
-                        onChange={onChangeHandler('biomassMeasurement.tide')}
-                        options={[
-                          { label: strings.LOW, value: 'Low' },
-                          { label: strings.HIGH, value: 'High' },
-                        ]}
-                      />
-                    </Box>
-                  </Box>
+                        <Box sx={{ flex: 1 }}>
+                          <Dropdown
+                            label={strings.TIDE}
+                            selectedValue={record.biomassMeasurement?.tide}
+                            id={'tide'}
+                            onChange={onChangeHandler('biomassMeasurement.tide')}
+                            options={[
+                              { label: strings.LOW, value: 'Low' },
+                              { label: strings.HIGH, value: 'High' },
+                            ]}
+                            errorText={tideError}
+                            required
+                          />
+                        </Box>
+                      </Box>
 
-                  <DatePicker
-                    id='startTime'
-                    label={strings.MEASUREMENT_TIME}
-                    value={record.biomassMeasurement?.tideTime}
-                    onDateChange={(value?: DateTime) => {
-                      onChangeHandler('biomassMeasurement.tideTime')(value?.toISO());
-                    }}
-                    aria-label='date-picker'
-                    showTime={true}
-                    sx={{ paddingTop: '16px' }}
-                  />
+                      <DatePicker
+                        id='startTime'
+                        label={`${strings.MEASUREMENT_TIME} *`}
+                        value={record.biomassMeasurement?.tideTime}
+                        onDateChange={(value?: DateTime) => {
+                          onChangeHandler('biomassMeasurement.tideTime')(value?.toISO());
+                        }}
+                        aria-label='date-picker'
+                        showTime={true}
+                        sx={{ paddingTop: '16px' }}
+                        errorText={tideTimeError}
+                      />
+                    </>
+                  )}
                 </>
               )}
 
@@ -421,6 +580,8 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                     id={'soilAssessment'}
                     onChange={onChangeHandler('biomassMeasurement.soilAssessment')}
                     sx={{ height: '100%', 'flex-flow': 'column !important', '.textfield-value': { flex: 1 } }}
+                    required
+                    errorText={soilAssessmentError}
                   />
                 </Box>
               </Box>

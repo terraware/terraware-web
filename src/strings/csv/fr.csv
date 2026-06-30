@@ -966,6 +966,7 @@ INVITE_FUNDER,Inviter le bailleur de fonds,d885523f
 INVITE_FUNDER_DESCRIPTION,Fournissez une adresse e-mail pour inviter un bailleur de fonds à accéder au portail des bailleurs de fonds sous cette entité de financement. Un e-mail d'invitation à créer un compte sera envoyé à l'adresse e-mail. Le prénom et le nom de famille seront fournis par le titulaire du compte.,306732c9
 INVITED,Invité·e,d40f4749
 IS_DECIMAL,Est décimal,c18644f0
+IS_THERE_WATER_IN_THIS_PLOT,Y a-t-il de l'eau dans cette parcelle ?,6fd4553f
 ISSUE,Sujet,5468a635
 IUCN_CRITICALLY_ENDANGERED,En danger critique d'extinction (CR),424daaa8
 IUCN_DATA_DEFICIENT,Données insuffisantes (DD),445f6cd0
@@ -1263,6 +1264,7 @@ NO_TEMPORARY_PLOTS_SURVIVAL_TOOLTIP,Aucune Observation terminée n'inclut de pla
 NO_TEMPORARY_PLOTS_WITHIN_STRATA,Il n’y a pas de parcelles temporaires dans les strates du site de plantation. Seules les parcelles temporaires situées dans les strates peuvent être utilisées pour le calcul du taux de survie.,407bd30a
 NO_VOTERS,Pas de votants,7db4c3bf
 NO_VOTERS_FOR_PROJECT,Il n'y a pas de votants pour ce projet. Contactez un administrateur de l'accélérateur pour ajouter des votants.,6753a8bc
+NO_WATER,Pas d'eau,18e0714e
 NO_WITHDRAWABLE_QUANTITIES_FOUND,Aucune quantité retirable n'a été trouvée,ab95517f
 NON_NATIVE,Non-autochtone,572d9365
 NONE,Aucun,8cff1f65
@@ -2590,6 +2592,8 @@ VOTING_DECISION,Décision de vote,9bb0be97
 VR,RV,98fd7fc5
 WATER_BODIES,Plans d'eau,c13f37d6
 WATER_DEPTH_CM,Profondeur de l'eau (cm),de1ca335
+WATER_DEPTH_REQUIRED_FOR_MANGROVE,La profondeur de l'eau est requise pour les observations de palétuviers. Saisissez une valeur ou cochez « Pas d'eau ».,6e89b127
+WATER_FIELDS_WILL_BE_CLEARED,"Sélectionner « Non » effacera les champs de profondeur d'eau, de salinité, de pH, de marée et d'heure de mesure de la marée.",02c0af42
 WEIGHT,Poids,8d79d02a
 WEIGHT_GRAMS,Poids (g),7f5ac0db
 WEIGHT_KILOGRAMS,Poids (kg),222d89cc
