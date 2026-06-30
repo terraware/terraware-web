@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button, Dropdown, DropdownItem, Separator } from '@terraware/web-components';
+import { BusySpinner, Button, Dropdown, DropdownItem, Separator } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
@@ -21,17 +21,19 @@ const PlantingSeasonsView = (): JSX.Element => {
   const { isMobile, isTablet } = useDeviceInfo();
   const isCompact = isMobile || isTablet;
   const { selectedOrganization } = useOrganization();
+  const organizationId = selectedOrganization?.id;
 
-  const { plantingSites } = useOrganizationPlantingSites({ full: true });
+  const { isLoading: plantingSitesLoading, plantingSites } = useOrganizationPlantingSites({ full: true });
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('planting-seasons');
 
-  const [listPlantingSeasons, { data: plantingSeasonsData }] = useLazyListPlantingSeasonsQuery();
+  const [listPlantingSeasons, plantingSeasonsResult] = useLazyListPlantingSeasonsQuery();
+  const { data: plantingSeasonsData } = plantingSeasonsResult;
 
   useEffect(() => {
-    if (selectedOrganization?.id) {
-      void listPlantingSeasons({ organizationId: selectedOrganization.id });
+    if (organizationId) {
+      void listPlantingSeasons({ organizationId });
     }
-  }, [listPlantingSeasons, selectedOrganization?.id]);
+  }, [listPlantingSeasons, organizationId]);
 
   const plantingSiteOptions = useMemo((): DropdownItem[] => {
     const sitesOptions = plantingSites
@@ -124,6 +126,9 @@ const PlantingSeasonsView = (): JSX.Element => {
     </Box>
   );
 
+  const seasonRowsLoading =
+    !organizationId || plantingSitesLoading || plantingSeasonsResult.isFetching || plantingSeasonsData === undefined;
+
   return (
     <Page
       title={isCompact ? mobileTitleArea : desktopTitleArea}
@@ -137,7 +142,9 @@ const PlantingSeasonsView = (): JSX.Element => {
           initialPlantingSiteId={selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId}
         />
       )}
-      {seasonRows.length === 0 ? (
+      {seasonRowsLoading ? (
+        <BusySpinner withSkrim={true} />
+      ) : seasonRows.length === 0 ? (
         <Card style={{ width: '100%' }} radius={theme.spacing(1)}>
           <Box
             sx={{
