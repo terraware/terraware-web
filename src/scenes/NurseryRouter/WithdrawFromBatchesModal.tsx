@@ -453,6 +453,18 @@ const Step1Content = ({
   readyBySpecies,
 }: Step1ContentProps): JSX.Element => {
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
+  const sortedRequestSpecies = useMemo(
+    () =>
+      requestSpecies
+        .filter((species) => species.requestedQuantity > 0)
+        .sort(
+          (first, second) =>
+            first.scientificName.localeCompare(second.scientificName, activeLocale || undefined) ||
+            first.speciesId - second.speciesId
+        ),
+    [activeLocale, requestSpecies]
+  );
 
   return (
     <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
@@ -547,7 +559,7 @@ const Step1Content = ({
               {strings.COVERAGE}
             </Typography>
           </Box>
-          {requestSpecies.map((s, index) => (
+          {sortedRequestSpecies.map((s, index) => (
             <NurserySummaryRow
               key={s.speciesId}
               species={s}
