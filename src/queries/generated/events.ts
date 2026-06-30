@@ -14,9 +14,15 @@ export type ListEventLogEntriesApiArg = ListEventLogEntriesRequestPayload;
 export type EventActionPayloadBase = {
   type: string;
 };
+export type CreatedFieldPayload = {
+  fieldName: string;
+  value?: string[];
+};
 export type CreatedActionPayload = {
   type: 'Created';
-} & EventActionPayloadBase;
+} & EventActionPayloadBase & {
+    fields: CreatedFieldPayload[];
+  };
 export type DeletedActionPayload = {
   type: 'Deleted';
 } & EventActionPayloadBase;

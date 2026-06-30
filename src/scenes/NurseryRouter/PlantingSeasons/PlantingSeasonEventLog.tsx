@@ -15,9 +15,6 @@ type PlantingSeasonEventLogProps = {
 
 const normalizeFieldName = (fieldName: string): string => fieldName.replace(/\s+/g, '').toLowerCase();
 
-const isClosedValue = (values?: string[]): boolean =>
-  values?.some((value) => value.toLowerCase() === 'closed') ?? false;
-
 const isPlantingSeasonDateField = (fieldName: string): boolean => {
   const normalizedFieldName = normalizeFieldName(fieldName);
 
@@ -103,15 +100,15 @@ const PlantingSeasonEventLog = ({ plantingSeasonId }: PlantingSeasonEventLogProp
         event.action.type === 'Deleted' ||
         (event.action.type === 'FieldUpdated' &&
           normalizeFieldName(event.action.fieldName) === 'status' &&
-          isClosedValue(event.action.changedTo))
+          event.action.changedTo?.[0] === 'Closed')
       ) {
         return strings.PLANTING_SEASON_EVENT_CLOSED;
       }
 
       if (event.action.type === 'FieldUpdated') {
-        return strings.formatString(
+        return strings.formatString<string | JSX.Element>(
           strings.PLANTING_SEASON_EVENT_FIELD_CHANGED,
-          <>{getPlantingSeasonFieldLabel(event.action.fieldName)}</>,
+          getPlantingSeasonFieldLabel(event.action.fieldName),
           renderChangedFrom(formatPlantingSeasonChangedValue(event.action.fieldName, event.action.changedFrom)),
           renderChangedTo(formatPlantingSeasonChangedValue(event.action.fieldName, event.action.changedTo))
         );
@@ -162,22 +159,22 @@ const PlantingSeasonEventLog = ({ plantingSeasonId }: PlantingSeasonEventLogProp
         const speciesName = event.subject.scientificName ?? event.subject.shortText;
 
         if (event.action.type === 'FieldUpdated') {
-          return strings.formatString(
+          return strings.formatString<string | JSX.Element>(
             strings.PLANTING_DATE_SPECIES_UPDATED,
-            <>{scheduledDate}</>,
-            <>{speciesName}</>,
-            <>{event.subject.substratumName}</>,
+            scheduledDate,
+            speciesName,
+            event.subject.substratumName,
             renderChangedFrom(event.action.changedFrom),
             renderChangedTo(event.action.changedTo)
           );
         }
 
         if (event.action.type === 'Created') {
-          return strings.formatString(
+          return strings.formatString<string | JSX.Element>(
             strings.PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,
-            <>{scheduledDate}</>,
-            <>{speciesName}</>,
-            <>{event.subject.substratumName}</>,
+            scheduledDate,
+            speciesName,
+            event.subject.substratumName,
             renderChangedTo(getActionChangedTo(event))
           );
         }

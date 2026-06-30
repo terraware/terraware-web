@@ -1571,7 +1571,7 @@ PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS,Les plantations nécessitent des lots
 PLANTS,Plantes,f6cde0c3
 PLANTS_DASHBOARD,Tableau de bord des plantes,65ec62dd
 PLANTS_DASHBOARD_ICON,Icône du tableau de bord des plantes,576ad8cc
-PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE,Plants de {0} attribués à {1} pour {2},4d94f242
+PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE,{0} plants de {1} attribués à {2} pour {3},88d6a493
 PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE_CHANGED,Plantes de {0} attribuées à {1} pour {2} modifiées de {3} à {4}.,99015caf
 PLANTS_PER_HA,Plantes par ha,1b8bb685
 PLANTS_PER_HA_LC,plants/ha,606dca50

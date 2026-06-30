@@ -81,8 +81,11 @@ const InventoryPlanningEventLog = ({
         );
 
         if (event.action.type === 'Created') {
+          const quantity = event.action.fields.find(({ fieldName }) => fieldName === 'quantity')?.value;
+
           return strings.formatString<string | JSX.Element>(
             strings.PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE,
+            renderChangedTo(quantity),
             event.subject.scientificName ?? event.subject.shortText,
             seasonLink,
             plantingSiteName

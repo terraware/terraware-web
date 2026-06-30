@@ -1572,7 +1572,7 @@ PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS,"Plantings require batches with seedl
 PLANTS,Plants,
 PLANTS_DASHBOARD,Plants Dashboard,
 PLANTS_DASHBOARD_ICON,Plants Dashboard icon,
-PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE,Plants of {0} allocated to {1} for {2},
+PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE,{0} plants of {1} allocated to {2} for {3},
 PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE_CHANGED,Plants of {0} allocated to {1} for {2} changed from {3} to {4}.,
 PLANTS_PER_HA,Plants per Ha,
 PLANTS_PER_HA_LC,plants/ha,
