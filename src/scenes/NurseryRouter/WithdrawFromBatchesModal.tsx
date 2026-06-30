@@ -453,9 +453,17 @@ const Step1Content = ({
   readyBySpecies,
 }: Step1ContentProps): JSX.Element => {
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
   const requestedSpecies = useMemo(
-    () => requestSpecies.filter((species) => species.requestedQuantity > 0),
-    [requestSpecies]
+    () =>
+      requestSpecies
+        .filter((species) => species.requestedQuantity > 0)
+        .sort(
+          (first, second) =>
+            first.scientificName.localeCompare(second.scientificName, activeLocale || undefined) ||
+            first.speciesId - second.speciesId
+        ),
+    [activeLocale, requestSpecies]
   );
 
   return (
