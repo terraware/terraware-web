@@ -482,7 +482,7 @@ const PlantingDateForm = ({
       const substratumId = Number(substratumIdStr);
       return draft.species.flatMap((s) => {
         const quantity = getSpeciesDraftQuantity(s);
-        if (s.speciesId === undefined || Number.isNaN(quantity) || quantity <= 0) {
+        if (s.speciesId === undefined || Number.isNaN(quantity)) {
           return [];
         }
         return [
