@@ -454,7 +454,7 @@ const Step1Content = ({
 }: Step1ContentProps): JSX.Element => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
-  const requestedSpecies = useMemo(
+  const sortedRequestSpecies = useMemo(
     () =>
       requestSpecies
         .filter((species) => species.requestedQuantity > 0)
@@ -559,7 +559,7 @@ const Step1Content = ({
               {strings.COVERAGE}
             </Typography>
           </Box>
-          {requestedSpecies.map((s, index) => (
+          {sortedRequestSpecies.map((s, index) => (
             <NurserySummaryRow
               key={s.speciesId}
               species={s}
