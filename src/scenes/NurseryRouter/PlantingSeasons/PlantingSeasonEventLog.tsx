@@ -21,9 +21,6 @@ const isPlantingSeasonDateField = (fieldName: string): boolean => {
   return normalizedFieldName === 'enddate' || normalizedFieldName === 'startdate';
 };
 
-const getActionChangedTo = (event: EventLogEntryPayload, fallback?: string[]): string[] | undefined =>
-  'changedTo' in event.action ? event.action.changedTo : fallback;
-
 const PlantingSeasonEventLog = ({ plantingSeasonId }: PlantingSeasonEventLogProps): JSX.Element | null => {
   const theme = useTheme();
   const { activeLocale, strings } = useLocalization();
@@ -174,8 +171,7 @@ const PlantingSeasonEventLog = ({ plantingSeasonId }: PlantingSeasonEventLogProp
             strings.PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,
             scheduledDate,
             speciesName,
-            event.subject.substratumName,
-            renderChangedTo(getActionChangedTo(event))
+            event.subject.substratumName
           );
         }
       }
