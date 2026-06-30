@@ -1,3 +1,4 @@
+c193d064 SW-8595 Planting Dates: Not able to delete species when there is just one in a substratum (#5972)
 c215aed9 SW-8584 UI/UX issues across Inventory and Planting Season pages (#5971)
 335c7ec8 SW-8441 Improve some events copy (#5970)
 03f60d02 SW-7489 Change CollectedDate to CollectedTime in CheckIn page (#5953)
