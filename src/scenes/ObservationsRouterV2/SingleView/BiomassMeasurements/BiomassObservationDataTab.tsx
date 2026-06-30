@@ -149,26 +149,28 @@ const BiomassObservationDataTab = () => {
     },
     {
       label: strings.WATER_DEPTH_CM,
-      value:
-        isAdditionalBiomassFieldsEnabled && !hasWater ? strings.NO_WATER : biomassMeasurement?.waterDepth ?? undefined,
+      value: isAdditionalBiomassFieldsEnabled && !hasWater ? strings.NO_WATER : biomassMeasurement?.waterDepth,
     },
     {
       label: strings.SALINITY_PPT,
-      value: biomassMeasurement?.salinity ?? '- -',
+      value: isAdditionalBiomassFieldsEnabled && !hasWater ? strings.NO_WATER : biomassMeasurement?.salinity,
     },
     {
       label: strings.PH,
-      value: biomassMeasurement?.ph ?? '- -',
+      value: isAdditionalBiomassFieldsEnabled && !hasWater ? strings.NO_WATER : biomassMeasurement?.ph,
     },
     {
       label: strings.TIDE,
-      value: biomassMeasurement?.tide ?? '- -',
+      value: isAdditionalBiomassFieldsEnabled && !hasWater ? strings.NO_WATER : biomassMeasurement?.tide,
     },
     {
       label: strings.MEASUREMENT_TIME,
-      value: biomassMeasurement?.tideTime
-        ? getDateTimeDisplayValue(new Date(biomassMeasurement?.tideTime).getTime())
-        : '- -',
+      value:
+        isAdditionalBiomassFieldsEnabled && !hasWater
+          ? strings.NO_WATER
+          : biomassMeasurement?.tideTime
+            ? getDateTimeDisplayValue(new Date(biomassMeasurement?.tideTime).getTime())
+            : '- -',
     },
     {
       label: strings.PLOT_CONDITIONS,
