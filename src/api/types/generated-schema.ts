@@ -6318,7 +6318,11 @@ export interface components {
         };
         CreateAccessionRequestPayloadV2: {
             bagNumbers?: string[];
-            /** Format: date */
+            /**
+             * Format: date
+             * @deprecated
+             * @description Will be derived from collectedTime if present.
+             */
             collectedDate?: string;
             /**
              * Format: date-time
@@ -6770,7 +6774,10 @@ export interface components {
             indicator: components["schemas"]["NewIndicatorPayload"];
         };
         CreateProjectRequestPayload: {
+            countryCode?: string;
             description?: string;
+            /** Format: int64 */
+            ecoregionId?: number;
             name: string;
             /** Format: int64 */
             organizationId: number;
@@ -6864,11 +6871,17 @@ export interface components {
             withdrawnQuantity?: components["schemas"]["SeedQuantityPayload"];
         };
         CreatedActionPayload: Omit<components["schemas"]["EventActionPayload"], "type"> & {
+            fields: components["schemas"]["CreatedFieldPayload"][];
+        } & {
             /**
              * @description discriminator enum property added by openapi-typescript
              * @enum {string}
              */
             type: "Created";
+        };
+        CreatedFieldPayload: {
+            fieldName: string;
+            value?: string[];
         };
         /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year */
         CumulativeIndicatorProgressPayload: {
@@ -9974,6 +9987,8 @@ export interface components {
             status: "Active" | "Upcoming" | "Past End Date" | "Closed";
         };
         PlantingSeasonScheduledDateSpeciesSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: date */
+            activeDate: string;
             /** Format: int64 */
             plantingSeasonId: number;
             /** Format: int64 */
@@ -10374,11 +10389,14 @@ export interface components {
             summary?: string;
         };
         ProjectPayload: {
+            countryCode?: string;
             /** Format: int64 */
             createdBy?: number;
             /** Format: date-time */
             createdTime?: string;
             description?: string;
+            /** Format: int64 */
+            ecoregionId?: number;
             /** Format: int64 */
             id: number;
             /** Format: int64 */
@@ -10996,7 +11014,7 @@ export interface components {
             cursor?: string;
             fields: string[];
             filters?: components["schemas"]["PrefixedSearch"][];
-            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingDateRequestSpecies" | "plantingDateRequests" | "plantingSeasonAllocatedSpeciesTable" | "plantingSeasonScheduledDates" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "scheduledPlantingDateSpeciesTable" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
+            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "botanicalCountries" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "ecoregionBotanicalCountries" | "ecoregionCountries" | "ecoregions" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingDateRequestSpecies" | "plantingDateRequests" | "plantingSeasonAllocatedSpeciesTable" | "plantingSeasonScheduledDates" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "scheduledPlantingDateSpeciesTable" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
             search?: components["schemas"]["SearchNodePayload"];
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
         };
@@ -11628,7 +11646,11 @@ export interface components {
         };
         UpdateAccessionRequestPayloadV2: {
             bagNumbers?: string[];
-            /** Format: date */
+            /**
+             * Format: date
+             * @deprecated
+             * @description Will be derived from collectedTime if present.
+             */
             collectedDate?: string;
             /**
              * Format: date-time
@@ -12095,7 +12117,10 @@ export interface components {
             score: components["schemas"]["UpdateProjectOverallScorePayload"];
         };
         UpdateProjectRequestPayload: {
+            countryCode?: string | null;
             description?: string;
+            /** Format: int64 */
+            ecoregionId?: number | null;
             name: string;
         };
         UpdateReportPhotoRequestPayload: {

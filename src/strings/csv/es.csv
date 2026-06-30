@@ -1508,7 +1508,9 @@ PLANTING_COMPLETE_TOOLTIP,¿Se ha completado la plantación en este sustrato?,a6
 PLANTING_DATE,Fecha de plantación,544c699c
 PLANTING_DATE_ADDED,Fecha de plantación agregada: {0}.,187cb611
 PLANTING_DATE_DELETED,Fecha de plantación eliminada: {0}.,6a287532
-PLANTING_DATE_SPECIES_UPDATED,Especie de fecha de plantación actualizada: {0} en {1} cambió de {2} a {3}.,d4138b44
+PLANTING_DATE_SPECIES_ADDED,Fecha de plantación {0} especies añadidas: {1} en {2}.,298ae021
+PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,Fecha de plantación {0} actualizada: {1} en {2} añadido con cantidad {3}.,f30a1b1d
+PLANTING_DATE_SPECIES_UPDATED,Fecha de plantación {0} actualizada: {1} en {2} cambió de {3} a {4}.,80c99e8a
 PLANTING_DATES,Fechas de plantación,e8aa47b1
 PLANTING_DATES_TAB_DESCRIPTION,"Las fechas de plantación especifican cuándo y dónde se plantan las plantas. Haga clic en ""Guardar y Solicitar"" cuando esté listo para que el vivero retire las plantas.",c144ee5c
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
@@ -1520,6 +1522,12 @@ PLANTING_SEASON,Temporada de plantación,45c5c9f9
 PLANTING_SEASON_END,Término de temporada de plantación,414309c0
 PLANTING_SEASON_END_IN_PAST,La fecha de término no puede estar en el pasado.,b2729d4d
 PLANTING_SEASON_END_OUT_OF_RANGE,Debe ser entre 4 semanas y 1 año de la fecha de inicio.,fcca5463
+PLANTING_SEASON_EVENT_CLOSED,Temporada de plantación cerrada,ffc3b8d3
+PLANTING_SEASON_EVENT_CREATED,Temporada de plantación creada,3dc928b1
+PLANTING_SEASON_EVENT_FIELD_CHANGED,La temporada de plantación {0} cambió de {1} a {2},80562c23
+PLANTING_SEASON_FIELD_END_DATE,fecha de finalización,af3501c9
+PLANTING_SEASON_FIELD_NAME,nombre,77cd4ae6
+PLANTING_SEASON_FIELD_START_DATE,fecha de inicio,cafdab1e
 PLANTING_SEASON_NO_OVERLAP,Se superpone con la temporada de plantación {0} - {1},f1549979
 PLANTING_SEASON_NOTIFICATION_ALLOCATION_QUANTITIES_UPDATED,El vivero ha actualizado las cantidades asignadas para esta temporada.,eff34e46
 PLANTING_SEASON_NOTIFICATION_PLANTING_SEASON_CLOSED,La temporada ha finalizado y sus especies ya no son necesarias ni solicitadas.,54133045
@@ -1561,6 +1569,7 @@ PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS,Las plantaciones requieren lotes con 
 PLANTS,Plantas,f6cde0c3
 PLANTS_DASHBOARD,Panel de plantas,65ec62dd
 PLANTS_DASHBOARD_ICON,Icono de Tablero de plantas,576ad8cc
+PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE,{0} plantas de {1} asignadas a {2} para {3},88d6a493
 PLANTS_OF_SPECIES_ALLOCATED_TO_SEASON_FOR_SITE_CHANGED,Plantas de {0} asignadas a {1} para {2} cambiaron de {3} a {4}.,99015caf
 PLANTS_PER_HA,Plantas por hectárea,1b8bb685
 PLANTS_PER_HA_LC,plantas/ha,606dca50
