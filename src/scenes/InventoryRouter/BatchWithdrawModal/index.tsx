@@ -92,8 +92,13 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     if (!open || !selectedOrganization || batchIds.length === 0) {
       return;
     }
+    let active = true;
+    setBatches(undefined);
     const populate = async () => {
       const results = await NurseryBatchService.getBatches(selectedOrganization.id, batchIds);
+      if (!active) {
+        return;
+      }
       if (!results) {
         setBatches([]);
         return;
@@ -124,6 +129,10 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       setBatches(withdrawableBatches);
     };
     void populate();
+
+    return () => {
+      active = false;
+    };
   }, [open, selectedOrganization, batchIds, snackbar, strings]);
 
   const updateDraft = useCallback((next: Partial<BatchWithdrawDraft>) => {
@@ -438,6 +447,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   }, [step, strings, canGoNextFromStep1, canGoNextFromStep2, handleClose, isCreating, onSubmit]);
 
   const stepLabels = [strings.PURPOSE, strings.QUANTITIES, strings.PHOTOS];
+  const isLoadingBatches = open && batches === undefined;
 
   return (
     <>
@@ -448,116 +458,113 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
           handleClose();
         }}
       />
-      <DialogBox
-        open={open}
-        onClose={handleClose}
-        title={strings.WITHDRAW_FROM_BATCHES}
-        size='large'
-        skrim
-        middleButtons={middleButtons}
-        scrolled
-      >
-        <Stepper activeStep={step} sx={{ margin: theme.spacing(1, 0, 3) }}>
-          {stepLabels.map((label, index) => (
-            <Step key={label}>
-              <StepLabel
-                sx={{
-                  '.MuiStepIcon-root': {
-                    fill: theme.palette.TwClrBgTertiary,
-                  },
-                  '.MuiStepIcon-root.Mui-active': {
-                    fill: theme.palette.TwClrIcnSecondary,
-                  },
-                  '.MuiStepIcon-root.Mui-completed': {
-                    fill: theme.palette.TwClrTxtBrand,
-                  },
-                  '.MuiStepLabel-label': {
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    color: index === step ? theme.palette.TwClrTxt : theme.palette.TwClrTxtSecondary,
-                  },
-                }}
-              >
-                {label}
-              </StepLabel>
-            </Step>
-          ))}
-        </Stepper>
-
-        {!batches ? (
-          <BusySpinner />
-        ) : (
-          <>
-            <Box
-              sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: theme.spacing(2) }}
-              marginBottom={theme.spacing(3)}
-            >
-              {speciesSummary.map((s, i) => (
-                <Box
-                  key={i}
-                  display='grid'
-                  gridTemplateColumns='110px 1fr'
-                  gap={theme.spacing(2)}
-                  paddingBottom={i === speciesSummary.length - 1 ? 0 : theme.spacing(1)}
-                  marginBottom={i === speciesSummary.length - 1 ? 0 : theme.spacing(1)}
-                  textAlign={'left'}
+      {isLoadingBatches && <BusySpinner withSkrim={true} />}
+      {batches && (
+        <DialogBox
+          open={open}
+          onClose={handleClose}
+          title={strings.WITHDRAW_FROM_BATCHES}
+          size='large'
+          skrim
+          middleButtons={middleButtons}
+          scrolled
+        >
+          <Stepper activeStep={step} sx={{ margin: theme.spacing(1, 0, 3) }}>
+            {stepLabels.map((label, index) => (
+              <Step key={label}>
+                <StepLabel
                   sx={{
-                    borderBottom:
-                      i === speciesSummary.length - 1 ? undefined : `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                    '.MuiStepIcon-root': {
+                      fill: theme.palette.TwClrBgTertiary,
+                    },
+                    '.MuiStepIcon-root.Mui-active': {
+                      fill: theme.palette.TwClrIcnSecondary,
+                    },
+                    '.MuiStepIcon-root.Mui-completed': {
+                      fill: theme.palette.TwClrTxtBrand,
+                    },
+                    '.MuiStepLabel-label': {
+                      fontSize: '14px',
+                      fontWeight: 400,
+                      color: index === step ? theme.palette.TwClrTxt : theme.palette.TwClrTxtSecondary,
+                    },
                   }}
                 >
-                  <Box>
-                    <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingBottom={1}>
-                      {strings.SPECIES}
-                    </Typography>
-                    <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
-                      {strings
-                        .formatString(
-                          s.batchNumbers.length === 1 ? strings.X_BATCH : strings.X_BATCHES,
-                          s.batchNumbers.length
-                        )
-                        .toString()}
-                    </Typography>
-                  </Box>
-                  <Box>
-                    <Typography fontSize='14px' paddingBottom={1}>
-                      {s.name}
-                    </Typography>
-                    <Box display='flex' flexWrap='wrap' columnGap={theme.spacing(2)} rowGap={theme.spacing(1)}>
-                      {s.batchNumbers.map((batchNumber, batchIndex) => (
-                        <Typography key={`${batchNumber}-${batchIndex}`} component='span' fontSize='14px'>
-                          {batchNumber}
-                        </Typography>
-                      ))}
-                    </Box>
+                  {label}
+                </StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+
+          <Box
+            sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: theme.spacing(2) }}
+            marginBottom={theme.spacing(3)}
+          >
+            {speciesSummary.map((s, i) => (
+              <Box
+                key={i}
+                display='grid'
+                gridTemplateColumns='110px 1fr'
+                gap={theme.spacing(2)}
+                paddingBottom={i === speciesSummary.length - 1 ? 0 : theme.spacing(1)}
+                marginBottom={i === speciesSummary.length - 1 ? 0 : theme.spacing(1)}
+                textAlign={'left'}
+                sx={{
+                  borderBottom:
+                    i === speciesSummary.length - 1 ? undefined : `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                }}
+              >
+                <Box>
+                  <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingBottom={1}>
+                    {strings.SPECIES}
+                  </Typography>
+                  <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+                    {strings
+                      .formatString(
+                        s.batchNumbers.length === 1 ? strings.X_BATCH : strings.X_BATCHES,
+                        s.batchNumbers.length
+                      )
+                      .toString()}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography fontSize='14px' paddingBottom={1}>
+                    {s.name}
+                  </Typography>
+                  <Box display='flex' flexWrap='wrap' columnGap={theme.spacing(2)} rowGap={theme.spacing(1)}>
+                    {s.batchNumbers.map((batchNumber, batchIndex) => (
+                      <Typography key={`${batchNumber}-${batchIndex}`} component='span' fontSize='14px'>
+                        {batchNumber}
+                      </Typography>
+                    ))}
                   </Box>
                 </Box>
-              ))}
-            </Box>
+              </Box>
+            ))}
+          </Box>
 
-            {step === 0 && (
-              <PurposeAndDestinationStep
-                batches={batches}
-                contributor={contributor}
-                draft={draft}
-                speciesTargets={visibleSpeciesTargets}
-                onChange={updateDraft}
-              />
-            )}
-            {step === 1 && quantityStepBatches && (
-              <QuantitiesStep
-                batches={quantityStepBatches}
-                draft={draft}
-                speciesTargets={visibleSpeciesTargets}
-                setWithdrawByBatch={setWithdrawByBatch}
-              />
-            )}
-            {step === 2 && (
-              <AddPhotosStep photos={draft.photos} onPhotosChanged={(files) => updateDraft({ photos: files })} />
-            )}
-          </>
-        )}
-      </DialogBox>
+          {step === 0 && (
+            <PurposeAndDestinationStep
+              batches={batches}
+              contributor={contributor}
+              draft={draft}
+              speciesTargets={visibleSpeciesTargets}
+              onChange={updateDraft}
+            />
+          )}
+          {step === 1 && quantityStepBatches && (
+            <QuantitiesStep
+              batches={quantityStepBatches}
+              draft={draft}
+              speciesTargets={visibleSpeciesTargets}
+              setWithdrawByBatch={setWithdrawByBatch}
+            />
+          )}
+          {step === 2 && (
+            <AddPhotosStep photos={draft.photos} onPhotosChanged={(files) => updateDraft({ photos: files })} />
+          )}
+        </DialogBox>
+      )}
     </>
   );
 };
