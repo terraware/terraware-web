@@ -170,8 +170,6 @@ export enum APP_PATHS {
   WELCOME = '/welcome',
 }
 
-// New home for API path strings. Migrate hard-coded API paths here incrementally.
-// Paths use `{token}` placeholders substituted with `.replace('{token}', value)` at call sites.
 export enum API_PATHS {
   ACCELERATOR_REPORT_PHOTO = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos/{fileId}',
   ACCESSION_PHOTO = '/api/v1/seedbank/accessions/{accessionId}/photos/{photoFilename}',
