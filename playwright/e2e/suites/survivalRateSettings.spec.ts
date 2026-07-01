@@ -13,8 +13,7 @@ test.describe('SurvivalRateSettingsTests', () => {
     await selectOrg(page, 'Terraformation (staging)');
   });
 
-  // TODO skip until fixed
-  test.skip('Edit permanent plots T0 settings using observation data and verify survival rate on dashboard', async ({
+  test('Edit permanent plots T0 settings using observation data and verify survival rate on dashboard', async ({
     page,
   }) => {
     if (!(await page.getByRole('button', { name: 'Observations' }).isVisible())) {
