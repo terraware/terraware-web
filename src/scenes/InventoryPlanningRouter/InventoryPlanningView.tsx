@@ -74,7 +74,7 @@ const InventoryPlanningView = (): JSX.Element => {
     if (!seasonsSearchData) {
       return [];
     }
-    const aggregated = aggregateInventoryPlanningRows(seasonsSearchData, availableBySpecies ?? new Map());
+    const aggregated = aggregateInventoryPlanningRows(seasonsSearchData, availableBySpecies ?? {});
     return speciesId === undefined ? aggregated : aggregated.filter((row) => row.speciesId === speciesId);
   }, [seasonsSearchData, availableBySpecies, speciesId]);
 

@@ -106,7 +106,7 @@ const injectedRtkApi = api.injectEndpoints({
       transformResponse: (response: InventoryPlanningSeasonSearchResponse) => response.results,
     }),
 
-    listInventoryPlanningSpeciesAvailable: build.query<Map<number, number>, number>({
+    listInventoryPlanningSpeciesAvailable: build.query<Record<number, number>, number>({
       query: (organizationId) => ({
         url: '/api/v1/search',
         method: 'POST',
@@ -141,14 +141,14 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
       providesTags: [{ type: QueryTagTypes.InventoryPlanning, id: 'LIST' }],
-      transformResponse: (response: InventoryPlanningAvailableResponse): Map<number, number> => {
-        const map = new Map<number, number>();
+      transformResponse: (response: InventoryPlanningAvailableResponse): Record<number, number> => {
+        const availableBySpecies: Record<number, number> = {};
         response.results.forEach((s) => {
           const hardening = Number(s.inventory?.['hardeningOffQuantity(raw)'] ?? 0);
           const ready = Number(s.inventory?.['readyQuantity(raw)'] ?? 0);
-          map.set(Number(s.id), hardening + ready);
+          availableBySpecies[Number(s.id)] = hardening + ready;
         });
-        return map;
+        return availableBySpecies;
       },
     }),
   }),
@@ -198,7 +198,7 @@ type InventoryPlanningAvailableResponse = {
 
 export const aggregateInventoryPlanningRows = (
   seasons: InventoryPlanningSeasonSearch[],
-  availableBySpecies: Map<number, number>
+  availableBySpecies: Record<number, number>
 ): InventoryPlanningSpeciesRow[] => {
   type SpeciesAcc = {
     scientificName: string;
@@ -274,7 +274,7 @@ export const aggregateInventoryPlanningRows = (
         speciesId,
         scientificName: acc.scientificName,
         commonName: acc.commonName,
-        available: availableBySpecies.get(speciesId) ?? 0,
+        available: availableBySpecies[speciesId] ?? 0,
         target: totalTarget,
         allocated: totalAllocated,
         seasons: seasonRows,
