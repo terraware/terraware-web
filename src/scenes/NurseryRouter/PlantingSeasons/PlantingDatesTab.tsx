@@ -386,7 +386,8 @@ const submitQuantityOnEnter = (key: string) => {
   }
 };
 
-const speciesTableGridColumns = '260px 120px minmax(132px, 1fr) 40px';
+const getSpeciesTableGridColumns = (isMobile: boolean): string =>
+  isMobile ? '260px 120px minmax(132px, 1fr) 40px' : '260px 160px minmax(132px, 1fr) 40px';
 
 const quantityTextFieldSx = {
   width: '100px',
@@ -874,7 +875,7 @@ const SpeciesTable = ({
       <Box minWidth={isMobile ? '600px' : undefined}>
         <Box
           display='grid'
-          gridTemplateColumns={speciesTableGridColumns}
+          gridTemplateColumns={getSpeciesTableGridColumns(isMobile)}
           sx={{
             columnGap: theme.spacing(2),
             padding: theme.spacing(1, 2),
@@ -956,6 +957,7 @@ const AddSpeciesRow = ({
   onRemove,
 }: AddSpeciesRowProps): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const [quantityFocused, setQuantityFocused] = useState(false);
   const selectedSpeciesId = draft.speciesId;
   const allocated =
@@ -999,7 +1001,7 @@ const AddSpeciesRow = ({
   return (
     <Box
       display='grid'
-      gridTemplateColumns={speciesTableGridColumns}
+      gridTemplateColumns={getSpeciesTableGridColumns(isMobile)}
       alignItems='flex-start'
       sx={{
         columnGap: theme.spacing(2),
@@ -1099,6 +1101,7 @@ const SpeciesRow = ({
   onUpdateSubstratumSpecies,
 }: SpeciesRowProps): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const [editing, setEditing] = useState(false);
   const [quantityFocused, setQuantityFocused] = useState(false);
   const [draftQuantity, setDraftQuantity] = useState<string>(draft.quantity.toString());
@@ -1127,7 +1130,7 @@ const SpeciesRow = ({
   return (
     <Box
       display='grid'
-      gridTemplateColumns={speciesTableGridColumns}
+      gridTemplateColumns={getSpeciesTableGridColumns(isMobile)}
       alignItems='center'
       sx={{
         columnGap: theme.spacing(2),
