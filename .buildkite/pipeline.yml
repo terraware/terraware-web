@@ -86,6 +86,21 @@ steps:
       SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
 
+  - label: ':yarn: Validate type generation'
+    key: 'validate-types'
+    depends_on:
+      - step: 'build-and-test'
+      - step: 'e2e-tests'
+    plugins:
+      - *shallow-clone
+      - *load-secrets
+      - cache#v1.11.1:
+          <<: *cache-node-modules-args
+          save:
+            - file
+            - branch
+    command: .buildkite/scripts/validate-types.sh
+
   - label: ':docker: Build and push Docker image'
     key: 'docker'
     depends_on:
