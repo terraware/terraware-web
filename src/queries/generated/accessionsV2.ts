@@ -440,6 +440,7 @@ export type CreateAccessionResponsePayloadV2Read = {
 export type CreateAccessionRequestPayloadV2 = {};
 export type CreateAccessionRequestPayloadV2Write = {
   bagNumbers?: string[];
+  /** Will be derived from collectedTime if present. */
   collectedDate?: string;
   /** Date and time the seeds were collected. */
   collectedTime?: string;
@@ -715,6 +716,7 @@ export type UpdateAccessionRequestPayloadV2Read = {
 };
 export type UpdateAccessionRequestPayloadV2Write = {
   bagNumbers?: string[];
+  /** Will be derived from collectedTime if present. */
   collectedDate?: string;
   /** Date and time the seeds were collected. */
   collectedTime?: string;

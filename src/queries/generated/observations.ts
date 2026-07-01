@@ -277,7 +277,7 @@ export type UploadOtherPlotMediaApiArg = {
   plotId: number;
   caption?: string;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
-  type?: 'Plot' | 'Quadrat' | 'Soil';
+  type?: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
   body: {
     file: Blob;
     payload: UploadPlotMediaRequestPayload;
@@ -462,10 +462,10 @@ export type NewBiomassMeasurementPayload = {
   description?: string;
   forestType: 'Terrestrial' | 'Mangrove';
   herbaceousCoverPercent: number;
-  /** Required for Mangrove forest. */
+  /** Only valid for Mangrove forests. A null value indicates that there was no water. */
   ph?: number;
   quadrats: NewBiomassQuadratPayload[];
-  /** Measured in ppt. Required for Mangrove forest. */
+  /** Measured in ppt. Only valid for Mangrove forests. A null value indicates that there was no water. */
   salinity?: number;
   smallTreeCountHigh: number;
   smallTreeCountLow: number;
@@ -486,9 +486,9 @@ export type NewBiomassMeasurementPayload = {
     | 'Unknown';
   /** List of herbaceous and tree species. Includes all recorded quadrat and additional herbaceous species and recorded tree species. Species not assigned to a quadrat or recorded trees will be saved as an additional herbaceous species. */
   species: BiomassSpeciesPayload[];
-  /** Low or high tide. Required for Mangrove forest. */
+  /** Low or high tide. Only valid for Mangrove forests. A null value indicates that there was no water. */
   tide?: 'Low' | 'High';
-  /** Time when ide is observed. Required for Mangrove forest. */
+  /** Time when tide is observed. Only valid for Mangrove forests. A null value indicates that there was no water. */
   tideTime?: string;
   trees: (NewShrubPayload | NewTreeWithTrunksPayload)[];
   /** Measured in centimeters. Only valid for Mangrove forests. A null value indicates that there was no water. */
@@ -561,7 +561,7 @@ export type ObservationMonitoringPlotMediaPayload = {
   isOriginal: boolean;
   mediaKind: 'Photo' | 'Video';
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
-  type: 'Plot' | 'Quadrat' | 'Soil';
+  type: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
 };
 export type ObservationSpeciesResultsPayload = {
   certainty: 'Known' | 'Other' | 'Unknown';
@@ -684,9 +684,10 @@ export type ExistingBiomassMeasurementPayload = {
   description?: string;
   forestType: 'Terrestrial' | 'Mangrove';
   herbaceousCoverPercent: number;
+  /** Only valid for Mangrove forests. A null value indicates that there was no water. */
   ph?: number;
   quadrats: ExistingBiomassQuadratPayload[];
-  /** Measured in ppt */
+  /** Measured in ppt. Only valid for Mangrove forests. A null value indicates that there was no water. */
   salinity?: number;
   smallTreeCountHigh: number;
   smallTreeCountLow: number;
@@ -705,9 +706,9 @@ export type ExistingBiomassMeasurementPayload = {
     | 'SiltLoam'
     | 'Silt'
     | 'Unknown';
-  /** Low or high tide. */
+  /** Low or high tide. Only valid for Mangrove forests. A null value indicates that there was no water. */
   tide?: 'Low' | 'High';
-  /** Time when ide is observed. */
+  /** Time when tide is observed. Only valid for Mangrove forests. A null value indicates that there was no water. */
   tideTime?: string;
   treeSpeciesCount: number;
   trees: ExistingTreePayload[];
@@ -827,12 +828,6 @@ export type MergeOtherSpeciesRequestPayload = {
   /** ID of the existing species that the Other species' recorded plants should be merged into. */
   speciesId: number;
 };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: object[];
-    type: 'GeometryCollection';
-  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -856,6 +851,12 @@ export type MultiPolygon = {
 } & GeometryBase & {
     coordinates: number[][][][];
     type: 'MultiPolygon';
+  };
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
+    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type AssignedPlotPayload = {
@@ -905,7 +906,7 @@ export type BiomassSpeciesUpdateOperationPayload = {
 export type BiomassUpdateOperationPayload = {
   type: 'Biomass';
 } & ObservationUpdateOperationPayloadBase & {
-    description?: string;
+    description?: string | null;
     forestType?: 'Terrestrial' | 'Mangrove';
     herbaceousCoverPercent?: number;
     ph?: number | null;
@@ -914,20 +915,23 @@ export type BiomassUpdateOperationPayload = {
     smallTreeCountLow?: number;
     soilAssessment?: string;
     soilType?:
-      | 'Clay'
-      | 'SandyClay'
-      | 'SandyClayLoam'
-      | 'ClayLoam'
-      | 'SiltyClay'
-      | 'SiltyClayLoam'
-      | 'SandyLoam'
-      | 'LoamySand'
-      | 'Sand'
-      | 'Loam'
-      | 'SiltLoam'
-      | 'Silt'
-      | 'Unknown';
-    tide?: 'Low' | 'High' | null;
+      | (
+          | 'Clay'
+          | 'SandyClay'
+          | 'SandyClayLoam'
+          | 'ClayLoam'
+          | 'SiltyClay'
+          | 'SiltyClayLoam'
+          | 'SandyLoam'
+          | 'LoamySand'
+          | 'Sand'
+          | 'Loam'
+          | 'SiltLoam'
+          | 'Silt'
+          | 'Unknown'
+        )
+      | null;
+    tide?: ('Low' | 'High') | null;
     tideTime?: string | null;
     waterDepth?: number | null;
   };
@@ -967,7 +971,7 @@ export type ObservationPlotUpdateOperationPayload = {
       | 'SteepSlope'
       | 'WaterBodies'
     )[];
-    notes?: string;
+    notes?: string | null;
   };
 export type QuadratSpeciesUpdateOperationPayload = {
   type: 'QuadratSpecies';
@@ -982,13 +986,13 @@ export type QuadratSpeciesUpdateOperationPayload = {
 export type QuadratUpdateOperationPayload = {
   type: 'Quadrat';
 } & ObservationUpdateOperationPayloadBase & {
-    description?: string;
+    description?: string | null;
     position: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
   };
 export type RecordedTreeUpdateOperationPayload = {
   type: 'RecordedTree';
 } & ObservationUpdateOperationPayloadBase & {
-    description?: string;
+    description?: string | null;
     /** Only valid for Tree and Trunk growth forms. */
     diameterAtBreastHeight?: number;
     /** Only valid for Tree and Trunk growth forms. */
@@ -1061,7 +1065,7 @@ export type UploadPlotMediaRequestPayload = {
   caption?: string;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
   /** Type of subject the uploaded file depicts. */
-  type?: 'Plot' | 'Quadrat' | 'Soil';
+  type?: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
 };
 export type UploadPlotPhotoRequestPayload = {
   caption?: string;
@@ -1070,7 +1074,7 @@ export type UploadPlotPhotoRequestPayload = {
   lngFirst?: boolean;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
   /** Type of observation plot photo. */
-  type?: 'Plot' | 'Quadrat' | 'Soil';
+  type?: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
 };
 export type UpdatePlotPhotoRequestPayload = {
   caption?: string;

@@ -70,7 +70,7 @@ export type Point = {
 export type FunderObservationActivityMediaFilePayload = {
   monitoringPlotNumber: number;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
-  type: 'Plot' | 'Quadrat' | 'Soil';
+  type: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
 };
 export type FunderActivityMediaFilePayload = {
   caption?: string;
