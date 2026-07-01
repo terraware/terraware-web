@@ -39,6 +39,14 @@ const InventoryPlanningEventLog = ({
     }
   }, [listInventoryPlanningEvents, organizationId, plantingSeasonId, plantingSiteId, speciesId]);
 
+  const filteredEvents = useMemo(
+    () =>
+      events?.filter(
+        (event) => !(event.subject.type === 'PlantingSeasonAllocatedSpecies' && event.action.type === 'Deleted')
+      ),
+    [events]
+  );
+
   const plantingSeasonsById = useMemo(
     () => new Map(plantingSeasons?.map((season) => [season.id, season])),
     [plantingSeasons]
@@ -109,13 +117,13 @@ const InventoryPlanningEventLog = ({
     [plantingSeasonsById, plantingSitesById, renderChangedFrom, renderChangedTo, strings]
   );
 
-  if (!events?.length) {
+  if (!filteredEvents?.length) {
     return null;
   }
 
   return (
     <Card style={{ marginTop: theme.spacing(3) }} radius={theme.spacing(1)}>
-      <EventLog events={events} isLoading={isLoading} renderEventDescription={renderEventDescription} />
+      <EventLog events={filteredEvents} isLoading={isLoading} renderEventDescription={renderEventDescription} />
     </Card>
   );
 };
