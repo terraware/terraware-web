@@ -12,7 +12,6 @@ import disclaimersReducers from './features/disclaimer/disclaimerSlice';
 import documentProducerReducers from './features/documentProducer';
 import draftPlantingSiteReducers from './features/draftPlantingSite/draftPlantingSiteSlice';
 import eventReducers from './features/events/eventsSlice';
-import funderActivitiesReducers from './features/funder/activities/funderActivitiesSlice';
 import fundingEntitiesReducers from './features/funder/entities/fundingEntitiesSlice';
 import funderProjectsReducers from './features/funder/projects/funderProjectsSlice';
 import gisReducers from './features/gis/gisSlice';
@@ -49,7 +48,6 @@ export const reducers = {
   ...documentProducerReducers,
   ...draftPlantingSiteReducers,
   ...eventReducers,
-  ...funderActivitiesReducers,
   ...funderProjectsReducers,
   ...fundingEntitiesReducers,
   ...gisReducers,

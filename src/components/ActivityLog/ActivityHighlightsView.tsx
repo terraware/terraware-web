@@ -9,13 +9,12 @@ import 'swiper/css/pagination';
 import { Mousewheel, Navigation, Pagination } from 'swiper/modules';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
+import { API_PATHS } from 'src/constants';
 import useFunderPortal from 'src/hooks/useFunderPortal';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { PublishedReportPayload, useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import { AcceleratorReportPayload, useListAcceleratorReportsQuery } from 'src/queries/generated/reports';
-import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { AcceleratorReport } from 'src/types/AcceleratorReport';
 import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -274,7 +273,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
     for (const activity of activities) {
       const title = activityTypeLabel(activity.payload.type, strings);
       const description = activity.payload.description;
-      const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
+      const baseUrl = activity.type === 'funder' ? API_PATHS.FUNDER_ACTIVITY_MEDIA_FILE : API_PATHS.ACTIVITY_MEDIA_FILE;
       const coverPhoto = activity.payload.media.find((file) => file.isCoverPhoto && !file.isHiddenOnMap);
       const coverPhotoURL = coverPhoto
         ? `${baseUrl

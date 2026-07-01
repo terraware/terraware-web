@@ -20,6 +20,7 @@ import {
   defaultPillValueRenderer,
 } from 'src/components/common/SearchFiltersWrapperV2';
 import IconFilters from 'src/components/common/SearchFiltersWrapperV2/IconFilters';
+import { API_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useClientSideFilter from 'src/hooks/useClientSideFiltering';
 import useFunderPortal from 'src/hooks/useFunderPortal';
@@ -32,8 +33,6 @@ import {
   useListActivitiesQuery,
 } from 'src/queries/generated/activities';
 import { useFunderListActivitiesQuery } from 'src/queries/generated/funderActivities';
-import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import {
   ACTIVITY_STATUSES,
   ACTIVITY_TYPES,
@@ -95,7 +94,7 @@ const ActivityListItem = ({ activity, focused, onClick, onMouseEnter, onMouseLea
   }, [activity.payload, activityType, strings]);
 
   const coverPhotoURL = useMemo(() => {
-    const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
+    const baseUrl = activity.type === 'funder' ? API_PATHS.FUNDER_ACTIVITY_MEDIA_FILE : API_PATHS.ACTIVITY_MEDIA_FILE;
     return coverPhoto
       ? `${baseUrl
           .replace('{activityId}', activity.payload.id.toString())

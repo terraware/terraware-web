@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Dropdown, SelectT, Tabs } from '@terraware/web-components';
+import { BusySpinner, Dropdown, SelectT, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
@@ -11,10 +11,8 @@ import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import TfMain from 'src/components/common/TfMain';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
+import { useFunderListActivitiesQuery } from 'src/queries/generated/funderActivities';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
-import { requestListFunderActivities } from 'src/redux/features/funder/activities/funderActivitiesAsyncThunks';
-import { selectListFunderActivitiesRequest } from 'src/redux/features/funder/activities/funderActivitiesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -39,22 +37,15 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
   const query = useQuery();
   const location = useStateLocation();
   const navigate = useSyncNavigate();
-  const [requestId, setRequestId] = useState('');
-  const [activities, setActivities] = useState<TypedActivity[]>([]);
-  const dispatch = useAppDispatch();
+  const { currentData: funderActivitiesData, isFetching } = useFunderListActivitiesQuery({
+    projectId: projectDetails.projectId,
+    includeMedia: true,
+  });
 
-  const funderListActivitiesRequest = useAppSelector(selectListFunderActivitiesRequest(requestId));
-
-  useEffect(() => {
-    const request = dispatch(requestListFunderActivities(projectDetails.projectId));
-    setRequestId(request.requestId);
-  }, [dispatch, projectDetails.projectId]);
-
-  useEffect(() => {
-    if (funderListActivitiesRequest?.status === 'success') {
-      setActivities(funderListActivitiesRequest?.data?.map((payload) => ({ type: 'funder', payload })) ?? []);
-    }
-  }, [funderListActivitiesRequest]);
+  const activities = useMemo<TypedActivity[]>(
+    () => funderActivitiesData?.activities?.map((payload) => ({ type: 'funder', payload })) ?? [],
+    [funderActivitiesData]
+  );
 
   const [selectedReport, setSelectedReport] = useState<PublishedReportPayload>();
   const [quarterDropdownData, setQuarterDropdownData] = useState<QuarterDropdownData | undefined>(undefined);
@@ -142,7 +133,8 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
 
   return (
     <TfMain>
-      <>{crumbs && <BreadCrumbs crumbs={crumbs} />}</>
+      {crumbs && <BreadCrumbs crumbs={crumbs} />}
+      {isFetching && <BusySpinner />}
       <Box
         component='main'
         sx={{

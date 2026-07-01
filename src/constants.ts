@@ -169,3 +169,8 @@ export enum APP_PATHS {
   VIRTUAL_WALKTHROUGHS = '/virtual-walkthroughs',
   WELCOME = '/welcome',
 }
+
+export enum API_PATHS {
+  ACTIVITY_MEDIA_FILE = '/api/v1/accelerator/activities/{activityId}/media/{fileId}',
+  FUNDER_ACTIVITY_MEDIA_FILE = '/api/v1/funder/activities/{activityId}/media/{fileId}',
+}
