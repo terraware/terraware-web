@@ -1,16 +1,25 @@
 import { theme } from '@terraware/web-components';
 
-import { components } from 'src/api/types/generated-schema';
+import {
+  ActivityMediaFilePayload,
+  AdminActivityMediaFilePayload,
+  ActivityPayload as RtkActivityPayload,
+  AdminActivityPayload as RtkAdminActivityPayload,
+  AdminCreateActivityRequestPayload as RtkAdminCreateActivityRequestPayload,
+  CreateActivityRequestPayload as RtkCreateActivityRequestPayload,
+  UpdateActivityMediaRequestPayload as RtkUpdateActivityMediaRequestPayload,
+  UpdateActivityRequestPayload as RtkUpdateActivityRequestPayload,
+} from 'src/queries/generated/activities';
 import defaultStrings from 'src/strings';
 
 export type Activity = Omit<
-  components['schemas']['AdminActivityPayload'],
+  RtkAdminActivityPayload,
   'createdBy' | 'createdTime' | 'isVerified' | 'modifiedBy' | 'modifiedTime'
 > & {
   createdBy?: number;
   createdTime?: string;
   isVerified?: boolean;
-  media: (Omit<components['schemas']['AdminActivityMediaFilePayload'], 'createdBy' | 'createdTime'> & {
+  media: (Omit<AdminActivityMediaFilePayload, 'createdBy' | 'createdTime'> & {
     createdBy?: number;
     createdTime?: string;
   })[];
@@ -18,14 +27,14 @@ export type Activity = Omit<
   modifiedTime?: string;
 };
 
-export type ActivityPayload = components['schemas']['ActivityPayload'];
-export type ActivityMediaFile = components['schemas']['ActivityMediaFilePayload'];
-export type AdminActivityPayload = components['schemas']['AdminActivityPayload'];
-export type AdminActivityMediaFile = components['schemas']['AdminActivityMediaFilePayload'];
-export type AdminCreateActivityRequestPayload = components['schemas']['AdminCreateActivityRequestPayload'];
-export type CreateActivityRequestPayload = components['schemas']['CreateActivityRequestPayload'];
-export type UpdateActivityRequestPayload = components['schemas']['UpdateActivityRequestPayload'];
-export type UpdateActivityMediaRequestPayload = components['schemas']['UpdateActivityMediaRequestPayload'];
+export type ActivityPayload = RtkActivityPayload;
+export type ActivityMediaFile = ActivityMediaFilePayload;
+export type AdminActivityPayload = RtkAdminActivityPayload;
+export type AdminActivityMediaFile = AdminActivityMediaFilePayload;
+export type AdminCreateActivityRequestPayload = RtkAdminCreateActivityRequestPayload;
+export type CreateActivityRequestPayload = RtkCreateActivityRequestPayload;
+export type UpdateActivityRequestPayload = RtkUpdateActivityRequestPayload;
+export type UpdateActivityMediaRequestPayload = RtkUpdateActivityMediaRequestPayload;
 
 export type ActivityType = Activity['type'];
 export const ACTIVITY_TYPES: ActivityType[] = [
