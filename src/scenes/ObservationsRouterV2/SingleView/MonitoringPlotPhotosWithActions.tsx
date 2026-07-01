@@ -5,6 +5,7 @@ import { Button } from '@terraware/web-components';
 
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import MediaItem, { MediaFile } from 'src/components/common/MediaItem';
+import { API_PATHS } from 'src/constants';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useLocalization } from 'src/providers/hooks';
 import {
@@ -13,9 +14,6 @@ import {
 } from 'src/queries/generated/observationSplats';
 import { ObservationMonitoringPlotPhoto, getPositionLabel, getQuadratLabel } from 'src/types/Observations';
 import useSnackbar from 'src/utils/useSnackbar';
-
-const PHOTO_URL = '/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}';
-const MEDIA_URL = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/media/{fileId}';
 
 export type MonitoringPlotPhotosWithActionsProps = {
   observationId: number;
@@ -45,13 +43,16 @@ export default function MonitoringPlotPhotosWithActions({
 
   const rootMediaUrl = useMemo(
     () =>
-      MEDIA_URL.replace('{observationId}', observationId.toString()).replace('{plotId}', monitoringPlotId.toString()),
+      API_PATHS.OBSERVATION_PLOT_MEDIA.replace('{observationId}', observationId.toString()).replace(
+        '{plotId}',
+        monitoringPlotId.toString()
+      ),
     [observationId, monitoringPlotId]
   );
 
   const rootPhotoUrl = useMemo(
     () =>
-      PHOTO_URL.replace('{observationId}', observationId.toString()).replace(
+      API_PATHS.OBSERVATION_PLOT_PHOTO.replace('{observationId}', observationId.toString()).replace(
         '{monitoringPlotId}',
         monitoringPlotId.toString()
       ),

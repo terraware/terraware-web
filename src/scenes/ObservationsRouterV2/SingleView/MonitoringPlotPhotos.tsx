@@ -1,9 +1,8 @@
 import React, { type JSX, useMemo } from 'react';
 
 import PhotosList from 'src/components/common/PhotosList';
+import { API_PATHS } from 'src/constants';
 import { ObservationMonitoringPlotPhoto } from 'src/types/Observations';
-
-const PHOTO_URL = '/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}';
 
 export type MonitoringPlotPhotosProps = {
   observationId: number;
@@ -17,7 +16,7 @@ export default function MonitoringPlotPhotos({
   photos,
 }: MonitoringPlotPhotosProps): JSX.Element {
   const photoUrls = useMemo(() => {
-    const rootUrl = PHOTO_URL.replace('{observationId}', observationId.toString()).replace(
+    const rootUrl = API_PATHS.OBSERVATION_PLOT_PHOTO.replace('{observationId}', observationId.toString()).replace(
       '{monitoringPlotId}',
       monitoringPlotId.toString()
     );

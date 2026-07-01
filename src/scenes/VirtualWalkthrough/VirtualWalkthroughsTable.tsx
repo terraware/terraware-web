@@ -15,6 +15,7 @@ import {
 
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
+import { API_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers';
 import {
@@ -131,9 +132,11 @@ export default function VirtualWalkthroughsTable({
         if (!file.observationId || !file.monitoringPlotId) {
           return null;
         }
-        thumbnailSrc = `/api/v1/tracking/observations/${file.observationId}/plots/${file.monitoringPlotId}/photos/${fileId}?maxWidth=64&maxHeight=40`;
+        thumbnailSrc = `${API_PATHS.OBSERVATION_PLOT_PHOTO.replace('{observationId}', String(file.observationId))
+          .replace('{monitoringPlotId}', String(file.monitoringPlotId))
+          .replace('{fileId}', String(fileId))}?maxWidth=64&maxHeight=40`;
       } else {
-        thumbnailSrc = `/api/v1/organizations/${organizationId}/media/${fileId}/thumbnail?maxWidth=64&maxHeight=40`;
+        thumbnailSrc = `${API_PATHS.ORGANIZATION_MEDIA_THUMBNAIL.replace('{organizationId}', String(organizationId)).replace('{fileId}', String(fileId))}?maxWidth=64&maxHeight=40`;
       }
 
       return (

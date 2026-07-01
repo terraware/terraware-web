@@ -3,13 +3,12 @@ import React, { type JSX, useMemo } from 'react';
 import { DateTime } from 'luxon';
 
 import { MapDrawerTableRow } from 'src/components/MapDrawerTable';
+import { API_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { Point } from 'src/queries/generated/nurseryWithdrawals';
 
 import MapPhotoDrawer from './MapPhotoDrawer';
 import { useFormatGPS } from './useFormatGPS';
-
-const PHOTO_URL = '/api/v1/nursery/withdrawals/:withdrawalId/photos/:photoId';
 
 type WithdrawalPhotoDrawerContentProps = {
   capturedLocalTime?: string;
@@ -30,7 +29,11 @@ const WithdrawalPhotoDrawerContent = ({
   const formatGPS = useFormatGPS();
 
   const photoUrl = useMemo(
-    () => PHOTO_URL.replace(':withdrawalId', `${withdrawalId}`).replace(':photoId', `${photoId}`),
+    () =>
+      API_PATHS.NURSERY_WITHDRAWAL_PHOTO.replace('{withdrawalId}', String(withdrawalId)).replace(
+        '{photoId}',
+        String(photoId)
+      ),
     [withdrawalId, photoId]
   );
 
