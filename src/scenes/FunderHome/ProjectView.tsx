@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Dropdown, SelectT, Tabs } from '@terraware/web-components';
+import { BusySpinner, Dropdown, SelectT, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
@@ -37,7 +37,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
   const query = useQuery();
   const location = useStateLocation();
   const navigate = useSyncNavigate();
-  const { currentData: funderActivitiesData } = useFunderListActivitiesQuery({
+  const { currentData: funderActivitiesData, isFetching } = useFunderListActivitiesQuery({
     projectId: projectDetails.projectId,
     includeMedia: true,
   });
@@ -133,7 +133,8 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
 
   return (
     <TfMain>
-      <>{crumbs && <BreadCrumbs crumbs={crumbs} />}</>
+      {crumbs && <BreadCrumbs crumbs={crumbs} />}
+      {isFetching && <BusySpinner />}
       <Box
         component='main'
         sx={{
