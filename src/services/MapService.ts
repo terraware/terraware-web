@@ -3,7 +3,6 @@ import union from '@turf/union';
 import { Feature, FeatureCollection, Polygon } from 'geojson';
 import { DateTime } from 'luxon';
 
-import { paths } from 'src/api/types/generated-schema';
 import { MapBoundingBox, MapData, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
 import {
   AdHocObservationResults,
@@ -16,8 +15,6 @@ import {
 import { MinimalPlantingSite, MultiPolygon, PlantingSite, PlantingSiteHistory } from 'src/types/Tracking';
 import { isAfter } from 'src/utils/dateUtils';
 
-import HttpService, { Response } from './HttpService';
-
 /**
  * Map related service
  */
@@ -25,30 +22,6 @@ import HttpService, { Response } from './HttpService';
 /**
  * Exported types
  */
-
-export type MapboxToken = {
-  token?: string;
-};
-
-export type MapboxTokenResponse = Response & MapboxToken;
-
-const MAPBOX_TOKEN_ENDPOINT = '/api/v1/tracking/mapbox/token';
-type MapboxTokenServerResponse =
-  paths[typeof MAPBOX_TOKEN_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-/**
- * Fetch a mapbox api token.
- */
-export const getMapboxToken = async (): Promise<MapboxTokenResponse> => {
-  const response: MapboxTokenResponse = await HttpService.root(MAPBOX_TOKEN_ENDPOINT).get<
-    MapboxTokenServerResponse,
-    MapboxToken
-  >({}, (data) => ({
-    token: data?.token,
-  }));
-
-  return response;
-};
 
 /**
  * Get the encompassing bounding box from a list of geometries
@@ -777,7 +750,6 @@ const getMonitoringPlotMapData = (
  * Exported functions
  */
 const MapService = {
-  getMapboxToken,
   getBoundingBox,
   getMapDataFromGisPlantingSites,
   getMapDataFromPlantingSite,

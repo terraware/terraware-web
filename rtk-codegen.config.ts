@@ -32,6 +32,9 @@ const config: ConfigFile = {
     './src/queries/generated/fundingEntities.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/funder/entities'),
     },
+    './src/queries/generated/mapbox.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/mapbox'),
+    },
     './src/queries/generated/modules.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/modules'),
     },
