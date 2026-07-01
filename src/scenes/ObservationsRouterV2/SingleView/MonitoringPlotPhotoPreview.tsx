@@ -4,6 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Icon, Textfield } from '@terraware/web-components';
 
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
+import { API_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers/hooks';
 import { MonitoringPlotMediaItem, getPositionLabel, getQuadratLabel } from 'src/types/Observations';
 import { shouldShowHeicPlaceholder } from 'src/utils/images';
@@ -32,8 +33,6 @@ const MonitoringPlotPhotoPreview = ({
 
   const [showPlaceholder, setShowPlaceholder] = useState<boolean | undefined>();
 
-  const PHOTO_URL = '/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}';
-
   useEffect(() => {
     const checkPlaceholder = async () => {
       if (mediaItem.type === 'new') {
@@ -52,7 +51,7 @@ const MonitoringPlotPhotoPreview = ({
     if (mediaItem.type === 'new') {
       return showPlaceholder ? '/assets/activity-media.svg' : URL.createObjectURL(mediaItem.data.file);
     } else if (mediaItem.type === 'existing' && observationId && monitoringPlotId) {
-      return PHOTO_URL.replace('{observationId}', observationId.toString())
+      return API_PATHS.OBSERVATION_PLOT_PHOTO.replace('{observationId}', observationId.toString())
         .replace('{monitoringPlotId}', monitoringPlotId.toString())
         .replace('{fileId}', mediaItem.data.fileId.toString());
     } else {

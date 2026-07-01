@@ -8,6 +8,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import ProgressCircle from 'src/components/common/ProgressCircle/ProgressCircle';
 import SpeciesSelector from 'src/components/common/SpeciesSelector';
+import { API_PATHS } from 'src/constants';
 import useAccession from 'src/hooks/useAccession';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
@@ -289,7 +290,7 @@ function Accession2EditModalForm({ accession, open, onClose }: Accession2EditMod
                   />
                   <img
                     alt={`${index}`}
-                    src={`/api/v1/seedbank/accessions/${accession.id}/photos/${photoFilename}?maxHeight=120&maxWidth=120`}
+                    src={`${API_PATHS.ACCESSION_PHOTO.replace('{accessionId}', String(accession.id)).replace('{photoFilename}', photoFilename)}?maxHeight=120&maxWidth=120`}
                     style={{
                       display: 'flex',
                       margin: 'auto auto',

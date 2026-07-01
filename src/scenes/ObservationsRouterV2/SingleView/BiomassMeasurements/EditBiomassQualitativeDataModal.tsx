@@ -13,6 +13,7 @@ import {
 } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
+import { API_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
@@ -54,7 +55,9 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
   const soilFileId = results?.adHocPlot?.media?.find((m) => m.type === 'Soil')?.fileId;
   const photoUrl =
     results && results.adHocPlot && soilFileId
-      ? `/api/v1/tracking/observations/${results.observationId}/plots/${results.adHocPlot.monitoringPlotId}/photos/${soilFileId}`
+      ? API_PATHS.OBSERVATION_PLOT_PHOTO.replace('{observationId}', String(results.observationId))
+          .replace('{monitoringPlotId}', String(results.adHocPlot.monitoringPlotId))
+          .replace('{fileId}', String(soilFileId))
       : undefined;
 
   const plotConditionsMap = React.useMemo(() => {

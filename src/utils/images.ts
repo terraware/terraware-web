@@ -1,5 +1,10 @@
+import { API_PATHS } from 'src/constants';
+
 const getImagePath = (projectId: number, imageId: number, maxHeight?: number, maxWidth?: number): string => {
-  let path = `/api/v1/document-producer/projects/${projectId}/images/${imageId}`;
+  let path = API_PATHS.DOCUMENT_PRODUCER_PROJECT_IMAGE.replace('{projectId}', String(projectId)).replace(
+    '{imageId}',
+    String(imageId)
+  );
 
   if (maxHeight !== undefined || maxWidth !== undefined) {
     path += '?';

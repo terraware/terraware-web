@@ -14,6 +14,7 @@ import SplatModel from 'src/components/GaussianSplat/SplatModel';
 import { TfAnnotationManager } from 'src/components/GaussianSplat/TfAnnotationManager';
 import { TfXrNavigation } from 'src/components/GaussianSplat/TfXrNavigation';
 import { WalkthroughCamera } from 'src/components/GaussianSplat/walkthrough-camera';
+import { API_PATHS } from 'src/constants';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
 import { useDevicePerformance } from 'src/hooks/useDevicePerformance';
 import {
@@ -73,8 +74,14 @@ const VirtualWalkthroughViewer = ({
 
   const splatSrc =
     observationId !== undefined
-      ? `/api/v1/tracking/observations/${observationId}/splats/${fileId}`
-      : `/api/v1/organizations/${organizationId}/splats/${fileId}`;
+      ? API_PATHS.OBSERVATION_SPLAT.replace('{observationId}', String(observationId)).replace(
+          '{fileId}',
+          String(fileId)
+        )
+      : API_PATHS.ORGANIZATION_SPLAT.replace('{organizationId}', String(organizationId)).replace(
+          '{fileId}',
+          String(fileId)
+        );
 
   const origin: [number, number, number] = useMemo(
     () =>

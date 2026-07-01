@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router';
 
 import { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import Button from 'src/components/common/button/Button';
-import { APP_PATHS } from 'src/constants';
+import { API_PATHS, APP_PATHS } from 'src/constants';
 import useBoolean from 'src/hooks/useBoolean';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useLocalization } from 'src/providers';
@@ -17,8 +17,6 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import MapPhotoDrawer from './MapPhotoDrawer';
 import { useFormatGPS } from './useFormatGPS';
-
-const PHOTO_URL = '/api/v1/tracking/observations/:observationId/plots/:monitoringPlotId/photos/:fileId';
 
 type ObservationPhotoDrawerContentProps = {
   monitoringPlotId: number;
@@ -47,9 +45,9 @@ const ObservationPhotoDrawerContent = ({
     if (!photo) {
       return undefined;
     }
-    return PHOTO_URL.replace(':observationId', `${observationId}`)
-      .replace(':monitoringPlotId', `${monitoringPlotId}`)
-      .replace(':fileId', `${photo.fileId}`);
+    return API_PATHS.OBSERVATION_PLOT_PHOTO.replace('{observationId}', String(observationId))
+      .replace('{monitoringPlotId}', String(monitoringPlotId))
+      .replace('{fileId}', String(photo.fileId));
   }, [observationId, monitoringPlotId, photo]);
 
   const result = useMemo(() => {

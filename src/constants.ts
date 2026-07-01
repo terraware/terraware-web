@@ -170,7 +170,19 @@ export enum APP_PATHS {
   WELCOME = '/welcome',
 }
 
+// New home for API path strings. Migrate hard-coded API paths here incrementally.
+// Paths use `{token}` placeholders substituted with `.replace('{token}', value)` at call sites.
 export enum API_PATHS {
+  ACCELERATOR_REPORT_PHOTO = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos/{fileId}',
+  ACCESSION_PHOTO = '/api/v1/seedbank/accessions/{accessionId}/photos/{photoFilename}',
   ACTIVITY_MEDIA_FILE = '/api/v1/accelerator/activities/{activityId}/media/{fileId}',
+  DOCUMENT_PRODUCER_PROJECT_IMAGE = '/api/v1/document-producer/projects/{projectId}/images/{imageId}',
   FUNDER_ACTIVITY_MEDIA_FILE = '/api/v1/funder/activities/{activityId}/media/{fileId}',
+  FUNDER_REPORT_PHOTO = '/api/v1/funder/reports/{reportId}/photos/{fileId}',
+  NURSERY_WITHDRAWAL_PHOTO = '/api/v1/nursery/withdrawals/{withdrawalId}/photos/{photoId}',
+  OBSERVATION_PLOT_MEDIA = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/media/{fileId}',
+  OBSERVATION_PLOT_PHOTO = '/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}',
+  OBSERVATION_SPLAT = '/api/v1/tracking/observations/{observationId}/splats/{fileId}',
+  ORGANIZATION_MEDIA_THUMBNAIL = '/api/v1/organizations/{organizationId}/media/{fileId}/thumbnail',
+  ORGANIZATION_SPLAT = '/api/v1/organizations/{organizationId}/splats/{fileId}',
 }
