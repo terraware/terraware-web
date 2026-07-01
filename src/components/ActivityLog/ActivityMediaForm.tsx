@@ -13,9 +13,9 @@ import {
 } from '@terraware/web-components';
 
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
+import { API_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
-import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
 import { ActivityMediaFile, AdminActivityMediaFile } from 'src/types/Activity';
 import {
   getObsPhotoTypeLabel,
@@ -113,7 +113,7 @@ const ActivityPhotoPreview = ({
     if (mediaItem.type === 'new') {
       return showPlaceholder ? '/assets/activity-media.svg' : URL.createObjectURL(mediaItem.data.file);
     } else if (mediaItem.type === 'existing' && activityId) {
-      return ACTIVITY_MEDIA_FILE_ENDPOINT.replace('{activityId}', activityId.toString()).replace(
+      return API_PATHS.ACTIVITY_MEDIA_FILE.replace('{activityId}', activityId.toString()).replace(
         '{fileId}',
         mediaItem.data.fileId.toString()
       );

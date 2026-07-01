@@ -8,7 +8,7 @@ import { DateTime } from 'luxon';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
-import { APP_PATHS } from 'src/constants';
+import { API_PATHS, APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useFunderPortal from 'src/hooks/useFunderPortal';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -28,8 +28,6 @@ import { useGetProjectQuery } from 'src/queries/generated/projects';
 import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/ActivityService';
-import { FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT } from 'src/services/funder/FunderActivityService';
 import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import { getObsPhotoTypeLabel, isObservationActivity } from 'src/utils/activityUtils';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
@@ -166,7 +164,7 @@ const ActivityMediaItem = ({
   );
 
   const imageSrc = useMemo(() => {
-    const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
+    const baseUrl = activity.type === 'funder' ? API_PATHS.FUNDER_ACTIVITY_MEDIA_FILE : API_PATHS.ACTIVITY_MEDIA_FILE;
     return baseUrl
       .replace('{activityId}', activity.payload.id.toString())
       .replace('{fileId}', mediaFile.fileId.toString());
@@ -185,7 +183,7 @@ const ActivityMediaItem = ({
     (event?: React.MouseEvent<HTMLButtonElement, MouseEvent> | undefined) => {
       event?.stopPropagation();
 
-      const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
+      const baseUrl = activity.type === 'funder' ? API_PATHS.FUNDER_ACTIVITY_MEDIA_FILE : API_PATHS.ACTIVITY_MEDIA_FILE;
       const imageURL = `${baseUrl
         .replace('{activityId}', activity.payload.id.toString())
         .replace('{fileId}', mediaFile.fileId.toString())}?raw=true`;
@@ -510,7 +508,7 @@ const ActivityDetailView = ({
   );
 
   const lightboxImageSrc = useMemo(() => {
-    const baseUrl = activity.type === 'funder' ? FUNDER_ACTIVITY_MEDIA_FILE_ENDPOINT : ACTIVITY_MEDIA_FILE_ENDPOINT;
+    const baseUrl = activity.type === 'funder' ? API_PATHS.FUNDER_ACTIVITY_MEDIA_FILE : API_PATHS.ACTIVITY_MEDIA_FILE;
     return lightboxMediaFile
       ? baseUrl
           .replace('{activityId}', activity.payload.id.toString())
