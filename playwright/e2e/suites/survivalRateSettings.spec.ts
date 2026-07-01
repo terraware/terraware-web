@@ -49,8 +49,7 @@ test.describe('SurvivalRateSettingsTests', () => {
     await expect(page.getByTestId('survival-rate-value')).toHaveText('100%');
   });
 
-  // TODO skip until fixed
-  test.skip('Edit one plot to manual density and verify new survival rate', async ({ page }) => {
+  test('Edit one plot to manual density and verify new survival rate', async ({ page }) => {
     if (!(await page.getByRole('button', { name: 'Observations' }).isVisible())) {
       await page.getByRole('button', { name: 'Plantings' }).click();
     }
