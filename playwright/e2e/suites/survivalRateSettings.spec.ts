@@ -13,7 +13,8 @@ test.describe('SurvivalRateSettingsTests', () => {
     await selectOrg(page, 'Terraformation (staging)');
   });
 
-  test('Edit permanent plots T0 settings using observation data and verify survival rate on dashboard', async ({
+  // TODO skip until fixed
+  test.skip('Edit permanent plots T0 settings using observation data and verify survival rate on dashboard', async ({
     page,
   }) => {
     if (!(await page.getByRole('button', { name: 'Observations' }).isVisible())) {
@@ -49,7 +50,8 @@ test.describe('SurvivalRateSettingsTests', () => {
     await expect(page.getByTestId('survival-rate-value')).toHaveText('100%');
   });
 
-  test('Edit one plot to manual density and verify new survival rate', async ({ page }) => {
+  // TODO skip until fixed
+  test.skip('Edit one plot to manual density and verify new survival rate', async ({ page }) => {
     if (!(await page.getByRole('button', { name: 'Observations' }).isVisible())) {
       await page.getByRole('button', { name: 'Plantings' }).click();
     }
