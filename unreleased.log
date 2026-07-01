@@ -1,3 +1,4 @@
+497dcd6d SW-7792: Biomass Monitoring Observations: Add field for Crown Diameter for mangrove trees (FOLLOW-UP) (#5978)
 9e00a7d8 SW-8603 Fix Editing allocated quantity on Inventory Planning page causes console error (#5979)
 f2b59959 Add initial script for validating type generation scripts (#5977)
 06b60786 SW-8411: Biomass Monitoring: For Mangrove forests, add option to specify "No Water" (#5961)
