@@ -1,3 +1,4 @@
+9e00a7d8 SW-8603 Fix Editing allocated quantity on Inventory Planning page causes console error (#5979)
 f2b59959 Add initial script for validating type generation scripts (#5977)
 06b60786 SW-8411: Biomass Monitoring: For Mangrove forests, add option to specify "No Water" (#5961)
 afb26eb8 SW-8595 Don't include species with 0 requested quantity (#5974)
