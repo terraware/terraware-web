@@ -296,15 +296,7 @@
 <a name='L231'></a><a href='#L231'>231</a>
 <a name='L232'></a><a href='#L232'>232</a>
 <a name='L233'></a><a href='#L233'>233</a>
-<a name='L234'></a><a href='#L234'>234</a>
-<a name='L235'></a><a href='#L235'>235</a>
-<a name='L236'></a><a href='#L236'>236</a>
-<a name='L237'></a><a href='#L237'>237</a>
-<a name='L238'></a><a href='#L238'>238</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L234'></a><a href='#L234'>234</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -540,11 +532,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { components } from 'src/api/types/generated-schema';
 import {
   ObservationMonitoringPlotMediaPayload,
-  ObservationMonitoringPlotResultsPayload as RtkObservationMonitoringPlotResultsPayload,
   ObservationResultsPayload as RtkObservationResultsPayload,
-  ObservationSpeciesResultsPayload as RtkObservationSpeciesResultsPayload,
-  ObservationStratumResultsPayload as RtkObservationStratumResultsPayload,
-  ObservationSubstratumResultsPayload as RtkObservationSubstratumResultsPayload,
 } from 'src/queries/generated/observations';
 import defaultStrings from 'src/strings';
 &nbsp;
@@ -572,7 +560,7 @@ type Boundary = {
 &nbsp;
 // expanded information on an observation including observed results down to monitoring plot level detail
 // requires navigating a tree of stratum results -&gt; substratum results -&gt; ( species results | monitoring plot results )
-export type ObservationResultsPayload = RtkObservationResultsPayload;
+export type ObservationResultsPayload = components['schemas']['ObservationResultsPayload'];
 export type ObservationResults = Omit&lt;RtkObservationResultsPayload, 'species'&gt; &amp;
   Boundary &amp; {
     completedDate?: string;
@@ -588,7 +576,7 @@ export type ObservationResults = Omit&lt;RtkObservationResultsPayload, 'species'
 &nbsp;
 export type AdHocObservationResults = Omit&lt;RtkObservationResultsPayload, 'strata' | 'adHocPlot'&gt; &amp;
   Boundary &amp; {
-    adHocPlot: ObservationMonitoringPlotResultsPayload;
+    adHocPlot: components['schemas']['ObservationMonitoringPlotResultsPayload'];
     plantingSiteName: string;
     strata: ObservationStratumResultsWithLastObv[];
     plotName?: string;
@@ -613,7 +601,7 @@ export type ObservationResultsWithLastObv = Omit&lt;
 &gt; &amp; { strata: ObservationStratumResultsWithLastObv[] };
 &nbsp;
 // stratum level results -&gt; contains a list of substratum level results
-export type ObservationStratumResultsPayload = RtkObservationStratumResultsPayload;
+export type ObservationStratumResultsPayload = components['schemas']['ObservationStratumResultsPayload'];
 export type ObservationStratumResults = ObservationStratumResultsPayload &amp; {
   completedDate?: string;
   stratumName: string;
@@ -630,7 +618,7 @@ export type ObservationStratumResultsWithLastObv = Omit&lt;ObservationStratumRes
 };
 &nbsp;
 // substratum level results -&gt; contains lists of both species level results and monitoring plot level results
-export type ObservationSubstratumResultsPayload = RtkObservationSubstratumResultsPayload;
+export type ObservationSubstratumResultsPayload = components['schemas']['ObservationSubstratumResultsPayload'];
 export type ObservationSubstratumResults = ObservationSubstratumResultsPayload &amp; {
   substratumName: string;
   monitoringPlots: ObservationMonitoringPlotResults[];
@@ -639,7 +627,7 @@ export type ObservationSubstratumResultsWithLastObv = ObservationSubstratumResul
   lastObv?: string;
 };
 // monitoring plot level results
-export type ObservationMonitoringPlotResultsPayload = RtkObservationMonitoringPlotResultsPayload;
+export type ObservationMonitoringPlotResultsPayload = components['schemas']['ObservationMonitoringPlotResultsPayload'];
 export type ObservationMonitoringPlotForMap = ObservationMonitoringPlotResultsPayload &amp; {
   isBiomassMeasurement?: boolean;
   totalShrubs?: number;
@@ -651,13 +639,13 @@ export type ObservationMonitoringPlotResults = ObservationMonitoringPlotResultsP
 };
 &nbsp;
 // monitoring plot photos
-export type ObservationMonitoringPlotPhoto = ObservationMonitoringPlotMediaPayload;
+export type ObservationMonitoringPlotPhoto = components['schemas']['ObservationMonitoringPlotMediaPayload'];
 export type ObservationMonitoringPlotPhotoWithGps = Omit&lt;ObservationMonitoringPlotPhoto, 'gpsCoordinates'&gt; &amp;
   Required&lt;Pick&lt;ObservationMonitoringPlotPhoto, 'gpsCoordinates'&gt;&gt;;
 export type ObservationMonitoringPlotPosition = ObservationMonitoringPlotMediaPayload['position'];
 &nbsp;
 // species related observation statistics
-export type ObservationSpeciesResultsPayload = RtkObservationSpeciesResultsPayload;
+export type ObservationSpeciesResultsPayload = components['schemas']['ObservationSpeciesResultsPayload'];
 export type ObservationSpeciesResults = ObservationSpeciesResultsPayload &amp; {
   speciesCommonName?: string;
   speciesScientificName: string;
@@ -718,7 +706,7 @@ export type PlotCondition = components['schemas']['CompleteAdHocObservationReque
 &nbsp;
 export type BiomassMeasurement = components['schemas']['ExistingBiomassMeasurementPayload'];
 &nbsp;
-export type MonitoringPlotFile = ObservationMonitoringPlotMediaPayload;
+export type MonitoringPlotFile = components['schemas']['ObservationMonitoringPlotMediaPayload'];
 &nbsp;
 export type NewMonitoringPlotFile = Omit&lt;MonitoringPlotFile, 'fileId' | 'type'&gt; &amp; {
   file: File;
@@ -781,7 +769,7 @@ export const getQuadratLabel = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-07-02T17:02:33.732Z
+                at 2026-07-02T17:02:38.312Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
