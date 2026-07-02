@@ -1513,7 +1513,7 @@ PLANTING_DATE_SPECIES_ADDED,Fecha de plantación {0} especies añadidas: {1} en 
 PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,Fecha de plantación {0} actualizada: {1} en {2} añadidos.,b3e3cbeb
 PLANTING_DATE_SPECIES_UPDATED,Fecha de plantación {0} actualizada: {1} en {2} cambió de {3} a {4}.,80c99e8a
 PLANTING_DATES,Fechas de plantación,e8aa47b1
-PLANTING_DATES_TAB_DESCRIPTION,Cree planes para cuándo y dónde se plantarán las plantas según los objetivos de especies. Haga clic en Guardar y Solicitar para enviar una solicitud al vivero para retirar plantas antes de fechas específicas.,77aa64f4
+PLANTING_DATES_TAB_DESCRIPTION,"Cree planes para cuándo y dónde se plantarán las plantas según los objetivos de especies. Haga clic en ""Guardar y Solicitar"" para enviar una solicitud al vivero para retirar plantas antes de fechas específicas.",b6304e7d
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
 PLANTING_GOAL,Meta de plantación,a97123a1
 PLANTING_PROGRESS,Avance de plantación,58616da9
