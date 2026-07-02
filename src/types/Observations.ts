@@ -1,7 +1,11 @@
 import { components } from 'src/api/types/generated-schema';
 import {
   ObservationMonitoringPlotMediaPayload,
+  ObservationMonitoringPlotResultsPayload as RtkObservationMonitoringPlotResultsPayload,
   ObservationResultsPayload as RtkObservationResultsPayload,
+  ObservationSpeciesResultsPayload as RtkObservationSpeciesResultsPayload,
+  ObservationStratumResultsPayload as RtkObservationStratumResultsPayload,
+  ObservationSubstratumResultsPayload as RtkObservationSubstratumResultsPayload,
 } from 'src/queries/generated/observations';
 import defaultStrings from 'src/strings';
 
@@ -29,7 +33,7 @@ type Boundary = {
 
 // expanded information on an observation including observed results down to monitoring plot level detail
 // requires navigating a tree of stratum results -> substratum results -> ( species results | monitoring plot results )
-export type ObservationResultsPayload = components['schemas']['ObservationResultsPayload'];
+export type ObservationResultsPayload = RtkObservationResultsPayload;
 export type ObservationResults = Omit<RtkObservationResultsPayload, 'species'> &
   Boundary & {
     completedDate?: string;
@@ -45,7 +49,7 @@ export type ObservationResults = Omit<RtkObservationResultsPayload, 'species'> &
 
 export type AdHocObservationResults = Omit<RtkObservationResultsPayload, 'strata' | 'adHocPlot'> &
   Boundary & {
-    adHocPlot: components['schemas']['ObservationMonitoringPlotResultsPayload'];
+    adHocPlot: ObservationMonitoringPlotResultsPayload;
     plantingSiteName: string;
     strata: ObservationStratumResultsWithLastObv[];
     plotName?: string;
@@ -70,7 +74,7 @@ export type ObservationResultsWithLastObv = Omit<
 > & { strata: ObservationStratumResultsWithLastObv[] };
 
 // stratum level results -> contains a list of substratum level results
-export type ObservationStratumResultsPayload = components['schemas']['ObservationStratumResultsPayload'];
+export type ObservationStratumResultsPayload = RtkObservationStratumResultsPayload;
 export type ObservationStratumResults = ObservationStratumResultsPayload & {
   completedDate?: string;
   stratumName: string;
@@ -87,7 +91,7 @@ export type ObservationStratumResultsWithLastObv = Omit<ObservationStratumResult
 };
 
 // substratum level results -> contains lists of both species level results and monitoring plot level results
-export type ObservationSubstratumResultsPayload = components['schemas']['ObservationSubstratumResultsPayload'];
+export type ObservationSubstratumResultsPayload = RtkObservationSubstratumResultsPayload;
 export type ObservationSubstratumResults = ObservationSubstratumResultsPayload & {
   substratumName: string;
   monitoringPlots: ObservationMonitoringPlotResults[];
@@ -96,7 +100,7 @@ export type ObservationSubstratumResultsWithLastObv = ObservationSubstratumResul
   lastObv?: string;
 };
 // monitoring plot level results
-export type ObservationMonitoringPlotResultsPayload = components['schemas']['ObservationMonitoringPlotResultsPayload'];
+export type ObservationMonitoringPlotResultsPayload = RtkObservationMonitoringPlotResultsPayload;
 export type ObservationMonitoringPlotForMap = ObservationMonitoringPlotResultsPayload & {
   isBiomassMeasurement?: boolean;
   totalShrubs?: number;
@@ -108,13 +112,13 @@ export type ObservationMonitoringPlotResults = ObservationMonitoringPlotResultsP
 };
 
 // monitoring plot photos
-export type ObservationMonitoringPlotPhoto = components['schemas']['ObservationMonitoringPlotMediaPayload'];
+export type ObservationMonitoringPlotPhoto = ObservationMonitoringPlotMediaPayload;
 export type ObservationMonitoringPlotPhotoWithGps = Omit<ObservationMonitoringPlotPhoto, 'gpsCoordinates'> &
   Required<Pick<ObservationMonitoringPlotPhoto, 'gpsCoordinates'>>;
 export type ObservationMonitoringPlotPosition = ObservationMonitoringPlotMediaPayload['position'];
 
 // species related observation statistics
-export type ObservationSpeciesResultsPayload = components['schemas']['ObservationSpeciesResultsPayload'];
+export type ObservationSpeciesResultsPayload = RtkObservationSpeciesResultsPayload;
 export type ObservationSpeciesResults = ObservationSpeciesResultsPayload & {
   speciesCommonName?: string;
   speciesScientificName: string;
@@ -175,7 +179,7 @@ export type PlotCondition = components['schemas']['CompleteAdHocObservationReque
 
 export type BiomassMeasurement = components['schemas']['ExistingBiomassMeasurementPayload'];
 
-export type MonitoringPlotFile = components['schemas']['ObservationMonitoringPlotMediaPayload'];
+export type MonitoringPlotFile = ObservationMonitoringPlotMediaPayload;
 
 export type NewMonitoringPlotFile = Omit<MonitoringPlotFile, 'fileId' | 'type'> & {
   file: File;

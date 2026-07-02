@@ -1,5 +1,5 @@
-import { components } from 'src/api/types/generated-schema';
 import { TypedActivity } from 'src/components/ActivityLog/types';
+import { AdminActivityObservationMediaFilePayload } from 'src/queries/generated/activities';
 import defaultStrings from 'src/strings';
 import { getPositionLabel, getQuadratLabel } from 'src/types/Observations';
 
@@ -58,7 +58,7 @@ export function groupActivitiesByQuarter(
 
 // All three observation media payload variants (Activity, Admin, Funder) are structurally identical;
 // we alias one of them as the canonical type for the shared helpers below.
-export type ObservationActivityMedia = components['schemas']['AdminActivityObservationMediaFilePayload'];
+export type ObservationActivityMedia = AdminActivityObservationMediaFilePayload;
 
 /**
  * Returns true when the activity was automatically created from a TW observation.

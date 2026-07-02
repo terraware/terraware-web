@@ -182,7 +182,7 @@ export type Point = {
 export type ActivityObservationMediaFilePayload = {
   monitoringPlotNumber: number;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
-  type: 'Plot' | 'Quadrat' | 'Soil';
+  type: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
 };
 export type ActivityMediaFilePayload = {
   caption?: string;
@@ -249,7 +249,7 @@ export type CreateActivityRequestPayload = {
 export type AdminActivityObservationMediaFilePayload = {
   monitoringPlotNumber: number;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
-  type: 'Plot' | 'Quadrat' | 'Soil';
+  type: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
 };
 export type AdminActivityMediaFilePayload = {
   caption?: string;
