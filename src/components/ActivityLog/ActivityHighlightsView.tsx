@@ -49,10 +49,6 @@ const carouselContainerStyles = {
   },
 };
 
-export const ACCELERATOR_REPORT_PHOTO_ENDPOINT =
-  '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos/{fileId}';
-export const FUNDER_REPORT_PHOTO_ENDPOINT = '/api/v1/funder/reports/{reportId}/photos/{fileId}';
-
 const carouselSlideContentStyles =
   (coverPhotoURL: string | undefined): SxProps<Theme> =>
   () => ({
@@ -255,7 +251,7 @@ const ActivityHighlightsView = ({ activities, projectId, selectedQuarter }: Acti
       const reportIdValue = isFunderRoute
         ? (selectedQuarterReport as PublishedReportPayload).reportId
         : (selectedQuarterReport as AcceleratorReport).id;
-      const photoEndpointUrl = isFunderRoute ? FUNDER_REPORT_PHOTO_ENDPOINT : ACCELERATOR_REPORT_PHOTO_ENDPOINT;
+      const photoEndpointUrl = isFunderRoute ? API_PATHS.FUNDER_REPORT_PHOTO : API_PATHS.ACCELERATOR_REPORT_PHOTO;
       const firstSlide: ActivityHighlightSlide = {
         coverPhotoURL: selectedQuarterReport.photos.length
           ? photoEndpointUrl

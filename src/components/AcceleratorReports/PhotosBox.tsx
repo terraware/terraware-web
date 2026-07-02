@@ -4,6 +4,7 @@ import { Box, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import { API_PATHS } from 'src/constants';
 import useBoolean from 'src/hooks/useBoolean';
 import { useBatchReportPhotosMutation } from 'src/queries/reports/photos';
 import strings from 'src/strings';
@@ -237,8 +238,13 @@ const PhotosBox = (props: ReportBoxProps) => {
     (fileId: number, maxHeight?: number, maxWidth?: number) => {
       if (report) {
         let path = isAcceleratorReport(report)
-          ? `/api/v1/accelerator/projects/${projectId}/reports/${report.id}/photos/${fileId}`
-          : `/api/v1/funder/reports/${report.reportId}/photos/${fileId}`;
+          ? API_PATHS.ACCELERATOR_REPORT_PHOTO.replace('{projectId}', String(projectId))
+              .replace('{reportId}', String(report.id))
+              .replace('{fileId}', String(fileId))
+          : API_PATHS.FUNDER_REPORT_PHOTO.replace('{reportId}', String(report.reportId)).replace(
+              '{fileId}',
+              String(fileId)
+            );
 
         if (maxHeight !== undefined || maxWidth !== undefined) {
           path += '?';

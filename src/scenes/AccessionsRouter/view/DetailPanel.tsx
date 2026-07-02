@@ -5,6 +5,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
 import PhotosList from 'src/components/common/PhotosList';
+import { API_PATHS } from 'src/constants';
 import useAccession from 'src/hooks/useAccession';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import strings from 'src/strings';
@@ -99,7 +100,9 @@ export default function DetailPanel(): JSX.Element {
   const photoUrls = useMemo(
     () =>
       accessionId && accessionPhotoFilenames
-        ? accessionPhotoFilenames.map((file) => `/api/v1/seedbank/accessions/${accessionId}/photos/${file}`)
+        ? accessionPhotoFilenames.map((file) =>
+            API_PATHS.ACCESSION_PHOTO.replace('{accessionId}', String(accessionId)).replace('{photoFilename}', file)
+          )
         : [],
     [accessionPhotoFilenames, accessionId]
   );

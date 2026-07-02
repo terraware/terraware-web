@@ -13,6 +13,7 @@ import useMapUtils from 'src/components/NewMap/useMapUtils';
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import Button from 'src/components/common/button/Button';
+import { API_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useLocalization } from 'src/providers';
 import { useUpdateOrganizationMediaFileMutation } from 'src/queries/generated/organizationMedia';
@@ -317,9 +318,11 @@ export default function VirtualWalkthroughsMap({
     const thumbnailSrc =
       selectedFile.type === 'Plot'
         ? selectedFile.observationId && selectedFile.monitoringPlotId
-          ? `/api/v1/tracking/observations/${selectedFile.observationId}/plots/${selectedFile.monitoringPlotId}/photos/${selectedFile.fileId}?maxWidth=377`
+          ? `${API_PATHS.OBSERVATION_PLOT_PHOTO.replace('{observationId}', String(selectedFile.observationId))
+              .replace('{monitoringPlotId}', String(selectedFile.monitoringPlotId))
+              .replace('{fileId}', String(selectedFile.fileId))}?maxWidth=377`
           : undefined
-        : `/api/v1/organizations/${organizationId}/media/${selectedFile.fileId}/thumbnail?maxWidth=377`;
+        : `${API_PATHS.ORGANIZATION_MEDIA_THUMBNAIL.replace('{organizationId}', String(organizationId)).replace('{fileId}', String(selectedFile.fileId))}?maxWidth=377`;
     return (
       <Box display='flex' flexDirection='column' width='100%' gap={2}>
         {thumbnailSrc && (

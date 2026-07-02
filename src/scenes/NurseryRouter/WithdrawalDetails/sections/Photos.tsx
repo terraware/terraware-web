@@ -4,11 +4,10 @@ import React, { type JSX, useEffect, useMemo } from 'react';
 import { Box, Typography } from '@mui/material';
 
 import PhotosList from 'src/components/common/PhotosList';
+import { API_PATHS } from 'src/constants';
 import { useLazyListWithdrawalPhotosQuery } from 'src/queries/generated/nurseryWithdrawals';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
-
-const NURSERY_WITHDRAWAL_PHOTO_ENDPOINT = '/api/v1/nursery/withdrawals/{withdrawalId}/photos/{photoId}';
 
 type PhotosSectionProps = {
   withdrawalId?: number;
@@ -20,9 +19,9 @@ export default function Photos({ withdrawalId }: PhotosSectionProps): JSX.Elemen
   const photoUrls = useMemo(() => {
     if (withdrawalId && listPhotosResponse.currentData) {
       return listPhotosResponse.currentData?.photos.map((photo) =>
-        NURSERY_WITHDRAWAL_PHOTO_ENDPOINT.replace('{withdrawalId}', `${withdrawalId}`).replace(
+        API_PATHS.NURSERY_WITHDRAWAL_PHOTO.replace('{withdrawalId}', String(withdrawalId)).replace(
           '{photoId}',
-          `${photo.id}`
+          String(photo.id)
         )
       );
     } else {
