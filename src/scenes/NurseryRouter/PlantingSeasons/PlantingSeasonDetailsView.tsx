@@ -340,21 +340,24 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
       >
         {isMobile ? (
           <Box display='flex' flexDirection='column'>
-            <Box display='flex' alignItems='flex-start' gap={theme.spacing(1)}>
+            <Box display='flex' alignItems='center' gap={theme.spacing(1)} flexWrap='wrap' minWidth={0}>
               <Icon name='iconCalendar' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
-              <Box display='flex' alignItems='center' gap={theme.spacing(1)} flexWrap='wrap' minWidth={0}>
-                <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
-                  {season.name}
-                </Typography>
-                <PlantingSeasonStatusBadge status={season.status} />
-              </Box>
+              <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                {season.name}
+              </Typography>
+              <PlantingSeasonStatusBadge status={season.status} />
             </Box>
-            <Typography color={theme.palette.TwClrTxtSecondary} marginTop={theme.spacing(1)}>
-              {plantingSite.name}
-            </Typography>
-            <Typography color={theme.palette.TwClrTxt} marginTop={theme.spacing(0.5)}>
-              {dateRange}
-            </Typography>
+            <Box
+              display='flex'
+              alignItems='center'
+              columnGap={theme.spacing(2)}
+              rowGap={0}
+              flexWrap='wrap'
+              marginTop={theme.spacing(1)}
+            >
+              <Typography color={theme.palette.TwClrTxtSecondary}>{plantingSite.name}</Typography>
+              <Typography color={theme.palette.TwClrTxt}>{dateRange}</Typography>
+            </Box>
             <Box display='flex' flexDirection='column' gap={theme.spacing(2)} marginTop={theme.spacing(2)}>
               {mobileNamesSection(strings.STRATA, strataNames)}
               {mobileNamesSection(strings.SUBSTRATA, substrataNames)}

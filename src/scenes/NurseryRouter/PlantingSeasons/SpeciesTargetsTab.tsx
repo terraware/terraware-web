@@ -52,7 +52,7 @@ const submitQuantityOnEnter = (key: string) => {
 
 const getSpeciesTargetGridColumns = (readOnly: boolean, isMobile: boolean): string => {
   if (isMobile) {
-    return readOnly ? 'minmax(0, 1fr) 112px' : 'minmax(0, 1fr) 112px 40px';
+    return readOnly ? 'minmax(0, 1fr) 80px' : 'minmax(0, 1fr) 80px 40px';
   }
 
   return readOnly ? '1fr 1fr' : '1fr 1fr 40px';
@@ -467,7 +467,7 @@ const SpeciesTargetRow = ({
             onKeyDown={submitQuantityOnEnter}
             min={0}
             autoFocus
-            sx={targetQuantityTextFieldSx}
+            sx={isMobile ? { width: '80px' } : targetQuantityTextFieldSx}
           />
         ) : (
           <>
