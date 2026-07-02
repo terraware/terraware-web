@@ -1081,6 +1081,7 @@ LOW,Bajo,ddedeca3
 LOWEST,Más baja,b651e8a7
 MAKE_HIGHLIGHT,Crear destacado,c3fda88f
 MANAGE_COLUMNS,Gestionar columnas,1dba3733
+MANAGE_PLANTING_SEASONS,Gestionar temporadas de plantación,2f58ca7d
 MANAGE_PLANTING_SITE_GOALS_WITHIN_PLANTING_SEASONS,Gestionar los objetivos del sitio de plantación dentro de las temporadas de plantación.,09b93599
 MANAGED_LOCATION_TYPE_NURSERY,Vivero,2a9dbfec
 MANAGED_LOCATION_TYPE_PLANTING_SITE,Sitio de plantación,ee55d884
@@ -1511,7 +1512,7 @@ PLANTING_DATE,Fecha de plantación,544c699c
 PLANTING_DATE_ADDED,Fecha de plantación agregada: {0}.,187cb611
 PLANTING_DATE_DELETED,Fecha de plantación eliminada: {0}.,6a287532
 PLANTING_DATE_SPECIES_ADDED,Fecha de plantación {0} especies añadidas: {1} en {2}.,298ae021
-PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,Fecha de plantación {0} actualizada: {1} en {2} añadido con cantidad {3}.,f30a1b1d
+PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,Fecha de plantación {0} actualizada: {1} en {2} añadido.,b3e3cbeb
 PLANTING_DATE_SPECIES_UPDATED,Fecha de plantación {0} actualizada: {1} en {2} cambió de {3} a {4}.,80c99e8a
 PLANTING_DATES,Fechas de plantación,e8aa47b1
 PLANTING_DATES_TAB_DESCRIPTION,"Las fechas de plantación especifican cuándo y dónde se plantan las plantas. Haga clic en ""Guardar y Solicitar"" cuando esté listo para que el vivero retire las plantas.",c144ee5c

@@ -1080,6 +1080,7 @@ LOW,Faible,ddedeca3
 LOWEST,Les plus faibles,b651e8a7
 MAKE_HIGHLIGHT,Créer une mise en avant,c3fda88f
 MANAGE_COLUMNS,Gérer les colonnes,1dba3733
+MANAGE_PLANTING_SEASONS,Gérer les saisons de plantation,2f58ca7d
 MANAGE_PLANTING_SITE_GOALS_WITHIN_PLANTING_SEASONS,Gérer les objectifs du site de plantation au sein des saisons de plantation.,09b93599
 MANAGED_LOCATION_TYPE_NURSERY,Pépinière,2a9dbfec
 MANAGED_LOCATION_TYPE_PLANTING_SITE,Site de plantation,ee55d884
@@ -1510,7 +1511,7 @@ PLANTING_DATE,Date de plantation,544c699c
 PLANTING_DATE_ADDED,Date de plantation ajoutée : {0}.,187cb611
 PLANTING_DATE_DELETED,Date de plantation supprimée : {0}.,6a287532
 PLANTING_DATE_SPECIES_ADDED,Espèces ajoutées à la date de plantation {0} : {1} dans {2}.,298ae021
-PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,Date de plantation {0} mise à jour : {1} dans {2} ajouté avec une quantité de {3}.,f30a1b1d
+PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,Date de plantation {0} mise à jour : {1} dans {2} ajouté.,b3e3cbeb
 PLANTING_DATE_SPECIES_UPDATED,Date de plantation {0} mise à jour : {1} dans {2} modifié de {3} à {4}.,80c99e8a
 PLANTING_DATES,Dates de plantation,e8aa47b1
 PLANTING_DATES_TAB_DESCRIPTION,Les dates de plantation indiquent quand et où les plants sont mis en terre. Cliquez sur « Enregistrer et demander » lorsque vous êtes prêt pour que la pépinière retire les plants.,c144ee5c
