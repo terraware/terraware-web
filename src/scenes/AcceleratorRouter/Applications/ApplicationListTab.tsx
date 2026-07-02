@@ -171,7 +171,9 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
       if (!locale) {
         return;
       }
-      const request = dispatch(requestListApplications({ listAll: true, search, searchSortOrder, searchAndSort }));
+      const request = dispatch(
+        requestListApplications({ listAll: true, locale: 'en', search, searchSortOrder, searchAndSort })
+      );
       setRequestId(request.requestId);
     },
     [dispatch, searchAndSort]

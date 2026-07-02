@@ -79,9 +79,12 @@ function convertToSearchNodePayload(
   };
 }
 
-async function search<T extends SearchResponseElement>(entity: RawSearchRequestPayload): Promise<T[] | null> {
+async function search<T extends SearchResponseElement>(
+  entity: RawSearchRequestPayload,
+  headers?: Record<string, string>
+): Promise<T[] | null> {
   try {
-    const response: SearchResponsePayload = (await httpSearch.post({ entity })).data;
+    const response: SearchResponsePayload = (await httpSearch.post({ entity, headers })).data;
     return response.results as T[] | null;
   } catch {
     return null;
