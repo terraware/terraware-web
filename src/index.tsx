@@ -10,6 +10,7 @@ import AppError from './AppError';
 import { APP_PATHS } from './constants';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import LearnMore from './scenes/LearnMore';
 import setupRum, { canEnableRum } from './setupRum';
 import strings from './strings';
 import theme from './theme';
@@ -24,6 +25,15 @@ const routes = [
     element: (
       <ThemeProvider theme={theme}>
         <AppError />
+      </ThemeProvider>
+    ),
+  },
+  {
+    // logged-out learn more site
+    path: APP_PATHS.LEARN_MORE,
+    element: (
+      <ThemeProvider theme={theme}>
+        <LearnMore />
       </ThemeProvider>
     ),
   },
