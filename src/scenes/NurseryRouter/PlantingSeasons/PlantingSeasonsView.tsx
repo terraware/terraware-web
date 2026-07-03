@@ -72,7 +72,7 @@ const PlantingSeasonsView = (): JSX.Element => {
         {plantingSiteDropdown}
       </Box>
       <Typography fontSize='14px' sx={{ marginTop: theme.spacing(0.5) }}>
-        {strings.MANAGE_PLANTING_SITE_GOALS_WITHIN_PLANTING_SEASONS}
+        {strings.MANAGE_PLANTING_TARGETS_WITHIN_PLANTING_SEASONS}
       </Typography>
     </Box>
   );
@@ -120,7 +120,7 @@ const PlantingSeasonsView = (): JSX.Element => {
         {plantingSiteDropdown}
       </Box>
       <Typography fontSize='14px' color={theme.palette.TwClrTxt} lineHeight='20px'>
-        {strings.MANAGE_PLANTING_SITE_GOALS_WITHIN_PLANTING_SEASONS}
+        {strings.MANAGE_PLANTING_TARGETS_WITHIN_PLANTING_SEASONS}
       </Typography>
       {seasonRows.length > 0 && addButton(true)}
     </Box>
@@ -158,7 +158,7 @@ const PlantingSeasonsView = (): JSX.Element => {
           >
             <Box component='img' src='/assets/calendar.svg' alt='' sx={{ width: 64, height: 64 }} />
             <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
-              {strings.NO_PLANTING_SEASONS_HAVE_BEEN_CREATED}
+              {strings.THERE_ARE_NO_PLANTING_SEASONS}
             </Typography>
             {addButton()}
           </Box>
