@@ -96,20 +96,20 @@ const EventLog = ({
             return (
               <Box
                 key={`${event.timestamp}-${event.subject.type}-${index}`}
-                borderBottom={`1px solid ${theme.palette.TwClrBrdrSecondary}`}
-                display='grid'
-                gap='32px'
-                gridTemplateColumns='minmax(150px, 1fr) 3fr'
-                justifyItems='start'
+                borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
+                display='flex'
+                gap='24px'
                 padding={2}
               >
-                <Box>
-                  <Typography color={theme.palette.TwClrTxtSecondary}>{dateModified}</Typography>
-                  <Typography color={theme.palette.TwClrTxtSecondary}>
-                    {strings.BY} {event.userName}
+                <Box sx={{ flexShrink: { xs: 1, sm: 0 } }}>
+                  <Typography
+                    color={theme.palette.TwClrTxtSecondary}
+                    sx={{ whiteSpace: { xs: 'normal', sm: 'nowrap' } }}
+                  >
+                    {dateModified} {strings.BY} {event.userName}
                   </Typography>
                 </Box>
-                <Box>{renderEventDescription?.(event) ?? defaultRenderEventDescription(event)}</Box>
+                <Box flex={1}>{renderEventDescription?.(event) ?? defaultRenderEventDescription(event)}</Box>
               </Box>
             );
           })}
