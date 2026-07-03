@@ -3,10 +3,11 @@ import { QueryTagTypes } from '../tags';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getModuleProjects: build.query<ModuleProject[], number | string>({
-      query: (moduleId) => ({
+    getModuleProjects: build.query<ModuleProject[], GetModuleProjectsApiArg>({
+      query: ({ moduleId, locale }) => ({
         url: '/api/v1/search',
         method: 'POST',
+        ...(locale ? { headers: { 'Accept-Language': locale } } : {}),
         body: {
           prefix: 'modules',
           fields: [
@@ -31,7 +32,7 @@ const injectedRtkApi = api.injectEndpoints({
           startDate: result.projectModules_startDate,
           endDate: result.projectModules_endDate,
         })),
-      providesTags: (results, _error, moduleId) => [
+      providesTags: (results, _error, { moduleId }) => [
         { type: QueryTagTypes.ProjectModules, id: moduleId },
         ...(results ? results.map((result) => ({ type: QueryTagTypes.Projects, id: result.projectId })) : []),
       ],
@@ -55,6 +56,11 @@ export type ModuleProject = {
   projectName: string;
   startDate: string;
   endDate: string;
+};
+
+export type GetModuleProjectsApiArg = {
+  moduleId: number | string;
+  locale?: string;
 };
 
 export { injectedRtkApi as api };

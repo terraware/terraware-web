@@ -36,7 +36,7 @@ const searchProjects = async <T extends SearchResponseElement>({
     params.sortOrder = [sortOrder];
   }
 
-  return SearchService.search<T>(params);
+  return SearchService.search<T>(params, { 'Accept-Language': 'en' });
 };
 
 /**
