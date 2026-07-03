@@ -957,7 +957,7 @@ INVENTORY_ONBOARDING_SPECIES_MSG,Définir une liste d'espèces utilisées dans v
 INVENTORY_PLANNING,Planification des stocks,2e1d8c1f
 INVENTORY_PLANNING_ALLOCATED_TOOLTIP,Nombre de plants de cette espèce prévus pour atteindre les objectifs des saisons de plantation.,8ae090b0
 INVENTORY_PLANNING_AVAILABLE_TOOLTIP,Nombre de semis de cette espèce en phase d'acclimatation et prêts à être plantés.,94c83729
-INVENTORY_PLANNING_DESCRIPTION,Planifiez et allouez les stocks pour les objectifs par espèce des saisons de plantation.,d56eab8b
+INVENTORY_PLANNING_DESCRIPTION,Allouer l'inventaire pour les objectifs d'espèces de la Saison de plantation.,0496b829
 INVENTORY_PLANNING_TARGET_TOOLTIP,Nombre de plants de cette espèce définis comme objectifs pour les saisons de plantation.,724d5222
 INVENTORY_WITHDRAWALS,Retraits d'inventaire,cefda57f
 INVESTMENT_COMMITTEE_VOTES,Votes du comité d'investissement,a7c64c6c
@@ -1081,7 +1081,7 @@ LOWEST,Les plus faibles,b651e8a7
 MAKE_HIGHLIGHT,Créer une mise en avant,c3fda88f
 MANAGE_COLUMNS,Gérer les colonnes,1dba3733
 MANAGE_PLANTING_SEASONS,Gérer les saisons de plantation,2f58ca7d
-MANAGE_PLANTING_SITE_GOALS_WITHIN_PLANTING_SEASONS,Gérer les objectifs du site de plantation au sein des saisons de plantation.,09b93599
+MANAGE_PLANTING_TARGETS_WITHIN_PLANTING_SEASONS,Gérer les objectifs de plantation au sein des Saisons de plantation.,4c8dbb4b
 MANAGED_LOCATION_TYPE_NURSERY,Pépinière,2a9dbfec
 MANAGED_LOCATION_TYPE_PLANTING_SITE,Site de plantation,ee55d884
 MANAGED_LOCATION_TYPE_SEED_BANK,Banque de semences/collecte de semences,d096b836
@@ -1241,7 +1241,6 @@ NO_PENDING_REQUESTS,Il n'y a aucune demande en attente.,89bea434
 NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE,Il n'y a aucune demande en attente pour le site de plantation sélectionné.,10a348ac
 NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Lorsque des observations comprenant des placettes permanentes sont terminées, celles-ci apparaîtront ici, et les données t0 devront être définies pour toutes les placettes permanentes afin que les taux de survie puissent être calculés.",18f6a079
 NO_PLANTING_DATES_SCHEDULED,Aucune date de plantation n'a été planifiée.,92de1320
-NO_PLANTING_SEASONS_HAVE_BEEN_CREATED,Aucune saison de plantation n’a été créée.,bda5b0d9
 NO_PLANTING_SITES_DESCRIPTION,Commencez par ajouter un site de plantation. L'ajout d'un site de plantation vous permettra de savoir où vont les semis après avoir quitté la pépinière.,b0104f6c
 NO_PLANTING_SITES_NON_ADMIN_MSG,Seuls les administrateurs peuvent ajouter des sites de plantation ; veuillez contacter le vôtre pour obtenir de l'aide.,8f016d3f
 NO_PLANTING_SITES_TITLE,"Un instant, ajoutons d'abord un site de plantation.",801ba14c
@@ -1514,7 +1513,7 @@ PLANTING_DATE_SPECIES_ADDED,Espèces ajoutées à la date de plantation {0} : {1
 PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,Date de plantation {0} mise à jour : {1} dans {2} ajouté.,b3e3cbeb
 PLANTING_DATE_SPECIES_UPDATED,Date de plantation {0} mise à jour : {1} dans {2} modifié de {3} à {4}.,80c99e8a
 PLANTING_DATES,Dates de plantation,e8aa47b1
-PLANTING_DATES_TAB_DESCRIPTION,Les dates de plantation indiquent quand et où les plants sont mis en terre. Cliquez sur « Enregistrer et demander » lorsque vous êtes prêt pour que la pépinière retire les plants.,c144ee5c
+PLANTING_DATES_TAB_DESCRIPTION,Créez des plans pour déterminer quand et où les plants seront mis en terre afin d’atteindre les objectifs par espèce. Cliquez sur « Enregistrer et demander » pour envoyer une demande à la pépinière afin de retirer des plants pour des dates spécifiques.,b6304e7d
 PLANTING_DENSITY,Densité de plantation,2d5d3bcb
 PLANTING_GOAL,Objectif de plantation,a97123a1
 PLANTING_PROGRESS,Progression de la plantation,58616da9
@@ -2021,7 +2020,7 @@ SESSION_IS_STARTING_SOON,La session va bientôt commencer.,c3abc7d1
 SESSION_SLIDES,Diapositives de la session,7748a514
 SET_PLANTING_COMPLETE,Plantation terminée,3bea077e
 SET_REMINDER,Définir un rappel,ad81e3b3
-SET_SPECIES_TARGETS_DESCRIPTION,Définissez les objectifs d’espèces par substrat du site de plantation. Les objectifs peuvent être modifiés à tout moment et sont visibles par le gestionnaire d’inventaire dans la planification de l’inventaire.,216e3add
+SET_SPECIES_TARGETS_DESCRIPTION,Définir des objectifs par substrat de site. Les espèces et quantités peuvent être modifiées à tout moment et sont visibles dans la Planification de l’inventaire.,7619cbee
 SET_T0_DATA_IN_THE,Voir {0},194994e4
 SET_UP,Configurer,6096080e
 SET_UP_NURSERY,Créer une pépinière,25ab7370
@@ -2314,6 +2313,7 @@ TEXT_REQUIRED_BOTH_FIELDS,Le texte est obligatoire pour les deux champs.,a4c500b
 TF_OWNER_REVIEWER,Propriétaire / Réviseur TF,3627b045
 THANK_YOU_FOR_CONTACTING_SUPPORT,Merci d'avoir contacté le service d'assistance de Terraware. Votre demande a été reçue. L'ID de votre demande est {0}.,733b2c42
 THANK_YOU_FOR_USING_TERRAWARE,Merci d'utiliser Terraware !,c6999786
+THERE_ARE_NO_PLANTING_SEASONS,Il n'y a pas de Saisons de plantation.,eff9d3fb
 THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET,Aucune espèce n'a encore été ajoutée à ce projet.,02f58d0e
 THIS_ACTION_IS_NON_REVERSIBLE,Cette action n'est pas réversible.,aecdef3a
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_DOCUMENT,"Ce livrable a été approuvé. Si le projet téléverse un nouveau document, le statut repassera à « En cours d’examen ».",96ae1308

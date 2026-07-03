@@ -958,7 +958,7 @@ INVENTORY_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su i
 INVENTORY_PLANNING,Planificación de inventario,2e1d8c1f
 INVENTORY_PLANNING_ALLOCATED_TOOLTIP,Cantidad de plantas de esta especie planificadas para cumplir los objetivos dentro de las temporadas de plantación.,8ae090b0
 INVENTORY_PLANNING_AVAILABLE_TOOLTIP,Cantidad de plántulas de esta especie que se encuentran en las fases de crecimiento de Aclimatación y Listas para plantar.,94c83729
-INVENTORY_PLANNING_DESCRIPTION,Planifique y asigne inventario para los objetivos de especies de la temporada de plantación.,d56eab8b
+INVENTORY_PLANNING_DESCRIPTION,Asigne inventario para los objetivos de especies de la Temporada de Plantación.,0496b829
 INVENTORY_PLANNING_TARGET_TOOLTIP,Cantidad de plantas de esta especie establecidas como objetivo dentro de las temporadas de plantación.,724d5222
 INVENTORY_WITHDRAWALS,Retiros de Inventario,cefda57f
 INVESTMENT_COMMITTEE_VOTES,Votos del Comité de inversión,a7c64c6c
@@ -1082,7 +1082,7 @@ LOWEST,Más baja,b651e8a7
 MAKE_HIGHLIGHT,Crear destacado,c3fda88f
 MANAGE_COLUMNS,Gestionar columnas,1dba3733
 MANAGE_PLANTING_SEASONS,Gestionar temporadas de plantación,2f58ca7d
-MANAGE_PLANTING_SITE_GOALS_WITHIN_PLANTING_SEASONS,Gestionar los objetivos del sitio de plantación dentro de las temporadas de plantación.,09b93599
+MANAGE_PLANTING_TARGETS_WITHIN_PLANTING_SEASONS,Gestione los objetivos de plantación dentro de las Temporadas de Plantación.,4c8dbb4b
 MANAGED_LOCATION_TYPE_NURSERY,Vivero,2a9dbfec
 MANAGED_LOCATION_TYPE_PLANTING_SITE,Sitio de plantación,ee55d884
 MANAGED_LOCATION_TYPE_SEED_BANK,Banco de semillas/Recolección de semillas,d096b836
@@ -1242,7 +1242,6 @@ NO_PENDING_REQUESTS,No hay solicitudes pendientes.,89bea434
 NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE,No hay solicitudes pendientes para el Sitio de Plantación seleccionado.,10a348ac
 NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Cuando se completen las Observaciones que incluyan parcelas permanentes, estas aparecerán aquí y será necesario establecer los datos t0 para todas las parcelas permanentes para que se puedan calcular las Tasas de Supervivencia.",18f6a079
 NO_PLANTING_DATES_SCHEDULED,No se han programado fechas de plantación.,92de1320
-NO_PLANTING_SEASONS_HAVE_BEEN_CREATED,No se han creado temporadas de plantación.,bda5b0d9
 NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Añadir un sitio de plantación le permitirá rastrear a dónde van las plantas de semillero al dejar el vivero.,b0104f6c
 NO_PLANTING_SITES_NON_ADMIN_MSG,"Solo los administradores pueden agregar sitios de plantación; por favor, comuníquese con el suyo para recibir asistencia.",8f016d3f
 NO_PLANTING_SITES_TITLE,"Solo un momento, añadamos un sitio de plantación primero.",801ba14c
@@ -1512,10 +1511,10 @@ PLANTING_DATE,Fecha de plantación,544c699c
 PLANTING_DATE_ADDED,Fecha de plantación agregada: {0}.,187cb611
 PLANTING_DATE_DELETED,Fecha de plantación eliminada: {0}.,6a287532
 PLANTING_DATE_SPECIES_ADDED,Fecha de plantación {0} especies añadidas: {1} en {2}.,298ae021
-PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,Fecha de plantación {0} actualizada: {1} en {2} añadido.,b3e3cbeb
+PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,Fecha de plantación {0} actualizada: {1} en {2} añadidos.,b3e3cbeb
 PLANTING_DATE_SPECIES_UPDATED,Fecha de plantación {0} actualizada: {1} en {2} cambió de {3} a {4}.,80c99e8a
 PLANTING_DATES,Fechas de plantación,e8aa47b1
-PLANTING_DATES_TAB_DESCRIPTION,"Las fechas de plantación especifican cuándo y dónde se plantan las plantas. Haga clic en ""Guardar y Solicitar"" cuando esté listo para que el vivero retire las plantas.",c144ee5c
+PLANTING_DATES_TAB_DESCRIPTION,"Cree planes para cuándo y dónde se plantarán las plantas según los objetivos de especies. Haga clic en ""Guardar y Solicitar"" para enviar una solicitud al vivero para retirar plantas antes de fechas específicas.",b6304e7d
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
 PLANTING_GOAL,Meta de plantación,a97123a1
 PLANTING_PROGRESS,Avance de plantación,58616da9
@@ -2022,7 +2021,7 @@ SESSION_IS_STARTING_SOON,La sesión comienza pronto.,c3abc7d1
 SESSION_SLIDES,Diapositivas de la sesión,7748a514
 SET_PLANTING_COMPLETE,Plantación completa,3bea077e
 SET_REMINDER,Establecer recordatorio,ad81e3b3
-SET_SPECIES_TARGETS_DESCRIPTION,Establezca objetivos de especies por sustrato del sitio de plantación. Los objetivos pueden actualizarse en cualquier momento y son visibles para el Gestor de Inventario en la Planificación de Inventario.,216e3add
+SET_SPECIES_TARGETS_DESCRIPTION,Establezca objetivos por sustrato del sitio. Las especies y cantidades pueden actualizarse en cualquier momento y son visibles en la Planificación de Inventario.,7619cbee
 SET_T0_DATA_IN_THE,Ver {0},194994e4
 SET_UP,Configurar,6096080e
 SET_UP_NURSERY,Establecer vivero,25ab7370
@@ -2314,6 +2313,7 @@ TEXT_REQUIRED_BOTH_FIELDS,El texto es obligatorio en los dos campos.,a4c500b6
 TF_OWNER_REVIEWER,Propietario/Revisor de TF,3627b045
 THANK_YOU_FOR_CONTACTING_SUPPORT,Gracias por ponerse en contacto con el equipo de asistencia técnica de Terraware. Recibimos su solicitud. El identificador de su solicitud es {0}.,733b2c42
 THANK_YOU_FOR_USING_TERRAWARE,¡Muchas gracias por utilizar Terraware!,c6999786
+THERE_ARE_NO_PLANTING_SEASONS,No hay Temporadas de Plantación.,eff9d3fb
 THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET,Todavía no hay especies agregadas a este Proyecto.,02f58d0e
 THIS_ACTION_IS_NON_REVERSIBLE,Este proceso no se puede anular.,aecdef3a
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_DOCUMENT,"Este entregable ha sido aprobado. Si el proyecto carga un nuevo documento, el estado volverá a ""En revisión"".",96ae1308

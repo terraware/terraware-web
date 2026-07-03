@@ -40,7 +40,7 @@ export default function ModuleDetails({ moduleId, module }: ModuleDetailsProps):
 
   useEffect(() => {
     if (module?.id) {
-      void requestListModuleProjects(moduleId, true);
+      void requestListModuleProjects({ moduleId, locale: 'en' }, true);
     }
   }, [module?.id, moduleId, requestListModuleProjects]);
 

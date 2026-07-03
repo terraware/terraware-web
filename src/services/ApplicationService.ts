@@ -66,6 +66,7 @@ const listApplications = async (request: {
 
   const response = await HttpService.root(APPLICATIONS_ENDPOINT).get2<ListApplicationsResponsePayload>({
     params,
+    ...(request.locale ? { headers: { 'Accept-Language': request.locale } } : {}),
   });
 
   if (response && response.data) {
