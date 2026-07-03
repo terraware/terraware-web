@@ -11,6 +11,7 @@ import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites
 import useStickyPlantingSiteId, { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
+import useQuery from 'src/utils/useQuery';
 
 import AddPlantingSeasonModal from './AddPlantingSeasonModal';
 import PlantingSeasonBox from './PlantingSeasonBox';
@@ -26,6 +27,8 @@ const PlantingSeasonsView = (): JSX.Element => {
   const { isLoading: plantingSitesLoading, plantingSites } = useOrganizationPlantingSites({ full: true });
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('planting-seasons');
 
+  const query = useQuery();
+
   const [listPlantingSeasons, plantingSeasonsResult] = useLazyListPlantingSeasonsQuery();
   const { data: plantingSeasonsData } = plantingSeasonsResult;
 
@@ -34,6 +37,13 @@ const PlantingSeasonsView = (): JSX.Element => {
       void listPlantingSeasons({ organizationId });
     }
   }, [listPlantingSeasons, organizationId]);
+
+  useEffect(() => {
+    const plantingSiteIdParam = query.get('plantingSiteId');
+    if (plantingSiteIdParam) {
+      selectPlantingSite(Number(plantingSiteIdParam));
+    }
+  }, [query, selectPlantingSite]);
 
   const plantingSiteOptions = useMemo((): DropdownItem[] => {
     const sitesOptions = plantingSites
