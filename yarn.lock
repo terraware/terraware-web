@@ -16948,10 +16948,10 @@ swc-plugin-coverage-instrument@0.0.32:
   resolved "https://registry.yarnpkg.com/swc-plugin-coverage-instrument/-/swc-plugin-coverage-instrument-0.0.32.tgz#213f683b509aaff211e931dce0ce56aa9c5ce6b3"
   integrity sha512-KsO1xNQdcVb331Rm98Op6uYf36/CYdF1kILQxOddmtCNlRLISpCUqHcnogu+QgELZvG48oie+w0fzS8uktjcEA==
 
-swiper@^12.0.3:
-  version "12.1.2"
-  resolved "https://registry.yarnpkg.com/swiper/-/swiper-12.1.2.tgz#39eaad0c088def66a7eb8f6bae1439384586ab90"
-  integrity sha512-4gILrI3vXZqoZh71I1PALqukCFgk+gpOwe1tOvz5uE9kHtl2gTDzmYflYCwWvR4LOvCrJi6UEEU+gnuW5BtkgQ==
+swiper@^14.0.0:
+  version "14.0.1"
+  resolved "https://registry.yarnpkg.com/swiper/-/swiper-14.0.1.tgz#65fd8cededb1219dccff2daf22d22589d96df591"
+  integrity sha512-dibQY282S5rn6S9Ba+GTIvofyY4Qujy526a0cPaJnjR2S18Z7HMGKZBr8k/3ukboeKW/ig5h0q//7CYip0MCQw==
 
 symbol-tree@^3.2.4:
   version "3.2.4"
