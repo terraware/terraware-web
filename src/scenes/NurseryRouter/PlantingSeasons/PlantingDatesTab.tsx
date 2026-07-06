@@ -119,7 +119,7 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
                   priority='secondary'
                   type='productive'
                   size={isMobile ? 'medium' : undefined}
-                  sx={mobileAddDateButtonSx}
+                  sx={mobileAddDateButtonSx ?? { flexShrink: 0, whiteSpace: 'nowrap', '& svg': { flexShrink: 0 } }}
                 />
               )}
             </Box>
