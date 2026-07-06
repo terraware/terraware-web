@@ -8,7 +8,7 @@ import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const ASSETS = '/assets/learnMore';
-const MAX_CONTENT_WIDTH = 1200;
+const MAX_CONTENT_WIDTH = 1400;
 
 type ImageInfo = {
   src: string;
@@ -34,14 +34,12 @@ const LearnMoreView = (): JSX.Element => {
   const textColor = theme.palette.TwClrTxt as string;
   const secondaryText = theme.palette.TwClrTxtSecondary as string;
 
-  const sectionPadding = isMobile ? '48px 24px' : '80px 24px';
+  const sectionPadding = isMobile ? '48px 0' : '80px 0';
 
   const sharedImageStyles = {
     display: 'block',
     maxWidth: '100%',
     height: 'auto',
-    borderRadius: '12px',
-    boxShadow: '0px 8px 24px rgba(58, 68, 69, 0.16)',
   };
 
   const StatCallout = ({ value, label }: StatInfo): JSX.Element => (
@@ -93,7 +91,19 @@ const LearnMoreView = (): JSX.Element => {
     </Box>
   );
 
-  const OverlapImages = ({ primary, secondary }: { primary: ImageInfo; secondary: ImageInfo }): JSX.Element => {
+  const OverlapImages = ({
+    primary,
+    secondary,
+    primaryWidth = '80%',
+    secondaryWidth = '52%',
+    overlap = '-22%',
+  }: {
+    primary: ImageInfo;
+    secondary: ImageInfo;
+    primaryWidth?: string;
+    secondaryWidth?: string;
+    overlap?: string;
+  }): JSX.Element => {
     if (isMobile) {
       return (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
@@ -104,12 +114,12 @@ const LearnMoreView = (): JSX.Element => {
     }
 
     return (
-      <Box sx={{ position: 'relative', width: '100%', height: '100%', minHeight: '380px' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
         <Box
           component='img'
           src={primary.src}
           alt={primary.alt ?? ''}
-          sx={{ ...sharedImageStyles, position: 'absolute', top: 0, left: 0, width: '82%' }}
+          sx={{ ...sharedImageStyles, width: primaryWidth, alignSelf: 'flex-start', position: 'relative', zIndex: 1 }}
         />
         <Box
           component='img'
@@ -117,11 +127,11 @@ const LearnMoreView = (): JSX.Element => {
           alt={secondary.alt ?? ''}
           sx={{
             ...sharedImageStyles,
-            position: 'absolute',
-            bottom: 0,
-            right: '-24px',
-            width: '52%',
-            border: `1px solid ${theme.palette.TwClrBaseGray100}`,
+            width: secondaryWidth,
+            alignSelf: 'flex-end',
+            marginTop: overlap,
+            position: 'relative',
+            zIndex: 2,
           }}
         />
       </Box>
@@ -139,7 +149,7 @@ const LearnMoreView = (): JSX.Element => {
 
   const FeatureSection = ({ title, intro, bullets, stat, images, imageSide }: FeatureSectionProps): JSX.Element => {
     const content = (
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', paddingTop: isMobile ? 0 : '48px' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
         <Typography sx={{ color: brand, fontSize: isMobile ? '24px' : '28px', fontWeight: 600 }}>{title}</Typography>
         <Typography
           sx={{
@@ -153,13 +163,13 @@ const LearnMoreView = (): JSX.Element => {
           {intro}
         </Typography>
         <Bullets items={bullets} />
-        <Box sx={{ marginTop: isMobile ? '32px' : 'auto', paddingTop: isMobile ? 0 : '40px' }}>
+        <Box sx={{ marginTop: isMobile ? '32px' : '40px' }}>
           <StatCallout value={stat.value} label={stat.label} />
         </Box>
       </Box>
     );
 
-    const imageColumn = <Box sx={{ flex: 1, display: 'flex', alignItems: 'stretch', width: '100%' }}>{images}</Box>;
+    const imageColumn = <Box sx={{ flex: 1, width: '100%' }}>{images}</Box>;
 
     if (isMobile) {
       return (
@@ -179,43 +189,72 @@ const LearnMoreView = (): JSX.Element => {
       );
     }
 
+    const textColumn = (
+      <Box
+        sx={{
+          position: 'relative',
+          zIndex: 1,
+          width: '44%',
+          display: 'flex',
+          flexDirection: 'column',
+          padding: imageSide === 'right' ? '0 54px 0 36px' : '0 36px 0 54px',
+        }}
+      >
+        <Box sx={{ paddingTop: '60px' }}>
+          <Typography sx={{ color: brand, fontSize: '28px', fontWeight: 600 }}>{title}</Typography>
+          <Typography
+            sx={{
+              color: theme.palette.TwClrBaseBlack,
+              fontSize: '16px',
+              lineHeight: '24px',
+              marginTop: '16px',
+              fontWeight: 400,
+            }}
+          >
+            {intro}
+          </Typography>
+          <Bullets items={bullets} />
+        </Box>
+        <Box
+          sx={{
+            marginTop: 'auto',
+            paddingTop: '40px',
+            display: 'flex',
+            justifyContent: imageSide === 'left' ? 'flex-end' : 'flex-start',
+          }}
+        >
+          <StatCallout value={stat.value} label={stat.label} />
+        </Box>
+      </Box>
+    );
+
+    const imageColumnWide = <Box sx={{ position: 'relative', zIndex: 1, width: '52%' }}>{images}</Box>;
+
     return (
-      <Box sx={{ position: 'relative' }}>
+      <Box sx={{ position: 'relative', display: 'flex', alignItems: 'stretch', justifyContent: 'space-between' }}>
         <Box
           sx={{
             position: 'absolute',
-            top: '40px',
-            bottom: '48px',
-            left: 0,
-            right: 0,
+            top: '44px',
+            bottom: '44px',
+            left: imageSide === 'left' ? '40px' : 0,
+            right: imageSide === 'right' ? '40px' : 0,
             background: theme.palette.TwClrBaseGray025,
             borderRadius: '16px',
             zIndex: 0,
           }}
         />
-        <Box
-          sx={{
-            position: 'relative',
-            zIndex: 1,
-            display: 'flex',
-            flexDirection: 'row',
-            gap: '48px',
-            alignItems: 'stretch',
-            padding: '0 48px',
-          }}
-        >
-          {imageSide === 'left' ? (
-            <>
-              {imageColumn}
-              {content}
-            </>
-          ) : (
-            <>
-              {content}
-              {imageColumn}
-            </>
-          )}
-        </Box>
+        {imageSide === 'left' ? (
+          <>
+            {imageColumnWide}
+            {textColumn}
+          </>
+        ) : (
+          <>
+            {textColumn}
+            {imageColumnWide}
+          </>
+        )}
       </Box>
     );
   };
@@ -345,7 +384,6 @@ const LearnMoreView = (): JSX.Element => {
               alt=''
               sx={{
                 ...sharedImageStyles,
-                border: `1px solid ${theme.palette.TwClrBaseGray100}`,
                 marginLeft: isMobile ? 0 : '-10%',
                 marginTop: isMobile ? 0 : '13%',
                 position: 'relative',
@@ -481,7 +519,7 @@ const LearnMoreView = (): JSX.Element => {
         sx={{
           display: 'flex',
           flexDirection: 'column',
-          gap: '48px',
+          gap: isMobile ? '48px' : '160px',
           margin: '0 auto',
           maxWidth: MAX_CONTENT_WIDTH,
           padding: isMobile ? '32px 20px' : '48px 24px',
@@ -521,7 +559,12 @@ const LearnMoreView = (): JSX.Element => {
           stat={{ value: '5.1M', label: strings.LEARN_MORE_STAT_PLANTINGS_LABEL }}
           imageSide='right'
           images={
-            <OverlapImages primary={{ src: `${ASSETS}/image7.png` }} secondary={{ src: `${ASSETS}/image8.png` }} />
+            <OverlapImages
+              primary={{ src: `${ASSETS}/image7.png` }}
+              secondary={{ src: `${ASSETS}/image8.png` }}
+              secondaryWidth='60%'
+              overlap='-14%'
+            />
           }
         />
       </Box>
@@ -623,7 +666,7 @@ const LearnMoreView = (): JSX.Element => {
             flexDirection: isMobile ? 'column' : 'row',
             gap: '48px',
             margin: '0 auto',
-            maxWidth: '960px',
+            maxWidth: '920px',
           }}
         >
           <CheckFeature text={strings.LEARN_MORE_OTHER_FEATURE_1} />
@@ -695,9 +738,7 @@ const LearnMoreView = (): JSX.Element => {
               strings.LEARN_MORE_CTA_DEMO,
               <Box
                 component='a'
-                href={''}
-                target='_blank'
-                rel='noopener noreferrer'
+                href={'mailto:product@terraformation.com'}
                 sx={{ color: `${theme.palette.TwClrBaseWhite} !important`, textDecoration: 'underline' }}
               >
                 {strings.LEARN_MORE_CTA_PRODUCT_TEAM}
