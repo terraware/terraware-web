@@ -9,9 +9,11 @@ import Card from 'src/components/common/Card';
 import useBoolean from 'src/hooks/useBoolean';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useStickyPlantingSiteId, { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import useQuery from 'src/utils/useQuery';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import AddPlantingSeasonModal from './AddPlantingSeasonModal';
 import PlantingSeasonBox from './PlantingSeasonBox';
@@ -28,6 +30,8 @@ const PlantingSeasonsView = (): JSX.Element => {
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('planting-seasons');
 
   const query = useQuery();
+  const location = useStateLocation();
+  const navigate = useSyncNavigate();
 
   const [listPlantingSeasons, plantingSeasonsResult] = useLazyListPlantingSeasonsQuery();
   const { data: plantingSeasonsData } = plantingSeasonsResult;
@@ -42,8 +46,10 @@ const PlantingSeasonsView = (): JSX.Element => {
     const plantingSiteIdParam = query.get('plantingSiteId');
     if (plantingSiteIdParam) {
       selectPlantingSite(Number(plantingSiteIdParam));
+      query.delete('plantingSiteId');
+      navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     }
-  }, [query, selectPlantingSite]);
+  }, [query, selectPlantingSite, navigate, location]);
 
   const plantingSiteOptions = useMemo((): DropdownItem[] => {
     const sitesOptions = plantingSites
