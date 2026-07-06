@@ -4,7 +4,9 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
 import { APP_PATHS, LOGIN_LINK } from 'src/constants';
+import { useGetPublicStatisticsQuery } from 'src/queries/generated/publicStatistics';
 import strings from 'src/strings';
+import { formatNumberScale } from 'src/utils/numbers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const ASSETS = '/assets/learnMore';
@@ -20,9 +22,18 @@ type StatInfo = {
   label: string;
 };
 
+const STAT_PLACEHOLDER = '—';
+
 const LearnMoreView = (): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+
+  const { data: statisticsData } = useGetPublicStatisticsQuery();
+  const statistics = statisticsData?.statistics;
+
+  const groupedStat = (value?: number): string =>
+    value === undefined ? STAT_PLACEHOLDER : value.toLocaleString(navigator.language || 'en');
+  const scaledStat = (value?: number): string => (value === undefined ? STAT_PLACEHOLDER : formatNumberScale(value, 1));
 
   const goToLogin = useCallback(() => {
     const redirect = encodeURIComponent(`${window.location.origin}${APP_PATHS.HOME}`);
@@ -369,9 +380,9 @@ const LearnMoreView = (): JSX.Element => {
         >
           {(
             [
-              { value: '1,078', label: strings.LEARN_MORE_STAT_ORGS_LABEL },
-              { value: '105', label: strings.LEARN_MORE_STAT_COUNTRIES_LABEL },
-              { value: '74.5k', label: strings.LEARN_MORE_STAT_AREA_LABEL },
+              { value: groupedStat(statistics?.totalOrganizations), label: strings.LEARN_MORE_STAT_ORGS_LABEL },
+              { value: groupedStat(statistics?.totalCountries), label: strings.LEARN_MORE_STAT_COUNTRIES_LABEL },
+              { value: scaledStat(statistics?.totalAreaUnderRestorationHa), label: strings.LEARN_MORE_STAT_AREA_LABEL },
             ] as StatInfo[]
           ).map((stat) => (
             <Box
@@ -491,7 +502,7 @@ const LearnMoreView = (): JSX.Element => {
           title={strings.LEARN_MORE_SEED_BANK_TITLE}
           intro={strings.LEARN_MORE_SEED_BANK_INTRO}
           bullets={[strings.LEARN_MORE_SEED_BANK_BULLET_1, strings.LEARN_MORE_SEED_BANK_BULLET_2]}
-          stat={{ value: '1.2B', label: strings.LEARN_MORE_STAT_SEEDS_LABEL }}
+          stat={{ value: scaledStat(statistics?.totalSeedsInStorage), label: strings.LEARN_MORE_STAT_SEEDS_LABEL }}
           imageSide='right'
           images={
             <OverlapImages primary={{ src: `${ASSETS}/image3.png` }} secondary={{ src: `${ASSETS}/image4.png` }} />
@@ -507,7 +518,10 @@ const LearnMoreView = (): JSX.Element => {
             strings.LEARN_MORE_NURSERY_BULLET_3,
             strings.LEARN_MORE_NURSERY_BULLET_4,
           ]}
-          stat={{ value: '16.7M', label: strings.LEARN_MORE_STAT_SEEDLINGS_LABEL }}
+          stat={{
+            value: scaledStat(statistics?.totalSeedlingsInNurseries),
+            label: strings.LEARN_MORE_STAT_SEEDLINGS_LABEL,
+          }}
           imageSide='left'
           images={
             <OverlapImages primary={{ src: `${ASSETS}/image5.png` }} secondary={{ src: `${ASSETS}/image6.png` }} />
@@ -518,7 +532,7 @@ const LearnMoreView = (): JSX.Element => {
           title={strings.LEARN_MORE_PLANTING_SITE_TITLE}
           intro={strings.LEARN_MORE_PLANTING_SITE_INTRO}
           bullets={[strings.LEARN_MORE_PLANTING_SITE_BULLET_1, strings.LEARN_MORE_PLANTING_SITE_BULLET_2]}
-          stat={{ value: '5.1M', label: strings.LEARN_MORE_STAT_PLANTINGS_LABEL }}
+          stat={{ value: scaledStat(statistics?.totalPlantings), label: strings.LEARN_MORE_STAT_PLANTINGS_LABEL }}
           imageSide='right'
           images={
             <OverlapImages primary={{ src: `${ASSETS}/image7.png` }} secondary={{ src: `${ASSETS}/image8.png` }} />
