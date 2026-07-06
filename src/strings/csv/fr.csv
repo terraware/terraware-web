@@ -1513,7 +1513,7 @@ PLANTING_DATE_SPECIES_ADDED,Espèces ajoutées à la date de plantation {0} : {1
 PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,Date de plantation {0} mise à jour : {1} dans {2} ajouté.,b3e3cbeb
 PLANTING_DATE_SPECIES_UPDATED,Date de plantation {0} mise à jour : {1} dans {2} modifié de {3} à {4}.,80c99e8a
 PLANTING_DATES,Dates de plantation,e8aa47b1
-PLANTING_DATES_TAB_DESCRIPTION,Créez des plans pour déterminer quand et où les plants seront mis en terre afin d’atteindre les objectifs par espèce. Cliquez sur « Enregistrer et demander » pour envoyer une demande à la pépinière afin de retirer des plants pour des dates spécifiques.,b6304e7d
+PLANTING_DATES_TAB_DESCRIPTION,Créez des plans pour déterminer quand et où les plants seront mis en terre afin d’atteindre les objectifs par espèce. Cliquez sur « Enregistrer et demander » pour demander à la pépinière de retirer des plants pour des dates spécifiques.,cd51495e
 PLANTING_DENSITY,Densité de plantation,2d5d3bcb
 PLANTING_GOAL,Objectif de plantation,a97123a1
 PLANTING_PROGRESS,Progression de la plantation,58616da9
