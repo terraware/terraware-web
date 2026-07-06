@@ -104,8 +104,13 @@ const LearnMoreView = (): JSX.Element => {
     }
 
     return (
-      <Box sx={{ position: 'relative', width: '100%', paddingBottom: '64px', paddingRight: '48px' }}>
-        <Box component='img' src={primary.src} alt={primary.alt ?? ''} sx={{ ...sharedImageStyles, width: '82%' }} />
+      <Box sx={{ position: 'relative', width: '100%', height: '100%', minHeight: '380px' }}>
+        <Box
+          component='img'
+          src={primary.src}
+          alt={primary.alt ?? ''}
+          sx={{ ...sharedImageStyles, position: 'absolute', top: 0, left: 0, width: '82%' }}
+        />
         <Box
           component='img'
           src={secondary.src}
@@ -114,7 +119,7 @@ const LearnMoreView = (): JSX.Element => {
             ...sharedImageStyles,
             position: 'absolute',
             bottom: 0,
-            right: 0,
+            right: '-24px',
             width: '52%',
             border: `1px solid ${theme.palette.TwClrBaseGray100}`,
           }}
@@ -134,7 +139,7 @@ const LearnMoreView = (): JSX.Element => {
 
   const FeatureSection = ({ title, intro, bullets, stat, images, imageSide }: FeatureSectionProps): JSX.Element => {
     const content = (
-      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', paddingTop: isMobile ? 0 : '48px' }}>
         <Typography sx={{ color: brand, fontSize: isMobile ? '24px' : '28px', fontWeight: 600 }}>{title}</Typography>
         <Typography
           sx={{
@@ -148,37 +153,69 @@ const LearnMoreView = (): JSX.Element => {
           {intro}
         </Typography>
         <Bullets items={bullets} />
-        <Box sx={{ marginTop: '32px' }}>
+        <Box sx={{ marginTop: isMobile ? '32px' : 'auto', paddingTop: isMobile ? 0 : '40px' }}>
           <StatCallout value={stat.value} label={stat.label} />
         </Box>
       </Box>
     );
 
-    const imageColumn = <Box sx={{ flex: 1, display: 'flex', alignItems: 'center', width: '100%' }}>{images}</Box>;
+    const imageColumn = <Box sx={{ flex: 1, display: 'flex', alignItems: 'stretch', width: '100%' }}>{images}</Box>;
+
+    if (isMobile) {
+      return (
+        <Box
+          sx={{
+            background: theme.palette.TwClrBaseGray025,
+            borderRadius: '16px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '32px',
+            padding: '32px 24px',
+          }}
+        >
+          {content}
+          {imageColumn}
+        </Box>
+      );
+    }
 
     return (
-      <Box
-        sx={{
-          background: theme.palette.TwClrBaseGray025,
-          borderRadius: '16px',
-          display: 'flex',
-          flexDirection: isMobile ? 'column' : 'row',
-          gap: isMobile ? '32px' : '48px',
-          alignItems: 'center',
-          padding: isMobile ? '32px 24px' : '56px 48px',
-        }}
-      >
-        {imageSide === 'left' && !isMobile ? (
-          <>
-            {imageColumn}
-            {content}
-          </>
-        ) : (
-          <>
-            {content}
-            {imageColumn}
-          </>
-        )}
+      <Box sx={{ position: 'relative' }}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '40px',
+            bottom: '48px',
+            left: 0,
+            right: 0,
+            background: theme.palette.TwClrBaseGray025,
+            borderRadius: '16px',
+            zIndex: 0,
+          }}
+        />
+        <Box
+          sx={{
+            position: 'relative',
+            zIndex: 1,
+            display: 'flex',
+            flexDirection: 'row',
+            gap: '48px',
+            alignItems: 'stretch',
+            padding: '0 48px',
+          }}
+        >
+          {imageSide === 'left' ? (
+            <>
+              {imageColumn}
+              {content}
+            </>
+          ) : (
+            <>
+              {content}
+              {imageColumn}
+            </>
+          )}
+        </Box>
       </Box>
     );
   };
@@ -209,6 +246,24 @@ const LearnMoreView = (): JSX.Element => {
       >
         {text}
       </Typography>
+    </Box>
+  );
+
+  const fieldContent = (
+    <Box sx={{ flex: 1 }}>
+      <Typography sx={{ color: brand, fontSize: isMobile ? '24px' : '28px', fontWeight: 700 }}>
+        {strings.LEARN_MORE_FIELD_TITLE}
+      </Typography>
+      <Typography sx={{ color: textColor, fontSize: '17px', lineHeight: 1.5, marginTop: '16px' }}>
+        {strings.LEARN_MORE_FIELD_INTRO}
+      </Typography>
+      <Bullets
+        items={[
+          strings.LEARN_MORE_FIELD_BULLET_1,
+          strings.LEARN_MORE_FIELD_BULLET_2,
+          strings.LEARN_MORE_FIELD_BULLET_3,
+        ]}
+      />
     </Box>
   );
 
@@ -473,37 +528,79 @@ const LearnMoreView = (): JSX.Element => {
 
       {/* In the field */}
       <Box sx={{ margin: '0 auto', maxWidth: MAX_CONTENT_WIDTH, padding: isMobile ? '32px 20px' : '48px 24px' }}>
-        <Box
-          sx={{
-            alignItems: 'center',
-            background: theme.palette.TwClrBaseGray025,
-            borderRadius: '16px',
-            display: 'flex',
-            flexDirection: isMobile ? 'column' : 'row',
-            gap: isMobile ? '32px' : '48px',
-            padding: isMobile ? '32px 24px' : '56px 48px',
-          }}
-        >
-          <Box sx={{ display: 'flex', flex: 1, gap: '16px', justifyContent: 'center' }}>
-            <Box component='img' src={`${ASSETS}/image9.png`} alt='' sx={{ ...sharedImageStyles, maxWidth: '48%' }} />
-            <Box component='img' src={`${ASSETS}/image10.png`} alt='' sx={{ ...sharedImageStyles, maxWidth: '48%' }} />
+        {isMobile ? (
+          <Box
+            sx={{
+              alignItems: 'center',
+              background: theme.palette.TwClrBaseGray025,
+              borderRadius: '16px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '32px',
+              padding: '32px 24px',
+            }}
+          >
+            <Box sx={{ display: 'flex', flex: 1, gap: '16px', justifyContent: 'center' }}>
+              <Box component='img' src={`${ASSETS}/image9.png`} alt='' sx={{ ...sharedImageStyles, maxWidth: '48%' }} />
+              <Box
+                component='img'
+                src={`${ASSETS}/image10.png`}
+                alt=''
+                sx={{ ...sharedImageStyles, maxWidth: '48%' }}
+              />
+            </Box>
+            {fieldContent}
           </Box>
-          <Box sx={{ flex: 1 }}>
-            <Typography sx={{ color: brand, fontSize: isMobile ? '24px' : '28px', fontWeight: 700 }}>
-              {strings.LEARN_MORE_FIELD_TITLE}
-            </Typography>
-            <Typography sx={{ color: textColor, fontSize: '17px', lineHeight: 1.5, marginTop: '16px' }}>
-              {strings.LEARN_MORE_FIELD_INTRO}
-            </Typography>
-            <Bullets
-              items={[
-                strings.LEARN_MORE_FIELD_BULLET_1,
-                strings.LEARN_MORE_FIELD_BULLET_2,
-                strings.LEARN_MORE_FIELD_BULLET_3,
-              ]}
+        ) : (
+          <Box sx={{ position: 'relative' }}>
+            <Box
+              sx={{
+                position: 'absolute',
+                top: '48px',
+                bottom: '48px',
+                left: 0,
+                right: 0,
+                background: theme.palette.TwClrBaseGray025,
+                borderRadius: '16px',
+                zIndex: 0,
+              }}
             />
+            <Box
+              sx={{
+                position: 'relative',
+                zIndex: 1,
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '48px',
+                alignItems: 'center',
+                padding: '0 48px',
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  flex: 1,
+                  gap: '16px',
+                  justifyContent: 'center',
+                }}
+              >
+                <Box
+                  component='img'
+                  src={`${ASSETS}/image9.png`}
+                  alt=''
+                  sx={{ ...sharedImageStyles, maxWidth: '48%' }}
+                />
+                <Box
+                  component='img'
+                  src={`${ASSETS}/image10.png`}
+                  alt=''
+                  sx={{ ...sharedImageStyles, maxWidth: '48%' }}
+                />
+              </Box>
+              {fieldContent}
+            </Box>
           </Box>
-        </Box>
+        )}
       </Box>
 
       {/* Other features */}
