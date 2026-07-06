@@ -1,8 +1,10 @@
 import React, { type JSX, useEffect, useState } from 'react';
+import { Provider } from 'react-redux';
 
 import { CssBaseline, GlobalStyles, StyledEngineProvider, Theme } from '@mui/material';
 
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
+import { store } from 'src/redux/store';
 import strings from 'src/strings';
 import { findLocaleDetails, supportedLocales } from 'src/strings/locales';
 
@@ -35,11 +37,13 @@ const LearnMore = (): JSX.Element => {
   }, []);
 
   return (
-    <StyledEngineProvider injectFirst>
-      <CssBaseline />
-      <GlobalStyles styles={globalStyles} />
-      {ready ? <LearnMoreView /> : <BlockingSpinner />}
-    </StyledEngineProvider>
+    <Provider store={store}>
+      <StyledEngineProvider injectFirst>
+        <CssBaseline />
+        <GlobalStyles styles={globalStyles} />
+        {ready ? <LearnMoreView /> : <BlockingSpinner />}
+      </StyledEngineProvider>
+    </Provider>
   );
 };
 
