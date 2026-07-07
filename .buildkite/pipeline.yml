@@ -35,6 +35,17 @@ agents:
   queue: 'x86-8core'
 
 steps:
+  - label: ':graphite: CI optimizer'
+    key: 'graphite-ci-optimizer'
+    soft_fail: true
+    plugins:
+      - *shallow-clone
+      - *load-secrets
+    command: .buildkite/scripts/graphite-optimizer.sh
+
+  - wait: ~
+    continue_on_failure: true
+
   - label: ':yarn: Build and test'
     key: 'build-and-test'
     plugins:
