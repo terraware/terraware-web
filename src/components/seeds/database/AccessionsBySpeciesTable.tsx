@@ -1,10 +1,11 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, CircularProgress, Popover, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, IconButton, Popover, Tooltip, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, EditableTable, EditableTableColumn } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_ShowHideColumnsButton,
+  MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
   MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
@@ -13,6 +14,7 @@ import {
 
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
+import Icon from 'src/components/common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
@@ -20,6 +22,7 @@ import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
+import { makeCsv } from 'src/utils/csv';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 export type SpeciesRow = {
@@ -258,6 +261,32 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
     ];
   }, [activeLocale, uniqueProjectNames, uniqueSpeciesNames, SpeciesNameCell, SpeciesNumericCell]);
 
+  const downloadReportHandler = useCallback((table: MRT_TableInstance<SpeciesRow>) => {
+    const filteredRows = table.getSortedRowModel().rows;
+    const visibleColumns = table
+      .getVisibleLeafColumns()
+      .filter((col) => !col.id.startsWith('mrt-') && typeof col.columnDef.header === 'string');
+    const csvColumns = visibleColumns.map((col) => ({
+      key: col.id,
+      displayLabel: col.columnDef.header as string,
+    }));
+    const csvData = filteredRows.map((row) => {
+      const rowData: Record<string, string> = {};
+      visibleColumns.forEach((col) => {
+        const value = row.getValue(col.id);
+        rowData[col.id] = value !== null && value !== undefined ? String(value) : '';
+      });
+      return rowData;
+    });
+    const blob = makeCsv(csvColumns, csvData);
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', 'accessions-by-species.csv');
+    link.click();
+    URL.revokeObjectURL(url);
+  }, []);
+
   if (searchResults === undefined) {
     return (
       <Card>
@@ -317,6 +346,11 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
           getRowId: (row) => row.id,
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
+              <Tooltip title={strings.EXPORT}>
+                <IconButton onClick={() => downloadReportHandler(table)}>
+                  <Icon name='iconExport' size='medium' />
+                </IconButton>
+              </Tooltip>
               <Tooltip title={strings.FILTER}>
                 <Button
                   id='filterAccessionsBySpecies'
