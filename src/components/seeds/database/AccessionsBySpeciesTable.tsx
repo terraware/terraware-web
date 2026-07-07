@@ -29,13 +29,22 @@ export type SpeciesRow = {
   species_commonName: string;
   project_name: string;
   totalSeeds: number;
+  dryingSeeds: number;
+  inStorageSeeds: number;
   accessionCount: number;
   usedUpAccessionCount: number;
 };
 
 const TABLE_STATE_STORAGE_KEY = 'accessions-database-species-table-v3';
 
-const DEFAULT_COLUMN_ORDER = ['speciesName', 'species_commonName', 'project_name', 'totalSeeds'];
+const DEFAULT_COLUMN_ORDER = [
+  'speciesName',
+  'species_commonName',
+  'project_name',
+  'totalSeeds',
+  'dryingSeeds',
+  'inStorageSeeds',
+];
 
 type AccessionsBySpeciesTableProps = {
   searchResults: SearchResponseElementWithId[] | null | undefined;
@@ -75,7 +84,7 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
     sorting,
   } = useTableState(TABLE_STATE_STORAGE_KEY, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
-    defaultColumnVisibility: {},
+    defaultColumnVisibility: { dryingSeeds: false, inStorageSeeds: false },
     defaultSorting: [{ id: 'speciesName', desc: false }],
     persistedMultiSelectColumnIds: ['project_name', 'speciesName'],
   });
@@ -117,12 +126,20 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
       const existing = grouped.get(key);
       const seeds = Number(accession['estimatedCount(raw)'] ?? 0) || 0;
       const isUsedUp = accession.state === 'Used Up';
+      const isDrying = accession.state === 'Drying';
+      const isInStorage = accession.state === 'In Storage';
       const projectName = (accession.project_name as string) ?? '';
       if (existing) {
         existing.totalSeeds += seeds;
         existing.accessionCount += 1;
         if (isUsedUp) {
           existing.usedUpAccessionCount += 1;
+        }
+        if (isDrying) {
+          existing.dryingSeeds += seeds;
+        }
+        if (isInStorage) {
+          existing.inStorageSeeds += seeds;
         }
         if (projectName && !existing.project_name.split(', ').includes(projectName)) {
           existing.project_name = existing.project_name ? `${existing.project_name}, ${projectName}` : projectName;
@@ -135,6 +152,8 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
           species_commonName: (accession.species_commonName as string) ?? '',
           project_name: projectName,
           totalSeeds: seeds,
+          dryingSeeds: isDrying ? seeds : 0,
+          inStorageSeeds: isInStorage ? seeds : 0,
           accessionCount: 1,
           usedUpAccessionCount: isUsedUp ? 1 : 0,
         });
@@ -219,6 +238,20 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
         id: 'totalSeeds',
         header: strings.TOTAL_SEEDS,
         accessorKey: 'totalSeeds',
+        filterVariant: 'range',
+        Cell: SpeciesNumericCell,
+      },
+      {
+        id: 'dryingSeeds',
+        header: strings.DRYING,
+        accessorKey: 'dryingSeeds',
+        filterVariant: 'range',
+        Cell: SpeciesNumericCell,
+      },
+      {
+        id: 'inStorageSeeds',
+        header: strings.IN_STORAGE,
+        accessorKey: 'inStorageSeeds',
         filterVariant: 'range',
         Cell: SpeciesNumericCell,
       },
