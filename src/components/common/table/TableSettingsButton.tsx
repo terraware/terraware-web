@@ -69,7 +69,7 @@ export default function TableSettingsButton(props: Props): JSX.Element {
           onClick={(event) => event && handleClick(event)}
           type='passive'
           priority='ghost'
-          icon='iconSettings'
+          icon='iconMenu'
         />
       </Tooltip>
       <PopoverMenu
