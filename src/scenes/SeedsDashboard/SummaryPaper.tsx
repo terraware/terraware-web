@@ -4,6 +4,7 @@ import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { IconName } from '@terraware/web-components';
 
 import PanelTitle from 'src/components/PanelTitle';
+import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
 import strings from 'src/strings';
 
@@ -12,12 +13,22 @@ interface Props {
   title: string;
   icon: IconName;
   statistic?: number | string;
+  statisticLink?: string;
   loading: boolean;
   error: boolean;
   tooltipTitle?: NonNullable<React.ReactNode>;
 }
 
-export default function SummaryPaper({ id, title, icon, statistic, loading, error, tooltipTitle }: Props): JSX.Element {
+export default function SummaryPaper({
+  id,
+  title,
+  icon,
+  statistic,
+  statisticLink,
+  loading,
+  error,
+  tooltipTitle,
+}: Props): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -35,13 +46,18 @@ export default function SummaryPaper({ id, title, icon, statistic, loading, erro
       </Box>
       {error && strings.GENERIC_ERROR}
       {loading && <CircularProgress id={`spinner-summary-${id}`} />}
-      {statistic !== undefined && (
-        <>
+      {statistic !== undefined &&
+        (statisticLink ? (
+          <Link to={statisticLink} style={{ display: 'block' }}>
+            <Typography id={`${id}-current`} component='p' fontSize='32px' fontWeight={600} color='inherit'>
+              {statistic}
+            </Typography>
+          </Link>
+        ) : (
           <Typography id={`${id}-current`} component='p' fontSize='32px' fontWeight={600}>
             {statistic}
           </Typography>
-        </>
-      )}
+        ))}
     </>
   );
 }

@@ -152,6 +152,7 @@ export default function SeedSummary(): JSX.Element {
                       title={strings.NUMBER_OF_SPECIES}
                       icon='species'
                       statistic={numberFormatter.format(seedBankSummary?.value?.species ?? 0)}
+                      statisticLink={`${APP_PATHS.ACCESSIONS}?tab=bySpecies`}
                       loading={seedBankSummary === undefined}
                       error={errorOccurred}
                     />
