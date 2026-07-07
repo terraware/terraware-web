@@ -6,7 +6,6 @@ import { Button, Icon, Textfield, Tooltip } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
-import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -30,7 +29,6 @@ import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 const BiomassObservationDataTab = () => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const isAdditionalBiomassFieldsEnabled = isEnabled('Additional Biomass Fields');
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
 
@@ -123,7 +121,7 @@ const BiomassObservationDataTab = () => {
     },
   ];
 
-  const hasWater = !isAdditionalBiomassFieldsEnabled || typeof biomassMeasurement?.waterDepth === 'number';
+  const hasWater = typeof biomassMeasurement?.waterDepth === 'number';
 
   const extraItems = [
     {
@@ -149,28 +147,27 @@ const BiomassObservationDataTab = () => {
     },
     {
       label: strings.WATER_DEPTH_CM,
-      value: isAdditionalBiomassFieldsEnabled && !hasWater ? strings.NO_WATER : biomassMeasurement?.waterDepth,
+      value: !hasWater ? strings.NO_WATER : biomassMeasurement?.waterDepth,
     },
     {
       label: strings.SALINITY_PPT,
-      value: isAdditionalBiomassFieldsEnabled && !hasWater ? strings.NO_WATER : biomassMeasurement?.salinity,
+      value: !hasWater ? strings.NO_WATER : biomassMeasurement?.salinity,
     },
     {
       label: strings.PH,
-      value: isAdditionalBiomassFieldsEnabled && !hasWater ? strings.NO_WATER : biomassMeasurement?.ph,
+      value: !hasWater ? strings.NO_WATER : biomassMeasurement?.ph,
     },
     {
       label: strings.TIDE,
-      value: isAdditionalBiomassFieldsEnabled && !hasWater ? strings.NO_WATER : biomassMeasurement?.tide,
+      value: !hasWater ? strings.NO_WATER : biomassMeasurement?.tide,
     },
     {
       label: strings.MEASUREMENT_TIME,
-      value:
-        isAdditionalBiomassFieldsEnabled && !hasWater
-          ? strings.NO_WATER
-          : biomassMeasurement?.tideTime
-            ? getDateTimeDisplayValue(new Date(biomassMeasurement?.tideTime).getTime())
-            : '- -',
+      value: !hasWater
+        ? strings.NO_WATER
+        : biomassMeasurement?.tideTime
+          ? getDateTimeDisplayValue(new Date(biomassMeasurement?.tideTime).getTime())
+          : '- -',
     },
     {
       label: strings.PLOT_CONDITIONS,
@@ -317,11 +314,9 @@ const BiomassObservationDataTab = () => {
               display={true}
             />
           </Box>
-          {isAdditionalBiomassFieldsEnabled && (
-            <Box>
-              <Textfield display id='soilType' label={strings.SOIL_TYPE} type='text' value={soilTypeLabel} />
-            </Box>
-          )}
+          <Box>
+            <Textfield display id='soilType' label={strings.SOIL_TYPE} type='text' value={soilTypeLabel} />
+          </Box>
         </Box>
       </Box>
       <Box paddingTop={2}>
