@@ -2,7 +2,9 @@ import React, { type JSX } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
+import Link from 'src/components/common/Link';
 import TextField from 'src/components/common/Textfield/Textfield';
+import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 
 import { BatchInfo, BatchWithdrawQuantities } from './types';
@@ -33,11 +35,11 @@ const SeedlingBatchBox = ({
 }: SeedlingBatchBoxProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
-  const tableColumns = isPlanting ? 'minmax(180px, 2fr) minmax(120px, 1fr) 112px' : '90px 45px repeat(4, 154px)';
+  const tableColumns = isPlanting ? 'minmax(180px, 2fr) minmax(120px, 1fr) 112px' : '90px 45px repeat(3, 154px)';
   const tableGap = isPlanting ? theme.spacing(4) : theme.spacing(1);
   const tableSx = {
     boxSizing: 'border-box' as const,
-    ...(isPlanting ? {} : { minWidth: '832px' }),
+    ...(isPlanting ? {} : { minWidth: '672px' }),
   };
   const withdrawInputSx = { justifySelf: 'end', width: '100px' };
   const phaseInputSx = { width: '90px', flexShrink: 0 };
@@ -48,11 +50,6 @@ const SeedlingBatchBox = ({
     label: string;
     available: (batch: BatchInfo) => number;
   }[] = [
-    {
-      key: 'germinatingQuantityWithdrawn',
-      label: strings.GERMINATION_ESTABLISHMENT,
-      available: (batch) => batch.germinatingQuantity,
-    },
     {
       key: 'activeGrowthQuantityWithdrawn',
       label: strings.ACTIVE_GROWTH,
@@ -81,9 +78,6 @@ const SeedlingBatchBox = ({
       },
     }));
   };
-
-  const phaseHeaderLabel = (column: (typeof phaseColumns)[number]) =>
-    column.key === 'germinatingQuantityWithdrawn' ? column.label.replace('/', '/\n') : column.label;
 
   return (
     <Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}`, overflowX: 'auto' }}>
@@ -139,7 +133,7 @@ const SeedlingBatchBox = ({
                 whiteSpace='pre-line'
                 sx={phaseHeaderSx}
               >
-                {phaseHeaderLabel(column)}
+                {column.label}
               </Typography>
             ))}
           </>
@@ -158,9 +152,13 @@ const SeedlingBatchBox = ({
             padding={theme.spacing(1, 2)}
             sx={tableSx}
           >
-            <Typography fontSize='16px' color={theme.palette.TwClrTxtBrand} textAlign='left'>
+            <Link
+              fontSize='16px'
+              to={`${APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', batch.speciesId.toString())}?batch=${batch.batchNumber}`}
+              target='_blank'
+            >
               {batch.batchNumber}
-            </Typography>
+            </Link>
             {isPlanting ? (
               <>
                 <Typography fontSize='16px' textAlign='right'>
