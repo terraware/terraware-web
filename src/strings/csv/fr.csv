@@ -1014,6 +1014,16 @@ LATITUDE_LONGITUDE,"Latitude, longitude",fb596189
 LB,livres,7ca2fa65
 LB_POUNDS,livres,9e3b82a5
 LEARN_MORE,En savoir plus,e2073ae7
+LEARN_MORE_AMERICAN_FORESTS_ALT,Logo American Forests,6b364d3e
+LEARN_MORE_BANNER,Plus de 150 organisations de foresterie et de conservation dans plus de 50 pays se sont inscrites pour utiliser Terraware.,48c8cf53
+LEARN_MORE_CTA_DEMO,Vous souhaitez une démonstration gratuite ? Contactez notre {0},9111b6e1
+LEARN_MORE_CTA_PRODUCT_TEAM,Équipe Produit,a375e11b
+LEARN_MORE_CTA_TITLE,Inscrivez-vous à Terraware dès aujourd'hui !,d83a9d06
+LEARN_MORE_FIELD_BULLET_1,Collecter des données géoréférencées lors des sorties de collecte de semences,60dfb40e
+LEARN_MORE_FIELD_BULLET_2,Mettre à jour l’inventaire de votre pépinière,7241dad0
+LEARN_MORE_FIELD_BULLET_3,Effectuer un suivi des plants guidé et statistiquement significatif,bbfe6c91
+LEARN_MORE_FIELD_INTRO,"L’application mobile Terraware est disponible sur iOS et Android. Elle permet une collecte facile de données géoréférencées sur le terrain, même hors ligne, qui sont automatiquement téléchargées dès qu’une connexion est disponible. Vous pouvez :",999dff70
+LEARN_MORE_FIELD_TITLE,Sur le terrain,9ea78743
 LEARN_MORE_GROWTH_FORM_FERN,"Plante vasculaire non florifère qui se reproduit par spores, dans la division végétale des ptéridophytes.",441ba60a
 LEARN_MORE_GROWTH_FORM_FORB,"Plante herbacée (non ligneuse) qui n'est PAS un graminoïde (herbe, laîche ou jonc).",dd6645c1
 LEARN_MORE_GROWTH_FORM_FUNGUS,"Généralement un organisme eucaryote (non végétal) hétérotrophe (qui ne peut pas produire sa propre nourriture), qui se développe en filaments (hyphes) et qui produit des spores.",7f123041
@@ -1027,10 +1037,43 @@ LEARN_MORE_GROWTH_FORM_SHRUB,Plante ligneuse plus petite qu'un arbre et posséda
 LEARN_MORE_GROWTH_FORM_SUBSHRUB,"Un arbuste nain, qui n'est généralement ligneux qu'à sa base.",8637bf0a
 LEARN_MORE_GROWTH_FORM_TREE,"Plante ligneuse pérenne, généralement dotée d'une seule tige ou d'un seul tronc atteignant une hauteur considérable et portant des branches latérales à une certaine distance du sol.",49a0eed4
 LEARN_MORE_GROWTH_FORM_VINE,Toute plante dotée de longues tiges flexibles et grimpantes (terme souvent utilisé pour les plantes herbacées grimpantes).,353cf9f4
+LEARN_MORE_HERO_IMAGE_ALT,Un forestier utilisant l’application mobile Terraware sur le terrain,3bf4fc9e
+LEARN_MORE_HERO_SUBTITLE,"Terraware est un logiciel spécialisé conçu par et pour les forestiers. Il vous permet de suivre votre stock de semences, de gérer votre pépinière, de surveiller les arbres plantés et de rendre compte des résultats de vos projets, le tout en un seul endroit, sur le terrain ou au bureau.",1cfd6e09
+LEARN_MORE_HERO_TITLE,Un logiciel pour assurer le succès de votre forêt,d23fcc89
+LEARN_MORE_HOW_TITLE,Comment puis-je utiliser Terraware dans mon projet ?,659644b6
+LEARN_MORE_LOGIN,Connexion,15bb6644
+LEARN_MORE_NURSERY_BULLET_1,Suivez chaque lot de semis depuis la germination jusqu'à la préparation pour le transplanté.,1923d501
+LEARN_MORE_NURSERY_BULLET_2,Constituez un historique clair de votre propagation et de l’emplacement de vos semis.,d11b2c6b
+LEARN_MORE_NURSERY_BULLET_3,Suivez les pertes de semis et leurs causes.,e40fcc2b
+LEARN_MORE_NURSERY_BULLET_4,"Affectez les semis à des objectifs de plantation spécifiques, afin d’être prêt pour la saison de plantation.",62fd600a
+LEARN_MORE_NURSERY_INTRO,Terraware vous aide à savoir exactement ce qui est prêt à être planté et à détecter les problèmes de pépinière avant qu’ils ne deviennent des pénuries. Vous pouvez :,27c828e0
+LEARN_MORE_NURSERY_TITLE,Pour votre pépinière,bb22a152
+LEARN_MORE_OTHER_FEATURE_1,Créez une liste centralisée et exportable de toutes les espèces avec lesquelles vous travaillez,01a9618d
+LEARN_MORE_OTHER_FEATURE_2,"Prise en charge multilingue (anglais, français, espagnol)",f939391f
+LEARN_MORE_OTHER_FEATURE_3,Gratuit et open source pour tous types de projets forestiers !,61743f65
+LEARN_MORE_OTHER_FEATURES_TITLE,Autres fonctionnalités,8c2784c3
+LEARN_MORE_PLANTING_SITE_BULLET_1,"Configurez votre site avec des strates et des sous-strates, puis suivez ce qui est planté et où, au fur et à mesure de l’avancement de la saison.",d9041466
+LEARN_MORE_PLANTING_SITE_BULLET_2,"Consultez des tableaux de bord et des vues cartographiques montrant la progression des plantations et les taux de survie au niveau du site, des strates, des sous-strates et des parcelles.",4ec8ad86
+LEARN_MORE_PLANTING_SITE_INTRO,Suivez vos progrès à mesure que votre site se développe. Vous pouvez :,226c0411
+LEARN_MORE_PLANTING_SITE_TITLE,Pour votre site de plantation,a56f63d6
+LEARN_MORE_QUOTE,Terraware est un outil de collecte de données extraordinaire qui a considérablement augmenté nos capacités d’enregistrement et de stockage des semences !,c963de8b
+LEARN_MORE_QUOTE_AUTHOR,– Michael Alfredo Navarro,5018a86e
+LEARN_MORE_QUOTE_AUTHOR_TITLE,"Coordinateur de l’initiative Semillas Compartidas (Semences Partagées), American Forests",7540e444
+LEARN_MORE_SEED_BANK_BULLET_1,Consignez les sorties de collecte de semences afin de savoir exactement d’où proviennent vos semences,63ba388e
+LEARN_MORE_SEED_BANK_BULLET_2,"Comprenez tout ce que vous avez dans votre banque de semences, où cela se trouve dans votre flux de travail, sa viabilité et sa destination finale",5fadbb44
+LEARN_MORE_SEED_BANK_INTRO,"Si vous collectez et gérez votre propre collection de semences, Terraware peut améliorer votre efficacité et réduire la perte de semences. Vous pouvez :",db034213
+LEARN_MORE_SEED_BANK_TITLE,Pour votre banque de semences,df0c4eda
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE,"Les semences se situent entre les semences orthodoxes et les semences récalcitrantes en ce qui concerne leur comportement ; elles peuvent notamment tolérer une dessiccation partielle, tolérer des températures fraîches mais non glaciales, ou avoir une durée de vie courte quelles que soient les conditions de conservation.",77cec9fc
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_LIKELY,"Des preuves scientifiques suggèrent ce comportement de conservation des semences, mais des recherches supplémentaires sont nécessaires pour le confirmer.",dffd0fda
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Les semences tolèrent les niveaux de dessiccation requis pour la conservation à l'état congelé (5-8 % d'humidité) et des températures de -20 °C ou moins.,3085fe7d
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Les semences ne tolèrent pas les niveaux de dessiccation requis pour la conservation ex situ (hors site).,1363ae6a
+LEARN_MORE_SIGN_UP,S’inscrire,1c63999d
+LEARN_MORE_STAT_AREA_LABEL,Superficie totale en restauration (ha),ca8d3288
+LEARN_MORE_STAT_COUNTRIES_LABEL,Pays,a25fc92e
+LEARN_MORE_STAT_ORGS_LABEL,Nombre total d’organisations,894327a0
+LEARN_MORE_STAT_PLANTINGS_LABEL,Nombre total de plantations,29ac2807
+LEARN_MORE_STAT_SEEDLINGS_LABEL,Semis en pépinières,121923ea
+LEARN_MORE_STAT_SEEDS_LABEL,Semences en banque,aa86476e
 LEARN_MORE_STRATA,"Pour en savoir plus sur la stratification des sites, cliquez ici",ba9a7d77
 LEAVE_AND_SAVE,Laissez et conservez,900e4d74
 LEAVE_ORGANIZATION,Quitter l'organisation,ce40fab6

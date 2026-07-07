@@ -1015,6 +1015,16 @@ LATITUDE_LONGITUDE,"Latitud, longitud",fb596189
 LB,lb,7ca2fa65
 LB_POUNDS,lb (libras),9e3b82a5
 LEARN_MORE,Más información,e2073ae7
+LEARN_MORE_AMERICAN_FORESTS_ALT,Logotipo de American Forests,6b364d3e
+LEARN_MORE_BANNER,Más de 150 organizaciones de silvicultura y conservación en más de 50 países se han registrado para usar Terraware.,48c8cf53
+LEARN_MORE_CTA_DEMO,¿Quiere una demostración gratuita? Póngase en contacto con nuestro {0},9111b6e1
+LEARN_MORE_CTA_PRODUCT_TEAM,Equipo de Producto,a375e11b
+LEARN_MORE_CTA_TITLE,¡Regístrese en Terraware hoy mismo!,d83a9d06
+LEARN_MORE_FIELD_BULLET_1,Capture datos georreferenciados en viajes de recolección de semillas,60dfb40e
+LEARN_MORE_FIELD_BULLET_2,Actualice el inventario de su vivero,7241dad0
+LEARN_MORE_FIELD_BULLET_3,Realice monitoreo de plantas guiado y estadísticamente significativo,bbfe6c91
+LEARN_MORE_FIELD_INTRO,"La aplicación móvil de Terraware está disponible en iOS y Android. Permite la recolección sencilla de datos georreferenciados en campo sin conexión, que se cargan automáticamente cuando hay conectividad. Usted puede:",999dff70
+LEARN_MORE_FIELD_TITLE,En el Campo,9ea78743
 LEARN_MORE_GROWTH_FORM_FERN,"Planta vascular que no florece y se reproduce mediante esporas, que pertenece al grupo de plantas de las pteridofitas.",441ba60a
 LEARN_MORE_GROWTH_FORM_FORB,"Planta herbácea (no leñosa) que NO es una gramínea (césped, juncia o junco).",dd6645c1
 LEARN_MORE_GROWTH_FORM_FUNGUS,"Usualmente, un organismo eucariota (no vegetal) que es heterótrofo (que no puede producir su propio alimento), que crece en filamentos (hifas) y que produce esporas.",7f123041
@@ -1028,10 +1038,43 @@ LEARN_MORE_GROWTH_FORM_SHRUB,Planta leñosa que es más pequeña que un árbol y
 LEARN_MORE_GROWTH_FORM_SUBSHRUB,Un arbusto enano que usualmente solo es leñoso en la base.,8637bf0a
 LEARN_MORE_GROWTH_FORM_TREE,"Planta leñosa perenne, que suele tener un solo tallo o tronco que crece hasta una altura considerable y posee ramas laterales a cierta distancia del suelo.",49a0eed4
 LEARN_MORE_GROWTH_FORM_VINE,"Cualquier planta con tallos largos, flexibles, trepadores (término que suele usarse para trepadoras herbáceas)",353cf9f4
+LEARN_MORE_HERO_IMAGE_ALT,Un silvicultor usando la aplicación móvil de Terraware en el campo,3bf4fc9e
+LEARN_MORE_HERO_SUBTITLE,"Terraware es un software especializado creado por y para silvicultores. Puede usarlo para rastrear su suministro de semillas, gestionar su vivero, monitorear árboles plantados y reportar los resultados de sus proyectos, todo en un solo lugar, desde el campo o la oficina.",1cfd6e09
+LEARN_MORE_HERO_TITLE,Software para Preparar su Bosque para el Éxito,d23fcc89
+LEARN_MORE_HOW_TITLE,¿Cómo puedo usar Terraware en mi proyecto?,659644b6
+LEARN_MORE_LOGIN,Iniciar sesión,15bb6644
+LEARN_MORE_NURSERY_BULLET_1,Siga cada lote de plántulas desde la germinación hasta que estén listas para transplantar.,1923d501
+LEARN_MORE_NURSERY_BULLET_2,Cree un registro claro de su historial de propagación y de dónde están plantadas sus plántulas.,d11b2c6b
+LEARN_MORE_NURSERY_BULLET_3,Registre la pérdida de plántulas y sus causas.,e40fcc2b
+LEARN_MORE_NURSERY_BULLET_4,"Asigne plántulas a objetivos de plantación específicos, asegurando que esté preparado para la temporada de plantación.",62fd600a
+LEARN_MORE_NURSERY_INTRO,Terraware le ayuda a saber exactamente qué está listo para plantar y detecta problemas en el vivero antes de que se conviertan en escasez. Usted puede:,27c828e0
+LEARN_MORE_NURSERY_TITLE,Para su vivero,bb22a152
+LEARN_MORE_OTHER_FEATURE_1,Cree una lista centralizada y exportable de todas las especies con las que trabaja.,01a9618d
+LEARN_MORE_OTHER_FEATURE_2,"Soporte multilingüe (inglés, francés, español)",f939391f
+LEARN_MORE_OTHER_FEATURE_3,¡Gratis y de código abierto para todo tipo de proyectos forestales!,61743f65
+LEARN_MORE_OTHER_FEATURES_TITLE,Otras funciones,8c2784c3
+LEARN_MORE_PLANTING_SITE_BULLET_1,"Configure su sitio con estratos y subestratos, luego registre qué se planta y dónde a medida que avanza la temporada.",d9041466
+LEARN_MORE_PLANTING_SITE_BULLET_2,"Vea paneles de control y mapas que muestran el progreso de la plantación y las tasas de supervivencia a nivel de sitio, estrato, subestrato y parcela.",4ec8ad86
+LEARN_MORE_PLANTING_SITE_INTRO,Registre su progreso a medida que crece su sitio. Usted puede:,226c0411
+LEARN_MORE_PLANTING_SITE_TITLE,Para su sitio de plantación,a56f63d6
+LEARN_MORE_QUOTE,¡Terraware es una herramienta extraordinaria de recopilación de datos que ha incrementado enormemente nuestras capacidades de registro y almacenamiento de semillas!,c963de8b
+LEARN_MORE_QUOTE_AUTHOR,– Michael Alfredo Navarro,5018a86e
+LEARN_MORE_QUOTE_AUTHOR_TITLE,"Coordinador de la Iniciativa Semillas Compartidas, American Forests",7540e444
+LEARN_MORE_SEED_BANK_BULLET_1,Registre viajes de recolección de semillas para saber exactamente de dónde provienen sus semillas,63ba388e
+LEARN_MORE_SEED_BANK_BULLET_2,"Comprenda todo lo que tiene en su banco de semillas, en qué parte del flujo de trabajo se encuentra, cuán viable es y a dónde va finalmente",5fadbb44
+LEARN_MORE_SEED_BANK_INTRO,"Si recolecta y mantiene su propia colección de semillas, Terraware puede mejorar su eficiencia y reducir la pérdida de semillas. Usted puede:",db034213
+LEARN_MORE_SEED_BANK_TITLE,Para su Banco de Semillas,df0c4eda
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_INTERMEDIATE,"Las semillas exhiben un comportamiento intermedio entre las semillas ortodoxas y las recalcitrantes; pueden soportar la desecación parcial, soportar temperaturas frías pero no de congelación o tener una vida corta, independientemente de las condiciones de almacenamiento.",77cec9fc
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_LIKELY,"La evidencia científica sugiere este comportamiento en almacenamiento de semillas, pero se necesita más investigación para confirmar.",dffd0fda
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_ORTHODOX,Las semillas toleran los niveles de desecación necesarios para ser almacenadas congeladas (contenido de humedad de 5-8 %) y unas temperaturas de -20 °C o inferiores.,3085fe7d
 LEARN_MORE_SEED_STORAGE_BEHAVIOR_RECALCITRANT,Las semillas no toleran los niveles de desecación necesarios para su conservación ex situ (fuera del sitio).,1363ae6a
+LEARN_MORE_SIGN_UP,Registrarse,1c63999d
+LEARN_MORE_STAT_AREA_LABEL,Superficie Total en Restauración (ha),ca8d3288
+LEARN_MORE_STAT_COUNTRIES_LABEL,Países,a25fc92e
+LEARN_MORE_STAT_ORGS_LABEL,Total de Organizaciones,894327a0
+LEARN_MORE_STAT_PLANTINGS_LABEL,Número Total de Plantaciones,29ac2807
+LEARN_MORE_STAT_SEEDLINGS_LABEL,Plántulas en Viveros,121923ea
+LEARN_MORE_STAT_SEEDS_LABEL,Semillas Almacenadas,aa86476e
 LEARN_MORE_STRATA,Obtenga más información sobre la estratificación de los sitios aquí.,ba9a7d77
 LEAVE_AND_SAVE,Salir y guardar,900e4d74
 LEAVE_ORGANIZATION,Salir de la organización,ce40fab6

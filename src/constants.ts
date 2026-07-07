@@ -14,6 +14,8 @@ export const TERRAWARE_MOBILE_APP_ANDROID_GOOGLE_PLAY_LINK =
   'https://play.google.com/store/apps/details?id=com.terraformation.seedcollector';
 export const ACCELERATOR_LINK = 'https://www.terraformation.com/accelerator';
 
+export const LOGIN_LINK = '/api/v1/login';
+
 // https://stackoverflow.com/questions/46155/whats-the-best-way-to-validate-an-email-address-in-javascript
 export const EMAIL_REGEX =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -103,6 +105,7 @@ export enum APP_PATHS {
   INVENTORY_ITEM_FOR_SPECIES = '/inventory/:speciesId',
   INVENTORY_PLANNING = '/inventory-planning',
   INVENTORY_WITHDRAW = '/inventory/withdraw',
+  LEARN_MORE = '/learn-more',
   MY_ACCOUNT = '/myaccount',
   MY_ACCOUNT_EDIT = '/myaccount/edit',
   NURSERIES = '/nurseries',
