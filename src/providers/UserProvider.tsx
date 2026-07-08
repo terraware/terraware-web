@@ -1,10 +1,11 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useGetMyselfQuery } from 'src/queries/generated/users';
 import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelectors';
 import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
 import { requestUserCookieConsentUpdate } from 'src/redux/features/user/usersAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PreferencesService, UserService } from 'src/services';
+import { CachedUserService, PreferencesService } from 'src/services';
 import { User } from 'src/types/User';
 import { GlobalRolePermission, isAllowed as isAllowedACL } from 'src/utils/acl';
 import { isTerraformationEmail } from 'src/utils/user';
@@ -17,10 +18,21 @@ export type UserProviderProps = {
 };
 
 export default function UserProvider({ children }: UserProviderProps): JSX.Element {
-  const [user, setUser] = useState<User>();
   const [userPreferences, setUserPreferences] = useState<PreferencesType>();
   const userAnalyticsState = useAppSelector(selectUserAnalytics);
   const dispatch = useAppDispatch();
+
+  const { currentData, refetch } = useGetMyselfQuery();
+  // Latch the user into local state so it survives the RESET_APP store wipe that OrganizationProvider
+  // dispatches on org change (which clears the RTK Query cache). Only populated, never cleared here —
+  // effectively "only a logout/reload resets the user", matching the pre-RTK behavior.
+  const [user, setUser] = useState<User>();
+
+  useEffect(() => {
+    if (currentData?.user) {
+      setUser(currentData.user);
+    }
+  }, [currentData]);
 
   const updateUserPreferences = useCallback(async (preferences: PreferencesType) => {
     const response = await PreferencesService.updateUserPreferences(preferences);
@@ -42,33 +54,8 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
   }, [setUserPreferences]);
 
   const reloadUser = useCallback(() => {
-    const populateUser = async () => {
-      const response = await UserService.getUser();
-
-      if (response.requestSucceeded) {
-        setUser(response.user);
-        if (response.user && !userAnalyticsState?.gtmInstrumented && (window as any).INIT_GTAG) {
-          dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
-
-          // Put the language in the "lang" attribute of the <html> tag before initializing Google
-          // Analytics because the cookie consent UI code will look there to determine which
-          // language to use for the consent UI. This needs to happen before the call to INIT_GTAG,
-          // so it lives here instead of in LocalizationProvider.
-          const locale = response.user.locale;
-          if (locale) {
-            document.documentElement.setAttribute('lang', locale);
-          }
-
-          (window as any).INIT_GTAG(
-            response.user.id.toString(),
-            isTerraformationEmail(response.user.email) ? 'true' : 'false'
-          );
-        }
-      }
-    };
-
-    void populateUser();
-  }, [setUser, userAnalyticsState?.gtmInstrumented, dispatch]);
+    void refetch();
+  }, [refetch]);
 
   const updateUserCookieConsent = useCallback(
     async (consent: boolean) => {
@@ -116,10 +103,27 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
   }, [reloadUserPreferences]);
 
   useEffect(() => {
-    if (!user) {
-      reloadUser();
+    if (user) {
+      CachedUserService.setUser(user);
     }
-  }, [user, reloadUser]);
+  }, [user]);
+
+  useEffect(() => {
+    if (user && !userAnalyticsState?.gtmInstrumented && (window as any).INIT_GTAG) {
+      dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
+
+      // Put the language in the "lang" attribute of the <html> tag before initializing Google
+      // Analytics because the cookie consent UI code will look there to determine which
+      // language to use for the consent UI. This needs to happen before the call to INIT_GTAG,
+      // so it lives here instead of in LocalizationProvider.
+      const locale = user.locale;
+      if (locale) {
+        document.documentElement.setAttribute('lang', locale);
+      }
+
+      (window as any).INIT_GTAG(user.id.toString(), isTerraformationEmail(user.email) ? 'true' : 'false');
+    }
+  }, [user, userAnalyticsState?.gtmInstrumented, dispatch]);
 
   return <UserContext.Provider value={userData}>{children}</UserContext.Provider>;
 }

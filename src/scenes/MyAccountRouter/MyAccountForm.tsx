@@ -22,9 +22,10 @@ import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useUpdateCurrentUser from 'src/hooks/useUpdateCurrentUser';
 import { useLocalization, useTimeZones, useUser } from 'src/providers';
 import { useGetDisclaimerQuery } from 'src/queries/generated/disclaimer';
-import { OrganizationService, OrganizationUserService, PreferencesService, UserService } from 'src/services';
+import { OrganizationService, OrganizationUserService, PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
 import { Organization, roleName } from 'src/types/Organization';
@@ -92,6 +93,7 @@ const MyAccountForm = ({
   desktopOffset,
 }: MyAccountFormProps): JSX.Element => {
   const { isMobile } = useDeviceInfo();
+  const updateCurrentUser = useUpdateCurrentUser();
   const supportedLocales = useSupportedLocales();
   const theme = useTheme();
   const { currentData: disclaimerData } = useGetDisclaimerQuery(undefined, { skip: user?.userType !== 'Funder' });
@@ -218,9 +220,8 @@ const MyAccountForm = ({
 
       const lastLocale = selectedLocale;
       setSelectedLocale(localeSelected);
-      const updateUserResponse = await saveProfileChanges();
-      if (updateUserResponse.requestSucceeded) {
-        reloadUser();
+      const succeeded = await saveProfileChanges();
+      if (succeeded) {
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
         setSelectedLocale(lastLocale);
@@ -237,12 +238,12 @@ const MyAccountForm = ({
   const saveProfileChanges = async () => {
     // Save the currently-selected locale, even if it differs from the locale in the profile data we
     // fetched from the server.
-    const updateUserResponse = await UserService.updateUser({
+    const succeeded = await updateCurrentUser({
       ...record,
       countryCode: countryCodeSelected,
       locale: localeSelected,
     });
-    return updateUserResponse;
+    return succeeded;
   };
 
   const openDeleteOrgModal = () => {
@@ -251,7 +252,7 @@ const MyAccountForm = ({
   };
 
   const leaveOrgHandler = async () => {
-    const updateUserResponse = await saveProfileChanges();
+    const succeeded = await saveProfileChanges();
     let leaveOrgResponse = {
       requestSucceeded: true,
     };
@@ -268,7 +269,7 @@ const MyAccountForm = ({
         leaveOrgResponse = await OrganizationUserService.deleteOrganizationUser(removedOrg.id, user.id);
       }
     }
-    if (updateUserResponse.requestSucceeded && leaveOrgResponse.requestSucceeded) {
+    if (succeeded && leaveOrgResponse.requestSucceeded) {
       if (reloadData) {
         reloadData();
       }
@@ -288,8 +289,8 @@ const MyAccountForm = ({
   const deleteOrgHandler = async () => {
     if (removedOrg) {
       const deleterOrgReponse = await OrganizationService.deleteOrganization(removedOrg.id);
-      const updateUserResponse = await saveProfileChanges();
-      if (updateUserResponse.requestSucceeded && deleterOrgReponse.requestSucceeded) {
+      const succeeded = await saveProfileChanges();
+      if (succeeded && deleterOrgReponse.requestSucceeded) {
         if (reloadData) {
           reloadData();
         }
