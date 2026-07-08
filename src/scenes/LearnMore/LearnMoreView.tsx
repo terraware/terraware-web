@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
@@ -38,6 +38,26 @@ const LearnMoreView = (): JSX.Element => {
   const goToLogin = useCallback(() => {
     const redirect = encodeURIComponent(`${window.location.origin}${APP_PATHS.HOME}`);
     window.location.href = `${LOGIN_LINK}?redirect=${redirect}`;
+  }, []);
+
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | undefined>(undefined);
+
+  useEffect(() => {
+    let active = true;
+    fetch('/api/v1/users/me', { credentials: 'include' })
+      .then((response) => {
+        if (active) {
+          setIsLoggedIn(response.ok);
+        }
+      })
+      .catch(() => {
+        if (active) {
+          setIsLoggedIn(false);
+        }
+      });
+    return () => {
+      active = false;
+    };
   }, []);
 
   const brand = theme.palette.TwClrTxtBrand as string;
@@ -333,16 +353,32 @@ const LearnMoreView = (): JSX.Element => {
         }}
       >
         <Box component='img' src='/assets/tw-tf-logo.svg' alt='Terraware by Terraformation' sx={{ height: '40px' }} />
-        <Box sx={{ display: 'flex', gap: '12px' }}>
-          <Button
-            label={strings.LEARN_MORE_SIGN_UP}
-            onClick={goToLogin}
-            priority='primary'
-            size='large'
-            type='productive'
-          />
-          <Button label={strings.LEARN_MORE_LOGIN} onClick={goToLogin} priority='secondary' size='large' />
-        </Box>
+        {isLoggedIn === true ? (
+          <Box
+            component='a'
+            href={APP_PATHS.HOME}
+            sx={{
+              color: `${brand} !important`,
+              fontSize: '16px',
+              fontWeight: 600,
+              textDecoration: 'none',
+              '&:hover': { textDecoration: 'underline' },
+            }}
+          >
+            {strings.BACK_TO_TERRAWARE}
+          </Box>
+        ) : isLoggedIn === false ? (
+          <Box sx={{ display: 'flex', gap: '12px' }}>
+            <Button
+              label={strings.LEARN_MORE_SIGN_UP}
+              onClick={goToLogin}
+              priority='primary'
+              size='large'
+              type='productive'
+            />
+            <Button label={strings.LEARN_MORE_LOGIN} onClick={goToLogin} priority='secondary' size='large' />
+          </Box>
+        ) : null}
       </Box>
 
       <Box sx={{ padding: sectionPadding }}>
