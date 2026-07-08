@@ -1,18 +1,19 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 
 import TextWithLink from 'src/components/common/TextWithLink';
 import { APP_PATHS } from 'src/constants';
+import useInitializeUnits from 'src/hooks/useInitializeUnits';
+import useInitializeUserTimeZone from 'src/hooks/useInitializeUserTimeZone';
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
-import { PreferencesService, UserService } from 'src/services';
+import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { useSupportedLocales } from 'src/strings/locales';
 import { ClientNotification } from 'src/types/Notifications';
-import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
+import { TimeZoneDescription } from 'src/types/TimeZones';
 import { weightSystemsNames } from 'src/units';
-import { InitializedUnits } from 'src/units';
 import { featureNotificationExpired } from 'src/utils/featureNotifications';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 
@@ -23,76 +24,55 @@ export default function useUserNotification(): ClientNotification | null {
   const [timeZoneUserNotification, setTimeZoneUserNotification] = useState(false);
   const [timeZoneUserNotificationRead, setTimeZoneUserNotificationRead] = useState(false);
   const [userTimeZone, setUserTimeZone] = useState<string>();
-  const { user, reloadUser, userPreferences, reloadUserPreferences } = useUser();
+  const { user, userPreferences, reloadUserPreferences } = useUser();
   const { selectedOrganization } = useOrganization();
   const timeZones = useTimeZones();
 
-  useEffect(() => {
-    const getTimeZoneById = (id?: string): TimeZoneDescription => {
-      return getTimeZone(timeZones, id) ?? getUTC(timeZones);
-    };
+  const getTimeZoneById = useCallback(
+    (id?: string): TimeZoneDescription => getTimeZone(timeZones, id) ?? getUTC(timeZones),
+    [timeZones]
+  );
 
-    const getDefaultTimeZone = (): TimeZoneDescription => {
-      const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      return getTimeZoneById(browserTimeZone);
-    };
+  const defaultTimeZoneId = getTimeZoneById(Intl.DateTimeFormat().resolvedOptions().timeZone).id;
 
-    const notifyTimeZoneUpdates = (userTz: InitializedTimeZone) => {
-      const notifyUser = userTz.timeZone && !featureNotificationExpired(userTz.timeZoneAcknowledgedOnMs);
-      setUserTimeZone(getTimeZoneById(userTz.timeZone).longName);
-      setTimeZoneUserNotification(!!notifyUser);
-
-      if (userTz.timeZoneAcknowledgedOnMs) {
-        setTimeZoneUserNotificationRead(true);
-      } else {
-        setTimeZoneUserNotificationRead(false);
-      }
-    };
-
-    const initializeTimeZones = async () => {
-      if (!user) {
-        return;
-      }
-
-      const userTz: InitializedTimeZone = await UserService.getInitializedTimeZone(user, getDefaultTimeZone().id);
-      if (!userTz.timeZone) {
-        return;
-      }
-
-      if (userTz.updated) {
-        reloadUser();
-      }
-
-      if (!userTz.updated) {
-        notifyTimeZoneUpdates(userTz);
-      }
-    };
-
-    void initializeTimeZones();
-  }, [reloadUser, user, userPreferences, timeZones]);
+  const userTz = useInitializeUserTimeZone(defaultTimeZoneId);
+  const userUnit = useInitializeUnits('metric');
 
   useEffect(() => {
-    const initializeWeightUnits = async () => {
-      const userUnit: InitializedUnits = await UserService.initializeUnits('metric');
-      if (!userUnit.units) {
-        return;
-      }
+    if (!userTz.timeZone) {
+      return;
+    }
 
-      if (userUnit.updated) {
-        reloadUserPreferences();
-      }
+    if (userTz.updated) {
+      // getMyself is refetched automatically via the Users:ME tag invalidation on updateMyself
+      return;
+    }
 
-      if (!userUnit.unitsAcknowledgedOnMs) {
-        setUnitNotificationRead(false);
-      } else {
-        setUnitNotificationRead(true);
-      }
+    const notifyUser = userTz.timeZone && !featureNotificationExpired(userTz.timeZoneAcknowledgedOnMs);
+    setUserTimeZone(getTimeZoneById(userTz.timeZone).longName);
+    setTimeZoneUserNotification(!!notifyUser);
 
-      setUnitNotification(!featureNotificationExpired(userUnit.unitsAcknowledgedOnMs));
-    };
+    if (userTz.timeZoneAcknowledgedOnMs) {
+      setTimeZoneUserNotificationRead(true);
+    } else {
+      setTimeZoneUserNotificationRead(false);
+    }
+  }, [userTz, getTimeZoneById]);
 
-    void initializeWeightUnits();
-  }, [user, userPreferences, reloadUserPreferences]);
+  useEffect(() => {
+    if (userUnit.updated) {
+      reloadUserPreferences();
+      return;
+    }
+
+    if (!userUnit.unitsAcknowledgedOnMs) {
+      setUnitNotificationRead(false);
+    } else {
+      setUnitNotificationRead(true);
+    }
+
+    setUnitNotification(!featureNotificationExpired(userUnit.unitsAcknowledgedOnMs));
+  }, [userUnit, reloadUserPreferences]);
 
   return useMemo(() => {
     if (unitNotification && timeZoneUserNotification) {
