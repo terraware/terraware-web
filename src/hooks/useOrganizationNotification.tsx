@@ -1,12 +1,13 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 
 import TextWithLink from 'src/components/common/TextWithLink';
 import { APP_PATHS } from 'src/constants';
+import useInitializeUserTimeZone from 'src/hooks/useInitializeUserTimeZone';
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
-import { OrganizationService, PreferencesService, UserService } from 'src/services';
+import { OrganizationService, PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { ClientNotification } from 'src/types/Notifications';
 import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
@@ -20,19 +21,19 @@ export default function useOrganizationNotification(): ClientNotification | null
   const [timeZoneOrgNotificationRead, setTimeZoneOrgNotificationRead] = useState(false);
   const [orgTimeZone, setOrgTimeZone] = useState<string>();
 
-  const { user, reloadUser, userPreferences, reloadUserPreferences } = useUser();
+  const { reloadUserPreferences } = useUser();
   const timeZones = useTimeZones();
 
+  const getTimeZoneById = useCallback(
+    (id?: string): TimeZoneDescription => getTimeZone(timeZones, id) ?? getUTC(timeZones),
+    [timeZones]
+  );
+
+  const defaultTimeZoneId = getTimeZoneById(Intl.DateTimeFormat().resolvedOptions().timeZone).id;
+
+  const userTz = useInitializeUserTimeZone(defaultTimeZoneId);
+
   useEffect(() => {
-    const getTimeZoneById = (id?: string): TimeZoneDescription => {
-      return getTimeZone(timeZones, id) ?? getUTC(timeZones);
-    };
-
-    const getDefaultTimeZone = (): TimeZoneDescription => {
-      const browserTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-      return getTimeZoneById(browserTimeZone);
-    };
-
     const notifyTimeZoneUpdates = (orgTz: InitializedTimeZone) => {
       const notifyOrg = orgTz.timeZone && !featureNotificationExpired(orgTz.timeZoneAcknowledgedOnMs);
       setOrgTimeZone(getTimeZoneById(orgTz.timeZone).longName);
@@ -46,11 +47,6 @@ export default function useOrganizationNotification(): ClientNotification | null
     };
 
     const initializeTimeZones = async () => {
-      if (!user) {
-        return;
-      }
-
-      const userTz: InitializedTimeZone = await UserService.getInitializedTimeZone(user, getDefaultTimeZone().id);
       if (!userTz.timeZone) {
         return;
       }
@@ -71,7 +67,7 @@ export default function useOrganizationNotification(): ClientNotification | null
     };
 
     void initializeTimeZones();
-  }, [reloadOrganizations, reloadUser, selectedOrganization, user, userPreferences, timeZones]);
+  }, [userTz, reloadOrganizations, selectedOrganization, getTimeZoneById]);
 
   return useMemo(() => {
     if (timeZoneOrgNotification && selectedOrganization) {
