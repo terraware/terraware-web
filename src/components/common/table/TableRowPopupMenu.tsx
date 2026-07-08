@@ -78,6 +78,11 @@ const TableRowPopupMenu = ({ menuItems }: TableRowPopupMenuProps): JSX.Element =
           type='passive'
           priority='ghost'
           size='medium'
+          style={{
+            padding: 0,
+            margin: 0,
+            minHeight: 0,
+          }}
         />
       </Tooltip>
     </>
