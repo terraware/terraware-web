@@ -3,9 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { requestSearchUserByEmail } from 'src/redux/features/user/usersAsyncThunks';
-import { selectUserByEmailRequest } from 'src/redux/features/user/usersSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useSearchUsersQuery } from 'src/queries/generated/users';
 import { usePersonData } from 'src/scenes/AcceleratorRouter/People/PersonContext';
 import { UserWithInternalnterests } from 'src/scenes/AcceleratorRouter/People/UserWithInternalInterests';
 import useUpdatePerson from 'src/scenes/AcceleratorRouter/People/useUpdatePerson';
@@ -17,7 +15,6 @@ import { isTerraformationEmail } from 'src/utils/user';
 import PersonForm from './PersonForm';
 
 const NewView = () => {
-  const dispatch = useAppDispatch();
   const navigate = useSyncNavigate();
   const location = useStateLocation();
   const updatePerson = useUpdatePerson();
@@ -28,8 +25,8 @@ const NewView = () => {
   const [emailError, setEmailError] = useState('');
   const [roleError, setRoleError] = useState('');
   const debouncedEmail = useDebounce(email, 1000);
-  const [searchRequestId, setSearchRequestId] = useState('');
-  const searchRequest = useAppSelector(selectUserByEmailRequest(searchRequestId));
+  const isValidEmail = !!debouncedEmail && isTerraformationEmail(debouncedEmail);
+  const { currentData, isFetching, isError } = useSearchUsersQuery(debouncedEmail, { skip: !isValidEmail });
 
   const goToPeople = useCallback(
     () => navigate(getLocation(APP_PATHS.ACCELERATOR_PEOPLE, location)),
@@ -64,32 +61,24 @@ const NewView = () => {
   );
 
   useEffect(() => {
-    if (!debouncedEmail) {
-      return;
-    }
-
     // Email address must end in @terraformation.com
-    if (!isTerraformationEmail(debouncedEmail)) {
+    if (debouncedEmail && !isTerraformationEmail(debouncedEmail)) {
       setEmailError(strings.EMAIL_REQUIREMENT_TERRAFORMATION);
-      return;
     }
-
-    const request = dispatch(requestSearchUserByEmail(debouncedEmail));
-    setSearchRequestId(request.requestId);
-  }, [debouncedEmail, dispatch]);
+  }, [debouncedEmail]);
 
   useEffect(() => {
-    if (!searchRequest) {
+    if (!isValidEmail || isFetching) {
       return;
     }
 
-    if (searchRequest.status === 'success' && searchRequest.data?.user) {
+    if (currentData?.user) {
       setEmailError('');
-      setUserId(searchRequest.data.user.id);
-    } else if (searchRequest.status === 'error') {
+      setUserId(currentData.user.id);
+    } else if (isError) {
       setEmailError(strings.USER_WITH_EMAIL_DOES_NOT_EXIST);
     }
-  }, [searchRequest, setUserId]);
+  }, [currentData, isError, isFetching, isValidEmail, setUserId]);
 
   useEffect(() => {
     if (updatePerson.succeeded) {

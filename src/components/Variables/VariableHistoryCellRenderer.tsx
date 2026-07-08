@@ -1,10 +1,8 @@
-import React, { type JSX, useEffect, useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { CellRenderer, RendererProps, TableRowType } from '@terraware/web-components';
 
-import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
-import { selectUser } from 'src/redux/features/user/usersSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetUserQuery } from 'src/queries/generated/users';
 import strings from 'src/strings';
 
 import { VariableHistoryTableRow } from './VariableHistoryTable';
@@ -40,15 +38,11 @@ const VariableChangesCellRenderer = (props: RendererProps<TableRowType>): JSX.El
 const VariableHistoryCellRenderer = (props: RendererProps<TableRowType>): JSX.Element => {
   const { column, row } = props;
   const tableRow = row as VariableHistoryTableRow;
-  const dispatch = useAppDispatch();
 
-  const userResult = useAppSelector(selectUser(tableRow.editedBy));
-
-  useEffect(() => {
-    if (!userResult && tableRow.editedBy && tableRow.editedBy !== -1) {
-      void dispatch(requestGetUser(tableRow.editedBy));
-    }
-  }, [dispatch, tableRow, userResult]);
+  const { currentData } = useGetUserQuery(tableRow.editedBy ?? -1, {
+    skip: !tableRow.editedBy || tableRow.editedBy === -1,
+  });
+  const userResult = currentData?.user;
 
   const editedByName = useMemo(() => {
     if (!userResult) {

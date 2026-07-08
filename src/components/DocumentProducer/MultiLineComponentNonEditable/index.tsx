@@ -6,6 +6,7 @@ import { DropdownItem, theme } from '@terraware/web-components';
 import CompleteIncompleteBadge from 'src/components/common/CompleteIncompleteBadge';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useLocalization } from 'src/providers';
+import { useGetUserQuery } from 'src/queries/generated/users';
 import {
   selectUpdateVariableOwner,
   selectUpdateVariableWorkflowDetails,
@@ -14,11 +15,8 @@ import {
   requestUpdateVariableOwner,
   requestUpdateVariableWorkflowDetails,
 } from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
-import { selectUser } from 'src/redux/features/user/usersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { User } from 'src/types/User';
 import { VariableStatusType } from 'src/types/documentProducer/Variable';
 import useSnackbar from 'src/utils/useSnackbar';
 import { getUserDisplayName } from 'src/utils/user';
@@ -57,20 +55,10 @@ export default function MultiLineComponentNonEditable({
   const [assignOwnerRequestId, setAssignOwnerRequestId] = useState('');
   const updateWorkflowDetailsResponse = useAppSelector(selectUpdateVariableWorkflowDetails(requestId));
   const updateOwnerResponse = useAppSelector(selectUpdateVariableOwner(assignOwnerRequestId));
-  const ownedBySelector = useAppSelector(selectUser(ownerId));
-  const [ownedByUser, setOwnedByUser] = useState<User>();
+  const { currentData: ownerData } = useGetUserQuery(ownerId ?? -1, { skip: !ownerId || ownerId === -1 });
+  const ownedByUser = ownerData?.user;
   const [showAssignOwnerModal, setShowAssignOwnerModal] = useState(false);
   const [displayActionsHover, setDisplyActionsHover] = useState(false);
-
-  useEffect(() => {
-    setOwnedByUser(ownedBySelector);
-  }, [ownedBySelector]);
-
-  useEffect(() => {
-    if (ownerId && ownerId !== -1) {
-      void dispatch(requestGetUser(ownerId));
-    }
-  }, [dispatch, ownerId]);
 
   useEffect(() => {
     if (updateWorkflowDetailsResponse?.status === 'success') {

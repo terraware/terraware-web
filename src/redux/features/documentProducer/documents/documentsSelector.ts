@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import createCachedSelector from 're-reselect';
 
-import { selectUsers } from 'src/redux/features/user/usersSelectors';
 import { RootState } from 'src/redux/rootReducer';
-import { User } from 'src/types/User';
 import {
   DocumentHistoryCreatedPayload,
   DocumentHistoryEditedPayload,
@@ -11,7 +9,6 @@ import {
   DocumentHistorySavedPayload,
 } from 'src/types/documentProducer/Document';
 import { Document as DocumentType } from 'src/types/documentProducer/Document';
-import { getUserDisplayName } from 'src/utils/user';
 
 import { AsyncRequest, AsyncRequestT } from '../../asyncUtils';
 
@@ -25,29 +22,11 @@ export const selectGetDocument =
 
 export const selectListHistory = createCachedSelector(
   (state: RootState, id: number) => state.documentProducerDocumentListHistory[id],
-  (state: RootState, id: number) => selectUsers(state),
-  (response, users) => {
+  (response) => {
     if (response) {
-      const usersMap =
-        users?.reduce(
-          (acc: Record<number, string>, curr: User | undefined) => {
-            if (curr) {
-              acc[curr.id] = getUserDisplayName(curr) || '';
-            }
-            return acc;
-          },
-          {} as Record<number, string>
-        ) ?? {};
-
       return {
         ...response,
-        data:
-          response.data?.map(
-            (event: DocumentHistorySavedPayload | DocumentHistoryCreatedPayload | DocumentHistoryEditedPayload) => ({
-              ...event,
-              modifiedByName: usersMap[event.createdBy] ?? '',
-            })
-          ) ?? [],
+        data: response.data ?? [],
       };
     } else {
       return response;

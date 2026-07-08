@@ -31,7 +31,6 @@ import speciesAsyncThunkReducers from './features/species/speciesSlice';
 import subLocationsReducers from './features/subLocations/subLocationsSlice';
 import trackingReducers from './features/tracking/trackingSlice';
 import userAnalyticsReducers from './features/user/userAnalyticsSlice';
-import usersReducers from './features/user/usersSlice';
 import userInternalInterestsReducers from './features/userInternalInterests/userInternalInterestsSlice';
 import votesReducers from './features/votes/votesSlice';
 
@@ -67,7 +66,6 @@ export const reducers = {
   ...trackingReducers,
   ...userAnalyticsReducers,
   ...userInternalInterestsReducers,
-  ...usersReducers,
   ...votesReducers,
   ...rtkReducers,
 };
