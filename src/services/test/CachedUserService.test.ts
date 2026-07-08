@@ -1,5 +1,4 @@
 import { setHttpServiceMocks, clearHttpServiceMocks } from './HttpServiceMocks';
-import UserService from '../UserService';
 import CachedUserService from '../CachedUserService';
 import PreferencesService from '../PreferencesService';
 import { User } from '../../types/User';
@@ -8,16 +7,6 @@ const USER = {
   id: 1,
   firstName: 'Constanza',
   email: 'constanza@terraformation.com',
-};
-
-const UPDATED_USER: User = {
-  email: 'constanza@terraformation.com',
-  emailNotificationsEnabled: false,
-  firstName: 'Constanza',
-  globalRoles: [],
-  id: 1,
-  lastName: 'Uanini',
-  userType: 'Individual',
 };
 
 const PREFERENCES = {
@@ -41,21 +30,12 @@ describe('Cached user service test', () => {
     clearHttpServiceMocks();
   });
 
-  test('get cached user should return correct user', async () => {
-    setHttpServiceMocks({
-      get: () =>
-        Promise.resolve({
-          user: USER,
-          requestSucceeded: true,
-          statusCode: 200,
-        }),
-    });
+  test('get cached user should return correct user', () => {
+    CachedUserService.setUser(USER as User);
 
-    const { user } = await UserService.getUser();
+    const cachedUser = CachedUserService.getUser();
 
-    const cachedUser = await CachedUserService.getUser();
-
-    expect(cachedUser).toEqual({ ...user, isTerraformation: true });
+    expect(cachedUser).toEqual({ ...USER, isTerraformation: true });
   });
 
   test('get cached user preferences should return correct preferences', async () => {
@@ -90,28 +70,6 @@ describe('Cached user service test', () => {
     const cachedOrgPreferences = CachedUserService.getUserOrgPreferences(1);
 
     expect(cachedOrgPreferences).toEqual(preferences);
-  });
-
-  test('cached user should be updated', async () => {
-    setHttpServiceMocks({
-      put: () =>
-        Promise.resolve({
-          requestSucceeded: true,
-          statusCode: 200,
-        }),
-      get: () =>
-        Promise.resolve({
-          user: UPDATED_USER,
-          requestSucceeded: true,
-          statusCode: 200,
-        }),
-    });
-
-    await UserService.updateUser(UPDATED_USER);
-
-    const cachedUser = CachedUserService.getUser();
-
-    expect(cachedUser).toEqual({ ...UPDATED_USER, isTerraformation: true });
   });
 
   test('user preferences should be updated', async () => {

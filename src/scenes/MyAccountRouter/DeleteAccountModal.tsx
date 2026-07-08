@@ -5,7 +5,7 @@ import { BusySpinner } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import { UserService } from 'src/services';
+import { useDeleteMyselfMutation } from 'src/queries/generated/users';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -17,11 +17,12 @@ export default function DeleteAccountModal({ onCancel }: DeleteAccountModalProps
   const [busy, setBusy] = useState<boolean>(false);
   const snackbar = useSnackbar();
   const mixpanel = useMixpanel();
+  const [deleteMyself] = useDeleteMyselfMutation();
 
   const deleteUser = async () => {
     setBusy(true);
-    const response = await UserService.deleteUser();
-    if (response.requestSucceeded) {
+    const result = await deleteMyself();
+    if (!('error' in result)) {
       mixpanel?.reset();
       window.location.href = '/sso/logout';
     } else {

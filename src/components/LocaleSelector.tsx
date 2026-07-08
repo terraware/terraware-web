@@ -3,7 +3,7 @@ import React, { type JSX } from 'react';
 import { useTheme } from '@mui/material';
 import { Dropdown, DropdownItem, PopoverMenu } from '@terraware/web-components';
 
-import { UserService } from 'src/services';
+import useUpdateCurrentUser from 'src/hooks/useUpdateCurrentUser';
 import strings from 'src/strings';
 
 import { useUser } from '../providers';
@@ -23,7 +23,8 @@ export default function LocaleSelector({
   localeSelected,
   fullWidth,
 }: LocaleSelectorProps): JSX.Element {
-  const { user, reloadUser } = useUser();
+  const { user } = useUser();
+  const updateCurrentUser = useUpdateCurrentUser();
   const supportedLocales = useSupportedLocales();
   const localeItems: DropdownItem[] = supportedLocales.map((supportedLocale) => ({
     value: supportedLocale.id,
@@ -42,8 +43,7 @@ export default function LocaleSelector({
 
           if (user && user.locale !== newValue) {
             const updateUserLocale = async () => {
-              await UserService.updateUser({ ...user, locale: newValue });
-              reloadUser();
+              await updateCurrentUser({ ...user, locale: newValue });
             };
 
             void updateUserLocale();

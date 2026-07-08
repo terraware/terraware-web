@@ -35,7 +35,6 @@ const CURRENT_USER_ENDPOINT = '/api/v1/users/me';
 const ENDPOINT_USER = '/api/v1/users/{userId}';
 const ENDPOINT_USERS = '/api/v1/users';
 
-type UserServerResponse = paths[typeof CURRENT_USER_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type UpdateUserPayloadType = paths[typeof CURRENT_USER_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
 type GetUserResponsePayload = paths[typeof ENDPOINT_USER]['get']['responses'][200]['content']['application/json'];
@@ -49,38 +48,6 @@ const cachedTimeZone: CachedTimeZone = {
   cachedOn: 0,
   promise: null,
   updated: false,
-};
-
-/**
- * get current/active user
- */
-const getUser = async (): Promise<UserResponse> => {
-  const response: UserResponse = await httpCurrentUser.get<UserServerResponse, UserData>({}, (data) => {
-    return {
-      user: data?.user
-        ? {
-            cookiesConsented: data.user.cookiesConsented,
-            cookiesConsentedTime: data.user.cookiesConsentedTime,
-            countryCode: data.user.countryCode,
-            email: data.user.email,
-            emailNotificationsEnabled: data.user.emailNotificationsEnabled,
-            firstName: data.user.firstName,
-            globalRoles: data.user.globalRoles,
-            id: data.user.id,
-            lastName: data.user.lastName,
-            locale: data.user.locale,
-            timeZone: data.user.timeZone,
-            userType: data.user.userType,
-          }
-        : undefined,
-    };
-  });
-
-  if (response.user) {
-    CachedUserService.setUser(response.user);
-  }
-
-  return response;
 };
 
 const get = async (userId: number): Promise<UserResponse> =>
@@ -121,19 +88,12 @@ const updateUser = async (user: User, options: UpdateOptions = {}): Promise<Resp
     await PreferencesService.updateUserCookieConsentPreferences({ cookiesConsented: user.cookiesConsented });
   }
 
-  void getUser();
-
   if (user.timeZone && !options.skipAcknowledgeTimeZone) {
     await PreferencesService.updateUserPreferences({ timeZoneAcknowledgedOnMs: Date.now() });
   }
 
   return response;
 };
-
-/**
- * Delete current user
- */
-const deleteUser = async (): Promise<Response> => await httpCurrentUser.delete({});
 
 /**
  * initialize user time zone
@@ -211,12 +171,10 @@ const initializeUnits = async (units: string): Promise<InitializedUnits> => {
 const UserService = {
   get,
   getInitializedTimeZone,
-  getUser,
   getUserByEmail,
   initializeTimeZone,
   initializeUnits,
   updateUser,
-  deleteUser,
 };
 
 export default UserService;
