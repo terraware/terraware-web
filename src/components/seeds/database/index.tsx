@@ -291,7 +291,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
             )}
           </PageHeader>
         </PageHeaderWrapper>
-        <Container ref={contentRef} maxWidth={false} sx={{ padding: 0 }}>
+        <Container ref={contentRef} maxWidth={false} disableGutters sx={{ padding: 0 }}>
           {selectedOrganization ? (
             <>
               {isOnboarded ? (
