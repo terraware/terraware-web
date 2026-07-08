@@ -1,7 +1,7 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Divider, Typography, useTheme } from '@mui/material';
-import { Badge, Button, Dropdown, DropdownItem } from '@terraware/web-components';
+import { Badge, BusySpinner, Button, Dropdown, DropdownItem } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -12,6 +12,7 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
+import { useLazyListBatchesForWithdrawQuery } from 'src/queries/search/batchesForWithdraw';
 import { PlantingDateRequestRow, useLazyListPlantingDateRequestsQuery } from 'src/queries/search/plantingDateRequests';
 import { getMediumDate } from 'src/utils/dateFormatter';
 
@@ -129,6 +130,22 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
       ? strings.NO_PENDING_REQUESTS
       : undefined;
   const [withdrawRequest, setWithdrawRequest] = useState<PlantingDateRequestRow | undefined>(undefined);
+  const [isPreparingWithdraw, setIsPreparingWithdraw] = useState(false);
+  const [prefetchBatchesForWithdraw] = useLazyListBatchesForWithdrawQuery();
+
+  const handleWithdrawClick = useCallback(
+    async (row: PlantingDateRequestRow) => {
+      if (!organizationId) {
+        return;
+      }
+      const requestSpeciesIds = row.species.map((s) => s.speciesId);
+      setIsPreparingWithdraw(true);
+      await prefetchBatchesForWithdraw({ organizationId, speciesIds: requestSpeciesIds }, true);
+      setWithdrawRequest(row);
+      setIsPreparingWithdraw(false);
+    },
+    [organizationId, prefetchBatchesForWithdraw]
+  );
 
   return (
     <Card flushMobile radius='8px'>
@@ -186,10 +203,11 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
             key={`${row.plantingSeasonId}-${row.date}`}
             row={row}
             activeLocale={activeLocale}
-            onWithdrawClick={() => setWithdrawRequest(row)}
+            onWithdrawClick={() => void handleWithdrawClick(row)}
           />
         ))
       )}
+      {isPreparingWithdraw && <BusySpinner withSkrim />}
       {withdrawRequest && (
         <WithdrawFromBatchesModal
           open={true}
