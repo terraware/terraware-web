@@ -35,11 +35,11 @@ const SeedlingBatchBox = ({
 }: SeedlingBatchBoxProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
-  const tableColumns = isPlanting ? 'minmax(180px, 2fr) minmax(120px, 1fr) 112px' : '90px 45px repeat(3, 154px)';
+  const tableColumns = isPlanting ? 'minmax(180px, 2fr) minmax(120px, 1fr) 112px' : '110px repeat(4, 154px)';
   const tableGap = isPlanting ? theme.spacing(4) : theme.spacing(1);
   const tableSx = {
     boxSizing: 'border-box' as const,
-    ...(isPlanting ? {} : { minWidth: '672px' }),
+    ...(isPlanting ? {} : { minWidth: '726px' }),
   };
   const withdrawInputSx = { justifySelf: 'end', width: '100px' };
   const phaseInputSx = { width: '90px', flexShrink: 0 };
@@ -50,6 +50,11 @@ const SeedlingBatchBox = ({
     label: string;
     available: (batch: BatchInfo) => number;
   }[] = [
+    {
+      key: 'germinatingQuantityWithdrawn',
+      label: strings.GERMINATION_ESTABLISHMENT,
+      available: (batch) => batch.germinatingQuantity,
+    },
     {
       key: 'activeGrowthQuantityWithdrawn',
       label: strings.ACTIVE_GROWTH,
@@ -78,6 +83,9 @@ const SeedlingBatchBox = ({
       },
     }));
   };
+
+  const phaseHeaderLabel = (column: (typeof phaseColumns)[number]) =>
+    column.key === 'germinatingQuantityWithdrawn' ? column.label.replace('/', '/\n') : column.label;
 
   return (
     <Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}`, overflowX: 'auto' }}>
@@ -120,9 +128,6 @@ const SeedlingBatchBox = ({
             <Typography fontSize='14px' fontWeight={600} textAlign='left'>
               {strings.BATCH}
             </Typography>
-            <Typography fontSize='14px' fontWeight={600} textAlign='right'>
-              {strings.TOTAL}
-            </Typography>
             {phaseColumns.map((column) => (
               <Typography
                 key={column.key}
@@ -133,7 +138,7 @@ const SeedlingBatchBox = ({
                 whiteSpace='pre-line'
                 sx={phaseHeaderSx}
               >
-                {column.label}
+                {phaseHeaderLabel(column)}
               </Typography>
             ))}
           </>
@@ -156,6 +161,7 @@ const SeedlingBatchBox = ({
               fontSize='16px'
               to={`${APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', batch.speciesId.toString())}?batch=${batch.batchNumber}`}
               target='_blank'
+              style={{ justifySelf: 'start', whiteSpace: 'nowrap' }}
             >
               {batch.batchNumber}
             </Link>
@@ -184,9 +190,6 @@ const SeedlingBatchBox = ({
               </>
             ) : (
               <>
-                <Typography fontSize='16px' textAlign='right'>
-                  {batch.totalQuantity.toLocaleString()}
-                </Typography>
                 {phaseColumns.map((column) => {
                   const available = column.available(batch);
                   const phaseValue = withdrawByBatch[batch.batchId]?.[column.key] ?? 0;
