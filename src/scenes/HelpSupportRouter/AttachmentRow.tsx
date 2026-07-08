@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Button from 'src/components/common/button/Button';
-import { selectSupportUploadAttachmentRequest } from 'src/redux/features/support/supportSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { useUploadAttachmentMutation } from 'src/queries/generated/support';
+import { Statuses } from 'src/redux/features/asyncUtils';
 import strings from 'src/strings';
 import { AttachmentRequest } from 'src/types/Support';
 
@@ -13,33 +13,43 @@ import AttachmentStatusBadge from './AttachmentStatusBadge';
 
 type AttachmentRowProps = {
   attachment: AttachmentRequest;
+  file: File;
   onChange?: (attachment: AttachmentRequest) => void;
   onRemove?: (attachment: AttachmentRequest) => void;
 };
 
-const AttachmentRow = ({ attachment, onChange, onRemove }: AttachmentRowProps) => {
+const AttachmentRow = ({ attachment, file, onChange, onRemove }: AttachmentRowProps) => {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
   const { filename, requestId } = attachment;
-  const attachmentRequest = useAppSelector(selectSupportUploadAttachmentRequest(attachment.requestId));
+
+  const [upload, uploadResult] = useUploadAttachmentMutation();
+  const uploadStarted = useRef(false);
 
   useEffect(() => {
-    const temporaryAttachmentId =
-      attachmentRequest.status === 'success' && attachmentRequest.data
-        ? attachmentRequest.data[0].temporaryAttachmentId
-        : undefined;
+    if (!uploadStarted.current) {
+      uploadStarted.current = true;
+      void upload({ file });
+    }
+  }, [upload, file]);
+
+  useEffect(() => {
+    const status: Statuses = uploadResult.isSuccess ? 'success' : uploadResult.isError ? 'error' : 'pending';
+    const temporaryAttachmentId = uploadResult.isSuccess
+      ? uploadResult.data.attachments[0]?.temporaryAttachmentId
+      : undefined;
 
     const newAttachment: AttachmentRequest = {
       filename,
       requestId,
-      status: attachmentRequest.status,
+      status,
       temporaryAttachmentId,
     };
     if (newAttachment.status !== attachment.status && onChange) {
       onChange(newAttachment);
     }
-  }, [attachmentRequest, onChange, attachment.status, filename, requestId]);
+  }, [uploadResult, onChange, attachment.status, filename, requestId]);
 
   return (
     <Grid

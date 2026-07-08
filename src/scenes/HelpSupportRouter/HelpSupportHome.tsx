@@ -12,6 +12,7 @@ import { IconName } from 'src/components/common/icon/icons';
 import { useDocLinks } from 'src/docLinks';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
+import { useListRequestTypesQuery } from 'src/queries/generated/support';
 import {
   ORDERED_SUPPORT_REQUEST_TYPES,
   getSupportRequestDescription,
@@ -19,8 +20,6 @@ import {
   getSupportRequestName,
 } from 'src/types/Support';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-import { useSupportData } from './provider/Context';
 
 type ListItemContent = {
   icon?: IconName;
@@ -35,7 +34,8 @@ export default function HelpSupportHome(): JSX.Element {
   const docLinks = useDocLinks();
   const theme = useTheme();
   const { goToContactUsForm } = useNavigateTo();
-  const { types } = useSupportData();
+  const { currentData } = useListRequestTypesQuery();
+  const types = currentData?.types;
 
   const knowledgeBaseItem: ListItemContent = useMemo(() => {
     return {

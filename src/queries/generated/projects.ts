@@ -59,6 +59,7 @@ export type AssignProjectApiArg = {
   assignProjectRequestPayload: AssignProjectRequestPayload;
 };
 export type ProjectPayload = {
+  botanicalCountryCode?: string;
   countryCode?: string;
   createdBy?: number;
   createdTime?: string;
@@ -86,6 +87,7 @@ export type CreateProjectResponsePayload = {
   status: SuccessOrError;
 };
 export type CreateProjectRequestPayload = {
+  botanicalCountryCode?: string;
   countryCode?: string;
   description?: string;
   name: string;
@@ -99,6 +101,7 @@ export type GetProjectResponsePayload = {
   status: SuccessOrError;
 };
 export type UpdateProjectRequestPayload = {
+  botanicalCountryCode?: string | null;
   countryCode?: string | null;
   description?: string;
   name: string;

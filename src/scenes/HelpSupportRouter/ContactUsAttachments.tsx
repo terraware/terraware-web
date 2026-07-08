@@ -1,10 +1,8 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import { FileChooser } from '@terraware/web-components';
 
-import { requestUploadAttachment } from 'src/redux/features/support/supportAsyncThunks';
-import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import { AttachmentRequest } from 'src/types/Support';
 
@@ -17,22 +15,21 @@ type AttachmentsProps = {
 };
 
 const ContactUsAttachments = ({ maxFiles, onChange }: AttachmentsProps): JSX.Element => {
-  const dispatch = useAppDispatch();
   const [attachments, setAttachments] = useState<AttachmentRequest[]>([]);
+  const filesById = useRef<Record<string, File>>({});
 
-  const handleFiles = useCallback(
-    (newFiles: File[]) => {
-      const newAttachments = newFiles.map((file) => {
-        const dispatched = dispatch(requestUploadAttachment(file));
-        return { filename: file.name, requestId: dispatched.requestId };
-      });
-      setAttachments([...attachments, ...newAttachments]);
-    },
-    [attachments, dispatch]
-  );
+  const handleFiles = useCallback((newFiles: File[]) => {
+    const newAttachments = newFiles.map((file): AttachmentRequest => {
+      const id = crypto.randomUUID();
+      filesById.current[id] = file;
+      return { filename: file.name, requestId: id };
+    });
+    setAttachments((existing) => [...existing, ...newAttachments]);
+  }, []);
 
   const removeAttachment = useCallback(
     (attachment: AttachmentRequest) => {
+      delete filesById.current[attachment.requestId];
       const newAttachments = attachments.filter((existing) => existing.requestId !== attachment.requestId);
       setAttachments(newAttachments);
       if (onChange) {
@@ -80,6 +77,7 @@ const ContactUsAttachments = ({ maxFiles, onChange }: AttachmentsProps): JSX.Ele
         <AttachmentRow
           key={attachment.requestId}
           attachment={attachment}
+          file={filesById.current[attachment.requestId]}
           onRemove={removeAttachment}
           onChange={handleUpdate}
         />

@@ -16,7 +16,6 @@ import SearchService from './SearchService';
 import SeedBankService from './SeedBankService';
 import SpeciesService from './SpeciesService';
 import SubLocationService from './SubLocationService';
-import SupportService from './SupportService';
 import SystemService from './SystemService';
 import TrackingService from './TrackingService';
 import UserService from './UserService';
@@ -42,7 +41,6 @@ export {
   SeedBankService,
   SpeciesService,
   SubLocationService,
-  SupportService,
   SystemService,
   TrackingService,
   UserService,

@@ -1,13 +1,11 @@
-import { components } from 'src/api/types/generated-schema';
 import { IconName } from 'src/components/common/icon/icons';
+import { SubmitSupportRequestPayload } from 'src/queries/generated/support';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import defaultStrings from 'src/strings';
 
-export type SupportRequestType = components['schemas']['SubmitSupportRequestPayload']['requestType'];
+export type SupportRequestType = SubmitSupportRequestPayload['requestType'];
 
-export type SupportRequest = components['schemas']['SubmitSupportRequestPayload'];
-
-export type TemporaryAttachment = components['schemas']['TemporaryAttachment'];
+export type SupportRequest = SubmitSupportRequestPayload;
 
 export type AttachmentRequest = {
   filename: string;
