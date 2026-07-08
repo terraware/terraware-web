@@ -1,3 +1,4 @@
+cbbad3c1 SW-8624 Remove total column (#6015)
 6884f0fe SW-7756 Implemented Support API RTK Query (#6016)
 4bf541ca SW-8606 Hide login buttons if logged in (#6014)
 3935e172 SW-8528 Remove padding from table row button to fit table density settings (#6013)
