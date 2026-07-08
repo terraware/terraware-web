@@ -1,3 +1,5 @@
+4bf541ca SW-8606 Hide login buttons if logged in (#6014)
+3935e172 SW-8528 Remove padding from table row button to fit table density settings (#6013)
 9f65cf55 Updated table settings icon to icon-menu (#6011)
 902c75e1 SW-8624 Batch Withdrawals: Batch numbers should be links (#6010)
 102e0370 SW-8588 Accessions By Species: make table exportable (#6009)
