@@ -17,6 +17,9 @@ const config: ConfigFile = {
     './src/queries/generated/deliveries.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/deliveries'),
     },
+    './src/queries/generated/disclaimer.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/disclaimer'),
+    },
     './src/queries/generated/draftPlantingSites.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/draftSites'),
     },

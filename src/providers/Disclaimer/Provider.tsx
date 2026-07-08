@@ -1,11 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import DisclaimerPage from 'src/components/Disclaimer/DisclaimerPage';
 import { useUser } from 'src/providers/hooks';
-import { requestAcceptDisclaimer, requestDisclaimer } from 'src/redux/features/disclaimer/disclaimerAsyncThunks';
-import { selectDisclaimer, selectDisclaimerAccept } from 'src/redux/features/disclaimer/disclaimerSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Disclaimer } from 'src/types/Disclaimer';
+import { useAcceptDisclaimerMutation, useGetDisclaimerQuery } from 'src/queries/generated/disclaimer';
 
 import { DisclaimerContext } from './Context';
 
@@ -14,52 +11,25 @@ type Props = {
 };
 
 const DisclaimerProvider = ({ children }: Props) => {
-  const dispatch = useAppDispatch();
-
   const { user } = useUser();
-  const [disclaimerRequestId, setDisclaimerRequestId] = useState<string>('');
-  const [acceptRequestId, setAcceptRequestId] = useState<string>('');
+  const isFunder = user?.userType === 'Funder';
 
-  const [disclaimer, setDisclaimer] = useState<Disclaimer>();
+  const { currentData } = useGetDisclaimerQuery(undefined, { skip: !isFunder });
+  const [acceptDisclaimer] = useAcceptDisclaimerMutation();
 
-  const disclaimerResponse = useAppSelector(selectDisclaimer(disclaimerRequestId));
-  const acceptDisclaimerResponse = useAppSelector(selectDisclaimerAccept(acceptRequestId));
+  const disclaimer = currentData?.disclaimer;
 
-  const reload = useCallback(() => {
-    if (user?.userType === 'Funder') {
-      const request = dispatch(requestDisclaimer());
-      setDisclaimerRequestId(request.requestId);
-    }
-  }, [dispatch, user?.userType]);
-
+  // Accepting invalidates the Disclaimer tag, which refetches getDisclaimer automatically.
   const accept = useCallback(() => {
-    const request = dispatch(requestAcceptDisclaimer());
-    setAcceptRequestId(request.requestId);
-  }, [dispatch]);
-
-  useEffect(() => {
-    reload();
-  }, [reload]);
-
-  useEffect(() => {
-    if (disclaimerResponse && disclaimerResponse.status === 'success') {
-      setDisclaimer(disclaimerResponse.data);
-    }
-  }, [disclaimerResponse]);
-
-  useEffect(() => {
-    if (acceptDisclaimerResponse && acceptDisclaimerResponse.status === 'success') {
-      reload();
-    }
-  }, [acceptDisclaimerResponse, reload]);
+    void acceptDisclaimer();
+  }, [acceptDisclaimer]);
 
   const data = useMemo(
     () => ({
       accept,
       disclaimer,
-      reload,
     }),
-    [accept, disclaimer, reload]
+    [accept, disclaimer]
   );
 
   return (
