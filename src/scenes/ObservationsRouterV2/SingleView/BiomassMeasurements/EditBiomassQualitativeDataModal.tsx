@@ -14,7 +14,6 @@ import {
 import { DateTime } from 'luxon';
 
 import { API_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import {
@@ -44,7 +43,6 @@ type EditQualitativeDataModalProps = {
 const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: EditQualitativeDataModalProps) => {
   const { activeLocale, strings } = useLocalization();
   const snackbar = useSnackbar();
-  const isAdditionalBiomassFieldsEnabled = isEnabled('Additional Biomass Fields');
 
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
@@ -73,7 +71,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
   const [showWaterClearConfirm, setShowWaterClearConfirm] = useState(false);
   const [validateFields, setValidateFields] = useState(false);
 
-  const hasWater = !isAdditionalBiomassFieldsEnabled || waterPresence;
+  const hasWater = waterPresence;
 
   const onAddPlotCondition = useCallback(
     (conditionId: PlotCondition) => {
@@ -237,7 +235,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
     return record.biomassMeasurement.forestType === 'Mangrove';
   }, [record]);
 
-  const waterFieldsRequired = isAdditionalBiomassFieldsEnabled && isMangrove && waterPresence;
+  const waterFieldsRequired = isMangrove && waterPresence;
 
   const waterDepthError = useMemo(() => {
     if (!validateFields || !waterFieldsRequired) {
@@ -302,7 +300,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
         type: 'Biomass',
         description: record.biomassMeasurement?.description,
         soilAssessment: record.biomassMeasurement?.soilAssessment,
-        soilType: isAdditionalBiomassFieldsEnabled ? record.biomassMeasurement?.soilType : undefined,
+        soilType: record.biomassMeasurement?.soilType,
         forestType: record.biomassMeasurement?.forestType,
         ph: record.biomassMeasurement?.ph ?? null,
         salinity: record.biomassMeasurement?.salinity ?? null,
@@ -338,7 +336,7 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
         }
       }
     })();
-  }, [isAdditionalBiomassFieldsEnabled, record, results, setOpen, update, observationId, snackbar]);
+  }, [record, results, setOpen, update, observationId, snackbar]);
 
   return (
     open && (
@@ -454,16 +452,14 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
               </Box>
               {isMangrove && (
                 <>
-                  {isAdditionalBiomassFieldsEnabled && (
-                    <Dropdown
-                      label={strings.IS_THERE_WATER_IN_THIS_PLOT}
-                      selectedValue={waterPresence ? 'Yes' : 'No'}
-                      options={waterPresenceOptions}
-                      onChange={onChangeWaterPresence}
-                      sx={{ paddingTop: '16px' }}
-                      required
-                    />
-                  )}
+                  <Dropdown
+                    label={strings.IS_THERE_WATER_IN_THIS_PLOT}
+                    selectedValue={waterPresence ? 'Yes' : 'No'}
+                    options={waterPresenceOptions}
+                    onChange={onChangeWaterPresence}
+                    sx={{ paddingTop: '16px' }}
+                    required
+                  />
                   {hasWater && (
                     <>
                       <Box sx={{ display: 'flex', gap: 2, paddingTop: '16px' }}>
@@ -589,15 +585,13 @@ const EditBiomassQualitativeDataModal = ({ initialFormData, open, setOpen }: Edi
                 </Box>
               </Box>
 
-              {isAdditionalBiomassFieldsEnabled && (
-                <Dropdown
-                  label={strings.SOIL_TYPE}
-                  selectedValue={record.biomassMeasurement?.soilType}
-                  options={soilTypeOptions}
-                  onChange={onChangeHandler('biomassMeasurement.soilType')}
-                  sx={{ paddingTop: '16px' }}
-                />
-              )}
+              <Dropdown
+                label={strings.SOIL_TYPE}
+                selectedValue={record.biomassMeasurement?.soilType}
+                options={soilTypeOptions}
+                onChange={onChangeHandler('biomassMeasurement.soilType')}
+                sx={{ paddingTop: '16px' }}
+              />
             </Box>
           </DialogBox>
         )}

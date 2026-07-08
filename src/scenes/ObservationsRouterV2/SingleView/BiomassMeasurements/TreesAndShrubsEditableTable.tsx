@@ -4,7 +4,6 @@ import { useParams } from 'react-router';
 import { IconButton, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 
-import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -31,7 +30,6 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const forestType = results?.biomassMeasurements?.forestType;
-  const isAdditionalBiomassFieldsEnabled = isEnabled('Additional Biomass Fields');
 
   const [update] = useUpdateCompletedObservationPlotMutation();
   const [optimisticValues, setOptimisticValues] = useState<Record<number, Partial<TreeRow>>>({});
@@ -190,25 +188,20 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
           onSave: (row, value) => saveRecordedTree('height', row, value),
         },
       },
-      ...(isAdditionalBiomassFieldsEnabled
-        ? [
-            {
-              id: 'treeCrownDiameter',
-              accessorKey: 'treeCrownDiameter' as keyof TreeRow,
-              header: strings.TREE_CROWN_DIAMETER_CM,
-              Cell: TreeCrownDiameterCell,
-              enableEditing: (row: { original: TreeRow }) =>
-                row.original.treeGrowthForm !== 'Shrub' && forestType === 'Mangrove',
-              editConfig: {
-                onSave: (row: TreeRow, value: any) => saveRecordedTree('treeCrownDiameter', row, value),
-              },
-            },
-          ]
-        : []),
+      {
+        id: 'treeCrownDiameter',
+        accessorKey: 'treeCrownDiameter',
+        header: strings.TREE_CROWN_DIAMETER_CM,
+        Cell: TreeCrownDiameterCell,
+        enableEditing: (row) => row.original.treeGrowthForm !== 'Shrub' && forestType === 'Mangrove',
+        editConfig: {
+          onSave: (row, value) => saveRecordedTree('treeCrownDiameter', row, value),
+        },
+      },
       {
         id: 'shrubDiameter',
         accessorKey: 'shrubDiameter',
-        header: isAdditionalBiomassFieldsEnabled ? strings.SHRUB_CROWN_DIAMETER_CM : strings.CROWN_DIAMETER_CM,
+        header: strings.SHRUB_CROWN_DIAMETER_CM,
         enableEditing: (row) => row.original.treeGrowthForm === 'Shrub' && forestType === 'Terrestrial',
         editConfig: {
           onSave: (row, value) => saveRecordedTree('shrubDiameter', row, value),
@@ -271,7 +264,6 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       saveBiomassSpecies,
       strings,
       forestType,
-      isAdditionalBiomassFieldsEnabled,
       TreeNumberCell,
       GrowthFormCell,
       TreeCrownDiameterCell,
@@ -313,11 +305,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         enableBottomToolbar={false}
         enableTopToolbar={false}
         initialSorting={[{ id: 'speciesName', desc: false }]}
-        sx={
-          isAdditionalBiomassFieldsEnabled
-            ? { '&& .Mui-TableHeadCell-Content-Wrapper': { whiteSpace: 'nowrap' } }
-            : undefined
-        }
+        sx={{ '&& .Mui-TableHeadCell-Content-Wrapper': { whiteSpace: 'nowrap' } }}
       />
     </>
   );
