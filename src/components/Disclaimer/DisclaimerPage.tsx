@@ -1,21 +1,33 @@
 import React, { useCallback, useState } from 'react';
 
 import TfMain from 'src/components/common/TfMain';
-import { useDisclaimerData } from 'src/providers/Disclaimer/Context';
+import { useAcceptDisclaimerMutation, useGetDisclaimerQuery } from 'src/queries/generated/disclaimer';
 
 import DisclaimerModal from './DisclaimerModal';
 
 const DisclaimerPage = () => {
-  const { accept } = useDisclaimerData();
+  const { currentData } = useGetDisclaimerQuery();
+  const [acceptDisclaimer] = useAcceptDisclaimerMutation();
   const [open, setOpen] = useState(true);
 
   const logout = useCallback(() => {
     window.location.href = '/sso/logout';
   }, []);
 
+  // Accepting invalidates the Disclaimer tag, which refetches getDisclaimer automatically.
+  const accept = useCallback(() => {
+    void acceptDisclaimer();
+  }, [acceptDisclaimer]);
+
   return (
     <TfMain>
-      <DisclaimerModal onCancel={logout} onConfirm={accept} open={open} setOpen={setOpen} />
+      <DisclaimerModal
+        content={currentData?.disclaimer?.content}
+        onCancel={logout}
+        onConfirm={accept}
+        open={open}
+        setOpen={setOpen}
+      />
     </TfMain>
   );
 };

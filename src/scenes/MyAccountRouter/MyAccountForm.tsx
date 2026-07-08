@@ -23,7 +23,7 @@ import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useTimeZones, useUser } from 'src/providers';
-import { useDisclaimerData } from 'src/providers/Disclaimer/Context';
+import { useGetDisclaimerQuery } from 'src/queries/generated/disclaimer';
 import { OrganizationService, OrganizationUserService, PreferencesService, UserService } from 'src/services';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
@@ -94,7 +94,8 @@ const MyAccountForm = ({
   const { isMobile } = useDeviceInfo();
   const supportedLocales = useSupportedLocales();
   const theme = useTheme();
-  const { disclaimer } = useDisclaimerData();
+  const { currentData: disclaimerData } = useGetDisclaimerQuery(undefined, { skip: user?.userType !== 'Funder' });
+  const disclaimer = disclaimerData?.disclaimer;
   const [selectedRows, setSelectedRows] = useState<PersonOrganization[]>([]);
   const [personOrganizations, setPersonOrganizations] = useState<PersonOrganization[]>([]);
   const navigate = useSyncNavigate();
@@ -372,7 +373,7 @@ const MyAccountForm = ({
         />
       )}
       {userIsFunder && openDisclaimerModal && (
-        <DisclaimerModal open={openDisclaimerModal} setOpen={setOpenDisclaimerModal} />
+        <DisclaimerModal content={disclaimer?.content} open={openDisclaimerModal} setOpen={setOpenDisclaimerModal} />
       )}
       {includeHeader && (
         <PageHeaderWrapper nextElement={contentRef.current} hasNav={hasNav}>
