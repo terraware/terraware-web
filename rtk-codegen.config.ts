@@ -105,6 +105,9 @@ const config: ConfigFile = {
     './src/queries/generated/stats.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/stats'),
     },
+    './src/queries/generated/support.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/support'),
+    },
     './src/queries/generated/publicStatistics.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/public/statistics'),
     },

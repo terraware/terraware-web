@@ -12,9 +12,7 @@ import Textfield from 'src/components/common/Textfield/Textfield';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
-import { requestSubmitSupportRequest } from 'src/redux/features/support/supportAsyncThunks';
-import { selectSupportRequestSubmitRequest } from 'src/redux/features/support/supportSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useListRequestTypesQuery, useSubmitRequestMutation } from 'src/queries/generated/support';
 import {
   AttachmentRequest,
   SupportRequest,
@@ -26,13 +24,11 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ContactUsAttachments from './ContactUsAttachments';
-import { useSupportData } from './provider/Context';
 
 const MAX_FILES_LIMIT = 10;
 const MAX_FILE_SIZE = 200;
 
 const ContactUsForm = () => {
-  const dispatch = useAppDispatch();
   const { isDesktop } = useDeviceInfo();
   const { strings } = useLocalization();
   const { user } = useUser();
@@ -57,7 +53,10 @@ const ContactUsForm = () => {
     [strings]
   );
 
-  const { types } = useSupportData();
+  const { currentData } = useListRequestTypesQuery();
+  const types = currentData?.types;
+
+  const [submitRequest, submitResult] = useSubmitRequestMutation();
 
   const supportRequestType: SupportRequestType | undefined = useMemo(() => {
     switch (pathParams.requestType) {
@@ -95,10 +94,6 @@ const ContactUsForm = () => {
   const [errorSummary, setErrorSummary] = useState<string>('');
   const [errorDescription, setErrorDescription] = useState<string>('');
 
-  // Submit request
-  const [submitSupportRequestId, setSubmitSupportRequestId] = useState<string>('');
-  const submitSupportRequest = useAppSelector(selectSupportRequestSubmitRequest(submitSupportRequestId));
-
   const onChangeAttachments = useCallback(
     (attachments: AttachmentRequest[]) => {
       setAllAttachments(attachments);
@@ -125,28 +120,23 @@ const ContactUsForm = () => {
       setErrorDescription('');
     }
     if (supportRequest.summary && supportRequest.description) {
-      const dispatched = dispatch(requestSubmitSupportRequest(supportRequest));
-      setSubmitSupportRequestId(dispatched.requestId);
+      void submitRequest(supportRequest);
     }
-  }, [supportRequest, strings, dispatch]);
+  }, [supportRequest, strings, submitRequest]);
 
   const handleOnSave = useCallback(() => {
     submit();
   }, [submit]);
 
   useEffect(() => {
-    if (!submitSupportRequest) {
-      return;
-    }
-
-    if (submitSupportRequest.status === 'error') {
+    if (submitResult.isError) {
       snackbar.toastError();
-    } else if (submitSupportRequest.status === 'success') {
-      const issueKey = submitSupportRequest.data;
+    } else if (submitResult.isSuccess) {
+      const issueKey = submitResult.data.issueKey;
       snackbar.toastSuccess(strings.formatString(strings.THANK_YOU_FOR_CONTACTING_SUPPORT, `${issueKey}`));
       goToHelpSupport();
     }
-  }, [submitSupportRequest, snackbar, goToHelpSupport, strings]);
+  }, [submitResult, snackbar, goToHelpSupport, strings]);
 
   const supportRequestTitle = useMemo(
     () => (supportRequestType ? getSupportRequestName(supportRequestType, strings) : ''),
@@ -167,7 +157,7 @@ const ContactUsForm = () => {
   return (
     <Page crumbs={crumbs} title={supportRequestTitle}>
       <PageForm
-        busy={submitSupportRequest?.status === 'pending'}
+        busy={submitResult.isLoading}
         cancelID='cancelSupportRequest'
         onCancel={() => goToHelpSupport()}
         onSave={() => handleOnSave()}

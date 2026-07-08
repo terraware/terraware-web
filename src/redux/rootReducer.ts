@@ -30,7 +30,6 @@ import snackbarReducers from './features/snackbar/snackbarSlice';
 import speciesReducers from './features/species';
 import speciesAsyncThunkReducers from './features/species/speciesSlice';
 import subLocationsReducers from './features/subLocations/subLocationsSlice';
-import supportReducers from './features/support/supportSlice';
 import trackingReducers from './features/tracking/trackingSlice';
 import userAnalyticsReducers from './features/user/userAnalyticsSlice';
 import usersReducers from './features/user/usersSlice';
@@ -67,7 +66,6 @@ export const reducers = {
   ...speciesAsyncThunkReducers,
   ...speciesReducers,
   ...subLocationsReducers,
-  ...supportReducers,
   ...trackingReducers,
   ...userAnalyticsReducers,
   ...userInternalInterestsReducers,
