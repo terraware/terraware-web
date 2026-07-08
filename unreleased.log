@@ -1,3 +1,4 @@
+986a8c28 SW-8571 Move total seeds to the end in column order (#6020)
 3ece857e Modified RTK skills to be aware of generation regression and to migrate types forward (#6017)
 a6f03475 SW-5196 Accessions: Remove left padding on tables (#6018)
 cbbad3c1 SW-8624 Remove total column (#6015)
