@@ -38,15 +38,15 @@ export type SpeciesRow = {
   usedUpAccessionCount: number;
 };
 
-const TABLE_STATE_STORAGE_KEY = 'accessions-database-species-table-v3';
+const TABLE_STATE_STORAGE_KEY = 'accessions-database-species-table-v4';
 
 const DEFAULT_COLUMN_ORDER = [
   'speciesName',
   'species_commonName',
   'project_name',
-  'totalSeeds',
   'dryingSeeds',
   'inStorageSeeds',
+  'totalSeeds',
 ];
 
 type AccessionsBySpeciesTableProps = {
@@ -238,13 +238,6 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
         },
       },
       {
-        id: 'totalSeeds',
-        header: strings.TOTAL_SEEDS,
-        accessorKey: 'totalSeeds',
-        filterVariant: 'range',
-        Cell: SpeciesNumericCell,
-      },
-      {
         id: 'dryingSeeds',
         header: strings.DRYING,
         accessorKey: 'dryingSeeds',
@@ -255,6 +248,13 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
         id: 'inStorageSeeds',
         header: strings.IN_STORAGE,
         accessorKey: 'inStorageSeeds',
+        filterVariant: 'range',
+        Cell: SpeciesNumericCell,
+      },
+      {
+        id: 'totalSeeds',
+        header: strings.TOTAL_SEEDS,
+        accessorKey: 'totalSeeds',
         filterVariant: 'range',
         Cell: SpeciesNumericCell,
       },
