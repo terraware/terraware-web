@@ -403,6 +403,7 @@ const WithdrawFromBatchesModal = ({
           withdrawDate={withdrawDate}
           setWithdrawDate={setWithdrawDate}
           nurseryOptions={nurseryOptions}
+          isFetchingNurseryOptions={isFetchingNurseryOptions}
           projectOptions={availableProjectsForBatches}
           requestSpecies={request.species}
           readyBySpecies={readyBySpecies}
@@ -435,6 +436,7 @@ type Step1ContentProps = {
   withdrawDate: string;
   setWithdrawDate: (date: string) => void;
   nurseryOptions: DropdownItem[];
+  isFetchingNurseryOptions: boolean;
   projectOptions?: Project[];
   requestSpecies: PlantingDateRequestRow['species'];
   readyBySpecies: Map<number, number>;
@@ -448,6 +450,7 @@ const Step1Content = ({
   withdrawDate,
   setWithdrawDate,
   nurseryOptions,
+  isFetchingNurseryOptions,
   projectOptions,
   requestSpecies,
   readyBySpecies,
@@ -489,17 +492,28 @@ const Step1Content = ({
       </Box>
       <Box display='flex' gap={theme.spacing(2)} flexWrap='wrap'>
         <Box flex={1} minWidth='240px' maxWidth='320px'>
-          <Dropdown
-            id='nursery'
-            label={strings.FROM_NURSERY_REQUIRED}
-            placeholder={strings.SELECT_NURSERY}
-            options={nurseryOptions}
-            selectedValue={facilityId}
-            onChange={(value) => setFacilityId(value !== undefined && value !== '' ? Number(value) : undefined)}
-            fullWidth
-            sx={{ textAlign: 'left' }}
-            fixedMenu
-          />
+          {!isFetchingNurseryOptions && nurseryOptions.length === 0 ? (
+            <>
+              <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} textAlign='left'>
+                {strings.FROM_NURSERY_REQUIRED}
+              </Typography>
+              <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxt} textAlign='left'>
+                {strings.NO_NURSERIES_WITH_REQUESTED_SPECIES}
+              </Typography>
+            </>
+          ) : (
+            <Dropdown
+              id='nursery'
+              label={strings.FROM_NURSERY_REQUIRED}
+              placeholder={strings.SELECT_NURSERY}
+              options={nurseryOptions}
+              selectedValue={facilityId}
+              onChange={(value) => setFacilityId(value !== undefined && value !== '' ? Number(value) : undefined)}
+              fullWidth
+              sx={{ textAlign: 'left' }}
+              fixedMenu
+            />
+          )}
         </Box>
 
         {facilityId !== undefined && (projectOptions?.length ?? 0) > 0 && (
