@@ -30,6 +30,8 @@ services:
       - 'TERRAWARE_PHOTO_DIR=/photos'
       - 'TERRAWARE_ENABLE_AWAITING_CHECK_IN=true'
       - 'TERRAWARE_ALLOW_ADMIN_UI_FOR_NON_ADMINS=true'
+      - 'TERRAWARE_GOOGLE_DRIVE_USE_LOCAL_STORE=true'
+      - 'TERRAWARE_DROPBOX_USE_LOCAL_STORE=true'
     volumes:
       - './photo-data:/photos'
     depends_on:

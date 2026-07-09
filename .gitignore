@@ -39,6 +39,7 @@ src/strings/strings-*.js
 # playwright
 /playwright-report/
 /playwright/test-results/
+photo-data/google-drive
 
 # test gaussian splat models
 public/assets/models/test

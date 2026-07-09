@@ -73,6 +73,9 @@ SET cookies_consented = true,
 "
 docker compose exec postgres psql -d terraware -U postgres -c "$UPDATE_STRING"
 
+echo "Removing local files"
+rm -rf photo-data/google-drive
+
 yarn docker:start:prod
 if yarn wait-be; then
     :
