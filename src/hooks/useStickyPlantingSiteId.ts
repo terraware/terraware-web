@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useState } from 'react';
 
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useOrganization } from 'src/providers';
-import { CachedUserService, PreferencesService } from 'src/services';
+import { CachedUserService } from 'src/services';
 
 // Selecting 'all' means "all planting sites" (no single site filter).
 export const ALL_PLANTING_SITES = 'all';
@@ -13,6 +14,7 @@ const LEGACY_ALL_PLANTING_SITES = -1;
 
 const useStickyPlantingSiteId = (preferenceName: string) => {
   const { selectedOrganization } = useOrganization();
+  const updateUserPreferences = useUpdateUserPreferences();
 
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<PlantingSiteId>(ALL_PLANTING_SITES);
   useEffect(() => {
@@ -34,12 +36,13 @@ const useStickyPlantingSiteId = (preferenceName: string) => {
       setSelectedPlantingSiteId(nextPlantingSiteId);
 
       if (selectedOrganization && nextPlantingSiteId !== selectedPlantingSiteId) {
-        void PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-          [preferenceName]: { plantingSiteId: nextPlantingSiteId },
-        });
+        void updateUserPreferences(
+          { [preferenceName]: { plantingSiteId: nextPlantingSiteId } },
+          selectedOrganization.id
+        ).catch(() => undefined);
       }
     },
-    [preferenceName, selectedOrganization, selectedPlantingSiteId]
+    [preferenceName, selectedOrganization, selectedPlantingSiteId, updateUserPreferences]
   );
 
   return {

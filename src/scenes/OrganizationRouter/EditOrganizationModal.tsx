@@ -8,6 +8,7 @@ import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useLocalization, useTimeZones } from 'src/providers';
 import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
@@ -42,6 +43,7 @@ export default function EditOrganizationModal({
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
   const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;
+  const updateUserPreferences = useUpdateUserPreferences();
 
   useEffect(() => {
     if (open) {
@@ -112,6 +114,14 @@ export default function EditOrganizationModal({
 
     const response = await OrganizationService.updateOrganization(organizationRecord);
     if (response.requestSucceeded) {
+      if (organizationRecord.timeZone) {
+        // Record that the user acknowledged the org time zone (read-modify-write, best-effort).
+        try {
+          await updateUserPreferences({ timeZoneAcknowledgedOnMs: Date.now() }, organizationRecord.id);
+        } catch {
+          // best-effort: don't block the save on the acknowledgement write
+        }
+      }
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       await reloadOrganizationData(organizationRecord.id);
     } else {
