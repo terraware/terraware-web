@@ -166,6 +166,19 @@ export default function NurseryDetailsView(): JSX.Element {
             display={true}
           />
         </Grid>
+        <Grid item xs={gridSize()}>
+          <TextField
+            id={'location'}
+            label={strings.LOCATION}
+            value={
+              nursery?.location
+                ? `${nursery.location.coordinates[1].toFixed(6)}, ${nursery.location.coordinates[0].toFixed(6)}`
+                : ''
+            }
+            type='text'
+            display={true}
+          />
+        </Grid>
         <NurserySubLocations nurseryId={Number(nurseryId)} />
       </Grid>
     </TfMain>

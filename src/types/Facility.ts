@@ -7,6 +7,8 @@ export type PartialSubLocation = Partial<SubLocation>;
 
 export type FacilityType = components['schemas']['FacilityPayload']['type'];
 
+export type FacilityLocation = components['schemas']['Point'];
+
 export interface Facility {
   id: number;
   name: string;
@@ -19,6 +21,7 @@ export interface Facility {
   buildCompletedDate?: string;
   operationStartedDate?: string;
   capacity?: number;
+  location?: FacilityLocation;
 }
 
 export const DEFAULT_SUB_LOCATIONS = (): string[] => [
