@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { useTheme } from '@mui/material';
+import { Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
@@ -27,6 +27,21 @@ export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {
     return `${strings.WITHDRAWAL} - ${purposeLabel(batchHistoryItem.purpose)}`;
   }
   return batchHistoryItem.type;
+};
+
+const EventTypeCell = ({ row }: { row: BatchHistoryItemForTable }): JSX.Element => {
+  const notes = row.type === 'QuantityEdited' ? row.notes : undefined;
+
+  return (
+    <>
+      {getEventType(row)}
+      {notes && (
+        <Typography fontSize='14px' fontWeight={300}>
+          {notes}
+        </Typography>
+      )}
+    </>
+  );
 };
 
 export default function BatchHistoryRenderer(props: RendererProps<TableRowType>): JSX.Element {
@@ -82,7 +97,12 @@ export default function BatchHistoryRenderer(props: RendererProps<TableRowType>)
       );
     }
     return (
-      <CellRenderer index={index} column={column} value={getEventType(row as BatchHistoryItemForTable)} row={row} />
+      <CellRenderer
+        index={index}
+        column={column}
+        value={<EventTypeCell row={row as BatchHistoryItemForTable} />}
+        row={row}
+      />
     );
   }
 

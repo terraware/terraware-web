@@ -1922,6 +1922,46 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/files/batches": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Creates a new file batch.
+         * @description A file batch groups together files that are uploaded as part of the same operation.
+         */
+        post: operations["createFileBatch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/files/batches/{fileBatchId}/finish": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Marks a file batch as finished uploading.
+         * @description Indicates that all the files in the batch have been uploaded and the batch is ready to be processed.
+         */
+        post: operations["finishUploadingFileBatch"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/files/tokens/{token}": {
         parameters: {
             query?: never;
@@ -2784,7 +2824,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Uploads a photo or video associated with an organization. */
+        /** Uploads a photo, video, or data file associated with an organization. */
         post: operations["uploadOrganizationMediaFile"];
         delete?: never;
         options?: never;
@@ -4302,7 +4342,7 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Adds a photo/video of a monitoring plot after an observation is complete. */
+        /** Adds a photo, video, or data file of a monitoring plot after an observation is complete. */
         post: operations["uploadOtherPlotMedia"];
         delete?: never;
         options?: never;
@@ -5441,7 +5481,7 @@ export interface components {
             /** @enum {string} */
             position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
             /** @enum {string} */
-            type: "Plot" | "Quadrat" | "Soil";
+            type: "Plot" | "Quadrat" | "Soil" | "Explanation";
         };
         ActivityObservationPayload: {
             isAdHoc: boolean;
@@ -5502,7 +5542,7 @@ export interface components {
             /** @enum {string} */
             position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
             /** @enum {string} */
-            type: "Plot" | "Quadrat" | "Soil";
+            type: "Plot" | "Quadrat" | "Soil" | "Explanation";
         };
         AdminActivityObservationPayload: {
             isAdHoc: boolean;
@@ -5968,6 +6008,7 @@ export interface components {
             hardeningOffQuantity: number;
             /** Format: int32 */
             notReadyQuantity: number;
+            notes?: string;
             /** Format: int32 */
             readyQuantity: number;
             /** @enum {string} */
@@ -6192,7 +6233,7 @@ export interface components {
             type: "BiomassSpecies";
         };
         BiomassUpdateOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
-            description?: string;
+            description?: string | null;
             /** @enum {string} */
             forestType?: "Terrestrial" | "Mangrove";
             /** Format: int32 */
@@ -6204,9 +6245,9 @@ export interface components {
             /** Format: int32 */
             smallTreeCountLow?: number;
             soilAssessment?: string;
-            /** @enum {string} */
-            soilType?: "Clay" | "SandyClay" | "SandyClayLoam" | "ClayLoam" | "SiltyClay" | "SiltyClayLoam" | "SandyLoam" | "LoamySand" | "Sand" | "Loam" | "SiltLoam" | "Silt" | "Unknown";
-            /** @enum {string} */
+            /** @enum {string|null} */
+            soilType?: "Clay" | "SandyClay" | "SandyClayLoam" | "ClayLoam" | "SiltyClay" | "SiltyClayLoam" | "SandyLoam" | "LoamySand" | "Sand" | "Loam" | "SiltLoam" | "Silt" | "Unknown" | null;
+            /** @enum {string|null} */
             tide?: "Low" | "High" | null;
             /** Format: date-time */
             tideTime?: string | null;
@@ -6562,6 +6603,7 @@ export interface components {
              */
             capacity?: number;
             description?: string;
+            location?: components["schemas"]["Point"];
             name: string;
             /** Format: date */
             operationStartedDate?: string;
@@ -6580,6 +6622,15 @@ export interface components {
             type: "Seed Bank" | "Desalination" | "Reverse Osmosis" | "Nursery";
         };
         CreateFacilityResponsePayload: {
+            /** Format: int64 */
+            id: number;
+            status: components["schemas"]["SuccessOrError"];
+        };
+        CreateFileBatchRequestPayload: {
+            /** @enum {string} */
+            type: "Splat";
+        };
+        CreateFileBatchResponsePayload: {
             /** Format: int64 */
             id: number;
             status: components["schemas"]["SuccessOrError"];
@@ -6690,6 +6741,8 @@ export interface components {
             withdrawnDate: string;
         };
         CreateOrganizationRequestPayload: {
+            /** @description TDWG Level 3 region code of organization's botanical country. */
+            botanicalCountryCode?: string;
             /**
              * @description ISO 3166 alpha-2 code of organization's country.
              * @example AU
@@ -6774,10 +6827,9 @@ export interface components {
             indicator: components["schemas"]["NewIndicatorPayload"];
         };
         CreateProjectRequestPayload: {
+            botanicalCountryCode?: string;
             countryCode?: string;
             description?: string;
-            /** Format: int64 */
-            ecoregionId?: number;
             name: string;
             /** Format: int64 */
             organizationId: number;
@@ -7555,6 +7607,7 @@ export interface components {
             facilityNumber: number;
             /** Format: int64 */
             id: number;
+            location?: components["schemas"]["Point"];
             name: string;
             /** Format: date */
             operationStartedDate?: string;
@@ -7663,7 +7716,7 @@ export interface components {
             /** @enum {string} */
             position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
             /** @enum {string} */
-            type: "Plot" | "Quadrat" | "Soil";
+            type: "Plot" | "Quadrat" | "Soil" | "Explanation";
         };
         FunderPayload: {
             accountCreated: boolean;
@@ -7735,7 +7788,7 @@ export interface components {
             type: "Point" | "LineString" | "Polygon" | "MultiPoint" | "MultiLineString" | "MultiPolygon" | "GeometryCollection";
         };
         GeometryCollection: Omit<WithRequired<components["schemas"]["Geometry"], "type">, "type"> & {
-            geometries: Record<string, never>[];
+            geometries: (components["schemas"]["GeometryCollection"] | components["schemas"]["LineString"] | components["schemas"]["MultiLineString"] | components["schemas"]["MultiPoint"] | components["schemas"]["MultiPolygon"] | components["schemas"]["Point"] | components["schemas"]["Polygon"])[];
             /** @enum {string} */
             type: "GeometryCollection";
         } & {
@@ -9332,7 +9385,7 @@ export interface components {
             /** @enum {string} */
             position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
             /** @enum {string} */
-            type: "Plot" | "Quadrat" | "Soil";
+            type: "Plot" | "Quadrat" | "Soil" | "Explanation";
         };
         /** @description Percentage of plants of all species that were dead in this substratum's permanent monitoring plots. */
         ObservationMonitoringPlotResultsPayload: {
@@ -9482,7 +9535,7 @@ export interface components {
         };
         ObservationPlotUpdateOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
             conditions?: ("AnimalDamage" | "FastGrowth" | "FavorableWeather" | "Fungus" | "Pests" | "SeedProduction" | "UnfavorableWeather" | "NaturalRegenerationWoody" | "Logging" | "Fire" | "Mining" | "Grazing" | "Infrastructure" | "ElectricalLines" | "SoilErosion" | "DifficultAccessibility" | "Contamination" | "SteepSlope" | "WaterBodies")[];
-            notes?: string;
+            notes?: string | null;
         } & {
             /**
              * @description discriminator enum property added by openapi-typescript
@@ -9755,6 +9808,8 @@ export interface components {
             totalWithdrawn: number;
         };
         OrganizationPayload: {
+            /** @description TDWG Level 3 region code of organization's botanical country. */
+            botanicalCountryCode?: string;
             /** @description Whether this organization can submit reports to Terraformation. */
             canSubmitReports: boolean;
             /**
@@ -10389,14 +10444,13 @@ export interface components {
             summary?: string;
         };
         ProjectPayload: {
+            botanicalCountryCode?: string;
             countryCode?: string;
             /** Format: int64 */
             createdBy?: number;
             /** Format: date-time */
             createdTime?: string;
             description?: string;
-            /** Format: int64 */
-            ecoregionId?: number;
             /** Format: int64 */
             id: number;
             /** Format: int64 */
@@ -10599,7 +10653,7 @@ export interface components {
             type: "QuadratSpecies";
         };
         QuadratUpdateOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
-            description?: string;
+            description?: string | null;
             /** @enum {string} */
             position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
         } & {
@@ -10680,7 +10734,7 @@ export interface components {
             type: "RecordedTree";
         };
         RecordedTreeUpdateOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
-            description?: string;
+            description?: string | null;
             /** @description Only valid for Tree and Trunk growth forms. */
             diameterAtBreastHeight?: number;
             /** @description Only valid for Tree and Trunk growth forms. */
@@ -11014,7 +11068,7 @@ export interface components {
             cursor?: string;
             fields: string[];
             filters?: components["schemas"]["PrefixedSearch"][];
-            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "botanicalCountries" | "countries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "ecoregionBotanicalCountries" | "ecoregionCountries" | "ecoregions" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingDateRequestSpecies" | "plantingDateRequests" | "plantingSeasonAllocatedSpeciesTable" | "plantingSeasonScheduledDates" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "scheduledPlantingDateSpeciesTable" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
+            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "botanicalCountries" | "countries" | "countryBotanicalCountries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingDateRequestSpecies" | "plantingDateRequests" | "plantingSeasonAllocatedSpeciesTable" | "plantingSeasonScheduledDates" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "scheduledPlantingDateSpeciesTable" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
             search?: components["schemas"]["SearchNodePayload"];
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
         };
@@ -11759,6 +11813,7 @@ export interface components {
             germinatingQuantity: number;
             /** Format: int32 */
             hardeningOffQuantity?: number;
+            notes?: string;
             /** Format: int32 */
             readyQuantity: number;
             /** Format: int32 */
@@ -11899,6 +11954,7 @@ export interface components {
              */
             capacity?: number;
             description?: string;
+            location?: components["schemas"]["Point"];
             name: string;
             /** Format: date */
             operationStartedDate?: string;
@@ -11951,6 +12007,8 @@ export interface components {
             gpsCoordinates?: components["schemas"]["Point"];
         };
         UpdateOrganizationRequestPayload: {
+            /** @description TDWG Level 3 region code of organization's botanical country. */
+            botanicalCountryCode?: string | null;
             /**
              * @description ISO 3166 alpha-2 code of organization's country.
              * @example AU
@@ -12117,10 +12175,9 @@ export interface components {
             score: components["schemas"]["UpdateProjectOverallScorePayload"];
         };
         UpdateProjectRequestPayload: {
+            botanicalCountryCode?: string | null;
             countryCode?: string | null;
             description?: string;
-            /** Format: int64 */
-            ecoregionId?: number | null;
             name: string;
         };
         UpdateReportPhotoRequestPayload: {
@@ -12305,6 +12362,8 @@ export interface components {
         };
         UploadOrganizationMediaRequestPayload: {
             caption?: string;
+            /** Format: int64 */
+            fileBatchId?: number;
         };
         UploadOrganizationMediaResponsePayload: {
             /** Format: int64 */
@@ -12313,6 +12372,8 @@ export interface components {
         };
         UploadPlotMediaRequestPayload: {
             caption?: string;
+            /** Format: int64 */
+            fileBatchId?: number;
             /** @enum {string} */
             position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
             /**
@@ -12320,7 +12381,7 @@ export interface components {
              * @default Plot
              * @enum {string}
              */
-            type: "Plot" | "Quadrat" | "Soil";
+            type: "Plot" | "Quadrat" | "Soil" | "Explanation";
         };
         UploadPlotMediaResponsePayload: {
             /** Format: int64 */
@@ -12339,7 +12400,7 @@ export interface components {
              * @default Plot
              * @enum {string}
              */
-            type: "Plot" | "Quadrat" | "Soil";
+            type: "Plot" | "Quadrat" | "Soil" | "Explanation";
         };
         /** @description List of conditions that might cause the user to want to cancel the upload but that can be automatically resolved if desired. */
         UploadProblemPayload: {
@@ -16842,6 +16903,52 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    createFileBatch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateFileBatchRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CreateFileBatchResponsePayload"];
+                };
+            };
+        };
+    };
+    finishUploadingFileBatch: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fileBatchId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
                 };
             };
         };
@@ -22078,8 +22185,9 @@ export interface operations {
         parameters: {
             query?: {
                 caption?: string;
+                fileBatchId?: number;
                 position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
-                type?: "Plot" | "Quadrat" | "Soil";
+                type?: "Plot" | "Quadrat" | "Soil" | "Explanation";
             };
             header?: never;
             path: {

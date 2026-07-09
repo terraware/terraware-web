@@ -48,6 +48,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
 
   const [record, setRecord, onChange, onChangeCallback] = useForm(batch);
   const [validateFields, setValidateFields] = useState<boolean>(false);
+  const [quantityNotes, setQuantityNotes] = useState<string>('');
   const totalQuantity = useMemo(() => {
     if (record) {
       const activeGrowthQuantity = record?.activeGrowthQuantity ?? 0;
@@ -141,12 +142,26 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
   );
   type MandatoryField = (typeof MANDATORY_FIELDS)[number];
 
+  const quantityChanged = useMemo(
+    () =>
+      !!record &&
+      (record.germinatingQuantity !== batch.germinatingQuantity ||
+        record.activeGrowthQuantity !== batch.activeGrowthQuantity ||
+        record.hardeningOffQuantity !== batch.hardeningOffQuantity ||
+        record.readyQuantity !== batch.readyQuantity),
+    [record, batch]
+  );
+
   const hasErrors = useCallback(() => {
     if (record) {
-      return MANDATORY_FIELDS.some((field: MandatoryField) => record[field] === '' || record[field] === undefined);
+      const missingMandatory = MANDATORY_FIELDS.some(
+        (field: MandatoryField) => record[field] === '' || record[field] === undefined
+      );
+      const missingQuantityNotes = quantityChanged && !quantityNotes.trim();
+      return missingMandatory || missingQuantityNotes;
     }
     return true;
-  }, [MANDATORY_FIELDS, record]);
+  }, [MANDATORY_FIELDS, record, quantityChanged, quantityNotes]);
 
   const updatePhotos = useCallback(async () => {
     await NurseryBatchService.uploadBatchPhotos(batch.id, newPhotos);
@@ -178,10 +193,13 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
 
       const response = await NurseryBatchService.updateBatch(record);
       if (response.batch) {
-        responseQuantities = await NurseryBatchService.updateBatchQuantities({
-          ...record,
-          version: response.batch.version,
-        });
+        responseQuantities = await NurseryBatchService.updateBatchQuantities(
+          {
+            ...record,
+            version: response.batch.version,
+          },
+          quantityNotes.trim() || undefined
+        );
       }
 
       if (response.requestSucceeded && responseQuantities.requestSucceeded) {
@@ -194,7 +212,22 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
         snackbar.toastError();
       }
     }
-  }, [record, hasErrors, updatePhotos, reload, onCloseHandler, snackbar, trackEvent, markSubmitted, batch]);
+  }, [
+    record,
+    hasErrors,
+    updatePhotos,
+    reload,
+    onCloseHandler,
+    snackbar,
+    trackEvent,
+    markSubmitted,
+    batch,
+    quantityNotes,
+  ]);
+
+  const onChangeQuantityNotes = useCallback((value: unknown) => {
+    setQuantityNotes(value as string);
+  }, []);
 
   const handleSaveBatch = useCallback(() => {
     void saveBatch();
@@ -364,6 +397,17 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
             label={strings.TOTAL_QUANTITY}
             display={true}
             tooltipTitle={strings.TOOLTIP_TOTAL_QUANTITY}
+          />
+        </Grid>
+        <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
+          <Textfield
+            id='quantityNotes'
+            value={quantityNotes}
+            onChange={onChangeQuantityNotes}
+            type='textarea'
+            label={strings.NOTES}
+            errorText={validateFields && quantityChanged && !quantityNotes.trim() ? strings.REQUIRED_FIELD : ''}
+            required
           />
         </Grid>
         <Grid item xs={12} sx={marginTop}>
