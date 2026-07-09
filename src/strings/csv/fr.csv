@@ -1279,7 +1279,7 @@ NO_LOCATION_FOUND,Emplacement non trouvé,8b4b8dab
 NO_MAP_DATA,Aucune donnée cartographique n'est affichée pour ce site de plantation.,1c2d3fa2
 NO_NOTIFICATIONS,Aucune notification à afficher,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer votre inventaire de pépinières, vous devez avoir une pépinière et des espèces dans Terraware. Seuls les administrateurs peuvent ajouter des pépinières ; veuillez contacter le vôtre pour obtenir de l'aide.",93c44729
-NO_NURSERIES_WITH_REQUESTED_SPECIES,Aucune pépinière ne possède les espèces demandées.,e9fcfa1f
+NO_NURSERIES_WITH_REQUESTED_SPECIES,Aucune pépinière ne dispose de quantités Prêtes à Planter pour les espèces demandées.,cbc1672d
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,Aucune observation n'a été planifiée,c05456cd
 NO_PENDING_REQUESTS,Il n'y a aucune demande en attente.,89bea434
 NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE,Il n'y a aucune demande en attente pour le site de plantation sélectionné.,10a348ac

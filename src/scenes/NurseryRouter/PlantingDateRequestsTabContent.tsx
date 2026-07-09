@@ -140,7 +140,11 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
       }
       const requestSpeciesIds = row.species.map((s) => s.speciesId);
       setIsPreparingWithdraw(true);
-      await prefetchBatchesForWithdraw({ organizationId, speciesIds: requestSpeciesIds }, true);
+      try {
+        await prefetchBatchesForWithdraw({ organizationId, speciesIds: requestSpeciesIds }, true).unwrap();
+      } catch {
+        // Open the modal anyway if it fails; it will re-attempt the query itself.
+      }
       setWithdrawRequest(row);
       setIsPreparingWithdraw(false);
     },

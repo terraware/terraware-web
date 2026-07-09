@@ -1280,7 +1280,7 @@ NO_LOCATION_FOUND,Ubicación no encontrada,8b4b8dab
 NO_MAP_DATA,No hay datos cartográficos que mostrar para este sitio de plantación.,1c2d3fa2
 NO_NOTIFICATIONS,No hay notificaciones que mostrar.,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Antes de poder agregar y administrar el inventario de su vivero, necesitará contar con un vivero y especies dentro de Terraware. Solo los administradores pueden agregar viveros; contáctese con el suyo para obtener ayuda.",93c44729
-NO_NURSERIES_WITH_REQUESTED_SPECIES,Ningún vivero tiene la especie solicitada.,e9fcfa1f
+NO_NURSERIES_WITH_REQUESTED_SPECIES,Ningún vivero tiene cantidades de la especie solicitada listas para plantar.,cbc1672d
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,No se han programado observaciones,c05456cd
 NO_PENDING_REQUESTS,No hay solicitudes pendientes.,89bea434
 NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE,No hay solicitudes pendientes para el Sitio de Plantación seleccionado.,10a348ac
