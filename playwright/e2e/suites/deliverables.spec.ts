@@ -237,7 +237,7 @@ test.describe('DeliverableTests', () => {
     await validateQuestionnaireOverallStatus('Test Questionnaire for Phase 1', 'Approved', page);
   });
 
-  test('Document Deliverable', async ({ page }) => {
+  test.only('Document Deliverable', async ({ page }) => {
     const deliverableName = 'Phase 1 Document';
 
     await verifyHomepageDeliverableStatus(deliverableName, 'Incomplete', true, 'Not Submitted', page);
