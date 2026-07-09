@@ -1,6 +1,5 @@
 import AcceleratorService from './AcceleratorService';
 import AccessionService from './AccessionService';
-import CachedUserService from './CachedUserService';
 import * as DraftPlantingSiteService from './DraftPlantingSiteService';
 import FacilityService from './FacilityService';
 import HttpService from './HttpService';
@@ -23,7 +22,6 @@ export type { Response } from './HttpService';
 export {
   AcceleratorService,
   AccessionService,
-  CachedUserService,
   DraftPlantingSiteService,
   FacilityService,
   HttpService,

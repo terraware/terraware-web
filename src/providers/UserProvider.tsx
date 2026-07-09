@@ -6,13 +6,13 @@ import { useGetMyselfQuery } from 'src/queries/generated/users';
 import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelectors';
 import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { CachedUserService } from 'src/services';
 import { User } from 'src/types/User';
 import { GlobalRolePermission, isAllowed as isAllowedACL } from 'src/utils/acl';
 import { isTerraformationEmail } from 'src/utils/user';
 
 import { PreferencesType, ProvidedUserData } from './DataTypes';
 import { UserContext } from './contexts';
+import { setCurrentUserSnapshot, setGlobalPreferencesSnapshot } from './currentUserStore';
 
 export type UserProviderProps = {
   children?: React.ReactNode;
@@ -31,6 +31,8 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
   useEffect(() => {
     if (currentData?.user) {
       setUser(currentData.user);
+      // Mirror into the module snapshot for synchronous non-React readers (feature flags).
+      setCurrentUserSnapshot(currentData.user);
     }
   }, [currentData]);
 
@@ -43,8 +45,11 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
 
   useEffect(() => {
     if (preferencesData) {
-      setUserPreferences(preferencesData.preferences ?? {});
+      const preferences = preferencesData.preferences ?? {};
+      setUserPreferences(preferences);
       setPreferencesLoaded(true);
+      // Mirror into the module snapshot for synchronous non-React readers (feature flags).
+      setGlobalPreferencesSnapshot(preferences);
     }
   }, [preferencesData]);
 
@@ -112,18 +117,6 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
       isAllowed,
     ]
   );
-
-  useEffect(() => {
-    if (userPreferences) {
-      CachedUserService.setUserPreferences(userPreferences);
-    }
-  }, [userPreferences]);
-
-  useEffect(() => {
-    if (user) {
-      CachedUserService.setUser(user);
-    }
-  }, [user]);
 
   useEffect(() => {
     if (user && !userAnalyticsState?.gtmInstrumented && (window as any).INIT_GTAG) {

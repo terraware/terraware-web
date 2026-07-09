@@ -1,5 +1,6 @@
-import { CachedUserService } from 'src/services';
+import { getCurrentUserSnapshot, getGlobalPreferencesSnapshot } from 'src/providers/currentUserStore';
 import env from 'src/utils/useEnvironment';
+import { isTerraformationEmail } from 'src/utils/user';
 
 export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots' | 'Planting Seasons';
 
@@ -67,7 +68,7 @@ OPT_IN_FEATURES.forEach((feature) => {
 /**
  * Utility function to check if a feature is enabled
  */
-export default function isEnabled(name: FeatureName, organizationId?: number) {
+export default function isEnabled(name: FeatureName) {
   const { isProduction } = env();
   const feature = FEATURE_MAP[name];
 
@@ -84,16 +85,12 @@ export default function isEnabled(name: FeatureName, organizationId?: number) {
   }
 
   if (!isProduction) {
-    const preferences =
-      organizationId !== undefined
-        ? CachedUserService.getUserOrgPreferences(organizationId)
-        : CachedUserService.getUserPreferences();
-    const preferenceName = feature.preferenceName;
+    const preferences = getGlobalPreferencesSnapshot();
 
-    return preferences && preferences[preferenceName] === true;
+    return preferences?.[feature.preferenceName] === true;
   }
 
-  return feature.allowInternalProduction && CachedUserService.getUser().isTerraformation;
+  return feature.allowInternalProduction && isTerraformationEmail(getCurrentUserSnapshot()?.email);
 }
 
 export function isRouteEnabled(name: FeatureName) {
@@ -108,5 +105,5 @@ export function isRouteEnabled(name: FeatureName) {
     return feature.enabled;
   }
 
-  return !isProduction || (feature.allowInternalProduction && CachedUserService.getUser().isTerraformation);
+  return !isProduction || (feature.allowInternalProduction && isTerraformationEmail(getCurrentUserSnapshot()?.email));
 }

@@ -11,7 +11,6 @@ import {
 import { InitializedTimeZone } from 'src/types/TimeZones';
 import { isAdmin } from 'src/utils/organization';
 
-import CachedUserService from './CachedUserService';
 import HttpService, { Response } from './HttpService';
 
 /**
@@ -249,7 +248,8 @@ const deleteOrganization = async (organizationId: number): Promise<Response> => 
  * initialize organization time zone
  */
 const initializeTimeZone = async (organization: Organization, timeZone: string): Promise<InitializedTimeZone> => {
-  const { timeZoneAcknowledgedOnMs } = CachedUserService.getUserOrgPreferences(organization.id);
+  const preferences = api.endpoints.getUserPreferences.select(organization.id)(store.getState())?.data?.preferences;
+  const timeZoneAcknowledgedOnMs = preferences?.timeZoneAcknowledgedOnMs;
 
   const initializedTimeZone: InitializedTimeZone = {
     timeZoneAcknowledgedOnMs,

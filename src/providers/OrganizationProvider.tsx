@@ -5,7 +5,7 @@ import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useGetUserPreferencesQuery } from 'src/queries/generated/preferences';
 import { store } from 'src/redux/store';
-import { CachedUserService, OrganizationService } from 'src/services';
+import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import useEnvironment from 'src/utils/useEnvironment';
@@ -85,8 +85,6 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       if (orgPreferencesData?.preferences) {
         setOrgPreferences(orgPreferencesData.preferences);
         setOrgPreferenceForId(selectedOrganization.id);
-        // TODO: remove after org preferences readers are served from the RTK store
-        CachedUserService.setUserOrgPreferences(selectedOrganization.id, orgPreferencesData.preferences);
       }
       // once we retrieve the org and it's preferences (or the request fails), we are now bootstrapped for the
       // organization provider
