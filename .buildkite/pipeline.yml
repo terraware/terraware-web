@@ -192,5 +192,5 @@ steps:
 notify:
   - slack:
       channels:
-        - "#buildkite-builds"
+        - '#buildkite-builds'
     if: build.state == "failed" && build.branch == "main"
