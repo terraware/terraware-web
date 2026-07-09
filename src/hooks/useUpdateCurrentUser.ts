@@ -1,10 +1,12 @@
 import { useCallback } from 'react';
 
+import { useUpdateCookieConsentMutation } from 'src/queries/generated/preferences';
 import { UpdateUserRequestPayload, api, useUpdateMyselfMutation } from 'src/queries/generated/users';
 import { QueryTagTypes } from 'src/queries/tags';
 import { useAppDispatch } from 'src/redux/store';
-import { PreferencesService } from 'src/services';
 import { User } from 'src/types/User';
+
+import useUpdateUserPreferences from './useUpdateUserPreferences';
 
 export type UpdateCurrentUserOptions = {
   skipAcknowledgeTimeZone?: boolean;
@@ -13,6 +15,8 @@ export type UpdateCurrentUserOptions = {
 const useUpdateCurrentUser = () => {
   const dispatch = useAppDispatch();
   const [updateMyself] = useUpdateMyselfMutation();
+  const [updateCookieConsent] = useUpdateCookieConsentMutation();
+  const updateUserPreferences = useUpdateUserPreferences();
 
   return useCallback(
     async (user: User, options: UpdateCurrentUserOptions = {}): Promise<boolean> => {
@@ -37,16 +41,20 @@ const useUpdateCurrentUser = () => {
       }
 
       if (succeeded && typeof user.cookiesConsented === 'boolean') {
-        await PreferencesService.updateUserCookieConsentPreferences({ cookiesConsented: user.cookiesConsented });
+        await updateCookieConsent({ cookiesConsented: user.cookiesConsented });
       }
 
       if (succeeded && user.timeZone && !options.skipAcknowledgeTimeZone) {
-        await PreferencesService.updateUserPreferences({ timeZoneAcknowledgedOnMs: Date.now() });
+        try {
+          await updateUserPreferences({ timeZoneAcknowledgedOnMs: Date.now() });
+        } catch {
+          // time zone acknowledgement is best-effort
+        }
       }
 
       return succeeded;
     },
-    [dispatch, updateMyself]
+    [dispatch, updateMyself, updateCookieConsent, updateUserPreferences]
   );
 };
 

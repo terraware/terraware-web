@@ -10,7 +10,6 @@ import NurseryInventoryService from './NurseryInventoryService';
 import OrganizationService from './OrganizationService';
 import OrganizationUserService from './OrganizationUserService';
 import PlantingsService from './PlantingsService';
-import PreferencesService from './PreferencesService';
 import SearchService from './SearchService';
 import SpeciesService from './SpeciesService';
 import SubLocationService from './SubLocationService';
@@ -31,7 +30,6 @@ export {
   OrganizationService,
   OrganizationUserService,
   PlantingsService,
-  PreferencesService,
   SearchService,
   SpeciesService,
   SubLocationService,

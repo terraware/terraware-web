@@ -1,6 +1,4 @@
-import { setHttpServiceMocks, clearHttpServiceMocks } from './HttpServiceMocks';
 import CachedUserService from '../CachedUserService';
-import PreferencesService from '../PreferencesService';
 import { User } from '../../types/User';
 
 const USER = {
@@ -13,23 +11,11 @@ const PREFERENCES = {
   lastVisitedOrg: 1,
 };
 
-const UPDATED_PREFERENCES = {
-  lastVisitedOrg: 2,
-};
-
 const ORG_PREFERENCES = {
   lastDashboardPlantingSite: { plantingSiteId: 4 },
 };
 
-const UPDATED_ORG_PREFERENCES = {
-  lastDashboardPlantingSite: { plantingSiteId: 5 },
-};
-
 describe('Cached user service test', () => {
-  beforeEach(() => {
-    clearHttpServiceMocks();
-  });
-
   test('get cached user should return correct user', () => {
     CachedUserService.setUser(USER as User);
 
@@ -38,81 +24,22 @@ describe('Cached user service test', () => {
     expect(cachedUser).toEqual({ ...USER, isTerraformation: true });
   });
 
-  test('get cached user preferences should return correct preferences', async () => {
-    setHttpServiceMocks({
-      get: () =>
-        Promise.resolve({
-          preferences: PREFERENCES,
-          requestSucceeded: true,
-          statusCode: 200,
-        }),
-    });
+  test('get cached user preferences should return the preferences that were set', () => {
+    CachedUserService.setUserPreferences(PREFERENCES);
 
-    const { preferences } = await PreferencesService.getUserPreferences();
-
-    const cachedPreferences = CachedUserService.getUserPreferences();
-
-    expect(cachedPreferences).toEqual(preferences);
+    expect(CachedUserService.getUserPreferences()).toEqual(PREFERENCES);
   });
 
-  test('get cached org preferences should return correct org preferences', async () => {
-    setHttpServiceMocks({
-      get: () =>
-        Promise.resolve({
-          preferences: ORG_PREFERENCES,
-          requestSucceeded: true,
-          statusCode: 200,
-        }),
-    });
+  test('get cached org preferences should return the org preferences that were set', () => {
+    CachedUserService.setUserOrgPreferences(1, ORG_PREFERENCES);
 
-    const { preferences } = await PreferencesService.getUserOrgPreferences(1);
-
-    const cachedOrgPreferences = CachedUserService.getUserOrgPreferences(1);
-
-    expect(cachedOrgPreferences).toEqual(preferences);
+    expect(CachedUserService.getUserOrgPreferences(1)).toEqual(ORG_PREFERENCES);
   });
 
-  test('user preferences should be updated', async () => {
-    setHttpServiceMocks({
-      put: () =>
-        Promise.resolve({
-          requestSucceeded: true,
-          statusCode: 200,
-        }),
-      get: () =>
-        Promise.resolve({
-          preferences: UPDATED_PREFERENCES,
-          requestSucceeded: true,
-          statusCode: 200,
-        }),
-    });
+  test('cookie consent preference should merge into the cached global preferences', () => {
+    CachedUserService.setUserPreferences(PREFERENCES);
+    CachedUserService.setUserCookieConsentPreferences(true);
 
-    await PreferencesService.updateUserPreferences(UPDATED_PREFERENCES);
-
-    const cachedPreferences = CachedUserService.getUserPreferences();
-
-    expect(cachedPreferences).toEqual(UPDATED_PREFERENCES);
-  });
-
-  test('org preferences should be updated', async () => {
-    setHttpServiceMocks({
-      put: () =>
-        Promise.resolve({
-          requestSucceeded: true,
-          statusCode: 200,
-        }),
-      get: () =>
-        Promise.resolve({
-          user: UPDATED_ORG_PREFERENCES,
-          requestSucceeded: true,
-          statusCode: 200,
-        }),
-    });
-
-    await PreferencesService.updateUserOrgPreferences(1, UPDATED_ORG_PREFERENCES);
-
-    const cachedOrgPreferences = CachedUserService.getUserOrgPreferences(1);
-
-    expect(cachedOrgPreferences).toEqual(UPDATED_ORG_PREFERENCES);
+    expect(CachedUserService.getUserPreferences()).toEqual({ ...PREFERENCES, cookiesConsented: true });
   });
 });

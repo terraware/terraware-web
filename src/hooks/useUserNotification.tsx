@@ -7,8 +7,8 @@ import TextWithLink from 'src/components/common/TextWithLink';
 import { APP_PATHS } from 'src/constants';
 import useInitializeUnits from 'src/hooks/useInitializeUnits';
 import useInitializeUserTimeZone from 'src/hooks/useInitializeUserTimeZone';
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
-import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { useSupportedLocales } from 'src/strings/locales';
 import { ClientNotification } from 'src/types/Notifications';
@@ -27,6 +27,7 @@ export default function useUserNotification(): ClientNotification | null {
   const { user, userPreferences, reloadUserPreferences } = useUser();
   const { selectedOrganization } = useOrganization();
   const timeZones = useTimeZones();
+  const updateUserPreferences = useUpdateUserPreferences();
 
   const getTimeZoneById = useCallback(
     (id?: string): TimeZoneDescription => getTimeZone(timeZones, id) ?? getUTC(timeZones),
@@ -122,7 +123,7 @@ export default function useUserNotification(): ClientNotification | null {
             ? timeZoneUserNotificationRead
             : unitNotificationRead || timeZoneUserNotificationRead,
         markAsRead: async (read: boolean) => {
-          await PreferencesService.updateUserPreferences({
+          await updateUserPreferences({
             unitsAcknowledgedOnMs: read ? Date.now() : undefined,
             timeZoneAcknowledgedOnMs: read ? Date.now() : undefined,
           });
@@ -146,5 +147,6 @@ export default function useUserNotification(): ClientNotification | null {
     timeZoneUserNotificationRead,
     unitNotificationRead,
     supportedLocales,
+    updateUserPreferences,
   ]);
 }
