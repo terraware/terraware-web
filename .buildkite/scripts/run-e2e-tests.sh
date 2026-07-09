@@ -37,6 +37,8 @@ run_tests() {
       echo "Tests timed out, retrying once..."
       timeout 20m "${docker_cmd[@]}"
     else
+      echo "tests failed, server logs:"
+      docker compose logs terraware-server
       exit 1
     fi
   }
