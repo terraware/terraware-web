@@ -8,19 +8,18 @@ import Checkbox from 'src/components/common/Checkbox';
 import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
-import { useDisclaimerData } from 'src/providers/Disclaimer/Context';
 import strings from 'src/strings';
 
 type DisclaimerModalProps = {
+  content?: string;
   onCancel?: () => void;
   onConfirm?: () => void;
   open: boolean;
   setOpen: (open: boolean) => void;
 };
 
-const DisclaimerModal = ({ open, setOpen, onCancel, onConfirm }: DisclaimerModalProps) => {
+const DisclaimerModal = ({ content, open, setOpen, onCancel, onConfirm }: DisclaimerModalProps) => {
   const { activeLocale } = useLocalization();
-  const { disclaimer } = useDisclaimerData();
   const { isMobile, isTablet } = useDeviceInfo();
   const theme = useTheme();
 
@@ -84,7 +83,7 @@ const DisclaimerModal = ({ open, setOpen, onCancel, onConfirm }: DisclaimerModal
       middleButtons={[...cancelButton, ...confirmButton]}
     >
       <Typography fontSize={'16px'} fontWeight={400} textAlign={'start'} whiteSpace='pre-wrap'>
-        {disclaimer?.content}
+        {content}
       </Typography>
 
       {onConfirm && (

@@ -1,3 +1,3 @@
-import { components } from 'src/api/types/generated-schema';
+import { DisclaimerPayload } from 'src/queries/generated/disclaimer';
 
-export type Disclaimer = components['schemas']['DisclaimerPayload'];
+export type Disclaimer = DisclaimerPayload;

@@ -21,9 +21,9 @@ import TerrawareRouter from 'src/scenes/TerrawareRouter';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import DisclaimerContainer from './components/Disclaimer/DisclaimerContainer';
 import useApplicationPortal from './hooks/useApplicationPortal';
 import useFunderPortal from './hooks/useFunderPortal';
-import DisclaimerProvider from './providers/Disclaimer/Provider';
 import ApplicationPortalRouter from './scenes/ApplicationRouter/portal';
 
 // Mixpanel setup
@@ -152,7 +152,7 @@ function AppContent() {
       </TopBar>
 
       <Box sx={mainBoxStyles}>
-        <DisclaimerProvider>
+        <DisclaimerContainer>
           <React.Suspense fallback={<BlockingSpinner />}>
             {/* TODO: Add application console router for applciations/{id} case */}
             {isAcceleratorRoute && isAllowed('VIEW_CONSOLE') ? (
@@ -165,7 +165,7 @@ function AppContent() {
               <TerrawareRouter showNavBar={showNavBar} setShowNavBar={setShowNavBar} />
             )}
           </React.Suspense>
-        </DisclaimerProvider>
+        </DisclaimerContainer>
       </Box>
     </StyledEngineProvider>
   );

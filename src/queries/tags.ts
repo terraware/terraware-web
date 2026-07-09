@@ -5,6 +5,7 @@ export enum QueryTagTypes {
   Activities = 'Activities',
   Batches = 'Batches',
   Deliveries = 'Deliveries',
+  Disclaimer = 'Disclaimer',
   FunderActivities = 'FunderActivities',
   InventoryPlanning = 'InventoryPlanning',
   CommonIndicators = 'CommonIndicators',
