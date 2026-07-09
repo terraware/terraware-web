@@ -8,7 +8,6 @@ import ProjectsRouter from 'src/components/Projects/Router';
 import SeedFundReportsRouter from 'src/components/SeedFundReports/Router';
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useProjects } from 'src/hooks/useProjects';
 import { useOrganization, useUser } from 'src/providers';
@@ -85,7 +84,6 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
 
   const orgFeatures = useOrganizationFeatures();
   const isVirtualWalkthroughEnabled = !!orgFeatures?.virtualWalkthrough?.enabled;
-  const isPlantingSeasonsEnabled = isEnabled('Planting Seasons');
 
   const contentStyles = {
     height: '100%',
@@ -212,12 +210,8 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.PLANTING_SITES + '/*'} element={<PlantingSites />} />
             <Route path={APP_PATHS.NURSERY + '/*'} element={<NurseryRouter />} />
             <Route path={APP_PATHS.PLANTING_PROGRESS} element={<PlantingProgressView />} />
-            {isPlantingSeasonsEnabled && (
-              <Route path={APP_PATHS.PLANTING_SEASONS + '/*'} element={<PlantingSeasonsRouter />} />
-            )}
-            {isPlantingSeasonsEnabled && (
-              <Route path={APP_PATHS.INVENTORY_PLANNING + '/*'} element={<InventoryPlanningRouter />} />
-            )}
+            <Route path={APP_PATHS.PLANTING_SEASONS + '/*'} element={<PlantingSeasonsRouter />} />
+            <Route path={APP_PATHS.INVENTORY_PLANNING + '/*'} element={<InventoryPlanningRouter />} />
             <Route path={APP_PATHS.HELP_SUPPORT + '/*'} element={<HelpSupportRouter />} />
             <Route path={APP_PATHS.MY_ACCOUNT + '/*'} element={<MyAccountRouter />} />
             <Route path={APP_PATHS.SETTINGS} element={<SettingsRedirect />} />

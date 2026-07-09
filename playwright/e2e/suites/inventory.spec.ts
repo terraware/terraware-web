@@ -118,15 +118,19 @@ test.describe('InventoryTests', () => {
     await page.waitForTimeout(1000); //Wait for modal to close
     await page.mouse.wheel(0, -1000);
     await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).click();
+    await page.locator('.dialog-box').waitFor({ state: 'visible' });
     await page.getByLabel('Dead').check();
-    await page.locator('#germinatingQuantityWithdrawn').getByRole('spinbutton').click();
-    await page.locator('#germinatingQuantityWithdrawn').getByRole('spinbutton').fill('5');
-    await page.locator('#activeGrowthQuantityWithdrawn').getByRole('spinbutton').click();
-    await page.locator('#activeGrowthQuantityWithdrawn').getByRole('spinbutton').fill('10');
-    await page.locator('#readyQuantityWithdrawn').getByRole('spinbutton').click();
-    await page.locator('#readyQuantityWithdrawn').getByRole('spinbutton').fill('0');
     await page.getByRole('button', { name: 'Next' }).click();
-    await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).click();
+    await page.locator('[id$="-germinatingQuantityWithdrawn"]').getByRole('spinbutton').fill('5');
+    await page.locator('[id$="-activeGrowthQuantityWithdrawn"]').getByRole('spinbutton').fill('10');
+    await page.locator('[id$="-readyQuantityWithdrawn"]').getByRole('spinbutton').fill('0');
+    await page.getByRole('button', { name: 'Next' }).click();
+    await page
+      .locator('.dialog-box')
+      .getByRole('button', { name: 'Withdraw', ...exactOptions })
+      .click();
+    await expect(page.locator('.dialog-box')).toBeHidden();
+    await page.reload();
     await expect(page.getByRole('main')).toContainText('Germination/Establishment Rate 80');
     await expect(page.getByRole('main')).toContainText('Loss Rate 14');
     await expect(page.getByRole('main')).toContainText('Total Withdrawn 15');
@@ -154,22 +158,21 @@ test.describe('InventoryTests', () => {
     const batchNumber = await getBatchNumberBySpeciesAndNursery(page, 'Banana', 'Nursery');
     await page.getByRole('link', { name: batchNumber }).click();
     await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).click();
-    await page.waitForTimeout(1000); //Wait for modal to load
+    await page.locator('.dialog-box').waitFor({ state: 'visible' });
     await page.getByLabel('Nursery Transfer').check();
-    await page.locator('#destinationFacilityId').getByPlaceholder('Select...').click();
-    await page.getByText('Other Nursery', exactOptions).click();
-    await page.locator('#germinatingQuantityWithdrawn').getByRole('spinbutton').click();
-    await page.locator('#germinatingQuantityWithdrawn').getByRole('spinbutton').fill('50');
-    await page.locator('#activeGrowthQuantityWithdrawn').getByRole('spinbutton').click();
-    await page.locator('#activeGrowthQuantityWithdrawn').getByRole('spinbutton').fill('50');
-    await page.locator('#readyQuantityWithdrawn').getByRole('spinbutton').click();
-    await page.locator('#readyQuantityWithdrawn').getByRole('spinbutton').fill('50');
-    await page.getByText('Withdrawal DetailsSelect a').click();
-    await expect(page.getByText('Withdraw Quantity150')).toBeVisible();
+    await page.locator('#to-nursery path').click();
+    await page.locator('li').getByText('Other Nursery', exactOptions).click();
     await page.locator('textarea').click();
     await page.locator('textarea').fill('Transferring some banana to the other nursery');
     await page.getByRole('button', { name: 'Next' }).click();
-    await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).click();
+    await page.locator('[id$="-germinatingQuantityWithdrawn"]').getByRole('spinbutton').fill('50');
+    await page.locator('[id$="-activeGrowthQuantityWithdrawn"]').getByRole('spinbutton').fill('50');
+    await page.locator('[id$="-readyQuantityWithdrawn"]').getByRole('spinbutton').fill('50');
+    await page.getByRole('button', { name: 'Next' }).click();
+    await page
+      .locator('.dialog-box')
+      .getByRole('button', { name: 'Withdraw', ...exactOptions })
+      .click();
     await expect(page.getByText('1 batch for a total of 150')).toBeVisible();
     await page.getByRole('button', { name: 'Withdrawals' }).click();
     await page.getByRole('row', { name: 'Nursery Transfer' }).locator('[id$="-withdrawnDate"]').click();
@@ -234,21 +237,23 @@ test.describe('InventoryTests', () => {
     const batchNumber = await getBatchNumberBySpeciesAndNursery(page, 'Kousa Dogwood', 'Nursery');
     await page.getByRole('link', { name: batchNumber }).click();
     await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).click();
+    await page.locator('.dialog-box').waitFor({ state: 'visible' });
     await page.getByLabel('Planting').check();
-    await page.locator('#plantingSiteId').getByPlaceholder('Select...').click();
-    await page.getByText('Planting Site', exactOptions).click();
-    await page.getByLabel('Open').first().click();
-    await page.getByRole('option', { name: 'East' }).click();
-    await page.getByLabel('Open').nth(1).click();
-    await page.getByRole('option', { name: 'North' }).click();
-    await page.getByRole('spinbutton').click();
-    await page.getByRole('spinbutton').fill('060');
+    await page.locator('#to-planting-site path').click();
+    await page.locator('li').getByText('Planting Site', exactOptions).click();
+    await page.locator('#stratum path').click();
+    await page.locator('li').getByText('East', exactOptions).click();
+    await page.locator('#substratum path').click();
+    await page.locator('li').getByText('North', exactOptions).click();
     await page.locator('textarea').click();
     await page.locator('textarea').fill('Withdrawing to Planting Site!');
     await page.getByRole('button', { name: 'Next' }).click();
-    await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).click();
-    await expect(page.getByText('One or more batches are now')).toBeVisible();
-    await page.getByRole('button', { name: 'Got It!' }).click();
+    await page.getByRole('spinbutton').fill('060');
+    await page.getByRole('button', { name: 'Next' }).click();
+    await page
+      .locator('.dialog-box')
+      .getByRole('button', { name: 'Withdraw', ...exactOptions })
+      .click();
     await expect(page.getByText('1 batch for a total of 60')).toBeVisible();
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByRole('cell', { name: 'Withdrawal - Planting' }).nth(0)).toBeVisible();

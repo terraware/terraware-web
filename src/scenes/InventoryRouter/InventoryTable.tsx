@@ -20,8 +20,6 @@ import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { convertFilterGroupToMap } from 'src/scenes/InventoryRouter/FilterUtils';
@@ -76,7 +74,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     () => (selectedOrganization ? getAllNurseries(selectedOrganization) : []),
     [selectedOrganization]
   );
-  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const query = useQuery();
   const numberFormatter = useNumberFormatter();
@@ -91,7 +88,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     openChangeQuantityModal: false,
   });
   const [withdrawModalBatchIds, setWithdrawModalBatchIds] = useState<number[] | undefined>(undefined);
-  const isPlantingSeasonsEnabled = isEnabled('Planting Seasons');
 
   const tableStateStorageKey = `inventoryTable_${origin.toLowerCase()}`;
 
@@ -267,48 +263,26 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   );
 
   const withdrawInventory = async () => {
-    if (isPlantingSeasonsEnabled) {
-      let batchIds: number[] = [];
-      if (origin === 'Species') {
-        const selectedSpeciesIds = selectedRows.filter((row) => row.id).map((row) => Number(row.id));
-        if (!selectedSpeciesIds.length || !selectedOrganization) {
-          return;
-        }
-        const searchResponse = await NurseryBatchService.getBatchIdsForSpecies(
-          selectedOrganization.id,
-          selectedSpeciesIds
-        );
-        batchIds = (searchResponse ?? []).map((sr) => Number(sr.id));
-      } else if (origin === 'Nursery') {
-        batchIds = selectedRows.flatMap((row) => row.batchIds).map((b) => Number(b));
-      } else {
-        batchIds = selectedRows.filter((r) => r.id).map((row) => Number(row.batchId));
-      }
-      if (batchIds.length === 0) {
+    let batchIds: number[] = [];
+    if (origin === 'Species') {
+      const selectedSpeciesIds = selectedRows.filter((row) => row.id).map((row) => Number(row.id));
+      if (!selectedSpeciesIds.length || !selectedOrganization) {
         return;
       }
-      setWithdrawModalBatchIds(batchIds);
+      const searchResponse = await NurseryBatchService.getBatchIdsForSpecies(
+        selectedOrganization.id,
+        selectedSpeciesIds
+      );
+      batchIds = (searchResponse ?? []).map((sr) => Number(sr.id));
+    } else if (origin === 'Nursery') {
+      batchIds = selectedRows.flatMap((row) => row.batchIds).map((b) => Number(b));
+    } else {
+      batchIds = selectedRows.filter((r) => r.id).map((row) => Number(row.batchId));
+    }
+    if (batchIds.length === 0) {
       return;
     }
-
-    const path = origin === 'Species' ? APP_PATHS.INVENTORY_WITHDRAW : APP_PATHS.BATCH_WITHDRAW;
-
-    const speciesIds = selectedRows.filter((row) => row.id).map((row) => `speciesId=${String(row.id)}`);
-    if (origin === 'Species' && !speciesIds.length) {
-      // we can't handle deleted inventory today
-      return;
-    }
-
-    const batchIdsParams =
-      origin === 'Nursery'
-        ? selectedRows.flatMap((row) => row.batchIds).map((b) => `batchId=${String(b)}`)
-        : selectedRows.filter((r) => r.id).map((row) => `batchId=${String(row.batchId)}`);
-    const searchParams = origin === 'Species' ? speciesIds.join('&') : batchIdsParams.join('&');
-
-    navigate({
-      pathname: path,
-      search: `?${searchParams}&source=${window.location.pathname}`,
-    });
+    setWithdrawModalBatchIds(batchIds);
   };
 
   const onCloseDeleteBatchesModal = useCallback(() => {
