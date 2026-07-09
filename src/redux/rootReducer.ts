@@ -30,7 +30,6 @@ import speciesAsyncThunkReducers from './features/species/speciesSlice';
 import subLocationsReducers from './features/subLocations/subLocationsSlice';
 import trackingReducers from './features/tracking/trackingSlice';
 import userAnalyticsReducers from './features/user/userAnalyticsSlice';
-import userInternalInterestsReducers from './features/userInternalInterests/userInternalInterestsSlice';
 import votesReducers from './features/votes/votesSlice';
 
 // assembly of app reducers
@@ -63,7 +62,6 @@ export const reducers = {
   ...subLocationsReducers,
   ...trackingReducers,
   ...userAnalyticsReducers,
-  ...userInternalInterestsReducers,
   ...votesReducers,
   ...rtkReducers,
 };

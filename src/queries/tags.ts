@@ -14,6 +14,7 @@ export enum QueryTagTypes {
   Funders = 'Funders',
   FundingEntities = 'FundingEntities',
   GlobalRolesUsers = 'GlobalRolesUsers',
+  InternalInterests = 'InternalInterests',
   Modules = 'Modules',
   MonitoringPlots = 'MonitoringPlots',
   Notifications = 'Notifications',
