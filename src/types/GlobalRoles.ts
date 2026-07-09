@@ -1,9 +1,9 @@
-import { components } from 'src/api/types/generated-schema';
+import { UserWithGlobalRolesPayload } from 'src/queries/generated/globalRoles';
 import strings from 'src/strings';
 
 import { UserGlobalRole } from './User';
 
-export type UserWithGlobalRoles = components['schemas']['UserWithGlobalRolesPayload'];
+export type UserWithGlobalRoles = UserWithGlobalRolesPayload;
 
 export const GLOBAL_ROLE_ACCELERATOR_ADMIN: UserGlobalRole = 'Accelerator Admin';
 export const GLOBAL_ROLE_READ_ONLY: UserGlobalRole = 'Read Only';
@@ -28,10 +28,6 @@ export const getHighestGlobalRole = (globalRoles?: UserGlobalRole[]): string => 
     }
   }
   return '';
-};
-
-export type GlobalRolesUsersData = {
-  users: UserWithGlobalRoles[];
 };
 
 export const getGlobalRole = (globalRole: UserGlobalRole): string => {

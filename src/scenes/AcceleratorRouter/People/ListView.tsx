@@ -10,19 +10,11 @@ import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import {
-  requestDeleteGlobalRolesForUsers,
-  requestListGlobalRolesUsers,
-} from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
-import {
-  selectGlobalRolesUsersRemoveRequest,
-  selectGlobalRolesUsersSearchRequest,
-} from 'src/redux/features/globalRoles/globalRolesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useDeleteGlobalRolesMutation, useListGlobalRolesQuery } from 'src/queries/generated/globalRoles';
 import strings from 'src/strings';
-import { UserWithGlobalRoles } from 'src/types/GlobalRoles';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { User } from 'src/types/User';
+import { SearchOrderConfig, searchAndSort } from 'src/utils/searchAndSort';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import PersonCellRenderer from './PersonCellRenderer';
@@ -71,22 +63,27 @@ const columns = (activeLocale: string | null): TableColumnType[] =>
     : [];
 
 const PeopleView = () => {
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const navigate = useSyncNavigate();
 
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
-  const [globalRoleUsers, setGlobalRoleUsers] = useState<UserWithGlobalRoles[]>([]);
-  const [listRequestId, setListRequestId] = useState('');
-  const [deleteRolesRequestId, setDeleteRolesRequestId] = useState('');
-  const [lastSearchRequest, setLastSearchRequest] = useState<
+  const [searchRequest, setSearchRequest] = useState<
     Partial<{ locale: string | null; search: SearchNodePayload; searchSortOrder: SearchSortOrder }>
   >({});
 
-  const listRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listRequestId));
-  const deleteRolesRequest = useAppSelector(selectGlobalRolesUsersRemoveRequest(deleteRolesRequestId));
+  const { data: globalRolesUsersData, isError: isListError } = useListGlobalRolesQuery();
+  const [deleteGlobalRoles, deleteGlobalRolesResponse] = useDeleteGlobalRolesMutation();
+
+  const globalRoleUsers = useMemo(() => {
+    const users = globalRolesUsersData?.users ?? [];
+    const { locale, search, searchSortOrder } = searchRequest;
+    const searchOrderConfig: SearchOrderConfig | undefined = searchSortOrder
+      ? { locale: locale ?? null, sortOrder: searchSortOrder, numberFields: ['id'] }
+      : undefined;
+    return searchAndSort(users, search, searchOrderConfig);
+  }, [globalRolesUsersData, searchRequest]);
 
   const goToAddPerson = useCallback(() => {
     navigate({ pathname: APP_PATHS.ACCELERATOR_PERSON_NEW });
@@ -94,17 +91,14 @@ const PeopleView = () => {
 
   const dispatchSearchRequest = useCallback(
     (locale?: string | null, search?: SearchNodePayload, searchSortOrder?: SearchSortOrder) => {
-      const request = dispatch(requestListGlobalRolesUsers({ locale: locale || null, search, searchSortOrder }));
-      setLastSearchRequest({ locale, search, searchSortOrder });
-      setListRequestId(request.requestId);
+      setSearchRequest({ locale, search, searchSortOrder });
     },
-    [dispatch]
+    []
   );
 
   const onConfirmSelectionRemoveRoles = useCallback(() => {
-    const request = dispatch(requestDeleteGlobalRolesForUsers({ users: selectedRows as User[] }));
-    setDeleteRolesRequestId(request.requestId);
-  }, [dispatch, selectedRows]);
+    void deleteGlobalRoles({ userIds: (selectedRows as User[]).map((user) => user.id) });
+  }, [deleteGlobalRoles, selectedRows]);
 
   const rightComponent = useMemo(
     () =>
@@ -125,31 +119,10 @@ const PeopleView = () => {
   );
 
   useEffect(() => {
-    if (!listRequest) {
-      return;
-    }
-
-    if (listRequest.status === 'success' && listRequest.data?.users) {
-      setGlobalRoleUsers(listRequest.data.users);
-    } else if (listRequest.status === 'error') {
+    if (isListError || deleteGlobalRolesResponse.isError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [listRequest, snackbar]);
-
-  useEffect(() => {
-    if (!deleteRolesRequest) {
-      return;
-    }
-
-    if (deleteRolesRequest.status === 'success') {
-      const { locale, search, searchSortOrder } = lastSearchRequest;
-      dispatchSearchRequest(locale || null, search, searchSortOrder);
-      setDeleteRolesRequestId('');
-    } else if (deleteRolesRequest.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-      setDeleteRolesRequestId('');
-    }
-  }, [dispatchSearchRequest, lastSearchRequest, snackbar, deleteRolesRequest]);
+  }, [isListError, deleteGlobalRolesResponse.isError, snackbar]);
 
   return (
     <Page title={strings.PEOPLE} rightComponent={rightComponent}>

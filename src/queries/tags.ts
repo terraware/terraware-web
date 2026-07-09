@@ -13,6 +13,7 @@ export enum QueryTagTypes {
   DraftPlantingSites = 'DraftPlantingSites',
   Funders = 'Funders',
   FundingEntities = 'FundingEntities',
+  GlobalRolesUsers = 'GlobalRolesUsers',
   Modules = 'Modules',
   MonitoringPlots = 'MonitoringPlots',
   Notifications = 'Notifications',

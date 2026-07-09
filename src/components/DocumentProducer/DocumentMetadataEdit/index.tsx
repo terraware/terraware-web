@@ -7,11 +7,9 @@ import isString from 'lodash/isString';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { useProjects } from 'src/hooks/useProjects';
-import { useLocalization } from 'src/providers';
+import { useListGlobalRolesQuery } from 'src/queries/generated/globalRoles';
 import { selectDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
 import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
-import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
-import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -46,23 +44,21 @@ const DocumentMetadataEdit = ({
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { activeLocale } = useLocalization();
   const { documentTemplates, error: getDocumentTemplatesError } = useAppSelector(selectDocumentTemplates);
   const { availableProjects: availableProjectOptions } = useProjects();
   const availableProjects = useMemo(() => availableProjectOptions || [], [availableProjectOptions]);
 
   const [documentNameFieldHasBeenFocused, setDocumentNameFieldHasBeenFocused] = useState(false);
   const [documentOwnerOptions, setDocumentOwnerOptions] = useState<DropdownItem[]>([]);
-  const [listUsersRequestId, setListUsersRequestId] = useState('');
-  const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
+  const { data: globalRolesUsersData, isError: isGlobalRolesUsersError } = useListGlobalRolesQuery();
 
   useEffect(() => {
-    if (listUsersRequest?.status === 'success') {
-      setDocumentOwnerOptions(getDocumentOwnerOptions(listUsersRequest.data?.users || []));
-    } else if (listUsersRequest?.status === 'error') {
+    if (globalRolesUsersData) {
+      setDocumentOwnerOptions(getDocumentOwnerOptions(globalRolesUsersData.users));
+    } else if (isGlobalRolesUsersError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [listUsersRequest, snackbar]);
+  }, [globalRolesUsersData, isGlobalRolesUsersError, snackbar]);
 
   const documentTemplateOptions = useMemo(
     () => getDocumentTemplateOptions(documentTemplates || []),
@@ -71,9 +67,7 @@ const DocumentMetadataEdit = ({
 
   useEffect(() => {
     void dispatch(requestListDocumentTemplates());
-    const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
-    setListUsersRequestId(request.requestId);
-  }, [activeLocale, dispatch]);
+  }, [dispatch]);
 
   useEffect(() => {
     if (getDocumentTemplatesError) {
