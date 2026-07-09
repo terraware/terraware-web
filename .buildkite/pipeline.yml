@@ -188,3 +188,9 @@ steps:
       - *load-secrets
       - *cache-node-modules
     command: .buildkite/scripts/deploy-docs.sh
+
+notify:
+  - slack:
+      channels:
+        - '#buildkite-builds'
+    if: build.state == "failed" && build.branch == "main"
