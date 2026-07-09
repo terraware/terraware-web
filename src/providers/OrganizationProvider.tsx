@@ -3,8 +3,9 @@ import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useGetUserPreferencesQuery } from 'src/queries/generated/preferences';
 import { store } from 'src/redux/store';
-import { OrganizationService, PreferencesService } from 'src/services';
+import { CachedUserService, OrganizationService } from 'src/services';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import useEnvironment from 'src/utils/useEnvironment';
@@ -68,21 +69,30 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     await populateOrganizations();
   }, []);
 
-  const reloadOrgPreferences = useCallback(() => {
-    const getOrgPreferences = async () => {
-      if (selectedOrganization) {
-        const response = await PreferencesService.getUserOrgPreferences(selectedOrganization.id);
-        if (response.requestSucceeded && response.preferences) {
-          setOrgPreferences(response.preferences);
-          setOrgPreferenceForId(selectedOrganization.id);
-        }
-        // once we retrieve the org and it's preferences, we are now bootstrapped for the organization provider
-        setBootstrapped(true);
-      }
-    };
+  const {
+    currentData: orgPreferencesData,
+    isSuccess: orgPreferencesLoaded,
+    isError: orgPreferencesError,
+    refetch: refetchOrgPreferences,
+  } = useGetUserPreferencesQuery(selectedOrganization?.id, { skip: !selectedOrganization });
 
-    void getOrgPreferences();
-  }, [selectedOrganization]);
+  const reloadOrgPreferences = useCallback(() => {
+    void refetchOrgPreferences();
+  }, [refetchOrgPreferences]);
+
+  useEffect(() => {
+    if (selectedOrganization && (orgPreferencesLoaded || orgPreferencesError)) {
+      if (orgPreferencesData?.preferences) {
+        setOrgPreferences(orgPreferencesData.preferences);
+        setOrgPreferenceForId(selectedOrganization.id);
+        // TODO: remove after org preferences readers are served from the RTK store
+        CachedUserService.setUserOrgPreferences(selectedOrganization.id, orgPreferencesData.preferences);
+      }
+      // once we retrieve the org and it's preferences (or the request fails), we are now bootstrapped for the
+      // organization provider
+      setBootstrapped(true);
+    }
+  }, [selectedOrganization, orgPreferencesLoaded, orgPreferencesError, orgPreferencesData]);
 
   const redirectAndNotify = useCallback(
     (organization: Organization) => {
@@ -115,10 +125,6 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     reloadOrgPreferences,
     redirectAndNotify,
   ]);
-
-  useEffect(() => {
-    reloadOrgPreferences();
-  }, [reloadOrgPreferences]);
 
   useEffect(() => {
     if (userBootstrapped && userPreferences && organizations && !isAcceleratorRoute && user?.userType !== 'Funder') {

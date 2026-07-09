@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useUser } from 'src/providers';
-import { PreferencesService } from 'src/services';
 import { InitializedUnits } from 'src/units';
 
 let unitsWriteInFlight = false;
@@ -10,6 +10,7 @@ const useInitializeUnits = (defaultUnits: string): InitializedUnits => {
   const { bootstrapped, userPreferences } = useUser();
   const [result, setResult] = useState<InitializedUnits>({});
   const started = useRef(false);
+  const updateUserPreferences = useUpdateUserPreferences();
 
   useEffect(() => {
     if (!bootstrapped) {
@@ -32,19 +33,15 @@ const useInitializeUnits = (defaultUnits: string): InitializedUnits => {
     unitsWriteInFlight = true;
     void (async () => {
       try {
-        const response = await PreferencesService.updateUserPreferences({ preferredWeightSystem: defaultUnits });
-        if (response.requestSucceeded) {
-          setResult({ units: defaultUnits, unitsAcknowledgedOnMs, updated: true });
-        } else {
-          started.current = false;
-        }
+        await updateUserPreferences({ preferredWeightSystem: defaultUnits });
+        setResult({ units: defaultUnits, unitsAcknowledgedOnMs, updated: true });
       } catch {
         started.current = false;
       } finally {
         unitsWriteInFlight = false;
       }
     })();
-  }, [bootstrapped, userPreferences, defaultUnits]);
+  }, [bootstrapped, userPreferences, defaultUnits, updateUserPreferences]);
 
   return result;
 };

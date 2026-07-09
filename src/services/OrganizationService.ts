@@ -1,4 +1,6 @@
 import { paths } from 'src/api/types/generated-schema';
+import { api } from 'src/queries/generated/preferences';
+import { store } from 'src/redux/store';
 import {
   ManagedLocationType,
   Organization,
@@ -11,7 +13,6 @@ import { isAdmin } from 'src/utils/organization';
 
 import CachedUserService from './CachedUserService';
 import HttpService, { Response } from './HttpService';
-import PreferencesService from './PreferencesService';
 
 /**
  * Service for organization related functionality
@@ -207,7 +208,25 @@ const updateOrganization = async (organization: Organization, options: UpdateOpt
 
   // update preferences to indicate time zone was set by user
   if (response.requestSucceeded && timeZone && !options.skipAcknowledgeTimeZone) {
-    await PreferencesService.updateUserOrgPreferences(organization.id, { timeZoneAcknowledgedOnMs: Date.now() });
+    const organizationId = organization.id;
+    // Read-modify-write against fresh server preferences so we don't clobber sibling org preferences.
+    const getPromise = store.dispatch(
+      api.endpoints.getUserPreferences.initiate(organizationId, { forceRefetch: true })
+    );
+    try {
+      const current = await getPromise.unwrap();
+      const preferences = { ...(current.preferences ?? {}), timeZoneAcknowledgedOnMs: Date.now() };
+      const putPromise = store.dispatch(api.endpoints.updateUserPreferences.initiate({ organizationId, preferences }));
+      try {
+        await putPromise.unwrap();
+      } finally {
+        putPromise.reset();
+      }
+    } catch {
+      // best-effort: preserve the old non-throwing behavior
+    } finally {
+      getPromise.unsubscribe();
+    }
   }
 
   return response;

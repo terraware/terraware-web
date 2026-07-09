@@ -6,8 +6,9 @@ import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import TextWithLink from 'src/components/common/TextWithLink';
 import { APP_PATHS } from 'src/constants';
 import useInitializeUserTimeZone from 'src/hooks/useInitializeUserTimeZone';
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useOrganization, useTimeZones, useUser } from 'src/providers';
-import { OrganizationService, PreferencesService } from 'src/services';
+import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
 import { ClientNotification } from 'src/types/Notifications';
 import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
@@ -23,6 +24,7 @@ export default function useOrganizationNotification(): ClientNotification | null
 
   const { reloadUserPreferences } = useUser();
   const timeZones = useTimeZones();
+  const updateUserPreferences = useUpdateUserPreferences();
 
   const getTimeZoneById = useCallback(
     (id?: string): TimeZoneDescription => getTimeZone(timeZones, id) ?? getUTC(timeZones),
@@ -90,9 +92,12 @@ export default function useOrganizationNotification(): ClientNotification | null
         createdTime: getTodaysDateFormatted(),
         isRead: timeZoneOrgNotificationRead,
         markAsRead: async (read: boolean) => {
-          await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-            timeZoneAcknowledgedOnMs: read ? Date.now() : undefined,
-          });
+          await updateUserPreferences(
+            {
+              timeZoneAcknowledgedOnMs: read ? Date.now() : undefined,
+            },
+            selectedOrganization.id
+          );
 
           // eslint-disable-next-line @typescript-eslint/await-thenable
           await reloadUserPreferences();
@@ -101,5 +106,12 @@ export default function useOrganizationNotification(): ClientNotification | null
     }
 
     return null;
-  }, [timeZoneOrgNotification, orgTimeZone, reloadUserPreferences, selectedOrganization, timeZoneOrgNotificationRead]);
+  }, [
+    timeZoneOrgNotification,
+    orgTimeZone,
+    reloadUserPreferences,
+    selectedOrganization,
+    timeZoneOrgNotificationRead,
+    updateUserPreferences,
+  ]);
 }

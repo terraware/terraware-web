@@ -74,6 +74,10 @@ const config: ConfigFile = {
     './src/queries/generated/plantingSites.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/sites'),
     },
+    './src/queries/generated/preferences.ts': {
+      filterEndpoints: (_, operation) =>
+        operation.path === '/api/v1/users/me/preferences' || operation.path === '/api/v1/users/me/cookies',
+    },
     './src/queries/generated/projects.ts': {
       filterEndpoints: (_, operation) =>
         operation.path.startsWith('/api/v1/projects') && !operation.path.includes('{id}/internalUsers'),
