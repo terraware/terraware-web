@@ -12,7 +12,6 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -75,8 +74,6 @@ export default function NavBar({
   const isProjectModulesRoute = useMatch({ path: APP_PATHS.PROJECT_MODULES + '/', end: false });
   const isActivityLogRoute = useMatch({ path: APP_PATHS.ACTIVITY_LOG + '/', end: false });
 
-  const isPlantingSeasonsEnabled = isEnabled('Planting Seasons');
-
   const closeNavBar = useCallback(() => {
     if (!isDesktop) {
       setShowNavBar(false);
@@ -112,10 +109,10 @@ export default function NavBar({
   );
 
   useEffect(() => {
-    if (isPlantingSeasonsEnabled && selectedOrganization) {
+    if (selectedOrganization) {
       void listPlantingSeasonsForNav({ organizationId: selectedOrganization.id }, true);
     }
-  }, [isPlantingSeasonsEnabled, listPlantingSeasonsForNav, selectedOrganization]);
+  }, [listPlantingSeasonsForNav, selectedOrganization]);
 
   useEffect(() => {
     if (!currentAcceleratorProject && projectsWithModules && projectsWithModules.length > 0) {
@@ -161,7 +158,7 @@ export default function NavBar({
     );
 
     const items = [inventoryMenu];
-    if (isPlantingSeasonsEnabled && hasPlantingSeasonWithTargets) {
+    if (hasPlantingSeasonWithTargets) {
       items.push(inventoryPlanningMenu);
     }
     if (showNurseryWithdrawals) {
@@ -414,16 +411,14 @@ export default function NavBar({
 
           {hasPlantingSites === true ? (
             <>
-              {isPlantingSeasonsEnabled && (
-                <NavItem
-                  label={strings.PLANTING_SEASONS}
-                  selected={!!isPlantingSeasonsRoute}
-                  onClick={() => {
-                    closeAndNavigateTo(APP_PATHS.PLANTING_SEASONS);
-                  }}
-                  id='planting-seasons'
-                />
-              )}
+              <NavItem
+                label={strings.PLANTING_SEASONS}
+                selected={!!isPlantingSeasonsRoute}
+                onClick={() => {
+                  closeAndNavigateTo(APP_PATHS.PLANTING_SEASONS);
+                }}
+                id='planting-seasons'
+              />
               <NavItem
                 label={strings.PLANTING_PROGRESS}
                 selected={!!isPlantingProgressRoute}

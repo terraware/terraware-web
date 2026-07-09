@@ -6,7 +6,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import strings from 'src/strings';
 import { MinimalPlantingSite } from 'src/types/Tracking';
@@ -56,13 +55,11 @@ export default function PlantingSiteDetailsCard({ plantingSite }: PlantingSiteDe
       <Grid item xs={gridSize()} display='flex'>
         <TextField display={true} id='project' label={strings.PROJECT} type='text' value={selectedProject?.name} />
       </Grid>
-      {isEnabled('Planting Seasons') && (
-        <Grid item xs={gridSize()} display='flex' alignItems='center' marginTop={isMobile ? 2 : 0}>
-          <Link fontSize='16px' to={`${APP_PATHS.PLANTING_SEASONS}?plantingSiteId=${plantingSite.id}`}>
-            {strings.MANAGE_PLANTING_SEASONS}
-          </Link>
-        </Grid>
-      )}
+      <Grid item xs={gridSize()} display='flex' alignItems='center' marginTop={isMobile ? 2 : 0}>
+        <Link fontSize='16px' to={`${APP_PATHS.PLANTING_SEASONS}?plantingSiteId=${plantingSite.id}`}>
+          {strings.MANAGE_PLANTING_SEASONS}
+        </Link>
+      </Grid>
     </Grid>
   );
 }
