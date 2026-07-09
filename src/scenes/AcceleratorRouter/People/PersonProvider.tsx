@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { useGetUserDeliverableCategoriesQuery } from 'src/queries/generated/userInternalInterests';
+import { useGetUserInternalInterestsQuery } from 'src/queries/generated/userInternalInterests';
 import { useGetUserQuery } from 'src/queries/generated/users';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -26,7 +26,7 @@ const PersonProvider = ({ children }: Props) => {
     data: internalInterestsData,
     isSuccess: isInternalInterestsSuccess,
     isError: isInternalInterestsError,
-  } = useGetUserDeliverableCategoriesQuery(userId, { skip: userId === -1 });
+  } = useGetUserInternalInterestsQuery(userId, { skip: userId === -1 });
 
   const personData = useMemo<PersonData>(() => {
     if (userSuccess && isInternalInterestsSuccess && userData?.user) {

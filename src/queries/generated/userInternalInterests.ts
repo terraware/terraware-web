@@ -2,15 +2,12 @@ import { baseApi as api } from '../baseApi';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    getUserDeliverableCategories: build.query<
-      GetUserDeliverableCategoriesApiResponse,
-      GetUserDeliverableCategoriesApiArg
-    >({
+    getUserInternalInterests: build.query<GetUserInternalInterestsApiResponse, GetUserInternalInterestsApiArg>({
       query: (queryArg) => ({ url: `/api/v1/users/${queryArg}/internalInterests` }),
     }),
-    updateUserDeliverableCategories: build.mutation<
-      UpdateUserDeliverableCategoriesApiResponse,
-      UpdateUserDeliverableCategoriesApiArg
+    updateUserInternalInterests: build.mutation<
+      UpdateUserInternalInterestsApiResponse,
+      UpdateUserInternalInterestsApiArg
     >({
       query: (queryArg) => ({
         url: `/api/v1/users/${queryArg.userId}/internalInterests`,
@@ -22,12 +19,12 @@ const injectedRtkApi = api.injectEndpoints({
   overrideExisting: false,
 });
 export { injectedRtkApi as api };
-export type GetUserDeliverableCategoriesApiResponse =
+export type GetUserInternalInterestsApiResponse =
   /** status 200 The requested operation succeeded. */ GetUserInternalInterestsResponsePayload;
-export type GetUserDeliverableCategoriesApiArg = number;
-export type UpdateUserDeliverableCategoriesApiResponse =
+export type GetUserInternalInterestsApiArg = number;
+export type UpdateUserInternalInterestsApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
-export type UpdateUserDeliverableCategoriesApiArg = {
+export type UpdateUserInternalInterestsApiArg = {
   userId: number;
   updateUserInternalInterestsRequestPayload: UpdateUserInternalInterestsRequestPayload;
 };
@@ -50,7 +47,7 @@ export type SimpleSuccessResponsePayload = {
   status: SuccessOrError;
 };
 export type UpdateUserInternalInterestsRequestPayload = {
-  /** New set of category assignments. Existing assignments that aren't included here will be removed from the user. */
+  /** New set of interest assignments. Existing assignments that aren't included here will be removed from the user. */
   internalInterests: (
     | 'Compliance'
     | 'Financial Viability'
@@ -64,7 +61,7 @@ export type UpdateUserInternalInterestsRequestPayload = {
   )[];
 };
 export const {
-  useGetUserDeliverableCategoriesQuery,
-  useLazyGetUserDeliverableCategoriesQuery,
-  useUpdateUserDeliverableCategoriesMutation,
+  useGetUserInternalInterestsQuery,
+  useLazyGetUserInternalInterestsQuery,
+  useUpdateUserInternalInterestsMutation,
 } = injectedRtkApi;

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo } from 'react';
 
 import { useUpdateGlobalRolesMutation } from 'src/queries/generated/globalRoles';
-import { useUpdateUserDeliverableCategoriesMutation } from 'src/queries/generated/userInternalInterests';
+import { useUpdateUserInternalInterestsMutation } from 'src/queries/generated/userInternalInterests';
 import { UserWithInternalnterests } from 'src/scenes/AcceleratorRouter/People/UserWithInternalInterests';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -15,7 +15,7 @@ export type Response = {
 export default function useUpdatePerson(): Response {
   const snackbar = useSnackbar();
 
-  const [updateInternalInterests, updateInternalInterestsResponse] = useUpdateUserDeliverableCategoriesMutation();
+  const [updateInternalInterests, updateInternalInterestsResponse] = useUpdateUserInternalInterestsMutation();
   const [updateGlobalRoles, updateGlobalRolesResponse] = useUpdateGlobalRolesMutation();
 
   const update = useCallback(
