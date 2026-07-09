@@ -1,9 +1,9 @@
 import { test } from '@playwright/test';
 
-import { navigateToProjectProfile } from '../utils/navigation';
-import { ProjectDetails, validateProjectProfilePage } from '../utils/projectProfile';
-import { changeToSuperAdmin } from '../utils/userUtils';
-import { exactOptions, waitFor } from '../utils/utils';
+import { navigateToProjectProfile } from '../../utils/navigation';
+import { ProjectDetails, validateProjectProfilePage } from '../../utils/projectProfile';
+import { changeToSuperAdmin } from '../../utils/userUtils';
+import { exactOptions, waitFor } from '../../utils/utils';
 
 test.describe('ProjectProfileTests', () => {
   test.beforeEach(async ({ context, baseURL }, testInfo) => {

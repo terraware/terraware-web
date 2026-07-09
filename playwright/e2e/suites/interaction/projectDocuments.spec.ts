@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-import { APP_PATHS } from '../../../src/constants';
-import { navigateToProjectProfile } from '../utils/navigation';
-import { changeToSuperAdmin } from '../utils/userUtils';
+import { APP_PATHS } from '../../../../src/constants';
+import { navigateToProjectProfile } from '../../utils/navigation';
+import { changeToSuperAdmin } from '../../utils/userUtils';
 
 test.describe('ProjectDocumentsTests', () => {
   test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
