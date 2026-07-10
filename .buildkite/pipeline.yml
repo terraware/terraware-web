@@ -118,6 +118,7 @@ steps:
     depends_on:
       - step: 'build-and-test'
       - step: 'e2e-tests'
+      - step: 'validate-types'
         allow_failure: true
     plugins:
       - *shallow-clone
