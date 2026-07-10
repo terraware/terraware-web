@@ -712,7 +712,7 @@ EVENT_RECORDED_SESSION_DESCRIPTION_1,"Regardez cette session enregistrée à tou
 EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Haut-parleurs ou casque – intégré, branché sur le port USB ou sans fil Bluetooth",b87be889
 EVENTS,Evénements,a18b73bc
 EXCEEDS_AVAILABLE_X,Dépasse le disponible ({0}),4391f9df
-EXCEEDS_READY_TO_PLANT,Dépasse le prêt à planter ({0}),42faa655
+EXCEEDS_READY_TO_PLANT,Le total retiré ({0}) pour tous les substrats dépasse le nombre Prêt à planter ({1}) dans ce lot,3e3cd4a4
 EXCEEDS_TARGET,Dépasse l'objectif,edcff874
 EXCLUSION_AREAS,Zones d'exclusion,08c7d391
 EXISTING,Existant,fa67ac1d
