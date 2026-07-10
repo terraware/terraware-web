@@ -55,3 +55,5 @@ run_tests() {
 # The shell inside Docker expands the glob to all spec files directly in the
 # suites directory, excluding the screenshots subdirectory.
 run_tests "Run remaining end-to-end tests" "playwright/e2e/suites/*.spec.ts"
+
+.buildkite/scripts/upload-playwright-results.sh
