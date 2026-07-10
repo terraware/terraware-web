@@ -713,7 +713,7 @@ EVENT_RECORDED_SESSION_DESCRIPTION_1,Puedes ver esta sesión grabada cuando quie
 EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Altavoces o auriculares: integrados, con conexión USB o inalámbricos con tecnología Bluetooth.",b87be889
 EVENTS,Eventos,a18b73bc
 EXCEEDS_AVAILABLE_X,Supera lo disponible ({0}),4391f9df
-EXCEEDS_READY_TO_PLANT,Supera Listo para Transplantar ({0}),42faa655
+EXCEEDS_READY_TO_PLANT,El total retirado ({0}) en todos los sustratos supera la cantidad Lista para Transplantar ({1}) en este lote,3e3cd4a4
 EXCEEDS_TARGET,Supera el objetivo,edcff874
 EXCLUSION_AREAS,Zonas de exclusión,08c7d391
 EXISTING,Existente,fa67ac1d

@@ -714,6 +714,7 @@ EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Speakers or headset - built-in, US
 EVENTS,Events,
 EXCEEDS_AVAILABLE_X,Exceeds available ({0}),
 EXCEEDS_READY_TO_PLANT,Exceeds Ready to Plant ({0}),
+EXCEEDS_READY_TO_PLANT,Total withdrawn ({0}) across all substrata exceeds Ready to Plant ({1}) in this batch,
 EXCEEDS_TARGET,Exceeds target,
 EXCLUSION_AREAS,Exclusion Areas,
 EXISTING,Existing,
