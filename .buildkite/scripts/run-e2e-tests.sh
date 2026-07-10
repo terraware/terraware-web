@@ -56,8 +56,4 @@ run_tests() {
 # suites directory, excluding the screenshots subdirectory.
 run_tests "Run remaining end-to-end tests" "playwright/e2e/suites/*.spec.ts"
 
-# Move the test output to a "public" subdirectory so it's readable in the
-# S3 bucket without AWS authentication.
-mkdir -p playwright/public
-mv playwright/test-results playwright/public
-mv playwright-report playwright/public/report
+.buildkite/scripts/upload-playwright-results.sh

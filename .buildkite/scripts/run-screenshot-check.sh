@@ -36,8 +36,4 @@ echo "--- :camera_with_flash: Run screenshot regression tests"
   sh -c "node_modules/.bin/wait-on -t 60000 http://localhost:3001 \
          && node_modules/.bin/playwright test playwright/e2e/suites/screenshots --project=prod"
 
-# Move the test output to a "public" subdirectory so it's readable in the
-# S3 bucket without AWS authentication.
-mkdir -p playwright/public
-mv playwright/test-results playwright/public
-mv playwright-report playwright/public/report
+.buildkite/scripts/upload-playwright-results.sh
