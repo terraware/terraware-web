@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-.buildkite/scripts/install-deps.sh --node --tools
-
 echo "--- :buildkite: S3 public artifact files test"
-
 mkdir -p playwright/test-results playwright-report
 date > playwright/test-results/date.txt
 .buildkite/scripts/upload-playwright-results.sh
+
+.buildkite/scripts/install-deps.sh --node --tools
 
 echo "--- :yarn: Install dependencies"
 yarn install --frozen-lockfile --prefer-offline

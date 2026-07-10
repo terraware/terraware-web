@@ -10,5 +10,4 @@ sudo mv playwright-report playwright/public/report
 # We need to disable KMS encryption on public artifacts so they will be
 # downloadable without AWS authentication. There's no good way to do this
 # selectively using the built-in artifacts support, so do it explicitly.
-export BUILDKITE_S3_SSE_ENABLED=false
-buildkite-agent artifact upload 'playwright/public/**/*'
+BUILDKITE_S3_SSE_ENABLED=false buildkite-agent artifact upload 'playwright/public/**/*'
