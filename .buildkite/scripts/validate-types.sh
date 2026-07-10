@@ -3,7 +3,7 @@ set -euo pipefail
 
 .buildkite/scripts/install-deps.sh --node --tools
 
-# generate-types and generate-queries needs the backend's OpenAPI spec at
+# generate-types and generate-queries need the backend's OpenAPI spec at
 # localhost:8080. If a server is already running, reuse it; otherwise start
 # one (no server:reset needed since we only read the spec, not the seeded data).
 if curl -sf http://localhost:8080/swagger-ui/index.html > /dev/null 2>&1; then
