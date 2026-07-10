@@ -26,6 +26,7 @@ import {
   saveSpeciesModal,
   selectQuestionnaireDropdown,
   selectSpeciesModalDropdown,
+  uploadDeliverableDocument,
   validateQuestionnaireField,
   validateQuestionnaireOverallStatus,
   validateQuestionnaireStatusCard,
@@ -236,19 +237,62 @@ test.describe('DeliverableTests', () => {
     await validateQuestionnaireOverallStatus('Test Questionnaire for Phase 1', 'Approved', page);
   });
 
-  test.skip('Document Deliverable', async ({ page }) => {
-    await page.goto('/');
-    await waitFor(page, '#home');
+  test('Document Deliverable', async ({ page }) => {
+    const deliverableName = 'Phase 1 Document';
+
+    await verifyHomepageDeliverableStatus(deliverableName, 'Incomplete', true, 'Not Submitted', page);
 
     await page.getByText('Deliverables', exactOptions).click();
-    await expect(page.getByText('Phase 1 Document', exactOptions)).toBeVisible(); // waits for table to load
-    await page.getByText('Phase 1 Document').click();
+    await expect(page.getByRole('link', { name: deliverableName, ...exactOptions })).toBeVisible(); // waits for table to load
+    await page.getByRole('link', { name: deliverableName, ...exactOptions }).click();
 
-    await page.setInputFiles('input', 'photo-data/test/Highlight.png');
-    await page.getByText('Description *').locator('..').locator('input').fill('TestDescription');
-    await page.getByRole('button', { name: 'Submit' }).click();
+    // upload a document with a description
+    await uploadDeliverableDocument('photo-data/test/Highlight.png', 'TestDescription', page);
 
-    // todo finish this test once we have support for local file storage
+    // the document appears in the list and the deliverable moves to In Review
+    await expect(page.getByText('Highlight.png')).toBeVisible();
+    await expect(page.getByText('TestDescription', exactOptions)).toBeVisible();
+    await expect(page.getByText('In Review')).toBeVisible();
+
+    await navigateHome(page);
+    await verifyHomepageDeliverableStatus(deliverableName, 'In Review', false, '', page);
+
+    // console: request an update
+    await navigateToConsoleDeliverables(page);
+    await page.getByRole('link', { name: deliverableName, ...exactOptions }).click();
+    await requestUpdateQuestionnaire('The document needs to be updated.', page);
+    await expect(page.getByRole('heading', { name: 'Deliverable Update Requested' })).toBeVisible();
+
+    // participant: sees the update request and feedback
+    await navigateConsoleToParticipant(page);
+    await verifyHomepageDeliverableStatus(deliverableName, 'Update Needed', true, 'Update Needed', page);
+    await navigateToParticipantDeliverables(page);
+    await page.getByRole('link', { name: deliverableName, ...exactOptions }).click();
+    await expect(page.getByText('Deliverable Update Needed')).toBeVisible();
+    await expect(page.getByText('The document needs to be updated.')).toBeVisible();
+
+    // re-upload a new document, confirming the status reset
+    await uploadDeliverableDocument('photo-data/test/Highlight1.png', 'UpdatedDescription', page, true);
+    await expect(page.getByText('Highlight1.png')).toBeVisible();
+    await expect(page.getByText('UpdatedDescription', exactOptions)).toBeVisible();
+    await expect(page.getByText('In Review')).toBeVisible();
+
+    // console: approve the deliverable
+    await navigateToConsoleDeliverables(page);
+    await page.getByRole('link', { name: deliverableName, ...exactOptions }).click();
+    await approveQuestionnaireDeliverable(page);
+
+    // participant: sees the approval
+    await navigateConsoleToParticipant(page);
+    await verifyHomepageDeliverableStatus(deliverableName, 'Completed', false, '', page);
+    await navigateToParticipantDeliverables(page);
+    await page.getByRole('link', { name: deliverableName, ...exactOptions }).click();
+    await expect(page.getByText('Deliverable Approved')).toBeVisible();
+    await expect(
+      page.getByText(
+        'This deliverable has been approved. If the project uploads a new document, the status will revert back to “In Review”.'
+      )
+    ).toBeVisible();
   });
 
   test('Species Deliverable', async ({ page }) => {

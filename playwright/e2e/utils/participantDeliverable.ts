@@ -34,6 +34,21 @@ export async function navigateToParticipantDeliverables(page: Page) {
   await page.getByText('Deliverables', exactOptions).click();
 }
 
+export async function uploadDeliverableDocument(
+  filePath: string,
+  description: string,
+  page: Page,
+  confirmStatusChange = false
+) {
+  await page.locator('input[type="file"]').setInputFiles(filePath);
+  if (confirmStatusChange) {
+    // re-uploading after a review resets the status, so confirm before the upload dialog opens
+    await page.getByRole('button', { name: 'Continue and Reset Status' }).click();
+  }
+  await page.locator('#description_0').locator('input').fill(description);
+  await page.getByRole('button', { name: 'Submit', ...exactOptions }).click();
+}
+
 export async function fillQuestionnaireInputField(label: string, fillText: string, page: Page) {
   await page.getByText(label).locator('../../../..').locator('input').fill(fillText);
 }
