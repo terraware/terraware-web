@@ -38,6 +38,7 @@ src/strings/strings-*.js
 
 # playwright
 /playwright-report/
+/playwright/public/
 /playwright/test-results/
 
 # test gaussian splat models

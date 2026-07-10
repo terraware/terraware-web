@@ -46,8 +46,7 @@ steps:
       - *load-secrets
     command: .buildkite/scripts/run-screenshot-check.sh
     artifact_paths:
-      - 'playwright/test-results/**/*'
-      - 'playwright-report/**/*'
+      - 'playwright/public/**/*'
     env:
       SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
       SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
