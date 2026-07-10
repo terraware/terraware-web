@@ -3,6 +3,12 @@ set -euo pipefail
 
 .buildkite/scripts/install-deps.sh --node --tools
 
+# DEBUG
+docker image ls
+docker container ls
+docker buildx du
+
+
 echo "--- :yarn: Install dependencies"
 yarn install --frozen-lockfile --prefer-offline
 
