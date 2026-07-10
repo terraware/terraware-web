@@ -36,7 +36,7 @@ export default function PlantingProgress(): JSX.Element {
     if (selectedPlantingSiteId !== undefined) {
       void getPlantingSite({ id: selectedPlantingSiteId }, true);
     } else if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, full: true, includeZones: false }, true);
+      void listPlantingSites({ organizationId: selectedOrganization.id, full: true, includeStrata: false }, true);
     }
   }, [getPlantingSite, listPlantingSites, selectedPlantingSiteId, selectedOrganization]);
 

@@ -39,9 +39,9 @@ export default function PlantsAndSpeciesCard({
 
   useEffect(() => {
     if (plantingSiteId) {
-      void getPlantingSite({ id: plantingSiteId, includeZones: false }, true);
+      void getPlantingSite({ id: plantingSiteId, includeStrata: false }, true);
     } else if (typeof projectId === 'number') {
-      void listPlantingSites({ projectId, full: true, includeZones: false }, true);
+      void listPlantingSites({ projectId, full: true, includeStrata: false }, true);
       void listPlantingSiteReportedPlants({ projectId }, true);
     }
   }, [getPlantingSite, listPlantingSiteReportedPlants, listPlantingSites, plantingSiteId, projectId]);

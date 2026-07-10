@@ -296,7 +296,7 @@ const useObservationExports = () => {
       const observationResults = results.observation;
 
       const siteResults = await getPlantingSite(
-        { id: observationResults.plantingSiteId, includeZones: false },
+        { id: observationResults.plantingSiteId, includeStrata: false },
         true
       ).unwrap();
       const site = siteResults.site;
@@ -341,7 +341,7 @@ const useObservationExports = () => {
       const observationResults = results.observation;
 
       const siteResults = await getPlantingSite(
-        { id: observationResults.plantingSiteId, includeZones: false },
+        { id: observationResults.plantingSiteId, includeStrata: false },
         true
       ).unwrap();
       const site = siteResults.site;
@@ -383,7 +383,7 @@ const useObservationExports = () => {
       const observationResults = results.observation;
 
       const siteResults = await getPlantingSite(
-        { id: observationResults.plantingSiteId, includeZones: false },
+        { id: observationResults.plantingSiteId, includeStrata: false },
         true
       ).unwrap();
       const site = siteResults.site;
@@ -422,7 +422,7 @@ const useObservationExports = () => {
       const observationResults = results.observation;
 
       const siteResults = await getPlantingSite(
-        { id: observationResults.plantingSiteId, includeZones: false },
+        { id: observationResults.plantingSiteId, includeStrata: false },
         true
       ).unwrap();
       const site = siteResults.site;

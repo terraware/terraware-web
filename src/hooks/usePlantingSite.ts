@@ -17,7 +17,7 @@ const usePlantingSite = (plantingSiteId: number | undefined) => {
 
   useEffect(() => {
     if (plantingSiteId && plantingSiteIdIsValid) {
-      void getPlantingSite({ id: plantingSiteId, includeZones: false }, true);
+      void getPlantingSite({ id: plantingSiteId, includeStrata: false }, true);
     }
   }, [getPlantingSite, plantingSiteId, plantingSiteIdIsValid]);
 

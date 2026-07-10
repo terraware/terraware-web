@@ -23,7 +23,7 @@ const useProjectSiteObservationResults = (
 
   useEffect(() => {
     if (enabled && projectId !== undefined) {
-      void listProjectSites({ projectId, full: true, includeZones: false }, true);
+      void listProjectSites({ projectId, full: true, includeStrata: false }, true);
     }
   }, [enabled, listProjectSites, projectId]);
 

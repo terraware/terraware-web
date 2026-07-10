@@ -9,6 +9,7 @@ const injectedRtkApi = api.injectEndpoints({
           organizationId: queryArg.organizationId,
           projectId: queryArg.projectId,
           full: queryArg.full,
+          includeStrata: queryArg.includeStrata,
           includeZones: queryArg.includeZones,
           simplified: queryArg.simplified,
         },
@@ -39,6 +40,7 @@ const injectedRtkApi = api.injectEndpoints({
       query: (queryArg) => ({
         url: `/api/v1/tracking/sites/${queryArg.id}`,
         params: {
+          includeStrata: queryArg.includeStrata,
           includeZones: queryArg.includeZones,
           simplified: queryArg.simplified,
         },
@@ -81,6 +83,8 @@ export type ListPlantingSitesApiArg = {
   projectId?: number;
   /** If true, include strata and substrata for each site. */
   full?: boolean;
+  includeStrata?: boolean;
+  /** Deprecated. Use includeStrata instead. */
   includeZones?: boolean;
   simplified?: boolean;
 };
@@ -100,6 +104,8 @@ export type DeletePlantingSiteApiArg = number;
 export type GetPlantingSiteApiResponse = /** status 200 OK */ GetPlantingSiteResponsePayload;
 export type GetPlantingSiteApiArg = {
   id: number;
+  includeStrata?: boolean;
+  /** Deprecated. Use includeStrata instead. */
   includeZones?: boolean;
   simplified?: boolean;
 };

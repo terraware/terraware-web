@@ -27,7 +27,7 @@ const useOrganizationPlantingSites = (props?: UseOrganizationPlantingSitesProps)
   const reload = useCallback(
     (preferCacheValue?: boolean) => {
       if (orgId) {
-        void listPlantingSites({ organizationId: orgId, full, includeZones: false }, preferCacheValue);
+        void listPlantingSites({ organizationId: orgId, full, includeStrata: false }, preferCacheValue);
       }
     },
     [full, listPlantingSites, orgId]

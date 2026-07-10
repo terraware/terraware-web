@@ -35,7 +35,7 @@ export default function PlantsReportedPerSpeciesCard({
 
   useEffect(() => {
     if (plantingSiteId) {
-      void getPlantingSite({ id: plantingSiteId, includeZones: false }, true);
+      void getPlantingSite({ id: plantingSiteId, includeStrata: false }, true);
     }
   }, [getPlantingSite, plantingSiteId]);
 

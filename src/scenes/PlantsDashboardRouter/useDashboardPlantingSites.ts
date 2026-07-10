@@ -19,7 +19,7 @@ const useDashboardPlantingSites = (projectId: number | typeof ALL_PLANTING_SITES
   const isProjectSelected = typeof projectId === 'number';
 
   const { currentData, isFetching, isSuccess } = useListPlantingSitesQuery(
-    { organizationId, projectId: isProjectSelected ? projectId : undefined, includeZones: false },
+    { organizationId, projectId: isProjectSelected ? projectId : undefined, includeStrata: false },
     { skip: organizationId === undefined }
   );
 

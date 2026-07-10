@@ -72,7 +72,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
     if (plantingSiteId !== undefined) {
       void getPlantingSite({ id: plantingSiteId }, true);
     } else if (selectedOrganization) {
-      void listPlantingSites({ organizationId: selectedOrganization.id, full: true, includeZones: false }, true);
+      void listPlantingSites({ organizationId: selectedOrganization.id, full: true, includeStrata: false }, true);
     }
   }, [getPlantingSite, listPlantingSites, plantingSiteId, selectedOrganization]);
 

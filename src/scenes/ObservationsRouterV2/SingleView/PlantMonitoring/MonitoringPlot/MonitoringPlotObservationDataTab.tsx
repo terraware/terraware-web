@@ -119,7 +119,7 @@ const MonitoringPlotObservationDataTab = () => {
 
   useEffect(() => {
     if (results) {
-      void getPlantingSite({ id: results.plantingSiteId, includeZones: false }, true);
+      void getPlantingSite({ id: results.plantingSiteId, includeStrata: false }, true);
     }
   }, [getPlantingSite, results]);
 
