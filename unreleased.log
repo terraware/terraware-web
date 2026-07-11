@@ -1,3 +1,4 @@
+fe121a07 SW-8635: Biomass Monitoring Observations: Shrub Crown Diameter not editable for Shrubs in Trees and Shrubs table (#6041)
 bb82edf8 Use custom S3 bucket for Buildkite artifacts (#6038)
 f28e7a0f SW-8580 Finish document deliverable test (#6033)
 a9e18900 Decrease rasterization of virtual walkthroughs when idle (#6036)
