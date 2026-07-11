@@ -227,7 +227,7 @@
     "sass": "^1.99.0",
     "storybook": "^7.0.12",
     "ts-node": "^10.9.2",
-    "typescript": "^5.0.0",
+    "typescript": "^7.0.0",
     "typescript-eslint": "^7.15.0",
     "wait-on": "^9.0.5",
     "webpack-dev-middleware": "^8.0.0"
