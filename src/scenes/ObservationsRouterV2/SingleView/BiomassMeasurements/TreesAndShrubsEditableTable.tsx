@@ -202,7 +202,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         id: 'shrubDiameter',
         accessorKey: 'shrubDiameter',
         header: strings.SHRUB_CROWN_DIAMETER_CM,
-        enableEditing: (row) => row.original.treeGrowthForm === 'Shrub' && forestType === 'Terrestrial',
+        enableEditing: (row) => row.original.treeGrowthForm === 'Shrub',
         editConfig: {
           onSave: (row, value) => saveRecordedTree('shrubDiameter', row, value),
         },
