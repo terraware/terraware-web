@@ -233,7 +233,7 @@
     "webpack-dev-middleware": "^8.0.0"
   },
   "resolutions": {
-    "@babel/traverse": "8.0.0",
+    "@babel/traverse": "8.0.4",
     "axios": "^1.15.0",
     "brace-expansion": "^2.0.3",
     "fork-ts-checker-webpack-plugin": "^9.0.0",
