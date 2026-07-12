@@ -242,7 +242,7 @@
     "picomatch": "^4.0.4",
     "serialize-javascript": "^7.0.5",
     "simple-git": "^3.32.3",
-    "string-width": "8.2.1",
+    "string-width": "8.2.2",
     "strip-ansi": "6.0.1",
     "wrap-ansi": "10.0.0"
   },
