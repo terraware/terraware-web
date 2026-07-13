@@ -5202,10 +5202,10 @@
     "@rsbuild/core" "^2.0.6"
     "@types/chai" "^5.2.3"
 
-"@rstest/coverage-istanbul@^0.10.0":
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/@rstest/coverage-istanbul/-/coverage-istanbul-0.10.2.tgz#6e4baedd063b969bc45673b276fa9ae1bb25e3de"
-  integrity sha512-PWgXviLBg8WRVC8B2OCOZvxAfGR55crYgHx8Chd62gr9w89d2QoPuNaJglGSaauyMSJ/wfWU7K4+H5bHupD7yQ==
+"@rstest/coverage-istanbul@^0.11.0":
+  version "0.11.1"
+  resolved "https://registry.yarnpkg.com/@rstest/coverage-istanbul/-/coverage-istanbul-0.11.1.tgz#daed6fb1fd96568aa6039a167eee9adb900e6872"
+  integrity sha512-7ub5W4IoihHFtsbGH19Pb1mAmTTcqdqRvVG1M0g3mU4a/Tan7ZN1w0cZrIersmMV/p0qZP9gmF24EMQPjRIfBg==
   dependencies:
     istanbul-lib-coverage "^3.2.2"
     istanbul-lib-report "^3.0.1"
