@@ -136,7 +136,9 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
       markSubmitted();
       onClose();
       if (response?.id) {
-        navigate(APP_PATHS.PLANTING_SEASONS_VIEW.replace(':plantingSeasonId', String(response.id)));
+        navigate(
+          `${APP_PATHS.PLANTING_SEASONS_VIEW.replace(':plantingSeasonId', String(response.id))}?tab=species-targets`
+        );
       }
     } catch (e) {
       snackbar.toastError();
