@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-import { openTodoFromHome } from '../participantHome';
+import { openTodoFromHome } from '../../participantHome';
 import {
   addQuestionnaireComments,
   approveDeliverableSpecies,
@@ -13,8 +13,8 @@ import {
   validateConsoleQuestionnaireStatusCard,
   validateQuestionnaireQuestionUpdateComments,
   validateQuestionnaireUpdateComments,
-} from '../utils/consoleDeliverable';
-import { navigateConsoleToParticipant, navigateHome } from '../utils/navigation';
+} from '../../utils/consoleDeliverable';
+import { navigateConsoleToParticipant, navigateHome } from '../../utils/navigation';
 import {
   deleteDeliverableSpecies,
   fillQuestionnaireInputField,
@@ -33,9 +33,9 @@ import {
   validateQuestionnaireTableFields,
   validateSpeciesStatus,
   verifyHomepageDeliverableStatus,
-} from '../utils/participantDeliverable';
-import { changeToSuperAdmin } from '../utils/userUtils';
-import { exactOptions, selectOrg, waitFor } from '../utils/utils';
+} from '../../utils/participantDeliverable';
+import { changeToSuperAdmin } from '../../utils/userUtils';
+import { exactOptions, selectOrg, waitFor } from '../../utils/utils';
 
 test.describe('DeliverableTests', () => {
   test.beforeEach(async ({ page, context, baseURL }) => {

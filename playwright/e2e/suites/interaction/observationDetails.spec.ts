@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-import { changeToSuperAdmin } from '../utils/userUtils';
-import { selectOrg, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../../utils/userUtils';
+import { selectOrg, waitFor } from '../../utils/utils';
 
 test.describe('ObservationDetailsTests', () => {
   test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
