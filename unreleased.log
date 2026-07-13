@@ -1,3 +1,4 @@
+650001a0 SW-8633 Fix condition to show tooltip (#6055)
 13b47cc2 SW-8641 Remove "Planting Season Withdrawal" event, which was not part of requirements (#6054)
 5c075265 SW-8637 Planting Season alert banner showing notices out of order (esp Season Closed) (#6053)
 04c65588 SW-8633 Show tooltip for Planting Purpose at all times (#6050)
