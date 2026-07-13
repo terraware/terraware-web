@@ -68,7 +68,7 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
               placement='bottom'
               title={
                 <Box>
-                  <Typography>
+                  <Typography whiteSpace='nowrap'>
                     {strings.LOCATION}: {swCoordinatesLat}, {swCoordinatesLong}
                   </Typography>
                   <Typography>
