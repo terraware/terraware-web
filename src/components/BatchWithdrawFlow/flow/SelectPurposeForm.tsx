@@ -529,11 +529,11 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return (
       <>
         {strings.PLANTING}
-        {noReadySeedlings ? (
-          <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS} />
-        ) : outplantDisabled ? (
+        {outplantDisabled ? (
           <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_PLANTING_SITES} />
-        ) : null}
+        ) : (
+          <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS} />
+        )}
       </>
     );
   };
