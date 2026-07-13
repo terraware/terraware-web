@@ -236,7 +236,7 @@ const PurposeAndDestinationStep = ({
   const outplantLabel = (
     <>
       {strings.PLANTING}
-      {noReadySeedlings && <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS} />}
+      {<IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS} />}
       {!noReadySeedlings && plantingSitesDisabled && (
         <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_PLANTING_SITES} />
       )}
