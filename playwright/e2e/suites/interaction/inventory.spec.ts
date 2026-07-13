@@ -238,7 +238,7 @@ test.describe('InventoryTests', () => {
     await page.getByRole('link', { name: batchNumber }).click();
     await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).click();
     await page.locator('.dialog-box').waitFor({ state: 'visible' });
-    await page.getByLabel('Planting').check();
+    await page.getByRole('radio', { name: 'Planting' }).check();
     await page.locator('#to-planting-site path').click();
     await page.locator('li').getByText('Planting Site', exactOptions).click();
     await page.locator('#stratum path').click();
