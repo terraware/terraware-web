@@ -111,6 +111,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
         </Typography>
         <Tooltip
           placement='bottom'
+          slotProps={{ tooltip: { sx: { maxWidth: 'none' } } }}
           title={
             <Box>
               {!monitoringPlot?.isAdHoc && (
