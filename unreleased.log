@@ -1,3 +1,5 @@
+e16f2bf6 SW-8502 Observations: In Plot info bubble, Latitude and Longitude do not appear on the same line (#6051)
+48ae40d2 SW-7966 Documents List page Deal Name selector is unsorted (#6052)
 b1757b5a Cleanup playwright tests (#6040)
 c865c98c Update dependency @rstest/core to ^0.11.0 (#6042)
 eebd185c Update dependency @rstest/coverage-istanbul to ^0.11.0 (#6043)
