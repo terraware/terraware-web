@@ -405,8 +405,9 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
             value={quantityNotes}
             onChange={onChangeQuantityNotes}
             type='textarea'
-            label={strings.NOTES}
+            label={strings.QUANTITY_NOTES}
             errorText={validateFields && quantityChanged && !quantityNotes.trim() ? strings.REQUIRED_FIELD : ''}
+            placeholder={strings.REMAINING_QUANTITY_NOTES_PLACEHOLDER}
             required
           />
         </Grid>

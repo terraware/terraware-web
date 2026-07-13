@@ -1,8 +1,8 @@
 import { Locator, expect, test } from '@playwright/test';
 import { Page } from 'playwright-core';
 
-import { changeToSuperAdmin } from '../utils/userUtils';
-import { exactOptions, selectOrg, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../../utils/userUtils';
+import { exactOptions, selectOrg, waitFor } from '../../utils/utils';
 
 test.describe('InventoryTests', () => {
   test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
