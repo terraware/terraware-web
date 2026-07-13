@@ -66,6 +66,7 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
           {hasLocation && (
             <Tooltip
               placement='bottom'
+              slotProps={{ tooltip: { sx: { maxWidth: 'none' } } }}
               title={
                 <Box>
                   <Typography whiteSpace='nowrap'>
