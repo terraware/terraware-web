@@ -1,13 +1,10 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import { useAcceleratorProjects } from 'src/hooks/useAcceleratorProjects';
-import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
-import { selectUser } from 'src/redux/features/user/usersSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetUserQuery } from 'src/queries/generated/users';
 import strings from 'src/strings';
-import { User } from 'src/types/User';
 import { Document } from 'src/types/documentProducer/Document';
 import { DocumentTemplate } from 'src/types/documentProducer/DocumentTemplate';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
@@ -19,24 +16,13 @@ export type DocumentMetadataProps = {
 };
 
 const DocumentMetadata = ({ document, documentTemplate }: DocumentMetadataProps): JSX.Element => {
-  const { name, ownedBy, modifiedBy, modifiedTime, projectId } = document;
+  const { name, modifiedBy, modifiedTime, projectId } = document;
 
-  const dispatch = useAppDispatch();
   const theme = useTheme();
   const { acceleratorProjects } = useAcceleratorProjects();
 
-  const [modifiedByUser, setModifiedByUser] = useState<User>();
-
-  const modifiedBySelector = useAppSelector(selectUser(modifiedBy));
-
-  useEffect(() => {
-    setModifiedByUser(modifiedBySelector);
-  }, [modifiedBySelector]);
-
-  useEffect(() => {
-    void dispatch(requestGetUser(ownedBy));
-    void dispatch(requestGetUser(modifiedBy));
-  }, [dispatch, ownedBy, modifiedBy]);
+  const { currentData: modifiedByData } = useGetUserQuery(modifiedBy, { skip: !modifiedBy });
+  const modifiedByUser = modifiedByData?.user;
 
   const modifiedByName = useMemo(() => getUserDisplayName(modifiedByUser), [modifiedByUser]);
   const modifiedTimeDisplay = useMemo(() => getDateTimeDisplayValue(new Date(modifiedTime).getTime()), [modifiedTime]);

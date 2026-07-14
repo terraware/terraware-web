@@ -1,6 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
+import { api } from 'src/queries/generated/users';
+import { QueryTagTypes } from 'src/queries/tags';
 import GlobalRolesService from 'src/services/GlobalRolesService';
 import { Response } from 'src/services/HttpService';
 import strings from 'src/strings';
@@ -49,7 +50,7 @@ export const requestUpdateGlobalRolesUser = createAsyncThunk(
 
     const response: Response = await GlobalRolesService.update(user, globalRoles);
     if (response && response.requestSucceeded) {
-      void dispatch(requestGetUser(user.id));
+      dispatch(api.util.invalidateTags([{ type: QueryTagTypes.Users, id: user.id }]));
       return user.id;
     }
 

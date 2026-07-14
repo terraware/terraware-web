@@ -25,9 +25,7 @@ import {
 } from 'src/queries/generated/funderActivities';
 import { useGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useGetProjectQuery } from 'src/queries/generated/projects';
-import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
-import { selectUser } from 'src/redux/features/user/usersSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetUserQuery } from 'src/queries/generated/users';
 import { ActivityMediaFile, activityTypeLabel } from 'src/types/Activity';
 import { getObsPhotoTypeLabel, isObservationActivity } from 'src/utils/activityUtils';
 import { getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
@@ -343,7 +341,6 @@ const ActivityDetailView = ({
   const { isAllowed } = useUser();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { isFunderRoute } = useFunderPortal();
-  const dispatch = useAppDispatch();
   const navigate = useSyncNavigate();
   const query = useQuery();
   const location = useStateLocation();
@@ -351,9 +348,9 @@ const ActivityDetailView = ({
   const { goToAcceleratorActivityEdit, goToActivityEdit } = useNavigateTo();
   const { selectedOrganization, organizations } = useOrganization();
 
-  const verifiedByUser = useAppSelector(
-    selectUser(activity.type === 'admin' ? activity.payload.verifiedBy : undefined)
-  );
+  const verifiedById = activity.type === 'admin' ? activity.payload.verifiedBy : undefined;
+  const { currentData: verifiedByData } = useGetUserQuery(verifiedById ?? -1, { skip: !verifiedById });
+  const verifiedByUser = verifiedByData?.user;
   const isAllowedEditActivities = isAcceleratorRoute
     ? isAllowed('EDIT_ACTIVITIES')
     : isAllowed('EDIT_ACTIVITIES', { organization: selectedOrganization });
@@ -452,12 +449,6 @@ const ActivityDetailView = ({
   const [getActivityMediaStream, { data: mediaStreamData }] = useLazyGetActivityMediaStream1Query();
   const [getFunderActivityMediaStream, { data: funderMediaStreamData }] = useLazyGetActivityMediaStreamQuery();
   const [publishActivityMutation] = useAdminPublishActivityMutation();
-
-  useEffect(() => {
-    if (activity.type === 'admin' && activity?.payload?.verifiedBy && !verifiedByUser) {
-      void dispatch(requestGetUser(activity?.payload?.verifiedBy));
-    }
-  }, [activity, dispatch, verifiedByUser]);
 
   const verifiedByLabel = useMemo(() => {
     const verifiedByName = verifiedByUser

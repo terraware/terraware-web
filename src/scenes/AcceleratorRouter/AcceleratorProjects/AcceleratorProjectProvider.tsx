@@ -6,9 +6,7 @@ import { useAcceleratorOrgs } from 'src/hooks/useAcceleratorOrgs';
 import { useLocalization } from 'src/providers';
 import { useProjectData } from 'src/providers/Project/ProjectContext';
 import { useLazyGetProjectAcceleratorDetailsQuery } from 'src/queries/generated/acceleratorProjects';
-import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
-import { selectUser } from 'src/redux/features/user/usersSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetUserQuery } from 'src/queries/generated/users';
 import strings from 'src/strings';
 import { AcceleratorOrg } from 'src/types/Accelerator';
 import { AcceleratorProject } from 'src/types/AcceleratorProject';
@@ -22,7 +20,6 @@ export type Props = {
 };
 
 const AcceleratorProjectProvider = ({ children }: Props) => {
-  const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { project, projectId } = useProjectData();
   const { acceleratorOrgs, reload: reloadAll } = useAcceleratorOrgs();
@@ -48,8 +45,10 @@ const AcceleratorProjectProvider = ({ children }: Props) => {
     reload: () => {},
   });
 
-  const createdByUser = useAppSelector(selectUser(project?.createdBy));
-  const modifiedByUser = useAppSelector(selectUser(project?.modifiedBy));
+  const { currentData: createdByData } = useGetUserQuery(project?.createdBy ?? -1, { skip: !project?.createdBy });
+  const { currentData: modifiedByData } = useGetUserQuery(project?.modifiedBy ?? -1, { skip: !project?.modifiedBy });
+  const createdByUser = createdByData?.user;
+  const modifiedByUser = modifiedByData?.user;
   const [projectMeta, setProjectMeta] = useState<ProjectMeta>({});
 
   const [organization, setOrganization] = useState<AcceleratorOrg>();
@@ -65,15 +64,6 @@ const AcceleratorProjectProvider = ({ children }: Props) => {
       void getProjectAcceleratorDetails(projectId);
     }
   }, [projectId, reloadAll, getProjectAcceleratorDetails]);
-
-  useEffect(() => {
-    const userIds = new Set([project?.createdBy, project?.modifiedBy]);
-    userIds.forEach((userId) => {
-      if (userId) {
-        void dispatch(requestGetUser(userId));
-      }
-    });
-  }, [dispatch, project?.createdBy, project?.modifiedBy]);
 
   useEffect(() => {
     setProjectMeta({

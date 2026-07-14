@@ -14,12 +14,6 @@ import PreferencesService from './PreferencesService';
 /**
  * Types exported from service
  */
-export type UserData = {
-  user?: User;
-};
-
-export type UserResponse = Response & UserData;
-
 export type UpdateOptions = {
   skipAcknowledgeTimeZone?: boolean;
 };
@@ -32,41 +26,16 @@ type CachedTimeZone = {
 
 // endpoint
 const CURRENT_USER_ENDPOINT = '/api/v1/users/me';
-const ENDPOINT_USER = '/api/v1/users/{userId}';
-const ENDPOINT_USERS = '/api/v1/users';
 
 type UpdateUserPayloadType = paths[typeof CURRENT_USER_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
-type GetUserResponsePayload = paths[typeof ENDPOINT_USER]['get']['responses'][200]['content']['application/json'];
-type SearchUserResponsePayload = paths[typeof ENDPOINT_USERS]['get']['responses'][200]['content']['application/json'];
-
 const httpCurrentUser = HttpService.root(CURRENT_USER_ENDPOINT);
-const httpUser = HttpService.root(ENDPOINT_USER);
-const httpUsers = HttpService.root(ENDPOINT_USERS);
 
 const cachedTimeZone: CachedTimeZone = {
   cachedOn: 0,
   promise: null,
   updated: false,
 };
-
-const get = async (userId: number): Promise<UserResponse> =>
-  httpUser.get<GetUserResponsePayload, UserData>(
-    {
-      urlReplacements: {
-        '{userId}': `${userId}`,
-      },
-    },
-    (data) => ({ user: data?.user })
-  );
-
-const getUserByEmail = async (email: string): Promise<UserResponse> =>
-  httpUsers.get<SearchUserResponsePayload, UserData>(
-    {
-      params: { email },
-    },
-    (data) => ({ user: data?.user })
-  );
 
 /**
  * update current/active user
@@ -169,9 +138,7 @@ const initializeUnits = async (units: string): Promise<InitializedUnits> => {
  * Exported functions
  */
 const UserService = {
-  get,
   getInitializedTimeZone,
-  getUserByEmail,
   initializeTimeZone,
   initializeUnits,
   updateUser,
