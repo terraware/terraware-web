@@ -63,6 +63,7 @@ const createFacility = async (facility: Omit<Facility, 'id'> & SubLocations): Pr
     buildCompletedDate: facility.buildCompletedDate,
     operationStartedDate: facility.operationStartedDate,
     capacity: facility.capacity,
+    location: facility.location,
   };
 
   const serverResponse: Response = await httpFacilities.post({ entity });
@@ -98,6 +99,7 @@ const updateFacility = async (facility: Facility): Promise<Response> => {
     buildCompletedDate: facility.buildCompletedDate,
     operationStartedDate: facility.operationStartedDate,
     capacity: facility.capacity,
+    location: facility.location,
   };
 
   return await httpFacility.put({

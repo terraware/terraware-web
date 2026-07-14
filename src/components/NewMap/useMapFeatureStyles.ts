@@ -102,6 +102,15 @@ const useMapFeatureStyles = () => {
     [theme]
   );
 
+  const nurseryLayerStyle = useMemo(
+    (): MapIconComponentStyle => ({
+      iconColor: theme.palette.TwClrBaseBlue500 as string,
+      iconName: 'iconNursery',
+      type: 'icon',
+    }),
+    [theme]
+  );
+
   const livePlantStyle = useMemo(
     (): MapIconComponentStyle => ({
       iconColor: '#40B0A6',
@@ -151,6 +160,7 @@ const useMapFeatureStyles = () => {
     adHocPlotsLayerStyle,
     deadPlantStyle,
     livePlantStyle,
+    nurseryLayerStyle,
     observationEventStyle,
     permanentPlotsLayerStyle,
     plotPhotoStyle,

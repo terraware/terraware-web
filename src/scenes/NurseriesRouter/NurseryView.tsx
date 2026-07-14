@@ -47,6 +47,8 @@ export default function NurseryView(): JSX.Element {
     organizationId: selectedOrganization?.id || -1,
     connectionState: 'Not Connected',
   });
+  const [latitude, setLatitude] = useState<string>('');
+  const [longitude, setLongitude] = useState<string>('');
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const [selectedNursery, setSelectedNursery] = useState<Facility | null>();
   const navigate = useSyncNavigate();
@@ -95,7 +97,11 @@ export default function NurseryView(): JSX.Element {
       buildCompletedDate: selectedNursery?.buildCompletedDate,
       operationStartedDate: selectedNursery?.operationStartedDate,
       capacity: selectedNursery?.capacity,
+      location: selectedNursery?.location,
     });
+    const coordinates = selectedNursery?.location?.coordinates;
+    setLongitude(coordinates?.[0] !== undefined ? String(coordinates[0]) : '');
+    setLatitude(coordinates?.[1] !== undefined ? String(coordinates[1]) : '');
   }, [selectedNursery, setRecord, selectedOrganization]);
 
   const saveNursery = async () => {
@@ -123,11 +129,19 @@ export default function NurseryView(): JSX.Element {
       setValidateDates(true);
       return;
     }
+    const parsedLatitude = parseFloat(latitude);
+    const parsedLongitude = parseFloat(longitude);
+    const location: Facility['location'] =
+      latitude !== '' && longitude !== '' && !Number.isNaN(parsedLatitude) && !Number.isNaN(parsedLongitude)
+        ? { type: 'Point', coordinates: [parsedLongitude, parsedLatitude] }
+        : undefined;
+
     let id = selectedNursery?.id;
     const response = selectedNursery
-      ? await FacilityService.updateFacility({ ...record } as Facility)
+      ? await FacilityService.updateFacility({ ...record, location } as Facility)
       : await FacilityService.createFacility({
           ...record,
+          location,
           subLocationNames: editedSubLocations?.map((l) => l.name as string),
         });
 
@@ -295,6 +309,24 @@ export default function NurseryView(): JSX.Element {
                 type='number'
                 min={0}
                 aria-label='date-picker'
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <TextField
+                id={'latitude'}
+                label={strings.LATITUDE}
+                value={latitude}
+                onChange={(value) => setLatitude(value as string)}
+                type='number'
+              />
+            </Grid>
+            <Grid item xs={gridSize()}>
+              <TextField
+                id={'longitude'}
+                label={strings.LONGITUDE}
+                value={longitude}
+                onChange={(value) => setLongitude(value as string)}
+                type='number'
               />
             </Grid>
           </Grid>

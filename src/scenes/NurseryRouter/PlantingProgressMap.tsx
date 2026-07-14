@@ -16,6 +16,7 @@ import {
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapPhotoDrawer from 'src/components/NewMap/useMapPhotoDrawer';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
+import useNurseriesMapLegend from 'src/components/NewMap/useNurseriesMapLegend';
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useWithdrawalPhotosForPlantingSite from 'src/components/NewMap/useWithdrawalPhotosForPlantingSite';
@@ -27,8 +28,10 @@ import {
   useLazyListPlantingSitesQuery,
 } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
+import { getAllNurseries } from 'src/utils/organization';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
+import NurseryLocationMapDrawer from './NurseryLocationMapDrawer';
 import PlantingProgressMapDrawer from './PlantingProgressMapDrawer';
 
 type SelectedFeature = {
@@ -48,7 +51,8 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   const { fitBounds } = useMapUtils(mapRef);
   const { selectedOrganization } = useOrganization();
 
-  const { sitesLayerStyle, strataLayerStyle, substrataLayerStyle, withdrawalPhotoStyle } = useMapFeatureStyles();
+  const { nurseryLayerStyle, sitesLayerStyle, strataLayerStyle, substrataLayerStyle, withdrawalPhotoStyle } =
+    useMapFeatureStyles();
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('substrata');
 
   const { plotPhotosLegendGroup, withdrawalPhotosVisible } = usePlotPhotosMapLegend({
@@ -56,6 +60,13 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
     includeWithdrawals: true,
     withdrawalsDisabled: plantingSiteId === undefined,
   });
+
+  const { nurseriesLegendGroup, nurseriesVisible } = useNurseriesMapLegend();
+
+  const nurseries = useMemo(
+    () => (selectedOrganization ? getAllNurseries(selectedOrganization).filter((nursery) => !!nursery.location) : []),
+    [selectedOrganization]
+  );
 
   const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
 
@@ -87,6 +98,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   }, [allOrgSites, plantingSiteId, singleSite]);
 
   const [selectedFeature, setSelectedFeature] = useState<SelectedFeature | undefined>();
+  const [selectedNurseryId, setSelectedNurseryId] = useState<number | undefined>();
   const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
 
   const withdrawalPhotos = useWithdrawalPhotosForPlantingSite({
@@ -96,6 +108,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
 
   useEffect(() => {
     setSelectedFeature(undefined);
+    setSelectedNurseryId(undefined);
     setDrawerOpen(false);
     selectPhotos([]);
   }, [plantingSiteId, selectPhotos]);
@@ -103,6 +116,17 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   const selectFeature = useCallback(
     (siteId: number, layerId: 'sites' | 'strata' | 'substrata', featureId: string) => () => {
       setSelectedFeature({ layerId, featureId, plantingSiteId: siteId });
+      setSelectedNurseryId(undefined);
+      selectPhotos([]);
+      setDrawerOpen(true);
+    },
+    [selectPhotos]
+  );
+
+  const selectNursery = useCallback(
+    (nurseryId: number) => () => {
+      setSelectedNurseryId(nurseryId);
+      setSelectedFeature(undefined);
       selectPhotos([]);
       setDrawerOpen(true);
     },
@@ -116,6 +140,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
       } else {
         setDrawerOpen(false);
         setSelectedFeature(undefined);
+        setSelectedNurseryId(undefined);
         selectPhotos([]);
       }
     },
@@ -236,8 +261,8 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
   }, [fitBounds, sites]);
 
   const legends = useMemo(
-    (): MapLegendGroup[] => [plantingSiteLegendGroup, plotPhotosLegendGroup],
-    [plantingSiteLegendGroup, plotPhotosLegendGroup]
+    (): MapLegendGroup[] => [plantingSiteLegendGroup, plotPhotosLegendGroup, nurseriesLegendGroup],
+    [nurseriesLegendGroup, plantingSiteLegendGroup, plotPhotosLegendGroup]
   );
 
   const withdrawalPhotoMarkers = useMemo(
@@ -248,6 +273,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
         latitude: entry.gpsCoordinates.coordinates[1],
         onClick: () => {
           setSelectedFeature(undefined);
+          setSelectedNurseryId(undefined);
           selectPhotos([
             {
               kind: 'withdrawal-photo',
@@ -267,6 +293,26 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
     [selectPhotos, selectedPhotos, withdrawalPhotos]
   );
 
+  const nurseryMarkers = useMemo(
+    (): MapMarker[] =>
+      nurseries.flatMap((nursery) => {
+        const coordinates = nursery.location?.coordinates;
+        if (!coordinates) {
+          return [];
+        }
+        return [
+          {
+            id: `nursery/${nursery.id}`,
+            longitude: coordinates[0],
+            latitude: coordinates[1],
+            onClick: selectNursery(nursery.id),
+            selected: selectedNurseryId === nursery.id,
+          },
+        ];
+      }),
+    [nurseries, selectNursery, selectedNurseryId]
+  );
+
   const mapMarkers = useMemo(
     (): MapMarkerGroup[] => [
       {
@@ -275,13 +321,34 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
         style: withdrawalPhotoStyle,
         visible: withdrawalPhotosVisible,
       },
+      {
+        markerGroupId: 'nurseries',
+        markers: nurseryMarkers,
+        style: nurseryLayerStyle,
+        visible: nurseriesVisible,
+      },
     ],
-    [withdrawalPhotoMarkers, withdrawalPhotoStyle, withdrawalPhotosVisible]
+    [
+      nurseryLayerStyle,
+      nurseryMarkers,
+      nurseriesVisible,
+      withdrawalPhotoMarkers,
+      withdrawalPhotoStyle,
+      withdrawalPhotosVisible,
+    ]
+  );
+
+  const selectedNursery = useMemo(
+    () => nurseries.find((nursery) => nursery.id === selectedNurseryId),
+    [nurseries, selectedNurseryId]
   );
 
   const drawerContent = useMemo(() => {
     if (selectedPhotos.length > 0) {
       return photoDrawerContent;
+    }
+    if (selectedNursery) {
+      return <NurseryLocationMapDrawer nurseryId={selectedNursery.id} nurseryName={selectedNursery.name} />;
     }
     if (!selectedFeature) {
       return undefined;
@@ -293,7 +360,7 @@ export default function PlantingProgressMap({ plantingSiteId }: PlantingProgress
         plantingSiteId={selectedFeature.plantingSiteId}
       />
     );
-  }, [photoDrawerContent, selectedFeature, selectedPhotos.length]);
+  }, [photoDrawerContent, selectedFeature, selectedNursery, selectedPhotos.length]);
 
   const drawerSize = selectedPhotos.length > 0 ? photoDrawerSize : 'small';
 
