@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { useUpdateGlobalRolesMutation } from 'src/queries/generated/globalRoles';
-import { requestGetUser } from 'src/redux/features/user/usersAsyncThunks';
 import { requestUpdateUserInternalInterests } from 'src/redux/features/userInternalInterests/userInternalInterestsAsyncThunks';
 import { selectUserInternalInterestsUpdateRequest } from 'src/redux/features/userInternalInterests/userInternalInterestsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -22,7 +21,6 @@ export default function useUpdatePerson(): Response {
   const [internalInterestsRequestId, setInternalInterestsRequest] = useState('');
   const internalInterestsRequest = useAppSelector(selectUserInternalInterestsUpdateRequest(internalInterestsRequestId));
   const [updateGlobalRoles, updateGlobalRolesResponse] = useUpdateGlobalRolesMutation();
-  const [updatedUserId, setUpdatedUserId] = useState<number>();
 
   const update = useCallback(
     (user: UserWithInternalnterests) => {
@@ -35,7 +33,6 @@ export default function useUpdatePerson(): Response {
 
       setInternalInterestsRequest(categoriesRequest.requestId);
 
-      setUpdatedUserId(user.id);
       void updateGlobalRoles({
         userId: user.id,
         updateGlobalRolesRequestPayload: { globalRoles: user.globalRoles },
@@ -43,12 +40,6 @@ export default function useUpdatePerson(): Response {
     },
     [dispatch, updateGlobalRoles]
   );
-
-  useEffect(() => {
-    if (updateGlobalRolesResponse.isSuccess && updatedUserId !== undefined) {
-      void dispatch(requestGetUser(updatedUserId));
-    }
-  }, [dispatch, updateGlobalRolesResponse.isSuccess, updatedUserId]);
 
   useEffect(() => {
     if (internalInterestsRequest?.status === 'error' || updateGlobalRolesResponse.isError) {
