@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
 
-import { ProjectDetails, publishProjectProfile, validateProjectProfilePage } from '../utils/projectProfile';
-import { changeToFunderUser, changeToSuperAdmin } from '../utils/userUtils';
+import { ProjectDetails, publishProjectProfile, validateProjectProfilePage } from '../../utils/projectProfile';
+import { changeToFunderUser, changeToSuperAdmin } from '../../utils/userUtils';
 
 test.describe('FunderProjectProfileTests', () => {
   test('Publish Project and then View Published Project', async ({ page, context, baseURL }, testInfo) => {

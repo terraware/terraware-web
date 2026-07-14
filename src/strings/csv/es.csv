@@ -1753,6 +1753,7 @@ QUANTITIES,Cantidades,bd99b2de
 QUANTITY,Cantidad,5130efc1
 QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,La cantidad debe ser mayor o igual a 0,5a55f459
 QUANTITY_MUST_BE_GREATER_THAN_ZERO,La cantidad debe ser mayor que 0,7c491d14
+QUANTITY_NOTES,Notas de cantidad,94baf637
 QUANTITY_TO_PLANT,Cantidad a plantar,14ee1db4
 QUANTITY_TO_PLANT_TOOLTIP,Cantidad de plantas programadas para ser plantadas en esta Fecha de Plantación.,d031febb
 QUARTER_YEAR,T{0} {1},637ce0a5

@@ -1,10 +1,10 @@
 import { expect, test } from '@playwright/test';
 import { Page } from 'playwright-core';
 
-import { navigateToFundingEntities } from '../utils/navigation';
-import { publishProjectProfile } from '../utils/projectProfile';
-import { changeToSuperAdmin } from '../utils/userUtils';
-import { exactOptions } from '../utils/utils';
+import { navigateToFundingEntities } from '../../utils/navigation';
+import { publishProjectProfile } from '../../utils/projectProfile';
+import { changeToSuperAdmin } from '../../utils/userUtils';
+import { exactOptions } from '../../utils/utils';
 
 type Funder = {
   name: string;

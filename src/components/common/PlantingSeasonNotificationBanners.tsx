@@ -41,11 +41,11 @@ type NotificationGroupBodyProps = {
 const notificationSortOrder: Record<PlantingSeasonNotificationType, number> = {
   SpeciesTargetsAdded: 1,
   SpeciesTargetsUpdated: 2,
-  PlantingSeasonClosed: 3,
-  AllocationQuantitiesUpdated: 4,
+  AllocationQuantitiesUpdated: 3,
+  ScheduledPlantingDateRequested: 4,
   SeasonWithdrawalRecorded: 5,
   PlantingSeasonPastEndDate: 6,
-  ScheduledPlantingDateRequested: 7,
+  PlantingSeasonClosed: 7,
 };
 
 const getSortedSpeciesNames = (notification: PlantingSeasonNotificationPayload, activeLocale: string | null) =>

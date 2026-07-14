@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Step, StepLabel, Stepper, Tooltip, Typography, useTheme } from '@mui/material';
-import { Dropdown, DropdownItem, Icon } from '@terraware/web-components';
+import { Dropdown, DropdownItem, Icon, IconTooltip } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
@@ -475,9 +475,12 @@ const Step1Content = ({
         <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} textAlign='left'>
           {strings.PURPOSE_REQUIRED}
         </Typography>
-        <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxt} textAlign='left'>
-          {strings.PLANTING}
-        </Typography>
+        <Box display={'flex'}>
+          <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxt} textAlign='left'>
+            {strings.PLANTING}
+          </Typography>
+          <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS} />
+        </Box>
       </Box>
 
       <Box maxWidth='320px'>
