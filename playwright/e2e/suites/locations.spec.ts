@@ -70,8 +70,8 @@ test.describe('LocationTests', () => {
     await page.getByLabel('Build Completion Date').fill('2024-02-01');
     await page.getByLabel('Operation Start Date').click();
     await page.getByLabel('Operation Start Date').fill('2024-02-03');
-    await page.getByRole('spinbutton').click();
-    await page.getByRole('spinbutton').fill('500');
+    await page.locator('#capacity').getByRole('spinbutton').click();
+    await page.locator('#capacity').getByRole('spinbutton').fill('500');
     await page.getByRole('button', { name: 'Add Sub-Location' }).click();
     await page.locator('#sub-location-name').getByRole('textbox').click();
     await page.locator('#sub-location-name').getByRole('textbox').fill('Garage');
