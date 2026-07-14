@@ -9,8 +9,6 @@ import BackToLink from 'src/components/common/BackToLink';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
 import { requestFetchBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { selectBatch } from 'src/redux/features/batches/batchesSelectors';
@@ -42,7 +40,6 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
   const { speciesId } = useParams<{ speciesId: string }>();
   const { nurseryId } = useParams<{ nurseryId: string }>();
   const batch = useAppSelector(selectBatch(batchId || -1));
-  const navigate = useSyncNavigate();
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
   const [inventoryNursery, setInventoryNursery] = useState<Facility>();
   const { selectedOrganization } = useOrganization();
@@ -55,21 +52,14 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
       Number(batch?.germinatingQuantity) >
     0;
 
-  const isPlantingSeasonsEnabled = isEnabled('Planting Seasons');
   const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
 
   const openWithdraw = () => {
     if (!batchId) {
       return;
     }
-    if (isPlantingSeasonsEnabled) {
-      setWithdrawModalOpen(true);
-    } else {
-      navigate({
-        pathname: APP_PATHS.BATCH_WITHDRAW,
-        search: `?batchId=${batchId.toString()}&source=${window.location.pathname}`,
-      });
-    }
+
+    setWithdrawModalOpen(true);
   };
 
   useEffect(() => {

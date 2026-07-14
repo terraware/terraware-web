@@ -34,6 +34,9 @@ agents:
   # Run all steps on the same kind of runner.
   queue: 'x86-8core'
 
+env:
+  BUILDKITE_ARTIFACT_UPLOAD_DESTINATION: 's3://$BUILDKITE_PLUGIN_S3_CACHE_BUCKET/artifacts/$BUILDKITE_PIPELINE_SLUG/$BUILDKITE_BUILD_ID'
+
 steps:
   - label: ':graphite: CI optimizer'
     key: 'graphite-ci-optimizer'
@@ -59,6 +62,7 @@ steps:
       - artifacts#v1.9.4:
           upload: 'dist'
           compressed: 'dist.tgz'
+          s3-upload-acl: 'private'
     command: .buildkite/scripts/build-and-test.sh
 
   - label: ':vercel: Deploy Vercel preview'
@@ -89,9 +93,6 @@ steps:
       - *restore-dist
       - *load-secrets
     command: .buildkite/scripts/run-e2e-tests.sh
-    artifact_paths:
-      - 'playwright/test-results/**/*'
-      - 'playwright-report/**/*'
     env:
       SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
       SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
@@ -118,6 +119,7 @@ steps:
     depends_on:
       - step: 'build-and-test'
       - step: 'e2e-tests'
+      - step: 'validate-types'
         allow_failure: true
     plugins:
       - *shallow-clone
@@ -188,3 +190,9 @@ steps:
       - *load-secrets
       - *cache-node-modules
     command: .buildkite/scripts/deploy-docs.sh
+
+notify:
+  - slack:
+      channels:
+        - '#buildkite-builds'
+    if: build.state == "failed" && build.branch == "main"

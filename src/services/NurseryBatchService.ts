@@ -456,12 +456,13 @@ export const updateBatch = async (batch: UpdateBatchRequestPayloadWithId): Promi
 /**
  * Update a batch quantity
  */
-const updateBatchQuantities = async (batch: Batch): Promise<Response> => {
+const updateBatchQuantities = async (batch: Batch, notes?: string): Promise<Response> => {
   const entity: UpdateBatchQuantitiesRequestPayload = {
     germinatingQuantity: batch.germinatingQuantity,
     hardeningOffQuantity: batch.hardeningOffQuantity,
     activeGrowthQuantity: batch.activeGrowthQuantity,
     readyQuantity: batch.readyQuantity,
+    notes,
     version: batch.version,
   };
 

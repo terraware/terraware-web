@@ -16,7 +16,6 @@ import {
 import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
@@ -233,28 +232,16 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     setRowSelection(newSelection);
   }, [filteredBatches]);
 
-  const getSelectedRowsAsQueryParams = useCallback(() => {
-    const batchIds = selectedRows.map((row) => `batchId=${row.id as string | number}`);
-    return `?${batchIds.join('&')}&source=${window.location.pathname}`;
-  }, [selectedRows]);
-
-  const isPlantingSeasonsEnabled = isEnabled('Planting Seasons');
   const [withdrawModalBatchIds, setWithdrawModalBatchIds] = useState<number[] | undefined>(undefined);
 
   const bulkWithdrawSelectedRows = useCallback(() => {
-    if (isPlantingSeasonsEnabled) {
-      const ids = selectedRows.map((row) => Number(row.id));
-      if (ids.length === 0) {
-        return;
-      }
-      setWithdrawModalBatchIds(ids);
+    const ids = selectedRows.map((row) => Number(row.id));
+    if (ids.length === 0) {
       return;
     }
-    navigate({
-      pathname: APP_PATHS.BATCH_WITHDRAW,
-      search: getSelectedRowsAsQueryParams(),
-    });
-  }, [isPlantingSeasonsEnabled, selectedRows, navigate, getSelectedRowsAsQueryParams]);
+    setWithdrawModalBatchIds(ids);
+    return;
+  }, [selectedRows]);
 
   const totalSelectedQuantity = useMemo<number>(
     () =>
@@ -333,14 +320,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
           id='withdraw-batch'
           label={strings.WITHDRAW}
           onClick={() => {
-            if (isPlantingSeasonsEnabled) {
-              setWithdrawModalBatchIds([Number(batch.id)]);
-            } else {
-              navigate({
-                pathname: APP_PATHS.BATCH_WITHDRAW,
-                search: `?batchId=${batch.id as string | number}&source=${window.location.pathname}`,
-              });
-            }
+            setWithdrawModalBatchIds([Number(batch.id)]);
           }}
           size='small'
           priority='secondary'
@@ -348,7 +328,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         />
       );
     },
-    [navigate, strings, isPlantingSeasonsEnabled]
+    [strings]
   );
 
   const QuantityCell = useCallback(

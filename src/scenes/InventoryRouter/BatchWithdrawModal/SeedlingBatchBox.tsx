@@ -35,11 +35,11 @@ const SeedlingBatchBox = ({
 }: SeedlingBatchBoxProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
-  const tableColumns = isPlanting ? 'minmax(180px, 2fr) minmax(120px, 1fr) 112px' : '110px repeat(4, 154px)';
+  const tableColumns = isPlanting ? 'minmax(180px, 2fr) minmax(120px, 1fr) 112px' : '110px repeat(4, 164px)';
   const tableGap = isPlanting ? theme.spacing(4) : theme.spacing(1);
   const tableSx = {
     boxSizing: 'border-box' as const,
-    ...(isPlanting ? {} : { minWidth: '726px' }),
+    ...(isPlanting ? {} : { minWidth: '830px' }),
   };
   const withdrawInputSx = { justifySelf: 'end', width: '100px' };
   const phaseInputSx = { width: '90px', flexShrink: 0 };
@@ -182,7 +182,7 @@ const SeedlingBatchBox = ({
                     max={batch.readyQuantity}
                     errorText={
                       exceeds
-                        ? strings.formatString(strings.EXCEEDS_READY_TO_PLANT, batch.readyQuantity).toString()
+                        ? strings.formatString(strings.EXCEEDS_READY_TO_PLANT, value, batch.readyQuantity).toString()
                         : ''
                     }
                   />
@@ -217,7 +217,7 @@ const SeedlingBatchBox = ({
                           }
                         />
                       </Box>
-                      <Typography fontSize='16px' textAlign='left' sx={{ minWidth: '36px' }}>
+                      <Typography fontSize='16px' textAlign='left' sx={{ minWidth: '62px', whiteSpace: 'nowrap' }}>
                         /{available.toLocaleString()}
                       </Typography>
                     </Box>

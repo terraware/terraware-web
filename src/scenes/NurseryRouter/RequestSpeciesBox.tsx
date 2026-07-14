@@ -114,7 +114,9 @@ const RequestSpeciesBox = ({
                   min={0}
                   max={batch.readyQuantity}
                   errorText={
-                    exceeds ? strings.formatString(strings.EXCEEDS_READY_TO_PLANT, batch.readyQuantity).toString() : ''
+                    exceeds
+                      ? strings.formatString(strings.EXCEEDS_READY_TO_PLANT, batchTotal, batch.readyQuantity).toString()
+                      : ''
                   }
                 />
               </Box>

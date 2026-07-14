@@ -8,7 +8,6 @@ import appVersionReducers from './features/appVersion/appVersionSlice';
 import applicationReducers from './features/application/applicationSlice';
 import batchesReducers from './features/batches/batchesSlice';
 import deliverablesReducers from './features/deliverables/deliverablesSlice';
-import disclaimersReducers from './features/disclaimer/disclaimerSlice';
 import documentProducerReducers from './features/documentProducer';
 import draftPlantingSiteReducers from './features/draftPlantingSite/draftPlantingSiteSlice';
 import eventReducers from './features/events/eventsSlice';
@@ -43,7 +42,6 @@ export const reducers = {
   ...appVersionReducers,
   ...batchesReducers,
   ...deliverablesReducers,
-  ...disclaimersReducers,
   ...documentProducerReducers,
   ...draftPlantingSiteReducers,
   ...eventReducers,

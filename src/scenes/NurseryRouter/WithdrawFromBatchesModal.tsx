@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Step, StepLabel, Stepper, Tooltip, Typography, useTheme } from '@mui/material';
-import { Dropdown, DropdownItem, Icon } from '@terraware/web-components';
+import { Dropdown, DropdownItem, Icon, IconTooltip } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
@@ -403,6 +403,7 @@ const WithdrawFromBatchesModal = ({
           withdrawDate={withdrawDate}
           setWithdrawDate={setWithdrawDate}
           nurseryOptions={nurseryOptions}
+          isFetchingNurseryOptions={isFetchingNurseryOptions}
           projectOptions={availableProjectsForBatches}
           requestSpecies={request.species}
           readyBySpecies={readyBySpecies}
@@ -435,6 +436,7 @@ type Step1ContentProps = {
   withdrawDate: string;
   setWithdrawDate: (date: string) => void;
   nurseryOptions: DropdownItem[];
+  isFetchingNurseryOptions: boolean;
   projectOptions?: Project[];
   requestSpecies: PlantingDateRequestRow['species'];
   readyBySpecies: Map<number, number>;
@@ -448,6 +450,7 @@ const Step1Content = ({
   withdrawDate,
   setWithdrawDate,
   nurseryOptions,
+  isFetchingNurseryOptions,
   projectOptions,
   requestSpecies,
   readyBySpecies,
@@ -472,9 +475,12 @@ const Step1Content = ({
         <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} textAlign='left'>
           {strings.PURPOSE_REQUIRED}
         </Typography>
-        <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxt} textAlign='left'>
-          {strings.PLANTING}
-        </Typography>
+        <Box display={'flex'}>
+          <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxt} textAlign='left'>
+            {strings.PLANTING}
+          </Typography>
+          <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS} />
+        </Box>
       </Box>
 
       <Box maxWidth='320px'>
@@ -489,17 +495,28 @@ const Step1Content = ({
       </Box>
       <Box display='flex' gap={theme.spacing(2)} flexWrap='wrap'>
         <Box flex={1} minWidth='240px' maxWidth='320px'>
-          <Dropdown
-            id='nursery'
-            label={strings.FROM_NURSERY_REQUIRED}
-            placeholder={strings.SELECT_NURSERY}
-            options={nurseryOptions}
-            selectedValue={facilityId}
-            onChange={(value) => setFacilityId(value !== undefined && value !== '' ? Number(value) : undefined)}
-            fullWidth
-            sx={{ textAlign: 'left' }}
-            fixedMenu
-          />
+          {!isFetchingNurseryOptions && nurseryOptions.length === 0 ? (
+            <>
+              <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} textAlign='left'>
+                {strings.FROM_NURSERY_REQUIRED}
+              </Typography>
+              <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxt} textAlign='left'>
+                {strings.NO_NURSERIES_WITH_REQUESTED_SPECIES}
+              </Typography>
+            </>
+          ) : (
+            <Dropdown
+              id='nursery'
+              label={strings.FROM_NURSERY_REQUIRED}
+              placeholder={strings.SELECT_NURSERY}
+              options={nurseryOptions}
+              selectedValue={facilityId}
+              onChange={(value) => setFacilityId(value !== undefined && value !== '' ? Number(value) : undefined)}
+              fullWidth
+              sx={{ textAlign: 'left' }}
+              fixedMenu
+            />
+          )}
         </Box>
 
         {facilityId !== undefined && (projectOptions?.length ?? 0) > 0 && (

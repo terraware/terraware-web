@@ -35,3 +35,5 @@ echo "--- :camera_with_flash: Run screenshot regression tests"
 "${DOCKER_BASE[@]}" \
   sh -c "node_modules/.bin/wait-on -t 60000 http://localhost:3001 \
          && node_modules/.bin/playwright test playwright/e2e/suites/screenshots --project=prod"
+
+.buildkite/scripts/upload-playwright-results.sh

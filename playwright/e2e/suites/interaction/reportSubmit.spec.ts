@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
-import { changeToSuperAdmin } from '../utils/userUtils';
-import { exactOptions, selectOrg, waitFor } from '../utils/utils';
+import { changeToSuperAdmin } from '../../utils/userUtils';
+import { exactOptions, selectOrg, waitFor } from '../../utils/utils';
 
 // Phase 1 Project (projectId=3) belongs to Terraformation (staging) org (id=1)
 // and has a cohort/phase set, making it a valid accelerator project for reports.

@@ -53,7 +53,6 @@ const injectedRtkApi = api.injectEndpoints({
             'PlantingSeasonScheduledDate',
             'PlantingSeasonScheduledDateSpecies',
             'PlantingSeasonSpeciesTarget',
-            'PlantingSeasonWithdrawal',
           ] satisfies EventSubject[],
         },
       }),

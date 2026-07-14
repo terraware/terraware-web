@@ -29,11 +29,13 @@ export default function DocumentsView(): JSX.Element | null {
 
   const availableProjects = useMemo(
     () =>
-      acceleratorProjects.map((project) => ({
-        id: project.projectId,
-        name: project.dealName || '',
-        dealName: project.dealName,
-      })),
+      acceleratorProjects
+        .map((project) => ({
+          id: project.projectId,
+          name: project.dealName || '',
+          dealName: project.dealName,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name)),
     [acceleratorProjects]
   );
 

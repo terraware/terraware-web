@@ -10,7 +10,6 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PlantingSeasonNotificationBanners from 'src/components/common/PlantingSeasonNotificationBanners';
 import TfMain from 'src/components/common/TfMain';
-import isEnabled from 'src/features';
 import { useOrganization } from 'src/providers';
 import { useListPlantingDateRequestsQuery } from 'src/queries/search/plantingDateRequests';
 import strings from 'src/strings';
@@ -24,11 +23,10 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
   const contentRef = useRef(null);
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization?.id;
-  const isPlantingSeasonsEnabled = isEnabled('Planting Seasons');
 
   const { data: requests } = useListPlantingDateRequestsQuery(
     { organizationId: organizationId ?? 0 },
-    { skip: !organizationId || !isPlantingSeasonsEnabled }
+    { skip: !organizationId }
   );
 
   const requestsCount = requests?.length ?? 0;
@@ -41,15 +39,15 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
         children: <NurseryWithdrawals />,
       },
     ];
-    if (isPlantingSeasonsEnabled) {
-      baseTabs.push({
-        id: 'requests',
-        label: strings.formatString(strings.REQUESTS_X, requestsCount).toString(),
-        children: <PlantingDateRequestsTabContent />,
-      });
-    }
+
+    baseTabs.push({
+      id: 'requests',
+      label: strings.formatString(strings.REQUESTS_X, requestsCount).toString(),
+      children: <PlantingDateRequestsTabContent />,
+    });
+
     return baseTabs;
-  }, [isPlantingSeasonsEnabled, requestsCount]);
+  }, [requestsCount]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'withdrawals',
@@ -72,13 +70,11 @@ export default function NurseryPlantingsAndWithdrawalsView(): JSX.Element {
             <PageSnackbar />
           </PageHeaderWrapper>
           <Box ref={contentRef} display='flex' flexDirection='column' flexGrow={1} maxWidth='100%'>
-            {isPlantingSeasonsEnabled && (
-              <PlantingSeasonNotificationBanners
-                organizationId={organizationId}
-                notificationPage='Withdrawals'
-                marginBottom={theme.spacing(3)}
-              />
-            )}
+            <PlantingSeasonNotificationBanners
+              organizationId={organizationId}
+              notificationPage='Withdrawals'
+              marginBottom={theme.spacing(3)}
+            />
             <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
           </Box>
         </Grid>

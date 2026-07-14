@@ -713,7 +713,7 @@ EVENT_RECORDED_SESSION_DESCRIPTION_1,Puedes ver esta sesión grabada cuando quie
 EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Altavoces o auriculares: integrados, con conexión USB o inalámbricos con tecnología Bluetooth.",b87be889
 EVENTS,Eventos,a18b73bc
 EXCEEDS_AVAILABLE_X,Supera lo disponible ({0}),4391f9df
-EXCEEDS_READY_TO_PLANT,Supera Listo para Transplantar ({0}),42faa655
+EXCEEDS_READY_TO_PLANT,El total retirado ({0}) en todos los sustratos supera la cantidad Lista para Transplantar ({1}) en este lote,3e3cd4a4
 EXCEEDS_TARGET,Supera el objetivo,edcff874
 EXCLUSION_AREAS,Zonas de exclusión,08c7d391
 EXISTING,Existente,fa67ac1d
@@ -1280,6 +1280,7 @@ NO_LOCATION_FOUND,Ubicación no encontrada,8b4b8dab
 NO_MAP_DATA,No hay datos cartográficos que mostrar para este sitio de plantación.,1c2d3fa2
 NO_NOTIFICATIONS,No hay notificaciones que mostrar.,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Antes de poder agregar y administrar el inventario de su vivero, necesitará contar con un vivero y especies dentro de Terraware. Solo los administradores pueden agregar viveros; contáctese con el suyo para obtener ayuda.",93c44729
+NO_NURSERIES_WITH_REQUESTED_SPECIES,Ningún vivero tiene cantidades de la especie solicitada listas para plantar.,cbc1672d
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,No se han programado observaciones,c05456cd
 NO_PENDING_REQUESTS,No hay solicitudes pendientes.,89bea434
 NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE,No hay solicitudes pendientes para el Sitio de Plantación seleccionado.,10a348ac
@@ -1751,6 +1752,7 @@ QUADRAT_PHOTOS_CANNOT_BE_DELETED,No se pueden eliminar las fotos de cuadrantes,2
 QUANTITIES,Cantidades,bd99b2de
 QUANTITY,Cantidad,5130efc1
 QUANTITY_MUST_BE_GREATER_THAN_OR_EQUAL_TO_ZERO,La cantidad debe ser mayor o igual a 0,5a55f459
+QUANTITY_NOTES,Notas de cantidad,94baf637
 QUANTITY_TO_PLANT,Cantidad a plantar,14ee1db4
 QUANTITY_TO_PLANT_TOOLTIP,Cantidad de plantas programadas para ser plantadas en esta Fecha de Plantación.,d031febb
 QUARTER_YEAR,T{0} {1},637ce0a5

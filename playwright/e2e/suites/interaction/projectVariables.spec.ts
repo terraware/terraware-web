@@ -1,8 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-import { navigateToProjectProfile } from '../utils/navigation';
-import { changeToSuperAdmin } from '../utils/userUtils';
-import { waitFor } from '../utils/utils';
+import { navigateToProjectProfile } from '../../utils/navigation';
+import { changeToSuperAdmin } from '../../utils/userUtils';
+import { waitFor } from '../../utils/utils';
 
 test.describe('ProjectVariablesTests', () => {
   test.beforeEach(async ({ context, baseURL }, testInfo) => {

@@ -28,6 +28,12 @@ const yOnPlane = (x: number, z: number, normal: Vec3, point: Vec3, fallback: num
 /** Frame-rate-independent damping lerp rate — matches PlayCanvas CameraControls. */
 const dampRate = (damping: number, dt: number) => 1 - Math.pow(damping, dt * 1000);
 
+/** Below this angular delta (degrees) the damped lerp snaps to its target and stops writing. */
+const ANGLE_EPSILON = 1e-3;
+
+/** Below this positional delta (world units) an idle frame skips the transform write. */
+const POSITION_EPSILON = 1e-5;
+
 export class WalkthroughCamera extends Script {
   static scriptName = 'walkthroughCamera';
 
@@ -293,12 +299,29 @@ export class WalkthroughCamera extends Script {
     this._syncGroundPlane();
 
     // Lerp current angles toward targets using the same damping as CameraControls.
+    // Snap to the target once within ANGLE_EPSILON so the asymptotic lerp actually
+    // settles instead of emitting ever-smaller micro-rotations for ~0.4s after each
+    // drag. The gsplat sorter guards its own re-sorts with an epsilon, so this mainly
+    // trims that sort tail; it does not affect per-frame rendering (autoRender does).
     const r = dampRate(this.rotateDamping, dt);
-    this._pitch += (this._targetPitch - this._pitch) * r;
-    this._yaw += (this._targetYaw - this._yaw) * r;
-    this._pitch = math.clamp(this._pitch, this.pitchMin, this.pitchMax);
+    let nextPitch = this._pitch + (this._targetPitch - this._pitch) * r;
+    let nextYaw = this._yaw + (this._targetYaw - this._yaw) * r;
+    if (Math.abs(this._targetPitch - nextPitch) < ANGLE_EPSILON) {
+      nextPitch = this._targetPitch;
+    }
+    if (Math.abs(this._targetYaw - nextYaw) < ANGLE_EPSILON) {
+      nextYaw = this._targetYaw;
+    }
+    nextPitch = math.clamp(nextPitch, this.pitchMin, this.pitchMax);
 
-    this.entity.setEulerAngles(this._pitch, this._yaw, 0);
+    // Only write the rotation when it actually changed, to avoid needlessly dirtying
+    // the scene node once the angles have settled.
+    const anglesChanged = nextPitch !== this._pitch || nextYaw !== this._yaw;
+    this._pitch = nextPitch;
+    this._yaw = nextYaw;
+    if (anglesChanged) {
+      this.entity.setEulerAngles(this._pitch, this._yaw, 0);
+    }
 
     const pos = this.entity.getPosition();
     let nx = pos.x;
@@ -351,7 +374,17 @@ export class WalkthroughCamera extends Script {
     const groundY = this._hasGroundPlane
       ? yOnPlane(nx, nz, this._planeNormal, this._planePoint, this.boundsCenter.y) + this.averageCameraHeight
       : this.boundsCenter.y;
-    this.entity.setPosition(nx, this.freeFly ? ny : groundY, nz);
+    const targetY = this.freeFly ? ny : groundY;
+    // Only write the position when it actually moved. This keeps the scene node clean on
+    // idle frames; note it does not stop per-frame rasterization — while autoRender is on
+    // the app renders every frame regardless of whether the transform changed.
+    if (
+      Math.abs(nx - pos.x) > POSITION_EPSILON ||
+      Math.abs(targetY - pos.y) > POSITION_EPSILON ||
+      Math.abs(nz - pos.z) > POSITION_EPSILON
+    ) {
+      this.entity.setPosition(nx, targetY, nz);
+    }
   }
 
   destroy() {
