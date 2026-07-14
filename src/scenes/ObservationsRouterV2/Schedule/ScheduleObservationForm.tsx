@@ -79,6 +79,12 @@ export default function ScheduleObservationForm({
     }
   }, [getPlantingSite, targetObservation]);
 
+  useEffect(() => {
+    if (!plantingSite && selectedPlantingSiteId === undefined && observableSites.length === 1) {
+      setSelectedPlantingSiteId(observableSites[0].id);
+    }
+  }, [observableSites, plantingSite, selectedPlantingSiteId]);
+
   const [startDate, setStartDate] = useState<string>();
   const [endDate, setEndDate] = useState<string>();
   const [requestedSubstratumIds, setRequestedSubstratumIds] = useState<number[]>();
