@@ -976,7 +976,7 @@ const AddSpeciesRow = ({
   const quantity = draft.quantityInput ?? draft.quantity.toString();
   const parsedQuantity = getSpeciesDraftQuantity(draft);
   const quantityToValidate = Number.isNaN(parsedQuantity) ? 0 : parsedQuantity;
-  const belowMinimum = selectedSpeciesId !== undefined && quantityToValidate <= 0;
+  const belowMinimum = selectedSpeciesId !== undefined && quantity.trim() !== '' && quantityToValidate <= 0;
   const exceedsGoal =
     selectedSpeciesId !== undefined && quantityExceedsAvailableToSchedule(quantityToValidate, availableToSchedule);
   const selectedSpecies = selectedSpeciesId === undefined ? undefined : species.find((s) => s.id === selectedSpeciesId);
@@ -1121,7 +1121,7 @@ const SpeciesRow = ({
   const availableToSchedule = getAvailableToSchedule(allocated, scheduledOther);
   const parsedDraftQuantity = Math.max(0, Number(draftQuantity));
   const quantityToValidate = Number.isNaN(parsedDraftQuantity) ? draft.quantity : parsedDraftQuantity;
-  const belowMinimum = quantityToValidate <= 0;
+  const belowMinimum = draftQuantity.trim() !== '' && quantityToValidate <= 0;
   const exceedsGoal = quantityExceedsAvailableToSchedule(quantityToValidate, availableToSchedule);
 
   const commitQuantity = () => {
