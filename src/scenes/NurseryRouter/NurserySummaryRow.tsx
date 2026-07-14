@@ -54,7 +54,7 @@ const NurserySummaryRow = ({ species, ready }: NurserySummaryRowProps): JSX.Elem
         {ready.toLocaleString()}
       </Typography>
       <Typography fontSize='16px' textAlign='right' color={theme.palette.TwClrTxt}>
-        {species.requestedQuantity.toLocaleString()}
+        {Math.max(0, species.requestedQuantity - species.withdrawnQuantity).toLocaleString()}
       </Typography>
       <Typography fontSize='16px' textAlign='right' color={coverageColor} fontWeight={600}>
         {coverageLabel}

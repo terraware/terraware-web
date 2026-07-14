@@ -49,9 +49,22 @@ const RequestSpeciesBox = ({
           {species.scientificName}
           {species.commonName ? ` (${species.commonName})` : ''}
         </Typography>
-        <Typography fontSize='14px' fontWeight={600}>
-          {species.quantity.toLocaleString()} {strings.REQUESTED}
-        </Typography>
+        <Box
+          display={'flex'}
+          alignItems={'center'}
+          sx={{
+            backgroundColor: theme.palette.TwClrBaseWhite,
+            borderRadius: theme.spacing(1),
+            padding: theme.spacing(0, 1),
+          }}
+        >
+          <Typography fontSize='14px' fontWeight={600} noWrap paddingRight={1}>
+            {strings.REMAINING_TO_WITHDRAW}:
+          </Typography>
+          <Typography fontSize='16px' fontWeight={600}>
+            {Math.max(0, species.quantity - species.withdrawnQuantity).toLocaleString()}
+          </Typography>
+        </Box>
       </Box>
       <Box
         display='grid'
