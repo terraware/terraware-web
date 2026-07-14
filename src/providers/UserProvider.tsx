@@ -1,10 +1,13 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
+import { baseApi } from 'src/queries/baseApi';
+import { useGetMyselfQuery } from 'src/queries/generated/users';
+import { QueryTagTypes } from 'src/queries/tags';
 import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelectors';
 import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
 import { requestUserCookieConsentUpdate } from 'src/redux/features/user/usersAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { PreferencesService, UserService } from 'src/services';
+import { CachedUserService, PreferencesService } from 'src/services';
 import { User } from 'src/types/User';
 import { GlobalRolePermission, isAllowed as isAllowedACL } from 'src/utils/acl';
 import { isTerraformationEmail } from 'src/utils/user';
@@ -17,10 +20,21 @@ export type UserProviderProps = {
 };
 
 export default function UserProvider({ children }: UserProviderProps): JSX.Element {
-  const [user, setUser] = useState<User>();
   const [userPreferences, setUserPreferences] = useState<PreferencesType>();
   const userAnalyticsState = useAppSelector(selectUserAnalytics);
   const dispatch = useAppDispatch();
+
+  const { currentData, refetch } = useGetMyselfQuery();
+
+  // Persist user after an AppReset due to organization change
+  const [user, setUser] = useState<User>();
+
+  useEffect(() => {
+    if (currentData?.user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setUser(currentData.user);
+    }
+  }, [currentData]);
 
   const updateUserPreferences = useCallback(async (preferences: PreferencesType) => {
     const response = await PreferencesService.updateUserPreferences(preferences);
@@ -42,40 +56,15 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
   }, [setUserPreferences]);
 
   const reloadUser = useCallback(() => {
-    const populateUser = async () => {
-      const response = await UserService.getUser();
-
-      if (response.requestSucceeded) {
-        setUser(response.user);
-        if (response.user && !userAnalyticsState?.gtmInstrumented && (window as any).INIT_GTAG) {
-          dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
-
-          // Put the language in the "lang" attribute of the <html> tag before initializing Google
-          // Analytics because the cookie consent UI code will look there to determine which
-          // language to use for the consent UI. This needs to happen before the call to INIT_GTAG,
-          // so it lives here instead of in LocalizationProvider.
-          const locale = response.user.locale;
-          if (locale) {
-            document.documentElement.setAttribute('lang', locale);
-          }
-
-          (window as any).INIT_GTAG(
-            response.user.id.toString(),
-            isTerraformationEmail(response.user.email) ? 'true' : 'false'
-          );
-        }
-      }
-    };
-
-    void populateUser();
-  }, [setUser, userAnalyticsState?.gtmInstrumented, dispatch]);
+    void refetch();
+  }, [refetch]);
 
   const updateUserCookieConsent = useCallback(
     async (consent: boolean) => {
       await dispatch(requestUserCookieConsentUpdate({ cookiesConsented: consent }));
-      reloadUser();
+      dispatch(baseApi.util.invalidateTags([{ type: QueryTagTypes.Users, id: 'ME' }]));
     },
-    [dispatch, reloadUser]
+    [dispatch]
   );
 
   const isAllowed = useCallback(
@@ -116,10 +105,27 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
   }, [reloadUserPreferences]);
 
   useEffect(() => {
-    if (!user) {
-      reloadUser();
+    if (user) {
+      CachedUserService.setUser(user);
     }
-  }, [user, reloadUser]);
+  }, [user]);
+
+  useEffect(() => {
+    if (user && !userAnalyticsState?.gtmInstrumented && (window as any).INIT_GTAG) {
+      dispatch(updateGtmInstrumented({ gtmInstrumented: true }));
+
+      // Put the language in the "lang" attribute of the <html> tag before initializing Google
+      // Analytics because the cookie consent UI code will look there to determine which
+      // language to use for the consent UI. This needs to happen before the call to INIT_GTAG,
+      // so it lives here instead of in LocalizationProvider.
+      const locale = user.locale;
+      if (locale) {
+        document.documentElement.setAttribute('lang', locale);
+      }
+
+      (window as any).INIT_GTAG(user.id.toString(), isTerraformationEmail(user.email) ? 'true' : 'false');
+    }
+  }, [user, userAnalyticsState?.gtmInstrumented, dispatch]);
 
   return <UserContext.Provider value={userData}>{children}</UserContext.Provider>;
 }
