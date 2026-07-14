@@ -11,6 +11,9 @@ type NurseryLocationMapDrawerProps = {
   nurseryName: string;
 };
 
+// A space after slashs
+const withSlashBreaks = (label: string): string => label.replace(/\//g, '/ ');
+
 export default function NurseryLocationMapDrawer({
   nurseryId,
   nurseryName,
@@ -61,10 +64,14 @@ export default function NurseryLocationMapDrawer({
             padding={theme.spacing(1)}
             bgcolor={index % 2 === 1 ? theme.palette.TwClrBgSecondary : undefined}
           >
-            <Typography fontSize='16px' fontWeight={fontWeight}>
-              {row.label}
+            <Typography
+              fontSize='16px'
+              fontWeight={fontWeight}
+              sx={{ flex: 1, minWidth: 0, marginRight: theme.spacing(1) }}
+            >
+              {withSlashBreaks(row.label)}
             </Typography>
-            <Typography fontSize='16px' fontWeight={fontWeight}>
+            <Typography fontSize='16px' fontWeight={fontWeight} sx={{ flexShrink: 0, whiteSpace: 'nowrap' }}>
               <FormattedNumber value={row.value} />
             </Typography>
           </Box>
