@@ -468,6 +468,15 @@ const PlantingDateForm = ({
     : undefined;
   const tooltipButtonWrapperStyle = isMobile ? { display: 'block', width: '100%' } : undefined;
 
+  const hasInvalidSpeciesQuantity = useMemo(
+    () =>
+      Object.values(substrataDrafts).some(
+        (draft) =>
+          draft.selected && draft.species.some((s) => s.speciesId !== undefined && getSpeciesDraftQuantity(s) <= 0)
+      ),
+    [substrataDrafts]
+  );
+
   const updateSubstratum = (substratumId: number, updater: (draft: SubstratumDraft) => SubstratumDraft) => {
     setSubstrataDrafts((prev) => ({
       ...prev,
@@ -639,7 +648,7 @@ const PlantingDateForm = ({
               onClick={() => void onSave()}
               priority='secondary'
               type={isMobile ? 'passive' : 'productive'}
-              disabled={isSaving}
+              disabled={isSaving || hasInvalidSpeciesQuantity}
               size={isMobile ? 'medium' : undefined}
               sx={mobileFooterButtonSx}
             />
@@ -650,7 +659,7 @@ const PlantingDateForm = ({
             <Button
               label={strings.SAVE_AND_REQUEST}
               onClick={() => setNotifyModalOpen(true)}
-              disabled={isSaving || !date}
+              disabled={isSaving || !date || hasInvalidSpeciesQuantity}
               priority={isMobile ? 'secondary' : 'primary'}
               size={isMobile ? 'medium' : undefined}
               sx={mobileFooterButtonSx}
@@ -967,6 +976,7 @@ const AddSpeciesRow = ({
   const quantity = draft.quantityInput ?? draft.quantity.toString();
   const parsedQuantity = getSpeciesDraftQuantity(draft);
   const quantityToValidate = Number.isNaN(parsedQuantity) ? 0 : parsedQuantity;
+  const belowMinimum = selectedSpeciesId !== undefined && quantityToValidate <= 0;
   const exceedsGoal =
     selectedSpeciesId !== undefined && quantityExceedsAvailableToSchedule(quantityToValidate, availableToSchedule);
   const selectedSpecies = selectedSpeciesId === undefined ? undefined : species.find((s) => s.id === selectedSpeciesId);
@@ -1032,9 +1042,11 @@ const AddSpeciesRow = ({
           onFocus={() => setQuantityFocused(true)}
           min={0}
           errorText={
-            quantityFocused && exceedsGoal
-              ? strings.formatString(strings.EXCEEDS_AVAILABLE_X, availableToSchedule).toString()
-              : ''
+            quantityFocused && belowMinimum
+              ? strings.QUANTITY_MUST_BE_GREATER_THAN_ZERO
+              : quantityFocused && exceedsGoal
+                ? strings.formatString(strings.EXCEEDS_AVAILABLE_X, availableToSchedule).toString()
+                : ''
           }
           sx={addSpeciesQuantityTextFieldSx}
         />
@@ -1109,6 +1121,7 @@ const SpeciesRow = ({
   const availableToSchedule = getAvailableToSchedule(allocated, scheduledOther);
   const parsedDraftQuantity = Math.max(0, Number(draftQuantity));
   const quantityToValidate = Number.isNaN(parsedDraftQuantity) ? draft.quantity : parsedDraftQuantity;
+  const belowMinimum = quantityToValidate <= 0;
   const exceedsGoal = quantityExceedsAvailableToSchedule(quantityToValidate, availableToSchedule);
 
   const commitQuantity = () => {
@@ -1161,9 +1174,11 @@ const SpeciesRow = ({
             onFocus={() => setQuantityFocused(true)}
             min={0}
             errorText={
-              quantityFocused && exceedsGoal
-                ? strings.formatString(strings.EXCEEDS_AVAILABLE_X, availableToSchedule).toString()
-                : ''
+              quantityFocused && belowMinimum
+                ? strings.QUANTITY_MUST_BE_GREATER_THAN_ZERO
+                : quantityFocused && exceedsGoal
+                  ? strings.formatString(strings.EXCEEDS_AVAILABLE_X, availableToSchedule).toString()
+                  : ''
             }
             autoFocus
             sx={quantityTextFieldSx}
