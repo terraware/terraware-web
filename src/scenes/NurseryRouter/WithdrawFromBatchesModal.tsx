@@ -570,7 +570,7 @@ const Step1Content = ({
               {strings.READY_TO_PLANT}
             </Typography>
             <Typography fontSize='14px' fontWeight={600} textAlign='right' color={theme.palette.TwClrTxt}>
-              {strings.REQUESTED}
+              {strings.REMAINING_TO_WITHDRAW}
             </Typography>
             <Typography fontSize='14px' fontWeight={600} textAlign='right' color={theme.palette.TwClrTxt}>
               {strings.COVERAGE}

@@ -6,6 +6,7 @@ export type PlantingDateRequestSpeciesDetail = {
   scientificName: string;
   commonName?: string;
   requestedQuantity: number;
+  withdrawnQuantity: number;
 };
 
 export type PlantingDateRequestSubstratumSpecies = {
@@ -13,6 +14,7 @@ export type PlantingDateRequestSubstratumSpecies = {
   scientificName: string;
   commonName?: string;
   quantity: number;
+  withdrawnQuantity: number;
 };
 
 export type PlantingDateRequestSubstratum = {
@@ -138,6 +140,16 @@ const injectedRtkApi = api.injectEndpoints({
           const speciesNames: string[] = [];
           let requestedPlants = 0;
 
+          const withdrawnBySpecies = new Map<number, number>();
+          (result.withdrawals ?? []).forEach((entry) => {
+            const speciesId = Number(entry.batchWithdrawals_batch_species_id);
+            if (!Number.isFinite(speciesId)) {
+              return;
+            }
+            const quantity = Number(entry['batchWithdrawals_readyQuantityWithdrawn(raw)']);
+            withdrawnBySpecies.set(speciesId, (withdrawnBySpecies.get(speciesId) ?? 0) + quantity);
+          });
+
           speciesEntries.forEach((entry) => {
             const speciesId = Number(entry.species_id);
             const quantity = Number(entry['quantity(raw)']);
@@ -153,6 +165,7 @@ const injectedRtkApi = api.injectEndpoints({
                 scientificName: entry.species_scientificName ?? `#${speciesId}`,
                 commonName: entry.species_commonName,
                 requestedQuantity: quantity,
+                withdrawnQuantity: withdrawnBySpecies.get(speciesId) ?? 0,
               });
               if (entry.species_scientificName) {
                 speciesNames.push(entry.species_scientificName);
@@ -178,14 +191,12 @@ const injectedRtkApi = api.injectEndpoints({
                 scientificName: entry.species_scientificName ?? `#${speciesId}`,
                 commonName: entry.species_commonName,
                 quantity,
+                withdrawnQuantity: withdrawnBySpecies.get(speciesId) ?? 0,
               });
             }
           });
 
-          const withdrawnPlants = (result.withdrawals ?? []).reduce(
-            (sum, entry) => sum + Number(entry['batchWithdrawals_readyQuantityWithdrawn(raw)']),
-            0
-          );
+          const withdrawnPlants = [...withdrawnBySpecies.values()].reduce((sum, quantity) => sum + quantity, 0);
 
           return {
             date: result.date,
