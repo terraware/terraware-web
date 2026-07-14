@@ -1,6 +1,8 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
+import { baseApi } from 'src/queries/baseApi';
 import { useGetMyselfQuery } from 'src/queries/generated/users';
+import { QueryTagTypes } from 'src/queries/tags';
 import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelectors';
 import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
 import { requestUserCookieConsentUpdate } from 'src/redux/features/user/usersAsyncThunks';
@@ -23,13 +25,13 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
   const dispatch = useAppDispatch();
 
   const { currentData, refetch } = useGetMyselfQuery();
-  // Latch the user into local state so it survives the RESET_APP store wipe that OrganizationProvider
-  // dispatches on org change (which clears the RTK Query cache). Only populated, never cleared here —
-  // effectively "only a logout/reload resets the user", matching the pre-RTK behavior.
+
+  // Persist user after an AppReset due to organization change
   const [user, setUser] = useState<User>();
 
   useEffect(() => {
     if (currentData?.user) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setUser(currentData.user);
     }
   }, [currentData]);
@@ -60,9 +62,9 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
   const updateUserCookieConsent = useCallback(
     async (consent: boolean) => {
       await dispatch(requestUserCookieConsentUpdate({ cookiesConsented: consent }));
-      reloadUser();
+      dispatch(baseApi.util.invalidateTags([{ type: QueryTagTypes.Users, id: 'ME' }]));
     },
-    [dispatch, reloadUser]
+    [dispatch]
   );
 
   const isAllowed = useCallback(
