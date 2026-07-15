@@ -594,7 +594,7 @@ const AddSpeciesRow = ({
     const speciesId = Number(value);
     setSelectedSpeciesId(speciesId);
     if (speciesId !== selectedSpeciesId) {
-      setQuantity('');
+      setQuantity('0');
     }
   };
 
@@ -638,7 +638,10 @@ const AddSpeciesRow = ({
           autocomplete
           hideClearIcon
           disabled={isUpserting}
-          sx={{ backgroundColor: theme.palette.TwClrBaseWhite }}
+          sx={{
+            backgroundColor: theme.palette.TwClrBaseWhite,
+            borderRadius: '8px',
+          }}
         />
       </Box>
       {showQuantitySlot && (
