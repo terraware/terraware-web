@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo } from 'react';
 
-import { useUpdateGlobalRolesMutation } from 'src/queries/generated/globalRoles';
+import { useInviteGlobalRolesUserMutation, useUpdateGlobalRolesMutation } from 'src/queries/generated/globalRoles';
 import { useUpdateUserInternalInterestsMutation } from 'src/queries/generated/userInternalInterests';
 import { UserWithInternalnterests } from 'src/scenes/AcceleratorRouter/People/UserWithInternalInterests';
 import strings from 'src/strings';
@@ -9,6 +9,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 export type Response = {
   busy?: boolean;
   succeeded?: boolean;
+  invite: (user: UserWithInternalnterests) => Promise<void>;
   update: (user: UserWithInternalnterests) => void;
 };
 
@@ -17,6 +18,7 @@ export default function useUpdatePerson(): Response {
 
   const [updateInternalInterests, updateInternalInterestsResponse] = useUpdateUserInternalInterestsMutation();
   const [updateGlobalRoles, updateGlobalRolesResponse] = useUpdateGlobalRolesMutation();
+  const [inviteGlobalRolesUser, inviteGlobalRolesResponse] = useInviteGlobalRolesUserMutation();
 
   const update = useCallback(
     (user: UserWithInternalnterests) => {
@@ -33,6 +35,32 @@ export default function useUpdatePerson(): Response {
     [updateInternalInterests, updateGlobalRoles]
   );
 
+  const invite = useCallback(
+    async (user: UserWithInternalnterests) => {
+      try {
+        const response = await inviteGlobalRolesUser({
+          email: user.email,
+          globalRoles: user.globalRoles,
+        }).unwrap();
+
+        if (response.status !== 'ok') {
+          snackbar.toastError(strings.GENERIC_ERROR);
+          return;
+        }
+
+        if (user.internalInterests?.length > 0) {
+          void updateInternalInterests({
+            userId: response.user.id,
+            updateUserInternalInterestsRequestPayload: { internalInterests: user.internalInterests },
+          });
+        }
+      } catch (e) {
+        snackbar.toastError(strings.GENERIC_ERROR);
+      }
+    },
+    [inviteGlobalRolesUser, updateInternalInterests, snackbar]
+  );
+
   useEffect(() => {
     if (updateInternalInterestsResponse.isError || updateGlobalRolesResponse.isError) {
       snackbar.toastError(strings.GENERIC_ERROR);
@@ -41,10 +69,16 @@ export default function useUpdatePerson(): Response {
 
   return useMemo<Response>(
     () => ({
-      busy: updateInternalInterestsResponse.isLoading || updateGlobalRolesResponse.isLoading,
-      succeeded: updateInternalInterestsResponse.isSuccess && updateGlobalRolesResponse.isSuccess,
+      busy:
+        updateInternalInterestsResponse.isLoading ||
+        updateGlobalRolesResponse.isLoading ||
+        inviteGlobalRolesResponse.isLoading,
+      succeeded:
+        (updateGlobalRolesResponse.isSuccess || inviteGlobalRolesResponse.isSuccess) &&
+        updateInternalInterestsResponse.isSuccess,
       update,
+      invite,
     }),
-    [update, updateInternalInterestsResponse, updateGlobalRolesResponse]
+    [update, invite, updateInternalInterestsResponse, updateGlobalRolesResponse, inviteGlobalRolesResponse]
   );
 }

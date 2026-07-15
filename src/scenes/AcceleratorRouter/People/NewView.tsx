@@ -19,8 +19,7 @@ const NewView = () => {
   const location = useStateLocation();
   const updatePerson = useUpdatePerson();
 
-  const personData = usePersonData();
-  const { setUserId, user } = personData;
+  const { setUserId, user } = usePersonData();
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [roleError, setRoleError] = useState('');
@@ -45,10 +44,14 @@ const NewView = () => {
         noErrors = false;
       }
       if (noErrors) {
-        updatePerson.update(record);
+        if (currentData?.user) {
+          updatePerson.update(record);
+        } else {
+          void updatePerson.invite(record);
+        }
       }
     },
-    [updatePerson]
+    [currentData?.user, updatePerson]
   );
 
   const handleOnChange = useCallback(
@@ -72,12 +75,10 @@ const NewView = () => {
       return;
     }
 
+    setEmailError('');
     if (currentData?.user) {
-      setEmailError('');
       setUserId(currentData.user.id);
-    } else if (isError) {
-      setEmailError(strings.USER_WITH_EMAIL_DOES_NOT_EXIST);
-    }
+    } // else if isError - new user, no op
   }, [currentData, isError, isFetching, isValidEmail, setUserId]);
 
   useEffect(() => {

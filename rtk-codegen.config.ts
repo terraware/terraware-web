@@ -43,7 +43,7 @@ const config: ConfigFile = {
     },
     './src/queries/generated/globalRoles.ts': {
       filterEndpoints: (_, operation) =>
-        operation.path === '/api/v1/globalRoles/users' || operation.path === '/api/v1/users/{userId}/globalRoles',
+        operation.path.startsWith('/api/v1/globalRoles') || operation.path === '/api/v1/users/{userId}/globalRoles',
     },
     './src/queries/generated/mapbox.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/mapbox'),

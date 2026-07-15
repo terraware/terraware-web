@@ -9,6 +9,9 @@ api.enhanceEndpoints({
     deleteGlobalRoles: {
       invalidatesTags: [{ type: QueryTagTypes.GlobalRolesUsers, id: 'LIST' }],
     },
+    inviteGlobalRolesUser: {
+      invalidatesTags: [{ type: QueryTagTypes.GlobalRolesUsers, id: 'LIST' }],
+    },
     updateGlobalRoles: {
       invalidatesTags: (_result, _error, args) => [
         { type: QueryTagTypes.GlobalRolesUsers, id: 'LIST' },
