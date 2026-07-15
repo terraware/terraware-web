@@ -1,3 +1,4 @@
+d143ca3c SW-6442 Autoselect planting site in Add Planting Season (#6064)
 99134da4 SW-6422 If only one planting site exists, autoselect it on the observation schedule page (#6063)
 07c438f2 Migrate user get/search endpoints off redux to RTK Query (#6023)
 58caa12d Migrate /api/v1/users/me endpoints to RTK Query (#6022)
