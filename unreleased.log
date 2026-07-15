@@ -1,3 +1,5 @@
+cb6c2bd7 SW-8138 Update messaging for when Permanent Plots tab shows no plots (#6066)
+ad549233 SW-8658 Species Targets quantity should be 0 by default (#6069)
 ed9eae83 SW-8638 Default to empty values in Planting Dates tab (#6068)
 e32cf49c SW-8644 Fix 404 when deleting an accession (#6067)
 8b512845 SW-7378 Terraware update message appearing in funny place in Plants Dashboard (#6065)
