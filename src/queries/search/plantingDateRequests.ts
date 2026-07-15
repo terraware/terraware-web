@@ -121,6 +121,7 @@ const injectedRtkApi = api.injectEndpoints({
               'plantingDateRequestSpecies.substratum_stratum_name',
               'withdrawals.batchWithdrawals_batch_species_id',
               'withdrawals.batchWithdrawals_readyQuantityWithdrawn(raw)',
+              'withdrawals.delivery.plantings_substratum_id',
             ],
             search: {
               operation: 'and',
@@ -141,6 +142,8 @@ const injectedRtkApi = api.injectEndpoints({
           let requestedPlants = 0;
 
           const withdrawnBySpecies = new Map<number, number>();
+          const withdrawnBySubstratumSpecies = new Map<string, number>();
+          const substratumSpeciesKey = (substratumId: number, speciesId: number) => `${substratumId}-${speciesId}`;
           (result.withdrawals ?? []).forEach((entry) => {
             const speciesId = Number(entry.batchWithdrawals_batch_species_id);
             if (!Number.isFinite(speciesId)) {
@@ -148,6 +151,13 @@ const injectedRtkApi = api.injectEndpoints({
             }
             const quantity = Number(entry['batchWithdrawals_readyQuantityWithdrawn(raw)']);
             withdrawnBySpecies.set(speciesId, (withdrawnBySpecies.get(speciesId) ?? 0) + quantity);
+
+            const substratumRaw = entry.delivery?.plantings_substratum_id;
+            const substratumId = substratumRaw !== undefined ? Number(substratumRaw) : undefined;
+            if (substratumId !== undefined && Number.isFinite(substratumId)) {
+              const key = substratumSpeciesKey(substratumId, speciesId);
+              withdrawnBySubstratumSpecies.set(key, (withdrawnBySubstratumSpecies.get(key) ?? 0) + quantity);
+            }
           });
 
           speciesEntries.forEach((entry) => {
@@ -191,7 +201,7 @@ const injectedRtkApi = api.injectEndpoints({
                 scientificName: entry.species_scientificName ?? `#${speciesId}`,
                 commonName: entry.species_commonName,
                 quantity,
-                withdrawnQuantity: withdrawnBySpecies.get(speciesId) ?? 0,
+                withdrawnQuantity: withdrawnBySubstratumSpecies.get(substratumSpeciesKey(substratumId, speciesId)) ?? 0,
               });
             }
           });
@@ -234,6 +244,7 @@ type PlantingDateRequestSpeciesApiResult = {
 type PlantingDateRequestWithdrawalApiResult = {
   batchWithdrawals_batch_species_id?: string;
   'batchWithdrawals_readyQuantityWithdrawn(raw)': string;
+  delivery?: { plantings_substratum_id?: string };
 };
 
 type PlantingDateRequestApiResult = {
