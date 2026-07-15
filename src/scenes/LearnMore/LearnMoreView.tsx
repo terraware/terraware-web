@@ -338,7 +338,7 @@ const LearnMoreView = (): JSX.Element => {
   );
 
   return (
-    <Box sx={{ background: theme.palette.TwClrBaseWhite, minHeight: '100vh', width: '100%' }}>
+    <Box sx={{ background: 'linear-gradient(180deg, #F5FAF7 0%, #FFF 18.31%)', minHeight: '100vh', width: '100%' }}>
       <Box
         sx={{
           alignItems: 'center',
