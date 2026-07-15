@@ -1285,7 +1285,7 @@ NO_NURSERIES_WITH_REQUESTED_SPECIES,No nurseries have Ready to Plant quantities 
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,No observations have been scheduled,
 NO_PENDING_REQUESTS,There are no pending requests.,
 NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE,There are no pending requests for the selected Planting Site.,
-NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"When Observations are completed that include permanent plots, the permanent plots will appear here, and t0 data will need to be set for all of the permanent plots for Survival Rates to be calculated.",
+NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"There are no completed Observations that include permanent plots.",
 NO_PLANTING_DATES_SCHEDULED,No planting dates have been scheduled.,
 NO_PLANTING_SITES_DESCRIPTION,Start by adding a planting site. Adding a planting site will allow you to track where seedlings go after they leave the nursery.,
 NO_PLANTING_SITES_NON_ADMIN_MSG,Only admins can add planting sites; please reach out to yours for assistance.,

@@ -1283,7 +1283,7 @@ NO_NURSERIES_WITH_REQUESTED_SPECIES,Aucune pépinière ne dispose de quantités 
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,Aucune observation n'a été planifiée,c05456cd
 NO_PENDING_REQUESTS,Il n'y a aucune demande en attente.,89bea434
 NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE,Il n'y a aucune demande en attente pour le site de plantation sélectionné.,10a348ac
-NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Lorsque des observations comprenant des placettes permanentes sont terminées, celles-ci apparaîtront ici, et les données t0 devront être définies pour toutes les placettes permanentes afin que les taux de survie puissent être calculés.",18f6a079
+NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,Il n’y a aucune Observation terminée incluant des placettes permanentes.,e52e1b0d
 NO_PLANTING_DATES_SCHEDULED,Aucune date de plantation n'a été planifiée.,92de1320
 NO_PLANTING_SITES_DESCRIPTION,Commencez par ajouter un site de plantation. L'ajout d'un site de plantation vous permettra de savoir où vont les semis après avoir quitté la pépinière.,b0104f6c
 NO_PLANTING_SITES_NON_ADMIN_MSG,Seuls les administrateurs peuvent ajouter des sites de plantation ; veuillez contacter le vôtre pour obtenir de l'aide.,8f016d3f
