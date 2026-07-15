@@ -1,4 +1,5 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Grid, useTheme } from '@mui/material';
 
@@ -15,7 +16,7 @@ import { getHighestGlobalRole } from 'src/types/GlobalRoles';
 import { internalInterestLabel } from 'src/types/UserInternalInterests';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import { usePersonData } from './PersonContext';
+import usePerson from './usePerson';
 
 const SingleView = () => {
   const navigate = useSyncNavigate();
@@ -23,7 +24,9 @@ const SingleView = () => {
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const theme = useTheme();
-  const { user, userId } = usePersonData();
+  const pathParams = useParams<{ userId: string }>();
+  const [userId] = useState(Number(pathParams.userId || -1));
+  const user = usePerson(userId);
 
   const canEdit = isAllowed('ASSIGN_SOME_GLOBAL_ROLES');
 
