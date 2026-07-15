@@ -103,6 +103,9 @@ const config: ConfigFile = {
     './src/queries/generated/accessionsV2.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v2/seedbank/accessions'),
     },
+    './src/queries/generated/userInternalInterests.ts': {
+      filterEndpoints: (_, operation) => operation.path === '/api/v1/users/{userId}/internalInterests',
+    },
     './src/queries/generated/indicators.ts': {
       filterEndpoints: (_, operation) =>
         operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports/indicators') ||

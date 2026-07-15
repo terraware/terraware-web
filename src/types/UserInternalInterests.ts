@@ -1,11 +1,7 @@
-import { components } from 'src/api/types/generated-schema';
+import { GetUserInternalInterestsResponsePayload } from 'src/queries/generated/userInternalInterests';
 import strings from 'src/strings';
 
-export type InternalInterest = components['schemas']['GetUserInternalInterestsResponsePayload']['internalInterests'][0];
-
-export type UserInternalInterestsData = {
-  internalInterests: InternalInterest[];
-};
+export type InternalInterest = GetUserInternalInterestsResponsePayload['internalInterests'][number];
 
 export const InternalInterests: InternalInterest[] = [
   'Compliance',
