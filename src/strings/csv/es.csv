@@ -1284,7 +1284,7 @@ NO_NURSERIES_WITH_REQUESTED_SPECIES,Ningún vivero tiene cantidades de la especi
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,No se han programado observaciones,c05456cd
 NO_PENDING_REQUESTS,No hay solicitudes pendientes.,89bea434
 NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE,No hay solicitudes pendientes para el Sitio de Plantación seleccionado.,10a348ac
-NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,"Cuando se completen las Observaciones que incluyan parcelas permanentes, estas aparecerán aquí y será necesario establecer los datos t0 para todas las parcelas permanentes para que se puedan calcular las Tasas de Supervivencia.",18f6a079
+NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,No hay Observaciones completadas que incluyan parcelas permanentes.,e52e1b0d
 NO_PLANTING_DATES_SCHEDULED,No se han programado fechas de plantación.,92de1320
 NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Añadir un sitio de plantación le permitirá rastrear a dónde van las plantas de semillero al dejar el vivero.,b0104f6c
 NO_PLANTING_SITES_NON_ADMIN_MSG,"Solo los administradores pueden agregar sitios de plantación; por favor, comuníquese con el suyo para recibir asistencia.",8f016d3f
