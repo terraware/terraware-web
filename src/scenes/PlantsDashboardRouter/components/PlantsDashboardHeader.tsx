@@ -220,6 +220,9 @@ export default function PlantsDashboardHeader({
           <Typography sx={{ fontSize: '24px', fontWeight: 600, alignItems: 'center' }}>{title}</Typography>
         </Grid>
       )}
+      <Grid item xs={12}>
+        <PageSnackbar />
+      </Grid>
       {showGeometryNote && isSiteSelected && latestObservationId && (
         <Box marginBottom={theme.spacing(4)}>
           <Message
@@ -324,9 +327,6 @@ export default function PlantsDashboardHeader({
       {plantingSites.length === 0 && !isAcceleratorRoute && !isLoading && delayedIsReady && (
         <PlantsDashboardEmptyMessage />
       )}
-      <Grid item xs={12}>
-        <PageSnackbar />
-      </Grid>
       {!delayedIsReady || isLoading ? <CircularProgress sx={{ margin: 'auto' }} /> : <Box>{children}</Box>}
     </Wrapper>
   );
