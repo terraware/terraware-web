@@ -41,6 +41,10 @@ const config: ConfigFile = {
     './src/queries/generated/fundingEntities.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/funder/entities'),
     },
+    './src/queries/generated/globalRoles.ts': {
+      filterEndpoints: (_, operation) =>
+        operation.path === '/api/v1/globalRoles/users' || operation.path === '/api/v1/users/{userId}/globalRoles',
+    },
     './src/queries/generated/mapbox.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/mapbox'),
     },

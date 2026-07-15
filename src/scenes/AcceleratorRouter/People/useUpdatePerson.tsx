@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { requestUpdateGlobalRolesUser } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
-import { selectGlobalRolesUserUpdateRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
+import { useUpdateGlobalRolesMutation } from 'src/queries/generated/globalRoles';
 import { requestUpdateUserInternalInterests } from 'src/redux/features/userInternalInterests/userInternalInterestsAsyncThunks';
 import { selectUserInternalInterestsUpdateRequest } from 'src/redux/features/userInternalInterests/userInternalInterestsSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -21,8 +20,7 @@ export default function useUpdatePerson(): Response {
 
   const [internalInterestsRequestId, setInternalInterestsRequest] = useState('');
   const internalInterestsRequest = useAppSelector(selectUserInternalInterestsUpdateRequest(internalInterestsRequestId));
-  const [globalRolesRequestId, setGlobalRolesRequestId] = useState('');
-  const globalRolesRequest = useAppSelector(selectGlobalRolesUserUpdateRequest(globalRolesRequestId));
+  const [updateGlobalRoles, updateGlobalRolesResponse] = useUpdateGlobalRolesMutation();
 
   const update = useCallback(
     (user: UserWithInternalnterests) => {
@@ -35,30 +33,26 @@ export default function useUpdatePerson(): Response {
 
       setInternalInterestsRequest(categoriesRequest.requestId);
 
-      const rolesRequest = dispatch(
-        requestUpdateGlobalRolesUser({
-          user,
-          globalRoles: user.globalRoles,
-        })
-      );
-
-      setGlobalRolesRequestId(rolesRequest.requestId);
+      void updateGlobalRoles({
+        userId: user.id,
+        updateGlobalRolesRequestPayload: { globalRoles: user.globalRoles },
+      });
     },
-    [dispatch]
+    [dispatch, updateGlobalRoles]
   );
 
   useEffect(() => {
-    if (internalInterestsRequest?.status === 'error' || globalRolesRequest?.status === 'error') {
+    if (internalInterestsRequest?.status === 'error' || updateGlobalRolesResponse.isError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [internalInterestsRequest, globalRolesRequest, snackbar]);
+  }, [internalInterestsRequest, updateGlobalRolesResponse.isError, snackbar]);
 
   return useMemo<Response>(
     () => ({
-      busy: internalInterestsRequest?.status === 'pending' || globalRolesRequest?.status === 'pending',
-      succeeded: internalInterestsRequest?.status === 'success' && globalRolesRequest?.status === 'success',
+      busy: internalInterestsRequest?.status === 'pending' || updateGlobalRolesResponse.isLoading,
+      succeeded: internalInterestsRequest?.status === 'success' && updateGlobalRolesResponse.isSuccess,
       update,
     }),
-    [update, internalInterestsRequest, globalRolesRequest]
+    [update, internalInterestsRequest, updateGlobalRolesResponse]
   );
 }

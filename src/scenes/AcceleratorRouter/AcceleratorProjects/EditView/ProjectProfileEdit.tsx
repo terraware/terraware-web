@@ -21,6 +21,7 @@ import Icon from 'src/components/common/icon/Icon';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useUpdateProjectAcceleratorDetailsMutation } from 'src/queries/generated/acceleratorProjects';
+import { useListGlobalRolesQuery } from 'src/queries/generated/globalRoles';
 import {
   InternalUserPayload,
   useGetInternalUsersQuery,
@@ -33,8 +34,6 @@ import {
 } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectSpecificVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import { requestListSpecificVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
-import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
 import { requestListOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersAsyncThunks';
 import { selectOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -98,7 +97,6 @@ const ProjectProfileEdit = () => {
   });
 
   const [organizationUsersRequestId, setOrganizationUsersRequestId] = useState<string>('');
-  const [listUsersRequestId, setListUsersRequestId] = useState('');
 
   const { data: internalUsersData, isSuccess: isInternalUsersRequestSuccess } = useGetInternalUsersQuery(projectId, {
     skip: !projectId || projectId === -1,
@@ -106,7 +104,7 @@ const ProjectProfileEdit = () => {
   const initialInternalUsers = useMemo(() => internalUsersData?.users ?? [], [internalUsersData]);
   const [updateInternalUsers, updateInternalUsersResponse] = useUpdateInternalUserMutation();
 
-  const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
+  const { data: globalRolesUsersData } = useListGlobalRolesQuery();
   const [internalUsers, setInternalUsers] = useState<InternalUserItem[]>([]);
   const [uploadImagesRequestId, setUploadImagesRequestId] = useState('');
   const uploadImagesResponse = useAppSelector(selectUploadImageValue(uploadImagesRequestId));
@@ -221,7 +219,6 @@ const ProjectProfileEdit = () => {
   }, [uploadImagesResponse, redirectToProjectView, snackbar]);
 
   useEffect(() => {
-    const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
     void dispatch(requestListSpecificVariables(variableStableIds));
     void dispatch(
       requestListSpecificVariablesValues({
@@ -229,12 +226,11 @@ const ProjectProfileEdit = () => {
         variablesStableIds: variableStableIds,
       })
     );
-    setListUsersRequestId(request.requestId);
-  }, [activeLocale, dispatch, projectId]);
+  }, [dispatch, projectId]);
 
   useEffect(() => {
-    if (listUsersRequest?.status === 'success') {
-      const userOptions = listUsersRequest.data?.users
+    if (globalRolesUsersData) {
+      const userOptions = globalRolesUsersData.users
         .filter((user) => !!user.firstName)
         .map((user) => ({
           label: `${user.firstName} ${user.lastName}`,
@@ -242,7 +238,7 @@ const ProjectProfileEdit = () => {
         }));
       setGlobalUsersOptions(userOptions);
     }
-  }, [listUsersRequest]);
+  }, [globalRolesUsersData]);
 
   useEffect(() => {
     if (isInternalUsersRequestSuccess) {

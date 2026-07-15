@@ -5,10 +5,7 @@ import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
-import { useLocalization } from 'src/providers';
-import { requestListGlobalRolesUsers } from 'src/redux/features/globalRoles/globalRolesAsyncThunks';
-import { selectGlobalRolesUsersSearchRequest } from 'src/redux/features/globalRoles/globalRolesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useListGlobalRolesQuery } from 'src/queries/generated/globalRoles';
 import strings from 'src/strings';
 
 import { getDocumentOwnerOptions } from '../DocumentMetadataEdit/helpers';
@@ -29,26 +26,18 @@ export default function AssignOwnerModal(props: AssignOwnerModalProps): JSX.Elem
   };
 
   const [documentOwnerOptions, setDocumentOwnerOptions] = useState<DropdownItem[]>([]);
-  const [listUsersRequestId, setListUsersRequestId] = useState('');
-  const listUsersRequest = useAppSelector(selectGlobalRolesUsersSearchRequest(listUsersRequestId));
-  const { activeLocale } = useLocalization();
-  const dispatch = useAppDispatch();
+  const { data: globalRolesUsersData } = useListGlobalRolesQuery();
 
   useEffect(() => {
-    const request = dispatch(requestListGlobalRolesUsers({ locale: activeLocale }));
-    setListUsersRequestId(request.requestId);
-  }, [activeLocale, dispatch]);
-
-  useEffect(() => {
-    if (listUsersRequest?.status === 'success') {
-      const allOwnerOptions = getDocumentOwnerOptions(listUsersRequest.data?.users || []);
+    if (globalRolesUsersData) {
+      const allOwnerOptions = getDocumentOwnerOptions(globalRolesUsersData.users);
       allOwnerOptions.unshift({
         label: strings.NONE,
         value: -1,
       });
       setDocumentOwnerOptions(allOwnerOptions);
     }
-  }, [listUsersRequest]);
+  }, [globalRolesUsersData]);
 
   return (
     <DialogBox
