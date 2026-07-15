@@ -1116,7 +1116,7 @@ const SpeciesRow = ({
   const { isMobile } = useDeviceInfo();
   const [editing, setEditing] = useState(false);
   const [quantityFocused, setQuantityFocused] = useState(false);
-  const [draftQuantity, setDraftQuantity] = useState<string>(draft.quantity.toString());
+  const [draftQuantity, setDraftQuantity] = useState<string>(draft.quantity > 0 ? draft.quantity.toString() : '');
   const speciesInfo = useMemo(() => species.find((s) => s.id === draft.speciesId), [species, draft.speciesId]);
   const availableToSchedule = getAvailableToSchedule(allocated, scheduledOther);
   const parsedDraftQuantity = Math.max(0, Number(draftQuantity));
@@ -1186,12 +1186,12 @@ const SpeciesRow = ({
         ) : (
           <>
             <Typography fontSize='16px' fontWeight={400}>
-              {draft.quantity.toLocaleString()}
+              {draft.quantity > 0 ? draft.quantity.toLocaleString() : ''}
             </Typography>
             <Button
               icon='iconEdit'
               onClick={() => {
-                setDraftQuantity(draft.quantity.toString());
+                setDraftQuantity(draft.quantity > 0 ? draft.quantity.toString() : '');
                 setEditing(true);
               }}
               priority='ghost'
