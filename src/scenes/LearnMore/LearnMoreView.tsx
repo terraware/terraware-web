@@ -539,7 +539,7 @@ const LearnMoreView = (): JSX.Element => {
           >
             <Box
               component='img'
-              src={`${ASSETS}/americanforestslogo.jpg`}
+              src={`${ASSETS}/americanforestslogo.png`}
               alt={strings.LEARN_MORE_AMERICAN_FORESTS_ALT}
               sx={{ height: '64px', width: 'auto' }}
             />
