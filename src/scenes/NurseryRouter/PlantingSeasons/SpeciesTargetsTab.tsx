@@ -638,7 +638,10 @@ const AddSpeciesRow = ({
           autocomplete
           hideClearIcon
           disabled={isUpserting}
-          sx={{ backgroundColor: theme.palette.TwClrBaseWhite }}
+          sx={{
+            backgroundColor: theme.palette.TwClrBaseWhite,
+            borderRadius: '8px',
+          }}
         />
       </Box>
       {showQuantitySlot && (
