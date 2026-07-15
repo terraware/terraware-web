@@ -594,7 +594,7 @@ const AddSpeciesRow = ({
     const speciesId = Number(value);
     setSelectedSpeciesId(speciesId);
     if (speciesId !== selectedSpeciesId) {
-      setQuantity('');
+      setQuantity('0');
     }
   };
 
