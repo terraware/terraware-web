@@ -423,7 +423,14 @@ const LearnMoreView = (): JSX.Element => {
               component='img'
               src={`${ASSETS}/image1.png`}
               alt={strings.LEARN_MORE_HERO_IMAGE_ALT}
-              sx={{ ...sharedImageStyles, position: 'relative', width: isMobile ? '100%' : '56%', zIndex: 1 }}
+              sx={{
+                ...sharedImageStyles,
+                borderRadius: '8px',
+                boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.20)',
+                position: 'relative',
+                width: isMobile ? '100%' : '56%',
+                zIndex: 1,
+              }}
             />
             <Box
               component='img'
