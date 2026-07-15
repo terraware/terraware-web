@@ -1,4 +1,3 @@
-aa6e6ce6 "Remaining to Withdraw" should be calculated per-substratum  (#6070)
 9f4f2ebe SW-7742 Replace Global Roles requests with RTK Query (#6031)
 cb6c2bd7 SW-8138 Update messaging for when Permanent Plots tab shows no plots (#6066)
 ad549233 SW-8658 Species Targets quantity should be 0 by default (#6069)
