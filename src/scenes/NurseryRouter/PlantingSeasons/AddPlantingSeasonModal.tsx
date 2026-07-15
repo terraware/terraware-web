@@ -83,6 +83,12 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
     }
   }, [listPlantingSeasons, record.plantingSiteId]);
 
+  useEffect(() => {
+    if (record.plantingSiteId === undefined && plantingSites.length === 1) {
+      setRecord((prev) => ({ ...prev, plantingSiteId: plantingSites[0].id }));
+    }
+  }, [plantingSites, record.plantingSiteId, setRecord]);
+
   const seasonsForSelectedSite = useMemo(
     () =>
       record.plantingSiteId
