@@ -75,7 +75,7 @@ export default function useUpdatePerson(): Response {
         inviteGlobalRolesResponse.isLoading,
       succeeded:
         (updateGlobalRolesResponse.isSuccess || inviteGlobalRolesResponse.isSuccess) &&
-        updateInternalInterestsResponse.isSuccess,
+        (updateInternalInterestsResponse.isSuccess || updateInternalInterestsResponse.isUninitialized),
       update,
       invite,
     }),
