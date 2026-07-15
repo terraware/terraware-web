@@ -514,11 +514,40 @@ const LearnMoreView = (): JSX.Element => {
       {/* Quote */}
       <Box sx={{ background: theme.palette.TwClrBaseGray050, padding: sectionPadding }}>
         <Box sx={{ margin: '0 auto', maxWidth: '900px', textAlign: 'center' }}>
-          <Typography
-            sx={{ color: secondaryText, fontSize: isMobile ? '24px' : '34px', fontWeight: 600, lineHeight: '44px' }}
-          >
-            “{strings.LEARN_MORE_QUOTE}”
-          </Typography>
+          <Box sx={{ position: 'relative' }}>
+            <Box
+              component='img'
+              src={`${ASSETS}/quote-left.svg`}
+              alt=''
+              sx={{ height: '31px', left: '-16px', position: 'absolute', top: 0, width: '40px', zIndex: 0 }}
+            />
+            <Typography
+              sx={{
+                color: secondaryText,
+                fontSize: isMobile ? '24px' : '34px',
+                fontWeight: 600,
+                lineHeight: '44px',
+                position: 'relative',
+                zIndex: 1,
+              }}
+            >
+              {strings.LEARN_MORE_QUOTE}
+              <Box
+                component='img'
+                src={`${ASSETS}/quote-right.svg`}
+                alt=''
+                sx={{
+                  display: 'inline-block',
+                  height: '31px',
+                  marginLeft: '-10px',
+                  position: 'relative',
+                  top: isMobile ? '-4px' : '-2px',
+                  width: '40px',
+                  zIndex: -1,
+                }}
+              />
+            </Typography>
+          </Box>
           <Box
             sx={{
               alignItems: 'center',
