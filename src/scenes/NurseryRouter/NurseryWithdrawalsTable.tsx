@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import {
   MRT_Cell,
   MRT_ColumnFiltersState,
@@ -55,6 +55,7 @@ const ITEMS_PER_PAGE = 100;
 const PLANTING_DATE_COLUMN_ID = 'plantingDate';
 const PLANTING_SEASON_COLUMN_ID = 'plantingSeasonName';
 const PLANTING_SEASON_ID_QUERY_PARAM = 'plantingSeasonId';
+const PLANTING_DATE_QUERY_PARAM = 'plantingDate';
 const PURPOSE_QUERY_PARAM = 'purpose';
 const MENU_COLUMN_ID = 'menu';
 const HIDDEN_BY_DEFAULT_COLUMN_IDS = [PLANTING_SEASON_COLUMN_ID, PLANTING_DATE_COLUMN_ID];
@@ -732,13 +733,16 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       .getAll(PLANTING_SEASON_ID_QUERY_PARAM)
       .map((id) => Number(id))
       .filter((id) => Number.isFinite(id));
+    const plantingDateParam = query.get(PLANTING_DATE_QUERY_PARAM) || undefined;
+    const plantingDate = plantingDateParam && dayjs(plantingDateParam).isValid() ? dayjs(plantingDateParam) : undefined;
 
     if (
       !siteName &&
       substratumNames.length === 0 &&
       stratumNames.length === 0 &&
       purposeValues.length === 0 &&
-      plantingSeasonIds.length === 0
+      plantingSeasonIds.length === 0 &&
+      !plantingDate
     ) {
       return;
     }
@@ -764,17 +768,24 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
       );
       seeded.push({ id: 'purpose', value: purposeLabels });
     }
+    if (plantingDate) {
+      seeded.push({ id: PLANTING_DATE_COLUMN_ID, value: [plantingDate, plantingDate] });
+    }
     if (plantingSeasonIds.length > 0) {
       setLinkedPlantingSeasonIds(plantingSeasonIds);
     }
     if (seeded.length > 0 || plantingSeasonIds.length > 0) {
       setColumnFilters(seeded);
     }
+    if (plantingDate) {
+      setColumnVisibility((curr) => ({ ...curr, [PLANTING_DATE_COLUMN_ID]: true }));
+    }
     query.delete('siteName');
     query.delete('substratumName');
     query.delete('stratumName');
     query.delete(PURPOSE_QUERY_PARAM);
     query.delete(PLANTING_SEASON_ID_QUERY_PARAM);
+    query.delete(PLANTING_DATE_QUERY_PARAM);
     navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
     // Run only once on mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps

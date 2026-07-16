@@ -309,7 +309,12 @@ const PlantingDateRequestListItem = ({
         <Box display='flex' gap={theme.spacing(3)} alignItems='flex-start'>
           <NumberColumn label={strings.SPECIES} value={row.speciesCount} activeLocale={activeLocale} />
           <NumberColumn label={strings.REQUESTED_PLANTS} value={row.requestedPlants} activeLocale={activeLocale} />
-          <NumberColumn label={strings.WITHDRAWN_PLANTS} value={row.withdrawnPlants} activeLocale={activeLocale} />
+          <NumberColumn
+            label={strings.WITHDRAWN_PLANTS}
+            value={row.withdrawnPlants}
+            activeLocale={activeLocale}
+            to={`${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawals&plantingSeasonId=${row.plantingSeasonId}&plantingDate=${row.date}`}
+          />
         </Box>
       </Box>
     </Box>
@@ -320,20 +325,29 @@ const NumberColumn = ({
   label,
   value,
   activeLocale,
+  to,
 }: {
   label: string;
   value: number;
   activeLocale: string | null;
+  to?: string;
 }): JSX.Element => {
   const theme = useTheme();
+  const formattedValue = value.toLocaleString(activeLocale || undefined);
   return (
     <Box textAlign='right' minWidth='110px'>
       <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
         {label}
       </Typography>
-      <Typography fontSize='20px' fontWeight={600}>
-        {value.toLocaleString(activeLocale || undefined)}
-      </Typography>
+      {to ? (
+        <Link fontSize='20px' fontWeight={600} to={to} style={{ textDecoration: 'underline' }}>
+          {formattedValue}
+        </Link>
+      ) : (
+        <Typography fontSize='20px' fontWeight={600}>
+          {formattedValue}
+        </Typography>
+      )}
     </Box>
   );
 };
