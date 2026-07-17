@@ -117,14 +117,13 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [strings.YES, strings.NO]
   );
 
-  const TreeCrownDiameterCell = useCallback(
-    ({ row }: { row: { original: TreeRow } }) => (
-      <>
-        {row.original.treeGrowthForm !== 'Shrub' && forestType === 'Mangrove'
-          ? row.original.treeCrownDiameter ?? ''
-          : ''}
-      </>
-    ),
+  const CrownDiameterCell = useCallback(
+    ({ row }: { row: { original: TreeRow } }) => {
+      if (row.original.treeGrowthForm === 'Shrub') {
+        return <>{row.original.shrubDiameter ?? ''}</>;
+      }
+      return <>{forestType === 'Mangrove' ? row.original.treeCrownDiameter ?? '' : ''}</>;
+    },
     [forestType]
   );
 
@@ -189,22 +188,16 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         },
       },
       {
-        id: 'treeCrownDiameter',
-        accessorKey: 'treeCrownDiameter',
-        header: strings.TREE_CROWN_DIAMETER_CM,
-        Cell: TreeCrownDiameterCell,
-        enableEditing: (row) => row.original.treeGrowthForm !== 'Shrub' && forestType === 'Mangrove',
+        id: 'crownDiameter',
+        accessorFn: (row) => (row.treeGrowthForm === 'Shrub' ? row.shrubDiameter : row.treeCrownDiameter),
+        header: strings.CROWN_DIAMETER_CM,
+        Cell: CrownDiameterCell,
+        enableEditing: (row) => row.original.treeGrowthForm === 'Shrub' || forestType === 'Mangrove',
         editConfig: {
-          onSave: (row, value) => saveRecordedTree('treeCrownDiameter', row, value),
-        },
-      },
-      {
-        id: 'shrubDiameter',
-        accessorKey: 'shrubDiameter',
-        header: strings.SHRUB_CROWN_DIAMETER_CM,
-        enableEditing: (row) => row.original.treeGrowthForm === 'Shrub',
-        editConfig: {
-          onSave: (row, value) => saveRecordedTree('shrubDiameter', row, value),
+          onSave: (row, value) =>
+            row.treeGrowthForm === 'Shrub'
+              ? saveRecordedTree('shrubDiameter', row, value)
+              : saveRecordedTree('treeCrownDiameter', row, value),
         },
       },
       {
@@ -266,7 +259,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       forestType,
       TreeNumberCell,
       GrowthFormCell,
-      TreeCrownDiameterCell,
+      CrownDiameterCell,
       IsInvasiveCell,
       IsThreatenedCell,
       IsDeadCell,
