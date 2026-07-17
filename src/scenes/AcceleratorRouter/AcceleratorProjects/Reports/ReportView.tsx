@@ -53,7 +53,7 @@ const ReportView = () => {
   const trackEvent = useTrackEvent();
 
   useEffect(() => {
-    trackEvent(MIXPANEL_EVENTS.REPORT_VIEWED, { is_funder_view: false });
+    trackEvent(MIXPANEL_EVENTS.REPORT_VIEWED, { viewer_persona: 'accelerator_admin' });
   }, [trackEvent]);
   const [showApproveDialog, , openApprovalDialog, closeApproveDialog] = useBoolean(false);
   const [showRejectDialog, , openRejectDialog, closeRejectDialog] = useBoolean(false);
