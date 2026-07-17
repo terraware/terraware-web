@@ -859,6 +859,14 @@ GO_TO_SEED_BANKS,Ir a los bancos de semilla,3b56bf2a
 GO_TO_SPECIES,Ir a las especies,a7f17ef4
 GOT_IT,¡Entendido!,f797a865
 GPS_COORDINATES,Coordenadas GPS,106ca85a
+GPS_FIELD_NORTHEAST_LATITUDE,Latitud noreste del campo GPS,3b62ac88
+GPS_FIELD_NORTHEAST_LONGITUDE,Longitud noreste del campo GPS,75ddc3a4
+GPS_FIELD_NORTHWEST_LATITUDE,Latitud noroeste del campo GPS,f5c90766
+GPS_FIELD_NORTHWEST_LONGITUDE,Longitud noroeste del campo GPS,81b7b79b
+GPS_FIELD_SOUTHEAST_LATITUDE,Latitud sureste del campo GPS,857b0f8d
+GPS_FIELD_SOUTHEAST_LONGITUDE,Longitud sureste del campo GPS,217399ae
+GPS_FIELD_SOUTHWEST_LATITUDE,Latitud suroeste del campo GPS,2819e6b7
+GPS_FIELD_SOUTHWEST_LONGITUDE,Longitud suroeste del campo GPS,f5cf07fd
 GPX_FILE,Archivo GPX,16b83a81
 GRAMINOID,Gramínea,3d34e325
 GRAMS,Gramos,3ba23872

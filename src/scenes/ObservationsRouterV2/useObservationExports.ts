@@ -108,6 +108,38 @@ const useObservationExports = () => {
           displayLabel: strings.NORTHEAST_CORNER_LONGITUDE,
         },
         {
+          key: 'gpsFieldSouthwestLatitude',
+          displayLabel: strings.GPS_FIELD_SOUTHWEST_LATITUDE,
+        },
+        {
+          key: 'gpsFieldSouthwestLongitude',
+          displayLabel: strings.GPS_FIELD_SOUTHWEST_LONGITUDE,
+        },
+        {
+          key: 'gpsFieldNorthwestLatitude',
+          displayLabel: strings.GPS_FIELD_NORTHWEST_LATITUDE,
+        },
+        {
+          key: 'gpsFieldNorthwestLongitude',
+          displayLabel: strings.GPS_FIELD_NORTHWEST_LONGITUDE,
+        },
+        {
+          key: 'gpsFieldSoutheastLatitude',
+          displayLabel: strings.GPS_FIELD_SOUTHEAST_LATITUDE,
+        },
+        {
+          key: 'gpsFieldSoutheastLongitude',
+          displayLabel: strings.GPS_FIELD_SOUTHEAST_LONGITUDE,
+        },
+        {
+          key: 'gpsFieldNortheastLatitude',
+          displayLabel: strings.GPS_FIELD_NORTHEAST_LATITUDE,
+        },
+        {
+          key: 'gpsFieldNortheastLongitude',
+          displayLabel: strings.GPS_FIELD_NORTHEAST_LONGITUDE,
+        },
+        {
           key: 'totalPlants',
           displayLabel: strings.TOTAL_PLANTS_OBSERVED,
         },
@@ -188,6 +220,23 @@ const useObservationExports = () => {
             // longitude first in each coordinate pair.
             const plotCoordinates: number[][] = monitoringPlot.boundary.coordinates[0];
 
+            const gpsFieldCoordinatesByPosition = monitoringPlot.photos.reduce(
+              (acc, photo) => {
+                if (photo.type === 'Plot' && photo.position && photo.gpsCoordinates) {
+                  acc[photo.position] = photo.gpsCoordinates.coordinates;
+                }
+                return acc;
+              },
+              {} as Partial<
+                Record<'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner', number[]>
+              >
+            );
+
+            const gpsFieldSouthwest = gpsFieldCoordinatesByPosition.SouthwestCorner;
+            const gpsFieldNorthwest = gpsFieldCoordinatesByPosition.NorthwestCorner;
+            const gpsFieldSoutheast = gpsFieldCoordinatesByPosition.SoutheastCorner;
+            const gpsFieldNortheast = gpsFieldCoordinatesByPosition.NortheastCorner;
+
             const plotConditions = monitoringPlot.conditions
               .map((condition) => getConditionString(condition))
               .join(', ');
@@ -196,6 +245,14 @@ const useObservationExports = () => {
               conditions: plotConditions,
               dateObserved,
               detailsLink,
+              gpsFieldNortheastLatitude: gpsFieldNortheast?.[1],
+              gpsFieldNortheastLongitude: gpsFieldNortheast?.[0],
+              gpsFieldNorthwestLatitude: gpsFieldNorthwest?.[1],
+              gpsFieldNorthwestLongitude: gpsFieldNorthwest?.[0],
+              gpsFieldSoutheastLatitude: gpsFieldSoutheast?.[1],
+              gpsFieldSoutheastLongitude: gpsFieldSoutheast?.[0],
+              gpsFieldSouthwestLatitude: gpsFieldSouthwest?.[1],
+              gpsFieldSouthwestLongitude: gpsFieldSouthwest?.[0],
               northeastLatitude: plotCoordinates[2][1],
               northeastLongitude: plotCoordinates[2][0],
               northwestLatitude: plotCoordinates[3][1],
@@ -307,6 +364,8 @@ const useObservationExports = () => {
 
       const prefix = `${site.name}-${completedDate}`;
       const dirName = `${prefix}-${strings.OBSERVATION}`;
+
+      console.log('observationResults', observationResults);
 
       return downloadZipFile({
         dirName,
