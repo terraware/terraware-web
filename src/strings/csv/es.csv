@@ -1376,8 +1376,7 @@ NURSERY_MEDIA,Mezcla del vivero,7bc6581b
 NURSERY_MORTALITY_RATE,Tasa de mortalidad en el vivero,feb99b18
 NURSERY_REQUIRED,Vivero *,809fa5b6
 NURSERY_SUMMARY,Resumen del Vivero,b46357cf
-NURSERY_SUMMARY_TOOLTIP_FIRST,El Resumen del Vivero muestra la cobertura de especies en el Vivero seleccionado para las especies solicitadas en la Fecha de Plantación.,005fc84a
-NURSERY_SUMMARY_TOOLTIP_SECOND,"Cuando no quedan plantas por retirar de una especie o de un sustrato, aún se pueden realizar retiros de las cantidades Listas para Plantar.",c240a5a8
+NURSERY_SUMMARY_TOOLTIP,El Resumen del Vivero muestra la cobertura de especies en el Vivero seleccionado para las especies solicitadas en la Fecha de Plantación.,005fc84a
 NURSERY_TRANSFER,Traslado de vivero,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Las transferencias de vivero requieren de un vivero fuente y uno meta.,7fe70d84
 OBSERVATION,Observación,ac4f24f0
@@ -1824,6 +1823,7 @@ REMAINING_IN_GOAL,Restante en la meta,0500723f
 REMAINING_QUANTITY_NOTES_PLACEHOLDER,Notas requeridas para cambios de cantidad,3603466e
 REMAINING_SEEDS,Semillas restantes,475182eb
 REMAINING_TO_WITHDRAW,Restante por retirar,234e649d
+REMAINING_TO_WITHDRAW_TOOLTIP,"Cuando no quedan plantas por retirar de una especie o de un sustrato, aún se pueden realizar retiros de las cantidades Listas para Plantar.",c240a5a8
 REMOVE,Eliminar,fe1f68f8
 REMOVE_ACCESS,Eliminar acceso,eb976c0a
 REMOVE_ACCESS_MODAL_TEXT,Esta acción no eliminará a las personas de Terraware. Solo eliminará su acceso a la Consola aceleradora.,34264879

@@ -1375,8 +1375,7 @@ NURSERY_MEDIA,Médias pour les pépinières,7bc6581b
 NURSERY_MORTALITY_RATE,Taux de mortalité de la pépinière,feb99b18
 NURSERY_REQUIRED,Pépinière *,809fa5b6
 NURSERY_SUMMARY,Résumé de la pépinière,b46357cf
-NURSERY_SUMMARY_TOOLTIP_FIRST,Le Résumé de la pépinière affiche la couverture des espèces dans la pépinière sélectionnée pour les espèces demandées à la date de plantation.,005fc84a
-NURSERY_SUMMARY_TOOLTIP_SECOND,"Lorsqu'il ne reste plus de plants à retirer pour une espèce ou pour un substrat, des retraits peuvent tout de même être effectués à partir des quantités Prêtes à planter.",c240a5a8
+NURSERY_SUMMARY_TOOLTIP,Le résumé de la pépinière affiche la couverture des espèces dans la pépinière sélectionnée pour les espèces demandées à la date de plantation.,005fc84a
 NURSERY_TRANSFER,Transfert de pépinière,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Les transferts de pépinières nécessitent une pépinière d'origine et une pépinière de destination.,7fe70d84
 OBSERVATION,Observation,ac4f24f0
@@ -1823,6 +1822,7 @@ REMAINING_IN_GOAL,Restant dans l'objectif,0500723f
 REMAINING_QUANTITY_NOTES_PLACEHOLDER,Notes requises pour les modifications de quantité,3603466e
 REMAINING_SEEDS,Semences restantes,475182eb
 REMAINING_TO_WITHDRAW,Montant restant à retirer,234e649d
+REMAINING_TO_WITHDRAW_TOOLTIP,"Lorsqu'il ne reste plus de plants à retirer pour une espèce ou pour un substrat, il est toujours possible d'effectuer des retraits à partir des quantités Prêtes à planter.",c240a5a8
 REMOVE,Supprimer,fe1f68f8
 REMOVE_ACCESS,Supprimer l'accès,eb976c0a
 REMOVE_ACCESS_MODAL_TEXT,Cette action ne supprimera pas les personnes de Terraware. Elle supprimera simplement leur accès à la console Accelerator.,34264879

@@ -547,14 +547,7 @@ const Step1Content = ({
               <Typography fontSize='16px' fontWeight={400} textAlign={'left'} color={theme.palette.TwClrTxt}>
                 {strings.NURSERY_SUMMARY}
               </Typography>
-              <Tooltip
-                title={
-                  <Box display='flex' flexDirection='column'>
-                    <Typography fontSize='inherit'>{strings.NURSERY_SUMMARY_TOOLTIP_FIRST}</Typography>
-                    <Typography fontSize='inherit'>{strings.NURSERY_SUMMARY_TOOLTIP_SECOND}</Typography>
-                  </Box>
-                }
-              >
+              <Tooltip title={strings.NURSERY_SUMMARY_TOOLTIP}>
                 <Box display='flex' alignItems='center'>
                   <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
                 </Box>
@@ -576,9 +569,16 @@ const Step1Content = ({
             <Typography fontSize='14px' fontWeight={600} textAlign='right' color={theme.palette.TwClrTxt}>
               {strings.READY_TO_PLANT}
             </Typography>
-            <Typography fontSize='14px' fontWeight={600} textAlign='right' color={theme.palette.TwClrTxt}>
-              {strings.REMAINING_TO_WITHDRAW}
-            </Typography>
+            <Box display='flex' alignItems='center' justifyContent='flex-end' gap={theme.spacing(0.5)}>
+              <Typography fontSize='14px' fontWeight={600} textAlign='right' color={theme.palette.TwClrTxt}>
+                {strings.REMAINING_TO_WITHDRAW}
+              </Typography>
+              <Tooltip title={strings.REMAINING_TO_WITHDRAW_TOOLTIP}>
+                <Box display='flex' alignItems='center'>
+                  <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+                </Box>
+              </Tooltip>
+            </Box>
             <Typography fontSize='14px' fontWeight={600} textAlign='right' color={theme.palette.TwClrTxt}>
               {strings.COVERAGE}
             </Typography>
