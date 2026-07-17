@@ -615,9 +615,7 @@ const Step2Content = ({
         .map((substratum) => ({
           ...substratum,
           species: substratum.species.filter(
-            (species) =>
-              species.quantity - species.withdrawnQuantity > 0 &&
-              (batchesBySpecies.get(species.speciesId)?.length ?? 0) > 0
+            (species) => species.quantity > 0 && (batchesBySpecies.get(species.speciesId)?.length ?? 0) > 0
           ),
         }))
         .filter((substratum) => substratum.species.length > 0),
