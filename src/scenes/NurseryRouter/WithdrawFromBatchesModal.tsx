@@ -547,7 +547,14 @@ const Step1Content = ({
               <Typography fontSize='16px' fontWeight={400} textAlign={'left'} color={theme.palette.TwClrTxt}>
                 {strings.NURSERY_SUMMARY}
               </Typography>
-              <Tooltip title={strings.NURSERY_SUMMARY_TOOLTIP}>
+              <Tooltip
+                title={
+                  <Box display='flex' flexDirection='column'>
+                    <Typography fontSize='inherit'>{strings.NURSERY_SUMMARY_TOOLTIP_FIRST}</Typography>
+                    <Typography fontSize='inherit'>{strings.NURSERY_SUMMARY_TOOLTIP_SECOND}</Typography>
+                  </Box>
+                }
+              >
                 <Box display='flex' alignItems='center'>
                   <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
                 </Box>
