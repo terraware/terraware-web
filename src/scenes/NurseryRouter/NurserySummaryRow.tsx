@@ -63,7 +63,12 @@ const NurserySummaryRow = ({ species, ready }: NurserySummaryRowProps): JSX.Elem
       <Typography fontSize='16px' textAlign='right' color={theme.palette.TwClrTxt}>
         {Math.max(0, species.requestedQuantity - species.withdrawnQuantity).toLocaleString()}
       </Typography>
-      <Typography fontSize='16px' textAlign='right' color={coverageColor} fontWeight={coverage === 'NOT_NEEDED' ? 400 : 600}>
+      <Typography
+        fontSize='16px'
+        textAlign='right'
+        color={coverageColor}
+        fontWeight={coverage === 'NOT_NEEDED' ? 400 : 600}
+      >
         {coverageLabel}
       </Typography>
     </Box>
