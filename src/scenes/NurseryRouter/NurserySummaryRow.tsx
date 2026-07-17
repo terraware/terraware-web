@@ -11,32 +11,39 @@ export type NurserySummaryRowProps = {
   index: number;
 };
 
-type Coverage = 'COVERED' | 'PARTIALLY_COVERED' | 'NOT_COVERED';
+type Coverage = 'COVERED' | 'PARTIALLY_COVERED' | 'NOT_COVERED' | 'NOT_NEEDED';
 
 const NurserySummaryRow = ({ species, ready }: NurserySummaryRowProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
 
   const coverage: Coverage = useMemo(() => {
+    if (species.requestedQuantity - species.withdrawnQuantity <= 0) {
+      return 'NOT_NEEDED';
+    }
     if (ready === 0) {
       return 'NOT_COVERED';
     }
     return ready >= species.requestedQuantity ? 'COVERED' : 'PARTIALLY_COVERED';
-  }, [ready, species.requestedQuantity]);
+  }, [ready, species.requestedQuantity, species.withdrawnQuantity]);
 
   const coverageColor =
-    coverage === 'COVERED'
-      ? theme.palette.TwClrTxtSuccess
-      : coverage === 'PARTIALLY_COVERED'
-        ? theme.palette.TwClrTxtWarning
-        : theme.palette.TwClrTxtDanger;
+    coverage === 'NOT_NEEDED'
+      ? theme.palette.TwClrTxt
+      : coverage === 'COVERED'
+        ? theme.palette.TwClrTxtSuccess
+        : coverage === 'PARTIALLY_COVERED'
+          ? theme.palette.TwClrTxtWarning
+          : theme.palette.TwClrTxtDanger;
 
   const coverageLabel =
-    coverage === 'COVERED'
-      ? strings.COVERED
-      : coverage === 'PARTIALLY_COVERED'
-        ? strings.PARTIALLY_COVERED
-        : strings.NOT_COVERED;
+    coverage === 'NOT_NEEDED'
+      ? strings.NOT_NEEDED
+      : coverage === 'COVERED'
+        ? strings.COVERED
+        : coverage === 'PARTIALLY_COVERED'
+          ? strings.PARTIALLY_COVERED
+          : strings.NOT_COVERED;
 
   return (
     <Box display='grid' gridTemplateColumns='2fr 1fr 1fr 1fr' gap={theme.spacing(1)} padding={theme.spacing(1, 2)}>
@@ -56,7 +63,7 @@ const NurserySummaryRow = ({ species, ready }: NurserySummaryRowProps): JSX.Elem
       <Typography fontSize='16px' textAlign='right' color={theme.palette.TwClrTxt}>
         {Math.max(0, species.requestedQuantity - species.withdrawnQuantity).toLocaleString()}
       </Typography>
-      <Typography fontSize='16px' textAlign='right' color={coverageColor} fontWeight={600}>
+      <Typography fontSize='16px' textAlign='right' color={coverageColor} fontWeight={coverage === 'NOT_NEEDED' ? 400 : 600}>
         {coverageLabel}
       </Typography>
     </Box>
