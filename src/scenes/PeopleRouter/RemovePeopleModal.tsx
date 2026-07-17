@@ -36,7 +36,7 @@ export default function RemovePeopleDialog(props: RemovePeopleDialogProps): JSX.
       message={
         removedPeople.length > 1
           ? strings.REMOVE_PEOPLE_DESC
-          : strings.formatString(strings.REMOVE_PERSON_DESC, removedPeople[0].firstName || '')
+          : strings.formatString(strings.REMOVE_PERSON_DESC, removedPeople[0].firstName || strings.THIS_PERSON)
       }
       skrim={true}
     />

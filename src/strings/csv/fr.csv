@@ -1834,7 +1834,7 @@ REMOVE_ONLY_ONE_ORG_AT_A_TIME,Vous ne pouvez vous retirer que d'une seule organi
 REMOVE_PEOPLE,Supprimer des personnes,7fa1c6ab
 REMOVE_PEOPLE_DESC,"Êtes-vous sûr·e de vouloir supprimer ces personnes ? En les supprimant, elles n’auront plus accès aux données de votre organisation.",687d00b0
 REMOVE_PERSON,Supprimer la personne,c7c8903c
-REMOVE_PERSON_DESC,"Êtes-vous sûr·e de vouloir supprimer {0} ? En les supprimant, ils n’auront plus accès aux données de votre organisation.",f3d4f70f
+REMOVE_PERSON_DESC,Êtes-vous sûr de vouloir retirer {0} ? Retirer {0} signifie qu'il n'aura plus accès aux données de votre organisation.,000a6493
 REMOVE_PROJECT,Supprimer un projet,3e32288a
 REMOVE_SPECIES,Supprimer des espèces,bbc8f149
 REMOVING_ORG_WARNING,"En vous retirant de {0}, vous n'aurez plus accès aux données de cette organisation. Êtes-vous sûr de vouloir enregistrer vos modifications ?",767a2892
@@ -2367,6 +2367,7 @@ THIS_DELIVERABLE_HAS_BEEN_APPROVED_DOCUMENT,"Ce livrable a été approuvé. Si l
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_QUESTIONNAIRE,"Ce livrable a été approuvé. Si le projet soumet à nouveau le questionnaire, le statut repassera à « En cours d’examen ».",89b908e0
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_SPECIES,Ce livrable a été approuvé. La liste des espèces et leur statut peuvent changer à mesure que d'autres livrables de liste d'espèces sont soumis.,28fcdf43
 THIS_MODULE_CONTAINS,Ce module contient :,7982e848
+THIS_PERSON,cette personne,7e1c4412
 THIS_PROJECT_HAS_NO_ACTIVITIES,Ce projet n’a aucune activité,cb693792
 THIS_REPORT_HAS_BEEN_APPROVED,Ce rapport a été approuvé.,030064cb
 THREATENED,Menacée,57ca76f3
