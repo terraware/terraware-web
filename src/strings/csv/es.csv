@@ -1835,7 +1835,7 @@ REMOVE_ONLY_ONE_ORG_AT_A_TIME,Solo puede eliminarse a sí mismo de una organizac
 REMOVE_PEOPLE,Eliminar personas,7fa1c6ab
 REMOVE_PEOPLE_DESC,"¿Estás seguro de que quieres eliminar a estas personas? Al eliminarlas, ya no tendrán acceso a los datos de tu organización.",687d00b0
 REMOVE_PERSON,Eliminar persona,c7c8903c
-REMOVE_PERSON_DESC,"¿Estás seguro de que quieres eliminar a {0}? Al eliminarlos, ya no tendrán acceso a los datos de tu organización.",f3d4f70f
+REMOVE_PERSON_DESC,"¿Está seguro de que desea eliminar a {0}? Al eliminar a {0}, ya no tendrá acceso a los datos de su organización.",000a6493
 REMOVE_PROJECT,Eliminar proyecto,3e32288a
 REMOVE_SPECIES,Borrar especies,bbc8f149
 REMOVING_ORG_WARNING,"Al eliminarse a sí mismo de {0}, ya no tendrá acceso a los datos de esta organización. ¿Está seguro de que desea guardar los cambios?",767a2892
@@ -2367,6 +2367,7 @@ THIS_DELIVERABLE_HAS_BEEN_APPROVED_DOCUMENT,"Este entregable ha sido aprobado. S
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_QUESTIONNAIRE,"Este entregable ha sido aprobado. Si el proyecto vuelve a enviar el cuestionario, el estado volverá a ""En revisión"".",89b908e0
 THIS_DELIVERABLE_HAS_BEEN_APPROVED_SPECIES,Este entregable ha sido aprobado. La lista de especies y su estado pueden cambiar a medida que se presenten nuevos entregables de listas de especies.,28fcdf43
 THIS_MODULE_CONTAINS,Este módulo contiene:,7982e848
+THIS_PERSON,esta persona,7e1c4412
 THIS_PROJECT_HAS_NO_ACTIVITIES,Este proyecto no tiene actividades,cb693792
 THIS_REPORT_HAS_BEEN_APPROVED,Se aprobó este informe.,030064cb
 THREATENED,Amenazada,57ca76f3
