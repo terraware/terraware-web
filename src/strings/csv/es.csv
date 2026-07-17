@@ -1376,7 +1376,7 @@ NURSERY_MEDIA,Mezcla del vivero,7bc6581b
 NURSERY_MORTALITY_RATE,Tasa de mortalidad en el vivero,feb99b18
 NURSERY_REQUIRED,Vivero *,809fa5b6
 NURSERY_SUMMARY,Resumen del Vivero,b46357cf
-NURSERY_SUMMARY_TOOLTIP,El Resumen del Vivero muestra la cobertura de especies en el Vivero seleccionado para las especies solicitadas en la Fecha de Plantación.,005fc84a
+NURSERY_SUMMARY_TOOLTIP,"El Resumen del Vivero muestra la cobertura de especies en el Vivero seleccionado para las especies solicitadas en la Fecha de Plantación. Cuando no quedan plantas de una especie o de un sustrato para retirar, aún se pueden realizar retiros de las cantidades Listas para Plantar.",a9b75b80
 NURSERY_TRANSFER,Traslado de vivero,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Las transferencias de vivero requieren de un vivero fuente y uno meta.,7fe70d84
 OBSERVATION,Observación,ac4f24f0
