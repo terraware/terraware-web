@@ -1,3 +1,4 @@
+63dc0326 SW-8669 Withdrawal Requests: In the card, make the "Withdrawn Plants" number a link to the Withdrawals table (#6080)
 112ed65f SW-8675 When Remaining to Withdraw is 0 show "Not Needed" status (#6085)
 b7605f3f Replace PersonProvider with hook instead (#6075)
 965328f7 SW-8410 Invite user with global roles if user does not exist (#6074)
