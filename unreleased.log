@@ -1,3 +1,4 @@
+b7605f3f Replace PersonProvider with hook instead (#6075)
 965328f7 SW-8410 Invite user with global roles if user does not exist (#6074)
 ba7da59d SW-8667 Combine tree/shrub crown diameter into a single column (#6084)
 13a88df2 SW-6729 People: Remove Person dialog for invited yet non-member of org is showing a blank for Name of Person (#6083)
