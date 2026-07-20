@@ -232,7 +232,7 @@ const MapStatsDrawer = ({
             value: properties.survivalRate ? `${properties.survivalRate}%` : strings.NO_DATA_YET,
           },
           {
-            key: strings.PLANTING_DENSITY,
+            key: strings.PLANT_DENSITY,
             value: properties.plantingDensity
               ? `${numberFormatter.format(properties.plantingDensity)} ${strings.PLANTS_PER_HECTARE}`
               : strings.NO_DATA_YET,

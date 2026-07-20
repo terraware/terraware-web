@@ -248,7 +248,7 @@ const ObservationStatsDrawer = ({
       });
 
       drawerRows.push({
-        key: strings.PLANTING_DENSITY,
+        key: strings.PLANT_DENSITY,
         value: properties.observedDensity ? `${properties.observedDensity}` : strings.NO_DATA_YET,
       });
 
