@@ -858,14 +858,6 @@ GO_TO_SEED_BANKS,Aller aux banques de semences,3b56bf2a
 GO_TO_SPECIES,Aller à espèces,a7f17ef4
 GOT_IT,Compris !,f797a865
 GPS_COORDINATES,Coordonnées GPS,106ca85a
-GPS_FIELD_NORTHEAST_LATITUDE,Latitude nord-est du champ GPS,3b62ac88
-GPS_FIELD_NORTHEAST_LONGITUDE,Longitude nord-est du champ GPS,75ddc3a4
-GPS_FIELD_NORTHWEST_LATITUDE,Latitude nord-ouest du champ GPS,f5c90766
-GPS_FIELD_NORTHWEST_LONGITUDE,Longitude nord-ouest du champ GPS,81b7b79b
-GPS_FIELD_SOUTHEAST_LATITUDE,Latitude sud-est du champ GPS,857b0f8d
-GPS_FIELD_SOUTHEAST_LONGITUDE,Longitude sud-est du champ GPS,217399ae
-GPS_FIELD_SOUTHWEST_LATITUDE,Latitude sud-ouest du champ GPS,2819e6b7
-GPS_FIELD_SOUTHWEST_LONGITUDE,Longitude sud-ouest du champ GPS,f5cf07fd
 GPX_FILE,Fichier GPX,16b83a81
 GRAMINOID,Graminoïdes,3d34e325
 GRAMS,Grammes,3ba23872
@@ -1324,9 +1316,13 @@ NONE_SELECTED,Aucun·e sélectionné·e,61621b35
 NORTHEAST_CORNER,Coin nord-est,da4ddbf6
 NORTHEAST_CORNER_LATITUDE,Latitude de l’angle nord-est,b20d2d02
 NORTHEAST_CORNER_LONGITUDE,Longitude de l’angle nord-est,36173800
+NORTHEAST_FIELD_RECORDED_LATITUDE,Latitude relevée sur le terrain au nord-est,0cda12b7
+NORTHEAST_FIELD_RECORDED_LONGITUDE,Longitude relevée sur le terrain au nord-est,d9a5aae7
 NORTHWEST_CORNER,Coin nord-ouest,2c0842da
 NORTHWEST_CORNER_LATITUDE,Latitude de l’angle nord-ouest,bef5fb10
 NORTHWEST_CORNER_LONGITUDE,Longitude de l’angle nord-ouest,355e9d22
+NORTHWEST_FIELD_RECORDED_LATITUDE,Latitude relevée sur le terrain au nord-ouest,fdee4895
+NORTHWEST_FIELD_RECORDED_LONGITUDE,Longitude relevée sur le terrain au nord-ouest,58fc9091
 NOT_ACCEPTED,Non accepté,c3102621
 NOT_APPLICABLE_FOR_AD_HOC_PLOTS,Non applicable aux parcelles ad hoc,3e9df420
 NOT_CALCULATED_FOR_TEMPORARY_PLOTS,Non calculé pour les parcelles temporaires.,ca983c30
@@ -2165,9 +2161,13 @@ SOURCING,Source,dc1a071d
 SOUTHEAST_CORNER,Coin sud-est,cdf375aa
 SOUTHEAST_CORNER_LATITUDE,Latitude de l’angle sud-est,25510ec5
 SOUTHEAST_CORNER_LONGITUDE,Longitude de l’angle sud-est,a15c5f33
+SOUTHEAST_FIELD_RECORDED_LATITUDE,Latitude relevée sur le terrain au sud-est,5fc20193
+SOUTHEAST_FIELD_RECORDED_LONGITUDE,Longitude relevée sur le terrain au sud-est,a549ab8d
 SOUTHWEST_CORNER,Coin sud-ouest,4d23e84b
 SOUTHWEST_CORNER_LATITUDE,Latitude de l’angle sud-ouest,11768ce8
 SOUTHWEST_CORNER_LONGITUDE,Longitude de l’angle sud-ouest,170c539d
+SOUTHWEST_FIELD_RECORDED_LATITUDE,Latitude relevée sur le terrain au sud-ouest,7f5ea15d
+SOUTHWEST_FIELD_RECORDED_LONGITUDE,Longitude relevée sur le terrain au sud-ouest,bc54eee1
 SPECIES,Espèces,bb344d18
 SPECIES_APPROVED,Espèces approuvées,448567d6
 SPECIES_CARD_DESCRIPTION,Voir les espèces qui sont référencées par vos entrées de semences et de plantes.,834fb3c8

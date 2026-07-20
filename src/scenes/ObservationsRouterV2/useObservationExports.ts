@@ -109,35 +109,35 @@ const useObservationExports = () => {
         },
         {
           key: 'gpsFieldSouthwestLatitude',
-          displayLabel: strings.GPS_FIELD_SOUTHWEST_LATITUDE,
+          displayLabel: strings.SOUTHWEST_FIELD_RECORDED_LATITUDE,
         },
         {
           key: 'gpsFieldSouthwestLongitude',
-          displayLabel: strings.GPS_FIELD_SOUTHWEST_LONGITUDE,
+          displayLabel: strings.SOUTHWEST_FIELD_RECORDED_LONGITUDE,
         },
         {
           key: 'gpsFieldNorthwestLatitude',
-          displayLabel: strings.GPS_FIELD_NORTHWEST_LATITUDE,
+          displayLabel: strings.NORTHWEST_FIELD_RECORDED_LATITUDE,
         },
         {
           key: 'gpsFieldNorthwestLongitude',
-          displayLabel: strings.GPS_FIELD_NORTHWEST_LONGITUDE,
+          displayLabel: strings.NORTHWEST_FIELD_RECORDED_LONGITUDE,
         },
         {
           key: 'gpsFieldSoutheastLatitude',
-          displayLabel: strings.GPS_FIELD_SOUTHEAST_LATITUDE,
+          displayLabel: strings.SOUTHEAST_FIELD_RECORDED_LATITUDE,
         },
         {
           key: 'gpsFieldSoutheastLongitude',
-          displayLabel: strings.GPS_FIELD_SOUTHEAST_LONGITUDE,
+          displayLabel: strings.SOUTHEAST_FIELD_RECORDED_LONGITUDE,
         },
         {
           key: 'gpsFieldNortheastLatitude',
-          displayLabel: strings.GPS_FIELD_NORTHEAST_LATITUDE,
+          displayLabel: strings.NORTHEAST_FIELD_RECORDED_LATITUDE,
         },
         {
           key: 'gpsFieldNortheastLongitude',
-          displayLabel: strings.GPS_FIELD_NORTHEAST_LONGITUDE,
+          displayLabel: strings.NORTHEAST_FIELD_RECORDED_LONGITUDE,
         },
         {
           key: 'totalPlants',
@@ -364,8 +364,6 @@ const useObservationExports = () => {
 
       const prefix = `${site.name}-${completedDate}`;
       const dirName = `${prefix}-${strings.OBSERVATION}`;
-
-      console.log('observationResults', observationResults);
 
       return downloadZipFile({
         dirName,
