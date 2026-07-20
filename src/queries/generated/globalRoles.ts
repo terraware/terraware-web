@@ -2,6 +2,9 @@ import { baseApi as api } from '../baseApi';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
+    inviteGlobalRolesUser: build.mutation<InviteGlobalRolesUserApiResponse, InviteGlobalRolesUserApiArg>({
+      query: (queryArg) => ({ url: `/api/v1/globalRoles/invite`, method: 'POST', body: queryArg }),
+    }),
     deleteGlobalRoles: build.mutation<DeleteGlobalRolesApiResponse, DeleteGlobalRolesApiArg>({
       query: (queryArg) => ({ url: `/api/v1/globalRoles/users`, method: 'DELETE', body: queryArg }),
     }),
@@ -19,6 +22,9 @@ const injectedRtkApi = api.injectEndpoints({
   overrideExisting: false,
 });
 export { injectedRtkApi as api };
+export type InviteGlobalRolesUserApiResponse =
+  /** status 200 The requested operation succeeded. */ GetGlobalRolesUserResponsePayload;
+export type InviteGlobalRolesUserApiArg = InviteGlobalRolesUserRequestPayload;
 export type DeleteGlobalRolesApiResponse = /** status 200 The requested operation succeeded. */ SuccessResponsePayload;
 export type DeleteGlobalRolesApiArg = DeleteGlobalRolesRequestPayload;
 export type ListGlobalRolesApiResponse =
@@ -30,19 +36,6 @@ export type UpdateGlobalRolesApiArg = {
   updateGlobalRolesRequestPayload: UpdateGlobalRolesRequestPayload;
 };
 export type SuccessOrError = 'ok' | 'error';
-export type SuccessResponsePayload = {
-  status: SuccessOrError;
-};
-export type ErrorDetails = {
-  message: string;
-};
-export type SimpleErrorResponsePayload = {
-  error: ErrorDetails;
-  status: SuccessOrError;
-};
-export type DeleteGlobalRolesRequestPayload = {
-  userIds: number[];
-};
 export type UserWithGlobalRolesPayload = {
   createdTime: string;
   email: string;
@@ -62,6 +55,27 @@ export type UserWithGlobalRolesPayload = {
   )[];
   lastName?: string;
 };
+export type GetGlobalRolesUserResponsePayload = {
+  status: SuccessOrError;
+  user: UserWithGlobalRolesPayload;
+};
+export type ErrorDetails = {
+  message: string;
+};
+export type SimpleErrorResponsePayload = {
+  error: ErrorDetails;
+  status: SuccessOrError;
+};
+export type InviteGlobalRolesUserRequestPayload = {
+  email: string;
+  globalRoles: ('Super-Admin' | 'Accelerator Admin' | 'TF Expert' | 'Read Only')[];
+};
+export type SuccessResponsePayload = {
+  status: SuccessOrError;
+};
+export type DeleteGlobalRolesRequestPayload = {
+  userIds: number[];
+};
 export type GlobalRoleUsersListResponsePayload = {
   status: SuccessOrError;
   users: UserWithGlobalRolesPayload[];
@@ -70,6 +84,7 @@ export type UpdateGlobalRolesRequestPayload = {
   globalRoles: ('Super-Admin' | 'Accelerator Admin' | 'TF Expert' | 'Read Only')[];
 };
 export const {
+  useInviteGlobalRolesUserMutation,
   useDeleteGlobalRolesMutation,
   useListGlobalRolesQuery,
   useLazyListGlobalRolesQuery,
