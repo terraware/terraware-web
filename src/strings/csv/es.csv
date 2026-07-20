@@ -1823,6 +1823,7 @@ REMAINING_IN_GOAL,Restante en la meta,0500723f
 REMAINING_QUANTITY_NOTES_PLACEHOLDER,Notas requeridas para cambios de cantidad,3603466e
 REMAINING_SEEDS,Semillas restantes,475182eb
 REMAINING_TO_WITHDRAW,Restante por retirar,234e649d
+REMAINING_TO_WITHDRAW_TOOLTIP,"Cuando no quedan plantas por retirar de una especie o de un sustrato, aún se pueden realizar retiros de las cantidades Listas para Plantar.",c240a5a8
 REMOVE,Eliminar,fe1f68f8
 REMOVE_ACCESS,Eliminar acceso,eb976c0a
 REMOVE_ACCESS_MODAL_TEXT,Esta acción no eliminará a las personas de Terraware. Solo eliminará su acceso a la Consola aceleradora.,34264879

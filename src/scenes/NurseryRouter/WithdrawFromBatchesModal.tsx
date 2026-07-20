@@ -569,9 +569,16 @@ const Step1Content = ({
             <Typography fontSize='14px' fontWeight={600} textAlign='right' color={theme.palette.TwClrTxt}>
               {strings.READY_TO_PLANT}
             </Typography>
-            <Typography fontSize='14px' fontWeight={600} textAlign='right' color={theme.palette.TwClrTxt}>
-              {strings.REMAINING_TO_WITHDRAW}
-            </Typography>
+            <Box display='flex' alignItems='center' justifyContent='flex-end' gap={theme.spacing(0.5)}>
+              <Typography fontSize='14px' fontWeight={600} textAlign='right' color={theme.palette.TwClrTxt}>
+                {strings.REMAINING_TO_WITHDRAW}
+              </Typography>
+              <Tooltip title={strings.REMAINING_TO_WITHDRAW_TOOLTIP}>
+                <Box display='flex' alignItems='center'>
+                  <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+                </Box>
+              </Tooltip>
+            </Box>
             <Typography fontSize='14px' fontWeight={600} textAlign='right' color={theme.palette.TwClrTxt}>
               {strings.COVERAGE}
             </Typography>
@@ -615,9 +622,7 @@ const Step2Content = ({
         .map((substratum) => ({
           ...substratum,
           species: substratum.species.filter(
-            (species) =>
-              species.quantity - species.withdrawnQuantity > 0 &&
-              (batchesBySpecies.get(species.speciesId)?.length ?? 0) > 0
+            (species) => species.quantity > 0 && (batchesBySpecies.get(species.speciesId)?.length ?? 0) > 0
           ),
         }))
         .filter((substratum) => substratum.species.length > 0),

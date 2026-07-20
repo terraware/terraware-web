@@ -1822,6 +1822,7 @@ REMAINING_IN_GOAL,Restant dans l'objectif,0500723f
 REMAINING_QUANTITY_NOTES_PLACEHOLDER,Notes requises pour les modifications de quantité,3603466e
 REMAINING_SEEDS,Semences restantes,475182eb
 REMAINING_TO_WITHDRAW,Montant restant à retirer,234e649d
+REMAINING_TO_WITHDRAW_TOOLTIP,"Lorsqu'il ne reste plus de plants à retirer pour une espèce ou pour un substrat, il est toujours possible d'effectuer des retraits à partir des quantités Prêtes à planter.",c240a5a8
 REMOVE,Supprimer,fe1f68f8
 REMOVE_ACCESS,Supprimer l'accès,eb976c0a
 REMOVE_ACCESS_MODAL_TEXT,Cette action ne supprimera pas les personnes de Terraware. Elle supprimera simplement leur accès à la console Accelerator.,34264879
