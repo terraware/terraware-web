@@ -1,5 +1,7 @@
 import { Quat, Script, Vec3, math } from 'playcanvas';
 
+import { computeGroundPlane, yOnPlane } from 'src/components/GaussianSplat/groundPlane';
+
 /**
  * First-person walkthrough camera for Gaussian Splat scenes.
  *
@@ -16,14 +18,6 @@ import { Quat, Script, Vec3, math } from 'playcanvas';
 const _quat = new Quat();
 const _flatForward = new Vec3();
 const _flatRight = new Vec3();
-
-/** Compute Y on the plane defined by `normal` passing through `point` at world XZ coords (x, z). */
-const yOnPlane = (x: number, z: number, normal: Vec3, point: Vec3, fallback: number): number => {
-  if (Math.abs(normal.y) < 1e-6) {
-    return fallback;
-  }
-  return point.y - (normal.x * (x - point.x) + normal.z * (z - point.z)) / normal.y;
-};
 
 /** Frame-rate-independent damping lerp rate — matches PlayCanvas CameraControls. */
 const dampRate = (damping: number, dt: number) => 1 - Math.pow(damping, dt * 1000);
@@ -113,32 +107,12 @@ export class WalkthroughCamera extends Script {
     if (this._hasGroundPlane || this.groundPlane.length < 3) {
       return;
     }
-    const p0 = this.groundPlane[0];
-    const p1 = this.groundPlane[1];
-    const p2 = this.groundPlane[2];
-    const v1x = p1.x - p0.x;
-    const v1y = p1.y - p0.y;
-    const v1z = p1.z - p0.z;
-    const v2x = p2.x - p0.x;
-    const v2y = p2.y - p0.y;
-    const v2z = p2.z - p0.z;
-    let nx = v1y * v2z - v1z * v2y;
-    let ny = v1z * v2x - v1x * v2z;
-    let nz = v1x * v2y - v1y * v2x;
-    const len = Math.sqrt(nx * nx + ny * ny + nz * nz);
-    if (len < 1e-10) {
+    const plane = computeGroundPlane(this.groundPlane);
+    if (!plane) {
       return;
     }
-    nx /= len;
-    ny /= len;
-    nz /= len;
-    if (ny < 0) {
-      nx = -nx;
-      ny = -ny;
-      nz = -nz;
-    }
-    this._planeNormal.set(nx, ny, nz);
-    this._planePoint.set(p0.x, p0.y, p0.z);
+    this._planeNormal.copy(plane.normal);
+    this._planePoint.copy(plane.point);
     this._hasGroundPlane = true;
   }
 
