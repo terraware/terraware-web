@@ -71,9 +71,6 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
 
   const [getUserPreferences] = useLazyGetUserPreferencesQuery();
 
-  // Fetch org preferences imperatively into local state rather than via a subscribed query: the
-  // subscribed cache entry would be wiped by the RESET_APP dispatched on the same org change (below)
-  // and never recover, leaving the provider stuck un-bootstrapped. Local state survives RESET_APP.
   const reloadOrgPreferences = useCallback(() => {
     const getOrgPreferences = async () => {
       if (selectedOrganization) {
