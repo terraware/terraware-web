@@ -15,6 +15,7 @@ export type OptionsMenuProps = {
   priority?: ButtonPriority;
   sx?: SxProps;
   type?: ButtonType;
+  menuAlign?: 'left' | 'center' | 'right';
 };
 
 export default function OptionsMenu({
@@ -26,6 +27,7 @@ export default function OptionsMenu({
   priority,
   sx,
   type,
+  menuAlign = 'right',
 }: OptionsMenuProps): JSX.Element {
   const [actionMenuAnchorEl, setActionMenuAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -71,6 +73,7 @@ export default function OptionsMenu({
         anchorElement={actionMenuAnchorEl}
         setAnchorElement={setActionMenuAnchorEl}
         onClose={onClose}
+        menuAlign={menuAlign}
       />
     </>
   );
