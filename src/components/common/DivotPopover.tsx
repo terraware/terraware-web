@@ -122,6 +122,16 @@ export default function DivotPopover({
         classes={{
           paper: `${isMobile ? 'mobile' : 'non-mobile divot-popover-' + size}`,
         }}
+        slotProps={{
+          paper: {
+            sx: {
+              overflow: 'visible',
+              display: 'flex',
+              flexDirection: 'column',
+              maxHeight: 'calc(100vh - 100px)',
+            },
+          },
+        }}
         sx={{
           overflowX: 'visible',
           overflowY: 'visible',
@@ -165,7 +175,8 @@ export default function DivotPopover({
             padding: 0,
             borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
             borderRadius: '7px 7px 0 0',
-            height: '64px',
+            minHeight: '64px',
+            flexShrink: 0,
           }}
         >
           {isMobile === false && (
@@ -176,8 +187,8 @@ export default function DivotPopover({
                   width: '16px',
                   height: '16px',
                   border: '2px solid transparent',
-                  borderLeft: `2px solid ${theme.palette.TwClrBrdrTertiary}`,
-                  borderTop: `2px solid ${theme.palette.TwClrBrdrTertiary}`,
+                  borderLeft: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                  borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
                   top: '-8px',
                   position: 'absolute',
                   transform: 'rotate(45deg)',
@@ -238,7 +249,9 @@ export default function DivotPopover({
             <Divider />
           </ListSubheader>
         </List>
-        {children}
+        <Box sx={{ display: 'flex', flexDirection: 'column', flex: '1 1 auto', minHeight: 0, overflowY: 'auto' }}>
+          {children}
+        </Box>
       </Popover>
     </div>
   );
