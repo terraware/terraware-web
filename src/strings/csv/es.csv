@@ -1317,9 +1317,13 @@ NONE_SELECTED,Ninguno seleccionado,61621b35
 NORTHEAST_CORNER,Esquina noreste,da4ddbf6
 NORTHEAST_CORNER_LATITUDE,Latitud de la esquina noreste,b20d2d02
 NORTHEAST_CORNER_LONGITUDE,Longitud de la esquina noreste,36173800
+NORTHEAST_FIELD_RECORDED_LATITUDE,Latitud registrada del campo noreste,0cda12b7
+NORTHEAST_FIELD_RECORDED_LONGITUDE,Longitud registrada del campo noreste,d9a5aae7
 NORTHWEST_CORNER,Esquina noroeste,2c0842da
 NORTHWEST_CORNER_LATITUDE,Latitud de la esquina noroeste,bef5fb10
 NORTHWEST_CORNER_LONGITUDE,Longitud de la esquina noroeste,355e9d22
+NORTHWEST_FIELD_RECORDED_LATITUDE,Latitud registrada del campo noroeste,fdee4895
+NORTHWEST_FIELD_RECORDED_LONGITUDE,Longitud registrada del campo noroeste,58fc9091
 NOT_ACCEPTED,No aceptado(a),c3102621
 NOT_APPLICABLE_FOR_AD_HOC_PLOTS,No aplica para parcelas ad hoc,3e9df420
 NOT_CALCULATED_FOR_TEMPORARY_PLOTS,No calculado para Parcelas Temporales.,ca983c30
@@ -2159,9 +2163,13 @@ SOURCING,Contratación,dc1a071d
 SOUTHEAST_CORNER,Esquina sureste,cdf375aa
 SOUTHEAST_CORNER_LATITUDE,Latitud de la esquina sureste,25510ec5
 SOUTHEAST_CORNER_LONGITUDE,Longitud de la esquina sureste,a15c5f33
+SOUTHEAST_FIELD_RECORDED_LATITUDE,Latitud registrada del campo sureste,5fc20193
+SOUTHEAST_FIELD_RECORDED_LONGITUDE,Longitud registrada del campo sureste,a549ab8d
 SOUTHWEST_CORNER,Esquina suroeste,4d23e84b
 SOUTHWEST_CORNER_LATITUDE,Latitud de la esquina suroeste,11768ce8
 SOUTHWEST_CORNER_LONGITUDE,Longitud de la esquina suroeste,170c539d
+SOUTHWEST_FIELD_RECORDED_LATITUDE,Latitud registrada del campo suroeste,7f5ea15d
+SOUTHWEST_FIELD_RECORDED_LONGITUDE,Longitud registrada del campo suroeste,bc54eee1
 SPECIES,Especies,bb344d18
 SPECIES_APPROVED,Especie aprobada,448567d6
 SPECIES_CARD_DESCRIPTION,Vea la especie referenciada en sus entradas de Semilla y Planta.,834fb3c8
