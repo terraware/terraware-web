@@ -1,3 +1,5 @@
+1b1c8fe4 SW-5611 Right-align dropdown menus from " ︙ " (more) buttons when the button is right-aligned (#6094)
+cf907917 SW-5996 Notifications popover display issues (#6093)
 37384e14 SW-8655 Assigned plot Plant Monitoring Observations: Include field-recorded plot location coordinates in export CSV file (#6081)
 563dcb86 Update dependency slate-dom to ^0.126.0 (#6087)
 62722a20 Update dependency slate-react to ^0.126.0 (#6088)
