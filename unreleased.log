@@ -1,3 +1,8 @@
+965328f7 SW-8410 Invite user with global roles if user does not exist (#6074)
+ba7da59d SW-8667 Combine tree/shrub crown diameter into a single column (#6084)
+13a88df2 SW-6729 People: Remove Person dialog for invited yet non-member of org is showing a blank for Name of Person (#6083)
+3e0326b7 SW-5550 Add meta tag to not recognize phone numbers for browsers (#6082)
+ca5f5c42 SW-8670 Do not show "Requests" tab when there are no Planting Seasons (#6079)
 d1109fae Add organization and user role context to Mixpanel events (#5777)
 6341099d SW-8634 Fix withdrawableSubstrata condition (#6078)
 f085b1b7 SW-6427 Create e2e test for new onboarding flow (#6076)
