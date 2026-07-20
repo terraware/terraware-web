@@ -1,3 +1,4 @@
+62722a20 Update dependency slate-react to ^0.126.0 (#6088)
 4d6aa296 Update dependency slate to ^0.126.0 (#6086)
 63dc0326 SW-8669 Withdrawal Requests: In the card, make the "Withdrawn Plants" number a link to the Withdrawals table (#6080)
 112ed65f SW-8675 When Remaining to Withdraw is 0 show "Not Needed" status (#6085)
