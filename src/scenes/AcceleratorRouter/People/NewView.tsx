@@ -4,8 +4,8 @@ import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useSearchUsersQuery } from 'src/queries/generated/users';
-import { usePersonData } from 'src/scenes/AcceleratorRouter/People/PersonContext';
 import { UserWithInternalnterests } from 'src/scenes/AcceleratorRouter/People/UserWithInternalInterests';
+import usePerson from 'src/scenes/AcceleratorRouter/People/usePerson';
 import useUpdatePerson from 'src/scenes/AcceleratorRouter/People/useUpdatePerson';
 import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
@@ -19,7 +19,8 @@ const NewView = () => {
   const location = useStateLocation();
   const updatePerson = useUpdatePerson();
 
-  const { setUserId, user } = usePersonData();
+  const [userId, setUserId] = useState(-1);
+  const user = usePerson(userId);
   const [email, setEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [roleError, setRoleError] = useState('');

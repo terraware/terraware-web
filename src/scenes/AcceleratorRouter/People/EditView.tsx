@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router';
 
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
@@ -7,15 +8,16 @@ import { UserWithInternalnterests } from 'src/scenes/AcceleratorRouter/People/Us
 import useUpdatePerson from 'src/scenes/AcceleratorRouter/People/useUpdatePerson';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
-import { usePersonData } from './PersonContext';
 import PersonForm from './PersonForm';
+import usePerson from './usePerson';
 
 const EditView = () => {
   const navigate = useSyncNavigate();
   const location = useStateLocation();
-  const personData = usePersonData();
   const updatePerson = useUpdatePerson();
-  const { user, userId } = personData;
+  const pathParams = useParams<{ userId: string }>();
+  const [userId] = useState(Number(pathParams.userId || -1));
+  const user = usePerson(userId);
 
   const goToViewPerson = useCallback(
     () => navigate(getLocation(APP_PATHS.ACCELERATOR_PERSON.replace(':userId', `${userId}`), location)),
