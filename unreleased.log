@@ -1,3 +1,4 @@
+a6c3b69d SW-7757 Migrated seedbank summary endpoint (#6099)
 0b809a4a SW-8528 Updated inventory batch to use table row menu (#6097)
 a6f22e50 SW-8674 Replaced plant density string (#6098)
 e660896a Update dependency axios to v1.18.0 [SECURITY] (#6096)
