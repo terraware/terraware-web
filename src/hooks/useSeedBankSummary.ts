@@ -1,48 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useMemo } from 'react';
 
 import { API_PULL_INTERVAL } from 'src/constants';
 import { useOrganization } from 'src/providers';
-import SeedBankService, { SummaryResponse } from 'src/services/SeedBankService';
+import { useGetSeedBankSummaryQuery } from 'src/queries/generated/seedBankSummary';
 
 export const useSeedBankSummary = () => {
   const { selectedOrganization } = useOrganization();
 
-  // populateSummaryInterval value is only being used when it is set.
-  const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
-  const [seedBankSummary, setSeedBankSummary] = useState<SummaryResponse>();
+  const { currentData, isSuccess, isError } = useGetSeedBankSummaryQuery(
+    { organizationId: selectedOrganization?.id },
+    {
+      skip: !selectedOrganization,
+      pollingInterval: import.meta.env.PUBLIC_DISABLE_RECURRENT_REQUESTS ? undefined : API_PULL_INTERVAL,
+    }
+  );
 
-  useEffect(() => {
-    if (selectedOrganization) {
-      const populateSummary = async () => {
-        const response = await SeedBankService.getSummary(selectedOrganization.id);
-        setSeedBankSummary(response);
-      };
-
-      // Update summary information
-      void populateSummary();
-
-      // Update interval that keeps summary up to date
-      if (!import.meta.env.PUBLIC_DISABLE_RECURRENT_REQUESTS) {
-        setPopulateSummaryInterval((currInterval) => {
-          if (currInterval) {
-            // Clear an existing interval when the facilityId changes
-            clearInterval(currInterval);
-          }
-          return setInterval(() => void populateSummary(), API_PULL_INTERVAL);
-        });
-      }
+  return useMemo(() => {
+    if (!isSuccess && !isError) {
+      return undefined;
     }
 
-    // Clear interval on exit
-    return () => {
-      setPopulateSummaryInterval((currInterval) => {
-        if (currInterval) {
-          clearInterval(currInterval);
-        }
-        return undefined;
-      });
+    return {
+      value: currentData,
+      requestSucceeded: isSuccess,
     };
-  }, [selectedOrganization]);
-
-  return seedBankSummary;
+  }, [currentData, isError, isSuccess]);
 };
