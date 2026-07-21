@@ -352,7 +352,13 @@ const LearnMoreView = (): JSX.Element => {
           zIndex: 10,
         }}
       >
-        <Box component='img' src='/assets/tw-tf-logo.svg' alt='Terraware by Terraformation' sx={{ height: '40px' }} />
+        <Box
+          component='img'
+          src='/assets/tw-tf-logo.svg'
+          alt='Terraware by Terraformation'
+          onClick={goToLogin}
+          sx={{ cursor: 'pointer', height: '40px' }}
+        />
         {isLoggedIn === true ? (
           <Box
             component='a'
@@ -761,7 +767,7 @@ const LearnMoreView = (): JSX.Element => {
         </Box>
       </Box>
 
-      <Box sx={{ background: theme.palette.TwClrBaseGray700, padding: isMobile ? '48px 24px' : '72px 24px' }}>
+      <Box sx={{ background: theme.palette.TwClrBaseGray700, padding: isMobile ? '48px 24px' : '152px 24px' }}>
         <Box sx={{ margin: '0 auto', maxWidth: MAX_CONTENT_WIDTH, textAlign: 'center' }}>
           <Box
             sx={{
@@ -815,7 +821,7 @@ const LearnMoreView = (): JSX.Element => {
             sx={{
               color: theme.palette.TwClrBaseWhite,
               fontSize: '20px',
-              marginTop: '32px',
+              marginTop: '24px',
               fontWeight: 400,
               lineHeight: '28px',
             }}
@@ -828,6 +834,27 @@ const LearnMoreView = (): JSX.Element => {
                 sx={{ color: `${theme.palette.TwClrBaseWhite} !important`, textDecoration: 'underline' }}
               >
                 {strings.LEARN_MORE_CTA_PRODUCT_TEAM}
+              </Box>
+            )}
+          </Typography>
+          <Typography
+            sx={{
+              color: theme.palette.TwClrBaseWhite,
+              fontSize: '20px',
+              marginTop: '24px',
+              lineHeight: '28px',
+            }}
+          >
+            {strings.formatString(
+              strings.LEARN_MORE_CTA_OPEN_SOURCE,
+              <Box
+                component='a'
+                href={'https://terraformation.com/'}
+                target='_blank'
+                rel='noopener noreferrer'
+                sx={{ color: `${theme.palette.TwClrBaseWhite} !important`, textDecoration: 'underline' }}
+              >
+                {strings.LEARN_MORE_CTA_TERRAFORMATION}
               </Box>
             )}
           </Typography>
