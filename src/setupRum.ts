@@ -9,7 +9,7 @@ const applicationId = import.meta.env.PUBLIC_DATADOG_APP_ID;
 const clientToken = import.meta.env.PUBLIC_DATADOG_CLIENT_TOKEN;
 
 export const canEnableRum = (): boolean => {
-  return !(tier === 'test' || !appVersion || !applicationId || !clientToken);
+  return !(tier === 'test' || tier === 'dev' || !appVersion || !applicationId || !clientToken);
 };
 
 const setupRum = () => {
