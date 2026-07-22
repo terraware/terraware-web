@@ -6,15 +6,16 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useUpdateSeedFundReportSettings from 'src/hooks/useUpdateSeedFundReportSettings';
 import { useOrganization } from 'src/providers';
-import ReportSettingsService, { ReportsSettings } from 'src/services/ReportSettingsService';
+import { SeedFundReportsSettings } from 'src/types/SeedFundReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import Card from '../common/Card';
 import ReportSettingsEditFormFields from './ReportSettingsEditFormFields';
 
 interface ReportSettingsEditFormProps {
-  reportsSettings: ReportsSettings;
+  reportsSettings: SeedFundReportsSettings;
   isEditing: boolean;
 }
 
@@ -23,6 +24,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
   const { selectedOrganization } = useOrganization();
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
+  const updateReportSettings = useUpdateSeedFundReportSettings();
 
   const [localReportsSettings, setLocalReportsSettings] = useState(reportsSettings);
   const [isBusy, setIsBusy] = useState<boolean>(false);
@@ -30,20 +32,19 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
   const onSave = useCallback(async () => {
     if (selectedOrganization) {
       setIsBusy(true);
-      const result = await ReportSettingsService.updateSettings({
-        organizationId: selectedOrganization.id,
-        ...localReportsSettings,
-      });
-
-      setIsBusy(false);
-      if (!result.requestSucceeded) {
+      try {
+        await updateReportSettings({
+          organizationId: selectedOrganization.id,
+          ...localReportsSettings,
+        });
+        navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS);
+      } catch {
         snackbar.toastError();
-        return;
+      } finally {
+        setIsBusy(false);
       }
-
-      navigate(APP_PATHS.SEED_FUND_REPORTS_SETTINGS);
     }
-  }, [navigate, localReportsSettings, selectedOrganization, snackbar]);
+  }, [navigate, localReportsSettings, selectedOrganization, snackbar, updateReportSettings]);
 
   const onChange = useCallback(
     (key: string | number, value: boolean) => {
