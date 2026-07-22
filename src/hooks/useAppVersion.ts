@@ -1,27 +1,16 @@
-import { useEffect } from 'react';
+import { useMemo } from 'react';
 
 import { ONE_MINUTE_INTERVAL_MS } from 'src/constants';
-import { requestAppVersion } from 'src/redux/features/appVersion/appVersionThunks';
+import { useGetAppVersionQuery } from 'src/queries/appVersion/appVersion';
 
-import { useAppDispatch } from './../redux/store';
+const currentAppVersion = import.meta.env.PUBLIC_TERRAWARE_FE_BUILD_VERSION;
 
-// variable used to track interval references
-let checkInterval: NodeJS.Timeout;
-
-// simple hook used to setup a polling app version check
+// Polls the deployed build version and reports whether it differs from the running build. The RTK
+// Query cache is shared, so multiple callers subscribe to the same polling request.
 export const useAppVersion = () => {
-  const dispatch = useAppDispatch();
+  const { currentData: version } = useGetAppVersionQuery(undefined, { pollingInterval: ONE_MINUTE_INTERVAL_MS });
 
-  useEffect(() => {
-    // clear any existing intervals
-    clearInterval(checkInterval);
+  const isStale = useMemo(() => !!version && version.toString().trim() !== currentAppVersion, [version]);
 
-    // trigger initial request
-    void dispatch(requestAppVersion());
-
-    // setup a interval check for new versions
-    checkInterval = setInterval(() => {
-      void dispatch(requestAppVersion());
-    }, ONE_MINUTE_INTERVAL_MS);
-  }, [dispatch]);
+  return { version, isStale };
 };

@@ -15,7 +15,6 @@ import PreferencesService from './PreferencesService';
 import SearchService from './SearchService';
 import SpeciesService from './SpeciesService';
 import SubLocationService from './SubLocationService';
-import SystemService from './SystemService';
 import TrackingService from './TrackingService';
 
 export type { Response } from './HttpService';
@@ -38,6 +37,5 @@ export {
   SearchService,
   SpeciesService,
   SubLocationService,
-  SystemService,
   TrackingService,
 };
