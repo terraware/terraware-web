@@ -17,6 +17,9 @@ const config: ConfigFile = {
     './src/queries/generated/clock.ts': {
       filterEndpoints: (_, operation) => operation.path === '/api/v1/seedbank/clock',
     },
+    './src/queries/generated/countryBoundary.ts': {
+      filterEndpoints: (_, operation) => operation.path === '/api/v1/countries/{countryCode}/boundary',
+    },
     './src/queries/generated/deliveries.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/deliveries'),
     },

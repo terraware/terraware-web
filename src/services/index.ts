@@ -4,7 +4,6 @@ import CachedUserService from './CachedUserService';
 import * as DraftPlantingSiteService from './DraftPlantingSiteService';
 import FacilityService from './FacilityService';
 import HttpService from './HttpService';
-import LocationService from './LocationService';
 import MapService from './MapService';
 import NurseryBatchService from './NurseryBatchService';
 import NurseryInventoryService from './NurseryInventoryService';
@@ -26,7 +25,6 @@ export {
   DraftPlantingSiteService,
   FacilityService,
   HttpService,
-  LocationService,
   MapService,
   NurseryBatchService,
   NurseryInventoryService,
