@@ -2,7 +2,7 @@ import { createContext, useContext } from 'react';
 
 import { Statuses } from 'src/redux/features/asyncUtils';
 import { Project } from 'src/types/Project';
-import { PhaseVotes } from 'src/types/Votes';
+import { PhaseVotes } from 'src/types/ProjectVotes';
 
 export type VotingData = {
   // This is defaults to Phase 1 votes

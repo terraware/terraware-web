@@ -6,7 +6,7 @@ import { BadgeProps } from '@terraware/web-components/components/Badge';
 
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { VoteOption } from 'src/types/Votes';
+import { VoteOption } from 'src/types/ProjectVotes';
 
 export type VoteBadgeProps = {
   vote?: VoteOption;

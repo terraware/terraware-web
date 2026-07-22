@@ -32,6 +32,7 @@ export enum QueryTagTypes {
   ProjectInternalUsers = 'ProjectInternalUsers',
   ProjectModules = 'ProjectModules',
   ProjectReportConfigs = 'ProjectReportConfigs',
+  ProjectVotes = 'ProjectVotes',
   Projects = 'Projects',
   PublishedReportMedia = 'PublishedReportMedia',
   PublishedReports = 'PublishedReports',

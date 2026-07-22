@@ -5,7 +5,7 @@ import { Dropdown, DropdownItem, Textfield } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { VoteOption, VoteSelection } from 'src/types/Votes';
+import { VoteOption, VoteSelection } from 'src/types/ProjectVotes';
 import { UserIdentity, getUserDisplayName } from 'src/utils/user';
 
 import VoteBadge from './VoteBadge';

@@ -36,7 +36,7 @@ import { Application } from 'src/types/Application';
 import { FunderProjectDetails } from 'src/types/FunderProject';
 import { Project, ProjectMeta, getProjectInternalUserRoleString } from 'src/types/Project';
 import { Score } from 'src/types/ProjectScore';
-import { PhaseVotes } from 'src/types/Votes';
+import { PhaseVotes } from 'src/types/ProjectVotes';
 import { getCountryByCode } from 'src/utils/country';
 import { formatNumberScale } from 'src/utils/numbers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';

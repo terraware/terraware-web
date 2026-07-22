@@ -6,10 +6,8 @@ import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { requestProjectVotesUpdate } from 'src/redux/features/votes/votesAsyncThunks';
-import { selectProjectVotesEditRequest } from 'src/redux/features/votes/votesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { UpsertVoteSelection, VoteOption, VoteSelection } from 'src/types/Votes';
+import { useUpsertProjectVotesMutation } from 'src/queries/generated/projectVotes';
+import { UpsertVoteSelection, VoteOption, VoteSelection } from 'src/types/ProjectVotes';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -23,15 +21,14 @@ const VotingEdit = () => {
   const navigate = useSyncNavigate();
   const location = useStateLocation();
   const query = useQuery();
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const theme = useTheme();
   const { phaseVotes, project } = useVotingData();
 
-  const [requestId, setRequestId] = useState<string>('');
   const [validate, setValidate] = useState<boolean>(false);
   const [votes, setVotes] = useState<UpsertVoteSelection[]>([]);
-  const result = useAppSelector((state) => selectProjectVotesEditRequest(state, requestId));
+  const [upsertProjectVotes, { isLoading: saveIsLoading, isSuccess: saveIsSuccess, isError: saveIsError }] =
+    useUpsertProjectVotesMutation();
 
   const goToVotingView = useCallback(() => {
     if (!project) {
@@ -62,15 +59,13 @@ const VotingEdit = () => {
       return !(orignal.conditionalInfo === conditionalInfo && orignal.voteOption === voteOption);
     });
 
-    const request = {
+    void upsertProjectVotes({
       projectId: project.id,
-      payload: {
+      upsertProjectVotesRequestPayload: {
         phase: phaseVotes.phase,
         votes: updatedVotes,
       },
-    };
-    const dispatched = dispatch(requestProjectVotesUpdate(request));
-    setRequestId(dispatched.requestId);
+    });
   };
 
   const setVoteValue = (index: number, conditionalInfo?: string, voteOption?: VoteOption) => {
@@ -86,12 +81,12 @@ const VotingEdit = () => {
   };
 
   useEffect(() => {
-    if (result?.status === 'error') {
+    if (saveIsError) {
       snackbar.toastError();
-    } else if (result?.status === 'success') {
+    } else if (saveIsSuccess) {
       goToVotingView();
     }
-  }, [goToVotingView, result?.status, snackbar]);
+  }, [goToVotingView, saveIsError, saveIsSuccess, snackbar]);
 
   useEffect(() => {
     if (phaseVotes?.votes) {
@@ -113,13 +108,7 @@ const VotingEdit = () => {
 
   return (
     <VotingWrapper isForm>
-      <PageForm
-        busy={result?.status === 'pending'}
-        cancelID='cancelSave'
-        onCancel={goToVotingView}
-        onSave={onSave}
-        saveID='saveVotes'
-      >
+      <PageForm busy={saveIsLoading} cancelID='cancelSave' onCancel={goToVotingView} onSave={onSave} saveID='saveVotes'>
         <Card
           style={{
             display: 'flex',
