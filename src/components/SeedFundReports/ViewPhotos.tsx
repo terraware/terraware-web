@@ -3,9 +3,10 @@ import React, { type JSX, useEffect, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Button, ViewPhotosDialog } from '@terraware/web-components';
 
-import SeedFundReportService, { REPORT_PHOTO_ENDPOINT } from 'src/services/SeedFundReportService';
+import { API_PATHS } from 'src/constants';
+import useSeedFundReportPhotos from 'src/hooks/useSeedFundReportPhotos';
 import strings from 'src/strings';
-import { ReportPhoto } from 'src/types/Report';
+import { SeedFundReportPhoto } from 'src/types/SeedFundReport';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -15,7 +16,7 @@ type PhotosSectionProps = {
   editable: boolean;
 };
 
-type ReportPhotoWithUrl = ReportPhoto & { url: string };
+type ReportPhotoWithUrl = SeedFundReportPhoto & { url: string };
 
 export default function ViewPhotos({ reportId, onPhotoRemove, editable }: PhotosSectionProps): JSX.Element {
   const theme = useTheme();
@@ -25,30 +26,25 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
   const [selectedSlide, setSelectedSlide] = useState(0);
   const { isMobile } = useDeviceInfo();
 
+  const { photos: fetchedPhotos, isError } = useSeedFundReportPhotos(reportId);
+
   useEffect(() => {
-    const getPhotos = async () => {
-      const photoListResponse = await SeedFundReportService.getReportPhotos(reportId);
-      if (!photoListResponse.requestSucceeded || photoListResponse.error) {
-        setPhotos([]);
-        snackbar.toastError();
-      } else {
-        const photosWithUrl: ReportPhotoWithUrl[] =
-          photoListResponse.photos?.map((photo) => {
-            return {
-              ...photo,
-              url: REPORT_PHOTO_ENDPOINT.replace('{reportId}', reportId.toString()).replace(
-                '{photoId}',
-                photo.id.toString()
-              ),
-            };
-          }) || [];
+    setPhotos(
+      fetchedPhotos.map((photo) => ({
+        ...photo,
+        url: API_PATHS.SEED_FUND_REPORT_PHOTO.replace('{reportId}', reportId.toString()).replace(
+          '{photoId}',
+          photo.id.toString()
+        ),
+      }))
+    );
+  }, [fetchedPhotos, reportId]);
 
-        setPhotos(photosWithUrl);
-      }
-    };
-
-    void getPhotos();
-  }, [reportId, snackbar]);
+  useEffect(() => {
+    if (isError) {
+      snackbar.toastError();
+    }
+  }, [isError, snackbar]);
 
   const closeHandler = () => {
     setPhotosModalOpened(false);
