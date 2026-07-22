@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useRef, useState } from 'react';
+import React, { type JSX, useRef } from 'react';
 
 import { Grid, Typography } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -6,10 +6,9 @@ import { TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import TfMain from 'src/components/common/TfMain';
 import Table from 'src/components/common/table';
+import useSeedFundReports from 'src/hooks/useSeedFundReports';
 import { useOrganization } from 'src/providers';
-import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
-import { ListReport } from 'src/types/Report';
 
 import PageHeaderWrapper from '../common/PageHeaderWrapper';
 import ReportsCellRenderer from './TableCellRenderer';
@@ -24,19 +23,9 @@ const columns = (): TableColumnType[] => [
 
 export default function ReportList(): JSX.Element {
   const contentRef = useRef(null);
-  const [results, setResults] = useState<ListReport[]>([]);
   const { selectedOrganization } = useOrganization();
 
-  useEffect(() => {
-    if (selectedOrganization) {
-      const refreshSearch = async () => {
-        const reportsResults = await SeedFundReportService.getReports(selectedOrganization.id);
-        setResults(reportsResults.reports || []);
-      };
-
-      void refreshSearch();
-    }
-  }, [selectedOrganization]);
+  const { reports: results } = useSeedFundReports(selectedOrganization?.id);
 
   return (
     <TfMain>
