@@ -11,14 +11,13 @@ import MapIcon from 'src/components/Map/MapIcon';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
+import { useCountryBoundary } from 'src/hooks/useCountryBoundary';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { requestUpdateApplicationBoundary } from 'src/redux/features/application/applicationAsyncThunks';
 import { selectApplicationUpdateBoundary } from 'src/redux/features/application/applicationSelectors';
-import { requestGetCountryBoundary } from 'src/redux/features/location/locationAsyncThunks';
-import { selectCountryBoundary } from 'src/redux/features/location/locationSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import StepTitleDescription, { Description } from 'src/scenes/PlantingSitesRouter/edit/editor/StepTitleDescription';
 import strings from 'src/strings';
@@ -48,27 +47,21 @@ const MapUpdateView = () => {
 
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectApplicationUpdateBoundary(requestId));
-  const countryBoundaryResult = useAppSelector(selectCountryBoundary(selectedApplication?.countryCode ?? ''));
-
-  useEffect(() => {
-    if (selectedApplication && selectedApplication.countryCode) {
-      void dispatch(requestGetCountryBoundary(selectedApplication.countryCode));
-    }
-  }, [dispatch, selectedApplication]);
+  const countryBoundaryData = useCountryBoundary(selectedApplication?.countryCode);
 
   const countryBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
-    if (!countryBoundaryResult || !countryBoundaryResult.data) {
+    if (!countryBoundaryData) {
       return undefined;
     }
 
     return [
       {
-        data: { type: 'FeatureCollection', features: [toFeature(countryBoundaryResult.data, {}, 'countryBoundary')] },
+        data: { type: 'FeatureCollection', features: [toFeature(countryBoundaryData, {}, 'countryBoundary')] },
         id: 'countryBoundary',
         renderProperties: getRenderAttributes('boundary'),
       },
     ];
-  }, [getRenderAttributes, countryBoundaryResult]);
+  }, [getRenderAttributes, countryBoundaryData]);
 
   const findErrors = (boundaryToCheck: MultiPolygon) => {
     const boundaryAreaHa = parseFloat((area(boundaryToCheck) * SQ_M_TO_HECTARES).toFixed(2));

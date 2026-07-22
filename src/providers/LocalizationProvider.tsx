@@ -1,9 +1,9 @@
 import React, { type JSX, useEffect, useState } from 'react';
 import LocalizedStrings from 'react-localization';
 
-import { requestListCountries, requestListTimezones } from 'src/redux/features/location/locationAsyncThunks';
-import { selectCountries, selectTimezones } from 'src/redux/features/location/locationSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { skipToken } from '@reduxjs/toolkit/query';
+
+import { useListCountriesQuery, useListTimeZonesQuery } from 'src/queries/location/localization';
 import { HttpService } from 'src/services';
 import defaultStrings, { ILocalizedStringsMap } from 'src/strings';
 import { Country } from 'src/types/Country';
@@ -28,8 +28,6 @@ export default function LocalizationProvider({
   activeLocale,
   setActiveLocale,
 }: LocalizationProviderProps): JSX.Element | null {
-  const dispatch = useAppDispatch();
-
   const [countries, setCountries] = useState<Country[]>([]);
   const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
   const [strings, setStrings] = useState<typeof defaultStrings>(defaultStrings);
@@ -37,11 +35,8 @@ export default function LocalizationProvider({
   const { user } = useUser();
   const supportedLocales = useSupportedLocales();
 
-  const [countriesRequestId, setCountriesRequestId] = useState<string>('');
-  const countriesResponse = useAppSelector(selectCountries(countriesRequestId));
-
-  const [timeZonesRequestId, setTimeZonesRequestId] = useState<string>('');
-  const timeZoneResponse = useAppSelector(selectTimezones(timeZonesRequestId));
+  const { currentData: countriesData } = useListCountriesQuery(selectedLocale ? { locale: selectedLocale } : skipToken);
+  const { currentData: timeZonesData } = useListTimeZonesQuery(selectedLocale ? { locale: selectedLocale } : skipToken);
 
   useEffect(() => {
     if (user) {
@@ -52,26 +47,22 @@ export default function LocalizationProvider({
   useEffect(() => {
     if (selectedLocale) {
       HttpService.setDefaultHeaders({ 'Accept-Language': selectedLocale });
-      const countriesDispatched = dispatch(requestListCountries());
-      const timezoneDispatched = dispatch(requestListTimezones());
-      setCountriesRequestId(countriesDispatched.requestId);
-      setTimeZonesRequestId(timezoneDispatched.requestId);
     }
-  }, [dispatch, selectedLocale]);
+  }, [selectedLocale]);
 
   useEffect(() => {
-    if (selectedLocale && countriesResponse && countriesResponse.status === 'success' && countriesResponse.data) {
-      const countriesCopy = [...countriesResponse.data];
+    if (selectedLocale && countriesData) {
+      const countriesCopy = [...countriesData];
       setCountries(countriesCopy.sort((a, b) => a.name.localeCompare(b.name, selectedLocale)));
     }
-  }, [selectedLocale, countriesResponse]);
+  }, [selectedLocale, countriesData]);
 
   useEffect(() => {
-    if (selectedLocale && timeZoneResponse && timeZoneResponse.status === 'success' && timeZoneResponse.data) {
-      const timezonesCopy = [...timeZoneResponse.data];
+    if (selectedLocale && timeZonesData) {
+      const timezonesCopy = [...timeZonesData];
       setTimeZones(timezonesCopy.sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale)));
     }
-  }, [selectedLocale, timeZoneResponse]);
+  }, [selectedLocale, timeZonesData]);
 
   useEffect(() => {
     if (selectedLocale) {
