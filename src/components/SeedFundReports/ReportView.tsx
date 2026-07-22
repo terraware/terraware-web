@@ -11,8 +11,8 @@ import BackToLink from 'src/components/common/BackToLink';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useSeedFundReport from 'src/hooks/useSeedFundReport';
+import useSeedFundReportActions from 'src/hooks/useSeedFundReportActions';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -34,6 +34,7 @@ export default function ReportView(): JSX.Element {
   const reportIdInt = reportId ? parseInt(reportId, 10) : -1;
 
   const { report, isError } = useSeedFundReport(reportIdInt);
+  const { forceLockReport } = useSeedFundReportActions();
 
   const initialReportFiles = useReportFiles(report);
 
@@ -50,12 +51,14 @@ export default function ReportView(): JSX.Element {
   const confirmEdit = async () => {
     // lock the report
     if (reportIdValid()) {
-      const lockResult = await SeedFundReportService.forceLockReport(reportIdInt);
+      try {
+        await forceLockReport(reportIdInt);
 
-      if (lockResult.requestSucceeded && reportId) {
         // then navigate to editing
-        navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_EDIT.replace(':reportId', reportId) });
-      } else {
+        if (reportId) {
+          navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_EDIT.replace(':reportId', reportId) });
+        }
+      } catch {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_EDIT);
       }
     }
