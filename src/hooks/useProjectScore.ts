@@ -1,12 +1,19 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 
-import { useGetProjectOverallScoreQuery, useUpsertProjectScoresMutation } from 'src/queries/generated/projectScores';
+import {
+  useLazyGetProjectOverallScoreQuery,
+  useUpsertProjectScoresMutation,
+} from 'src/queries/generated/projectScores';
 import { Score } from 'src/types/ProjectScore';
 
 const useProjectScore = (projectId: number) => {
-  const { currentData, isFetching, isSuccess } = useGetProjectOverallScoreQuery(projectId, {
-    skip: !projectId,
-  });
+  const [getProjectOverallScore, { currentData, isFetching, isSuccess }] = useLazyGetProjectOverallScoreQuery();
+
+  useEffect(() => {
+    if (projectId) {
+      void getProjectOverallScore(projectId, true);
+    }
+  }, [getProjectOverallScore, projectId]);
 
   const [upsertProjectScores, { isLoading: updateIsLoading, isSuccess: updateIsSuccess }] =
     useUpsertProjectScoresMutation();
