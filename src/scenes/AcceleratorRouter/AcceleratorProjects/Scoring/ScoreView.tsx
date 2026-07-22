@@ -16,7 +16,7 @@ const ScoreView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const { project, projectId } = useAcceleratorProjectData();
-  const { projectScore, getStatus } = useProjectScore(projectId);
+  const { projectScore, isLoading } = useProjectScore(projectId);
   const { goToAcceleratorProjectScoreEdit, goToAcceleratorProjectVote } = useNavigateTo();
 
   const rightComponent = useMemo(
@@ -39,7 +39,7 @@ const ScoreView = () => {
   );
 
   return (
-    <ScoringWrapper isLoading={getStatus === 'pending'} rightComponent={rightComponent}>
+    <ScoringWrapper isLoading={isLoading} rightComponent={rightComponent}>
       <Box display='flex' flexDirection='row' flexGrow={0} margin={theme.spacing(3)} justifyContent='right'>
         <Button
           id='goToVotes'

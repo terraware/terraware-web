@@ -3,7 +3,7 @@ import React, { useCallback, useEffect } from 'react';
 import PageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
-import { Score } from 'src/types/Score';
+import { Score } from 'src/types/ProjectScore';
 import useForm from 'src/utils/useForm';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
@@ -14,14 +14,14 @@ const ScorecardEditView = () => {
   const { goToAcceleratorProjectScore } = useNavigateTo();
 
   const { project, projectId } = useAcceleratorProjectData();
-  const { projectScore, updateProjectScore, updateStatus, getStatus } = useProjectScore(projectId);
+  const { projectScore, updateProjectScore, updateIsLoading, updateIsSuccess, isSuccess } = useProjectScore(projectId);
   const [score, setScore, onChange] = useForm<Score>({});
 
   useEffect(() => {
-    if (getStatus === 'success' && projectScore) {
+    if (isSuccess && projectScore) {
       setScore(projectScore);
     }
-  }, [getStatus, projectScore, setScore]);
+  }, [isSuccess, projectScore, setScore]);
 
   const onExit = useCallback(() => {
     if (project) {
@@ -43,15 +43,15 @@ const ScorecardEditView = () => {
   }, [onExit, score, projectScore, updateProjectScore]);
 
   useEffect(() => {
-    if (updateStatus === 'success') {
+    if (updateIsSuccess) {
       onExit();
     }
-  }, [updateStatus, onExit]);
+  }, [updateIsSuccess, onExit]);
 
   return (
-    <ScoringWrapper isForm isLoading={updateStatus === 'pending'}>
+    <ScoringWrapper isForm isLoading={updateIsLoading}>
       <PageForm
-        busy={updateStatus === 'pending'}
+        busy={updateIsLoading}
         cancelID='cancelEditScorecard'
         onCancel={onExit}
         onSave={onSave}
