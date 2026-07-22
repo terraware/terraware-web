@@ -3,7 +3,9 @@ import LocalizedStrings from 'react-localization';
 
 import { skipToken } from '@reduxjs/toolkit/query';
 
-import { useListCountriesQuery, useListTimeZonesQuery } from 'src/queries/location/localization';
+import { useListTimeZoneNamesQuery } from 'src/queries/generated/timeZones';
+import { setQueryLocale } from 'src/queries/locale';
+import { useListCountriesQuery } from 'src/queries/search/countries';
 import { HttpService } from 'src/services';
 import defaultStrings, { ILocalizedStringsMap } from 'src/strings';
 import { Country } from 'src/types/Country';
@@ -35,8 +37,12 @@ export default function LocalizationProvider({
   const { user } = useUser();
   const supportedLocales = useSupportedLocales();
 
-  const { currentData: countriesData } = useListCountriesQuery(selectedLocale ? { locale: selectedLocale } : skipToken);
-  const { currentData: timeZonesData } = useListTimeZonesQuery(selectedLocale ? { locale: selectedLocale } : skipToken);
+  // Keep the RTK Query locale in sync synchronously (before the query hooks below run) so that a
+  // language switch recomputes each query's locale-scoped cache key and refetches localized data.
+  setQueryLocale(selectedLocale ?? undefined);
+
+  const { currentData: countriesData } = useListCountriesQuery(selectedLocale ? undefined : skipToken);
+  const { currentData: timeZonesData } = useListTimeZoneNamesQuery(selectedLocale ? undefined : skipToken);
 
   useEffect(() => {
     if (user) {
@@ -59,7 +65,7 @@ export default function LocalizationProvider({
 
   useEffect(() => {
     if (selectedLocale && timeZonesData) {
-      const timezonesCopy = [...timeZonesData];
+      const timezonesCopy = [...timeZonesData.timeZones];
       setTimeZones(timezonesCopy.sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale)));
     }
   }, [selectedLocale, timeZonesData]);

@@ -1,15 +1,6 @@
 import { Country, Subdivision } from 'src/types/Country';
-import { TimeZoneDescription } from 'src/types/TimeZones';
 
 import { baseApi as api } from '../baseApi';
-
-export type LocalizedApiArg = {
-  locale?: string;
-};
-
-type ListTimeZonesApiResponse = {
-  timeZones: TimeZoneDescription[];
-};
 
 type CountrySearchResult = {
   code: string;
@@ -24,21 +15,10 @@ type ListCountriesApiResponse = {
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    listTimeZones: build.query<TimeZoneDescription[], LocalizedApiArg>({
-      query: ({ locale }) => ({
-        url: '/api/v1/i18n/timeZones',
-        ...(locale ? { headers: { 'Accept-Language': locale } } : {}),
-      }),
-      // Time zone names are effectively static per locale; keep them cached for the whole session.
-      keepUnusedDataFor: Infinity,
-      transformResponse: (response: ListTimeZonesApiResponse) => response.timeZones ?? [],
-    }),
-
-    listCountries: build.query<Country[], LocalizedApiArg>({
-      query: ({ locale }) => ({
+    listCountries: build.query<Country[], void>({
+      query: () => ({
         url: '/api/v1/search',
         method: 'POST',
-        ...(locale ? { headers: { 'Accept-Language': locale } } : {}),
         body: {
           prefix: 'countries',
           fields: ['code', 'name', 'region', 'subdivisions.code', 'subdivisions.name'],
@@ -46,7 +26,7 @@ const injectedRtkApi = api.injectEndpoints({
           count: 1000,
         },
       }),
-      // Country lists are effectively static per locale; keep them cached for the whole session.
+      // Country lists are effectively static; keep them cached for the whole session.
       keepUnusedDataFor: Infinity,
       transformResponse: (response: ListCountriesApiResponse) =>
         response.results.map(
@@ -63,5 +43,4 @@ const injectedRtkApi = api.injectEndpoints({
 
 export { injectedRtkApi as api };
 
-export const { useListTimeZonesQuery, useLazyListTimeZonesQuery, useListCountriesQuery, useLazyListCountriesQuery } =
-  injectedRtkApi;
+export const { useListCountriesQuery, useLazyListCountriesQuery } = injectedRtkApi;
