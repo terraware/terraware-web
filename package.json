@@ -237,7 +237,7 @@
     "axios": "^1.15.0",
     "brace-expansion": "^2.0.3",
     "fork-ts-checker-webpack-plugin": "^9.0.0",
-    "immutable": "^5.1.5",
+    "immutable": "^5.1.9",
     "js-yaml": "4.3.0",
     "picomatch": "^4.0.4",
     "serialize-javascript": "^7.0.5",
