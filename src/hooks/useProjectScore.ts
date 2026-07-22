@@ -1,55 +1,36 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback } from 'react';
 
-import { requestProjectScore, requestUpdateProjectScore } from 'src/redux/features/scores/scoresAsyncThunks';
-import { selectScore, selectScoreUpdateRequest } from 'src/redux/features/scores/scoresSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Score } from 'src/types/Score';
+import { useGetProjectOverallScoreQuery, useUpsertProjectScoresMutation } from 'src/queries/generated/projectScores';
+import { Score } from 'src/types/ProjectScore';
 
 const useProjectScore = (projectId: number) => {
-  const dispatch = useAppDispatch();
+  const { currentData, isFetching, isSuccess } = useGetProjectOverallScoreQuery(projectId, {
+    skip: !projectId,
+  });
 
-  const [updateRequestId, setUpdateRequestId] = useState('');
+  const [upsertProjectScores, { isLoading: updateIsLoading, isSuccess: updateIsSuccess }] =
+    useUpsertProjectScoresMutation();
 
-  const projectScoreRequest = useAppSelector(selectScore(projectId));
-  const updateRequest = useAppSelector(selectScoreUpdateRequest(updateRequestId));
-
-  const getProjectScore = useCallback(() => {
-    void dispatch(requestProjectScore(projectId));
-  }, [dispatch, projectId]);
+  const projectScore: Score | undefined = currentData?.score;
 
   const updateProjectScore = useCallback(
     (score: Score) => {
-      const request = dispatch(requestUpdateProjectScore({ projectId, score }));
-      setUpdateRequestId(request.requestId);
+      void upsertProjectScores({
+        projectId,
+        updateProjectOverallScoreRequestPayload: { score },
+      });
     },
-    [dispatch, projectId, setUpdateRequestId]
+    [projectId, upsertProjectScores]
   );
 
-  useEffect(() => {
-    getProjectScore();
-  }, [getProjectScore]);
-
-  const projectScore = useMemo(
-    () => (projectScoreRequest?.status === 'success' ? projectScoreRequest.data : undefined),
-    [projectScoreRequest]
-  );
-
-  useEffect(() => {
-    if (updateRequest && updateRequest.status === 'success') {
-      getProjectScore();
-    }
-  }, [updateRequest, getProjectScore]);
-
-  return useMemo(
-    () => ({
-      projectScore,
-      getProjectScore,
-      updateProjectScore,
-      getStatus: projectScoreRequest?.status,
-      updateStatus: updateRequest?.status,
-    }),
-    [updateRequest, projectScore, getProjectScore, projectScoreRequest?.status, updateProjectScore]
-  );
+  return {
+    projectScore,
+    updateProjectScore,
+    isLoading: isFetching,
+    isSuccess,
+    updateIsLoading,
+    updateIsSuccess,
+  };
 };
 
 export default useProjectScore;

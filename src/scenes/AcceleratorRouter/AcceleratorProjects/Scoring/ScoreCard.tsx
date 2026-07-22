@@ -8,7 +8,7 @@ import { DateTime } from 'luxon';
 import Link from 'src/components/common/Link';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { Score } from 'src/types/Score';
+import { Score } from 'src/types/ProjectScore';
 
 type ScoreCardProps = {
   score: Score;
