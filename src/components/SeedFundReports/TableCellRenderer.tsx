@@ -5,10 +5,10 @@ import { DateTime } from 'luxon';
 import ReportLink from 'src/components/SeedFundReports/ReportLink';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
-import { ListReport, statusName } from 'src/types/Report';
+import { SeedFundReportListElement, seedFundReportStatusName } from 'src/types/SeedFundReport';
 
 export default function ReportsCellRenderer(
-  props: RendererProps<ListReport & { organizationName?: string }>
+  props: RendererProps<SeedFundReportListElement & { organizationName?: string }>
 ): JSX.Element {
   const { column, row, index } = props;
 
@@ -17,7 +17,7 @@ export default function ReportsCellRenderer(
   }
 
   if (column.key === 'status') {
-    return <CellRenderer index={index} row={row} column={column} value={statusName(row.status)} />;
+    return <CellRenderer index={index} row={row} column={column} value={seedFundReportStatusName(row.status)} />;
   }
 
   if (column.key === 'submittedTime') {

@@ -186,4 +186,6 @@ export enum API_PATHS {
   OBSERVATION_SPLAT = '/api/v1/tracking/observations/{observationId}/splats/{fileId}',
   ORGANIZATION_MEDIA_THUMBNAIL = '/api/v1/organizations/{organizationId}/media/{fileId}/thumbnail',
   ORGANIZATION_SPLAT = '/api/v1/organizations/{organizationId}/splats/{fileId}',
+  SEED_FUND_REPORT_FILE = '/api/v1/reports/{reportId}/files/{fileId}',
+  SEED_FUND_REPORT_PHOTO = '/api/v1/reports/{reportId}/photos/{photoId}',
 }
