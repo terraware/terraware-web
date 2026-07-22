@@ -10,7 +10,6 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useLocalization, useTimeZones } from 'src/providers';
 import { OrganizationService } from 'src/services';
-import strings from 'src/strings';
 import { Organization, OrganizationType, OrganizationTypes, organizationTypeLabel } from 'src/types/Organization';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import useForm from 'src/utils/useForm';
@@ -31,7 +30,7 @@ export default function EditOrganizationModal({
   reloadOrganizationData,
 }: EditOrganizationModalProps): JSX.Element {
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const [organizationRecord, setOrganizationRecord, onChange, onChangeCallback] = useForm<Organization>(organization);
   const [nameError, setNameError] = useState('');
   const [countryError, setCountryError] = useState('');
