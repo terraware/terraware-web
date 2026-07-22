@@ -22,7 +22,7 @@ import useSeedFundReportActions from 'src/hooks/useSeedFundReportActions';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization, useUser } from 'src/providers';
 import { useBatchSeedFundReportFilesMutation } from 'src/queries/seedFundReports/files';
-import SeedFundReportService from 'src/services/SeedFundReportService';
+import { useBatchSeedFundReportPhotosMutation } from 'src/queries/seedFundReports/photos';
 import strings from 'src/strings';
 import { SeedFundReport, SeedFundReportFile } from 'src/types/SeedFundReport';
 import { overWordLimit } from 'src/utils/text';
@@ -55,14 +55,15 @@ export default function ReportEdit(): JSX.Element {
   const initialReportFiles = useReportFiles(report, setUpdatedReportFiles);
 
   const reportIdInt = reportId ? parseInt(reportId, 10) : -1;
-  const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
+  const reportName = `SeedFundReport (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
 
   const { report: loadedReport, isError, reload } = useSeedFundReport(reportIdInt);
 
   const { onUpdate, unlockReport, onSubmit, isLoading: reportActionInProgress } = useSeedFundReportActions();
   const [batchFiles, batchFilesResult] = useBatchSeedFundReportFilesMutation();
+  const [batchPhotos, batchPhotosResult] = useBatchSeedFundReportPhotosMutation();
 
-  const busyState = reportActionInProgress || batchFilesResult.isLoading;
+  const busyState = reportActionInProgress || batchFilesResult.isLoading || batchPhotosResult.isLoading;
 
   useEffect(() => {
     const el = document.getElementById(idInView);
@@ -122,12 +123,13 @@ export default function ReportEdit(): JSX.Element {
   }, [report, user, showInvalidUserModal, currentUserEditing]);
 
   const updatePhotos = async (iReportId: number) => {
-    await SeedFundReportService.uploadReportPhotos(iReportId, photos);
-    setPhotos([]);
-    if (photoIdsToRemove) {
-      await SeedFundReportService.deleteReportPhotos(iReportId, photoIdsToRemove);
-      setPhotoIdsToRemove([]);
+    try {
+      await batchPhotos({ reportId: iReportId, photosToUpload: photos, photoIdsToDelete: photoIdsToRemove }).unwrap();
+    } catch {
+      snackbar.toastError();
     }
+    setPhotos([]);
+    setPhotoIdsToRemove([]);
   };
 
   const gotoReportView = async (saveChanges: boolean) => {
@@ -409,7 +411,7 @@ export default function ReportEdit(): JSX.Element {
   };
 
   /**
-   * Report update functions
+   * SeedFundReport update functions
    */
   const updateReport = (field: string, value: any) => {
     if (report) {

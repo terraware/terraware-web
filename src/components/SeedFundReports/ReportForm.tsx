@@ -7,18 +7,18 @@ import LocationSection from 'src/components/SeedFundReports/LocationSelection';
 import ViewPhotos from 'src/components/SeedFundReports/ViewPhotos';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
-import SeedFundReportService from 'src/services/SeedFundReportService';
+import useSeedFundReportPhotos from 'src/hooks/useSeedFundReportPhotos';
 import strings from 'src/strings';
-import { Report, ReportNursery, ReportPlantingSite } from 'src/types/Report';
-import { ReportSeedBank } from 'src/types/Report';
+import { SeedFundReport, SeedFundReportNursery, SeedFundReportPlantingSite } from 'src/types/SeedFundReport';
+import { SeedFundReportSeedBank } from 'src/types/SeedFundReport';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const MAX_PHOTOS = 30;
 
 export type ReportFormProps = {
   editable: boolean;
-  draftReport: Report;
-  onChange?: (report: Report) => void;
+  draftReport: SeedFundReport;
+  onChange?: (report: SeedFundReport) => void;
   onUpdateReport?: (field: string, value: any) => void;
   onUpdateLocation?: (
     index: number,
@@ -34,9 +34,9 @@ export type ReportFormProps = {
   ) => void;
   onPhotosChanged?: (photos: File[]) => void;
   onPhotoRemove?: (id: number) => void;
-  reportNurseries?: ReportNursery[];
-  reportPlantingSites?: ReportPlantingSite[];
-  reportSeedBanks?: ReportSeedBank[];
+  reportNurseries?: SeedFundReportNursery[];
+  reportPlantingSites?: SeedFundReportPlantingSite[];
+  reportSeedBanks?: SeedFundReportSeedBank[];
   validate?: boolean;
 };
 
@@ -62,6 +62,8 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
   const [projectNotes, setProjectNotes] = useState(draftReport.notes ?? '');
   const [photoCount, setPhotoCount] = useState(0);
 
+  const { photos } = useSeedFundReportPhotos(draftReport.id);
+
   const infoCardStyle = {
     padding: 0,
   };
@@ -76,17 +78,8 @@ export default function ReportForm(props: ReportFormProps): JSX.Element {
   const isProjectReport = !!draftReport.projectName;
 
   useEffect(() => {
-    const getPhotoCount = async () => {
-      const photoListResponse = await SeedFundReportService.getReportPhotos(draftReport.id);
-      if (!photoListResponse.requestSucceeded || photoListResponse.error) {
-        setPhotoCount(0);
-      } else {
-        setPhotoCount(photoListResponse.photos?.length ?? 0);
-      }
-    };
-
-    void getPhotoCount();
-  }, [draftReport.id]);
+    setPhotoCount(photos.length);
+  }, [photos]);
 
   const handleAddRemoveLocation = useCallback(
     (selected: boolean, index: number, location: 'seedBanks' | 'nurseries' | 'plantingSites') => {
