@@ -2,10 +2,10 @@ import React from 'react';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { ListReport } from 'src/types/Report';
+import { SeedFundReportListElement } from 'src/types/SeedFundReport';
 
 interface ReportLinkProps {
-  report: ListReport & { organizationName?: string };
+  report: SeedFundReportListElement & { organizationName?: string };
   fontSize?: string | number;
 }
 

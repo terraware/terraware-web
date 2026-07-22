@@ -7,7 +7,7 @@ import { InfoField, infoCardStyles } from 'src/components/SeedFundReports/Locati
 import { transformNumericValue } from 'src/components/SeedFundReports/LocationSelection/util';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import strings from 'src/strings';
-import { ReportNursery } from 'src/types/Report';
+import { SeedFundReportNursery } from 'src/types/SeedFundReport';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 const LocationSectionNursery = (props: LocationSectionProps): JSX.Element => {
@@ -23,13 +23,13 @@ const LocationSectionNursery = (props: LocationSectionProps): JSX.Element => {
         <InfoField
           id={`${location.id}-nursery-capacity`}
           label={strings.NURSERY_CAPACITY_REQUIRED}
-          value={(location as ReportNursery).capacity ?? ''}
+          value={(location as SeedFundReportNursery).capacity ?? ''}
           minNum={0}
           editable={editable}
           onChange={(value) => onUpdateLocation('capacity', transformNumericValue(value, { min: 0 }))}
           type='text'
           /* eslint-disable-next-line eqeqeq */
-          errorText={validate && (location as ReportNursery).capacity == null ? strings.REQUIRED_FIELD : ''}
+          errorText={validate && (location as SeedFundReportNursery).capacity == null ? strings.REQUIRED_FIELD : ''}
           tooltipTitle={strings.REPORT_NURSERY_CAPACITY_INFO}
         />
       </Grid>
@@ -37,7 +37,7 @@ const LocationSectionNursery = (props: LocationSectionProps): JSX.Element => {
         <OverviewItemCard
           isEditable={false}
           title={strings.TOTAL_NUMBER_OF_PLANTS_PROPAGATED}
-          contents={(location as ReportNursery).totalPlantsPropagated.toString() ?? '0'}
+          contents={(location as SeedFundReportNursery).totalPlantsPropagated.toString() ?? '0'}
           sx={infoCardStyles}
         />
       </Grid>
@@ -46,7 +46,7 @@ const LocationSectionNursery = (props: LocationSectionProps): JSX.Element => {
           <OverviewItemCard
             isEditable={false}
             title={strings.formatString(strings.TOTAL_NUMBER_OF_PLANTS_PROPAGATED_FOR_PROJECT, projectName) as string}
-            contents={(location as ReportNursery).totalPlantsPropagatedForProject?.toString() ?? '0'}
+            contents={(location as SeedFundReportNursery).totalPlantsPropagatedForProject?.toString() ?? '0'}
             sx={infoCardStyles}
           />
         </Grid>
@@ -55,7 +55,7 @@ const LocationSectionNursery = (props: LocationSectionProps): JSX.Element => {
         <OverviewItemCard
           isEditable={false}
           title={strings.NURSERY_MORTALITY_RATE}
-          contents={`${(location as ReportNursery).mortalityRate.toString() ?? '0'}%`}
+          contents={`${(location as SeedFundReportNursery).mortalityRate.toString() ?? '0'}%`}
           sx={infoCardStyles}
         />
       </Grid>

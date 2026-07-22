@@ -3,9 +3,9 @@ import React, { type JSX, useRef, useState } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Checkbox, Textfield } from '@terraware/web-components';
 
-import { REPORT_FILE_ENDPOINT } from 'src/services/SeedFundReportService';
+import { API_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { Report, ReportFile, SustainableDevelopmentGoal } from 'src/types/Report';
+import { SeedFundReport, SeedFundReportFile, SustainableDevelopmentGoal } from 'src/types/SeedFundReport';
 import { numWords, overWordLimit } from 'src/utils/text';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -19,12 +19,12 @@ const quarterPageStyles = {
 
 export type ReportFormAnnualProps = {
   editable: boolean;
-  report: Report;
+  report: SeedFundReport;
   updateDetails?: (field: string, value: any) => void;
   updateSDGProgress?: (index: number, value: string) => void;
-  initialReportFiles: ReportFile[];
+  initialReportFiles: SeedFundReportFile[];
   onNewFilesChanged?: (files: File[]) => void;
-  onExistingFilesChanged?: (files: ReportFile[]) => void;
+  onExistingFilesChanged?: (files: SeedFundReportFile[]) => void;
   validate?: boolean;
 };
 
@@ -95,7 +95,7 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
   const [opportunities, setOpportunities] = useState(report.annualDetails?.opportunities ?? '');
   const [nextSteps, setNextSteps] = useState(report.annualDetails?.nextSteps ?? '');
 
-  const [existingFiles, setExistingFiles] = useState<ReportFile[]>(initialReportFiles);
+  const [existingFiles, setExistingFiles] = useState<SeedFundReportFile[]>(initialReportFiles);
   const [newFiles, setNewFiles] = useState<File[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const divRef = useRef<HTMLDivElement>(null);
@@ -132,7 +132,10 @@ export default function ReportFormAnnual(props: ReportFormAnnualProps): JSX.Elem
   };
 
   const getReportFileUrl = (reportId: number, fileId: number) => {
-    return REPORT_FILE_ENDPOINT.replace('{reportId}', reportId.toString()).replace('{fileId}', fileId.toString());
+    return API_PATHS.SEED_FUND_REPORT_FILE.replace('{reportId}', reportId.toString()).replace(
+      '{fileId}',
+      fileId.toString()
+    );
   };
 
   const handleObservationMonthChange = (add: boolean, monthNumber: number) => {

@@ -14,12 +14,12 @@ import {
   transformNumericValue,
 } from 'src/components/SeedFundReports/LocationSelection/util';
 import strings from 'src/strings';
-import { ReportNursery, ReportPlantingSite, ReportSeedBank } from 'src/types/Report';
+import { SeedFundReportNursery, SeedFundReportPlantingSite, SeedFundReportSeedBank } from 'src/types/SeedFundReport';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export type LocationSectionProps = {
   editable: boolean;
-  location: ReportSeedBank | ReportNursery | ReportPlantingSite;
+  location: SeedFundReportSeedBank | SeedFundReportNursery | SeedFundReportPlantingSite;
   onUpdateLocation: (field: string, value: any) => void;
   onUpdateWorkers: (workersField: string, value: any) => void;
   locationType: 'seedBank' | 'nursery' | 'plantingSite';
@@ -69,15 +69,17 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                   ? strings.REPORT_SEEDBANK_BUILD_START_DATE
                   : strings.FACILITY_BUILD_START_DATE_REQUIRED
               }
-              editable={editable && (location as ReportSeedBank | ReportNursery).buildStartedDateEditable}
-              value={(location as ReportSeedBank | ReportNursery).buildStartedDate ?? ''}
+              editable={
+                editable && (location as SeedFundReportSeedBank | SeedFundReportNursery).buildStartedDateEditable
+              }
+              value={(location as SeedFundReportSeedBank | SeedFundReportNursery).buildStartedDate ?? ''}
               onChange={(value) => onUpdateLocation('buildStartedDate', value)}
               type='date'
-              maxDate={(location as ReportSeedBank | ReportNursery).buildCompletedDate}
+              maxDate={(location as SeedFundReportSeedBank | SeedFundReportNursery).buildCompletedDate}
               errorText={
-                validate && !(location as ReportSeedBank | ReportNursery).buildStartedDate
+                validate && !(location as SeedFundReportSeedBank | SeedFundReportNursery).buildStartedDate
                   ? strings.REQUIRED_FIELD
-                  : validate && !buildStartedDateValid(location as ReportSeedBank | ReportNursery)
+                  : validate && !buildStartedDateValid(location as SeedFundReportSeedBank | SeedFundReportNursery)
                     ? strings.FACILITY_BUILD_START_DATE_INVALID
                     : ''
               }
@@ -92,16 +94,18 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                   ? strings.REPORT_SEEDBANK_BUILD_COMPLETION_DATE
                   : strings.FACILITY_BUILD_COMPLETION_DATE_REQUIRED
               }
-              editable={editable && (location as ReportSeedBank | ReportNursery).buildCompletedDateEditable}
-              value={(location as ReportSeedBank | ReportNursery).buildCompletedDate ?? ''}
+              editable={
+                editable && (location as SeedFundReportSeedBank | SeedFundReportNursery).buildCompletedDateEditable
+              }
+              value={(location as SeedFundReportSeedBank | SeedFundReportNursery).buildCompletedDate ?? ''}
               onChange={(value) => onUpdateLocation('buildCompletedDate', value)}
               type='date'
-              minDate={(location as ReportSeedBank | ReportNursery).buildStartedDate}
-              maxDate={(location as ReportSeedBank | ReportNursery).operationStartedDate}
+              minDate={(location as SeedFundReportSeedBank | SeedFundReportNursery).buildStartedDate}
+              maxDate={(location as SeedFundReportSeedBank | SeedFundReportNursery).operationStartedDate}
               errorText={
-                validate && !(location as ReportSeedBank | ReportNursery).buildCompletedDate
+                validate && !(location as SeedFundReportSeedBank | SeedFundReportNursery).buildCompletedDate
                   ? strings.REQUIRED_FIELD
-                  : validate && !buildCompletedDateValid(location as ReportSeedBank | ReportNursery)
+                  : validate && !buildCompletedDateValid(location as SeedFundReportSeedBank | SeedFundReportNursery)
                     ? strings.FACILITY_BUILD_COMPLETION_DATE_INVALID
                     : ''
               }
@@ -116,15 +120,17 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
                   ? strings.REPORT_SEEDBANK_OPERATION_START_DATE
                   : strings.FACILITY_OPERATION_START_DATE_REQUIRED
               }
-              editable={editable && (location as ReportSeedBank | ReportNursery).operationStartedDateEditable}
-              value={(location as ReportSeedBank | ReportNursery).operationStartedDate ?? ''}
+              editable={
+                editable && (location as SeedFundReportSeedBank | SeedFundReportNursery).operationStartedDateEditable
+              }
+              value={(location as SeedFundReportSeedBank | SeedFundReportNursery).operationStartedDate ?? ''}
               onChange={(value) => onUpdateLocation('operationStartedDate', value)}
               type='date'
-              minDate={(location as ReportSeedBank | ReportNursery).buildCompletedDate}
+              minDate={(location as SeedFundReportSeedBank | SeedFundReportNursery).buildCompletedDate}
               errorText={
-                validate && !(location as ReportSeedBank | ReportNursery).operationStartedDate
+                validate && !(location as SeedFundReportSeedBank | SeedFundReportNursery).operationStartedDate
                   ? strings.REQUIRED_FIELD
-                  : validate && !operationStartedDateValid(location as ReportSeedBank | ReportNursery)
+                  : validate && !operationStartedDateValid(location as SeedFundReportSeedBank | SeedFundReportNursery)
                     ? strings.FACILITY_OPERATION_START_DATE_INVALID
                     : ''
               }

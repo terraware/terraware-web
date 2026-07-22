@@ -4,7 +4,7 @@ import { Grid, Typography, useTheme } from '@mui/material';
 
 import SdgIcon from 'src/components/common/SDG/SdgIcon';
 import strings from 'src/strings';
-import { SustainableDevelopmentGoal } from 'src/types/Report';
+import { SustainableDevelopmentGoal } from 'src/types/SeedFundReport';
 
 const ProjectSdgDisplay = ({ sdgList }: { sdgList?: SustainableDevelopmentGoal[] }) => {
   const theme = useTheme();

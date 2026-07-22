@@ -1,6 +1,6 @@
 import React, { type JSX } from 'react';
 
-import { SustainableDevelopmentGoal } from 'src/types/Report';
+import { SustainableDevelopmentGoal } from 'src/types/SeedFundReport';
 
 export type SdgIconProps = {
   goal: SustainableDevelopmentGoal;

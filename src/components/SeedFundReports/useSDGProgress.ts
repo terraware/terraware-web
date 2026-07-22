@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 
-import { Report } from 'src/types/Report';
+import { SeedFundReport } from 'src/types/SeedFundReport';
 
-export default function useSDGProgress(report: Report): [string[], React.Dispatch<React.SetStateAction<string>>[]] {
+export default function useSDGProgress(
+  report: SeedFundReport
+): [string[], React.Dispatch<React.SetStateAction<string>>[]] {
   const sdgProgressStates: string[] = [];
   const setSdgProgressStates: React.Dispatch<React.SetStateAction<string>>[] = [];
 
@@ -30,7 +32,7 @@ export default function useSDGProgress(report: Report): [string[], React.Dispatc
 function useGoal(
   progress: string[],
   setProgress: React.Dispatch<React.SetStateAction<string>>[],
-  report: Report,
+  report: SeedFundReport,
   goalIndex: number
 ) {
   const [sdgProgress, setSdgProgress] = useState(
