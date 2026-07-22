@@ -17,7 +17,6 @@ import SpeciesService from './SpeciesService';
 import SubLocationService from './SubLocationService';
 import SystemService from './SystemService';
 import TrackingService from './TrackingService';
-import UserService from './UserService';
 
 export type { Response } from './HttpService';
 
@@ -41,5 +40,4 @@ export {
   SubLocationService,
   SystemService,
   TrackingService,
-  UserService,
 };

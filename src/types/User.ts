@@ -1,8 +1,8 @@
-import { components } from 'src/api/types/generated-schema';
+import { UserProfilePayload } from 'src/queries/generated/users';
 
 import { OrganizationRole } from './Organization';
 
-export type User = components['schemas']['UserProfilePayload'];
+export type User = UserProfilePayload;
 export type UserGlobalRoles = User['globalRoles'];
 export type UserGlobalRole = User['globalRoles'][0];
 
