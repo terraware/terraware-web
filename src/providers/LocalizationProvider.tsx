@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useRef, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useRef, useState } from 'react';
 import LocalizedStrings from 'react-localization';
 
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -32,8 +32,6 @@ export default function LocalizationProvider({
   activeLocale,
   setActiveLocale,
 }: LocalizationProviderProps): JSX.Element | null {
-  const [countries, setCountries] = useState<Country[]>([]);
-  const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
   const [strings, setStrings] = useState<typeof defaultStrings>(defaultStrings);
 
   const { user } = useUser();
@@ -47,6 +45,20 @@ export default function LocalizationProvider({
 
   const { currentData: countriesData } = useListCountriesQuery(selectedLocale ? undefined : skipToken);
   const { currentData: timeZonesData } = useListTimeZoneNamesQuery(selectedLocale ? undefined : skipToken);
+
+  const countries = useMemo<Country[]>(() => {
+    if (!selectedLocale || !countriesData) {
+      return [];
+    }
+    return [...countriesData].sort((a, b) => a.name.localeCompare(b.name, selectedLocale));
+  }, [selectedLocale, countriesData]);
+
+  const timeZones = useMemo<TimeZoneDescription[]>(() => {
+    if (!selectedLocale || !timeZonesData) {
+      return [];
+    }
+    return [...timeZonesData.timeZones].sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale));
+  }, [selectedLocale, timeZonesData]);
 
   useEffect(() => {
     if (user) {
@@ -68,20 +80,6 @@ export default function LocalizationProvider({
       previousLocaleRef.current = selectedLocale;
     }
   }, [dispatch, selectedLocale]);
-
-  useEffect(() => {
-    if (selectedLocale && countriesData) {
-      const countriesCopy = [...countriesData];
-      setCountries(countriesCopy.sort((a, b) => a.name.localeCompare(b.name, selectedLocale)));
-    }
-  }, [selectedLocale, countriesData]);
-
-  useEffect(() => {
-    if (selectedLocale && timeZonesData) {
-      const timezonesCopy = [...timeZonesData.timeZones];
-      setTimeZones(timezonesCopy.sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale)));
-    }
-  }, [selectedLocale, timeZonesData]);
 
   useEffect(() => {
     if (selectedLocale) {
