@@ -6,6 +6,7 @@ import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useVotingData from 'src/hooks/useVotingData';
 import { useUpsertProjectVotesMutation } from 'src/queries/generated/projectVotes';
 import { UpsertVoteSelection, VoteOption, VoteSelection } from 'src/types/ProjectVotes';
 import useQuery from 'src/utils/useQuery';
@@ -14,7 +15,6 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { UserIdentity } from 'src/utils/user';
 
 import { UserVoteEdit } from './UserVote';
-import { useVotingData } from './VotingContext';
 import VotingWrapper from './VotingWrapper';
 
 const VotingEdit = () => {

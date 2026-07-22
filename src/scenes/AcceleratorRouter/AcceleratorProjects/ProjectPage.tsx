@@ -8,6 +8,7 @@ import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
+import useVotingData from 'src/hooks/useVotingData';
 import { useLocalization, useUser } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
@@ -27,7 +28,6 @@ import ProjectDocumentsView from './ProjectDocumentsView';
 import ProjectProfileView from './ProjectProfileView';
 import ProjectVariablesView from './ProjectVariablesView';
 import PublishModal from './Reports/PublishModal';
-import { useVotingData } from './Voting/VotingContext';
 
 const ProjectPage = () => {
   const { strings } = useLocalization();

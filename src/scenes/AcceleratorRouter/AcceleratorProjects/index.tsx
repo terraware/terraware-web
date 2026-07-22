@@ -13,27 +13,24 @@ import ProjectProfileGisMaps from './ProjectProfileGisMaps';
 import Reports from './Reports';
 import Scoring from './Scoring';
 import Voting from './Voting';
-import VotingProvider from './Voting/VotingProvider';
 
 const AcceleratorProjectsRouter = () => {
   return (
     <ProjectProvider>
-      <VotingProvider>
-        <AcceleratorProjectProvider>
-          <DocumentProducerProvider>
-            <Routes>
-              <Route path={'edit'} element={<ProjectProfileEdit />} />
-              <Route path={'modules/edit'} element={<ProjectModulesEditView />} />
-              <Route path={''} element={<ProjectPage />} />
-              <Route path={'maps/*'} element={<ProjectProfileGisMaps />} />
-              <Route path={'votes/*'} element={<Voting />} />
-              <Route path={'scores/*'} element={<Scoring />} />
-              <Route path={'reports/*'} element={<Reports />} />
-              <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_PROJECTS} />} />
-            </Routes>
-          </DocumentProducerProvider>
-        </AcceleratorProjectProvider>
-      </VotingProvider>
+      <AcceleratorProjectProvider>
+        <DocumentProducerProvider>
+          <Routes>
+            <Route path={'edit'} element={<ProjectProfileEdit />} />
+            <Route path={'modules/edit'} element={<ProjectModulesEditView />} />
+            <Route path={''} element={<ProjectPage />} />
+            <Route path={'maps/*'} element={<ProjectProfileGisMaps />} />
+            <Route path={'votes/*'} element={<Voting />} />
+            <Route path={'scores/*'} element={<Scoring />} />
+            <Route path={'reports/*'} element={<Reports />} />
+            <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_PROJECTS} />} />
+          </Routes>
+        </DocumentProducerProvider>
+      </AcceleratorProjectProvider>
     </ProjectProvider>
   );
 };

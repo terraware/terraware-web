@@ -5,6 +5,7 @@ import { Button } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useVotingData from 'src/hooks/useVotingData';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -12,7 +13,6 @@ import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
 import { UserVoteView } from './UserVote';
-import { useVotingData } from './VotingContext';
 import VotingWrapper from './VotingWrapper';
 
 const VotingView = () => {
