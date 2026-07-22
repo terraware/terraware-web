@@ -141,6 +141,10 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
           // Seed/refresh the zoom so markers cluster on initial load and after the view settles.
           setZoom(mbMap.getZoom());
         });
+
+        mbMap.on('style.load', () => {
+          loadImages(map);
+        });
       }
     },
     [loadImages, mapRef, onMapLoad]
