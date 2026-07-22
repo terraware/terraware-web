@@ -133,6 +133,9 @@ const config: ConfigFile = {
     './src/queries/generated/stats.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/stats'),
     },
+    './src/queries/generated/timeZones.ts': {
+      filterEndpoints: (_, operation) => operation.path === '/api/v1/i18n/timeZones',
+    },
     './src/queries/generated/support.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/support'),
     },

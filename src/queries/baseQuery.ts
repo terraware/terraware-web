@@ -1,5 +1,7 @@
 import { BaseQueryFn, FetchArgs, FetchBaseQueryError, fetchBaseQuery } from '@reduxjs/toolkit/query';
 
+import { getQueryLocale } from './locale';
+
 function delay(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(() => resolve(), ms));
 }
@@ -30,6 +32,15 @@ function objectToFormData(value: Record<string, unknown>) {
 const rawBaseQuery = fetchBaseQuery({
   baseUrl: '',
   credentials: 'include',
+  prepareHeaders: (headers) => {
+    // Send the active locale (kept in sync by LocalizationProvider) so RTK Query requests are
+    // localized the same way axios requests are. Endpoints that set their own Accept-Language win.
+    const locale = getQueryLocale();
+    if (locale && !headers.has('Accept-Language')) {
+      headers.set('Accept-Language', locale);
+    }
+    return headers;
+  },
   paramsSerializer: (params: Record<string, unknown>) =>
     Object.entries(params)
       .filter(([, value]) => value !== undefined)
