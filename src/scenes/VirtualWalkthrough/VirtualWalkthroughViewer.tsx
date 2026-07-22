@@ -8,6 +8,7 @@ import { XrControllers } from 'playcanvas/scripts/esm/xr-controllers.mjs';
 
 import Annotation, { AnnotationProps } from 'src/components/GaussianSplat/Annotation';
 import { AutoRotator } from 'src/components/GaussianSplat/AutoRotator';
+import BoundaryRing from 'src/components/GaussianSplat/BoundaryRing';
 import GradientSky from 'src/components/GaussianSplat/GradientSky';
 import SplatControls from 'src/components/GaussianSplat/SplatControls';
 import SplatModel from 'src/components/GaussianSplat/SplatModel';
@@ -317,6 +318,10 @@ const VirtualWalkthroughViewer = ({
       </Entity>
 
       {splatModel}
+
+      {data?.sceneBounds?.m !== undefined && groundPlane.length === 3 && (
+        <BoundaryRing center={sceneBoundsCenter} radius={sceneBoundsRadius} groundPlane={groundPlane} />
+      )}
 
       {localAnnotations.length > 0 && (
         <Entity name='annotations-root'>
