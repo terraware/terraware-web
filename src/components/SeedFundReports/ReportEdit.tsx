@@ -21,6 +21,7 @@ import useSeedFundReport from 'src/hooks/useSeedFundReport';
 import useSeedFundReportActions from 'src/hooks/useSeedFundReportActions';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization, useUser } from 'src/providers';
+import { useBatchSeedFundReportFilesMutation } from 'src/queries/seedFundReports/files';
 import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
 import { SeedFundReport, SeedFundReportFile } from 'src/types/SeedFundReport';
@@ -57,7 +58,11 @@ export default function ReportEdit(): JSX.Element {
   const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
 
   const { report: loadedReport, isError, reload } = useSeedFundReport(reportIdInt);
-  const { onUpdate, unlockReport, onSubmit, isLoading: busyState } = useSeedFundReportActions();
+
+  const { onUpdate, unlockReport, onSubmit, isLoading: reportActionInProgress } = useSeedFundReportActions();
+  const [batchFiles, batchFilesResult] = useBatchSeedFundReportFilesMutation();
+
+  const busyState = reportActionInProgress || batchFilesResult.isLoading;
 
   useEffect(() => {
     const el = document.getElementById(idInView);
@@ -83,15 +88,14 @@ export default function ReportEdit(): JSX.Element {
 
   const updateFiles = async () => {
     if (reportIdValid()) {
-      await Promise.all(
-        initialReportFiles?.map((f: { id: number; filename: string }) => {
-          if (!updatedReportFiles?.includes(f)) {
-            return SeedFundReportService.deleteReportFile(reportIdInt, f.id);
-          }
-          return undefined;
-        }) ?? []
-      );
-      await Promise.all(newReportFiles?.map((f) => SeedFundReportService.uploadReportFile(reportIdInt, f)) ?? []);
+      const fileIdsToDelete = (initialReportFiles ?? [])
+        .filter((f) => !updatedReportFiles?.includes(f))
+        .map((f) => f.id);
+      try {
+        await batchFiles({ reportId: reportIdInt, filesToUpload: newReportFiles, fileIdsToDelete }).unwrap();
+      } catch {
+        snackbar.toastError();
+      }
     }
   };
 
