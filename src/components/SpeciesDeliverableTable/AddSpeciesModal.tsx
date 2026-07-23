@@ -7,9 +7,9 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useDocLinks } from 'src/docLinks';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { requestCreateAcceleratorProjectSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
 import { selectAcceleratorProjectSpeciesCreateRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -40,7 +40,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   const theme = useTheme();
   const docLinks = useDocLinks();
 
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
 
   const [requestId, setRequestId] = useState<string>('');
   const result = useAppSelector(selectAcceleratorProjectSpeciesCreateRequest(requestId));

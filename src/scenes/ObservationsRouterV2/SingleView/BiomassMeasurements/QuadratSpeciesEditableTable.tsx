@@ -5,8 +5,8 @@ import { TextField } from '@mui/material';
 import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 
 import { useGetOneObservationResults } from 'src/hooks/observations';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   BiomassSpeciesUpdateOperationPayload,
   QuadratSpeciesUpdateOperationPayload,
@@ -38,7 +38,7 @@ export default function QuadratSpeciesEditableTable({
   species,
   position,
 }: QuadratSpeciesEditableTableProps): JSX.Element {
-  const { species: availableSpecies } = useSpeciesData();
+  const { species: availableSpecies } = useOrganizationSpecies();
   const { strings } = useLocalization();
 
   const params = useParams<{ observationId: string }>();

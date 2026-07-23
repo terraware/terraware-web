@@ -5,8 +5,8 @@ import { IconButton, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 
 import { useGetOneObservationResults } from 'src/hooks/observations';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   BiomassSpeciesUpdateOperationPayload,
   RecordedTreeUpdateOperationPayload,
@@ -22,7 +22,7 @@ type TreeRow = ExistingTreePayload & {
 
 export default function TreesAndShrubsEditableTable(): JSX.Element {
   const theme = useTheme();
-  const { species: availableSpecies } = useSpeciesData();
+  const { species: availableSpecies } = useOrganizationSpecies();
   const params = useParams<{ observationId: string }>();
   const { strings } = useLocalization();
 

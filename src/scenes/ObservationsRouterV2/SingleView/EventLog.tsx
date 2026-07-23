@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import EventLogView from 'src/components/common/EventLog';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { EventLogEntryPayload } from 'src/queries/generated/events';
 import { ListObservationEventsArgs, useLazyListObservationEventsQuery } from 'src/queries/observations/observations';
 
@@ -16,7 +16,7 @@ type EventLogProps = {
 const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
 
   const [list, { data: events, isLoading }] = useLazyListObservationEventsQuery();
 

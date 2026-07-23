@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { ObservationSpeciesResultsPayload } from 'src/queries/generated/observations';
 import { ObservationSpeciesResults } from 'src/types/Observations';
 
@@ -9,7 +9,7 @@ const useObservationSpecies = (
   species: ObservationSpeciesResultsPayload[],
   unknownSpecies?: ObservationSpeciesResultsPayload
 ) => {
-  const { species: availableSpecies } = useSpeciesData();
+  const { species: availableSpecies } = useOrganizationSpecies();
   const { strings } = useLocalization();
 
   return useMemo((): ObservationSpeciesResults[] => {

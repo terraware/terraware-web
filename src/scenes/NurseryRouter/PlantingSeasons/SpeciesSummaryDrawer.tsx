@@ -3,7 +3,7 @@ import React, { type JSX, useEffect, useMemo } from 'react';
 import { Box, Drawer, IconButton, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLazyGetPlantingSeasonSpeciesSummaryQuery } from 'src/queries/search/plantingSeasons';
 import strings from 'src/strings';
 
@@ -25,7 +25,7 @@ type DisplayRow = {
 
 const SpeciesSummaryDrawer = ({ open, onClose, plantingSeasonId }: SpeciesSummaryDrawerProps): JSX.Element => {
   const theme = useTheme();
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
   const [getSummary, { data: summaryRows }] = useLazyGetPlantingSeasonSpeciesSummaryQuery();
 
   useEffect(() => {

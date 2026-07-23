@@ -8,11 +8,11 @@ import PageHeader from 'src/components/PageHeader';
 import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
 import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import OnboardingCard, { OnboardingCardRow } from 'src/scenes/Home/OnboardingHomeView/OnboardingCard';
@@ -34,7 +34,7 @@ const OnboardingHomeView = () => {
   const snackbar = useSnackbar();
   const query = useQuery();
 
-  const { species: allSpecies } = useSpeciesData();
+  const { species: allSpecies } = useOrganizationSpecies();
 
   useEffect(() => {
     if (selectedOrganization && query.get('newOrg') === 'true') {

@@ -8,8 +8,8 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { useLazyListBatchesForWithdrawQuery } from 'src/queries/search/batchesForWithdraw';
@@ -22,7 +22,7 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
   const theme = useTheme();
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
   const organizationId = selectedOrganization?.id;
 
   const [plantingSiteId, setPlantingSiteId] = useState<number | undefined>(undefined);
