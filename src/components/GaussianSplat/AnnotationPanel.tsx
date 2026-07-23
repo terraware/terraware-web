@@ -127,9 +127,7 @@ const AnnotationPanel = ({ annotation, hotspotPosition, onClose }: AnnotationPan
 
   const panelStyle: React.CSSProperties = {
     ...PANEL_STYLE,
-    ...(annotation.imageUrl
-      ? { width: 'fit-content', maxWidth: '60vw' }
-      : { width: 'fit-content', maxWidth: '50vw' }),
+    ...(annotation.imageUrl ? { width: 'fit-content', maxWidth: '60vw' } : { width: 'fit-content', maxWidth: '50vw' }),
     ...(panelLeft !== null ? { left: `${panelLeft}px` } : {}),
   };
 
