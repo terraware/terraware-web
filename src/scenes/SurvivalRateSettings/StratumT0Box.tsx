@@ -4,8 +4,8 @@ import { Box, Divider, Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { SpeciesPlot, StratumT0Data } from 'src/types/Tracking';
@@ -19,7 +19,7 @@ type StratumT0BoxProps = {
 
 const StratumT0Box = ({ plotsWithObservations, withdrawnSpeciesPlot, t0Stratum }: StratumT0BoxProps) => {
   const theme = useTheme();
-  const { speciesById } = useSpeciesData();
+  const { speciesById } = useOrganizationSpecies();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
 

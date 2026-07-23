@@ -7,8 +7,8 @@ import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import PlantingSeasonNotificationBanners from 'src/components/common/PlantingSeasonNotificationBanners';
 import TextField from 'src/components/common/Textfield/Textfield';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   useLazyListPlantingSeasonsQuery,
   useUpsertAllocatedSpeciesMutation,
@@ -43,7 +43,7 @@ const InventoryPlanningView = (): JSX.Element => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
   const organizationId = selectedOrganization?.id;
 
   const [plantingSiteId, setPlantingSiteId] = useState<number | undefined>(undefined);

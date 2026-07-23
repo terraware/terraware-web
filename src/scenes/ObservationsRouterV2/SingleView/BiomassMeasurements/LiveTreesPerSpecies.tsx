@@ -1,7 +1,7 @@
 import React, { type JSX, useMemo } from 'react';
 
 import BarChart from 'src/components/common/Chart/BarChart';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { ExistingTreePayload } from 'src/types/Observations';
 
 export type LiveTreesPerSpeciesProps = {
@@ -9,7 +9,7 @@ export type LiveTreesPerSpeciesProps = {
 };
 
 export default function LiveTreesPerSpecies({ trees }: LiveTreesPerSpeciesProps): JSX.Element {
-  const { species: availableSpecies } = useSpeciesData();
+  const { species: availableSpecies } = useOrganizationSpecies();
 
   const treeSpecies = useMemo(() => {
     const _treeSpecies: Record<string | number, number> = {};

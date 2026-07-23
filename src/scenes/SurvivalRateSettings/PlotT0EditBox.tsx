@@ -5,9 +5,9 @@ import { Button, Checkbox, Icon, IconTooltip, Message, SelectT } from '@terrawar
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import TextField from 'src/components/common/TextField';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   ObservationSpeciesDensityPayload,
   useGetPlotObservationDensitiesForPlantingSiteQuery,
@@ -42,7 +42,7 @@ const PlotT0EditBox = ({
   const theme = useTheme();
   const [t0Origin, setT0Origin] = useState<string>('useObservation');
 
-  const { species, speciesById } = useSpeciesData();
+  const { species, speciesById } = useOrganizationSpecies();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const { plantingSite } = usePlantingSite(plantingSiteId);

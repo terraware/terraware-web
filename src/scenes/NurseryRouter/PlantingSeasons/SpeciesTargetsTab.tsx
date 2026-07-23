@@ -6,7 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
 import TextField from 'src/components/common/Textfield/Textfield';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import {
   PlantingSeasonPayload,
   SpeciesTargetPayload,
@@ -61,7 +61,7 @@ const getSpeciesTargetGridColumns = (readOnly: boolean, isMobile: boolean): stri
 const SpeciesTargetsTab = ({ plantingSeason, plantingSite }: SpeciesTargetsTabProps): JSX.Element => {
   const theme = useTheme();
   const { data: speciesTargetsData } = useGetSpeciesTargetsQuery(plantingSeason.id);
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
 
   const readOnly = plantingSeason.status === 'Closed';
 

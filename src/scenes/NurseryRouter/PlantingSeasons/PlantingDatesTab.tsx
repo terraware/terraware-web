@@ -8,8 +8,8 @@ import { DateTime } from 'luxon';
 import Card from 'src/components/common/Card';
 import DatePicker from 'src/components/common/DatePicker';
 import TextField from 'src/components/common/Textfield/Textfield';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   PlantingSeasonPayload,
   ScheduledDatePayload,
@@ -55,7 +55,7 @@ const compareSpeciesScientificNames = (
 const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProps): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
   const { data: scheduledDatesData } = useGetScheduledPlantingDatesQuery(plantingSeason.id);
   const { data: speciesTargetsData } = useGetSpeciesTargetsQuery(plantingSeason.id);
   const { data: speciesSummary } = useGetPlantingSeasonSpeciesSummaryQuery(plantingSeason.id);

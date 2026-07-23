@@ -11,10 +11,10 @@ import { transformNumericValue } from 'src/components/SeedFundReports/LocationSe
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
 import { useLatestSiteObservationResult } from 'src/hooks/observations';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useLocalization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useSearchObservationDatesQuery } from 'src/queries/search/plantingSites';
 import { ReportPlantingSite } from 'src/types/Report';
 import { GrowthForm } from 'src/types/Species';
@@ -73,7 +73,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
     state: ['InProgress'],
   });
 
-  const { species: allSpecies } = useSpeciesData();
+  const { species: allSpecies } = useOrganizationSpecies();
   const [plantingSiteSpecies, setPlantingSiteSpecies] = useState<PlantingSiteSpecies[]>([]);
   const [plantingDensity, setPlantingDensity] = useState<Record<string, number | string>>();
 

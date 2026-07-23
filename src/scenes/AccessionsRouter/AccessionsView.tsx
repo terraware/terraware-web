@@ -1,13 +1,13 @@
 import React from 'react';
 
 import Database from 'src/components/seeds/database';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useOrganization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { selectedOrgHasFacilityType } from 'src/utils/organization';
 
 const AccessionsView = () => {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
 
   return (
     <Database
