@@ -1,3 +1,4 @@
+f0ce13ad SW-7755 Remove voting context/provider (#6111)
 2633205f SW-7755 Migrate project votes to RTK Query (#6110)
 bcaa9fb0 SW-5835 Reload images on map style change (#6121)
 55e6a802 SW-7758 Clock and App Version RTK Query (#6118)
