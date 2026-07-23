@@ -57,9 +57,7 @@ export default function ReportEdit(): JSX.Element {
   const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
 
   const { report: loadedReport, isError, reload } = useSeedFundReport(reportIdInt);
-  const { onUpdate, unlockReport, onSubmit, isLoading: reportActionInProgress } = useSeedFundReportActions();
-
-  const busyState = reportActionInProgress;
+  const { onUpdate, unlockReport, onSubmit, isLoading: busyState } = useSeedFundReportActions();
 
   useEffect(() => {
     const el = document.getElementById(idInView);

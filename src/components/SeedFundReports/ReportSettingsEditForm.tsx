@@ -6,13 +6,13 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import useUpdateSeedFundReportSettings from 'src/hooks/useUpdateSeedFundReportSettings';
 import { useOrganization } from 'src/providers';
 import { SeedFundReportsSettings } from 'src/types/SeedFundReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import Card from '../common/Card';
 import ReportSettingsEditFormFields from './ReportSettingsEditFormFields';
+import { useUpdateReportSettingsMutation } from 'src/queries/generated/seedFundReports';
 
 interface ReportSettingsEditFormProps {
   reportsSettings: SeedFundReportsSettings;
@@ -24,7 +24,7 @@ const ReportSettingsEditForm = ({ reportsSettings, isEditing }: ReportSettingsEd
   const { selectedOrganization } = useOrganization();
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
-  const updateReportSettings = useUpdateSeedFundReportSettings();
+  const [updateReportSettings] = useUpdateReportSettingsMutation();
 
   const [localReportsSettings, setLocalReportsSettings] = useState(reportsSettings);
   const [isBusy, setIsBusy] = useState<boolean>(false);
