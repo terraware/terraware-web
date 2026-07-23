@@ -50,8 +50,10 @@ const PANEL_STYLE: React.CSSProperties = {
 };
 
 const IMAGE_STYLE: React.CSSProperties = {
-  width: '100%',
+  width: 'auto',
   height: 'auto',
+  maxWidth: '100%',
+  maxHeight: '60vh',
   display: 'block',
   borderRadius: '12px 12px 0 0',
   flexShrink: 0,
@@ -125,7 +127,9 @@ const AnnotationPanel = ({ annotation, hotspotPosition, onClose }: AnnotationPan
 
   const panelStyle: React.CSSProperties = {
     ...PANEL_STYLE,
-    ...(annotation.imageUrl ? { width: '60vw' } : { width: 'fit-content', maxWidth: '50vw' }),
+    ...(annotation.imageUrl
+      ? { width: 'fit-content', maxWidth: '60vw' }
+      : { width: 'fit-content', maxWidth: '50vw' }),
     ...(panelLeft !== null ? { left: `${panelLeft}px` } : {}),
   };
 
