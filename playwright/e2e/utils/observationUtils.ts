@@ -174,3 +174,76 @@ export const uploadObservationData = async (
 
   return completedPlots;
 };
+
+export type AdHocObservation = {
+  observationId: number;
+  plotId: number;
+  plotNumber: number;
+  livePlants: number;
+  deadPlants: number;
+  totalPlants: number;
+  totalSpecies: number;
+  conditions: string[];
+  notes: string;
+};
+
+export const uploadAdHocObservationData = async (
+  request: APIRequestContext,
+  {
+    plantingSiteId,
+    speciesId,
+    livePlants = 13,
+    deadPlants = 4,
+    conditions = ['FavorableWeather'],
+    notes = 'Automated ad-hoc observation upload test',
+  }: {
+    plantingSiteId: number;
+    speciesId: number;
+    livePlants?: number;
+    deadPlants?: number;
+    conditions?: string[];
+    notes?: string;
+  }
+): Promise<AdHocObservation> => {
+  const gpsCoordinates = { type: 'Point', coordinates: [38.626, 15.69] };
+  const buildPlant = (status: 'Live' | 'Dead') => ({ certainty: 'Known', speciesId, status, gpsCoordinates });
+  const plants = [
+    ...Array.from({ length: livePlants }, () => buildPlant('Live')),
+    ...Array.from({ length: deadPlants }, () => buildPlant('Dead')),
+  ];
+
+  const response = await request.post('/api/v1/tracking/observations/adHoc', {
+    headers: JSON_HEADERS,
+    data: {
+      observationType: 'Monitoring',
+      plantingSiteId,
+      observedTime: new Date().toISOString(),
+      swCorner: gpsCoordinates,
+      conditions,
+      notes,
+      lngFirst: true,
+      plants,
+    },
+  });
+  expect(response.ok()).toBeTruthy();
+  const { observationId, plotId } = await response.json();
+
+  const resultsResponse = await request.get(`/api/v1/tracking/observations/${observationId}/results`, {
+    headers: JSON_HEADERS,
+    params: { depth: 'Plot' },
+  });
+  expect(resultsResponse.ok()).toBeTruthy();
+  const { observation } = await resultsResponse.json();
+
+  return {
+    observationId,
+    plotId,
+    plotNumber: observation.adHocPlot.monitoringPlotNumber,
+    livePlants,
+    deadPlants,
+    totalPlants: livePlants + deadPlants,
+    totalSpecies: livePlants > 0 ? 1 : 0,
+    conditions,
+    notes,
+  };
+};
