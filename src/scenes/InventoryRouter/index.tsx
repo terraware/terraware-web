@@ -13,7 +13,7 @@ import { selectedOrgHasFacilityType } from 'src/utils/organization';
 
 const InventoryRouter = () => {
   const { selectedOrganization } = useOrganization();
-  const { species } = useOrganizationSpecies();
+  const { species, isLoading: speciesLoading } = useOrganizationSpecies();
 
   return (
     <Routes>
@@ -23,6 +23,7 @@ const InventoryRouter = () => {
           <InventoryV2View
             hasNurseries={selectedOrganization ? selectedOrgHasFacilityType(selectedOrganization, 'Nursery') : false}
             hasSpecies={species.length > 0}
+            speciesLoading={speciesLoading}
           />
         }
       />
