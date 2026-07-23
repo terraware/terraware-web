@@ -38,6 +38,7 @@ const PlantingSiteMapDrawer = ({ plantingSiteId, layerFeatureId }: PlantingSiteM
     if (data.type === 'site') {
       return [
         { key: strings.PLANTING_SITE_AREA, value: formatArea(data.areaHa) },
+        { key: strings.PLANTING_COMPLETE, value: data.plantingComplete ? strings.YES : strings.NO },
         { key: strings.STRATA, value: `${data.strataCount}` },
         { key: strings.SUBSTRATA, value: `${data.substrataCount}` },
       ];

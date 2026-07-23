@@ -42,14 +42,23 @@ describe('getPlantingSiteMapDrawerData', () => {
     expect(getPlantingSiteMapDrawerData(undefined, featureId('sites', '1'))).toBeUndefined();
   });
 
-  test('returns site data with strata and substrata counts', () => {
+  test('returns site data with planting complete plus strata and substrata counts', () => {
     expect(getPlantingSiteMapDrawerData(makeSite(), featureId('sites', '1'))).toEqual({
       type: 'site',
       name: 'Site A',
       areaHa: 12.5,
+      plantingComplete: false,
       strataCount: 2,
       substrataCount: 3,
     });
+  });
+
+  test('site planting complete is true when every substratum across all strata is complete', () => {
+    const site = makeSite();
+    site.strata?.forEach((stratum) => stratum.substrata.forEach((substratum) => (substratum.plantingCompleted = true)));
+
+    const result = getPlantingSiteMapDrawerData(site, featureId('sites', '1'));
+    expect(result?.type === 'site' && result.plantingComplete).toBe(true);
   });
 
   test('returns stratum data; planting complete is false when any substratum is incomplete', () => {

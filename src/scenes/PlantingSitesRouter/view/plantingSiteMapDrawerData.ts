@@ -2,7 +2,14 @@ import { MapLayerFeatureId } from 'src/components/NewMap/types';
 import { PlantingSite } from 'src/types/Tracking';
 
 export type PlantingSiteDrawerData =
-  | { type: 'site'; name: string; areaHa: number | undefined; strataCount: number; substrataCount: number }
+  | {
+      type: 'site';
+      name: string;
+      areaHa: number | undefined;
+      plantingComplete: boolean;
+      strataCount: number;
+      substrataCount: number;
+    }
   | { type: 'stratum'; name: string; areaHa: number; plantingComplete: boolean; targetPlantingDensity: number }
   | { type: 'substratum'; name: string; areaHa: number; plantingComplete: boolean; targetPlantingDensity: number };
 
@@ -21,6 +28,9 @@ export const getPlantingSiteMapDrawerData = (
       type: 'site',
       name: plantingSite.name,
       areaHa: plantingSite.areaHa,
+      plantingComplete: strata
+        .flatMap((stratum) => stratum.substrata)
+        .every((substratum) => substratum.plantingCompleted),
       strataCount: strata.length,
       substrataCount: strata.flatMap((stratum) => stratum.substrata).length,
     };
