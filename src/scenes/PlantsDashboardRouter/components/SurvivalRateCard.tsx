@@ -20,9 +20,14 @@ import LiveDeadPlantsPerSpeciesCard from './LiveDeadPlantsPerSpeciesCard';
 type SurvivalRateCardProps = {
   plantingSiteId?: number;
   projectId?: number | 'all';
+  organizationId?: number;
 };
 
-export default function SurvivalRateCard({ plantingSiteId, projectId }: SurvivalRateCardProps): JSX.Element {
+export default function SurvivalRateCard({
+  plantingSiteId,
+  projectId,
+  organizationId,
+}: SurvivalRateCardProps): JSX.Element {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
   const isProjectView = !plantingSiteId && typeof projectId === 'number';
@@ -152,7 +157,10 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
               </Tooltip>
             </Box>
             <Box paddingTop={2}>
-              <HighestAndLowestSurvivalRateSpeciesCard plantingSiteId={plantingSiteId} />
+              <HighestAndLowestSurvivalRateSpeciesCard
+                plantingSiteId={plantingSiteId}
+                organizationId={organizationId}
+              />
             </Box>
           </Box>
           <div style={separatorStyles} />
@@ -168,7 +176,7 @@ export default function SurvivalRateCard({ plantingSiteId, projectId }: Survival
               </Tooltip>
             </Box>
             <Box paddingTop={2}>
-              <LiveDeadPlantsPerSpeciesCard plantingSiteId={plantingSiteId} />
+              <LiveDeadPlantsPerSpeciesCard plantingSiteId={plantingSiteId} organizationId={organizationId} />
             </Box>
           </Box>
         </>
