@@ -8,6 +8,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
 import { View } from 'src/components/common/ListMapSelector';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
@@ -15,6 +16,7 @@ import DeletePlantingSiteModal from '../edit/DeletePlantingSiteModal';
 import BoundariesAndStrata from './BoundariesAndStrata';
 import PlantingSiteDetailsCard from './PlantingSiteDetailsCard';
 import PlantingSiteDetailsHeader from './PlantingSiteDetailsHeader';
+import PlantingSiteMapV2 from './PlantingSiteMapV2';
 import SimplePlantingSite from './SimplePlantingSite';
 
 export default function PlantingSiteView(): JSX.Element {
@@ -68,9 +70,13 @@ export default function PlantingSiteView(): JSX.Element {
           }}
         >
           <PlantingSiteDetailsCard plantingSite={plantingSite} />
-          {plantingSite.boundary && plantingSite.strata && (
-            <BoundariesAndStrata search={search} setSearch={setSearch} setView={setView} view={view} />
-          )}
+          {plantingSite.boundary &&
+            plantingSite.strata &&
+            (isEnabled('New Planting Site Map') ? (
+              <PlantingSiteMapV2 plantingSiteId={plantingSite.id} />
+            ) : (
+              <BoundariesAndStrata search={search} setSearch={setSearch} setView={setView} view={view} />
+            ))}
           {plantingSite.boundary && !plantingSite.strata && (
             <Grid container flexGrow={1}>
               <Grid item xs={12} display='flex'>
