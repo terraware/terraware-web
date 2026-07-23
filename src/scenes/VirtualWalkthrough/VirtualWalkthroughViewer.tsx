@@ -32,8 +32,8 @@ import {
 const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
 const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
 
-// TODO: replace with actual image urls once retrieval is available
 const PLACEHOLDER_IMAGE_URLS = [
+  'https://images.unsplash.com/photo-1722444366501-6e5de9e768d1?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cG9ydHJhaXQlMjBsYW5kc2NhcGV8ZW58MHx8MHx8fDA%3D',
   'https://placehold.co/1080x1920',
   'https://placehold.co/1920x1080',
   'https://placehold.co/800x450',
