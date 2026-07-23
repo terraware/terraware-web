@@ -1,3 +1,4 @@
+e3b64f2e SW-7421 e2e test for uploading observation data (#6117)
 a701c871 Projcet Score RTK (#6103)
 dfea0f23 Abstract user timezone/units init into hooks; remove UserService (#6024)
 aa4e8ff5 Update dependency brace-expansion to v2.1.2 [SECURITY] (#6109)
