@@ -63,13 +63,13 @@ const injectedRtkApi = api.injectEndpoints({
           },
           {
             operation: 'field',
-            field: 'scheduledPlantingDate_plantingSeason_status',
+            field: 'scheduledPlantingDate_plantingSeason_status(raw)',
             type: 'Exact',
             values: includedPlantingSeasonStatuses,
           },
           {
             operation: 'field',
-            field: 'status',
+            field: 'status(raw)',
             type: 'Exact',
             values: ['Pending', 'Partial'],
           },
