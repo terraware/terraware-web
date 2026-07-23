@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
 import { Box, Container, Grid, List, ListItem, Typography, useTheme } from '@mui/material';
 import { Message, TableColumnType, Tabs } from '@terraware/web-components';
@@ -11,14 +11,12 @@ import ReportsCellRenderer from 'src/components/SeedFundReports/TableCellRendere
 import TfMain from 'src/components/common/TfMain';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import useSeedFundReportSettings from 'src/hooks/useSeedFundReportSettings';
+import useSeedFundReports from 'src/hooks/useSeedFundReports';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
-import { selectReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsSelectors';
-import { requestReportsSettings } from 'src/redux/features/reportsSettings/reportsSettingsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
-import { ListReport } from 'src/types/Report';
+import { SeedFundReportListElement } from 'src/types/SeedFundReport';
 
 import ReportSettingsEditFormFields from './ReportSettingsEditFormFields';
 
@@ -40,17 +38,28 @@ interface ReportsViewProps {
 export default function ReportsView(props: ReportsViewProps): JSX.Element {
   const tab = props.tab || DEFAULT_TAB;
 
-  const dispatch = useAppDispatch();
   const contentRef = useRef(null);
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const navigate = useSyncNavigate();
 
-  const reportsSettings = useAppSelector(selectReportsSettings);
+  const { settings: reportsSettings } = useSeedFundReportSettings(selectedOrganization?.id);
+  const { reports } = useSeedFundReports(selectedOrganization?.id);
 
   const [activeTab, setActiveTab] = useState<string>(tab);
-  const [results, setResults] = useState<(ListReport & { organizationName?: string })[]>([]);
+
+  const results: (SeedFundReportListElement & { organizationName?: string })[] = useMemo(
+    () =>
+      reports.map((report) => {
+        if (report.projectName) {
+          return report;
+        }
+        // Reports without a project name are for the organization
+        return { ...report, organizationName: selectedOrganization?.name };
+      }),
+    [reports, selectedOrganization?.name]
+  );
 
   const onChangeTab = useCallback(
     (newTab: string) => {
@@ -68,31 +77,6 @@ export default function ReportsView(props: ReportsViewProps): JSX.Element {
     },
     [navigate]
   );
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void dispatch(requestReportsSettings(selectedOrganization.id));
-    }
-  }, [dispatch, selectedOrganization]);
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      const refreshSearch = async () => {
-        const reportsResults = await SeedFundReportService.getReports(selectedOrganization.id);
-        setResults(
-          (reportsResults.reports || []).map((report) => {
-            if (report.projectName) {
-              return report;
-            }
-            // Reports without a project name are for the organization
-            return { ...report, organizationName: selectedOrganization.name };
-          })
-        );
-      };
-
-      void refreshSearch();
-    }
-  }, [selectedOrganization]);
 
   const reportsToComplete = useMemo(() => results.filter((report) => report.status !== 'Submitted'), [results]);
 

@@ -17,11 +17,12 @@ import SubmitConfirmationDialog from 'src/components/SeedFundReports/SubmitConfi
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import useSeedFundReport from 'src/hooks/useSeedFundReport';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization, useUser } from 'src/providers';
 import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
-import { Report, ReportFile } from 'src/types/Report';
+import { SeedFundReport, SeedFundReportFile } from 'src/types/SeedFundReport';
 import { overWordLimit } from 'src/utils/text';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -40,12 +41,12 @@ export default function ReportEdit(): JSX.Element {
   const [showInvalidUserModal, setShowInvalidUserModal] = useState(false);
   const [photos, setPhotos] = useState<File[]>([]);
   const [photoIdsToRemove, setPhotoIdsToRemove] = useState<number[]>([]);
-  const [report, setReport] = useState<Report>();
+  const [report, setReport] = useState<SeedFundReport>();
   const [validateFields, setValidateFields] = useState(false);
   const [busyState, setBusyState] = useState(false);
   const [idInView, setIdInView] = useState('');
   const [newReportFiles, setNewReportFiles] = useState<File[]>([]);
-  const [updatedReportFiles, setUpdatedReportFiles] = useState<ReportFile[]>([]);
+  const [updatedReportFiles, setUpdatedReportFiles] = useState<SeedFundReportFile[]>([]);
   const [showAnnual, setShowAnnual] = useState(false);
   const [confirmSubmitDialogOpen, setConfirmSubmitDialogOpen] = useState(false);
   const [currentUserEditing, setCurrentUserEditing] = useState(true);
@@ -54,6 +55,8 @@ export default function ReportEdit(): JSX.Element {
 
   const reportIdInt = reportId ? parseInt(reportId, 10) : -1;
   const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
+
+  const { report: loadedReport, isError, reload } = useSeedFundReport(reportIdInt);
 
   useEffect(() => {
     const el = document.getElementById(idInView);
@@ -66,23 +69,16 @@ export default function ReportEdit(): JSX.Element {
   const reportIdValid = useCallback(() => reportIdInt && reportIdInt !== -1, [reportIdInt]);
 
   useEffect(() => {
-    const getReport = async () => {
-      if (reportIdValid()) {
-        const result = await SeedFundReportService.getReport(reportIdInt);
-        if (result.requestSucceeded && result.report) {
-          setReport(result.report);
-        } else {
-          snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
-        }
-      }
-    };
+    if (loadedReport && !report) {
+      setReport(loadedReport);
+    }
+  }, [loadedReport, report]);
 
-    if (reportIdInt) {
-      void getReport();
-    } else {
+  useEffect(() => {
+    if (isError) {
       snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
-  }, [reportIdInt, snackbar, reportIdValid]);
+  }, [isError, snackbar]);
 
   const updateFiles = async () => {
     if (reportIdValid()) {
@@ -99,22 +95,20 @@ export default function ReportEdit(): JSX.Element {
   };
 
   useEffect(() => {
-    const getReport = async () => {
-      if (reportIdInt && reportIdInt !== -1) {
-        const result = await SeedFundReportService.getReport(reportIdInt);
-        if (result.requestSucceeded && result.report) {
-          setCurrentUserEditing(result.report.lockedByUserId === user?.id);
-        }
+    const checkLockOwner = async () => {
+      const latest = await reload();
+      if (latest) {
+        setCurrentUserEditing(latest.lockedByUserId === user?.id);
       }
     };
 
-    const interval = setInterval(() => void getReport(), 60000);
+    const interval = setInterval(() => void checkLockOwner(), 60000);
 
     // Clean up existing interval.
     return () => {
       clearInterval(interval);
     };
-  }, [reportIdInt, user?.id]);
+  }, [reload, user?.id]);
 
   useEffect(() => {
     if (report && user && !currentUserEditing && !showInvalidUserModal) {
@@ -219,7 +213,7 @@ export default function ReportEdit(): JSX.Element {
     };
   }, [snackbar]);
 
-  const hasEmptyRequiredFields = (iReport: Report) => {
+  const hasEmptyRequiredFields = (iReport: SeedFundReport) => {
     if (!iReport.summaryOfProgress) {
       return 'summary-of-progress';
     }
@@ -290,7 +284,7 @@ export default function ReportEdit(): JSX.Element {
     return '';
   };
 
-  const hasEmptyRequiredAnnualFields = (iReport: Report) => {
+  const hasEmptyRequiredAnnualFields = (iReport: SeedFundReport) => {
     if (!iReport.isAnnual) {
       return '';
     }
@@ -376,7 +370,7 @@ export default function ReportEdit(): JSX.Element {
     setNewReportFiles(filesList);
   };
 
-  const onExistingFilesChanged = (filesList: ReportFile[]) => {
+  const onExistingFilesChanged = (filesList: SeedFundReportFile[]) => {
     setUpdatedReportFiles(filesList);
   };
 
