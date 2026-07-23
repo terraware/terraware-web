@@ -11,7 +11,6 @@ import { isAdmin } from 'src/utils/organization';
 
 import CachedUserService from './CachedUserService';
 import HttpService, { Response } from './HttpService';
-import PreferencesService from './PreferencesService';
 
 /**
  * Service for organization related functionality
@@ -36,10 +35,6 @@ export type OrganizationData = {
 };
 
 export type OrganizationResponse = Response & OrganizationData;
-
-export type UpdateOptions = {
-  skipAcknowledgeTimeZone?: boolean;
-};
 
 export type OrganizationInternalTags = {
   internalTags: number[];
@@ -175,7 +170,7 @@ const createOrganization = async (
 /**
  * update an organization
  */
-const updateOrganization = async (organization: Organization, options: UpdateOptions = {}): Promise<Response> => {
+const updateOrganization = async (organization: Organization): Promise<Response> => {
   const {
     name,
     description,
@@ -204,11 +199,6 @@ const updateOrganization = async (organization: Organization, options: UpdateOpt
       '{organizationId}': organization.id.toString(),
     },
   });
-
-  // update preferences to indicate time zone was set by user
-  if (response.requestSucceeded && timeZone && !options.skipAcknowledgeTimeZone) {
-    await PreferencesService.updateUserOrgPreferences(organization.id, { timeZoneAcknowledgedOnMs: Date.now() });
-  }
 
   return response;
 };
@@ -241,7 +231,7 @@ const initializeTimeZone = async (organization: Organization, timeZone: string):
   }
 
   if (!organization.timeZone) {
-    const response = await updateOrganization({ ...organization, timeZone }, { skipAcknowledgeTimeZone: true });
+    const response = await updateOrganization({ ...organization, timeZone });
     if (response.requestSucceeded) {
       initializedTimeZone.updated = true;
       initializedTimeZone.timeZone = timeZone;

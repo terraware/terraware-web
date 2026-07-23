@@ -10,13 +10,14 @@ import TfMain from 'src/components/common/TfMain';
 import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import OnboardingCard, { OnboardingCardRow } from 'src/scenes/Home/OnboardingHomeView/OnboardingCard';
-import { OrganizationUserService, PreferencesService } from 'src/services';
+import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import { OrganizationUser } from 'src/types/User';
 import { isAdmin, isManagerOrHigher, isOwner } from 'src/utils/organization';
@@ -26,6 +27,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 const OnboardingHomeView = () => {
   const { user } = useUser();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
+  const updateUserPreferences = useUpdateUserPreferences();
   const { isMobile, isDesktop } = useDeviceInfo();
   const trackEvent = useTrackEvent();
   const navigate = useSyncNavigate();
@@ -66,21 +68,17 @@ const OnboardingHomeView = () => {
 
   const dismissAcceleratorCard = async () => {
     if (selectedOrganization) {
-      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-        ['showAcceleratorCard']: false,
-      });
+      await updateUserPreferences({ ['showAcceleratorCard']: false }, selectedOrganization.id);
       reloadOrgPreferences();
     }
   };
 
   const markAsComplete = useCallback(async () => {
     if (selectedOrganization) {
-      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-        ['singlePersonOrg']: true,
-      });
+      await updateUserPreferences({ ['singlePersonOrg']: true }, selectedOrganization.id);
     }
     reloadOrgPreferences();
-  }, [reloadOrgPreferences, selectedOrganization]);
+  }, [reloadOrgPreferences, selectedOrganization, updateUserPreferences]);
 
   const onboardingCardRows: OnboardingCardRow[] = useMemo(() => {
     const rows = isOwner(selectedOrganization)

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useUser } from 'src/providers';
-import { PreferencesService } from 'src/services';
 import { InitializedUnits } from 'src/units';
 
 // Guard so the default units are written at most once per session. Module-level (not a per-instance
@@ -11,6 +11,7 @@ let unitsWriteStarted = false;
 const useInitializeUnits = (defaultUnits: string): InitializedUnits => {
   const { bootstrapped, userPreferences } = useUser();
   const [result, setResult] = useState<InitializedUnits>({});
+  const updateUserPreferences = useUpdateUserPreferences();
 
   useEffect(() => {
     if (!bootstrapped) {
@@ -32,17 +33,13 @@ const useInitializeUnits = (defaultUnits: string): InitializedUnits => {
     unitsWriteStarted = true;
     void (async () => {
       try {
-        const response = await PreferencesService.updateUserPreferences({ preferredWeightSystem: defaultUnits });
-        if (response.requestSucceeded) {
-          setResult({ units: defaultUnits, unitsAcknowledgedOnMs, updated: true });
-        } else {
-          unitsWriteStarted = false;
-        }
+        await updateUserPreferences({ preferredWeightSystem: defaultUnits });
+        setResult({ units: defaultUnits, unitsAcknowledgedOnMs, updated: true });
       } catch {
         unitsWriteStarted = false;
       }
     })();
-  }, [bootstrapped, userPreferences, defaultUnits]);
+  }, [bootstrapped, userPreferences, defaultUnits, updateUserPreferences]);
 
   return result;
 };

@@ -15,6 +15,7 @@ import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
@@ -23,7 +24,6 @@ import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModa
 import CTACard from 'src/scenes/Home/CTACard';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import VirtualWalkthroughMessages from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughMessages';
-import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 import { isAdmin, isManagerOrHigher, selectedOrgHasFacilityType } from 'src/utils/organization';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -36,6 +36,7 @@ const TerrawareHomeView = () => {
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
   const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
+  const updateUserPreferences = useUpdateUserPreferences();
   const { isTablet, isMobile, isDesktop } = useDeviceInfo();
   const trackEvent = useTrackEvent();
   const navigate = useSyncNavigate();
@@ -85,9 +86,7 @@ const TerrawareHomeView = () => {
 
   const dismissAcceleratorCard = async () => {
     if (selectedOrganization) {
-      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-        ['showAcceleratorCard']: false,
-      });
+      await updateUserPreferences({ ['showAcceleratorCard']: false }, selectedOrganization.id);
       reloadOrgPreferences();
     }
   };

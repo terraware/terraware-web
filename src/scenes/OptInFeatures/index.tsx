@@ -6,7 +6,8 @@ import Page from 'src/components/Page';
 import PageSnackbar from 'src/components/PageSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import { Feature, OPT_IN_FEATURES } from 'src/features';
-import { PreferencesService } from 'src/services';
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
+import { useGetUserPreferencesQuery } from 'src/queries/generated/preferences';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -20,14 +21,15 @@ export default function OptInFeaturesView({ refresh }: OptInFeaturesViewProps): 
   const { isMobile } = useDeviceInfo();
   const [preferences, setPreferences] = useState<{ [key: string]: boolean }>();
   const snackbar = useSnackbar();
+  const { currentData } = useGetUserPreferencesQuery(undefined);
+  const updateUserPreferences = useUpdateUserPreferences();
 
   useEffect(() => {
-    const loadPreferences = async () => {
-      const response = await PreferencesService.getUserPreferences();
+    const loadPreferences = () => {
       const data: any = {};
       // collect preferences related to our opt-in feature set
-      if (response.requestSucceeded && response.preferences) {
-        const prefs = response.preferences;
+      const prefs = currentData?.preferences;
+      if (prefs) {
         Object.keys(prefs).forEach((key) => {
           if (OPT_IN_FEATURES.find((f) => f.preferenceName === key)) {
             data[key] = prefs[key] || false;
@@ -45,15 +47,13 @@ export default function OptInFeaturesView({ refresh }: OptInFeaturesViewProps): 
       }, 250);
     };
 
-    if (!preferences) {
-      void loadPreferences();
+    if (!preferences && currentData) {
+      loadPreferences();
     }
   });
 
   const savePreference = async (feature: Feature, value: boolean) => {
-    let response = {
-      requestSucceeded: true,
-    };
+    let succeeded = true;
 
     if (feature.set) {
       feature.set(value);
@@ -63,10 +63,14 @@ export default function OptInFeaturesView({ refresh }: OptInFeaturesViewProps): 
         ...prev,
         [feature.preferenceName]: value,
       }));
-      response = await PreferencesService.updateUserPreferences({ [feature.preferenceName]: value });
+      try {
+        await updateUserPreferences({ [feature.preferenceName]: value });
+      } catch {
+        succeeded = false;
+      }
     }
 
-    if (response.requestSucceeded) {
+    if (succeeded) {
       setPreferences((prev) => ({
         ...prev,
         [feature.preferenceName]: value,
