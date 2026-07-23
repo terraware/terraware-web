@@ -1,4 +1,5 @@
 import { api } from '../generated/accessionsV2';
+import { speciesCacheTags } from '../speciesCacheTags';
 import { QueryTagTypes } from '../tags';
 
 const csvTemplateResponseHandler = async (response: Response): Promise<string> => {
@@ -27,7 +28,10 @@ api.enhanceEndpoints({
       }),
     },
     getAccession: {
-      providesTags: (_results, _error, id) => [{ type: QueryTagTypes.Accessions, id }],
+      providesTags: (results, _error, id) => [
+        { type: QueryTagTypes.Accessions, id },
+        ...speciesCacheTags([results?.accession?.speciesId]),
+      ],
     },
     updateAccession: {
       invalidatesTags: (_results, _error, payload) => [

@@ -1,4 +1,5 @@
 import { api } from '../generated/observations';
+import { speciesCacheTags } from '../speciesCacheTags';
 import { QueryTagTypes } from '../tags';
 
 api.enhanceEndpoints({
@@ -35,6 +36,9 @@ api.enhanceEndpoints({
               { type: QueryTagTypes.PlantingSiteSurvivalRate, id: observation.plantingSiteId },
             ])
           : []),
+        ...speciesCacheTags(
+          results ? results.observations.flatMap((observation) => observation.species.map((s) => s.speciesId)) : []
+        ),
         { type: QueryTagTypes.Observation, id: 'LIST' },
       ],
     },
@@ -139,6 +143,7 @@ api.enhanceEndpoints({
           ? [
               { type: QueryTagTypes.Observation, id: observationResults.observation.observationId },
               { type: QueryTagTypes.PlantingSiteSurvivalRate, id: observationResults.observation.plantingSiteId },
+              ...speciesCacheTags(observationResults.observation.species.map((s) => s.speciesId)),
             ]
           : [],
     },

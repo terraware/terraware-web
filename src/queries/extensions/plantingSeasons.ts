@@ -1,4 +1,5 @@
 import { api } from '../generated/plantingSeasons';
+import { speciesCacheTags } from '../speciesCacheTags';
 import { QueryTagTypes } from '../tags';
 
 api.enhanceEndpoints({
@@ -6,13 +7,21 @@ api.enhanceEndpoints({
     listPlantingSeasons: {
       providesTags: (results) => [
         ...(results ? results.seasons.map((season) => ({ type: QueryTagTypes.PlantingSeasons, id: season.id })) : []),
+        ...speciesCacheTags(
+          results ? results.seasons.flatMap((season) => season.speciesTargets.map((target) => target.speciesId)) : []
+        ),
         { type: QueryTagTypes.PlantingSeasons, id: 'LIST' },
       ],
     },
     getPlantingSeason: {
-      providesTags: (_result, _error, plantingSeasonId) => [
+      providesTags: (result, _error, plantingSeasonId) => [
         { type: QueryTagTypes.PlantingSeasons, id: plantingSeasonId },
+        ...speciesCacheTags((result?.season.speciesTargets ?? []).map((target) => target.speciesId)),
       ],
+    },
+    getPlantingSeasonNotifications: {
+      // Notifications embed species scientific names, so refresh them on any species change.
+      providesTags: [{ type: QueryTagTypes.Species, id: 'LIST' }],
     },
     createPlantingSeason: {
       invalidatesTags: (result) => [
@@ -40,8 +49,9 @@ api.enhanceEndpoints({
       ],
     },
     getSpeciesTargets: {
-      providesTags: (_result, _error, plantingSeasonId) => [
+      providesTags: (result, _error, plantingSeasonId) => [
         { type: QueryTagTypes.PlantingSeasons, id: plantingSeasonId },
+        ...speciesCacheTags((result?.targets ?? []).map((target) => target.speciesId)),
       ],
     },
     upsertSpeciesTarget: {
@@ -63,8 +73,17 @@ api.enhanceEndpoints({
       ],
     },
     getScheduledPlantingDates: {
-      providesTags: (_result, _error, plantingSeasonId) => [
+      providesTags: (result, _error, plantingSeasonId) => [
         { type: QueryTagTypes.PlantingSeasonDates, id: plantingSeasonId },
+        ...speciesCacheTags(
+          result ? result.scheduledDates.flatMap((date) => date.species.map((species) => species.speciesId)) : []
+        ),
+      ],
+    },
+    getSingleScheduledPlantingDate: {
+      providesTags: (result, _error, arg) => [
+        { type: QueryTagTypes.PlantingSeasonDates, id: arg.plantingSeasonId },
+        ...speciesCacheTags((result?.scheduledDate.species ?? []).map((species) => species.speciesId)),
       ],
     },
     createScheduledPlantingDate: {
