@@ -4,7 +4,7 @@ import { QueryTagTypes } from '../tags';
 api.enhanceEndpoints({
   endpoints: {
     getSeedBankSummary: {
-      providesTags: [QueryTagTypes.Accessions],
+      providesTags: [QueryTagTypes.SeedbankSummary],
     },
   },
 });
