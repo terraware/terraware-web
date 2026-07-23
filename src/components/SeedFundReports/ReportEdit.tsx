@@ -127,6 +127,7 @@ export default function ReportEdit(): JSX.Element {
       await batchPhotos({ reportId: iReportId, photosToUpload: photos, photoIdsToDelete: photoIdsToRemove }).unwrap();
     } catch {
       snackbar.toastError();
+      return;
     }
     setPhotos([]);
     setPhotoIdsToRemove([]);
