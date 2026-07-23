@@ -135,7 +135,7 @@ export default function ListMapView({
         <ListMapSelector defaultView={initialView} view={view} onView={updateView} />
       </Box>
       <Box
-        marginTop={theme.spacing(2)}
+        marginTop={theme.spacing(2.5)}
         sx={view === 'map' ? { display: 'flex', flexDirection: 'column', flexGrow: 1 } : undefined}
       >
         <Box flexGrow={1} flexDirection='column' display={view === 'list' ? 'flex' : 'none'}>
