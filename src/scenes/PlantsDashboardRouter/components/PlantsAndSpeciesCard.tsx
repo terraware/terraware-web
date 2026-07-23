@@ -22,9 +22,11 @@ import PlantsReportedPerSpeciesCard from './PlantsReportedPerSpeciesCard';
 export default function PlantsAndSpeciesCard({
   plantingSiteId,
   projectId,
+  organizationId,
 }: {
   plantingSiteId?: number;
   projectId?: number | 'all';
+  organizationId?: number;
 }): JSX.Element {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -223,7 +225,12 @@ export default function PlantsAndSpeciesCard({
       <Grid item xs={12}>
         <Card radius='8px' style={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
           <Box flexBasis='100%'>
-            <PlantsReportedPerSpeciesCard newVersion plantingSiteId={plantingSiteId} projectId={projectId} />
+            <PlantsReportedPerSpeciesCard
+              newVersion
+              plantingSiteId={plantingSiteId}
+              projectId={projectId}
+              organizationId={organizationId}
+            />
           </Box>
           <div
             style={{
@@ -235,7 +242,11 @@ export default function PlantsAndSpeciesCard({
             }}
           />
           <Box flexBasis='100%'>
-            <NumberOfSpeciesPlantedCard plantingSiteId={plantingSiteId} projectId={projectId} />
+            <NumberOfSpeciesPlantedCard
+              plantingSiteId={plantingSiteId}
+              projectId={projectId}
+              organizationId={organizationId}
+            />
           </Box>
         </Card>
       </Grid>

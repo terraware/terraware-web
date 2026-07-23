@@ -4,19 +4,21 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { useLatestSiteObservationResult } from 'src/hooks/observations';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import strings from 'src/strings';
 import { ObservationSpeciesResultsPayload } from 'src/types/Observations';
 
 type HighestAndLowestSurvivalRateSpeciesCardProps = {
   plantingSiteId: number;
+  organizationId?: number;
 };
 
 export default function HighestAndLowestSurvivalRateSpeciesCard({
   plantingSiteId,
+  organizationId,
 }: HighestAndLowestSurvivalRateSpeciesCardProps): JSX.Element {
   const theme = useTheme();
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies({ organizationId });
 
   const { observation: latestObservationResult } = useLatestSiteObservationResult(plantingSiteId, 'Substratum');
 
