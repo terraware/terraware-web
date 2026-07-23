@@ -16,11 +16,19 @@ interface AnnotationPanelProps {
 // Fallback hotspot diameter (px) when the rendered size isn't reported yet.
 const DEFAULT_HOTSPOT_DIAMETER = 35;
 
+// Horizontal gap (px) kept between the panel's right edge and the hotspot so
+// the connector line stays visible.
+const PANEL_HOTSPOT_GAP = 48;
+
+// Minimum distance from the left edge of the viewer, as a fraction of its
+// width, so the panel never drifts further left than this.
+const MIN_LEFT_FRACTION = 0.02;
+
 const BACKDROP_STYLE: React.CSSProperties = {
   position: 'absolute',
   inset: 0,
   zIndex: 5001,
-  cursor: 'pointer',
+  cursor: 'default',
 };
 
 const CONNECTOR_STYLE: React.CSSProperties = {
@@ -68,6 +76,7 @@ const AnnotationPanel = ({ annotation, hotspotPosition, onClose }: AnnotationPan
   const panelRef = useRef<HTMLDivElement>(null);
   const connectorRef = useRef<SVGSVGElement>(null);
   const [lineStart, setLineStart] = useState<{ x: number; y: number } | null>(null);
+  const [panelLeft, setPanelLeft] = useState<number | null>(null);
 
   useEffect(() => {
     if (!annotation) {
@@ -84,19 +93,26 @@ const AnnotationPanel = ({ annotation, hotspotPosition, onClose }: AnnotationPan
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [annotation, onClose]);
 
-  // Anchor the line at the vertical center of the panel's right edge, in the
+  // Position the panel just to the left of the hotspot (clamped so it never
+  // goes further left than MIN_LEFT_FRACTION of the viewer) and anchor the
+  // connector line at the vertical center of the panel's right edge, in the
   // connector SVG's coordinate space.
   useLayoutEffect(() => {
     if (!annotation || !hotspotPosition || !panelRef.current || !connectorRef.current) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
+      setPanelLeft(null);
       setLineStart(null);
       return;
     }
-    const panelRect = panelRef.current.getBoundingClientRect();
+    const panelWidth = panelRef.current.getBoundingClientRect().width;
     const connectorRect = connectorRef.current.getBoundingClientRect();
+    const minLeft = connectorRect.width * MIN_LEFT_FRACTION;
+    const desiredLeft = hotspotPosition.x - PANEL_HOTSPOT_GAP - panelWidth;
+    const left = Math.max(desiredLeft, minLeft);
+    setPanelLeft(left);
     setLineStart({
-      x: panelRect.right - connectorRect.left,
-      y: panelRect.top + panelRect.height / 2 - connectorRect.top,
+      x: left + panelWidth,
+      y: connectorRect.height / 2,
     });
   }, [annotation, hotspotPosition]);
 
@@ -107,6 +123,7 @@ const AnnotationPanel = ({ annotation, hotspotPosition, onClose }: AnnotationPan
   const panelStyle: React.CSSProperties = {
     ...PANEL_STYLE,
     ...(annotation.imageUrl ? { width: '60vw' } : { width: 'fit-content', maxWidth: '50vw' }),
+    ...(panelLeft !== null ? { left: `${panelLeft}px` } : {}),
   };
 
   // Stop the line at the edge of the hotspot circle
