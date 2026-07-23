@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
 import { useLazyGetReportQuery } from 'src/queries/generated/seedFundReports';
 
@@ -7,25 +7,25 @@ import { useLazyGetReportQuery } from 'src/queries/generated/seedFundReports';
  * `reload` trigger for imperative refreshes (e.g. polling the lock owner).
  */
 const useSeedFundReport = (reportId?: number) => {
-  const [trigger, response] = useLazyGetReportQuery();
+  const [getReport, response] = useLazyGetReportQuery();
 
-  const isValid = reportId !== undefined && reportId > 0;
+  const isValid = useMemo(() => reportId !== undefined && reportId > 0, []);
 
   useEffect(() => {
-    if (reportId !== undefined && reportId > 0) {
-      void trigger(reportId, true);
+    if (isValid) {
+      void getReport(reportId!, true);
     }
-  }, [trigger, reportId]);
+  }, [getReport, reportId]);
 
   const report = isValid ? response.currentData?.report : undefined;
 
   const reload = useCallback(async () => {
-    if (reportId === undefined || reportId <= 0) {
+    if (isValid) {
       return undefined;
     }
-    const result = await trigger(reportId, false).unwrap();
+    const result = await getReport(reportId!, false).unwrap();
     return result.report;
-  }, [trigger, reportId]);
+  }, [getReport, reportId]);
 
   return { report, isLoading: response.isFetching, isError: response.isError, reload };
 };
