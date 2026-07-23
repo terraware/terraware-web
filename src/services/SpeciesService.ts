@@ -1,10 +1,9 @@
-import { paths } from 'src/api/types/generated-schema';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 import { FieldNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
-import { MergeOtherSpeciesPayload, Species, SuggestedSpecies } from 'src/types/Species';
+import { MergeOtherSpeciesPayload, SuggestedSpecies } from 'src/types/Species';
 import { parseSearchTerm } from 'src/utils/search';
 
-import HttpService, { Response, Response2 } from './HttpService';
+import HttpService, { Response } from './HttpService';
 import SearchService from './SearchService';
 
 /**
@@ -22,114 +21,19 @@ export type SpeciesUploadStatusDetails = {
   uploadStatus?: GetUploadStatusResponsePayload;
 };
 
-export type SpeciesIdResponse = Response & SpeciesIdData;
-
-export type AllSpeciesResponse = Response & AllSpeciesData;
-
-export type AllSpeciesData = { species?: Species[] };
-
-export type SpeciesIdData = { species?: Species };
-
 export type SpeciesProjectsSearchResponse = SearchResponseElement & {
   projects: {
     project_name: string;
   }[];
 };
 
-const SPECIES_ENDPOINT = '/api/v1/species';
-const SPECIES_ID_ENDPOINT = '/api/v1/species/{speciesId}';
 const SPECIES_TEMPLATE_ENDPOINT = '/api/v1/species/uploads/template';
 const SPECIES_UPLOADS_ENDPOINT = '/api/v1/species/uploads';
 const SPECIES_UPLOAD_STATUS_ENDPOINT = '/api/v1/species/uploads/{uploadId}';
 const SPECIES_UPLOAD_RESOLVE_ENDPOINT = '/api/v1/species/uploads/{uploadId}/resolve';
 const MERGE_OTHER_SPECIES_ENDPOINT = '/api/v1/tracking/observations/{observationId}/mergeOtherSpecies';
 
-type UpdateSpeciesRequestPayload =
-  paths[typeof SPECIES_ID_ENDPOINT]['put']['requestBody']['content']['application/json'];
-type SpeciesResponsePayload = paths[typeof SPECIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-type SpeciesIdResponsePayload =
-  paths[typeof SPECIES_ID_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-const httpSpecies = HttpService.root(SPECIES_ENDPOINT);
-const httpSpeciesId = HttpService.root(SPECIES_ID_ENDPOINT);
 const httpMergeOtherSpecies = HttpService.root(MERGE_OTHER_SPECIES_ENDPOINT);
-
-/**
- * get a species by id
- */
-const getSpecies = async (speciesId: number, organizationId: number): Promise<SpeciesIdResponse> => {
-  const params = { organizationId: organizationId.toString() };
-  const response: SpeciesIdResponse = await httpSpeciesId.get<SpeciesIdResponsePayload, SpeciesIdData>(
-    {
-      params,
-      urlReplacements: { '{speciesId}': speciesId.toString() },
-    },
-    (data) => {
-      if (!data?.species) {
-        return {} as SpeciesIdData;
-      }
-
-      const speciesData: SpeciesIdData = {
-        species: data.species,
-      };
-
-      return speciesData;
-    }
-  );
-
-  return response;
-};
-
-/**
- * Update a species
- */
-const updateSpecies = async (species: Species, organizationId: number): Promise<Response> => {
-  const entity: UpdateSpeciesRequestPayload = {
-    averageWoodDensity: species.averageWoodDensity,
-    ecosystemTypes: species.ecosystemTypes,
-    commonName: species.commonName,
-    conservationCategory: species.conservationCategory,
-    dbhSource: species.dbhSource,
-    dbhValue: species.dbhValue,
-    ecologicalRoleKnown: species.ecologicalRoleKnown,
-    familyName: species.familyName,
-    growthForms: species.growthForms,
-    heightAtMaturitySource: species.heightAtMaturitySource,
-    heightAtMaturityValue: species.heightAtMaturityValue,
-    localUsesKnown: species.localUsesKnown,
-    nativeEcosystem: species.nativeEcosystem,
-    organizationId,
-    otherFacts: species.otherFacts,
-    plantMaterialSourcingMethods: species.plantMaterialSourcingMethods,
-    rare: species.rare,
-    scientificName: species.scientificName,
-    seedStorageBehavior: species.seedStorageBehavior,
-    successionalGroups: species.successionalGroups,
-    woodDensityLevel: species.woodDensityLevel,
-  };
-
-  return await httpSpeciesId.put({
-    entity,
-    urlReplacements: {
-      '{speciesId}': species.id.toString(),
-    },
-  });
-};
-
-/**
- * Get all species
- */
-const getAllSpecies = async (organizationId: number, inUse?: boolean): Promise<Response2<SpeciesResponsePayload>> => {
-  const params: any = { organizationId: organizationId.toString() };
-
-  if (inUse) {
-    params.inUse = inUse.toString();
-  }
-
-  const response: AllSpeciesResponse = await httpSpecies.get2<SpeciesResponsePayload>({ params });
-
-  return response;
-};
 
 /**
  * Download species template
@@ -291,14 +195,11 @@ const mergeOtherSpecies = (
  */
 const SpeciesService = {
   downloadSpeciesTemplate,
-  getAllSpecies,
-  getSpecies,
   getSpeciesProjects,
   getSpeciesUploadStatus,
   mergeOtherSpecies,
   resolveSpeciesUpload,
   suggestSpecies,
-  updateSpecies,
   uploadSpecies,
 };
 
