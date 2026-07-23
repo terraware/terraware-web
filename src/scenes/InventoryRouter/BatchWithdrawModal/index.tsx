@@ -375,8 +375,6 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         ) as string
       );
 
-      // If a withdrawal exhausted a batch on today's date, surface the info
-      // modal before closing — matches the old full-page flow's UX hint.
       const today = getTodaysDateFormatted();
       const drainedABatchToday =
         draft.withdrawnDate === today &&
@@ -392,6 +390,8 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         });
 
       if (drainedABatchToday) {
+        // Hide the main modal by rendering the empty-batches notice instead;
+        // handleClose() runs when the user dismisses that notice.
         setShowEmptyBatchesModal(true);
       } else {
         handleClose();
@@ -459,7 +459,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         }}
       />
       {isLoadingBatches && <BusySpinner withSkrim={true} />}
-      {batches && (
+      {batches && !showEmptyBatchesModal && (
         <DialogBox
           open={open}
           onClose={handleClose}
