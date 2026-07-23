@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 import _ from 'lodash';
 
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useLazyGetSpeciesQuery, useUpdateSpeciesMutation } from 'src/queries/generated/species';
 import {
   requestGetAcceleratorProjectSpecies,
   requestUpdateAcceleratorProjectSpecies,
@@ -12,8 +13,6 @@ import {
   selectAcceleratorProjectSpeciesGetRequest,
   selectAcceleratorProjectSpeciesUpdateRequest,
 } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
-import { requestGetOneSpecies, requestUpdateSpecies } from 'src/redux/features/species/speciesAsyncThunks';
-import { selectSpeciesGetOneRequest, selectSpeciesUpdateRequest } from 'src/redux/features/species/speciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorProjectSpecies } from 'src/types/AcceleratorProjectSpecies';
@@ -54,14 +53,12 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
   const [getPPSRequestId, setGetPPSRequestId] = useState('');
   const getPPSResponse = useAppSelector(selectAcceleratorProjectSpeciesGetRequest(getPPSRequestId));
 
-  const [getSpeciesRequestId, setGetSpeciesRequestId] = useState('');
-  const getSpeciesResponse = useAppSelector(selectSpeciesGetOneRequest(getSpeciesRequestId));
+  const [getSpecies, getSpeciesResponse] = useLazyGetSpeciesQuery();
 
   const [updatePPSRequestId, setUpdatePPSRequestId] = useState('');
   const updatePPSResponse = useAppSelector(selectAcceleratorProjectSpeciesUpdateRequest(updatePPSRequestId));
 
-  const [updateSpeciesRequestId, setUpdateSpeciesRequestId] = useState('');
-  const updateSpeciesResponse = useAppSelector(selectSpeciesUpdateRequest(updateSpeciesRequestId));
+  const [updateSpecies, updateSpeciesResponse] = useUpdateSpeciesMutation();
 
   const [newStatus, setNewStatus] = useState('');
   const [ppsNeedsReload, setPpsNeedsReload] = useState(true);
@@ -84,15 +81,14 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
       return;
     }
 
-    const request = dispatch(
-      requestGetOneSpecies({
+    void getSpecies(
+      {
         organizationId: currentDeliverable.organizationId,
         speciesId: currentAcceleratorProjectSpecies.speciesId,
-      })
+      },
+      false
     );
-
-    setGetSpeciesRequestId(request.requestId);
-  }, [dispatch, currentDeliverable, currentAcceleratorProjectSpecies]);
+  }, [getSpecies, currentDeliverable, currentAcceleratorProjectSpecies]);
 
   const reload = useCallback(() => {
     reloadPPS();
@@ -118,24 +114,50 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
       }
 
       if (species && currentDeliverable && !_.isEqual(species, currentSpecies)) {
-        const updateSpeciesRequest = dispatch(
-          requestUpdateSpecies({
+        void updateSpecies({
+          speciesId: species.id,
+          updateSpeciesRequestPayload: {
             organizationId: currentDeliverable.organizationId,
-            species,
-          })
-        );
-        setUpdateSpeciesRequestId(updateSpeciesRequest.requestId);
+            scientificName: species.scientificName,
+            averageWoodDensity: species.averageWoodDensity,
+            commonName: species.commonName,
+            conservationCategory: species.conservationCategory,
+            dbhSource: species.dbhSource,
+            dbhValue: species.dbhValue,
+            ecologicalRoleKnown: species.ecologicalRoleKnown,
+            ecosystemTypes: species.ecosystemTypes,
+            familyName: species.familyName,
+            growthForms: species.growthForms,
+            heightAtMaturitySource: species.heightAtMaturitySource,
+            heightAtMaturityValue: species.heightAtMaturityValue,
+            localUsesKnown: species.localUsesKnown,
+            nativeEcosystem: species.nativeEcosystem,
+            otherFacts: species.otherFacts,
+            plantMaterialSourcingMethods: species.plantMaterialSourcingMethods,
+            rare: species.rare,
+            seedStorageBehavior: species.seedStorageBehavior,
+            successionalGroups: species.successionalGroups,
+            woodDensityLevel: species.woodDensityLevel,
+          },
+        });
       }
       setPpsNeedsReload(true);
     },
-    [currentDeliverable, currentAcceleratorProjectSpecies, currentSpecies, dispatch, goToAcceleratorProjectSpecies]
+    [
+      currentDeliverable,
+      currentAcceleratorProjectSpecies,
+      currentSpecies,
+      dispatch,
+      goToAcceleratorProjectSpecies,
+      updateSpecies,
+    ]
   );
 
   const acceleratorProjectSpeciesData = useMemo<AcceleratorProjectSpeciesData>(
     () => ({
       currentAcceleratorProjectSpecies,
       currentSpecies,
-      isBusy: updatePPSResponse?.status === 'pending' || updateSpeciesResponse?.status === 'pending',
+      isBusy: updatePPSResponse?.status === 'pending' || updateSpeciesResponse.isLoading,
       acceleratorProjectSpeciesId,
       reload,
       update,
@@ -188,17 +210,13 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
   ]);
 
   useEffect(() => {
-    if (!updateSpeciesResponse) {
-      return;
-    }
-
-    if (updateSpeciesResponse.status === 'success') {
+    if (updateSpeciesResponse.isSuccess) {
       reloadSpecies();
       snackbar.toastSuccess(strings.CHANGES_SAVED);
-    } else if (updateSpeciesResponse.status === 'error') {
+    } else if (updateSpeciesResponse.isError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [reloadSpecies, snackbar, updateSpeciesResponse]);
+  }, [reloadSpecies, snackbar, updateSpeciesResponse.isSuccess, updateSpeciesResponse.isError]);
 
   useEffect(() => {
     if (!getPPSResponse) {
@@ -213,16 +231,12 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
   }, [getPPSResponse, snackbar]);
 
   useEffect(() => {
-    if (!getSpeciesResponse) {
-      return;
-    }
-
-    if (getSpeciesResponse.status === 'success' && getSpeciesResponse.data) {
-      setCurrentSpecies(getSpeciesResponse.data);
-    } else if (getSpeciesResponse.status === 'error') {
+    if (getSpeciesResponse.isSuccess && getSpeciesResponse.currentData?.species) {
+      setCurrentSpecies(getSpeciesResponse.currentData.species);
+    } else if (getSpeciesResponse.isError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [getSpeciesResponse, snackbar]);
+  }, [getSpeciesResponse.isSuccess, getSpeciesResponse.currentData, getSpeciesResponse.isError, snackbar]);
 
   useEffect(() => {
     if (acceleratorProjectSpeciesId) {
