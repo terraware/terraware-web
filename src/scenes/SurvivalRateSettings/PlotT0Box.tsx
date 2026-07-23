@@ -6,8 +6,8 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
@@ -23,7 +23,7 @@ type PlotT0BoxProps = {
 
 const PlotT0Box = ({ plot, t0Plot, withdrawnSpeciesPlot }: PlotT0BoxProps) => {
   const theme = useTheme();
-  const { speciesById } = useSpeciesData();
+  const { speciesById } = useOrganizationSpecies();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
 

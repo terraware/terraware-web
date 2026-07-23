@@ -6,7 +6,7 @@ import { Checkbox, Icon } from '@terraware/web-components';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useGetPlantingSiteQuery, useGetPlantingSiteReportedPlantsQuery } from 'src/queries/generated/plantingSites';
 import { useUpdateSubstrataMutation } from 'src/queries/generated/substrata';
 import strings from 'src/strings';
@@ -25,7 +25,7 @@ export default function PlantingProgressMapDrawer({
 }: PlantingProgressMapDrawerProps): JSX.Element | null {
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
 
   const plantingSiteResponse = useGetPlantingSiteQuery({ id: plantingSiteId });
   const plantingSite = plantingSiteResponse.currentData?.site;

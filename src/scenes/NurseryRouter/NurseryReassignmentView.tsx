@@ -13,10 +13,10 @@ import TfMain from 'src/components/common/TfMain';
 import TitleDescription from 'src/components/common/TitleDescription';
 import Table from 'src/components/common/table';
 import { APP_PATHS } from 'src/constants';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useGetDeliveryQuery, useReassignDeliveryMutation } from 'src/queries/generated/deliveries';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -64,7 +64,7 @@ export default function NurseryReassignmentView(): JSX.Element {
     }
   }, [getDeliveryResponse.isError, snackbar]);
 
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
   const { plantingSite } = usePlantingSite(delivery?.plantingSiteId);
 
   const goToWithdrawals = useCallback(() => {

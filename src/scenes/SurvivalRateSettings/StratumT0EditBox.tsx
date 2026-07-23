@@ -5,8 +5,8 @@ import { Button, Checkbox, Icon, IconTooltip, SelectT } from '@terraware/web-com
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import TextField from 'src/components/common/TextField';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { PlotsWithObservationsSearchResult } from 'src/redux/features/tracking/trackingThunks';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
@@ -30,7 +30,7 @@ const StratumT0EditBox = ({
   setRecord,
 }: StratumT0EditBoxProps) => {
   const theme = useTheme();
-  const { species, speciesById } = useSpeciesData();
+  const { species, speciesById } = useOrganizationSpecies();
   const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
 

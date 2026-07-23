@@ -5,8 +5,8 @@ import { Box } from '@mui/material';
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { RecordedPlant } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 
@@ -26,7 +26,7 @@ const MapPlantDrawer = ({ monitoringPlotId, observationId, plant }: MapPlantDraw
     depth: 'Plant',
   });
 
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
 
   const observationResult = useMemo(() => {
     return observationResultResponse?.observation;

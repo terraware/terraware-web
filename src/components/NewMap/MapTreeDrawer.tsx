@@ -4,8 +4,8 @@ import { Box } from '@mui/material';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { useGetOneObservationResults } from 'src/hooks/observations';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { ExistingTreePayload } from 'src/queries/generated/observations';
 
 type MapTreeDrawerProps = {
@@ -17,7 +17,7 @@ const MapTreeDrawer = ({ observationId, tree }: MapTreeDrawerProps): JSX.Element
   const { strings } = useLocalization();
   const { data } = useGetOneObservationResults({ observationId, depth: 'Plant' });
 
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
 
   const result = useMemo(() => {
     return data?.observation;

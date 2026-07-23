@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { Species } from 'src/types/Species';
 
 export const useSpeciesForm = (record?: { speciesId?: number }) => {
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
 
   const speciesId = record?.speciesId;
   const selectedSpecies = useMemo<Species | undefined>(

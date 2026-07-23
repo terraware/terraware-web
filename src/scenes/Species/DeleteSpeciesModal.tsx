@@ -3,7 +3,7 @@ import React, { type JSX, useCallback, useMemo } from 'react';
 import { Typography } from '@mui/material';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 
@@ -17,7 +17,7 @@ export interface DeleteSpeciesDialogProps {
 export default function DeleteSpeciesDialog(props: DeleteSpeciesDialogProps): JSX.Element | null {
   const { onClose, open, onSubmit, speciesToDelete } = props;
 
-  const { inUseSpecies } = useSpeciesData();
+  const { species: inUseSpecies } = useOrganizationSpecies({ inUse: true });
 
   const cannotDelete = useMemo<boolean | undefined>(() => {
     if (inUseSpecies) {
