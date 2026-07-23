@@ -292,7 +292,10 @@ export class TfAnnotationManager extends PcAnnotationManager {
     }
 
     if (annotation.onScreenPositionUpdateCallback) {
-      annotation.onScreenPositionUpdateCallback(screenPos.x + offsetX, screenPos.y + offsetY);
+      // Rendered hotspot diameter (px), set by _updateAnnotationRotationAndScale.
+      // Parsed from the style rather than measured to avoid forcing a reflow.
+      const hotspotSize = parseFloat(resources.hotspotDom.style.width) || undefined;
+      annotation.onScreenPositionUpdateCallback(screenPos.x + offsetX, screenPos.y + offsetY, hotspotSize);
     }
   }
 

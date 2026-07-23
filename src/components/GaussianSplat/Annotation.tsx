@@ -13,6 +13,13 @@ import './annotation-styles.css';
 
 export type AnnotationIconType = 'text' | 'image' | 'video';
 
+/**
+ * Target normalized-device x coordinate for a clicked annotation. +0.5 places
+ * the hotspot three quarters across the screen (25% from the right), leaving room
+ * for the annotation panel on the left without covering the hotspot.
+ */
+const VIEW_HORIZONTAL_NDC_BIAS = 0.5;
+
 export interface AnnotationProps {
   position: [number, number, number];
   title: string;
@@ -24,10 +31,11 @@ export interface AnnotationProps {
   visible?: boolean;
   isEdit?: boolean;
   isSelected?: boolean;
+  isViewed?: boolean;
   onSelect?: () => void;
   onPositionChange?: (position: [number, number, number]) => void;
   onView?: (annotation: AnnotationProps, screenX: number, screenY: number) => void;
-  onScreenPositionUpdate?: (index: number, screenX: number, screenY: number) => void;
+  onScreenPositionUpdate?: (index: number, screenX: number, screenY: number, size?: number) => void;
 }
 
 /**
@@ -59,9 +67,11 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
     visible = true,
     isEdit = false,
     isSelected = false,
+    isViewed = false,
     onSelect,
     onPositionChange,
     onView,
+    onScreenPositionUpdate,
     index,
   } = props;
   const app = useApp();
@@ -73,6 +83,7 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
   const isEditRef = useRef(isEdit);
   const onSelectRef = useRef(onSelect);
   const onViewRef = useRef(onView);
+  const onScreenPositionUpdateRef = useRef(onScreenPositionUpdate);
   const positionRef = useRef(position);
   const cameraPositionRef = useRef(cameraPosition);
   const annotationForViewRef = useRef<AnnotationProps>({
@@ -88,10 +99,11 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
     isEditRef.current = isEdit;
     onSelectRef.current = onSelect;
     onViewRef.current = onView;
+    onScreenPositionUpdateRef.current = onScreenPositionUpdate;
     positionRef.current = position;
     cameraPositionRef.current = cameraPosition;
     annotationForViewRef.current = { position, title, label, bodyText, imageUrl, cameraPosition };
-  }, [isEdit, onSelect, onView, position, cameraPosition, title, label, bodyText, imageUrl]);
+  }, [isEdit, onSelect, onView, onScreenPositionUpdate, position, cameraPosition, title, label, bodyText, imageUrl]);
 
   // Create a stable callback that reads from refs, because this is read from TfAnnotationManager when the annotation is added to the scene
   const handleClick = useCallback(
@@ -99,13 +111,21 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
       if (isEditRef.current) {
         onSelectRef.current?.();
       } else {
-        setCamera(positionRef.current, cameraPositionRef.current);
+        setCamera(positionRef.current, cameraPositionRef.current, VIEW_HORIZONTAL_NDC_BIAS);
         if (onViewRef.current && screenX !== undefined && screenY !== undefined) {
           onViewRef.current(annotationForViewRef.current, screenX, screenY);
         }
       }
     },
     [setCamera]
+  );
+
+  // Stable callback so its identity doesn't churn the underlying script prop each frame.
+  const handleScreenPositionUpdate = useCallback(
+    (screenX: number, screenY: number, size?: number) => {
+      onScreenPositionUpdateRef.current?.(index, screenX, screenY, size);
+    },
+    [index]
   );
 
   const entityName = useMemo(() => `annotation-${index}`, [index]);
@@ -208,6 +228,7 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
         text={bodyText}
         enabled={visible}
         onClickCallback={handleClick}
+        onScreenPositionUpdateCallback={isViewed ? handleScreenPositionUpdate : undefined}
       />
     </Entity>
   );
