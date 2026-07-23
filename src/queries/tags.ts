@@ -42,6 +42,7 @@ export enum QueryTagTypes {
   SeedbankSummary = 'SeedbankSummary',
   SeedFundReportMedia = 'SeedFundReportMedia',
   SeedFundReports = 'SeedFundReports',
+  Species = 'Species',
   T0 = 'T0',
   TrackingStats = 'TrackingStats',
   Users = 'Users',

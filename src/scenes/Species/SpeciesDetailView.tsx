@@ -13,10 +13,9 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useOrganization } from 'src/providers/hooks';
-import { SpeciesService } from 'src/services';
+import { useDeleteSpeciesMutation, useLazyGetSpeciesQuery } from 'src/queries/generated/species';
 import strings from 'src/strings';
 import {
-  Species,
   getConservationCategoryString,
   getEcosystemTypesString,
   getGrowthFormsString,
@@ -39,16 +38,25 @@ type SpeciesDetailViewProps = {
 
 export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps): JSX.Element {
   const theme = useTheme();
-  const [species, setSpecies] = useState<Species>();
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const { speciesId } = useParams<{ speciesId: string }>();
   const userCanEdit = !isContributor(selectedOrganization);
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
-  const [isBusy, setIsBusy] = useState<boolean>(false);
   const snackbar = useSnackbar();
   const { orgHasParticipants } = useParticipantData();
+
+  const [getSpecies, { currentData: speciesData, isError: getSpeciesError }] = useLazyGetSpeciesQuery();
+  const species = speciesData?.species;
+
+  const [deleteSpecies, { isLoading: isDeleting }] = useDeleteSpeciesMutation();
+
+  useEffect(() => {
+    if (selectedOrganization && speciesId) {
+      void getSpecies({ speciesId: Number(speciesId), organizationId: selectedOrganization.id }, true);
+    }
+  }, [getSpecies, selectedOrganization, speciesId]);
 
   const gridSize = useMemo(() => {
     if (isMobile) {
@@ -58,18 +66,10 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   }, [isMobile]);
 
   useEffect(() => {
-    if (selectedOrganization) {
-      const getSpecies = async () => {
-        const speciesResponse = await SpeciesService.getSpecies(Number(speciesId), selectedOrganization.id);
-        if (speciesResponse.requestSucceeded) {
-          setSpecies(speciesResponse.species);
-        } else {
-          navigate(APP_PATHS.SPECIES);
-        }
-      };
-      void getSpecies();
+    if (getSpeciesError) {
+      navigate(APP_PATHS.SPECIES);
     }
-  }, [speciesId, selectedOrganization, navigate]);
+  }, [getSpeciesError, navigate]);
 
   const goToEditSpecies = () => {
     if (speciesId) {
@@ -87,18 +87,14 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   };
 
   const deleteSelectedSpecies = async (id: number) => {
-    if (selectedOrganization) {
-      setIsBusy(true);
-      const success = await SpeciesService.deleteSpecies(id, selectedOrganization.id);
-      setIsBusy(false);
-      if (!success) {
-        snackbar.toastError(strings.GENERIC_ERROR);
-      } else {
-        reloadData();
-      }
-      setDeleteSpeciesModalOpen(false);
-      navigate(APP_PATHS.SPECIES);
+    try {
+      await deleteSpecies(id).unwrap();
+      reloadData();
+    } catch {
+      snackbar.toastError(strings.GENERIC_ERROR);
     }
+    setDeleteSpeciesModalOpen(false);
+    navigate(APP_PATHS.SPECIES);
   };
 
   const GridItemWrapper = useCallback(
@@ -112,7 +108,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
 
   return (
     <TfMain>
-      {isBusy && <BusySpinner withSkrim={true} />}
+      {isDeleting && <BusySpinner withSkrim={true} />}
       <Grid container padding={theme.spacing(0, 0, 4, 0)}>
         <Grid item xs={12} marginBottom={theme.spacing(3)}>
           <BackToLink id='back' to={APP_PATHS.SPECIES} name={strings.SPECIES} />

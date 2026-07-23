@@ -9,8 +9,8 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
+import { useCreateSpeciesMutation } from 'src/queries/generated/species';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
-import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import { Species, SpeciesRequestError } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -37,7 +37,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
   const organizationId = selectedOrganization?.id || -1; // TODO: Add null check for selectedOrganization
   const [record, setRecord, , onChangeCallback] = useForm<Species>(initSpecies());
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
-  const [isBusy, setIsBusy] = useState<boolean>(false);
+  const [createSpecies, { isLoading: isBusy }] = useCreateSpeciesMutation();
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -50,19 +50,33 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
     }
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
-    } else {
-      setIsBusy(true);
-      const response = await SpeciesService.createSpecies(record, organizationId);
-      setIsBusy(false);
-      if (response.requestSucceeded) {
-        if (response.speciesId) {
-          reloadData();
-          navigate(APP_PATHS.SPECIES_DETAILS.replace(':speciesId', response.speciesId.toString()));
-        }
-      } else {
-        if (response.error === SpeciesRequestError.PreexistingSpecies) {
-          setNameFormatError(strings.formatString(strings.EXISTING_SPECIES_MSG, record.scientificName));
-        }
+      return;
+    }
+
+    try {
+      const { id } = await createSpecies({
+        organizationId,
+        scientificName: record.scientificName,
+        commonName: record.commonName,
+        conservationCategory: record.conservationCategory,
+        ecologicalRoleKnown: record.ecologicalRoleKnown,
+        ecosystemTypes: record.ecosystemTypes,
+        familyName: record.familyName,
+        growthForms: record.growthForms,
+        localUsesKnown: record.localUsesKnown,
+        nativeEcosystem: record.nativeEcosystem,
+        otherFacts: record.otherFacts,
+        plantMaterialSourcingMethods: record.plantMaterialSourcingMethods,
+        rare: record.rare,
+        seedStorageBehavior: record.seedStorageBehavior,
+        successionalGroups: record.successionalGroups,
+      }).unwrap();
+      reloadData();
+      navigate(APP_PATHS.SPECIES_DETAILS.replace(':speciesId', id.toString()));
+    } catch (e) {
+      const errorMessage = (e as { data?: { error?: { message?: string } } })?.data?.error?.message;
+      if (errorMessage === SpeciesRequestError.PreexistingSpecies) {
+        setNameFormatError(strings.formatString(strings.EXISTING_SPECIES_MSG, record.scientificName));
       }
     }
   };

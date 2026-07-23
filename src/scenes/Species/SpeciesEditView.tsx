@@ -11,6 +11,7 @@ import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
+import { useLazyGetSpeciesQuery, useUpdateSpeciesMutation } from 'src/queries/generated/species';
 import {
   requestAddManyAcceleratorProjectSpecies,
   requestDeleteManyAcceleratorProjectSpecies,
@@ -21,7 +22,6 @@ import {
 } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
-import { SpeciesService } from 'src/services';
 import { CreateAcceleratorProjectSpeciesRequestPayload } from 'src/services/AcceleratorProjectSpeciesService';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
@@ -45,15 +45,24 @@ function initSpecies(species?: Species): Species {
 
 export default function SpeciesEditView(): JSX.Element {
   const theme = useTheme();
-  const [species, setSpecies] = useState<Species>();
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const { speciesId } = useParams<{ speciesId: string }>();
-  const [isBusy, setIsBusy] = useState<boolean>(false);
   const [record, setRecord, , onChangeCallback] = useForm<Species>(initSpecies());
   const snackbar = useSnackbar();
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
+
+  const [getSpecies, { currentData: speciesData, isError: getSpeciesError }] = useLazyGetSpeciesQuery();
+  const species = speciesData?.species;
+
+  const [updateSpecies, { isLoading: isBusy }] = useUpdateSpeciesMutation();
+
+  useEffect(() => {
+    if (selectedOrganization && speciesId) {
+      void getSpecies({ speciesId: Number(speciesId), organizationId: selectedOrganization.id }, true);
+    }
+  }, [getSpecies, selectedOrganization, speciesId]);
   const [addedProjectsSpecies, setAddedProjectsSpecies] = useState<ProjectSpecies[]>();
   const [removedProjectsIds, setRemovedProjectsIds] = useState<number[]>();
 
@@ -110,18 +119,10 @@ export default function SpeciesEditView(): JSX.Element {
   }, [addedResult, goToSpecies, record.id, removedResult]);
 
   useEffect(() => {
-    const getSpecies = async () => {
-      const speciesResponse = await SpeciesService.getSpecies(Number(speciesId), selectedOrganization?.id || -1);
-      if (speciesResponse.requestSucceeded) {
-        setSpecies(speciesResponse.species);
-      } else {
-        navigate(APP_PATHS.SPECIES);
-      }
-    };
-    if (selectedOrganization && speciesId) {
-      void getSpecies();
+    if (getSpeciesError) {
+      navigate(APP_PATHS.SPECIES);
     }
-  }, [speciesId, selectedOrganization, navigate]);
+  }, [getSpeciesError, navigate]);
 
   useEffect(() => {
     const now = DateTime.now().toISO();
@@ -146,33 +147,60 @@ export default function SpeciesEditView(): JSX.Element {
     }
     if (!record.scientificName) {
       setNameFormatError(strings.REQUIRED_FIELD);
-    } else {
-      setIsBusy(true);
-      const response = await SpeciesService.updateSpecies(record, selectedOrganization.id);
-      setIsBusy(false);
-      if (response.requestSucceeded) {
-        if (removedProjectsIds) {
-          const request = dispatch(requestDeleteManyAcceleratorProjectSpecies(removedProjectsIds));
-          setRemoveRequestId(request.requestId);
-        }
-        if (addedProjectsSpecies && speciesId) {
-          const createRequests = addedProjectsSpecies.map((aPS) => {
-            return {
-              projectId: aPS.project.id,
-              speciesId: Number(speciesId),
-              speciesNativeCategory: aPS.nativeCategory,
-            } as CreateAcceleratorProjectSpeciesRequestPayload;
-          });
-          const request = dispatch(requestAddManyAcceleratorProjectSpecies(createRequests));
-          setAddRequestId(request.requestId);
-        }
-        if (
-          (!removedProjectsIds || !removedProjectsIds.length) &&
-          (!addedProjectsSpecies || !addedProjectsSpecies.length)
-        ) {
-          goToSpecies(record.id);
-        }
-      } else if (response.statusCode === 409) {
+      return;
+    }
+
+    try {
+      await updateSpecies({
+        speciesId: record.id,
+        updateSpeciesRequestPayload: {
+          organizationId: selectedOrganization.id,
+          scientificName: record.scientificName,
+          averageWoodDensity: record.averageWoodDensity,
+          commonName: record.commonName,
+          conservationCategory: record.conservationCategory,
+          dbhSource: record.dbhSource,
+          dbhValue: record.dbhValue,
+          ecologicalRoleKnown: record.ecologicalRoleKnown,
+          ecosystemTypes: record.ecosystemTypes,
+          familyName: record.familyName,
+          growthForms: record.growthForms,
+          heightAtMaturitySource: record.heightAtMaturitySource,
+          heightAtMaturityValue: record.heightAtMaturityValue,
+          localUsesKnown: record.localUsesKnown,
+          nativeEcosystem: record.nativeEcosystem,
+          otherFacts: record.otherFacts,
+          plantMaterialSourcingMethods: record.plantMaterialSourcingMethods,
+          rare: record.rare,
+          seedStorageBehavior: record.seedStorageBehavior,
+          successionalGroups: record.successionalGroups,
+          woodDensityLevel: record.woodDensityLevel,
+        },
+      }).unwrap();
+
+      if (removedProjectsIds) {
+        const request = dispatch(requestDeleteManyAcceleratorProjectSpecies(removedProjectsIds));
+        setRemoveRequestId(request.requestId);
+      }
+      if (addedProjectsSpecies && speciesId) {
+        const createRequests = addedProjectsSpecies.map((aPS) => {
+          return {
+            projectId: aPS.project.id,
+            speciesId: Number(speciesId),
+            speciesNativeCategory: aPS.nativeCategory,
+          } as CreateAcceleratorProjectSpeciesRequestPayload;
+        });
+        const request = dispatch(requestAddManyAcceleratorProjectSpecies(createRequests));
+        setAddRequestId(request.requestId);
+      }
+      if (
+        (!removedProjectsIds || !removedProjectsIds.length) &&
+        (!addedProjectsSpecies || !addedProjectsSpecies.length)
+      ) {
+        goToSpecies(record.id);
+      }
+    } catch (e) {
+      if ((e as { status?: number })?.status === 409) {
         snackbar.toastError(strings.formatString(strings.EXISTING_SPECIES_MSG, record.scientificName));
       } else {
         snackbar.toastError();

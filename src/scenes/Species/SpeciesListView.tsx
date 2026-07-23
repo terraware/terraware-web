@@ -31,12 +31,7 @@ import { useLocalization, useOrganization } from 'src/providers/hooks';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
 import { SearchRequestPayload } from 'src/types/Search';
-import {
-  Species,
-  SpeciesProblemElement,
-  conservationCategories,
-  getConservationCategoryString,
-} from 'src/types/Species';
+import { Species, conservationCategories, getConservationCategoryString } from 'src/types/Species';
 import { makeCsv } from 'src/utils/csv';
 import { isContributor } from 'src/utils/organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -88,7 +83,7 @@ const ProblemsCellComponent = ({ row, reloadData, onRowClick }: ProblemsCellProp
           transformOrigin={{ vertical: 'top', horizontal: 'center' }}
         >
           <ProblemTooltip
-            problems={value as SpeciesProblemElement[]}
+            problems={value}
             openedTooltip={Boolean(anchorEl)}
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             reloadData={reloadData}

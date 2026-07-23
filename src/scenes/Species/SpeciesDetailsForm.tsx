@@ -10,7 +10,7 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization } from 'src/providers/hooks';
-import { SpeciesService } from 'src/services';
+import { useLazyGetSpeciesDetailsQuery, useLazyListSpeciesNamesQuery } from 'src/queries/generated/species';
 import strings from 'src/strings';
 import { AcceleratorProjectSpecies } from 'src/types/AcceleratorProjectSpecies';
 import {
@@ -26,7 +26,6 @@ import {
   storageBehaviors,
   successionalGroups,
 } from 'src/types/Species';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 
 import { ProjectSpecies } from './AddToProjectModal';
@@ -73,59 +72,68 @@ export default function SpeciesDetailsForm({
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { orgHasParticipants } = useParticipantData();
 
+  const searchTermTooShort = debouncedSearchTerm.length <= 1;
+
+  const [listSpeciesNames, { currentData: namesData }] = useLazyListSpeciesNamesQuery();
+  const [getSpeciesDetails, { currentData: speciesDetails, isError: detailsError }] = useLazyGetSpeciesDetailsQuery();
+
   useEffect(() => {
-    const getOptionsForTyped = async () => {
-      const requestId = Math.random().toString();
-      setRequestId('names', requestId);
-      const response = await SpeciesService.getSpeciesNames(debouncedSearchTerm);
-      if (response.requestSucceeded) {
-        if (getRequestId('names') === requestId) {
-          setOptionsForName(response.names);
-        }
-      }
-    };
-
-    const getDetails = async () => {
-      if (!debouncedSearchTerm) {
-        setNewScientificName(false);
-      }
-      if (debouncedSearchTerm.length > 1 && setRecord) {
-        const requestId = Math.random().toString();
-        setRequestId('details', requestId);
-        const response = await SpeciesService.getSpeciesDetails(debouncedSearchTerm);
-        if (response.requestSucceeded) {
-          if (getRequestId('details') === requestId) {
-            setNewScientificName(false);
-            const speciesDetails = response.speciesDetails;
-            setRecord((previousRecord: Species) => {
-              if (speciesDetails?.commonNames?.length === 1) {
-                return {
-                  ...previousRecord,
-                  familyName: speciesDetails.familyName,
-                  commonName: speciesDetails.commonNames[0].name,
-                  conservationCategory: speciesDetails.conservationCategory ?? previousRecord.conservationCategory,
-                };
-              } else {
-                setOptionsForCommonName(speciesDetails?.commonNames?.map((cN) => cN.name));
-                return {
-                  ...previousRecord,
-                  conservationCategory: speciesDetails?.conservationCategory ?? previousRecord.conservationCategory,
-                  familyName: speciesDetails?.familyName ?? previousRecord.familyName,
-                };
-              }
-            });
-          }
-        } else {
-          setNewScientificName(true);
-        }
-      }
-    };
-
-    if (userSearched) {
-      void getOptionsForTyped();
-      void getDetails();
+    if (userSearched && !searchTermTooShort) {
+      void listSpeciesNames({ search: debouncedSearchTerm }, true);
     }
-  }, [debouncedSearchTerm, setRecord, userSearched]);
+  }, [listSpeciesNames, debouncedSearchTerm, searchTermTooShort, userSearched]);
+
+  useEffect(() => {
+    if (userSearched && !searchTermTooShort && setRecord) {
+      void getSpeciesDetails({ scientificName: debouncedSearchTerm }, true);
+    }
+  }, [getSpeciesDetails, debouncedSearchTerm, searchTermTooShort, setRecord, userSearched]);
+
+  useEffect(() => {
+    if (!userSearched) {
+      return;
+    }
+    if (searchTermTooShort) {
+      setOptionsForName([]);
+    } else if (namesData) {
+      setOptionsForName(namesData.names);
+    }
+  }, [namesData, searchTermTooShort, userSearched]);
+
+  useEffect(() => {
+    if (!debouncedSearchTerm) {
+      setNewScientificName(false);
+    }
+  }, [debouncedSearchTerm]);
+
+  useEffect(() => {
+    if (!userSearched || searchTermTooShort || !setRecord) {
+      return;
+    }
+
+    if (speciesDetails) {
+      setNewScientificName(false);
+      if (speciesDetails.commonNames?.length !== 1) {
+        setOptionsForCommonName(speciesDetails.commonNames?.map((cN) => cN.name));
+      }
+      setRecord((previousRecord: Species) =>
+        speciesDetails.commonNames?.length === 1
+          ? {
+              ...previousRecord,
+              familyName: speciesDetails.familyName,
+              commonName: speciesDetails.commonNames[0].name,
+              conservationCategory: speciesDetails.conservationCategory ?? previousRecord.conservationCategory,
+            }
+          : {
+              ...previousRecord,
+              conservationCategory: speciesDetails.conservationCategory ?? previousRecord.conservationCategory,
+              familyName: speciesDetails.familyName ?? previousRecord.familyName,
+            }
+      );
+    } else if (detailsError) {
+      setNewScientificName(true);
+    }
+  }, [speciesDetails, detailsError, searchTermTooShort, setRecord, userSearched]);
 
   const onChangeScientificName = (value: string) => {
     setNameFormatError('');
