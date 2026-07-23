@@ -1,11 +1,18 @@
 import { DropdownItem } from '@terraware/web-components';
 
 import { components } from 'src/api/types/generated-schema';
+import { SpeciesLookupDetailsResponsePayload, SpeciesResponseElement } from 'src/queries/generated/species';
 import strings from 'src/strings';
 
 import { ArrayDeref, NonUndefined } from './utils';
 
-export type Species = components['schemas']['GetSpeciesResponsePayload']['species'];
+// `projects` is required on the API response, but the app also uses `Species` as a form/partial model
+// (new-species forms, search-result rows) where projects is not present, so it stays optional here.
+export type Species = Omit<SpeciesResponseElement, 'projects'> & {
+  projects?: SpeciesResponseElement['projects'];
+};
+
+export type { SpeciesProblemElement } from 'src/queries/generated/species';
 
 export type WoodDensityLevel = NonUndefined<Species['woodDensityLevel']>;
 
@@ -20,14 +27,6 @@ export type EcosystemType = ArrayDeref<NonUndefined<Species['ecosystemTypes']>>;
 export type GrowthForm = ArrayDeref<NonUndefined<Species['growthForms']>>;
 
 export type SeedStorageBehavior = NonUndefined<Species['seedStorageBehavior']>;
-
-export type SpeciesProblemElement = {
-  id: number;
-  field: 'Scientific Name';
-  type: 'Name Misspelled' | 'Name Not Found' | 'Name Is Synonym';
-  /** Value for the field in question that would correct the problem. Absent if the system is unable to calculate a corrected value. */
-  suggestedValue?: string;
-};
 
 export function conservationCategories() {
   return [
@@ -382,7 +381,7 @@ export enum SpeciesRequestError {
   RequestFailed = 'AN_UNRECOVERABLE_ERROR_OCCURRED',
 }
 
-export type SpeciesDetails = components['schemas']['SpeciesLookupDetailsResponsePayload'];
+export type SpeciesDetails = SpeciesLookupDetailsResponsePayload;
 
 export type SuggestedSpecies = Partial<Species> & { scientificName: string };
 

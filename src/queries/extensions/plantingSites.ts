@@ -1,4 +1,5 @@
 import { api } from '../generated/plantingSites';
+import { speciesCacheTags } from '../speciesCacheTags';
 import { QueryTagTypes } from '../tags';
 
 api.enhanceEndpoints({
@@ -18,6 +19,7 @@ api.enhanceEndpoints({
     listPlantingSiteReportedPlants: {
       providesTags: (results) => [
         ...(results ? results.sites.map((site) => ({ type: QueryTagTypes.PlantingSites, id: site.id })) : []),
+        ...speciesCacheTags(results ? results.sites.flatMap((site) => site.species.map((species) => species.id)) : []),
         { type: QueryTagTypes.PlantingSites, id: 'LIST' },
       ],
     },
@@ -43,7 +45,10 @@ api.enhanceEndpoints({
       providesTags: (_result, _error, payload) => [{ type: QueryTagTypes.PlantingSites, id: payload.id }],
     },
     getPlantingSiteReportedPlants: {
-      providesTags: (_result, _error, plantingSiteId) => [{ type: QueryTagTypes.PlantingSites, id: plantingSiteId }],
+      providesTags: (result, _error, plantingSiteId) => [
+        { type: QueryTagTypes.PlantingSites, id: plantingSiteId },
+        ...speciesCacheTags((result?.site.species ?? []).map((species) => species.id)),
+      ],
     },
   },
 });

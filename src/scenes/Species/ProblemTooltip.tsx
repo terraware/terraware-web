@@ -2,7 +2,7 @@ import React, { type JSX } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
-import { SpeciesService } from 'src/services';
+import { useAcceptProblemSuggestionMutation, useDeleteProblemMutation } from 'src/queries/generated/species';
 import strings from 'src/strings';
 import { SpeciesProblemElement } from 'src/types/Species';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -26,6 +26,9 @@ export default function ProblemTooltip({
   const theme = useTheme();
   const snackbar = useSnackbar();
 
+  const [ignoreProblem] = useDeleteProblemMutation();
+  const [acceptProblem] = useAcceptProblemSuggestionMutation();
+
   const spacingStyles = {
     marginRight: theme.spacing(1),
   };
@@ -42,7 +45,7 @@ export default function ProblemTooltip({
   };
 
   const ignoreFix = async (problemId: number) => {
-    await SpeciesService.ignoreProblemSuggestion(problemId);
+    await ignoreProblem(problemId);
     onClose();
     if (reloadData) {
       reloadData();
@@ -50,8 +53,9 @@ export default function ProblemTooltip({
   };
 
   const acceptFix = async (problemId: number) => {
-    const response = await SpeciesService.acceptProblemSuggestion(problemId);
-    if (!response.requestSucceeded) {
+    try {
+      await acceptProblem(problemId).unwrap();
+    } catch {
       snackbar.toastError(strings.UNEXPECTED_ERROR, strings.GENERIC_ERROR);
     }
     onClose();

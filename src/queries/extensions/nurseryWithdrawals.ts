@@ -1,4 +1,5 @@
 import { api } from '../generated/nurseryWithdrawals';
+import { speciesCacheTags } from '../speciesCacheTags';
 import { QueryTagTypes } from '../tags';
 
 api.enhanceEndpoints({
@@ -12,7 +13,13 @@ api.enhanceEndpoints({
       ],
     },
     getNurseryWithdrawal: {
-      providesTags: (_results, _error, withdrawalId) => [{ type: QueryTagTypes.NurseryWithdrawals, id: withdrawalId }],
+      providesTags: (results, _error, withdrawalId) => [
+        { type: QueryTagTypes.NurseryWithdrawals, id: withdrawalId },
+        ...speciesCacheTags([
+          ...(results?.batches ?? []).map((batch) => batch.speciesId),
+          ...(results?.delivery?.plantings ?? []).map((planting) => planting.speciesId),
+        ]),
+      ],
     },
     listWithdrawalPhotos: {
       providesTags: (_results, _error, withdrawalId) => [

@@ -127,6 +127,9 @@ const config: ConfigFile = {
     './src/queries/generated/plantingSeasons.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/planting-seasons'),
     },
+    './src/queries/generated/species.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/species'),
+    },
     './src/queries/generated/stats.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/stats'),
     },
