@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { useTheme } from '@mui/material';
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
 import { useApp } from '@playcanvas/react/hooks';
 import { Color, Vec3 } from 'playcanvas';
 import { XrControllers } from 'playcanvas/scripts/esm/xr-controllers.mjs';
 
-import Annotation, { AnnotationProps } from 'src/components/GaussianSplat/Annotation';
+import Annotation, { AnnotationIconType, AnnotationProps } from 'src/components/GaussianSplat/Annotation';
 import AnnotationPanel from 'src/components/GaussianSplat/AnnotationPanel';
 import { AutoRotator } from 'src/components/GaussianSplat/AutoRotator';
 import BoundaryRing from 'src/components/GaussianSplat/BoundaryRing';
@@ -48,6 +49,7 @@ const VirtualWalkthroughViewer = ({
   isFullScreen = false,
   onToggleFullScreen,
 }: VirtualWalkthroughViewerProps) => {
+  const theme = useTheme();
   const { setCamera } = useCameraPosition();
   const { isHighPerformance } = useDevicePerformance();
   const app = useApp();
@@ -143,22 +145,31 @@ const VirtualWalkthroughViewer = ({
 
   const apiAnnotations = useMemo<AnnotationProps[]>(
     () =>
-      data?.annotations?.map(
-        (annotation) =>
-          ({
-            ...annotation,
-            position: [annotation.position.x, annotation.position.y, annotation.position.z] as [number, number, number],
-            cameraPosition: annotation.cameraPosition
-              ? ([annotation.cameraPosition.x, annotation.cameraPosition.y, annotation.cameraPosition.z] as [
-                  number,
-                  number,
-                  number,
-                ])
-              : undefined,
-            // TODO: replace with actual image url once retrieval is available
-            imageUrl: annotation.media.length > 0 ? 'https://placehold.co/800x450' : undefined,
-          }) as AnnotationProps
-      ) ?? [],
+      data?.annotations?.map((annotation) => {
+        const [firstMedia] = annotation.media;
+        const icon: AnnotationIconType = !firstMedia
+          ? 'menu'
+          : firstMedia.contentType.startsWith('image')
+            ? 'image'
+            : firstMedia.contentType.startsWith('video')
+              ? 'video'
+              : 'menu';
+
+        return {
+          ...annotation,
+          position: [annotation.position.x, annotation.position.y, annotation.position.z] as [number, number, number],
+          cameraPosition: annotation.cameraPosition
+            ? ([annotation.cameraPosition.x, annotation.cameraPosition.y, annotation.cameraPosition.z] as [
+                number,
+                number,
+                number,
+              ])
+            : undefined,
+          icon,
+          // TODO: replace with actual image url once retrieval is available
+          imageUrl: annotation.media.length > 0 ? 'https://placehold.co/800x450' : undefined,
+        } as AnnotationProps;
+      }) ?? [],
     [data?.annotations]
   );
 
@@ -343,9 +354,9 @@ const VirtualWalkthroughViewer = ({
             hotspotSize={30}
             maxWorldSize={0.05}
             opacity={1}
-            hotspotColor={new Color().fromString('#ffffff')}
+            hotspotColor={new Color().fromString(theme.palette.TwClrIcnBrand as string)}
             hoverColor={new Color().fromString('#ffffff')}
-            hotspotBackgroundColor='#2C8658'
+            hotspotBackgroundColor={theme.palette.TwClrBaseWhite as string}
           />
           {localAnnotations.map((annotation, index) => (
             <Annotation

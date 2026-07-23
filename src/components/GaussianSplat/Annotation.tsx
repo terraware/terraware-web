@@ -11,12 +11,15 @@ import { useCameraPosition } from 'src/hooks/useCameraPosition';
 
 import './annotation-styles.css';
 
+export type AnnotationIconType = 'menu' | 'image' | 'video';
+
 export interface AnnotationProps {
   position: [number, number, number];
   title: string;
   bodyText?: string;
   label?: string;
   imageUrl?: string;
+  icon?: AnnotationIconType;
   cameraPosition?: [number, number, number];
   visible?: boolean;
   isEdit?: boolean;
@@ -50,6 +53,7 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
     cameraPosition,
     bodyText,
     imageUrl,
+    icon,
     title,
     label,
     visible = true,
@@ -200,6 +204,7 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
         script={PcAnnotation}
         title={title}
         label={label}
+        icon={icon}
         text={bodyText}
         enabled={visible}
         onClickCallback={handleClick}
