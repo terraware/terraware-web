@@ -9,15 +9,18 @@ import { useLazyGetReportQuery } from 'src/queries/generated/seedFundReports';
 const useSeedFundReport = (reportId?: number) => {
   const [getReport, response] = useLazyGetReportQuery();
 
-  const isValid = useMemo(() => reportId !== undefined && reportId > 0, []);
+  const isValid = useMemo(() => reportId !== undefined && reportId > 0, [reportId]);
 
   useEffect(() => {
     if (isValid) {
       void getReport(reportId!, true);
     }
-  }, [getReport, reportId]);
+  }, [getReport, isValid, reportId]);
 
-  const report = isValid ? response.currentData?.report : undefined;
+  const report = useMemo(
+    () => (isValid ? response.currentData?.report : undefined),
+    [isValid, response.currentData?.report]
+  );
 
   const reload = useCallback(async () => {
     if (isValid) {
@@ -25,7 +28,7 @@ const useSeedFundReport = (reportId?: number) => {
     }
     const result = await getReport(reportId!, false).unwrap();
     return result.report;
-  }, [getReport, reportId]);
+  }, [isValid, getReport, reportId]);
 
   return { report, isLoading: response.isFetching, isError: response.isError, reload };
 };
