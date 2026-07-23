@@ -1,3 +1,4 @@
+96083c08 SW-7421 e2e test for uploading ad-hoc observation data (#6128)
 f0ce13ad SW-7755 Remove voting context/provider (#6111)
 2633205f SW-7755 Migrate project votes to RTK Query (#6110)
 bcaa9fb0 SW-5835 Reload images on map style change (#6121)
