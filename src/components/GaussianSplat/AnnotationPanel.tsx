@@ -24,13 +24,6 @@ const PANEL_HOTSPOT_GAP = 48;
 // width, so the panel never drifts further left than this.
 const MIN_LEFT_FRACTION = 0.02;
 
-const BACKDROP_STYLE: React.CSSProperties = {
-  position: 'absolute',
-  inset: 0,
-  zIndex: 5001,
-  cursor: 'default',
-};
-
 const CONNECTOR_STYLE: React.CSSProperties = {
   position: 'absolute',
   inset: 0,
@@ -89,8 +82,18 @@ const AnnotationPanel = ({ annotation, hotspotPosition, onClose }: AnnotationPan
       }
     };
 
+    const handlePointerDown = (e: PointerEvent) => {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    };
+
     document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener('pointerdown', handlePointerDown);
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.removeEventListener('pointerdown', handlePointerDown);
+    };
   }, [annotation, onClose]);
 
   // Position the panel just to the left of the hotspot (clamped so it never
@@ -139,7 +142,6 @@ const AnnotationPanel = ({ annotation, hotspotPosition, onClose }: AnnotationPan
 
   return (
     <>
-      <div data-testid='annotation-panel-backdrop' style={BACKDROP_STYLE} onClick={onClose} />
       <svg ref={connectorRef} data-testid='annotation-panel-connector' style={CONNECTOR_STYLE}>
         {lineStart && lineEnd && (
           <line x1={lineStart.x} y1={lineStart.y} x2={lineEnd.x} y2={lineEnd.y} stroke='#ffffff' strokeWidth={2} />
