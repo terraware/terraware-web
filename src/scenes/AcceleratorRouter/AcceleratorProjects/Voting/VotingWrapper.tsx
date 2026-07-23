@@ -1,4 +1,5 @@
-import React, { type JSX, useEffect, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import { useParams } from 'react-router';
 
 import { Box, useTheme } from '@mui/material';
 import { BusySpinner, ErrorBox } from '@terraware/web-components';
@@ -8,12 +9,14 @@ import Card from 'src/components/common/Card';
 import PageWithModuleTimeline from 'src/components/common/PageWithModuleTimeline';
 import { APP_PATHS } from 'src/constants';
 import useListProjectModules from 'src/hooks/useListProjectModules';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useVotingData from 'src/hooks/useVotingData';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import VoteBadge from './VoteBadge';
 import VoteRowGrid from './VoteRowGrid';
-import { useVotingData } from './VotingContext';
 
 export type Props = {
   children: React.ReactNode;
@@ -24,9 +27,29 @@ export type Props = {
 const VotingWrapper = ({ children, isForm, rightComponent }: Props): JSX.Element => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const navigate = useSyncNavigate();
+  const snackbar = useSnackbar();
   const { phaseVotes, project, status } = useVotingData();
 
+  const pathParams = useParams<{ projectId: string }>();
+  const projectId = Number(pathParams.projectId);
+
   const { projectModules, listProjectModules } = useListProjectModules();
+
+  const goToProjects = useCallback(() => navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECTS }), [navigate]);
+
+  // Redirect to project management list page if projectId is invalid.
+  useEffect(() => {
+    if (isNaN(projectId)) {
+      goToProjects();
+    }
+  }, [goToProjects, projectId]);
+
+  useEffect(() => {
+    if (status === 'error') {
+      snackbar.toastError();
+    }
+  }, [snackbar, status]);
 
   useEffect(() => {
     if (project && project.id) {
