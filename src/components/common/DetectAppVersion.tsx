@@ -3,8 +3,7 @@ import React, { type JSX, useEffect } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
 
-import { selectIsAppVersionStale } from 'src/redux/features/appVersion/appVersionSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { useAppVersion } from 'src/hooks/useAppVersion';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -15,7 +14,7 @@ type DetectAppVersionProps = {
 export default function DetectAppVersion({ onNewVersion }: DetectAppVersionProps): JSX.Element | null {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const isStale = useAppSelector(selectIsAppVersionStale);
+  const { isStale } = useAppVersion();
 
   useEffect(() => {
     if (isStale && onNewVersion) {

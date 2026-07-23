@@ -4,7 +4,6 @@ import { rtkReducers } from 'src/queries/reducers';
 
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
 import acceleratorProjectSpeciesReducers from './features/acceleratorProjectSpecies/acceleratorProjectSpeciesSlice';
-import appVersionReducers from './features/appVersion/appVersionSlice';
 import applicationReducers from './features/application/applicationSlice';
 import batchesReducers from './features/batches/batchesSlice';
 import deliverablesReducers from './features/deliverables/deliverablesSlice';
@@ -35,7 +34,6 @@ import votesReducers from './features/votes/votesSlice';
 export const reducers = {
   ...acceleratorReducers,
   ...applicationReducers,
-  ...appVersionReducers,
   ...batchesReducers,
   ...deliverablesReducers,
   ...documentProducerReducers,
