@@ -1,6 +1,6 @@
-import { ReportNursery, ReportSeedBank } from 'src/types/Report';
+import { SeedFundReportNursery, SeedFundReportSeedBank } from 'src/types/SeedFundReport';
 
-export const buildStartedDateValid = (loc: ReportSeedBank | ReportNursery) => {
+export const buildStartedDateValid = (loc: SeedFundReportSeedBank | SeedFundReportNursery) => {
   let beforeBuildCompletedConditionMet = false;
   let beforeOpStartedConditionMet = false;
   if (loc.buildStartedDate && loc.buildCompletedDate) {
@@ -12,7 +12,7 @@ export const buildStartedDateValid = (loc: ReportSeedBank | ReportNursery) => {
   return beforeBuildCompletedConditionMet && beforeOpStartedConditionMet;
 };
 
-export const buildCompletedDateValid = (loc: ReportSeedBank | ReportNursery) => {
+export const buildCompletedDateValid = (loc: SeedFundReportSeedBank | SeedFundReportNursery) => {
   let afterStartConditionMet = false;
   let beforeOpStartedConditionMet = false;
   if (loc.buildStartedDate && loc.buildCompletedDate) {
@@ -24,7 +24,7 @@ export const buildCompletedDateValid = (loc: ReportSeedBank | ReportNursery) => 
   return afterStartConditionMet && beforeOpStartedConditionMet;
 };
 
-export const operationStartedDateValid = (loc: ReportSeedBank | ReportNursery) => {
+export const operationStartedDateValid = (loc: SeedFundReportSeedBank | SeedFundReportNursery) => {
   let afterBuildStartedConditionMet = false;
   let afterBuildCompletedConditionMet = false;
   if (loc.buildStartedDate && loc.operationStartedDate) {

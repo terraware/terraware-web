@@ -16,7 +16,7 @@ import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlan
 import { useLocalization } from 'src/providers';
 import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useSearchObservationDatesQuery } from 'src/queries/search/plantingSites';
-import { ReportPlantingSite } from 'src/types/Report';
+import { SeedFundReportPlantingSite } from 'src/types/SeedFundReport';
 import { GrowthForm } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -97,7 +97,7 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
   useEffect(() => {
     if (allSpecies) {
       const psSpecies: PlantingSiteSpecies[] = [];
-      (location as ReportPlantingSite).species.forEach((iSpecies) => {
+      (location as SeedFundReportPlantingSite).species.forEach((iSpecies) => {
         const foundSpecies = allSpecies.find((serverSpecies) => serverSpecies.id === iSpecies.id);
         if (foundSpecies) {
           psSpecies.push({
@@ -115,12 +115,12 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
 
   const onEditPlantingSiteReport = (species: PlantingSiteSpecies, fromColumn?: string, value?: any) => {
     if (fromColumn) {
-      const speciesToEditIndex = (location as ReportPlantingSite).species.findIndex(
+      const speciesToEditIndex = (location as SeedFundReportPlantingSite).species.findIndex(
         (iSpecies) => iSpecies.id === species.id
       );
-      const speciesToEdit = (location as ReportPlantingSite).species[speciesToEditIndex];
+      const speciesToEdit = (location as SeedFundReportPlantingSite).species[speciesToEditIndex];
 
-      const newSpecies = [...(location as ReportPlantingSite).species];
+      const newSpecies = [...(location as SeedFundReportPlantingSite).species];
       const speciesModified = {
         ...speciesToEdit,
         [fromColumn as 'mortalityRateInField' | 'totalPlanted']: value,
@@ -209,13 +209,13 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
         <InfoField
           id={`${location.id}-planting-site-area`}
           label={strings.TOTAL_PLANTING_SITE_AREA_HA}
-          value={(location as ReportPlantingSite).totalPlantingSiteArea ?? ''}
+          value={(location as SeedFundReportPlantingSite).totalPlantingSiteArea ?? ''}
           minNum={0}
           editable={editable}
           onChange={(value) => onUpdateLocation('totalPlantingSiteArea', transformNumericValue(value, { min: 0 }))}
           type='text'
           errorText={
-            validate && (location as ReportPlantingSite).totalPlantingSiteArea === undefined
+            validate && (location as SeedFundReportPlantingSite).totalPlantingSiteArea === undefined
               ? strings.REQUIRED_FIELD
               : ''
           }
@@ -227,13 +227,15 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
         <InfoField
           id={`${location.id}-total-planted-area`}
           label={strings.TOTAL_PLANTED_AREA_HA}
-          value={(location as ReportPlantingSite).totalPlantedArea ?? ''}
+          value={(location as SeedFundReportPlantingSite).totalPlantedArea ?? ''}
           minNum={0}
           editable={editable}
           onChange={(value) => onUpdateLocation('totalPlantedArea', transformNumericValue(value, { min: 0 }))}
           type='text'
           errorText={
-            validate && (location as ReportPlantingSite).totalPlantedArea === undefined ? strings.REQUIRED_FIELD : ''
+            validate && (location as SeedFundReportPlantingSite).totalPlantedArea === undefined
+              ? strings.REQUIRED_FIELD
+              : ''
           }
           tooltipTitle={strings.REPORT_TOTAL_PLANTED_AREA_INFO}
         />
@@ -245,14 +247,16 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
         <InfoField
           id={`${location.id}-total-trees-planted`}
           label={strings.TOTAL_TREES_PLANTED}
-          value={(location as ReportPlantingSite).totalTreesPlanted ?? ''}
+          value={(location as SeedFundReportPlantingSite).totalTreesPlanted ?? ''}
           minNum={0}
           editable={editable}
           onChange={(value) => onUpdateLocation('totalTreesPlanted', transformNumericValue(value, { min: 0 }))}
           type='text'
           helper={strings.TOTAL_TREES_PLANTED_HELPER_TEXT}
           errorText={
-            validate && (location as ReportPlantingSite).totalTreesPlanted === undefined ? strings.REQUIRED_FIELD : ''
+            validate && (location as SeedFundReportPlantingSite).totalTreesPlanted === undefined
+              ? strings.REQUIRED_FIELD
+              : ''
           }
           tooltipTitle={strings.REPORT_TOTAL_TREES_PLANTED_INFO}
         />
@@ -262,14 +266,16 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
         <InfoField
           id={`${location.id}-total-plants-planted`}
           label={strings.TOTAL_PLANTS_PLANTED_REQUIRED}
-          value={(location as ReportPlantingSite).totalPlantsPlanted ?? ''}
+          value={(location as SeedFundReportPlantingSite).totalPlantsPlanted ?? ''}
           minNum={0}
           editable={editable}
           onChange={(value) => onUpdateLocation('totalPlantsPlanted', transformNumericValue(value, { min: 0 }))}
           type='text'
           helper={strings.TOTAL_PLANTS_PLANTED_HELPER_TEXT}
           errorText={
-            validate && (location as ReportPlantingSite).totalPlantsPlanted === undefined ? strings.REQUIRED_FIELD : ''
+            validate && (location as SeedFundReportPlantingSite).totalPlantsPlanted === undefined
+              ? strings.REQUIRED_FIELD
+              : ''
           }
           tooltipTitle={strings.REPORT_TOTAL_NON_TREES_PLANTED_INFO}
         />
@@ -286,7 +292,9 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
           onChange={(value) => onUpdateLocation('mortalityRate', transformNumericValue(value, { min: 0, max: 100 }))}
           type='text'
           errorText={
-            validate && (location as ReportPlantingSite).mortalityRate === undefined ? strings.REQUIRED_FIELD : ''
+            validate && (location as SeedFundReportPlantingSite).mortalityRate === undefined
+              ? strings.REQUIRED_FIELD
+              : ''
           }
           tooltipTitle={strings.REPORT_MORTALITY_RATE_INFO}
         />

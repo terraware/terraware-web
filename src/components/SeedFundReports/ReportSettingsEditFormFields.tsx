@@ -6,16 +6,16 @@ import { Button, Checkbox } from '@terraware/web-components';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
-import { ReportsSettings } from 'src/services/ReportSettingsService';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
+import { SeedFundReportsSettings } from 'src/types/SeedFundReport';
 
 import { APP_PATHS } from '../../constants';
 
 interface ReportSettingsEditFormFieldsProps {
   isEditing: boolean;
   onChange?: (key: string | number, value: boolean) => void;
-  reportsSettings: ReportsSettings;
+  reportsSettings: SeedFundReportsSettings;
 }
 
 interface ReportsSettingsCheckboxConfig {
