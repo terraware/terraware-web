@@ -32,6 +32,14 @@ import {
 const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
 const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
 
+// TODO: replace with actual image urls once retrieval is available
+const PLACEHOLDER_IMAGE_URLS = [
+  'https://placehold.co/1080x1920',
+  'https://placehold.co/1920x1080',
+  'https://placehold.co/800x450',
+  'https://placehold.co/450x800',
+];
+
 export type VirtualWalkthroughViewerProps = {
   fileId: number;
   observationId?: number;
@@ -147,7 +155,7 @@ const VirtualWalkthroughViewer = ({
 
   const apiAnnotations = useMemo<AnnotationProps[]>(
     () =>
-      data?.annotations?.map((annotation) => {
+      data?.annotations?.map((annotation, index) => {
         const [firstMedia] = annotation.media;
         const icon: AnnotationIconType = !firstMedia
           ? 'text'
@@ -169,7 +177,8 @@ const VirtualWalkthroughViewer = ({
             : undefined,
           icon,
           // TODO: replace with actual image url once retrieval is available
-          imageUrl: annotation.media.length > 0 ? 'https://placehold.co/800x450' : undefined,
+          imageUrl:
+            annotation.media.length > 0 ? PLACEHOLDER_IMAGE_URLS[index % PLACEHOLDER_IMAGE_URLS.length] : undefined,
         } as AnnotationProps;
       }) ?? [],
     [data?.annotations]
