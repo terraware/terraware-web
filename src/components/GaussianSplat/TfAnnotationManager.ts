@@ -217,13 +217,6 @@ export class TfAnnotationManager extends PcAnnotationManager {
     ctx.strokeStyle = 'white';
     ctx.stroke();
 
-    // Draw text
-    ctx.font = 'bold 32px Arial';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = 'white';
-    ctx.fillText(label, Math.floor(canvas.width / 2), Math.floor(canvas.height / 2) + 1);
-
     // Get pixel data
     const imageData = ctx.getImageData(0, 0, size, size);
     const data = imageData.data;

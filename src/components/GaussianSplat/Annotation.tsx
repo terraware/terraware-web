@@ -58,7 +58,6 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
     onSelect,
     onPositionChange,
     onView,
-    onScreenPositionUpdate,
     index,
   } = props;
   const app = useApp();
@@ -70,7 +69,6 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
   const isEditRef = useRef(isEdit);
   const onSelectRef = useRef(onSelect);
   const onViewRef = useRef(onView);
-  const onScreenPositionUpdateRef = useRef(onScreenPositionUpdate);
   const positionRef = useRef(position);
   const cameraPositionRef = useRef(cameraPosition);
   const annotationForViewRef = useRef<AnnotationProps>({
@@ -86,11 +84,10 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
     isEditRef.current = isEdit;
     onSelectRef.current = onSelect;
     onViewRef.current = onView;
-    onScreenPositionUpdateRef.current = onScreenPositionUpdate;
     positionRef.current = position;
     cameraPositionRef.current = cameraPosition;
     annotationForViewRef.current = { position, title, label, bodyText, imageUrl, cameraPosition };
-  }, [isEdit, onSelect, onView, onScreenPositionUpdate, position, cameraPosition, title, label, bodyText, imageUrl]);
+  }, [isEdit, onSelect, onView, position, cameraPosition, title, label, bodyText, imageUrl]);
 
   // Create a stable callback that reads from refs, because this is read from TfAnnotationManager when the annotation is added to the scene
   const handleClick = useCallback(
@@ -105,13 +102,6 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
       }
     },
     [setCamera]
-  );
-
-  const handleScreenPositionUpdate = useCallback(
-    (x: number, y: number) => {
-      onScreenPositionUpdateRef.current?.(index, x, y);
-    },
-    [index]
   );
 
   const entityName = useMemo(() => `annotation-${index}`, [index]);
@@ -213,7 +203,6 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
         text={bodyText}
         enabled={visible}
         onClickCallback={handleClick}
-        onScreenPositionUpdateCallback={handleScreenPositionUpdate}
       />
     </Entity>
   );

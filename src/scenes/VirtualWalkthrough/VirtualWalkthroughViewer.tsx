@@ -60,10 +60,6 @@ const VirtualWalkthroughViewer = ({
   const [localAnnotations, setLocalAnnotations] = useState<AnnotationProps[]>([]);
   const [isTextFieldFocused, setIsTextFieldFocused] = useState(false);
   const [viewingAnnotation, setViewingAnnotation] = useState<AnnotationProps | null>(null);
-  const [viewingAnnotationIndex, setViewingAnnotationIndex] = useState<number | null>(null);
-  // hotspotScreenPos is plumbed for a future connector-line feature — intentionally unused for now
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [hotspotScreenPos, setHotspotScreenPos] = useState<{ x: number; y: number } | null>(null);
   const [getOrgSplatInfo, { data: orgData }] = useLazyGetOrganizationSplatInfoQuery();
   const [getObsSplatInfo, { data: obsData }] = useLazyListSplatDetailsQuery();
   const [saveObservationAnnotations] = useSetObservationSplatAnnotationsMutation();
@@ -272,25 +268,11 @@ const VirtualWalkthroughViewer = ({
   }, []);
 
   const handleAnnotationView = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (annotation: AnnotationProps, annotationIndex: number, screenX: number, screenY: number) => {
       setViewingAnnotation(annotation);
-      setViewingAnnotationIndex(annotationIndex);
-      setHotspotScreenPos({ x: screenX, y: screenY });
     },
     []
-  );
-
-  const handleAnnotationScreenPositionUpdate = useCallback(
-    (index: number, screenX: number, screenY: number) => {
-      // Store the live screen position of the active annotation for future connector-line use
-      setHotspotScreenPos((prev) => {
-        if (viewingAnnotationIndex !== null && index === viewingAnnotationIndex) {
-          return { x: screenX, y: screenY };
-        }
-        return prev;
-      });
-    },
-    [viewingAnnotationIndex]
   );
 
   const handleAnnotationUpdate = useCallback(
@@ -376,7 +358,6 @@ const VirtualWalkthroughViewer = ({
               onSelect={() => setSelectedAnnotationIndex(index)}
               onPositionChange={handleAnnotationPositionChange}
               onView={(anno, screenX, screenY) => handleAnnotationView(anno, index, screenX, screenY)}
-              onScreenPositionUpdate={handleAnnotationScreenPositionUpdate}
             />
           ))}
         </Entity>
@@ -412,7 +393,6 @@ const VirtualWalkthroughViewer = ({
         annotation={viewingAnnotation}
         onClose={() => {
           setViewingAnnotation(null);
-          setViewingAnnotationIndex(null);
         }}
       />
     </>
