@@ -15,7 +15,7 @@ const csvTemplateResponseHandler = async (response: Response): Promise<string> =
 api.enhanceEndpoints({
   endpoints: {
     createAccession: {
-      invalidatesTags: [{ type: QueryTagTypes.Accessions, id: 'LIST' }],
+      invalidatesTags: [{ type: QueryTagTypes.Accessions, id: 'LIST' }, QueryTagTypes.SeedbankSummary],
     },
     getAccessionsListUploadTemplate: {
       query: () => ({
@@ -33,15 +33,17 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.Accessions, id: payload.id },
         { type: QueryTagTypes.Accessions, id: 'LIST' },
+        QueryTagTypes.SeedbankSummary,
       ],
     },
     resolveAccessionsListUpload: {
-      invalidatesTags: [{ type: QueryTagTypes.Accessions, id: 'LIST' }],
+      invalidatesTags: [{ type: QueryTagTypes.Accessions, id: 'LIST' }, QueryTagTypes.SeedbankSummary],
     },
     createNurseryTransferWithdrawal: {
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' },
         { type: QueryTagTypes.Accessions, id: payload.accessionId },
+        QueryTagTypes.SeedbankSummary,
       ],
     },
     listViabilityTests: {
@@ -54,6 +56,7 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.ViabilityTests, id: 'LIST' },
         { type: QueryTagTypes.Accessions, id: payload.accessionId },
+        QueryTagTypes.SeedbankSummary,
       ],
     },
     updateViabilityTest: {
@@ -61,6 +64,7 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.ViabilityTests, id: payload.viabilityTestId },
         { type: QueryTagTypes.ViabilityTests, id: 'LIST' },
         { type: QueryTagTypes.Accessions, id: payload.accessionId },
+        QueryTagTypes.SeedbankSummary,
       ],
     },
     deleteViabilityTest: {
@@ -68,6 +72,7 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.ViabilityTests, id: payload.viabilityTestId },
         { type: QueryTagTypes.ViabilityTests, id: 'LIST' },
         { type: QueryTagTypes.Accessions, id: payload.accessionId },
+        QueryTagTypes.SeedbankSummary,
       ],
     },
     getViabilityTest: {
@@ -85,6 +90,7 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' },
         { type: QueryTagTypes.Accessions, id: payload.accessionId },
+        QueryTagTypes.SeedbankSummary,
       ],
     },
     updateWithdrawal: {
@@ -92,6 +98,7 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.AccessionWithdrawals, id: payload.withdrawalId },
         { type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' },
         { type: QueryTagTypes.Accessions, id: payload.accessionId },
+        QueryTagTypes.SeedbankSummary,
       ],
     },
     deleteWithdrawal: {
@@ -99,6 +106,7 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.AccessionWithdrawals, id: payload.withdrawalId },
         { type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' },
         { type: QueryTagTypes.Accessions, id: payload.accessionId },
+        QueryTagTypes.SeedbankSummary,
       ],
     },
     getWithdrawal: {
