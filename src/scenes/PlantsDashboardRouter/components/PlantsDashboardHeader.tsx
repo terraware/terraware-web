@@ -31,6 +31,7 @@ export type PlantsDashboardHeaderProps = {
   onSelectPlantingSite: (plantingSiteId: PlantingSiteId) => void;
   projectId: number | typeof ALL_PLANTING_SITES;
   onSelectProject: (projectId: number | typeof ALL_PLANTING_SITES) => void;
+  organizationId?: number;
 };
 
 export default function PlantsDashboardHeader({
@@ -39,6 +40,7 @@ export default function PlantsDashboardHeader({
   onSelectPlantingSite,
   projectId,
   onSelectProject,
+  organizationId: dashboardOrganizationId,
 }: PlantsDashboardHeaderProps): JSX.Element {
   const { strings, activeLocale } = useLocalization();
   const theme = useTheme();
@@ -46,8 +48,10 @@ export default function PlantsDashboardHeader({
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { selectedOrganization } = useOrganization();
 
-  const { organizationId, plantingSites, showAllSitesOption, isLoading, isSuccess } =
-    useDashboardPlantingSites(projectId);
+  const { organizationId, plantingSites, showAllSitesOption, isLoading, isSuccess } = useDashboardPlantingSites(
+    projectId,
+    dashboardOrganizationId
+  );
 
   // Project ids that have at least one planting site, used to populate the project dropdown.
   const [searchPlantingSiteProjects, { currentData: projectIdsWithSites }] = useLazySearchPlantingSiteProjectsQuery();

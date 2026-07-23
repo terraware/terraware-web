@@ -6,19 +6,21 @@ import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import PieChart from 'src/components/common/Chart/PieChart';
 import { useLatestSiteObservationResult } from 'src/hooks/observations';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type LiveDeadPlantsPerSpeciesCardProps = {
   plantingSiteId: number;
+  organizationId?: number;
 };
 
 export default function LiveDeadPlantsPerSpeciesCard({
   plantingSiteId,
+  organizationId,
 }: LiveDeadPlantsPerSpeciesCardProps): JSX.Element {
   const [selectedSpecies, setSelectedSpecies] = useState<string>();
-  const { species: availableSpecies } = useSpeciesData();
+  const { species: availableSpecies } = useOrganizationSpecies({ organizationId });
   const [allSpecies, setAllSpecies] = useState<
     {
       label: string;

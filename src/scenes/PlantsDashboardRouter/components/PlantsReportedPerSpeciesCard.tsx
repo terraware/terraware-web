@@ -7,7 +7,7 @@ import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 import BarChart from 'src/components/common/Chart/BarChart';
 import PieChart from 'src/components/common/Chart/PieChart';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import {
   useGetPlantingSiteReportedPlantsQuery,
   useLazyGetPlantingSiteQuery,
@@ -23,12 +23,14 @@ type PlantsReportedPerSpeciesCardProps = {
   newVersion?: boolean;
   plantingSiteId?: number;
   projectId?: number | 'all';
+  organizationId?: number;
 };
 
 export default function PlantsReportedPerSpeciesCard({
   newVersion,
   plantingSiteId,
   projectId,
+  organizationId,
 }: PlantsReportedPerSpeciesCardProps): JSX.Element | undefined {
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
   const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse]);
@@ -40,11 +42,15 @@ export default function PlantsReportedPerSpeciesCard({
   }, [getPlantingSite, plantingSiteId]);
 
   if (typeof projectId === 'number' && plantingSiteId === undefined) {
-    return <RolledUpCard projectId={projectId} />;
+    return <RolledUpCard projectId={projectId} organizationId={organizationId} />;
   } else if (plantingSite && !plantingSite?.strata?.length) {
-    return <SiteWithoutStrataCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
+    return (
+      <SiteWithoutStrataCard plantingSiteId={plantingSite.id} newVersion={newVersion} organizationId={organizationId} />
+    );
   } else if (plantingSite && plantingSite?.strata?.length) {
-    return <SiteWithStrataCard plantingSiteId={plantingSite.id} newVersion={newVersion} />;
+    return (
+      <SiteWithStrataCard plantingSiteId={plantingSite.id} newVersion={newVersion} organizationId={organizationId} />
+    );
   } else {
     return (
       <ChartData plantingSiteId={plantingSiteId} tooltipTitles={[]} labels={[]} values={[]} newVersion={newVersion} />
@@ -95,8 +101,8 @@ const calculateSpeciesQuantities = (plantings: { plants: number; scientificName:
   return speciesQuantities;
 };
 
-const RolledUpCard = ({ projectId }: { projectId: number }): JSX.Element => {
-  const { species: orgSpecies } = useSpeciesData();
+const RolledUpCard = ({ projectId, organizationId }: { projectId: number; organizationId?: number }): JSX.Element => {
+  const { species: orgSpecies } = useOrganizationSpecies({ organizationId });
 
   const listReportedPlantsResponse = useListPlantingSiteReportedPlantsQuery({ projectId });
   const reportedPlants = useMemo(() => listReportedPlantsResponse.data?.sites ?? [], [listReportedPlantsResponse]);
@@ -124,13 +130,15 @@ const RolledUpCard = ({ projectId }: { projectId: number }): JSX.Element => {
 const SiteWithoutStrataCard = ({
   plantingSiteId,
   newVersion,
+  organizationId,
 }: {
   plantingSiteId: number;
   newVersion?: boolean;
+  organizationId?: number;
 }): JSX.Element => {
   const plantingsResponse = useGetPlantingSiteReportedPlantsQuery(plantingSiteId);
   const speciesPlantings = useMemo(() => plantingsResponse.data?.site?.species ?? [], [plantingsResponse.data?.site]);
-  const { species: orgSpecies } = useSpeciesData();
+  const { species: orgSpecies } = useOrganizationSpecies({ organizationId });
 
   const speciesQuantities = useMemo(() => {
     const transformedPlantings = speciesPlantings?.map((planting) => ({
@@ -161,6 +169,7 @@ const SiteWithoutStrataCard = ({
 const SiteWithStrataCard = ({
   plantingSiteId,
   newVersion,
+  organizationId,
 }: {
   plantingSiteId: number;
   newVersion?: boolean;
@@ -171,7 +180,7 @@ const SiteWithStrataCard = ({
     () => plantingSiteReportedPlantsResponse.data?.site,
     [plantingSiteReportedPlantsResponse]
   );
-  const { species: orgSpecies } = useSpeciesData();
+  const { species: orgSpecies } = useOrganizationSpecies({ organizationId });
 
   const speciesQuantities = useMemo(() => {
     if (plantingSiteReportedPlants && orgSpecies) {

@@ -5,8 +5,8 @@ import { Icon, Tooltip } from '@terraware/web-components';
 import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import PieChart from 'src/components/common/Chart/PieChart';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   useGetPlantingSiteReportedPlantsQuery,
   useLazyGetPlantingSiteQuery,
@@ -60,11 +60,13 @@ const processConservationCategories = (
 type NumberOfSpeciesPlantedCardProps = {
   plantingSiteId?: number;
   projectId?: number | 'all';
+  organizationId?: number;
 };
 
 export default function NumberOfSpeciesPlantedCard({
   plantingSiteId,
   projectId,
+  organizationId,
 }: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined {
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
   const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse]);
@@ -76,19 +78,19 @@ export default function NumberOfSpeciesPlantedCard({
   }, [getPlantingSite, plantingSiteId]);
 
   if (typeof projectId === 'number' && plantingSiteId === undefined) {
-    return <RolledUpCard projectId={projectId} />;
+    return <RolledUpCard projectId={projectId} organizationId={organizationId} />;
   } else if (plantingSite && !plantingSite?.strata?.length) {
-    return <SiteWithoutStrataCard plantingSiteId={plantingSite.id} />;
+    return <SiteWithoutStrataCard plantingSiteId={plantingSite.id} organizationId={organizationId} />;
   } else if (plantingSite && plantingSite?.strata?.length) {
-    return <SiteWithStrataCard plantingSiteId={plantingSite.id} />;
+    return <SiteWithStrataCard plantingSiteId={plantingSite.id} organizationId={organizationId} />;
   } else {
     return <ChartData labels={[]} values={[]} />;
   }
 }
 
-const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
+const RolledUpCard = ({ projectId, organizationId }: { projectId?: number; organizationId?: number }): JSX.Element => {
   const { strings } = useLocalization();
-  const { species: orgSpecies } = useSpeciesData();
+  const { species: orgSpecies } = useOrganizationSpecies({ organizationId });
 
   const listReportedPlantsResponse = useListPlantingSiteReportedPlantsQuery({ projectId });
   const reportedPlants = useMemo(() => listReportedPlantsResponse.data?.sites ?? [], [listReportedPlantsResponse]);
@@ -154,11 +156,17 @@ const RolledUpCard = ({ projectId }: { projectId?: number }): JSX.Element => {
   return <ChartData labels={labels} values={values} rareSpecies={rareSpecies} />;
 };
 
-const SiteWithoutStrataCard = ({ plantingSiteId }: { plantingSiteId: number }): JSX.Element | undefined => {
+const SiteWithoutStrataCard = ({
+  plantingSiteId,
+  organizationId,
+}: {
+  plantingSiteId: number;
+  organizationId?: number;
+}): JSX.Element | undefined => {
   const { strings } = useLocalization();
   const plantingsResponse = useGetPlantingSiteReportedPlantsQuery(plantingSiteId);
   const speciesPlantings = useMemo(() => plantingsResponse.data?.site?.species ?? [], [plantingsResponse.data?.site]);
-  const { species: orgSpecies } = useSpeciesData();
+  const { species: orgSpecies } = useOrganizationSpecies({ organizationId });
 
   const { labels, values, rareSpecies } = useMemo(() => {
     const speciesNames: Set<string> = new Set();
@@ -201,11 +209,17 @@ const SiteWithoutStrataCard = ({ plantingSiteId }: { plantingSiteId: number }): 
   return <ChartData labels={labels} values={values} rareSpecies={rareSpecies} />;
 };
 
-const SiteWithStrataCard = ({ plantingSiteId }: { plantingSiteId: number }): JSX.Element => {
+const SiteWithStrataCard = ({
+  plantingSiteId,
+  organizationId,
+}: {
+  plantingSiteId: number;
+  organizationId?: number;
+}): JSX.Element => {
   const { strings } = useLocalization();
   const plantingsResponse = useGetPlantingSiteReportedPlantsQuery(plantingSiteId);
   const plantingSiteReportedPlants = useMemo(() => plantingsResponse.data?.site, [plantingsResponse.data?.site]);
-  const { species: orgSpecies } = useSpeciesData();
+  const { species: orgSpecies } = useOrganizationSpecies({ organizationId });
 
   const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species.length ?? 0, [plantingSiteReportedPlants]);
 
