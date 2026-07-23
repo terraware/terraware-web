@@ -85,8 +85,8 @@ export class TfAnnotationManager extends PcAnnotationManager {
           if (callback) {
             this._clickHandlersAttached.add(annotation);
 
-            resources.hotspotDom.addEventListener('pointerdown', () => {
-              callback();
+            resources.hotspotDom.addEventListener('pointerdown', (e: PointerEvent) => {
+              callback(e.clientX, e.clientY);
             });
           }
         }
@@ -104,77 +104,14 @@ export class TfAnnotationManager extends PcAnnotationManager {
     });
   }
 
-  /**
-   * Override to handle React components in annotation text and respect visibility.
-   * Creates a portal container for React content instead of using textContent.
-   * @private
-   */
-  _showTooltip(annotation: any) {
-    // Don't show tooltip if annotation is not visible
-    const isVisible = annotation.enabled !== undefined ? annotation.enabled : true;
-    if (!isVisible) {
-      return;
-    }
-
-    (this as any)._activeAnnotation = annotation;
-    (this as any)._tooltipDom.style.visibility = 'visible';
-    (this as any)._tooltipDom.style.opacity = '1';
-    (this as any)._titleDom.textContent = annotation.title;
-
-    // Handle React content vs string text
-    if (annotation.textContentRef?.current) {
-      // Clear and set up React portal container for React components
-      const textDom = (this as any)._textDom;
-      textDom.innerHTML = '';
-
-      const reactContainer = document.createElement('div');
-      reactContainer.setAttribute('data-react-portal-container', 'true');
-      reactContainer.style.width = '100%';
-      reactContainer.style.height = '100%';
-      textDom.appendChild(reactContainer);
-
-      // Notify the annotation component about the container
-      if (annotation.setTextContainer) {
-        annotation.setTextContainer(reactContainer);
-      }
-    } else {
-      // Standard string text
-      (this as any)._textDom.textContent = annotation.text;
-    }
-
-    annotation.fire('show', annotation);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _showTooltip(_annotation: any) {
+    // No-op: AnnotationPanel handles all annotation UI, this removes default behavior
   }
 
-  /**
-   * Override to handle React components in annotation text.
-   * Ensures portal container exists for React content.
-   * @private
-   */
-  _onTextChange(annotation: any, text: string) {
-    if ((this as any)._activeAnnotation === annotation) {
-      // Handle React content vs string text
-      if (annotation.textContentRef?.current) {
-        // For React content, the portal will handle updates
-        // Just make sure container exists
-        const textDom = (this as any)._textDom;
-        if (!textDom.querySelector('[data-react-portal-container]')) {
-          textDom.innerHTML = '';
-
-          const reactContainer = document.createElement('div');
-          reactContainer.setAttribute('data-react-portal-container', 'true');
-          reactContainer.style.width = '100%';
-          reactContainer.style.height = '100%';
-          textDom.appendChild(reactContainer);
-
-          if (annotation.setTextContainer) {
-            annotation.setTextContainer(reactContainer);
-          }
-        }
-      } else {
-        // Standard string text
-        (this as any)._textDom.textContent = text;
-      }
-    }
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _onTextChange(_annotation: any, _text: string) {
+    // No-op: AnnotationPanel handles all annotation UI, this removes default behavior
   }
 
   /**
@@ -200,6 +137,10 @@ export class TfAnnotationManager extends PcAnnotationManager {
       (this as any)._tooltipDom.style.display = isVisible ? 'block' : 'none';
       (this as any)._tooltipDom.style.left = `${screenPos.x + offsetX}px`;
       (this as any)._tooltipDom.style.top = `${screenPos.y + offsetY}px`;
+    }
+
+    if (annotation.onScreenPositionUpdateCallback) {
+      annotation.onScreenPositionUpdateCallback(screenPos.x + offsetX, screenPos.y + offsetY);
     }
   }
 
