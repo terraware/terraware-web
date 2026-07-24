@@ -1,5 +1,6 @@
 import { Action, combineReducers } from '@reduxjs/toolkit';
 
+import { baseApi } from 'src/queries/baseApi';
 import { rtkReducers } from 'src/queries/reducers';
 
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
@@ -61,8 +62,12 @@ const combinedReducers = combineReducers(reducers);
 type CombinedState = ReturnType<typeof combinedReducers>;
 
 export const rootReducer = (state: CombinedState | undefined, action: Action) => {
-  if (action.type === 'RESET_APP') {
-    state = undefined;
+  if (action.type === 'RESET_APP' && state) {
+    // Reset every feature slice, but leave the RTK Query cache slice alone. That slice is owned by
+    // RTK and is reset separately via baseApi.util.resetApiState(), which also re-triggers active
+    // subscriptions so always-mounted queries refetch. Nuking it here (state = undefined) would
+    // blank the cache behind RTK's back, leaving those queries stale until they remount.
+    state = { [baseApi.reducerPath]: state[baseApi.reducerPath] } as CombinedState;
   }
 
   return combinedReducers(state, action);
