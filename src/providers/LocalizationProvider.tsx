@@ -1,8 +1,6 @@
 import React, { type JSX, useEffect, useMemo, useRef, useState } from 'react';
 import LocalizedStrings from 'react-localization';
 
-import { skipToken } from '@reduxjs/toolkit/query';
-
 import { baseApi } from 'src/queries/baseApi';
 import { useListTimeZoneNamesQuery } from 'src/queries/generated/timeZones';
 import { setQueryLocale } from 'src/queries/locale';
@@ -43,21 +41,21 @@ export default function LocalizationProvider({
   // hooks below run) so the initial fetch is already localized.
   setQueryLocale(selectedLocale ?? undefined);
 
-  const { currentData: countriesData } = useListCountriesQuery(selectedLocale ? undefined : skipToken);
-  const { currentData: timeZonesData } = useListTimeZoneNamesQuery(selectedLocale ? undefined : skipToken);
+  const { currentData: countriesData } = useListCountriesQuery();
+  const { currentData: timeZonesData } = useListTimeZoneNamesQuery(undefined);
 
   const countries = useMemo<Country[]>(() => {
-    if (!selectedLocale || !countriesData) {
+    if (!countriesData) {
       return [];
     }
-    return [...countriesData].sort((a, b) => a.name.localeCompare(b.name, selectedLocale));
+    return [...countriesData].sort((a, b) => a.name.localeCompare(b.name, selectedLocale ?? 'en'));
   }, [selectedLocale, countriesData]);
 
   const timeZones = useMemo<TimeZoneDescription[]>(() => {
-    if (!selectedLocale || !timeZonesData) {
+    if (!timeZonesData) {
       return [];
     }
-    return [...timeZonesData.timeZones].sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale));
+    return [...timeZonesData.timeZones].sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale ?? 'en'));
   }, [selectedLocale, timeZonesData]);
 
   useEffect(() => {
