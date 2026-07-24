@@ -10,10 +10,10 @@ import useReportFiles from 'src/components/SeedFundReports/useReportFiles';
 import BackToLink from 'src/components/common/BackToLink';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import useSeedFundReport from 'src/hooks/useSeedFundReport';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import SeedFundReportService from 'src/services/SeedFundReportService';
 import strings from 'src/strings';
-import { Report } from 'src/types/Report';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -28,31 +28,24 @@ export default function ReportView(): JSX.Element {
 
   const snackbar = useSnackbar();
 
-  const [report, setReport] = useState<Report>();
   const [showAnnual, setShowAnnual] = useState(false);
   const [confirmEditDialogOpen, setConfirmEditDialogOpen] = useState(false);
 
+  const reportIdInt = reportId ? parseInt(reportId, 10) : -1;
+
+  const { report, isError } = useSeedFundReport(reportIdInt);
+
   const initialReportFiles = useReportFiles(report);
 
-  const reportIdInt = reportId ? parseInt(reportId, 10) : -1;
   const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
 
   const reportIdValid = useCallback(() => reportIdInt && reportIdInt !== -1, [reportIdInt]);
 
   useEffect(() => {
-    const getReport = async () => {
-      const result = await SeedFundReportService.getReport(reportIdInt);
-      if (result.requestSucceeded) {
-        setReport(result.report);
-      } else {
-        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
-      }
-    };
-
-    if (reportIdValid()) {
-      void getReport();
+    if (isError) {
+      snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_OPEN);
     }
-  }, [reportIdInt, snackbar, reportIdValid]);
+  }, [isError, snackbar]);
 
   const confirmEdit = async () => {
     // lock the report
