@@ -32,6 +32,14 @@ import {
 const DEFAULT_FOCUS_POINT: [number, number, number] = [0, 0.1, 0];
 const DEFAULT_POSITION: [number, number, number] = [1, 0.1, 0];
 
+const PLACEHOLDER_IMAGE_URLS = [
+  'https://images.unsplash.com/photo-1722444366501-6e5de9e768d1?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cG9ydHJhaXQlMjBsYW5kc2NhcGV8ZW58MHx8MHx8fDA%3D',
+  'https://placehold.co/1080x1920',
+  'https://placehold.co/1920x1080',
+  'https://placehold.co/800x450',
+  'https://placehold.co/450x800',
+];
+
 export type VirtualWalkthroughViewerProps = {
   fileId: number;
   observationId?: number;
@@ -147,7 +155,7 @@ const VirtualWalkthroughViewer = ({
 
   const apiAnnotations = useMemo<AnnotationProps[]>(
     () =>
-      data?.annotations?.map((annotation) => {
+      data?.annotations?.map((annotation, index) => {
         const [firstMedia] = annotation.media;
         const icon: AnnotationIconType = !firstMedia
           ? 'text'
@@ -169,7 +177,8 @@ const VirtualWalkthroughViewer = ({
             : undefined,
           icon,
           // TODO: replace with actual image url once retrieval is available
-          imageUrl: annotation.media.length > 0 ? 'https://placehold.co/800x450' : undefined,
+          imageUrl:
+            annotation.media.length > 0 ? PLACEHOLDER_IMAGE_URLS[index % PLACEHOLDER_IMAGE_URLS.length] : undefined,
         } as AnnotationProps;
       }) ?? [],
     [data?.annotations]
