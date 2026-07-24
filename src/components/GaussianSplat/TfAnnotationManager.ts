@@ -14,6 +14,23 @@ const ANNOTATION_ICONS: Record<AnnotationIconType, IconName> = {
   video: 'iconVideo',
 };
 
+// Pixel dimensions of the (square) hotspot texture canvas at rest.
+const HOTSPOT_TEXTURE_SIZE = 64;
+
+// How much larger the hotspot appears while hovered.
+const HOTSPOT_HOVER_SCALE = 1.3;
+
+// Transparent margin (in texture pixels) added around the circle on hover so
+// the baked drop shadow has room to render without being clipped. Must be at
+// least HOTSPOT_SHADOW_BLUR (+ the vertical offset) to avoid clipping.
+const HOTSPOT_SHADOW_PADDING = 20;
+
+// Blur radius of the baked hover drop shadow, in texture pixels.
+const HOTSPOT_SHADOW_BLUR = 16;
+
+// Color (and opacity) of the baked hover drop shadow.
+const HOTSPOT_SHADOW_COLOR = 'rgba(0, 0, 0, 0.2)';
+
 /**
  * Extended AnnotationManager that adds max size clamping for annotations
  * and fixes positioning when canvas is not at document origin.
@@ -117,7 +134,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
 
     annotationResources.forEach((_resources: any, annotation: any) => {
       if ((annotation.icon ?? 'menu') === iconType) {
-        this._applyAnnotationIcon(annotation);
+        this._applyAnnotationIcon(annotation, (this as any)._hoverAnnotation === annotation);
       }
     });
   }
@@ -172,9 +189,10 @@ export class TfAnnotationManager extends PcAnnotationManager {
 
   /**
    * Recreates the hotspot texture with the appropriate media icon drawn on it.
+   * When `hovered` is true the texture includes a baked drop shadow.
    * @private
    */
-  _applyAnnotationIcon(annotation: any) {
+  _applyAnnotationIcon(annotation: any, hovered = false) {
     const resources = (this as any)._annotationResources.get(annotation);
     if (!resources) {
       return;
@@ -183,7 +201,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
     const icon: AnnotationIconType = annotation.icon ?? 'menu';
 
     resources.texture.destroy();
-    resources.texture = this._createHotspotTexture(annotation.label, 64, 6, icon);
+    resources.texture = this._createHotspotTexture(annotation.label, HOTSPOT_TEXTURE_SIZE, 6, icon, hovered);
     resources.materials.forEach((material: any) => {
       material.emissiveMap = resources.texture;
       material.opacityMap = resources.texture;
@@ -197,14 +215,14 @@ export class TfAnnotationManager extends PcAnnotationManager {
    * annotation is redrawn once it has (see `_refreshIcon`).
    * @private
    */
-  _drawIcon(ctx: CanvasRenderingContext2D, icon: AnnotationIconType, size: number) {
+  _drawIcon(ctx: CanvasRenderingContext2D, icon: AnnotationIconType, size: number, padding = 0) {
     const image = this._iconImages.get(icon);
     if (!image || !image.complete || image.naturalWidth === 0) {
       return;
     }
 
     const iconSize = size * 0.5;
-    const offset = (size - iconSize) / 2;
+    const offset = padding + (size - iconSize) / 2;
     ctx.drawImage(image, offset, offset, iconSize, iconSize);
   }
 
@@ -214,7 +232,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
    * @private
    */
   _onLabelChange(annotation: any) {
-    this._applyAnnotationIcon(annotation);
+    this._applyAnnotationIcon(annotation, (this as any)._hoverAnnotation === annotation);
   }
 
   /**
@@ -229,10 +247,9 @@ export class TfAnnotationManager extends PcAnnotationManager {
     return material;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _setAnnotationHover(_annotation: any, _hover: boolean) {
-    // No-op: hotspot colors are baked into the texture, so there is no emissive
-    // re-tint on hover.
+  _setAnnotationHover(annotation: any, hover: boolean) {
+    // Grow hotspot and add shadow on hover
+    this._applyAnnotationIcon(annotation, hover);
   }
 
   _updateAllAnnotationColors() {
@@ -301,14 +318,25 @@ export class TfAnnotationManager extends PcAnnotationManager {
     // Clamp to maximum world size
     const worldSize = Math.min(unclamped, this._maxWorldSize);
 
-    annotation.entity.setLocalScale(worldSize, worldSize, worldSize);
+    const hovered = (this as any)._hoverAnnotation === annotation;
+    const hoverScale = hovered ? HOTSPOT_HOVER_SCALE : 1;
 
-    // Scale the hotspot DOM element proportionally when clamped
+    // The hover texture is enlarged to fit the drop shadow (see
+    // `_createHotspotTexture`), which would otherwise shrink the circle to
+    // `HOTSPOT_TEXTURE_SIZE / paddedSize`. Scaling the entity by the inverse
+    // cancels that out, leaving a clean `HOTSPOT_HOVER_SCALE` net growth.
+    const paddingFactor = hovered ? (HOTSPOT_TEXTURE_SIZE + 2 * HOTSPOT_SHADOW_PADDING) / HOTSPOT_TEXTURE_SIZE : 1;
+    const entityScale = worldSize * hoverScale * paddingFactor;
+
+    annotation.entity.setLocalScale(entityScale, entityScale, entityScale);
+
+    // Scale the hotspot DOM element proportionally when clamped. It tracks the
+    // visible circle, so it grows by `hoverScale` only (not the padding factor).
     const resources = (this as any)._annotationResources.get(annotation);
     if (resources && resources.hotspotDom) {
       const scaleFactor = worldSize / unclamped;
       const baseSize = (this as any)._hotspotSize + 5; // Match the +5 from the stylesheet
-      const scaledSize = baseSize * scaleFactor;
+      const scaledSize = baseSize * scaleFactor * hoverScale;
       resources.hotspotDom.style.width = `${scaledSize}px`;
       resources.hotspotDom.style.height = `${scaledSize}px`;
     }
@@ -318,10 +346,22 @@ export class TfAnnotationManager extends PcAnnotationManager {
    * Override to create hotspot texture with custom background color.
    * @private
    */
-  _createHotspotTexture(label: string, size = 64, borderWidth = 6, icon?: AnnotationIconType) {
+  _createHotspotTexture(
+    label: string,
+    size = HOTSPOT_TEXTURE_SIZE,
+    borderWidth = 6,
+    icon?: AnnotationIconType,
+    hovered = false
+  ) {
+    // On hover, pad the canvas so the baked drop shadow has room to render
+    // without being clipped. The circle itself keeps the same pixel size in
+    // both states; the entity scale compensates for the larger texture.
+    const padding = hovered ? HOTSPOT_SHADOW_PADDING : 0;
+    const canvasSize = size + 2 * padding;
+
     const canvas = document.createElement('canvas');
-    canvas.width = size;
-    canvas.height = size;
+    canvas.width = canvasSize;
+    canvas.height = canvasSize;
     const ctx = canvas.getContext('2d');
 
     if (!ctx) {
@@ -331,22 +371,32 @@ export class TfAnnotationManager extends PcAnnotationManager {
     // First clear with stroke color at zero alpha
     ctx.fillStyle = 'white';
     ctx.globalAlpha = 0;
-    ctx.fillRect(0, 0, size, size);
+    ctx.fillRect(0, 0, canvasSize, canvasSize);
     ctx.globalAlpha = 1.0;
 
     // Draw circle with custom background color
-    const centerX = size / 2;
-    const centerY = size / 2;
+    const centerX = padding + size / 2;
+    const centerY = padding + size / 2;
     const radius = size / 2 - 4;
 
     // The icon fill and border share the hotspot color
     const foregroundColor = (this as any)._hotspotColor?.toString() ?? '#ffffff';
 
-    // Draw main circle
+    // Draw main circle, casting a drop shadow when hovered
+    if (hovered) {
+      ctx.shadowColor = HOTSPOT_SHADOW_COLOR;
+      ctx.shadowBlur = HOTSPOT_SHADOW_BLUR;
+      ctx.shadowOffsetY = 2;
+    }
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
     ctx.fillStyle = this._hotspotBackgroundColor;
     ctx.fill();
+
+    // Reset the shadow so only the disc casts it (not the border or icon)
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetY = 0;
 
     // Draw border
     ctx.beginPath();
@@ -357,17 +407,17 @@ export class TfAnnotationManager extends PcAnnotationManager {
 
     // Draw the media icon inside the circle
     if (icon) {
-      this._drawIcon(ctx, icon, size);
+      this._drawIcon(ctx, icon, size, padding);
     }
 
     // Get pixel data
-    const imageData = ctx.getImageData(0, 0, size, size);
+    const imageData = ctx.getImageData(0, 0, canvasSize, canvasSize);
     const data = imageData.data;
 
     // Create and return the texture
     return new Texture(this.app.graphicsDevice, {
-      width: size,
-      height: size,
+      width: canvasSize,
+      height: canvasSize,
       format: PIXELFORMAT_RGBA8,
       magFilter: FILTER_LINEAR,
       minFilter: FILTER_LINEAR,
