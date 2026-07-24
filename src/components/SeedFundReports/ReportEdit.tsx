@@ -18,6 +18,7 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useSeedFundReport from 'src/hooks/useSeedFundReport';
+import useSeedFundReportActions from 'src/hooks/useSeedFundReportActions';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization, useUser } from 'src/providers';
 import SeedFundReportService from 'src/services/SeedFundReportService';
@@ -43,7 +44,6 @@ export default function ReportEdit(): JSX.Element {
   const [photoIdsToRemove, setPhotoIdsToRemove] = useState<number[]>([]);
   const [report, setReport] = useState<SeedFundReport>();
   const [validateFields, setValidateFields] = useState(false);
-  const [busyState, setBusyState] = useState(false);
   const [idInView, setIdInView] = useState('');
   const [newReportFiles, setNewReportFiles] = useState<File[]>([]);
   const [updatedReportFiles, setUpdatedReportFiles] = useState<SeedFundReportFile[]>([]);
@@ -57,6 +57,7 @@ export default function ReportEdit(): JSX.Element {
   const reportName = `Report (${report?.year}-Q${report?.quarter}) ` + (report?.projectName ?? '');
 
   const { report: loadedReport, isError, reload } = useSeedFundReport(reportIdInt);
+  const { onUpdate, unlockReport, onSubmit, isLoading: busyState } = useSeedFundReportActions();
 
   useEffect(() => {
     const el = document.getElementById(idInView);
@@ -126,24 +127,23 @@ export default function ReportEdit(): JSX.Element {
   };
 
   const gotoReportView = async (saveChanges: boolean) => {
-    let saveResult;
     if (saveChanges && report) {
-      setBusyState(true);
-      saveResult = await SeedFundReportService.updateReport(report);
-      if (!saveResult.requestSucceeded) {
-        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
-      } else {
+      try {
+        await onUpdate(report);
         snackbar.toastSuccess(strings.CHANGES_SAVED);
         await updateFiles();
         await updatePhotos(report.id);
+      } catch {
+        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+        return;
       }
-      setBusyState(false);
     }
 
-    if ((!saveResult || saveResult.requestSucceeded) && reportIdValid()) {
+    if (reportIdValid()) {
       // unlock the report
-      const unlockResult = await SeedFundReportService.unlockReport(reportIdInt);
-      if (!unlockResult.requestSucceeded) {
+      try {
+        await unlockReport(reportIdInt);
+      } catch {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_UNLOCK);
       }
 
@@ -168,34 +168,34 @@ export default function ReportEdit(): JSX.Element {
 
   const handleSaveAndNext = async () => {
     if (report) {
-      setBusyState(true);
-      const saveResult = await SeedFundReportService.updateReport(report);
-      switchPages('annual');
-      setValidateFields(false);
-      if (!saveResult.requestSucceeded) {
-        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
-      } else {
+      try {
+        await onUpdate(report);
         snackbar.toastSuccess(strings.CHANGES_SAVED);
         await updateFiles();
         await updatePhotos(report.id);
+      } catch {
+        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+      } finally {
+        switchPages('annual');
+        setValidateFields(false);
       }
-      setBusyState(false);
     }
   };
 
   const handleBack = async (hideToast?: boolean) => {
     if (report) {
-      setBusyState(true);
-      const saveResult = await SeedFundReportService.updateReport(report);
-      switchPages('quarterly');
-      if (!hideToast) {
-        if (!saveResult.requestSucceeded) {
-          snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
-        } else {
+      try {
+        await onUpdate(report);
+        if (!hideToast) {
           snackbar.toastSuccess(strings.CHANGES_SAVED);
         }
+      } catch {
+        if (!hideToast) {
+          snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+        }
+      } finally {
+        switchPages('quarterly');
       }
-      setBusyState(false);
     }
   };
 
@@ -343,22 +343,28 @@ export default function ReportEdit(): JSX.Element {
 
   const submitReport = async () => {
     if (report) {
-      setBusyState(true);
-      const saveResult = await SeedFundReportService.updateReport(report);
-      if (saveResult.requestSucceeded && reportIdInt) {
-        await updateFiles();
-        await updatePhotos(report.id);
-        const submitResult = await SeedFundReportService.submitReport(reportIdInt);
-        if (submitResult.requestSucceeded && reportId && selectedOrganization) {
-          void reloadOrganizations(selectedOrganization.id);
-          navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) }, { replace: true });
-        } else {
-          snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SUBMIT);
-        }
-      } else {
+      try {
+        await onUpdate(report);
+      } catch {
         snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SAVE);
+        return;
       }
-      setBusyState(false);
+
+      try {
+        if (reportIdInt) {
+          await updateFiles();
+          await updatePhotos(report.id);
+          await onSubmit(reportIdInt);
+          if (reportId && selectedOrganization) {
+            void reloadOrganizations(selectedOrganization.id);
+            navigate({ pathname: APP_PATHS.SEED_FUND_REPORTS_VIEW.replace(':reportId', reportId) }, { replace: true });
+          } else {
+            snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SUBMIT);
+          }
+        }
+      } catch {
+        snackbar.toastError(strings.GENERIC_ERROR, strings.REPORT_COULD_NOT_SUBMIT);
+      }
     }
   };
 
