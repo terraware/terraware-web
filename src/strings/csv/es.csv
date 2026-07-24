@@ -205,6 +205,7 @@ AR,RA,25a8e55a
 ARE_YOU_SURE,¿Está seguro(a)?,d4536b91
 ARE_YOU_SURE_DELETE,¿Está seguro de que desea eliminar?,a7f716f0
 ARE_YOU_SURE_DELETE_TARGET,¿Está seguro de que desea eliminar este objetivo de especie?,8f7cb65e
+AREA,Área,be27ab89
 AREA_HA,Área (ha),8ab5d500
 AREA_NOT_OBSERVED,Área no observada,9eeddab4
 ARROW_KEYS,Flechas del teclado,5cefb475
@@ -1569,6 +1570,8 @@ PLANTING_DATES,Fechas de plantación,e8aa47b1
 PLANTING_DATES_TAB_DESCRIPTION,"Cree planes para cuándo y dónde se plantarán las plantas según los objetivos de especies. Haga clic en ""Guardar y Solicitar"" para pedir al vivero que retire plantas para fechas específicas.",cd51495e
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
 PLANTING_GOAL,Meta de plantación,a97123a1
+PLANTING_PLAN,Plan de Plantación,423afe5f
+PLANTING_PLAN_DESCRIPTION,"Establezca densidades objetivo de plantación y especies en Objetivos del Sitio, y planifique las actividades de plantación en Temporadas de Plantación.",72ea86ca
 PLANTING_PLANS,Planes de Plantación,b6afa2ff
 PLANTING_PROGRESS,Avance de plantación,58616da9
 PLANTING_PROGRESS_PERCENT,Progreso de la plantación (%),0d372a57
@@ -2117,6 +2120,7 @@ SITE_EXCLUSION_AREAS_DESCRIPTION_2,Excluye zonas del sitio de plantación dibuja
 SITE_EXCLUSION_AREAS_OPTIONAL,Zonas de exclusión (opcional),434ba2b3
 SITE_EXCLUSION_ERRORS,Hay errores en el límite de exclusión.,dc334f43
 SITE_GOAL,Objetivo del Sitio,61f394c1
+SITE_GOALS,Objetivos del Sitio,345a7c04
 SITE_LOCATION,Ubicación del sitio,e0a85b19
 SITE_MAP,Mapa del sitio,df2fc60a
 SITE_STRATUM_BOUNDARIES,Límites de Estrato,418d687a
@@ -2355,7 +2359,9 @@ TARGET_HECTARES_PLANTED,Objetivo: {0} ha,8c7d580d
 TARGET_PLANTING_DENSITY,Densidad de plantación objetivo,4f350d39
 TARGET_PLANTING_DENSITY_TOOLTIP,Densidad de plantación objetivo para el estrato (plantas por hectárea).,042cc8ff
 TARGET_PLANTS,plantas objetivo,ff0517a3
+TARGET_PLANTS_TITLE,Plantas Objetivo,c1aa1642
 TARGET_QUANTITY,Cantidad objetivo,73c71da9
+TARGET_SPECIES,Especies Objetivo,ba3510dd
 TARGETS,Objetivos,afd4bbf9
 TEMPLATE,Plantilla,28afe27c
 TEMPLATES,Plantillas,a66a976a
