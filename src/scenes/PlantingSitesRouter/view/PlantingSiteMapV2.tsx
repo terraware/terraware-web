@@ -1,17 +1,19 @@
-import React, { type JSX, useEffect, useMemo, useRef } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box } from '@mui/material';
 
 import MapComponent from 'src/components/NewMap';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
-import { MapLayer, MapLayerFeature } from 'src/components/NewMap/types';
+import { MapLayer, MapLayerFeature, MapLayerFeatureId } from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
 import { getBoundingBoxFromMultiPolygons } from 'src/components/NewMap/utils';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import useMapboxToken from 'src/utils/useMapboxToken';
+
+import PlantingSiteMapDrawer from './PlantingSiteMapDrawer';
 
 export type PlantingSiteMapV2Props = {
   plantingSiteId: number;
@@ -26,6 +28,23 @@ const PlantingSiteMapV2 = ({ plantingSiteId }: PlantingSiteMapV2Props): JSX.Elem
   const { selectedLayer, plantingSiteLegendGroup } = usePlantingSiteMapLegend('strata');
   const { sitesLayerStyle, strataLayerStyle, substrataLayerStyle } = useMapFeatureStyles();
 
+  const [selectedFeature, setSelectedFeature] = useState<MapLayerFeatureId>();
+  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+
+  const selectFeature = useCallback(
+    (layerId: string, featureId: string) => () => {
+      setSelectedFeature({ layerId, featureId });
+      setDrawerOpen(true);
+    },
+    []
+  );
+
+  const isSelected = useCallback(
+    (layerId: string, featureId: string) =>
+      selectedFeature?.layerId === layerId && selectedFeature?.featureId === featureId,
+    [selectedFeature]
+  );
+
   const layers = useMemo((): MapLayer[] => {
     if (!plantingSite?.boundary) {
       return [];
@@ -38,6 +57,8 @@ const PlantingSiteMapV2 = ({ plantingSiteId }: PlantingSiteMapV2Props): JSX.Elem
       {
         featureId: `${plantingSite.id}`,
         geometry: { type: 'MultiPolygon', coordinates: plantingSite.boundary.coordinates },
+        onClick: selectFeature('sites', `${plantingSite.id}`),
+        selected: isSelected('sites', `${plantingSite.id}`),
       },
     ];
 
@@ -45,12 +66,16 @@ const PlantingSiteMapV2 = ({ plantingSiteId }: PlantingSiteMapV2Props): JSX.Elem
       featureId: `${stratum.id}`,
       label: stratum.name,
       geometry: { type: 'MultiPolygon', coordinates: stratum.boundary.coordinates },
+      onClick: selectFeature('strata', `${stratum.id}`),
+      selected: isSelected('strata', `${stratum.id}`),
     }));
 
     const substratumFeatures: MapLayerFeature[] = substrata.map((substratum) => ({
       featureId: `${substratum.id}`,
       label: substratum.name,
       geometry: { type: 'MultiPolygon', coordinates: substratum.boundary.coordinates },
+      onClick: selectFeature('substrata', `${substratum.id}`),
+      selected: isSelected('substrata', `${substratum.id}`),
     }));
 
     return [
@@ -63,9 +88,25 @@ const PlantingSiteMapV2 = ({ plantingSiteId }: PlantingSiteMapV2Props): JSX.Elem
         visible: selectedLayer === 'substrata',
       },
     ];
-  }, [plantingSite, selectedLayer, sitesLayerStyle, strataLayerStyle, substrataLayerStyle]);
+  }, [plantingSite, selectedLayer, selectFeature, isSelected, sitesLayerStyle, strataLayerStyle, substrataLayerStyle]);
 
   const legends = useMemo((): MapLegendGroup[] => [plantingSiteLegendGroup], [plantingSiteLegendGroup]);
+
+  const drawerContent = useMemo(() => {
+    if (selectedFeature) {
+      return <PlantingSiteMapDrawer plantingSiteId={plantingSiteId} layerFeatureId={selectedFeature} />;
+    }
+    return undefined;
+  }, [plantingSiteId, selectedFeature]);
+
+  const setDrawerOpenCallback = useCallback((open: boolean) => {
+    if (open) {
+      setDrawerOpen(true);
+    } else {
+      setDrawerOpen(false);
+      setSelectedFeature(undefined);
+    }
+  }, []);
 
   useEffect(() => {
     if (plantingSite?.boundary) {
@@ -79,11 +120,15 @@ const PlantingSiteMapV2 = ({ plantingSiteId }: PlantingSiteMapV2Props): JSX.Elem
 
   return (
     <MapComponent
+      drawerChildren={drawerContent}
+      drawerOpen={drawerOpen}
+      drawerSize={'small'}
       legends={legends}
       mapId={mapId}
       mapLayers={layers}
       mapRef={mapRef}
       onTokenExpired={refreshToken}
+      setDrawerOpen={setDrawerOpenCallback}
       token={token}
     />
   );
