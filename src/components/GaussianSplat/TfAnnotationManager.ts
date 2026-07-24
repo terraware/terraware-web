@@ -1,5 +1,18 @@
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+
+import { Icon, IconName } from '@terraware/web-components';
 import { FILTER_LINEAR, PIXELFORMAT_RGBA8, Texture } from 'playcanvas';
 import { AnnotationManager as PcAnnotationManager } from 'playcanvas/scripts/esm/annotations.mjs';
+
+import { AnnotationIconType } from './Annotation';
+
+// Maps each annotation icon type to a @terraware/web-components icon.
+const ANNOTATION_ICONS: Record<AnnotationIconType, IconName> = {
+  text: 'iconDocument',
+  image: 'iconPhoto',
+  video: 'iconVideo',
+};
 
 /**
  * Extended AnnotationManager that adds max size clamping for annotations
@@ -12,6 +25,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
   private _customParentDom: HTMLElement | null = null;
   private _clickHandlersAttached = new Set<any>();
   private _hotspotBackgroundColor = '#2C8658';
+  private _iconImages = new Map<AnnotationIconType, HTMLImageElement>();
 
   /**
    * Maximum world-space size for annotations.
@@ -64,6 +78,48 @@ export class TfAnnotationManager extends PcAnnotationManager {
 
     // Call parent initialize
     super.initialize();
+
+    this._loadIconImages();
+  }
+
+  /**
+   * Renders each web-components icon to an SVG image once. When an image finishes
+   * loading, any annotations already using that icon are redrawn.
+   * @private
+   */
+  _loadIconImages() {
+    const fillColor = (this as any)._hotspotColor?.toString() ?? '#ffffff';
+
+    (Object.keys(ANNOTATION_ICONS) as AnnotationIconType[]).forEach((iconType) => {
+      const name = ANNOTATION_ICONS[iconType];
+      const markup = renderToStaticMarkup(createElement(Icon, { name, fillColor })).replace(
+        /^<svg/,
+        '<svg width="128" height="128"'
+      );
+
+      const image = new Image();
+      image.onload = () => this._refreshIcon(iconType);
+      image.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(markup)}`;
+      this._iconImages.set(iconType, image);
+    });
+  }
+
+  /**
+   * Redraws the texture for all annotations using the given icon, once its image
+   * has loaded.
+   * @private
+   */
+  _refreshIcon(iconType: AnnotationIconType) {
+    const annotationResources = (this as any)._annotationResources;
+    if (!annotationResources) {
+      return;
+    }
+
+    annotationResources.forEach((_resources: any, annotation: any) => {
+      if ((annotation.icon ?? 'menu') === iconType) {
+        this._applyAnnotationIcon(annotation);
+      }
+    });
   }
 
   /**
@@ -102,6 +158,85 @@ export class TfAnnotationManager extends PcAnnotationManager {
         }
       }
     });
+  }
+
+  /**
+   * Override annotation registration to draw the media icon onto the hotspot
+   * texture once the annotation (and its icon) is available.
+   * @private
+   */
+  _registerAnnotation(annotation: any) {
+    super._registerAnnotation(annotation);
+    this._applyAnnotationIcon(annotation);
+  }
+
+  /**
+   * Recreates the hotspot texture with the appropriate media icon drawn on it.
+   * @private
+   */
+  _applyAnnotationIcon(annotation: any) {
+    const resources = (this as any)._annotationResources.get(annotation);
+    if (!resources) {
+      return;
+    }
+
+    const icon: AnnotationIconType = annotation.icon ?? 'menu';
+
+    resources.texture.destroy();
+    resources.texture = this._createHotspotTexture(annotation.label, 64, 6, icon);
+    resources.materials.forEach((material: any) => {
+      material.emissiveMap = resources.texture;
+      material.opacityMap = resources.texture;
+      material.update();
+    });
+  }
+
+  /**
+   * Draws the icon image onto the hotspot texture canvas, scaled to fit the
+   * circle. Does nothing if the image has not finished loading yet; the
+   * annotation is redrawn once it has (see `_refreshIcon`).
+   * @private
+   */
+  _drawIcon(ctx: CanvasRenderingContext2D, icon: AnnotationIconType, size: number) {
+    const image = this._iconImages.get(icon);
+    if (!image || !image.complete || image.naturalWidth === 0) {
+      return;
+    }
+
+    const iconSize = size * 0.5;
+    const offset = (size - iconSize) / 2;
+    ctx.drawImage(image, offset, offset, iconSize, iconSize);
+  }
+
+  /**
+   * Keep the media icon drawn on the hotspot texture. The label text itself
+   * is not rendered on the hotspot, so we simply redraw with the icon.
+   * @private
+   */
+  _onLabelChange(annotation: any) {
+    this._applyAnnotationIcon(annotation);
+  }
+
+  /**
+   * The hotspot colors are baked into the texture in `_createHotspotTexture`,
+   * so the material emissive is kept white to let those colors render as drawn.
+   * @private
+   */
+  _createHotspotMaterial(texture: any, options?: any) {
+    const material = super._createHotspotMaterial(texture, options);
+    material.emissive.set(1, 1, 1);
+    material.update();
+    return material;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _setAnnotationHover(_annotation: any, _hover: boolean) {
+    // No-op: hotspot colors are baked into the texture, so there is no emissive
+    // re-tint on hover.
+  }
+
+  _updateAllAnnotationColors() {
+    // No-op: hotspot colors are baked into the texture (see _createHotspotMaterial).
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -183,7 +318,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
    * Override to create hotspot texture with custom background color.
    * @private
    */
-  _createHotspotTexture(label: string, size = 64, borderWidth = 6) {
+  _createHotspotTexture(label: string, size = 64, borderWidth = 6, icon?: AnnotationIconType) {
     const canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
@@ -204,33 +339,30 @@ export class TfAnnotationManager extends PcAnnotationManager {
     const centerY = size / 2;
     const radius = size / 2 - 4;
 
+    // The icon fill and border share the hotspot color
+    const foregroundColor = (this as any)._hotspotColor?.toString() ?? '#ffffff';
+
     // Draw main circle
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
-    ctx.fillStyle = this._hotspotBackgroundColor; // this is the only line different from playcanvas in this method
+    ctx.fillStyle = this._hotspotBackgroundColor;
     ctx.fill();
 
     // Draw border
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
     ctx.lineWidth = borderWidth;
-    ctx.strokeStyle = 'white';
+    ctx.strokeStyle = foregroundColor;
     ctx.stroke();
+
+    // Draw the media icon inside the circle
+    if (icon) {
+      this._drawIcon(ctx, icon, size);
+    }
 
     // Get pixel data
     const imageData = ctx.getImageData(0, 0, size, size);
     const data = imageData.data;
-
-    // Set the color channel of semitransparent pixels to white so the blending at
-    // the edges is correct
-    for (let i = 0; i < data.length; i += 4) {
-      const a = data[i + 3];
-      if (a < 255) {
-        data[i] = 255;
-        data[i + 1] = 255;
-        data[i + 2] = 255;
-      }
-    }
 
     // Create and return the texture
     return new Texture(this.app.graphicsDevice, {
