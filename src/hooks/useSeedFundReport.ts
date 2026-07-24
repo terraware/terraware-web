@@ -23,7 +23,7 @@ const useSeedFundReport = (reportId?: number) => {
   );
 
   const reload = useCallback(async () => {
-    if (isValid) {
+    if (!isValid) {
       return undefined;
     }
     const result = await getReport(reportId!, false).unwrap();
