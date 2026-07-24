@@ -287,6 +287,7 @@ BY_ACCESSION,Por accesión,61b8fb95
 BY_BATCH,Por lotes,68c5092f
 BY_NURSERY,Por vivero,a0a2faa5
 BY_SPECIES,Por especies,602624ab
+BY_TARGET_PLANTING_DENSITY,por densidad de plantación objetivo,1a635b91
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densidad de plantas calculada a partir de retiros,d06a4b56
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Para usar la densidad de plantas calculada a partir de los Retiros de plantación, marque la casilla. Para sobrescribir estos datos, ingrese manualmente un valor en los campos de Densidad de Plantas a la izquierda.",c674df96
 CAMERA_FOCUS_POINT,Punto de enfoque,350a921b
@@ -1126,6 +1127,7 @@ LOW,Bajo,ddedeca3
 LOWEST,Más baja,b651e8a7
 MAKE_HIGHLIGHT,Crear destacado,c3fda88f
 MANAGE_COLUMNS,Gestionar columnas,1dba3733
+MANAGE_PLANTING_PLANS_DESCRIPTION,"Gestione los planes de plantación para los Sitios de Plantación, incluyendo los objetivos del sitio y las temporadas de plantación.",6d14df77
 MANAGE_PLANTING_SEASONS,Gestionar temporadas de plantación,2f58ca7d
 MANAGE_PLANTING_TARGETS_WITHIN_PLANTING_SEASONS,Gestione los objetivos de plantación dentro de las Temporadas de Plantación.,4c8dbb4b
 MANAGED_LOCATION_TYPE_NURSERY,Vivero,2a9dbfec
@@ -1567,6 +1569,7 @@ PLANTING_DATES,Fechas de plantación,e8aa47b1
 PLANTING_DATES_TAB_DESCRIPTION,"Cree planes para cuándo y dónde se plantarán las plantas según los objetivos de especies. Haga clic en ""Guardar y Solicitar"" para pedir al vivero que retire plantas para fechas específicas.",cd51495e
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
 PLANTING_GOAL,Meta de plantación,a97123a1
+PLANTING_PLANS,Planes de Plantación,b6afa2ff
 PLANTING_PROGRESS,Avance de plantación,58616da9
 PLANTING_PROGRESS_PERCENT,Progreso de la plantación (%),0d372a57
 PLANTING_PROGRESS_TOOLTIP,Progreso de los retiros en relación con la meta de plantación para esta temporada.,4cc685ea
@@ -2093,6 +2096,7 @@ SIMPLE_SITE,Terreno sencillo,760ab731
 SINGLE_SPECIES_SURVIVAL_RATE_MESSAGE,"Actualmente solo hay una especie con una tasa de supervivencia. Cuando haya más especies con una tasa de supervivencia, se mostrará la especie con la tasa de supervivencia más baja.",c4ff6454
 SINGLE_STRATUM_SURVIVAL_RATE_MESSAGE,"El sitio tiene solo un estrato con una tasa de supervivencia. Cuando un sitio tiene más de un estrato con una tasa de supervivencia, se mostrará el estrato con la tasa de supervivencia más baja.",10007138
 SITE,Sitio,925ca15b
+SITE_AREA,Área del Sitio,2072d1ae
 SITE_BOUNDARY,Límite del sitio,ee9dc83f
 SITE_BOUNDARY_ABSENT_WARNING,Dibuje un límite para el sitio.,495ebdb5
 SITE_BOUNDARY_DESCRIPTION_0,Trace a continuación los límites de su sitio de plantación. Todas las zonas de su proyecto que sean aptas para la siembra deben estar dentro de los límites del terreno.,1eb2c82f
@@ -2112,6 +2116,7 @@ SITE_EXCLUSION_AREAS_DESCRIPTION_1,Dibuja a continuación los límites de las zo
 SITE_EXCLUSION_AREAS_DESCRIPTION_2,Excluye zonas del sitio de plantación dibujando formas dentro o superpuestas al límite del sitio de plantación. Completa las formas de la zona de exclusión haciendo doble clic o volviendo a hacer clic en el punto de partida.,e7b47271
 SITE_EXCLUSION_AREAS_OPTIONAL,Zonas de exclusión (opcional),434ba2b3
 SITE_EXCLUSION_ERRORS,Hay errores en el límite de exclusión.,dc334f43
+SITE_GOAL,Objetivo del Sitio,61f394c1
 SITE_LOCATION,Ubicación del sitio,e0a85b19
 SITE_MAP,Mapa del sitio,df2fc60a
 SITE_STRATUM_BOUNDARIES,Límites de Estrato,418d687a
@@ -2371,6 +2376,7 @@ TEXT_REQUIRED_BOTH_FIELDS,El texto es obligatorio en los dos campos.,a4c500b6
 TF_OWNER_REVIEWER,Propietario/Revisor de TF,3627b045
 THANK_YOU_FOR_CONTACTING_SUPPORT,Gracias por ponerse en contacto con el equipo de asistencia técnica de Terraware. Recibimos su solicitud. El identificador de su solicitud es {0}.,733b2c42
 THANK_YOU_FOR_USING_TERRAWARE,¡Muchas gracias por utilizar Terraware!,c6999786
+THERE_ARE_NO_PLANTING_PLANS,No hay Planes de Plantación.,3c854b17
 THERE_ARE_NO_PLANTING_SEASONS,No hay Temporadas de Plantación.,eff9d3fb
 THERE_ARE_NO_SPECIES_ADDED_TO_THIS_PROJET_YET,Todavía no hay especies agregadas a este Proyecto.,02f58d0e
 THIS_ACTION_IS_NON_REVERSIBLE,Este proceso no se puede anular.,aecdef3a
