@@ -62,6 +62,8 @@ const VirtualWalkthroughViewer = ({
   const [localAnnotations, setLocalAnnotations] = useState<AnnotationProps[]>([]);
   const [isTextFieldFocused, setIsTextFieldFocused] = useState(false);
   const [viewingAnnotation, setViewingAnnotation] = useState<AnnotationProps | null>(null);
+  const [viewingAnnotationIndex, setViewingAnnotationIndex] = useState(-1);
+  const [viewedScreenPos, setViewedScreenPos] = useState<{ x: number; y: number; size?: number } | null>(null);
   const [getOrgSplatInfo, { data: orgData }] = useLazyGetOrganizationSplatInfoQuery();
   const [getObsSplatInfo, { data: obsData }] = useLazyListSplatDetailsQuery();
   const [saveObservationAnnotations] = useSetObservationSplatAnnotationsMutation();
@@ -282,9 +284,30 @@ const VirtualWalkthroughViewer = ({
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     (annotation: AnnotationProps, annotationIndex: number, screenX: number, screenY: number) => {
       setViewingAnnotation(annotation);
+      setViewingAnnotationIndex(annotationIndex);
+      // Cleared so the connector line waits for the hotspot's post-aim position
+      // rather than briefly pointing at its old spot.
+      setViewedScreenPos(null);
     },
     []
   );
+
+  const handleAnnotationScreenPositionUpdate = useCallback(
+    (_index: number, screenX: number, screenY: number, size?: number) => {
+      // The scene is frozen while the panel is open, so guard against redundant
+      // updates from the per-frame callback to avoid needless re-renders.
+      setViewedScreenPos((prev) =>
+        prev && prev.x === screenX && prev.y === screenY && prev.size === size ? prev : { x: screenX, y: screenY, size }
+      );
+    },
+    []
+  );
+
+  const handleCloseAnnotation = useCallback(() => {
+    setViewingAnnotation(null);
+    setViewingAnnotationIndex(-1);
+    setViewedScreenPos(null);
+  }, []);
 
   const handleAnnotationUpdate = useCallback(
     (updates: Partial<AnnotationProps>) => {
@@ -333,7 +356,7 @@ const VirtualWalkthroughViewer = ({
         <Script script={TfXrNavigation} enabled={!isEdit} enableTeleport={false} />
         <Script
           script={AutoRotator}
-          enabled={!isEdit && autoRotate}
+          enabled={!isEdit && autoRotate && !viewingAnnotation}
           startDelay={0.5}
           restartDelay={3}
           startFadeInTime={0.5}
@@ -366,9 +389,11 @@ const VirtualWalkthroughViewer = ({
               visible={showAnnotations}
               isEdit={isEdit}
               isSelected={selectedAnnotationIndex === index}
+              isViewed={viewingAnnotationIndex === index}
               onSelect={() => setSelectedAnnotationIndex(index)}
               onPositionChange={handleAnnotationPositionChange}
               onView={(anno, screenX, screenY) => handleAnnotationView(anno, index, screenX, screenY)}
+              onScreenPositionUpdate={handleAnnotationScreenPositionUpdate}
             />
           ))}
         </Entity>
@@ -402,9 +427,8 @@ const VirtualWalkthroughViewer = ({
 
       <AnnotationPanel
         annotation={viewingAnnotation}
-        onClose={() => {
-          setViewingAnnotation(null);
-        }}
+        hotspotPosition={viewedScreenPos}
+        onClose={handleCloseAnnotation}
       />
     </>
   );

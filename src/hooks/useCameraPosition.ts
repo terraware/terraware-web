@@ -7,12 +7,13 @@ export const useCameraPosition = () => {
   const app = useApp();
 
   const setCamera = useCallback(
-    (focus: [number, number, number], position?: [number, number, number]) => {
+    (focus: [number, number, number], position?: [number, number, number], horizontalNdcBias = 0) => {
       const camera = app.root.findByName('camera');
       // @ts-expect-error - scripts are added dynamically to the camera entity
       const controls = camera?.script?.cameraControls ?? camera?.script?.walkthroughCamera;
       if (controls && camera) {
-        controls.reset(new Vec3(focus), position ? new Vec3(position) : camera.getPosition());
+        // The extra bias arg is only honored by WalkthroughCamera; CameraControls ignores it.
+        controls.reset(new Vec3(focus), position ? new Vec3(position) : camera.getPosition(), horizontalNdcBias);
       }
     },
     [app]
