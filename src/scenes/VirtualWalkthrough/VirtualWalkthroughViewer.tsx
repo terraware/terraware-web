@@ -148,12 +148,12 @@ const VirtualWalkthroughViewer = ({
       data?.annotations?.map((annotation) => {
         const [firstMedia] = annotation.media;
         const icon: AnnotationIconType = !firstMedia
-          ? 'menu'
+          ? 'text'
           : firstMedia.contentType.startsWith('image')
             ? 'image'
             : firstMedia.contentType.startsWith('video')
               ? 'video'
-              : 'menu';
+              : 'text';
 
         return {
           ...annotation,
