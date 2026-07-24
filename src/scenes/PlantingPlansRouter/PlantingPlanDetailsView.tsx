@@ -55,7 +55,7 @@ const PlantingPlanDetailsView = (): JSX.Element => {
     () =>
       plantingSite ? (
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: theme.spacing(1), width: '100%' }}>
-          <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} lineHeight='20px'>
+          <Typography fontSize='14px' color={theme.palette.TwClrTxt} lineHeight='20px'>
             {strings.PLANTING_PLAN}
           </Typography>
           <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(2) }}>
@@ -64,6 +64,9 @@ const PlantingPlanDetailsView = (): JSX.Element => {
             </Typography>
             <SegmentControl segments={segments} selected={segment} onChange={selectSegment} />
           </Box>
+          <Typography fontSize='14px' color={theme.palette.TwClrTxt} lineHeight='20px'>
+            {strings.PLANTING_PLAN_DESCRIPTION}
+          </Typography>
         </Box>
       ) : undefined,
     [plantingSite, segment, segments, selectSegment, strings, theme]
@@ -74,13 +77,7 @@ const PlantingPlanDetailsView = (): JSX.Element => {
   }
 
   return (
-    <Page
-      title={title}
-      description={strings.PLANTING_PLAN_DESCRIPTION}
-      crumbs={crumbs}
-      leftComponentGridSize={0}
-      rightComponentGridSize={0}
-    >
+    <Page title={title} crumbs={crumbs} leftComponentGridSize={0} rightComponentGridSize={0}>
       {segment === 'overview' && <PlantingPlanOverview plantingSite={plantingSite} />}
     </Page>
   );
