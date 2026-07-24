@@ -1,9 +1,13 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useRef, useState } from 'react';
 import LocalizedStrings from 'react-localization';
 
-import { requestListCountries, requestListTimezones } from 'src/redux/features/location/locationAsyncThunks';
-import { selectCountries, selectTimezones } from 'src/redux/features/location/locationSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { skipToken } from '@reduxjs/toolkit/query';
+
+import { baseApi } from 'src/queries/baseApi';
+import { useListTimeZoneNamesQuery } from 'src/queries/generated/timeZones';
+import { setQueryLocale } from 'src/queries/locale';
+import { useListCountriesQuery } from 'src/queries/search/countries';
+import { useAppDispatch } from 'src/redux/store';
 import { HttpService } from 'src/services';
 import defaultStrings, { ILocalizedStringsMap } from 'src/strings';
 import { Country } from 'src/types/Country';
@@ -28,20 +32,33 @@ export default function LocalizationProvider({
   activeLocale,
   setActiveLocale,
 }: LocalizationProviderProps): JSX.Element | null {
-  const dispatch = useAppDispatch();
-
-  const [countries, setCountries] = useState<Country[]>([]);
-  const [timeZones, setTimeZones] = useState<TimeZoneDescription[]>([]);
   const [strings, setStrings] = useState<typeof defaultStrings>(defaultStrings);
 
   const { user } = useUser();
   const supportedLocales = useSupportedLocales();
+  const dispatch = useAppDispatch();
+  const previousLocaleRef = useRef<string | null>(null);
 
-  const [countriesRequestId, setCountriesRequestId] = useState<string>('');
-  const countriesResponse = useAppSelector(selectCountries(countriesRequestId));
+  // Keep the locale that RTK Query sends as Accept-Language in sync synchronously (before the query
+  // hooks below run) so the initial fetch is already localized.
+  setQueryLocale(selectedLocale ?? undefined);
 
-  const [timeZonesRequestId, setTimeZonesRequestId] = useState<string>('');
-  const timeZoneResponse = useAppSelector(selectTimezones(timeZonesRequestId));
+  const { currentData: countriesData } = useListCountriesQuery(selectedLocale ? undefined : skipToken);
+  const { currentData: timeZonesData } = useListTimeZoneNamesQuery(selectedLocale ? undefined : skipToken);
+
+  const countries = useMemo<Country[]>(() => {
+    if (!selectedLocale || !countriesData) {
+      return [];
+    }
+    return [...countriesData].sort((a, b) => a.name.localeCompare(b.name, selectedLocale));
+  }, [selectedLocale, countriesData]);
+
+  const timeZones = useMemo<TimeZoneDescription[]>(() => {
+    if (!selectedLocale || !timeZonesData) {
+      return [];
+    }
+    return [...timeZonesData.timeZones].sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale));
+  }, [selectedLocale, timeZonesData]);
 
   useEffect(() => {
     if (user) {
@@ -52,26 +69,17 @@ export default function LocalizationProvider({
   useEffect(() => {
     if (selectedLocale) {
       HttpService.setDefaultHeaders({ 'Accept-Language': selectedLocale });
-      const countriesDispatched = dispatch(requestListCountries());
-      const timezoneDispatched = dispatch(requestListTimezones());
-      setCountriesRequestId(countriesDispatched.requestId);
-      setTimeZonesRequestId(timezoneDispatched.requestId);
+
+      // On an actual language change (not the initial load), reset the RTK Query cache so every
+      // endpoint refetches with the new locale. RTK Query hooks only resubscribe when their arg
+      // changes, so this is how locale-dependent data is refreshed without threading the locale
+      // into each endpoint's arguments.
+      if (previousLocaleRef.current !== null && previousLocaleRef.current !== selectedLocale) {
+        dispatch(baseApi.util.resetApiState());
+      }
+      previousLocaleRef.current = selectedLocale;
     }
   }, [dispatch, selectedLocale]);
-
-  useEffect(() => {
-    if (selectedLocale && countriesResponse && countriesResponse.status === 'success' && countriesResponse.data) {
-      const countriesCopy = [...countriesResponse.data];
-      setCountries(countriesCopy.sort((a, b) => a.name.localeCompare(b.name, selectedLocale)));
-    }
-  }, [selectedLocale, countriesResponse]);
-
-  useEffect(() => {
-    if (selectedLocale && timeZoneResponse && timeZoneResponse.status === 'success' && timeZoneResponse.data) {
-      const timezonesCopy = [...timeZoneResponse.data];
-      setTimeZones(timezonesCopy.sort((a, b) => a.longName.localeCompare(b.longName, selectedLocale)));
-    }
-  }, [selectedLocale, timeZoneResponse]);
 
   useEffect(() => {
     if (selectedLocale) {

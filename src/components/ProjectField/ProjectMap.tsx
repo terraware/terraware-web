@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
@@ -6,10 +6,8 @@ import { Icon } from '@terraware/web-components';
 import { GenericMap } from 'src/components/Map';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import { APP_PATHS } from 'src/constants';
+import { useCountryBoundary } from 'src/hooks/useCountryBoundary';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { requestGetCountryBoundary } from 'src/redux/features/location/locationAsyncThunks';
-import { selectCountryBoundary } from 'src/redux/features/location/locationSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { MapService } from 'src/services';
 import strings from 'src/strings';
 import { Application } from 'src/types/Application';
@@ -28,15 +26,8 @@ type ProjectMapProps = {
 const ProjectMap = ({ application, countryCode, md, includeLabel, projectId }: ProjectMapProps) => {
   const theme = useTheme();
   const getRenderAttributes = useRenderAttributes();
-  const dispatch = useAppDispatch();
-  const countryBoundaryResult = useAppSelector(selectCountryBoundary(countryCode ?? ''));
+  const countryBoundary = useCountryBoundary(countryCode);
   const navigate = useSyncNavigate();
-
-  useEffect(() => {
-    if (countryCode) {
-      void dispatch(requestGetCountryBoundary(countryCode));
-    }
-  }, [dispatch, countryCode]);
 
   const getMapOptions = useCallback(
     (coordinates: number[][][][], name: string, type: RenderableObject, id: number) => {
@@ -66,12 +57,12 @@ const ProjectMap = ({ application, countryCode, md, includeLabel, projectId }: P
   );
 
   const countryMapOptions = useMemo<MapOptions | undefined>(() => {
-    if (!countryBoundaryResult || !countryBoundaryResult.data) {
+    if (!countryBoundary) {
       return undefined;
     }
 
-    return getMapOptions(countryBoundaryResult.data.coordinates, 'countryBoundary', 'countryBoundary', 1);
-  }, [countryBoundaryResult, getMapOptions]);
+    return getMapOptions(countryBoundary.coordinates, 'countryBoundary', 'countryBoundary', 1);
+  }, [countryBoundary, getMapOptions]);
 
   const applicationBoundary = application?.boundary;
   const applicationId = application?.id;

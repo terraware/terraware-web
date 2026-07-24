@@ -17,6 +17,9 @@ const config: ConfigFile = {
     './src/queries/generated/clock.ts': {
       filterEndpoints: (_, operation) => operation.path === '/api/v1/seedbank/clock',
     },
+    './src/queries/generated/countryBoundary.ts': {
+      filterEndpoints: (_, operation) => operation.path === '/api/v1/countries/{countryCode}/boundary',
+    },
     './src/queries/generated/deliveries.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/deliveries'),
     },
@@ -129,6 +132,9 @@ const config: ConfigFile = {
     },
     './src/queries/generated/stats.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/stats'),
+    },
+    './src/queries/generated/timeZones.ts': {
+      filterEndpoints: (_, operation) => operation.path === '/api/v1/i18n/timeZones',
     },
     './src/queries/generated/support.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/support'),
