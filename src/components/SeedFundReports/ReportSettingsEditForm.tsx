@@ -7,12 +7,12 @@ import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
+import { useUpdateReportSettingsMutation } from 'src/queries/generated/seedFundReports';
 import { SeedFundReportsSettings } from 'src/types/SeedFundReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import Card from '../common/Card';
 import ReportSettingsEditFormFields from './ReportSettingsEditFormFields';
-import { useUpdateReportSettingsMutation } from 'src/queries/generated/seedFundReports';
 
 interface ReportSettingsEditFormProps {
   reportsSettings: SeedFundReportsSettings;
