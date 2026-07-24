@@ -115,12 +115,18 @@ export type SetSplatAnnotationRequestPayload = {
 export type SetSplatAnnotationsRequestPayload = {
   annotations: SetSplatAnnotationRequestPayload[];
 };
+export type SplatAnnotationMediaPayload = {
+  contentType: string;
+  fileId: number;
+  position: number;
+};
 export type SplatAnnotationPayload = {
   bodyText?: string;
   cameraPosition?: CoordinatePayload;
   fileId: number;
   id: number;
   label?: string;
+  media: SplatAnnotationMediaPayload[];
   position: CoordinatePayload;
   title: string;
 };
