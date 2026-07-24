@@ -9,7 +9,7 @@ import { AnnotationIconType } from './Annotation';
 
 // Maps each annotation icon type to a @terraware/web-components icon.
 const ANNOTATION_ICONS: Record<AnnotationIconType, IconName> = {
-  menu: 'iconMenu',
+  text: 'iconDocument',
   image: 'iconPhoto',
   video: 'iconVideo',
 };

@@ -11,7 +11,7 @@ import { useCameraPosition } from 'src/hooks/useCameraPosition';
 
 import './annotation-styles.css';
 
-export type AnnotationIconType = 'menu' | 'image' | 'video';
+export type AnnotationIconType = 'text' | 'image' | 'video';
 
 export interface AnnotationProps {
   position: [number, number, number];
