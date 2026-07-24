@@ -8,6 +8,7 @@ import { DateTime } from 'luxon';
 import EmptyBatchesInfoModal from 'src/components/BatchWithdrawFlow/EmptyBatchesInfoModal';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
   useCreateBatchWithdrawalMutation,
@@ -62,6 +63,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   const theme = useTheme();
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const { findSpeciesById } = useOrganizationSpecies();
   const snackbar = useSnackbar();
 
   const [step, setStep] = useState<FlowStep>(0);
@@ -104,13 +106,14 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         return;
       }
       const withdrawableBatches = results
-        .map(
-          (b): BatchInfo => ({
+        .map((b): BatchInfo => {
+          const orgSpecies = findSpeciesById(Number(b.species_id));
+          return {
             batchId: Number(b.id),
             batchNumber: String(b.batchNumber ?? ''),
             speciesId: Number(b.species_id),
-            scientificName: String(b.species_scientificName ?? ''),
-            commonName: b.species_commonName ? String(b.species_commonName) : undefined,
+            scientificName: orgSpecies?.scientificName ?? String(b.species_scientificName ?? ''),
+            commonName: orgSpecies?.commonName ?? (b.species_commonName ? String(b.species_commonName) : undefined),
             facilityId: Number(b.facility_id),
             facilityName: String(b.facility_name ?? ''),
             germinatingQuantity: Number(b['germinatingQuantity(raw)'] ?? 0),
@@ -120,8 +123,8 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
             totalQuantity: Number(b['totalQuantity(raw)'] ?? 0),
             projectId: b.project_id !== undefined && b.project_id !== null ? Number(b.project_id) : undefined,
             projectName: b.project_name ? String(b.project_name) : undefined,
-          })
-        )
+          };
+        })
         .filter((batch) => batch.totalQuantity + batch.germinatingQuantity > 0);
       if (withdrawableBatches.length === 0) {
         snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM);
@@ -133,7 +136,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     return () => {
       active = false;
     };
-  }, [open, selectedOrganization, batchIds, snackbar, strings]);
+  }, [open, selectedOrganization, batchIds, findSpeciesById, snackbar, strings]);
 
   const updateDraft = useCallback((next: Partial<BatchWithdrawDraft>) => {
     setDraft((prev) => {

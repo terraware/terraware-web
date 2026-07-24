@@ -14,6 +14,8 @@ export type UseOrganizationSpeciesArgs = {
 export type UseOrganizationSpeciesResult = {
   species: Species[];
   speciesById: Record<number, Species>;
+  /** Resolves the fresh species record for an id, or undefined when the id is missing/unknown. */
+  findSpeciesById: (speciesId?: number | null) => Species | undefined;
   isLoading: boolean;
   refetch: () => void;
 };
@@ -37,13 +39,27 @@ export const useOrganizationSpecies = (args?: UseOrganizationSpeciesArgs): UseOr
     }
   }, [listSpecies, organizationId, inUse]);
 
-  return useMemo<UseOrganizationSpeciesResult>(() => {
-    const species = currentData?.species ?? [];
-    return {
+  const species = useMemo<Species[]>(() => currentData?.species ?? [], [currentData]);
+
+  const speciesById = useMemo<Record<number, Species>>(
+    () => Object.fromEntries(species.map((s) => [s.id, s])),
+    [species]
+  );
+
+  const findSpeciesById = useCallback(
+    (speciesId?: number | null): Species | undefined =>
+      speciesId === undefined || speciesId === null ? undefined : speciesById[speciesId],
+    [speciesById]
+  );
+
+  return useMemo<UseOrganizationSpeciesResult>(
+    () => ({
       species,
-      speciesById: Object.fromEntries(species.map((s) => [s.id, s])),
+      speciesById,
+      findSpeciesById,
       isLoading: isUninitialized || isFetching,
       refetch,
-    };
-  }, [currentData, isFetching, isUninitialized, refetch]);
+    }),
+    [species, speciesById, findSpeciesById, isFetching, isUninitialized, refetch]
+  );
 };

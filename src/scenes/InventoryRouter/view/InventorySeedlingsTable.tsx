@@ -16,6 +16,7 @@ import {
 import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
@@ -73,6 +74,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const { findSpeciesById } = useOrganizationSpecies();
   const { availableProjects: projects } = useProjects();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -168,15 +170,37 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       const searchFields = getSearchFields();
       const batchesResults = await getBatchesSearch(selectedOrganization.id, originId, searchFields, undefined);
 
+      // Resolve species names from the org species list so they stay fresh even if the search
+      // response carries a stale (or, eventually, absent) embedded name.
+      const withOrgSpecies = (batchesResults || []).map((batch) => {
+        const orgSpecies = findSpeciesById(Number(batch.species_id));
+        return orgSpecies
+          ? {
+              ...batch,
+              species_scientificName: orgSpecies.scientificName,
+              species_commonName: orgSpecies.commonName ?? batch.species_commonName,
+            }
+          : batch;
+      });
+
       if (requestId === getRequestId('inventory-seedlings')) {
-        setBatches(batchesResults || []);
+        setBatches(withOrgSpecies);
       }
     };
 
     if (!originId || !isNaN(originId)) {
       void populateResults();
     }
-  }, [activeLocale, filters.facilityIds, getBatchesSearch, getSearchFields, modified, originId, selectedOrganization]);
+  }, [
+    activeLocale,
+    filters.facilityIds,
+    findSpeciesById,
+    getBatchesSearch,
+    getSearchFields,
+    modified,
+    originId,
+    selectedOrganization,
+  ]);
 
   useEffect(() => {
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);

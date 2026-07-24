@@ -9,6 +9,7 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { useCheckInMutation } from 'src/queries/generated/accessionsV1';
@@ -27,6 +28,7 @@ import CheckInAllConfirmationDialog from './CheckInAllConfirmationDialog';
 
 export default function CheckIn(): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { findSpeciesById } = useOrganizationSpecies();
   const { isMobile } = useDeviceInfo();
   const locationTimeZone = useLocationTimeZone();
   const facilityNameToTz = useMemo(
@@ -223,7 +225,9 @@ export default function CheckIn(): JSX.Element {
                         label={strings.SPECIES}
                         id='species'
                         type='text'
-                        value={result.speciesName as string}
+                        value={
+                          findSpeciesById(Number(result.species_id))?.scientificName ?? (result.speciesName as string)
+                        }
                         display={true}
                       />
                     </Grid>

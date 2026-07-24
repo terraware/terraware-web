@@ -6,6 +6,7 @@ import { TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
@@ -20,6 +21,7 @@ import useForm from 'src/utils/useForm';
 export default function InventoryListByBatch() {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const { findSpeciesById } = useOrganizationSpecies();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
@@ -134,10 +136,12 @@ export default function InventoryListByBatch() {
       // format results
       const updatedResult = processedResults?.map((uR) => {
         const resultTyped = uR as BatchInventoryResult;
+        const orgSpecies = findSpeciesById(Number(resultTyped.species_id));
         return {
           ...resultTyped,
           batchId: resultTyped.id,
-          species_scientificName_noLink: resultTyped.species_scientificName,
+          species_scientificName_noLink: orgSpecies?.scientificName ?? resultTyped.species_scientificName,
+          species_commonName: orgSpecies?.commonName ?? resultTyped.species_commonName,
           facility_name_noLink: resultTyped.facility_name,
         } as InventoryResultWithBatchNumber;
       });
@@ -155,7 +159,7 @@ export default function InventoryListByBatch() {
         }
       }
     }
-  }, [activeLocale, filters, debouncedSearchTerm, selectedOrganization]);
+  }, [activeLocale, filters, debouncedSearchTerm, findSpeciesById, selectedOrganization]);
 
   const reloadData = useCallback(() => void onApplyFilters(), [onApplyFilters]);
 

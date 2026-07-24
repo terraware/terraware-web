@@ -22,7 +22,7 @@ type TreeRow = ExistingTreePayload & {
 
 export default function TreesAndShrubsEditableTable(): JSX.Element {
   const theme = useTheme();
-  const { species: availableSpecies } = useOrganizationSpecies();
+  const { findSpeciesById } = useOrganizationSpecies();
   const params = useParams<{ observationId: string }>();
   const { strings } = useLocalization();
 
@@ -269,15 +269,16 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
 
   const treesWithData = useMemo(() => {
     return results?.biomassMeasurements?.trees?.map((tree) => {
-      const foundSpecies = availableSpecies.find((avSpecies) => avSpecies.id === tree.speciesId);
       const optimistic = optimisticValues[tree.id] ?? {};
       return {
         ...tree,
         ...optimistic,
-        speciesName: tree.speciesName || foundSpecies?.scientificName,
+        speciesName: tree.speciesId
+          ? findSpeciesById(tree.speciesId)?.scientificName ?? tree.speciesName
+          : tree.speciesName,
       };
     });
-  }, [availableSpecies, results, optimisticValues]);
+  }, [findSpeciesById, results, optimisticValues]);
 
   return (
     <>

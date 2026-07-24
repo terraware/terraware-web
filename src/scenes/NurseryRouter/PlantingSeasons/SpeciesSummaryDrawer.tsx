@@ -25,7 +25,7 @@ type DisplayRow = {
 
 const SpeciesSummaryDrawer = ({ open, onClose, plantingSeasonId }: SpeciesSummaryDrawerProps): JSX.Element => {
   const theme = useTheme();
-  const { species } = useOrganizationSpecies();
+  const { findSpeciesById } = useOrganizationSpecies();
   const [getSummary, { data: summaryRows }] = useLazyGetPlantingSeasonSpeciesSummaryQuery();
 
   useEffect(() => {
@@ -37,11 +37,11 @@ const SpeciesSummaryDrawer = ({ open, onClose, plantingSeasonId }: SpeciesSummar
   const rows = useMemo<DisplayRow[]>(() => {
     return (summaryRows ?? [])
       .map((row) => {
-        const speciesInfo = species.find((s) => s.id === row.speciesId);
+        const speciesInfo = findSpeciesById(row.speciesId);
         return {
           speciesId: row.speciesId,
-          scientificName: row.scientificName ?? speciesInfo?.scientificName ?? `#${row.speciesId}`,
-          commonName: row.commonName ?? speciesInfo?.commonName,
+          scientificName: speciesInfo?.scientificName ?? row.scientificName ?? `#${row.speciesId}`,
+          commonName: speciesInfo?.commonName ?? row.commonName,
           target: row.target,
           allocated: row.allocated,
           withdrawn: row.withdrawn,
@@ -49,7 +49,7 @@ const SpeciesSummaryDrawer = ({ open, onClose, plantingSeasonId }: SpeciesSummar
         };
       })
       .sort((a, b) => a.scientificName.localeCompare(b.scientificName));
-  }, [summaryRows, species]);
+  }, [summaryRows, findSpeciesById]);
 
   const totals = useMemo(
     () =>
