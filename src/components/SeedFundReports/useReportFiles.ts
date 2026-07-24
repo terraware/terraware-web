@@ -1,38 +1,32 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
-import SeedFundReportService from 'src/services/SeedFundReportService';
-import { Report, ReportFile } from 'src/types/Report';
+import { useListReportFilesQuery } from 'src/queries/generated/seedFundReports';
+import { SeedFundReport, SeedFundReportFile } from 'src/types/SeedFundReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export default function useReportFiles(
-  report?: Report,
-  setUpdatedReportFiles?: React.Dispatch<React.SetStateAction<ReportFile[]>>
-): ReportFile[] {
+  report?: SeedFundReport,
+  setUpdatedReportFiles?: React.Dispatch<React.SetStateAction<SeedFundReportFile[]>>
+): SeedFundReportFile[] {
   const snackbar = useSnackbar();
-  const [initialReportFiles, setInitialReportFiles] = useState<ReportFile[]>([]);
+  const response = useListReportFilesQuery(report?.id as number, { skip: !report });
+
+  const initialReportFiles: SeedFundReportFile[] = useMemo(
+    () => response.currentData?.files ?? [],
+    [response.currentData]
+  );
+
   useEffect(() => {
-    const getFiles = async () => {
-      if (report) {
-        const fileListResponse = await SeedFundReportService.getReportFiles(report.id);
-        if (!fileListResponse.requestSucceeded) {
-          setInitialReportFiles([]);
-          snackbar.toastError();
-        } else {
-          const fileArray: ReportFile[] = [];
-          fileListResponse.files?.forEach((f) => {
-            fileArray.push(f);
-          });
+    if (response.isError) {
+      snackbar.toastError();
+    }
+  }, [response.isError, snackbar]);
 
-          setInitialReportFiles(fileArray);
-          if (setUpdatedReportFiles) {
-            setUpdatedReportFiles(fileArray);
-          }
-        }
-      }
-    };
-
-    void getFiles();
-  }, [report, snackbar, setUpdatedReportFiles]);
+  useEffect(() => {
+    if (response.currentData && setUpdatedReportFiles) {
+      setUpdatedReportFiles(initialReportFiles);
+    }
+  }, [initialReportFiles, response.currentData, setUpdatedReportFiles]);
 
   return initialReportFiles;
 }
