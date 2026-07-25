@@ -12,7 +12,7 @@ common:
     manifest: 'yarn.lock'
 
   - &cache-node-modules
-    cache#v1.11.1:
+    cache#v1.12.0:
       <<: *cache-node-modules-args
 
   - &load-secrets
@@ -54,7 +54,7 @@ steps:
     plugins:
       - *shallow-clone
       - *load-secrets
-      - cache#v1.11.1:
+      - cache#v1.12.0:
           <<: *cache-node-modules-args
           save:
             - file
@@ -86,7 +86,7 @@ steps:
     plugins:
       - *shallow-clone
       - *cache-node-modules
-      - cache#v1.11.1:
+      - cache#v1.12.0:
           <<: *cache-common-args
           path: '.cache/ms-playwright'
           manifest: 'yarn.lock'
@@ -107,7 +107,7 @@ steps:
     plugins:
       - *shallow-clone
       - *load-secrets
-      - cache#v1.11.1:
+      - cache#v1.12.0:
           <<: *cache-node-modules-args
           save:
             - file
@@ -124,7 +124,7 @@ steps:
     plugins:
       - *shallow-clone
       - *load-secrets
-      - cache#v1.11.1:
+      - cache#v1.12.0:
           <<: *cache-common-args
           path: '.buildx-cache'
           save:
@@ -139,10 +139,10 @@ steps:
     branches: 'main'
     plugins:
       - *shallow-clone
-      - cache#v1.11.1: &promote-cache
+      - cache#v1.12.0: &promote-cache
           <<: *cache-node-modules-args
           save: 'pipeline'
-      - cache#v1.11.1:
+      - cache#v1.12.0:
           <<: *promote-cache
           path: '.buildx-cache'
     command: 'echo --- :buildkite: Promoted caches to pipeline level'
