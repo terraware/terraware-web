@@ -1,5 +1,5 @@
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
-import { FieldNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
+import { FieldNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { MergeOtherSpeciesPayload, SuggestedSpecies } from 'src/types/Species';
 import { parseSearchTerm } from 'src/utils/search';
 
@@ -19,12 +19,6 @@ export type SpeciesUploadTemplate = {
 };
 export type SpeciesUploadStatusDetails = {
   uploadStatus?: GetUploadStatusResponsePayload;
-};
-
-export type SpeciesProjectsSearchResponse = SearchResponseElement & {
-  projects: {
-    project_name: string;
-  }[];
 };
 
 const SPECIES_TEMPLATE_ENDPOINT = '/api/v1/species/uploads/template';
@@ -146,37 +140,6 @@ const suggestSpecies = async (organizationId: number, query: string): Promise<Su
   return await SearchService.search(params);
 };
 
-const getSpeciesProjects = (
-  organizationId: number,
-  speciesId: number
-): Promise<SpeciesProjectsSearchResponse[] | null> => {
-  const params: SearchRequestPayload = {
-    prefix: 'inventories',
-    fields: ['projects.project_name'],
-    sortOrder: [{ field: 'projects.project_name', direction: 'Ascending' }],
-    search: {
-      operation: 'and',
-      children: [
-        {
-          operation: 'field',
-          field: 'organization_id',
-          type: 'Exact',
-          values: [organizationId],
-        },
-        {
-          operation: 'field',
-          field: 'species_id',
-          type: 'Exact',
-          values: [`${speciesId}`],
-        },
-      ],
-    },
-    count: 0,
-  };
-
-  return SearchService.search<SpeciesProjectsSearchResponse>(params);
-};
-
 const mergeOtherSpecies = (
   mergeOtherSpeciesPayload: MergeOtherSpeciesPayload,
   observationId: number
@@ -195,7 +158,6 @@ const mergeOtherSpecies = (
  */
 const SpeciesService = {
   downloadSpeciesTemplate,
-  getSpeciesProjects,
   getSpeciesUploadStatus,
   mergeOtherSpecies,
   resolveSpeciesUpload,

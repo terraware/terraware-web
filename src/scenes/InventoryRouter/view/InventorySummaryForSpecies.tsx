@@ -5,9 +5,7 @@ import { Grid } from '@mui/material';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useOrganization } from 'src/providers';
 import { useLazyGetSpeciesSummaryQuery } from 'src/queries/generated/nurserySummaries';
-import { selectSpeciesProjects } from 'src/redux/features/species/speciesProjectsSelectors';
-import { requestSpeciesProjects } from 'src/redux/features/species/speciesProjectsThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useListSpeciesProjectNamesQuery } from 'src/queries/search/speciesProjects';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -15,21 +13,17 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 interface InventorySummaryProps {
   speciesId: number;
-  modified: number;
 }
 
 export default function InventorySummaryForSpecies(props: InventorySummaryProps): JSX.Element {
-  const { speciesId, modified } = props;
+  const { speciesId } = props;
 
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
   const numberFormatter = useNumberFormatter();
 
   const [getSpeciesSummary, { currentData: speciesSummary, isError: summaryError }] = useLazyGetSpeciesSummaryQuery();
-
-  const speciesProjects = useAppSelector(selectSpeciesProjects(speciesId));
 
   useEffect(() => {
     if (selectedOrganization && speciesId) {
@@ -39,17 +33,16 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
 
   const summary = useMemo(() => speciesSummary?.summary, [speciesSummary?.summary]);
 
+  const { currentData: speciesProjectNames } = useListSpeciesProjectNamesQuery(
+    { organizationId: selectedOrganization?.id ?? -1, speciesId },
+    { skip: speciesId === undefined || !selectedOrganization }
+  );
+
   useEffect(() => {
     if (summaryError) {
       snackbar.toastError();
     }
   }, [summaryError, snackbar]);
-
-  useEffect(() => {
-    if (speciesId !== undefined && selectedOrganization) {
-      void dispatch(requestSpeciesProjects(selectedOrganization.id, speciesId));
-    }
-  }, [dispatch, modified, selectedOrganization, speciesId]);
 
   const getData = () => {
     if (!summary) {
@@ -69,7 +62,7 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
 
     const topRowColumns = isMobile ? 12 : 3;
 
-    const showProjectsOverviewCard = !!speciesProjects;
+    const showProjectsOverviewCard = !!speciesProjectNames?.length;
     const bottomRowColumns = isMobile ? 12 : showProjectsOverviewCard ? 3 : 4;
 
     return [
@@ -125,7 +118,7 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
         ? [
             {
               label: strings.PROJECTS,
-              value: speciesProjects.map((project) => project.project_name).join(', '),
+              value: (speciesProjectNames ?? []).join(', '),
               gridColumns: bottomRowColumns,
             },
           ]
