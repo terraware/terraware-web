@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect } from 'react';
+import React, { type JSX } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -39,10 +39,6 @@ export default function RegionSelector({
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { countries } = useLocalization();
-
-  useEffect(() => {
-    console.log(countries);
-  }, [countries]);
 
   const onChangeCountry = (newValue: string) => {
     const found = countries?.find((country) => country.code.toString() === newValue);
