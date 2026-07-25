@@ -12,9 +12,7 @@ import { parseSearchTerm } from 'src/utils/search';
 import { getUserDisplayName } from 'src/utils/user';
 
 import HttpService, { Response } from './HttpService';
-import PhotoService from './PhotoService';
 import SearchService from './SearchService';
-import { getPromisesResponse } from './utils';
 
 /**
  * Nursery related services
@@ -24,9 +22,7 @@ const BATCHES_ENDPOINT = '/api/v1/nursery/batches';
 const BATCH_CHANGE_STATUSES_ENDPOINT = '/api/v1/nursery/batches/{id}/changeStatuses';
 const BATCH_ID_ENDPOINT = '/api/v1/nursery/batches/{id}';
 const BATCH_QUANTITIES_ENDPOINT = '/api/v1/nursery/batches/{id}/quantities';
-const LIST_BATCH_PHOTOS_ENDPOINT = '/api/v1/nursery/batches/{batchId}/photos';
 const BATCH_HISTORY_ENDPOINT = '/api/v1/nursery/batches/{batchId}/history';
-export const BATCH_PHOTO_ENDPOINT = '/api/v1/nursery/batches/{batchId}/photos/{photoId}';
 
 const DEFAULT_BATCH_FIELDS = [
   'accession_id',
@@ -144,14 +140,6 @@ export type BatchHistoryData = {
   history: BatchHistoryItem[] | null;
 };
 
-export type BatchPhotosIds = {
-  photoIds?: { id: number }[];
-};
-
-type PhotoId = {
-  photoId: number | null;
-};
-
 export type ChangeBatchStatusesRequestPayload =
   paths[typeof BATCH_CHANGE_STATUSES_ENDPOINT]['post']['requestBody']['content']['application/json'];
 export type UpdateBatchRequestPayload =
@@ -162,12 +150,9 @@ export type UpdateBatchQuantitiesRequestPayload =
 type GetBatchResponsePayload = paths[typeof BATCH_ID_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type GetBatchHistoryResponsePayload =
   paths[typeof BATCH_HISTORY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-type GetBatchListPhotosResponsePayload =
-  paths[typeof LIST_BATCH_PHOTOS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 const httpBatch = HttpService.root(BATCH_ID_ENDPOINT);
 const httpBatchHistory = HttpService.root(BATCH_HISTORY_ENDPOINT);
-const httpBatchPhoto = HttpService.root(BATCH_PHOTO_ENDPOINT);
 
 /**
  * Create a batch
@@ -486,54 +471,6 @@ const changeBatchStatuses = async (batch: Batch, entity: ChangeBatchStatusesRequ
   });
 };
 
-/**
- * Get withdrawal photos list
- */
-const getBatchPhotosList = async (batchId: number): Promise<Response & BatchPhotosIds> => {
-  const response: Response & BatchPhotosIds = await HttpService.root(LIST_BATCH_PHOTOS_ENDPOINT).get<
-    GetBatchListPhotosResponsePayload,
-    BatchPhotosIds
-  >(
-    {
-      urlReplacements: {
-        '{batchId}': batchId.toString(),
-      },
-    },
-    (data) => ({ photoIds: data?.photos })
-  );
-
-  return response;
-};
-
-/**
- * Delete multiple photos for a batch
- */
-const deleteBatchPhotos = async (batchId: number, photosId: number[]): Promise<(Response | null)[]> => {
-  const deletePhotoPromises = photosId.map((photoId) => deleteBatchPhoto(batchId, photoId));
-
-  return getPromisesResponse<Response>(deletePhotoPromises);
-};
-
-/**
- * delete batch file
- */
-const deleteBatchPhoto = async (reportId: number, fileId: number): Promise<Response> => {
-  return await httpBatchPhoto.delete({
-    urlReplacements: {
-      '{batchId}': reportId.toString(),
-      '{photoId}': fileId.toString(),
-    },
-  });
-};
-
-/**
- * Upload multiple photos for a batch
- */
-const uploadBatchPhotos = async (batchId: number, photos: File[]): Promise<((Response & PhotoId) | string)[]> => {
-  const url = LIST_BATCH_PHOTOS_ENDPOINT.replace('{batchId}', batchId.toString());
-  return PhotoService.uploadPhotos(url, photos);
-};
-
 const getBatchHistory = async (
   batchId: number,
   search?: string,
@@ -638,9 +575,6 @@ const NurseryBatchService = {
   updateBatch,
   updateBatchQuantities,
   exportBatchesForSpeciesById,
-  getBatchPhotosList,
-  deleteBatchPhotos,
-  uploadBatchPhotos,
   getBatchHistory,
   getBatchesForNursery,
 };

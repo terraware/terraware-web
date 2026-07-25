@@ -182,6 +182,7 @@ export enum API_PATHS {
   DOCUMENT_PRODUCER_PROJECT_IMAGE = '/api/v1/document-producer/projects/{projectId}/images/{imageId}',
   FUNDER_ACTIVITY_MEDIA_FILE = '/api/v1/funder/activities/{activityId}/media/{fileId}',
   FUNDER_REPORT_PHOTO = '/api/v1/funder/reports/{reportId}/photos/{fileId}',
+  NURSERY_BATCH_PHOTO = '/api/v1/nursery/batches/{batchId}/photos/{photoId}',
   NURSERY_WITHDRAWAL_PHOTO = '/api/v1/nursery/withdrawals/{withdrawalId}/photos/{photoId}',
   OBSERVATION_PLOT_MEDIA = '/api/v1/tracking/observations/{observationId}/plots/{plotId}/media/{fileId}',
   OBSERVATION_PLOT_PHOTO = '/api/v1/tracking/observations/{observationId}/plots/{monitoringPlotId}/photos/{fileId}',

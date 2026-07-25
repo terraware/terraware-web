@@ -1,17 +1,17 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
+import { API_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { baseApi } from 'src/queries/baseApi';
+import { useListBatchPhotosQuery } from 'src/queries/generated/nurseryBatches';
 import { QueryTagTypes } from 'src/queries/tags';
 import { useAppDispatch } from 'src/redux/store';
 import ChangeQuantityModal from 'src/scenes/InventoryRouter/view/ChangeQuantityModal';
-import { NurseryBatchService } from 'src/services';
-import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
 import { batchSubstrateEnumToLocalized } from 'src/types/Accession';
 import { Batch } from 'src/types/Batch';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -34,7 +34,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
   const numberFormatter = useNumberFormatter();
   const dispatch = useAppDispatch();
 
-  const [photoUrls, setPhotoUrls] = useState<string[]>([]);
+  const { currentData: batchPhotos, isError: batchPhotosError } = useListBatchPhotosQuery(batch.id);
   const [openEditBatchModal, setOpenEditBatchModal] = useState(false);
   const [modalValues, setModalValues] = useState({ type: 'germinating', openChangeQuantityModal: false });
 
@@ -46,27 +46,19 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
     'readyQuantity(raw)': batch.readyQuantity,
   };
 
-  useEffect(() => {
-    const getPhotos = async () => {
-      const photoListResponse = await NurseryBatchService.getBatchPhotosList(batch.id);
-      if (!photoListResponse.requestSucceeded || photoListResponse.error) {
-        setPhotoUrls([]);
-        snackbar.toastError();
-      } else {
-        const photoUrlArray: string[] = [];
-        photoListResponse.photoIds?.forEach(({ id }: { id: number }) => {
-          photoUrlArray.push(
-            BATCH_PHOTO_ENDPOINT.replace('{batchId}', batch.id.toString()).replace('{photoId}', id.toString())
-          );
-        });
-        setPhotoUrls(photoUrlArray);
-      }
-    };
+  const photoUrls = useMemo(
+    () =>
+      (batchPhotos?.photos ?? []).map(({ id }) =>
+        API_PATHS.NURSERY_BATCH_PHOTO.replace('{batchId}', batch.id.toString()).replace('{photoId}', id.toString())
+      ),
+    [batchPhotos, batch.id]
+  );
 
-    if (batch) {
-      void getPhotos();
+  useEffect(() => {
+    if (batchPhotosError) {
+      snackbar.toastError();
     }
-  }, [batch, snackbar]);
+  }, [batchPhotosError, snackbar]);
 
   const openEditModal = useCallback(() => {
     setOpenEditBatchModal(true);
