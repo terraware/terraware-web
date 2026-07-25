@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Container } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -8,14 +8,12 @@ import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useLazyListAllBatchesQuery } from 'src/queries/search/batches';
-import { useLazySearchInventoryByNurseryQuery } from 'src/queries/search/nurseryInventory';
+import { useListAllBatchesQuery } from 'src/queries/search/batches';
+import { useSearchInventoryByNurseryQuery } from 'src/queries/search/nurseryInventory';
 import { isNurseryEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
-import { SearchResponseElement } from 'src/types/Search';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 
@@ -23,12 +21,8 @@ export default function InventoryListByNursery() {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { findSpeciesById } = useOrganizationSpecies();
-  const [listAllBatches] = useLazyListAllBatchesQuery();
-  const [searchInventoryByNursery] = useLazySearchInventoryByNurseryQuery();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
-  const [showResults, setShowResults] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
@@ -75,23 +69,33 @@ export default function InventoryListByNursery() {
     [strings]
   );
 
-  const onApplyFilters = useCallback(async () => {
-    if (selectedOrganization && activeLocale) {
-      const requestId = Math.random().toString();
-      setRequestId('searchInventory', requestId);
+  // Whether the org has any inventory at all, which decides between the table and the onboarding page
+  const { data: allBatches } = useListAllBatchesQuery(
+    { organizationId: selectedOrganization?.id ?? -1 },
+    { skip: !selectedOrganization || !activeLocale }
+  );
 
-      const showEmptyNurseries = (filters.showEmptyNurseries || [])[0] === 'true';
+  // `data` rather than `currentData` so the table keeps showing the previous rows while a filter
+  // change refetches, which is what awaiting the search imperatively used to do.
+  const { data: apiSearchResults } = useSearchInventoryByNurseryQuery(
+    {
+      organizationId: selectedOrganization?.id ?? -1,
+      query: debouncedSearchTerm,
+      facilityIds: filters.facilityIds,
+      speciesIds: filters.speciesIds,
+    },
+    { skip: !selectedOrganization || !activeLocale }
+  );
 
-      const allBatchesResult = await listAllBatches({ organizationId: selectedOrganization.id }, true).unwrap();
+  const searchResults = useMemo(() => {
+    if (!apiSearchResults) {
+      return undefined;
+    }
 
-      const apiSearchResults = await searchInventoryByNursery({
-        organizationId: selectedOrganization.id,
-        query: debouncedSearchTerm,
-        facilityIds: filters.facilityIds,
-        speciesIds: filters.speciesIds,
-      }).unwrap();
+    const showEmptyNurseries = (filters.showEmptyNurseries || [])[0] === 'true';
 
-      const updatedResult = apiSearchResults?.map((result) => {
+    return apiSearchResults
+      .map((result) => {
         const resultTyped = result as FacilitySpeciesInventoryResult;
         const speciesNames =
           resultTyped.facilityInventories
@@ -102,34 +106,11 @@ export default function InventoryListByNursery() {
             ?.filter((fi) => fi.species_id)
             ?.flatMap((inv) => inv.batches.map((batch) => batch.id)) || [];
         return { ...resultTyped, facilityInventories: speciesNames.join('\r'), batchIds };
-      });
+      })
+      .filter((result) => showEmptyNurseries || !isNurseryEmpty(result));
+  }, [apiSearchResults, filters.showEmptyNurseries, findSpeciesById]);
 
-      const filteredResult = updatedResult?.filter((result) => showEmptyNurseries || !isNurseryEmpty(result));
-
-      if (updatedResult) {
-        if (getRequestId('searchInventory') === requestId) {
-          setShowResults((allBatchesResult?.length || 0) > 0);
-          setSearchResults(filteredResult || []);
-        }
-      }
-    }
-  }, [
-    activeLocale,
-    debouncedSearchTerm,
-    filters.facilityIds,
-    filters.showEmptyNurseries,
-    filters.speciesIds,
-    findSpeciesById,
-    listAllBatches,
-    searchInventoryByNursery,
-    selectedOrganization,
-  ]);
-
-  const reloadData = useCallback(() => void onApplyFilters(), [onApplyFilters]);
-
-  useEffect(() => {
-    void onApplyFilters();
-  }, [filters, onApplyFilters]);
+  const showResults = (allBatches?.length ?? 0) > 0;
 
   return (
     <Card flushMobile>
@@ -148,7 +129,7 @@ export default function InventoryListByNursery() {
               : ''
           }
         />
-      ) : searchResults === null ? (
+      ) : searchResults === undefined ? (
         <Box
           sx={{
             position: 'fixed',
@@ -160,7 +141,7 @@ export default function InventoryListByNursery() {
         </Box>
       ) : (
         <Container maxWidth={false} sx={{ padding: '32px 0' }}>
-          <EmptyStatePage pageName='Inventory' reloadData={reloadData} />
+          <EmptyStatePage pageName='Inventory' />
         </Container>
       )}
     </Card>

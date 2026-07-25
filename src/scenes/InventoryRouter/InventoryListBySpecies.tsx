@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Container } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -7,24 +7,19 @@ import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useLazySearchSpeciesInventoryQuery } from 'src/queries/search/nurseryInventory';
+import { useSearchSpeciesInventoryQuery } from 'src/queries/search/nurseryInventory';
 import { isSpeciesEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { SpeciesFacilitiesInventoryResult, SpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
-import { SearchResponseElement } from 'src/types/Search';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 
 export default function InventoryListBySpecies() {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const [searchSpeciesInventory] = useLazySearchSpeciesInventoryQuery();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
-  const [showResults, setShowResults] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
 
@@ -77,119 +72,114 @@ export default function InventoryListBySpecies() {
     [strings]
   );
 
-  const onApplyFilters = useCallback(async () => {
-    if (selectedOrganization) {
-      const requestId = Math.random().toString();
-      setRequestId('searchInventory', requestId);
+  // `data` rather than `currentData` so the table keeps showing the previous rows while a filter
+  // change refetches, which is what awaiting the search imperatively used to do.
+  const { data: apiSearchResults } = useSearchSpeciesInventoryQuery(
+    {
+      organizationId: selectedOrganization?.id ?? -1,
+      query: debouncedSearchTerm,
+      facilityIds: filters.facilityIds,
+    },
+    { skip: !selectedOrganization }
+  );
 
-      const showEmptySpecies = (filters.showEmptySpecies || [])[0] === 'true';
+  const searchResults = useMemo(() => {
+    if (!apiSearchResults) {
+      return undefined;
+    }
 
-      const apiSearchResults = await searchSpeciesInventory({
-        organizationId: selectedOrganization.id,
-        query: debouncedSearchTerm,
-        facilityIds: filters.facilityIds,
-      }).unwrap();
+    const showEmptySpecies = (filters.showEmptySpecies || [])[0] === 'true';
 
-      const specificFacilities = (filters.facilityIds?.length || 0) > 0;
+    const specificFacilities = (filters.facilityIds?.length || 0) > 0;
 
-      const updatedResult = apiSearchResults?.map((result) => {
-        const resultTyped = specificFacilities
-          ? (result as SpeciesFacilitiesInventoryResult)
-          : (result as SpeciesInventoryResult);
-        const facilityInventoriesNames = specificFacilities
-          ? (resultTyped as SpeciesFacilitiesInventoryResult).facilityInventories?.map((fi) => fi.facility_name) || []
-          : (resultTyped as SpeciesInventoryResult).inventory?.facilityInventories?.map(
-              (nursery) => nursery.facility_name
-            ) || [];
+    const updatedResult = apiSearchResults?.map((result) => {
+      const resultTyped = specificFacilities
+        ? (result as SpeciesFacilitiesInventoryResult)
+        : (result as SpeciesInventoryResult);
+      const facilityInventoriesNames = specificFacilities
+        ? (resultTyped as SpeciesFacilitiesInventoryResult).facilityInventories?.map((fi) => fi.facility_name) || []
+        : (resultTyped as SpeciesInventoryResult).inventory?.facilityInventories?.map(
+            (nursery) => nursery.facility_name
+          ) || [];
 
-        const getQuantities = () => {
-          if (specificFacilities) {
-            const typedResult = resultTyped as SpeciesFacilitiesInventoryResult;
-            if (!typedResult.facilityInventories) {
-              return {
-                germinatingQuantity: '0',
-                hardeningOffQuantity: '0',
-                activeGrowthQuantity: '0',
-                readyQuantity: '0',
-                totalQuantity: '0',
-              };
-            }
-            return typedResult.facilityInventories.reduce(
-              (acc, fi) => ({
-                germinatingQuantity: acc.germinatingQuantity + Number(fi['germinatingQuantity(raw)']),
-                hardeningOffQuantity: acc.hardeningOffQuantity + Number(fi['hardeningOffQuantity(raw)']),
-                activeGrowthQuantity: acc.activeGrowthQuantity + Number(fi['activeGrowthQuantity(raw)']),
-                readyQuantity: acc.readyQuantity + Number(fi['readyQuantity(raw)']),
-                totalQuantity: acc.totalQuantity + Number(fi['totalQuantity(raw)']),
-              }),
-              {
-                germinatingQuantity: 0,
-                hardeningOffQuantity: 0,
-                activeGrowthQuantity: 0,
-                readyQuantity: 0,
-                totalQuantity: 0,
-              }
-            );
-          } else {
-            const typedResult = resultTyped as SpeciesInventoryResult;
+      const getQuantities = () => {
+        if (specificFacilities) {
+          const typedResult = resultTyped as SpeciesFacilitiesInventoryResult;
+          if (!typedResult.facilityInventories) {
             return {
-              germinatingQuantity: typedResult.inventory
-                ? Number(typedResult.inventory['germinatingQuantity(raw)'])
-                : '0',
-              hardeningOffQuantity: typedResult.inventory
-                ? Number(typedResult.inventory['hardeningOffQuantity(raw)'])
-                : '0',
-              activeGrowthQuantity: typedResult.inventory
-                ? Number(typedResult.inventory['activeGrowthQuantity(raw)'])
-                : '0',
-              readyQuantity: typedResult.inventory ? Number(typedResult.inventory['readyQuantity(raw)']) : '0',
-              totalQuantity: typedResult.inventory ? Number(typedResult.inventory['totalQuantity(raw)']) : '0',
+              germinatingQuantity: '0',
+              hardeningOffQuantity: '0',
+              activeGrowthQuantity: '0',
+              readyQuantity: '0',
+              totalQuantity: '0',
             };
           }
-        };
+          return typedResult.facilityInventories.reduce(
+            (acc, fi) => ({
+              germinatingQuantity: acc.germinatingQuantity + Number(fi['germinatingQuantity(raw)']),
+              hardeningOffQuantity: acc.hardeningOffQuantity + Number(fi['hardeningOffQuantity(raw)']),
+              activeGrowthQuantity: acc.activeGrowthQuantity + Number(fi['activeGrowthQuantity(raw)']),
+              readyQuantity: acc.readyQuantity + Number(fi['readyQuantity(raw)']),
+              totalQuantity: acc.totalQuantity + Number(fi['totalQuantity(raw)']),
+            }),
+            {
+              germinatingQuantity: 0,
+              hardeningOffQuantity: 0,
+              activeGrowthQuantity: 0,
+              readyQuantity: 0,
+              totalQuantity: 0,
+            }
+          );
+        } else {
+          const typedResult = resultTyped as SpeciesInventoryResult;
+          return {
+            germinatingQuantity: typedResult.inventory
+              ? Number(typedResult.inventory['germinatingQuantity(raw)'])
+              : '0',
+            hardeningOffQuantity: typedResult.inventory
+              ? Number(typedResult.inventory['hardeningOffQuantity(raw)'])
+              : '0',
+            activeGrowthQuantity: typedResult.inventory
+              ? Number(typedResult.inventory['activeGrowthQuantity(raw)'])
+              : '0',
+            readyQuantity: typedResult.inventory ? Number(typedResult.inventory['readyQuantity(raw)']) : '0',
+            totalQuantity: typedResult.inventory ? Number(typedResult.inventory['totalQuantity(raw)']) : '0',
+          };
+        }
+      };
 
-        const quantities = getQuantities();
+      const quantities = getQuantities();
 
-        return {
-          ...resultTyped,
-          ...quantities,
-          facilityInventories: facilityInventoriesNames.join('\r'),
-          inventory: specificFacilities ? undefined : (resultTyped as SpeciesInventoryResult).inventory,
-          'totalQuantity(raw)': specificFacilities
-            ? (resultTyped as SpeciesFacilitiesInventoryResult).facilityInventories?.reduce(
-                (acc, fi) => acc + Number(fi['totalQuantity(raw)']),
-                0
-              ) || 0
-            : Number((resultTyped as SpeciesInventoryResult).inventory?.['totalQuantity(raw)'] || 0),
-          'germinatingQuantity(raw)': specificFacilities
-            ? (resultTyped as SpeciesFacilitiesInventoryResult).facilityInventories?.reduce(
-                (acc, fi) => acc + Number(fi['germinatingQuantity(raw)']),
-                0
-              ) || 0
-            : Number((resultTyped as SpeciesInventoryResult).inventory?.['germinatingQuantity(raw)'] || 0),
-        };
-      });
+      return {
+        ...resultTyped,
+        ...quantities,
+        facilityInventories: facilityInventoriesNames.join('\r'),
+        inventory: specificFacilities ? undefined : (resultTyped as SpeciesInventoryResult).inventory,
+        'totalQuantity(raw)': specificFacilities
+          ? (resultTyped as SpeciesFacilitiesInventoryResult).facilityInventories?.reduce(
+              (acc, fi) => acc + Number(fi['totalQuantity(raw)']),
+              0
+            ) || 0
+          : Number((resultTyped as SpeciesInventoryResult).inventory?.['totalQuantity(raw)'] || 0),
+        'germinatingQuantity(raw)': specificFacilities
+          ? (resultTyped as SpeciesFacilitiesInventoryResult).facilityInventories?.reduce(
+              (acc, fi) => acc + Number(fi['germinatingQuantity(raw)']),
+              0
+            ) || 0
+          : Number((resultTyped as SpeciesInventoryResult).inventory?.['germinatingQuantity(raw)'] || 0),
+      };
+    });
 
-      const filteredResult = updatedResult?.filter(
-        (result) =>
-          showEmptySpecies ||
-          (specificFacilities
-            ? Number(result['totalQuantity(raw)']) > 0 && Number(result['germinatingQuantity(raw)']) > 0
-            : !isSpeciesEmpty(result))
-      );
+    return updatedResult.filter(
+      (result) =>
+        showEmptySpecies ||
+        (specificFacilities
+          ? Number(result['totalQuantity(raw)']) > 0 && Number(result['germinatingQuantity(raw)']) > 0
+          : !isSpeciesEmpty(result))
+    );
+  }, [apiSearchResults, filters.facilityIds, filters.showEmptySpecies]);
 
-      if (updatedResult && getRequestId('searchInventory') === requestId) {
-        setShowResults((apiSearchResults?.length || 0) > 0);
-        setSearchResults(filteredResult || []);
-      }
-    }
-  }, [filters, debouncedSearchTerm, searchSpeciesInventory, selectedOrganization]);
-
-  const reloadData = useCallback(() => void onApplyFilters(), [onApplyFilters]);
-
-  useEffect(() => {
-    void onApplyFilters();
-  }, [filters, onApplyFilters]);
+  const showResults = (apiSearchResults?.length ?? 0) > 0;
 
   return (
     <Card flushMobile>
@@ -206,7 +196,7 @@ export default function InventoryListBySpecies() {
             !debouncedSearchTerm && !filters.facilityIds?.length ? strings.NO_BATCHES_WITH_INVENTORY : ''
           }
         />
-      ) : searchResults === null ? (
+      ) : searchResults === undefined ? (
         <Box
           sx={{
             position: 'fixed',
@@ -218,7 +208,7 @@ export default function InventoryListBySpecies() {
         </Box>
       ) : (
         <Container maxWidth={false} sx={{ padding: '32px 0' }}>
-          <EmptyStatePage pageName='Inventory' reloadData={reloadData} />
+          <EmptyStatePage pageName='Inventory' />
         </Container>
       )}
     </Card>
