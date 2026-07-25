@@ -11,13 +11,12 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export interface BatchDetailsModalProps {
   onClose: () => void;
-  reload: () => void;
   originId?: number;
   origin: OriginPage;
 }
 
 export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.Element {
-  const { onClose, reload, originId, origin } = props;
+  const { onClose, originId, origin } = props;
 
   const snackbar = useSnackbar();
   const saveBatch = useSaveBatch();
@@ -40,7 +39,6 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
         if (savedBatch) {
           markSubmitted();
-          reload();
           onClose();
         } else {
           snackbar.toastError(strings.GENERIC_ERROR);
@@ -50,7 +48,7 @@ export default function BatchDetailsModal(props: BatchDetailsModalProps): JSX.El
 
       void save();
     },
-    [markSubmitted, onClose, reload, saveBatch, snackbar]
+    [markSubmitted, onClose, saveBatch, snackbar]
   );
 
   const onSaveBatch = useCallback(() => {

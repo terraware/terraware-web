@@ -1,4 +1,4 @@
-import React, { type JSX, useRef, useState } from 'react';
+import React, { type JSX, useRef } from 'react';
 import { useParams } from 'react-router';
 
 import { Grid, Typography, useTheme } from '@mui/material';
@@ -27,8 +27,6 @@ export default function InventoryForNurseryView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const contentRef = useRef(null);
   const theme = useTheme();
-
-  const [modified, setModified] = useState<number>(-1);
 
   const nurseryId = Number(pathParams.nurseryId);
   const openBatchNumber = (query.get('batch') || '').toLowerCase();
@@ -78,8 +76,6 @@ export default function InventoryForNurseryView(): JSX.Element {
           <Card flushMobile style={{ marginTop: theme.spacing(3) }}>
             <InventorySeedlingsTableForNursery
               nurseryId={nurseryId}
-              modified={modified}
-              setModified={setModified}
               onUpdateOpenBatch={setBatchNumber}
               openBatchNumber={openBatchNumber}
               origin={'Nursery'}
