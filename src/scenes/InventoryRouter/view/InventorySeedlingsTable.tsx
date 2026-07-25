@@ -21,9 +21,9 @@ import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useDeleteBatchMutation } from 'src/queries/generated/nurseryBatches';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
-import { NurseryBatchService } from 'src/services';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { downloadCsv } from 'src/utils/csv';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -81,6 +81,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
   const numberFormatter = useNumberFormatter();
+  const [deleteBatch] = useDeleteBatchMutation();
   const tableStorageKey = `inventorySeedlingsTable_${origin.toLowerCase()}`;
 
   const [batches, setBatches] = useState<SearchResponseElement[]>([]);
@@ -238,15 +239,15 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   };
 
   const deleteSelectedBatches = useCallback(() => {
-    const promises = selectedRows.map((r) => NurseryBatchService.deleteBatch(r.id as number));
+    const promises = selectedRows.map((r) => deleteBatch(r.id as number).unwrap());
     void Promise.allSettled(promises).then((results) => {
-      if (results.some((result) => result.status === 'rejected' || result?.value?.requestSucceeded === false)) {
+      if (results.some((result) => result.status === 'rejected')) {
         snackbar.toastError();
       }
       reloadData();
       setOpenDeleteModal(false);
     });
-  }, [reloadData, selectedRows, snackbar]);
+  }, [deleteBatch, reloadData, selectedRows, snackbar]);
 
   const selectAllRows = useCallback(() => {
     const newSelection: MRT_RowSelectionState = {};

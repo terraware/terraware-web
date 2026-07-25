@@ -22,6 +22,7 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import { APP_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useDeleteBatchMutation } from 'src/queries/generated/nurseryBatches';
 import { convertFilterGroupToMap } from 'src/scenes/InventoryRouter/FilterUtils';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
@@ -77,6 +78,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const snackbar = useSnackbar();
   const query = useQuery();
   const numberFormatter = useNumberFormatter();
+  const [deleteBatch] = useDeleteBatchMutation();
 
   const theme = useTheme();
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
@@ -290,15 +292,15 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   }, []);
 
   const deleteSelectedBatches = useCallback(() => {
-    const promises = selectedRows.map((r) => NurseryBatchService.deleteBatch(r.id as number));
+    const promises = selectedRows.map((r) => deleteBatch(r.id as number).unwrap());
     void Promise.allSettled(promises).then((deleteResults) => {
-      if (deleteResults.some((result) => result.status === 'rejected' || result?.value?.requestSucceeded === false)) {
+      if (deleteResults.some((result) => result.status === 'rejected')) {
         snackbar.toastError();
       }
       reloadData?.();
       setOpenDeleteModal(false);
     });
-  }, [reloadData, selectedRows, snackbar]);
+  }, [deleteBatch, reloadData, selectedRows, snackbar]);
 
   const isSelectionWithdrawable = () => {
     // we are woring with 'any' type rows in this table

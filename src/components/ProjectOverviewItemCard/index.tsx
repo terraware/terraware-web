@@ -14,7 +14,8 @@ import { isMember } from 'src/utils/organization';
 
 interface OverviewItemCardProjectProps<T extends { id: number; projectId?: number }> {
   entity: T;
-  reloadData: () => void;
+  /** Only needed when the entity is not refetched by the assign mutation's cache invalidation. */
+  reloadData?: () => void;
   projectAssignPayloadCreator: () => AssignProjectRequestPayload;
   onUnAssign?: () => void;
 }
@@ -63,7 +64,7 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
             assignPayloadCreator={projectAssignPayloadCreator}
             reloadEntity={() => {
               setIsProjectAssignModalOpen(false);
-              reloadData();
+              reloadData?.();
             }}
             isModalOpen={isProjectAssignModalOpen}
             onClose={() => setIsProjectAssignModalOpen(false)}

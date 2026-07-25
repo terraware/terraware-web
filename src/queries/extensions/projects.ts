@@ -28,9 +28,23 @@ api.enhanceEndpoints({
       ],
     },
     assignProject: {
+      // The assigned entities carry the project id, so their caches are stale too
       invalidatesTags: (_result, _error, payload) => [
         { type: QueryTagTypes.Projects, id: payload.id },
         { type: QueryTagTypes.Projects, id: 'LIST' },
+        ...(payload.assignProjectRequestPayload.batchIds ?? []).map((batchId) => ({
+          type: QueryTagTypes.Batches,
+          id: batchId,
+        })),
+        ...(payload.assignProjectRequestPayload.batchIds?.length ? [{ type: QueryTagTypes.Batches, id: 'LIST' }] : []),
+        ...(payload.assignProjectRequestPayload.accessionIds ?? []).map((accessionId) => ({
+          type: QueryTagTypes.Accessions,
+          id: accessionId,
+        })),
+        ...(payload.assignProjectRequestPayload.accessionIds?.length
+          ? [{ type: QueryTagTypes.Accessions, id: 'LIST' }]
+          : []),
+        ...(payload.assignProjectRequestPayload.plantingSiteIds?.length ? [{ type: QueryTagTypes.PlantingSites }] : []),
       ],
     },
   },

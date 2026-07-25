@@ -8,6 +8,7 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 import DatePicker from 'src/components/common/DatePicker';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 import { API_PATHS } from 'src/constants';
+import { useSaveBatch } from 'src/hooks/batches/useSaveBatch';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
@@ -17,7 +18,6 @@ import {
   useDeleteBatchPhotoMutation,
   useListBatchPhotosQuery,
 } from 'src/queries/generated/nurseryBatches';
-import { NurseryBatchService } from 'src/services';
 import {
   batchSubstrateEnumToLocalized,
   batchSubstrateLocalizedToEnum,
@@ -36,17 +36,17 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 export interface BatchDetailsModalProps {
   batch: Batch;
   onClose: () => void;
-  reload: () => void;
 }
 
 type BatchPhotoWithUrl = BatchPhoto & { url: string };
 
-export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetailsModalProps): JSX.Element | null {
+export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalProps): JSX.Element | null {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const numberFormatter = useNumberFormatter();
   const snackbar = useSnackbar();
   const trackEvent = useTrackEvent();
+  const saveBatch = useSaveBatch();
   const markSubmitted = useTrackModalAbandonment('batch_details_edit', true);
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
@@ -165,7 +165,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
     onClose();
   }, [onClose, setValidateFields]);
 
-  const saveBatch = useCallback(async () => {
+  const submitBatch = useCallback(async () => {
     if (record) {
       if (hasErrors()) {
         setValidateFields(true);
@@ -177,24 +177,20 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
         return;
       }
 
-      let responseQuantities = { requestSucceeded: true };
-
-      const response = await NurseryBatchService.updateBatch(record);
-      if (response.batch) {
-        responseQuantities = await NurseryBatchService.updateBatchQuantities(
-          {
-            ...record,
-            version: response.batch.version,
-          },
-          quantityNotes.trim() || undefined
-        );
+      if (!selectedOrganization) {
+        return;
       }
 
-      if (response.requestSucceeded && responseQuantities.requestSucceeded) {
+      const savedBatch = await saveBatch({
+        batch: record,
+        organizationId: selectedOrganization.id,
+        quantityNotes: quantityNotes.trim() || undefined,
+      });
+
+      if (savedBatch) {
         trackEvent(MIXPANEL_EVENTS.BATCH_QUANTITY_EDITED);
         markSubmitted();
         await updatePhotos();
-        reload();
         onCloseHandler();
       } else {
         snackbar.toastError();
@@ -204,8 +200,9 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
     record,
     hasErrors,
     updatePhotos,
-    reload,
     onCloseHandler,
+    saveBatch,
+    selectedOrganization,
     snackbar,
     trackEvent,
     markSubmitted,
@@ -218,8 +215,8 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
   }, []);
 
   const handleSaveBatch = useCallback(() => {
-    void saveBatch();
-  }, [saveBatch]);
+    void submitBatch();
+  }, [submitBatch]);
 
   const changeDate = useCallback(
     (id: string, value?: Date | null) => {

@@ -6,7 +6,6 @@ import { rtkReducers } from 'src/queries/reducers';
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
 import acceleratorProjectSpeciesReducers from './features/acceleratorProjectSpecies/acceleratorProjectSpeciesSlice';
 import applicationReducers from './features/application/applicationSlice';
-import batchesReducers from './features/batches/batchesSlice';
 import deliverablesReducers from './features/deliverables/deliverablesSlice';
 import documentProducerReducers from './features/documentProducer';
 import draftPlantingSiteReducers from './features/draftPlantingSite/draftPlantingSiteSlice';
@@ -32,7 +31,6 @@ import userAnalyticsReducers from './features/user/userAnalyticsSlice';
 export const reducers = {
   ...acceleratorReducers,
   ...applicationReducers,
-  ...batchesReducers,
   ...deliverablesReducers,
   ...documentProducerReducers,
   ...draftPlantingSiteReducers,

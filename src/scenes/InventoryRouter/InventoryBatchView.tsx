@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -10,9 +10,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
-import { requestFetchBatch } from 'src/redux/features/batches/batchesAsyncThunks';
-import { selectBatch } from 'src/redux/features/batches/batchesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetBatchQuery } from 'src/queries/generated/nurseryBatches';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { Species } from 'src/types/Species';
@@ -33,13 +31,13 @@ type InventoryBatchProps = {
 };
 
 export default function InventoryBatchView({ origin, species }: InventoryBatchProps) {
-  const dispatch = useAppDispatch();
   const contentRef = useRef(null);
   const theme = useTheme();
   const { batchId } = useParams<{ batchId: string }>();
   const { speciesId } = useParams<{ speciesId: string }>();
   const { nurseryId } = useParams<{ nurseryId: string }>();
-  const batch = useAppSelector(selectBatch(batchId || -1));
+  const { currentData: batchData } = useGetBatchQuery(Number(batchId), { skip: !batchId });
+  const batch = batchData?.batch;
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
   const [inventoryNursery, setInventoryNursery] = useState<Facility>();
   const { selectedOrganization } = useOrganization();
@@ -98,16 +96,6 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
     return inventoryNursery?.name || '';
   };
 
-  const fetchBatch = useCallback(() => {
-    if (batchId) {
-      void dispatch(requestFetchBatch({ batchId }));
-    }
-  }, [batchId, dispatch]);
-
-  useEffect(() => {
-    fetchBatch();
-  }, [batchId, fetchBatch]);
-
   const tabs = useMemo(() => {
     if (!batch) {
       return [];
@@ -117,7 +105,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
       {
         id: 'details',
         label: strings.DETAILS,
-        children: <BatchDetails batch={batch} onUpdate={fetchBatch} />,
+        children: <BatchDetails batch={batch} />,
       },
       {
         id: 'history',
@@ -125,7 +113,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
         children: <BatchHistory batchId={batch.id} nurseryName={inventoryNursery?.name} />,
       },
     ];
-  }, [batch, fetchBatch, inventoryNursery]);
+  }, [batch, inventoryNursery]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'details',
@@ -211,7 +199,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
       <Grid container ref={contentRef}>
         {batch && (
           <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
-            <BatchSummary batch={batch} reloadData={fetchBatch} />
+            <BatchSummary batch={batch} />
             <Box
               display='flex'
               flexDirection='column'

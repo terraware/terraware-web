@@ -1,15 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
 import _ from 'lodash';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
+import { useSaveBatch } from 'src/hooks/batches/useSaveBatch';
 import { useOrganization } from 'src/providers';
-import { requestFetchBatch, requestSaveBatch } from 'src/redux/features/batches/batchesAsyncThunks';
-import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import SubLocationsDropdown from 'src/scenes/InventoryRouter/form/SubLocationsDropdown';
 import { useSubLocations } from 'src/scenes/InventoryRouter/form/useSubLocations';
-import { BatchData } from 'src/services/NurseryBatchService';
 import strings from 'src/strings';
 import { Batch } from 'src/types/Batch';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -19,16 +16,13 @@ interface OverviewItemCardSubLocationsProps {
 }
 
 const OverviewItemCardSubLocations = (props: OverviewItemCardSubLocationsProps) => {
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
+  const saveBatch = useSaveBatch();
   const { selectedOrganization } = useOrganization();
 
   const [batch, setBatch] = useState<Batch>(props.batch);
 
   const { availableSubLocations, selectedSubLocations } = useSubLocations(batch.facilityId, batch);
-
-  const [requestId, setRequestId] = useState('');
-  const batchesRequest = useAppSelector(selectBatchesRequest(requestId));
 
   const [showSubLocationEdit, setShowSubLocationEdit] = useState<boolean>(false);
 
@@ -42,12 +36,23 @@ const OverviewItemCardSubLocations = (props: OverviewItemCardSubLocationsProps) 
 
   const syncSubLocations = useCallback(
     (_batch: Batch) => {
-      if (!_.isEqual(props.batch.subLocationIds, _batch.subLocationIds) && selectedOrganization) {
-        const request = dispatch(requestSaveBatch({ batch: _batch, organizationId: selectedOrganization.id }));
-        setRequestId(request.requestId);
+      if (_.isEqual(props.batch.subLocationIds, _batch.subLocationIds) || !selectedOrganization) {
+        return;
       }
+
+      const save = async () => {
+        // The batch cache is invalidated by the update, so other consumers pick up the change
+        const savedBatch = await saveBatch({ batch: _batch, organizationId: selectedOrganization.id });
+        if (savedBatch) {
+          setBatch(savedBatch);
+        } else {
+          snackbar.toastError(strings.GENERIC_ERROR);
+        }
+      };
+
+      void save();
     },
-    [dispatch, props.batch.subLocationIds, selectedOrganization]
+    [props.batch.subLocationIds, saveBatch, selectedOrganization, snackbar]
   );
 
   const toggleSubLocationEdit = useCallback(() => {
@@ -68,19 +73,6 @@ const OverviewItemCardSubLocations = (props: OverviewItemCardSubLocationsProps) 
     },
     [syncSubLocations]
   );
-
-  useEffect(() => {
-    if (batchesRequest?.status === 'success' && batchesRequest.data) {
-      const nextBatch = (batchesRequest.data as BatchData).batch;
-      if (nextBatch) {
-        setBatch(nextBatch);
-      }
-      // Since we've updated the batch, we want to make sure any consumers are updated
-      void dispatch(requestFetchBatch({ batchId: batch.id }));
-    } else if (batchesRequest?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    }
-  }, [batch.id, batchesRequest, dispatch, snackbar]);
 
   return (
     <OverviewItemCard

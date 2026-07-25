@@ -6,8 +6,8 @@ import ProjectOverviewItemCard from 'src/components/ProjectOverviewItemCard';
 import Link from 'src/components/common/Link';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { APP_PATHS } from 'src/constants';
+import { useUpdateBatchMutation } from 'src/queries/generated/nurseryBatches';
 import OverviewItemCardSubLocations from 'src/scenes/InventoryRouter/view/OverviewItemCardSubLocations';
-import { NurseryBatchService } from 'src/services';
 import strings from 'src/strings';
 import { Batch } from 'src/types/Batch';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -16,24 +16,38 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 interface BatchSummaryProps {
   batch: Batch;
-  reloadData: () => void;
 }
 
 export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
-  const { batch, reloadData } = props;
+  const { batch } = props;
   const { isMobile, isTablet } = useDeviceInfo();
   const snackbar = useSnackbar();
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
+  const [updateBatch] = useUpdateBatchMutation();
 
   const onProjectUnAssign = useCallback(async () => {
-    const response = await NurseryBatchService.updateBatch({ ...batch, projectId: undefined });
-    if (response.requestSucceeded) {
-      reloadData();
-    } else {
+    try {
+      await updateBatch({
+        id: batch.id,
+        updateBatchRequestPayload: {
+          germinationStartedDate: batch.germinationStartedDate,
+          notes: batch.notes,
+          projectId: undefined,
+          readyByDate: batch.readyByDate,
+          seedsSownDate: batch.seedsSownDate,
+          subLocationIds: batch.subLocationIds,
+          substrate: batch.substrate,
+          substrateNotes: batch.substrateNotes,
+          treatment: batch.treatment,
+          treatmentNotes: batch.treatmentNotes,
+          version: batch.version,
+        },
+      }).unwrap();
+    } catch {
       snackbar.toastError();
     }
-  }, [batch, reloadData, snackbar]);
+  }, [batch, snackbar, updateBatch]);
 
   const overviewItemCount = 7;
   const overviewGridSize = isMobile ? '100%' : isTablet ? '50%' : overviewItemCount <= 6 ? '33%' : '25%';
@@ -85,7 +99,6 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
         <Grid item flexBasis={overviewGridSize} flexGrow={1}>
           <ProjectOverviewItemCard<Batch>
             entity={batch}
-            reloadData={reloadData}
             projectAssignPayloadCreator={() => ({ batchIds: [batch.id] })}
             onUnAssign={() => void onProjectUnAssign()}
           />
