@@ -1,13 +1,10 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import TextTruncated from 'src/components/common/TextTruncated';
-import NurserySummaryService, {
-  NurserySummaryPayload,
-  NurserySummarySpecies,
-} from 'src/services/NurserySummaryService';
+import { NurserySummarySpeciesPayload, useGetNurserySummaryQuery } from 'src/queries/generated/nurserySummaries';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -15,32 +12,21 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 type InventorySummaryForNurseryProps = {
   nurseryId: number;
-  modified: number;
 };
 
-export default function InventorySummaryForNursery({
-  nurseryId,
-  modified,
-}: InventorySummaryForNurseryProps): JSX.Element {
+export default function InventorySummaryForNursery({ nurseryId }: InventorySummaryForNurseryProps): JSX.Element {
   const snackbar = useSnackbar();
   const { isMobile } = useDeviceInfo();
   const numberFormatter = useNumberFormatter();
 
-  const [summary, setSummary] = useState<NurserySummaryPayload | undefined>();
+  const { currentData: nurserySummary, isError } = useGetNurserySummaryQuery(nurseryId);
+  const summary = nurserySummary?.summary;
 
   useEffect(() => {
-    const reloadData = async () => {
-      const summaryResponse = await NurserySummaryService.getNurserySummary(nurseryId);
-      if (!summaryResponse || !summaryResponse.requestSucceeded) {
-        snackbar.toastError();
-        return;
-      }
-
-      setSummary(summaryResponse);
-    };
-
-    void reloadData();
-  }, [nurseryId, snackbar, modified]);
+    if (isError) {
+      snackbar.toastError();
+    }
+  }, [isError, snackbar]);
 
   const cards = useMemo(() => {
     if (!summary) {
@@ -114,7 +100,7 @@ export default function InventorySummaryForNursery({
         label: strings.SPECIES,
         valueComponent: (
           <TextTruncated
-            stringList={(species || []).map((s: NurserySummarySpecies) => s.scientificName)}
+            stringList={(species || []).map((s: NurserySummarySpeciesPayload) => s.scientificName)}
             width={350}
             fontSize={16}
             moreText={strings.TRUNCATED_TEXT_MORE_LINK}

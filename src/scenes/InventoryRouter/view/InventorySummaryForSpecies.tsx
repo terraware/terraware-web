@@ -1,16 +1,14 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useEffect } from 'react';
 
 import { Grid } from '@mui/material';
-import _ from 'lodash';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useOrganization } from 'src/providers';
+import { useGetSpeciesSummaryQuery } from 'src/queries/generated/nurserySummaries';
 import { selectSpeciesProjects } from 'src/redux/features/species/speciesProjectsSelectors';
 import { requestSpeciesProjects } from 'src/redux/features/species/speciesProjectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { NurseryInventoryService } from 'src/services';
 import strings from 'src/strings';
-import { SpeciesInventorySummary } from 'src/types/Inventory';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -30,29 +28,23 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
   const numberFormatter = useNumberFormatter();
 
   const speciesProjects = useAppSelector(selectSpeciesProjects(speciesId));
-  const [summary, setSummary] = useState<SpeciesInventorySummary>();
 
-  const reloadData = useCallback(() => {
-    const populateSummary = async () => {
-      const response = await NurseryInventoryService.getSummary(speciesId);
-      if (response.requestSucceeded === false) {
-        snackbar.toastError();
-      } else if (!_.isEqual(response.summary, summary)) {
-        setSummary(response.summary || undefined);
-      }
-    };
-
-    if (speciesId !== undefined && selectedOrganization) {
-      void populateSummary();
-      void dispatch(requestSpeciesProjects(selectedOrganization?.id, speciesId));
-    } else {
-      setSummary(undefined);
-    }
-  }, [speciesId, summary, snackbar, dispatch, selectedOrganization]);
+  const { currentData: speciesSummary, isError: summaryError } = useGetSpeciesSummaryQuery(speciesId, {
+    skip: speciesId === undefined || !selectedOrganization,
+  });
+  const summary = speciesSummary?.summary;
 
   useEffect(() => {
-    reloadData();
-  }, [speciesId, reloadData, modified]);
+    if (summaryError) {
+      snackbar.toastError();
+    }
+  }, [summaryError, snackbar]);
+
+  useEffect(() => {
+    if (speciesId !== undefined && selectedOrganization) {
+      void dispatch(requestSpeciesProjects(selectedOrganization.id, speciesId));
+    }
+  }, [dispatch, modified, selectedOrganization, speciesId]);
 
   const getData = () => {
     if (!summary) {

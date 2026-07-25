@@ -73,7 +73,7 @@ export default function InventoryForNurseryView(): JSX.Element {
       </PageHeaderWrapper>
       <Grid container ref={contentRef}>
         <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
-          <InventorySummaryForNursery modified={modified} nurseryId={nurseryId} />
+          <InventorySummaryForNursery nurseryId={nurseryId} />
 
           <Card flushMobile style={{ marginTop: theme.spacing(3) }}>
             <InventorySeedlingsTableForNursery

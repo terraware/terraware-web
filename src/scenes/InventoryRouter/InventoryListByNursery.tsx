@@ -9,11 +9,11 @@ import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListAllBatchesQuery } from 'src/queries/search/batches';
+import { useLazySearchInventoryByNurseryQuery } from 'src/queries/search/nurseryInventory';
 import { isNurseryEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
-import NurseryInventoryService from 'src/services/NurseryInventoryService';
 import { SearchResponseElement } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
@@ -24,6 +24,7 @@ export default function InventoryListByNursery() {
   const { selectedOrganization } = useOrganization();
   const { findSpeciesById } = useOrganizationSpecies();
   const [listAllBatches] = useLazyListAllBatchesQuery();
+  const [searchInventoryByNursery] = useLazySearchInventoryByNurseryQuery();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
@@ -83,12 +84,12 @@ export default function InventoryListByNursery() {
 
       const allBatchesResult = await listAllBatches({ organizationId: selectedOrganization.id }, true).unwrap();
 
-      const apiSearchResults = await NurseryInventoryService.searchInventoryByNursery({
+      const apiSearchResults = await searchInventoryByNursery({
         organizationId: selectedOrganization.id,
         query: debouncedSearchTerm,
         facilityIds: filters.facilityIds,
         speciesIds: filters.speciesIds,
-      });
+      }).unwrap();
 
       const updatedResult = apiSearchResults?.map((result) => {
         const resultTyped = result as FacilitySpeciesInventoryResult;
@@ -120,6 +121,7 @@ export default function InventoryListByNursery() {
     filters.speciesIds,
     findSpeciesById,
     listAllBatches,
+    searchInventoryByNursery,
     selectedOrganization,
   ]);
 

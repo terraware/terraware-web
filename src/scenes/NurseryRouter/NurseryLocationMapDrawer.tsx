@@ -1,9 +1,9 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import NurserySummaryService, { NurserySummaryPayload } from 'src/services/NurserySummaryService';
+import { useGetNurserySummaryQuery } from 'src/queries/generated/nurserySummaries';
 import strings from 'src/strings';
 
 type NurseryLocationMapDrawerProps = {
@@ -19,21 +19,8 @@ export default function NurseryLocationMapDrawer({
   nurseryName,
 }: NurseryLocationMapDrawerProps): JSX.Element {
   const theme = useTheme();
-  const [summary, setSummary] = useState<NurserySummaryPayload | undefined>();
-
-  useEffect(() => {
-    let active = true;
-    const fetchSummary = async () => {
-      const response = await NurserySummaryService.getNurserySummary(nurseryId);
-      if (active && response.requestSucceeded) {
-        setSummary(response);
-      }
-    };
-    void fetchSummary();
-    return () => {
-      active = false;
-    };
-  }, [nurseryId]);
+  const { currentData: nurserySummary } = useGetNurserySummaryQuery(nurseryId);
+  const summary = nurserySummary?.summary;
 
   const rows = useMemo(
     () => [

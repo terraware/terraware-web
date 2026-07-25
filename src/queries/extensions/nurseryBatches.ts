@@ -58,6 +58,8 @@ api.enhanceEndpoints({
       ],
     },
     getSeedlingBatchesUploadTemplate: {
+      // The template is a static CSV file, so it is read as text and never expires
+      query: () => ({ url: '/api/v1/nursery/batches/uploads/template', responseHandler: 'text' }),
       keepUnusedDataFor: Infinity,
     },
     uploadSeedlingBatchesList: {
