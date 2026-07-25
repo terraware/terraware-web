@@ -6,6 +6,7 @@ import { TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
+import { useOrganizationHasBatches } from 'src/hooks/batches/useOrganizationHasBatches';
 import { useLocalization, useOrganization } from 'src/providers';
 import { SearchSpeciesInventoryApiArg, useLazySearchSpeciesInventoryQuery } from 'src/queries/search/nurseryInventory';
 import { isSpeciesEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
@@ -187,11 +188,22 @@ export default function InventoryListBySpecies() {
     );
   }, [apiSearchResults, filters.facilityIds, filters.showEmptySpecies]);
 
-  const showResults = (apiSearchResults?.length ?? 0) > 0;
+  // A search matching nothing shows an empty table rather than the onboarding page
+  const hasBatches = useOrganizationHasBatches();
 
   return (
     <Card flushMobile>
-      {showResults ? (
+      {hasBatches === undefined || searchResults === undefined ? (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : hasBatches ? (
         <InventoryTable
           results={searchResults || []}
           temporalSearchValue={temporalSearchValue}
@@ -204,16 +216,6 @@ export default function InventoryListBySpecies() {
             !debouncedSearchTerm && !filters.facilityIds?.length ? strings.NO_BATCHES_WITH_INVENTORY : ''
           }
         />
-      ) : searchResults === undefined ? (
-        <Box
-          sx={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-          }}
-        >
-          <CircularProgress />
-        </Box>
       ) : (
         <Container maxWidth={false} sx={{ padding: '32px 0' }}>
           <EmptyStatePage pageName='Inventory' />

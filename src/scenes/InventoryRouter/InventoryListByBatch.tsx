@@ -6,6 +6,7 @@ import { TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
+import { useOrganizationHasBatches } from 'src/hooks/batches/useOrganizationHasBatches';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
 import { ListAllBatchesApiArg, useLazyListAllBatchesQuery } from 'src/queries/search/batches';
@@ -23,7 +24,6 @@ export default function InventoryListByBatch() {
   const { findSpeciesById } = useOrganizationSpecies();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
-  const [showResults, setShowResults] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
 
   const debouncedSearchTerm = useDebounce(temporalSearchValue, DEFAULT_SEARCH_DEBOUNCE_MS);
@@ -138,19 +138,22 @@ export default function InventoryListByBatch() {
     return results?.filter((result) => showEmptyBatches || !isBatchEmpty(result));
   }, [filters.showEmptyBatches, results]);
 
-  const isUnfiltered = !debouncedSearchTerm && !filters.facilityIds?.length && !filters.projectIds?.length;
-
-  // Sticky: once an unfiltered search has found batches the table stays up, so narrowing the
-  // filters down to nothing shows an empty table rather than the onboarding page.
-  useEffect(() => {
-    if (results && isUnfiltered) {
-      setShowResults(results.length > 0);
-    }
-  }, [isUnfiltered, results]);
+  // Narrowing the filters down to nothing shows an empty table rather than the onboarding page
+  const hasBatches = useOrganizationHasBatches();
 
   return (
     <Card flushMobile>
-      {showResults ? (
+      {hasBatches === undefined || searchResults === undefined ? (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : hasBatches ? (
         <InventoryTable
           results={searchResults || []}
           temporalSearchValue={temporalSearchValue}
@@ -166,16 +169,6 @@ export default function InventoryListByBatch() {
               : ''
           }
         />
-      ) : searchResults === undefined ? (
-        <Box
-          sx={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-          }}
-        >
-          <CircularProgress />
-        </Box>
       ) : (
         <Container maxWidth={false} sx={{ padding: '32px 0' }}>
           <EmptyStatePage pageName='Inventory' />
