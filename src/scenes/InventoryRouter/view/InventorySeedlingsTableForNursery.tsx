@@ -13,7 +13,7 @@ import { parseSearchTerm } from 'src/utils/search';
 interface InventorySeedlingsTableForNurseryProps
   extends Omit<
     InventorySeedlingsTableProps,
-    'columns' | 'isSelectionBulkWithdrawable' | 'getFuzzySearchFields' | 'getBatchesSearch' | 'getBatchesExport'
+    'columns' | 'isSelectionBulkWithdrawable' | 'getFuzzySearchFields' | 'getBatchesSearch'
   > {
   nurseryId: number;
 }

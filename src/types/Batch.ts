@@ -1,13 +1,21 @@
-import { components } from 'src/api/types/generated-schema';
-import { BatchHistoryPayload as GeneratedBatchHistoryPayload } from 'src/queries/generated/nurseryBatches';
+import { CreateNurseryTransferRequestPayload } from 'src/queries/generated/accessionsV2';
+import {
+  BatchPayload,
+  BatchPhotoPayload,
+  BatchHistoryPayload as GeneratedBatchHistoryPayload,
+  CreateBatchRequestPayload as GeneratedCreateBatchRequestPayload,
+} from 'src/queries/generated/nurseryBatches';
+import {
+  CreateNurseryWithdrawalRequestPayload,
+  BatchWithdrawalPayload as GeneratedBatchWithdrawalPayload,
+  NurseryWithdrawalPayload,
+} from 'src/queries/generated/nurseryWithdrawals';
 import strings from 'src/strings';
 
-export type Batch = components['schemas']['BatchResponsePayload']['batch'];
+export type Batch = BatchPayload;
 export type BatchHistoryItem = GeneratedBatchHistoryPayload;
-export type CreateBatchRequestPayload = components['schemas']['CreateBatchRequestPayload'];
-export type NurseryWithdrawal = components['schemas']['GetNurseryWithdrawalResponsePayload']['withdrawal'];
-export type BatchWithdrawal = NurseryWithdrawal['batchWithdrawals'][0];
-export type NurseryWithdrawalPurpose = NurseryWithdrawal['purpose'];
+export type CreateBatchRequestPayload = GeneratedCreateBatchRequestPayload;
+export type NurseryWithdrawalPurpose = NurseryWithdrawalPayload['purpose'];
 export type BatchHistoryPayload = GeneratedBatchHistoryPayload;
 
 export const NurseryWithdrawalPurposes: { [key: string]: NurseryWithdrawalPurpose } = {
@@ -20,10 +28,10 @@ export const NurseryWithdrawalPurposes: { [key: string]: NurseryWithdrawalPurpos
 
 export const NurseryWithdrawalPurposesValues = Object.values(NurseryWithdrawalPurposes);
 
-export type NurseryTransfer = components['schemas']['CreateNurseryTransferRequestPayload'];
-export type NurseryWithdrawalRequest = components['schemas']['CreateNurseryWithdrawalRequestPayload'];
+export type NurseryTransfer = CreateNurseryTransferRequestPayload;
+export type NurseryWithdrawalRequest = CreateNurseryWithdrawalRequestPayload;
 export type NurseryWithdrawalRequestPurpose = NurseryWithdrawalRequest['purpose'];
-export type BatchWithdrawalPayload = components['schemas']['BatchWithdrawalPayload'];
+export type BatchWithdrawalPayload = GeneratedBatchWithdrawalPayload;
 
 export const NurseryWithdrawalRequestPurposes: { [key: string]: NurseryWithdrawalRequestPurpose } = {
   OUTPLANT: 'Out Plant',
@@ -47,7 +55,7 @@ export const purposeLabel = (purpose: NurseryWithdrawalPurpose): string => {
   }
 };
 
-export type BatchPhoto = components['schemas']['BatchPhotoPayload'];
+export type BatchPhoto = BatchPhotoPayload;
 
 export const getBatchHistoryTypesEnum = (): BatchHistoryPayload['type'][] => [
   'DetailsEdited',
