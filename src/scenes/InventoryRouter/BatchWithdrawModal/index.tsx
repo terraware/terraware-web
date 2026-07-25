@@ -14,8 +14,8 @@ import {
   useCreateBatchWithdrawalMutation,
   useUploadWithdrawalPhotoMutation,
 } from 'src/queries/generated/nurseryWithdrawals';
+import { useListBatchesByIdsQuery } from 'src/queries/search/batches';
 import { useLazyListSpeciesTargetsForSubstratumQuery } from 'src/queries/search/speciesTargetsForSubstratum';
-import { NurseryBatchService } from 'src/services';
 import { NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 import { isContributor } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -67,7 +67,6 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   const snackbar = useSnackbar();
 
   const [step, setStep] = useState<FlowStep>(0);
-  const [batches, setBatches] = useState<BatchInfo[] | undefined>(undefined);
   const [showEmptyBatchesModal, setShowEmptyBatchesModal] = useState(false);
 
   const [listSpeciesTargets, speciesTargetsResult] = useLazyListSpeciesTargetsForSubstratumQuery();
@@ -90,24 +89,15 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   const [draft, setDraft] = useState<BatchWithdrawDraft>(defaultDraft);
   const [hasWithdrawn, setHasWithdrawn] = useState(false);
 
-  // Fetch batches when the modal opens.
-  useEffect(() => {
-    if (!open || !selectedOrganization || batchIds.length === 0) {
-      return;
-    }
-    let active = true;
-    setBatches(undefined);
-    const populate = async () => {
-      const results = await NurseryBatchService.getBatches(selectedOrganization.id, batchIds);
-      if (!active) {
-        return;
-      }
-      if (!results) {
-        setBatches([]);
-        return;
-      }
-      const withdrawableBatches = results
-        .map((b): BatchInfo => {
+  const { currentData: searchedBatches } = useListBatchesByIdsQuery(
+    { organizationId: selectedOrganization?.id ?? -1, batchIds },
+    { skip: !open || !selectedOrganization || batchIds.length === 0 }
+  );
+
+  const batches = useMemo(
+    (): BatchInfo[] | undefined =>
+      searchedBatches
+        ?.map((b): BatchInfo => {
           const orgSpecies = findSpeciesById(Number(b.species_id));
           return {
             batchId: Number(b.id),
@@ -126,20 +116,17 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
             projectName: b.project_name ? String(b.project_name) : undefined,
           };
         })
-        .filter((batch) => batch.totalQuantity + batch.germinatingQuantity > 0);
-      // Only when the modal opened with nothing to withdraw. After a withdrawal the batches are
-      // refetched, and a batch we just emptied would otherwise toast over the success message.
-      if (!hasWithdrawn && withdrawableBatches.length === 0) {
-        snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM);
-      }
-      setBatches(withdrawableBatches);
-    };
-    void populate();
+        .filter((batch) => batch.totalQuantity + batch.germinatingQuantity > 0),
+    [findSpeciesById, searchedBatches]
+  );
 
-    return () => {
-      active = false;
-    };
-  }, [open, selectedOrganization, batchIds, findSpeciesById, hasWithdrawn, snackbar, strings]);
+  useEffect(() => {
+    // Only when the modal opened with nothing to withdraw. After a withdrawal the batches are
+    // refetched, and a batch we just emptied would otherwise toast over the success message.
+    if (!hasWithdrawn && searchedBatches && batches?.length === 0) {
+      snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM);
+    }
+  }, [batches, hasWithdrawn, searchedBatches, snackbar, strings]);
 
   const updateDraft = useCallback((next: Partial<BatchWithdrawDraft>) => {
     setDraft((prev) => {
@@ -222,7 +209,6 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   const handleClose = useCallback(() => {
     setStep(0);
     setDraft(defaultDraft());
-    setBatches(undefined);
     setHasWithdrawn(false);
     onClose();
   }, [defaultDraft, onClose]);

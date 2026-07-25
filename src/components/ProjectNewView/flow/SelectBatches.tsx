@@ -16,12 +16,10 @@ import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
 import Table from 'src/components/common/table';
 import { useLocalization, useOrganization } from 'src/providers';
-import { NurseryBatchService } from 'src/services';
-import { SearchResponseBatches } from 'src/services/NurseryBatchService';
+import { NurseryBatchesSearchResponseElement, useLazyListAllBatchesQuery } from 'src/queries/search/batches';
 import { CreateProjectRequest } from 'src/types/Project';
 import { FieldNodePayload, SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 import { getAllNurseries } from 'src/utils/organization';
-import { parseSearchTerm } from 'src/utils/search';
 
 import { EntitySpecificFilterConfig } from './ProjectEntityFilter';
 
@@ -32,7 +30,7 @@ type SelectBatchesProps = {
   onCancel: () => void;
   saveText: string;
   pageFormRightButtons: FormButton[];
-  setProjectBatches: (batches: SearchResponseBatches[]) => void;
+  setProjectBatches: (batches: NurseryBatchesSearchResponseElement[]) => void;
   setHasBatches: (value: boolean) => void;
 };
 
@@ -44,6 +42,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const [listAllBatches] = useLazyListAllBatchesQuery();
 
   const columns = useMemo(
     (): TableColumnType[] => [
@@ -105,53 +104,22 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
   const getSearchResults = useCallback(
     (
       organizationId: number,
-      searchFields: SearchNodePayload[],
+      _searchFields: SearchNodePayload[],
       searchSortOrder?: SearchSortOrder,
-      searchFilters?: ProjectEntityFilters
-    ) => {
-      let facilityIds;
-      const query = undefined;
-      const fields = [...searchFields];
-
-      const nurseryIds = searchFilters?.nurseryIds || [];
-      if (nurseryIds.length > 0) {
-        facilityIds = nurseryIds;
-      }
-
-      const projectIds = searchFilters?.projectIds || [];
-      if (projectIds.length > 0) {
-        fields.push({
-          field: 'project_id',
-          operation: 'field',
-          type: 'Exact',
-          values: projectIds.map((id: number | null) => (id === null ? id : `${id}`)),
-        });
-      }
-
-      return NurseryBatchService.getAllBatches(
+      searchFilters?: ProjectEntityFilters,
+      searchTerm?: string
+    ) =>
+      listAllBatches({
         organizationId,
-        searchSortOrder,
-        facilityIds,
-        undefined,
-        query,
-        false,
-        fields
-      );
-    },
-    []
+        sortOrder: searchSortOrder,
+        nurseryIds: searchFilters?.nurseryIds,
+        projectIds: searchFilters?.projectIds,
+        query: searchTerm,
+      }).unwrap(),
+    [listAllBatches]
   );
 
-  const getSearchFields = useCallback((debouncedSearchTerm: string): FieldNodePayload[] => {
-    const { type, values } = parseSearchTerm(debouncedSearchTerm);
-    return [
-      {
-        operation: 'field',
-        field: 'batchNumber',
-        type,
-        values,
-      },
-    ];
-  }, []);
+  const getSearchFields = useCallback((): FieldNodePayload[] => [], []);
 
   const {
     entities,
@@ -162,7 +130,7 @@ export default function SelectBatches(props: SelectBatchesProps): JSX.Element | 
     setTemporalSearchValue,
     filters,
     setFilters,
-  } = useProjectEntitySelection<SearchResponseBatches>({
+  } = useProjectEntitySelection<NurseryBatchesSearchResponseElement>({
     currentFlowState: flowState,
     thisFlowState: 'batches',
     setHasEntities: setHasBatches,

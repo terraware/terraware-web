@@ -9,7 +9,10 @@ export default function BatchBulkWithdrawView(): JSX.Element | null {
   const query = useQuery();
   const navigate = useSyncNavigate();
 
-  const batchIds = useMemo(() => (query.getAll('batchId').length > 0 ? query.getAll('batchId') : undefined), [query]);
+  const batchIds = useMemo(
+    () => (query.getAll('batchId').length > 0 ? query.getAll('batchId').map(Number) : undefined),
+    [query]
+  );
 
   const source = useMemo(() => (batchIds ? query.get('source') : undefined), [batchIds, query]);
 

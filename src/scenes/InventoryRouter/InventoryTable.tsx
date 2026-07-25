@@ -23,11 +23,11 @@ import { APP_PATHS } from 'src/constants';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useDeleteBatchMutation } from 'src/queries/generated/nurseryBatches';
+import { useLazyListBatchIdsForSpeciesQuery } from 'src/queries/search/batches';
 import { convertFilterGroupToMap } from 'src/scenes/InventoryRouter/FilterUtils';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import Search from 'src/scenes/InventoryRouter/Search';
-import { NurseryBatchService } from 'src/services';
 import { SearchNodePayload, SearchResponseElement } from 'src/types/Search';
 import { downloadCsv } from 'src/utils/csv';
 import { useSessionFilters } from 'src/utils/filterHooks/useSessionFilters';
@@ -79,6 +79,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const query = useQuery();
   const numberFormatter = useNumberFormatter();
   const [deleteBatch] = useDeleteBatchMutation();
+  const [listBatchIdsForSpecies] = useLazyListBatchIdsForSpeciesQuery();
 
   const theme = useTheme();
   const { sessionFilters, setSessionFilters } = useSessionFilters(origin.toLowerCase());
@@ -271,11 +272,10 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       if (!selectedSpeciesIds.length || !selectedOrganization) {
         return;
       }
-      const searchResponse = await NurseryBatchService.getBatchIdsForSpecies(
-        selectedOrganization.id,
-        selectedSpeciesIds
-      );
-      batchIds = (searchResponse ?? []).map((sr) => Number(sr.id));
+      batchIds = await listBatchIdsForSpecies(
+        { organizationId: selectedOrganization.id, speciesIds: selectedSpeciesIds },
+        true
+      ).unwrap();
     } else if (origin === 'Nursery') {
       batchIds = selectedRows.flatMap((row) => row.batchIds).map((b) => Number(b));
     } else {

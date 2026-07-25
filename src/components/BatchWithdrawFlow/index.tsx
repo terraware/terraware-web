@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, theme } from '@terraware/web-components';
@@ -15,7 +15,7 @@ import {
   useCreateBatchWithdrawalMutation,
   useUploadWithdrawalPhotoMutation,
 } from 'src/queries/generated/nurseryWithdrawals';
-import { NurseryBatchService } from 'src/services';
+import { useListBatchesByIdsQuery } from 'src/queries/search/batches';
 import strings from 'src/strings';
 import { NurseryWithdrawalRequest, NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 import { SearchResponseElement } from 'src/types/Search';
@@ -32,7 +32,7 @@ import SelectPurposeForm from './flow/SelectPurposeForm';
 type FlowStates = 'purpose' | 'select batches' | 'photos';
 
 type BatchWithdrawFlowProps = {
-  batchIds: string[];
+  batchIds: number[];
   sourcePage?: string;
 };
 
@@ -48,7 +48,6 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     purpose: isContributor(selectedOrganization) ? NURSERY_TRANSFER : OUTPLANT,
     withdrawnDate: getTodaysDateFormatted(),
   });
-  const [batches, setBatches] = useState<SearchResponseElement[]>();
   const [showEmptyBatchesModalFor, setShowEmptyBatchesModalFor] = useState<NurseryWithdrawalPayload>();
   const [filterProjectId, setFilterProjectId] = useState<number>();
   const [hasWithdrawn, setHasWithdrawn] = useState(false);
@@ -78,29 +77,24 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     trackEvent(MIXPANEL_EVENTS.BATCH_WITHDRAWAL_STEP_REACHED, { step: flowState });
   }, [flowState, trackEvent]);
 
-  useEffect(() => {
-    if (selectedOrganization) {
-      const populateBatches = async () => {
-        const searchResponse: SearchResponseElement[] | null = await NurseryBatchService.getBatches(
-          selectedOrganization.id,
-          batchIds.map((id) => Number(id))
-        );
+  const { currentData: searchedBatches } = useListBatchesByIdsQuery(
+    { organizationId: selectedOrganization?.id ?? -1, batchIds },
+    { skip: !selectedOrganization }
+  );
 
-        if (searchResponse) {
-          const withdrawable = searchResponse.filter(
-            (batch: any) => +batch['totalQuantity(raw)'] + +batch['germinatingQuantity(raw)'] > 0
-          );
-          // Only when the flow opened with nothing to withdraw. After a withdrawal the batches are
-          // refetched, and a batch we just emptied would otherwise toast over the success message.
-          if (!hasWithdrawn && !withdrawable.length) {
-            snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
-          }
-          setBatches(withdrawable);
-        }
-      };
-      void populateBatches();
+  const batches = useMemo(
+    (): SearchResponseElement[] | undefined =>
+      searchedBatches?.filter((batch) => +batch['totalQuantity(raw)'] + +batch['germinatingQuantity(raw)'] > 0),
+    [searchedBatches]
+  );
+
+  useEffect(() => {
+    // Only when the flow opened with nothing to withdraw. After a withdrawal the batches are
+    // refetched, and a batch we just emptied would otherwise toast over the success message.
+    if (!hasWithdrawn && searchedBatches && !batches?.length) {
+      snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
     }
-  }, [batchIds, hasWithdrawn, snackbar, selectedOrganization]);
+  }, [batches, hasWithdrawn, searchedBatches, snackbar]);
 
   const onWithdrawalConfigured = (withdrawal: NurseryWithdrawalRequest) => {
     setRecord(withdrawal);

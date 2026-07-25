@@ -5,7 +5,6 @@ import * as DraftPlantingSiteService from './DraftPlantingSiteService';
 import FacilityService from './FacilityService';
 import HttpService from './HttpService';
 import MapService from './MapService';
-import NurseryBatchService from './NurseryBatchService';
 import NurseryInventoryService from './NurseryInventoryService';
 import OrganizationService from './OrganizationService';
 import OrganizationUserService from './OrganizationUserService';
@@ -26,7 +25,6 @@ export {
   FacilityService,
   HttpService,
   MapService,
-  NurseryBatchService,
   NurseryInventoryService,
   OrganizationService,
   OrganizationUserService,

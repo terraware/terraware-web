@@ -3,10 +3,10 @@ import React, { type JSX, useCallback, useMemo } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
+import { useLazyListBatchesForNurseryQuery } from 'src/queries/search/batches';
 import InventorySeedlingsTable, {
   InventorySeedlingsTableProps,
 } from 'src/scenes/InventoryRouter/view/InventorySeedlingsTable';
-import { NurseryBatchService } from 'src/services';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { parseSearchTerm } from 'src/utils/search';
 
@@ -19,6 +19,7 @@ interface InventorySeedlingsTableForNurseryProps
 }
 
 export default function InventorySeedlingsTableForNursery(props: InventorySeedlingsTableForNurseryProps): JSX.Element {
+  const [listBatchesForNursery] = useLazyListBatchesForNurseryQuery();
   const facilityId = props.nurseryId;
   const { strings } = useLocalization();
 
@@ -86,15 +87,15 @@ export default function InventorySeedlingsTableForNursery(props: InventorySeedli
       searchFields: FieldNodePayload[],
       searchSortOrder: SearchSortOrder | undefined
     ): Promise<SearchResponseElement[] | null> => {
-      const searchResponse: SearchResponseElement[] | null = await NurseryBatchService.getBatchesForNursery(
-        orgId,
-        originId,
+      const searchResponse = await listBatchesForNursery({
+        organizationId: orgId,
+        nurseryId: originId,
         searchFields,
-        searchSortOrder
-      );
-      return searchResponse?.map((sr: SearchResponseElement): SearchResponseElement => ({ ...sr, facilityId })) || null;
+        sortOrder: searchSortOrder,
+      }).unwrap();
+      return searchResponse.map((sr): SearchResponseElement => ({ ...sr, facilityId }));
     },
-    [facilityId]
+    [facilityId, listBatchesForNursery]
   );
 
   const isSelectionBulkWithdrawable = useCallback(() => true, []);
