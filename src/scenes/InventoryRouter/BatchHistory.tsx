@@ -9,7 +9,8 @@ import { FilterField } from 'src/components/common/FilterGroup';
 import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 import Table from 'src/components/common/table';
 import { useOrganization } from 'src/providers';
-import { NurseryBatchService, OrganizationUserService } from 'src/services';
+import { useGetBatchHistoryQuery } from 'src/queries/generated/nurseryBatches';
+import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import {
   BatchHistoryItem,
@@ -46,8 +47,8 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
   const theme = useTheme();
   const [search, setSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
-  const [results, setResults] = useState<BatchHistoryItemForTable[] | null>();
   const [users, setUsers] = useState<Record<number, OrganizationUser> | undefined>({});
+  const { currentData: batchHistory } = useGetBatchHistoryQuery(batchId);
   const filterOptions = useMemo<FieldOptionsMap>(
     () => ({
       type: {
@@ -142,80 +143,99 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
     []
   );
 
-  useEffect(() => {
-    if (users) {
-      const fetchResults = async () => {
-        const response = await NurseryBatchService.getBatchHistory(batchId, search, filters, users);
-        if (response.requestSucceeded) {
-          const historyItemsForTable =
-            response.history
-              ?.filter((historyItem) => {
-                // Filter out the first, "empty" result
-                return historyItem.type === 'DetailsEdited' ? findPreviousEvent(historyItem, response.history) : true;
-              })
-              .map((historyItem) => {
-                const userSelected = users[historyItem.createdBy];
-                const previousEv = findPreviousEvent(historyItem, response.history);
-                const changedFields = [];
-                if (historyItem.type === 'DetailsEdited' && (previousEv?.type === 'DetailsEdited' || !previousEv)) {
-                  if ((historyItem.notes || '') !== (previousEv?.notes || '')) {
-                    changedFields.push(strings.NOTES);
-                  }
-                  if (
-                    (historyItem.substrate || '') !== (previousEv?.substrate || '') ||
-                    (historyItem.substrateNotes || '') !== (previousEv?.substrateNotes || '')
-                  ) {
-                    changedFields.push(strings.SUBSTRATE);
-                  }
-                  if (
-                    (historyItem.treatment || '') !== (previousEv?.treatment || '') ||
-                    (historyItem.treatmentNotes || '') !== (previousEv?.treatmentNotes || '')
-                  ) {
-                    changedFields.push(strings.TREATMENT);
-                  }
-                  if ((historyItem.germinationStartedDate || '') !== (previousEv?.germinationStartedDate || '')) {
-                    changedFields.push(strings.GERMINATION_ESTABLISHMENT_STARTED_DATE);
-                  }
-                  if ((historyItem.readyByDate || '') !== (previousEv?.readyByDate || '')) {
-                    changedFields.push(strings.ESTIMATED_READY_DATE);
-                  }
-                  if ((historyItem.seedsSownDate || '') !== (previousEv?.seedsSownDate || '')) {
-                    changedFields.push(strings.SEEDS_SOWN_DATE);
-                  }
-                }
-                if (
-                  (historyItem.type === 'QuantityEdited' || historyItem.type === 'StatusChanged') &&
-                  (previousEv?.type === 'QuantityEdited' || previousEv?.type === 'StatusChanged' || !previousEv)
-                ) {
-                  if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {
-                    changedFields.push(strings.GERMINATION_ESTABLISHMENT_QUANTITY);
-                  }
-                  if (historyItem.activeGrowthQuantity !== previousEv?.activeGrowthQuantity) {
-                    changedFields.push(strings.ACTIVE_GROWTH_QUANTITY);
-                  }
-                  if (historyItem.hardeningOffQuantity !== previousEv?.hardeningOffQuantity) {
-                    changedFields.push(strings.HARDENING_OFF_QUANTITY);
-                  }
-                  if (historyItem.readyQuantity !== previousEv?.readyQuantity) {
-                    changedFields.push(strings.READY_TO_PLANT_QUANTITY);
-                  }
-                }
-                return {
-                  ...historyItem,
-                  editedByName: getUserDisplayName(userSelected),
-                  previousEvent: previousEv,
-                  modifiedFields: changedFields,
-                  nurseryName,
-                };
-              }) || null;
-
-          setResults(historyItemsForTable);
-        }
-      };
-
-      void fetchResults();
+  // The search and filters narrow the history before previous-event lookups, so an event's
+  // "before" values are the previous one still visible in the table
+  const filteredHistory = useMemo((): BatchHistoryItem[] | null => {
+    if (!batchHistory || !users) {
+      return null;
     }
-  }, [users, batchId, findPreviousEvent, nurseryName, filters, search]);
+
+    let filtered = [...batchHistory.history];
+
+    if (filters.type?.values) {
+      filtered = filtered.filter((ev) => filters.type.values.indexOf(ev.type) > -1);
+    }
+
+    if (filters.editedByName?.values) {
+      filtered = filtered.filter(
+        (ev) => filters.editedByName.values.indexOf(getUserDisplayName(users[ev.createdBy])) > -1
+      );
+    }
+
+    if (search) {
+      const regex = new RegExp(search, 'i');
+      filtered = filtered.filter((ev) => getUserDisplayName(users[ev.createdBy]).match(regex));
+    }
+
+    return filtered;
+  }, [batchHistory, filters, search, users]);
+
+  const results = useMemo((): BatchHistoryItemForTable[] | null => {
+    if (!filteredHistory || !users) {
+      return null;
+    }
+
+    return filteredHistory
+      .filter((historyItem) => {
+        // Filter out the first, "empty" result
+        return historyItem.type === 'DetailsEdited' ? findPreviousEvent(historyItem, filteredHistory) : true;
+      })
+      .map((historyItem) => {
+        const userSelected = users[historyItem.createdBy];
+        const previousEv = findPreviousEvent(historyItem, filteredHistory);
+        const changedFields = [];
+        if (historyItem.type === 'DetailsEdited' && (previousEv?.type === 'DetailsEdited' || !previousEv)) {
+          if ((historyItem.notes || '') !== (previousEv?.notes || '')) {
+            changedFields.push(strings.NOTES);
+          }
+          if (
+            (historyItem.substrate || '') !== (previousEv?.substrate || '') ||
+            (historyItem.substrateNotes || '') !== (previousEv?.substrateNotes || '')
+          ) {
+            changedFields.push(strings.SUBSTRATE);
+          }
+          if (
+            (historyItem.treatment || '') !== (previousEv?.treatment || '') ||
+            (historyItem.treatmentNotes || '') !== (previousEv?.treatmentNotes || '')
+          ) {
+            changedFields.push(strings.TREATMENT);
+          }
+          if ((historyItem.germinationStartedDate || '') !== (previousEv?.germinationStartedDate || '')) {
+            changedFields.push(strings.GERMINATION_ESTABLISHMENT_STARTED_DATE);
+          }
+          if ((historyItem.readyByDate || '') !== (previousEv?.readyByDate || '')) {
+            changedFields.push(strings.ESTIMATED_READY_DATE);
+          }
+          if ((historyItem.seedsSownDate || '') !== (previousEv?.seedsSownDate || '')) {
+            changedFields.push(strings.SEEDS_SOWN_DATE);
+          }
+        }
+        if (
+          (historyItem.type === 'QuantityEdited' || historyItem.type === 'StatusChanged') &&
+          (previousEv?.type === 'QuantityEdited' || previousEv?.type === 'StatusChanged' || !previousEv)
+        ) {
+          if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {
+            changedFields.push(strings.GERMINATION_ESTABLISHMENT_QUANTITY);
+          }
+          if (historyItem.activeGrowthQuantity !== previousEv?.activeGrowthQuantity) {
+            changedFields.push(strings.ACTIVE_GROWTH_QUANTITY);
+          }
+          if (historyItem.hardeningOffQuantity !== previousEv?.hardeningOffQuantity) {
+            changedFields.push(strings.HARDENING_OFF_QUANTITY);
+          }
+          if (historyItem.readyQuantity !== previousEv?.readyQuantity) {
+            changedFields.push(strings.READY_TO_PLANT_QUANTITY);
+          }
+        }
+        return {
+          ...historyItem,
+          editedByName: getUserDisplayName(userSelected),
+          previousEvent: previousEv,
+          modifiedFields: changedFields,
+          nurseryName,
+        };
+      });
+  }, [filteredHistory, findPreviousEvent, nurseryName, users]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onBatchSelected = (batch: any, fromColumn?: string) => {
