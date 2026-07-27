@@ -4,7 +4,7 @@ import { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useOrganization } from 'src/providers';
-import { useGetSpeciesSummaryQuery, useLazyGetSpeciesSummaryQuery } from 'src/queries/generated/nurserySummaries';
+import { useLazyGetSpeciesSummaryQuery } from 'src/queries/generated/nurserySummaries';
 import { selectSpeciesProjects } from 'src/redux/features/species/speciesProjectsSelectors';
 import { requestSpeciesProjects } from 'src/redux/features/species/speciesProjectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
