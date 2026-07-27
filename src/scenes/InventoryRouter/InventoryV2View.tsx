@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
-import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Tabs } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -156,6 +156,7 @@ export type BatchInventoryResult = {
 type InventoryProps = {
   hasNurseries: boolean;
   hasSpecies: boolean;
+  speciesLoading?: boolean;
 };
 
 export default function InventoryV2View(props: InventoryProps): JSX.Element {
@@ -164,7 +165,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useSyncNavigate();
-  const { hasNurseries, hasSpecies } = props;
+  const { hasNurseries, hasSpecies, speciesLoading } = props;
   const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
   const contentRef = useRef(null);
 
@@ -263,6 +264,16 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
   const onCloseImportInventoryModal = useCallback(() => setImportInventoryModalOpen(false), []);
 
   const navigateToInventoryCreateView = useCallback(() => goTo(APP_PATHS.INVENTORY_NEW), [goTo]);
+
+  if (speciesLoading) {
+    return (
+      <TfMain>
+        <Box sx={{ display: 'flex', justifyContent: 'center', paddingTop: '64px' }}>
+          <CircularProgress />
+        </Box>
+      </TfMain>
+    );
+  }
 
   return (
     <TfMain>
