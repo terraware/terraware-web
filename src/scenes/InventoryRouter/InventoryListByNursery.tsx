@@ -6,6 +6,7 @@ import { TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
 import { isNurseryEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
@@ -21,6 +22,7 @@ import useForm from 'src/utils/useForm';
 export default function InventoryListByNursery() {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const { findSpeciesById } = useOrganizationSpecies();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
@@ -90,8 +92,9 @@ export default function InventoryListByNursery() {
       const updatedResult = apiSearchResults?.map((result) => {
         const resultTyped = result as FacilitySpeciesInventoryResult;
         const speciesNames =
-          resultTyped.facilityInventories?.filter((fi) => fi.species_id)?.map((inv) => inv.species_scientificName) ||
-          [];
+          resultTyped.facilityInventories
+            ?.filter((fi) => fi.species_id)
+            ?.map((inv) => findSpeciesById(Number(inv.species_id))?.scientificName ?? inv.species_scientificName) || [];
         const batchIds =
           resultTyped.facilityInventories
             ?.filter((fi) => fi.species_id)
@@ -114,6 +117,7 @@ export default function InventoryListByNursery() {
     filters.facilityIds,
     filters.showEmptyNurseries,
     filters.speciesIds,
+    findSpeciesById,
     selectedOrganization,
   ]);
 

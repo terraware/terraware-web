@@ -102,6 +102,7 @@ const injectedRtkApi = api.injectEndpoints({
           fields: [
             'accessionNumber',
             'speciesName',
+            'species_id',
             'collectionSiteName',
             'collectedTime',
             'receivedDate',

@@ -15,6 +15,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useAccession from 'src/hooks/useAccession';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useUser } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
 import { useCheckInMutation } from 'src/queries/generated/accessionsV1';
@@ -51,6 +52,7 @@ export default function Accession2View(): JSX.Element {
   const { userPreferences } = useUser();
   const { accessionId } = useParams<{ accessionId: string }>();
   const { accession, refetch: refetchAccession } = useAccession(Number(accessionId));
+  const { findSpeciesById } = useOrganizationSpecies();
   const [openEditLocationModal, setOpenEditLocationModal] = useState(false);
   const [openEditStateModal, setOpenEditStateModal] = useState(false);
   const [openEndDryingReminderModal, setOpenEndDryingReminderModal] = useState(false);
@@ -468,7 +470,7 @@ export default function Accession2View(): JSX.Element {
             </Typography>
             <Box display='flex' justifyContent='space-between' alignItems='center'>
               <Typography color={themeObj.palette.TwClrTxt} fontSize='20px' fontStyle='italic' fontWeight={600}>
-                {accession?.speciesScientificName}
+                {findSpeciesById(accession?.speciesId)?.scientificName ?? accession?.speciesScientificName}
               </Typography>
               {!isMobile && userCanEdit && (
                 <Box display='flex' alignItems='center'>
@@ -482,7 +484,7 @@ export default function Accession2View(): JSX.Element {
               )}
             </Box>
             <Typography color={themeObj.palette.TwClrTxt} fontSize='14px'>
-              {accession?.speciesCommonName}
+              {findSpeciesById(accession?.speciesId)?.commonName ?? accession?.speciesCommonName}
             </Typography>
             {isMobile && userCanEdit && (
               <Box display='flex' alignItems='center' paddingRight={2} marginTop={2}>
