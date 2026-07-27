@@ -1,8 +1,8 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
 
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useOrganization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import InventoryBatchView from 'src/scenes/InventoryRouter/InventoryBatchView';
 import InventoryCreateView from 'src/scenes/InventoryRouter/InventoryCreateView';
 import InventoryForNurseryView from 'src/scenes/InventoryRouter/InventoryForNurseryView';
@@ -13,7 +13,7 @@ import { selectedOrgHasFacilityType } from 'src/utils/organization';
 
 const InventoryRouter = () => {
   const { selectedOrganization } = useOrganization();
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
 
   return (
     <Routes>

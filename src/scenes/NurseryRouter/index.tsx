@@ -1,13 +1,13 @@
 import React from 'react';
 import { Route, Routes } from 'react-router';
 
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import NurseryPlantingsAndWithdrawalsView from 'src/scenes/NurseryRouter/NurseryPlantingsAndWithdrawalsView';
 import NurseryReassignmentView from 'src/scenes/NurseryRouter/NurseryReassignmentView';
 import NurseryWithdrawalsDetailsView from 'src/scenes/NurseryRouter/NurseryWithdrawalsDetailsView';
 
 const NurseryRouter = () => {
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
 
   return (
     <Routes>

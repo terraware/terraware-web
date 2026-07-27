@@ -4,8 +4,8 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import sanitize from 'sanitize-filename';
 
 import { APP_PATHS } from 'src/constants';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import {
   useLazyExportBiomassObservationsCsvQuery,
   useLazyExportBiomassPlotsCsvQuery,
@@ -34,7 +34,7 @@ const useObservationExports = () => {
   const [exportObservationGpx] = useLazyExportObservationGpxQuery();
   const [getPlantingSite] = useLazyGetPlantingSiteQuery();
 
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
 
   const scientificNamesById = useMemo(
     () =>

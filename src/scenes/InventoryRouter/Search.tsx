@@ -7,8 +7,8 @@ import { PillList } from '@terraware/web-components';
 
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import TableSettingsButton from 'src/components/common/table/TableSettingsButton';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { selectSubLocations } from 'src/redux/features/subLocations/subLocationsSelectors';
 import { requestSubLocations } from 'src/redux/features/subLocations/subLocationsThunks';
@@ -87,7 +87,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
 
   const origin = props.origin || 'Species';
 
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
   const { availableProjects: projects } = useProjects();
   const nurseries = useMemo<Facility[]>(
     () => (selectedOrganization ? getAllNurseries(selectedOrganization) : []),

@@ -9,11 +9,11 @@ import SeedFundReportsRouter from 'src/components/SeedFundReports/Router';
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
 import { useOrganization, useUser } from 'src/providers';
 import ApplicationProvider from 'src/providers/Application';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import SpeciesProvider from 'src/providers/Species/SpeciesProvider';
 import { useLazyCountObservationsQuery } from 'src/queries/search/observations';
 import { useLazyCountPlantingSitesQuery } from 'src/queries/search/plantingSites';
@@ -66,7 +66,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const location = useStateLocation();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const { species } = useSpeciesData();
+  const { species } = useOrganizationSpecies();
   const { availableProjects: projects } = useProjects();
 
   const [countPlantingSites, countPlantingSitesResult] = useLazyCountPlantingSitesQuery();
