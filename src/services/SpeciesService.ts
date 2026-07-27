@@ -1,10 +1,10 @@
 import { paths } from 'src/api/types/generated-schema';
 import { GetUploadStatusResponsePayload, UploadFileResponse } from 'src/types/File';
 import { FieldNodePayload, SearchRequestPayload, SearchResponseElement } from 'src/types/Search';
-import { MergeOtherSpeciesPayload, Species, SpeciesDetails, SuggestedSpecies } from 'src/types/Species';
+import { MergeOtherSpeciesPayload, Species, SuggestedSpecies } from 'src/types/Species';
 import { parseSearchTerm } from 'src/utils/search';
 
-import HttpService, { Response, Response2, ServerData } from './HttpService';
+import HttpService, { Response, Response2 } from './HttpService';
 import SearchService from './SearchService';
 
 /**
@@ -15,10 +15,6 @@ import SearchService from './SearchService';
  * Types exported from service
  */
 
-export type CreateSpeciesResponse = Response & {
-  speciesId: number | null;
-};
-
 export type SpeciesUploadTemplate = {
   template?: string;
 };
@@ -28,19 +24,11 @@ export type SpeciesUploadStatusDetails = {
 
 export type SpeciesIdResponse = Response & SpeciesIdData;
 
-export type SpeciesDetailsResponse = Response & SpeciesDetailsData;
-
-export type SpeciesNamesResponse = Response & SpeciesNamesData;
-
 export type AllSpeciesResponse = Response & AllSpeciesData;
 
 export type AllSpeciesData = { species?: Species[] };
 
 export type SpeciesIdData = { species?: Species };
-
-export type SpeciesDetailsData = { speciesDetails?: SpeciesDetails };
-
-export type SpeciesNamesData = { names?: string[] };
 
 export type SpeciesProjectsSearchResponse = SearchResponseElement & {
   projects: {
@@ -54,59 +42,17 @@ const SPECIES_TEMPLATE_ENDPOINT = '/api/v1/species/uploads/template';
 const SPECIES_UPLOADS_ENDPOINT = '/api/v1/species/uploads';
 const SPECIES_UPLOAD_STATUS_ENDPOINT = '/api/v1/species/uploads/{uploadId}';
 const SPECIES_UPLOAD_RESOLVE_ENDPOINT = '/api/v1/species/uploads/{uploadId}/resolve';
-const SPECIES_UPLOAD_PROBLEM = '/api/v1/species/problems/{problemId}';
-const SPECIES_DETAILS_ENDPOINT = '/api/v1/species/lookup/details';
-const SPECIES_NAMES_ENDPOINT = '/api/v1/species/lookup/names';
 const MERGE_OTHER_SPECIES_ENDPOINT = '/api/v1/tracking/observations/{observationId}/mergeOtherSpecies';
 
-type CreateSpeciesRequestPayload = paths[typeof SPECIES_ENDPOINT]['post']['requestBody']['content']['application/json'];
 type UpdateSpeciesRequestPayload =
   paths[typeof SPECIES_ID_ENDPOINT]['put']['requestBody']['content']['application/json'];
 type SpeciesResponsePayload = paths[typeof SPECIES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type SpeciesIdResponsePayload =
   paths[typeof SPECIES_ID_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-type SpeciesDetailsResponsePayload =
-  paths[typeof SPECIES_DETAILS_ENDPOINT]['get']['responses'][200]['content']['application/json'] & ServerData;
-type SpeciesNamesResponsePayload =
-  paths[typeof SPECIES_NAMES_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
 const httpSpecies = HttpService.root(SPECIES_ENDPOINT);
 const httpSpeciesId = HttpService.root(SPECIES_ID_ENDPOINT);
-const httpSpeciesDetails = HttpService.root(SPECIES_DETAILS_ENDPOINT);
-const httpSpeciesNames = HttpService.root(SPECIES_NAMES_ENDPOINT);
 const httpMergeOtherSpecies = HttpService.root(MERGE_OTHER_SPECIES_ENDPOINT);
-
-/**
- * create a species
- */
-const createSpecies = async (species: Omit<Species, 'id'>, organizationId: number): Promise<CreateSpeciesResponse> => {
-  const entity: CreateSpeciesRequestPayload = {
-    ecosystemTypes: species.ecosystemTypes,
-    commonName: species.commonName,
-    conservationCategory: species.conservationCategory,
-    ecologicalRoleKnown: species.ecologicalRoleKnown,
-    familyName: species.familyName,
-    growthForms: species.growthForms,
-    localUsesKnown: species.localUsesKnown,
-    nativeEcosystem: species.nativeEcosystem,
-    organizationId,
-    otherFacts: species.otherFacts,
-    plantMaterialSourcingMethods: species.plantMaterialSourcingMethods,
-    rare: species.rare,
-    scientificName: species.scientificName,
-    seedStorageBehavior: species.seedStorageBehavior,
-    successionalGroups: species.successionalGroups,
-  };
-
-  const serverResponse: Response = await httpSpecies.post({ entity });
-
-  const response: CreateSpeciesResponse = {
-    ...serverResponse,
-    speciesId: serverResponse.data?.id ?? null,
-  };
-
-  return response;
-};
 
 /**
  * get a species by id
@@ -168,21 +114,6 @@ const updateSpecies = async (species: Species, organizationId: number): Promise<
       '{speciesId}': species.id.toString(),
     },
   });
-};
-
-/**
- * delete a species
- */
-const deleteSpecies = async (speciesId: number, organizationId: number): Promise<Response> => {
-  const params = { organizationId: organizationId.toString() };
-  const response: Response = await httpSpeciesId.delete({
-    params,
-    urlReplacements: {
-      '{speciesId}': speciesId.toString(),
-    },
-  });
-
-  return response;
 };
 
 /**
@@ -258,65 +189,6 @@ const resolveSpeciesUpload = async (uploadId: number, overwriteExisting: boolean
     },
     entity: { overwriteExisting: overwriteExisting.toString() },
   });
-};
-
-/**
- * Accept species upload problem suggestion
- */
-const acceptProblemSuggestion = async (problemId: number): Promise<Response> => {
-  return await HttpService.root(SPECIES_UPLOAD_PROBLEM).post({
-    urlReplacements: {
-      '{problemId}': problemId.toString(),
-    },
-  });
-};
-
-/**
- * Ignore species upload problem suggestion
- */
-const ignoreProblemSuggestion = async (problemId: number): Promise<Response> => {
-  return await HttpService.root(SPECIES_UPLOAD_PROBLEM).delete({
-    urlReplacements: {
-      '{problemId}': problemId.toString(),
-    },
-  });
-};
-
-/**
- * get details of a species
- */
-const getSpeciesDetails = async (scientificName: string): Promise<SpeciesDetailsResponse> => {
-  const params = { scientificName };
-  const response: SpeciesDetailsResponse = await httpSpeciesDetails.get<
-    SpeciesDetailsResponsePayload,
-    SpeciesDetailsData
-  >(
-    {
-      params,
-    },
-    (data) => ({ speciesDetails: data })
-  );
-
-  return response;
-};
-
-/**
- * get all species names
- */
-const getSpeciesNames = async (search: string): Promise<SpeciesNamesResponse> => {
-  const params = { search };
-
-  const response: SpeciesNamesResponse =
-    search.length > 1
-      ? await httpSpeciesNames.get<SpeciesNamesResponsePayload, SpeciesNamesData>(
-          {
-            params,
-          },
-          (data) => ({ names: data?.names })
-        )
-      : { names: [], requestSucceeded: true };
-
-  return response;
 };
 
 /**
@@ -418,17 +290,11 @@ const mergeOtherSpecies = (
  * Exported functions
  */
 const SpeciesService = {
-  acceptProblemSuggestion,
-  createSpecies,
-  deleteSpecies,
   downloadSpeciesTemplate,
   getAllSpecies,
   getSpecies,
-  getSpeciesDetails,
-  getSpeciesNames,
   getSpeciesProjects,
   getSpeciesUploadStatus,
-  ignoreProblemSuggestion,
   mergeOtherSpecies,
   resolveSpeciesUpload,
   suggestSpecies,
