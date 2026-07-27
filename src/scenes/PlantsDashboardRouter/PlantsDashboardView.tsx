@@ -13,7 +13,6 @@ import useStickyPlantingSiteId, { ALL_PLANTING_SITES } from 'src/hooks/useSticky
 import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useSpeciesData } from 'src/providers/Species/SpeciesContext';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
 
 import EmptyPlantingSiteMap from './components/EmptyPlantingSiteMap';
@@ -54,11 +53,16 @@ export default function PlantsDashboardView({
 
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId(PREFERENCE_NAME);
 
-  const { setAcceleratorOrganizationId } = useSpeciesData();
+  // Effective organization for the dashboard: the accelerator project's org when on an accelerator
+  // route, otherwise the selected org. Threaded down so species/planting-site queries target it.
+  const dashboardOrganizationId = useMemo(
+    () => (isAcceleratorRoute ? organizationId : undefined) ?? selectedOrganization?.id,
+    [isAcceleratorRoute, organizationId, selectedOrganization?.id]
+  );
 
   // The header owns selection normalization; the view only needs `showAllSitesOption` to label the
   // totals section. The scoped query is shared (RTK cache) with the header.
-  const { showAllSitesOption } = useDashboardPlantingSites(projectId);
+  const { showAllSitesOption } = useDashboardPlantingSites(projectId, dashboardOrganizationId);
 
   // Keep the URL :plantingSiteId param in sync with the selection in org mode (no project selected),
   // so a specific site stays bookmarkable/deep-linkable.
@@ -93,14 +97,6 @@ export default function PlantsDashboardView({
   // Poll for survival rate recalculation and refresh observation results when it completes.
   const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(plantingSite?.id);
   const hasObservationResults = useMemo(() => !!plantingSite?.latestObservationId, [plantingSite]);
-
-  useEffect(() => {
-    if (organizationId) {
-      setAcceleratorOrganizationId(organizationId);
-    } else if (!isAcceleratorRoute && selectedOrganization?.id) {
-      setAcceleratorOrganizationId(selectedOrganization?.id);
-    }
-  }, [isAcceleratorRoute, organizationId, selectedOrganization?.id, setAcceleratorOrganizationId]);
 
   const sectionHeader = (title: string) => (
     <Grid item xs={12}>
@@ -138,7 +134,11 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <SurvivalRateCard plantingSiteId={plantingSite?.id} projectId={projectId} />
+            <SurvivalRateCard
+              plantingSiteId={plantingSite?.id}
+              projectId={projectId}
+              organizationId={dashboardOrganizationId}
+            />
           </Grid>
         </>
       ) : undefined,
@@ -150,6 +150,7 @@ export default function PlantsDashboardView({
       projectId,
       isProjectSelected,
       survivalRateRecalculationInProgress,
+      dashboardOrganizationId,
     ]
   );
 
@@ -175,6 +176,7 @@ export default function PlantsDashboardView({
         <PlantsAndSpeciesCard
           plantingSiteId={selectedPlantingSiteId !== ALL_PLANTING_SITES ? plantingSite?.id : undefined}
           projectId={projectId}
+          organizationId={dashboardOrganizationId}
         />
       </Grid>
     </>
@@ -318,6 +320,7 @@ export default function PlantsDashboardView({
       onSelectPlantingSite={selectPlantingSite}
       projectId={projectId}
       onSelectProject={setProjectId}
+      organizationId={dashboardOrganizationId}
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
         {renderTotalPlantsAndSpecies()}
