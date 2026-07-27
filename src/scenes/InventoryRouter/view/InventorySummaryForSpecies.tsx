@@ -5,7 +5,7 @@ import { Grid } from '@mui/material';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useOrganization } from 'src/providers';
 import { useLazyGetSpeciesSummaryQuery } from 'src/queries/generated/nurserySummaries';
-import { useListSpeciesProjectNamesQuery } from 'src/queries/search/speciesProjects';
+import { useLazyListSpeciesProjectNamesQuery } from 'src/queries/search/speciesProjects';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -24,25 +24,23 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
   const numberFormatter = useNumberFormatter();
 
   const [getSpeciesSummary, { currentData: speciesSummary, isError: summaryError }] = useLazyGetSpeciesSummaryQuery();
+  const [listSpeciesProjectNames, { currentData: speciesProjectNames, isError: speciesProjectNamesError }] =
+    useLazyListSpeciesProjectNamesQuery();
 
   useEffect(() => {
     if (selectedOrganization && speciesId) {
       void getSpeciesSummary(speciesId, true);
+      void listSpeciesProjectNames({ organizationId: selectedOrganization.id, speciesId }, true);
     }
-  }, [getSpeciesSummary, selectedOrganization, speciesId]);
+  }, [getSpeciesSummary, listSpeciesProjectNames, selectedOrganization, speciesId]);
 
   const summary = useMemo(() => speciesSummary?.summary, [speciesSummary?.summary]);
 
-  const { currentData: speciesProjectNames } = useListSpeciesProjectNamesQuery(
-    { organizationId: selectedOrganization?.id ?? -1, speciesId },
-    { skip: speciesId === undefined || !selectedOrganization }
-  );
-
   useEffect(() => {
-    if (summaryError) {
+    if (summaryError || speciesProjectNamesError) {
       snackbar.toastError();
     }
-  }, [summaryError, snackbar]);
+  }, [summaryError, snackbar, speciesProjectNamesError]);
 
   const getData = () => {
     if (!summary) {
