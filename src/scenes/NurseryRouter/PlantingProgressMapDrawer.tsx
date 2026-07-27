@@ -127,7 +127,7 @@ export default function PlantingProgressMapDrawer({
   return (
     <Box display='flex' flexDirection='column'>
       <Box bgcolor={theme.palette.TwClrBgSecondary} padding={theme.spacing(1, 1, 1, 1)} marginBottom={theme.spacing(1)}>
-        <Typography fontSize='16px' fontWeight={600}>
+        <Typography fontSize='20px' fontWeight={600}>
           {view.name}
         </Typography>
       </Box>
