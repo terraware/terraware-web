@@ -15,15 +15,9 @@ export type UseOrganizationSpeciesResult = {
   species: Species[];
   speciesById: Record<number, Species>;
   isLoading: boolean;
-  /** Forces a fresh fetch. Rarely needed — species mutations invalidate the cache automatically. */
   refetch: () => void;
 };
 
-/**
- * Loads an organization's species via RTK Query. Replaces the former SpeciesProvider/useSpeciesData
- * context: the species list is cached for the session (see the species extension's keepUnusedDataFor)
- * and refreshed by tag invalidation on species mutations.
- */
 export const useOrganizationSpecies = (args?: UseOrganizationSpeciesArgs): UseOrganizationSpeciesResult => {
   const { selectedOrganization } = useOrganization();
   const organizationId = args?.organizationId ?? selectedOrganization?.id;
