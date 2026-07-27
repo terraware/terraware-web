@@ -14,7 +14,6 @@ const SpeciesRouter = () => {
   const { species, isLoading, refetch } = useOrganizationSpecies();
 
   const getSpeciesView = useCallback((): JSX.Element => {
-    // Show a spinner while species are still loading so the onboarding empty state doesn't flash first.
     if (isLoading) {
       return (
         <Box sx={{ display: 'flex', justifyContent: 'center', paddingTop: '64px' }}>

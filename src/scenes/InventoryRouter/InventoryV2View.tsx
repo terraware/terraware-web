@@ -265,7 +265,6 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
 
   const navigateToInventoryCreateView = useCallback(() => goTo(APP_PATHS.INVENTORY_NEW), [goTo]);
 
-  // Show a spinner while species are still loading so the onboarding empty state doesn't flash first.
   if (speciesLoading) {
     return (
       <TfMain>
