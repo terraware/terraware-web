@@ -5,11 +5,11 @@ import { Box } from '@mui/material';
 
 import MapComponent from 'src/components/NewMap';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
-import { MapLayer, MapLayerFeature, MapLayerFeatureId } from 'src/components/NewMap/types';
+import { MapLayer, MapLayerFeature, MapLayerFeatureId, MapNameTag, MapPoint } from 'src/components/NewMap/types';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
-import { getBoundingBoxFromMultiPolygons } from 'src/components/NewMap/utils';
+import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
@@ -108,6 +108,37 @@ const PlantingSiteMapV2 = ({ plantingSiteId }: PlantingSiteMapV2Props): JSX.Elem
     }
   }, []);
 
+  const nameTags = useMemo((): MapNameTag[] | undefined => {
+    if (!plantingSite || plantingSite.boundary === undefined) {
+      return undefined;
+    } else {
+      const points = plantingSite.boundary.coordinates
+        .flat()
+        .flat()
+        .map(
+          ([lng, lat]): MapPoint => ({
+            lat,
+            lng,
+          })
+        );
+
+      const bbox = getBoundingBoxFromPoints(points);
+      const latitude = (bbox.maxLat + bbox.minLat) / 2;
+      const longitude = (bbox.maxLng + bbox.minLng) / 2;
+
+      return [
+        {
+          label: plantingSite.name,
+          longitude,
+          latitude,
+          onClick: () => {
+            fitBounds(bbox);
+          },
+        },
+      ];
+    }
+  }, [fitBounds, plantingSite]);
+
   useEffect(() => {
     if (plantingSite?.boundary) {
       fitBounds(getBoundingBoxFromMultiPolygons([plantingSite.boundary]));
@@ -127,6 +158,7 @@ const PlantingSiteMapV2 = ({ plantingSiteId }: PlantingSiteMapV2Props): JSX.Elem
       mapId={mapId}
       mapLayers={layers}
       mapRef={mapRef}
+      nameTags={nameTags}
       onTokenExpired={refreshToken}
       setDrawerOpen={setDrawerOpenCallback}
       token={token}
