@@ -2,8 +2,8 @@ import { api } from '../generated/nurseryBatches';
 import { QueryTagTypes } from '../tags';
 
 const batchMutationTags = (batchId: number) => [
-  { type: QueryTagTypes.Batches, id: batchId },
-  { type: QueryTagTypes.Batches, id: 'LIST' },
+  { type: QueryTagTypes.NurseryBatches, id: batchId },
+  { type: QueryTagTypes.NurseryBatches, id: 'LIST' },
   { type: QueryTagTypes.NurserySummary },
   { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
 ];
@@ -11,14 +11,14 @@ const batchMutationTags = (batchId: number) => [
 api.enhanceEndpoints({
   endpoints: {
     getBatch: {
-      providesTags: (_results, _error, batchId) => [{ type: QueryTagTypes.Batches, id: batchId }],
+      providesTags: (_results, _error, batchId) => [{ type: QueryTagTypes.NurseryBatches, id: batchId }],
     },
     getBatchHistory: {
-      providesTags: (_results, _error, batchId) => [{ type: QueryTagTypes.Batches, id: batchId }],
+      providesTags: (_results, _error, batchId) => [{ type: QueryTagTypes.NurseryBatches, id: batchId }],
     },
     createBatch: {
       invalidatesTags: [
-        { type: QueryTagTypes.Batches, id: 'LIST' },
+        { type: QueryTagTypes.NurseryBatches, id: 'LIST' },
         { type: QueryTagTypes.NurserySummary },
         { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
       ],
@@ -36,21 +36,21 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, batchId) => batchMutationTags(batchId),
     },
     listBatchPhotos: {
-      providesTags: (_results, _error, batchId) => [{ type: QueryTagTypes.BatchPhotos, id: batchId }],
+      providesTags: (_results, _error, batchId) => [{ type: QueryTagTypes.NurseryBatchPhotos, id: batchId }],
     },
     getBatchPhoto: {
-      providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.BatchPhotos, id: payload.batchId }],
+      providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.NurseryBatchPhotos, id: payload.batchId }],
     },
     createBatchPhoto: {
       invalidatesTags: (_results, _error, payload) => [
-        { type: QueryTagTypes.BatchPhotos, id: payload.batchId },
-        { type: QueryTagTypes.Batches, id: payload.batchId },
+        { type: QueryTagTypes.NurseryBatchPhotos, id: payload.batchId },
+        { type: QueryTagTypes.NurseryBatches, id: payload.batchId },
       ],
     },
     deleteBatchPhoto: {
       invalidatesTags: (_results, _error, payload) => [
-        { type: QueryTagTypes.BatchPhotos, id: payload.batchId },
-        { type: QueryTagTypes.Batches, id: payload.batchId },
+        { type: QueryTagTypes.NurseryBatchPhotos, id: payload.batchId },
+        { type: QueryTagTypes.NurseryBatches, id: payload.batchId },
       ],
     },
     getSeedlingBatchesUploadTemplate: {
@@ -58,7 +58,7 @@ api.enhanceEndpoints({
     },
     uploadSeedlingBatchesList: {
       invalidatesTags: [
-        { type: QueryTagTypes.Batches, id: 'LIST' },
+        { type: QueryTagTypes.NurseryBatches, id: 'LIST' },
         { type: QueryTagTypes.NurserySummary },
         { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
       ],
