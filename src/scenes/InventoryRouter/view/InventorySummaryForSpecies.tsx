@@ -1,10 +1,10 @@
-import React, { type JSX, useEffect } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Grid } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useOrganization } from 'src/providers';
-import { useGetSpeciesSummaryQuery } from 'src/queries/generated/nurserySummaries';
+import { useGetSpeciesSummaryQuery, useLazyGetSpeciesSummaryQuery } from 'src/queries/generated/nurserySummaries';
 import { selectSpeciesProjects } from 'src/redux/features/species/speciesProjectsSelectors';
 import { requestSpeciesProjects } from 'src/redux/features/species/speciesProjectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -27,12 +27,17 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
   const { selectedOrganization } = useOrganization();
   const numberFormatter = useNumberFormatter();
 
+  const [getSpeciesSummary, { currentData: speciesSummary, isError: summaryError }] = useLazyGetSpeciesSummaryQuery();
+
   const speciesProjects = useAppSelector(selectSpeciesProjects(speciesId));
 
-  const { currentData: speciesSummary, isError: summaryError } = useGetSpeciesSummaryQuery(speciesId, {
-    skip: speciesId === undefined || !selectedOrganization,
-  });
-  const summary = speciesSummary?.summary;
+  useEffect(() => {
+    if (selectedOrganization && speciesId) {
+      void getSpeciesSummary(speciesId, true);
+    }
+  }, [getSpeciesSummary, selectedOrganization, speciesId]);
+
+  const summary = useMemo(() => speciesSummary?.summary, [speciesSummary?.summary]);
 
   useEffect(() => {
     if (summaryError) {

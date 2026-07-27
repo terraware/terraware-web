@@ -1,16 +1,22 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import { API_PULL_INTERVAL } from 'src/constants';
 import { useOrganization } from 'src/providers';
-import { useGetOrganizationNurserySummaryQuery } from 'src/queries/generated/nurserySummaries';
+import { useLazyGetOrganizationNurserySummaryQuery } from 'src/queries/generated/nurserySummaries';
 
 export const useOrgNurserySummary = () => {
   const { selectedOrganization } = useOrganization();
 
-  const { currentData, isSuccess, isError } = useGetOrganizationNurserySummaryQuery(selectedOrganization?.id ?? -1, {
-    skip: !selectedOrganization,
-    pollingInterval: import.meta.env.PUBLIC_DISABLE_RECURRENT_REQUESTS ? undefined : API_PULL_INTERVAL,
-  });
+  const [getOrganizationNurserySummary, { currentData, isSuccess, isError }] =
+    useLazyGetOrganizationNurserySummaryQuery({
+      pollingInterval: import.meta.env.PUBLIC_DISABLE_RECURRENT_REQUESTS ? undefined : API_PULL_INTERVAL,
+    });
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void getOrganizationNurserySummary(selectedOrganization.id, true);
+    }
+  }, [getOrganizationNurserySummary, selectedOrganization]);
 
   return useMemo(() => {
     if (!isSuccess && !isError) {
