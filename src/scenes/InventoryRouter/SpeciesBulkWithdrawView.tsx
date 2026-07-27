@@ -4,7 +4,7 @@ import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
-import { useLazyListBatchIdsForSpeciesQuery, useListBatchIdsForSpeciesQuery } from 'src/queries/search/batches';
+import { useLazyListBatchIdsForSpeciesQuery } from 'src/queries/search/batches';
 import useQuery from 'src/utils/useQuery';
 
 export default function SpeciesBulkWithdrawView(): JSX.Element | null {
