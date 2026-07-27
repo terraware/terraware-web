@@ -116,7 +116,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
     }
 
     annotationResources.forEach((_resources: any, annotation: any) => {
-      if ((annotation.icon ?? 'menu') === iconType) {
+      if ((annotation.icon ?? 'text') === iconType) {
         this._applyAnnotationIcon(annotation);
       }
     });
@@ -180,7 +180,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
       return;
     }
 
-    const icon: AnnotationIconType = annotation.icon ?? 'menu';
+    const icon: AnnotationIconType = annotation.icon ?? 'text';
 
     resources.texture.destroy();
     resources.texture = this._createHotspotTexture(annotation.label, 64, 6, icon);
