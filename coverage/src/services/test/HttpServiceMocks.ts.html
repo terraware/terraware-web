@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">72.22% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>15/18</span>
+                <span class='fraction'>13/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">31.25% </span>
+                <span class="strong">18.75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>5/16</span>
+                <span class='fraction'>3/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">58.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>9/12</span>
+                <span class='fraction'>7/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">72.22% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>15/18</span>
+                <span class='fraction'>13/18</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -187,19 +187,19 @@
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -210,8 +210,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -227,7 +227,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -275,9 +275,9 @@ rstest.mock('../HttpService', () =&gt; {
     get2: (...args: any[]) =&gt; (mockHttpService.mockedImpls?.get2 ?? <span class="branch-1 cbranch-no" title="branch not covered" >actual.get2)</span>(args),
     put: (...args: any[]) =&gt; (mockHttpService.mockedImpls?.put ?? <span class="branch-1 cbranch-no" title="branch not covered" >actual.put)</span>(args),
     put2: <span class="fstat-no" title="function not covered" >(...args: any[]) =&gt; <span class="cstat-no" title="statement not covered" >(mockHttpService.mockedImpls?.put2 ?? actual.put2)(args),</span></span>
-    post: (...args: any[]) =&gt; (mockHttpService.mockedImpls?.post ?? <span class="branch-1 cbranch-no" title="branch not covered" >actual.post)</span>(args),
+    post: <span class="fstat-no" title="function not covered" >(...args: any[]) =&gt; <span class="cstat-no" title="statement not covered" >(mockHttpService.mockedImpls?.post ?? actual.post)(args),</span></span>
     post2: <span class="fstat-no" title="function not covered" >(...args: any[]) =&gt; <span class="cstat-no" title="statement not covered" >(mockHttpService.mockedImpls?.post2 ?? actual.post2)(args),</span></span>
-    delete: (...args: any[]) =&gt; (mockHttpService.mockedImpls?.delete ?? <span class="branch-1 cbranch-no" title="branch not covered" >actual.delete)</span>(args),
+    delete: <span class="fstat-no" title="function not covered" >(...args: any[]) =&gt; <span class="cstat-no" title="statement not covered" >(mockHttpService.mockedImpls?.delete ?? actual.delete)(args),</span></span>
     delete2: <span class="fstat-no" title="function not covered" >(...args: any[]) =&gt; <span class="cstat-no" title="statement not covered" >(mockHttpService.mockedImpls?.delete2 ?? actual.delete2)(args),</span></span>
   };
 &nbsp;
@@ -322,7 +322,7 @@ export { setHttpServiceMocks, clearHttpServiceMocks };
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-07-27T16:32:18.909Z
+                at 2026-07-27T16:47:23.626Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
