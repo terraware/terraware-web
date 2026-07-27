@@ -170,7 +170,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [selectedOrganization?.id, updateUserPreferences, userPreferences.lastVisitedOrg]);
 
   useEffect(() => {
-    // reset redux store when org changes
+    // Reset the feature (redux) slices when the org changes.
     store.dispatch({ type: 'RESET_APP' });
   }, [selectedOrganization?.id]);
 
