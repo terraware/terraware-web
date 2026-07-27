@@ -143,8 +143,6 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
     []
   );
 
-  // The search and filters narrow the history before previous-event lookups, so an event's
-  // "before" values are the previous one still visible in the table
   const filteredHistory = useMemo((): BatchHistoryItem[] | null => {
     if (!batchHistory || !users) {
       return null;
@@ -177,7 +175,6 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
 
     return filteredHistory
       .filter((historyItem) => {
-        // Filter out the first, "empty" result
         return historyItem.type === 'DetailsEdited' ? findPreviousEvent(historyItem, filteredHistory) : true;
       })
       .map((historyItem) => {
