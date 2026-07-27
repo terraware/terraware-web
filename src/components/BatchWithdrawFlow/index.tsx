@@ -15,7 +15,7 @@ import {
   useCreateBatchWithdrawalMutation,
   useUploadWithdrawalPhotoMutation,
 } from 'src/queries/generated/nurseryWithdrawals';
-import { useListBatchesByIdsQuery } from 'src/queries/search/batches';
+import { useLazyListBatchesByIdsQuery } from 'src/queries/search/batches';
 import strings from 'src/strings';
 import { NurseryWithdrawalRequest, NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 import { SearchResponseElement } from 'src/types/Search';
@@ -55,6 +55,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   const navigate = useSyncNavigate();
   const trackEvent = useTrackEvent();
 
+  const [listBatchesById, { currentData: searchedBatches }] = useLazyListBatchesByIdsQuery();
   const [createBatchWithdrawal] = useCreateBatchWithdrawalMutation();
   const [uploadWithdrawalPhotos] = useUploadWithdrawalPhotoMutation();
 
@@ -77,10 +78,11 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
     trackEvent(MIXPANEL_EVENTS.BATCH_WITHDRAWAL_STEP_REACHED, { step: flowState });
   }, [flowState, trackEvent]);
 
-  const { currentData: searchedBatches } = useListBatchesByIdsQuery(
-    { organizationId: selectedOrganization?.id ?? -1, batchIds },
-    { skip: !selectedOrganization }
-  );
+  useEffect(() => {
+    if (selectedOrganization) {
+      void listBatchesById({ organizationId: selectedOrganization.id, batchIds }, true);
+    }
+  }, [batchIds, listBatchesById, selectedOrganization]);
 
   const batches = useMemo(
     (): SearchResponseElement[] | undefined =>

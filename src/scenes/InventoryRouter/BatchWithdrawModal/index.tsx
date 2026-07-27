@@ -14,7 +14,7 @@ import {
   useCreateBatchWithdrawalMutation,
   useUploadWithdrawalPhotoMutation,
 } from 'src/queries/generated/nurseryWithdrawals';
-import { useListBatchesByIdsQuery } from 'src/queries/search/batches';
+import { useLazyListBatchesByIdsQuery } from 'src/queries/search/batches';
 import { useLazyListSpeciesTargetsForSubstratumQuery } from 'src/queries/search/speciesTargetsForSubstratum';
 import { NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 import { isContributor } from 'src/utils/organization';
@@ -69,6 +69,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   const [step, setStep] = useState<FlowStep>(0);
   const [showEmptyBatchesModal, setShowEmptyBatchesModal] = useState(false);
 
+  const [listBatchesByIds, { currentData: searchedBatches }] = useLazyListBatchesByIdsQuery();
   const [listSpeciesTargets, speciesTargetsResult] = useLazyListSpeciesTargetsForSubstratumQuery();
   const [createBatchWithdrawal, { isLoading: isCreating }] = useCreateBatchWithdrawalMutation();
   const [uploadWithdrawalPhoto] = useUploadWithdrawalPhotoMutation();
@@ -89,10 +90,11 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   const [draft, setDraft] = useState<BatchWithdrawDraft>(defaultDraft);
   const [hasWithdrawn, setHasWithdrawn] = useState(false);
 
-  const { currentData: searchedBatches } = useListBatchesByIdsQuery(
-    { organizationId: selectedOrganization?.id ?? -1, batchIds },
-    { skip: !open || !selectedOrganization || batchIds.length === 0 }
-  );
+  useEffect(() => {
+    if (selectedOrganization && batchIds.length > 0) {
+      void listBatchesByIds({ organizationId: selectedOrganization.id, batchIds }, true);
+    }
+  }, [batchIds, listBatchesByIds, selectedOrganization]);
 
   const batches = useMemo(
     (): BatchInfo[] | undefined =>

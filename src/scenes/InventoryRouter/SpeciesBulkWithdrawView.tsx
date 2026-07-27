@@ -4,7 +4,7 @@ import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
-import { useListBatchIdsForSpeciesQuery } from 'src/queries/search/batches';
+import { useLazyListBatchIdsForSpeciesQuery, useListBatchIdsForSpeciesQuery } from 'src/queries/search/batches';
 import useQuery from 'src/utils/useQuery';
 
 export default function SpeciesBulkWithdrawView(): JSX.Element | null {
@@ -14,10 +14,13 @@ export default function SpeciesBulkWithdrawView(): JSX.Element | null {
   const navigate = useSyncNavigate();
   const query = useQuery();
 
-  const { currentData: batchIds, isSuccess } = useListBatchIdsForSpeciesQuery(
-    { organizationId: selectedOrganization?.id ?? -1, speciesIds: speciesIds ?? [] },
-    { skip: !selectedOrganization || !speciesIds }
-  );
+  const [listBatchIdsForSpecies, { currentData: batchIds, isSuccess }] = useLazyListBatchIdsForSpeciesQuery();
+
+  useEffect(() => {
+    if (selectedOrganization && speciesIds) {
+      void listBatchIdsForSpecies({ organizationId: selectedOrganization.id, speciesIds }, true);
+    }
+  }, [listBatchIdsForSpecies, selectedOrganization, speciesIds]);
 
   useEffect(() => {
     if (query.getAll('speciesId').length > 0) {
