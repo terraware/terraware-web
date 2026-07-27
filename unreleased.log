@@ -1,3 +1,4 @@
+1d5f6711 Update dependency web-vitals to v6 (#6147)
 f4301363 Update dependency react-router to v7.18.0 [SECURITY] (#6150)
 d31a240c SW-7734 Remove SeedFund report service, redux settings slice, and dead types (#6116)
 bf39c73b SW-7734 Migrate SeedFund report photo CRUD to RTK Query (#6115)
