@@ -154,12 +154,15 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
   }, [MANDATORY_FIELDS, record, quantityChanged, quantityNotes]);
 
   const updatePhotos = useCallback(async () => {
-    // Failures are tolerated here to match the rest of the save flow, which reports only batch errors
-    await Promise.all(newPhotos.map((file) => createBatchPhoto({ batchId: batch.id, body: { file } })));
-    setNewPhotos([]);
-    await Promise.all(photoIdsToRemove.map((photoId) => deleteBatchPhoto({ batchId: batch.id, photoId })));
-    setPhotoIdsToRemove([]);
-  }, [batch.id, createBatchPhoto, deleteBatchPhoto, newPhotos, photoIdsToRemove]);
+    try {
+      await Promise.all(newPhotos.map((file) => createBatchPhoto({ batchId: batch.id, body: { file } }).unwrap()));
+      setNewPhotos([]);
+      await Promise.all(photoIdsToRemove.map((photoId) => deleteBatchPhoto({ batchId: batch.id, photoId }).unwrap()));
+      setPhotoIdsToRemove([]);
+    } catch {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [batch.id, createBatchPhoto, deleteBatchPhoto, newPhotos, photoIdsToRemove, snackbar, strings.GENERIC_ERROR]);
 
   const onCloseHandler = useCallback(() => {
     setValidateFields(false);
