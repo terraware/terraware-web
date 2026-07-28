@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box } from '@mui/material';
@@ -16,7 +16,11 @@ import {
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
-import { getBoundingBoxFromPoints, getBoundsZoomLevel } from 'src/components/NewMap/utils';
+import {
+  getBoundingBoxFromMultiPolygons,
+  getBoundingBoxFromPoints,
+  getBoundsZoomLevel,
+} from 'src/components/NewMap/utils';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
@@ -115,6 +119,16 @@ const PlantingSiteMapV2 = ({ plantingSiteId }: PlantingSiteMapV2Props): JSX.Elem
     }
   }, []);
 
+  const fitToSite = useCallback(() => {
+    if (plantingSite?.boundary) {
+      fitBounds(getBoundingBoxFromMultiPolygons([plantingSite.boundary]));
+    }
+  }, [fitBounds, plantingSite]);
+
+  useEffect(() => {
+    fitToSite();
+  }, [fitToSite]);
+
   const nameTags = useMemo((): MapNameTag[] | undefined => {
     if (!plantingSite || plantingSite.boundary === undefined) {
       return undefined;
@@ -187,6 +201,7 @@ const PlantingSiteMapV2 = ({ plantingSiteId }: PlantingSiteMapV2Props): JSX.Elem
       mapLayers={layers}
       mapRef={mapRef}
       nameTags={nameTags}
+      onMapLoad={fitToSite}
       onTokenExpired={refreshToken}
       setDrawerOpen={setDrawerOpenCallback}
       token={token}

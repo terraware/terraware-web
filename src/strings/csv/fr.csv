@@ -204,6 +204,7 @@ AR,RA,25a8e55a
 ARE_YOU_SURE,Êtes-vous sûr ?,d4536b91
 ARE_YOU_SURE_DELETE,Êtes-vous sûr de vouloir supprimer ?,a7f716f0
 ARE_YOU_SURE_DELETE_TARGET,Êtes-vous sûr de vouloir supprimer cet objectif d'espèce ?,8f7cb65e
+AREA,Superficie,be27ab89
 AREA_HA,Superficie (ha),8ab5d500
 AREA_NOT_OBSERVED,Zone non observée,9eeddab4
 ARROW_KEYS,Touches fléchées,5cefb475
@@ -1568,6 +1569,8 @@ PLANTING_DATES,Dates de plantation,e8aa47b1
 PLANTING_DATES_TAB_DESCRIPTION,Créez des plans pour déterminer quand et où les plants seront mis en terre afin d’atteindre les objectifs par espèce. Cliquez sur « Enregistrer et demander » pour demander à la pépinière de retirer des plants pour des dates spécifiques.,cd51495e
 PLANTING_DENSITY,Densité de plantation,2d5d3bcb
 PLANTING_GOAL,Objectif de plantation,a97123a1
+PLANTING_PLAN,Plan de plantation,423afe5f
+PLANTING_PLAN_DESCRIPTION,"Définissez les densités de plantation cibles et les espèces dans les objectifs du site, et planifiez les activités de plantation dans les saisons de plantation.",72ea86ca
 PLANTING_PLANS,Plans de plantation,b6afa2ff
 PLANTING_PROGRESS,Progression de la plantation,58616da9
 PLANTING_PROGRESS_PERCENT,Progression de la plantation (%),0d372a57
@@ -2116,6 +2119,7 @@ SITE_EXCLUSION_AREAS_DESCRIPTION_2,Excluez des zones du site de plantation en de
 SITE_EXCLUSION_AREAS_OPTIONAL,Zones d'exclusion (facultatif),434ba2b3
 SITE_EXCLUSION_ERRORS,Il y a des erreurs dans la limite d’exclusion.,dc334f43
 SITE_GOAL,Objectif du site,61f394c1
+SITE_GOALS,Objectifs du site,345a7c04
 SITE_LOCATION,Emplacement du site,e0a85b19
 SITE_MAP,Carte du site,df2fc60a
 SITE_STRATUM_BOUNDARIES,Limites de la strate,418d687a
@@ -2355,7 +2359,9 @@ TARGET_HECTARES_PLANTED,Cible : {0} ha,8c7d580d
 TARGET_PLANTING_DENSITY,Densité de plantation cible,4f350d39
 TARGET_PLANTING_DENSITY_TOOLTIP,Densité de plantation cible pour le stratum (plants par hectare).,042cc8ff
 TARGET_PLANTS,plantes cibles,ff0517a3
+TARGET_PLANTS_TITLE,Plantes cibles,c1aa1642
 TARGET_QUANTITY,Quantité cible,73c71da9
+TARGET_SPECIES,Espèces cibles,ba3510dd
 TARGETS,Cibles,afd4bbf9
 TEMPLATE,Modèle,28afe27c
 TEMPLATES,Modèles,a66a976a
