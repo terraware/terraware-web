@@ -8,7 +8,7 @@ import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useListAllBatchesQuery } from 'src/queries/search/batches';
+import { ListAllBatchesApiArg, useLazyListAllBatchesQuery } from 'src/queries/search/batches';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
@@ -88,19 +88,27 @@ export default function InventoryListByBatch() {
     [strings]
   );
 
-  // `data` rather than `currentData` so the table keeps showing the previous rows while a filter
-  // change refetches, rather than blanking out on every keystroke.
-  const { data: batchResults } = useListAllBatchesQuery(
-    {
+  const searchArgs = useMemo(
+    (): ListAllBatchesApiArg => ({
       organizationId: selectedOrganization?.id ?? -1,
       sortOrder: { field: 'batchNumber', direction: 'Ascending' } as SearchSortOrder,
       nurseryIds: filters.facilityIds,
       subLocationIds: filters.subLocationsIds,
       projectIds: filters.projectIds,
       query: debouncedSearchTerm,
-    },
-    { skip: !selectedOrganization || !activeLocale }
+    }),
+    [debouncedSearchTerm, filters.facilityIds, filters.projectIds, filters.subLocationsIds, selectedOrganization]
   );
+
+  // `data` rather than `currentData` so the table keeps showing the previous rows while a filter
+  // change refetches, rather than blanking out on every keystroke.
+  const [listAllBatches, { data: batchResults }] = useLazyListAllBatchesQuery();
+
+  useEffect(() => {
+    if (selectedOrganization && activeLocale) {
+      void listAllBatches(searchArgs, true);
+    }
+  }, [activeLocale, listAllBatches, searchArgs, selectedOrganization]);
 
   const results = useMemo(
     () =>

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Container } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -7,7 +7,7 @@ import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useSearchSpeciesInventoryQuery } from 'src/queries/search/nurseryInventory';
+import { SearchSpeciesInventoryApiArg, useLazySearchSpeciesInventoryQuery } from 'src/queries/search/nurseryInventory';
 import { isSpeciesEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
@@ -72,16 +72,24 @@ export default function InventoryListBySpecies() {
     [strings]
   );
 
-  // `data` rather than `currentData` so the table keeps showing the previous rows while a filter
-  // change refetches, rather than blanking out on every keystroke.
-  const { data: apiSearchResults } = useSearchSpeciesInventoryQuery(
-    {
+  const searchArgs = useMemo(
+    (): SearchSpeciesInventoryApiArg => ({
       organizationId: selectedOrganization?.id ?? -1,
       query: debouncedSearchTerm,
       facilityIds: filters.facilityIds,
-    },
-    { skip: !selectedOrganization }
+    }),
+    [debouncedSearchTerm, filters.facilityIds, selectedOrganization]
   );
+
+  // `data` rather than `currentData` so the table keeps showing the previous rows while a filter
+  // change refetches, rather than blanking out on every keystroke.
+  const [searchSpeciesInventory, { data: apiSearchResults }] = useLazySearchSpeciesInventoryQuery();
+
+  useEffect(() => {
+    if (selectedOrganization) {
+      void searchSpeciesInventory(searchArgs, true);
+    }
+  }, [searchArgs, searchSpeciesInventory, selectedOrganization]);
 
   const searchResults = useMemo(() => {
     if (!apiSearchResults) {

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Container } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -8,8 +8,11 @@ import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useListAllBatchesQuery } from 'src/queries/search/batches';
-import { useSearchInventoryByNurseryQuery } from 'src/queries/search/nurseryInventory';
+import { useLazyListAllBatchesQuery } from 'src/queries/search/batches';
+import {
+  SearchInventoryByNurseryApiArg,
+  useLazySearchInventoryByNurseryQuery,
+} from 'src/queries/search/nurseryInventory';
 import { isNurseryEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
@@ -70,22 +73,33 @@ export default function InventoryListByNursery() {
   );
 
   // Whether the org has any inventory at all, which decides between the table and the onboarding page
-  const { data: allBatches } = useListAllBatchesQuery(
-    { organizationId: selectedOrganization?.id ?? -1 },
-    { skip: !selectedOrganization || !activeLocale }
-  );
+  const [listAllBatches, { data: allBatches }] = useLazyListAllBatchesQuery();
 
-  // `data` rather than `currentData` so the table keeps showing the previous rows while a filter
-  // change refetches, rather than blanking out on every keystroke.
-  const { data: apiSearchResults } = useSearchInventoryByNurseryQuery(
-    {
+  useEffect(() => {
+    if (selectedOrganization && activeLocale) {
+      void listAllBatches({ organizationId: selectedOrganization.id }, true);
+    }
+  }, [activeLocale, listAllBatches, selectedOrganization]);
+
+  const searchArgs = useMemo(
+    (): SearchInventoryByNurseryApiArg => ({
       organizationId: selectedOrganization?.id ?? -1,
       query: debouncedSearchTerm,
       facilityIds: filters.facilityIds,
       speciesIds: filters.speciesIds,
-    },
-    { skip: !selectedOrganization || !activeLocale }
+    }),
+    [debouncedSearchTerm, filters.facilityIds, filters.speciesIds, selectedOrganization]
   );
+
+  // `data` rather than `currentData` so the table keeps showing the previous rows while a filter
+  // change refetches, rather than blanking out on every keystroke.
+  const [searchInventoryByNursery, { data: apiSearchResults }] = useLazySearchInventoryByNurseryQuery();
+
+  useEffect(() => {
+    if (selectedOrganization && activeLocale) {
+      void searchInventoryByNursery(searchArgs, true);
+    }
+  }, [activeLocale, searchArgs, searchInventoryByNursery, selectedOrganization]);
 
   const searchResults = useMemo(() => {
     if (!apiSearchResults) {
