@@ -517,19 +517,15 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
     return batchesFromNursery.reduce((acc, batch) => acc + (Number(batch['readyQuantity(raw)']) || 0), 0);
   }, [batchesFromNursery]);
 
-  const outplantDisabled = useMemo(() => {
-    if ((!isLoading && !plantingSites.length) || noReadySeedlings) {
-      return true;
-    }
+  const noPlantingSites = useMemo(() => !isLoading && !plantingSites.length, [isLoading, plantingSites]);
 
-    return false;
-  }, [plantingSites, isLoading, noReadySeedlings]);
+  const outplantDisabled = useMemo(() => noPlantingSites || noReadySeedlings, [noPlantingSites, noReadySeedlings]);
 
   const getOutplantLabel = () => {
     return (
       <>
         {strings.PLANTING}
-        {outplantDisabled ? (
+        {noPlantingSites ? (
           <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_PLANTING_SITES} />
         ) : (
           <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS} />
