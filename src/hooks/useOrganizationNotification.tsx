@@ -7,7 +7,7 @@ import TextWithLink from 'src/components/common/TextWithLink';
 import { APP_PATHS } from 'src/constants';
 import useInitializeUserTimeZone from 'src/hooks/useInitializeUserTimeZone';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
-import { useOrganization, useTimeZones, useUser } from 'src/providers';
+import { useOrganization, useTimeZones } from 'src/providers';
 import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
 import { ClientNotification } from 'src/types/Notifications';
@@ -22,7 +22,6 @@ export default function useOrganizationNotification(): ClientNotification | null
   const [timeZoneOrgNotificationRead, setTimeZoneOrgNotificationRead] = useState(false);
   const [orgTimeZone, setOrgTimeZone] = useState<string>();
 
-  const { reloadUserPreferences } = useUser();
   const timeZones = useTimeZones();
   const updateUserPreferences = useUpdateUserPreferences();
 
@@ -98,20 +97,10 @@ export default function useOrganizationNotification(): ClientNotification | null
             },
             selectedOrganization.id
           );
-
-          // eslint-disable-next-line @typescript-eslint/await-thenable
-          await reloadUserPreferences();
         },
       };
     }
 
     return null;
-  }, [
-    timeZoneOrgNotification,
-    orgTimeZone,
-    reloadUserPreferences,
-    selectedOrganization,
-    timeZoneOrgNotificationRead,
-    updateUserPreferences,
-  ]);
+  }, [timeZoneOrgNotification, orgTimeZone, selectedOrganization, timeZoneOrgNotificationRead, updateUserPreferences]);
 }

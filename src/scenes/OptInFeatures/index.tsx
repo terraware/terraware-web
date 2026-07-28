@@ -12,11 +12,7 @@ import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
-type OptInFeaturesViewProps = {
-  refresh?: () => void;
-};
-
-export default function OptInFeaturesView({ refresh }: OptInFeaturesViewProps): JSX.Element {
+export default function OptInFeaturesView(): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const [preferences, setPreferences] = useState<{ [key: string]: boolean }>();
@@ -75,9 +71,6 @@ export default function OptInFeaturesView({ refresh }: OptInFeaturesViewProps): 
         ...prev,
         [feature.preferenceName]: value,
       }));
-      if (refresh) {
-        refresh();
-      }
     } else {
       setPreferences((prev) => ({
         ...prev,

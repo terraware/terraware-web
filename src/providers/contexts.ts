@@ -17,10 +17,6 @@ export const UserContext = createContext<ProvidedUserData>({
     // default no-op implementation
     return;
   },
-  reloadUserPreferences: () => {
-    // default no-op implementation
-    return;
-  },
   userPreferences: {},
   bootstrapped: false,
   updateUserCookieConsent: () => Promise.resolve(),

@@ -31,7 +31,7 @@ const MobileAppCard = ({
 }: MobileAppCardProps): JSX.Element => {
   const { isDesktop, isMobile } = useDeviceInfo();
   const theme = useTheme();
-  const { updateUserPreferences, userPreferences, reloadUserPreferences } = useUser();
+  const { updateUserPreferences, userPreferences } = useUser();
 
   const showCard = useMemo(() => {
     if (allowDismiss && dismissPreferenceId && userPreferences[dismissPreferenceId]) {
@@ -43,9 +43,8 @@ const MobileAppCard = ({
   const dismissMobileAppCard = useCallback(async () => {
     if (dismissPreferenceId) {
       await updateUserPreferences({ [dismissPreferenceId]: true });
-      reloadUserPreferences();
     }
-  }, [dismissPreferenceId, reloadUserPreferences, updateUserPreferences]);
+  }, [dismissPreferenceId, updateUserPreferences]);
 
   const handleDismissClick = useCallback(() => {
     void dismissMobileAppCard();

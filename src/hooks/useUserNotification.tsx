@@ -24,7 +24,7 @@ export default function useUserNotification(): ClientNotification | null {
   const [timeZoneUserNotification, setTimeZoneUserNotification] = useState(false);
   const [timeZoneUserNotificationRead, setTimeZoneUserNotificationRead] = useState(false);
   const [userTimeZone, setUserTimeZone] = useState<string>();
-  const { user, userPreferences, reloadUserPreferences } = useUser();
+  const { user, userPreferences } = useUser();
   const { selectedOrganization } = useOrganization();
   const timeZones = useTimeZones();
   const updateUserPreferences = useUpdateUserPreferences();
@@ -62,7 +62,7 @@ export default function useUserNotification(): ClientNotification | null {
 
   useEffect(() => {
     if (userUnit.updated) {
-      reloadUserPreferences();
+      // the preferences write invalidates the Preferences tag, so the subscription refetches on its own
       return;
     }
 
@@ -73,7 +73,7 @@ export default function useUserNotification(): ClientNotification | null {
     }
 
     setUnitNotification(!featureNotificationExpired(userUnit.unitsAcknowledgedOnMs));
-  }, [userUnit, reloadUserPreferences]);
+  }, [userUnit]);
 
   return useMemo(() => {
     if (unitNotification && timeZoneUserNotification) {
@@ -127,9 +127,6 @@ export default function useUserNotification(): ClientNotification | null {
             unitsAcknowledgedOnMs: read ? Date.now() : undefined,
             timeZoneAcknowledgedOnMs: read ? Date.now() : undefined,
           });
-
-          // eslint-disable-next-line @typescript-eslint/await-thenable
-          await reloadUserPreferences();
         },
       };
     }
@@ -138,7 +135,6 @@ export default function useUserNotification(): ClientNotification | null {
   }, [
     unitNotification,
     timeZoneUserNotification,
-    reloadUserPreferences,
     selectedOrganization,
     user?.userType,
     user?.locale,

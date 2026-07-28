@@ -112,7 +112,7 @@ const MyAccountForm = ({
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
-  const { userPreferences, reloadUserPreferences } = useUser();
+  const { userPreferences } = useUser();
   const updateUserPreferences = useUpdateUserPreferences();
   const snackbar = useSnackbar();
   const docLinks = useDocLinks();
@@ -218,7 +218,6 @@ const MyAccountForm = ({
       }
     } else {
       await updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
-      reloadUserPreferences();
 
       const lastLocale = selectedLocale;
       setSelectedLocale(localeSelected);

@@ -33,7 +33,6 @@ export enum QueryTagTypes {
   PlantingSeasons = 'PlantingSeasons',
   PlantingSiteSurvivalRate = 'PlantingSiteSurvivalRate',
   PlantingSites = 'PlantingSites',
-  Preferences = 'Preferences',
   ProjectInternalUsers = 'ProjectInternalUsers',
   ProjectModules = 'ProjectModules',
   ProjectReportConfigs = 'ProjectReportConfigs',
@@ -50,6 +49,7 @@ export enum QueryTagTypes {
   Species = 'Species',
   T0 = 'T0',
   TrackingStats = 'TrackingStats',
+  UserPreferences = 'UserPreferences',
   Users = 'Users',
   ViabilityTests = 'ViabilityTests',
 }

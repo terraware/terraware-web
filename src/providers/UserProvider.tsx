@@ -29,7 +29,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
   // Both of these queries take a constant arg, so their cache entries are never keyed away from under
   // us and `currentData` survives refetches. RESET_APP preserves the RTK Query cache slice (see
   // rootReducer), so there is nothing to latch against.
-  const { currentData: preferencesData, refetch: refetchPreferences } = useGetUserPreferencesQuery(undefined);
+  const { currentData: preferencesData } = useGetUserPreferencesQuery(undefined);
   const userPreferences = useMemo<PreferencesType | undefined>(
     () => (preferencesData ? preferencesData.preferences ?? {} : undefined),
     [preferencesData]
@@ -50,10 +50,6 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
     },
     [updatePreferences]
   );
-
-  const reloadUserPreferences = useCallback(() => {
-    void refetchPreferences();
-  }, [refetchPreferences]);
 
   const reloadUser = useCallback(() => {
     void refetch();
@@ -84,21 +80,11 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
       bootstrapped: Boolean(preferencesLoaded && user),
       user,
       userPreferences: userPreferences ?? {},
-      reloadUserPreferences,
       updateUserCookieConsent,
       updateUserPreferences,
       isAllowed,
     }),
-    [
-      reloadUser,
-      user,
-      preferencesLoaded,
-      userPreferences,
-      reloadUserPreferences,
-      updateUserCookieConsent,
-      updateUserPreferences,
-      isAllowed,
-    ]
+    [reloadUser, user, preferencesLoaded, userPreferences, updateUserCookieConsent, updateUserPreferences, isAllowed]
   );
 
   useEffect(() => {
