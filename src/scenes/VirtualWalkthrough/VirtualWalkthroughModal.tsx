@@ -5,7 +5,7 @@ import { Box, IconButton } from '@mui/material';
 import { OverlayModal } from '@terraware/web-components';
 import { Application } from '@terraware/web-components/virtualWalkthrough';
 
-import VirtualWalkthroughViewer, { VirtualWalkthroughViewerProps } from './VirtualWalkthroughViewer';
+import VirtualWalkthroughWrapper, { VirtualWalkthroughViewerProps } from './VirtualWalkthroughWrapper';
 
 type VirtualWalkthroughModalProps = Omit<VirtualWalkthroughViewerProps, 'isFullScreen' | 'onToggleFullScreen'> & {
   onClose?: () => void;
@@ -65,7 +65,7 @@ const VirtualWalkthroughModal = ({ onClose, belowComponent, ...viewerProps }: Vi
           <Close />
         </IconButton>
         <Application style={{ width: '100%', height: '100%', display: 'block' }}>
-          <VirtualWalkthroughViewer {...viewerProps} isFullScreen={true} onToggleFullScreen={handleToggleFullScreen} />
+          <VirtualWalkthroughWrapper {...viewerProps} isFullScreen={true} onToggleFullScreen={handleToggleFullScreen} />
         </Application>
       </Box>
     );
@@ -74,7 +74,7 @@ const VirtualWalkthroughModal = ({ onClose, belowComponent, ...viewerProps }: Vi
   return (
     <OverlayModal open={true} onClose={onClose} belowComponent={belowComponent}>
       <Application style={{ width: '100%', height: '100%', display: 'block', margin: '0 auto' }}>
-        <VirtualWalkthroughViewer {...viewerProps} isFullScreen={false} onToggleFullScreen={handleToggleFullScreen} />
+        <VirtualWalkthroughWrapper {...viewerProps} isFullScreen={false} onToggleFullScreen={handleToggleFullScreen} />
       </Application>
     </OverlayModal>
   );
