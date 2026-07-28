@@ -1,3 +1,4 @@
+8bf80b88 Reroute batch types off generated-schema (#6159)
 f1f0a0b6 Migrate PreferencesService to RTK Query (#6025)
 780dc64a Migrate nursery inventory and summaries to RTK Query (#6158)
 efbeedb6 Migrate batch searches to RTK Query and delete NurseryBatchService (#6157)
