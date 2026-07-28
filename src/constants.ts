@@ -127,6 +127,8 @@ export enum APP_PATHS {
   PEOPLE = '/people',
   PEOPLE_VIEW = '/people/:personId',
   PLANTS_DASHBOARD = '/plants/dashboard',
+  PLANTING_PLANS = '/planting-plans',
+  PLANTING_PLANS_VIEW = '/planting-plans/:plantingSiteId',
   PLANTING_PROGRESS = '/plants/planting-progress',
   PLANTING_SEASONS = '/plants/planting-seasons',
   PLANTING_SEASONS_VIEW = '/plants/planting-seasons/:plantingSeasonId',

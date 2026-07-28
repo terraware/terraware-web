@@ -12,6 +12,7 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -64,6 +65,7 @@ export default function NavBar({
   const isBatchWithdrawRoute = useMatch({ path: APP_PATHS.BATCH_WITHDRAW + '/', end: false });
   const isPlantingSitesRoute = useMatch({ path: APP_PATHS.PLANTING_SITES + '/', end: false });
   const isPlantsDashboardRoute = useMatch({ path: APP_PATHS.PLANTS_DASHBOARD + '/', end: false });
+  const isPlantingPlansRoute = useMatch({ path: APP_PATHS.PLANTING_PLANS + '/', end: false });
   const isPlantingProgressRoute = useMatch({ path: APP_PATHS.PLANTING_PROGRESS + '/', end: false });
   const isPlantingSeasonsRoute = useMatch({ path: APP_PATHS.PLANTING_SEASONS + '/', end: false });
   const isWithdrawalLogRoute = useMatch({ path: APP_PATHS.NURSERY_WITHDRAWALS + '/', end: false });
@@ -408,6 +410,17 @@ export default function NavBar({
             }}
             id='plants-dashboard'
           />
+
+          {isEnabled('Planting Goals') && (
+            <NavItem
+              label={strings.PLANTING_PLANS}
+              selected={!!isPlantingPlansRoute}
+              onClick={() => {
+                closeAndNavigateTo(APP_PATHS.PLANTING_PLANS);
+              }}
+              id='planting-plans'
+            />
+          )}
 
           {hasPlantingSites === true ? (
             <>
