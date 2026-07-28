@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40.67% </span>
+                <span class="strong">42.1% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>24/59</span>
+                <span class='fraction'>24/57</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12% </span>
+                <span class="strong">15% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/25</span>
+                <span class='fraction'>3/20</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40.67% </span>
+                <span class="strong">42.1% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>24/59</span>
+                <span class='fraction'>24/57</span>
             </div>
         
             
@@ -367,22 +367,7 @@
 <a name='L302'></a><a href='#L302'>302</a>
 <a name='L303'></a><a href='#L303'>303</a>
 <a name='L304'></a><a href='#L304'>304</a>
-<a name='L305'></a><a href='#L305'>305</a>
-<a name='L306'></a><a href='#L306'>306</a>
-<a name='L307'></a><a href='#L307'>307</a>
-<a name='L308'></a><a href='#L308'>308</a>
-<a name='L309'></a><a href='#L309'>309</a>
-<a name='L310'></a><a href='#L310'>310</a>
-<a name='L311'></a><a href='#L311'>311</a>
-<a name='L312'></a><a href='#L312'>312</a>
-<a name='L313'></a><a href='#L313'>313</a>
-<a name='L314'></a><a href='#L314'>314</a>
-<a name='L315'></a><a href='#L315'>315</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L305'></a><a href='#L305'>305</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -582,11 +567,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -704,7 +684,6 @@ import { isAdmin } from 'src/utils/organization';
 &nbsp;
 import CachedUserService from './CachedUserService';
 import HttpService, { Response } from './HttpService';
-import PreferencesService from './PreferencesService';
 &nbsp;
 /**
  * Service for organization related functionality
@@ -729,10 +708,6 @@ export type OrganizationData = {
 };
 &nbsp;
 export type OrganizationResponse = Response &amp; OrganizationData;
-&nbsp;
-export type UpdateOptions = {
-  skipAcknowledgeTimeZone?: boolean;
-};
 &nbsp;
 export type OrganizationInternalTags = {
   internalTags: number[];
@@ -868,7 +843,7 @@ const createOrganization = <span class="fstat-no" title="function not covered" >
 /**
  * update an organization
  */
-const updateOrganization = <span class="fstat-no" title="function not covered" >async (organization: Organization, options: UpdateOptions = {}): Promise&lt;Response&gt; =&gt; {</span>
+const updateOrganization = <span class="fstat-no" title="function not covered" >async (organization: Organization): Promise&lt;Response&gt; =&gt; {</span>
   const {
     name,
     description,
@@ -897,11 +872,6 @@ const updateOrganization = <span class="fstat-no" title="function not covered" >
       '{organizationId}': organization.id.toString(),
     },
   });
-&nbsp;
-  // update preferences to indicate time zone was set by user
-<span class="cstat-no" title="statement not covered" >  if (response.requestSucceeded &amp;&amp; timeZone &amp;&amp; !options.skipAcknowledgeTimeZone) {</span>
-<span class="cstat-no" title="statement not covered" >    await PreferencesService.updateUserOrgPreferences(organization.id, { timeZoneAcknowledgedOnMs: Date.now() });</span>
-  }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return response;</span>
 };
@@ -934,7 +904,7 @@ const initializeTimeZone = <span class="fstat-no" title="function not covered" >
   }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  if (!organization.timeZone) {</span>
-    const response = <span class="cstat-no" title="statement not covered" >await updateOrganization({ ...organization, timeZone }, { skipAcknowledgeTimeZone: true });</span>
+    const response = <span class="cstat-no" title="statement not covered" >await updateOrganization({ ...organization, timeZone });</span>
 <span class="cstat-no" title="statement not covered" >    if (response.requestSucceeded) {</span>
 <span class="cstat-no" title="statement not covered" >      initializedTimeZone.updated = true;</span>
 <span class="cstat-no" title="statement not covered" >      initializedTimeZone.timeZone = timeZone;</span>
@@ -1012,7 +982,7 @@ export default OrganizationService;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-07-28T23:35:57.330Z
+                at 2026-07-28T23:41:33.847Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
