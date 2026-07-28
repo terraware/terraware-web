@@ -7,6 +7,7 @@ import { Color, Vec3 } from 'playcanvas';
 import { XrControllers } from 'playcanvas/scripts/esm/xr-controllers.mjs';
 
 import Annotation, { AnnotationProps } from 'src/components/GaussianSplat/Annotation';
+import AnnotationPanel from 'src/components/GaussianSplat/AnnotationPanel';
 import { AutoRotator } from 'src/components/GaussianSplat/AutoRotator';
 import BoundaryRing from 'src/components/GaussianSplat/BoundaryRing';
 import GradientSky from 'src/components/GaussianSplat/GradientSky';
@@ -58,6 +59,7 @@ const VirtualWalkthroughViewer = ({
   const [selectedAnnotationIndex, setSelectedAnnotationIndex] = useState(-1);
   const [localAnnotations, setLocalAnnotations] = useState<AnnotationProps[]>([]);
   const [isTextFieldFocused, setIsTextFieldFocused] = useState(false);
+  const [viewingAnnotation, setViewingAnnotation] = useState<AnnotationProps | null>(null);
   const [getOrgSplatInfo, { data: orgData }] = useLazyGetOrganizationSplatInfoQuery();
   const [getObsSplatInfo, { data: obsData }] = useLazyListSplatDetailsQuery();
   const [saveObservationAnnotations] = useSetObservationSplatAnnotationsMutation();
@@ -153,6 +155,8 @@ const VirtualWalkthroughViewer = ({
                   number,
                 ])
               : undefined,
+            // TODO: replace with actual image url once retrieval is available
+            imageUrl: annotation.media.length > 0 ? 'https://placehold.co/800x450' : undefined,
           }) as AnnotationProps
       ) ?? [],
     [data?.annotations]
@@ -263,6 +267,14 @@ const VirtualWalkthroughViewer = ({
     setSelectedAnnotationIndex(-1);
   }, []);
 
+  const handleAnnotationView = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    (annotation: AnnotationProps, annotationIndex: number, screenX: number, screenY: number) => {
+      setViewingAnnotation(annotation);
+    },
+    []
+  );
+
   const handleAnnotationUpdate = useCallback(
     (updates: Partial<AnnotationProps>) => {
       if (selectedAnnotationIndex === -1) {
@@ -345,6 +357,7 @@ const VirtualWalkthroughViewer = ({
               isSelected={selectedAnnotationIndex === index}
               onSelect={() => setSelectedAnnotationIndex(index)}
               onPositionChange={handleAnnotationPositionChange}
+              onView={(anno, screenX, screenY) => handleAnnotationView(anno, index, screenX, screenY)}
             />
           ))}
         </Entity>
@@ -374,6 +387,13 @@ const VirtualWalkthroughViewer = ({
         onToggleFullScreen={onToggleFullScreen}
         isFreeFly={isFreeFly}
         onToggleFreeFly={handleToggleFreeFly}
+      />
+
+      <AnnotationPanel
+        annotation={viewingAnnotation}
+        onClose={() => {
+          setViewingAnnotation(null);
+        }}
       />
     </>
   );

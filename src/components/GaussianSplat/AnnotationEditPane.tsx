@@ -134,7 +134,6 @@ const AnnotationEditPane = ({ visible, annotation, onUpdate, onTextFieldFocus }:
                 onChange={handleLabelChange}
                 onFocus={handleFocus}
                 onBlur={handleBlur}
-                maxLength={3}
                 sx={textFieldSx}
               />
             </Tooltip>

@@ -16,12 +16,15 @@ export interface AnnotationProps {
   title: string;
   bodyText?: string;
   label?: string;
+  imageUrl?: string;
   cameraPosition?: [number, number, number];
   visible?: boolean;
   isEdit?: boolean;
   isSelected?: boolean;
   onSelect?: () => void;
   onPositionChange?: (position: [number, number, number]) => void;
+  onView?: (annotation: AnnotationProps, screenX: number, screenY: number) => void;
+  onScreenPositionUpdate?: (index: number, screenX: number, screenY: number) => void;
 }
 
 /**
@@ -46,13 +49,16 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
     position,
     cameraPosition,
     bodyText,
+    imageUrl,
+    title,
+    label,
     visible = true,
     isEdit = false,
     isSelected = false,
     onSelect,
     onPositionChange,
+    onView,
     index,
-    ...annotationProps
   } = props;
   const app = useApp();
   const { setCamera } = useCameraPosition();
@@ -62,24 +68,41 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
   // Use refs to always call the latest callback values
   const isEditRef = useRef(isEdit);
   const onSelectRef = useRef(onSelect);
+  const onViewRef = useRef(onView);
   const positionRef = useRef(position);
   const cameraPositionRef = useRef(cameraPosition);
+  const annotationForViewRef = useRef<AnnotationProps>({
+    position,
+    title,
+    label,
+    bodyText,
+    imageUrl,
+    cameraPosition,
+  });
 
   useEffect(() => {
     isEditRef.current = isEdit;
     onSelectRef.current = onSelect;
+    onViewRef.current = onView;
     positionRef.current = position;
     cameraPositionRef.current = cameraPosition;
-  }, [isEdit, onSelect, position, cameraPosition]);
+    annotationForViewRef.current = { position, title, label, bodyText, imageUrl, cameraPosition };
+  }, [isEdit, onSelect, onView, position, cameraPosition, title, label, bodyText, imageUrl]);
 
   // Create a stable callback that reads from refs, because this is read from TfAnnotationManager when the annotation is added to the scene
-  const handleClick = useCallback(() => {
-    if (isEditRef.current) {
-      onSelectRef.current?.();
-    } else {
-      setCamera(positionRef.current, cameraPositionRef.current);
-    }
-  }, [setCamera]);
+  const handleClick = useCallback(
+    (screenX?: number, screenY?: number) => {
+      if (isEditRef.current) {
+        onSelectRef.current?.();
+      } else {
+        setCamera(positionRef.current, cameraPositionRef.current);
+        if (onViewRef.current && screenX !== undefined && screenY !== undefined) {
+          onViewRef.current(annotationForViewRef.current, screenX, screenY);
+        }
+      }
+    },
+    [setCamera]
+  );
 
   const entityName = useMemo(() => `annotation-${index}`, [index]);
 
@@ -175,7 +198,8 @@ const Annotation = (props: AnnotationProps & { index: number }) => {
     <Entity name={entityName} position={position}>
       <Script
         script={PcAnnotation}
-        {...annotationProps}
+        title={title}
+        label={label}
         text={bodyText}
         enabled={visible}
         onClickCallback={handleClick}
