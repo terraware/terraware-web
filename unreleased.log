@@ -1,4 +1,3 @@
-387a5310 Migrate nursery batch CRUD to RTK Query and drop the batches redux feature (#6155)
 df09221e SW-7907 Update Planting tooltips in withdrawal form (#6171)
 e1469410 SW-8698 Replace full virtual walkthrough viewer with wrapper over web-components version (#6170)
 3b5674db SW-8698 Remove all Gaussian Splat components in favor of web-components versions (#6169)
