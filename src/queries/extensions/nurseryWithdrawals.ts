@@ -10,6 +10,8 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.PlantingDateRequests, id: 'LIST' },
         { type: QueryTagTypes.NurseryBatches, id: 'LIST' },
         { type: QueryTagTypes.NurserySummary },
+        { type: QueryTagTypes.NurserySpeciesSummary },
+        { type: QueryTagTypes.NurseryOrganizationSummary },
       ],
     },
     getNurseryWithdrawal: {
@@ -37,6 +39,8 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.PlantingSites },
         { type: QueryTagTypes.NurseryBatches, id: 'LIST' },
         { type: QueryTagTypes.NurserySummary },
+        { type: QueryTagTypes.NurserySpeciesSummary },
+        { type: QueryTagTypes.NurseryOrganizationSummary },
       ],
     },
   },

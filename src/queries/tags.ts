@@ -19,6 +19,8 @@ export enum QueryTagTypes {
   Notifications = 'Notifications',
   NurseryBatchPhotos = 'NurseryBatchPhotos',
   NurseryBatches = 'NurseryBatches',
+  NurseryOrganizationSummary = 'NurseryOrganizationSummary',
+  NurserySpeciesSummary = 'NurserySpeciesSummary',
   NurserySummary = 'NurserySummary',
   NurseryWithdrawalPhotos = 'NurseryWithdrawalPhotos',
   NurseryWithdrawals = 'NurseryWithdrawals',

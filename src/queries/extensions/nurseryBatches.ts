@@ -5,6 +5,8 @@ const batchMutationTags = (batchId: number) => [
   { type: QueryTagTypes.NurseryBatches, id: batchId },
   { type: QueryTagTypes.NurseryBatches, id: 'LIST' },
   { type: QueryTagTypes.NurserySummary },
+  { type: QueryTagTypes.NurserySpeciesSummary },
+  { type: QueryTagTypes.NurseryOrganizationSummary },
   { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
 ];
 
@@ -20,6 +22,8 @@ api.enhanceEndpoints({
       invalidatesTags: [
         { type: QueryTagTypes.NurseryBatches, id: 'LIST' },
         { type: QueryTagTypes.NurserySummary },
+        { type: QueryTagTypes.NurserySpeciesSummary },
+        { type: QueryTagTypes.NurseryOrganizationSummary },
         { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
       ],
     },
@@ -60,6 +64,8 @@ api.enhanceEndpoints({
       invalidatesTags: [
         { type: QueryTagTypes.NurseryBatches, id: 'LIST' },
         { type: QueryTagTypes.NurserySummary },
+        { type: QueryTagTypes.NurserySpeciesSummary },
+        { type: QueryTagTypes.NurseryOrganizationSummary },
         { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
       ],
     },
