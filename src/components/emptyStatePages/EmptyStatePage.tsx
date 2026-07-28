@@ -4,12 +4,14 @@ import { Box, Container, useTheme } from '@mui/material';
 
 import PageHeader from 'src/components/PageHeader';
 import EmptyMessage from 'src/components/common/EmptyMessage';
+import { downloadCsvTemplateHandler as downloadTemplateCsv } from 'src/components/common/ImportModal';
 import { IconName } from 'src/components/common/icon/icons';
 import EmptyStateContent, { ListItemContent } from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
+import { useInventoryImport } from 'src/hooks/batches/useInventoryImport';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
-import ImportInventoryModal, { downloadInventoryCsvTemplate } from 'src/scenes/InventoryRouter/ImportInventoryModal';
+import ImportInventoryModal from 'src/scenes/InventoryRouter/ImportInventoryModal';
 import PlantingSiteTypeSelect from 'src/scenes/PlantingSitesRouter/edit/PlantingSiteTypeSelect';
 import strings from 'src/strings';
 import { isAdmin, isContributor } from 'src/utils/organization';
@@ -41,6 +43,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
+  const { getInventoryTemplate } = useInventoryImport();
 
   const goToNewLocation = () => {
     const newLocation = {
@@ -54,7 +57,7 @@ export default function EmptyStatePage({ pageName, reloadData }: EmptyStatePageP
   };
 
   const downloadInventoryCsvTemplateHandler = () => {
-    void downloadInventoryCsvTemplate();
+    void downloadTemplateCsv(getInventoryTemplate);
   };
 
   const [importSpeciesModalOpened, setImportSpeciesModalOpened] = useState(false);

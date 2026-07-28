@@ -1,16 +1,14 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Grid } from '@mui/material';
-import _ from 'lodash';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useOrganization } from 'src/providers';
+import { useLazyGetSpeciesSummaryQuery } from 'src/queries/generated/nurserySummaries';
 import { selectSpeciesProjects } from 'src/redux/features/species/speciesProjectsSelectors';
 import { requestSpeciesProjects } from 'src/redux/features/species/speciesProjectsThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { NurseryInventoryService } from 'src/services';
 import strings from 'src/strings';
-import { SpeciesInventorySummary } from 'src/types/Inventory';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -29,30 +27,29 @@ export default function InventorySummaryForSpecies(props: InventorySummaryProps)
   const { selectedOrganization } = useOrganization();
   const numberFormatter = useNumberFormatter();
 
+  const [getSpeciesSummary, { currentData: speciesSummary, isError: summaryError }] = useLazyGetSpeciesSummaryQuery();
+
   const speciesProjects = useAppSelector(selectSpeciesProjects(speciesId));
-  const [summary, setSummary] = useState<SpeciesInventorySummary>();
-
-  const reloadData = useCallback(() => {
-    const populateSummary = async () => {
-      const response = await NurseryInventoryService.getSummary(speciesId);
-      if (response.requestSucceeded === false) {
-        snackbar.toastError();
-      } else if (!_.isEqual(response.summary, summary)) {
-        setSummary(response.summary || undefined);
-      }
-    };
-
-    if (speciesId !== undefined && selectedOrganization) {
-      void populateSummary();
-      void dispatch(requestSpeciesProjects(selectedOrganization?.id, speciesId));
-    } else {
-      setSummary(undefined);
-    }
-  }, [speciesId, summary, snackbar, dispatch, selectedOrganization]);
 
   useEffect(() => {
-    reloadData();
-  }, [speciesId, reloadData, modified]);
+    if (selectedOrganization && speciesId) {
+      void getSpeciesSummary(speciesId, true);
+    }
+  }, [getSpeciesSummary, selectedOrganization, speciesId]);
+
+  const summary = useMemo(() => speciesSummary?.summary, [speciesSummary?.summary]);
+
+  useEffect(() => {
+    if (summaryError) {
+      snackbar.toastError();
+    }
+  }, [summaryError, snackbar]);
+
+  useEffect(() => {
+    if (speciesId !== undefined && selectedOrganization) {
+      void dispatch(requestSpeciesProjects(selectedOrganization.id, speciesId));
+    }
+  }, [dispatch, modified, selectedOrganization, speciesId]);
 
   const getData = () => {
     if (!summary) {

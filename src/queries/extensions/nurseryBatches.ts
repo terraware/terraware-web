@@ -58,6 +58,7 @@ api.enhanceEndpoints({
       ],
     },
     getSeedlingBatchesUploadTemplate: {
+      query: () => ({ url: '/api/v1/nursery/batches/uploads/template', responseHandler: 'text' }),
       keepUnusedDataFor: Infinity,
     },
     uploadSeedlingBatchesList: {

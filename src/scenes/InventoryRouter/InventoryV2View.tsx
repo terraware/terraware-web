@@ -11,9 +11,9 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PlantingSeasonNotificationBanners from 'src/components/common/PlantingSeasonNotificationBanners';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { useInventoryImport } from 'src/hooks/batches/useInventoryImport';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import NurseryInventoryService from 'src/services/NurseryInventoryService';
 import { isAdmin } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStickyTabs from 'src/utils/useStickyTabs';
@@ -165,6 +165,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const navigate = useSyncNavigate();
+  const { getInventoryTemplate } = useInventoryImport();
   const { hasNurseries, hasSpecies, speciesLoading } = props;
   const [importInventoryModalOpen, setImportInventoryModalOpen] = useState(false);
   const contentRef = useRef(null);
@@ -221,7 +222,7 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
           title: strings.IMPORT_INVENTORY_ALT_TITLE,
           text: strings.IMPORT_INVENTORY_WITH_TEMPLATE,
           linkText: strings.DOWNLOAD_THE_CSV_TEMPLATE,
-          onLinkClick: () => downloadCsvTemplateHandler(NurseryInventoryService.downloadInventoryTemplate),
+          onLinkClick: () => downloadCsvTemplateHandler(getInventoryTemplate),
           buttonText: strings.IMPORT_INVENTORY,
           onClick: () => importInventory(),
         },

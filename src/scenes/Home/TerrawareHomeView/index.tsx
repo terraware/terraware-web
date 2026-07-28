@@ -192,11 +192,11 @@ const TerrawareHomeView = () => {
         statsCardItems: [
           {
             label: strings.TOTAL_SEEDLINGS_COUNT,
-            value: numberFormatter.format(orgNurserySummary?.totalQuantity ?? 0),
+            value: numberFormatter.format(orgNurserySummary?.value?.totalQuantity ?? 0),
           },
           {
             label: strings.TOTAL_WITHDRAWN_FOR_PLANTING,
-            value: numberFormatter.format(orgNurserySummary?.totalWithdrawn ?? 0),
+            value: numberFormatter.format(orgNurserySummary?.value?.totalWithdrawn ?? 0),
             linkOnClick: () => {
               navigate(APP_PATHS.NURSERY_WITHDRAWALS);
             },

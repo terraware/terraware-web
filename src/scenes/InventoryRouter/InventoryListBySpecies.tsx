@@ -7,11 +7,11 @@ import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useLazySearchSpeciesInventoryQuery } from 'src/queries/search/nurseryInventory';
 import { isSpeciesEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { SpeciesFacilitiesInventoryResult, SpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
-import NurseryInventoryService from 'src/services/NurseryInventoryService';
 import { SearchResponseElement } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
@@ -20,6 +20,7 @@ import useForm from 'src/utils/useForm';
 export default function InventoryListBySpecies() {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const [searchSpeciesInventory] = useLazySearchSpeciesInventoryQuery();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
@@ -83,11 +84,11 @@ export default function InventoryListBySpecies() {
 
       const showEmptySpecies = (filters.showEmptySpecies || [])[0] === 'true';
 
-      const apiSearchResults = await NurseryInventoryService.searchSpeciesInventory({
+      const apiSearchResults = await searchSpeciesInventory({
         organizationId: selectedOrganization.id,
         query: debouncedSearchTerm,
         facilityIds: filters.facilityIds,
-      });
+      }).unwrap();
 
       const specificFacilities = (filters.facilityIds?.length || 0) > 0;
 
@@ -182,7 +183,7 @@ export default function InventoryListBySpecies() {
         setSearchResults(filteredResult || []);
       }
     }
-  }, [filters, debouncedSearchTerm, selectedOrganization]);
+  }, [filters, debouncedSearchTerm, searchSpeciesInventory, selectedOrganization]);
 
   const reloadData = useCallback(() => void onApplyFilters(), [onApplyFilters]);
 

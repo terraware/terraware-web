@@ -1,48 +1,28 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
-import { API_PULL_INTERVAL } from 'src/constants';
 import { useOrganization } from 'src/providers';
-import NurserySummaryService, { OrganizationNurserySummaryResponse } from 'src/services/NurserySummaryService';
+import { useLazyGetOrganizationNurserySummaryQuery } from 'src/queries/generated/nurserySummaries';
 
 export const useOrgNurserySummary = () => {
   const { selectedOrganization } = useOrganization();
 
-  // populateSummaryInterval value is only being used when it is set.
-  const [, setPopulateSummaryInterval] = useState<ReturnType<typeof setInterval>>();
-  const [orgNurserySummary, setOrgNurserySummary] = useState<OrganizationNurserySummaryResponse>();
+  const [getOrganizationNurserySummary, { currentData, isSuccess, isError }] =
+    useLazyGetOrganizationNurserySummaryQuery();
 
   useEffect(() => {
     if (selectedOrganization) {
-      const populateSummary = async () => {
-        const response = await NurserySummaryService.getOrganizationNurserySummary(selectedOrganization.id);
-        setOrgNurserySummary(response);
-      };
+      void getOrganizationNurserySummary(selectedOrganization.id, true);
+    }
+  }, [getOrganizationNurserySummary, selectedOrganization]);
 
-      // Update summary information
-      void populateSummary();
-
-      // Update interval that keeps summary up to date
-      if (!import.meta.env.PUBLIC_DISABLE_RECURRENT_REQUESTS) {
-        setPopulateSummaryInterval((currInterval) => {
-          if (currInterval) {
-            // Clear an existing interval when the facilityId changes
-            clearInterval(currInterval);
-          }
-          return setInterval(() => void populateSummary(), API_PULL_INTERVAL);
-        });
-      }
+  return useMemo(() => {
+    if (!isSuccess && !isError) {
+      return undefined;
     }
 
-    // Clear interval on exit
-    return () => {
-      setPopulateSummaryInterval((currInterval) => {
-        if (currInterval) {
-          clearInterval(currInterval);
-        }
-        return undefined;
-      });
+    return {
+      value: currentData?.summary,
+      requestSucceeded: isSuccess,
     };
-  }, [selectedOrganization]);
-
-  return orgNurserySummary;
+  }, [currentData, isError, isSuccess]);
 };

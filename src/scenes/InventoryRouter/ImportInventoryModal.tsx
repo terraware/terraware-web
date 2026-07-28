@@ -1,10 +1,10 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
+import { useInventoryImport } from 'src/hooks/batches/useInventoryImport';
 import { useOrganization } from 'src/providers/hooks';
-import { NurseryInventoryService, SpeciesService } from 'src/services';
+import { SpeciesService } from 'src/services';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
-import { downloadCsv } from 'src/utils/csv';
 import useForm from 'src/utils/useForm';
 
 import ImportModal from '../../components/common/ImportModal';
@@ -16,16 +16,10 @@ export type ImportInventoryModalProps = {
   reloadData?: () => void;
 };
 
-export const downloadInventoryCsvTemplate = async () => {
-  const apiResponse = await NurseryInventoryService.downloadInventoryTemplate();
-  if (apiResponse?.template) {
-    downloadCsv('template', apiResponse.template);
-  }
-};
-
 export default function ImportInventoryModal(props: ImportInventoryModalProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const { open, onClose, reloadData } = props;
+  const { getInventoryTemplate, uploadInventory, getInventoryUploadStatus } = useInventoryImport();
   const [record, setRecord] = useForm({ facilityId: -1 });
   const [validate, setValidate] = useState<boolean>(false);
 
@@ -59,9 +53,9 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
       resolveApi={SpeciesService.resolveSpeciesUpload}
       uploaderTitle={strings.IMPORT_INVENTORY}
       uploaderDescription={strings.IMPORT_INVENTORY_DESC}
-      uploadApi={NurseryInventoryService.uploadInventory}
-      templateApi={NurseryInventoryService.downloadInventoryTemplate}
-      statusApi={NurseryInventoryService.getInventoryUploadStatus}
+      uploadApi={uploadInventory}
+      templateApi={getInventoryTemplate}
+      statusApi={getInventoryUploadStatus}
       importCompleteLabel={strings.INVENTORY_IMPORT_COMPLETE}
       importingLabel={strings.IMPORTING_INVENTORY}
       duplicatedLabel={strings.DUPLICATED_INVENTORY}
