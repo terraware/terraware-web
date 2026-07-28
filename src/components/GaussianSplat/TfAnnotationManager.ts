@@ -14,6 +14,12 @@ const ANNOTATION_ICONS: Record<AnnotationIconType, IconName> = {
   video: 'iconVideo',
 };
 
+// Pixel dimensions of the (square) hotspot texture canvas at rest.
+const HOTSPOT_TEXTURE_SIZE = 64;
+
+// How much larger the hotspot appears while hovered.
+const HOTSPOT_HOVER_SCALE = 1.3;
+
 /**
  * Extended AnnotationManager that adds max size clamping for annotations
  * and fixes positioning when canvas is not at document origin.
@@ -183,7 +189,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
     const icon: AnnotationIconType = annotation.icon ?? 'text';
 
     resources.texture.destroy();
-    resources.texture = this._createHotspotTexture(annotation.label, 64, 6, icon);
+    resources.texture = this._createHotspotTexture(annotation.label, HOTSPOT_TEXTURE_SIZE, 6, icon);
     resources.materials.forEach((material: any) => {
       material.emissiveMap = resources.texture;
       material.opacityMap = resources.texture;
@@ -231,8 +237,8 @@ export class TfAnnotationManager extends PcAnnotationManager {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   _setAnnotationHover(_annotation: any, _hover: boolean) {
-    // No-op: hotspot colors are baked into the texture, so there is no emissive
-    // re-tint on hover.
+    // No-op: the hover growth is handled in _updateAnnotationRotationAndScale
+    // (via _hoverAnnotation); the texture is identical in both states.
   }
 
   _updateAllAnnotationColors() {
@@ -301,14 +307,19 @@ export class TfAnnotationManager extends PcAnnotationManager {
     // Clamp to maximum world size
     const worldSize = Math.min(unclamped, this._maxWorldSize);
 
-    annotation.entity.setLocalScale(worldSize, worldSize, worldSize);
+    const hovered = (this as any)._hoverAnnotation === annotation;
+    const hoverScale = hovered ? HOTSPOT_HOVER_SCALE : 1;
+    const entityScale = worldSize * hoverScale;
 
-    // Scale the hotspot DOM element proportionally when clamped
+    annotation.entity.setLocalScale(entityScale, entityScale, entityScale);
+
+    // Scale the hotspot DOM element proportionally when clamped, including the
+    // hover growth so it tracks the visible circle.
     const resources = (this as any)._annotationResources.get(annotation);
     if (resources && resources.hotspotDom) {
       const scaleFactor = worldSize / unclamped;
       const baseSize = (this as any)._hotspotSize + 5; // Match the +5 from the stylesheet
-      const scaledSize = baseSize * scaleFactor;
+      const scaledSize = baseSize * scaleFactor * hoverScale;
       resources.hotspotDom.style.width = `${scaledSize}px`;
       resources.hotspotDom.style.height = `${scaledSize}px`;
     }
@@ -318,7 +329,7 @@ export class TfAnnotationManager extends PcAnnotationManager {
    * Override to create hotspot texture with custom background color.
    * @private
    */
-  _createHotspotTexture(label: string, size = 64, borderWidth = 6, icon?: AnnotationIconType) {
+  _createHotspotTexture(label: string, size = HOTSPOT_TEXTURE_SIZE, borderWidth = 6, icon?: AnnotationIconType) {
     const canvas = document.createElement('canvas');
     canvas.width = size;
     canvas.height = size;
