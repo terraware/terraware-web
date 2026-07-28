@@ -313,7 +313,11 @@ const PlantingDateRequestListItem = ({
             label={strings.WITHDRAWN_PLANTS}
             value={row.withdrawnPlants}
             activeLocale={activeLocale}
-            to={`${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawals&plantingSeasonId=${row.plantingSeasonId}&plantingDate=${row.date}`}
+            to={
+              row.withdrawnPlants > 0
+                ? `${APP_PATHS.NURSERY_WITHDRAWALS}?tab=withdrawals&plantingSeasonId=${row.plantingSeasonId}&plantingDate=${row.date}`
+                : undefined
+            }
           />
         </Box>
       </Box>
