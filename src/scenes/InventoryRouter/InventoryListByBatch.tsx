@@ -8,12 +8,12 @@ import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useLazyListAllBatchesQuery } from 'src/queries/search/batches';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { BatchInventoryResult, InventoryResultWithBatchNumber } from 'src/scenes/InventoryRouter/InventoryV2View';
-import { NurseryBatchService } from 'src/services';
-import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
@@ -22,6 +22,7 @@ export default function InventoryListByBatch() {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { findSpeciesById } = useOrganizationSpecies();
+  const [listAllBatches] = useLazyListAllBatchesQuery();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
@@ -97,25 +98,14 @@ export default function InventoryListByBatch() {
 
       const showEmptyBatches = (filters.showEmptyBatches || [])[0] === 'true';
 
-      const searchFields = [];
-      if (filters.projectIds && filters.projectIds.length > 0) {
-        searchFields.push({
-          operation: 'field',
-          field: 'project_id',
-          type: 'Exact',
-          values: filters.projectIds.map((id) => (id === null ? id : id.toString())),
-        } as SearchNodePayload);
-      }
-
-      const apiSearchResults = await NurseryBatchService.getAllBatches(
-        selectedOrganization.id,
-        { field: 'batchNumber', direction: 'Ascending' } as SearchSortOrder,
-        filters.facilityIds,
-        filters.subLocationsIds,
-        debouncedSearchTerm,
-        undefined,
-        searchFields
-      );
+      const apiSearchResults = await listAllBatches({
+        organizationId: selectedOrganization.id,
+        sortOrder: { field: 'batchNumber', direction: 'Ascending' } as SearchSortOrder,
+        nurseryIds: filters.facilityIds,
+        subLocationIds: filters.subLocationsIds,
+        projectIds: filters.projectIds,
+        query: debouncedSearchTerm,
+      }).unwrap();
 
       const processedResults = apiSearchResults?.map((result) => {
         let subLocationsList = '';
@@ -159,7 +149,7 @@ export default function InventoryListByBatch() {
         }
       }
     }
-  }, [activeLocale, filters, debouncedSearchTerm, findSpeciesById, selectedOrganization]);
+  }, [activeLocale, filters, debouncedSearchTerm, findSpeciesById, listAllBatches, selectedOrganization]);
 
   const reloadData = useCallback(() => void onApplyFilters(), [onApplyFilters]);
 

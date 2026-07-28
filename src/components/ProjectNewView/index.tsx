@@ -8,7 +8,7 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { useAssignProjectMutation, useCreateProjectMutation } from 'src/queries/generated/projects';
-import { SearchResponseBatches } from 'src/services/NurseryBatchService';
+import { NurseryBatchesSearchResponseElement } from 'src/queries/search/batches';
 import strings from 'src/strings';
 import { CreateProjectRequest } from 'src/types/Project';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
@@ -44,7 +44,7 @@ export default function ProjectNewView(): JSX.Element {
   const [hasPlantingSites, setHasPlantingSites] = useState<boolean>(true);
   const [saveText, setSaveText] = useState('');
   const [projectAccessions, setProjectAccessions] = useState<SearchResponseAccession[]>([]);
-  const [projectBatches, setProjectBatches] = useState<SearchResponseBatches[]>([]);
+  const [projectBatches, setProjectBatches] = useState<NurseryBatchesSearchResponseElement[]>([]);
   const [projectPlantingSites, setProjectPlantingSites] = useState<PlantingSiteSearchResult[]>([]);
 
   const goToProjects = useCallback(() => {

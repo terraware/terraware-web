@@ -8,11 +8,11 @@ import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useLazyListAllBatchesQuery } from 'src/queries/search/batches';
 import { isNurseryEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { FacilitySpeciesInventoryResult } from 'src/scenes/InventoryRouter/InventoryV2View';
-import { NurseryBatchService } from 'src/services';
 import NurseryInventoryService from 'src/services/NurseryInventoryService';
 import { SearchResponseElement } from 'src/types/Search';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -23,6 +23,7 @@ export default function InventoryListByNursery() {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { findSpeciesById } = useOrganizationSpecies();
+  const [listAllBatches] = useLazyListAllBatchesQuery();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
@@ -80,7 +81,7 @@ export default function InventoryListByNursery() {
 
       const showEmptyNurseries = (filters.showEmptyNurseries || [])[0] === 'true';
 
-      const allBatchesResult = await NurseryBatchService.getAllBatches(selectedOrganization.id);
+      const allBatchesResult = await listAllBatches({ organizationId: selectedOrganization.id }, true).unwrap();
 
       const apiSearchResults = await NurseryInventoryService.searchInventoryByNursery({
         organizationId: selectedOrganization.id,
@@ -118,6 +119,7 @@ export default function InventoryListByNursery() {
     filters.showEmptyNurseries,
     filters.speciesIds,
     findSpeciesById,
+    listAllBatches,
     selectedOrganization,
   ]);
 

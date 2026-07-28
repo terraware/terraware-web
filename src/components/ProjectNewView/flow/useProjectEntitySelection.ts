@@ -18,7 +18,8 @@ interface UseProjectEntitySelectionProps<T extends SearchResponseElement> {
     organizationId: number,
     searchFields: (FieldNodePayload | SearchNodePayload)[],
     searchSortOrder?: SearchSortOrder,
-    filters?: ProjectEntityFilters
+    filters?: ProjectEntityFilters,
+    searchTerm?: string
   ) => Promise<T[] | null>;
   getSearchFields: (debouncedSearchTerm: string) => (FieldNodePayload | SearchNodePayload)[];
 }
@@ -57,7 +58,8 @@ export const useProjectEntitySelection = <T extends SearchResponseElement>({
           selectedOrganization.id,
           getSearchFields(debouncedSearchTerm || ''),
           searchSortOrder,
-          filters
+          filters,
+          debouncedSearchTerm || undefined
         );
 
         if (searchResponse) {

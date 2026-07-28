@@ -4,20 +4,27 @@ import BatchWithdrawFlow from 'src/components/BatchWithdrawFlow';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers';
-import { NurseryBatchService } from 'src/services';
+import { useLazyListBatchIdsForSpeciesQuery } from 'src/queries/search/batches';
 import useQuery from 'src/utils/useQuery';
 
 export default function SpeciesBulkWithdrawView(): JSX.Element | null {
   const { selectedOrganization } = useOrganization();
-  const [speciesIds, setSpeciesIds] = useState<string[]>();
-  const [batchIds, setBatchIds] = useState<string[]>();
+  const [speciesIds, setSpeciesIds] = useState<number[]>();
   const [source, setSource] = useState<string | null>();
   const navigate = useSyncNavigate();
   const query = useQuery();
 
+  const [listBatchIdsForSpecies, { currentData: batchIds, isSuccess }] = useLazyListBatchIdsForSpeciesQuery();
+
+  useEffect(() => {
+    if (selectedOrganization && speciesIds) {
+      void listBatchIdsForSpecies({ organizationId: selectedOrganization.id, speciesIds }, true);
+    }
+  }, [listBatchIdsForSpecies, selectedOrganization, speciesIds]);
+
   useEffect(() => {
     if (query.getAll('speciesId').length > 0) {
-      setSpeciesIds(query.getAll('speciesId'));
+      setSpeciesIds(query.getAll('speciesId').map(Number));
       setSource(query.get('source'));
     } else {
       // return to inventory page if we came here from some bad url (no valid species)
@@ -26,24 +33,11 @@ export default function SpeciesBulkWithdrawView(): JSX.Element | null {
   }, [query, navigate]);
 
   useEffect(() => {
-    const populateResults = async () => {
-      if (speciesIds && selectedOrganization) {
-        const searchResponse = await NurseryBatchService.getBatchIdsForSpecies(
-          selectedOrganization.id,
-          speciesIds.map((id) => Number(id))
-        );
-        const ids = searchResponse?.map((sr) => sr.id as string);
-        if (ids?.length) {
-          setBatchIds(ids);
-        } else {
-          // return to inventory page if we came here from some bad url (no valid species)
-          navigate({ pathname: APP_PATHS.INVENTORY });
-        }
-      }
-    };
+    if (isSuccess && !batchIds?.length) {
+      // return to inventory page if we came here from some bad url (no valid species)
+      navigate({ pathname: APP_PATHS.INVENTORY });
+    }
+  }, [batchIds, isSuccess, navigate]);
 
-    void populateResults();
-  }, [speciesIds, navigate, selectedOrganization]);
-
-  return batchIds ? <BatchWithdrawFlow batchIds={batchIds} sourcePage={source || undefined} /> : null;
+  return batchIds?.length ? <BatchWithdrawFlow batchIds={batchIds} sourcePage={source || undefined} /> : null;
 }

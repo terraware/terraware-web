@@ -1,7 +1,7 @@
 import React, { type JSX } from 'react';
 
 import { SearchResponseAccession } from 'src/components/ProjectNewView/flow/SelectAccessions';
-import { SearchResponseBatches } from 'src/services/NurseryBatchService';
+import { NurseryBatchesSearchResponseElement } from 'src/queries/search/batches';
 import strings from 'src/strings';
 import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
@@ -13,7 +13,7 @@ const singularOrPlural = (renderNumber: number, singular: string, plural: string
 export const getFormattedSuccessMessages = (
   projectName: string,
   projectAccessions: SearchResponseAccession[],
-  projectBatches: SearchResponseBatches[],
+  projectBatches: NurseryBatchesSearchResponseElement[],
   projectPlantingSites: PlantingSiteSearchResult[]
 ): (JSX.Element | string)[] => {
   if (!projectAccessions?.length && !projectBatches?.length && !projectPlantingSites?.length) {

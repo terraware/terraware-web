@@ -3,10 +3,10 @@ import React, { type JSX, useCallback, useMemo } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
+import { useLazyListBatchesForSpeciesQuery } from 'src/queries/search/batches';
 import InventorySeedlingsTable, {
   InventorySeedlingsTableProps,
 } from 'src/scenes/InventoryRouter/view/InventorySeedlingsTable';
-import { NurseryBatchService } from 'src/services';
 import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { parseSearchTerm } from 'src/utils/search';
 
@@ -19,6 +19,7 @@ interface InventorySeedlingsTableForSpeciesProps
 }
 
 export default function InventorySeedlingsTableForSpecies(props: InventorySeedlingsTableForSpeciesProps): JSX.Element {
+  const [listBatchesForSpecies] = useLazyListBatchesForSpeciesQuery();
   const speciesId = props.speciesId;
   const { strings } = useLocalization();
 
@@ -87,23 +88,21 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
       searchFields: FieldNodePayload[],
       searchSortOrder: SearchSortOrder | undefined
     ): Promise<SearchResponseElement[] | null> => {
-      const searchResponse: SearchResponseElement[] | null = await NurseryBatchService.getBatchesForSpeciesById(
-        orgId,
-        originId,
+      const searchResponse = await listBatchesForSpecies({
+        organizationId: orgId,
+        speciesId: originId,
         searchFields,
-        searchSortOrder
-      );
-      return (
-        searchResponse?.map(
-          (sr: SearchResponseElement): SearchResponseElement => ({
-            ...sr,
-            facilityId: sr.facility_id,
-            species_id: speciesId,
-          })
-        ) || null
+        sortOrder: searchSortOrder,
+      }).unwrap();
+      return searchResponse.map(
+        (sr): SearchResponseElement => ({
+          ...sr,
+          facilityId: sr.facility_id,
+          species_id: speciesId,
+        })
       );
     },
-    [speciesId]
+    [listBatchesForSpecies, speciesId]
   );
 
   const areAllFromSameNursery = (selectedRows: SearchResponseElement[]) => {
