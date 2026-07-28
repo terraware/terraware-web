@@ -1,13 +1,14 @@
 import { components } from 'src/api/types/generated-schema';
+import { BatchHistoryPayload as GeneratedBatchHistoryPayload } from 'src/queries/generated/nurseryBatches';
 import strings from 'src/strings';
 
 export type Batch = components['schemas']['BatchResponsePayload']['batch'];
-export type BatchHistoryItem = components['schemas']['BatchHistoryPayload'];
+export type BatchHistoryItem = GeneratedBatchHistoryPayload;
 export type CreateBatchRequestPayload = components['schemas']['CreateBatchRequestPayload'];
 export type NurseryWithdrawal = components['schemas']['GetNurseryWithdrawalResponsePayload']['withdrawal'];
 export type BatchWithdrawal = NurseryWithdrawal['batchWithdrawals'][0];
 export type NurseryWithdrawalPurpose = NurseryWithdrawal['purpose'];
-export type BatchHistoryPayload = components['schemas']['BatchHistoryPayload'];
+export type BatchHistoryPayload = GeneratedBatchHistoryPayload;
 
 export const NurseryWithdrawalPurposes: { [key: string]: NurseryWithdrawalPurpose } = {
   OUTPLANT: 'Out Plant',

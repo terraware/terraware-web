@@ -1,5 +1,3 @@
-import { paths } from 'src/api/types/generated-schema';
-import { BatchHistoryItem } from 'src/types/Batch';
 import {
   FieldNodePayload,
   SearchNodePayload,
@@ -7,18 +5,13 @@ import {
   SearchResponseElement,
   SearchSortOrder,
 } from 'src/types/Search';
-import { OrganizationUser } from 'src/types/User';
 import { parseSearchTerm } from 'src/utils/search';
-import { getUserDisplayName } from 'src/utils/user';
 
-import HttpService, { Response } from './HttpService';
 import SearchService from './SearchService';
 
 /**
  * Nursery related services
  */
-
-const BATCH_HISTORY_ENDPOINT = '/api/v1/nursery/batches/{batchId}/history';
 
 const DEFAULT_BATCH_FIELDS = [
   'accession_id',
@@ -127,15 +120,6 @@ export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
   version: string;
   project_name?: string;
 };
-
-export type BatchHistoryData = {
-  history: BatchHistoryItem[] | null;
-};
-
-type GetBatchHistoryResponsePayload =
-  paths[typeof BATCH_HISTORY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-const httpBatchHistory = HttpService.root(BATCH_HISTORY_ENDPOINT);
 
 /**
  * Get batches by list of ids
@@ -349,55 +333,6 @@ const exportBatchesForSpeciesById = async (
   return await getBatchesForSpeciesById(organizationId, speciesId, searchFields, searchSortOrder, true);
 };
 
-const getBatchHistory = async (
-  batchId: number,
-  search?: string,
-  filter?: Record<string, any>,
-  users?: Record<number, OrganizationUser>
-): Promise<Response & BatchHistoryData> => {
-  const response: Response & BatchHistoryData = await httpBatchHistory.get<
-    GetBatchHistoryResponsePayload,
-    BatchHistoryData
-  >(
-    {
-      urlReplacements: {
-        '{batchId}': batchId.toString(),
-      },
-    },
-    (data) => {
-      if (data) {
-        let filtered = [...data.history];
-        if (filter) {
-          if (filter.type?.values) {
-            filtered = filtered.filter((ev) => {
-              return filter.type.values.indexOf(ev.type) > -1;
-            });
-          }
-          if (filter.editedByName?.values && users) {
-            filtered = filtered.filter((ev) => {
-              const evUserName = getUserDisplayName(users[ev.createdBy]);
-              return filter.editedByName.values.indexOf(evUserName) > -1;
-            });
-          }
-        }
-        if (search && users) {
-          const regex = new RegExp(search, 'i');
-          filtered = filtered.filter((ev) => {
-            const evUserName = getUserDisplayName(users[ev.createdBy]);
-            return evUserName.match(regex);
-          });
-        }
-        return {
-          history: filtered,
-        };
-      }
-      return { history: null };
-    }
-  );
-
-  return response;
-};
-
 const getBatchesForNursery = (
   organizationId: number,
   nurseryId: number,
@@ -447,7 +382,6 @@ const NurseryBatchService = {
   getBatchIdsForSpecies,
   getBatchesForSpeciesById,
   exportBatchesForSpeciesById,
-  getBatchHistory,
   getBatchesForNursery,
 };
 
