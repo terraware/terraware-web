@@ -30,19 +30,7 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
     try {
       await updateBatch({
         id: batch.id,
-        updateBatchRequestPayload: {
-          germinationStartedDate: batch.germinationStartedDate,
-          notes: batch.notes,
-          projectId: undefined,
-          readyByDate: batch.readyByDate,
-          seedsSownDate: batch.seedsSownDate,
-          subLocationIds: batch.subLocationIds,
-          substrate: batch.substrate,
-          substrateNotes: batch.substrateNotes,
-          treatment: batch.treatment,
-          treatmentNotes: batch.treatmentNotes,
-          version: batch.version,
-        },
+        updateBatchRequestPayload: { ...batch, projectId: undefined },
       }).unwrap();
     } catch {
       snackbar.toastError();

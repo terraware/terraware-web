@@ -45,19 +45,7 @@ export const useSaveBatch = () => {
     async (batch: SavableBatch, batchId: number, version: number, quantityNotes?: string): Promise<BatchPayload> => {
       const updated = await updateBatch({
         id: batchId,
-        updateBatchRequestPayload: {
-          germinationStartedDate: batch.germinationStartedDate,
-          notes: batch.notes,
-          projectId: batch.projectId,
-          readyByDate: batch.readyByDate,
-          seedsSownDate: batch.seedsSownDate,
-          subLocationIds: batch.subLocationIds,
-          substrate: batch.substrate,
-          substrateNotes: batch.substrateNotes,
-          treatment: batch.treatment,
-          treatmentNotes: batch.treatmentNotes,
-          version,
-        },
+        updateBatchRequestPayload: { ...batch, version },
       }).unwrap();
 
       const withQuantities = await updateBatchQuantities({
@@ -86,23 +74,13 @@ export const useSaveBatch = () => {
 
         if (!batch.accessionId) {
           const created = await createBatch({
+            ...batch,
             activeGrowthQuantity: Number(batch.activeGrowthQuantity),
-            addedDate: batch.addedDate,
             facilityId: Number(batch.facilityId),
             germinatingQuantity: Number(batch.germinatingQuantity),
-            germinationStartedDate: batch.germinationStartedDate,
             hardeningOffQuantity: Number(batch.hardeningOffQuantity),
-            notes: batch.notes,
-            projectId: batch.projectId,
-            readyByDate: batch.readyByDate,
             readyQuantity: Number(batch.readyQuantity),
-            seedsSownDate: batch.seedsSownDate,
             speciesId: Number(batch.speciesId),
-            subLocationIds: batch.subLocationIds,
-            substrate: batch.substrate,
-            substrateNotes: batch.substrateNotes,
-            treatment: batch.treatment,
-            treatmentNotes: batch.treatmentNotes,
           }).unwrap();
 
           return created.batch;
