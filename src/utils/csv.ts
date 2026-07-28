@@ -3,8 +3,8 @@ import { AcceptedData, ColumnHeader } from 'export-to-csv/output/lib/types';
 
 export type CsvData = { [k: string]: AcceptedData };
 
-export const makeCsv = (columns: ColumnHeader[], data: CsvData[]): Blob => {
-  const csvConfig = mkConfig({ columnHeaders: columns });
+export const makeCsv = (columns: ColumnHeader[], data: CsvData[], quoteStrings = true): Blob => {
+  const csvConfig = mkConfig({ columnHeaders: columns, quoteStrings });
   const csv = generateCsv(csvConfig)(data);
   return asBlob(csvConfig)(csv);
 };

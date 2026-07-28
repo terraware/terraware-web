@@ -109,35 +109,35 @@ const useObservationExports = () => {
         },
         {
           key: 'gpsFieldSouthwestLatitude',
-          displayLabel: strings.SOUTHWEST_FIELD_RECORDED_LATITUDE,
+          displayLabel: strings.SOUTHWEST_CORNER_FIELD_LATITUDE,
         },
         {
           key: 'gpsFieldSouthwestLongitude',
-          displayLabel: strings.SOUTHWEST_FIELD_RECORDED_LONGITUDE,
+          displayLabel: strings.SOUTHWEST_CORNER_FIELD_LONGITUDE,
         },
         {
           key: 'gpsFieldNorthwestLatitude',
-          displayLabel: strings.NORTHWEST_FIELD_RECORDED_LATITUDE,
+          displayLabel: strings.NORTHWEST_CORNER_FIELD_LATITUDE,
         },
         {
           key: 'gpsFieldNorthwestLongitude',
-          displayLabel: strings.NORTHWEST_FIELD_RECORDED_LONGITUDE,
+          displayLabel: strings.NORTHWEST_CORNER_FIELD_LONGITUDE,
         },
         {
           key: 'gpsFieldSoutheastLatitude',
-          displayLabel: strings.SOUTHEAST_FIELD_RECORDED_LATITUDE,
+          displayLabel: strings.SOUTHEAST_CORNER_FIELD_LATITUDE,
         },
         {
           key: 'gpsFieldSoutheastLongitude',
-          displayLabel: strings.SOUTHEAST_FIELD_RECORDED_LONGITUDE,
+          displayLabel: strings.SOUTHEAST_CORNER_FIELD_LONGITUDE,
         },
         {
           key: 'gpsFieldNortheastLatitude',
-          displayLabel: strings.NORTHEAST_FIELD_RECORDED_LATITUDE,
+          displayLabel: strings.NORTHEAST_CORNER_FIELD_LATITUDE,
         },
         {
           key: 'gpsFieldNortheastLongitude',
-          displayLabel: strings.NORTHEAST_FIELD_RECORDED_LONGITUDE,
+          displayLabel: strings.NORTHEAST_CORNER_FIELD_LONGITUDE,
         },
         {
           key: 'totalPlants',
@@ -279,7 +279,90 @@ const useObservationExports = () => {
         )
       );
 
-      return makeCsv(columnHeaders, data);
+      return makeCsv(columnHeaders, data, false);
+    },
+    [strings]
+  );
+
+  const makePlotLocationsCsv = useCallback(
+    (observationResults: ObservationResultsPayload): Blob => {
+      const columnHeaders = [
+        {
+          key: 'monitoringPlotNumber',
+          displayLabel: strings.MONITORING_PLOT,
+        },
+        {
+          key: 'stratumName',
+          displayLabel: strings.STRATUM,
+        },
+        {
+          key: 'substratumName',
+          displayLabel: strings.SUBSTRATUM,
+        },
+        {
+          key: 'plotType',
+          displayLabel: strings.MONITORING_PLOT_TYPE,
+        },
+        {
+          key: 'southwestLatitude',
+          displayLabel: strings.SOUTHWEST_CORNER_LATITUDE,
+        },
+        {
+          key: 'southwestLongitude',
+          displayLabel: strings.SOUTHWEST_CORNER_LONGITUDE,
+        },
+        {
+          key: 'northwestLatitude',
+          displayLabel: strings.NORTHWEST_CORNER_LATITUDE,
+        },
+        {
+          key: 'northwestLongitude',
+          displayLabel: strings.NORTHWEST_CORNER_LONGITUDE,
+        },
+        {
+          key: 'southeastLatitude',
+          displayLabel: strings.SOUTHEAST_CORNER_LATITUDE,
+        },
+        {
+          key: 'southeastLongitude',
+          displayLabel: strings.SOUTHEAST_CORNER_LONGITUDE,
+        },
+        {
+          key: 'northeastLatitude',
+          displayLabel: strings.NORTHEAST_CORNER_LATITUDE,
+        },
+        {
+          key: 'northeastLongitude',
+          displayLabel: strings.NORTHEAST_CORNER_LONGITUDE,
+        },
+      ];
+
+      const data = observationResults.strata.flatMap((stratum) =>
+        stratum.substrata.flatMap((substratum) =>
+          substratum.monitoringPlots.map((monitoringPlot) => {
+            // Plot polygon has a single ring of coordinates. They're in order SW-SE-NE-NW-SW, with
+            // longitude first in each coordinate pair.
+            const plotCoordinates: number[][] = monitoringPlot.boundary.coordinates[0];
+
+            return {
+              monitoringPlotNumber: monitoringPlot.monitoringPlotNumber,
+              northeastLatitude: plotCoordinates[2][1],
+              northeastLongitude: plotCoordinates[2][0],
+              northwestLatitude: plotCoordinates[3][1],
+              northwestLongitude: plotCoordinates[3][0],
+              plotType: monitoringPlot.isPermanent ? strings.PERMANENT : strings.TEMPORARY,
+              southeastLatitude: plotCoordinates[1][1],
+              southeastLongitude: plotCoordinates[1][0],
+              southwestLatitude: plotCoordinates[0][1],
+              southwestLongitude: plotCoordinates[0][0],
+              stratumName: stratum.name,
+              substratumName: substratum.name,
+            };
+          })
+        )
+      );
+
+      return makeCsv(columnHeaders, data, false);
     },
     [strings]
   );
@@ -342,7 +425,7 @@ const useObservationExports = () => {
         )
       );
 
-      return makeCsv(columnHeaders, data);
+      return makeCsv(columnHeaders, data, false);
     },
     [scientificNamesById, strings]
   );
@@ -403,10 +486,7 @@ const useObservationExports = () => {
       ).unwrap();
       const site = siteResults.site;
 
-      const fileBlob = makeObservationCsv(
-        observationResults,
-        site.timeZone ?? selectedOrganization?.timeZone ?? defaultTimeZone
-      );
+      const fileBlob = makePlotLocationsCsv(observationResults);
 
       const completedDate = observationResults.completedTime
         ? getDateDisplayValue(
@@ -428,7 +508,7 @@ const useObservationExports = () => {
       defaultTimeZone,
       getObservationResults,
       getPlantingSite,
-      makeObservationCsv,
+      makePlotLocationsCsv,
       selectedOrganization?.timeZone,
     ]
   );
