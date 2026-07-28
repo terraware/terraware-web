@@ -26,7 +26,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 const OnboardingHomeView = () => {
   const { user } = useUser();
-  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
+  const { selectedOrganization, orgPreferences } = useOrganization();
   const updateUserPreferences = useUpdateUserPreferences();
   const { isMobile, isDesktop } = useDeviceInfo();
   const trackEvent = useTrackEvent();
@@ -69,7 +69,6 @@ const OnboardingHomeView = () => {
   const dismissAcceleratorCard = async () => {
     if (selectedOrganization) {
       await updateUserPreferences({ ['showAcceleratorCard']: false }, selectedOrganization.id);
-      reloadOrgPreferences();
     }
   };
 
@@ -77,8 +76,7 @@ const OnboardingHomeView = () => {
     if (selectedOrganization) {
       await updateUserPreferences({ ['singlePersonOrg']: true }, selectedOrganization.id);
     }
-    reloadOrgPreferences();
-  }, [reloadOrgPreferences, selectedOrganization, updateUserPreferences]);
+  }, [selectedOrganization, updateUserPreferences]);
 
   const onboardingCardRows: OnboardingCardRow[] = useMemo(() => {
     const rows = isOwner(selectedOrganization)

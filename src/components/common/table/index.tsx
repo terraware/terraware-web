@@ -101,7 +101,7 @@ export function OrderPreserveableTable<T extends TableRowType>(
 ): JSX.Element {
   const [initialized, setInitialized] = useState<boolean>(false);
   const { columns, columnsPreferenceName, id, onReorderEnd, setColumns, ...tableProps } = props;
-  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
+  const { selectedOrganization, orgPreferences } = useOrganization();
   const updateUserPreferences = useUpdateUserPreferences();
 
   const getPreferenceName = useCallback(() => columnsPreferenceName || `${id}-columns`, [columnsPreferenceName, id]);
@@ -117,7 +117,6 @@ export function OrderPreserveableTable<T extends TableRowType>(
   const reorderHandler = async (reorderedColumns: string[]) => {
     if (selectedOrganization) {
       await updateUserPreferences({ [getPreferenceName()]: reorderedColumns }, selectedOrganization.id);
-      reloadOrgPreferences();
       const columnsToSet = getTableColumns(reorderedColumns);
       setColumns(columnsToSet);
 

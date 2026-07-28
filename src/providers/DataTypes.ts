@@ -28,9 +28,7 @@ export type ProvidedOrganizationData = {
   orgPreferences: PreferencesType;
   redirectAndNotify: (organization: Organization) => void;
   reloadOrganizations: (selectedOrgId?: number) => Promise<void>;
-  reloadOrgPreferences: () => void;
   bootstrapped: boolean;
-  orgPreferenceForId: number;
 };
 
 export type ProvidedLocalizationData = {

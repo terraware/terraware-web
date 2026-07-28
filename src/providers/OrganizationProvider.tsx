@@ -1,9 +1,9 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLazyGetUserPreferencesQuery } from 'src/queries/generated/preferences';
+import { useGetUserPreferencesQuery } from 'src/queries/generated/preferences';
 import { store } from 'src/redux/store';
 import { CachedUserService, OrganizationService } from 'src/services';
 import strings from 'src/strings';
@@ -28,10 +28,7 @@ enum APIRequestStatus {
 }
 
 export default function OrganizationProvider({ children }: OrganizationProviderProps): JSX.Element {
-  const [bootstrapped, setBootstrapped] = useState<boolean>(false);
   const [selectedOrganization, setSelectedOrganization] = useState<Organization>();
-  const [orgPreferences, setOrgPreferences] = useState<PreferencesType>({});
-  const [orgPreferenceForId, setOrgPreferenceForId] = useState<number>(-1);
   const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
   const [organizations, setOrganizations] = useState<Organization[]>();
   const navigate = useSyncNavigate();
@@ -53,10 +50,6 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
             setSelectedOrganization(orgToSelect);
           }
         }
-        if (response.organizations.length === 0) {
-          // if we don't need to retrieve org preferences (such as for orphaned users), mark as bootstrapped
-          setBootstrapped(true);
-        }
       } else if (response.error === 'NotAuthenticated') {
         setOrgAPIRequestStatus(APIRequestStatus.FAILED_NO_AUTH);
       } else {
@@ -69,33 +62,27 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     await populateOrganizations();
   }, []);
 
-  const [getUserPreferences] = useLazyGetUserPreferencesQuery();
+  // Subscribe to the selected org's preferences rather than mirroring them into local state. Writes
+  // invalidate the Preferences tag, so the refetch flows back through this subscription on its own —
+  // no manual reload, and no window where a caller can observe a stale snapshot.
+  const {
+    currentData: orgPreferencesData,
+    isSuccess: orgPreferencesLoaded,
+    isError: orgPreferencesFailed,
+  } = useGetUserPreferencesQuery(selectedOrganization?.id, { skip: !selectedOrganization });
 
-  const reloadOrgPreferences = useCallback(() => {
-    const getOrgPreferences = async () => {
-      if (selectedOrganization) {
-        const organizationId = selectedOrganization.id;
-        try {
-          const response = await getUserPreferences(organizationId).unwrap();
-          setOrgPreferences(response.preferences ?? {});
-          setOrgPreferenceForId(organizationId);
-          // TODO: remove after org preferences readers are served from the RTK store
-          CachedUserService.setUserOrgPreferences(organizationId, response.preferences ?? {});
-        } catch {
-          // best-effort: still bootstrap below so the app doesn't hang on a preferences failure
-        } finally {
-          // once we retrieve the org and its preferences (or the request fails), we are bootstrapped
-          setBootstrapped(true);
-        }
-      }
-    };
-
-    void getOrgPreferences();
-  }, [selectedOrganization, getUserPreferences]);
+  const orgPreferences = useMemo<PreferencesType>(() => orgPreferencesData?.preferences ?? {}, [orgPreferencesData]);
 
   useEffect(() => {
-    reloadOrgPreferences();
-  }, [reloadOrgPreferences]);
+    // TODO: remove after org preferences readers are served from the RTK store
+    if (selectedOrganization && orgPreferencesData) {
+      CachedUserService.setUserOrgPreferences(selectedOrganization.id, orgPreferencesData.preferences ?? {});
+    }
+  }, [selectedOrganization, orgPreferencesData]);
+
+  // Bootstrapped once the org's preferences resolve (or fail), or immediately when there is no org to
+  // load them for (such as orphaned users). AppBootstrap latches this, so it needn't be latched here.
+  const bootstrapped = organizations?.length === 0 || orgPreferencesLoaded || orgPreferencesFailed;
 
   const redirectAndNotify = useCallback(
     (organization: Organization) => {
@@ -116,18 +103,8 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
       organizations: organizations ?? [],
       orgPreferences,
       bootstrapped,
-      orgPreferenceForId,
-      reloadOrgPreferences,
     }));
-  }, [
-    selectedOrganization,
-    organizations,
-    orgPreferences,
-    bootstrapped,
-    orgPreferenceForId,
-    reloadOrgPreferences,
-    redirectAndNotify,
-  ]);
+  }, [selectedOrganization, organizations, orgPreferences, bootstrapped, redirectAndNotify]);
 
   useEffect(() => {
     if (userBootstrapped && userPreferences && organizations && !isAcceleratorRoute && user?.userType !== 'Funder') {
@@ -202,9 +179,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     orgPreferences,
     redirectAndNotify,
     reloadOrganizations,
-    reloadOrgPreferences,
     bootstrapped,
-    orgPreferenceForId,
   });
 
   return <OrganizationContext.Provider value={organizationData}>{children}</OrganizationContext.Provider>;

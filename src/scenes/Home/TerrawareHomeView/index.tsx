@@ -35,7 +35,7 @@ const TerrawareHomeView = () => {
   const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
-  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
+  const { selectedOrganization, orgPreferences } = useOrganization();
   const updateUserPreferences = useUpdateUserPreferences();
   const { isTablet, isMobile, isDesktop } = useDeviceInfo();
   const trackEvent = useTrackEvent();
@@ -87,7 +87,6 @@ const TerrawareHomeView = () => {
   const dismissAcceleratorCard = async () => {
     if (selectedOrganization) {
       await updateUserPreferences({ ['showAcceleratorCard']: false }, selectedOrganization.id);
-      reloadOrgPreferences();
     }
   };
 

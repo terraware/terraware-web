@@ -24,7 +24,7 @@ export default function PlantingSiteSelector({
   // assume `requestPlantingSites` thunk has been dispatched by consumer
   const [selectedValue, setSelectedValue] = useState<SelectedValue>();
   const { activeLocale, strings } = useLocalization();
-  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
+  const { selectedOrganization, orgPreferences } = useOrganization();
   const updateUserPreferences = useUpdateUserPreferences();
 
   const { plantingSites } = useOrganizationPlantingSites();
@@ -53,10 +53,9 @@ export default function PlantingSiteSelector({
     async (id: number) => {
       if (id !== orgPreferences.lastPlantingSiteSelected && selectedOrganization) {
         await updateUserPreferences({ ['lastPlantingSiteSelected']: id }, selectedOrganization.id);
-        reloadOrgPreferences();
       }
     },
-    [orgPreferences.lastPlantingSiteSelected, reloadOrgPreferences, selectedOrganization, updateUserPreferences]
+    [orgPreferences.lastPlantingSiteSelected, selectedOrganization, updateUserPreferences]
   );
 
   const updateSelection = useCallback(

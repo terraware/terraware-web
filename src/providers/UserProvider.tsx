@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { baseApi } from 'src/queries/baseApi';
@@ -9,7 +9,6 @@ import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelect
 import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { CachedUserService } from 'src/services';
-import { User } from 'src/types/User';
 import { GlobalRolePermission, isAllowed as isAllowedACL } from 'src/utils/acl';
 import { isTerraformationEmail } from 'src/utils/user';
 
@@ -25,31 +24,17 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
   const dispatch = useAppDispatch();
 
   const { currentData, refetch } = useGetMyselfQuery();
+  const user = currentData?.user;
 
-  // Persist user after an AppReset due to organization change
-  const [user, setUser] = useState<User>();
-
-  useEffect(() => {
-    if (currentData?.user) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setUser(currentData.user);
-    }
-  }, [currentData]);
-
+  // Both of these queries take a constant arg, so their cache entries are never keyed away from under
+  // us and `currentData` survives refetches. RESET_APP preserves the RTK Query cache slice (see
+  // rootReducer), so there is nothing to latch against.
   const { currentData: preferencesData, refetch: refetchPreferences } = useGetUserPreferencesQuery(undefined);
-  // Latch the global preferences (and the loaded flag) locally for the same reason as `user`: the
-  // RESET_APP store wipe clears the RTK Query cache on org change, and bootstrapping must not regress
-  // to a spinner. Only populated, never cleared here.
-  const [userPreferences, setUserPreferences] = useState<PreferencesType>();
-  const [preferencesLoaded, setPreferencesLoaded] = useState(false);
-
-  useEffect(() => {
-    if (preferencesData) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setUserPreferences(preferencesData.preferences ?? {});
-      setPreferencesLoaded(true);
-    }
-  }, [preferencesData]);
+  const userPreferences = useMemo<PreferencesType | undefined>(
+    () => (preferencesData ? preferencesData.preferences ?? {} : undefined),
+    [preferencesData]
+  );
+  const preferencesLoaded = preferencesData !== undefined;
 
   const updatePreferences = useUpdateUserPreferences();
   const [updateCookieConsent] = useUpdateCookieConsentMutation();
