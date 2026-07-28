@@ -14,7 +14,6 @@ export type ProvidedUserData = {
   bootstrapped: boolean;
   isAllowed: (permission: GlobalRolePermission, metadata?: unknown) => boolean;
   reloadUser: () => void;
-  reloadUserPreferences: () => void;
   updateUserCookieConsent: (consent: boolean) => Promise<void>;
   updateUserPreferences: (preferences: PreferencesType) => Promise<boolean>;
   user?: User;
@@ -28,9 +27,7 @@ export type ProvidedOrganizationData = {
   orgPreferences: PreferencesType;
   redirectAndNotify: (organization: Organization) => void;
   reloadOrganizations: (selectedOrgId?: number) => Promise<void>;
-  reloadOrgPreferences: () => void;
   bootstrapped: boolean;
-  orgPreferenceForId: number;
 };
 
 export type ProvidedLocalizationData = {

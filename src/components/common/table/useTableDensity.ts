@@ -14,7 +14,7 @@ export type Response = {
  * update before the API round trip completes.
  */
 const useTableDensity = (): Response => {
-  const { updateUserPreferences, userPreferences, reloadUserPreferences } = useUser();
+  const { updateUserPreferences, userPreferences } = useUser();
 
   const [tableDensity, _setTableDensity] = useState<TableDensityType>(
     (userPreferences.tableDensity as TableDensityType) ?? 'comfortable'
@@ -23,9 +23,8 @@ const useTableDensity = (): Response => {
   const saveTableDensityToUserPreferences = useCallback(
     (newDensity: TableDensityType) => {
       void updateUserPreferences({ tableDensity: newDensity });
-      reloadUserPreferences();
     },
-    [reloadUserPreferences, updateUserPreferences]
+    [updateUserPreferences]
   );
 
   useEffect(() => {

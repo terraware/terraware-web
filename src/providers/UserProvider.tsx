@@ -1,14 +1,14 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { baseApi } from 'src/queries/baseApi';
+import { useGetUserPreferencesQuery, useUpdateCookieConsentMutation } from 'src/queries/generated/preferences';
 import { useGetMyselfQuery } from 'src/queries/generated/users';
 import { QueryTagTypes } from 'src/queries/tags';
 import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelectors';
 import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
-import { requestUserCookieConsentUpdate } from 'src/redux/features/user/usersAsyncThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { CachedUserService, PreferencesService } from 'src/services';
-import { User } from 'src/types/User';
+import { CachedUserService } from 'src/services';
 import { GlobalRolePermission, isAllowed as isAllowedACL } from 'src/utils/acl';
 import { isTerraformationEmail } from 'src/utils/user';
 
@@ -20,40 +20,33 @@ export type UserProviderProps = {
 };
 
 export default function UserProvider({ children }: UserProviderProps): JSX.Element {
-  const [userPreferences, setUserPreferences] = useState<PreferencesType>();
   const userAnalyticsState = useAppSelector(selectUserAnalytics);
   const dispatch = useAppDispatch();
 
   const { currentData, refetch } = useGetMyselfQuery();
+  const user = currentData?.user;
 
-  // Persist user after an AppReset due to organization change
-  const [user, setUser] = useState<User>();
+  const { currentData: preferencesData } = useGetUserPreferencesQuery(undefined);
+  const userPreferences = useMemo<PreferencesType | undefined>(
+    () => (preferencesData ? preferencesData.preferences ?? {} : undefined),
+    [preferencesData]
+  );
+  const preferencesLoaded = preferencesData !== undefined;
 
-  useEffect(() => {
-    if (currentData?.user) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setUser(currentData.user);
-    }
-  }, [currentData]);
+  const updatePreferences = useUpdateUserPreferences();
+  const [updateCookieConsent] = useUpdateCookieConsentMutation();
 
-  const updateUserPreferences = useCallback(async (preferences: PreferencesType) => {
-    const response = await PreferencesService.updateUserPreferences(preferences);
-    if (response.requestSucceeded) {
-      setUserPreferences(response.preferences ?? {});
-    }
-
-    return Promise.resolve(response.requestSucceeded);
-  }, []);
-
-  const reloadUserPreferences = useCallback(() => {
-    const getUserPreferences = async () => {
-      const response = await PreferencesService.getUserPreferences();
-
-      setUserPreferences(response.preferences ?? {});
-    };
-
-    void getUserPreferences();
-  }, [setUserPreferences]);
+  const updateUserPreferences = useCallback(
+    async (preferences: PreferencesType): Promise<boolean> => {
+      try {
+        await updatePreferences(preferences);
+        return true;
+      } catch {
+        return false;
+      }
+    },
+    [updatePreferences]
+  );
 
   const reloadUser = useCallback(() => {
     void refetch();
@@ -61,48 +54,41 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
 
   const updateUserCookieConsent = useCallback(
     async (consent: boolean) => {
-      await dispatch(requestUserCookieConsentUpdate({ cookiesConsented: consent }));
+      await updateCookieConsent({ cookiesConsented: consent }).unwrap();
       dispatch(baseApi.util.invalidateTags([{ type: QueryTagTypes.Users, id: 'ME' }]));
     },
-    [dispatch]
+    [updateCookieConsent, dispatch]
   );
 
   const isAllowed = useCallback(
     (permission: GlobalRolePermission, metadata?: unknown): boolean => {
-      if (!(userPreferences && user)) {
+      if (!(preferencesLoaded && user)) {
         return false;
       }
 
       return isAllowedACL(user, permission, metadata);
     },
-    [user, userPreferences]
+    [user, preferencesLoaded]
   );
 
   const userData = useMemo<ProvidedUserData>(
     () => ({
       reloadUser,
-      bootstrapped: Boolean(userPreferences && user),
+      bootstrapped: Boolean(preferencesLoaded && user),
       user,
       userPreferences: userPreferences ?? {},
-      reloadUserPreferences,
       updateUserCookieConsent,
       updateUserPreferences,
       isAllowed,
     }),
-    [
-      reloadUser,
-      user,
-      userPreferences,
-      reloadUserPreferences,
-      updateUserCookieConsent,
-      updateUserPreferences,
-      isAllowed,
-    ]
+    [reloadUser, user, preferencesLoaded, userPreferences, updateUserCookieConsent, updateUserPreferences, isAllowed]
   );
 
   useEffect(() => {
-    reloadUserPreferences();
-  }, [reloadUserPreferences]);
+    if (userPreferences) {
+      CachedUserService.setUserPreferences(userPreferences);
+    }
+  }, [userPreferences]);
 
   useEffect(() => {
     if (user) {

@@ -4,8 +4,8 @@ import { TableColumnType, TableRowType, Table as WebComponentsTable } from '@ter
 import { LocalizationProps, Props, TextAlignment } from '@terraware/web-components/components/table';
 import _ from 'lodash';
 
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useLocalization, useOrganization } from 'src/providers';
-import { PreferencesService } from 'src/services';
 import strings from 'src/strings';
 
 import useTableDensity from './useTableDensity';
@@ -101,7 +101,8 @@ export function OrderPreserveableTable<T extends TableRowType>(
 ): JSX.Element {
   const [initialized, setInitialized] = useState<boolean>(false);
   const { columns, columnsPreferenceName, id, onReorderEnd, setColumns, ...tableProps } = props;
-  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
+  const { selectedOrganization, orgPreferences } = useOrganization();
+  const updateUserPreferences = useUpdateUserPreferences();
 
   const getPreferenceName = useCallback(() => columnsPreferenceName || `${id}-columns`, [columnsPreferenceName, id]);
 
@@ -115,10 +116,7 @@ export function OrderPreserveableTable<T extends TableRowType>(
 
   const reorderHandler = async (reorderedColumns: string[]) => {
     if (selectedOrganization) {
-      await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-        [getPreferenceName()]: reorderedColumns,
-      });
-      reloadOrgPreferences();
+      await updateUserPreferences({ [getPreferenceName()]: reorderedColumns }, selectedOrganization.id);
       const columnsToSet = getTableColumns(reorderedColumns);
       setColumns(columnsToSet);
 

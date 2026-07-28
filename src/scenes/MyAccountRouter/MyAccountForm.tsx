@@ -23,9 +23,10 @@ import { APP_PATHS } from 'src/constants';
 import { useDocLinks } from 'src/docLinks';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useUpdateCurrentUser from 'src/hooks/useUpdateCurrentUser';
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useLocalization, useTimeZones, useUser } from 'src/providers';
 import { useGetDisclaimerQuery } from 'src/queries/generated/disclaimer';
-import { OrganizationService, OrganizationUserService, PreferencesService } from 'src/services';
+import { OrganizationService, OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
 import { Organization, roleName } from 'src/types/Organization';
@@ -111,7 +112,8 @@ const MyAccountForm = ({
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
   const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
-  const { userPreferences, reloadUserPreferences } = useUser();
+  const { userPreferences } = useUser();
+  const updateUserPreferences = useUpdateUserPreferences();
   const snackbar = useSnackbar();
   const docLinks = useDocLinks();
   const contentRef = useRef(null);
@@ -215,8 +217,7 @@ const MyAccountForm = ({
         setCannotRemoveOrgModalOpened(true);
       }
     } else {
-      await PreferencesService.updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
-      reloadUserPreferences();
+      await updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
 
       const lastLocale = selectedLocale;
       setSelectedLocale(localeSelected);

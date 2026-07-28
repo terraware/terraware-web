@@ -12,7 +12,7 @@ import isEnabled from 'src/features';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
-import { useOrganization, useUser } from 'src/providers';
+import { useOrganization } from 'src/providers';
 import ApplicationProvider from 'src/providers/Application';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import { useLazyCountObservationsQuery } from 'src/queries/search/observations';
@@ -63,7 +63,6 @@ interface OrgRouterProps {
 const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const { type } = useDeviceInfo();
   const { isProduction } = useEnvironment();
-  const { reloadUserPreferences: reloadPreferences } = useUser();
   const location = useStateLocation();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
@@ -229,9 +228,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
               <Route path={APP_PATHS.VIRTUAL_WALKTHROUGHS + '/*'} element={<VirtualWalkthroughsView />} />
             )}
 
-            {!isProduction && (
-              <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView refresh={reloadPreferences} />} />
-            )}
+            {!isProduction && <Route path={APP_PATHS.OPT_IN} element={<OptInFeaturesView />} />}
 
             <Route path='*' element={orgFeatures ? <Navigate to={APP_PATHS.HOME} /> : <BlockingSpinner />} />
           </Routes>

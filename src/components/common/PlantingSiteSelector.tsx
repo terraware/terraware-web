@@ -3,8 +3,8 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { Dropdown } from '@terraware/web-components';
 
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useLocalization, useOrganization } from 'src/providers';
-import { PreferencesService } from 'src/services';
 
 const ALL_PLANTING_SITES_VALUE = 'all';
 
@@ -24,7 +24,8 @@ export default function PlantingSiteSelector({
   // assume `requestPlantingSites` thunk has been dispatched by consumer
   const [selectedValue, setSelectedValue] = useState<SelectedValue>();
   const { activeLocale, strings } = useLocalization();
-  const { selectedOrganization, orgPreferences, reloadOrgPreferences } = useOrganization();
+  const { selectedOrganization, orgPreferences } = useOrganization();
+  const updateUserPreferences = useUpdateUserPreferences();
 
   const { plantingSites } = useOrganizationPlantingSites();
 
@@ -51,13 +52,10 @@ export default function PlantingSiteSelector({
   const updateAndReloadLastSelectedSite = useCallback(
     async (id: number) => {
       if (id !== orgPreferences.lastPlantingSiteSelected && selectedOrganization) {
-        await PreferencesService.updateUserOrgPreferences(selectedOrganization.id, {
-          ['lastPlantingSiteSelected']: id,
-        });
-        reloadOrgPreferences();
+        await updateUserPreferences({ ['lastPlantingSiteSelected']: id }, selectedOrganization.id);
       }
     },
-    [orgPreferences.lastPlantingSiteSelected, reloadOrgPreferences, selectedOrganization]
+    [orgPreferences.lastPlantingSiteSelected, selectedOrganization, updateUserPreferences]
   );
 
   const updateSelection = useCallback(

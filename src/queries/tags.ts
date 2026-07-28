@@ -49,6 +49,7 @@ export enum QueryTagTypes {
   Species = 'Species',
   T0 = 'T0',
   TrackingStats = 'TrackingStats',
+  UserPreferences = 'UserPreferences',
   Users = 'Users',
   ViabilityTests = 'ViabilityTests',
 }

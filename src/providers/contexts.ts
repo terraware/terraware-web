@@ -17,10 +17,6 @@ export const UserContext = createContext<ProvidedUserData>({
     // default no-op implementation
     return;
   },
-  reloadUserPreferences: () => {
-    // default no-op implementation
-    return;
-  },
   userPreferences: {},
   bootstrapped: false,
   updateUserCookieConsent: () => Promise.resolve(),
@@ -42,11 +38,6 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
     // default no-op implementation
     return Promise.resolve();
   },
-  reloadOrgPreferences: () => {
-    // default no-op implementation
-    return;
-  },
-
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setSelectedOrganization: (org) => {
     // no-op
@@ -55,7 +46,6 @@ export const OrganizationContext = createContext<ProvidedOrganizationData>({
 
   selectedOrganization: undefined,
   bootstrapped: false,
-  orgPreferenceForId: -1,
 });
 
 export const LocalizationContext = createContext<ProvidedLocalizationData>({
