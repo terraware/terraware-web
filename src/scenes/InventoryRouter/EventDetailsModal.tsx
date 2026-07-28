@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, Divider, Grid, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
@@ -6,9 +6,8 @@ import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/ut
 
 import { API_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
-import { NurseryBatchService } from 'src/services';
+import { useGetBatchQuery } from 'src/queries/generated/nurseryBatches';
 import strings from 'src/strings';
-import { Batch } from 'src/types/Batch';
 import { getNurseryById } from 'src/utils/organization';
 
 import { BatchHistoryItemForTable } from './BatchHistory';
@@ -33,7 +32,12 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
 
   const paddingSeparator = useMemo(() => (isMobile ? 0 : 1.5), [isMobile]);
 
-  const [relatedBatch, setRelatedBatch] = useState<Batch | null>();
+  const { currentData: relatedBatchData } = useGetBatchQuery(
+    selectedEvent.type === 'IncomingWithdrawal' ? selectedEvent.fromBatchId : 0,
+    { skip: selectedEvent.type !== 'IncomingWithdrawal' }
+  );
+  const relatedBatch = relatedBatchData?.batch;
+
   const photoUrl = useMemo(
     () =>
       selectedEvent.type === 'PhotoCreated' && selectedEvent.fileId
@@ -44,20 +48,6 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         : undefined,
     [selectedEvent, batchId]
   );
-
-  useEffect(() => {
-    const fetchRelatedBatch = async () => {
-      if (selectedEvent.type === 'IncomingWithdrawal') {
-        const response = await NurseryBatchService.getBatch(selectedEvent.fromBatchId);
-        if (response.requestSucceeded) {
-          setRelatedBatch(response.batch);
-        }
-      }
-    };
-    if (selectedEvent.type === 'IncomingWithdrawal' && !relatedBatch) {
-      void fetchRelatedBatch();
-    }
-  }, [selectedEvent, relatedBatch]);
 
   return (
     <DialogBox

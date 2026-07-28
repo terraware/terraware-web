@@ -7,10 +7,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import { API_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
-import { baseApi } from 'src/queries/baseApi';
 import { useListBatchPhotosQuery } from 'src/queries/generated/nurseryBatches';
-import { QueryTagTypes } from 'src/queries/tags';
-import { useAppDispatch } from 'src/redux/store';
 import ChangeQuantityModal from 'src/scenes/InventoryRouter/view/ChangeQuantityModal';
 import { batchSubstrateEnumToLocalized } from 'src/types/Accession';
 import { Batch } from 'src/types/Batch';
@@ -23,16 +20,14 @@ import BatchDetailsModal from './BatchDetailsModal';
 
 interface BatchDetailsProps {
   batch: Batch;
-  onUpdate: () => void;
 }
 
-export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JSX.Element {
+export default function BatchDetails({ batch }: BatchDetailsProps): JSX.Element {
   const { strings } = useLocalization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
   const numberFormatter = useNumberFormatter();
-  const dispatch = useAppDispatch();
 
   const { currentData: batchPhotos, isError: batchPhotosError } = useListBatchPhotosQuery(batch.id);
   const [openEditBatchModal, setOpenEditBatchModal] = useState(false);
@@ -85,14 +80,9 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
     setModalValues({ openChangeQuantityModal: true, type: 'hardening-off' });
   }, [setModalValues]);
 
-  const handleUpdate = useCallback(() => {
-    dispatch(baseApi.util.invalidateTags([{ type: QueryTagTypes.InventoryPlanning, id: 'LIST' }]));
-    onUpdate();
-  }, [dispatch, onUpdate]);
-
   return (
     <Card flushMobile style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-      {openEditBatchModal && <BatchDetailsModal batch={batch} onClose={closeEditModal} reload={handleUpdate} />}
+      {openEditBatchModal && <BatchDetailsModal batch={batch} onClose={closeEditModal} />}
 
       <Box sx={{ display: 'flex', alignItems: 'center' }} marginBottom={theme.spacing(1)}>
         <Typography fontSize='20px' fontWeight={600} color={theme.palette.TwClrTxt} sx={{ flexGrow: 1 }}>
@@ -106,12 +96,7 @@ export default function BatchDetails({ batch, onUpdate }: BatchDetailsProps): JS
         />
       </Box>
       {modalValues.openChangeQuantityModal && (
-        <ChangeQuantityModal
-          modalValues={modalValues}
-          onClose={onCloseChangeQuantityModal}
-          reload={handleUpdate}
-          row={batchWithRawQtys}
-        />
+        <ChangeQuantityModal modalValues={modalValues} onClose={onCloseChangeQuantityModal} row={batchWithRawQtys} />
       )}
       <Grid container>
         <Grid item xs={isMobile ? 12 : 6} paddingRight={theme.spacing(3)}>

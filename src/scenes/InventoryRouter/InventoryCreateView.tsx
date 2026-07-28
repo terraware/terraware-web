@@ -1,57 +1,32 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import { SavableBatch, useSaveBatch } from 'src/hooks/batches/useSaveBatch';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useUser } from 'src/providers';
-import { SavableBatch, requestSaveBatch } from 'src/redux/features/batches/batchesAsyncThunks';
-import { selectBatchesRequest } from 'src/redux/features/batches/batchesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { InventoryListType, InventoryListTypes } from 'src/scenes/InventoryRouter/InventoryV2View';
 import BatchDetailsForm from 'src/scenes/InventoryRouter/form/BatchDetailsForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export default function InventoryCreateView(): JSX.Element {
   const { strings } = useLocalization();
-  const dispatch = useAppDispatch();
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
+  const saveBatch = useSaveBatch();
   const { userPreferences } = useUser();
   const originInventoryViewType: InventoryListType =
     (userPreferences.inventoryListType as InventoryListType) || InventoryListTypes.BATCHES_BY_SPECIES;
 
   const [doValidateBatch, setDoValidateBatch] = useState<boolean>(false);
-  const [requestId, setRequestId] = useState('');
   const [busy, setBusy] = useState<boolean>(false);
   const trackEvent = useTrackEvent();
-  // The thunk dispatch doesn't expose batch input on success; capture the source
-  // of this create (fresh batch vs transferred from an accession) at dispatch time.
-  const fromAccessionRef = useRef<boolean>(false);
-
-  const batchesRequest = useAppSelector(selectBatchesRequest(requestId));
-
-  const onBatchValidated = useCallback(
-    (batchDetails: { batch: SavableBatch; organizationId: number; timezone: string } | false) => {
-      setDoValidateBatch(false);
-      if (batchDetails) {
-        fromAccessionRef.current = batchDetails.batch.accessionId !== undefined;
-        setBusy(true);
-        const request = dispatch(requestSaveBatch(batchDetails));
-        setRequestId(request.requestId);
-      }
-    },
-    [dispatch]
-  );
-
-  const onSaveBatch = useCallback(() => {
-    setDoValidateBatch(true);
-  }, []);
 
   const inventoryLocation = useMemo(
     () => ({
@@ -64,46 +39,61 @@ export default function InventoryCreateView(): JSX.Element {
     navigate(inventoryLocation);
   }, [navigate, inventoryLocation]);
 
-  useEffect(() => {
-    if (batchesRequest?.status === 'success') {
-      setBusy(false);
-      trackEvent(MIXPANEL_EVENTS.BATCH_CREATED, {
-        species_id: batchesRequest?.data?.batch?.speciesId,
-        from_accession: fromAccessionRef.current,
-      });
-      navigate(inventoryLocation, { replace: true });
-
-      const batchId = batchesRequest?.data?.batch?.id;
-      const facilityId = batchesRequest?.data?.batch?.facilityId;
-      const speciesId = batchesRequest?.data?.batch?.speciesId;
-
-      // we can assume the batchId, facilityId and speciesId will be valid upon a successful create
-
-      if (originInventoryViewType === InventoryListTypes.BATCHES_BY_NURSERY) {
-        navigate({
-          pathname: APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${facilityId}`).replace(
-            ':batchId',
-            `${batchId}`
-          ),
-        });
-      } else if (originInventoryViewType === InventoryListTypes.BATCHES_BY_BATCH) {
-        navigate({
-          pathname: APP_PATHS.INVENTORY_BATCH.replace(':batchId', `${batchId}`),
-        });
-      } else {
-        navigate({
-          pathname: APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${speciesId}`).replace(
-            ':batchId',
-            `${batchId}`
-          ),
-        });
-      }
-    } else if (batchesRequest?.status === 'error') {
-      setBusy(false);
-      snackbar.toastError(strings.GENERIC_ERROR);
+  const onBatchValidated = useCallback(
+    (batchDetails: { batch: SavableBatch; organizationId: number; timezone: string } | false) => {
       setDoValidateBatch(false);
-    }
-  }, [batchesRequest, navigate, inventoryLocation, originInventoryViewType, snackbar, strings, trackEvent]);
+      if (!batchDetails) {
+        return;
+      }
+
+      const fromAccession = batchDetails.batch.accessionId !== undefined;
+
+      const save = async () => {
+        setBusy(true);
+        const savedBatch = await saveBatch(batchDetails);
+        setBusy(false);
+
+        if (!savedBatch) {
+          snackbar.toastError(strings.GENERIC_ERROR);
+          setDoValidateBatch(false);
+          return;
+        }
+
+        trackEvent(MIXPANEL_EVENTS.BATCH_CREATED, {
+          species_id: savedBatch.speciesId,
+          from_accession: fromAccession,
+        });
+        navigate(inventoryLocation, { replace: true });
+
+        if (originInventoryViewType === InventoryListTypes.BATCHES_BY_NURSERY) {
+          navigate({
+            pathname: APP_PATHS.INVENTORY_BATCH_FOR_NURSERY.replace(':nurseryId', `${savedBatch.facilityId}`).replace(
+              ':batchId',
+              `${savedBatch.id}`
+            ),
+          });
+        } else if (originInventoryViewType === InventoryListTypes.BATCHES_BY_BATCH) {
+          navigate({
+            pathname: APP_PATHS.INVENTORY_BATCH.replace(':batchId', `${savedBatch.id}`),
+          });
+        } else {
+          navigate({
+            pathname: APP_PATHS.INVENTORY_BATCH_FOR_SPECIES.replace(':speciesId', `${savedBatch.speciesId}`).replace(
+              ':batchId',
+              `${savedBatch.id}`
+            ),
+          });
+        }
+      };
+
+      void save();
+    },
+    [inventoryLocation, navigate, originInventoryViewType, saveBatch, snackbar, strings, trackEvent]
+  );
+
+  const onSaveBatch = useCallback(() => {
+    setDoValidateBatch(true);
+  }, []);
 
   return (
     <TfMain>

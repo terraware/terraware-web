@@ -6,8 +6,7 @@ import { BusySpinner, Dropdown, Icon, Textfield } from '@terraware/web-component
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
-import { NurseryBatchService } from 'src/services';
-import { ChangeBatchStatusesRequestPayload } from 'src/services/NurseryBatchService';
+import { ChangeBatchStatusRequestPayload, useChangeBatchStatusesMutation } from 'src/queries/generated/nurseryBatches';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -32,8 +31,9 @@ export default function ChangeQuantityModal({
   const snackbar = useSnackbar();
   const numberFormatter = useNumberFormatter();
   const markSubmitted = useTrackModalAbandonment('batch_quantity_change', true);
+  const [changeBatchStatuses] = useChangeBatchStatusesMutation();
 
-  const [nextPhase, setNextPhase] = useState<ChangeBatchStatusesRequestPayload['newPhase']>(
+  const [nextPhase, setNextPhase] = useState<ChangeBatchStatusRequestPayload['newPhase']>(
     type === 'germinating' ? 'ActiveGrowth' : type === 'active-growth' ? 'HardeningOff' : 'Ready'
   );
   const [saving, setSaving] = useState<boolean>(false);
@@ -92,7 +92,7 @@ export default function ChangeQuantityModal({
 
     setSaving(true);
 
-    let previousPhase: ChangeBatchStatusesRequestPayload['previousPhase'];
+    let previousPhase: ChangeBatchStatusRequestPayload['previousPhase'];
 
     if (type === 'germinating') {
       previousPhase = 'Germinating';
@@ -102,24 +102,27 @@ export default function ChangeQuantityModal({
       previousPhase = 'HardeningOff';
     }
 
-    const response = await NurseryBatchService.changeBatchStatuses(record, {
-      newPhase: nextPhase,
-      previousPhase,
-      quantity: movedValue,
-    });
+    try {
+      await changeBatchStatuses({
+        id: record.id,
+        changeBatchStatusRequestPayload: {
+          newPhase: nextPhase,
+          previousPhase,
+          quantity: movedValue,
+        },
+      }).unwrap();
 
-    setSaving(false);
-
-    if (response.requestSucceeded) {
       markSubmitted();
       if (reload) {
         reload();
       }
       onCloseHandler();
-    } else {
+    } catch {
       snackbar.toastError();
+    } finally {
+      setSaving(false);
     }
-  }, [markSubmitted, movedValue, nextPhase, onCloseHandler, record, reload, row, snackbar, type]);
+  }, [changeBatchStatuses, markSubmitted, movedValue, nextPhase, onCloseHandler, record, reload, row, snackbar, type]);
 
   const onSave = useCallback(() => {
     void onSubmit();
@@ -262,7 +265,7 @@ export default function ChangeQuantityModal({
 
   const onChangeGrowthPhase = useCallback(
     (value: string) => {
-      setNextPhase(value as ChangeBatchStatusesRequestPayload['newPhase']);
+      setNextPhase(value as ChangeBatchStatusRequestPayload['newPhase']);
     },
     [setNextPhase]
   );

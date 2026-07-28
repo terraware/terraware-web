@@ -44,6 +44,8 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' },
         { type: QueryTagTypes.Accessions, id: payload.accessionId },
         QueryTagTypes.SeedbankSummary,
+        { type: QueryTagTypes.NurseryBatches, id: 'LIST' },
+        { type: QueryTagTypes.NurserySummary },
       ],
     },
     listViabilityTests: {

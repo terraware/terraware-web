@@ -7,9 +7,9 @@ import getDateDisplayValue, { getTodaysDateFormatted } from '@terraware/web-comp
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import DatePicker from 'src/components/common/DatePicker';
+import { SavableBatch } from 'src/hooks/batches/useSaveBatch';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { SavableBatch } from 'src/redux/features/batches/batchesAsyncThunks';
 import { OriginPage } from 'src/scenes/InventoryRouter/InventoryBatchView';
 import AccessionsDropdown from 'src/scenes/InventoryRouter/form/AccessionsDropdown';
 import NurseryDropdownV2 from 'src/scenes/InventoryRouter/form/NurseryDropdownV2';

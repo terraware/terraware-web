@@ -14,7 +14,7 @@ import { isMember } from 'src/utils/organization';
 
 interface OverviewItemCardProjectProps<T extends { id: number; projectId?: number }> {
   entity: T;
-  reloadData: () => void;
+  reloadData?: () => void;
   projectAssignPayloadCreator: () => AssignProjectRequestPayload;
   onUnAssign?: () => void;
 }
@@ -63,7 +63,7 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
             assignPayloadCreator={projectAssignPayloadCreator}
             reloadEntity={() => {
               setIsProjectAssignModalOpen(false);
-              reloadData();
+              reloadData?.();
             }}
             isModalOpen={isProjectAssignModalOpen}
             onClose={() => setIsProjectAssignModalOpen(false)}
