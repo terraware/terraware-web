@@ -26,9 +26,6 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
   const { currentData, refetch } = useGetMyselfQuery();
   const user = currentData?.user;
 
-  // Both of these queries take a constant arg, so their cache entries are never keyed away from under
-  // us and `currentData` survives refetches. RESET_APP preserves the RTK Query cache slice (see
-  // rootReducer), so there is nothing to latch against.
   const { currentData: preferencesData } = useGetUserPreferencesQuery(undefined);
   const userPreferences = useMemo<PreferencesType | undefined>(
     () => (preferencesData ? preferencesData.preferences ?? {} : undefined),
