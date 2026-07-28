@@ -76,7 +76,7 @@ export default function InventoryListByNursery() {
   );
 
   // `data` rather than `currentData` so the table keeps showing the previous rows while a filter
-  // change refetches, which is what awaiting the search imperatively used to do.
+  // change refetches, rather than blanking out on every keystroke.
   const { data: apiSearchResults } = useSearchInventoryByNurseryQuery(
     {
       organizationId: selectedOrganization?.id ?? -1,
