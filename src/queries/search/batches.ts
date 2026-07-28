@@ -180,7 +180,6 @@ const buildAllBatchesRequest = (args: ListAllBatchesApiArg) => {
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    /** How many batches the organization has, for telling "no inventory yet" apart from "no matches". */
     countAllBatches: build.query<number, number>({
       query: (organizationId) => ({
         url: '/api/v1/search/count',
