@@ -95,10 +95,6 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
     [setNewPhotos]
   );
 
-  const removePhoto = useCallback((id: number) => {
-    setPhotoIdsToRemove((currentIds) => [...currentIds, id]);
-  }, []);
-
   useEffect(() => {
     if (batchPhotosError) {
       snackbar.toastError();
@@ -261,12 +257,9 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
     [onChange]
   );
 
-  const getHandleRemovePhoto = useCallback(
-    (photoId: number) => () => {
-      removePhoto(photoId);
-    },
-    [removePhoto]
-  );
+  const handleRemovePhoto = useCallback((photoId: number) => {
+    setPhotoIdsToRemove((currentIds) => [...currentIds, photoId]);
+  }, []);
 
   const gridSize = useMemo(() => (isMobile ? 12 : 6), [isMobile]);
 
@@ -469,8 +462,6 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           </Typography>
           <Box display='flex' flexWrap='wrap' flexDirection='row'>
             {photos.map((photo, index) => {
-              const handleRemovePhoto = getHandleRemovePhoto(photo.id);
-
               return (
                 <Box
                   key={index}
@@ -485,7 +476,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
                 >
                   <Button
                     icon='iconTrashCan'
-                    onClick={handleRemovePhoto}
+                    onClick={() => handleRemovePhoto(photo.id)}
                     size='small'
                     style={{
                       position: 'absolute',
