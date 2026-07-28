@@ -201,8 +201,15 @@ export class WalkthroughCamera extends Script {
   /**
    * Position the camera at `position` looking toward `focus`.
    * Compatible with the useCameraPosition hook's reset() call.
+   *
+   * `horizontalNdcBias` offsets the aim horizontally so `focus` lands off-center
+   * on screen. It is the target normalized-device x coordinate for `focus`
+   * (0 = centered, +0.5 = three quarters across / 25% from the right). It is
+   * applied as a pure yaw offset, so the pitch toward `focus` — looking up/down
+   * at the hotspot, and its vertical centering — is preserved, and the on-screen
+   * position is independent of the distance to `focus`.
    */
-  reset(focus: Vec3, position: Vec3) {
+  reset(focus: Vec3, position: Vec3, horizontalNdcBias = 0) {
     this.entity.setPosition(position);
 
     const dx = focus.x - position.x;
@@ -211,10 +218,23 @@ export class WalkthroughCamera extends Script {
     const len = Math.sqrt(dx * dx + dy * dy + dz * dz);
     if (len > 0) {
       // PlayCanvas uses right-handed CCW Y rotation: forward = (-sinθ, 0, -cosθ),
-      // so to look toward (dx, 0, dz): θ = atan2(-dx, -dz).
+      // so to look toward (dx, 0, dz): yaw = atan2(-dx, -dz). Positive pitch tilts
+      // the view up (matching the pointer-look controls), so a focus above the
+      // camera (dy > 0) uses a positive pitch.
       this._yaw = Math.atan2(-dx, -dz) * (180 / Math.PI);
-      this._pitch = Math.atan2(-dy, Math.sqrt(dx * dx + dz * dz)) * (180 / Math.PI);
+      this._pitch = Math.atan2(dy, Math.sqrt(dx * dx + dz * dz)) * (180 / Math.PI);
       this._pitch = math.clamp(this._pitch, this.pitchMin, this.pitchMax);
+
+      if (horizontalNdcBias !== 0) {
+        // projectionMatrix.data[0] = 1 / tan(halfFovX), so atan(ndc / data[0]) =
+        // atan(ndc * tan(halfFovX)) is the yaw offset that slides `focus` to the
+        // requested normalized-device x, independent of distance. Only yaw
+        // changes, so the pitch toward `focus` is retained.
+        const projScaleX = this.entity.camera?.projectionMatrix?.data?.[0];
+        if (projScaleX) {
+          this._yaw += Math.atan(horizontalNdcBias / projScaleX) * (180 / Math.PI);
+        }
+      }
     }
 
     // Snap targets so there's no damped drift from the previous pose.
