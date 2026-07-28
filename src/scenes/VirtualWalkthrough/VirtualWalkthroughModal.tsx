@@ -3,8 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Close } from '@mui/icons-material';
 import { Box, IconButton } from '@mui/material';
 import { OverlayModal } from '@terraware/web-components';
-
-import Application from 'src/components/GaussianSplat/Application';
+import { Application } from '@terraware/web-components/virtualWalkthrough';
 
 import VirtualWalkthroughViewer, { VirtualWalkthroughViewerProps } from './VirtualWalkthroughViewer';
 

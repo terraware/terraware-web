@@ -4610,7 +4610,7 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.2.7.tgz#eb5014dfd0b03e7f3ba2eeeff506eed89b028058"
   integrity sha512-YLT9Zo3oNPJoBjBc4q8G2mjU4tqIbf5CEOORbUUr48dCD9q3umJ3IPlVqOqDakPfd2HuwccBaqlGhN4Gmr5OWg==
 
-"@playcanvas/react@^0.11.3":
+"@playcanvas/react@0.11.3", "@playcanvas/react@^0.11.3":
   version "0.11.3"
   resolved "https://registry.yarnpkg.com/@playcanvas/react/-/react-0.11.3.tgz#5783477039688981a8486b547682645901cc975b"
   integrity sha512-pf6uQIVKQZ04MrDCi3bfWq6llYoQwMtYCfZurOe/99TIGzNtoMUL/4LsX24ILgbKfiLAbU85g/uvzXh53YeELw==
@@ -6359,10 +6359,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.11.2.tgz#00409e743ac4eea9afe5b7708594d5fcebb00212"
   integrity sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==
 
-"@terraware/web-components@^v4.2.13":
-  version "4.2.13"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-4.2.13.tgz#febe83dcf528ce6616b610de5416f7dc18fb83a4"
-  integrity sha512-VbczvktkXzMDHmD5gWvn3yUpyIvHBFCOsfustm+KS5Waa7nvSG+5Zaga1FBRqMTOJl1lLblgJU7R0XvHwPlTtw==
+"@terraware/web-components@^v4.2.14-rc.0":
+  version "4.2.14-rc.0"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-4.2.14-rc.0.tgz#868c0e4b7489903f30e94186f63b2da4e794839c"
+  integrity sha512-vJ5IAfgt2iB72AfZUO96gyIwAm6p7eGm6cIKBb7vtkyOdN9R1w/wU9nxU2PJbzK2Dofo/BlOQtJVX5iZbSt1ag==
   dependencies:
     "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^10.0.0"
@@ -6372,11 +6372,13 @@
     "@mui/lab" "^6.0.1-beta.36"
     "@mui/material" "^6.0.0"
     "@mui/x-date-pickers" "^7.22.0"
+    "@playcanvas/react" "0.11.3"
     classnames "^2.3.2"
     geojson "^0.5.0"
     luxon "^3.3.0"
     marked "^16.2.1"
     material-react-table "^3.2.1"
+    playcanvas "2.15.1"
     prettier "^3.8.1"
     react-intersection-observer "^9.5.2"
     react-multi-carousel "^2.8.2"
@@ -14783,7 +14785,7 @@ pkg-types@^1.3.1:
     mlly "^1.7.4"
     pathe "^2.0.1"
 
-playcanvas@^2.15.1:
+playcanvas@2.15.1, playcanvas@^2.15.1:
   version "2.15.1"
   resolved "https://registry.yarnpkg.com/playcanvas/-/playcanvas-2.15.1.tgz#9fbb08ab3bb00979e3abd281e175f656fe9ff830"
   integrity sha512-G0jjbcwf9pHEHsdiaA+bqTRnS/yAnbvb4EQiAljLNwXnZLHSFV0+wbJ1evO0RNM01Jc0WPqBhVVEAgnmEqg8WA==
