@@ -4,22 +4,27 @@ import { useTheme } from '@mui/material';
 import { Entity } from '@playcanvas/react';
 import { Camera, Script } from '@playcanvas/react/components';
 import { useApp } from '@playcanvas/react/hooks';
+import {
+  Annotation,
+  AnnotationIconType,
+  AnnotationPanel,
+  AnnotationProps,
+  AutoRotator,
+  BoundaryRing,
+  GradientSky,
+  SplatControls,
+  SplatModel,
+  TfAnnotationManager,
+  TfXrNavigation,
+  WalkthroughCamera,
+} from '@terraware/web-components/virtualWalkthrough';
 import { Color, Vec3 } from 'playcanvas';
 import { XrControllers } from 'playcanvas/scripts/esm/xr-controllers.mjs';
 
-import Annotation, { AnnotationIconType, AnnotationProps } from 'src/components/GaussianSplat/Annotation';
-import AnnotationPanel from 'src/components/GaussianSplat/AnnotationPanel';
-import { AutoRotator } from 'src/components/GaussianSplat/AutoRotator';
-import BoundaryRing from 'src/components/GaussianSplat/BoundaryRing';
-import GradientSky from 'src/components/GaussianSplat/GradientSky';
-import SplatControls from 'src/components/GaussianSplat/SplatControls';
-import SplatModel from 'src/components/GaussianSplat/SplatModel';
-import { TfAnnotationManager } from 'src/components/GaussianSplat/TfAnnotationManager';
-import { TfXrNavigation } from 'src/components/GaussianSplat/TfXrNavigation';
-import { WalkthroughCamera } from 'src/components/GaussianSplat/walkthrough-camera';
 import { API_PATHS } from 'src/constants';
 import { useCameraPosition } from 'src/hooks/useCameraPosition';
 import { useDevicePerformance } from 'src/hooks/useDevicePerformance';
+import { useLocalization, useUser } from 'src/providers';
 import {
   useLazyListSplatDetailsQuery,
   useSetObservationSplatAnnotationsMutation,
@@ -61,6 +66,9 @@ const VirtualWalkthroughViewer = ({
   const { setCamera } = useCameraPosition();
   const { isHighPerformance } = useDevicePerformance();
   const app = useApp();
+  const { strings } = useLocalization();
+  const { isAllowed } = useUser();
+  const isSuperAdmin = isAllowed('FREE_FLY_VIRTUAL_WALKTHROUGH');
 
   const [showAnnotations, setShowAnnotations] = useState(true);
   const [autoRotate, setAutoRotate] = useState(true);
@@ -432,6 +440,57 @@ const VirtualWalkthroughViewer = ({
         onToggleFullScreen={onToggleFullScreen}
         isFreeFly={isFreeFly}
         onToggleFreeFly={handleToggleFreeFly}
+        showFreeFly={isSuperAdmin}
+        // This is a temporary solution until web-components has its own strings implementation
+        strings={{
+          addAnnotation: strings.ADD_ANNOTATION,
+          deselectAnnotation: strings.DESELECT_ANNOTATION,
+          deleteAnnotation: strings.DELETE_ANNOTATION,
+          ar: strings.AR,
+          vr: strings.VR,
+          edit: strings.EDIT,
+          freeFly: strings.FREE_FLY,
+          boundedFly: strings.BOUNDED_FLY,
+          cancel: strings.CANCEL,
+          save: strings.SAVE,
+          controlsInfoPane: {
+            controls: strings.CONTROLS,
+            annotations: strings.ANNOTATIONS,
+            autoRotate: strings.AUTO_ROTATE,
+            orbit: strings.ORBIT,
+            leftMouse: strings.LEFT_MOUSE,
+            touchDrag: strings.TOUCH_DRAG,
+            pan: strings.PAN,
+            middleMouse: strings.MIDDLE_MOUSE,
+            swipe: strings.SWIPE,
+            look: strings.LOOK,
+            rightMouse: strings.RIGHT_MOUSE,
+            zoom: strings.ZOOM,
+            mouseWheel: strings.MOUSE_WHEEL,
+            pinch: strings.PINCH,
+            fly: strings.FLY,
+            arrowKeys: strings.ARROW_KEYS,
+            flyFaster: strings.FLY_FASTER,
+            shift: strings.SHIFT,
+            flySlower: strings.FLY_SLOWER,
+            ctrl: strings.CTRL,
+            resetCamera: strings.RESET_CAMERA,
+          },
+          cameraInfo: {
+            cameraFocusPoint: strings.CAMERA_FOCUS_POINT,
+            cameraInfo: strings.CAMERA_INFO,
+            cameraPosition: strings.CAMERA_POSITION,
+          },
+          annotationEditPane: {
+            editAnnotation: strings.EDIT_ANNOTATION,
+            title: strings.TITLE,
+            titleTooltip: strings.ANNOTATION_TITLE_TOOLTIP,
+            description: strings.DESCRIPTION,
+            descriptionTooltip: strings.ANNOTATION_DESCRIPTION_TOOLTIP,
+            label: strings.LABEL,
+            labelTooltip: strings.ANNOTATION_LABEL_TOOLTIP,
+          },
+        }}
       />
 
       <AnnotationPanel
