@@ -330,7 +330,7 @@ const injectedRtkApi = api.injectEndpoints({
       },
       providesTags: (results) => [
         ...(results?.map((result) => ({ type: QueryTagTypes.NurseryWithdrawals, id: result.withdrawalId })) ?? []),
-        { type: QueryTagTypes.NurseryWithdrawals, id: 'List' },
+        { type: QueryTagTypes.NurseryWithdrawals, id: 'LIST' },
       ],
       transformResponse: (response: SearchNurseryWithdrawalApiResponse) =>
         response.results.map(
@@ -380,7 +380,7 @@ const injectedRtkApi = api.injectEndpoints({
           body: { ...payload, count: undefined, cursor: undefined },
         };
       },
-      providesTags: [{ type: QueryTagTypes.NurseryWithdrawals, id: 'List' }],
+      providesTags: [{ type: QueryTagTypes.NurseryWithdrawals, id: 'LIST' }],
       transformResponse: (response: SearchCountApiResponse) => response.count,
     }),
 
@@ -399,7 +399,7 @@ const injectedRtkApi = api.injectEndpoints({
           count: 0,
         },
       }),
-      providesTags: [{ type: QueryTagTypes.NurseryWithdrawals, id: 'List' }],
+      providesTags: [{ type: QueryTagTypes.NurseryWithdrawals, id: 'LIST' }],
       transformResponse: (response: SearchNurseryWithdrawalPhotosApiResponse): WithdrawalPhotoSearchEntry[] =>
         response.results.flatMap((result): WithdrawalPhotoSearchEntry[] => {
           if (!result.gpsCoordinate || !result.withdrawal?.id || !result.withdrawal.withdrawnDate || !result.fileId) {

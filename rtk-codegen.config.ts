@@ -60,6 +60,15 @@ const config: ConfigFile = {
     './src/queries/generated/notifications.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/notifications'),
     },
+    './src/queries/generated/nurseryBatches.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/nursery/batches'),
+    },
+    './src/queries/generated/nurserySummaries.ts': {
+      filterEndpoints: (_, operation) =>
+        operation.path === '/api/v1/nursery/summary' ||
+        operation.path === '/api/v1/nursery/facilities/{facilityId}/summary' ||
+        operation.path === '/api/v1/nursery/species/{speciesId}/summary',
+    },
     './src/queries/generated/nurseryWithdrawals.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/nursery/withdrawals'),
     },
