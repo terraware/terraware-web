@@ -51,6 +51,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
   const [batches, setBatches] = useState<SearchResponseElement[]>();
   const [showEmptyBatchesModalFor, setShowEmptyBatchesModalFor] = useState<NurseryWithdrawalPayload>();
   const [filterProjectId, setFilterProjectId] = useState<number>();
+  const [hasWithdrawn, setHasWithdrawn] = useState(false);
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
   const trackEvent = useTrackEvent();
@@ -89,7 +90,9 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
           const withdrawable = searchResponse.filter(
             (batch: any) => +batch['totalQuantity(raw)'] + +batch['germinatingQuantity(raw)'] > 0
           );
-          if (!withdrawable.length) {
+          // Only when the flow opened with nothing to withdraw. After a withdrawal the batches are
+          // refetched, and a batch we just emptied would otherwise toast over the success message.
+          if (!hasWithdrawn && !withdrawable.length) {
             snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM); // temporary until we have a solution from design
           }
           setBatches(withdrawable);
@@ -97,7 +100,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
       };
       void populateBatches();
     }
-  }, [batchIds, snackbar, selectedOrganization]);
+  }, [batchIds, hasWithdrawn, snackbar, selectedOrganization]);
 
   const onWithdrawalConfigured = (withdrawal: NurseryWithdrawalRequest) => {
     setRecord(withdrawal);
@@ -156,6 +159,7 @@ export default function BatchWithdrawFlow(props: BatchWithdrawFlowProps): JSX.El
 
     try {
       const withdrawalResponse = await createBatchWithdrawal(record).unwrap();
+      setHasWithdrawn(true);
       const { withdrawal } = withdrawalResponse;
       trackEvent(MIXPANEL_EVENTS.BATCH_WITHDRAWN, {
         purpose: record.purpose,

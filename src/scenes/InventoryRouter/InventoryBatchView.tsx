@@ -52,6 +52,9 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
 
   const [withdrawModalOpen, setWithdrawModalOpen] = useState(false);
 
+  // A fresh array literal here would re-run the modal's fetch effect on every re-render of this view
+  const withdrawBatchIds = useMemo(() => (batchId ? [Number(batchId)] : []), [batchId]);
+
   const openWithdraw = () => {
     if (!batchId) {
       return;
@@ -188,7 +191,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
             <BatchWithdrawModal
               open={withdrawModalOpen}
               onClose={() => setWithdrawModalOpen(false)}
-              batchIds={[Number(batchId)]}
+              batchIds={withdrawBatchIds}
             />
           )}
           <Grid item xs={12}>

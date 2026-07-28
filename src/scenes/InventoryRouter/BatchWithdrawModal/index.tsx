@@ -88,6 +88,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   );
 
   const [draft, setDraft] = useState<BatchWithdrawDraft>(defaultDraft);
+  const [hasWithdrawn, setHasWithdrawn] = useState(false);
 
   // Fetch batches when the modal opens.
   useEffect(() => {
@@ -126,7 +127,9 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
           };
         })
         .filter((batch) => batch.totalQuantity + batch.germinatingQuantity > 0);
-      if (withdrawableBatches.length === 0) {
+      // Only when the modal opened with nothing to withdraw. After a withdrawal the batches are
+      // refetched, and a batch we just emptied would otherwise toast over the success message.
+      if (!hasWithdrawn && withdrawableBatches.length === 0) {
         snackbar.toastError(strings.NO_BATCHES_TO_WITHDRAW_FROM);
       }
       setBatches(withdrawableBatches);
@@ -136,7 +139,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     return () => {
       active = false;
     };
-  }, [open, selectedOrganization, batchIds, findSpeciesById, snackbar, strings]);
+  }, [open, selectedOrganization, batchIds, findSpeciesById, hasWithdrawn, snackbar, strings]);
 
   const updateDraft = useCallback((next: Partial<BatchWithdrawDraft>) => {
     setDraft((prev) => {
@@ -220,6 +223,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     setStep(0);
     setDraft(defaultDraft());
     setBatches(undefined);
+    setHasWithdrawn(false);
     onClose();
   }, [defaultDraft, onClose]);
 
@@ -357,6 +361,8 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
           )
         );
       }
+
+      setHasWithdrawn(true);
 
       const numBatches = batchWithdrawals.length;
       const totalWithdrawn = batchWithdrawals.reduce(
