@@ -21,7 +21,6 @@ import plantingSiteReducers from './features/plantingSite/plantingSiteSlice';
 import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
 import projectToDoReducers from './features/projectToDo/projectToDoSlice';
 import snackbarReducers from './features/snackbar/snackbarSlice';
-import speciesReducers from './features/species';
 import speciesAsyncThunkReducers from './features/species/speciesSlice';
 import subLocationsReducers from './features/subLocations/subLocationsSlice';
 import trackingReducers from './features/tracking/trackingSlice';
@@ -48,7 +47,6 @@ export const reducers = {
   ...projectToDoReducers,
   ...snackbarReducers,
   ...speciesAsyncThunkReducers,
-  ...speciesReducers,
   ...subLocationsReducers,
   ...trackingReducers,
   ...userAnalyticsReducers,
