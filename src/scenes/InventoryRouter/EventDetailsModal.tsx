@@ -4,9 +4,9 @@ import { Box, Divider, Grid, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
+import { API_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { NurseryBatchService } from 'src/services';
-import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
 import strings from 'src/strings';
 import { Batch } from 'src/types/Batch';
 import { getNurseryById } from 'src/utils/organization';
@@ -37,7 +37,7 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
   const photoUrl = useMemo(
     () =>
       selectedEvent.type === 'PhotoCreated' && selectedEvent.fileId
-        ? BATCH_PHOTO_ENDPOINT.replace('{batchId}', batchId.toString()).replace(
+        ? API_PATHS.NURSERY_BATCH_PHOTO.replace('{batchId}', batchId.toString()).replace(
             '{photoId}',
             selectedEvent.fileId.toString()
           )

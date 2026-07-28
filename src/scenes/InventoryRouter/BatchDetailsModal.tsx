@@ -7,12 +7,17 @@ import getDateDisplayValue from '@terraware/web-components/utils/date';
 
 import DatePicker from 'src/components/common/DatePicker';
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
+import { API_PATHS } from 'src/constants';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
+import {
+  useCreateBatchPhotoMutation,
+  useDeleteBatchPhotoMutation,
+  useListBatchPhotosQuery,
+} from 'src/queries/generated/nurseryBatches';
 import { NurseryBatchService } from 'src/services';
-import { BATCH_PHOTO_ENDPOINT } from 'src/services/NurseryBatchService';
 import {
   batchSubstrateEnumToLocalized,
   batchSubstrateLocalizedToEnum,
@@ -58,12 +63,30 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
     }
     return 0;
   }, [record]);
-  const [photos, setPhotos] = useState<BatchPhotoWithUrl[]>([]);
   const [newPhotos, setNewPhotos] = useState<File[]>([]);
   const [photoIdsToRemove, setPhotoIdsToRemove] = useState<number[]>([]);
   const [facility, setFacility] = useState<Facility>();
   const tz = useLocationTimeZone().get(facility);
   const timeZone = tz.id;
+
+  const { currentData: batchPhotos, isError: batchPhotosError } = useListBatchPhotosQuery(batch.id);
+  const [createBatchPhoto] = useCreateBatchPhotoMutation();
+  const [deleteBatchPhoto] = useDeleteBatchPhotoMutation();
+
+  // Removals are only applied on save, so the removed ids are filtered out of the fetched list until then
+  const photos = useMemo(
+    (): BatchPhotoWithUrl[] =>
+      (batchPhotos?.photos ?? [])
+        .filter((photo) => !photoIdsToRemove.includes(photo.id))
+        .map((photo) => ({
+          ...photo,
+          url: API_PATHS.NURSERY_BATCH_PHOTO.replace('{batchId}', batch.id.toString()).replace(
+            '{photoId}',
+            photo.id.toString()
+          ),
+        })),
+    [batchPhotos, batch.id, photoIdsToRemove]
+  );
 
   const onPhotosChanged = useCallback(
     (photosList: File[]) => {
@@ -72,48 +95,11 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
     [setNewPhotos]
   );
 
-  const onRemovePhoto = useCallback(
-    (id: number) => {
-      const newIds = [...photoIdsToRemove];
-      newIds.push(id);
-      setPhotoIdsToRemove(newIds);
-    },
-    [photoIdsToRemove]
-  );
-
-  const removePhoto = useCallback(
-    (id: number, index: number) => {
-      photos.splice(index, 1);
-      onRemovePhoto(id);
-    },
-    [photos, onRemovePhoto]
-  );
-
   useEffect(() => {
-    const getPhotos = async () => {
-      const photoListResponse = await NurseryBatchService.getBatchPhotosList(batch.id);
-      if (!photoListResponse.requestSucceeded || photoListResponse.error) {
-        setPhotos([]);
-        snackbar.toastError();
-      } else {
-        const photosWithUrl: BatchPhotoWithUrl[] = photoListResponse.photoIds
-          ? photoListResponse.photoIds.map((photo: { id: number }) => {
-              return {
-                ...photo,
-                url: BATCH_PHOTO_ENDPOINT.replace('{batchId}', batch.id.toString()).replace(
-                  '{photoId}',
-                  photo.id.toString()
-                ),
-              };
-            })
-          : [];
-
-        setPhotos(photosWithUrl);
-      }
-    };
-
-    void getPhotos();
-  }, [batch, snackbar]);
+    if (batchPhotosError) {
+      snackbar.toastError();
+    }
+  }, [batchPhotosError, snackbar]);
 
   useEffect(() => {
     if (record?.facilityId && selectedOrganization) {
@@ -164,13 +150,15 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
   }, [MANDATORY_FIELDS, record, quantityChanged, quantityNotes]);
 
   const updatePhotos = useCallback(async () => {
-    await NurseryBatchService.uploadBatchPhotos(batch.id, newPhotos);
-    setNewPhotos([]);
-    if (photoIdsToRemove) {
-      await NurseryBatchService.deleteBatchPhotos(batch.id, photoIdsToRemove);
+    try {
+      await Promise.all(newPhotos.map((file) => createBatchPhoto({ batchId: batch.id, body: { file } }).unwrap()));
+      setNewPhotos([]);
+      await Promise.all(photoIdsToRemove.map((photoId) => deleteBatchPhoto({ batchId: batch.id, photoId }).unwrap()));
       setPhotoIdsToRemove([]);
+    } catch {
+      snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [batch.id, newPhotos, photoIdsToRemove]);
+  }, [batch.id, createBatchPhoto, deleteBatchPhoto, newPhotos, photoIdsToRemove, snackbar, strings.GENERIC_ERROR]);
 
   const onCloseHandler = useCallback(() => {
     setValidateFields(false);
@@ -269,12 +257,9 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
     [onChange]
   );
 
-  const getHandleRemovePhoto = useCallback(
-    (photoId: number, index: number) => () => {
-      removePhoto(photoId, index);
-    },
-    [removePhoto]
-  );
+  const handleRemovePhoto = useCallback((photoId: number) => {
+    setPhotoIdsToRemove((currentIds) => [...currentIds, photoId]);
+  }, []);
 
   const gridSize = useMemo(() => (isMobile ? 12 : 6), [isMobile]);
 
@@ -477,8 +462,6 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
           </Typography>
           <Box display='flex' flexWrap='wrap' flexDirection='row'>
             {photos.map((photo, index) => {
-              const handleRemovePhoto = getHandleRemovePhoto(photo.id, index);
-
               return (
                 <Box
                   key={index}
@@ -493,7 +476,7 @@ export default function BatchDetailsModal({ batch, onClose, reload }: BatchDetai
                 >
                   <Button
                     icon='iconTrashCan'
-                    onClick={handleRemovePhoto}
+                    onClick={() => handleRemovePhoto(photo.id)}
                     size='small'
                     style={{
                       position: 'absolute',
