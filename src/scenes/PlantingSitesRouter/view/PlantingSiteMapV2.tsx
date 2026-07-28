@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 import MapComponent from 'src/components/NewMap';
 import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
@@ -31,6 +31,7 @@ export type PlantingSiteMapV2Props = {
 };
 
 const PlantingSiteMapV2 = ({ plantingSiteId }: PlantingSiteMapV2Props): JSX.Element => {
+  const theme = useTheme();
   const { mapId, refreshToken, token } = useMapboxToken();
   const mapRef = useRef<MapRef | null>(null);
   const { fitBounds } = useMapUtils(mapRef);
@@ -192,6 +193,7 @@ const PlantingSiteMapV2 = ({ plantingSiteId }: PlantingSiteMapV2Props): JSX.Elem
 
   return (
     <MapComponent
+      containerStyle={{ marginTop: theme.spacing(3) }}
       drawerChildren={drawerContent}
       drawerOpen={drawerOpen}
       drawerSize={'small'}
