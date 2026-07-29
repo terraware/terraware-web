@@ -176,6 +176,14 @@ const useObservationExports = () => {
           displayLabel: strings.FIELD_NOTES,
         },
         {
+          key: 'optionalLatitude',
+          displayLabel: strings.OPTIONAL_LATITUDE_OF_PLOT,
+        },
+        {
+          key: 'optionalLongitude',
+          displayLabel: strings.OPTIONAL_LONGITUDE_OF_PLOT,
+        },
+        {
           key: 'detailsLink',
           displayLabel: strings.LINK_TO_PLOT_OBSERVATION_DETAILS,
         },
@@ -232,6 +240,15 @@ const useObservationExports = () => {
               >
             );
 
+            const optionalLatitude =
+              monitoringPlot.coordinates.length > 0
+                ? monitoringPlot.coordinates[0].gpsCoordinates.coordinates[1]
+                : undefined;
+            const optionalLongitude =
+              monitoringPlot.coordinates.length > 0
+                ? monitoringPlot.coordinates[0].gpsCoordinates.coordinates[0]
+                : undefined;
+
             const gpsFieldSouthwest = gpsFieldCoordinatesByPosition.SouthwestCorner;
             const gpsFieldNorthwest = gpsFieldCoordinatesByPosition.NorthwestCorner;
             const gpsFieldSoutheast = gpsFieldCoordinatesByPosition.SoutheastCorner;
@@ -259,6 +276,8 @@ const useObservationExports = () => {
               northwestLongitude: plotCoordinates[3][0],
               notes: monitoringPlot.notes,
               monitoringPlotNumber: monitoringPlot.monitoringPlotNumber,
+              optionalLatitude,
+              optionalLongitude,
               plantingDensity: monitoringPlot.plantingDensity,
               plotType: monitoringPlot.isPermanent ? strings.PERMANENT : strings.TEMPORARY,
               southeastLatitude: plotCoordinates[1][1],

@@ -1439,6 +1439,8 @@ OPT_IN,Funciones Opt-In,cbb9300b
 OPTIONAL,Opcional,9f75363c
 OPTIONAL_GPS_COORDINATES_OF_PLOT,Opcional: Coordenadas GPS de la parcela,c15f1313
 OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,"Proporcione las coordenadas GPS de la esquina suroeste, si el área observada no corresponde a la ubicación original de la parcela.",d5180b23
+OPTIONAL_LATITUDE_OF_PLOT,Opcional: Latitud de la parcela,9de4497b
+OPTIONAL_LONGITUDE_OF_PLOT,Opcional: Longitud de la parcela,124fa9fb
 OR,O,38d8953d
 ORBIT,Orbitar,8e3af3cb
 ORG_NOTIFICATION_ACTION,"Para cambiar la preferencia, ve a [Ajustes > Organización]",5cbf22d7
