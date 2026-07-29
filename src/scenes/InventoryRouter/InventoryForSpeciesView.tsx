@@ -29,7 +29,6 @@ export default function InventoryForSpeciesView(props: InventoryForSpeciesViewPr
   const { species } = props;
   const { speciesId } = useParams<{ speciesId: string }>();
   const [inventorySpecies, setInventorySpecies] = useState<Species>();
-  const [modified, setModified] = useState<number>(-1);
   const contentRef = useRef(null);
   const theme = useTheme();
 
@@ -88,8 +87,6 @@ export default function InventoryForSpeciesView(props: InventoryForSpeciesViewPr
             <Card flushMobile style={{ marginTop: theme.spacing(3) }}>
               <InventorySeedlingsTableForSpecies
                 speciesId={Number(speciesId)}
-                modified={modified}
-                setModified={setModified}
                 openBatchNumber={openBatchNumber}
                 onUpdateOpenBatch={setBatchNumber}
                 origin={'Species'}

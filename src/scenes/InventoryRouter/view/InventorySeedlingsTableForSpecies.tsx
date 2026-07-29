@@ -3,24 +3,17 @@ import React, { type JSX, useCallback, useMemo } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
-import { useLazyListBatchesForSpeciesQuery } from 'src/queries/search/batches';
 import InventorySeedlingsTable, {
   InventorySeedlingsTableProps,
 } from 'src/scenes/InventoryRouter/view/InventorySeedlingsTable';
-import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import { parseSearchTerm } from 'src/utils/search';
+import { SearchResponseElement } from 'src/types/Search';
 
 interface InventorySeedlingsTableForSpeciesProps
-  extends Omit<
-    InventorySeedlingsTableProps,
-    'columns' | 'isSelectionBulkWithdrawable' | 'getFuzzySearchFields' | 'getBatchesSearch'
-  > {
+  extends Omit<InventorySeedlingsTableProps, 'columns' | 'isSelectionBulkWithdrawable'> {
   speciesId: number;
 }
 
 export default function InventorySeedlingsTableForSpecies(props: InventorySeedlingsTableForSpeciesProps): JSX.Element {
-  const [listBatchesForSpecies] = useLazyListBatchesForSpeciesQuery();
-  const speciesId = props.speciesId;
   const { strings } = useLocalization();
 
   const columns = useMemo(
@@ -69,42 +62,6 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
     [strings]
   );
 
-  const getFuzzySearchFields = useCallback((debouncedSearchTerm: string): FieldNodePayload[] => {
-    const { type, values } = parseSearchTerm(debouncedSearchTerm);
-    return [
-      {
-        operation: 'field',
-        field: 'facility_name',
-        type,
-        values,
-      },
-    ];
-  }, []);
-
-  const getBatchesSearch = useCallback(
-    async (
-      orgId: number,
-      originId: number,
-      searchFields: FieldNodePayload[],
-      searchSortOrder: SearchSortOrder | undefined
-    ): Promise<SearchResponseElement[] | null> => {
-      const searchResponse = await listBatchesForSpecies({
-        organizationId: orgId,
-        speciesId: originId,
-        searchFields,
-        sortOrder: searchSortOrder,
-      }).unwrap();
-      return searchResponse.map(
-        (sr): SearchResponseElement => ({
-          ...sr,
-          facilityId: sr.facility_id,
-          species_id: speciesId,
-        })
-      );
-    },
-    [listBatchesForSpecies, speciesId]
-  );
-
   const areAllFromSameNursery = (selectedRows: SearchResponseElement[]) => {
     if (!selectedRows.length) {
       return false;
@@ -121,12 +78,6 @@ export default function InventorySeedlingsTableForSpecies(props: InventorySeedli
   );
 
   return (
-    <InventorySeedlingsTable
-      {...props}
-      columns={columns}
-      isSelectionBulkWithdrawable={isSelectionBulkWithdrawable}
-      getFuzzySearchFields={getFuzzySearchFields}
-      getBatchesSearch={getBatchesSearch}
-    />
+    <InventorySeedlingsTable {...props} columns={columns} isSelectionBulkWithdrawable={isSelectionBulkWithdrawable} />
   );
 }

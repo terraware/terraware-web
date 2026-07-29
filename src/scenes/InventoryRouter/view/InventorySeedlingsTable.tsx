@@ -22,11 +22,11 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useDeleteBatchMutation } from 'src/queries/generated/nurseryBatches';
+import { useListBatchesForNurseryQuery, useListBatchesForSpeciesQuery } from 'src/queries/search/batches';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
-import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
+import { FieldNodePayload, SearchResponseElement } from 'src/types/Search';
 import { downloadCsv } from 'src/utils/csv';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
@@ -42,34 +42,16 @@ import QuantitiesMenu from './QuantitiesMenu';
 export interface InventorySeedlingsTableProps {
   speciesId?: number;
   facilityId?: number;
-  modified: number;
-  setModified: (val: number) => void;
   openBatchNumber: string | null;
   onUpdateOpenBatch: (batchNum: string | null) => void;
   origin: OriginPage;
   columns: TableColumnType[] | (() => TableColumnType[]);
   isSelectionBulkWithdrawable: (selectedRows: SearchResponseElement[]) => boolean;
-  getFuzzySearchFields: (debouncedSearchTerm: string) => FieldNodePayload[];
-  // Origin ID is either the facility ID or the species ID
-  getBatchesSearch: (
-    orgId: number,
-    originId: number,
-    searchFields: FieldNodePayload[],
-    searchSortOrder: SearchSortOrder | undefined
-  ) => Promise<SearchResponseElement[] | null>;
 }
 
 export default function InventorySeedlingsTable(props: InventorySeedlingsTableProps): JSX.Element {
-  const {
-    modified,
-    setModified,
-    openBatchNumber,
-    onUpdateOpenBatch,
-    origin,
-    columns,
-    isSelectionBulkWithdrawable,
-    getBatchesSearch,
-  } = props;
+  const { openBatchNumber, onUpdateOpenBatch, origin, columns, isSelectionBulkWithdrawable } = props;
+  // Origin ID is either the facility ID or the species ID
   const originId: number | undefined = props.facilityId || props.speciesId;
 
   const { activeLocale, strings } = useLocalization();
@@ -84,7 +66,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const [deleteBatch] = useDeleteBatchMutation();
   const tableStorageKey = `inventorySeedlingsTable_${origin.toLowerCase()}`;
 
-  const [batches, setBatches] = useState<SearchResponseElement[]>([]);
   const [filteredBatches, setFilteredBatches] = useState<SearchResponseElement[]>([]);
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
@@ -102,16 +83,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
         .filter((row): row is SearchResponseElement => row !== undefined),
     [rowSelection, filteredBatches]
   );
-
-  useEffect(() => {
-    if (
-      (origin === 'Species' || origin === 'Nursery') &&
-      batches.length > 0 &&
-      batches.filter((batch: SearchResponseElement) => !isBatchEmpty(batch)).length === 0
-    ) {
-      setFilters({ showEmptyBatches: ['true'] });
-    }
-  }, [batches, origin, setFilters]);
 
   const filterEmptyBatches = useCallback(
     (unfiltered: SearchResponseElement[]) => {
@@ -160,48 +131,58 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     return fields;
   }, [getNonSpeciesSearchFields, filters.speciesIds]);
 
+  const searchFields = useMemo(() => getSearchFields(), [getSearchFields]);
+  const isNurseryOrigin = origin === 'Nursery';
+  const skipSearch = !originId || isNaN(originId) || !selectedOrganization || !activeLocale;
+
+  const { currentData: nurseryBatchResults } = useListBatchesForNurseryQuery(
+    { organizationId: selectedOrganization?.id ?? -1, nurseryId: originId ?? -1, searchFields },
+    { skip: skipSearch || !isNurseryOrigin }
+  );
+
+  const { currentData: speciesBatchResults } = useListBatchesForSpeciesQuery(
+    { organizationId: selectedOrganization?.id ?? -1, speciesId: originId ?? -1, searchFields },
+    { skip: skipSearch || isNurseryOrigin }
+  );
+
+  // Resolve species names from the org species list so they stay fresh even if the search
+  // response carries a stale (or, eventually, absent) embedded name.
+  const withOrgSpecies = useCallback(
+    (batch: SearchResponseElement): SearchResponseElement => {
+      const orgSpecies = findSpeciesById(Number(batch.species_id));
+      return orgSpecies
+        ? {
+            ...batch,
+            species_scientificName: orgSpecies.scientificName,
+            species_commonName: orgSpecies.commonName ?? batch.species_commonName,
+          }
+        : batch;
+    },
+    [findSpeciesById]
+  );
+
+  // The origin is not a column of the search results, so it is folded back into each row
+  const batches = useMemo(
+    (): SearchResponseElement[] =>
+      isNurseryOrigin
+        ? (nurseryBatchResults ?? []).map((batch) => ({ ...withOrgSpecies(batch), facilityId: originId }))
+        : (speciesBatchResults ?? []).map((batch) => ({
+            ...withOrgSpecies(batch),
+            facilityId: batch.facility_id,
+            species_id: originId,
+          })),
+    [isNurseryOrigin, nurseryBatchResults, originId, speciesBatchResults, withOrgSpecies]
+  );
+
   useEffect(() => {
-    const requestId = setRequestId('inventory-seedlings');
-
-    const populateResults = async () => {
-      if (!originId || !selectedOrganization || !activeLocale) {
-        return;
-      }
-
-      const searchFields = getSearchFields();
-      const batchesResults = await getBatchesSearch(selectedOrganization.id, originId, searchFields, undefined);
-
-      // Resolve species names from the org species list so they stay fresh even if the search
-      // response carries a stale (or, eventually, absent) embedded name.
-      const withOrgSpecies = (batchesResults || []).map((batch) => {
-        const orgSpecies = findSpeciesById(Number(batch.species_id));
-        return orgSpecies
-          ? {
-              ...batch,
-              species_scientificName: orgSpecies.scientificName,
-              species_commonName: orgSpecies.commonName ?? batch.species_commonName,
-            }
-          : batch;
-      });
-
-      if (requestId === getRequestId('inventory-seedlings')) {
-        setBatches(withOrgSpecies);
-      }
-    };
-
-    if (!originId || !isNaN(originId)) {
-      void populateResults();
+    if (
+      (origin === 'Species' || origin === 'Nursery') &&
+      batches.length > 0 &&
+      batches.filter((batch: SearchResponseElement) => !isBatchEmpty(batch)).length === 0
+    ) {
+      setFilters({ showEmptyBatches: ['true'] });
     }
-  }, [
-    activeLocale,
-    filters.facilityIds,
-    findSpeciesById,
-    getBatchesSearch,
-    getSearchFields,
-    modified,
-    originId,
-    selectedOrganization,
-  ]);
+  }, [batches, origin, setFilters]);
 
   useEffect(() => {
     const batch = batches.find((b) => b.batchNumber === openBatchNumber);
@@ -229,13 +210,8 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     setFilteredBatches(filterEmptyBatches(batches));
   }, [batches, filterEmptyBatches]);
 
-  const reloadData = useCallback(() => {
-    setModified(Date.now());
-  }, [setModified]);
-
   const addBatch = () => {
     setOpenNewBatchModal(true);
-    reloadData();
   };
 
   const deleteSelectedBatches = useCallback(() => {
@@ -244,10 +220,9 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       if (results.some((result) => result.status === 'rejected')) {
         snackbar.toastError();
       }
-      reloadData();
       setOpenDeleteModal(false);
     });
-  }, [deleteBatch, reloadData, selectedRows, snackbar]);
+  }, [deleteBatch, selectedRows, snackbar]);
 
   const selectAllRows = useCallback(() => {
     const newSelection: MRT_RowSelectionState = {};
@@ -452,7 +427,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       >
         {openNewBatchModal && (
           <BatchDetailsModal
-            reload={reloadData}
             onClose={() => {
               onUpdateOpenBatch(null);
               setOpenNewBatchModal(false);
@@ -478,7 +452,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
             onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
             modalValues={modalValues}
             row={modalValues.batch}
-            reload={reloadData}
           />
         )}
         <Grid item xs={12} sx={{ marginTop: theme.spacing(1) }}>
@@ -552,7 +525,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
                     <ProjectAssignTopBarButton
                       totalResultsCount={filteredBatches?.length}
                       selectAllRows={selectAllRows}
-                      reloadData={reloadData}
                       projectAssignPayloadCreator={() => ({ batchIds: selectedRows.map((row) => Number(row.id)) })}
                     />
                     <Tooltip title={withdrawTooltip || ''}>

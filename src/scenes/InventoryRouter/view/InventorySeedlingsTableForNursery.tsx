@@ -3,23 +3,16 @@ import React, { type JSX, useCallback, useMemo } from 'react';
 import { TableColumnType } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
-import { useLazyListBatchesForNurseryQuery } from 'src/queries/search/batches';
 import InventorySeedlingsTable, {
   InventorySeedlingsTableProps,
 } from 'src/scenes/InventoryRouter/view/InventorySeedlingsTable';
-import { FieldNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import { parseSearchTerm } from 'src/utils/search';
 
 interface InventorySeedlingsTableForNurseryProps
-  extends Omit<
-    InventorySeedlingsTableProps,
-    'columns' | 'isSelectionBulkWithdrawable' | 'getFuzzySearchFields' | 'getBatchesSearch'
-  > {
+  extends Omit<InventorySeedlingsTableProps, 'columns' | 'isSelectionBulkWithdrawable'> {
   nurseryId: number;
 }
 
 export default function InventorySeedlingsTableForNursery(props: InventorySeedlingsTableForNurseryProps): JSX.Element {
-  const [listBatchesForNursery] = useLazyListBatchesForNurseryQuery();
   const facilityId = props.nurseryId;
   const { strings } = useLocalization();
 
@@ -68,36 +61,6 @@ export default function InventorySeedlingsTableForNursery(props: InventorySeedli
     [strings]
   );
 
-  const getFuzzySearchFields = useCallback((debouncedSearchTerm: string): FieldNodePayload[] => {
-    const { type, values } = parseSearchTerm(debouncedSearchTerm);
-    return [
-      {
-        operation: 'field',
-        field: 'species_scientificName',
-        type,
-        values,
-      },
-    ];
-  }, []);
-
-  const getBatchesSearch = useCallback(
-    async (
-      orgId: number,
-      originId: number,
-      searchFields: FieldNodePayload[],
-      searchSortOrder: SearchSortOrder | undefined
-    ): Promise<SearchResponseElement[] | null> => {
-      const searchResponse = await listBatchesForNursery({
-        organizationId: orgId,
-        nurseryId: originId,
-        searchFields,
-        sortOrder: searchSortOrder,
-      }).unwrap();
-      return searchResponse.map((sr): SearchResponseElement => ({ ...sr, facilityId }));
-    },
-    [facilityId, listBatchesForNursery]
-  );
-
   const isSelectionBulkWithdrawable = useCallback(() => true, []);
 
   return (
@@ -106,8 +69,6 @@ export default function InventorySeedlingsTableForNursery(props: InventorySeedli
       facilityId={facilityId}
       columns={columns}
       isSelectionBulkWithdrawable={isSelectionBulkWithdrawable}
-      getFuzzySearchFields={getFuzzySearchFields}
-      getBatchesSearch={getBatchesSearch}
     />
   );
 }
