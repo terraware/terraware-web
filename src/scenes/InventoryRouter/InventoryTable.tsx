@@ -47,7 +47,6 @@ interface InventoryTableProps {
   columns: TableColumnType[] | (() => TableColumnType[]);
   filters: InventoryFiltersUnion;
   origin: OriginPage;
-  reloadData?: () => void;
   results: SearchResponseElement[];
   setFilters: (f: InventoryFiltersUnion) => void;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
@@ -63,7 +62,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     filters,
     setFilters,
     columns,
-    reloadData,
     origin,
     allowSelectionProjectAssign,
     emptyTableMessage,
@@ -297,10 +295,9 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       if (deleteResults.some((result) => result.status === 'rejected')) {
         snackbar.toastError();
       }
-      reloadData?.();
       setOpenDeleteModal(false);
     });
-  }, [deleteBatch, reloadData, selectedRows, snackbar]);
+  }, [deleteBatch, selectedRows, snackbar]);
 
   const isSelectionWithdrawable = () => {
     // we are woring with 'any' type rows in this table
@@ -618,7 +615,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
           onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
           modalValues={modalValues}
           row={modalValues.batch}
-          reload={reloadData}
         />
       )}
       {withdrawModalBatchIds && (
@@ -702,7 +698,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                           <ProjectAssignTopBarButton
                             totalResultsCount={results?.length}
                             selectAllRows={selectAllRows}
-                            reloadData={reloadData}
                             projectAssignPayloadCreator={projectAssignPayloadCreator}
                           />
                         )}

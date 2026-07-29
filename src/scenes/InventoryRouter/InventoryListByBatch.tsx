@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Container } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -8,13 +8,12 @@ import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useLazyListAllBatchesQuery } from 'src/queries/search/batches';
+import { ListAllBatchesApiArg, useLazyListAllBatchesQuery } from 'src/queries/search/batches';
 import { isBatchEmpty } from 'src/scenes/InventoryRouter/FilterUtils';
 import { InventoryFiltersUnion } from 'src/scenes/InventoryRouter/InventoryFilter';
 import InventoryTable from 'src/scenes/InventoryRouter/InventoryTable';
 import { BatchInventoryResult, InventoryResultWithBatchNumber } from 'src/scenes/InventoryRouter/InventoryV2View';
-import { SearchResponseElement, SearchSortOrder } from 'src/types/Search';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
+import { SearchSortOrder } from 'src/types/Search';
 import useDebounce from 'src/utils/useDebounce';
 import useForm from 'src/utils/useForm';
 
@@ -22,10 +21,8 @@ export default function InventoryListByBatch() {
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { findSpeciesById } = useOrganizationSpecies();
-  const [listAllBatches] = useLazyListAllBatchesQuery();
 
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
-  const [searchResults, setSearchResults] = useState<SearchResponseElement[] | null>(null);
   const [showResults, setShowResults] = useState(false);
   const [temporalSearchValue, setTemporalSearchValue] = useState('');
 
@@ -91,42 +88,40 @@ export default function InventoryListByBatch() {
     [strings]
   );
 
-  const onApplyFilters = useCallback(async () => {
+  const searchArgs = useMemo(
+    (): ListAllBatchesApiArg => ({
+      organizationId: selectedOrganization?.id ?? -1,
+      sortOrder: { field: 'batchNumber', direction: 'Ascending' } as SearchSortOrder,
+      nurseryIds: filters.facilityIds,
+      subLocationIds: filters.subLocationsIds,
+      projectIds: filters.projectIds,
+      query: debouncedSearchTerm,
+    }),
+    [debouncedSearchTerm, filters.facilityIds, filters.projectIds, filters.subLocationsIds, selectedOrganization]
+  );
+
+  // `data` rather than `currentData` so the table keeps showing the previous rows while a filter
+  // change refetches, rather than blanking out on every keystroke.
+  const [listAllBatches, { data: batchResults }] = useLazyListAllBatchesQuery();
+
+  useEffect(() => {
     if (selectedOrganization && activeLocale) {
-      const requestId = Math.random().toString();
-      setRequestId('searchInventory', requestId);
+      void listAllBatches(searchArgs, true);
+    }
+  }, [activeLocale, listAllBatches, searchArgs, selectedOrganization]);
 
-      const showEmptyBatches = (filters.showEmptyBatches || [])[0] === 'true';
-
-      const apiSearchResults = await listAllBatches({
-        organizationId: selectedOrganization.id,
-        sortOrder: { field: 'batchNumber', direction: 'Ascending' } as SearchSortOrder,
-        nurseryIds: filters.facilityIds,
-        subLocationIds: filters.subLocationsIds,
-        projectIds: filters.projectIds,
-        query: debouncedSearchTerm,
-      }).unwrap();
-
-      const processedResults = apiSearchResults?.map((result) => {
-        let subLocationsList = '';
-        (result.subLocations as any[])?.forEach((sl, index) => {
-          if (index === 0) {
-            subLocationsList = sl.subLocation_name;
-          } else {
-            subLocationsList += `\r${sl.subLocation_name}`;
-          }
-        });
-
-        return {
+  const results = useMemo(
+    () =>
+      batchResults?.map((result) => {
+        const resultTyped = {
           ...result,
-          subLocations: subLocationsList,
-        };
-      });
+          subLocations: ((result.subLocations as { subLocation_name: string }[]) ?? [])
+            .map((subLocation) => subLocation.subLocation_name)
+            .join('\r'),
+        } as BatchInventoryResult;
 
-      // format results
-      const updatedResult = processedResults?.map((uR) => {
-        const resultTyped = uR as BatchInventoryResult;
         const orgSpecies = findSpeciesById(Number(resultTyped.species_id));
+
         return {
           ...resultTyped,
           batchId: resultTyped.id,
@@ -134,28 +129,24 @@ export default function InventoryListByBatch() {
           species_commonName: orgSpecies?.commonName ?? resultTyped.species_commonName,
           facility_name_noLink: resultTyped.facility_name,
         } as InventoryResultWithBatchNumber;
-      });
+      }),
+    [batchResults, findSpeciesById]
+  );
 
-      const filteredResult = updatedResult?.filter((result) => showEmptyBatches || !isBatchEmpty(result));
+  const searchResults = useMemo(() => {
+    const showEmptyBatches = (filters.showEmptyBatches || [])[0] === 'true';
+    return results?.filter((result) => showEmptyBatches || !isBatchEmpty(result));
+  }, [filters.showEmptyBatches, results]);
 
-      if (updatedResult) {
-        if (!debouncedSearchTerm && !filters.facilityIds?.length && !filters.projectIds?.length) {
-          setShowResults(updatedResult.length > 0);
-        }
-      }
-      if (filteredResult) {
-        if (getRequestId('searchInventory') === requestId) {
-          setSearchResults(filteredResult);
-        }
-      }
-    }
-  }, [activeLocale, filters, debouncedSearchTerm, findSpeciesById, listAllBatches, selectedOrganization]);
+  const isUnfiltered = !debouncedSearchTerm && !filters.facilityIds?.length && !filters.projectIds?.length;
 
-  const reloadData = useCallback(() => void onApplyFilters(), [onApplyFilters]);
-
+  // Sticky: once an unfiltered search has found batches the table stays up, so narrowing the
+  // filters down to nothing shows an empty table rather than the onboarding page.
   useEffect(() => {
-    void onApplyFilters();
-  }, [filters, onApplyFilters]);
+    if (results && isUnfiltered) {
+      setShowResults(results.length > 0);
+    }
+  }, [isUnfiltered, results]);
 
   return (
     <Card flushMobile>
@@ -167,7 +158,6 @@ export default function InventoryListByBatch() {
           filters={filters}
           setFilters={setFilters}
           columns={columns}
-          reloadData={reloadData}
           origin='Batches'
           allowSelectionProjectAssign
           emptyTableMessage={
@@ -176,7 +166,7 @@ export default function InventoryListByBatch() {
               : ''
           }
         />
-      ) : searchResults === null ? (
+      ) : searchResults === undefined ? (
         <Box
           sx={{
             position: 'fixed',
@@ -188,7 +178,7 @@ export default function InventoryListByBatch() {
         </Box>
       ) : (
         <Container maxWidth={false} sx={{ padding: '32px 0' }}>
-          <EmptyStatePage pageName='Inventory' reloadData={reloadData} />
+          <EmptyStatePage pageName='Inventory' />
         </Container>
       )}
     </Card>

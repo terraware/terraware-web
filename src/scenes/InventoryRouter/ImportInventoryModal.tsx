@@ -13,12 +13,11 @@ import NurseryDropdown from './NurseryDropdown';
 export type ImportInventoryModalProps = {
   open: boolean;
   onClose: (saved: boolean, snackbarMessage?: string) => void;
-  reloadData?: () => void;
 };
 
 export default function ImportInventoryModal(props: ImportInventoryModalProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
-  const { open, onClose, reloadData } = props;
+  const { open, onClose } = props;
   const { getInventoryTemplate, uploadInventory, getInventoryUploadStatus } = useInventoryImport();
   const [record, setRecord] = useForm({ facilityId: -1 });
   const [validate, setValidate] = useState<boolean>(false);
@@ -59,7 +58,6 @@ export default function ImportInventoryModal(props: ImportInventoryModalProps): 
       importCompleteLabel={strings.INVENTORY_IMPORT_COMPLETE}
       importingLabel={strings.IMPORTING_INVENTORY}
       duplicatedLabel={strings.DUPLICATED_INVENTORY}
-      reloadData={reloadData}
       isImportValid={isValid}
     >
       <NurseryDropdown
