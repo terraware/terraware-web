@@ -1,3 +1,4 @@
+import { SearchCountApiResponse } from 'src/queries/generated/search';
 import { SearchNodePayload, SearchResponseElement, SearchSortOrder } from 'src/types/Search';
 import { parseSearchTerm } from 'src/utils/search';
 
@@ -179,6 +180,24 @@ const buildAllBatchesRequest = (args: ListAllBatchesApiArg) => {
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
+    countAllBatches: build.query<number, number>({
+      query: (organizationId) => ({
+        url: '/api/v1/search/count',
+        method: 'POST',
+        body: {
+          prefix: 'batches',
+          fields: [],
+          search: {
+            operation: 'field',
+            field: 'facility_organization_id',
+            values: [`${organizationId}`],
+          },
+        },
+      }),
+      providesTags: [{ type: QueryTagTypes.NurseryBatches, id: 'LIST' }],
+      transformResponse: (response: SearchCountApiResponse) => response.count,
+    }),
+
     listBatchesByIds: build.query<NurseryBatchesSearchResponseElement[], ListBatchesByIdsApiArg>({
       query: (args) => ({
         url: '/api/v1/search',
@@ -313,6 +332,8 @@ type BatchSearchResponse = {
 export { injectedRtkApi as api };
 
 export const {
+  useCountAllBatchesQuery,
+  useLazyCountAllBatchesQuery,
   useListBatchesByIdsQuery,
   useLazyListBatchesByIdsQuery,
   useListAllBatchesQuery,

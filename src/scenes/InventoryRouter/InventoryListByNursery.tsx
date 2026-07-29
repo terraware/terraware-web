@@ -6,9 +6,9 @@ import { TableColumnType } from '@terraware/web-components';
 import Card from 'src/components/common/Card';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
+import { useOrganizationHasBatches } from 'src/hooks/batches/useOrganizationHasBatches';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useLazyListAllBatchesQuery } from 'src/queries/search/batches';
 import {
   SearchInventoryByNurseryApiArg,
   useLazySearchInventoryByNurseryQuery,
@@ -72,14 +72,8 @@ export default function InventoryListByNursery() {
     [strings]
   );
 
-  // Whether the org has any inventory at all, which decides between the table and the onboarding page
-  const [listAllBatches, { data: allBatches }] = useLazyListAllBatchesQuery();
-
-  useEffect(() => {
-    if (selectedOrganization && activeLocale) {
-      void listAllBatches({ organizationId: selectedOrganization.id }, true);
-    }
-  }, [activeLocale, listAllBatches, selectedOrganization]);
+  // Decides between the table and the onboarding page
+  const hasBatches = useOrganizationHasBatches();
 
   const searchArgs = useMemo(
     (): SearchInventoryByNurseryApiArg => ({
@@ -124,11 +118,19 @@ export default function InventoryListByNursery() {
       .filter((result) => showEmptyNurseries || !isNurseryEmpty(result));
   }, [apiSearchResults, filters.showEmptyNurseries, findSpeciesById]);
 
-  const showResults = (allBatches?.length ?? 0) > 0;
-
   return (
     <Card flushMobile>
-      {showResults ? (
+      {hasBatches === undefined || searchResults === undefined ? (
+        <Box
+          sx={{
+            position: 'fixed',
+            top: '50%',
+            left: '50%',
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : hasBatches ? (
         <InventoryTable
           results={searchResults || []}
           temporalSearchValue={temporalSearchValue}
@@ -143,16 +145,6 @@ export default function InventoryListByNursery() {
               : ''
           }
         />
-      ) : searchResults === undefined ? (
-        <Box
-          sx={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-          }}
-        >
-          <CircularProgress />
-        </Box>
       ) : (
         <Container maxWidth={false} sx={{ padding: '32px 0' }}>
           <EmptyStatePage pageName='Inventory' />
