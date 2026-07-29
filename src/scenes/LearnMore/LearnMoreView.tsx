@@ -455,7 +455,7 @@ const LearnMoreView = (): JSX.Element => {
         </Box>
       </Box>
 
-      <Box sx={{ padding: isMobile ? '0 24px 16px' : '0 24px 24px' }}>
+      <Box sx={{ padding: isMobile ? '0 24px 96px' : '0 24px 190px' }}>
         <Box
           sx={{
             display: 'flex',
@@ -494,33 +494,6 @@ const LearnMoreView = (): JSX.Element => {
               </Typography>
             </Box>
           ))}
-        </Box>
-      </Box>
-
-      {/* Registered orgs banner */}
-      <Box sx={{ padding: isMobile ? '0 24px 48px' : '0 24px 64px' }}>
-        <Box
-          sx={{
-            background: theme.palette.TwClrBgBrandGhostHover,
-            borderRadius: '16px',
-            margin: '0 auto',
-            maxWidth: MAX_CONTENT_WIDTH,
-            padding: isMobile ? '24px' : '32px 40px',
-          }}
-        >
-          <Typography
-            sx={{
-              color: brand,
-              fontSize: isMobile ? '20px' : '26px',
-              fontWeight: 600,
-              lineHeight: 1.4,
-              margin: '0 auto',
-              maxWidth: '760px',
-              textAlign: 'center',
-            }}
-          >
-            {strings.LEARN_MORE_BANNER}
-          </Typography>
         </Box>
       </Box>
 
