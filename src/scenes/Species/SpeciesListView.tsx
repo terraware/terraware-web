@@ -24,6 +24,7 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
@@ -123,6 +124,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const [showProblemsColumn, setShowProblemsColumn] = useState<boolean>(false);
 
   const userCanEdit = !isContributor(selectedOrganization);
+  const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
   const { isMobile } = useDeviceInfo();
 
   const {
@@ -596,22 +598,26 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               >
                 {strings.SPECIES}
               </h1>
-              {species && species.length > 0 && availableProjects && availableProjects.length > 0 && (
-                <Box display='flex' alignItems='center' marginLeft={theme.spacing(2)}>
-                  <Separator height='40px' />
-                  <Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'>
-                    {strings.PROJECT}
-                  </Typography>
-                  <ProjectsDropdown
-                    allowUnselect
-                    availableProjects={availableProjects}
-                    label=''
-                    record={projectFilter}
-                    setRecord={setProjectFilter}
-                    unselectLabel={strings.ALL_PROJECTS}
-                  />
-                </Box>
-              )}
+              {speciesIntelligenceEnabled &&
+                species &&
+                species.length > 0 &&
+                availableProjects &&
+                availableProjects.length > 0 && (
+                  <Box display='flex' alignItems='center' marginLeft={theme.spacing(2)}>
+                    <Separator height='40px' />
+                    <Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'>
+                      {strings.PROJECT}
+                    </Typography>
+                    <ProjectsDropdown
+                      allowUnselect
+                      availableProjects={availableProjects}
+                      label=''
+                      record={projectFilter}
+                      setRecord={setProjectFilter}
+                      unselectLabel={strings.ALL_PROJECTS}
+                    />
+                  </Box>
+                )}
             </Box>
             {species && species.length > 0 && !isMobile && userCanEdit && (
               <div>
