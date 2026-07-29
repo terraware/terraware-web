@@ -1,8 +1,8 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, ClickAwayListener, IconButton, Popover, Tooltip, useTheme } from '@mui/material';
+import { Box, ClickAwayListener, IconButton, Popover, Tooltip, Typography, useTheme } from '@mui/material';
 import { DropdownItem } from '@terraware/web-components';
-import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { EditableTable, EditableTableColumn, Icon, Separator } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_ShowHideColumnsButton,
@@ -14,6 +14,7 @@ import {
 } from 'material-react-table';
 
 import PageSnackbar from 'src/components/PageSnackbar';
+import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import Card from 'src/components/common/Card';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import Link from 'src/components/common/Link';
@@ -23,6 +24,7 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
@@ -108,9 +110,11 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
+  const [projectFilter, setProjectFilter] = useState<{ projectId?: number }>({});
   const query = useQuery();
   const navigate = useSyncNavigate();
   const { activeLocale } = useLocalization();
+  const { availableProjects } = useProjects();
 
   const contentRef = React.useRef(null);
 
@@ -262,6 +266,28 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       ).sort(),
     [results]
   );
+
+  const speciesProjectIds = useMemo(() => {
+    const map = new Map<number, Set<number>>();
+    species?.forEach((sp) => {
+      const projectIds = new Set<number>();
+      sp.projects?.forEach((project) => {
+        if (project.projectId !== undefined) {
+          projectIds.add(project.projectId);
+        }
+      });
+      map.set(sp.id, projectIds);
+    });
+    return map;
+  }, [species]);
+
+  const filteredResults = useMemo(() => {
+    const projectId = projectFilter.projectId;
+    if (!results || projectId === undefined) {
+      return results;
+    }
+    return results.filter((result) => speciesProjectIds.get(result.id)?.has(projectId));
+  }, [results, projectFilter.projectId, speciesProjectIds]);
 
   const onNewSpecies = () => {
     navigate(APP_PATHS.SPECIES_NEW);
@@ -559,16 +585,34 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               paddingLeft: theme.spacing(3),
             }}
           >
-            <h1
-              style={{
-                fontSize: '24px',
-                lineHeight: '32px',
-                fontWeight: 600,
-                margin: 0,
-              }}
-            >
-              {strings.SPECIES}
-            </h1>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
+              <h1
+                style={{
+                  fontSize: '24px',
+                  lineHeight: '32px',
+                  fontWeight: 600,
+                  margin: 0,
+                }}
+              >
+                {strings.SPECIES}
+              </h1>
+              {species && species.length > 0 && availableProjects && availableProjects.length > 0 && (
+                <Box display='flex' alignItems='center' marginLeft={theme.spacing(2)}>
+                  <Separator height='40px' />
+                  <Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'>
+                    {strings.PROJECT}
+                  </Typography>
+                  <ProjectsDropdown
+                    allowUnselect
+                    availableProjects={availableProjects}
+                    label=''
+                    record={projectFilter}
+                    setRecord={setProjectFilter}
+                    unselectLabel={strings.ALL_PROJECTS}
+                  />
+                </Box>
+              )}
+            </Box>
             {species && species.length > 0 && !isMobile && userCanEdit && (
               <div>
                 <Button id='add-species' label={strings.ADD_SPECIES} icon='plus' onClick={onNewSpecies} size='medium' />
@@ -591,7 +635,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
           <EditableTable
             clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
             columns={editableColumns}
-            data={results ?? []}
+            data={filteredResults ?? []}
             enableEditing={false}
             enableSorting={true}
             enableGlobalFilter={true}
