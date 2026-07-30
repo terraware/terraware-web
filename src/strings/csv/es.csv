@@ -537,6 +537,7 @@ DELIVERABLE_UPDATE_NEEDED,Se necesita actualizar el entregable,fcbb302d
 DELIVERABLE_UPDATE_REQUESTED,Se ha solicitado la actualización del entregable,73ebd469
 DELIVERABLES,Entregables,78600fc8
 DELIVERABLES_IMPORT_COMPLETE,¡Completada la importación de datos de los entregables!,88da4444
+DENSITY,Densidad,3890fcd7
 DENSITY_COMFORTABLE,Densidad: cómoda,a7f1b4ca
 DENSITY_COMPACT,Densidad: compacta,cab2e914
 DENSITY_ROOMY,Densidad: amplia,bb240ade
@@ -2068,6 +2069,7 @@ SELECT_SEED_BANK_INFO,Las accesiones requieren un lugar de almacenamiento en un 
 SELECT_SEEDLINGS_BATCHES_FOR_PROJECT,Seleccione los lotes de plántulas para {0},1823e205
 SELECT_SEEDLINGS_BATCHES_FOR_PROJECT_DESCRIPTION,Use la columna de la casilla de verificación para seleccionar los lotes de plántulas que deben añadirse a {0}.,54222918
 SELECT_SPECIES,Seleccionar especies,d19ac8ee
+SELECT_SPECIES_TO_PLANT_DESCRIPTION,"Seleccione las especies que se plantarán en el sitio. Si se establecen números objetivo, el número total de plantas puede diferir del número basado en las densidades objetivo.",efa1bc71
 SELECT_VOTE,Seleccionar voto,5114a633
 SELECTED_COLUMNS,Columnas seleccionadas,ca9dc436
 SELECTED_SPECIES_IN_USE,"La especie seleccionada para eliminar está en uso (en una Accesión, Inventario y/o Observación) y no puede ser eliminada.",cdd9b0e1
@@ -2085,6 +2087,7 @@ SET_PLANTING_COMPLETE,Plantación completa,3bea077e
 SET_REMINDER,Establecer recordatorio,ad81e3b3
 SET_SPECIES_TARGETS_DESCRIPTION,Establezca objetivos por sustrato del sitio. Las especies y cantidades pueden actualizarse en cualquier momento y son visibles en la Planificación de Inventario.,7619cbee
 SET_T0_DATA_IN_THE,Ver {0},194994e4
+SET_TARGET_DENSITY_DESCRIPTION,Establezca la densidad de plantación objetivo para los estratos del sitio. El número de plantas se calculará utilizando la densidad de plantas y el área.,59faf940
 SET_UP,Configurar,6096080e
 SET_UP_NURSERY,Establecer vivero,25ab7370
 SET_UP_SEED_BANK,Establecer banco de semillas,6f047a89
@@ -2123,6 +2126,7 @@ SITE_EXCLUSION_AREAS_OPTIONAL,Zonas de exclusión (opcional),434ba2b3
 SITE_EXCLUSION_ERRORS,Hay errores en el límite de exclusión.,dc334f43
 SITE_GOAL,Objetivo del Sitio,61f394c1
 SITE_GOALS,Objetivos del Sitio,345a7c04
+SITE_GOALS_DESCRIPTION,Gestione los objetivos del sitio para las densidades de plantas objetivo y las especies.,6df1e3e0
 SITE_LOCATION,Ubicación del sitio,e0a85b19
 SITE_MAP,Mapa del sitio,df2fc60a
 SITE_STRATUM_BOUNDARIES,Límites de Estrato,418d687a
@@ -2723,6 +2727,8 @@ X_HA,{0} hectáreas,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha en la Superficie total de plantación,586af003
 X_HECTARES,{0} hectáreas,6f24cf52
 X_HECTARES_HA,{0} hectáreas (ha),e2af9d30
+X_PER_HA,{0}/ha,0fe29eac
+X_PLANTS,{0} plantas,8cb7c65d
 X_SPECIES_Y_PLANTS,"{0} especies, {1} plantas",81dea858
 XR_ERROR,"Se produjo un error al habilitar el modo XR. Por favor, actualice la página e intente nuevamente.",935ea96d
 YEAR,Año,484bf433
