@@ -14,7 +14,8 @@ install_node() {
     fi
     echo "Installing Node.js ${NODE_VERSION}..."
     curl -fsSL "https://rpm.nodesource.com/setup_${NODE_VERSION}.x" | sudo bash -
-    sudo dnf install -y nodejs
+    sudo dnf install -y --allowerasing "nodejs-${NODE_VERSION}.*"
+    hash -r
     # Enable corepack for yarn
     sudo corepack enable
 }
