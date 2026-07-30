@@ -20,7 +20,10 @@ api.enhanceEndpoints({
       ],
     },
     getNurseryWithdrawal: {
-      providesTags: (_results, _error, withdrawalId) => [{ type: QueryTagTypes.NurseryWithdrawals, id: withdrawalId }],
+      providesTags: (results, _error, withdrawalId) => [
+        { type: QueryTagTypes.NurseryWithdrawals, id: withdrawalId },
+        ...(results?.delivery ? [{ type: QueryTagTypes.Deliveries, id: results.delivery.id }] : []),
+      ],
     },
     listWithdrawalPhotos: {
       providesTags: (_results, _error, withdrawalId) => [
