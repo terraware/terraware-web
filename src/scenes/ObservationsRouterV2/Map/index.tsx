@@ -56,7 +56,7 @@ const ObservationMapWrapper = ({
   const listObservationsResultsResponse = useListObservationResults({
     organizationId: plantingSiteId !== undefined && !observationId && !isBiomass ? selectedOrganization?.id : undefined,
     plantingSiteId,
-    depth: 'Site',
+    depth: 'Stratum',
   });
 
   useEffect(() => {
