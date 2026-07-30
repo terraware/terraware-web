@@ -1801,6 +1801,7 @@ REASSIGNMENT_REQUEST_STATUS,Statut de la demande de réaffectation,f56ec4a5
 REASSIGNMENT_REQUEST_TEMPORARY_PLOT_ADDED,La parcelle temporaire {0} a été ajoutée uniquement pour cette observation.,87cebad7
 REASSIGNMENT_REQUEST_TEMPORARY_PLOT_REMOVED_LONG_TERM,La parcelle temporaire {0} a été supprimée de façon permanente.,449a68b6
 REASSIGNMENT_REQUEST_TEMPORARY_PLOT_REMOVED_TEMPORARY,La parcelle temporaire {0} a été supprimée uniquement pour cette observation.,f247edc2
+REASSIGNMENT_SUCESSFUL,Réaffectation réussie,6ecbb084
 RECALCITRANT,Récalcitrant,f95e16a4
 RECEIVE_EMAIL_NOTIFICATIONS,Recevoir des notifications par e-mail,378f118d
 RECEIVED_DATE,Date de réception,9814318f

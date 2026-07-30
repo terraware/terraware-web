@@ -4,10 +4,10 @@ import { QueryTagTypes } from '../tags';
 api.enhanceEndpoints({
   endpoints: {
     getDelivery: {
-      providesTags: (_result, _error, deliveryId) => [{ type: QueryTagTypes.AcceleratorProjects, id: deliveryId }],
+      providesTags: (_result, _error, deliveryId) => [{ type: QueryTagTypes.Deliveries, id: deliveryId }],
     },
     reassignDelivery: {
-      invalidatesTags: (_result, _error, payload) => [{ type: QueryTagTypes.AcceleratorProjects, id: payload.id }],
+      invalidatesTags: (_result, _error, payload) => [{ type: QueryTagTypes.Deliveries, id: payload.id }],
     },
   },
 });

@@ -3,20 +3,23 @@ import React, { type JSX, useState } from 'react';
 import { MenuItem, MenuList, Popover, Typography, useTheme } from '@mui/material';
 import { Button, Tooltip } from '@terraware/web-components';
 
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
+import { SearchNurseryWithdrawalPayload } from 'src/queries/search/nurseries';
 import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 
 export type WithdrawalHistoryMenuProps = {
-  withdrawal: any;
-  reassign: any;
-  undo: any;
+  withdrawal: SearchNurseryWithdrawalPayload;
+  reassign: () => void;
+  undo: () => void;
 };
 
 export default function WithdrawalHistoryMenu(props: WithdrawalHistoryMenuProps): JSX.Element {
   const { withdrawal, reassign, undo } = props;
   const theme = useTheme();
+  const { strings } = useLocalization();
   const [menuAnchorEl, setMenuAnchorEl] = useState<HTMLButtonElement | null>(null);
   const openMenu = Boolean(menuAnchorEl);
+
   const { OUTPLANT } = NurseryWithdrawalPurposes;
 
   const openMenuHandler = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -45,7 +48,7 @@ export default function WithdrawalHistoryMenu(props: WithdrawalHistoryMenuProps)
         }}
       >
         <MenuList sx={{ padding: theme.spacing(2, 0) }}>
-          {withdrawal.purpose === OUTPLANT && withdrawal.substratumNames && withdrawal.hasReassignments === 'false' && (
+          {withdrawal.purpose === OUTPLANT && withdrawal.substratumName && withdrawal.hasReassignments === false && (
             <MenuItem id='reassign' onClick={reassign} sx={{ padding: theme.spacing(1, 2) }}>
               <Typography color={theme.palette.TwClrBaseGray800} paddingLeft={1}>
                 {strings.REASSIGN}

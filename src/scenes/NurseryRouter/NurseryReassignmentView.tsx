@@ -145,11 +145,18 @@ export default function NurseryReassignmentView(): JSX.Element {
 
   useEffect(() => {
     if (reassignDeliveryResponse.isSuccess) {
+      snackbar.toastSuccess(strings.REASSIGNMENT_SUCESSFUL);
       goToWithdrawals();
     } else if (reassignDeliveryResponse.isError) {
       snackbar.toastError();
     }
-  }, [goToWithdrawals, reassignDeliveryResponse.isError, reassignDeliveryResponse.isSuccess, snackbar]);
+  }, [
+    goToWithdrawals,
+    reassignDeliveryResponse.isError,
+    reassignDeliveryResponse.isSuccess,
+    snackbar,
+    strings.REASSIGNMENT_SUCESSFUL,
+  ]);
 
   const reassignmentRenderer = useMemo(
     () =>

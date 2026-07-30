@@ -330,13 +330,16 @@ const injectedRtkApi = api.injectEndpoints({
       },
       providesTags: (results) => [
         ...(results?.map((result) => ({ type: QueryTagTypes.NurseryWithdrawals, id: result.withdrawalId })) ?? []),
+        ...(results?.flatMap((result) =>
+          result.deliveryId !== undefined ? [{ type: QueryTagTypes.Deliveries, id: result.deliveryId }] : []
+        ) ?? []),
         { type: QueryTagTypes.NurseryWithdrawals, id: 'LIST' },
       ],
       transformResponse: (response: SearchNurseryWithdrawalApiResponse) =>
         response.results.map(
           (result): SearchNurseryWithdrawalPayload => ({
             withdrawalId: Number(result.id),
-            deliveryId: Number(result.delivery_id),
+            deliveryId: result.delivery_id ? Number(result.delivery_id) : undefined,
             withdrawnDate: result.withdrawnDate,
             purpose: result['purpose(raw)'] as NurseryWithdrawalPurpose,
             nurseryName: result.facility_name,
@@ -345,7 +348,7 @@ const injectedRtkApi = api.injectEndpoints({
             substratumName: result.substratumNames,
             substratumShortName: result.substratumShortNames,
             totalWithdrawn: Number(result['totalWithdrawn(raw)']),
-            hasReassignments: Boolean(result.hasReassignments),
+            hasReassignments: result.hasReassignments === 'true',
             projectNames: Array.from(
               new Set(
                 (result.batchWithdrawals ?? [])
@@ -495,7 +498,7 @@ type NurseryWithdrawalBatchApiResult = {
 
 type NurseryWithdrawalApiResult = {
   id: string;
-  delivery_id: string;
+  delivery_id?: string;
   withdrawnDate: string;
   'purpose(raw)': string;
   facility_name: string;
@@ -519,7 +522,7 @@ type SearchNurseryWithdrawalApiResponse = {
 
 export type SearchNurseryWithdrawalPayload = {
   withdrawalId: number;
-  deliveryId: number;
+  deliveryId?: number;
   withdrawnDate: string;
   purpose: NurseryWithdrawalPurpose;
   nurseryName: string;
