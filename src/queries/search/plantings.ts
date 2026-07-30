@@ -44,7 +44,7 @@ const injectedRtkApi = api.injectEndpoints({
           type: result.type,
           species: {
             conservationCategory: result.species.conservationCategory,
-            rare: Boolean(result.species.rare),
+            rare: result.species.rare === 'true',
             scientificName: result.species.scientificName,
             speciesId: Number(result.species.id),
           },
