@@ -118,9 +118,9 @@ const VirtualWalkthroughWrapper = ({
               ])
             : undefined,
           icon,
-          // TODO: replace with actual image url once retrieval is available
-          imageUrl:
-            annotation.media.length > 0 ? PLACEHOLDER_IMAGE_URLS[index % PLACEHOLDER_IMAGE_URLS.length] : undefined,
+          // TODO: replace with actual image urls once retrieval is available
+          imageUrls:
+            annotation.media.length > 0 ? [PLACEHOLDER_IMAGE_URLS[index % PLACEHOLDER_IMAGE_URLS.length]] : undefined,
         } as AnnotationProps;
       }) ?? [],
     [data?.annotations]
