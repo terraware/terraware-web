@@ -26,11 +26,16 @@ import useSnackbar from 'src/utils/useSnackbar';
 type AddPlantingSeasonModalProps = {
   onClose: () => void;
   initialPlantingSiteId?: number;
+  hidePlantingSiteSelector?: boolean;
 };
 
 type PlantingSeasonForm = Partial<CreatePlantingSeasonRequestPayload> & { copyPrevious: boolean };
 
-const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingSeasonModalProps): JSX.Element => {
+const AddPlantingSeasonModal = ({
+  onClose,
+  initialPlantingSiteId,
+  hidePlantingSiteSelector,
+}: AddPlantingSeasonModalProps): JSX.Element => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
@@ -176,19 +181,21 @@ const AddPlantingSeasonModal = ({ onClose, initialPlantingSiteId }: AddPlantingS
       ]}
     >
       <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12}>
-          <Dropdown
-            id='plantingSite'
-            required
-            label={strings.PLANTING_SITE}
-            placeholder={strings.SELECT}
-            selectedValue={record.plantingSiteId}
-            options={plantingSiteOptions}
-            onChange={onChangePlantingSite}
-            errorText={validate && !record.plantingSiteId ? strings.REQUIRED_FIELD : ''}
-            fullWidth
-          />
-        </Grid>
+        {!hidePlantingSiteSelector && (
+          <Grid item xs={12}>
+            <Dropdown
+              id='plantingSite'
+              required
+              label={strings.PLANTING_SITE}
+              placeholder={strings.SELECT}
+              selectedValue={record.plantingSiteId}
+              options={plantingSiteOptions}
+              onChange={onChangePlantingSite}
+              errorText={validate && !record.plantingSiteId ? strings.REQUIRED_FIELD : ''}
+              fullWidth
+            />
+          </Grid>
+        )}
         {seasonsForSelectedSite.length > 0 && (
           <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingBottom: 0 } }} display={'flex'} alignItems='end'>
             <Checkbox

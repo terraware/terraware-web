@@ -424,14 +424,16 @@ export default function NavBar({
 
           {hasPlantingSites === true ? (
             <>
-              <NavItem
-                label={strings.PLANTING_SEASONS}
-                selected={!!isPlantingSeasonsRoute}
-                onClick={() => {
-                  closeAndNavigateTo(APP_PATHS.PLANTING_SEASONS);
-                }}
-                id='planting-seasons'
-              />
+              {!isEnabled('Planting Goals') && (
+                <NavItem
+                  label={strings.PLANTING_SEASONS}
+                  selected={!!isPlantingSeasonsRoute}
+                  onClick={() => {
+                    closeAndNavigateTo(APP_PATHS.PLANTING_SEASONS);
+                  }}
+                  id='planting-seasons'
+                />
+              )}
               <NavItem
                 label={strings.PLANTING_PROGRESS}
                 selected={!!isPlantingProgressRoute}

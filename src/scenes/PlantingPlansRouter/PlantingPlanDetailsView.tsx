@@ -2,16 +2,19 @@ import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner } from '@terraware/web-components';
+import { BusySpinner, Button } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import SegmentControl, { SegmentOption } from 'src/components/common/SegmentControl';
 import { APP_PATHS } from 'src/constants';
+import useBoolean from 'src/hooks/useBoolean';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
+import AddPlantingSeasonModal from 'src/scenes/NurseryRouter/PlantingSeasons/AddPlantingSeasonModal';
 
 import PlantingPlanOverview from './PlantingPlanOverview';
+import PlantingPlanSeasons from './PlantingPlanSeasons';
 import PlantingPlanSiteGoals from './PlantingPlanSiteGoals';
 
 type PlantingPlanSegment = 'overview' | 'siteGoals' | 'plantingSeasons';
@@ -32,6 +35,7 @@ const PlantingPlanDetailsView = (): JSX.Element => {
   const { plantingSite, isLoading } = usePlantingSite(plantingSiteId);
 
   const [segment, setSegment] = useState<PlantingPlanSegment>(readStoredSegment);
+  const [addSeasonModalOpen, , openAddSeasonModal, closeAddSeasonModal] = useBoolean(false);
 
   const selectSegment = useCallback((next: PlantingPlanSegment) => {
     setSegment(next);
@@ -53,7 +57,7 @@ const PlantingPlanDetailsView = (): JSX.Element => {
   );
 
   const description = useMemo(
-    () => (segment === 'siteGoals' ? strings.SITE_GOALS_DESCRIPTION : strings.PLANTING_PLAN_DESCRIPTION),
+    () => (segment === 'overview' ? strings.PLANTING_PLAN_DESCRIPTION : strings.SITE_GOALS_DESCRIPTION),
     [segment, strings]
   );
 
@@ -82,10 +86,38 @@ const PlantingPlanDetailsView = (): JSX.Element => {
     return <BusySpinner withSkrim={true} />;
   }
 
+  const showAddSeasonButton = segment === 'plantingSeasons';
+
+  const rightComponent = showAddSeasonButton ? (
+    <Button
+      id='addPlantingSeason'
+      icon='plus'
+      label={strings.ADD_PLANTING_SEASON}
+      onClick={openAddSeasonModal}
+      size='medium'
+    />
+  ) : undefined;
+
   return (
-    <Page title={title} crumbs={crumbs} leftComponentGridSize={0} rightComponentGridSize={0}>
+    <Page
+      title={title}
+      crumbs={crumbs}
+      rightComponent={rightComponent}
+      leftComponentGridSize={0}
+      rightComponentGridSize={showAddSeasonButton ? 3 : 0}
+    >
+      {addSeasonModalOpen && (
+        <AddPlantingSeasonModal
+          onClose={closeAddSeasonModal}
+          initialPlantingSiteId={plantingSite.id}
+          hidePlantingSiteSelector
+        />
+      )}
       {segment === 'overview' && <PlantingPlanOverview plantingSite={plantingSite} />}
       {segment === 'siteGoals' && <PlantingPlanSiteGoals plantingSite={plantingSite} />}
+      {segment === 'plantingSeasons' && (
+        <PlantingPlanSeasons plantingSite={plantingSite} onAddSeason={openAddSeasonModal} />
+      )}
     </Page>
   );
 };
