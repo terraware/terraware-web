@@ -71,7 +71,6 @@ api.enhanceEndpoints({
     },
     deleteViabilityTest: {
       invalidatesTags: (_results, _error, payload) => [
-        { type: QueryTagTypes.ViabilityTests, id: payload.viabilityTestId },
         { type: QueryTagTypes.ViabilityTests, id: 'LIST' },
         { type: QueryTagTypes.Accessions, id: payload.accessionId },
         QueryTagTypes.SeedbankSummary,
@@ -105,7 +104,6 @@ api.enhanceEndpoints({
     },
     deleteWithdrawal: {
       invalidatesTags: (_results, _error, payload) => [
-        { type: QueryTagTypes.AccessionWithdrawals, id: payload.withdrawalId },
         { type: QueryTagTypes.AccessionWithdrawals, id: 'LIST' },
         { type: QueryTagTypes.Accessions, id: payload.accessionId },
         QueryTagTypes.SeedbankSummary,

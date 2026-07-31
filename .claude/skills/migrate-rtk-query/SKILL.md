@@ -14,7 +14,7 @@ Task Progress:
 - [ ] Create a new QueryTagType if needed.
 - [ ] Add a new output file and filter to `rtk-codegen.config.ts` if needed. The filter will use the endpoints that are in the service.
 - [ ] Run `yarn generate-queries` to create/update the generated file(s).
-- [ ] Add or update the corresponding extension file for the queries/mutations, setting the provides and invalidates tags properly.
+- [ ] Add or update the corresponding extension file for the queries/mutations, setting the provides and invalidates tags properly. Delete mutations invalidate the 'LIST' tag (and parent/summary tags), never the deleted entity's own id tag.
 - [ ] Replace fetch or mutate usages for a single endpoint with the new RTK Query usage.
 - [ ] Remove the redux dispatches and selectors.
 - [ ] Remove the redux reducer if needed.

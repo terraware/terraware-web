@@ -27,10 +27,7 @@ api.enhanceEndpoints({
       ],
     },
     deleteSpecies: {
-      invalidatesTags: (_result, _error, speciesId) => [
-        { type: QueryTagTypes.Species, id: speciesId },
-        { type: QueryTagTypes.Species, id: 'LIST' },
-      ],
+      invalidatesTags: [{ type: QueryTagTypes.Species, id: 'LIST' }],
     },
     resolveSpeciesListUpload: {
       invalidatesTags: [{ type: QueryTagTypes.Species, id: 'LIST' }],

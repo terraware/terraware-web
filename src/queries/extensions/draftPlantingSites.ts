@@ -10,10 +10,7 @@ api.enhanceEndpoints({
       ],
     },
     deleteDraftPlantingSite: {
-      invalidatesTags: (_result, _error, draftSiteId) => [
-        { type: QueryTagTypes.DraftPlantingSites, id: draftSiteId },
-        { type: QueryTagTypes.DraftPlantingSites, id: 'LIST' },
-      ],
+      invalidatesTags: [{ type: QueryTagTypes.DraftPlantingSites, id: 'LIST' }],
     },
     getDraftPlantingSite: {
       providesTags: (_result, _error, plantingSiteId) => [

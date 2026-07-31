@@ -7,10 +7,7 @@ api.enhanceEndpoints({
       invalidatesTags: [{ type: QueryTagTypes.Splats, id: 'LIST' }],
     },
     deleteOrganizationSplat: {
-      invalidatesTags: (_results, _error, payload) => [
-        { type: QueryTagTypes.Splats, id: payload.fileId },
-        { type: QueryTagTypes.Splats, id: 'LIST' },
-      ],
+      invalidatesTags: [{ type: QueryTagTypes.Splats, id: 'LIST' }],
     },
     getOrganizationSplatFile: {
       providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Splats, id: payload.fileId }],
