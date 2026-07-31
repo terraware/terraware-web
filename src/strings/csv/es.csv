@@ -1625,8 +1625,8 @@ PLANTING_SITES,Sitios de plantación,3799d2eb
 PLANTING_WITHDRAWAL_DATE,Fecha de Retiro de Plantación,bf2739c8
 PLANTING_WITHDRAWALS,Retiros de Plantación,3c64a0e3
 PLANTINGS,Plantaciones,51a94883
-PLANTINGS_REQUIRE_PLANTING_SITES,Es necesario asignar un sitio de plantación a las plantaciones.,e83e8ad2
-PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS,Las plantaciones requieren lotes con plántulas que están «Listas para plantar».,ed590a8b
+PLANTINGS_REQUIRE_PLANTING_SITES,Los retiros de plantación requieren un Sitio de Plantación.,611c73df
+PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS,"Los retiros para plantaciones requieren lotes con cantidades ""Listas para plantar"".",f2eb3d96
 PLANTS,Plantas,f6cde0c3
 PLANTS_DASHBOARD,Panel de plantas,65ec62dd
 PLANTS_DASHBOARD_ICON,Icono de Tablero de plantas,576ad8cc
