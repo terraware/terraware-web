@@ -7275,7 +7275,7 @@ export interface components {
         };
         EventLogEntryPayload: {
             action: components["schemas"]["CreatedActionPayload"] | components["schemas"]["DeletedActionPayload"] | components["schemas"]["FieldUpdatedActionPayload"];
-            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingDateRequestSpeciesSubjectPayload"] | components["schemas"]["PlantingDateRequestSubjectPayload"] | components["schemas"]["PlantingSeasonAllocatedSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSpeciesTargetSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["PlantingSeasonWithdrawalSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
+            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotCoordinatesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingDateRequestSpeciesSubjectPayload"] | components["schemas"]["PlantingDateRequestSubjectPayload"] | components["schemas"]["PlantingSeasonAllocatedSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSpeciesTargetSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["PlantingSeasonWithdrawalSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
             /** Format: date-time */
             timestamp: string;
             /** Format: int64 */
@@ -8567,7 +8567,7 @@ export interface components {
             /** Format: int64 */
             projectId?: number;
             /** @description If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
-            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotMedia" | "Organization" | "PlantingDateRequest" | "PlantingDateRequestSpecies" | "PlantingSeason" | "PlantingSeasonAllocatedSpecies" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "PlantingSeasonSpeciesTarget" | "PlantingSeasonWithdrawal" | "Project" | "RecordedTree")[];
+            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotCoordinates" | "ObservationPlotMedia" | "Organization" | "PlantingDateRequest" | "PlantingDateRequestSpecies" | "PlantingSeason" | "PlantingSeasonAllocatedSpecies" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "PlantingSeasonSpeciesTarget" | "PlantingSeasonWithdrawal" | "Project" | "RecordedTree")[];
         };
         ListEventLogEntriesResponsePayload: {
             events: components["schemas"]["EventLogEntryPayload"][];
@@ -9498,6 +9498,22 @@ export interface components {
             state: "Upcoming" | "InProgress" | "Completed" | "Overdue" | "Abandoned";
             /** @enum {string} */
             type: "Monitoring" | "Biomass Measurements";
+        };
+        ObservationPlotCoordinatesSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            monitoringPlotId: number;
+            /** Format: int64 */
+            observationId: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            /** @enum {string} */
+            position: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "ObservationPlotCoordinates";
         };
         ObservationPlotMediaSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
             /** Format: int64 */
