@@ -85,6 +85,14 @@ export type MonitoringSpeciesSubjectPayload = {
     scientificName?: string;
     speciesId?: number;
   };
+export type ObservationPlotCoordinatesSubjectPayload = {
+  type: 'ObservationPlotCoordinates';
+} & EventSubjectPayloadBase & {
+    monitoringPlotId: number;
+    observationId: number;
+    plantingSiteId: number;
+    position: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
+  };
 export type ObservationPlotMediaSubjectPayload = {
   type: 'ObservationPlotMedia';
 } & EventSubjectPayloadBase & {
@@ -207,6 +215,7 @@ export type EventLogEntryPayload = {
     | BiomassQuadratSubjectPayload
     | BiomassSpeciesSubjectPayload
     | MonitoringSpeciesSubjectPayload
+    | ObservationPlotCoordinatesSubjectPayload
     | ObservationPlotMediaSubjectPayload
     | ObservationPlotSubjectPayload
     | OrganizationSubjectPayload
@@ -245,6 +254,7 @@ export type ListEventLogEntriesRequestPayload = {
     | 'BiomassSpecies'
     | 'MonitoringSpecies'
     | 'ObservationPlot'
+    | 'ObservationPlotCoordinates'
     | 'ObservationPlotMedia'
     | 'Organization'
     | 'PlantingDateRequest'

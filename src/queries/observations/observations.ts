@@ -21,6 +21,7 @@ const injectedRtkApi = api.injectEndpoints({
           subjects: queryArgs.isBiomass
             ? [
                 'ObservationPlot',
+                'ObservationPlotCoordinates',
                 'ObservationPlotMedia',
                 'BiomassDetails',
                 'BiomassQuadrat',
@@ -28,7 +29,7 @@ const injectedRtkApi = api.injectEndpoints({
                 'BiomassSpecies',
                 'RecordedTree',
               ]
-            : ['ObservationPlot', 'ObservationPlotMedia', 'MonitoringSpecies'],
+            : ['ObservationPlot', 'ObservationPlotCoordinates', 'ObservationPlotMedia', 'MonitoringSpecies'],
           organizationId: queryArgs.organizationId,
         },
       }),
