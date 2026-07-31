@@ -36,12 +36,14 @@ export default function DeletePlantingSiteModal(props: DeletePlantingSiteModalPr
 
   useEffect(() => {
     if (deleteResult.isSuccess) {
+      onClose();
       snackbar.toastSuccess(strings.PLANTING_SITE_DELETED);
       navigate(APP_PATHS.PLANTING_SITES);
     } else if (deleteResult.isError) {
+      onClose();
       snackbar.toastError();
     }
-  }, [deleteResult, navigate, snackbar]);
+  }, [deleteResult, navigate, onClose, snackbar]);
 
   return (
     <>

@@ -22,10 +22,7 @@ api.enhanceEndpoints({
       ],
     },
     deletePlantingSite: {
-      invalidatesTags: (_result, _error, plantingSiteId) => [
-        { type: QueryTagTypes.PlantingSites, id: plantingSiteId },
-        { type: QueryTagTypes.PlantingSites, id: 'LIST' },
-      ],
+      invalidatesTags: [{ type: QueryTagTypes.PlantingSites, id: 'LIST' }],
     },
     getPlantingSite: {
       providesTags: (_result, _error, siteApiArg) => [{ type: QueryTagTypes.PlantingSites, id: siteApiArg.id }],
