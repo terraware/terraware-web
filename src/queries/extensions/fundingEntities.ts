@@ -21,10 +21,7 @@ api.enhanceEndpoints({
       providesTags: (result) => (result ? [{ type: QueryTagTypes.FundingEntities, id: result.fundingEntity.id }] : []),
     },
     deleteFundingEntity: {
-      invalidatesTags: (_result, _error, fundingEntityId) => [
-        { type: QueryTagTypes.FundingEntities, id: fundingEntityId },
-        { type: QueryTagTypes.FundingEntities, id: 'LIST' },
-      ],
+      invalidatesTags: [{ type: QueryTagTypes.FundingEntities, id: 'LIST' }],
     },
     getFundingEntity: {
       providesTags: (result) => (result ? [{ type: QueryTagTypes.FundingEntities, id: result.fundingEntity.id }] : []),

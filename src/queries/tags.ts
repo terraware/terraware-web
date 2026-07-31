@@ -1,3 +1,8 @@
+/**
+ * Delete mutations must not invalidate the deleted entity's own id tag. Any still-mounted query
+ * holding that tag would immediately refetch the entity that no longer exists and 404. Invalidate
+ * the 'LIST' tag (plus any parent/summary tags) instead, and let navigation unmount the detail views.
+ */
 export enum QueryTagTypes {
   AcceleratorProjects = 'AcceleratorProjects',
   AccessionWithdrawals = 'AccessionWithdrawals',

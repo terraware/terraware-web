@@ -7,10 +7,7 @@ api.enhanceEndpoints({
       invalidatesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
     },
     deleteOrganizationMediaFile: {
-      invalidatesTags: (_results, _error, payload) => [
-        { type: QueryTagTypes.OrganizationMedia, id: payload.fileId },
-        { type: QueryTagTypes.OrganizationMedia, id: 'LIST' },
-      ],
+      invalidatesTags: [{ type: QueryTagTypes.OrganizationMedia, id: 'LIST' }],
     },
     downloadOrganizationMediaFile: {
       providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.OrganizationMedia, id: payload.fileId }],

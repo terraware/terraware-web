@@ -10,10 +10,7 @@ api.enhanceEndpoints({
       ],
     },
     deleteProjectModule: {
-      invalidatesTags: (_result, _error, payload) => [
-        { type: QueryTagTypes.ProjectModules, id: payload.moduleId },
-        { type: QueryTagTypes.ProjectModules, id: 'LIST' },
-      ],
+      invalidatesTags: [{ type: QueryTagTypes.ProjectModules, id: 'LIST' }],
     },
     updateProjectModule: {
       invalidatesTags: (_result, _error, payload) => [

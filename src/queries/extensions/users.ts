@@ -15,9 +15,6 @@ api.enhanceEndpoints({
     updateMyself: {
       invalidatesTags: [{ type: QueryTagTypes.Users, id: 'ME' }],
     },
-    deleteMyself: {
-      invalidatesTags: [{ type: QueryTagTypes.Users, id: 'ME' }],
-    },
     getUser: {
       providesTags: (result) => (result?.user ? [{ type: QueryTagTypes.Users, id: result.user.id }] : []),
     },

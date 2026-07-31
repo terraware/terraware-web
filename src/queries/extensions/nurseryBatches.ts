@@ -1,14 +1,15 @@
 import { api } from '../generated/nurseryBatches';
 import { QueryTagTypes } from '../tags';
 
-const batchMutationTags = (batchId: number) => [
-  { type: QueryTagTypes.NurseryBatches, id: batchId },
+const batchListTags = [
   { type: QueryTagTypes.NurseryBatches, id: 'LIST' },
   { type: QueryTagTypes.NurserySummary },
   { type: QueryTagTypes.NurserySpeciesSummary },
   { type: QueryTagTypes.NurseryOrganizationSummary },
   { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
 ];
+
+const batchMutationTags = (batchId: number) => [{ type: QueryTagTypes.NurseryBatches, id: batchId }, ...batchListTags];
 
 api.enhanceEndpoints({
   endpoints: {
@@ -19,13 +20,7 @@ api.enhanceEndpoints({
       providesTags: (_results, _error, batchId) => [{ type: QueryTagTypes.NurseryBatches, id: batchId }],
     },
     createBatch: {
-      invalidatesTags: [
-        { type: QueryTagTypes.NurseryBatches, id: 'LIST' },
-        { type: QueryTagTypes.NurserySummary },
-        { type: QueryTagTypes.NurserySpeciesSummary },
-        { type: QueryTagTypes.NurseryOrganizationSummary },
-        { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
-      ],
+      invalidatesTags: batchListTags,
     },
     updateBatch: {
       invalidatesTags: (_results, _error, payload) => batchMutationTags(payload.id),
@@ -37,7 +32,7 @@ api.enhanceEndpoints({
       invalidatesTags: (_results, _error, payload) => batchMutationTags(payload.id),
     },
     deleteBatch: {
-      invalidatesTags: (_results, _error, batchId) => batchMutationTags(batchId),
+      invalidatesTags: batchListTags,
     },
     listBatchPhotos: {
       providesTags: (_results, _error, batchId) => [{ type: QueryTagTypes.NurseryBatchPhotos, id: batchId }],

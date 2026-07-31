@@ -48,10 +48,7 @@ api.enhanceEndpoints({
       ],
     },
     deleteActivity: {
-      invalidatesTags: (_result, _error, activityId) => [
-        { type: QueryTagTypes.Activities, id: activityId },
-        { type: QueryTagTypes.Activities, id: 'LIST' },
-      ],
+      invalidatesTags: [{ type: QueryTagTypes.Activities, id: 'LIST' }],
     },
     uploadActivityMedia: {
       invalidatesTags: (_result, _error, args) => [{ type: QueryTagTypes.Activities, id: args.activityId }],

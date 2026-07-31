@@ -22,10 +22,7 @@ api.enhanceEndpoints({
       ],
     },
     deleteProject: {
-      invalidatesTags: (_result, _error, projectId) => [
-        { type: QueryTagTypes.Projects, id: projectId },
-        { type: QueryTagTypes.Projects, id: 'LIST' },
-      ],
+      invalidatesTags: [{ type: QueryTagTypes.Projects, id: 'LIST' }],
     },
     assignProject: {
       // The assigned entities carry the project id, so their caches are stale too

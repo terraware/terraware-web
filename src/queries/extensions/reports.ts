@@ -133,10 +133,6 @@ api.enhanceEndpoints({
           type: QueryTagTypes.Reports,
           id: args.reportId,
         },
-        {
-          type: QueryTagTypes.ReportMedia,
-          id: args.fileId,
-        },
       ],
     },
     getAcceleratorReportPhoto: {

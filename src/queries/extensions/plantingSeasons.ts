@@ -27,10 +27,7 @@ api.enhanceEndpoints({
       ],
     },
     deletePlantingSeason: {
-      // Invalidating the per-season tags would refetch the detail page's still-mounted
-      // season/species-targets/scheduled-dates queries against the just-deleted season (404s) before navigation
-      // unmounts them. The season is gone, so there is nothing to refresh — only the list needs to drop it.
-      invalidatesTags: () => [{ type: QueryTagTypes.PlantingSeasons, id: 'LIST' }],
+      invalidatesTags: [{ type: QueryTagTypes.PlantingSeasons, id: 'LIST' }],
     },
     closePlantingSeason: {
       invalidatesTags: (_result, _error, plantingSeasonId) => [

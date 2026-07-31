@@ -141,9 +141,10 @@ const injectedRtkApi = api.injectEndpoints({
           type: QueryTagTypes.Reports,
           id: args.reportId,
         },
-        {
+        ...(args.photosToUpdate ?? []).map((photo) => ({
           type: QueryTagTypes.ReportMedia,
-        },
+          id: photo.fileId,
+        })),
       ],
     }),
   }),
