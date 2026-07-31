@@ -12,6 +12,7 @@ import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
 
 import PlantingPlanOverview from './PlantingPlanOverview';
+import PlantingPlanSiteGoals from './PlantingPlanSiteGoals';
 
 type PlantingPlanSegment = 'overview' | 'siteGoals' | 'plantingSeasons';
 
@@ -51,6 +52,11 @@ const PlantingPlanDetailsView = (): JSX.Element => {
     [strings]
   );
 
+  const description = useMemo(
+    () => (segment === 'siteGoals' ? strings.SITE_GOALS_DESCRIPTION : strings.PLANTING_PLAN_DESCRIPTION),
+    [segment, strings]
+  );
+
   const title = useMemo(
     () =>
       plantingSite ? (
@@ -65,11 +71,11 @@ const PlantingPlanDetailsView = (): JSX.Element => {
             <SegmentControl segments={segments} selected={segment} onChange={selectSegment} />
           </Box>
           <Typography fontSize='14px' color={theme.palette.TwClrTxt} lineHeight='20px'>
-            {strings.PLANTING_PLAN_DESCRIPTION}
+            {description}
           </Typography>
         </Box>
       ) : undefined,
-    [plantingSite, segment, segments, selectSegment, strings, theme]
+    [description, plantingSite, segment, segments, selectSegment, strings, theme]
   );
 
   if (isLoading || !plantingSite) {
@@ -79,6 +85,7 @@ const PlantingPlanDetailsView = (): JSX.Element => {
   return (
     <Page title={title} crumbs={crumbs} leftComponentGridSize={0} rightComponentGridSize={0}>
       {segment === 'overview' && <PlantingPlanOverview plantingSite={plantingSite} />}
+      {segment === 'siteGoals' && <PlantingPlanSiteGoals plantingSite={plantingSite} />}
     </Page>
   );
 };
