@@ -243,11 +243,14 @@
     "immutable": "^5.1.9",
     "js-yaml": "4.3.0",
     "picomatch": "^4.0.4",
+    "postcss": "^8.5.25",
     "serialize-javascript": "^7.0.5",
     "simple-git": "^3.32.3",
     "string-width": "8.2.2",
     "strip-ansi": "6.0.1",
-    "wrap-ansi": "10.0.0"
+    "tmp": "^0.2.6",
+    "wrap-ansi": "10.0.0",
+    "ws": "^8.21.1"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
