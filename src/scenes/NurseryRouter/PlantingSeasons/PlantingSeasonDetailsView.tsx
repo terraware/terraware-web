@@ -15,6 +15,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PlantingSeasonNotificationBanners from 'src/components/common/PlantingSeasonNotificationBanners';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
@@ -82,11 +83,16 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
   const [deletePlantingSeason, { isLoading: isDeleting }] = useDeletePlantingSeasonMutation();
   const [closePlantingSeason, { isLoading: isClosing }] = useClosePlantingSeasonMutation();
 
+  const backTo =
+    isEnabled('Planting Goals') && season?.plantingSiteId
+      ? APP_PATHS.PLANTING_PLANS_VIEW.replace(':plantingSiteId', String(season.plantingSiteId))
+      : APP_PATHS.PLANTING_SEASONS;
+
   const onConfirmDelete = async () => {
     try {
       await deletePlantingSeason(seasonIdNumber).unwrap();
       setDeleteModalOpen(false);
-      navigate(APP_PATHS.PLANTING_SEASONS);
+      navigate(backTo);
     } catch (e) {
       snackbar.toastError();
     }
@@ -326,7 +332,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
         <BackToLink
           id='back'
           name={`${strings.PLANTING_SEASONS} / ${season.name} (${plantingSite.name})`}
-          to={APP_PATHS.PLANTING_SEASONS}
+          to={backTo}
         />
         <PageSnackbar />
       </PageHeaderWrapper>
@@ -369,7 +375,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
               marginTop={theme.spacing(3)}
               alignItems='end'
             >
-              {numberColumn(strings.PLANTING_GOAL, plantingGoal, 'left')}
+              {numberColumn(strings.PLANTING_TARGET, plantingGoal, 'left')}
               {numberColumn(
                 strings.WITHDRAWN_FOR_PLANTING,
                 withdrawnForPlantingTotal,
@@ -441,7 +447,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
               </Box>
             </Box>
             <Box display='flex' gap={theme.spacing(6)} flexWrap='wrap' marginTop={theme.spacing(2)} alignItems='end'>
-              {numberColumn(strings.PLANTING_GOAL, plantingGoal, 'left')}
+              {numberColumn(strings.PLANTING_TARGET, plantingGoal, 'left')}
               {numberColumn(
                 strings.WITHDRAWN_FOR_PLANTING,
                 withdrawnForPlantingTotal,
@@ -573,7 +579,7 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
             </Box>
             <Box display='flex' flexDirection='column' alignItems='flex-end' gap={theme.spacing(2)}>
               <Box display='flex' gap={theme.spacing(4)} alignItems='flex-start'>
-                {numberColumn(strings.PLANTING_GOAL, plantingGoal)}
+                {numberColumn(strings.PLANTING_TARGET, plantingGoal)}
                 {numberColumn(
                   strings.WITHDRAWN_FOR_PLANTING,
                   withdrawnForPlantingTotal,

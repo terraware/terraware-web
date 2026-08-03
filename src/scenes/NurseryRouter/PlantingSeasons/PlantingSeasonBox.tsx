@@ -21,9 +21,15 @@ type PlantingSeasonBoxProps = {
   season: PlantingSeasonPayload;
   plantingSiteName: string;
   strata: StratumResponsePayload[];
+  showPlantingSiteName?: boolean;
 };
 
-const PlantingSeasonBox = ({ season, plantingSiteName, strata }: PlantingSeasonBoxProps): JSX.Element => {
+const PlantingSeasonBox = ({
+  season,
+  plantingSiteName,
+  strata,
+  showPlantingSiteName = true,
+}: PlantingSeasonBoxProps): JSX.Element => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { isMobile, isTablet } = useDeviceInfo();
@@ -206,9 +212,11 @@ const PlantingSeasonBox = ({ season, plantingSiteName, strata }: PlantingSeasonB
                 {isTablet && <PlantingSeasonStatusBadge status={season.status} />}
               </Box>
             </Box>
-            <Typography color={theme.palette.TwClrTxtSecondary} marginTop={theme.spacing(1)}>
-              {plantingSiteName}
-            </Typography>
+            {showPlantingSiteName && (
+              <Typography color={theme.palette.TwClrTxtSecondary} marginTop={theme.spacing(1)}>
+                {plantingSiteName}
+              </Typography>
+            )}
             <Typography color={theme.palette.TwClrTxt} marginTop={theme.spacing(0.5)}>
               {dateRange}
             </Typography>
@@ -247,7 +255,9 @@ const PlantingSeasonBox = ({ season, plantingSiteName, strata }: PlantingSeasonB
                 </Box>
               </Box>
               <Box display='flex' alignItems='center' gap={theme.spacing(2)} marginTop={theme.spacing(1)}>
-                <Typography color={theme.palette.TwClrTxtSecondary}>{plantingSiteName}</Typography>
+                {showPlantingSiteName && (
+                  <Typography color={theme.palette.TwClrTxtSecondary}>{plantingSiteName}</Typography>
+                )}
                 <Typography color={theme.palette.TwClrTxt}>{dateRange}</Typography>
               </Box>
               <Divider sx={{ marginY: theme.spacing(2) }} />
@@ -268,8 +278,8 @@ const PlantingSeasonBox = ({ season, plantingSiteName, strata }: PlantingSeasonB
                 <Box minWidth={0}>{desktopNamesList(substrataNames, true)}</Box>
               </Box>
             </Box>
-            <Box display='flex' gap={theme.spacing(4)} alignItems='flex-start'>
-              {numberColumn(strings.PLANTING_GOAL, plantingGoal)}
+            <Box display='flex' gap={theme.spacing(3)} alignItems='flex-start'>
+              {numberColumn(strings.PLANTING_TARGET, plantingGoal)}
               {numberColumn(strings.WITHDRAWN_FOR_PLANTING, withdrawnForPlantingTotal)}
               {numberColumn(strings.LEFT_TO_PLANT, leftToPlantTotal)}
             </Box>

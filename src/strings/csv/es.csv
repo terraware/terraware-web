@@ -1622,6 +1622,7 @@ PLANTING_SITE_TYPE,Tipo de sitio de plantación,4f94b3c8
 PLANTING_SITE_TYPE_DETAILED,Detallado,6a25500b
 PLANTING_SITE_TYPE_SIMPLE,Sencillo,33e02624
 PLANTING_SITES,Sitios de plantación,3799d2eb
+PLANTING_TARGET,Meta de Plantación,7df4b251
 PLANTING_WITHDRAWAL_DATE,Fecha de Retiro de Plantación,bf2739c8
 PLANTING_WITHDRAWALS,Retiros de Plantación,3c64a0e3
 PLANTINGS,Plantaciones,51a94883
@@ -2482,6 +2483,7 @@ TOTAL_PLANTED_COMPLETE,Plantado total completado,47ede772
 TOTAL_PLANTED_REQUIRED,Plantados en total *,f8c6398b
 TOTAL_PLANTING_AREA,Área total de plantación,d227ef50
 TOTAL_PLANTING_SITE_AREA_HA,Superficie total de la zona de siembra (Ha) *,cf590ea2
+TOTAL_PLANTING_TARGET_IN_SEASONS,Meta Total de Plantación por Temporadas,0317fe02
 TOTAL_PLANTS,Plantas en total,375e264f
 TOTAL_PLANTS_OBSERVED,Total de plantas observadas,4a3801b1
 TOTAL_PLANTS_PLANTED,Plantas plantadas en total,2db49cb6
