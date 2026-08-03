@@ -1,7 +1,7 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Button } from '@terraware/web-components';
+import { BusySpinner } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -14,10 +14,9 @@ const PLACEHOLDER = '-';
 
 export type PlantingPlanSeasonsProps = {
   plantingSite: PlantingSitePayload;
-  onAddSeason: () => void;
 };
 
-const PlantingPlanSeasons = ({ plantingSite, onAddSeason }: PlantingPlanSeasonsProps): JSX.Element => {
+const PlantingPlanSeasons = ({ plantingSite }: PlantingPlanSeasonsProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
   const numberFormatter = useNumberFormatter();

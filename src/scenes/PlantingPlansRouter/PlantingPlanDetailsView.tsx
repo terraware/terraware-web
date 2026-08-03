@@ -115,9 +115,7 @@ const PlantingPlanDetailsView = (): JSX.Element => {
       )}
       {segment === 'overview' && <PlantingPlanOverview plantingSite={plantingSite} />}
       {segment === 'siteGoals' && <PlantingPlanSiteGoals plantingSite={plantingSite} />}
-      {segment === 'plantingSeasons' && (
-        <PlantingPlanSeasons plantingSite={plantingSite} onAddSeason={openAddSeasonModal} />
-      )}
+      {segment === 'plantingSeasons' && <PlantingPlanSeasons plantingSite={plantingSite} />}
     </Page>
   );
 };
