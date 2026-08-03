@@ -15,6 +15,7 @@ import { useOrganization } from 'src/providers/hooks';
 import {
   useAssignSpeciesToProjectsMutation,
   useLazyGetSpeciesQuery,
+  useUnassignSpeciesFromProjectsMutation,
   useUpdateSpeciesMutation,
 } from 'src/queries/generated/species';
 import {
@@ -64,13 +65,26 @@ export default function SpeciesEditView(): JSX.Element {
 
   const [updateSpecies, { isLoading: isBusy }] = useUpdateSpeciesMutation();
   const [assignSpeciesToProjects] = useAssignSpeciesToProjectsMutation();
+  const [unassignSpeciesFromProjects] = useUnassignSpeciesFromProjectsMutation();
 
   const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
   const [addedProjectIds, setAddedProjectIds] = useState<number[]>([]);
+  const [removedProjectIds, setRemovedProjectIds] = useState<number[]>([]);
 
   const onAddProjectIds = useCallback((projectIds: number[]) => {
     setAddedProjectIds((previous) => [...previous, ...projectIds.filter((id) => !previous.includes(id))]);
   }, []);
+
+  const onRemoveProjectIds = useCallback(
+    (projectIds: number[]) => {
+      // Staged (not-yet-saved) additions are simply dropped; already-assigned projects are staged
+      // for unassignment on save.
+      const stagedRemovals = projectIds.filter((id) => !addedProjectIds.includes(id));
+      setAddedProjectIds((previous) => previous.filter((id) => !projectIds.includes(id)));
+      setRemovedProjectIds((previous) => [...previous, ...stagedRemovals.filter((id) => !previous.includes(id))]);
+    },
+    [addedProjectIds]
+  );
 
   useEffect(() => {
     if (selectedOrganization && speciesId) {
@@ -198,6 +212,12 @@ export default function SpeciesEditView(): JSX.Element {
         }).unwrap();
       }
 
+      if (speciesIntelligenceEnabled && removedProjectIds.length && speciesId) {
+        await unassignSpeciesFromProjects({
+          species: [{ speciesId: Number(speciesId), projectIds: removedProjectIds }],
+        }).unwrap();
+      }
+
       if (removedProjectsIds) {
         const request = dispatch(requestDeleteManyAcceleratorProjectSpecies(removedProjectsIds));
         setRemoveRequestId(request.requestId);
@@ -270,7 +290,9 @@ export default function SpeciesEditView(): JSX.Element {
                 speciesProjects={species.projects}
                 editMode
                 addedProjectIds={addedProjectIds}
+                removedProjectIds={removedProjectIds}
                 onAddProjectIds={onAddProjectIds}
+                onRemoveProjectIds={onRemoveProjectIds}
               />
             </Box>
           )}

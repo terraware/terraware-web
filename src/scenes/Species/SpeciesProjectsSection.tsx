@@ -1,11 +1,12 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { TableRowType } from '@terraware/web-components';
 
 import Button from 'src/components/common/button/Button';
 import TooltipButton from 'src/components/common/button/TooltipButton';
 import Table from 'src/components/common/table';
-import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
+import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps, TableColumnType } from 'src/components/common/table/types';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization } from 'src/providers';
@@ -14,6 +15,7 @@ import { Project } from 'src/types/Project';
 import { SpeciesProjectElement } from 'src/types/Species';
 
 import AddSpeciesToProjectModal from './AddSpeciesToProjectModal';
+import RemoveProjectsDialog from './RemoveProjectsDialog';
 import SpeciesNativityBadge from './SpeciesNativityBadge';
 
 type Nativity = NonNullable<SpeciesProjectElement['calculatedNativity']>;
@@ -36,24 +38,32 @@ type SpeciesProjectsSectionProps = {
   speciesProjects?: SpeciesProjectElement[];
   editMode?: boolean;
   addedProjectIds?: number[];
+  removedProjectIds?: number[];
   onAddProjectIds?: (projectIds: number[]) => void;
+  onRemoveProjectIds?: (projectIds: number[]) => void;
 };
 
 export default function SpeciesProjectsSection({
   speciesProjects,
   editMode = false,
   addedProjectIds,
+  removedProjectIds,
   onAddProjectIds,
+  onRemoveProjectIds,
 }: SpeciesProjectsSectionProps): JSX.Element {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { availableProjects, getProjectName } = useProjects();
 
   const [openedAddToProjectModal, setOpenedAddToProjectModal] = useState(false);
+  const [showRemoveDialog, setShowRemoveDialog] = useState(false);
+  const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
 
   const rows = useMemo<ProjectRow[]>(() => {
+    const removed = editMode ? removedProjectIds ?? [] : [];
     const existingRows: ProjectRow[] = (speciesProjects ?? [])
       .filter((project): project is SpeciesProjectElement & { projectId: number } => project.projectId !== undefined)
+      .filter((project) => !removed.includes(project.projectId))
       .map((project) => ({
         projectId: project.projectId,
         projectName: getProjectName(project.projectId),
@@ -69,7 +79,7 @@ export default function SpeciesProjectsSection({
     }));
 
     return [...existingRows, ...addedRows];
-  }, [speciesProjects, editMode, addedProjectIds, getProjectName]);
+  }, [speciesProjects, editMode, addedProjectIds, removedProjectIds, getProjectName]);
 
   const selectableProjects = useMemo<Project[]>(() => {
     const assignedIds = new Set(rows.map((row) => row.projectId));
@@ -82,6 +92,15 @@ export default function SpeciesProjectsSection({
     }
     return strings.NO_AVAILABLE_PROJECTS_FOR_SPECIES;
   }, [activeLocale, selectableProjects]);
+
+  const onRemove = useCallback(() => {
+    const removedIds = selectedRows.map((row) => (row as ProjectRow).projectId);
+    if (removedIds.length && onRemoveProjectIds) {
+      onRemoveProjectIds(removedIds);
+    }
+    setSelectedRows([]);
+    setShowRemoveDialog(false);
+  }, [onRemoveProjectIds, selectedRows]);
 
   const Renderer = useCallback(
     (props: RendererProps<TableRowType>): JSX.Element => {
@@ -144,6 +163,14 @@ export default function SpeciesProjectsSection({
         />
       )}
 
+      {editMode && showRemoveDialog && (
+        <RemoveProjectsDialog
+          onClose={() => setShowRemoveDialog(false)}
+          ppSpeciesToRemove={selectedRows.map((row) => (row as ProjectRow).projectId)}
+          onSubmit={onRemove}
+        />
+      )}
+
       {editMode && (
         <Box
           alignItems='center'
@@ -169,7 +196,25 @@ export default function SpeciesProjectsSection({
         </Box>
       )}
 
-      <Table id='species-projects-section' columns={columns} rows={rows} orderBy={'projectName'} Renderer={Renderer} />
+      <Table
+        id='species-projects-section'
+        columns={columns}
+        rows={rows}
+        orderBy={'projectName'}
+        Renderer={Renderer}
+        showCheckbox={editMode}
+        showTopBar={editMode}
+        selectedRows={editMode ? selectedRows : undefined}
+        setSelectedRows={editMode ? setSelectedRows : undefined}
+        topBarButtons={[
+          {
+            buttonText: strings.REMOVE,
+            buttonType: 'destructive',
+            onButtonClick: () => setShowRemoveDialog(true),
+            icon: 'iconTrashCan',
+          },
+        ]}
+      />
     </>
   );
 }
