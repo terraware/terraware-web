@@ -57,16 +57,6 @@ const PlantingPlanSeasons = ({ plantingSite, onAddSeason }: PlantingPlanSeasonsP
 
   const isLoading = !organizationId || plantingSeasonsResult.isFetching || plantingSeasonsData === undefined;
 
-  const addButton = () => (
-    <Button
-      id='addPlantingSeason'
-      icon='plus'
-      label={strings.ADD_PLANTING_SEASON}
-      onClick={onAddSeason}
-      size='medium'
-    />
-  );
-
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
       <Card style={{ width: '100%', padding: theme.spacing(3) }} radius={theme.spacing(1)}>
@@ -120,7 +110,6 @@ const PlantingPlanSeasons = ({ plantingSite, onAddSeason }: PlantingPlanSeasonsP
               <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
                 {strings.THERE_ARE_NO_PLANTING_SEASONS}
               </Typography>
-              {addButton()}
             </Box>
           </Card>
         ) : (
