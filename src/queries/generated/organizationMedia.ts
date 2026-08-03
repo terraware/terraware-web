@@ -110,6 +110,7 @@ export type UploadOrganizationMediaResponsePayload = {
 };
 export type UploadOrganizationMediaRequestPayload = {
   caption?: string;
+  fileBatchId?: number;
 };
 export type SimpleSuccessResponsePayload = {
   status: SuccessOrError;

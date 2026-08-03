@@ -41,6 +41,9 @@ const injectedRtkApi = api.injectEndpoints({
     acceptProblemSuggestion: build.mutation<AcceptProblemSuggestionApiResponse, AcceptProblemSuggestionApiArg>({
       query: (queryArg) => ({ url: `/api/v1/species/problems/${queryArg}`, method: 'POST' }),
     }),
+    acceptPendingNativities: build.mutation<AcceptPendingNativitiesApiResponse, AcceptPendingNativitiesApiArg>({
+      query: (queryArg) => ({ url: `/api/v1/species/projects/accept`, method: 'POST', body: queryArg }),
+    }),
     assignSpeciesToProjects: build.mutation<AssignSpeciesToProjectsApiResponse, AssignSpeciesToProjectsApiArg>({
       query: (queryArg) => ({ url: `/api/v1/species/projects/assign`, method: 'POST', body: queryArg }),
     }),
@@ -137,6 +140,9 @@ export type GetSpeciesProblemApiArg = number;
 export type AcceptProblemSuggestionApiResponse =
   /** status 200 Suggestion applied. Response contains the updated species information. */ GetSpeciesResponsePayload;
 export type AcceptProblemSuggestionApiArg = number;
+export type AcceptPendingNativitiesApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type AcceptPendingNativitiesApiArg = AcceptPendingNativitiesRequestPayload;
 export type AssignSpeciesToProjectsApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
 export type AssignSpeciesToProjectsApiArg = AssignSpeciesToProjectsPayload;
@@ -196,6 +202,9 @@ export type SpeciesProjectElement = {
   calculatedNativitySource?: SpeciesDataSourcePayload;
   overriddenJustification?: string;
   overriddenNativity?: 'Invasive' | 'Introduced' | 'Native' | 'Unknown';
+  /** Latest calculated nativity value for the species, if different from calculatedNativity. This nativity is considered 'pending' until it is accepted by the user. */
+  pendingNativity?: 'Invasive' | 'Introduced' | 'Native' | 'Unknown';
+  pendingNativitySource?: SpeciesDataSourcePayload;
   projectId?: number;
 };
 export type SpeciesResponseElement = {
@@ -409,6 +418,11 @@ export type GetSpeciesResponsePayload = {
   species: SpeciesResponseElement;
   status: SuccessOrError;
 };
+export type AcceptPendingNativitiesRequestPayload = {
+  organizationId: number;
+  /** If present, only accept pending nativities for species in the specified projects. If absent, accept pending nativities across all projects. */
+  projectIds?: number[];
+};
 export type SpeciesProjectsPayload = {
   projectIds: number[];
   speciesId: number;
@@ -556,6 +570,7 @@ export const {
   useGetSpeciesProblemQuery,
   useLazyGetSpeciesProblemQuery,
   useAcceptProblemSuggestionMutation,
+  useAcceptPendingNativitiesMutation,
   useAssignSpeciesToProjectsMutation,
   useOverrideProjectSpeciesDataMutation,
   useUnassignSpeciesFromProjectsMutation,

@@ -81,6 +81,7 @@ export type ListPlantingSitesApiArg = {
   projectId?: number;
   /** If true, include strata and substrata for each site. */
   full?: boolean;
+  /** include the plantingZones variable in the response. Only used for backwards compatibility; should be false in all new calls of it. */
   includeZones?: boolean;
   simplified?: boolean;
 };
@@ -100,6 +101,7 @@ export type DeletePlantingSiteApiArg = number;
 export type GetPlantingSiteApiResponse = /** status 200 OK */ GetPlantingSiteResponsePayload;
 export type GetPlantingSiteApiArg = {
   id: number;
+  /** include the plantingZones variable in the response. Only used for backwards compatibility; should be false in all new calls of it. */
   includeZones?: boolean;
   simplified?: boolean;
 };

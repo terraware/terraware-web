@@ -3833,6 +3833,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/species/projects/accept": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Accepts the pending nativities for all species in an organization. */
+        post: operations["acceptPendingNativities"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/species/projects/assign": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Associates species with projects. */
+        post: operations["assignSpeciesToProjects"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/species/projects/override": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Overrides calculated per-project species data. */
+        post: operations["overrideProjectSpeciesData"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/species/projects/unassign": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Removes species from projects. */
+        post: operations["unassignSpeciesFromProjects"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/species/uploads": {
         parameters: {
             query?: never;
@@ -5001,9 +5069,9 @@ export interface paths {
             cookie?: never;
         };
         /** Get the list of internal interests assigned to a user. */
-        get: operations["getUserDeliverableCategories"];
+        get: operations["getUserInternalInterests"];
         /** Update which internal interests are assigned to a user. */
-        put: operations["updateUserDeliverableCategories"];
+        put: operations["updateUserInternalInterests"];
         post?: never;
         delete?: never;
         options?: never;
@@ -5341,6 +5409,12 @@ export interface components {
             submittedTime?: string;
             unpublishedProperties: ("achievements" | "additionalComments" | "autoCalculatedIndicators" | "challenges" | "commonIndicators" | "financialSummaries" | "highlights" | "photos" | "projectIndicators")[];
         };
+        AcceptPendingNativitiesRequestPayload: {
+            /** Format: int64 */
+            organizationId: number;
+            /** @description If present, only accept pending nativities for species in the specified projects. If absent, accept pending nativities across all projects. */
+            projectIds?: number[];
+        };
         AccessionHistoryEntryPayload: {
             /** Format: int64 */
             batchId?: number;
@@ -5456,6 +5530,32 @@ export interface components {
             viabilityPercent?: number;
             viabilityTests?: components["schemas"]["GetViabilityTestPayload"][];
             withdrawals?: components["schemas"]["GetWithdrawalPayload"][];
+        };
+        AccessionPhotoSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            accessionId: number;
+            /** Format: int64 */
+            facilityId: number;
+            /** Format: int64 */
+            fileId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "AccessionPhoto";
+        };
+        AccessionSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            accessionId: number;
+            /** Format: int64 */
+            facilityId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "Accession";
         };
         ActivityMediaFilePayload: {
             caption?: string;
@@ -5762,6 +5862,10 @@ export interface components {
             /** Format: int64 */
             plantingSiteId: number;
             strata: components["schemas"]["StratumT0DataPayload"][];
+        };
+        AssignSpeciesToProjectsPayload: {
+            /** @description The species to assign, each with the projects to associate it with. */
+            species: components["schemas"]["SpeciesProjectsPayload"][];
         };
         AssignTerraformationContactRequestPayload: {
             /** Format: int64 */
@@ -6847,6 +6951,40 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
             version: components["schemas"]["DocumentSavedVersionPayload"];
         };
+        CreateSpeciesRequestPayload: {
+            averageWoodDensity?: number;
+            commonName?: string;
+            /**
+             * @description IUCN Red List conservation category code.
+             * @enum {string}
+             */
+            conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+            dbhSource?: string;
+            dbhValue?: number;
+            ecologicalRoleKnown?: string;
+            ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
+            familyName?: string;
+            growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Subshrub" | "Multiple Forms" | "Mangrove" | "Herb")[];
+            heightAtMaturitySource?: string;
+            heightAtMaturityValue?: number;
+            localUsesKnown?: string;
+            nativeEcosystem?: string;
+            /**
+             * Format: int64
+             * @description Which organization's species list to update.
+             */
+            organizationId: number;
+            otherFacts?: string;
+            plantMaterialSourcingMethods?: ("Seed collection & germination" | "Seed purchase & germination" | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
+            projectIds?: number[];
+            rare?: boolean;
+            scientificName: string;
+            /** @enum {string} */
+            seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate" | "Intermediate - Cool Temperature Sensitive" | "Intermediate - Partial Desiccation Tolerant" | "Intermediate - Short Lived" | "Likely Intermediate - Cool Temperature Sensitive" | "Likely Intermediate - Partial Desiccation Tolerant" | "Likely Intermediate - Short Lived";
+            successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
+            /** @enum {string} */
+            woodDensityLevel?: "Species" | "Genus" | "Family";
+        };
         CreateSpeciesResponsePayload: {
             /** Format: int64 */
             id: number;
@@ -7275,7 +7413,7 @@ export interface components {
         };
         EventLogEntryPayload: {
             action: components["schemas"]["CreatedActionPayload"] | components["schemas"]["DeletedActionPayload"] | components["schemas"]["FieldUpdatedActionPayload"];
-            subject: components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotCoordinatesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingDateRequestSpeciesSubjectPayload"] | components["schemas"]["PlantingDateRequestSubjectPayload"] | components["schemas"]["PlantingSeasonAllocatedSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSpeciesTargetSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["PlantingSeasonWithdrawalSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"];
+            subject: components["schemas"]["AccessionPhotoSubjectPayload"] | components["schemas"]["AccessionSubjectPayload"] | components["schemas"]["BiomassDetailsSubjectPayload"] | components["schemas"]["BiomassQuadratSpeciesSubjectPayload"] | components["schemas"]["BiomassQuadratSubjectPayload"] | components["schemas"]["BiomassSpeciesSubjectPayload"] | components["schemas"]["MonitoringSpeciesSubjectPayload"] | components["schemas"]["ObservationPlotCoordinatesSubjectPayload"] | components["schemas"]["ObservationPlotMediaSubjectPayload"] | components["schemas"]["ObservationPlotSubjectPayload"] | components["schemas"]["OrganizationSubjectPayload"] | components["schemas"]["PlantingDateRequestSpeciesSubjectPayload"] | components["schemas"]["PlantingDateRequestSubjectPayload"] | components["schemas"]["PlantingSeasonAllocatedSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSpeciesSubjectPayload"] | components["schemas"]["PlantingSeasonScheduledDateSubjectPayload"] | components["schemas"]["PlantingSeasonSpeciesTargetSubjectPayload"] | components["schemas"]["PlantingSeasonSubjectPayload"] | components["schemas"]["PlantingSeasonWithdrawalSubjectPayload"] | components["schemas"]["ProjectSubjectPayload"] | components["schemas"]["RecordedTreeSubjectPayload"] | components["schemas"]["ViabilityTestSubjectPayload"] | components["schemas"]["WithdrawalSubjectPayload"];
             /** Format: date-time */
             timestamp: string;
             /** Format: int64 */
@@ -8567,7 +8705,7 @@ export interface components {
             /** Format: int64 */
             projectId?: number;
             /** @description If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
-            subjects?: ("BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotCoordinates" | "ObservationPlotMedia" | "Organization" | "PlantingDateRequest" | "PlantingDateRequestSpecies" | "PlantingSeason" | "PlantingSeasonAllocatedSpecies" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "PlantingSeasonSpeciesTarget" | "PlantingSeasonWithdrawal" | "Project" | "RecordedTree")[];
+            subjects?: ("Accession" | "AccessionPhoto" | "BiomassDetails" | "BiomassQuadrat" | "BiomassQuadratSpecies" | "BiomassSpecies" | "MonitoringSpecies" | "ObservationPlot" | "ObservationPlotCoordinates" | "ObservationPlotMedia" | "Organization" | "PlantingDateRequest" | "PlantingDateRequestSpecies" | "PlantingSeason" | "PlantingSeasonAllocatedSpecies" | "PlantingSeasonScheduledDate" | "PlantingSeasonScheduledDateSpecies" | "PlantingSeasonSpeciesTarget" | "PlantingSeasonWithdrawal" | "Project" | "RecordedTree" | "ViabilityTest" | "Withdrawal")[];
         };
         ListEventLogEntriesResponsePayload: {
             events: components["schemas"]["EventLogEntryPayload"][];
@@ -9902,6 +10040,18 @@ export interface components {
             /** @enum {string} */
             role: "Contributor" | "Manager" | "Admin" | "Owner" | "Terraformation Contact";
         };
+        OverrideSpeciesProjectDataElement: {
+            overriddenJustification: string;
+            /** @enum {string} */
+            overriddenNativity: "Invasive" | "Introduced" | "Native" | "Unknown";
+            /** Format: int64 */
+            projectId?: number;
+            /** Format: int64 */
+            speciesId: number;
+        };
+        OverrideSpeciesProjectDataRequestPayload: {
+            overrides: components["schemas"]["OverrideSpeciesProjectDataElement"][];
+        };
         ParticipantProjectForSpeciesPayload: {
             /**
              * Format: int64
@@ -11084,7 +11234,7 @@ export interface components {
             cursor?: string;
             fields: string[];
             filters?: components["schemas"]["PrefixedSearch"][];
-            prefix?: "accessionCollectors" | "accessions" | "applications" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "botanicalCountries" | "countries" | "countryBotanicalCountries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingDateRequestSpecies" | "plantingDateRequests" | "plantingSeasonAllocatedSpeciesTable" | "plantingSeasonScheduledDates" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "reports" | "scheduledPlantingDateSpeciesTable" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
+            prefix?: "acceleratorReportAutoCalculatedIndicators" | "acceleratorReportCommonIndicators" | "acceleratorReportProjectIndicators" | "acceleratorReports" | "accessionCollectors" | "accessions" | "applications" | "autoCalculatedIndicators" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "botanicalCountries" | "commonIndicators" | "countries" | "countryBotanicalCountries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingDateRequestSpecies" | "plantingDateRequests" | "plantingSeasonAllocatedSpeciesTable" | "plantingSeasonScheduledDates" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectIndicators" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectSpecies" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "scheduledPlantingDateSpeciesTable" | "seedFundReports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
             search?: components["schemas"]["SearchNodePayload"];
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
         };
@@ -11210,6 +11360,12 @@ export interface components {
             strata: components["schemas"]["StratumT0DataPayload"][];
             survivalRateIncludesTempPlots: boolean;
         };
+        SpeciesDataSourcePayload: {
+            /** Format: date */
+            datasetDate: string;
+            /** @enum {string} */
+            datasetType: "GBIF" | "WCVP" | "GRIIS" | "RESOLVE" | "NaturalEarth";
+        };
         SpeciesDensityPayload: {
             density: number;
             plotDensity: number;
@@ -11227,14 +11383,14 @@ export interface components {
             name: string;
         };
         SpeciesLookupDetailsResponsePayload: {
+            /** @description IUCN Red List conservation category code. */
+            commonNameSource: components["schemas"]["SpeciesDataSourcePayload"];
             /** @description List of known common names for the species, if any. */
             commonNames?: components["schemas"]["SpeciesLookupCommonNamePayload"][];
-            /**
-             * @description IUCN Red List conservation category code.
-             * @enum {string}
-             */
+            /** @enum {string} */
             conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
             familyName: string;
+            familyNameSource: components["schemas"]["SpeciesDataSourcePayload"];
             /**
              * @description If this is not the accepted name for the species, the type of problem the name has. Currently, this will always be "Name Is Synonym".
              * @enum {string}
@@ -11262,42 +11418,32 @@ export interface components {
             /** @enum {string} */
             type: "Name Misspelled" | "Name Not Found" | "Name Is Synonym";
         };
-        SpeciesRequestPayload: {
-            averageWoodDensity?: number;
-            commonName?: string;
+        SpeciesProjectElement: {
+            /** @enum {string} */
+            calculatedNativity?: "Invasive" | "Introduced" | "Native" | "Unknown";
+            calculatedNativitySource?: components["schemas"]["SpeciesDataSourcePayload"];
+            overriddenJustification?: string;
+            /** @enum {string} */
+            overriddenNativity?: "Invasive" | "Introduced" | "Native" | "Unknown";
             /**
-             * @description IUCN Red List conservation category code.
+             * @description Latest calculated nativity value for the species, if different from calculatedNativity. This nativity is considered 'pending' until it is accepted by the user.
              * @enum {string}
              */
-            conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
-            dbhSource?: string;
-            dbhValue?: number;
-            ecologicalRoleKnown?: string;
-            ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
-            familyName?: string;
-            growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Subshrub" | "Multiple Forms" | "Mangrove" | "Herb")[];
-            heightAtMaturitySource?: string;
-            heightAtMaturityValue?: number;
-            localUsesKnown?: string;
-            nativeEcosystem?: string;
-            /**
-             * Format: int64
-             * @description Which organization's species list to update.
-             */
-            organizationId: number;
-            otherFacts?: string;
-            plantMaterialSourcingMethods?: ("Seed collection & germination" | "Seed purchase & germination" | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
-            rare?: boolean;
-            scientificName: string;
-            /** @enum {string} */
-            seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate" | "Intermediate - Cool Temperature Sensitive" | "Intermediate - Partial Desiccation Tolerant" | "Intermediate - Short Lived" | "Likely Intermediate - Cool Temperature Sensitive" | "Likely Intermediate - Partial Desiccation Tolerant" | "Likely Intermediate - Short Lived";
-            successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
-            /** @enum {string} */
-            woodDensityLevel?: "Species" | "Genus" | "Family";
+            pendingNativity?: "Invasive" | "Introduced" | "Native" | "Unknown";
+            pendingNativitySource?: components["schemas"]["SpeciesDataSourcePayload"];
+            /** Format: int64 */
+            projectId?: number;
+        };
+        /** @description The species to assign, each with the projects to associate it with. */
+        SpeciesProjectsPayload: {
+            projectIds: number[];
+            /** Format: int64 */
+            speciesId: number;
         };
         SpeciesResponseElement: {
             averageWoodDensity?: number;
             commonName?: string;
+            commonNameSource?: components["schemas"]["SpeciesDataSourcePayload"];
             /**
              * @description IUCN Red List conservation category code.
              * @enum {string}
@@ -11310,6 +11456,7 @@ export interface components {
             ecologicalRoleKnown?: string;
             ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
             familyName?: string;
+            familyNameSource?: components["schemas"]["SpeciesDataSourcePayload"];
             growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Subshrub" | "Multiple Forms" | "Mangrove" | "Herb")[];
             heightAtMaturitySource?: string;
             heightAtMaturityValue?: number;
@@ -11322,6 +11469,7 @@ export interface components {
             otherFacts?: string;
             plantMaterialSourcingMethods?: ("Seed collection & germination" | "Seed purchase & germination" | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
             problems?: components["schemas"]["SpeciesProblemElement"][];
+            projects: components["schemas"]["SpeciesProjectElement"][];
             rare?: boolean;
             scientificName: string;
             /** @enum {string} */
@@ -11380,6 +11528,13 @@ export interface components {
             /** Format: int64 */
             substratumId: number;
         };
+        SplatAnnotationMediaPayload: {
+            contentType: string;
+            /** Format: int64 */
+            fileId: number;
+            /** Format: int32 */
+            position: number;
+        };
         SplatAnnotationPayload: {
             bodyText?: string;
             cameraPosition?: components["schemas"]["CoordinatePayload"];
@@ -11388,6 +11543,7 @@ export interface components {
             /** Format: int64 */
             id: number;
             label?: string;
+            media: components["schemas"]["SplatAnnotationMediaPayload"][];
             position: components["schemas"]["CoordinatePayload"];
             title: string;
         };
@@ -12210,6 +12366,39 @@ export interface components {
         UpdateSavedDocumentVersionRequestPayload: {
             isSubmitted: boolean;
         };
+        UpdateSpeciesRequestPayload: {
+            averageWoodDensity?: number;
+            commonName?: string;
+            /**
+             * @description IUCN Red List conservation category code.
+             * @enum {string}
+             */
+            conservationCategory?: "CR" | "DD" | "EN" | "EW" | "EX" | "LC" | "NE" | "NT" | "VU";
+            dbhSource?: string;
+            dbhValue?: number;
+            ecologicalRoleKnown?: string;
+            ecosystemTypes?: ("Boreal forests/Taiga" | "Deserts and xeric shrublands" | "Flooded grasslands and savannas" | "Mangroves" | "Mediterranean forests, woodlands and scrubs" | "Montane grasslands and shrublands" | "Temperate broad leaf and mixed forests" | "Temperate coniferous forest" | "Temperate grasslands, savannas and shrublands" | "Tropical and subtropical coniferous forests" | "Tropical and subtropical dry broad leaf forests" | "Tropical and subtropical grasslands, savannas and shrublands" | "Tropical and subtropical moist broad leaf forests" | "Tundra")[];
+            familyName?: string;
+            growthForms?: ("Tree" | "Shrub" | "Forb" | "Graminoid" | "Fern" | "Fungus" | "Lichen" | "Moss" | "Vine" | "Liana" | "Subshrub" | "Multiple Forms" | "Mangrove" | "Herb")[];
+            heightAtMaturitySource?: string;
+            heightAtMaturityValue?: number;
+            localUsesKnown?: string;
+            nativeEcosystem?: string;
+            /**
+             * Format: int64
+             * @description Which organization's species list to update.
+             */
+            organizationId: number;
+            otherFacts?: string;
+            plantMaterialSourcingMethods?: ("Seed collection & germination" | "Seed purchase & germination" | "Mangrove propagules" | "Vegetative propagation" | "Wildling harvest" | "Seedling purchase" | "Other")[];
+            rare?: boolean;
+            scientificName: string;
+            /** @enum {string} */
+            seedStorageBehavior?: "Orthodox" | "Recalcitrant" | "Intermediate" | "Unknown" | "Likely Orthodox" | "Likely Recalcitrant" | "Likely Intermediate" | "Intermediate - Cool Temperature Sensitive" | "Intermediate - Partial Desiccation Tolerant" | "Intermediate - Short Lived" | "Likely Intermediate - Cool Temperature Sensitive" | "Likely Intermediate - Partial Desiccation Tolerant" | "Likely Intermediate - Short Lived";
+            successionalGroups?: ("Pioneer" | "Early secondary" | "Late secondary" | "Mature")[];
+            /** @enum {string} */
+            woodDensityLevel?: "Species" | "Genus" | "Family";
+        };
         UpdateSubLocationRequestPayload: {
             name: string;
         };
@@ -12227,7 +12416,7 @@ export interface components {
             cookiesConsented: boolean;
         };
         UpdateUserInternalInterestsRequestPayload: {
-            /** @description New set of category assignments. Existing assignments that aren't included here will be removed from the user. */
+            /** @description New set of interest assignments. Existing assignments that aren't included here will be removed from the user. */
             internalInterests: ("Compliance" | "Financial Viability" | "GIS" | "Carbon Eligibility" | "Stakeholders and Community Impact" | "Proposed Restoration Activities" | "Verra Non-Permanence Risk Tool (NPRT)" | "Supplemental Files" | "Sourcing")[];
         };
         UpdateUserPreferencesRequestPayload: {
@@ -12609,6 +12798,20 @@ export interface components {
             /** Format: int32 */
             seedsGerminated: number;
         };
+        ViabilityTestSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            accessionId: number;
+            /** Format: int64 */
+            facilityId: number;
+            /** Format: int64 */
+            viabilityTestId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "ViabilityTest";
+        };
         VoteSelection: {
             conditionalInfo?: string;
             /** @description The vote the user has selected. Can be yes/no/conditional or `null` if a vote is not yet selected. */
@@ -12619,6 +12822,20 @@ export interface components {
             userId: number;
             /** @enum {string} */
             voteOption?: "No" | "Conditional" | "Yes";
+        };
+        WithdrawalSubjectPayload: Omit<WithRequired<components["schemas"]["EventSubjectPayload"], "fullText" | "shortText">, "type"> & {
+            /** Format: int64 */
+            accessionId: number;
+            /** Format: int64 */
+            facilityId: number;
+            /** Format: int64 */
+            withdrawalId: number;
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "Withdrawal";
         };
         WorkersPayloadV1: {
             /** Format: int32 */
@@ -20897,7 +21114,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SpeciesRequestPayload"];
+                "application/json": components["schemas"]["CreateSpeciesRequestPayload"];
             };
         };
         responses: {
@@ -21079,6 +21296,147 @@ export interface operations {
             };
             /** @description The requested resource was not found. */
             404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    acceptPendingNativities: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AcceptPendingNativitiesRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    assignSpeciesToProjects: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignSpeciesToProjectsPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description A species and project are in different organizations. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    overrideProjectSpeciesData: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["OverrideSpeciesProjectDataRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+        };
+    };
+    unassignSpeciesFromProjects: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["AssignSpeciesToProjectsPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description A species and project are in different organizations. */
+            409: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -21270,7 +21628,7 @@ export interface operations {
         };
         requestBody: {
             content: {
-                "application/json": components["schemas"]["SpeciesRequestPayload"];
+                "application/json": components["schemas"]["UpdateSpeciesRequestPayload"];
             };
         };
         responses: {
@@ -22738,6 +23096,7 @@ export interface operations {
                 projectId?: number;
                 /** @description If true, include strata and substrata for each site. */
                 full?: boolean;
+                /** @description include the plantingZones variable in the response. Only used for backwards compatibility; should be false in all new calls of it. */
                 includeZones?: boolean;
                 simplified?: boolean;
             };
@@ -22832,6 +23191,7 @@ export interface operations {
     getPlantingSite: {
         parameters: {
             query?: {
+                /** @description include the plantingZones variable in the response. Only used for backwards compatibility; should be false in all new calls of it. */
                 includeZones?: boolean;
                 simplified?: boolean;
             };
@@ -23469,7 +23829,7 @@ export interface operations {
             };
         };
     };
-    getUserDeliverableCategories: {
+    getUserInternalInterests: {
         parameters: {
             query?: never;
             header?: never;
@@ -23491,7 +23851,7 @@ export interface operations {
             };
         };
     };
-    updateUserDeliverableCategories: {
+    updateUserInternalInterests: {
         parameters: {
             query?: never;
             header?: never;

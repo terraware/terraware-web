@@ -42,6 +42,19 @@ export type EventSubjectPayloadBase = {
   shortText: string;
   type: string;
 };
+export type AccessionPhotoSubjectPayload = {
+  type: 'AccessionPhoto';
+} & EventSubjectPayloadBase & {
+    accessionId: number;
+    facilityId: number;
+    fileId: number;
+  };
+export type AccessionSubjectPayload = {
+  type: 'Accession';
+} & EventSubjectPayloadBase & {
+    accessionId: number;
+    facilityId: number;
+  };
 export type BiomassDetailsSubjectPayload = {
   type: 'BiomassDetails';
 } & EventSubjectPayloadBase & {
@@ -207,9 +220,25 @@ export type RecordedTreeSubjectPayload = {
     treeNumber: number;
     trunkNumber: number;
   };
+export type ViabilityTestSubjectPayload = {
+  type: 'ViabilityTest';
+} & EventSubjectPayloadBase & {
+    accessionId: number;
+    facilityId: number;
+    viabilityTestId: number;
+  };
+export type WithdrawalSubjectPayload = {
+  type: 'Withdrawal';
+} & EventSubjectPayloadBase & {
+    accessionId: number;
+    facilityId: number;
+    withdrawalId: number;
+  };
 export type EventLogEntryPayload = {
   action: CreatedActionPayload | DeletedActionPayload | FieldUpdatedActionPayload;
   subject:
+    | AccessionPhotoSubjectPayload
+    | AccessionSubjectPayload
     | BiomassDetailsSubjectPayload
     | BiomassQuadratSpeciesSubjectPayload
     | BiomassQuadratSubjectPayload
@@ -228,7 +257,9 @@ export type EventLogEntryPayload = {
     | PlantingSeasonSubjectPayload
     | PlantingSeasonWithdrawalSubjectPayload
     | ProjectSubjectPayload
-    | RecordedTreeSubjectPayload;
+    | RecordedTreeSubjectPayload
+    | ViabilityTestSubjectPayload
+    | WithdrawalSubjectPayload;
   timestamp: string;
   userId: number;
   userName: string;
@@ -248,6 +279,8 @@ export type ListEventLogEntriesRequestPayload = {
   projectId?: number;
   /** If specified, only return event log entries for specific subject types. This can be used to narrow the scope of the results in cases where there might be events related to child entities and you don't care about those. */
   subjects?: (
+    | 'Accession'
+    | 'AccessionPhoto'
     | 'BiomassDetails'
     | 'BiomassQuadrat'
     | 'BiomassQuadratSpecies'
@@ -267,6 +300,8 @@ export type ListEventLogEntriesRequestPayload = {
     | 'PlantingSeasonWithdrawal'
     | 'Project'
     | 'RecordedTree'
+    | 'ViabilityTest'
+    | 'Withdrawal'
   )[];
 };
 export const { useListEventLogEntriesMutation } = injectedRtkApi;

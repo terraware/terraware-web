@@ -199,7 +199,7 @@ export default function SpeciesProjectsTable({
             width='100%'
           >
             <Typography fontSize='20px' fontWeight={600}>
-              {strings.PROJECTS}
+              {strings.ACCELERATOR_PROJECTS}
             </Typography>
             {editMode && (
               <TooltipButton
