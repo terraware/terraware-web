@@ -10,6 +10,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import Checkbox from 'src/components/common/Checkbox';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useOrganization } from 'src/providers/hooks';
@@ -30,6 +31,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
+import SpeciesProjectsSection from './SpeciesProjectsSection';
 import SpeciesProjectsTable from './SpeciesProjectsTable';
 
 type SpeciesDetailViewProps = {
@@ -46,6 +48,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
   const snackbar = useSnackbar();
   const { orgHasParticipants } = useParticipantData();
+  const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
 
   const [getSpecies, { currentData: speciesData, isError: getSpeciesError }] = useLazyGetSpeciesQuery();
   const species = speciesData?.species;
@@ -312,6 +315,11 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             />
           </GridItemWrapper>
           {species && orgHasParticipants && <SpeciesProjectsTable speciesId={species.id} editMode={false} />}
+          {speciesIntelligenceEnabled && species && (
+            <Grid item xs={12} marginTop={theme.spacing(4)}>
+              <SpeciesProjectsSection speciesProjects={species.projects} />
+            </Grid>
+          )}
         </Grid>
       </Grid>
       {species && (

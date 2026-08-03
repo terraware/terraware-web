@@ -12,7 +12,7 @@ export type Species = Omit<SpeciesResponseElement, 'projects'> & {
   projects?: SpeciesResponseElement['projects'];
 };
 
-export type { SpeciesProblemElement } from 'src/queries/generated/species';
+export type { SpeciesProblemElement, SpeciesProjectElement } from 'src/queries/generated/species';
 
 export type WoodDensityLevel = NonUndefined<Species['woodDensityLevel']>;
 

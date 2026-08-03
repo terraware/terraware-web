@@ -9,9 +9,14 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
-import { useLazyGetSpeciesQuery, useUpdateSpeciesMutation } from 'src/queries/generated/species';
+import {
+  useAssignSpeciesToProjectsMutation,
+  useLazyGetSpeciesQuery,
+  useUpdateSpeciesMutation,
+} from 'src/queries/generated/species';
 import {
   requestAddManyAcceleratorProjectSpecies,
   requestDeleteManyAcceleratorProjectSpecies,
@@ -30,6 +35,7 @@ import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { ProjectSpecies } from './AddToProjectModal';
+import SpeciesProjectsSection from './SpeciesProjectsSection';
 
 function initSpecies(species?: Species): Species {
   const now = DateTime.now().toISO();
@@ -57,6 +63,14 @@ export default function SpeciesEditView(): JSX.Element {
   const species = speciesData?.species;
 
   const [updateSpecies, { isLoading: isBusy }] = useUpdateSpeciesMutation();
+  const [assignSpeciesToProjects] = useAssignSpeciesToProjectsMutation();
+
+  const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
+  const [addedProjectIds, setAddedProjectIds] = useState<number[]>([]);
+
+  const onAddProjectIds = useCallback((projectIds: number[]) => {
+    setAddedProjectIds((previous) => [...previous, ...projectIds.filter((id) => !previous.includes(id))]);
+  }, []);
 
   useEffect(() => {
     if (selectedOrganization && speciesId) {
@@ -178,6 +192,12 @@ export default function SpeciesEditView(): JSX.Element {
         },
       }).unwrap();
 
+      if (speciesIntelligenceEnabled && addedProjectIds.length && speciesId) {
+        await assignSpeciesToProjects({
+          species: [{ speciesId: Number(speciesId), projectIds: addedProjectIds }],
+        }).unwrap();
+      }
+
       if (removedProjectsIds) {
         const request = dispatch(requestDeleteManyAcceleratorProjectSpecies(removedProjectsIds));
         setRemoveRequestId(request.requestId);
@@ -244,6 +264,16 @@ export default function SpeciesEditView(): JSX.Element {
             addedProjectsSpecies={addedProjectsSpecies}
             removedProjectsIds={removedProjectsIds}
           />
+          {speciesIntelligenceEnabled && species && (
+            <Box marginTop={theme.spacing(4)}>
+              <SpeciesProjectsSection
+                speciesProjects={species.projects}
+                editMode
+                addedProjectIds={addedProjectIds}
+                onAddProjectIds={onAddProjectIds}
+              />
+            </Box>
+          )}
         </Box>
       </PageForm>
     </TfMain>

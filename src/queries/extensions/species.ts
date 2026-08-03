@@ -26,6 +26,24 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.Species, id: 'LIST' },
       ],
     },
+    assignSpeciesToProjects: {
+      invalidatesTags: (_result, _error, arg) => [
+        ...arg.species.map((species) => ({ type: QueryTagTypes.Species, id: species.speciesId })),
+        { type: QueryTagTypes.Species, id: 'LIST' },
+      ],
+    },
+    unassignSpeciesFromProjects: {
+      invalidatesTags: (_result, _error, arg) => [
+        ...arg.species.map((species) => ({ type: QueryTagTypes.Species, id: species.speciesId })),
+        { type: QueryTagTypes.Species, id: 'LIST' },
+      ],
+    },
+    overrideProjectSpeciesData: {
+      invalidatesTags: (_result, _error, arg) => [
+        ...arg.overrides.map((override) => ({ type: QueryTagTypes.Species, id: override.speciesId })),
+        { type: QueryTagTypes.Species, id: 'LIST' },
+      ],
+    },
     deleteSpecies: {
       invalidatesTags: [{ type: QueryTagTypes.Species, id: 'LIST' }],
     },

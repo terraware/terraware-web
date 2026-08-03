@@ -118,6 +118,7 @@ const injectedRtkApi = api.injectEndpoints({
         body: queryArg.body,
         params: {
           caption: queryArg.caption,
+          fileBatchId: queryArg.fileBatchId,
           position: queryArg.position,
           type: queryArg['type'],
         },
@@ -276,6 +277,7 @@ export type UploadOtherPlotMediaApiArg = {
   observationId: number;
   plotId: number;
   caption?: string;
+  fileBatchId?: number;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
   type?: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
   body: {
@@ -828,6 +830,12 @@ export type MergeOtherSpeciesRequestPayload = {
   /** ID of the existing species that the Other species' recorded plants should be merged into. */
   speciesId: number;
 };
+export type GeometryCollection = {
+  type: 'GeometryCollection';
+} & GeometryBase & {
+    geometries: object[];
+    type: 'GeometryCollection';
+  };
 export type LineString = {
   type: 'LineString';
 } & GeometryBase & {
@@ -851,12 +859,6 @@ export type MultiPolygon = {
 } & GeometryBase & {
     coordinates: number[][][][];
     type: 'MultiPolygon';
-  };
-export type GeometryCollection = {
-  type: 'GeometryCollection';
-} & GeometryBase & {
-    geometries: (GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon)[];
-    type: 'GeometryCollection';
   };
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 export type AssignedPlotPayload = {
@@ -1063,6 +1065,7 @@ export type UploadPlotMediaResponsePayload = {
 };
 export type UploadPlotMediaRequestPayload = {
   caption?: string;
+  fileBatchId?: number;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
   /** Type of subject the uploaded file depicts. */
   type?: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
