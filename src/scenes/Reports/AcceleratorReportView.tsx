@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -24,14 +23,15 @@ import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { useGetAcceleratorReportQuery, useSubmitAcceleratorReportMutation } from 'src/queries/generated/reports';
+import { useSubmitAcceleratorReportMutation } from 'src/queries/generated/reports';
 
 import MetricRow from '../AcceleratorRouter/AcceleratorProjects/Reports/MetricRow';
 import SubmitReportDialog from './SubmitReportDialog';
+import useParticipantReport from './useParticipantReport';
 
 const AcceleratorReportView = () => {
   const { strings } = useLocalization();
-  const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
+  const { currentAcceleratorProject } = useParticipantData();
   const theme = useTheme();
   const trackEvent = useTrackEvent();
 
@@ -41,26 +41,11 @@ const AcceleratorReportView = () => {
 
   const { goToAcceleratorReportEdit } = useNavigateTo();
 
-  const pathParams = useParams<{ projectId: string; reportId: string }>();
-  const reportId = Number(pathParams.reportId);
-  const projectId = Number(pathParams.projectId);
-
-  const reportResponse = useGetAcceleratorReportQuery({
-    projectId,
-    reportId,
-    includeIndicators: true,
-  });
-
-  const report = useMemo(() => reportResponse?.data?.report, [reportResponse?.data]);
+  const { getReportResponse, projectId, report, reportId } = useParticipantReport();
 
   const [submit, submitResponse] = useSubmitAcceleratorReportMutation();
 
   const [showSubmitDialog, setShowSubmitDialog] = useState(false);
-  useEffect(() => {
-    if (projectId !== currentAcceleratorProject?.id) {
-      setCurrentAcceleratorProject(projectId);
-    }
-  }, [currentAcceleratorProject?.id, projectId, setCurrentAcceleratorProject]);
 
   const year = useMemo(() => {
     return report?.startDate.split('-')[0];
@@ -77,14 +62,14 @@ const AcceleratorReportView = () => {
   );
 
   const goToReportEdit = useCallback(() => {
-    goToAcceleratorReportEdit(reportId, projectId);
-  }, [goToAcceleratorReportEdit, projectId, reportId]);
+    goToAcceleratorReportEdit(reportId);
+  }, [goToAcceleratorReportEdit, reportId]);
 
   const callToAction = useMemo(() => {
     const buttonsDisabled =
       !report?.id ||
       (report?.status !== 'Not Submitted' && report?.status !== 'Needs Update') ||
-      reportResponse.isLoading ||
+      getReportResponse.isLoading ||
       submitResponse.isLoading;
 
     return (
@@ -108,7 +93,7 @@ const AcceleratorReportView = () => {
         />
       </>
     );
-  }, [goToReportEdit, report?.id, report?.status, reportResponse.isLoading, strings, submitResponse.isLoading]);
+  }, [goToReportEdit, report?.id, report?.status, getReportResponse.isLoading, strings, submitResponse.isLoading]);
 
   const rightComponent = useMemo(
     () => (
@@ -120,7 +105,9 @@ const AcceleratorReportView = () => {
   );
 
   const submitReport = useCallback(() => {
-    void submit({ reportId, projectId });
+    if (projectId !== undefined) {
+      void submit({ reportId, projectId });
+    }
     setShowSubmitDialog(false);
   }, [projectId, reportId, submit]);
 
@@ -130,6 +117,10 @@ const AcceleratorReportView = () => {
     () => (year ? Number(report?.startDate.split('-')[0]) : DateTime.now().year),
     [report?.startDate, year]
   );
+
+  if (!projectId) {
+    return <></>;
+  }
 
   return (
     <>

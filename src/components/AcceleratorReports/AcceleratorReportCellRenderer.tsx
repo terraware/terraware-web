@@ -31,8 +31,12 @@ const ReportCell = ({ renderProps, projectId }: ReportCellProps): JSX.Element =>
   const defaultTimezone = useDefaultTimeZone().get().id;
 
   const linkToReport = useMemo(() => {
-    const reportUrl = isAcceleratorRoute ? APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW : APP_PATHS.REPORTS_VIEW;
-    const to = reportUrl.replace(':reportId', `${row.id}`).replace(':projectId', projectId.toString());
+    const to = isAcceleratorRoute
+      ? APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW.replace(':reportId', `${row.id}`).replace(
+          ':projectId',
+          projectId.toString()
+        )
+      : APP_PATHS.REPORTS_VIEW.replace(':reportId', `${row.id}`);
 
     const year = row.startDate.split('-')[0];
     const reportName = row.quarter ? `${year}-${row.quarter}` : `${year}`;
