@@ -7,6 +7,7 @@ ACCELERATOR_WELCOME_ALT,Deux personnes qui entretiennent des semis dans une pép
 ACCELERATOR_WELCOME_CONTENT,Terraware sera votre source d'information pour le programme accélérateur de Terraformation. Consultez votre liste de tâches ci-dessous pour voir les tâches que vous devez examiner et accomplir avant leurs dates d'échéance. Consultez toutes vos tâches pour la phase en cours en cliquant sur Livrables dans le menu de gauche.,f5fb9d32
 ACCELERATOR_WELCOME_HEADER,Bienvenue au programme accélérateur !,f8e75345
 ACCEPT,Accepter,1ae736cf
+ACCEPT_AND_NEXT,Accepter et continuer,9ba59ea5
 ACCEPTED,Accepté,2dee58ee
 ACCESSION,Accession,6a1389cb
 ACCESSION_BY_STATUS,Accession par statut,8d5df55b
@@ -273,6 +274,7 @@ BIOMASS_PLOT_LOCATION_TOOLTIP,Emplacement de la parcelle indique les coordonnée
 BIOMASS_PLOT_SPECIES_TOOLTIP,Espèces correspond au nombre d’espèces représentées par les arbres et arbustes observés. Cela n’inclut pas les plantes enregistrées dans les quadrats ni d’autres espèces envahissantes ou menacées supplémentaires.,f520363a
 BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantes totales correspond au nombre total d’arbres et d’arbustes observés, y compris les arbres et arbustes vivants et morts. Cela n’inclut pas les plantes enregistrées dans les quadrats ni d’autres espèces envahissantes ou menacées supplémentaires.",d020f12c
 BOOLEAN_TRUE,vrai,54415086
+BOTANICAL_COUNTRY,Pays botanique,7bd4e8de
 BOUNDARIES,Limites,e40b0600
 BOUNDARIES_AND_STRATA,Limites et strates,87db24b5
 BOUNDED_FLY,Vol limité,9e3c46ae
@@ -296,6 +298,8 @@ CAMERA_INFO,Informations sur la caméra,4283d43c
 CAMERA_POSITION,Position,3eb30313
 CANCEL,Annuler,e73dc4d4
 CANCEL_DATA_CHECK,Annuler la vérification des données,5f140f00
+CANCEL_SPECIES_CHECK,Annuler la vérification des espèces,fd764c88
+CANCEL_SPECIES_CHECK_MESSAGE,Vous êtes sur le point d'annuler la vérification des espèces. Toutes les modifications seront perdues. Êtes-vous sûr ?,3cc2bad6
 CANNOT_BE_CALCULATED,Impossible à calculer,19dafba4
 CANNOT_DELETE_APPLICATION_PROJECT,"Ce projet ne peut pas être supprimé, car une candidature à notre programme d'accélération a été initiée pour celui-ci.",5c1b8d4f
 CANNOT_EDIT,Impossible de modifier,97a312d7
@@ -464,6 +468,8 @@ DATA_CHECK_WITH_PROBLEMS,Vérification de la base de données terminée. {0} err
 DATA_IMPORT_FAILED,Échec de l'importation des données,9b2691f0
 DATA_IMPORT_ROW_MESSAGE,Ligne {0} : {1},3a694eb9
 DATA_IS_NOT_YET_AVAILABLE,Les données ne sont pas encore disponibles.,ea3a0d36
+DATABASE_CHECK,Vérification de la base de données,0aa4985f
+DATABASE_CHECK_NO_ERRORS,Aucune erreur trouvée lors de la vérification de la base de données.,ab00b9b4
 DATE,Date,3b0a1ef9
 DATE_ADDED,Date Ajouté,597eea90
 DATE_ADDED_REQUIRED,Date Ajouté *,443f82cc
@@ -784,6 +790,7 @@ FINANCE,Finances,ae6619da
 FINANCIAL_SUMMARIES,Synthèses financières,d26c4f56
 FINANCIAL_VIABILITY,Viabilité financière,50706753
 FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,En savoir plus sur l’Accélérateur De La Semence à la Forêt de Terraformation {0} et postulez !,e49d8596
+FINISH,Terminer,c1f1e84f
 FIRE,Incendie,3daefdd1
 FIRST_ADD_PLANTING_SITE,"Pour afficher le tableau de bord, vous devez détenir un site de plantation.",29adc97e
 FIRST_NAME,Prénom,4728037d
@@ -985,6 +992,7 @@ IUCN_VULNERABLE,Vulnérable (VU),ed5dcc89
 JOIN,Rejoindre,43eb6054
 JOIN_EVENT_NAME,Rejoindre {0},14c4bd8e
 JUST_SAVED,Enregistré à l’instant,d426eaa3
+JUSTIFICATION_FOR_PLANTING,Justification de la plantation,3eff9ad4
 KEEP_ORIGINAL,Garder l'original,21773616
 KEY,Légende,b46ab088
 KEY_LESSONS,Principales leçons tirées,24ee85f1
@@ -1240,10 +1248,14 @@ N_IMAGES,{0} image(s),098eae0e
 N_ROWS,{0} ligne(s),2bb73684
 NA,N/A,627f660e
 NAME,Nom,e7c2678c
+NAME_CHECK,Vérification du nom,6afa08ed
 NAME_REQUIRED,Nom *,9a735f80
 NAME_UNKNOWN,(nom inconnu),526f6e3c
 NAME_USED_BY_PROJECT,Nom utilisé par projet,c2fdff8f
 NATIVE,Indigène,3ef34d4d
+NATIVE_CHECK,Vérification du statut indigène,474464e4
+NATIVE_CHECK_NO_UPDATES,Aucune mise à jour du statut indigène des espèces détectée.,636bfefb
+NATIVE_CHECK_NO_UPDATES_HINT,Le statut individuel des espèces peut être modifié dans l’écran des détails de l’espèce.,21f7b4fe
 NATIVE_ECOSYSTEM,Écosystème indigène,1a733f45
 NATIVE_ECOSYSTEM_TOOLTIP,"Indiquez le type d'écosystème dans lequel cette espèce se trouve à l'état naturel ; vous pouvez inclure des détails tels que l'altitude, la pluviométrie, etc.",188f8600
 NATIVE_FOREST,Forêt indigène,bbd2ab56
@@ -1484,6 +1496,7 @@ OVER_WORD_LIMIT,Dépasser la limite de mots,8e2d9bd4
 OVERALL_SCORE,Note globale,1d6cdabe
 OVERDUE,En retard,90d8f429
 OVERRIDE,Remplacer,15bd0e63
+OVERRIDE_SPECIES,Remplacer l’espèce,c8f09521
 OVERVIEW,Vue d’ensemble,c7fd0e47
 OVERWRITTEN_ORIGINAL_VALUE,Remplacement – original : {0},c504c96d
 OWNER,Propriétaire,f1db93f1
@@ -1956,6 +1969,7 @@ ROLE_REQUIRED,Rôle *,5038b606
 ROLES_INFO,Sélectionner un rôle pour cette personne.,6ca3fb03
 ROWS_SELECTED,{0} sélectionné,66ca608f
 RUN_A_DATABASE_CHECK,Faire une vérification de la base de données,8e1277e7
+RUN_SPECIES_CHECK,Lancer la vérification des espèces,b762ef0e
 SALINITY_PPT,Salinité (ppt),7d26cb5a
 SAMPLE_OBSERVED_DENSITY_WARNING,Ce calcul est fondé sur un échantillon réalisé avec moins d'un site entier. Des échantillons inférieurs à l'ensemble du site peuvent aboutir à des résultats trompeurs.,1353ea67
 SAND,Sable,5d54e2e8
@@ -2087,6 +2101,8 @@ SESSION_HAS_NOT_STARTED,La session n'a pas commencé.,ec7ca566
 SESSION_IS_IN_PROGRESS,La session est en cours.,b30ad69a
 SESSION_IS_STARTING_SOON,La session va bientôt commencer.,c3abc7d1
 SESSION_SLIDES,Diapositives de la session,7748a514
+SET_LOCATION,Définir l’emplacement,262e6b39
+SET_LOCATIONS,Définir les emplacements,68884a84
 SET_PLANTING_COMPLETE,Plantation terminée,3bea077e
 SET_REMINDER,Définir un rappel,ad81e3b3
 SET_SPECIES_TARGETS_DESCRIPTION,Définir des objectifs par substrat de site. Les espèces et quantités peuvent être modifiées à tout moment et sont visibles dans la Planification de l’inventaire.,7619cbee
@@ -2196,6 +2212,11 @@ SPECIES_APPROVED,Espèces approuvées,448567d6
 SPECIES_CARD_DESCRIPTION,Voir les espèces qui sont référencées par vos entrées de semences et de plantes.,834fb3c8
 SPECIES_CATEGORIES,Catégories d'espèces,b63aa30d
 SPECIES_CATEGORIES_TOOLTIP,Les catégories d'espèces indiquent le pourcentage du total des plantes plantées qui sont rares et menacées en fonction de l'espèce.,e6a1dcfe
+SPECIES_CHECK,Vérification des espèces,d7d0f200
+SPECIES_CHECK_ADDED_BANNER,Vous avez ajouté {0} nouvelles espèces à votre liste ({1}). Lancez la vérification des espèces.,3d922bc3
+SPECIES_CHECK_SET_LOCATION_BANNER,"Pour voir quelles espèces sont indigènes, introduites ou envahissantes sur vos sites, vous devez définir votre emplacement.",1aec8983
+SPECIES_CHECK_SPECIES_CHECKED,{0} espèces vérifiées,3a3237db
+SPECIES_CHECK_UPDATES,{0} mises à jour,a1d89ade
 SPECIES_CLASSIFICATION,Classification des espèces,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"Vous n'avez pas saisi de valeurs de densité de plantation pour toutes les espèces. Si vous ne saisissez pas de valeurs de densité de plantation pour toutes les espèces, les densités de plantation pour cette parcelle ne seront pas définies et aucun taux de survie ne sera calculé pour cette espèce. Saisissez 0 pour toute espèce qui n'a pas été plantée dans une parcelle.",5bcc0f2b
 SPECIES_DENSITY_WARNING_MESSAGE_TEMPORARY_PLOTS,"Vous n’avez pas saisi de valeurs de densité de plantation pour toutes les espèces dans toutes les strates. Si vous n’indiquez pas de densité de plantation pour toutes les espèces d’une strate, les densités de plantation de cette strate ne seront pas définies et aucun taux de survie ne sera calculé pour cette espèce. Saisissez 0 pour toute espèce qui n’a pas été plantée dans une strate.",685a0c64

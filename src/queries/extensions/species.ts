@@ -44,6 +44,9 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.Species, id: 'LIST' },
       ],
     },
+    acceptPendingNativities: {
+      invalidatesTags: [QueryTagTypes.Species],
+    },
     deleteSpecies: {
       invalidatesTags: [{ type: QueryTagTypes.Species, id: 'LIST' }],
     },

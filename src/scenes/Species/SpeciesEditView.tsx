@@ -287,6 +287,8 @@ export default function SpeciesEditView(): JSX.Element {
           {speciesIntelligenceEnabled && species && (
             <Box marginTop={theme.spacing(4)}>
               <SpeciesProjectsSection
+                speciesId={species.id}
+                speciesName={species.scientificName}
                 speciesProjects={species.projects}
                 editMode
                 addedProjectIds={addedProjectIds}
