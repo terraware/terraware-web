@@ -4,6 +4,7 @@ import { Box, useTheme } from '@mui/material';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
+import IndicatorProgressSection from 'src/components/AcceleratorReports/IndicatorProgressSection';
 import ProjectHealthBar from 'src/components/AcceleratorReports/ProjectHealthBar';
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
@@ -80,6 +81,8 @@ const AcceleratorReportTabV2 = (): JSX.Element => {
           {projectId !== undefined && (
             <HighlightsBox key={resolvedReportId} projectId={projectId} report={selectedReport} />
           )}
+
+          <IndicatorProgressSection reportId={resolvedReportId} />
         </>
       )}
     </Card>

@@ -446,6 +446,7 @@ CUMULATIVE,Cumulatif,51c21c57
 CUMULATIVE_OR_LEVEL,Cumulatif ou Niveau,0a0f2515
 CUMULATIVE_PROGRESS,Progrès cumulé,fd7ffcac
 CUMULATIVE_PROGRESS_TOOLTIP,"Pour les indicateurs cumulatifs, le progrès total depuis le début du projet est affiché. Pour consulter le progrès trimestriel (réalisé trimestriel), développez cette section.",df7927bd
+CUMULATIVE_TARGET,Objectif cumulatif,82b48c14
 CURRENT_NEXT_OBSERVATION,Observation actuelle/prochaine,50735263
 CURRENT_TIMELINE,Étapes,2dcbaeeb
 CURRENT_VIEW,Vue actuelle,8b3a3d54
@@ -1114,6 +1115,7 @@ LIKELY_ORTHODOX,Probablement orthodoxe,ba5566d5
 LIKELY_RECALCITRANT,Probablement récalcitrant,46d96515
 LINK,Lien,ec1ef684
 LINK_TO_PLOT_OBSERVATION_DETAILS,Lien vers les détails de l'observation de la parcelle,413c1f2b
+LINK_TO_SUPPORTING_DOCUMENTS,Lien vers le(s) document(s) justificatif(s),03411fdd
 LIST,Liste,f7fa295c
 LIVE,En direct,81bb797e
 LIVE_PLANTS,Plantes vivantes,0124ea18
@@ -1300,6 +1302,7 @@ NO_INVENTORY_DESCRIPTION,"Il semble que vous n'avez pas encore ajouté d'inventa
 NO_LINK_ADDED,Aucun lien ajouté,14e4907f
 NO_LOCATION_FOUND,Emplacement non trouvé,8b4b8dab
 NO_MAP_DATA,Aucune donnée cartographique n'est affichée pour ce site de plantation.,1c2d3fa2
+NO_NOTES_ADDED,Aucune note ajoutée,cf9baa54
 NO_NOTIFICATIONS,Aucune notification à afficher,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer votre inventaire de pépinières, vous devez avoir une pépinière et des espèces dans Terraware. Seuls les administrateurs peuvent ajouter des pépinières ; veuillez contacter le vôtre pour obtenir de l'aide.",93c44729
 NO_NURSERIES_WITH_REQUESTED_SPECIES,Aucune pépinière ne dispose de quantités Prêtes à Planter pour les espèces demandées.,cbc1672d
@@ -1328,6 +1331,7 @@ NO_SPECIES_TARGETS_FOR_SUBSTRATUM,Aucun objectif d’espèces n’a été défin
 NO_STATUS,Aucun statut,4d08c36e
 NO_SUB_LOCATIONS,Modifiez cette banque de semences pour ajouter des sous-emplacements.,963dba11
 NO_SUB_LOCATIONS_NURSERY,Modifier cette pépinière pour ajouter des sous-emplacements.,8a939067
+NO_TARGET_SET,Aucun objectif défini,0e9242a1
 NO_TEMPORARY_PLOTS_SURVIVAL_TOOLTIP,Aucune Observation terminée n'inclut de placettes temporaires dans un substrat de site de plantation.,fdf09cc6
 NO_TEMPORARY_PLOTS_WITHIN_STRATA,Il n’y a pas de parcelles temporaires dans les strates du site de plantation. Seules les parcelles temporaires situées dans les strates peuvent être utilisées pour le calcul du taux de survie.,407bd30a
 NO_VOTERS,Pas de votants,7db4c3bf
@@ -2678,6 +2682,7 @@ VIDEO_UPLOAD_FAILED_DESCRIPTION,Le téléchargement de votre vidéo a échoué. 
 VIEW,Voir,02cff17a
 VIEW_3D_MODEL,Voir le modèle 3D,fc2e2960
 VIEW_APPLICATION,Voir la demande,bbdc193f
+VIEW_DOCUMENTS,Voir le(s) document(s),3925fe9c
 VIEW_FULL_DASHBOARD,Afficher le tableau de bord complet,25189646
 VIEW_HISTORY,Voir l'historique,a1dbe2ca
 VIEW_IN_MAP,Afficher sur la carte,510d8388
@@ -2762,9 +2767,12 @@ X_HA,{0} ha,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha dans la superficie totale de plantation,586af003
 X_HECTARES,{0} hectares,6f24cf52
 X_HECTARES_HA,{0} Hectares (ha),e2af9d30
+X_OF_YEAR_CUMULATIVE_TARGET,{0} de l'objectif cumulatif annuel,6658988a
+X_OF_YEAR_TARGET,{0} de l'objectif annuel,c57dbf7a
 X_PER_HA,{0}/ha,0fe29eac
 X_PLANTS,{0} plants,8cb7c65d
 X_SPECIES_Y_PLANTS,"{0} espèces, {1} plants",81dea858
+X_THIS_QUARTER,{0} ce trimestre,6391f6a0
 XR_ERROR,Une erreur s'est produite lors de l'activation du mode XR. Veuillez actualiser la page et réessayer.,935ea96d
 YEAR,Année,484bf433
 YES,Oui,d8b0d802
