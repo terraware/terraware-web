@@ -7,9 +7,12 @@ import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/Acc
 import AcceleratorReportsTable from 'src/components/AcceleratorReports/AcceleratorReportsTable';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
+import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import useStickyTabs from 'src/utils/useStickyTabs';
+
+import AcceleratorReportTabV2 from './AcceleratorReportTabV2';
 
 const AcceleratorReportsView = () => {
   const { strings } = useLocalization();
@@ -17,12 +20,14 @@ const AcceleratorReportsView = () => {
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
 
+  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+
   const tabs = useMemo(() => {
     return [
       {
         id: 'reports',
         label: strings.REPORTS,
-        children: <AcceleratorReportsTable />,
+        children: newReportTabEnabled ? <AcceleratorReportTabV2 /> : <AcceleratorReportsTable />,
       },
       {
         id: 'targets',
@@ -30,7 +35,7 @@ const AcceleratorReportsView = () => {
         children: <AcceleratorReportTargetsTable />,
       },
     ];
-  }, [strings]);
+  }, [newReportTabEnabled, strings]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'reports',
