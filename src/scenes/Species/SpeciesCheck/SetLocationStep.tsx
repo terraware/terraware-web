@@ -30,6 +30,8 @@ const SetLocationStep = ({
   const hasCountryMapping = botanicalCountries.some((bc) => bc.countryCode !== undefined);
 
   return (
+    // Full width so the dividers between projects span wide; each project's fields sit in a narrower
+    // centered column.
     <Box display='flex' flexDirection='column' gap={theme.spacing(3)} textAlign='left'>
       {targets.map((target, index) => {
         const edit = edits[target.key] ?? {};
@@ -39,37 +41,44 @@ const SetLocationStep = ({
               .map((bc) => ({ label: bc.name, value: bc.code }))
           : [];
         return (
-          <Box key={target.key} display='flex' flexDirection='column' gap={theme.spacing(2)}>
-            {index > 0 && <Divider sx={{ marginBottom: theme.spacing(1) }} />}
-            <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt}>
-              {target.name}
-            </Typography>
-            <Dropdown
-              id={`country-${target.key}`}
-              label={strings.COUNTRY}
-              placeholder={strings.SELECT}
-              options={countryOptions}
-              selectedValue={edit.countryCode}
-              onChange={(value: string) =>
-                onChange(target.key, { countryCode: value, botanicalCountryCode: undefined })
-              }
-              fullWidth
-              required
-              autocomplete
-            />
-            <Dropdown
-              id={`botanical-country-${target.key}`}
-              label={strings.BOTANICAL_COUNTRY}
-              placeholder={strings.SELECT}
-              options={botanicalCountryOptions}
-              selectedValue={edit.botanicalCountryCode}
-              onChange={(value: string) => onChange(target.key, { ...edit, botanicalCountryCode: value })}
-              fullWidth
-              required
-              autocomplete
-              disabled={!edit.countryCode}
-            />
-          </Box>
+          <React.Fragment key={target.key}>
+            {index > 0 && <Divider sx={{ borderColor: theme.palette.TwClrBrdrTertiary }} />}
+            <Box
+              display='flex'
+              flexDirection='column'
+              gap={theme.spacing(2)}
+              sx={{ maxWidth: '520px', marginX: 'auto', width: '100%' }}
+            >
+              <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
+                {target.name}
+              </Typography>
+              <Dropdown
+                id={`country-${target.key}`}
+                label={strings.COUNTRY}
+                placeholder={strings.SELECT}
+                options={countryOptions}
+                selectedValue={edit.countryCode}
+                onChange={(value: string) =>
+                  onChange(target.key, { countryCode: value, botanicalCountryCode: undefined })
+                }
+                fullWidth
+                required
+                autocomplete
+              />
+              <Dropdown
+                id={`botanical-country-${target.key}`}
+                label={strings.BOTANICAL_COUNTRY}
+                placeholder={strings.SELECT}
+                options={botanicalCountryOptions}
+                selectedValue={edit.botanicalCountryCode}
+                onChange={(value: string) => onChange(target.key, { ...edit, botanicalCountryCode: value })}
+                fullWidth
+                required
+                autocomplete
+                disabled={!edit.countryCode}
+              />
+            </Box>
+          </React.Fragment>
         );
       })}
     </Box>

@@ -58,13 +58,13 @@ const ProjectCheckSummary = ({
         <Box display='flex' flexWrap='wrap' gap={theme.spacing(2)}>
           <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
             {strings.COUNTRY}{' '}
-            <Box component='span' color={theme.palette.TwClrTxt} fontWeight={500}>
+            <Box component='span' color={theme.palette.TwClrBaseBlack}>
               {countryName ?? '—'}
             </Box>
           </Typography>
           <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
             {strings.BOTANICAL_COUNTRY}{' '}
-            <Box component='span' color={theme.palette.TwClrTxt} fontWeight={500}>
+            <Box component='span' color={theme.palette.TwClrBaseBlack}>
               {botanicalCountryName ?? '—'}
             </Box>
           </Typography>

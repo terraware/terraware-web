@@ -40,7 +40,6 @@ const SummaryBox = (props: ProjectCheckSummaryProps): JSX.Element => {
     <Box
       sx={{
         backgroundColor: theme.palette.TwClrBgSecondary,
-        borderRadius: theme.spacing(1),
         padding: theme.spacing(2),
       }}
     >
@@ -147,7 +146,6 @@ const NativeCheckStep = ({
                     key={key}
                     sx={{
                       border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-                      borderRadius: '8px',
                       backgroundColor: theme.palette.TwClrBgWarningTertiary,
                       padding: theme.spacing(2),
                       display: 'flex',
@@ -157,7 +155,7 @@ const NativeCheckStep = ({
                   >
                     <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
                       <Icon name='warning' size='medium' fillColor={theme.palette.TwClrIcnWarning} />
-                      <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxt}>
+                      <Typography fontSize='16px' fontWeight={500} color={'#3A4445'}>
                         {row.species.scientificName}
                       </Typography>
                     </Box>
@@ -167,7 +165,6 @@ const NativeCheckStep = ({
                       options={nativityOptions}
                       selectedValue={override.nativity ?? row.nativity}
                       onChange={(value: string) => onOverrideChange(key, { ...override, nativity: value as Nativity })}
-                      fullWidth
                     />
                     <Textfield
                       id={`override-justification-${key}`}

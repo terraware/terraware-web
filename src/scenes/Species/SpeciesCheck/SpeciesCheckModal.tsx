@@ -128,10 +128,10 @@ const SpeciesCheckModal = ({
 
   const stepLabels = useMemo(() => {
     const locationLabel = targets.length > 1 ? strings.SET_LOCATIONS : strings.SET_LOCATION;
-    const nameLabel = entry === 'menu' ? strings.DATABASE_CHECK : strings.NAME_CHECK;
-    const nativeLabel = entry === 'menu' ? strings.SPECIES_CHECK : strings.NATIVE_CHECK;
-    return stepKeys.map((key) => (key === 'setLocation' ? locationLabel : key === 'name' ? nameLabel : nativeLabel));
-  }, [entry, targets.length, stepKeys]);
+    return stepKeys.map((key) =>
+      key === 'setLocation' ? locationLabel : key === 'name' ? strings.NAME_CHECK : strings.NATIVE_CHECK
+    );
+  }, [targets.length, stepKeys]);
 
   const countryNameByCode = useCallback(
     (code?: string) => countries?.find((country) => country.code === code)?.name,
@@ -406,6 +406,7 @@ const SpeciesCheckModal = ({
           label={strings.BACK}
           onClick={() => goToStep('setLocation')}
           priority='secondary'
+          type='passive'
           disabled={busy}
         />
       ) : null;
@@ -431,6 +432,7 @@ const SpeciesCheckModal = ({
           label={strings.BACK}
           onClick={() => setNativeMode('list')}
           priority='secondary'
+          type='passive'
           disabled={busy}
         />,
         <Button
@@ -443,7 +445,14 @@ const SpeciesCheckModal = ({
     }
 
     const backButton = (
-      <Button key='back' label={strings.BACK} onClick={() => goToStep('name')} priority='secondary' disabled={busy} />
+      <Button
+        key='back'
+        label={strings.BACK}
+        onClick={() => goToStep('name')}
+        priority='secondary'
+        type='passive'
+        disabled={busy}
+      />
     );
     const primary = !hasAnyPending ? (
       <Button key='finish' label={strings.FINISH} onClick={() => void onFinish()} disabled={busy} />

@@ -121,7 +121,6 @@ export default function OverrideSpeciesModal({
           <Box
             sx={{
               border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-              borderRadius: '8px',
               backgroundColor: theme.palette.TwClrBgWarningTertiary,
               padding: theme.spacing(2),
               display: 'flex',
@@ -141,7 +140,6 @@ export default function OverrideSpeciesModal({
               options={nativityOptions}
               selectedValue={nativity}
               onChange={(value: string) => setNativity(value as Nativity)}
-              fullWidth
             />
             <Textfield
               id='override-justification'
