@@ -30,8 +30,6 @@ const SetLocationStep = ({
   const hasCountryMapping = botanicalCountries.some((bc) => bc.countryCode !== undefined);
 
   return (
-    // Full width so the dividers between projects span wide; each project's fields sit in a narrower
-    // centered column.
     <Box display='flex' flexDirection='column' gap={theme.spacing(3)} textAlign='left'>
       {targets.map((target, index) => {
         const edit = edits[target.key] ?? {};

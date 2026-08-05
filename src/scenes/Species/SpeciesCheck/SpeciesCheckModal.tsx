@@ -199,8 +199,6 @@ const SpeciesCheckModal = ({
 
   const goToStep = useCallback((key: StepKey) => setStep(stepKeys.indexOf(key)), [stepKeys]);
 
-  const handleClose = useCallback(() => onClose(), [onClose]);
-
   const toggleName = useCallback((speciesId: number) => {
     setNameSelected((previous) => {
       const next = new Set(previous);
@@ -312,8 +310,8 @@ const SpeciesCheckModal = ({
     setBusy(true);
     await finish();
     setBusy(false);
-    handleClose();
-  }, [finish, handleClose]);
+    onClose();
+  }, [finish, onClose]);
 
   const onOverride = useCallback(async () => {
     setBusy(true);
@@ -343,10 +341,10 @@ const SpeciesCheckModal = ({
       snackbar.toastError();
     }
     setBusy(false);
-    handleClose();
+    onClose();
   }, [
     acceptPending,
-    handleClose,
+    onClose,
     nativeSections,
     nativeSelected,
     overrideEdits,
@@ -367,11 +365,11 @@ const SpeciesCheckModal = ({
 
   const requestCancel = useCallback(() => {
     if (currentKey === 'setLocation') {
-      handleClose();
+      onClose();
     } else {
       setShowCancel(true);
     }
-  }, [currentKey, handleClose]);
+  }, [currentKey, onClose]);
 
   const middleButtons = useMemo<JSX.Element[]>(() => {
     const cancelButton = (
@@ -536,7 +534,7 @@ const SpeciesCheckModal = ({
           onClose={() => setShowCancel(false)}
           onConfirm={() => {
             setShowCancel(false);
-            handleClose();
+            onClose();
           }}
         />
       )}
