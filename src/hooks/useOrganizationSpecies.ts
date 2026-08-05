@@ -31,7 +31,7 @@ export const useOrganizationSpecies = (args?: UseOrganizationSpeciesArgs): UseOr
     if (organizationId && organizationId > 0) {
       void listSpecies({ organizationId, inUse }, true);
     }
-  }, [listSpecies, organizationId, inUse]);
+  }, [listSpecies, organizationId, inUse, isUninitialized]);
 
   const refetch = useCallback(() => {
     if (organizationId && organizationId > 0) {

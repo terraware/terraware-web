@@ -300,9 +300,10 @@ const SpeciesCheckModal = ({
       if (selectedOrganization && hasAnyPending) {
         await acceptPending({ organizationId: selectedOrganization.id }).unwrap();
       }
-      reloadSpecies();
     } catch {
       snackbar.toastError();
+    } finally {
+      reloadSpecies();
     }
   }, [acceptPending, hasAnyPending, reloadSpecies, selectedOrganization, snackbar]);
 
@@ -336,12 +337,13 @@ const SpeciesCheckModal = ({
       if (selectedOrganization) {
         await acceptPending({ organizationId: selectedOrganization.id }).unwrap();
       }
-      reloadSpecies();
+      onClose();
     } catch {
       snackbar.toastError();
+    } finally {
+      reloadSpecies();
+      setBusy(false);
     }
-    setBusy(false);
-    onClose();
   }, [
     acceptPending,
     onClose,

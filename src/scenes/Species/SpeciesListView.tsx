@@ -169,19 +169,26 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const showFirstTimeBanner = speciesCheckEnabled && noLocationSet && !firstTimeBannerDismissed;
   const showAddedBanner = speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !addedBannerDismissed;
 
+  const statusScopeSelected = projectFilter.projectId !== undefined || !hasProjects;
+  const speciesCheckRan =
+    statusScopeSelected &&
+    species.some((sp) => {
+      const element = (sp.projects ?? []).find((p) => p.projectId === projectFilter.projectId);
+      return !!(element?.calculatedNativity || element?.overriddenNativity);
+    });
+  const showStatusColumn = speciesCheckEnabled && speciesCheckRan;
+
   const statusBySpeciesId = useMemo(() => {
     const map = new Map<number, Nativity | undefined>();
-    const projectId = projectFilter.projectId;
-    if (projectId !== undefined) {
+    if (showStatusColumn) {
+      const projectId = projectFilter.projectId;
       species.forEach((sp) => {
         const element = (sp.projects ?? []).find((p) => p.projectId === projectId);
         map.set(sp.id, element?.overriddenNativity ?? element?.calculatedNativity);
       });
     }
     return map;
-  }, [species, projectFilter.projectId]);
-
-  const showStatusColumn = speciesCheckEnabled && projectFilter.projectId !== undefined;
+  }, [species, projectFilter.projectId, showStatusColumn]);
 
   const {
     columnOrder,
@@ -581,6 +588,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                 strings.UNKNOWN,
                 strings.NOT_SET,
               ],
+              filterFn: 'equals',
               sortUndefined: 'last' as const,
               Cell: StatusCell,
             },
@@ -602,7 +610,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         accessorFn: (row: SpeciesSearchResultRow) => getConservationCategoryString(row.conservationCategory),
         enableEditing: false,
         filterVariant: 'select',
-        filterSelectOptions: uniqueConservationCategories,
+        filterSelectOptions: uniqueConservationCategories.map((category) => category.label),
         sortUndefined: 'last',
       },
       {
