@@ -1,7 +1,8 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
+import { ProjectHealthBarContent } from 'src/components/AcceleratorReports/ProjectHealthBar';
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
@@ -37,6 +38,20 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
     [reports, selectedReportId]
   );
 
+  const selectedReport = useMemo(
+    () => listPublishedReportsData?.reports.find((report) => report.reportId === resolvedReportId),
+    [listPublishedReportsData, resolvedReportId]
+  );
+
+  const indicators = useMemo(
+    () => [
+      ...(selectedReport?.autoCalculatedIndicators ?? []),
+      ...(selectedReport?.commonIndicators ?? []),
+      ...(selectedReport?.projectIndicators ?? []),
+    ],
+    [selectedReport]
+  );
+
   const isEmpty = listPublishedReportsData !== undefined && reports.length === 0;
 
   return (
@@ -49,9 +64,7 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
             <ReportDropdown onChange={setSelectedReportId} reports={reports} selectedReportId={resolvedReportId} />
           </Box>
 
-          <Box display='flex' flexGrow={1} alignItems='center' justifyContent='center'>
-            <Typography>{`Funder report view (project ${selectedProjectId}, report ${resolvedReportId})`}</Typography>
-          </Box>
+          <ProjectHealthBarContent indicators={indicators} />
         </>
       )}
     </Card>
