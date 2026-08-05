@@ -12,6 +12,8 @@ import Card from 'src/components/common/Card';
 import { useListAcceleratorReportsQuery } from 'src/queries/generated/reports';
 import useQuery from 'src/utils/useQuery';
 
+import ReportInternalComment from './ReportInternalComment';
+
 const ReportTabV2 = (): JSX.Element => {
   const theme = useTheme();
   const pathParams = useParams<{ projectId: string }>();
@@ -57,6 +59,8 @@ const ReportTabV2 = (): JSX.Element => {
 
             {selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
           </Box>
+
+          {selectedReport && <ReportInternalComment projectId={projectId} report={selectedReport} />}
 
           <ProjectHealthBar reportId={resolvedReportId} />
         </>
