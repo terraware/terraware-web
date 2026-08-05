@@ -1106,6 +1106,7 @@ LESS_THAN_FIFTY_PERCENT,< 50 %,d26d7627
 LEVEL,Niveau,353f7559
 LIANA,Liane,812e082e
 LICHEN,Lichen,4f8de0bf
+LIFETIME,Durée de vie,a7451a5d
 LIGHT,Lumière,2bf7f442
 LIKELY_INTERMEDIATE,Probablement intermédiaire,3dfbb044
 LIKELY_INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE,Probablement intermédiaire  -  Sensible aux températures fraîches,a26422ae
@@ -2772,6 +2773,7 @@ X_OF_YEAR_TARGET,{0} de l'objectif annuel,c57dbf7a
 X_PER_HA,{0}/ha,0fe29eac
 X_PLANTS,{0} plants,8cb7c65d
 X_SPECIES_Y_PLANTS,"{0} espèces, {1} plants",81dea858
+X_TARGET,Objectif de {0},6f7826be
 X_THIS_QUARTER,{0} ce trimestre,6391f6a0
 XR_ERROR,Une erreur s'est produite lors de l'activation du mode XR. Veuillez actualiser la page et réessayer.,935ea96d
 YEAR,Année,484bf433
