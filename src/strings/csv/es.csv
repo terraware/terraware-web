@@ -1287,16 +1287,20 @@ NEXT_STEPS_INSTRUCTIONS,Resuma las siguientes fases de su proyecto. (Un cuarto d
 NEXT_STEPS_REQUIRED,Próximos pasos *,33f00368
 NICE,¡Muy bien!,d5008f62
 NO,No,3c5beb81
+NO_ACHIEVEMENTS_ADDED,No se han agregado logros,d69c8f4b
 NO_ACTIVE_PLANTING_SEASONS_FOR_FILTERS,No hay Temporadas de Plantación activas para el Sitio de Plantación seleccionado.,2f97b045
 NO_ACTIVE_SEASONS_FOR_SITE,No hay temporadas activas para el Sitio de Plantación seleccionado,7909d317
 NO_ACTIVITIES_TO_SHOW,No hay actividades para mostrar.,1b075899
+NO_ADDITIONAL_COMMENTS_ADDED,No se han agregado comentarios adicionales,d0c4bf68
 NO_AVAILABLE_PROJECTS_FOR_SPECIES,No hay más proyectos disponibles para esta especie.,071c6205
 NO_BATCHES_TO_WITHDRAW_FROM,No hay lotes con cantidades disponibles.,dc94bdcc
 NO_BATCHES_WITH_INVENTORY,"Todos los lotes que tenían inventario ahora están vacíos. Para ver los lotes, especies y viveros que anteriormente tenían inventario, utilice los filtros “Mostrar lotes vacíos” y “Mostrar especies/viveros sin inventario”.",2c0612be
 NO_BATCHES_WITH_INVENTORY_MESSAGE,Ningún lote tiene inventario. Utilice el filtro “Mostrar lotes vacíos” para ver todos sus lotes vacíos.,c326ecab
+NO_CHALLENGES_AND_MITIGATION_PLANS_ADDED,No se han agregado desafíos ni planes de mitigación,f1d982d5
 NO_COLUMNS_SELECTED,Sin columnas seleccionadas,ac8b2bbe
 NO_COMMENTS_ADDED,Ningún comentario añadido,7fd30c97
 NO_DATA_YET,Aún no hay datos.,f2a0be82
+NO_FINANCIAL_SUMMARIES_ADDED,No se han agregado resúmenes financieros,455039c1
 NO_FUTURE_DATES,No se admiten fechas futuras.,a0f0673b
 NO_HIGHLIGHTS_ADDED,No se han añadido destacados,d7125894
 NO_HIGHLIGHTS_YET,Aún no hay destacados.,cafd3fe8

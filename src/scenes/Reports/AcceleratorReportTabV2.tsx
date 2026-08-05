@@ -3,6 +3,10 @@ import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
+import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
+import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalCommentsBox';
+import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
+import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import IndicatorProgressSection from 'src/components/AcceleratorReports/IndicatorProgressSection';
 import ProjectHealthBar from 'src/components/AcceleratorReports/ProjectHealthBar';
@@ -83,6 +87,18 @@ const AcceleratorReportTabV2 = (): JSX.Element => {
           )}
 
           <IndicatorProgressSection reportId={resolvedReportId} />
+
+          {projectId !== undefined && (
+            <>
+              <AchievementsBox projectId={projectId} report={selectedReport} />
+
+              <ChallengesMitigationBox projectId={projectId} report={selectedReport} />
+
+              <FinancialSummariesBox projectId={projectId} report={selectedReport} />
+
+              <AdditionalCommentsBox projectId={projectId} report={selectedReport} />
+            </>
+          )}
         </>
       )}
     </Card>
