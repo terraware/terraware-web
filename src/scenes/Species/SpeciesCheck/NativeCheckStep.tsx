@@ -38,7 +38,11 @@ const SummaryBox = (props: ProjectCheckSummaryProps): JSX.Element => {
   const theme = useTheme();
   return (
     <Box
-      sx={{ backgroundColor: theme.palette.TwClrBgSecondary, borderRadius: theme.spacing(1), padding: theme.spacing(2) }}
+      sx={{
+        backgroundColor: theme.palette.TwClrBgSecondary,
+        borderRadius: theme.spacing(1),
+        padding: theme.spacing(2),
+      }}
     >
       <ProjectCheckSummary {...props} />
     </Box>
