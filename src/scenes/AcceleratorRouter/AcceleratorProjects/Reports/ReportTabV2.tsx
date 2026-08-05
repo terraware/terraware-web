@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
+import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
@@ -37,6 +38,11 @@ const ReportTabV2 = (): JSX.Element => {
     [reports, selectedReportId]
   );
 
+  const selectedReport = useMemo(
+    () => listReportsData?.reports.find((report) => report.id === resolvedReportId),
+    [listReportsData, resolvedReportId]
+  );
+
   const isEmpty = listReportsData !== undefined && reports.length === 0;
 
   return (
@@ -45,8 +51,10 @@ const ReportTabV2 = (): JSX.Element => {
         <ReportEmptyState />
       ) : (
         <>
-          <Box marginBottom={theme.spacing(3)}>
+          <Box alignItems='center' display='flex' justifyContent='space-between' marginBottom={theme.spacing(3)}>
             <ReportDropdown onChange={setSelectedReportId} reports={reports} selectedReportId={resolvedReportId} />
+
+            {selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
           </Box>
 
           <Box display='flex' flexGrow={1} alignItems='center' justifyContent='center'>
