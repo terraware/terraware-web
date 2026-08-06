@@ -940,6 +940,7 @@ INCOMPLETE,Incompleto,5f524fdf
 INCORRECT_EMAIL_FORMAT,Formato de correo electrónico incorrecto.,19f1a8c9
 INDICATOR_LEVEL,Nivel del indicador,b128c992
 INDICATOR_NAME,Nombre del indicador,0d8b0613
+INDICATOR_OVERWRITTEN_ORIGINAL_VALUE,Sobrescrito - original: {0},c504c96d
 INDICATOR_TYPE,Tipo de indicador,d5e75bf1
 INDICATOR_TYPE_GOAL,Meta,cb34c06e
 INDICATOR_TYPE_PROCESS,Proceso,0bee5739
@@ -1377,6 +1378,7 @@ NOTES,Notas,953783ac
 NOTES_AFTER,Notas (después),a4cfe728
 NOTES_BEFORE,Notas (antes),a4b844ff
 NOTES_OPTIONAL,Notas (opcional),e7b49e90
+NOTES_TO_FUNDER,Notas para el financiador,076f6db4
 NOTIFICATIONS,Notificaciones,535ca7ec
 NUMBER_OF_LIVE_PLANTS_PER_SPECIES,Número de plantas vivas por especie,82f354e1
 NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El número de plantas vivas por especie muestra el número de plantas vivas por especie registradas. Este número solo incluye las plantas registradas como vivas. No incluye las plantas registradas como preexistentes ni las registradas como desconocidas.,6b3e7e54
@@ -1512,6 +1514,7 @@ OVERDUE,Atrasado,90d8f429
 OVERRIDE,Anular,15bd0e63
 OVERRIDE_SPECIES,Anular especie,c8f09521
 OVERVIEW,Descripción,c7fd0e47
+OVERWRITE_TERRAWARE_TRACKING_DATA,Sobrescribir los datos de seguimiento de Terraware,1f5637ba
 OVERWRITTEN_ORIGINAL_VALUE,Sobrescrito - original: {0},c504c96d
 OWNER,Propietario,f1db93f1
 OZ,oz,63ec7cc2
@@ -1716,6 +1719,7 @@ PROGRESS,Progreso,c07f21ce
 PROGRESS_NOTES,Notas sobre el progreso,5e670e4a
 PROGRESS_NOTES_DESCRIPTION,Proporcione información que pueda publicarse a los financiadores.,a42ffda7
 PROGRESS_REPORT,Informe sobre el avance,69cf80ea
+PROGRESS_VALUE,Valor de progreso,0420c694
 PROJECT,Proyecto,162b4c3f
 PROJECT_ACTIVITY,Actividad del proyecto,74a61b7a
 PROJECT_ADDED,{0} Añadido,c579a852
@@ -1958,6 +1962,8 @@ RESCHEDULE_OBSERVATION,Reprogramar observación,b7403925
 RESET,Restablecer,d51ffc01
 RESET_CAMERA,Restablecer cámara,ee37fbd5
 RESET_COLUMNS,Restablecer columnas,871d2d56
+RESET_INDICATOR,Restablecer indicador,bb1f7ec8
+RESET_INDICATOR_CONFIRM,¿Está seguro de que desea restablecer este indicador? Será reemplazado con los datos de seguimiento actuales de Terraware.,9d1f1dfb
 RESET_METRIC,Restablecer métrica,fe2748bc
 RESET_METRIC_CONFIRM,¿Está seguro de que quiere restablecer esta métrica? Se sustituirá por los datos de seguimiento actuales de Terraware.,44353912
 RESET_ORDER,Restablecer orden,a30cc4ed

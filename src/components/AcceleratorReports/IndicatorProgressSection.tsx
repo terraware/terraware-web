@@ -24,14 +24,20 @@ const compareRefIds = (a: string, b: string) => {
 };
 
 export type IndicatorProgressSectionContentProps = {
+  editing?: boolean;
   indicators: ProgressIndicator[];
+  onChangeIndicator?: (indicator: ProgressIndicator, id: string, value: unknown) => void;
   quarter?: 'Q1' | 'Q2' | 'Q3' | 'Q4';
+  showNotesToFunder?: boolean;
   year?: number;
 };
 
 export const IndicatorProgressSectionContent = ({
+  editing,
   indicators,
+  onChangeIndicator,
   quarter,
+  showNotesToFunder,
   year,
 }: IndicatorProgressSectionContentProps): JSX.Element | null => {
   const theme = useTheme();
@@ -50,7 +56,15 @@ export const IndicatorProgressSectionContent = ({
       </Typography>
 
       {sortedIndicators.map((indicator, index) => (
-        <IndicatorProgressRow indicator={indicator} key={`${indicator.refId}-${index}`} quarter={quarter} year={year} />
+        <IndicatorProgressRow
+          editing={editing}
+          indicator={indicator}
+          key={`${indicator.refId}-${index}`}
+          onChange={(id, value) => onChangeIndicator?.(indicator, id, value)}
+          quarter={quarter}
+          showNotesToFunder={showNotesToFunder}
+          year={year}
+        />
       ))}
     </Box>
   );
@@ -65,11 +79,12 @@ const IndicatorProgressSection = ({ reportId }: IndicatorProgressSectionProps): 
 
   const indicators = useMemo<ProgressIndicator[]>(
     () => [
-      ...(report?.commonIndicators ?? []),
-      ...(report?.projectIndicators ?? []),
+      ...(report?.commonIndicators ?? []).map((indicator) => ({ ...indicator, type: 'common' as const })),
+      ...(report?.projectIndicators ?? []).map((indicator) => ({ ...indicator, type: 'project' as const })),
       ...(report?.autoCalculatedIndicators ?? []).map((indicator) => ({
         ...indicator,
         name: indicator.indicator,
+        type: 'autoCalculated' as const,
         value: indicator.overrideValue ?? indicator.systemValue,
       })),
     ],
