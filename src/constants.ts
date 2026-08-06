@@ -56,6 +56,7 @@ export enum APP_PATHS {
   ACCELERATOR_PROJECT_REPORTS_EDIT = '/accelerator/projects/:projectId/reports/edit',
   ACCELERATOR_PROJECT_REPORTS_INDICATORS_NEW = '/accelerator/projects/:projectId/reports/indicators/new',
   ACCELERATOR_PROJECT_REPORTS_VIEW = '/accelerator/projects/:projectId/reports/:reportId',
+  ACCELERATOR_PROJECT_REPORTS_VIEW_EDIT = '/accelerator/projects/:projectId/reports/:reportId/edit',
   ACCELERATOR_PROJECT_SCORES = '/accelerator/projects/:projectId/scores',
   ACCELERATOR_PROJECT_SCORES_EDIT = '/accelerator/projects/:projectId/scores/edit',
   ACCELERATOR_SPECIES = '/accelerator/deliverables/:deliverableId/submissions/:projectId/species/:acceleratorProjectSpeciesId',

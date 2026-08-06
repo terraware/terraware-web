@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
@@ -11,6 +11,7 @@ import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
@@ -18,21 +19,31 @@ import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 import ReportTabV2 from './ReportTabV2';
 import ReportsSettings from './ReportsSettings';
 
-const ReportsView = () => {
+export type ReportsViewProps = {
+  tab?: string;
+};
+
+const ReportsView = ({ tab }: ReportsViewProps) => {
   const { crumbs, acceleratorProject, project } = useAcceleratorProjectData();
+  const navigate = useSyncNavigate();
   const { strings } = useLocalization();
-  const { goToNewIndicator } = useNavigateTo();
-  const pathParams = useParams<{ projectId: string }>();
+  const { goToAcceleratorProjectReportEdit, goToNewIndicator } = useNavigateTo();
+  const pathParams = useParams<{ projectId: string; reportId?: string }>();
   const { isAllowed } = useUser();
 
   const newReportTabEnabled = isEnabled('Report Updates July 2026');
+  const pathActiveTab = tab ?? 'reports';
 
   const tabs = useMemo(() => {
     return [
       {
         id: 'reports',
         label: strings.REPORTS,
-        children: newReportTabEnabled ? <ReportTabV2 /> : <AcceleratorReportsTable />,
+        children: newReportTabEnabled ? (
+          <ReportTabV2 active={pathActiveTab === 'reports'} />
+        ) : (
+          <AcceleratorReportsTable />
+        ),
       },
       {
         id: 'targets',
@@ -45,13 +56,26 @@ const ReportsView = () => {
         children: <ReportsSettings />,
       },
     ];
-  }, [newReportTabEnabled, strings]);
+  }, [newReportTabEnabled, pathActiveTab, strings]);
 
-  const { activeTab, onChangeTab } = useStickyTabs({
+  const { activeTab: stickyActiveTab, onChangeTab: onChangeStickyTab } = useStickyTabs({
     defaultTab: 'reports',
     tabs,
     viewIdentifier: 'project-reports',
   });
+
+  const selectedReportId = Number(pathParams.reportId) || undefined;
+
+  const reportsPath = APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', pathParams.projectId ?? '');
+
+  const onChangePathTab = useCallback(
+    (newTab: string) =>
+      navigate(newTab === 'reports' ? reportsPath : `${reportsPath}/${newTab === 'settings' ? 'indicators' : newTab}`),
+    [navigate, reportsPath]
+  );
+
+  const activeTab = newReportTabEnabled ? pathActiveTab : stickyActiveTab;
+  const onChangeTab = newReportTabEnabled ? onChangePathTab : onChangeStickyTab;
 
   return (
     <Page
@@ -72,6 +96,14 @@ const ReportsView = () => {
             icon='plus'
             size='medium'
             onClick={() => goToNewIndicator(pathParams.projectId ?? '')}
+          />
+        ) : newReportTabEnabled && activeTab === 'reports' && selectedReportId !== undefined ? (
+          <Button
+            icon='iconEdit'
+            label={strings.EDIT}
+            onClick={() => goToAcceleratorProjectReportEdit(selectedReportId, Number(pathParams.projectId))}
+            priority='secondary'
+            size='medium'
           />
         ) : undefined
       }

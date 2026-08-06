@@ -144,6 +144,14 @@ export default function useNavigateTo() {
       goToAcceleratorReport: (reportId: number) =>
         navigate({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', `${reportId}`) }),
 
+      goToAcceleratorProjectReportEdit: (reportId: number, projectId: number) =>
+        navigate({
+          pathname: APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW_EDIT.replace(':reportId', `${reportId}`).replace(
+            ':projectId',
+            `${projectId}`
+          ),
+        }),
+
       goToAcceleratorReportEdit: (reportId: number) =>
         navigate({ pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', `${reportId}`) }),
 
