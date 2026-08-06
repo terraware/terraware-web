@@ -76,7 +76,7 @@ const PlantingPlanSeasons = ({ plantingSite }: PlantingPlanSeasonsProps): JSX.El
               {PLACEHOLDER}
             </Typography>
             <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} lineHeight='20px'>
-              {strings.BY_TARGET_PLANTING_DENSITY}
+              {strings.BY_INITIAL_PLANTING_DENSITY}
             </Typography>
           </Box>
           <Box flex={1} minWidth='200px'>

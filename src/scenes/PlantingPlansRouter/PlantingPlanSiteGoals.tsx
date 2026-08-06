@@ -73,7 +73,7 @@ const PlantingPlanSiteGoals = ({ plantingSite }: PlantingPlanSiteGoalsProps): JS
         ? PLACEHOLDER
         : strings.formatString(strings.X_HA, numberFormatter.format(plantingSite.areaHa, { decimals: 1 })).toString();
 
-    const targetPlantingDensity =
+    const initialPlantingDensity =
       targetPlants === undefined || !plantingSite.areaHa
         ? PLACEHOLDER
         : strings
@@ -83,7 +83,7 @@ const PlantingPlanSiteGoals = ({ plantingSite }: PlantingPlanSiteGoalsProps): JS
     return {
       area,
       strata: numberFormatter.format(strata.length),
-      targetPlantingDensity,
+      initialPlantingDensity,
       targetPlants:
         targetPlants === undefined
           ? PLACEHOLDER
@@ -100,7 +100,7 @@ const PlantingPlanSiteGoals = ({ plantingSite }: PlantingPlanSiteGoalsProps): JS
       <PlantingPlanStats
         targetPlants={stats.targetPlants}
         area={stats.area}
-        targetPlantingDensity={stats.targetPlantingDensity}
+        initialPlantingDensity={stats.initialPlantingDensity}
         targetSpecies={stats.targetSpecies}
         strata={stats.strata}
       />

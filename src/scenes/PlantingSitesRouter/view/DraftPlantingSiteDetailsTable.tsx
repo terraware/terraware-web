@@ -27,9 +27,9 @@ const columns = (): TableColumnType[] => [
     type: 'string',
   },
   {
-    key: 'targetPlantingDensity',
-    name: strings.TARGET_PLANTING_DENSITY,
-    tooltipTitle: strings.TARGET_PLANTING_DENSITY_TOOLTIP,
+    key: 'initialPlantingDensity',
+    name: strings.INITIAL_PLANTING_DENSITY,
+    tooltipTitle: strings.INITIAL_PLANTING_DENSITY_TOOLTIP,
     type: 'number',
   },
   {

@@ -61,6 +61,7 @@ export default function PlantingProgressList(): JSX.Element {
                       (thisSubstratum) => thisSubstratum.id === substratumReportedPlants.id
                     );
                     return {
+                      initialPlantingDensity: stratum?.initialPlantingDensity,
                       plantingCompleted: substratum?.plantingCompleted,
                       projectName: site?.projectId
                         ? projects?.find((project) => project.id === site.projectId)?.name ?? ''
@@ -71,7 +72,6 @@ export default function PlantingProgressList(): JSX.Element {
                       stratumName: stratum?.name,
                       substratumId: substratum?.id,
                       substratumName: substratum?.name,
-                      targetPlantingDensity: stratum?.targetPlantingDensity,
                       totalPlants: substratumReportedPlants.totalPlants,
                       totalSeedlingsSent: substratumReportedPlants.totalPlants,
                     };
@@ -156,8 +156,8 @@ export default function PlantingProgressList(): JSX.Element {
   );
 
   // Cell renderer components
-  const TargetPlantingDensityCell = useCallback(({ cell }: { cell: MRT_Cell<Partial<PlantingProgressType>> }) => {
-    const value = cell.row.original.targetPlantingDensity;
+  const InitialPlantingDensityCell = useCallback(({ cell }: { cell: MRT_Cell<Partial<PlantingProgressType>> }) => {
+    const value = cell.row.original.initialPlantingDensity;
     return value ? <FormattedNumber value={value} /> : null;
   }, []);
 
@@ -230,9 +230,9 @@ export default function PlantingProgressList(): JSX.Element {
     []
   );
 
-  const TargetPlantingDensityHeader = useCallback(
+  const InitialPlantingDensityHeader = useCallback(
     ({ column }: { column: any }) => (
-      <Tooltip title={strings.TARGET_PLANTING_DENSITY_TOOLTIP}>
+      <Tooltip title={strings.INITIAL_PLANTING_DENSITY_TOOLTIP}>
         <span>{column.columnDef.header as string}</span>
       </Tooltip>
     ),
@@ -290,14 +290,14 @@ export default function PlantingProgressList(): JSX.Element {
         sortUndefined: 'last',
       },
       {
-        id: 'targetPlantingDensity',
-        header: strings.TARGET_PLANTING_DENSITY,
-        accessorKey: 'targetPlantingDensity',
+        id: 'initialPlantingDensity',
+        header: strings.INITIAL_PLANTING_DENSITY,
+        accessorKey: 'initialPlantingDensity',
         enableEditing: false,
         filterVariant: 'range',
         sortUndefined: 'last',
-        Cell: TargetPlantingDensityCell,
-        Header: TargetPlantingDensityHeader,
+        Cell: InitialPlantingDensityCell,
+        Header: InitialPlantingDensityHeader,
       },
       {
         id: 'totalSeedlingsSent',
@@ -310,10 +310,10 @@ export default function PlantingProgressList(): JSX.Element {
       },
     ],
     [
-      TargetPlantingDensityCell,
+      InitialPlantingDensityCell,
       TotalSeedlingsSentCell,
       PlantingCompleteHeader,
-      TargetPlantingDensityHeader,
+      InitialPlantingDensityHeader,
       uniqueSiteNames,
       uniqueProjectNames,
     ]

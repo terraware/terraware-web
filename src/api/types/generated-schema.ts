@@ -9304,9 +9304,14 @@ export interface components {
         /** @description List of strata to create. If present and not empty, "boundary" must also be specified. */
         NewStratumPayload: {
             boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+            initialPlantingDensity?: number;
             /** @description Name of this stratum. Two strata in the same planting site may not have the same name. */
             name: string;
             substrata?: components["schemas"]["NewSubstratumPayload"][];
+            /**
+             * @deprecated
+             * @description Use initialPlantingDensity instead.
+             */
             targetPlantingDensity?: number;
         };
         NewSubstratumPayload: {
@@ -11593,6 +11598,7 @@ export interface components {
             boundaryModifiedTime: string;
             /** Format: int64 */
             id: number;
+            initialPlantingDensity: number;
             /** Format: date-time */
             latestObservationCompletedTime?: string;
             /** Format: int64 */
@@ -11603,7 +11609,11 @@ export interface components {
             /** Format: int32 */
             numTemporaryPlots: number;
             substrata: components["schemas"]["SubstratumResponsePayload"][];
-            targetPlantingDensity: number;
+            /**
+             * @deprecated
+             * @description Use initialPlantingDensity instead.
+             */
+            targetPlantingDensity?: number;
         };
         StratumT0DataPayload: {
             densityData: components["schemas"]["SpeciesDensityPayload"][];

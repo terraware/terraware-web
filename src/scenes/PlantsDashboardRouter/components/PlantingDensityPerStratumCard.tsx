@@ -47,7 +47,7 @@ export default function PlantingDensityPerStratumCard({
     if (plantingSite) {
       const stratumDensities: Record<string, (number | null)[]> = {};
       plantingSite.strata?.forEach((stratum) => {
-        stratumDensities[stratum.name] = [stratum.targetPlantingDensity];
+        stratumDensities[stratum.name] = [stratum.initialPlantingDensity];
 
         if (latestObservationResult) {
           const stratumFromObs = latestObservationResult.strata.find(

@@ -17,7 +17,7 @@ const makeSite = (): PlantingSite =>
         id: 10,
         name: 'Stratum 1',
         areaHa: 8,
-        targetPlantingDensity: 1500,
+        initialPlantingDensity: 1500,
         boundary,
         substrata: [
           { id: 100, name: 'Sub 1', areaHa: 5, plantingCompleted: true, boundary },
@@ -28,7 +28,7 @@ const makeSite = (): PlantingSite =>
         id: 20,
         name: 'Stratum 2',
         areaHa: 4,
-        targetPlantingDensity: 900,
+        initialPlantingDensity: 900,
         boundary,
         substrata: [{ id: 200, name: 'Sub 3', areaHa: 4, plantingCompleted: true, boundary }],
       },
@@ -67,7 +67,7 @@ describe('getPlantingSiteMapDrawerData', () => {
       name: 'Stratum 1',
       areaHa: 8,
       plantingComplete: false,
-      targetPlantingDensity: 1500,
+      initialPlantingDensity: 1500,
     });
   });
 
@@ -77,7 +77,7 @@ describe('getPlantingSiteMapDrawerData', () => {
       name: 'Stratum 2',
       areaHa: 4,
       plantingComplete: true,
-      targetPlantingDensity: 900,
+      initialPlantingDensity: 900,
     });
   });
 
@@ -87,7 +87,7 @@ describe('getPlantingSiteMapDrawerData', () => {
       name: 'Sub 2',
       areaHa: 3,
       plantingComplete: false,
-      targetPlantingDensity: 1500,
+      initialPlantingDensity: 1500,
     });
   });
 

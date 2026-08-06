@@ -184,7 +184,7 @@ const ContextRenderer =
       const stratum = strata.find((_stratum) => _stratum.id === entity.id);
       title = stratum?.name ?? '';
       properties = [
-        { key: strings.TARGET_PLANTING_DENSITY, value: stratum?.targetPlantingDensity ?? 0 },
+        { key: strings.INITIAL_PLANTING_DENSITY, value: stratum?.initialPlantingDensity ?? 0 },
         { key: strings.SUBSTRATA, value: stratum?.substrata.length ?? 0 },
       ];
     } else {

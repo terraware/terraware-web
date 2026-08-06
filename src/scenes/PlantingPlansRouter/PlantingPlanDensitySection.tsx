@@ -55,7 +55,7 @@ const PlantingPlanDensitySection = ({
   return (
     <Box flex={1} minWidth={0}>
       <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginBottom={theme.spacing(2)}>
-        {strings.SET_TARGET_DENSITY_DESCRIPTION}
+        {strings.SET_INITIAL_DENSITY_DESCRIPTION}
       </Typography>
       <Box display='flex' alignItems='center' gap={theme.spacing(1)} marginBottom={theme.spacing(2)}>
         <Icon name='iconMyLocation' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
