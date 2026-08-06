@@ -453,6 +453,7 @@ export type ReportAutoCalculatedIndicatorPayload = {
   projectsComments?: string;
   refId: string;
   status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  supportingDocumentUrl?: string;
   systemTime?: string;
   systemValue?: number;
   target?: number;
@@ -480,6 +481,7 @@ export type ReportCommonIndicatorPayload = {
   projectsComments?: string;
   refId: string;
   status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  supportingDocumentUrl?: string;
   target?: number;
   value?: number;
 };
@@ -510,6 +512,7 @@ export type ReportProjectIndicatorPayload = {
   projectsComments?: string;
   refId: string;
   status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  supportingDocumentUrl?: string;
   target?: number;
   unit?: string;
   value?: number;
@@ -745,12 +748,14 @@ export type ReportAutoCalculatedIndicatorEntriesPayload = {
   progressNotes?: string;
   projectsComments?: string;
   status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  supportingDocumentUrl?: string;
 };
 export type ReportCommonIndicatorEntriesPayload = {
   id: number;
   progressNotes?: string;
   projectsComments?: string;
   status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  supportingDocumentUrl?: string;
   value?: number;
 };
 export type ReportProjectIndicatorEntriesPayload = {
@@ -758,6 +763,7 @@ export type ReportProjectIndicatorEntriesPayload = {
   progressNotes?: string;
   projectsComments?: string;
   status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  supportingDocumentUrl?: string;
   value?: number;
 };
 export type UpdateAcceleratorReportValuesRequestPayload = {

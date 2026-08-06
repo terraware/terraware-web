@@ -10343,8 +10343,6 @@ export interface components {
             /** Format: int64 */
             id: number;
             /** Format: int32 */
-            plantsSinceLastObservation: number;
-            /** Format: int32 */
             progressPercent?: number;
             species: components["schemas"]["ReportedSpeciesPayload"][];
             strata: components["schemas"]["StratumReportedPlantsResponsePayload"][];
@@ -10695,6 +10693,8 @@ export interface components {
             refId: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
             target?: number;
             unit?: string;
             value?: number;
@@ -10973,6 +10973,8 @@ export interface components {
             projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
         };
         ReportAutoCalculatedIndicatorPayload: {
             baseline?: number;
@@ -10999,6 +11001,8 @@ export interface components {
             refId: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
             /** Format: date-time */
             systemTime?: string;
             systemValue?: number;
@@ -11015,6 +11019,8 @@ export interface components {
             projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
             value?: number;
         };
         ReportCommonIndicatorPayload: {
@@ -11042,6 +11048,8 @@ export interface components {
             refId: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
             target?: number;
             value?: number;
         };
@@ -11057,6 +11065,8 @@ export interface components {
             projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
             value?: number;
         };
         ReportProjectIndicatorPayload: {
@@ -11084,6 +11094,8 @@ export interface components {
             refId: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
             target?: number;
             unit?: string;
             value?: number;
@@ -11111,8 +11123,6 @@ export interface components {
         ReportedSpeciesPayload: {
             /** Format: int64 */
             id: number;
-            /** Format: int32 */
-            plantsSinceLastObservation: number;
             /** Format: int32 */
             totalPlants: number;
         };
@@ -11564,8 +11574,6 @@ export interface components {
             /** Format: int64 */
             id: number;
             /** Format: int32 */
-            plantsSinceLastObservation: number;
-            /** Format: int32 */
             progressPercent: number;
             species: components["schemas"]["ReportedSpeciesPayload"][];
             substrata: components["schemas"]["SubstratumReportedPlantsResponsePayload"][];
@@ -11665,8 +11673,6 @@ export interface components {
         SubstratumReportedPlantsResponsePayload: {
             /** Format: int64 */
             id: number;
-            /** Format: int32 */
-            plantsSinceLastObservation: number;
             species: components["schemas"]["ReportedSpeciesPayload"][];
             /** Format: int32 */
             totalPlants: number;
