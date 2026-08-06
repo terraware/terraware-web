@@ -1,7 +1,8 @@
 import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
@@ -13,10 +14,13 @@ import IndicatorProgressSection from 'src/components/AcceleratorReports/Indicato
 import ProjectHealthBar from 'src/components/AcceleratorReports/ProjectHealthBar';
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
+import ReportMessages from 'src/components/AcceleratorReports/ReportMessages';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useLocalization } from 'src/providers';
+import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import { useListAcceleratorReportsQuery } from 'src/queries/generated/reports';
 
 import ReportInternalComment from './ReportInternalComment';
@@ -26,6 +30,7 @@ export type ReportTabV2Props = {
 };
 
 const ReportTabV2 = ({ active }: ReportTabV2Props): JSX.Element => {
+  const { strings } = useLocalization();
   const theme = useTheme();
   const pathParams = useParams<{ projectId: string; reportId?: string }>();
   const navigate = useSyncNavigate();
@@ -69,6 +74,18 @@ const ReportTabV2 = ({ active }: ReportTabV2Props): JSX.Element => {
     [listReportsData, resolvedReportId]
   );
 
+  const { currentData: listPublishedReportsData } = useListPublishedReportsQuery(projectId);
+
+  const lastPublished = useMemo(() => {
+    const publishedTime = listPublishedReportsData?.reports.find(
+      (report) => report.reportId === resolvedReportId
+    )?.publishedTime;
+
+    return publishedTime
+      ? strings.formatString(strings.FUNDER_REPORT_LAST_PUBLISHED, getDateDisplayValue(publishedTime)).toString()
+      : undefined;
+  }, [listPublishedReportsData, resolvedReportId, strings]);
+
   const isEmpty = listReportsData !== undefined && reports.length === 0;
 
   return (
@@ -77,11 +94,21 @@ const ReportTabV2 = ({ active }: ReportTabV2Props): JSX.Element => {
         <ReportEmptyState />
       ) : (
         <>
-          <Box alignItems='center' display='flex' justifyContent='space-between' marginBottom={theme.spacing(3)}>
-            <ReportDropdown onChange={selectReport} reports={reports} selectedReportId={resolvedReportId} />
+          <Box marginBottom={theme.spacing(3)}>
+            <Box alignItems='center' display='flex' justifyContent='space-between'>
+              <ReportDropdown onChange={selectReport} reports={reports} selectedReportId={resolvedReportId} />
 
-            {selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
+              {selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
+            </Box>
+
+            {lastPublished && (
+              <Typography color={theme.palette.TwClrTxt} fontSize='14px' lineHeight='20px'>
+                {lastPublished}
+              </Typography>
+            )}
           </Box>
+
+          {resolvedReportId !== undefined && <ReportMessages isConsoleView reportId={resolvedReportId} />}
 
           {selectedReport && <ReportInternalComment projectId={projectId} report={selectedReport} />}
 
