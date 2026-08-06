@@ -216,6 +216,7 @@ ASSIGN_NEW_OWNER_DESC,"Pour supprimer le propriétaire actuel, vous devez lui at
 ASSIGN_OWNER,Attribuer un propriétaire,dc696cfa
 ASSIGN_OWNER_ELLIPSIS,Attribuer un propriétaire...,8053cd0e
 ASSIGNED,Désigné,29aa3dd8
+ASSIGNED_LOCATION,Emplacement attribué,9e0b2077
 ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre de plants observés par espèce enregistrés comme vivants. Les plants enregistrés comme préexistants ou dont l'espèce est inconnue ne sont pas inclus.,526a70bc
 ASSIGNED_PLOT_OBSERVATION,Observation de parcelle attribuée,9175acf6
 ASSIGNED_PLOT_OBSERVATION_TOOLTIP,Sélectionnez une observation de parcelle attribuée pour afficher les données d'observation sur la carte.,2a1963a4
@@ -765,6 +766,7 @@ FEATURE_REQUEST_INSTRUCTIONS,Fournissez des détails sur une nouvelle fonctionna
 FEEDBACK,Commentaires,2510edcc
 FEEDBACK_SHARED_WITH_PROJECT,Commentaires (partagés avec le projet),d56b8ddb
 FERN,Fougère,35767f4d
+FIELD_LOCATION,Emplacement sur le terrain,009654a6
 FIELD_NOTES,Notes de terrain,1c50984e
 FIFTY_TO_SEVENTY_FIVE_PERCENT,50 % à 75 %,174fb41a
 FILE_NAME,Nom du fichier,fc9f4f98
@@ -1222,6 +1224,7 @@ MONTH_12,Décembre,dc3ea137
 MORE,Plus,58c3e1ca
 MORE_INFO,Plus d'informations,50ec3d8a
 MORE_OPTIONS,Autres options,40289137
+MORE_THAN_20M_FROM_ASSIGNED_LOCATION,(à plus de 20 m de l’emplacement attribué),f3b60390
 MORTALITY_RATE,Taux de mortalité,f1ef57f9
 MORTALITY_RATE_IN_FIELD,Taux de mortalité dans champ (%),48a2d543
 MORTALITY_RATE_IN_FIELD_REQUIRED,Taux de mortalité sur le terrain (%) *,cdddfe98
