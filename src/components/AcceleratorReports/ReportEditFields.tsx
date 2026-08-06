@@ -18,14 +18,14 @@ const INDICATOR_FIELDS: Record<string, keyof AcceleratorReportPayload> = {
 export type ReportEditFieldsProps = {
   onChangeCallback: (id: string) => (value: unknown) => void;
   record: AcceleratorReportPayload;
-  showNotesToFunder?: boolean;
+  isConsoleView?: boolean;
   validate?: boolean;
 };
 
 const ReportEditFields = ({
   onChangeCallback,
   record,
-  showNotesToFunder,
+  isConsoleView,
   validate,
 }: ReportEditFieldsProps): JSX.Element => {
   const projectId = record.projectId;
@@ -71,7 +71,7 @@ const ReportEditFields = ({
         indicators={indicators}
         onChangeIndicator={onChangeIndicator}
         quarter={record.quarter}
-        showNotesToFunder={showNotesToFunder}
+        isConsoleView={isConsoleView}
         year={Number(record.startDate?.split('-')[0]) || undefined}
       />
 

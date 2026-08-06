@@ -20,6 +20,7 @@ const TICK_HOVER_WIDTH = 9;
 
 export type ProgressIndicator = {
   baseline?: number;
+  isPublishable?: boolean;
   id?: number;
   overrideValue?: number;
   systemValue?: number;
@@ -46,7 +47,7 @@ export type IndicatorProgressRowProps = {
   indicator: ProgressIndicator;
   onChange?: (id: string, value: unknown) => void;
   quarter?: 'Q1' | 'Q2' | 'Q3' | 'Q4';
-  showNotesToFunder?: boolean;
+  isConsoleView?: boolean;
   year?: number;
 };
 
@@ -55,7 +56,7 @@ const IndicatorProgressRow = ({
   indicator,
   onChange,
   quarter,
-  showNotesToFunder,
+  isConsoleView,
   year,
 }: IndicatorProgressRowProps): JSX.Element => {
   const theme = useTheme();
@@ -250,6 +251,24 @@ const IndicatorProgressRow = ({
               label={isCumulative ? strings.CUMULATIVE : strings.LEVEL}
               labelColor={theme.palette.TwClrTxtSecondary}
             />
+
+            {isConsoleView && (
+              <Box
+                alignItems='center'
+                border={`1px solid ${
+                  indicator.isPublishable ? theme.palette.TwClrBrdrBrand : theme.palette.TwClrBaseGray300
+                }`}
+                borderRadius={theme.spacing(0.5)}
+                display='flex'
+                padding={theme.spacing(0.25, 0.75)}
+              >
+                <Icon
+                  fillColor={indicator.isPublishable ? theme.palette.TwClrIcnBrand : theme.palette.TwClrIcnSecondary}
+                  name={indicator.isPublishable ? 'iconEye' : 'lock'}
+                  size='small'
+                />
+              </Box>
+            )}
           </Box>
         </Box>
 
@@ -471,7 +490,7 @@ const IndicatorProgressRow = ({
               />
             </Box>
 
-            {showNotesToFunder && (
+            {isConsoleView && (
               <Box flex='1 1 45%' minWidth={0}>
                 <Textfield
                   id={`progressNotes-${fieldKey}`}
