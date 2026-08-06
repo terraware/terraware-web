@@ -41,7 +41,7 @@ const PlantingPlanOverview = ({ plantingSite }: PlantingPlanOverviewProps): JSX.
       <PlantingPlanStats
         targetPlants={PLACEHOLDER}
         area={area}
-        targetPlantingDensity={PLACEHOLDER}
+        initialPlantingDensity={PLACEHOLDER}
         targetSpecies={PLACEHOLDER}
         strata={strataCount}
       />

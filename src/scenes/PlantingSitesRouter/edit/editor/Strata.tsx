@@ -57,8 +57,8 @@ const createDraftSiteWith = (site: DraftPlantingSite) => (cutStrata: GeometryFea
     defaultStratumPayload({
       boundary: toMultiPolygon(stratum.geometry) as MultiPolygon,
       id: index,
+      initialPlantingDensity: stratum.properties?.initialPlantingDensity ?? 1500,
       name: stratumNameGenerator(new Set<string>(), strings.STRATUM),
-      targetPlantingDensity: stratum.properties?.targetPlantingDensity ?? 1500,
     })
   ),
 });
@@ -126,8 +126,8 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
             return defaultStratumPayload({
               boundary: multiPolygon,
               id: properties?.id ?? index,
+              initialPlantingDensity: properties?.initialPlantingDensity ?? 1500,
               name: properties?.name ?? '',
-              targetPlantingDensity: properties?.targetPlantingDensity ?? 1500,
             });
           } else {
             return undefined;
@@ -299,14 +299,14 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
     (): MapPopupRenderer => ({
       sx: [mapStyles.tooltip, mapStyles.box],
       render: (properties: MapSourceProperties, onClose?: () => void): JSX.Element | null => {
-        const { id, name, targetPlantingDensity } = properties;
+        const { id, name, initialPlantingDensity } = properties;
 
         const close = () => {
           setOverridePopupInfo(undefined);
           onClose?.();
         };
 
-        const onUpdate = (nameVal: string, targetPlantingDensityVal: number) => {
+        const onUpdate = (nameVal: string, initialPlantingDensityVal: number) => {
           if (!strata) {
             return;
           }
@@ -319,7 +319,7 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
             stratum.properties = {};
           }
           stratum.properties.name = nameVal;
-          stratum.properties.targetPlantingDensity = targetPlantingDensityVal;
+          stratum.properties.initialPlantingDensity = initialPlantingDensityVal;
           setStrataData((prev) => ({
             ...prev,
             fixedBoundaries: updatedStrata,
@@ -338,7 +338,7 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
             name={name}
             onClose={close}
             onUpdate={onUpdate}
-            targetPlantingDensity={targetPlantingDensity}
+            initialPlantingDensity={initialPlantingDensity}
             stratumNamesInUse={stratumNamesInUse}
           />
         );
@@ -374,10 +374,10 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
 }
 
 type TooltipContentsProps = {
+  initialPlantingDensity: number;
   name?: string;
   onClose: () => void;
-  onUpdate: (name: string, targetPlantingDensity: number) => void;
-  targetPlantingDensity: number;
+  onUpdate: (name: string, initialPlantingDensity: number) => void;
   stratumNamesInUse: Set<string>;
 };
 
@@ -385,11 +385,11 @@ const TooltipContents = ({
   name,
   onClose,
   onUpdate,
-  targetPlantingDensity,
+  initialPlantingDensity,
   stratumNamesInUse,
 }: TooltipContentsProps): JSX.Element => {
   const [stratumName, setStratumName] = useState<string>(name ?? '');
-  const [density, setDensity] = useState<number>(targetPlantingDensity);
+  const [density, setDensity] = useState<number>(initialPlantingDensity);
   const [nameError, setNameError] = useState<string>('');
   const [densityError, setDensityError] = useState<string>('');
   const [validate, setValidate] = useState<boolean>(false);
@@ -458,8 +458,8 @@ const TooltipContents = ({
           sx={{ marginTop: theme.spacing(1.5) }}
         />
         <Textfield
-          label={strings.TARGET_PLANTING_DENSITY}
-          id='target-planting-density'
+          label={strings.INITIAL_PLANTING_DENSITY}
+          id='initial-planting-density'
           type='number'
           onChange={(value) => setDensity(value as number)}
           value={density}

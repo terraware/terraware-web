@@ -48,8 +48,8 @@ const makePlantingProgressCsv = ({
       displayLabel: strings.PROJECT,
     },
     {
-      key: 'targetPlantingDensity',
-      displayLabel: strings.TARGET_PLANTING_DENSITY,
+      key: 'initialPlantingDensity',
+      displayLabel: strings.INITIAL_PLANTING_DENSITY,
     },
     {
       key: 'totalSeedlingsSent',

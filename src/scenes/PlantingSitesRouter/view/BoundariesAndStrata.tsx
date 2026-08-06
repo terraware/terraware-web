@@ -242,8 +242,8 @@ function PlantingSiteMapView({ search }: PlantingSiteMapViewProps): JSX.Element 
                   : '',
             },
             {
-              key: strings.TARGET_PLANTING_DENSITY,
-              value: numberFormatter.format(stratum?.targetPlantingDensity ?? 0),
+              key: strings.INITIAL_PLANTING_DENSITY,
+              value: numberFormatter.format(stratum?.initialPlantingDensity ?? 0),
             },
             {
               key: strings.PLANTING_COMPLETE,

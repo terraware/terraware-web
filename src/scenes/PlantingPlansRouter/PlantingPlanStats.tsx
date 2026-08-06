@@ -9,7 +9,7 @@ import PlantingPlanStatTile from './PlantingPlanStatTile';
 export type PlantingPlanStatsProps = {
   targetPlants: string;
   area: string;
-  targetPlantingDensity: string;
+  initialPlantingDensity: string;
   targetSpecies: string;
   strata: string;
 };
@@ -17,7 +17,7 @@ export type PlantingPlanStatsProps = {
 const PlantingPlanStats = ({
   targetPlants,
   area,
-  targetPlantingDensity,
+  initialPlantingDensity,
   targetSpecies,
   strata,
 }: PlantingPlanStatsProps): JSX.Element => {
@@ -41,11 +41,11 @@ const PlantingPlanStats = ({
           {targetPlants}
         </Typography>
         <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} lineHeight='20px'>
-          {strings.BY_TARGET_PLANTING_DENSITY}
+          {strings.BY_INITIAL_PLANTING_DENSITY}
         </Typography>
       </Box>
       <PlantingPlanStatTile label={strings.AREA} value={area} />
-      <PlantingPlanStatTile label={strings.TARGET_PLANTING_DENSITY} value={targetPlantingDensity} showDivider />
+      <PlantingPlanStatTile label={strings.INITIAL_PLANTING_DENSITY} value={initialPlantingDensity} showDivider />
       <PlantingPlanStatTile label={strings.TARGET_SPECIES} value={targetSpecies} showDivider />
       <PlantingPlanStatTile label={strings.STRATA} value={strata} showDivider />
     </Box>
