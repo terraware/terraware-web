@@ -269,19 +269,16 @@ export type CreatePlantingSiteRequestPayload = {
 };
 export type ReportedSpeciesPayload = {
   id: number;
-  plantsSinceLastObservation: number;
   totalPlants: number;
 };
 export type SubstratumReportedPlantsResponsePayload = {
   id: number;
-  plantsSinceLastObservation: number;
   species: ReportedSpeciesPayload[];
   totalPlants: number;
   totalSpecies: number;
 };
 export type StratumReportedPlantsResponsePayload = {
   id: number;
-  plantsSinceLastObservation: number;
   progressPercent: number;
   species: ReportedSpeciesPayload[];
   substrata: SubstratumReportedPlantsResponsePayload[];
@@ -290,7 +287,6 @@ export type StratumReportedPlantsResponsePayload = {
 };
 export type PlantingSiteReportedPlantsPayload = {
   id: number;
-  plantsSinceLastObservation: number;
   progressPercent?: number;
   species: ReportedSpeciesPayload[];
   strata: StratumReportedPlantsResponsePayload[];
