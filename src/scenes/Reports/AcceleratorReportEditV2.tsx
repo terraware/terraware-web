@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -6,6 +6,7 @@ import { Button } from '@terraware/web-components';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import { REPORT_TITLE_STYLE } from 'src/components/AcceleratorReports/ReportDropdown';
+import ReportEditFields from 'src/components/AcceleratorReports/ReportEditFields';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
@@ -13,6 +14,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization } from 'src/providers';
 import { useUpdateOneAcceleratorReportValuesMutation } from 'src/queries/generated/acceleratorReports';
+import { AcceleratorReportPayload } from 'src/queries/generated/reports';
 import useSnackbar from 'src/utils/useSnackbar';
 
 const AcceleratorReportEditV2 = (): JSX.Element => {
@@ -36,11 +38,35 @@ const AcceleratorReportEditV2 = (): JSX.Element => {
     }
   }, [goToReport, report]);
 
+  const [edits, setEdits] = useState<Partial<AcceleratorReportPayload>>({});
+  const [validate, setValidate] = useState(false);
+
+  const record = useMemo(() => (report ? { ...report, ...edits } : undefined), [edits, report]);
+
+  const onChangeCallback = useCallback(
+    (id: string) => (value: unknown) => setEdits((previous) => ({ ...previous, [id]: value })),
+    []
+  );
+
   const onSave = useCallback(() => {
-    if (report) {
-      void updateReport({ reportId, updateAcceleratorReportValuesRequestPayload: report });
+    if (!record) {
+      return;
     }
-  }, [report, reportId, updateReport]);
+
+    setValidate(false);
+
+    const missingPair = record.challenges.some(
+      (challenge) =>
+        (challenge.challenge && !challenge.mitigationPlan) || (challenge.mitigationPlan && !challenge.challenge)
+    );
+
+    if (missingPair) {
+      setValidate(true);
+      return;
+    }
+
+    void updateReport({ reportId, updateAcceleratorReportValuesRequestPayload: record });
+  }, [record, reportId, updateReport]);
 
   useEffect(() => {
     if (updateReportResponse.isError) {
@@ -85,6 +111,8 @@ const AcceleratorReportEditV2 = (): JSX.Element => {
 
             {report && <AcceleratorReportStatusBadge status={report.status} />}
           </Box>
+
+          {record && <ReportEditFields onChangeCallback={onChangeCallback} record={record} validate={validate} />}
         </Card>
       </Box>
     </Page>
