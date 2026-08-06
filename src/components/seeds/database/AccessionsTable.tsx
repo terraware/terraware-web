@@ -182,6 +182,10 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
 
     if (urlFilters.length > 0) {
       setColumnFilters((prev) => {
+        // If coming from dashboard leave only the state filter.
+        if (filterState) {
+          return urlFilters;
+        }
         const newIds = new Set(urlFilters.map((f) => f.id));
         return [...prev.filter((f) => !newIds.has(f.id)), ...urlFilters];
       });
