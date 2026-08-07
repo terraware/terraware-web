@@ -18,11 +18,6 @@ const TICK_OVERHANG = 3;
 const MIN_TARGET_PERCENT = 50;
 const TICK_HOVER_WIDTH = 9;
 
-const statusOptions: DropdownItem[] = (['Achieved', 'On-Track', 'Unlikely', 'Off-Track'] as const).map((status) => ({
-  label: status,
-  value: status,
-}));
-
 export type ProgressIndicator = {
   baseline?: number;
   id?: number;
@@ -189,6 +184,18 @@ const IndicatorProgressRow = ({
 
     return Math.round((((cumulativeValue ?? 0) - baselineValue) / denominator) * 100);
   }, [baselineValue, cumulativeValue, indicator.target]);
+
+  const statusOptions = useMemo<DropdownItem[]>(
+    () => [
+      { label: strings.ACHIEVED, value: 'Achieved' },
+      { label: strings.ON_TRACK, value: 'On-Track' },
+      { label: strings.UNLIKELY, value: 'Unlikely' },
+      { label: strings.OFF_TRACK, value: 'Off-Track' },
+    ],
+    [strings]
+  );
+
+  const fieldKey = `${indicator.type ?? 'indicator'}-${indicator.id ?? indicator.name}`.replace(/\s+/g, '-');
 
   const onToggle = useCallback(() => setExpanded((previous) => !previous), []);
 
@@ -405,7 +412,7 @@ const IndicatorProgressRow = ({
                 <Box flexGrow={1}>
                   <Textfield
                     disabled={valueDisabled}
-                    id={`value-${indicator.refId}`}
+                    id={`value-${fieldKey}`}
                     label={strings.PROGRESS_VALUE}
                     min={0}
                     onChange={onChangeValue}
@@ -455,7 +462,7 @@ const IndicatorProgressRow = ({
 
             <Box flex='1 1 45%' minWidth={0}>
               <Textfield
-                id={`projectsComments-${indicator.refId}`}
+                id={`projectsComments-${fieldKey}`}
                 label={strings.PROJECTS_COMMENTS}
                 onChange={(value: unknown) => onChange?.('projectsComments', value)}
                 preserveNewlines
@@ -467,7 +474,7 @@ const IndicatorProgressRow = ({
             {showNotesToFunder && (
               <Box flex='1 1 45%' minWidth={0}>
                 <Textfield
-                  id={`progressNotes-${indicator.refId}`}
+                  id={`progressNotes-${fieldKey}`}
                   label={strings.NOTES_TO_FUNDER}
                   onChange={(value: unknown) => onChange?.('progressNotes', value)}
                   preserveNewlines
@@ -483,7 +490,7 @@ const IndicatorProgressRow = ({
 
             <Box flex='1 1 45%' minWidth={0}>
               <Textfield
-                id={`supportingDocumentUrl-${indicator.refId}`}
+                id={`supportingDocumentUrl-${fieldKey}`}
                 label={strings.LINK_TO_SUPPORTING_DOCUMENTS}
                 onChange={(value: unknown) => onChange?.('supportingDocumentUrl', value)}
                 type='text'
