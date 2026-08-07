@@ -1583,6 +1583,8 @@ PLANTING_COMPLETE_TOOLTIP,La plantation a-t-elle été achevée dans ce substrat
 PLANTING_DATE,Date de plantation,544c699c
 PLANTING_DATE_ADDED,Date de plantation ajoutée : {0}.,187cb611
 PLANTING_DATE_DELETED,Date de plantation supprimée : {0}.,6a287532
+PLANTING_DATE_QUANTITY_NOT_SET_TITLE,Quantité à planter non définie,e5701f1b
+PLANTING_DATE_QUANTITY_NOT_SET_WARNING,"Au moins une espèce n’a pas encore de quantité à planter définie. Pour enregistrer la date de plantation, ajoutez des quantités pour toutes les espèces ou supprimez les espèces de cette date.",5b164c2d
 PLANTING_DATE_SPECIES_ADDED,Espèces ajoutées à la date de plantation {0} : {1} dans {2}.,298ae021
 PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,Date de plantation {0} mise à jour : {1} dans {2} ajouté.,b3e3cbeb
 PLANTING_DATE_SPECIES_UPDATED,Date de plantation {0} mise à jour : {1} dans {2} modifié de {3} à {4}.,80c99e8a
@@ -2103,9 +2105,9 @@ SESSION_HAS_NOT_STARTED,La session n'a pas commencé.,ec7ca566
 SESSION_IS_IN_PROGRESS,La session est en cours.,b30ad69a
 SESSION_IS_STARTING_SOON,La session va bientôt commencer.,c3abc7d1
 SESSION_SLIDES,Diapositives de la session,7748a514
+SET_INITIAL_DENSITY_DESCRIPTION,Définissez la densité de plantation initiale pour les strates du site. Le nombre de plants sera calculé en fonction de la densité de plantation et de la superficie.,4ef3c583
 SET_LOCATION,Définir l’emplacement,262e6b39
 SET_LOCATIONS,Définir les emplacements,68884a84
-SET_INITIAL_DENSITY_DESCRIPTION,Définissez la densité de plantation initiale pour les strates du site. Le nombre de plants sera calculé en fonction de la densité de plantation et de la superficie.,4ef3c583
 SET_PLANTING_COMPLETE,Plantation terminée,3bea077e
 SET_REMINDER,Définir un rappel,ad81e3b3
 SET_SPECIES_TARGETS_DESCRIPTION,Définir des objectifs par substrat de site. Les espèces et quantités peuvent être modifiées à tout moment et sont visibles dans la Planification de l’inventaire.,7619cbee
