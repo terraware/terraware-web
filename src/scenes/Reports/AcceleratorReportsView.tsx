@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import Tabs from '@terraware/web-components/components/Tabs';
 
@@ -19,6 +19,7 @@ import { useParticipantData } from 'src/providers/Participant/ParticipantContext
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import AcceleratorReportTabV2 from './AcceleratorReportTabV2';
+import ReportSubmitButton from './ReportSubmitButton';
 
 export type AcceleratorReportsViewProps = {
   tab?: string;
@@ -26,6 +27,7 @@ export type AcceleratorReportsViewProps = {
 
 const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
   const { strings } = useLocalization();
+  const theme = useTheme();
   const navigate = useSyncNavigate();
   const pathParams = useParams<{ reportId?: string }>();
   const { goToAcceleratorReportEdit } = useNavigateTo();
@@ -80,16 +82,20 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
   const rightComponent = useMemo(
     () =>
       newReportTabEnabled && activeTab === 'reports' && selectedReportId !== undefined ? (
-        <Button
-          disabled={!canEdit}
-          icon='iconEdit'
-          label={strings.EDIT}
-          onClick={() => goToAcceleratorReportEdit(selectedReportId)}
-          priority='secondary'
-          size='medium'
-        />
+        <Box display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
+          <Button
+            disabled={!canEdit}
+            icon='iconEdit'
+            label={strings.EDIT}
+            onClick={() => goToAcceleratorReportEdit(selectedReportId)}
+            priority='secondary'
+            size='medium'
+          />
+
+          <ReportSubmitButton reportId={selectedReportId} />
+        </Box>
       ) : undefined,
-    [activeTab, canEdit, goToAcceleratorReportEdit, newReportTabEnabled, selectedReportId, strings]
+    [activeTab, canEdit, goToAcceleratorReportEdit, newReportTabEnabled, selectedReportId, strings, theme]
   );
 
   const PageHeaderLeftComponent = useMemo(
