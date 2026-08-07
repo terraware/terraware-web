@@ -187,14 +187,10 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
     if (challengeMitigations.length === 0) {
       addRow();
     }
-    if (onChange) {
-      if (areFilteredChallengesDifferent) {
-        // only call onChange if the non-empty challenges are different, but call it with all to include the empty
-        // challenges; otherwise deleting characters can cause rows to disappear
-        onChange(challengeMitigations);
-      }
+    if (onChange && areFilteredChallengesDifferent) {
+      onChange(nonEmptyChallenges);
     }
-  }, [addRow, areFilteredChallengesDifferent, challengeMitigations, onChange]);
+  }, [addRow, areFilteredChallengesDifferent, challengeMitigations, nonEmptyChallenges, onChange]);
 
   useEffect(() => {
     if (reviewReportResponse.isError) {
