@@ -9,6 +9,7 @@ import ActivityHighlightsContent, { QuarterDropdownData } from 'src/components/A
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import TfMain from 'src/components/common/TfMain';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useFunderListActivitiesQuery } from 'src/queries/generated/funderActivities';
@@ -19,6 +20,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ProjectProfileView from '../AcceleratorRouter/AcceleratorProjects/ProjectProfileView';
+import FunderReportTabV2 from '../FunderReport/FunderReportTabV2';
 import FunderReportView from '../FunderReport/FunderReportView';
 
 const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
@@ -73,6 +75,8 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
     }
   }, [projectDetailsDealName]);
 
+  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+
   const tabs = useMemo(() => {
     return [
       {
@@ -85,7 +89,11 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
       {
         id: 'report',
         label: strings.REPORT,
-        children: <FunderReportView selectedProjectId={projectDetails.projectId} selectedReport={selectedReport} />,
+        children: newReportTabEnabled ? (
+          <FunderReportTabV2 selectedProjectId={projectDetails.projectId} />
+        ) : (
+          <FunderReportView selectedProjectId={projectDetails.projectId} selectedReport={selectedReport} />
+        ),
       },
       ...(activities.length > 0
         ? [
@@ -110,7 +118,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
           ]
         : []),
     ];
-  }, [projectDetails, publishedReports, selectedReport, strings, activities]);
+  }, [projectDetails, publishedReports, newReportTabEnabled, selectedReport, strings, activities]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',

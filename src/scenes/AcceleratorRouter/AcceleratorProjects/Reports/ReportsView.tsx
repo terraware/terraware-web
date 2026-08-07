@@ -9,11 +9,13 @@ import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/Acc
 import AcceleratorReportsTable from 'src/components/AcceleratorReports/AcceleratorReportsTable';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
+import ReportTabV2 from './ReportTabV2';
 import ReportsSettings from './ReportsSettings';
 
 const ReportsView = () => {
@@ -23,12 +25,14 @@ const ReportsView = () => {
   const pathParams = useParams<{ projectId: string }>();
   const { isAllowed } = useUser();
 
+  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+
   const tabs = useMemo(() => {
     return [
       {
         id: 'reports',
         label: strings.REPORTS,
-        children: <AcceleratorReportsTable />,
+        children: newReportTabEnabled ? <ReportTabV2 /> : <AcceleratorReportsTable />,
       },
       {
         id: 'targets',
@@ -41,7 +45,7 @@ const ReportsView = () => {
         children: <ReportsSettings />,
       },
     ];
-  }, [strings]);
+  }, [newReportTabEnabled, strings]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'reports',
