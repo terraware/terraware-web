@@ -255,6 +255,7 @@ test.describe('InventoryTests', () => {
       .getByRole('button', { name: 'Withdraw', ...exactOptions })
       .click();
     await expect(page.getByText('1 batch for a total of 60')).toBeVisible();
+    await page.locator('#acknowledge-button').click();
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByRole('cell', { name: 'Withdrawal - Planting' }).nth(0)).toBeVisible();
     await page.getByRole('button', { name: 'Plantings' }).click();
