@@ -51,6 +51,9 @@ const IndicatorProgressRow = ({ indicator, quarter, year }: IndicatorProgressRow
 
   const startingTotal = indicator.previousYearCumulativeTotal ?? baselineValue;
 
+  const startingTotalLabel =
+    indicator.previousYearCumulativeTotal !== undefined && year !== undefined ? String(year - 1) : strings.BASELINE;
+
   const currentYearProgress = useMemo(() => indicator.currentYearProgress ?? [], [indicator.currentYearProgress]);
 
   const cumulativeValue = useMemo(() => {
@@ -265,6 +268,23 @@ const IndicatorProgressRow = ({ indicator, quarter, year }: IndicatorProgressRow
                   </Box>
                 </Tooltip>
               ))}
+
+              {isCumulative && (
+                <Tooltip title={startingTotalLabel}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      height: `${BAR_HEIGHT + TICK_OVERHANG * 2}px`,
+                      left: 0,
+                      position: 'absolute',
+                      top: `-${TICK_OVERHANG}px`,
+                      width: `${TICK_HOVER_WIDTH}px`,
+                    }}
+                  >
+                    <Box sx={{ backgroundColor: theme.palette.TwClrBaseBlack, height: '100%', width: '2px' }} />
+                  </Box>
+                </Tooltip>
+              )}
 
               {targetPercent !== undefined && (
                 <Box
