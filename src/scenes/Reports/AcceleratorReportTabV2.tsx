@@ -77,6 +77,13 @@ const AcceleratorReportTabV2 = ({ active }: AcceleratorReportTabV2Props): JSX.El
     [pathReportId, reports]
   );
 
+  // the reports path has no report of its own, so send it to the latest one
+  useEffect(() => {
+    if (active && resolvedReportId !== undefined && pathReportId !== resolvedReportId) {
+      selectReport(resolvedReportId, true);
+    }
+  }, [active, pathReportId, resolvedReportId, selectReport]);
+
   const isEmpty = listReportsResponse.currentData !== undefined && reports.length === 0;
 
   return (
