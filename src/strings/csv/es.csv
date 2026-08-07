@@ -206,6 +206,7 @@ APPROX_SYMBOL,~,acb59e95
 AR,RA,25a8e55a
 ARE_YOU_SURE,¿Está seguro(a)?,d4536b91
 ARE_YOU_SURE_DELETE,¿Está seguro de que desea eliminar?,a7f716f0
+ARE_YOU_SURE_DELETE_PLANTING_DATE,¿Está seguro de que desea eliminar esta Fecha de Plantación?,c9c72b70
 ARE_YOU_SURE_DELETE_TARGET,¿Está seguro de que desea eliminar este objetivo de especie?,8f7cb65e
 AREA,Área,be27ab89
 AREA_HA,Área (ha),8ab5d500
@@ -512,6 +513,9 @@ DELETE_OBSERVATION_PHOTO_MESSAGE,Esta foto también se eliminará de la observac
 DELETE_OBSERVATION_PHOTO_TITLE,Eliminar foto de la observación,e92e9851
 DELETE_ORGANIZATION,Borrar Organización,91c84420
 DELETE_ORGANIZATION_MSG,¿Está seguro de que deseas borrar {0}?,a932473f
+DELETE_PLANTING_DATE,Eliminar Fecha de Plantación,1282a922
+DELETE_PLANTING_DATE_CONFIRM,Está a punto de eliminar esta Fecha de Plantación. Las solicitudes de retiro enviadas al vivero para esta fecha serán eliminadas.,572576b3
+DELETE_PLANTING_DATE_WITHDRAWALS_RECORDED,"Ya se han registrado retiros de plantación para esta fecha. Antes de eliminar esta Fecha de Plantación, puede encontrar los retiros de plantación relacionados en la tabla de Retiros y deshacerlos, si es necesario.",4f8f645b
 DELETE_PLANTING_SEASON,Eliminar temporada de plantación,dda3774d
 DELETE_PLANTING_SEASON_CONFIRM,"Está a punto de eliminar {0}. Al eliminar la temporada, se eliminarán permanentemente todos los objetivos y fechas, pero los retiros de plantación permanecerán intactos. Esta acción no se puede deshacer.",a49b8872
 DELETE_PLANTING_SITE,Borrar sitio de plantación,aa2a58c0

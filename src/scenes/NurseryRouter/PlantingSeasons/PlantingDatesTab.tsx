@@ -27,12 +27,14 @@ import {
   StratumResponsePayload,
   SubstratumResponsePayload,
 } from 'src/queries/generated/plantingSites';
+import { useLazyGetScheduledPlantingDateWithdrawnTotalQuery } from 'src/queries/search/plantingDateRequests';
 import { useGetPlantingSeasonSpeciesSummaryQuery } from 'src/queries/search/plantingSeasons';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import DeletePlantingDateModal from './DeletePlantingDateModal';
 import PlantingSeasonEventLog from './PlantingSeasonEventLog';
 import SaveAndNotifyNurseryModal from './SaveAndNotifyNurseryModal';
 
@@ -427,6 +429,8 @@ const PlantingDateForm = ({
   const [createScheduledPlantingDate, { isLoading: isCreating }] = useCreateScheduledPlantingDateMutation();
   const [updateScheduledPlantingDate, { isLoading: isUpdating }] = useUpdateScheduledPlantingDateMutation();
   const [deleteScheduledPlantingDate, { isLoading: isDeleting }] = useDeleteScheduledPlantingDateMutation();
+  const [getWithdrawnTotal, { isFetching: isCheckingWithdrawals }] =
+    useLazyGetScheduledPlantingDateWithdrawnTotalQuery();
 
   const isSaving = isCreating || isUpdating || isDeleting;
   const isEditing = editingScheduledDate !== undefined;
@@ -455,6 +459,8 @@ const PlantingDateForm = ({
   const [validate, setValidate] = useState(false);
   const [notifyModalOpen, setNotifyModalOpen] = useState(false);
   const [notSetWarningOpen, setNotSetWarningOpen] = useState(false);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [hasRecordedWithdrawals, setHasRecordedWithdrawals] = useState(false);
 
   const mobileFooterButtonSx = isMobile
     ? {
@@ -603,6 +609,22 @@ const PlantingDateForm = ({
     }
   };
 
+  const openDeleteConfirmation = async () => {
+    if (!editingScheduledDate) {
+      return;
+    }
+    try {
+      const withdrawnTotal = await getWithdrawnTotal({
+        plantingSeasonId: plantingSeason.id,
+        date: editingScheduledDate.date,
+      }).unwrap();
+      setHasRecordedWithdrawals(withdrawnTotal > 0);
+    } catch (e) {
+      setHasRecordedWithdrawals(false);
+    }
+    setConfirmingDelete(true);
+  };
+
   const onDelete = async () => {
     if (!editingScheduledDate) {
       return;
@@ -612,6 +634,7 @@ const PlantingDateForm = ({
         plantingSeasonId: plantingSeason.id,
         scheduledPlantingDateId: editingScheduledDate.scheduledPlantingDateId,
       }).unwrap();
+      setConfirmingDelete(false);
       onClose();
     } catch (e) {
       snackbar.toastError();
@@ -673,10 +696,10 @@ const PlantingDateForm = ({
         {isEditing && (
           <Button
             label={strings.DELETE}
-            onClick={() => void onDelete()}
+            onClick={() => void openDeleteConfirmation()}
             priority='secondary'
             type='destructive'
-            disabled={isSaving}
+            disabled={isSaving || isCheckingWithdrawals}
             size={isMobile ? 'medium' : undefined}
             sx={mobileFooterButtonSx}
           />
@@ -716,6 +739,16 @@ const PlantingDateForm = ({
           </span>
         </Tooltip>
       </Box>
+
+      {confirmingDelete && (
+        <DeletePlantingDateModal
+          open={true}
+          hasRecordedWithdrawals={hasRecordedWithdrawals}
+          busy={isDeleting}
+          onClose={() => setConfirmingDelete(false)}
+          onConfirm={() => void onDelete()}
+        />
+      )}
 
       {notifyModalOpen && (
         <SaveAndNotifyNurseryModal

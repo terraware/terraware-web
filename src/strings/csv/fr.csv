@@ -205,6 +205,7 @@ APPROX_SYMBOL,~,acb59e95
 AR,RA,25a8e55a
 ARE_YOU_SURE,Êtes-vous sûr ?,d4536b91
 ARE_YOU_SURE_DELETE,Êtes-vous sûr de vouloir supprimer ?,a7f716f0
+ARE_YOU_SURE_DELETE_PLANTING_DATE,Êtes-vous sûr de vouloir supprimer cette date de plantation ?,c9c72b70
 ARE_YOU_SURE_DELETE_TARGET,Êtes-vous sûr de vouloir supprimer cet objectif d'espèce ?,8f7cb65e
 AREA,Superficie,be27ab89
 AREA_HA,Superficie (ha),8ab5d500
@@ -511,6 +512,9 @@ DELETE_OBSERVATION_PHOTO_MESSAGE,Cette photo sera également supprimée de l'obs
 DELETE_OBSERVATION_PHOTO_TITLE,Supprimer la photo de l'observation,e92e9851
 DELETE_ORGANIZATION,Supprimer l'organisation,91c84420
 DELETE_ORGANIZATION_MSG,Voulez-vous vraiment supprimer {0} ?,a932473f
+DELETE_PLANTING_DATE,Supprimer la date de plantation,1282a922
+DELETE_PLANTING_DATE_CONFIRM,Vous êtes sur le point de supprimer cette date de plantation. Les demandes de retrait envoyées à la pépinière pour cette date seront supprimées.,572576b3
+DELETE_PLANTING_DATE_WITHDRAWALS_RECORDED,"Des retraits de plantation ont déjà été enregistrés pour cette date. Avant de supprimer cette date de plantation, vous pouvez retrouver les retraits de plantation concernés dans le tableau des retraits et les annuler si nécessaire.",4f8f645b
 DELETE_PLANTING_SEASON,Supprimer la saison de plantation,dda3774d
 DELETE_PLANTING_SEASON_CONFIRM,"Vous êtes sur le point de supprimer {0}. La suppression de la saison entraînera la suppression définitive de tous les objectifs et dates, mais les retraits de plantation resteront inchangés. Cette action est irréversible.",a49b8872
 DELETE_PLANTING_SITE,Supprimer un site de plantation,aa2a58c0
