@@ -1325,6 +1325,7 @@ NO_SPECIES,Ninguna especie,1616e61b
 NO_SPECIES_CONTRIBUTOR_MSG,"Aún no hay especies en su lista de especies. Solo los administradores pueden añadir especies, así que por favor contacte con el suyo para que le ayude.",32a4f50e
 NO_SPECIES_DESCRIPTION,Parece que aún no ha añadido ninguna especie. Disponer de una lista maestra de especies ayuda a agilizar la introducción de datos sobre semillas y plantas en su organización. Puede añadir especies manual e individualmente o importar datos desde un CSV.,048a81f6
 NO_SPECIES_TARGETS_FOR_SUBSTRATUM,No se han establecido objetivos de especies para este sustrato.,53b1322b
+NO_STATUS,Sin estado,4d08c36e
 NO_SUB_LOCATIONS,Edite este banco de semillas para añadir sublocalizaciones.,963dba11
 NO_SUB_LOCATIONS_NURSERY,Edite este vivero para añadir sublocalizaciones.,8a939067
 NO_TEMPORARY_PLOTS_SURVIVAL_TOOLTIP,No hay Observaciones completadas que incluyan parcelas temporales dentro de un sustrato de Sitio de Plantación.,fdf09cc6
@@ -1720,6 +1721,7 @@ PROJECT_AREA_DESCRIPTION,"El área total que abarca todo el proyecto, donde las 
 PROJECT_AREA_HA,Área del proyecto (ha),6bda7dea
 PROJECT_AREA_MAP,Mapa de zonas de proyecto,7c01fd14
 PROJECT_AREA_TOTALS,Total de zonas de proyecto,bece9b37
+PROJECT_HEALTH,Salud del proyecto,721aa8b8
 PROJECT_HIGHLIGHT_IMAGE,Imagen destacada del proyecto,a7d500cb
 PROJECT_IMPACT,Impacto del proyecto,7daa6ba5
 PROJECT_IMPACT_INSTRUCTIONS,"Proporcione los detalles de su impacto durante el período del informe, incluidos los logros más importantes y los avances hacia la consecución de los objetivos declarados y las metas principales. Además de los objetivos forestales, por favor incluya los puestos de trabajo creados (a tiempo completo, a tiempo parcial y estacionales), con cifras específicas desglosadas por género. (Aproximadamente una página).",57149db5
