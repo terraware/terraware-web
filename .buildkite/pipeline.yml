@@ -38,6 +38,21 @@ env:
   BUILDKITE_ARTIFACT_UPLOAD_DESTINATION: 's3://$BUILDKITE_PLUGIN_S3_CACHE_BUCKET/artifacts/$BUILDKITE_PIPELINE_SLUG/$BUILDKITE_BUILD_ID'
 
 steps:
+  # The pipeline builds on PR label changes so that adding the "Vercel preview" label deploys a
+  # preview without needing a new commit. The flip side is that changing any other label ("wip",
+  # renovate's "dependencies", etc.) would kick off a full build too, so discard those immediately.
+  # build.pull_request.label is only set on labeled/unlabeled events, so this step is skipped
+  # outright on ordinary pushes.
+  - label: ':label: Discard unrelated label-change build'
+    key: 'label-change-guard'
+    if: "build.pull_request.label != null && build.pull_request.label != 'Vercel preview'"
+    plugins:
+      - *shallow-clone
+    command: |
+      buildkite-agent annotate --style info --context label-change \
+        'Build skipped: triggered by a PR label change unrelated to the "Vercel preview" label.'
+      echo 'steps: []' | buildkite-agent pipeline upload --replace
+
   - label: ':graphite: CI optimizer'
     key: 'graphite-ci-optimizer'
     soft_fail: true
@@ -65,10 +80,11 @@ steps:
           s3-upload-acl: 'private'
     command: .buildkite/scripts/build-and-test.sh
 
+  # Previews are opt-in via the "Vercel preview" PR label; see .buildkite/README.md.
   - label: ':vercel: Deploy Vercel preview'
     key: 'vercel-preview'
     depends_on: 'build-and-test'
-    if: "build.branch != 'main' && build.tag == null"
+    if: "build.branch != 'main' && build.tag == null && build.pull_request.labels includes 'Vercel preview'"
     soft_fail: true
     plugins:
       - *shallow-clone
