@@ -59,11 +59,6 @@ const AcceleratorReportTabV2 = (): JSX.Element => {
     [reports, selectedReportId]
   );
 
-  const selectedReport = useMemo(
-    () => listReportsResponse.currentData?.reports.find((report) => report.id === resolvedReportId),
-    [listReportsResponse.currentData, resolvedReportId]
-  );
-
   const isEmpty = listReportsResponse.currentData !== undefined && reports.length === 0;
 
   return (
