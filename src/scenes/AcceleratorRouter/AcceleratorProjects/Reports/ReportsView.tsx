@@ -97,7 +97,10 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
             size='medium'
             onClick={() => goToNewIndicator(pathParams.projectId ?? '')}
           />
-        ) : newReportTabEnabled && activeTab === 'reports' && selectedReportId !== undefined ? (
+        ) : newReportTabEnabled &&
+          activeTab === 'reports' &&
+          selectedReportId !== undefined &&
+          isAllowed('EDIT_REPORTS') ? (
           <Button
             icon='iconEdit'
             label={strings.EDIT}
