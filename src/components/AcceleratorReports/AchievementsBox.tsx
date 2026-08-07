@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
@@ -84,6 +84,8 @@ const AchievementsBox = (props: ReportBoxProps) => {
 
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
 
+  const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
+
   const getNonEmptyAchievements = useCallback(() => {
     return achievements.filter((s) => !!s);
   }, [achievements]);
@@ -96,14 +98,29 @@ const AchievementsBox = (props: ReportBoxProps) => {
   }, [achievements]);
 
   useEffect(() => {
-    if (achievements.length === 0) {
-      addRow();
-    }
     const filteredAchievements = getNonEmptyAchievements();
     if (filteredAchievements && JSON.stringify(filteredAchievements) !== JSON.stringify(report?.achievements)) {
       onChange?.(filteredAchievements);
     }
-  }, [achievements, addRow, getNonEmptyAchievements, onChange, report?.achievements]);
+  }, [getNonEmptyAchievements, onChange, report?.achievements]);
+
+  const firstRendered = useRef(false);
+
+  // the editor opens with a row ready to fill in; a deleted row stays deleted
+  useEffect(() => {
+    if (!isEditing) {
+      firstRendered.current = false;
+      return;
+    }
+
+    if (!firstRendered.current) {
+      firstRendered.current = true;
+
+      if (achievements.length === 0) {
+        addRow();
+      }
+    }
+  }, [achievements.length, addRow, isEditing]);
 
   useEffect(() => {
     if (reviewReportResponse.isError) {
@@ -150,7 +167,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
     []
   );
 
-  const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
+  const isEmpty = newReportTabEnabled && (isEditing ? achievements : getNonEmptyAchievements()).length === 0;
 
   return (
     <EditableReportBox
@@ -163,7 +180,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
       isConsoleView={isConsoleView}
       includeBorder={!newReportTabEnabled && !funderReportView}
     >
-      {newReportTabEnabled && !isEditing && getNonEmptyAchievements().length === 0 ? (
+      {isEmpty ? (
         <Grid item xs={12} marginBottom={1}>
           <EmptyFieldPlaceholder text={strings.NO_ACHIEVEMENTS_ADDED} />
         </Grid>
