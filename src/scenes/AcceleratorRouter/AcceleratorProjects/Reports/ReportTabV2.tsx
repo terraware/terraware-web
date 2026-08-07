@@ -16,7 +16,6 @@ const ReportTabV2 = (): JSX.Element => {
 
   const projectId = Number(pathParams.projectId);
 
-  // The tab has no path of its own, so deep links arrive as a reportId query param
   const [selectedReportId, setSelectedReportId] = useState<number | undefined>(
     Number(query.get('reportId')) || undefined
   );

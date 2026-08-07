@@ -15,26 +15,23 @@ const AcceleratorReportTabV2 = (): JSX.Element => {
   const { allAcceleratorProjects, currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
   const query = useQuery();
 
-  // The tab has no path of its own, so deep links arrive as a reportId query param
   const [selectedReportId, setSelectedReportId] = useState<number | undefined>(
     Number(query.get('reportId')) || undefined
   );
 
-  // A linked report says which project it belongs to, which need not be the one already selected
-  const { report: linkedReport } = useOneAcceleratorReport(selectedReportId);
+  const { report: selectedReport } = useOneAcceleratorReport(selectedReportId);
 
-  const linkedProjectId = linkedReport?.projectId;
+  const selectedProjectId = selectedReport?.projectId;
 
   useEffect(() => {
-    // only adopt a project the participant actually has, or the context keeps resetting the choice
     if (
-      linkedProjectId !== undefined &&
-      linkedProjectId !== currentAcceleratorProject?.id &&
-      allAcceleratorProjects.some((project) => project.id === linkedProjectId)
+      selectedProjectId !== undefined &&
+      selectedProjectId !== currentAcceleratorProject?.id &&
+      allAcceleratorProjects.some((project) => project.id === selectedProjectId)
     ) {
-      setCurrentAcceleratorProject(linkedProjectId);
+      setCurrentAcceleratorProject(selectedProjectId);
     }
-  }, [allAcceleratorProjects, currentAcceleratorProject?.id, linkedProjectId, setCurrentAcceleratorProject]);
+  }, [allAcceleratorProjects, currentAcceleratorProject?.id, selectedProjectId, setCurrentAcceleratorProject]);
 
   const projectId = currentAcceleratorProject?.id;
 
