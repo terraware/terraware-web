@@ -14,16 +14,16 @@ const SpeciesRouter = () => {
   const { species, isLoading, refetch } = useOrganizationSpecies();
 
   const getSpeciesView = useCallback((): JSX.Element => {
+    if (species.length > 0) {
+      return <SpeciesListView reloadData={refetch} species={species} />;
+    }
+
     if (isLoading) {
       return (
         <Box sx={{ display: 'flex', justifyContent: 'center', paddingTop: '64px' }}>
           <CircularProgress />
         </Box>
       );
-    }
-
-    if (species.length > 0) {
-      return <SpeciesListView reloadData={refetch} species={species} />;
     }
 
     return <EmptyStatePage pageName={'Species'} reloadData={refetch} />;

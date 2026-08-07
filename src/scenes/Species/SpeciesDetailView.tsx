@@ -317,7 +317,11 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
           {species && orgHasParticipants && <SpeciesProjectsTable speciesId={species.id} editMode={false} />}
           {speciesIntelligenceEnabled && species && (
             <Grid item xs={12} marginTop={theme.spacing(4)}>
-              <SpeciesProjectsSection speciesProjects={species.projects} />
+              <SpeciesProjectsSection
+                speciesId={species.id}
+                speciesName={species.scientificName}
+                speciesProjects={species.projects}
+              />
             </Grid>
           )}
         </Grid>

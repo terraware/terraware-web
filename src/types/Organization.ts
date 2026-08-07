@@ -20,6 +20,7 @@ export const OrganizationTypes: OrganizationType[] = [
 
 export type Organization = {
   canSubmitReports?: boolean;
+  botanicalCountryCode?: string;
   countryCode?: string;
   countrySubdivisionCode?: string;
   createdTime?: string;

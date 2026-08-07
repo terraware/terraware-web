@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, Tooltip, Typography, useTheme } from '@mui/material';
 import { TableRowType } from '@terraware/web-components';
 
 import Button from 'src/components/common/button/Button';
@@ -15,6 +15,7 @@ import { Project } from 'src/types/Project';
 import { SpeciesProjectElement } from 'src/types/Species';
 
 import AddSpeciesToProjectModal from './AddSpeciesToProjectModal';
+import OverrideSpeciesModal from './OverrideSpeciesModal';
 import RemoveProjectsDialog from './RemoveProjectsDialog';
 import SpeciesNativityBadge from './SpeciesNativityBadge';
 
@@ -24,7 +25,9 @@ type ProjectRow = {
   projectId: number;
   projectName: string;
   nativity?: Nativity;
+  justification?: string;
   dataSourceDate?: string;
+  dataSourceType?: string;
   isNew: boolean;
 };
 
@@ -35,6 +38,8 @@ const columns = (): TableColumnType[] => [
 ];
 
 type SpeciesProjectsSectionProps = {
+  speciesId: number;
+  speciesName: string;
   speciesProjects?: SpeciesProjectElement[];
   editMode?: boolean;
   addedProjectIds?: number[];
@@ -44,6 +49,8 @@ type SpeciesProjectsSectionProps = {
 };
 
 export default function SpeciesProjectsSection({
+  speciesId,
+  speciesName,
   speciesProjects,
   editMode = false,
   addedProjectIds,
@@ -58,6 +65,7 @@ export default function SpeciesProjectsSection({
   const [openedAddToProjectModal, setOpenedAddToProjectModal] = useState(false);
   const [showRemoveDialog, setShowRemoveDialog] = useState(false);
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
+  const [overrideProjectId, setOverrideProjectId] = useState<number>();
 
   const rows = useMemo<ProjectRow[]>(() => {
     const removed = editMode ? removedProjectIds ?? [] : [];
@@ -68,7 +76,9 @@ export default function SpeciesProjectsSection({
         projectId: project.projectId,
         projectName: getProjectName(project.projectId),
         nativity: project.overriddenNativity ?? project.calculatedNativity,
-        dataSourceDate: project.calculatedNativitySource?.datasetDate,
+        justification: project.overriddenJustification,
+        dataSourceDate: project.calculatedNativitySource?.datasetDate ?? project.pendingNativitySource?.datasetDate,
+        dataSourceType: project.calculatedNativitySource?.datasetType ?? project.pendingNativitySource?.datasetType,
         isNew: false,
       }));
 
@@ -102,6 +112,15 @@ export default function SpeciesProjectsSection({
     setShowRemoveDialog(false);
   }, [onRemoveProjectIds, selectedRows]);
 
+  const overrideTarget = useMemo(() => {
+    if (overrideProjectId === undefined) {
+      return undefined;
+    }
+    const project = availableProjects?.find((p) => p.id === overrideProjectId);
+    const row = rows.find((r) => r.projectId === overrideProjectId);
+    return project ? { project, row } : undefined;
+  }, [availableProjects, overrideProjectId, rows]);
+
   const Renderer = useCallback(
     (props: RendererProps<TableRowType>): JSX.Element => {
       const { column, row, index } = props;
@@ -113,7 +132,15 @@ export default function SpeciesProjectsSection({
             {...props}
             value={
               <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(1) }}>
-                <SpeciesNativityBadge nativity={projectRow.nativity} />
+                {projectRow.dataSourceType ? (
+                  <Tooltip title={projectRow.dataSourceType}>
+                    <Box component='span' sx={{ display: 'inline-flex' }}>
+                      <SpeciesNativityBadge nativity={projectRow.nativity} />
+                    </Box>
+                  </Tooltip>
+                ) : (
+                  <SpeciesNativityBadge nativity={projectRow.nativity} />
+                )}
                 {projectRow.dataSourceDate && (
                   <Typography component='span' fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
                     {strings.formatString(strings.SPECIES_PROJECT_DATA_SOURCE_SYNC, projectRow.dataSourceDate)}
@@ -139,8 +166,7 @@ export default function SpeciesProjectsSection({
                   priority='secondary'
                   type='passive'
                   size='small'
-                  // TODO: open the override-nativity modal (follow-up)
-                  onClick={() => undefined}
+                  onClick={() => setOverrideProjectId(projectRow.projectId)}
                 />
               )
             }
@@ -168,6 +194,17 @@ export default function SpeciesProjectsSection({
           onClose={() => setShowRemoveDialog(false)}
           ppSpeciesToRemove={selectedRows.map((row) => (row as ProjectRow).projectId)}
           onSubmit={onRemove}
+        />
+      )}
+
+      {overrideTarget && (
+        <OverrideSpeciesModal
+          onClose={() => setOverrideProjectId(undefined)}
+          speciesId={speciesId}
+          speciesName={speciesName}
+          project={overrideTarget.project}
+          currentNativity={overrideTarget.row?.nativity}
+          currentJustification={overrideTarget.row?.justification}
         />
       )}
 

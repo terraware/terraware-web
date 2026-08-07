@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, ClickAwayListener, IconButton, Popover, Tooltip, Typography, useTheme } from '@mui/material';
-import { DropdownItem } from '@terraware/web-components';
+import { Badge, DropdownItem, Message } from '@terraware/web-components';
 import { EditableTable, EditableTableColumn, Icon, Separator } from '@terraware/web-components';
 import {
   MRT_Cell,
@@ -44,6 +44,9 @@ import useQuery from 'src/utils/useQuery';
 import CheckDataModal from './CheckDataModal';
 import ImportSpeciesModal from './ImportSpeciesModal';
 import ProblemTooltip from './ProblemTooltip';
+import SpeciesCheckModal, { SpeciesCheckEntry } from './SpeciesCheck/SpeciesCheckModal';
+import { Nativity, getNativityLabel } from './SpeciesCheck/types';
+import SpeciesNativityBadge from './SpeciesNativityBadge';
 import { SpeciesSearchResultRow } from './types';
 
 const TABLE_STATE_STORAGE_KEY = 'species-list-table';
@@ -125,7 +128,67 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const userCanEdit = !isContributor(selectedOrganization);
   const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
+
+  const speciesCheckEnabled = speciesIntelligenceEnabled;
+  const hasProjects = (availableProjects?.length ?? 0) > 0;
   const { isMobile } = useDeviceInfo();
+
+  const [speciesCheckOpen, setSpeciesCheckOpen] = useState(false);
+  const [speciesCheckEntry, setSpeciesCheckEntry] = useState<SpeciesCheckEntry>('menu');
+  const [firstTimeBannerDismissed, setFirstTimeBannerDismissed] = useState(false);
+  const [addedBannerDismissed, setAddedBannerDismissed] = useState(false);
+
+  const openSpeciesCheck = useCallback((entry: SpeciesCheckEntry) => {
+    setSpeciesCheckEntry(entry);
+    setSpeciesCheckOpen(true);
+  }, []);
+
+  const noLocationSet = hasProjects
+    ? (availableProjects ?? []).every((p) => !p.botanicalCountryCode)
+    : !selectedOrganization?.botanicalCountryCode;
+  const orgLocationSet = !hasProjects && !!selectedOrganization?.botanicalCountryCode;
+
+  const uncheckedSpecies = useMemo(
+    () =>
+      species.filter((sp) => {
+        if (hasProjects) {
+          return (sp.projects ?? []).some((element) => {
+            const project = availableProjects?.find((p) => p.id === element.projectId);
+            return !!project?.botanicalCountryCode && !element.calculatedNativity && !element.overriddenNativity;
+          });
+        }
+        if (!orgLocationSet) {
+          return false;
+        }
+        const orgElement = (sp.projects ?? []).find((e) => e.projectId === undefined);
+        return !orgElement || (!orgElement.calculatedNativity && !orgElement.overriddenNativity);
+      }),
+    [species, availableProjects, hasProjects, orgLocationSet]
+  );
+
+  const showFirstTimeBanner = speciesCheckEnabled && noLocationSet && !firstTimeBannerDismissed;
+  const showAddedBanner = speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !addedBannerDismissed;
+
+  const statusScopeSelected = projectFilter.projectId !== undefined || !hasProjects;
+  const speciesCheckRan =
+    statusScopeSelected &&
+    species.some((sp) => {
+      const element = (sp.projects ?? []).find((p) => p.projectId === projectFilter.projectId);
+      return !!(element?.calculatedNativity || element?.overriddenNativity);
+    });
+  const showStatusColumn = speciesCheckEnabled && speciesCheckRan;
+
+  const statusBySpeciesId = useMemo(() => {
+    const map = new Map<number, Nativity | undefined>();
+    if (showStatusColumn) {
+      const projectId = projectFilter.projectId;
+      species.forEach((sp) => {
+        const element = (sp.projects ?? []).find((p) => p.projectId === projectId);
+        map.set(sp.id, element?.overriddenNativity ?? element?.calculatedNativity);
+      });
+    }
+    return map;
+  }, [species, projectFilter.projectId, showStatusColumn]);
 
   const {
     columnOrder,
@@ -200,7 +263,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         const speciesResults: SpeciesSearchResultRow[] = [];
         searchResults?.forEach((result) => {
           speciesResults.push({
-            id: result.id as number,
+            id: Number(result.id),
             acceleratorProjects: (result.acceleratorProjectSpecies as any[])?.map(
               (ppsData) => ppsData.project.name
             ) as string[],
@@ -370,6 +433,10 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const onOptionItemClick = (optionItem: DropdownItem) => {
     switch (optionItem.value) {
+      case 'runSpeciesCheck': {
+        openSpeciesCheck('menu');
+        break;
+      }
       case 'checkData': {
         onCheckData();
         break;
@@ -437,6 +504,23 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     [reloadDataProblemsHandler, navigate]
   );
 
+  const StatusCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<SpeciesSearchResultRow> }) => {
+      const nativity = statusBySpeciesId.get(cell.row.original.id);
+      return nativity ? (
+        <SpeciesNativityBadge nativity={nativity} />
+      ) : (
+        <Badge
+          label={strings.NOT_SET}
+          backgroundColor={theme.palette.TwClrBgSecondary}
+          borderColor={theme.palette.TwClrBrdrSecondary}
+          labelColor={theme.palette.TwClrTxtSecondary}
+        />
+      );
+    },
+    [statusBySpeciesId, theme]
+  );
+
   const editableColumns = useMemo<EditableTableColumn<SpeciesSearchResultRow>[]>(() => {
     // No-op to make lint happy so it doesn't think the dependency is unused.
     if (!activeLocale) {
@@ -486,6 +570,30 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         filterVariant: 'text',
         sortUndefined: 'last',
       },
+      ...(showStatusColumn
+        ? [
+            {
+              id: 'status',
+              header: strings.STATUS,
+              accessorFn: (row: SpeciesSearchResultRow) => {
+                const nativity = statusBySpeciesId.get(row.id);
+                return nativity ? getNativityLabel(nativity) : strings.NOT_SET;
+              },
+              enableEditing: false,
+              filterVariant: 'select' as const,
+              filterSelectOptions: [
+                strings.NATIVE,
+                strings.INTRODUCED,
+                strings.INVASIVE,
+                strings.UNKNOWN,
+                strings.NOT_SET,
+              ],
+              filterFn: 'equals',
+              sortUndefined: 'last' as const,
+              Cell: StatusCell,
+            },
+          ]
+        : []),
       {
         id: 'acceleratorProjects',
         header: strings.PROJECTS,
@@ -502,7 +610,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         accessorFn: (row: SpeciesSearchResultRow) => getConservationCategoryString(row.conservationCategory),
         enableEditing: false,
         filterVariant: 'select',
-        filterSelectOptions: uniqueConservationCategories,
+        filterSelectOptions: uniqueConservationCategories.map((category) => category.label),
         sortUndefined: 'last',
       },
       {
@@ -549,6 +657,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   }, [
     activeLocale,
     showProblemsColumn,
+    showStatusColumn,
+    statusBySpeciesId,
     uniqueAcceleratorProjects,
     uniqueConservationCategories,
     uniqueGrowthForms,
@@ -556,6 +666,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     uniqueEcosystemTypes,
     theme,
     ProblemsCell,
+    StatusCell,
     ScientificNameCell,
     AcceleratorProjectsCell,
     GrowthFormsCell,
@@ -576,6 +687,59 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         onClose={onCloseImportSpeciesModal}
         setCheckDataModalOpen={setCheckDataModalOpen}
       />
+      {speciesCheckEnabled && (
+        <SpeciesCheckModal
+          open={speciesCheckOpen}
+          onClose={() => setSpeciesCheckOpen(false)}
+          species={species}
+          projects={availableProjects ?? []}
+          entry={speciesCheckEntry}
+          reloadSpecies={reloadData}
+        />
+      )}
+      {(showFirstTimeBanner || showAddedBanner) && (
+        <Box marginBottom={theme.spacing(2)} paddingLeft={theme.spacing(3)} paddingRight={theme.spacing(3)}>
+          {showFirstTimeBanner ? (
+            <Message
+              type='page'
+              priority='info'
+              body={strings.SPECIES_CHECK_SET_LOCATION_BANNER}
+              showCloseButton
+              onClose={() => setFirstTimeBannerDismissed(true)}
+              pageButtons={[
+                <Button
+                  key='run'
+                  label={strings.RUN_SPECIES_CHECK}
+                  priority='secondary'
+                  type='passive'
+                  onClick={() => openSpeciesCheck('first-time')}
+                />,
+              ]}
+            />
+          ) : (
+            <Message
+              type='page'
+              priority='info'
+              body={strings.formatString(
+                strings.SPECIES_CHECK_ADDED_BANNER,
+                String(uncheckedSpecies.length),
+                uncheckedSpecies.map((sp) => sp.scientificName).join(', ')
+              )}
+              showCloseButton
+              onClose={() => setAddedBannerDismissed(true)}
+              pageButtons={[
+                <Button
+                  key='run'
+                  label={strings.RUN_SPECIES_CHECK}
+                  priority='secondary'
+                  type='passive'
+                  onClick={() => openSpeciesCheck('added')}
+                />,
+              ]}
+            />
+          )}
+        </Box>
+      )}
       <Box ref={contentRef}>
         <PageHeaderWrapper nextElement={contentRef.current}>
           <Box
@@ -625,7 +789,9 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                 <OptionsMenu
                   onOptionItemClick={onOptionItemClick}
                   optionItems={[
-                    { label: strings.CHECK_DATA, value: 'checkData' },
+                    speciesCheckEnabled
+                      ? { label: strings.RUN_SPECIES_CHECK, value: 'runSpeciesCheck' }
+                      : { label: strings.CHECK_DATA, value: 'checkData' },
                     { label: strings.IMPORT, value: 'import' },
                   ]}
                 />

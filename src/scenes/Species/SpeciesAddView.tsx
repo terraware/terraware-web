@@ -1,16 +1,18 @@
-import React, { type JSX, useState } from 'react';
+import React, { type JSX, useCallback, useState } from 'react';
 
-import { Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
-import { useCreateSpeciesMutation } from 'src/queries/generated/species';
+import { useAssignSpeciesToProjectsMutation, useCreateSpeciesMutation } from 'src/queries/generated/species';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
+import SpeciesProjectsSection from 'src/scenes/Species/SpeciesProjectsSection';
 import strings from 'src/strings';
 import { Species, SpeciesRequestError } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -38,9 +40,21 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
   const [record, setRecord, , onChangeCallback] = useForm<Species>(initSpecies());
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
   const [createSpecies, { isLoading: isBusy }] = useCreateSpeciesMutation();
+  const [assignSpeciesToProjects] = useAssignSpeciesToProjectsMutation();
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
+
+  const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
+  const [addedProjectIds, setAddedProjectIds] = useState<number[]>([]);
+
+  const onAddProjectIds = useCallback((projectIds: number[]) => {
+    setAddedProjectIds((previous) => [...previous, ...projectIds.filter((id) => !previous.includes(id))]);
+  }, []);
+
+  const onRemoveProjectIds = useCallback((projectIds: number[]) => {
+    setAddedProjectIds((previous) => previous.filter((id) => !projectIds.includes(id)));
+  }, []);
 
   const newGridSize = isMobile ? 12 : 4;
 
@@ -71,6 +85,9 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
         seedStorageBehavior: record.seedStorageBehavior,
         successionalGroups: record.successionalGroups,
       }).unwrap();
+      if (speciesIntelligenceEnabled && addedProjectIds.length) {
+        await assignSpeciesToProjects({ species: [{ speciesId: id, projectIds: addedProjectIds }] }).unwrap();
+      }
       reloadData();
       navigate(APP_PATHS.SPECIES_DETAILS.replace(':speciesId', id.toString()));
     } catch (e) {
@@ -121,6 +138,18 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
               nameFormatError={nameFormatError}
               setNameFormatError={setNameFormatError}
             />
+            {speciesIntelligenceEnabled && (
+              <Box marginTop={theme.spacing(4)} width='100%'>
+                <SpeciesProjectsSection
+                  speciesId={record.id}
+                  speciesName={record.scientificName}
+                  editMode
+                  addedProjectIds={addedProjectIds}
+                  onAddProjectIds={onAddProjectIds}
+                  onRemoveProjectIds={onRemoveProjectIds}
+                />
+              </Box>
+            )}
           </Grid>
         </Container>
       </PageForm>
