@@ -176,7 +176,7 @@ const SeedlingBatchBox = ({
                     type='number'
                     label=''
                     sx={{ width: '100%' }}
-                    value={value.toString()}
+                    value={value === 0 ? '' : value.toString()}
                     onChange={(v) => updateQuantity(batch.batchId, 'readyQuantityWithdrawn', v)}
                     min={0}
                     max={batch.readyQuantity}
@@ -208,7 +208,7 @@ const SeedlingBatchBox = ({
                           type='number'
                           label=''
                           sx={{ width: '100%' }}
-                          value={phaseValue.toString()}
+                          value={phaseValue === 0 ? '' : phaseValue.toString()}
                           onChange={(v) => updateQuantity(batch.batchId, column.key, v)}
                           min={0}
                           max={available}
