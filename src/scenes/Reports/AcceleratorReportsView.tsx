@@ -1,33 +1,51 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
+import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
+import { Button } from '@terraware/web-components';
 import Tabs from '@terraware/web-components/components/Tabs';
 
 import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/AcceleratorReportTargetsTable';
 import AcceleratorReportsTable from 'src/components/AcceleratorReports/AcceleratorReportsTable';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
+import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import useNavigateTo from 'src/hooks/useNavigateTo';
+import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import AcceleratorReportTabV2 from './AcceleratorReportTabV2';
 
-const AcceleratorReportsView = () => {
+export type AcceleratorReportsViewProps = {
+  tab?: string;
+};
+
+const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
   const { strings } = useLocalization();
+  const navigate = useSyncNavigate();
+  const pathParams = useParams<{ reportId?: string }>();
+  const { goToAcceleratorReportEdit } = useNavigateTo();
   const { currentAcceleratorProject, allAcceleratorProjects, setCurrentAcceleratorProject } = useParticipantData();
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
 
   const newReportTabEnabled = isEnabled('Report Updates July 2026');
+  const pathActiveTab = tab ?? 'reports';
 
   const tabs = useMemo(() => {
     return [
       {
         id: 'reports',
         label: strings.REPORTS,
-        children: newReportTabEnabled ? <AcceleratorReportTabV2 /> : <AcceleratorReportsTable />,
+        children: newReportTabEnabled ? (
+          <AcceleratorReportTabV2 active={pathActiveTab === 'reports'} />
+        ) : (
+          <AcceleratorReportsTable />
+        ),
       },
       {
         id: 'targets',
@@ -35,13 +53,44 @@ const AcceleratorReportsView = () => {
         children: <AcceleratorReportTargetsTable />,
       },
     ];
-  }, [newReportTabEnabled, strings]);
+  }, [newReportTabEnabled, pathActiveTab, strings]);
 
-  const { activeTab, onChangeTab } = useStickyTabs({
+  const { activeTab: stickyActiveTab, onChangeTab: onChangeStickyTab } = useStickyTabs({
     defaultTab: 'reports',
     tabs,
     viewIdentifier: 'accelerator-reports',
   });
+
+  const onChangePathTab = useCallback(
+    (newTab: string) => navigate(newTab === 'reports' ? APP_PATHS.REPORTS : `${APP_PATHS.REPORTS}/${newTab}`),
+    [navigate]
+  );
+
+  const activeTab = newReportTabEnabled ? tab ?? 'reports' : stickyActiveTab;
+  const onChangeTab = newReportTabEnabled ? onChangePathTab : onChangeStickyTab;
+
+  const selectedReportId = Number(pathParams.reportId) || undefined;
+
+  const { report } = useOneAcceleratorReport(selectedReportId);
+
+  // a report can only be edited before it has been accepted
+  const reportStatus = report?.status;
+  const canEdit = reportStatus === 'Not Submitted' || reportStatus === 'Needs Update';
+
+  const rightComponent = useMemo(
+    () =>
+      newReportTabEnabled && activeTab === 'reports' && selectedReportId !== undefined ? (
+        <Button
+          disabled={!canEdit}
+          icon='iconEdit'
+          label={strings.EDIT}
+          onClick={() => goToAcceleratorReportEdit(selectedReportId)}
+          priority='secondary'
+          size='medium'
+        />
+      ) : undefined,
+    [activeTab, canEdit, goToAcceleratorReportEdit, newReportTabEnabled, selectedReportId, strings]
+  );
 
   const PageHeaderLeftComponent = useMemo(
     () => (
@@ -57,7 +106,12 @@ const AcceleratorReportsView = () => {
   );
 
   return (
-    <Page hierarchicalCrumbs={false} leftComponent={PageHeaderLeftComponent} title={strings.REPORTS}>
+    <Page
+      hierarchicalCrumbs={false}
+      leftComponent={PageHeaderLeftComponent}
+      rightComponent={rightComponent}
+      title={strings.REPORTS}
+    >
       <Box display='flex' flexDirection='column' flexGrow={1} width={'100%'}>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>
