@@ -7,7 +7,7 @@ import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedRep
 import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
 import { toReportReviewPayload } from 'src/components/AcceleratorReports/utils';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
-import { useLocalization } from 'src/providers';
+import { useLocalization, useUser } from 'src/providers';
 import { useReviewOneAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import RejectDialog from 'src/scenes/AcceleratorRouter/AcceleratorProjects/Reports/RejectDialog';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -19,6 +19,7 @@ export type ReportMessagesProps = {
 
 const ReportMessages = ({ isConsoleView, reportId }: ReportMessagesProps): JSX.Element | null => {
   const { strings } = useLocalization();
+  const { isAllowed } = useUser();
   const theme = useTheme();
   const snackbar = useSnackbar();
 
@@ -100,7 +101,10 @@ const ReportMessages = ({ isConsoleView, reportId }: ReportMessagesProps): JSX.E
 
       <ApprovedReportMessage report={report} />
 
-      <RejectedReportMessage report={report} showRejectDialog={isConsoleView ? openRejectDialog : undefined} />
+      <RejectedReportMessage
+        report={report}
+        showRejectDialog={isConsoleView && isAllowed('UPDATE_SUBMISSION_STATUS') ? openRejectDialog : undefined}
+      />
 
       {unpublishedChanges && (
         <Box marginBottom={theme.spacing(2)}>
