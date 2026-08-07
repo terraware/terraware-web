@@ -13,6 +13,7 @@ import IndicatorProgressSection from 'src/components/AcceleratorReports/Indicato
 import ProjectHealthBar from 'src/components/AcceleratorReports/ProjectHealthBar';
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
+import ReportMessages from 'src/components/AcceleratorReports/ReportMessages';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
@@ -97,6 +98,8 @@ const AcceleratorReportTabV2 = ({ active }: AcceleratorReportTabV2Props): JSX.El
 
             {selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
           </Box>
+
+          {resolvedReportId !== undefined && <ReportMessages reportId={resolvedReportId} />}
 
           <ProjectHealthBar reportId={resolvedReportId} />
 
