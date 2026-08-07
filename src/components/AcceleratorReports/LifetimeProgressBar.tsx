@@ -32,9 +32,12 @@ const LifetimeProgressBar = ({
   const lifetimeSpan = endOfProjectTarget !== undefined ? endOfProjectTarget - baselineValue : 0;
 
   const toPercent = useCallback(
-    (value: number) => Math.min(100, Math.max(0, ((value - baselineValue) / lifetimeSpan) * 100)),
+    (value: number) => ((value - baselineValue) / lifetimeSpan) * 100,
     [baselineValue, lifetimeSpan]
   );
+
+  // positions stay inside the track even when progress runs past the end-of-project target
+  const toBarPercent = useCallback((value: number) => Math.min(100, Math.max(0, toPercent(value))), [toPercent]);
 
   const ticks = useMemo(() => {
     if (lifetimeSpan <= 0 || year === undefined) {
@@ -43,17 +46,17 @@ const LifetimeProgressBar = ({
 
     return [
       previousYearCumulativeTotal !== undefined
-        ? { key: 'previousYear', label: String(year - 1), percent: toPercent(previousYearCumulativeTotal) }
+        ? { key: 'previousYear', label: String(year - 1), percent: toBarPercent(previousYearCumulativeTotal) }
         : undefined,
       yearTarget !== undefined
         ? {
             key: 'yearTarget',
             label: strings.formatString(strings.X_TARGET, String(year)).toString(),
-            percent: toPercent(yearTarget),
+            percent: toBarPercent(yearTarget),
           }
         : undefined,
     ].filter((tick): tick is { key: string; label: string; percent: number } => tick !== undefined);
-  }, [lifetimeSpan, previousYearCumulativeTotal, strings, toPercent, year, yearTarget]);
+  }, [lifetimeSpan, previousYearCumulativeTotal, strings, toBarPercent, year, yearTarget]);
 
   if (lifetimeSpan <= 0) {
     return null;
@@ -90,7 +93,7 @@ const LifetimeProgressBar = ({
             sx={{
               backgroundColor: theme.palette.TwClrBaseGray300,
               height: '100%',
-              width: `${toPercent(currentProgress)}%`,
+              width: `${toBarPercent(currentProgress)}%`,
             }}
           />
         </Box>
