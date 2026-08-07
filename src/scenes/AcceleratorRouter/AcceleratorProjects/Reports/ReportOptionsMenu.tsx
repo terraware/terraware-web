@@ -63,7 +63,9 @@ const ReportOptionsMenu = ({ reportId }: ReportOptionsMenuProps): JSX.Element | 
 
   return (
     <>
-      {showPublishModal && <PublishModal onClose={closePublishModal} onSubmit={publish} />}
+      {showPublishModal && (
+        <PublishModal disabled={publishReportResponse.isLoading} onClose={closePublishModal} onSubmit={publish} />
+      )}
 
       <OptionsMenu
         onOptionItemClick={onOptionItemClick}
