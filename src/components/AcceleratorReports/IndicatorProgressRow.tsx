@@ -15,6 +15,7 @@ const MIN_TARGET_PERCENT = 50;
 const TICK_HOVER_WIDTH = 9;
 
 export type ProgressIndicator = {
+  baseline?: number;
   classId: 'Cumulative' | 'Level';
   description?: string;
   currentYearProgress?: { quarter: string; value: number }[];
@@ -43,7 +44,9 @@ const IndicatorProgressRow = ({ indicator, quarter }: IndicatorProgressRowProps)
 
   const isCumulative = indicator.classId === 'Cumulative';
   const precision = indicator.precision ?? 0;
-  const previousYearCumulativeTotal = indicator.previousYearCumulativeTotal ?? 0;
+  const baselineValue = indicator.baseline ?? 0;
+
+  const startingTotal = indicator.previousYearCumulativeTotal ?? baselineValue;
 
   const currentYearProgress = useMemo(() => indicator.currentYearProgress ?? [], [indicator.currentYearProgress]);
 
@@ -52,8 +55,8 @@ const IndicatorProgressRow = ({ indicator, quarter }: IndicatorProgressRowProps)
       return indicator.value;
     }
 
-    return currentYearProgress.reduce((total, progress) => total + progress.value, previousYearCumulativeTotal);
-  }, [currentYearProgress, indicator.value, isCumulative, previousYearCumulativeTotal]);
+    return currentYearProgress.reduce((total, progress) => total + progress.value, startingTotal);
+  }, [currentYearProgress, indicator.value, isCumulative, startingTotal]);
 
   const quarterlyValue = useMemo(
     () => (isCumulative ? currentYearProgress.find((progress) => progress.quarter === quarter)?.value : undefined),
@@ -62,7 +65,7 @@ const IndicatorProgressRow = ({ indicator, quarter }: IndicatorProgressRowProps)
 
   // Caps the target mark at the halfway line for visibility
   const { segments, targetPercent } = useMemo(() => {
-    const barMin = isCumulative ? previousYearCumulativeTotal : 0;
+    const barMin = isCumulative ? startingTotal : 0;
     const total = cumulativeValue ?? 0;
     const target = indicator.target;
     const barMax = Math.max(total, target ?? 0, barMin);
@@ -106,7 +109,7 @@ const IndicatorProgressRow = ({ indicator, quarter }: IndicatorProgressRowProps)
         : [{ key: 'total', quarter: undefined, startPercent: 0, widthPercent: toPercent(total) }];
 
     return { segments: barSegments, targetPercent: anchorPercent };
-  }, [cumulativeValue, currentYearProgress, indicator.target, isCumulative, previousYearCumulativeTotal]);
+  }, [cumulativeValue, currentYearProgress, indicator.target, isCumulative, startingTotal]);
 
   const fillColor =
     indicator.status === 'Unlikely'
@@ -131,8 +134,14 @@ const IndicatorProgressRow = ({ indicator, quarter }: IndicatorProgressRowProps)
       return undefined;
     }
 
-    return Math.round(((cumulativeValue ?? 0) / target) * 100);
-  }, [cumulativeValue, indicator.target]);
+    const denominator = target - baselineValue;
+
+    if (denominator <= 0) {
+      return undefined;
+    }
+
+    return Math.round((((cumulativeValue ?? 0) - baselineValue) / denominator) * 100);
+  }, [baselineValue, cumulativeValue, indicator.target]);
 
   const onToggle = useCallback(() => setExpanded((previous) => !previous), []);
 
