@@ -588,6 +588,14 @@ const PlantingDateForm = ({
     }
   };
 
+  const onSaveAndRequest = () => {
+    if (hasNotSetSpecies) {
+      setNotSetWarningOpen(true);
+      return;
+    }
+    setNotifyModalOpen(true);
+  };
+
   const onSaveAndNotify = async (note: string) => {
     if (await performSave({ note })) {
       setNotifyModalOpen(false);
@@ -699,7 +707,7 @@ const PlantingDateForm = ({
           <span style={tooltipButtonWrapperStyle}>
             <Button
               label={strings.SAVE_AND_REQUEST}
-              onClick={() => setNotifyModalOpen(true)}
+              onClick={onSaveAndRequest}
               disabled={isSaving || !date || !hasAnySpeciesWithQuantity}
               priority={isMobile ? 'secondary' : 'primary'}
               size={isMobile ? 'medium' : undefined}
