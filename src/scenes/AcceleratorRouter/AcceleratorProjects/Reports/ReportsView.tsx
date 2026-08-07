@@ -16,6 +16,7 @@ import { useLocalization, useUser } from 'src/providers';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
+import ReportOptionsMenu from './ReportOptionsMenu';
 import ReportReviewButtons from './ReportReviewButtons';
 import ReportTabV2 from './ReportTabV2';
 import ReportsSettings from './ReportsSettings';
@@ -113,6 +114,8 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
             )}
 
             <ReportReviewButtons reportId={selectedReportId} />
+
+            <ReportOptionsMenu reportId={selectedReportId} />
           </Box>
         ) : undefined
       }
