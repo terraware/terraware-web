@@ -141,15 +141,11 @@ export default function useNavigateTo() {
         navigate({ pathname: APP_PATHS.ACCELERATOR_PROJECT_VOTES_EDIT.replace(':projectId', `${projectId}`) });
       },
 
-      goToAcceleratorReport: (reportId: number, projectId: number) =>
-        navigate({
-          pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', `${reportId}`).replace(':projectId', `${projectId}`),
-        }),
+      goToAcceleratorReport: (reportId: number) =>
+        navigate({ pathname: APP_PATHS.REPORTS_VIEW.replace(':reportId', `${reportId}`) }),
 
-      goToAcceleratorReportEdit: (reportId: number, projectId: number) =>
-        navigate({
-          pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', `${reportId}`).replace(':projectId', `${projectId}`),
-        }),
+      goToAcceleratorReportEdit: (reportId: number) =>
+        navigate({ pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', `${reportId}`) }),
 
       goToActivityCreate: (projectId: number) => {
         const params = searchParamsWithMapViewState();

@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -16,7 +15,6 @@ import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
-import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import {
   AcceleratorReportPayload,
   ReportAutoCalculatedIndicatorPayload,
@@ -40,14 +38,12 @@ type AcceleratorReportEditFormProps = {
 };
 
 const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) => {
-  const { currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
   const theme = useTheme();
   const { strings } = useLocalization();
   const { goToAcceleratorReport } = useNavigateTo();
 
-  const pathParams = useParams<{ projectId: string; reportId: string }>();
-  const reportId = Number(pathParams.reportId);
-  const projectId = Number(pathParams.projectId);
+  const projectId = report.projectId;
+  const reportId = report.id;
 
   const year = useMemo(() => {
     return Number(report.startDate.split('-')[0]);
@@ -61,8 +57,8 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
   const snackbar = useSnackbar();
 
   const goToReport = useCallback(() => {
-    goToAcceleratorReport(Number(reportId), Number(projectId));
-  }, [goToAcceleratorReport, projectId, reportId]);
+    goToAcceleratorReport(Number(reportId));
+  }, [goToAcceleratorReport, reportId]);
 
   const saveReport = useCallback(() => {
     setValidate(false);
@@ -119,12 +115,6 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
     updateReportResponse.isError,
     updateReportResponse.isSuccess,
   ]);
-
-  useEffect(() => {
-    if (projectId !== currentAcceleratorProject?.id) {
-      setCurrentAcceleratorProject(projectId);
-    }
-  }, [currentAcceleratorProject?.id, projectId, setCurrentAcceleratorProject]);
 
   const onChangeIndicator = useCallback(
     (
