@@ -1,3 +1,4 @@
+0231cf6f Update dependency js-yaml to v4.3.1 [SECURITY] (#6221)
 9cbae6e4 SW-8744 Inventory Withdrawals: In mobile web, can't input quantities in single batch withdrawals initiated within the batch (#6218)
 29da381c SW-8731 Show message when attempting to Save Planting Dates with species that don't have quantities set (#6220)
 245ad92b SW-8745 In mobile web, bulk Withdraw from Withdraw tables, Add to Project window is munged (#6219)
