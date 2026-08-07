@@ -7,6 +7,7 @@ import { DateTime } from 'luxon';
 
 import Card from 'src/components/common/Card';
 import DatePicker from 'src/components/common/DatePicker';
+import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -453,6 +454,7 @@ const PlantingDateForm = ({
   });
   const [validate, setValidate] = useState(false);
   const [notifyModalOpen, setNotifyModalOpen] = useState(false);
+  const [notSetWarningOpen, setNotSetWarningOpen] = useState(false);
 
   const mobileFooterButtonSx = isMobile
     ? {
@@ -468,13 +470,26 @@ const PlantingDateForm = ({
     : undefined;
   const tooltipButtonWrapperStyle = isMobile ? { display: 'block', width: '100%' } : undefined;
 
-  const hasInvalidSpeciesQuantity = useMemo(
-    () =>
-      Object.values(substrataDrafts).some(
-        (draft) =>
-          draft.selected && draft.species.some((s) => s.speciesId !== undefined && getSpeciesDraftQuantity(s) <= 0)
-      ),
-    [substrataDrafts]
+  const selectedSpeciesQuantities = useMemo(() => {
+    const quantities: number[] = [];
+    Object.values(substrataDrafts).forEach((draft) => {
+      if (!draft.selected) {
+        return;
+      }
+      draft.species.forEach((s) => {
+        if (s.speciesId === undefined) {
+          return;
+        }
+        quantities.push(getSpeciesDraftQuantity(s));
+      });
+    });
+    return quantities;
+  }, [substrataDrafts]);
+
+  const hasNotSetSpecies = useMemo(() => selectedSpeciesQuantities.some((q) => q <= 0), [selectedSpeciesQuantities]);
+  const hasAnySpeciesWithQuantity = useMemo(
+    () => selectedSpeciesQuantities.some((q) => q > 0),
+    [selectedSpeciesQuantities]
   );
 
   const scheduledThisDateBySpecies = useMemo(() => {
@@ -509,7 +524,7 @@ const PlantingDateForm = ({
       const substratumId = Number(substratumIdStr);
       return draft.species.flatMap((s) => {
         const quantity = getSpeciesDraftQuantity(s);
-        if (s.speciesId === undefined || Number.isNaN(quantity)) {
+        if (s.speciesId === undefined || Number.isNaN(quantity) || quantity <= 0) {
           return [];
         }
         return [
@@ -560,6 +575,14 @@ const PlantingDateForm = ({
   };
 
   const onSave = async () => {
+    if (!date) {
+      setValidate(true);
+      return;
+    }
+    if (hasNotSetSpecies) {
+      setNotSetWarningOpen(true);
+      return;
+    }
     if (await performSave()) {
       onClose();
     }
@@ -666,7 +689,7 @@ const PlantingDateForm = ({
               onClick={() => void onSave()}
               priority='secondary'
               type={isMobile ? 'passive' : 'productive'}
-              disabled={isSaving || hasInvalidSpeciesQuantity}
+              disabled={isSaving}
               size={isMobile ? 'medium' : undefined}
               sx={mobileFooterButtonSx}
             />
@@ -677,7 +700,7 @@ const PlantingDateForm = ({
             <Button
               label={strings.SAVE_AND_REQUEST}
               onClick={() => setNotifyModalOpen(true)}
-              disabled={isSaving || !date || hasInvalidSpeciesQuantity}
+              disabled={isSaving || !date || !hasAnySpeciesWithQuantity}
               priority={isMobile ? 'secondary' : 'primary'}
               size={isMobile ? 'medium' : undefined}
               sx={mobileFooterButtonSx}
@@ -692,6 +715,26 @@ const PlantingDateForm = ({
           onClose={() => setNotifyModalOpen(false)}
           onConfirm={(note) => void onSaveAndNotify(note)}
           busy={isSaving}
+        />
+      )}
+
+      {notSetWarningOpen && (
+        <DialogBox
+          open={true}
+          onClose={() => setNotSetWarningOpen(false)}
+          title={strings.PLANTING_DATE_QUANTITY_NOT_SET_TITLE}
+          message={strings.PLANTING_DATE_QUANTITY_NOT_SET_WARNING}
+          size='medium'
+          skrim={true}
+          middleButtons={[
+            <Button
+              key='close-not-set-warning'
+              id='closeNotSetWarning'
+              label={strings.OK}
+              onClick={() => setNotSetWarningOpen(false)}
+              size='medium'
+            />,
+          ]}
         />
       )}
     </Box>

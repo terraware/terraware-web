@@ -1584,6 +1584,8 @@ PLANTING_COMPLETE_TOOLTIP,¿Se ha completado la plantación en este sustrato?,a6
 PLANTING_DATE,Fecha de plantación,544c699c
 PLANTING_DATE_ADDED,Fecha de plantación agregada: {0}.,187cb611
 PLANTING_DATE_DELETED,Fecha de plantación eliminada: {0}.,6a287532
+PLANTING_DATE_QUANTITY_NOT_SET_TITLE,Cantidad a plantar no establecida,e5701f1b
+PLANTING_DATE_QUANTITY_NOT_SET_WARNING,"Hay al menos una especie para la cual la Cantidad a Plantar aún no ha sido establecida. Para guardar la Fecha de Plantación, agregue cantidades para todas las especies o elimine especies de la fecha.",5b164c2d
 PLANTING_DATE_SPECIES_ADDED,Fecha de plantación {0} especies añadidas: {1} en {2}.,298ae021
 PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,Fecha de plantación {0} actualizada: {1} en {2} añadidos.,b3e3cbeb
 PLANTING_DATE_SPECIES_UPDATED,Fecha de plantación {0} actualizada: {1} en {2} cambió de {3} a {4}.,80c99e8a
@@ -2104,9 +2106,9 @@ SESSION_HAS_NOT_STARTED,La sesión no comenzó.,ec7ca566
 SESSION_IS_IN_PROGRESS,La sesión está en curso.,b30ad69a
 SESSION_IS_STARTING_SOON,La sesión comienza pronto.,c3abc7d1
 SESSION_SLIDES,Diapositivas de la sesión,7748a514
+SET_INITIAL_DENSITY_DESCRIPTION,Establezca la densidad de plantación inicial para los estratos del sitio. El número de plantas se calculará utilizando la densidad de plantas y el área.,4ef3c583
 SET_LOCATION,Establecer ubicación,262e6b39
 SET_LOCATIONS,Establecer ubicaciones,68884a84
-SET_INITIAL_DENSITY_DESCRIPTION,Establezca la densidad de plantación inicial para los estratos del sitio. El número de plantas se calculará utilizando la densidad de plantas y el área.,4ef3c583
 SET_PLANTING_COMPLETE,Plantación completa,3bea077e
 SET_REMINDER,Establecer recordatorio,ad81e3b3
 SET_SPECIES_TARGETS_DESCRIPTION,Establezca objetivos por sustrato del sitio. Las especies y cantidades pueden actualizarse en cualquier momento y son visibles en la Planificación de Inventario.,7619cbee
