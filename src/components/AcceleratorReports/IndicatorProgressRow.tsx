@@ -3,6 +3,7 @@ import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { Box, Collapse, IconButton, Link, Tooltip, Typography, useTheme } from '@mui/material';
 import { Badge, Icon, IconTooltip } from '@terraware/web-components';
 
+import LifetimeProgressBar from 'src/components/AcceleratorReports/LifetimeProgressBar';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import { useLocalization } from 'src/providers';
 import { MetricStatus } from 'src/types/AcceleratorReport';
@@ -17,6 +18,7 @@ const TICK_HOVER_WIDTH = 9;
 export type ProgressIndicator = {
   baseline?: number;
   classId: 'Cumulative' | 'Level';
+  endOfProjectTarget?: number;
   description?: string;
   currentYearProgress?: { quarter: string; value: number }[];
   name: string;
@@ -35,9 +37,10 @@ export type ProgressIndicator = {
 export type IndicatorProgressRowProps = {
   indicator: ProgressIndicator;
   quarter?: 'Q1' | 'Q2' | 'Q3' | 'Q4';
+  year?: number;
 };
 
-const IndicatorProgressRow = ({ indicator, quarter }: IndicatorProgressRowProps): JSX.Element => {
+const IndicatorProgressRow = ({ indicator, quarter, year }: IndicatorProgressRowProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
   const [expanded, setExpanded] = useState(false);
@@ -47,6 +50,9 @@ const IndicatorProgressRow = ({ indicator, quarter }: IndicatorProgressRowProps)
   const baselineValue = indicator.baseline ?? 0;
 
   const startingTotal = indicator.previousYearCumulativeTotal ?? baselineValue;
+
+  const startingTotalLabel =
+    indicator.previousYearCumulativeTotal !== undefined && year !== undefined ? String(year - 1) : strings.BASELINE;
 
   const currentYearProgress = useMemo(() => indicator.currentYearProgress ?? [], [indicator.currentYearProgress]);
 
@@ -263,6 +269,23 @@ const IndicatorProgressRow = ({ indicator, quarter }: IndicatorProgressRowProps)
                 </Tooltip>
               ))}
 
+              {isCumulative && (
+                <Tooltip title={startingTotalLabel}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      height: `${BAR_HEIGHT + TICK_OVERHANG * 2}px`,
+                      left: 0,
+                      position: 'absolute',
+                      top: `-${TICK_OVERHANG}px`,
+                      width: `${TICK_HOVER_WIDTH}px`,
+                    }}
+                  >
+                    <Box sx={{ backgroundColor: theme.palette.TwClrBaseBlack, height: '100%', width: '2px' }} />
+                  </Box>
+                </Tooltip>
+              )}
+
               {targetPercent !== undefined && (
                 <Box
                   sx={{
@@ -288,6 +311,17 @@ const IndicatorProgressRow = ({ indicator, quarter }: IndicatorProgressRowProps)
                 </Typography>
               )}
             </Typography>
+          )}
+
+          {isCumulative && (
+            <LifetimeProgressBar
+              baseline={indicator.baseline}
+              currentProgress={cumulativeValue ?? 0}
+              endOfProjectTarget={indicator.endOfProjectTarget}
+              previousYearCumulativeTotal={indicator.previousYearCumulativeTotal}
+              year={year}
+              yearTarget={indicator.target}
+            />
           )}
         </Box>
 

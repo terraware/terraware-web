@@ -70,7 +70,11 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
 
           <HighlightsBox key={resolvedReportId} projectId={selectedProjectId} report={selectedReport} />
 
-          <IndicatorProgressSectionContent indicators={indicators} quarter={selectedReport?.quarter} />
+          <IndicatorProgressSectionContent
+            indicators={indicators}
+            quarter={selectedReport?.quarter}
+            year={selectedReport?.startDate ? Number(selectedReport.startDate.split('-')[0]) : undefined}
+          />
         </>
       )}
     </Card>

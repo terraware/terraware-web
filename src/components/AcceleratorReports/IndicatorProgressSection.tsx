@@ -26,11 +26,13 @@ const compareRefIds = (a: string, b: string) => {
 export type IndicatorProgressSectionContentProps = {
   indicators: ProgressIndicator[];
   quarter?: 'Q1' | 'Q2' | 'Q3' | 'Q4';
+  year?: number;
 };
 
 export const IndicatorProgressSectionContent = ({
   indicators,
   quarter,
+  year,
 }: IndicatorProgressSectionContentProps): JSX.Element | null => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -48,7 +50,7 @@ export const IndicatorProgressSectionContent = ({
       </Typography>
 
       {sortedIndicators.map((indicator, index) => (
-        <IndicatorProgressRow indicator={indicator} key={`${indicator.refId}-${index}`} quarter={quarter} />
+        <IndicatorProgressRow indicator={indicator} key={`${indicator.refId}-${index}`} quarter={quarter} year={year} />
       ))}
     </Box>
   );
@@ -74,7 +76,9 @@ const IndicatorProgressSection = ({ reportId }: IndicatorProgressSectionProps): 
     [report]
   );
 
-  return <IndicatorProgressSectionContent indicators={indicators} quarter={report?.quarter} />;
+  const year = report?.startDate ? Number(report.startDate.split('-')[0]) : undefined;
+
+  return <IndicatorProgressSectionContent indicators={indicators} quarter={report?.quarter} year={year} />;
 };
 
 export default IndicatorProgressSection;
