@@ -29,6 +29,13 @@ const AcceleratorReportEditV2 = (): JSX.Element => {
 
   const goToReport = useCallback(() => goToAcceleratorReport(reportId), [goToAcceleratorReport, reportId]);
 
+  // the form is reachable by typing the path, and a report stops being editable once it is submitted
+  useEffect(() => {
+    if (report && report.status !== 'Not Submitted' && report.status !== 'Needs Update') {
+      goToReport();
+    }
+  }, [goToReport, report]);
+
   const onSave = useCallback(() => {
     if (report) {
       void updateReport({ reportId, updateAcceleratorReportValuesRequestPayload: report });
