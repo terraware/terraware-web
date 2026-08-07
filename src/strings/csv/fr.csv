@@ -1286,16 +1286,20 @@ NEXT_STEPS_INSTRUCTIONS,Résumez les phases suivantes de votre projet. (Un quart
 NEXT_STEPS_REQUIRED,Prochaines étapes *,33f00368
 NICE,Génial !,d5008f62
 NO,Non,3c5beb81
+NO_ACHIEVEMENTS_ADDED,Aucun accomplissement ajouté,d69c8f4b
 NO_ACTIVE_PLANTING_SEASONS_FOR_FILTERS,Il n’y a aucune saison de plantation active pour le site de plantation sélectionné.,2f97b045
 NO_ACTIVE_SEASONS_FOR_SITE,Aucune saison active pour le site de plantation sélectionné,7909d317
 NO_ACTIVITIES_TO_SHOW,Aucune activité à afficher.,1b075899
+NO_ADDITIONAL_COMMENTS_ADDED,Aucun commentaire supplémentaire ajouté,d0c4bf68
 NO_AVAILABLE_PROJECTS_FOR_SPECIES,Il n'y a pas d'autres projets disponibles pour cette espèce.,071c6205
 NO_BATCHES_TO_WITHDRAW_FROM,Il n'y a pas de lots dont les quantités peuvent être retirés.,dc94bdcc
 NO_BATCHES_WITH_INVENTORY,"Tous les lots ayant eu un inventaire sont maintenant vides. Pour afficher les lots, espèces et pépinières qui avaient auparavant un inventaire, utilisez les filtres « Afficher les lots vides » et « Afficher les espèces/pépinières sans inventaire ».",2c0612be
 NO_BATCHES_WITH_INVENTORY_MESSAGE,Aucun lot ne possède d’inventaire. Utilisez le filtre « Afficher les lots vides » pour voir tous vos lots vides.,c326ecab
+NO_CHALLENGES_AND_MITIGATION_PLANS_ADDED,Aucun défi ni plan d’atténuation ajouté,f1d982d5
 NO_COLUMNS_SELECTED,Aucune colonne sélectionnée,ac8b2bbe
 NO_COMMENTS_ADDED,Aucun commentaire ajouté,7fd30c97
 NO_DATA_YET,Pas encore de données,f2a0be82
+NO_FINANCIAL_SUMMARIES_ADDED,Aucun résumé financier ajouté,455039c1
 NO_FUTURE_DATES,Aucune date future autorisée,a0f0673b
 NO_HIGHLIGHTS_ADDED,Aucun point saillant ajouté,d7125894
 NO_HIGHLIGHTS_YET,Aucun point saillant pour le moment.,cafd3fe8

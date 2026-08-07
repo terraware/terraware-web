@@ -4,6 +4,10 @@ import { useParams } from 'react-router';
 import { Box, useTheme } from '@mui/material';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
+import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
+import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalCommentsBox';
+import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
+import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import IndicatorProgressSection from 'src/components/AcceleratorReports/IndicatorProgressSection';
 import ProjectHealthBar from 'src/components/AcceleratorReports/ProjectHealthBar';
@@ -69,6 +73,14 @@ const ReportTabV2 = (): JSX.Element => {
           <HighlightsBox key={resolvedReportId} projectId={projectId} report={selectedReport} />
 
           <IndicatorProgressSection reportId={resolvedReportId} />
+
+          <AchievementsBox projectId={projectId} report={selectedReport} />
+
+          <ChallengesMitigationBox projectId={projectId} report={selectedReport} />
+
+          <FinancialSummariesBox projectId={projectId} report={selectedReport} />
+
+          <AdditionalCommentsBox projectId={projectId} report={selectedReport} />
         </>
       )}
     </Card>

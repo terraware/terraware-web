@@ -6,6 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
+import isEnabled from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import { useReviewAcceleratorReportMutation } from 'src/queries/generated/reports';
 import strings from 'src/strings';
@@ -13,6 +14,7 @@ import { ChallengeMitigation, isAcceleratorReport } from 'src/types/AcceleratorR
 import useSnackbar from 'src/utils/useSnackbar';
 
 import EditableReportBox from './EditableReportBox';
+import EmptyFieldPlaceholder from './EmptyFieldPlaceholder';
 import { ReportBoxProps } from './ReportBox';
 
 const textAreaStyles = { textarea: { height: '120px' } };
@@ -40,6 +42,7 @@ const ChallengeMitigationPlan = ({
 }) => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const newReportTabEnabled = isEnabled('Report Updates July 2026');
 
   const setChallenge = useCallback(
     (value: any) => setChallengeMitigation({ ...challengeMitigation, challenge: value }),
@@ -53,7 +56,7 @@ const ChallengeMitigationPlan = ({
 
   return (
     <Grid item xs={12} marginBottom={1}>
-      {!(funderReportView && !isMobile) && (
+      {!newReportTabEnabled && !(funderReportView && !isMobile) && (
         <Box
           sx={{ scrollMarginTop: '50vh' }}
           borderBottom={funderReportView ? 'none' : `1px solid ${theme.palette.TwClrBrdrSecondary}`}
@@ -154,6 +157,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
+  const newReportTabEnabled = isEnabled('Report Updates July 2026');
   const snackbar = useSnackbar();
 
   const { isMobile } = useDeviceInfo();
@@ -162,7 +166,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   }, [challengeMitigations]);
 
   const areFilteredChallengesDifferent = useMemo(() => {
-    return nonEmptyChallenges.length > 0 && JSON.stringify(nonEmptyChallenges) !== JSON.stringify(report?.challenges);
+    return JSON.stringify(nonEmptyChallenges) !== JSON.stringify(report?.challenges ?? []);
   }, [report?.challenges, nonEmptyChallenges]);
 
   useEffect(() => {
@@ -183,14 +187,10 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
     if (challengeMitigations.length === 0) {
       addRow();
     }
-    if (onChange) {
-      if (areFilteredChallengesDifferent) {
-        // only call onChange if the non-empty challenges are different, but call it with all to include the empty
-        // challenges; otherwise deleting characters can cause rows to disappear
-        onChange(challengeMitigations);
-      }
+    if (onChange && areFilteredChallengesDifferent) {
+      onChange(nonEmptyChallenges);
     }
-  }, [addRow, areFilteredChallengesDifferent, challengeMitigations, onChange]);
+  }, [addRow, areFilteredChallengesDifferent, challengeMitigations, nonEmptyChallenges, onChange]);
 
   useEffect(() => {
     if (reviewReportResponse.isError) {
@@ -247,47 +247,55 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
 
   const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
 
+  const isEmpty = newReportTabEnabled && !isEditing && nonEmptyChallenges.length === 0;
+
   return (
     <EditableReportBox
-      name={''}
+      name={newReportTabEnabled ? strings.CHALLENGES_AND_MITIGATION_PLAN : ''}
       canEdit={!!canEdit}
       editing={isEditing}
       onEdit={setInternalEditingTrue}
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
-      includeBorder={!funderReportView}
+      includeBorder={!newReportTabEnabled && !funderReportView}
     >
-      {funderReportView && !isMobile && (
+      {!isEmpty && (newReportTabEnabled || (funderReportView && !isMobile)) && (
         <Box width={'100%'}>
           <Grid container marginBottom={1}>
             <Grid item xs={6}>
-              <Typography fontWeight={600} fontSize={'20px'}>
+              <Typography fontWeight={600} fontSize={funderReportView ? '20px' : '16px'}>
                 {strings.CHALLENGE}
               </Typography>
             </Grid>
             <Grid item xs={6}>
-              <Typography fontWeight={600} fontSize={'20px'}>
+              <Typography fontWeight={600} fontSize={funderReportView ? '20px' : '16px'}>
                 {strings.MITIGATION_PLAN}
               </Typography>
             </Grid>
           </Grid>
         </Box>
       )}
-      {challengeMitigations?.map((challenge, index) => (
-        <ChallengeMitigationPlan
-          challengeMitigation={challenge}
-          key={`challenge-mitigation-${index}`}
-          index={index}
-          includeBorder={index < challengeMitigations.length - 1}
-          editing={isEditing}
-          onRemove={deleteChallenge(index)}
-          setChallengeMitigation={updateChallenge(index)}
-          validateFields={validateFields}
-          funderReportView={funderReportView}
-          validate={validate}
-        />
-      ))}
+      {isEmpty ? (
+        <Grid item xs={12} marginBottom={1}>
+          <EmptyFieldPlaceholder text={strings.NO_CHALLENGES_AND_MITIGATION_PLANS_ADDED} />
+        </Grid>
+      ) : (
+        challengeMitigations?.map((challenge, index) => (
+          <ChallengeMitigationPlan
+            challengeMitigation={challenge}
+            key={`challenge-mitigation-${index}`}
+            index={index}
+            includeBorder={index < challengeMitigations.length - 1}
+            editing={isEditing}
+            onRemove={deleteChallenge(index)}
+            setChallengeMitigation={updateChallenge(index)}
+            validateFields={validateFields}
+            funderReportView={funderReportView}
+            validate={validate}
+          />
+        ))
+      )}
       {isEditing && (
         <Button
           onClick={addRow}
