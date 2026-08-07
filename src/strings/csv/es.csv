@@ -231,7 +231,7 @@ AUTO_ROTATE,Rotación automática,15ce1a40
 AVAILABLE,disponible,716e496f
 AVAILABLE_TITLE,Disponible,b84c21ed
 AVAILABLE_TO_SCHEDULE,Disponible para programar,00da4780
-AVAILABLE_TO_SCHEDULE_TOOLTIP,Cantidad de plantas de esta especie asignadas por el vivero menos la cantidad en Fechas de Plantación guardadas.,9f01f803
+AVAILABLE_TO_SCHEDULE_TOOLTIP,"Cantidad de plantas de esta especie asignadas por el vivero menos la cantidad de plantas programadas en Fechas de Plantación, incluyendo esta fecha.",800ad9f3
 AVERAGE_PROJECT_STRATA_SURVIVAL_RATE,Tasa promedio de supervivencia por estrato del proyecto,eba4d7ea
 AVERAGE_STRATA_SURVIVAL_RATE,Tasa promedio de supervivencia por estrato,1aab76e2
 AVERAGE_WOOD_DENSITY,Densidad promedio de la madera (kb/m3),b413c9a9
@@ -289,9 +289,9 @@ BUG_REPORT_INSTRUCTIONS,Describa detalladamente el problema que encontró (¿Dó
 BY,Por,e8fbe470
 BY_ACCESSION,Por accesión,61b8fb95
 BY_BATCH,Por lotes,68c5092f
+BY_INITIAL_PLANTING_DENSITY,por densidad de plantación inicial,0213f3d7
 BY_NURSERY,Por vivero,a0a2faa5
 BY_SPECIES,Por especies,602624ab
-BY_TARGET_PLANTING_DENSITY,por densidad de plantación objetivo,1a635b91
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densidad de plantas calculada a partir de retiros,d06a4b56
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Para usar la densidad de plantas calculada a partir de los Retiros de plantación, marque la casilla. Para sobrescribir estos datos, ingrese manualmente un valor en los campos de Densidad de Plantas a la izquierda.",c674df96
 CAMERA_FOCUS_POINT,Punto de enfoque,350a921b
@@ -944,6 +944,8 @@ INDICATOR_TYPE_GOAL,Meta,cb34c06e
 INDICATOR_TYPE_PROCESS,Proceso,0bee5739
 INDICATORS,Indicadores,ea71857f
 INFRASTRUCTURE,Infraestructura,c8fe126f
+INITIAL_PLANTING_DENSITY,Densidad de plantación inicial,54f0e256
+INITIAL_PLANTING_DENSITY_TOOLTIP,Densidad de plantación inicial para el estrato (plantas por hectárea).,fb0f44cd
 INSTANCES,Casos,fcc19322
 INSTRUCTIONS,Instrucciones:,4abbf6f0
 INSUFFICIENT_DATA,Datos insuficientes,8e59cf35
@@ -2104,11 +2106,11 @@ SESSION_IS_STARTING_SOON,La sesión comienza pronto.,c3abc7d1
 SESSION_SLIDES,Diapositivas de la sesión,7748a514
 SET_LOCATION,Establecer ubicación,262e6b39
 SET_LOCATIONS,Establecer ubicaciones,68884a84
+SET_INITIAL_DENSITY_DESCRIPTION,Establezca la densidad de plantación inicial para los estratos del sitio. El número de plantas se calculará utilizando la densidad de plantas y el área.,4ef3c583
 SET_PLANTING_COMPLETE,Plantación completa,3bea077e
 SET_REMINDER,Establecer recordatorio,ad81e3b3
 SET_SPECIES_TARGETS_DESCRIPTION,Establezca objetivos por sustrato del sitio. Las especies y cantidades pueden actualizarse en cualquier momento y son visibles en la Planificación de Inventario.,7619cbee
 SET_T0_DATA_IN_THE,Ver {0},194994e4
-SET_TARGET_DENSITY_DESCRIPTION,Establezca la densidad de plantación objetivo para los estratos del sitio. El número de plantas se calculará utilizando la densidad de plantas y el área.,59faf940
 SET_UP,Configurar,6096080e
 SET_UP_NURSERY,Establecer vivero,25ab7370
 SET_UP_SEED_BANK,Establecer banco de semillas,6f047a89
@@ -2389,8 +2391,6 @@ TAKE_ME_THERE,Llévame allí,a6c46fcb
 TARGET,Objetivo,7f0a4d77
 TARGET_DENSITY,Densidad objetivo,239e7748
 TARGET_HECTARES_PLANTED,Objetivo: {0} ha,8c7d580d
-TARGET_PLANTING_DENSITY,Densidad de plantación objetivo,4f350d39
-TARGET_PLANTING_DENSITY_TOOLTIP,Densidad de plantación objetivo para el estrato (plantas por hectárea).,042cc8ff
 TARGET_PLANTS,plantas objetivo,ff0517a3
 TARGET_PLANTS_TITLE,Plantas Objetivo,c1aa1642
 TARGET_QUANTITY,Cantidad objetivo,73c71da9

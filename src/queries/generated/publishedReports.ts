@@ -50,6 +50,7 @@ export type PublishedReportIndicatorPayload = {
   projectsComments?: string;
   refId: string;
   status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  supportingDocumentUrl?: string;
   target?: number;
   unit?: string;
   value?: number;

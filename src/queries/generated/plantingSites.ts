@@ -205,13 +205,15 @@ export type StratumResponsePayload = {
   /** When the boundary of this stratum was last modified. Modifications of other attributes of the stratum do not cause this timestamp to change. */
   boundaryModifiedTime: string;
   id: number;
+  initialPlantingDensity: number;
   latestObservationCompletedTime?: string;
   latestObservationId?: number;
   name: string;
   numPermanentPlots: number;
   numTemporaryPlots: number;
   substrata: SubstratumResponsePayload[];
-  targetPlantingDensity: number;
+  /** Use initialPlantingDensity instead. */
+  targetPlantingDensity?: number;
 };
 export type PlantingSitePayload = {
   adHocPlots: MonitoringPlotPayload[];
@@ -250,9 +252,11 @@ export type NewSubstratumPayload = {
 };
 export type NewStratumPayload = {
   boundary: MultiPolygon | Polygon;
+  initialPlantingDensity?: number;
   /** Name of this stratum. Two strata in the same planting site may not have the same name. */
   name: string;
   substrata?: NewSubstratumPayload[];
+  /** Use initialPlantingDensity instead. */
   targetPlantingDensity?: number;
 };
 export type CreatePlantingSiteRequestPayload = {
@@ -269,19 +273,16 @@ export type CreatePlantingSiteRequestPayload = {
 };
 export type ReportedSpeciesPayload = {
   id: number;
-  plantsSinceLastObservation: number;
   totalPlants: number;
 };
 export type SubstratumReportedPlantsResponsePayload = {
   id: number;
-  plantsSinceLastObservation: number;
   species: ReportedSpeciesPayload[];
   totalPlants: number;
   totalSpecies: number;
 };
 export type StratumReportedPlantsResponsePayload = {
   id: number;
-  plantsSinceLastObservation: number;
   progressPercent: number;
   species: ReportedSpeciesPayload[];
   substrata: SubstratumReportedPlantsResponsePayload[];
@@ -290,7 +291,6 @@ export type StratumReportedPlantsResponsePayload = {
 };
 export type PlantingSiteReportedPlantsPayload = {
   id: number;
-  plantsSinceLastObservation: number;
   progressPercent?: number;
   species: ReportedSpeciesPayload[];
   strata: StratumReportedPlantsResponsePayload[];

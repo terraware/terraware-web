@@ -10,8 +10,8 @@ export type PlantingSiteDrawerData =
       strataCount: number;
       substrataCount: number;
     }
-  | { type: 'stratum'; name: string; areaHa: number; plantingComplete: boolean; targetPlantingDensity: number }
-  | { type: 'substratum'; name: string; areaHa: number; plantingComplete: boolean; targetPlantingDensity: number };
+  | { type: 'stratum'; name: string; areaHa: number; plantingComplete: boolean; initialPlantingDensity: number }
+  | { type: 'substratum'; name: string; areaHa: number; plantingComplete: boolean; initialPlantingDensity: number };
 
 export const getPlantingSiteMapDrawerData = (
   plantingSite: PlantingSite | undefined,
@@ -46,7 +46,7 @@ export const getPlantingSiteMapDrawerData = (
       name: stratum.name,
       areaHa: stratum.areaHa,
       plantingComplete: stratum.substrata.every((substratum) => substratum.plantingCompleted),
-      targetPlantingDensity: stratum.targetPlantingDensity,
+      initialPlantingDensity: stratum.initialPlantingDensity,
     };
   }
 
@@ -65,7 +65,7 @@ export const getPlantingSiteMapDrawerData = (
       name: substratum.name,
       areaHa: substratum.areaHa,
       plantingComplete: substratum.plantingCompleted,
-      targetPlantingDensity: parentStratum.targetPlantingDensity,
+      initialPlantingDensity: parentStratum.initialPlantingDensity,
     };
   }
 

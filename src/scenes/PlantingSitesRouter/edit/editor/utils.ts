@@ -13,12 +13,13 @@ import { MinimalStratum, MinimalSubstratum } from 'src/types/Tracking';
 export type DefaultStratumPayload = Omit<MinimalStratum, 'substrata'>;
 
 export const defaultStratumPayload = (payload: DefaultStratumPayload): MinimalStratum => {
-  const { boundary, id, name, targetPlantingDensity } = payload;
+  const { boundary, id, name, initialPlantingDensity } = payload;
   const substratumName = substratumNameGenerator(new Set(), strings.SUBSTRATUM);
 
   return {
     boundary,
     id,
+    initialPlantingDensity,
     name,
     substrata: [
       {
@@ -29,7 +30,6 @@ export const defaultStratumPayload = (payload: DefaultStratumPayload): MinimalSt
         plantingCompleted: false,
       },
     ],
-    targetPlantingDensity,
   };
 };
 
@@ -71,7 +71,7 @@ export const toIdentifiableFeature = (
  */
 export const toStratumFeature = (feature: Feature, idGenerator: () => number) =>
   toIdentifiableFeature(feature, idGenerator, {
-    targetPlantingDensity: feature.properties?.targetPlantingDensity ?? 1500,
+    initialPlantingDensity: feature.properties?.initialPlantingDensity ?? 1500,
   });
 
 /**
@@ -79,8 +79,8 @@ export const toStratumFeature = (feature: Feature, idGenerator: () => number) =>
  * This is from BE stratum data to a stratum feature.
  */
 export const stratumToFeature = (stratum: MinimalStratum): Feature => {
-  const { boundary, id, name, targetPlantingDensity } = stratum;
-  return toFeature(boundary, { id, name, targetPlantingDensity }, id);
+  const { boundary, id, name, initialPlantingDensity } = stratum;
+  return toFeature(boundary, { id, name, initialPlantingDensity }, id);
 };
 
 /**

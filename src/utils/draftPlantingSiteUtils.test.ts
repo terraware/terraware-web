@@ -143,7 +143,7 @@ const strata: MinimalStratum[] = [
         plantingCompleted: false,
       },
     ],
-    targetPlantingDensity: 1500,
+    initialPlantingDensity: 1500,
   },
   {
     boundary: stratum2,
@@ -165,7 +165,7 @@ const strata: MinimalStratum[] = [
         plantingCompleted: false,
       },
     ],
-    targetPlantingDensity: 2500,
+    initialPlantingDensity: 2500,
   },
 ];
 

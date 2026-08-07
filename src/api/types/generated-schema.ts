@@ -9304,9 +9304,14 @@ export interface components {
         /** @description List of strata to create. If present and not empty, "boundary" must also be specified. */
         NewStratumPayload: {
             boundary: components["schemas"]["MultiPolygon"] | components["schemas"]["Polygon"];
+            initialPlantingDensity?: number;
             /** @description Name of this stratum. Two strata in the same planting site may not have the same name. */
             name: string;
             substrata?: components["schemas"]["NewSubstratumPayload"][];
+            /**
+             * @deprecated
+             * @description Use initialPlantingDensity instead.
+             */
             targetPlantingDensity?: number;
         };
         NewSubstratumPayload: {
@@ -10343,8 +10348,6 @@ export interface components {
             /** Format: int64 */
             id: number;
             /** Format: int32 */
-            plantsSinceLastObservation: number;
-            /** Format: int32 */
             progressPercent?: number;
             species: components["schemas"]["ReportedSpeciesPayload"][];
             strata: components["schemas"]["StratumReportedPlantsResponsePayload"][];
@@ -10695,6 +10698,8 @@ export interface components {
             refId: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
             target?: number;
             unit?: string;
             value?: number;
@@ -10973,6 +10978,8 @@ export interface components {
             projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
         };
         ReportAutoCalculatedIndicatorPayload: {
             baseline?: number;
@@ -10999,6 +11006,8 @@ export interface components {
             refId: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
             /** Format: date-time */
             systemTime?: string;
             systemValue?: number;
@@ -11015,6 +11024,8 @@ export interface components {
             projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
             value?: number;
         };
         ReportCommonIndicatorPayload: {
@@ -11042,6 +11053,8 @@ export interface components {
             refId: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
             target?: number;
             value?: number;
         };
@@ -11057,6 +11070,8 @@ export interface components {
             projectsComments?: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
             value?: number;
         };
         ReportProjectIndicatorPayload: {
@@ -11084,6 +11099,8 @@ export interface components {
             refId: string;
             /** @enum {string} */
             status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            /** Format: uri */
+            supportingDocumentUrl?: string;
             target?: number;
             unit?: string;
             value?: number;
@@ -11111,8 +11128,6 @@ export interface components {
         ReportedSpeciesPayload: {
             /** Format: int64 */
             id: number;
-            /** Format: int32 */
-            plantsSinceLastObservation: number;
             /** Format: int32 */
             totalPlants: number;
         };
@@ -11564,8 +11579,6 @@ export interface components {
             /** Format: int64 */
             id: number;
             /** Format: int32 */
-            plantsSinceLastObservation: number;
-            /** Format: int32 */
             progressPercent: number;
             species: components["schemas"]["ReportedSpeciesPayload"][];
             substrata: components["schemas"]["SubstratumReportedPlantsResponsePayload"][];
@@ -11585,6 +11598,7 @@ export interface components {
             boundaryModifiedTime: string;
             /** Format: int64 */
             id: number;
+            initialPlantingDensity: number;
             /** Format: date-time */
             latestObservationCompletedTime?: string;
             /** Format: int64 */
@@ -11595,7 +11609,11 @@ export interface components {
             /** Format: int32 */
             numTemporaryPlots: number;
             substrata: components["schemas"]["SubstratumResponsePayload"][];
-            targetPlantingDensity: number;
+            /**
+             * @deprecated
+             * @description Use initialPlantingDensity instead.
+             */
+            targetPlantingDensity?: number;
         };
         StratumT0DataPayload: {
             densityData: components["schemas"]["SpeciesDensityPayload"][];
@@ -11665,8 +11683,6 @@ export interface components {
         SubstratumReportedPlantsResponsePayload: {
             /** Format: int64 */
             id: number;
-            /** Format: int32 */
-            plantsSinceLastObservation: number;
             species: components["schemas"]["ReportedSpeciesPayload"][];
             /** Format: int32 */
             totalPlants: number;

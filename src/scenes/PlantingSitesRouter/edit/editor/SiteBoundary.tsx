@@ -39,7 +39,7 @@ const createStratumWith = (boundary?: MultiPolygon): MinimalStratum | undefined 
     boundary: stratumBoundary,
     id: 0,
     name: stratumName,
-    targetPlantingDensity: 1500,
+    initialPlantingDensity: 1500,
   });
 };
 

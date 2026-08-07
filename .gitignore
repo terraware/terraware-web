@@ -52,3 +52,6 @@ public/assets/models/test
 
 # Claude Superpowers Plugin
 docs/superpowers
+
+# Handoff docs for other agents
+docs/handoffs

@@ -73,7 +73,7 @@ test.describe('ReportSubmitTests', () => {
 
   test('Edit a report — fill in highlights — and save', async ({ page }) => {
     // Navigate directly to the edit page to avoid state dependency on previous test.
-    await page.goto(`/reports/${PROJECT_ID}/${reportId}/edit`);
+    await page.goto(`/reports/${reportId}/edit`);
     await expect(page.getByText('Highlights')).toBeVisible({ timeout: 10000 });
 
     // Fill in the Highlights field.
@@ -89,7 +89,7 @@ test.describe('ReportSubmitTests', () => {
 
   test('Submit report for approval and verify status changes to Submitted', async ({ page }) => {
     // Navigate directly to the report view page.
-    await page.goto(`/reports/${PROJECT_ID}/${reportId}`);
+    await page.goto(`/reports/${reportId}`);
     await expect(page.getByRole('button', { name: 'Submit for Approval' })).toBeVisible({ timeout: 10000 });
     await expect(page.getByText('Not Submitted')).toBeVisible();
 
@@ -150,7 +150,7 @@ test.describe('ReportSubmitTests', () => {
 
   test('Verify Approved report shows approval message on participant side', async ({ page }) => {
     // Navigate to the participant-side report view.
-    await page.goto(`/reports/${PROJECT_ID}/${reportId}`);
+    await page.goto(`/reports/${reportId}`);
 
     // The status should be Approved and the approval banner should be visible.
     await expect(page.getByText('Approved', exactOptions)).toBeVisible({ timeout: 10000 });

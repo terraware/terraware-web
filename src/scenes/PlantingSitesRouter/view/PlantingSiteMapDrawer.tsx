@@ -47,7 +47,7 @@ const PlantingSiteMapDrawer = ({ plantingSiteId, layerFeatureId }: PlantingSiteM
     return [
       { key: strings.AREA_HA, value: formatArea(data.areaHa) },
       { key: strings.PLANTING_COMPLETE, value: data.plantingComplete ? strings.YES : strings.NO },
-      { key: strings.TARGET_PLANTING_DENSITY, value: formatDensity(data.targetPlantingDensity) },
+      { key: strings.INITIAL_PLANTING_DENSITY, value: formatDensity(data.initialPlantingDensity) },
     ];
   }, [data, numberFormatter, strings]);
 
