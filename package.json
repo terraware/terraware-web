@@ -241,7 +241,7 @@
     "brace-expansion": "^2.0.3",
     "fork-ts-checker-webpack-plugin": "^9.0.0",
     "immutable": "^5.1.9",
-    "js-yaml": "4.3.0",
+    "js-yaml": "4.3.1",
     "picomatch": "^4.0.4",
     "postcss": "^8.5.25",
     "serialize-javascript": "^7.0.5",
