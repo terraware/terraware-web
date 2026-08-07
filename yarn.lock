@@ -4610,7 +4610,14 @@
   resolved "https://registry.yarnpkg.com/@pkgr/core/-/core-0.2.7.tgz#eb5014dfd0b03e7f3ba2eeeff506eed89b028058"
   integrity sha512-YLT9Zo3oNPJoBjBc4q8G2mjU4tqIbf5CEOORbUUr48dCD9q3umJ3IPlVqOqDakPfd2HuwccBaqlGhN4Gmr5OWg==
 
-"@playcanvas/react@0.11.3", "@playcanvas/react@^0.11.3":
+"@playcanvas/react@0.11.5":
+  version "0.11.5"
+  resolved "https://registry.yarnpkg.com/@playcanvas/react/-/react-0.11.5.tgz#d47c3837daa2942bddf3475c09e7a4275d521e52"
+  integrity sha512-GlEyEJf9qCsQ9NoL8vXTFg7a6tsB99udia/AHgJmie1vl+dECPg8Itv8UU4iuiFWhqmF4binP/XPkCCARm6sGQ==
+  dependencies:
+    dedent "^1.6.0"
+
+"@playcanvas/react@^0.11.3":
   version "0.11.3"
   resolved "https://registry.yarnpkg.com/@playcanvas/react/-/react-0.11.3.tgz#5783477039688981a8486b547682645901cc975b"
   integrity sha512-pf6uQIVKQZ04MrDCi3bfWq6llYoQwMtYCfZurOe/99TIGzNtoMUL/4LsX24ILgbKfiLAbU85g/uvzXh53YeELw==
@@ -6359,10 +6366,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.11.2.tgz#00409e743ac4eea9afe5b7708594d5fcebb00212"
   integrity sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==
 
-"@terraware/web-components@^v4.2.17":
-  version "4.2.17"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-4.2.17.tgz#8588b96e07d16ca34fe4f8e147d82b7fdcf70fac"
-  integrity sha512-yPX0ycOaW5dGIh0oveUabarj7QCqANmpEsWEvbNGPC7DrjTJTWRpE+RxYibCK9drVmsqDNKBFZuPPF3jMiwHzQ==
+"@terraware/web-components@^v4.2.24":
+  version "4.2.24"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-4.2.24.tgz#f5f8f7fc8adff668204ef0323b664150352d790d"
+  integrity sha512-BE//GCRyiVnuuX9Jt4fWB2D9yy0wFlgOlQV9rQz0DwY1kZDEmMyPW3DX7kYo3dYN0IyVgHFNeM4VRdbZ0qhtdQ==
   dependencies:
     "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^10.0.0"
@@ -6372,13 +6379,13 @@
     "@mui/lab" "^6.0.1-beta.36"
     "@mui/material" "^6.0.0"
     "@mui/x-date-pickers" "^7.22.0"
-    "@playcanvas/react" "0.11.3"
+    "@playcanvas/react" "0.11.5"
     classnames "^2.3.2"
     geojson "^0.5.0"
     luxon "^3.3.0"
     marked "^16.2.1"
     material-react-table "^3.2.1"
-    playcanvas "2.15.1"
+    playcanvas "2.21.3"
     prettier "^3.8.1"
     react-intersection-observer "^9.5.2"
     react-multi-carousel "^2.8.2"
@@ -7502,6 +7509,11 @@
   version "0.1.69"
   resolved "https://registry.yarnpkg.com/@webgpu/types/-/types-0.1.69.tgz#6b849bf370a1f29c78bd3aeba8e84c1150b237f2"
   integrity sha512-RPmm6kgRbI8e98zSD3RVACvnuktIja5+yLgDAkTmxLr90BEwdTXRQWNLF3ETTTyH/8mKhznZuN5AveXYFEsMGQ==
+
+"@webgpu/types@^0.1.70":
+  version "0.1.71"
+  resolved "https://registry.yarnpkg.com/@webgpu/types/-/types-0.1.71.tgz#46ed33ba7816029d622d0b52e1e0004bf441db98"
+  integrity sha512-mMy8/ODcKhab808co15eW+yN+HgXoQxRQHTiBV9Mrvl1r0ufnid7YOcI+gi4eUWSWl9ezD6TW2KXccrL8HCh2A==
 
 "@xstate/fsm@^1.4.0":
   version "1.6.5"
@@ -14770,7 +14782,15 @@ pkg-types@^1.3.1:
     mlly "^1.7.4"
     pathe "^2.0.1"
 
-playcanvas@2.15.1, playcanvas@^2.15.1:
+playcanvas@2.21.3:
+  version "2.21.3"
+  resolved "https://registry.yarnpkg.com/playcanvas/-/playcanvas-2.21.3.tgz#328cc2b1c0da1417e463c5acc3741db2b81ec5c5"
+  integrity sha512-+AKl0yeNUBo9JSjMRNi2Sz24KhWDhBVMtvhonbeRnKD6FGhNK0O76zvqOu3zgXZxUEzF54h4QGpruhNUkKvsUQ==
+  dependencies:
+    "@types/webxr" "^0.5.24"
+    "@webgpu/types" "^0.1.70"
+
+playcanvas@^2.15.1:
   version "2.15.1"
   resolved "https://registry.yarnpkg.com/playcanvas/-/playcanvas-2.15.1.tgz#9fbb08ab3bb00979e3abd281e175f656fe9ff830"
   integrity sha512-G0jjbcwf9pHEHsdiaA+bqTRnS/yAnbvb4EQiAljLNwXnZLHSFV0+wbJ1evO0RNM01Jc0WPqBhVVEAgnmEqg8WA==
