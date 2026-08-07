@@ -50,7 +50,8 @@ https://buildkite.com/docs/pipelines/configure/managing-log-output
 
 ## Vercel previews
 
-Previews are opt-in: to get one, add the "Vercel preview" label to the pull request.
+Previews are opt-in: add the "Vercel preview" label to the pull request, then start a new build to
+get one.
 
 ## Caching and artifacts
 
