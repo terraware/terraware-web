@@ -1583,8 +1583,8 @@ PLANTING_COMPLETE_TOOLTIP,La plantation a-t-elle été achevée dans ce substrat
 PLANTING_DATE,Date de plantation,544c699c
 PLANTING_DATE_ADDED,Date de plantation ajoutée : {0}.,187cb611
 PLANTING_DATE_DELETED,Date de plantation supprimée : {0}.,6a287532
-PLANTING_DATE_QUANTITY_NOT_SET_TITLE,Quantité à planter non définie,e5701f1b
-PLANTING_DATE_QUANTITY_NOT_SET_WARNING,"Au moins une espèce n’a pas encore de quantité à planter définie. Pour enregistrer la date de plantation, ajoutez des quantités pour toutes les espèces ou supprimez les espèces de cette date.",5b164c2d
+PLANTING_DATE_QUANTITY_NOT_SET_TITLE,Quantité non définie,58200f42
+PLANTING_DATE_QUANTITY_NOT_SET_WARNING,"Il y a au moins une espèce pour laquelle la quantité à planter n’a pas encore été définie. Pour enregistrer la date de plantation, ajoutez les quantités pour toutes les espèces ou retirez les espèces de la date.",e4b3a94c
 PLANTING_DATE_SPECIES_ADDED,Espèces ajoutées à la date de plantation {0} : {1} dans {2}.,298ae021
 PLANTING_DATE_SPECIES_ADDED_WITH_QUANTITY,Date de plantation {0} mise à jour : {1} dans {2} ajouté.,b3e3cbeb
 PLANTING_DATE_SPECIES_UPDATED,Date de plantation {0} mise à jour : {1} dans {2} modifié de {3} à {4}.,80c99e8a
