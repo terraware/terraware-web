@@ -48,6 +48,11 @@ export type ListPlantingDateRequestsArgs = {
   speciesId?: number;
 };
 
+export type ScheduledPlantingDateWithdrawalsArgs = {
+  plantingSeasonId: number;
+  date: string;
+};
+
 const includedPlantingSeasonStatuses = ['Active', 'Upcoming', 'Past End Date'];
 
 const injectedRtkApi = api.injectEndpoints({
@@ -227,6 +232,40 @@ const injectedRtkApi = api.injectEndpoints({
           };
         }),
     }),
+    getScheduledPlantingDateWithdrawnTotal: build.query<number, ScheduledPlantingDateWithdrawalsArgs>({
+      query: ({ plantingSeasonId }) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          prefix: 'plantingDateRequests',
+          fields: ['date', 'withdrawals.batchWithdrawals_readyQuantityWithdrawn(raw)'],
+          search: {
+            operation: 'field',
+            field: 'scheduledPlantingDate_plantingSeason_id',
+            type: 'Exact',
+            values: [`${plantingSeasonId}`],
+          },
+          count: 0,
+        },
+      }),
+      providesTags: [{ type: QueryTagTypes.PlantingDateRequests, id: 'LIST' }],
+      transformResponse: (
+        response: PlantingDateRequestsApiResponse,
+        _meta: unknown,
+        arg: ScheduledPlantingDateWithdrawalsArgs
+      ): number =>
+        (response.results ?? [])
+          .filter((result) => result.date === arg.date)
+          .reduce(
+            (total, result) =>
+              total +
+              (result.withdrawals ?? []).reduce(
+                (sum, entry) => sum + Number(entry['batchWithdrawals_readyQuantityWithdrawn(raw)'] ?? 0),
+                0
+              ),
+            0
+          ),
+    }),
   }),
 });
 
@@ -263,4 +302,8 @@ type PlantingDateRequestsApiResponse = {
   results: PlantingDateRequestApiResult[];
 };
 
-export const { useListPlantingDateRequestsQuery, useLazyListPlantingDateRequestsQuery } = injectedRtkApi;
+export const {
+  useListPlantingDateRequestsQuery,
+  useLazyListPlantingDateRequestsQuery,
+  useLazyGetScheduledPlantingDateWithdrawnTotalQuery,
+} = injectedRtkApi;
