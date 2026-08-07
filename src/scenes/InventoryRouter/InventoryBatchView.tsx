@@ -187,18 +187,18 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
               <Button label={strings.WITHDRAW} onClick={openWithdraw} style={isMobile ? { width: '100%' } : {}} />
             </Box>
           )}
-          {batchId && (
-            <BatchWithdrawModal
-              open={withdrawModalOpen}
-              onClose={() => setWithdrawModalOpen(false)}
-              batchIds={withdrawBatchIds}
-            />
-          )}
           <Grid item xs={12}>
             <PageSnackbar />
           </Grid>
         </Grid>
       </PageHeaderWrapper>
+      {batchId && (
+        <BatchWithdrawModal
+          open={withdrawModalOpen}
+          onClose={() => setWithdrawModalOpen(false)}
+          batchIds={withdrawBatchIds}
+        />
+      )}
       <Grid container ref={contentRef}>
         {batch && (
           <Grid item xs={12} sx={{ display: 'flex', flexDirection: 'column' }}>
