@@ -117,7 +117,7 @@ const RequestSpeciesBox = ({
                   id={`withdraw-${batch.batchId}-${substratumId}`}
                   type='number'
                   label=''
-                  value={value.toString()}
+                  value={value === 0 ? '' : value.toString()}
                   onChange={(v) =>
                     setWithdrawByBatchSubstratum((prev) => ({
                       ...prev,
