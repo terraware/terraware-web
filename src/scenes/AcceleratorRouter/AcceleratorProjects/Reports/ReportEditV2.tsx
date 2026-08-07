@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -7,14 +7,21 @@ import { Button } from '@terraware/web-components';
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import { REPORT_TITLE_STYLE } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEditFields from 'src/components/AcceleratorReports/ReportEditFields';
-import { getReportName } from 'src/components/AcceleratorReports/utils';
+import {
+  getReportName,
+  toIndicatorEntriesPayload,
+  toReportReviewPayload,
+} from 'src/components/AcceleratorReports/utils';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import { useUpdateOneAcceleratorReportValuesMutation } from 'src/queries/generated/acceleratorReports';
+import {
+  useReviewOneAcceleratorReportIndicatorsMutation,
+  useReviewOneAcceleratorReportMutation,
+} from 'src/queries/generated/acceleratorReports';
 import { AcceleratorReportPayload } from 'src/queries/generated/reports';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -34,7 +41,9 @@ const ReportEditV2 = (): JSX.Element => {
 
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
-  const [updateReport, updateReportResponse] = useUpdateOneAcceleratorReportValuesMutation();
+  const [reviewReport, reviewReportResponse] = useReviewOneAcceleratorReportMutation();
+  const [reviewIndicators, reviewIndicatorsResponse] = useReviewOneAcceleratorReportIndicatorsMutation();
+  const saving = reviewReportResponse.isLoading || reviewIndicatorsResponse.isLoading;
 
   const goToReport = useCallback(
     () =>
@@ -57,7 +66,7 @@ const ReportEditV2 = (): JSX.Element => {
     []
   );
 
-  const onSave = useCallback(() => {
+  const onSave = useCallback(async () => {
     if (!record) {
       return;
     }
@@ -74,17 +83,24 @@ const ReportEditV2 = (): JSX.Element => {
       return;
     }
 
-    void updateReport({ reportId, updateAcceleratorReportValuesRequestPayload: record });
-  }, [record, reportId, updateReport]);
+    try {
+      await Promise.all([
+        reviewReport({
+          reportId,
+          reviewAcceleratorReportRequestPayload: { review: toReportReviewPayload(record) },
+        }).unwrap(),
+        reviewIndicators({
+          reportId,
+          reviewAcceleratorReportIndicatorsRequestPayload: toIndicatorEntriesPayload(record),
+        }).unwrap(),
+      ]);
 
-  useEffect(() => {
-    if (updateReportResponse.isError) {
-      snackbar.toastError();
-    } else if (updateReportResponse.isSuccess) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       goToReport();
+    } catch {
+      snackbar.toastError();
     }
-  }, [goToReport, snackbar, strings.CHANGES_SAVED, updateReportResponse.isError, updateReportResponse.isSuccess]);
+  }, [goToReport, record, reportId, reviewIndicators, reviewReport, snackbar, strings.CHANGES_SAVED]);
 
   const pageCrumbs = useMemo(
     () => [
@@ -105,7 +121,7 @@ const ReportEditV2 = (): JSX.Element => {
     () => (
       <Box display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
         <Button
-          disabled={updateReportResponse.isLoading}
+          disabled={saving}
           id='cancelEditAcceleratorReport'
           label={strings.CANCEL}
           onClick={goToReport}
@@ -115,15 +131,15 @@ const ReportEditV2 = (): JSX.Element => {
         />
 
         <Button
-          disabled={updateReportResponse.isLoading}
+          disabled={saving}
           id='saveEditAcceleratorReport'
           label={strings.SAVE}
-          onClick={onSave}
+          onClick={() => void onSave()}
           size='medium'
         />
       </Box>
     ),
-    [goToReport, onSave, strings, theme, updateReportResponse.isLoading]
+    [goToReport, onSave, saving, strings, theme]
   );
 
   return (
@@ -144,7 +160,14 @@ const ReportEditV2 = (): JSX.Element => {
 
           {report && <ReportInternalComment projectId={projectId} report={report} />}
 
-          {record && <ReportEditFields onChangeCallback={onChangeCallback} record={record} validate={validate} />}
+          {record && (
+            <ReportEditFields
+              onChangeCallback={onChangeCallback}
+              record={record}
+              showNotesToFunder
+              validate={validate}
+            />
+          )}
         </Card>
       </Box>
     </Page>

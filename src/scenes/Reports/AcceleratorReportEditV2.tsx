@@ -7,7 +7,7 @@ import { Button } from '@terraware/web-components';
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import { REPORT_TITLE_STYLE } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEditFields from 'src/components/AcceleratorReports/ReportEditFields';
-import { getReportName } from 'src/components/AcceleratorReports/utils';
+import { getReportName, toUpdateReportValuesPayload } from 'src/components/AcceleratorReports/utils';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -65,7 +65,7 @@ const AcceleratorReportEditV2 = (): JSX.Element => {
       return;
     }
 
-    void updateReport({ reportId, updateAcceleratorReportValuesRequestPayload: record });
+    void updateReport({ reportId, updateAcceleratorReportValuesRequestPayload: toUpdateReportValuesPayload(record) });
   }, [record, reportId, updateReport]);
 
   useEffect(() => {

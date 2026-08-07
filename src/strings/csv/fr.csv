@@ -939,6 +939,7 @@ INCOMPLETE,Incomplet,5f524fdf
 INCORRECT_EMAIL_FORMAT,Format d'e-mail incorrect.,19f1a8c9
 INDICATOR_LEVEL,Niveau d’indicateur,b128c992
 INDICATOR_NAME,Nom de l’indicateur,0d8b0613
+INDICATOR_OVERWRITTEN_ORIGINAL_VALUE,Remplacé – valeur d'origine : {0},c504c96d
 INDICATOR_TYPE,Type d’indicateur,d5e75bf1
 INDICATOR_TYPE_GOAL,Objectif,cb34c06e
 INDICATOR_TYPE_PROCESS,Processus,0bee5739
@@ -1376,6 +1377,7 @@ NOTES,Notes,953783ac
 NOTES_AFTER,Notes (après),a4cfe728
 NOTES_BEFORE,Notes (avant),a4b844ff
 NOTES_OPTIONAL,Notes (optionnel),e7b49e90
+NOTES_TO_FUNDER,Notes à l'investisseur,076f6db4
 NOTIFICATIONS,Notifications,535ca7ec
 NUMBER_OF_LIVE_PLANTS_PER_SPECIES,Nombre de plantes vivantes par espèce,82f354e1
 NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plantes vivantes par espèce indique le nombre de plantes vivantes par espèce enregistrées. Ce nombre ne comprend que les plantes enregistrées comme étant vivantes. Il n'inclut pas les plantes enregistrées comme préexistantes ou enregistrées comme « Impossible à déterminer » (inconnues).,6b3e7e54
@@ -1511,6 +1513,7 @@ OVERDUE,En retard,90d8f429
 OVERRIDE,Remplacer,15bd0e63
 OVERRIDE_SPECIES,Remplacer l’espèce,c8f09521
 OVERVIEW,Vue d’ensemble,c7fd0e47
+OVERWRITE_TERRAWARE_TRACKING_DATA,Écraser les données de suivi Terraware,1f5637ba
 OVERWRITTEN_ORIGINAL_VALUE,Remplacement – original : {0},c504c96d
 OWNER,Propriétaire,f1db93f1
 OZ,oz,63ec7cc2
@@ -1715,6 +1718,7 @@ PROGRESS,Progrès,c07f21ce
 PROGRESS_NOTES,Notes sur l'état d'avancement,5e670e4a
 PROGRESS_NOTES_DESCRIPTION,Fournissez des informations qui peuvent être publiées à l'intention des bailleurs de fonds.,a42ffda7
 PROGRESS_REPORT,Rapport d’avancement,69cf80ea
+PROGRESS_VALUE,Valeur de progression,0420c694
 PROJECT,Projet,162b4c3f
 PROJECT_ACTIVITY,Activité du projet,74a61b7a
 PROJECT_ADDED,{0} ajoutés,c579a852
@@ -1957,6 +1961,8 @@ RESCHEDULE_OBSERVATION,Reporter l'observation,b7403925
 RESET,Réinitialisation,d51ffc01
 RESET_CAMERA,Réinitialiser la caméra,ee37fbd5
 RESET_COLUMNS,Réinitialiser les colonnes,871d2d56
+RESET_INDICATOR,Réinitialiser l'indicateur,bb1f7ec8
+RESET_INDICATOR_CONFIRM,Êtes-vous sûr de vouloir réinitialiser cet indicateur ? Il sera remplacé par les données de suivi actuelles de Terraware.,9d1f1dfb
 RESET_METRIC,Réinitialiser la mesure,fe2748bc
 RESET_METRIC_CONFIRM,Êtes-vous sûr de vouloir réinitialiser cette mesure ? Elle sera remplacée par les données de suivi actuelles de Terraware.,44353912
 RESET_ORDER,Réinitialiser l'ordre,a30cc4ed

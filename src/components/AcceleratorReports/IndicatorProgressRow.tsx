@@ -1,12 +1,15 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Collapse, IconButton, Link, Tooltip, Typography, useTheme } from '@mui/material';
-import { Badge, Icon, IconTooltip } from '@terraware/web-components';
+import { Badge, Dropdown, DropdownItem, Icon, IconTooltip, Textfield } from '@terraware/web-components';
 
+import EmptyFieldPlaceholder from 'src/components/AcceleratorReports/EmptyFieldPlaceholder';
 import LifetimeProgressBar from 'src/components/AcceleratorReports/LifetimeProgressBar';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
+import ResetIndicatorModal from 'src/components/AcceleratorReports/ResetIndicatorModal';
+import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
-import { MetricStatus } from 'src/types/AcceleratorReport';
+import { IndicatorType, MetricStatus } from 'src/types/AcceleratorReport';
 import { formatPrecision } from 'src/utils/numbers';
 
 const TITLE_COLUMN_WIDTH = 300;
@@ -17,6 +20,10 @@ const TICK_HOVER_WIDTH = 9;
 
 export type ProgressIndicator = {
   baseline?: number;
+  id?: number;
+  overrideValue?: number;
+  systemValue?: number;
+  type?: IndicatorType;
   classId: 'Cumulative' | 'Level';
   endOfProjectTarget?: number;
   description?: string;
@@ -35,17 +42,30 @@ export type ProgressIndicator = {
 };
 
 export type IndicatorProgressRowProps = {
+  editing?: boolean;
   indicator: ProgressIndicator;
+  onChange?: (id: string, value: unknown) => void;
   quarter?: 'Q1' | 'Q2' | 'Q3' | 'Q4';
+  showNotesToFunder?: boolean;
   year?: number;
 };
 
-const IndicatorProgressRow = ({ indicator, quarter, year }: IndicatorProgressRowProps): JSX.Element => {
+const IndicatorProgressRow = ({
+  editing,
+  indicator,
+  onChange,
+  quarter,
+  showNotesToFunder,
+  year,
+}: IndicatorProgressRowProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
   const [expanded, setExpanded] = useState(false);
+  const [resetModalOpened, setResetModalOpened] = useState(false);
+  const [overwriting, setOverwriting] = useState(false);
 
   const isCumulative = indicator.classId === 'Cumulative';
+  const isAutoCalculated = indicator.type === 'autoCalculated';
   const precision = indicator.precision ?? 0;
   const baselineValue = indicator.baseline ?? 0;
 
@@ -54,15 +74,31 @@ const IndicatorProgressRow = ({ indicator, quarter, year }: IndicatorProgressRow
   const startingTotalLabel =
     indicator.previousYearCumulativeTotal !== undefined && year !== undefined ? String(year - 1) : strings.BASELINE;
 
-  const currentYearProgress = useMemo(() => indicator.currentYearProgress ?? [], [indicator.currentYearProgress]);
+  const enteredValue = isAutoCalculated ? indicator.overrideValue ?? indicator.systemValue : indicator.value;
+
+  // A cumulative total is the earlier quarters plus this one, so substitute the entered value for this
+  // quarter and re-sum; that keeps the year and lifetime bars in step while the value is being edited.
+  const currentYearProgress = useMemo(() => {
+    const progress = indicator.currentYearProgress ?? [];
+
+    if (enteredValue === undefined || quarter === undefined) {
+      return progress;
+    }
+
+    const withCurrentQuarter = progress.some((entry) => entry.quarter === quarter)
+      ? progress.map((entry) => (entry.quarter === quarter ? { ...entry, value: enteredValue } : entry))
+      : [...progress, { quarter, value: enteredValue }];
+
+    return [...withCurrentQuarter].sort((a, b) => a.quarter.localeCompare(b.quarter));
+  }, [enteredValue, indicator.currentYearProgress, quarter]);
 
   const cumulativeValue = useMemo(() => {
     if (!isCumulative) {
-      return indicator.value;
+      return enteredValue;
     }
 
     return currentYearProgress.reduce((total, progress) => total + progress.value, startingTotal);
-  }, [currentYearProgress, indicator.value, isCumulative, startingTotal]);
+  }, [currentYearProgress, enteredValue, isCumulative, startingTotal]);
 
   const quarterlyValue = useMemo(
     () => (isCumulative ? currentYearProgress.find((progress) => progress.quarter === quarter)?.value : undefined),
@@ -149,7 +185,43 @@ const IndicatorProgressRow = ({ indicator, quarter, year }: IndicatorProgressRow
     return Math.round((((cumulativeValue ?? 0) - baselineValue) / denominator) * 100);
   }, [baselineValue, cumulativeValue, indicator.target]);
 
+  const statusOptions = useMemo<DropdownItem[]>(
+    () => [
+      { label: strings.ACHIEVED, value: 'Achieved' },
+      { label: strings.ON_TRACK, value: 'On-Track' },
+      { label: strings.UNLIKELY, value: 'Unlikely' },
+      { label: strings.OFF_TRACK, value: 'Off-Track' },
+    ],
+    [strings]
+  );
+
+  const fieldKey = `${indicator.type ?? 'indicator'}-${indicator.id ?? indicator.name}`.replace(/\s+/g, '-');
+
   const onToggle = useCallback(() => setExpanded((previous) => !previous), []);
+
+  const openResetModal = useCallback(() => setResetModalOpened(true), []);
+  const closeResetModal = useCallback(() => setResetModalOpened(false), []);
+  const startOverwriting = useCallback(() => setOverwriting(true), []);
+
+  const hasOverride = indicator.overrideValue !== undefined;
+
+  // an auto-calculated value comes from tracking data, so it only opens up on request
+  const valueDisabled = isAutoCalculated && !hasOverride && !overwriting;
+
+  const onChangeValue = useCallback(
+    (value: unknown) => {
+      // clearing the box means no progress rather than no value, so it lands as zero
+      const parsed = value === '' || value === undefined || value === null ? 0 : Number(value);
+      onChange?.(isAutoCalculated ? 'overrideValue' : 'value', parsed);
+    },
+    [isAutoCalculated, onChange]
+  );
+
+  const onReset = useCallback(() => {
+    onChange?.('overrideValue', undefined);
+    setOverwriting(false);
+    closeResetModal();
+  }, [closeResetModal, onChange]);
 
   const unitSuffix = indicator.unit ? (
     <Typography component='span' color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontWeight={400}>
@@ -333,52 +405,143 @@ const IndicatorProgressRow = ({ indicator, quarter, year }: IndicatorProgressRow
       </Box>
 
       <Collapse in={expanded}>
-        <Box display='flex' flexWrap='wrap' gap={theme.spacing(3)} paddingTop={theme.spacing(2)}>
-          <Box flex='1 1 45%' minWidth={0}>
-            <Typography fontSize='14px' fontWeight={600}>
-              {strings.PROJECTS_COMMENTS}
-            </Typography>
+        {editing ? (
+          <Box display='flex' flexWrap='wrap' gap={theme.spacing(3)} paddingTop={theme.spacing(2)}>
+            <Box flex='1 1 45%' minWidth={0}>
+              <Box alignItems='flex-end' display='flex' gap={theme.spacing(1)}>
+                <Box flexGrow={1}>
+                  <Textfield
+                    disabled={valueDisabled}
+                    id={`value-${fieldKey}`}
+                    label={strings.PROGRESS_VALUE}
+                    min={0}
+                    onChange={onChangeValue}
+                    type='number'
+                    value={enteredValue ?? ''}
+                  />
+                </Box>
 
-            {indicator.projectsComments ? (
-              <Typography fontSize='14px'>{indicator.projectsComments}</Typography>
-            ) : (
-              <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontStyle='italic'>
-                {strings.NO_COMMENTS_ADDED}
-              </Typography>
+                {isAutoCalculated &&
+                  (valueDisabled ? (
+                    <Tooltip title={strings.OVERWRITE_TERRAWARE_TRACKING_DATA}>
+                      <Box>
+                        <Button
+                          icon='iconEdit'
+                          onClick={startOverwriting}
+                          priority='ghost'
+                          size='small'
+                          type='passive'
+                        />
+                      </Box>
+                    </Tooltip>
+                  ) : (
+                    <Button icon='iconUndo' onClick={openResetModal} priority='ghost' size='small' type='passive' />
+                  ))}
+              </Box>
+
+              {isAutoCalculated && hasOverride && indicator.systemValue !== undefined && (
+                <Typography color={theme.palette.TwClrTxtSecondary} fontSize='12px'>
+                  {strings.formatString(
+                    strings.INDICATOR_OVERWRITTEN_ORIGINAL_VALUE,
+                    `${formatPrecision(indicator.systemValue, precision)}${indicator.unit ? ` ${indicator.unit}` : ''}`
+                  )}
+                </Typography>
+              )}
+            </Box>
+
+            <Box flex='1 1 45%' minWidth={0}>
+              <Dropdown
+                fullWidth
+                label={strings.STATUS}
+                onChange={(value: string) => onChange?.('status', value)}
+                options={statusOptions}
+                placeholder={strings.NO_STATUS}
+                selectedValue={indicator.status}
+              />
+            </Box>
+
+            <Box flex='1 1 45%' minWidth={0}>
+              <Textfield
+                id={`projectsComments-${fieldKey}`}
+                label={strings.PROJECTS_COMMENTS}
+                onChange={(value: unknown) => onChange?.('projectsComments', value)}
+                preserveNewlines
+                type='textarea'
+                value={indicator.projectsComments ?? ''}
+              />
+            </Box>
+
+            {showNotesToFunder && (
+              <Box flex='1 1 45%' minWidth={0}>
+                <Textfield
+                  id={`progressNotes-${fieldKey}`}
+                  label={strings.NOTES_TO_FUNDER}
+                  onChange={(value: unknown) => onChange?.('progressNotes', value)}
+                  preserveNewlines
+                  type='textarea'
+                  value={indicator.progressNotes ?? ''}
+                />
+
+                <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+                  {strings.PROGRESS_NOTES_DESCRIPTION}
+                </Typography>
+              </Box>
             )}
+
+            <Box flex='1 1 45%' minWidth={0}>
+              <Textfield
+                id={`supportingDocumentUrl-${fieldKey}`}
+                label={strings.LINK_TO_SUPPORTING_DOCUMENTS}
+                onChange={(value: unknown) => onChange?.('supportingDocumentUrl', value)}
+                type='text'
+                value={indicator.supportingDocumentUrl ?? ''}
+              />
+            </Box>
           </Box>
-
-          <Box flex='1 1 45%' minWidth={0}>
-            <Typography fontSize='14px' fontWeight={600}>
-              {strings.PROGRESS_NOTES}
-            </Typography>
-
-            {indicator.progressNotes ? (
-              <Typography fontSize='14px'>{indicator.progressNotes}</Typography>
-            ) : (
-              <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontStyle='italic'>
-                {strings.NO_NOTES_ADDED}
+        ) : (
+          <Box display='flex' flexWrap='wrap' gap={theme.spacing(3)} paddingTop={theme.spacing(2)}>
+            <Box flex='1 1 45%' minWidth={0}>
+              <Typography fontSize='14px' fontWeight={600}>
+                {strings.PROJECTS_COMMENTS}
               </Typography>
-            )}
-          </Box>
 
-          <Box flexBasis='100%'>
-            <Typography fontSize='14px' fontWeight={600}>
-              {strings.LINK_TO_SUPPORTING_DOCUMENTS}
-            </Typography>
+              {indicator.projectsComments ? (
+                <Typography fontSize='14px'>{indicator.projectsComments}</Typography>
+              ) : (
+                <EmptyFieldPlaceholder text={strings.NO_COMMENTS_ADDED} />
+              )}
+            </Box>
 
-            {indicator.supportingDocumentUrl ? (
-              <Link href={indicator.supportingDocumentUrl} rel='noopener noreferrer' target='_blank'>
-                <Typography fontSize='14px'>{strings.VIEW_DOCUMENTS}</Typography>
-              </Link>
-            ) : (
-              <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontStyle='italic'>
-                {strings.NO_LINK_ADDED}
+            <Box flex='1 1 45%' minWidth={0}>
+              <Typography fontSize='14px' fontWeight={600}>
+                {strings.PROGRESS_NOTES}
               </Typography>
-            )}
+
+              {indicator.progressNotes ? (
+                <Typography fontSize='14px'>{indicator.progressNotes}</Typography>
+              ) : (
+                <EmptyFieldPlaceholder text={strings.NO_NOTES_ADDED} />
+              )}
+            </Box>
+
+            <Box flexBasis='100%'>
+              <Typography fontSize='14px' fontWeight={600}>
+                {strings.LINK_TO_SUPPORTING_DOCUMENTS}
+              </Typography>
+
+              {indicator.supportingDocumentUrl ? (
+                <Link href={indicator.supportingDocumentUrl} rel='noopener noreferrer' target='_blank'>
+                  <Typography fontSize='14px'>{strings.VIEW_DOCUMENTS}</Typography>
+                </Link>
+              ) : (
+                <EmptyFieldPlaceholder text={strings.NO_LINK_ADDED} />
+              )}
+            </Box>
           </Box>
-        </Box>
+        )}
       </Collapse>
+
+      {resetModalOpened && <ResetIndicatorModal onClose={closeResetModal} onSubmit={onReset} />}
     </Box>
   );
 };
