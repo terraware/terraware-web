@@ -15,7 +15,7 @@ import {
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
 
-import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
+import ProjectAssignModal from 'src/components/ProjectAssignModal';
 import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
@@ -84,6 +84,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [pillListPortalEl, setPillListPortalEl] = useState<HTMLElement | null>(null);
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [openProjectAssignModal, setOpenProjectAssignModal] = useState<boolean>(false);
   const [modalValues, setModalValues] = useState<{ type: string; openChangeQuantityModal: boolean; batch?: any }>({
     type: 'germinating',
     openChangeQuantityModal: false,
@@ -335,14 +336,6 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
       return undefined;
     }
   }, [origin, selectedRows, strings, totalSelectedQuantity]);
-
-  const selectAllRows = useCallback(() => {
-    const newSelection: MRT_RowSelectionState = {};
-    results.forEach((_row, index) => {
-      newSelection[index] = true;
-    });
-    setRowSelection(newSelection);
-  }, [results]);
 
   const getResultsSpeciesNames = useCallback(() => {
     return results
@@ -610,6 +603,14 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   return (
     <Box position={'relative'}>
       <DeleteBatchesModal open={openDeleteModal} onClose={onCloseDeleteBatchesModal} onSubmit={deleteSelectedBatches} />
+      {openProjectAssignModal && (
+        <ProjectAssignModal<{ id: number; projectId?: number }>
+          entity={{ id: -1, projectId: undefined }}
+          assignPayloadCreator={projectAssignPayloadCreator}
+          isModalOpen={true}
+          onClose={() => setOpenProjectAssignModal(false)}
+        />
+      )}
       {modalValues.openChangeQuantityModal && modalValues.batch && (
         <ChangeQuantityModal
           onClose={() => setModalValues({ openChangeQuantityModal: false, type: 'germinating' })}
@@ -695,10 +696,11 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                           priority='secondary'
                         />
                         {allowSelectionProjectAssign && (
-                          <ProjectAssignTopBarButton
-                            totalResultsCount={results?.length}
-                            selectAllRows={selectAllRows}
-                            projectAssignPayloadCreator={projectAssignPayloadCreator}
+                          <Button
+                            type='passive'
+                            onClick={() => setOpenProjectAssignModal(true)}
+                            label={strings.ADD_TO_PROJECT}
+                            priority='secondary'
                           />
                         )}
                         <Tooltip title={withdrawTooltip || ''}>

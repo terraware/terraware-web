@@ -13,7 +13,7 @@ import {
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
 
-import ProjectAssignTopBarButton from 'src/components/ProjectAssignTopBarButton';
+import ProjectAssignModal from 'src/components/ProjectAssignModal';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
@@ -70,6 +70,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
+  const [openProjectAssignModal, setOpenProjectAssignModal] = useState<boolean>(false);
   const [openNewBatchModal, setOpenNewBatchModal] = useState<boolean>(false);
   const [modalValues, setModalValues] = useState<{ type: string; openChangeQuantityModal: boolean; batch?: any }>({
     type: 'germinating',
@@ -223,14 +224,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
       setOpenDeleteModal(false);
     });
   }, [deleteBatch, selectedRows, snackbar]);
-
-  const selectAllRows = useCallback(() => {
-    const newSelection: MRT_RowSelectionState = {};
-    filteredBatches.forEach((_row, index) => {
-      newSelection[index] = true;
-    });
-    setRowSelection(newSelection);
-  }, [filteredBatches]);
 
   const [withdrawModalBatchIds, setWithdrawModalBatchIds] = useState<number[] | undefined>(undefined);
 
@@ -440,6 +433,14 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
           onClose={() => setOpenDeleteModal(false)}
           onSubmit={deleteSelectedBatches}
         />
+        {openProjectAssignModal && (
+          <ProjectAssignModal<{ id: number; projectId?: number }>
+            entity={{ id: -1, projectId: undefined }}
+            assignPayloadCreator={() => ({ batchIds: selectedRows.map((row) => Number(row.id)) })}
+            isModalOpen={true}
+            onClose={() => setOpenProjectAssignModal(false)}
+          />
+        )}
         {withdrawModalBatchIds && (
           <BatchWithdrawModal
             open={true}
@@ -522,10 +523,11 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
                       label={strings.DELETE}
                       priority='secondary'
                     />
-                    <ProjectAssignTopBarButton
-                      totalResultsCount={filteredBatches?.length}
-                      selectAllRows={selectAllRows}
-                      projectAssignPayloadCreator={() => ({ batchIds: selectedRows.map((row) => Number(row.id)) })}
+                    <Button
+                      type='passive'
+                      onClick={() => setOpenProjectAssignModal(true)}
+                      label={strings.ADD_TO_PROJECT}
+                      priority='secondary'
                     />
                     <Tooltip title={withdrawTooltip || ''}>
                       <span>

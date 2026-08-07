@@ -69,6 +69,7 @@ function ProjectAssignModal<T extends ProjectAssignableEntity>(props: ProjectAss
       open={isModalOpen || false}
       title={strings.ADD_TO_PROJECT}
       size={'small'}
+      skrim
       middleButtons={[
         <Button
           label={strings.CANCEL}
