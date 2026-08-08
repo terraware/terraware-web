@@ -65,11 +65,11 @@ steps:
           s3-upload-acl: 'private'
     command: .buildkite/scripts/build-and-test.sh
 
-  # Previews are opt-in via the "Vercel preview" PR label; see .buildkite/README.md.
+  # Previews are opt-in; deploy-vercel.sh checks the PR for the "Vercel preview" label.
   - label: ':vercel: Deploy Vercel preview'
     key: 'vercel-preview'
     depends_on: 'build-and-test'
-    if: "build.branch != 'main' && build.tag == null && build.pull_request.labels includes 'Vercel preview'"
+    if: "build.branch != 'main' && build.tag == null"
     soft_fail: true
     plugins:
       - *shallow-clone
