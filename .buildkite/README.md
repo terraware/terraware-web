@@ -48,6 +48,10 @@ You'll notice the scripts have a bunch of "echo" commands that output lines star
 Those lines mark the start of collapsible sections. More information here:
 https://buildkite.com/docs/pipelines/configure/managing-log-output
 
+## Vercel previews
+
+Previews are opt-in: add the "Vercel preview" label to the pull request, then re-run the build.
+
 ## Caching and artifacts
 
 We run Buildkite on ephemeral hosts that go away when they're idle. In addition, each step in a
