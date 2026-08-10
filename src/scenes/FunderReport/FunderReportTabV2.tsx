@@ -2,6 +2,10 @@ import React, { type JSX, useMemo, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
+import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
+import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalCommentsBox';
+import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
+import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import { IndicatorProgressSectionContent } from 'src/components/AcceleratorReports/IndicatorProgressSection';
 import { ProjectHealthBarContent } from 'src/components/AcceleratorReports/ProjectHealthBar';
@@ -75,6 +79,14 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
             quarter={selectedReport?.quarter}
             year={selectedReport?.startDate ? Number(selectedReport.startDate.split('-')[0]) : undefined}
           />
+
+          <AchievementsBox projectId={selectedProjectId} report={selectedReport} />
+
+          <ChallengesMitigationBox projectId={selectedProjectId} report={selectedReport} />
+
+          <FinancialSummariesBox projectId={selectedProjectId} report={selectedReport} />
+
+          <AdditionalCommentsBox projectId={selectedProjectId} report={selectedReport} />
         </>
       )}
     </Card>
