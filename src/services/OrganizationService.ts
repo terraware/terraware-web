@@ -186,7 +186,7 @@ const updateOrganization = async (organization: Organization): Promise<Response>
   const request: UpdateOrganizationRequestPayload = {
     name,
     description,
-    botanicalCountryCode,
+    botanicalCountryCode: botanicalCountryCode ?? null,
     countryCode,
     countrySubdivisionCode,
     organizationType,

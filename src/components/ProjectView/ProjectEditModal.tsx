@@ -56,7 +56,9 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
       updateProjectRequestPayload: {
         name,
         description,
-        ...(speciesIntelligenceEnabled ? { countryCode, botanicalCountryCode } : {}),
+        ...(speciesIntelligenceEnabled
+          ? { countryCode: countryCode ?? null, botanicalCountryCode: botanicalCountryCode ?? null }
+          : {}),
       },
     });
   };
