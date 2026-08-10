@@ -6,17 +6,19 @@ import { Confirm } from '@terraware/web-components';
 import { useLocalization } from 'src/providers';
 
 export type PublishModalProps = {
+  disabled?: boolean;
   onClose: () => void;
   onSubmit: () => void;
 };
 
-export default function PublishModal({ onClose, onSubmit }: PublishModalProps): JSX.Element {
+export default function PublishModal({ disabled, onClose, onSubmit }: PublishModalProps): JSX.Element {
   const theme = useTheme();
   const { strings } = useLocalization();
 
   return (
     <Confirm
       size={'medium'}
+      confirmButtonDisabled={disabled}
       closeButtonId='cancelPublish'
       closeButtonText={strings.CANCEL}
       confirmButtonId='confirmPublish'
