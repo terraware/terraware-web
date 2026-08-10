@@ -3,6 +3,7 @@ import React, { type JSX, useMemo, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
+import { IndicatorProgressSectionContent } from 'src/components/AcceleratorReports/IndicatorProgressSection';
 import { ProjectHealthBarContent } from 'src/components/AcceleratorReports/ProjectHealthBar';
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
@@ -68,6 +69,8 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
           <ProjectHealthBarContent indicators={indicators} />
 
           <HighlightsBox key={resolvedReportId} projectId={selectedProjectId} report={selectedReport} />
+
+          <IndicatorProgressSectionContent indicators={indicators} quarter={selectedReport?.quarter} />
         </>
       )}
     </Card>
