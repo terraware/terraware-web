@@ -3,6 +3,7 @@ import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
+import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import ProjectHealthBar from 'src/components/AcceleratorReports/ProjectHealthBar';
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
@@ -75,6 +76,10 @@ const AcceleratorReportTabV2 = (): JSX.Element => {
           </Box>
 
           <ProjectHealthBar reportId={resolvedReportId} />
+
+          {projectId !== undefined && (
+            <HighlightsBox key={resolvedReportId} projectId={projectId} report={selectedReport} />
+          )}
         </>
       )}
     </Card>
