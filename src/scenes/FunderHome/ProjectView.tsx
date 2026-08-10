@@ -52,7 +52,14 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
   const [selectedReport, setSelectedReport] = useState<PublishedReportPayload>();
   const [quarterDropdownData, setQuarterDropdownData] = useState<QuarterDropdownData | undefined>(undefined);
 
+  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+
   useEffect(() => {
+    // FunderReportTabV2 lists its own reports and consumes the reportId param itself
+    if (newReportTabEnabled) {
+      return;
+    }
+
     if (!selectedReport && publishedReports?.length) {
       if (query.get('reportId')) {
         const found = publishedReports?.find((r) => r.reportId.toString() === query.get('reportId'));
@@ -63,7 +70,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
         setSelectedReport(publishedReports[0]);
       }
     }
-  }, [location, navigate, query, publishedReports, selectedReport]);
+  }, [location, navigate, newReportTabEnabled, query, publishedReports, selectedReport]);
 
   const projectDetailsDealName = projectDetails?.dealName;
 
@@ -74,8 +81,6 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
       return projectDetailsDealName;
     }
   }, [projectDetailsDealName]);
-
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
 
   const tabs = useMemo(() => {
     return [
@@ -160,7 +165,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
             <Typography fontWeight={600} lineHeight={'40px'} fontSize={'24px'}>
               {strippedDealName}
             </Typography>
-            {activeTab === 'report' && (publishedReports?.length ?? 0) > 0 && (
+            {!newReportTabEnabled && activeTab === 'report' && (publishedReports?.length ?? 0) > 0 && (
               <SelectT<PublishedReportPayload>
                 id='report'
                 label={''}
