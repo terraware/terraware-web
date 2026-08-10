@@ -11,7 +11,7 @@ export const useBotanicalCountries = (skip = false): UseBotanicalCountriesResult
   const [listBotanicalCountries, { data, isUninitialized }] = useLazyListBotanicalCountriesQuery();
 
   useEffect(() => {
-    if (!skip) {
+    if (!skip && isUninitialized) {
       void listBotanicalCountries(undefined, true);
     }
   }, [listBotanicalCountries, skip, isUninitialized]);
