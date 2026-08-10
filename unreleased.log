@@ -1,3 +1,5 @@
+82f0ead2 SW-8755 Show badge for source in species detail view (#6232)
+0d23d320 Update Node.js to v24.19.0 (#6228)
 99f0501c Update dependency react-router to v7.18.2 [SECURITY] (#6230)
 06196c16 Bump web-components to get latest virtual walkthrough updates (#6227)
 6c0cd2fb Enables Vercel preview only when PR is labeled (#6226)
