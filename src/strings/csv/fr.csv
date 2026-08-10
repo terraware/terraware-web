@@ -1328,6 +1328,7 @@ NO_SPECIES,Aucune espèce,1616e61b
 NO_SPECIES_CONTRIBUTOR_MSG,"Aucune espèce ne figure dans votre liste d'espèces pour le moment. Seuls les administrateurs peuvent ajouter des espèces, contactez donc le vôtre pour obtenir de l'aide.",32a4f50e
 NO_SPECIES_DESCRIPTION,"Il semble que vous n'ayez ajouté aucune espèce pour le moment. Le fait de disposer d'une liste principale des espèces permet de rationaliser la saisie des données relatives aux semences et aux plantes au sein de votre organisation. Vous pouvez ajouter des espèces manuellement et individuellement, ou importer des données à partir d'un fichier CSV.",048a81f6
 NO_SPECIES_TARGETS_FOR_SUBSTRATUM,Aucun objectif d’espèces n’a été défini pour ce substrat.,53b1322b
+NO_STATUS,Aucun statut,4d08c36e
 NO_SUB_LOCATIONS,Modifiez cette banque de semences pour ajouter des sous-emplacements.,963dba11
 NO_SUB_LOCATIONS_NURSERY,Modifier cette pépinière pour ajouter des sous-emplacements.,8a939067
 NO_TEMPORARY_PLOTS_SURVIVAL_TOOLTIP,Aucune Observation terminée n'inclut de placettes temporaires dans un substrat de site de plantation.,fdf09cc6
@@ -1723,6 +1724,7 @@ PROJECT_AREA_DESCRIPTION,"Superficie totale pour tout le projet, dont les activi
 PROJECT_AREA_HA,Superficie du projet (ha),6bda7dea
 PROJECT_AREA_MAP,Carte de la zone du projet,7c01fd14
 PROJECT_AREA_TOTALS,Totaux de la zone de projet,bece9b37
+PROJECT_HEALTH,Santé du projet,721aa8b8
 PROJECT_HIGHLIGHT_IMAGE,Image de mise en évidence du projet,a7d500cb
 PROJECT_IMPACT,Impact du projet,7daa6ba5
 PROJECT_IMPACT_INSTRUCTIONS,"Détaillez l'impact de votre projet au cours de la période couverte par le rapport, y compris les principales réalisations et les progrès accomplis en vue d'atteindre les objectifs fixés et les principales étapes. Outre les objectifs forestiers, veuillez indiquer les emplois créés (à temps plein, à temps partiel et saisonniers), en utilisant des chiffres spécifiques ventilés par sexe. (Environ une page.)",57149db5

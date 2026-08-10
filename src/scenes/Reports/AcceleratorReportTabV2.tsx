@@ -1,8 +1,9 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
+import ProjectHealthBar from 'src/components/AcceleratorReports/ProjectHealthBar';
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
@@ -73,9 +74,7 @@ const AcceleratorReportTabV2 = (): JSX.Element => {
             {selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
           </Box>
 
-          <Box display='flex' flexGrow={1} alignItems='center' justifyContent='center'>
-            <Typography>{`Participant report view (report ${resolvedReportId})`}</Typography>
-          </Box>
+          <ProjectHealthBar reportId={resolvedReportId} />
         </>
       )}
     </Card>
