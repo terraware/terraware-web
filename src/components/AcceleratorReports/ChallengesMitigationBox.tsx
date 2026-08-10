@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
@@ -161,6 +161,8 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const snackbar = useSnackbar();
 
   const { isMobile } = useDeviceInfo();
+  const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
+
   const nonEmptyChallenges = useMemo(() => {
     return challengeMitigations.filter((s) => !!s.challenge || !!s.mitigationPlan);
   }, [challengeMitigations]);
@@ -184,13 +186,28 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   useEffect(() => {
     setValidateFields(false);
 
-    if (challengeMitigations.length === 0) {
-      addRow();
-    }
     if (onChange && areFilteredChallengesDifferent) {
       onChange(nonEmptyChallenges);
     }
-  }, [addRow, areFilteredChallengesDifferent, challengeMitigations, nonEmptyChallenges, onChange]);
+  }, [areFilteredChallengesDifferent, nonEmptyChallenges, onChange]);
+
+  const firstRendered = useRef(false);
+
+  // the editor opens with a row ready to fill in; a deleted row stays deleted
+  useEffect(() => {
+    if (!isEditing) {
+      firstRendered.current = false;
+      return;
+    }
+
+    if (!firstRendered.current) {
+      firstRendered.current = true;
+
+      if (challengeMitigations.length === 0) {
+        addRow();
+      }
+    }
+  }, [addRow, challengeMitigations.length, isEditing]);
 
   useEffect(() => {
     if (reviewReportResponse.isError) {
@@ -245,9 +262,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
     []
   );
 
-  const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
-
-  const isEmpty = newReportTabEnabled && !isEditing && nonEmptyChallenges.length === 0;
+  const isEmpty = newReportTabEnabled && (isEditing ? challengeMitigations : nonEmptyChallenges).length === 0;
 
   return (
     <EditableReportBox
