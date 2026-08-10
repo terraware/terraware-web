@@ -45,8 +45,8 @@ function stringsToJS(stringsMap) {
 
 /**
  * Returns a list of extra strings to include in the string table for a locale. This is necessary
- * because Phrase doesn't work well with punctuation-only strings such as list separators; including
- * them in a translation order can cause the order to get stuck indefinitely.
+ * because some translation frameworks don't work well with punctuation-only strings such as list
+ * separators; including them in a translation order can cause the order to get stuck indefinitely.
  *
  * @param {string} [locale] - Locale whose extra strings should be returned.
  * @return {{LIST_SEPARATOR_SECONDARY: string, LIST_SEPARATOR: string, TRUNCATED_TEXT_MORE_SEPARATOR: string}}
