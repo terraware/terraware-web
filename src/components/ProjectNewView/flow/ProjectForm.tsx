@@ -3,7 +3,9 @@ import React, { type JSX, useState } from 'react';
 import { Container, Grid, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
+import CountryAndBotanicalCountrySelect from 'src/components/CountryAndBotanicalCountrySelect';
 import PageForm from 'src/components/common/PageForm';
+import isEnabled from 'src/features';
 import strings from 'src/strings';
 import { CreateProjectRequest, UpdateProjectRequest } from 'src/types/Project';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -23,6 +25,7 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
+  const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
   const [localRecord, setLocalRecord] = useState<T>(project);
   const [validateFields, setValidateFields] = useState<boolean>(false);
 
@@ -92,6 +95,17 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
               label={strings.DESCRIPTION}
             />
           </Grid>
+          {speciesIntelligenceEnabled && (
+            <Grid item xs={12} container spacing={2} sx={{ marginTop: theme.spacing(1) }}>
+              <CountryAndBotanicalCountrySelect
+                countryCode={localRecord.countryCode ?? undefined}
+                botanicalCountryCode={localRecord.botanicalCountryCode ?? undefined}
+                onChange={({ countryCode, botanicalCountryCode }) => {
+                  setLocalRecord((prev) => ({ ...prev, countryCode, botanicalCountryCode }));
+                }}
+              />
+            </Grid>
+          )}
         </Grid>
       </Container>
     </PageForm>
