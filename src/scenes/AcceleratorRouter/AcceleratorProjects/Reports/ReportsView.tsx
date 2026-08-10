@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import Tabs from '@terraware/web-components/components/Tabs';
 
@@ -16,6 +16,7 @@ import { useLocalization, useUser } from 'src/providers';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
+import ReportReviewButtons from './ReportReviewButtons';
 import ReportTabV2 from './ReportTabV2';
 import ReportsSettings from './ReportsSettings';
 
@@ -27,6 +28,7 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
   const { crumbs, acceleratorProject, project } = useAcceleratorProjectData();
   const navigate = useSyncNavigate();
   const { strings } = useLocalization();
+  const theme = useTheme();
   const { goToAcceleratorProjectReportEdit, goToNewIndicator } = useNavigateTo();
   const pathParams = useParams<{ projectId: string; reportId?: string }>();
   const { isAllowed } = useUser();
@@ -87,6 +89,7 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
           to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', acceleratorProject?.projectId.toString() || ''),
         },
       ]}
+      rightComponentGridSize={6}
       title={strings.REPORTS}
       titleStyle={{ paddingTop: '16px' }}
       rightComponent={
@@ -97,17 +100,20 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
             size='medium'
             onClick={() => goToNewIndicator(pathParams.projectId ?? '')}
           />
-        ) : newReportTabEnabled &&
-          activeTab === 'reports' &&
-          selectedReportId !== undefined &&
-          isAllowed('EDIT_REPORTS') ? (
-          <Button
-            icon='iconEdit'
-            label={strings.EDIT}
-            onClick={() => goToAcceleratorProjectReportEdit(selectedReportId, Number(pathParams.projectId))}
-            priority='secondary'
-            size='medium'
-          />
+        ) : newReportTabEnabled && activeTab === 'reports' && selectedReportId !== undefined ? (
+          <Box display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
+            {isAllowed('EDIT_REPORTS') && (
+              <Button
+                icon='iconEdit'
+                label={strings.EDIT}
+                onClick={() => goToAcceleratorProjectReportEdit(selectedReportId, Number(pathParams.projectId))}
+                priority='secondary'
+                size='medium'
+              />
+            )}
+
+            <ReportReviewButtons reportId={selectedReportId} />
+          </Box>
         ) : undefined
       }
     >
