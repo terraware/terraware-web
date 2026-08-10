@@ -1,4 +1,4 @@
-import React, { type JSX, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, useTheme } from '@mui/material';
@@ -15,20 +15,30 @@ import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
+import { APP_PATHS } from 'src/constants';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useListAcceleratorReportsQuery } from 'src/queries/generated/reports';
-import useQuery from 'src/utils/useQuery';
 
 import ReportInternalComment from './ReportInternalComment';
 
-const ReportTabV2 = (): JSX.Element => {
+export type ReportTabV2Props = {
+  active?: boolean;
+};
+
+const ReportTabV2 = ({ active }: ReportTabV2Props): JSX.Element => {
   const theme = useTheme();
-  const pathParams = useParams<{ projectId: string }>();
-  const query = useQuery();
+  const pathParams = useParams<{ projectId: string; reportId?: string }>();
+  const navigate = useSyncNavigate();
 
   const projectId = Number(pathParams.projectId);
+  const pathReportId = Number(pathParams.reportId) || undefined;
 
-  const [selectedReportId, setSelectedReportId] = useState<number | undefined>(
-    Number(query.get('reportId')) || undefined
+  const selectReport = useCallback(
+    (reportId: number, replace = false) =>
+      navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', `${projectId}`)}/${reportId}`, {
+        replace,
+      }),
+    [navigate, projectId]
   );
 
   const { currentData: listReportsData } = useListAcceleratorReportsQuery({ projectId });
@@ -43,9 +53,16 @@ const ReportTabV2 = (): JSX.Element => {
   );
 
   const resolvedReportId = useMemo(
-    () => reports.find((report) => report.reportId === selectedReportId)?.reportId ?? reports[0]?.reportId,
-    [reports, selectedReportId]
+    () => reports.find((report) => report.reportId === pathReportId)?.reportId ?? reports[0]?.reportId,
+    [pathReportId, reports]
   );
+
+  // the reports path has no report of its own, so send it to the latest one
+  useEffect(() => {
+    if (active && resolvedReportId !== undefined && pathReportId !== resolvedReportId) {
+      selectReport(resolvedReportId, true);
+    }
+  }, [active, pathReportId, resolvedReportId, selectReport]);
 
   const selectedReport = useMemo(
     () => listReportsData?.reports.find((report) => report.id === resolvedReportId),
@@ -61,7 +78,7 @@ const ReportTabV2 = (): JSX.Element => {
       ) : (
         <>
           <Box alignItems='center' display='flex' justifyContent='space-between' marginBottom={theme.spacing(3)}>
-            <ReportDropdown onChange={setSelectedReportId} reports={reports} selectedReportId={resolvedReportId} />
+            <ReportDropdown onChange={selectReport} reports={reports} selectedReportId={resolvedReportId} />
 
             {selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
           </Box>

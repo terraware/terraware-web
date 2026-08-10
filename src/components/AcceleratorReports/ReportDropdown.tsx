@@ -14,16 +14,17 @@ export type ReportDropdownProps = {
   onChange: (reportId: number) => void;
 };
 
+export const REPORT_TITLE_STYLE = {
+  fontSize: '24px',
+  fontWeight: '600',
+  lineHeight: '32px',
+};
+
 const selectStyles = {
   arrow: {
     height: '32px',
   },
-  input: {
-    fontSize: '24px',
-    fontWeight: '600',
-    lineHeight: '32px',
-  },
-  // the field's own padding would indent the title past the card's content edge
+  input: REPORT_TITLE_STYLE,
   inputContainer: {
     border: 0,
     backgroundColor: 'initial',
