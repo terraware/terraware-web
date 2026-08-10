@@ -4,6 +4,7 @@ import { BusySpinner } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useUpdateProjectMutation } from 'src/queries/generated/projects';
 import {
@@ -11,7 +12,6 @@ import {
   useAcceptProblemSuggestionMutation,
   useOverrideProjectSpeciesDataMutation,
 } from 'src/queries/generated/species';
-import { useListBotanicalCountriesQuery } from 'src/queries/search/botanicalCountries';
 import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
@@ -50,7 +50,7 @@ const SpeciesCheckModal = ({
   const snackbar = useSnackbar();
   const { countries } = useLocalization();
   const { selectedOrganization, reloadOrganizations } = useOrganization();
-  const { data: botanicalCountries } = useListBotanicalCountriesQuery(undefined, { skip: !open });
+  const { botanicalCountries } = useBotanicalCountries(!open);
 
   const [updateProject] = useUpdateProjectMutation();
   const [acceptProblem] = useAcceptProblemSuggestionMutation();
@@ -138,7 +138,7 @@ const SpeciesCheckModal = ({
     [countries]
   );
   const botanicalNameByCode = useCallback(
-    (code?: string) => botanicalCountries?.find((botanicalCountry) => botanicalCountry.code === code)?.name,
+    (code?: string) => botanicalCountries.find((botanicalCountry) => botanicalCountry.code === code)?.name,
     [botanicalCountries]
   );
 
@@ -508,7 +508,7 @@ const SpeciesCheckModal = ({
             targets={targets}
             edits={locationEdits}
             countries={countries ?? []}
-            botanicalCountries={botanicalCountries ?? []}
+            botanicalCountries={botanicalCountries}
             onChange={(targetKey, edit) => setLocationEdits((previous) => ({ ...previous, [targetKey]: edit }))}
           />
         )}

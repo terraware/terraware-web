@@ -2,9 +2,11 @@ import React, { type JSX, useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
 
+import CountryAndBotanicalCountrySelect from 'src/components/CountryAndBotanicalCountrySelect';
 import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import isEnabled from 'src/features';
 import { useUpdateProjectMutation } from 'src/queries/generated/projects';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
@@ -22,14 +24,20 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
 
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+  const [countryCode, setCountryCode] = useState<string>();
+  const [botanicalCountryCode, setBotanicalCountryCode] = useState<string>();
   const [validateFields, setValidateFields] = useState(false);
   const [updateProject, { isError, isSuccess, reset }] = useUpdateProjectMutation();
+
+  const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
 
   useEffect(() => {
     if (open) {
       setValidateFields(false);
       setName(project?.name ?? '');
       setDescription(project?.description ?? '');
+      setCountryCode(project?.countryCode);
+      setBotanicalCountryCode(project?.botanicalCountryCode);
     }
   }, [open, project]);
 
@@ -43,7 +51,16 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
       return;
     }
 
-    void updateProject({ id: project.id, updateProjectRequestPayload: { name, description } });
+    void updateProject({
+      id: project.id,
+      updateProjectRequestPayload: {
+        name,
+        description,
+        ...(speciesIntelligenceEnabled
+          ? { countryCode: countryCode ?? null, botanicalCountryCode: botanicalCountryCode ?? null }
+          : {}),
+      },
+    });
   };
 
   useEffect(() => {
@@ -97,6 +114,16 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
             value={description}
           />
         </Grid>
+        {speciesIntelligenceEnabled && (
+          <CountryAndBotanicalCountrySelect
+            countryCode={countryCode}
+            botanicalCountryCode={botanicalCountryCode}
+            onChange={({ countryCode: nextCountry, botanicalCountryCode: nextBotanical }) => {
+              setCountryCode(nextCountry);
+              setBotanicalCountryCode(nextBotanical);
+            }}
+          />
+        )}
       </Grid>
     </ScrollableDialogBox>
   );
