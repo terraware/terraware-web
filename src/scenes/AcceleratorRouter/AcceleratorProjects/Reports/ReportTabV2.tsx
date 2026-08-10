@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
+import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import { useListAcceleratorReportsQuery } from 'src/queries/generated/reports';
@@ -31,15 +32,28 @@ const ReportTabV2 = (): JSX.Element => {
     [listReportsData]
   );
 
+  const resolvedReportId = useMemo(
+    () => reports.find((report) => report.reportId === selectedReportId)?.reportId ?? reports[0]?.reportId,
+    [reports, selectedReportId]
+  );
+
+  const isEmpty = listReportsData !== undefined && reports.length === 0;
+
   return (
     <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(3) }}>
-      <Box marginBottom={theme.spacing(3)}>
-        <ReportDropdown onChange={setSelectedReportId} reports={reports} selectedReportId={selectedReportId} />
-      </Box>
+      {isEmpty ? (
+        <ReportEmptyState />
+      ) : (
+        <>
+          <Box marginBottom={theme.spacing(3)}>
+            <ReportDropdown onChange={setSelectedReportId} reports={reports} selectedReportId={resolvedReportId} />
+          </Box>
 
-      <Box display='flex' flexGrow={1} alignItems='center' justifyContent='center'>
-        <Typography>{`Accelerator report view (report ${selectedReportId})`}</Typography>
-      </Box>
+          <Box display='flex' flexGrow={1} alignItems='center' justifyContent='center'>
+            <Typography>{`Accelerator report view (report ${resolvedReportId})`}</Typography>
+          </Box>
+        </>
+      )}
     </Card>
   );
 };
