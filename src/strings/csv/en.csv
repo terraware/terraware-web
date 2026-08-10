@@ -1112,6 +1112,7 @@ LESS_THAN_FIFTY_PERCENT,< 50%,
 LEVEL,Level,
 LIANA,Liana,A type of plant.
 LICHEN,Lichen,
+LIFETIME,Lifetime,
 LIGHT,Light,
 LIKELY_INTERMEDIATE,Likely Intermediate,Option to indicate that a species' seed storage behavior has not been scientifically confirmed but is believed to be Intermediate.
 LIKELY_INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE,Likely Intermediate - Cool Temperature Sensitive,
@@ -2777,6 +2778,7 @@ X_OF_YEAR_TARGET,{0} of Year Target,
 X_PER_HA,{0}/ha,
 X_PLANTS,{0} plants,
 X_SPECIES_Y_PLANTS,"{0} species, {1} plants",
+X_TARGET,{0} target,
 X_THIS_QUARTER,{0} this quarter,
 XR_ERROR,An error occurred while enabling XR mode. Please refresh and try again, or try again another time.
 YEAR,Year,
