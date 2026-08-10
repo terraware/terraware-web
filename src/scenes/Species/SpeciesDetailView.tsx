@@ -14,7 +14,11 @@ import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useOrganization } from 'src/providers/hooks';
-import { useDeleteSpeciesMutation, useLazyGetSpeciesQuery } from 'src/queries/generated/species';
+import {
+  SpeciesDataSourcePayload,
+  useDeleteSpeciesMutation,
+  useLazyGetSpeciesQuery,
+} from 'src/queries/generated/species';
 import strings from 'src/strings';
 import {
   getConservationCategoryString,
@@ -31,6 +35,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
+import SpeciesDataSourceField from './SpeciesDataSourceField';
 import SpeciesProjectsSection from './SpeciesProjectsSection';
 import SpeciesProjectsTable from './SpeciesProjectsTable';
 
@@ -109,6 +114,11 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
     [gridSize, theme]
   );
 
+  const dataSource = useCallback(
+    (source?: SpeciesDataSourcePayload) => (speciesIntelligenceEnabled ? source : undefined),
+    [speciesIntelligenceEnabled]
+  );
+
   return (
     <TfMain>
       {isDeleting && <BusySpinner withSkrim={true} />}
@@ -169,17 +179,21 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             />
           </GridItemWrapper>
           <GridItemWrapper>
-            <TextField
-              label={strings.COMMON_NAME}
+            <SpeciesDataSourceField
               id='commonName'
-              type='text'
+              label={strings.COMMON_NAME}
+              source={dataSource(species?.commonNameSource)}
+              tooltipTitle={strings.TOOLTIP_COMMON_NAME}
               value={species?.commonName}
-              tooltipTitle={strings.TOOLTIP_TIME_ZONE_NURSERY}
-              display={true}
             />
           </GridItemWrapper>
           <GridItemWrapper>
-            <TextField id={'family'} label={strings.FAMILY} value={species?.familyName} type='text' display={true} />
+            <SpeciesDataSourceField
+              id='family'
+              label={strings.FAMILY}
+              source={dataSource(species?.familyNameSource)}
+              value={species?.familyName}
+            />
           </GridItemWrapper>
           <GridItemWrapper>
             <TextField
