@@ -161,12 +161,7 @@ const ReportEditV2 = (): JSX.Element => {
           {report && <ReportInternalComment projectId={projectId} report={report} />}
 
           {record && (
-            <ReportEditFields
-              onChangeCallback={onChangeCallback}
-              record={record}
-              showNotesToFunder
-              validate={validate}
-            />
+            <ReportEditFields onChangeCallback={onChangeCallback} record={record} isConsoleView validate={validate} />
           )}
         </Card>
       </Box>

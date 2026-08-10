@@ -1,6 +1,7 @@
 import React, { type JSX, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 
 import IndicatorProgressRow, { ProgressIndicator } from 'src/components/AcceleratorReports/IndicatorProgressRow';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
@@ -28,7 +29,7 @@ export type IndicatorProgressSectionContentProps = {
   indicators: ProgressIndicator[];
   onChangeIndicator?: (indicator: ProgressIndicator, id: string, value: unknown) => void;
   quarter?: 'Q1' | 'Q2' | 'Q3' | 'Q4';
-  showNotesToFunder?: boolean;
+  isConsoleView?: boolean;
   year?: number;
 };
 
@@ -37,7 +38,7 @@ export const IndicatorProgressSectionContent = ({
   indicators,
   onChangeIndicator,
   quarter,
-  showNotesToFunder,
+  isConsoleView,
   year,
 }: IndicatorProgressSectionContentProps): JSX.Element | null => {
   const theme = useTheme();
@@ -51,9 +52,40 @@ export const IndicatorProgressSectionContent = ({
 
   return (
     <Box marginBottom={theme.spacing(3)} padding={theme.spacing(2)}>
-      <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(2)}>
-        {strings.PROGRESS}
-      </Typography>
+      <Box alignItems='center' display='flex' justifyContent='space-between' marginBottom={theme.spacing(2)}>
+        <Typography fontSize='20px' fontWeight={600}>
+          {strings.PROGRESS}
+        </Typography>
+
+        {isConsoleView && (
+          <Box alignItems='center' columnGap={theme.spacing(2)} display='flex'>
+            {(
+              [
+                {
+                  icon: 'iconEye',
+                  iconColor: theme.palette.TwClrIcnBrand,
+                  label: strings.SHARED_WITH_FUNDER,
+                  labelColor: theme.palette.TwClrTxtBrand,
+                },
+                {
+                  icon: 'lock',
+                  iconColor: theme.palette.TwClrIcnSecondary,
+                  label: strings.INTERNAL_ONLY,
+                  labelColor: theme.palette.TwClrTxtSecondary,
+                },
+              ] as const
+            ).map((entry) => (
+              <Box alignItems='center' columnGap={theme.spacing(0.5)} display='flex' key={entry.label}>
+                <Icon fillColor={entry.iconColor} name={entry.icon} size='small' />
+
+                <Typography color={entry.labelColor} fontSize='14px'>
+                  {entry.label}
+                </Typography>
+              </Box>
+            ))}
+          </Box>
+        )}
+      </Box>
 
       {sortedIndicators.map((indicator, index) => (
         <IndicatorProgressRow
@@ -62,7 +94,7 @@ export const IndicatorProgressSectionContent = ({
           key={`${indicator.refId}-${index}`}
           onChange={(id, value) => onChangeIndicator?.(indicator, id, value)}
           quarter={quarter}
-          showNotesToFunder={showNotesToFunder}
+          isConsoleView={isConsoleView}
           year={year}
         />
       ))}
@@ -71,10 +103,11 @@ export const IndicatorProgressSectionContent = ({
 };
 
 export type IndicatorProgressSectionProps = {
+  isConsoleView?: boolean;
   reportId?: number;
 };
 
-const IndicatorProgressSection = ({ reportId }: IndicatorProgressSectionProps): JSX.Element | null => {
+const IndicatorProgressSection = ({ isConsoleView, reportId }: IndicatorProgressSectionProps): JSX.Element | null => {
   const { report } = useOneAcceleratorReport(reportId);
 
   const indicators = useMemo<ProgressIndicator[]>(
@@ -93,7 +126,14 @@ const IndicatorProgressSection = ({ reportId }: IndicatorProgressSectionProps): 
 
   const year = report?.startDate ? Number(report.startDate.split('-')[0]) : undefined;
 
-  return <IndicatorProgressSectionContent indicators={indicators} quarter={report?.quarter} year={year} />;
+  return (
+    <IndicatorProgressSectionContent
+      indicators={indicators}
+      isConsoleView={isConsoleView}
+      quarter={report?.quarter}
+      year={year}
+    />
+  );
 };
 
 export default IndicatorProgressSection;

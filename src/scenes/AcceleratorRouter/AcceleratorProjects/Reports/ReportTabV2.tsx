@@ -89,7 +89,7 @@ const ReportTabV2 = ({ active }: ReportTabV2Props): JSX.Element => {
 
           <HighlightsBox key={resolvedReportId} projectId={projectId} report={selectedReport} />
 
-          <IndicatorProgressSection reportId={resolvedReportId} />
+          <IndicatorProgressSection isConsoleView reportId={resolvedReportId} />
 
           <AchievementsBox projectId={projectId} report={selectedReport} />
 
