@@ -396,7 +396,11 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const onCloseImportSpeciesModal = (completed: boolean) => {
     if (completed && reloadData) {
       reloadData();
-      setCheckDataModalOpen(true);
+      if (speciesCheckEnabled) {
+        openSpeciesCheck('added');
+      } else {
+        setCheckDataModalOpen(true);
+      }
     }
     setImportSpeciesModalOpen(false);
   };
