@@ -36,7 +36,10 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
+import OverrideSpeciesModal from './OverrideSpeciesModal';
+import SpeciesDataSourceBadge from './SpeciesDataSourceBadge';
 import SpeciesDataSourceField from './SpeciesDataSourceField';
+import SpeciesNativityBadge from './SpeciesNativityBadge';
 import SpeciesProjectsSection from './SpeciesProjectsSection';
 import SpeciesProjectsTable from './SpeciesProjectsTable';
 
@@ -54,9 +57,11 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   const { speciesId } = useParams<{ speciesId: string }>();
   const userCanEdit = !isContributor(selectedOrganization);
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
+  const [overrideModalOpen, setOverrideModalOpen] = useState(false);
   const snackbar = useSnackbar();
   const { orgHasParticipants } = useParticipantData();
   const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
+  const showOrgNativity = speciesIntelligenceEnabled && !hasMultipleProjects;
 
   const [getSpecies, { currentData: speciesData, isError: getSpeciesError }] = useLazyGetSpeciesQuery();
   const species = speciesData?.species;
@@ -121,6 +126,12 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
     (source?: SpeciesDataSourcePayload) => (speciesIntelligenceEnabled ? source : undefined),
     [speciesIntelligenceEnabled]
   );
+
+  const orgNativityElement = useMemo(
+    () => (species?.projects ?? []).find((element) => element.projectId === undefined),
+    [species]
+  );
+  const orgNativity = orgNativityElement?.overriddenNativity ?? orgNativityElement?.calculatedNativity;
 
   return (
     <TfMain>
@@ -322,7 +333,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               }
             />
           </GridItemWrapper>
-          <GridItemWrapper props={{ xs: isMobile ? 12 : 8 }}>
+          <GridItemWrapper props={{ xs: isMobile ? 12 : showOrgNativity ? 4 : 8 }}>
             <TextField
               id={'otherFacts'}
               label={strings.OTHER_FACTS}
@@ -331,6 +342,35 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               display={true}
             />
           </GridItemWrapper>
+          {showOrgNativity && (
+            <GridItemWrapper>
+              <Box>
+                <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontWeight={400}>
+                  {strings.STATUS}
+                </Typography>
+                <Box
+                  display='flex'
+                  alignItems='center'
+                  flexWrap='wrap'
+                  gap={theme.spacing(1)}
+                  marginTop={theme.spacing(1)}
+                >
+                  <SpeciesNativityBadge nativity={orgNativity} />
+                  <SpeciesDataSourceBadge source={orgNativityElement?.calculatedNativitySource} />
+                  {orgNativity && userCanEdit && (
+                    <Button
+                      id='override-org-nativity'
+                      label={strings.OVERRIDE}
+                      priority='secondary'
+                      type='passive'
+                      size='small'
+                      onClick={() => setOverrideModalOpen(true)}
+                    />
+                  )}
+                </Box>
+              </Box>
+            </GridItemWrapper>
+          )}
           {species && orgHasParticipants && <SpeciesProjectsTable speciesId={species.id} editMode={false} />}
           {speciesIntelligenceEnabled && hasMultipleProjects && species && (
             <Grid item xs={12} marginTop={theme.spacing(4)}>
@@ -349,6 +389,18 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
           onClose={() => setDeleteSpeciesModalOpen(false)}
           onSubmit={(toDelete: number) => void deleteSelectedSpecies(toDelete)}
           speciesToDelete={species}
+        />
+      )}
+      {overrideModalOpen && species && (
+        <OverrideSpeciesModal
+          onClose={() => setOverrideModalOpen(false)}
+          speciesId={species.id}
+          speciesName={species.scientificName}
+          targetName={selectedOrganization?.name}
+          countryCode={selectedOrganization?.countryCode}
+          botanicalCountryCode={selectedOrganization?.botanicalCountryCode}
+          currentNativity={orgNativity}
+          currentJustification={orgNativityElement?.overriddenJustification}
         />
       )}
     </TfMain>
