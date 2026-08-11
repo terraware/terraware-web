@@ -1,3 +1,5 @@
+c99fe69e Remove duplicates from web-components strings, force uniqueness (#6238)
+2699f019 Extend component strings object, set components locale (#6237)
 0002f936 SW-8770 Learn More page Localization (#6241)
 33c69cec SW-8763 Add label to projects table (#6235)
 bf77f25b SW-8765 Weird line wrap on species common name (#6234)
