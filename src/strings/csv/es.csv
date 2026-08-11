@@ -444,8 +444,6 @@ CTRL,Ctrl,f485607a
 CULTIVATED,Cultivado,f0d960a4
 CULTIVATED_EX_SITU,Cultivado (ex situ),db8d3394
 CULTIVATED_EX_SITU_DESCRIPTION,"Plantas que se han cultivado en un vivero, área de producción de semillas u otra instalación de propagación.",9b096972
-CUMULATIVE,Acumulativo,51c21c57
-CUMULATIVE_OR_LEVEL,Acumulativo o Nivel,0a0f2515
 CUMULATIVE_PROGRESS,Progreso acumulado,fd7ffcac
 CUMULATIVE_PROGRESS_TOOLTIP,"Para los indicadores acumulativos, se muestra el progreso total desde el inicio del proyecto. Para ver el progreso trimestral (real trimestral), expanda esta sección.",df7927bd
 CUMULATIVE_TARGET,Objetivo acumulado,82b48c14
@@ -987,6 +985,7 @@ INVITATION_PENDING,Invitación pendiente,6b64d319
 INVITE_FUNDER,Invitar financiador,d885523f
 INVITE_FUNDER_DESCRIPTION,Ingrese un correo electrónico para invitar a un financiador al Portal de Financiación bajo esta entidad. Se enviará un correo de invitación para crear una cuenta. El nombre y el apellido serán ingresados por el titular de la cuenta.,306732c9
 INVITED,Invitado,d40f4749
+IS_CUMULATIVE,¿Es acumulativo?,9aaf7449
 IS_DECIMAL,Es decimal,c18644f0
 IS_THERE_WATER_IN_THIS_PLOT,¿Hay agua en esta parcela?,6fd4553f
 ISSUE,Problema,5468a635
@@ -1110,10 +1109,10 @@ LEFT_TO_PLANT_TOOLTIP,"Cantidad de plantas que quedan por plantar, es decir, que
 LEGAL,Legal,dc8b5907
 LEGEND,Leyenda,d312e5fb
 LESS_THAN_FIFTY_PERCENT,< 50%,d26d7627
-LEVEL,Nivel,353f7559
 LIANA,Liana,812e082e
 LICHEN,Liquen,4f8de0bf
 LIFETIME,Duración total,a7451a5d
+LIFETIME_CUMULATIVE,Acumulativo de por vida,b8d6dc7e
 LIGHT,Luz,2bf7f442
 LIKELY_INTERMEDIATE,Posiblemente intermedia,3dfbb044
 LIKELY_INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE,Probablemente intermedio - Sensible a temperaturas frías,a26422ae
@@ -1368,6 +1367,7 @@ NOT_APPLICABLE_FOR_AD_HOC_PLOTS,No aplica para parcelas ad hoc,3e9df420
 NOT_CALCULATED_FOR_TEMPORARY_PLOTS,No calculado para Parcelas Temporales.,ca983c30
 NOT_COMPLETE,Sin completar,a8606bc8
 NOT_COVERED,No Cubierto,c01864d7
+NOT_CUMULATIVE,No acumulativo,86f75ffc
 NOT_ENOUGH_SEEDS_IN_ACCESSION,No hay suficientes semillas en la accesión.,1d7be036
 NOT_NEEDED,No es necesario,dc4188cf
 NOT_OBSERVED,No observado,4a9890a2
@@ -2794,6 +2794,7 @@ X_TARGET,Meta de {0},6f7826be
 X_THIS_QUARTER,{0} este trimestre,6391f6a0
 XR_ERROR,"Se produjo un error al habilitar el modo XR. Por favor, actualice la página e intente nuevamente.",935ea96d
 YEAR,Año,484bf433
+YEARLY_CUMULATIVE,Acumulativo anual,ed9a120d
 YES,Sí,d8b0d802
 YOU_ACCEPTED_THE_TERMS_ON,Aceptaste los términos el {0}.,b2a20246
 YOU_APPROVED_SPECIES,Aprobó {0}.,8536512d

@@ -38,8 +38,9 @@ export const indicatorTypeOptions = () => {
 
 export const classIdOptions = () => {
   return [
-    { label: strings.CUMULATIVE, value: 'Cumulative' },
-    { label: strings.LEVEL, value: 'Level' },
+    { label: strings.NOT_CUMULATIVE, value: 'Not Cumulative' },
+    { label: strings.LIFETIME_CUMULATIVE, value: 'Lifetime Cumulative' },
+    { label: strings.YEARLY_CUMULATIVE, value: 'Yearly Cumulative' },
   ];
 };
 
@@ -206,7 +207,7 @@ export default function EditCommonIndicatorModal({
           <Dropdown
             fullWidth
             id='classId'
-            label={strings.CUMULATIVE_OR_LEVEL}
+            label={strings.IS_CUMULATIVE}
             onChange={onChangeCallback('classId')}
             options={classIdOptions()}
             selectedValue={record.classId}
