@@ -36,7 +36,7 @@ const SpeciesDataSourceField = ({
         {tooltipTitle && <IconTooltip title={tooltipTitle} />}
       </Box>
       <Box sx={{ alignItems: 'flex-end', display: 'flex', gap: theme.spacing(1), width: '100%' }}>
-        <p className='textfield-value--display' style={{ margin: 0 }}>
+        <p id={id} className='textfield-value--display' style={{ margin: 0 }}>
           {value}
         </p>
         <Box flexShrink={0} paddingBottom={theme.spacing(0.5)}>
