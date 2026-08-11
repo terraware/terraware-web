@@ -1763,6 +1763,7 @@ PROJECT_INTERNAL_USER_ROLE_SOCIAL_LEAD,Responsable social,87aa1342
 PROJECT_LEAD,Jefe de proyecto,abaeba3a
 PROJECT_LINKS,Enlaces del proyecto,b34cdb0e
 PROJECT_NAME,Nombre del proyecto,17451aa2
+PROJECT_NATIVE_INVASIVE_STATUS,Estado de especies nativas/invasoras del proyecto,cfaab33d
 PROJECT_NOT_LISTED_PUBLISH,Debe publicarse un perfil de proyecto para que aparezca en esta lista.,0d9b8c84
 PROJECT_NOTES,Notas informativas adicionales sobre el proyecto,0c985c39
 PROJECT_OBJECTIVES,Objetivos del proyecto,20d1aaf6

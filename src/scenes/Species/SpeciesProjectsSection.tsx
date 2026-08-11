@@ -208,7 +208,7 @@ export default function SpeciesProjectsSection({
         />
       )}
 
-      {editMode && (
+      {editMode ? (
         <Box
           alignItems='center'
           display='flex'
@@ -218,7 +218,7 @@ export default function SpeciesProjectsSection({
           width='100%'
         >
           <Typography fontSize='20px' fontWeight={600}>
-            {strings.PROJECTS}
+            {strings.PROJECT_NATIVE_INVASIVE_STATUS}
           </Typography>
           <TooltipButton
             icon='plus'
@@ -231,6 +231,10 @@ export default function SpeciesProjectsSection({
             tooltip={buttonTooltip}
           />
         </Box>
+      ) : (
+        <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(2)}>
+          {strings.PROJECT_NATIVE_INVASIVE_STATUS}
+        </Typography>
       )}
 
       <Table
