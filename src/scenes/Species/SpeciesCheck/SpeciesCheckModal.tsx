@@ -252,8 +252,8 @@ const SpeciesCheckModal = ({
           }).unwrap();
         })
       );
-      if (targets.some((target) => target.isOrg)) {
-        await reloadOrganizations();
+      if (targets.some((target) => target.isOrg) && selectedOrganization) {
+        await reloadOrganizations(selectedOrganization.id);
       }
       reloadSpecies();
       setLocationsSubmitted(true);
