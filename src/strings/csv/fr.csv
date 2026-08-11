@@ -285,7 +285,6 @@ BY_NURSERY,Par pépinière,a0a2faa5
 BY_SPECIES,Par espèce,602624ab
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densité de plants calculée à partir des retraits,d06a4b56
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Pour utiliser la densité de plantation calculée à partir des retraits de plantation, cochez la case. Pour remplacer cette donnée, saisissez manuellement une valeur dans les champs de densité de plantation à gauche.",c674df96
-CANCEL,Annuler,e73dc4d4
 CANCEL_DATA_CHECK,Annuler la vérification des données,5f140f00
 CANCEL_SPECIES_CHECK,Annuler la vérification des espèces,fd764c88
 CANCEL_SPECIES_CHECK_MESSAGE,Vous êtes sur le point d'annuler la vérification des espèces. Toutes les modifications seront perdues. Êtes-vous sûr ?,3cc2bad6
@@ -335,7 +334,6 @@ CHECKED_IN,Enregistré !,1e7ea963
 CHECKIN_ACCESSIONS,Vérifier les accessions,3046e6fd
 CHECKING_DATA,"Vérification de la base de données en cours. Veuillez patienter, cela peut prendre quelques minutes...",7a36812b
 CHEMICAL,Chimique,7363e596
-CHOOSE_FILE,Choisissez le fichier...,967c4c38
 CHOOSE_FILES,Choisir des fichiers...,c5167691
 CITATION,Citation,772afe77
 CITY,Ville,27557cbb
@@ -538,7 +536,6 @@ DENSITY_COMFORTABLE,Densité – confortable,a7f1b4ca
 DENSITY_COMPACT,Densité – compacte,cab2e914
 DENSITY_ROOMY,Densité – spacieuse,bb240ade
 DESCRIBE_ORGANIZATION_TYPE_DETAILS,Décrivez votre organisation,b502c88a
-DESCRIPTION,Description,9cb0cc64
 DESCRIPTION_KNOWLEDGE_BASE,Apprenez à utiliser Terraware et trouvez des réponses à vos questions sur les fonctionnalités de Terraware.,e04d81cb
 DESCRIPTION_KNOWLEDGE_BASE_WITH_LINK,Apprenez à utiliser Terraware et trouvez les réponses à vos questions sur les fonctionnalités de Terraware dans le {0}.,a7644709
 DESCRIPTION_NOTES,Description/Remarques,ce46605b
@@ -611,7 +608,6 @@ ECOSYSTEM_TROPICAL_GRASSLAND_SAVANNA_SHRUBLAND,"Prairies, savanes et arbustes tr
 ECOSYSTEM_TROPICAL_MOIST_BROADLEAF_FOREST,Forêts humides à feuilles larges tropicales et subtropicales,67204b54
 ECOSYSTEM_TUNDRA,Toundra,9ac9ca11
 ECOSYSTEM_TYPE,Type d’Écosystème,eb192b40
-EDIT,Modifier,9d1278d8
 EDIT_ACCESSION,Modifier l'accession,3df43588
 EDIT_ACCESSION_DETAIL,Modifier les détails de l'accession,9b3e32a8
 EDIT_ACCOUNT,Modifier le compte,b77ad44d
@@ -713,7 +709,6 @@ EXCEEDS_AVAILABLE_X,Dépasse le disponible ({0}),4391f9df
 EXCEEDS_READY_TO_PLANT,Le total retiré ({0}) pour tous les substrats dépasse le nombre Prêt à planter ({1}) dans ce lot,3e3cd4a4
 EXCEEDS_TARGET,Dépasse l'objectif,edcff874
 EXCLUSION_AREAS,Zones d'exclusion,08c7d391
-EXISTING,Existant,fa67ac1d
 EXISTING_PROJECT_ACCESSIONS_BODY,"Certaines accessions ont déjà été ajoutées à un projet existant. Si vous sélectionnez ces accessions ici, vous remplacerez le projet par {0} (au lieu de créer une association supplémentaire).",a23f695b
 EXISTING_PROJECT_ACCESSIONS_TITLE,Projet existant avec accessions,278f1f38
 EXISTING_PROJECT_BATCHES_BODY,"Certains lots ont déjà été ajoutés à un projet existant. Si vous sélectionnez ces lots ici, vous remplacerez le projet par {0} (au lieu de créer une association supplémentaire).",426c8254
@@ -763,7 +758,6 @@ FIELD_NOTES,Notes de terrain,1c50984e
 FIFTY_TO_SEVENTY_FIVE_PERCENT,50 % à 75 %,174fb41a
 FILE_NAME,Nom du fichier,fc9f4f98
 FILE_NAMING,Noms de fichiers,ab7d2f6d
-FILE_SELECTED,Fichier sélectionné,23a60a8d
 FILE_TOO_LARGE,Le fichier {0} est trop volumineux. La taille maximale est de {1} Mo.,73c962ea
 FILTER,Filtre,51b390ee
 FILTER_BY_PROJECT,Filtrer par projet,cc5c10c0
@@ -892,7 +886,6 @@ I_AM_THE_ONLY_PERSON,Je suis la seule personne,7add78fd
 ID,Identifiant,0ba65e03
 IGNORE,Ignorer,ca0de6b5
 IMAGE_UPDATED,Mise à jour de l'image,632f3512
-IMAGES,Images,2041d3b6
 IMPERIAL,impérial,1be3a1b1
 IMPERIAL_OZ_LB,"Impérial (oz, lb)",7f5017f5
 IMPORT,Importer,a9507bb3
@@ -1249,7 +1242,6 @@ NATIVE_SPECIES_TO_BE_PLANTED,Espèces indigènes à planter,7a13ce14
 NATURAL_REGENERATION_WOODY,Régénération naturelle ligneuse,26fe4ab1
 NEEDS_ATTENTION,Nécessite une attention,95ec1cac
 NEEDS_TRANSLATION,Nécessite une traduction,ce38bfa9
-NEW,Nouveau,b8096e3b
 NEW_ACCESSION,Ajouter une adhésion,6d0d1602
 NEW_APP_VERSION,Veuillez actualiser pour utiliser la dernière version de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualisez pour obtenir la dernière version de Terraware.,6235c190
@@ -1871,7 +1863,6 @@ REMOVE_SPECIES,Supprimer des espèces,bbc8f149
 REMOVING_ORG_WARNING,"En vous retirant de {0}, vous n'aurez plus accès aux données de cette organisation. Êtes-vous sûr de vouloir enregistrer vos modifications ?",767a2892
 REPLACE,Remplacer,f6e3faed
 REPLACE_BOUNDARY,Remplacer les limites,f20d140b
-REPLACE_FILE,Remplacer le fichier...,14c3cc45
 REPORT,Rapport,5de259d3
 REPORT_ANNUAL_DETAILS_TITLE,Détails supplémentaires du projet (rapport annuel),50f5c50c
 REPORT_APPROVED,Rapport approuvé,ca469436
@@ -1972,7 +1963,6 @@ SAMPLE_OBSERVED_DENSITY_WARNING,Ce calcul est fondé sur un échantillon réalis
 SAND,Sable,5d54e2e8
 SAND_PETRI_DISH,Boîte de Petri avec sable,25b60fb2
 SATELLITE,Satellite,14d51868
-SAVE,Sauvegarder,526a3e42
 SAVE_AND_CLOSE,Enregistrer et fermer,aaa98fc6
 SAVE_AND_NEXT,Sauvegarder et suivant,1ca9d40a
 SAVE_AND_REQUEST,Enregistrer et demander,fa423722
@@ -2429,7 +2419,6 @@ TIME,Temps,2132441e
 TIME_ZONE,Fuseau horaire,abc27841
 TIME_ZONE_REQUIRED,Fuseau horaire *,f1ee0610
 TIME_ZONE_SELECTED,Fuseau horaire : {0},4a5acdb1
-TITLE,Titre,a5f8fc0b
 TITLE_OVERVIEW,{0} Vue d'ensemble,df4e964c
 TITLE_WELCOME,Bienvenue à Terraware,66882ae5
 TITLE_WELCOME_EXCLAIM,Bienvenue chez Terraware !,6da26087
@@ -2600,8 +2589,6 @@ UPLOAD_DELIVERABLES_MESSAGE,Les livrables doivent faire référence à des ident
 UPLOAD_ELLIPSIS,Télécharger...,0565da25
 UPLOAD_FAILED,Échec du téléchargement,bbacbec8
 UPLOAD_FILE,Envoyer un fichier,248e3ae5
-UPLOAD_FILES,Téléverser des fichiers,b98547be
-UPLOAD_FILES_DESCRIPTION,Parcourir ou glisser-déposer des fichiers.,7c4a7822
 UPLOAD_FILES_DESCRIPTION_FORMATS,"Parcourez ou faites glisser et déposez des photos et/ou des vidéos (JPG, PNG, MP4, MOV)",db3af0c6
 UPLOAD_FILES_TITLE,Télécharger le(s) fichier(s),bd0f5440
 UPLOAD_MODULES_DESCRIPTION,Parcourir ou glisser-déposer un fichier CSV.,0e9c1a46
