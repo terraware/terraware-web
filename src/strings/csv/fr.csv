@@ -64,7 +64,6 @@ ADD_ACTIVITY,Ajouter une activité,0ed95a7d
 ADD_ACTIVITY_FOR_PROJECT,Ajouter une activité pour {0},86739f8b
 ADD_ADDRESS,Ajouter une adresse,8262aa95
 ADD_AN_ACCESSION,Ajouter une accession,e4b619b4
-ADD_ANNOTATION,Ajouter une annotation,91742a0f
 ADD_BATCH,Ajouter un lot,0d9f7a4a
 ADD_DATE,Ajouter une date,5c2a04af
 ADD_DOCUMENT,Ajouter un document,af87beed
@@ -164,10 +163,6 @@ ALREADY_WITHDRAWN,Déjà retiré,aa003cd7
 AMOUNT_EST_COUNT,Quantité (nombre estimé),e203609b
 AMOUNT_REMAINING,Montant ({0} restant),349aa6d6
 ANIMAL_DAMAGE,Dommages causés par les animaux,754d26fb
-ANNOTATION_DESCRIPTION_TOOLTIP,Détails ou contexte supplémentaires concernant cette annotation,8cb997d2
-ANNOTATION_LABEL_TOOLTIP,Identifiant court affiché sur le point d’annotation,adbb02a1
-ANNOTATION_TITLE_TOOLTIP,Titre principal de l’annotation,b3f5b753
-ANNOTATIONS,Annotations,c15a3aa4
 ANNUAL,Annuel,772b555a
 ANSWER_APPROVED,Réponse approuvée,8a11d452
 ANSWERS_UPDATE_NEEDED,Mises à jour des réponses nécessaires,5faf2563
@@ -202,7 +197,6 @@ APPROVE,Approuver,913a9927
 APPROVE_DELIVERABLE,Approuver le livrable,7efd4b07
 APPROVED,Approuvé,b279ed0b
 APPROX_SYMBOL,~,acb59e95
-AR,RA,25a8e55a
 ARE_YOU_SURE,Êtes-vous sûr ?,d4536b91
 ARE_YOU_SURE_DELETE,Êtes-vous sûr de vouloir supprimer ?,a7f716f0
 ARE_YOU_SURE_DELETE_PLANTING_DATE,Êtes-vous sûr de vouloir supprimer cette date de plantation ?,c9c72b70
@@ -210,7 +204,6 @@ ARE_YOU_SURE_DELETE_TARGET,Êtes-vous sûr de vouloir supprimer cet objectif d'e
 AREA,Superficie,be27ab89
 AREA_HA,Superficie (ha),8ab5d500
 AREA_NOT_OBSERVED,Zone non observée,9eeddab4
-ARROW_KEYS,Touches fléchées,5cefb475
 AS_OF_X,à partir de {0},6d77dc0f
 ASSIGN,Attribuer,d1afb440
 ASSIGN_NEW_OWNER,Attribuer un nouveau propriétaire,5dd9263d
@@ -227,7 +220,6 @@ ATTACHMENT_LIMIT_REACHED,Limite de pièces jointes atteinte,9f9323bc
 ATTACHMENT_LIMIT_REACHED_MESSAGE,Vous ne pouvez télécharger que {0} pièces jointes.,cc438d34
 ATTACHMENTS,Annexes,e7695404
 AUTO_CALCULATED_INDICATORS,Indicateurs calculés automatiquement,3b7057e0
-AUTO_ROTATE,Rotation automatique,15ce1a40
 AVAILABLE,disponible,716e496f
 AVAILABLE_TITLE,Disponible,b84c21ed
 AVAILABLE_TO_SCHEDULE,Disponible à planifier,00da4780
@@ -278,7 +270,6 @@ BOOLEAN_TRUE,vrai,54415086
 BOTANICAL_COUNTRY,Pays botanique,7bd4e8de
 BOUNDARIES,Limites,e40b0600
 BOUNDARIES_AND_STRATA,Limites et strates,87db24b5
-BOUNDED_FLY,Vol limité,9e3c46ae
 BUDGET_DOCUMENT_XLS,Document budgétaire (.XLS),6eface4e
 BUDGET_NARRATIVE_SUMMARY,Résumé narratif du budget,075fcdb3
 BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS,"Fournissez une description de grande qualité de votre budget par rapport aux données réelles, en notant tout écart important et en énumérant tous les contributeurs. (Une demi-page au plus).",3a2e7928
@@ -294,9 +285,6 @@ BY_NURSERY,Par pépinière,a0a2faa5
 BY_SPECIES,Par espèce,602624ab
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densité de plants calculée à partir des retraits,d06a4b56
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Pour utiliser la densité de plantation calculée à partir des retraits de plantation, cochez la case. Pour remplacer cette donnée, saisissez manuellement une valeur dans les champs de densité de plantation à gauche.",c674df96
-CAMERA_FOCUS_POINT,Point de mise au point,350a921b
-CAMERA_INFO,Informations sur la caméra,4283d43c
-CAMERA_POSITION,Position,3eb30313
 CANCEL,Annuler,e73dc4d4
 CANCEL_DATA_CHECK,Annuler la vérification des données,5f140f00
 CANCEL_SPECIES_CHECK,Annuler la vérification des espèces,fd764c88
@@ -405,7 +393,6 @@ CONTINUE_APPLICATION,Continuer la candidature,bd87b380
 CONTINUE_TO_APPLICATION,Continuer vers la demande,bc4ca333
 CONTRIBUTOR,Contributeur,79b43797
 CONTRIBUTOR_INFO,"Un contributeur peut ajouter des données sur les semences, gérer l'inventaire des pépinières à l'exception des retraits de plantation, visualiser les retraits, gérer les réaffectations de pépinières et visualiser les plantations d'un site de plantation sur une carte géographique.",2e98706c
-CONTROLS,Commandes,f7c1294f
 CONVERTED_VALUE_INFO,Cette valeur est calculée automatiquement à titre d'information.,d8d0d516
 COOKIES,Cookies,fe57dc6f
 COOKIES_ACCEPT,Accepter les cookies,78702f3c
@@ -439,7 +426,6 @@ CREATED_ON,Créé le,f66518dc
 CROWN_DIAMETER_CM,Diamètre de la couronne (cm),4bc3fb02
 CSV_FILE,Fichier CSV,f496cfaa
 CT,ct,7b04a9d2
-CTRL,Ctrl,f485607a
 CULTIVATED,Cultivé,f0d960a4
 CULTIVATED_EX_SITU,Cultivé (ex situ),db8d3394
 CULTIVATED_EX_SITU_DESCRIPTION,"Plantes qui ont été cultivées dans une pépinière, une zone de production de semences ou une autre installation de propagation.",9b096972
@@ -501,7 +487,6 @@ DELETE_ACCOUNT_CONFIRMATION,Êtes-vous sûr de vouloir supprimer votre compte ? 
 DELETE_ACCOUNT_ERROR,Une erreur s'est produite lors de la suppression de votre compte.,6105987b
 DELETE_ACTIVITY,Supprimer l'activité,18958b95
 DELETE_ACTIVITY_CONFIRM,Êtes-vous sûr de vouloir supprimer cette activité ? Toutes les données associées à cette activité seront supprimées.,e64e17b5
-DELETE_ANNOTATION,Supprimer l’annotation,10fcdc4e
 DELETE_CONFIRMATION_MODAL_MAIN_TEXT,Êtes-vous sûr de vouloir supprimer l'espèce ?,43a238c7
 DELETE_FUNDING_ENTITY,Supprimer l’entité de financement,7d8a1f95
 DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,Tous les financeurs associés à cette entité de financement seront supprimés.,cedce711
@@ -558,7 +543,6 @@ DESCRIPTION_KNOWLEDGE_BASE,Apprenez à utiliser Terraware et trouvez des répons
 DESCRIPTION_KNOWLEDGE_BASE_WITH_LINK,Apprenez à utiliser Terraware et trouvez les réponses à vos questions sur les fonctionnalités de Terraware dans le {0}.,a7644709
 DESCRIPTION_NOTES,Description/Remarques,ce46605b
 DESCRIPTION_REQUIRED,Description *,e14d49bc
-DESELECT_ANNOTATION,Désélectionner l’annotation,32c46edd
 DESTINATION,Destination,d3525c91
 DESTINATION_REQUIRED,Destination *,46e3fd94
 DETAILED_SITE,Site détaillé,24e93f92
@@ -632,7 +616,6 @@ EDIT_ACCESSION,Modifier l'accession,3df43588
 EDIT_ACCESSION_DETAIL,Modifier les détails de l'accession,9b3e32a8
 EDIT_ACCOUNT,Modifier le compte,b77ad44d
 EDIT_ACTIVITY,Modifier l’activité,5b6476f3
-EDIT_ANNOTATION,Modifier l’annotation,82bcb054
 EDIT_BATCH_DETAILS,Modifier les détails du lot,d2f2112a
 EDIT_COMMON_INDICATOR,Modifier l’indicateur commun,e14bc686
 EDIT_COMMON_INDICATOR_CONFIRMATION,Les modifications apportées à cet indicateur commun seront appliquées à TOUS les projets. Voulez-vous vraiment que ces mises à jour s’appliquent à tous les projets ?,8a103582
@@ -801,9 +784,6 @@ FIRST_ADD_PLANTING_SITE,"Pour afficher le tableau de bord, vous devez détenir u
 FIRST_NAME,Prénom,4728037d
 FIX_HIGHLIGHTED_FIELDS,Remplissez les champs surlignés ci-dessous.,505e80af
 FLAG,Signaler,aafc43da
-FLY,Voler,0747d35f
-FLY_FASTER,Voler plus vite,e24d00c8
-FLY_SLOWER,Voler plus lentement,0271712f
 FOOTNOTE_WAIT_FOR_INVITATION_1,Vous n'êtes pas intéressé par la création de votre propre organisation ou vous attendez une invitation à une organisation existante ?,57c63204
 FOOTNOTE_WAIT_FOR_INVITATION_2,"Rassurez-vous, vous recevrez un e-mail lorsqu'un administrateur de votre organisation vous ajoutera à l'organisation dans Terraware.",5a0db9d0
 FOR_A_FULL_OVERVIEW,"Pour une vue d'ensemble de tous nos logiciels, visitez la [Page des logiciels] sur notre site Web.",dbdd4eb3
@@ -812,7 +792,6 @@ FOR_LAB_GERMINATION,Pour la germination en laboratoire,401f658e
 FOR_NURSERY_GERMINATION,Pour la germination en pépinière,ec2b91cc
 FORB,Phorbe,98c76e90
 FORESTRY,Sylviculture,e5cd15f6
-FREE_FLY,Vol libre,3eb18bf0
 FREEZER,Congélateur,18226170
 FREEZER_1,Congélateur 1,953b9b90
 FREEZER_2,Congélateur 2,8e57368e
@@ -1014,7 +993,6 @@ KNOWLEDGE_BASE,Base de connaissances,81690eb8
 KNOWLEDGE_BASE_ARTICLE_SURVIVAL_RATES,Article de la base de connaissances sur les taux de survie,5477d6bb
 LAB,Laboratoire,251d5706
 LAB_GERMINATION,Germination en laboratoire,ebeb9362
-LABEL,Étiquette,85def946
 LAND_DATA,Données foncières,fd5158aa
 LAND_USE_MODEL_TYPE,Type de modèle d'utilisation du sol,1b29eac7
 LANDOWNER,Propriétaire foncier,85b55541
@@ -1103,7 +1081,6 @@ LEAVE_AND_SAVE,Laissez et conservez,900e4d74
 LEAVE_ORGANIZATION,Quitter l'organisation,ce40fab6
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_PERMANENT_PLOTS,Vous quittez l’écran de modification des Parcelles Permanentes. Toute modification non enregistrée des Parcelles Permanentes ne sera pas sauvegardée. Êtes-vous sûr de vouloir quitter ?,3df033ef
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_TEMPORARY_PLOTS,Vous quittez l’écran de modification des Parcelles Temporaires. Toute modification non enregistrée des Parcelles Temporaires ne sera pas sauvegardée. Êtes-vous sûr de vouloir quitter ?,a4409ad0
-LEFT_MOUSE,Bouton gauche de la souris,b034e4dc
 LEFT_TO_PLANT,Restant à transplanter,30af8cf9
 LEFT_TO_PLANT_TOOLTIP,"Nombre de plants restant à planter, qui doivent encore être retirés pour atteindre l'objectif de l'espèce sur ce substrat.",ded53f18
 LEGAL,Juridique,dc8b5907
@@ -1143,7 +1120,6 @@ LOG_OUT,Déconnexion,48c18649
 LOGGING,Exploitation forestière,b34b2e6e
 LONG_TERM_PERMANENT,Long terme/Permanent,566657d6
 LONGITUDE,Longitude,bec9ea21
-LOOK,Regarder,e006bd6f
 LOSS_RATE,Taux de perte,544aa2af
 LOW,Faible,ddedeca3
 LOWEST,Les plus faibles,b651e8a7
@@ -1198,7 +1174,6 @@ METRIC_TYPE_OUTPUT,Production,d697f360
 METRIC_VISIBLE_TO_FUNDER,Mesure visible pour le donateur,5034bdf9
 MG,mg,cd486375
 MG_MILLIGRAMS,mg (milligrammes),1eb6e72c
-MIDDLE_MOUSE,Bouton central de la souris,18763653
 MILLIGRAMS,Milligrammes,23d587ba
 MIN,Min,145ecf8a
 MIN_MAX_CARBON_ACCUMULATION,Accumulation de carbone min-max,8997b45d
@@ -1249,7 +1224,6 @@ MORTALITY_RATE_PERCENT,Taux de mortalité (%),2640a01f
 MORTALITY_RATE_PERCENT_REQUIRED,Taux de mortalité (%) *,c7d13833
 MOSS,Mousse,5b67a19f
 MOST_RECENT_OBSERVATION,Observation la plus récente,a614018e
-MOUSE_WHEEL,Molette de la souris,8e3d3d78
 MOVE,Déplacer,abe6be41
 MRV_CYCLE,Cycle MRV,ab7e636c
 MULTIPLE_FORMS,Formes multiples,abad8008
@@ -1476,7 +1450,6 @@ OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,Indiquez les coordonnées GPS de l’an
 OPTIONAL_LATITUDE_OF_PLOT,Optionnel : Latitude de la parcelle,9de4497b
 OPTIONAL_LONGITUDE_OF_PLOT,Optionnel : Longitude de la parcelle,124fa9fb
 OR,OU,38d8953d
-ORBIT,Orbiter,8e3af3cb
 ORG_NOTIFICATION_ACTION,"Pour modifier les préférences, rendez-vous [Paramètres > Organisation]",5cbf22d7
 ORGANIZATION,Organisation,b1115ab0
 ORGANIZATION_CREATE_FAILED,Impossible de créer une organisation.,969a54ff
@@ -1526,7 +1499,6 @@ OZ_OUNCES,oz (onces),45ec05af
 PAGINATION_FOOTER,{0} sur {1},056416b6
 PAGINATION_FOOTER_EMPTY,0 sur 0,0ee978bd
 PAGINATION_FOOTER_RANGE,{0} à {1} sur {2},ce14c917
-PAN,Déplacer,34177007
 PAPER,Papier,df5f30a1
 PAPER_PETRI_DISH,Boîte de Petri en papier,d478bf2a
 PARTIAL,Partiel,d8250603
@@ -1560,7 +1532,6 @@ PHOTOS_AND_VIDEOS,Photos et vidéos,754d8e11
 PHOTOS_TO_UPLOAD,Photos à télécharger,2735bfdb
 PHOTOS_TO_UPLOAD_LIMIT,(Limite de {0} plus),121ba2ad
 PHOTOS_VIDEOS,Photos/Vidéos,5d533136
-PINCH,Pincer,3c1f1f79
 PLACEHOLDER,Espace réservé,e7c25185
 PLANT,plante,9089fdf9
 PLANT_DENSITY,Densité de plantation,feae2a2d
@@ -1965,7 +1936,6 @@ REQUIRED_QUESTION_MARK,Obligatoire ?,d99ba5a7
 RESCHEDULE,Reporter,2bb033c0
 RESCHEDULE_OBSERVATION,Reporter l'observation,b7403925
 RESET,Réinitialisation,d51ffc01
-RESET_CAMERA,Réinitialiser la caméra,ee37fbd5
 RESET_COLUMNS,Réinitialiser les colonnes,871d2d56
 RESET_INDICATOR,Réinitialiser l'indicateur,bb1f7ec8
 RESET_INDICATOR_CONFIRM,Êtes-vous sûr de vouloir réinitialiser cet indicateur ? Il sera remplacé par les données de suivi actuelles de Terraware.,9d1f1dfb
@@ -1989,7 +1959,6 @@ REVIEW_PENDING_REQUESTS_DESCRIPTION,Examinez les demandes en attente pour les da
 REVIEW_YOUR_ACCOUNT_SETTING,Voir les paramètres de votre compte,26593a52
 REVIEW_YOUR_APPLICATION,Examiner votre demande,a364de57
 REVIEW_YOUR_ORGANIZATION_SETTING,Voir les paramètres de votre organisation,49991b07
-RIGHT_MOUSE,Bouton droit de la souris,d551c809
 RISK_TRACKER,Suivi des risques,98a9d2b1
 RISK_TRACKER_LINK,Lien vers le traceur de risques,2e269fd1
 ROLE,Rôle,6016ee0a
@@ -2142,7 +2111,6 @@ SET_UP_SEED_BANK,Créer une banque de semences,6f047a89
 SETTINGS,Paramètres,38560978
 SETTINGS_FOR,Paramètres pour {0},da07c7b6
 SHARED_WITH_FUNDER,Partagé avec le bailleur de fonds,f59b229b
-SHIFT,Maj,4d173d2a
 SHOW_COLOR_KEY,Afficher la légende des couleurs,7ba69c52
 SHOW_LESS,Afficher moins,d753a0ed
 SHOW_MORE,Afficher plus,43cab9b7
@@ -2400,7 +2368,6 @@ SURVIVAL_RATES_UNAVAILABLE_BODY,Saisissez les données dans le {0} et apprenez-e
 SURVIVAL_RATES_UNAVAILABLE_TITLE,Les taux de survie ne peuvent pas être calculés car toutes les données requises n'ont pas été saisies.,3a990e77
 SUSTAINABLE_DEVELOPMENT_GOALS,Objectifs de développement durable,905bfc54
 SUSTAINABLE_TIMBER,Bois durable,b9574821
-SWIPE,Glisser,bc0962fa
 SYSTEM_METRICS,Mesures du système,c19498b7
 T0_DATA_IS_SET,Les données t0 sont définies,cf4c95a7
 T0_NOT_SET_FOR_PERMANENT_PLOTS,t0 non défini pour les Placettes permanentes,d1ad09a9
@@ -2578,7 +2545,6 @@ TOTAL_WITHDRAWN_WEIGHT_MILLIGRAMS,Total retiré (mg),fcaf5ce8
 TOTAL_WITHDRAWN_WEIGHT_OUNCES,Total retiré (onces),4ec6a8f1
 TOTAL_WITHDRAWN_WEIGHT_POUNDS,Total retiré (livres),893058af
 TOTALS,Totaux,61f4cdef
-TOUCH_DRAG,Toucher + Glisser,ff6d48d2
 TREATMENT,Traitement,d92a8264
 TREATMENT_AFTER,Traitement (après),47efd418
 TREATMENT_BEFORE,Traitement (avant),311905d8
@@ -2725,7 +2691,6 @@ VIRTUAL_WALKTHROUGHS,Visites virtuelles,74c630f5
 VISIT_VIRTUAL_PLOT,Visiter la parcelle virtuelle,22d34c8b
 VOTER,Électeur : {0},46578e94
 VOTING_DECISION,Décision de vote,9bb0be97
-VR,RV,98fd7fc5
 WATER_BODIES,Plans d'eau,c13f37d6
 WATER_DEPTH_CM,Profondeur de l'eau (cm),de1ca335
 WATER_DEPTH_REQUIRED_FOR_MANGROVE,La profondeur de l'eau est requise pour les observations de palétuviers. Saisissez une valeur ou cochez « Pas d'eau ».,6e89b127
@@ -2813,4 +2778,3 @@ YOU_HAVE_X_VIRTUAL_WALKTHROUGHS,Vous avez {0} visites virtuelles,566e4d75
 YOUR_APPLICATIONS,Vos candidatures,7da0f423
 YOUR_VIDEO_IS_PROCESSING,Votre vidéo est en cours de traitement et apparaîtra sous peu.,fb65d59c
 ZERO,zéro,16bd92ef
-ZOOM,Zoom,07b636df

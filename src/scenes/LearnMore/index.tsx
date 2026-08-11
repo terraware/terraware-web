@@ -2,6 +2,7 @@ import React, { type JSX, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
 import { CssBaseline, GlobalStyles, StyledEngineProvider, Theme } from '@mui/material';
+import { setLocale as setComponentLocale } from '@terraware/web-components';
 
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import { store } from 'src/redux/store';
@@ -33,6 +34,9 @@ const LearnMore = (): JSX.Element => {
       const localeDetails = findLocaleDetails(publicLocales, detectPreferredLocale());
       strings.setContent({ [localeDetails.id]: (await localeDetails.loadModule()).strings });
       strings.setLanguage(localeDetails.id);
+      // This page loads its strings outside of LocalizationProvider, so it has to tell the
+      // component library which locale to use.
+      setComponentLocale(localeDetails.id);
       setReady(true);
     };
 

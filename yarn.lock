@@ -6366,10 +6366,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.11.2.tgz#00409e743ac4eea9afe5b7708594d5fcebb00212"
   integrity sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==
 
-"@terraware/web-components@^v4.3.0":
-  version "4.3.0"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-4.3.0.tgz#c3fe2a889b9a62bc7f261546b7e76d4ff0737d18"
-  integrity sha512-8qRC8bAK6TVyFiCMzLyg6TfDVDZgyvN7azhhB5dt8WEjZNXG7nneyAkIfQgRARBb99Umt46JUlPXwTQasz/wQw==
+"@terraware/web-components@^v4.3.3-rc.2":
+  version "4.3.3-rc.2"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-4.3.3-rc.2.tgz#97fb11b6301d2fb5d3903ae216c77802c565fe1d"
+  integrity sha512-h2MnhjGLOTqu7uuyKrGS3j46fUR8hK4vdoSPyij5uldNebR8nVxuGell4hymk4rufY9ZgNB/thfnVY2ifrdIWg==
   dependencies:
     "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^10.0.0"
@@ -6381,6 +6381,7 @@
     "@mui/x-date-pickers" "^7.22.0"
     "@playcanvas/react" "0.11.5"
     classnames "^2.3.2"
+    csv-parse "^5.5.5"
     geojson "^0.5.0"
     luxon "^3.3.0"
     marked "^16.2.1"
@@ -8361,11 +8362,6 @@ bser@2.1.1:
   integrity sha512-gQxTNE/GAfIIrmHLUE3oJyp5FO6HRBfhjnw4/wMmA63ZGDJnWBmgY/lyQBpnDUkGmAhbSe39tx2d/iTOAfglwQ==
   dependencies:
     node-int64 "^0.4.0"
-
-btoa@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/btoa/-/btoa-1.2.1.tgz#01a9909f8b2c93f6bf680ba26131eb30f7fa3d73"
-  integrity sha512-SB4/MIGlsiVkMcHmT+pSmIPoNDoHg+7cMzmt3Uxt628MTz2487DKSqK/fuhFBrkuqrYv5UCEnACpF4dTFNKc/g==
 
 buffer-crc32@~0.2.3:
   version "0.2.13"
