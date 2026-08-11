@@ -11,6 +11,7 @@ import Checkbox from 'src/components/common/Checkbox';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useOrganization } from 'src/providers/hooks';
@@ -48,6 +49,8 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
+  const { availableProjects } = useProjects();
+  const hasMultipleProjects = (availableProjects?.length ?? 0) > 1;
   const { speciesId } = useParams<{ speciesId: string }>();
   const userCanEdit = !isContributor(selectedOrganization);
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
@@ -329,7 +332,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             />
           </GridItemWrapper>
           {species && orgHasParticipants && <SpeciesProjectsTable speciesId={species.id} editMode={false} />}
-          {speciesIntelligenceEnabled && species && (
+          {speciesIntelligenceEnabled && hasMultipleProjects && species && (
             <Grid item xs={12} marginTop={theme.spacing(4)}>
               <SpeciesProjectsSection
                 speciesId={species.id}
