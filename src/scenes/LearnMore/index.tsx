@@ -10,6 +10,9 @@ import { findLocaleDetails, supportedLocales } from 'src/strings/locales';
 
 import LearnMoreView from './LearnMoreView';
 
+const detectPreferredLocale = (): string =>
+  new URLSearchParams(window.location.search).get('locale') || navigator.language || 'en';
+
 // The public Learn More page renders outside of `AppContent`, so it does not inherit the app-wide MUI
 // styling scaffolding. Reproduce the purely presentational pieces of `AppContent` here — the emotion
 // injection order (`injectFirst`, so `@terraware/web-components` SCSS resolves correctly against MUI's
@@ -27,7 +30,7 @@ const LearnMore = (): JSX.Element => {
   useEffect(() => {
     const loadStrings = async () => {
       const publicLocales = supportedLocales.filter((locale) => !locale.inDevelopment);
-      const localeDetails = findLocaleDetails(publicLocales, navigator.language || 'en');
+      const localeDetails = findLocaleDetails(publicLocales, detectPreferredLocale());
       strings.setContent({ [localeDetails.id]: (await localeDetails.loadModule()).strings });
       strings.setLanguage(localeDetails.id);
       setReady(true);
