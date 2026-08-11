@@ -1,5 +1,10 @@
 import { useMemo } from 'react';
 
+import {
+  LocaleDetails as ComponentLocaleDetails,
+  findLocaleDetails as findComponentLocaleDetails,
+} from '@terraware/web-components';
+
 import useEnvironment from 'src/utils/useEnvironment';
 
 import { LocaleDetails } from '.';
@@ -29,25 +34,8 @@ export const useSupportedLocales = (): LocaleDetails[] => {
 /**
  * Returns the locale from the list of supported locales that matches the user's selected language.
  *
- * The user's locale can include both a language and a country code, but entries in the menu of
- * languages usually don't have country codes. So we need to find the entry that is the longest
- * prefix of the user's locale.
- *
- * If the locale is es-MX and the list of locales only has es, we want the es item to be selected
- * in the dropdown. But if the locale is zh-CN and the list of locales has both zh-CN and zh-TW,
- * we want zh-CN to be selected.
- *
- * If none of the locales in the list matches, returns the first locale from the list.
+ * Adds the caller's element type. web-components' signature isn't generic, so it returns a bare LocaleDetails, which
+ * does not have `loadModule`.
  */
-export function findLocaleDetails(locales: LocaleDetails[], locale: string): LocaleDetails {
-  return locales.reduce((bestMatch, candidate) => {
-    if (
-      locale.startsWith(candidate.id) &&
-      (!bestMatch.id.startsWith(locale) || candidate.id.length > bestMatch.id.length)
-    ) {
-      return candidate;
-    } else {
-      return bestMatch;
-    }
-  });
-}
+export const findLocaleDetails = <T extends ComponentLocaleDetails>(locales: T[], locale: string): T =>
+  findComponentLocaleDetails(locales, locale) as T;

@@ -1,6 +1,8 @@
 import React, { type JSX, useEffect, useMemo, useRef, useState } from 'react';
 import LocalizedStrings from 'react-localization';
 
+import { setLocale as setComponentLocale } from '@terraware/web-components';
+
 import { baseApi } from 'src/queries/baseApi';
 import { useListTimeZoneNamesQuery } from 'src/queries/generated/timeZones';
 import { setQueryLocale } from 'src/queries/locale';
@@ -92,6 +94,10 @@ export default function LocalizationProvider({
         localeMap[selectedLocale] = (await localeDetails.loadModule()).strings;
         defaultStrings.setContent(localeMap);
         defaultStrings.setLanguage(selectedLocale);
+        // The component library keeps its own string tables, and owning the locale is the
+        // application's job. Switch it here so the components change language at the same moment
+        // the app does.
+        setComponentLocale(selectedLocale);
         const localizedStrings = new LocalizedStrings(localeMap);
 
         setActiveLocale(selectedLocale);
