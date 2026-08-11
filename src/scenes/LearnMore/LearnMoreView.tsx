@@ -32,7 +32,7 @@ const LearnMoreView = (): JSX.Element => {
   const statistics = statisticsData?.statistics;
 
   const groupedStat = (value?: number): string =>
-    value === undefined ? STAT_PLACEHOLDER : value.toLocaleString(navigator.language || 'en');
+    value === undefined ? STAT_PLACEHOLDER : value.toLocaleString(strings.getLanguage() || navigator.language || 'en');
   const scaledStat = (value?: number): string => (value === undefined ? STAT_PLACEHOLDER : formatNumberScale(value, 1));
 
   const goToLogin = useCallback(() => {
