@@ -11,6 +11,7 @@
 const fs = require('fs/promises');
 const path = require('path');
 const { csvToStrings, generateGibberish, stringsToTypeScript } = require('@terraware/web-components/strings/export');
+const { strings: componentStrings } = require('@terraware/web-components/strings/strings-en');
 
 /**
  * Returns a list of extra strings to include in the string table for a locale. This is necessary
@@ -98,10 +99,43 @@ async function convertCsvFile(csvPath, targetDir, defaultToEnglish = true) {
 }
 
 /**
+ * Throws if this application defines a string the component library already provides.
+ *
+ * The component library's table is the base layer of the string table, so redefining one of its
+ * keys would shadow it at runtime and let the two copies of the translation drift apart. The type
+ * check in index.tsx rejects the same collision; this catches it at the step that builds the
+ * tables, which runs first.
+ *
+ * The comparison uses the component library's built table, which is what the application merges
+ * with at runtime, rather than the CSV it was built from. This application's own table can't be
+ * read the same way: this is the code that generates it.
+ *
+ * @param {string} [csvDir] - Directory holding this application's CSV files.
+ * @return {Promise<void>}
+ */
+async function checkForComponentDuplicates(csvDir) {
+  const appStrings = {
+    ...extraStrings('en'),
+    ...csvToStrings(await fs.readFile(path.join(csvDir, 'en.csv'), { encoding: 'utf-8' })),
+  };
+
+  const duplicates = Object.keys(componentStrings).filter((key) => key in appStrings);
+
+  if (duplicates.length > 0) {
+    throw new Error(
+      `@terraware/web-components already defines these strings, so they must be removed from ` +
+        `${csvDir}: ${duplicates.join(', ')}`
+    );
+  }
+}
+
+/**
  * Converts the CSV files for all locales to TypeScript source files that export a symbol
  * "strings." The list of locales is determined by the presence of CSV files.
  */
 async function convertAllLocales(csvDir, stringsDir, defaultToEnglish = true) {
+  await checkForComponentDuplicates(csvDir);
+
   const files = await fs.readdir(csvDir);
   const conversions = files.map(async (filename) => {
     if (filename.endsWith('.csv')) {

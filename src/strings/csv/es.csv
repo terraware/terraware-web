@@ -286,7 +286,6 @@ BY_NURSERY,Por vivero,a0a2faa5
 BY_SPECIES,Por especies,602624ab
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densidad de plantas calculada a partir de retiros,d06a4b56
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Para usar la densidad de plantas calculada a partir de los Retiros de plantación, marque la casilla. Para sobrescribir estos datos, ingrese manualmente un valor en los campos de Densidad de Plantas a la izquierda.",c674df96
-CANCEL,Cancelar,e73dc4d4
 CANCEL_DATA_CHECK,Cancelar comprobación de datos,5f140f00
 CANCEL_SPECIES_CHECK,Cancelar verificación de especies,fd764c88
 CANCEL_SPECIES_CHECK_MESSAGE,Está a punto de cancelar la verificación de especies. Todos los cambios se descartarán. ¿Está seguro?,3cc2bad6
@@ -336,7 +335,6 @@ CHECKED_IN,¡Comprobado!,1e7ea963
 CHECKIN_ACCESSIONS,Registro de accesiones,3046e6fd
 CHECKING_DATA,"Ejecutando comprobación de base de datos. Por favor espere, esto puede tardar unos minutos...",7a36812b
 CHEMICAL,Química,7363e596
-CHOOSE_FILE,Seleccione archivo...,967c4c38
 CHOOSE_FILES,Seleccionar archivos...,c5167691
 CITATION,Cita,772afe77
 CITY,Ciudad,27557cbb
@@ -539,7 +537,6 @@ DENSITY_COMFORTABLE,Densidad: cómoda,a7f1b4ca
 DENSITY_COMPACT,Densidad: compacta,cab2e914
 DENSITY_ROOMY,Densidad: amplia,bb240ade
 DESCRIBE_ORGANIZATION_TYPE_DETAILS,Describa su organización,b502c88a
-DESCRIPTION,Descripción,9cb0cc64
 DESCRIPTION_KNOWLEDGE_BASE,Aprenda a utilizar Terraware y encuentre respuestas a sus preguntas sobre las funciones de Terraware.,e04d81cb
 DESCRIPTION_KNOWLEDGE_BASE_WITH_LINK,Aprenda cómo usar Terraware y encuentre respuestas a sus preguntas sobre las funciones de Terraware en {0}.,a7644709
 DESCRIPTION_NOTES,Descripción/Notas,ce46605b
@@ -612,7 +609,6 @@ ECOSYSTEM_TROPICAL_GRASSLAND_SAVANNA_SHRUBLAND,"Pastizal, sabana y matorral trop
 ECOSYSTEM_TROPICAL_MOIST_BROADLEAF_FOREST,Bosque húmedo tropical y subtropical de hoja ancha,67204b54
 ECOSYSTEM_TUNDRA,Tundra,9ac9ca11
 ECOSYSTEM_TYPE,Tipo de ecosistema,eb192b40
-EDIT,Editar,9d1278d8
 EDIT_ACCESSION,Editar accesión,3df43588
 EDIT_ACCESSION_DETAIL,Editar detalle de accesión,9b3e32a8
 EDIT_ACCOUNT,Editar cuenta,b77ad44d
@@ -714,7 +710,6 @@ EXCEEDS_AVAILABLE_X,Supera lo disponible ({0}),4391f9df
 EXCEEDS_READY_TO_PLANT,El total retirado ({0}) en todos los sustratos supera la cantidad Lista para Transplantar ({1}) en este lote,3e3cd4a4
 EXCEEDS_TARGET,Supera el objetivo,edcff874
 EXCLUSION_AREAS,Zonas de exclusión,08c7d391
-EXISTING,Existente,fa67ac1d
 EXISTING_PROJECT_ACCESSIONS_BODY,"Hay accesiones que ya se añadieron a un proyecto existente. Si selecciona dichas accesiones aquí, reemplazará el proyecto con {0} (en vez de crear una asociación adicional).",a23f695b
 EXISTING_PROJECT_ACCESSIONS_TITLE,Proyecto existente con accesiones,278f1f38
 EXISTING_PROJECT_BATCHES_BODY,"Hay lotes que ya se añadieron a un proyecto existente. Si selecciona dichos lotes aquí, reemplazará el proyecto con {0} (en vez de crear una asociación adicional).",426c8254
@@ -764,7 +759,6 @@ FIELD_NOTES,Notas de campo,1c50984e
 FIFTY_TO_SEVENTY_FIVE_PERCENT,50% a 75%,174fb41a
 FILE_NAME,Nombre de archivo,fc9f4f98
 FILE_NAMING,Nombres de archivos,ab7d2f6d
-FILE_SELECTED,Archivo seleccionado,23a60a8d
 FILE_TOO_LARGE,El archivo {0} es demasiado grande. El tamaño máximo es {1} MB.,73c962ea
 FILTER,Filtrar,51b390ee
 FILTER_BY_PROJECT,Filtrar por proyecto,cc5c10c0
@@ -893,7 +887,6 @@ I_AM_THE_ONLY_PERSON,Soy la única persona,7add78fd
 ID,Identificación,0ba65e03
 IGNORE,Ignorar,ca0de6b5
 IMAGE_UPDATED,Imagen actualizada,632f3512
-IMAGES,Imágenes,2041d3b6
 IMPERIAL,Imperial,1be3a1b1
 IMPERIAL_OZ_LB,"Imperial (oz, lb)",7f5017f5
 IMPORT,Importar,a9507bb3
@@ -1250,7 +1243,6 @@ NATIVE_SPECIES_TO_BE_PLANTED,Especies nativas que se plantarán,7a13ce14
 NATURAL_REGENERATION_WOODY,Regeneración natural leñosa,26fe4ab1
 NEEDS_ATTENTION,Requiere atención,95ec1cac
 NEEDS_TRANSLATION,Necesita traducción,ce38bfa9
-NEW,Nuevo,b8096e3b
 NEW_ACCESSION,Añadir accesión,6d0d1602
 NEW_APP_VERSION,Actualice para usar la versión más reciente de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualice para obtener la versión más reciente de Terraware.,6235c190
@@ -1872,7 +1864,6 @@ REMOVE_SPECIES,Borrar especies,bbc8f149
 REMOVING_ORG_WARNING,"Al eliminarse a sí mismo de {0}, ya no tendrá acceso a los datos de esta organización. ¿Está seguro de que desea guardar los cambios?",767a2892
 REPLACE,Reemplazar,f6e3faed
 REPLACE_BOUNDARY,Cambiar lindero,f20d140b
-REPLACE_FILE,Reemplazar archivo...,14c3cc45
 REPORT,Informe,5de259d3
 REPORT_ANNUAL_DETAILS_TITLE,Información adicional del proyecto (Informe anual),50f5c50c
 REPORT_APPROVED,Informe aprobado,ca469436
@@ -1973,7 +1964,6 @@ SAMPLE_OBSERVED_DENSITY_WARNING,Este cálculo se basa en una muestra menor a una
 SAND,Arena,5d54e2e8
 SAND_PETRI_DISH,Pula el Disco de Petri,25b60fb2
 SATELLITE,Satélite,14d51868
-SAVE,Guardar,526a3e42
 SAVE_AND_CLOSE,Guardar y cerrar,aaa98fc6
 SAVE_AND_NEXT,Guardar y Continuar,1ca9d40a
 SAVE_AND_REQUEST,Guardar y solicitar,fa423722
@@ -2429,7 +2419,6 @@ TIME,Hora,2132441e
 TIME_ZONE,Zona horaria,abc27841
 TIME_ZONE_REQUIRED,Zona horaria *,f1ee0610
 TIME_ZONE_SELECTED,Zona horaria: {0},4a5acdb1
-TITLE,Título,a5f8fc0b
 TITLE_OVERVIEW,{0} Descripción,df4e964c
 TITLE_WELCOME,Bienvenido a Terraware,66882ae5
 TITLE_WELCOME_EXCLAIM,¡Le damos la bienvenida a Terraware!,6da26087
@@ -2600,8 +2589,6 @@ UPLOAD_DELIVERABLES_MESSAGE,Los entregables deben hacer referencia a ID de módu
 UPLOAD_ELLIPSIS,Subir...,0565da25
 UPLOAD_FAILED,Falló la carga,bbacbec8
 UPLOAD_FILE,Subir archivo,248e3ae5
-UPLOAD_FILES,Subir archivos,b98547be
-UPLOAD_FILES_DESCRIPTION,Buscar o arrastrar y soltar archivos.,7c4a7822
 UPLOAD_FILES_DESCRIPTION_FORMATS,"Busque o arrastre y suelte fotos y/o videos (JPG, PNG, MP4, MOV)",db3af0c6
 UPLOAD_FILES_TITLE,Cargar archivo(s),bd0f5440
 UPLOAD_MODULES_DESCRIPTION,Explore o arrastre y suelte un archivo CSV.,0e9c1a46
