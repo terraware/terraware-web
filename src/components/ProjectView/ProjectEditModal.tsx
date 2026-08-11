@@ -7,6 +7,7 @@ import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import isEnabled from 'src/features';
+import { useProjects } from 'src/hooks/useProjects';
 import { useUpdateProjectMutation } from 'src/queries/generated/projects';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
@@ -29,7 +30,8 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
   const [validateFields, setValidateFields] = useState(false);
   const [updateProject, { isError, isSuccess, reset }] = useUpdateProjectMutation();
 
-  const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
+  const { availableProjects } = useProjects();
+  const showProjectLocation = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) > 1;
 
   useEffect(() => {
     if (open) {
@@ -56,7 +58,7 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
       updateProjectRequestPayload: {
         name,
         description,
-        ...(speciesIntelligenceEnabled
+        ...(showProjectLocation
           ? { countryCode: countryCode ?? null, botanicalCountryCode: botanicalCountryCode ?? null }
           : {}),
       },
@@ -114,7 +116,7 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
             value={description}
           />
         </Grid>
-        {speciesIntelligenceEnabled && (
+        {showProjectLocation && (
           <CountryAndBotanicalCountrySelect
             countryCode={countryCode}
             botanicalCountryCode={botanicalCountryCode}

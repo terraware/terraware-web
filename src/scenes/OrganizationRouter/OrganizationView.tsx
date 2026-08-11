@@ -27,7 +27,7 @@ export default function OrganizationView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const { countries } = useLocalization();
   const { availableProjects } = useProjects();
-  const showBotanicalCountry = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) === 0;
+  const showBotanicalCountry = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) < 2;
   const { getBotanicalCountryName } = useBotanicalCountries(!showBotanicalCountry);
   const timeZones = useTimeZones();
   const utcTimeZone = getUTC(timeZones);

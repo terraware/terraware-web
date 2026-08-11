@@ -15,6 +15,7 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
+import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
@@ -33,8 +34,9 @@ export default function ProjectView(): JSX.Element {
   const { strings, countries } = useLocalization();
   const { selectedOrganization } = useOrganization();
 
-  const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
-  const { getBotanicalCountryName } = useBotanicalCountries(!speciesIntelligenceEnabled);
+  const { availableProjects } = useProjects();
+  const showProjectLocation = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) > 1;
+  const { getBotanicalCountryName } = useBotanicalCountries(!showProjectLocation);
   const { allApplications } = useApplicationData();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
@@ -167,7 +169,7 @@ export default function ProjectView(): JSX.Element {
               display={true}
             />
           </Grid>
-          {speciesIntelligenceEnabled && (
+          {showProjectLocation && (
             <>
               <Grid item xs={4} paddingTop={theme.spacing(3)}>
                 <TextField
