@@ -1,39 +1,13 @@
 import { AcceleratorReportPayload, api } from '../generated/acceleratorReports';
-import { QueryTagTypes } from '../tags';
-
-/**
- * Reports are tagged at three scopes so mutations can invalidate exactly as much as they change:
- *  - `AcceleratorReport` / report id: one report.
- *  - `ProjectAcceleratorReport` / project id: every report of a project.
- *  - `ProjectAcceleratorReportYear` / `${projectId}-${year}`: every report of a project in one year.
- *
- * Every report query provides all three, so a mutation picks the scope and any mounted query holding
- * that scope refetches.
- */
-const reportTag = (reportId: number) => ({ type: QueryTagTypes.AcceleratorReport, id: reportId });
-
-const projectReportsTag = (projectId: number) => ({ type: QueryTagTypes.ProjectAcceleratorReport, id: projectId });
-
-const projectReportYearTag = (projectId: number, year: number) => ({
-  type: QueryTagTypes.ProjectAcceleratorReportYear,
-  id: `${projectId}-${year}`,
-});
-
-const reportConfigsTag = (projectId: number) => ({
-  type: QueryTagTypes.ProjectAcceleratorReportConfigs,
-  id: projectId,
-});
-
-/**
- * The target endpoints return every yearly target of a project in one payload, so project id is the
- * only granularity available here even for a mutation that touches a single year.
- */
-const reportTargetsTag = (projectId: number) => ({
-  type: QueryTagTypes.ProjectAcceleratorReportTargets,
-  id: projectId,
-});
-
-const reportMediaTag = (fileId: number) => ({ type: QueryTagTypes.AcceleratorReportMedia, id: fileId });
+import {
+  QueryTagTypes,
+  acceleratorReportMediaTag,
+  acceleratorReportTag,
+  projectAcceleratorReportConfigsTag,
+  projectAcceleratorReportTag,
+  projectAcceleratorReportTargetsTag,
+  projectAcceleratorReportYearTag,
+} from '../tags';
 
 const reportYear = (report: AcceleratorReportPayload) => Number(report.startDate.split('-')[0]);
 
@@ -45,177 +19,177 @@ api.enhanceEndpoints({
         results?.reports.forEach((report) => years.add(reportYear(report)));
 
         return [
-          ...(results?.reports.map((report) => reportTag(report.id)) ?? []),
-          projectReportsTag(args.projectId),
-          ...[...years].map((year) => projectReportYearTag(args.projectId, year)),
+          ...(results?.reports.map((report) => acceleratorReportTag(report.id)) ?? []),
+          projectAcceleratorReportTag(args.projectId),
+          ...[...years].map((year) => projectAcceleratorReportYearTag(args.projectId, year)),
         ];
       },
     },
     getAcceleratorReport: {
       providesTags: (results, _error, args) => [
-        reportTag(args.reportId),
-        projectReportsTag(args.projectId),
-        ...(results ? [projectReportYearTag(args.projectId, reportYear(results.report))] : []),
+        acceleratorReportTag(args.reportId),
+        projectAcceleratorReportTag(args.projectId),
+        ...(results ? [projectAcceleratorReportYearTag(args.projectId, reportYear(results.report))] : []),
       ],
     },
     getOneAcceleratorReport: {
       providesTags: (results, _error, args) => [
-        reportTag(args.reportId),
+        acceleratorReportTag(args.reportId),
         ...(results
           ? [
-              projectReportsTag(results.report.projectId),
-              projectReportYearTag(results.report.projectId, reportYear(results.report)),
+              projectAcceleratorReportTag(results.report.projectId),
+              projectAcceleratorReportYearTag(results.report.projectId, reportYear(results.report)),
             ]
           : []),
       ],
     },
 
     listAcceleratorReportConfig: {
-      providesTags: (_results, _error, projectId) => [reportConfigsTag(projectId)],
+      providesTags: (_results, _error, projectId) => [projectAcceleratorReportConfigsTag(projectId)],
     },
     getAcceleratorReportYears: {
-      providesTags: (_results, _error, projectId) => [reportConfigsTag(projectId)],
+      providesTags: (_results, _error, projectId) => [projectAcceleratorReportConfigsTag(projectId)],
     },
-
-    // A config change shifts the reporting period, so every report of the project is stale.
     createAcceleratorReportConfig: {
       invalidatesTags: (_results, _error, args) => [
-        reportConfigsTag(args.projectId),
-        projectReportsTag(args.projectId),
+        projectAcceleratorReportConfigsTag(args.projectId),
+        projectAcceleratorReportTag(args.projectId),
       ],
     },
     updateAcceleratorReportConfig: {
       invalidatesTags: (_results, _error, args) => [
-        reportConfigsTag(args.projectId),
-        projectReportsTag(args.projectId),
+        projectAcceleratorReportConfigsTag(args.projectId),
+        projectAcceleratorReportTag(args.projectId),
       ],
     },
     updateProjectAcceleratorReportConfig: {
       invalidatesTags: (_results, _error, args) => [
-        reportConfigsTag(args.projectId),
-        projectReportsTag(args.projectId),
+        projectAcceleratorReportConfigsTag(args.projectId),
+        projectAcceleratorReportTag(args.projectId),
       ],
     },
 
     getAutoCalculatedIndicatorTargets: {
-      providesTags: (_results, _error, projectId) => [reportTargetsTag(projectId)],
+      providesTags: (_results, _error, projectId) => [projectAcceleratorReportTargetsTag(projectId)],
     },
     getCommonIndicatorTargets: {
-      providesTags: (_results, _error, projectId) => [reportTargetsTag(projectId)],
+      providesTags: (_results, _error, projectId) => [projectAcceleratorReportTargetsTag(projectId)],
     },
     getProjectIndicatorTargets: {
-      providesTags: (_results, _error, projectId) => [reportTargetsTag(projectId)],
+      providesTags: (_results, _error, projectId) => [projectAcceleratorReportTargetsTag(projectId)],
     },
-
-    // A yearly target only appears on that year's reports.
     updateAutoCalculatedIndicatorTarget: {
       invalidatesTags: (_results, _error, args) => [
-        reportTargetsTag(args.projectId),
-        projectReportYearTag(args.projectId, args.updateAutoCalculatedIndicatorTargetRequestPayload.year),
+        projectAcceleratorReportTargetsTag(args.projectId),
+        projectAcceleratorReportYearTag(args.projectId, args.updateAutoCalculatedIndicatorTargetRequestPayload.year),
       ],
     },
     updateCommonIndicatorTarget: {
       invalidatesTags: (_results, _error, args) => [
-        reportTargetsTag(args.projectId),
-        projectReportYearTag(args.projectId, args.updateCommonIndicatorTargetRequestPayload.year),
+        projectAcceleratorReportTargetsTag(args.projectId),
+        projectAcceleratorReportYearTag(args.projectId, args.updateCommonIndicatorTargetRequestPayload.year),
       ],
     },
     updateProjectIndicatorTarget: {
       invalidatesTags: (_results, _error, args) => [
-        reportTargetsTag(args.projectId),
-        projectReportYearTag(args.projectId, args.updateProjectIndicatorTargetRequestPayload.year),
+        projectAcceleratorReportTargetsTag(args.projectId),
+        projectAcceleratorReportYearTag(args.projectId, args.updateProjectIndicatorTargetRequestPayload.year),
       ],
     },
-
-    // Baselines and end-of-project targets appear on every report of the project.
     updateAutoCalculatedIndicatorBaselineTarget: {
       invalidatesTags: (_results, _error, args) => [
-        reportTargetsTag(args.projectId),
-        projectReportsTag(args.projectId),
+        projectAcceleratorReportTargetsTag(args.projectId),
+        projectAcceleratorReportTag(args.projectId),
       ],
     },
     updateCommonIndicatorBaselineTarget: {
       invalidatesTags: (_results, _error, args) => [
-        reportTargetsTag(args.projectId),
-        projectReportsTag(args.projectId),
+        projectAcceleratorReportTargetsTag(args.projectId),
+        projectAcceleratorReportTag(args.projectId),
       ],
     },
     updateProjectIndicatorBaselineTarget: {
       invalidatesTags: (_results, _error, args) => [
-        reportTargetsTag(args.projectId),
-        projectReportsTag(args.projectId),
+        projectAcceleratorReportTargetsTag(args.projectId),
+        projectAcceleratorReportTag(args.projectId),
       ],
     },
 
     updateAcceleratorReportValues: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
     },
     updateOneAcceleratorReportValues: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
     },
     refreshAcceleratorReportAutoCalculatedIndicators: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
     },
     refreshOneAcceleratorReportAutoCalculatedIndicators: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
     },
     reviewAcceleratorReportIndicators: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
     },
     reviewOneAcceleratorReportIndicators: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
     },
     reviewAcceleratorReport: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
     },
     reviewOneAcceleratorReport: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
     },
     submitAcceleratorReport: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
     },
     submitOneAcceleratorReport: {
-      invalidatesTags: (_results, _error, reportId) => [reportTag(reportId)],
+      invalidatesTags: (_results, _error, reportId) => [acceleratorReportTag(reportId)],
     },
 
     publishAcceleratorReport: {
       invalidatesTags: (_results, _error, args) => [
-        reportTag(args.reportId),
+        acceleratorReportTag(args.reportId),
         { type: QueryTagTypes.PublishedAcceleratorReport, id: args.reportId },
         { type: QueryTagTypes.PublishedAcceleratorReport, id: 'LIST' },
       ],
     },
     publishOneAcceleratorReport: {
       invalidatesTags: (_results, _error, reportId) => [
-        reportTag(reportId),
+        acceleratorReportTag(reportId),
         { type: QueryTagTypes.PublishedAcceleratorReport, id: reportId },
         { type: QueryTagTypes.PublishedAcceleratorReport, id: 'LIST' },
       ],
     },
 
     getAcceleratorReportPhoto: {
-      providesTags: (_results, _error, args) => [reportMediaTag(args.fileId)],
+      providesTags: (_results, _error, args) => [acceleratorReportMediaTag(args.fileId)],
     },
     getOneAcceleratorReportPhoto: {
-      providesTags: (_results, _error, args) => [reportMediaTag(args.fileId)],
+      providesTags: (_results, _error, args) => [acceleratorReportMediaTag(args.fileId)],
     },
     uploadAcceleratorReportPhoto: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
     },
     uploadOneAcceleratorReportPhoto: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
     },
     updateAcceleratorReportPhoto: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId), reportMediaTag(args.fileId)],
+      invalidatesTags: (_results, _error, args) => [
+        acceleratorReportTag(args.reportId),
+        acceleratorReportMediaTag(args.fileId),
+      ],
     },
     updateOneAcceleratorReportPhoto: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId), reportMediaTag(args.fileId)],
+      invalidatesTags: (_results, _error, args) => [
+        acceleratorReportTag(args.reportId),
+        acceleratorReportMediaTag(args.fileId),
+      ],
     },
     deleteAcceleratorReportPhoto: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
     },
     deleteOneAcceleratorReportPhoto: {
-      invalidatesTags: (_results, _error, args) => [reportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
     },
   },
 });

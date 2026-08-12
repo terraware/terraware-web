@@ -1,5 +1,5 @@
 import { api } from '../generated/acceleratorReportIndicators';
-import { QueryTagTypes } from '../tags';
+import { QueryTagTypes, projectAcceleratorReportTag } from '../tags';
 
 api.enhanceEndpoints({
   endpoints: {
@@ -13,14 +13,14 @@ api.enhanceEndpoints({
     createProjectIndicator: {
       invalidatesTags: (_results, _error, args) => [
         { type: QueryTagTypes.ProjectIndicators, id: 'LIST' },
-        { type: QueryTagTypes.ProjectAcceleratorReport, id: args.projectId },
+        projectAcceleratorReportTag(args.projectId),
         { type: QueryTagTypes.PublishedAcceleratorReport },
       ],
     },
     updateProjectIndicator: {
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.ProjectIndicators, id: payload.indicatorId },
-        { type: QueryTagTypes.ProjectAcceleratorReport, id: payload.projectId },
+        projectAcceleratorReportTag(payload.projectId),
         { type: QueryTagTypes.PublishedAcceleratorReport },
       ],
     },
@@ -30,7 +30,6 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.CommonIndicators, id: 'LIST' },
       ],
     },
-    // Common indicators are shared, so every project's reports are stale.
     createCommonIndicator: {
       invalidatesTags: () => [
         { type: QueryTagTypes.CommonIndicators, id: 'LIST' },

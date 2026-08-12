@@ -23,7 +23,6 @@ const config: ConfigFile = {
     './src/queries/generated/acceleratorReports.ts': {
       filterEndpoints: (_, operation) =>
         (operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports') &&
-          // Generated into acceleratorReportIndicators.ts instead.
           !operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports/indicators')) ||
         operation.path.startsWith('/api/v1/accelerator/reports/{reportId}'),
     },

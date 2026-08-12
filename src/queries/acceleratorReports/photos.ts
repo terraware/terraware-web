@@ -1,7 +1,7 @@
 import { AcceleratorReportPhoto, NewAcceleratorReportPhoto } from 'src/types/AcceleratorReport';
 
 import { baseApi as api } from '../baseApi';
-import { QueryTagTypes } from '../tags';
+import { acceleratorReportMediaTag, acceleratorReportTag } from '../tags';
 
 export type BatchPhotosRequest = {
   projectId: number;
@@ -137,14 +137,8 @@ const injectedRtkApi = api.injectEndpoints({
         }
       },
       invalidatesTags: (_result, _error, args) => [
-        {
-          type: QueryTagTypes.AcceleratorReport,
-          id: args.reportId,
-        },
-        ...(args.photosToUpdate ?? []).map((photo) => ({
-          type: QueryTagTypes.AcceleratorReportMedia,
-          id: photo.fileId,
-        })),
+        acceleratorReportTag(args.reportId),
+        ...(args.photosToUpdate ?? []).map((photo) => acceleratorReportMediaTag(photo.fileId)),
       ],
     }),
   }),

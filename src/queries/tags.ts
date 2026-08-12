@@ -5,7 +5,6 @@
  */
 export enum QueryTagTypes {
   AcceleratorProjects = 'AcceleratorProjects',
-  /** A single accelerator report, keyed by report id. */
   AcceleratorReport = 'AcceleratorReport',
   AcceleratorReportMedia = 'AcceleratorReportMedia',
   AccessionWithdrawals = 'AccessionWithdrawals',
@@ -41,12 +40,9 @@ export enum QueryTagTypes {
   PlantingSeasons = 'PlantingSeasons',
   PlantingSiteSurvivalRate = 'PlantingSiteSurvivalRate',
   PlantingSites = 'PlantingSites',
-  /** Every accelerator report of a project, keyed by project id. */
   ProjectAcceleratorReport = 'ProjectAcceleratorReport',
   ProjectAcceleratorReportConfigs = 'ProjectAcceleratorReportConfigs',
-  /** The indicator baselines and yearly targets of a project, keyed by project id. */
   ProjectAcceleratorReportTargets = 'ProjectAcceleratorReportTargets',
-  /** Every accelerator report of a project in one year, keyed by `${projectId}-${year}`. */
   ProjectAcceleratorReportYear = 'ProjectAcceleratorReportYear',
   ProjectInternalUsers = 'ProjectInternalUsers',
   ProjectModules = 'ProjectModules',
@@ -67,3 +63,30 @@ export enum QueryTagTypes {
 }
 
 export const QUERY_TAGS = Object.values(QueryTagTypes);
+
+export const acceleratorReportTag = (reportId: number) => ({ type: QueryTagTypes.AcceleratorReport, id: reportId });
+
+export const acceleratorReportMediaTag = (fileId: number) => ({
+  type: QueryTagTypes.AcceleratorReportMedia,
+  id: fileId,
+});
+
+export const projectAcceleratorReportTag = (projectId: number) => ({
+  type: QueryTagTypes.ProjectAcceleratorReport,
+  id: projectId,
+});
+
+export const projectAcceleratorReportConfigsTag = (projectId: number) => ({
+  type: QueryTagTypes.ProjectAcceleratorReportConfigs,
+  id: projectId,
+});
+
+export const projectAcceleratorReportTargetsTag = (projectId: number) => ({
+  type: QueryTagTypes.ProjectAcceleratorReportTargets,
+  id: projectId,
+});
+
+export const projectAcceleratorReportYearTag = (projectId: number, year: number) => ({
+  type: QueryTagTypes.ProjectAcceleratorReportYear,
+  id: `${projectId}-${year}`,
+});
