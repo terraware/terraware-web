@@ -3,7 +3,8 @@ import React, { type JSX } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
-import { API_PULL_INTERVAL } from 'src/constants';
+import Link from 'src/components/common/Link';
+import { API_PULL_INTERVAL, APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import {
   PlantingSeasonNotificationGroupPayload,
@@ -48,17 +49,6 @@ const notificationSortOrder: Record<PlantingSeasonNotificationType, number> = {
   PlantingSeasonClosed: 7,
 };
 
-const getSortedSpeciesNames = (notification: PlantingSeasonNotificationPayload, activeLocale: string | null) =>
-  Array.from(new Set(notification.speciesScientificNames ?? [])).toSorted((a, b) =>
-    a.localeCompare(b, activeLocale || undefined)
-  );
-
-const SpeciesNamesList = ({ names }: { names: string[] }): JSX.Element => (
-  <Box component='span' sx={{ fontStyle: 'italic' }}>
-    {names.join(', ')}
-  </Box>
-);
-
 const getScheduledPlantingDateRequestMessage = (
   notification: PlantingSeasonNotificationPayload,
   notificationPage: PlantingSeasonNotificationPage,
@@ -78,28 +68,30 @@ const getScheduledPlantingDateRequestMessage = (
     : strings.PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY;
 };
 
-const ContextPrefix = ({ group }: { group: PlantingSeasonNotificationGroupPayload }): JSX.Element => {
-  const label = `${group.plantingSiteName} \u00B7 ${group.plantingSeasonName}`;
-
-  return (
-    <>
-      <Typography component='span' fontWeight={600}>
-        {label}
-      </Typography>
-      {' \u2014 '}
-    </>
-  );
-};
+const ContextPrefix = ({ group }: { group: PlantingSeasonNotificationGroupPayload }): JSX.Element => (
+  <>
+    <Typography component='span' fontWeight={600}>
+      {`${group.plantingSiteName} \u00B7 `}
+    </Typography>
+    <Link
+      to={APP_PATHS.PLANTING_SEASONS_VIEW.replace(':plantingSeasonId', String(group.plantingSeasonId))}
+      fontSize='inherit'
+      lineHeight='inherit'
+      fontWeight={400}
+      style={{ textDecoration: 'underline' }}
+    >
+      {group.plantingSeasonName}
+    </Link>
+    {' \u2014 '}
+  </>
+);
 
 const getNotificationMessage = ({
   notification,
   notificationPage,
   activeLocale,
 }: NotificationBodyProps): JSX.Element => {
-  const speciesNames = getSortedSpeciesNames(notification, activeLocale);
-  const hasSpeciesNames = speciesNames.length > 0;
-  const appendsSpeciesList =
-    hasSpeciesNames && ['SpeciesTargetsAdded', 'SpeciesTargetsUpdated'].includes(notification.type);
+  const hasSpeciesNames = (notification.speciesScientificNames ?? []).length > 0;
 
   const message = (() => {
     switch (notification.type) {
@@ -115,27 +107,16 @@ const getNotificationMessage = ({
         return getScheduledPlantingDateRequestMessage(notification, notificationPage, activeLocale);
       case 'SpeciesTargetsAdded':
         return hasSpeciesNames
-          ? strings.formatString(
-              strings.NEW_SPECIES_TARGETS_ADDED,
-              <SpeciesNamesList key='species-names' names={speciesNames} />
-            )
+          ? strings.NEW_SPECIES_TARGETS_ADDED
           : strings.PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_ADDED_FOR_SEASON;
       case 'SpeciesTargetsUpdated':
         return hasSpeciesNames
-          ? strings.formatString(
-              strings.PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_UPDATED,
-              <SpeciesNamesList key='species-names' names={speciesNames} />
-            )
+          ? strings.PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_UPDATED
           : strings.PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_UPDATED_FOR_SEASON;
     }
   })();
 
-  return (
-    <>
-      {message}
-      {appendsSpeciesList ? '.' : ''}
-    </>
-  );
+  return <>{message}</>;
 };
 
 const NotificationGroupBody = ({ group, activeLocale, showPageContext }: NotificationGroupBodyProps): JSX.Element => {

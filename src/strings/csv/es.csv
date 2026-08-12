@@ -1247,7 +1247,7 @@ NEW_ACCESSION,Añadir accesión,6d0d1602
 NEW_APP_VERSION,Actualice para usar la versión más reciente de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualice para obtener la versión más reciente de Terraware.,6235c190
 NEW_PLANTING_WITHDRAWAL_REQUESTS_RECEIVED,Nuevas solicitudes de retiro de plantas recibidas para {0},0da4cdcd
-NEW_SPECIES_TARGETS_ADDED,Nuevos objetivos de especies añadidos para {0},2289b20d
+NEW_SPECIES_TARGETS_ADDED,Nuevos objetivos de especies añadidos.,7c3d77c9
 NEW_STRATUM,Nuevo Estrato,84292d1f
 NEW_SUBSTRATUM,Nuevo Sustrato,90a1ddc3
 NEW_TEMPLATE_MODAL_DESCRIPTION,Se publicó una nueva versión para documentTemplate de este documento. ¿Quiere actualizar?,c11ed4d2
@@ -1600,7 +1600,7 @@ PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY,Se ha r
 PLANTING_SEASON_NOTIFICATION_SCHEDULED_PLANTING_DATE_REQUESTED_INVENTORY_WITH_DATES,Se ha recibido una nueva solicitud o una actualización de retiro de plantación para {0}.,beed313d
 PLANTING_SEASON_NOTIFICATION_SEASON_WITHDRAWAL_RECORDED,Se han registrado nuevos retiros de plantación para esta temporada; el progreso de plantación ha sido actualizado.,0e81a27a
 PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_ADDED_FOR_SEASON,Se han agregado nuevos objetivos de especies para esta temporada.,f2882419
-PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_UPDATED,Objetivos de especies actualizados para {0},9d708c47
+PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_UPDATED,Objetivos de especies actualizados.,3c95e08c
 PLANTING_SEASON_NOTIFICATION_SPECIES_TARGETS_UPDATED_FOR_SEASON,Objetivos de especies actualizados para esta temporada.,c480159e
 PLANTING_SEASON_OPTIONAL,Temporada de plantación (opcional),607dcd9a
 PLANTING_SEASON_OPTIONAL_TOOLTIP,Seleccione una temporada de plantación de las temporadas activas para el sitio. Luego seleccione un estrato y subestrato en la temporada.,2fed80e5
