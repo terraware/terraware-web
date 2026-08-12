@@ -44,7 +44,7 @@ const LearnMoreView = (): JSX.Element => {
 
   useEffect(() => {
     let active = true;
-    fetch('/api/v1/users/me', { credentials: 'include' })
+    fetch('/api/v1/users/me', { credentials: 'include', headers: { Accept: 'application/json' } })
       .then((response) => {
         if (active) {
           setIsLoggedIn(response.ok);
