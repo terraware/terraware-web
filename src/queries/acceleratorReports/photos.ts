@@ -138,11 +138,11 @@ const injectedRtkApi = api.injectEndpoints({
       },
       invalidatesTags: (_result, _error, args) => [
         {
-          type: QueryTagTypes.Reports,
+          type: QueryTagTypes.AcceleratorReport,
           id: args.reportId,
         },
         ...(args.photosToUpdate ?? []).map((photo) => ({
-          type: QueryTagTypes.ReportMedia,
+          type: QueryTagTypes.AcceleratorReportMedia,
           id: photo.fileId,
         })),
       ],

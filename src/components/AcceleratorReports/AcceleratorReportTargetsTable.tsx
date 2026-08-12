@@ -14,7 +14,7 @@ import {
   useLazyListProjectIndicatorsQuery,
   useListAutoCalculatedIndicatorsQuery,
   useListCommonIndicatorsQuery,
-} from 'src/queries/generated/indicators';
+} from 'src/queries/generated/acceleratorReportIndicators';
 import {
   useLazyGetAcceleratorReportYearsQuery,
   useLazyGetAutoCalculatedIndicatorTargetsQuery,
@@ -26,7 +26,7 @@ import {
   useUpdateCommonIndicatorTargetMutation,
   useUpdateProjectIndicatorBaselineTargetMutation,
   useUpdateProjectIndicatorTargetMutation,
-} from 'src/queries/generated/reports';
+} from 'src/queries/generated/acceleratorReports';
 import { formatPrecision } from 'src/utils/numbers';
 import useSnackbar from 'src/utils/useSnackbar';
 

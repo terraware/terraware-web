@@ -1,4 +1,3 @@
-import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import {
   AcceleratorReportPayload,
   CreateAcceleratorReportConfigRequestPayload,
@@ -10,7 +9,8 @@ import {
   UpdateAcceleratorReportConfigPayload,
   UpdateAcceleratorReportConfigRequestPayload,
   UpdateAcceleratorReportValuesRequestPayload,
-} from 'src/queries/generated/reports';
+} from 'src/queries/generated/acceleratorReports';
+import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 
 export type {
   CreateAcceleratorReportConfigRequestPayload,

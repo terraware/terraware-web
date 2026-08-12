@@ -14,7 +14,7 @@ import {
   AcceleratorReportPayload,
   useLazyGetAcceleratorReportYearsQuery,
   useLazyListAcceleratorReportsQuery,
-} from 'src/queries/generated/reports';
+} from 'src/queries/generated/acceleratorReports';
 import { AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
 import { SearchSortOrder } from 'src/types/Search';
 import useQuery from 'src/utils/useQuery';

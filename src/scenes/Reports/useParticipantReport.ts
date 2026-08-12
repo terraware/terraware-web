@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useParams } from 'react-router';
 
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { useLazyGetAcceleratorReportQuery } from 'src/queries/generated/reports';
+import { useLazyGetAcceleratorReportQuery } from 'src/queries/generated/acceleratorReports';
 
 const useParticipantReport = () => {
   const { currentAcceleratorProject } = useParticipantData();

@@ -20,8 +20,8 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
+import { useListAcceleratorReportsQuery } from 'src/queries/generated/acceleratorReports';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
-import { useListAcceleratorReportsQuery } from 'src/queries/generated/reports';
 
 import ReportInternalComment from './ReportInternalComment';
 

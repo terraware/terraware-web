@@ -5,6 +5,9 @@
  */
 export enum QueryTagTypes {
   AcceleratorProjects = 'AcceleratorProjects',
+  /** A single accelerator report, keyed by report id. */
+  AcceleratorReport = 'AcceleratorReport',
+  AcceleratorReportMedia = 'AcceleratorReportMedia',
   AccessionWithdrawals = 'AccessionWithdrawals',
   Accessions = 'Accessions',
   Activities = 'Activities',
@@ -38,16 +41,20 @@ export enum QueryTagTypes {
   PlantingSeasons = 'PlantingSeasons',
   PlantingSiteSurvivalRate = 'PlantingSiteSurvivalRate',
   PlantingSites = 'PlantingSites',
+  /** Every accelerator report of a project, keyed by project id. */
+  ProjectAcceleratorReport = 'ProjectAcceleratorReport',
+  ProjectAcceleratorReportConfigs = 'ProjectAcceleratorReportConfigs',
+  /** The indicator baselines and yearly targets of a project, keyed by project id. */
+  ProjectAcceleratorReportTargets = 'ProjectAcceleratorReportTargets',
+  /** Every accelerator report of a project in one year, keyed by `${projectId}-${year}`. */
+  ProjectAcceleratorReportYear = 'ProjectAcceleratorReportYear',
   ProjectInternalUsers = 'ProjectInternalUsers',
   ProjectModules = 'ProjectModules',
-  ProjectReportConfigs = 'ProjectReportConfigs',
   ProjectScores = 'ProjectScores',
   ProjectVotes = 'ProjectVotes',
   Projects = 'Projects',
-  PublishedReportMedia = 'PublishedReportMedia',
-  PublishedReports = 'PublishedReports',
-  ReportMedia = 'ReportMedia',
-  Reports = 'Reports',
+  PublishedAcceleratorReport = 'PublishedAcceleratorReport',
+  PublishedAcceleratorReportMedia = 'PublishedAcceleratorReportMedia',
   SeedbankSummary = 'SeedbankSummary',
   SeedFundReportMedia = 'SeedFundReportMedia',
   SeedFundReports = 'SeedFundReports',

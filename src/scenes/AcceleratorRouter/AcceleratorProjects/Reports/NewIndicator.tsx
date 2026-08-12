@@ -17,7 +17,7 @@ import {
   NewIndicatorPayload,
   useCreateCommonIndicatorMutation,
   useCreateProjectIndicatorMutation,
-} from 'src/queries/generated/indicators';
+} from 'src/queries/generated/acceleratorReportIndicators';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
