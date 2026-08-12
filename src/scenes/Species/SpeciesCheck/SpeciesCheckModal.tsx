@@ -84,7 +84,7 @@ const SpeciesCheckModal = ({
       {
         key: ORG_TARGET_KEY,
         projectId: undefined,
-        name: strings.NO_PROJECT,
+        name: selectedOrganization?.name ?? strings.NO_PROJECT,
         countryCode: orgCountryCode,
         botanicalCountryCode: selectedOrganization?.botanicalCountryCode,
         isOrg: true,
@@ -252,8 +252,8 @@ const SpeciesCheckModal = ({
           }).unwrap();
         })
       );
-      if (targets.some((target) => target.isOrg)) {
-        await reloadOrganizations();
+      if (targets.some((target) => target.isOrg) && selectedOrganization) {
+        await reloadOrganizations(selectedOrganization.id);
       }
       reloadSpecies();
       setLocationsSubmitted(true);

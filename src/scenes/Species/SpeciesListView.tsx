@@ -34,7 +34,12 @@ import { useLocalization, useOrganization } from 'src/providers/hooks';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
 import { SearchRequestPayload } from 'src/types/Search';
-import { Species, conservationCategories, getConservationCategoryString } from 'src/types/Species';
+import {
+  Species,
+  SpeciesProjectElement,
+  conservationCategories,
+  getConservationCategoryString,
+} from 'src/types/Species';
 import { makeCsv } from 'src/utils/csv';
 import { isContributor } from 'src/utils/organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -130,7 +135,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
 
   const speciesCheckEnabled = speciesIntelligenceEnabled;
-  const hasProjects = (availableProjects?.length ?? 0) > 0;
+  const hasMultipleProjects = (availableProjects?.length ?? 0) > 1;
   const { isMobile } = useDeviceInfo();
 
   const [speciesCheckOpen, setSpeciesCheckOpen] = useState(false);
@@ -143,15 +148,15 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     setSpeciesCheckOpen(true);
   }, []);
 
-  const noLocationSet = hasProjects
+  const noLocationSet = hasMultipleProjects
     ? (availableProjects ?? []).every((p) => !p.botanicalCountryCode)
     : !selectedOrganization?.botanicalCountryCode;
-  const orgLocationSet = !hasProjects && !!selectedOrganization?.botanicalCountryCode;
+  const orgLocationSet = !hasMultipleProjects && !!selectedOrganization?.botanicalCountryCode;
 
   const uncheckedSpecies = useMemo(
     () =>
       species.filter((sp) => {
-        if (hasProjects) {
+        if (hasMultipleProjects) {
           return (sp.projects ?? []).some((element) => {
             const project = availableProjects?.find((p) => p.id === element.projectId);
             return !!project?.botanicalCountryCode && !element.calculatedNativity && !element.overriddenNativity;
@@ -163,17 +168,24 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         const orgElement = (sp.projects ?? []).find((e) => e.projectId === undefined);
         return !orgElement || (!orgElement.calculatedNativity && !orgElement.overriddenNativity);
       }),
-    [species, availableProjects, hasProjects, orgLocationSet]
+    [species, availableProjects, hasMultipleProjects, orgLocationSet]
   );
 
   const showFirstTimeBanner = speciesCheckEnabled && noLocationSet && !firstTimeBannerDismissed;
   const showAddedBanner = speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !addedBannerDismissed;
 
-  const statusScopeSelected = projectFilter.projectId !== undefined || !hasProjects;
+  const statusScopeProjectId = hasMultipleProjects ? projectFilter.projectId : undefined;
+  const statusScopeSelected = !hasMultipleProjects || projectFilter.projectId !== undefined;
+  const matchesStatusScope = useCallback(
+    (element: SpeciesProjectElement) =>
+      statusScopeProjectId === undefined ? element.projectId === undefined : element.projectId === statusScopeProjectId,
+    [statusScopeProjectId]
+  );
+
   const speciesCheckRan =
     statusScopeSelected &&
     species.some((sp) => {
-      const element = (sp.projects ?? []).find((p) => p.projectId === projectFilter.projectId);
+      const element = (sp.projects ?? []).find(matchesStatusScope);
       return !!(element?.calculatedNativity || element?.overriddenNativity);
     });
   const showStatusColumn = speciesCheckEnabled && speciesCheckRan;
@@ -181,14 +193,13 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const statusBySpeciesId = useMemo(() => {
     const map = new Map<number, Nativity | undefined>();
     if (showStatusColumn) {
-      const projectId = projectFilter.projectId;
       species.forEach((sp) => {
-        const element = (sp.projects ?? []).find((p) => p.projectId === projectId);
+        const element = (sp.projects ?? []).find(matchesStatusScope);
         map.set(sp.id, element?.overriddenNativity ?? element?.calculatedNativity);
       });
     }
     return map;
-  }, [species, projectFilter.projectId, showStatusColumn]);
+  }, [species, matchesStatusScope, showStatusColumn]);
 
   const {
     columnOrder,
@@ -696,7 +707,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
           open={speciesCheckOpen}
           onClose={() => setSpeciesCheckOpen(false)}
           species={species}
-          projects={availableProjects ?? []}
+          projects={hasMultipleProjects ? availableProjects ?? [] : []}
           entry={speciesCheckEntry}
           reloadSpecies={reloadData}
         />
@@ -769,8 +780,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               {speciesIntelligenceEnabled &&
                 species &&
                 species.length > 0 &&
-                availableProjects &&
-                availableProjects.length > 0 && (
+                hasMultipleProjects &&
+                availableProjects && (
                   <Box display='flex' alignItems='center' marginLeft={theme.spacing(2)}>
                     <Separator height='40px' />
                     <Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'>

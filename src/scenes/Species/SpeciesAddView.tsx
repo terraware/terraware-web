@@ -8,6 +8,7 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import { useAssignSpeciesToProjectsMutation, useCreateSpeciesMutation } from 'src/queries/generated/species';
@@ -36,6 +37,8 @@ type SpeciesAddViewProps = {
 
 export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { availableProjects } = useProjects();
+  const hasMultipleProjects = (availableProjects?.length ?? 0) > 1;
   const organizationId = selectedOrganization?.id || -1; // TODO: Add null check for selectedOrganization
   const [record, setRecord, , onChangeCallback] = useForm<Species>(initSpecies());
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
@@ -138,7 +141,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
               nameFormatError={nameFormatError}
               setNameFormatError={setNameFormatError}
             />
-            {speciesIntelligenceEnabled && (
+            {speciesIntelligenceEnabled && hasMultipleProjects && (
               <Box marginTop={theme.spacing(4)} width='100%'>
                 <SpeciesProjectsSection
                   speciesId={record.id}

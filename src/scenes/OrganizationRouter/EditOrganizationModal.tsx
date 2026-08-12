@@ -46,7 +46,7 @@ export default function EditOrganizationModal({
   const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;
 
   const { availableProjects } = useProjects();
-  const showBotanicalCountry = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) === 0;
+  const showBotanicalCountry = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) < 2;
   const { botanicalCountries } = useBotanicalCountries(!showBotanicalCountry);
   const botanicalCountryOptions: DropdownItem[] = organizationRecord.countryCode
     ? botanicalCountries
