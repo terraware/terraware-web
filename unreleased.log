@@ -1,3 +1,4 @@
+edf10839 SW-8766 Don't show project selector on species list view if org has 1 project or less (#6236)
 c99fe69e Remove duplicates from web-components strings, force uniqueness (#6238)
 2699f019 Extend component strings object, set components locale (#6237)
 0002f936 SW-8770 Learn More page Localization (#6241)
