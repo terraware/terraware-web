@@ -84,7 +84,7 @@ const SpeciesCheckModal = ({
       {
         key: ORG_TARGET_KEY,
         projectId: undefined,
-        name: strings.NO_PROJECT,
+        name: selectedOrganization?.name ?? strings.NO_PROJECT,
         countryCode: orgCountryCode,
         botanicalCountryCode: selectedOrganization?.botanicalCountryCode,
         isOrg: true,
