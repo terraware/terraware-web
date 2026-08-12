@@ -161,7 +161,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
         <Grid item xs={12}>
           <Dropdown
             id='classId'
-            label={strings.CUMULATIVE_OR_LEVEL}
+            label={strings.IS_CUMULATIVE}
             onChange={onChangeCallback('classId')}
             options={classIdOptions()}
             selectedValue={record.classId}

@@ -188,7 +188,7 @@ export type CumulativeIndicatorProgressPayload = {
 export type ReportAutoCalculatedIndicatorPayload = {
   baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId: 'Cumulative' | 'Level';
+  classId: 'Lifetime Cumulative' | 'Not Cumulative' | 'Yearly Cumulative';
   /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
   currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
@@ -214,6 +214,7 @@ export type ReportAutoCalculatedIndicatorPayload = {
   systemTime?: string;
   systemValue?: number;
   target?: number;
+  unit: string;
 };
 export type ReportChallengePayload = {
   challenge: string;
@@ -222,7 +223,7 @@ export type ReportChallengePayload = {
 export type ReportCommonIndicatorPayload = {
   baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId: 'Cumulative' | 'Level';
+  classId: 'Lifetime Cumulative' | 'Not Cumulative' | 'Yearly Cumulative';
   /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
   currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
@@ -240,6 +241,7 @@ export type ReportCommonIndicatorPayload = {
   status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   supportingDocumentUrl?: string;
   target?: number;
+  unit?: string;
   value?: number;
 };
 export type SimpleUserPayload = {
@@ -253,7 +255,7 @@ export type ReportPhotoPayload = {
 export type ReportProjectIndicatorPayload = {
   baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId: 'Cumulative' | 'Level';
+  classId: 'Lifetime Cumulative' | 'Not Cumulative' | 'Yearly Cumulative';
   /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
   currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;

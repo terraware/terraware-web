@@ -6,6 +6,7 @@ import { Badge, Button, EditableTable, EditableTableColumn, Textfield } from '@t
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { MRT_Cell } from 'material-react-table';
 
+import { IndicatorClass, indicatorClassLabel } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import useBoolean from 'src/hooks/useBoolean';
@@ -91,7 +92,7 @@ export default function ReportsSettings(): JSX.Element {
     isCommon: boolean;
     reference: string;
     category: string;
-    classId?: string;
+    classId?: IndicatorClass;
     level: string;
     active: boolean;
     primaryDataSource?: string;
@@ -252,8 +253,7 @@ export default function ReportsSettings(): JSX.Element {
 
   const ClassIdCell = useCallback(
     ({ cell }: { cell: MRT_Cell<IndicatorRow> }) => {
-      const classId = cell.getValue<string>();
-      return <>{classId === 'Cumulative' ? strings.CUMULATIVE : strings.LEVEL}</>;
+      return <>{indicatorClassLabel(cell.getValue<IndicatorClass>(), strings)}</>;
     },
     [strings]
   );
@@ -315,7 +315,7 @@ export default function ReportsSettings(): JSX.Element {
       },
       {
         id: 'classId',
-        header: strings.CUMULATIVE_OR_LEVEL,
+        header: strings.IS_CUMULATIVE,
         accessorKey: 'classId',
         enableEditing: false,
         size: 160,

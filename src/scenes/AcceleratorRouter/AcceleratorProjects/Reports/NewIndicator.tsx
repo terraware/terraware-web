@@ -72,7 +72,7 @@ export default function NewIndicator(): JSX.Element {
   const [newIndicator, , , onChangeCallback] = useForm<NewIndicatorPayload>({
     active: true,
     category: 'Biodiversity',
-    classId: 'Level',
+    classId: 'Not Cumulative',
     isPublishable: true,
     level: 'Goal',
     name: '',
@@ -215,7 +215,7 @@ export default function NewIndicator(): JSX.Element {
                 <Dropdown
                   fullWidth
                   id='classId'
-                  label={strings.CUMULATIVE_OR_LEVEL}
+                  label={strings.IS_CUMULATIVE}
                   onChange={onChangeCallback('classId')}
                   options={classIdOptions()}
                   selectedValue={newIndicator.classId}
