@@ -139,6 +139,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const speciesCheckEnabled = speciesIntelligenceEnabled;
   const hasMultipleProjects = (availableProjects?.length ?? 0) > 1;
+  const orgScopeKnown = availableProjects !== undefined && availableProjects.length <= 1;
   const { isMobile } = useDeviceInfo();
 
   const [speciesCheckOpen, setSpeciesCheckOpen] = useState(false);
@@ -169,16 +170,21 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
           return false;
         }
         const orgElement = (sp.projects ?? []).find((e) => e.projectId === undefined);
-        return !orgElement || (!orgElement.calculatedNativity && !orgElement.overriddenNativity);
+        if (nativityOf(orgElement)) {
+          return false;
+        }
+        if (orgScopeKnown) {
+          return !(sp.projects ?? []).some((element) => nativityOf(element));
+        }
+        return true;
       }),
-    [species, availableProjects, hasMultipleProjects, orgLocationSet]
+    [species, availableProjects, hasMultipleProjects, orgLocationSet, orgScopeKnown]
   );
 
   const showFirstTimeBanner = speciesCheckEnabled && noLocationSet && !firstTimeBannerDismissed;
   const showAddedBanner = speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !addedBannerDismissed;
 
   const statusScopeSelected = !hasMultipleProjects || projectFilter.projectId !== undefined;
-  const orgScopeKnown = availableProjects !== undefined && availableProjects.length <= 1;
   const resolveScopeNativity = useCallback(
     (sp: Species): Nativity | undefined => {
       const elements = sp.projects ?? [];
