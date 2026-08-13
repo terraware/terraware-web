@@ -174,32 +174,32 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const showFirstTimeBanner = speciesCheckEnabled && noLocationSet && !firstTimeBannerDismissed;
   const showAddedBanner = speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !addedBannerDismissed;
 
-  const statusScopeProjectId = hasMultipleProjects ? projectFilter.projectId : undefined;
   const statusScopeSelected = !hasMultipleProjects || projectFilter.projectId !== undefined;
-  const matchesStatusScope = useCallback(
-    (element: SpeciesProjectElement) =>
-      statusScopeProjectId === undefined ? element.projectId === undefined : element.projectId === statusScopeProjectId,
-    [statusScopeProjectId]
+  const nativityOf = (element?: SpeciesProjectElement) => element?.overriddenNativity ?? element?.calculatedNativity;
+  const resolveScopeNativity = useCallback(
+    (sp: Species): Nativity | undefined => {
+      const elements = sp.projects ?? [];
+      if (hasMultipleProjects) {
+        return nativityOf(elements.find((element) => element.projectId === projectFilter.projectId));
+      }
+      const orgNativity = nativityOf(elements.find((element) => element.projectId === undefined));
+      return orgNativity ?? nativityOf(elements.find((element) => nativityOf(element)));
+    },
+    [hasMultipleProjects, projectFilter.projectId]
   );
 
-  const speciesCheckRan =
-    statusScopeSelected &&
-    species.some((sp) => {
-      const element = (sp.projects ?? []).find(matchesStatusScope);
-      return !!(element?.calculatedNativity || element?.overriddenNativity);
-    });
+  const speciesCheckRan = statusScopeSelected && species.some((sp) => !!resolveScopeNativity(sp));
   const showStatusColumn = speciesCheckEnabled && speciesCheckRan;
 
   const statusBySpeciesId = useMemo(() => {
     const map = new Map<number, Nativity | undefined>();
     if (showStatusColumn) {
       species.forEach((sp) => {
-        const element = (sp.projects ?? []).find(matchesStatusScope);
-        map.set(sp.id, element?.overriddenNativity ?? element?.calculatedNativity);
+        map.set(sp.id, resolveScopeNativity(sp));
       });
     }
     return map;
-  }, [species, matchesStatusScope, showStatusColumn]);
+  }, [showStatusColumn, species, resolveScopeNativity]);
 
   const {
     columnOrder,
