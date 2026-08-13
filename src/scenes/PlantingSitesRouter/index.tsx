@@ -6,7 +6,6 @@ import PlantingSiteDraftEdit from './edit/PlantingSiteDraftEdit';
 import PlantingSiteUpdate from './edit/PlantingSiteUpdate';
 import PlantingSiteDraftStratumView from './view/PlantingSiteDraftStratumView';
 import PlantingSiteDraftView from './view/PlantingSiteDraftView';
-import PlantingSiteStratumView from './view/PlantingSiteStratumView';
 import PlantingSiteView from './view/PlantingSiteView';
 import PlantingSitesList from './view/PlantingSitesList';
 
@@ -28,7 +27,6 @@ export function PlantingSitesRouter(): JSX.Element {
 
   return (
     <Routes>
-      <Route path={'/stratum/:stratumId'} element={<PlantingSiteStratumView />} />
       <Route path={'/edit'} element={<PlantingSiteUpdate plantingSiteId={Number(plantingSiteId)} />} />
       <Route path={'*'} element={<PlantingSiteView />} />
     </Routes>

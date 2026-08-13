@@ -4,7 +4,6 @@ import env from 'src/utils/useEnvironment';
 export type FeatureName =
   | 'Show Production View'
   | 'Virtual Monitoring Plots'
-  | 'New Planting Site Map'
   | 'Planting Goals'
   | 'Species Intelligence'
   | 'Report Updates July 2026';
@@ -48,15 +47,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for virtual monitoring plots'],
-    disclosure: ['This is a WIP'],
-  },
-  {
-    name: 'New Planting Site Map',
-    preferenceName: 'newPlantingSiteMap',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['New Mapbox-based planting site map on the planting site details page.'],
     disclosure: ['This is a WIP'],
   },
   {

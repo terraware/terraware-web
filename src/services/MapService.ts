@@ -159,25 +159,6 @@ const extractPlantingSite = (site: MinimalPlantingSite): MapSourceBaseData => {
 };
 
 /**
- * Transform planting site geometry data into UI model
- */
-const extractPlantingSiteFromHistory = (site: MinimalPlantingSite, history: PlantingSiteHistory): MapSourceBaseData => {
-  const { name, description } = site;
-  const { id, boundary } = history;
-
-  return {
-    entities: [
-      {
-        properties: { id, name, description, type: 'site' },
-        boundary: getPolygons(boundary),
-        id,
-      },
-    ],
-    id: 'sites',
-  };
-};
-
-/**
  * Transform planting sites geometry data into UI model
  */
 const extractPlantingSites = (sites: MinimalPlantingSite[]): MapSourceBaseData => {
@@ -244,26 +225,6 @@ const extractStrata = (site: MinimalPlantingSite): MapSourceBaseData => {
 };
 
 /**
- * Transform strata geometry data into UI model
- */
-const extractStrataFromHistory = (site: PlantingSiteHistory): MapSourceBaseData => {
-  const strataData =
-    site.strata?.map((stratum) => {
-      const { id, stratumId, name, boundary } = stratum;
-      return {
-        properties: { id, stratumId, name, type: 'stratum', recency: 0 },
-        boundary: getPolygons(boundary),
-        id,
-      };
-    }) || [];
-
-  return {
-    entities: strataData,
-    id: 'strata',
-  };
-};
-
-/**
  * Transform multiple sites substrata geometry data into UI model
  */
 const extractSubstrataFromSites = (sites: MinimalPlantingSite[]): MapSourceBaseData => {
@@ -303,26 +264,6 @@ const extractSubstrata = (site: MinimalPlantingSite): MapSourceBaseData => {
         const { id, name, fullName, boundary } = substratum;
         return {
           properties: { id, name, fullName, type: 'substratum', stratumId: stratum.id, stratumName: stratum.name },
-          boundary: getPolygons(boundary),
-          id,
-        };
-      });
-    }) || [];
-
-  return {
-    entities: allSubstrataData.flatMap((f) => f),
-    id: 'substrata',
-  };
-};
-
-const extractSubstrataFromHistory = (site: PlantingSiteHistory): MapSourceBaseData => {
-  const allSubstrataData =
-    site.strata?.flatMap((stratum) => {
-      const { substrata } = stratum;
-      return substrata.map((substratum) => {
-        const { id, name, fullName, boundary } = substratum;
-        return {
-          properties: { id, name, fullName, type: 'substratum', stratumId: stratum.id },
           boundary: getPolygons(boundary),
           id,
         };
@@ -587,20 +528,6 @@ const getMapDataFromPlantingSite = (plantingSite: MinimalPlantingSite): MapData 
 };
 
 /**
- * Extract Planting Site, Strata, Substrata from planting site data
- */
-const getMapDataFromPlantingSiteHistory = (plantingSite: PlantingSite, history: PlantingSiteHistory): MapData => {
-  return {
-    site: extractPlantingSiteFromHistory(plantingSite, history),
-    stratum: extractStrataFromHistory(history),
-    substratum: extractSubstrataFromHistory(history),
-    permanentPlot: undefined,
-    temporaryPlot: undefined,
-    adHocPlot: undefined,
-  };
-};
-
-/**
  * Extract Planting Site, Strata, Substrata, and Plots from an ObservationResult
  */
 const getMapDataFromObservation = (
@@ -754,17 +681,13 @@ const MapService = {
   getMapDataFromGisPlantingSites,
   getMapDataFromPlantingSite,
   getMapDataFromPlantingSites,
-  getMapDataFromPlantingSiteHistory,
   getMapDataFromObservation,
   getPlantingSiteBoundingBox,
   getMapEntityGeometry,
   getRecencyFromTime,
   extractPlantingSite,
-  extractPlantingSiteFromHistory,
   extractStrata,
-  extractStrataFromHistory,
   extractSubstrata,
-  extractSubstrataFromHistory,
   calculateAreaFromGisData,
 };
 
