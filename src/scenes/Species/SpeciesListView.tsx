@@ -173,6 +173,9 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         if (nativityOf(orgElement)) {
           return false;
         }
+        if (orgElement?.pendingNativity) {
+          return true;
+        }
         if (orgScopeKnown) {
           return !(sp.projects ?? []).some((element) => nativityOf(element));
         }
