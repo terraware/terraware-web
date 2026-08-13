@@ -127,10 +127,13 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
     [speciesIntelligenceEnabled]
   );
 
-  const orgNativityElement = useMemo(
-    () => (species?.projects ?? []).find((element) => element.projectId === undefined),
-    [species]
-  );
+  const orgNativityElement = useMemo(() => {
+    const elements = species?.projects ?? [];
+    const nativityOf = (element?: (typeof elements)[number]) =>
+      element?.overriddenNativity ?? element?.calculatedNativity;
+    const orgElement = elements.find((element) => element.projectId === undefined);
+    return nativityOf(orgElement) ? orgElement : elements.find((element) => nativityOf(element)) ?? orgElement;
+  }, [species]);
   const orgNativity = orgNativityElement?.overriddenNativity ?? orgNativityElement?.calculatedNativity;
 
   return (
