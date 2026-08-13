@@ -13,8 +13,10 @@ import Card from 'src/components/common/Card';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization } from 'src/providers';
-import { useUpdateOneAcceleratorReportValuesMutation } from 'src/queries/generated/acceleratorReports';
-import { AcceleratorReportPayload } from 'src/queries/generated/reports';
+import {
+  AcceleratorReportPayload,
+  useUpdateOneAcceleratorReportValuesMutation,
+} from 'src/queries/generated/acceleratorReports';
 import useSnackbar from 'src/utils/useSnackbar';
 
 const AcceleratorReportEditV2 = (): JSX.Element => {

@@ -7,7 +7,7 @@ import {
   ReportAutoCalculatedIndicatorPayload,
   ReportCommonIndicatorPayload,
   ReportProjectIndicatorPayload,
-} from 'src/queries/generated/reports';
+} from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
 import { IndicatorType } from 'src/types/AcceleratorReport';
 import { formatPrecision } from 'src/utils/numbers';

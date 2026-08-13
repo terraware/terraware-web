@@ -1,13 +1,11 @@
 import {
-  ReportReviewPayload,
-  ReviewAcceleratorReportIndicatorsRequestPayload,
-} from 'src/queries/generated/acceleratorReports';
-import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
-import {
   AcceleratorReportPayload,
   ReportCommonIndicatorPayload,
+  ReportReviewPayload,
+  ReviewAcceleratorReportIndicatorsRequestPayload,
   UpdateAcceleratorReportValuesRequestPayload,
-} from 'src/queries/generated/reports';
+} from 'src/queries/generated/acceleratorReports';
+import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { ILocalizedStrings } from 'src/strings';
 import { MetricStatus } from 'src/types/AcceleratorReport';
 

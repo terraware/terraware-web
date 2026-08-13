@@ -23,7 +23,7 @@ import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { useSubmitAcceleratorReportMutation } from 'src/queries/generated/reports';
+import { useSubmitAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 
 import MetricRow from '../AcceleratorRouter/AcceleratorProjects/Reports/MetricRow';
 import SubmitReportDialog from './SubmitReportDialog';

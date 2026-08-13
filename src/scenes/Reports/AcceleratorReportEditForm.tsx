@@ -15,14 +15,14 @@ import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
+import { useBatchReportPhotosMutation } from 'src/queries/acceleratorReports/photos';
 import {
   AcceleratorReportPayload,
   ReportAutoCalculatedIndicatorPayload,
   ReportCommonIndicatorPayload,
   ReportProjectIndicatorPayload,
   useUpdateAcceleratorReportValuesMutation,
-} from 'src/queries/generated/reports';
-import { useBatchReportPhotosMutation } from 'src/queries/reports/photos';
+} from 'src/queries/generated/acceleratorReports';
 import { AcceleratorReportPhoto, IndicatorType, NewAcceleratorReportPhoto } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';

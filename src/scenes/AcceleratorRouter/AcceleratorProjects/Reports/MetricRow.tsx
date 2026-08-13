@@ -15,7 +15,7 @@ import {
   ReportCommonIndicatorPayload,
   ReportProjectIndicatorPayload,
   useReviewAcceleratorReportIndicatorsMutation,
-} from 'src/queries/generated/reports';
+} from 'src/queries/generated/acceleratorReports';
 import { IndicatorType } from 'src/types/AcceleratorReport';
 import { formatPrecision } from 'src/utils/numbers';
 import useForm from 'src/utils/useForm';

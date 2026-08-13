@@ -8,7 +8,10 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization } from 'src/providers';
-import { ExistingCommonIndicatorPayload, useUpdateCommonIndicatorMutation } from 'src/queries/generated/indicators';
+import {
+  ExistingCommonIndicatorPayload,
+  useUpdateCommonIndicatorMutation,
+} from 'src/queries/generated/acceleratorReportIndicators';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';

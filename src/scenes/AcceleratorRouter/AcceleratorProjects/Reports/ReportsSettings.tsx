@@ -19,8 +19,8 @@ import {
   useListAutoCalculatedIndicatorsQuery,
   useListCommonIndicatorsQuery,
   useListProjectIndicatorsQuery,
-} from 'src/queries/generated/indicators';
-import { useListAcceleratorReportConfigQuery } from 'src/queries/generated/reports';
+} from 'src/queries/generated/acceleratorReportIndicators';
+import { useListAcceleratorReportConfigQuery } from 'src/queries/generated/acceleratorReports';
 
 import EditCommonIndicatorModal from './EditCommonIndicatorModal';
 import EditProjectIndicatorModal from './EditProjectIndicatorModal';

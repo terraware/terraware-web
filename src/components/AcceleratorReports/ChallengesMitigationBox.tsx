@@ -8,7 +8,7 @@ import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
 import isEnabled from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
-import { useReviewAcceleratorReportMutation } from 'src/queries/generated/reports';
+import { useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
 import { ChallengeMitigation, isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';

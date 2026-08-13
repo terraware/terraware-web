@@ -3,7 +3,7 @@ import React, { type JSX, useCallback, useEffect } from 'react';
 import { Box, useTheme } from '@mui/material';
 
 import { useLocalization, useUser } from 'src/providers';
-import { AcceleratorReportPayload, useReviewAcceleratorReportMutation } from 'src/queries/generated/reports';
+import { AcceleratorReportPayload, useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 

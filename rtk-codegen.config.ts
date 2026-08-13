@@ -14,6 +14,18 @@ const config: ConfigFile = {
         operation.path === '/api/v1/accelerator/projects' ||
         operation.path === '/api/v1/accelerator/projects/{projectId}',
     },
+    './src/queries/generated/acceleratorReportIndicators.ts': {
+      filterEndpoints: (_, operation) =>
+        operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports/indicators') ||
+        operation.path.startsWith('/api/v1/accelerator/reports/autoCalculatedIndicators') ||
+        operation.path.startsWith('/api/v1/accelerator/reports/commonIndicators'),
+    },
+    './src/queries/generated/acceleratorReports.ts': {
+      filterEndpoints: (_, operation) =>
+        (operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports') &&
+          !operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports/indicators')) ||
+        operation.path.startsWith('/api/v1/accelerator/reports/{reportId}'),
+    },
     './src/queries/generated/clock.ts': {
       filterEndpoints: (_, operation) => operation.path === '/api/v1/seedbank/clock',
     },
@@ -110,12 +122,6 @@ const config: ConfigFile = {
     './src/queries/generated/publishedReports.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/funder/reports'),
     },
-    './src/queries/generated/reports.ts': {
-      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports'),
-    },
-    './src/queries/generated/acceleratorReports.ts': {
-      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/reports/{reportId}'),
-    },
     './src/queries/generated/projectScores.ts': {
       filterEndpoints: (_, operation) => operation.path === '/api/v2/accelerator/projects/{projectId}/scores',
     },
@@ -136,12 +142,6 @@ const config: ConfigFile = {
     },
     './src/queries/generated/userInternalInterests.ts': {
       filterEndpoints: (_, operation) => operation.path === '/api/v1/users/{userId}/internalInterests',
-    },
-    './src/queries/generated/indicators.ts': {
-      filterEndpoints: (_, operation) =>
-        operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports/indicators') ||
-        operation.path.startsWith('/api/v1/accelerator/reports/autoCalculatedIndicators') ||
-        operation.path.startsWith('/api/v1/accelerator/reports/commonIndicators'),
     },
     './src/queries/generated/t0.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/t0'),
