@@ -56,6 +56,9 @@ import { SpeciesSearchResultRow } from './types';
 
 const TABLE_STATE_STORAGE_KEY = 'species-list-table';
 
+const nativityOf = (element?: SpeciesProjectElement): Nativity | undefined =>
+  element?.overriddenNativity ?? element?.calculatedNativity;
+
 type ProblemsCellProps = {
   row: SpeciesSearchResultRow;
   reloadData: () => Promise<void>;
@@ -175,7 +178,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const showAddedBanner = speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !addedBannerDismissed;
 
   const statusScopeSelected = !hasMultipleProjects || projectFilter.projectId !== undefined;
-  const nativityOf = (element?: SpeciesProjectElement) => element?.overriddenNativity ?? element?.calculatedNativity;
+  const orgScopeKnown = availableProjects !== undefined && availableProjects.length <= 1;
   const resolveScopeNativity = useCallback(
     (sp: Species): Nativity | undefined => {
       const elements = sp.projects ?? [];
@@ -183,9 +186,12 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         return nativityOf(elements.find((element) => element.projectId === projectFilter.projectId));
       }
       const orgNativity = nativityOf(elements.find((element) => element.projectId === undefined));
-      return orgNativity ?? nativityOf(elements.find((element) => nativityOf(element)));
+      if (orgNativity) {
+        return orgNativity;
+      }
+      return orgScopeKnown ? nativityOf(elements.find((element) => nativityOf(element))) : undefined;
     },
-    [hasMultipleProjects, projectFilter.projectId]
+    [hasMultipleProjects, projectFilter.projectId, orgScopeKnown]
   );
 
   const speciesCheckRan = statusScopeSelected && species.some((sp) => !!resolveScopeNativity(sp));
