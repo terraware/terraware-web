@@ -2,10 +2,60 @@ import React, { type JSX, type ReactNode } from 'react';
 
 import { Typography } from '@mui/material';
 
+import { API_PATHS } from 'src/constants';
 import type { ProvidedLocalizationData } from 'src/providers';
 import { type EventLogEntryPayload } from 'src/queries/generated/events';
 
 type Strings = ProvidedLocalizationData['strings'];
+
+/**
+ * What clicking a history row should do. Rows whose entity still exists and has somewhere to go open
+ * it; everything else stays plain text.
+ *
+ * Note what is deliberately absent: seedbank withdrawals. They are not the same entity as the nursery
+ * withdrawals behind APP_PATHS.NURSERY_WITHDRAWALS_DETAILS -- those IDs come from a different table --
+ * so pointing a seedbank withdrawal ID at that route would open an unrelated withdrawal. Linking a
+ * withdrawal to its nursery batch needs a batchId on the subject payload.
+ */
+export type AccessionEventTarget =
+  | { kind: 'photo'; accessionId: number; fullText: string }
+  | { kind: 'viabilityTest'; accessionId: number; viabilityTestId: number };
+
+export const accessionEventTarget = (event: EventLogEntryPayload): AccessionEventTarget | undefined => {
+  const { subject } = event;
+
+  if (subject.deleted) {
+    return undefined;
+  }
+
+  switch (subject.type) {
+    case 'AccessionPhoto':
+      return { kind: 'photo', accessionId: subject.accessionId, fullText: subject.fullText };
+    case 'ViabilityTest':
+      return {
+        kind: 'viabilityTest',
+        accessionId: subject.accessionId,
+        viabilityTestId: subject.viabilityTestId,
+      };
+    default:
+      return undefined;
+  }
+};
+
+/**
+ * The photo subject has no filename field -- the server only puts the filename inside its display
+ * text -- and photos are addressable by filename alone, so the filename is recovered by matching the
+ * display text against the accession's current photos. Returns undefined when nothing matches, which
+ * is what should happen for a photo that has since been replaced or deleted.
+ */
+export const findPhotoFilename = (fullText: string, photoFilenames: string[] | undefined): string | undefined =>
+  photoFilenames?.find((filename) => fullText.endsWith(filename));
+
+export const accessionPhotoUrl = (accessionId: number, filename: string): string =>
+  API_PATHS.ACCESSION_PHOTO.replace('{accessionId}', String(accessionId)).replace(
+    '{photoFilename}',
+    encodeURIComponent(filename)
+  );
 
 export type ChangedValueColors = {
   changedFrom: string;

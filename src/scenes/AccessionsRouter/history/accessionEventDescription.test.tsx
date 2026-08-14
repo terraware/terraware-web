@@ -12,7 +12,13 @@ import {
 import defaultStrings, { type ILocalizedStringsMap } from 'src/strings';
 import { strings as english } from 'src/strings/strings-en';
 
-import { type ChangedValueColors, renderAccessionEventDescription } from './accessionEventDescription';
+import {
+  type ChangedValueColors,
+  accessionEventTarget,
+  accessionPhotoUrl,
+  findPhotoFilename,
+  renderAccessionEventDescription,
+} from './accessionEventDescription';
 
 // Mirrors LocalizationProvider: the component library's table is the base layer and the
 // application's strings are laid over it, so a single lookup reaches either.
@@ -196,5 +202,62 @@ describe('renderAccessionEventDescription', () => {
     );
 
     expect(describeEvent(entry)).toBe('');
+  });
+});
+
+describe('accessionEventTarget', () => {
+  it('targets the photo modal for photo events', () => {
+    expect(accessionEventTarget(event(photo(), created))).toEqual({
+      kind: 'photo',
+      accessionId: 7,
+      fullText: 'Photo IMG_1234.jpg',
+    });
+  });
+
+  it('targets the viability test modal for test events', () => {
+    expect(accessionEventTarget(event(viabilityTest(), created))).toEqual({
+      kind: 'viabilityTest',
+      accessionId: 7,
+      viabilityTestId: 444222,
+    });
+  });
+
+  // A seedbank withdrawal ID is not a nursery withdrawal ID, so linking it to
+  // /nursery/withdrawals/:withdrawalId would open an unrelated withdrawal.
+  it('gives withdrawal events nothing to open', () => {
+    expect(accessionEventTarget(event(withdrawal(), created))).toBeUndefined();
+  });
+
+  it('gives accession events nothing to open, since this is already that page', () => {
+    expect(accessionEventTarget(event(accession(), created))).toBeUndefined();
+  });
+
+  it('gives a deleted entity nothing to open', () => {
+    const deletedPhoto: EventLogEntryPayload['subject'] = { ...photo(), deleted: true };
+    expect(accessionEventTarget(event(deletedPhoto, deleted))).toBeUndefined();
+  });
+});
+
+describe('findPhotoFilename', () => {
+  it('recovers the filename from the subject display text', () => {
+    expect(findPhotoFilename('Photo IMG_1234.jpg', ['IMG_0001.jpg', 'IMG_1234.jpg'])).toBe('IMG_1234.jpg');
+  });
+
+  it('returns undefined when the photo is no longer on the accession', () => {
+    expect(findPhotoFilename('Photo IMG_1234.jpg', ['IMG_0001.jpg'])).toBeUndefined();
+  });
+
+  it('returns undefined when the accession has not loaded', () => {
+    expect(findPhotoFilename('Photo IMG_1234.jpg', undefined)).toBeUndefined();
+  });
+});
+
+describe('accessionPhotoUrl', () => {
+  it('builds the photo endpoint URL', () => {
+    expect(accessionPhotoUrl(7, 'IMG_1234.jpg')).toBe('/api/v1/seedbank/accessions/7/photos/IMG_1234.jpg');
+  });
+
+  it('escapes a filename with characters that need it', () => {
+    expect(accessionPhotoUrl(7, 'my photo (1).jpg')).toBe('/api/v1/seedbank/accessions/7/photos/my%20photo%20(1).jpg');
   });
 });
