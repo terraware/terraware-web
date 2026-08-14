@@ -5,12 +5,23 @@ import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useGetAccessionHistoryQuery } from 'src/queries/generated/accessionsV1';
 import { AccessionHistoryEntry } from 'src/services/AccessionService';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import AccessionEventLog from './AccessionEventLog';
+
 export default function Accession2History(): JSX.Element {
+  return isEnabled('Accession Event Log') ? <AccessionEventLog /> : <LegacyHistory />;
+}
+
+/**
+ * Reads the pre-event-log history endpoint. Delete this along with the feature flag once the event
+ * log version has shipped.
+ */
+function LegacyHistory(): JSX.Element {
   const { accessionId } = useParams<{ accessionId: string }>();
   const theme = useTheme();
   const snackbar = useSnackbar();

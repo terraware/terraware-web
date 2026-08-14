@@ -13,7 +13,15 @@ ACCESSION,Accession,6a1389cb
 ACCESSION_BY_STATUS,Accession par statut,8d5df55b
 ACCESSION_DETAIL,Détail de l'accès,dab2431a
 ACCESSION_DETAILS,Détails de l'accès,1fa5df58
+ACCESSION_EVENT_PHOTO_REPLACED,{0} a été remplacé,c87c5b4c
+ACCESSION_EVENT_VIABILITY_TEST_ADDED,a lancé un test de viabilité,1ec9a61e
+ACCESSION_EVENT_VIABILITY_TEST_DELETED,a supprimé un test de viabilité,131c982f
+ACCESSION_EVENT_VIABILITY_TEST_UPDATED,Le test de viabilité {0} a été modifié de {1} à {2},630ab02f
+ACCESSION_EVENT_WITHDRAWAL_ADDED,a ajouté un retrait,66861582
+ACCESSION_EVENT_WITHDRAWAL_DELETED,a supprimé un retrait,2fa169b8
+ACCESSION_EVENT_WITHDRAWAL_UPDATED,Le retrait {0} a été modifié de {1} à {2},8dd1f01b
 ACCESSION_HISTORY,Historique de l'accession,1e6eaa37
+ACCESSION_HISTORY_NO_EVENTS,Aucun historique pour le moment.,f8822669
 ACCESSION_ID,Identifiant de l'accesion,a87726c0
 ACCESSION_NUMBER_CHECKED_IN,L'accesion {0} a été enregistrée avec succès !,b78da03c
 ACCESSIONS,Accessions,5f4f92e5
