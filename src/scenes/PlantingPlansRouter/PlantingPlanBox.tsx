@@ -6,11 +6,12 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
+import { PlantingSitePayload, useListPlantingSiteSpeciesTargetsQuery } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import PlantingPlanMapThumbnail from './PlantingPlanMapThumbnail';
+import { siteGoalPlants } from './plantingPlanGoals';
 
 const PLACEHOLDER = '-';
 
@@ -25,6 +26,8 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
   const navigate = useSyncNavigate();
   const numberFormatter = useNumberFormatter();
 
+  const { data: speciesTargetsData } = useListPlantingSiteSpeciesTargetsQuery(plantingSite.id);
+
   const strata = useMemo(() => plantingSite.strata ?? [], [plantingSite.strata]);
 
   const strataNames = useMemo(() => strata.map((stratum) => stratum.name), [strata]);
@@ -33,13 +36,19 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
     [strata]
   );
 
-  const siteArea = useMemo(
-    () =>
-      plantingSite.areaHa === undefined
-        ? PLACEHOLDER
-        : strings.formatString(strings.X_HA, numberFormatter.format(plantingSite.areaHa, { decimals: 1 })).toString(),
-    [numberFormatter, plantingSite.areaHa]
-  );
+  const plantingGoalLabel = useMemo(() => {
+    const plants = siteGoalPlants(plantingSite, 'initial');
+    return strings
+      .formatString(strings.X_PLANTS, plants === undefined ? PLACEHOLDER : numberFormatter.format(plants))
+      .toString();
+  }, [numberFormatter, plantingSite]);
+
+  const speciesLabel = useMemo(() => {
+    const count = speciesTargetsData?.targets.length ?? 0;
+    return strings
+      .formatString(strings.X_SPECIES, count === 0 ? PLACEHOLDER : numberFormatter.format(count))
+      .toString();
+  }, [numberFormatter, speciesTargetsData]);
 
   const navigateToDetails = () =>
     navigate(APP_PATHS.PLANTING_PLANS_VIEW.replace(':plantingSiteId', plantingSite.id.toString()));
@@ -80,34 +89,29 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
     </Box>
   );
 
-  const siteGoal = (
+  const plantingGoal = (
     <Box
       sx={{
-        backgroundColor: theme.palette.TwClrBgBrandTertiary,
+        alignItems: 'center',
+        backgroundColor: theme.palette.TwClrBgSecondary,
         borderRadius: theme.spacing(1),
-        padding: theme.spacing(1.5, 2),
-        minWidth: '160px',
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: theme.spacing(2),
+        minWidth: '220px',
+        padding: theme.spacing(3),
+        width: '400px',
+        justifyContent: 'center',
       }}
     >
-      <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrBaseBlack} lineHeight='20px'>
-        {strings.SITE_GOAL}
+      <Typography fontSize='16px' fontWeight={400} color={theme.palette.TwClrBaseBlack}>
+        {`${strings.PLANTING_GOAL}:`}
       </Typography>
-      <Typography fontSize='16px' fontWeight={600} lineHeight='32px' color={theme.palette.TwClrBaseBlack}>
-        {PLACEHOLDER}
+      <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
+        {plantingGoalLabel}
       </Typography>
-      <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} lineHeight='20px'>
-        {strings.BY_INITIAL_PLANTING_DENSITY}
-      </Typography>
-    </Box>
-  );
-
-  const metric = (label: string, value: string) => (
-    <Box minWidth={isCompact ? 0 : '80px'}>
-      <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrBaseBlack} lineHeight='20px'>
-        {label}
-      </Typography>
-      <Typography fontSize='16px' fontWeight={600} lineHeight='32px' color={theme.palette.TwClrBaseBlack}>
-        {value}
+      <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
+        {speciesLabel}
       </Typography>
     </Box>
   );
@@ -126,16 +130,8 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
   );
 
   const metrics = (
-    <Box
-      display='flex'
-      gap={theme.spacing(3)}
-      alignItems='center'
-      flexWrap={isCompact ? 'wrap' : 'nowrap'}
-      marginTop={isCompact ? theme.spacing(2) : 0}
-    >
-      {siteGoal}
-      {metric(strings.SITE_AREA, siteArea)}
-      {metric(strings.SPECIES, PLACEHOLDER)}
+    <Box display='flex' alignItems='center' marginTop={isCompact ? theme.spacing(2) : 0}>
+      {plantingGoal}
     </Box>
   );
 

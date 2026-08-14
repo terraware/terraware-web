@@ -10,6 +10,8 @@ import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import PlantingSeasonBox from 'src/scenes/NurseryRouter/PlantingSeasons/PlantingSeasonBox';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
+import { siteGoalPlants } from './plantingPlanGoals';
+
 const PLACEHOLDER = '-';
 
 type PlantingPlanSeasonsProps = {
@@ -54,12 +56,19 @@ const PlantingPlanSeasons = ({ plantingSite }: PlantingPlanSeasonsProps): JSX.El
     [seasons]
   );
 
+  const initialGoalLabel = useMemo(() => {
+    const plants = siteGoalPlants(plantingSite, 'initial');
+    return strings
+      .formatString(strings.X_PLANTS, plants === undefined ? PLACEHOLDER : numberFormatter.format(plants))
+      .toString();
+  }, [numberFormatter, plantingSite, strings]);
+
   const isLoading = !organizationId || plantingSeasonsResult.isFetching || plantingSeasonsData === undefined;
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
       <Card style={{ width: '100%', padding: theme.spacing(3) }} radius={theme.spacing(1)}>
-        <Box display='flex' alignItems='center' gap={theme.spacing(3)} flexWrap='wrap' width='100%'>
+        <Box display='flex' alignItems='stretch' gap={theme.spacing(2)} flexWrap='wrap' width='100%'>
           <Box
             sx={{
               backgroundColor: theme.palette.TwClrBgBrandTertiary,
@@ -69,22 +78,19 @@ const PlantingPlanSeasons = ({ plantingSite }: PlantingPlanSeasonsProps): JSX.El
               padding: theme.spacing(1.5, 2),
             }}
           >
-            <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrBaseBlack} lineHeight='20px'>
-              {strings.TARGET_PLANTS_TITLE}
-            </Typography>
             <Typography fontSize='24px' fontWeight={600} lineHeight='32px' color={theme.palette.TwClrBaseBlack}>
-              {PLACEHOLDER}
+              {initialGoalLabel}
             </Typography>
             <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} lineHeight='20px'>
               {strings.BY_INITIAL_PLANTING_DENSITY}
             </Typography>
           </Box>
-          <Box flex={1} minWidth='200px'>
-            <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrBaseBlack} lineHeight='20px'>
-              {strings.TOTAL_PLANTING_TARGET_IN_SEASONS}
-            </Typography>
+          <Box flex={1} minWidth='200px' padding={theme.spacing(1.5, 2)}>
             <Typography fontSize='24px' fontWeight={600} lineHeight='32px' color={theme.palette.TwClrBaseBlack}>
               {strings.formatString(strings.X_PLANTS, numberFormatter.format(totalPlantingTarget)).toString()}
+            </Typography>
+            <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary} lineHeight='20px'>
+              {strings.BY_PLANTING_SEASON_TARGETS}
             </Typography>
           </Box>
         </Box>
