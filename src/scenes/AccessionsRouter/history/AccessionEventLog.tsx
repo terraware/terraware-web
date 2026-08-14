@@ -19,6 +19,8 @@ import {
   accessionEventTarget,
   accessionPhotoUrl,
   findPhotoFilename,
+  findViabilityTestWithdrawals,
+  isPairedViabilityTestEvent,
   renderAccessionEventDescription,
 } from './accessionEventDescription';
 
@@ -69,10 +71,18 @@ const AccessionEventLog = (): JSX.Element => {
 
   const closeModal = useCallback(() => setOpenedTarget(undefined), []);
 
+  const viabilityTestWithdrawals = useMemo(() => findViabilityTestWithdrawals(events ?? []), [events]);
+
+  // The withdrawal row already says it was for a viability test, so drop the test's own duplicate row.
+  const filterEvent = useCallback(
+    (event: EventLogEntryPayload): boolean => !isPairedViabilityTestEvent(event, viabilityTestWithdrawals),
+    [viabilityTestWithdrawals]
+  );
+
   const renderEventDescription = useCallback(
     (event: EventLogEntryPayload): ReactNode => {
-      const description = renderAccessionEventDescription(event, strings, colors);
-      const target = accessionEventTarget(event);
+      const description = renderAccessionEventDescription(event, strings, colors, viabilityTestWithdrawals);
+      const target = accessionEventTarget(event, viabilityTestWithdrawals);
 
       // A photo whose file is no longer on the accession has nothing to open.
       if (!target || (target.kind === 'photo' && !findPhotoFilename(target.fullText, accession?.photoFilenames))) {
@@ -85,7 +95,7 @@ const AccessionEventLog = (): JSX.Element => {
         </Link>
       );
     },
-    [accession?.photoFilenames, colors, strings]
+    [accession?.photoFilenames, colors, strings, viabilityTestWithdrawals]
   );
 
   if (!events && !isError) {
@@ -128,6 +138,7 @@ const AccessionEventLog = (): JSX.Element => {
         defaultExpanded
         emptyState={<Typography>{strings.ACCESSION_HISTORY_NO_EVENTS}</Typography>}
         events={events ?? []}
+        filterEvent={filterEvent}
         hideToggle
         renderEventDescription={renderEventDescription}
       />
