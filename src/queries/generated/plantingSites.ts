@@ -71,6 +71,31 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({ url: `/api/v1/tracking/sites/${queryArg}/reportedPlants` }),
     }),
+    listPlantingSiteSpeciesTargets: build.query<
+      ListPlantingSiteSpeciesTargetsApiResponse,
+      ListPlantingSiteSpeciesTargetsApiArg
+    >({
+      query: (queryArg) => ({ url: `/api/v1/tracking/sites/${queryArg}/speciesTargets` }),
+    }),
+    deletePlantingSiteSpeciesTarget: build.mutation<
+      DeletePlantingSiteSpeciesTargetApiResponse,
+      DeletePlantingSiteSpeciesTargetApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/sites/${queryArg.plantingSiteId}/speciesTargets/${queryArg.speciesId}`,
+        method: 'DELETE',
+      }),
+    }),
+    updatePlantingSiteSpeciesTarget: build.mutation<
+      UpdatePlantingSiteSpeciesTargetApiResponse,
+      UpdatePlantingSiteSpeciesTargetApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/sites/${queryArg.plantingSiteId}/speciesTargets/${queryArg.speciesId}`,
+        method: 'PUT',
+        body: queryArg.updatePlantingSiteSpeciesTargetRequestPayload,
+      }),
+    }),
   }),
   overrideExisting: false,
 });
@@ -122,6 +147,22 @@ export type GetPlantingSiteHistoryApiArg = {
 export type GetPlantingSiteReportedPlantsApiResponse =
   /** status 200 OK */ GetPlantingSiteReportedPlantsResponsePayload;
 export type GetPlantingSiteReportedPlantsApiArg = number;
+export type ListPlantingSiteSpeciesTargetsApiResponse =
+  /** status 200 The requested operation succeeded. */ ListPlantingSiteSpeciesTargetsResponsePayload;
+export type ListPlantingSiteSpeciesTargetsApiArg = number;
+export type DeletePlantingSiteSpeciesTargetApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type DeletePlantingSiteSpeciesTargetApiArg = {
+  plantingSiteId: number;
+  speciesId: number;
+};
+export type UpdatePlantingSiteSpeciesTargetApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdatePlantingSiteSpeciesTargetApiArg = {
+  plantingSiteId: number;
+  speciesId: number;
+  updatePlantingSiteSpeciesTargetRequestPayload: UpdatePlantingSiteSpeciesTargetRequestPayload;
+};
 export type CrsProperties = {
   /** Name of the coordinate reference system. This must be in the form EPSG:nnnn where nnnn is the numeric identifier of a coordinate system in the EPSG dataset. The default is Longitude/Latitude EPSG:4326, which is the coordinate system for GeoJSON. */
   name: string;
@@ -212,8 +253,8 @@ export type StratumResponsePayload = {
   numPermanentPlots: number;
   numTemporaryPlots: number;
   substrata: SubstratumResponsePayload[];
-  /** Use initialPlantingDensity instead. */
-  targetPlantingDensity?: number;
+  /** Number of plants per hectare that the stratum should have after planting is completed. */
+  targetPlantDensity?: number;
 };
 export type PlantingSitePayload = {
   adHocPlots: MonitoringPlotPayload[];
@@ -256,8 +297,8 @@ export type NewStratumPayload = {
   /** Name of this stratum. Two strata in the same planting site may not have the same name. */
   name: string;
   substrata?: NewSubstratumPayload[];
-  /** Use initialPlantingDensity instead. */
-  targetPlantingDensity?: number;
+  /** Number of plants per hectare that the stratum should have after planting is completed. */
+  targetPlantDensity?: number;
 };
 export type CreatePlantingSiteRequestPayload = {
   boundary?: MultiPolygon | Polygon;
@@ -398,6 +439,23 @@ export type GetPlantingSiteReportedPlantsResponsePayload = {
   site: PlantingSiteReportedPlantsPayload;
   status: SuccessOrError;
 };
+export type PlantingSiteSpeciesTargetPayload = {
+  speciesId: number;
+  /** Strata of the planting site where the species is targeted for planting. */
+  stratumIds: number[];
+  /** Number of plants targeted for the planting site as a whole. */
+  targetPlants?: number;
+};
+export type ListPlantingSiteSpeciesTargetsResponsePayload = {
+  status: SuccessOrError;
+  targets: PlantingSiteSpeciesTargetPayload[];
+};
+export type UpdatePlantingSiteSpeciesTargetRequestPayload = {
+  /** Strata of the planting site where the species is targeted for planting. There is no target number of plants at the stratum level. */
+  stratumIds: number[];
+  /** Number of plants targeted for the planting site as a whole. */
+  targetPlants?: number;
+};
 export const {
   useListPlantingSitesQuery,
   useLazyListPlantingSitesQuery,
@@ -415,4 +473,8 @@ export const {
   useLazyGetPlantingSiteHistoryQuery,
   useGetPlantingSiteReportedPlantsQuery,
   useLazyGetPlantingSiteReportedPlantsQuery,
+  useListPlantingSiteSpeciesTargetsQuery,
+  useLazyListPlantingSiteSpeciesTargetsQuery,
+  useDeletePlantingSiteSpeciesTargetMutation,
+  useUpdatePlantingSiteSpeciesTargetMutation,
 } = injectedRtkApi;

@@ -125,6 +125,9 @@ const config: ConfigFile = {
     './src/queries/generated/substrata.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/substrata'),
     },
+    './src/queries/generated/strata.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/strata'),
+    },
     './src/queries/generated/accessionsV1.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/seedbank/accessions'),
     },

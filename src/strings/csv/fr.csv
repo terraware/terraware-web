@@ -210,6 +210,7 @@ ASSIGN_NEW_OWNER,Attribuer un nouveau propriétaire,5dd9263d
 ASSIGN_NEW_OWNER_DESC,"Pour supprimer le propriétaire actuel, vous devez lui attribuer un nouveau propriétaire.",2dd31177
 ASSIGN_OWNER,Attribuer un propriétaire,dc696cfa
 ASSIGN_OWNER_ELLIPSIS,Attribuer un propriétaire...,8053cd0e
+ASSIGN_STRATA,Attribuer des strates,43b7aa27
 ASSIGNED,Désigné,29aa3dd8
 ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre de plants observés par espèce enregistrés comme vivants. Les plants enregistrés comme préexistants ou dont l'espèce est inconnue ne sont pas inclus.,526a70bc
 ASSIGNED_PLOT_OBSERVATION,Observation de parcelle attribuée,9175acf6
@@ -282,7 +283,9 @@ BY_ACCESSION,Par accession,61b8fb95
 BY_BATCH,Par lot,68c5092f
 BY_INITIAL_PLANTING_DENSITY,par densité de plantation initiale,0213f3d7
 BY_NURSERY,Par pépinière,a0a2faa5
+BY_PLANTING_SEASON_TARGETS,par objectifs de saison de plantation,e89333ee
 BY_SPECIES,Par espèce,602624ab
+BY_TARGET_PLANT_DENSITY,par densité de plantation cible,161882a6
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS,Densité de plants calculée à partir des retraits,d06a4b56
 CALCULATED_PLANT_DENSITY_FROM_WITHDRAWALS_TOOLTIP,"Pour utiliser la densité de plantation calculée à partir des retraits de plantation, cochez la case. Pour remplacer cette donnée, saisissez manuellement une valeur dans les champs de densité de plantation à gauche.",c674df96
 CANCEL_DATA_CHECK,Annuler la vérification des données,5f140f00
@@ -1120,6 +1123,7 @@ MAKE_HIGHLIGHT,Créer une mise en avant,c3fda88f
 MANAGE_COLUMNS,Gérer les colonnes,1dba3733
 MANAGE_PLANTING_PLANS_DESCRIPTION,"Gérez les plans de plantation pour les sites de plantation, y compris les objectifs du site et les saisons de plantation.",6d14df77
 MANAGE_PLANTING_SEASONS,Gérer les saisons de plantation,2f58ca7d
+MANAGE_PLANTING_SEASONS_TO_MEET_GOALS,Gérer les saisons et dates de plantation pour atteindre les objectifs initiaux de plantation.,3d7e7c78
 MANAGE_PLANTING_TARGETS_WITHIN_PLANTING_SEASONS,Gérer les objectifs de plantation au sein des Saisons de plantation.,4c8dbb4b
 MANAGED_LOCATION_TYPE_NURSERY,Pépinière,2a9dbfec
 MANAGED_LOCATION_TYPE_PLANTING_SITE,Site de plantation,ee55d884
@@ -1575,7 +1579,7 @@ PLANTING_DATES_TAB_DESCRIPTION,Créez des plans pour déterminer quand et où le
 PLANTING_DENSITY,Densité de plantation,2d5d3bcb
 PLANTING_GOAL,Objectif de plantation,a97123a1
 PLANTING_PLAN,Plan de plantation,423afe5f
-PLANTING_PLAN_DESCRIPTION,"Définissez les densités de plantation cibles et les espèces dans les objectifs du site, et planifiez les activités de plantation dans les saisons de plantation.",72ea86ca
+PLANTING_PLAN_DESCRIPTION,"Définissez les densités de plantation initiales, les densités cibles et les espèces dans les objectifs du site, puis planifiez les activités de plantation dans les saisons de plantation.",38aa3edf
 PLANTING_PLANS,Plans de plantation,b6afa2ff
 PLANTING_PROGRESS,Progression de la plantation,58616da9
 PLANTING_PROGRESS_PERCENT,Progression de la plantation (%),0d372a57
@@ -2074,7 +2078,7 @@ SELECT_SEED_BANK_INFO,Les accessions nécessitent un emplacement de conservation
 SELECT_SEEDLINGS_BATCHES_FOR_PROJECT,Sélectionner les lots de semis pour {0},1823e205
 SELECT_SEEDLINGS_BATCHES_FOR_PROJECT_DESCRIPTION,Utilisez la colonne des cases à cocher pour sélectionner les lots de semi qui doivent être ajoutés à {0}.,54222918
 SELECT_SPECIES,Sélectionner les espèces,d19ac8ee
-SELECT_SPECIES_TO_PLANT_DESCRIPTION,"Sélectionnez les espèces à planter sur le site. Si des nombres cibles sont définis, le nombre total de plants peut différer du nombre basé sur les densités cibles.",efa1bc71
+SELECT_SPECIES_TO_PLANT_DESCRIPTION,"Sélectionnez les espèces à planter sur le site. Si des nombres cibles sont définis, le nombre total de plants peut différer du nombre basé sur les densités de plantation.",aa4b4832
 SELECT_VOTE,Sélectionner le vote,5114a633
 SELECTED_COLUMNS,Colonnes sélectionnées,ca9dc436
 SELECTED_SPECIES_IN_USE,"L'espèce sélectionnée pour suppression est utilisée (dans une Accession, un Inventaire et/ou une Observation) et ne peut pas être supprimée.",cdd9b0e1
@@ -2088,7 +2092,7 @@ SESSION_HAS_NOT_STARTED,La session n'a pas commencé.,ec7ca566
 SESSION_IS_IN_PROGRESS,La session est en cours.,b30ad69a
 SESSION_IS_STARTING_SOON,La session va bientôt commencer.,c3abc7d1
 SESSION_SLIDES,Diapositives de la session,7748a514
-SET_INITIAL_DENSITY_DESCRIPTION,Définissez la densité de plantation initiale pour les strates du site. Le nombre de plants sera calculé en fonction de la densité de plantation et de la superficie.,4ef3c583
+SET_INITIAL_DENSITY_DESCRIPTION,Définissez les densités de plantation initiales et cibles pour les strates du site. Le nombre cible de plants sera calculé en fonction de la superficie.,c8a8a38f
 SET_LOCATION,Définir l’emplacement,262e6b39
 SET_LOCATIONS,Définir les emplacements,68884a84
 SET_PLANTING_COMPLETE,Plantation terminée,3bea077e
@@ -2135,7 +2139,7 @@ SITE_EXCLUSION_AREAS_OPTIONAL,Zones d'exclusion (facultatif),434ba2b3
 SITE_EXCLUSION_ERRORS,Il y a des erreurs dans la limite d’exclusion.,dc334f43
 SITE_GOAL,Objectif du site,61f394c1
 SITE_GOALS,Objectifs du site,345a7c04
-SITE_GOALS_DESCRIPTION,Gérez les objectifs du site pour les densités de plantation cibles et les espèces.,6df1e3e0
+SITE_GOALS_DESCRIPTION,Gérer les objectifs du site pour les densités de plantation et les espèces.,29421088
 SITE_LOCATION,Emplacement du site,e0a85b19
 SITE_MAP,Carte du site,df2fc60a
 SITE_STRATUM_BOUNDARIES,Limites de la strate,418d687a
@@ -2244,6 +2248,7 @@ SPECIES_TARGET_ADDED,Objectif d'espèce ajouté : {0} dans {1}.,024829c9
 SPECIES_TARGET_DELETED,Objectif d'espèce supprimé : {0} dans {1}.,fd85928a
 SPECIES_TARGET_UPDATED,Objectif d'espèce mis à jour : {0} dans {1} modifié de {2} à {3}.,f14397fe
 SPECIES_TARGETS,Objectifs par espèce,96d27e04
+SPECIES_TO_PLANT,Espèces à planter,ad7f9878
 SPECIES_TOOLTIP,Espèces dont les densités de plantation seront utilisées pour calculer les taux de survie des parcelles et des espèces.,6e5f03ec
 SPECIES_USAGE,Utilisation des espèces,0669cb85
 SPECIES_VALUE_CHANGED_FROM_TO,La valeur {1} de l'espèce {0} a été modifiée de {2} à {3},e3330648
@@ -2377,6 +2382,7 @@ TAKE_ME_THERE,M'emmener là-bas,a6c46fcb
 TARGET,Cible,7f0a4d77
 TARGET_DENSITY,Densité cible,239e7748
 TARGET_HECTARES_PLANTED,Cible : {0} ha,8c7d580d
+TARGET_PLANT_DENSITY,Densité de plantation cible,8654dc31
 TARGET_PLANTS,plantes cibles,ff0517a3
 TARGET_PLANTS_TITLE,Plantes cibles,c1aa1642
 TARGET_QUANTITY,Quantité cible,73c71da9
@@ -2425,6 +2431,7 @@ TITLE_WELCOME_EXCLAIM,Bienvenue chez Terraware !,6da26087
 TO,À,0ec3d25a
 TO_NURSERY,Vers : pépinière,ef613421
 TO_NURSERY_REQUIRED,Vers : Pépinière *,e9bd2c95
+TO_PLANT,à planter,13c6274a
 TO_PLANTING_SITE_REQUIRED,Vers : Site de plantation *,b92a92f0
 TO_STRATUM,À : Strate,31a7e652
 TO_SUBSTRATUM,À : Substrat,f8e40ecb
@@ -2741,6 +2748,7 @@ X_OF_YEAR_CUMULATIVE_TARGET,{0} de l'objectif cumulatif annuel,6658988a
 X_OF_YEAR_TARGET,{0} de l'objectif annuel,c57dbf7a
 X_PER_HA,{0}/ha,0fe29eac
 X_PLANTS,{0} plants,8cb7c65d
+X_SPECIES,{0} espèces,42e62955
 X_SPECIES_Y_PLANTS,"{0} espèces, {1} plants",81dea858
 X_TARGET,Objectif de {0},6f7826be
 X_THIS_QUARTER,{0} ce trimestre,6391f6a0
