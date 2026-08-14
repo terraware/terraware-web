@@ -1579,6 +1579,7 @@ PLANTING_DATE_SPECIES_UPDATED,Planting Date {0} updated: {1} in {2} changed from
 PLANTING_DATES,Planting Dates,
 PLANTING_DATES_TAB_DESCRIPTION,"Create plans for when and where plants will be planted toward the species targets. Click ""Save & Request"" to request the nursery to withdraw plants for specific dates.",
 PLANTING_DENSITY,Planting Density,
+PLANTING_DENSITY_MUST_BE_POSITIVE,Planting density must be greater than 0.
 PLANTING_GOAL,Planting Goal,
 PLANTING_PLAN,Planting Plan,
 PLANTING_PLAN_DESCRIPTION,"Set initial planting and target plant densities and species in Site Goals, and plan for planting activities in Planting Seasons.",

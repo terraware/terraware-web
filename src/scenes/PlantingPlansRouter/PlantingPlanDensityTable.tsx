@@ -1,7 +1,7 @@
 import React, { type JSX, useState } from 'react';
 
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
-import { Button, Icon } from '@terraware/web-components';
+import { Icon } from '@terraware/web-components';
 
 import TextField from 'src/components/common/Textfield/Textfield';
 import { PlantingSitePayload, StratumResponsePayload } from 'src/queries/generated/plantingSites';
@@ -198,26 +198,50 @@ const StratumDensityEditor = ({ stratum, densityType }: StratumDensityEditorProp
   const [updateStratum, { isLoading }] = useUpdateStratumMutation();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState('');
+  const [error, setError] = useState('');
 
   const density = stratumDensity(stratum, densityType);
 
-  const commit = async () => {
+  const save = async (payload: { initialPlantingDensity: number; targetPlantDensity?: number }) => {
     setEditing(false);
-    const parsed = Number(draft);
-    if (draft.trim() === '' || !Number.isFinite(parsed) || parsed < 0 || parsed === density) {
-      return;
-    }
+    setError('');
     try {
-      await updateStratum({
-        id: stratum.id,
-        updateStratumRequestPayload:
-          densityType === 'initial'
-            ? { initialPlantingDensity: parsed, targetPlantDensity: stratum.targetPlantDensity }
-            : { initialPlantingDensity: stratum.initialPlantingDensity, targetPlantDensity: parsed },
-      }).unwrap();
+      await updateStratum({ id: stratum.id, updateStratumRequestPayload: payload }).unwrap();
     } catch (e) {
       snackbar.toastError();
     }
+  };
+
+  const commit = async () => {
+    const trimmed = draft.trim();
+
+    if (trimmed === '') {
+      setError('');
+      if (densityType === 'target' && density !== undefined) {
+        await save({ initialPlantingDensity: stratum.initialPlantingDensity, targetPlantDensity: undefined });
+      } else {
+        setEditing(false);
+      }
+      return;
+    }
+
+    const parsed = Number(trimmed);
+    if (!Number.isFinite(parsed) || parsed <= 0) {
+      setError(strings.PLANTING_DENSITY_MUST_BE_POSITIVE);
+      return;
+    }
+
+    if (parsed === density) {
+      setEditing(false);
+      setError('');
+      return;
+    }
+
+    await save(
+      densityType === 'initial'
+        ? { initialPlantingDensity: parsed, targetPlantDensity: stratum.targetPlantDensity }
+        : { initialPlantingDensity: stratum.initialPlantingDensity, targetPlantDensity: parsed }
+    );
   };
 
   return (
@@ -228,7 +252,12 @@ const StratumDensityEditor = ({ stratum, densityType }: StratumDensityEditorProp
           type='number'
           label=''
           value={draft}
-          onChange={(next) => setDraft(String(next ?? ''))}
+          onChange={(next) => {
+            setDraft(String(next ?? ''));
+            if (error) {
+              setError('');
+            }
+          }}
           onBlur={() => void commit()}
           onKeyDown={(key: string) => {
             if (key === 'Enter' && document.activeElement instanceof HTMLElement) {
@@ -236,6 +265,7 @@ const StratumDensityEditor = ({ stratum, densityType }: StratumDensityEditorProp
             }
           }}
           min={0}
+          errorText={error || undefined}
           autoFocus
           disabled={isLoading}
           sx={{ width: '72px' }}

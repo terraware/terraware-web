@@ -1577,6 +1577,7 @@ PLANTING_DATE_SPECIES_UPDATED,Date de plantation {0} mise à jour : {1} dans {2}
 PLANTING_DATES,Dates de plantation,e8aa47b1
 PLANTING_DATES_TAB_DESCRIPTION,Créez des plans pour déterminer quand et où les plants seront mis en terre afin d’atteindre les objectifs par espèce. Cliquez sur « Enregistrer et demander » pour demander à la pépinière de retirer des plants pour des dates spécifiques.,cd51495e
 PLANTING_DENSITY,Densité de plantation,2d5d3bcb
+PLANTING_DENSITY_MUST_BE_POSITIVE,La densité de plantation doit être supérieure à 0.,aff01c05
 PLANTING_GOAL,Objectif de plantation,a97123a1
 PLANTING_PLAN,Plan de plantation,423afe5f
 PLANTING_PLAN_DESCRIPTION,"Définissez les densités de plantation initiales, les densités cibles et les espèces dans les objectifs du site, puis planifiez les activités de plantation dans les saisons de plantation.",38aa3edf

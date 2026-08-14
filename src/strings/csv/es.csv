@@ -1578,6 +1578,7 @@ PLANTING_DATE_SPECIES_UPDATED,Fecha de plantación {0} actualizada: {1} en {2} c
 PLANTING_DATES,Fechas de plantación,e8aa47b1
 PLANTING_DATES_TAB_DESCRIPTION,"Cree planes para cuándo y dónde se plantarán las plantas según los objetivos de especies. Haga clic en ""Guardar y Solicitar"" para pedir al vivero que retire plantas para fechas específicas.",cd51495e
 PLANTING_DENSITY,Densidad de siembra,2d5d3bcb
+PLANTING_DENSITY_MUST_BE_POSITIVE,La densidad de plantación debe ser mayor que 0.,aff01c05
 PLANTING_GOAL,Meta de plantación,a97123a1
 PLANTING_PLAN,Plan de Plantación,423afe5f
 PLANTING_PLAN_DESCRIPTION,"Establezca las densidades iniciales y objetivo de plantación y las especies en Objetivos del Sitio, y planifique las actividades de plantación en Temporadas de Plantación.",38aa3edf
