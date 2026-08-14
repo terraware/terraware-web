@@ -109,6 +109,8 @@ export type DeliveryPayload = {
   id: number;
   plantingSiteId: number;
   plantings: PlantingPayload[];
+  /** IDs of deliveries created by reassigning plants from this delivery to substrata at other planting sites. Empty if this delivery has no cross-site reassignments. */
+  reassignmentDeliveryIds: number[];
   withdrawalId: number;
 };
 export type SuccessOrError = 'ok' | 'error';

@@ -38,6 +38,7 @@ export enum QueryTagTypes {
   PlantingDateRequests = 'PlantingDateRequests',
   PlantingSeasonDates = 'PlantingSeasonDates',
   PlantingSeasons = 'PlantingSeasons',
+  PlantingSiteSpeciesTargets = 'PlantingSiteSpeciesTargets',
   PlantingSiteSurvivalRate = 'PlantingSiteSurvivalRate',
   PlantingSites = 'PlantingSites',
   ProjectAcceleratorReport = 'ProjectAcceleratorReport',
