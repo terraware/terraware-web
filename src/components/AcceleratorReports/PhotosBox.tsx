@@ -6,7 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { API_PATHS } from 'src/constants';
 import useBoolean from 'src/hooks/useBoolean';
-import { useBatchReportPhotosMutation } from 'src/queries/reports/photos';
+import { useBatchReportPhotosMutation } from 'src/queries/acceleratorReports/photos';
 import strings from 'src/strings';
 import { AcceleratorReportPhoto, NewAcceleratorReportPhoto, isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';

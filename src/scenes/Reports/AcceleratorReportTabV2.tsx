@@ -20,7 +20,7 @@ import { APP_PATHS } from 'src/constants';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/reports';
+import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/acceleratorReports';
 
 export type AcceleratorReportTabV2Props = {
   active?: boolean;

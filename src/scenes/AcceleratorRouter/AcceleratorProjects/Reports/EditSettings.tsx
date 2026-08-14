@@ -17,7 +17,7 @@ import {
   useCreateAcceleratorReportConfigMutation,
   useLazyListAcceleratorReportConfigQuery,
   useUpdateProjectAcceleratorReportConfigMutation,
-} from 'src/queries/generated/reports';
+} from 'src/queries/generated/acceleratorReports';
 import { NewAcceleratorReportConfig } from 'src/types/AcceleratorReport';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';

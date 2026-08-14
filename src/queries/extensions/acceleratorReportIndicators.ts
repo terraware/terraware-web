@@ -1,5 +1,5 @@
-import { api } from '../generated/indicators';
-import { QueryTagTypes } from '../tags';
+import { api } from '../generated/acceleratorReportIndicators';
+import { QueryTagTypes, projectAcceleratorReportTag } from '../tags';
 
 api.enhanceEndpoints({
   endpoints: {
@@ -13,15 +13,13 @@ api.enhanceEndpoints({
     createProjectIndicator: {
       invalidatesTags: (_results, _error, args) => [
         { type: QueryTagTypes.ProjectIndicators, id: 'LIST' },
-        { type: QueryTagTypes.Reports, id: `project-${args.projectId}` },
-        { type: QueryTagTypes.PublishedReports },
+        projectAcceleratorReportTag(args.projectId),
       ],
     },
     updateProjectIndicator: {
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.ProjectIndicators, id: payload.indicatorId },
-        { type: QueryTagTypes.Reports, id: `project-${payload.projectId}` },
-        { type: QueryTagTypes.PublishedReports },
+        projectAcceleratorReportTag(payload.projectId),
       ],
     },
     listCommonIndicators: {
@@ -33,15 +31,13 @@ api.enhanceEndpoints({
     createCommonIndicator: {
       invalidatesTags: () => [
         { type: QueryTagTypes.CommonIndicators, id: 'LIST' },
-        { type: QueryTagTypes.Reports },
-        { type: QueryTagTypes.PublishedReports },
+        { type: QueryTagTypes.AcceleratorReport },
       ],
     },
     updateCommonIndicator: {
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.CommonIndicators, id: payload.indicatorId },
-        { type: QueryTagTypes.Reports },
-        { type: QueryTagTypes.PublishedReports },
+        { type: QueryTagTypes.AcceleratorReport },
       ],
     },
   },

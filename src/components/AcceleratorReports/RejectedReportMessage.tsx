@@ -5,7 +5,7 @@ import { Button, Message } from '@terraware/web-components';
 
 import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers/hooks';
-import { AcceleratorReportPayload } from 'src/queries/generated/reports';
+import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
 
 type RejectedReportMessageProps = {

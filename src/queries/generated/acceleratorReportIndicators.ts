@@ -76,7 +76,7 @@ export type UpdateCommonIndicatorApiArg = {
 export type ExistingProjectIndicatorPayload = {
   active: boolean;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId: 'Cumulative' | 'Level';
+  classId: 'Lifetime Cumulative' | 'Not Cumulative' | 'Yearly Cumulative';
   description?: string;
   frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   id: number;
@@ -102,7 +102,7 @@ export type SimpleSuccessResponsePayload = {
 export type NewIndicatorPayload = {
   active: boolean;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId: 'Cumulative' | 'Level';
+  classId: 'Lifetime Cumulative' | 'Not Cumulative' | 'Yearly Cumulative';
   description?: string;
   frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   isPublishable: boolean;
@@ -131,7 +131,7 @@ export type UpdateProjectIndicatorRequestPayload = {
 export type AutoCalculatedIndicatorPayload = {
   active: boolean;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId: 'Cumulative' | 'Level';
+  classId: 'Lifetime Cumulative' | 'Not Cumulative' | 'Yearly Cumulative';
   description: string;
   frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   indicator:
@@ -157,7 +157,7 @@ export type ListAutoCalculatedIndicatorsResponsePayload = {
 export type ExistingCommonIndicatorPayload = {
   active: boolean;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId: 'Cumulative' | 'Level';
+  classId: 'Lifetime Cumulative' | 'Not Cumulative' | 'Yearly Cumulative';
   description?: string;
   frequency?: 'Annual' | 'Bi-Annual' | 'MRV Cycle' | 'Quarterly';
   id: number;

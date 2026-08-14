@@ -2,6 +2,225 @@ import { baseApi as api } from '../baseApi';
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
+    listAcceleratorReports: build.query<ListAcceleratorReportsApiResponse, ListAcceleratorReportsApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports`,
+        params: {
+          year: queryArg.year,
+          includeArchived: queryArg.includeArchived,
+          includeFuture: queryArg.includeFuture,
+          includeIndicators: queryArg.includeIndicators,
+        },
+      }),
+    }),
+    updateAutoCalculatedIndicatorTarget: build.mutation<
+      UpdateAutoCalculatedIndicatorTargetApiResponse,
+      UpdateAutoCalculatedIndicatorTargetApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/autoCalculatedIndicatorTarget`,
+        method: 'POST',
+        body: queryArg.updateAutoCalculatedIndicatorTargetRequestPayload,
+      }),
+    }),
+    updateAutoCalculatedIndicatorBaselineTarget: build.mutation<
+      UpdateAutoCalculatedIndicatorBaselineTargetApiResponse,
+      UpdateAutoCalculatedIndicatorBaselineTargetApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/autoCalculatedIndicatorTarget/baseline`,
+        method: 'POST',
+        body: queryArg.updateAutoCalculatedIndicatorBaselineTargetRequestPayload,
+      }),
+    }),
+    getAutoCalculatedIndicatorTargets: build.query<
+      GetAutoCalculatedIndicatorTargetsApiResponse,
+      GetAutoCalculatedIndicatorTargetsApiArg
+    >({
+      query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/autoCalculatedIndicatorTargets` }),
+    }),
+    updateCommonIndicatorTarget: build.mutation<
+      UpdateCommonIndicatorTargetApiResponse,
+      UpdateCommonIndicatorTargetApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/commonIndicatorTarget`,
+        method: 'POST',
+        body: queryArg.updateCommonIndicatorTargetRequestPayload,
+      }),
+    }),
+    updateCommonIndicatorBaselineTarget: build.mutation<
+      UpdateCommonIndicatorBaselineTargetApiResponse,
+      UpdateCommonIndicatorBaselineTargetApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/commonIndicatorTarget/baseline`,
+        method: 'POST',
+        body: queryArg.updateCommonIndicatorBaselineTargetRequestPayload,
+      }),
+    }),
+    getCommonIndicatorTargets: build.query<GetCommonIndicatorTargetsApiResponse, GetCommonIndicatorTargetsApiArg>({
+      query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/commonIndicatorTargets` }),
+    }),
+    listAcceleratorReportConfig: build.query<ListAcceleratorReportConfigApiResponse, ListAcceleratorReportConfigApiArg>(
+      {
+        query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/configs` }),
+      }
+    ),
+    updateProjectAcceleratorReportConfig: build.mutation<
+      UpdateProjectAcceleratorReportConfigApiResponse,
+      UpdateProjectAcceleratorReportConfigApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/configs`,
+        method: 'POST',
+        body: queryArg.updateProjectAcceleratorReportConfigRequestPayload,
+      }),
+    }),
+    createAcceleratorReportConfig: build.mutation<
+      CreateAcceleratorReportConfigApiResponse,
+      CreateAcceleratorReportConfigApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/configs`,
+        method: 'PUT',
+        body: queryArg.createAcceleratorReportConfigRequestPayload,
+      }),
+    }),
+    updateAcceleratorReportConfig: build.mutation<
+      UpdateAcceleratorReportConfigApiResponse,
+      UpdateAcceleratorReportConfigApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/configs/${queryArg.configId}`,
+        method: 'POST',
+        body: queryArg.updateAcceleratorReportConfigRequestPayload,
+      }),
+    }),
+    updateProjectIndicatorTarget: build.mutation<
+      UpdateProjectIndicatorTargetApiResponse,
+      UpdateProjectIndicatorTargetApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/projectIndicatorTarget`,
+        method: 'POST',
+        body: queryArg.updateProjectIndicatorTargetRequestPayload,
+      }),
+    }),
+    updateProjectIndicatorBaselineTarget: build.mutation<
+      UpdateProjectIndicatorBaselineTargetApiResponse,
+      UpdateProjectIndicatorBaselineTargetApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/projectIndicatorTarget/baseline`,
+        method: 'POST',
+        body: queryArg.updateProjectIndicatorBaselineTargetRequestPayload,
+      }),
+    }),
+    getProjectIndicatorTargets: build.query<GetProjectIndicatorTargetsApiResponse, GetProjectIndicatorTargetsApiArg>({
+      query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/projectIndicatorTargets` }),
+    }),
+    getAcceleratorReportYears: build.query<GetAcceleratorReportYearsApiResponse, GetAcceleratorReportYearsApiArg>({
+      query: (queryArg) => ({ url: `/api/v1/accelerator/projects/${queryArg}/reports/years` }),
+    }),
+    getAcceleratorReport: build.query<GetAcceleratorReportApiResponse, GetAcceleratorReportApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}`,
+        params: {
+          includeIndicators: queryArg.includeIndicators,
+        },
+      }),
+    }),
+    updateAcceleratorReportValues: build.mutation<
+      UpdateAcceleratorReportValuesApiResponse,
+      UpdateAcceleratorReportValuesApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}`,
+        method: 'POST',
+        body: queryArg.updateAcceleratorReportValuesRequestPayload,
+      }),
+    }),
+    refreshAcceleratorReportAutoCalculatedIndicators: build.mutation<
+      RefreshAcceleratorReportAutoCalculatedIndicatorsApiResponse,
+      RefreshAcceleratorReportAutoCalculatedIndicatorsApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}/indicators/refresh`,
+        method: 'POST',
+        params: {
+          indicators: queryArg.indicators,
+        },
+      }),
+    }),
+    reviewAcceleratorReportIndicators: build.mutation<
+      ReviewAcceleratorReportIndicatorsApiResponse,
+      ReviewAcceleratorReportIndicatorsApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}/indicators/review`,
+        method: 'POST',
+        body: queryArg.reviewAcceleratorReportIndicatorsRequestPayload,
+      }),
+    }),
+    uploadAcceleratorReportPhoto: build.mutation<
+      UploadAcceleratorReportPhotoApiResponse,
+      UploadAcceleratorReportPhotoApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}/photos`,
+        method: 'POST',
+        body: queryArg.body,
+      }),
+    }),
+    deleteAcceleratorReportPhoto: build.mutation<
+      DeleteAcceleratorReportPhotoApiResponse,
+      DeleteAcceleratorReportPhotoApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}/photos/${queryArg.fileId}`,
+        method: 'DELETE',
+        body: queryArg.body,
+      }),
+    }),
+    getAcceleratorReportPhoto: build.query<GetAcceleratorReportPhotoApiResponse, GetAcceleratorReportPhotoApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}/photos/${queryArg.fileId}`,
+        params: {
+          maxWidth: queryArg.maxWidth,
+          maxHeight: queryArg.maxHeight,
+        },
+      }),
+    }),
+    updateAcceleratorReportPhoto: build.mutation<
+      UpdateAcceleratorReportPhotoApiResponse,
+      UpdateAcceleratorReportPhotoApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}/photos/${queryArg.fileId}`,
+        method: 'PUT',
+        body: queryArg.updateAcceleratorReportPhotoRequestPayload,
+      }),
+    }),
+    publishAcceleratorReport: build.mutation<PublishAcceleratorReportApiResponse, PublishAcceleratorReportApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}/publish`,
+        method: 'POST',
+      }),
+    }),
+    reviewAcceleratorReport: build.mutation<ReviewAcceleratorReportApiResponse, ReviewAcceleratorReportApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}/review`,
+        method: 'POST',
+        body: queryArg.reviewAcceleratorReportRequestPayload,
+      }),
+    }),
+    submitAcceleratorReport: build.mutation<SubmitAcceleratorReportApiResponse, SubmitAcceleratorReportApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/accelerator/projects/${queryArg.projectId}/reports/${queryArg.reportId}/submit`,
+        method: 'POST',
+      }),
+    }),
     getOneAcceleratorReport: build.query<GetOneAcceleratorReportApiResponse, GetOneAcceleratorReportApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/accelerator/reports/${queryArg.reportId}`,
@@ -108,6 +327,172 @@ const injectedRtkApi = api.injectEndpoints({
   overrideExisting: false,
 });
 export { injectedRtkApi as api };
+export type ListAcceleratorReportsApiResponse =
+  /** status 200 The requested operation succeeded. */ ListAcceleratorReportsResponsePayload;
+export type ListAcceleratorReportsApiArg = {
+  projectId: number;
+  year?: number;
+  includeArchived?: boolean;
+  includeFuture?: boolean;
+  includeIndicators?: boolean;
+};
+export type UpdateAutoCalculatedIndicatorTargetApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateAutoCalculatedIndicatorTargetApiArg = {
+  projectId: number;
+  updateAutoCalculatedIndicatorTargetRequestPayload: UpdateAutoCalculatedIndicatorTargetRequestPayload;
+};
+export type UpdateAutoCalculatedIndicatorBaselineTargetApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateAutoCalculatedIndicatorBaselineTargetApiArg = {
+  projectId: number;
+  updateAutoCalculatedIndicatorBaselineTargetRequestPayload: UpdateAutoCalculatedIndicatorBaselineTargetRequestPayload;
+};
+export type GetAutoCalculatedIndicatorTargetsApiResponse =
+  /** status 200 The requested operation succeeded. */ GetAutoCalculatedIndicatorTargetsResponsePayload;
+export type GetAutoCalculatedIndicatorTargetsApiArg = number;
+export type UpdateCommonIndicatorTargetApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateCommonIndicatorTargetApiArg = {
+  projectId: number;
+  updateCommonIndicatorTargetRequestPayload: UpdateCommonIndicatorTargetRequestPayload;
+};
+export type UpdateCommonIndicatorBaselineTargetApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateCommonIndicatorBaselineTargetApiArg = {
+  projectId: number;
+  updateCommonIndicatorBaselineTargetRequestPayload: UpdateCommonIndicatorBaselineTargetRequestPayload;
+};
+export type GetCommonIndicatorTargetsApiResponse =
+  /** status 200 The requested operation succeeded. */ GetCommonIndicatorTargetsResponsePayload;
+export type GetCommonIndicatorTargetsApiArg = number;
+export type ListAcceleratorReportConfigApiResponse =
+  /** status 200 The requested operation succeeded. */ ListAcceleratorReportConfigResponsePayload;
+export type ListAcceleratorReportConfigApiArg = number;
+export type UpdateProjectAcceleratorReportConfigApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateProjectAcceleratorReportConfigApiArg = {
+  projectId: number;
+  updateProjectAcceleratorReportConfigRequestPayload: UpdateProjectAcceleratorReportConfigRequestPayload;
+};
+export type CreateAcceleratorReportConfigApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type CreateAcceleratorReportConfigApiArg = {
+  projectId: number;
+  createAcceleratorReportConfigRequestPayload: CreateAcceleratorReportConfigRequestPayload;
+};
+export type UpdateAcceleratorReportConfigApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateAcceleratorReportConfigApiArg = {
+  projectId: number;
+  configId: number;
+  updateAcceleratorReportConfigRequestPayload: UpdateAcceleratorReportConfigRequestPayload;
+};
+export type UpdateProjectIndicatorTargetApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateProjectIndicatorTargetApiArg = {
+  projectId: number;
+  updateProjectIndicatorTargetRequestPayload: UpdateProjectIndicatorTargetRequestPayload;
+};
+export type UpdateProjectIndicatorBaselineTargetApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateProjectIndicatorBaselineTargetApiArg = {
+  projectId: number;
+  updateProjectIndicatorBaselineTargetRequestPayload: UpdateProjectIndicatorBaselineTargetRequestPayload;
+};
+export type GetProjectIndicatorTargetsApiResponse =
+  /** status 200 The requested operation succeeded. */ GetProjectIndicatorTargetsResponsePayload;
+export type GetProjectIndicatorTargetsApiArg = number;
+export type GetAcceleratorReportYearsApiResponse =
+  /** status 200 The requested operation succeeded. */ GetAcceleratorReportYearsResponsePayload;
+export type GetAcceleratorReportYearsApiArg = number;
+export type GetAcceleratorReportApiResponse =
+  /** status 200 The requested operation succeeded. */ GetAcceleratorReportResponsePayload;
+export type GetAcceleratorReportApiArg = {
+  projectId: number;
+  reportId: number;
+  includeIndicators?: boolean;
+};
+export type UpdateAcceleratorReportValuesApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type UpdateAcceleratorReportValuesApiArg = {
+  projectId: number;
+  reportId: number;
+  updateAcceleratorReportValuesRequestPayload: UpdateAcceleratorReportValuesRequestPayload;
+};
+export type RefreshAcceleratorReportAutoCalculatedIndicatorsApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type RefreshAcceleratorReportAutoCalculatedIndicatorsApiArg = {
+  projectId: number;
+  reportId: number;
+  indicators: (
+    | 'Seeds Collected'
+    | 'Seedlings'
+    | 'Trees Planted'
+    | 'Species Planted'
+    | 'Hectares Planted'
+    | 'Survival Rate'
+  )[];
+};
+export type ReviewAcceleratorReportIndicatorsApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type ReviewAcceleratorReportIndicatorsApiArg = {
+  projectId: number;
+  reportId: number;
+  reviewAcceleratorReportIndicatorsRequestPayload: ReviewAcceleratorReportIndicatorsRequestPayload;
+};
+export type UploadAcceleratorReportPhotoApiResponse = /** status 200 OK */ UploadAcceleratorReportPhotoResponsePayload;
+export type UploadAcceleratorReportPhotoApiArg = {
+  projectId: number;
+  reportId: number;
+  body: {
+    caption?: string;
+    file: Blob;
+  };
+};
+export type DeleteAcceleratorReportPhotoApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
+export type DeleteAcceleratorReportPhotoApiArg = {
+  projectId: number;
+  reportId: number;
+  fileId: number;
+  body: Blob;
+};
+export type GetAcceleratorReportPhotoApiResponse = /** status 200 The photo was successfully retrieved. */ Blob;
+export type GetAcceleratorReportPhotoApiArg = {
+  projectId: number;
+  reportId: number;
+  fileId: number;
+  /** Maximum desired width in pixels. If neither this nor maxHeight is specified, the full-sized original image will be returned. If this is specified, an image no wider than this will be returned. The image may be narrower than this value if needed to preserve the aspect ratio of the original. */
+  maxWidth?: number;
+  /** Maximum desired height in pixels. If neither this nor maxWidth is specified, the full-sized original image will be returned. If this is specified, an image no taller than this will be returned. The image may be shorter than this value if needed to preserve the aspect ratio of the original. */
+  maxHeight?: number;
+};
+export type UpdateAcceleratorReportPhotoApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
+export type UpdateAcceleratorReportPhotoApiArg = {
+  projectId: number;
+  reportId: number;
+  fileId: number;
+  updateAcceleratorReportPhotoRequestPayload: UpdateAcceleratorReportPhotoRequestPayload;
+};
+export type PublishAcceleratorReportApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type PublishAcceleratorReportApiArg = {
+  projectId: number;
+  reportId: number;
+};
+export type ReviewAcceleratorReportApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type ReviewAcceleratorReportApiArg = {
+  projectId: number;
+  reportId: number;
+  reviewAcceleratorReportRequestPayload: ReviewAcceleratorReportRequestPayload;
+};
+export type SubmitAcceleratorReportApiResponse =
+  /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
+export type SubmitAcceleratorReportApiArg = {
+  projectId: number;
+  reportId: number;
+};
 export type GetOneAcceleratorReportApiResponse =
   /** status 200 The requested operation succeeded. */ GetAcceleratorReportResponsePayload;
 export type GetOneAcceleratorReportApiArg = {
@@ -188,7 +573,7 @@ export type CumulativeIndicatorProgressPayload = {
 export type ReportAutoCalculatedIndicatorPayload = {
   baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId: 'Cumulative' | 'Level';
+  classId: 'Lifetime Cumulative' | 'Not Cumulative' | 'Yearly Cumulative';
   /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
   currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
@@ -223,7 +608,7 @@ export type ReportChallengePayload = {
 export type ReportCommonIndicatorPayload = {
   baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId: 'Cumulative' | 'Level';
+  classId: 'Lifetime Cumulative' | 'Not Cumulative' | 'Yearly Cumulative';
   /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
   currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
@@ -255,7 +640,7 @@ export type ReportPhotoPayload = {
 export type ReportProjectIndicatorPayload = {
   baseline?: number;
   category: 'Project Objectives' | 'Climate' | 'Community' | 'Biodiversity';
-  classId: 'Cumulative' | 'Level';
+  classId: 'Lifetime Cumulative' | 'Not Cumulative' | 'Yearly Cumulative';
   /** If the indicator is cumulative, the list of actual values for all quarters in the report's year */
   currentYearProgress?: CumulativeIndicatorProgressPayload[];
   description?: string;
@@ -313,8 +698,8 @@ export type AcceleratorReportPayload = {
   )[];
 };
 export type SuccessOrError = 'ok' | 'error';
-export type GetAcceleratorReportResponsePayload = {
-  report: AcceleratorReportPayload;
+export type ListAcceleratorReportsResponsePayload = {
+  reports: AcceleratorReportPayload[];
   status: SuccessOrError;
 };
 export type SimpleSuccessResponsePayload = {
@@ -325,6 +710,130 @@ export type ErrorDetails = {
 };
 export type SimpleErrorResponsePayload = {
   error: ErrorDetails;
+  status: SuccessOrError;
+};
+export type UpdateAutoCalculatedIndicatorTargetRequestPayload = {
+  indicator:
+    | 'Seeds Collected'
+    | 'Seedlings'
+    | 'Trees Planted'
+    | 'Species Planted'
+    | 'Hectares Planted'
+    | 'Survival Rate';
+  target?: number;
+  year: number;
+};
+export type UpdateAutoCalculatedIndicatorBaselineTargetRequestPayload = {
+  baseline?: number;
+  endOfProjectTarget?: number;
+  indicator:
+    | 'Seeds Collected'
+    | 'Seedlings'
+    | 'Trees Planted'
+    | 'Species Planted'
+    | 'Hectares Planted'
+    | 'Survival Rate';
+};
+export type YearlyIndicatorTargetPayload = {
+  target?: number;
+  year: number;
+};
+export type AutoCalculatedIndicatorTargetsPayload = {
+  baseline?: number;
+  endOfProjectTarget?: number;
+  indicatorId:
+    | 'Seeds Collected'
+    | 'Seedlings'
+    | 'Trees Planted'
+    | 'Species Planted'
+    | 'Hectares Planted'
+    | 'Survival Rate';
+  yearlyTargets: YearlyIndicatorTargetPayload[];
+};
+export type GetAutoCalculatedIndicatorTargetsResponsePayload = {
+  status: SuccessOrError;
+  targets: AutoCalculatedIndicatorTargetsPayload[];
+};
+export type UpdateCommonIndicatorTargetRequestPayload = {
+  indicatorId: number;
+  target?: number;
+  year: number;
+};
+export type UpdateCommonIndicatorBaselineTargetRequestPayload = {
+  baseline?: number;
+  endOfProjectTarget?: number;
+  indicatorId: number;
+};
+export type CommonIndicatorTargetsPayload = {
+  baseline?: number;
+  endOfProjectTarget?: number;
+  indicatorId: number;
+  yearlyTargets: YearlyIndicatorTargetPayload[];
+};
+export type GetCommonIndicatorTargetsResponsePayload = {
+  status: SuccessOrError;
+  targets: CommonIndicatorTargetsPayload[];
+};
+export type ExistingAcceleratorReportConfigPayload = {
+  configId: number;
+  logframeUrl?: string;
+  projectId: number;
+  reportingEndDate: string;
+  reportingStartDate: string;
+};
+export type ListAcceleratorReportConfigResponsePayload = {
+  configs: ExistingAcceleratorReportConfigPayload[];
+  status: SuccessOrError;
+};
+export type UpdateAcceleratorReportConfigPayload = {
+  logframeUrl?: string;
+  reportingEndDate: string;
+  reportingStartDate: string;
+};
+export type UpdateProjectAcceleratorReportConfigRequestPayload = {
+  config: UpdateAcceleratorReportConfigPayload;
+};
+export type NewAcceleratorReportConfigPayload = {
+  logframeUrl?: string;
+  reportingEndDate: string;
+  reportingStartDate: string;
+};
+export type CreateAcceleratorReportConfigRequestPayload = {
+  config: NewAcceleratorReportConfigPayload;
+};
+export type UpdateAcceleratorReportConfigRequestPayload = {
+  config: UpdateAcceleratorReportConfigPayload;
+};
+export type UpdateProjectIndicatorTargetRequestPayload = {
+  indicatorId: number;
+  target?: number;
+  year: number;
+};
+export type UpdateProjectIndicatorBaselineTargetRequestPayload = {
+  baseline?: number;
+  endOfProjectTarget?: number;
+  indicatorId: number;
+};
+export type ProjectIndicatorTargetsPayload = {
+  baseline?: number;
+  endOfProjectTarget?: number;
+  indicatorId: number;
+  yearlyTargets: YearlyIndicatorTargetPayload[];
+};
+export type GetProjectIndicatorTargetsResponsePayload = {
+  status: SuccessOrError;
+  targets: ProjectIndicatorTargetsPayload[];
+};
+export type ReportYearsPayload = {
+  endYear: number;
+  startYear: number;
+};
+export type GetAcceleratorReportYearsResponsePayload = {
+  status: SuccessOrError;
+  years?: ReportYearsPayload;
+};
+export type GetAcceleratorReportResponsePayload = {
+  report: AcceleratorReportPayload;
   status: SuccessOrError;
 };
 export type ReportAutoCalculatedIndicatorEntriesPayload = {
@@ -394,6 +903,40 @@ export type ReviewAcceleratorReportRequestPayload = {
   review: ReportReviewPayload;
 };
 export const {
+  useListAcceleratorReportsQuery,
+  useLazyListAcceleratorReportsQuery,
+  useUpdateAutoCalculatedIndicatorTargetMutation,
+  useUpdateAutoCalculatedIndicatorBaselineTargetMutation,
+  useGetAutoCalculatedIndicatorTargetsQuery,
+  useLazyGetAutoCalculatedIndicatorTargetsQuery,
+  useUpdateCommonIndicatorTargetMutation,
+  useUpdateCommonIndicatorBaselineTargetMutation,
+  useGetCommonIndicatorTargetsQuery,
+  useLazyGetCommonIndicatorTargetsQuery,
+  useListAcceleratorReportConfigQuery,
+  useLazyListAcceleratorReportConfigQuery,
+  useUpdateProjectAcceleratorReportConfigMutation,
+  useCreateAcceleratorReportConfigMutation,
+  useUpdateAcceleratorReportConfigMutation,
+  useUpdateProjectIndicatorTargetMutation,
+  useUpdateProjectIndicatorBaselineTargetMutation,
+  useGetProjectIndicatorTargetsQuery,
+  useLazyGetProjectIndicatorTargetsQuery,
+  useGetAcceleratorReportYearsQuery,
+  useLazyGetAcceleratorReportYearsQuery,
+  useGetAcceleratorReportQuery,
+  useLazyGetAcceleratorReportQuery,
+  useUpdateAcceleratorReportValuesMutation,
+  useRefreshAcceleratorReportAutoCalculatedIndicatorsMutation,
+  useReviewAcceleratorReportIndicatorsMutation,
+  useUploadAcceleratorReportPhotoMutation,
+  useDeleteAcceleratorReportPhotoMutation,
+  useGetAcceleratorReportPhotoQuery,
+  useLazyGetAcceleratorReportPhotoQuery,
+  useUpdateAcceleratorReportPhotoMutation,
+  usePublishAcceleratorReportMutation,
+  useReviewAcceleratorReportMutation,
+  useSubmitAcceleratorReportMutation,
   useGetOneAcceleratorReportQuery,
   useLazyGetOneAcceleratorReportQuery,
   useUpdateOneAcceleratorReportValuesMutation,

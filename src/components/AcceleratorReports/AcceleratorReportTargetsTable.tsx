@@ -5,15 +5,16 @@ import { useTheme } from '@mui/material';
 import { Badge, EditableTable, EditableTableColumn } from '@terraware/web-components';
 import { MRT_Cell } from 'material-react-table';
 
+import { IndicatorClass, indicatorClassLabel } from 'src/components/AcceleratorReports/utils';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
-import { useOrganization, useUser } from 'src/providers';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import {
   AutoCalculatedIndicatorPayload,
   useLazyListProjectIndicatorsQuery,
   useListAutoCalculatedIndicatorsQuery,
   useListCommonIndicatorsQuery,
-} from 'src/queries/generated/indicators';
+} from 'src/queries/generated/acceleratorReportIndicators';
 import {
   useLazyGetAcceleratorReportYearsQuery,
   useLazyGetAutoCalculatedIndicatorTargetsQuery,
@@ -25,8 +26,7 @@ import {
   useUpdateCommonIndicatorTargetMutation,
   useUpdateProjectIndicatorBaselineTargetMutation,
   useUpdateProjectIndicatorTargetMutation,
-} from 'src/queries/generated/reports';
-import strings from 'src/strings';
+} from 'src/queries/generated/acceleratorReports';
 import { formatPrecision } from 'src/utils/numbers';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -40,7 +40,7 @@ export type RowMetric = {
   baseline?: number;
   endOfProjectTarget?: number;
   indicatorSystemName?: string;
-  classId?: string;
+  classId?: IndicatorClass;
   notes?: string;
   precision: number;
   [key: string]: string | number | undefined;
@@ -50,6 +50,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { currentAcceleratorProject } = useParticipantData();
   const { isAllowed } = useUser();
+  const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = isAcceleratorRoute ? Number(pathParams.projectId) : currentAcceleratorProject?.id;
@@ -263,6 +264,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     [
       projectId,
       snackbar,
+      strings,
       updateAutoCalculatedIndicatorTarget,
       updateCommonIndicatorTarget,
       updateProjectIndicatorTarget,
@@ -324,6 +326,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     [
       projectId,
       snackbar,
+      strings,
       updateAutoCalculatedIndicatorBaselineTarget,
       updateCommonIndicatorBaselineTarget,
       updateProjectIndicatorBaselineTarget,
@@ -385,6 +388,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     [
       projectId,
       snackbar,
+      strings,
       updateAutoCalculatedIndicatorBaselineTarget,
       updateCommonIndicatorBaselineTarget,
       updateProjectIndicatorBaselineTarget,
@@ -409,13 +413,12 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     [theme]
   );
 
-  const ClassIdCell = useCallback(({ cell }: { cell: MRT_Cell<RowMetric> }) => {
-    const classId = cell.getValue<string | undefined>();
-    if (!classId) {
-      return null;
-    }
-    return <>{classId === 'Cumulative' ? strings.CUMULATIVE : strings.LEVEL}</>;
-  }, []);
+  const ClassIdCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<RowMetric> }) => (
+      <>{indicatorClassLabel(cell.getValue<IndicatorClass | undefined>(), strings)}</>
+    ),
+    [strings]
+  );
 
   const NumericCell = useCallback(({ cell }: { cell: MRT_Cell<RowMetric> }) => {
     const raw = cell.getValue<number | string | undefined>();
@@ -480,7 +483,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       },
       {
         id: 'cumulativeOrLevel',
-        header: strings.CUMULATIVE_OR_LEVEL,
+        header: strings.IS_CUMULATIVE,
         accessorKey: 'classId' as keyof RowMetric,
         enableEditing: false,
         Cell: ClassIdCell,
@@ -506,6 +509,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
 
     return [...baseColumns, ...yearColumns, ...lastColumns];
   }, [
+    strings,
     yearRange,
     isAllowedUpdateReportsTargets,
     onSaveYearTarget,

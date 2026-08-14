@@ -7,6 +7,7 @@ import EmptyFieldPlaceholder from 'src/components/AcceleratorReports/EmptyFieldP
 import LifetimeProgressBar from 'src/components/AcceleratorReports/LifetimeProgressBar';
 import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import ResetIndicatorModal from 'src/components/AcceleratorReports/ResetIndicatorModal';
+import { IndicatorClass, indicatorClassLabel } from 'src/components/AcceleratorReports/utils';
 import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
 import { IndicatorType, MetricStatus } from 'src/types/AcceleratorReport';
@@ -25,7 +26,7 @@ export type ProgressIndicator = {
   overrideValue?: number;
   systemValue?: number;
   type?: IndicatorType;
-  classId: 'Cumulative' | 'Level';
+  classId: IndicatorClass;
   endOfProjectTarget?: number;
   description?: string;
   currentYearProgress?: { quarter: string; value: number }[];
@@ -65,12 +66,17 @@ const IndicatorProgressRow = ({
   const [resetModalOpened, setResetModalOpened] = useState(false);
   const [overwriting, setOverwriting] = useState(false);
 
-  const isCumulative = indicator.classId === 'Cumulative';
+  // both cumulative classes accumulate the year's quarters; only the lifetime one reaches back past
+  // the start of the year
+  const isLifetime = indicator.classId === 'Lifetime Cumulative';
+  const isYearly = indicator.classId === 'Yearly Cumulative';
+  const isCumulative = isLifetime || isYearly;
   const isAutoCalculated = indicator.type === 'autoCalculated';
   const precision = indicator.precision ?? 0;
   const baselineValue = indicator.baseline ?? 0;
 
-  const startingTotal = indicator.previousYearCumulativeTotal ?? baselineValue;
+  // a yearly indicator restarts at zero each year, so it carries neither the baseline nor a prior total
+  const startingTotal = isLifetime ? indicator.previousYearCumulativeTotal ?? baselineValue : 0;
 
   const startingTotalLabel =
     indicator.previousYearCumulativeTotal !== undefined && year !== undefined ? String(year - 1) : strings.BASELINE;
@@ -98,8 +104,14 @@ const IndicatorProgressRow = ({
       return enteredValue;
     }
 
+    // with no quarterly breakdown a yearly indicator has nothing to accumulate, and its zero starting
+    // total would otherwise report no progress at all
+    if (isYearly && currentYearProgress.length === 0) {
+      return enteredValue;
+    }
+
     return currentYearProgress.reduce((total, progress) => total + progress.value, startingTotal);
-  }, [currentYearProgress, enteredValue, isCumulative, startingTotal]);
+  }, [currentYearProgress, enteredValue, isCumulative, isYearly, startingTotal]);
 
   const quarterlyValue = useMemo(
     () => (isCumulative ? currentYearProgress.find((progress) => progress.quarter === quarter)?.value : undefined),
@@ -108,7 +120,7 @@ const IndicatorProgressRow = ({
 
   // Caps the target mark at the halfway line for visibility
   const { segments, targetPercent } = useMemo(() => {
-    const barMin = isCumulative ? startingTotal : 0;
+    const barMin = startingTotal;
     const total = cumulativeValue ?? 0;
     const target = indicator.target;
     const barMax = Math.max(total, target ?? 0, barMin);
@@ -177,14 +189,16 @@ const IndicatorProgressRow = ({
       return undefined;
     }
 
-    const denominator = target - baselineValue;
+    // a yearly target measures the year's progress alone, so the project baseline is not on its scale
+    const origin = isYearly ? 0 : baselineValue;
+    const denominator = target - origin;
 
     if (denominator <= 0) {
       return undefined;
     }
 
-    return Math.round((((cumulativeValue ?? 0) - baselineValue) / denominator) * 100);
-  }, [baselineValue, cumulativeValue, indicator.target]);
+    return Math.round((((cumulativeValue ?? 0) - origin) / denominator) * 100);
+  }, [baselineValue, cumulativeValue, indicator.target, isYearly]);
 
   const statusOptions = useMemo<DropdownItem[]>(
     () => [
@@ -248,7 +262,7 @@ const IndicatorProgressRow = ({
             <Badge
               backgroundColor={theme.palette.TwClrBgSecondary}
               borderColor={theme.palette.TwClrBaseGray300}
-              label={isCumulative ? strings.CUMULATIVE : strings.LEVEL}
+              label={indicatorClassLabel(indicator.classId, strings)}
               labelColor={theme.palette.TwClrTxtSecondary}
             />
 
@@ -304,7 +318,7 @@ const IndicatorProgressRow = ({
             >
               {indicator.target !== undefined && (
                 <>
-                  {`${isCumulative ? strings.CUMULATIVE_TARGET : strings.TARGET} `}
+                  {`${isLifetime ? strings.CUMULATIVE_TARGET : strings.TARGET} `}
                   <Typography component='span' fontSize='14px' fontWeight={600}>
                     {formatPrecision(indicator.target, precision)}
                   </Typography>
@@ -360,7 +374,7 @@ const IndicatorProgressRow = ({
                 </Tooltip>
               ))}
 
-              {isCumulative && (
+              {isLifetime && (
                 <Tooltip title={startingTotalLabel}>
                   <Box
                     sx={{
@@ -396,7 +410,7 @@ const IndicatorProgressRow = ({
           {targetPercentComplete !== undefined && (
             <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' marginTop={theme.spacing(1)}>
               {strings.formatString(
-                isCumulative ? strings.X_OF_YEAR_CUMULATIVE_TARGET : strings.X_OF_YEAR_TARGET,
+                isLifetime ? strings.X_OF_YEAR_CUMULATIVE_TARGET : strings.X_OF_YEAR_TARGET,
                 <Typography component='span' color={statusColor} fontSize='14px' fontWeight={600} key='percent'>
                   {`${targetPercentComplete}%`}
                 </Typography>
@@ -404,7 +418,7 @@ const IndicatorProgressRow = ({
             </Typography>
           )}
 
-          {isCumulative && (
+          {isLifetime && (
             <LifetimeProgressBar
               baseline={indicator.baseline}
               currentProgress={cumulativeValue ?? 0}

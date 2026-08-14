@@ -56,6 +56,9 @@ import { SpeciesSearchResultRow } from './types';
 
 const TABLE_STATE_STORAGE_KEY = 'species-list-table';
 
+const nativityOf = (element?: SpeciesProjectElement): Nativity | undefined =>
+  element?.overriddenNativity ?? element?.calculatedNativity;
+
 type ProblemsCellProps = {
   row: SpeciesSearchResultRow;
   reloadData: () => Promise<void>;
@@ -136,6 +139,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const speciesCheckEnabled = speciesIntelligenceEnabled;
   const hasMultipleProjects = (availableProjects?.length ?? 0) > 1;
+  const orgScopeKnown = availableProjects !== undefined && availableProjects.length <= 1;
   const { isMobile } = useDeviceInfo();
 
   const [speciesCheckOpen, setSpeciesCheckOpen] = useState(false);
@@ -166,40 +170,51 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
           return false;
         }
         const orgElement = (sp.projects ?? []).find((e) => e.projectId === undefined);
-        return !orgElement || (!orgElement.calculatedNativity && !orgElement.overriddenNativity);
+        if (nativityOf(orgElement)) {
+          return false;
+        }
+        if (orgElement?.pendingNativity) {
+          return true;
+        }
+        if (orgScopeKnown) {
+          return !(sp.projects ?? []).some((element) => nativityOf(element));
+        }
+        return true;
       }),
-    [species, availableProjects, hasMultipleProjects, orgLocationSet]
+    [species, availableProjects, hasMultipleProjects, orgLocationSet, orgScopeKnown]
   );
 
   const showFirstTimeBanner = speciesCheckEnabled && noLocationSet && !firstTimeBannerDismissed;
   const showAddedBanner = speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !addedBannerDismissed;
 
-  const statusScopeProjectId = hasMultipleProjects ? projectFilter.projectId : undefined;
   const statusScopeSelected = !hasMultipleProjects || projectFilter.projectId !== undefined;
-  const matchesStatusScope = useCallback(
-    (element: SpeciesProjectElement) =>
-      statusScopeProjectId === undefined ? element.projectId === undefined : element.projectId === statusScopeProjectId,
-    [statusScopeProjectId]
+  const resolveScopeNativity = useCallback(
+    (sp: Species): Nativity | undefined => {
+      const elements = sp.projects ?? [];
+      if (hasMultipleProjects) {
+        return nativityOf(elements.find((element) => element.projectId === projectFilter.projectId));
+      }
+      const orgNativity = nativityOf(elements.find((element) => element.projectId === undefined));
+      if (orgNativity) {
+        return orgNativity;
+      }
+      return orgScopeKnown ? nativityOf(elements.find((element) => nativityOf(element))) : undefined;
+    },
+    [hasMultipleProjects, projectFilter.projectId, orgScopeKnown]
   );
 
-  const speciesCheckRan =
-    statusScopeSelected &&
-    species.some((sp) => {
-      const element = (sp.projects ?? []).find(matchesStatusScope);
-      return !!(element?.calculatedNativity || element?.overriddenNativity);
-    });
+  const speciesCheckRan = statusScopeSelected && species.some((sp) => !!resolveScopeNativity(sp));
   const showStatusColumn = speciesCheckEnabled && speciesCheckRan;
 
   const statusBySpeciesId = useMemo(() => {
     const map = new Map<number, Nativity | undefined>();
     if (showStatusColumn) {
       species.forEach((sp) => {
-        const element = (sp.projects ?? []).find(matchesStatusScope);
-        map.set(sp.id, element?.overriddenNativity ?? element?.calculatedNativity);
+        map.set(sp.id, resolveScopeNativity(sp));
       });
     }
     return map;
-  }, [species, matchesStatusScope, showStatusColumn]);
+  }, [showStatusColumn, species, resolveScopeNativity]);
 
   const {
     columnOrder,

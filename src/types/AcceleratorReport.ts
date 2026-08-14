@@ -1,26 +1,35 @@
-import { components } from 'src/api/types/generated-schema';
+import {
+  AcceleratorReportPayload,
+  CreateAcceleratorReportConfigRequestPayload,
+  ExistingAcceleratorReportConfigPayload,
+  NewAcceleratorReportConfigPayload,
+  ReportChallengePayload,
+  ReportPhotoPayload,
+  ReportReviewPayload,
+  UpdateAcceleratorReportConfigPayload,
+  UpdateAcceleratorReportConfigRequestPayload,
+  UpdateAcceleratorReportValuesRequestPayload,
+} from 'src/queries/generated/acceleratorReports';
+import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 
-export type UpdateAcceleratorReportRequest = components['schemas']['UpdateAcceleratorReportValuesRequestPayload'];
+export type {
+  CreateAcceleratorReportConfigRequestPayload,
+  ReportReviewPayload,
+  UpdateAcceleratorReportConfigPayload,
+  UpdateAcceleratorReportConfigRequestPayload,
+};
 
-export type ExistingAcceleratorReportConfig = components['schemas']['ExistingAcceleratorReportConfigPayload'];
+export type UpdateAcceleratorReportRequest = UpdateAcceleratorReportValuesRequestPayload;
 
-export type NewAcceleratorReportConfig = components['schemas']['NewAcceleratorReportConfigPayload'];
+export type ExistingAcceleratorReportConfig = ExistingAcceleratorReportConfigPayload;
 
-export type CreateAcceleratorReportConfigRequestPayload =
-  components['schemas']['CreateAcceleratorReportConfigRequestPayload'];
-
-export type UpdateAcceleratorReportConfigRequestPayload =
-  components['schemas']['UpdateAcceleratorReportConfigRequestPayload'];
-
-export type UpdateAcceleratorReportConfigPayload = components['schemas']['UpdateAcceleratorReportConfigPayload'];
+export type NewAcceleratorReportConfig = NewAcceleratorReportConfigPayload;
 
 export type CreateAcceleratorReportConfigRequest = CreateAcceleratorReportConfigRequestPayload & { projectId: string };
 
 export type UpdateAcceleratorReportConfigRequest = UpdateAcceleratorReportConfigRequestPayload & {
   projectId: string;
 };
-
-export type ReportReviewPayload = components['schemas']['ReportReviewPayload'];
 
 export type ReviewAcceleratorReportRequest = {
   review: ReportReviewPayload;
@@ -33,9 +42,9 @@ export type PublishAcceleratorReportRequest = {
   reportId: number;
 };
 
-export type AcceleratorReport = components['schemas']['AcceleratorReportPayload'];
+export type AcceleratorReport = AcceleratorReportPayload;
 
-export type AcceleratorReportStatus = components['schemas']['AcceleratorReportPayload']['status'];
+export type AcceleratorReportStatus = AcceleratorReportPayload['status'];
 export const AcceleratorReportStatuses: AcceleratorReportStatus[] = [
   'Not Submitted',
   'Submitted',
@@ -46,17 +55,17 @@ export const AcceleratorReportStatuses: AcceleratorReportStatus[] = [
 
 export type IndicatorType = 'autoCalculated' | 'common' | 'project';
 
-export type ChallengeMitigation = components['schemas']['ReportChallengePayload'];
+export type ChallengeMitigation = ReportChallengePayload;
 
 export type MetricStatus = 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
 
-export type PublishedReport = components['schemas']['PublishedReportPayload'];
+export type PublishedReport = PublishedReportPayload;
 
 export const isAcceleratorReport = (report: any): report is AcceleratorReport => {
   return report && 'id' in report && 'status' in report;
 };
 
-export type AcceleratorReportPhoto = components['schemas']['ReportPhotoPayload'];
+export type AcceleratorReportPhoto = ReportPhotoPayload;
 
 export type NewAcceleratorReportPhoto = {
   file: File;

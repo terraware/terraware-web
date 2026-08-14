@@ -19,10 +19,10 @@ import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import {
+  AcceleratorReportPayload,
   useReviewOneAcceleratorReportIndicatorsMutation,
   useReviewOneAcceleratorReportMutation,
 } from 'src/queries/generated/acceleratorReports';
-import { AcceleratorReportPayload } from 'src/queries/generated/reports';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';

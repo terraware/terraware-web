@@ -1,14 +1,32 @@
 import {
+  AcceleratorReportPayload,
+  ReportCommonIndicatorPayload,
   ReportReviewPayload,
   ReviewAcceleratorReportIndicatorsRequestPayload,
+  UpdateAcceleratorReportValuesRequestPayload,
 } from 'src/queries/generated/acceleratorReports';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
-import { AcceleratorReportPayload, UpdateAcceleratorReportValuesRequestPayload } from 'src/queries/generated/reports';
+import { ILocalizedStrings } from 'src/strings';
 import { MetricStatus } from 'src/types/AcceleratorReport';
 
 export const getReportName = (report: AcceleratorReportPayload | PublishedReportPayload) => {
   const year = report.startDate?.split('-')[0];
   return report.quarter ? `${year}-${report.quarter}` : year;
+};
+
+export type IndicatorClass = ReportCommonIndicatorPayload['classId'];
+
+export const indicatorClassLabel = (classId: IndicatorClass | undefined, strings: ILocalizedStrings): string => {
+  switch (classId) {
+    case 'Lifetime Cumulative':
+      return strings.LIFETIME_CUMULATIVE;
+    case 'Yearly Cumulative':
+      return strings.YEARLY_CUMULATIVE;
+    case 'Not Cumulative':
+      return strings.NOT_CUMULATIVE;
+    default:
+      return '';
+  }
 };
 
 // the editor keeps a blank row so a fresh list is typeable; it should not be saved

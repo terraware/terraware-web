@@ -7,7 +7,7 @@ import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSu
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import { ProgressIndicator } from 'src/components/AcceleratorReports/IndicatorProgressRow';
 import { IndicatorProgressSectionContent } from 'src/components/AcceleratorReports/IndicatorProgressSection';
-import { AcceleratorReportPayload } from 'src/queries/generated/reports';
+import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 
 const INDICATOR_FIELDS: Record<string, keyof AcceleratorReportPayload> = {
   autoCalculated: 'autoCalculatedIndicators',

@@ -1,5 +1,5 @@
+import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
-import { AcceleratorReportPayload } from 'src/queries/generated/reports';
 
 export type ReportBoxProps = {
   report?: AcceleratorReportPayload | PublishedReportPayload;

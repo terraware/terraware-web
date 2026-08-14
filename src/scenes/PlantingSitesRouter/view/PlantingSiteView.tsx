@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, useTheme } from '@mui/material';
@@ -6,14 +6,11 @@ import { BusySpinner } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
-import { View } from 'src/components/common/ListMapSelector';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 
 import DeletePlantingSiteModal from '../edit/DeletePlantingSiteModal';
-import BoundariesAndStrata from './BoundariesAndStrata';
 import PlantingSiteDetailsCard from './PlantingSiteDetailsCard';
 import PlantingSiteDetailsHeader from './PlantingSiteDetailsHeader';
 import PlantingSiteMapV2 from './PlantingSiteMapV2';
@@ -23,8 +20,6 @@ export default function PlantingSiteView(): JSX.Element {
   const theme = useTheme();
   const navigate = useSyncNavigate();
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
-  const [search, setSearch] = useState<string>('');
-  const [view, setView] = useState<View>('map');
 
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
@@ -38,11 +33,6 @@ export default function PlantingSiteView(): JSX.Element {
     }
   }, [plantingSite, navigate]);
 
-  const isMapView = useMemo<boolean>(
-    () => view === 'map' || (plantingSite?.boundary !== undefined && plantingSite?.strata === undefined),
-    [plantingSite?.boundary, plantingSite?.strata, view]
-  );
-
   const openModal = useCallback(() => setDeleteModalOpen(true), []);
   const closeModal = useCallback(() => setDeleteModalOpen(false), []);
 
@@ -55,7 +45,7 @@ export default function PlantingSiteView(): JSX.Element {
       {deleteModalOpen && plantingSite && (
         <DeletePlantingSiteModal plantingSiteId={plantingSite.id} onClose={closeModal} />
       )}
-      <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: isMapView ? 1 : 0 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <PlantingSiteDetailsHeader onEdit={goToEditPlantingSite} onDelete={openModal} plantingSite={plantingSite} />
         <Grid item xs={12}>
           <PageSnackbar />
@@ -70,13 +60,7 @@ export default function PlantingSiteView(): JSX.Element {
           }}
         >
           <PlantingSiteDetailsCard plantingSite={plantingSite} />
-          {plantingSite.boundary &&
-            plantingSite.strata &&
-            (isEnabled('New Planting Site Map') ? (
-              <PlantingSiteMapV2 plantingSiteId={plantingSite.id} />
-            ) : (
-              <BoundariesAndStrata search={search} setSearch={setSearch} setView={setView} view={view} />
-            ))}
+          {plantingSite.boundary && plantingSite.strata && <PlantingSiteMapV2 plantingSiteId={plantingSite.id} />}
           {plantingSite.boundary && !plantingSite.strata && (
             <Grid container flexGrow={1}>
               <Grid item xs={12} display='flex'>
