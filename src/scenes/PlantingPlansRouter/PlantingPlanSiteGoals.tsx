@@ -1,25 +1,18 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
-import { Divider, Stack, useTheme } from '@mui/material';
+import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
-import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
+import { PlantingSitePayload, useListPlantingSiteSpeciesTargetsQuery } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
-import PlantingPlanDensitySection from './PlantingPlanDensitySection';
-import PlantingPlanSpeciesSection, { SpeciesTarget } from './PlantingPlanSpeciesSection';
+import PlantingPlanDensityTable from './PlantingPlanDensityTable';
+import PlantingPlanSpeciesSection from './PlantingPlanSpeciesSection';
 import PlantingPlanStats from './PlantingPlanStats';
+import { siteGoalPlants } from './plantingPlanGoals';
 
 const PLACEHOLDER = '-';
-
-const parseDensity = (value: string | undefined): number | undefined => {
-  if (value === undefined || value.trim() === '') {
-    return undefined;
-  }
-  const parsed = Number(value);
-  return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
-};
 
 export type PlantingPlanSiteGoalsProps = {
   plantingSite: PlantingSitePayload;
@@ -28,82 +21,31 @@ export type PlantingPlanSiteGoalsProps = {
 const PlantingPlanSiteGoals = ({ plantingSite }: PlantingPlanSiteGoalsProps): JSX.Element => {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
+  const { data: speciesTargetsData } = useListPlantingSiteSpeciesTargetsQuery(plantingSite.id);
 
-  const strata = useMemo(() => plantingSite.strata ?? [], [plantingSite.strata]);
-
-  const [densityByStratum, setDensityByStratum] = useState<Record<number, string>>({});
-  const [speciesTargets, setSpeciesTargets] = useState<SpeciesTarget[]>([]);
-
-  const onDensityChange = useCallback((stratumId: number, value: string) => {
-    setDensityByStratum((current) => ({ ...current, [stratumId]: value }));
-  }, []);
-
-  const onAddSpecies = useCallback((speciesId: number, target: string) => {
-    setSpeciesTargets((current) => [...current, { speciesId, target }]);
-  }, []);
-
-  const onUpdateSpecies = useCallback((speciesId: number, target: string) => {
-    setSpeciesTargets((current) =>
-      current.map((entry) => (entry.speciesId === speciesId ? { ...entry, target } : entry))
-    );
-  }, []);
-
-  const onRemoveSpecies = useCallback((speciesId: number) => {
-    setSpeciesTargets((current) => current.filter((entry) => entry.speciesId !== speciesId));
-  }, []);
-
-  const targetPlants = useMemo(() => {
-    let total = 0;
-    let anyDensitySet = false;
-    strata.forEach((stratum) => {
-      const density = parseDensity(densityByStratum[stratum.id]);
-      if (density !== undefined) {
-        anyDensitySet = true;
-        stratum.substrata.forEach((substratum) => {
-          total += Math.round(substratum.areaHa * density);
-        });
-      }
-    });
-    return anyDensitySet ? total : undefined;
-  }, [densityByStratum, strata]);
+  const speciesCount = speciesTargetsData?.targets.length ?? 0;
 
   const stats = useMemo(() => {
-    const area =
-      plantingSite.areaHa === undefined
-        ? PLACEHOLDER
-        : strings.formatString(strings.X_HA, numberFormatter.format(plantingSite.areaHa, { decimals: 1 })).toString();
-
-    const initialPlantingDensity =
-      targetPlants === undefined || !plantingSite.areaHa
-        ? PLACEHOLDER
-        : strings
-            .formatString(strings.X_PER_HA, numberFormatter.format(Math.round(targetPlants / plantingSite.areaHa)))
-            .toString();
+    const plantsValue = (plants: number | undefined) =>
+      strings
+        .formatString(strings.X_PLANTS, plants === undefined ? PLACEHOLDER : numberFormatter.format(plants))
+        .toString();
 
     return {
-      area,
-      strata: numberFormatter.format(strata.length),
-      initialPlantingDensity,
-      targetPlants:
-        targetPlants === undefined
-          ? PLACEHOLDER
-          : strings.formatString(strings.X_PLANTS, numberFormatter.format(targetPlants)).toString(),
-      targetSpecies: speciesTargets.length === 0 ? PLACEHOLDER : numberFormatter.format(speciesTargets.length),
+      initialGoal: plantsValue(siteGoalPlants(plantingSite, 'initial')),
+      targetGoal: plantsValue(siteGoalPlants(plantingSite, 'target')),
+      species: strings
+        .formatString(strings.X_SPECIES, speciesCount === 0 ? PLACEHOLDER : numberFormatter.format(speciesCount))
+        .toString(),
     };
-  }, [numberFormatter, plantingSite.areaHa, speciesTargets.length, strata.length, targetPlants]);
+  }, [numberFormatter, plantingSite, speciesCount]);
 
   return (
     <Card
       style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, padding: theme.spacing(3), width: '100%' }}
       radius={theme.spacing(1)}
     >
-      <PlantingPlanStats
-        targetPlants={stats.targetPlants}
-        area={stats.area}
-        initialPlantingDensity={stats.initialPlantingDensity}
-        targetSpecies={stats.targetSpecies}
-        strata={stats.strata}
-      />
+      <PlantingPlanStats initialGoal={stats.initialGoal} targetGoal={stats.targetGoal} species={stats.species} />
 
       <Stack
         direction={{ xs: 'column', md: 'row' }}
@@ -111,17 +53,25 @@ const PlantingPlanSiteGoals = ({ plantingSite }: PlantingPlanSiteGoalsProps): JS
         spacing={3}
         marginTop={theme.spacing(3)}
       >
-        <PlantingPlanDensitySection
-          plantingSite={plantingSite}
-          densityByStratum={densityByStratum}
-          onDensityChange={onDensityChange}
-        />
-        <PlantingPlanSpeciesSection
-          speciesTargets={speciesTargets}
-          onAdd={onAddSpecies}
-          onUpdate={onUpdateSpecies}
-          onRemove={onRemoveSpecies}
-        />
+        <Box flex={1} minWidth={0}>
+          <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} marginBottom={theme.spacing(2)}>
+            {strings.SET_INITIAL_DENSITY_DESCRIPTION}
+          </Typography>
+          <Box display='flex' flexDirection='column' gap={theme.spacing(3)}>
+            <PlantingPlanDensityTable
+              plantingSite={plantingSite}
+              densityType='initial'
+              title={strings.INITIAL_PLANTING_DENSITY}
+            />
+            <PlantingPlanDensityTable
+              plantingSite={plantingSite}
+              densityType='target'
+              title={strings.TARGET_PLANT_DENSITY}
+            />
+          </Box>
+        </Box>
+
+        <PlantingPlanSpeciesSection plantingSite={plantingSite} />
       </Stack>
     </Card>
   );
