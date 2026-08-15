@@ -13,18 +13,20 @@ export type MapDrawerTableRow = {
 
 type MapDrawerTableProps = {
   header?: string;
+  overline?: string;
   rows: MapDrawerTableRow[];
   subheader?: string;
   subheaderUrl?: string;
 };
 
-const MapDrawerTable = ({ header, subheader, subheaderUrl, rows }: MapDrawerTableProps): JSX.Element => {
+const MapDrawerTable = ({ header, overline, subheader, subheaderUrl, rows }: MapDrawerTableProps): JSX.Element => {
   return (
     <table className='map-drawer-table'>
       {header && (
         <thead>
           <tr>
             <th colSpan={2}>
+              {overline && <div className='map-drawer-table--overline'>{overline}</div>}
               <div style={{ display: 'flex', flexDirection: 'row' }}>
                 {header}
                 {subheader && (

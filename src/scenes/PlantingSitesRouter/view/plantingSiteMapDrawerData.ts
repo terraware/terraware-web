@@ -1,5 +1,5 @@
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
-import { PlantingSite } from 'src/types/Tracking';
+import { PlantingSitePayload, PlantingSiteSpeciesTargetPayload } from 'src/queries/generated/plantingSites';
 
 export type PlantingSiteDrawerData =
   | {
@@ -10,12 +10,29 @@ export type PlantingSiteDrawerData =
       strataCount: number;
       substrataCount: number;
     }
-  | { type: 'stratum'; name: string; areaHa: number; plantingComplete: boolean; initialPlantingDensity: number }
-  | { type: 'substratum'; name: string; areaHa: number; plantingComplete: boolean; initialPlantingDensity: number };
+  | {
+      type: 'stratum';
+      name: string;
+      areaHa: number;
+      plantingComplete: boolean;
+      initialPlantingDensity: number;
+      targetPlantDensity: number | undefined;
+      speciesIds: number[];
+    }
+  | {
+      type: 'substratum';
+      name: string;
+      stratumName: string;
+      areaHa: number;
+      plantingComplete: boolean;
+      initialPlantingDensity: number;
+      targetPlantDensity: number | undefined;
+    };
 
 export const getPlantingSiteMapDrawerData = (
-  plantingSite: PlantingSite | undefined,
-  layerFeatureId: MapLayerFeatureId
+  plantingSite: PlantingSitePayload | undefined,
+  layerFeatureId: MapLayerFeatureId,
+  speciesTargets?: PlantingSiteSpeciesTargetPayload[]
 ): PlantingSiteDrawerData | undefined => {
   if (!plantingSite) {
     return undefined;
@@ -47,6 +64,10 @@ export const getPlantingSiteMapDrawerData = (
       areaHa: stratum.areaHa,
       plantingComplete: stratum.substrata.every((substratum) => substratum.plantingCompleted),
       initialPlantingDensity: stratum.initialPlantingDensity,
+      targetPlantDensity: stratum.targetPlantDensity,
+      speciesIds: (speciesTargets ?? [])
+        .filter((target) => target.stratumIds.includes(stratum.id))
+        .map((target) => target.speciesId),
     };
   }
 
@@ -63,9 +84,11 @@ export const getPlantingSiteMapDrawerData = (
     return {
       type: 'substratum',
       name: substratum.name,
+      stratumName: parentStratum.name,
       areaHa: substratum.areaHa,
       plantingComplete: substratum.plantingCompleted,
       initialPlantingDensity: parentStratum.initialPlantingDensity,
+      targetPlantDensity: parentStratum.targetPlantDensity,
     };
   }
 
