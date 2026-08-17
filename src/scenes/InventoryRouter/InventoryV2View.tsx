@@ -36,10 +36,6 @@ export type FacilityName = {
   facility_name: string;
 };
 
-export type SpeciesName = {
-  species_scientificName: string;
-};
-
 export type InventoryResult = {
   facility_id: string;
   species_id: string;
@@ -108,28 +104,11 @@ export type FacilitySpeciesInventoryResult = {
   }[];
 };
 
-export type InventoryResultWithFacilityNames = Omit<InventoryResult, 'facilityInventories'> & {
-  facilityInventories: string;
-};
-
 export type InventoryResultWithBatchNumber = Omit<InventoryResult, 'facilityInventories'> & {
   batchId: string;
   batchNumber: string;
   facility_name_noLink: string;
   species_scientificName_noLink: string;
-};
-
-export type FacilityInventoryResult = {
-  facility_id: string;
-  facility_name: string;
-  species_id: string;
-  species_scientificName: string;
-  species_commonName?: string;
-  'germinatingQuantity(raw)': string;
-  'hardeningOffQuantity(raw)': string;
-  'readyQuantity(raw)': string;
-  'activeGrowthQuantity(raw)': string;
-  'totalQuantity(raw)': string;
 };
 
 export type BatchInventoryResult = {

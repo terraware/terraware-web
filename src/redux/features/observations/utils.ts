@@ -9,7 +9,6 @@ import {
   ObservationSubstratumResults,
   PlotCondition,
 } from 'src/types/Observations';
-import { MultiPolygon } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { regexMatch } from 'src/utils/search';
 
@@ -80,12 +79,6 @@ export const searchPlots = (search: string, observations?: AdHocObservationResul
   return observations?.filter((observation: AdHocObservationResults) =>
     observation.adHocPlot ? regexMatch(observation.adHocPlot.monitoringPlotNumber.toString(), search) : true
   );
-};
-
-export type Value = {
-  name: string;
-  boundary: MultiPolygon;
-  timeZone?: string;
 };
 
 export const getConditionString = (

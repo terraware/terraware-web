@@ -28,7 +28,6 @@ export type PlantingSiteSearchResult = {
 
 // delivery and plantings
 export type Delivery = components['schemas']['DeliveryPayload'];
-export type Planting = components['schemas']['PlantingPayload'];
 
 // reported plants
 export type PlantingSiteReportedPlants = components['schemas']['PlantingSiteReportedPlantsPayload'];

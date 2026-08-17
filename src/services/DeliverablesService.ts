@@ -40,8 +40,6 @@ export type UpdateSubmissionRequestPayload =
   paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['requestBody']['content']['application/json'];
 export type UpdateSubmissionResponsePayload =
   paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['responses'][200]['content']['application/json'];
-export type SubmitSubmissionResponsePayload =
-  paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION_SUBMIT]['post']['responses'][200]['content']['application/json'];
 export type ImportDeliverablesResponsePayload =
   paths[typeof DELIVERABLES_IMPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 

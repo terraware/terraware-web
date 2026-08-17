@@ -105,10 +105,6 @@ export type VariableValueEmailValue = components['schemas']['ExistingEmailValueP
 
 export type VariableValueLinkValue = components['schemas']['ExistingLinkValuePayload'];
 
-export type UpdateVariableValueRequestWithDocId = components['schemas']['UpdateValueOperationPayload'] & {
-  docId: number;
-};
-
 export type NewTextValuePayload = components['schemas']['NewTextValuePayload'];
 
 export type NewNumberValuePayload = components['schemas']['NewNumberValuePayload'];
@@ -121,53 +117,13 @@ export type NewEmailValuePayload = components['schemas']['NewEmailValuePayload']
 
 export type NewLinkValuePayload = components['schemas']['NewLinkValuePayload'];
 
-export type NewImageValuePayload = components['schemas']['NewImageValuePayload'];
-
-export type UpdateVariableValuesRequestWithDocId = UpdateVariableValuesRequestPayload & {
-  docId: number;
-};
-
 export type UpdateVariableValuesRequestWithProjectId = UpdateVariableValuesRequestPayload & {
   projectId: number;
 };
 
-export type UpdateTextVariableValueRequestWithDocId = Omit<
-  components['schemas']['UpdateValueOperationPayload'],
-  'value'
-> & {
-  docId: number;
-  value: NewTextValuePayload | NewNumberValuePayload | NewImageValuePayload | NewSelectValuePayload;
-};
-
-export type UpdateTextVariableValueRequestWithProjectId = Omit<
-  components['schemas']['UpdateValueOperationPayload'],
-  'value'
-> & {
-  projectId: number;
-  value: NewTextValuePayload | NewNumberValuePayload | NewImageValuePayload | NewSelectValuePayload;
-};
-
 export type DeleteVariableValueOperation = components['schemas']['DeleteValueOperationPayload'];
 
-export type DeleteVariableValueRequestWithDocId = components['schemas']['DeleteValueOperationPayload'] & {
-  docId: number;
-};
-
-export type DeleteVariableValueRequestWithProjectId = components['schemas']['DeleteValueOperationPayload'] & {
-  projectId: number;
-};
-
-export type NewValuePayload = components['schemas']['NewValuePayload'];
-
 export type UpdateVariableValuesRequestPayload = components['schemas']['UpdateVariableValuesRequestPayload'];
-
-export type AppendVariableRequestWithDocId = components['schemas']['UpdateValueOperationPayload'] & {
-  docId: number;
-};
-
-export type AppendVariableRequestWithProjectId = components['schemas']['UpdateValueOperationPayload'] & {
-  projectId: number;
-};
 
 export type Operation =
   | components['schemas']['AppendValueOperationPayload']
@@ -182,10 +138,6 @@ export type OriginalUploadImageValue = Required<
 // Change type for file attribute from string to File, because that is how we process it in the frontend
 export type UploadImageValueRequestPayload = Omit<OriginalUploadImageValue, 'file'> & { file: File };
 
-export type UploadImageValueRequestPayloadWithDocId = UploadImageValueRequestPayload & {
-  docId: number;
-};
-
 export type UploadImageValueRequestPayloadWithProjectId = UploadImageValueRequestPayload & {
   projectId: number;
 };
@@ -194,21 +146,9 @@ export type AppendVariableValueOperation = Omit<components['schemas']['AppendVal
   value: NewNonSectionValuePayloadUnion;
 };
 
-export type AppendVariableValueRequestWithDocId = AppendVariableValueOperation & {
-  docId: number;
-};
-
 export type NewSectionTextValuePayload = components['schemas']['NewSectionTextValuePayload'];
 
 export type NewSectionVariableValuePayload = components['schemas']['NewSectionVariableValuePayload'];
-
-export type ReplaceSectionValuesOperationPayloadWithDocId = Omit<
-  components['schemas']['ReplaceValuesOperationPayload'],
-  'values'
-> & {
-  docId: number;
-  values: (NewSectionTextValuePayload | NewSectionVariableValuePayload)[];
-};
 
 export type ReplaceSectionValuesOperationPayloadWithProjectId = Omit<
   components['schemas']['ReplaceValuesOperationPayload'],

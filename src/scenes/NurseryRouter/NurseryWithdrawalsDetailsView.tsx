@@ -25,20 +25,6 @@ import NonOutplantWithdrawalContent from './WithdrawalDetails/NonOutplantWithdra
 import ReassignmentTabPanelContent from './WithdrawalDetails/ReassignmentTabPanelContent';
 import WithdrawalTabPanelContent from './WithdrawalDetails/WithdrawalTabPanelContent';
 
-export interface WithdrawalSummary {
-  id: string;
-  delivery_id: string;
-  withdrawnDate: string;
-  purpose: string;
-  facilityName: string;
-  destinationName: string;
-  stratumNames: string;
-  substratumShortNames: string;
-  scientificNames: string[];
-  totalWithdrawn: string;
-  hasReassignments: boolean;
-}
-
 type NurseryWithdrawalsDetailsViewProps = {
   species: Species[];
 };

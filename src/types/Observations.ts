@@ -14,16 +14,11 @@ import { MultiPolygon } from './Tracking';
 // basic information on a single observation (excluding observation results)
 export type Observation = components['schemas']['ObservationPayload'];
 
-export type ScheduleObservationRequestPayload = components['schemas']['ScheduleObservationRequestPayload'];
-export type RescheduleObservationRequestPayload = components['schemas']['RescheduleObservationRequestPayload'];
-
 // "Upcoming" | "InProgress" | "Completed" | "Overdue"
 export type ObservationState = Observation['state'];
 
 // plot replacement
 export type ReplaceObservationPlotRequestPayload = components['schemas']['ReplaceObservationPlotRequestPayload'];
-export type ReplaceObservationPlotResponseFullPayload = components['schemas']['ReplaceObservationPlotResponsePayload'];
-export type ReplaceObservationPlotResponsePayload = Omit<ReplaceObservationPlotResponseFullPayload, 'status'>;
 // "Temporary" | "LongTerm"
 export type ReplaceObservationPlotDuration = ReplaceObservationPlotRequestPayload['duration'];
 
@@ -101,10 +96,6 @@ export type ObservationSubstratumResultsWithLastObv = ObservationSubstratumResul
 };
 // monitoring plot level results
 export type ObservationMonitoringPlotResultsPayload = RtkObservationMonitoringPlotResultsPayload;
-export type ObservationMonitoringPlotForMap = ObservationMonitoringPlotResultsPayload & {
-  isBiomassMeasurement?: boolean;
-  totalShrubs?: number;
-};
 export type MonitoringPlotStatus = ObservationMonitoringPlotResultsPayload['status'];
 export type ObservationMonitoringPlotResults = ObservationMonitoringPlotResultsPayload & {
   completedDate?: string;
@@ -172,8 +163,6 @@ export type RecordedPlant = components['schemas']['RecordedPlantPayload'];
 export type RecordedPlantStatus = RecordedPlant['status'];
 
 export type ExistingTreePayload = components['schemas']['ExistingTreePayload'];
-
-export type BiomassSpeciesPayload = components['schemas']['BiomassSpeciesPayload'];
 
 export type PlotCondition = components['schemas']['CompleteAdHocObservationRequestPayload']['conditions'][0];
 
