@@ -1,3 +1,4 @@
+7b443092 Remove outdated Craco command from package.json (#6262)
 f877287d Remove unused type declarations (#6261)
 e57f7b8c Detect dead code in CI (#6249)
 56d8a1ba Switch to native rsbuild React Compiler (#6253)
