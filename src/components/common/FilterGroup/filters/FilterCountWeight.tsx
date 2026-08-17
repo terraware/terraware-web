@@ -11,7 +11,7 @@ import { AndNodePayload, FieldNodePayload, OrNodePayload, SearchNodePayload } fr
 import { weightUnits } from 'src/units';
 
 export type WEIGHT_QUANTITY_FIELDS = 'remainingQuantity' | 'totalQuantity' | 'withdrawalQuantity';
-export const COUNT_WEIGHT_VALID_FIELDS: Record<WEIGHT_QUANTITY_FIELDS, string[]> = {
+const COUNT_WEIGHT_VALID_FIELDS: Record<WEIGHT_QUANTITY_FIELDS, string[]> = {
   remainingQuantity: ['remainingQuantity', 'remainingGrams', 'remainingUnits'],
   totalQuantity: ['totalQuantity', 'totalGrams', 'totalUnits'],
   withdrawalQuantity: ['withdrawalQuantity', 'withdrawalGrams', 'withdrawalUnits'],

@@ -54,4 +54,4 @@ export type SubstratumPayload = {
   stratumName: string;
 };
 
-export const { useListSubstrataQuery, useLazyListSubstrataQuery } = injectedRtkApi;
+export const { useLazyListSubstrataQuery } = injectedRtkApi;

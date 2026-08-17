@@ -22,7 +22,7 @@ export default function PlantingSites(): JSX.Element {
   );
 }
 
-export function PlantingSitesRouter(): JSX.Element {
+function PlantingSitesRouter(): JSX.Element {
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
 
   return (
@@ -33,7 +33,7 @@ export function PlantingSitesRouter(): JSX.Element {
   );
 }
 
-export function PlantingSitesDraftRouter(): JSX.Element {
+function PlantingSitesDraftRouter(): JSX.Element {
   return (
     <Routes>
       <Route path={'/:plantingSiteId/stratum/:stratumId'} element={<PlantingSiteDraftStratumView />} />

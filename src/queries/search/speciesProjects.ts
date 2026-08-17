@@ -52,6 +52,4 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export { injectedRtkApi as api };
-
-export const { useListSpeciesProjectNamesQuery, useLazyListSpeciesProjectNamesQuery } = injectedRtkApi;
+export const { useLazyListSpeciesProjectNamesQuery } = injectedRtkApi;

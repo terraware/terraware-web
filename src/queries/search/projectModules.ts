@@ -63,6 +63,4 @@ export type GetModuleProjectsApiArg = {
   locale?: string;
 };
 
-export { injectedRtkApi as api };
-
-export const { useGetModuleProjectsQuery, useLazyGetModuleProjectsQuery } = injectedRtkApi;
+export const { useLazyGetModuleProjectsQuery } = injectedRtkApi;

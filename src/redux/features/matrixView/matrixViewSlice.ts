@@ -6,7 +6,7 @@ import { ProjectsWithVariablesSearchResult, requestGetProjectsWithVariables } fr
 
 const initialProjectsWithVariablesState: { [key: string]: StatusT<ProjectsWithVariablesSearchResult[]> } = {};
 
-export const projectsWithVariablesSlice = createSlice({
+const projectsWithVariablesSlice = createSlice({
   name: 'projectsWithVariablesSlice',
   initialState: initialProjectsWithVariablesState,
   reducers: {},

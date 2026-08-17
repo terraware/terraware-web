@@ -2,7 +2,7 @@ import { Chart } from 'chart.js';
 
 import strings from 'src/strings';
 
-export const getOrCreateLegendList = (chart: any, id: string) => {
+const getOrCreateLegendList = (chart: any, id: string) => {
   const legendContainer = document.getElementById(id);
   let listContainer = legendContainer?.querySelector('ul');
 

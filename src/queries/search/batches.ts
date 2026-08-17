@@ -329,19 +329,11 @@ type BatchSearchResponse = {
   results: NurseryBatchesSearchResponseElement[];
 };
 
-export { injectedRtkApi as api };
-
 export const {
-  useCountAllBatchesQuery,
   useLazyCountAllBatchesQuery,
-  useListBatchesByIdsQuery,
   useLazyListBatchesByIdsQuery,
-  useListAllBatchesQuery,
   useLazyListAllBatchesQuery,
-  useListBatchIdsForSpeciesQuery,
   useLazyListBatchIdsForSpeciesQuery,
   useListBatchesForSpeciesQuery,
-  useLazyListBatchesForSpeciesQuery,
   useListBatchesForNurseryQuery,
-  useLazyListBatchesForNurseryQuery,
 } = injectedRtkApi;

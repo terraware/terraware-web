@@ -28,7 +28,7 @@ const initialStateFundingEntityCreate: { [requestId: string]: StatusT<{ fundingE
 
 const initialStateFundingEntityInvite: { [requestId: string]: StatusT<string | InviteFunderResponse> } = {};
 
-export const fundingEntitySlice = createSlice({
+const fundingEntitySlice = createSlice({
   name: 'fundingEntitySlice',
   initialState: initialStateFundingEntity,
   reducers: {},
@@ -37,7 +37,7 @@ export const fundingEntitySlice = createSlice({
   },
 });
 
-export const fundingEntitiesSlice = createSlice({
+const fundingEntitiesSlice = createSlice({
   name: 'fundingEntitiesSlice',
   initialState: initialStateFundingEntities,
   reducers: {},
@@ -46,7 +46,7 @@ export const fundingEntitiesSlice = createSlice({
   },
 });
 
-export const userFundingEntitySlice = createSlice({
+const userFundingEntitySlice = createSlice({
   name: 'userFundingEntitySlice',
   initialState: initialStateUserFundingEntity,
   reducers: {},
@@ -55,7 +55,7 @@ export const userFundingEntitySlice = createSlice({
   },
 });
 
-export const fundingEntityUpdateSlice = createSlice({
+const fundingEntityUpdateSlice = createSlice({
   name: 'fundingEntityUpdateSlice',
   initialState: initialStateFundingEntityUpdate,
   reducers: {},
@@ -64,7 +64,7 @@ export const fundingEntityUpdateSlice = createSlice({
   },
 });
 
-export const fundingEntityCreateSlice = createSlice({
+const fundingEntityCreateSlice = createSlice({
   name: 'fundingEntityCreateSlice',
   initialState: initialStateFundingEntityCreate,
   reducers: {},
@@ -73,7 +73,7 @@ export const fundingEntityCreateSlice = createSlice({
   },
 });
 
-export const fundingEntityInviteSlice = createSlice({
+const fundingEntityInviteSlice = createSlice({
   name: 'fundingEntityInviteSlice',
   initialState: initialStateFundingEntityInvite,
   reducers: {},
@@ -84,7 +84,7 @@ export const fundingEntityInviteSlice = createSlice({
 
 const initialStateFunderList: { [requestId: string]: StatusT<Funder[]> } = {};
 
-export const funderListSlice = createSlice({
+const funderListSlice = createSlice({
   name: 'funderListSlice',
   initialState: initialStateFunderList,
   reducers: {},
@@ -95,7 +95,7 @@ export const funderListSlice = createSlice({
 
 const initialStateDeleteFunder: { [requestId: string]: StatusT<Response> } = {};
 
-export const deleteFundersSlice = createSlice({
+const deleteFundersSlice = createSlice({
   name: 'deleteFundersSlice',
   initialState: initialStateDeleteFunder,
   reducers: {},
@@ -106,7 +106,7 @@ export const deleteFundersSlice = createSlice({
 
 const initialStateProjectFundingEntities: { [requestId: string]: StatusT<FundingEntity[]> } = {};
 
-export const projectFundingEntitiesSlice = createSlice({
+const projectFundingEntitiesSlice = createSlice({
   name: 'projectFundingEntitiesSlice',
   initialState: initialStateProjectFundingEntities,
   reducers: {},

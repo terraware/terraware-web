@@ -94,6 +94,4 @@ export type Plantings = {
   withdrawalId: number;
 };
 
-export { injectedRtkApi as api };
-
-export const { useSearchPlantingsForSiteQuery, useLazySearchPlantingsForSiteQuery } = injectedRtkApi;
+export const { useSearchPlantingsForSiteQuery } = injectedRtkApi;

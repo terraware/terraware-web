@@ -53,4 +53,4 @@ const generateTerrawareRandomColors = (theme: Theme, numberOfColors: number) => 
   return colors;
 };
 
-export { generateRandomColor, generateTerrawareRandomColors };
+export { generateTerrawareRandomColors };

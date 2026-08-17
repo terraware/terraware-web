@@ -221,7 +221,7 @@ const getRawField = <T extends Record<string, unknown>>(result: T, field: string
   }
 };
 
-export const sortResults = <T extends Record<string, unknown>>(
+const sortResults = <T extends Record<string, unknown>>(
   results: T[],
   locale: string | null,
   sortOrder: SearchSortOrder,

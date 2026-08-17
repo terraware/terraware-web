@@ -8,7 +8,7 @@ import { MergeOtherSpeciesRequestData, requestMergeOtherSpecies } from './specie
  */
 const initialStateMergeOtherSpecies: { [key: string]: StatusT<MergeOtherSpeciesRequestData[]> } = {};
 
-export const mergeOtherSpeciesSlice = createSlice({
+const mergeOtherSpeciesSlice = createSlice({
   name: 'mergeOtherSpeciesSlice',
   initialState: initialStateMergeOtherSpecies,
   reducers: {},

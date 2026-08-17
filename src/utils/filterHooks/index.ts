@@ -7,7 +7,7 @@ export type FiltersType = Record<string, FilterValue>;
 
 // Convert an array to a comma separated string and other values to a string
 // Array values are sorted, so we can detect equality easier elsewhere
-export const normalizeValue = (value: FilterValue): string => {
+const normalizeValue = (value: FilterValue): string => {
   if (isArray(value)) {
     return value
       .sort((valueA, valueB) => `${valueA}`.localeCompare(`${valueB}`))
@@ -52,9 +52,9 @@ export const filtersEqual = (a: FiltersType, b: FiltersType) =>
   Object.keys(a).every((key) => (isEmptyArray(a[key]) && !b[key]) || filterValueEqual(a[key], b[key])) &&
   Object.keys(b).every((key) => (isEmptyArray(b[key]) && !a[key]) || filterValueEqual(a[key], b[key]));
 
-export const isFilterKey = (viewIdentifier: string, key: string) => key.includes(`${viewIdentifier}_filter_`);
-export const scrubFilterKey = (key: string) => key.replace(/.*_filter_(.+)/, '$1');
-export const makeFiltersSessionKey = (viewIdentifier: string) => `${viewIdentifier}_filters`;
+const isFilterKey = (viewIdentifier: string, key: string) => key.includes(`${viewIdentifier}_filter_`);
+const scrubFilterKey = (key: string) => key.replace(/.*_filter_(.+)/, '$1');
+const makeFiltersSessionKey = (viewIdentifier: string) => `${viewIdentifier}_filters`;
 
 export const getFiltersFromSession = (viewIdentifier: string): FiltersType => {
   try {

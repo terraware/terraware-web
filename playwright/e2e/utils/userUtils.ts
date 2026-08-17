@@ -18,7 +18,7 @@ export const changeToFunderUser = async (context: BrowserContext, baseURL: strin
   ]);
 };
 
-export const changeToContributor = async (context: BrowserContext, baseURL: string | undefined) => {
+const changeToContributor = async (context: BrowserContext, baseURL: string | undefined) => {
   await context.clearCookies({ name: 'SESSION' });
   await context.addCookies([
     { name: 'SESSION', value: 'YmQ0Y2Y1MTktOGI0Ny00ODI2LTlmNjYtYjlmZGI5YzAyNWI4', url: baseURL },

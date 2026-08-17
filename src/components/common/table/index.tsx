@@ -96,7 +96,7 @@ export type OrderPreserveableTableProps = {
   setColumns: (columns: TableColumnType[]) => void;
 };
 
-export function OrderPreserveableTable<T extends TableRowType>(
+function OrderPreserveableTable<T extends TableRowType>(
   props: TableProps<T> & OrderPreserveableTableProps
 ): JSX.Element {
   const [initialized, setInitialized] = useState<boolean>(false);

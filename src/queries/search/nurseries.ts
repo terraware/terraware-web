@@ -541,15 +541,10 @@ export type SearchNurseryWithdrawalPayload = {
   undoesWithdrawalDate?: string;
 };
 
-export { injectedRtkApi as api };
-
 export const {
-  useSearchNurseryWithdrawalsFilterOptionsQuery,
   useLazySearchNurseryWithdrawalsFilterOptionsQuery,
   useSearchNurseryWithdrawalsQuery,
   useLazySearchNurseryWithdrawalsQuery,
-  useCountNurseryWithdrawalsQuery,
   useLazyCountNurseryWithdrawalsQuery,
   useSearchNurseryWithdrawalPhotosQuery,
-  useLazySearchNurseryWithdrawalPhotosQuery,
 } = injectedRtkApi;

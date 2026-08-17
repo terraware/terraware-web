@@ -16,7 +16,7 @@ import {
  */
 const initialStateModule: { [key: string]: StatusT<Module> } = {};
 
-export const moduleSlice = createSlice({
+const moduleSlice = createSlice({
   name: 'moduleSlice',
   initialState: initialStateModule,
   reducers: {},
@@ -30,7 +30,7 @@ export const moduleSlice = createSlice({
  */
 const initialStateModuleList: { [key: string]: StatusT<Module[]> } = {};
 
-export const moduleListSlice = createSlice({
+const moduleListSlice = createSlice({
   name: 'moduleListSlice',
   initialState: initialStateModuleList,
   reducers: {},
@@ -44,7 +44,7 @@ export const moduleListSlice = createSlice({
  */
 const initialStateModuleOrgProjects: { [key: string]: StatusT<number[]> } = {};
 
-export const moduleOrgProjectsSlice = createSlice({
+const moduleOrgProjectsSlice = createSlice({
   name: 'moduleOrgProjectsSlice',
   initialState: initialStateModuleOrgProjects,
   reducers: {},
@@ -58,7 +58,7 @@ export const moduleOrgProjectsSlice = createSlice({
  */
 const initialStateModuleProjects: { [key: string]: StatusT<ModuleProjectsSearchResult> } = {};
 
-export const moduleProjectsSlice = createSlice({
+const moduleProjectsSlice = createSlice({
   name: 'moduleProjectsSlice',
   initialState: initialStateModuleProjects,
   reducers: {},
@@ -72,7 +72,7 @@ export const moduleProjectsSlice = createSlice({
  */
 const initialStateSearchModules: { [key: string]: StatusT<ModuleSearchResult[]> } = {};
 
-export const searchModulesSlice = createSlice({
+const searchModulesSlice = createSlice({
   name: 'searchModulesSlice',
   initialState: initialStateSearchModules,
   reducers: {},

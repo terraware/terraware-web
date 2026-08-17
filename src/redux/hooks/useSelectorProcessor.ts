@@ -20,7 +20,7 @@ export type OnSelectorData = React.Dispatch<React.SetStateAction<any>>;
 /**
  * Hook that handles callbacks with selectors
  */
-export const useProcessorCallbacks = (
+const useProcessorCallbacks = (
   selector: any,
   onData: OnSelectorData,
   { handleError = true, dispatched = true, onSuccess, onError, onPending, onPartialSuccess }: ProcessorCallbacksProps

@@ -19,6 +19,4 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export { injectedRtkApi as api };
-
-export const { useGetAppVersionQuery, useLazyGetAppVersionQuery } = injectedRtkApi;
+export const { useGetAppVersionQuery } = injectedRtkApi;
