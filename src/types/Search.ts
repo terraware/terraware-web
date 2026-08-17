@@ -13,7 +13,6 @@ export type SearchType = components['schemas']['FieldNodePayload']['type'];
 export type SearchResponseElement = components['schemas']['SearchResponsePayload']['results'][0];
 export type SearchResponseElementWithId = SearchResponseElement & { id: string };
 export type SearchValuesResponseElement = components['schemas']['SearchValuesResponsePayload']['results'];
-export type SearchValuesResponseElementWithId = SearchValuesResponseElement & { id: string };
 
 export type FieldOptionsMap = { [key: string]: { partial: boolean; values: (string | null)[] } };
 
@@ -23,7 +22,6 @@ export type SearchRequestPayload = components['schemas']['SearchRequestPayload']
   count: number;
   search: SearchNodePayload;
 };
-export type OptionalSearchRequestPayload = components['schemas']['SearchRequestPayload'];
 
 export const isFieldNodePayload = (node: SearchNodePayload): node is FieldNodePayload => node.operation === 'field';
 export const isNotNodePayload = (node: SearchNodePayload): node is NotNodePayload => node.operation === 'not';

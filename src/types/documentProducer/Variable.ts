@@ -10,8 +10,6 @@ export type Variable = VariableListResponse['variables'][0];
 
 export type VariableType = components['schemas']['ExistingValuePayload']['type'];
 
-export type Column = components['schemas']['TableColumnPayload'];
-
 export type LinkVariable = components['schemas']['LinkVariablePayload'];
 
 export type SectionVariable = components['schemas']['SectionVariablePayload'];
@@ -89,20 +87,11 @@ export const isSectionVariableWithValues = (input: unknown): input is SectionVar
     isArray((input as SectionVariableWithValues).children)
   );
 
-export type ImageFile = {
-  url: string;
-  id: string;
-  caption?: string;
-  citation?: string;
-};
-
 export type GetVariableHistoryResponse = components['schemas']['GetVariableWorkflowHistoryResponsePayload'];
 
 export type UpdateVariableWorkflowDetailsPayload = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload'];
 
 export type UpdateVariableOwnerPayload = components['schemas']['UpdateVariableOwnerRequestPayload'];
-
-export type VariableHistoryElement = components['schemas']['VariableWorkflowHistoryElement'];
 
 export type VariableStatusType = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload']['status'];
 

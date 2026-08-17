@@ -7,7 +7,6 @@ import {
   AdminActivityPayload as RtkAdminActivityPayload,
   AdminCreateActivityRequestPayload as RtkAdminCreateActivityRequestPayload,
   CreateActivityRequestPayload as RtkCreateActivityRequestPayload,
-  UpdateActivityMediaRequestPayload as RtkUpdateActivityMediaRequestPayload,
   UpdateActivityRequestPayload as RtkUpdateActivityRequestPayload,
 } from 'src/queries/generated/activities';
 import defaultStrings from 'src/strings';
@@ -34,7 +33,6 @@ export type AdminActivityMediaFile = AdminActivityMediaFilePayload;
 export type AdminCreateActivityRequestPayload = RtkAdminCreateActivityRequestPayload;
 export type CreateActivityRequestPayload = RtkCreateActivityRequestPayload;
 export type UpdateActivityRequestPayload = RtkUpdateActivityRequestPayload;
-export type UpdateActivityMediaRequestPayload = RtkUpdateActivityMediaRequestPayload;
 
 export type ActivityType = Activity['type'];
 export const ACTIVITY_TYPES: ActivityType[] = [

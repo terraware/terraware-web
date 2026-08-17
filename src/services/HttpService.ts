@@ -32,8 +32,6 @@ export type PostRequest = Request & {
 
 export type PutRequest = PostRequest;
 
-export type PatchRequest = PostRequest;
-
 export type DeleteRequest = PostRequest;
 
 /**

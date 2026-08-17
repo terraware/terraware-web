@@ -1,7 +1,7 @@
 import { paths } from 'src/api/types/generated-schema';
 import { CreatePlantingSiteRequestPayload, ValidatePlantingSiteResponsePayload } from 'src/types/PlantingSite';
 import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
-import { Delivery, MonitoringPlotSearchResult, PlantingSite, PlantingSiteSearchResult } from 'src/types/Tracking';
+import { MonitoringPlotSearchResult, PlantingSite, PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import { isArray } from '../types/utils';
 import HttpService, { Response, Response2 } from './HttpService';
@@ -41,10 +41,6 @@ export type PlantingSitesData = {
 
 export type PlantingSiteData = {
   site?: PlantingSite;
-};
-
-export type DeliveryData = {
-  delivery?: Delivery;
 };
 
 const httpPlantingSites = HttpService.root(PLANTING_SITES_ENDPOINT);
