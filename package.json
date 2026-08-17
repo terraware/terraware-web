@@ -216,6 +216,7 @@
     "jest": "^30.0.0",
     "jest-mock-axios": "^4.4.1",
     "jest-mock-extended": "^4.0.0",
+    "knip": "^6.32.1",
     "license-report": "^6.0.0",
     "llm-autotranslate": "^1.0.0",
     "openapi-typescript": "^7.0.0",

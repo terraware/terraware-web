@@ -120,13 +120,25 @@ steps:
       SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENTSECRET: dummy
       SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUERURI: https://auth.staging.terraware.io/realms/terraware
 
-  - label: ':docker: Build and push Docker image'
-    key: 'docker'
+  - label: ':yarn: Check for dead code'
+    key: 'knip'
     depends_on:
       - step: 'build-and-test'
       - step: 'e2e-tests'
       - step: 'validate-types'
         allow_failure: true
+    if: "build.branch != 'main' && build.tag == null"
+    plugins:
+      - *shallow-clone
+      - *cache-node-modules
+    command: .buildkite/scripts/knip.sh
+
+  - label: ':docker: Build and push Docker image'
+    key: 'docker'
+    depends_on:
+      - step: 'build-and-test'
+      - step: 'e2e-tests'
+      - step: 'knip'
     plugins:
       - *shallow-clone
       - *load-secrets
