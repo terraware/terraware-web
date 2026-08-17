@@ -54,7 +54,6 @@ export const filtersEqual = (a: FiltersType, b: FiltersType) =>
 
 export const isFilterKey = (viewIdentifier: string, key: string) => key.includes(`${viewIdentifier}_filter_`);
 export const scrubFilterKey = (key: string) => key.replace(/.*_filter_(.+)/, '$1');
-export const makeFilterKey = (viewIdentifier: string, key: string) => `${viewIdentifier}_filter_${key}`;
 export const makeFiltersSessionKey = (viewIdentifier: string) => `${viewIdentifier}_filters`;
 
 export const getFiltersFromSession = (viewIdentifier: string): FiltersType => {
@@ -101,17 +100,6 @@ export const getFiltersFromQuery = (query: URLSearchParams, viewIdentifier: stri
     });
 
   return queryFilters;
-};
-
-export const writeFiltersToQuery = (query: URLSearchParams, viewIdentifier: string, filters: FiltersType): void => {
-  Object.keys(filters).forEach((key) => {
-    const value = filters[key];
-    if (!value || (isArray(value) && value.length === 0)) {
-      return;
-    }
-
-    query.set(makeFilterKey(viewIdentifier, key), normalizeValue(value));
-  });
 };
 
 export const resetQuery = (query: URLSearchParams, viewIdentifier: string): void => {

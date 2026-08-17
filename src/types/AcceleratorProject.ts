@@ -62,8 +62,5 @@ export const REGIONS = (): RegionLabel[] => [
   { region: 'Sub-Saharan Africa', label: strings.REGION_SUB_SAHARAN_AFRICA },
 ];
 
-export const getRegionLabel = (input: Region): string =>
-  REGIONS().find((obj) => obj.region === input)?.label ?? (input as string);
-
 export const getRegionValue = (input: string): Region | undefined =>
   REGIONS().find((obj) => obj.label === input)?.region;

@@ -16,12 +16,6 @@ import ContentAndMaterials from './ContentAndMaterials';
 import Events from './Events';
 import ModuleDetails from './ModuleDetails';
 
-export const InventoryListTypes: Record<string, string> = {
-  BATCHES_BY_SPECIES: 'batches_by_species',
-  BATCHES_BY_NURSERY: 'batches_by_nursery',
-  BATCHES_BY_BATCH: 'batches_by_batch',
-} as const;
-
 export default function ModuleView(): JSX.Element {
   const contentRef = useRef(null);
   const { moduleId } = useParams<{ moduleId: string }>();

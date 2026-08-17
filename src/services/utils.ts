@@ -16,14 +16,3 @@ export async function getPromisesResponse<T>(promises: Promise<T>[]): Promise<(T
 
   return [];
 }
-
-export async function handlePromises<T>(promises: Promise<T>[]): Promise<boolean> {
-  try {
-    const promiseResponses = await Promise.allSettled(promises);
-    return promiseResponses.every((response) => response.status !== 'rejected');
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.error(e);
-    return false;
-  }
-}

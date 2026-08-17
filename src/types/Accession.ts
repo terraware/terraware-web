@@ -9,18 +9,6 @@ export type ViabilityTestResult = Required<components['schemas']['GetViabilityTe
 export type Withdrawal = Required<Accession>['withdrawals'][0];
 export type Geolocation = components['schemas']['Geolocation'];
 
-export const ACCESSION_STATES = [
-  'Awaiting Check-In',
-  'Pending',
-  'Processing',
-  'Processed',
-  'Drying',
-  'Dried',
-  'In Storage',
-  'Withdrawn',
-  'Nursery',
-];
-
 export type AccessionState = Accession['state'];
 
 export const ACCESSION_2_STATES: AccessionState[] = [
@@ -125,18 +113,6 @@ export function accessionNurserySubstrates(): { label: string; value: ViabilityT
     { label: strings.PERLITE_VERMICULITE, value: 'Perlite/Vermiculite' },
     { label: strings.OTHER, value: 'Other' },
     { label: strings.NONE, value: 'None' },
-  ];
-}
-
-export function nurserySubstrates(): { label: string; value: Batch['substrate'] | null }[] {
-  return [
-    { label: strings.MEDIA_MIX, value: 'MediaMix' },
-    { label: strings.SOIL, value: 'Soil' },
-    { label: strings.SAND, value: 'Sand' },
-    { label: strings.MOSS, value: 'Moss' },
-    { label: strings.PERLITE_VERMICULITE, value: 'PerliteVermiculite' },
-    { label: strings.OTHER, value: 'Other' },
-    { label: strings.NONE, value: null },
   ];
 }
 

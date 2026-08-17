@@ -38,13 +38,6 @@ export function conservationCategories() {
   ];
 }
 
-export function nativeStatuses() {
-  return [
-    { label: strings.NATIVE, value: 'Native' },
-    { label: strings.NON_NATIVE, value: 'Non-Native' },
-  ];
-}
-
 export function plantMaterialSourcingMethods(): {
   label: string;
   value: PlantMaterialSourcingMethod;

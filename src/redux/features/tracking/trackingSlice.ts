@@ -101,8 +101,6 @@ export const siteReportedPlantsSlice = createSlice({
   },
 });
 
-export const { setSiteReportedPlantsAction } = siteReportedPlantsSlice.actions;
-
 // Monitoring plots
 
 type MonitoringPlotsState = Record<string, StatusT<MonitoringPlotsResponse>>;
