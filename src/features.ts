@@ -118,19 +118,3 @@ export default function isEnabled(name: FeatureName, organizationId?: number) {
 
   return feature.allowInternalProduction && CachedUserService.getUser().isTerraformation;
 }
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function isRouteEnabled(name: FeatureName) {
-  const { isProduction } = env();
-  const feature = FEATURE_MAP[name];
-
-  if (!feature) {
-    return false;
-  }
-
-  if (!feature.active || feature.enabled) {
-    return feature.enabled;
-  }
-
-  return !isProduction || (feature.allowInternalProduction && CachedUserService.getUser().isTerraformation);
-}
