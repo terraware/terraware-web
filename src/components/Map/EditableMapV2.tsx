@@ -39,7 +39,7 @@ import { boundariesToViewState, getMapErrorLayer, readOnlyBoundariesToMapLayers 
 
 // Callback to select one feature from among list of features on the map that overlap the click target.
 export type LayerFeature = MapGeoJSONFeature;
-export type FeatureSelectorOnClick = (features: LayerFeature[]) => LayerFeature | undefined;
+type FeatureSelectorOnClick = (features: LayerFeature[]) => LayerFeature | undefined;
 
 export type EditableMapProps = {
   activeContext?: MapEntityOptions;

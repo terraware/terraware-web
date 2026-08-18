@@ -17,12 +17,12 @@ import ProgressCircle from './ProgressCircle/ProgressCircle';
 import Button from './button/Button';
 import Icon from './icon/Icon';
 
-export type ImportProblemElement = {
+type ImportProblemElement = {
   problem: string;
   row: number;
 };
 
-export type ImportResponsePayload = Omit<ImportModuleResponsePayload, 'problems'> & {
+type ImportResponsePayload = Omit<ImportModuleResponsePayload, 'problems'> & {
   problems: ImportProblemElement[];
 };
 

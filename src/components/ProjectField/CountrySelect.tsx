@@ -8,7 +8,7 @@ import { Region, getRegionValue } from 'src/types/AcceleratorProject';
 import { ProjectFieldEditProps } from '.';
 import ProjectFieldSelect from './Select';
 
-export type Props = Omit<ProjectFieldEditProps, 'onChange'> & {
+type Props = Omit<ProjectFieldEditProps, 'onChange'> & {
   onChange: (countryCode?: string, region?: string) => void;
   region?: Region;
 };

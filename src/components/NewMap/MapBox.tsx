@@ -34,7 +34,7 @@ import {
 import { useMaintainLayerOrder } from './useMaintainLayerOrder';
 import { getBoundingBoxFromPoints, isBoundsValid } from './utils';
 
-export type MapBoxProps = {
+type MapBoxProps = {
   additionalComponent?: React.ReactNode;
   clusterMaxZoom?: number;
   clusterRadius?: number;

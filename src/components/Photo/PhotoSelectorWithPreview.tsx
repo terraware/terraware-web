@@ -7,7 +7,7 @@ import PhotoDragDrop, { PhotoDragDropProps } from 'src/components/Photo/PhotoDra
 
 import PhotoPreview from './PhotoPreview';
 
-export type PhotoSelectorWithPreviewErrorType = {
+type PhotoSelectorWithPreviewErrorType = {
   title: string;
   text: string;
 };

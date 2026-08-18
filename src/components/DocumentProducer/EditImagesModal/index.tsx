@@ -31,7 +31,7 @@ import { getImagePath } from 'src/utils/images';
 
 import PhotoSelector, { PhotoWithAttributes } from './PhotoSelector';
 
-export type EditImagesModalProps = {
+type EditImagesModalProps = {
   display?: boolean;
   variable: ImageVariableWithValues;
   onFinish: (edited: boolean) => void;

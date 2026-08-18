@@ -15,15 +15,15 @@ import SearchService from './SearchService';
 /**
  * Types exported from service
  */
-export type Facilities = Facility[];
+type Facilities = Facility[];
 
-export type FacilitySearchParams = {
+type FacilitySearchParams = {
   type: FacilityType;
   organizationId: number | string;
   query?: string;
 };
 
-export type GetFacilityRequest = {
+type GetFacilityRequest = {
   organization: Organization;
   facilityId: number | string;
   type: FacilityType;

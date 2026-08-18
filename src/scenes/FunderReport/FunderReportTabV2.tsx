@@ -16,7 +16,7 @@ import Card from 'src/components/common/Card';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import useQuery from 'src/utils/useQuery';
 
-export type FunderReportTabV2Props = {
+type FunderReportTabV2Props = {
   selectedProjectId: number;
 };
 

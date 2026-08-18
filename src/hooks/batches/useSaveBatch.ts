@@ -14,7 +14,7 @@ import {
 import { useLazyGetAccessionForSpeciesQuery } from 'src/queries/search/accessions';
 import { Batch } from 'src/types/Batch';
 
-export type UpdateBatchRequestPayloadWithId = UpdateBatchRequestPayload & { id: number };
+type UpdateBatchRequestPayloadWithId = UpdateBatchRequestPayload & { id: number };
 
 export type SavableBatch = (CreateBatchRequestPayload | UpdateBatchRequestPayloadWithId) & Batch;
 

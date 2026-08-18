@@ -21,7 +21,7 @@ const parseDensity = (value: string | undefined): number | undefined => {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
 };
 
-export type PlantingPlanSiteGoalsProps = {
+type PlantingPlanSiteGoalsProps = {
   plantingSite: PlantingSitePayload;
 };
 

@@ -59,7 +59,7 @@ export type MapLayer = {
   visible: boolean;
 };
 
-export type MapHighlight = {
+type MapHighlight = {
   featureIds: MapLayerFeatureId[];
   style: MapFillComponentStyle;
 };

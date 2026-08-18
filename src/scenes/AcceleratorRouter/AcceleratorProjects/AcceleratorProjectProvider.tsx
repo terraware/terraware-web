@@ -15,7 +15,7 @@ import { getUserDisplayName } from 'src/utils/user';
 
 import { AcceleratorProjectContext, AcceleratorProjectData } from './AcceleratorProjectContext';
 
-export type Props = {
+type Props = {
   children: React.ReactNode;
 };
 

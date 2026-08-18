@@ -10,7 +10,7 @@ import { DocumentTemplate } from 'src/types/documentProducer/DocumentTemplate';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
 import { getUserDisplayName } from 'src/utils/user';
 
-export type DocumentMetadataProps = {
+type DocumentMetadataProps = {
   document: Document;
   documentTemplate: DocumentTemplate;
 };

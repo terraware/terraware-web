@@ -65,7 +65,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type CountObservationsApiArgs = {
+type CountObservationsApiArgs = {
   organizationId: number;
   plantingSiteId?: number;
   observationType?: 'Monitoring' | 'Biomass Measurements';

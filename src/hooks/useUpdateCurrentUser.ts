@@ -8,7 +8,7 @@ import { User } from 'src/types/User';
 
 import useUpdateUserPreferences from './useUpdateUserPreferences';
 
-export type UpdateCurrentUserOptions = {
+type UpdateCurrentUserOptions = {
   skipAcknowledgeTimeZone?: boolean;
 };
 

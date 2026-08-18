@@ -6,14 +6,14 @@ import {
 } from '../generated/events';
 import { QueryTagTypes } from '../tags';
 
-export type EventSubject = NonNullable<ListEventLogEntriesRequestPayload['subjects']>[number];
+type EventSubject = NonNullable<ListEventLogEntriesRequestPayload['subjects']>[number];
 
-export type ListPlantingSeasonEventsArgs = {
+type ListPlantingSeasonEventsArgs = {
   organizationId: number;
   plantingSeasonId: number;
 };
 
-export type ListInventoryPlanningEventsArgs = {
+type ListInventoryPlanningEventsArgs = {
   organizationId: number;
   plantingSeasonId?: number;
   plantingSiteId?: number;

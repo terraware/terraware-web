@@ -14,7 +14,7 @@ export type SpeciesTarget = {
   target: string;
 };
 
-export type PlantingPlanSpeciesSectionProps = {
+type PlantingPlanSpeciesSectionProps = {
   speciesTargets: SpeciesTarget[];
   onAdd: (speciesId: number, target: string) => void;
   onUpdate: (speciesId: number, target: string) => void;

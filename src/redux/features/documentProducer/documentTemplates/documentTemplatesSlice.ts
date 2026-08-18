@@ -9,7 +9,7 @@ export type DocumentTemplatesData = {
 };
 
 // Define the initial state
-export type DocumentTemplatesState = {
+type DocumentTemplatesState = {
   listDocumentTemplates: DocumentTemplatesData;
 };
 

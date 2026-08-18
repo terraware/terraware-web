@@ -21,7 +21,7 @@ import ReportReviewButtons from './ReportReviewButtons';
 import ReportTabV2 from './ReportTabV2';
 import ReportsSettings from './ReportsSettings';
 
-export type ReportsViewProps = {
+type ReportsViewProps = {
   tab?: string;
 };
 

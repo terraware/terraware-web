@@ -7,7 +7,7 @@ export type PartialSubLocation = Partial<SubLocation>;
 
 export type FacilityType = components['schemas']['FacilityPayload']['type'];
 
-export type FacilityLocation = components['schemas']['Point'];
+type FacilityLocation = components['schemas']['Point'];
 
 export interface Facility {
   id: number;

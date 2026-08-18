@@ -1,7 +1,7 @@
 import { baseApi as api } from '../baseApi';
 import { QueryTagTypes } from '../tags';
 
-export type ListSpeciesProjectNamesApiArg = {
+type ListSpeciesProjectNamesApiArg = {
   organizationId: number;
   speciesId: number;
 };

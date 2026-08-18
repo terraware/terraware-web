@@ -5,7 +5,7 @@
 
 export type Position = number[]; // [longitude, latitude]
 export type Ring = Position[];
-export type Polygon = Ring[]; // [outerRing, ...holes]
+type Polygon = Ring[]; // [outerRing, ...holes]
 export type MultiPolygonCoordinates = Polygon[];
 
 // Coordinate precision (~1m at 5 decimals) — plenty for a small thumbnail.

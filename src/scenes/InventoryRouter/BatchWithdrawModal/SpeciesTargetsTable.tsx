@@ -5,7 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { useLocalization } from 'src/providers';
 import { SpeciesTargetForSubstratum } from 'src/queries/search/speciesTargetsForSubstratum';
 
-export type SpeciesTargetsTableProps = {
+type SpeciesTargetsTableProps = {
   rows: SpeciesTargetForSubstratum[];
 };
 

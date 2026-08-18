@@ -19,7 +19,7 @@ type MapLegendItem = {
   isDisabled?: boolean;
 };
 
-export type MapLegendGroup = {
+type MapLegendGroup = {
   title: string;
   items: MapLegendItem[];
   tooltip?: string;

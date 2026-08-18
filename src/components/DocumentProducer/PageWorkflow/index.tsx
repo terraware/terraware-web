@@ -7,7 +7,7 @@ import strings from 'src/strings';
 
 import PartialErrorsDialog from './PartialErrorsDialog';
 
-export type PageWorkflowProps = WorkflowSuccessProps & {
+type PageWorkflowProps = WorkflowSuccessProps & {
   children: React.ReactNode;
 };
 

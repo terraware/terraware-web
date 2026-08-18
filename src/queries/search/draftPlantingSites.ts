@@ -105,7 +105,7 @@ type ListDraftPlantingSiteSummariesApiResponse = {
   results: DraftPlantingSiteSummaryApiResult[];
 };
 
-export type SearchDraftPlantingSiteSummariesApiArgs = {
+type SearchDraftPlantingSiteSummariesApiArgs = {
   organizationId: number;
   projectIds?: number[];
   searchOrder?: SearchSortOrderElement[];

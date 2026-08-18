@@ -9,7 +9,7 @@ import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import { setPlantingSiteAction, setPlantingSitesAction, setPlantingSitesSearchResultsAction } from './trackingSlice';
 
-export type PlotT0Observation = {
+type PlotT0Observation = {
   observation_startDate: string;
   observation_completedTime: string;
   observation_id: string;

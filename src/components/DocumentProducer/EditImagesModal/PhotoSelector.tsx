@@ -8,7 +8,7 @@ import PhotoDragDrop, { PhotoDragDropProps } from 'src/components/Photo/PhotoDra
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import strings from 'src/strings';
 
-export type PhotoChooserErrorType = {
+type PhotoChooserErrorType = {
   title: string;
   text: string;
 };
@@ -29,7 +29,7 @@ export type PhotoWithAttributes = {
   citation: string;
 };
 
-export type PhotoWithAttributesAndUrl = PhotoWithAttributes & {
+type PhotoWithAttributesAndUrl = PhotoWithAttributes & {
   url: string;
 };
 

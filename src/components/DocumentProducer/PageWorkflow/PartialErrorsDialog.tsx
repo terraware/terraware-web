@@ -6,7 +6,7 @@ import { Button, DialogBox } from '@terraware/web-components';
 import ErrorMessage from 'src/components/DocumentProducer/ErrorMessage';
 import strings from 'src/strings';
 
-export type PartialErrorsDialogProps = {
+type PartialErrorsDialogProps = {
   onClose: () => void;
   partialError: string;
 };

@@ -11,7 +11,7 @@ import SpeciesNativityBadge from '../SpeciesNativityBadge';
 import ProjectCheckSummary, { ProjectCheckSummaryProps } from './ProjectCheckSummary';
 import { NATIVITY_VALUES, Nativity, OverrideEdit, getNativityLabel, projectSpeciesKey } from './types';
 
-export type PendingRow = {
+type PendingRow = {
   species: Species;
   nativity: Nativity;
 };
@@ -23,7 +23,7 @@ export type NativeCheckProjectSection = {
   pending: PendingRow[];
 };
 
-export type NativeCheckStepProps = {
+type NativeCheckStepProps = {
   mode: 'list' | 'override';
   sections: NativeCheckProjectSection[];
   selectedKeys: Set<string>;

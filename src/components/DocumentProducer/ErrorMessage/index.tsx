@@ -2,7 +2,7 @@ import React, { type JSX } from 'react';
 
 import { Typography, useTheme } from '@mui/material';
 
-export type ErrorMessageProps = {
+type ErrorMessageProps = {
   error?: string;
   fontSize?: number;
 };

@@ -4,7 +4,7 @@ import { Grid, useTheme } from '@mui/material';
 
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-export type Props = {
+type Props = {
   leftChild?: React.ReactNode;
   rightChild?: React.ReactNode;
   style?: Record<string, string | number>;

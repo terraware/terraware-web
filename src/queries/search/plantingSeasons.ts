@@ -123,7 +123,7 @@ type PlantingSeasonSummaryApiResponse = {
   results: PlantingSeasonSummaryApiResult[];
 };
 
-export type PlantingSeasonSpeciesSummaryRow = {
+type PlantingSeasonSpeciesSummaryRow = {
   speciesId: number;
   scientificName?: string;
   commonName?: string;

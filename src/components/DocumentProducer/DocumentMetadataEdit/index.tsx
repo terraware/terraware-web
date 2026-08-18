@@ -16,7 +16,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import { getDocumentOwnerOptions, getDocumentTemplateName, getDocumentTemplateOptions } from './helpers';
 
-export type DocumentMetadataEditProps = {
+type DocumentMetadataEditProps = {
   documentName?: string;
   setDocumentName: (name: string) => void;
   documentOwner?: string;

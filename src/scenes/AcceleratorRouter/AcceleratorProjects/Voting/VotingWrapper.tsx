@@ -18,7 +18,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import VoteBadge from './VoteBadge';
 import VoteRowGrid from './VoteRowGrid';
 
-export type Props = {
+type Props = {
   children: React.ReactNode;
   isForm?: boolean;
   rightComponent?: React.ReactNode;

@@ -31,22 +31,20 @@ const SEARCH_VALUES_ENDPOINT = '/api/v1/search/values';
  *
  * You will generally want SearchRequestPayload instead of this.
  */
-export type RawSearchRequestPayload =
-  paths[typeof SEARCH_ENDPOINT]['post']['requestBody']['content']['application/json'];
+type RawSearchRequestPayload = paths[typeof SEARCH_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
-export type SearchResponsePayload =
-  paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
+type SearchResponsePayload = paths[typeof SEARCH_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
-export type RawSearchCountRequestPayload =
+type RawSearchCountRequestPayload =
   paths[typeof SEARCH_COUNT_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
-export type SearchCountResponsePayload =
+type SearchCountResponsePayload =
   paths[typeof SEARCH_COUNT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
-export type RawSearchValuesRequestPayload =
+type RawSearchValuesRequestPayload =
   paths[typeof SEARCH_VALUES_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
-export type SearchValuesResponsePayload =
+type SearchValuesResponsePayload =
   paths[typeof SEARCH_VALUES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 const httpSearch = HttpService.root(SEARCH_ENDPOINT);

@@ -102,7 +102,7 @@ export const IndicatorProgressSectionContent = ({
   );
 };
 
-export type IndicatorProgressSectionProps = {
+type IndicatorProgressSectionProps = {
   isConsoleView?: boolean;
   reportId?: number;
 };

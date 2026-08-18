@@ -9,7 +9,7 @@ import Search, { SearchProps } from 'src/components/DocumentProducer/Search';
 import Table from 'src/components/common/table';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 
-export type TableProps<T> = {
+type TableProps<T> = {
   tableOrderBy: string;
   tableOrder?: SortOrder;
   tableColumns: TableColumnType[];
@@ -24,7 +24,7 @@ export type TableProps<T> = {
   sortComparator?: (a: T, b: T, orderBy: keyof T) => number;
 };
 
-export type TableContentProps<T> = {
+type TableContentProps<T> = {
   // Search
   searchProps?: SearchProps;
 

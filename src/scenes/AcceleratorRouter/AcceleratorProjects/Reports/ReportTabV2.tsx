@@ -25,7 +25,7 @@ import { useListPublishedReportsQuery } from 'src/queries/generated/publishedRep
 
 import ReportInternalComment from './ReportInternalComment';
 
-export type ReportTabV2Props = {
+type ReportTabV2Props = {
   active?: boolean;
 };
 

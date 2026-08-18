@@ -5,7 +5,7 @@ import { useLocalization } from 'src/providers';
 import { MapSingleSelectLegendGroup } from './MapLegend';
 import useMapFeatureStyles from './useMapFeatureStyles';
 
-export type PlantingSiteMapLayer = 'sites' | 'strata' | 'substrata';
+type PlantingSiteMapLayer = 'sites' | 'strata' | 'substrata';
 
 const usePlantingSiteMapLegend = (defaultLayer?: PlantingSiteMapLayer, disabled?: boolean) => {
   const { strings } = useLocalization();

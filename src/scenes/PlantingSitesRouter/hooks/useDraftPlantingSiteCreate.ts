@@ -18,7 +18,7 @@ import useSnackbar from 'src/utils/useSnackbar';
  * @param nextStep
  * Next step to use in the flow if create was successful.
  */
-export type Data = {
+type Data = {
   draft: DraftPlantingSite;
   nextStep: SiteEditStep;
 };

@@ -7,7 +7,7 @@ import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 
 import DisplayVariableValue from './DisplayVariableValue';
 
-export type EditableSectionDisplayProps = {
+type EditableSectionDisplayProps = {
   allVariables: VariableWithValues[];
   projectId: number;
   onEditVariableValue: (variable?: VariableWithValues) => void;

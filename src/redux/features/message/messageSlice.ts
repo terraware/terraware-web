@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-export type Message = {
+type Message = {
   key: string;
   data: any;
 };

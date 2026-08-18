@@ -3,7 +3,7 @@ import { AcceleratorReportPhoto, NewAcceleratorReportPhoto } from 'src/types/Acc
 import { baseApi as api } from '../baseApi';
 import { acceleratorReportMediaTag, acceleratorReportTag } from '../tags';
 
-export type BatchPhotosRequest = {
+type BatchPhotosRequest = {
   projectId: number;
   reportId: number;
   photosToUpdate?: AcceleratorReportPhoto[];
@@ -11,7 +11,7 @@ export type BatchPhotosRequest = {
   fileIdsToDelete?: number[];
 };
 
-export type BatchPhotosResponse = {
+type BatchPhotosResponse = {
   uploadedFileIds?: number[];
 };
 

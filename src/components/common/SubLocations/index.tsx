@@ -17,7 +17,7 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import AddEditSubLocationModal from './AddEditSubLocationModal';
 import SubLocationsCellRenderer from './SubLocationsCellRenderer';
 
-export type FacilityType = 'seedbank' | 'nursery';
+type FacilityType = 'seedbank' | 'nursery';
 
 export type SublocationsProps = {
   facilityType: FacilityType;

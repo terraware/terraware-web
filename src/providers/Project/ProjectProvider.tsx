@@ -8,7 +8,7 @@ import { useGetProjectQuery } from 'src/queries/generated/projects';
 
 import { ProjectContext, ProjectData } from './ProjectContext';
 
-export type Props = {
+type Props = {
   children: React.ReactNode;
 };
 

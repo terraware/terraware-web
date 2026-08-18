@@ -8,23 +8,23 @@ import HttpService, { Response, Response2 } from '../HttpService';
  */
 
 // types
-export type FundingEntitiesData = {
+type FundingEntitiesData = {
   fundingEntities?: FundingEntity[];
 };
 
-export type FundingEntityData = {
+type FundingEntityData = {
   fundingEntity: FundingEntity | undefined;
 };
 
-export type UserFundingEntityData = {
+type UserFundingEntityData = {
   userFundingEntity: FundingEntity | undefined;
 };
 
-export type FundingEntitiesResponse = Response & FundingEntitiesData;
-export type UserFundingEntityResponse = Response & UserFundingEntityData;
-export type FundingEntityResponse = Response & FundingEntityData;
+type FundingEntitiesResponse = Response & FundingEntitiesData;
+type UserFundingEntityResponse = Response & UserFundingEntityData;
+type FundingEntityResponse = Response & FundingEntityData;
 
-export type InviteFunderError = 'PRE_EXISTING_USER' | 'INVALID_EMAIL';
+type InviteFunderError = 'PRE_EXISTING_USER' | 'INVALID_EMAIL';
 
 export type InviteFunderResponse = Response & {
   email: string;
@@ -53,14 +53,14 @@ type ListFundersServerResponse =
   paths[typeof FUNDING_ENTITY_USERS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 type ListFunderReportsServerResponse =
   paths[typeof FUNDER_REPORTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-export type UpdateFundingEntityRequest =
+type UpdateFundingEntityRequest =
   paths[typeof FUNDING_ENTITY_ENDPOINT]['put']['requestBody']['content']['application/json'];
-export type CreateFundingEntityRequest =
+type CreateFundingEntityRequest =
   paths[typeof FUNDING_ENTITIES_LIST_ENDPOINT]['post']['requestBody']['content']['application/json'];
 
-export type InviteFunderServerResponse =
+type InviteFunderServerResponse =
   paths[typeof FUNDING_ENTITY_USERS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-export type DeleteFundersServerRequest =
+type DeleteFundersServerRequest =
   paths[typeof FUNDING_ENTITY_USERS_ENDPOINT]['delete']['requestBody']['content']['application/json'];
 
 const httpUserFundingEntity = HttpService.root(USER_FUNDING_ENTITY_ENDPOINT);

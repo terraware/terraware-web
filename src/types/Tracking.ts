@@ -3,7 +3,7 @@ import { components } from 'src/api/types/generated-schema';
 // planting site, stratum, substratum
 export type PlantingSite = components['schemas']['PlantingSitePayload'];
 export type Stratum = components['schemas']['StratumResponsePayload'];
-export type Substratum = components['schemas']['SubstratumResponsePayload'];
+type Substratum = components['schemas']['SubstratumResponsePayload'];
 
 // geometry and types of geometries
 export type Polygon = components['schemas']['Polygon'];

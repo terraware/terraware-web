@@ -11,7 +11,7 @@ export type SegmentOption<T extends string> = {
   disabled?: boolean;
 };
 
-export type SegmentControlProps<T extends string> = {
+type SegmentControlProps<T extends string> = {
   segments: SegmentOption<T>[];
   selected: T;
   onChange: (id: T) => void;
