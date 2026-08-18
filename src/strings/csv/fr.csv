@@ -1772,6 +1772,7 @@ PUBLISH_ACTIVITY,Publier l’activité,a00f9120
 PUBLISH_ACTIVITY_MODAL_MESSAGE,Vous êtes sur le point de publier {0} de {1}. Êtes-vous sûr de vouloir continuer ?,6e0d670f
 PUBLISH_TO_FUNDER_PORTAL,Publier sur le portail des financeurs,ec2ddbec
 PUBLISHED,Publié,baa0bfba
+PUBLISHED_FUNDER_REPORT,Rapport de bailleur publié,28419d0b
 PUBLISHED_REPORT_CONSOLE_WARNING,"Vous consultez le dernier rapport publié, celui fourni aux donateurs sur leur portail.",64413dc4
 PURPOSE,But,ff06abab
 PURPOSE_AND_DESTINATION,But et destination,bd78a61c
@@ -1895,6 +1896,7 @@ REPORT_NEEDS_UPDATE,Le rapport doit être mis à jour,99c8c3cd
 REPORT_NO_NURSERIES,Le rapport n'inclut aucune pépinière.,d33e97f7
 REPORT_NO_PLANTING_SITES,Le rapport n'inclut aucun site de plantation.,bbd3eaf4
 REPORT_NO_SEEDBANKS,Le rapport n'inclut aucune banque de semences.,8d098394
+REPORT_NOT_PUBLISHED_YET,Ce rapport n'a pas encore été publié sur le Portail des bailleurs.,6e8ab84b
 REPORT_NURSERY_CAPACITY_INFO,Veuillez indiquer le nombre total de plantes que la pépinière peut contenir selon les meilleures estimations.,daa9bfcc
 REPORT_PERIOD,Période du rapport : {0} - {1},b06927c6
 REPORT_PREVIEW,Aperçu du rapport,96417b29

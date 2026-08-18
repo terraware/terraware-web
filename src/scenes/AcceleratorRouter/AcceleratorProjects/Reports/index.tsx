@@ -8,6 +8,7 @@ import { useUser } from 'src/providers';
 import EditSettings from './EditSettings';
 import FunderReportPreviewV2 from './FunderReportPreviewV2';
 import NewIndicator from './NewIndicator';
+import PublishedFunderReportV2 from './PublishedFunderReportV2';
 import ReportEditV2 from './ReportEditV2';
 import ReportView from './ReportView';
 import ReportsView from './ReportsView';
@@ -38,6 +39,7 @@ const ReportsRouter = () => {
           }
         />
         <Route path='/:reportId/preview' element={<FunderReportPreviewV2 />} />
+        <Route path='/:reportId/published' element={<PublishedFunderReportV2 />} />
         <Route path='/:reportId' element={<ReportsView tab='reports' />} />
         <Route path='' element={<ReportsView tab='reports' />} />
         <Route

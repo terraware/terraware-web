@@ -8,6 +8,7 @@ import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
+import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import PublishModal from './PublishModal';
@@ -30,6 +31,13 @@ const ReportOptionsMenu = ({ projectId, reportId }: ReportOptionsMenuProps): JSX
   const { report } = useOneAcceleratorReport(reportId);
 
   const { isLoading, publishReport, publishReportResponse } = useAcceleratorReportActions(reportId);
+
+  const { currentData: listPublishedReportsData } = useListPublishedReportsQuery(projectId);
+
+  const isPublished = useMemo(
+    () => listPublishedReportsData?.reports.some((publishedReport) => publishedReport.reportId === reportId) ?? false,
+    [listPublishedReportsData, reportId]
+  );
 
   useEffect(() => {
     if (publishReportResponse.isError) {
@@ -55,6 +63,11 @@ const ReportOptionsMenu = ({ projectId, reportId }: ReportOptionsMenuProps): JSX
         label: strings.PREVIEW_FUNDER_REPORT,
         value: 'preview',
       },
+      {
+        disabled: !isPublished,
+        label: strings.VIEW_PUBLISHED_FUNDER_REPORT,
+        value: 'published',
+      },
       ...(canPublish
         ? [
             {
@@ -65,13 +78,17 @@ const ReportOptionsMenu = ({ projectId, reportId }: ReportOptionsMenuProps): JSX
           ]
         : []),
     ],
-    [canPublish, isLoading, report?.status, strings]
+    [canPublish, isLoading, isPublished, report?.status, strings]
   );
 
   const onOptionItemClick = useCallback(
     (optionItem: DropdownItem) => {
       if (optionItem.value === 'preview') {
         navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', `${projectId}`)}/${reportId}/preview`);
+      } else if (optionItem.value === 'published') {
+        navigate(
+          `${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', `${projectId}`)}/${reportId}/published`
+        );
       } else if (optionItem.value === 'publish') {
         setShowPublishModal(true);
       }

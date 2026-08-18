@@ -1773,6 +1773,7 @@ PUBLISH_ACTIVITY,Publicar actividad,a00f9120
 PUBLISH_ACTIVITY_MODAL_MESSAGE,Está a punto de publicar {0} de {1}. ¿Está seguro?,6e0d670f
 PUBLISH_TO_FUNDER_PORTAL,Publicar en el portal del financiador,ec2ddbec
 PUBLISHED,Publicado,baa0bfba
+PUBLISHED_FUNDER_REPORT,Informe de financiador publicado,28419d0b
 PUBLISHED_REPORT_CONSOLE_WARNING,Está viendo el último informe publicado tal y como aparece para los financistas en el Portal del financista.,64413dc4
 PURPOSE,Propósito,ff06abab
 PURPOSE_AND_DESTINATION,Propósito y Destino,bd78a61c
@@ -1896,6 +1897,7 @@ REPORT_NEEDS_UPDATE,El informe necesita actualizarse,99c8c3cd
 REPORT_NO_NURSERIES,No se incluyeron viveros en el informe.,d33e97f7
 REPORT_NO_PLANTING_SITES,No se incluyeron sitios de siembra en el informe.,bbd3eaf4
 REPORT_NO_SEEDBANKS,No se incluyeron bancos de semillas en el informe.,8d098394
+REPORT_NOT_PUBLISHED_YET,Este informe aún no ha sido publicado en el Portal de Financiadores.,6e8ab84b
 REPORT_NURSERY_CAPACITY_INFO,"Por favor, enumere el número total de plantas que el vivero puede alojar según las mejores estimaciones.",daa9bfcc
 REPORT_PERIOD,Periodo del informe: {0} - {1},b06927c6
 REPORT_PREVIEW,Vista previa del informe,96417b29
