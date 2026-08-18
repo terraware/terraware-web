@@ -16,7 +16,7 @@ export const useBotanicalCountries = (skip = false): UseBotanicalCountriesResult
     }
   }, [listBotanicalCountries, skip, isUninitialized]);
 
-  const botanicalCountries = useMemo(() => data ?? [], [data]);
+  const botanicalCountries = useMemo(() => [...(data ?? [])].sort((a, b) => a.name.localeCompare(b.name)), [data]);
 
   const getBotanicalCountryName = useMemo(
     () => (code?: string) => botanicalCountries.find((botanicalCountry) => botanicalCountry.code === code)?.name,
