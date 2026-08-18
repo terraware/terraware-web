@@ -95,17 +95,6 @@ export type UpdateVariableOwnerPayload = components['schemas']['UpdateVariableOw
 
 export type VariableStatusType = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload']['status'];
 
-export const VariableStatuses: VariableStatusType[] = [
-  'Approved',
-  'Complete',
-  'In Review',
-  'Incomplete',
-  'Needs Translation',
-  'Not Needed',
-  'Not Submitted',
-  'Rejected',
-];
-
 export const NonSectionVariableStatuses: VariableStatusType[] = [
   'Approved',
   'In Review',

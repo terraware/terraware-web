@@ -36,8 +36,6 @@ export const isSelectVariableValue = (input: unknown): input is SelectVariableVa
   !!(input as SelectVariableValue)?.optionValues;
 
 export type TableVariableValue = components['schemas']['ExistingTableValuePayload'];
-export const isTableVariableValue = (input: unknown): input is TableVariableValue =>
-  (input as TableVariableValue)?.type === 'Table';
 
 export type TextVariableValue = components['schemas']['ExistingTextValuePayload'];
 export const isTextVariableValue = (input: unknown): input is TextVariableValue =>

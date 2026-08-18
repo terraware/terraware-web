@@ -18,14 +18,6 @@ export const DeliverableCategories: DeliverableCategoryType[] = [
 ];
 
 export type DeliverableStatusType = components['schemas']['DeliverablePayload']['status'];
-export const DeliverableStatuses: DeliverableStatusType[] = [
-  'Not Submitted',
-  'In Review',
-  'Rejected',
-  'Approved',
-  'Needs Translation',
-  'Not Needed',
-];
 
 export const DeliverableStatusOrder: { [key in DeliverableStatusTypeWithOverdue]: number } = {
   Overdue: 0,
@@ -90,16 +82,5 @@ export const categoryLabel = (category: DeliverableCategoryType): string => {
 
     default:
       return category as string;
-  }
-};
-
-export const getDeliverableTypeLabel = (status: DeliverableTypeType): string => {
-  switch (status) {
-    case 'Document':
-      return strings.DOCUMENT;
-    case 'Species':
-      return strings.SPECIES_LIST;
-    default:
-      return status as string;
   }
 };

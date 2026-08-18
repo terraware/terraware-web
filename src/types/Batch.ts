@@ -67,11 +67,6 @@ export const getBatchHistoryTypesEnum = (): BatchHistoryPayload['type'][] => [
   'StatusChanged',
 ];
 
-export const getBatchHistoryTypesLocalized = (): string[] =>
-  getBatchHistoryTypesEnum()
-    .map((type: BatchHistoryPayload['type']) => batchHistoryEventEnumToLocalized(type))
-    .filter((type: string | undefined): type is string => !!type);
-
 export const batchHistoryEventEnumToLocalized = (batchHistoryType: BatchHistoryPayload['type']): string | undefined => {
   switch (batchHistoryType) {
     case 'DetailsEdited': {
@@ -94,32 +89,6 @@ export const batchHistoryEventEnumToLocalized = (batchHistoryType: BatchHistoryP
     }
     case 'StatusChanged': {
       return strings.BATCH_HISTORY_TYPE_STATUS_CHANGED;
-    }
-  }
-};
-
-export const batchHistoryEventLocalizedToEnum = (batchHistoryType: string): BatchHistoryPayload['type'] | undefined => {
-  switch (batchHistoryType) {
-    case strings.BATCH_HISTORY_TYPE_DETAILS_EDITED: {
-      return 'DetailsEdited';
-    }
-    case strings.BATCH_HISTORY_TYPE_INCOMING_WITHDRAWAL: {
-      return 'IncomingWithdrawal';
-    }
-    case strings.BATCH_HISTORY_TYPE_OUTGOING_WITHDRAWAL: {
-      return 'OutgoingWithdrawal';
-    }
-    case strings.BATCH_HISTORY_TYPE_PHOTO_CREATED: {
-      return 'PhotoCreated';
-    }
-    case strings.BATCH_HISTORY_TYPE_PHOTO_DELETED: {
-      return 'PhotoDeleted';
-    }
-    case strings.BATCH_HISTORY_TYPE_QUANTITY_EDITED: {
-      return 'QuantityEdited';
-    }
-    case strings.BATCH_HISTORY_TYPE_STATUS_CHANGED: {
-      return 'StatusChanged';
     }
   }
 };

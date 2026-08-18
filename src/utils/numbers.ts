@@ -31,12 +31,6 @@ export const formatNumberScale = (value?: number | string, decimalPlaces: number
   return `${scaledNum.toFixed(decimalPlaces)}${scale.suffix}`;
 };
 
-export const disableDecimalChar = (e: React.KeyboardEvent<HTMLDivElement>) => {
-  if (e.key === '.' || e.key === ',') {
-    e.preventDefault();
-  }
-};
-
 /**
  * Rounds a number to a specified number of decimal places
  * @param value - The number to round

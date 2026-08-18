@@ -5,7 +5,6 @@ export const selectDraftPlantingSiteCreate = (requestId: string) => (state: Root
 export const selectDraftPlantingSiteEdit = (requestId: string) => (state: RootState) =>
   state.draftPlantingSiteEdit[requestId];
 export const selectDraftPlantingSiteGet = (id: number) => (state: RootState) => state.draftPlantingSiteGet[id];
-export const selectDraftPlantingSite = (state: RootState, id: number) => selectDraftPlantingSiteGet(id)(state)?.data;
 
 /**
  * Returns PlantingSiteSearchResult[], not a draft planting site will full geometries

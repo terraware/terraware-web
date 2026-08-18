@@ -1,29 +1,10 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 import { MapViewStyle } from 'src/types/Map';
 import { getRgbaFromHex } from 'src/utils/color';
-
-export const useMapViewStyle = (): [MapViewStyle, (style: MapViewStyle) => void] => {
-  const [mapViewStyle, setMapViewStyle] = useState<MapViewStyle>(
-    localStorage.getItem('mapViewStyle') === 'Outdoors' ? 'Outdoors' : 'Satellite'
-  );
-
-  const onChangeMapViewStyle = useCallback(
-    (viewStyle: MapViewStyle) => {
-      setMapViewStyle(viewStyle);
-      localStorage.setItem('mapViewStyle', viewStyle);
-    },
-    [setMapViewStyle]
-  );
-
-  return useMemo<[MapViewStyle, (style: MapViewStyle) => void]>(
-    () => [mapViewStyle, onChangeMapViewStyle],
-    [mapViewStyle, onChangeMapViewStyle]
-  );
-};
 
 export type MapViewStyleSwitchProps = {
   mapViewStyle?: MapViewStyle;

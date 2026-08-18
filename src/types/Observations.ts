@@ -145,20 +145,6 @@ export const getPlotStatus = (status: MonitoringPlotStatus | undefined, strings:
   }
 };
 
-export const getReplaceObservationPlotDuration = (
-  duration: ReplaceObservationPlotDuration,
-  strings: typeof defaultStrings
-): string => {
-  switch (duration) {
-    case 'Temporary':
-      return strings.TEMPORARY;
-    case 'LongTerm':
-      return strings.LONG_TERM_PERMANENT;
-    default:
-      return '';
-  }
-};
-
 export type RecordedPlant = components['schemas']['RecordedPlantPayload'];
 export type RecordedPlantStatus = RecordedPlant['status'];
 
