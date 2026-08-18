@@ -444,6 +444,8 @@ export type NewShrubPayload = {
     shrubDiameter: number;
   };
 export type NewTrunkPayload = {
+  /** Measured in meters. */
+  boleHeight?: number;
   description?: string;
   /** Measured in centimeters. */
   diameterAtBreastHeight: number;
@@ -659,6 +661,8 @@ export type ExistingBiomassQuadratPayload = {
   species: ExistingBiomassQuadratSpeciesPayload[];
 };
 export type ExistingTreePayload = {
+  /** Measured in meters. */
+  boleHeight?: number;
   description?: string;
   /** Measured in centimeters. */
   diameterAtBreastHeight?: number;
@@ -994,6 +998,7 @@ export type QuadratUpdateOperationPayload = {
 export type RecordedTreeUpdateOperationPayload = {
   type: 'RecordedTree';
 } & ObservationUpdateOperationPayloadBase & {
+    boleHeight?: number | null;
     description?: string | null;
     /** Only valid for Tree and Trunk growth forms. */
     diameterAtBreastHeight?: number;
