@@ -17,6 +17,7 @@ import { SpeciesProjectElement } from 'src/types/Species';
 import AddSpeciesToProjectModal from './AddSpeciesToProjectModal';
 import OverrideSpeciesModal from './OverrideSpeciesModal';
 import RemoveProjectsDialog from './RemoveProjectsDialog';
+import { speciesDataSourceLabel } from './SpeciesDataSourceBadge';
 import SpeciesNativityBadge from './SpeciesNativityBadge';
 
 type Nativity = NonNullable<SpeciesProjectElement['calculatedNativity']>;
@@ -133,7 +134,7 @@ export default function SpeciesProjectsSection({
             value={
               <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(1) }}>
                 {projectRow.dataSourceType ? (
-                  <Tooltip title={projectRow.dataSourceType}>
+                  <Tooltip title={speciesDataSourceLabel(projectRow.dataSourceType)}>
                     <Box component='span' sx={{ display: 'inline-flex' }}>
                       <SpeciesNativityBadge nativity={projectRow.nativity} />
                     </Box>
