@@ -21,7 +21,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 import AcceleratorReportTabV2 from './AcceleratorReportTabV2';
 import ReportSubmitButton from './ReportSubmitButton';
 
-export type AcceleratorReportsViewProps = {
+type AcceleratorReportsViewProps = {
   tab?: string;
 };
 

@@ -1,13 +1,13 @@
 import { baseApi as api } from '../baseApi';
 import { QueryTagTypes } from '../tags';
 
-export type BatchSeedFundReportPhotosRequest = {
+type BatchSeedFundReportPhotosRequest = {
   reportId: number;
   photosToUpload?: File[];
   photoIdsToDelete?: number[];
 };
 
-export type BatchSeedFundReportPhotosResponse = {
+type BatchSeedFundReportPhotosResponse = {
   uploadedFileIds?: number[];
 };
 

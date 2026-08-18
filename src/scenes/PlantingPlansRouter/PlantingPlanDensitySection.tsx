@@ -24,7 +24,7 @@ const parseDensity = (value: string | undefined): number | undefined => {
   return Number.isFinite(parsed) && parsed > 0 ? parsed : undefined;
 };
 
-export type PlantingPlanDensitySectionProps = {
+type PlantingPlanDensitySectionProps = {
   plantingSite: PlantingSitePayload;
   densityByStratum: Record<number, string>;
   onDensityChange: (stratumId: number, value: string) => void;

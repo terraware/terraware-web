@@ -12,7 +12,7 @@ import Preview from '../PreviewView';
 import SaveVersion from './SaveVersion';
 import UpdateMetadata from './UpdateMetadata';
 
-export type DocumentActionsProps = {
+type DocumentActionsProps = {
   document: Document;
   onDocumentUpdate: () => void;
 };

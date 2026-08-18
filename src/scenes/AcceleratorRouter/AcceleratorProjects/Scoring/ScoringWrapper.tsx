@@ -13,7 +13,7 @@ import strings from 'src/strings';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 
-export type Props = {
+type Props = {
   children: React.ReactNode;
   isForm?: boolean;
   isLoading?: boolean;

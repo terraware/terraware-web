@@ -23,7 +23,7 @@ export type PlantingSitesFilters = {
  * Expectation is for the client to parse the `data` JSON into first class properties on read,
  * and put them back into `data` as JSON upon write/update.
  */
-export type DraftPlantingSitePayloadRaw = components['schemas']['DraftPlantingSitePayload'];
+type DraftPlantingSitePayloadRaw = components['schemas']['DraftPlantingSitePayload'];
 export type DraftPlantingSitePayload = Omit<DraftPlantingSitePayloadRaw, 'createdTime' | 'modifiedTime'>;
 export type CreateDraftPlantingSiteRequestPayload = components['schemas']['CreateDraftPlantingSiteRequestPayload'];
 export type UpdateDraftPlantingSiteRequestPayload = components['schemas']['UpdateDraftPlantingSiteRequestPayload'];

@@ -22,7 +22,7 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/acceleratorReports';
 
-export type AcceleratorReportTabV2Props = {
+type AcceleratorReportTabV2Props = {
   active?: boolean;
 };
 

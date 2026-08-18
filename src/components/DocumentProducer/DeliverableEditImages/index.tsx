@@ -10,7 +10,7 @@ import { getImagePath } from 'src/utils/images';
 
 import PhotoSelector, { PhotoWithAttributes } from '../EditImagesModal/PhotoSelector';
 
-export type DeliverableEditImagesProps = {
+type DeliverableEditImagesProps = {
   projectId: number;
   setDeletedImages: (values: VariableValueImageValue[]) => void;
   setImages: (values: VariableValueImageValue[]) => void;

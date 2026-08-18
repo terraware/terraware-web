@@ -5,7 +5,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 
-export type EditableReportBoxProps = {
+type EditableReportBoxProps = {
   name: string;
   description?: string;
   canEdit: boolean;

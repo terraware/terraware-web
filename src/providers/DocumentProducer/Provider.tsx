@@ -33,7 +33,7 @@ import {
 import { DocumentProducerContext, DocumentProducerData } from './Context';
 import { getContainingSections } from './util';
 
-export type Props = {
+type Props = {
   children: React.ReactNode;
 };
 

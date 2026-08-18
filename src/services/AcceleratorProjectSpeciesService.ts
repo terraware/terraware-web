@@ -34,7 +34,7 @@ type GetSpeciesForProjectResponse =
 type GetSubmissionSnapshotResponse =
   paths[typeof ENDPOINT_ACCELERATOR_PROJECT_SPECIES_SUBMISSION_SNAPSHOT]['get']['responses'][200]['content']['*/*'];
 
-export type UpdateRequestPayload =
+type UpdateRequestPayload =
   paths[typeof ENDPOINT_ACCELERATOR_PROJECT_SPECIES_SINGULAR]['put']['requestBody']['content']['application/json'];
 type UpdateResponse =
   paths[typeof ENDPOINT_ACCELERATOR_PROJECT_SPECIES_SINGULAR]['put']['responses'][200]['content']['application/json'];

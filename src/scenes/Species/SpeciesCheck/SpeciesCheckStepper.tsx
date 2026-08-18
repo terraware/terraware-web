@@ -2,7 +2,7 @@ import React, { type JSX } from 'react';
 
 import { Step, StepLabel, Stepper, useTheme } from '@mui/material';
 
-export type SpeciesCheckStepperProps = {
+type SpeciesCheckStepperProps = {
   steps: string[];
   activeStep: number;
 };

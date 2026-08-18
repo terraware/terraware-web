@@ -10,7 +10,7 @@ import strings from 'src/strings';
 import useDebounce from 'src/utils/useDebounce';
 import useMapboxSearch from 'src/utils/useMapboxSearch';
 
-export type MapSearchBoxProp = {
+type MapSearchBoxProp = {
   onSelect?: (features: AddressAutofillFeatureSuggestion[] | null) => void;
   style?: CSSProperties;
 };

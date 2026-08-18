@@ -1,7 +1,7 @@
 import { baseApi as api } from '../baseApi';
 
-export type GetAppVersionApiResponse = string;
-export type GetAppVersionApiArg = void;
+type GetAppVersionApiResponse = string;
+type GetAppVersionApiArg = void;
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({

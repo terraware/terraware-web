@@ -9,7 +9,7 @@ import FilterGroup, { FilterField } from 'src/components/common/FilterGroup';
 import strings from 'src/strings';
 import { FieldOptionsMap } from 'src/types/Search';
 
-export type SearchFiltersProp = {
+type SearchFiltersProp = {
   filterColumns: FilterField[];
   filterOptions: FieldOptionsMap;
   filters: Record<string, any>;

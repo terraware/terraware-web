@@ -22,7 +22,7 @@ import {
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
 
-export type VariableDetailsInputProps = {
+type VariableDetailsInputProps = {
   display?: boolean;
   values: VariableValueValue[];
   setValues: (values: VariableValueValue[]) => void;

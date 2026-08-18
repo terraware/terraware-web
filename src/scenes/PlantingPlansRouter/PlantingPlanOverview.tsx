@@ -12,7 +12,7 @@ import PlantingPlanStats from './PlantingPlanStats';
 
 const PLACEHOLDER = '-';
 
-export type PlantingPlanOverviewProps = {
+type PlantingPlanOverviewProps = {
   plantingSite: PlantingSitePayload;
 };
 

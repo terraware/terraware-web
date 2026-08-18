@@ -10,7 +10,7 @@ import strings from 'src/strings';
 import { AndNodePayload, FieldNodePayload, OrNodePayload, SearchNodePayload } from 'src/types/Search';
 import { weightUnits } from 'src/units';
 
-export type WEIGHT_QUANTITY_FIELDS = 'remainingQuantity' | 'totalQuantity' | 'withdrawalQuantity';
+type WEIGHT_QUANTITY_FIELDS = 'remainingQuantity' | 'totalQuantity' | 'withdrawalQuantity';
 const COUNT_WEIGHT_VALID_FIELDS: Record<WEIGHT_QUANTITY_FIELDS, string[]> = {
   remainingQuantity: ['remainingQuantity', 'remainingGrams', 'remainingUnits'],
   totalQuantity: ['totalQuantity', 'totalGrams', 'totalUnits'],

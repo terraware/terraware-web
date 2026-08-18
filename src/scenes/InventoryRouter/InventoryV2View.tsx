@@ -32,11 +32,11 @@ export const InventoryListTypes: Record<string, string> = {
 type InventoryListTypeKeys = keyof typeof InventoryListTypes;
 export type InventoryListType = (typeof InventoryListTypes)[InventoryListTypeKeys];
 
-export type FacilityName = {
+type FacilityName = {
   facility_name: string;
 };
 
-export type InventoryResult = {
+type InventoryResult = {
   facility_id: string;
   species_id: string;
   species_scientificName: string;

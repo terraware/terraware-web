@@ -10,13 +10,13 @@ export type Variable = VariableListResponse['variables'][0];
 
 export type VariableType = components['schemas']['ExistingValuePayload']['type'];
 
-export type LinkVariable = components['schemas']['LinkVariablePayload'];
+type LinkVariable = components['schemas']['LinkVariablePayload'];
 
-export type SectionVariable = components['schemas']['SectionVariablePayload'];
+type SectionVariable = components['schemas']['SectionVariablePayload'];
 
-export type DateVariable = components['schemas']['DateVariablePayload'];
+type DateVariable = components['schemas']['DateVariablePayload'];
 
-export type EmailVariable = components['schemas']['EmailVariablePayload'];
+type EmailVariable = components['schemas']['EmailVariablePayload'];
 
 export type TextVariable = components['schemas']['TextVariablePayload'];
 export const isTextVariable = (input: unknown): input is TableVariable => (input as TextVariable).type === 'Text';
@@ -29,7 +29,7 @@ export const isTableVariable = (input: unknown): input is TableVariable => (inpu
 
 export type TableColumn = components['schemas']['TableVariablePayload']['columns'][0];
 
-export type NumberVariable = components['schemas']['NumberVariablePayload'];
+type NumberVariable = components['schemas']['NumberVariablePayload'];
 
 export type SelectVariable = components['schemas']['SelectVariablePayload'];
 export const isSelectVariable = (input: unknown): input is SelectVariable =>

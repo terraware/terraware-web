@@ -14,7 +14,7 @@ export type BatchForWithdraw = {
   projectName?: string;
 };
 
-export type ListBatchesForWithdrawArgs = {
+type ListBatchesForWithdrawArgs = {
   organizationId: number;
   facilityId?: number;
   speciesIds: number[];

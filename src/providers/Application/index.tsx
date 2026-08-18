@@ -18,7 +18,7 @@ import { isAllowed } from 'src/utils/acl';
 
 import { ApplicationContext, ApplicationData } from './Context';
 
-export type Props = {
+type Props = {
   children?: ReactNode;
 };
 

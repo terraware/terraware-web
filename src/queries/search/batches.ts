@@ -70,7 +70,7 @@ export type NurseryBatchesSearchResponseElement = SearchResponseElement & {
   project_name?: string;
 };
 
-export type ListBatchesByIdsApiArg = {
+type ListBatchesByIdsApiArg = {
   organizationId: number;
   batchIds: number[];
 };
@@ -85,19 +85,19 @@ export type ListAllBatchesApiArg = {
   query?: string;
 };
 
-export type ListBatchIdsForSpeciesApiArg = {
+type ListBatchIdsForSpeciesApiArg = {
   organizationId: number;
   speciesIds: number[];
 };
 
-export type ListBatchesForSpeciesApiArg = {
+type ListBatchesForSpeciesApiArg = {
   organizationId: number;
   speciesId: number;
   searchFields?: SearchNodePayload[];
   sortOrder?: SearchSortOrder;
 };
 
-export type ListBatchesForNurseryApiArg = {
+type ListBatchesForNurseryApiArg = {
   organizationId: number;
   nurseryId: number;
   searchFields?: SearchNodePayload[];

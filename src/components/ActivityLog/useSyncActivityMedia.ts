@@ -11,14 +11,14 @@ import { useDeletePlotPhotoMutation, useUploadOtherPlotMediaMutation } from 'src
 import { QueryTagTypes } from 'src/queries/tags';
 import { useAppDispatch } from 'src/redux/store';
 
-export type SyncActivityMediaResult = {
+type SyncActivityMediaResult = {
   error?: string;
   fileId?: number;
   operation: 'delete' | 'update' | 'upload';
   success: boolean;
 };
 
-export type SyncActivityMediaResponse = {
+type SyncActivityMediaResponse = {
   allSuccessful: boolean;
   deletedCount: number;
   results: SyncActivityMediaResult[];
@@ -26,7 +26,7 @@ export type SyncActivityMediaResponse = {
   uploadedCount: number;
 };
 
-export type SyncActivityMediaRequest = {
+type SyncActivityMediaRequest = {
   activityId: number;
   mediaItems: ActivityMediaItem[];
   observationId?: number;

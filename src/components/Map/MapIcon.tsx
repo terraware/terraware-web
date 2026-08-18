@@ -3,7 +3,7 @@ import React, { CSSProperties, type JSX } from 'react';
 import { useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
-export type MapIconType = 'polygon' | 'slice' | 'trash';
+type MapIconType = 'polygon' | 'slice' | 'trash';
 
 export type MapIconProps = {
   centerAligned?: boolean;

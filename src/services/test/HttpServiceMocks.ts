@@ -5,16 +5,16 @@ import { Mocked, rstest } from '@rstest/core';
 
 import HttpService from '../HttpService';
 
-export type Get = Mocked<typeof HttpService.get>;
-export type Get2 = Mocked<typeof HttpService.get2>;
-export type Put = Mocked<typeof HttpService.put>;
-export type Put2 = Mocked<typeof HttpService.put2>;
-export type Post = Mocked<typeof HttpService.post>;
-export type Post2 = Mocked<typeof HttpService.post2>;
-export type Delete = Mocked<typeof HttpService.delete>;
-export type Delete2 = Mocked<typeof HttpService.delete2>;
+type Get = Mocked<typeof HttpService.get>;
+type Get2 = Mocked<typeof HttpService.get2>;
+type Put = Mocked<typeof HttpService.put>;
+type Put2 = Mocked<typeof HttpService.put2>;
+type Post = Mocked<typeof HttpService.post>;
+type Post2 = Mocked<typeof HttpService.post2>;
+type Delete = Mocked<typeof HttpService.delete>;
+type Delete2 = Mocked<typeof HttpService.delete2>;
 
-export type MockedImpls = {
+type MockedImpls = {
   get?: Get;
   get2?: Get2;
   put?: Put;

@@ -35,11 +35,11 @@ type CreatePlantingSiteResponse =
 /**
  * exported type
  */
-export type PlantingSitesData = {
+type PlantingSitesData = {
   sites?: PlantingSite[];
 };
 
-export type PlantingSiteData = {
+type PlantingSiteData = {
   site?: PlantingSite;
 };
 

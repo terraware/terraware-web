@@ -9,7 +9,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import SubmitReportDialog from './SubmitReportDialog';
 
-export type ReportSubmitButtonProps = {
+type ReportSubmitButtonProps = {
   reportId: number;
 };
 

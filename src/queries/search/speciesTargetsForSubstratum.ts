@@ -10,7 +10,7 @@ export type SpeciesTargetForSubstratum = {
   notYetWithdrawn: number;
 };
 
-export type SpeciesTargetsForSubstratumArgs = {
+type SpeciesTargetsForSubstratumArgs = {
   plantingSeasonId: number;
   substratumId: number;
 };

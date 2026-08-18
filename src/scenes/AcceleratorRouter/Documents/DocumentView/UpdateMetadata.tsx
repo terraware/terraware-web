@@ -10,7 +10,7 @@ import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Document } from 'src/types/documentProducer/Document';
 
-export type UpdateMetadataProps = {
+type UpdateMetadataProps = {
   doc: Document;
   onFinish: (saved: boolean) => void;
 };

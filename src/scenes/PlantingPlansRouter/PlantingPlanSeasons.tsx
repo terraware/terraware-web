@@ -12,7 +12,7 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 const PLACEHOLDER = '-';
 
-export type PlantingPlanSeasonsProps = {
+type PlantingPlanSeasonsProps = {
   plantingSite: PlantingSitePayload;
 };
 

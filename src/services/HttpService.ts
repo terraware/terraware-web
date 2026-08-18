@@ -7,7 +7,7 @@ import axios, { AxiosResponse } from './axios';
 /**
  * Url replacements
  */
-export type Replacements = Record<string, string>;
+type Replacements = Record<string, string>;
 
 /**
  * Request types
@@ -17,22 +17,22 @@ export type ServerData = { status?: 'ok' | 'error' };
 
 export type Params = Record<string, string>;
 
-export type Request = {
+type Request = {
   url?: string; // override url to use
   urlReplacements?: Replacements;
   headers?: Record<string, any>;
   params?: Params; // query params
 };
 
-export type GetRequest = Request;
+type GetRequest = Request;
 
-export type PostRequest = Request & {
+type PostRequest = Request & {
   entity?: Record<string, any>;
 };
 
-export type PutRequest = PostRequest;
+type PutRequest = PostRequest;
 
-export type DeleteRequest = PostRequest;
+type DeleteRequest = PostRequest;
 
 /**
  * Response type

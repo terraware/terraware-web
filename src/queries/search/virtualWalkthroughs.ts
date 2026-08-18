@@ -71,7 +71,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type SplatStatus = 'Preparing' | 'Ready' | 'Errored';
+type SplatStatus = 'Preparing' | 'Ready' | 'Errored';
 
 type SearchVirtualWalkthroughApiResult = {
   fileId: string;

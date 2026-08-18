@@ -12,7 +12,7 @@ export const isDateVariableValue = (input: unknown): input is DateVariableValue 
 
 export type DeletedVariableValue = components['schemas']['ExistingDeletedValuePayload'];
 
-export type EmailVariableValue = components['schemas']['ExistingEmailValuePayload'];
+type EmailVariableValue = components['schemas']['ExistingEmailValuePayload'];
 
 export type ImageVariableValue = components['schemas']['ExistingImageValuePayload'];
 
@@ -129,12 +129,12 @@ export type Operation =
   | components['schemas']['ReplaceValuesOperationPayload']
   | components['schemas']['UpdateValueOperationPayload'];
 
-export type OriginalUploadImageValue = Required<
+type OriginalUploadImageValue = Required<
   operations['uploadProjectImageValue']
 >['requestBody']['content']['application/json'];
 
 // Change type for file attribute from string to File, because that is how we process it in the frontend
-export type UploadImageValueRequestPayload = Omit<OriginalUploadImageValue, 'file'> & { file: File };
+type UploadImageValueRequestPayload = Omit<OriginalUploadImageValue, 'file'> & { file: File };
 
 export type UploadImageValueRequestPayloadWithProjectId = UploadImageValueRequestPayload & {
   projectId: number;

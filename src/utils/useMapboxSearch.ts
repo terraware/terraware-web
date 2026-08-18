@@ -10,7 +10,7 @@ import {
 
 import useMapboxToken from './useMapboxToken';
 
-export type MapboxSearch = {
+type MapboxSearch = {
   clear: () => void;
   retrieve: (suggestion: AddressAutofillSuggestion) => Promise<AddressAutofillFeatureSuggestion[]>;
   suggest: (suggestText: string) => Promise<AddressAutofillSuggestion[]>;

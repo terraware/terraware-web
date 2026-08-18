@@ -117,7 +117,7 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
   );
 };
 
-export type PlantMonitoringListProps = {
+type PlantMonitoringListProps = {
   plantingSiteId?: PlantingSiteId;
 };
 

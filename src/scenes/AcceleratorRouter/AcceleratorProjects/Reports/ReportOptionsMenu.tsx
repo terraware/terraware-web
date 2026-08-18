@@ -10,7 +10,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import PublishModal from './PublishModal';
 
-export type ReportOptionsMenuProps = {
+type ReportOptionsMenuProps = {
   reportId: number;
 };
 

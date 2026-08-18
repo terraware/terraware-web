@@ -19,34 +19,34 @@ import HttpService, { Response } from './HttpService';
 /**
  * Types exported from service
  */
-export type OrganizationsData = {
+type OrganizationsData = {
   organizations: Organization[];
 };
 
-export type OrganizationsResponse = Response & OrganizationsData;
+type OrganizationsResponse = Response & OrganizationsData;
 
-export type OrganizationRoles = {
+type OrganizationRoles = {
   roles: OrganizationRoleInfo[];
 };
-export type OrganizationRolesResponse = Response & OrganizationRoles;
+type OrganizationRolesResponse = Response & OrganizationRoles;
 
-export type OrganizationData = {
+type OrganizationData = {
   organization?: Organization;
 };
 
-export type OrganizationResponse = Response & OrganizationData;
+type OrganizationResponse = Response & OrganizationData;
 
-export type OrganizationInternalTags = {
+type OrganizationInternalTags = {
   internalTags: number[];
 };
 
-export type OrganizationInternalTagsResponse = Response & OrganizationInternalTags;
+type OrganizationInternalTagsResponse = Response & OrganizationInternalTags;
 
-export type OrganizationsInternalTags = {
+type OrganizationsInternalTags = {
   organizations: OrganizationWithInternalTags[];
 };
 
-export type OrganizationsInternalTagsResponse = Response & OrganizationsInternalTags;
+type OrganizationsInternalTagsResponse = Response & OrganizationsInternalTags;
 
 // endpoint
 const ORGANIZATIONS_ENDPOINT = '/api/v1/organizations';

@@ -6,7 +6,7 @@ import strings from 'src/strings';
 import { MapViewStyle } from 'src/types/Map';
 import { getRgbaFromHex } from 'src/utils/color';
 
-export type MapViewStyleSwitchProps = {
+type MapViewStyleSwitchProps = {
   mapViewStyle?: MapViewStyle;
   onChangeMapViewStyle: (style: MapViewStyle) => void;
 };

@@ -443,7 +443,7 @@ type SearchNurseryWithdrawalFilterOptionsApiResponse = {
   };
 };
 
-export type NurseryWithdrawalFilterOptions = {
+type NurseryWithdrawalFilterOptions = {
   nurseryNames: string[];
   destinationNames: string[];
   stratumNames: string[];
@@ -451,7 +451,7 @@ export type NurseryWithdrawalFilterOptions = {
   speciesNames: string[];
 };
 
-export type SearchNurseryWithdrawalPhotosApiArgs = {
+type SearchNurseryWithdrawalPhotosApiArgs = {
   plantingSiteId: number;
 };
 

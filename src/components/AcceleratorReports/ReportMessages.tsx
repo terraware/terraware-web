@@ -12,7 +12,7 @@ import { useReviewOneAcceleratorReportMutation } from 'src/queries/generated/acc
 import RejectDialog from 'src/scenes/AcceleratorRouter/AcceleratorProjects/Reports/RejectDialog';
 import useSnackbar from 'src/utils/useSnackbar';
 
-export type ReportMessagesProps = {
+type ReportMessagesProps = {
   isConsoleView?: boolean;
   reportId: number;
 };

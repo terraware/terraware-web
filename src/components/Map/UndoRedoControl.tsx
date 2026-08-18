@@ -3,7 +3,7 @@ import React, { type JSX } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
-export type UndoRedoBoundaryControlProps = {
+type UndoRedoBoundaryControlProps = {
   onRedo?: () => void;
   onUndo?: () => void;
 };

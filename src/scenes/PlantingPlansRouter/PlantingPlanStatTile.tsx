@@ -2,7 +2,7 @@ import React, { type JSX } from 'react';
 
 import { Box, Divider, Typography, useTheme } from '@mui/material';
 
-export type PlantingPlanStatTileProps = {
+type PlantingPlanStatTileProps = {
   label: string;
   value: string;
   showDivider?: boolean;

@@ -6,7 +6,7 @@ import strings from 'src/strings';
 
 import PlantingPlanStatTile from './PlantingPlanStatTile';
 
-export type PlantingPlanStatsProps = {
+type PlantingPlanStatsProps = {
   targetPlants: string;
   area: string;
   initialPlantingDensity: string;

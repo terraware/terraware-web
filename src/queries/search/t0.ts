@@ -80,14 +80,14 @@ type GetPlotsWithObservationsApiResponse = {
   results: PlotsWithObservationsApiResult[];
 };
 
-export type PlotT0Observation = {
+type PlotT0Observation = {
   observation_startDate: string;
   observation_completedTime: string;
   observation_id: string;
   isPermanent: string;
 };
 
-export type PlotsWithObservations = {
+type PlotsWithObservations = {
   id: number;
   name: string;
   substratum_name: string;

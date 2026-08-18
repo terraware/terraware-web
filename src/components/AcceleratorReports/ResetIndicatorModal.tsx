@@ -5,7 +5,7 @@ import { Confirm } from '@terraware/web-components';
 
 import { useLocalization } from 'src/providers';
 
-export type ResetIndicatorModalProps = {
+type ResetIndicatorModalProps = {
   onClose: () => void;
   onSubmit: () => void;
 };

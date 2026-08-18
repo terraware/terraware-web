@@ -5,7 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { useLocalization } from 'src/providers';
 import { PlantingDateRequestSpeciesDetail } from 'src/queries/search/plantingDateRequests';
 
-export type NurserySummaryRowProps = {
+type NurserySummaryRowProps = {
   species: PlantingDateRequestSpeciesDetail;
   ready: number;
   index: number;

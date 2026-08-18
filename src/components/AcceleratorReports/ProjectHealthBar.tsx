@@ -6,7 +6,7 @@ import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization } from 'src/providers';
 import { MetricStatus } from 'src/types/AcceleratorReport';
 
-export type ProjectHealthIndicator = {
+type ProjectHealthIndicator = {
   status?: MetricStatus;
 };
 
@@ -100,7 +100,7 @@ export const ProjectHealthBarContent = ({ indicators }: ProjectHealthBarContentP
   );
 };
 
-export type ProjectHealthBarProps = {
+type ProjectHealthBarProps = {
   reportId?: number;
 };
 

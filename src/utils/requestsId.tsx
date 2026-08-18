@@ -1,4 +1,4 @@
-export type RequestIds = {
+type RequestIds = {
   [endpoint: string]: string;
 };
 

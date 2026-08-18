@@ -11,7 +11,7 @@ import { MapCursor, MapHighlightGroup, MapLayer, MapMarkerGroup, MapNameTag, Map
 import useStickyMapViewStyle from './useStickyMapViewStyle';
 import { getBoundingBoxFromMultiPolygons, getBoundsZoomLevel } from './utils';
 
-export type MapComponentProps = {
+type MapComponentProps = {
   additionalComponent?: React.ReactNode;
   clusterMaxZoom?: number;
   clusterRadius?: number;

@@ -24,17 +24,17 @@ type SubLocationResponsePayload =
  * exported types
  */
 
-export type SubLocationsData = {
+type SubLocationsData = {
   subLocations: SubLocation[];
 };
 export type SubLocationsResponse = Response & SubLocationsData;
 
-export type SubLocationData = {
+type SubLocationData = {
   subLocation?: SubLocation;
 };
-export type SubLocationResponse = Response & SubLocationData;
+type SubLocationResponse = Response & SubLocationData;
 
-export type SubLocationUpdateRequestBody =
+type SubLocationUpdateRequestBody =
   paths[typeof SUB_LOCATION_ENDPOINT]['put']['requestBody']['content']['application/json'];
 
 const httpSubLocations = HttpService.root(SUB_LOCATIONS_ENDPOINT);

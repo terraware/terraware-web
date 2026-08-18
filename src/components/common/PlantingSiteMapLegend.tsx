@@ -6,13 +6,7 @@ import MapLegend from 'src/components/common/MapLegend';
 import strings from 'src/strings';
 import { getRgbaFromHex } from 'src/utils/color';
 
-export type PlantingSiteMapLegendOption =
-  | 'site'
-  | 'stratum'
-  | 'substratum'
-  | 'permanentPlot'
-  | 'temporaryPlot'
-  | 'adHocPlot';
+type PlantingSiteMapLegendOption = 'site' | 'stratum' | 'substratum' | 'permanentPlot' | 'temporaryPlot' | 'adHocPlot';
 
 export type PlantingSiteMapLegendProps = {
   options: PlantingSiteMapLegendOption[];

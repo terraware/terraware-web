@@ -31,7 +31,7 @@ type NewApplication = {
   projectName?: string;
 };
 
-export type NewApplicationModalProps = {
+type NewApplicationModalProps = {
   open: boolean;
   onClose: () => void;
 };

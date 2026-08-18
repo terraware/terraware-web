@@ -89,7 +89,7 @@ export function BaseTable<T extends TableRowType>(props: TableProps<T>): JSX.Ele
  * Also saves new columns order upon reordering, into user preferences (for the org scope).
  */
 
-export type OrderPreserveableTableProps = {
+type OrderPreserveableTableProps = {
   // user preference name to store the columns order
   columnsPreferenceName?: string;
   id: string;
@@ -161,7 +161,7 @@ function OrderPreserveableTable<T extends TableRowType>(
  * where client does not need extra semantics to filter columns.
  * Species table is an example where this won't work, uses its own setColumns implementation.
  */
-export type OrderPreservedTableProps = {
+type OrderPreservedTableProps = {
   id: string;
   columns: TableColumnType[] | (() => TableColumnType[]);
 };

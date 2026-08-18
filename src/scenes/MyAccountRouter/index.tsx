@@ -4,7 +4,7 @@ import { Route, Routes } from 'react-router';
 import { useOrganization } from 'src/providers';
 import MyAccountPage from 'src/scenes/MyAccountRouter/MyAccountPage';
 
-export interface Props {
+interface Props {
   className?: string;
   hasNav?: boolean;
 }

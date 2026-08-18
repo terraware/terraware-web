@@ -212,7 +212,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type ExportBiomassObservationsApiArg = {
+type ExportBiomassObservationsApiArg = {
   organizationId: number;
   plantingSiteId?: number;
 };

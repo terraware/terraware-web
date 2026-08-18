@@ -5,7 +5,7 @@ import { OrganizationUser } from 'src/types/User';
 
 import { requestListOrganizationUsers } from './organizationUsersAsyncThunks';
 
-export type OrganizationUsersData = {
+type OrganizationUsersData = {
   users: OrganizationUser[];
 };
 

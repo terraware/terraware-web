@@ -8,7 +8,7 @@ const BAR_HEIGHT = 8;
 const TICK_OVERHANG = 3;
 const TICK_LABEL_HEIGHT = '16px';
 
-export type LifetimeProgressBarProps = {
+type LifetimeProgressBarProps = {
   baseline?: number;
   currentProgress: number;
   endOfProjectTarget?: number;

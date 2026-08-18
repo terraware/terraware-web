@@ -13,7 +13,7 @@ import RejectDialog from './RejectDialog';
 
 const NO_WRAP = { '&.button': { minWidth: 'auto', whiteSpace: 'nowrap' } };
 
-export type ReportReviewButtonsProps = {
+type ReportReviewButtonsProps = {
   reportId: number;
 };
 

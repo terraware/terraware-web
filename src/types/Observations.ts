@@ -12,13 +12,13 @@ import defaultStrings from 'src/strings';
 import { MultiPolygon } from './Tracking';
 
 // basic information on a single observation (excluding observation results)
-export type Observation = components['schemas']['ObservationPayload'];
+type Observation = components['schemas']['ObservationPayload'];
 
 // "Upcoming" | "InProgress" | "Completed" | "Overdue"
 export type ObservationState = Observation['state'];
 
 // plot replacement
-export type ReplaceObservationPlotRequestPayload = components['schemas']['ReplaceObservationPlotRequestPayload'];
+type ReplaceObservationPlotRequestPayload = components['schemas']['ReplaceObservationPlotRequestPayload'];
 // "Temporary" | "LongTerm"
 export type ReplaceObservationPlotDuration = ReplaceObservationPlotRequestPayload['duration'];
 
@@ -28,7 +28,7 @@ type Boundary = {
 
 // expanded information on an observation including observed results down to monitoring plot level detail
 // requires navigating a tree of stratum results -> substratum results -> ( species results | monitoring plot results )
-export type ObservationResultsPayload = RtkObservationResultsPayload;
+type ObservationResultsPayload = RtkObservationResultsPayload;
 
 export type AdHocObservationResults = Omit<RtkObservationResultsPayload, 'strata' | 'adHocPlot'> &
   Boundary & {
@@ -57,7 +57,7 @@ export type ObservationResultsWithLastObv = Omit<
 > & { strata: ObservationStratumResultsWithLastObv[] };
 
 // stratum level results -> contains a list of substratum level results
-export type ObservationStratumResultsPayload = RtkObservationStratumResultsPayload;
+type ObservationStratumResultsPayload = RtkObservationStratumResultsPayload;
 export type ObservationStratumResults = ObservationStratumResultsPayload & {
   completedDate?: string;
   stratumName: string;
@@ -68,18 +68,18 @@ export type ObservationStratumResults = ObservationStratumResultsPayload & {
   hasObservedTemporaryPlots: boolean;
 };
 
-export type ObservationStratumResultsWithLastObv = Omit<ObservationStratumResults, 'substrata'> & {
+type ObservationStratumResultsWithLastObv = Omit<ObservationStratumResults, 'substrata'> & {
   lastObv?: string;
   substrata: ObservationSubstratumResultsWithLastObv[];
 };
 
 // substratum level results -> contains lists of both species level results and monitoring plot level results
-export type ObservationSubstratumResultsPayload = RtkObservationSubstratumResultsPayload;
+type ObservationSubstratumResultsPayload = RtkObservationSubstratumResultsPayload;
 export type ObservationSubstratumResults = ObservationSubstratumResultsPayload & {
   substratumName: string;
   monitoringPlots: ObservationMonitoringPlotResults[];
 };
-export type ObservationSubstratumResultsWithLastObv = ObservationSubstratumResults & {
+type ObservationSubstratumResultsWithLastObv = ObservationSubstratumResults & {
   lastObv?: string;
 };
 // monitoring plot level results
@@ -142,19 +142,19 @@ export type PlotCondition = components['schemas']['CompleteAdHocObservationReque
 
 export type BiomassMeasurement = components['schemas']['ExistingBiomassMeasurementPayload'];
 
-export type MonitoringPlotFile = ObservationMonitoringPlotMediaPayload;
+type MonitoringPlotFile = ObservationMonitoringPlotMediaPayload;
 
-export type NewMonitoringPlotFile = Omit<MonitoringPlotFile, 'fileId' | 'type'> & {
+type NewMonitoringPlotFile = Omit<MonitoringPlotFile, 'fileId' | 'type'> & {
   file: File;
   type?: 'Plot' | 'Quadrat' | 'Soil';
 };
 
-export type NewMonitoringPlotMediaItem = {
+type NewMonitoringPlotMediaItem = {
   type: 'new';
   data: NewMonitoringPlotFile;
 };
 
-export type ExistingMonitoringPlotMediaItem = {
+type ExistingMonitoringPlotMediaItem = {
   type: 'existing';
   data: MonitoringPlotFile;
   isModified?: boolean;

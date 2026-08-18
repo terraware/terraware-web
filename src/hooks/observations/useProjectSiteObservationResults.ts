@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { ObservationResultsPayload, useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 
-export type ProjectSiteObservationResult = {
+type ProjectSiteObservationResult = {
   site: PlantingSitePayload;
   result?: ObservationResultsPayload;
 };

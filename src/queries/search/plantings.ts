@@ -75,14 +75,14 @@ type SearchPlantingsApiResponse = {
   results: PlantingsApiResult[];
 };
 
-export type PlantingSpecies = {
+type PlantingSpecies = {
   conservationCategory: string;
   rare: boolean;
   scientificName: string;
   speciesId: number;
 };
 
-export type Plantings = {
+type Plantings = {
   id: number;
   createdTime: string;
   deliveryId: number;

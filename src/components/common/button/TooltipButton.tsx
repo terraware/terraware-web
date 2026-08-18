@@ -5,7 +5,7 @@ import Tooltip from '@terraware/web-components/components/Tooltip/Tooltip';
 
 import Button from './Button';
 
-export type TooltipButtonProps = {
+type TooltipButtonProps = {
   tooltip?: string; // if not undefined, hovering over the button will show a tooltip
 };
 

@@ -4,7 +4,7 @@ import { TableDensityType } from '@terraware/web-components/components/table/typ
 
 import { useUser } from 'src/providers';
 
-export type Response = {
+type Response = {
   tableDensity: TableDensityType;
   setTableDensity: (density: TableDensityType) => void;
 };

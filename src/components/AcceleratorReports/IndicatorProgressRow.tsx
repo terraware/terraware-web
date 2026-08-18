@@ -43,7 +43,7 @@ export type ProgressIndicator = {
   value?: number;
 };
 
-export type IndicatorProgressRowProps = {
+type IndicatorProgressRowProps = {
   editing?: boolean;
   indicator: ProgressIndicator;
   onChange?: (id: string, value: unknown) => void;

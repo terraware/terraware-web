@@ -9,7 +9,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import InternalComment from './InternalComment';
 
-export type ReportInternalCommentProps = {
+type ReportInternalCommentProps = {
   projectId: number;
   report: AcceleratorReportPayload;
 };

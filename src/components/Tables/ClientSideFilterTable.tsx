@@ -19,8 +19,7 @@ import { parseSearchTerm } from 'src/utils/search';
 import { SearchAndSortFn, SearchOrderConfig, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
 import useDebounce from 'src/utils/useDebounce';
 
-export interface ClientSideFilterTableProps
-  extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
+interface ClientSideFilterTableProps extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
   busy?: boolean;
   clientSortedFields?: string[];
   columns: TableColumnType[] | ((activeLocale: string | null) => TableColumnType[]);

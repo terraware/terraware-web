@@ -21,7 +21,7 @@ import {
 } from 'src/types/Application';
 import useForm from 'src/utils/useForm';
 
-export type ApplicationReviewModalProps = {
+type ApplicationReviewModalProps = {
   open: boolean;
   onClose: () => void;
   onSuccess: () => void;
