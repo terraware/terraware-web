@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.75% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/16</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>2/7</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.5% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/8</span>
+                <span class='fraction'>3/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.81% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/11</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -80,28 +80,7 @@
 <a name='L15'></a><a href='#L15'>15</a>
 <a name='L16'></a><a href='#L16'>16</a>
 <a name='L17'></a><a href='#L17'>17</a>
-<a name='L18'></a><a href='#L18'>18</a>
-<a name='L19'></a><a href='#L19'>19</a>
-<a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a>
-<a name='L25'></a><a href='#L25'>25</a>
-<a name='L26'></a><a href='#L26'>26</a>
-<a name='L27'></a><a href='#L27'>27</a>
-<a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
+<a name='L18'></a><a href='#L18'>18</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -109,9 +88,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">44x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -123,24 +99,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">export type WithRequired&lt;T, K extends keyof T&gt; = T &amp; { [P in K]-?: T[P] };
 &nbsp;
-export const isOptionalT = <span class="fstat-no" title="function not covered" >&lt;T&gt;(input: unknown, typeguard: (input: unknown) =&gt; input is T): input is T | undefined =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  input === undefined || typeguard(input);</span>
-&nbsp;
 export const isNumber = (input: unknown): input is number =&gt; typeof input === 'number';
-&nbsp;
-export const isOptionalNumber = <span class="fstat-no" title="function not covered" >(input: unknown): input is number | undefined =&gt; <span class="cstat-no" title="statement not covered" >isOptionalT&lt;number&gt;(input, isNumber);</span></span>
-&nbsp;
-export const isString = <span class="fstat-no" title="function not covered" >(input: unknown): input is string =&gt; <span class="cstat-no" title="statement not covered" >typeof input === 'string';</span></span>
-&nbsp;
-export const isOptionalString = <span class="fstat-no" title="function not covered" >(input: unknown): input is string | undefined =&gt; <span class="cstat-no" title="statement not covered" >isOptionalT&lt;string&gt;(input, isString);</span></span>
 &nbsp;
 export const isArray = (input: unknown): input is unknown[] =&gt; Array.isArray(input);
 &nbsp;
 export const isArrayOfT = &lt;T&gt;(input: unknown, typeguard: (input: unknown) =&gt; input is T): input is T[] =&gt;
   isArray(input) &amp;&amp; input.every(typeguard);
-&nbsp;
-export const isObject = <span class="fstat-no" title="function not covered" >(input: unknown): input is Record&lt;string, unknown&gt; =&gt;</span>
-<span class="cstat-no" title="statement not covered" >  typeof input === 'object' &amp;&amp; input !== null &amp;&amp; !isArray(input);</span>
 &nbsp;
 // Gives you a type from an array of the given type
 // (1 | 2 | 3)[] =&gt; 1 | 2 | 3
@@ -157,7 +121,7 @@ export type NonUndefined&lt;T&gt; = T extends undefined ? never : T;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-08-18T15:29:29.777Z
+                at 2026-08-18T15:45:45.044Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">53.42% </span>
+                <span class="strong">55.55% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>39/73</span>
+                <span class='fraction'>35/63</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.26% </span>
+                <span class="strong">63.63% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>21/38</span>
+                <span class='fraction'>21/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.09% </span>
+                <span class="strong">44.44% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>8/21</span>
+                <span class='fraction'>8/18</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">52.83% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>30/60</span>
+                <span class='fraction'>28/53</span>
             </div>
         
             
@@ -174,19 +174,7 @@
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a>
-<a name='L116'></a><a href='#L116'>116</a>
-<a name='L117'></a><a href='#L117'>117</a>
-<a name='L118'></a><a href='#L118'>118</a>
-<a name='L119'></a><a href='#L119'>119</a>
-<a name='L120'></a><a href='#L120'>120</a>
-<a name='L121'></a><a href='#L121'>121</a>
-<a name='L122'></a><a href='#L122'>122</a>
-<a name='L123'></a><a href='#L123'>123</a>
-<a name='L124'></a><a href='#L124'>124</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L112'></a><a href='#L112'>112</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -243,7 +231,6 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -289,17 +276,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -318,7 +294,7 @@ export type FiltersType = Record&lt;string, FilterValue&gt;;
 &nbsp;
 // Convert an array to a comma separated string and other values to a string
 // Array values are sorted, so we can detect equality easier elsewhere
-export const normalizeValue = (value: FilterValue): string =&gt; {
+const normalizeValue = (value: FilterValue): string =&gt; {
   if (isArray(value)) {
     return value
       .sort((valueA, valueB) =&gt; `${valueA}`.localeCompare(`${valueB}`))
@@ -363,10 +339,9 @@ export const filtersEqual = (a: FiltersType, b: FiltersType) =&gt;
   Object.keys(a).every((key) =&gt; (isEmptyArray(a[key]) &amp;&amp; !b[key]) || filterValueEqual(a[key], b[key])) &amp;&amp;
   Object.keys(b).every((key) =&gt; (isEmptyArray(b[key]) &amp;&amp; <span class="branch-4 cbranch-no" title="branch not covered" >!a[key])</span> || filterValueEqual(a[key], b[key]));
 &nbsp;
-export const isFilterKey = <span class="fstat-no" title="function not covered" >(viewIdentifier: string, key: string) =&gt; <span class="cstat-no" title="statement not covered" >key.includes(`${viewIdentifier}_filter_`);</span></span>
-export const scrubFilterKey = <span class="fstat-no" title="function not covered" >(key: string) =&gt; <span class="cstat-no" title="statement not covered" >key.replace(/.*_filter_(.+)/, '$1');</span></span>
-export const makeFilterKey = <span class="fstat-no" title="function not covered" >(viewIdentifier: string, key: string) =&gt; <span class="cstat-no" title="statement not covered" >`${viewIdentifier}_filter_${key}`;</span></span>
-export const makeFiltersSessionKey = <span class="fstat-no" title="function not covered" >(viewIdentifier: string) =&gt; <span class="cstat-no" title="statement not covered" >`${viewIdentifier}_filters`;</span></span>
+const isFilterKey = <span class="fstat-no" title="function not covered" >(viewIdentifier: string, key: string) =&gt; <span class="cstat-no" title="statement not covered" >key.includes(`${viewIdentifier}_filter_`);</span></span>
+const scrubFilterKey = <span class="fstat-no" title="function not covered" >(key: string) =&gt; <span class="cstat-no" title="statement not covered" >key.replace(/.*_filter_(.+)/, '$1');</span></span>
+const makeFiltersSessionKey = <span class="fstat-no" title="function not covered" >(viewIdentifier: string) =&gt; <span class="cstat-no" title="statement not covered" >`${viewIdentifier}_filters`;</span></span>
 &nbsp;
 export const getFiltersFromSession = <span class="fstat-no" title="function not covered" >(viewIdentifier: string): FiltersType =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  try {</span>
@@ -414,17 +389,6 @@ export const getFiltersFromQuery = <span class="fstat-no" title="function not co
 <span class="cstat-no" title="statement not covered" >  return queryFilters;</span>
 };
 &nbsp;
-export const writeFiltersToQuery = <span class="fstat-no" title="function not covered" >(query: URLSearchParams, viewIdentifier: string, filters: FiltersType): void =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  Object.keys(filters).forEach(<span class="fstat-no" title="function not covered" >(key) =&gt; {</span></span>
-    const value = <span class="cstat-no" title="statement not covered" >filters[key];</span>
-<span class="cstat-no" title="statement not covered" >    if (!value || (isArray(value) &amp;&amp; value.length === 0)) {</span>
-<span class="cstat-no" title="statement not covered" >      return;</span>
-    }
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    query.set(makeFilterKey(viewIdentifier, key), normalizeValue(value));</span>
-  });
-};
-&nbsp;
 export const resetQuery = <span class="fstat-no" title="function not covered" >(query: URLSearchParams, viewIdentifier: string): void =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  query.forEach(<span class="fstat-no" title="function not covered" >(value, key) =&gt; {</span></span>
 <span class="cstat-no" title="statement not covered" >    if (isFilterKey(viewIdentifier, key)) {</span>
@@ -439,7 +403,7 @@ export const resetQuery = <span class="fstat-no" title="function not covered" >(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-08-18T15:29:29.777Z
+                at 2026-08-18T15:45:45.044Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
