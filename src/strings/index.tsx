@@ -18,7 +18,8 @@ type AppStrings = typeof english;
  * worth reporting. `yarn generate-strings` fails on the same collision with a plainer message.
  */
 type NoStringsSharedWithComponents<T extends { alreadyDefinedByWebComponents: never }> = T;
-export type SharedStringKeys = NoStringsSharedWithComponents<{
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+type SharedStringKeys = NoStringsSharedWithComponents<{
   alreadyDefinedByWebComponents: Extract<keyof ComponentStrings, keyof AppStrings>;
 }>;
 
