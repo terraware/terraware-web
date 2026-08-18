@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
-import { TableRowType } from '@terraware/web-components';
+import { Badge, TableRowType } from '@terraware/web-components';
 
 import Button from 'src/components/common/button/Button';
 import TooltipButton from 'src/components/common/button/TooltipButton';
@@ -133,19 +133,30 @@ export default function SpeciesProjectsSection({
             {...props}
             value={
               <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(1) }}>
-                {projectRow.dataSourceType ? (
-                  <Tooltip title={speciesDataSourceLabel(projectRow.dataSourceType)}>
-                    <Box component='span' sx={{ display: 'inline-flex' }}>
+                {projectRow.nativity ? (
+                  <>
+                    {projectRow.dataSourceType ? (
+                      <Tooltip title={speciesDataSourceLabel(projectRow.dataSourceType)}>
+                        <Box component='span' sx={{ display: 'inline-flex' }}>
+                          <SpeciesNativityBadge nativity={projectRow.nativity} />
+                        </Box>
+                      </Tooltip>
+                    ) : (
                       <SpeciesNativityBadge nativity={projectRow.nativity} />
-                    </Box>
-                  </Tooltip>
+                    )}
+                    {projectRow.dataSourceDate && (
+                      <Typography component='span' fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+                        {strings.formatString(strings.SPECIES_PROJECT_DATA_SOURCE_SYNC, projectRow.dataSourceDate)}
+                      </Typography>
+                    )}
+                  </>
                 ) : (
-                  <SpeciesNativityBadge nativity={projectRow.nativity} />
-                )}
-                {projectRow.dataSourceDate && (
-                  <Typography component='span' fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
-                    {strings.formatString(strings.SPECIES_PROJECT_DATA_SOURCE_SYNC, projectRow.dataSourceDate)}
-                  </Typography>
+                  <Badge
+                    label={strings.NOT_SET}
+                    backgroundColor={theme.palette.TwClrBgSecondary}
+                    borderColor={theme.palette.TwClrBrdrSecondary}
+                    labelColor={theme.palette.TwClrTxtSecondary}
+                  />
                 )}
               </Box>
             }
@@ -167,6 +178,7 @@ export default function SpeciesProjectsSection({
                   priority='secondary'
                   type='passive'
                   size='small'
+                  disabled={!projectRow.nativity}
                   onClick={() => setOverrideProjectId(projectRow.projectId)}
                 />
               )
