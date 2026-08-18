@@ -42,6 +42,4 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export { injectedRtkApi as api };
-
-export const { useListBotanicalCountriesQuery, useLazyListBotanicalCountriesQuery } = injectedRtkApi;
+export const { useLazyListBotanicalCountriesQuery } = injectedRtkApi;

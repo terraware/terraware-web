@@ -11,7 +11,7 @@ export type OrganizationUsersData = {
 
 const initialStateOrganizationUsers: { [key: string]: StatusT<OrganizationUsersData> } = {};
 
-export const organizationUsersListSlice = createSlice({
+const organizationUsersListSlice = createSlice({
   name: 'organizationUsersListSlice',
   initialState: initialStateOrganizationUsers,
   reducers: {},

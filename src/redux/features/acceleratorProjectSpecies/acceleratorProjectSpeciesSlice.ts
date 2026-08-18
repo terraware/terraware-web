@@ -22,7 +22,7 @@ import {
  */
 const initialStateAcceleratorProjectSpeciesCreate: { [key: string]: StatusT<AcceleratorProjectSpecies> } = {};
 
-export const acceleratorProjectSpeciesCreateSlice = createSlice({
+const acceleratorProjectSpeciesCreateSlice = createSlice({
   name: 'acceleratorProjectSpeciesCreateSlice',
   initialState: initialStateAcceleratorProjectSpeciesCreate,
   reducers: {},
@@ -36,7 +36,7 @@ export const acceleratorProjectSpeciesCreateSlice = createSlice({
  */
 const initialStateAcceleratorProjectDeleteMany: { [key: string]: StatusT<boolean> } = {};
 
-export const acceleratorProjectSpeciesDeleteManySlice = createSlice({
+const acceleratorProjectSpeciesDeleteManySlice = createSlice({
   name: 'acceleratorProjectSpeciesDeleteManySlice',
   initialState: initialStateAcceleratorProjectDeleteMany,
   reducers: {},
@@ -50,7 +50,7 @@ export const acceleratorProjectSpeciesDeleteManySlice = createSlice({
  */
 const initialStateAcceleratorProjectAddMany: { [key: string]: StatusT<boolean> } = {};
 
-export const acceleratorProjectSpeciesAddManySlice = createSlice({
+const acceleratorProjectSpeciesAddManySlice = createSlice({
   name: 'acceleratorProjectSpeciesAddManySlice',
   initialState: initialStateAcceleratorProjectAddMany,
   reducers: {},
@@ -64,7 +64,7 @@ export const acceleratorProjectSpeciesAddManySlice = createSlice({
  */
 const initialStateAcceleratorProjectGet: { [key: string]: StatusT<AcceleratorProjectSpecies> } = {};
 
-export const acceleratorProjectSpeciesGetSlice = createSlice({
+const acceleratorProjectSpeciesGetSlice = createSlice({
   name: 'acceleratorProjectSpeciesGetSlice',
   initialState: initialStateAcceleratorProjectGet,
   reducers: {},
@@ -78,7 +78,7 @@ export const acceleratorProjectSpeciesGetSlice = createSlice({
  */
 const initialStateAcceleratorProjectsForSpeciesGet: { [key: string]: StatusT<AcceleratorProjectForSpecies[]> } = {};
 
-export const acceleratorProjectsForSpeciesGetSlice = createSlice({
+const acceleratorProjectsForSpeciesGetSlice = createSlice({
   name: 'acceleratorProjectsForSpeciesGetSlice',
   initialState: initialStateAcceleratorProjectsForSpeciesGet,
   reducers: {},
@@ -92,7 +92,7 @@ export const acceleratorProjectsForSpeciesGetSlice = createSlice({
  */
 const initialStateAcceleratorProjectsList: { [key: string]: StatusT<SpeciesForAcceleratorProject[]> } = {};
 
-export const acceleratorProjectSpeciesListSlice = createSlice({
+const acceleratorProjectSpeciesListSlice = createSlice({
   name: 'acceleratorProjectSpeciesListSlice',
   initialState: initialStateAcceleratorProjectsList,
   reducers: {},
@@ -107,7 +107,7 @@ export const acceleratorProjectSpeciesListSlice = createSlice({
  */
 const initialStateAcceleratorProjectUpdate: { [key: string]: StatusT<boolean> } = {};
 
-export const acceleratorProjectSpeciesUpdateSlice = createSlice({
+const acceleratorProjectSpeciesUpdateSlice = createSlice({
   name: 'acceleratorProjectSpeciesUpdateSlice',
   initialState: initialStateAcceleratorProjectUpdate,
   reducers: {},

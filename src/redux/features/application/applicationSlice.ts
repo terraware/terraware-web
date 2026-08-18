@@ -22,7 +22,7 @@ import {
  */
 const initialStateApplicationCreate: Record<string, StatusT<number>> = {};
 
-export const applicationCreateSlice = createSlice({
+const applicationCreateSlice = createSlice({
   name: 'applicationCreateSlice',
   initialState: initialStateApplicationCreate,
   reducers: {},
@@ -36,7 +36,7 @@ export const applicationCreateSlice = createSlice({
  */
 const initialStateApplicationProjectCreate: Record<string, StatusT<number>> = {};
 
-export const applicationProjectCreateSlice = createSlice({
+const applicationProjectCreateSlice = createSlice({
   name: 'applicationProjectCreateSlice',
   initialState: initialStateApplicationProjectCreate,
   reducers: {},
@@ -50,7 +50,7 @@ export const applicationProjectCreateSlice = createSlice({
  */
 const initialStateApplications: Record<string, StatusT<Application[]>> = {};
 
-export const applicationListSlice = createSlice({
+const applicationListSlice = createSlice({
   name: 'applicationListSlice',
   initialState: initialStateApplications,
   reducers: {},
@@ -64,7 +64,7 @@ export const applicationListSlice = createSlice({
  */
 const initialStateApplicationDeliverables: Record<string, StatusT<ApplicationDeliverable[]>> = {};
 
-export const applicationDeliverablesListSlice = createSlice({
+const applicationDeliverablesListSlice = createSlice({
   name: 'applicationDeliverablesListSlice',
   initialState: initialStateApplicationDeliverables,
   reducers: {},
@@ -78,7 +78,7 @@ export const applicationDeliverablesListSlice = createSlice({
  */
 const initialStateApplicationHistory: Record<string, StatusT<ApplicationHistory[]>> = {};
 
-export const applicationHistoryListSlice = createSlice({
+const applicationHistoryListSlice = createSlice({
   name: 'applicationHistoryListSlice',
   initialState: initialStateApplicationHistory,
   reducers: {},
@@ -92,7 +92,7 @@ export const applicationHistoryListSlice = createSlice({
  */
 const initialStateApplicationModules: Record<string, StatusT<ApplicationModule[]>> = {};
 
-export const applicationModuleListSlice = createSlice({
+const applicationModuleListSlice = createSlice({
   name: 'applicationModuleListSlice',
   initialState: initialStateApplicationModules,
   reducers: {},
@@ -106,7 +106,7 @@ export const applicationModuleListSlice = createSlice({
  */
 const initialStateApplicationRestart: Record<string, StatusT<Response>> = {};
 
-export const applicationRestartSlice = createSlice({
+const applicationRestartSlice = createSlice({
   name: 'applicationRestartSlice',
   initialState: initialStateApplicationRestart,
   reducers: {},
@@ -120,7 +120,7 @@ export const applicationRestartSlice = createSlice({
  */
 const initialStateApplicationSubmit: Record<string, StatusT<string[]>> = {};
 
-export const applicationSubmitSlice = createSlice({
+const applicationSubmitSlice = createSlice({
   name: 'applicationSubmitSlice',
   initialState: initialStateApplicationSubmit,
   reducers: {},
@@ -134,7 +134,7 @@ export const applicationSubmitSlice = createSlice({
  */
 const initialStateApplicationReview: Record<string, StatusT<Response>> = {};
 
-export const applicationReviewSlice = createSlice({
+const applicationReviewSlice = createSlice({
   name: 'applicationReviewSlice',
   initialState: initialStateApplicationReview,
   reducers: {},
@@ -148,7 +148,7 @@ export const applicationReviewSlice = createSlice({
  */
 const initialStateApplicationUpdateBoundary: Record<string, StatusT<Response>> = {};
 
-export const applicationUpdateBoundarySlice = createSlice({
+const applicationUpdateBoundarySlice = createSlice({
   name: 'applicationUpdateBoundarySlice',
   initialState: initialStateApplicationUpdateBoundary,
   reducers: {},
@@ -162,7 +162,7 @@ export const applicationUpdateBoundarySlice = createSlice({
  */
 const initialStateApplicationUploadBoundary: Record<string, StatusT<Response>> = {};
 
-export const applicationUploadBoundarySlice = createSlice({
+const applicationUploadBoundarySlice = createSlice({
   name: 'applicationUploadBoundarySlice',
   initialState: initialStateApplicationUploadBoundary,
   reducers: {},

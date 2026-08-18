@@ -217,17 +217,10 @@ export type ExportBiomassObservationsApiArg = {
   plantingSiteId?: number;
 };
 
-export { injectedRtkApi as api };
-
 export const {
-  useExportObservationGpxQuery,
   useLazyExportObservationGpxQuery,
-  useExportBiomassPlotsCsvQuery,
   useLazyExportBiomassPlotsCsvQuery,
-  useExportBiomassSpeciesCsvQuery,
   useLazyExportBiomassSpeciesCsvQuery,
-  useExportBiomassTreesShrubsCsvQuery,
   useLazyExportBiomassTreesShrubsCsvQuery,
-  useExportBiomassObservationsCsvQuery,
   useLazyExportBiomassObservationsCsvQuery,
 } = injectedRtkApi;

@@ -144,6 +144,4 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export { injectedRtkApi as api };
-
 export const { useBatchReportPhotosMutation } = injectedRtkApi;

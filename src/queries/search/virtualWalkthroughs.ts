@@ -105,6 +105,4 @@ export type OrganizationVirtualWalkthrough = {
   monitoringPlotName?: string;
 };
 
-export { injectedRtkApi as api };
-
-export const { useSearchVirtualWalkthroughsQuery, useLazySearchVirtualWalkthroughsQuery } = injectedRtkApi;
+export const { useSearchVirtualWalkthroughsQuery } = injectedRtkApi;

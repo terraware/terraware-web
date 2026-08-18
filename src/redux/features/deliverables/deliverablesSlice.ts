@@ -17,7 +17,7 @@ import { DeliverableWithOverdue, ListDeliverablesElementWithOverdue } from 'src/
  */
 const initialStateDeliverablesList: { [key: string]: StatusT<ListDeliverablesElementWithOverdue[]> } = {};
 
-export const deliverablesListSlice = createSlice({
+const deliverablesListSlice = createSlice({
   name: 'deliverablesListSlice',
   initialState: initialStateDeliverablesList,
   reducers: {},
@@ -42,7 +42,7 @@ export const deliverableCompositeKeyFn = (arg: unknown): string => {
   return `d${castArg.deliverableId}-p${castArg.projectId}`;
 };
 
-export const deliverablesSlice = createSlice({
+const deliverablesSlice = createSlice({
   name: 'deliverablesSlice',
   initialState: initialStateDeliverable,
   reducers: {},
@@ -57,7 +57,7 @@ export const deliverablesSlice = createSlice({
  */
 const initialStateEditDeliverable: { [key: number | string]: StatusT<number | string> } = {};
 
-export const deliverablesEditSlice = createSlice({
+const deliverablesEditSlice = createSlice({
   name: 'deliverablesEditSlice',
   initialState: initialStateEditDeliverable,
   reducers: {},

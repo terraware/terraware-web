@@ -50,7 +50,7 @@ export type RegionLabel = {
   label: string;
 };
 
-export const REGIONS = (): RegionLabel[] => [
+const REGIONS = (): RegionLabel[] => [
   { region: 'Antarctica', label: strings.REGION_ANTARCTICA },
   { region: 'East Asia & Pacific', label: strings.REGION_EAST_ASIA_PACIFIC },
   { region: 'Europe & Central Asia', label: strings.REGION_EUROPE_CENTRAL_ASIA },

@@ -21,7 +21,7 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import StatsCardItem from './StatsCardItem';
 
-export const PlantingSiteStats = () => {
+const PlantingSiteStats = () => {
   const { strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { isDesktop } = useDeviceInfo();

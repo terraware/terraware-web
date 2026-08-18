@@ -139,4 +139,4 @@ type WithdrawalsApiResponse = {
   results: WithdrawalsApiResult[];
 };
 
-export const { useListSpeciesTargetsForSubstratumQuery, useLazyListSpeciesTargetsForSubstratumQuery } = injectedRtkApi;
+export const { useLazyListSpeciesTargetsForSubstratumQuery } = injectedRtkApi;

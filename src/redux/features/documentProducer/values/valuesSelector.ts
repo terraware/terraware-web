@@ -6,10 +6,10 @@ import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
 import { variableListCompositeKeyFn } from './valuesSlice';
 
-export const selectVariablesValues = (state: RootState, docId: number | string, maxValueId?: number) =>
+const selectVariablesValues = (state: RootState, docId: number | string, maxValueId?: number) =>
   state.documentProducerVariableValuesList[docId];
 
-export const selectGetVariableValues = createCachedSelector(
+const selectGetVariableValues = createCachedSelector(
   (state: RootState, projectId: number | string, variableId: number, maxValueId?: number) =>
     state.documentProducerVariableValuesList[variableListCompositeKeyFn({ projectId, maxValueId })],
   (state: RootState, projectId: number | string, variableId: number, maxValueId?: number) => projectId,

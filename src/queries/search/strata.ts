@@ -176,10 +176,7 @@ export type StratumSurvivalRate = {
 };
 
 export const {
-  useListStrataQuery,
   useLazyListStrataQuery,
-  useGetStratumPlantDensityTrendQuery,
   useLazyGetStratumPlantDensityTrendQuery,
-  useGetStratumSurvivalRateTrendQuery,
   useLazyGetStratumSurvivalRateTrendQuery,
 } = injectedRtkApi;

@@ -80,11 +80,4 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export { injectedRtkApi as api };
-
-export const {
-  useListPlantingSeasonEventsQuery,
-  useLazyListPlantingSeasonEventsQuery,
-  useListInventoryPlanningEventsQuery,
-  useLazyListInventoryPlanningEventsQuery,
-} = injectedRtkApi;
+export const { useLazyListPlantingSeasonEventsQuery, useLazyListInventoryPlanningEventsQuery } = injectedRtkApi;

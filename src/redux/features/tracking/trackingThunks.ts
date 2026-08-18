@@ -26,7 +26,7 @@ export type PlotsWithObservationsSearchResult = {
   permanentIndex?: string;
 };
 
-export const requestPlantingSite = (plantingSiteId: number, locale?: string | null) => {
+const requestPlantingSite = (plantingSiteId: number, locale?: string | null) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       const response = await TrackingService.getPlantingSite(plantingSiteId);
@@ -83,7 +83,7 @@ export const requestPlantingSites = createAsyncThunk(
   }
 );
 
-export const requestPlantingSitesSearchResults = (organizationId: number) => {
+const requestPlantingSitesSearchResults = (organizationId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       const response: PlantingSiteSearchResult[] | null = await TrackingService.searchPlantingSites(organizationId);

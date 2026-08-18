@@ -192,11 +192,4 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export { injectedRtkApi as api };
-
-export const {
-  useSearchSpeciesInventoryQuery,
-  useLazySearchSpeciesInventoryQuery,
-  useSearchInventoryByNurseryQuery,
-  useLazySearchInventoryByNurseryQuery,
-} = injectedRtkApi;
+export const { useLazySearchSpeciesInventoryQuery, useLazySearchInventoryByNurseryQuery } = injectedRtkApi;

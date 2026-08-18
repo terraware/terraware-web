@@ -11,7 +11,7 @@ import { requestProjectToDoDeliverables, requestProjectToDoEvents } from './proj
  */
 const initialStateProjectToDoDeliverables: { [key: string]: StatusT<DeliverableToDoItem[]> } = {};
 
-export const deliverablesToDoListSlice = createSlice({
+const deliverablesToDoListSlice = createSlice({
   name: 'projectToDoDeliverablesSlice',
   initialState: initialStateProjectToDoDeliverables,
   reducers: {},
@@ -25,7 +25,7 @@ export const deliverablesToDoListSlice = createSlice({
  */
 const initialStateProjectToDoEvents: { [key: string]: StatusT<EventToDoItem[]> } = {};
 
-export const eventsToDoListSlice = createSlice({
+const eventsToDoListSlice = createSlice({
   name: 'projectToDoEventsSlice',
   initialState: initialStateProjectToDoEvents,
   reducers: {},

@@ -326,7 +326,7 @@ export function getSuccessionalGroupsString(species?: Species): string {
     .join(', ');
 }
 
-export const getWoodDensityLevel = (value: WoodDensityLevel): string => {
+const getWoodDensityLevel = (value: WoodDensityLevel): string => {
   switch (value) {
     case 'Family':
       return strings.FAMILY;

@@ -302,8 +302,5 @@ type PlantingDateRequestsApiResponse = {
   results: PlantingDateRequestApiResult[];
 };
 
-export const {
-  useListPlantingDateRequestsQuery,
-  useLazyListPlantingDateRequestsQuery,
-  useLazyGetScheduledPlantingDateWithdrawnTotalQuery,
-} = injectedRtkApi;
+export const { useLazyListPlantingDateRequestsQuery, useLazyGetScheduledPlantingDateWithdrawnTotalQuery } =
+  injectedRtkApi;

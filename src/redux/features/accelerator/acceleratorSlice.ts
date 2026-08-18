@@ -10,7 +10,7 @@ import { requestAcceleratorOrgs, requestAssignTerraformationContact } from './ac
  */
 const initialStateAcceleratorOrgs: Record<string, StatusT<AcceleratorOrg[]>> = {};
 
-export const acceleratorOrgsSlice = createSlice({
+const acceleratorOrgsSlice = createSlice({
   name: 'acceleratorOrgsSlice',
   initialState: initialStateAcceleratorOrgs,
   reducers: {},
@@ -24,7 +24,7 @@ export const acceleratorOrgsSlice = createSlice({
  */
 const initialStateAssignTerraformationContact: Record<string, StatusT<Response>> = {};
 
-export const assignTerraformationContactSlice = createSlice({
+const assignTerraformationContactSlice = createSlice({
   name: 'assignTerraformationContactSlice',
   initialState: initialStateAssignTerraformationContact,
   reducers: {},

@@ -112,11 +112,4 @@ export type SearchDraftPlantingSiteSummariesApiArgs = {
   searchTerm?: string;
 };
 
-export { injectedRtkApi as api };
-
-export const {
-  useCountDraftPlantingSitesQuery,
-  useLazyCountDraftPlantingSitesQuery,
-  useSearchDraftPlantingSitesQuery,
-  useLazySearchDraftPlantingSitesQuery,
-} = injectedRtkApi;
+export const { useLazyCountDraftPlantingSitesQuery, useLazySearchDraftPlantingSitesQuery } = injectedRtkApi;

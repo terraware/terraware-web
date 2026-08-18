@@ -12,15 +12,14 @@ import { Document as DocumentType } from 'src/types/documentProducer/Document';
 
 import { AsyncRequest, AsyncRequestT } from '../../asyncUtils';
 
-export const selectDocuments = (requestId: string) => (state: RootState) =>
-  state.documentProducerDocumentList[requestId];
+const selectDocuments = (requestId: string) => (state: RootState) => state.documentProducerDocumentList[requestId];
 
 export const selectGetDocument =
   (docId: number) =>
   (state: RootState): AsyncRequestT<DocumentType> | undefined =>
     state.documentProducerDocument[docId];
 
-export const selectListHistory = createCachedSelector(
+const selectListHistory = createCachedSelector(
   (state: RootState, id: number) => state.documentProducerDocumentListHistory[id],
   (response) => {
     if (response) {

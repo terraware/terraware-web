@@ -199,17 +199,10 @@ const injectedRtkApi = api.injectEndpoints({
   overrideExisting: false,
 });
 
-export { injectedRtkApi as api };
-
 export const {
-  useSearchAccessionsQuery,
   useLazySearchAccessionsQuery,
-  useGetPendingAccessionsQuery,
   useLazyGetPendingAccessionsQuery,
-  useGetCollectorsQuery,
   useLazyGetCollectorsQuery,
-  useGetCollectionSiteNamesQuery,
   useLazyGetCollectionSiteNamesQuery,
-  useGetAccessionForSpeciesQuery,
   useLazyGetAccessionForSpeciesQuery,
 } = injectedRtkApi;

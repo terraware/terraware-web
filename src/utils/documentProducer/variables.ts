@@ -88,7 +88,7 @@ export const variableDependencyMet = (variable: VariableWithValues, allVariables
   }
 };
 
-export const getRawValue = (variable: VariableWithValues): number | number[] | string | undefined => {
+const getRawValue = (variable: VariableWithValues): number | number[] | string | undefined => {
   const firstValue = variable.values[0];
 
   if (!firstValue) {

@@ -30,7 +30,7 @@ export async function addQuestionnaireComments(question: string, comments: strin
   await validateQuestionnaireComments(question, comments, page);
 }
 
-export async function validateQuestionnaireComments(question: string, comments: string, page: Page) {
+async function validateQuestionnaireComments(question: string, comments: string, page: Page) {
   await expect(page.getByText(question).locator('../../..').getByText(comments)).toBeVisible();
 }
 

@@ -10,7 +10,7 @@ import { requestSpeciesDeliverables } from './projectSpeciesAsyncThunks';
  */
 const initialStateSpeciesDeliverables: { [key: string]: StatusT<SpeciesDeliverable[]> } = {};
 
-export const speciesDeliverablesSlice = createSlice({
+const speciesDeliverablesSlice = createSlice({
   name: 'speciesDeliverablesSlice',
   initialState: initialStateSpeciesDeliverables,
   reducers: {},

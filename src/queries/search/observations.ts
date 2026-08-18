@@ -65,8 +65,6 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export { injectedRtkApi as api };
-
 export type CountObservationsApiArgs = {
   organizationId: number;
   plantingSiteId?: number;
@@ -75,4 +73,4 @@ export type CountObservationsApiArgs = {
   state?: ('Upcoming' | 'InProgress' | 'Completed' | 'Overdue' | 'Abandoned')[];
 };
 
-export const { useCountObservationsQuery, useLazyCountObservationsQuery } = injectedRtkApi;
+export const { useLazyCountObservationsQuery } = injectedRtkApi;

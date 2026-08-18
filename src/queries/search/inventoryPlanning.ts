@@ -283,9 +283,4 @@ export const aggregateInventoryPlanningRows = (
     .sort((a, b) => a.scientificName.localeCompare(b.scientificName));
 };
 
-export const {
-  useListInventoryPlanningSeasonsQuery,
-  useLazyListInventoryPlanningSeasonsQuery,
-  useListInventoryPlanningSpeciesAvailableQuery,
-  useLazyListInventoryPlanningSpeciesAvailableQuery,
-} = injectedRtkApi;
+export const { useListInventoryPlanningSeasonsQuery, useListInventoryPlanningSpeciesAvailableQuery } = injectedRtkApi;
