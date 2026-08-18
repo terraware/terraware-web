@@ -5,6 +5,7 @@ import { Badge, DropdownItem, Message } from '@terraware/web-components';
 import { EditableTable, EditableTableColumn, Icon, Separator } from '@terraware/web-components';
 import {
   MRT_Cell,
+  MRT_Row,
   MRT_ShowHideColumnsButton,
   MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
@@ -50,7 +51,7 @@ import CheckDataModal from './CheckDataModal';
 import ImportSpeciesModal from './ImportSpeciesModal';
 import ProblemTooltip from './ProblemTooltip';
 import SpeciesCheckModal, { SpeciesCheckEntry } from './SpeciesCheck/SpeciesCheckModal';
-import { Nativity, getNativityLabel } from './SpeciesCheck/types';
+import { NATIVITY_VALUES, Nativity, getNativityLabel } from './SpeciesCheck/types';
 import SpeciesNativityBadge from './SpeciesNativityBadge';
 import { SpeciesSearchResultRow } from './types';
 
@@ -187,34 +188,40 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const showFirstTimeBanner = speciesCheckEnabled && noLocationSet && !firstTimeBannerDismissed;
   const showAddedBanner = speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !addedBannerDismissed;
 
-  const statusScopeSelected = !hasMultipleProjects || projectFilter.projectId !== undefined;
-  const resolveScopeNativity = useCallback(
-    (sp: Species): Nativity | undefined => {
+  const resolveScopeNativities = useCallback(
+    (sp: Species): Nativity[] => {
       const elements = sp.projects ?? [];
+      const distinct = (values: (Nativity | undefined)[]): Nativity[] =>
+        NATIVITY_VALUES.filter((value) => values.includes(value));
+
       if (hasMultipleProjects) {
-        return nativityOf(elements.find((element) => element.projectId === projectFilter.projectId));
+        if (projectFilter.projectId !== undefined) {
+          return distinct([nativityOf(elements.find((element) => element.projectId === projectFilter.projectId))]);
+        }
+        return distinct(elements.map((element) => nativityOf(element)));
       }
+
       const orgNativity = nativityOf(elements.find((element) => element.projectId === undefined));
       if (orgNativity) {
-        return orgNativity;
+        return [orgNativity];
       }
-      return orgScopeKnown ? nativityOf(elements.find((element) => nativityOf(element))) : undefined;
+      return orgScopeKnown ? distinct([nativityOf(elements.find((element) => nativityOf(element)))]) : [];
     },
     [hasMultipleProjects, projectFilter.projectId, orgScopeKnown]
   );
 
-  const speciesCheckRan = statusScopeSelected && species.some((sp) => !!resolveScopeNativity(sp));
+  const speciesCheckRan = species.some((sp) => resolveScopeNativities(sp).length > 0);
   const showStatusColumn = speciesCheckEnabled && speciesCheckRan;
 
   const statusBySpeciesId = useMemo(() => {
-    const map = new Map<number, Nativity | undefined>();
+    const map = new Map<number, Nativity[]>();
     if (showStatusColumn) {
       species.forEach((sp) => {
-        map.set(sp.id, resolveScopeNativity(sp));
+        map.set(sp.id, resolveScopeNativities(sp));
       });
     }
     return map;
-  }, [showStatusColumn, species, resolveScopeNativity]);
+  }, [showStatusColumn, species, resolveScopeNativities]);
 
   const {
     columnOrder,
@@ -536,16 +543,23 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const StatusCell = useCallback(
     ({ cell }: { cell: MRT_Cell<SpeciesSearchResultRow> }) => {
-      const nativity = statusBySpeciesId.get(cell.row.original.id);
-      return nativity ? (
-        <SpeciesNativityBadge nativity={nativity} />
-      ) : (
-        <Badge
-          label={strings.NOT_SET}
-          backgroundColor={theme.palette.TwClrBgSecondary}
-          borderColor={theme.palette.TwClrBrdrSecondary}
-          labelColor={theme.palette.TwClrTxtSecondary}
-        />
+      const nativities = statusBySpeciesId.get(cell.row.original.id) ?? [];
+      if (nativities.length === 0) {
+        return (
+          <Badge
+            label={strings.NOT_SET}
+            backgroundColor={theme.palette.TwClrBgSecondary}
+            borderColor={theme.palette.TwClrBrdrSecondary}
+            labelColor={theme.palette.TwClrTxtSecondary}
+          />
+        );
+      }
+      return (
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: theme.spacing(0.5) }}>
+          {nativities.map((nativity) => (
+            <SpeciesNativityBadge key={nativity} nativity={nativity} />
+          ))}
+        </Box>
       );
     },
     [statusBySpeciesId, theme]
@@ -606,8 +620,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               id: 'status',
               header: strings.STATUS,
               accessorFn: (row: SpeciesSearchResultRow) => {
-                const nativity = statusBySpeciesId.get(row.id);
-                return nativity ? getNativityLabel(nativity) : strings.NOT_SET;
+                const nativities = statusBySpeciesId.get(row.id) ?? [];
+                return nativities.length ? nativities.map(getNativityLabel).join(', ') : strings.NOT_SET;
               },
               enableEditing: false,
               filterVariant: 'select' as const,
@@ -618,7 +632,11 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                 strings.UNKNOWN,
                 strings.NOT_SET,
               ],
-              filterFn: 'equals',
+              filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, filterValue: string) => {
+                const nativities = statusBySpeciesId.get(row.original.id) ?? [];
+                const labels = nativities.length ? nativities.map(getNativityLabel) : [strings.NOT_SET];
+                return labels.includes(filterValue);
+              },
               sortUndefined: 'last' as const,
               Cell: StatusCell,
             },
