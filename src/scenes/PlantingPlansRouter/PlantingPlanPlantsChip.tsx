@@ -21,7 +21,7 @@ const PlantingPlanPlantsChip = ({ plants }: PlantingPlanPlantsChipProps): JSX.El
         padding: theme.spacing(0.5, 1.5),
       }}
     >
-      <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrBaseBlack} whiteSpace='nowrap'>
+      <Typography fontSize='14px' fontWeight={500} color={theme.palette.TwClrTxt} whiteSpace='nowrap'>
         {strings.formatString(strings.X_PLANTS, numberFormatter.format(plants)).toString()}
       </Typography>
     </Box>

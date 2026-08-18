@@ -56,10 +56,15 @@ const PlantingPlanDetailsView = (): JSX.Element => {
     [strings]
   );
 
-  const description = useMemo(
-    () => (segment === 'overview' ? strings.PLANTING_PLAN_DESCRIPTION : strings.SITE_GOALS_DESCRIPTION),
-    [segment, strings]
-  );
+  const description = useMemo(() => {
+    if (segment === 'siteGoals') {
+      return strings.SITE_GOALS_DESCRIPTION;
+    }
+    if (segment === 'plantingSeasons') {
+      return strings.MANAGE_PLANTING_SEASONS_TO_MEET_GOALS;
+    }
+    return strings.PLANTING_PLAN_DESCRIPTION;
+  }, [segment, strings]);
 
   const title = useMemo(
     () =>
