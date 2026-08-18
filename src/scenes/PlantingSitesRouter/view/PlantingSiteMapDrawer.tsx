@@ -20,7 +20,7 @@ type PlantingSiteMapDrawerProps = {
 };
 
 const PlantingSiteMapDrawer = ({ plantingSiteId, layerFeatureId }: PlantingSiteMapDrawerProps): JSX.Element | null => {
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { plantingSite } = usePlantingSite(plantingSiteId);
   const { findSpeciesById } = useOrganizationSpecies();
@@ -66,8 +66,8 @@ const PlantingSiteMapDrawer = ({ plantingSiteId, layerFeatureId }: PlantingSiteM
     return data.speciesIds
       .map((speciesId) => findSpeciesById(speciesId)?.scientificName)
       .filter((name): name is string => name !== undefined)
-      .sort((a, b) => a.localeCompare(b));
-  }, [data, findSpeciesById]);
+      .sort((a, b) => a.localeCompare(b, activeLocale || undefined));
+  }, [activeLocale, data, findSpeciesById]);
 
   if (!data) {
     return null;
