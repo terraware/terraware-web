@@ -8,7 +8,7 @@ import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { VoteOption } from 'src/types/ProjectVotes';
 
-export type VoteBadgeProps = {
+type VoteBadgeProps = {
   vote?: VoteOption;
 };
 

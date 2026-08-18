@@ -56,13 +56,13 @@ export type MapGeometry = number[][][][];
 
 export type MapSourceProperties = { [key: string]: any };
 
-export type MapAnnotation = {
+type MapAnnotation = {
   textField: string; // property field whose value to render as annotation
   textSize: number;
   textColor: string;
 };
 
-export type MapPatternFill = Expression | string;
+type MapPatternFill = Expression | string;
 
 /**
  * A renderable map entity
@@ -138,7 +138,7 @@ export type MapEntityOptions = {
 /**
  * Types of objects that can be added to MapData
  */
-export type MapObject = 'site' | 'stratum' | 'substratum' | 'permanentPlot' | 'temporaryPlot' | 'adHocPlot';
+type MapObject = 'site' | 'stratum' | 'substratum' | 'permanentPlot' | 'temporaryPlot' | 'adHocPlot';
 
 /**
  * Sources for a map

@@ -4,7 +4,7 @@ import { Box, LinearProgress, Typography, useTheme } from '@mui/material';
 
 import { MetricStatus } from 'src/types/AcceleratorReport';
 
-export type QuarterlyProgressItem = {
+type QuarterlyProgressItem = {
   quarter: string;
   value: number;
 };

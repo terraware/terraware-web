@@ -15,7 +15,7 @@ const INDICATOR_FIELDS: Record<string, keyof AcceleratorReportPayload> = {
   project: 'projectIndicators',
 };
 
-export type ReportEditFieldsProps = {
+type ReportEditFieldsProps = {
   onChangeCallback: (id: string) => (value: unknown) => void;
   record: AcceleratorReportPayload;
   isConsoleView?: boolean;

@@ -17,7 +17,7 @@ export type PlantingDateRequestSubstratumSpecies = {
   withdrawnQuantity: number;
 };
 
-export type PlantingDateRequestSubstratum = {
+type PlantingDateRequestSubstratum = {
   substratumId: number;
   substratumName: string;
   stratumId: number;
@@ -41,14 +41,14 @@ export type PlantingDateRequestRow = {
   substrata: PlantingDateRequestSubstratum[];
 };
 
-export type ListPlantingDateRequestsArgs = {
+type ListPlantingDateRequestsArgs = {
   organizationId: number;
   plantingSiteId?: number;
   plantingSeasonId?: number;
   speciesId?: number;
 };
 
-export type ScheduledPlantingDateWithdrawalsArgs = {
+type ScheduledPlantingDateWithdrawalsArgs = {
   plantingSeasonId: number;
   date: string;
 };
@@ -302,8 +302,5 @@ type PlantingDateRequestsApiResponse = {
   results: PlantingDateRequestApiResult[];
 };
 
-export const {
-  useListPlantingDateRequestsQuery,
-  useLazyListPlantingDateRequestsQuery,
-  useLazyGetScheduledPlantingDateWithdrawnTotalQuery,
-} = injectedRtkApi;
+export const { useLazyListPlantingDateRequestsQuery, useLazyGetScheduledPlantingDateWithdrawnTotalQuery } =
+  injectedRtkApi;

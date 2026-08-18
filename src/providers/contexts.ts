@@ -5,7 +5,6 @@ import { Organization } from 'src/types/Organization';
 import { GlobalRolePermission } from 'src/utils/acl';
 
 import {
-  ProvidedFundingEntityData,
   ProvidedLocalizationData,
   ProvidedOrganizationData,
   ProvidedUserData,
@@ -61,12 +60,4 @@ export const LocalizationContext = createContext<ProvidedLocalizationData>({
 export const UserFundingEntityContext = createContext<ProvidedUserFundingEntityData>({
   userFundingEntity: undefined,
   bootstrapped: false,
-});
-
-export const FundingEntityContext = createContext<ProvidedFundingEntityData>({
-  fundingEntity: undefined,
-  reload: () => {
-    // default no-op implementation
-    return;
-  },
 });

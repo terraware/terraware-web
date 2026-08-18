@@ -118,7 +118,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type ListStrataArgs = {
+type ListStrataArgs = {
   organizationId: number;
   plantingSiteId?: number;
 };
@@ -133,7 +133,7 @@ type ListStrataApiResponse = {
   results: ListStrataApiResult[];
 };
 
-export type StratumPayload = {
+type StratumPayload = {
   id: number;
   name: string;
   plantingSiteId: number;
@@ -150,7 +150,7 @@ type GetStratumPlantDensityTrendApiResponse = {
   results: StratumPlantDensityTrendApiResult[];
 };
 
-export type StratumPlantDensity = {
+type StratumPlantDensity = {
   observationId: number;
   completedTime: string;
   plantDensity: number;
@@ -168,7 +168,7 @@ type GetStratumSurvivalRateTrendApiResponse = {
   results: StratumSurvivalRateTrendApiResult[];
 };
 
-export type StratumSurvivalRate = {
+type StratumSurvivalRate = {
   observationId: number;
   completedTime: string;
   survivalRate: number;
@@ -176,10 +176,7 @@ export type StratumSurvivalRate = {
 };
 
 export const {
-  useListStrataQuery,
   useLazyListStrataQuery,
-  useGetStratumPlantDensityTrendQuery,
   useLazyGetStratumPlantDensityTrendQuery,
-  useGetStratumSurvivalRateTrendQuery,
   useLazyGetStratumSurvivalRateTrendQuery,
 } = injectedRtkApi;

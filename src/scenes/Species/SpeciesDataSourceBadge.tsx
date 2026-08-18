@@ -6,6 +6,17 @@ import { Badge } from '@terraware/web-components';
 import { SpeciesDataSourcePayload } from 'src/queries/generated/species';
 import strings from 'src/strings';
 
+const DATA_SOURCE_LABELS: Record<string, string> = {
+  GBIF: 'Global Biodiversity Information Facility',
+  GRIIS: 'Global Register of Introduced and Invasive Species',
+  WCVP: 'World Checklist of Vascular Plants',
+  NaturalEarth: 'Natural Earth',
+  RESOLVE: 'RESOLVE Ecoregions',
+};
+
+export const speciesDataSourceLabel = (datasetType?: string): string =>
+  datasetType ? DATA_SOURCE_LABELS[datasetType] ?? datasetType : '';
+
 type SpeciesDataSourceBadgeProps = {
   source?: SpeciesDataSourcePayload;
 };
@@ -16,7 +27,15 @@ const SpeciesDataSourceBadge = ({ source }: SpeciesDataSourceBadgeProps): JSX.El
   }
 
   return (
-    <Tooltip title={strings.formatString(strings.SPECIES_PROJECT_DATA_SOURCE_SYNC, source.datasetDate) as string}>
+    <Tooltip
+      title={
+        <>
+          {speciesDataSourceLabel(source.datasetType)}
+          <br />
+          {strings.formatString(strings.SPECIES_PROJECT_DATA_SOURCE_SYNC, source.datasetDate)}
+        </>
+      }
+    >
       <Box component='span' sx={{ display: 'inline-flex' }}>
         <Badge label={source.datasetType} />
       </Box>

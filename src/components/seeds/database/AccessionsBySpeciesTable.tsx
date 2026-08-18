@@ -25,7 +25,7 @@ import { SearchResponseElementWithId } from 'src/types/Search';
 import { makeCsv } from 'src/utils/csv';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
-export type SpeciesRow = {
+type SpeciesRow = {
   id: string;
   speciesId: number | undefined;
   speciesName: string;

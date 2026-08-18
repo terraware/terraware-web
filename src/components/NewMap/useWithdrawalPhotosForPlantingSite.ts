@@ -1,6 +1,6 @@
 import { WithdrawalPhotoSearchEntry, useSearchNurseryWithdrawalPhotosQuery } from 'src/queries/search/nurseries';
 
-export type WithdrawalPhotoEntry = WithdrawalPhotoSearchEntry;
+type WithdrawalPhotoEntry = WithdrawalPhotoSearchEntry;
 
 type UseWithdrawalPhotosForPlantingSiteArgs = {
   enabled?: boolean;

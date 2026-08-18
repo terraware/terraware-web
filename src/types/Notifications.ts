@@ -8,5 +8,3 @@ export type ClientNotification = Omit<Notification, 'body'> & {
   body: string | JSX.Element;
   markAsRead: (read: boolean) => void;
 };
-
-export type NotificationCriticality = Notification['notificationCriticality'];

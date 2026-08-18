@@ -78,4 +78,4 @@ const shouldShowHeicPlaceholder = async (file: File): Promise<boolean> => {
   return !isSupported;
 };
 
-export { getImagePath, isHeicFile, isHeicSupportedByBrowser, shouldShowHeicPlaceholder };
+export { getImagePath, shouldShowHeicPlaceholder };

@@ -26,7 +26,7 @@ import useMapboxToken from 'src/utils/useMapboxToken';
 
 import PlantingSiteMapDrawer from './PlantingSiteMapDrawer';
 
-export type PlantingSiteMapV2Props = {
+type PlantingSiteMapV2Props = {
   plantingSiteId: number;
 };
 

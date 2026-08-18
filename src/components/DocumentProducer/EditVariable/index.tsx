@@ -32,7 +32,7 @@ import {
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
 
-export type EditVariableProps = {
+type EditVariableProps = {
   display?: boolean;
   onFinish: (edited: boolean) => void;
   projectId: number;

@@ -10,12 +10,12 @@ import { StratumResponsePayload, SubstratumResponsePayload } from 'src/queries/g
 import strings from 'src/strings';
 import { NumberFormatter } from 'src/types/Number';
 
-export type SubstratumInfo = {
+type SubstratumInfo = {
   id: number;
   name: string;
 };
 
-export type StratumInfo = {
+type StratumInfo = {
   id: number;
   name: string;
   substrata: SubstratumInfo[];

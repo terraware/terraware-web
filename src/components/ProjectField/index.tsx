@@ -18,10 +18,6 @@ export interface ProjectFieldProps {
   backgroundColor?: string;
 }
 
-export type ProjectIdFieldProps = ProjectFieldProps & {
-  id: string;
-};
-
 export type EditFieldValue = string | number | undefined;
 
 export interface ProjectFieldEditProps {

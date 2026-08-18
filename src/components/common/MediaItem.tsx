@@ -18,7 +18,7 @@ export type MediaFile = {
   isQuadrat: boolean;
 };
 
-export type MediaItemProps = {
+type MediaItemProps = {
   mediaFile: MediaFile;
   imageSrc: string;
   onDownload?: (fileId: number) => void;

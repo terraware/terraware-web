@@ -2,7 +2,7 @@ import React, { type JSX } from 'react';
 
 import { SustainableDevelopmentGoal } from 'src/types/SeedFundReport';
 
-export type SdgIconProps = {
+type SdgIconProps = {
   goal: SustainableDevelopmentGoal;
   size?: number; // dimensions are width x height (where width = height = size)
 };

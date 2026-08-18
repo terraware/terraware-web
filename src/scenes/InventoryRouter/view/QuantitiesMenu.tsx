@@ -2,8 +2,7 @@ import React, { type JSX } from 'react';
 
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import strings from 'src/strings';
-
-import { ModalValuesType } from './BatchesCellRenderer';
+import { ModalValuesType } from 'src/types/Batch';
 
 export type QuantitiesMenuProps = {
   setModalValues: React.Dispatch<React.SetStateAction<ModalValuesType>>;

@@ -8,7 +8,7 @@ export type ReportOption = {
   title: string;
 };
 
-export type ReportDropdownProps = {
+type ReportDropdownProps = {
   reports: ReportOption[];
   selectedReportId?: number;
   onChange: (reportId: number) => void;

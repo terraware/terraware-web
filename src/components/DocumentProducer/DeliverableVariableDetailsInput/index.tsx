@@ -29,7 +29,7 @@ import DeliverableEditTable from '../DeliverableEditTable';
 import { PhotoWithAttributes } from '../EditImagesModal/PhotoSelector';
 import { VariableTableCell } from '../EditableTableModal/helpers';
 
-export type DeliverableVariableDetailsInputProps = {
+type DeliverableVariableDetailsInputProps = {
   hideDescription?: boolean;
   values: VariableValueValue[];
   setCellValues?: (values: VariableTableCell[][]) => void;

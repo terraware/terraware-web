@@ -9,7 +9,7 @@ import { requestSaveVersion } from 'src/redux/features/documentProducer/document
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 
-export type SaveVersionProps = {
+type SaveVersionProps = {
   docId: number;
   onFinish: (saved: boolean) => void;
 };

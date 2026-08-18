@@ -3,7 +3,6 @@ import strings from 'src/strings';
 
 export type Deliverable = components['schemas']['DeliverablePayload'];
 export type DeliverableTypeType = components['schemas']['DeliverablePayload']['type'];
-export type ImportDeliverableProblemElement = components['schemas']['ImportDeliverableProblemElement'];
 export const DeliverableTypes: DeliverableTypeType[] = ['Document', 'Species', 'Questions'];
 
 export type DeliverableCategoryType = components['schemas']['DeliverablePayload']['category'];
@@ -19,14 +18,6 @@ export const DeliverableCategories: DeliverableCategoryType[] = [
 ];
 
 export type DeliverableStatusType = components['schemas']['DeliverablePayload']['status'];
-export const DeliverableStatuses: DeliverableStatusType[] = [
-  'Not Submitted',
-  'In Review',
-  'Rejected',
-  'Approved',
-  'Needs Translation',
-  'Not Needed',
-];
 
 export const DeliverableStatusOrder: { [key in DeliverableStatusTypeWithOverdue]: number } = {
   Overdue: 0,
@@ -49,8 +40,6 @@ export const DeliverableStatusesWithOverdue: DeliverableStatusTypeWithOverdue[] 
   'Not Needed',
   'Overdue',
 ];
-
-export type DeliverableDocument = components['schemas']['SubmissionDocumentPayload'];
 
 export type UploadDeliverableDocumentRequest = {
   description: string;
@@ -93,16 +82,5 @@ export const categoryLabel = (category: DeliverableCategoryType): string => {
 
     default:
       return category as string;
-  }
-};
-
-export const getDeliverableTypeLabel = (status: DeliverableTypeType): string => {
-  switch (status) {
-    case 'Document':
-      return strings.DOCUMENT;
-    case 'Species':
-      return strings.SPECIES_LIST;
-    default:
-      return status as string;
   }
 };

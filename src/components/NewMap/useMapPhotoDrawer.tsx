@@ -23,7 +23,7 @@ export type PlotSplat = {
   splat: ObservationSplatPayload;
 };
 
-export type WithdrawalPhoto = {
+type WithdrawalPhoto = {
   kind: 'withdrawal-photo';
   capturedLocalTime?: string;
   withdrawalId: number;
@@ -32,7 +32,7 @@ export type WithdrawalPhoto = {
   gpsCoordinates: Point;
 };
 
-export type MapDrawerPhotoItem = PlotPhoto | PlotSplat | WithdrawalPhoto;
+type MapDrawerPhotoItem = PlotPhoto | PlotSplat | WithdrawalPhoto;
 
 const useMapPhotoDrawer = () => {
   const [selectedPhotos, setSelectedPhotos] = useState<MapDrawerPhotoItem[]>([]);

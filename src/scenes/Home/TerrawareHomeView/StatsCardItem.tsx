@@ -17,7 +17,7 @@ export type StatsCardItemProps = {
   value?: string;
 };
 
-export const StatsCardItem = ({
+const StatsCardItem = ({
   label,
   linkOnClick,
   linkText,

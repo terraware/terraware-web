@@ -44,6 +44,4 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export { injectedRtkApi as api };
-
-export const { useListObservationEventsQuery, useLazyListObservationEventsQuery } = injectedRtkApi;
+export const { useLazyListObservationEventsQuery } = injectedRtkApi;

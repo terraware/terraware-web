@@ -16,31 +16,6 @@ import ContentAndMaterials from './ContentAndMaterials';
 import Events from './Events';
 import ModuleDetails from './ModuleDetails';
 
-export const InventoryListTypes: Record<string, string> = {
-  BATCHES_BY_SPECIES: 'batches_by_species',
-  BATCHES_BY_NURSERY: 'batches_by_nursery',
-  BATCHES_BY_BATCH: 'batches_by_batch',
-} as const;
-
-type InventoryListTypeKeys = keyof typeof InventoryListTypes;
-export type InventoryListType = (typeof InventoryListTypes)[InventoryListTypeKeys];
-
-export type FacilityName = {
-  facility_name: string;
-};
-export type InventoryResult = {
-  facility_id: string;
-  species_id: string;
-  species_scientificName: string;
-  species_commonName?: string;
-  germinatingQuantity: string;
-  hardeningOffQuantity: string;
-  activeGrowthQuantity: string;
-  readyQuantity: string;
-  totalQuantity: string;
-  facilityInventories: FacilityName[];
-};
-
 export default function ModuleView(): JSX.Element {
   const contentRef = useRef(null);
   const { moduleId } = useParams<{ moduleId: string }>();

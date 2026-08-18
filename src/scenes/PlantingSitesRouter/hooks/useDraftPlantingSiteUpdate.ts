@@ -23,7 +23,7 @@ import usePlantingSiteValidate from './usePlantingSiteValidate';
  * @param optionalSteps
  * Dictionary of optional steps that were completed if update was successful.
  */
-export type Data = {
+type Data = {
   draft: DraftPlantingSite;
   nextStep: SiteEditStep;
   optionalSteps?: Record<OptionalSiteEditStep, boolean>;

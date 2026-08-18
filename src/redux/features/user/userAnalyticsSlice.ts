@@ -8,7 +8,7 @@ const initialState: UserAnalyticsState = {
   gtmInstrumented: false,
 };
 
-export const userAnalyticsSlice = createSlice({
+const userAnalyticsSlice = createSlice({
   name: 'userAnalytics',
   initialState,
   reducers: {

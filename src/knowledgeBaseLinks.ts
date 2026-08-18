@@ -1,7 +1,7 @@
 import { useLocalization } from 'src/providers';
 import { SupportedLocaleId } from 'src/strings/locales';
 
-export type TerrawarePath =
+type TerrawarePath =
   | '/home'
   | '/myaccount'
   | '/myaccount/edit'

@@ -11,7 +11,7 @@ import Link from './Link';
 import Icon from './icon/Icon';
 import { IconName } from './icon/icons';
 
-export type LinkStyle = 'plain' | 'button-primary' | 'button-secondary';
+type LinkStyle = 'plain' | 'button-primary' | 'button-secondary';
 
 export interface PageCardProps {
   cardIsClickable?: boolean;

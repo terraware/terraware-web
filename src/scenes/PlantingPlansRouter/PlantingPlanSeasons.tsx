@@ -14,7 +14,7 @@ import { siteGoalPlants } from './plantingPlanGoals';
 
 const PLACEHOLDER = '-';
 
-export type PlantingPlanSeasonsProps = {
+type PlantingPlanSeasonsProps = {
   plantingSite: PlantingSitePayload;
 };
 

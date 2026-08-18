@@ -99,7 +99,7 @@ const isReadOnlyOrHigher = (user: User): boolean => ReadOnlyPlus.some((role) => 
 /**
  * Functions related to authorization around global roles
  */
-export const globalRolesAvailableToSet = (user: User): UserGlobalRole[] => {
+const globalRolesAvailableToSet = (user: User): UserGlobalRole[] => {
   if (isSuperAdmin(user)) {
     // Super admin can assign all roles
     return USER_GLOBAL_ROLES;

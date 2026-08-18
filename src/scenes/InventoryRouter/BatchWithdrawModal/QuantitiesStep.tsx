@@ -9,7 +9,7 @@ import SeedlingBatchBox from './SeedlingBatchBox';
 import SpeciesTargetsTable from './SpeciesTargetsTable';
 import { BatchInfo, BatchWithdrawDraft, BatchWithdrawQuantities } from './types';
 
-export type QuantitiesStepProps = {
+type QuantitiesStepProps = {
   batches: BatchInfo[];
   draft: BatchWithdrawDraft;
   speciesTargets?: SpeciesTargetForSubstratum[];

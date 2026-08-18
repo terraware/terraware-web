@@ -21,7 +21,7 @@ import {
 } from 'src/types/documentProducer/Variable';
 import { VariableValueValue } from 'src/types/documentProducer/VariableValue';
 
-export type TableDisplayProps = {
+type TableDisplayProps = {
   variable: TableVariableWithValues;
 };
 

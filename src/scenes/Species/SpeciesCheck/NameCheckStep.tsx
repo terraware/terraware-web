@@ -18,7 +18,7 @@ const issueLabel = (problem: SpeciesProblemElement): string => {
   }
 };
 
-export type NameCheckStepProps = {
+type NameCheckStepProps = {
   summaries: ProjectCheckSummaryProps[];
   speciesWithProblems: Species[];
   selectedSpeciesIds: Set<number>;

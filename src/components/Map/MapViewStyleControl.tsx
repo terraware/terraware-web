@@ -28,7 +28,7 @@ export const useMapViewStyle = (initialMapViewStyle?: MapViewStyle): [MapViewSty
   );
 };
 
-export type MapViewStyleControlProps = {
+type MapViewStyleControlProps = {
   mapViewStyle?: MapViewStyle;
   onChangeMapViewStyle: (style: MapViewStyle) => void;
 };

@@ -10,7 +10,7 @@ export type SpeciesTargetForSubstratum = {
   notYetWithdrawn: number;
 };
 
-export type SpeciesTargetsForSubstratumArgs = {
+type SpeciesTargetsForSubstratumArgs = {
   plantingSeasonId: number;
   substratumId: number;
 };
@@ -139,4 +139,4 @@ type WithdrawalsApiResponse = {
   results: WithdrawalsApiResult[];
 };
 
-export const { useListSpeciesTargetsForSubstratumQuery, useLazyListSpeciesTargetsForSubstratumQuery } = injectedRtkApi;
+export const { useLazyListSpeciesTargetsForSubstratumQuery } = injectedRtkApi;

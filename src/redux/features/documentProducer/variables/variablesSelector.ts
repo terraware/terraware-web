@@ -17,7 +17,7 @@ import { deliverableCompositeKeyFn } from '../../deliverables/deliverablesSlice'
 import { variableListCompositeKeyFn } from '../values/valuesSlice';
 import { specificVariablesCompositeKeyFn, variableHistoryCompositeKeyFn } from './variablesSlice';
 
-export const selectDocumentVariables = (state: RootState, documentId: number | undefined) =>
+const selectDocumentVariables = (state: RootState, documentId: number | undefined) =>
   documentId ? state.documentProducerDocumentVariables[documentId] : undefined;
 
 export const selectAllVariables = (requestId: string) => (state: RootState) =>

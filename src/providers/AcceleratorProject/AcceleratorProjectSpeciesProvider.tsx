@@ -23,7 +23,7 @@ import { useDeliverableData } from '../Deliverable/DeliverableContext';
 import { useProjectData } from '../Project/ProjectContext';
 import { AcceleratorProjectSpeciesContext, AcceleratorProjectSpeciesData } from './AcceleratorProjectSpeciesContext';
 
-export type Props = {
+type Props = {
   children: React.ReactNode;
 };
 

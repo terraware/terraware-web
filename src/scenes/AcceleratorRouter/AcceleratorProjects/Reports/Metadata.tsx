@@ -10,7 +10,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import InternalComment from './InternalComment';
 
-export type MetadataProps = {
+type MetadataProps = {
   report: AcceleratorReportPayload;
   projectId: number;
 };

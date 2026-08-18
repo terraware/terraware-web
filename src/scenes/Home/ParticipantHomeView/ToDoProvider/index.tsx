@@ -16,7 +16,7 @@ import { ToDoItem, compareToDoItems } from 'src/types/ProjectToDo';
 
 import { ToDoContext, ToDoData } from './Context';
 
-export type Props = {
+type Props = {
   children?: React.ReactNode;
 };
 

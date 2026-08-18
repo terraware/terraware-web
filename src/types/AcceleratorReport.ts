@@ -1,46 +1,12 @@
 import {
   AcceleratorReportPayload,
-  CreateAcceleratorReportConfigRequestPayload,
-  ExistingAcceleratorReportConfigPayload,
   NewAcceleratorReportConfigPayload,
   ReportChallengePayload,
   ReportPhotoPayload,
-  ReportReviewPayload,
-  UpdateAcceleratorReportConfigPayload,
-  UpdateAcceleratorReportConfigRequestPayload,
-  UpdateAcceleratorReportValuesRequestPayload,
 } from 'src/queries/generated/acceleratorReports';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 
-export type {
-  CreateAcceleratorReportConfigRequestPayload,
-  ReportReviewPayload,
-  UpdateAcceleratorReportConfigPayload,
-  UpdateAcceleratorReportConfigRequestPayload,
-};
-
-export type UpdateAcceleratorReportRequest = UpdateAcceleratorReportValuesRequestPayload;
-
-export type ExistingAcceleratorReportConfig = ExistingAcceleratorReportConfigPayload;
-
 export type NewAcceleratorReportConfig = NewAcceleratorReportConfigPayload;
-
-export type CreateAcceleratorReportConfigRequest = CreateAcceleratorReportConfigRequestPayload & { projectId: string };
-
-export type UpdateAcceleratorReportConfigRequest = UpdateAcceleratorReportConfigRequestPayload & {
-  projectId: string;
-};
-
-export type ReviewAcceleratorReportRequest = {
-  review: ReportReviewPayload;
-  projectId: number;
-  reportId: number;
-};
-
-export type PublishAcceleratorReportRequest = {
-  projectId: number;
-  reportId: number;
-};
 
 export type AcceleratorReport = AcceleratorReportPayload;
 

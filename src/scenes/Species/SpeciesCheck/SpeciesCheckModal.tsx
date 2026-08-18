@@ -28,7 +28,7 @@ import { LocationEdit, LocationTarget, Nativity, ORG_TARGET_KEY, OverrideEdit, p
 
 export type SpeciesCheckEntry = 'first-time' | 'menu' | 'added';
 
-export type SpeciesCheckModalProps = {
+type SpeciesCheckModalProps = {
   open: boolean;
   onClose: () => void;
   species: Species[];

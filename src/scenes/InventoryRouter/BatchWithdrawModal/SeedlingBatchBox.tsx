@@ -9,7 +9,7 @@ import { useLocalization } from 'src/providers';
 
 import { BatchInfo, BatchWithdrawQuantities } from './types';
 
-export type SeedlingBatchBoxProps = {
+type SeedlingBatchBoxProps = {
   speciesName: string;
   batches: BatchInfo[];
   isPlanting: boolean;

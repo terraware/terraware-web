@@ -30,7 +30,7 @@ import {
 import { formatPrecision } from 'src/utils/numbers';
 import useSnackbar from 'src/utils/useSnackbar';
 
-export type RowMetric = {
+type RowMetric = {
   name: string;
   description?: string;
   type: string;

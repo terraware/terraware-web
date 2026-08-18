@@ -17,7 +17,7 @@ const initialState: SnackbarState = {
   },
 };
 
-export const snackbarSlice = createSlice({
+const snackbarSlice = createSlice({
   name: 'snackbar',
   initialState,
   reducers: {

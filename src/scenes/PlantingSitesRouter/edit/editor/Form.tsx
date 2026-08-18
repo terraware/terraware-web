@@ -6,7 +6,7 @@ import { FormButton, PageForm } from '@terraware/web-components';
 import strings from 'src/strings';
 import { SiteEditStep } from 'src/types/PlantingSite';
 
-export type OptionalStep = {
+type OptionalStep = {
   completed: boolean;
 };
 

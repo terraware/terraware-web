@@ -3,13 +3,13 @@ import React, { type JSX } from 'react';
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Button, IconName } from '@terraware/web-components';
 
-export type SecondaryButtonProps = {
+type SecondaryButtonProps = {
   title?: string;
   icon?: IconName;
   onClick: () => void;
 };
 
-export type PageContentProps = {
+type PageContentProps = {
   title?: string;
   secondaryButton?: SecondaryButtonProps;
   children?: React.ReactNode;

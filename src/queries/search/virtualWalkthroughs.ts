@@ -71,7 +71,7 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export type SplatStatus = 'Preparing' | 'Ready' | 'Errored';
+type SplatStatus = 'Preparing' | 'Ready' | 'Errored';
 
 type SearchVirtualWalkthroughApiResult = {
   fileId: string;
@@ -105,6 +105,4 @@ export type OrganizationVirtualWalkthrough = {
   monitoringPlotName?: string;
 };
 
-export { injectedRtkApi as api };
-
-export const { useSearchVirtualWalkthroughsQuery, useLazySearchVirtualWalkthroughsQuery } = injectedRtkApi;
+export const { useSearchVirtualWalkthroughsQuery } = injectedRtkApi;

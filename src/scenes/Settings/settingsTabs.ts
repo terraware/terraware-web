@@ -4,7 +4,7 @@ import { isAdmin, isManagerOrHigher } from 'src/utils/organization';
 
 export type SettingsSection = 'organization' | 'people' | 'projects';
 
-export const SETTINGS_TAB_SESSION_KEY = 'tab-org-settings';
+const SETTINGS_TAB_SESSION_KEY = 'tab-org-settings';
 
 export const SECTION_PATHS: Record<SettingsSection, string> = {
   organization: APP_PATHS.ORGANIZATION,
@@ -24,7 +24,7 @@ export const getAllowedSections = (organization?: Organization): SettingsSection
   return sections;
 };
 
-export const readStoredSection = (): SettingsSection | undefined => {
+const readStoredSection = (): SettingsSection | undefined => {
   try {
     const stored = sessionStorage.getItem(SETTINGS_TAB_SESSION_KEY);
     return stored && stored in SECTION_PATHS ? (stored as SettingsSection) : undefined;
@@ -41,7 +41,7 @@ export const writeStoredSection = (section: SettingsSection): void => {
   }
 };
 
-export const getSettingsLandingSection = (organization?: Organization): SettingsSection => {
+const getSettingsLandingSection = (organization?: Organization): SettingsSection => {
   const allowed = getAllowedSections(organization);
   const stored = readStoredSection();
   return (stored && allowed.includes(stored) ? stored : allowed[0]) ?? 'people';

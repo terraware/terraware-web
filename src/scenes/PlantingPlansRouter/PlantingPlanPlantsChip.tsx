@@ -5,7 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
-export type PlantingPlanPlantsChipProps = {
+type PlantingPlanPlantsChipProps = {
   plants: number;
 };
 

@@ -17,7 +17,7 @@ import {
  */
 const initialStateEvent: { [key: string]: StatusT<ModuleEvent> } = {};
 
-export const eventSlice = createSlice({
+const eventSlice = createSlice({
   name: 'eventSlice',
   initialState: initialStateEvent,
   reducers: {},
@@ -31,7 +31,7 @@ export const eventSlice = createSlice({
  */
 const initialStateEventsList: { [key: string]: StatusT<ModuleEvent[]> } = {};
 
-export const eventListSlice = createSlice({
+const eventListSlice = createSlice({
   name: 'eventListSlice',
   initialState: initialStateEventsList,
   reducers: {},
@@ -98,7 +98,7 @@ const eventProjectsUpdateSlice = createSlice({
  */
 const initialStateEventDeleteMany: { [key: string]: StatusT<boolean> } = {};
 
-export const eventDeleteManySlice = createSlice({
+const eventDeleteManySlice = createSlice({
   name: 'eventDeleteManySlice',
   initialState: initialStateEventDeleteMany,
   reducers: {},

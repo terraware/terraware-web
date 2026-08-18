@@ -627,5 +627,4 @@ const MetricRow = ({
   );
 };
 
-export { isAutoCalculatedIndicator };
 export default MetricRow;

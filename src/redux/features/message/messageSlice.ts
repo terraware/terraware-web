@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
-export type Message = {
+type Message = {
   key: string;
   data: any;
 };
@@ -13,7 +13,7 @@ const initialState: MessageState = {
   messages: {},
 };
 
-export const messageSlice = createSlice({
+const messageSlice = createSlice({
   name: 'message',
   initialState,
   reducers: {

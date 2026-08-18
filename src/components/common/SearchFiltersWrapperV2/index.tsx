@@ -12,7 +12,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import FeaturedFilters from './FeaturedFilters';
 import IconFilters from './IconFilters';
 
-export type SearchInputProps = {
+type SearchInputProps = {
   search: string;
   searchPlaceholder?: string;
   onSearch: (search: string) => void;

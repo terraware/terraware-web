@@ -5,7 +5,7 @@ import DialogBox, { Props as DialogBoxProps } from '@terraware/web-components/co
 import PageWorkflow from 'src/components/DocumentProducer/PageWorkflow';
 import { WorkflowSuccessProps } from 'src/redux/hooks/useWorkflowSuccess';
 
-export type PageDialogProps = DialogBoxProps & WorkflowSuccessProps;
+type PageDialogProps = DialogBoxProps & WorkflowSuccessProps;
 
 const PageDialog = (props: PageDialogProps): JSX.Element => {
   const { ...dialogProps }: DialogBoxProps = props;

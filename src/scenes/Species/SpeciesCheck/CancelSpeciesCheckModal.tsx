@@ -4,7 +4,7 @@ import { Button, DialogBox } from '@terraware/web-components';
 
 import strings from 'src/strings';
 
-export type CancelSpeciesCheckModalProps = {
+type CancelSpeciesCheckModalProps = {
   onClose: () => void;
   onConfirm: () => void;
 };

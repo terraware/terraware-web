@@ -1,6 +1,6 @@
 import type { JSX } from 'react';
 
-import { CellDateRenderer, TableRowType, CellRenderer as WebComponentsCellRenderer } from '@terraware/web-components';
+import { TableRowType, CellRenderer as WebComponentsCellRenderer } from '@terraware/web-components';
 import { LocalizationProps } from '@terraware/web-components/components/table';
 import { RendererProps } from '@terraware/web-components/components/table/types';
 
@@ -17,5 +17,4 @@ export default function CellRenderer<T extends TableRowType>(props: CellRenderer
   });
 }
 
-export { CellDateRenderer };
 export type { TableRowType };

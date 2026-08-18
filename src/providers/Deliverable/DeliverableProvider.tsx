@@ -5,7 +5,7 @@ import useFetchDeliverable from 'src/components/DeliverableView/useFetchDelivera
 
 import { DeliverableContext, DeliverableData } from './DeliverableContext';
 
-export type Props = {
+type Props = {
   children: React.ReactNode;
 };
 

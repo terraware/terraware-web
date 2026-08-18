@@ -62,7 +62,7 @@ export function toFeature(
   };
 }
 
-export const getFillColor = (source: MapSourceRenderProperties, type: 'highlight' | 'select' | 'hover' | 'default') => {
+const getFillColor = (source: MapSourceRenderProperties, type: 'highlight' | 'select' | 'hover' | 'default') => {
   switch (type) {
     case 'highlight':
       return source.highlightFillColor || source.fillColor;

@@ -443,7 +443,7 @@ type SearchNurseryWithdrawalFilterOptionsApiResponse = {
   };
 };
 
-export type NurseryWithdrawalFilterOptions = {
+type NurseryWithdrawalFilterOptions = {
   nurseryNames: string[];
   destinationNames: string[];
   stratumNames: string[];
@@ -451,7 +451,7 @@ export type NurseryWithdrawalFilterOptions = {
   speciesNames: string[];
 };
 
-export type SearchNurseryWithdrawalPhotosApiArgs = {
+type SearchNurseryWithdrawalPhotosApiArgs = {
   plantingSiteId: number;
 };
 
@@ -541,15 +541,10 @@ export type SearchNurseryWithdrawalPayload = {
   undoesWithdrawalDate?: string;
 };
 
-export { injectedRtkApi as api };
-
 export const {
-  useSearchNurseryWithdrawalsFilterOptionsQuery,
   useLazySearchNurseryWithdrawalsFilterOptionsQuery,
   useSearchNurseryWithdrawalsQuery,
   useLazySearchNurseryWithdrawalsQuery,
-  useCountNurseryWithdrawalsQuery,
   useLazyCountNurseryWithdrawalsQuery,
   useSearchNurseryWithdrawalPhotosQuery,
-  useLazySearchNurseryWithdrawalPhotosQuery,
 } = injectedRtkApi;

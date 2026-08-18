@@ -41,6 +41,4 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export { injectedRtkApi as api };
-
-export const { useListCountriesQuery, useLazyListCountriesQuery } = injectedRtkApi;
+export const { useListCountriesQuery } = injectedRtkApi;

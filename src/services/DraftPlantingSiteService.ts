@@ -22,7 +22,7 @@ export type CreateDraftPlantingSiteResponse = Response & {
   draftId: number | null;
 };
 
-export type DraftPlantingSiteData = {
+type DraftPlantingSiteData = {
   site?: DraftPlantingSite;
 };
 

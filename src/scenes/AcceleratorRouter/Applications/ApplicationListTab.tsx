@@ -17,7 +17,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import ApplicationCellRenderer from './ApplicationCellRenderer';
 
-export type ApplicationRow = {
+type ApplicationRow = {
   countryCode?: string;
   countryName?: string;
   id: number;

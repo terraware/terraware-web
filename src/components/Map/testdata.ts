@@ -62,7 +62,7 @@ export const feature3: GeometryFeature = {
   id: 2,
 };
 
-export const feature4: GeometryFeature = {
+const feature4: GeometryFeature = {
   type: 'Feature',
   geometry: {
     type: 'MultiPolygon',
@@ -82,7 +82,7 @@ export const feature4: GeometryFeature = {
   id: 2,
 };
 
-export const feature5: GeometryFeature = {
+const feature5: GeometryFeature = {
   type: 'Feature',
   geometry: {
     type: 'MultiPolygon',

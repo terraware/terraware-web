@@ -2,15 +2,14 @@ import LocalizationProvider from './LocalizationProvider';
 import OrganizationProvider from './OrganizationProvider';
 import UserFundingEntityProvider from './UserFundingEntityProvider';
 import UserProvider from './UserProvider';
-import { useLocalization, useOrganization, useProject, useTimeZones, useUser, useUserFundingEntity } from './hooks';
+import { useLocalization, useOrganization, useTimeZones, useUser, useUserFundingEntity } from './hooks';
 
-export type { ProvidedOrganizationData, ProvidedLocalizationData, ProvidedUserData } from './DataTypes';
+export type { ProvidedLocalizationData } from './DataTypes';
 
 export {
   useUserFundingEntity,
   useLocalization,
   useOrganization,
-  useProject,
   useTimeZones,
   useUser,
   UserFundingEntityProvider,

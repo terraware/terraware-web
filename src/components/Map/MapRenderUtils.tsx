@@ -112,7 +112,7 @@ export function MapTooltip({ title, properties, subtitle, subtitleColor }: MapTo
   );
 }
 
-export type ButtonType = {
+type ButtonType = {
   title: string;
   onClick: () => void;
 };
