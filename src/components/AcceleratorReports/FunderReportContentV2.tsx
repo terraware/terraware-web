@@ -23,11 +23,6 @@ export type FunderReportContentV2Props = {
   report?: AcceleratorReportPayload | PublishedReportPayload;
 };
 
-/**
- * The report as funders see it. Every section is read-only: passing neither `isConsoleView` nor
- * `canEdit` keeps the boxes' edit affordances and the indicators' internal-only markers hidden.
- * Callers are responsible for handing over only the indicators funders are allowed to see.
- */
 const FunderReportContentV2 = ({ header, indicators, projectId, report }: FunderReportContentV2Props): JSX.Element => {
   const theme = useTheme();
 
