@@ -23,7 +23,7 @@ const ReportOptionsMenu = ({ reportId }: ReportOptionsMenuProps): JSX.Element | 
 
   const { report } = useOneAcceleratorReport(reportId);
 
-  const { publishReport, publishReportResponse } = useAcceleratorReportActions(reportId);
+  const { isLoading, publishReport, publishReportResponse } = useAcceleratorReportActions(reportId);
 
   useEffect(() => {
     if (publishReportResponse.isError) {
@@ -41,12 +41,12 @@ const ReportOptionsMenu = ({ reportId }: ReportOptionsMenuProps): JSX.Element | 
   const optionItems = useMemo(
     (): DropdownItem[] => [
       {
-        disabled: report?.status !== 'Approved',
+        disabled: report?.status !== 'Approved' || isLoading,
         label: strings.PUBLISH,
         value: 'publish',
       },
     ],
-    [report?.status, strings]
+    [isLoading, report?.status, strings]
   );
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {

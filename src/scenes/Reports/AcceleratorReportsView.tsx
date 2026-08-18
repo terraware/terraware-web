@@ -11,6 +11,7 @@ import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -75,6 +76,8 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
 
   const { report } = useOneAcceleratorReport(selectedReportId);
 
+  const { isLoading } = useAcceleratorReportActions(selectedReportId);
+
   // a report can only be edited before it has been accepted
   const reportStatus = report?.status;
   const canEdit = reportStatus === 'Not Submitted' || reportStatus === 'Needs Update';
@@ -84,7 +87,7 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
       newReportTabEnabled && activeTab === 'reports' && selectedReportId !== undefined ? (
         <Box display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
           <Button
-            disabled={!canEdit}
+            disabled={!canEdit || isLoading}
             icon='iconEdit'
             label={strings.EDIT}
             onClick={() => goToAcceleratorReportEdit(selectedReportId)}
@@ -95,7 +98,7 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
           <ReportSubmitButton reportId={selectedReportId} />
         </Box>
       ) : undefined,
-    [activeTab, canEdit, goToAcceleratorReportEdit, newReportTabEnabled, selectedReportId, strings, theme]
+    [activeTab, canEdit, goToAcceleratorReportEdit, isLoading, newReportTabEnabled, selectedReportId, strings, theme]
   );
 
   const PageHeaderLeftComponent = useMemo(
