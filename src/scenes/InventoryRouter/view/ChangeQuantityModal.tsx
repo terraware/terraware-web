@@ -8,11 +8,10 @@ import Button from 'src/components/common/button/Button';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { ChangeBatchStatusRequestPayload, useChangeBatchStatusesMutation } from 'src/queries/generated/nurseryBatches';
 import strings from 'src/strings';
+import { ModalValuesType } from 'src/types/Batch';
 import useForm from 'src/utils/useForm';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
-
-import { ModalValuesType } from './BatchesCellRenderer';
 
 export interface ChangeQuantityModalProps {
   modalValues: ModalValuesType;
