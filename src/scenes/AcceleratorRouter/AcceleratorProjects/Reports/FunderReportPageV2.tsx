@@ -17,7 +17,7 @@ import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 
 type FunderReportPageV2Props = {
-  /** explains which version of the report is on screen, or why there is nothing to show */
+  /** shown on the top of the page */
   banner: string;
   indicators: ProgressIndicator[];
   /** shown under the report name, e.g. when the report was last published */
@@ -28,10 +28,6 @@ type FunderReportPageV2Props = {
   title: string;
 };
 
-/**
- * The console page shell shared by the funder-facing report views. The report body is rendered only
- * once there is a report, so the banner carries the explanation while one is loading or missing.
- */
 const FunderReportPageV2 = ({
   banner,
   indicators,
