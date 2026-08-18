@@ -359,9 +359,6 @@ export const getWoodDensityLevelOptions = (
 
 export enum SpeciesRequestError {
   PreexistingSpecies = 'A species with that name already exists.',
-  // Server returned any other error (3xx, 4xx, 5xxx), or server did not respond, or there was an error
-  // setting up the request. In other words, there was a developer error or server outage.
-  RequestFailed = 'AN_UNRECOVERABLE_ERROR_OCCURRED',
 }
 
 export type SuggestedSpecies = Partial<Species> & { scientificName: string };
