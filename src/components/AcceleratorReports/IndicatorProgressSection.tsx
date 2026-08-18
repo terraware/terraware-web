@@ -6,6 +6,7 @@ import { Icon } from '@terraware/web-components';
 import IndicatorProgressRow, { ProgressIndicator } from 'src/components/AcceleratorReports/IndicatorProgressRow';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization } from 'src/providers';
+import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 
 // Reference ids read like 11.2.3, so compare them segment by segment as numbers rather than as text,
 // which would order 11.10 before 11.2.
@@ -102,6 +103,21 @@ export const IndicatorProgressSectionContent = ({
   );
 };
 
+export const getProgressIndicators = (report?: AcceleratorReportPayload): ProgressIndicator[] => [
+  ...(report?.commonIndicators ?? []).map((indicator) => ({ ...indicator, type: 'common' as const })),
+  ...(report?.projectIndicators ?? []).map((indicator) => ({ ...indicator, type: 'project' as const })),
+  ...(report?.autoCalculatedIndicators ?? []).map((indicator) => ({
+    ...indicator,
+    name: indicator.indicator,
+    type: 'autoCalculated' as const,
+    value: indicator.overrideValue ?? indicator.systemValue,
+  })),
+];
+
+// funders are only ever sent the publishable indicators, so a funder-facing view has to drop the rest
+export const getFunderVisibleIndicators = (report?: AcceleratorReportPayload): ProgressIndicator[] =>
+  getProgressIndicators(report).filter((indicator) => indicator.isPublishable);
+
 type IndicatorProgressSectionProps = {
   isConsoleView?: boolean;
   reportId?: number;
@@ -110,19 +126,7 @@ type IndicatorProgressSectionProps = {
 const IndicatorProgressSection = ({ isConsoleView, reportId }: IndicatorProgressSectionProps): JSX.Element | null => {
   const { report } = useOneAcceleratorReport(reportId);
 
-  const indicators = useMemo<ProgressIndicator[]>(
-    () => [
-      ...(report?.commonIndicators ?? []).map((indicator) => ({ ...indicator, type: 'common' as const })),
-      ...(report?.projectIndicators ?? []).map((indicator) => ({ ...indicator, type: 'project' as const })),
-      ...(report?.autoCalculatedIndicators ?? []).map((indicator) => ({
-        ...indicator,
-        name: indicator.indicator,
-        type: 'autoCalculated' as const,
-        value: indicator.overrideValue ?? indicator.systemValue,
-      })),
-    ],
-    [report]
-  );
+  const indicators = useMemo<ProgressIndicator[]>(() => getProgressIndicators(report), [report]);
 
   const year = report?.startDate ? Number(report.startDate.split('-')[0]) : undefined;
 

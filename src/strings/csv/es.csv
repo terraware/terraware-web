@@ -807,6 +807,7 @@ FUNDER_DISCLAIMER_TITLE,Aviso legal de la plataforma Terraware para financiadore
 FUNDER_NAME,Nombre del financiador,1ea661a7
 FUNDER_PORTAL,Portal del financiador,500322ac
 FUNDER_REPORT_LAST_PUBLISHED,El informe de financiación se publicó por última vez el {0}.,0a69140e
+FUNDER_REPORT_PREVIEW_WARNING,Está previsualizando este informe tal como aparecerá para los financiadores en el Portal de Financiadores. Los indicadores y notas de uso interno están ocultos.,c41bedd2
 FUNDERS,Financiadores,77d89a51
 FUNDERS_DELETED,Los financiadores se han eliminado,7f6ba996
 FUNDING_ENTITIES,Entidades financiadoras,6ba1d5ee
@@ -1681,6 +1682,7 @@ PREPARATION_MATERIALS,Materiales de preparación,c6fd2575
 PRESCREEN,Preselección,9a38127f
 PRESCREEN_FAILED,Prueba de selección fallida,2a2dc3e9
 PREVIEW,Vista previa,a2aefa10
+PREVIEW_FUNDER_REPORT,Previsualizar informe para financiadores,17fa74c8
 PREVIEW_HIGHLIGHTS,Vista previa de aspectos destacados,248bb9ae
 PREVIEW_WILL_DISPLAY_AFTER_SAVING,La vista previa se mostrará después de guardar,475b4844
 PREVIOUS,Anterior,156ee39e
@@ -1895,6 +1897,7 @@ REPORT_NO_PLANTING_SITES,No se incluyeron sitios de siembra en el informe.,bbd3e
 REPORT_NO_SEEDBANKS,No se incluyeron bancos de semillas en el informe.,8d098394
 REPORT_NURSERY_CAPACITY_INFO,"Por favor, enumere el número total de plantas que el vivero puede alojar según las mejores estimaciones.",daa9bfcc
 REPORT_PERIOD,Periodo del informe: {0} - {1},b06927c6
+REPORT_PREVIEW,Vista previa del informe,96417b29
 REPORT_PUBLISHED,Informe publicado,4ab6a36f
 REPORT_SAVE_AND_CLOSE,Guardar y cerrar,aaa98fc6
 REPORT_SEEDBANK_BUILD_COMPLETION_DATE,Fecha de finalización de la construcción del banco de semillas *,31433692
