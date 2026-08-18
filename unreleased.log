@@ -1,3 +1,5 @@
+4dbba87b Remove Babel configuration (#6281)
+3aaa14d5 Remove unused enum values (#6275)
 f48e9b27 SW-8733 Change weight for species names (#6280)
 5e382c40 SW-8722 Planting plan map drawers: target density & species to plant (#6264)
 beb45878 SW-8764 Re-work pre-check project association table (#6276)
