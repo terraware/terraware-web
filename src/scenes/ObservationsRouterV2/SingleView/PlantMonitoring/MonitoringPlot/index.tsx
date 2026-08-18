@@ -104,6 +104,16 @@ const MonitoringPlotDetails = (): JSX.Element => {
     const swCoordinatesLat = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
     const swCoordinatesLng = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
 
+    const fieldSwCoordinates = monitoringPlot?.photos?.find(
+      (photo) => photo.type === 'Plot' && photo.position === 'SouthwestCorner' && photo.gpsCoordinates
+    )?.gpsCoordinates?.coordinates;
+    const fieldSwCoordinatesLat = fieldSwCoordinates?.[1];
+    const fieldSwCoordinatesLng = fieldSwCoordinates?.[0];
+
+    // TODO: Get the "Explanation" photo when the plot was set up >20m from its assigned
+    // location, so its presence flags a deviation.
+    const isFieldLocationDeviated = monitoringPlot?.photos?.some((photo) => photo.type === 'Explanation') ?? false;
+
     return (
       <Box display='flex' alignItems={'end'}>
         <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
@@ -133,8 +143,14 @@ const MonitoringPlotDetails = (): JSX.Element => {
                     : strings.TEMPORARY}
               </Typography>
               <Typography whiteSpace='nowrap'>
-                {strings.LOCATION}: {swCoordinatesLat}, {swCoordinatesLng}
+                {strings.ASSIGNED_LOCATION}: {swCoordinatesLat}, {swCoordinatesLng}
               </Typography>
+              {fieldSwCoordinates && (
+                <Typography whiteSpace='nowrap'>
+                  {strings.FIELD_LOCATION}: {fieldSwCoordinatesLat}, {fieldSwCoordinatesLng}
+                  {isFieldLocationDeviated ? ` ${strings.MORE_THAN_20M_FROM_ASSIGNED_LOCATION}` : ''}
+                </Typography>
+              )}
               <Typography>
                 {strings.ELEVATION}: {monitoringPlot?.elevationMeters} {strings.METERS}
               </Typography>

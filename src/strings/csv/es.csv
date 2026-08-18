@@ -213,6 +213,7 @@ ASSIGN_OWNER,Asignar propietario,dc696cfa
 ASSIGN_OWNER_ELLIPSIS,Asignar propietario...,8053cd0e
 ASSIGN_STRATA,Asignar estratos,43b7aa27
 ASSIGNED,Asignada,29aa3dd8
+ASSIGNED_LOCATION,Ubicación asignada,9e0b2077
 ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El Número de Plantas Vivas por Especie muestra la cantidad de plantas observadas por especie registradas como vivas. No se incluyen las plantas registradas como preexistentes o cuya especie es desconocida.,526a70bc
 ASSIGNED_PLOT_OBSERVATION,Observación de Parcela Asignada,9175acf6
 ASSIGNED_PLOT_OBSERVATION_TOOLTIP,Seleccione una Observación Asignada de Parcela para ver los datos de la observación en el mapa.,2a1963a4
@@ -756,6 +757,7 @@ FEATURE_REQUEST_INSTRUCTIONS,Proporcione detalles sobre una nueva función o cam
 FEEDBACK,Comentarios,2510edcc
 FEEDBACK_SHARED_WITH_PROJECT,Comentarios (compartidos con el proyecto),d56b8ddb
 FERN,Helecho,35767f4d
+FIELD_LOCATION,Ubicación en campo,009654a6
 FIELD_NOTES,Notas de campo,1c50984e
 FIFTY_TO_SEVENTY_FIVE_PERCENT,50% a 75%,174fb41a
 FILE_NAME,Nombre de archivo,fc9f4f98
@@ -1213,6 +1215,7 @@ MONTH_12,Diciembre,dc3ea137
 MORE,Más,58c3e1ca
 MORE_INFO,Más información,50ec3d8a
 MORE_OPTIONS,Más opciones,40289137
+MORE_THAN_20M_FROM_ASSIGNED_LOCATION,(a más de 20 m de la ubicación asignada),f3b60390
 MORTALITY_RATE,Tasa de mortalidad,f1ef57f9
 MORTALITY_RATE_IN_FIELD,Tasa de mortalidad en campo (%),48a2d543
 MORTALITY_RATE_IN_FIELD_REQUIRED,Tasa de mortalidad en el campo (%) *,cdddfe98
