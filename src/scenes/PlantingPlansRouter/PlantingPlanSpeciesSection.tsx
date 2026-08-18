@@ -55,15 +55,19 @@ const PlantingPlanSpeciesSection = ({ plantingSite }: PlantingPlanSpeciesSection
 
   const stratumName = (stratumId: number) => (plantingSite.strata ?? []).find((s) => s.id === stratumId)?.name;
 
-  const upsertTarget = async (speciesId: number, stratumIds: number[], targetPlants?: number) => {
+  // Returns true only when the update succeeded, so callers can keep the editor open on failure
+  // instead of discarding the user's input.
+  const upsertTarget = async (speciesId: number, stratumIds: number[], targetPlants?: number): Promise<boolean> => {
     try {
       await updateSpeciesTarget({
         plantingSiteId: plantingSite.id,
         speciesId,
         updatePlantingSiteSpeciesTargetRequestPayload: { stratumIds, targetPlants },
       }).unwrap();
+      return true;
     } catch (e) {
       snackbar.toastError();
+      return false;
     }
   };
 
@@ -130,8 +134,10 @@ const PlantingPlanSpeciesSection = ({ plantingSite }: PlantingPlanSpeciesSection
             options={availableOptions}
             onCancel={() => setAddingSpecies(false)}
             onAdd={async (speciesId, targetPlants) => {
-              await upsertTarget(speciesId, [], targetPlants);
-              setAddingSpecies(false);
+              const succeeded = await upsertTarget(speciesId, [], targetPlants);
+              if (succeeded) {
+                setAddingSpecies(false);
+              }
             }}
           />
         ) : (

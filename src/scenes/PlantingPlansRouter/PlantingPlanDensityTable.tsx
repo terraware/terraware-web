@@ -5,10 +5,8 @@ import { Icon } from '@terraware/web-components';
 
 import TextField from 'src/components/common/Textfield/Textfield';
 import { PlantingSitePayload, StratumResponsePayload } from 'src/queries/generated/plantingSites';
-import { useUpdateStratumMutation } from 'src/queries/generated/strata';
 import strings from 'src/strings';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
-import useSnackbar from 'src/utils/useSnackbar';
 
 import PlantingPlanPlantsChip from './PlantingPlanPlantsChip';
 import {
@@ -23,13 +21,25 @@ import {
 const PLACEHOLDER = '-';
 const GRID_COLUMNS = 'minmax(0, 1fr) 150px 90px';
 
+export type CommitStratumDensity = (
+  stratumId: number,
+  densityType: DensityType,
+  value: number | undefined
+) => Promise<void>;
+
 export type PlantingPlanDensityTableProps = {
   plantingSite: PlantingSitePayload;
   densityType: DensityType;
   title: string;
+  onCommitDensity: CommitStratumDensity;
 };
 
-const PlantingPlanDensityTable = ({ plantingSite, densityType, title }: PlantingPlanDensityTableProps): JSX.Element => {
+const PlantingPlanDensityTable = ({
+  plantingSite,
+  densityType,
+  title,
+  onCommitDensity,
+}: PlantingPlanDensityTableProps): JSX.Element => {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
   const strata = plantingSite.strata ?? [];
@@ -88,6 +98,7 @@ const PlantingPlanDensityTable = ({ plantingSite, densityType, title }: Planting
             areaLabel={areaLabel}
             perHaLabel={perHaLabel}
             plantsLabel={plantsLabel}
+            onCommitDensity={onCommitDensity}
           />
         ))}
 
@@ -116,9 +127,17 @@ type StratumRowProps = {
   areaLabel: (areaHa: number) => string;
   perHaLabel: (density: number | undefined) => string;
   plantsLabel: (plants: number | undefined) => string;
+  onCommitDensity: CommitStratumDensity;
 };
 
-const StratumRow = ({ stratum, densityType, areaLabel, perHaLabel, plantsLabel }: StratumRowProps): JSX.Element => {
+const StratumRow = ({
+  stratum,
+  densityType,
+  areaLabel,
+  perHaLabel,
+  plantsLabel,
+  onCommitDensity,
+}: StratumRowProps): JSX.Element => {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
 
@@ -150,7 +169,7 @@ const StratumRow = ({ stratum, densityType, areaLabel, perHaLabel, plantsLabel }
             {areaLabel(stratum.areaHa)}
           </Typography>
         </Box>
-        <StratumDensityEditor stratum={stratum} densityType={densityType} />
+        <StratumDensityEditor stratum={stratum} densityType={densityType} onCommitDensity={onCommitDensity} />
         <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack} textAlign='right'>
           {plantsLabel(stratumPlants(stratum, densityType))}
         </Typography>
@@ -189,27 +208,25 @@ const StratumRow = ({ stratum, densityType, areaLabel, perHaLabel, plantsLabel }
 type StratumDensityEditorProps = {
   stratum: StratumResponsePayload;
   densityType: DensityType;
+  onCommitDensity: CommitStratumDensity;
 };
 
-const StratumDensityEditor = ({ stratum, densityType }: StratumDensityEditorProps): JSX.Element => {
+const StratumDensityEditor = ({ stratum, densityType, onCommitDensity }: StratumDensityEditorProps): JSX.Element => {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
-  const snackbar = useSnackbar();
-  const [updateStratum, { isLoading }] = useUpdateStratumMutation();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState('');
   const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
 
   const density = stratumDensity(stratum, densityType);
 
-  const save = async (payload: { initialPlantingDensity: number; targetPlantDensity?: number }) => {
+  const save = async (value: number | undefined) => {
     setEditing(false);
     setError('');
-    try {
-      await updateStratum({ id: stratum.id, updateStratumRequestPayload: payload }).unwrap();
-    } catch (e) {
-      snackbar.toastError();
-    }
+    setBusy(true);
+    await onCommitDensity(stratum.id, densityType, value);
+    setBusy(false);
   };
 
   const commit = async () => {
@@ -218,7 +235,7 @@ const StratumDensityEditor = ({ stratum, densityType }: StratumDensityEditorProp
     if (trimmed === '') {
       setError('');
       if (densityType === 'target' && density !== undefined) {
-        await save({ initialPlantingDensity: stratum.initialPlantingDensity, targetPlantDensity: undefined });
+        await save(undefined);
       } else {
         setEditing(false);
       }
@@ -237,11 +254,7 @@ const StratumDensityEditor = ({ stratum, densityType }: StratumDensityEditorProp
       return;
     }
 
-    await save(
-      densityType === 'initial'
-        ? { initialPlantingDensity: parsed, targetPlantDensity: stratum.targetPlantDensity }
-        : { initialPlantingDensity: stratum.initialPlantingDensity, targetPlantDensity: parsed }
-    );
+    await save(parsed);
   };
 
   return (
@@ -267,7 +280,7 @@ const StratumDensityEditor = ({ stratum, densityType }: StratumDensityEditorProp
           min={0}
           errorText={error || undefined}
           autoFocus
-          disabled={isLoading}
+          disabled={busy}
           sx={{ width: '72px' }}
         />
       ) : (
@@ -281,7 +294,7 @@ const StratumDensityEditor = ({ stratum, densityType }: StratumDensityEditorProp
               setEditing(true);
             }}
             size='small'
-            disabled={isLoading}
+            disabled={busy}
           >
             <Icon name={'iconEdit'} />
           </IconButton>
