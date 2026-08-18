@@ -15,14 +15,11 @@ import {
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
-import {
-  AcceleratorReportPayload,
-  useReviewOneAcceleratorReportIndicatorsMutation,
-  useReviewOneAcceleratorReportMutation,
-} from 'src/queries/generated/acceleratorReports';
+import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
@@ -41,9 +38,7 @@ const ReportEditV2 = (): JSX.Element => {
 
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
-  const [reviewReport, reviewReportResponse] = useReviewOneAcceleratorReportMutation();
-  const [reviewIndicators, reviewIndicatorsResponse] = useReviewOneAcceleratorReportIndicatorsMutation();
-  const saving = reviewReportResponse.isLoading || reviewIndicatorsResponse.isLoading;
+  const { isLoading: saving, reviewIndicators, reviewReport } = useAcceleratorReportActions(reportId);
 
   const goToReport = useCallback(
     () =>
@@ -85,14 +80,8 @@ const ReportEditV2 = (): JSX.Element => {
 
     try {
       await Promise.all([
-        reviewReport({
-          reportId,
-          reviewAcceleratorReportRequestPayload: { review: toReportReviewPayload(record) },
-        }).unwrap(),
-        reviewIndicators({
-          reportId,
-          reviewAcceleratorReportIndicatorsRequestPayload: toIndicatorEntriesPayload(record),
-        }).unwrap(),
+        reviewReport({ review: toReportReviewPayload(record) })?.unwrap(),
+        reviewIndicators(toIndicatorEntriesPayload(record))?.unwrap(),
       ]);
 
       snackbar.toastSuccess(strings.CHANGES_SAVED);
@@ -100,7 +89,7 @@ const ReportEditV2 = (): JSX.Element => {
     } catch {
       snackbar.toastError();
     }
-  }, [goToReport, record, reportId, reviewIndicators, reviewReport, snackbar, strings.CHANGES_SAVED]);
+  }, [goToReport, record, reviewIndicators, reviewReport, snackbar, strings.CHANGES_SAVED]);
 
   const pageCrumbs = useMemo(
     () => [

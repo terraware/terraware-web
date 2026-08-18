@@ -3,9 +3,9 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { DropdownItem } from '@terraware/web-components';
 
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization, useUser } from 'src/providers';
-import { usePublishOneAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import PublishModal from './PublishModal';
@@ -23,18 +23,20 @@ const ReportOptionsMenu = ({ reportId }: ReportOptionsMenuProps): JSX.Element | 
 
   const { report } = useOneAcceleratorReport(reportId);
 
-  const [publishReport, publishReportResponse] = usePublishOneAcceleratorReportMutation();
+  const { publishReport, publishReportResponse } = useAcceleratorReportActions(reportId);
 
   useEffect(() => {
     if (publishReportResponse.isError) {
       snackbar.toastError();
+      publishReportResponse.reset();
       return;
     }
     if (publishReportResponse.isSuccess) {
       snackbar.toastSuccess(strings.REPORT_PUBLISHED);
       setShowPublishModal(false);
+      publishReportResponse.reset();
     }
-  }, [publishReportResponse.isError, publishReportResponse.isSuccess, snackbar, strings]);
+  }, [publishReportResponse, snackbar, strings]);
 
   const optionItems = useMemo(
     (): DropdownItem[] => [
@@ -55,7 +57,7 @@ const ReportOptionsMenu = ({ reportId }: ReportOptionsMenuProps): JSX.Element | 
 
   const closePublishModal = useCallback(() => setShowPublishModal(false), []);
 
-  const publish = useCallback(() => void publishReport(reportId), [publishReport, reportId]);
+  const publish = useCallback(() => void publishReport(), [publishReport]);
 
   if (!isAllowed('PUBLISH_REPORTS')) {
     return null;

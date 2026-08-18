@@ -3,9 +3,10 @@ import React, { type JSX, useCallback, useEffect, useState } from 'react';
 import { Button } from '@terraware/web-components';
 
 import { toReportReviewPayload } from 'src/components/AcceleratorReports/utils';
+import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization, useUser } from 'src/providers';
-import { ReportReviewPayload, useReviewOneAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
+import { ReportReviewPayload } from 'src/queries/generated/acceleratorReports';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ApproveReportDialog from './ApproveReportDialog';
@@ -30,31 +31,28 @@ const ReportReviewButtons = ({ reportId }: ReportReviewButtonsProps): JSX.Elemen
   // a report can only be reviewed once it has been submitted
   const notReviewable = report?.status === undefined || report.status === 'Not Submitted';
 
-  const [reviewReport, reviewReportResponse] = useReviewOneAcceleratorReportMutation();
+  const { reviewReport, reviewReportResponse } = useAcceleratorReportActions(reportId);
 
   useEffect(() => {
     if (reviewReportResponse.isError) {
       snackbar.toastError();
+      reviewReportResponse.reset();
       return;
     }
     if (reviewReportResponse.isSuccess) {
       setShowApproveDialog(false);
       setShowRejectDialog(false);
+      reviewReportResponse.reset();
     }
-  }, [reviewReportResponse.isError, reviewReportResponse.isSuccess, snackbar]);
+  }, [reviewReportResponse, snackbar]);
 
   const review = useCallback(
     (status: ReportReviewPayload['status'], feedback?: string) => {
       if (report) {
-        void reviewReport({
-          reportId,
-          reviewAcceleratorReportRequestPayload: {
-            review: { ...toReportReviewPayload(report), feedback, status },
-          },
-        });
+        void reviewReport({ review: { ...toReportReviewPayload(report), feedback, status } });
       }
     },
-    [report, reportId, reviewReport]
+    [report, reviewReport]
   );
 
   const approveReport = useCallback(() => review('Approved'), [review]);
