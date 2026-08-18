@@ -23,14 +23,6 @@ type BatchReportPhotosArgs = {
 const cacheKey = (reportId: number | undefined, action: string) =>
   reportId === undefined ? undefined : `report-${reportId}-${action}`;
 
-/**
- * Write actions for a single accelerator report. Each mutation is registered under a `fixedCacheKey`
- * derived from `reportId`, so every component that calls this hook for the same report shares one
- * in-flight state: a submit started by one component is visible to all the others, even after the
- * component that started it unmounts. `isLoading` is true while any of the actions is in flight.
- *
- * Each action resolves to `undefined` without making a request when `reportId` is undefined.
- */
 const useAcceleratorReportActions = (reportId?: number) => {
   const [submit, submitReportResponse] = useSubmitOneAcceleratorReportMutation({
     fixedCacheKey: cacheKey(reportId, 'submit'),
@@ -41,8 +33,6 @@ const useAcceleratorReportActions = (reportId?: number) => {
   const [review, reviewReportResponse] = useReviewOneAcceleratorReportMutation({
     fixedCacheKey: cacheKey(reportId, 'review'),
   });
-  // the feedback edit is a separate affordance that happens to reuse the review endpoint, and it is
-  // rendered alongside the review buttons, so it gets its own key to keep the two results apart
   const [reviewFeedbackOnly, reviewFeedbackResponse] = useReviewOneAcceleratorReportMutation({
     fixedCacheKey: cacheKey(reportId, 'review-feedback'),
   });
