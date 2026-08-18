@@ -2,8 +2,6 @@ import { components } from 'src/api/types/generated-schema';
 
 import { MinimalPlantingSite, MultiPolygon } from './Tracking';
 
-export type UpdateSubstratumPayload = components['schemas']['UpdateSubstratumRequestPayload'];
-
 export type SiteType = 'simple' | 'detailed';
 export type SiteEditStep =
   | 'details'
