@@ -263,31 +263,7 @@
 <a name='L198'></a><a href='#L198'>198</a>
 <a name='L199'></a><a href='#L199'>199</a>
 <a name='L200'></a><a href='#L200'>200</a>
-<a name='L201'></a><a href='#L201'>201</a>
-<a name='L202'></a><a href='#L202'>202</a>
-<a name='L203'></a><a href='#L203'>203</a>
-<a name='L204'></a><a href='#L204'>204</a>
-<a name='L205'></a><a href='#L205'>205</a>
-<a name='L206'></a><a href='#L206'>206</a>
-<a name='L207'></a><a href='#L207'>207</a>
-<a name='L208'></a><a href='#L208'>208</a>
-<a name='L209'></a><a href='#L209'>209</a>
-<a name='L210'></a><a href='#L210'>210</a>
-<a name='L211'></a><a href='#L211'>211</a>
-<a name='L212'></a><a href='#L212'>212</a>
-<a name='L213'></a><a href='#L213'>213</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L201'></a><a href='#L201'>201</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -501,13 +477,13 @@ import defaultStrings from 'src/strings';
 import { MultiPolygon } from './Tracking';
 &nbsp;
 // basic information on a single observation (excluding observation results)
-export type Observation = components['schemas']['ObservationPayload'];
+type Observation = components['schemas']['ObservationPayload'];
 &nbsp;
 // "Upcoming" | "InProgress" | "Completed" | "Overdue"
 export type ObservationState = Observation['state'];
 &nbsp;
 // plot replacement
-export type ReplaceObservationPlotRequestPayload = components['schemas']['ReplaceObservationPlotRequestPayload'];
+type ReplaceObservationPlotRequestPayload = components['schemas']['ReplaceObservationPlotRequestPayload'];
 // "Temporary" | "LongTerm"
 export type ReplaceObservationPlotDuration = ReplaceObservationPlotRequestPayload['duration'];
 &nbsp;
@@ -517,19 +493,7 @@ type Boundary = {
 &nbsp;
 // expanded information on an observation including observed results down to monitoring plot level detail
 // requires navigating a tree of stratum results -&gt; substratum results -&gt; ( species results | monitoring plot results )
-export type ObservationResultsPayload = RtkObservationResultsPayload;
-export type ObservationResults = Omit&lt;RtkObservationResultsPayload, 'species'&gt; &amp;
-  Boundary &amp; {
-    completedDate?: string;
-    plantingSiteName: string;
-    strata: ObservationStratumResults[];
-    species: ObservationSpeciesResults[];
-    timeZone: string;
-    totalLive: number | undefined;
-    totalPlants: number;
-    hasObservedPermanentPlots: boolean;
-    hasObservedTemporaryPlots: boolean;
-  };
+type ObservationResultsPayload = RtkObservationResultsPayload;
 &nbsp;
 export type AdHocObservationResults = Omit&lt;RtkObservationResultsPayload, 'strata' | 'adHocPlot'&gt; &amp;
   Boundary &amp; {
@@ -558,7 +522,7 @@ export type ObservationResultsWithLastObv = Omit&lt;
 &gt; &amp; { strata: ObservationStratumResultsWithLastObv[] };
 &nbsp;
 // stratum level results -&gt; contains a list of substratum level results
-export type ObservationStratumResultsPayload = RtkObservationStratumResultsPayload;
+type ObservationStratumResultsPayload = RtkObservationStratumResultsPayload;
 export type ObservationStratumResults = ObservationStratumResultsPayload &amp; {
   completedDate?: string;
   stratumName: string;
@@ -569,18 +533,18 @@ export type ObservationStratumResults = ObservationStratumResultsPayload &amp; {
   hasObservedTemporaryPlots: boolean;
 };
 &nbsp;
-export type ObservationStratumResultsWithLastObv = Omit&lt;ObservationStratumResults, 'substrata'&gt; &amp; {
+type ObservationStratumResultsWithLastObv = Omit&lt;ObservationStratumResults, 'substrata'&gt; &amp; {
   lastObv?: string;
   substrata: ObservationSubstratumResultsWithLastObv[];
 };
 &nbsp;
 // substratum level results -&gt; contains lists of both species level results and monitoring plot level results
-export type ObservationSubstratumResultsPayload = RtkObservationSubstratumResultsPayload;
+type ObservationSubstratumResultsPayload = RtkObservationSubstratumResultsPayload;
 export type ObservationSubstratumResults = ObservationSubstratumResultsPayload &amp; {
   substratumName: string;
   monitoringPlots: ObservationMonitoringPlotResults[];
 };
-export type ObservationSubstratumResultsWithLastObv = ObservationSubstratumResults &amp; {
+type ObservationSubstratumResultsWithLastObv = ObservationSubstratumResults &amp; {
   lastObv?: string;
 };
 // monitoring plot level results
@@ -643,19 +607,19 @@ export type PlotCondition = components['schemas']['CompleteAdHocObservationReque
 &nbsp;
 export type BiomassMeasurement = components['schemas']['ExistingBiomassMeasurementPayload'];
 &nbsp;
-export type MonitoringPlotFile = ObservationMonitoringPlotMediaPayload;
+type MonitoringPlotFile = ObservationMonitoringPlotMediaPayload;
 &nbsp;
-export type NewMonitoringPlotFile = Omit&lt;MonitoringPlotFile, 'fileId' | 'type'&gt; &amp; {
+type NewMonitoringPlotFile = Omit&lt;MonitoringPlotFile, 'fileId' | 'type'&gt; &amp; {
   file: File;
   type?: 'Plot' | 'Quadrat' | 'Soil';
 };
 &nbsp;
-export type NewMonitoringPlotMediaItem = {
+type NewMonitoringPlotMediaItem = {
   type: 'new';
   data: NewMonitoringPlotFile;
 };
 &nbsp;
-export type ExistingMonitoringPlotMediaItem = {
+type ExistingMonitoringPlotMediaItem = {
   type: 'existing';
   data: MonitoringPlotFile;
   isModified?: boolean;
@@ -706,7 +670,7 @@ export const getQuadratLabel = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-08-18T16:11:42.579Z
+                at 2026-08-18T18:12:55.100Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
