@@ -27,6 +27,7 @@ import { isAllowed as isAllowedACL } from 'src/utils/acl';
 
 import { buildOrganization } from './fixtures/organization';
 import { buildUser } from './fixtures/user';
+import { setTestLocale } from './setupStrings';
 
 export type RenderWithProvidersOptions = {
   /**
@@ -149,6 +150,11 @@ export const renderWithProviders = (
   const organizationContext = buildOrganizationContext(organization);
   const localizationContext = buildLocalizationContext(localization);
   const fundingEntityContext = buildFundingEntityContext(fundingEntity);
+
+  // Keep the string tables in step with the locale the context claims. Without this the context
+  // would report French while `strings.SOMETHING` still returned English, which is a state the
+  // application never reaches. Reset after each test by `setupStrings.ts`.
+  setTestLocale(localizationContext.activeLocale ?? localizationContext.selectedLocale);
 
   const Wrapper = ({ children }: { children?: ReactNode }): JSX.Element => (
     <Provider store={store}>

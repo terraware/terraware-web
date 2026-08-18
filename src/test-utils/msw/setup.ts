@@ -29,19 +29,40 @@ class OriginRelativeRequest extends OriginalRequest {
 globalThis.Request = OriginRelativeRequest;
 
 /**
+ * Requests that reached the network with no handler registered for them.
+ *
+ * `onUnhandledRequest: 'error'` alone is not enough to fail a test. MSW turns an unhandled request
+ * into a rejected fetch, and RTK Query catches that and stores it as ordinary error state — so a
+ * test that doesn't assert on the affected query stays green while silently exercising nothing.
+ * Recording them here and failing in `afterEach` is what actually holds the line: add an endpoint
+ * to a component, and every test rendering it fails until the mock exists.
+ */
+const unhandledRequests: string[] = [];
+
+/**
  * Global MSW lifecycle, registered as an rstest setup file so no individual test has to start the
  * server.
- *
- * `onUnhandledRequest: 'error'` is deliberate. Without it, a component that fires a request the
- * test didn't anticipate hangs until the test times out and the failure points at the assertion
- * rather than the missing mock. With it, you get the offending method and URL immediately.
  */
 beforeAll(() => {
   server.listen({ onUnhandledRequest: 'error' });
+  server.events.on('request:unhandled', ({ request }) => {
+    unhandledRequests.push(`${request.method} ${request.url}`);
+  });
 });
 
 afterEach(() => {
   server.resetHandlers();
+
+  // Drain before asserting so one failure doesn't cascade into every later test in the file.
+  const seen = unhandledRequests.splice(0);
+
+  if (seen.length > 0) {
+    throw new Error(
+      `The component under test made ${seen.length} request(s) with no MSW handler registered:\n` +
+        seen.map((entry) => `  - ${entry}`).join('\n') +
+        '\nMock them with mockGet/mockPost/etc, or with server.use(...) for anything the helpers do not cover.'
+    );
+  }
 });
 
 afterAll(() => {

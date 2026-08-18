@@ -7,7 +7,6 @@ import PlantsDashboardEmptyMessage from 'src/components/emptyStatePages/PlantsDa
 import strings from 'src/strings';
 import { buildAcceleratorAdmin, buildOrganization, renderWithProviders } from 'src/test-utils';
 
-
 /** Renders the current location so a test can assert on where a click navigated. */
 const LocationProbe = () => {
   const location = useLocation();

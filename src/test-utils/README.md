@@ -79,6 +79,22 @@ renderWithProviders(<SpeciesDetail />, { route: '/species/7', path: '/species/:s
 To assert on navigation, render a small probe next to the component and read the location from it —
 see `PlantsDashboardEmptyMessage.test.tsx`.
 
+### Locale
+
+Overriding the locale switches the string tables too, so `strings.SOMETHING` returns translated
+copy and components from `@terraware/web-components` change language along with the app — the same
+three things the real `LocalizationProvider` moves together. The locale resets to English after each
+test.
+
+```tsx
+renderWithProviders(<Thing />, { localization: { activeLocale: 'fr', selectedLocale: 'fr' } });
+// strings.SAVE === 'Sauvegarder'
+```
+
+Useful for locale-dependent formatting (number grouping, dates) as well as translated copy. Assert
+via `strings.SOME_KEY` rather than a translated literal so the test doesn't break every time a
+translation is revised.
+
 ## Mocking the API
 
 MSW intercepts at the network layer, so components run their real query hooks, real cache, and real
@@ -102,9 +118,14 @@ await waitFor(() => expect(requests).toHaveLength(1));
 expect(await requests[0].json()).toMatchObject({ scientificName: 'Acacia koa' });
 ```
 
-**Unhandled requests fail the test.** If you see `onUnhandledRequest` error output naming a URL you
-didn't expect, the component is fetching something you haven't mocked — mock it rather than
-loosening the setting.
+**Unhandled requests fail the test.** Any request that reaches the network without a handler is
+recorded and thrown in `afterEach`, naming the method and URL. Mock it rather than working around
+the check — a test that silently fetches nothing is worse than no test.
+
+Note that `onUnhandledRequest: 'error'` alone would _not_ do this. MSW turns an unhandled request
+into a rejected fetch, and RTK Query stores that as ordinary error state, so a test that doesn't
+assert on the affected query would stay green. The `afterEach` check is what makes the guarantee
+real: add an endpoint to a component and every test rendering it fails until the mock exists.
 
 ## Fixtures
 
@@ -136,12 +157,14 @@ Wired through `setupFiles` in `rstest.config.ts`, so tests never do this themsel
 
 - **Strings** (`setupStrings.ts`) — `src/strings` exports an _empty_ `LocalizedStrings` instance
   that the app fills in at runtime. Without this, every `strings.SOMETHING` is `undefined` and
-  components render blank text. Assert against `strings.SOME_KEY` rather than a literal so
-  assertions don't drift from the CSV.
-- **MSW** (`msw/setup.ts`) — starts the server, resets handlers between tests, and shims the global
-  `Request` so root-relative paths resolve against the jsdom origin. `src/queries/baseQuery.ts` uses
-  `baseUrl: ''`, which the browser resolves against the document but Node's `Request` rejects; the
-  symptom without the shim is a query that silently never returns data.
+  components render blank text. All supported locales are loaded so a locale override switches
+  language for real; the active locale resets to English after each test. Assert against
+  `strings.SOME_KEY` rather than a literal so assertions don't drift from the CSV.
+- **MSW** (`msw/setup.ts`) — starts the server, resets handlers between tests, fails any test that
+  made an unmocked request, and shims the global `Request` so root-relative paths resolve against
+  the jsdom origin. `src/queries/baseQuery.ts` uses `baseUrl: ''`, which the browser resolves
+  against the document but Node's `Request` rejects; the symptom without the shim is a query that
+  silently never returns data.
 - **Stylesheets** — `@terraware/web-components` imports SCSS, loaded as inert source since jsdom
   applies no styles.
 
