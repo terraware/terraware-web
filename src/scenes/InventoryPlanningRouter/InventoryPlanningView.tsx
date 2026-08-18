@@ -371,7 +371,7 @@ const SpeciesRow = ({ row, index, expanded, onToggle, activeLocale }: SpeciesRow
           <Icon name={expanded ? 'caretDown' : 'caretRight'} size='small' fillColor={theme.palette.TwClrIcn} />
         </Box>
         <Box>
-          <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
+          <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrBaseBlack}>
             {row.scientificName}
           </Typography>
           {row.commonName && (
