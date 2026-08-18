@@ -152,6 +152,10 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     setSpeciesCheckOpen(true);
   }, []);
 
+  useEffect(() => {
+    reloadData();
+  }, [reloadData]);
+
   const noLocationSet = hasMultipleProjects
     ? (availableProjects ?? []).every((p) => !p.botanicalCountryCode)
     : !selectedOrganization?.botanicalCountryCode;
