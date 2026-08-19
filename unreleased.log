@@ -1,3 +1,4 @@
+28a84e3e SW-8787 Show deduplicated status column for All Projects view (#6279)
 4dbba87b Remove Babel configuration (#6281)
 3aaa14d5 Remove unused enum values (#6275)
 f48e9b27 SW-8733 Change weight for species names (#6280)
