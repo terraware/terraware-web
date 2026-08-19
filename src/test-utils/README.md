@@ -43,20 +43,14 @@ harness supplies context values directly instead, because a test almost never ca
 arrived. The practical effect: **you only mock the endpoints the component under test actually
 calls**, not the whole bootstrap sequence.
 
-| Option           | Purpose                                                                     |
-| ---------------- | --------------------------------------------------------------------------- |
-| `currentUser`    | Overrides for `useUser()`.                                                  |
-| `organization`   | Overrides for `useOrganization()`.                                          |
-| `localization`   | Overrides for `useLocalization()` — locale, countries, time zones.          |
-| `fundingEntity`  | Overrides for `useUserFundingEntity()`.                                     |
-| `preloadedState` | Initial redux state, for components reading a legacy feature slice.         |
-| `store`          | Supply your own store to dispatch before rendering or share across renders. |
-| `route` / `path` | Initial URL and route pattern, so `useParams()` resolves.                   |
+Options let you override any of those contexts, seed redux state, and set the route. They are
+documented on `RenderWithProvidersOptions` in `renderWithProviders.tsx` — read the type rather than
+a list here, which would go stale.
 
-Returns everything React Testing Library returns, plus:
+Returns everything React Testing Library returns, plus a `store` to assert on or dispatch to, and a
+`user` (a `userEvent` instance) to drive interactions with. Prefer that over `fireEvent`.
 
-- `store` — assert on state, or dispatch to drive the component.
-- `user` — a `userEvent` instance already set up. Prefer it over `fireEvent`.
+The sections below cover the parts that are not obvious from the type.
 
 ### Permissions
 
@@ -129,17 +123,19 @@ real: add an endpoint to a component and every test rendering it fails until the
 
 ## Fixtures
 
-`buildUser`, `buildAcceleratorAdmin`, `buildFunderUser`, `buildOrganization`, `buildFacility`,
-`buildSeedBank`, `buildSpecies`, `buildSpeciesList`, `buildWithdrawalRow`. Each takes an overrides
-object and fills in plausible defaults, so a test names only what it cares about:
+`src/test-utils/fixtures` holds `build*` functions for the common domain objects — users,
+organizations, facilities, species, and so on. Each fills in plausible defaults and takes an
+overrides object, so a test names only what it cares about:
 
 ```ts
 buildOrganization({ role: 'Contributor', facilities: [] });
+buildUser({ globalRoles: ['Accelerator Admin'] });
 ```
 
-Add a builder here the first time a second test needs the same shape.
+See the directory for what exists. Add a builder there the first time a second test needs the same
+shape, and export it from `fixtures/index.ts`.
 
-## Exemplars
+## Reference tests
 
 Four tests, written to be copied:
 
@@ -153,7 +149,7 @@ Four tests, written to be copied:
 
 ## What the harness sets up globally
 
-Wired through `setupFiles` in `rstest.config.ts`, so tests never do this themselves:
+Pulled in by `src/setupTests.js`, so tests never do this themselves:
 
 - **Strings** (`setupStrings.ts`) — `src/strings` exports an _empty_ `LocalizedStrings` instance
   that the app fills in at runtime. Without this, every `strings.SOMETHING` is `undefined` and
@@ -168,9 +164,20 @@ Wired through `setupFiles` in `rstest.config.ts`, so tests never do this themsel
 - **Stylesheets** — `@terraware/web-components` imports SCSS, loaded as inert source since jsdom
   applies no styles.
 
+## What to assert
+
+Before writing a test, answer: **what would a failure tell us?** If it is "the component changed,"
+don't write it. If it names a requirement someone would want to be consulted about before it
+changed, write it.
+
+Assert on what a user can observe — visible text, roles and accessible names, where a click
+navigates, what request was sent — never on how the component achieves it. `component-test-agent.md`
+has the longer version, including the specific assertion shapes to avoid.
+
 ## Known gaps
 
-- No fixtures yet for batches, planting sites, observations, or deliverables — add them as tests
-  need them.
+- Fixtures exist only for the domain objects the current tests needed; add more as you go.
 - Map-heavy and 3D components are not covered here. Mapbox and PlayCanvas need a real GL context;
   those stay with the Playwright suites.
+- Nothing here can see visual appearance. jsdom applies no styles, so layout, color, and responsive
+  behavior belong in the Playwright screenshot suites.

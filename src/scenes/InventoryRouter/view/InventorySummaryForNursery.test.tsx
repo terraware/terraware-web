@@ -8,6 +8,7 @@ import { mockError, mockGet, renderWithProviders } from 'src/test-utils';
 
 const NURSERY_ID = 42;
 const SUMMARY_URL = `/api/v1/nursery/facilities/${NURSERY_ID}/summary`;
+const NARROW_NO_BREAK_SPACE = ' ';
 
 const summary = {
   germinatingQuantity: 1200,
@@ -55,17 +56,23 @@ describe('InventorySummaryForNursery', () => {
       localization: { activeLocale: 'fr', selectedLocale: 'fr' },
     });
 
-    // French groups with a narrow no-break space rather than a comma. Match on the digits alone so
-    // the assertion doesn't depend on which space character the runtime's ICU data picks.
-    expect(await screen.findByText((content) => content.replace(/\s/g, '') === '12960')).toBeInTheDocument();
+    // French groups with a narrow no-break space (U+202F) where English uses a comma; that
+    // separator is the thing under test, so the default normalizer — which would collapse it to an
+    // ordinary space — is replaced with one that only trims.
+    expect(
+      await screen.findByText(`12${NARROW_NO_BREAK_SPACE}960`, { normalizer: (text) => text.trim() })
+    ).toBeInTheDocument();
   });
 
-  it('renders nothing until the summary arrives', () => {
+  it('renders nothing until the summary arrives', async () => {
     mockGet(SUMMARY_URL, { summary });
 
     renderWithProviders(<InventorySummaryForNursery nurseryId={NURSERY_ID} />);
 
     expect(screen.queryByText(strings.TOTAL_QUANTITY)).not.toBeInTheDocument();
+
+    // Prove the negative above is meaningful: the label does appear, just not yet.
+    expect(await screen.findByText(strings.TOTAL_QUANTITY)).toBeInTheDocument();
   });
 
   it('raises a toast when the summary request fails', async () => {

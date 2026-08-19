@@ -7,7 +7,7 @@ export default defineConfig({
   // because copies of the tree show up under agent worktrees and yalc links, and a bare 'playwright'
   // only matches the top-level directory.
   exclude: ['**/playwright/**', '**/.claude/**', '**/.yalc/**', '**/node_modules/**', '**/dist/**'],
-  setupFiles: ['./src/setupTests.js', './src/test-utils/setupStrings.ts', './src/test-utils/msw/setup.ts'],
+  setupFiles: ['./src/setupTests.js'],
   resolve: {
     alias: {
       'react-map-gl/mapbox': path.resolve('./node_modules/react-map-gl/dist/mapbox.cjs'),

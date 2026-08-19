@@ -29,8 +29,8 @@ See `package.json` for the latest list of dependencies and versions.
 - Prefer using existing components from `@terraware/web-components`
 - Use MUI components for UI only when no suitable `@terraware/web-components` option exists
 - Prefer existing utilities and helpers instead of introducing new ones
-- Write component tests with `renderWithProviders` from `src/test-utils`, and mock API responses
-  with its MSW helpers rather than stubbing hooks or services — see `src/test-utils/README.md`
+- Use the `component-test-agent` for tests that render a component, and the `playwright-test-agent`
+  for end-to-end specs and tests of non-rendering code
 
 ## Do Not Introduce
 

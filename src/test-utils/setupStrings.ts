@@ -1,4 +1,4 @@
-import { afterEach } from '@rstest/core';
+import { beforeEach } from '@rstest/core';
 import { getStrings as getComponentStrings, setLocale as setComponentLocale } from '@terraware/web-components';
 
 import defaultStrings, { ILocalizedStringsMap } from 'src/strings';
@@ -47,8 +47,10 @@ export const setTestLocale = (locale: string) => {
 
 setTestLocale(DEFAULT_TEST_LOCALE);
 
-// The string table is a module-level singleton, so a test that switches locale would otherwise
-// leak that choice into every test that runs after it.
-afterEach(() => {
+// The string table is a module-level singleton, so a test that switches locale would otherwise leak
+// that choice into the tests that follow it. This resets before each test rather than after, so it
+// still holds when the previous test failed part way through — including when the MSW hook throws
+// on an unmocked request, which would otherwise skip an afterEach registered later.
+beforeEach(() => {
   setTestLocale(DEFAULT_TEST_LOCALE);
 });
