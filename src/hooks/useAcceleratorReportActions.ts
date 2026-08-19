@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 
-import { useBatchReportPhotosMutation } from 'src/queries/acceleratorReports/photos';
+import { useUpsertReportPhotosMutation } from 'src/queries/acceleratorReports/photos';
 import {
   ReviewAcceleratorReportIndicatorsRequestPayload,
   ReviewAcceleratorReportRequestPayload,
@@ -13,7 +13,7 @@ import {
 } from 'src/queries/generated/acceleratorReports';
 import { AcceleratorReportPhoto, NewAcceleratorReportPhoto } from 'src/types/AcceleratorReport';
 
-type BatchReportPhotosArgs = {
+type UpsertReportPhotosArgs = {
   fileIdsToDelete?: number[];
   photosToUpdate?: AcceleratorReportPhoto[];
   photosToUpload?: NewAcceleratorReportPhoto[];
@@ -42,7 +42,7 @@ const useAcceleratorReportActions = (reportId?: number) => {
   const [updateValues, updateReportValuesResponse] = useUpdateOneAcceleratorReportValuesMutation({
     fixedCacheKey: cacheKey(reportId, 'update-values'),
   });
-  const [batchPhotoChanges, batchPhotosResponse] = useBatchReportPhotosMutation({
+  const [upsertPhotos, upsertReportPhotosResponse] = useUpsertReportPhotosMutation({
     fixedCacheKey: cacheKey(reportId, 'photos'),
   });
 
@@ -79,9 +79,9 @@ const useAcceleratorReportActions = (reportId?: number) => {
     [reportId, updateValues]
   );
 
-  const batchPhotos = useCallback(
-    (args: BatchReportPhotosArgs) => (reportId === undefined ? undefined : batchPhotoChanges({ ...args, reportId })),
-    [batchPhotoChanges, reportId]
+  const upsertReportPhotos = useCallback(
+    (args: UpsertReportPhotosArgs) => (reportId === undefined ? undefined : upsertPhotos({ ...args, reportId })),
+    [upsertPhotos, reportId]
   );
 
   const responses = useMemo(
@@ -92,16 +92,16 @@ const useAcceleratorReportActions = (reportId?: number) => {
       reviewFeedbackResponse,
       reviewIndicatorsResponse,
       updateReportValuesResponse,
-      batchPhotosResponse,
+      upsertReportPhotosResponse,
     ],
     [
-      batchPhotosResponse,
       publishReportResponse,
       reviewFeedbackResponse,
       reviewIndicatorsResponse,
       reviewReportResponse,
       submitReportResponse,
       updateReportValuesResponse,
+      upsertReportPhotosResponse,
     ]
   );
 
@@ -128,8 +128,6 @@ const useAcceleratorReportActions = (reportId?: number) => {
   const isLoading = responses.some((response) => response.isLoading);
 
   return {
-    batchPhotos,
-    batchPhotosResponse,
     isLoading,
     publishReport,
     publishReportResponse,
@@ -143,6 +141,8 @@ const useAcceleratorReportActions = (reportId?: number) => {
     submitReportResponse,
     updateReportValues,
     updateReportValuesResponse,
+    upsertReportPhotos,
+    upsertReportPhotosResponse,
   };
 };
 

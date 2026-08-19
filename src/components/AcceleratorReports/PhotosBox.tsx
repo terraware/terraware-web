@@ -123,8 +123,8 @@ const PhotosBox = (props: ReportBoxProps) => {
   }
 
   const acceleratorReportId = report && isAcceleratorReport(report) ? report.id : undefined;
-  const { batchPhotos, batchPhotosResponse } = useAcceleratorReportActions(acceleratorReportId);
-  const isLoading = batchPhotosResponse.isLoading;
+  const { upsertReportPhotos, upsertReportPhotosResponse } = useAcceleratorReportActions(acceleratorReportId);
+  const isLoading = upsertReportPhotosResponse.isLoading;
   const snackbar = useSnackbar();
 
   const files = useMemo(() => {
@@ -185,7 +185,7 @@ const PhotosBox = (props: ReportBoxProps) => {
       }
 
       try {
-        await batchPhotos({
+        await upsertReportPhotos({
           projectId,
           photosToUpdate: toUpdate,
           photosToUpload: newPhotos,
@@ -199,7 +199,7 @@ const PhotosBox = (props: ReportBoxProps) => {
         snackbar.toastError();
       }
     }
-  }, [report, toDelete, toUpdate, newPhotos, batchPhotos, projectId, setInternalEditing, snackbar]);
+  }, [report, toDelete, toUpdate, newPhotos, upsertReportPhotos, projectId, setInternalEditing, snackbar]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);
