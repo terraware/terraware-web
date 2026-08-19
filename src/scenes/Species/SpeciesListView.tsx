@@ -721,6 +721,26 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     EcosystemTypesCell,
   ]);
 
+  const showProjectSelector =
+    speciesIntelligenceEnabled && species && species.length > 0 && hasMultipleProjects && !!availableProjects;
+
+  const projectSelector =
+    showProjectSelector && availableProjects ? (
+      <Box display='flex' alignItems='center'>
+        <Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'>
+          {strings.PROJECT}
+        </Typography>
+        <ProjectsDropdown
+          allowUnselect
+          availableProjects={availableProjects}
+          label=''
+          record={projectFilter}
+          setRecord={setProjectFilter}
+          unselectLabel={strings.ALL_PROJECTS}
+        />
+      </Box>
+    ) : null;
+
   return (
     <TfMain>
       <CheckDataModal
@@ -796,7 +816,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               alignItems: 'center',
               justifyContent: 'space-between',
               paddingBottom: theme.spacing(2),
-              paddingLeft: theme.spacing(3),
+              paddingLeft: theme.spacing(isMobile ? 1 : 3),
             }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
@@ -810,26 +830,12 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               >
                 {strings.SPECIES}
               </h1>
-              {speciesIntelligenceEnabled &&
-                species &&
-                species.length > 0 &&
-                hasMultipleProjects &&
-                availableProjects && (
-                  <Box display='flex' alignItems='center' marginLeft={theme.spacing(2)}>
-                    <Separator height='40px' />
-                    <Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'>
-                      {strings.PROJECT}
-                    </Typography>
-                    <ProjectsDropdown
-                      allowUnselect
-                      availableProjects={availableProjects}
-                      label=''
-                      record={projectFilter}
-                      setRecord={setProjectFilter}
-                      unselectLabel={strings.ALL_PROJECTS}
-                    />
-                  </Box>
-                )}
+              {!isMobile && projectSelector && (
+                <Box display='flex' alignItems='center' marginLeft={theme.spacing(2)}>
+                  <Separator height='40px' />
+                  {projectSelector}
+                </Box>
+              )}
             </Box>
             {species && species.length > 0 && !isMobile && userCanEdit && (
               <div>
@@ -845,8 +851,24 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                 />
               </div>
             )}
-            {isMobile && userCanEdit && <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />}
+            {isMobile && userCanEdit && (
+              <Box display='flex' alignItems='center' gap={theme.spacing(0.5)}>
+                <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' style={{ marginRight: 0 }} />
+                {speciesCheckEnabled && species && species.length > 0 && (
+                  <OptionsMenu
+                    onOptionItemClick={onOptionItemClick}
+                    optionItems={[{ label: strings.RUN_SPECIES_CHECK, value: 'runSpeciesCheck' }]}
+                    sx={{ marginLeft: 0, '& button': { margin: 0 } }}
+                  />
+                )}
+              </Box>
+            )}
           </Box>
+          {isMobile && projectSelector && (
+            <Box paddingLeft={theme.spacing(1)} paddingBottom={theme.spacing(2)}>
+              {projectSelector}
+            </Box>
+          )}
           <PageSnackbar />
         </PageHeaderWrapper>
       </Box>
