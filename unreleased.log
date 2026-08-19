@@ -1,3 +1,6 @@
+41522b8d Remove unused dependencies (#6291)
+7de2ba12 Add directly-used dependencies to package.json (#6289)
+0136032b Remove invalid type dependency (#6288)
 1cca2fc5 SW-8783 Copy Changes for Species Check alert banner (#6293)
 538496d9 Suppress Knip reports on generated query files (#6292)
 1ad9d259 SW-8760 Disable report actions while a write is in flight (#6278)
