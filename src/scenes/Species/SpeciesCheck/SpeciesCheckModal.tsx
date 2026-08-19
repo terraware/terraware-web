@@ -1,5 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -47,6 +48,7 @@ const SpeciesCheckModal = ({
   entry,
   reloadSpecies,
 }: SpeciesCheckModalProps): JSX.Element => {
+  const theme = useTheme();
   const snackbar = useSnackbar();
   const { countries } = useLocalization();
   const { selectedOrganization, reloadOrganizations } = useOrganization();
@@ -95,6 +97,9 @@ const SpeciesCheckModal = ({
   const targetsRef = useRef(targets);
   targetsRef.current = targets;
 
+  const speciesRef = useRef(species);
+  speciesRef.current = species;
+
   useEffect(() => {
     if (!open) {
       return;
@@ -109,7 +114,7 @@ const SpeciesCheckModal = ({
     setLocationEdits(initial);
     setStep(0);
     setNativeMode('list');
-    setNameSelected(new Set());
+    setNameSelected(new Set(speciesRef.current.filter((sp) => (sp.problems?.length ?? 0) > 0).map((sp) => sp.id)));
     setNativeSelected(new Set());
     setOverrideEdits({});
     setShowCancel(false);
@@ -410,17 +415,9 @@ const SpeciesCheckModal = ({
           disabled={busy}
         />
       ) : null;
-      const namePrimary =
-        speciesWithProblems.length === 0 ? (
-          <Button key='next' label={strings.NEXT} onClick={() => goToStep('native')} disabled={busy} />
-        ) : (
-          <Button
-            key='acceptNext'
-            label={strings.ACCEPT_AND_NEXT}
-            onClick={() => void onAcceptNames()}
-            disabled={busy}
-          />
-        );
+      const namePrimary = (
+        <Button key='next' label={strings.NEXT} onClick={() => void onAcceptNames()} disabled={busy} />
+      );
       return [cancelButton, nameBackButton, namePrimary].filter((button): button is JSX.Element => button !== null);
     }
 
@@ -454,16 +451,12 @@ const SpeciesCheckModal = ({
         disabled={busy}
       />
     );
-    const primary = !hasAnyPending ? (
-      <Button key='finish' label={strings.FINISH} onClick={() => void onFinish()} disabled={busy} />
-    ) : (
-      <Button
-        key='override'
-        label={strings.OVERRIDE}
-        onClick={() => (nativeSelected.size > 0 ? setNativeMode('override') : void onFinish())}
-        disabled={busy}
-      />
-    );
+    const primary =
+      nativeSelected.size > 0 ? (
+        <Button key='override' label={strings.OVERRIDE} onClick={() => setNativeMode('override')} disabled={busy} />
+      ) : (
+        <Button key='done' label={strings.DONE} onClick={() => void onFinish()} disabled={busy} />
+      );
     return [cancelButton, backButton, primary];
   }, [
     allLocationEditsValid,
@@ -471,7 +464,6 @@ const SpeciesCheckModal = ({
     busy,
     currentKey,
     goToStep,
-    hasAnyPending,
     includeSetLocation,
     nativeMode,
     nativeSelected.size,
@@ -480,7 +472,6 @@ const SpeciesCheckModal = ({
     onOverride,
     onSetLocations,
     requestCancel,
-    speciesWithProblems.length,
     targets.length,
   ]);
 
@@ -502,6 +493,18 @@ const SpeciesCheckModal = ({
         middleButtons={middleButtons}
       >
         <SpeciesCheckStepper steps={stepLabels} activeStep={Math.min(step, stepLabels.length - 1)} />
+
+        {(currentKey === 'name' || (currentKey === 'native' && nativeMode === 'list')) && (
+          <Typography
+            fontSize='16px'
+            color={theme.palette.TwClrTxt}
+            textAlign='left'
+            marginTop={theme.spacing(2)}
+            marginBottom={theme.spacing(1)}
+          >
+            {strings.SPECIES_CHECK_UPDATE_HINT}
+          </Typography>
+        )}
 
         {currentKey === 'setLocation' && (
           <SetLocationStep
