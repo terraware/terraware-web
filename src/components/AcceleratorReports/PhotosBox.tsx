@@ -5,8 +5,8 @@ import { Textfield } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import { API_PATHS } from 'src/constants';
+import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useBoolean from 'src/hooks/useBoolean';
-import { useBatchReportPhotosMutation } from 'src/queries/acceleratorReports/photos';
 import strings from 'src/strings';
 import { AcceleratorReportPhoto, NewAcceleratorReportPhoto, isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -122,7 +122,9 @@ const PhotosBox = (props: ReportBoxProps) => {
     setNewPhotos([]);
   }
 
-  const [batchReportPhotos, { isLoading }] = useBatchReportPhotosMutation();
+  const acceleratorReportId = report && isAcceleratorReport(report) ? report.id : undefined;
+  const { upsertReportPhotos, upsertReportPhotosResponse } = useAcceleratorReportActions(acceleratorReportId);
+  const isLoading = upsertReportPhotosResponse.isLoading;
   const snackbar = useSnackbar();
 
   const files = useMemo(() => {
@@ -183,13 +185,12 @@ const PhotosBox = (props: ReportBoxProps) => {
       }
 
       try {
-        await batchReportPhotos({
+        await upsertReportPhotos({
           projectId,
-          reportId: report.id,
           photosToUpdate: toUpdate,
           photosToUpload: newPhotos,
           fileIdsToDelete: toDelete.map((photo) => photo.fileId),
-        }).unwrap();
+        })?.unwrap();
 
         snackbar.toastSuccess(strings.CHANGES_SAVED);
         setInternalEditing(false);
@@ -198,7 +199,7 @@ const PhotosBox = (props: ReportBoxProps) => {
         snackbar.toastError();
       }
     }
-  }, [report, toDelete, toUpdate, newPhotos, batchReportPhotos, projectId, setInternalEditing, snackbar]);
+  }, [report, toDelete, toUpdate, newPhotos, upsertReportPhotos, projectId, setInternalEditing, snackbar]);
 
   const onCancel = useCallback(() => {
     setInternalEditing(false);

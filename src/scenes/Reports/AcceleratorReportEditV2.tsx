@@ -10,13 +10,11 @@ import ReportEditFields from 'src/components/AcceleratorReports/ReportEditFields
 import { getReportName, toUpdateReportValuesPayload } from 'src/components/AcceleratorReports/utils';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization } from 'src/providers';
-import {
-  AcceleratorReportPayload,
-  useUpdateOneAcceleratorReportValuesMutation,
-} from 'src/queries/generated/acceleratorReports';
+import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 import useSnackbar from 'src/utils/useSnackbar';
 
 const AcceleratorReportEditV2 = (): JSX.Element => {
@@ -29,7 +27,7 @@ const AcceleratorReportEditV2 = (): JSX.Element => {
 
   const { goToAcceleratorReport } = useNavigateTo();
   const snackbar = useSnackbar();
-  const [updateReport, updateReportResponse] = useUpdateOneAcceleratorReportValuesMutation();
+  const { isLoading, updateReportValues, updateReportValuesResponse } = useAcceleratorReportActions(reportId);
 
   const goToReport = useCallback(() => goToAcceleratorReport(reportId), [goToAcceleratorReport, reportId]);
 
@@ -67,23 +65,25 @@ const AcceleratorReportEditV2 = (): JSX.Element => {
       return;
     }
 
-    void updateReport({ reportId, updateAcceleratorReportValuesRequestPayload: toUpdateReportValuesPayload(record) });
-  }, [record, reportId, updateReport]);
+    void updateReportValues(toUpdateReportValuesPayload(record));
+  }, [record, updateReportValues]);
 
   useEffect(() => {
-    if (updateReportResponse.isError) {
+    if (updateReportValuesResponse.isError) {
       snackbar.toastError();
-    } else if (updateReportResponse.isSuccess) {
+      updateReportValuesResponse.reset();
+    } else if (updateReportValuesResponse.isSuccess) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
       goToReport();
+      updateReportValuesResponse.reset();
     }
-  }, [goToReport, snackbar, strings.CHANGES_SAVED, updateReportResponse.isError, updateReportResponse.isSuccess]);
+  }, [goToReport, snackbar, strings.CHANGES_SAVED, updateReportValuesResponse]);
 
   const rightComponent = useMemo(
     () => (
       <Box display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
         <Button
-          disabled={updateReportResponse.isLoading}
+          disabled={isLoading}
           id='cancelEditAcceleratorReport'
           label={strings.CANCEL}
           onClick={goToReport}
@@ -93,7 +93,7 @@ const AcceleratorReportEditV2 = (): JSX.Element => {
         />
 
         <Button
-          disabled={updateReportResponse.isLoading}
+          disabled={isLoading}
           id='saveEditAcceleratorReport'
           label={strings.SAVE}
           onClick={onSave}
@@ -101,7 +101,7 @@ const AcceleratorReportEditV2 = (): JSX.Element => {
         />
       </Box>
     ),
-    [goToReport, onSave, strings, theme, updateReportResponse.isLoading]
+    [goToReport, isLoading, onSave, strings, theme]
   );
 
   return (

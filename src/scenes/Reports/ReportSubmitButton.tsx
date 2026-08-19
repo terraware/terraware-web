@@ -2,9 +2,9 @@ import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Button } from '@terraware/web-components';
 
+import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization } from 'src/providers';
-import { useSubmitOneAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import SubmitReportDialog from './SubmitReportDialog';
@@ -21,30 +21,31 @@ const ReportSubmitButton = ({ reportId }: ReportSubmitButtonProps): JSX.Element 
 
   const { isFetching, report } = useOneAcceleratorReport(reportId);
 
-  const [submit, submitResponse] = useSubmitOneAcceleratorReportMutation();
+  const { isLoading, submitReport, submitReportResponse } = useAcceleratorReportActions(reportId);
 
   useEffect(() => {
-    if (submitResponse.isError) {
+    if (submitReportResponse.isError) {
       snackbar.toastError();
+      submitReportResponse.reset();
     }
-  }, [snackbar, submitResponse.isError]);
+  }, [snackbar, submitReportResponse]);
 
   const status = report?.status;
 
-  const disabled = (status !== 'Not Submitted' && status !== 'Needs Update') || isFetching || submitResponse.isLoading;
+  const disabled = (status !== 'Not Submitted' && status !== 'Needs Update') || isFetching || isLoading;
 
   const openSubmitDialog = useCallback(() => setShowSubmitDialog(true), []);
 
   const closeSubmitDialog = useCallback(() => setShowSubmitDialog(false), []);
 
-  const submitReport = useCallback(() => {
-    void submit(reportId);
+  const onSubmit = useCallback(() => {
+    void submitReport();
     setShowSubmitDialog(false);
-  }, [reportId, submit]);
+  }, [submitReport]);
 
   return (
     <>
-      {showSubmitDialog && <SubmitReportDialog onClose={closeSubmitDialog} onSubmit={submitReport} />}
+      {showSubmitDialog && <SubmitReportDialog onClose={closeSubmitDialog} onSubmit={onSubmit} />}
 
       <Button
         disabled={disabled}
