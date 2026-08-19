@@ -69,7 +69,6 @@ export default function NavBar({
   const isPlantingProgressRoute = useMatch({ path: APP_PATHS.PLANTING_PROGRESS + '/', end: false });
   const isPlantingSeasonsRoute = useMatch({ path: APP_PATHS.PLANTING_SEASONS + '/', end: false });
   const isWithdrawalLogRoute = useMatch({ path: APP_PATHS.NURSERY_WITHDRAWALS + '/', end: false });
-  const isReassignmentRoute = useMatch({ path: APP_PATHS.NURSERY_REASSIGNMENT + '/', end: false });
   const isReportsRoute = useMatch({ path: APP_PATHS.REPORTS + '/', end: false });
   const isSeedFundReportsRoute = useMatch({ path: APP_PATHS.SEED_FUND_REPORTS + '/', end: false });
   const isObservationsRoute = useMatch({ path: APP_PATHS.OBSERVATIONS + '/', end: false });
@@ -150,7 +149,7 @@ export default function NavBar({
     const withdrawalLogMenu = (
       <NavItem
         label={strings.WITHDRAWALS}
-        selected={!!isWithdrawalLogRoute || !!isReassignmentRoute}
+        selected={!!isWithdrawalLogRoute}
         onClick={() => {
           closeAndNavigateTo(APP_PATHS.NURSERY_WITHDRAWALS);
         }}

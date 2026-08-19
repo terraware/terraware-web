@@ -212,8 +212,8 @@ export type StratumResponsePayload = {
   numPermanentPlots: number;
   numTemporaryPlots: number;
   substrata: SubstratumResponsePayload[];
-  /** Use initialPlantingDensity instead. */
-  targetPlantingDensity?: number;
+  /** Number of plants per hectare that the stratum should have after planting is completed. */
+  targetPlantDensity?: number;
 };
 export type PlantingSitePayload = {
   adHocPlots: MonitoringPlotPayload[];
@@ -256,8 +256,8 @@ export type NewStratumPayload = {
   /** Name of this stratum. Two strata in the same planting site may not have the same name. */
   name: string;
   substrata?: NewSubstratumPayload[];
-  /** Use initialPlantingDensity instead. */
-  targetPlantingDensity?: number;
+  /** Number of plants per hectare that the stratum should have after planting is completed. */
+  targetPlantDensity?: number;
 };
 export type CreatePlantingSiteRequestPayload = {
   boundary?: MultiPolygon | Polygon;

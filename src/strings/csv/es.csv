@@ -1271,7 +1271,9 @@ NEW,Nuevo,b8096e3b
 NEW_ACCESSION,Añadir accesión,6d0d1602
 NEW_APP_VERSION,Actualice para usar la versión más reciente de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualice para obtener la versión más reciente de Terraware.,6235c190
+NEW_PLANTING_SITE,Nuevo Sitio de Plantación,ec2cbd8f
 NEW_PLANTING_WITHDRAWAL_REQUESTS_RECEIVED,Nuevas solicitudes de retiro de plantas recibidas para {0},0da4cdcd
+NEW_SITE,Nuevo Sitio,7e99de90
 NEW_SPECIES_TARGETS_ADDED,Nuevos objetivos de especies añadidos para {0},2289b20d
 NEW_STRATUM,Nuevo Estrato,84292d1f
 NEW_SUBSTRATUM,Nuevo Sustrato,90a1ddc3
@@ -1478,6 +1480,7 @@ ORGANIZATION_TYPE_NGO,Organizaciones no gubernamentales (ONG),560257fd
 ORGANIZATION_TYPE_OTHER,Otro,626335b2
 ORGANIZATION_WEBSITE,Sitio web de la organización,331767ac
 ORGANIZATIONS,Organizaciones,8c86eca3
+ORIGINAL_PLANTING_SITE,Sitio de Plantación Original,b790c51d
 ORIGINAL_QTY,Cantidad original,636a1ae9
 ORIGINAL_STRATUM,Estrato Original,01b09c38
 ORIGINAL_SUBSTRATUM,Subestrato Original,3d5071db
@@ -1810,6 +1813,7 @@ REASON,Motivo,aa1f8a01
 REASSIGN,Reasignar,48e98f3f
 REASSIGN_SEEDLINGS,Reasignar plántulas,99d4391c
 REASSIGN_SEEDLINGS_DESCRIPTION,"Ingrese el nuevo subestrato, la nueva cantidad y las notas para la especie a la que desea reasignar plántulas. Las plántulas de las filas que deje vacías no serán reasignadas.",1a8cfcc9
+REASSIGN_SEEDLINGS_MODAL_DESCRIPTION,"Seleccione el Sitio de Plantación, Estrato, Subestrato y la cantidad de plántulas que desea reasignar.",888162d1
 REASSIGNMENT,Reasignación,79a8c3fe
 REASSIGNMENT_DURATION,Duración de la reasignación,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,No se añadirán parcelas.,ebf0fa62

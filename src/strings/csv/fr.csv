@@ -1270,7 +1270,9 @@ NEW,Nouveau,b8096e3b
 NEW_ACCESSION,Ajouter une adhésion,6d0d1602
 NEW_APP_VERSION,Veuillez actualiser pour utiliser la dernière version de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualisez pour obtenir la dernière version de Terraware.,6235c190
+NEW_PLANTING_SITE,Nouveau site de plantation,ec2cbd8f
 NEW_PLANTING_WITHDRAWAL_REQUESTS_RECEIVED,Nouvelles demandes de retrait de plantation reçues pour {0},0da4cdcd
+NEW_SITE,Nouveau site,7e99de90
 NEW_SPECIES_TARGETS_ADDED,Nouveaux objectifs d'espèces ajoutés pour {0},2289b20d
 NEW_STRATUM,Nouvelle strate,84292d1f
 NEW_SUBSTRATUM,Nouveau substrat,90a1ddc3
@@ -1477,6 +1479,7 @@ ORGANIZATION_TYPE_NGO,Organisations non gouvernementales (ONG),560257fd
 ORGANIZATION_TYPE_OTHER,Autre,626335b2
 ORGANIZATION_WEBSITE,Site Web de l'organisation,331767ac
 ORGANIZATIONS,Organisations,8c86eca3
+ORIGINAL_PLANTING_SITE,Site de plantation d'origine,b790c51d
 ORIGINAL_QTY,Qté d'origine,636a1ae9
 ORIGINAL_STRATUM,Strate d'origine,01b09c38
 ORIGINAL_SUBSTRATUM,Sous-strate d'origine,3d5071db
@@ -1809,6 +1812,7 @@ REASON,Motif,aa1f8a01
 REASSIGN,Réaffecter,48e98f3f
 REASSIGN_SEEDLINGS,Réaffecter les semis,99d4391c
 REASSIGN_SEEDLINGS_DESCRIPTION,"Saisissez la nouvelle sous-strate, la nouvelle quantité et les notes pour l'espèce pour laquelle vous souhaitez réaffecter des plants. Les plants des lignes laissées vides ne seront pas réaffectés.",1a8cfcc9
+REASSIGN_SEEDLINGS_MODAL_DESCRIPTION,"Sélectionnez le site de plantation, le stratum, le substratum et la quantité de semis que vous souhaitez réaffecter.",888162d1
 REASSIGNMENT,Réaffectation,79a8c3fe
 REASSIGNMENT_DURATION,Durée de la réaffectation,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,Aucune parcelle ne sera ajoutée.,ebf0fa62

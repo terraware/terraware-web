@@ -457,6 +457,7 @@ export type ReportAutoCalculatedIndicatorPayload = {
   systemTime?: string;
   systemValue?: number;
   target?: number;
+  unit: string;
 };
 export type ReportChallengePayload = {
   challenge: string;
@@ -483,6 +484,7 @@ export type ReportCommonIndicatorPayload = {
   status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
   supportingDocumentUrl?: string;
   target?: number;
+  unit?: string;
   value?: number;
 };
 export type SimpleUserPayload = {
