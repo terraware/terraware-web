@@ -28,7 +28,7 @@ const ReportReviewButtons = ({ reportId }: ReportReviewButtonsProps): JSX.Elemen
 
   const { report } = useOneAcceleratorReport(reportId);
 
-  const { reviewReport, reviewReportResponse, isLoading } = useAcceleratorReportActions(reportId);
+  const { isLoading, reviewReport, reviewReportResponse } = useAcceleratorReportActions(reportId);
 
   // a report can only be reviewed once it has been submitted
   const notReviewable = report?.status === undefined || report.status === 'Not Submitted' || isLoading;
