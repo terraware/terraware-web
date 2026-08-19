@@ -2207,8 +2207,9 @@ SPECIES_CARD_DESCRIPTION,Voir les espèces qui sont référencées par vos entr�
 SPECIES_CATEGORIES,Catégories d'espèces,b63aa30d
 SPECIES_CATEGORIES_TOOLTIP,Les catégories d'espèces indiquent le pourcentage du total des plantes plantées qui sont rares et menacées en fonction de l'espèce.,e6a1dcfe
 SPECIES_CHECK,Vérification des espèces,d7d0f200
-SPECIES_CHECK_ADDED_BANNER,Vous avez ajouté {0} nouvelles espèces à votre liste ({1}). Lancez la vérification des espèces.,3d922bc3
-SPECIES_CHECK_SET_LOCATION_BANNER,"Pour voir quelles espèces sont indigènes, introduites ou envahissantes sur vos sites, vous devez définir votre emplacement.",1aec8983
+SPECIES_CHECK_ADDED_BANNER,"{0} nouvelles espèces ont été ajoutées ({1}). Lancez la vérification des espèces pour voir lesquelles sont indigènes, introduites ou envahissantes.",35e34395
+SPECIES_CHECK_ADDED_BANNER_ONE,"{0} nouvelle espèce a été ajoutée ({1}). Lancez la vérification des espèces pour voir si elle est indigène, introduite ou envahissante.",89f12eb5
+SPECIES_CHECK_SET_LOCATION_BANNER,"Pour vérifier quelles espèces sont indigènes, introduites ou envahissantes pour vos projets, lancez la vérification des espèces. Vous devrez d'abord définir l'emplacement de vos projets.",36e36517
 SPECIES_CHECK_SPECIES_CHECKED,{0} espèces vérifiées,3a3237db
 SPECIES_CHECK_UPDATES,{0} mises à jour,a1d89ade
 SPECIES_CLASSIFICATION,Classification des espèces,2e8b4fb1
