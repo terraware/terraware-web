@@ -2210,6 +2210,7 @@ SPECIES_CHECK,Vérification des espèces,d7d0f200
 SPECIES_CHECK_ADDED_BANNER,Vous avez ajouté {0} nouvelles espèces à votre liste ({1}). Lancez la vérification des espèces.,3d922bc3
 SPECIES_CHECK_SET_LOCATION_BANNER,"Pour voir quelles espèces sont indigènes, introduites ou envahissantes sur vos sites, vous devez définir votre emplacement.",1aec8983
 SPECIES_CHECK_SPECIES_CHECKED,{0} espèces vérifiées,3a3237db
+SPECIES_CHECK_UPDATE_HINT,"Sélectionnez les espèces à mettre à jour, ou continuez sans effectuer de mise à jour. Les mises à jour remplaceront les données existantes.",6cfa3ed4
 SPECIES_CHECK_UPDATES,{0} mises à jour,a1d89ade
 SPECIES_CLASSIFICATION,Classification des espèces,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"Vous n'avez pas saisi de valeurs de densité de plantation pour toutes les espèces. Si vous ne saisissez pas de valeurs de densité de plantation pour toutes les espèces, les densités de plantation pour cette parcelle ne seront pas définies et aucun taux de survie ne sera calculé pour cette espèce. Saisissez 0 pour toute espèce qui n'a pas été plantée dans une parcelle.",5bcc0f2b

@@ -2212,6 +2212,7 @@ SPECIES_CHECK,Species Check,
 SPECIES_CHECK_ADDED_BANNER,You have added {0} new species to your list ({1}). Run species check.,
 SPECIES_CHECK_SET_LOCATION_BANNER,"In order to see which species are native, introduced, or invasive for your sites, you need to set your location.",
 SPECIES_CHECK_SPECIES_CHECKED,{0} species checked,
+SPECIES_CHECK_UPDATE_HINT,"Select species to update, or continue without any updates. Updates will override pre-existing data."
 SPECIES_CHECK_UPDATES,{0} updates,
 SPECIES_CLASSIFICATION,Species Classification,
 SPECIES_DENSITY_WARNING_MESSAGE,"You have not entered plant density values for all species. If you do not enter plant density values for all species, the plant densities for this plot will not be set and no survival rate will be calculated for that species. Enter 0 for any species that were not planted in a plot.",
