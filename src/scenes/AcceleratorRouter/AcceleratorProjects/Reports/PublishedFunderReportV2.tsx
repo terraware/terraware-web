@@ -3,7 +3,9 @@ import { useParams } from 'react-router';
 
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
-import { ProgressIndicator } from 'src/components/AcceleratorReports/IndicatorProgressRow';
+import ReportExportMenu from 'src/components/AcceleratorReports/ReportExportMenu';
+import useExportReportCsv from 'src/components/AcceleratorReports/useExportReportCsv';
+import { getPublishedProgressIndicators } from 'src/components/AcceleratorReports/utils';
 import { useLocalization } from 'src/providers';
 import { useGetPublishedReportQuery } from 'src/queries/generated/publishedReports';
 
@@ -17,18 +19,11 @@ const PublishedFunderReportV2 = (): JSX.Element => {
   const reportId = Number(pathParams.reportId);
 
   const { currentData: getPublishedReportData, error } = useGetPublishedReportQuery(reportId);
+  const { exportFunderReport } = useExportReportCsv();
 
   const report = getPublishedReportData?.report;
 
-  // the published payload only ever carries the indicators funders are allowed to see
-  const indicators = useMemo<ProgressIndicator[]>(
-    () => [
-      ...(report?.autoCalculatedIndicators ?? []),
-      ...(report?.commonIndicators ?? []),
-      ...(report?.projectIndicators ?? []),
-    ],
-    [report]
-  );
+  const indicators = useMemo(() => getPublishedProgressIndicators(report), [report]);
 
   const isUnpublished = error !== undefined && 'status' in error && error.status === 404;
 
@@ -46,6 +41,12 @@ const PublishedFunderReportV2 = (): JSX.Element => {
       projectId={projectId}
       report={report}
       reportId={reportId}
+      rightComponent={
+        <ReportExportMenu
+          disabled={report === undefined}
+          onExport={() => void exportFunderReport({ projectId, reportId })}
+        />
+      }
       title={strings.PUBLISHED_FUNDER_REPORT}
     />
   );

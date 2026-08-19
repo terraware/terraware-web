@@ -5,8 +5,8 @@ import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalC
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
 import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
-import { ProgressIndicator } from 'src/components/AcceleratorReports/IndicatorProgressRow';
 import { IndicatorProgressSectionContent } from 'src/components/AcceleratorReports/IndicatorProgressSection';
+import { ProgressIndicator } from 'src/components/AcceleratorReports/utils';
 import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 
 const INDICATOR_FIELDS: Record<string, keyof AcceleratorReportPayload> = {

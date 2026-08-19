@@ -1,12 +1,13 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 
 import FunderReportContentV2 from 'src/components/AcceleratorReports/FunderReportContentV2';
-import { ProgressIndicator } from 'src/components/AcceleratorReports/IndicatorProgressRow';
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
-import { getReportName } from 'src/components/AcceleratorReports/utils';
+import ReportExportMenu from 'src/components/AcceleratorReports/ReportExportMenu';
+import useExportReportCsv from 'src/components/AcceleratorReports/useExportReportCsv';
+import { getPublishedProgressIndicators, getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import useQuery from 'src/utils/useQuery';
@@ -18,6 +19,7 @@ type FunderReportTabV2Props = {
 const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.Element => {
   const theme = useTheme();
   const query = useQuery();
+  const { exportFunderReport } = useExportReportCsv();
 
   const [selectedReportId, setSelectedReportId] = useState<number | undefined>(
     Number(query.get('reportId')) || undefined
@@ -44,15 +46,7 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
     [listPublishedReportsData, resolvedReportId]
   );
 
-  // the published payload only ever carries the indicators funders are allowed to see
-  const indicators = useMemo<ProgressIndicator[]>(
-    () => [
-      ...(selectedReport?.autoCalculatedIndicators ?? []),
-      ...(selectedReport?.commonIndicators ?? []),
-      ...(selectedReport?.projectIndicators ?? []),
-    ],
-    [selectedReport]
-  );
+  const indicators = useMemo(() => getPublishedProgressIndicators(selectedReport), [selectedReport]);
 
   const isEmpty = listPublishedReportsData !== undefined && reports.length === 0;
 
@@ -66,7 +60,19 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
 
   return (
     <FunderReportContentV2
-      header={<ReportDropdown onChange={setSelectedReportId} reports={reports} selectedReportId={resolvedReportId} />}
+      header={
+        <Box alignItems='center' display='flex' justifyContent='space-between'>
+          <ReportDropdown onChange={setSelectedReportId} reports={reports} selectedReportId={resolvedReportId} />
+
+          <ReportExportMenu
+            disabled={resolvedReportId === undefined}
+            onExport={() =>
+              resolvedReportId !== undefined &&
+              void exportFunderReport({ projectId: selectedProjectId, reportId: resolvedReportId })
+            }
+          />
+        </Box>
+      }
       indicators={indicators}
       projectId={selectedProjectId}
       report={selectedReport}

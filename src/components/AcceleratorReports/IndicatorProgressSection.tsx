@@ -3,27 +3,10 @@ import React, { type JSX, useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
-import IndicatorProgressRow, { ProgressIndicator } from 'src/components/AcceleratorReports/IndicatorProgressRow';
+import IndicatorProgressRow from 'src/components/AcceleratorReports/IndicatorProgressRow';
+import { ProgressIndicator, compareRefIds, getProgressIndicators } from 'src/components/AcceleratorReports/utils';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization } from 'src/providers';
-import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
-
-// Reference ids read like 11.2.3, so compare them segment by segment as numbers rather than as text,
-// which would order 11.10 before 11.2.
-const compareRefIds = (a: string, b: string) => {
-  const aSegments = a.split('.');
-  const bSegments = b.split('.');
-
-  for (let index = 0; index < Math.max(aSegments.length, bSegments.length); index++) {
-    const difference = (Number(aSegments[index]) || 0) - (Number(bSegments[index]) || 0);
-
-    if (difference !== 0) {
-      return difference;
-    }
-  }
-
-  return 0;
-};
 
 export type IndicatorProgressSectionContentProps = {
   editing?: boolean;
@@ -102,21 +85,6 @@ export const IndicatorProgressSectionContent = ({
     </Box>
   );
 };
-
-export const getProgressIndicators = (report?: AcceleratorReportPayload): ProgressIndicator[] => [
-  ...(report?.commonIndicators ?? []).map((indicator) => ({ ...indicator, type: 'common' as const })),
-  ...(report?.projectIndicators ?? []).map((indicator) => ({ ...indicator, type: 'project' as const })),
-  ...(report?.autoCalculatedIndicators ?? []).map((indicator) => ({
-    ...indicator,
-    name: indicator.indicator,
-    type: 'autoCalculated' as const,
-    value: indicator.overrideValue ?? indicator.systemValue,
-  })),
-];
-
-// funders are only ever sent the publishable indicators, so a funder-facing view has to drop the rest
-export const getFunderVisibleIndicators = (report?: AcceleratorReportPayload): ProgressIndicator[] =>
-  getProgressIndicators(report).filter((indicator) => indicator.isPublishable);
 
 type IndicatorProgressSectionProps = {
   isConsoleView?: boolean;

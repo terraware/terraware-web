@@ -2,6 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 
 import { DropdownItem } from '@terraware/web-components';
 
+import useExportReportCsv from 'src/components/AcceleratorReports/useExportReportCsv';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
@@ -11,6 +12,7 @@ import { useLocalization, useUser } from 'src/providers';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 import PublishModal from './PublishModal';
 
 type ReportOptionsMenuProps = {
@@ -23,6 +25,8 @@ const ReportOptionsMenu = ({ projectId, reportId }: ReportOptionsMenuProps): JSX
   const { isAllowed } = useUser();
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
+  const { acceleratorProject, project } = useAcceleratorProjectData();
+  const { exportAcceleratorReport } = useExportReportCsv();
 
   const canPublish = isAllowed('PUBLISH_REPORTS');
 
@@ -68,6 +72,10 @@ const ReportOptionsMenu = ({ projectId, reportId }: ReportOptionsMenuProps): JSX
         label: strings.VIEW_PUBLISHED_FUNDER_REPORT,
         value: 'published',
       },
+      {
+        label: strings.EXPORT_CSV,
+        value: 'exportCsv',
+      },
       ...(canPublish
         ? [
             {
@@ -89,11 +97,13 @@ const ReportOptionsMenu = ({ projectId, reportId }: ReportOptionsMenuProps): JSX
         navigate(
           `${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', `${projectId}`)}/${reportId}/published`
         );
+      } else if (optionItem.value === 'exportCsv') {
+        void exportAcceleratorReport({ projectName: acceleratorProject?.dealName || project?.name, reportId });
       } else if (optionItem.value === 'publish') {
         setShowPublishModal(true);
       }
     },
-    [navigate, projectId, reportId]
+    [acceleratorProject?.dealName, exportAcceleratorReport, navigate, project?.name, projectId, reportId]
   );
 
   const closePublishModal = useCallback(() => setShowPublishModal(false), []);
