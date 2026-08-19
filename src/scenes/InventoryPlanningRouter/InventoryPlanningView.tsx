@@ -28,7 +28,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import InventoryPlanningEventLog from './InventoryPlanningEventLog';
 
-const inventoryPlanningTableGridTemplateColumns = '40px 2fr 1fr 1fr 1fr 1.5fr';
+const inventoryPlanningTableGridTemplateColumns = '40px 3fr 0.8fr 1fr 1fr 1.5fr';
 const inventoryPlanningTableMinWidth = '960px';
 const allocatedForTargetCellSx = { paddingLeft: 8 };
 const allocatedForTargetBarSx = {
@@ -361,7 +361,7 @@ const SpeciesRow = ({ row, index, expanded, onToggle, activeLocale }: SpeciesRow
         alignItems='center'
         onClick={onToggle}
         sx={{
-          padding: theme.spacing(1.5, 2),
+          padding: theme.spacing(0.5, 2),
           backgroundColor: index % 2 === 0 ? theme.palette.TwClrBgSecondary : 'transparent',
           cursor: 'pointer',
           '&:hover': { backgroundColor: theme.palette.TwClrBgHover },
@@ -371,7 +371,7 @@ const SpeciesRow = ({ row, index, expanded, onToggle, activeLocale }: SpeciesRow
           <Icon name={expanded ? 'caretDown' : 'caretRight'} size='small' fillColor={theme.palette.TwClrIcn} />
         </Box>
         <Box>
-          <Typography fontSize='16px' fontWeight={400}>
+          <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrBaseBlack}>
             {row.scientificName}
           </Typography>
           {row.commonName && (
@@ -417,7 +417,7 @@ const SpeciesRow = ({ row, index, expanded, onToggle, activeLocale }: SpeciesRow
         </Box>
       </Box>
       {expanded &&
-        row.seasons.map((season) => (
+        row.seasons.map((season, seasonIndex) => (
           <SeasonDetailRow
             key={season.plantingSeasonId}
             speciesId={row.speciesId}
@@ -425,6 +425,7 @@ const SpeciesRow = ({ row, index, expanded, onToggle, activeLocale }: SpeciesRow
             available={row.available}
             backgroundColor={index % 2 === 0 ? theme.palette.TwClrBgSecondary ?? 'transparent' : 'transparent'}
             activeLocale={activeLocale}
+            isFirst={seasonIndex === 0}
           />
         ))}
     </>
@@ -437,6 +438,7 @@ type SeasonDetailRowProps = {
   available: number;
   backgroundColor: string;
   activeLocale: string | null;
+  isFirst: boolean;
 };
 
 const SeasonDetailRow = ({
@@ -445,6 +447,7 @@ const SeasonDetailRow = ({
   available,
   backgroundColor,
   activeLocale,
+  isFirst,
 }: SeasonDetailRowProps): JSX.Element => {
   const theme = useTheme();
   const snackbar = useSnackbar();
@@ -487,15 +490,20 @@ const SeasonDetailRow = ({
       gridTemplateColumns={inventoryPlanningTableGridTemplateColumns}
       gap={theme.spacing(1)}
       alignItems='center'
-      sx={{ padding: theme.spacing(1.5, 2), backgroundColor }}
+      sx={{
+        paddingTop: theme.spacing(isFirst ? 0.5 : 1),
+        paddingBottom: theme.spacing(1),
+        paddingX: theme.spacing(2),
+        backgroundColor,
+      }}
       onClick={(e) => e.stopPropagation()}
     >
       <Box />
-      <Box>
+      <Box paddingLeft={theme.spacing(4)}>
         <Typography fontSize='16px' fontWeight={400}>
           {season.plantingSeasonName}
         </Typography>
-        <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+        <Typography fontSize='14px' color={theme.palette.TwClrTxt}>
           {`${season.plantingSiteName}  -  ${getMediumDate(season.startDate, activeLocale)} - ${getMediumDate(
             season.endDate,
             activeLocale

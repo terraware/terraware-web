@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 
 import SelectPhotos from 'src/components/common/Photos/SelectPhotos';
 
-export type AddPhotosStepProps = {
+type AddPhotosStepProps = {
   photos: File[];
   onPhotosChanged: (files: File[]) => void;
 };

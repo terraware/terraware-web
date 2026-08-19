@@ -11,7 +11,7 @@ type Data = {
 // Define the initial state
 const initialState: Data = {};
 
-export const subLocationsSlice = createSlice({
+const subLocationsSlice = createSlice({
   name: 'subLocationsSlice',
   initialState,
   reducers: {

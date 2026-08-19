@@ -4892,6 +4892,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/sites/{plantingSiteId}/speciesTargets": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets the species targeted for planting at a planting site. */
+        get: operations["listPlantingSiteSpeciesTargets"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/sites/{plantingSiteId}/speciesTargets/{speciesId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        /**
+         * Targets a species for planting at a planting site.
+         * @description If the species is already targeted at the site, its target number of plants and its list of strata are replaced with the values from the request.
+         */
+        put: operations["updatePlantingSiteSpeciesTarget"];
+        post?: never;
+        /**
+         * Stops targeting a species for planting at a planting site.
+         * @description The species is also removed from the strata where it was targeted. Succeeds even if the species wasn't targeted at the site.
+         */
+        delete: operations["deletePlantingSiteSpeciesTarget"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/stats": {
         parameters: {
             query?: never;
@@ -7822,6 +7863,8 @@ export interface components {
             type: "Text";
         };
         ExistingTreePayload: {
+            /** @description Measured in meters. */
+            boleHeight?: number;
             description?: string;
             /** @description Measured in centimeters. */
             diameterAtBreastHeight?: number;
@@ -8970,6 +9013,10 @@ export interface components {
             sites: components["schemas"]["PlantingSiteReportedPlantsPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
+        ListPlantingSiteSpeciesTargetsResponsePayload: {
+            status: components["schemas"]["SuccessOrError"];
+            targets: components["schemas"]["PlantingSiteSpeciesTargetPayload"][];
+        };
         ListPlantingSitesResponsePayload: {
             sites: components["schemas"]["PlantingSitePayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -9514,6 +9561,8 @@ export interface components {
             growthForm: "tree";
         };
         NewTrunkPayload: {
+            /** @description Measured in meters. */
+            boleHeight?: number;
             description?: string;
             /** @description Measured in centimeters. */
             diameterAtBreastHeight: number;
@@ -10512,6 +10561,17 @@ export interface components {
             /** Format: int32 */
             totalPlants: number;
         };
+        PlantingSiteSpeciesTargetPayload: {
+            /** Format: int64 */
+            speciesId: number;
+            /** @description Strata of the planting site where the species is targeted for planting. */
+            stratumIds: number[];
+            /**
+             * Format: int64
+             * @description Number of plants targeted for the planting site as a whole.
+             */
+            targetPlants?: number;
+        };
         PlantingSiteValidationProblemPayload: {
             /** @description If the problem is a conflict between two strata or two substrata, the list of the conflicting stratum or substratum names. */
             conflictsWith?: string[];
@@ -11063,6 +11123,7 @@ export interface components {
             type: "RecordedTree";
         };
         RecordedTreeUpdateOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
+            boleHeight?: number | null;
             description?: string | null;
             /** @description Only valid for Tree and Trunk growth forms. */
             diameterAtBreastHeight?: number;
@@ -11409,7 +11470,7 @@ export interface components {
             cursor?: string;
             fields: string[];
             filters?: components["schemas"]["PrefixedSearch"][];
-            prefix?: "acceleratorReportAutoCalculatedIndicators" | "acceleratorReportCommonIndicators" | "acceleratorReportProjectIndicators" | "acceleratorReports" | "accessionCollectors" | "accessions" | "applications" | "autoCalculatedIndicators" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "botanicalCountries" | "commonIndicators" | "countries" | "countryBotanicalCountries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingDateRequestSpecies" | "plantingDateRequests" | "plantingSeasonAllocatedSpeciesTable" | "plantingSeasonScheduledDates" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectIndicators" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectSpecies" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "scheduledPlantingDateSpeciesTable" | "seedFundReports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
+            prefix?: "acceleratorReportAutoCalculatedIndicators" | "acceleratorReportCommonIndicators" | "acceleratorReportProjectIndicators" | "acceleratorReports" | "accessionCollectors" | "accessions" | "applications" | "autoCalculatedIndicators" | "bags" | "batchSubLocations" | "batchWithdrawals" | "batches" | "botanicalCountries" | "commonIndicators" | "countries" | "countryBotanicalCountries" | "countrySubdivisions" | "deliverables" | "deliveries" | "documentTemplates" | "documents" | "draftPlantingSites" | "events" | "facilities" | "facilityInventories" | "facilityInventoryTotals" | "geolocations" | "internalTags" | "inventories" | "mediaFiles" | "modules" | "monitoringPlotHistories" | "monitoringPlots" | "nurserySpeciesProjects" | "nurseryWithdrawalPhotos" | "nurseryWithdrawals" | "observationBiomassDetails" | "observationBiomassQuadratSpecies" | "observationBiomassSpecies" | "observationPlotConditions" | "observationPlotResult" | "observationPlots" | "observationSiteResult" | "observationStratumResult" | "observationSubstratumResult" | "observations" | "organizationInternalTags" | "organizationUsers" | "organizations" | "participantProjectSpecies" | "plantingDateRequestSpecies" | "plantingDateRequests" | "plantingSeasonAllocatedSpeciesTable" | "plantingSeasonScheduledDates" | "plantingSeasonSpeciesTargets" | "plantingSeasons" | "plantingSiteHistories" | "plantingSitePopulations" | "plantingSiteSpeciesTargets" | "plantingSites" | "plantings" | "projectAcceleratorDetails" | "projectDeliverables" | "projectIndicators" | "projectInternalUsers" | "projectLandUseModelTypes" | "projectModules" | "projectSpecies" | "projectVariableValues" | "projectVariables" | "projects" | "recordedTrees" | "scheduledPlantingDateSpeciesTable" | "seedFundReports" | "species" | "speciesEcosystemTypes" | "speciesGrowthForms" | "speciesPlantMaterialSourcingMethods" | "speciesProblems" | "speciesSuccessionalGroups" | "strata" | "stratumHistories" | "stratumPopulations" | "stratumSpeciesTargets" | "subLocations" | "substrata" | "substratumHistories" | "substratumPopulations" | "users" | "variableSelectOptions" | "viabilityTestResults" | "viabilityTests" | "withdrawals";
             search?: components["schemas"]["SearchNodePayload"];
             sortOrder?: components["schemas"]["SearchSortOrderElement"][];
         };
@@ -12410,6 +12471,15 @@ export interface components {
              * @example America/New_York
              */
             timeZone?: string;
+        };
+        UpdatePlantingSiteSpeciesTargetRequestPayload: {
+            /** @description Strata of the planting site where the species is targeted for planting. There is no target number of plants at the stratum level. */
+            stratumIds: number[];
+            /**
+             * Format: int64
+             * @description Number of plants targeted for the planting site as a whole.
+             */
+            targetPlants?: number;
         };
         UpdatePlantingSubzoneRequestPayload: {
             plantingCompleted: boolean;
@@ -23913,6 +23983,114 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GetPlantingSiteReportedPlantsResponsePayload"];
+                };
+            };
+        };
+    };
+    listPlantingSiteSpeciesTargets: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSiteId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ListPlantingSiteSpeciesTargetsResponsePayload"];
+                };
+            };
+            /** @description The planting site does not exist. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    updatePlantingSiteSpeciesTarget: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSiteId: number;
+                speciesId: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdatePlantingSiteSpeciesTargetRequestPayload"];
+            };
+        };
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The planting site, one of the strata, or the species does not exist. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+            /** @description The species is in a different organization than the planting site. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
+    deletePlantingSiteSpeciesTarget: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                plantingSiteId: number;
+                speciesId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
+                };
+            };
+            /** @description The planting site does not exist. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
                 };
             };
         };

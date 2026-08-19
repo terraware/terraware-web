@@ -53,8 +53,3 @@ export type ProvidedUserFundingEntityData = {
   bootstrapped: boolean;
   userFundingEntity?: FundingEntity;
 };
-
-export type ProvidedFundingEntityData = {
-  fundingEntity?: FundingEntity;
-  reload: () => void;
-};

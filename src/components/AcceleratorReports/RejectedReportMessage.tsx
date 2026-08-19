@@ -3,8 +3,9 @@ import React, { type JSX } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
 
+import isEnabled from 'src/features';
 import { useLocalization } from 'src/providers/hooks';
-import { AcceleratorReportPayload } from 'src/queries/generated/reports';
+import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
 
 type RejectedReportMessageProps = {
@@ -15,11 +16,12 @@ type RejectedReportMessageProps = {
 const RejectedReportMessage = ({ report, showRejectDialog }: RejectedReportMessageProps): JSX.Element => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
+  const newReportTabEnabled = isEnabled('Report Updates July 2026');
 
   return (
     <>
       {activeLocale && report?.status === 'Needs Update' && (
-        <Box marginBottom={theme.spacing(4)}>
+        <Box marginBottom={theme.spacing(newReportTabEnabled ? 2 : 4)}>
           <Message
             body={report?.feedback || ''}
             pageButtons={

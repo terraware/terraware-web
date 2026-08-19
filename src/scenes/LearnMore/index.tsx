@@ -2,6 +2,7 @@ import React, { type JSX, useEffect, useState } from 'react';
 import { Provider } from 'react-redux';
 
 import { CssBaseline, GlobalStyles, StyledEngineProvider, Theme } from '@mui/material';
+import { setLocale as setComponentLocale } from '@terraware/web-components';
 
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import { store } from 'src/redux/store';
@@ -9,6 +10,9 @@ import strings from 'src/strings';
 import { findLocaleDetails, supportedLocales } from 'src/strings/locales';
 
 import LearnMoreView from './LearnMoreView';
+
+const detectPreferredLocale = (): string =>
+  new URLSearchParams(window.location.search).get('locale') || navigator.language || 'en';
 
 // The public Learn More page renders outside of `AppContent`, so it does not inherit the app-wide MUI
 // styling scaffolding. Reproduce the purely presentational pieces of `AppContent` here — the emotion
@@ -27,9 +31,12 @@ const LearnMore = (): JSX.Element => {
   useEffect(() => {
     const loadStrings = async () => {
       const publicLocales = supportedLocales.filter((locale) => !locale.inDevelopment);
-      const localeDetails = findLocaleDetails(publicLocales, navigator.language || 'en');
+      const localeDetails = findLocaleDetails(publicLocales, detectPreferredLocale());
       strings.setContent({ [localeDetails.id]: (await localeDetails.loadModule()).strings });
       strings.setLanguage(localeDetails.id);
+      // This page loads its strings outside of LocalizationProvider, so it has to tell the
+      // component library which locale to use.
+      setComponentLocale(localeDetails.id);
       setReady(true);
     };
 

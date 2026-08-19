@@ -25,7 +25,7 @@ export type MapDropdownLegendGroup = {
   setSelectedValue: (value: string | undefined) => void;
 } & BaseMapLegendGroup;
 
-export type MapSingleSelectLegendItem = {
+type MapSingleSelectLegendItem = {
   disabled?: boolean;
   id: string;
   label: string;
@@ -53,7 +53,7 @@ export type MapMultiSelectLegendGroup = {
   type: 'multi-select';
 } & BaseMapLegendGroup;
 
-export type MapGroupToggleLegendItem = {
+type MapGroupToggleLegendItem = {
   label: string;
   style: MapIconComponentStyle | MapFillComponentStyle;
 };
@@ -71,13 +71,13 @@ export type MapLegendGroup =
   | MapGroupToggleLegendGroup
   | MapDropdownLegendGroup;
 
-export type MapLegendItem =
+type MapLegendItem =
   | MapMultiSelectLegendItem
   | MapSingleSelectLegendItem
   | MapGroupToggleLegendItem
   | MapDropdownLegendItem;
 
-export type MapLegendProps = {
+type MapLegendProps = {
   legends: MapLegendGroup[];
 };
 

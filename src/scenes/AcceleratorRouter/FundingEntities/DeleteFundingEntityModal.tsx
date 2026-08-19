@@ -11,7 +11,7 @@ import strings from 'src/strings';
 import { FundingEntity } from 'src/types/FundingEntity';
 import useSnackbar from 'src/utils/useSnackbar';
 
-export interface DeleteFundingEntityModalProps {
+interface DeleteFundingEntityModalProps {
   open: boolean;
   fundingEntity: FundingEntity;
   onClose: () => void;

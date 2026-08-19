@@ -1,7 +1,7 @@
 import { baseApi as api } from '../baseApi';
 import { QueryTagTypes } from '../tags';
 
-export type ListSpeciesProjectNamesApiArg = {
+type ListSpeciesProjectNamesApiArg = {
   organizationId: number;
   speciesId: number;
 };
@@ -52,6 +52,4 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export { injectedRtkApi as api };
-
-export const { useListSpeciesProjectNamesQuery, useLazyListSpeciesProjectNamesQuery } = injectedRtkApi;
+export const { useLazyListSpeciesProjectNamesQuery } = injectedRtkApi;

@@ -9,7 +9,7 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 
-export type ButtonType = {
+type ButtonType = {
   title: string;
   onClick: () => void;
 };

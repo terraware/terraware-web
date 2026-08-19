@@ -3,13 +3,15 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Grid } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
+import isEnabled from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
-import { useReviewAcceleratorReportMutation } from 'src/queries/generated/reports';
+import { useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
 import { isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import EditableReportBox from './EditableReportBox';
+import EmptyFieldPlaceholder from './EmptyFieldPlaceholder';
 import { ReportBoxProps } from './ReportBox';
 
 const textAreaStyles = { textarea: { height: '120px' } };
@@ -20,6 +22,7 @@ const FinancialSummariesBox = (props: ReportBoxProps) => {
   const [financialSummaries, setFinancialSummaries] = useState<string | undefined>(report?.financialSummaries);
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
 
+  const newReportTabEnabled = isEnabled('Report Updates July 2026');
   const snackbar = useSnackbar();
 
   useEffect(() => setFinancialSummaries(report?.financialSummaries), [report?.financialSummaries]);
@@ -75,20 +78,24 @@ const FinancialSummariesBox = (props: ReportBoxProps) => {
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
-      includeBorder={!funderReportView}
+      includeBorder={!newReportTabEnabled && !funderReportView}
     >
       <Grid item xs={12}>
-        <Textfield
-          type='textarea'
-          value={financialSummaries}
-          id={'financialSummaries'}
-          label={''}
-          display={!isEditing}
-          styles={textAreaStyles}
-          onChange={setFinancialSummariesCallback}
-          preserveNewlines
-          markdown
-        />
+        {newReportTabEnabled && !isEditing && !financialSummaries ? (
+          <EmptyFieldPlaceholder text={strings.NO_FINANCIAL_SUMMARIES_ADDED} />
+        ) : (
+          <Textfield
+            type='textarea'
+            value={financialSummaries}
+            id={'financialSummaries'}
+            label={''}
+            display={!isEditing}
+            styles={textAreaStyles}
+            onChange={setFinancialSummariesCallback}
+            preserveNewlines
+            markdown
+          />
+        )}
       </Grid>
     </EditableReportBox>
   );

@@ -3,7 +3,7 @@ import { Facility, FacilityType } from 'src/types/Facility';
 import { HighOrganizationRolesValues, Organization, OrganizationRole } from 'src/types/Organization';
 import { OrganizationUser } from 'src/types/User';
 
-export const getFacilitiesByType = (organization: Organization, type: FacilityType, locale?: string) => {
+const getFacilitiesByType = (organization: Organization, type: FacilityType, locale?: string) => {
   let facilitiesByType: Facility[] = [];
   if (organization && organization.facilities) {
     facilitiesByType = organization?.facilities

@@ -10,15 +10,13 @@ export type Variable = VariableListResponse['variables'][0];
 
 export type VariableType = components['schemas']['ExistingValuePayload']['type'];
 
-export type Column = components['schemas']['TableColumnPayload'];
+type LinkVariable = components['schemas']['LinkVariablePayload'];
 
-export type LinkVariable = components['schemas']['LinkVariablePayload'];
+type SectionVariable = components['schemas']['SectionVariablePayload'];
 
-export type SectionVariable = components['schemas']['SectionVariablePayload'];
+type DateVariable = components['schemas']['DateVariablePayload'];
 
-export type DateVariable = components['schemas']['DateVariablePayload'];
-
-export type EmailVariable = components['schemas']['EmailVariablePayload'];
+type EmailVariable = components['schemas']['EmailVariablePayload'];
 
 export type TextVariable = components['schemas']['TextVariablePayload'];
 export const isTextVariable = (input: unknown): input is TableVariable => (input as TextVariable).type === 'Text';
@@ -31,7 +29,7 @@ export const isTableVariable = (input: unknown): input is TableVariable => (inpu
 
 export type TableColumn = components['schemas']['TableVariablePayload']['columns'][0];
 
-export type NumberVariable = components['schemas']['NumberVariablePayload'];
+type NumberVariable = components['schemas']['NumberVariablePayload'];
 
 export type SelectVariable = components['schemas']['SelectVariablePayload'];
 export const isSelectVariable = (input: unknown): input is SelectVariable =>
@@ -89,33 +87,13 @@ export const isSectionVariableWithValues = (input: unknown): input is SectionVar
     isArray((input as SectionVariableWithValues).children)
   );
 
-export type ImageFile = {
-  url: string;
-  id: string;
-  caption?: string;
-  citation?: string;
-};
-
 export type GetVariableHistoryResponse = components['schemas']['GetVariableWorkflowHistoryResponsePayload'];
 
 export type UpdateVariableWorkflowDetailsPayload = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload'];
 
 export type UpdateVariableOwnerPayload = components['schemas']['UpdateVariableOwnerRequestPayload'];
 
-export type VariableHistoryElement = components['schemas']['VariableWorkflowHistoryElement'];
-
 export type VariableStatusType = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload']['status'];
-
-export const VariableStatuses: VariableStatusType[] = [
-  'Approved',
-  'Complete',
-  'In Review',
-  'Incomplete',
-  'Needs Translation',
-  'Not Needed',
-  'Not Submitted',
-  'Rejected',
-];
 
 export const NonSectionVariableStatuses: VariableStatusType[] = [
   'Approved',

@@ -82,7 +82,7 @@ export default function MatchSpeciesModal(props: MatchSpeciesModalProps): JSX.El
   );
 }
 
-export interface MatchSpeciesRowProps {
+interface MatchSpeciesRowProps {
   matchSpeciesPayload: MergeOtherSpeciesPayloadPartial;
   setRecords: React.Dispatch<
     React.SetStateAction<

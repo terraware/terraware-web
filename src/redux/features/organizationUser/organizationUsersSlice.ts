@@ -5,13 +5,13 @@ import { OrganizationUser } from 'src/types/User';
 
 import { requestListOrganizationUsers } from './organizationUsersAsyncThunks';
 
-export type OrganizationUsersData = {
+type OrganizationUsersData = {
   users: OrganizationUser[];
 };
 
 const initialStateOrganizationUsers: { [key: string]: StatusT<OrganizationUsersData> } = {};
 
-export const organizationUsersListSlice = createSlice({
+const organizationUsersListSlice = createSlice({
   name: 'organizationUsersListSlice',
   initialState: initialStateOrganizationUsers,
   reducers: {},

@@ -11,10 +11,15 @@ import Checkbox from 'src/components/common/Checkbox';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useOrganization } from 'src/providers/hooks';
-import { useDeleteSpeciesMutation, useLazyGetSpeciesQuery } from 'src/queries/generated/species';
+import {
+  SpeciesDataSourcePayload,
+  useDeleteSpeciesMutation,
+  useLazyGetSpeciesQuery,
+} from 'src/queries/generated/species';
 import strings from 'src/strings';
 import {
   getConservationCategoryString,
@@ -31,6 +36,10 @@ import useSnackbar from 'src/utils/useSnackbar';
 import TextField from '../../components/common/Textfield/Textfield';
 import TfMain from '../../components/common/TfMain';
 import DeleteSpeciesModal from './DeleteSpeciesModal';
+import OverrideSpeciesModal from './OverrideSpeciesModal';
+import SpeciesDataSourceBadge from './SpeciesDataSourceBadge';
+import SpeciesDataSourceField from './SpeciesDataSourceField';
+import SpeciesNativityBadge from './SpeciesNativityBadge';
 import SpeciesProjectsSection from './SpeciesProjectsSection';
 import SpeciesProjectsTable from './SpeciesProjectsTable';
 
@@ -43,12 +52,16 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
+  const { availableProjects } = useProjects();
+  const hasMultipleProjects = (availableProjects?.length ?? 0) > 1;
   const { speciesId } = useParams<{ speciesId: string }>();
   const userCanEdit = !isContributor(selectedOrganization);
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
+  const [overrideModalOpen, setOverrideModalOpen] = useState(false);
   const snackbar = useSnackbar();
   const { orgHasParticipants } = useParticipantData();
   const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
+  const showOrgNativity = speciesIntelligenceEnabled && !hasMultipleProjects;
 
   const [getSpecies, { currentData: speciesData, isError: getSpeciesError }] = useLazyGetSpeciesQuery();
   const species = speciesData?.species;
@@ -108,6 +121,24 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
     ),
     [gridSize, theme]
   );
+
+  const dataSource = useCallback(
+    (source?: SpeciesDataSourcePayload) => (speciesIntelligenceEnabled ? source : undefined),
+    [speciesIntelligenceEnabled]
+  );
+
+  const orgScopeKnown = availableProjects !== undefined && availableProjects.length <= 1;
+  const orgNativityElement = useMemo(() => {
+    const elements = species?.projects ?? [];
+    const nativityOf = (element?: (typeof elements)[number]) =>
+      element?.overriddenNativity ?? element?.calculatedNativity;
+    const orgElement = elements.find((element) => element.projectId === undefined);
+    if (nativityOf(orgElement) || !orgScopeKnown) {
+      return orgElement;
+    }
+    return elements.find((element) => nativityOf(element)) ?? orgElement;
+  }, [species, orgScopeKnown]);
+  const orgNativity = orgNativityElement?.overriddenNativity ?? orgNativityElement?.calculatedNativity;
 
   return (
     <TfMain>
@@ -169,17 +200,21 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             />
           </GridItemWrapper>
           <GridItemWrapper>
-            <TextField
-              label={strings.COMMON_NAME}
+            <SpeciesDataSourceField
               id='commonName'
-              type='text'
+              label={strings.COMMON_NAME}
+              source={dataSource(species?.commonNameSource)}
+              tooltipTitle={strings.TOOLTIP_COMMON_NAME}
               value={species?.commonName}
-              tooltipTitle={strings.TOOLTIP_TIME_ZONE_NURSERY}
-              display={true}
             />
           </GridItemWrapper>
           <GridItemWrapper>
-            <TextField id={'family'} label={strings.FAMILY} value={species?.familyName} type='text' display={true} />
+            <SpeciesDataSourceField
+              id='family'
+              label={strings.FAMILY}
+              source={dataSource(species?.familyNameSource)}
+              value={species?.familyName}
+            />
           </GridItemWrapper>
           <GridItemWrapper>
             <TextField
@@ -305,7 +340,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               }
             />
           </GridItemWrapper>
-          <GridItemWrapper props={{ xs: isMobile ? 12 : 8 }}>
+          <GridItemWrapper props={{ xs: isMobile ? 12 : showOrgNativity ? 4 : 8 }}>
             <TextField
               id={'otherFacts'}
               label={strings.OTHER_FACTS}
@@ -314,8 +349,37 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               display={true}
             />
           </GridItemWrapper>
+          {showOrgNativity && (
+            <GridItemWrapper>
+              <Box>
+                <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontWeight={400}>
+                  {strings.STATUS}
+                </Typography>
+                <Box
+                  display='flex'
+                  alignItems='center'
+                  flexWrap='wrap'
+                  gap={theme.spacing(1)}
+                  marginTop={theme.spacing(1)}
+                >
+                  <SpeciesNativityBadge nativity={orgNativity} />
+                  <SpeciesDataSourceBadge source={orgNativityElement?.calculatedNativitySource} />
+                  {orgNativity && userCanEdit && (
+                    <Button
+                      id='override-org-nativity'
+                      label={strings.OVERRIDE}
+                      priority='secondary'
+                      type='passive'
+                      size='small'
+                      onClick={() => setOverrideModalOpen(true)}
+                    />
+                  )}
+                </Box>
+              </Box>
+            </GridItemWrapper>
+          )}
           {species && orgHasParticipants && <SpeciesProjectsTable speciesId={species.id} editMode={false} />}
-          {speciesIntelligenceEnabled && species && (
+          {speciesIntelligenceEnabled && hasMultipleProjects && species && (
             <Grid item xs={12} marginTop={theme.spacing(4)}>
               <SpeciesProjectsSection
                 speciesId={species.id}
@@ -332,6 +396,18 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
           onClose={() => setDeleteSpeciesModalOpen(false)}
           onSubmit={(toDelete: number) => void deleteSelectedSpecies(toDelete)}
           speciesToDelete={species}
+        />
+      )}
+      {overrideModalOpen && species && (
+        <OverrideSpeciesModal
+          onClose={() => setOverrideModalOpen(false)}
+          speciesId={species.id}
+          speciesName={species.scientificName}
+          targetName={selectedOrganization?.name}
+          countryCode={selectedOrganization?.countryCode}
+          botanicalCountryCode={selectedOrganization?.botanicalCountryCode}
+          currentNativity={orgNativity}
+          currentJustification={orgNativityElement?.overriddenJustification}
         />
       )}
     </TfMain>

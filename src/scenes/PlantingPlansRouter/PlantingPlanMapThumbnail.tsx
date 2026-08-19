@@ -6,7 +6,7 @@ import usePlantingSite from 'src/hooks/usePlantingSite';
 import { simplifyToBudget } from 'src/utils/geometry';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
-export type PlantingPlanMapThumbnailProps = {
+type PlantingPlanMapThumbnailProps = {
   plantingSiteId: number;
   width?: number;
   height?: number;

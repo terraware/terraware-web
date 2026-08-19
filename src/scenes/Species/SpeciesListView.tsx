@@ -5,6 +5,7 @@ import { Badge, DropdownItem, Message } from '@terraware/web-components';
 import { EditableTable, EditableTableColumn, Icon, Separator } from '@terraware/web-components';
 import {
   MRT_Cell,
+  MRT_Row,
   MRT_ShowHideColumnsButton,
   MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
@@ -34,7 +35,12 @@ import { useLocalization, useOrganization } from 'src/providers/hooks';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
 import { SearchRequestPayload } from 'src/types/Search';
-import { Species, conservationCategories, getConservationCategoryString } from 'src/types/Species';
+import {
+  Species,
+  SpeciesProjectElement,
+  conservationCategories,
+  getConservationCategoryString,
+} from 'src/types/Species';
 import { makeCsv } from 'src/utils/csv';
 import { isContributor } from 'src/utils/organization';
 import { getRequestId, setRequestId } from 'src/utils/requestsId';
@@ -45,11 +51,14 @@ import CheckDataModal from './CheckDataModal';
 import ImportSpeciesModal from './ImportSpeciesModal';
 import ProblemTooltip from './ProblemTooltip';
 import SpeciesCheckModal, { SpeciesCheckEntry } from './SpeciesCheck/SpeciesCheckModal';
-import { Nativity, getNativityLabel } from './SpeciesCheck/types';
+import { NATIVITY_VALUES, Nativity, getNativityLabel } from './SpeciesCheck/types';
 import SpeciesNativityBadge from './SpeciesNativityBadge';
 import { SpeciesSearchResultRow } from './types';
 
 const TABLE_STATE_STORAGE_KEY = 'species-list-table';
+
+const nativityOf = (element?: SpeciesProjectElement): Nativity | undefined =>
+  element?.overriddenNativity ?? element?.calculatedNativity;
 
 type ProblemsCellProps = {
   row: SpeciesSearchResultRow;
@@ -130,7 +139,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
 
   const speciesCheckEnabled = speciesIntelligenceEnabled;
-  const hasProjects = (availableProjects?.length ?? 0) > 0;
+  const hasMultipleProjects = (availableProjects?.length ?? 0) > 1;
+  const orgScopeKnown = availableProjects !== undefined && availableProjects.length <= 1;
   const { isMobile } = useDeviceInfo();
 
   const [speciesCheckOpen, setSpeciesCheckOpen] = useState(false);
@@ -143,15 +153,15 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     setSpeciesCheckOpen(true);
   }, []);
 
-  const noLocationSet = hasProjects
+  const noLocationSet = hasMultipleProjects
     ? (availableProjects ?? []).every((p) => !p.botanicalCountryCode)
     : !selectedOrganization?.botanicalCountryCode;
-  const orgLocationSet = !hasProjects && !!selectedOrganization?.botanicalCountryCode;
+  const orgLocationSet = !hasMultipleProjects && !!selectedOrganization?.botanicalCountryCode;
 
   const uncheckedSpecies = useMemo(
     () =>
       species.filter((sp) => {
-        if (hasProjects) {
+        if (hasMultipleProjects) {
           return (sp.projects ?? []).some((element) => {
             const project = availableProjects?.find((p) => p.id === element.projectId);
             return !!project?.botanicalCountryCode && !element.calculatedNativity && !element.overriddenNativity;
@@ -161,34 +171,57 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
           return false;
         }
         const orgElement = (sp.projects ?? []).find((e) => e.projectId === undefined);
-        return !orgElement || (!orgElement.calculatedNativity && !orgElement.overriddenNativity);
+        if (nativityOf(orgElement)) {
+          return false;
+        }
+        if (orgElement?.pendingNativity) {
+          return true;
+        }
+        if (orgScopeKnown) {
+          return !(sp.projects ?? []).some((element) => nativityOf(element));
+        }
+        return true;
       }),
-    [species, availableProjects, hasProjects, orgLocationSet]
+    [species, availableProjects, hasMultipleProjects, orgLocationSet, orgScopeKnown]
   );
 
   const showFirstTimeBanner = speciesCheckEnabled && noLocationSet && !firstTimeBannerDismissed;
   const showAddedBanner = speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !addedBannerDismissed;
 
-  const statusScopeSelected = projectFilter.projectId !== undefined || !hasProjects;
-  const speciesCheckRan =
-    statusScopeSelected &&
-    species.some((sp) => {
-      const element = (sp.projects ?? []).find((p) => p.projectId === projectFilter.projectId);
-      return !!(element?.calculatedNativity || element?.overriddenNativity);
-    });
+  const resolveScopeNativities = useCallback(
+    (sp: Species): Nativity[] => {
+      const elements = sp.projects ?? [];
+      const distinct = (values: (Nativity | undefined)[]): Nativity[] =>
+        NATIVITY_VALUES.filter((value) => values.includes(value));
+
+      if (hasMultipleProjects) {
+        if (projectFilter.projectId !== undefined) {
+          return distinct([nativityOf(elements.find((element) => element.projectId === projectFilter.projectId))]);
+        }
+        return distinct(elements.map((element) => nativityOf(element)));
+      }
+
+      const orgNativity = nativityOf(elements.find((element) => element.projectId === undefined));
+      if (orgNativity) {
+        return [orgNativity];
+      }
+      return orgScopeKnown ? distinct([nativityOf(elements.find((element) => nativityOf(element)))]) : [];
+    },
+    [hasMultipleProjects, projectFilter.projectId, orgScopeKnown]
+  );
+
+  const speciesCheckRan = species.some((sp) => resolveScopeNativities(sp).length > 0);
   const showStatusColumn = speciesCheckEnabled && speciesCheckRan;
 
   const statusBySpeciesId = useMemo(() => {
-    const map = new Map<number, Nativity | undefined>();
+    const map = new Map<number, Nativity[]>();
     if (showStatusColumn) {
-      const projectId = projectFilter.projectId;
       species.forEach((sp) => {
-        const element = (sp.projects ?? []).find((p) => p.projectId === projectId);
-        map.set(sp.id, element?.overriddenNativity ?? element?.calculatedNativity);
+        map.set(sp.id, resolveScopeNativities(sp));
       });
     }
     return map;
-  }, [species, projectFilter.projectId, showStatusColumn]);
+  }, [showStatusColumn, species, resolveScopeNativities]);
 
   const {
     columnOrder,
@@ -396,7 +429,11 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const onCloseImportSpeciesModal = (completed: boolean) => {
     if (completed && reloadData) {
       reloadData();
-      setCheckDataModalOpen(true);
+      if (speciesCheckEnabled) {
+        openSpeciesCheck('added');
+      } else {
+        setCheckDataModalOpen(true);
+      }
     }
     setImportSpeciesModalOpen(false);
   };
@@ -506,16 +543,23 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const StatusCell = useCallback(
     ({ cell }: { cell: MRT_Cell<SpeciesSearchResultRow> }) => {
-      const nativity = statusBySpeciesId.get(cell.row.original.id);
-      return nativity ? (
-        <SpeciesNativityBadge nativity={nativity} />
-      ) : (
-        <Badge
-          label={strings.NOT_SET}
-          backgroundColor={theme.palette.TwClrBgSecondary}
-          borderColor={theme.palette.TwClrBrdrSecondary}
-          labelColor={theme.palette.TwClrTxtSecondary}
-        />
+      const nativities = statusBySpeciesId.get(cell.row.original.id) ?? [];
+      if (nativities.length === 0) {
+        return (
+          <Badge
+            label={strings.NOT_SET}
+            backgroundColor={theme.palette.TwClrBgSecondary}
+            borderColor={theme.palette.TwClrBrdrSecondary}
+            labelColor={theme.palette.TwClrTxtSecondary}
+          />
+        );
+      }
+      return (
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: theme.spacing(0.5) }}>
+          {nativities.map((nativity) => (
+            <SpeciesNativityBadge key={nativity} nativity={nativity} />
+          ))}
+        </Box>
       );
     },
     [statusBySpeciesId, theme]
@@ -576,8 +620,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               id: 'status',
               header: strings.STATUS,
               accessorFn: (row: SpeciesSearchResultRow) => {
-                const nativity = statusBySpeciesId.get(row.id);
-                return nativity ? getNativityLabel(nativity) : strings.NOT_SET;
+                const nativities = statusBySpeciesId.get(row.id) ?? [];
+                return nativities.length ? nativities.map(getNativityLabel).join(', ') : strings.NOT_SET;
               },
               enableEditing: false,
               filterVariant: 'select' as const,
@@ -588,7 +632,11 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                 strings.UNKNOWN,
                 strings.NOT_SET,
               ],
-              filterFn: 'equals',
+              filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, filterValue: string) => {
+                const nativities = statusBySpeciesId.get(row.original.id) ?? [];
+                const labels = nativities.length ? nativities.map(getNativityLabel) : [strings.NOT_SET];
+                return labels.includes(filterValue);
+              },
               sortUndefined: 'last' as const,
               Cell: StatusCell,
             },
@@ -673,6 +721,26 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     EcosystemTypesCell,
   ]);
 
+  const showProjectSelector =
+    speciesIntelligenceEnabled && species && species.length > 0 && hasMultipleProjects && !!availableProjects;
+
+  const projectSelector =
+    showProjectSelector && availableProjects ? (
+      <Box display='flex' alignItems='center'>
+        <Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'>
+          {strings.PROJECT}
+        </Typography>
+        <ProjectsDropdown
+          allowUnselect
+          availableProjects={availableProjects}
+          label=''
+          record={projectFilter}
+          setRecord={setProjectFilter}
+          unselectLabel={strings.ALL_PROJECTS}
+        />
+      </Box>
+    ) : null;
+
   return (
     <TfMain>
       <CheckDataModal
@@ -692,7 +760,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
           open={speciesCheckOpen}
           onClose={() => setSpeciesCheckOpen(false)}
           species={species}
-          projects={availableProjects ?? []}
+          projects={hasMultipleProjects ? availableProjects ?? [] : []}
           entry={speciesCheckEntry}
           reloadSpecies={reloadData}
         />
@@ -721,7 +789,9 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               type='page'
               priority='info'
               body={strings.formatString(
-                strings.SPECIES_CHECK_ADDED_BANNER,
+                uncheckedSpecies.length === 1
+                  ? strings.SPECIES_CHECK_ADDED_BANNER_ONE
+                  : strings.SPECIES_CHECK_ADDED_BANNER,
                 String(uncheckedSpecies.length),
                 uncheckedSpecies.map((sp) => sp.scientificName).join(', ')
               )}
@@ -748,7 +818,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               alignItems: 'center',
               justifyContent: 'space-between',
               paddingBottom: theme.spacing(2),
-              paddingLeft: theme.spacing(3),
+              paddingLeft: theme.spacing(isMobile ? 1 : 3),
             }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
@@ -762,26 +832,12 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               >
                 {strings.SPECIES}
               </h1>
-              {speciesIntelligenceEnabled &&
-                species &&
-                species.length > 0 &&
-                availableProjects &&
-                availableProjects.length > 0 && (
-                  <Box display='flex' alignItems='center' marginLeft={theme.spacing(2)}>
-                    <Separator height='40px' />
-                    <Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'>
-                      {strings.PROJECT}
-                    </Typography>
-                    <ProjectsDropdown
-                      allowUnselect
-                      availableProjects={availableProjects}
-                      label=''
-                      record={projectFilter}
-                      setRecord={setProjectFilter}
-                      unselectLabel={strings.ALL_PROJECTS}
-                    />
-                  </Box>
-                )}
+              {!isMobile && projectSelector && (
+                <Box display='flex' alignItems='center' marginLeft={theme.spacing(2)}>
+                  <Separator height='40px' />
+                  {projectSelector}
+                </Box>
+              )}
             </Box>
             {species && species.length > 0 && !isMobile && userCanEdit && (
               <div>
@@ -797,8 +853,24 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                 />
               </div>
             )}
-            {isMobile && userCanEdit && <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />}
+            {isMobile && userCanEdit && (
+              <Box display='flex' alignItems='center' gap={theme.spacing(0.5)}>
+                <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' style={{ marginRight: 0 }} />
+                {speciesCheckEnabled && species && species.length > 0 && (
+                  <OptionsMenu
+                    onOptionItemClick={onOptionItemClick}
+                    optionItems={[{ label: strings.RUN_SPECIES_CHECK, value: 'runSpeciesCheck' }]}
+                    sx={{ marginLeft: 0, '& button': { margin: 0 } }}
+                  />
+                )}
+              </Box>
+            )}
           </Box>
+          {isMobile && projectSelector && (
+            <Box paddingLeft={theme.spacing(1)} paddingBottom={theme.spacing(2)}>
+              {projectSelector}
+            </Box>
+          )}
           <PageSnackbar />
         </PageHeaderWrapper>
       </Box>

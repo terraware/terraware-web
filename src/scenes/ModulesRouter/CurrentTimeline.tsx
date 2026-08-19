@@ -5,7 +5,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import strings from 'src/strings';
 
-export type TimelineStep = {
+type TimelineStep = {
   name: string;
   description: string;
 };

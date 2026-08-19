@@ -1,3 +1,3 @@
-import { EnhancedTableDetailsRow, RendererProps, TableColumnType } from '@terraware/web-components';
+import { RendererProps, TableColumnType } from '@terraware/web-components';
 
-export type { TableColumnType, EnhancedTableDetailsRow, RendererProps };
+export type { TableColumnType, RendererProps };

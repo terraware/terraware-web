@@ -8,7 +8,10 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import useBoolean from 'src/hooks/useBoolean';
 import { useLocalization } from 'src/providers';
-import { ExistingCommonIndicatorPayload, useUpdateCommonIndicatorMutation } from 'src/queries/generated/indicators';
+import {
+  ExistingCommonIndicatorPayload,
+  useUpdateCommonIndicatorMutation,
+} from 'src/queries/generated/acceleratorReportIndicators';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -38,8 +41,9 @@ export const indicatorTypeOptions = () => {
 
 export const classIdOptions = () => {
   return [
-    { label: strings.CUMULATIVE, value: 'Cumulative' },
-    { label: strings.LEVEL, value: 'Level' },
+    { label: strings.NOT_CUMULATIVE, value: 'Not Cumulative' },
+    { label: strings.LIFETIME_CUMULATIVE, value: 'Lifetime Cumulative' },
+    { label: strings.YEARLY_CUMULATIVE, value: 'Yearly Cumulative' },
   ];
 };
 
@@ -206,7 +210,7 @@ export default function EditCommonIndicatorModal({
           <Dropdown
             fullWidth
             id='classId'
-            label={strings.CUMULATIVE_OR_LEVEL}
+            label={strings.IS_CUMULATIVE}
             onChange={onChangeCallback('classId')}
             options={classIdOptions()}
             selectedValue={record.classId}

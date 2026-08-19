@@ -2,7 +2,7 @@ import React, { type JSX } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 
-export interface FluidWrapperProps {
+interface FluidWrapperProps {
   height?: string;
   children: JSX.Element;
 }

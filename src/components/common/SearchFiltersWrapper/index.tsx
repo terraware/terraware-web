@@ -14,7 +14,7 @@ import ExportTableComponent, { ExportTableProps } from './ExportTableComponent';
 import FeaturedFilters from './FeaturedFilters';
 import IconFilters from './IconFilters';
 
-export type SearchInputProps = {
+type SearchInputProps = {
   search: string;
   onSearch: (search: string) => void;
 };

@@ -1,13 +1,16 @@
 import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
-import { Dropdown } from '@terraware/web-components';
+import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
 import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import isEnabled from 'src/features';
+import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
+import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useTimeZones } from 'src/providers';
 import { OrganizationService } from 'src/services';
 import { Organization, OrganizationType, OrganizationTypes, organizationTypeLabel } from 'src/types/Organization';
@@ -41,6 +44,15 @@ export default function EditOrganizationModal({
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
   const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;
+
+  const { availableProjects } = useProjects();
+  const showBotanicalCountry = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) < 2;
+  const { botanicalCountries } = useBotanicalCountries(!showBotanicalCountry);
+  const botanicalCountryOptions: DropdownItem[] = organizationRecord.countryCode
+    ? botanicalCountries
+        .filter((botanicalCountry) => botanicalCountry.countryCode === organizationRecord.countryCode)
+        .map((botanicalCountry) => ({ label: botanicalCountry.name, value: botanicalCountry.code }))
+    : [];
 
   useEffect(() => {
     if (open) {
@@ -172,6 +184,8 @@ export default function EditOrganizationModal({
                 ...previousOrganizationRecord,
                 countryCode,
                 countrySubdivisionCode: undefined,
+                // Changing the country clears the botanical country, which may no longer be valid.
+                botanicalCountryCode: undefined,
               })
             );
             setCountryError('');
@@ -184,6 +198,21 @@ export default function EditOrganizationModal({
           countrySubdivisionError={subdivisionError}
           paddingBottom={theme.spacing(4)}
         />
+        {showBotanicalCountry && (
+          <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 }, paddingBottom: theme.spacing(4) }}>
+            <Dropdown
+              id='botanicalCountry'
+              label={strings.BOTANICAL_COUNTRY}
+              placeholder={strings.SELECT}
+              options={botanicalCountryOptions}
+              selectedValue={organizationRecord.botanicalCountryCode}
+              onChange={(value: string) => onChange('botanicalCountryCode', value || undefined)}
+              fullWidth
+              autocomplete
+              disabled={!organizationRecord.countryCode}
+            />
+          </Grid>
+        )}
         <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
           <TimeZoneSelector
             selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}

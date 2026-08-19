@@ -5,7 +5,7 @@ import Form, { PageFormProps as FormProps } from '@terraware/web-components/comp
 import PageWorkflow from 'src/components/DocumentProducer/PageWorkflow';
 import { WorkflowSuccessProps } from 'src/redux/hooks/useWorkflowSuccess';
 
-export type PageFormProps = FormProps & WorkflowSuccessProps;
+type PageFormProps = FormProps & WorkflowSuccessProps;
 
 const PageForm = (props: PageFormProps): JSX.Element => {
   const { ...formProps }: FormProps = props;

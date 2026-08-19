@@ -7,7 +7,7 @@ import {
 } from '@terraware/web-components/virtualWalkthrough';
 
 import { API_PATHS } from 'src/constants';
-import { useLocalization, useUser } from 'src/providers';
+import { useUser } from 'src/providers';
 import {
   useLazyListSplatDetailsQuery,
   useSetObservationSplatAnnotationsMutation,
@@ -42,7 +42,6 @@ const VirtualWalkthroughWrapper = ({
   isFullScreen = false,
   onToggleFullScreen,
 }: VirtualWalkthroughViewerProps) => {
-  const { strings } = useLocalization();
   const { isAllowed } = useUser();
   const isSuperAdmin = isAllowed('FREE_FLY_VIRTUAL_WALKTHROUGH');
 
@@ -177,55 +176,6 @@ const VirtualWalkthroughWrapper = ({
       showFreeFly={isSuperAdmin}
       isFullScreen={isFullScreen}
       onToggleFullScreen={onToggleFullScreen}
-      strings={{
-        addAnnotation: strings.ADD_ANNOTATION,
-        deselectAnnotation: strings.DESELECT_ANNOTATION,
-        deleteAnnotation: strings.DELETE_ANNOTATION,
-        ar: strings.AR,
-        vr: strings.VR,
-        edit: strings.EDIT,
-        freeFly: strings.FREE_FLY,
-        boundedFly: strings.BOUNDED_FLY,
-        cancel: strings.CANCEL,
-        save: strings.SAVE,
-        controlsInfoPane: {
-          controls: strings.CONTROLS,
-          annotations: strings.ANNOTATIONS,
-          autoRotate: strings.AUTO_ROTATE,
-          orbit: strings.ORBIT,
-          leftMouse: strings.LEFT_MOUSE,
-          touchDrag: strings.TOUCH_DRAG,
-          pan: strings.PAN,
-          middleMouse: strings.MIDDLE_MOUSE,
-          swipe: strings.SWIPE,
-          look: strings.LOOK,
-          rightMouse: strings.RIGHT_MOUSE,
-          zoom: strings.ZOOM,
-          mouseWheel: strings.MOUSE_WHEEL,
-          pinch: strings.PINCH,
-          fly: strings.FLY,
-          arrowKeys: strings.ARROW_KEYS,
-          flyFaster: strings.FLY_FASTER,
-          shift: strings.SHIFT,
-          flySlower: strings.FLY_SLOWER,
-          ctrl: strings.CTRL,
-          resetCamera: strings.RESET_CAMERA,
-        },
-        cameraInfo: {
-          cameraFocusPoint: strings.CAMERA_FOCUS_POINT,
-          cameraInfo: strings.CAMERA_INFO,
-          cameraPosition: strings.CAMERA_POSITION,
-        },
-        annotationEditPane: {
-          editAnnotation: strings.EDIT_ANNOTATION,
-          title: strings.TITLE,
-          titleTooltip: strings.ANNOTATION_TITLE_TOOLTIP,
-          description: strings.DESCRIPTION,
-          descriptionTooltip: strings.ANNOTATION_DESCRIPTION_TOOLTIP,
-          label: strings.LABEL,
-          labelTooltip: strings.ANNOTATION_LABEL_TOOLTIP,
-        },
-      }}
     />
   );
 };

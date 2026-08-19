@@ -5,7 +5,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import { Statuses } from '../features/asyncUtils';
 
-export type SelectedState = {
+type SelectedState = {
   status: Statuses;
   error?: string;
   updatedAt?: number;

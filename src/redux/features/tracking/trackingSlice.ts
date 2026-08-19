@@ -23,7 +23,7 @@ type SiteData = {
 // Define the initial state
 const initialState: { [organizationId: string]: StatusT<SitesData> } & SitesData = {};
 
-export const trackingSlice = createSlice({
+const trackingSlice = createSlice({
   name: 'trackingSlice',
   initialState,
   reducers: {
@@ -64,7 +64,7 @@ type SearchData = {
 // Define the initial state for search
 const initialSearchState: SearchData = {};
 
-export const plantingSitesSearchResultsSlice = createSlice({
+const plantingSitesSearchResultsSlice = createSlice({
   name: 'plantingSitesResultsSlice',
   initialState: initialSearchState,
   reducers: {
@@ -90,7 +90,7 @@ type SiteReportedPlantsPayload = {
 
 const initialSiteReportedPlantsState: Record<number, SiteReportedPlantsData> = {};
 
-export const siteReportedPlantsSlice = createSlice({
+const siteReportedPlantsSlice = createSlice({
   name: 'siteReportedPlantsSlice',
   initialState: initialSiteReportedPlantsState,
   reducers: {
@@ -100,8 +100,6 @@ export const siteReportedPlantsSlice = createSlice({
     },
   },
 });
-
-export const { setSiteReportedPlantsAction } = siteReportedPlantsSlice.actions;
 
 // Monitoring plots
 
@@ -117,7 +115,7 @@ const monitoringPlotsSlice = createSlice({
 });
 
 const initialStatePlantingSiteList: { [key: string]: StatusT<PlantingSite[]> } = {};
-export const plantingSiteListSlice = createSlice({
+const plantingSiteListSlice = createSlice({
   name: 'plantingSiteListSlice',
   initialState: initialStatePlantingSiteList,
   reducers: {},
@@ -126,7 +124,7 @@ export const plantingSiteListSlice = createSlice({
   },
 });
 
-export const projectPlantingSiteListSlice = createSlice({
+const projectPlantingSiteListSlice = createSlice({
   name: 'projectPlantingSiteListSlice',
   initialState: initialStatePlantingSiteList,
   reducers: {},
@@ -136,7 +134,7 @@ export const projectPlantingSiteListSlice = createSlice({
 });
 
 const initialStatePlantingSite: { [key: string]: StatusT<PlantingSite> } = {};
-export const plantingSiteSlice = createSlice({
+const plantingSiteSlice = createSlice({
   name: 'plantingSiteSlice',
   initialState: initialStatePlantingSite,
   reducers: {},

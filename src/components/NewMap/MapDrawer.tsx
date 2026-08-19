@@ -9,7 +9,7 @@ import './styles.scss';
 
 export type MapDrawerSize = 'small' | 'medium' | 'large';
 
-export type MapDrawerProp = {
+type MapDrawerProp = {
   children?: ReactNode;
   drawerRef?: MutableRefObject<HTMLDivElement | null>;
   headerComponent?: ReactNode;

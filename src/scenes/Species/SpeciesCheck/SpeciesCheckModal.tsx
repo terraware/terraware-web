@@ -1,9 +1,11 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
+import { Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
+import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useUpdateProjectMutation } from 'src/queries/generated/projects';
 import {
@@ -11,7 +13,6 @@ import {
   useAcceptProblemSuggestionMutation,
   useOverrideProjectSpeciesDataMutation,
 } from 'src/queries/generated/species';
-import { useListBotanicalCountriesQuery } from 'src/queries/search/botanicalCountries';
 import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
@@ -28,7 +29,7 @@ import { LocationEdit, LocationTarget, Nativity, ORG_TARGET_KEY, OverrideEdit, p
 
 export type SpeciesCheckEntry = 'first-time' | 'menu' | 'added';
 
-export type SpeciesCheckModalProps = {
+type SpeciesCheckModalProps = {
   open: boolean;
   onClose: () => void;
   species: Species[];
@@ -47,10 +48,11 @@ const SpeciesCheckModal = ({
   entry,
   reloadSpecies,
 }: SpeciesCheckModalProps): JSX.Element => {
+  const theme = useTheme();
   const snackbar = useSnackbar();
   const { countries } = useLocalization();
   const { selectedOrganization, reloadOrganizations } = useOrganization();
-  const { data: botanicalCountries } = useListBotanicalCountriesQuery(undefined, { skip: !open });
+  const { botanicalCountries } = useBotanicalCountries(!open);
 
   const [updateProject] = useUpdateProjectMutation();
   const [acceptProblem] = useAcceptProblemSuggestionMutation();
@@ -84,7 +86,7 @@ const SpeciesCheckModal = ({
       {
         key: ORG_TARGET_KEY,
         projectId: undefined,
-        name: strings.NO_PROJECT,
+        name: selectedOrganization?.name ?? strings.NO_PROJECT,
         countryCode: orgCountryCode,
         botanicalCountryCode: selectedOrganization?.botanicalCountryCode,
         isOrg: true,
@@ -94,6 +96,9 @@ const SpeciesCheckModal = ({
 
   const targetsRef = useRef(targets);
   targetsRef.current = targets;
+
+  const speciesRef = useRef(species);
+  speciesRef.current = species;
 
   useEffect(() => {
     if (!open) {
@@ -109,7 +114,7 @@ const SpeciesCheckModal = ({
     setLocationEdits(initial);
     setStep(0);
     setNativeMode('list');
-    setNameSelected(new Set());
+    setNameSelected(new Set(speciesRef.current.filter((sp) => (sp.problems?.length ?? 0) > 0).map((sp) => sp.id)));
     setNativeSelected(new Set());
     setOverrideEdits({});
     setShowCancel(false);
@@ -138,7 +143,7 @@ const SpeciesCheckModal = ({
     [countries]
   );
   const botanicalNameByCode = useCallback(
-    (code?: string) => botanicalCountries?.find((botanicalCountry) => botanicalCountry.code === code)?.name,
+    (code?: string) => botanicalCountries.find((botanicalCountry) => botanicalCountry.code === code)?.name,
     [botanicalCountries]
   );
 
@@ -252,8 +257,8 @@ const SpeciesCheckModal = ({
           }).unwrap();
         })
       );
-      if (targets.some((target) => target.isOrg)) {
-        await reloadOrganizations();
+      if (targets.some((target) => target.isOrg) && selectedOrganization) {
+        await reloadOrganizations(selectedOrganization.id);
       }
       reloadSpecies();
       setLocationsSubmitted(true);
@@ -410,17 +415,9 @@ const SpeciesCheckModal = ({
           disabled={busy}
         />
       ) : null;
-      const namePrimary =
-        speciesWithProblems.length === 0 ? (
-          <Button key='next' label={strings.NEXT} onClick={() => goToStep('native')} disabled={busy} />
-        ) : (
-          <Button
-            key='acceptNext'
-            label={strings.ACCEPT_AND_NEXT}
-            onClick={() => void onAcceptNames()}
-            disabled={busy}
-          />
-        );
+      const namePrimary = (
+        <Button key='next' label={strings.NEXT} onClick={() => void onAcceptNames()} disabled={busy} />
+      );
       return [cancelButton, nameBackButton, namePrimary].filter((button): button is JSX.Element => button !== null);
     }
 
@@ -454,16 +451,12 @@ const SpeciesCheckModal = ({
         disabled={busy}
       />
     );
-    const primary = !hasAnyPending ? (
-      <Button key='finish' label={strings.FINISH} onClick={() => void onFinish()} disabled={busy} />
-    ) : (
-      <Button
-        key='override'
-        label={strings.OVERRIDE}
-        onClick={() => (nativeSelected.size > 0 ? setNativeMode('override') : void onFinish())}
-        disabled={busy}
-      />
-    );
+    const primary =
+      nativeSelected.size > 0 ? (
+        <Button key='override' label={strings.OVERRIDE} onClick={() => setNativeMode('override')} disabled={busy} />
+      ) : (
+        <Button key='done' label={strings.DONE} onClick={() => void onFinish()} disabled={busy} />
+      );
     return [cancelButton, backButton, primary];
   }, [
     allLocationEditsValid,
@@ -471,7 +464,6 @@ const SpeciesCheckModal = ({
     busy,
     currentKey,
     goToStep,
-    hasAnyPending,
     includeSetLocation,
     nativeMode,
     nativeSelected.size,
@@ -480,7 +472,6 @@ const SpeciesCheckModal = ({
     onOverride,
     onSetLocations,
     requestCancel,
-    speciesWithProblems.length,
     targets.length,
   ]);
 
@@ -503,12 +494,24 @@ const SpeciesCheckModal = ({
       >
         <SpeciesCheckStepper steps={stepLabels} activeStep={Math.min(step, stepLabels.length - 1)} />
 
+        {(currentKey === 'name' || (currentKey === 'native' && nativeMode === 'list')) && (
+          <Typography
+            fontSize='16px'
+            color={theme.palette.TwClrTxt}
+            textAlign='left'
+            marginTop={theme.spacing(2)}
+            marginBottom={theme.spacing(1)}
+          >
+            {strings.SPECIES_CHECK_UPDATE_HINT}
+          </Typography>
+        )}
+
         {currentKey === 'setLocation' && (
           <SetLocationStep
             targets={targets}
             edits={locationEdits}
             countries={countries ?? []}
-            botanicalCountries={botanicalCountries ?? []}
+            botanicalCountries={botanicalCountries}
             onChange={(targetKey, edit) => setLocationEdits((previous) => ({ ...previous, [targetKey]: edit }))}
           />
         )}

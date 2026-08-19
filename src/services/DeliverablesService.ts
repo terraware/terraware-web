@@ -33,16 +33,14 @@ export const ENDPOINT_DELIVERABLE_DOCUMENT = '/api/v1/accelerator/deliverables/{
 const DELIVERABLES_IMPORT_ENDPOINT = '/api/v1/accelerator/deliverables/import';
 
 export type ListDeliverablesRequestParams = paths[typeof ENDPOINT_DELIVERABLES]['get']['parameters']['query'];
-export type GetDeliverableResponsePayload =
+type GetDeliverableResponsePayload =
   paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['get']['responses'][200]['content']['application/json'];
 
-export type UpdateSubmissionRequestPayload =
+type UpdateSubmissionRequestPayload =
   paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['requestBody']['content']['application/json'];
-export type UpdateSubmissionResponsePayload =
+type UpdateSubmissionResponsePayload =
   paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION]['put']['responses'][200]['content']['application/json'];
-export type SubmitSubmissionResponsePayload =
-  paths[typeof ENDPOINT_DELIVERABLE_SUBMISSION_SUBMIT]['post']['responses'][200]['content']['application/json'];
-export type ImportDeliverablesResponsePayload =
+type ImportDeliverablesResponsePayload =
   paths[typeof DELIVERABLES_IMPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 
 const httpDeliverables = HttpService.root(ENDPOINT_DELIVERABLES);

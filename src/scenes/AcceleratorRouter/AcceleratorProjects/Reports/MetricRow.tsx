@@ -15,7 +15,7 @@ import {
   ReportCommonIndicatorPayload,
   ReportProjectIndicatorPayload,
   useReviewAcceleratorReportIndicatorsMutation,
-} from 'src/queries/generated/reports';
+} from 'src/queries/generated/acceleratorReports';
 import { IndicatorType } from 'src/types/AcceleratorReport';
 import { formatPrecision } from 'src/utils/numbers';
 import useForm from 'src/utils/useForm';
@@ -137,7 +137,7 @@ const MetricRow = ({
   const hasTargetValue = metric.target !== undefined && metric.target !== null;
 
   const currentYearProgress = metric.currentYearProgress;
-  const isCumulative = metric.classId === 'Cumulative';
+  const isCumulative = metric.classId === 'Lifetime Cumulative';
   const previousYearCumulativeTotal = metric.previousYearCumulativeTotal ?? 0;
   const hasCumulativeEntries = (currentYearProgress?.length ?? 0) > 0 || previousYearCumulativeTotal !== 0;
   const cumulativeValue = isCumulative
@@ -627,5 +627,4 @@ const MetricRow = ({
   );
 };
 
-export { isAutoCalculatedIndicator };
 export default MetricRow;

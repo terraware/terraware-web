@@ -1,7 +1,7 @@
 import { DropdownItem } from '@terraware/web-components';
 
 import { components } from 'src/api/types/generated-schema';
-import { SpeciesLookupDetailsResponsePayload, SpeciesResponseElement } from 'src/queries/generated/species';
+import { SpeciesResponseElement } from 'src/queries/generated/species';
 import strings from 'src/strings';
 
 import { ArrayDeref, NonUndefined } from './utils';
@@ -20,13 +20,9 @@ export type PlantMaterialSourcingMethod = ArrayDeref<NonUndefined<Species['plant
 
 export type SuccessionalGroup = ArrayDeref<NonUndefined<Species['successionalGroups']>>;
 
-export type NativeStatus = 'Native' | 'Non-Native';
-
 export type EcosystemType = ArrayDeref<NonUndefined<Species['ecosystemTypes']>>;
 
 export type GrowthForm = ArrayDeref<NonUndefined<Species['growthForms']>>;
-
-export type SeedStorageBehavior = NonUndefined<Species['seedStorageBehavior']>;
 
 export function conservationCategories() {
   return [
@@ -39,13 +35,6 @@ export function conservationCategories() {
     { label: strings.IUCN_LEAST_CONCERN, value: 'LC' },
     { label: strings.IUCN_DATA_DEFICIENT, value: 'DD' },
     { label: strings.IUCN_NOT_EVALUATED, value: 'NE' },
-  ];
-}
-
-export function nativeStatuses() {
-  return [
-    { label: strings.NATIVE, value: 'Native' },
-    { label: strings.NON_NATIVE, value: 'Non-Native' },
   ];
 }
 
@@ -337,7 +326,7 @@ export function getSuccessionalGroupsString(species?: Species): string {
     .join(', ');
 }
 
-export const getWoodDensityLevel = (value: WoodDensityLevel): string => {
+const getWoodDensityLevel = (value: WoodDensityLevel): string => {
   switch (value) {
     case 'Family':
       return strings.FAMILY;
@@ -368,20 +357,9 @@ export const getWoodDensityLevelOptions = (
       ]
     : [];
 
-export type SpeciesWithScientificName = Species & {
-  scientificName?: string;
-};
-
-export type SpeciesById = Map<number, SpeciesWithScientificName>;
-
 export enum SpeciesRequestError {
   PreexistingSpecies = 'A species with that name already exists.',
-  // Server returned any other error (3xx, 4xx, 5xxx), or server did not respond, or there was an error
-  // setting up the request. In other words, there was a developer error or server outage.
-  RequestFailed = 'AN_UNRECOVERABLE_ERROR_OCCURRED',
 }
-
-export type SpeciesDetails = SpeciesLookupDetailsResponsePayload;
 
 export type SuggestedSpecies = Partial<Species> & { scientificName: string };
 

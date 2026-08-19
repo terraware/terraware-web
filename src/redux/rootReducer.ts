@@ -27,7 +27,7 @@ import trackingReducers from './features/tracking/trackingSlice';
 import userAnalyticsReducers from './features/user/userAnalyticsSlice';
 
 // assembly of app reducers
-export const reducers = {
+const reducers = {
   ...acceleratorReducers,
   ...applicationReducers,
   ...deliverablesReducers,

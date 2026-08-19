@@ -2,51 +2,21 @@
  * String table rendering functions. This is not called at runtime, just as part of the build
  * process.
  *
- * It needs to be a CommonJS module because it is invoked by Webpack in dev environments.
+ * Parsing the CSVs, deriving the gibberish locale, and rendering a table as TypeScript are shared
+ * with @terraware/web-components, which builds its own string tables the same way. What's left
+ * here is the strings this application adds outside of the CSVs.
+ *
+ * It needs to be a CommonJS module because it is invoked by Rsbuild's config in dev environments.
  */
-const btoa = require('btoa');
 const fs = require('fs/promises');
-const { parse } = require('csv-parse/sync');
 const path = require('path');
-
-/**
- * Loads a CSV strings file into an object.
- *
- * @param {string} [csvData] - Contents of CSV file
- * @return {object} - The strings table with keys and values from the first two CSV columns
- */
-function csvToStrings(csvData) {
-  const rows = parse(csvData, {
-    // Skip header row
-    from: 2,
-    // Only rows for strings that have comments have 3 fields.
-    relax_column_count_less: true,
-    // Skip empty "row" that is really just the terminating linefeed
-    skip_empty_lines: true,
-  });
-
-  return rows.reduce((result, row) => {
-    result[row[0]] = row[1];
-    return result;
-  }, {});
-}
-
-/**
- * Renders a strings object as a JavaScript statement that exports a constant called "strings".
- *
- * @param {object} [stringsMap] - Strings to render as JavaScript.
- * @return {string} - A JavaScript statement that exports a constant called "strings"
- */
-function stringsToJS(stringsMap) {
-  const json = JSON.stringify(stringsMap, null, 2);
-
-  return `export const strings = ${json};\n`;
-}
+const { csvToStrings, generateGibberish, stringsToTypeScript } = require('@terraware/web-components/strings/export');
+const { strings: componentStrings } = require('@terraware/web-components/strings/strings-en');
 
 /**
  * Returns a list of extra strings to include in the string table for a locale. This is necessary
- * because Phrase doesn't work well with punctuation-only strings such as list separators; including
- * them in a translation order can cause the order to get stuck indefinitely.
+ * because some translation frameworks don't work well with punctuation-only strings such as list
+ * separators; including them in a translation order can cause the order to get stuck indefinitely.
  *
  * @param {string} [locale] - Locale whose extra strings should be returned.
  * @return {{LIST_SEPARATOR_SECONDARY: string, LIST_SEPARATOR: string, TRUNCATED_TEXT_MORE_SEPARATOR: string}}
@@ -86,21 +56,19 @@ async function exportStrings(englishStrings, localizedStrings, locale, targetDir
     }
   }
 
-  const javascript = stringsToJS(stringsMap);
+  const exportPath = path.resolve(targetDir, `strings-${locale}.ts`);
 
-  const exportPath = path.resolve(targetDir, `strings-${locale}.js`);
-
-  await fs.writeFile(exportPath, javascript, { encoding: 'utf-8' });
+  await fs.writeFile(exportPath, await stringsToTypeScript(stringsMap, exportPath), { encoding: 'utf-8' });
 }
 
 /**
- * Converts a CSV strings file to a JavaScript source file that exports a constant called "strings".
+ * Converts a CSV strings file to a TypeScript source file that exports a constant called "strings".
  * This will be an object that has the same keys as the English strings file; the English strings
  * will be used for any keys that aren't translated yet.
  *
  * @param {string} [csvPath] - Location of CSV file. The filename is assumed to be the locale
  * code with a ".csv" suffix.
- * @param {string} [targetDir] - Directory to write JS file to
+ * @param {string} [targetDir] - Directory to write the TypeScript file to
  * @param {boolean} [defaultToEnglish] - If true, output the English text for any strings that
  * don't have translations in the CSV file.
  * @return {Promise<void>}
@@ -131,54 +99,48 @@ async function convertCsvFile(csvPath, targetDir, defaultToEnglish = true) {
 }
 
 /**
- * Transforms the English strings table into gibberish.
+ * Throws if this application defines a string the component library already provides.
  *
- * 1. Split the English string into whitespace-delimited words.
- * 2. Reverse the order of the words.
- * 3. Render each word as a base64 encoding of its UTF-8 representation, except for words that look
- *    like format string placeholders.
+ * The component library's table is the base layer of the string table, so redefining one of its
+ * keys would shadow it at runtime and let the two copies of the translation drift apart. The type
+ * check in index.tsx rejects the same collision; this catches it at the step that builds the
+ * tables, which runs first.
  *
- * @param {object} [english] - English strings table.
- * @return {object} - Gibberish strings table.
+ * The comparison uses the component library's built table, which is what the application merges
+ * with at runtime, rather than the CSV it was built from. This application's own table can't be
+ * read the same way: this is the code that generates it.
+ *
+ * @param {string} [csvDir] - Directory holding this application's CSV files.
+ * @return {Promise<void>}
  */
-function generateGibberish(english) {
-  const overrides = {
-    MONITORING_DATE_FORMAT: 'HH:mm d MMM',
+async function checkForComponentDuplicates(csvDir) {
+  const appStrings = {
+    ...extraStrings('en'),
+    ...csvToStrings(await fs.readFile(path.join(csvDir, 'en.csv'), { encoding: 'utf-8' })),
   };
 
-  const encoder = new TextEncoder();
-  const gibberish = Object.assign({}, english);
-  Object.keys(english).forEach((key) => {
-    const englishString = english[key];
-    const words = englishString.split(' ').reverse();
-    const encodedWords = words.map((word) => {
-      if (word.startsWith('{')) {
-        return word;
-      } else {
-        const uint8Array = encoder.encode(word);
-        const binary = Array(uint8Array.length)
-          .fill('')
-          .map((_, i) => String.fromCharCode(uint8Array[i]))
-          .join('');
-        return btoa(binary).replace(/=/g, '');
-      }
-    });
-    gibberish[key] = encodedWords.join(' ');
-  });
+  const duplicates = Object.keys(componentStrings).filter((key) => key in appStrings);
 
-  return { ...gibberish, ...overrides };
+  if (duplicates.length > 0) {
+    throw new Error(
+      `@terraware/web-components already defines these strings, so they must be removed from ` +
+        `${csvDir}: ${duplicates.join(', ')}`
+    );
+  }
 }
 
 /**
- * Converts the CSV files for all locales to JavaScript source files that export a symbol
+ * Converts the CSV files for all locales to TypeScript source files that export a symbol
  * "strings." The list of locales is determined by the presence of CSV files.
  */
 async function convertAllLocales(csvDir, stringsDir, defaultToEnglish = true) {
+  await checkForComponentDuplicates(csvDir);
+
   const files = await fs.readdir(csvDir);
   const conversions = files.map(async (filename) => {
     if (filename.endsWith('.csv')) {
       // eslint-disable no-console
-      console.log(`Converting ${filename} to JavaScript`);
+      console.log(`Converting ${filename} to TypeScript`);
       await convertCsvFile(`${csvDir}/${filename}`, stringsDir, defaultToEnglish);
     }
   });

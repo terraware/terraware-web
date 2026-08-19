@@ -8,7 +8,10 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
-import { ExistingProjectIndicatorPayload, useUpdateProjectIndicatorMutation } from 'src/queries/generated/indicators';
+import {
+  ExistingProjectIndicatorPayload,
+  useUpdateProjectIndicatorMutation,
+} from 'src/queries/generated/acceleratorReportIndicators';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -161,7 +164,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
         <Grid item xs={12}>
           <Dropdown
             id='classId'
-            label={strings.CUMULATIVE_OR_LEVEL}
+            label={strings.IS_CUMULATIVE}
             onChange={onChangeCallback('classId')}
             options={classIdOptions()}
             selectedValue={record.classId}

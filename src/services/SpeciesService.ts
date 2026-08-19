@@ -14,10 +14,10 @@ import SearchService from './SearchService';
  * Types exported from service
  */
 
-export type SpeciesUploadTemplate = {
+type SpeciesUploadTemplate = {
   template?: string;
 };
-export type SpeciesUploadStatusDetails = {
+type SpeciesUploadStatusDetails = {
   uploadStatus?: GetUploadStatusResponsePayload;
 };
 

@@ -4,13 +4,13 @@ import { Box, useTheme } from '@mui/material';
 
 import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
 import { useLocalization, useUser } from 'src/providers';
-import { AcceleratorReportPayload, useReviewAcceleratorReportMutation } from 'src/queries/generated/reports';
+import { AcceleratorReportPayload, useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import InternalComment from './InternalComment';
 
-export type MetadataProps = {
+type MetadataProps = {
   report: AcceleratorReportPayload;
   projectId: number;
 };

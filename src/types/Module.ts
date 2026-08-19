@@ -16,7 +16,6 @@ export type ModuleEventWithStartTime = Omit<ModuleEvent, 'startTime'> & { startT
 
 export type ModuleEventStatus = components['schemas']['ModuleEvent']['status'];
 export type ModuleEventType = ModuleEvent['type'];
-export type ImportModuleProblemElement = components['schemas']['ImportModuleProblemElement'];
 
 export const getEventType = (input: ModuleEventType): string => {
   switch (input) {

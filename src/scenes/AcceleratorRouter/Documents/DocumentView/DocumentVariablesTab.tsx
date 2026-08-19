@@ -93,7 +93,7 @@ const tableCellRenderer = (props: RendererProps<any>): JSX.Element => {
   return <CellRenderer {...props} />;
 };
 
-export type DocumentVariablesProps = {
+type DocumentVariablesProps = {
   projectId?: number;
 };
 

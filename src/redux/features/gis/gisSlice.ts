@@ -7,7 +7,7 @@ import { requestGetGis } from './gisAsyncThunks';
 
 const initialGisState: { [key: string]: StatusT<GisResponse> } = {};
 
-export const gisSlice = createSlice({
+const gisSlice = createSlice({
   name: 'gisSlice',
   initialState: initialGisState,
   reducers: {},

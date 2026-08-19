@@ -5,6 +5,8 @@
  */
 export enum QueryTagTypes {
   AcceleratorProjects = 'AcceleratorProjects',
+  AcceleratorReport = 'AcceleratorReport',
+  AcceleratorReportMedia = 'AcceleratorReportMedia',
   AccessionWithdrawals = 'AccessionWithdrawals',
   Accessions = 'Accessions',
   Activities = 'Activities',
@@ -36,18 +38,20 @@ export enum QueryTagTypes {
   PlantingDateRequests = 'PlantingDateRequests',
   PlantingSeasonDates = 'PlantingSeasonDates',
   PlantingSeasons = 'PlantingSeasons',
+  PlantingSiteSpeciesTargets = 'PlantingSiteSpeciesTargets',
   PlantingSiteSurvivalRate = 'PlantingSiteSurvivalRate',
   PlantingSites = 'PlantingSites',
+  ProjectAcceleratorReport = 'ProjectAcceleratorReport',
+  ProjectAcceleratorReportConfigs = 'ProjectAcceleratorReportConfigs',
+  ProjectAcceleratorReportTargets = 'ProjectAcceleratorReportTargets',
+  ProjectAcceleratorReportYear = 'ProjectAcceleratorReportYear',
   ProjectInternalUsers = 'ProjectInternalUsers',
   ProjectModules = 'ProjectModules',
-  ProjectReportConfigs = 'ProjectReportConfigs',
   ProjectScores = 'ProjectScores',
   ProjectVotes = 'ProjectVotes',
   Projects = 'Projects',
-  PublishedReportMedia = 'PublishedReportMedia',
-  PublishedReports = 'PublishedReports',
-  ReportMedia = 'ReportMedia',
-  Reports = 'Reports',
+  PublishedAcceleratorReport = 'PublishedAcceleratorReport',
+  PublishedAcceleratorReportMedia = 'PublishedAcceleratorReportMedia',
   SeedbankSummary = 'SeedbankSummary',
   SeedFundReportMedia = 'SeedFundReportMedia',
   SeedFundReports = 'SeedFundReports',
@@ -60,3 +64,30 @@ export enum QueryTagTypes {
 }
 
 export const QUERY_TAGS = Object.values(QueryTagTypes);
+
+export const acceleratorReportTag = (reportId: number) => ({ type: QueryTagTypes.AcceleratorReport, id: reportId });
+
+export const acceleratorReportMediaTag = (fileId: number) => ({
+  type: QueryTagTypes.AcceleratorReportMedia,
+  id: fileId,
+});
+
+export const projectAcceleratorReportTag = (projectId: number) => ({
+  type: QueryTagTypes.ProjectAcceleratorReport,
+  id: projectId,
+});
+
+export const projectAcceleratorReportConfigsTag = (projectId: number) => ({
+  type: QueryTagTypes.ProjectAcceleratorReportConfigs,
+  id: projectId,
+});
+
+export const projectAcceleratorReportTargetsTag = (projectId: number) => ({
+  type: QueryTagTypes.ProjectAcceleratorReportTargets,
+  id: projectId,
+});
+
+export const projectAcceleratorReportYearTag = (projectId: number, year: number) => ({
+  type: QueryTagTypes.ProjectAcceleratorReportYear,
+  id: `${projectId}-${year}`,
+});

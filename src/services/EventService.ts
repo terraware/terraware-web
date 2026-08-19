@@ -4,11 +4,11 @@ import { ModuleEvent } from 'src/types/Module';
 
 import HttpService, { Response, Response2 } from './HttpService';
 
-export type EventsData = {
+type EventsData = {
   events: ModuleEvent[] | undefined;
 };
 
-export type EventData = {
+type EventData = {
   event: ModuleEvent | undefined;
 };
 
@@ -16,10 +16,8 @@ const EVENTS_ENDPOINT = '/api/v1/accelerator/events';
 const EVENT_ENDPONT = '/api/v1/accelerator/events/{eventId}';
 const EVENT_PROJECTS_ENDPOINT = '/api/v1/accelerator/events/{eventId}/projects';
 
-export type ListEventsResponsePayload =
-  paths[typeof EVENTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-export type GetEventResponsePayload =
-  paths[typeof EVENT_ENDPONT]['get']['responses'][200]['content']['application/json'];
+type ListEventsResponsePayload = paths[typeof EVENTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
+type GetEventResponsePayload = paths[typeof EVENT_ENDPONT]['get']['responses'][200]['content']['application/json'];
 export type CreateModuleEventResponsePayload =
   paths[typeof EVENTS_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 export type DeleteEventResponsePayload =

@@ -1,17 +1,19 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
 import { Button, Textfield } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
+import isEnabled from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
-import { useReviewAcceleratorReportMutation } from 'src/queries/generated/reports';
+import { useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
 import { isAcceleratorReport } from 'src/types/AcceleratorReport';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import EditableReportBox from './EditableReportBox';
+import EmptyFieldPlaceholder from './EmptyFieldPlaceholder';
 import { ReportBoxProps } from './ReportBox';
 
 const textAreaStyles = { textarea: { height: '120px' } };
@@ -77,9 +79,12 @@ const AchievementsBox = (props: ReportBoxProps) => {
   const { report, projectId, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } = props;
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [achievements, setAchievements] = useState<string[]>(report?.achievements || []);
+  const newReportTabEnabled = isEnabled('Report Updates July 2026');
   const snackbar = useSnackbar();
 
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
+
+  const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
 
   const getNonEmptyAchievements = useCallback(() => {
     return achievements.filter((s) => !!s);
@@ -93,14 +98,29 @@ const AchievementsBox = (props: ReportBoxProps) => {
   }, [achievements]);
 
   useEffect(() => {
-    if (achievements.length === 0) {
-      addRow();
-    }
     const filteredAchievements = getNonEmptyAchievements();
     if (filteredAchievements && JSON.stringify(filteredAchievements) !== JSON.stringify(report?.achievements)) {
       onChange?.(filteredAchievements);
     }
-  }, [achievements, addRow, getNonEmptyAchievements, onChange, report?.achievements]);
+  }, [getNonEmptyAchievements, onChange, report?.achievements]);
+
+  const firstRendered = useRef(false);
+
+  // the editor opens with a row ready to fill in; a deleted row stays deleted
+  useEffect(() => {
+    if (!isEditing) {
+      firstRendered.current = false;
+      return;
+    }
+
+    if (!firstRendered.current) {
+      firstRendered.current = true;
+
+      if (achievements.length === 0) {
+        addRow();
+      }
+    }
+  }, [achievements.length, addRow, isEditing]);
 
   useEffect(() => {
     if (reviewReportResponse.isError) {
@@ -147,7 +167,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
     []
   );
 
-  const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
+  const isEmpty = newReportTabEnabled && (isEditing ? achievements : getNonEmptyAchievements()).length === 0;
 
   return (
     <EditableReportBox
@@ -158,19 +178,25 @@ const AchievementsBox = (props: ReportBoxProps) => {
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
-      includeBorder={!funderReportView}
+      includeBorder={!newReportTabEnabled && !funderReportView}
     >
-      {achievements.map((achievement, index) => (
-        <Achievement
-          achievement={achievement}
-          key={`achievement-${index}`}
-          index={index}
-          includeBorder={index < achievements.length - 1}
-          editing={isEditing}
-          onRemove={deleteAchievement(index)}
-          setAchievement={updateAchievement(index)}
-        />
-      ))}
+      {isEmpty ? (
+        <Grid item xs={12} marginBottom={1}>
+          <EmptyFieldPlaceholder text={strings.NO_ACHIEVEMENTS_ADDED} />
+        </Grid>
+      ) : (
+        achievements.map((achievement, index) => (
+          <Achievement
+            achievement={achievement}
+            key={`achievement-${index}`}
+            index={index}
+            includeBorder={index < achievements.length - 1}
+            editing={isEditing}
+            onRemove={deleteAchievement(index)}
+            setAchievement={updateAchievement(index)}
+          />
+        ))
+      )}
       {isEditing && (
         <Button
           onClick={addRow}

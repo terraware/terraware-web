@@ -19,7 +19,7 @@ export function weightUnits() {
   ];
 }
 
-export function weightUnitsV2(unit?: string) {
+function weightUnitsV2(unit?: string) {
   if (unit === 'imperial') {
     return [
       { label: strings.OZ, value: 'Ounces' },
@@ -63,7 +63,7 @@ export type InitializedUnits = {
   updated?: boolean;
 };
 
-export function getUnitsForSystem(system: string) {
+function getUnitsForSystem(system: string) {
   if (system === 'imperial') {
     return [
       { label: strings.LB_POUNDS, value: 'Pounds' },

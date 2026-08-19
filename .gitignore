@@ -31,7 +31,7 @@ yarn-error.log*
 public/build-version.txt
 
 # generated strings files
-src/strings/strings-*.js
+src/strings/strings-*.[jt]s
 
 # ignore .vim swap files
 *.swp

@@ -6,9 +6,9 @@ import { BusySpinner, Dropdown, Icon } from '@terraware/web-components';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useLocalization } from 'src/providers';
 import { useOverrideProjectSpeciesDataMutation } from 'src/queries/generated/species';
-import { useListBotanicalCountriesQuery } from 'src/queries/search/botanicalCountries';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -20,7 +20,10 @@ export type OverrideSpeciesModalProps = {
   onClose: () => void;
   speciesId: number;
   speciesName: string;
-  project: Project;
+  project?: Project;
+  targetName?: string;
+  countryCode?: string;
+  botanicalCountryCode?: string;
   currentNativity?: Nativity;
   currentJustification?: string;
 };
@@ -30,25 +33,32 @@ export default function OverrideSpeciesModal({
   speciesId,
   speciesName,
   project,
+  targetName,
+  countryCode,
+  botanicalCountryCode,
   currentNativity,
   currentJustification,
 }: OverrideSpeciesModalProps): JSX.Element {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { countries } = useLocalization();
-  const { data: botanicalCountries } = useListBotanicalCountriesQuery();
+  const { botanicalCountries } = useBotanicalCountries();
   const [overrideSpecies, { isLoading: isBusy }] = useOverrideProjectSpeciesDataMutation();
 
   const [nativity, setNativity] = useState<Nativity | undefined>(currentNativity);
   const [justification, setJustification] = useState<string>(currentJustification ?? '');
 
+  const resolvedCountryCode = project?.countryCode ?? countryCode;
+  const resolvedBotanicalCountryCode = project?.botanicalCountryCode ?? botanicalCountryCode;
+  const resolvedTargetName = project?.name ?? targetName ?? '';
+
   const countryName = useMemo(
-    () => countries?.find((country) => country.code === project.countryCode)?.name,
-    [countries, project.countryCode]
+    () => countries?.find((country) => country.code === resolvedCountryCode)?.name,
+    [countries, resolvedCountryCode]
   );
   const botanicalCountryName = useMemo(
-    () => botanicalCountries?.find((bc) => bc.code === project.botanicalCountryCode)?.name,
-    [botanicalCountries, project.botanicalCountryCode]
+    () => botanicalCountries.find((bc) => bc.code === resolvedBotanicalCountryCode)?.name,
+    [botanicalCountries, resolvedBotanicalCountryCode]
   );
 
   const nativityOptions = NATIVITY_VALUES.map((value) => ({ label: getNativityLabel(value), value }));
@@ -61,7 +71,7 @@ export default function OverrideSpeciesModal({
       await overrideSpecies({
         overrides: [
           {
-            projectId: project.id,
+            projectId: project?.id,
             speciesId,
             overriddenNativity: nativity,
             overriddenJustification: justification,
@@ -111,7 +121,7 @@ export default function OverrideSpeciesModal({
             }}
           >
             <ProjectCheckSummary
-              projectName={project.name}
+              projectName={resolvedTargetName}
               countryName={countryName}
               botanicalCountryName={botanicalCountryName}
               updates={1}

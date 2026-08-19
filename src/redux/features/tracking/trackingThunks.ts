@@ -9,7 +9,7 @@ import { PlantingSiteSearchResult } from 'src/types/Tracking';
 
 import { setPlantingSiteAction, setPlantingSitesAction, setPlantingSitesSearchResultsAction } from './trackingSlice';
 
-export type PlotT0Observation = {
+type PlotT0Observation = {
   observation_startDate: string;
   observation_completedTime: string;
   observation_id: string;
@@ -26,7 +26,7 @@ export type PlotsWithObservationsSearchResult = {
   permanentIndex?: string;
 };
 
-export const requestPlantingSite = (plantingSiteId: number, locale?: string | null) => {
+const requestPlantingSite = (plantingSiteId: number, locale?: string | null) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       const response = await TrackingService.getPlantingSite(plantingSiteId);
@@ -83,7 +83,7 @@ export const requestPlantingSites = createAsyncThunk(
   }
 );
 
-export const requestPlantingSitesSearchResults = (organizationId: number) => {
+const requestPlantingSitesSearchResults = (organizationId: number) => {
   return async (dispatch: Dispatch, _getState: () => RootState) => {
     try {
       const response: PlantingSiteSearchResult[] | null = await TrackingService.searchPlantingSites(organizationId);

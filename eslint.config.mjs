@@ -37,7 +37,7 @@ export default fixupConfigRules([
     .map((config) => ({
       ...config,
       files: ['**/*.ts', '**/*.tsx'],
-      ignores: ['**/generated-schema.ts', 'src/queries/generated/*'],
+      ignores: ['**/generated-schema.ts', 'src/queries/generated/*', 'src/strings/strings-*.ts'],
     })),
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
@@ -52,7 +52,7 @@ export default fixupConfigRules([
   {
     files: ['**/*.ts', '**/*.tsx'],
 
-    ignores: ['**/generated-schema.ts', 'src/queries/generated/*'],
+    ignores: ['**/generated-schema.ts', 'src/queries/generated/*', 'src/strings/strings-*.ts'],
 
     plugins: {
       jsdoc,

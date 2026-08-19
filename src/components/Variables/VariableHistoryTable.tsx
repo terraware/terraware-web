@@ -22,7 +22,7 @@ import {
 
 import VariableHistoryCellRenderer from './VariableHistoryCellRenderer';
 
-export type VariableChange = {
+type VariableChange = {
   field: 'feedback' | 'internalComment' | 'status' | 'value' | 'table' | 'image';
   previous: string;
   current: string;

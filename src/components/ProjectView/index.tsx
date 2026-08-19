@@ -13,10 +13,14 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
+import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
+import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
 import { useDeleteProjectMutation, useGetProjectQuery } from 'src/queries/generated/projects';
+import { getCountryByCode } from 'src/utils/country';
 import { isAdmin } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -27,8 +31,12 @@ export default function ProjectView(): JSX.Element {
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
   const location = useStateLocation();
-  const { strings } = useLocalization();
+  const { strings, countries } = useLocalization();
   const { selectedOrganization } = useOrganization();
+
+  const { availableProjects } = useProjects();
+  const showProjectLocation = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) > 1;
+  const { getBotanicalCountryName } = useBotanicalCountries(!showProjectLocation);
   const { allApplications } = useApplicationData();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
@@ -161,6 +169,28 @@ export default function ProjectView(): JSX.Element {
               display={true}
             />
           </Grid>
+          {showProjectLocation && (
+            <>
+              <Grid item xs={4} paddingTop={theme.spacing(3)}>
+                <TextField
+                  label={strings.COUNTRY}
+                  id='country'
+                  type='text'
+                  value={project?.countryCode ? getCountryByCode(countries ?? [], project.countryCode)?.name : ''}
+                  display={true}
+                />
+              </Grid>
+              <Grid item xs={4} paddingTop={theme.spacing(3)}>
+                <TextField
+                  label={strings.BOTANICAL_COUNTRY}
+                  id='botanicalCountry'
+                  type='text'
+                  value={getBotanicalCountryName(project?.botanicalCountryCode) ?? ''}
+                  display={true}
+                />
+              </Grid>
+            </>
+          )}
         </Grid>
       </Card>
       {projectHasApplication ? (

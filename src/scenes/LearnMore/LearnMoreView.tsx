@@ -32,7 +32,7 @@ const LearnMoreView = (): JSX.Element => {
   const statistics = statisticsData?.statistics;
 
   const groupedStat = (value?: number): string =>
-    value === undefined ? STAT_PLACEHOLDER : value.toLocaleString(navigator.language || 'en');
+    value === undefined ? STAT_PLACEHOLDER : value.toLocaleString(strings.getLanguage() || navigator.language || 'en');
   const scaledStat = (value?: number): string => (value === undefined ? STAT_PLACEHOLDER : formatNumberScale(value, 1));
 
   const goToLogin = useCallback(() => {
@@ -44,7 +44,7 @@ const LearnMoreView = (): JSX.Element => {
 
   useEffect(() => {
     let active = true;
-    fetch('/api/v1/users/me', { credentials: 'include' })
+    fetch('/api/v1/users/me', { credentials: 'include', headers: { Accept: 'application/json' } })
       .then((response) => {
         if (active) {
           setIsLoggedIn(response.ok);

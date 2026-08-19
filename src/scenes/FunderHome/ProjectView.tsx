@@ -9,6 +9,7 @@ import ActivityHighlightsContent, { QuarterDropdownData } from 'src/components/A
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import TfMain from 'src/components/common/TfMain';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useFunderListActivitiesQuery } from 'src/queries/generated/funderActivities';
@@ -19,6 +20,7 @@ import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ProjectProfileView from '../AcceleratorRouter/AcceleratorProjects/ProjectProfileView';
+import FunderReportTabV2 from '../FunderReport/FunderReportTabV2';
 import FunderReportView from '../FunderReport/FunderReportView';
 
 const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
@@ -50,7 +52,14 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
   const [selectedReport, setSelectedReport] = useState<PublishedReportPayload>();
   const [quarterDropdownData, setQuarterDropdownData] = useState<QuarterDropdownData | undefined>(undefined);
 
+  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+
   useEffect(() => {
+    // FunderReportTabV2 lists its own reports and consumes the reportId param itself
+    if (newReportTabEnabled) {
+      return;
+    }
+
     if (!selectedReport && publishedReports?.length) {
       if (query.get('reportId')) {
         const found = publishedReports?.find((r) => r.reportId.toString() === query.get('reportId'));
@@ -61,7 +70,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
         setSelectedReport(publishedReports[0]);
       }
     }
-  }, [location, navigate, query, publishedReports, selectedReport]);
+  }, [location, navigate, newReportTabEnabled, query, publishedReports, selectedReport]);
 
   const projectDetailsDealName = projectDetails?.dealName;
 
@@ -85,7 +94,11 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
       {
         id: 'report',
         label: strings.REPORT,
-        children: <FunderReportView selectedProjectId={projectDetails.projectId} selectedReport={selectedReport} />,
+        children: newReportTabEnabled ? (
+          <FunderReportTabV2 selectedProjectId={projectDetails.projectId} />
+        ) : (
+          <FunderReportView selectedProjectId={projectDetails.projectId} selectedReport={selectedReport} />
+        ),
       },
       ...(activities.length > 0
         ? [
@@ -110,7 +123,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
           ]
         : []),
     ];
-  }, [projectDetails, publishedReports, selectedReport, strings, activities]);
+  }, [projectDetails, publishedReports, newReportTabEnabled, selectedReport, strings, activities]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',
@@ -152,7 +165,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
             <Typography fontWeight={600} lineHeight={'40px'} fontSize={'24px'}>
               {strippedDealName}
             </Typography>
-            {activeTab === 'report' && (publishedReports?.length ?? 0) > 0 && (
+            {!newReportTabEnabled && activeTab === 'report' && (publishedReports?.length ?? 0) > 0 && (
               <SelectT<PublishedReportPayload>
                 id='report'
                 label={''}

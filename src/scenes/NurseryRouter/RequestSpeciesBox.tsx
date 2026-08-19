@@ -11,7 +11,7 @@ const batchGridTemplateColumns = '2fr 1fr 1fr 1fr';
 const withdrawColumnSx = { gridColumn: 4 };
 const withdrawInputSx = { gridColumn: 4, justifySelf: 'end', width: '100px' };
 
-export type RequestSpeciesBoxProps = {
+type RequestSpeciesBoxProps = {
   species: PlantingDateRequestSubstratumSpecies;
   substratumId: number;
   batches: BatchForWithdraw[];

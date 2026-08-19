@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
 import TextField from '@terraware/web-components/components/Textfield/Textfield';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
-import { AcceleratorReportPayload } from 'src/queries/generated/reports';
+import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 import { AcceleratorReportStatus, AcceleratorReportStatuses } from 'src/types/AcceleratorReport';
 
 interface InternalCommentProps {
@@ -18,6 +18,7 @@ interface InternalCommentProps {
 
 function InternalComment({ entity, update, disabled }: InternalCommentProps) {
   const { strings } = useLocalization();
+  const theme = useTheme();
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [internalComment, setInternalComment] = useState(entity.internalComment || '');
   const [status, setStatus] = useState<AcceleratorReportStatus>(entity.status || '');
@@ -74,15 +75,21 @@ function InternalComment({ entity, update, disabled }: InternalCommentProps) {
           />
         )}
       </Box>
-      <TextField
-        display
-        id='internalComment'
-        label={''}
-        onChange={setInternalCommentCallback}
-        preserveNewlines
-        type='textarea'
-        value={entity.internalComment ?? strings.NO_COMMENTS_ADDED}
-      />
+      {entity.internalComment ? (
+        <TextField
+          display
+          id='internalComment'
+          label={''}
+          onChange={setInternalCommentCallback}
+          preserveNewlines
+          type='textarea'
+          value={entity.internalComment}
+        />
+      ) : (
+        <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontStyle='italic'>
+          {strings.NO_COMMENTS_ADDED}
+        </Typography>
+      )}
       <DialogBox
         onClose={toggleDialog}
         open={isDialogOpen}

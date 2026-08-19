@@ -42,5 +42,18 @@ api.enhanceEndpoints({
     getPlantingSiteReportedPlants: {
       providesTags: (_result, _error, plantingSiteId) => [{ type: QueryTagTypes.PlantingSites, id: plantingSiteId }],
     },
+    listPlantingSiteSpeciesTargets: {
+      providesTags: (_result, _error, siteId) => [{ type: QueryTagTypes.PlantingSiteSpeciesTargets, id: siteId }],
+    },
+    updatePlantingSiteSpeciesTarget: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: QueryTagTypes.PlantingSiteSpeciesTargets, id: arg.plantingSiteId },
+      ],
+    },
+    deletePlantingSiteSpeciesTarget: {
+      invalidatesTags: (_result, _error, arg) => [
+        { type: QueryTagTypes.PlantingSiteSpeciesTargets, id: arg.plantingSiteId },
+      ],
+    },
   },
 });

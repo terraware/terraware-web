@@ -10,7 +10,7 @@ import { Project } from 'src/types/Project';
 
 import { ParticipantContext, ParticipantData } from './ParticipantContext';
 
-export type Props = {
+type Props = {
   children: React.ReactNode;
 };
 

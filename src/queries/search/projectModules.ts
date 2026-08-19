@@ -51,18 +51,16 @@ type GetModuleProjectsApiResponse = {
   results: ModulesProjectApiResult[];
 };
 
-export type ModuleProject = {
+type ModuleProject = {
   projectId: number;
   projectName: string;
   startDate: string;
   endDate: string;
 };
 
-export type GetModuleProjectsApiArg = {
+type GetModuleProjectsApiArg = {
   moduleId: number | string;
   locale?: string;
 };
 
-export { injectedRtkApi as api };
-
-export const { useGetModuleProjectsQuery, useLazyGetModuleProjectsQuery } = injectedRtkApi;
+export const { useLazyGetModuleProjectsQuery } = injectedRtkApi;

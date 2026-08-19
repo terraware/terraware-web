@@ -11,15 +11,15 @@ import HttpService, { Response } from './HttpService';
 /**
  * Types exported from service
  */
-export type OrganizationUsers = {
+type OrganizationUsers = {
   users: OrganizationUser[];
 };
 
-export type OrganizationUsersResponse = Response & OrganizationUsers;
+type OrganizationUsersResponse = Response & OrganizationUsers;
 
-export type CreateOrganizationUserError = 'PRE_EXISTING_USER' | 'INVALID_EMAIL';
+type CreateOrganizationUserError = 'PRE_EXISTING_USER' | 'INVALID_EMAIL';
 
-export type CreateOrganizationUserResponse = Response & {
+type CreateOrganizationUserResponse = Response & {
   userId: number;
   errorDetails?: CreateOrganizationUserError;
 };

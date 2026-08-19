@@ -9,7 +9,7 @@ import { Country } from 'src/types/Country';
 
 import { LocationEdit, LocationTarget } from './types';
 
-export type SetLocationStepProps = {
+type SetLocationStepProps = {
   targets: LocationTarget[];
   edits: Record<number, LocationEdit>;
   countries: Country[];

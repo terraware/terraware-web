@@ -6,14 +6,14 @@ import {
 } from '../generated/events';
 import { QueryTagTypes } from '../tags';
 
-export type EventSubject = NonNullable<ListEventLogEntriesRequestPayload['subjects']>[number];
+type EventSubject = NonNullable<ListEventLogEntriesRequestPayload['subjects']>[number];
 
-export type ListPlantingSeasonEventsArgs = {
+type ListPlantingSeasonEventsArgs = {
   organizationId: number;
   plantingSeasonId: number;
 };
 
-export type ListInventoryPlanningEventsArgs = {
+type ListInventoryPlanningEventsArgs = {
   organizationId: number;
   plantingSeasonId?: number;
   plantingSiteId?: number;
@@ -80,11 +80,4 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export { injectedRtkApi as api };
-
-export const {
-  useListPlantingSeasonEventsQuery,
-  useLazyListPlantingSeasonEventsQuery,
-  useListInventoryPlanningEventsQuery,
-  useLazyListInventoryPlanningEventsQuery,
-} = injectedRtkApi;
+export const { useLazyListPlantingSeasonEventsQuery, useLazyListInventoryPlanningEventsQuery } = injectedRtkApi;

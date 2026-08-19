@@ -6,7 +6,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import strings from 'src/strings';
 
-export type NewApplicationModalProps = {
+type NewApplicationModalProps = {
   open: boolean;
   title: string;
   body: string;

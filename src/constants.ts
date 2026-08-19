@@ -1,6 +1,5 @@
 export const API_PULL_INTERVAL = 60000;
 export const ONE_MINUTE_INTERVAL_MS = 60 * 1000;
-export const FIFTEEN_MINUTE_INTERVAL_MS = 15 * 60 * 1000;
 export const DEFAULT_SEARCH_DEBOUNCE_MS = 250;
 
 export const SQ_M_TO_HECTARES = 1 / 10000;
@@ -32,7 +31,6 @@ export enum APP_PATHS {
   ACCELERATOR_DELIVERABLES = '/accelerator/deliverables',
   ACCELERATOR_DELIVERABLE_VIEW = '/accelerator/deliverables/:deliverableId/submissions/:projectId',
   ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_NEW = '/accelerator/documents/new',
-  ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_PREVIEW = '/accelerator/documents/:documentId/preview',
   ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENT_VIEW = '/accelerator/documents/:documentId',
   ACCELERATOR_DOCUMENT_PRODUCER_DOCUMENTS = '/accelerator/documents',
   ACCELERATOR_FUNDING_ENTITIES = '/accelerator/funding-entities',
@@ -56,6 +54,7 @@ export enum APP_PATHS {
   ACCELERATOR_PROJECT_REPORTS_EDIT = '/accelerator/projects/:projectId/reports/edit',
   ACCELERATOR_PROJECT_REPORTS_INDICATORS_NEW = '/accelerator/projects/:projectId/reports/indicators/new',
   ACCELERATOR_PROJECT_REPORTS_VIEW = '/accelerator/projects/:projectId/reports/:reportId',
+  ACCELERATOR_PROJECT_REPORTS_VIEW_EDIT = '/accelerator/projects/:projectId/reports/:reportId/edit',
   ACCELERATOR_PROJECT_SCORES = '/accelerator/projects/:projectId/scores',
   ACCELERATOR_PROJECT_SCORES_EDIT = '/accelerator/projects/:projectId/scores/edit',
   ACCELERATOR_SPECIES = '/accelerator/deliverables/:deliverableId/submissions/:projectId/species/:acceleratorProjectSpeciesId',
@@ -66,7 +65,6 @@ export enum APP_PATHS {
   ACCESSIONS = '/accessions',
   ACCESSIONS2_NEW = '/accessions/new',
   ACCESSIONS2_ITEM = '/accessions/:accessionId',
-  ACCESSIONS2_EDIT = '/accessions/:accessionId/edit',
   ACTIVITY_LOG = '/activity-log',
   ACTIVITY_LOG_EDIT = '/activity-log/:projectId/:activityId/edit',
   ACTIVITY_LOG_NEW = '/activity-log/:projectId/new',
@@ -87,7 +85,6 @@ export enum APP_PATHS {
   DELIVERABLE_VIEW = '/deliverables/:deliverableId/submissions/:projectId',
   EDIT_SURVIVAL_RATE_SETTINGS_V2 = '/observations/survival-rate-settings/:plantingSiteId/edit',
   ERROR = '/error',
-  ERROR_MOBILE_NOT_SUPPORTED = '/error/mobile-not-supported',
   ERROR_FAILED_TO_FETCH_FUNDING_ENTITY = '/error/cannot-fetch-funding-entity',
   ERROR_FAILED_TO_FETCH_ORG_DATA = '/error/cannot-fetch-org-data',
   FUNDER = '/funder',
@@ -104,7 +101,6 @@ export enum APP_PATHS {
   INVENTORY_ITEM_FOR_NURSERY = '/inventory/nursery/:nurseryId',
   INVENTORY_ITEM_FOR_SPECIES = '/inventory/:speciesId',
   INVENTORY_PLANNING = '/inventory-planning',
-  INVENTORY_WITHDRAW = '/inventory/withdraw',
   LEARN_MORE = '/learn-more',
   MY_ACCOUNT = '/myaccount',
   MY_ACCOUNT_EDIT = '/myaccount/edit',
@@ -138,8 +134,6 @@ export enum APP_PATHS {
   PLANTING_SITES_DRAFT_STRATUM_VIEW = '/planting-sites/draft/:plantingSiteId/stratum/:stratumId',
   PLANTING_SITES_DRAFT_VIEW = '/planting-sites/draft/:plantingSiteId',
   PLANTING_SITES_EDIT = '/planting-sites/:plantingSiteId/edit',
-  PLANTING_SITES_NEW = '/planting-sites/new',
-  PLANTING_SITES_STRATUM_VIEW = '/planting-sites/:plantingSiteId/stratum/:stratumId',
   PLANTING_SITES_VIEW = '/planting-sites/:plantingSiteId',
   PROJECT_MODULE = '/projects/:projectId/modules/:moduleId',
   PROJECT_MODULE_ADDITIONAL_RESOURCES = '/projects/:projectId/modules/:moduleId/additionalResources',

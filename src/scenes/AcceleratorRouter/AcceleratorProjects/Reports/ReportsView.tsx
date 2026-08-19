@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { Box } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import Tabs from '@terraware/web-components/components/Tabs';
 
@@ -9,26 +9,45 @@ import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/Acc
 import AcceleratorReportsTable from 'src/components/AcceleratorReports/AcceleratorReportsTable';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
+import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
+import ReportOptionsMenu from './ReportOptionsMenu';
+import ReportReviewButtons from './ReportReviewButtons';
+import ReportTabV2 from './ReportTabV2';
 import ReportsSettings from './ReportsSettings';
 
-const ReportsView = () => {
+type ReportsViewProps = {
+  tab?: string;
+};
+
+const ReportsView = ({ tab }: ReportsViewProps) => {
   const { crumbs, acceleratorProject, project } = useAcceleratorProjectData();
+  const navigate = useSyncNavigate();
   const { strings } = useLocalization();
-  const { goToNewIndicator } = useNavigateTo();
-  const pathParams = useParams<{ projectId: string }>();
+  const theme = useTheme();
+  const { goToAcceleratorProjectReportEdit, goToNewIndicator } = useNavigateTo();
+  const pathParams = useParams<{ projectId: string; reportId?: string }>();
   const { isAllowed } = useUser();
+
+  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+  const pathActiveTab = tab ?? 'reports';
 
   const tabs = useMemo(() => {
     return [
       {
         id: 'reports',
         label: strings.REPORTS,
-        children: <AcceleratorReportsTable />,
+        children: newReportTabEnabled ? (
+          <ReportTabV2 active={pathActiveTab === 'reports'} />
+        ) : (
+          <AcceleratorReportsTable />
+        ),
       },
       {
         id: 'targets',
@@ -41,13 +60,28 @@ const ReportsView = () => {
         children: <ReportsSettings />,
       },
     ];
-  }, [strings]);
+  }, [newReportTabEnabled, pathActiveTab, strings]);
 
-  const { activeTab, onChangeTab } = useStickyTabs({
+  const { activeTab: stickyActiveTab, onChangeTab: onChangeStickyTab } = useStickyTabs({
     defaultTab: 'reports',
     tabs,
     viewIdentifier: 'project-reports',
   });
+
+  const selectedReportId = Number(pathParams.reportId) || undefined;
+
+  const { isLoading } = useAcceleratorReportActions(selectedReportId);
+
+  const reportsPath = APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', pathParams.projectId ?? '');
+
+  const onChangePathTab = useCallback(
+    (newTab: string) =>
+      navigate(newTab === 'reports' ? reportsPath : `${reportsPath}/${newTab === 'settings' ? 'indicators' : newTab}`),
+    [navigate, reportsPath]
+  );
+
+  const activeTab = newReportTabEnabled ? pathActiveTab : stickyActiveTab;
+  const onChangeTab = newReportTabEnabled ? onChangePathTab : onChangeStickyTab;
 
   return (
     <Page
@@ -59,6 +93,7 @@ const ReportsView = () => {
           to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', acceleratorProject?.projectId.toString() || ''),
         },
       ]}
+      rightComponentGridSize={6}
       title={strings.REPORTS}
       titleStyle={{ paddingTop: '16px' }}
       rightComponent={
@@ -69,6 +104,23 @@ const ReportsView = () => {
             size='medium'
             onClick={() => goToNewIndicator(pathParams.projectId ?? '')}
           />
+        ) : newReportTabEnabled && activeTab === 'reports' && selectedReportId !== undefined ? (
+          <Box display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
+            {isAllowed('EDIT_REPORTS') && (
+              <Button
+                disabled={isLoading}
+                icon='iconEdit'
+                label={strings.EDIT}
+                onClick={() => goToAcceleratorProjectReportEdit(selectedReportId, Number(pathParams.projectId))}
+                priority='secondary'
+                size='medium'
+              />
+            )}
+
+            <ReportReviewButtons reportId={selectedReportId} />
+
+            <ReportOptionsMenu reportId={selectedReportId} />
+          </Box>
         ) : undefined
       }
     >

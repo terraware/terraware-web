@@ -9,7 +9,7 @@ export const makeCsv = (columns: ColumnHeader[], data: CsvData[], quoteStrings =
   return asBlob(csvConfig)(csv);
 };
 
-export const downloadFile = (filename: string, mimeType: string, fileContent: string) => {
+const downloadFile = (filename: string, mimeType: string, fileContent: string) => {
   const encodedUri = `data:${mimeType};charset=utf-8,${encodeURIComponent(fileContent)}`;
   const link = document.createElement('a');
   link.setAttribute('href', encodedUri);

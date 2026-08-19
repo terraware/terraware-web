@@ -15,8 +15,8 @@ import useFunderPortal from 'src/hooks/useFunderPortal';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
+import { ReportCommonIndicatorPayload } from 'src/queries/generated/acceleratorReports';
 import { PublishedReportIndicatorPayload, PublishedReportPayload } from 'src/queries/generated/publishedReports';
-import { ReportCommonIndicatorPayload } from 'src/queries/generated/reports';
 
 import MetricRow from '../AcceleratorRouter/AcceleratorProjects/Reports/MetricRow';
 

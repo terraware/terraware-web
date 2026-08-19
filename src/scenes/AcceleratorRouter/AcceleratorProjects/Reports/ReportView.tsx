@@ -27,12 +27,12 @@ import useBoolean from 'src/hooks/useBoolean';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useUser } from 'src/providers';
-import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import {
   useGetAcceleratorReportQuery,
   usePublishAcceleratorReportMutation,
   useReviewAcceleratorReportMutation,
-} from 'src/queries/generated/reports';
+} from 'src/queries/generated/acceleratorReports';
+import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import FunderReportView from 'src/scenes/FunderReport/FunderReportView';
 import useSnackbar from 'src/utils/useSnackbar';
 

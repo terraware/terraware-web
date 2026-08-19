@@ -9,10 +9,8 @@ const MODULES_ENDOINT = '/api/v1/accelerator/modules';
 const MODULE_ENDOINT = '/api/v1/accelerator/modules/{moduleId}';
 const MODULES_IMPORT_ENDPOINT = '/api/v1/accelerator/modules/import';
 
-export type ListModulesResponsePayload =
-  paths[typeof MODULES_ENDOINT]['get']['responses'][200]['content']['application/json'];
-export type GetModuleResponsePayload =
-  paths[typeof MODULE_ENDOINT]['get']['responses'][200]['content']['application/json'];
+type ListModulesResponsePayload = paths[typeof MODULES_ENDOINT]['get']['responses'][200]['content']['application/json'];
+type GetModuleResponsePayload = paths[typeof MODULE_ENDOINT]['get']['responses'][200]['content']['application/json'];
 export type ImportModuleResponsePayload =
   paths[typeof MODULES_IMPORT_ENDPOINT]['post']['responses'][200]['content']['application/json'];
 

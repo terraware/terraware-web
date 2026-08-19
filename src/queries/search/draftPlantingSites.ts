@@ -105,18 +105,11 @@ type ListDraftPlantingSiteSummariesApiResponse = {
   results: DraftPlantingSiteSummaryApiResult[];
 };
 
-export type SearchDraftPlantingSiteSummariesApiArgs = {
+type SearchDraftPlantingSiteSummariesApiArgs = {
   organizationId: number;
   projectIds?: number[];
   searchOrder?: SearchSortOrderElement[];
   searchTerm?: string;
 };
 
-export { injectedRtkApi as api };
-
-export const {
-  useCountDraftPlantingSitesQuery,
-  useLazyCountDraftPlantingSitesQuery,
-  useSearchDraftPlantingSitesQuery,
-  useLazySearchDraftPlantingSitesQuery,
-} = injectedRtkApi;
+export const { useLazyCountDraftPlantingSitesQuery, useLazySearchDraftPlantingSitesQuery } = injectedRtkApi;

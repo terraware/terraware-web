@@ -10,7 +10,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import { createCombinedSelector, getCombinedStatus } from './util';
 
 // selector processor callbacks for easier use
-export type ProcessorCallbacksProps = {
+type ProcessorCallbacksProps = {
   handleError?: boolean; // whether to pop up a toast error if the selector has an error
   dispatched?: boolean; // whether an action has been dispatched for this selector, defaults to true
   onData?: React.Dispatch<React.SetStateAction<any>>;
@@ -20,7 +20,7 @@ export type ProcessorCallbacksProps = {
   onSuccess?: (data?: any) => void;
 };
 
-export type AsyncRequestSelector = (state: RootState) => AsyncRequest | undefined;
+type AsyncRequestSelector = (state: RootState) => AsyncRequest | undefined;
 
 export type SelectorIdentifier = string;
 

@@ -23,20 +23,20 @@ export type SearchResponseAccession = {
   state: AccessionState;
 };
 
-export type SearchAccessionsApiArg = {
+type SearchAccessionsApiArg = {
   organizationId: number;
   fields: string[];
   searchCriteria?: SearchCriteria;
   sortOrder?: SearchSortOrder;
 };
 
-export type GetCollectorsApiArg = number;
-export type GetCollectionSiteNamesApiArg = number;
-export type GetAccessionForSpeciesApiArg = {
+type GetCollectorsApiArg = number;
+type GetCollectionSiteNamesApiArg = number;
+type GetAccessionForSpeciesApiArg = {
   organizationId: number;
   speciesId: number;
 };
-export type GetPendingAccessionsApiArg = number;
+type GetPendingAccessionsApiArg = number;
 
 type SearchResponse<T> = {
   results: T[];
@@ -199,17 +199,10 @@ const injectedRtkApi = api.injectEndpoints({
   overrideExisting: false,
 });
 
-export { injectedRtkApi as api };
-
 export const {
-  useSearchAccessionsQuery,
   useLazySearchAccessionsQuery,
-  useGetPendingAccessionsQuery,
   useLazyGetPendingAccessionsQuery,
-  useGetCollectorsQuery,
   useLazyGetCollectorsQuery,
-  useGetCollectionSiteNamesQuery,
   useLazyGetCollectionSiteNamesQuery,
-  useGetAccessionForSpeciesQuery,
   useLazyGetAccessionForSpeciesQuery,
 } = injectedRtkApi;

@@ -2,7 +2,7 @@ import React, { type JSX } from 'react';
 
 import { Grid, SxProps, useTheme } from '@mui/material';
 
-export interface GridEntryWrapperProps {
+interface GridEntryWrapperProps {
   children: JSX.Element;
   height?: string;
   md?: number;

@@ -42,11 +42,6 @@ const generateRandomColor = (random: () => number = getRandom()) => {
     .padStart(6, '0')}`;
 };
 
-const generateRandomColors = (numberOfColors: number) => {
-  const random = getRandom();
-  return Array.from({ length: numberOfColors }, () => generateRandomColor(random));
-};
-
 const generateTerrawareRandomColors = (theme: Theme, numberOfColors: number) => {
   const random = getRandom();
   const terrawareColorsList = terrawareColors(theme);
@@ -58,4 +53,4 @@ const generateTerrawareRandomColors = (theme: Theme, numberOfColors: number) => 
   return colors;
 };
 
-export { generateRandomColor, generateRandomColors, generateTerrawareRandomColors };
+export { generateTerrawareRandomColors };

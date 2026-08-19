@@ -10,7 +10,7 @@ import {
 } from './funderProjectsAsyncThunks';
 
 const initialPublishedProjects: { [key: string]: StatusT<PublishedProject[]> } = {};
-export const publishedProjectsSlice = createSlice({
+const publishedProjectsSlice = createSlice({
   name: 'publishedProjectsSlice',
   initialState: initialPublishedProjects,
   reducers: {},
@@ -20,7 +20,7 @@ export const publishedProjectsSlice = createSlice({
 });
 
 const initialStateFunderProject: { [key: string]: FunderProjectDetails } = {};
-export const funderProjectsSlice = createSlice({
+const funderProjectsSlice = createSlice({
   name: 'funderProjectSlice',
   initialState: initialStateFunderProject,
   reducers: {},
@@ -39,7 +39,7 @@ export const funderProjectsSlice = createSlice({
 });
 
 const initialPublishFunderProject: { [key: string]: StatusT<number> } = {};
-export const publishFunderProjectSlice = createSlice({
+const publishFunderProjectSlice = createSlice({
   name: 'publishFunderProjectSlice',
   initialState: initialPublishFunderProject,
   reducers: {},

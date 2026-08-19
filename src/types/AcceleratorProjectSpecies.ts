@@ -9,7 +9,7 @@ export type SpeciesNativeCategory = AcceleratorProjectSpecies['speciesNativeCate
 export type AcceleratorProjectForSpecies = components['schemas']['ParticipantProjectForSpeciesPayload'];
 export type SpeciesForAcceleratorProject = components['schemas']['SpeciesForParticipantProjectPayload'];
 
-export const getSpeciesNativeCategoryLabel = (value: SpeciesNativeCategory): string => {
+const getSpeciesNativeCategoryLabel = (value: SpeciesNativeCategory): string => {
   switch (value) {
     case 'Native':
       return strings.NATIVE;

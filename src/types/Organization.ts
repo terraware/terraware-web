@@ -36,7 +36,7 @@ export type Organization = {
   website?: string;
 };
 
-export type HighOrganizationRoles = 'Admin' | 'Owner' | 'Terraformation Contact';
+type HighOrganizationRoles = 'Admin' | 'Owner' | 'Terraformation Contact';
 
 export const HighOrganizationRolesValues = ['Admin', 'Owner', 'Terraformation Contact'];
 

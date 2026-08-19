@@ -10,6 +10,7 @@ import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
 import {
@@ -55,6 +56,8 @@ export default function SpeciesEditView(): JSX.Element {
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const { selectedOrganization } = useOrganization();
+  const { availableProjects } = useProjects();
+  const hasMultipleProjects = (availableProjects?.length ?? 0) > 1;
   const { speciesId } = useParams<{ speciesId: string }>();
   const [record, setRecord, , onChangeCallback] = useForm<Species>(initSpecies());
   const snackbar = useSnackbar();
@@ -284,7 +287,7 @@ export default function SpeciesEditView(): JSX.Element {
             addedProjectsSpecies={addedProjectsSpecies}
             removedProjectsIds={removedProjectsIds}
           />
-          {speciesIntelligenceEnabled && species && (
+          {speciesIntelligenceEnabled && hasMultipleProjects && species && (
             <Box marginTop={theme.spacing(4)}>
               <SpeciesProjectsSection
                 speciesId={species.id}

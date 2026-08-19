@@ -44,11 +44,6 @@ export type ChartData = {
   datasets: ChartDataset[];
 };
 
-export interface StyleProps {
-  minHeight?: string;
-  maxWidth?: string;
-}
-
 export type BaseChartProps = {
   chartId: string;
   chartData?: ChartData;

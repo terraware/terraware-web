@@ -10,9 +10,6 @@ export const selectApplicationList = (requestId: string) => (state: RootState) =
 export const selectApplicationDeliverableList = (requestId: string) => (state: RootState) =>
   state.applicationDeliverables[requestId];
 
-export const selectApplicationHistoryList = (requestId: string) => (state: RootState) =>
-  state.applicationHistory[requestId];
-
 export const selectApplicationModuleList = (requestId: string) => (state: RootState) =>
   state.applicationModules[requestId];
 
@@ -25,6 +22,3 @@ export const selectApplicationSubmit = (requestId: string) => (state: RootState)
 
 export const selectApplicationUpdateBoundary = (requestId: string) => (state: RootState) =>
   state.applicationUpdateBoundary[requestId];
-
-export const selectApplicationUploadBoundary = (requestId: string) => (state: RootState) =>
-  state.applicationUploadBoundary[requestId];

@@ -4,9 +4,9 @@ import env from 'src/utils/useEnvironment';
 export type FeatureName =
   | 'Show Production View'
   | 'Virtual Monitoring Plots'
-  | 'New Planting Site Map'
   | 'Planting Goals'
-  | 'Species Intelligence';
+  | 'Species Intelligence'
+  | 'Report Updates July 2026';
 
 export type Feature = {
   name: FeatureName;
@@ -50,15 +50,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     disclosure: ['This is a WIP'],
   },
   {
-    name: 'New Planting Site Map',
-    preferenceName: 'newPlantingSiteMap',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['New Mapbox-based planting site map on the planting site details page.'],
-    disclosure: ['This is a WIP'],
-  },
-  {
     name: 'Planting Goals',
     preferenceName: 'plantingGoals',
     active: true,
@@ -74,6 +65,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for species suggestions'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Report Updates July 2026',
+    preferenceName: 'reportUpdatesJuly2026',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Redesigned report tab for participants, accelerator admins, and funders.'],
     disclosure: ['This is a WIP'],
   },
 ];
@@ -117,19 +117,4 @@ export default function isEnabled(name: FeatureName, organizationId?: number) {
   }
 
   return feature.allowInternalProduction && CachedUserService.getUser().isTerraformation;
-}
-
-export function isRouteEnabled(name: FeatureName) {
-  const { isProduction } = env();
-  const feature = FEATURE_MAP[name];
-
-  if (!feature) {
-    return false;
-  }
-
-  if (!feature.active || feature.enabled) {
-    return feature.enabled;
-  }
-
-  return !isProduction || (feature.allowInternalProduction && CachedUserService.getUser().isTerraformation);
 }

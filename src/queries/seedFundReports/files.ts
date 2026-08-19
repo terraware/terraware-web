@@ -1,13 +1,13 @@
 import { baseApi as api } from '../baseApi';
 import { QueryTagTypes } from '../tags';
 
-export type BatchSeedFundReportFilesRequest = {
+type BatchSeedFundReportFilesRequest = {
   reportId: number;
   filesToUpload?: File[];
   fileIdsToDelete?: number[];
 };
 
-export type BatchSeedFundReportFilesResponse = {
+type BatchSeedFundReportFilesResponse = {
   uploadedFileIds?: number[];
 };
 
@@ -80,7 +80,5 @@ const injectedRtkApi = api.injectEndpoints({
     }),
   }),
 });
-
-export { injectedRtkApi as api };
 
 export const { useBatchSeedFundReportFilesMutation } = injectedRtkApi;

@@ -1,6 +1,4 @@
 import { defineConfig, rspack } from '@rsbuild/core';
-import { pluginBabel } from '@rsbuild/plugin-babel';
-import { pluginEslint } from '@rsbuild/plugin-eslint';
 import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginSvgr } from '@rsbuild/plugin-svgr';
@@ -20,12 +18,8 @@ const isDev = process.env.NODE_ENV === 'development';
 
 export default defineConfig({
   plugins: [
-    pluginReact(),
-    pluginBabel({
-      include: /\.(?:jsx|tsx)$/,
-      babelLoaderOptions(opts) {
-        opts.plugins?.unshift('babel-plugin-react-compiler');
-      },
+    pluginReact({
+      reactCompiler: true,
     }),
     pluginSass(),
     pluginSvgr({
