@@ -218,6 +218,7 @@
     "knip": "^6.32.1",
     "license-report": "^6.0.0",
     "llm-autotranslate": "^1.0.0",
+    "msw": "^2.15.0",
     "openapi-typescript": "^7.0.0",
     "patch-package": "^8.0.0",
     "playwright": "^1.55.1",
