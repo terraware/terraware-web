@@ -1,3 +1,4 @@
+8c1c59da SW-8788 New species added reminder doesn't show up until after a refresh (#6284)
 28a84e3e SW-8787 Show deduplicated status column for All Projects view (#6279)
 4dbba87b Remove Babel configuration (#6281)
 3aaa14d5 Remove unused enum values (#6275)
