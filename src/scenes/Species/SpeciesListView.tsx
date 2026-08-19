@@ -769,7 +769,9 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               type='page'
               priority='info'
               body={strings.formatString(
-                strings.SPECIES_CHECK_ADDED_BANNER,
+                uncheckedSpecies.length === 1
+                  ? strings.SPECIES_CHECK_ADDED_BANNER_ONE
+                  : strings.SPECIES_CHECK_ADDED_BANNER,
                 String(uncheckedSpecies.length),
                 uncheckedSpecies.map((sp) => sp.scientificName).join(', ')
               )}

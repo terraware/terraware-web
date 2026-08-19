@@ -2208,8 +2208,9 @@ SPECIES_CARD_DESCRIPTION,Vea la especie referenciada en sus entradas de Semilla 
 SPECIES_CATEGORIES,Categorías de especies,b63aa30d
 SPECIES_CATEGORIES_TOOLTIP,"Categorías de especies muestra el porcentaje del total de plantas plantadas que son Raras y en Peligro, según la especie.",e6a1dcfe
 SPECIES_CHECK,Verificación de especies,d7d0f200
-SPECIES_CHECK_ADDED_BANNER,Ha agregado {0} nuevas especies a su lista ({1}). Ejecute la verificación de especies.,3d922bc3
-SPECIES_CHECK_SET_LOCATION_BANNER,"Para ver qué especies son nativas, introducidas o invasoras en sus sitios, debe establecer su ubicación.",1aec8983
+SPECIES_CHECK_ADDED_BANNER,"Se agregaron {0} especies nuevas ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",35e34395
+SPECIES_CHECK_ADDED_BANNER_ONE,"Se agregó {0} especie nueva ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",89f12eb5
+SPECIES_CHECK_SET_LOCATION_BANNER,"Para verificar cuáles especies son nativas, introducidas o invasoras en sus proyectos, ejecute la verificación de especies. Primero deberá establecer la ubicación de sus proyectos.",36e36517
 SPECIES_CHECK_SPECIES_CHECKED,{0} especies verificadas,3a3237db
 SPECIES_CHECK_UPDATES,{0} actualizaciones,a1d89ade
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
