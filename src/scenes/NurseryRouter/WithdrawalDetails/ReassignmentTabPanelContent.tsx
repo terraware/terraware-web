@@ -1,9 +1,15 @@
-import React, { type JSX } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { BatchPayload, DeliveryPayload, NurseryWithdrawalPayload } from 'src/queries/generated/nurseryWithdrawals';
+import { useLazyGetDeliveryQuery } from 'src/queries/generated/deliveries';
+import {
+  BatchPayload,
+  DeliveryPayload,
+  NurseryWithdrawalPayload,
+  PlantingPayload,
+} from 'src/queries/generated/nurseryWithdrawals';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -27,9 +33,44 @@ export default function ReassignmentTabPanelContent({
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const quantity = delivery?.plantings
-    ?.filter((planting) => planting.type === 'Reassignment To')
-    ?.reduce((acc, planting) => acc + planting.numPlants, 0);
+  const [getDelivery] = useLazyGetDeliveryQuery();
+  const [linkedPlantings, setLinkedPlantings] = useState<PlantingPayload[]>([]);
+
+  const reassignmentDeliveryIds = delivery?.reassignmentDeliveryIds;
+
+  useEffect(() => {
+    const ids = reassignmentDeliveryIds ?? [];
+    if (ids.length === 0) {
+      setLinkedPlantings([]);
+      return;
+    }
+
+    let cancelled = false;
+    void Promise.all(ids.map((id) => getDelivery(id, true).unwrap()))
+      .then((responses) => {
+        if (!cancelled) {
+          setLinkedPlantings(responses.flatMap((response) => response.delivery.plantings));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setLinkedPlantings([]);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [getDelivery, reassignmentDeliveryIds]);
+
+  const combinedPlantings = useMemo(
+    () => [...(delivery?.plantings ?? []), ...linkedPlantings],
+    [delivery?.plantings, linkedPlantings]
+  );
+
+  const quantity = combinedPlantings
+    .filter((planting) => planting.type === 'Reassignment To')
+    .reduce((acc, planting) => acc + planting.numPlants, 0);
 
   const overviewCardData = [
     {
@@ -42,7 +83,7 @@ export default function ReassignmentTabPanelContent({
     },
     {
       title: strings.QUANTITY,
-      data: typeof quantity === 'number' ? numberFormatter.format(quantity) : quantity,
+      data: numberFormatter.format(quantity),
     },
   ];
 
@@ -59,7 +100,11 @@ export default function ReassignmentTabPanelContent({
         ))}
       </Grid>
       <Box marginTop={theme.spacing(3)}>
-        <OutplantReassignmentTable species={species} delivery={delivery} withdrawalNotes={withdrawal?.notes} />
+        <OutplantReassignmentTable
+          species={species}
+          plantings={combinedPlantings}
+          withdrawalNotes={withdrawal?.notes}
+        />
       </Box>
     </Box>
   );
