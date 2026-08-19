@@ -1,3 +1,4 @@
+538496d9 Suppress Knip reports on generated query files (#6292)
 1ad9d259 SW-8760 Disable report actions while a write is in flight (#6278)
 f3111d1c SW-8760 Share accelerator report mutation state per report (#6277)
 8c1c59da SW-8788 New species added reminder doesn't show up until after a refresh (#6284)
