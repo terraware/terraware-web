@@ -24,7 +24,6 @@ type FunderReportPageV2Props = {
   projectId: number;
   report?: AcceleratorReportPayload | PublishedReportPayload;
   reportId: number;
-  /** page-level actions, e.g. the CSV export */
   rightComponent?: ReactNode;
   title: string;
 };

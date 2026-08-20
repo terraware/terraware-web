@@ -7,11 +7,9 @@ import { useLocalization } from 'src/providers';
 
 export type ReportExportMenuProps = {
   disabled?: boolean;
-  /** bind this to whichever `useExportReportCsv` callback matches the report on screen */
   onExport: () => void;
 };
 
-/** An options menu whose only entry exports the report on screen as a zipfile of CSVs. */
 const ReportExportMenu = ({ disabled, onExport }: ReportExportMenuProps): JSX.Element => {
   const { strings } = useLocalization();
 
