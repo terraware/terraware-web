@@ -8,6 +8,7 @@ import { Button, DropdownItem } from '@terraware/web-components';
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
 import Checkbox from 'src/components/common/Checkbox';
+import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
@@ -129,16 +130,17 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
     [speciesIntelligenceEnabled]
   );
 
+  const orgScopeKnown = availableProjects !== undefined && availableProjects.length <= 1;
   const orgNativityElement = useMemo(() => {
     const elements = species?.projects ?? [];
     const nativityOf = (element?: (typeof elements)[number]) =>
       element?.overriddenNativity ?? element?.calculatedNativity;
     const orgElement = elements.find((element) => element.projectId === undefined);
-    if (nativityOf(orgElement) || hasMultipleProjects) {
+    if (nativityOf(orgElement) || !orgScopeKnown) {
       return orgElement;
     }
     return elements.find((element) => nativityOf(element)) ?? orgElement;
-  }, [species, hasMultipleProjects]);
+  }, [species, orgScopeKnown]);
   const orgNativity = orgNativityElement?.overriddenNativity ?? orgNativityElement?.calculatedNativity;
   const orgIsOverridden = !!orgNativityElement?.overriddenNativity;
 
@@ -378,18 +380,9 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
                   )}
                 </Box>
                 {orgIsOverridden && (
-                  <Typography
-                    onClick={() => setStatusDetailsOpen(true)}
-                    sx={{
-                      color: theme.palette.TwClrTxtBrand,
-                      cursor: 'pointer',
-                      fontSize: '14px',
-                      marginTop: theme.spacing(1),
-                      width: 'fit-content',
-                    }}
-                  >
-                    {strings.SEE_DETAILS}
-                  </Typography>
+                  <Box marginTop={theme.spacing(1)}>
+                    <Link onClick={() => setStatusDetailsOpen(true)}>{strings.SEE_DETAILS}</Link>
+                  </Box>
                 )}
               </Box>
             </GridItemWrapper>

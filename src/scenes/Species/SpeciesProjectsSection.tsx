@@ -3,6 +3,7 @@ import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
 import { Badge, TableRowType } from '@terraware/web-components';
 
+import Link from 'src/components/common/Link';
 import Button from 'src/components/common/button/Button';
 import TooltipButton from 'src/components/common/button/TooltipButton';
 import Table from 'src/components/common/table';
@@ -170,18 +171,9 @@ export default function SpeciesProjectsSection({
                       </Typography>
                     )}
                     {projectRow.overridden && (
-                      <Typography
-                        component='span'
-                        onClick={() => setDetailsProjectId(projectRow.projectId)}
-                        sx={{
-                          color: theme.palette.TwClrTxtBrand,
-                          cursor: 'pointer',
-                          fontSize: '14px',
-                          whiteSpace: 'nowrap',
-                        }}
-                      >
-                        {strings.SEE_DETAILS}
-                      </Typography>
+                      <Box component='span' sx={{ whiteSpace: 'nowrap' }}>
+                        <Link onClick={() => setDetailsProjectId(projectRow.projectId)}>{strings.SEE_DETAILS}</Link>
+                      </Box>
                     )}
                   </>
                 ) : (
