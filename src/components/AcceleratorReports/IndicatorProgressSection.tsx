@@ -4,7 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 import IndicatorProgressRow from 'src/components/AcceleratorReports/IndicatorProgressRow';
-import { ProgressIndicator, compareRefIds, getProgressIndicators } from 'src/components/AcceleratorReports/utils';
+import { ProgressIndicator, getProgressIndicators } from 'src/components/AcceleratorReports/utils';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization } from 'src/providers';
 
@@ -27,8 +27,6 @@ export const IndicatorProgressSectionContent = ({
 }: IndicatorProgressSectionContentProps): JSX.Element | null => {
   const theme = useTheme();
   const { strings } = useLocalization();
-
-  const sortedIndicators = useMemo(() => [...indicators].sort((a, b) => compareRefIds(a.refId, b.refId)), [indicators]);
 
   if (indicators.length === 0) {
     return null;
@@ -71,7 +69,7 @@ export const IndicatorProgressSectionContent = ({
         )}
       </Box>
 
-      {sortedIndicators.map((indicator, index) => (
+      {indicators.map((indicator, index) => (
         <IndicatorProgressRow
           editing={editing}
           indicator={indicator}

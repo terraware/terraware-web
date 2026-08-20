@@ -194,11 +194,12 @@ describe('getIndicatorCsvColumns', () => {
 });
 
 describe('makeIndicatorCsvRows', () => {
-  test('orders rows by reference id numerically rather than as text', () => {
+  // ordering is `getProgressIndicators`' job, so the sheet just has to keep what it is handed
+  test('keeps the order the view is rendering', () => {
     const indicators = [
-      indicator({ name: 'Eleven ten', refId: '11.10' }),
-      indicator({ name: 'Eleven two', refId: '11.2' }),
       indicator({ name: 'Two', refId: '2.1' }),
+      indicator({ name: 'Eleven two', refId: '11.2' }),
+      indicator({ name: 'Eleven ten', refId: '11.10' }),
     ];
 
     expect(makeIndicatorCsvRows({ ...params('funder'), indicators }).map((row) => row.name)).toEqual([

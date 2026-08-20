@@ -8,7 +8,6 @@ import {
   IndicatorLevel,
   ProgressIndicator,
   acceleratorReportStatusLabel,
-  compareRefIds,
   getIndicatorCumulativeValue,
   getProgressIndicators,
   getPublishedProgressIndicators,
@@ -201,43 +200,41 @@ const indicatorNumber = (value: number | undefined, precision: number | undefine
 
 /** One row per indicator, in the order the progress section renders them. */
 export const makeIndicatorCsvRows = ({ indicators }: ReportCsvParams): IndicatorCsvRow[] =>
-  [...indicators]
-    .sort((a, b) => compareRefIds(a.refId, b.refId))
-    .map((indicator) => {
-      const asNumber = (value?: number) => indicatorNumber(value, indicator.precision);
+  indicators.map((indicator) => {
+    const asNumber = (value?: number) => indicatorNumber(value, indicator.precision);
 
-      const quarterValues = Object.fromEntries(
-        QUARTERS.map((quarter) => [
-          quarter,
-          asNumber(indicator.currentYearProgress?.find((progress) => progress.quarter === quarter)?.value),
-        ])
-      );
+    const quarterValues = Object.fromEntries(
+      QUARTERS.map((quarter) => [
+        quarter,
+        asNumber(indicator.currentYearProgress?.find((progress) => progress.quarter === quarter)?.value),
+      ])
+    );
 
-      return {
-        ...quarterValues,
-        baseline: asNumber(indicator.baseline),
-        category: { kind: 'indicatorCategory' as const, value: indicator.category },
-        classId: { kind: 'indicatorClass' as const, value: indicator.classId },
-        cumulativeValue: asNumber(getIndicatorCumulativeValue(indicator)),
-        description: indicator.description,
-        endOfProjectTarget: asNumber(indicator.endOfProjectTarget),
-        isPublishable: { kind: 'boolean' as const, value: indicator.isPublishable },
-        level: { kind: 'indicatorLevel' as const, value: indicator.level },
-        name: indicator.name,
-        overrideValue: asNumber(indicator.overrideValue),
-        previousYearCumulativeTotal: asNumber(indicator.previousYearCumulativeTotal),
-        progressNotes: indicator.progressNotes,
-        projectsComments: indicator.projectsComments,
-        refId: indicator.refId,
-        status: { kind: 'metricStatus' as const, value: indicator.status },
-        supportingDocumentUrl: indicator.supportingDocumentUrl,
-        systemValue: asNumber(indicator.systemValue),
-        target: asNumber(indicator.target),
-        type: { kind: 'indicatorType' as const, value: indicator.type },
-        unit: indicator.unit,
-        value: asNumber(indicator.value),
-      };
-    });
+    return {
+      ...quarterValues,
+      baseline: asNumber(indicator.baseline),
+      category: { kind: 'indicatorCategory' as const, value: indicator.category },
+      classId: { kind: 'indicatorClass' as const, value: indicator.classId },
+      cumulativeValue: asNumber(getIndicatorCumulativeValue(indicator)),
+      description: indicator.description,
+      endOfProjectTarget: asNumber(indicator.endOfProjectTarget),
+      isPublishable: { kind: 'boolean' as const, value: indicator.isPublishable },
+      level: { kind: 'indicatorLevel' as const, value: indicator.level },
+      name: indicator.name,
+      overrideValue: asNumber(indicator.overrideValue),
+      previousYearCumulativeTotal: asNumber(indicator.previousYearCumulativeTotal),
+      progressNotes: indicator.progressNotes,
+      projectsComments: indicator.projectsComments,
+      refId: indicator.refId,
+      status: { kind: 'metricStatus' as const, value: indicator.status },
+      supportingDocumentUrl: indicator.supportingDocumentUrl,
+      systemValue: asNumber(indicator.systemValue),
+      target: asNumber(indicator.target),
+      type: { kind: 'indicatorType' as const, value: indicator.type },
+      unit: indicator.unit,
+      value: asNumber(indicator.value),
+    };
+  });
 
 export type ExportAcceleratorReportParams = {
   /** the deal name in the console, the project name for a participant */

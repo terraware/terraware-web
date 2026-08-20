@@ -18,7 +18,6 @@ export type IndicatorClass = ReportCommonIndicatorPayload['classId'];
 export type IndicatorCategory = ReportCommonIndicatorPayload['category'];
 export type IndicatorLevel = ReportCommonIndicatorPayload['level'];
 
-/** The one indicator shape every v2 view renders, whichever payload it came from. */
 export type ProgressIndicator = {
   baseline?: number;
   category?: IndicatorCategory;
@@ -45,32 +44,6 @@ export type ProgressIndicator = {
   value?: number;
 };
 
-export const getProgressIndicators = (report?: AcceleratorReportPayload): ProgressIndicator[] => [
-  ...(report?.commonIndicators ?? []).map((indicator) => ({ ...indicator, type: 'common' as const })),
-  ...(report?.projectIndicators ?? []).map((indicator) => ({ ...indicator, type: 'project' as const })),
-  ...(report?.autoCalculatedIndicators ?? []).map((indicator) => ({
-    ...indicator,
-    name: indicator.indicator,
-    type: 'autoCalculated' as const,
-    value: indicator.overrideValue ?? indicator.systemValue,
-  })),
-];
-
-// funders are only ever sent the publishable indicators, so a funder-facing view has to drop the rest
-export const getFunderVisibleIndicators = (report?: AcceleratorReportPayload): ProgressIndicator[] =>
-  getProgressIndicators(report).filter((indicator) => indicator.isPublishable);
-
-/**
- * The published payload only ever carries the indicators funders are allowed to see. It gives every
- * class of indicator the same shape, so the only thing that says which class an indicator is, is the
- * array it arrived in.
- */
-export const getPublishedProgressIndicators = (report?: PublishedReportPayload): ProgressIndicator[] => [
-  ...(report?.autoCalculatedIndicators ?? []).map((indicator) => ({ ...indicator, type: 'autoCalculated' as const })),
-  ...(report?.commonIndicators ?? []).map((indicator) => ({ ...indicator, type: 'common' as const })),
-  ...(report?.projectIndicators ?? []).map((indicator) => ({ ...indicator, type: 'project' as const })),
-];
-
 // Reference ids read like 11.2.3, so compare them segment by segment as numbers rather than as text,
 // which would order 11.10 before 11.2.
 export const compareRefIds = (a: string, b: string) => {
@@ -87,6 +60,32 @@ export const compareRefIds = (a: string, b: string) => {
 
   return 0;
 };
+
+// the v2 views read indicators in reference id order, so every list of them arrives that way
+const sortedByRefId = (indicators: ProgressIndicator[]): ProgressIndicator[] =>
+  [...indicators].sort((a, b) => compareRefIds(a.refId, b.refId));
+
+export const getProgressIndicators = (report?: AcceleratorReportPayload): ProgressIndicator[] =>
+  sortedByRefId([
+    ...(report?.commonIndicators ?? []).map((indicator) => ({ ...indicator, type: 'common' as const })),
+    ...(report?.projectIndicators ?? []).map((indicator) => ({ ...indicator, type: 'project' as const })),
+    ...(report?.autoCalculatedIndicators ?? []).map((indicator) => ({
+      ...indicator,
+      name: indicator.indicator,
+      type: 'autoCalculated' as const,
+      value: indicator.overrideValue ?? indicator.systemValue,
+    })),
+  ]);
+
+export const getFunderVisibleIndicators = (report?: AcceleratorReportPayload): ProgressIndicator[] =>
+  getProgressIndicators(report).filter((indicator) => indicator.isPublishable);
+
+export const getPublishedProgressIndicators = (report?: PublishedReportPayload): ProgressIndicator[] =>
+  sortedByRefId([
+    ...(report?.autoCalculatedIndicators ?? []).map((indicator) => ({ ...indicator, type: 'autoCalculated' as const })),
+    ...(report?.commonIndicators ?? []).map((indicator) => ({ ...indicator, type: 'common' as const })),
+    ...(report?.projectIndicators ?? []).map((indicator) => ({ ...indicator, type: 'project' as const })),
+  ]);
 
 /**
  * The headline number for an indicator: for a cumulative class, the quarters of the year on top of
@@ -137,10 +136,6 @@ export const unpublishedPropertyList = (unpublishedProperties: string[], strings
   return unpublishedProperties.map((property) => propertyLabels[property] ?? property).join(', ');
 };
 
-/**
- * The console calls a rejected report "update requested" where everyone else calls it "update
- * needed", matching `AcceleratorReportStatusBadge`.
- */
 export const acceleratorReportStatusLabel = (
   status: AcceleratorReportStatus | undefined,
   strings: ILocalizedStrings,
@@ -220,7 +215,6 @@ export const indicatorClassLabel = (classId: IndicatorClass | undefined, strings
   }
 };
 
-// the editor keeps a blank row so a fresh list is typeable; it should not be saved
 const savedAchievements = (report: AcceleratorReportPayload) =>
   report.achievements.map((achievement) => achievement.trim()).filter((achievement) => achievement);
 

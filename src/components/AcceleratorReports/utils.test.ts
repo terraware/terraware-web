@@ -77,9 +77,9 @@ describe('compareRefIds', () => {
 describe('getProgressIndicators', () => {
   test('tags each indicator with the class it came from', () => {
     const report = acceleratorReport({
-      autoCalculatedIndicators: [{ indicator: 'Trees Planted', systemValue: 40 }],
-      commonIndicators: [{ name: 'Standard one' }],
-      projectIndicators: [{ name: 'Project one' }],
+      autoCalculatedIndicators: [{ indicator: 'Trees Planted', refId: '1.3', systemValue: 40 }],
+      commonIndicators: [{ name: 'Standard one', refId: '1.1' }],
+      projectIndicators: [{ name: 'Project one', refId: '1.2' }],
     } as unknown as Partial<AcceleratorReportPayload>);
 
     expect(getProgressIndicators(report).map(({ name, type }) => ({ name, type }))).toEqual([
@@ -91,7 +91,7 @@ describe('getProgressIndicators', () => {
 
   test('names an auto-calculated indicator after the tracking value it reads', () => {
     const report = acceleratorReport({
-      autoCalculatedIndicators: [{ indicator: 'Seeds Collected', systemValue: 10 }],
+      autoCalculatedIndicators: [{ indicator: 'Seeds Collected', refId: '1.1', systemValue: 10 }],
     } as unknown as Partial<AcceleratorReportPayload>);
 
     expect(getProgressIndicators(report)[0].name).toBe('Seeds Collected');
@@ -99,7 +99,7 @@ describe('getProgressIndicators', () => {
 
   test('prefers a console override over the Terraware value', () => {
     const report = acceleratorReport({
-      autoCalculatedIndicators: [{ indicator: 'Trees Planted', overrideValue: 12, systemValue: 40 }],
+      autoCalculatedIndicators: [{ indicator: 'Trees Planted', overrideValue: 12, refId: '1.1', systemValue: 40 }],
     } as unknown as Partial<AcceleratorReportPayload>);
 
     expect(getProgressIndicators(report)[0].value).toBe(12);
@@ -107,10 +107,20 @@ describe('getProgressIndicators', () => {
 
   test('falls back to the Terraware value when nothing was overridden', () => {
     const report = acceleratorReport({
-      autoCalculatedIndicators: [{ indicator: 'Trees Planted', systemValue: 40 }],
+      autoCalculatedIndicators: [{ indicator: 'Trees Planted', refId: '1.1', systemValue: 40 }],
     } as unknown as Partial<AcceleratorReportPayload>);
 
     expect(getProgressIndicators(report)[0].value).toBe(40);
+  });
+
+  test('orders by reference id numerically, whichever array an indicator came from', () => {
+    const report = acceleratorReport({
+      autoCalculatedIndicators: [{ indicator: 'Auto', refId: '2.1' }],
+      commonIndicators: [{ name: 'Standard', refId: '11.10' }],
+      projectIndicators: [{ name: 'Project', refId: '11.2' }],
+    } as unknown as Partial<AcceleratorReportPayload>);
+
+    expect(getProgressIndicators(report).map(({ refId }) => refId)).toEqual(['2.1', '11.2', '11.10']);
   });
 
   test('returns nothing for a report that has not loaded', () => {
@@ -118,36 +128,46 @@ describe('getProgressIndicators', () => {
   });
 });
 
-describe('getFunderVisibleIndicators', () => {
-  test('drops the indicators that never reach funders', () => {
-    const report = acceleratorReport({
-      commonIndicators: [
-        { isPublishable: true, name: 'Shared' },
-        { isPublishable: false, name: 'Internal' },
-      ],
-    } as unknown as Partial<AcceleratorReportPayload>);
-
-    expect(getFunderVisibleIndicators(report).map(({ name }) => name)).toEqual(['Shared']);
-  });
-});
-
 describe('getPublishedProgressIndicators', () => {
   test('tags each indicator with the array it arrived in', () => {
     const report = publishedReport({
-      autoCalculatedIndicators: [{ name: 'Trees Planted' }],
-      commonIndicators: [{ name: 'Standard one' }],
-      projectIndicators: [{ name: 'Project one' }],
+      autoCalculatedIndicators: [{ name: 'Trees Planted', refId: '1.3', value: 40 }],
+      commonIndicators: [{ name: 'Standard one', refId: '1.1' }],
+      projectIndicators: [{ name: 'Project one', refId: '1.2' }],
     } as unknown as Partial<PublishedReportPayload>);
 
     expect(getPublishedProgressIndicators(report).map(({ name, type }) => ({ name, type }))).toEqual([
-      { name: 'Trees Planted', type: 'autoCalculated' },
       { name: 'Standard one', type: 'common' },
       { name: 'Project one', type: 'project' },
+      { name: 'Trees Planted', type: 'autoCalculated' },
     ]);
+  });
+
+  test('orders by reference id numerically, whichever array an indicator came from', () => {
+    const report = publishedReport({
+      autoCalculatedIndicators: [{ name: 'Auto', refId: '2.1' }],
+      commonIndicators: [{ name: 'Standard', refId: '11.10' }],
+      projectIndicators: [{ name: 'Project', refId: '11.2' }],
+    } as unknown as Partial<PublishedReportPayload>);
+
+    expect(getPublishedProgressIndicators(report).map(({ refId }) => refId)).toEqual(['2.1', '11.2', '11.10']);
   });
 
   test('returns nothing for a report that has not loaded', () => {
     expect(getPublishedProgressIndicators(undefined)).toEqual([]);
+  });
+});
+
+describe('getFunderVisibleIndicators', () => {
+  test('drops the indicators that never reach funders', () => {
+    const report = acceleratorReport({
+      commonIndicators: [
+        { isPublishable: true, name: 'Shared', refId: '1.1' },
+        { isPublishable: false, name: 'Internal', refId: '1.2' },
+      ],
+    } as unknown as Partial<AcceleratorReportPayload>);
+
+    expect(getFunderVisibleIndicators(report).map(({ name }) => name)).toEqual(['Shared']);
   });
 });
 

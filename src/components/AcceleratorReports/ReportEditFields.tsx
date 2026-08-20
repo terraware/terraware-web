@@ -6,7 +6,7 @@ import ChallengesMitigationBox from 'src/components/AcceleratorReports/Challenge
 import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
 import { IndicatorProgressSectionContent } from 'src/components/AcceleratorReports/IndicatorProgressSection';
-import { ProgressIndicator } from 'src/components/AcceleratorReports/utils';
+import { ProgressIndicator, getProgressIndicators } from 'src/components/AcceleratorReports/utils';
 import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 
 const INDICATOR_FIELDS: Record<string, keyof AcceleratorReportPayload> = {
@@ -30,19 +30,7 @@ const ReportEditFields = ({
 }: ReportEditFieldsProps): JSX.Element => {
   const projectId = record.projectId;
 
-  const indicators = useMemo<ProgressIndicator[]>(
-    () => [
-      ...record.commonIndicators.map((indicator) => ({ ...indicator, type: 'common' as const })),
-      ...record.projectIndicators.map((indicator) => ({ ...indicator, type: 'project' as const })),
-      ...record.autoCalculatedIndicators.map((indicator) => ({
-        ...indicator,
-        name: indicator.indicator,
-        type: 'autoCalculated' as const,
-        value: indicator.overrideValue ?? indicator.systemValue,
-      })),
-    ],
-    [record.autoCalculatedIndicators, record.commonIndicators, record.projectIndicators]
-  );
+  const indicators = useMemo(() => getProgressIndicators(record), [record]);
 
   const onChangeIndicator = useCallback(
     (indicator: ProgressIndicator, id: string, value: unknown) => {
