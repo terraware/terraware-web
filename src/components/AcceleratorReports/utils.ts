@@ -7,7 +7,7 @@ import {
 } from 'src/queries/generated/acceleratorReports';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { ILocalizedStrings } from 'src/strings';
-import { IndicatorType, MetricStatus } from 'src/types/AcceleratorReport';
+import { AcceleratorReportStatus, IndicatorType, MetricStatus } from 'src/types/AcceleratorReport';
 
 export const getReportName = (report: AcceleratorReportPayload | PublishedReportPayload) => {
   const year = report.startDate?.split('-')[0];
@@ -60,12 +60,15 @@ export const getProgressIndicators = (report?: AcceleratorReportPayload): Progre
 export const getFunderVisibleIndicators = (report?: AcceleratorReportPayload): ProgressIndicator[] =>
   getProgressIndicators(report).filter((indicator) => indicator.isPublishable);
 
-// the published payload only ever carries the indicators funders are allowed to see, and gives every
-// class of indicator the same shape
+/**
+ * The published payload only ever carries the indicators funders are allowed to see. It gives every
+ * class of indicator the same shape, so the only thing that says which class an indicator is, is the
+ * array it arrived in.
+ */
 export const getPublishedProgressIndicators = (report?: PublishedReportPayload): ProgressIndicator[] => [
-  ...(report?.autoCalculatedIndicators ?? []),
-  ...(report?.commonIndicators ?? []),
-  ...(report?.projectIndicators ?? []),
+  ...(report?.autoCalculatedIndicators ?? []).map((indicator) => ({ ...indicator, type: 'autoCalculated' as const })),
+  ...(report?.commonIndicators ?? []).map((indicator) => ({ ...indicator, type: 'common' as const })),
+  ...(report?.projectIndicators ?? []).map((indicator) => ({ ...indicator, type: 'project' as const })),
 ];
 
 // Reference ids read like 11.2.3, so compare them segment by segment as numbers rather than as text,
@@ -132,6 +135,76 @@ export const unpublishedPropertyList = (unpublishedProperties: string[], strings
   };
 
   return unpublishedProperties.map((property) => propertyLabels[property] ?? property).join(', ');
+};
+
+/**
+ * The console calls a rejected report "update requested" where everyone else calls it "update
+ * needed", matching `AcceleratorReportStatusBadge`.
+ */
+export const acceleratorReportStatusLabel = (
+  status: AcceleratorReportStatus | undefined,
+  strings: ILocalizedStrings,
+  isConsoleView?: boolean
+): string => {
+  switch (status) {
+    case 'Approved':
+      return strings.APPROVED;
+    case 'Needs Update':
+      return isConsoleView ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED;
+    case 'Not Needed':
+      return strings.NOT_NEEDED;
+    case 'Not Submitted':
+      return strings.NOT_SUBMITTED;
+    case 'Submitted':
+      return strings.SUBMITTED;
+    default:
+      return '';
+  }
+};
+
+export const metricStatusLabel = (status: MetricStatus | undefined, strings: ILocalizedStrings): string => {
+  switch (status) {
+    case 'Achieved':
+      return strings.ACHIEVED;
+    case 'Off-Track':
+      return strings.OFF_TRACK;
+    case 'On-Track':
+      return strings.ON_TRACK;
+    case 'Unlikely':
+      return strings.UNLIKELY;
+    default:
+      return '';
+  }
+};
+
+export const indicatorCategoryLabel = (category: IndicatorCategory | undefined, strings: ILocalizedStrings): string => {
+  switch (category) {
+    case 'Biodiversity':
+      return strings.BIODIVERSITY;
+    case 'Climate':
+      return strings.CLIMATE;
+    case 'Community':
+      return strings.COMMUNITY;
+    case 'Project Objectives':
+      return strings.PROJECT_OBJECTIVES;
+    default:
+      return '';
+  }
+};
+
+export const indicatorLevelLabel = (level: IndicatorLevel | undefined, strings: ILocalizedStrings): string => {
+  switch (level) {
+    case 'Goal':
+      return strings.INDICATOR_TYPE_GOAL;
+    case 'Outcome':
+      return strings.METRIC_TYPE_OUTCOME;
+    case 'Output':
+      return strings.METRIC_TYPE_OUTPUT;
+    case 'Process':
+      return strings.INDICATOR_TYPE_PROCESS;
+    default:
+      return '';
+  }
 };
 
 export const indicatorClassLabel = (classId: IndicatorClass | undefined, strings: ILocalizedStrings): string => {

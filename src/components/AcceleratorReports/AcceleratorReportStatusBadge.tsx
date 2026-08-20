@@ -4,6 +4,7 @@ import { useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
+import { acceleratorReportStatusLabel } from 'src/components/AcceleratorReports/utils';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
@@ -19,7 +20,7 @@ const AcceleratorReportStatusBadge = (props: AcceleratorReportStatusBadgeProps):
   const theme = useTheme();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
-  const badgeProps = useMemo((): BadgeProps | undefined => {
+  const badgeProps = useMemo((): Omit<BadgeProps, 'label'> | undefined => {
     if (!activeLocale) {
       return undefined;
     }
@@ -30,42 +31,43 @@ const AcceleratorReportStatusBadge = (props: AcceleratorReportStatusBadgeProps):
           backgroundColor: theme.palette.TwClrBgSuccessTertiary,
           borderColor: theme.palette.TwClrBrdrSuccess,
           labelColor: theme.palette.TwClrTxtSuccess,
-          label: strings.APPROVED,
         };
       case 'Not Needed':
         return {
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
           borderColor: theme.palette.TwClrBrdrInfo,
           labelColor: theme.palette.TwClrTxtInfo,
-          label: strings.NOT_NEEDED,
         };
       case 'Needs Update':
         return {
           backgroundColor: theme.palette.TwClrBgDangerTertiary,
           borderColor: theme.palette.TwClrBrdrDanger,
           labelColor: theme.palette.TwClrTxtDanger,
-          label: isAcceleratorRoute ? strings.UPDATE_REQUESTED : strings.UPDATE_NEEDED,
         };
       case 'Not Submitted':
         return {
           backgroundColor: theme.palette.TwClrBgInfoTertiary,
           borderColor: theme.palette.TwClrBrdrInfo,
           labelColor: theme.palette.TwClrTxtInfo,
-          label: strings.NOT_SUBMITTED,
         };
       case 'Submitted':
         return {
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
           labelColor: theme.palette.TwClrTxtWarning,
-          label: strings.SUBMITTED,
         };
       default:
         return undefined;
     }
-  }, [activeLocale, isAcceleratorRoute, status, theme]);
+  }, [activeLocale, status, theme]);
 
-  return <>{badgeProps && <Badge {...badgeProps} />}</>;
+  return (
+    <>
+      {badgeProps && (
+        <Badge {...badgeProps} label={acceleratorReportStatusLabel(status, strings, isAcceleratorRoute)} />
+      )}
+    </>
+  );
 };
 
 export default AcceleratorReportStatusBadge;

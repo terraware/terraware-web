@@ -1,20 +1,19 @@
 import { describe, expect, test } from '@rstest/core';
 
-import { ProgressIndicator, getIndicatorCumulativeValue } from 'src/components/AcceleratorReports/utils';
 import {
   ReportCsvAudience,
-  makeAchievementsCsv,
-  makeChallengesCsv,
-  makeIndicatorsCsv,
-  makeReportCsv,
+  ReportCsvField,
+  ReportCsvParams,
+  getIndicatorCsvColumns,
+  isLocalizedCsvValue,
+  makeAchievementCsvRows,
+  makeChallengeCsvRows,
+  makeIndicatorCsvRows,
+  makeReportCsvRows,
 } from 'src/components/AcceleratorReports/useExportReportCsv';
+import { ProgressIndicator } from 'src/components/AcceleratorReports/utils';
 import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
-import { strings as english } from 'src/strings/strings-en';
-import { ILocalizedStrings } from 'src/strings';
-
-// the CSV builders only read keys, so the app's half of the table stands in for the whole thing
-const strings = english as unknown as ILocalizedStrings;
 
 const acceleratorReport: AcceleratorReportPayload = {
   achievements: ['Planted the first stratum', 'Hired two rangers'],
@@ -71,116 +70,145 @@ const indicator = (overrides: Partial<ProgressIndicator> = {}): ProgressIndicato
   ...overrides,
 });
 
-const params = (audience: ReportCsvAudience, overrides: Partial<Parameters<typeof makeReportCsv>[0]> = {}) => ({
+const params = (audience: ReportCsvAudience, overrides: Partial<ReportCsvParams> = {}): ReportCsvParams => ({
   audience,
-  indicators: [] as ProgressIndicator[],
+  indicators: [],
   report: audience === 'funder' ? publishedReport : acceleratorReport,
   ...overrides,
 });
 
-// jsdom's Blob has no text(), so read it the way a browser without that method would
-const blobText = (blob: Blob) =>
-  new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve((reader.result as string).replace(/^\ufeff/, ''));
-    reader.onerror = () => reject(reader.error);
-    reader.readAsText(blob);
+const fieldsOf = (rows: { field: ReportCsvField }[]) => rows.map(({ field }) => field);
+
+const valueOf = (rows: { field: ReportCsvField; value: unknown }[], field: ReportCsvField) =>
+  rows.find((row) => row.field === field)?.value;
+
+describe('makeReportCsvRows', () => {
+  test('omits the review fields a funder never sees, even from a working report', () => {
+    const fields = fieldsOf(makeReportCsvRows({ ...params('funder'), report: acceleratorReport }));
+
+    expect(fields).toContain('highlights');
+    expect(fields).not.toContain('status');
+    expect(fields).not.toContain('feedback');
+    expect(fields).not.toContain('internalComment');
+    expect(fields).not.toContain('unpublishedChanges');
   });
 
-const rows = async (blob: Blob) => (await blobText(blob)).trim().split('\r\n');
+  test('gives a participant the review state but not the console-only fields', () => {
+    const rows = makeReportCsvRows(params('participant'));
 
-describe('makeReportCsv', () => {
-  test('omits the review fields a funder never sees, even from a working report', async () => {
-    const text = await blobText(makeReportCsv(
-      { ...params('funder'), report: acceleratorReport, projectName: 'Kaiholena' },
-      strings
-    ));
-
-    expect(text).toContain(strings.HIGHLIGHTS);
-    expect(text).not.toContain(strings.STATUS);
-    expect(text).not.toContain(strings.FEEDBACK);
-    expect(text).not.toContain(strings.INTERNAL_COMMENT);
-    expect(text).not.toContain(strings.UNPUBLISHED_CHANGES);
+    expect(fieldsOf(rows)).toContain('status');
+    expect(valueOf(rows, 'feedback')).toBe('Please expand the highlights');
+    expect(fieldsOf(rows)).not.toContain('internalComment');
+    expect(fieldsOf(rows)).not.toContain('unpublishedChanges');
   });
 
-  test('gives a participant the review state but not the console-only fields', async () => {
-    const text = await blobText(makeReportCsv(params('participant'), strings));
+  test('gives the console the internal comment and the unpublished section list', () => {
+    const rows = makeReportCsvRows(params('console'));
 
-    expect(text).toContain(strings.STATUS);
-    expect(text).toContain('Approved');
-    expect(text).toContain(strings.FEEDBACK);
-    expect(text).toContain('Please expand the highlights');
-    expect(text).not.toContain(strings.INTERNAL_COMMENT);
-    expect(text).not.toContain(strings.UNPUBLISHED_CHANGES);
+    expect(valueOf(rows, 'internalComment')).toBe('Watch the burn rate');
+    expect(valueOf(rows, 'unpublishedChanges')).toEqual({
+      kind: 'reportSections',
+      value: ['highlights', 'challenges'],
+    });
   });
 
-  test('gives the console the internal comment and the unpublished section list', async () => {
-    const text = await blobText(makeReportCsv(params('console'), strings));
+  test('leaves the status for the hook to render, flagged for the console wording', () => {
+    expect(valueOf(makeReportCsvRows(params('console')), 'status')).toEqual({
+      kind: 'reportStatus',
+      isConsoleView: true,
+      value: 'Approved',
+    });
 
-    expect(text).toContain(strings.INTERNAL_COMMENT);
-    expect(text).toContain('Watch the burn rate');
-    expect(text).toContain(strings.UNPUBLISHED_CHANGES);
-    expect(text).toContain(`${strings.HIGHLIGHTS}, ${strings.CHALLENGES}`);
+    expect(valueOf(makeReportCsvRows(params('participant')), 'status')).toEqual({
+      kind: 'reportStatus',
+      isConsoleView: false,
+      value: 'Approved',
+    });
   });
 
-  test('includes the project row only when a project name is known', async () => {
-    const withProject = await blobText(makeReportCsv({ ...params('funder'), projectName: 'Kaiholena' }, strings));
-    const withoutProject = await blobText(makeReportCsv(params('funder'), strings));
+  test('leaves the reporting period for the hook to render in the reader locale', () => {
+    const rows = makeReportCsvRows(params('participant'));
 
-    expect(withProject).toContain('Kaiholena');
-    expect(withoutProject).not.toContain('Kaiholena');
+    expect(valueOf(rows, 'startDate')).toEqual({ kind: 'date', value: '2026-04-01' });
+    expect(valueOf(rows, 'endDate')).toEqual({ kind: 'date', value: '2026-06-30' });
+  });
+
+  test('includes the project row only when a project name is known', () => {
+    expect(valueOf(makeReportCsvRows({ ...params('funder'), projectName: 'Kaiholena' }), 'project')).toBe('Kaiholena');
+    expect(fieldsOf(makeReportCsvRows(params('funder')))).not.toContain('project');
+  });
+
+  test('names the report by year and quarter', () => {
+    expect(valueOf(makeReportCsvRows(params('participant')), 'report')).toBe('2026-Q2');
   });
 });
 
-describe('makeAchievementsCsv', () => {
-  test('writes one row per achievement', async () => {
-    expect(await rows(makeAchievementsCsv(params('participant'), strings))).toEqual([
-      `"${strings.ACHIEVEMENT}"`,
-      '"Planted the first stratum"',
-      '"Hired two rangers"',
+describe('makeAchievementCsvRows', () => {
+  test('writes one row per achievement', () => {
+    expect(makeAchievementCsvRows(params('participant'))).toEqual([
+      { achievement: 'Planted the first stratum' },
+      { achievement: 'Hired two rangers' },
     ]);
   });
 
-  test('writes headers only when there are no achievements', async () => {
+  test('is empty when there are no achievements', () => {
     const report = { ...acceleratorReport, achievements: [] };
 
-    expect(await rows(makeAchievementsCsv({ ...params('participant'), report }, strings))).toEqual([
-      `"${strings.ACHIEVEMENT}"`,
-    ]);
+    expect(makeAchievementCsvRows({ ...params('participant'), report })).toEqual([]);
   });
 });
 
-describe('makeChallengesCsv', () => {
-  test('pairs each challenge with its mitigation plan', async () => {
-    expect(await rows(makeChallengesCsv(params('participant'), strings))).toEqual([
-      `"${strings.CHALLENGE}","${strings.MITIGATION_PLAN}"`,
-      '"Drought","Drip irrigation"',
+describe('makeChallengeCsvRows', () => {
+  test('pairs each challenge with its mitigation plan', () => {
+    expect(makeChallengeCsvRows(params('participant'))).toEqual([
+      { challenge: 'Drought', mitigationPlan: 'Drip irrigation' },
     ]);
   });
 
-  test('writes headers only when there are no challenges', async () => {
+  test('is empty when there are no challenges', () => {
     const report = { ...acceleratorReport, challenges: [] };
 
-    expect(await rows(makeChallengesCsv({ ...params('participant'), report }, strings))).toEqual([
-      `"${strings.CHALLENGE}","${strings.MITIGATION_PLAN}"`,
-    ]);
+    expect(makeChallengeCsvRows({ ...params('participant'), report })).toEqual([]);
   });
 });
 
-describe('makeIndicatorsCsv', () => {
-  test('orders rows by reference id numerically rather than as text', async () => {
+describe('getIndicatorCsvColumns', () => {
+  test('keeps the Terraware values out of a funder export', () => {
+    expect(getIndicatorCsvColumns('funder')).not.toContain('systemValue');
+    expect(getIndicatorCsvColumns('funder')).not.toContain('overrideValue');
+    expect(getIndicatorCsvColumns('participant')).toContain('systemValue');
+    expect(getIndicatorCsvColumns('participant')).toContain('overrideValue');
+  });
+
+  test('reports which indicators reach funders only in the console export', () => {
+    expect(getIndicatorCsvColumns('console')).toContain('isPublishable');
+    expect(getIndicatorCsvColumns('participant')).not.toContain('isPublishable');
+    expect(getIndicatorCsvColumns('funder')).not.toContain('isPublishable');
+  });
+
+  test('opens every audience with the same identifying columns', () => {
+    (['funder', 'participant', 'console'] as ReportCsvAudience[]).forEach((audience) => {
+      expect(getIndicatorCsvColumns(audience).slice(0, 3)).toEqual(['refId', 'name', 'type']);
+    });
+  });
+});
+
+describe('makeIndicatorCsvRows', () => {
+  test('orders rows by reference id numerically rather than as text', () => {
     const indicators = [
       indicator({ name: 'Eleven ten', refId: '11.10' }),
       indicator({ name: 'Eleven two', refId: '11.2' }),
       indicator({ name: 'Two', refId: '2.1' }),
     ];
 
-    const [, ...dataRows] = await rows(makeIndicatorsCsv({ ...params('funder'), indicators }, strings));
-
-    expect(dataRows.map((row) => row.split(',')[1])).toEqual(['"Two"', '"Eleven two"', '"Eleven ten"']);
+    expect(makeIndicatorCsvRows({ ...params('funder'), indicators }).map((row) => row.name)).toEqual([
+      'Two',
+      'Eleven two',
+      'Eleven ten',
+    ]);
   });
 
-  test('spreads the year of progress across the quarter columns', async () => {
+  test('spreads the year of progress across the quarter columns', () => {
     const indicators = [
       indicator({
         classId: 'Yearly Cumulative',
@@ -192,97 +220,76 @@ describe('makeIndicatorsCsv', () => {
       }),
     ];
 
-    const [headerRow, dataRow] = await rows(makeIndicatorsCsv({ ...params('funder'), indicators }, strings));
-    const columns = headerRow.split(',').map((column) => column.replace(/"/g, ''));
-    const values = dataRow.split(',').map((value) => value.replace(/"/g, ''));
-    const valueOf = (column: string) => values[columns.indexOf(column)];
+    const [row] = makeIndicatorCsvRows({ ...params('funder'), indicators });
 
-    expect(valueOf('Q1')).toBe('10');
-    expect(valueOf('Q2')).toBe('15');
-    expect(valueOf('Q3')).toBe('');
-    expect(valueOf('Q4')).toBe('');
-    expect(valueOf(strings.CUMULATIVE_PROGRESS)).toBe('25');
+    expect(row.Q1).toBe(10);
+    expect(row.Q2).toBe(15);
+    expect(row.Q3).toBeUndefined();
+    expect(row.Q4).toBeUndefined();
+    expect(row.cumulativeValue).toBe(25);
   });
 
-  test('rounds to the indicator precision, and leaves a precision-less value alone', async () => {
+  test('rounds to the indicator precision, and leaves a precision-less value alone', () => {
     const indicators = [
       indicator({ name: 'Rounded', precision: 1, refId: '1.1', value: 12.345 }),
       indicator({ name: 'Raw', refId: '1.2', value: 12.345 }),
     ];
 
-    const text = await blobText(makeIndicatorsCsv({ ...params('funder'), indicators }, strings));
-
-    expect(text).toContain('12.3');
-    expect(text).toContain('12.345');
+    expect(makeIndicatorCsvRows({ ...params('funder'), indicators }).map((row) => row.value)).toEqual([12.3, 12.345]);
   });
 
-  test('keeps the Terraware values out of a funder export', async () => {
-    const indicators = [indicator({ overrideValue: 5, systemValue: 4, type: 'autoCalculated' })];
+  test('leaves every enum cell for the hook to render', () => {
+    const indicators = [
+      indicator({ category: 'Climate', classId: 'Lifetime Cumulative', level: 'Outcome', status: 'On-Track' }),
+    ];
 
-    const funderText = await blobText(makeIndicatorsCsv({ ...params('funder'), indicators }, strings));
-    const participantText = await blobText(makeIndicatorsCsv({ ...params('participant'), indicators }, strings));
+    const [row] = makeIndicatorCsvRows({ ...params('funder'), indicators });
 
-    expect(funderText).not.toContain(strings.TERRAWARE_VALUE);
-    expect(funderText).not.toContain(strings.OVERWRITTEN_VALUE);
-    expect(participantText).toContain(strings.TERRAWARE_VALUE);
-    expect(participantText).toContain(strings.OVERWRITTEN_VALUE);
+    expect(row.category).toEqual({ kind: 'indicatorCategory', value: 'Climate' });
+    expect(row.classId).toEqual({ kind: 'indicatorClass', value: 'Lifetime Cumulative' });
+    expect(row.level).toEqual({ kind: 'indicatorLevel', value: 'Outcome' });
+    expect(row.status).toEqual({ kind: 'metricStatus', value: 'On-Track' });
+    expect(row.type).toEqual({ kind: 'indicatorType', value: 'common' });
   });
 
-  test('reports which indicators reach funders only in the console export', async () => {
-    const indicators = [indicator({ isPublishable: true })];
+  test('records which class of indicator each row came from', () => {
+    const indicators = [
+      indicator({ refId: '1.1', type: 'autoCalculated' }),
+      indicator({ refId: '1.2', type: 'common' }),
+      indicator({ refId: '1.3', type: 'project' }),
+    ];
 
-    const consoleText = await blobText(makeIndicatorsCsv({ ...params('console'), indicators }, strings));
-    const participantText = await blobText(makeIndicatorsCsv({ ...params('participant'), indicators }, strings));
+    expect(makeIndicatorCsvRows({ ...params('funder'), indicators }).map((row) => row.type)).toEqual([
+      { kind: 'indicatorType', value: 'autoCalculated' },
+      { kind: 'indicatorType', value: 'common' },
+      { kind: 'indicatorType', value: 'project' },
+    ]);
+  });
 
-    expect(consoleText).toContain(strings.SHARED_WITH_FUNDER);
-    expect(participantText).not.toContain(strings.SHARED_WITH_FUNDER);
+  test('carries the free-text cells through untouched', () => {
+    const indicators = [
+      indicator({
+        description: 'How many trees went in the ground',
+        progressNotes: 'Ahead of plan',
+        projectsComments: 'Rain helped',
+        supportingDocumentUrl: 'https://example.org/evidence',
+      }),
+    ];
+
+    const [row] = makeIndicatorCsvRows({ ...params('funder'), indicators });
+
+    expect(row.description).toBe('How many trees went in the ground');
+    expect(row.progressNotes).toBe('Ahead of plan');
+    expect(row.projectsComments).toBe('Rain helped');
+    expect(row.supportingDocumentUrl).toBe('https://example.org/evidence');
   });
 });
 
-describe('getIndicatorCumulativeValue', () => {
-  test('returns the quarter value for a non-cumulative indicator', () => {
-    expect(getIndicatorCumulativeValue(indicator({ value: 12 }))).toBe(12);
-  });
-
-  test('accumulates a yearly indicator from zero', () => {
-    const yearly = indicator({
-      baseline: 100,
-      classId: 'Yearly Cumulative',
-      currentYearProgress: [
-        { quarter: 'Q1', value: 10 },
-        { quarter: 'Q2', value: 15 },
-      ],
-      previousYearCumulativeTotal: 500,
-      value: 15,
-    });
-
-    expect(getIndicatorCumulativeValue(yearly)).toBe(25);
-  });
-
-  test('falls back to the quarter value when a yearly indicator has no quarterly breakdown', () => {
-    expect(getIndicatorCumulativeValue(indicator({ classId: 'Yearly Cumulative', value: 15 }))).toBe(15);
-  });
-
-  test('accumulates a lifetime indicator on top of the previous year total', () => {
-    const lifetime = indicator({
-      baseline: 100,
-      classId: 'Lifetime Cumulative',
-      currentYearProgress: [{ quarter: 'Q1', value: 10 }],
-      previousYearCumulativeTotal: 500,
-      value: 10,
-    });
-
-    expect(getIndicatorCumulativeValue(lifetime)).toBe(510);
-  });
-
-  test('falls back to the baseline when a lifetime indicator has no previous year total', () => {
-    const lifetime = indicator({
-      baseline: 100,
-      classId: 'Lifetime Cumulative',
-      currentYearProgress: [{ quarter: 'Q1', value: 10 }],
-      value: 10,
-    });
-
-    expect(getIndicatorCumulativeValue(lifetime)).toBe(110);
+describe('isLocalizedCsvValue', () => {
+  test('separates the cells that still need rendering from the ones that do not', () => {
+    expect(isLocalizedCsvValue({ kind: 'date', value: '2026-04-01' })).toBe(true);
+    expect(isLocalizedCsvValue('Kaiholena')).toBe(false);
+    expect(isLocalizedCsvValue(12.5)).toBe(false);
+    expect(isLocalizedCsvValue(undefined)).toBe(false);
   });
 });
