@@ -12,6 +12,11 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.PublishedAcceleratorReport, id: 'LIST' },
       ],
     },
+    getPublishedReport: {
+      // tagged from the argument rather than the result so that publishing also refetches a report
+      // this page has already been told does not exist yet
+      providesTags: (_results, _error, reportId) => [{ type: QueryTagTypes.PublishedAcceleratorReport, id: reportId }],
+    },
     getPublishedReportPhoto: {
       providesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.PublishedAcceleratorReportMedia, id: payload.fileId },

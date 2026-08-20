@@ -5,7 +5,7 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { ProgressIndicator } from 'src/components/AcceleratorReports/IndicatorProgressRow';
 import { useLocalization } from 'src/providers';
-import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
+import { useGetPublishedReportQuery } from 'src/queries/generated/publishedReports';
 
 import FunderReportPageV2 from './FunderReportPageV2';
 
@@ -16,12 +16,9 @@ const PublishedFunderReportV2 = (): JSX.Element => {
   const projectId = Number(pathParams.projectId);
   const reportId = Number(pathParams.reportId);
 
-  const { currentData: listPublishedReportsData } = useListPublishedReportsQuery(projectId);
+  const { currentData: getPublishedReportData, error } = useGetPublishedReportQuery(reportId);
 
-  const report = useMemo(
-    () => listPublishedReportsData?.reports.find((publishedReport) => publishedReport.reportId === reportId),
-    [listPublishedReportsData, reportId]
-  );
+  const report = getPublishedReportData?.report;
 
   // the published payload only ever carries the indicators funders are allowed to see
   const indicators = useMemo<ProgressIndicator[]>(
@@ -33,7 +30,7 @@ const PublishedFunderReportV2 = (): JSX.Element => {
     [report]
   );
 
-  const isUnpublished = listPublishedReportsData !== undefined && report === undefined;
+  const isUnpublished = error !== undefined && 'status' in error && error.status === 404;
 
   return (
     <FunderReportPageV2
