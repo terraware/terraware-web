@@ -14,8 +14,19 @@ const DATA_SOURCE_LABELS: Record<string, string> = {
   RESOLVE: 'RESOLVE Ecoregions',
 };
 
+const ACRONYM_SOURCES = new Set(['GBIF', 'GRIIS', 'WCVP']);
 export const speciesDataSourceLabel = (datasetType?: string): string =>
   datasetType ? DATA_SOURCE_LABELS[datasetType] ?? datasetType : '';
+export const speciesDataSourceAcronymLabel = (datasetType?: string): string => {
+  if (!datasetType) {
+    return '';
+  }
+  const fullName = DATA_SOURCE_LABELS[datasetType];
+  if (!fullName) {
+    return datasetType;
+  }
+  return ACRONYM_SOURCES.has(datasetType) ? `${datasetType} (${fullName})` : fullName;
+};
 
 type SpeciesDataSourceBadgeProps = {
   source?: SpeciesDataSourcePayload;

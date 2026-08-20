@@ -3,6 +3,7 @@ import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
 import { Badge, TableRowType } from '@terraware/web-components';
 
+import Link from 'src/components/common/Link';
 import Button from 'src/components/common/button/Button';
 import TooltipButton from 'src/components/common/button/TooltipButton';
 import Table from 'src/components/common/table';
@@ -17,8 +18,9 @@ import { SpeciesProjectElement } from 'src/types/Species';
 import AddSpeciesToProjectModal from './AddSpeciesToProjectModal';
 import OverrideSpeciesModal from './OverrideSpeciesModal';
 import RemoveProjectsDialog from './RemoveProjectsDialog';
-import { speciesDataSourceLabel } from './SpeciesDataSourceBadge';
+import { speciesDataSourceAcronymLabel } from './SpeciesDataSourceBadge';
 import SpeciesNativityBadge from './SpeciesNativityBadge';
+import StatusDetailsModal from './StatusDetailsModal';
 
 type Nativity = NonNullable<SpeciesProjectElement['calculatedNativity']>;
 
@@ -26,7 +28,10 @@ type ProjectRow = {
   projectId: number;
   projectName: string;
   nativity?: Nativity;
+  overridden: boolean;
   justification?: string;
+  overriddenBy?: string;
+  overriddenTime?: string;
   dataSourceDate?: string;
   dataSourceType?: string;
   isNew: boolean;
@@ -67,6 +72,7 @@ export default function SpeciesProjectsSection({
   const [showRemoveDialog, setShowRemoveDialog] = useState(false);
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [overrideProjectId, setOverrideProjectId] = useState<number>();
+  const [detailsProjectId, setDetailsProjectId] = useState<number>();
 
   const rows = useMemo<ProjectRow[]>(() => {
     const removed = editMode ? removedProjectIds ?? [] : [];
@@ -77,7 +83,10 @@ export default function SpeciesProjectsSection({
         projectId: project.projectId,
         projectName: getProjectName(project.projectId),
         nativity: project.overriddenNativity ?? project.calculatedNativity,
+        overridden: !!project.overriddenNativity,
         justification: project.overriddenJustification,
+        overriddenBy: project.overriddenByName,
+        overriddenTime: project.overriddenTime,
         dataSourceDate: project.calculatedNativitySource?.datasetDate ?? project.pendingNativitySource?.datasetDate,
         dataSourceType: project.calculatedNativitySource?.datasetType ?? project.pendingNativitySource?.datasetType,
         isNew: false,
@@ -86,6 +95,7 @@ export default function SpeciesProjectsSection({
     const addedRows: ProjectRow[] = (editMode ? addedProjectIds ?? [] : []).map((projectId) => ({
       projectId,
       projectName: getProjectName(projectId),
+      overridden: false,
       isNew: true,
     }));
 
@@ -122,6 +132,11 @@ export default function SpeciesProjectsSection({
     return project ? { project, row } : undefined;
   }, [availableProjects, overrideProjectId, rows]);
 
+  const detailsRow = useMemo(
+    () => (detailsProjectId === undefined ? undefined : rows.find((r) => r.projectId === detailsProjectId)),
+    [detailsProjectId, rows]
+  );
+
   const Renderer = useCallback(
     (props: RendererProps<TableRowType>): JSX.Element => {
       const { column, row, index } = props;
@@ -131,12 +146,13 @@ export default function SpeciesProjectsSection({
         return (
           <CellRenderer
             {...props}
+            sx={{ '& > p': { maxWidth: 'none', overflow: 'visible' } }}
             value={
-              <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(1) }}>
+              <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: theme.spacing(1) }}>
                 {projectRow.nativity ? (
                   <>
                     {projectRow.dataSourceType ? (
-                      <Tooltip title={speciesDataSourceLabel(projectRow.dataSourceType)}>
+                      <Tooltip title={speciesDataSourceAcronymLabel(projectRow.dataSourceType)}>
                         <Box component='span' sx={{ display: 'inline-flex' }}>
                           <SpeciesNativityBadge nativity={projectRow.nativity} />
                         </Box>
@@ -145,9 +161,19 @@ export default function SpeciesProjectsSection({
                       <SpeciesNativityBadge nativity={projectRow.nativity} />
                     )}
                     {projectRow.dataSourceDate && (
-                      <Typography component='span' fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+                      <Typography
+                        component='span'
+                        fontSize='14px'
+                        color={theme.palette.TwClrTxtSecondary}
+                        whiteSpace='nowrap'
+                      >
                         {strings.formatString(strings.SPECIES_PROJECT_DATA_SOURCE_SYNC, projectRow.dataSourceDate)}
                       </Typography>
+                    )}
+                    {projectRow.overridden && (
+                      <Box component='span' sx={{ whiteSpace: 'nowrap' }}>
+                        <Link onClick={() => setDetailsProjectId(projectRow.projectId)}>{strings.SEE_DETAILS}</Link>
+                      </Box>
                     )}
                   </>
                 ) : (
@@ -174,7 +200,7 @@ export default function SpeciesProjectsSection({
               ) : (
                 <Button
                   id={`override-${projectRow.projectId}`}
-                  label={strings.OVERRIDE}
+                  label={projectRow.overridden ? strings.EDIT : strings.OVERRIDE}
                   priority='secondary'
                   type='passive'
                   size='small'
@@ -218,6 +244,21 @@ export default function SpeciesProjectsSection({
           project={overrideTarget.project}
           currentNativity={overrideTarget.row?.nativity}
           currentJustification={overrideTarget.row?.justification}
+        />
+      )}
+
+      {detailsRow && (
+        <StatusDetailsModal
+          onClose={() => setDetailsProjectId(undefined)}
+          onEdit={() => {
+            const projectId = detailsRow.projectId;
+            setDetailsProjectId(undefined);
+            setOverrideProjectId(projectId);
+          }}
+          nativity={detailsRow.nativity}
+          overriddenBy={detailsRow.overriddenBy}
+          overriddenTime={detailsRow.overriddenTime}
+          justification={detailsRow.justification}
         />
       )}
 

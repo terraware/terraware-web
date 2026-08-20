@@ -8,6 +8,7 @@ import { Button, DropdownItem } from '@terraware/web-components';
 import PageSnackbar from 'src/components/PageSnackbar';
 import BackToLink from 'src/components/common/BackToLink';
 import Checkbox from 'src/components/common/Checkbox';
+import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
@@ -42,6 +43,7 @@ import SpeciesDataSourceField from './SpeciesDataSourceField';
 import SpeciesNativityBadge from './SpeciesNativityBadge';
 import SpeciesProjectsSection from './SpeciesProjectsSection';
 import SpeciesProjectsTable from './SpeciesProjectsTable';
+import StatusDetailsModal from './StatusDetailsModal';
 
 type SpeciesDetailViewProps = {
   reloadData: () => void;
@@ -58,6 +60,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   const userCanEdit = !isContributor(selectedOrganization);
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
   const [overrideModalOpen, setOverrideModalOpen] = useState(false);
+  const [statusDetailsOpen, setStatusDetailsOpen] = useState(false);
   const snackbar = useSnackbar();
   const { orgHasParticipants } = useParticipantData();
   const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
@@ -139,6 +142,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
     return elements.find((element) => nativityOf(element)) ?? orgElement;
   }, [species, orgScopeKnown]);
   const orgNativity = orgNativityElement?.overriddenNativity ?? orgNativityElement?.calculatedNativity;
+  const orgIsOverridden = !!orgNativityElement?.overriddenNativity;
 
   return (
     <TfMain>
@@ -364,7 +368,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
                 >
                   <SpeciesNativityBadge nativity={orgNativity} />
                   <SpeciesDataSourceBadge source={orgNativityElement?.calculatedNativitySource} />
-                  {orgNativity && userCanEdit && (
+                  {orgNativity && userCanEdit && !orgIsOverridden && (
                     <Button
                       id='override-org-nativity'
                       label={strings.OVERRIDE}
@@ -375,6 +379,11 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
                     />
                   )}
                 </Box>
+                {orgIsOverridden && (
+                  <Box marginTop={theme.spacing(1)}>
+                    <Link onClick={() => setStatusDetailsOpen(true)}>{strings.SEE_DETAILS}</Link>
+                  </Box>
+                )}
               </Box>
             </GridItemWrapper>
           )}
@@ -408,6 +417,23 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
           botanicalCountryCode={selectedOrganization?.botanicalCountryCode}
           currentNativity={orgNativity}
           currentJustification={orgNativityElement?.overriddenJustification}
+        />
+      )}
+      {statusDetailsOpen && (
+        <StatusDetailsModal
+          onClose={() => setStatusDetailsOpen(false)}
+          onEdit={
+            userCanEdit
+              ? () => {
+                  setStatusDetailsOpen(false);
+                  setOverrideModalOpen(true);
+                }
+              : undefined
+          }
+          nativity={orgNativity}
+          overriddenBy={orgNativityElement?.overriddenByName}
+          overriddenTime={orgNativityElement?.overriddenTime}
+          justification={orgNativityElement?.overriddenJustification}
         />
       )}
     </TfMain>
