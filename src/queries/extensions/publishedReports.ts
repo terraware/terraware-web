@@ -13,8 +13,6 @@ api.enhanceEndpoints({
       ],
     },
     getPublishedReport: {
-      // tagged from the argument rather than the result so that publishing also refetches a report
-      // this page has already been told does not exist yet
       providesTags: (_results, _error, reportId) => [{ type: QueryTagTypes.PublishedAcceleratorReport, id: reportId }],
     },
     getPublishedReportPhoto: {
