@@ -2022,6 +2022,7 @@ SEASON_TO_COPY,Saison à copier,fd2a6498
 SECTION_OWNER_ASSIGNED,Section Propriétaire assigné,2756744b
 SECTIONS_USED,Sections utilisées,4e682124
 SEE_ALL_ACCESSIONS,Voir toutes les accessions,2d1b160b
+SEE_DETAILS,Voir les détails,70772c6c
 SEE_IC_VOTES,Voir les votes IC,a6e1094b
 SEE_LESS,Voir moins,519e0ef0
 SEE_MONITORING_PLOTS,Voir les parcelles de suivi,398e1420
@@ -2230,6 +2231,8 @@ SPECIES_MATCHED,Espèces appariées,429dfb05
 SPECIES_NAME,Nom de l'espèce,26123a34
 SPECIES_NOT_ACCEPTED,Espèces non acceptées,5383ef6c
 SPECIES_OBSERVED,Espèces observées,1759de27
+SPECIES_OVERRIDE_BY,Remplacé par {0} le {1},eb21f83f
+SPECIES_OVERRIDE_JUSTIFICATION,Justification : {0},10799196
 SPECIES_PLANTED,Espèces plantées,c5e0f029
 SPECIES_PROBLEM_NAME_IS_SYNONYM,Le nom est un synonyme,c38f5499
 SPECIES_PROBLEM_NAME_MISSPELLED,Nom mal orthographié,58f35a8c

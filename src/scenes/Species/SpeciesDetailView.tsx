@@ -42,6 +42,7 @@ import SpeciesDataSourceField from './SpeciesDataSourceField';
 import SpeciesNativityBadge from './SpeciesNativityBadge';
 import SpeciesProjectsSection from './SpeciesProjectsSection';
 import SpeciesProjectsTable from './SpeciesProjectsTable';
+import StatusDetailsModal from './StatusDetailsModal';
 
 type SpeciesDetailViewProps = {
   reloadData: () => void;
@@ -58,6 +59,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   const userCanEdit = !isContributor(selectedOrganization);
   const [deleteSpeciesModalOpen, setDeleteSpeciesModalOpen] = useState(false);
   const [overrideModalOpen, setOverrideModalOpen] = useState(false);
+  const [statusDetailsOpen, setStatusDetailsOpen] = useState(false);
   const snackbar = useSnackbar();
   const { orgHasParticipants } = useParticipantData();
   const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
@@ -127,18 +129,18 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
     [speciesIntelligenceEnabled]
   );
 
-  const orgScopeKnown = availableProjects !== undefined && availableProjects.length <= 1;
   const orgNativityElement = useMemo(() => {
     const elements = species?.projects ?? [];
     const nativityOf = (element?: (typeof elements)[number]) =>
       element?.overriddenNativity ?? element?.calculatedNativity;
     const orgElement = elements.find((element) => element.projectId === undefined);
-    if (nativityOf(orgElement) || !orgScopeKnown) {
+    if (nativityOf(orgElement) || hasMultipleProjects) {
       return orgElement;
     }
     return elements.find((element) => nativityOf(element)) ?? orgElement;
-  }, [species, orgScopeKnown]);
+  }, [species, hasMultipleProjects]);
   const orgNativity = orgNativityElement?.overriddenNativity ?? orgNativityElement?.calculatedNativity;
+  const orgIsOverridden = !!orgNativityElement?.overriddenNativity;
 
   return (
     <TfMain>
@@ -364,7 +366,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
                 >
                   <SpeciesNativityBadge nativity={orgNativity} />
                   <SpeciesDataSourceBadge source={orgNativityElement?.calculatedNativitySource} />
-                  {orgNativity && userCanEdit && (
+                  {orgNativity && userCanEdit && !orgIsOverridden && (
                     <Button
                       id='override-org-nativity'
                       label={strings.OVERRIDE}
@@ -375,6 +377,20 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
                     />
                   )}
                 </Box>
+                {orgIsOverridden && (
+                  <Typography
+                    onClick={() => setStatusDetailsOpen(true)}
+                    sx={{
+                      color: theme.palette.TwClrTxtBrand,
+                      cursor: 'pointer',
+                      fontSize: '14px',
+                      marginTop: theme.spacing(1),
+                      width: 'fit-content',
+                    }}
+                  >
+                    {strings.SEE_DETAILS}
+                  </Typography>
+                )}
               </Box>
             </GridItemWrapper>
           )}
@@ -408,6 +424,23 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
           botanicalCountryCode={selectedOrganization?.botanicalCountryCode}
           currentNativity={orgNativity}
           currentJustification={orgNativityElement?.overriddenJustification}
+        />
+      )}
+      {statusDetailsOpen && (
+        <StatusDetailsModal
+          onClose={() => setStatusDetailsOpen(false)}
+          onEdit={
+            userCanEdit
+              ? () => {
+                  setStatusDetailsOpen(false);
+                  setOverrideModalOpen(true);
+                }
+              : undefined
+          }
+          nativity={orgNativity}
+          overriddenBy={orgNativityElement?.overriddenByName}
+          overriddenTime={orgNativityElement?.overriddenTime}
+          justification={orgNativityElement?.overriddenJustification}
         />
       )}
     </TfMain>

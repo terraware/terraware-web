@@ -2023,6 +2023,7 @@ SEASON_TO_COPY,Temporada a copiar,fd2a6498
 SECTION_OWNER_ASSIGNED,Sección asignada por el propietario,2756744b
 SECTIONS_USED,Secciones utilizadas,4e682124
 SEE_ALL_ACCESSIONS,Ver todas las accesiones,2d1b160b
+SEE_DETAILS,Ver detalles,70772c6c
 SEE_IC_VOTES,Ver votos IC,a6e1094b
 SEE_LESS,Ver menos,519e0ef0
 SEE_MONITORING_PLOTS,Ver parcelas de monitoreo,398e1420
@@ -2231,6 +2232,8 @@ SPECIES_MATCHED,Especies coincidentes,429dfb05
 SPECIES_NAME,Nombre de la especie,26123a34
 SPECIES_NOT_ACCEPTED,Especies no aceptadas,5383ef6c
 SPECIES_OBSERVED,Especies observadas,1759de27
+SPECIES_OVERRIDE_BY,Anulado por {0} el {1},eb21f83f
+SPECIES_OVERRIDE_JUSTIFICATION,Justificación: {0},10799196
 SPECIES_PLANTED,Especies plantadas,c5e0f029
 SPECIES_PROBLEM_NAME_IS_SYNONYM,El nombre es un sinónimo,c38f5499
 SPECIES_PROBLEM_NAME_MISSPELLED,El nombre está mal escrito,58f35a8c

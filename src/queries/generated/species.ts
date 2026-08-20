@@ -200,8 +200,11 @@ export type SpeciesProblemElement = {
 export type SpeciesProjectElement = {
   calculatedNativity?: 'Invasive' | 'Introduced' | 'Native' | 'Unknown';
   calculatedNativitySource?: SpeciesDataSourcePayload;
+  overriddenBy?: number;
+  overriddenByName?: string;
   overriddenJustification?: string;
   overriddenNativity?: 'Invasive' | 'Introduced' | 'Native' | 'Unknown';
+  overriddenTime?: string;
   /** Latest calculated nativity value for the species, if different from calculatedNativity. This nativity is considered 'pending' until it is accepted by the user. */
   pendingNativity?: 'Invasive' | 'Introduced' | 'Native' | 'Unknown';
   pendingNativitySource?: SpeciesDataSourcePayload;

@@ -6123,7 +6123,7 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId: "Cumulative" | "Level";
+            classId: "Lifetime Cumulative" | "Not Cumulative" | "Yearly Cumulative";
             description: string;
             /** @enum {string} */
             frequency?: "Annual" | "Bi-Annual" | "MRV Cycle" | "Quarterly";
@@ -7713,7 +7713,7 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId: "Cumulative" | "Level";
+            classId: "Lifetime Cumulative" | "Not Cumulative" | "Yearly Cumulative";
             description?: string;
             /** @enum {string} */
             frequency?: "Annual" | "Bi-Annual" | "MRV Cycle" | "Quarterly";
@@ -7793,7 +7793,7 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId: "Cumulative" | "Level";
+            classId: "Lifetime Cumulative" | "Not Cumulative" | "Yearly Cumulative";
             description?: string;
             /** @enum {string} */
             frequency?: "Annual" | "Bi-Annual" | "MRV Cycle" | "Quarterly";
@@ -8895,6 +8895,10 @@ export interface components {
         /** @description Specifies which entities' events should be retrieved. Organization ID is mandatory, but other IDs can also be specified here. Entities have to match all the requested IDs. For example, if you specify observationId and monitoringPlotId, you will only get events related to one monitoring plot in one observation, whereas if you specify just observationId, you will get events related to all monitoring plots in that observation. The subjects property may be used to narrow the search further. */
         ListEventLogEntriesRequestPayload: {
             /** Format: int64 */
+            accessionId?: number;
+            /** Format: int64 */
+            facilityId?: number;
+            /** Format: int64 */
             fileId?: number;
             /** Format: int64 */
             monitoringPlotId?: number;
@@ -9421,7 +9425,7 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId: "Cumulative" | "Level";
+            classId: "Lifetime Cumulative" | "Not Cumulative" | "Yearly Cumulative";
             description?: string;
             /** @enum {string} */
             frequency?: "Annual" | "Bi-Annual" | "MRV Cycle" | "Quarterly";
@@ -10885,7 +10889,7 @@ export interface components {
         PublishProjectProfileRequestPayload: {
             details: components["schemas"]["FunderProjectDetailsPayload"];
         };
-        /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year. Note that only the report's quarter will be a published value, the rest will be current values whether or not they are the same as their published counterparts. */
+        /** @description If the indicator is lifetime or yearly cumulative, the list of actual values for all quarters in the report's year. Note that only the report's quarter will be a published value, the rest will be current values whether or not they are the same as their published counterparts. */
         PublishedCumulativeIndicatorProgressPayload: {
             /** @enum {string} */
             quarter: "Q1" | "Q2" | "Q3" | "Q4";
@@ -10901,15 +10905,15 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId: "Cumulative" | "Level";
-            /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year. Note that only the report's quarter will be a published value, the rest will be current values whether or not they are the same as their published counterparts. */
+            classId: "Lifetime Cumulative" | "Not Cumulative" | "Yearly Cumulative";
+            /** @description If the indicator is lifetime or yearly cumulative, the list of actual values for all quarters in the report's year. Note that only the report's quarter will be a published value, the rest will be current values whether or not they are the same as their published counterparts. */
             currentYearProgress?: components["schemas"]["PublishedCumulativeIndicatorProgressPayload"][];
             description?: string;
             endOfProjectTarget?: number;
             /** @enum {string} */
             level: "Process" | "Output" | "Outcome" | "Goal";
             name: string;
-            /** @description If the indicator is cumulative, the cumulative total at the end of the previous year */
+            /** @description If the indicator is lifetime cumulative, the cumulative total at the end of the previous year. Always null for yearly cumulative indicators. */
             previousYearCumulativeTotal?: number;
             progressNotes?: string;
             projectsComments?: string;
@@ -11205,7 +11209,7 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId: "Cumulative" | "Level";
+            classId: "Lifetime Cumulative" | "Not Cumulative" | "Yearly Cumulative";
             /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year */
             currentYearProgress?: components["schemas"]["CumulativeIndicatorProgressPayload"][];
             description?: string;
@@ -11253,7 +11257,7 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId: "Cumulative" | "Level";
+            classId: "Lifetime Cumulative" | "Not Cumulative" | "Yearly Cumulative";
             /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year */
             currentYearProgress?: components["schemas"]["CumulativeIndicatorProgressPayload"][];
             description?: string;
@@ -11300,7 +11304,7 @@ export interface components {
             /** @enum {string} */
             category: "Project Objectives" | "Climate" | "Community" | "Biodiversity";
             /** @enum {string} */
-            classId: "Cumulative" | "Level";
+            classId: "Lifetime Cumulative" | "Not Cumulative" | "Yearly Cumulative";
             /** @description If the indicator is cumulative, the list of actual values for all quarters in the report's year */
             currentYearProgress?: components["schemas"]["CumulativeIndicatorProgressPayload"][];
             description?: string;
@@ -11658,9 +11662,14 @@ export interface components {
             /** @enum {string} */
             calculatedNativity?: "Invasive" | "Introduced" | "Native" | "Unknown";
             calculatedNativitySource?: components["schemas"]["SpeciesDataSourcePayload"];
+            /** Format: int64 */
+            overriddenBy?: number;
+            overriddenByName?: string;
             overriddenJustification?: string;
             /** @enum {string} */
             overriddenNativity?: "Invasive" | "Introduced" | "Native" | "Unknown";
+            /** Format: date-time */
+            overriddenTime?: string;
             /**
              * @description Latest calculated nativity value for the species, if different from calculatedNativity. This nativity is considered 'pending' until it is accepted by the user.
              * @enum {string}
