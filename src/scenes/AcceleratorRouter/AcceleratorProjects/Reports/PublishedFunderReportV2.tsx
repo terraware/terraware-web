@@ -9,10 +9,6 @@ import { useListPublishedReportsQuery } from 'src/queries/generated/publishedRep
 
 import FunderReportPageV2 from './FunderReportPageV2';
 
-/**
- * The report as funders see it right now, rendered from the published snapshot. Unpublished console
- * edits are deliberately absent — the preview view is the one that shows those.
- */
 const PublishedFunderReportV2 = (): JSX.Element => {
   const { strings } = useLocalization();
   const pathParams = useParams<{ projectId: string; reportId: string }>();
