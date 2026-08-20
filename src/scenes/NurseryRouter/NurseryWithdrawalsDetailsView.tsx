@@ -10,7 +10,6 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers/hooks';
 import { useGetNurseryWithdrawalQuery } from 'src/queries/generated/nurseryWithdrawals';
 import { useSearchNurseryWithdrawalsQuery } from 'src/queries/search/nurseries';
@@ -20,6 +19,7 @@ import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
+import ReassignSeedlingsModal from './ReassignSeedlingsModal';
 import UndoWithdrawalModal from './UndoWithdrawalModal';
 import NonOutplantWithdrawalContent from './WithdrawalDetails/NonOutplantWithdrawalContent';
 import ReassignmentTabPanelContent from './WithdrawalDetails/ReassignmentTabPanelContent';
@@ -55,9 +55,9 @@ export default function NurseryWithdrawalsDetailsView({ species }: NurseryWithdr
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const { OUTPLANT, NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
-  const navigate = useSyncNavigate();
 
   const [undoWithdrawalModalOpened, setUndoWithdrawalModalOpened] = useState(false);
+  const [reassignModalOpened, setReassignModalOpened] = useState(false);
   const contentPanelProps = {
     borderRadius: '32px',
     backgroundColor: theme.palette.TwClrBg,
@@ -70,10 +70,7 @@ export default function NurseryWithdrawalsDetailsView({ species }: NurseryWithdr
 
   const handleReassign = () => {
     if (delivery) {
-      navigate({
-        pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', delivery.id.toString()),
-        search: '?fromWithdrawal',
-      });
+      setReassignModalOpened(true);
     }
   };
 
@@ -137,6 +134,9 @@ export default function NurseryWithdrawalsDetailsView({ species }: NurseryWithdr
     <TfMain>
       {undoWithdrawalModalOpened && withdrawalSummary && (
         <UndoWithdrawalModal onClose={() => setUndoWithdrawalModalOpened(false)} row={withdrawalSummary} />
+      )}
+      {reassignModalOpened && delivery && (
+        <ReassignSeedlingsModal deliveryId={delivery.id} onClose={() => setReassignModalOpened(false)} />
       )}
       <PageHeaderWrapper nextElement={contentRef.current} nextElementInitialMargin={-24}>
         <Box marginBottom={theme.spacing(2)}>

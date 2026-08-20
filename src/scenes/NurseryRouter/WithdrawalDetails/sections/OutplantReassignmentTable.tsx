@@ -4,15 +4,15 @@ import { TableColumnType } from '@terraware/web-components';
 
 import Table from 'src/components/common/table';
 import { useOrganization } from 'src/providers';
+import { PlantingPayload } from 'src/queries/generated/nurseryWithdrawals';
 import { useLazyListSubstrataQuery } from 'src/queries/search/substrata';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
-import { Delivery } from 'src/types/Tracking';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type OutplantReassignmentTableProps = {
   species: Species[];
-  delivery?: Delivery;
+  plantings?: PlantingPayload[];
   withdrawalNotes?: string;
 };
 
@@ -26,7 +26,7 @@ const columns = (): TableColumnType[] => [
 ];
 
 export default function OutplantReassignmentTable({
-  delivery,
+  plantings: allPlantings,
   species,
   withdrawalNotes,
 }: OutplantReassignmentTableProps): JSX.Element {
@@ -56,14 +56,12 @@ export default function OutplantReassignmentTable({
   const rowData = useMemo(() => {
     // get list of distinct species
     const speciesList =
-      delivery?.plantings?.reduce<number[]>(
-        (acc, pl) => (acc.includes(pl.speciesId) ? acc : [...acc, pl.speciesId]),
-        []
-      ) ?? [];
+      allPlantings?.reduce<number[]>((acc, pl) => (acc.includes(pl.speciesId) ? acc : [...acc, pl.speciesId]), []) ??
+      [];
     const rows: { [p: string]: unknown }[] = [];
     for (const sp of speciesList) {
       const speciesName = species?.find((x) => x?.id === sp)?.scientificName ?? '';
-      const plantings = delivery?.plantings?.filter((pl) => pl.speciesId === sp);
+      const plantings = allPlantings?.filter((pl) => pl.speciesId === sp);
       const deliveryPlanting = plantings?.find((pl) => pl.type === 'Delivery');
       const reassignmentFromPlanting = plantings?.find((pl) => pl.type === 'Reassignment From');
       const reassignmentToPlanting = plantings?.find((pl) => pl.type === 'Reassignment To');
@@ -92,7 +90,7 @@ export default function OutplantReassignmentTable({
     }
 
     return rows;
-  }, [delivery, species, substratumNames, withdrawalNotes, numberFormatter]);
+  }, [allPlantings, species, substratumNames, withdrawalNotes, numberFormatter]);
 
   return <Table id='outplant-reassignment-table' columns={columns} rows={rowData} orderBy={'name'} />;
 }

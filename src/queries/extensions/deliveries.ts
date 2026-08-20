@@ -7,7 +7,11 @@ api.enhanceEndpoints({
       providesTags: (_result, _error, deliveryId) => [{ type: QueryTagTypes.Deliveries, id: deliveryId }],
     },
     reassignDelivery: {
-      invalidatesTags: (_result, _error, payload) => [{ type: QueryTagTypes.Deliveries, id: payload.id }],
+      invalidatesTags: (_result, _error, payload) => [
+        { type: QueryTagTypes.Deliveries, id: payload.id },
+        { type: QueryTagTypes.NurseryWithdrawals, id: 'LIST' },
+        { type: QueryTagTypes.PlantingSites },
+      ],
     },
   },
 });

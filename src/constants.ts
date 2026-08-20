@@ -109,7 +109,6 @@ export enum APP_PATHS {
   NURSERIES_NEW = '/nurseries/new',
   NURSERIES_VIEW = '/nurseries/:nurseryId',
   NURSERY = '/nursery',
-  NURSERY_REASSIGNMENT = '/nursery/reassignment/:deliveryId',
   NURSERY_WITHDRAWALS = '/nursery/withdrawals',
   NURSERY_WITHDRAWALS_DETAILS = '/nursery/withdrawals/:withdrawalId',
   OBSERVATION_AD_HOC_PLOT_EDIT_PHOTOS_V2 = '/observations/:observationId/plot/:monitoringPlotId/photos',

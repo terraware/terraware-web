@@ -33,6 +33,7 @@ import {
   useLazySearchNurseryWithdrawalsFilterOptionsQuery,
   useLazySearchNurseryWithdrawalsQuery,
 } from 'src/queries/search/nurseries';
+import ReassignSeedlingsModal from 'src/scenes/NurseryRouter/ReassignSeedlingsModal';
 import UndoWithdrawalModal from 'src/scenes/NurseryRouter/UndoWithdrawalModal';
 import WithdrawalHistoryMenu from 'src/scenes/NurseryRouter/WithdrawalHistoryMenu';
 import { exportNurseryWithdrawalResults } from 'src/scenes/NurseryRouter/exportNurseryData';
@@ -89,21 +90,19 @@ const DEFAULT_SORT_ORDER: SearchSortOrderElement[] = [
 const MenuCellComponent = ({
   row,
   onUndo,
+  onReassign,
 }: {
   row: SearchNurseryWithdrawalPayload;
   onUndo: (row: SearchNurseryWithdrawalPayload) => void;
+  onReassign: (deliveryId: number) => void;
 }) => {
-  const navigate = useSyncNavigate();
   const { NURSERY_TRANSFER } = NurseryWithdrawalPurposes;
 
   const handleReassign = useCallback(() => {
     if (row.deliveryId) {
-      navigate({
-        pathname: APP_PATHS.NURSERY_REASSIGNMENT.replace(':deliveryId', String(row.deliveryId)),
-        search: '?fromWithdrawal',
-      });
+      onReassign(row.deliveryId);
     }
-  }, [navigate, row.deliveryId]);
+  }, [onReassign, row.deliveryId]);
 
   if (row.purpose !== NURSERY_TRANSFER && !row.undoesWithdrawalId && !row.undoneByWithdrawalId) {
     return <WithdrawalHistoryMenu reassign={handleReassign} withdrawal={row} undo={() => onUndo(row)} />;
@@ -177,6 +176,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const { availableProjects: projects } = useProjects();
 
   const [undoModalRow, setUndoModalRow] = useState<SearchNurseryWithdrawalPayload>();
+  const [reassignDeliveryId, setReassignDeliveryId] = useState<number>();
   const [listPlantingSeasons, plantingSeasonsResponse] = useLazyListPlantingSeasonsQuery();
   const [searchFilterOptions, searchFilterOptionsResponse] = useLazySearchNurseryWithdrawalsFilterOptionsQuery();
   const [searchNurseryWithdrawals, searchNurseryWithdrawalsResponse] = useLazySearchNurseryWithdrawalsQuery();
@@ -480,7 +480,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
   const MenuCell = useCallback(({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
     const row = cell.row.original;
-    return <MenuCellComponent row={row} onUndo={setUndoModalRow} />;
+    return <MenuCellComponent row={row} onUndo={setUndoModalRow} onReassign={setReassignDeliveryId} />;
   }, []);
 
   const columns = useMemo<EditableTableColumn<SearchNurseryWithdrawalPayload>[]>(
@@ -827,6 +827,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   return (
     <>
       {undoModalRow && <UndoWithdrawalModal onClose={() => setUndoModalRow(undefined)} row={undoModalRow} />}
+      {reassignDeliveryId !== undefined && (
+        <ReassignSeedlingsModal deliveryId={reassignDeliveryId} onClose={() => setReassignDeliveryId(undefined)} />
+      )}
       <EditableTable
         key='nursery-withdrawals-table'
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
