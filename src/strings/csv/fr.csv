@@ -2209,7 +2209,7 @@ SPECIES_CATEGORIES_TOOLTIP,Les catégories d'espèces indiquent le pourcentage d
 SPECIES_CHECK,Vérification des espèces,d7d0f200
 SPECIES_CHECK_ADDED_BANNER,"{0} nouvelles espèces ont été ajoutées ({1}). Lancez la vérification des espèces pour voir lesquelles sont indigènes, introduites ou envahissantes.",35e34395
 SPECIES_CHECK_ADDED_BANNER_ONE,"{0} nouvelle espèce a été ajoutée ({1}). Lancez la vérification des espèces pour voir si elle est indigène, introduite ou envahissante.",89f12eb5
-SPECIES_CHECK_SET_LOCATION_BANNER,"Pour vérifier quelles espèces sont indigènes, introduites ou envahissantes pour vos projets, lancez la vérification des espèces. Vous devrez d'abord définir l'emplacement de vos projets.",36e36517
+SPECIES_CHECK_SET_LOCATION_BANNER,"Pour vérifier quelles espèces sont indigènes, introduites ou envahissantes, lancez la Vérification des espèces. Vous devrez définir l’emplacement de vos projets.",3ba75cbd
 SPECIES_CHECK_SPECIES_CHECKED,{0} espèces vérifiées,3a3237db
 SPECIES_CHECK_UPDATE_HINT,"Sélectionnez les espèces à mettre à jour, ou continuez sans effectuer de mise à jour. Les mises à jour remplaceront les données existantes.",6cfa3ed4
 SPECIES_CHECK_UPDATES,{0} mises à jour,a1d89ade
