@@ -773,7 +773,10 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               priority='info'
               body={strings.SPECIES_CHECK_SET_LOCATION_BANNER}
               showCloseButton
-              onClose={() => setFirstTimeBannerDismissed(true)}
+              onClose={() => {
+                trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_BANNER_SHOWN, {});
+                setFirstTimeBannerDismissed(true);
+              }}
               pageButtons={[
                 <Button
                   key='run'

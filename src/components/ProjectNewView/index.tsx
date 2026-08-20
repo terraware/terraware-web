@@ -6,6 +6,8 @@ import { FormButton, theme } from '@terraware/web-components';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization } from 'src/providers/hooks';
 import { useAssignProjectMutation, useCreateProjectMutation } from 'src/queries/generated/projects';
 import { NurseryBatchesSearchResponseElement } from 'src/queries/search/batches';
@@ -29,6 +31,7 @@ export default function ProjectNewView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
+  const trackEvent = useTrackEvent();
 
   const [createProject, { data: createdProject, isError, isSuccess }] = useCreateProjectMutation();
   const [assignProject, { isError: isAssignError, isSuccess: isAssignSuccess }] = useAssignProjectMutation();
@@ -73,6 +76,15 @@ export default function ProjectNewView(): JSX.Element {
       return;
     }
 
+    if (record.botanicalCountryCode && record.countryCode) {
+      trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_PROJECT_LOCATION_SET, {
+        project_id: createdProject.id,
+        country_code: record.countryCode,
+        botanical_country_id: record.botanicalCountryCode,
+        set_at: 'creation',
+      });
+    }
+
     void assignProject({
       id: createdProject.id,
       assignProjectRequestPayload: {
@@ -89,7 +101,9 @@ export default function ProjectNewView(): JSX.Element {
     projectAccessions,
     projectBatches,
     projectPlantingSites,
+    record,
     snackbar,
+    trackEvent,
   ]);
 
   // Once the entities are assigned, notify and redirect to the projects list

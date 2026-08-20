@@ -8,6 +8,8 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useUpdateProjectMutation } from 'src/queries/generated/projects';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
@@ -31,6 +33,7 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
   const [updateProject, { isError, isSuccess, reset }] = useUpdateProjectMutation();
 
   const { availableProjects } = useProjects();
+  const trackEvent = useTrackEvent();
   const showProjectLocation = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) > 1;
 
   useEffect(() => {
@@ -71,11 +74,31 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
       snackbar.toastError();
     } else if (isSuccess && project) {
       reset();
+      if (showProjectLocation && countryCode && botanicalCountryCode) {
+        trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_PROJECT_LOCATION_SET, {
+          project_id: project.id,
+          country_code: countryCode,
+          botanical_country_id: botanicalCountryCode,
+          set_at: 'edit',
+        });
+      }
       snackbar.toastSuccess(strings.CHANGES_SAVED, strings.SAVED);
       reload();
       onClose();
     }
-  }, [isError, isSuccess, reset, snackbar, project, reload, onClose]);
+  }, [
+    isError,
+    isSuccess,
+    reset,
+    snackbar,
+    project,
+    reload,
+    onClose,
+    showProjectLocation,
+    countryCode,
+    botanicalCountryCode,
+    trackEvent,
+  ]);
 
   return (
     <ScrollableDialogBox
