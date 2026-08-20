@@ -105,6 +105,13 @@ const SpeciesCheckModal = ({
 
   const runStartRef = useRef(0);
 
+  const trackEventRef = useRef(trackEvent);
+  trackEventRef.current = trackEvent;
+  const entryRef = useRef(entry);
+  entryRef.current = entry;
+  const projectsLengthRef = useRef(projects.length);
+  projectsLengthRef.current = projects.length;
+
   useEffect(() => {
     if (!open) {
       return;
@@ -127,18 +134,18 @@ const SpeciesCheckModal = ({
     setLocationsSubmitted(false);
 
     runStartRef.current = Date.now();
-    trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_CHECK_RUN, {
+    trackEventRef.current(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_CHECK_RUN, {
       project_scope: 'all',
       species_count: speciesRef.current.length,
     });
     const locationStepShown = !targetsRef.current.every((target) => !!target.botanicalCountryCode);
     if (locationStepShown) {
-      trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_SHOWN, {
-        project_count: projects.length,
-        trigger: entry,
+      trackEventRef.current(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_SHOWN, {
+        project_count: projectsLengthRef.current,
+        trigger: entryRef.current,
       });
     }
-  }, [entry, open, projects.length, trackEvent]);
+  }, [open]);
 
   const allLocationsSet = targets.every((target) => !!target.botanicalCountryCode);
   const includeSetLocation = (!allLocationsSet && !locationsSubmitted) || forceLocation;
@@ -327,38 +334,50 @@ const SpeciesCheckModal = ({
     setBusy(false);
   }, [acceptProblem, goToStep, nameSelected, reloadSpecies, snackbar, speciesWithProblems]);
 
-  const trackCheckCompleted = useCallback(() => {
-    let invasiveCount = 0;
-    let unknownCount = 0;
-    speciesRef.current.forEach((sp) => {
-      const nativities = (sp.projects ?? []).map(
-        (element) => element.pendingNativity ?? element.overriddenNativity ?? element.calculatedNativity
-      );
-      if (nativities.includes('Invasive')) {
-        invasiveCount += 1;
-      }
-      if (nativities.includes('Unknown')) {
-        unknownCount += 1;
-      }
-    });
-    trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_CHECK_COMPLETED, {
-      project_scope: 'all',
-      species_count: speciesRef.current.length,
-      invasive_count: invasiveCount,
-      unknown_count: unknownCount,
-      duration_ms: Date.now() - runStartRef.current,
-    });
-  }, [trackEvent]);
+  const trackCheckCompleted = useCallback(
+    (submittedOverrides: { projectId?: number; speciesId: number; overriddenNativity: Nativity }[] = []) => {
+      const overrideByKey = new Map<string, Nativity>();
+      submittedOverrides.forEach((override) => {
+        overrideByKey.set(`${override.projectId ?? ORG_TARGET_KEY}-${override.speciesId}`, override.overriddenNativity);
+      });
+
+      let invasiveCount = 0;
+      let unknownCount = 0;
+      speciesRef.current.forEach((sp) => {
+        const nativities = (sp.projects ?? []).map(
+          (element) =>
+            overrideByKey.get(`${element.projectId ?? ORG_TARGET_KEY}-${sp.id}`) ??
+            element.pendingNativity ??
+            element.overriddenNativity ??
+            element.calculatedNativity
+        );
+        if (nativities.includes('Invasive')) {
+          invasiveCount += 1;
+        }
+        if (nativities.includes('Unknown')) {
+          unknownCount += 1;
+        }
+      });
+      trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_CHECK_COMPLETED, {
+        project_scope: 'all',
+        species_count: speciesRef.current.length,
+        invasive_count: invasiveCount,
+        unknown_count: unknownCount,
+        duration_ms: Date.now() - runStartRef.current,
+      });
+    },
+    [trackEvent]
+  );
 
   const finish = useCallback(async () => {
     try {
       if (selectedOrganization && hasAnyPending) {
         await acceptPending({ organizationId: selectedOrganization.id }).unwrap();
       }
+      trackCheckCompleted();
     } catch {
       snackbar.toastError();
     } finally {
-      trackCheckCompleted();
       reloadSpecies();
     }
   }, [acceptPending, hasAnyPending, reloadSpecies, selectedOrganization, snackbar, trackCheckCompleted]);
@@ -400,7 +419,7 @@ const SpeciesCheckModal = ({
       if (selectedOrganization) {
         await acceptPending({ organizationId: selectedOrganization.id }).unwrap();
       }
-      trackCheckCompleted();
+      trackCheckCompleted(overrides);
       onClose();
     } catch {
       snackbar.toastError();

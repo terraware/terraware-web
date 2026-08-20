@@ -45,13 +45,15 @@ const SpeciesDataSourceBadge = ({ source, speciesId, fieldName }: SpeciesDataSou
 
   return (
     <Tooltip
-      onOpen={() =>
-        trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SOURCE_ATTRIBUTION_HOVERED, {
-          species_id: speciesId ?? 0,
-          field_name: fieldName,
-          source: source.datasetType,
-        })
-      }
+      onOpen={() => {
+        if (speciesId) {
+          trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SOURCE_ATTRIBUTION_HOVERED, {
+            species_id: speciesId,
+            field_name: fieldName,
+            source: source.datasetType,
+          });
+        }
+      }}
       title={
         <>
           {speciesDataSourceLabel(source.datasetType)}
