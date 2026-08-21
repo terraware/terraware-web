@@ -81,6 +81,8 @@ const NameCheckStep = ({
           </Box>
           {speciesWithProblems.map((species) => {
             const problem = species.problems?.[0];
+            const hasSuggestion = !!problem?.suggestedValue;
+            const textColor = hasSuggestion ? theme.palette.TwClrTxt : theme.palette.TwClrTxtSecondary;
             return (
               <Box
                 key={species.id}
@@ -90,15 +92,16 @@ const NameCheckStep = ({
                 padding={theme.spacing(1, 2, 1, 0)}
               >
                 <Checkbox
-                  checked={selectedSpeciesIds.has(species.id)}
+                  checked={hasSuggestion && selectedSpeciesIds.has(species.id)}
                   onChange={() => onToggleSpecies(species.id)}
+                  disabled={!hasSuggestion}
                   sx={{ padding: 0 }}
                 />
-                <Typography sx={bodyCell}>{species.scientificName}</Typography>
+                <Typography sx={{ ...bodyCell, color: textColor }}>{species.scientificName}</Typography>
                 <Typography sx={{ ...bodyCell, color: theme.palette.TwClrTxt }}>
                   {problem ? issueLabel(problem) : ''}
                 </Typography>
-                <Typography sx={{ ...bodyCell, textAlign: 'right' }}>
+                <Typography sx={{ ...bodyCell, textAlign: 'right', color: textColor }}>
                   {problem?.suggestedValue
                     ? strings.formatString(strings.CHANGE_TO, <b>{problem.suggestedValue}</b>)
                     : ''}
