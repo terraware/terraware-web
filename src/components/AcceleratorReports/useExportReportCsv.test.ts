@@ -249,7 +249,7 @@ describe('makeIndicatorCsvRows', () => {
     expect(row.category).toEqual({ kind: 'indicatorCategory', value: 'Climate' });
     expect(row.classId).toEqual({ kind: 'indicatorClass', value: 'Lifetime Cumulative' });
     expect(row.level).toEqual({ kind: 'indicatorLevel', value: 'Outcome' });
-    expect(row.status).toEqual({ kind: 'metricStatus', value: 'On-Track' });
+    expect(row.status).toEqual({ kind: 'reportIndicatorStatus', value: 'On-Track' });
     expect(row.type).toEqual({ kind: 'indicatorType', value: 'common' });
   });
 

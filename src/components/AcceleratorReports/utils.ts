@@ -7,7 +7,7 @@ import {
 } from 'src/queries/generated/acceleratorReports';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { ILocalizedStrings } from 'src/strings';
-import { AcceleratorReportStatus, IndicatorType, MetricStatus } from 'src/types/AcceleratorReport';
+import { AcceleratorReportStatus, IndicatorType, ReportIndicatorStatus } from 'src/types/AcceleratorReport';
 
 export const getReportName = (report: AcceleratorReportPayload | PublishedReportPayload) => {
   const year = report.startDate?.split('-')[0];
@@ -37,7 +37,7 @@ export type ProgressIndicator = {
   progressNotes?: string;
   projectsComments?: string;
   refId: string;
-  status?: MetricStatus;
+  status?: ReportIndicatorStatus;
   supportingDocumentUrl?: string;
   target?: number;
   unit?: string;
@@ -157,7 +157,10 @@ export const acceleratorReportStatusLabel = (
   }
 };
 
-export const metricStatusLabel = (status: MetricStatus | undefined, strings: ILocalizedStrings): string => {
+export const reportIndicatorStatusLabel = (
+  status: ReportIndicatorStatus | undefined,
+  strings: ILocalizedStrings
+): string => {
   switch (status) {
     case 'Achieved':
       return strings.ACHIEVED;
@@ -232,7 +235,7 @@ export const toIndicatorEntriesPayload = (
   const entries = (indicator: {
     progressNotes?: string;
     projectsComments?: string;
-    status?: MetricStatus;
+    status?: ReportIndicatorStatus;
     supportingDocumentUrl?: string;
   }) => ({
     progressNotes: indicator.progressNotes,

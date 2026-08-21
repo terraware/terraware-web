@@ -4,13 +4,13 @@ import { Box, useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
-import { metricStatusLabel } from 'src/components/AcceleratorReports/utils';
+import { reportIndicatorStatusLabel } from 'src/components/AcceleratorReports/utils';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
-import { MetricStatus } from 'src/types/AcceleratorReport';
+import { ReportIndicatorStatus } from 'src/types/AcceleratorReport';
 
 type MetricStatusBadgeProps = {
-  status: MetricStatus;
+  status: ReportIndicatorStatus;
 };
 
 const MetricStatusBadge = (props: MetricStatusBadgeProps): JSX.Element => {
@@ -55,7 +55,7 @@ const MetricStatusBadge = (props: MetricStatusBadgeProps): JSX.Element => {
 
   return (
     <Box sx={{ textWrap: 'nowrap' }}>
-      {badgeProps && <Badge {...badgeProps} label={metricStatusLabel(status, strings)} />}
+      {badgeProps && <Badge {...badgeProps} label={reportIndicatorStatusLabel(status, strings)} />}
     </Box>
   );
 };

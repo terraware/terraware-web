@@ -15,7 +15,7 @@ import {
   indicatorCategoryLabel,
   indicatorClassLabel,
   indicatorLevelLabel,
-  metricStatusLabel,
+  reportIndicatorStatusLabel,
   unpublishedPropertyList,
 } from 'src/components/AcceleratorReports/utils';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
@@ -25,7 +25,12 @@ import {
   useLazyGetOneAcceleratorReportQuery,
 } from 'src/queries/generated/acceleratorReports';
 import { PublishedReportPayload, useLazyListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
-import { AcceleratorReportStatus, IndicatorType, MetricStatus, isAcceleratorReport } from 'src/types/AcceleratorReport';
+import {
+  AcceleratorReportStatus,
+  IndicatorType,
+  ReportIndicatorStatus,
+  isAcceleratorReport,
+} from 'src/types/AcceleratorReport';
 import { CsvData, makeCsv } from 'src/utils/csv';
 import { getMediumDate } from 'src/utils/dateFormatter';
 import downloadZipFile from 'src/utils/downloadZipFile';
@@ -57,7 +62,7 @@ export type LocalizedCsvValue =
   | { kind: 'indicatorClass'; value?: IndicatorClass }
   | { kind: 'indicatorLevel'; value?: IndicatorLevel }
   | { kind: 'indicatorType'; value?: IndicatorType }
-  | { kind: 'metricStatus'; value?: MetricStatus }
+  | { kind: 'reportIndicatorStatus'; value?: ReportIndicatorStatus }
   | { kind: 'reportSections'; value: string[] }
   | { kind: 'reportStatus'; isConsoleView: boolean; value?: AcceleratorReportStatus };
 
@@ -226,7 +231,7 @@ export const makeIndicatorCsvRows = ({ indicators }: ReportCsvParams): Indicator
       progressNotes: indicator.progressNotes,
       projectsComments: indicator.projectsComments,
       refId: indicator.refId,
-      status: { kind: 'metricStatus' as const, value: indicator.status },
+      status: { kind: 'reportIndicatorStatus' as const, value: indicator.status },
       supportingDocumentUrl: indicator.supportingDocumentUrl,
       systemValue: asNumber(indicator.systemValue),
       target: asNumber(indicator.target),
@@ -302,8 +307,8 @@ const useExportReportCsv = () => {
           return indicatorLevelLabel(value.value, strings);
         case 'indicatorType':
           return indicatorTypeLabel(value.value);
-        case 'metricStatus':
-          return metricStatusLabel(value.value, strings);
+        case 'reportIndicatorStatus':
+          return reportIndicatorStatusLabel(value.value, strings);
         case 'reportSections':
           return unpublishedPropertyList(value.value, strings);
         case 'reportStatus':
