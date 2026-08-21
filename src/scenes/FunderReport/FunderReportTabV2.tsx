@@ -1,14 +1,9 @@
 import React, { type JSX, useMemo, useState } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 
-import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
-import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalCommentsBox';
-import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
-import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
-import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
-import { IndicatorProgressSectionContent } from 'src/components/AcceleratorReports/IndicatorProgressSection';
-import { ProjectHealthBarContent } from 'src/components/AcceleratorReports/ProjectHealthBar';
+import FunderReportContentV2 from 'src/components/AcceleratorReports/FunderReportContentV2';
+import { ProgressIndicator } from 'src/components/AcceleratorReports/IndicatorProgressRow';
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
@@ -49,7 +44,8 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
     [listPublishedReportsData, resolvedReportId]
   );
 
-  const indicators = useMemo(
+  // the published payload only ever carries the indicators funders are allowed to see
+  const indicators = useMemo<ProgressIndicator[]>(
     () => [
       ...(selectedReport?.autoCalculatedIndicators ?? []),
       ...(selectedReport?.commonIndicators ?? []),
@@ -60,36 +56,21 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
 
   const isEmpty = listPublishedReportsData !== undefined && reports.length === 0;
 
-  return (
-    <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(3) }}>
-      {isEmpty ? (
+  if (isEmpty) {
+    return (
+      <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(3) }}>
         <ReportEmptyState />
-      ) : (
-        <>
-          <Box marginBottom={theme.spacing(3)}>
-            <ReportDropdown onChange={setSelectedReportId} reports={reports} selectedReportId={resolvedReportId} />
-          </Box>
+      </Card>
+    );
+  }
 
-          <ProjectHealthBarContent indicators={indicators} />
-
-          <HighlightsBox key={resolvedReportId} projectId={selectedProjectId} report={selectedReport} />
-
-          <IndicatorProgressSectionContent
-            indicators={indicators}
-            quarter={selectedReport?.quarter}
-            year={selectedReport?.startDate ? Number(selectedReport.startDate.split('-')[0]) : undefined}
-          />
-
-          <AchievementsBox projectId={selectedProjectId} report={selectedReport} />
-
-          <ChallengesMitigationBox projectId={selectedProjectId} report={selectedReport} />
-
-          <FinancialSummariesBox projectId={selectedProjectId} report={selectedReport} />
-
-          <AdditionalCommentsBox projectId={selectedProjectId} report={selectedReport} />
-        </>
-      )}
-    </Card>
+  return (
+    <FunderReportContentV2
+      header={<ReportDropdown onChange={setSelectedReportId} reports={reports} selectedReportId={resolvedReportId} />}
+      indicators={indicators}
+      projectId={selectedProjectId}
+      report={selectedReport}
+    />
   );
 };
 

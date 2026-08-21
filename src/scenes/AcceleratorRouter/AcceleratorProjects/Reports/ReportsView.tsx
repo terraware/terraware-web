@@ -119,7 +119,7 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
 
             <ReportReviewButtons reportId={selectedReportId} />
 
-            <ReportOptionsMenu reportId={selectedReportId} />
+            <ReportOptionsMenu projectId={Number(pathParams.projectId)} reportId={selectedReportId} />
           </Box>
         ) : undefined
       }

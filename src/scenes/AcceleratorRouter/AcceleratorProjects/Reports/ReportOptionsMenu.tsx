@@ -3,21 +3,27 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { DropdownItem } from '@terraware/web-components';
 
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import { APP_PATHS } from 'src/constants';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import PublishModal from './PublishModal';
 
 type ReportOptionsMenuProps = {
+  projectId: number;
   reportId: number;
 };
 
-const ReportOptionsMenu = ({ reportId }: ReportOptionsMenuProps): JSX.Element | null => {
+const ReportOptionsMenu = ({ projectId, reportId }: ReportOptionsMenuProps): JSX.Element => {
   const { strings } = useLocalization();
   const { isAllowed } = useUser();
+  const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
+
+  const canPublish = isAllowed('PUBLISH_REPORTS');
 
   const [showPublishModal, setShowPublishModal] = useState(false);
 
@@ -45,23 +51,37 @@ const ReportOptionsMenu = ({ reportId }: ReportOptionsMenuProps): JSX.Element | 
         label: strings.PUBLISH,
         value: 'publish',
       },
+      {
+        label: strings.PREVIEW_FUNDER_REPORT,
+        value: 'preview',
+      },
+      ...(canPublish
+        ? [
+            {
+              disabled: report?.status !== 'Approved',
+              label: strings.PUBLISH,
+              value: 'publish',
+            },
+          ]
+        : []),
     ],
-    [isLoading, report?.status, strings]
+    [canPublish, isLoading, report?.status, strings]
   );
 
-  const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
-    if (optionItem.value === 'publish') {
-      setShowPublishModal(true);
-    }
-  }, []);
+  const onOptionItemClick = useCallback(
+    (optionItem: DropdownItem) => {
+      if (optionItem.value === 'preview') {
+        navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', `${projectId}`)}/${reportId}/preview`);
+      } else if (optionItem.value === 'publish') {
+        setShowPublishModal(true);
+      }
+    },
+    [navigate, projectId, reportId]
+  );
 
   const closePublishModal = useCallback(() => setShowPublishModal(false), []);
 
   const publish = useCallback(() => void publishReport(), [publishReport]);
-
-  if (!isAllowed('PUBLISH_REPORTS')) {
-    return null;
-  }
 
   return (
     <>

@@ -6,6 +6,7 @@ import isEnabled from 'src/features';
 import { useUser } from 'src/providers';
 
 import EditSettings from './EditSettings';
+import FunderReportPreviewV2 from './FunderReportPreviewV2';
 import NewIndicator from './NewIndicator';
 import ReportEditV2 from './ReportEditV2';
 import ReportView from './ReportView';
@@ -36,6 +37,7 @@ const ReportsRouter = () => {
             )
           }
         />
+        <Route path='/:reportId/preview' element={<FunderReportPreviewV2 />} />
         <Route path='/:reportId' element={<ReportsView tab='reports' />} />
         <Route path='' element={<ReportsView tab='reports' />} />
         <Route

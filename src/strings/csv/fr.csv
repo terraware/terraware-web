@@ -806,6 +806,7 @@ FUNDER_DISCLAIMER_TITLE,Clause de non-responsabilité de la plateforme Terraware
 FUNDER_NAME,Nom du bailleur de fonds,1ea661a7
 FUNDER_PORTAL,Portail du financeur,500322ac
 FUNDER_REPORT_LAST_PUBLISHED,Le dernier rapport destiné aux donateurs a été publié le {0},0a69140e
+FUNDER_REPORT_PREVIEW_WARNING,Vous prévisualisez ce rapport tel qu'il apparaîtra aux bailleurs de fonds dans le Portail des bailleurs. Les indicateurs et notes internes sont masqués.,c41bedd2
 FUNDERS,Bailleurs de fonds,77d89a51
 FUNDERS_DELETED,Bailleurs de fonds supprimés,7f6ba996
 FUNDING_ENTITIES,Organismes de financement,6ba1d5ee
@@ -1681,6 +1682,7 @@ PREPARATION_MATERIALS,Matériaux de préparation,c6fd2575
 PRESCREEN,Présélection,9a38127f
 PRESCREEN_FAILED,Échec de la présélection,2a2dc3e9
 PREVIEW,Aperçu,a2aefa10
+PREVIEW_FUNDER_REPORT,Prévisualiser le rapport du bailleur,17fa74c8
 PREVIEW_HIGHLIGHTS,Aperçu des points forts,248bb9ae
 PREVIEW_WILL_DISPLAY_AFTER_SAVING,L’aperçu s’affichera après l’enregistrement,475b4844
 PREVIOUS,Précédent,156ee39e
@@ -1895,6 +1897,7 @@ REPORT_NO_PLANTING_SITES,Le rapport n'inclut aucun site de plantation.,bbd3eaf4
 REPORT_NO_SEEDBANKS,Le rapport n'inclut aucune banque de semences.,8d098394
 REPORT_NURSERY_CAPACITY_INFO,Veuillez indiquer le nombre total de plantes que la pépinière peut contenir selon les meilleures estimations.,daa9bfcc
 REPORT_PERIOD,Période du rapport : {0} - {1},b06927c6
+REPORT_PREVIEW,Aperçu du rapport,96417b29
 REPORT_PUBLISHED,Rapport publié,4ab6a36f
 REPORT_SAVE_AND_CLOSE,Enregistrer et fermer,aaa98fc6
 REPORT_SEEDBANK_BUILD_COMPLETION_DATE,Date de fin de construction de banque de semences *,31433692
