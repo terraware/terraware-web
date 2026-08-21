@@ -126,7 +126,13 @@ const SpeciesCheckModal = ({
     setLocationEdits(initial);
     setStep(0);
     setNativeMode('list');
-    setNameSelected(new Set(speciesRef.current.filter((sp) => (sp.problems?.length ?? 0) > 0).map((sp) => sp.id)));
+    setNameSelected(
+      new Set(
+        speciesRef.current
+          .filter((sp) => (sp.problems ?? []).some((problem) => !!problem.suggestedValue))
+          .map((sp) => sp.id)
+      )
+    );
     setNativeSelected(new Set());
     setOverrideEdits({});
     setShowCancel(false);
