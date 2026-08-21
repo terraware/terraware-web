@@ -5,6 +5,9 @@ const injectedRtkApi = api.injectEndpoints({
     listPublishedReports: build.query<ListPublishedReportsApiResponse, ListPublishedReportsApiArg>({
       query: (queryArg) => ({ url: `/api/v1/funder/reports/projects/${queryArg}` }),
     }),
+    getPublishedReport: build.query<GetPublishedReportApiResponse, GetPublishedReportApiArg>({
+      query: (queryArg) => ({ url: `/api/v1/funder/reports/${queryArg}` }),
+    }),
     getPublishedReportPhoto: build.query<GetPublishedReportPhotoApiResponse, GetPublishedReportPhotoApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/funder/reports/${queryArg.reportId}/photos/${queryArg.fileId}`,
@@ -21,6 +24,9 @@ export { injectedRtkApi as api };
 export type ListPublishedReportsApiResponse =
   /** status 200 The requested operation succeeded. */ ListPublishedReportsResponsePayload;
 export type ListPublishedReportsApiArg = number;
+export type GetPublishedReportApiResponse =
+  /** status 200 The requested operation succeeded. */ GetPublishedReportResponsePayload;
+export type GetPublishedReportApiArg = number;
 export type GetPublishedReportPhotoApiResponse = /** status 200 The photo was successfully retrieved. */ Blob;
 export type GetPublishedReportPhotoApiArg = {
   reportId: number;
@@ -94,9 +100,15 @@ export type SimpleErrorResponsePayload = {
   error: ErrorDetails;
   status: SuccessOrError;
 };
+export type GetPublishedReportResponsePayload = {
+  report: PublishedReportPayload;
+  status: SuccessOrError;
+};
 export const {
   useListPublishedReportsQuery,
   useLazyListPublishedReportsQuery,
+  useGetPublishedReportQuery,
+  useLazyGetPublishedReportQuery,
   useGetPublishedReportPhotoQuery,
   useLazyGetPublishedReportPhotoQuery,
 } = injectedRtkApi;

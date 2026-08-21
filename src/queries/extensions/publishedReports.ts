@@ -12,6 +12,9 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.PublishedAcceleratorReport, id: 'LIST' },
       ],
     },
+    getPublishedReport: {
+      providesTags: (_results, _error, reportId) => [{ type: QueryTagTypes.PublishedAcceleratorReport, id: reportId }],
+    },
     getPublishedReportPhoto: {
       providesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.PublishedAcceleratorReportMedia, id: payload.fileId },
