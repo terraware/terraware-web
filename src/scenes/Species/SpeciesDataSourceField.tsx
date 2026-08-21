@@ -12,6 +12,7 @@ type SpeciesDataSourceFieldProps = {
   id: string;
   label: string;
   source?: SpeciesDataSourcePayload;
+  speciesId?: number;
   tooltipTitle?: TooltipProps['title'];
   value?: string;
 };
@@ -20,6 +21,7 @@ const SpeciesDataSourceField = ({
   id,
   label,
   source,
+  speciesId,
   tooltipTitle,
   value,
 }: SpeciesDataSourceFieldProps): JSX.Element => {
@@ -40,7 +42,7 @@ const SpeciesDataSourceField = ({
           {value}
         </p>
         <Box flexShrink={0} paddingBottom={theme.spacing(0.5)}>
-          <SpeciesDataSourceBadge source={source} />
+          <SpeciesDataSourceBadge source={source} speciesId={speciesId} fieldName={id} />
         </Box>
       </Box>
     </Box>

@@ -10,6 +10,8 @@ import Table from 'src/components/common/table';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
 import { RendererProps, TableColumnType } from 'src/components/common/table/types';
 import { useProjects } from 'src/hooks/useProjects';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
@@ -67,6 +69,7 @@ export default function SpeciesProjectsSection({
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const { availableProjects, getProjectName } = useProjects();
+  const trackEvent = useTrackEvent();
 
   const [openedAddToProjectModal, setOpenedAddToProjectModal] = useState(false);
   const [showRemoveDialog, setShowRemoveDialog] = useState(false);
@@ -152,7 +155,17 @@ export default function SpeciesProjectsSection({
                 {projectRow.nativity ? (
                   <>
                     {projectRow.dataSourceType ? (
-                      <Tooltip title={speciesDataSourceAcronymLabel(projectRow.dataSourceType)}>
+                      <Tooltip
+                        title={speciesDataSourceAcronymLabel(projectRow.dataSourceType)}
+                        onOpen={() =>
+                          trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_STATUS_INDICATOR_HOVERED, {
+                            species_id: speciesId,
+                            status_state: projectRow.nativity
+                              ? (projectRow.nativity.toLowerCase() as 'invasive' | 'introduced' | 'native' | 'unknown')
+                              : 'unknown',
+                          })
+                        }
+                      >
                         <Box component='span' sx={{ display: 'inline-flex' }}>
                           <SpeciesNativityBadge nativity={projectRow.nativity} />
                         </Box>
@@ -215,7 +228,7 @@ export default function SpeciesProjectsSection({
 
       return <CellRenderer {...props} index={index} />;
     },
-    [theme]
+    [speciesId, theme, trackEvent]
   );
 
   return (

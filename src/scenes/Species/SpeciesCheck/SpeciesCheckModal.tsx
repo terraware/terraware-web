@@ -6,6 +6,8 @@ import { BusySpinner } from '@terraware/web-components';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useUpdateProjectMutation } from 'src/queries/generated/projects';
 import {
@@ -53,6 +55,7 @@ const SpeciesCheckModal = ({
   const { countries } = useLocalization();
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const { botanicalCountries } = useBotanicalCountries(!open);
+  const trackEvent = useTrackEvent();
 
   const [updateProject] = useUpdateProjectMutation();
   const [acceptProblem] = useAcceptProblemSuggestionMutation();
@@ -100,6 +103,15 @@ const SpeciesCheckModal = ({
   const speciesRef = useRef(species);
   speciesRef.current = species;
 
+  const runStartRef = useRef(0);
+
+  const trackEventRef = useRef(trackEvent);
+  trackEventRef.current = trackEvent;
+  const entryRef = useRef(entry);
+  entryRef.current = entry;
+  const projectsLengthRef = useRef(projects.length);
+  projectsLengthRef.current = projects.length;
+
   useEffect(() => {
     if (!open) {
       return;
@@ -120,6 +132,19 @@ const SpeciesCheckModal = ({
     setShowCancel(false);
     setForceLocation(false);
     setLocationsSubmitted(false);
+
+    runStartRef.current = Date.now();
+    trackEventRef.current(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_CHECK_RUN, {
+      project_scope: 'all',
+      species_count: speciesRef.current.length,
+    });
+    const locationStepShown = !targetsRef.current.every((target) => !!target.botanicalCountryCode);
+    if (locationStepShown) {
+      trackEventRef.current(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_SHOWN, {
+        project_count: projectsLengthRef.current,
+        trigger: entryRef.current,
+      });
+    }
   }, [open]);
 
   const allLocationsSet = targets.every((target) => !!target.botanicalCountryCode);
@@ -264,6 +289,14 @@ const SpeciesCheckModal = ({
       setLocationsSubmitted(true);
       setForceLocation(false);
       setStep(0);
+      trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_COMPLETED, {
+        project_count: projects.length,
+        countries_set: targets.filter((target) => !!(locationEdits[target.key]?.countryCode ?? target.countryCode))
+          .length,
+        botanical_country_set: targets.filter(
+          (target) => !!(locationEdits[target.key]?.botanicalCountryCode ?? target.botanicalCountryCode)
+        ).length,
+      });
     } catch {
       snackbar.toastError();
     }
@@ -276,6 +309,7 @@ const SpeciesCheckModal = ({
     selectedOrganization,
     snackbar,
     targets,
+    trackEvent,
     updateProject,
   ]);
 
@@ -300,17 +334,53 @@ const SpeciesCheckModal = ({
     setBusy(false);
   }, [acceptProblem, goToStep, nameSelected, reloadSpecies, snackbar, speciesWithProblems]);
 
+  const trackCheckCompleted = useCallback(
+    (submittedOverrides: { projectId?: number; speciesId: number; overriddenNativity: Nativity }[] = []) => {
+      const overrideByKey = new Map<string, Nativity>();
+      submittedOverrides.forEach((override) => {
+        overrideByKey.set(`${override.projectId ?? ORG_TARGET_KEY}-${override.speciesId}`, override.overriddenNativity);
+      });
+
+      let invasiveCount = 0;
+      let unknownCount = 0;
+      speciesRef.current.forEach((sp) => {
+        const nativities = (sp.projects ?? []).map(
+          (element) =>
+            overrideByKey.get(`${element.projectId ?? ORG_TARGET_KEY}-${sp.id}`) ??
+            element.pendingNativity ??
+            element.overriddenNativity ??
+            element.calculatedNativity
+        );
+        if (nativities.includes('Invasive')) {
+          invasiveCount += 1;
+        }
+        if (nativities.includes('Unknown')) {
+          unknownCount += 1;
+        }
+      });
+      trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_CHECK_COMPLETED, {
+        project_scope: 'all',
+        species_count: speciesRef.current.length,
+        invasive_count: invasiveCount,
+        unknown_count: unknownCount,
+        duration_ms: Date.now() - runStartRef.current,
+      });
+    },
+    [trackEvent]
+  );
+
   const finish = useCallback(async () => {
     try {
       if (selectedOrganization && hasAnyPending) {
         await acceptPending({ organizationId: selectedOrganization.id }).unwrap();
       }
+      trackCheckCompleted();
     } catch {
       snackbar.toastError();
     } finally {
       reloadSpecies();
     }
-  }, [acceptPending, hasAnyPending, reloadSpecies, selectedOrganization, snackbar]);
+  }, [acceptPending, hasAnyPending, reloadSpecies, selectedOrganization, snackbar, trackCheckCompleted]);
 
   const onFinish = useCallback(async () => {
     setBusy(true);
@@ -338,10 +408,18 @@ const SpeciesCheckModal = ({
       );
       if (overrides.length) {
         await overrideSpecies({ overrides }).unwrap();
+        overrides.forEach((override) => {
+          trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_OVERRIDE_CREATED, {
+            project_scope: override.projectId,
+            species_id: override.speciesId,
+            justification_length: override.overriddenJustification.length,
+          });
+        });
       }
       if (selectedOrganization) {
         await acceptPending({ organizationId: selectedOrganization.id }).unwrap();
       }
+      trackCheckCompleted(overrides);
       onClose();
     } catch {
       snackbar.toastError();
@@ -359,6 +437,8 @@ const SpeciesCheckModal = ({
     reloadSpecies,
     selectedOrganization,
     snackbar,
+    trackCheckCompleted,
+    trackEvent,
   ]);
 
   const allLocationEditsValid = targets.every((target) => {
@@ -372,11 +452,14 @@ const SpeciesCheckModal = ({
 
   const requestCancel = useCallback(() => {
     if (currentKey === 'setLocation') {
+      trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_CANCELLED, {
+        project_count: projects.length,
+      });
       onClose();
     } else {
       setShowCancel(true);
     }
-  }, [currentKey, onClose]);
+  }, [currentKey, onClose, projects.length, trackEvent]);
 
   const middleButtons = useMemo<JSX.Element[]>(() => {
     const cancelButton = (

@@ -60,6 +60,19 @@ export enum MIXPANEL_EVENTS {
   FORM_VALIDATION_FAILED = 'Form Validation Failed',
   SAVE_FAILED = 'Save Failed',
   MODAL_ABANDONED = 'Modal Abandoned',
+
+  // --- Species Intelligence ---
+  SPECIES_INTELLIGENCE_BANNER_SHOWN = 'Species Intelligence Banner Shown',
+  SPECIES_INTELLIGENCE_SETUP_PROMPT_SHOWN = 'Species Intelligence Setup Prompt Shown',
+  SPECIES_INTELLIGENCE_SETUP_PROMPT_COMPLETED = 'Species Intelligence Setup Prompt Completed',
+  SPECIES_INTELLIGENCE_SETUP_PROMPT_CANCELLED = 'Species Intelligence Setup Prompt Cancelled',
+  SPECIES_INTELLIGENCE_PROJECT_LOCATION_SET = 'Species Intelligence Project Location Set',
+  SPECIES_INTELLIGENCE_STATUS_INDICATOR_HOVERED = 'Species Intelligence Status Indicator Hovered',
+  SPECIES_INTELLIGENCE_CHECK_RUN = 'Species Intelligence Check Run',
+  SPECIES_INTELLIGENCE_CHECK_COMPLETED = 'Species Intelligence Check Completed',
+  SPECIES_INTELLIGENCE_OVERRIDE_CREATED = 'Species Intelligence Override Created',
+  SPECIES_AUTOFILL_FIELD_EDITED = 'Species Autofill Field Edited',
+  SPECIES_INTELLIGENCE_SOURCE_ATTRIBUTION_HOVERED = 'Species Intelligence Source Attribution Hovered',
 }
 
 // Shape of the user profile written via mixpanel.people.set(). Keys prefixed with
@@ -154,5 +167,54 @@ export type MixpanelEventPropertyMap = {
   [MIXPANEL_EVENTS.MODAL_ABANDONED]: {
     modal_name: string;
     time_open_seconds: number;
+  };
+  [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_BANNER_SHOWN]: Record<string, never>;
+  [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_SHOWN]: {
+    project_count: number;
+    trigger: string;
+  };
+  [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_COMPLETED]: {
+    project_count: number;
+    countries_set: number;
+    botanical_country_set: number;
+  };
+  [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_CANCELLED]: {
+    project_count: number;
+  };
+  [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_PROJECT_LOCATION_SET]: {
+    project_id: number;
+    country_code?: string;
+    botanical_country_id?: string;
+    set_at: 'creation' | 'edit';
+  };
+  [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_STATUS_INDICATOR_HOVERED]: {
+    species_id: number;
+    status_state: 'invasive' | 'introduced' | 'native' | 'unknown';
+  };
+  [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_CHECK_RUN]: {
+    project_scope: 'all' | number;
+    species_count: number;
+  };
+  [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_CHECK_COMPLETED]: {
+    project_scope: 'all' | number;
+    species_count: number;
+    invasive_count: number;
+    unknown_count: number;
+    duration_ms: number;
+  };
+  [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_OVERRIDE_CREATED]: {
+    project_scope?: number;
+    species_id: number;
+    justification_length: number;
+  };
+  [MIXPANEL_EVENTS.SPECIES_AUTOFILL_FIELD_EDITED]: {
+    species_id?: number;
+    field_name: string;
+    time_since_autofill_ms: number;
+  };
+  [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SOURCE_ATTRIBUTION_HOVERED]: {
+    species_id: number;
+    field_name?: string;
+    source: string;
   };
 };
