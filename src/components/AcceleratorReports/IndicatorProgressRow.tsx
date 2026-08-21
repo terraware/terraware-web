@@ -4,8 +4,8 @@ import { Box, Collapse, IconButton, Link, Tooltip, Typography, useTheme } from '
 import { Badge, Dropdown, DropdownItem, Icon, IconTooltip, Textfield } from '@terraware/web-components';
 
 import EmptyFieldPlaceholder from 'src/components/AcceleratorReports/EmptyFieldPlaceholder';
+import IndicatorStatusBadge from 'src/components/AcceleratorReports/IndicatorStatusBadge';
 import LifetimeProgressBar from 'src/components/AcceleratorReports/LifetimeProgressBar';
-import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import ResetIndicatorModal from 'src/components/AcceleratorReports/ResetIndicatorModal';
 import {
   ProgressIndicator,
@@ -227,7 +227,7 @@ const IndicatorProgressRow = ({
           </Box>
 
           <Box columnGap={theme.spacing(1)} display='flex' flexWrap='wrap' marginTop={theme.spacing(1)} rowGap={1}>
-            {indicator.status && <MetricStatusBadge status={indicator.status} />}
+            {indicator.status && <IndicatorStatusBadge status={indicator.status} />}
 
             <Badge
               backgroundColor={theme.palette.TwClrBgSecondary}

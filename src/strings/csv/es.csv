@@ -923,10 +923,19 @@ INCORRECT_EMAIL_FORMAT,Formato de correo electrónico incorrecto.,19f1a8c9
 INDICATOR_CLASS,Clase de indicador,8c9d3791
 INDICATOR_LEVEL,Nivel del indicador,b128c992
 INDICATOR_NAME,Nombre del indicador,0d8b0613
+INDICATOR_NOT_VISIBLE_TO_FUNDER,Indicador no visible para el financiador,d8aea360
 INDICATOR_OVERWRITTEN_ORIGINAL_VALUE,Sobrescrito - original: {0},c504c96d
+INDICATOR_STATUS_DESCRIPTION_ARCHIVED,Resultado ya logrado,f3f4a3fa
+INDICATOR_STATUS_DESCRIPTION_ON_TRACK,Resultado encaminado para lograrse dentro del plazo esperado,fde2d530
+INDICATOR_STATUS_DESCRIPTION_UNLIKELY,Resultado con pocas probabilidades de lograrse en el plazo esperado,7be5d98c
 INDICATOR_TYPE,Tipo de indicador,d5e75bf1
+INDICATOR_TYPE_ACTIVITY,Actividad,4e3914f0
 INDICATOR_TYPE_GOAL,Meta,cb34c06e
+INDICATOR_TYPE_IMPACT,Impacto,cea29899
+INDICATOR_TYPE_OUTCOME,Consecuencia,27a08fef
+INDICATOR_TYPE_OUTPUT,Resultado,d697f360
 INDICATOR_TYPE_PROCESS,Proceso,0bee5739
+INDICATOR_VISIBLE_TO_FUNDER,Indicador visible para el financiador,7e161a0e
 INDICATORS,Indicadores,ea71857f
 INFRASTRUCTURE,Infraestructura,c8fe126f
 INITIAL_PLANTING_DENSITY,Densidad de plantación inicial,54f0e256
@@ -1167,15 +1176,6 @@ METHODOLOGY,Metodología,caae1759
 METHODOLOGY_NUMBER,Número de metodología,de41c745
 METRIC,Métrico,83e86b5d
 METRIC_G_KG_MG,"Métrico (g, kg, mg)",0efae160
-METRIC_NOT_VISIBLE_TO_FUNDER,Métrica invisible para el financiador,a334d200
-METRIC_STATUS_DESCRIPTION_ARCHIVED,Resultado ya logrado,f3f4a3fa
-METRIC_STATUS_DESCRIPTION_ON_TRACK,Resultado encaminado para lograrse dentro del plazo esperado,fde2d530
-METRIC_STATUS_DESCRIPTION_UNLIKELY,Resultado con pocas probabilidades de lograrse en el plazo esperado,7be5d98c
-METRIC_TYPE_ACTIVITY,Actividad,4e3914f0
-METRIC_TYPE_IMPACT,Impacto,cea29899
-METRIC_TYPE_OUTCOME,Consecuencia,27a08fef
-METRIC_TYPE_OUTPUT,Resultado,d697f360
-METRIC_VISIBLE_TO_FUNDER,Métrica visible para el financiador,5034bdf9
 MG,mg,cd486375
 MG_MILLIGRAMS,mg (miligramos),1eb6e72c
 MILLIGRAMS,Miligramos,23d587ba
@@ -1955,8 +1955,6 @@ RESET,Restablecer,d51ffc01
 RESET_COLUMNS,Restablecer columnas,871d2d56
 RESET_INDICATOR,Restablecer indicador,bb1f7ec8
 RESET_INDICATOR_CONFIRM,¿Está seguro de que desea restablecer este indicador? Será reemplazado con los datos de seguimiento actuales de Terraware.,9d1f1dfb
-RESET_METRIC,Restablecer métrica,fe2748bc
-RESET_METRIC_CONFIRM,¿Está seguro de que quiere restablecer esta métrica? Se sustituirá por los datos de seguimiento actuales de Terraware.,44353912
 RESET_ORDER,Restablecer orden,a30cc4ed
 RESET_STATUS,Restablecer estado,75db6b41
 RESET_STATUS_BODY,Agregar esta especie al/los proyecto(s) seleccionado(s) restablecerá el estado del entregable. Tendrás que volver a enviar el entregable para su aprobación para: {0},357adbe0

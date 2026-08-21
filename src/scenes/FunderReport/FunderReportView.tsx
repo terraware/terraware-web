@@ -8,7 +8,7 @@ import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalC
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
 import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
-import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
+import IndicatorStatusBadge from 'src/components/AcceleratorReports/IndicatorStatusBadge';
 import PhotosBox from 'src/components/AcceleratorReports/PhotosBox';
 import Card from 'src/components/common/Card';
 import useFunderPortal from 'src/hooks/useFunderPortal';
@@ -18,7 +18,7 @@ import { useLocalization } from 'src/providers';
 import { ReportCommonIndicatorPayload } from 'src/queries/generated/acceleratorReports';
 import { PublishedReportIndicatorPayload, PublishedReportPayload } from 'src/queries/generated/publishedReports';
 
-import MetricRow from '../AcceleratorRouter/AcceleratorProjects/Reports/MetricRow';
+import IndicatorRow from '../AcceleratorRouter/AcceleratorProjects/Reports/IndicatorRow';
 
 type FunderReportViewProps = {
   selectedProjectId: number;
@@ -62,7 +62,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
   const communityIndicators = allIndicators.filter((m) => m.category === 'Community');
   const projectObjectivesIndicators = allIndicators.filter((m) => m.category === 'Project Objectives');
 
-  const metricBoxStyle = { borderRadius: '8px', paddingTop: 0 };
+  const indicatorBoxStyle = { borderRadius: '8px', paddingTop: 0 };
 
   if (!selectedReport) {
     return;
@@ -95,21 +95,21 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
           <Box>
             <Box display='flex' marginTop={2}>
               <Box flexBasis={'81px'} flexShrink={0} marginRight={1}>
-                <MetricStatusBadge status='Achieved' />
+                <IndicatorStatusBadge status='Achieved' />
               </Box>
-              <Typography>{strings.METRIC_STATUS_DESCRIPTION_ARCHIVED}</Typography>
+              <Typography>{strings.INDICATOR_STATUS_DESCRIPTION_ARCHIVED}</Typography>
             </Box>
             <Box display='flex' marginTop={3}>
               <Box flexBasis={'81px'} flexShrink={0} marginRight={1}>
-                <MetricStatusBadge status='On-Track' />
+                <IndicatorStatusBadge status='On-Track' />
               </Box>
-              <Typography>{strings.METRIC_STATUS_DESCRIPTION_ON_TRACK}</Typography>
+              <Typography>{strings.INDICATOR_STATUS_DESCRIPTION_ON_TRACK}</Typography>
             </Box>
             <Box display='flex' marginTop={3}>
               <Box flexBasis={'81px'} flexShrink={0} marginRight={1}>
-                <MetricStatusBadge status='Unlikely' />
+                <IndicatorStatusBadge status='Unlikely' />
               </Box>
-              <Typography>{strings.METRIC_STATUS_DESCRIPTION_UNLIKELY}</Typography>
+              <Typography>{strings.INDICATOR_STATUS_DESCRIPTION_UNLIKELY}</Typography>
             </Box>
           </Box>
         </Card>
@@ -129,12 +129,12 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
                 <Typography fontSize={'20px'} fontWeight={600} margin={theme.spacing(3, 0)}>
                   {label}
                 </Typography>
-                <Card style={metricBoxStyle}>
+                <Card style={indicatorBoxStyle}>
                   {indicators.map((indicator, index) => (
-                    <MetricRow
+                    <IndicatorRow
                       key={index}
                       type='common'
-                      metric={indicator}
+                      indicator={indicator}
                       reportLabel={selectedReport?.quarter}
                       year={Number(year)}
                       projectId={selectedProjectId}

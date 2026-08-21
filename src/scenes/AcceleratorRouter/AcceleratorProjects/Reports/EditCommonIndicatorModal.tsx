@@ -16,7 +16,7 @@ import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
-export const metricComponentOptions = () => {
+export const indicatorComponentOptions = () => {
   return [
     { label: strings.COMMUNITY, value: 'Community' },
     { label: strings.PROJECT_OBJECTIVES, value: 'Project Objectives' },
@@ -33,8 +33,8 @@ export interface EditCommonIndicatorModalProps {
 export const indicatorTypeOptions = () => {
   return [
     { label: strings.INDICATOR_TYPE_PROCESS, value: 'Process' },
-    { label: strings.METRIC_TYPE_OUTPUT, value: 'Output' },
-    { label: strings.METRIC_TYPE_OUTCOME, value: 'Outcome' },
+    { label: strings.INDICATOR_TYPE_OUTPUT, value: 'Output' },
+    { label: strings.INDICATOR_TYPE_OUTCOME, value: 'Outcome' },
     { label: strings.INDICATOR_TYPE_GOAL, value: 'Goal' },
   ];
 };
@@ -183,7 +183,7 @@ export default function EditCommonIndicatorModal({
             id='category'
             label={strings.CATEGORY}
             onChange={onChangeCallback('category')}
-            options={metricComponentOptions()}
+            options={indicatorComponentOptions()}
             required
             selectedValue={record.category}
           />
