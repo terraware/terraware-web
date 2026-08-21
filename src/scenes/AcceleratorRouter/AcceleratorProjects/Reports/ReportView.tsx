@@ -38,8 +38,8 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 import ApproveReportDialog from './ApproveReportDialog';
+import IndicatorRow from './IndicatorRow';
 import Metadata from './Metadata';
-import MetricRow from './MetricRow';
 import PublishModal from './PublishModal';
 import RejectDialog from './RejectDialog';
 
@@ -378,10 +378,10 @@ const ReportView = () => {
                       : report?.projectIndicators;
 
                 return indicators?.map((indicator, index) => (
-                  <MetricRow
+                  <IndicatorRow
                     key={`${type}-${index}`}
                     type={type}
-                    metric={indicator}
+                    indicator={indicator}
                     reportLabel={report?.quarter}
                     year={yearToUse}
                     projectId={projectId}

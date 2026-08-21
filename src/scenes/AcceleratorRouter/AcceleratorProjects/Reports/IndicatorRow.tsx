@@ -4,8 +4,8 @@ import { Box, Collapse, Divider, Grid, IconButton, Tooltip, Typography, useTheme
 import { Dropdown, DropdownItem, Icon, Textfield } from '@terraware/web-components';
 
 import EditProgressModal from 'src/components/AcceleratorReports/EditProgressModal';
-import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
-import ResetMetricModal from 'src/components/AcceleratorReports/ResetMetricModal';
+import IndicatorStatusBadge from 'src/components/AcceleratorReports/IndicatorStatusBadge';
+import ResetIndicatorModal from 'src/components/AcceleratorReports/ResetIndicatorModal';
 import ProgressChart from 'src/components/common/Chart/ProgressChart';
 import Button from 'src/components/common/button/Button';
 import useBoolean from 'src/hooks/useBoolean';
@@ -33,13 +33,13 @@ const indicatorStatusOptions: DropdownItem[] = (['Achieved', 'On-Track', 'Unlike
 
 const textAreaStyles = { textarea: { height: '120px' } };
 
-type IndicatorMetric =
+type ReportIndicatorPayload =
   | ReportAutoCalculatedIndicatorPayload
   | ReportCommonIndicatorPayload
   | ReportProjectIndicatorPayload;
 
-type MetricRowProps = {
-  metric: IndicatorMetric;
+type IndicatorRowProps = {
+  indicator: ReportIndicatorPayload;
   type: IndicatorType;
   reportLabel?: string;
   year?: number;
@@ -51,8 +51,8 @@ type MetricRowProps = {
   onEditChange?: (editing: boolean) => void;
 };
 
-const MetricRow = ({
-  metric,
+const IndicatorRow = ({
+  indicator,
   type,
   reportLabel = '',
   year,
@@ -62,14 +62,14 @@ const MetricRow = ({
   hideProgressNotes = false,
   hideProjectsComments = false,
   onEditChange,
-}: MetricRowProps): JSX.Element => {
+}: IndicatorRowProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
   const [expanded, setExpanded] = useState(false);
-  const [record, setRecord, onChange, onChangeCallback] = useForm<IndicatorMetric>(metric);
+  const [record, setRecord, onChange, onChangeCallback] = useForm<ReportIndicatorPayload>(indicator);
   const [internalEditing, setInternalEditing, setInternalEditingTrue, setInternalEditingFalse] = useBoolean(false);
   const [progressModalOpened, , openProgressModal, closeProgressModal] = useBoolean(false);
-  const [resetMetricModalOpened, , openResetMetricModal, closeResetMetricModal] = useBoolean(false);
+  const [resetIndicatorModalOpened, , openResetIndicatorModal, closeResetIndicatorModal] = useBoolean(false);
 
   const [reviewReportIndicators, reviewReportIndicatorsResponse] = useReviewAcceleratorReportIndicatorsMutation();
   const snackbar = useSnackbar();
@@ -93,16 +93,16 @@ const MetricRow = ({
 
   useEffect(() => {
     if (!internalEditing) {
-      setRecord(metric);
+      setRecord(indicator);
     }
-  }, [internalEditing, metric, setRecord]);
+  }, [internalEditing, indicator, setRecord]);
 
-  const getMetricName = () => {
-    if (isAutoCalculatedIndicator(metric)) {
-      return metric.indicator;
+  const getIndicatorName = () => {
+    if (isAutoCalculatedIndicator(indicator)) {
+      return indicator.indicator;
     }
-    if (isCommonOrProjectIndicator(metric)) {
-      return metric.name;
+    if (isCommonOrProjectIndicator(indicator)) {
+      return indicator.name;
     }
     return '';
   };
@@ -119,13 +119,13 @@ const MetricRow = ({
   };
 
   const getUnit = () => {
-    if (isCommonOrProjectIndicator(metric) && 'unit' in metric) {
-      return metric.unit ?? '';
+    if (isCommonOrProjectIndicator(indicator) && 'unit' in indicator) {
+      return indicator.unit ?? '';
     }
     return '';
   };
 
-  const targetValue = metric.target ?? 0;
+  const targetValue = indicator.target ?? 0;
   const actualValue = getActualValue();
   const unit = getUnit();
 
@@ -134,19 +134,19 @@ const MetricRow = ({
     : isCommonOrProjectIndicator(record)
       ? record.value !== undefined && record.value !== null
       : false;
-  const hasTargetValue = metric.target !== undefined && metric.target !== null;
+  const hasTargetValue = indicator.target !== undefined && indicator.target !== null;
 
-  const currentYearProgress = metric.currentYearProgress;
-  const isCumulative = metric.classId === 'Lifetime Cumulative';
-  const previousYearCumulativeTotal = metric.previousYearCumulativeTotal ?? 0;
+  const currentYearProgress = indicator.currentYearProgress;
+  const isCumulative = indicator.classId === 'Lifetime Cumulative';
+  const previousYearCumulativeTotal = indicator.previousYearCumulativeTotal ?? 0;
   const hasCumulativeEntries = (currentYearProgress?.length ?? 0) > 0 || previousYearCumulativeTotal !== 0;
   const cumulativeValue = isCumulative
     ? (currentYearProgress?.reduce((sum, q) => sum + q.value, 0) ?? 0) + previousYearCumulativeTotal
     : 0;
-  const baseline = metric.baseline ?? 0;
-  const precision = metric.precision ?? 0;
-  const hasPreviousYear = metric.previousYearCumulativeTotal !== undefined;
-  const previousYearDisplayValue = hasPreviousYear ? metric.previousYearCumulativeTotal : baseline;
+  const baseline = indicator.baseline ?? 0;
+  const precision = indicator.precision ?? 0;
+  const hasPreviousYear = indicator.previousYearCumulativeTotal !== undefined;
+  const previousYearDisplayValue = hasPreviousYear ? indicator.previousYearCumulativeTotal : baseline;
   const previousYearDisplayLabel = hasPreviousYear ? String((year ?? 0) - 1) : strings.BASELINE;
   const displayValue = isCumulative ? cumulativeValue : actualValue;
   const completionDenominator = targetValue - baseline;
@@ -155,7 +155,7 @@ const MetricRow = ({
   const showPercentComplete = hasActualValue && hasTargetValue;
 
   const hasComments =
-    (!hideProjectsComments && !!metric.projectsComments) || (!hideProgressNotes && !!metric.progressNotes);
+    (!hideProjectsComments && !!indicator.projectsComments) || (!hideProgressNotes && !!indicator.progressNotes);
   const canExpand = hasComments || isCumulative;
 
   const onToggle = useCallback(() => {
@@ -165,7 +165,7 @@ const MetricRow = ({
   }, [canExpand, internalEditing]);
 
   const getUpdateBody = useCallback(() => {
-    const baseMetric = {
+    const baseIndicator = {
       projectsComments: record.projectsComments,
       progressNotes: record.progressNotes,
       status: record.status,
@@ -176,7 +176,7 @@ const MetricRow = ({
           {
             indicator: record.indicator,
             overrideValue: record.overrideValue !== undefined ? Number(record.overrideValue) : undefined,
-            ...baseMetric,
+            ...baseIndicator,
           },
         ],
         commonIndicators: [],
@@ -188,7 +188,7 @@ const MetricRow = ({
           {
             id: record.id,
             value: record.value !== undefined && record.value !== null ? Number(record.value) : undefined,
-            ...baseMetric,
+            ...baseIndicator,
           },
         ],
         autoCalculatedIndicators: [],
@@ -200,7 +200,7 @@ const MetricRow = ({
           {
             id: record.id,
             value: record.value !== undefined && record.value !== null ? Number(record.value) : undefined,
-            ...baseMetric,
+            ...baseIndicator,
           },
         ],
         autoCalculatedIndicators: [],
@@ -219,9 +219,9 @@ const MetricRow = ({
   }, [getUpdateBody, projectId, reportId, reviewReportIndicators]);
 
   const handleCancel = useCallback(() => {
-    setRecord(metric);
+    setRecord(indicator);
     setInternalEditingFalse();
-  }, [metric, setInternalEditingFalse, setRecord]);
+  }, [indicator, setInternalEditingFalse, setRecord]);
 
   const handleEditClick = useCallback((e: React.MouseEvent) => {
     e.stopPropagation();
@@ -236,8 +236,8 @@ const MetricRow = ({
 
   const onResetIndicator = useCallback(() => {
     onChange('overrideValue', undefined);
-    closeResetMetricModal();
-  }, [onChange, closeResetMetricModal]);
+    closeResetIndicatorModal();
+  }, [onChange, closeResetIndicatorModal]);
 
   const actualValueLabel = `${reportLabel} ${strings.ACTUAL}${unit ? ` (${unit})` : ''}`;
 
@@ -261,7 +261,7 @@ const MetricRow = ({
               </Tooltip>
             )}
             {record.overrideValue !== undefined && (
-              <Button icon='iconUndo' onClick={openResetMetricModal} priority='ghost' size='small' type='passive' />
+              <Button icon='iconUndo' onClick={openResetIndicatorModal} priority='ghost' size='small' type='passive' />
             )}
             <Button icon='iconEdit' onClick={openProgressModal} priority='ghost' size='small' type='passive' />
           </Box>
@@ -297,14 +297,16 @@ const MetricRow = ({
     <>
       {progressModalOpened && isAutoCalculatedIndicator(record) && (
         <EditProgressModal
-          metricName={getMetricName()}
+          indicatorName={getIndicatorName()}
           target={targetValue}
           onChange={onChangeProgress}
           value={record.overrideValue ?? record.systemValue ?? 0}
           onClose={closeProgressModal}
         />
       )}
-      {resetMetricModalOpened && <ResetMetricModal onClose={closeResetMetricModal} onSubmit={onResetIndicator} />}
+      {resetIndicatorModalOpened && (
+        <ResetIndicatorModal onClose={closeResetIndicatorModal} onSubmit={onResetIndicator} />
+      )}
       <Box>
         <Box
           sx={{
@@ -331,13 +333,13 @@ const MetricRow = ({
           >
             <Box flex={3} paddingRight={2}>
               <Typography fontSize='16px' fontWeight={600} marginBottom={internalEditing ? 0 : 1}>
-                {getMetricName()}
+                {getIndicatorName()}
               </Typography>
               {!internalEditing && (
                 <ProgressChart
                   value={actualValue}
                   target={targetValue}
-                  status={metric.status}
+                  status={indicator.status}
                   quarterlyProgress={isCumulative ? currentYearProgress : undefined}
                   reportLabel={!isCumulative ? reportLabel : undefined}
                   previousYearValue={isCumulative ? previousYearDisplayValue : undefined}
@@ -372,8 +374,8 @@ const MetricRow = ({
                         : '--'}
                     </Typography>
                     {hasCumulativeEntries &&
-                      isAutoCalculatedIndicator(metric) &&
-                      metric.overrideValue === undefined && (
+                      isAutoCalculatedIndicator(indicator) &&
+                      indicator.overrideValue === undefined && (
                         <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
                           <Box display='flex' alignItems='center' paddingLeft={1}>
                             <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
@@ -396,19 +398,21 @@ const MetricRow = ({
                     <Typography fontSize='20px' fontWeight={600}>
                       {hasActualValue ? `${formatPrecision(actualValue, precision)}${unit ? ` ${unit}` : ''}` : '--'}
                     </Typography>
-                    {hasActualValue && isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
-                      <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
-                        <Box display='flex' alignItems='center' paddingLeft={1}>
-                          <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
-                        </Box>
-                      </Tooltip>
-                    )}
+                    {hasActualValue &&
+                      isAutoCalculatedIndicator(indicator) &&
+                      indicator.overrideValue === undefined && (
+                        <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                          <Box display='flex' alignItems='center' paddingLeft={1}>
+                            <Icon name='iconDataMigration' size='medium' fillColor={theme.palette.TwClrIcnSecondary} />
+                          </Box>
+                        </Tooltip>
+                      )}
                   </Box>
-                  {isAutoCalculatedIndicator(metric) && metric.overrideValue !== undefined && (
+                  {isAutoCalculatedIndicator(indicator) && indicator.overrideValue !== undefined && (
                     <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingTop={0.5}>
                       {strings.formatString(
                         strings.OVERWRITTEN_ORIGINAL_VALUE,
-                        metric.systemValue !== undefined ? formatPrecision(metric.systemValue, precision) : ''
+                        indicator.systemValue !== undefined ? formatPrecision(indicator.systemValue, precision) : ''
                       )}
                     </Typography>
                   )}
@@ -459,7 +463,7 @@ const MetricRow = ({
                   >
                     {strings.STATUS}
                   </Typography>
-                  {metric.status && <MetricStatusBadge status={metric.status} />}
+                  {indicator.status && <IndicatorStatusBadge status={indicator.status} />}
                 </>
               )}
             </Box>
@@ -568,50 +572,52 @@ const MetricRow = ({
                             ? `${formatPrecision(actualValue, precision)}${unit ? ` ${unit}` : ''}`
                             : '--'}
                         </Typography>
-                        {hasActualValue && isAutoCalculatedIndicator(metric) && metric.overrideValue === undefined && (
-                          <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
-                            <Box display='flex' alignItems='center' paddingLeft={1}>
-                              <Icon
-                                name='iconDataMigration'
-                                size='medium'
-                                fillColor={theme.palette.TwClrIcnSecondary}
-                              />
-                            </Box>
-                          </Tooltip>
-                        )}
+                        {hasActualValue &&
+                          isAutoCalculatedIndicator(indicator) &&
+                          indicator.overrideValue === undefined && (
+                            <Tooltip title={strings.TERRAWARE_METRIC_MESSAGE}>
+                              <Box display='flex' alignItems='center' paddingLeft={1}>
+                                <Icon
+                                  name='iconDataMigration'
+                                  size='medium'
+                                  fillColor={theme.palette.TwClrIcnSecondary}
+                                />
+                              </Box>
+                            </Tooltip>
+                          )}
                       </Box>
-                      {isAutoCalculatedIndicator(metric) && metric.overrideValue !== undefined && (
+                      {isAutoCalculatedIndicator(indicator) && indicator.overrideValue !== undefined && (
                         <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} paddingTop={0.5}>
                           {strings.formatString(
                             strings.OVERWRITTEN_ORIGINAL_VALUE,
-                            metric.systemValue !== undefined ? formatPrecision(metric.systemValue, precision) : ''
+                            indicator.systemValue !== undefined ? formatPrecision(indicator.systemValue, precision) : ''
                           )}
                         </Typography>
                       )}
                     </Grid>
                   )}
                   {!isCumulative &&
-                    ((!hideProjectsComments && metric.projectsComments) ||
-                      (!hideProgressNotes && metric.progressNotes)) && <Grid item xs={4} />}
-                  {!hideProjectsComments && metric.projectsComments ? (
+                    ((!hideProjectsComments && indicator.projectsComments) ||
+                      (!hideProgressNotes && indicator.progressNotes)) && <Grid item xs={4} />}
+                  {!hideProjectsComments && indicator.projectsComments ? (
                     <Grid item xs={4}>
                       <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
                         {strings.PROJECTS_COMMENTS}
                       </Typography>
                       <Typography fontSize='14px' color={theme.palette.TwClrBaseBlack} sx={{ whiteSpace: 'pre-wrap' }}>
-                        {metric.projectsComments}
+                        {indicator.projectsComments}
                       </Typography>
                     </Grid>
                   ) : (
-                    !hideProgressNotes && metric.progressNotes && <Grid item xs={4} />
+                    !hideProgressNotes && indicator.progressNotes && <Grid item xs={4} />
                   )}
-                  {!hideProgressNotes && metric.progressNotes && (
+                  {!hideProgressNotes && indicator.progressNotes && (
                     <Grid item xs={4}>
                       <Typography fontSize='16px' fontWeight={600} marginBottom={1}>
                         {strings.PROGRESS_NOTES}
                       </Typography>
                       <Typography fontSize='14px' color={theme.palette.TwClrBaseBlack} sx={{ whiteSpace: 'pre-wrap' }}>
-                        {metric.progressNotes}
+                        {indicator.progressNotes}
                       </Typography>
                     </Grid>
                   )}
@@ -627,4 +633,4 @@ const MetricRow = ({
   );
 };
 
-export default MetricRow;
+export default IndicatorRow;

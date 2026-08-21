@@ -195,9 +195,9 @@ export const indicatorLevelLabel = (level: IndicatorLevel | undefined, strings: 
     case 'Goal':
       return strings.INDICATOR_TYPE_GOAL;
     case 'Outcome':
-      return strings.METRIC_TYPE_OUTCOME;
+      return strings.INDICATOR_TYPE_OUTCOME;
     case 'Output':
-      return strings.METRIC_TYPE_OUTPUT;
+      return strings.INDICATOR_TYPE_OUTPUT;
     case 'Process':
       return strings.INDICATOR_TYPE_PROCESS;
     default:

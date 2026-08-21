@@ -18,8 +18,8 @@ import useSnackbar from 'src/utils/useSnackbar';
 import {
   classIdOptions,
   frequencyOptions,
+  indicatorComponentOptions,
   indicatorTypeOptions,
-  metricComponentOptions,
 } from './EditCommonIndicatorModal';
 
 export interface EditProjectIndicatorModalProps {
@@ -137,7 +137,7 @@ export default function EditProjectIndicatorModal(props: EditProjectIndicatorMod
             id='category'
             label={strings.CATEGORY}
             onChange={onChangeCallback('category')}
-            options={metricComponentOptions()}
+            options={indicatorComponentOptions()}
             selectedValue={record.category}
             fullWidth
             required
