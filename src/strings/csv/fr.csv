@@ -1489,6 +1489,7 @@ OVERALL_SCORE,Note globale,1d6cdabe
 OVERDUE,En retard,90d8f429
 OVERRIDE,Remplacer,15bd0e63
 OVERRIDE_SPECIES,Remplacer l’espèce,c8f09521
+OVERRIDE_STATUS_NOT_SET_TOOLTIP,"Une fois qu’un statut est défini, il peut être remplacé. Utilisez la fonctionnalité de vérification des espèces pour définir un statut pour l’espèce dans ce projet.",15d7f709
 OVERVIEW,Vue d’ensemble,c7fd0e47
 OVERWRITE_TERRAWARE_TRACKING_DATA,Écraser les données de suivi Terraware,1f5637ba
 OVERWRITTEN_ORIGINAL_VALUE,Remplacement – original : {0},c504c96d

@@ -4,7 +4,6 @@ import { Box, Tooltip, Typography, useTheme } from '@mui/material';
 import { Badge, TableRowType } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
-import Button from 'src/components/common/button/Button';
 import TooltipButton from 'src/components/common/button/TooltipButton';
 import Table from 'src/components/common/table';
 import CellRenderer from 'src/components/common/table/TableCellRenderer';
@@ -211,13 +210,14 @@ export default function SpeciesProjectsSection({
               projectRow.isNew ? (
                 ''
               ) : (
-                <Button
+                <TooltipButton
                   id={`override-${projectRow.projectId}`}
                   label={projectRow.overridden ? strings.EDIT : strings.OVERRIDE}
                   priority='secondary'
                   type='passive'
                   size='small'
                   disabled={!projectRow.nativity}
+                  tooltip={projectRow.nativity ? undefined : strings.OVERRIDE_STATUS_NOT_SET_TOOLTIP}
                   onClick={() => setOverrideProjectId(projectRow.projectId)}
                 />
               )

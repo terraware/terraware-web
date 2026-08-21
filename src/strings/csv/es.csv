@@ -1490,6 +1490,7 @@ OVERALL_SCORE,Puntaje total,1d6cdabe
 OVERDUE,Atrasado,90d8f429
 OVERRIDE,Anular,15bd0e63
 OVERRIDE_SPECIES,Anular especie,c8f09521
+OVERRIDE_STATUS_NOT_SET_TOOLTIP,"Después de establecer un estado, este puede ser anulado. Ejecute la función de Verificación de Especies para establecer un estado para la especie en este Proyecto.",15d7f709
 OVERVIEW,Descripción,c7fd0e47
 OVERWRITE_TERRAWARE_TRACKING_DATA,Sobrescribir los datos de seguimiento de Terraware,1f5637ba
 OVERWRITTEN_ORIGINAL_VALUE,Sobrescrito - original: {0},c504c96d
