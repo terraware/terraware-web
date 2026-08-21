@@ -4,12 +4,13 @@ import { Box, useTheme } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 import { BadgeProps } from '@terraware/web-components/components/Badge';
 
+import { reportIndicatorStatusLabel } from 'src/components/AcceleratorReports/utils';
 import { useLocalization } from 'src/providers/hooks';
 import strings from 'src/strings';
-import { MetricStatus } from 'src/types/AcceleratorReport';
+import { ReportIndicatorStatus } from 'src/types/AcceleratorReport';
 
 type MetricStatusBadgeProps = {
-  status: MetricStatus;
+  status: ReportIndicatorStatus;
 };
 
 const MetricStatusBadge = (props: MetricStatusBadgeProps): JSX.Element => {
@@ -17,7 +18,7 @@ const MetricStatusBadge = (props: MetricStatusBadgeProps): JSX.Element => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
 
-  const badgeProps = useMemo((): BadgeProps | undefined => {
+  const badgeProps = useMemo((): Omit<BadgeProps, 'label'> | undefined => {
     if (!activeLocale) {
       return undefined;
     }
@@ -28,35 +29,35 @@ const MetricStatusBadge = (props: MetricStatusBadgeProps): JSX.Element => {
           backgroundColor: theme.palette.TwClrBgSuccessTertiary,
           borderColor: theme.palette.TwClrBrdrSuccess,
           labelColor: theme.palette.TwClrTxtSuccess,
-          label: strings.ACHIEVED,
         };
       case 'Unlikely':
         return {
           backgroundColor: theme.palette.TwClrBgDangerTertiary,
           borderColor: theme.palette.TwClrBrdrDanger,
           labelColor: theme.palette.TwClrTxtDanger,
-          label: strings.UNLIKELY,
         };
       case 'On-Track':
         return {
           backgroundColor: theme.palette.TwClrBgSuccessTertiary,
           borderColor: theme.palette.TwClrBrdrSuccess,
           labelColor: theme.palette.TwClrTxtSuccess,
-          label: strings.ON_TRACK,
         };
       case 'Off-Track':
         return {
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
           labelColor: theme.palette.TwClrTxtWarning,
-          label: strings.OFF_TRACK,
         };
       default:
         return undefined;
     }
   }, [activeLocale, status, theme]);
 
-  return <Box sx={{ textWrap: 'nowrap' }}>{badgeProps && <Badge {...badgeProps} />}</Box>;
+  return (
+    <Box sx={{ textWrap: 'nowrap' }}>
+      {badgeProps && <Badge {...badgeProps} label={reportIndicatorStatusLabel(status, strings)} />}
+    </Box>
+  );
 };
 
 export default MetricStatusBadge;

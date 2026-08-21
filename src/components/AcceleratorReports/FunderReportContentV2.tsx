@@ -7,9 +7,9 @@ import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalC
 import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
 import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
 import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
-import { ProgressIndicator } from 'src/components/AcceleratorReports/IndicatorProgressRow';
 import { IndicatorProgressSectionContent } from 'src/components/AcceleratorReports/IndicatorProgressSection';
 import { ProjectHealthBarContent } from 'src/components/AcceleratorReports/ProjectHealthBar';
+import { ProgressIndicator } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';

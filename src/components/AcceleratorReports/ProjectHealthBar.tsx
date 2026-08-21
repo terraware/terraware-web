@@ -4,10 +4,10 @@ import { Box, Typography, useTheme } from '@mui/material';
 
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization } from 'src/providers';
-import { MetricStatus } from 'src/types/AcceleratorReport';
+import { ReportIndicatorStatus } from 'src/types/AcceleratorReport';
 
 type ProjectHealthIndicator = {
-  status?: MetricStatus;
+  status?: ReportIndicatorStatus;
 };
 
 export type ProjectHealthBarContentProps = {
@@ -19,7 +19,8 @@ export const ProjectHealthBarContent = ({ indicators }: ProjectHealthBarContentP
   const { strings } = useLocalization();
 
   const counts = useMemo(() => {
-    const countOf = (status: MetricStatus) => indicators.filter((indicator) => indicator.status === status).length;
+    const countOf = (status: ReportIndicatorStatus) =>
+      indicators.filter((indicator) => indicator.status === status).length;
 
     return {
       achieved: countOf('Achieved'),

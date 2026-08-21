@@ -5,7 +5,7 @@ import { Message } from '@terraware/web-components';
 
 import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
 import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
-import { toReportReviewPayload } from 'src/components/AcceleratorReports/utils';
+import { toReportReviewPayload, unpublishedPropertyList } from 'src/components/AcceleratorReports/utils';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization, useUser } from 'src/providers';
@@ -46,21 +46,7 @@ const ReportMessages = ({ isConsoleView, reportId }: ReportMessagesProps): JSX.E
       return null;
     }
 
-    const propertyLabels: Record<string, string> = {
-      achievements: strings.ACHIEVEMENTS,
-      additionalComments: strings.ADDITIONAL_COMMENTS,
-      autoCalculatedIndicators: strings.AUTO_CALCULATED_INDICATORS,
-      challenges: strings.CHALLENGES,
-      commonIndicators: strings.COMMON_INDICATORS,
-      financialSummaries: strings.FINANCIAL_SUMMARIES,
-      highlights: strings.HIGHLIGHTS,
-      photos: strings.PHOTOS,
-      projectIndicators: strings.PROJECT_INDICATORS,
-    };
-
-    const propertyList = report.unpublishedProperties
-      .map((property) => propertyLabels[property] ?? property)
-      .join(', ');
+    const propertyList = unpublishedPropertyList(report.unpublishedProperties, strings);
 
     return (
       <Box display='flex' flexDirection='column' gap={1}>

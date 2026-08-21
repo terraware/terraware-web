@@ -1,12 +1,11 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, type ReactNode, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
 import FunderReportContentV2 from 'src/components/AcceleratorReports/FunderReportContentV2';
-import { ProgressIndicator } from 'src/components/AcceleratorReports/IndicatorProgressRow';
 import { REPORT_TITLE_STYLE } from 'src/components/AcceleratorReports/ReportDropdown';
-import { getReportName } from 'src/components/AcceleratorReports/utils';
+import { ProgressIndicator, getReportName } from 'src/components/AcceleratorReports/utils';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
@@ -25,6 +24,7 @@ type FunderReportPageV2Props = {
   projectId: number;
   report?: AcceleratorReportPayload | PublishedReportPayload;
   reportId: number;
+  rightComponent?: ReactNode;
   title: string;
 };
 
@@ -35,6 +35,7 @@ const FunderReportPageV2 = ({
   projectId,
   report,
   reportId,
+  rightComponent,
   title,
 }: FunderReportPageV2Props): JSX.Element => {
   const theme = useTheme();
@@ -71,7 +72,13 @@ const FunderReportPageV2 = ({
   );
 
   return (
-    <Page crumbs={pageCrumbs} hierarchicalCrumbs={false} title={title} titleStyle={{ paddingTop: '16px' }}>
+    <Page
+      crumbs={pageCrumbs}
+      hierarchicalCrumbs={false}
+      rightComponent={rightComponent}
+      title={title}
+      titleStyle={{ paddingTop: '16px' }}
+    >
       <Box display='flex' flexDirection='column' flexGrow={1} width={'100%'}>
         <Box marginTop={theme.spacing(3)} width={'100%'}>
           <Message body={banner} priority='info' type='page' />

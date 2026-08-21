@@ -1,7 +1,7 @@
 import React, { type JSX, useMemo } from 'react';
 import { useParams } from 'react-router';
 
-import { getFunderVisibleIndicators } from 'src/components/AcceleratorReports/IndicatorProgressSection';
+import { getFunderVisibleIndicators } from 'src/components/AcceleratorReports/utils';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization } from 'src/providers';
 

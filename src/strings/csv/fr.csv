@@ -26,6 +26,7 @@ ACCOUNT,Compte,ad5c7580
 ACCUMULATION_RATE,Taux d'accumulation,2d9ec0ee
 ACCUMULATION_RATE_UNITS,Taux d'accumulation (tCO2/ha/an),400d7f2a
 ACHIEVED,Atteint,845a66be
+ACHIEVEMENT,Réussite,3677a25c
 ACHIEVEMENTS,Réalisations,e1e95bcf
 ACTION,Action,d1213a6c
 ACTIVE,Actif,514d5311
@@ -220,6 +221,7 @@ ATTACHMENT_DESCRIPTION,Joindre jusqu'à {0} fichiers. Chaque fichier a une taill
 ATTACHMENT_LIMIT_REACHED,Limite de pièces jointes atteinte,9f9323bc
 ATTACHMENT_LIMIT_REACHED_MESSAGE,Vous ne pouvez télécharger que {0} pièces jointes.,cc438d34
 ATTACHMENTS,Annexes,e7695404
+AUTO_CALCULATED,Calculé automatiquement,31b73d89
 AUTO_CALCULATED_INDICATORS,Indicateurs calculés automatiquement,3b7057e0
 AVAILABLE,disponible,716e496f
 AVAILABLE_TITLE,Disponible,b84c21ed
@@ -727,6 +729,7 @@ EXPANSION_POTENTIAL_DESCRIPTION,"Terrain éligible non encore sécurisé par des
 EXPANSION_POTENTIAL_HA,Potentiel d'expansion (ha),eb119de5
 EXPORT,Exporter,54546641
 EXPORT_BIOMASS_MONITORING_DETAILS_CSV,Exporter les Détails de la Surveillance de la Biomasse (CSV),eb24aa11
+EXPORT_CSV,Exporter CSV,7070c8c7
 EXPORT_DATA,Exporter les données,3fc16ad5
 EXPORT_LOCATIONS,Exporter les emplacements,1e075828
 EXPORT_LOCATIONS_DISABLED_TOOLTIP,Les emplacements des parcelles sont déterminés au début de l'observation,c4219ca7
@@ -755,6 +758,7 @@ FEATURE_REQUEST_INSTRUCTIONS,Fournissez des détails sur une nouvelle fonctionna
 FEEDBACK,Commentaires,2510edcc
 FEEDBACK_SHARED_WITH_PROJECT,Commentaires (partagés avec le projet),d56b8ddb
 FERN,Fougère,35767f4d
+FIELD,Champ,dc19e415
 FIELD_NOTES,Notes de terrain,1c50984e
 FIFTY_TO_SEVENTY_FIVE_PERCENT,50 % à 75 %,174fb41a
 FILE_NAME,Nom du fichier,fc9f4f98
@@ -915,6 +919,7 @@ IN_STORAGE,Stocké,e17c2135
 INCLUDE_EMPTY_FIELDS,Inclure des champs vides,a4ba1236
 INCOMPLETE,Incomplet,5f524fdf
 INCORRECT_EMAIL_FORMAT,Format d'e-mail incorrect.,19f1a8c9
+INDICATOR_CLASS,Classe d’indicateur,8c9d3791
 INDICATOR_LEVEL,Niveau d’indicateur,b128c992
 INDICATOR_NAME,Nom de l’indicateur,0d8b0613
 INDICATOR_OVERWRITTEN_ORIGINAL_VALUE,Remplacé – valeur d'origine : {0},c504c96d
@@ -932,6 +937,7 @@ INTERMEDIATE,Intermédiaire,09764770
 INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE,Intermédiaire - Sensible aux températures froides,86d69e60
 INTERMEDIATE_PARTIAL_DESICCATION_TOLERANT,Intermédiaire - Tolérance partielle à la dessiccation,55af1663
 INTERMEDIATE_SHORT_LIVED,Intermédiaire - courte durée de vie,5b578af6
+INTERNAL_COMMENT,Commentaire interne,e40b8805
 INTERNAL_COMMENTS,Commentaires internes,d0352e65
 INTERNAL_INTERESTS,Intérêts internes,d07513bb
 INTERNAL_LEADS,Responsables internes,ea24d417
@@ -1494,6 +1500,7 @@ OVERRIDE_STATUS_NOT_SET_TOOLTIP,"Une fois qu’un statut est défini, il peut ê
 OVERVIEW,Vue d’ensemble,c7fd0e47
 OVERWRITE_TERRAWARE_TRACKING_DATA,Écraser les données de suivi Terraware,1f5637ba
 OVERWRITTEN_ORIGINAL_VALUE,Remplacement – original : {0},c504c96d
+OVERWRITTEN_VALUE,Valeur remplacée,929e8eac
 OWNER,Propriétaire,f1db93f1
 OZ,oz,63ec7cc2
 OZ_OUNCES,oz (onces),45ec05af
@@ -1686,6 +1693,7 @@ PREVIEW_FUNDER_REPORT,Prévisualiser le rapport du bailleur,17fa74c8
 PREVIEW_HIGHLIGHTS,Aperçu des points forts,248bb9ae
 PREVIEW_WILL_DISPLAY_AFTER_SAVING,L’aperçu s’affichera après l’enregistrement,475b4844
 PREVIOUS,Précédent,156ee39e
+PREVIOUS_YEAR_CUMULATIVE_TOTAL,Total cumulatif de l’année précédente,e29d1c3c
 PRIMARY_DATA_SOURCE,Source de données principale,4ad95dc9
 PRIVACY_POLICY,Engagement de confidentialité,47ab3e90
 PROBLEMS,Problèmes,25b5d615
@@ -1836,6 +1844,7 @@ REF_ID,ID de référence,89bd78ee
 REFERENCE,Référence,0a82a6a5
 REFERENCE_DBH,Citez la référence pour « DHP à maturité ».,9e786693
 REFERENCE_HEIGHT_AT_MATURITY,Citez la référence pour « Hauteur à maturité ».,40d3e9bd
+REFERENCE_ID,ID de référence,c29f4804
 REFRESH,Actualiser,aca87218
 REFRIGERATOR_1,Réfrigérateur 1,e8eed3ec
 REFRIGERATOR_2,Réfrigérateur 2,ab94a835
@@ -2414,6 +2423,7 @@ TERRAFORMATION_CONTACT,Contact Terraformation,65846c70
 TERRAWARE_IS_SOFTWARE,"Terraware est un logiciel spécialisé, créé par [Terraformation], qui permet aux forestiers d'optimiser toutes les étapes de leurs projets forestiers, de la collecte des semences au calcul du carbone.",ca042b5f
 TERRAWARE_METRIC_MESSAGE,Cette mesure est tirée directement des données de suivi de Terraware.,cd131ec1
 TERRAWARE_MOBILE_APP_IMAGE_ALT,Illustration de l'application mobile Terraware sur un smartphone.,3e805068
+TERRAWARE_VALUE,Valeur Terraware,13163913
 TERRESTRIAL,Terrestre,25e86de2
 TEST,Essai,e888ded7
 TEST_DATE_REQUIRED,Date de l'essai *,f53ff17e
