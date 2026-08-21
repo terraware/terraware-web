@@ -131,12 +131,13 @@ const SpeciesCheckModal = ({
   );
   const currentKey = stepKeys[Math.min(step, stepKeys.length - 1)];
 
-  const stepLabels = useMemo(() => {
-    const locationLabel = targets.length > 1 ? strings.SET_LOCATIONS : strings.SET_LOCATION;
-    return stepKeys.map((key) =>
-      key === 'setLocation' ? locationLabel : key === 'name' ? strings.NAME_CHECK : strings.NATIVE_CHECK
-    );
-  }, [targets.length, stepKeys]);
+  const stepLabels = useMemo(
+    () =>
+      stepKeys.map((key) =>
+        key === 'setLocation' ? strings.LOCATION : key === 'name' ? strings.NAME_CHECK : strings.NATIVE_CHECK
+      ),
+    [stepKeys]
+  );
 
   const countryNameByCode = useCallback(
     (code?: string) => countries?.find((country) => country.code === code)?.name,
@@ -500,20 +501,33 @@ const SpeciesCheckModal = ({
             color={theme.palette.TwClrTxt}
             textAlign='left'
             marginTop={theme.spacing(2)}
-            marginBottom={theme.spacing(1)}
+            marginBottom={theme.spacing(2)}
           >
             {strings.SPECIES_CHECK_UPDATE_HINT}
           </Typography>
         )}
 
         {currentKey === 'setLocation' && (
-          <SetLocationStep
-            targets={targets}
-            edits={locationEdits}
-            countries={countries ?? []}
-            botanicalCountries={botanicalCountries}
-            onChange={(targetKey, edit) => setLocationEdits((previous) => ({ ...previous, [targetKey]: edit }))}
-          />
+          <>
+            <Typography
+              fontSize='16px'
+              color={theme.palette.TwClrTxt}
+              textAlign='left'
+              marginTop={theme.spacing(2)}
+              marginBottom={theme.spacing(2)}
+            >
+              {targets.length > 1
+                ? strings.SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS
+                : strings.SPECIES_CHECK_SET_LOCATION_HINT}
+            </Typography>
+            <SetLocationStep
+              targets={targets}
+              edits={locationEdits}
+              countries={countries ?? []}
+              botanicalCountries={botanicalCountries}
+              onChange={(targetKey, edit) => setLocationEdits((previous) => ({ ...previous, [targetKey]: edit }))}
+            />
+          </>
         )}
         {currentKey === 'name' && (
           <NameCheckStep

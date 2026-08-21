@@ -30,7 +30,7 @@ const SetLocationStep = ({
   const hasCountryMapping = botanicalCountries.some((bc) => bc.countryCode !== undefined);
 
   return (
-    <Box display='flex' flexDirection='column' gap={theme.spacing(3)} textAlign='left'>
+    <Box display='flex' flexDirection='column' gap={theme.spacing(4)} textAlign='left' padding={theme.spacing(2)}>
       {targets.map((target, index) => {
         const edit = edits[target.key] ?? {};
         const botanicalCountryOptions: DropdownItem[] = edit.countryCode
@@ -41,12 +41,7 @@ const SetLocationStep = ({
         return (
           <React.Fragment key={target.key}>
             {index > 0 && <Divider sx={{ borderColor: theme.palette.TwClrBrdrTertiary }} />}
-            <Box
-              display='flex'
-              flexDirection='column'
-              gap={theme.spacing(2)}
-              sx={{ maxWidth: '520px', marginX: 'auto', width: '100%' }}
-            >
+            <Box display='flex' flexDirection='column' gap={theme.spacing(3)} sx={{ maxWidth: '400px', width: '100%' }}>
               <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
                 {target.name}
               </Typography>
