@@ -208,6 +208,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               id='commonName'
               label={strings.COMMON_NAME}
               source={dataSource(species?.commonNameSource)}
+              speciesId={species?.id}
               tooltipTitle={strings.TOOLTIP_COMMON_NAME}
               value={species?.commonName}
             />
@@ -217,6 +218,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
               id='family'
               label={strings.FAMILY}
               source={dataSource(species?.familyNameSource)}
+              speciesId={species?.id}
               value={species?.familyName}
             />
           </GridItemWrapper>
@@ -367,7 +369,11 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
                   marginTop={theme.spacing(1)}
                 >
                   <SpeciesNativityBadge nativity={orgNativity} />
-                  <SpeciesDataSourceBadge source={orgNativityElement?.calculatedNativitySource} />
+                  <SpeciesDataSourceBadge
+                    source={orgNativityElement?.calculatedNativitySource}
+                    speciesId={species?.id}
+                    fieldName='nativity'
+                  />
                   {orgNativity && userCanEdit && !orgIsOverridden && (
                     <Button
                       id='override-org-nativity'

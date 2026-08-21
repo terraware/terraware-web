@@ -2216,7 +2216,7 @@ SPECIES_CATEGORIES_TOOLTIP,"Species Categories shows the percentage of total pla
 SPECIES_CHECK,Species Check,
 SPECIES_CHECK_ADDED_BANNER,"{0} new species were added ({1}). Run the Species check to see which are native, introduced, or invasive.",
 SPECIES_CHECK_ADDED_BANNER_ONE,"{0} new species was added ({1}). Run the Species check to see which are native, introduced, or invasive.",
-SPECIES_CHECK_SET_LOCATION_BANNER,"To check which species are native, introduced, or invasive, run the Species Check. You will need to set location of your projects.",
+SPECIES_CHECK_SET_LOCATION_BANNER,"To check which species are native, introduced, or invasive, run the Species Check. You will need to set the location of your projects.",
 SPECIES_CHECK_SET_LOCATION_HINT,Select a Country and Botanical Country to set the location.,
 SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS,Select a Country and Botanical Country to set the location of each Project.,
 SPECIES_CHECK_SPECIES_CHECKED,{0} species checked,

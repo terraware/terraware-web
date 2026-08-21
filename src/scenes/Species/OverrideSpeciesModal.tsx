@@ -7,6 +7,8 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Textfield from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { useOverrideProjectSpeciesDataMutation } from 'src/queries/generated/species';
 import strings from 'src/strings';
@@ -44,6 +46,7 @@ export default function OverrideSpeciesModal({
   const { countries } = useLocalization();
   const { botanicalCountries } = useBotanicalCountries();
   const [overrideSpecies, { isLoading: isBusy }] = useOverrideProjectSpeciesDataMutation();
+  const trackEvent = useTrackEvent();
 
   const [nativity, setNativity] = useState<Nativity | undefined>(currentNativity);
   const [justification, setJustification] = useState<string>(currentJustification ?? '');
@@ -78,6 +81,11 @@ export default function OverrideSpeciesModal({
           },
         ],
       }).unwrap();
+      trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_OVERRIDE_CREATED, {
+        project_scope: project?.id,
+        species_id: speciesId,
+        justification_length: justification.length,
+      });
       onClose();
     } catch {
       snackbar.toastError();

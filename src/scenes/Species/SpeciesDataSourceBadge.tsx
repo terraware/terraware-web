@@ -3,6 +3,8 @@ import React, { type JSX } from 'react';
 import { Box, Tooltip } from '@mui/material';
 import { Badge } from '@terraware/web-components';
 
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { SpeciesDataSourcePayload } from 'src/queries/generated/species';
 import strings from 'src/strings';
 
@@ -30,15 +32,28 @@ export const speciesDataSourceAcronymLabel = (datasetType?: string): string => {
 
 type SpeciesDataSourceBadgeProps = {
   source?: SpeciesDataSourcePayload;
+  speciesId?: number;
+  fieldName?: string;
 };
 
-const SpeciesDataSourceBadge = ({ source }: SpeciesDataSourceBadgeProps): JSX.Element | null => {
+const SpeciesDataSourceBadge = ({ source, speciesId, fieldName }: SpeciesDataSourceBadgeProps): JSX.Element | null => {
+  const trackEvent = useTrackEvent();
+
   if (!source) {
     return null;
   }
 
   return (
     <Tooltip
+      onOpen={() => {
+        if (speciesId) {
+          trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SOURCE_ATTRIBUTION_HOVERED, {
+            species_id: speciesId,
+            field_name: fieldName,
+            source: source.datasetType,
+          });
+        }
+      }}
       title={
         <>
           {speciesDataSourceLabel(source.datasetType)}

@@ -188,6 +188,14 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const showFirstTimeBanner = speciesCheckEnabled && noLocationSet && !firstTimeBannerDismissed;
   const showAddedBanner = speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !addedBannerDismissed;
 
+  const firstTimeBannerImpressionRef = React.useRef(false);
+  useEffect(() => {
+    if (showFirstTimeBanner && !firstTimeBannerImpressionRef.current) {
+      firstTimeBannerImpressionRef.current = true;
+      trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_BANNER_SHOWN, {});
+    }
+  }, [showFirstTimeBanner, trackEvent]);
+
   const resolveScopeNativities = useCallback(
     (sp: Species): Nativity[] => {
       const elements = sp.projects ?? [];
