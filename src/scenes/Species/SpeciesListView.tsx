@@ -1,8 +1,8 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, ClickAwayListener, IconButton, Popover, Tooltip, Typography, useTheme } from '@mui/material';
+import { Box, ClickAwayListener, IconButton, Popover, Tooltip, useTheme } from '@mui/material';
 import { Badge, DropdownItem, Message } from '@terraware/web-components';
-import { EditableTable, EditableTableColumn, Icon, Separator } from '@terraware/web-components';
+import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_Row,
@@ -15,7 +15,6 @@ import {
 } from 'material-react-table';
 
 import PageSnackbar from 'src/components/PageSnackbar';
-import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import Card from 'src/components/common/Card';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import Link from 'src/components/common/Link';
@@ -123,7 +122,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
   const [results, setResults] = useState<SpeciesSearchResultRow[]>();
-  const [projectFilter, setProjectFilter] = useState<{ projectId?: number }>({});
   const query = useQuery();
   const navigate = useSyncNavigate();
   const { activeLocale } = useLocalization();
@@ -203,9 +201,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         NATIVITY_VALUES.filter((value) => values.includes(value));
 
       if (hasMultipleProjects) {
-        if (projectFilter.projectId !== undefined) {
-          return distinct([nativityOf(elements.find((element) => element.projectId === projectFilter.projectId))]);
-        }
         return distinct(elements.map((element) => nativityOf(element)));
       }
 
@@ -215,7 +210,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       }
       return orgScopeKnown ? distinct([nativityOf(elements.find((element) => nativityOf(element)))]) : [];
     },
-    [hasMultipleProjects, projectFilter.projectId, orgScopeKnown]
+    [hasMultipleProjects, orgScopeKnown]
   );
 
   const speciesCheckRan = species.some((sp) => resolveScopeNativities(sp).length > 0);
@@ -373,27 +368,29 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     [results]
   );
 
-  const speciesProjectIds = useMemo(() => {
-    const map = new Map<number, Set<number>>();
+  const projectNamesBySpeciesId = useMemo(() => {
+    const map = new Map<number, string[]>();
     species?.forEach((sp) => {
-      const projectIds = new Set<number>();
+      const names: string[] = [];
       sp.projects?.forEach((project) => {
         if (project.projectId !== undefined) {
-          projectIds.add(project.projectId);
+          const name = availableProjects?.find((p) => p.id === project.projectId)?.name;
+          if (name) {
+            names.push(name);
+          }
         }
       });
-      map.set(sp.id, projectIds);
+      map.set(sp.id, names);
     });
     return map;
-  }, [species]);
+  }, [species, availableProjects]);
 
-  const filteredResults = useMemo(() => {
-    const projectId = projectFilter.projectId;
-    if (!results || projectId === undefined) {
-      return results;
-    }
-    return results.filter((result) => speciesProjectIds.get(result.id)?.has(projectId));
-  }, [results, projectFilter.projectId, speciesProjectIds]);
+  const availableProjectNames = useMemo(
+    () => (availableProjects ?? []).map((project) => project.name).sort((a, b) => a.localeCompare(b)),
+    [availableProjects]
+  );
+
+  const showProjectColumn = speciesIntelligenceEnabled && hasMultipleProjects && !!availableProjects;
 
   const onNewSpecies = () => {
     navigate(APP_PATHS.SPECIES_NEW);
@@ -538,6 +535,20 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     return <TextTruncated fontSize={16} stringList={list} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />;
   }, []);
 
+  const ProjectCell = useCallback(({ cell }: { cell: MRT_Cell<SpeciesSearchResultRow> }) => {
+    const value = cell.getValue() as string | undefined;
+    const list = value ? value.split(', ') : [];
+    return (
+      <TextTruncated
+        fontSize={16}
+        stringList={list}
+        width={150}
+        listSeparator={strings.LIST_SEPARATOR_SECONDARY}
+        moreText={strings.TRUNCATED_TEXT_MORE_LINK}
+      />
+    );
+  }, []);
+
   const ProblemsCell = useCallback(
     ({ cell }: { cell: MRT_Cell<SpeciesSearchResultRow> }) => (
       <ProblemsCellComponent
@@ -650,6 +661,27 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
             },
           ]
         : []),
+      ...(showProjectColumn
+        ? [
+            {
+              id: 'project',
+              header: strings.PROJECT,
+              accessorFn: (row: SpeciesSearchResultRow) => (projectNamesBySpeciesId.get(row.id) ?? []).join(', '),
+              enableEditing: false,
+              filterVariant: 'multi-select',
+              filterSelectOptions: availableProjectNames,
+              filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, filterValue: string[]) => {
+                if (!filterValue?.length) {
+                  return true;
+                }
+                const names = projectNamesBySpeciesId.get(row.original.id) ?? [];
+                return filterValue.some((value) => names.includes(value));
+              },
+              sortUndefined: 'last',
+              Cell: ProjectCell,
+            },
+          ]
+        : []),
       {
         id: 'acceleratorProjects',
         header: strings.PROJECTS,
@@ -714,6 +746,9 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     activeLocale,
     showProblemsColumn,
     showStatusColumn,
+    showProjectColumn,
+    availableProjectNames,
+    projectNamesBySpeciesId,
     statusBySpeciesId,
     uniqueAcceleratorProjects,
     uniqueConservationCategories,
@@ -724,30 +759,11 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     ProblemsCell,
     StatusCell,
     ScientificNameCell,
+    ProjectCell,
     AcceleratorProjectsCell,
     GrowthFormsCell,
     EcosystemTypesCell,
   ]);
-
-  const showProjectSelector =
-    speciesIntelligenceEnabled && species && species.length > 0 && hasMultipleProjects && !!availableProjects;
-
-  const projectSelector =
-    showProjectSelector && availableProjects ? (
-      <Box display='flex' alignItems='center'>
-        <Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'>
-          {strings.PROJECT}
-        </Typography>
-        <ProjectsDropdown
-          allowUnselect
-          availableProjects={availableProjects}
-          label=''
-          record={projectFilter}
-          setRecord={setProjectFilter}
-          unselectLabel={strings.ALL_PROJECTS}
-        />
-      </Box>
-    ) : null;
 
   return (
     <TfMain>
@@ -840,12 +856,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               >
                 {strings.SPECIES}
               </h1>
-              {!isMobile && projectSelector && (
-                <Box display='flex' alignItems='center' marginLeft={theme.spacing(2)}>
-                  <Separator height='40px' />
-                  {projectSelector}
-                </Box>
-              )}
             </Box>
             {species && species.length > 0 && !isMobile && userCanEdit && (
               <div>
@@ -874,11 +884,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               </Box>
             )}
           </Box>
-          {isMobile && projectSelector && (
-            <Box paddingLeft={theme.spacing(1)} paddingBottom={theme.spacing(2)}>
-              {projectSelector}
-            </Box>
-          )}
           <PageSnackbar />
         </PageHeaderWrapper>
       </Box>
@@ -887,7 +892,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
           <EditableTable
             clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
             columns={editableColumns}
-            data={filteredResults ?? []}
+            data={results ?? []}
             enableEditing={false}
             enableSorting={true}
             enableGlobalFilter={true}
