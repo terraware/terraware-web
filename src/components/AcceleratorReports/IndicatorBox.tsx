@@ -15,41 +15,47 @@ import useForm from 'src/utils/useForm';
 
 import EditableReportBox from './EditableReportBox';
 
-type IndicatorMetric =
+type ReportIndicatorPayload =
   | ReportAutoCalculatedIndicatorPayload
   | ReportCommonIndicatorPayload
   | ReportProjectIndicatorPayload;
 
-const isAutoCalculated = (m: IndicatorMetric): m is ReportAutoCalculatedIndicatorPayload =>
+const isAutoCalculated = (m: ReportIndicatorPayload): m is ReportAutoCalculatedIndicatorPayload =>
   'indicator' in m && typeof m.indicator === 'string';
 
 const textAreaStyles = { textarea: { height: '120px' } };
 
 type IndicatorBoxProps = {
   editing?: boolean;
-  metric: IndicatorMetric;
+  indicator: ReportIndicatorPayload;
   type: IndicatorType;
   year?: number;
-  onChangeIndicator?: (metric: IndicatorMetric, type: IndicatorType) => void;
+  onChangeIndicator?: (indicator: ReportIndicatorPayload, type: IndicatorType) => void;
 };
 
-const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }: IndicatorBoxProps): JSX.Element => {
+const IndicatorBox = ({
+  editing = false,
+  indicator,
+  type,
+  year,
+  onChangeIndicator,
+}: IndicatorBoxProps): JSX.Element => {
   const theme = useTheme();
-  const [record, , , onChangeCallback] = useForm<IndicatorMetric>(metric);
+  const [record, , , onChangeCallback] = useForm<ReportIndicatorPayload>(indicator);
 
   useEffect(() => {
-    if (JSON.stringify(record) !== JSON.stringify(metric)) {
+    if (JSON.stringify(record) !== JSON.stringify(indicator)) {
       onChangeIndicator?.(record, type);
     }
-  }, [metric, onChangeIndicator, record, type]);
+  }, [indicator, onChangeIndicator, record, type]);
 
-  const precision = metric.precision ?? 0;
+  const precision = indicator.precision ?? 0;
 
   const getName = () => {
-    if (isAutoCalculated(metric)) {
-      return metric.indicator;
+    if (isAutoCalculated(indicator)) {
+      return indicator.indicator;
     }
-    return (metric as ReportCommonIndicatorPayload).name;
+    return (indicator as ReportCommonIndicatorPayload).name;
   };
 
   const getProgressValue = () => {
@@ -67,8 +73,8 @@ const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }
       onCancel={() => undefined}
       onSave={() => undefined}
       editing={editing}
-      visibleToFunder={metric.isPublishable}
-      description={metric.description}
+      visibleToFunder={indicator.isPublishable}
+      description={indicator.description}
     >
       <Grid item xs={6}>
         {isAutoCalculated(record) ? (
@@ -84,8 +90,8 @@ const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }
                     ? formatPrecision(record.systemValue, precision)
                     : '--'}{' '}
                 /{' '}
-                {metric.target !== undefined && metric.target !== null
-                  ? formatPrecision(metric.target, precision)
+                {indicator.target !== undefined && indicator.target !== null
+                  ? formatPrecision(indicator.target, precision)
                   : '--'}{' '}
                 ({year} {strings.TARGET})
               </Typography>
@@ -120,7 +126,9 @@ const IndicatorBox = ({ editing = false, metric, type, year, onChangeIndicator }
             />
             <Typography paddingTop={3} paddingLeft={0.5}>
               /{' '}
-              {metric.target !== undefined && metric.target !== null ? formatPrecision(metric.target, precision) : '--'}{' '}
+              {indicator.target !== undefined && indicator.target !== null
+                ? formatPrecision(indicator.target, precision)
+                : '--'}{' '}
               ({year} {strings.TARGET})
             </Typography>
             {'unit' in record && record.unit && (

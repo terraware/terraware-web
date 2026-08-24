@@ -213,7 +213,7 @@ const AcceleratorReportEditForm = ({ report }: AcceleratorReportEditFormProps) =
               <IndicatorBox
                 key={`${type}-${index}`}
                 editing={true}
-                metric={indicator}
+                indicator={indicator}
                 type={type}
                 year={year}
                 onChangeIndicator={onChangeIndicator}

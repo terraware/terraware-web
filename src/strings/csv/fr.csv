@@ -922,10 +922,19 @@ INCORRECT_EMAIL_FORMAT,Format d'e-mail incorrect.,19f1a8c9
 INDICATOR_CLASS,Classe d’indicateur,8c9d3791
 INDICATOR_LEVEL,Niveau d’indicateur,b128c992
 INDICATOR_NAME,Nom de l’indicateur,0d8b0613
+INDICATOR_NOT_VISIBLE_TO_FUNDER,Indicateur non visible par le financeur,d8aea360
 INDICATOR_OVERWRITTEN_ORIGINAL_VALUE,Remplacé – valeur d'origine : {0},c504c96d
+INDICATOR_STATUS_DESCRIPTION_ARCHIVED,Résultat déjà atteint,f3f4a3fa
+INDICATOR_STATUS_DESCRIPTION_ON_TRACK,Le résultat est en voie d'être atteint dans les délais prévus,fde2d530
+INDICATOR_STATUS_DESCRIPTION_UNLIKELY,Résultat peu susceptible d'être atteint dans les délais prévus,7be5d98c
 INDICATOR_TYPE,Type d’indicateur,d5e75bf1
+INDICATOR_TYPE_ACTIVITY,Activité,4e3914f0
 INDICATOR_TYPE_GOAL,Objectif,cb34c06e
+INDICATOR_TYPE_IMPACT,Impact,cea29899
+INDICATOR_TYPE_OUTCOME,Résultats,27a08fef
+INDICATOR_TYPE_OUTPUT,Production,d697f360
 INDICATOR_TYPE_PROCESS,Processus,0bee5739
+INDICATOR_VISIBLE_TO_FUNDER,Indicateur visible par le financeur,7e161a0e
 INDICATORS,Indicateurs,ea71857f
 INFRASTRUCTURE,Infrastructure,c8fe126f
 INITIAL_PLANTING_DENSITY,Densité de plantation initiale,54f0e256
@@ -1166,15 +1175,6 @@ METHODOLOGY,Méthodologie,caae1759
 METHODOLOGY_NUMBER,Numéro de méthodologie,de41c745
 METRIC,Métrique,83e86b5d
 METRIC_G_KG_MG,"Métrique (g, kg, mg)",0efae160
-METRIC_NOT_VISIBLE_TO_FUNDER,Mesure non visible pour le donateur,a334d200
-METRIC_STATUS_DESCRIPTION_ARCHIVED,Résultat déjà atteint,f3f4a3fa
-METRIC_STATUS_DESCRIPTION_ON_TRACK,Le résultat est en voie d'être atteint dans les délais prévus,fde2d530
-METRIC_STATUS_DESCRIPTION_UNLIKELY,Résultat peu susceptible d'être atteint dans les délais prévus,7be5d98c
-METRIC_TYPE_ACTIVITY,Activité,4e3914f0
-METRIC_TYPE_IMPACT,Impact,cea29899
-METRIC_TYPE_OUTCOME,Résultats,27a08fef
-METRIC_TYPE_OUTPUT,Production,d697f360
-METRIC_VISIBLE_TO_FUNDER,Mesure visible pour le donateur,5034bdf9
 MG,mg,cd486375
 MG_MILLIGRAMS,mg (milligrammes),1eb6e72c
 MILLIGRAMS,Milligrammes,23d587ba
@@ -1954,8 +1954,6 @@ RESET,Réinitialisation,d51ffc01
 RESET_COLUMNS,Réinitialiser les colonnes,871d2d56
 RESET_INDICATOR,Réinitialiser l'indicateur,bb1f7ec8
 RESET_INDICATOR_CONFIRM,Êtes-vous sûr de vouloir réinitialiser cet indicateur ? Il sera remplacé par les données de suivi actuelles de Terraware.,9d1f1dfb
-RESET_METRIC,Réinitialiser la mesure,fe2748bc
-RESET_METRIC_CONFIRM,Êtes-vous sûr de vouloir réinitialiser cette mesure ? Elle sera remplacée par les données de suivi actuelles de Terraware.,44353912
 RESET_ORDER,Réinitialiser l'ordre,a30cc4ed
 RESET_STATUS,Réinitialiser le statut,75db6b41
 RESET_STATUS_BODY,L’ajout de cette espèce au(x) projet(s) sélectionné(s) réinitialisera le statut du produit livrable. Vous devrez soumettre à nouveau le produit à approuver pour : {0},357adbe0

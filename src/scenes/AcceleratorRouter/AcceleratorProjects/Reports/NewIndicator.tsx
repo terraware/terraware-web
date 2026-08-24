@@ -24,8 +24,8 @@ import useSnackbar from 'src/utils/useSnackbar';
 import {
   classIdOptions,
   frequencyOptions,
+  indicatorComponentOptions,
   indicatorTypeOptions,
-  metricComponentOptions,
 } from './EditCommonIndicatorModal';
 
 type IndicatorKind = 'common' | 'project';
@@ -188,7 +188,7 @@ export default function NewIndicator(): JSX.Element {
                   id='category'
                   label={strings.CATEGORY}
                   onChange={onChangeCallback('category')}
-                  options={metricComponentOptions()}
+                  options={indicatorComponentOptions()}
                   required
                   selectedValue={newIndicator.category}
                 />

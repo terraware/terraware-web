@@ -95,7 +95,7 @@ const EditableReportBox = ({
                     color={visibleToFunder ? theme.palette.TwClrTxtSuccess : theme.palette.TwClrTxtDanger}
                     paddingLeft={theme.spacing(2)}
                   >
-                    {visibleToFunder ? strings.METRIC_VISIBLE_TO_FUNDER : strings.METRIC_NOT_VISIBLE_TO_FUNDER}
+                    {visibleToFunder ? strings.INDICATOR_VISIBLE_TO_FUNDER : strings.INDICATOR_NOT_VISIBLE_TO_FUNDER}
                   </Typography>
                 )}
               </Box>

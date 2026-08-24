@@ -30,13 +30,13 @@ import {
 import { formatPrecision } from 'src/utils/numbers';
 import useSnackbar from 'src/utils/useSnackbar';
 
-type RowMetric = {
+type RowIndicator = {
   name: string;
   description?: string;
   type: string;
   component: string;
   id: number;
-  metricType: 'projectIndicator' | 'commonIndicator' | 'autoCalculatedIndicator';
+  indicatorType: 'projectIndicator' | 'commonIndicator' | 'autoCalculatedIndicator';
   baseline?: number;
   endOfProjectTarget?: number;
   indicatorSystemName?: string;
@@ -116,8 +116,8 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
     [listAutoCalculatedIndicatorTargetsResponse.data?.targets]
   );
 
-  const allIndicatorRows = useMemo((): RowMetric[] => {
-    const projectIndicatorRows = projectIndicators.map((ind): RowMetric => {
+  const allIndicatorRows = useMemo((): RowIndicator[] => {
+    const projectIndicatorRows = projectIndicators.map((ind): RowIndicator => {
       const targets = projectIndicatorTargets.find((t) => t.indicatorId === ind.id);
       const targetByYear: { [yearKey: string]: number | undefined } = {};
       targets?.yearlyTargets.forEach((yt) => {
@@ -129,7 +129,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         component: ind.category,
         id: ind.id,
         description: ind.description,
-        metricType: 'projectIndicator',
+        indicatorType: 'projectIndicator',
         baseline: targets?.baseline,
         endOfProjectTarget: targets?.endOfProjectTarget,
         classId: ind.classId,
@@ -139,7 +139,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       };
     });
 
-    const commonIndicatorRows = commonIndicators.map((ind): RowMetric => {
+    const commonIndicatorRows = commonIndicators.map((ind): RowIndicator => {
       const targets = commonIndicatorTargets.find((t) => t.indicatorId === ind.id);
       const targetByYear: { [yearKey: string]: number | undefined } = {};
       targets?.yearlyTargets.forEach((yt) => {
@@ -151,7 +151,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         component: ind.category,
         id: ind.id,
         description: ind.description,
-        metricType: 'commonIndicator',
+        indicatorType: 'commonIndicator',
         baseline: targets?.baseline,
         endOfProjectTarget: targets?.endOfProjectTarget,
         classId: ind.classId,
@@ -161,7 +161,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       };
     });
 
-    const autoCalculatedIndicatorRows = autoCalculatedIndicators.map((ind): RowMetric => {
+    const autoCalculatedIndicatorRows = autoCalculatedIndicators.map((ind): RowIndicator => {
       const targets = autoCalculatedIndicatorTargets.find((t) => t.indicatorId === ind.indicator);
       const targetByYear: { [yearKey: string]: number | undefined } = {};
       targets?.yearlyTargets.forEach((yt) => {
@@ -173,7 +173,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         component: ind.category,
         id: -1,
         description: ind.description,
-        metricType: 'autoCalculatedIndicator',
+        indicatorType: 'autoCalculatedIndicator',
         indicatorSystemName: ind.indicator,
         baseline: targets?.baseline,
         endOfProjectTarget: targets?.endOfProjectTarget,
@@ -212,7 +212,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   ]);
 
   const onSaveYearTarget = useCallback(
-    async (row: RowMetric, value: any, year: number) => {
+    async (row: RowIndicator, value: any, year: number) => {
       if (!projectId) {
         return;
       }
@@ -224,7 +224,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       }
 
       try {
-        switch (row.metricType) {
+        switch (row.indicatorType) {
           case 'projectIndicator':
             await updateProjectIndicatorTarget({
               projectId,
@@ -272,7 +272,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   );
 
   const onSaveBaseline = useCallback(
-    async (row: RowMetric, value: any) => {
+    async (row: RowIndicator, value: any) => {
       if (!projectId) {
         return;
       }
@@ -284,7 +284,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       }
 
       try {
-        switch (row.metricType) {
+        switch (row.indicatorType) {
           case 'projectIndicator':
             await updateProjectIndicatorBaselineTarget({
               projectId,
@@ -334,7 +334,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   );
 
   const onSaveEndOfProjectTarget = useCallback(
-    async (row: RowMetric, value: any) => {
+    async (row: RowIndicator, value: any) => {
       if (!projectId) {
         return;
       }
@@ -346,7 +346,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
       }
 
       try {
-        switch (row.metricType) {
+        switch (row.indicatorType) {
           case 'projectIndicator':
             await updateProjectIndicatorBaselineTarget({
               projectId,
@@ -398,7 +398,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   const theme = useTheme();
 
   const CategoryCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<RowMetric> }) => {
+    ({ cell }: { cell: MRT_Cell<RowIndicator> }) => {
       const category = cell.getValue<string>();
       const isGreen = category === 'Biodiversity' || category === 'Climate' || category === 'Project Objectives';
       return (
@@ -414,13 +414,13 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   );
 
   const ClassIdCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<RowMetric> }) => (
+    ({ cell }: { cell: MRT_Cell<RowIndicator> }) => (
       <>{indicatorClassLabel(cell.getValue<IndicatorClass | undefined>(), strings)}</>
     ),
     [strings]
   );
 
-  const NumericCell = useCallback(({ cell }: { cell: MRT_Cell<RowMetric> }) => {
+  const NumericCell = useCallback(({ cell }: { cell: MRT_Cell<RowIndicator> }) => {
     const raw = cell.getValue<number | string | undefined>();
     if (raw === undefined || raw === null || raw === '') {
       return null;
@@ -434,7 +434,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
   }, []);
 
   const tableColumns = useMemo(() => {
-    const baseColumns: EditableTableColumn<RowMetric>[] = [
+    const baseColumns: EditableTableColumn<RowIndicator>[] = [
       {
         id: 'name',
         header: strings.INDICATOR_NAME,
@@ -450,48 +450,48 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         Cell: NumericCell,
         editConfig: {
           editVariant: 'text',
-          onSave: (row: RowMetric, value: any) => onSaveBaseline(row, value),
+          onSave: (row: RowIndicator, value: any) => onSaveBaseline(row, value),
         },
       },
     ];
 
-    const yearColumns: EditableTableColumn<RowMetric>[] = yearRange.map((year) => ({
+    const yearColumns: EditableTableColumn<RowIndicator>[] = yearRange.map((year) => ({
       id: `year${year}`,
       header: year.toString(),
-      accessorKey: `year${year}` as keyof RowMetric,
+      accessorKey: `year${year}` as keyof RowIndicator,
       enableEditing: isAllowedUpdateReportsTargets,
       Cell: NumericCell,
       editConfig: {
         editVariant: 'text',
-        onSave: (row: RowMetric, value: any) => onSaveYearTarget(row, value, year),
+        onSave: (row: RowIndicator, value: any) => onSaveYearTarget(row, value, year),
       },
     }));
 
-    const lastColumns: EditableTableColumn<RowMetric>[] = [
+    const lastColumns: EditableTableColumn<RowIndicator>[] = [
       {
         id: 'category',
         header: strings.CATEGORY,
-        accessorKey: 'component' as keyof RowMetric,
+        accessorKey: 'component' as keyof RowIndicator,
         enableEditing: false,
         Cell: CategoryCell,
       },
       {
         id: 'indicatorLevel',
         header: strings.INDICATOR_LEVEL,
-        accessorKey: 'type' as keyof RowMetric,
+        accessorKey: 'type' as keyof RowIndicator,
         enableEditing: false,
       },
       {
         id: 'cumulativeOrLevel',
         header: strings.IS_CUMULATIVE,
-        accessorKey: 'classId' as keyof RowMetric,
+        accessorKey: 'classId' as keyof RowIndicator,
         enableEditing: false,
         Cell: ClassIdCell,
       },
       {
         id: 'notes',
         header: strings.NOTES,
-        accessorKey: 'notes' as keyof RowMetric,
+        accessorKey: 'notes' as keyof RowIndicator,
         enableEditing: false,
       },
       {
@@ -502,7 +502,7 @@ export default function AcceleratorReportTargetsTable(): JSX.Element {
         Cell: NumericCell,
         editConfig: {
           editVariant: 'text',
-          onSave: (row: RowMetric, value: any) => onSaveEndOfProjectTarget(row, value),
+          onSave: (row: RowIndicator, value: any) => onSaveEndOfProjectTarget(row, value),
         },
       },
     ];
