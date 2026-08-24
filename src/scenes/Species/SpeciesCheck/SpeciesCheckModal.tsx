@@ -182,9 +182,11 @@ const SpeciesCheckModal = ({
   const targetData = useMemo(
     () =>
       targets.map((target) => {
-        const targetSpecies = target.isOrg
-          ? species
-          : species.filter((sp) => (sp.projects ?? []).some((p) => p.projectId === target.projectId));
+        const targetSpecies = [
+          ...(target.isOrg
+            ? species
+            : species.filter((sp) => (sp.projects ?? []).some((p) => p.projectId === target.projectId))),
+        ].sort((a, b) => (a.scientificName ?? '').localeCompare(b.scientificName ?? ''));
         const withProblems = targetSpecies.filter((sp) => (sp.problems?.length ?? 0) > 0);
         const pending = targetSpecies
           .map((sp) => {
@@ -197,7 +199,13 @@ const SpeciesCheckModal = ({
     [species, targets]
   );
 
-  const speciesWithProblems = useMemo(() => species.filter((sp) => (sp.problems?.length ?? 0) > 0), [species]);
+  const speciesWithProblems = useMemo(
+    () =>
+      species
+        .filter((sp) => (sp.problems?.length ?? 0) > 0)
+        .sort((a, b) => (a.scientificName ?? '').localeCompare(b.scientificName ?? '')),
+    [species]
+  );
 
   const buildSummary = useCallback(
     (data: (typeof targetData)[number], updates: number): ProjectCheckSummaryProps => ({
