@@ -3,26 +3,10 @@ import React, { type JSX, useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
-import IndicatorProgressRow, { ProgressIndicator } from 'src/components/AcceleratorReports/IndicatorProgressRow';
+import IndicatorProgressRow from 'src/components/AcceleratorReports/IndicatorProgressRow';
+import { ProgressIndicator, getProgressIndicators } from 'src/components/AcceleratorReports/utils';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization } from 'src/providers';
-
-// Reference ids read like 11.2.3, so compare them segment by segment as numbers rather than as text,
-// which would order 11.10 before 11.2.
-const compareRefIds = (a: string, b: string) => {
-  const aSegments = a.split('.');
-  const bSegments = b.split('.');
-
-  for (let index = 0; index < Math.max(aSegments.length, bSegments.length); index++) {
-    const difference = (Number(aSegments[index]) || 0) - (Number(bSegments[index]) || 0);
-
-    if (difference !== 0) {
-      return difference;
-    }
-  }
-
-  return 0;
-};
 
 export type IndicatorProgressSectionContentProps = {
   editing?: boolean;
@@ -43,8 +27,6 @@ export const IndicatorProgressSectionContent = ({
 }: IndicatorProgressSectionContentProps): JSX.Element | null => {
   const theme = useTheme();
   const { strings } = useLocalization();
-
-  const sortedIndicators = useMemo(() => [...indicators].sort((a, b) => compareRefIds(a.refId, b.refId)), [indicators]);
 
   if (indicators.length === 0) {
     return null;
@@ -87,7 +69,7 @@ export const IndicatorProgressSectionContent = ({
         )}
       </Box>
 
-      {sortedIndicators.map((indicator, index) => (
+      {indicators.map((indicator, index) => (
         <IndicatorProgressRow
           editing={editing}
           indicator={indicator}
@@ -110,19 +92,7 @@ type IndicatorProgressSectionProps = {
 const IndicatorProgressSection = ({ isConsoleView, reportId }: IndicatorProgressSectionProps): JSX.Element | null => {
   const { report } = useOneAcceleratorReport(reportId);
 
-  const indicators = useMemo<ProgressIndicator[]>(
-    () => [
-      ...(report?.commonIndicators ?? []).map((indicator) => ({ ...indicator, type: 'common' as const })),
-      ...(report?.projectIndicators ?? []).map((indicator) => ({ ...indicator, type: 'project' as const })),
-      ...(report?.autoCalculatedIndicators ?? []).map((indicator) => ({
-        ...indicator,
-        name: indicator.indicator,
-        type: 'autoCalculated' as const,
-        value: indicator.overrideValue ?? indicator.systemValue,
-      })),
-    ],
-    [report]
-  );
+  const indicators = useMemo<ProgressIndicator[]>(() => getProgressIndicators(report), [report]);
 
   const year = report?.startDate ? Number(report.startDate.split('-')[0]) : undefined;
 

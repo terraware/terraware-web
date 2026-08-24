@@ -2,16 +2,12 @@ import React, { type JSX, useMemo, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
-import AchievementsBox from 'src/components/AcceleratorReports/AchievementsBox';
-import AdditionalCommentsBox from 'src/components/AcceleratorReports/AdditionalCommentsBox';
-import ChallengesMitigationBox from 'src/components/AcceleratorReports/ChallengesMitigationBox';
-import FinancialSummariesBox from 'src/components/AcceleratorReports/FinancialSummaryBox';
-import HighlightsBox from 'src/components/AcceleratorReports/HighlightsBox';
-import { IndicatorProgressSectionContent } from 'src/components/AcceleratorReports/IndicatorProgressSection';
-import { ProjectHealthBarContent } from 'src/components/AcceleratorReports/ProjectHealthBar';
+import FunderReportContentV2 from 'src/components/AcceleratorReports/FunderReportContentV2';
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
-import { getReportName } from 'src/components/AcceleratorReports/utils';
+import ReportExportMenu from 'src/components/AcceleratorReports/ReportExportMenu';
+import useExportReportCsv from 'src/components/AcceleratorReports/useExportReportCsv';
+import { getPublishedProgressIndicators, getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import useQuery from 'src/utils/useQuery';
@@ -23,6 +19,7 @@ type FunderReportTabV2Props = {
 const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.Element => {
   const theme = useTheme();
   const query = useQuery();
+  const { exportFunderReport } = useExportReportCsv();
 
   const [selectedReportId, setSelectedReportId] = useState<number | undefined>(
     Number(query.get('reportId')) || undefined
@@ -49,47 +46,37 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
     [listPublishedReportsData, resolvedReportId]
   );
 
-  const indicators = useMemo(
-    () => [
-      ...(selectedReport?.autoCalculatedIndicators ?? []),
-      ...(selectedReport?.commonIndicators ?? []),
-      ...(selectedReport?.projectIndicators ?? []),
-    ],
-    [selectedReport]
-  );
+  const indicators = useMemo(() => getPublishedProgressIndicators(selectedReport), [selectedReport]);
 
   const isEmpty = listPublishedReportsData !== undefined && reports.length === 0;
 
-  return (
-    <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(3) }}>
-      {isEmpty ? (
+  if (isEmpty) {
+    return (
+      <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(3) }}>
         <ReportEmptyState />
-      ) : (
-        <>
-          <Box marginBottom={theme.spacing(3)}>
-            <ReportDropdown onChange={setSelectedReportId} reports={reports} selectedReportId={resolvedReportId} />
-          </Box>
+      </Card>
+    );
+  }
 
-          <ProjectHealthBarContent indicators={indicators} />
+  return (
+    <FunderReportContentV2
+      header={
+        <Box alignItems='center' display='flex' justifyContent='space-between'>
+          <ReportDropdown onChange={setSelectedReportId} reports={reports} selectedReportId={resolvedReportId} />
 
-          <HighlightsBox key={resolvedReportId} projectId={selectedProjectId} report={selectedReport} />
-
-          <IndicatorProgressSectionContent
-            indicators={indicators}
-            quarter={selectedReport?.quarter}
-            year={selectedReport?.startDate ? Number(selectedReport.startDate.split('-')[0]) : undefined}
+          <ReportExportMenu
+            disabled={resolvedReportId === undefined}
+            onExport={() =>
+              resolvedReportId !== undefined &&
+              void exportFunderReport({ projectId: selectedProjectId, reportId: resolvedReportId })
+            }
           />
-
-          <AchievementsBox projectId={selectedProjectId} report={selectedReport} />
-
-          <ChallengesMitigationBox projectId={selectedProjectId} report={selectedReport} />
-
-          <FinancialSummariesBox projectId={selectedProjectId} report={selectedReport} />
-
-          <AdditionalCommentsBox projectId={selectedProjectId} report={selectedReport} />
-        </>
-      )}
-    </Card>
+        </Box>
+      }
+      indicators={indicators}
+      projectId={selectedProjectId}
+      report={selectedReport}
+    />
   );
 };
 

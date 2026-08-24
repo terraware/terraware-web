@@ -10,6 +10,7 @@ const config: KnipConfig = {
     'public/js/table-of-contents.js',
   ],
   project: ['**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx,mdx,sass,scss}!'],
+  ignore: ['src/queries/generated/**'],
 };
 
 export default config;

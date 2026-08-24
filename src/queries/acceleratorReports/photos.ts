@@ -3,7 +3,7 @@ import { AcceleratorReportPhoto, NewAcceleratorReportPhoto } from 'src/types/Acc
 import { baseApi as api } from '../baseApi';
 import { acceleratorReportMediaTag, acceleratorReportTag } from '../tags';
 
-type BatchPhotosRequest = {
+type UpsertPhotosRequest = {
   projectId: number;
   reportId: number;
   photosToUpdate?: AcceleratorReportPhoto[];
@@ -11,13 +11,13 @@ type BatchPhotosRequest = {
   fileIdsToDelete?: number[];
 };
 
-type BatchPhotosResponse = {
+type UpsertPhotosResponse = {
   uploadedFileIds?: number[];
 };
 
 const injectedRtkApi = api.injectEndpoints({
   endpoints: (build) => ({
-    batchReportPhotos: build.mutation<BatchPhotosResponse, BatchPhotosRequest>({
+    upsertReportPhotos: build.mutation<UpsertPhotosResponse, UpsertPhotosRequest>({
       queryFn: async (args, _api, _extraOptions, baseQuery) => {
         const { projectId, reportId, photosToUpdate = [], photosToUpload = [], fileIdsToDelete = [] } = args;
 
@@ -144,4 +144,4 @@ const injectedRtkApi = api.injectEndpoints({
   }),
 });
 
-export const { useBatchReportPhotosMutation } = injectedRtkApi;
+export const { useUpsertReportPhotosMutation } = injectedRtkApi;

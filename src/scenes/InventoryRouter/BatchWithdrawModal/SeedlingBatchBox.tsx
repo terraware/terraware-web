@@ -35,8 +35,8 @@ const SeedlingBatchBox = ({
 }: SeedlingBatchBoxProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
-  const tableColumns = isPlanting ? 'minmax(180px, 2fr) minmax(120px, 1fr) 112px' : '110px repeat(4, 164px)';
-  const tableGap = isPlanting ? theme.spacing(4) : theme.spacing(1);
+  const tableColumns = isPlanting ? 'minmax(0, 2fr) minmax(0, 1fr) 112px' : '110px repeat(4, 164px)';
+  const tableGap = isPlanting ? theme.spacing(2) : theme.spacing(1);
   const tableSx = {
     boxSizing: 'border-box' as const,
     ...(isPlanting ? {} : { minWidth: '830px' }),
@@ -161,7 +161,15 @@ const SeedlingBatchBox = ({
               fontSize='16px'
               to={`${APP_PATHS.INVENTORY_ITEM_FOR_SPECIES.replace(':speciesId', batch.speciesId.toString())}?batch=${batch.batchNumber}`}
               target='_blank'
-              style={{ justifySelf: 'start', whiteSpace: 'nowrap' }}
+              style={{
+                display: 'block',
+                justifySelf: 'start',
+                maxWidth: '100%',
+                whiteSpace: 'nowrap',
+                minWidth: 0,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
             >
               {batch.batchNumber}
             </Link>

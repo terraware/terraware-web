@@ -25,7 +25,7 @@ import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useSubmitAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 
-import MetricRow from '../AcceleratorRouter/AcceleratorProjects/Reports/MetricRow';
+import IndicatorRow from '../AcceleratorRouter/AcceleratorProjects/Reports/IndicatorRow';
 import SubmitReportDialog from './SubmitReportDialog';
 import useParticipantReport from './useParticipantReport';
 
@@ -171,10 +171,10 @@ const AcceleratorReportView = () => {
                     : report?.projectIndicators;
 
               return indicators?.map((indicator, index) => (
-                <MetricRow
+                <IndicatorRow
                   key={`${type}-${index}`}
                   type={type}
-                  metric={indicator}
+                  indicator={indicator}
                   reportLabel={report?.quarter}
                   year={yearToUse}
                   projectId={projectId}

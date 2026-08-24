@@ -10,6 +10,7 @@ import AcceleratorReportsTable from 'src/components/AcceleratorReports/Accelerat
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
@@ -69,6 +70,8 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
 
   const selectedReportId = Number(pathParams.reportId) || undefined;
 
+  const { isLoading } = useAcceleratorReportActions(selectedReportId);
+
   const reportsPath = APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', pathParams.projectId ?? '');
 
   const onChangePathTab = useCallback(
@@ -105,6 +108,7 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
           <Box display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
             {isAllowed('EDIT_REPORTS') && (
               <Button
+                disabled={isLoading}
                 icon='iconEdit'
                 label={strings.EDIT}
                 onClick={() => goToAcceleratorProjectReportEdit(selectedReportId, Number(pathParams.projectId))}
@@ -115,7 +119,7 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
 
             <ReportReviewButtons reportId={selectedReportId} />
 
-            <ReportOptionsMenu reportId={selectedReportId} />
+            <ReportOptionsMenu projectId={Number(pathParams.projectId)} reportId={selectedReportId} />
           </Box>
         ) : undefined
       }

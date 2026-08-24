@@ -11,12 +11,12 @@ export interface EditProgressModalProps {
   onClose: () => void;
   onChange: (value: string) => void;
   value?: number;
-  metricName: string;
+  indicatorName: string;
   target: number;
 }
 
 export default function EditProgressModal(props: EditProgressModalProps): JSX.Element {
-  const { onClose, onChange, value, metricName, target } = props;
+  const { onClose, onChange, value, indicatorName, target } = props;
 
   const [newProgress, setNewProgress] = useState(value);
 
@@ -40,7 +40,7 @@ export default function EditProgressModal(props: EditProgressModalProps): JSX.El
     <DialogBox
       onClose={onCloseHandler}
       open={true}
-      title={metricName}
+      title={indicatorName}
       size='medium'
       middleButtons={[
         <Button

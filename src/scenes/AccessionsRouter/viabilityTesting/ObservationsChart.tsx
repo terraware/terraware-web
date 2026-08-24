@@ -39,7 +39,7 @@ export default function ObservationsChart({ observations }: Props): JSX.Element 
           // Time, we need to take a user-entered date of 2023-01-26 and turn it into a timestamp of
           // 2023-01-26T00:00:00 EAT.
           const localTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-          const data = observations.reverse().map((entry) => ({
+          const data = [...observations].reverse().map((entry) => ({
             x: DateTime.fromISO(entry.recordingDate).setZone(localTimeZone).toJSDate(),
             y: entry.seedsGerminated,
           }));

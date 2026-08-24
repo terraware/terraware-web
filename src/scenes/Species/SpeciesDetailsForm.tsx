@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useEffect, useRef, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import { Dropdown, MultiSelect } from '@terraware/web-components';
@@ -8,6 +8,8 @@ import Checkbox from 'src/components/common/Checkbox';
 import Select from 'src/components/common/Select/Select';
 import TextField from 'src/components/common/Textfield/Textfield';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization } from 'src/providers/hooks';
 import { useLazyGetSpeciesDetailsQuery, useLazyListSpeciesNamesQuery } from 'src/queries/generated/species';
@@ -71,6 +73,9 @@ export default function SpeciesDetailsForm({
   const { isMobile } = useDeviceInfo();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { orgHasParticipants } = useParticipantData();
+  const trackEvent = useTrackEvent();
+
+  const autofillTimesRef = useRef<Record<string, number>>({});
 
   const searchTermTooShort = debouncedSearchTerm.length <= 1;
 
@@ -130,6 +135,16 @@ export default function SpeciesDetailsForm({
               familyName: speciesDetails.familyName ?? previousRecord.familyName,
             }
       );
+      const autofilledAt = Date.now();
+      if (speciesDetails.familyName) {
+        autofillTimesRef.current.familyName = autofilledAt;
+      }
+      if (speciesDetails.conservationCategory) {
+        autofillTimesRef.current.conservationCategory = autofilledAt;
+      }
+      if (speciesDetails.commonNames?.length === 1) {
+        autofillTimesRef.current.commonName = autofilledAt;
+      }
     } else if (detailsError) {
       setNewScientificName(true);
     }
@@ -142,6 +157,19 @@ export default function SpeciesDetailsForm({
       setUserSearched(true);
     }
     onChange('scientificName')(value);
+  };
+
+  const onChangeAutofillable = (id: string) => (value: unknown) => {
+    const autofilledAt = autofillTimesRef.current[id];
+    if (autofilledAt !== undefined) {
+      trackEvent(MIXPANEL_EVENTS.SPECIES_AUTOFILL_FIELD_EDITED, {
+        species_id: record.id || undefined,
+        field_name: id,
+        time_since_autofill_ms: Date.now() - autofilledAt,
+      });
+      delete autofillTimesRef.current[id];
+    }
+    onChange(id)(value);
   };
 
   return (
@@ -172,7 +200,7 @@ export default function SpeciesDetailsForm({
         <Select
           id='commonName'
           selectedValue={record.commonName}
-          onChange={onChange('commonName')}
+          onChange={onChangeAutofillable('commonName')}
           options={optionsForCommonName}
           label={strings.COMMON_NAME}
           aria-label={strings.COMMON_NAME}
@@ -186,7 +214,7 @@ export default function SpeciesDetailsForm({
         <TextField
           id={'family'}
           label={strings.FAMILY}
-          onChange={onChange('familyName')}
+          onChange={onChangeAutofillable('familyName')}
           value={record.familyName}
           type='text'
         />
@@ -197,7 +225,7 @@ export default function SpeciesDetailsForm({
           label={strings.CONSERVATION_CATEGORY}
           aria-label={strings.CONSERVATION_CATEGORY}
           fullWidth={true}
-          onChange={onChange('conservationCategory')}
+          onChange={onChangeAutofillable('conservationCategory')}
           placeholder={strings.SELECT}
           options={conservationCategories()}
           selectedValue={record.conservationCategory}

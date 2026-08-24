@@ -26,6 +26,7 @@ ACCOUNT,Cuenta,ad5c7580
 ACCUMULATION_RATE,Tasa de acumulación,2d9ec0ee
 ACCUMULATION_RATE_UNITS,Tasa de acumulación (tCO2/ha/año),400d7f2a
 ACHIEVED,Logrado,845a66be
+ACHIEVEMENT,Logro,3677a25c
 ACHIEVEMENTS,Logros,e1e95bcf
 ACTION,Acción,d1213a6c
 ACTIVE,Activo,514d5311
@@ -221,6 +222,7 @@ ATTACHMENT_DESCRIPTION,Adjunte hasta {0} archivos. Cada archivo tiene un tamaño
 ATTACHMENT_LIMIT_REACHED,Se alcanzó el límite de archivos adjuntos,9f9323bc
 ATTACHMENT_LIMIT_REACHED_MESSAGE,Solo puede subir {0} archivos adjuntos.,cc438d34
 ATTACHMENTS,Archivos adjuntos,e7695404
+AUTO_CALCULATED,Calculado automáticamente,31b73d89
 AUTO_CALCULATED_INDICATORS,Indicadores calculados automáticamente,3b7057e0
 AVAILABLE,disponible,716e496f
 AVAILABLE_TITLE,Disponible,b84c21ed
@@ -728,6 +730,7 @@ EXPANSION_POTENTIAL_DESCRIPTION,"Terrenos elegibles aún no protegidos mediante 
 EXPANSION_POTENTIAL_HA,Potencial de expansión (ha),eb119de5
 EXPORT,Exportar,54546641
 EXPORT_BIOMASS_MONITORING_DETAILS_CSV,Exportar detalles del monitoreo de biomasa (CSV),eb24aa11
+EXPORT_CSV,Exportar CSV,7070c8c7
 EXPORT_DATA,Exportar datos,3fc16ad5
 EXPORT_LOCATIONS,Exportar ubicaciones,1e075828
 EXPORT_LOCATIONS_DISABLED_TOOLTIP,Las ubicaciones de las parcelas se determinan al comienzo de la observación,c4219ca7
@@ -756,6 +759,7 @@ FEATURE_REQUEST_INSTRUCTIONS,Proporcione detalles sobre una nueva función o cam
 FEEDBACK,Comentarios,2510edcc
 FEEDBACK_SHARED_WITH_PROJECT,Comentarios (compartidos con el proyecto),d56b8ddb
 FERN,Helecho,35767f4d
+FIELD,Campo,dc19e415
 FIELD_NOTES,Notas de campo,1c50984e
 FIFTY_TO_SEVENTY_FIVE_PERCENT,50% a 75%,174fb41a
 FILE_NAME,Nombre de archivo,fc9f4f98
@@ -807,6 +811,7 @@ FUNDER_DISCLAIMER_TITLE,Aviso legal de la plataforma Terraware para financiadore
 FUNDER_NAME,Nombre del financiador,1ea661a7
 FUNDER_PORTAL,Portal del financiador,500322ac
 FUNDER_REPORT_LAST_PUBLISHED,El informe de financiación se publicó por última vez el {0}.,0a69140e
+FUNDER_REPORT_PREVIEW_WARNING,Está previsualizando este informe tal como aparecerá para los financiadores en el Portal de Financiadores. Los indicadores y notas de uso interno están ocultos.,c41bedd2
 FUNDERS,Financiadores,77d89a51
 FUNDERS_DELETED,Los financiadores se han eliminado,7f6ba996
 FUNDING_ENTITIES,Entidades financiadoras,6ba1d5ee
@@ -915,12 +920,22 @@ IN_STORAGE,En almacenamiento,e17c2135
 INCLUDE_EMPTY_FIELDS,Incluir campos vacíos,a4ba1236
 INCOMPLETE,Incompleto,5f524fdf
 INCORRECT_EMAIL_FORMAT,Formato de correo electrónico incorrecto.,19f1a8c9
+INDICATOR_CLASS,Clase de indicador,8c9d3791
 INDICATOR_LEVEL,Nivel del indicador,b128c992
 INDICATOR_NAME,Nombre del indicador,0d8b0613
+INDICATOR_NOT_VISIBLE_TO_FUNDER,Indicador no visible para el financiador,d8aea360
 INDICATOR_OVERWRITTEN_ORIGINAL_VALUE,Sobrescrito - original: {0},c504c96d
+INDICATOR_STATUS_DESCRIPTION_ARCHIVED,Resultado ya logrado,f3f4a3fa
+INDICATOR_STATUS_DESCRIPTION_ON_TRACK,Resultado encaminado para lograrse dentro del plazo esperado,fde2d530
+INDICATOR_STATUS_DESCRIPTION_UNLIKELY,Resultado con pocas probabilidades de lograrse en el plazo esperado,7be5d98c
 INDICATOR_TYPE,Tipo de indicador,d5e75bf1
+INDICATOR_TYPE_ACTIVITY,Actividad,4e3914f0
 INDICATOR_TYPE_GOAL,Meta,cb34c06e
+INDICATOR_TYPE_IMPACT,Impacto,cea29899
+INDICATOR_TYPE_OUTCOME,Consecuencia,27a08fef
+INDICATOR_TYPE_OUTPUT,Resultado,d697f360
 INDICATOR_TYPE_PROCESS,Proceso,0bee5739
+INDICATOR_VISIBLE_TO_FUNDER,Indicador visible para el financiador,7e161a0e
 INDICATORS,Indicadores,ea71857f
 INFRASTRUCTURE,Infraestructura,c8fe126f
 INITIAL_PLANTING_DENSITY,Densidad de plantación inicial,54f0e256
@@ -932,6 +947,7 @@ INTERMEDIATE,Intermedia,09764770
 INTERMEDIATE_COOL_TEMPERATURE_SENSITIVE,Intermedio - Sensible a la temperatura fría,86d69e60
 INTERMEDIATE_PARTIAL_DESICCATION_TOLERANT,Intermedio - Tolerante a la desecación parcial,55af1663
 INTERMEDIATE_SHORT_LIVED,Intermedio - De corta duración,5b578af6
+INTERNAL_COMMENT,Comentario interno,e40b8805
 INTERNAL_COMMENTS,Comentarios internos,d0352e65
 INTERNAL_INTERESTS,Intereses internos,d07513bb
 INTERNAL_LEADS,Responsables internos,ea24d417
@@ -1160,15 +1176,6 @@ METHODOLOGY,Metodología,caae1759
 METHODOLOGY_NUMBER,Número de metodología,de41c745
 METRIC,Métrico,83e86b5d
 METRIC_G_KG_MG,"Métrico (g, kg, mg)",0efae160
-METRIC_NOT_VISIBLE_TO_FUNDER,Métrica invisible para el financiador,a334d200
-METRIC_STATUS_DESCRIPTION_ARCHIVED,Resultado ya logrado,f3f4a3fa
-METRIC_STATUS_DESCRIPTION_ON_TRACK,Resultado encaminado para lograrse dentro del plazo esperado,fde2d530
-METRIC_STATUS_DESCRIPTION_UNLIKELY,Resultado con pocas probabilidades de lograrse en el plazo esperado,7be5d98c
-METRIC_TYPE_ACTIVITY,Actividad,4e3914f0
-METRIC_TYPE_IMPACT,Impacto,cea29899
-METRIC_TYPE_OUTCOME,Consecuencia,27a08fef
-METRIC_TYPE_OUTPUT,Resultado,d697f360
-METRIC_VISIBLE_TO_FUNDER,Métrica visible para el financiador,5034bdf9
 MG,mg,cd486375
 MG_MILLIGRAMS,mg (miligramos),1eb6e72c
 MILLIGRAMS,Miligramos,23d587ba
@@ -1249,7 +1256,9 @@ NEEDS_TRANSLATION,Necesita traducción,ce38bfa9
 NEW_ACCESSION,Añadir accesión,6d0d1602
 NEW_APP_VERSION,Actualice para usar la versión más reciente de Terraware.,cd76916f
 NEW_APP_VERSION_MOBILE,Actualice para obtener la versión más reciente de Terraware.,6235c190
+NEW_PLANTING_SITE,Nuevo Sitio de Plantación,ec2cbd8f
 NEW_PLANTING_WITHDRAWAL_REQUESTS_RECEIVED,Nuevas solicitudes de retiro de plantas recibidas para {0},0da4cdcd
+NEW_SITE,Nuevo Sitio,7e99de90
 NEW_SPECIES_TARGETS_ADDED,Nuevos objetivos de especies añadidos.,7c3d77c9
 NEW_STRATUM,Nuevo Estrato,84292d1f
 NEW_SUBSTRATUM,Nuevo Sustrato,90a1ddc3
@@ -1302,7 +1311,7 @@ NO_PROJECT_SPECIFIC_METRICS_TO_SHOW,No hay métricas específicas del proyecto p
 NO_PROJECTS_NON_ADMIN_MSG,"Solo los administradores pueden agregar proyectos. Por favor, comuníquese con el suyo para recibir asistencia.",e023cbd0
 NO_QUANTITY_SET,No se ha establecido una cantidad.,5922c859
 NO_REASSIGNMENTS,No hay reasignaciones.,8152a9dd
-NO_REASSIGNMENTS_TEXT,Seleccione un nuevo sustrato con cantidad en al menos una fila de lote de plántulas.,f7546414
+NO_REASSIGNMENTS_TEXT,Seleccione un sustrato y una cantidad para reasignar para cada especie.,ff65d8d2
 NO_SEASON,Sin temporada,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de poder agregar y administrar sus accesiones, necesitará contar con un banco de semillas y especies dentro de Terraware. Solo los administradores pueden agregar bancos de semillas; contáctese con el suyo para obtener ayuda.",814348fe
 NO_SPECIES,Ninguna especie,1616e61b
@@ -1465,6 +1474,7 @@ ORGANIZATION_TYPE_NGO,Organizaciones no gubernamentales (ONG),560257fd
 ORGANIZATION_TYPE_OTHER,Otro,626335b2
 ORGANIZATION_WEBSITE,Sitio web de la organización,331767ac
 ORGANIZATIONS,Organizaciones,8c86eca3
+ORIGINAL_PLANTING_SITE,Sitio de Plantación Original,b790c51d
 ORIGINAL_QTY,Cantidad original,636a1ae9
 ORIGINAL_STRATUM,Estrato Original,01b09c38
 ORIGINAL_SUBSTRATUM,Subestrato Original,3d5071db
@@ -1487,9 +1497,11 @@ OVERALL_SCORE,Puntaje total,1d6cdabe
 OVERDUE,Atrasado,90d8f429
 OVERRIDE,Anular,15bd0e63
 OVERRIDE_SPECIES,Anular especie,c8f09521
+OVERRIDE_STATUS_NOT_SET_TOOLTIP,"Después de establecer un estado, este puede ser anulado. Ejecute la función de Verificación de Especies para establecer un estado para la especie en este Proyecto.",15d7f709
 OVERVIEW,Descripción,c7fd0e47
 OVERWRITE_TERRAWARE_TRACKING_DATA,Sobrescribir los datos de seguimiento de Terraware,1f5637ba
 OVERWRITTEN_ORIGINAL_VALUE,Sobrescrito - original: {0},c504c96d
+OVERWRITTEN_VALUE,Valor sobrescrito,929e8eac
 OWNER,Propietario,f1db93f1
 OZ,oz,63ec7cc2
 OZ_OUNCES,oz (onzas),45ec05af
@@ -1678,9 +1690,11 @@ PREPARATION_MATERIALS,Materiales de preparación,c6fd2575
 PRESCREEN,Preselección,9a38127f
 PRESCREEN_FAILED,Prueba de selección fallida,2a2dc3e9
 PREVIEW,Vista previa,a2aefa10
+PREVIEW_FUNDER_REPORT,Previsualizar informe para financiadores,17fa74c8
 PREVIEW_HIGHLIGHTS,Vista previa de aspectos destacados,248bb9ae
 PREVIEW_WILL_DISPLAY_AFTER_SAVING,La vista previa se mostrará después de guardar,475b4844
 PREVIOUS,Anterior,156ee39e
+PREVIOUS_YEAR_CUMULATIVE_TOTAL,Total acumulado del año anterior,e29d1c3c
 PRIMARY_DATA_SOURCE,Fuente principal de datos,4ad95dc9
 PRIVACY_POLICY,Política de privacidad,47ab3e90
 PROBLEMS,Problemas,25b5d615
@@ -1767,6 +1781,7 @@ PUBLISH_ACTIVITY,Publicar actividad,a00f9120
 PUBLISH_ACTIVITY_MODAL_MESSAGE,Está a punto de publicar {0} de {1}. ¿Está seguro?,6e0d670f
 PUBLISH_TO_FUNDER_PORTAL,Publicar en el portal del financiador,ec2ddbec
 PUBLISHED,Publicado,baa0bfba
+PUBLISHED_FUNDER_REPORT,Informe de financiador publicado,28419d0b
 PUBLISHED_REPORT_CONSOLE_WARNING,Está viendo el último informe publicado tal y como aparece para los financistas en el Portal del financista.,64413dc4
 PURPOSE,Propósito,ff06abab
 PURPOSE_AND_DESTINATION,Propósito y Destino,bd78a61c
@@ -1800,6 +1815,7 @@ REASON,Motivo,aa1f8a01
 REASSIGN,Reasignar,48e98f3f
 REASSIGN_SEEDLINGS,Reasignar plántulas,99d4391c
 REASSIGN_SEEDLINGS_DESCRIPTION,"Ingrese el nuevo subestrato, la nueva cantidad y las notas para la especie a la que desea reasignar plántulas. Las plántulas de las filas que deje vacías no serán reasignadas.",1a8cfcc9
+REASSIGN_SEEDLINGS_MODAL_DESCRIPTION,Seleccione una nueva ubicación y la cantidad de plántulas a reasignar de cada especie.,fa53fb3b
 REASSIGNMENT,Reasignación,79a8c3fe
 REASSIGNMENT_DURATION,Duración de la reasignación,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,No se añadirán parcelas.,ebf0fa62
@@ -1829,6 +1845,7 @@ REF_ID,ID de referencia,89bd78ee
 REFERENCE,Referencia,0a82a6a5
 REFERENCE_DBH,"Cite la referencia para el ""DAP en la madurez"".",9e786693
 REFERENCE_HEIGHT_AT_MATURITY,"Cite la referencia para la ""Altura en la madurez"".",40d3e9bd
+REFERENCE_ID,ID de referencia,c29f4804
 REFRESH,Actualizar,aca87218
 REFRIGERATOR_1,Refrigerador 1,e8eed3ec
 REFRIGERATOR_2,Refrigerador 2,ab94a835
@@ -1889,8 +1906,10 @@ REPORT_NEEDS_UPDATE,El informe necesita actualizarse,99c8c3cd
 REPORT_NO_NURSERIES,No se incluyeron viveros en el informe.,d33e97f7
 REPORT_NO_PLANTING_SITES,No se incluyeron sitios de siembra en el informe.,bbd3eaf4
 REPORT_NO_SEEDBANKS,No se incluyeron bancos de semillas en el informe.,8d098394
+REPORT_NOT_PUBLISHED_YET,Este informe aún no ha sido publicado en el Portal de Financiadores.,6e8ab84b
 REPORT_NURSERY_CAPACITY_INFO,"Por favor, enumere el número total de plantas que el vivero puede alojar según las mejores estimaciones.",daa9bfcc
 REPORT_PERIOD,Periodo del informe: {0} - {1},b06927c6
+REPORT_PREVIEW,Vista previa del informe,96417b29
 REPORT_PUBLISHED,Informe publicado,4ab6a36f
 REPORT_SAVE_AND_CLOSE,Guardar y cerrar,aaa98fc6
 REPORT_SEEDBANK_BUILD_COMPLETION_DATE,Fecha de finalización de la construcción del banco de semillas *,31433692
@@ -1936,8 +1955,6 @@ RESET,Restablecer,d51ffc01
 RESET_COLUMNS,Restablecer columnas,871d2d56
 RESET_INDICATOR,Restablecer indicador,bb1f7ec8
 RESET_INDICATOR_CONFIRM,¿Está seguro de que desea restablecer este indicador? Será reemplazado con los datos de seguimiento actuales de Terraware.,9d1f1dfb
-RESET_METRIC,Restablecer métrica,fe2748bc
-RESET_METRIC_CONFIRM,¿Está seguro de que quiere restablecer esta métrica? Se sustituirá por los datos de seguimiento actuales de Terraware.,44353912
 RESET_ORDER,Restablecer orden,a30cc4ed
 RESET_STATUS,Restablecer estado,75db6b41
 RESET_STATUS_BODY,Agregar esta especie al/los proyecto(s) seleccionado(s) restablecerá el estado del entregable. Tendrás que volver a enviar el entregable para su aprobación para: {0},357adbe0
@@ -2023,6 +2040,7 @@ SEASON_TO_COPY,Temporada a copiar,fd2a6498
 SECTION_OWNER_ASSIGNED,Sección asignada por el propietario,2756744b
 SECTIONS_USED,Secciones utilizadas,4e682124
 SEE_ALL_ACCESSIONS,Ver todas las accesiones,2d1b160b
+SEE_DETAILS,Ver detalles,70772c6c
 SEE_IC_VOTES,Ver votos IC,a6e1094b
 SEE_LESS,Ver menos,519e0ef0
 SEE_MONITORING_PLOTS,Ver parcelas de monitoreo,398e1420
@@ -2208,9 +2226,13 @@ SPECIES_CARD_DESCRIPTION,Vea la especie referenciada en sus entradas de Semilla 
 SPECIES_CATEGORIES,Categorías de especies,b63aa30d
 SPECIES_CATEGORIES_TOOLTIP,"Categorías de especies muestra el porcentaje del total de plantas plantadas que son Raras y en Peligro, según la especie.",e6a1dcfe
 SPECIES_CHECK,Verificación de especies,d7d0f200
-SPECIES_CHECK_ADDED_BANNER,Ha agregado {0} nuevas especies a su lista ({1}). Ejecute la verificación de especies.,3d922bc3
-SPECIES_CHECK_SET_LOCATION_BANNER,"Para ver qué especies son nativas, introducidas o invasoras en sus sitios, debe establecer su ubicación.",1aec8983
+SPECIES_CHECK_ADDED_BANNER,"Se agregaron {0} especies nuevas ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",35e34395
+SPECIES_CHECK_ADDED_BANNER_ONE,"Se agregó {0} especie nueva ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",89f12eb5
+SPECIES_CHECK_SET_LOCATION_BANNER,"Para verificar qué especies son nativas, introducidas o invasoras, ejecute la Verificación de Especies. Deberá establecer la ubicación de sus proyectos.",49c844fd
+SPECIES_CHECK_SET_LOCATION_HINT,Seleccione un país y un país botánico para establecer la ubicación.,e7b413a8
+SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS,Seleccione un país y un país botánico para establecer la ubicación de cada proyecto.,8070772f
 SPECIES_CHECK_SPECIES_CHECKED,{0} especies verificadas,3a3237db
+SPECIES_CHECK_UPDATE_HINT,Seleccione las especies que desea actualizar o continúe sin realizar actualizaciones. Las actualizaciones sobrescribirán los datos existentes.,6cfa3ed4
 SPECIES_CHECK_UPDATES,{0} actualizaciones,a1d89ade
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"No ha ingresado valores de densidad de plantas para todas las especies. Si no ingresa valores de densidad de plantas para todas las especies, las densidades de plantas para esta parcela no se establecerán y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una parcela.",5bcc0f2b
@@ -2231,6 +2253,8 @@ SPECIES_MATCHED,Especies coincidentes,429dfb05
 SPECIES_NAME,Nombre de la especie,26123a34
 SPECIES_NOT_ACCEPTED,Especies no aceptadas,5383ef6c
 SPECIES_OBSERVED,Especies observadas,1759de27
+SPECIES_OVERRIDE_BY,Anulado por {0} el {1},eb21f83f
+SPECIES_OVERRIDE_JUSTIFICATION,Justificación: {0},10799196
 SPECIES_PLANTED,Especies plantadas,c5e0f029
 SPECIES_PROBLEM_NAME_IS_SYNONYM,El nombre es un sinónimo,c38f5499
 SPECIES_PROBLEM_NAME_MISSPELLED,El nombre está mal escrito,58f35a8c
@@ -2397,6 +2421,7 @@ TERRAFORMATION_CONTACT,Contacto de Terraformation,65846c70
 TERRAWARE_IS_SOFTWARE,"Terraware es un software especializado, creado por [Terraformation], que permite a los silvicultores optimizar cualquier etapa de sus proyectos forestales, desde la recolección de semillas hasta el cálculo del carbono.",ca042b5f
 TERRAWARE_METRIC_MESSAGE,Esta métrica está tomada directamente de los datos de seguimiento de Terraware.,cd131ec1
 TERRAWARE_MOBILE_APP_IMAGE_ALT,Ilustración de la aplicación móvil de Terraware en un teléfono inteligente.,3e805068
+TERRAWARE_VALUE,Valor de Terraware,13163913
 TERRESTRIAL,Terrestre,25e86de2
 TEST,Prueba,e888ded7
 TEST_DATE_REQUIRED,Fecha de la prueba *,f53ff17e

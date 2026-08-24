@@ -5,6 +5,7 @@ import { Badge, DropdownItem, Message } from '@terraware/web-components';
 import { EditableTable, EditableTableColumn, Icon, Separator } from '@terraware/web-components';
 import {
   MRT_Cell,
+  MRT_Row,
   MRT_ShowHideColumnsButton,
   MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
@@ -50,7 +51,7 @@ import CheckDataModal from './CheckDataModal';
 import ImportSpeciesModal from './ImportSpeciesModal';
 import ProblemTooltip from './ProblemTooltip';
 import SpeciesCheckModal, { SpeciesCheckEntry } from './SpeciesCheck/SpeciesCheckModal';
-import { Nativity, getNativityLabel } from './SpeciesCheck/types';
+import { NATIVITY_VALUES, Nativity, getNativityLabel } from './SpeciesCheck/types';
 import SpeciesNativityBadge from './SpeciesNativityBadge';
 import { SpeciesSearchResultRow } from './types';
 
@@ -187,34 +188,48 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const showFirstTimeBanner = speciesCheckEnabled && noLocationSet && !firstTimeBannerDismissed;
   const showAddedBanner = speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !addedBannerDismissed;
 
-  const statusScopeSelected = !hasMultipleProjects || projectFilter.projectId !== undefined;
-  const resolveScopeNativity = useCallback(
-    (sp: Species): Nativity | undefined => {
+  const firstTimeBannerImpressionRef = React.useRef(false);
+  useEffect(() => {
+    if (showFirstTimeBanner && !firstTimeBannerImpressionRef.current) {
+      firstTimeBannerImpressionRef.current = true;
+      trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_BANNER_SHOWN, {});
+    }
+  }, [showFirstTimeBanner, trackEvent]);
+
+  const resolveScopeNativities = useCallback(
+    (sp: Species): Nativity[] => {
       const elements = sp.projects ?? [];
+      const distinct = (values: (Nativity | undefined)[]): Nativity[] =>
+        NATIVITY_VALUES.filter((value) => values.includes(value));
+
       if (hasMultipleProjects) {
-        return nativityOf(elements.find((element) => element.projectId === projectFilter.projectId));
+        if (projectFilter.projectId !== undefined) {
+          return distinct([nativityOf(elements.find((element) => element.projectId === projectFilter.projectId))]);
+        }
+        return distinct(elements.map((element) => nativityOf(element)));
       }
+
       const orgNativity = nativityOf(elements.find((element) => element.projectId === undefined));
       if (orgNativity) {
-        return orgNativity;
+        return [orgNativity];
       }
-      return orgScopeKnown ? nativityOf(elements.find((element) => nativityOf(element))) : undefined;
+      return orgScopeKnown ? distinct([nativityOf(elements.find((element) => nativityOf(element)))]) : [];
     },
     [hasMultipleProjects, projectFilter.projectId, orgScopeKnown]
   );
 
-  const speciesCheckRan = statusScopeSelected && species.some((sp) => !!resolveScopeNativity(sp));
+  const speciesCheckRan = species.some((sp) => resolveScopeNativities(sp).length > 0);
   const showStatusColumn = speciesCheckEnabled && speciesCheckRan;
 
   const statusBySpeciesId = useMemo(() => {
-    const map = new Map<number, Nativity | undefined>();
+    const map = new Map<number, Nativity[]>();
     if (showStatusColumn) {
       species.forEach((sp) => {
-        map.set(sp.id, resolveScopeNativity(sp));
+        map.set(sp.id, resolveScopeNativities(sp));
       });
     }
     return map;
-  }, [showStatusColumn, species, resolveScopeNativity]);
+  }, [showStatusColumn, species, resolveScopeNativities]);
 
   const {
     columnOrder,
@@ -536,16 +551,23 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const StatusCell = useCallback(
     ({ cell }: { cell: MRT_Cell<SpeciesSearchResultRow> }) => {
-      const nativity = statusBySpeciesId.get(cell.row.original.id);
-      return nativity ? (
-        <SpeciesNativityBadge nativity={nativity} />
-      ) : (
-        <Badge
-          label={strings.NOT_SET}
-          backgroundColor={theme.palette.TwClrBgSecondary}
-          borderColor={theme.palette.TwClrBrdrSecondary}
-          labelColor={theme.palette.TwClrTxtSecondary}
-        />
+      const nativities = statusBySpeciesId.get(cell.row.original.id) ?? [];
+      if (nativities.length === 0) {
+        return (
+          <Badge
+            label={strings.NOT_SET}
+            backgroundColor={theme.palette.TwClrBgSecondary}
+            borderColor={theme.palette.TwClrBrdrSecondary}
+            labelColor={theme.palette.TwClrTxtSecondary}
+          />
+        );
+      }
+      return (
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: theme.spacing(0.5) }}>
+          {nativities.map((nativity) => (
+            <SpeciesNativityBadge key={nativity} nativity={nativity} />
+          ))}
+        </Box>
       );
     },
     [statusBySpeciesId, theme]
@@ -606,8 +628,8 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               id: 'status',
               header: strings.STATUS,
               accessorFn: (row: SpeciesSearchResultRow) => {
-                const nativity = statusBySpeciesId.get(row.id);
-                return nativity ? getNativityLabel(nativity) : strings.NOT_SET;
+                const nativities = statusBySpeciesId.get(row.id) ?? [];
+                return nativities.length ? nativities.map(getNativityLabel).join(', ') : strings.NOT_SET;
               },
               enableEditing: false,
               filterVariant: 'select' as const,
@@ -618,7 +640,11 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                 strings.UNKNOWN,
                 strings.NOT_SET,
               ],
-              filterFn: 'equals',
+              filterFn: (row: MRT_Row<SpeciesSearchResultRow>, _columnId: string, filterValue: string) => {
+                const nativities = statusBySpeciesId.get(row.original.id) ?? [];
+                const labels = nativities.length ? nativities.map(getNativityLabel) : [strings.NOT_SET];
+                return labels.includes(filterValue);
+              },
               sortUndefined: 'last' as const,
               Cell: StatusCell,
             },
@@ -703,6 +729,26 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     EcosystemTypesCell,
   ]);
 
+  const showProjectSelector =
+    speciesIntelligenceEnabled && species && species.length > 0 && hasMultipleProjects && !!availableProjects;
+
+  const projectSelector =
+    showProjectSelector && availableProjects ? (
+      <Box display='flex' alignItems='center'>
+        <Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'>
+          {strings.PROJECT}
+        </Typography>
+        <ProjectsDropdown
+          allowUnselect
+          availableProjects={availableProjects}
+          label=''
+          record={projectFilter}
+          setRecord={setProjectFilter}
+          unselectLabel={strings.ALL_PROJECTS}
+        />
+      </Box>
+    ) : null;
+
   return (
     <TfMain>
       <CheckDataModal
@@ -751,7 +797,9 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               type='page'
               priority='info'
               body={strings.formatString(
-                strings.SPECIES_CHECK_ADDED_BANNER,
+                uncheckedSpecies.length === 1
+                  ? strings.SPECIES_CHECK_ADDED_BANNER_ONE
+                  : strings.SPECIES_CHECK_ADDED_BANNER,
                 String(uncheckedSpecies.length),
                 uncheckedSpecies.map((sp) => sp.scientificName).join(', ')
               )}
@@ -778,7 +826,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               alignItems: 'center',
               justifyContent: 'space-between',
               paddingBottom: theme.spacing(2),
-              paddingLeft: theme.spacing(3),
+              paddingLeft: theme.spacing(isMobile ? 1 : 3),
             }}
           >
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'nowrap' }}>
@@ -792,26 +840,12 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               >
                 {strings.SPECIES}
               </h1>
-              {speciesIntelligenceEnabled &&
-                species &&
-                species.length > 0 &&
-                hasMultipleProjects &&
-                availableProjects && (
-                  <Box display='flex' alignItems='center' marginLeft={theme.spacing(2)}>
-                    <Separator height='40px' />
-                    <Typography component='span' lineHeight='40px' marginRight='12px' whiteSpace='nowrap'>
-                      {strings.PROJECT}
-                    </Typography>
-                    <ProjectsDropdown
-                      allowUnselect
-                      availableProjects={availableProjects}
-                      label=''
-                      record={projectFilter}
-                      setRecord={setProjectFilter}
-                      unselectLabel={strings.ALL_PROJECTS}
-                    />
-                  </Box>
-                )}
+              {!isMobile && projectSelector && (
+                <Box display='flex' alignItems='center' marginLeft={theme.spacing(2)}>
+                  <Separator height='40px' />
+                  {projectSelector}
+                </Box>
+              )}
             </Box>
             {species && species.length > 0 && !isMobile && userCanEdit && (
               <div>
@@ -827,8 +861,24 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                 />
               </div>
             )}
-            {isMobile && userCanEdit && <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' />}
+            {isMobile && userCanEdit && (
+              <Box display='flex' alignItems='center' gap={theme.spacing(0.5)}>
+                <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' style={{ marginRight: 0 }} />
+                {speciesCheckEnabled && species && species.length > 0 && (
+                  <OptionsMenu
+                    onOptionItemClick={onOptionItemClick}
+                    optionItems={[{ label: strings.RUN_SPECIES_CHECK, value: 'runSpeciesCheck' }]}
+                    sx={{ marginLeft: 0, '& button': { margin: 0 } }}
+                  />
+                )}
+              </Box>
+            )}
           </Box>
+          {isMobile && projectSelector && (
+            <Box paddingLeft={theme.spacing(1)} paddingBottom={theme.spacing(2)}>
+              {projectSelector}
+            </Box>
+          )}
           <PageSnackbar />
         </PageHeaderWrapper>
       </Box>

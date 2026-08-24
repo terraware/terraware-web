@@ -13,6 +13,9 @@ rm -f docs/.gitignore
 echo "--- :yarn: Output license report"
 yarn license-report
 
+echo "--- :yarn: Generate strings"
+yarn generate-strings
+
 echo "--- :jest: Run unit tests to generate coverage"
 yarn test-coverage
 

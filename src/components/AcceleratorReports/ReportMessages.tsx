@@ -5,10 +5,10 @@ import { Message } from '@terraware/web-components';
 
 import ApprovedReportMessage from 'src/components/AcceleratorReports/ApprovedReportMessage';
 import RejectedReportMessage from 'src/components/AcceleratorReports/RejectedReportMessage';
-import { toReportReviewPayload } from 'src/components/AcceleratorReports/utils';
+import { toReportReviewPayload, unpublishedPropertyList } from 'src/components/AcceleratorReports/utils';
+import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { useLocalization, useUser } from 'src/providers';
-import { useReviewOneAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import RejectDialog from 'src/scenes/AcceleratorRouter/AcceleratorProjects/Reports/RejectDialog';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -27,38 +27,26 @@ const ReportMessages = ({ isConsoleView, reportId }: ReportMessagesProps): JSX.E
 
   const { report } = useOneAcceleratorReport(reportId);
 
-  const [reviewReport, reviewReportResponse] = useReviewOneAcceleratorReportMutation();
+  const { reviewFeedback, reviewFeedbackResponse } = useAcceleratorReportActions(reportId);
 
   useEffect(() => {
-    if (reviewReportResponse.isError) {
+    if (reviewFeedbackResponse.isError) {
       snackbar.toastError();
+      reviewFeedbackResponse.reset();
       return;
     }
-    if (reviewReportResponse.isSuccess) {
+    if (reviewFeedbackResponse.isSuccess) {
       setShowRejectDialog(false);
+      reviewFeedbackResponse.reset();
     }
-  }, [reviewReportResponse.isError, reviewReportResponse.isSuccess, snackbar]);
+  }, [reviewFeedbackResponse, snackbar]);
 
   const unpublishedChanges = useMemo(() => {
     if (!isConsoleView || !report?.unpublishedProperties?.length) {
       return null;
     }
 
-    const propertyLabels: Record<string, string> = {
-      achievements: strings.ACHIEVEMENTS,
-      additionalComments: strings.ADDITIONAL_COMMENTS,
-      autoCalculatedIndicators: strings.AUTO_CALCULATED_INDICATORS,
-      challenges: strings.CHALLENGES,
-      commonIndicators: strings.COMMON_INDICATORS,
-      financialSummaries: strings.FINANCIAL_SUMMARIES,
-      highlights: strings.HIGHLIGHTS,
-      photos: strings.PHOTOS,
-      projectIndicators: strings.PROJECT_INDICATORS,
-    };
-
-    const propertyList = report.unpublishedProperties
-      .map((property) => propertyLabels[property] ?? property)
-      .join(', ');
+    const propertyList = unpublishedPropertyList(report.unpublishedProperties, strings);
 
     return (
       <Box display='flex' flexDirection='column' gap={1}>
@@ -80,13 +68,10 @@ const ReportMessages = ({ isConsoleView, reportId }: ReportMessagesProps): JSX.E
   const editFeedback = useCallback(
     (feedback: string) => {
       if (report) {
-        void reviewReport({
-          reportId,
-          reviewAcceleratorReportRequestPayload: { review: { ...toReportReviewPayload(report), feedback } },
-        });
+        void reviewFeedback({ review: { ...toReportReviewPayload(report), feedback } });
       }
     },
-    [report, reportId, reviewReport]
+    [report, reviewFeedback]
   );
 
   if (!report) {

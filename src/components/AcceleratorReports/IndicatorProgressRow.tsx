@@ -4,13 +4,16 @@ import { Box, Collapse, IconButton, Link, Tooltip, Typography, useTheme } from '
 import { Badge, Dropdown, DropdownItem, Icon, IconTooltip, Textfield } from '@terraware/web-components';
 
 import EmptyFieldPlaceholder from 'src/components/AcceleratorReports/EmptyFieldPlaceholder';
+import IndicatorStatusBadge from 'src/components/AcceleratorReports/IndicatorStatusBadge';
 import LifetimeProgressBar from 'src/components/AcceleratorReports/LifetimeProgressBar';
-import MetricStatusBadge from 'src/components/AcceleratorReports/MetricStatusBadge';
 import ResetIndicatorModal from 'src/components/AcceleratorReports/ResetIndicatorModal';
-import { IndicatorClass, indicatorClassLabel } from 'src/components/AcceleratorReports/utils';
+import {
+  ProgressIndicator,
+  getIndicatorCumulativeValue,
+  indicatorClassLabel,
+} from 'src/components/AcceleratorReports/utils';
 import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
-import { IndicatorType, MetricStatus } from 'src/types/AcceleratorReport';
 import { formatPrecision } from 'src/utils/numbers';
 
 const TITLE_COLUMN_WIDTH = 300;
@@ -18,30 +21,6 @@ const BAR_HEIGHT = 12;
 const TICK_OVERHANG = 3;
 const MIN_TARGET_PERCENT = 50;
 const TICK_HOVER_WIDTH = 9;
-
-export type ProgressIndicator = {
-  baseline?: number;
-  isPublishable?: boolean;
-  id?: number;
-  overrideValue?: number;
-  systemValue?: number;
-  type?: IndicatorType;
-  classId: IndicatorClass;
-  endOfProjectTarget?: number;
-  description?: string;
-  currentYearProgress?: { quarter: string; value: number }[];
-  name: string;
-  precision?: number;
-  previousYearCumulativeTotal?: number;
-  progressNotes?: string;
-  projectsComments?: string;
-  refId: string;
-  status?: MetricStatus;
-  supportingDocumentUrl?: string;
-  target?: number;
-  unit?: string;
-  value?: number;
-};
 
 type IndicatorProgressRowProps = {
   editing?: boolean;
@@ -99,19 +78,10 @@ const IndicatorProgressRow = ({
     return [...withCurrentQuarter].sort((a, b) => a.quarter.localeCompare(b.quarter));
   }, [enteredValue, indicator.currentYearProgress, quarter]);
 
-  const cumulativeValue = useMemo(() => {
-    if (!isCumulative) {
-      return enteredValue;
-    }
-
-    // with no quarterly breakdown a yearly indicator has nothing to accumulate, and its zero starting
-    // total would otherwise report no progress at all
-    if (isYearly && currentYearProgress.length === 0) {
-      return enteredValue;
-    }
-
-    return currentYearProgress.reduce((total, progress) => total + progress.value, startingTotal);
-  }, [currentYearProgress, enteredValue, isCumulative, isYearly, startingTotal]);
+  const cumulativeValue = useMemo(
+    () => getIndicatorCumulativeValue({ ...indicator, value: enteredValue }, currentYearProgress),
+    [currentYearProgress, enteredValue, indicator]
+  );
 
   const quarterlyValue = useMemo(
     () => (isCumulative ? currentYearProgress.find((progress) => progress.quarter === quarter)?.value : undefined),
@@ -257,7 +227,7 @@ const IndicatorProgressRow = ({
           </Box>
 
           <Box columnGap={theme.spacing(1)} display='flex' flexWrap='wrap' marginTop={theme.spacing(1)} rowGap={1}>
-            {indicator.status && <MetricStatusBadge status={indicator.status} />}
+            {indicator.status && <IndicatorStatusBadge status={indicator.status} />}
 
             <Badge
               backgroundColor={theme.palette.TwClrBgSecondary}

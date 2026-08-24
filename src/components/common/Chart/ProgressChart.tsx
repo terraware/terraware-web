@@ -2,7 +2,7 @@ import React, { type JSX } from 'react';
 
 import { Box, LinearProgress, Typography, useTheme } from '@mui/material';
 
-import { MetricStatus } from 'src/types/AcceleratorReport';
+import { ReportIndicatorStatus } from 'src/types/AcceleratorReport';
 
 type QuarterlyProgressItem = {
   quarter: string;
@@ -12,7 +12,7 @@ type QuarterlyProgressItem = {
 export type ProgressChartProps = {
   value: number;
   target: number;
-  status?: MetricStatus;
+  status?: ReportIndicatorStatus;
   quarterlyProgress?: QuarterlyProgressItem[];
   reportLabel?: string;
   previousYearValue?: number;
