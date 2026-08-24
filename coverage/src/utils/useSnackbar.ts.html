@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.5% </span>
+                <span class="strong">62.5% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/16</span>
+                <span class='fraction'>10/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>6/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">7.14% </span>
+                <span class="strong">57.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/14</span>
+                <span class='fraction'>8/14</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -134,22 +134,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -159,6 +157,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,8 +169,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-yes">31x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo } from 'react';
 &nbsp;
@@ -191,16 +191,16 @@ import { Message, OnCloseMessage, Priority, Title, Type } from 'src/types/Snackb
  */
 export const SNACKBAR_PAGE_CLOSE_KEY = 'snackbarPageMessageClose';
 &nbsp;
-function <span class="fstat-no" title="function not covered" >snackbarFns(</span>dispatch: Dispatch) {
-  const snack = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(msg: Message, title: Title, priority: Priority, type: Type, onCloseMessage?: OnCloseMessage) =&gt; {</span></span>
-<span class="cstat-no" title="statement not covered" >    dispatch(sendSnackbar({ msg, title, priority, type, onCloseMessage }));</span>
+function snackbarFns(dispatch: Dispatch) {
+  const snack = (msg: Message, title: Title, priority: Priority, type: Type, onCloseMessage?: OnCloseMessage) =&gt; {
+    dispatch(sendSnackbar({ msg, title, priority, type, onCloseMessage }));
   };
 &nbsp;
   // toast helpers
   const toastInfo = <span class="fstat-no" title="function not covered" >(msg: Message, title?: Title) =&gt; <span class="cstat-no" title="statement not covered" >snack(msg, title, 'info', 'toast');</span></span>
   const toastWarning = <span class="fstat-no" title="function not covered" >(msg: Message, title?: Title) =&gt; <span class="cstat-no" title="statement not covered" >snack(msg, title, 'warning', 'toast');</span></span>
-  const toastSuccess = <span class="fstat-no" title="function not covered" >(msg: Message, title?: Title) =&gt; <span class="cstat-no" title="statement not covered" >snack(msg, title, 'success', 'toast');</span></span>
-  const toastError = <span class="fstat-no" title="function not covered" >(msg?: Message, title?: Title) =&gt; <span class="cstat-no" title="statement not covered" >snack(msg || strings.GENERIC_ERROR, title, 'critical', 'toast');</span></span>
+  const toastSuccess = (msg: Message, title?: Title) =&gt; snack(msg, title, 'success', 'toast');
+  const toastError = (msg?: Message, title?: Title) =&gt; snack(msg || strings.GENERIC_ERROR, title, 'critical', 'toast');
 &nbsp;
   // page helpers
   const pageInfo = <span class="fstat-no" title="function not covered" >(msg: Message, title?: Title, closeMessage?: OnCloseMessage) =&gt;</span>
@@ -212,7 +212,7 @@ function <span class="fstat-no" title="function not covered" >snackbarFns(</span
   const pageError = <span class="fstat-no" title="function not covered" >(msg: Message, title?: Title, closeMessage?: OnCloseMessage) =&gt;</span>
 <span class="cstat-no" title="statement not covered" >    snack(msg, title, 'critical', 'page', closeMessage);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return {</span>
+  return {
     toastInfo,
     toastWarning,
     toastSuccess,
@@ -224,9 +224,9 @@ function <span class="fstat-no" title="function not covered" >snackbarFns(</span
   };
 }
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >useSnackbar(</span>) {
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-<span class="cstat-no" title="statement not covered" >  return useMemo(<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >snackbarFns(dispatch),</span></span> [dispatch]);</span>
+export default function useSnackbar() {
+  const dispatch = useAppDispatch();
+  return useMemo(() =&gt; snackbarFns(dispatch), [dispatch]);
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -235,7 +235,7 @@ export default function <span class="fstat-no" title="function not covered" >use
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-08-24T21:46:06.383Z
+                at 2026-08-24T22:43:15.336Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

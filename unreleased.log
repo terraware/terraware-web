@@ -1,3 +1,4 @@
+1134e950 Add a component test harness (#6286)
 5c23aafc Generate strings before running tests in deploy-docs (#6315)
 04a05f75 Rename report metrics to indicators (#6306)
 13e2ff13 SW-8814 Alphabetize species list in species check (#6314)
