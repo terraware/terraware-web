@@ -1310,7 +1310,7 @@ NO_PROJECT_SPECIFIC_METRICS_TO_SHOW,Aucun indicateur spécifique au projet à af
 NO_PROJECTS_NON_ADMIN_MSG,Seuls les administrateurs peuvent ajouter des projets. Veuillez contacter le vôtre pour obtenir de l'aide.,e023cbd0
 NO_QUANTITY_SET,Pas de quantité définie,5922c859
 NO_REASSIGNMENTS,Aucune réaffectation,8152a9dd
-NO_REASSIGNMENTS_TEXT,Sélectionnez un nouveau substrat avec une quantité dans au moins une ligne de lot de semis.,f7546414
+NO_REASSIGNMENTS_TEXT,Sélectionnez un substrat et une quantité à réaffecter pour chaque espèce.,ff65d8d2
 NO_SEASON,Aucune saison,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer vos accessions, vous devez disposer d'une banque de semences et d'espèces dans Terraware. Seuls les administrateurs peuvent ajouter des banques de semences ; veuillez contacter le vôtre pour obtenir de l'aide.",814348fe
 NO_SPECIES,Aucune espèce,1616e61b
@@ -1814,7 +1814,7 @@ REASON,Motif,aa1f8a01
 REASSIGN,Réaffecter,48e98f3f
 REASSIGN_SEEDLINGS,Réaffecter les semis,99d4391c
 REASSIGN_SEEDLINGS_DESCRIPTION,"Saisissez la nouvelle sous-strate, la nouvelle quantité et les notes pour l'espèce pour laquelle vous souhaitez réaffecter des plants. Les plants des lignes laissées vides ne seront pas réaffectés.",1a8cfcc9
-REASSIGN_SEEDLINGS_MODAL_DESCRIPTION,"Sélectionnez le site de plantation, le stratum, le substratum et la quantité de semis que vous souhaitez réaffecter.",888162d1
+REASSIGN_SEEDLINGS_MODAL_DESCRIPTION,Sélectionnez un nouvel emplacement et une quantité de semis à réaffecter pour chaque espèce.,fa53fb3b
 REASSIGNMENT,Réaffectation,79a8c3fe
 REASSIGNMENT_DURATION,Durée de la réaffectation,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,Aucune parcelle ne sera ajoutée.,ebf0fa62
