@@ -1311,7 +1311,7 @@ NO_PROJECT_SPECIFIC_METRICS_TO_SHOW,No hay métricas específicas del proyecto p
 NO_PROJECTS_NON_ADMIN_MSG,"Solo los administradores pueden agregar proyectos. Por favor, comuníquese con el suyo para recibir asistencia.",e023cbd0
 NO_QUANTITY_SET,No se ha establecido una cantidad.,5922c859
 NO_REASSIGNMENTS,No hay reasignaciones.,8152a9dd
-NO_REASSIGNMENTS_TEXT,Seleccione un nuevo sustrato con cantidad en al menos una fila de lote de plántulas.,f7546414
+NO_REASSIGNMENTS_TEXT,Seleccione un sustrato y una cantidad para reasignar para cada especie.,ff65d8d2
 NO_SEASON,Sin temporada,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de poder agregar y administrar sus accesiones, necesitará contar con un banco de semillas y especies dentro de Terraware. Solo los administradores pueden agregar bancos de semillas; contáctese con el suyo para obtener ayuda.",814348fe
 NO_SPECIES,Ninguna especie,1616e61b
@@ -1815,7 +1815,7 @@ REASON,Motivo,aa1f8a01
 REASSIGN,Reasignar,48e98f3f
 REASSIGN_SEEDLINGS,Reasignar plántulas,99d4391c
 REASSIGN_SEEDLINGS_DESCRIPTION,"Ingrese el nuevo subestrato, la nueva cantidad y las notas para la especie a la que desea reasignar plántulas. Las plántulas de las filas que deje vacías no serán reasignadas.",1a8cfcc9
-REASSIGN_SEEDLINGS_MODAL_DESCRIPTION,"Seleccione el Sitio de Plantación, Estrato, Subestrato y la cantidad de plántulas que desea reasignar.",888162d1
+REASSIGN_SEEDLINGS_MODAL_DESCRIPTION,Seleccione una nueva ubicación y la cantidad de plántulas a reasignar de cada especie.,fa53fb3b
 REASSIGNMENT,Reasignación,79a8c3fe
 REASSIGNMENT_DURATION,Duración de la reasignación,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,No se añadirán parcelas.,ebf0fa62
