@@ -1,4 +1,5 @@
 import { Feature } from 'geojson';
+import strings from 'src/strings';
 import { GeometryFeature } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import {
@@ -273,7 +274,7 @@ describe('cutBoundaries', () => {
             ],
           ],
         },
-        properties: { errorText: '--', fill: true },
+        properties: { errorText: strings.SITE_STRATUM_BOUNDARY_TOO_SMALL, fill: true },
         id: 2,
       },
       {
@@ -292,7 +293,7 @@ describe('cutBoundaries', () => {
             ],
           ],
         },
-        properties: { errorText: '--', fill: true },
+        properties: { errorText: strings.SITE_STRATUM_BOUNDARY_TOO_SMALL, fill: true },
         id: 2,
       },
     ]);
