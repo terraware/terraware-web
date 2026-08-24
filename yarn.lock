@@ -18201,14 +18201,13 @@ wordwrap@^1.0.0:
     string-width "^4.1.0"
     strip-ansi "^6.0.0"
 
-wrap-ansi@10.0.0, wrap-ansi@^6.0.1, wrap-ansi@^7.0.0, wrap-ansi@^8.1.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-10.0.0.tgz#b83ddcc14dbc5596f1b07e153bf6f863c1acbb57"
-  integrity sha512-SGcvg80f0wUy2/fXES19feHMz8E0JoXv2uNgHOu4Dgi2OrCy1lqwFYEJz1BLbDI0exjPMe/ZdzZ/YpGECBG/aQ==
+wrap-ansi@10.0.1, wrap-ansi@^6.0.1, wrap-ansi@^7.0.0, wrap-ansi@^8.1.0:
+  version "10.0.1"
+  resolved "https://registry.yarnpkg.com/wrap-ansi/-/wrap-ansi-10.0.1.tgz#59b821b7987d36a87a367bc9517284ff974086ea"
+  integrity sha512-M0N4xzyzosiIok3svYlEo1sdLZts/8FPgYH/GPC3wvlmPoRvnoManGMrE54waYj3tISA8w6lsdesfVv67qSr8Q==
   dependencies:
     ansi-styles "^6.2.3"
     string-width "^8.2.0"
-    strip-ansi "^7.1.2"
 
 wrappy@1:
   version "1.0.2"
