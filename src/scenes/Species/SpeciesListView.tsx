@@ -194,6 +194,40 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     }
   }, [showFirstTimeBanner, trackEvent]);
 
+  const {
+    columnFilters,
+    columnOrder,
+    columnVisibility,
+    density,
+    onDensityChange,
+    onPaginationChange,
+    pagination,
+    setColumnFilters,
+    setColumnOrder,
+    setColumnVisibility,
+    setShowColumnFilters,
+    setShowGlobalFilter,
+    setSorting,
+    showColumnFilters,
+    showGlobalFilter,
+    sorting,
+  } = useTableState(TABLE_STATE_STORAGE_KEY, {
+    defaultSorting: [{ id: 'scientificName', desc: false }],
+  });
+
+  const selectedProjectIds = useMemo<Set<number>>(() => {
+    const filter = columnFilters.find((f) => f.id === 'project');
+    const names = Array.isArray(filter?.value) ? (filter?.value as string[]) : [];
+    const ids = new Set<number>();
+    names.forEach((name) => {
+      const project = availableProjects?.find((p) => p.name === name);
+      if (project) {
+        ids.add(project.id);
+      }
+    });
+    return ids;
+  }, [columnFilters, availableProjects]);
+
   const resolveScopeNativities = useCallback(
     (sp: Species): Nativity[] => {
       const elements = sp.projects ?? [];
@@ -201,7 +235,11 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         NATIVITY_VALUES.filter((value) => values.includes(value));
 
       if (hasMultipleProjects) {
-        return distinct(elements.map((element) => nativityOf(element)));
+        const scopedElements =
+          selectedProjectIds.size > 0
+            ? elements.filter((element) => element.projectId !== undefined && selectedProjectIds.has(element.projectId))
+            : elements;
+        return distinct(scopedElements.map((element) => nativityOf(element)));
       }
 
       const orgNativity = nativityOf(elements.find((element) => element.projectId === undefined));
@@ -210,7 +248,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       }
       return orgScopeKnown ? distinct([nativityOf(elements.find((element) => nativityOf(element)))]) : [];
     },
-    [hasMultipleProjects, orgScopeKnown]
+    [hasMultipleProjects, orgScopeKnown, selectedProjectIds]
   );
 
   const speciesCheckRan = species.some((sp) => resolveScopeNativities(sp).length > 0);
@@ -225,25 +263,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     }
     return map;
   }, [showStatusColumn, species, resolveScopeNativities]);
-
-  const {
-    columnOrder,
-    columnVisibility,
-    density,
-    onDensityChange,
-    onPaginationChange,
-    pagination,
-    setColumnOrder,
-    setColumnVisibility,
-    setShowColumnFilters,
-    setShowGlobalFilter,
-    setSorting,
-    showColumnFilters,
-    showGlobalFilter,
-    sorting,
-  } = useTableState(TABLE_STATE_STORAGE_KEY, {
-    defaultSorting: [{ id: 'scientificName', desc: false }],
-  });
 
   const getParams = useCallback((): SearchRequestPayload => {
     if (!selectedOrganization) {
@@ -906,6 +925,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
             tableOptions={{
               state: {
                 sorting,
+                columnFilters,
                 columnOrder,
                 columnVisibility,
                 density,
@@ -914,6 +934,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                 showGlobalFilter,
               },
               onSortingChange: setSorting,
+              onColumnFiltersChange: setColumnFilters,
               onPaginationChange,
               onColumnOrderChange: setColumnOrder,
               onColumnVisibilityChange: setColumnVisibility,
