@@ -1,7 +1,6 @@
 import React, { type JSX } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Icon } from '@terraware/web-components';
 
 import strings from 'src/strings';
 
@@ -11,7 +10,6 @@ export type ProjectCheckSummaryProps = {
   botanicalCountryName?: string;
   updates: number;
   speciesChecked: number;
-  onEdit?: () => void;
 };
 
 const ProjectCheckSummary = ({
@@ -20,7 +18,6 @@ const ProjectCheckSummary = ({
   botanicalCountryName,
   updates,
   speciesChecked,
-  onEdit,
 }: ProjectCheckSummaryProps): JSX.Element => {
   const theme = useTheme();
 
@@ -37,23 +34,6 @@ const ProjectCheckSummary = ({
           <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxtSecondary}>
             {projectName}
           </Typography>
-          {onEdit && (
-            <Box
-              component='button'
-              onClick={onEdit}
-              aria-label={strings.EDIT}
-              sx={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 0,
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <Icon name='iconEdit' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
-            </Box>
-          )}
         </Box>
         <Box display='flex' flexWrap='wrap' gap={theme.spacing(2)}>
           <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
