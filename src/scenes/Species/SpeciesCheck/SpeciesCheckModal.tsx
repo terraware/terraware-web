@@ -261,11 +261,19 @@ const SpeciesCheckModal = ({
     });
   }, []);
 
+  const isLocationComplete = useCallback(
+    (target: LocationTarget) => {
+      const edit = locationEdits[target.key] ?? {};
+      return !!(edit.countryCode ?? target.countryCode) && !!(edit.botanicalCountryCode ?? target.botanicalCountryCode);
+    },
+    [locationEdits]
+  );
+
   const onSetLocations = useCallback(async () => {
     setBusy(true);
     try {
       await Promise.all(
-        targets.map((target) => {
+        targets.filter(isLocationComplete).map((target) => {
           const edit = locationEdits[target.key] ?? {};
           if (target.isOrg) {
             if (!selectedOrganization) {
@@ -309,6 +317,7 @@ const SpeciesCheckModal = ({
     }
     setBusy(false);
   }, [
+    isLocationComplete,
     locationEdits,
     projects,
     reloadOrganizations,
@@ -448,10 +457,7 @@ const SpeciesCheckModal = ({
     trackEvent,
   ]);
 
-  const allLocationEditsValid = targets.every((target) => {
-    const edit = locationEdits[target.key] ?? {};
-    return !!(edit.countryCode ?? target.countryCode) && !!(edit.botanicalCountryCode ?? target.botanicalCountryCode);
-  });
+  const anyLocationEditValid = targets.some(isLocationComplete);
 
   const allOverridesValid = [...nativeSelected].every(
     (key) => (overrideEdits[key]?.justification ?? '').trim().length > 0
@@ -489,7 +495,7 @@ const SpeciesCheckModal = ({
           id='setLocation'
           label={targets.length > 1 ? strings.SET_LOCATIONS : strings.SET_LOCATION}
           onClick={() => void onSetLocations()}
-          disabled={busy || !allLocationEditsValid}
+          disabled={busy || !anyLocationEditValid}
         />,
       ];
     }
@@ -549,7 +555,7 @@ const SpeciesCheckModal = ({
       );
     return [cancelButton, backButton, primary];
   }, [
-    allLocationEditsValid,
+    anyLocationEditValid,
     allOverridesValid,
     busy,
     currentKey,
