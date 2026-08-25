@@ -112,7 +112,7 @@ const ProblemsCellComponent = ({ row, reloadData, onRowClick }: ProblemsCellProp
 };
 
 type SpeciesListProps = {
-  reloadData: () => void;
+  reloadData: () => Promise<void>;
   species: Species[];
 };
 
@@ -436,7 +436,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const onCloseImportSpeciesModal = (completed: boolean) => {
     if (completed && reloadData) {
-      reloadData();
+      void reloadData();
       if (speciesCheckEnabled) {
         openSpeciesCheck('added');
       } else {
@@ -458,7 +458,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const reloadDataProblemsHandler = useCallback(async () => {
     setHasNewData(false);
-    // eslint-disable-next-line @typescript-eslint/await-thenable
     await reloadData();
     setHandleProblemsColumn(true);
   }, [reloadData]);
@@ -756,7 +755,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         onClose={() => setCheckDataModalOpen(false)}
         species={species}
         reviewErrors={reviewErrorsHandler}
-        reloadData={reloadData}
+        reloadData={() => void reloadData()}
       />
       <ImportSpeciesModal
         open={importSpeciesModalOpen}

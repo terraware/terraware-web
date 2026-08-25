@@ -18,7 +18,7 @@ const SpeciesRouter = () => {
   const wasListRoute = useRef(isListRoute);
   useEffect(() => {
     if (isListRoute && !wasListRoute.current) {
-      refetch();
+      void refetch();
     }
     wasListRoute.current = isListRoute;
   }, [isListRoute, refetch]);
@@ -36,13 +36,13 @@ const SpeciesRouter = () => {
       );
     }
 
-    return <EmptyStatePage pageName={'Species'} reloadData={refetch} />;
+    return <EmptyStatePage pageName={'Species'} reloadData={() => void refetch()} />;
   }, [isLoading, species, refetch]);
 
   return (
     <Routes>
-      <Route path={'/new'} element={<SpeciesAddView reloadData={refetch} />} />
-      <Route path={'/:speciesId'} element={<SpeciesDetailView reloadData={refetch} />} />
+      <Route path={'/new'} element={<SpeciesAddView reloadData={() => void refetch()} />} />
+      <Route path={'/:speciesId'} element={<SpeciesDetailView reloadData={() => void refetch()} />} />
       <Route path={'/:speciesId/edit'} element={<SpeciesEditView />} />
       <Route path={'/*'} element={getSpeciesView()} />
     </Routes>

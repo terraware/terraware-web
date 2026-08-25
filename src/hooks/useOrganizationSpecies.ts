@@ -17,7 +17,7 @@ export type UseOrganizationSpeciesResult = {
   /** Resolves the fresh species record for an id, or undefined when the id is missing/unknown. */
   findSpeciesById: (speciesId?: number | null) => Species | undefined;
   isLoading: boolean;
-  refetch: () => void;
+  refetch: () => Promise<void>;
 };
 
 export const useOrganizationSpecies = (args?: UseOrganizationSpeciesArgs): UseOrganizationSpeciesResult => {
@@ -33,9 +33,9 @@ export const useOrganizationSpecies = (args?: UseOrganizationSpeciesArgs): UseOr
     }
   }, [listSpecies, organizationId, inUse, isUninitialized]);
 
-  const refetch = useCallback(() => {
+  const refetch = useCallback(async (): Promise<void> => {
     if (organizationId && organizationId > 0) {
-      void listSpecies({ organizationId, inUse }, false);
+      await listSpecies({ organizationId, inUse }, false);
     }
   }, [listSpecies, organizationId, inUse]);
 

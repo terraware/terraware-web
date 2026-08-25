@@ -38,7 +38,7 @@ type SpeciesCheckModalProps = {
   species: Species[];
   projects: Project[];
   entry: SpeciesCheckEntry;
-  reloadSpecies: () => void;
+  reloadSpecies: () => Promise<void>;
 };
 
 type StepKey = 'setLocation' | 'name' | 'native';
@@ -297,7 +297,7 @@ const SpeciesCheckModal = ({
   );
 
   const onSetLocations = useCallback(async () => {
-    setRecalculatedTargetKeys(new Set(changedTargets.map((target) => target.key)));
+    const changedKeys = new Set(changedTargets.map((target) => target.key));
     setBusy(true);
     try {
       await Promise.all(
@@ -328,7 +328,8 @@ const SpeciesCheckModal = ({
       if (targets.some((target) => target.isOrg) && selectedOrganization) {
         await reloadOrganizations(selectedOrganization.id);
       }
-      reloadSpecies();
+      await reloadSpecies();
+      setRecalculatedTargetKeys(changedKeys);
       setStep(1);
       trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_COMPLETED, {
         project_count: projects.length,
@@ -368,7 +369,7 @@ const SpeciesCheckModal = ({
         }
       }
       if (toAccept.length) {
-        reloadSpecies();
+        void reloadSpecies();
       }
       goToStep('native');
     } catch {
@@ -421,7 +422,7 @@ const SpeciesCheckModal = ({
     } catch {
       snackbar.toastError();
     } finally {
-      reloadSpecies();
+      void reloadSpecies();
     }
   }, [acceptPending, hasAnyPending, reloadSpecies, selectedOrganization, snackbar, trackCheckCompleted]);
 
@@ -467,7 +468,7 @@ const SpeciesCheckModal = ({
     } catch {
       snackbar.toastError();
     } finally {
-      reloadSpecies();
+      void reloadSpecies();
       setBusy(false);
     }
   }, [
