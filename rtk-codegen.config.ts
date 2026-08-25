@@ -134,6 +134,9 @@ const config: ConfigFile = {
     './src/queries/generated/strata.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/strata'),
     },
+    './src/queries/generated/siteThumbnail.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/sites/{id}/thumbnail'),
+    },
     './src/queries/generated/accessionsV1.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/seedbank/accessions'),
     },

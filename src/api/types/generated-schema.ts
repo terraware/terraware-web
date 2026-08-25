@@ -2339,6 +2339,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/funder/reports/{reportId}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get one published report. */
+        get: operations["getPublishedReport"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/funder/reports/{reportId}/photos/{fileId}": {
         parameters: {
             query?: never;
@@ -4892,6 +4909,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/sites/{id}/thumbnail": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Renders the outline of a planting site's boundary as an SVG image.
+         * @description The boundary is scaled to fit the requested canvas size with its aspect ratio preserved, so a site that is wider than it is tall will not fill the full height.
+         */
+        get: operations["getPlantingSiteThumbnail"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/sites/{plantingSiteId}/speciesTargets": {
         parameters: {
             query?: never;
@@ -6180,6 +6217,22 @@ export interface components {
              */
             timeseriesValue?: number;
         };
+        /** @description A transfer from a seed bank that added germinating seedlings to this batch. */
+        BatchHistoryAddedFromAccessionPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
+            /** Format: int64 */
+            accessionId: number;
+            accessionNumber: string;
+            /** Format: int32 */
+            germinatingQuantity: number;
+            /** @enum {string} */
+            type: "AddedFromAccession";
+        } & {
+            /**
+             * @description discriminator enum property added by openapi-typescript
+             * @enum {string}
+             */
+            type: "AddedFromAccession";
+        };
         /** @description A change to the non-quantity-related details of a batch. */
         BatchHistoryDetailsEditedPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
             /** Format: date */
@@ -6268,7 +6321,7 @@ export interface components {
         };
         BatchHistoryPayload: ({
             type: string;
-        } & WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime">) & (components["schemas"]["BatchHistoryDetailsEditedPayload"] | components["schemas"]["BatchHistoryIncomingWithdrawalPayload"] | components["schemas"]["BatchHistoryOutgoingWithdrawalPayload"] | components["schemas"]["BatchHistoryPhotoCreatedPayload"] | components["schemas"]["BatchHistoryPhotoDeletedPayload"] | components["schemas"]["BatchHistoryQuantityEditedPayload"] | components["schemas"]["BatchHistoryStatusChangedPayload"]);
+        } & WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime">) & (components["schemas"]["BatchHistoryAddedFromAccessionPayload"] | components["schemas"]["BatchHistoryDetailsEditedPayload"] | components["schemas"]["BatchHistoryIncomingWithdrawalPayload"] | components["schemas"]["BatchHistoryOutgoingWithdrawalPayload"] | components["schemas"]["BatchHistoryPhotoCreatedPayload"] | components["schemas"]["BatchHistoryPhotoDeletedPayload"] | components["schemas"]["BatchHistoryQuantityEditedPayload"] | components["schemas"]["BatchHistoryStatusChangedPayload"]);
         BatchHistoryPayloadCommonProps: {
             /** Format: int64 */
             createdBy: number;
@@ -6965,20 +7018,34 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
         };
         CreateNurseryTransferRequestPayload: {
-            /** Format: int32 */
+            /**
+             * Format: int32
+             * @description Ignored if batchId is specified.
+             */
             activeGrowthQuantity: number;
+            /**
+             * Format: int64
+             * @description If this transfer should add to an existing batch, the batch's ID. Default is to create a new batch. The batch must be at the facility specified by destinationFacilityId, and it must be of the same species as the accession.
+             */
+            batchId?: number;
             /** Format: date */
             date: string;
             /** Format: int64 */
             destinationFacilityId: number;
             /** Format: int32 */
             germinatingQuantity: number;
-            /** Format: int32 */
+            /**
+             * Format: int32
+             * @description Ignored if batchId is specified.
+             */
             hardeningOffQuantity?: number;
             notes?: string;
             /** Format: date */
             readyByDate?: string;
-            /** Format: int32 */
+            /**
+             * Format: int32
+             * @description Ignored if batchId is specified.
+             */
             readyQuantity: number;
             /**
              * Format: int64
@@ -6989,7 +7056,7 @@ export interface components {
         CreateNurseryTransferResponsePayload: {
             /** @description Updated accession that includes a withdrawal for the nursery transfer. */
             accession: components["schemas"]["AccessionPayloadV2"];
-            /** @description Details of newly-created seedling batch. */
+            /** @description Details of the seedling batch the seeds were added to. */
             batch: components["schemas"]["BatchPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
@@ -8454,6 +8521,10 @@ export interface components {
         };
         GetPublishedProjectResponsePayload: {
             projects: components["schemas"]["PublishedProjectPayload"][];
+            status: components["schemas"]["SuccessOrError"];
+        };
+        GetPublishedReportResponsePayload: {
+            report: components["schemas"]["PublishedReportPayload"];
             status: components["schemas"]["SuccessOrError"];
         };
         GetReportPayload: {
@@ -18287,6 +18358,37 @@ export interface operations {
             };
         };
     };
+    getPublishedReport: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                reportId: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The requested operation succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetPublishedReportResponsePayload"];
+                };
+            };
+            /** @description The requested resource was not found. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
     getPublishedReportPhoto: {
         parameters: {
             query?: {
@@ -23992,6 +24094,40 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["GetPlantingSiteReportedPlantsResponsePayload"];
+                };
+            };
+        };
+    };
+    getPlantingSiteThumbnail: {
+        parameters: {
+            query?: {
+                width?: number;
+                height?: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The image was successfully generated. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "image/svg+xml": string;
+                };
+            };
+            /** @description The planting site does not have a boundary. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
                 };
             };
         };
