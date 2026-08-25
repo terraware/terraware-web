@@ -299,7 +299,6 @@ const SpeciesCheckModal = ({
   const onSetLocations = useCallback(async () => {
     setRecalculatedTargetKeys(new Set(changedTargets.map((target) => target.key)));
     setBusy(true);
-    setBusy(true);
     try {
       await Promise.all(
         targets.filter(isLocationComplete).map((target) => {
