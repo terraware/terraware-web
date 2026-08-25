@@ -59,6 +59,10 @@ const IndicatorProgressRow = ({
   // a yearly indicator restarts at zero each year, so it carries neither the baseline nor a prior total
   const startingTotal = isLifetime ? indicator.previousYearCumulativeTotal ?? baselineValue : 0;
 
+  // A lifetime bar starts at the total carried in from earlier years, so from the second year on the
+  // year's target can sit behind that origin — it was reached before this year began.
+  const targetBehindOrigin = indicator.target !== undefined && indicator.target <= startingTotal;
+
   const startingTotalLabel =
     indicator.previousYearCumulativeTotal !== undefined && year !== undefined ? String(year - 1) : strings.BASELINE;
 
@@ -98,15 +102,30 @@ const IndicatorProgressRow = ({
     const barMax = Math.max(total, target ?? 0, barMin);
     const range = barMax - barMin;
 
+    // A target behind the origin has no room to be drawn as a milestone still ahead, so it belongs at
+    // the origin with the whole bar counting as progress past it. Scaling it as though it were ahead
+    // is what used to squeeze the fill into an invisible sliver at the far right.
     const anchorPercent =
-      target !== undefined && range > 0 ? Math.max(MIN_TARGET_PERCENT, ((target - barMin) / range) * 100) : undefined;
+      target === undefined
+        ? undefined
+        : targetBehindOrigin
+          ? 0
+          : range > 0
+            ? Math.max(MIN_TARGET_PERCENT, ((target - barMin) / range) * 100)
+            : undefined;
 
     const toPercent = (value: number) => {
-      if (range <= 0) {
+      // the origin is 0 by definition, whatever the scale does above it
+      if (value <= barMin) {
         return 0;
       }
 
-      if (anchorPercent === undefined || target === undefined) {
+      if (range <= 0) {
+        return 100;
+      }
+
+      // with the target at the origin there is no piecewise split left to make
+      if (target === undefined || anchorPercent === undefined || anchorPercent <= 0) {
         return ((value - barMin) / range) * 100;
       }
 
@@ -118,6 +137,12 @@ const IndicatorProgressRow = ({
       const aboveTarget = barMax - target;
       return aboveTarget > 0 ? anchorPercent + ((value - target) / aboveTarget) * (100 - anchorPercent) : anchorPercent;
     };
+
+    // A target already behind the origin with nothing added this year leaves no span to scale, but the
+    // target is still met, so the bar reads as complete rather than empty.
+    if (targetBehindOrigin && range <= 0) {
+      return { segments: [{ key: 'total', quarter: undefined, startPercent: 0, widthPercent: 100 }], targetPercent: 0 };
+    }
 
     let runningTotal = barMin;
     const barSegments =
@@ -136,7 +161,7 @@ const IndicatorProgressRow = ({
         : [{ key: 'total', quarter: undefined, startPercent: 0, widthPercent: toPercent(total) }];
 
     return { segments: barSegments, targetPercent: anchorPercent };
-  }, [cumulativeValue, currentYearProgress, indicator.target, isCumulative, startingTotal]);
+  }, [cumulativeValue, currentYearProgress, indicator.target, isCumulative, startingTotal, targetBehindOrigin]);
 
   const fillColor =
     indicator.status === 'Unlikely'
@@ -169,8 +194,15 @@ const IndicatorProgressRow = ({
       return undefined;
     }
 
+    // A target already met before this year began divides a whole lifetime of progress by a target
+    // that stopped being the yardstick years ago, which reads as an absurd figure next to a full bar.
+    // The only honest thing left to say about it is that it is met.
+    if (targetBehindOrigin) {
+      return 100;
+    }
+
     return Math.round((((cumulativeValue ?? 0) - origin) / denominator) * 100);
-  }, [baselineValue, cumulativeValue, indicator.target, isYearly]);
+  }, [baselineValue, cumulativeValue, indicator.target, isYearly, targetBehindOrigin]);
 
   const statusOptions = useMemo<DropdownItem[]>(
     () => [
@@ -299,9 +331,9 @@ const IndicatorProgressRow = ({
               fontSize='14px'
               position='absolute'
               sx={
-                targetPercent !== undefined
-                  ? { left: `${targetPercent}%`, transform: 'translateX(-100%)' }
-                  : { right: 0 }
+                // the label is right-aligned on the mark, so at the origin it would sit entirely off
+                // the left edge; park it opposite instead, as it is when there is no mark to align to
+                targetPercent ? { left: `${targetPercent}%`, transform: 'translateX(-100%)' } : { right: 0 }
               }
               top={0}
               whiteSpace='nowrap'
