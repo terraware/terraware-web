@@ -41,7 +41,6 @@ type ProjectRow = {
 const columns = (): TableColumnType[] => [
   { key: 'projectName', name: strings.PROJECT, type: 'string' },
   { key: 'status', name: strings.STATUS, type: 'string' },
-  { key: 'action', name: strings.ACTION, type: 'string', alignment: 'right' },
 ];
 
 type SpeciesProjectsSectionProps = {
@@ -182,11 +181,9 @@ export default function SpeciesProjectsSection({
                         {strings.formatString(strings.SPECIES_PROJECT_DATA_SOURCE_SYNC, projectRow.dataSourceDate)}
                       </Typography>
                     )}
-                    {projectRow.overridden && (
-                      <Box component='span' sx={{ whiteSpace: 'nowrap' }}>
-                        <Link onClick={() => setDetailsProjectId(projectRow.projectId)}>{strings.SEE_DETAILS}</Link>
-                      </Box>
-                    )}
+                    <Box component='span' sx={{ whiteSpace: 'nowrap' }}>
+                      <Link onClick={() => setDetailsProjectId(projectRow.projectId)}>{strings.SEE_DETAILS}</Link>
+                    </Box>
                   </>
                 ) : (
                   <Badge
@@ -197,30 +194,6 @@ export default function SpeciesProjectsSection({
                   />
                 )}
               </Box>
-            }
-          />
-        );
-      }
-
-      if (column.key === 'action') {
-        return (
-          <CellRenderer
-            {...props}
-            value={
-              projectRow.isNew ? (
-                ''
-              ) : (
-                <TooltipButton
-                  id={`override-${projectRow.projectId}`}
-                  label={projectRow.overridden ? strings.EDIT : strings.OVERRIDE}
-                  priority='secondary'
-                  type='passive'
-                  size='small'
-                  disabled={!projectRow.nativity}
-                  tooltip={projectRow.nativity ? undefined : strings.OVERRIDE_STATUS_NOT_SET_TOOLTIP}
-                  onClick={() => setOverrideProjectId(projectRow.projectId)}
-                />
-              )
             }
           />
         );
@@ -268,6 +241,9 @@ export default function SpeciesProjectsSection({
             setDetailsProjectId(undefined);
             setOverrideProjectId(projectId);
           }}
+          speciesName={speciesName}
+          project={availableProjects?.find((p) => p.id === detailsRow.projectId)}
+          targetName={detailsRow.projectName}
           nativity={detailsRow.nativity}
           overriddenBy={detailsRow.overriddenBy}
           overriddenTime={detailsRow.overriddenTime}
