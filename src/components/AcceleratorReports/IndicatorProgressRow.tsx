@@ -315,7 +315,9 @@ const IndicatorProgressRow = ({
               color={theme.palette.TwClrTxtSecondary}
               fontSize='14px'
               position='absolute'
-              sx={targetPercent ? { left: `${targetPercent}%`, transform: 'translateX(-100%)' } : { right: 0 }}
+
+              sx={targetPercent !== undefined ? { left: `${targetPercent}%`, transform: 'translateX(-100%)' } : { right: 0 }}
+
               top={0}
               whiteSpace='nowrap'
             >
