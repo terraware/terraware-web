@@ -47,8 +47,6 @@ const IndicatorProgressRow = ({
   const [resetModalOpened, setResetModalOpened] = useState(false);
   const [overwriting, setOverwriting] = useState(false);
 
-  // both cumulative classes accumulate the year's quarters; only the lifetime one reaches back past
-  // the start of the year
   const isLifetime = indicator.classId === 'Lifetime Cumulative';
   const isYearly = indicator.classId === 'Yearly Cumulative';
   const isCumulative = isLifetime || isYearly;
@@ -56,20 +54,14 @@ const IndicatorProgressRow = ({
   const precision = indicator.precision ?? 0;
   const baselineValue = indicator.baseline ?? 0;
 
-  // a yearly indicator restarts at zero each year, so it carries neither the baseline nor a prior total
   const startingTotal = isLifetime ? indicator.previousYearCumulativeTotal ?? baselineValue : 0;
-
-  // A lifetime bar starts at the total carried in from earlier years, so from the second year on the
-  // year's target can sit behind that origin — it was reached before this year began.
-  const targetBehindOrigin = indicator.target !== undefined && indicator.target <= startingTotal;
+  const targetBehindOrigin = isLifetime && indicator.target !== undefined && indicator.target <= startingTotal;
 
   const startingTotalLabel =
     indicator.previousYearCumulativeTotal !== undefined && year !== undefined ? String(year - 1) : strings.BASELINE;
 
   const enteredValue = isAutoCalculated ? indicator.overrideValue ?? indicator.systemValue : indicator.value;
 
-  // A cumulative total is the earlier quarters plus this one, so substitute the entered value for this
-  // quarter and re-sum; that keeps the year and lifetime bars in step while the value is being edited.
   const currentYearProgress = useMemo(() => {
     const progress = indicator.currentYearProgress ?? [];
 
@@ -102,9 +94,7 @@ const IndicatorProgressRow = ({
     const barMax = Math.max(total, target ?? 0, barMin);
     const range = barMax - barMin;
 
-    // A target behind the origin has no room to be drawn as a milestone still ahead, so it belongs at
-    // the origin with the whole bar counting as progress past it. Scaling it as though it were ahead
-    // is what used to squeeze the fill into an invisible sliver at the far right.
+    // Pin target at start if origin is ahead of target
     const anchorPercent =
       target === undefined
         ? undefined
@@ -138,8 +128,7 @@ const IndicatorProgressRow = ({
       return aboveTarget > 0 ? anchorPercent + ((value - target) / aboveTarget) * (100 - anchorPercent) : anchorPercent;
     };
 
-    // A target already behind the origin with nothing added this year leaves no span to scale, but the
-    // target is still met, so the bar reads as complete rather than empty.
+    // Show target met if origin is ahead of target
     if (targetBehindOrigin && range <= 0) {
       return { segments: [{ key: 'total', quarter: undefined, startPercent: 0, widthPercent: 100 }], targetPercent: 0 };
     }
@@ -186,7 +175,6 @@ const IndicatorProgressRow = ({
       return undefined;
     }
 
-    // a yearly target measures the year's progress alone, so the project baseline is not on its scale
     const origin = isYearly ? 0 : baselineValue;
     const denominator = target - origin;
 
@@ -194,9 +182,6 @@ const IndicatorProgressRow = ({
       return undefined;
     }
 
-    // A target already met before this year began divides a whole lifetime of progress by a target
-    // that stopped being the yardstick years ago, which reads as an absurd figure next to a full bar.
-    // The only honest thing left to say about it is that it is met.
     if (targetBehindOrigin) {
       return 100;
     }
@@ -330,11 +315,7 @@ const IndicatorProgressRow = ({
               color={theme.palette.TwClrTxtSecondary}
               fontSize='14px'
               position='absolute'
-              sx={
-                // the label is right-aligned on the mark, so at the origin it would sit entirely off
-                // the left edge; park it opposite instead, as it is when there is no mark to align to
-                targetPercent ? { left: `${targetPercent}%`, transform: 'translateX(-100%)' } : { right: 0 }
-              }
+              sx={targetPercent ? { left: `${targetPercent}%`, transform: 'translateX(-100%)' } : { right: 0 }}
               top={0}
               whiteSpace='nowrap'
             >
