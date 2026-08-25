@@ -1,3 +1,4 @@
+8fecbd00 SW-8813 Species Check: Can't set just one Project's location (#6312)
 1134e950 Add a component test harness (#6286)
 5c23aafc Generate strings before running tests in deploy-docs (#6315)
 04a05f75 Rename report metrics to indicators (#6306)
