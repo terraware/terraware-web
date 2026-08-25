@@ -2611,6 +2611,7 @@ UPCOMING,Venidero,fa1930e2
 UPCOMING_PLANTING_SEASONS,Próximas temporadas de plantación,3ad28e65
 UPDATE,Actualizar,c4c30980
 UPDATE_LOCATION,Actualizar ubicación,86b598cd
+UPDATE_LOCATION_MESSAGE,Está a punto de actualizar la ubicación de {0}. Esto provocará que se recalculen los estados nativos de las especies. ¿Está seguro?,124d09d8
 UPDATE_NEEDED,Actualización necesaria,7b391dc2
 UPDATE_REQUESTED,Actualización solicitada,3c56b2c5
 UPDATE_STATUS_WARNING,Estás a punto de actualizar el estatus,6ee652b9
