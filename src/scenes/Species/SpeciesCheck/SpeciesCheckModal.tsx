@@ -69,8 +69,6 @@ const SpeciesCheckModal = ({
   const [nativeSelected, setNativeSelected] = useState<Set<string>>(new Set());
   const [overrideEdits, setOverrideEdits] = useState<Record<string, OverrideEdit>>({});
   const [showCancel, setShowCancel] = useState(false);
-  const [forceLocation, setForceLocation] = useState(false);
-  const [locationsSubmitted, setLocationsSubmitted] = useState(false);
   const [busy, setBusy] = useState(false);
 
   const targets = useMemo<LocationTarget[]>(() => {
@@ -124,7 +122,8 @@ const SpeciesCheckModal = ({
       };
     });
     setLocationEdits(initial);
-    setStep(0);
+    const locationsMissing = !targetsRef.current.every((target) => !!target.botanicalCountryCode);
+    setStep(locationsMissing ? 0 : 1);
     setNativeMode('list');
     setNameSelected(
       new Set(
@@ -136,16 +135,13 @@ const SpeciesCheckModal = ({
     setNativeSelected(new Set());
     setOverrideEdits({});
     setShowCancel(false);
-    setForceLocation(false);
-    setLocationsSubmitted(false);
 
     runStartRef.current = Date.now();
     trackEventRef.current(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_CHECK_RUN, {
       project_scope: 'all',
       species_count: speciesRef.current.length,
     });
-    const locationStepShown = !targetsRef.current.every((target) => !!target.botanicalCountryCode);
-    if (locationStepShown) {
+    if (locationsMissing) {
       trackEventRef.current(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_SHOWN, {
         project_count: projectsLengthRef.current,
         trigger: entryRef.current,
@@ -153,13 +149,7 @@ const SpeciesCheckModal = ({
     }
   }, [open]);
 
-  const allLocationsSet = targets.every((target) => !!target.botanicalCountryCode);
-  const includeSetLocation = (!allLocationsSet && !locationsSubmitted) || forceLocation;
-
-  const stepKeys = useMemo<StepKey[]>(
-    () => (includeSetLocation ? ['setLocation', 'name', 'native'] : ['name', 'native']),
-    [includeSetLocation]
-  );
+  const stepKeys = useMemo<StepKey[]>(() => ['setLocation', 'name', 'native'], []);
   const currentKey = stepKeys[Math.min(step, stepKeys.length - 1)];
 
   const stepLabels = useMemo(
@@ -216,10 +206,6 @@ const SpeciesCheckModal = ({
       ),
       updates,
       speciesChecked: data.targetSpecies.length,
-      onEdit: () => {
-        setForceLocation(true);
-        setStep(0);
-      },
     }),
     [botanicalNameByCode, countryNameByCode, locationEdits]
   );
@@ -269,11 +255,19 @@ const SpeciesCheckModal = ({
     });
   }, []);
 
+  const isLocationComplete = useCallback(
+    (target: LocationTarget) => {
+      const edit = locationEdits[target.key] ?? {};
+      return !!(edit.countryCode ?? target.countryCode) && !!(edit.botanicalCountryCode ?? target.botanicalCountryCode);
+    },
+    [locationEdits]
+  );
+
   const onSetLocations = useCallback(async () => {
     setBusy(true);
     try {
       await Promise.all(
-        targets.map((target) => {
+        targets.filter(isLocationComplete).map((target) => {
           const edit = locationEdits[target.key] ?? {};
           if (target.isOrg) {
             if (!selectedOrganization) {
@@ -301,9 +295,7 @@ const SpeciesCheckModal = ({
         await reloadOrganizations(selectedOrganization.id);
       }
       reloadSpecies();
-      setLocationsSubmitted(true);
-      setForceLocation(false);
-      setStep(0);
+      setStep(1);
       trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_COMPLETED, {
         project_count: projects.length,
         countries_set: targets.filter((target) => !!(locationEdits[target.key]?.countryCode ?? target.countryCode))
@@ -317,6 +309,7 @@ const SpeciesCheckModal = ({
     }
     setBusy(false);
   }, [
+    isLocationComplete,
     locationEdits,
     projects,
     reloadOrganizations,
@@ -456,10 +449,7 @@ const SpeciesCheckModal = ({
     trackEvent,
   ]);
 
-  const allLocationEditsValid = targets.every((target) => {
-    const edit = locationEdits[target.key] ?? {};
-    return !!(edit.countryCode ?? target.countryCode) && !!(edit.botanicalCountryCode ?? target.botanicalCountryCode);
-  });
+  const anyLocationEditValid = targets.some(isLocationComplete);
 
   const allOverridesValid = [...nativeSelected].every(
     (key) => (overrideEdits[key]?.justification ?? '').trim().length > 0
@@ -497,13 +487,13 @@ const SpeciesCheckModal = ({
           id='setLocation'
           label={targets.length > 1 ? strings.SET_LOCATIONS : strings.SET_LOCATION}
           onClick={() => void onSetLocations()}
-          disabled={busy || !allLocationEditsValid}
+          disabled={busy || !anyLocationEditValid}
         />,
       ];
     }
 
     if (currentKey === 'name') {
-      const nameBackButton = includeSetLocation ? (
+      const nameBackButton = (
         <Button
           key='back'
           label={strings.BACK}
@@ -512,11 +502,11 @@ const SpeciesCheckModal = ({
           type='passive'
           disabled={busy}
         />
-      ) : null;
+      );
       const namePrimary = (
         <Button key='next' label={strings.NEXT} onClick={() => void onAcceptNames()} disabled={busy} />
       );
-      return [cancelButton, nameBackButton, namePrimary].filter((button): button is JSX.Element => button !== null);
+      return [cancelButton, nameBackButton, namePrimary];
     }
 
     if (nativeMode === 'override') {
@@ -557,12 +547,11 @@ const SpeciesCheckModal = ({
       );
     return [cancelButton, backButton, primary];
   }, [
-    allLocationEditsValid,
+    anyLocationEditValid,
     allOverridesValid,
     busy,
     currentKey,
     goToStep,
-    includeSetLocation,
     nativeMode,
     nativeSelected.size,
     onAcceptNames,
