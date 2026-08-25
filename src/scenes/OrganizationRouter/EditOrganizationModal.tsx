@@ -5,6 +5,7 @@ import { Dropdown, DropdownItem } from '@terraware/web-components';
 
 import RegionSelector from 'src/components/RegionSelector';
 import TimeZoneSelector from 'src/components/TimeZoneSelector';
+import UpdateLocationModal from 'src/components/UpdateLocationModal';
 import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
@@ -41,6 +42,7 @@ export default function EditOrganizationModal({
   const [organizationTypeError, setOrganizationTypeError] = useState('');
   const [organizationTypeDetailsError, setOrganizationTypeDetailsError] = useState('');
   const [requireSubdivision, setRequireSubdivisions] = useState(!!organization.countrySubdivisionCode);
+  const [showUpdateLocation, setShowUpdateLocation] = useState(false);
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
   const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;
@@ -92,6 +94,23 @@ export default function EditOrganizationModal({
     setOrganizationTypeError('');
   };
 
+  const locationChanged =
+    showBotanicalCountry &&
+    !!organization.botanicalCountryCode &&
+    (organizationRecord.countryCode !== organization.countryCode ||
+      organizationRecord.botanicalCountryCode !== organization.botanicalCountryCode);
+
+  const performSave = async () => {
+    const response = await OrganizationService.updateOrganization(organizationRecord);
+    if (response.requestSucceeded) {
+      snackbar.toastSuccess(strings.CHANGES_SAVED);
+      await reloadOrganizationData(organizationRecord.id);
+    } else {
+      snackbar.toastError();
+    }
+    onClose();
+  };
+
   const saveOrganization = async () => {
     let hasErrors = false;
     if (organizationRecord.name === '') {
@@ -121,146 +140,156 @@ export default function EditOrganizationModal({
       return;
     }
 
-    const response = await OrganizationService.updateOrganization(organizationRecord);
-    if (response.requestSucceeded) {
-      snackbar.toastSuccess(strings.CHANGES_SAVED);
-      await reloadOrganizationData(organizationRecord.id);
-    } else {
-      snackbar.toastError();
+    if (locationChanged) {
+      setShowUpdateLocation(true);
+      return;
     }
-    onClose();
+
+    await performSave();
   };
 
   return (
-    <ScrollableDialogBox
-      onClose={onClose}
-      open={open}
-      title={strings.EDIT_ORGANIZATION}
-      size='medium'
-      maxHeight={'calc(100vh - 120px)'}
-      scrolled
-      middleButtons={[
-        <Button
-          id='cancelEditOrg'
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onClose}
-          key='button-1'
-        />,
-        <Button id='saveEditOrg' label={strings.SAVE} onClick={() => void saveOrganization()} key='button-2' />,
-      ]}
-    >
-      <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12}>
-          <TextField
-            id='name'
-            label={strings.ORGANIZATION_NAME_REQUIRED}
-            type='text'
-            onChange={(value) => {
-              onChange('name', value);
-              setNameError('');
-            }}
-            value={organizationRecord.name}
-            errorText={nameError}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id='description'
-            label={strings.DESCRIPTION}
-            type='textarea'
-            onChange={onChangeCallback('description')}
-            value={organizationRecord.description}
-          />
-        </Grid>
-        <RegionSelector
-          selectedCountryCode={organizationRecord.countryCode}
-          selectedCountrySubdivisionCode={organizationRecord.countrySubdivisionCode}
-          onChangeCountryCode={(countryCode: string, hasSubdivisions: boolean) => {
-            setRequireSubdivisions(hasSubdivisions);
-            setOrganizationRecord(
-              (previousOrganizationRecord: Organization): Organization => ({
-                ...previousOrganizationRecord,
-                countryCode,
-                countrySubdivisionCode: undefined,
-                // Changing the country clears the botanical country, which may no longer be valid.
-                botanicalCountryCode: undefined,
-              })
-            );
-            setCountryError('');
+    <>
+      {showUpdateLocation && (
+        <UpdateLocationModal
+          locationName={organizationRecord.name}
+          onClose={() => setShowUpdateLocation(false)}
+          onConfirm={() => {
+            setShowUpdateLocation(false);
+            void performSave();
           }}
-          onChangeCountrySubdivisionCode={(countrySubdivisionCode: string) => {
-            onChange('countrySubdivisionCode', countrySubdivisionCode);
-            setSubdivisionError('');
-          }}
-          countryError={countryError}
-          countrySubdivisionError={subdivisionError}
-          paddingBottom={theme.spacing(4)}
         />
-        {showBotanicalCountry && (
-          <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 }, paddingBottom: theme.spacing(4) }}>
-            <Dropdown
-              id='botanicalCountry'
-              label={strings.BOTANICAL_COUNTRY}
-              placeholder={strings.SELECT}
-              options={botanicalCountryOptions}
-              selectedValue={organizationRecord.botanicalCountryCode}
-              onChange={(value: string) => onChange('botanicalCountryCode', value || undefined)}
-              fullWidth
-              autocomplete
-              disabled={!organizationRecord.countryCode}
+      )}
+      <ScrollableDialogBox
+        onClose={onClose}
+        open={open}
+        title={strings.EDIT_ORGANIZATION}
+        size='medium'
+        maxHeight={'calc(100vh - 120px)'}
+        scrolled
+        middleButtons={[
+          <Button
+            id='cancelEditOrg'
+            label={strings.CANCEL}
+            priority='secondary'
+            type='passive'
+            onClick={onClose}
+            key='button-1'
+          />,
+          <Button id='saveEditOrg' label={strings.SAVE} onClick={() => void saveOrganization()} key='button-2' />,
+        ]}
+      >
+        <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+          <Grid item xs={12}>
+            <TextField
+              id='name'
+              label={strings.ORGANIZATION_NAME_REQUIRED}
+              type='text'
+              onChange={(value) => {
+                onChange('name', value);
+                setNameError('');
+              }}
+              value={organizationRecord.name}
+              errorText={nameError}
             />
           </Grid>
-        )}
-        <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
-          <TimeZoneSelector
-            selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}
-            countryCode={organizationRecord.countryCode}
-            onTimeZoneSelected={onChangeTimeZone}
-            label={strings.TIME_ZONE_REQUIRED}
-            tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Dropdown
-            required
-            label={strings.ORGANIZATION_TYPE}
-            onChange={onChangeOrganizationType}
-            selectedValue={organizationRecord.organizationType}
-            options={organizationTypeOptions}
-            fullWidth={true}
-            errorText={organizationTypeError}
-          />
-          {organizationRecord.organizationType === 'Other' && (
+          <Grid item xs={12}>
             <TextField
-              required
-              type='text'
-              label={strings.DESCRIBE_ORGANIZATION_TYPE_DETAILS}
-              id='edit-org-question-type-details'
-              display={false}
-              maxLength={100}
-              onChange={(value) => {
-                onChange('organizationTypeDetails', value);
-                setOrganizationTypeDetailsError('');
-              }}
-              errorText={organizationTypeDetailsError}
-              sx={{ marginTop: theme.spacing(1) }}
-              value={organizationRecord.organizationTypeDetails}
+              id='description'
+              label={strings.DESCRIPTION}
+              type='textarea'
+              onChange={onChangeCallback('description')}
+              value={organizationRecord.description}
             />
-          )}
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            type='text'
-            label={strings.ORGANIZATION_WEBSITE}
-            id='org-website'
-            display={false}
-            onChange={onChangeCallback('website')}
-            value={organizationRecord.website}
+          </Grid>
+          <RegionSelector
+            selectedCountryCode={organizationRecord.countryCode}
+            selectedCountrySubdivisionCode={organizationRecord.countrySubdivisionCode}
+            onChangeCountryCode={(countryCode: string, hasSubdivisions: boolean) => {
+              setRequireSubdivisions(hasSubdivisions);
+              setOrganizationRecord(
+                (previousOrganizationRecord: Organization): Organization => ({
+                  ...previousOrganizationRecord,
+                  countryCode,
+                  countrySubdivisionCode: undefined,
+                  // Changing the country clears the botanical country, which may no longer be valid.
+                  botanicalCountryCode: undefined,
+                })
+              );
+              setCountryError('');
+            }}
+            onChangeCountrySubdivisionCode={(countrySubdivisionCode: string) => {
+              onChange('countrySubdivisionCode', countrySubdivisionCode);
+              setSubdivisionError('');
+            }}
+            countryError={countryError}
+            countrySubdivisionError={subdivisionError}
+            paddingBottom={theme.spacing(4)}
           />
+          {showBotanicalCountry && (
+            <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 }, paddingBottom: theme.spacing(4) }}>
+              <Dropdown
+                id='botanicalCountry'
+                label={strings.BOTANICAL_COUNTRY}
+                placeholder={strings.SELECT}
+                options={botanicalCountryOptions}
+                selectedValue={organizationRecord.botanicalCountryCode}
+                onChange={(value: string) => onChange('botanicalCountryCode', value || undefined)}
+                fullWidth
+                autocomplete
+                disabled={!organizationRecord.countryCode}
+              />
+            </Grid>
+          )}
+          <Grid item xs={12} sx={{ '&.MuiGrid-item': { paddingTop: 0 } }}>
+            <TimeZoneSelector
+              selectedTimeZone={organizationRecord.timeZone || defaultTimeZone}
+              countryCode={organizationRecord.countryCode}
+              onTimeZoneSelected={onChangeTimeZone}
+              label={strings.TIME_ZONE_REQUIRED}
+              tooltip={strings.TOOLTIP_TIME_ZONE_ORGANIZATION}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Dropdown
+              required
+              label={strings.ORGANIZATION_TYPE}
+              onChange={onChangeOrganizationType}
+              selectedValue={organizationRecord.organizationType}
+              options={organizationTypeOptions}
+              fullWidth={true}
+              errorText={organizationTypeError}
+            />
+            {organizationRecord.organizationType === 'Other' && (
+              <TextField
+                required
+                type='text'
+                label={strings.DESCRIBE_ORGANIZATION_TYPE_DETAILS}
+                id='edit-org-question-type-details'
+                display={false}
+                maxLength={100}
+                onChange={(value) => {
+                  onChange('organizationTypeDetails', value);
+                  setOrganizationTypeDetailsError('');
+                }}
+                errorText={organizationTypeDetailsError}
+                sx={{ marginTop: theme.spacing(1) }}
+                value={organizationRecord.organizationTypeDetails}
+              />
+            )}
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              type='text'
+              label={strings.ORGANIZATION_WEBSITE}
+              id='org-website'
+              display={false}
+              onChange={onChangeCallback('website')}
+              value={organizationRecord.website}
+            />
+          </Grid>
         </Grid>
-      </Grid>
-    </ScrollableDialogBox>
+      </ScrollableDialogBox>
+    </>
   );
 }

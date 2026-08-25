@@ -3,6 +3,7 @@ import React, { type JSX, useEffect, useState } from 'react';
 import { Grid } from '@mui/material';
 
 import CountryAndBotanicalCountrySelect from 'src/components/CountryAndBotanicalCountrySelect';
+import UpdateLocationModal from 'src/components/UpdateLocationModal';
 import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
@@ -30,6 +31,7 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
   const [countryCode, setCountryCode] = useState<string>();
   const [botanicalCountryCode, setBotanicalCountryCode] = useState<string>();
   const [validateFields, setValidateFields] = useState(false);
+  const [showUpdateLocation, setShowUpdateLocation] = useState(false);
   const [updateProject, { isError, isSuccess, reset }] = useUpdateProjectMutation();
 
   const { availableProjects } = useProjects();
@@ -46,13 +48,13 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
     }
   }, [open, project]);
 
-  const saveProject = () => {
-    if (!project) {
-      return;
-    }
+  const locationChanged =
+    showProjectLocation &&
+    !!project?.botanicalCountryCode &&
+    (countryCode !== project?.countryCode || botanicalCountryCode !== project?.botanicalCountryCode);
 
-    if (!name) {
-      setValidateFields(true);
+  const performSave = () => {
+    if (!project) {
       return;
     }
 
@@ -66,6 +68,24 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
           : {}),
       },
     });
+  };
+
+  const saveProject = () => {
+    if (!project) {
+      return;
+    }
+
+    if (!name) {
+      setValidateFields(true);
+      return;
+    }
+
+    if (locationChanged) {
+      setShowUpdateLocation(true);
+      return;
+    }
+
+    performSave();
   };
 
   useEffect(() => {
@@ -101,55 +121,67 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
   ]);
 
   return (
-    <ScrollableDialogBox
-      onClose={onClose}
-      open={open}
-      title={project?.name ?? strings.EDIT_PROJECT}
-      size='medium'
-      middleButtons={[
-        <Button
-          id='cancelEditProject'
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onClose}
-          key='button-1'
-        />,
-        <Button id='saveEditProject' label={strings.SAVE} onClick={saveProject} key='button-2' />,
-      ]}
-    >
-      <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12}>
-          <TextField
-            id='name'
-            label={strings.NAME}
-            type='text'
-            onChange={(value) => setName(value as string)}
-            value={name}
-            errorText={validateFields && !name ? strings.REQUIRED_FIELD : ''}
-            required
-          />
+    <>
+      {showUpdateLocation && (
+        <UpdateLocationModal
+          locationName={name || (project?.name ?? '')}
+          onClose={() => setShowUpdateLocation(false)}
+          onConfirm={() => {
+            setShowUpdateLocation(false);
+            performSave();
+          }}
+        />
+      )}
+      <ScrollableDialogBox
+        onClose={onClose}
+        open={open}
+        title={project?.name ?? strings.EDIT_PROJECT}
+        size='medium'
+        middleButtons={[
+          <Button
+            id='cancelEditProject'
+            label={strings.CANCEL}
+            priority='secondary'
+            type='passive'
+            onClick={onClose}
+            key='button-1'
+          />,
+          <Button id='saveEditProject' label={strings.SAVE} onClick={saveProject} key='button-2' />,
+        ]}
+      >
+        <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+          <Grid item xs={12}>
+            <TextField
+              id='name'
+              label={strings.NAME}
+              type='text'
+              onChange={(value) => setName(value as string)}
+              value={name}
+              errorText={validateFields && !name ? strings.REQUIRED_FIELD : ''}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id='description'
+              label={strings.DESCRIPTION}
+              type='text'
+              onChange={(value) => setDescription(value as string)}
+              value={description}
+            />
+          </Grid>
+          {showProjectLocation && (
+            <CountryAndBotanicalCountrySelect
+              countryCode={countryCode}
+              botanicalCountryCode={botanicalCountryCode}
+              onChange={({ countryCode: nextCountry, botanicalCountryCode: nextBotanical }) => {
+                setCountryCode(nextCountry);
+                setBotanicalCountryCode(nextBotanical);
+              }}
+            />
+          )}
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id='description'
-            label={strings.DESCRIPTION}
-            type='text'
-            onChange={(value) => setDescription(value as string)}
-            value={description}
-          />
-        </Grid>
-        {showProjectLocation && (
-          <CountryAndBotanicalCountrySelect
-            countryCode={countryCode}
-            botanicalCountryCode={botanicalCountryCode}
-            onChange={({ countryCode: nextCountry, botanicalCountryCode: nextBotanical }) => {
-              setCountryCode(nextCountry);
-              setBotanicalCountryCode(nextBotanical);
-            }}
-          />
-        )}
-      </Grid>
-    </ScrollableDialogBox>
+      </ScrollableDialogBox>
+    </>
   );
 }
