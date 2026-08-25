@@ -1695,6 +1695,9 @@ PREVIEW_WILL_DISPLAY_AFTER_SAVING,L’aperçu s’affichera après l’enregistr
 PREVIOUS,Précédent,156ee39e
 PREVIOUS_YEAR_CUMULATIVE_TOTAL,Total cumulatif de l’année précédente,e29d1c3c
 PRIMARY_DATA_SOURCE,Source de données principale,4ad95dc9
+PRINT,Imprimer,bccc6ef2
+PRINT_REPORT,Imprimer / Enregistrer au format PDF,6fd7a26e
+PRINT_WINDOW_BLOCKED,Votre navigateur a bloqué la fenêtre d'impression. Autorisez les fenêtres contextuelles pour ce site et réessayez.,82018e5b
 PRIVACY_POLICY,Engagement de confidentialité,47ab3e90
 PROBLEMS,Problèmes,25b5d615
 PROBLEMS_WITH_ENTRIES,Il y a eu un problème avec certaines saisies dans ce formulaire.,86f72cd9

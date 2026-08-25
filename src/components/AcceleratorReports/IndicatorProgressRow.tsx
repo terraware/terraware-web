@@ -19,13 +19,15 @@ import { formatPrecision } from 'src/utils/numbers';
 const TITLE_COLUMN_WIDTH = 300;
 const BAR_HEIGHT = 12;
 const TICK_OVERHANG = 3;
-const MIN_TARGET_PERCENT = 50;
+const MIN_TARGET_PERCENT = 90;
 const TICK_HOVER_WIDTH = 9;
 
 type IndicatorProgressRowProps = {
   editing?: boolean;
   indicator: ProgressIndicator;
   onChange?: (id: string, value: unknown) => void;
+  /** on paper the row is always open, and shows the progress notes alone */
+  printMode?: boolean;
   quarter?: 'Q1' | 'Q2' | 'Q3' | 'Q4';
   isConsoleView?: boolean;
   year?: number;
@@ -35,6 +37,7 @@ const IndicatorProgressRow = ({
   editing,
   indicator,
   onChange,
+  printMode,
   quarter,
   isConsoleView,
   year,
@@ -88,7 +91,9 @@ const IndicatorProgressRow = ({
     [currentYearProgress, isCumulative, quarter]
   );
 
-  // Caps the target mark at the halfway line for visibility
+  // Pins an overshot target no further left than MIN_TARGET_PERCENT, so the bar past it stays visible.
+  // Not any further left than that: the target label is right-aligned on the mark and would run back
+  // over the value and the quarterly figure beside it.
   const { segments, targetPercent } = useMemo(() => {
     const barMin = startingTotal;
     const total = cumulativeValue ?? 0;
@@ -214,8 +219,26 @@ const IndicatorProgressRow = ({
     </Typography>
   ) : null;
 
+  const progressNotes = (
+    <>
+      <Typography fontSize='14px' fontWeight={600}>
+        {strings.PROGRESS_NOTES}
+      </Typography>
+
+      {indicator.progressNotes ? (
+        <Typography fontSize='14px'>{indicator.progressNotes}</Typography>
+      ) : (
+        <EmptyFieldPlaceholder text={strings.NO_NOTES_ADDED} />
+      )}
+    </>
+  );
+
   return (
-    <Box borderTop={`1px solid ${theme.palette.TwClrBgTertiary}`} padding={theme.spacing(2, 0)}>
+    <Box
+      borderTop={`1px solid ${theme.palette.TwClrBgTertiary}`}
+      className={printMode ? 'print-section' : undefined}
+      padding={theme.spacing(2, 0)}
+    >
       <Box display='flex'>
         <Box flexShrink={0} paddingRight={theme.spacing(2)} width={`${TITLE_COLUMN_WIDTH}px`}>
           <Box alignItems='center' display='flex'>
@@ -223,7 +246,7 @@ const IndicatorProgressRow = ({
               {indicator.name}
             </Typography>
 
-            {indicator.description && <IconTooltip title={indicator.description} />}
+            {indicator.description && !printMode && <IconTooltip title={indicator.description} />}
           </Box>
 
           <Box columnGap={theme.spacing(1)} display='flex' flexWrap='wrap' marginTop={theme.spacing(1)} rowGap={1}>
@@ -326,7 +349,7 @@ const IndicatorProgressRow = ({
               </Box>
 
               {segments.map((segment) => (
-                <Tooltip key={`tick-${segment.key}`} title={segment.quarter ?? ''}>
+                <Tooltip key={`tick-${segment.key}`} title={printMode ? '' : segment.quarter ?? ''}>
                   <Box
                     sx={{
                       display: 'flex',
@@ -345,7 +368,7 @@ const IndicatorProgressRow = ({
               ))}
 
               {isLifetime && (
-                <Tooltip title={startingTotalLabel}>
+                <Tooltip title={printMode ? '' : startingTotalLabel}>
                   <Box
                     sx={{
                       display: 'flex',
@@ -400,149 +423,147 @@ const IndicatorProgressRow = ({
           )}
         </Box>
 
-        <Box flexShrink={0} paddingLeft={theme.spacing(1)} width={theme.spacing(5)}>
-          <IconButton onClick={onToggle} size='small'>
-            <Icon name={expanded ? 'chevronUp' : 'chevronDown'} />
-          </IconButton>
-        </Box>
-      </Box>
-
-      <Collapse in={expanded}>
-        {editing ? (
-          <Box display='flex' flexWrap='wrap' gap={theme.spacing(3)} paddingTop={theme.spacing(2)}>
-            <Box flex='1 1 45%' minWidth={0}>
-              <Box alignItems='flex-end' display='flex' gap={theme.spacing(1)}>
-                <Box flexGrow={1}>
-                  <Textfield
-                    disabled={valueDisabled}
-                    id={`value-${fieldKey}`}
-                    label={strings.PROGRESS_VALUE}
-                    min={0}
-                    onChange={onChangeValue}
-                    type='number'
-                    value={enteredValue ?? ''}
-                  />
-                </Box>
-
-                {isAutoCalculated &&
-                  (valueDisabled ? (
-                    <Tooltip title={strings.OVERWRITE_TERRAWARE_TRACKING_DATA}>
-                      <Box>
-                        <Button
-                          icon='iconEdit'
-                          onClick={startOverwriting}
-                          priority='ghost'
-                          size='small'
-                          type='passive'
-                        />
-                      </Box>
-                    </Tooltip>
-                  ) : (
-                    <Button icon='iconUndo' onClick={openResetModal} priority='ghost' size='small' type='passive' />
-                  ))}
-              </Box>
-
-              {isAutoCalculated && hasOverride && indicator.systemValue !== undefined && (
-                <Typography color={theme.palette.TwClrTxtSecondary} fontSize='12px'>
-                  {strings.formatString(
-                    strings.INDICATOR_OVERWRITTEN_ORIGINAL_VALUE,
-                    `${formatPrecision(indicator.systemValue, precision)}${indicator.unit ? ` ${indicator.unit}` : ''}`
-                  )}
-                </Typography>
-              )}
-            </Box>
-
-            <Box flex='1 1 45%' minWidth={0}>
-              <Dropdown
-                fullWidth
-                label={strings.STATUS}
-                onChange={(value: string) => onChange?.('status', value)}
-                options={statusOptions}
-                placeholder={strings.NO_STATUS}
-                selectedValue={indicator.status}
-              />
-            </Box>
-
-            <Box flex='1 1 45%' minWidth={0}>
-              <Textfield
-                id={`projectsComments-${fieldKey}`}
-                label={strings.PROJECTS_COMMENTS}
-                onChange={(value: unknown) => onChange?.('projectsComments', value)}
-                preserveNewlines
-                type='textarea'
-                value={indicator.projectsComments ?? ''}
-              />
-            </Box>
-
-            {isConsoleView && (
-              <Box flex='1 1 45%' minWidth={0}>
-                <Textfield
-                  id={`progressNotes-${fieldKey}`}
-                  label={strings.NOTES_TO_FUNDER}
-                  onChange={(value: unknown) => onChange?.('progressNotes', value)}
-                  preserveNewlines
-                  type='textarea'
-                  value={indicator.progressNotes ?? ''}
-                />
-
-                <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
-                  {strings.PROGRESS_NOTES_DESCRIPTION}
-                </Typography>
-              </Box>
-            )}
-
-            <Box flex='1 1 45%' minWidth={0}>
-              <Textfield
-                id={`supportingDocumentUrl-${fieldKey}`}
-                label={strings.LINK_TO_SUPPORTING_DOCUMENTS}
-                onChange={(value: unknown) => onChange?.('supportingDocumentUrl', value)}
-                type='text'
-                value={indicator.supportingDocumentUrl ?? ''}
-              />
-            </Box>
-          </Box>
-        ) : (
-          <Box display='flex' flexWrap='wrap' gap={theme.spacing(3)} paddingTop={theme.spacing(2)}>
-            <Box flex='1 1 45%' minWidth={0}>
-              <Typography fontSize='14px' fontWeight={600}>
-                {strings.PROJECTS_COMMENTS}
-              </Typography>
-
-              {indicator.projectsComments ? (
-                <Typography fontSize='14px'>{indicator.projectsComments}</Typography>
-              ) : (
-                <EmptyFieldPlaceholder text={strings.NO_COMMENTS_ADDED} />
-              )}
-            </Box>
-
-            <Box flex='1 1 45%' minWidth={0}>
-              <Typography fontSize='14px' fontWeight={600}>
-                {strings.PROGRESS_NOTES}
-              </Typography>
-
-              {indicator.progressNotes ? (
-                <Typography fontSize='14px'>{indicator.progressNotes}</Typography>
-              ) : (
-                <EmptyFieldPlaceholder text={strings.NO_NOTES_ADDED} />
-              )}
-            </Box>
-
-            <Box flexBasis='100%'>
-              <Typography fontSize='14px' fontWeight={600}>
-                {strings.LINK_TO_SUPPORTING_DOCUMENTS}
-              </Typography>
-
-              {indicator.supportingDocumentUrl ? (
-                <Link href={indicator.supportingDocumentUrl} rel='noopener noreferrer' target='_blank'>
-                  <Typography fontSize='14px'>{strings.VIEW_DOCUMENTS}</Typography>
-                </Link>
-              ) : (
-                <EmptyFieldPlaceholder text={strings.NO_LINK_ADDED} />
-              )}
-            </Box>
+        {!printMode && (
+          <Box flexShrink={0} paddingLeft={theme.spacing(1)} width={theme.spacing(5)}>
+            <IconButton onClick={onToggle} size='small'>
+              <Icon name={expanded ? 'chevronUp' : 'chevronDown'} />
+            </IconButton>
           </Box>
         )}
-      </Collapse>
+      </Box>
+
+      {printMode ? (
+        <Box paddingTop={theme.spacing(2)}>{progressNotes}</Box>
+      ) : (
+        <Collapse in={expanded}>
+          {editing ? (
+            <Box display='flex' flexWrap='wrap' gap={theme.spacing(3)} paddingTop={theme.spacing(2)}>
+              <Box flex='1 1 45%' minWidth={0}>
+                <Box alignItems='flex-end' display='flex' gap={theme.spacing(1)}>
+                  <Box flexGrow={1}>
+                    <Textfield
+                      disabled={valueDisabled}
+                      id={`value-${fieldKey}`}
+                      label={strings.PROGRESS_VALUE}
+                      min={0}
+                      onChange={onChangeValue}
+                      type='number'
+                      value={enteredValue ?? ''}
+                    />
+                  </Box>
+
+                  {isAutoCalculated &&
+                    (valueDisabled ? (
+                      <Tooltip title={strings.OVERWRITE_TERRAWARE_TRACKING_DATA}>
+                        <Box>
+                          <Button
+                            icon='iconEdit'
+                            onClick={startOverwriting}
+                            priority='ghost'
+                            size='small'
+                            type='passive'
+                          />
+                        </Box>
+                      </Tooltip>
+                    ) : (
+                      <Button icon='iconUndo' onClick={openResetModal} priority='ghost' size='small' type='passive' />
+                    ))}
+                </Box>
+
+                {isAutoCalculated && hasOverride && indicator.systemValue !== undefined && (
+                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='12px'>
+                    {strings.formatString(
+                      strings.INDICATOR_OVERWRITTEN_ORIGINAL_VALUE,
+                      `${formatPrecision(indicator.systemValue, precision)}${indicator.unit ? ` ${indicator.unit}` : ''}`
+                    )}
+                  </Typography>
+                )}
+              </Box>
+
+              <Box flex='1 1 45%' minWidth={0}>
+                <Dropdown
+                  fullWidth
+                  label={strings.STATUS}
+                  onChange={(value: string) => onChange?.('status', value)}
+                  options={statusOptions}
+                  placeholder={strings.NO_STATUS}
+                  selectedValue={indicator.status}
+                />
+              </Box>
+
+              <Box flex='1 1 45%' minWidth={0}>
+                <Textfield
+                  id={`projectsComments-${fieldKey}`}
+                  label={strings.PROJECTS_COMMENTS}
+                  onChange={(value: unknown) => onChange?.('projectsComments', value)}
+                  preserveNewlines
+                  type='textarea'
+                  value={indicator.projectsComments ?? ''}
+                />
+              </Box>
+
+              {isConsoleView && (
+                <Box flex='1 1 45%' minWidth={0}>
+                  <Textfield
+                    id={`progressNotes-${fieldKey}`}
+                    label={strings.NOTES_TO_FUNDER}
+                    onChange={(value: unknown) => onChange?.('progressNotes', value)}
+                    preserveNewlines
+                    type='textarea'
+                    value={indicator.progressNotes ?? ''}
+                  />
+
+                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+                    {strings.PROGRESS_NOTES_DESCRIPTION}
+                  </Typography>
+                </Box>
+              )}
+
+              <Box flex='1 1 45%' minWidth={0}>
+                <Textfield
+                  id={`supportingDocumentUrl-${fieldKey}`}
+                  label={strings.LINK_TO_SUPPORTING_DOCUMENTS}
+                  onChange={(value: unknown) => onChange?.('supportingDocumentUrl', value)}
+                  type='text'
+                  value={indicator.supportingDocumentUrl ?? ''}
+                />
+              </Box>
+            </Box>
+          ) : (
+            <Box display='flex' flexWrap='wrap' gap={theme.spacing(3)} paddingTop={theme.spacing(2)}>
+              <Box flex='1 1 45%' minWidth={0}>
+                <Typography fontSize='14px' fontWeight={600}>
+                  {strings.PROJECTS_COMMENTS}
+                </Typography>
+
+                {indicator.projectsComments ? (
+                  <Typography fontSize='14px'>{indicator.projectsComments}</Typography>
+                ) : (
+                  <EmptyFieldPlaceholder text={strings.NO_COMMENTS_ADDED} />
+                )}
+              </Box>
+
+              <Box flex='1 1 45%' minWidth={0}>
+                {progressNotes}
+              </Box>
+
+              <Box flexBasis='100%'>
+                <Typography fontSize='14px' fontWeight={600}>
+                  {strings.LINK_TO_SUPPORTING_DOCUMENTS}
+                </Typography>
+
+                {indicator.supportingDocumentUrl ? (
+                  <Link href={indicator.supportingDocumentUrl} rel='noopener noreferrer' target='_blank'>
+                    <Typography fontSize='14px'>{strings.VIEW_DOCUMENTS}</Typography>
+                  </Link>
+                ) : (
+                  <EmptyFieldPlaceholder text={strings.NO_LINK_ADDED} />
+                )}
+              </Box>
+            </Box>
+          )}
+        </Collapse>
+      )}
 
       {resetModalOpened && <ResetIndicatorModal onClose={closeResetModal} onSubmit={onReset} />}
     </Box>

@@ -1,10 +1,12 @@
-import React, { type JSX, type ReactNode, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
 import FunderReportContentV2 from 'src/components/AcceleratorReports/FunderReportContentV2';
 import { REPORT_TITLE_STYLE } from 'src/components/AcceleratorReports/ReportDropdown';
+import ReportExportMenu from 'src/components/AcceleratorReports/ReportExportMenu';
+import ReportPrint from 'src/components/AcceleratorReports/ReportPrint';
 import { ProgressIndicator, getReportName } from 'src/components/AcceleratorReports/utils';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
@@ -21,10 +23,11 @@ type FunderReportPageV2Props = {
   indicators: ProgressIndicator[];
   /** shown under the report name, e.g. when the report was last published */
   note?: string;
+  /** omitted where the page has nothing to export; printing is offered on every one of them */
+  onExport?: () => void;
   projectId: number;
   report?: AcceleratorReportPayload | PublishedReportPayload;
   reportId: number;
-  rightComponent?: ReactNode;
   title: string;
 };
 
@@ -32,23 +35,29 @@ const FunderReportPageV2 = ({
   banner,
   indicators,
   note,
+  onExport,
   projectId,
   report,
   reportId,
-  rightComponent,
   title,
 }: FunderReportPageV2Props): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
   const { crumbs, acceleratorProject, project } = useAcceleratorProjectData();
 
+  const [printing, setPrinting] = useState(false);
+
+  const startPrinting = useCallback(() => setPrinting(true), []);
+  const stopPrinting = useCallback(() => setPrinting(false), []);
+
   const reportName = report ? getReportName(report) : '';
+  const projectName = acceleratorProject?.dealName || project?.name;
 
   const pageCrumbs = useMemo<Crumb[]>(
     () => [
       ...crumbs,
       {
-        name: acceleratorProject?.dealName || project?.name || '',
+        name: projectName || '',
         to: APP_PATHS.ACCELERATOR_PROJECT_VIEW.replace(':projectId', `${projectId}`),
       },
       {
@@ -68,17 +77,21 @@ const FunderReportPageV2 = ({
           ]
         : []),
     ],
-    [acceleratorProject?.dealName, crumbs, project?.name, projectId, reportId, reportName, strings]
+    [crumbs, projectId, projectName, reportId, reportName, strings]
   );
 
   return (
     <Page
       crumbs={pageCrumbs}
       hierarchicalCrumbs={false}
-      rightComponent={rightComponent}
+      rightComponent={<ReportExportMenu disabled={report === undefined} onExport={onExport} onPrint={startPrinting} />}
       title={title}
       titleStyle={{ paddingTop: '16px' }}
     >
+      {printing && (
+        <ReportPrint indicators={indicators} onClose={stopPrinting} projectName={projectName} report={report} />
+      )}
+
       <Box display='flex' flexDirection='column' flexGrow={1} width={'100%'}>
         <Box marginTop={theme.spacing(3)} width={'100%'}>
           <Message body={banner} priority='info' type='page' />

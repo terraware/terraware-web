@@ -3,7 +3,6 @@ import { useParams } from 'react-router';
 
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
-import ReportExportMenu from 'src/components/AcceleratorReports/ReportExportMenu';
 import useExportReportCsv from 'src/components/AcceleratorReports/useExportReportCsv';
 import { getPublishedProgressIndicators } from 'src/components/AcceleratorReports/utils';
 import { useLocalization } from 'src/providers';
@@ -38,15 +37,10 @@ const PublishedFunderReportV2 = (): JSX.Element => {
               .toString()
           : undefined
       }
+      onExport={() => void exportFunderReport({ projectId, reportId })}
       projectId={projectId}
       report={report}
       reportId={reportId}
-      rightComponent={
-        <ReportExportMenu
-          disabled={report === undefined}
-          onExport={() => void exportFunderReport({ projectId, reportId })}
-        />
-      }
       title={strings.PUBLISHED_FUNDER_REPORT}
     />
   );

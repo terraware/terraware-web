@@ -12,6 +12,7 @@ export type IndicatorProgressSectionContentProps = {
   editing?: boolean;
   indicators: ProgressIndicator[];
   onChangeIndicator?: (indicator: ProgressIndicator, id: string, value: unknown) => void;
+  printMode?: boolean;
   quarter?: 'Q1' | 'Q2' | 'Q3' | 'Q4';
   isConsoleView?: boolean;
   year?: number;
@@ -21,6 +22,7 @@ export const IndicatorProgressSectionContent = ({
   editing,
   indicators,
   onChangeIndicator,
+  printMode,
   quarter,
   isConsoleView,
   year,
@@ -75,6 +77,7 @@ export const IndicatorProgressSectionContent = ({
           indicator={indicator}
           key={`${indicator.refId}-${index}`}
           onChange={(id, value) => onChangeIndicator?.(indicator, id, value)}
+          printMode={printMode}
           quarter={quarter}
           isConsoleView={isConsoleView}
           year={year}
