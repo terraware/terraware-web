@@ -1698,7 +1698,7 @@ PREVIOUS_YEAR_CUMULATIVE_TOTAL,Total acumulado del año anterior,e29d1c3c
 PRIMARY_DATA_SOURCE,Fuente principal de datos,4ad95dc9
 PRINT,Imprimir,bccc6ef2
 PRINT_REPORT,Imprimir / Guardar como PDF,6fd7a26e
-PRINT_WINDOW_BLOCKED,Su navegador bloqueó la ventana de impresión. Permita las ventanas emergentes para este sitio e intente nuevamente.,82018e5b
+PRINT_WINDOW_BLOCKED,La ventana emergente de impresión fue bloqueada. Permita las ventanas emergentes para este sitio e intente nuevamente.,3c1bbd57
 PRIVACY_POLICY,Política de privacidad,47ab3e90
 PROBLEMS,Problemas,25b5d615
 PROBLEMS_WITH_ENTRIES,Se produjo un problema con algunas entradas de este formulario.,86f72cd9

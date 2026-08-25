@@ -26,7 +26,6 @@ type IndicatorProgressRowProps = {
   editing?: boolean;
   indicator: ProgressIndicator;
   onChange?: (id: string, value: unknown) => void;
-  /** on paper the row is always open, and shows the progress notes alone */
   printMode?: boolean;
   quarter?: 'Q1' | 'Q2' | 'Q3' | 'Q4';
   isConsoleView?: boolean;
@@ -92,8 +91,6 @@ const IndicatorProgressRow = ({
   );
 
   // Pins an overshot target no further left than MIN_TARGET_PERCENT, so the bar past it stays visible.
-  // Not any further left than that: the target label is right-aligned on the mark and would run back
-  // over the value and the quarterly figure beside it.
   const { segments, targetPercent } = useMemo(() => {
     const barMin = startingTotal;
     const total = cumulativeValue ?? 0;

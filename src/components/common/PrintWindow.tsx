@@ -86,10 +86,6 @@ export type PrintWindowProps = {
   title: string;
 };
 
-/**
- * Renders its children into a new browser window styled like the app, and opens the print dialog on
- * it. Everything reaches the children through React context, so the caller's data is reused as is.
- */
 const PrintWindow = ({ children, onClose, ready, title }: PrintWindowProps): JSX.Element | null => {
   const { strings } = useLocalization();
   const snackbar = useSnackbar();
@@ -127,8 +123,6 @@ const PrintWindow = ({ children, onClose, ready, title }: PrintWindowProps): JSX
 
     printWindow.addEventListener('beforeunload', onClose);
 
-    // opening the window is the external effect; the container it hands back is what React renders
-    // into, so it has to reach state from here
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setTarget({
       // prepended so the copied stylesheets can still override MUI, as `injectFirst` arranges in the app

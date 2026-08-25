@@ -22,12 +22,6 @@ export type ReportPrintContentProps = {
   report: AcceleratorReportPayload | PublishedReportPayload;
 };
 
-/**
- * The report as a document. Deliberately not `FunderReportContentV2`: this one drops the card, the
- * report selector and every edit affordance, opens each indicator, and leaves out the parts that are
- * for working on a report rather than reading it — review banners, internal comments, the
- * shared-with-funder tags, per-indicator project comments and supporting document links.
- */
 const ReportPrintContent = ({ indicators, projectId, projectName, report }: ReportPrintContentProps): JSX.Element => {
   const theme = useTheme();
 
