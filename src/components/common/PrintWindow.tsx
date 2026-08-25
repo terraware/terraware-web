@@ -11,14 +11,9 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 const MARGIN_INCHES = 0.5;
 const CSS_PIXELS_PER_INCH = 96;
-/** letter is the narrower of the two page sizes this has to fit; A4 leaves a little slack */
+
 const PAGE_WIDTH = (8.5 - MARGIN_INCHES * 2) * CSS_PIXELS_PER_INCH;
-/**
- * The report is laid out for a desktop content column. Below roughly this width its indicator rows
- * start colliding — the target label is positioned as a percentage of the bar and runs back over the
- * value beside it — so the document is laid out at this width whatever the paper is, and scaled to
- * fit. Zoom rather than a transform, so pagination still sees the real box sizes.
- */
+
 const CONTENT_WIDTH = 1024;
 
 const PRINT_STYLES = `
@@ -42,13 +37,23 @@ const PRINT_STYLES = `
 `;
 
 /**
- * Reproduces the app's styling inside another document. Emotion is handled separately, by pointing a
- * cache at the target head; this covers everything else — the bundled CSS chunks, the SCSS from
- * `@terraware/web-components`, and the webfont link.
+ * Returns a promise for the linked stylesheets, which are fetched again by the new document. Nothing
+ * should print until they land, or the document goes to the printer unstyled.
  */
-const copyStyles = (source: Document, target: Document) => {
+const copyStyles = (source: Document, target: Document): Promise<unknown> => {
+  const linksLoaded: Promise<unknown>[] = [];
+
   source.head.querySelectorAll('link[rel="stylesheet"]').forEach((link) => {
-    target.head.appendChild(link.cloneNode(true));
+    const clone = link.cloneNode(true) as HTMLLinkElement;
+
+    linksLoaded.push(
+      new Promise((resolve) => {
+        clone.addEventListener('load', resolve, { once: true });
+        clone.addEventListener('error', resolve, { once: true });
+      })
+    );
+
+    target.head.appendChild(clone);
   });
 
   source.head.querySelectorAll('style').forEach((style) => {
@@ -71,11 +76,14 @@ const copyStyles = (source: Document, target: Document) => {
 
     target.head.appendChild(clone);
   });
+
+  return Promise.all(linksLoaded);
 };
 
 type PortalTarget = {
   cache: EmotionCache;
   container: HTMLElement;
+  stylesLoaded: Promise<unknown>;
 };
 
 export type PrintWindowProps = {
@@ -112,7 +120,7 @@ const PrintWindow = ({ children, onClose, ready, title }: PrintWindowProps): JSX
 
     windowRef.current = printWindow;
 
-    copyStyles(document, printWindow.document);
+    const stylesLoaded = copyStyles(document, printWindow.document);
 
     const printStyle = printWindow.document.createElement('style');
     printStyle.textContent = PRINT_STYLES;
@@ -128,6 +136,7 @@ const PrintWindow = ({ children, onClose, ready, title }: PrintWindowProps): JSX
       // prepended so the copied stylesheets can still override MUI, as `injectFirst` arranges in the app
       cache: createCache({ container: printWindow.document.head, key: 'twprint', prepend: true }),
       container,
+      stylesLoaded,
     });
   }, [onClose, snackbar, strings]);
 
@@ -155,7 +164,6 @@ const PrintWindow = ({ children, onClose, ready, title }: PrintWindowProps): JSX
 
     let cancelled = false;
 
-    // a second frame so the freshly applied styles have been laid out, not just applied
     const print = () =>
       printWindow.requestAnimationFrame(() => {
         if (!cancelled) {
@@ -163,11 +171,13 @@ const PrintWindow = ({ children, onClose, ready, title }: PrintWindowProps): JSX
         }
       });
 
-    void printWindow.document.fonts.ready.then(() => {
-      if (!cancelled) {
-        printWindow.requestAnimationFrame(print);
-      }
-    });
+    void target.stylesLoaded
+      .then(() => printWindow.document.fonts.ready)
+      .then(() => {
+        if (!cancelled) {
+          printWindow.requestAnimationFrame(print);
+        }
+      });
 
     return () => {
       cancelled = true;
