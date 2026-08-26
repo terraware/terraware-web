@@ -451,14 +451,7 @@ const SpeciesCheckModal = ({
     } finally {
       reloadSpecies();
     }
-  }, [
-    acceptPending,
-    hasAnyPending,
-    selectedOrganization,
-    snackbar,
-    trackCheckCompleted,
-    trackSaveFailed,
-  ]);
+  }, [acceptPending, hasAnyPending, selectedOrganization, snackbar, trackCheckCompleted, trackSaveFailed]);
 
   const onFinish = useCallback(async () => {
     setBusy(true);
