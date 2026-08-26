@@ -9,6 +9,7 @@ export type UseOrganizationSpeciesArgs = {
   organizationId?: number;
   /** When true, only species already in use by the organization are returned. */
   inUse?: boolean;
+  preferCacheValue?: boolean;
 };
 
 export type UseOrganizationSpeciesResult = {
@@ -24,14 +25,15 @@ export const useOrganizationSpecies = (args?: UseOrganizationSpeciesArgs): UseOr
   const { selectedOrganization } = useOrganization();
   const organizationId = args?.organizationId ?? selectedOrganization?.id;
   const inUse = args?.inUse;
+  const preferCacheValue = args?.preferCacheValue ?? true;
 
   const [listSpecies, { currentData, isFetching, isUninitialized }] = useLazyListSpeciesQuery();
 
   useEffect(() => {
     if (organizationId && organizationId > 0) {
-      void listSpecies({ organizationId, inUse }, true);
+      void listSpecies({ organizationId, inUse }, preferCacheValue);
     }
-  }, [listSpecies, organizationId, inUse, isUninitialized]);
+  }, [listSpecies, organizationId, inUse, preferCacheValue]);
 
   const refetch = useCallback(async (): Promise<void> => {
     if (organizationId && organizationId > 0) {
