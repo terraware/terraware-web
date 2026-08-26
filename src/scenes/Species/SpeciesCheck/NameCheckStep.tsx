@@ -54,7 +54,7 @@ const NameCheckStep = ({
               borderTop: index > 0 ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined,
             }}
           >
-            <ProjectCheckSummary {...summary} />
+            <ProjectCheckSummary {...summary} updatesLabel={strings.SUGGESTIONS} />
           </Box>
         ))}
       </Box>

@@ -50,6 +50,9 @@ const SAVE_FAILURE_ENTITY_TYPES = {
   nativeCheck: 'species_intelligence_native_check',
 } as const;
 
+const hasCompleteLocation = (location: LocationEdit): boolean =>
+  !!location.countryCode && !!location.botanicalCountryCode;
+
 const SpeciesCheckModal = ({
   open,
   onClose,
@@ -106,6 +109,8 @@ const SpeciesCheckModal = ({
     ];
   }, [projects, selectedOrganization]);
 
+  const locationsOptional = projects.length > 1;
+
   const targetsRef = useRef(targets);
   targetsRef.current = targets;
 
@@ -133,7 +138,7 @@ const SpeciesCheckModal = ({
       };
     });
     setLocationEdits(initial);
-    const locationsMissing = !targetsRef.current.every((target) => !!target.botanicalCountryCode);
+    const locationsMissing = !targetsRef.current.every(hasCompleteLocation);
     setStep(locationsMissing ? 0 : 1);
     setNativeMode('list');
     setNameSelected(
@@ -182,6 +187,15 @@ const SpeciesCheckModal = ({
     [botanicalCountries]
   );
 
+  const locationForTarget = useCallback(
+    (target: LocationTarget): LocationEdit =>
+      locationEdits[target.key] ?? {
+        countryCode: target.countryCode,
+        botanicalCountryCode: target.botanicalCountryCode,
+      },
+    [locationEdits]
+  );
+
   const trackSaveFailed = useCallback(
     (entityType: (typeof SAVE_FAILURE_ENTITY_TYPES)[keyof typeof SAVE_FAILURE_ENTITY_TYPES]) => {
       trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: entityType });
@@ -218,44 +232,57 @@ const SpeciesCheckModal = ({
     [species, targets, recalculatedTargetKeys]
   );
 
+  const checkedTargetData = useMemo(
+    () => targetData.filter((data) => hasCompleteLocation(locationForTarget(data.target))),
+    [locationForTarget, targetData]
+  );
+
+  const checkedSpecies = useMemo(() => {
+    const speciesById = new Map<number, Species>();
+    checkedTargetData.forEach((data) => data.targetSpecies.forEach((sp) => speciesById.set(sp.id, sp)));
+    return [...speciesById.values()];
+  }, [checkedTargetData]);
+
   const speciesWithProblems = useMemo(
     () =>
-      species
+      checkedSpecies
         .filter((sp) => (sp.problems?.length ?? 0) > 0)
         .sort((a, b) => (a.scientificName ?? '').localeCompare(b.scientificName ?? '')),
-    [species]
+    [checkedSpecies]
   );
 
   const buildSummary = useCallback(
-    (data: (typeof targetData)[number], updates: number): ProjectCheckSummaryProps => ({
-      projectName: data.target.name,
-      countryName: countryNameByCode(locationEdits[data.target.key]?.countryCode ?? data.target.countryCode),
-      botanicalCountryName: botanicalNameByCode(
-        locationEdits[data.target.key]?.botanicalCountryCode ?? data.target.botanicalCountryCode
-      ),
-      updates,
-      speciesChecked: data.targetSpecies.length,
-    }),
-    [botanicalNameByCode, countryNameByCode, locationEdits]
+    (data: (typeof targetData)[number], updates: number): ProjectCheckSummaryProps => {
+      const location = locationForTarget(data.target);
+      return {
+        projectName: data.target.name,
+        countryName: countryNameByCode(location.countryCode),
+        botanicalCountryName: botanicalNameByCode(location.botanicalCountryCode),
+        showLocation: hasCompleteLocation(location),
+        updates,
+        speciesChecked: data.targetSpecies.length,
+      };
+    },
+    [botanicalNameByCode, countryNameByCode, locationForTarget]
   );
 
   const nameSummaries = useMemo(
-    () => targetData.map((data) => buildSummary(data, data.withProblems.length)),
-    [buildSummary, targetData]
+    () => checkedTargetData.map((data) => buildSummary(data, data.withProblems.length)),
+    [buildSummary, checkedTargetData]
   );
 
   const nativeSections = useMemo<NativeCheckProjectSection[]>(
     () =>
-      targetData.map((data) => ({
+      checkedTargetData.map((data) => ({
         key: data.target.key,
         projectId: data.target.projectId,
         summary: buildSummary(data, data.pending.length),
         pending: data.displayRows,
       })),
-    [buildSummary, targetData]
+    [buildSummary, checkedTargetData]
   );
 
-  const hasAnyPending = targetData.some((data) => data.pending.length > 0);
+  const hasAnyPending = checkedTargetData.some((data) => data.pending.length > 0);
 
   const goToStep = useCallback((key: StepKey) => setStep(stepKeys.indexOf(key)), [stepKeys]);
 
@@ -293,25 +320,23 @@ const SpeciesCheckModal = ({
   }, []);
 
   const isLocationComplete = useCallback(
-    (target: LocationTarget) => {
-      const edit = locationEdits[target.key] ?? {};
-      return !!(edit.countryCode ?? target.countryCode) && !!(edit.botanicalCountryCode ?? target.botanicalCountryCode);
-    },
-    [locationEdits]
+    (target: LocationTarget) => hasCompleteLocation(locationForTarget(target)),
+    [locationForTarget]
   );
 
   const changedTargets = useMemo(
     () =>
       targets.filter((target) => {
-        if (!isLocationComplete(target)) {
+        const edit = locationEdits[target.key];
+        if (!edit) {
           return false;
         }
-        const edit = locationEdits[target.key] ?? {};
-        const nextCountry = edit.countryCode ?? target.countryCode;
-        const nextBotanical = edit.botanicalCountryCode ?? target.botanicalCountryCode;
-        return nextCountry !== target.countryCode || nextBotanical !== target.botanicalCountryCode;
+        return (
+          (edit.countryCode ?? null) !== (target.countryCode ?? null) ||
+          (edit.botanicalCountryCode ?? null) !== (target.botanicalCountryCode ?? null)
+        );
       }),
-    [targets, locationEdits, isLocationComplete]
+    [targets, locationEdits]
   );
 
   const confirmTargets = useMemo(
@@ -324,8 +349,8 @@ const SpeciesCheckModal = ({
     setBusy(true);
     try {
       await Promise.all(
-        targets.filter(isLocationComplete).map((target) => {
-          const edit = locationEdits[target.key] ?? {};
+        changedTargets.map((target) => {
+          const edit = locationForTarget(target);
           if (target.isOrg) {
             if (!selectedOrganization) {
               return Promise.resolve();
@@ -342,13 +367,13 @@ const SpeciesCheckModal = ({
             updateProjectRequestPayload: {
               name: project?.name ?? target.name,
               description: project?.description,
-              countryCode: edit.countryCode,
-              botanicalCountryCode: edit.botanicalCountryCode,
+              countryCode: edit.countryCode ?? null,
+              botanicalCountryCode: edit.botanicalCountryCode ?? null,
             },
           }).unwrap();
         })
       );
-      if (targets.some((target) => target.isOrg) && selectedOrganization) {
+      if (changedTargets.some((target) => target.isOrg) && selectedOrganization) {
         await reloadOrganizations(selectedOrganization.id);
       }
       await reloadSpecies();
@@ -356,11 +381,8 @@ const SpeciesCheckModal = ({
       setStep(1);
       trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_COMPLETED, {
         project_count: projects.length,
-        countries_set: targets.filter((target) => !!(locationEdits[target.key]?.countryCode ?? target.countryCode))
-          .length,
-        botanical_country_set: targets.filter(
-          (target) => !!(locationEdits[target.key]?.botanicalCountryCode ?? target.botanicalCountryCode)
-        ).length,
+        countries_set: targets.filter((target) => !!locationForTarget(target).countryCode).length,
+        botanical_country_set: targets.filter((target) => !!locationForTarget(target).botanicalCountryCode).length,
       });
     } catch {
       trackSaveFailed(SAVE_FAILURE_ENTITY_TYPES.setLocation);
@@ -369,8 +391,7 @@ const SpeciesCheckModal = ({
     setBusy(false);
   }, [
     changedTargets,
-    isLocationComplete,
-    locationEdits,
+    locationForTarget,
     projects,
     reloadOrganizations,
     reloadSpecies,
@@ -525,7 +546,9 @@ const SpeciesCheckModal = ({
     trackSaveFailed,
   ]);
 
-  const anyLocationEditValid = targets.some(isLocationComplete);
+  const canContinueLocationStep = locationsOptional
+    ? targets.some(isLocationComplete)
+    : targets.every(isLocationComplete);
 
   const allOverridesValid = [...nativeSelected].every(
     (key) => (overrideEdits[key]?.justification ?? '').trim().length > 0
@@ -570,7 +593,7 @@ const SpeciesCheckModal = ({
               void onSetLocations();
             }
           }}
-          disabled={busy || !anyLocationEditValid}
+          disabled={busy || !canContinueLocationStep}
         />,
       ];
     }
@@ -630,9 +653,9 @@ const SpeciesCheckModal = ({
       );
     return [cancelButton, backButton, primary];
   }, [
-    anyLocationEditValid,
     allOverridesValid,
     busy,
+    canContinueLocationStep,
     confirmTargets.length,
     currentKey,
     goBackToLocationStep,
@@ -708,6 +731,7 @@ const SpeciesCheckModal = ({
               edits={locationEdits}
               countries={countries ?? []}
               botanicalCountries={botanicalCountries}
+              locationsRequired={!locationsOptional}
               onChange={(targetKey, edit) => setLocationEdits((previous) => ({ ...previous, [targetKey]: edit }))}
             />
           </>

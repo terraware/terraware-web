@@ -8,7 +8,9 @@ export type ProjectCheckSummaryProps = {
   projectName: string;
   countryName?: string;
   botanicalCountryName?: string;
+  showLocation?: boolean;
   updates?: number;
+  updatesLabel?: React.ReactNode;
   speciesChecked?: number;
 };
 
@@ -16,7 +18,9 @@ const ProjectCheckSummary = ({
   projectName,
   countryName,
   botanicalCountryName,
+  showLocation = true,
   updates,
+  updatesLabel,
   speciesChecked,
 }: ProjectCheckSummaryProps): JSX.Element => {
   const theme = useTheme();
@@ -36,25 +40,27 @@ const ProjectCheckSummary = ({
             {projectName}
           </Typography>
         </Box>
-        <Box display='flex' flexWrap='wrap' gap={theme.spacing(2)}>
-          <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
-            {strings.COUNTRY}{' '}
-            <Box component='span' color={theme.palette.TwClrBaseBlack}>
-              {countryName ?? '—'}
-            </Box>
-          </Typography>
-          <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
-            {strings.BOTANICAL_COUNTRY}{' '}
-            <Box component='span' color={theme.palette.TwClrBaseBlack}>
-              {botanicalCountryName ?? '—'}
-            </Box>
-          </Typography>
-        </Box>
+        {showLocation && (
+          <Box display='flex' flexWrap='wrap' gap={theme.spacing(2)}>
+            <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
+              {strings.COUNTRY}{' '}
+              <Box component='span' color={theme.palette.TwClrBaseBlack}>
+                {countryName ?? '—'}
+              </Box>
+            </Typography>
+            <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary}>
+              {strings.BOTANICAL_COUNTRY}{' '}
+              <Box component='span' color={theme.palette.TwClrBaseBlack}>
+                {botanicalCountryName ?? '—'}
+              </Box>
+            </Typography>
+          </Box>
+        )}
       </Box>
       {showCounts && (
         <Box textAlign='right' whiteSpace='nowrap'>
           <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrBaseBlack}>
-            {strings.formatString(strings.SPECIES_CHECK_UPDATES, updates)}
+            {updatesLabel ?? strings.formatString(strings.SPECIES_CHECK_UPDATES, updates)}
           </Typography>
           <Typography fontSize='16px' color={theme.palette.TwClrBaseBlack}>
             {strings.formatString(strings.SPECIES_CHECK_SPECIES_CHECKED, speciesChecked)}
