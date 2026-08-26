@@ -63,6 +63,7 @@ export enum MIXPANEL_EVENTS {
 
   // --- Species Intelligence ---
   SPECIES_INTELLIGENCE_BANNER_SHOWN = 'Species Intelligence Banner Shown',
+  SPECIES_INTELLIGENCE_BANNER_DISMISSED = 'Species Intelligence Banner Dismissed',
   SPECIES_INTELLIGENCE_SETUP_PROMPT_SHOWN = 'Species Intelligence Setup Prompt Shown',
   SPECIES_INTELLIGENCE_SETUP_PROMPT_COMPLETED = 'Species Intelligence Setup Prompt Completed',
   SPECIES_INTELLIGENCE_SETUP_PROMPT_CANCELLED = 'Species Intelligence Setup Prompt Cancelled',
@@ -74,6 +75,8 @@ export enum MIXPANEL_EVENTS {
   SPECIES_AUTOFILL_FIELD_EDITED = 'Species Autofill Field Edited',
   SPECIES_INTELLIGENCE_SOURCE_ATTRIBUTION_HOVERED = 'Species Intelligence Source Attribution Hovered',
 }
+
+export type SpeciesIntelligenceBannerType = 'set_location' | 'species_added';
 
 // Shape of the user profile written via mixpanel.people.set(). Keys prefixed with
 // `$` are Mixpanel reserved properties (they populate built-in profile fields,
@@ -168,7 +171,12 @@ export type MixpanelEventPropertyMap = {
     modal_name: string;
     time_open_seconds: number;
   };
-  [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_BANNER_SHOWN]: Record<string, never>;
+  [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_BANNER_SHOWN]: {
+    banner_type: SpeciesIntelligenceBannerType;
+  };
+  [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_BANNER_DISMISSED]: {
+    banner_type: SpeciesIntelligenceBannerType;
+  };
   [MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_SHOWN]: {
     project_count: number;
     trigger: string;

@@ -88,6 +88,7 @@ export default function OverrideSpeciesModal({
       });
       onClose();
     } catch {
+      trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'species_intelligence_override' });
       snackbar.toastError();
     }
   };
