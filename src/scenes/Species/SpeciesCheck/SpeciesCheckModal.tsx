@@ -449,9 +449,17 @@ const SpeciesCheckModal = ({
       snackbar.toastError();
       return false;
     } finally {
-      reloadSpecies();
+      void reloadSpecies();
     }
-  }, [acceptPending, hasAnyPending, selectedOrganization, snackbar, trackCheckCompleted, trackSaveFailed]);
+  }, [
+    acceptPending,
+    hasAnyPending,
+    reloadSpecies,
+    selectedOrganization,
+    snackbar,
+    trackCheckCompleted,
+    trackSaveFailed,
+  ]);
 
   const onFinish = useCallback(async () => {
     setBusy(true);
