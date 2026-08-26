@@ -2300,6 +2300,7 @@ STATE_REQUIRED,État *,917ddf08
 STATS_WARNING_DESCRIPTION_1,Les statistiques d’observation ont été calculées après que ce substrat a été marqué comme Plantation terminée.,e10ed124
 STATS_WARNING_DESCRIPTION_2,L'annulation de l'état « Plantation terminée » supprimera ces statistiques. Êtes-vous sûr de vouloir annuler ?,d75cb848
 STATUS,Statut,213765a6
+STATUS_DETAILS,Détails du statut,bcb04832
 STATUS_WITH_STATUS,Statut : {0},67587035
 STEEP_SLOPE,Pente raide,5bde8271
 STORAGE,Stocké,bba4a98a
