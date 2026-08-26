@@ -98,7 +98,7 @@ export default function OverrideSpeciesModal({
       <DialogBox
         onClose={onClose}
         open={true}
-        title={strings.OVERRIDE_SPECIES}
+        title={strings.EDIT_STATUS}
         size='large'
         scrolled
         middleButtons={[
@@ -112,9 +112,9 @@ export default function OverrideSpeciesModal({
             disabled={isBusy}
           />,
           <Button
-            id='override'
-            key='override'
-            label={strings.OVERRIDE}
+            id='save'
+            key='save'
+            label={strings.SAVE}
             onClick={() => void onOverride()}
             disabled={isBusy || !nativity || justification.trim().length === 0}
           />,
@@ -124,7 +124,6 @@ export default function OverrideSpeciesModal({
           <Box
             sx={{
               backgroundColor: theme.palette.TwClrBgSecondary,
-              borderRadius: theme.spacing(1),
               padding: theme.spacing(2),
             }}
           >
@@ -132,8 +131,6 @@ export default function OverrideSpeciesModal({
               projectName={resolvedTargetName}
               countryName={countryName}
               botanicalCountryName={botanicalCountryName}
-              updates={1}
-              speciesChecked={1}
             />
           </Box>
           <Box

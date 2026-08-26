@@ -436,6 +436,10 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
                 }
               : undefined
           }
+          speciesName={species?.scientificName}
+          targetName={selectedOrganization?.name}
+          countryCode={selectedOrganization?.countryCode}
+          botanicalCountryCode={selectedOrganization?.botanicalCountryCode}
           nativity={orgNativity}
           overriddenBy={orgNativityElement?.overriddenByName}
           overriddenTime={orgNativityElement?.overriddenTime}

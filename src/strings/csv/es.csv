@@ -2301,6 +2301,7 @@ STATE_REQUIRED,Estado *,917ddf08
 STATS_WARNING_DESCRIPTION_1,Las estadísticas de observación se calcularon después de que este subestrato fue marcado como Plantación Completa.,e10ed124
 STATS_WARNING_DESCRIPTION_2,Deshacer el estado de Plantación completa eliminará dichas estadísticas. ¿Está seguro de que desea deshacerlo?,d75cb848
 STATUS,Estado,213765a6
+STATUS_DETAILS,Detalles del estado,bcb04832
 STATUS_WITH_STATUS,Estatus:{0},67587035
 STEEP_SLOPE,Pendiente pronunciada,5bde8271
 STORAGE,Almacenamiento,bba4a98a
