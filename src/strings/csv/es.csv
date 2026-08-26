@@ -1245,6 +1245,7 @@ NATIVE,Nativo,3ef34d4d
 NATIVE_CHECK,Verificación de especie nativa,474464e4
 NATIVE_CHECK_NO_UPDATES,No se detectaron actualizaciones en el estado nativo de las especies.,636bfefb
 NATIVE_CHECK_NO_UPDATES_HINT,El estado individual de la especie puede cambiarse en la pantalla de detalles de la especie.,21f7b4fe
+NATIVE_CHECK_UPDATE_HINT,Seleccione las especies para modificar su estado listado o continúe sin cambiar los resultados.,1b67a440
 NATIVE_ECOSYSTEM,Ecosistema autóctono,1a733f45
 NATIVE_ECOSYSTEM_TOOLTIP,"Indique el tipo de ecosistema en el cual se encuentra esta especie de forma natural; podría incluir detalles tales como el rango de elevación, pluviometría, etc.",188f8600
 NATIVE_FOREST,Bosque autóctono,bbd2ab56

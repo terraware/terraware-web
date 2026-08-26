@@ -618,7 +618,7 @@ const SpeciesCheckModal = ({
       >
         <SpeciesCheckStepper steps={stepLabels} activeStep={Math.min(step, stepLabels.length - 1)} />
 
-        {(currentKey === 'name' || (currentKey === 'native' && nativeMode === 'list')) && (
+        {currentKey === 'name' && (
           <Typography
             fontSize='16px'
             color={theme.palette.TwClrTxt}
@@ -627,6 +627,18 @@ const SpeciesCheckModal = ({
             marginBottom={theme.spacing(2)}
           >
             {strings.SPECIES_CHECK_UPDATE_HINT}
+          </Typography>
+        )}
+
+        {currentKey === 'native' && nativeMode === 'list' && (
+          <Typography
+            fontSize='16px'
+            color={theme.palette.TwClrTxt}
+            textAlign='left'
+            marginTop={theme.spacing(2)}
+            marginBottom={theme.spacing(2)}
+          >
+            {strings.NATIVE_CHECK_UPDATE_HINT}
           </Typography>
         )}
 
