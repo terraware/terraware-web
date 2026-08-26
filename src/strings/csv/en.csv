@@ -2233,7 +2233,7 @@ SPECIES_CHECK_SET_LOCATION_BANNER,"To check which species are native, introduced
 SPECIES_CHECK_SET_LOCATION_HINT,Select a Country and Botanical Country to set the location.,
 SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS,Select a Country and Botanical Country to set the location of each Project.,
 SPECIES_CHECK_SPECIES_CHECKED,{0} species checked,
-SPECIES_CHECK_UPDATE_HINT,"Select species to update, or continue without any updates. Updates will override pre-existing data."
+SPECIES_CHECK_UPDATE_HINT,"Select species to override their listed status or continue without changing the results."
 SPECIES_CHECK_UPDATES,{0} updates,
 SPECIES_CLASSIFICATION,Species Classification,
 SPECIES_DENSITY_WARNING_MESSAGE,"You have not entered plant density values for all species. If you do not enter plant density values for all species, the plant densities for this plot will not be set and no survival rate will be calculated for that species. Enter 0 for any species that were not planted in a plot.",
