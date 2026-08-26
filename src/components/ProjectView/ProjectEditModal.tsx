@@ -1,8 +1,9 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
 
 import CountryAndBotanicalCountrySelect from 'src/components/CountryAndBotanicalCountrySelect';
+import UpdateLocationModal from 'src/components/UpdateLocationModal';
 import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
@@ -30,6 +31,8 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
   const [countryCode, setCountryCode] = useState<string>();
   const [botanicalCountryCode, setBotanicalCountryCode] = useState<string>();
   const [validateFields, setValidateFields] = useState(false);
+  const [showUpdateLocation, setShowUpdateLocation] = useState(false);
+  const [isSavingConfirmedLocationUpdate, setIsSavingConfirmedLocationUpdate] = useState(false);
   const [updateProject, { isError, isSuccess, reset }] = useUpdateProjectMutation();
 
   const { availableProjects } = useProjects();
@@ -46,31 +49,54 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
     }
   }, [open, project]);
 
-  const saveProject = () => {
-    if (!project) {
-      return;
+  useEffect(() => {
+    if (!open) {
+      setShowUpdateLocation(false);
+      setIsSavingConfirmedLocationUpdate(false);
     }
+  }, [open]);
 
-    if (!name) {
-      setValidateFields(true);
-      return;
-    }
+  const locationChanged =
+    showProjectLocation &&
+    !!project?.botanicalCountryCode &&
+    (countryCode !== project?.countryCode || botanicalCountryCode !== project?.botanicalCountryCode);
 
-    void updateProject({
-      id: project.id,
-      updateProjectRequestPayload: {
-        name,
-        description,
-        ...(showProjectLocation
-          ? { countryCode: countryCode ?? null, botanicalCountryCode: botanicalCountryCode ?? null }
-          : {}),
-      },
-    });
-  };
+  const saveProject = useCallback(
+    (confirmed = false) => {
+      if (!project) {
+        setIsSavingConfirmedLocationUpdate(false);
+        return;
+      }
+
+      if (!name) {
+        setIsSavingConfirmedLocationUpdate(false);
+        setValidateFields(true);
+        return;
+      }
+
+      if (locationChanged && !confirmed) {
+        setShowUpdateLocation(true);
+        return;
+      }
+
+      void updateProject({
+        id: project.id,
+        updateProjectRequestPayload: {
+          name,
+          description,
+          ...(showProjectLocation
+            ? { countryCode: countryCode ?? null, botanicalCountryCode: botanicalCountryCode ?? null }
+            : {}),
+        },
+      });
+    },
+    [project, name, description, locationChanged, showProjectLocation, countryCode, botanicalCountryCode, updateProject]
+  );
 
   useEffect(() => {
     if (isError) {
       reset();
+      setIsSavingConfirmedLocationUpdate(false);
       snackbar.toastError();
     } else if (isSuccess && project) {
       reset();
@@ -101,55 +127,68 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
   ]);
 
   return (
-    <ScrollableDialogBox
-      onClose={onClose}
-      open={open}
-      title={project?.name ?? strings.EDIT_PROJECT}
-      size='medium'
-      middleButtons={[
-        <Button
-          id='cancelEditProject'
-          label={strings.CANCEL}
-          priority='secondary'
-          type='passive'
-          onClick={onClose}
-          key='button-1'
-        />,
-        <Button id='saveEditProject' label={strings.SAVE} onClick={saveProject} key='button-2' />,
-      ]}
-    >
-      <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
-        <Grid item xs={12}>
-          <TextField
-            id='name'
-            label={strings.NAME}
-            type='text'
-            onChange={(value) => setName(value as string)}
-            value={name}
-            errorText={validateFields && !name ? strings.REQUIRED_FIELD : ''}
-            required
-          />
+    <>
+      {showUpdateLocation && (
+        <UpdateLocationModal
+          locationName={name || (project?.name ?? '')}
+          onClose={() => setShowUpdateLocation(false)}
+          onConfirm={() => {
+            setShowUpdateLocation(false);
+            setIsSavingConfirmedLocationUpdate(true);
+            saveProject(true);
+          }}
+        />
+      )}
+      <ScrollableDialogBox
+        onClose={onClose}
+        open={open && !showUpdateLocation && !isSavingConfirmedLocationUpdate}
+        title={project?.name ?? strings.EDIT_PROJECT}
+        size='medium'
+        middleButtons={[
+          <Button
+            id='cancelEditProject'
+            label={strings.CANCEL}
+            priority='secondary'
+            type='passive'
+            onClick={onClose}
+            key='button-1'
+          />,
+          <Button id='saveEditProject' label={strings.SAVE} onClick={() => saveProject()} key='button-2' />,
+        ]}
+      >
+        <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
+          <Grid item xs={12}>
+            <TextField
+              id='name'
+              label={strings.NAME}
+              type='text'
+              onChange={(value) => setName(value as string)}
+              value={name}
+              errorText={validateFields && !name ? strings.REQUIRED_FIELD : ''}
+              required
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              id='description'
+              label={strings.DESCRIPTION}
+              type='text'
+              onChange={(value) => setDescription(value as string)}
+              value={description}
+            />
+          </Grid>
+          {showProjectLocation && (
+            <CountryAndBotanicalCountrySelect
+              countryCode={countryCode}
+              botanicalCountryCode={botanicalCountryCode}
+              onChange={({ countryCode: nextCountry, botanicalCountryCode: nextBotanical }) => {
+                setCountryCode(nextCountry);
+                setBotanicalCountryCode(nextBotanical);
+              }}
+            />
+          )}
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            id='description'
-            label={strings.DESCRIPTION}
-            type='text'
-            onChange={(value) => setDescription(value as string)}
-            value={description}
-          />
-        </Grid>
-        {showProjectLocation && (
-          <CountryAndBotanicalCountrySelect
-            countryCode={countryCode}
-            botanicalCountryCode={botanicalCountryCode}
-            onChange={({ countryCode: nextCountry, botanicalCountryCode: nextBotanical }) => {
-              setCountryCode(nextCountry);
-              setBotanicalCountryCode(nextBotanical);
-            }}
-          />
-        )}
-      </Grid>
-    </ScrollableDialogBox>
+      </ScrollableDialogBox>
+    </>
   );
 }

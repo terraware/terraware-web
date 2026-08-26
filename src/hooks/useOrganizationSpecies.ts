@@ -9,6 +9,7 @@ export type UseOrganizationSpeciesArgs = {
   organizationId?: number;
   /** When true, only species already in use by the organization are returned. */
   inUse?: boolean;
+  preferCacheValue?: boolean;
 };
 
 export type UseOrganizationSpeciesResult = {
@@ -17,25 +18,26 @@ export type UseOrganizationSpeciesResult = {
   /** Resolves the fresh species record for an id, or undefined when the id is missing/unknown. */
   findSpeciesById: (speciesId?: number | null) => Species | undefined;
   isLoading: boolean;
-  refetch: () => void;
+  refetch: () => Promise<void>;
 };
 
 export const useOrganizationSpecies = (args?: UseOrganizationSpeciesArgs): UseOrganizationSpeciesResult => {
   const { selectedOrganization } = useOrganization();
   const organizationId = args?.organizationId ?? selectedOrganization?.id;
   const inUse = args?.inUse;
+  const preferCacheValue = args?.preferCacheValue ?? true;
 
   const [listSpecies, { currentData, isFetching, isUninitialized }] = useLazyListSpeciesQuery();
 
   useEffect(() => {
     if (organizationId && organizationId > 0) {
-      void listSpecies({ organizationId, inUse }, true);
+      void listSpecies({ organizationId, inUse }, preferCacheValue);
     }
-  }, [listSpecies, organizationId, inUse, isUninitialized]);
+  }, [listSpecies, organizationId, inUse, preferCacheValue]);
 
-  const refetch = useCallback(() => {
+  const refetch = useCallback(async (): Promise<void> => {
     if (organizationId && organizationId > 0) {
-      void listSpecies({ organizationId, inUse }, false);
+      await listSpecies({ organizationId, inUse }, false);
     }
   }, [listSpecies, organizationId, inUse]);
 

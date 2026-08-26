@@ -1,50 +1,29 @@
-import React, { type JSX, useCallback, useEffect, useRef } from 'react';
-import { Route, Routes, useLocation } from 'react-router';
+import React, { type JSX } from 'react';
+import { Route, Routes } from 'react-router';
 
-import { Box, CircularProgress } from '@mui/material';
-
-import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
-import { APP_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import SpeciesAddView from 'src/scenes/Species/SpeciesAddView';
 import SpeciesDetailView from 'src/scenes/Species/SpeciesDetailView';
 import SpeciesEditView from 'src/scenes/Species/SpeciesEditView';
 import SpeciesListView from 'src/scenes/Species/SpeciesListView';
 
+const SpeciesAddRoute = (): JSX.Element => {
+  const { refetch } = useOrganizationSpecies();
+  return <SpeciesAddView reloadData={() => void refetch()} />;
+};
+
+const SpeciesDetailRoute = (): JSX.Element => {
+  const { refetch } = useOrganizationSpecies();
+  return <SpeciesDetailView reloadData={() => void refetch()} />;
+};
+
 const SpeciesRouter = () => {
-  const { species, isLoading, refetch } = useOrganizationSpecies();
-  const location = useLocation();
-  const isListRoute = location.pathname === (APP_PATHS.SPECIES as string);
-  const wasListRoute = useRef(isListRoute);
-  useEffect(() => {
-    if (isListRoute && !wasListRoute.current) {
-      refetch();
-    }
-    wasListRoute.current = isListRoute;
-  }, [isListRoute, refetch]);
-
-  const getSpeciesView = useCallback((): JSX.Element => {
-    if (species.length > 0) {
-      return <SpeciesListView reloadData={refetch} species={species} />;
-    }
-
-    if (isLoading) {
-      return (
-        <Box sx={{ display: 'flex', justifyContent: 'center', paddingTop: '64px' }}>
-          <CircularProgress />
-        </Box>
-      );
-    }
-
-    return <EmptyStatePage pageName={'Species'} reloadData={refetch} />;
-  }, [isLoading, species, refetch]);
-
   return (
     <Routes>
-      <Route path={'/new'} element={<SpeciesAddView reloadData={refetch} />} />
-      <Route path={'/:speciesId'} element={<SpeciesDetailView reloadData={refetch} />} />
+      <Route path={'/new'} element={<SpeciesAddRoute />} />
+      <Route path={'/:speciesId'} element={<SpeciesDetailRoute />} />
       <Route path={'/:speciesId/edit'} element={<SpeciesEditView />} />
-      <Route path={'/*'} element={getSpeciesView()} />
+      <Route path={'/*'} element={<SpeciesListView />} />
     </Routes>
   );
 };

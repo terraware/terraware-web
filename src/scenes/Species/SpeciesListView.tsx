@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, ClickAwayListener, IconButton, Popover, Tooltip, useTheme } from '@mui/material';
+import { Box, CircularProgress, ClickAwayListener, IconButton, Popover, Tooltip, useTheme } from '@mui/material';
 import { Badge, DropdownItem, Message } from '@terraware/web-components';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import {
@@ -16,24 +16,24 @@ import {
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
-import EmptyMessage from 'src/components/common/EmptyMessage';
 import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextTruncated from 'src/components/common/TextTruncated';
 import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
+import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
+import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS, type SpeciesIntelligenceBannerType } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import SearchService from 'src/services/SearchService';
+import { useListSpeciesAcceleratorProjectsQuery } from 'src/queries/search/species';
 import strings from 'src/strings';
-import { SearchRequestPayload } from 'src/types/Search';
 import {
   Species,
   SpeciesProjectElement,
@@ -42,7 +42,6 @@ import {
 } from 'src/types/Species';
 import { makeCsv } from 'src/utils/csv';
 import { isContributor } from 'src/utils/organization';
-import { getRequestId, setRequestId } from 'src/utils/requestsId';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 
@@ -55,6 +54,7 @@ import SpeciesNativityBadge from './SpeciesNativityBadge';
 import { SpeciesSearchResultRow } from './types';
 
 const TABLE_STATE_STORAGE_KEY = 'species-list-table';
+const EMPTY_ACCELERATOR_PROJECT_NAMES_BY_SPECIES_ID: Record<number, string[]> = {};
 
 const nativityOf = (element?: SpeciesProjectElement): Nativity | undefined =>
   element?.overriddenNativity ?? element?.calculatedNativity;
@@ -113,22 +113,23 @@ const ProblemsCellComponent = ({ row, reloadData, onRowClick }: ProblemsCellProp
   );
 };
 
-type SpeciesListProps = {
-  reloadData: () => void;
-  species: Species[];
-};
-
-export default function SpeciesListView({ reloadData, species }: SpeciesListProps): JSX.Element {
+export default function SpeciesListView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
+  const { species, isLoading, refetch: reloadData } = useOrganizationSpecies({ preferCacheValue: false });
   const theme = useTheme();
   const trackEvent = useTrackEvent();
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
-  const [results, setResults] = useState<SpeciesSearchResultRow[]>();
   const query = useQuery();
   const navigate = useSyncNavigate();
   const { activeLocale } = useLocalization();
   const { availableProjects } = useProjects();
+  const organizationId = selectedOrganization?.id;
+  const { data: acceleratorProjectNamesBySpeciesId = EMPTY_ACCELERATOR_PROJECT_NAMES_BY_SPECIES_ID } =
+    useListSpeciesAcceleratorProjectsQuery(organizationId ?? -1, {
+      skip: !organizationId || species.length === 0,
+      refetchOnMountOrArgChange: true,
+    });
 
   const contentRef = React.useRef(null);
 
@@ -303,82 +304,31 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     return map;
   }, [showStatusColumn, species, resolveScopeNativities]);
 
-  const getParams = useCallback((): SearchRequestPayload => {
-    if (!selectedOrganization) {
-      return {
-        prefix: 'species',
-        fields: [],
-        search: { operation: 'and', children: [] },
-        count: 0,
-      };
-    }
+  const projectNamesBySpeciesId = useMemo(() => {
+    const map = new Map<number, string[]>();
+    species.forEach((sp) => {
+      const names: string[] = [];
+      sp.projects?.forEach((project) => {
+        if (project.projectId !== undefined) {
+          const name = availableProjects?.find((p) => p.id === project.projectId)?.name;
+          if (name) {
+            names.push(name);
+          }
+        }
+      });
+      map.set(sp.id, names);
+    });
+    return map;
+  }, [species, availableProjects]);
 
-    return {
-      prefix: 'species',
-      fields: [
-        'scientificName',
-        'commonName',
-        'conservationCategory',
-        'familyName',
-        'seedStorageBehavior',
-        'id',
-        'createdTime',
-        'modifiedTime',
-        'rare',
-        'growthForms.growthForm',
-        'ecosystemTypes.ecosystemType',
-        'organization_id',
-        'participantProjectSpecies.project.id',
-        'participantProjectSpecies.project.name',
-      ],
-      search: {
-        operation: 'and',
-        children: [
-          {
-            operation: 'field',
-            field: 'organization_id',
-            type: 'Exact',
-            values: [selectedOrganization.id],
-          },
-        ],
-      },
-      count: 0,
-    };
-  }, [selectedOrganization]);
-
-  const onApplyFilters = useCallback(async () => {
-    const params = getParams();
-
-    if (species) {
-      const requestId = Math.random().toString();
-      setRequestId('searchSpecies', requestId);
-      const searchResults = await SearchService.search(params);
-      if (getRequestId('searchSpecies') === requestId) {
-        const speciesResults: SpeciesSearchResultRow[] = [];
-        searchResults?.forEach((result) => {
-          speciesResults.push({
-            id: Number(result.id),
-            acceleratorProjects: (result.acceleratorProjectSpecies as any[])?.map(
-              (ppsData) => ppsData.project.name
-            ) as string[],
-            problems: species.find((sp) => sp.id.toString() === (result.id as string))?.problems,
-            scientificName: result.scientificName as string,
-            commonName: result.commonName as string,
-            familyName: result.familyName as string,
-            growthForms: (result.growthForms as any[])?.map((growthFormData) => growthFormData.growthForm) as string[],
-            seedStorageBehavior: result.seedStorageBehavior as string,
-            ecosystemTypes: (result.ecosystemTypes as any[])?.map((et) => et.ecosystemType) as string[],
-            rare: result.rare === strings.BOOLEAN_TRUE ? 'true' : 'false',
-            conservationCategory: result.conservationCategory as string,
-            createdTime: result.createdTime as string,
-            modifiedTime: result.modifiedTime as string,
-          });
-        });
-
-        setResults(speciesResults);
-      }
-    }
-  }, [getParams, species]);
+  const results = useMemo<SpeciesSearchResultRow[]>(
+    () =>
+      species.map((sp) => ({
+        ...sp,
+        acceleratorProjects: acceleratorProjectNamesBySpeciesId[sp.id],
+      })),
+    [species, acceleratorProjectNamesBySpeciesId]
+  );
 
   useEffect(() => {
     const shouldCheckData = query.has('checkData');
@@ -388,10 +338,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       navigate({ pathname: APP_PATHS.SPECIES, search: query.toString() }, { replace: true });
     }
   }, [query, setCheckDataModalOpen, navigate]);
-
-  useEffect(() => {
-    void onApplyFilters();
-  }, [onApplyFilters]);
 
   // Unique filter option values derived from results (client-side)
   const uniqueConservationCategories = useMemo(() => {
@@ -425,23 +371,6 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       ).sort(),
     [results]
   );
-
-  const projectNamesBySpeciesId = useMemo(() => {
-    const map = new Map<number, string[]>();
-    species?.forEach((sp) => {
-      const names: string[] = [];
-      sp.projects?.forEach((project) => {
-        if (project.projectId !== undefined) {
-          const name = availableProjects?.find((p) => p.id === project.projectId)?.name;
-          if (name) {
-            names.push(name);
-          }
-        }
-      });
-      map.set(sp.id, names);
-    });
-    return map;
-  }, [species, availableProjects]);
 
   const availableProjectNames = useMemo(
     () => (availableProjects ?? []).map((project) => project.name).sort((a, b) => a.localeCompare(b)),
@@ -491,7 +420,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
 
   const onCloseImportSpeciesModal = (completed: boolean) => {
     if (completed && reloadData) {
-      reloadData();
+      void reloadData();
       if (speciesCheckEnabled) {
         openSpeciesCheck('added');
       } else {
@@ -508,12 +437,10 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const reviewErrorsHandler = (hasErrors: boolean) => {
     setCheckDataModalOpen(false);
     setShowProblemsColumn(hasErrors);
-    void onApplyFilters();
   };
 
   const reloadDataProblemsHandler = useCallback(async () => {
     setHasNewData(false);
-    // eslint-disable-next-line @typescript-eslint/await-thenable
     await reloadData();
     setHandleProblemsColumn(true);
   }, [reloadData]);
@@ -564,7 +491,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     const list = value ? value.split(', ') : [];
     return (
       <TextTruncated
-        fontSize={16}
+        fontSize={14}
         stringList={list}
         width={150}
         listSeparator={strings.LIST_SEPARATOR_SECONDARY}
@@ -590,7 +517,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   const AcceleratorProjectsCell = useCallback(({ cell }: { cell: MRT_Cell<SpeciesSearchResultRow> }) => {
     const value = cell.getValue() as string | undefined;
     const list = value ? value.split(', ') : [];
-    return <TextTruncated fontSize={16} stringList={list} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />;
+    return <TextTruncated fontSize={14} stringList={list} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />;
   }, []);
 
   const ProjectCell = useCallback(({ cell }: { cell: MRT_Cell<SpeciesSearchResultRow> }) => {
@@ -598,7 +525,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     const list = value ? value.split(', ') : [];
     return (
       <TextTruncated
-        fontSize={16}
+        fontSize={14}
         stringList={list}
         width={150}
         listSeparator={strings.LIST_SEPARATOR_SECONDARY}
@@ -742,7 +669,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         : []),
       {
         id: 'acceleratorProjects',
-        header: strings.PROJECTS,
+        header: strings.ACCELERATOR_PROJECTS,
         accessorFn: (row: SpeciesSearchResultRow) => (row.acceleratorProjects ?? []).join(', '),
         enableEditing: false,
         filterVariant: 'multi-select' as const,
@@ -762,7 +689,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
       {
         id: 'rare',
         header: strings.RARE,
-        accessorFn: (row: SpeciesSearchResultRow) => (row.rare === 'true' ? strings.YES : strings.NO),
+        accessorFn: (row: SpeciesSearchResultRow) => (row.rare ? strings.YES : strings.NO),
         enableEditing: false,
         filterVariant: 'select',
         filterSelectOptions: [strings.YES, strings.NO],
@@ -823,6 +750,20 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     EcosystemTypesCell,
   ]);
 
+  if (!species.length) {
+    if (isLoading) {
+      return (
+        <TfMain>
+          <Box sx={{ display: 'flex', justifyContent: 'center', paddingTop: '64px' }}>
+            <CircularProgress />
+          </Box>
+        </TfMain>
+      );
+    }
+
+    return <EmptyStatePage pageName={'Species'} reloadData={() => void reloadData()} />;
+  }
+
   return (
     <TfMain>
       <CheckDataModal
@@ -830,7 +771,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         onClose={() => setCheckDataModalOpen(false)}
         species={species}
         reviewErrors={reviewErrorsHandler}
-        reloadData={reloadData}
+        reloadData={() => void reloadData()}
       />
       <ImportSpeciesModal
         open={importSpeciesModalOpen}
@@ -915,7 +856,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                 {strings.SPECIES}
               </h1>
             </Box>
-            {species && species.length > 0 && !isMobile && userCanEdit && (
+            {!isMobile && userCanEdit && (
               <div>
                 <Button id='add-species' label={strings.ADD_SPECIES} icon='plus' onClick={onNewSpecies} size='medium' />
                 <OptionsMenu
@@ -932,7 +873,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
             {isMobile && userCanEdit && (
               <Box display='flex' alignItems='center' gap={theme.spacing(0.5)}>
                 <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' style={{ marginRight: 0 }} />
-                {speciesCheckEnabled && species && species.length > 0 && (
+                {speciesCheckEnabled && (
                   <OptionsMenu
                     onOptionItemClick={onOptionItemClick}
                     optionItems={[{ label: strings.RUN_SPECIES_CHECK, value: 'runSpeciesCheck' }]}
@@ -946,101 +887,87 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
         </PageHeaderWrapper>
       </Box>
       <Card flushMobile>
-        {species && species.length ? (
-          <EditableTable
-            clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-            columns={editableColumns}
-            data={results ?? []}
-            enableEditing={false}
-            enableSorting={true}
-            enableGlobalFilter={true}
-            enableColumnFilters={true}
-            enableColumnOrdering={true}
-            stickyFilters={true}
-            storageKey={TABLE_STATE_STORAGE_KEY}
-            enablePagination={true}
-            enableTopToolbar={true}
-            enableBottomToolbar={true}
-            tableOptions={{
-              state: {
-                sorting,
-                columnFilters,
-                columnOrder,
-                columnVisibility,
-                density,
-                pagination,
-                showColumnFilters,
-                showGlobalFilter,
-              },
-              onSortingChange: setSorting,
-              onColumnFiltersChange: setColumnFilters,
-              onPaginationChange,
-              onColumnOrderChange: setColumnOrder,
-              onColumnVisibilityChange: setColumnVisibility,
-              onShowColumnFiltersChange: setShowColumnFilters,
-              onShowGlobalFilterChange: setShowGlobalFilter,
-              onDensityChange,
-              enableColumnPinning: true,
-              enableColumnActions: true,
-              enableHiding: true,
-              enableColumnDragging: true,
-              positionGlobalFilter: 'right',
-              getRowId: (row) => String(row.id),
-              renderToolbarInternalActions: ({ table }) => (
-                <Box display='flex' gap={0.5}>
-                  <Tooltip title={strings.EXPORT}>
-                    <IconButton onClick={() => downloadReportHandler(table)}>
-                      <Icon name='iconExport' size='medium' />
-                    </IconButton>
-                  </Tooltip>
-                  <MRT_ToggleGlobalFilterButton table={table} />
-                  <MRT_ToggleFiltersButton table={table} />
-                  <MRT_ShowHideColumnsButton table={table} />
-                  <MRT_ToggleDensePaddingButton table={table} />
-                  <MRT_ToggleFullScreenButton table={table} />
-                </Box>
-              ),
-              muiTableBodyCellProps: ({ row, column, table }) => {
-                const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
-                return { id: `row${visualIndex + 1}-${column.id}` };
-              },
-              muiTableBodyProps: {
-                sx: {
-                  '& tr:nth-of-type(odd) > td': {
-                    backgroundColor: theme.palette.TwClrBaseGray025,
-                  },
+        <EditableTable
+          clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+          columns={editableColumns}
+          data={results}
+          enableEditing={false}
+          enableSorting={true}
+          enableGlobalFilter={true}
+          enableColumnFilters={true}
+          enableColumnOrdering={true}
+          stickyFilters={true}
+          storageKey={TABLE_STATE_STORAGE_KEY}
+          enablePagination={true}
+          enableTopToolbar={true}
+          enableBottomToolbar={true}
+          tableOptions={{
+            state: {
+              sorting,
+              columnFilters,
+              columnOrder,
+              columnVisibility,
+              density,
+              pagination,
+              showColumnFilters,
+              showGlobalFilter,
+            },
+            onSortingChange: setSorting,
+            onColumnFiltersChange: setColumnFilters,
+            onPaginationChange,
+            onColumnOrderChange: setColumnOrder,
+            onColumnVisibilityChange: setColumnVisibility,
+            onShowColumnFiltersChange: setShowColumnFilters,
+            onShowGlobalFilterChange: setShowGlobalFilter,
+            onDensityChange,
+            enableColumnPinning: true,
+            enableColumnActions: true,
+            enableHiding: true,
+            enableColumnDragging: true,
+            positionGlobalFilter: 'right',
+            getRowId: (row) => String(row.id),
+            renderToolbarInternalActions: ({ table }) => (
+              <Box display='flex' gap={0.5}>
+                <Tooltip title={strings.EXPORT}>
+                  <IconButton onClick={() => downloadReportHandler(table)}>
+                    <Icon name='iconExport' size='medium' />
+                  </IconButton>
+                </Tooltip>
+                <MRT_ToggleGlobalFilterButton table={table} />
+                <MRT_ToggleFiltersButton table={table} />
+                <MRT_ShowHideColumnsButton table={table} />
+                <MRT_ToggleDensePaddingButton table={table} />
+                <MRT_ToggleFullScreenButton table={table} />
+              </Box>
+            ),
+            muiTableBodyCellProps: ({ row, column, table }) => {
+              const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
+              return { id: `row${visualIndex + 1}-${column.id}` };
+            },
+            muiTableBodyProps: {
+              sx: {
+                '& tr:nth-of-type(odd) > td': {
+                  backgroundColor: theme.palette.TwClrBaseGray025,
                 },
               },
-              muiTablePaperProps: {
-                elevation: 0,
-              },
-              muiTopToolbarProps: {
-                sx: {
+            },
+            muiTablePaperProps: {
+              elevation: 0,
+            },
+            muiTopToolbarProps: {
+              sx: {
+                position: 'relative',
+                '& > .MuiBox-root': {
                   position: 'relative',
-                  '& > .MuiBox-root': {
-                    position: 'relative',
-                  },
-                  '& .Mui-ToolbarDropZone': {
-                    display: 'none',
-                  },
+                },
+                '& .Mui-ToolbarDropZone': {
+                  display: 'none',
                 },
               },
-            }}
-            sx={{ padding: 0 }}
-          />
-        ) : (
-          <EmptyMessage
-            title={strings.ADD_A_SPECIES}
-            text={strings.SPECIES_EMPTY_MSG_BODY}
-            buttonText={strings.ADD_SPECIES}
-            onClick={onNewSpecies}
-            sx={{
-              margin: '0 auto',
-              width: '50%',
-              marginTop: '10%',
-            }}
-          />
-        )}
+            },
+          }}
+          sx={{ padding: 0 }}
+        />
       </Card>
     </TfMain>
   );
