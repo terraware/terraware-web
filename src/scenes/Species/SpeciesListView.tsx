@@ -29,7 +29,7 @@ import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
-import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
+import { MIXPANEL_EVENTS, type SpeciesIntelligenceBannerType } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import SearchService from 'src/services/SearchService';
 import strings from 'src/strings';
@@ -58,6 +58,9 @@ const TABLE_STATE_STORAGE_KEY = 'species-list-table';
 
 const nativityOf = (element?: SpeciesProjectElement): Nativity | undefined =>
   element?.overriddenNativity ?? element?.calculatedNativity;
+
+const SET_LOCATION_BANNER_TYPE: SpeciesIntelligenceBannerType = 'set_location';
+const SPECIES_ADDED_BANNER_TYPE: SpeciesIntelligenceBannerType = 'species_added';
 
 type ProblemsCellProps = {
   row: SpeciesSearchResultRow;
@@ -151,6 +154,24 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
     setSpeciesCheckOpen(true);
   }, []);
 
+  const trackBannerShown = useCallback(
+    (bannerType: SpeciesIntelligenceBannerType) => {
+      trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_BANNER_SHOWN, {
+        banner_type: bannerType,
+      });
+    },
+    [trackEvent]
+  );
+
+  const trackBannerDismissed = useCallback(
+    (bannerType: SpeciesIntelligenceBannerType) => {
+      trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_BANNER_DISMISSED, {
+        banner_type: bannerType,
+      });
+    },
+    [trackEvent]
+  );
+
   const noLocationSet = hasMultipleProjects
     ? (availableProjects ?? []).every((p) => !p.botanicalCountryCode)
     : !selectedOrganization?.botanicalCountryCode;
@@ -190,9 +211,27 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
   useEffect(() => {
     if (showFirstTimeBanner && !firstTimeBannerImpressionRef.current) {
       firstTimeBannerImpressionRef.current = true;
-      trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_BANNER_SHOWN, {});
+      trackBannerShown(SET_LOCATION_BANNER_TYPE);
     }
-  }, [showFirstTimeBanner, trackEvent]);
+  }, [showFirstTimeBanner, trackBannerShown]);
+
+  const addedBannerWasShownRef = React.useRef(false);
+  useEffect(() => {
+    if (showAddedBanner && !addedBannerWasShownRef.current) {
+      trackBannerShown(SPECIES_ADDED_BANNER_TYPE);
+    }
+    addedBannerWasShownRef.current = showAddedBanner;
+  }, [showAddedBanner, trackBannerShown]);
+
+  const dismissFirstTimeBanner = useCallback(() => {
+    trackBannerDismissed(SET_LOCATION_BANNER_TYPE);
+    setFirstTimeBannerDismissed(true);
+  }, [trackBannerDismissed]);
+
+  const dismissAddedBanner = useCallback(() => {
+    trackBannerDismissed(SPECIES_ADDED_BANNER_TYPE);
+    setAddedBannerDismissed(true);
+  }, [trackBannerDismissed]);
 
   const {
     columnFilters,
@@ -816,7 +855,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
               priority='info'
               body={strings.SPECIES_CHECK_SET_LOCATION_BANNER}
               showCloseButton
-              onClose={() => setFirstTimeBannerDismissed(true)}
+              onClose={dismissFirstTimeBanner}
               pageButtons={[
                 <Button
                   key='run'
@@ -839,7 +878,7 @@ export default function SpeciesListView({ reloadData, species }: SpeciesListProp
                 uncheckedSpecies.map((sp) => sp.scientificName).join(', ')
               )}
               showCloseButton
-              onClose={() => setAddedBannerDismissed(true)}
+              onClose={dismissAddedBanner}
               pageButtons={[
                 <Button
                   key='run'

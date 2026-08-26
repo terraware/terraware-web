@@ -7,6 +7,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useUpdateProjectMutation } from 'src/queries/generated/projects';
@@ -42,6 +43,12 @@ type SpeciesCheckModalProps = {
 
 type StepKey = 'setLocation' | 'name' | 'native';
 
+const SAVE_FAILURE_ENTITY_TYPES = {
+  setLocation: 'species_intelligence_location',
+  nameCheck: 'species_intelligence_name_check',
+  nativeCheck: 'species_intelligence_native_check',
+} as const;
+
 const SpeciesCheckModal = ({
   open,
   onClose,
@@ -56,6 +63,7 @@ const SpeciesCheckModal = ({
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const { botanicalCountries } = useBotanicalCountries(!open);
   const trackEvent = useTrackEvent();
+  const markSubmitted = useTrackModalAbandonment('species_check', open);
 
   const [updateProject] = useUpdateProjectMutation();
   const [acceptProblem] = useAcceptProblemSuggestionMutation();
@@ -169,6 +177,13 @@ const SpeciesCheckModal = ({
     [botanicalCountries]
   );
 
+  const trackSaveFailed = useCallback(
+    (entityType: (typeof SAVE_FAILURE_ENTITY_TYPES)[keyof typeof SAVE_FAILURE_ENTITY_TYPES]) => {
+      trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: entityType });
+    },
+    [trackEvent]
+  );
+
   const targetData = useMemo(
     () =>
       targets.map((target) => {
@@ -229,6 +244,14 @@ const SpeciesCheckModal = ({
   const hasAnyPending = nativeSections.some((section) => section.pending.length > 0);
 
   const goToStep = useCallback((key: StepKey) => setStep(stepKeys.indexOf(key)), [stepKeys]);
+
+  const goBackToLocationStep = useCallback(() => {
+    goToStep('setLocation');
+    trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_SHOWN, {
+      project_count: projects.length,
+      trigger: 'back-navigation',
+    });
+  }, [goToStep, projects.length, trackEvent]);
 
   const toggleName = useCallback((speciesId: number) => {
     setNameSelected((previous) => {
@@ -305,6 +328,7 @@ const SpeciesCheckModal = ({
         ).length,
       });
     } catch {
+      trackSaveFailed(SAVE_FAILURE_ENTITY_TYPES.setLocation);
       snackbar.toastError();
     }
     setBusy(false);
@@ -318,6 +342,7 @@ const SpeciesCheckModal = ({
     snackbar,
     targets,
     trackEvent,
+    trackSaveFailed,
     updateProject,
   ]);
 
@@ -337,10 +362,11 @@ const SpeciesCheckModal = ({
       }
       goToStep('native');
     } catch {
+      trackSaveFailed(SAVE_FAILURE_ENTITY_TYPES.nameCheck);
       snackbar.toastError();
     }
     setBusy(false);
-  }, [acceptProblem, goToStep, nameSelected, reloadSpecies, snackbar, speciesWithProblems]);
+  }, [acceptProblem, goToStep, nameSelected, reloadSpecies, snackbar, speciesWithProblems, trackSaveFailed]);
 
   const trackCheckCompleted = useCallback(
     (submittedOverrides: { projectId?: number; speciesId: number; overriddenNativity: Nativity }[] = []) => {
@@ -384,18 +410,28 @@ const SpeciesCheckModal = ({
       }
       trackCheckCompleted();
     } catch {
+      trackSaveFailed(SAVE_FAILURE_ENTITY_TYPES.nativeCheck);
       snackbar.toastError();
     } finally {
       reloadSpecies();
     }
-  }, [acceptPending, hasAnyPending, reloadSpecies, selectedOrganization, snackbar, trackCheckCompleted]);
+  }, [
+    acceptPending,
+    hasAnyPending,
+    reloadSpecies,
+    selectedOrganization,
+    snackbar,
+    trackCheckCompleted,
+    trackSaveFailed,
+  ]);
 
   const onFinish = useCallback(async () => {
     setBusy(true);
     await finish();
+    markSubmitted();
     setBusy(false);
     onClose();
-  }, [finish, onClose]);
+  }, [finish, markSubmitted, onClose]);
 
   const onOverride = useCallback(async () => {
     setBusy(true);
@@ -428,8 +464,10 @@ const SpeciesCheckModal = ({
         await acceptPending({ organizationId: selectedOrganization.id }).unwrap();
       }
       trackCheckCompleted(overrides);
+      markSubmitted();
       onClose();
     } catch {
+      trackSaveFailed(SAVE_FAILURE_ENTITY_TYPES.nativeCheck);
       snackbar.toastError();
     } finally {
       reloadSpecies();
@@ -445,8 +483,10 @@ const SpeciesCheckModal = ({
     reloadSpecies,
     selectedOrganization,
     snackbar,
+    markSubmitted,
     trackCheckCompleted,
     trackEvent,
+    trackSaveFailed,
   ]);
 
   const anyLocationEditValid = targets.some(isLocationComplete);
@@ -457,6 +497,7 @@ const SpeciesCheckModal = ({
 
   const requestCancel = useCallback(() => {
     if (currentKey === 'setLocation') {
+      markSubmitted();
       trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_CANCELLED, {
         project_count: projects.length,
       });
@@ -464,7 +505,7 @@ const SpeciesCheckModal = ({
     } else {
       setShowCancel(true);
     }
-  }, [currentKey, onClose, projects.length, trackEvent]);
+  }, [currentKey, markSubmitted, onClose, projects.length, trackEvent]);
 
   const middleButtons = useMemo<JSX.Element[]>(() => {
     const cancelButton = (
@@ -497,7 +538,7 @@ const SpeciesCheckModal = ({
         <Button
           key='back'
           label={strings.BACK}
-          onClick={() => goToStep('setLocation')}
+          onClick={goBackToLocationStep}
           priority='secondary'
           type='passive'
           disabled={busy}
@@ -551,6 +592,7 @@ const SpeciesCheckModal = ({
     allOverridesValid,
     busy,
     currentKey,
+    goBackToLocationStep,
     goToStep,
     nativeMode,
     nativeSelected.size,
