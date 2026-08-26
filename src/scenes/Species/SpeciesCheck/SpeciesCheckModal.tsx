@@ -409,9 +409,11 @@ const SpeciesCheckModal = ({
         await acceptPending({ organizationId: selectedOrganization.id }).unwrap();
       }
       trackCheckCompleted();
+      return true;
     } catch {
       trackSaveFailed(SAVE_FAILURE_ENTITY_TYPES.nativeCheck);
       snackbar.toastError();
+      return false;
     } finally {
       reloadSpecies();
     }
@@ -427,8 +429,10 @@ const SpeciesCheckModal = ({
 
   const onFinish = useCallback(async () => {
     setBusy(true);
-    await finish();
-    markSubmitted();
+    const succeeded = await finish();
+    if (succeeded) {
+      markSubmitted();
+    }
     setBusy(false);
     onClose();
   }, [finish, markSubmitted, onClose]);
