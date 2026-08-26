@@ -32,6 +32,7 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
   const [botanicalCountryCode, setBotanicalCountryCode] = useState<string>();
   const [validateFields, setValidateFields] = useState(false);
   const [showUpdateLocation, setShowUpdateLocation] = useState(false);
+  const [isSavingConfirmedLocationUpdate, setIsSavingConfirmedLocationUpdate] = useState(false);
   const [updateProject, { isError, isSuccess, reset }] = useUpdateProjectMutation();
 
   const { availableProjects } = useProjects();
@@ -48,6 +49,13 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
     }
   }, [open, project]);
 
+  useEffect(() => {
+    if (!open) {
+      setShowUpdateLocation(false);
+      setIsSavingConfirmedLocationUpdate(false);
+    }
+  }, [open]);
+
   const locationChanged =
     showProjectLocation &&
     !!project?.botanicalCountryCode &&
@@ -56,10 +64,12 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
   const saveProject = useCallback(
     (confirmed = false) => {
       if (!project) {
+        setIsSavingConfirmedLocationUpdate(false);
         return;
       }
 
       if (!name) {
+        setIsSavingConfirmedLocationUpdate(false);
         setValidateFields(true);
         return;
       }
@@ -86,6 +96,7 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
   useEffect(() => {
     if (isError) {
       reset();
+      setIsSavingConfirmedLocationUpdate(false);
       snackbar.toastError();
     } else if (isSuccess && project) {
       reset();
@@ -123,13 +134,14 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
           onClose={() => setShowUpdateLocation(false)}
           onConfirm={() => {
             setShowUpdateLocation(false);
+            setIsSavingConfirmedLocationUpdate(true);
             saveProject(true);
           }}
         />
       )}
       <ScrollableDialogBox
         onClose={onClose}
-        open={open}
+        open={open && !showUpdateLocation && !isSavingConfirmedLocationUpdate}
         title={project?.name ?? strings.EDIT_PROJECT}
         size='medium'
         middleButtons={[

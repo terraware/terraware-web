@@ -43,6 +43,7 @@ export default function EditOrganizationModal({
   const [organizationTypeDetailsError, setOrganizationTypeDetailsError] = useState('');
   const [requireSubdivision, setRequireSubdivisions] = useState(!!organization.countrySubdivisionCode);
   const [showUpdateLocation, setShowUpdateLocation] = useState(false);
+  const [isSavingConfirmedLocationUpdate, setIsSavingConfirmedLocationUpdate] = useState(false);
   const snackbar = useSnackbar();
   const timeZones = useTimeZones();
   const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;
@@ -67,6 +68,13 @@ export default function EditOrganizationModal({
       setRequireSubdivisions(!!organization.countrySubdivisionCode);
     }
   }, [open, organization, setOrganizationRecord]);
+
+  useEffect(() => {
+    if (!open) {
+      setShowUpdateLocation(false);
+      setIsSavingConfirmedLocationUpdate(false);
+    }
+  }, [open]);
 
   const organizationTypeOptions = useMemo(() => {
     if (!activeLocale) {
@@ -130,6 +138,7 @@ export default function EditOrganizationModal({
       }
 
       if (hasErrors) {
+        setIsSavingConfirmedLocationUpdate(false);
         return;
       }
 
@@ -142,10 +151,11 @@ export default function EditOrganizationModal({
       if (response.requestSucceeded) {
         snackbar.toastSuccess(strings.CHANGES_SAVED);
         await reloadOrganizationData(organizationRecord.id);
+        onClose();
       } else {
+        setIsSavingConfirmedLocationUpdate(false);
         snackbar.toastError();
       }
-      onClose();
     },
     [organizationRecord, requireSubdivision, locationChanged, snackbar, strings, reloadOrganizationData, onClose]
   );
@@ -158,13 +168,14 @@ export default function EditOrganizationModal({
           onClose={() => setShowUpdateLocation(false)}
           onConfirm={() => {
             setShowUpdateLocation(false);
+            setIsSavingConfirmedLocationUpdate(true);
             void saveOrganization(true);
           }}
         />
       )}
       <ScrollableDialogBox
         onClose={onClose}
-        open={open}
+        open={open && !showUpdateLocation && !isSavingConfirmedLocationUpdate}
         title={strings.EDIT_ORGANIZATION}
         size='medium'
         maxHeight={'calc(100vh - 120px)'}
