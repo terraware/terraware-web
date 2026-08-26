@@ -368,15 +368,12 @@ const SpeciesCheckModal = ({
           }
         }
       }
-      if (toAccept.length) {
-        void reloadSpecies();
-      }
       goToStep('native');
     } catch {
       snackbar.toastError();
     }
     setBusy(false);
-  }, [acceptProblem, goToStep, nameSelected, reloadSpecies, snackbar, speciesWithProblems]);
+  }, [acceptProblem, goToStep, nameSelected, snackbar, speciesWithProblems]);
 
   const trackCheckCompleted = useCallback(
     (submittedOverrides: { projectId?: number; speciesId: number; overriddenNativity: Nativity }[] = []) => {
@@ -416,15 +413,14 @@ const SpeciesCheckModal = ({
   const finish = useCallback(async () => {
     try {
       if (selectedOrganization && hasAnyPending) {
+        // acceptPendingNativities invalidates the Species tag, so the list refetches.
         await acceptPending({ organizationId: selectedOrganization.id }).unwrap();
       }
       trackCheckCompleted();
     } catch {
       snackbar.toastError();
-    } finally {
-      void reloadSpecies();
     }
-  }, [acceptPending, hasAnyPending, reloadSpecies, selectedOrganization, snackbar, trackCheckCompleted]);
+  }, [acceptPending, hasAnyPending, selectedOrganization, snackbar, trackCheckCompleted]);
 
   const onFinish = useCallback(async () => {
     setBusy(true);
@@ -468,7 +464,6 @@ const SpeciesCheckModal = ({
     } catch {
       snackbar.toastError();
     } finally {
-      void reloadSpecies();
       setBusy(false);
     }
   }, [
@@ -478,7 +473,6 @@ const SpeciesCheckModal = ({
     nativeSelected,
     overrideEdits,
     overrideSpecies,
-    reloadSpecies,
     selectedOrganization,
     snackbar,
     trackCheckCompleted,

@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
@@ -100,53 +100,55 @@ export default function EditOrganizationModal({
     (organizationRecord.countryCode !== organization.countryCode ||
       organizationRecord.botanicalCountryCode !== organization.botanicalCountryCode);
 
-  const performSave = async () => {
-    const response = await OrganizationService.updateOrganization(organizationRecord);
-    if (response.requestSucceeded) {
-      snackbar.toastSuccess(strings.CHANGES_SAVED);
-      await reloadOrganizationData(organizationRecord.id);
-    } else {
-      snackbar.toastError();
-    }
-    onClose();
-  };
+  const saveOrganization = useCallback(
+    async (confirmed = false) => {
+      let hasErrors = false;
+      if (organizationRecord.name === '') {
+        setNameError(strings.REQUIRED_FIELD);
+        hasErrors = true;
+      }
 
-  const saveOrganization = async () => {
-    let hasErrors = false;
-    if (organizationRecord.name === '') {
-      setNameError(strings.REQUIRED_FIELD);
-      hasErrors = true;
-    }
+      if (!organizationRecord.countryCode) {
+        setCountryError(strings.REQUIRED_FIELD);
+        hasErrors = true;
+      }
 
-    if (!organizationRecord.countryCode) {
-      setCountryError(strings.REQUIRED_FIELD);
-      hasErrors = true;
-    }
+      if (requireSubdivision && !organizationRecord.countrySubdivisionCode) {
+        setSubdivisionError(strings.REQUIRED_FIELD);
+        hasErrors = true;
+      }
 
-    if (requireSubdivision && !organizationRecord.countrySubdivisionCode) {
-      setSubdivisionError(strings.REQUIRED_FIELD);
-      hasErrors = true;
-    }
+      if (!organizationRecord.organizationType) {
+        setOrganizationTypeError(strings.REQUIRED_FIELD);
+        hasErrors = true;
+      } else if (
+        organizationRecord.organizationType === 'Other' &&
+        !organizationRecord.organizationTypeDetails?.trim()
+      ) {
+        setOrganizationTypeDetailsError(strings.REQUIRED_FIELD);
+        hasErrors = true;
+      }
 
-    if (!organizationRecord.organizationType) {
-      setOrganizationTypeError(strings.REQUIRED_FIELD);
-      hasErrors = true;
-    } else if (organizationRecord.organizationType === 'Other' && !organizationRecord.organizationTypeDetails?.trim()) {
-      setOrganizationTypeDetailsError(strings.REQUIRED_FIELD);
-      hasErrors = true;
-    }
+      if (hasErrors) {
+        return;
+      }
 
-    if (hasErrors) {
-      return;
-    }
+      if (locationChanged && !confirmed) {
+        setShowUpdateLocation(true);
+        return;
+      }
 
-    if (locationChanged) {
-      setShowUpdateLocation(true);
-      return;
-    }
-
-    await performSave();
-  };
+      const response = await OrganizationService.updateOrganization(organizationRecord);
+      if (response.requestSucceeded) {
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
+        await reloadOrganizationData(organizationRecord.id);
+      } else {
+        snackbar.toastError();
+      }
+      onClose();
+    },
+    [organizationRecord, requireSubdivision, locationChanged, snackbar, strings, reloadOrganizationData, onClose]
+  );
 
   return (
     <>
@@ -156,7 +158,7 @@ export default function EditOrganizationModal({
           onClose={() => setShowUpdateLocation(false)}
           onConfirm={() => {
             setShowUpdateLocation(false);
-            void performSave();
+            void saveOrganization(true);
           }}
         />
       )}

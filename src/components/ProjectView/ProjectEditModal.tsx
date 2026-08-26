@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
 
@@ -53,40 +53,35 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
     !!project?.botanicalCountryCode &&
     (countryCode !== project?.countryCode || botanicalCountryCode !== project?.botanicalCountryCode);
 
-  const performSave = () => {
-    if (!project) {
-      return;
-    }
+  const saveProject = useCallback(
+    (confirmed = false) => {
+      if (!project) {
+        return;
+      }
 
-    void updateProject({
-      id: project.id,
-      updateProjectRequestPayload: {
-        name,
-        description,
-        ...(showProjectLocation
-          ? { countryCode: countryCode ?? null, botanicalCountryCode: botanicalCountryCode ?? null }
-          : {}),
-      },
-    });
-  };
+      if (!name) {
+        setValidateFields(true);
+        return;
+      }
 
-  const saveProject = () => {
-    if (!project) {
-      return;
-    }
+      if (locationChanged && !confirmed) {
+        setShowUpdateLocation(true);
+        return;
+      }
 
-    if (!name) {
-      setValidateFields(true);
-      return;
-    }
-
-    if (locationChanged) {
-      setShowUpdateLocation(true);
-      return;
-    }
-
-    performSave();
-  };
+      void updateProject({
+        id: project.id,
+        updateProjectRequestPayload: {
+          name,
+          description,
+          ...(showProjectLocation
+            ? { countryCode: countryCode ?? null, botanicalCountryCode: botanicalCountryCode ?? null }
+            : {}),
+        },
+      });
+    },
+    [project, name, description, locationChanged, showProjectLocation, countryCode, botanicalCountryCode, updateProject]
+  );
 
   useEffect(() => {
     if (isError) {
@@ -128,7 +123,7 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
           onClose={() => setShowUpdateLocation(false)}
           onConfirm={() => {
             setShowUpdateLocation(false);
-            performSave();
+            saveProject(true);
           }}
         />
       )}
@@ -146,7 +141,7 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
             onClick={onClose}
             key='button-1'
           />,
-          <Button id='saveEditProject' label={strings.SAVE} onClick={saveProject} key='button-2' />,
+          <Button id='saveEditProject' label={strings.SAVE} onClick={() => saveProject()} key='button-2' />,
         ]}
       >
         <Grid container spacing={3} sx={{ padding: 0 }} textAlign='left'>
