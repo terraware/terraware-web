@@ -1245,6 +1245,7 @@ NATIVE,Nativo,3ef34d4d
 NATIVE_CHECK,Verificación de especie nativa,474464e4
 NATIVE_CHECK_NO_UPDATES,No se detectaron actualizaciones en el estado nativo de las especies.,636bfefb
 NATIVE_CHECK_NO_UPDATES_HINT,El estado individual de la especie puede cambiarse en la pantalla de detalles de la especie.,21f7b4fe
+NATIVE_CHECK_UPDATE_HINT,Seleccione las especies para modificar su estado listado o continúe sin cambiar los resultados.,1b67a440
 NATIVE_ECOSYSTEM,Ecosistema autóctono,1a733f45
 NATIVE_ECOSYSTEM_TOOLTIP,"Indique el tipo de ecosistema en el cual se encuentra esta especie de forma natural; podría incluir detalles tales como el rango de elevación, pluviometría, etc.",188f8600
 NATIVE_FOREST,Bosque autóctono,bbd2ab56
@@ -2232,7 +2233,7 @@ SPECIES_CHECK_SET_LOCATION_BANNER,"Para verificar qué especies son nativas, int
 SPECIES_CHECK_SET_LOCATION_HINT,Seleccione un país y un país botánico para establecer la ubicación.,e7b413a8
 SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS,Seleccione un país y un país botánico para establecer la ubicación de cada proyecto.,8070772f
 SPECIES_CHECK_SPECIES_CHECKED,{0} especies verificadas,3a3237db
-SPECIES_CHECK_UPDATE_HINT,Seleccione las especies para modificar su estado listado o continúe sin cambiar los resultados.,1b67a440
+SPECIES_CHECK_UPDATE_HINT,Seleccione las especies que desea actualizar o continúe sin realizar actualizaciones. Las actualizaciones sobrescribirán los datos existentes.,6cfa3ed4
 SPECIES_CHECK_UPDATES,{0} actualizaciones,a1d89ade
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"No ha ingresado valores de densidad de plantas para todas las especies. Si no ingresa valores de densidad de plantas para todas las especies, las densidades de plantas para esta parcela no se establecerán y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una parcela.",5bcc0f2b
