@@ -2612,6 +2612,7 @@ UPCOMING,À venir,fa1930e2
 UPCOMING_PLANTING_SEASONS,Saisons de plantation à venir,3ad28e65
 UPDATE,Mettre à jour,c4c30980
 UPDATE_LOCATION,Mettre à jour l’emplacement,86b598cd
+UPDATE_LOCATION_MESSAGE,Vous êtes sur le point de mettre à jour l’emplacement de {0}. Cela entraînera le recalcul des statuts natifs pour les espèces. Êtes-vous sûr de vouloir continuer ?,124d09d8
 UPDATE_NEEDED,Mise à jour nécessaire,7b391dc2
 UPDATE_REQUESTED,Mise à jour demandée,3c56b2c5
 UPDATE_STATUS_WARNING,Vous êtes sur le point de mettre à jour le statut,6ee652b9

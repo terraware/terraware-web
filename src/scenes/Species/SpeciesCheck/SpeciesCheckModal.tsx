@@ -3,6 +3,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } fr
 import { Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
 
+import UpdateLocationModal from 'src/components/UpdateLocationModal';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import Button from 'src/components/common/button/Button';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
@@ -37,7 +38,7 @@ type SpeciesCheckModalProps = {
   species: Species[];
   projects: Project[];
   entry: SpeciesCheckEntry;
-  reloadSpecies: () => void;
+  reloadSpecies: () => Promise<void>;
 };
 
 type StepKey = 'setLocation' | 'name' | 'native';
@@ -70,6 +71,8 @@ const SpeciesCheckModal = ({
   const [overrideEdits, setOverrideEdits] = useState<Record<string, OverrideEdit>>({});
   const [showCancel, setShowCancel] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [showUpdateLocation, setShowUpdateLocation] = useState(false);
+  const [recalculatedTargetKeys, setRecalculatedTargetKeys] = useState<Set<number>>(new Set());
 
   const targets = useMemo<LocationTarget[]>(() => {
     const orgCountryCode = selectedOrganization?.countryCode;
@@ -135,6 +138,8 @@ const SpeciesCheckModal = ({
     setNativeSelected(new Set());
     setOverrideEdits({});
     setShowCancel(false);
+    setShowUpdateLocation(false);
+    setRecalculatedTargetKeys(new Set());
 
     runStartRef.current = Date.now();
     trackEventRef.current(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_CHECK_RUN, {
@@ -184,9 +189,18 @@ const SpeciesCheckModal = ({
             return element?.pendingNativity ? { species: sp, nativity: element.pendingNativity as Nativity } : null;
           })
           .filter((row): row is { species: Species; nativity: Nativity } => row !== null);
-        return { target, targetSpecies, withProblems, pending };
+        const displayRows = recalculatedTargetKeys.has(target.key)
+          ? targetSpecies
+              .map((sp) => {
+                const element = (sp.projects ?? []).find((p) => p.projectId === target.projectId);
+                const nativity = element?.pendingNativity ?? element?.overriddenNativity ?? element?.calculatedNativity;
+                return nativity ? { species: sp, nativity: nativity as Nativity } : null;
+              })
+              .filter((row): row is { species: Species; nativity: Nativity } => row !== null)
+          : pending;
+        return { target, targetSpecies, withProblems, pending, displayRows };
       }),
-    [species, targets]
+    [species, targets, recalculatedTargetKeys]
   );
 
   const speciesWithProblems = useMemo(
@@ -221,12 +235,12 @@ const SpeciesCheckModal = ({
         key: data.target.key,
         projectId: data.target.projectId,
         summary: buildSummary(data, data.pending.length),
-        pending: data.pending,
+        pending: data.displayRows,
       })),
     [buildSummary, targetData]
   );
 
-  const hasAnyPending = nativeSections.some((section) => section.pending.length > 0);
+  const hasAnyPending = targetData.some((data) => data.pending.length > 0);
 
   const goToStep = useCallback((key: StepKey) => setStep(stepKeys.indexOf(key)), [stepKeys]);
 
@@ -263,7 +277,27 @@ const SpeciesCheckModal = ({
     [locationEdits]
   );
 
+  const changedTargets = useMemo(
+    () =>
+      targets.filter((target) => {
+        if (!isLocationComplete(target)) {
+          return false;
+        }
+        const edit = locationEdits[target.key] ?? {};
+        const nextCountry = edit.countryCode ?? target.countryCode;
+        const nextBotanical = edit.botanicalCountryCode ?? target.botanicalCountryCode;
+        return nextCountry !== target.countryCode || nextBotanical !== target.botanicalCountryCode;
+      }),
+    [targets, locationEdits, isLocationComplete]
+  );
+
+  const confirmTargets = useMemo(
+    () => changedTargets.filter((target) => !!target.botanicalCountryCode),
+    [changedTargets]
+  );
+
   const onSetLocations = useCallback(async () => {
+    const changedKeys = new Set(changedTargets.map((target) => target.key));
     setBusy(true);
     try {
       await Promise.all(
@@ -294,7 +328,8 @@ const SpeciesCheckModal = ({
       if (targets.some((target) => target.isOrg) && selectedOrganization) {
         await reloadOrganizations(selectedOrganization.id);
       }
-      reloadSpecies();
+      await reloadSpecies();
+      setRecalculatedTargetKeys(changedKeys);
       setStep(1);
       trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_COMPLETED, {
         project_count: projects.length,
@@ -309,6 +344,7 @@ const SpeciesCheckModal = ({
     }
     setBusy(false);
   }, [
+    changedTargets,
     isLocationComplete,
     locationEdits,
     projects,
@@ -332,15 +368,12 @@ const SpeciesCheckModal = ({
           }
         }
       }
-      if (toAccept.length) {
-        reloadSpecies();
-      }
       goToStep('native');
     } catch {
       snackbar.toastError();
     }
     setBusy(false);
-  }, [acceptProblem, goToStep, nameSelected, reloadSpecies, snackbar, speciesWithProblems]);
+  }, [acceptProblem, goToStep, nameSelected, snackbar, speciesWithProblems]);
 
   const trackCheckCompleted = useCallback(
     (submittedOverrides: { projectId?: number; speciesId: number; overriddenNativity: Nativity }[] = []) => {
@@ -380,15 +413,14 @@ const SpeciesCheckModal = ({
   const finish = useCallback(async () => {
     try {
       if (selectedOrganization && hasAnyPending) {
+        // acceptPendingNativities invalidates the Species tag, so the list refetches.
         await acceptPending({ organizationId: selectedOrganization.id }).unwrap();
       }
       trackCheckCompleted();
     } catch {
       snackbar.toastError();
-    } finally {
-      reloadSpecies();
     }
-  }, [acceptPending, hasAnyPending, reloadSpecies, selectedOrganization, snackbar, trackCheckCompleted]);
+  }, [acceptPending, hasAnyPending, selectedOrganization, snackbar, trackCheckCompleted]);
 
   const onFinish = useCallback(async () => {
     setBusy(true);
@@ -432,7 +464,6 @@ const SpeciesCheckModal = ({
     } catch {
       snackbar.toastError();
     } finally {
-      reloadSpecies();
       setBusy(false);
     }
   }, [
@@ -442,7 +473,6 @@ const SpeciesCheckModal = ({
     nativeSelected,
     overrideEdits,
     overrideSpecies,
-    reloadSpecies,
     selectedOrganization,
     snackbar,
     trackCheckCompleted,
@@ -486,7 +516,13 @@ const SpeciesCheckModal = ({
           key='setLocation'
           id='setLocation'
           label={targets.length > 1 ? strings.SET_LOCATIONS : strings.SET_LOCATION}
-          onClick={() => void onSetLocations()}
+          onClick={() => {
+            if (confirmTargets.length > 0) {
+              setShowUpdateLocation(true);
+            } else {
+              void onSetLocations();
+            }
+          }}
           disabled={busy || !anyLocationEditValid}
         />,
       ];
@@ -550,6 +586,7 @@ const SpeciesCheckModal = ({
     anyLocationEditValid,
     allOverridesValid,
     busy,
+    confirmTargets.length,
     currentKey,
     goToStep,
     nativeMode,
@@ -640,6 +677,16 @@ const SpeciesCheckModal = ({
           onConfirm={() => {
             setShowCancel(false);
             onClose();
+          }}
+        />
+      )}
+      {showUpdateLocation && (
+        <UpdateLocationModal
+          locationName={confirmTargets.map((target) => target.name).join(', ')}
+          onClose={() => setShowUpdateLocation(false)}
+          onConfirm={() => {
+            setShowUpdateLocation(false);
+            void onSetLocations();
           }}
         />
       )}

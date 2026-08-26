@@ -7,7 +7,7 @@ export type SpeciesSearchResultRow = Omit<
   conservationCategory?: string;
   growthForms?: string[];
   acceleratorProjects?: string[];
-  rare?: string;
+  rare?: boolean;
   seedStorageBehavior?: string;
   ecosystemTypes?: string[];
 };
