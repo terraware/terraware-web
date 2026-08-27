@@ -284,6 +284,30 @@ const SpeciesCheckModal = ({
 
   const hasAnyPending = checkedTargetData.some((data) => data.pending.length > 0);
 
+  const visibleNativeKeys = useMemo(() => {
+    const keys = new Set<string>();
+    nativeSections.forEach((section) => {
+      section.pending.forEach((row) => keys.add(projectSpeciesKey(section.key, row.species.id)));
+    });
+    return keys;
+  }, [nativeSections]);
+
+  const selectedVisibleNativeKeys = useMemo(
+    () => new Set([...nativeSelected].filter((key) => visibleNativeKeys.has(key))),
+    [nativeSelected, visibleNativeKeys]
+  );
+
+  useEffect(() => {
+    setNativeSelected((previous) => {
+      const next = new Set([...previous].filter((key) => visibleNativeKeys.has(key)));
+      return next.size === previous.size ? previous : next;
+    });
+    setOverrideEdits((previous) => {
+      const next = Object.fromEntries(Object.entries(previous).filter(([key]) => visibleNativeKeys.has(key)));
+      return Object.keys(next).length === Object.keys(previous).length ? previous : next;
+    });
+  }, [visibleNativeKeys]);
+
   const goToStep = useCallback((key: StepKey) => setStep(stepKeys.indexOf(key)), [stepKeys]);
 
   const goBackToLocationStep = useCallback(() => {
@@ -497,7 +521,7 @@ const SpeciesCheckModal = ({
     try {
       const overrides = nativeSections.flatMap((section) =>
         section.pending
-          .filter((row) => nativeSelected.has(projectSpeciesKey(section.key, row.species.id)))
+          .filter((row) => selectedVisibleNativeKeys.has(projectSpeciesKey(section.key, row.species.id)))
           .map((row) => {
             const key = projectSpeciesKey(section.key, row.species.id);
             const edit = overrideEdits[key] ?? {};
@@ -535,7 +559,7 @@ const SpeciesCheckModal = ({
     acceptPending,
     onClose,
     nativeSections,
-    nativeSelected,
+    selectedVisibleNativeKeys,
     overrideEdits,
     overrideSpecies,
     selectedOrganization,
@@ -550,7 +574,7 @@ const SpeciesCheckModal = ({
     ? targets.some(isLocationComplete)
     : targets.every(isLocationComplete);
 
-  const allOverridesValid = [...nativeSelected].every(
+  const allOverridesValid = [...selectedVisibleNativeKeys].every(
     (key) => (overrideEdits[key]?.justification ?? '').trim().length > 0
   );
 
@@ -646,7 +670,7 @@ const SpeciesCheckModal = ({
       />
     );
     const primary =
-      nativeSelected.size > 0 ? (
+      selectedVisibleNativeKeys.size > 0 ? (
         <Button key='override' label={strings.OVERRIDE} onClick={() => setNativeMode('override')} disabled={busy} />
       ) : (
         <Button key='done' label={strings.DONE} onClick={() => void onFinish()} disabled={busy} />
@@ -661,12 +685,12 @@ const SpeciesCheckModal = ({
     goBackToLocationStep,
     goToStep,
     nativeMode,
-    nativeSelected.size,
     onAcceptNames,
     onFinish,
     onOverride,
     onSetLocations,
     requestCancel,
+    selectedVisibleNativeKeys.size,
     targets.length,
   ]);
 
@@ -748,7 +772,7 @@ const SpeciesCheckModal = ({
           <NativeCheckStep
             mode={nativeMode}
             sections={nativeSections}
-            selectedKeys={nativeSelected}
+            selectedKeys={selectedVisibleNativeKeys}
             onToggle={toggleNative}
             overrides={overrideEdits}
             onOverrideChange={(key, edit) => setOverrideEdits((previous) => ({ ...previous, [key]: edit }))}
