@@ -166,14 +166,15 @@ const NativeCheckStep = ({
                       selectedValue={override.nativity ?? row.nativity}
                       onChange={(value: string) => onOverrideChange(key, { ...override, nativity: value as Nativity })}
                       fixedMenu
+                      required
                     />
                     <Textfield
                       id={`override-justification-${key}`}
-                      label={''}
+                      label={strings.JUSTIFICATION}
                       type='text'
                       value={override.justification ?? ''}
-                      placeholder={strings.JUSTIFICATION_FOR_PLANTING}
                       onChange={(value) => onOverrideChange(key, { ...override, justification: value as string })}
+                      required
                     />
                   </Box>
                 );
