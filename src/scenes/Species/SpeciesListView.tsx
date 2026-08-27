@@ -640,7 +640,7 @@ export default function SpeciesListView(): JSX.Element {
         ? [
             {
               id: 'status',
-              header: strings.STATUS,
+              header: strings.NATIVE_STATUS,
               accessorFn: (row: SpeciesSearchResultRow) => {
                 const nativities = statusBySpeciesId.get(row.id) ?? [];
                 return nativities.length ? nativities.map(getNativityLabel).join(', ') : strings.NOT_SET;

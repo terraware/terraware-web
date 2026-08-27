@@ -40,7 +40,7 @@ type ProjectRow = {
 
 const columns = (): TableColumnType[] => [
   { key: 'projectName', name: strings.PROJECT, type: 'string', sx: { width: '34%' } },
-  { key: 'status', name: strings.STATUS, type: 'string', sx: { width: '44%' } },
+  { key: 'status', name: strings.NATIVE_STATUS, type: 'string', sx: { width: '44%' } },
   { key: 'actions', name: '', type: 'string', alignment: 'right', sx: { width: '180px' } },
 ];
 
@@ -303,7 +303,7 @@ export default function SpeciesProjectsSection({
           width='100%'
         >
           <Typography fontSize='20px' fontWeight={600}>
-            {strings.PROJECT_NATIVE_INVASIVE_STATUS}
+            {strings.PROJECT_NATIVE_STATUS}
           </Typography>
           <TooltipButton
             icon='plus'
@@ -318,7 +318,7 @@ export default function SpeciesProjectsSection({
         </Box>
       ) : (
         <Typography fontSize='20px' fontWeight={600} marginBottom={theme.spacing(2)}>
-          {strings.PROJECT_NATIVE_INVASIVE_STATUS}
+          {strings.PROJECT_NATIVE_STATUS}
         </Typography>
       )}
 
