@@ -39,8 +39,9 @@ type ProjectRow = {
 };
 
 const columns = (): TableColumnType[] => [
-  { key: 'projectName', name: strings.PROJECT, type: 'string' },
-  { key: 'status', name: strings.NATIVE_STATUS, type: 'string' },
+  { key: 'projectName', name: strings.PROJECT, type: 'string', sx: { width: '34%' } },
+  { key: 'status', name: strings.NATIVE_STATUS, type: 'string', sx: { width: '44%' } },
+  { key: 'actions', name: '', type: 'string', alignment: 'right', sx: { width: '180px' } },
 ];
 
 type SpeciesProjectsSectionProps = {
@@ -143,11 +144,17 @@ export default function SpeciesProjectsSection({
       const { column, row, index } = props;
       const projectRow = row as ProjectRow;
 
+      if (column.key === 'projectName') {
+        return <CellRenderer {...props} index={index} style={{ width: '34%' }} />;
+      }
+
       if (column.key === 'status') {
         return (
           <CellRenderer
             {...props}
-            sx={{ '& > p': { maxWidth: 'none', overflow: 'visible' } }}
+            component='div'
+            style={{ width: '44%' }}
+            sx={{ '& > div': { maxWidth: 'none', overflow: 'visible' } }}
             value={
               <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: theme.spacing(1) }}>
                 {projectRow.nativity ? (
@@ -181,9 +188,15 @@ export default function SpeciesProjectsSection({
                         {strings.formatString(strings.SPECIES_PROJECT_DATA_SOURCE_SYNC, projectRow.dataSourceDate)}
                       </Typography>
                     )}
-                    <Box component='span' sx={{ whiteSpace: 'nowrap' }}>
-                      <Link onClick={() => setDetailsProjectId(projectRow.projectId)}>{strings.SEE_DETAILS}</Link>
-                    </Box>
+                    {projectRow.overridden && (
+                      <Box
+                        component='span'
+                        onClick={(event) => event.stopPropagation()}
+                        sx={{ display: 'inline-flex', whiteSpace: 'nowrap' }}
+                      >
+                        <Link onClick={() => setDetailsProjectId(projectRow.projectId)}>{strings.SEE_DETAILS}</Link>
+                      </Box>
+                    )}
                   </>
                 ) : (
                   <Badge
@@ -194,6 +207,35 @@ export default function SpeciesProjectsSection({
                   />
                 )}
               </Box>
+            }
+          />
+        );
+      }
+
+      if (column.key === 'actions') {
+        const overrideStatusLabel = `${strings.OVERRIDE} ${strings.STATUS}`;
+
+        return (
+          <CellRenderer
+            {...props}
+            component='div'
+            style={{ width: '180px' }}
+            sx={{ '& > div': { display: 'flex', justifyContent: 'flex-end', maxWidth: 'none', overflow: 'visible' } }}
+            value={
+              !projectRow.overridden && (
+                <Box component='span' onClick={(event) => event.stopPropagation()} sx={{ display: 'inline-flex' }}>
+                  <TooltipButton
+                    id={`override-status-${projectRow.projectId}`}
+                    label={overrideStatusLabel}
+                    onClick={() => setOverrideProjectId(projectRow.projectId)}
+                    priority='secondary'
+                    type='passive'
+                    size='small'
+                    disabled={!projectRow.nativity}
+                    tooltip={!projectRow.nativity ? strings.OVERRIDE_STATUS_NOT_SET_TOOLTIP : undefined}
+                  />
+                </Box>
+              )
             }
           />
         );

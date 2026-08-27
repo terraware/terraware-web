@@ -993,7 +993,7 @@ IUCN_VULNERABLE,Vulnerable (VU),IUCN conservation category. Keep the two-letter 
 JOIN,Join,
 JOIN_EVENT_NAME,Join {0},
 JUST_SAVED,Just saved
-JUSTIFICATION_FOR_PLANTING,Justification for planting,
+JUSTIFICATION,Justification,
 KEEP_ORIGINAL,Keep Original,
 KEY,Key,
 KEY_LESSONS,Key Lessons Learned,
