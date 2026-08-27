@@ -1250,6 +1250,7 @@ NATIVE_ECOSYSTEM_TOOLTIP,"Indiquez le type d'écosystème dans lequel cette esp�
 NATIVE_FOREST,Forêt indigène,bbd2ab56
 NATIVE_NON_NATIVE,Indigène/non-indigène,4ce0ad21
 NATIVE_SPECIES_TO_BE_PLANTED,Espèces indigènes à planter,7a13ce14
+NATIVE_STATUS,Statut autochtone,a3b2178c
 NATURAL_REGENERATION_WOODY,Régénération naturelle ligneuse,26fe4ab1
 NEEDS_ATTENTION,Nécessite une attention,95ec1cac
 NEEDS_TRANSLATION,Nécessite une traduction,ce38bfa9
@@ -1745,7 +1746,7 @@ PROJECT_INTERNAL_USER_ROLE_SOCIAL_LEAD,Responsable social,87aa1342
 PROJECT_LEAD,Responsable de projet,abaeba3a
 PROJECT_LINKS,Liens du projet,b34cdb0e
 PROJECT_NAME,Nom du projet,17451aa2
-PROJECT_NATIVE_INVASIVE_STATUS,Statut indigène/invasif du projet,cfaab33d
+PROJECT_NATIVE_STATUS,Statut autochtone du projet,40cf628a
 PROJECT_NOT_LISTED_PUBLISH,"Pour apparaître dans cette liste, le profil d'un projet doit être publié.",0d9b8c84
 PROJECT_NOTES,Notes d'informations complémentaires sur le projet,0c985c39
 PROJECT_OBJECTIVES,Objectifs du projet,20d1aaf6
