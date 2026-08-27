@@ -30,6 +30,7 @@ import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { MIXPANEL_EVENTS, type SpeciesIntelligenceBannerType } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useListSpeciesAcceleratorProjectsQuery } from 'src/queries/search/species';
@@ -61,6 +62,8 @@ const nativityOf = (element?: SpeciesProjectElement): Nativity | undefined =>
 
 const SET_LOCATION_BANNER_TYPE: SpeciesIntelligenceBannerType = 'set_location';
 const SPECIES_ADDED_BANNER_TYPE: SpeciesIntelligenceBannerType = 'species_added';
+const PREF_DISMISSED_SET_LOCATION_BANNER = 'speciesIntelligence.dismissedSetLocationBanner';
+const PREF_DISMISSED_SPECIES_ADDED_BANNER = 'speciesIntelligence.dismissedSpeciesAddedBanner';
 
 type ProblemsCellProps = {
   row: SpeciesSearchResultRow;
@@ -114,10 +117,11 @@ const ProblemsCellComponent = ({ row, reloadData, onRowClick }: ProblemsCellProp
 };
 
 export default function SpeciesListView(): JSX.Element {
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, orgPreferences } = useOrganization();
   const { species, isLoading, refetch: reloadData } = useOrganizationSpecies({ preferCacheValue: false });
   const theme = useTheme();
   const trackEvent = useTrackEvent();
+  const updateUserPreferences = useUpdateUserPreferences();
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
   const query = useQuery();
@@ -205,8 +209,14 @@ export default function SpeciesListView(): JSX.Element {
     [species, availableProjects, hasMultipleProjects, orgLocationSet, orgScopeKnown]
   );
 
-  const showFirstTimeBanner = speciesCheckEnabled && noLocationSet && !firstTimeBannerDismissed;
-  const showAddedBanner = speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !addedBannerDismissed;
+  const setLocationBannerDismissed =
+    orgPreferences[PREF_DISMISSED_SET_LOCATION_BANNER] === true || firstTimeBannerDismissed;
+  const speciesAddedBannerDismissed =
+    orgPreferences[PREF_DISMISSED_SPECIES_ADDED_BANNER] === true || addedBannerDismissed;
+
+  const showFirstTimeBanner = speciesCheckEnabled && noLocationSet && !setLocationBannerDismissed;
+  const showAddedBanner =
+    speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !speciesAddedBannerDismissed;
 
   const firstTimeBannerImpressionRef = React.useRef(false);
   useEffect(() => {
@@ -227,12 +237,18 @@ export default function SpeciesListView(): JSX.Element {
   const dismissFirstTimeBanner = useCallback(() => {
     trackBannerDismissed(SET_LOCATION_BANNER_TYPE);
     setFirstTimeBannerDismissed(true);
-  }, [trackBannerDismissed]);
+    if (organizationId !== undefined) {
+      void updateUserPreferences({ [PREF_DISMISSED_SET_LOCATION_BANNER]: true }, organizationId);
+    }
+  }, [organizationId, trackBannerDismissed, updateUserPreferences]);
 
   const dismissAddedBanner = useCallback(() => {
     trackBannerDismissed(SPECIES_ADDED_BANNER_TYPE);
     setAddedBannerDismissed(true);
-  }, [trackBannerDismissed]);
+    if (organizationId !== undefined) {
+      void updateUserPreferences({ [PREF_DISMISSED_SPECIES_ADDED_BANNER]: true }, organizationId);
+    }
+  }, [organizationId, trackBannerDismissed, updateUserPreferences]);
 
   const {
     columnFilters,
