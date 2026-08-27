@@ -257,6 +257,25 @@ const SpeciesCheckModal = ({
 
   const hasAnyPending = targetData.some((data) => data.pending.length > 0);
 
+  const visibleNativeKeys = useMemo(() => {
+    const keys = new Set<string>();
+    nativeSections.forEach((section) => {
+      section.pending.forEach((row) => keys.add(projectSpeciesKey(section.key, row.species.id)));
+    });
+    return keys;
+  }, [nativeSections]);
+
+  useEffect(() => {
+    setNativeSelected((previous) => {
+      const next = new Set([...previous].filter((key) => visibleNativeKeys.has(key)));
+      return next.size === previous.size ? previous : next;
+    });
+    setOverrideEdits((previous) => {
+      const next = Object.fromEntries(Object.entries(previous).filter(([key]) => visibleNativeKeys.has(key)));
+      return Object.keys(next).length === Object.keys(previous).length ? previous : next;
+    });
+  }, [visibleNativeKeys]);
+
   const goToStep = useCallback((key: StepKey) => setStep(stepKeys.indexOf(key)), [stepKeys]);
 
   const goBackToLocationStep = useCallback(() => {
