@@ -10,7 +10,6 @@ export type ImportSpeciesModalProps = {
   open: boolean;
   onClose: (saved: boolean, snackbarMessage?: string) => void;
   onError?: (snackbarMessage: string) => void;
-  setCheckDataModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 export const downloadCsvTemplate = async () => {
