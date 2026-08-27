@@ -350,10 +350,12 @@ export default function SpeciesListView(): JSX.Element {
     const shouldCheckData = query.has('checkData');
     if (shouldCheckData) {
       query.delete('checkData');
-      setCheckDataModalOpen(true);
+      if (!speciesCheckEnabled) {
+        setCheckDataModalOpen(true);
+      }
       navigate({ pathname: APP_PATHS.SPECIES, search: query.toString() }, { replace: true });
     }
-  }, [query, setCheckDataModalOpen, navigate]);
+  }, [query, speciesCheckEnabled, setCheckDataModalOpen, navigate]);
 
   // Unique filter option values derived from results (client-side)
   const uniqueConservationCategories = useMemo(() => {
@@ -789,11 +791,7 @@ export default function SpeciesListView(): JSX.Element {
         reviewErrors={reviewErrorsHandler}
         reloadData={() => void reloadData()}
       />
-      <ImportSpeciesModal
-        open={importSpeciesModalOpen}
-        onClose={onCloseImportSpeciesModal}
-        setCheckDataModalOpen={setCheckDataModalOpen}
-      />
+      <ImportSpeciesModal open={importSpeciesModalOpen} onClose={onCloseImportSpeciesModal} />
       {speciesCheckEnabled && (
         <SpeciesCheckModal
           open={speciesCheckOpen}
