@@ -991,7 +991,7 @@ IUCN_VULNERABLE,Vulnérable (VU),ed5dcc89
 JOIN,Rejoindre,43eb6054
 JOIN_EVENT_NAME,Rejoindre {0},14c4bd8e
 JUST_SAVED,Enregistré à l’instant,d426eaa3
-JUSTIFICATION_FOR_PLANTING,Justification de la plantation,3eff9ad4
+JUSTIFICATION,Justification,88588c24
 KEEP_ORIGINAL,Garder l'original,21773616
 KEY,Légende,b46ab088
 KEY_LESSONS,Principales leçons tirées,24ee85f1

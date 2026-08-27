@@ -157,14 +157,15 @@ export default function OverrideSpeciesModal({
               selectedValue={nativity}
               onChange={(value: string) => setNativity(value as Nativity)}
               fixedMenu
+              required
             />
             <Textfield
               id='override-justification'
-              label={''}
+              label={strings.JUSTIFICATION}
               type='text'
               value={justification}
-              placeholder={strings.JUSTIFICATION_FOR_PLANTING}
               onChange={(value) => setJustification(value as string)}
+              required
             />
           </Box>
         </Box>

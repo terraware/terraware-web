@@ -992,7 +992,7 @@ IUCN_VULNERABLE,Vulnerable (VU),ed5dcc89
 JOIN,Únase,43eb6054
 JOIN_EVENT_NAME,Únase {0},14c4bd8e
 JUST_SAVED,Guardado recientemente,d426eaa3
-JUSTIFICATION_FOR_PLANTING,Justificación para la plantación,3eff9ad4
+JUSTIFICATION,Justificación,88588c24
 KEEP_ORIGINAL,Conservar original,21773616
 KEY,Clave,b46ab088
 KEY_LESSONS,Lecciones clave aprendidas,24ee85f1
