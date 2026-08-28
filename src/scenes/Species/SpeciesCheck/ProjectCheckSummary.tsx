@@ -14,6 +14,12 @@ export type ProjectCheckSummaryProps = {
   speciesChecked?: number;
 };
 
+export const suggestionsCountLabel = (suggestions: number): React.ReactNode =>
+  strings.formatString(
+    suggestions === 1 ? strings.SPECIES_CHECK_SUGGESTION : strings.SPECIES_CHECK_SUGGESTIONS,
+    suggestions
+  );
+
 const ProjectCheckSummary = ({
   projectName,
   countryName,

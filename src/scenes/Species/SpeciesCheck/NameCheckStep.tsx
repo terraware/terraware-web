@@ -5,7 +5,7 @@ import { Box, Checkbox, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { Species, SpeciesProblemElement } from 'src/types/Species';
 
-import ProjectCheckSummary, { ProjectCheckSummaryProps } from './ProjectCheckSummary';
+import ProjectCheckSummary, { ProjectCheckSummaryProps, suggestionsCountLabel } from './ProjectCheckSummary';
 
 const issueLabel = (problem: SpeciesProblemElement): string => {
   switch (problem.type) {
@@ -54,10 +54,7 @@ const NameCheckStep = ({
               borderTop: index > 0 ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined,
             }}
           >
-            <ProjectCheckSummary
-              {...summary}
-              updatesLabel={strings.formatString(strings.SPECIES_CHECK_SUGGESTIONS, summary.updates ?? 0)}
-            />
+            <ProjectCheckSummary {...summary} updatesLabel={suggestionsCountLabel(summary.updates ?? 0)} />
           </Box>
         ))}
       </Box>

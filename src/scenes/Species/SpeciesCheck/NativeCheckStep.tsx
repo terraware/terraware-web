@@ -8,7 +8,7 @@ import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 
 import SpeciesNativityBadge from '../SpeciesNativityBadge';
-import ProjectCheckSummary, { ProjectCheckSummaryProps } from './ProjectCheckSummary';
+import ProjectCheckSummary, { ProjectCheckSummaryProps, suggestionsCountLabel } from './ProjectCheckSummary';
 import { NATIVITY_VALUES, Nativity, OverrideEdit, getNativityLabel, projectSpeciesKey } from './types';
 
 type PendingRow = {
@@ -36,8 +36,7 @@ type NativeCheckStepProps = {
 // summaries are grouped together).
 const SummaryBox = (props: ProjectCheckSummaryProps): JSX.Element => {
   const theme = useTheme();
-  const updatesLabel =
-    props.updates !== undefined ? strings.formatString(strings.SPECIES_CHECK_SUGGESTIONS, props.updates) : undefined;
+  const updatesLabel = props.updates !== undefined ? suggestionsCountLabel(props.updates) : undefined;
 
   return (
     <Box
