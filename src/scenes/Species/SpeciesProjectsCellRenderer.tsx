@@ -16,7 +16,7 @@ export default function SpeciesProjectsCellRenderer(props: RendererProps<TableRo
   const { goToDeliverable } = useNavigateTo();
   const { activeLocale } = useLocalization();
 
-  if (column.key === 'activeDeliverableId') {
+  if (column.key === 'deliverableId') {
     if (value) {
       return (
         <CellRenderer
@@ -34,7 +34,7 @@ export default function SpeciesProjectsCellRenderer(props: RendererProps<TableRo
     }
   }
 
-  if (column.key === 'acceleratorProjectSpeciesSubmissionStatus') {
+  if (column.key === 'participantProjectSpeciesSubmissionStatus') {
     return (
       <CellRenderer
         style={{ width: '50px' }}

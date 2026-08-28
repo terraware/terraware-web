@@ -22,14 +22,14 @@ import SpeciesProjectsCellRenderer from './SpeciesProjectsCellRenderer';
 
 const columns = (): TableColumnType[] => [
   { key: 'projectName', name: strings.PROJECT, type: 'string' },
-  { key: 'acceleratorProjectSpeciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
-  { key: 'acceleratorProjectSpeciesSubmissionStatus', name: strings.STATUS, type: 'string' },
+  { key: 'participantProjectSpeciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
+  { key: 'participantProjectSpeciesSubmissionStatus', name: strings.STATUS, type: 'string' },
 ];
 
 const viewColumns = (): TableColumnType[] => [
   ...columns(),
   {
-    key: 'activeDeliverableId',
+    key: 'deliverableId',
     name: '',
     type: 'string',
   } as TableColumnType,
