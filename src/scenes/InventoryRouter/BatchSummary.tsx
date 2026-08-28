@@ -45,14 +45,22 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
     () =>
       accessionLinks.length ? (
         <Box component='span' display='flex' flexWrap='wrap'>
-          {accessionLinks.map(({ accessionId, accessionNumber }, index) => (
-            <React.Fragment key={accessionId}>
-              <Link to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${accessionId}`)}>
-                {accessionNumber || accessionId}
-              </Link>
-              {index < accessionLinks.length - 1 ? strings.LIST_SEPARATOR : null}
-            </React.Fragment>
-          ))}
+          {accessionLinks.map(({ accessionId, accessionNumber }, index) => {
+            const hasFollowingAccession = index < accessionLinks.length - 1;
+
+            return (
+              <Box key={accessionId} component='span' display='inline-flex'>
+                <Link to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${accessionId}`)}>
+                  {accessionNumber || accessionId}
+                </Link>
+                {hasFollowingAccession ? (
+                  <Box component='span' whiteSpace='pre'>
+                    {strings.LIST_SEPARATOR}
+                  </Box>
+                ) : null}
+              </Box>
+            );
+          })}
         </Box>
       ) : null,
     [accessionLinks]
