@@ -8,6 +8,8 @@ export type ReportBoxProps = {
   editing?: boolean;
   onChange?: (value: any) => void;
   onEditChange?: (value: boolean) => void;
+  /** rendered for print: no edit chrome, nothing clipped behind a "show more" */
+  printMode?: boolean;
   canEdit?: boolean;
   funderReportView?: boolean;
   validate?: boolean;

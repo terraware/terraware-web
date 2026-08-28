@@ -18,7 +18,8 @@ const textAreaStyles = { textarea: { height: '120px' } };
 const COLLAPSED_MAX_HEIGHT = 120;
 
 const HighlightsBox = (props: ReportBoxProps) => {
-  const { report, projectId, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } = props;
+  const { report, projectId, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView, printMode } =
+    props;
   const newReportTabEnabled = isEnabled('Report Updates July 2026');
   const theme = useTheme();
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
@@ -110,7 +111,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
             onChange={setHighlightsCallback}
             preserveNewlines
             markdown
-            truncateConfig={isEditing ? undefined : truncateConfig}
+            truncateConfig={isEditing || printMode ? undefined : truncateConfig}
           />
         )}
       </Grid>

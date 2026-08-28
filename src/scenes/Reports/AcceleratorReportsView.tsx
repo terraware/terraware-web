@@ -5,6 +5,7 @@ import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 import Tabs from '@terraware/web-components/components/Tabs';
 
+import AcceleratorReportPrint from 'src/components/AcceleratorReports/AcceleratorReportPrint';
 import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/AcceleratorReportTargetsTable';
 import AcceleratorReportsTable from 'src/components/AcceleratorReports/AcceleratorReportsTable';
 import ReportExportMenu from 'src/components/AcceleratorReports/ReportExportMenu';
@@ -38,6 +39,10 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
   const { exportAcceleratorReport } = useExportReportCsv();
 
   const [projectFilter, setProjectFilter] = useState<{ projectId?: number | string }>({});
+  const [printing, setPrinting] = useState(false);
+
+  const startPrinting = useCallback(() => setPrinting(true), []);
+  const stopPrinting = useCallback(() => setPrinting(false), []);
 
   const newReportTabEnabled = isEnabled('Report Updates July 2026');
   const pathActiveTab = tab ?? 'reports';
@@ -107,6 +112,7 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
                 reportId: selectedReportId,
               })
             }
+            onPrint={startPrinting}
           />
         </Box>
       ) : undefined,
@@ -119,6 +125,7 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
       isLoading,
       newReportTabEnabled,
       selectedReportId,
+      startPrinting,
       strings.EDIT,
       theme,
     ]
@@ -144,6 +151,14 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
       rightComponent={rightComponent}
       title={strings.REPORTS}
     >
+      {printing && selectedReportId !== undefined && (
+        <AcceleratorReportPrint
+          onClose={stopPrinting}
+          projectName={currentAcceleratorProject?.name}
+          reportId={selectedReportId}
+        />
+      )}
+
       <Box display='flex' flexDirection='column' flexGrow={1} width={'100%'}>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>

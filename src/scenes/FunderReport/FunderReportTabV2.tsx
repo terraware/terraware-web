@@ -1,4 +1,4 @@
-import React, { type JSX, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
@@ -6,6 +6,7 @@ import FunderReportContentV2 from 'src/components/AcceleratorReports/FunderRepor
 import ReportDropdown, { ReportOption } from 'src/components/AcceleratorReports/ReportDropdown';
 import ReportEmptyState from 'src/components/AcceleratorReports/ReportEmptyState';
 import ReportExportMenu from 'src/components/AcceleratorReports/ReportExportMenu';
+import ReportPrint from 'src/components/AcceleratorReports/ReportPrint';
 import useExportReportCsv from 'src/components/AcceleratorReports/useExportReportCsv';
 import { getPublishedProgressIndicators, getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
@@ -24,6 +25,10 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
   const [selectedReportId, setSelectedReportId] = useState<number | undefined>(
     Number(query.get('reportId')) || undefined
   );
+  const [printing, setPrinting] = useState(false);
+
+  const startPrinting = useCallback(() => setPrinting(true), []);
+  const stopPrinting = useCallback(() => setPrinting(false), []);
 
   const { currentData: listPublishedReportsData } = useListPublishedReportsQuery(selectedProjectId);
 
@@ -59,24 +64,36 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
   }
 
   return (
-    <FunderReportContentV2
-      header={
-        <Box alignItems='center' display='flex' justifyContent='space-between'>
-          <ReportDropdown onChange={setSelectedReportId} reports={reports} selectedReportId={resolvedReportId} />
+    <>
+      {printing && (
+        <ReportPrint
+          indicators={indicators}
+          onClose={stopPrinting}
+          projectName={selectedReport?.projectName}
+          report={selectedReport}
+        />
+      )}
 
-          <ReportExportMenu
-            disabled={resolvedReportId === undefined}
-            onExport={() =>
-              resolvedReportId !== undefined &&
-              void exportFunderReport({ projectId: selectedProjectId, reportId: resolvedReportId })
-            }
-          />
-        </Box>
-      }
-      indicators={indicators}
-      projectId={selectedProjectId}
-      report={selectedReport}
-    />
+      <FunderReportContentV2
+        header={
+          <Box alignItems='center' display='flex' justifyContent='space-between'>
+            <ReportDropdown onChange={setSelectedReportId} reports={reports} selectedReportId={resolvedReportId} />
+
+            <ReportExportMenu
+              disabled={resolvedReportId === undefined}
+              onExport={() =>
+                resolvedReportId !== undefined &&
+                void exportFunderReport({ projectId: selectedProjectId, reportId: resolvedReportId })
+              }
+              onPrint={startPrinting}
+            />
+          </Box>
+        }
+        indicators={indicators}
+        projectId={selectedProjectId}
+        report={selectedReport}
+      />
+    </>
   );
 };
 

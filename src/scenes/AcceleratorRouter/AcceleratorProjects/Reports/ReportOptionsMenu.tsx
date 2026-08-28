@@ -2,6 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 
 import { DropdownItem } from '@terraware/web-components';
 
+import AcceleratorReportPrint from 'src/components/AcceleratorReports/AcceleratorReportPrint';
 import useExportReportCsv from 'src/components/AcceleratorReports/useExportReportCsv';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
@@ -31,6 +32,9 @@ const ReportOptionsMenu = ({ projectId, reportId }: ReportOptionsMenuProps): JSX
   const canPublish = isAllowed('PUBLISH_REPORTS');
 
   const [showPublishModal, setShowPublishModal] = useState(false);
+  const [printing, setPrinting] = useState(false);
+
+  const projectName = acceleratorProject?.dealName || project?.name;
 
   const { report } = useOneAcceleratorReport(reportId);
 
@@ -76,6 +80,10 @@ const ReportOptionsMenu = ({ projectId, reportId }: ReportOptionsMenuProps): JSX
         label: strings.EXPORT_CSV,
         value: 'exportCsv',
       },
+      {
+        label: strings.PRINT_REPORT,
+        value: 'print',
+      },
       ...(canPublish
         ? [
             {
@@ -98,15 +106,19 @@ const ReportOptionsMenu = ({ projectId, reportId }: ReportOptionsMenuProps): JSX
           `${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', `${projectId}`)}/${reportId}/published`
         );
       } else if (optionItem.value === 'exportCsv') {
-        void exportAcceleratorReport({ projectName: acceleratorProject?.dealName || project?.name, reportId });
+        void exportAcceleratorReport({ projectName, reportId });
+      } else if (optionItem.value === 'print') {
+        setPrinting(true);
       } else if (optionItem.value === 'publish') {
         setShowPublishModal(true);
       }
     },
-    [acceleratorProject?.dealName, exportAcceleratorReport, navigate, project?.name, projectId, reportId]
+    [exportAcceleratorReport, navigate, projectId, projectName, reportId]
   );
 
   const closePublishModal = useCallback(() => setShowPublishModal(false), []);
+
+  const stopPrinting = useCallback(() => setPrinting(false), []);
 
   const publish = useCallback(() => void publishReport(), [publishReport]);
 
@@ -115,6 +127,8 @@ const ReportOptionsMenu = ({ projectId, reportId }: ReportOptionsMenuProps): JSX
       {showPublishModal && (
         <PublishModal disabled={publishReportResponse.isLoading} onClose={closePublishModal} onSubmit={publish} />
       )}
+
+      {printing && <AcceleratorReportPrint onClose={stopPrinting} projectName={projectName} reportId={reportId} />}
 
       <OptionsMenu
         onOptionItemClick={onOptionItemClick}
