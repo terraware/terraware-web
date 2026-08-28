@@ -2238,6 +2238,7 @@ SPECIES_CHECK_SET_LOCATION_BANNER,"Para verificar qué especies son nativas, int
 SPECIES_CHECK_SET_LOCATION_HINT,Seleccione un país y un país botánico para establecer la ubicación.,e7b413a8
 SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS,Seleccione un país y un país botánico para establecer la ubicación de cada proyecto.,8070772f
 SPECIES_CHECK_SPECIES_CHECKED,{0} especies verificadas,3a3237db
+SPECIES_CHECK_SUGGESTIONS,{0} sugerencias,9154c212
 SPECIES_CHECK_UPDATE_HINT,Seleccione las especies que desea actualizar o continúe sin realizar actualizaciones. Las actualizaciones sobrescribirán los datos existentes.,6cfa3ed4
 SPECIES_CHECK_UPDATES,{0} actualizaciones,a1d89ade
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
@@ -2372,6 +2373,7 @@ SUCCESSIONAL_GROUP_LATE_SECONDARY,Secundario tardío,4817ea1d
 SUCCESSIONAL_GROUP_MATURE,Maduro,20bb27db
 SUCCESSIONAL_GROUP_PIONEER,Pionero,909ea222
 SUGGESTION,Sugerencia,9e30c163
+SUGGESTIONS,Sugerencias,d6f8e49f
 SUMMARY,Resumen,430d4ee5
 SUMMARY_OF_PROGRESS,Resumen del progreso,c74014f3
 SUMMARY_OF_PROGRESS_DESCRIPTION,Haga un breve resumen de este proyecto.,c60ce682

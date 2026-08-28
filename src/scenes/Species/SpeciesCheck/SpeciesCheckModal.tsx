@@ -50,6 +50,14 @@ const SAVE_FAILURE_ENTITY_TYPES = {
   nativeCheck: 'species_intelligence_native_check',
 } as const;
 
+const hasCompleteLocation = (location: LocationEdit): boolean =>
+  !!location.countryCode && !!location.botanicalCountryCode;
+
+const hasSuggestedValue = (suggestedValue?: string): boolean => !!suggestedValue?.trim();
+
+const hasNameSuggestion = (species: Species): boolean =>
+  (species.problems ?? []).some((problem) => hasSuggestedValue(problem.suggestedValue));
+
 const SpeciesCheckModal = ({
   open,
   onClose,
@@ -106,6 +114,8 @@ const SpeciesCheckModal = ({
     ];
   }, [projects, selectedOrganization]);
 
+  const locationsOptional = projects.length > 1;
+
   const targetsRef = useRef(targets);
   targetsRef.current = targets;
 
@@ -133,16 +143,10 @@ const SpeciesCheckModal = ({
       };
     });
     setLocationEdits(initial);
-    const locationsMissing = !targetsRef.current.every((target) => !!target.botanicalCountryCode);
+    const locationsMissing = !targetsRef.current.every(hasCompleteLocation);
     setStep(locationsMissing ? 0 : 1);
     setNativeMode('list');
-    setNameSelected(
-      new Set(
-        speciesRef.current
-          .filter((sp) => (sp.problems ?? []).some((problem) => !!problem.suggestedValue))
-          .map((sp) => sp.id)
-      )
-    );
+    setNameSelected(new Set(speciesRef.current.filter(hasNameSuggestion).map((sp) => sp.id)));
     setNativeSelected(new Set());
     setOverrideEdits({});
     setShowCancel(false);
@@ -182,6 +186,15 @@ const SpeciesCheckModal = ({
     [botanicalCountries]
   );
 
+  const locationForTarget = useCallback(
+    (target: LocationTarget): LocationEdit =>
+      locationEdits[target.key] ?? {
+        countryCode: target.countryCode,
+        botanicalCountryCode: target.botanicalCountryCode,
+      },
+    [locationEdits]
+  );
+
   const trackSaveFailed = useCallback(
     (entityType: (typeof SAVE_FAILURE_ENTITY_TYPES)[keyof typeof SAVE_FAILURE_ENTITY_TYPES]) => {
       trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: entityType });
@@ -218,44 +231,81 @@ const SpeciesCheckModal = ({
     [species, targets, recalculatedTargetKeys]
   );
 
+  const checkedTargetData = useMemo(
+    () => targetData.filter((data) => hasCompleteLocation(locationForTarget(data.target))),
+    [locationForTarget, targetData]
+  );
+
+  const checkedSpecies = useMemo(() => {
+    const speciesById = new Map<number, Species>();
+    checkedTargetData.forEach((data) => data.targetSpecies.forEach((sp) => speciesById.set(sp.id, sp)));
+    return [...speciesById.values()];
+  }, [checkedTargetData]);
+
   const speciesWithProblems = useMemo(
     () =>
-      species
+      checkedSpecies
         .filter((sp) => (sp.problems?.length ?? 0) > 0)
         .sort((a, b) => (a.scientificName ?? '').localeCompare(b.scientificName ?? '')),
-    [species]
+    [checkedSpecies]
   );
 
   const buildSummary = useCallback(
-    (data: (typeof targetData)[number], updates: number): ProjectCheckSummaryProps => ({
-      projectName: data.target.name,
-      countryName: countryNameByCode(locationEdits[data.target.key]?.countryCode ?? data.target.countryCode),
-      botanicalCountryName: botanicalNameByCode(
-        locationEdits[data.target.key]?.botanicalCountryCode ?? data.target.botanicalCountryCode
-      ),
-      updates,
-      speciesChecked: data.targetSpecies.length,
-    }),
-    [botanicalNameByCode, countryNameByCode, locationEdits]
+    (data: (typeof targetData)[number], updates: number): ProjectCheckSummaryProps => {
+      const location = locationForTarget(data.target);
+      return {
+        projectName: data.target.name,
+        countryName: countryNameByCode(location.countryCode),
+        botanicalCountryName: botanicalNameByCode(location.botanicalCountryCode),
+        showLocation: hasCompleteLocation(location),
+        updates,
+        speciesChecked: data.targetSpecies.length,
+      };
+    },
+    [botanicalNameByCode, countryNameByCode, locationForTarget]
   );
 
   const nameSummaries = useMemo(
-    () => targetData.map((data) => buildSummary(data, data.withProblems.length)),
-    [buildSummary, targetData]
+    () => checkedTargetData.map((data) => buildSummary(data, data.withProblems.filter(hasNameSuggestion).length)),
+    [buildSummary, checkedTargetData]
   );
 
   const nativeSections = useMemo<NativeCheckProjectSection[]>(
     () =>
-      targetData.map((data) => ({
+      checkedTargetData.map((data) => ({
         key: data.target.key,
         projectId: data.target.projectId,
         summary: buildSummary(data, data.pending.length),
         pending: data.displayRows,
       })),
-    [buildSummary, targetData]
+    [buildSummary, checkedTargetData]
   );
 
-  const hasAnyPending = targetData.some((data) => data.pending.length > 0);
+  const hasAnyPending = checkedTargetData.some((data) => data.pending.length > 0);
+
+  const visibleNativeKeys = useMemo(() => {
+    const keys = new Set<string>();
+    nativeSections.forEach((section) => {
+      section.pending.forEach((row) => keys.add(projectSpeciesKey(section.key, row.species.id)));
+    });
+    return keys;
+  }, [nativeSections]);
+
+  const selectedVisibleNativeKeys = useMemo(
+    () => new Set([...nativeSelected].filter((key) => visibleNativeKeys.has(key))),
+    [nativeSelected, visibleNativeKeys]
+  );
+
+  useEffect(() => {
+    setNativeSelected((previous) => {
+      const next = new Set([...previous].filter((key) => visibleNativeKeys.has(key)));
+      return next.size === previous.size ? previous : next;
+    });
+    setOverrideEdits((previous) => {
+      const next = Object.fromEntries(Object.entries(previous).filter(([key]) => visibleNativeKeys.has(key)));
+      return Object.keys(next).length === Object.keys(previous).length ? previous : next;
+    });
+  }, [visibleNativeKeys]);
 
   const goToStep = useCallback((key: StepKey) => setStep(stepKeys.indexOf(key)), [stepKeys]);
 
@@ -293,25 +343,23 @@ const SpeciesCheckModal = ({
   }, []);
 
   const isLocationComplete = useCallback(
-    (target: LocationTarget) => {
-      const edit = locationEdits[target.key] ?? {};
-      return !!(edit.countryCode ?? target.countryCode) && !!(edit.botanicalCountryCode ?? target.botanicalCountryCode);
-    },
-    [locationEdits]
+    (target: LocationTarget) => hasCompleteLocation(locationForTarget(target)),
+    [locationForTarget]
   );
 
   const changedTargets = useMemo(
     () =>
       targets.filter((target) => {
-        if (!isLocationComplete(target)) {
+        const edit = locationEdits[target.key];
+        if (!edit) {
           return false;
         }
-        const edit = locationEdits[target.key] ?? {};
-        const nextCountry = edit.countryCode ?? target.countryCode;
-        const nextBotanical = edit.botanicalCountryCode ?? target.botanicalCountryCode;
-        return nextCountry !== target.countryCode || nextBotanical !== target.botanicalCountryCode;
+        return (
+          (edit.countryCode ?? null) !== (target.countryCode ?? null) ||
+          (edit.botanicalCountryCode ?? null) !== (target.botanicalCountryCode ?? null)
+        );
       }),
-    [targets, locationEdits, isLocationComplete]
+    [targets, locationEdits]
   );
 
   const confirmTargets = useMemo(
@@ -324,8 +372,8 @@ const SpeciesCheckModal = ({
     setBusy(true);
     try {
       await Promise.all(
-        targets.filter(isLocationComplete).map((target) => {
-          const edit = locationEdits[target.key] ?? {};
+        changedTargets.map((target) => {
+          const edit = locationForTarget(target);
           if (target.isOrg) {
             if (!selectedOrganization) {
               return Promise.resolve();
@@ -342,13 +390,13 @@ const SpeciesCheckModal = ({
             updateProjectRequestPayload: {
               name: project?.name ?? target.name,
               description: project?.description,
-              countryCode: edit.countryCode,
-              botanicalCountryCode: edit.botanicalCountryCode,
+              countryCode: edit.countryCode ?? null,
+              botanicalCountryCode: edit.botanicalCountryCode ?? null,
             },
           }).unwrap();
         })
       );
-      if (targets.some((target) => target.isOrg) && selectedOrganization) {
+      if (changedTargets.some((target) => target.isOrg) && selectedOrganization) {
         await reloadOrganizations(selectedOrganization.id);
       }
       await reloadSpecies();
@@ -356,11 +404,8 @@ const SpeciesCheckModal = ({
       setStep(1);
       trackEvent(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_SETUP_PROMPT_COMPLETED, {
         project_count: projects.length,
-        countries_set: targets.filter((target) => !!(locationEdits[target.key]?.countryCode ?? target.countryCode))
-          .length,
-        botanical_country_set: targets.filter(
-          (target) => !!(locationEdits[target.key]?.botanicalCountryCode ?? target.botanicalCountryCode)
-        ).length,
+        countries_set: targets.filter((target) => !!locationForTarget(target).countryCode).length,
+        botanical_country_set: targets.filter((target) => !!locationForTarget(target).botanicalCountryCode).length,
       });
     } catch {
       trackSaveFailed(SAVE_FAILURE_ENTITY_TYPES.setLocation);
@@ -369,8 +414,7 @@ const SpeciesCheckModal = ({
     setBusy(false);
   }, [
     changedTargets,
-    isLocationComplete,
-    locationEdits,
+    locationForTarget,
     projects,
     reloadOrganizations,
     reloadSpecies,
@@ -388,7 +432,7 @@ const SpeciesCheckModal = ({
       const toAccept = speciesWithProblems.filter((sp) => nameSelected.has(sp.id));
       for (const sp of toAccept) {
         for (const problem of sp.problems ?? []) {
-          if (problem.suggestedValue) {
+          if (hasSuggestedValue(problem.suggestedValue)) {
             await acceptProblem(problem.id).unwrap();
           }
         }
@@ -476,7 +520,7 @@ const SpeciesCheckModal = ({
     try {
       const overrides = nativeSections.flatMap((section) =>
         section.pending
-          .filter((row) => nativeSelected.has(projectSpeciesKey(section.key, row.species.id)))
+          .filter((row) => selectedVisibleNativeKeys.has(projectSpeciesKey(section.key, row.species.id)))
           .map((row) => {
             const key = projectSpeciesKey(section.key, row.species.id);
             const edit = overrideEdits[key] ?? {};
@@ -514,7 +558,7 @@ const SpeciesCheckModal = ({
     acceptPending,
     onClose,
     nativeSections,
-    nativeSelected,
+    selectedVisibleNativeKeys,
     overrideEdits,
     overrideSpecies,
     selectedOrganization,
@@ -525,9 +569,11 @@ const SpeciesCheckModal = ({
     trackSaveFailed,
   ]);
 
-  const anyLocationEditValid = targets.some(isLocationComplete);
+  const canContinueLocationStep = locationsOptional
+    ? targets.some(isLocationComplete)
+    : targets.every(isLocationComplete);
 
-  const allOverridesValid = [...nativeSelected].every(
+  const allOverridesValid = [...selectedVisibleNativeKeys].every(
     (key) => (overrideEdits[key]?.justification ?? '').trim().length > 0
   );
 
@@ -570,7 +616,7 @@ const SpeciesCheckModal = ({
               void onSetLocations();
             }
           }}
-          disabled={busy || !anyLocationEditValid}
+          disabled={busy || !canContinueLocationStep}
         />,
       ];
     }
@@ -623,27 +669,27 @@ const SpeciesCheckModal = ({
       />
     );
     const primary =
-      nativeSelected.size > 0 ? (
+      selectedVisibleNativeKeys.size > 0 ? (
         <Button key='override' label={strings.OVERRIDE} onClick={() => setNativeMode('override')} disabled={busy} />
       ) : (
         <Button key='done' label={strings.DONE} onClick={() => void onFinish()} disabled={busy} />
       );
     return [cancelButton, backButton, primary];
   }, [
-    anyLocationEditValid,
     allOverridesValid,
     busy,
+    canContinueLocationStep,
     confirmTargets.length,
     currentKey,
     goBackToLocationStep,
     goToStep,
     nativeMode,
-    nativeSelected.size,
     onAcceptNames,
     onFinish,
     onOverride,
     onSetLocations,
     requestCancel,
+    selectedVisibleNativeKeys.size,
     targets.length,
   ]);
 
@@ -708,6 +754,7 @@ const SpeciesCheckModal = ({
               edits={locationEdits}
               countries={countries ?? []}
               botanicalCountries={botanicalCountries}
+              locationsRequired={!locationsOptional}
               onChange={(targetKey, edit) => setLocationEdits((previous) => ({ ...previous, [targetKey]: edit }))}
             />
           </>
@@ -724,7 +771,7 @@ const SpeciesCheckModal = ({
           <NativeCheckStep
             mode={nativeMode}
             sections={nativeSections}
-            selectedKeys={nativeSelected}
+            selectedKeys={selectedVisibleNativeKeys}
             onToggle={toggleNative}
             overrides={overrideEdits}
             onOverrideChange={(key, edit) => setOverrideEdits((previous) => ({ ...previous, [key]: edit }))}

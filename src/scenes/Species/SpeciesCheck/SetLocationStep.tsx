@@ -14,6 +14,7 @@ type SetLocationStepProps = {
   edits: Record<number, LocationEdit>;
   countries: Country[];
   botanicalCountries: BotanicalCountry[];
+  locationsRequired: boolean;
   onChange: (targetKey: number, edit: LocationEdit) => void;
 };
 
@@ -22,6 +23,7 @@ const SetLocationStep = ({
   edits,
   countries,
   botanicalCountries,
+  locationsRequired,
   onChange,
 }: SetLocationStepProps): JSX.Element => {
   const theme = useTheme();
@@ -52,10 +54,10 @@ const SetLocationStep = ({
                 options={countryOptions}
                 selectedValue={edit.countryCode}
                 onChange={(value: string) =>
-                  onChange(target.key, { countryCode: value, botanicalCountryCode: undefined })
+                  onChange(target.key, { countryCode: value || undefined, botanicalCountryCode: undefined })
                 }
                 fullWidth
-                required
+                required={locationsRequired}
                 autocomplete
               />
               <Dropdown
@@ -64,9 +66,11 @@ const SetLocationStep = ({
                 placeholder={strings.SELECT}
                 options={botanicalCountryOptions}
                 selectedValue={edit.botanicalCountryCode}
-                onChange={(value: string) => onChange(target.key, { ...edit, botanicalCountryCode: value })}
+                onChange={(value: string) =>
+                  onChange(target.key, { ...edit, botanicalCountryCode: value || undefined })
+                }
                 fullWidth
-                required
+                required={locationsRequired}
                 autocomplete
                 disabled={!edit.countryCode}
               />
