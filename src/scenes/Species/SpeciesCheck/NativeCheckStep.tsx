@@ -36,6 +36,9 @@ type NativeCheckStepProps = {
 // summaries are grouped together).
 const SummaryBox = (props: ProjectCheckSummaryProps): JSX.Element => {
   const theme = useTheme();
+  const updatesLabel =
+    props.updates !== undefined ? strings.formatString(strings.SPECIES_CHECK_SUGGESTIONS, props.updates) : undefined;
+
   return (
     <Box
       sx={{
@@ -43,7 +46,7 @@ const SummaryBox = (props: ProjectCheckSummaryProps): JSX.Element => {
         padding: theme.spacing(2),
       }}
     >
-      <ProjectCheckSummary {...props} />
+      <ProjectCheckSummary {...props} updatesLabel={updatesLabel} />
     </Box>
   );
 };

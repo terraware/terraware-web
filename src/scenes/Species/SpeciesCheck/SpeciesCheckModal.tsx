@@ -53,6 +53,11 @@ const SAVE_FAILURE_ENTITY_TYPES = {
 const hasCompleteLocation = (location: LocationEdit): boolean =>
   !!location.countryCode && !!location.botanicalCountryCode;
 
+const hasSuggestedValue = (suggestedValue?: string): boolean => !!suggestedValue?.trim();
+
+const hasNameSuggestion = (species: Species): boolean =>
+  (species.problems ?? []).some((problem) => hasSuggestedValue(problem.suggestedValue));
+
 const SpeciesCheckModal = ({
   open,
   onClose,
@@ -141,13 +146,7 @@ const SpeciesCheckModal = ({
     const locationsMissing = !targetsRef.current.every(hasCompleteLocation);
     setStep(locationsMissing ? 0 : 1);
     setNativeMode('list');
-    setNameSelected(
-      new Set(
-        speciesRef.current
-          .filter((sp) => (sp.problems ?? []).some((problem) => !!problem.suggestedValue))
-          .map((sp) => sp.id)
-      )
-    );
+    setNameSelected(new Set(speciesRef.current.filter(hasNameSuggestion).map((sp) => sp.id)));
     setNativeSelected(new Set());
     setOverrideEdits({});
     setShowCancel(false);
@@ -267,7 +266,7 @@ const SpeciesCheckModal = ({
   );
 
   const nameSummaries = useMemo(
-    () => checkedTargetData.map((data) => buildSummary(data, data.withProblems.length)),
+    () => checkedTargetData.map((data) => buildSummary(data, data.withProblems.filter(hasNameSuggestion).length)),
     [buildSummary, checkedTargetData]
   );
 
@@ -433,7 +432,7 @@ const SpeciesCheckModal = ({
       const toAccept = speciesWithProblems.filter((sp) => nameSelected.has(sp.id));
       for (const sp of toAccept) {
         for (const problem of sp.problems ?? []) {
-          if (problem.suggestedValue) {
+          if (hasSuggestedValue(problem.suggestedValue)) {
             await acceptProblem(problem.id).unwrap();
           }
         }

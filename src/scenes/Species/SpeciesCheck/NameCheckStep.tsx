@@ -54,7 +54,10 @@ const NameCheckStep = ({
               borderTop: index > 0 ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined,
             }}
           >
-            <ProjectCheckSummary {...summary} updatesLabel={strings.SUGGESTIONS} />
+            <ProjectCheckSummary
+              {...summary}
+              updatesLabel={strings.formatString(strings.SPECIES_CHECK_SUGGESTIONS, summary.updates ?? 0)}
+            />
           </Box>
         ))}
       </Box>
@@ -81,7 +84,7 @@ const NameCheckStep = ({
           </Box>
           {speciesWithProblems.map((species) => {
             const problem = species.problems?.[0];
-            const hasSuggestion = !!problem?.suggestedValue;
+            const hasSuggestion = !!problem?.suggestedValue?.trim();
             const textColor = hasSuggestion ? theme.palette.TwClrTxt : theme.palette.TwClrTxtSecondary;
             return (
               <Box
