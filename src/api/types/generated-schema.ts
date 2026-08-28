@@ -6217,6 +6217,12 @@ export interface components {
              */
             timeseriesValue?: number;
         };
+        /** @description If this batch was created via a seed withdrawal, the list of accessions it came from. */
+        BatchAccessionPayload: {
+            /** Format: int64 */
+            accessionId?: number;
+            accessionNumber?: string;
+        };
         /** @description A transfer from a seed bank that added germinating seedlings to this batch. */
         BatchHistoryAddedFromAccessionPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
             /** Format: int64 */
@@ -6407,18 +6413,17 @@ export interface components {
             /** @description The name of the sub-location at the time the details were edited. If the sub-location was subsequently renamed or deleted, this name remains the same. */
             name: string;
         };
-        BatchAccessionPayload: {
-            /** Format: int64 */
-            accessionId?: number;
-            accessionNumber?: string;
-        };
         BatchPayload: {
             /**
              * Format: int64
+             * @deprecated
              * @description If this batch was created via a seed withdrawal, the ID of the seed accession it came from. Use "accessions" instead of this.
              */
             accessionId?: number;
-            /** @description If this batch was created via a seed withdrawal, the accession number associated to the seed accession it came from. Use "accessions" instead of this. */
+            /**
+             * @deprecated
+             * @description If this batch was created via a seed withdrawal, the accession number associated to the seed accession it came from. Use "accessions" instead of this.
+             */
             accessionNumber?: string;
             /** @description If this batch was created via a seed withdrawal, the list of accessions it came from. */
             accessions: components["schemas"]["BatchAccessionPayload"][];
