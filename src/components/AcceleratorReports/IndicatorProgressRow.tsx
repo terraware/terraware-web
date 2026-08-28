@@ -47,8 +47,6 @@ const IndicatorProgressRow = ({
   const [resetModalOpened, setResetModalOpened] = useState(false);
   const [overwriting, setOverwriting] = useState(false);
 
-  // both cumulative classes accumulate the year's quarters; only the lifetime one reaches back past
-  // the start of the year
   const isLifetime = indicator.classId === 'Lifetime Cumulative';
   const isYearly = indicator.classId === 'Yearly Cumulative';
   const isCumulative = isLifetime || isYearly;
@@ -56,16 +54,14 @@ const IndicatorProgressRow = ({
   const precision = indicator.precision ?? 0;
   const baselineValue = indicator.baseline ?? 0;
 
-  // a yearly indicator restarts at zero each year, so it carries neither the baseline nor a prior total
   const startingTotal = isLifetime ? indicator.previousYearCumulativeTotal ?? baselineValue : 0;
+  const targetBehindOrigin = isLifetime && indicator.target !== undefined && indicator.target <= startingTotal;
 
   const startingTotalLabel =
     indicator.previousYearCumulativeTotal !== undefined && year !== undefined ? String(year - 1) : strings.BASELINE;
 
   const enteredValue = isAutoCalculated ? indicator.overrideValue ?? indicator.systemValue : indicator.value;
 
-  // A cumulative total is the earlier quarters plus this one, so substitute the entered value for this
-  // quarter and re-sum; that keeps the year and lifetime bars in step while the value is being edited.
   const currentYearProgress = useMemo(() => {
     const progress = indicator.currentYearProgress ?? [];
 
@@ -98,15 +94,28 @@ const IndicatorProgressRow = ({
     const barMax = Math.max(total, target ?? 0, barMin);
     const range = barMax - barMin;
 
+    // Pin target at start if origin is ahead of target
     const anchorPercent =
-      target !== undefined && range > 0 ? Math.max(MIN_TARGET_PERCENT, ((target - barMin) / range) * 100) : undefined;
+      target === undefined
+        ? undefined
+        : targetBehindOrigin
+          ? 0
+          : range > 0
+            ? Math.max(MIN_TARGET_PERCENT, ((target - barMin) / range) * 100)
+            : undefined;
 
     const toPercent = (value: number) => {
-      if (range <= 0) {
+      // the origin is 0 by definition, whatever the scale does above it
+      if (value <= barMin) {
         return 0;
       }
 
-      if (anchorPercent === undefined || target === undefined) {
+      if (range <= 0) {
+        return 100;
+      }
+
+      // with the target at the origin there is no piecewise split left to make
+      if (target === undefined || anchorPercent === undefined || anchorPercent <= 0) {
         return ((value - barMin) / range) * 100;
       }
 
@@ -118,6 +127,11 @@ const IndicatorProgressRow = ({
       const aboveTarget = barMax - target;
       return aboveTarget > 0 ? anchorPercent + ((value - target) / aboveTarget) * (100 - anchorPercent) : anchorPercent;
     };
+
+    // Show target met if origin is ahead of target
+    if (targetBehindOrigin && range <= 0) {
+      return { segments: [{ key: 'total', quarter: undefined, startPercent: 0, widthPercent: 100 }], targetPercent: 0 };
+    }
 
     let runningTotal = barMin;
     const barSegments =
@@ -136,7 +150,7 @@ const IndicatorProgressRow = ({
         : [{ key: 'total', quarter: undefined, startPercent: 0, widthPercent: toPercent(total) }];
 
     return { segments: barSegments, targetPercent: anchorPercent };
-  }, [cumulativeValue, currentYearProgress, indicator.target, isCumulative, startingTotal]);
+  }, [cumulativeValue, currentYearProgress, indicator.target, isCumulative, startingTotal, targetBehindOrigin]);
 
   const fillColor =
     indicator.status === 'Unlikely'
@@ -161,7 +175,6 @@ const IndicatorProgressRow = ({
       return undefined;
     }
 
-    // a yearly target measures the year's progress alone, so the project baseline is not on its scale
     const origin = isYearly ? 0 : baselineValue;
     const denominator = target - origin;
 
@@ -169,8 +182,12 @@ const IndicatorProgressRow = ({
       return undefined;
     }
 
+    if (targetBehindOrigin) {
+      return 100;
+    }
+
     return Math.round((((cumulativeValue ?? 0) - origin) / denominator) * 100);
-  }, [baselineValue, cumulativeValue, indicator.target, isYearly]);
+  }, [baselineValue, cumulativeValue, indicator.target, isYearly, targetBehindOrigin]);
 
   const statusOptions = useMemo<DropdownItem[]>(
     () => [
