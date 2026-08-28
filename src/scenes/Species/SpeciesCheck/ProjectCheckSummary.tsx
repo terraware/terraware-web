@@ -59,11 +59,11 @@ const ProjectCheckSummary = ({
       </Box>
       {showCounts && (
         <Box textAlign='right' whiteSpace='nowrap'>
-          <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrBaseBlack}>
-            {updatesLabel ?? strings.formatString(strings.SPECIES_CHECK_UPDATES, updates)}
-          </Typography>
           <Typography fontSize='16px' color={theme.palette.TwClrBaseBlack}>
             {strings.formatString(strings.SPECIES_CHECK_SPECIES_CHECKED, speciesChecked)}
+          </Typography>
+          <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrBaseBlack}>
+            {updatesLabel ?? strings.formatString(strings.SPECIES_CHECK_UPDATES, updates)}
           </Typography>
         </Box>
       )}
