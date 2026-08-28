@@ -1,6 +1,6 @@
-import React, { type JSX, useCallback } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
-import { Grid, useTheme } from '@mui/material';
+import { Box, Grid, useTheme } from '@mui/material';
 
 import ProjectOverviewItemCard from 'src/components/ProjectOverviewItemCard';
 import Link from 'src/components/common/Link';
@@ -25,6 +25,38 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
   const [updateBatch] = useUpdateBatchMutation();
+
+  const accessionLinks = useMemo(() => {
+    if (batch.accessions?.length) {
+      return batch.accessions.filter(
+        (accession): accession is { accessionId: number; accessionNumber?: string } =>
+          accession.accessionId !== undefined
+      );
+    }
+
+    if (batch.accessionId) {
+      return [{ accessionId: batch.accessionId, accessionNumber: batch.accessionNumber }];
+    }
+
+    return [];
+  }, [batch.accessionId, batch.accessionNumber, batch.accessions]);
+
+  const accessionLinkContents = useMemo(
+    () =>
+      accessionLinks.length ? (
+        <Box component='span' display='flex' flexWrap='wrap'>
+          {accessionLinks.map(({ accessionId, accessionNumber }, index) => (
+            <React.Fragment key={accessionId}>
+              <Link to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${accessionId}`)}>
+                {accessionNumber || accessionId}
+              </Link>
+              {index < accessionLinks.length - 1 ? strings.LIST_SEPARATOR : null}
+            </React.Fragment>
+          ))}
+        </Box>
+      ) : null,
+    [accessionLinks]
+  );
 
   const onProjectUnAssign = useCallback(async () => {
     try {
@@ -67,20 +99,10 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
         />
       </Grid>
       <Grid item flexBasis={overviewGridSize} flexGrow={1}>
-        <OverviewItemCard
-          isEditable={false}
-          title={strings.ACCESSION_ID}
-          contents={
-            batch.accessionId ? (
-              <Link to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${batch.accessionId}`)}>
-                {batch.accessionNumber || ''}
-              </Link>
-            ) : null
-          }
-        />
+        <OverviewItemCard isEditable={false} title={strings.ACCESSION_ID} contents={accessionLinkContents} />
       </Grid>
       <Grid item flexBasis={overviewGridSize} flexGrow={1}>
-        <OverviewItemCard isEditable={false} title={strings.DATE_ADDED} contents={batch.addedDate} />
+        <OverviewItemCard isEditable={false} title={strings.BATCH_CREATED} contents={batch.addedDate} />
       </Grid>
 
       {batch && (

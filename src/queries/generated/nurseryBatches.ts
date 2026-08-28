@@ -149,11 +149,17 @@ export type UpdateBatchQuantitiesApiArg = {
   id: number;
   updateBatchQuantitiesRequestPayload: UpdateBatchQuantitiesRequestPayload;
 };
-export type BatchPayload = {
-  /** If this batch was created via a seed withdrawal, the ID of the seed accession it came from. */
+export type BatchAccessionPayload = {
   accessionId?: number;
-  /** If this batch was created via a seed withdrawal, the accession number associated to the seed accession it came from. */
   accessionNumber?: string;
+};
+export type BatchPayload = {
+  /** If this batch was created via a seed withdrawal, the ID of the seed accession it came from. Use "accessions" instead of this. */
+  accessionId?: number;
+  /** If this batch was created via a seed withdrawal, the accession number associated to the seed accession it came from. Use "accessions" instead of this. */
+  accessionNumber?: string;
+  /** If this batch was created via a seed withdrawal, the list of accessions it came from. */
+  accessions: BatchAccessionPayload[];
   activeGrowthQuantity: number;
   addedDate: string;
   batchNumber: string;
@@ -250,6 +256,12 @@ export type BatchHistoryPayloadCommonProps = {
   createdTime: string;
   version?: number;
 };
+export type BatchHistoryAddedFromAccessionPayload = BatchHistoryPayloadCommonProps & {
+  accessionId: number;
+  accessionNumber: string;
+  germinatingQuantity: number;
+  type: 'AddedFromAccession';
+};
 export type BatchHistorySubLocationPayload = {
   /** The ID of the sub-location if it still exists. If it was subsequently deleted, this will be null but the name will still be present. */
   id?: number;
@@ -320,6 +332,9 @@ export type BatchHistoryStatusChangedPayload = BatchHistoryPayloadCommonProps & 
   type: 'StatusChanged';
 };
 export type BatchHistoryPayload =
+  | ({
+      type: 'AddedFromAccession';
+    } & BatchHistoryAddedFromAccessionPayload)
   | ({
       type: 'DetailsEdited';
     } & BatchHistoryDetailsEditedPayload)

@@ -224,6 +224,9 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
             changedFields.push(strings.READY_TO_PLANT_QUANTITY);
           }
         }
+        if (historyItem.type === 'AddedFromAccession') {
+          changedFields.push(strings.GERMINATION_ESTABLISHMENT_QUANTITY);
+        }
         return {
           ...historyItem,
           editedByName: getUserDisplayName(userSelected),

@@ -238,7 +238,9 @@ BACK_TO_TERRAWARE,Volver a Terraware,a22174ad
 BAG_ID,ID de Bolsa,1eaa1440
 BASELINE,Línea base,332af00e
 BATCH,Lote,9fdfdd9b
+BATCH_CREATED,Lote creado,1a382f74
 BATCH_DETAILS,Detalles del lote,9ebc8179
+BATCH_HISTORY_TYPE_ADDED_FROM_ACCESSION,Agregado desde accesión,57b6054e
 BATCH_HISTORY_TYPE_DETAILS_EDITED,Detalles editados,4e7e4bd8
 BATCH_HISTORY_TYPE_INCOMING_WITHDRAWAL,Retiro entrante,e9ddca41
 BATCH_HISTORY_TYPE_OUTGOING_WITHDRAWAL,Retiro saliente,05f67246
@@ -247,6 +249,7 @@ BATCH_HISTORY_TYPE_PHOTO_DELETED,Foto eliminada,a1951aa1
 BATCH_HISTORY_TYPE_QUANTITY_EDITED,Cantidad editada,0e759125
 BATCH_HISTORY_TYPE_STATUS_CHANGED,Estado cambiado,b151d962
 BATCH_NUMBER,Número de lote,4576c1c5
+BATCH_QUANTITY_UPDATED_FROM_ACCESSION,Cantidad del lote actualizada desde la accesión {0}.,ada0b88f
 BATCH_WITHDRAW_SUCCESS,{0} {1} para un total de {2} {3} retirados.,12e46db6
 BATCHES,Lotes,9a63f6cf
 BATCHES_AT,Lotes en {0},b3caf9d1
@@ -962,6 +965,7 @@ INVASIVE,Invasiva,6d785c90
 INVASIVE_AND_THREATENED_SPECIES,Especies invasoras y amenazadas,d12cca9f
 INVASIVE_AND_THREATENED_SPECIES_INSTRUCTIONS,Haga clic en un valor de las tablas para editarlo. Vaya a Fotos y Videos para editar los pies de foto.,580915bd
 INVENTORY,Inventario,001c6bdb
+INVENTORY_BATCH,Lote de inventario,7f5a4622
 INVENTORY_IMPORT_COMPLETE,¡Importación de datos del inventario finalizada!,760bba82
 INVENTORY_ONBOARDING_NURSERIES_MSG,Defina los viveros asignados al inventario de plántulas,393e62d3
 INVENTORY_ONBOARDING_SPECIES_MSG,Defina una lista de especies utilizadas en su inventario de plántulas,bafd0703

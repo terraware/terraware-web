@@ -270,6 +270,8 @@ export type ListEventLogEntriesResponsePayload = {
   status: SuccessOrError;
 };
 export type ListEventLogEntriesRequestPayload = {
+  accessionId?: number;
+  facilityId?: number;
   fileId?: number;
   monitoringPlotId?: number;
   observationId?: number;
