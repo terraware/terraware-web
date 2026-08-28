@@ -40,7 +40,7 @@ type ProjectRow = {
 
 const columns = (): TableColumnType[] => [
   { key: 'projectName', name: strings.PROJECT, type: 'string', sx: { width: '34%' } },
-  { key: 'status', name: strings.NATIVE_STATUS, type: 'string', sx: { width: '44%' } },
+  { key: 'status', name: strings.NATIVE_STATUS, type: 'string' },
   { key: 'actions', name: '', type: 'string', alignment: 'right', sx: { width: '180px' } },
 ];
 
@@ -145,7 +145,7 @@ export default function SpeciesProjectsSection({
       const projectRow = row as ProjectRow;
 
       if (column.key === 'projectName') {
-        return <CellRenderer {...props} index={index} style={{ width: '34%' }} />;
+        return <CellRenderer {...props} index={index} />;
       }
 
       if (column.key === 'status') {
@@ -153,7 +153,6 @@ export default function SpeciesProjectsSection({
           <CellRenderer
             {...props}
             component='div'
-            style={{ width: '44%' }}
             sx={{ '& > div': { maxWidth: 'none', overflow: 'visible' } }}
             value={
               <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'nowrap', gap: theme.spacing(1) }}>

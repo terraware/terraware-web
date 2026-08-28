@@ -21,7 +21,7 @@ import RemoveProjectsDialog from './RemoveProjectsDialog';
 import SpeciesProjectsCellRenderer from './SpeciesProjectsCellRenderer';
 
 const columns = (): TableColumnType[] => [
-  { key: 'projectName', name: strings.PROJECT, type: 'string' },
+  { key: 'projectName', name: strings.PROJECT, type: 'string', sx: { width: '34%' } },
   { key: 'participantProjectSpeciesNativeCategory', name: strings.NATIVE_NON_NATIVE, type: 'string' },
   { key: 'participantProjectSpeciesSubmissionStatus', name: strings.STATUS, type: 'string' },
 ];
