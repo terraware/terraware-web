@@ -25,8 +25,7 @@ const ORG_URL = `/api/v1/organizations/${ORG_ID}`;
 const ORG_USER_URL = `/api/v1/organizations/${ORG_ID}/users/:userId`;
 const userUrl = (userId: string) => `/api/v1/organizations/${ORG_ID}/users/${userId}`;
 
-// The signed-in user, who is also the organization's owner in most of these tests: several of the
-// destructive paths treat "me" differently from everyone else.
+// The signed-in user, who is also the organization's owner in most of these tests
 const CURRENT_USER_ID = 1;
 
 const OWNER = buildPersonSearchResult({
@@ -71,8 +70,7 @@ const TF_CONTACT = buildPersonSearchResult({
  * internal project roles shown next to a Terraformation Contact.
  *
  * Returns the prefixes requested so far, so a test can wait for the mount searches to settle before
- * touching the table. That matters: the table clears its selection whenever the rows array changes
- * identity, so clicking a checkbox before the second search lands would silently deselect it again.
+ * touching the table.
  */
 const mockSearches = (people: PersonSearchResult[], projectInternalUsers: Record<string, string>[] = []) => {
   const prefixes: string[] = [];
@@ -102,12 +100,7 @@ const rowFor = (email: string) => screen.getByText(email).closest('tr') as HTMLE
 /** The Remove button in the table's top bar, which only appears once rows are selected. */
 const topBarRemoveButton = () => screen.getByRole('button', { name: strings.REMOVE });
 
-/**
- * The open dialog with this title, so its buttons and option list can be told apart from the page
- * behind it — while rows are selected the table's top bar also carries a "Remove" button, and the
- * emails offered as a replacement owner are also listed in the table. DialogBox renders no ARIA
- * dialog role to scope by, hence the class.
- */
+/** The open dialog with this title */
 const dialogTitled = (title: string): HTMLElement => {
   const box = screen.getByText(title).closest('.dialog-box');
   if (!box) {
@@ -115,12 +108,6 @@ const dialogTitled = (title: string): HTMLElement => {
   }
   return box as HTMLElement;
 };
-
-// PageSnackbar mounts the app-version poller on every page. An empty body means "no newer build",
-// which keeps the upgrade banner out of the way of what these tests are looking at.
-beforeEach(() => {
-  server.use(http.get('/build-version.txt', () => HttpResponse.text('')));
-});
 
 describe('PeopleListView', () => {
   describe('permission gating', () => {
