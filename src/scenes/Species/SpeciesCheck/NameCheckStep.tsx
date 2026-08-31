@@ -62,7 +62,10 @@ const NameCheckStep = ({
       {speciesWithProblems.length === 0 ? (
         <Box padding={theme.spacing(4)} textAlign='center'>
           <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
-            {strings.DATABASE_CHECK_NO_ERRORS}
+            {strings.NAME_CHECK_NO_SUGGESTIONS}
+          </Typography>
+          <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
+            {strings.NAME_CHECK_NO_SUGGESTIONS_HINT}
           </Typography>
         </Box>
       ) : (

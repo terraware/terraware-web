@@ -1237,12 +1237,14 @@ N_ROWS,{0} ligne(s),2bb73684
 NA,N/A,627f660e
 NAME,Nom,e7c2678c
 NAME_CHECK,Vérification du nom,6afa08ed
+NAME_CHECK_NO_SUGGESTIONS,Aucune suggestion de noms d'espèces détectée.,a334f132
+NAME_CHECK_NO_SUGGESTIONS_HINT,Les noms individuels des espèces peuvent être modifiés sur l'écran Détails de l'espèce.,1de53c3f
 NAME_REQUIRED,Nom *,9a735f80
 NAME_UNKNOWN,(nom inconnu),526f6e3c
 NAME_USED_BY_PROJECT,Nom utilisé par projet,c2fdff8f
 NATIVE,Indigène,3ef34d4d
 NATIVE_CHECK,Vérification du statut indigène,474464e4
-NATIVE_CHECK_NO_UPDATES,Aucune mise à jour du statut indigène des espèces détectée.,636bfefb
+NATIVE_CHECK_NO_UPDATES,Aucune suggestion concernant le statut d'origine des espèces détectée.,6ba30629
 NATIVE_CHECK_NO_UPDATES_HINT,Le statut individuel des espèces peut être modifié dans l’écran des détails de l’espèce.,21f7b4fe
 NATIVE_CHECK_UPDATE_HINT,Sélectionnez les espèces pour remplacer leur statut indiqué ou continuez sans modifier les résultats.,1b67a440
 NATIVE_ECOSYSTEM,Écosystème indigène,1a733f45
