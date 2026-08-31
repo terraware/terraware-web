@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">76.19% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/21</span>
+                <span class='fraction'>16/21</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">70% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>4/10</span>
+                <span class='fraction'>7/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">42.85% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/7</span>
+                <span class='fraction'>3/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">76.19% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/21</span>
+                <span class='fraction'>16/21</span>
             </div>
         
             
@@ -141,7 +141,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -165,19 +165,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">26x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,7 +188,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">8x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -196,13 +196,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-yes">78x</span>
-<span class="cline-any cline-yes">78x</span>
-<span class="cline-any cline-yes">78x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">104x</span>
+<span class="cline-any cline-yes">104x</span>
+<span class="cline-any cline-yes">104x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">77x</span>
+<span class="cline-any cline-yes">103x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -237,11 +237,11 @@ function <span class="fstat-no" title="function not covered" >escapeRegExp(</spa
  * surrounded by double quotes, the type is PhraseMatch (and the search term will have the quotes
  * stripped). Otherwise the type is the value of the "type" parameter, which is Fuzzy by default.
  */
-const parseSearchTerm = <span class="fstat-no" title="function not covered" >(searchTerm: string, type: SearchType = 'Fuzzy'): { type: SearchType; values: string[] } =&gt; {</span>
-  const phraseMatchQuery = <span class="cstat-no" title="statement not covered" >removeDoubleQuotes(searchTerm);</span>
+const parseSearchTerm = (searchTerm: string, type: SearchType = 'Fuzzy'): { type: SearchType; values: string[] } =&gt; {
+  const phraseMatchQuery = removeDoubleQuotes(searchTerm);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return {</span>
-    type: phraseMatchQuery ? 'PhraseMatch' : type,
+  return {
+    type: phraseMatchQuery ? <span class="branch-0 cbranch-no" title="branch not covered" >'PhraseMatch' </span>: type,
     values: [phraseMatchQuery || searchTerm],
   };
 };
@@ -286,7 +286,7 @@ export { createSearchNodeForIds, parseSearchTerm, phraseMatch, regexMatch, remov
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-08-31T20:17:24.854Z
+                at 2026-08-31T23:34:38.004Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
