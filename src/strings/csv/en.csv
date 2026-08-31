@@ -2238,6 +2238,7 @@ SPECIES_CHECK_SET_LOCATION_BANNER,"To check which species are native, introduced
 SPECIES_CHECK_SET_LOCATION_HINT,Select a Country and Botanical Country to set the location.,
 SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS,Select a Country and Botanical Country to set the location of each Project.,
 SPECIES_CHECK_SPECIES_CHECKED,{0} species checked,
+SPECIES_CHECK_SUGGESTION,{0} suggestion,
 SPECIES_CHECK_SUGGESTIONS,{0} suggestions,
 SPECIES_CHECK_UPDATE_HINT,"Select species to update, or continue without any updates. Updates will override pre-existing data."
 SPECIES_CHECK_UPDATES,{0} updates,
