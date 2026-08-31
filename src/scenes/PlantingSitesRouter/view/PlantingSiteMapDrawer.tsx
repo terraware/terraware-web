@@ -40,12 +40,12 @@ const PlantingSiteMapDrawer = ({ plantingSiteId, layerFeatureId }: PlantingSiteM
       areaHa ? numberFormatter.format(areaHa, { decimals: 1 }) : strings.UNKNOWN;
 
     const formatDensity = (density: number | undefined) =>
-      density === undefined ? PLACEHOLDER : `${numberFormatter.format(density)} ${strings.PLANTS_PER_HECTARE}`;
+      density === undefined ? PLACEHOLDER : numberFormatter.format(density);
 
     if (data.type === 'site') {
       return [
-        { key: strings.PLANTING_SITE_AREA, value: formatArea(data.areaHa) },
-        { key: strings.PLANTING_COMPLETE, value: data.plantingComplete ? strings.YES : strings.NO },
+        { key: strings.AREA_HA, value: formatArea(data.areaHa) },
+        { key: strings.PLANTING_COMPLETE_CHART, value: data.plantingComplete ? strings.YES : strings.NO },
         { key: strings.STRATA, value: `${data.strataCount}` },
         { key: strings.SUBSTRATA, value: `${data.substrataCount}` },
       ];
@@ -53,9 +53,18 @@ const PlantingSiteMapDrawer = ({ plantingSiteId, layerFeatureId }: PlantingSiteM
 
     return [
       { key: strings.AREA_HA, value: formatArea(data.areaHa) },
-      { key: strings.PLANTING_COMPLETE, value: data.plantingComplete ? strings.YES : strings.NO },
-      { key: strings.INITIAL_PLANTING_DENSITY, value: formatDensity(data.initialPlantingDensity) },
-      { key: strings.TARGET_PLANT_DENSITY, value: formatDensity(data.targetPlantDensity) },
+      {
+        key: strings.PLANTING_COMPLETE_CHART,
+        value: data.plantingComplete ? strings.YES : strings.NO,
+      },
+      {
+        key: `${strings.INITIAL_PLANTING_DENSITY} (${strings.PLANTS_PER_HECTARE})`,
+        value: formatDensity(data.initialPlantingDensity),
+      },
+      {
+        key: `${strings.TARGET_PLANT_DENSITY} (${strings.PLANTS_PER_HECTARE})`,
+        value: formatDensity(data.targetPlantDensity),
+      },
     ];
   }, [data, numberFormatter, strings]);
 
@@ -79,8 +88,9 @@ const PlantingSiteMapDrawer = ({ plantingSiteId, layerFeatureId }: PlantingSiteM
         header={data.name}
         overline={data.type === 'substratum' ? data.stratumName : undefined}
         rows={rows}
+        stripedRows={data.type === 'site'}
       />
-      {speciesNames.length > 0 && <SpeciesToPlant names={speciesNames} />}
+      {data.type === 'stratum' && <SpeciesToPlant names={speciesNames} />}
     </Box>
   );
 };

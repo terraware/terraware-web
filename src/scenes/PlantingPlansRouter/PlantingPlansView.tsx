@@ -17,7 +17,12 @@ const PlantingPlansView = (): JSX.Element => {
   const { isLoading, plantingSites } = useOrganizationPlantingSites({ full: true });
 
   return (
-    <Page title={strings.PLANTING_PLANS} description={strings.MANAGE_PLANTING_PLANS_DESCRIPTION}>
+    <Page
+      title={strings.PLANTING_PLANS}
+      titleStyle={{ paddingLeft: theme.spacing(1) }}
+      description={strings.MANAGE_PLANTING_PLANS_DESCRIPTION}
+      descriptionStyle={{ paddingLeft: theme.spacing(1) }}
+    >
       {isLoading ? (
         <BusySpinner withSkrim={true} />
       ) : plantingSites.length === 0 ? (

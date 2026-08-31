@@ -104,6 +104,16 @@ describe('getPlantingSiteMapDrawerData', () => {
     expect(result?.type === 'stratum' && result.speciesIds).toEqual([]);
   });
 
+  test('ignores species targets with missing strata instead of failing the drawer', () => {
+    const targets = [
+      { speciesId: 5, stratumIds: undefined },
+      { speciesId: 6, stratumIds: [10] },
+    ] as unknown as PlantingSiteSpeciesTargetPayload[];
+
+    const result = getPlantingSiteMapDrawerData(makeSite(), featureId('strata', '10'), targets);
+    expect(result?.type === 'stratum' && result.speciesIds).toEqual([6]);
+  });
+
   test('returns substratum data with densities and stratum name inherited from the parent stratum', () => {
     expect(getPlantingSiteMapDrawerData(makeSite(), featureId('substrata', '101'))).toEqual({
       type: 'substratum',

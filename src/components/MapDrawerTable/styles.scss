@@ -21,7 +21,7 @@
 
   &--overline {
     font-size: 14px;
-    font-weight: 400;
+    font-weight: 600;
     line-height: 20px;
   }
 
@@ -43,17 +43,19 @@
   }
 
   tbody {
-    tr {
+    tr td:nth-child(2) {
+      text-align: right;
+    }
+  }
+
+  &--striped {
+    tbody tr {
       &:nth-child(odd) {
         background-color: $tw-clr-base-white;
       }
 
       &:nth-child(even) {
         background-color: $tw-clr-base-gray-050;
-      }
-
-      td:nth-child(2) {
-        text-align: right;
       }
     }
   }

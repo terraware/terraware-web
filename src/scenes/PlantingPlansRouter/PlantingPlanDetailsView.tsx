@@ -43,8 +43,14 @@ const PlantingPlanDetailsView = (): JSX.Element => {
   }, []);
 
   const crumbs = useMemo(
-    (): Crumb[] => [{ name: strings.PLANTING_PLANS, to: APP_PATHS.PLANTING_PLANS }],
-    [strings.PLANTING_PLANS]
+    (): Crumb[] => [
+      { name: strings.PLANTING_PLANS, to: APP_PATHS.PLANTING_PLANS },
+      {
+        name: plantingSite?.name ?? '',
+        to: `/${plantingSiteId}`,
+      },
+    ],
+    [plantingSite?.name, plantingSiteId, strings.PLANTING_PLANS]
   );
 
   const segments = useMemo(
@@ -107,6 +113,7 @@ const PlantingPlanDetailsView = (): JSX.Element => {
     <Page
       title={title}
       crumbs={crumbs}
+      titleContainerStyle={{ marginTop: theme.spacing(2) }}
       rightComponent={rightComponent}
       leftComponentGridSize={0}
       rightComponentGridSize={showAddSeasonButton ? 3 : 0}

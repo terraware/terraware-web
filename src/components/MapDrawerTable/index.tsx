@@ -15,13 +15,21 @@ type MapDrawerTableProps = {
   header?: string;
   overline?: string;
   rows: MapDrawerTableRow[];
+  stripedRows?: boolean;
   subheader?: string;
   subheaderUrl?: string;
 };
 
-const MapDrawerTable = ({ header, overline, subheader, subheaderUrl, rows }: MapDrawerTableProps): JSX.Element => {
+const MapDrawerTable = ({
+  header,
+  overline,
+  rows,
+  stripedRows = true,
+  subheader,
+  subheaderUrl,
+}: MapDrawerTableProps): JSX.Element => {
   return (
-    <table className='map-drawer-table'>
+    <table className={`map-drawer-table${stripedRows ? ' map-drawer-table--striped' : ''}`}>
       {header && (
         <thead>
           <tr>

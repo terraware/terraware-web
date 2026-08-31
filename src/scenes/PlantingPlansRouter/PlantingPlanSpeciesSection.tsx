@@ -80,6 +80,7 @@ const PlantingPlanSpeciesSection = ({ plantingSite }: PlantingPlanSpeciesSection
   };
 
   const assigningTarget = targets.find((entry) => entry.speciesId === assigningSpeciesId);
+  const showAddSpeciesRow = targets.length === 0 || addingSpecies;
 
   return (
     <Box flex={1} minWidth={0}>
@@ -129,10 +130,10 @@ const PlantingPlanSpeciesSection = ({ plantingSite }: PlantingPlanSpeciesSection
           />
         ))}
 
-        {addingSpecies ? (
+        {showAddSpeciesRow ? (
           <AddSpeciesRow
             options={availableOptions}
-            onCancel={() => setAddingSpecies(false)}
+            onCancel={targets.length > 0 ? () => setAddingSpecies(false) : undefined}
             onAdd={async (speciesId, targetPlants) => {
               const succeeded = await upsertTarget(speciesId, [], targetPlants);
               if (succeeded) {
@@ -273,7 +274,7 @@ const SpeciesRow = ({
 
 type AddSpeciesRowProps = {
   options: DropdownItem[];
-  onCancel: () => void;
+  onCancel?: () => void;
   onAdd: (speciesId: number, targetPlants?: number) => Promise<void>;
 };
 
@@ -330,7 +331,7 @@ const AddSpeciesRow = ({ options, onCancel, onAdd }: AddSpeciesRowProps): JSX.El
         type='productive'
         disabled={selectedSpeciesId === undefined}
       />
-      <Button icon='close' onClick={onCancel} priority='ghost' size='small' type='passive' />
+      {onCancel && <Button icon='close' onClick={onCancel} priority='ghost' size='small' type='passive' />}
     </Box>
   );
 };
