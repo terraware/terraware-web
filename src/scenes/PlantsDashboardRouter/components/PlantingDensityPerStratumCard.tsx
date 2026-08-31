@@ -146,6 +146,13 @@ export default function PlantingDensityPerStratumCard({
           customLegend
           customLegendContainerId='legend-container-density'
           customTooltipLabel={tooltipRenderer}
+          pluginsOptions={{
+            legend: {
+              labels: {
+                sort: (a, b) => (a.datasetIndex ?? 0) - (b.datasetIndex ?? 0),
+              },
+            },
+          }}
         />
       </Box>
     </Box>
