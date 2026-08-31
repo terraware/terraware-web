@@ -1,3 +1,4 @@
+8eaf6611 Fix alignment in species projects tables (#6331)
 9294934d Update Node.js to v24.20.0 (#6334)
 e22f2283 Update dependency js-yaml to v4.3.2 (#6336)
 d574ecab Fix lifetime indicator progress bars in later report years (#6320)
