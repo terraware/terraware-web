@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { TableColumnType } from '@terraware/web-components';
@@ -41,6 +41,132 @@ export type BatchHistoryItemForTable = BatchHistoryItem & {
   previousEvent?: BatchHistoryItem;
   modifiedFields: string[];
   nurseryName?: string;
+};
+
+type FullQuantityHistoryItem = Extract<BatchHistoryItem, { type: 'QuantityEdited' | 'StatusChanged' }>;
+type AddedFromAccessionHistoryItem = Extract<BatchHistoryItem, { type: 'AddedFromAccession' }>;
+type QuantityHistoryItem = FullQuantityHistoryItem | AddedFromAccessionHistoryItem;
+
+const isFullQuantityHistoryItem = (historyItem?: BatchHistoryItem): historyItem is FullQuantityHistoryItem =>
+  historyItem?.type === 'QuantityEdited' || historyItem?.type === 'StatusChanged';
+
+const isQuantityHistoryItem = (historyItem: BatchHistoryItem): historyItem is QuantityHistoryItem =>
+  isFullQuantityHistoryItem(historyItem) || historyItem.type === 'AddedFromAccession';
+
+const findPreviousMatchingEvent = <T extends BatchHistoryItem>(
+  historyItem: BatchHistoryItem,
+  allItems: BatchHistoryItem[] | null,
+  isCandidate: (item: BatchHistoryItem) => item is T
+): T | undefined => {
+  let previousEv: T | undefined;
+
+  allItems?.forEach((ev) => {
+    if (
+      isCandidate(ev) &&
+      ev.version &&
+      historyItem.version &&
+      ev.version < historyItem.version &&
+      ev.version > (previousEv?.version || 0)
+    ) {
+      previousEv = ev;
+    }
+  });
+
+  return previousEv;
+};
+
+const findPreviousQuantitySnapshot = (
+  historyItem: BatchHistoryItem,
+  allItems: BatchHistoryItem[] | null
+): FullQuantityHistoryItem | undefined => {
+  const previousQuantityEvent = findPreviousMatchingEvent(historyItem, allItems, isQuantityHistoryItem);
+
+  if (!previousQuantityEvent) {
+    return undefined;
+  }
+
+  if (isFullQuantityHistoryItem(previousQuantityEvent)) {
+    return previousQuantityEvent;
+  }
+
+  const previousFullQuantityEvent = findPreviousMatchingEvent(
+    previousQuantityEvent,
+    allItems,
+    isFullQuantityHistoryItem
+  );
+
+  return {
+    ...previousQuantityEvent,
+    activeGrowthQuantity: previousFullQuantityEvent?.activeGrowthQuantity ?? 0,
+    germinatingQuantity: previousQuantityEvent.germinatingQuantity,
+    hardeningOffQuantity: previousFullQuantityEvent?.hardeningOffQuantity ?? 0,
+    notReadyQuantity: previousFullQuantityEvent?.notReadyQuantity ?? 0,
+    readyQuantity: previousFullQuantityEvent?.readyQuantity ?? 0,
+    type: 'QuantityEdited',
+  };
+};
+
+export const findPreviousEvent = (
+  historyItem: BatchHistoryItem,
+  allItems: BatchHistoryItem[] | null
+): BatchHistoryItem | undefined => {
+  if (isFullQuantityHistoryItem(historyItem)) {
+    return findPreviousQuantitySnapshot(historyItem, allItems);
+  }
+
+  return findPreviousMatchingEvent(historyItem, allItems, (ev): ev is BatchHistoryItem => ev.type === historyItem.type);
+};
+
+export const getModifiedFields = (historyItem: BatchHistoryItem, previousEv?: BatchHistoryItem): string[] => {
+  const changedFields: string[] = [];
+
+  if (historyItem.type === 'DetailsEdited' && (previousEv?.type === 'DetailsEdited' || !previousEv)) {
+    if ((historyItem.notes || '') !== (previousEv?.notes || '')) {
+      changedFields.push(strings.NOTES);
+    }
+    if (
+      (historyItem.substrate || '') !== (previousEv?.substrate || '') ||
+      (historyItem.substrateNotes || '') !== (previousEv?.substrateNotes || '')
+    ) {
+      changedFields.push(strings.SUBSTRATE);
+    }
+    if (
+      (historyItem.treatment || '') !== (previousEv?.treatment || '') ||
+      (historyItem.treatmentNotes || '') !== (previousEv?.treatmentNotes || '')
+    ) {
+      changedFields.push(strings.TREATMENT);
+    }
+    if ((historyItem.germinationStartedDate || '') !== (previousEv?.germinationStartedDate || '')) {
+      changedFields.push(strings.GERMINATION_ESTABLISHMENT_STARTED_DATE);
+    }
+    if ((historyItem.readyByDate || '') !== (previousEv?.readyByDate || '')) {
+      changedFields.push(strings.ESTIMATED_READY_DATE);
+    }
+    if ((historyItem.seedsSownDate || '') !== (previousEv?.seedsSownDate || '')) {
+      changedFields.push(strings.SEEDS_SOWN_DATE);
+    }
+  }
+
+  if (isFullQuantityHistoryItem(historyItem) && (isFullQuantityHistoryItem(previousEv) || !previousEv)) {
+    if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {
+      changedFields.push(strings.GERMINATION_ESTABLISHMENT_QUANTITY);
+    }
+    if (historyItem.activeGrowthQuantity !== previousEv?.activeGrowthQuantity) {
+      changedFields.push(strings.ACTIVE_GROWTH_QUANTITY);
+    }
+    if (historyItem.hardeningOffQuantity !== previousEv?.hardeningOffQuantity) {
+      changedFields.push(strings.HARDENING_OFF_QUANTITY);
+    }
+    if (historyItem.readyQuantity !== previousEv?.readyQuantity) {
+      changedFields.push(strings.READY_TO_PLANT_QUANTITY);
+    }
+  }
+
+  if (historyItem.type === 'AddedFromAccession') {
+    changedFields.push(strings.GERMINATION_ESTABLISHMENT_QUANTITY);
+  }
+
+  return changedFields;
 };
 
 export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps): JSX.Element {
@@ -125,24 +251,6 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
     }
   }, [selectedOrganization]);
 
-  const findPreviousEvent = useCallback(
-    (batch: BatchHistoryItem, allItems: BatchHistoryItem[] | null): BatchHistoryItem | undefined => {
-      const eventsOfSameType = allItems?.filter((result) =>
-        batch.type === 'QuantityEdited' || batch.type === 'StatusChanged'
-          ? result.type === 'QuantityEdited' || result.type === 'StatusChanged'
-          : result.type === batch.type
-      );
-      let previousEv: BatchHistoryItem | undefined;
-      eventsOfSameType?.forEach((ev) => {
-        if (ev.version && batch.version && ev.version < batch.version && ev.version > (previousEv?.version || 0)) {
-          previousEv = ev;
-        }
-      });
-      return previousEv;
-    },
-    []
-  );
-
   const filteredHistory = useMemo((): BatchHistoryItem[] | null => {
     if (!batchHistory || !users) {
       return null;
@@ -175,55 +283,14 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
 
     return filteredHistory
       .filter((historyItem) => {
-        return historyItem.type === 'DetailsEdited' ? findPreviousEvent(historyItem, filteredHistory) : true;
+        return historyItem.type === 'DetailsEdited'
+          ? findPreviousEvent(historyItem, batchHistory?.history ?? null)
+          : true;
       })
       .map((historyItem) => {
         const userSelected = users[historyItem.createdBy];
-        const previousEv = findPreviousEvent(historyItem, filteredHistory);
-        const changedFields = [];
-        if (historyItem.type === 'DetailsEdited' && (previousEv?.type === 'DetailsEdited' || !previousEv)) {
-          if ((historyItem.notes || '') !== (previousEv?.notes || '')) {
-            changedFields.push(strings.NOTES);
-          }
-          if (
-            (historyItem.substrate || '') !== (previousEv?.substrate || '') ||
-            (historyItem.substrateNotes || '') !== (previousEv?.substrateNotes || '')
-          ) {
-            changedFields.push(strings.SUBSTRATE);
-          }
-          if (
-            (historyItem.treatment || '') !== (previousEv?.treatment || '') ||
-            (historyItem.treatmentNotes || '') !== (previousEv?.treatmentNotes || '')
-          ) {
-            changedFields.push(strings.TREATMENT);
-          }
-          if ((historyItem.germinationStartedDate || '') !== (previousEv?.germinationStartedDate || '')) {
-            changedFields.push(strings.GERMINATION_ESTABLISHMENT_STARTED_DATE);
-          }
-          if ((historyItem.readyByDate || '') !== (previousEv?.readyByDate || '')) {
-            changedFields.push(strings.ESTIMATED_READY_DATE);
-          }
-          if ((historyItem.seedsSownDate || '') !== (previousEv?.seedsSownDate || '')) {
-            changedFields.push(strings.SEEDS_SOWN_DATE);
-          }
-        }
-        if (
-          (historyItem.type === 'QuantityEdited' || historyItem.type === 'StatusChanged') &&
-          (previousEv?.type === 'QuantityEdited' || previousEv?.type === 'StatusChanged' || !previousEv)
-        ) {
-          if (historyItem.germinatingQuantity !== previousEv?.germinatingQuantity) {
-            changedFields.push(strings.GERMINATION_ESTABLISHMENT_QUANTITY);
-          }
-          if (historyItem.activeGrowthQuantity !== previousEv?.activeGrowthQuantity) {
-            changedFields.push(strings.ACTIVE_GROWTH_QUANTITY);
-          }
-          if (historyItem.hardeningOffQuantity !== previousEv?.hardeningOffQuantity) {
-            changedFields.push(strings.HARDENING_OFF_QUANTITY);
-          }
-          if (historyItem.readyQuantity !== previousEv?.readyQuantity) {
-            changedFields.push(strings.READY_TO_PLANT_QUANTITY);
-          }
-        }
+        const previousEv = findPreviousEvent(historyItem, batchHistory?.history ?? null);
+        const changedFields = getModifiedFields(historyItem, previousEv);
         return {
           ...historyItem,
           editedByName: getUserDisplayName(userSelected),
@@ -232,7 +299,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
           nurseryName,
         };
       });
-  }, [filteredHistory, findPreviousEvent, nurseryName, users]);
+  }, [batchHistory?.history, filteredHistory, nurseryName, users]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onBatchSelected = (batch: any, fromColumn?: string) => {

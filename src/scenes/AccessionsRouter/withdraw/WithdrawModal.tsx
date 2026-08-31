@@ -8,6 +8,7 @@ import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@ter
 import AddLink from 'src/components/common/AddLink';
 import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
+import Select from 'src/components/common/Select/Select';
 import Button from 'src/components/common/button/Button';
 import useAccession from 'src/hooks/useAccession';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
@@ -19,6 +20,7 @@ import {
   useCreateViabilityTestMutation,
   useCreateWithdrawalMutation,
 } from 'src/queries/generated/accessionsV2';
+import { useListBatchesForNurseryQuery } from 'src/queries/search/batches';
 import CountWithdrawal from 'src/scenes/AccessionsRouter/withdraw/CountWithdrawal';
 import WeightWithdrawal from 'src/scenes/AccessionsRouter/withdraw/WeightWithdrawal';
 import WithdrawDateWarningModal from 'src/scenes/AccessionsRouter/withdraw/WithdrawDateWarningModal';
@@ -27,6 +29,7 @@ import { ViabilityTestPostRequest } from 'src/services/AccessionService';
 import { Accession, Withdrawal, treatments, withdrawalTypes } from 'src/types/Accession';
 import { NurseryTransfer } from 'src/types/Batch';
 import { Facility } from 'src/types/Facility';
+import { SearchNodePayload } from 'src/types/Search';
 import { OrganizationUser, User } from 'src/types/User';
 import { UnitType, convertUnits } from 'src/units';
 import { getAllNurseries, getSeedBank, isContributor } from 'src/utils/organization';
@@ -89,6 +92,7 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
   const [withdrawalValid, setWithdrawalValid] = useState<boolean>(false);
   const [withdrawalButtonEnabled, setWithdrawalButtonEnabled] = useState<boolean>(true);
   const [showDateWarning, setShowDateWarning] = useState<boolean>(false);
+  const [inventoryBatchNumber, setInventoryBatchNumber] = useState<string>('');
 
   const newWithdrawal: Withdrawal = useMemo(
     () => ({
@@ -117,8 +121,64 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
   );
 
   const [record, setRecord, onChange] = useForm(newWithdrawal);
-  const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer, onChangeTransferCallback] =
-    useForm(nurseryTransferWithdrawal);
+  const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer] = useForm(nurseryTransferWithdrawal);
+
+  const selectedDestinationFacilityId = Number(nurseryTransferRecord.destinationFacilityId);
+
+  const shouldListInventoryBatches =
+    !!selectedOrganization?.id && selectedDestinationFacilityId > 0 && !!accession.speciesId;
+
+  const inventoryBatchSearchFields = useMemo<SearchNodePayload[]>(
+    () =>
+      accession.speciesId
+        ? [
+            {
+              operation: 'field',
+              field: 'species_id',
+              type: 'Exact',
+              values: [String(accession.speciesId)],
+            },
+          ]
+        : [],
+    [accession.speciesId]
+  );
+
+  const { currentData: inventoryBatches } = useListBatchesForNurseryQuery(
+    {
+      organizationId: selectedOrganization?.id ?? -1,
+      nurseryId: selectedDestinationFacilityId,
+      searchFields: inventoryBatchSearchFields,
+      sortOrder: { field: 'batchNumber', direction: 'Descending' },
+    },
+    { skip: !shouldListInventoryBatches }
+  );
+
+  const inventoryBatchesForAccession = useMemo(
+    () =>
+      [...(inventoryBatches ?? [])]
+        .filter((batch) => Number(batch.species_id) === accession.speciesId)
+        .sort((a, b) => b.batchNumber.localeCompare(a.batchNumber, undefined, { numeric: true })),
+    [accession.speciesId, inventoryBatches]
+  );
+
+  const inventoryBatchOptions = useMemo(
+    () =>
+      inventoryBatchesForAccession
+        .filter(
+          (batch) =>
+            !inventoryBatchNumber ||
+            batch.batchNumber.toLocaleLowerCase().includes(inventoryBatchNumber.toLocaleLowerCase())
+        )
+        .map((batch) => batch.batchNumber),
+    [inventoryBatchNumber, inventoryBatchesForAccession]
+  );
+
+  const inventoryBatchValue = inventoryBatchNumber.trim();
+
+  const selectedInventoryBatch = useMemo(
+    () => inventoryBatchesForAccession.find((batch) => batch.batchNumber === inventoryBatchValue),
+    [inventoryBatchValue, inventoryBatchesForAccession]
+  );
 
   const setIndividualError = useCallback((id: string, error?: string) => {
     setFieldsErrors((prev) => ({
@@ -131,6 +191,7 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
     setIsNotesOpened(false);
     setRecord(newWithdrawal);
     setNurseryTransferRecord(nurseryTransferWithdrawal);
+    setInventoryBatchNumber('');
     onClose();
   }, [newWithdrawal, nurseryTransferWithdrawal, setRecord, setNurseryTransferRecord, onClose]);
 
@@ -266,6 +327,28 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
     [onChangeNurseryTransfer, onChange]
   );
 
+  const validateInventoryBatch = useCallback(() => {
+    if (!isNurseryTransfer || !inventoryBatchValue || inventoryBatchesForAccession.length === 0) {
+      setIndividualError('inventoryBatch', '');
+      return true;
+    }
+
+    if (!selectedInventoryBatch) {
+      setIndividualError('inventoryBatch', strings.INVALID_VALUE);
+      return false;
+    }
+
+    setIndividualError('inventoryBatch', '');
+    return true;
+  }, [
+    inventoryBatchesForAccession.length,
+    inventoryBatchValue,
+    isNurseryTransfer,
+    selectedInventoryBatch,
+    setIndividualError,
+    strings,
+  ]);
+
   const saveWithdrawalHandler = useCallback(async () => {
     setWithdrawalButtonEnabled(false);
     try {
@@ -277,6 +360,14 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
             fields_with_errors: ['destinationFacilityId'],
           });
           setIndividualError('destinationFacilityId', strings.REQUIRED_FIELD);
+          return;
+        }
+        if (isNurseryTransfer && !validateInventoryBatch()) {
+          trackEvent(MIXPANEL_EVENTS.FORM_VALIDATION_FAILED, {
+            form_name: 'accession_withdraw',
+            error_count: 1,
+            fields_with_errors: ['inventoryBatch'],
+          });
           return;
         }
         if (fieldsErrors.date || (isNurseryTransfer && fieldsErrors.readyByDate)) {
@@ -297,10 +388,13 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
 
         try {
           if (isNurseryTransfer) {
-            nurseryTransferRecord.germinatingQuantity = estimatedWithdrawalQty;
             await createNurseryTransferWithdrawal({
               accessionId: accession.id,
-              createNurseryTransferRequestPayload: nurseryTransferRecord,
+              createNurseryTransferRequestPayload: {
+                ...nurseryTransferRecord,
+                batchId: selectedInventoryBatch?.id ? Number(selectedInventoryBatch.id) : undefined,
+                germinatingQuantity: estimatedWithdrawalQty,
+              },
             }).unwrap();
           } else if (record.purpose === 'Viability Testing') {
             viabilityTesting.seedsTested = estimatedWithdrawalQty;
@@ -355,10 +449,12 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
     onCloseHandler,
     record,
     markSubmitted,
+    selectedInventoryBatch?.id,
     setIndividualError,
     snackbar,
     strings,
     trackEvent,
+    validateInventoryBatch,
     viabilityTesting,
     withdrawalQty,
   ]);
@@ -417,6 +513,28 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
   const onChangeNotesHandler = useCallback((value: unknown) => onChangeNotes('notes', value), [onChangeNotes]);
 
   const onClickAddNotes = useCallback(() => setIsNotesOpened(true), []);
+
+  const onChangeDestination = useCallback(
+    (value: unknown) => {
+      onChangeNurseryTransfer('destinationFacilityId', Number(value));
+      setInventoryBatchNumber('');
+      setIndividualError('destinationFacilityId', '');
+      setIndividualError('inventoryBatch', '');
+    },
+    [onChangeNurseryTransfer, setIndividualError]
+  );
+
+  const onChangeInventoryBatch = useCallback(
+    (value: string) => {
+      setInventoryBatchNumber(value);
+
+      const typedValue = value.trim();
+      if (!typedValue || inventoryBatchesForAccession.some((batch) => batch.batchNumber === typedValue)) {
+        setIndividualError('inventoryBatch', '');
+      }
+    },
+    [inventoryBatchesForAccession, setIndividualError]
+  );
 
   const isEqualUsers = useCallback((a: OrganizationUser, b: OrganizationUser) => a.id === b.id, []);
 
@@ -497,11 +615,28 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
                     label: nursery.name,
                     value: nursery.id.toString(),
                   }))}
-                  onChange={onChangeTransferCallback('destinationFacilityId')}
+                  onChange={onChangeDestination}
                   errorText={fieldsErrors.destinationFacilityId}
                   fullWidth={true}
                 />
               </Grid>
+              {inventoryBatchesForAccession.length > 0 && (
+                <Grid item xs={12} paddingBottom={2}>
+                  <Select
+                    id='inventoryBatch'
+                    selectedValue={inventoryBatchNumber}
+                    onChange={onChangeInventoryBatch}
+                    options={inventoryBatchOptions}
+                    label={strings.INVENTORY_BATCH}
+                    aria-label={strings.INVENTORY_BATCH}
+                    editable={true}
+                    errorText={fieldsErrors.inventoryBatch}
+                    fullWidth={true}
+                    hideArrow={true}
+                    onBlur={validateInventoryBatch}
+                  />
+                </Grid>
+              )}
             </>
           ) : null}
           {record.purpose === 'Viability Testing' && !isNurseryTransfer ? (

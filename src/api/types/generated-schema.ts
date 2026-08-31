@@ -6217,6 +6217,12 @@ export interface components {
              */
             timeseriesValue?: number;
         };
+        /** @description If this batch was created via a seed withdrawal, the list of accessions it came from. */
+        BatchAccessionPayload: {
+            /** Format: int64 */
+            accessionId?: number;
+            accessionNumber?: string;
+        };
         /** @description A transfer from a seed bank that added germinating seedlings to this batch. */
         BatchHistoryAddedFromAccessionPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
             /** Format: int64 */
@@ -6410,11 +6416,17 @@ export interface components {
         BatchPayload: {
             /**
              * Format: int64
-             * @description If this batch was created via a seed withdrawal, the ID of the seed accession it came from.
+             * @deprecated
+             * @description If this batch was created via a seed withdrawal, the ID of the seed accession it came from. Use "accessions" instead of this.
              */
             accessionId?: number;
-            /** @description If this batch was created via a seed withdrawal, the accession number associated to the seed accession it came from. */
+            /**
+             * @deprecated
+             * @description If this batch was created via a seed withdrawal, the accession number associated to the seed accession it came from. Use "accessions" instead of this.
+             */
             accessionNumber?: string;
+            /** @description If this batch was created via a seed withdrawal, the list of accessions it came from. */
+            accessions: components["schemas"]["BatchAccessionPayload"][];
             /** Format: int32 */
             activeGrowthQuantity: number;
             /** Format: date */

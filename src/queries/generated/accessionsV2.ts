@@ -437,7 +437,10 @@ export type CreateAccessionResponsePayloadV2Read = {
   accession: AccessionPayloadV2Read;
   status: SuccessOrError;
 };
-export type CreateAccessionRequestPayloadV2 = {};
+export type CreateAccessionRequestPayloadV2 = {
+  /** Date and time the seeds were collected. */
+  collectedTime?: string;
+};
 export type CreateAccessionRequestPayloadV2Write = {
   bagNumbers?: string[];
   /** Will be derived from collectedTime if present. */
@@ -517,11 +520,17 @@ export type ResolveUploadRequestPayload = {
   /** If true, the data for entries that already exist will be overwritten with the values in the uploaded file. If false, only entries that don't already exist will be imported. */
   overwriteExisting: boolean;
 };
-export type BatchPayload = {
-  /** If this batch was created via a seed withdrawal, the ID of the seed accession it came from. */
+export type BatchAccessionPayload = {
   accessionId?: number;
-  /** If this batch was created via a seed withdrawal, the accession number associated to the seed accession it came from. */
   accessionNumber?: string;
+};
+export type BatchPayload = {
+  /** If this batch was created via a seed withdrawal, the ID of the seed accession it came from. Use "accessions" instead of this. */
+  accessionId?: number;
+  /** If this batch was created via a seed withdrawal, the accession number associated to the seed accession it came from. Use "accessions" instead of this. */
+  accessionNumber?: string;
+  /** If this batch was created via a seed withdrawal, the list of accessions it came from. */
+  accessions: BatchAccessionPayload[];
   activeGrowthQuantity: number;
   addedDate: string;
   batchNumber: string;
@@ -554,25 +563,30 @@ export type BatchPayload = {
 export type CreateNurseryTransferResponsePayload = {
   /** Updated accession that includes a withdrawal for the nursery transfer. */
   accession: AccessionPayloadV2;
-  /** Details of newly-created seedling batch. */
+  /** Details of the seedling batch the seeds were added to. */
   batch: BatchPayload;
   status: SuccessOrError;
 };
 export type CreateNurseryTransferResponsePayloadRead = {
   /** Updated accession that includes a withdrawal for the nursery transfer. */
   accession: AccessionPayloadV2Read;
-  /** Details of newly-created seedling batch. */
+  /** Details of the seedling batch the seeds were added to. */
   batch: BatchPayload;
   status: SuccessOrError;
 };
 export type CreateNurseryTransferRequestPayload = {
+  /** Ignored if batchId is specified. */
   activeGrowthQuantity: number;
+  /** If this transfer should add to an existing batch, the batch's ID. Default is to create a new batch. The batch must be at the facility specified by destinationFacilityId, and it must be of the same species as the accession. */
+  batchId?: number;
   date: string;
   destinationFacilityId: number;
   germinatingQuantity: number;
+  /** Ignored if batchId is specified. */
   hardeningOffQuantity?: number;
   notes?: string;
   readyByDate?: string;
+  /** Ignored if batchId is specified. */
   readyQuantity: number;
   /** ID of the user who withdrew the seeds. Default is the current user's ID. If non-null, the current user must have permission to read the referenced user's membership details in the organization. */
   withdrawnByUserId?: number;

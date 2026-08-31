@@ -13,6 +13,11 @@ import { RendererProps } from '../../components/common/table/types';
 import { BatchHistoryItemForTable } from './BatchHistory';
 
 export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {
+  if (batchHistoryItem.type === 'AddedFromAccession') {
+    return strings
+      .formatString(strings.BATCH_QUANTITY_UPDATED_FROM_ACCESSION, batchHistoryItem.accessionNumber)
+      .toString();
+  }
   if (
     batchHistoryItem.type === 'DetailsEdited' ||
     batchHistoryItem.type === 'QuantityEdited' ||
@@ -31,6 +36,19 @@ export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {
 
 const EventTypeCell = ({ row }: { row: BatchHistoryItemForTable }): JSX.Element => {
   const notes = row.type === 'QuantityEdited' ? row.notes : undefined;
+
+  if (row.type === 'AddedFromAccession') {
+    return (
+      <>
+        {strings.formatString(
+          strings.BATCH_QUANTITY_UPDATED_FROM_ACCESSION,
+          <Link fontSize='16px' to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${row.accessionId}`)}>
+            {row.accessionNumber}
+          </Link>
+        )}
+      </>
+    );
+  }
 
   return (
     <>

@@ -45,6 +45,14 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.Accessions, id: payload.accessionId },
         QueryTagTypes.SeedbankSummary,
         { type: QueryTagTypes.NurseryBatches, id: 'LIST' },
+        ...(payload.createNurseryTransferRequestPayload.batchId
+          ? [
+              {
+                type: QueryTagTypes.NurseryBatches,
+                id: payload.createNurseryTransferRequestPayload.batchId,
+              },
+            ]
+          : []),
         { type: QueryTagTypes.NurserySummary },
       ],
     },

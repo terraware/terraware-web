@@ -58,6 +58,7 @@ export const purposeLabel = (purpose: NurseryWithdrawalPurpose): string => {
 export type BatchPhoto = BatchPhotoPayload;
 
 export const getBatchHistoryTypesEnum = (): BatchHistoryPayload['type'][] => [
+  'AddedFromAccession',
   'DetailsEdited',
   'IncomingWithdrawal',
   'OutgoingWithdrawal',
@@ -69,6 +70,9 @@ export const getBatchHistoryTypesEnum = (): BatchHistoryPayload['type'][] => [
 
 export const batchHistoryEventEnumToLocalized = (batchHistoryType: BatchHistoryPayload['type']): string | undefined => {
   switch (batchHistoryType) {
+    case 'AddedFromAccession': {
+      return strings.BATCH_HISTORY_TYPE_ADDED_FROM_ACCESSION;
+    }
     case 'DetailsEdited': {
       return strings.BATCH_HISTORY_TYPE_DETAILS_EDITED;
     }

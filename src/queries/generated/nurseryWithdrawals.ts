@@ -59,11 +59,17 @@ export type GetWithdrawalPhotoApiArg = {
 export type UndoBatchWithdrawalApiResponse =
   /** status 200 The requested operation succeeded. */ SimpleSuccessResponsePayload;
 export type UndoBatchWithdrawalApiArg = number;
-export type BatchPayload = {
-  /** If this batch was created via a seed withdrawal, the ID of the seed accession it came from. */
+export type BatchAccessionPayload = {
   accessionId?: number;
-  /** If this batch was created via a seed withdrawal, the accession number associated to the seed accession it came from. */
   accessionNumber?: string;
+};
+export type BatchPayload = {
+  /** If this batch was created via a seed withdrawal, the ID of the seed accession it came from. Use "accessions" instead of this. */
+  accessionId?: number;
+  /** If this batch was created via a seed withdrawal, the accession number associated to the seed accession it came from. Use "accessions" instead of this. */
+  accessionNumber?: string;
+  /** If this batch was created via a seed withdrawal, the list of accessions it came from. */
+  accessions: BatchAccessionPayload[];
   activeGrowthQuantity: number;
   addedDate: string;
   batchNumber: string;
