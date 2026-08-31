@@ -60,7 +60,7 @@ export default function PlantsDashboardView({
     () => (isAcceleratorRoute ? organizationId : undefined) ?? selectedOrganization?.id,
     [isAcceleratorRoute, organizationId, selectedOrganization?.id]
   );
-  const plantingGoalsEnabled = isEnabled('Planting Goals', dashboardOrganizationId);
+  const plantingGoalsEnabled = isEnabled('Planting Goals');
 
   // The header owns selection normalization; the view only needs `showAllSitesOption` to label the
   // totals section. The scoped query is shared (RTK cache) with the header.
