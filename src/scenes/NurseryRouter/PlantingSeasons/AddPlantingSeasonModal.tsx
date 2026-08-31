@@ -59,12 +59,14 @@ const AddPlantingSeasonModal = ({
     startDate: undefined,
     endDate: undefined,
   });
+  const selectedSourceSeasonId = record.copyPrevious ? record.fromPlantingSeasonId : undefined;
 
-  const { data: speciesTargets } = useGetSpeciesTargetsQuery(record.fromPlantingSeasonId!, {
-    skip: !record.fromPlantingSeasonId,
+  const { data: speciesTargets } = useGetSpeciesTargetsQuery(selectedSourceSeasonId!, {
+    skip: !selectedSourceSeasonId,
   });
   const [listPlantingSiteSpeciesTargets, siteSpeciesTargetsResponse] = useLazyListPlantingSiteSpeciesTargetsQuery();
-  const hasCurrentSiteSpeciesTargets = siteSpeciesTargetsResponse.originalArgs === record.plantingSiteId;
+  const hasCurrentSiteSpeciesTargets =
+    siteSpeciesTargetsResponse.originalArgs === record.plantingSiteId && siteSpeciesTargetsResponse.isSuccess;
 
   const speciesCount = new Set(speciesTargets?.targets.map((t) => t.speciesId)).size;
   const substrataCount = new Set(speciesTargets?.targets.map((t) => t.substratumId)).size;
@@ -101,6 +103,12 @@ const AddPlantingSeasonModal = ({
       void listPlantingSiteSpeciesTargets(record.plantingSiteId, true);
     }
   }, [listPlantingSiteSpeciesTargets, plantingGoalsEnabled, record.copyPrevious, record.plantingSiteId]);
+
+  useEffect(() => {
+    if (siteSpeciesTargetsResponse.isError) {
+      snackbar.toastError();
+    }
+  }, [siteSpeciesTargetsResponse.isError, snackbar]);
 
   useEffect(() => {
     if (record.plantingSiteId === undefined && plantingSites.length === 1) {
@@ -163,8 +171,15 @@ const AddPlantingSeasonModal = ({
   };
 
   const onCreate = async () => {
-    const { plantingSiteId, name, startDate, endDate, copyPrevious, fromPlantingSeasonId } = record;
-    if (!plantingSiteId || !name?.trim() || !startDate || !endDate || endDateBeforeStart) {
+    const { plantingSiteId, name, startDate, endDate, copyPrevious } = record;
+    if (
+      !plantingSiteId ||
+      !name?.trim() ||
+      !startDate ||
+      !endDate ||
+      endDateBeforeStart ||
+      (copyPrevious && !selectedSourceSeasonId)
+    ) {
       setValidate(true);
       return;
     }
@@ -172,13 +187,13 @@ const AddPlantingSeasonModal = ({
     try {
       const response = await createPlantingSeason({
         endDate,
-        fromPlantingSeasonId: copyPrevious ? fromPlantingSeasonId : undefined,
+        fromPlantingSeasonId: selectedSourceSeasonId,
         name: name.trim(),
         plantingSiteId,
         startDate,
       }).unwrap();
 
-      if (response.id && plantingGoalsEnabled && !copyPrevious) {
+      if (response.id && plantingGoalsEnabled && !selectedSourceSeasonId) {
         try {
           await Promise.all(
             defaultSpeciesTargets.map((target) =>
@@ -284,6 +299,8 @@ const AddPlantingSeasonModal = ({
               selectedValue={record.fromPlantingSeasonId}
               options={seasonToCopyOptions}
               onChange={(value) => onChange('fromPlantingSeasonId', Number(value))}
+              errorText={validate && !selectedSourceSeasonId ? strings.REQUIRED_FIELD : ''}
+              required
               fullWidth
             />
             {record.fromPlantingSeasonId !== undefined && (
