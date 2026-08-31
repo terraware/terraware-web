@@ -1242,14 +1242,14 @@ N_ROWS,{0} fila(s),2bb73684
 NA,No aplica,627f660e
 NAME,Nombre,e7c2678c
 NAME_CHECK,Verificación de nombre,6afa08ed
-NAME_CHECK_NO_SUGGESTIONS,No se detectaron sugerencias para nombres de especies.,a334f132
+NAME_CHECK_NO_SUGGESTIONS,No hay sugerencias para nombres de especies.,1743b138
 NAME_CHECK_NO_SUGGESTIONS_HINT,Los nombres individuales de especies pueden modificarse en la pantalla de detalles de la especie.,1de53c3f
 NAME_REQUIRED,Nombre *,9a735f80
 NAME_UNKNOWN,(nombre desconocido),526f6e3c
 NAME_USED_BY_PROJECT,Nombre usado por proyecto,c2fdff8f
 NATIVE,Nativo,3ef34d4d
 NATIVE_CHECK,Verificación de especie nativa,474464e4
-NATIVE_CHECK_NO_UPDATES,No se detectaron sugerencias para el estado nativo de las especies.,6ba30629
+NATIVE_CHECK_NO_UPDATES,No hay sugerencias para el estado nativo de las especies.,f9f543dc
 NATIVE_CHECK_NO_UPDATES_HINT,El estado individual de la especie puede cambiarse en la pantalla de detalles de la especie.,21f7b4fe
 NATIVE_CHECK_UPDATE_HINT,Seleccione las especies para modificar su estado listado o continúe sin cambiar los resultados.,1b67a440
 NATIVE_ECOSYSTEM,Ecosistema autóctono,1a733f45
