@@ -36,6 +36,11 @@ export const htmlLegendPlugin = {
     const generateLabelsFunction = chart.options?.plugins?.legend?.labels?.generateLabels;
     if (generateLabelsFunction) {
       const items = generateLabelsFunction(chart);
+      const sortLabels = chart.options?.plugins?.legend?.labels?.sort;
+      if (sortLabels) {
+        items.sort((a, b) => sortLabels(a, b, chart.data));
+      }
+
       items.forEach((item) => {
         const li = document.createElement('li');
         li.style.alignItems = 'center';
