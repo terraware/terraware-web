@@ -122,9 +122,12 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
 
   const [record, setRecord, onChange] = useForm(newWithdrawal);
   const [nurseryTransferRecord, setNurseryTransferRecord, onChangeNurseryTransfer] = useForm(nurseryTransferWithdrawal);
+
   const selectedDestinationFacilityId = Number(nurseryTransferRecord.destinationFacilityId);
+
   const shouldListInventoryBatches =
     !!selectedOrganization?.id && selectedDestinationFacilityId > 0 && !!accession.speciesId;
+
   const inventoryBatchSearchFields = useMemo<SearchNodePayload[]>(
     () =>
       accession.speciesId
@@ -139,6 +142,7 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
         : [],
     [accession.speciesId]
   );
+
   const { currentData: inventoryBatches } = useListBatchesForNurseryQuery(
     {
       organizationId: selectedOrganization?.id ?? -1,
@@ -148,6 +152,7 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
     },
     { skip: !shouldListInventoryBatches }
   );
+
   const inventoryBatchesForAccession = useMemo(
     () =>
       [...(inventoryBatches ?? [])]
@@ -155,6 +160,7 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
         .sort((a, b) => b.batchNumber.localeCompare(a.batchNumber, undefined, { numeric: true })),
     [accession.speciesId, inventoryBatches]
   );
+
   const inventoryBatchOptions = useMemo(
     () =>
       inventoryBatchesForAccession
@@ -166,7 +172,9 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
         .map((batch) => batch.batchNumber),
     [inventoryBatchNumber, inventoryBatchesForAccession]
   );
+
   const inventoryBatchValue = inventoryBatchNumber.trim();
+
   const selectedInventoryBatch = useMemo(
     () => inventoryBatchesForAccession.find((batch) => batch.batchNumber === inventoryBatchValue),
     [inventoryBatchValue, inventoryBatchesForAccession]
