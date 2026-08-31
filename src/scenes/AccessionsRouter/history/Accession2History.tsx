@@ -17,10 +17,6 @@ export default function Accession2History(): JSX.Element {
   return isEnabled('Accession Event Log') ? <AccessionEventLog /> : <LegacyHistory />;
 }
 
-/**
- * Reads the pre-event-log history endpoint. Delete this along with the feature flag once the event
- * log version has shipped.
- */
 function LegacyHistory(): JSX.Element {
   const { accessionId } = useParams<{ accessionId: string }>();
   const theme = useTheme();

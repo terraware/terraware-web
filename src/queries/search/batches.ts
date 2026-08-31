@@ -198,10 +198,6 @@ const injectedRtkApi = api.injectEndpoints({
       transformResponse: (response: SearchCountApiResponse) => response.count,
     }),
 
-    /**
-     * The nursery each of an accession's batches went to, for labelling its withdrawal history rows.
-     * One search rather than a batch fetch per row, and facility_name saves a second lookup.
-     */
     listAccessionBatchNurseries: build.query<Map<number, string>, number>({
       query: (accessionId) => ({
         url: '/api/v1/search',

@@ -8,15 +8,6 @@ import { type EventLogEntryPayload } from 'src/queries/generated/events';
 
 type Strings = ProvidedLocalizationData['strings'];
 
-/**
- * What clicking a history row should do. Rows whose entity still exists and has somewhere to go open
- * it; everything else stays plain text.
- *
- * Note what is deliberately absent: seedbank withdrawals. They are not the same entity as the nursery
- * withdrawals behind APP_PATHS.NURSERY_WITHDRAWALS_DETAILS -- those IDs come from a different table --
- * so pointing a seedbank withdrawal ID at that route would open an unrelated withdrawal. Linking a
- * withdrawal to its nursery batch needs a batchId on the subject payload.
- */
 export type AccessionEventTarget =
   | { kind: 'photo'; accessionId: number; fullText: string }
   | { kind: 'viabilityTest'; accessionId: number; viabilityTestId: number }
@@ -61,12 +52,6 @@ export const accessionEventTarget = (
   }
 };
 
-/**
- * The photo subject has no filename field -- the server only puts the filename inside its display
- * text -- and photos are addressable by filename alone, so the filename is recovered by matching the
- * display text against the accession's current photos. Returns undefined when nothing matches, which
- * is what should happen for a photo that has since been replaced or deleted.
- */
 export const findPhotoFilename = (fullText: string, photoFilenames: string[] | undefined): string | undefined =>
   photoFilenames?.find((filename) => fullText.endsWith(filename));
 
@@ -84,13 +69,6 @@ export const createdField = (action: EventLogEntryPayload['action'], fieldName: 
  * Withdrawing seeds for a viability test logs both a withdrawal and the test, so one user action
  * would otherwise be reported as two rows -- on creation, and again on deletion. The withdrawal row
  * is the one kept, since it can say what the withdrawal was for; the test's own row is dropped.
- *
- * The link is the withdrawal creation event's viabilityTestId. A deletion carries no fields, so the
- * map built from the creation events is what lets a deletion row know it was part of a test too.
- *
- * One gap: a withdrawal deleted before WithdrawalCreatedEventV2 shipped has no viabilityTestId,
- * because the upgrade reads it from the withdrawals row and that row is gone. Those legacy pairs show
- * two rows. Everything created since, and every withdrawal that still exists, pairs exactly.
  */
 export type ViabilityTestWithdrawals = Map<number, number>;
 
@@ -119,8 +97,7 @@ export const isViabilityTestWithdrawal = (
 
 /**
  * True for the viability test row that the paired withdrawal row already accounts for, so that one
- * user action produces one row. Only creation and deletion are paired; a field change on the test is
- * a separate edit and keeps its own row.
+ * user action produces one row.
  */
 export const isPairedViabilityTestEvent = (
   event: EventLogEntryPayload,
@@ -164,7 +141,7 @@ const unitName = (strings: Strings, units: string): string => {
 
 /**
  * Quantity fields arrive as the server's raw object rendering rather than a display string, so they
- * are unpacked into "33 Seeds" / "50 Grams". Anything that doesn't match is passed through untouched.
+ * are unpacked into "33 Seeds" / "50 Grams".
  */
 export const formatEventValue = (strings: Strings, value: string): string => {
   const match = SEED_QUANTITY.exec(value);
@@ -202,21 +179,6 @@ const renderFieldChange = (
     renderChangedValue(strings, colors.changedTo, changedTo)
   );
 
-/**
- * Turns one accession event into its history row description. The row already shows the date and the
- * user, so these read as the remainder of that sentence.
- *
- * Two subjects are phrased around the field name rather than the server's subject text: withdrawals
- * and viability tests have no user-facing identifier, so their subject text is "Withdrawal 123" /
- * "Viability test 45" -- an internal database ID that must not reach the page. Accessions and photos
- * do have one (accession number, filename), so they read subject-first like the other event logs.
- *
- * Creation events for withdrawals and viability tests carry no field values at all, so there is
- * nothing to say beyond that they happened. See docs/handoffs for the full list of gaps.
- *
- * Pass pairs to say so when a withdrawal was made for a viability test; see
- * findViabilityTestWithdrawals for how those are identified.
- */
 export const renderAccessionEventDescription = (
   event: EventLogEntryPayload,
   strings: Strings,
