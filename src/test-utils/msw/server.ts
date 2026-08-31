@@ -2,22 +2,9 @@ import { HttpResponse, http } from 'msw';
 import { setupServer } from 'msw/node';
 
 /**
- * Endpoints that are always mocked, for every test.
- *
- * The bar for adding to this list is deliberately high: **no domain endpoint belongs here.** The
- * value of this harness comes from unhandled requests failing the test — add a fetch to a component
- * and every test rendering it goes red until the mock exists (see `setup.ts`). Defaulting a domain
- * endpoint would silently exempt it from that check, and a test asserting on data nobody mocked is
- * worse than no test.
- *
- * What qualifies instead is infrastructure noise: a request that every page makes, that carries no
- * domain data, and whose response no assertion should ever depend on.
- *
- * - `/build-version.txt` — `PageSnackbar` renders `DetectAppVersion`, which polls the deployed build
- *   version once a minute to offer an "upgrade available" banner. 36 components mount PageSnackbar,
- *   so essentially every scene-level test would otherwise have to mock it. An empty body reads as
- *   "no newer build" (`useAppVersion` treats a falsy version as not stale), so the banner stays out
- *   of the way. A test that wants to exercise the banner overrides this with `server.use(...)`.
+ * Endpoints that are always mocked, for every test. Only for requests that nearly every page makes
+ * and no test should assert on — never a domain endpoint, since unhandled requests failing the test
+ * is the point of this harness. A test can still override any of these with `server.use(...)`.
  */
 const defaultHandlers = [http.get('/build-version.txt', () => HttpResponse.text(''))];
 
