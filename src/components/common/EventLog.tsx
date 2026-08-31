@@ -34,6 +34,8 @@ const EventLog = ({
   const { strings } = useLocalization();
   const theme = useTheme();
   const [showEventLog, setShowEventLog] = useState(defaultExpanded ?? false);
+  // Hiding the toggle removes the only way to expand, so that mode always shows the list.
+  const eventsVisible = hideToggle || showEventLog;
 
   const lastEvent = useMemo(() => events?.[0], [events]);
   const filteredEvents = useMemo(() => (filterEvent ? events?.filter(filterEvent) : events), [events, filterEvent]);
@@ -77,7 +79,7 @@ const EventLog = ({
   );
 
   if (!lastEvent) {
-    return emptyState ? <Box>{emptyState}</Box> : null;
+    return emptyState && !isLoading ? <Box>{emptyState}</Box> : null;
   }
 
   return (
@@ -100,7 +102,7 @@ const EventLog = ({
           />
         </Box>
       )}
-      {showEventLog && !isLoading && (
+      {eventsVisible && !isLoading && (
         <Box>
           {filteredEvents?.map((event, index) => {
             const dateModified = DateTime.fromMillis(new Date(event.timestamp).getTime()).toFormat('yyyy-MM-dd');
