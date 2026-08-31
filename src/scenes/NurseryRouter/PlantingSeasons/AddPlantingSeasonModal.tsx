@@ -9,6 +9,7 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
@@ -18,7 +19,9 @@ import {
   useCreatePlantingSeasonMutation,
   useGetSpeciesTargetsQuery,
   useLazyListPlantingSeasonsQuery,
+  useUpsertSpeciesTargetMutation,
 } from 'src/queries/generated/plantingSeasons';
+import { useLazyListPlantingSiteSpeciesTargetsQuery } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -41,9 +44,12 @@ const AddPlantingSeasonModal = ({
   const { selectedOrganization } = useOrganization();
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const snackbar = useSnackbar();
-  const [createPlantingSeason, { isLoading }] = useCreatePlantingSeasonMutation();
+  const [createPlantingSeason] = useCreatePlantingSeasonMutation();
+  const [upsertSpeciesTarget] = useUpsertSpeciesTargetMutation();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const markSubmitted = useTrackModalAbandonment('planting_season_add', true);
   const navigate = useSyncNavigate();
+  const plantingGoalsEnabled = isEnabled('Planting Goals');
 
   const [record, setRecord, onChange] = useForm<PlantingSeasonForm>({
     plantingSiteId: initialPlantingSiteId && initialPlantingSiteId > 0 ? initialPlantingSiteId : undefined,
@@ -57,6 +63,8 @@ const AddPlantingSeasonModal = ({
   const { data: speciesTargets } = useGetSpeciesTargetsQuery(record.fromPlantingSeasonId!, {
     skip: !record.fromPlantingSeasonId,
   });
+  const [listPlantingSiteSpeciesTargets, siteSpeciesTargetsResponse] = useLazyListPlantingSiteSpeciesTargetsQuery();
+  const hasCurrentSiteSpeciesTargets = siteSpeciesTargetsResponse.originalArgs === record.plantingSiteId;
 
   const speciesCount = new Set(speciesTargets?.targets.map((t) => t.speciesId)).size;
   const substrataCount = new Set(speciesTargets?.targets.map((t) => t.substratumId)).size;
@@ -89,6 +97,12 @@ const AddPlantingSeasonModal = ({
   }, [listPlantingSeasons, record.plantingSiteId]);
 
   useEffect(() => {
+    if (plantingGoalsEnabled && record.plantingSiteId && !record.copyPrevious) {
+      void listPlantingSiteSpeciesTargets(record.plantingSiteId, true);
+    }
+  }, [listPlantingSiteSpeciesTargets, plantingGoalsEnabled, record.copyPrevious, record.plantingSiteId]);
+
+  useEffect(() => {
     if (record.plantingSiteId === undefined && plantingSites.length === 1) {
       setRecord((prev) => ({ ...prev, plantingSiteId: plantingSites[0].id }));
     }
@@ -113,6 +127,24 @@ const AddPlantingSeasonModal = ({
     [seasonsForSelectedSite]
   );
 
+  const defaultSpeciesTargets = useMemo(() => {
+    const selectedSite = plantingSites.find((site) => site.id === record.plantingSiteId);
+    const strataById = new Map((selectedSite?.strata ?? []).map((stratum) => [stratum.id, stratum]));
+
+    const siteTargets = hasCurrentSiteSpeciesTargets ? siteSpeciesTargetsResponse.currentData?.targets : undefined;
+
+    return (siteTargets ?? []).flatMap((speciesTarget) =>
+      (Array.isArray(speciesTarget.stratumIds) ? speciesTarget.stratumIds : []).flatMap(
+        (stratumId) =>
+          strataById.get(stratumId)?.substrata.map((substratum) => ({
+            quantity: 0,
+            speciesId: speciesTarget.speciesId,
+            substratumId: substratum.id,
+          })) ?? []
+      )
+    );
+  }, [hasCurrentSiteSpeciesTargets, plantingSites, record.plantingSiteId, siteSpeciesTargetsResponse.currentData]);
+
   const onChangePlantingSite = (value: any) => {
     setRecord((prev) => ({
       ...prev,
@@ -136,6 +168,7 @@ const AddPlantingSeasonModal = ({
       setValidate(true);
       return;
     }
+    setIsSubmitting(true);
     try {
       const response = await createPlantingSeason({
         endDate,
@@ -144,6 +177,22 @@ const AddPlantingSeasonModal = ({
         plantingSiteId,
         startDate,
       }).unwrap();
+
+      if (response.id && plantingGoalsEnabled && !copyPrevious) {
+        try {
+          await Promise.all(
+            defaultSpeciesTargets.map((target) =>
+              upsertSpeciesTarget({
+                plantingSeasonId: response.id,
+                upsertPlantingSeasonSpeciesTargetRequestPayload: target,
+              }).unwrap()
+            )
+          );
+        } catch (e) {
+          snackbar.toastError();
+        }
+      }
+
       markSubmitted();
       onClose();
       if (response?.id) {
@@ -153,6 +202,8 @@ const AddPlantingSeasonModal = ({
       }
     } catch (e) {
       snackbar.toastError();
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -176,7 +227,13 @@ const AddPlantingSeasonModal = ({
           id='createPlantingSeason'
           label={strings.CREATE_SEASON}
           onClick={() => void onCreate()}
-          disabled={isLoading}
+          disabled={
+            isSubmitting ||
+            (plantingGoalsEnabled &&
+              !record.copyPrevious &&
+              !!record.plantingSiteId &&
+              (!hasCurrentSiteSpeciesTargets || siteSpeciesTargetsResponse.isFetching))
+          }
         />,
       ]}
     >
