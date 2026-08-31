@@ -32,6 +32,11 @@ defaultStrings.setLanguage('en');
 const colors: ChangedValueColors = { changedFrom: '#ff0000', changedTo: '#00ff00' };
 
 const created: CreatedActionPayload = { type: 'Created', fields: [] };
+const createdWith = (fields: Record<string, string>): CreatedActionPayload => ({
+  type: 'Created',
+  fields: Object.entries(fields).map(([fieldName, value]) => ({ fieldName, value: [value] })),
+});
+const QUANTITY_50 = 'SeedQuantityModel(quantity=50, units=Seeds)';
 const deleted: DeletedActionPayload = { type: 'Deleted' };
 const fieldUpdated = (fieldName: string, changedFrom?: string[], changedTo?: string[]): FieldUpdatedActionPayload => ({
   type: 'FieldUpdated',
@@ -86,8 +91,14 @@ const viabilityTest = (): EventLogEntryPayload['subject'] => ({
   shortText: 'Viability test',
 });
 
-const describeEvent = (entry: EventLogEntryPayload, pairs?: ViabilityTestWithdrawals): string => {
-  const { container } = render(<>{renderAccessionEventDescription(entry, defaultStrings, colors, pairs)}</>);
+const describeEvent = (
+  entry: EventLogEntryPayload,
+  pairs?: ViabilityTestWithdrawals,
+  nurseryNames?: Map<number, string>
+): string => {
+  const { container } = render(
+    <>{renderAccessionEventDescription(entry, defaultStrings, colors, pairs, nurseryNames)}</>
+  );
   return container.textContent ?? '';
 };
 
@@ -318,41 +329,20 @@ describe('formatEventValue', () => {
   });
 });
 
-const at = (
-  timestamp: string,
-  subject: EventLogEntryPayload['subject'],
-  action: EventLogEntryPayload['action'],
-  userId = 1
-): EventLogEntryPayload => ({
-  ...event(subject, action),
-  timestamp,
-  userId,
-});
-
 describe('findViabilityTestWithdrawals', () => {
-  // The real server writes both creations in one transaction, ~20ms apart.
-  const testCreated = at('2026-08-14T20:15:07.419985Z', viabilityTest(), created);
-  const pairedWithdrawal = at('2026-08-14T20:15:07.439033Z', withdrawal(494), created);
-  const nurseryWithdrawal = at('2026-08-14T20:11:40.516598Z', withdrawal(493), created);
+  it('maps a withdrawal to the test named on its creation event', () => {
+    const events = [
+      event(withdrawal(494), createdWith({ viabilityTestId: '444222', purpose: 'Viability Testing' })),
+      event(withdrawal(493), createdWith({ purpose: 'Nursery', batchId: '720' })),
+    ];
 
-  it('maps a withdrawal to the test it was created alongside', () => {
-    const pairs = findViabilityTestWithdrawals([nurseryWithdrawal, testCreated, pairedWithdrawal]);
-    expect([...pairs.entries()]).toEqual([[494, 444222]]);
+    expect([...findViabilityTestWithdrawals(events).entries()]).toEqual([[494, 444222]]);
   });
 
-  // This is the guard against folding in withdrawals made for a different purpose.
-  it('does not pair a withdrawal made minutes earlier', () => {
-    const pairs = findViabilityTestWithdrawals([nurseryWithdrawal, testCreated, pairedWithdrawal]);
-    expect(pairs.has(493)).toBe(false);
-  });
-
-  it('does not pair across different users', () => {
-    const otherUser = at('2026-08-14T20:15:07.439033Z', withdrawal(494), created, 99);
-    expect(findViabilityTestWithdrawals([testCreated, otherUser]).size).toBe(0);
-  });
-
-  it('finds nothing when no viability test was created', () => {
-    expect(findViabilityTestWithdrawals([nurseryWithdrawal]).size).toBe(0);
+  // A withdrawal deleted before WithdrawalCreatedEventV2 upgrades without a viabilityTestId.
+  it('does not pair a withdrawal whose creation event has no viabilityTestId', () => {
+    const events = [event(withdrawal(494), createdWith({ purpose: 'Viability Testing' }))];
+    expect(findViabilityTestWithdrawals(events).size).toBe(0);
   });
 
   it('finds nothing in an empty log', () => {
@@ -360,42 +350,75 @@ describe('findViabilityTestWithdrawals', () => {
   });
 });
 
-describe('withdrawals made for a viability test', () => {
-  const pairs: ViabilityTestWithdrawals = new Map([[494, 444222]]);
+describe('withdrawal creation copy', () => {
+  it('names the destination nursery for a transfer', () => {
+    const entry = event(
+      withdrawal(493),
+      createdWith({ withdrawnQuantity: QUANTITY_50, purpose: 'Nursery', batchId: '720' })
+    );
+    const nurseries = new Map([[720, 'Bend Nursery']]);
 
-  it('says what the withdrawal was for when it is added', () => {
-    expect(describeEvent(event(withdrawal(494), created), pairs)).toBe('added a withdrawal for viability test');
+    expect(describeEvent(entry, undefined, nurseries)).toBe('withdrew 50 Seeds to Bend Nursery');
   });
 
-  // The pairing comes from the log, so this still reads correctly after both are deleted.
-  it('says what the withdrawal was for when it is deleted', () => {
+  it('falls back to the purpose until the nursery name resolves', () => {
+    const entry = event(
+      withdrawal(493),
+      createdWith({ withdrawnQuantity: QUANTITY_50, purpose: 'Nursery', batchId: '720' })
+    );
+    expect(describeEvent(entry)).toBe('withdrew 50 Seeds for Nursery');
+  });
+
+  it('uses the purpose when there is no batch', () => {
+    const entry = event(withdrawal(494), createdWith({ withdrawnQuantity: QUANTITY_50, purpose: 'Viability Testing' }));
+    expect(describeEvent(entry)).toBe('withdrew 50 Seeds for Viability Testing');
+  });
+
+  it('reports the quantity alone when there is no purpose', () => {
+    const entry = event(withdrawal(493), createdWith({ withdrawnQuantity: QUANTITY_50 }));
+    expect(describeEvent(entry)).toBe('withdrew 50 Seeds');
+  });
+
+  it('falls back to the bare wording when the event carries no fields', () => {
+    expect(describeEvent(event(withdrawal(493), created))).toBe('added a withdrawal');
+  });
+
+  it('still says what a deleted withdrawal was for, using the pairing map', () => {
+    const pairs: ViabilityTestWithdrawals = new Map([[494, 444222]]);
     expect(describeEvent(event(withdrawal(494), deleted), pairs)).toBe('deleted a withdrawal for viability test');
   });
+});
 
-  it('leaves a withdrawal made for another purpose unqualified', () => {
-    expect(describeEvent(event(withdrawal(493), created), pairs)).toBe('added a withdrawal');
-    expect(describeEvent(event(withdrawal(493), deleted), pairs)).toBe('deleted a withdrawal');
+describe('viability test creation copy', () => {
+  it('names the test type', () => {
+    const entry = event(viabilityTest(), createdWith({ testType: 'Lab', seedsTested: '50' }));
+    expect(describeEvent(entry)).toBe('started a Lab viability test');
   });
 
-  it('leaves withdrawals unqualified when nothing was paired', () => {
-    expect(describeEvent(event(withdrawal(494), created))).toBe('added a withdrawal');
+  it('falls back when the event carries no fields', () => {
+    expect(describeEvent(event(viabilityTest(), created))).toBe('started a viability test');
+  });
+});
+
+describe('click targets for withdrawals', () => {
+  it('sends a nursery transfer to its batch', () => {
+    const entry = event(withdrawal(493), createdWith({ batchId: '720', purpose: 'Nursery' }));
+    expect(accessionEventTarget(entry)).toEqual({ kind: 'batch', batchId: 720 });
   });
 
-  it('does not qualify a field change', () => {
-    const entry = event(withdrawal(494), fieldUpdated('notes', ['a'], ['b']));
-    expect(describeEvent(entry, pairs)).toBe('Withdrawal notes changed from a to b');
-  });
+  it('sends a test withdrawal to the test it was made for', () => {
+    const pairs: ViabilityTestWithdrawals = new Map([[494, 444222]]);
+    const entry = event(withdrawal(494), createdWith({ viabilityTestId: '444222' }));
 
-  it('opens the test the withdrawal was made for', () => {
-    expect(accessionEventTarget(event(withdrawal(494), created), pairs)).toEqual({
+    expect(accessionEventTarget(entry, pairs)).toEqual({
       kind: 'viabilityTest',
       accessionId: 7,
       viabilityTestId: 444222,
     });
   });
 
-  it('gives a withdrawal made for another purpose nothing to open', () => {
-    expect(accessionEventTarget(event(withdrawal(493), created), pairs)).toBeUndefined();
+  it('gives an unpaired withdrawal with no batch nothing to open', () => {
+    expect(accessionEventTarget(event(withdrawal(493), createdWith({ purpose: 'Other' })))).toBeUndefined();
   });
 });
 
@@ -417,8 +440,7 @@ describe('isPairedViabilityTestEvent', () => {
   });
 
   it('keeps a test that was not paired with a withdrawal', () => {
-    const unpaired: ViabilityTestWithdrawals = new Map([[494, 999]]);
-    expect(isPairedViabilityTestEvent(event(viabilityTest(), created), unpaired)).toBe(false);
+    expect(isPairedViabilityTestEvent(event(viabilityTest(), created), new Map([[494, 999]]))).toBe(false);
   });
 
   it('keeps everything when nothing was paired', () => {

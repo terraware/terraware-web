@@ -16,9 +16,12 @@ ACCESSION_DETAILS,Détails de l'accès,1fa5df58
 ACCESSION_EVENT_PHOTO_REPLACED,{0} a été remplacé,c87c5b4c
 ACCESSION_EVENT_VIABILITY_TEST_ADDED,a lancé un test de viabilité,1ec9a61e
 ACCESSION_EVENT_VIABILITY_TEST_DELETED,a supprimé un test de viabilité,131c982f
+ACCESSION_EVENT_VIABILITY_TEST_STARTED,a commencé un test de viabilité {0},241121fa
 ACCESSION_EVENT_VIABILITY_TEST_UPDATED,Le test de viabilité {0} a été modifié de {1} à {2},630ab02f
 ACCESSION_EVENT_WITHDRAWAL_ADDED,a ajouté un retrait,66861582
-ACCESSION_EVENT_WITHDRAWAL_ADDED_FOR_VIABILITY_TEST,un retrait a été ajouté pour un test de viabilité,5c99720c
+ACCESSION_EVENT_WITHDRAWAL_ADDED_FOR,a retiré {0} pour {1},60701bb4
+ACCESSION_EVENT_WITHDRAWAL_ADDED_QUANTITY,a retiré {0},fb83504c
+ACCESSION_EVENT_WITHDRAWAL_ADDED_TO,a retiré {0} vers {1},8c38cd96
 ACCESSION_EVENT_WITHDRAWAL_DELETED,a supprimé un retrait,2fa169b8
 ACCESSION_EVENT_WITHDRAWAL_DELETED_FOR_VIABILITY_TEST,un retrait a été supprimé pour un test de viabilité,d9b09155
 ACCESSION_EVENT_WITHDRAWAL_UPDATED,Le retrait {0} a été modifié de {1} à {2},8dd1f01b

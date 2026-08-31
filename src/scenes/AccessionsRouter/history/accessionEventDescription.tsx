@@ -19,7 +19,8 @@ type Strings = ProvidedLocalizationData['strings'];
  */
 export type AccessionEventTarget =
   | { kind: 'photo'; accessionId: number; fullText: string }
-  | { kind: 'viabilityTest'; accessionId: number; viabilityTestId: number };
+  | { kind: 'viabilityTest'; accessionId: number; viabilityTestId: number }
+  | { kind: 'batch'; batchId: number };
 
 export const accessionEventTarget = (
   event: EventLogEntryPayload,
@@ -40,8 +41,15 @@ export const accessionEventTarget = (
         accessionId: subject.accessionId,
         viabilityTestId: subject.viabilityTestId,
       };
-    // The withdrawal row stands in for the test it was made for, so it opens that test.
     case 'Withdrawal': {
+      // A nursery transfer created a batch, so the row goes there -- the link the legacy tab had.
+      const batchId = createdField(event.action, 'batchId');
+
+      if (batchId !== undefined) {
+        return { kind: 'batch', batchId: Number(batchId) };
+      }
+
+      // Otherwise the row stands in for the test it was made for, so it opens that test.
       const viabilityTestId = pairs?.get(subject.withdrawalId);
 
       return viabilityTestId === undefined
@@ -68,52 +76,36 @@ export const accessionPhotoUrl = (accessionId: number, filename: string): string
     encodeURIComponent(filename)
   );
 
+/** Reads one value out of a creation event's initial field values. */
+export const createdField = (action: EventLogEntryPayload['action'], fieldName: string): string | undefined =>
+  action.type === 'Created' ? action.fields.find((field) => field.fieldName === fieldName)?.value?.[0] : undefined;
+
 /**
  * Withdrawing seeds for a viability test logs both a withdrawal and the test, so one user action
  * would otherwise be reported as two rows -- on creation, and again on deletion. The withdrawal row
  * is the one kept, since it can say what the withdrawal was for; the test's own row is dropped.
  *
- * Nothing in either payload references the other, and the accession only knows the link while the
- * withdrawal exists, which is no help once it is deleted. What does survive is the event log itself:
- * the server writes both creations in a single transaction, so a withdrawal made for a test is one
- * whose creation sits alongside a test creation by the same user. Requiring that tight a window is
- * what keeps genuinely separate withdrawals -- a nursery withdrawal minutes earlier, say -- from
- * being folded in.
+ * The link is the withdrawal creation event's viabilityTestId. A deletion carries no fields, so the
+ * map built from the creation events is what lets a deletion row know it was part of a test too.
  *
- * A viabilityTestId on WithdrawalSubjectPayload would replace this inference with the real link.
+ * One gap: a withdrawal deleted before WithdrawalCreatedEventV2 shipped has no viabilityTestId,
+ * because the upgrade reads it from the withdrawals row and that row is gone. Those legacy pairs show
+ * two rows. Everything created since, and every withdrawal that still exists, pairs exactly.
  */
-const PAIRED_CREATION_WINDOW_MS = 1000;
-
-/** Withdrawal ID to the ID of the viability test it was made for. */
 export type ViabilityTestWithdrawals = Map<number, number>;
 
 export const findViabilityTestWithdrawals = (events: EventLogEntryPayload[]): ViabilityTestWithdrawals => {
-  const testCreations = events.filter(
-    (event) => event.subject.type === 'ViabilityTest' && event.action.type === 'Created'
-  );
-
   const pairs: ViabilityTestWithdrawals = new Map();
 
-  if (testCreations.length === 0) {
-    return pairs;
-  }
-
-  events.forEach((event) => {
-    const { action, subject } = event;
-
-    if (subject.type !== 'Withdrawal' || action.type !== 'Created') {
+  events.forEach(({ action, subject }) => {
+    if (subject.type !== 'Withdrawal') {
       return;
     }
 
-    const createdAt = Date.parse(event.timestamp);
-    const test = testCreations.find(
-      (candidate) =>
-        candidate.userId === event.userId &&
-        Math.abs(Date.parse(candidate.timestamp) - createdAt) <= PAIRED_CREATION_WINDOW_MS
-    );
+    const viabilityTestId = createdField(action, 'viabilityTestId');
 
-    if (test?.subject.type === 'ViabilityTest') {
-      pairs.set(subject.withdrawalId, test.subject.viabilityTestId);
+    if (viabilityTestId !== undefined) {
+      pairs.set(subject.withdrawalId, Number(viabilityTestId));
     }
   });
 
@@ -229,7 +221,8 @@ export const renderAccessionEventDescription = (
   event: EventLogEntryPayload,
   strings: Strings,
   colors: ChangedValueColors,
-  pairs?: ViabilityTestWithdrawals
+  pairs?: ViabilityTestWithdrawals,
+  nurseryNames?: Map<number, string>
 ): ReactNode => {
   const { action, subject } = event;
   const forViabilityTest = isViabilityTestWithdrawal(event, pairs);
@@ -270,10 +263,27 @@ export const renderAccessionEventDescription = (
 
     case 'Withdrawal':
       switch (action.type) {
-        case 'Created':
-          return forViabilityTest
-            ? strings.ACCESSION_EVENT_WITHDRAWAL_ADDED_FOR_VIABILITY_TEST
-            : strings.ACCESSION_EVENT_WITHDRAWAL_ADDED;
+        case 'Created': {
+          const rawQuantity = createdField(action, 'withdrawnQuantity');
+
+          if (rawQuantity === undefined) {
+            return strings.ACCESSION_EVENT_WITHDRAWAL_ADDED;
+          }
+
+          const quantity = formatEventValue(strings, rawQuantity);
+          // purpose is already localized by the server; it is display text, never a discriminator.
+          const purpose = createdField(action, 'purpose');
+          const batchId = createdField(action, 'batchId');
+          const nursery = batchId === undefined ? undefined : nurseryNames?.get(Number(batchId));
+
+          if (nursery !== undefined) {
+            return strings.formatString(strings.ACCESSION_EVENT_WITHDRAWAL_ADDED_TO, quantity, nursery);
+          }
+
+          return purpose === undefined
+            ? strings.formatString(strings.ACCESSION_EVENT_WITHDRAWAL_ADDED_QUANTITY, quantity)
+            : strings.formatString(strings.ACCESSION_EVENT_WITHDRAWAL_ADDED_FOR, quantity, purpose);
+        }
         case 'Deleted':
           return forViabilityTest
             ? strings.ACCESSION_EVENT_WITHDRAWAL_DELETED_FOR_VIABILITY_TEST
@@ -293,8 +303,13 @@ export const renderAccessionEventDescription = (
 
     case 'ViabilityTest':
       switch (action.type) {
-        case 'Created':
-          return strings.ACCESSION_EVENT_VIABILITY_TEST_ADDED;
+        case 'Created': {
+          const testType = createdField(action, 'testType');
+
+          return testType === undefined
+            ? strings.ACCESSION_EVENT_VIABILITY_TEST_ADDED
+            : strings.formatString(strings.ACCESSION_EVENT_VIABILITY_TEST_STARTED, testType);
+        }
         case 'Deleted':
           return strings.ACCESSION_EVENT_VIABILITY_TEST_DELETED;
         case 'FieldUpdated':

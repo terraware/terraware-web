@@ -5,11 +5,14 @@ import { Box, CircularProgress, Link, Typography, useTheme } from '@mui/material
 import { ViewPhotosDialog } from '@terraware/web-components';
 
 import EventLog from 'src/components/common/EventLog';
+import RouterLink from 'src/components/common/Link';
+import { APP_PATHS } from 'src/constants';
 import useAccession from 'src/hooks/useAccession';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useListAccessionEventsQuery } from 'src/queries/accessions/events';
 import { useGetViabilityTestQuery } from 'src/queries/generated/accessionsV2';
 import { type EventLogEntryPayload } from 'src/queries/generated/events';
+import { useListAccessionBatchNurseriesQuery } from 'src/queries/search/batches';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ViewViabilityTestModal from '../viabilityTesting/ViewViabilityTestModal';
@@ -73,6 +76,11 @@ const AccessionEventLog = (): JSX.Element => {
 
   const viabilityTestWithdrawals = useMemo(() => findViabilityTestWithdrawals(events ?? []), [events]);
 
+  // Nursery transfers name their destination; resolved in one search rather than per row.
+  const { currentData: nurseryNames } = useListAccessionBatchNurseriesQuery(accessionId, {
+    skip: !accessionIdParam,
+  });
+
   // The withdrawal row already says it was for a viability test, so drop the test's own duplicate row.
   const filterEvent = useCallback(
     (event: EventLogEntryPayload): boolean => !isPairedViabilityTestEvent(event, viabilityTestWithdrawals),
@@ -81,12 +89,26 @@ const AccessionEventLog = (): JSX.Element => {
 
   const renderEventDescription = useCallback(
     (event: EventLogEntryPayload): ReactNode => {
-      const description = renderAccessionEventDescription(event, strings, colors, viabilityTestWithdrawals);
+      const description = renderAccessionEventDescription(
+        event,
+        strings,
+        colors,
+        viabilityTestWithdrawals,
+        nurseryNames
+      );
       const target = accessionEventTarget(event, viabilityTestWithdrawals);
 
       // A photo whose file is no longer on the accession has nothing to open.
       if (!target || (target.kind === 'photo' && !findPhotoFilename(target.fullText, accession?.photoFilenames))) {
         return description;
+      }
+
+      if (target.kind === 'batch') {
+        return (
+          <RouterLink to={APP_PATHS.INVENTORY_BATCH.replace(':batchId', String(target.batchId))}>
+            {description}
+          </RouterLink>
+        );
       }
 
       return (
@@ -95,7 +117,7 @@ const AccessionEventLog = (): JSX.Element => {
         </Link>
       );
     },
-    [accession?.photoFilenames, colors, strings, viabilityTestWithdrawals]
+    [accession?.photoFilenames, colors, nurseryNames, strings, viabilityTestWithdrawals]
   );
 
   if (!events && !isError) {
