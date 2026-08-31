@@ -28,7 +28,7 @@ ChartJS.register(annotationPlugin);
 
 export type ChartDataset = {
   color?: string;
-  values: (number | null)[] | [number, number][];
+  values: (number | null | [number, number])[];
   // Dataset label which will appear in legends and tooltips
   label?: string;
   showLine?: boolean;
@@ -37,6 +37,7 @@ export type ChartDataset = {
   borderWidth?: number;
   xAxisID?: string;
   minBarLength?: number;
+  order?: number;
 };
 
 export type ChartData = {
@@ -260,6 +261,7 @@ function ChartContent(props: ChartContentProps): JSX.Element {
       pointRadius: ds.pointRadius,
       borderWidth: ds.borderWidth,
       xAxisID: ds.xAxisID,
+      order: ds.order,
     }));
     const newPlugins = {
       ...pluginsOptions,

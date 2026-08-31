@@ -38,7 +38,14 @@ export default function PlantingDensityPerStratumCard({
       }
 
       const rawValue = Array.isArray(value) ? value[0] : value;
+      if (rawValue === null || rawValue === undefined) {
+        return '-';
+      }
+
       const numValue = typeof rawValue === 'number' ? rawValue : parseFloat(String(rawValue) || '0');
+      if (!Number.isFinite(numValue)) {
+        return '-';
+      }
 
       const formattedValue = numberFormatter.format(numValue);
       return plantingGoalsEnabled && tooltipItem.dataset.label
@@ -87,9 +94,10 @@ export default function PlantingDensityPerStratumCard({
     const datasets: ChartDataset[] = [
       {
         label: strings.TARGET_DENSITY,
-        values: targets.map((v) => [v, v] as [number, number]),
+        values: targets.map((value) => (value === null ? null : [value, value])),
         color: theme.palette.TwClrBaseBlack,
         minBarLength: 1,
+        order: 0,
         xAxisID: 'xAxisTarget',
       },
     ];
@@ -101,6 +109,7 @@ export default function PlantingDensityPerStratumCard({
         color: theme.palette.TwClrBaseLightGreen200,
         xAxisID: 'xAxisActual',
         minBarLength: 1,
+        order: 1,
       });
     }
 
