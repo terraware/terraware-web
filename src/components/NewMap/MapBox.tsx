@@ -746,8 +746,8 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
           }, properties[0]);
 
           const clickedItem = featureGroups
-            .flatMap((group) => group.features)
-            .find((feature) => feature.featureId === topPriorityFeature.id);
+            .find((group) => group.layerId === topPriorityFeature.layerId)
+            ?.features.find((feature) => feature.featureId === `${topPriorityFeature.id}`);
           if (clickedItem && clickedItem.onClick) {
             clickedItem.onClick();
 

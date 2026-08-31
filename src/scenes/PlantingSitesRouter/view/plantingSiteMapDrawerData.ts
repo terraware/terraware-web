@@ -65,8 +65,8 @@ export const getPlantingSiteMapDrawerData = (
       plantingComplete: stratum.substrata.every((substratum) => substratum.plantingCompleted),
       initialPlantingDensity: stratum.initialPlantingDensity,
       targetPlantDensity: stratum.targetPlantDensity,
-      speciesIds: (speciesTargets ?? [])
-        .filter((target) => target.stratumIds.includes(stratum.id))
+      speciesIds: (Array.isArray(speciesTargets) ? speciesTargets : [])
+        .filter((target) => Array.isArray(target.stratumIds) && target.stratumIds.includes(stratum.id))
         .map((target) => target.speciesId),
     };
   }
