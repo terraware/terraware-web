@@ -3,6 +3,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useRef } from 'react'
 import { Box, Divider, Stack, Typography, useTheme } from '@mui/material';
 
 import Card from 'src/components/common/Card';
+import { useOrganization } from 'src/providers';
 import {
   PlantingSitePayload,
   StratumResponsePayload,
@@ -10,6 +11,7 @@ import {
 } from 'src/queries/generated/plantingSites';
 import { useUpdateStratumMutation } from 'src/queries/generated/strata';
 import strings from 'src/strings';
+import { isAdmin } from 'src/utils/organization';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -30,8 +32,11 @@ const PlantingPlanSiteGoals = ({ plantingSite }: PlantingPlanSiteGoalsProps): JS
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
   const snackbar = useSnackbar();
+  const { selectedOrganization } = useOrganization();
   const { data: speciesTargetsData } = useListPlantingSiteSpeciesTargetsQuery(plantingSite.id);
   const [updateStratum] = useUpdateStratumMutation();
+
+  const canEdit = isAdmin(selectedOrganization);
 
   const speciesCount = speciesTargetsData?.targets.length ?? 0;
 
@@ -116,17 +121,19 @@ const PlantingPlanSiteGoals = ({ plantingSite }: PlantingPlanSiteGoalsProps): JS
               densityType='initial'
               title={strings.INITIAL_PLANTING_DENSITY}
               onCommitDensity={commitDensity}
+              canEdit={canEdit}
             />
             <PlantingPlanDensityTable
               plantingSite={plantingSite}
               densityType='target'
               title={strings.TARGET_PLANT_DENSITY}
               onCommitDensity={commitDensity}
+              canEdit={canEdit}
             />
           </Box>
         </Box>
 
-        <PlantingPlanSpeciesSection plantingSite={plantingSite} />
+        <PlantingPlanSpeciesSection plantingSite={plantingSite} canEdit={canEdit} />
       </Stack>
     </Card>
   );

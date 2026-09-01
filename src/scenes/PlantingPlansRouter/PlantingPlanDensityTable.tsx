@@ -32,6 +32,7 @@ export type PlantingPlanDensityTableProps = {
   densityType: DensityType;
   title: string;
   onCommitDensity: CommitStratumDensity;
+  canEdit: boolean;
 };
 
 const PlantingPlanDensityTable = ({
@@ -39,6 +40,7 @@ const PlantingPlanDensityTable = ({
   densityType,
   title,
   onCommitDensity,
+  canEdit,
 }: PlantingPlanDensityTableProps): JSX.Element => {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
@@ -99,6 +101,7 @@ const PlantingPlanDensityTable = ({
             perHaLabel={perHaLabel}
             plantsLabel={plantsLabel}
             onCommitDensity={onCommitDensity}
+            canEdit={canEdit}
           />
         ))}
 
@@ -128,6 +131,7 @@ type StratumRowProps = {
   perHaLabel: (density: number | undefined) => string;
   plantsLabel: (plants: number | undefined) => string;
   onCommitDensity: CommitStratumDensity;
+  canEdit: boolean;
 };
 
 const StratumRow = ({
@@ -137,6 +141,7 @@ const StratumRow = ({
   perHaLabel,
   plantsLabel,
   onCommitDensity,
+  canEdit,
 }: StratumRowProps): JSX.Element => {
   const theme = useTheme();
   const [expanded, setExpanded] = useState(false);
@@ -169,7 +174,12 @@ const StratumRow = ({
             {areaLabel(stratum.areaHa)}
           </Typography>
         </Box>
-        <StratumDensityEditor stratum={stratum} densityType={densityType} onCommitDensity={onCommitDensity} />
+        <StratumDensityEditor
+          stratum={stratum}
+          densityType={densityType}
+          onCommitDensity={onCommitDensity}
+          canEdit={canEdit}
+        />
         <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack} textAlign='right'>
           {plantsLabel(stratumPlants(stratum, densityType))}
         </Typography>
@@ -209,9 +219,15 @@ type StratumDensityEditorProps = {
   stratum: StratumResponsePayload;
   densityType: DensityType;
   onCommitDensity: CommitStratumDensity;
+  canEdit: boolean;
 };
 
-const StratumDensityEditor = ({ stratum, densityType, onCommitDensity }: StratumDensityEditorProps): JSX.Element => {
+const StratumDensityEditor = ({
+  stratum,
+  densityType,
+  onCommitDensity,
+  canEdit,
+}: StratumDensityEditorProps): JSX.Element => {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
   const [editing, setEditing] = useState(false);
@@ -288,16 +304,18 @@ const StratumDensityEditor = ({ stratum, densityType, onCommitDensity }: Stratum
           <Typography fontSize='16px' color={theme.palette.TwClrBaseBlack}>
             {density === undefined ? PLACEHOLDER : numberFormatter.format(density)}
           </Typography>
-          <IconButton
-            onClick={() => {
-              setDraft(density === undefined ? '' : String(density));
-              setEditing(true);
-            }}
-            size='small'
-            disabled={busy}
-          >
-            <Icon name={'iconEdit'} />
-          </IconButton>
+          {canEdit && (
+            <IconButton
+              onClick={() => {
+                setDraft(density === undefined ? '' : String(density));
+                setEditing(true);
+              }}
+              size='small'
+              disabled={busy}
+            >
+              <Icon name={'iconEdit'} />
+            </IconButton>
+          )}
         </>
       )}
       <Typography fontSize='14px' color={theme.palette.TwClrTxt}>
