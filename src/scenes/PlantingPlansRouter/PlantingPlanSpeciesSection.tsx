@@ -24,9 +24,10 @@ const PLACEHOLDER = '-';
 
 export type PlantingPlanSpeciesSectionProps = {
   plantingSite: PlantingSitePayload;
+  canEdit: boolean;
 };
 
-const PlantingPlanSpeciesSection = ({ plantingSite }: PlantingPlanSpeciesSectionProps): JSX.Element => {
+const PlantingPlanSpeciesSection = ({ plantingSite, canEdit }: PlantingPlanSpeciesSectionProps): JSX.Element => {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
   const snackbar = useSnackbar();
@@ -127,30 +128,40 @@ const PlantingPlanSpeciesSection = ({ plantingSite }: PlantingPlanSpeciesSection
             onUpdateTarget={(targetPlants) => void upsertTarget(target.speciesId, target.stratumIds, targetPlants)}
             onAssignStrata={() => setAssigningSpeciesId(target.speciesId)}
             onDelete={() => void onDelete(target.speciesId)}
+            canEdit={canEdit}
           />
         ))}
 
-        {showAddSpeciesRow ? (
-          <AddSpeciesRow
-            options={availableOptions}
-            onCancel={targets.length > 0 ? () => setAddingSpecies(false) : undefined}
-            onAdd={async (speciesId, targetPlants) => {
-              const succeeded = await upsertTarget(speciesId, [], targetPlants);
-              if (succeeded) {
-                setAddingSpecies(false);
-              }
-            }}
-          />
-        ) : (
-          <Box padding={theme.spacing(1.5, 2)}>
-            <Button
-              icon='iconAdd'
-              label={strings.ADD_SPECIES}
-              onClick={() => setAddingSpecies(true)}
-              priority='ghost'
-              type='productive'
-              disabled={availableOptions.length === 0}
+        {canEdit &&
+          (showAddSpeciesRow ? (
+            <AddSpeciesRow
+              options={availableOptions}
+              onCancel={targets.length > 0 ? () => setAddingSpecies(false) : undefined}
+              onAdd={async (speciesId, targetPlants) => {
+                const succeeded = await upsertTarget(speciesId, [], targetPlants);
+                if (succeeded) {
+                  setAddingSpecies(false);
+                }
+              }}
             />
+          ) : (
+            <Box padding={theme.spacing(1.5, 2)}>
+              <Button
+                icon='iconAdd'
+                label={strings.ADD_SPECIES}
+                onClick={() => setAddingSpecies(true)}
+                priority='ghost'
+                type='productive'
+                disabled={availableOptions.length === 0}
+              />
+            </Box>
+          ))}
+
+        {!canEdit && targets.length === 0 && (
+          <Box padding={theme.spacing(1.5, 2)}>
+            <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
+              {PLACEHOLDER}
+            </Typography>
           </Box>
         )}
       </Box>
@@ -166,6 +177,7 @@ type SpeciesRowProps = {
   onUpdateTarget: (targetPlants?: number) => void;
   onAssignStrata: () => void;
   onDelete: () => void;
+  canEdit: boolean;
 };
 
 const SpeciesRow = ({
@@ -176,6 +188,7 @@ const SpeciesRow = ({
   onUpdateTarget,
   onAssignStrata,
   onDelete,
+  canEdit,
 }: SpeciesRowProps): JSX.Element => {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
@@ -239,35 +252,49 @@ const SpeciesRow = ({
             <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
               {target.targetPlants === undefined ? PLACEHOLDER : numberFormatter.format(target.targetPlants)}
             </Typography>
-            <Button
-              icon='iconEdit'
-              onClick={() => {
-                setDraft(target.targetPlants === undefined ? '' : String(target.targetPlants));
-                setEditing(true);
-              }}
-              priority='ghost'
-              size='small'
-              type='passive'
-            />
+            {canEdit && (
+              <Button
+                icon='iconEdit'
+                onClick={() => {
+                  setDraft(target.targetPlants === undefined ? '' : String(target.targetPlants));
+                  setEditing(true);
+                }}
+                priority='ghost'
+                size='small'
+                type='passive'
+              />
+            )}
           </>
         )}
       </Box>
 
       <Box width='180px' textAlign='right'>
         {target.stratumIds.length === 0 ? (
-          <Link onClick={onAssignStrata}>{strings.ASSIGN_STRATA}</Link>
+          canEdit ? (
+            <Link onClick={onAssignStrata}>{strings.ASSIGN_STRATA}</Link>
+          ) : (
+            <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+              {PLACEHOLDER}
+            </Typography>
+          )
         ) : (
           <Box display='flex' flexDirection='column' alignItems='flex-end'>
-            {target.stratumIds.map((stratumId) => (
-              <Link key={stratumId} onClick={onAssignStrata} style={{ fontWeight: 400, textDecoration: 'underline' }}>
-                {stratumName(stratumId) ?? `#${stratumId}`}
-              </Link>
-            ))}
+            {target.stratumIds.map((stratumId) =>
+              canEdit ? (
+                <Link key={stratumId} onClick={onAssignStrata} style={{ fontWeight: 400, textDecoration: 'underline' }}>
+                  {stratumName(stratumId) ?? `#${stratumId}`}
+                </Link>
+              ) : (
+                <Typography key={stratumId} fontSize='14px' fontWeight={400} color={theme.palette.TwClrTxtSecondary}>
+                  {stratumName(stratumId) ?? `#${stratumId}`}
+                </Typography>
+              )
+            )}
           </Box>
         )}
       </Box>
 
-      <Button icon='iconTrashCan' onClick={onDelete} priority='ghost' size='small' type='passive' />
+      {canEdit && <Button icon='iconTrashCan' onClick={onDelete} priority='ghost' size='small' type='passive' />}
     </Box>
   );
 };
