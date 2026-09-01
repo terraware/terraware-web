@@ -110,7 +110,7 @@ export const findPreviousEvent = (
   historyItem: BatchHistoryItem,
   allItems: BatchHistoryItem[] | null
 ): BatchHistoryItem | undefined => {
-  if (isFullQuantityHistoryItem(historyItem)) {
+  if (isQuantityHistoryItem(historyItem)) {
     return findPreviousQuantitySnapshot(historyItem, allItems);
   }
 
