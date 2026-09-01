@@ -89,18 +89,19 @@ export default function EventDetailsModal(props: EventDetailsModalProps): JSX.El
         )}
         {selectedEvent.modifiedFields.includes(strings.GERMINATION_ESTABLISHMENT_QUANTITY) && (
           <>
-            {(!previousEvent || previousEvent?.type === 'QuantityEdited' || previousEvent?.type === 'StatusChanged') &&
-              selectedEvent.type !== 'AddedFromAccession' && (
-                <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
-                  <Textfield
-                    id='germinationQuantityBefore'
-                    value={previousEvent?.germinatingQuantity || 0}
-                    type='text'
-                    label={strings.GERMINATION_ESTABLISHMENT_QUANTITY_BEFORE}
-                    display={true}
-                  />
-                </Grid>
-              )}
+            {(!previousEvent ||
+              previousEvent?.type === 'QuantityEdited' ||
+              previousEvent?.type === 'StatusChanged') && (
+              <Grid item xs={12} sx={marginTop} paddingRight={paddingSeparator}>
+                <Textfield
+                  id='germinationQuantityBefore'
+                  value={previousEvent?.germinatingQuantity || 0}
+                  type='text'
+                  label={strings.GERMINATION_ESTABLISHMENT_QUANTITY_BEFORE}
+                  display={true}
+                />
+              </Grid>
+            )}
             {(selectedEvent.type === 'QuantityEdited' ||
               selectedEvent.type === 'StatusChanged' ||
               selectedEvent.type === 'AddedFromAccession') && (
