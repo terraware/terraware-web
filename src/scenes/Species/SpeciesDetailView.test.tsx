@@ -10,6 +10,7 @@ import {
   buildOrganization,
   buildSpecies,
   captureRequests,
+  dialogTitled,
   mockError,
   mockGet,
   renderWithProviders,
@@ -47,7 +48,16 @@ type RenderOptions = {
 const renderDetailView = ({ inUse = [], organization }: RenderOptions = {}) => {
   mockGet(PROJECTS_URL, { projects: [] });
   mockGet(`${SPECIES_URL}/${SPECIES_ID}`, { species: SPECIES });
-  mockGet(SPECIES_URL, { species: inUse });
+
+  // Matching on the query keeps this fixture from also answering a plain species list, which would
+  // surface as an unhandled request instead — nothing here asks for one today.
+  server.use(
+    http.get(SPECIES_URL, ({ request }) =>
+      new URL(request.url).searchParams.get('inUse') === 'true'
+        ? HttpResponse.json({ status: 'ok', species: inUse })
+        : undefined
+    )
+  );
 
   const reloads: boolean[] = [];
 
@@ -85,18 +95,7 @@ const optionsMenuButton = (): HTMLElement => {
   return button as HTMLElement;
 };
 
-/**
- * The open dialog with this title, so its Delete button is told apart from the destructive Delete
- * item in the options menu behind it. `DialogBox` renders no ARIA dialog role to scope by.
- */
-const dialogTitled = (title: string): HTMLElement => {
-  const box = screen.getByText(title).closest('.dialog-box');
-  if (!box) {
-    throw new Error(`No open dialog titled "${title}"`);
-  }
-  return box as HTMLElement;
-};
-
+/** Scoped so the dialog's Delete button is told apart from the Delete menu item behind it. */
 const deleteDialog = () => dialogTitled(strings.DELETE_SPECIES);
 
 const currentPath = () => screen.getByTestId('location').textContent;
@@ -106,12 +105,6 @@ const openDeleteDialog = async (user: ReturnType<typeof renderDetailView>['user'
   await user.click(await screen.findByRole('menuitem', { name: strings.DELETE }));
   await screen.findByText(strings.DELETE_SPECIES);
 };
-
-// PageSnackbar mounts the app-version poller on every page. An empty body means "no newer build",
-// which keeps the upgrade banner out of the way of what these tests are looking at.
-beforeEach(() => {
-  server.use(http.get('/build-version.txt', () => HttpResponse.text('')));
-});
 
 describe('SpeciesDetailView', () => {
   describe('permission gating', () => {
@@ -217,9 +210,9 @@ describe('SpeciesDetailView', () => {
           msg: strings.GENERIC_ERROR,
         })
       );
+      await waitFor(() => expect(currentPath()).toBe('/species'));
       expect(wasReloaded()).toBe(false);
       expect(screen.queryByText(strings.SELECTED_SPECIES_UNUSED)).not.toBeInTheDocument();
-      expect(currentPath()).toBe('/species');
     });
   });
 });
