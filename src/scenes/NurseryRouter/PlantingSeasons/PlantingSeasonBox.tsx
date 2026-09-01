@@ -5,6 +5,7 @@ import { Icon } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
+import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
@@ -12,6 +13,7 @@ import { PlantingSeasonPayload } from 'src/queries/generated/plantingSeasons';
 import { StratumResponsePayload } from 'src/queries/generated/plantingSites';
 import { useGetPlantingSeasonSpeciesSummaryQuery } from 'src/queries/search/plantingSeasons';
 import strings from 'src/strings';
+import { NurseryWithdrawalPurposes } from 'src/types/Batch';
 import { getMediumDate } from 'src/utils/dateFormatter';
 
 import PlantingSeasonStatusBadge from './PlantingSeasonStatusBadge';
@@ -64,6 +66,16 @@ const PlantingSeasonBox = ({
     return speciesSummary.reduce((sum, target) => sum + target.leftToPlant, 0);
   }, [speciesSummary]);
 
+  const withdrawnForPlantingUrl = useMemo(() => {
+    const params = new URLSearchParams({
+      plantingSeasonId: String(season.id),
+      purpose: NurseryWithdrawalPurposes.OUTPLANT,
+      tab: 'withdrawals',
+    });
+
+    return `${APP_PATHS.NURSERY_WITHDRAWALS}?${params.toString()}`;
+  }, [season.id]);
+
   const dateRange = `${getMediumDate(season.startDate, activeLocale)} - ${getMediumDate(season.endDate, activeLocale)}`;
 
   const { strataNames, substrataNames } = useMemo(
@@ -75,9 +87,11 @@ const PlantingSeasonBox = ({
     label: string,
     value: number | undefined,
     align: 'left' | 'center' | 'right' = 'right',
-    highlight = false
+    highlight = false,
+    to?: string
   ) => {
     const justifyContent = align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
+    const isLink = to !== undefined && value !== undefined;
 
     return (
       <Box
@@ -103,15 +117,29 @@ const PlantingSeasonBox = ({
         >
           {label}
         </Typography>
-        <Typography
-          fontSize='24px'
-          fontWeight={600}
-          lineHeight='32px'
-          color={highlight && value !== undefined ? theme.palette.TwClrTxtBrand : theme.palette.TwClrTxt}
-          sx={highlight && value !== undefined ? { textDecoration: 'underline' } : undefined}
-        >
-          {value === undefined ? '-' : value.toLocaleString(activeLocale || undefined)}
-        </Typography>
+        {isLink ? (
+          <Box component='span' onClick={(e) => e.stopPropagation()}>
+            <Link
+              to={to}
+              fontSize='24px'
+              fontWeight={600}
+              lineHeight='32px'
+              style={{ color: theme.palette.TwClrTxtBrand, textDecoration: 'underline' }}
+            >
+              {value.toLocaleString(activeLocale || undefined)}
+            </Link>
+          </Box>
+        ) : (
+          <Typography
+            fontSize='24px'
+            fontWeight={600}
+            lineHeight='32px'
+            color={highlight && value !== undefined ? theme.palette.TwClrTxtBrand : theme.palette.TwClrTxt}
+            sx={highlight && value !== undefined ? { textDecoration: 'underline' } : undefined}
+          >
+            {value === undefined ? '-' : value.toLocaleString(activeLocale || undefined)}
+          </Typography>
+        )}
       </Box>
     );
   };
@@ -238,7 +266,13 @@ const PlantingSeasonBox = ({
               alignItems='end'
             >
               {numberColumn(strings.TOTAL_GOAL, plantingGoal, 'left')}
-              {numberColumn(strings.WITHDRAWN_FOR_PLANTING, withdrawnForPlantingTotal, 'center', true)}
+              {numberColumn(
+                strings.WITHDRAWN_FOR_PLANTING,
+                withdrawnForPlantingTotal,
+                'center',
+                true,
+                withdrawnForPlantingUrl
+              )}
               {numberColumn(strings.LEFT_TO_PLANT, leftToPlantTotal, 'right')}
             </Box>
           </Box>
@@ -280,7 +314,13 @@ const PlantingSeasonBox = ({
             </Box>
             <Box display='flex' gap={theme.spacing(3)} alignItems='flex-start'>
               {numberColumn(strings.PLANTING_TARGET, plantingGoal)}
-              {numberColumn(strings.WITHDRAWN_FOR_PLANTING, withdrawnForPlantingTotal)}
+              {numberColumn(
+                strings.WITHDRAWN_FOR_PLANTING,
+                withdrawnForPlantingTotal,
+                'right',
+                true,
+                withdrawnForPlantingUrl
+              )}
               {numberColumn(strings.LEFT_TO_PLANT, leftToPlantTotal)}
             </Box>
           </Box>
