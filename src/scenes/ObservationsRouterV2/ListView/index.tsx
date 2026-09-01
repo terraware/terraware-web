@@ -1,4 +1,5 @@
-import React, { type JSX, useEffect, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo, useRef } from 'react';
+import { useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem, Separator, Tabs } from '@terraware/web-components';
@@ -37,7 +38,36 @@ const ObservationListView = (): JSX.Element => {
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('observations-list');
 
   // The data layer treats `undefined` as "all planting sites", so translate the selection for queries.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const plantingSiteIdParam = searchParams.get('plantingSiteId');
+
   const plantingSiteIdFilter = selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId;
+
+  const lastParamRef = useRef<string | null | undefined>(undefined);
+  useEffect(() => {
+    const paramChangedExternally = plantingSiteIdParam !== lastParamRef.current;
+    lastParamRef.current = plantingSiteIdParam;
+
+    if (paramChangedExternally && plantingSiteIdParam) {
+      const paramId = Number(plantingSiteIdParam);
+      if (!isNaN(paramId) && paramId !== selectedPlantingSiteId) {
+        selectPlantingSite(paramId);
+      }
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams);
+    if (typeof selectedPlantingSiteId === 'number') {
+      if (Number(plantingSiteIdParam) !== selectedPlantingSiteId) {
+        params.set('plantingSiteId', selectedPlantingSiteId.toString());
+        setSearchParams(params, { replace: true });
+      }
+    } else if (plantingSiteIdParam) {
+      // If "all planting sites" is selected, remove the param
+      params.delete('plantingSiteId');
+      setSearchParams(params, { replace: true });
+    }
+  }, [searchParams, setSearchParams, selectedPlantingSiteId, plantingSiteIdParam, selectPlantingSite]);
 
   // Poll for survival rate recalculation and refresh observation results when it completes.
   const { inProgress: survivalRateRecalculationInProgress } =
