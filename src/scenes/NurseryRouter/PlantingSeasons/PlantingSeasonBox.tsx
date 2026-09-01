@@ -88,10 +88,10 @@ const PlantingSeasonBox = ({
     value: number | undefined,
     align: 'left' | 'center' | 'right' = 'right',
     highlight = false,
-    to?: string
+    url?: string
   ) => {
     const justifyContent = align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
-    const isLink = to !== undefined && value !== undefined;
+    const isLink = url !== undefined && value !== undefined;
 
     return (
       <Box
@@ -120,7 +120,7 @@ const PlantingSeasonBox = ({
         {isLink ? (
           <Box component='span' onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
             <Link
-              to={to}
+              to={url}
               fontSize='24px'
               fontWeight={600}
               lineHeight='32px'
