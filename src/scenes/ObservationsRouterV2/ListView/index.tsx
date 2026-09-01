@@ -34,7 +34,7 @@ const ObservationListView = (): JSX.Element => {
   const { isMobile } = useDeviceInfo();
 
   const observableSites = useObservablePlantingSites();
-  const { plantingSites } = useOrganizationPlantingSites();
+  const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites();
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId('observations-list');
 
   // The data layer treats `undefined` as "all planting sites", so translate the selection for queries.
@@ -43,31 +43,48 @@ const ObservationListView = (): JSX.Element => {
 
   const plantingSiteIdFilter = selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId;
 
-  const lastParamRef = useRef<string | null | undefined>(undefined);
+  const lastParamRef = useRef<string | null>(null);
   useEffect(() => {
+    if (!plantingSitesLoaded) {
+      return;
+    }
+
     const paramChangedExternally = plantingSiteIdParam !== lastParamRef.current;
     lastParamRef.current = plantingSiteIdParam;
 
     if (paramChangedExternally && plantingSiteIdParam) {
-      const paramId = Number(plantingSiteIdParam);
-      if (!isNaN(paramId) && paramId !== selectedPlantingSiteId) {
-        selectPlantingSite(paramId);
+      if (plantingSiteIdParam === ALL_PLANTING_SITES) {
+        if (selectedPlantingSiteId !== ALL_PLANTING_SITES) {
+          selectPlantingSite(ALL_PLANTING_SITES);
+        }
+        return;
       }
-      return;
+      const paramId = Number(plantingSiteIdParam);
+      const isSiteInOrg = !isNaN(paramId) && plantingSites.some((site) => site.id === paramId);
+      if (isSiteInOrg) {
+        if (paramId !== selectedPlantingSiteId) {
+          selectPlantingSite(paramId);
+        }
+        return;
+      }
     }
 
-    const params = new URLSearchParams(searchParams);
-    if (typeof selectedPlantingSiteId === 'number') {
-      if (Number(plantingSiteIdParam) !== selectedPlantingSiteId) {
-        params.set('plantingSiteId', selectedPlantingSiteId.toString());
-        setSearchParams(params, { replace: true });
-      }
-    } else if (plantingSiteIdParam) {
-      // If "all planting sites" is selected, remove the param
-      params.delete('plantingSiteId');
+    const desiredParam =
+      typeof selectedPlantingSiteId === 'number' ? selectedPlantingSiteId.toString() : ALL_PLANTING_SITES;
+    if (plantingSiteIdParam !== desiredParam) {
+      const params = new URLSearchParams(searchParams);
+      params.set('plantingSiteId', desiredParam);
       setSearchParams(params, { replace: true });
     }
-  }, [searchParams, setSearchParams, selectedPlantingSiteId, plantingSiteIdParam, selectPlantingSite]);
+  }, [
+    plantingSitesLoaded,
+    plantingSites,
+    searchParams,
+    setSearchParams,
+    selectedPlantingSiteId,
+    plantingSiteIdParam,
+    selectPlantingSite,
+  ]);
 
   // Poll for survival rate recalculation and refresh observation results when it completes.
   const { inProgress: survivalRateRecalculationInProgress } =
