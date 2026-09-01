@@ -118,7 +118,7 @@ const PlantingSeasonBox = ({
           {label}
         </Typography>
         {isLink ? (
-          <Box component='span' onClick={(e) => e.stopPropagation()}>
+          <Box component='span' onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()}>
             <Link
               to={to}
               fontSize='24px'
