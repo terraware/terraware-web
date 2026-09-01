@@ -33,14 +33,12 @@ export const accessionEventTarget = (
         viabilityTestId: subject.viabilityTestId,
       };
     case 'Withdrawal': {
-      // A nursery transfer created a batch, so the row goes there -- the link the legacy tab had.
       const batchId = createdField(event.action, 'batchId');
 
       if (batchId !== undefined) {
         return { kind: 'batch', batchId: Number(batchId) };
       }
 
-      // Otherwise the row stands in for the test it was made for, so it opens that test.
       const viabilityTestId = pairs?.get(subject.withdrawalId);
 
       return viabilityTestId === undefined
@@ -241,7 +239,6 @@ export const renderAccessionEventDescription = (
           }
 
           const quantity = formatEventValue(strings, rawQuantity);
-          // purpose is already localized by the server; it is display text, never a discriminator.
           const purpose = createdField(action, 'purpose');
           const batchId = createdField(action, 'batchId');
           const nursery = batchId === undefined ? undefined : nurseryNames?.get(Number(batchId));

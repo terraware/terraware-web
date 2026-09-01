@@ -44,7 +44,6 @@ const AccessionEventLog = (): JSX.Element => {
     { skip: !accessionIdParam || organizationId === undefined }
   );
 
-  // Only needed to turn a photo event into a photo URL; the accession is already cached by the page.
   const { accession } = useAccession(accessionId);
 
   const openedPhotoFilename =
@@ -76,12 +75,11 @@ const AccessionEventLog = (): JSX.Element => {
 
   const viabilityTestWithdrawals = useMemo(() => findViabilityTestWithdrawals(events ?? []), [events]);
 
-  // Nursery transfers name their destination; resolved in one search rather than per row.
   const { currentData: nurseryNames } = useListAccessionBatchNurseriesQuery(accessionId, {
     skip: !accessionIdParam,
   });
 
-  // The withdrawal row already says it was for a viability test, so drop the test's own duplicate row.
+  // Drop the withdrawal row that points to the viability test event.
   const filterEvent = useCallback(
     (event: EventLogEntryPayload): boolean => !isPairedViabilityTestEvent(event, viabilityTestWithdrawals),
     [viabilityTestWithdrawals]
