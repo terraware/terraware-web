@@ -28,12 +28,14 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 type NavBarProps = {
   backgroundTransparent?: boolean;
   hasPlantingSites?: boolean;
+  hasSpecies?: boolean;
   setShowNavBar: (value: boolean) => void;
 };
 
 export default function NavBar({
   backgroundTransparent,
   hasPlantingSites,
+  hasSpecies,
   setShowNavBar,
 }: NavBarProps): JSX.Element | null {
   const { isAllowed } = useUser();
@@ -410,7 +412,7 @@ export default function NavBar({
             id='plants-dashboard'
           />
 
-          {isEnabled('Planting Goals') && (
+          {isEnabled('Planting Goals') && hasPlantingSites === true && hasSpecies === true && (
             <NavItem
               label={strings.PLANTING_PLANS}
               selected={!!isPlantingPlansRoute}
