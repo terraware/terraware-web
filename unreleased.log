@@ -1,3 +1,7 @@
+756bc32d SW-8773 Include the Before quantity in the Event Details dialog (#6346)
+654c1bf1 SW-8836 Planting Plans link appears when there are no Planting Sites (#6348)
+d1b94c11 Planting goals: In planting site card align elements to the top (#6350)
+8ada31a1 SW-7655 Add Planting Site ID to Observations navigation link URLs (#6351)
 aef8b0bd SW-8837 Non-Admin Org user roles not able to access Planting Plans pages (#6349)
 438e531d SW-8833 In new seasons, view auto-populated list of site goal Species assigned to Strata in Substrata (#6340)
 cdf4b9d3 People list view component test (#6333)
