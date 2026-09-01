@@ -45,13 +45,79 @@ export type BatchHistoryItemForTable = BatchHistoryItem & {
 
 type FullQuantityHistoryItem = Extract<BatchHistoryItem, { type: 'QuantityEdited' | 'StatusChanged' }>;
 type AddedFromAccessionHistoryItem = Extract<BatchHistoryItem, { type: 'AddedFromAccession' }>;
-type QuantityHistoryItem = FullQuantityHistoryItem | AddedFromAccessionHistoryItem;
+type IncomingWithdrawalHistoryItem = Extract<BatchHistoryItem, { type: 'IncomingWithdrawal' }>;
+type OutgoingWithdrawalHistoryItem = Extract<BatchHistoryItem, { type: 'OutgoingWithdrawal' }>;
+type QuantityHistoryItem =
+  | FullQuantityHistoryItem
+  | AddedFromAccessionHistoryItem
+  | IncomingWithdrawalHistoryItem
+  | OutgoingWithdrawalHistoryItem;
 
 const isFullQuantityHistoryItem = (historyItem?: BatchHistoryItem): historyItem is FullQuantityHistoryItem =>
   historyItem?.type === 'QuantityEdited' || historyItem?.type === 'StatusChanged';
 
 const isQuantityHistoryItem = (historyItem: BatchHistoryItem): historyItem is QuantityHistoryItem =>
-  isFullQuantityHistoryItem(historyItem) || historyItem.type === 'AddedFromAccession';
+  isFullQuantityHistoryItem(historyItem) ||
+  historyItem.type === 'AddedFromAccession' ||
+  historyItem.type === 'IncomingWithdrawal' ||
+  historyItem.type === 'OutgoingWithdrawal';
+
+const emptyQuantitySnapshot = (historyItem: QuantityHistoryItem): FullQuantityHistoryItem => ({
+  activeGrowthQuantity: 0,
+  createdBy: historyItem.createdBy,
+  createdTime: historyItem.createdTime,
+  germinatingQuantity: 0,
+  hardeningOffQuantity: 0,
+  notReadyQuantity: 0,
+  readyQuantity: 0,
+  type: 'QuantityEdited',
+  version: historyItem.version,
+});
+
+const applyQuantityHistoryItem = (
+  historyItem: QuantityHistoryItem,
+  previousSnapshot?: FullQuantityHistoryItem
+): FullQuantityHistoryItem => {
+  if (isFullQuantityHistoryItem(historyItem)) {
+    return historyItem;
+  }
+
+  const snapshot = previousSnapshot ?? emptyQuantitySnapshot(historyItem);
+  const baseSnapshot = {
+    ...snapshot,
+    createdBy: historyItem.createdBy,
+    createdTime: historyItem.createdTime,
+    type: 'QuantityEdited' as const,
+    version: historyItem.version,
+  };
+
+  if (historyItem.type === 'AddedFromAccession') {
+    return {
+      ...baseSnapshot,
+      germinatingQuantity: historyItem.germinatingQuantity,
+    };
+  }
+
+  if (historyItem.type === 'IncomingWithdrawal') {
+    return {
+      ...baseSnapshot,
+      activeGrowthQuantity: snapshot.activeGrowthQuantity + (historyItem.activeGrowthQuantityAdded ?? 0),
+      germinatingQuantity: snapshot.germinatingQuantity + (historyItem.germinatingQuantityAdded ?? 0),
+      hardeningOffQuantity: snapshot.hardeningOffQuantity + (historyItem.hardeningOffQuantityAdded ?? 0),
+      notReadyQuantity: snapshot.notReadyQuantity + (historyItem.notReadyQuantityAdded ?? 0),
+      readyQuantity: snapshot.readyQuantity + (historyItem.readyQuantityAdded ?? 0),
+    };
+  }
+
+  return {
+    ...baseSnapshot,
+    activeGrowthQuantity: snapshot.activeGrowthQuantity - (historyItem.activeGrowthQuantityWithdrawn ?? 0),
+    germinatingQuantity: snapshot.germinatingQuantity - (historyItem.germinatingQuantityWithdrawn ?? 0),
+    hardeningOffQuantity: snapshot.hardeningOffQuantity - (historyItem.hardeningOffQuantity ?? 0),
+    notReadyQuantity: snapshot.notReadyQuantity - (historyItem.notReadyQuantityWithdrawn ?? 0),
+    readyQuantity: snapshot.readyQuantity - (historyItem.readyQuantityWithdrawn ?? 0),
+  };
+};
 
 const findPreviousMatchingEvent = <T extends BatchHistoryItem>(
   historyItem: BatchHistoryItem,
@@ -79,31 +145,20 @@ const findPreviousQuantitySnapshot = (
   historyItem: BatchHistoryItem,
   allItems: BatchHistoryItem[] | null
 ): FullQuantityHistoryItem | undefined => {
-  const previousQuantityEvent = findPreviousMatchingEvent(historyItem, allItems, isQuantityHistoryItem);
-
-  if (!previousQuantityEvent) {
+  if (!historyItem.version) {
     return undefined;
   }
 
-  if (isFullQuantityHistoryItem(previousQuantityEvent)) {
-    return previousQuantityEvent;
-  }
-
-  const previousFullQuantityEvent = findPreviousMatchingEvent(
-    previousQuantityEvent,
-    allItems,
-    isFullQuantityHistoryItem
-  );
-
-  return {
-    ...previousQuantityEvent,
-    activeGrowthQuantity: previousFullQuantityEvent?.activeGrowthQuantity ?? 0,
-    germinatingQuantity: previousQuantityEvent.germinatingQuantity,
-    hardeningOffQuantity: previousFullQuantityEvent?.hardeningOffQuantity ?? 0,
-    notReadyQuantity: previousFullQuantityEvent?.notReadyQuantity ?? 0,
-    readyQuantity: previousFullQuantityEvent?.readyQuantity ?? 0,
-    type: 'QuantityEdited',
-  };
+  return allItems
+    ?.filter(
+      (event): event is QuantityHistoryItem =>
+        isQuantityHistoryItem(event) && event.version !== undefined && event.version < historyItem.version!
+    )
+    .sort((a, b) => (a.version ?? 0) - (b.version ?? 0))
+    .reduce<FullQuantityHistoryItem | undefined>(
+      (previousSnapshot, event) => applyQuantityHistoryItem(event, previousSnapshot),
+      undefined
+    );
 };
 
 export const findPreviousEvent = (
