@@ -99,7 +99,7 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
         flexWrap: 'wrap',
         gap: theme.spacing(2),
         minWidth: '220px',
-        padding: theme.spacing(3),
+        padding: theme.spacing(4, 3),
         width: '400px',
         justifyContent: 'center',
       }}
@@ -118,10 +118,15 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
 
   const titleAndStrata = (
     <Box flex={1} minWidth={0}>
-      <Typography fontSize={isCompact ? '20px' : '28px'} fontWeight={600} color={theme.palette.TwClrTxt}>
+      <Typography
+        fontSize={isCompact ? '20px' : '28px'}
+        fontWeight={600}
+        color={theme.palette.TwClrTxt}
+        lineHeight={'36px'}
+      >
         {plantingSite.name}
       </Typography>
-      <Divider sx={{ marginY: theme.spacing(1.5), borderColor: theme.palette.TwClrBrdrTertiary }} />
+      <Divider sx={{ marginY: theme.spacing(1), borderColor: theme.palette.TwClrBrdrTertiary }} />
       <Box display='flex' flexDirection='row' flexWrap='wrap' gap={theme.spacing(4)}>
         {namesColumn(strings.STRATA, strataNames)}
         {namesColumn(strings.SUBSTRATA, substrataNames, true)}
@@ -130,7 +135,7 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
   );
 
   const metrics = (
-    <Box display='flex' alignItems='center' marginTop={isCompact ? theme.spacing(2) : 0}>
+    <Box display='flex' alignItems='flex-start' marginTop={isCompact ? theme.spacing(2) : 0}>
       {plantingGoal}
     </Box>
   );
@@ -164,9 +169,9 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
           display='flex'
           flexDirection={isCompact ? 'column' : 'row'}
           gap={theme.spacing(3)}
-          alignItems={isCompact ? 'stretch' : 'center'}
+          alignItems={isCompact ? 'stretch' : 'flex-start'}
         >
-          <Box display='flex' alignItems='center' gap={theme.spacing(3)} flex={1} minWidth={0}>
+          <Box display='flex' alignItems='flex-start' gap={theme.spacing(3)} flex={1} minWidth={0}>
             <PlantingPlanMapThumbnail plantingSiteId={plantingSite.id} />
             {titleAndStrata}
           </Box>
