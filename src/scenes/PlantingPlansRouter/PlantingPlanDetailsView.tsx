@@ -32,7 +32,7 @@ const PlantingPlanDetailsView = (): JSX.Element => {
 
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
-  const { plantingSite, isLoading } = usePlantingSite(plantingSiteId);
+  const { plantingSite } = usePlantingSite(plantingSiteId);
 
   const [segment, setSegment] = useState<PlantingPlanSegment>(readStoredSegment);
   const [addSeasonModalOpen, , openAddSeasonModal, closeAddSeasonModal] = useBoolean(false);
@@ -93,7 +93,7 @@ const PlantingPlanDetailsView = (): JSX.Element => {
     [description, plantingSite, segment, segments, selectSegment, strings, theme]
   );
 
-  if (isLoading || !plantingSite) {
+  if (!plantingSite) {
     return <BusySpinner withSkrim={true} />;
   }
 
