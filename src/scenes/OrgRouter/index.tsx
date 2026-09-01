@@ -81,6 +81,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
 
   const hasObservationsResults = useMemo(() => !!countObservationsResult, [countObservationsResult]);
   const hasPlantingSites = useMemo(() => !!countPlantingSitesResult.data, [countPlantingSitesResult.data]);
+  const hasSpecies = useMemo(() => species.length > 0, [species]);
 
   const orgFeatures = useOrganizationFeatures();
   const isVirtualWalkthroughEnabled = !!orgFeatures?.virtualWalkthrough?.enabled;
@@ -152,7 +153,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
       {type !== 'desktop' ? (
         <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
           <Box sx={navBarOpened}>
-            <NavBar setShowNavBar={setShowNavBar} hasPlantingSites={hasPlantingSites} />
+            <NavBar setShowNavBar={setShowNavBar} hasPlantingSites={hasPlantingSites} hasSpecies={hasSpecies} />
           </Box>
         </Slide>
       ) : (
@@ -160,6 +161,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
           setShowNavBar={setShowNavBar}
           backgroundTransparent={viewHasBackgroundImage()}
           hasPlantingSites={hasPlantingSites}
+          hasSpecies={hasSpecies}
         />
       )}
       <Box
