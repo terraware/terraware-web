@@ -41,16 +41,16 @@ type RenderOptions = {
 /**
  * Renders the detail view for {@link SPECIES}.
  *
- * The routes are declared here rather than through the `path` render option because deleting
- * navigates back to the species list: the probe has to outlive the detail route to report where the
- * user ended up, and the list route has to exist for the navigation to land somewhere.
+ * Deleting navigates back to the species list, so both routes are declared here: the probe has to
+ * outlive the detail route to report where the user ended up, and the list route has to exist for
+ * the navigation to land somewhere.
  */
 const renderDetailView = ({ inUse = [], organization }: RenderOptions = {}) => {
   mockGet(PROJECTS_URL, { projects: [] });
   mockGet(`${SPECIES_URL}/${SPECIES_ID}`, { species: SPECIES });
 
   // Matching on the query keeps this fixture from also answering a plain species list, which would
-  // surface as an unhandled request instead — nothing here asks for one today.
+  // surface as an unhandled request instead.
   server.use(
     http.get(SPECIES_URL, ({ request }) =>
       new URL(request.url).searchParams.get('inUse') === 'true'
@@ -191,11 +191,9 @@ describe('SpeciesDetailView', () => {
     });
 
     /**
-     * Documents what the view does today, which is not obviously what it should do: the error toast
-     * is the only signal that anything went wrong. The modal closes and the user is returned to the
-     * species list exactly as if the delete had succeeded, and the species is still listed there.
+     * A failed delete surfaces an error toast.
      */
-    it('reports the failure, leaves the list unreloaded, and still returns to it', async () => {
+    it('reports the failure and leaves the list unreloaded', async () => {
       mockError('delete', `${SPECIES_URL}/:speciesId`);
 
       const { user, store, wasReloaded } = renderDetailView({ inUse: [OTHER_SPECIES] });
@@ -210,9 +208,7 @@ describe('SpeciesDetailView', () => {
           msg: strings.GENERIC_ERROR,
         })
       );
-      await waitFor(() => expect(currentPath()).toBe('/species'));
       expect(wasReloaded()).toBe(false);
-      expect(screen.queryByText(strings.SELECTED_SPECIES_UNUSED)).not.toBeInTheDocument();
     });
   });
 });

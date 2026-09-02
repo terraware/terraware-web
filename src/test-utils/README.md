@@ -126,9 +126,6 @@ real: add an endpoint to a component and every test rendering it fails until the
 `src/test-utils/queries.ts` holds queries for markup Testing Library can't reach on its own, where a
 component renders without the roles or accessible names a normal query needs.
 
-See the file for what exists. Add one there the first time a second test needs the same handle, and
-export it from `index.ts`.
-
 ## Fixtures
 
 `src/test-utils/fixtures` holds `build*` functions for the common domain objects — users,
