@@ -1,13 +1,11 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useCallback } from 'react';
 
 import { Typography } from '@mui/material';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { selectDraftPlantingSiteEdit } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
-import { requestDeleteDraft } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useDeleteDraftPlantingSiteMutation } from 'src/queries/generated/draftPlantingSites';
 import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -21,27 +19,25 @@ export default function DeleteDraftPlantingSiteModal(props: Props): JSX.Element 
   const { onClose, plantingSite } = props;
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState<string>('');
-  const result = useAppSelector(selectDraftPlantingSiteEdit(requestId));
+  const [deleteDraftPlantingSite, { isLoading: isDeleting }] = useDeleteDraftPlantingSiteMutation();
 
-  const deleteHandler = () => {
-    const request = dispatch(requestDeleteDraft(plantingSite.id));
-    setRequestId(request.requestId);
-  };
+  const deleteHandler = useCallback(() => {
+    const deleteDraft = async () => {
+      try {
+        await deleteDraftPlantingSite(plantingSite.id).unwrap();
+        snackbar.toastSuccess(strings.PLANTING_SITE_DELETED);
+        navigate(APP_PATHS.PLANTING_SITES);
+      } catch {
+        snackbar.toastError();
+      }
+    };
 
-  useEffect(() => {
-    if (result?.status === 'success') {
-      snackbar.toastSuccess(strings.PLANTING_SITE_DELETED);
-      navigate(APP_PATHS.PLANTING_SITES);
-    } else if (result?.status === 'error') {
-      snackbar.toastError();
-    }
-  }, [navigate, result?.status, snackbar]);
+    void deleteDraft();
+  }, [deleteDraftPlantingSite, navigate, plantingSite.id, snackbar]);
 
   return (
     <>
-      {result?.status === 'pending' && <BusySpinner withSkrim={true} />}
+      {isDeleting && <BusySpinner withSkrim={true} />}
       <DialogBox
         onClose={onClose}
         open={true}

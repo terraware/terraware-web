@@ -1,17 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { Statuses } from 'src/redux/features/asyncUtils';
-import { selectDraftPlantingSiteEdit } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
-import { requestUpdateDraft } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useUpdateDraftPlantingSiteMutation } from 'src/queries/generated/draftPlantingSites';
+import { useValidatePlantingSiteMutation } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { DraftPlantingSite, OptionalSiteEditStep, SiteEditStep } from 'src/types/PlantingSite';
-import { fromDraftToCreate } from 'src/utils/draftPlantingSiteUtils';
+import { fromDraft, fromDraftToCreate } from 'src/utils/draftPlantingSiteUtils';
 import useSnackbar from 'src/utils/useSnackbar';
-
-import usePlantingSiteValidate from './usePlantingSiteValidate';
 
 /**
  * Data type for request and response in hook functions.
@@ -30,93 +26,63 @@ type Data = {
 };
 
 export type Response = {
+  isUpdating: boolean;
   onFinishUpdate: () => void;
   updateDraft: (draft: Data, redirectToDraft: boolean) => void;
-  updateDraftStatus?: Statuses;
   updatedDraft?: Data;
 };
 
 /**
- * Hook to isoloate workflow logic to update a draft planting site.
- * Returns update function, status on request and the updated draft site.
+ * Hook to isolate workflow logic to update a draft planting site.
+ * Returns update function, whether the request is in flight and the updated draft site.
  * Optionally redirects to draft after update.
  */
 export default function useDraftPlantingSiteUpdate(): Response {
-  const dispatch = useAppDispatch();
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
-  const [draftRequest, setDraftRequest] = useState<Data>();
   const [updatedDraft, setUpdatedDraft] = useState<Data | undefined>();
-  const [redirect, setRedirect] = useState<boolean>(false);
 
-  const [requestId, setRequestId] = useState<string>('');
-  const draftResult = useAppSelector(selectDraftPlantingSiteEdit(requestId));
-
-  const { validate, result: validateResult } = usePlantingSiteValidate();
-
-  const _updateDraft = useCallback(
-    (request: Data) => {
-      const dispatched = dispatch(requestUpdateDraft(request.draft));
-      setRequestId(dispatched.requestId);
-    },
-    [dispatch]
-  );
-
-  const _validateDraft = useCallback(
-    (request: Data) => {
-      const site = fromDraftToCreate(request.draft);
-      validate(site);
-    },
-    [validate]
-  );
-
-  useEffect(() => {
-    if (validateResult?.status === 'success' && draftRequest) {
-      _updateDraft(draftRequest);
-    }
-  }, [draftRequest, _updateDraft, validateResult]);
-
-  useEffect(() => {
-    if (draftResult?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    }
-  }, [draftResult?.status, snackbar]);
-
-  useEffect(() => {
-    if (draftResult) {
-      if (draftResult.status === 'error') {
-        snackbar.toastError(strings.GENERIC_ERROR);
-      } else if (draftResult?.status === 'success' && draftRequest) {
-        if (redirect) {
-          snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
-          navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${draftRequest.draft.id}`));
-        } else {
-          setUpdatedDraft(draftRequest);
-        }
-      }
-    }
-  }, [draftRequest, draftResult, navigate, redirect, snackbar]);
+  const [validatePlantingSite, { isLoading: isValidating }] = useValidatePlantingSiteMutation();
+  const [updateDraftPlantingSite, { isLoading: isSaving }] = useUpdateDraftPlantingSiteMutation();
 
   const updateDraft = useCallback(
     (request: Data, redirectToDraft: boolean) => {
-      setDraftRequest(request);
-      setRedirect(redirectToDraft);
-      _validateDraft(request);
+      const update = async () => {
+        try {
+          // a draft is allowed to still have validation problems, so only the request has to succeed
+          await validatePlantingSite(fromDraftToCreate(request.draft)).unwrap();
+
+          await updateDraftPlantingSite({
+            id: request.draft.id,
+            updateDraftPlantingSiteRequestPayload: fromDraft(request.draft),
+          }).unwrap();
+
+          if (redirectToDraft) {
+            snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
+            navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${request.draft.id}`));
+          } else {
+            setUpdatedDraft(request);
+          }
+        } catch {
+          snackbar.toastError(strings.GENERIC_ERROR);
+        }
+      };
+
+      void update();
     },
-    [_validateDraft]
+    [navigate, snackbar, updateDraftPlantingSite, validatePlantingSite]
   );
+
+  const onFinishUpdate = useCallback(() => setUpdatedDraft(undefined), []);
 
   return useMemo<Response>(
     () => ({
-      onFinishUpdate: () => {
-        setUpdatedDraft(undefined);
-        setRequestId('');
-      },
+      isUpdating: isValidating || isSaving,
+      onFinishUpdate,
       updateDraft,
-      updateDraftStatus: draftResult?.status,
       updatedDraft,
     }),
-    [updateDraft, updatedDraft, draftResult?.status]
+    [isSaving, isValidating, onFinishUpdate, updateDraft, updatedDraft]
   );
 }

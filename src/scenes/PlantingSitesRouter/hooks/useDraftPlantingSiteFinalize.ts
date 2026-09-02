@@ -1,17 +1,13 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { selectDraftPlantingSiteEdit } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
-import { requestDeleteDraft } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useDeleteDraftPlantingSiteMutation } from 'src/queries/generated/draftPlantingSites';
+import { useCreatePlantingSiteMutation, useValidatePlantingSiteMutation } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { DraftPlantingSite, PlantingSiteProblem } from 'src/types/PlantingSite';
 import { fromDraftToCreate } from 'src/utils/draftPlantingSiteUtils';
 import useSnackbar from 'src/utils/useSnackbar';
-
-import usePlantingSiteCreate from './usePlantingSiteCreate';
-import usePlantingSiteValidate from './usePlantingSiteValidate';
 
 export type Response = {
   finalize: (draft: DraftPlantingSite) => void;
@@ -22,106 +18,60 @@ export type Response = {
  * Hook to create a planting site from a draft.
  * Deletes draft if create is successful.
  * Redirects user to created planting site.
- * Returns create function and status on request.
+ * Returns create function and whether a request is in flight.
  */
 export default function useDraftPlantingSiteFinalize(
   onSuccess?: (plantingSiteId: number) => void,
   onError?: (problems?: PlantingSiteProblem[]) => void
 ): Response {
-  const dispatch = useAppDispatch();
-  const [draft, setDraft] = useState<DraftPlantingSite>();
   const snackbar = useSnackbar();
   const trackEvent = useTrackEvent();
 
-  const { create, result: createResult } = usePlantingSiteCreate();
-
-  const { validate, result: validateResult } = usePlantingSiteValidate();
-  const [deleteDraftRequestId, setDeleteDraftRequestId] = useState<string>('');
-  const deleteDraftResult = useAppSelector(selectDraftPlantingSiteEdit(deleteDraftRequestId));
-
-  const _createFromDraft = useCallback(
-    (_draft: DraftPlantingSite) => {
-      const site = fromDraftToCreate(_draft);
-      create(site);
-    },
-    [create]
-  );
-
-  const _validateDraft = useCallback(
-    (_draft: DraftPlantingSite) => {
-      const site = fromDraftToCreate(_draft);
-      validate(site);
-    },
-    [validate]
-  );
-
-  const _deleteDraft = useCallback(
-    (_draft: DraftPlantingSite) => {
-      const dispatched = dispatch(requestDeleteDraft(_draft.id));
-      setDeleteDraftRequestId(dispatched.requestId);
-    },
-    [dispatch]
-  );
-
-  useEffect(() => {
-    if (validateResult) {
-      if (validateResult.status === 'error') {
-        snackbar.toastError(strings.GENERIC_ERROR);
-      } else if (validateResult.status === 'success') {
-        if (validateResult.data?.isValid) {
-          if (draft) {
-            _createFromDraft(draft);
-          }
-        } else {
-          onError?.(validateResult.data?.problems);
-        }
-      }
-    }
-  }, [_createFromDraft, draft, onError, snackbar, validateResult]);
-
-  useEffect(() => {
-    if (createResult?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    } else if (createResult?.status === 'success') {
-      if (draft) {
-        trackEvent(MIXPANEL_EVENTS.PLANTING_SITE_CREATED, {
-          num_strata: draft.strata?.length,
-          has_boundary: draft.boundary !== undefined && draft.boundary !== null,
-        });
-        _deleteDraft(draft);
-      }
-    }
-  }, [_createFromDraft, draft, onError, createResult, _deleteDraft, snackbar, trackEvent]);
-
-  useEffect(() => {
-    if (deleteDraftResult?.status === 'success') {
-      if (createResult?.data) {
-        onSuccess?.(createResult.data);
-      }
-    }
-  }, [deleteDraftResult, createResult, dispatch, onSuccess]);
+  const [validatePlantingSite, { isLoading: isValidating }] = useValidatePlantingSiteMutation();
+  const [createPlantingSite, { isLoading: isCreating }] = useCreatePlantingSiteMutation();
+  const [deleteDraftPlantingSite, { isLoading: isDeleting }] = useDeleteDraftPlantingSiteMutation();
 
   const finalize = useCallback(
-    (_draft: DraftPlantingSite) => {
-      setDraft(_draft);
-      _validateDraft(_draft);
-    },
-    [_validateDraft]
-  );
+    (draft: DraftPlantingSite) => {
+      const createFromDraft = async () => {
+        const site = fromDraftToCreate(draft);
 
-  const isPending = useMemo(() => {
-    return (
-      validateResult?.status === 'pending' ||
-      createResult?.status === 'pending' ||
-      deleteDraftResult?.status === 'pending'
-    );
-  }, [createResult?.status, deleteDraftResult?.status, validateResult?.status]);
+        try {
+          const validation = await validatePlantingSite(site).unwrap();
+
+          if (!validation.isValid) {
+            onError?.(validation.problems);
+            return;
+          }
+
+          const { id } = await createPlantingSite(site).unwrap();
+
+          trackEvent(MIXPANEL_EVENTS.PLANTING_SITE_CREATED, {
+            num_strata: draft.strata?.length,
+            has_boundary: draft.boundary !== undefined && draft.boundary !== null,
+          });
+
+          // the site exists at this point, so a failed draft cleanup must not read as a failed create
+          await deleteDraftPlantingSite(draft.id)
+            .unwrap()
+            .catch(() => undefined);
+
+          onSuccess?.(id);
+        } catch {
+          snackbar.toastError(strings.GENERIC_ERROR);
+        }
+      };
+
+      void createFromDraft();
+    },
+    [createPlantingSite, deleteDraftPlantingSite, onError, onSuccess, snackbar, trackEvent, validatePlantingSite]
+  );
 
   return useMemo<Response>(
     () => ({
       finalize,
-      isPending,
+      isPending: isValidating || isCreating || isDeleting,
     }),
-    [finalize, isPending]
+    [finalize, isCreating, isDeleting, isValidating]
   );
 }

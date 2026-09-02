@@ -8,7 +8,6 @@ import acceleratorProjectSpeciesReducers from './features/acceleratorProjectSpec
 import applicationReducers from './features/application/applicationSlice';
 import deliverablesReducers from './features/deliverables/deliverablesSlice';
 import documentProducerReducers from './features/documentProducer';
-import draftPlantingSiteReducers from './features/draftPlantingSite/draftPlantingSiteSlice';
 import eventReducers from './features/events/eventsSlice';
 import fundingEntitiesReducers from './features/funder/entities/fundingEntitiesSlice';
 import funderProjectsReducers from './features/funder/projects/funderProjectsSlice';
@@ -17,7 +16,6 @@ import matrixViewReducers from './features/matrixView/matrixViewSlice';
 import messageReducers from './features/message/messageSlice';
 import moduleReducers from './features/modules/modulesSlice';
 import organizationUsersReducers from './features/organizationUser/organizationUsersSlice';
-import plantingSiteReducers from './features/plantingSite/plantingSiteSlice';
 import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
 import projectToDoReducers from './features/projectToDo/projectToDoSlice';
 import snackbarReducers from './features/snackbar/snackbarSlice';
@@ -32,7 +30,6 @@ const reducers = {
   ...applicationReducers,
   ...deliverablesReducers,
   ...documentProducerReducers,
-  ...draftPlantingSiteReducers,
   ...eventReducers,
   ...funderProjectsReducers,
   ...fundingEntitiesReducers,
@@ -42,7 +39,6 @@ const reducers = {
   ...moduleReducers,
   ...organizationUsersReducers,
   ...acceleratorProjectSpeciesReducers,
-  ...plantingSiteReducers,
   ...projectSpeciesReducers,
   ...projectToDoReducers,
   ...snackbarReducers,
