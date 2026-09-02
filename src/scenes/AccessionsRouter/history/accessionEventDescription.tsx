@@ -112,50 +112,9 @@ export type ChangedValueColors = {
   changedTo: string;
 };
 
-/** Matches the server's raw rendering of a seed quantity, e.g. "SeedQuantityModel(quantity=33, units=Seeds)". */
-const SEED_QUANTITY = /^SeedQuantityModel\(quantity=(-?[\d.]+), units=(\w+)\)$/;
-
-const unitName = (strings: Strings, units: string): string => {
-  switch (units) {
-    case 'Grams':
-      return strings.GRAMS;
-    case 'Kilograms':
-      return strings.KILOGRAMS;
-    case 'Milligrams':
-      return strings.MILLIGRAMS;
-    case 'Ounces':
-      return strings.OUNCES;
-    case 'Pounds':
-      return strings.POUNDS;
-    case 'Seeds':
-      return strings.SEEDS;
-    default:
-      return units;
-  }
-};
-
-/**
- * Quantity fields arrive as the server's raw object rendering rather than a display string, so they
- * are unpacked into "33 Seeds" / "50 Grams".
- */
-export const formatEventValue = (strings: Strings, value: string): string => {
-  const match = SEED_QUANTITY.exec(value);
-
-  if (!match) {
-    return value;
-  }
-
-  const [, rawQuantity, units] = match;
-  // Number() drops the trailing zero the server sends for whole weights ("50.0" -> "50").
-  const parsed = Number(rawQuantity);
-  const quantity = Number.isFinite(parsed) ? String(parsed) : rawQuantity;
-
-  return `${quantity} ${unitName(strings, units)}`;
-};
-
 const renderChangedValue = (strings: Strings, color: string, values?: string[]): JSX.Element => (
   <Typography display='inline' color={color} fontWeight={600}>
-    {values?.map((value) => formatEventValue(strings, value)).join(strings.LIST_SEPARATOR) || strings.NONE}
+    {values?.join(strings.LIST_SEPARATOR) || strings.NONE}
   </Typography>
 );
 
@@ -221,13 +180,12 @@ export const renderAccessionEventDescription = (
     case 'Withdrawal':
       switch (action.type) {
         case 'Created': {
-          const rawQuantity = createdField(action, 'withdrawnQuantity');
+          const quantity = createdField(action, 'withdrawnQuantity');
 
-          if (rawQuantity === undefined) {
+          if (quantity === undefined) {
             return strings.ACCESSION_EVENT_WITHDRAWAL_ADDED;
           }
 
-          const quantity = formatEventValue(strings, rawQuantity);
           const purpose = createdField(action, 'purpose');
           const batchId = createdField(action, 'batchId');
           const nursery = batchId === undefined ? undefined : nurseryNames?.get(Number(batchId));

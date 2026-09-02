@@ -18,7 +18,6 @@ import {
   accessionEventTarget,
   accessionPhotoUrl,
   findViabilityTestWithdrawals,
-  formatEventValue,
   isPairedViabilityTestEvent,
   renderAccessionEventDescription,
 } from './accessionEventDescription';
@@ -35,7 +34,7 @@ const createdWith = (fields: Record<string, string>): CreatedActionPayload => ({
   type: 'Created',
   fields: Object.entries(fields).map(([fieldName, value]) => ({ fieldName, value: [value] })),
 });
-const QUANTITY_50 = 'SeedQuantityModel(quantity=50, units=Seeds)';
+const QUANTITY_50 = '50 Seeds';
 const deleted: DeletedActionPayload = { type: 'Deleted' };
 const fieldUpdated = (fieldName: string, changedFrom?: string[], changedTo?: string[]): FieldUpdatedActionPayload => ({
   type: 'FieldUpdated',
@@ -126,19 +125,9 @@ describe('renderAccessionEventDescription', () => {
       expect(describeEvent(entry)).toBe('collectors changed from Ada to Ada, Grace');
     });
 
-    it('reads a quantity change without the raw server object', () => {
-      const entry = event(
-        accession(),
-        fieldUpdated(
-          'quantity',
-          ['SeedQuantityModel(quantity=33, units=Seeds)'],
-          ['SeedQuantityModel(quantity=100, units=Seeds)']
-        )
-      );
-      const text = describeEvent(entry);
-
-      expect(text).toBe('quantity changed from 33 Seeds to 100 Seeds');
-      expect(text).not.toContain('SeedQuantityModel');
+    it('reads a quantity change', () => {
+      const entry = event(accession(), fieldUpdated('quantity', ['33 Seeds'], ['100 Seeds']));
+      expect(describeEvent(entry)).toBe('quantity changed from 33 Seeds to 100 Seeds');
     });
   });
 
@@ -274,43 +263,6 @@ describe('accessionPhotoUrl', () => {
 
   it('escapes a filename with characters that need it', () => {
     expect(accessionPhotoUrl(7, 'my photo (1).jpg')).toBe('/api/v1/seedbank/accessions/7/photos/my%20photo%20(1).jpg');
-  });
-});
-
-describe('formatEventValue', () => {
-  it('unpacks a seed count', () => {
-    expect(formatEventValue(defaultStrings, 'SeedQuantityModel(quantity=10, units=Seeds)')).toBe('10 Seeds');
-  });
-
-  it('unpacks each weight unit', () => {
-    const cases: [string, string][] = [
-      ['Grams', '50 Grams'],
-      ['Kilograms', '50 Kilograms'],
-      ['Milligrams', '50 Milligrams'],
-      ['Ounces', '50 Ounces'],
-      ['Pounds', '50 Pounds'],
-    ];
-
-    cases.forEach(([units, expected]) => {
-      expect(formatEventValue(defaultStrings, `SeedQuantityModel(quantity=50, units=${units})`)).toBe(expected);
-    });
-  });
-
-  it('drops the trailing zero the server sends for whole weights', () => {
-    expect(formatEventValue(defaultStrings, 'SeedQuantityModel(quantity=50.0, units=Grams)')).toBe('50 Grams');
-  });
-
-  it('keeps a genuine fraction', () => {
-    expect(formatEventValue(defaultStrings, 'SeedQuantityModel(quantity=1.50, units=Grams)')).toBe('1.5 Grams');
-  });
-
-  it('falls back to the raw unit name if the server adds one we do not know', () => {
-    expect(formatEventValue(defaultStrings, 'SeedQuantityModel(quantity=2, units=Bushels)')).toBe('2 Bushels');
-  });
-
-  it('passes through values that are not quantities', () => {
-    expect(formatEventValue(defaultStrings, 'Drying')).toBe('Drying');
-    expect(formatEventValue(defaultStrings, '')).toBe('');
   });
 });
 
