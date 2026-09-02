@@ -110,13 +110,21 @@ const SpeciesToPlant = ({ names }: SpeciesToPlantProps): JSX.Element => {
           {strings.SPECIES_TO_PLANT}
         </Typography>
       </Box>
-      {names.map((name) => (
-        <Box key={name} sx={{ padding: '4px' }}>
+      {names.length === 0 ? (
+        <Box sx={{ padding: '4px' }}>
           <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'} color={theme.palette.TwClrTxt}>
-            {name}
+            {strings.NO_SPECIES_TO_PLANT}
           </Typography>
         </Box>
-      ))}
+      ) : (
+        names.map((name) => (
+          <Box key={name} sx={{ padding: '4px' }}>
+            <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'} color={theme.palette.TwClrTxt}>
+              {name}
+            </Typography>
+          </Box>
+        ))
+      )}
     </Box>
   );
 };
