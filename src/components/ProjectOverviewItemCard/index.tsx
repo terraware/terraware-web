@@ -41,22 +41,7 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
       title={strings.PROJECT}
       contents={
         <>
-          {entityProject?.name ?? (
-            <Link onClick={() => setIsProjectAssignModalOpen(true)}>
-              <Box display='flex' alignItems='center'>
-                <Icon
-                  name='iconAdd'
-                  style={{
-                    fill: theme.palette.TwClrIcnBrand,
-                    height: '20px',
-                    width: '20px',
-                    marginRight: '5px',
-                  }}
-                />
-                {strings.ADD_TO_PROJECT}
-              </Box>
-            </Link>
-          )}
+          {entityProject?.name ?? undefined}
 
           <ProjectAssignModal<T>
             entity={entity}
