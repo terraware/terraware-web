@@ -8,8 +8,7 @@ import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
-import { selectDraftPlantingSites } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
-import { requestSearchDrafts } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
+import { useLazySearchDraftPlantingSitesQuery } from 'src/queries/search/draftPlantingSites';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -38,10 +37,10 @@ export default function DraftSiteDetailsInputForm({
   const { selectedOrganization } = useOrganization();
   const dispatch = useAppDispatch();
   const plantingSites = useAppSelector(selectPlantingSites);
-  const draftSites = useAppSelector(selectDraftPlantingSites(selectedOrganization?.id || -1));
+  const [searchDraftPlantingSites, { currentData: draftSites }] = useLazySearchDraftPlantingSitesQuery();
 
   const usedNames = useMemo(() => {
-    const allSites = [...(plantingSites || []), ...(draftSites?.data || [])];
+    const allSites = [...(plantingSites || []), ...(draftSites || [])];
     const otherSiteNames = allSites.filter((site) => Number(site.id) !== record.id).map((site) => site.name);
     return new Set(otherSiteNames);
   }, [draftSites, plantingSites, record.id]);
@@ -67,9 +66,9 @@ export default function DraftSiteDetailsInputForm({
 
   useEffect(() => {
     if (selectedOrganization) {
-      void dispatch(requestSearchDrafts(selectedOrganization.id));
+      void searchDraftPlantingSites({ organizationId: selectedOrganization.id }, true);
     }
-  }, [dispatch, selectedOrganization]);
+  }, [searchDraftPlantingSites, selectedOrganization]);
 
   useEffect(() => {
     if (!onValidate) {

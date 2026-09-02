@@ -9,8 +9,7 @@ import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers';
 import { UpdatePlantingSiteRequestPayload } from 'src/queries/generated/plantingSites';
-import { selectDraftPlantingSites } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
-import { requestSearchDrafts } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
+import { useLazySearchDraftPlantingSitesQuery } from 'src/queries/search/draftPlantingSites';
 import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
 import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
@@ -40,13 +39,13 @@ export default function DetailsInputForm({
   const { selectedOrganization } = useOrganization();
   const dispatch = useAppDispatch();
   const plantingSites = useAppSelector(selectPlantingSites);
-  const draftSites = useAppSelector(selectDraftPlantingSites(selectedOrganization?.id || -1));
+  const [searchDraftPlantingSites, { currentData: draftSites }] = useLazySearchDraftPlantingSitesQuery();
 
   const usedNames = useMemo(() => {
-    const allSites = [...(plantingSites || []), ...(draftSites?.data || [])];
+    const allSites = [...(plantingSites || []), ...(draftSites || [])];
     const otherSiteNames = allSites.filter((site) => Number(site.id) !== plantingSiteId).map((site) => site.name);
     return new Set(otherSiteNames);
-  }, [draftSites?.data, plantingSiteId, plantingSites]);
+  }, [draftSites, plantingSiteId, plantingSites]);
 
   const checkErrors = useCallback(() => {
     if (!record.name) {
@@ -69,9 +68,9 @@ export default function DetailsInputForm({
 
   useEffect(() => {
     if (selectedOrganization) {
-      void dispatch(requestSearchDrafts(selectedOrganization.id));
+      void searchDraftPlantingSites({ organizationId: selectedOrganization.id }, true);
     }
-  }, [dispatch, selectedOrganization]);
+  }, [searchDraftPlantingSites, selectedOrganization]);
 
   useEffect(() => {
     if (!onValidate) {

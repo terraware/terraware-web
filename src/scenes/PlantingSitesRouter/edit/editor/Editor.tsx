@@ -10,7 +10,6 @@ import TextWithLink from 'src/components/common/TextWithLink';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import useDraftPlantingSiteCreate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteCreate';
@@ -84,14 +83,11 @@ export default function Editor(props: EditorProps): JSX.Element {
   );
   const [plantingSite, setPlantingSite, onChange] = useForm({ ...site });
 
-  const { reload } = useOrganizationPlantingSites();
-
   const onFinalizeSuccess = useCallback(
     (plantingSiteId: number) => {
-      reload();
       goToPlantingSiteView(plantingSiteId);
     },
-    [goToPlantingSiteView, reload]
+    [goToPlantingSiteView]
   );
 
   const onFinalizeError = useCallback(() => {
@@ -101,8 +97,8 @@ export default function Editor(props: EditorProps): JSX.Element {
   /**
    * set up hooks to create/update a draft and also to create a planting site from draft
    */
-  const { onFinishCreate, createDraft, createDraftStatus, createdDraft } = useDraftPlantingSiteCreate();
-  const { onFinishUpdate, updateDraft, updateDraftStatus, updatedDraft } = useDraftPlantingSiteUpdate();
+  const { onFinishCreate, createDraft, isCreating, createdDraft } = useDraftPlantingSiteCreate();
+  const { onFinishUpdate, updateDraft, isUpdating, updatedDraft } = useDraftPlantingSiteUpdate();
   const { finalize, isPending } = useDraftPlantingSiteFinalize(onFinalizeSuccess, onFinalizeError);
 
   // update local state when draft is created
@@ -293,7 +289,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   return (
     <TfMain>
       {isPending && <BusySpinner withSkrim={true} />}
-      {(createDraftStatus === 'pending' || updateDraftStatus === 'pending') && <BusySpinner />}
+      {(isCreating || isUpdating) && <BusySpinner />}
       {showStartOver && <StartOverConfirmation onClose={onCloseStartOver} onConfirm={onStartOver} />}
       <PageHeaderWrapper nextElement={contentRef.current}>
         <Box sx={{ padding: theme.spacing(0, 0, 2, 3), display: 'flex' }}>

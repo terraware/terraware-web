@@ -28,7 +28,7 @@ export default function PlantingSiteDraftStratumView(): JSX.Element | undefined 
   const [search, setSearch] = useState<string>('');
 
   const { plantingSiteId, stratumId } = useParams<{ plantingSiteId: string; stratumId: string }>();
-  const { site, status } = useDraftPlantingSiteGet({ draftId: Number(plantingSiteId) });
+  const { isLoading, site } = useDraftPlantingSiteGet({ draftId: Number(plantingSiteId) });
 
   const stratum = useMemo(() => {
     return site?.strata?.find((_stratum) => _stratum.id === Number(stratumId));
@@ -61,7 +61,7 @@ export default function PlantingSiteDraftStratumView(): JSX.Element | undefined 
   );
 
   useEffect(() => {
-    if (status === 'pending') {
+    if (isLoading) {
       return;
     }
 
@@ -70,9 +70,9 @@ export default function PlantingSiteDraftStratumView(): JSX.Element | undefined 
     } else if (!stratum) {
       navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', plantingSiteId));
     }
-  }, [status, site, plantingSiteId, stratum, navigate]);
+  }, [isLoading, site, plantingSiteId, stratum, navigate]);
 
-  if (status === 'pending' || !site || !stratum) {
+  if (isLoading || !site || !stratum) {
     return <BusySpinner />;
   }
 

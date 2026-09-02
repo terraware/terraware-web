@@ -1,13 +1,11 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { Statuses } from 'src/redux/features/asyncUtils';
-import { selectDraftPlantingSiteCreate } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
-import { requestCreateDraft } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useCreateDraftPlantingSiteMutation } from 'src/queries/generated/draftPlantingSites';
 import strings from 'src/strings';
 import { DraftPlantingSite, SiteEditStep } from 'src/types/PlantingSite';
+import { fromDraft } from 'src/utils/draftPlantingSiteUtils';
 import useSnackbar from 'src/utils/useSnackbar';
 
 /**
@@ -25,70 +23,58 @@ type Data = {
 
 export type Response = {
   createDraft: (draft: Data, redirectToDraft: boolean) => void;
-  createDraftStatus?: Statuses;
   createdDraft?: Data;
+  isCreating: boolean;
   onFinishCreate: () => void;
 };
 
 /**
  * Hook to isolate workflow logic to create a draft planting site.
- * Returns create function, status on request and the created draft site.
+ * Returns create function, whether the request is in flight and the created draft site.
  * Optionally redirects to the created draft.
  */
 export default function useDraftPlantingSiteCreate(): Response {
-  const dispatch = useAppDispatch();
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
 
   const [createdDraft, setCreatedDraft] = useState<Data | undefined>();
-  const [draftRequest, setDraftRequest] = useState<Data>();
-  const [redirect, setRedirect] = useState<boolean>(false);
 
-  const [requestId, setRequestId] = useState<string>('');
-  const draftResult = useAppSelector(selectDraftPlantingSiteCreate(requestId));
+  const [createDraftPlantingSite, { isLoading: isCreating }] = useCreateDraftPlantingSiteMutation();
 
   const createDraft = useCallback(
     (request: Data, redirectToDraft: boolean) => {
-      const dispatched = dispatch(requestCreateDraft(request.draft));
-      setRequestId(dispatched.requestId);
-      setDraftRequest(request);
-      setRedirect(redirectToDraft);
+      const create = async () => {
+        try {
+          const { id } = await createDraftPlantingSite(fromDraft(request.draft)).unwrap();
+
+          // the draft has an id now, so drop the 'new site' url from the history
+          navigate(APP_PATHS.PLANTING_SITES_DRAFT_EDIT.replace(':plantingSiteId', `${id}`), { replace: true });
+
+          if (redirectToDraft) {
+            snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
+            navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${id}`));
+          } else {
+            setCreatedDraft({ ...request, draft: { ...request.draft, id } });
+          }
+        } catch {
+          snackbar.toastError(strings.GENERIC_ERROR);
+        }
+      };
+
+      void create();
     },
-    [dispatch]
+    [createDraftPlantingSite, navigate, snackbar]
   );
 
-  useEffect(() => {
-    if (draftResult?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    }
-  }, [draftResult?.status, snackbar]);
-
-  useEffect(() => {
-    if (draftResult?.status === 'success' && draftResult?.data && draftRequest) {
-      const id = draftResult.data;
-      navigate(APP_PATHS.PLANTING_SITES_DRAFT_EDIT.replace(':plantingSiteId', `${id}`), { replace: true });
-      if (redirect) {
-        snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
-        navigate(APP_PATHS.PLANTING_SITES_DRAFT_VIEW.replace(':plantingSiteId', `${id}`));
-      } else {
-        setCreatedDraft({
-          ...draftRequest,
-          draft: { ...draftRequest.draft, id },
-        });
-      }
-    }
-  }, [draftRequest, draftResult?.data, draftResult?.status, navigate, redirect, snackbar]);
+  const onFinishCreate = useCallback(() => setCreatedDraft(undefined), []);
 
   return useMemo<Response>(
     () => ({
       createDraft,
-      createDraftStatus: draftResult?.status,
       createdDraft,
-      onFinishCreate: () => {
-        setCreatedDraft(undefined);
-        setRequestId('');
-      },
+      isCreating,
+      onFinishCreate,
     }),
-    [createDraft, createdDraft, draftResult?.status]
+    [createDraft, createdDraft, isCreating, onFinishCreate]
   );
 }

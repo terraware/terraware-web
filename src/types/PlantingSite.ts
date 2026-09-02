@@ -1,4 +1,8 @@
-import { components } from 'src/api/types/generated-schema';
+import { DraftPlantingSitePayload as DraftPlantingSitePayloadRaw } from 'src/queries/generated/draftPlantingSites';
+import {
+  CreatePlantingSiteRequestPayload as CreatePlantingSiteRequestPayloadRaw,
+  PlantingSiteValidationProblemPayload,
+} from 'src/queries/generated/plantingSites';
 
 import { MinimalPlantingSite, MultiPolygon } from './Tracking';
 
@@ -23,19 +27,14 @@ export type PlantingSitesFilters = {
  * Expectation is for the client to parse the `data` JSON into first class properties on read,
  * and put them back into `data` as JSON upon write/update.
  */
-type DraftPlantingSitePayloadRaw = components['schemas']['DraftPlantingSitePayload'];
 export type DraftPlantingSitePayload = Omit<DraftPlantingSitePayloadRaw, 'createdTime' | 'modifiedTime'>;
-export type CreateDraftPlantingSiteRequestPayload = components['schemas']['CreateDraftPlantingSiteRequestPayload'];
-export type UpdateDraftPlantingSiteRequestPayload = components['schemas']['UpdateDraftPlantingSiteRequestPayload'];
-export type GetDraftPlantingSiteResponsePayload = components['schemas']['GetDraftPlantingSiteResponsePayload'];
 
 /**
  * Planting Sites Payloads
  */
-export type CreatePlantingSiteRequestPayload = components['schemas']['CreatePlantingSiteRequestPayload'];
-export type ValidatePlantingSiteResponsePayload = components['schemas']['ValidatePlantingSiteResponsePayload'];
+export type CreatePlantingSiteRequestPayload = CreatePlantingSiteRequestPayloadRaw;
 
-export type PlantingSiteProblem = components['schemas']['PlantingSiteValidationProblemPayload'];
+export type PlantingSiteProblem = PlantingSiteValidationProblemPayload;
 
 /**
  * Client side draft planting site with first class properties.

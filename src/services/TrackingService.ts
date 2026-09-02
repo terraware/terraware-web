@@ -1,5 +1,4 @@
 import { paths } from 'src/api/types/generated-schema';
-import { CreatePlantingSiteRequestPayload, ValidatePlantingSiteResponsePayload } from 'src/types/PlantingSite';
 import { SearchNodePayload, SearchRequestPayload, SearchSortOrder } from 'src/types/Search';
 import { MonitoringPlotSearchResult, PlantingSite, PlantingSiteSearchResult } from 'src/types/Tracking';
 
@@ -12,7 +11,6 @@ import SearchService from './SearchService';
  */
 
 const PLANTING_SITES_ENDPOINT = '/api/v1/tracking/sites';
-const PLANTING_SITES_VALIDATE_ENDPOINT = '/api/v1/tracking/sites/validate';
 const PLANTING_SITE_ENDPOINT = '/api/v1/tracking/sites/{id}';
 const PLANTING_SITE_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/{id}/reportedPlants';
 const ALL_REPORTED_PLANTS_ENDPOINT = '/api/v1/tracking/sites/reportedPlants';
@@ -29,9 +27,6 @@ type GetPlantingSiteReportedPlantsPayload =
 type ListOrganizationReportedPlantsPayload =
   paths[typeof ALL_REPORTED_PLANTS_ENDPOINT]['get']['responses'][200]['content']['application/json'];
 
-type CreatePlantingSiteResponse =
-  paths[typeof PLANTING_SITES_ENDPOINT]['post']['responses'][200]['content']['application/json'];
-
 /**
  * exported type
  */
@@ -44,7 +39,6 @@ type PlantingSiteData = {
 };
 
 const httpPlantingSites = HttpService.root(PLANTING_SITES_ENDPOINT);
-const httpPlantingSitesValidate = HttpService.root(PLANTING_SITES_VALIDATE_ENDPOINT);
 const httpPlantingSite = HttpService.root(PLANTING_SITE_ENDPOINT);
 
 /**
@@ -71,24 +65,6 @@ const fetchPlantingSiteList = async (
   );
 
   return response;
-};
-
-/**
- * Create a planting site
- */
-const createPlantingSite = async (
-  entity: CreatePlantingSiteRequestPayload
-): Promise<Response2<CreatePlantingSiteResponse>> => {
-  return httpPlantingSites.post2<CreatePlantingSiteResponse>({ entity });
-};
-
-/**
- * Validate a planting site
- */
-const validatePlantingSite = async (
-  entity: CreatePlantingSiteRequestPayload
-): Promise<Response2<ValidatePlantingSiteResponsePayload>> => {
-  return httpPlantingSitesValidate.post2<ValidatePlantingSiteResponsePayload>({ entity });
 };
 
 /**
@@ -257,9 +233,7 @@ const listPlantingSites = async (request: {
  * Exported functions
  */
 const TrackingService = {
-  createPlantingSite,
   fetchPlantingSiteList,
-  validatePlantingSite,
   getPlantingSite,
   getReportedPlants,
   listPlantingSites,

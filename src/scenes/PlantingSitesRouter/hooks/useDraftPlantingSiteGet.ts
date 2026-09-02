@@ -2,12 +2,10 @@ import { useCallback, useEffect, useMemo } from 'react';
 
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { Statuses } from 'src/redux/features/asyncUtils';
-import { selectDraftPlantingSiteGet } from 'src/redux/features/draftPlantingSite/draftPlantingSiteSelectors';
-import { requestGetDraft } from 'src/redux/features/draftPlantingSite/draftPlantingSiteThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetDraftPlantingSiteQuery } from 'src/queries/generated/draftPlantingSites';
 import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { toDraft } from 'src/utils/draftPlantingSiteUtils';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Props = {
@@ -15,44 +13,45 @@ export type Props = {
 };
 
 export type Response = {
-  status: Statuses;
+  isLoading: boolean;
   site?: DraftPlantingSite;
 };
 
 /**
  * Hook to fetch a draft planting site.
- * Returns status on request and the fetched draft site.
+ * Returns the fetched draft site and whether the request is still in flight.
  */
 export default function useDraftPlantingSiteGet({ draftId }: Props): Response {
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
-  const dispatch = useAppDispatch();
-  const draftResult = useAppSelector(selectDraftPlantingSiteGet(draftId));
+
+  const draftIdIsValid = useMemo(() => !isNaN(draftId), [draftId]);
+
+  const { currentData, isError, isLoading } = useGetDraftPlantingSiteQuery(draftId, { skip: !draftIdIsValid });
 
   const goToPlantingSites = useCallback(() => {
     navigate(APP_PATHS.PLANTING_SITES);
   }, [navigate]);
 
   useEffect(() => {
-    if (!isNaN(draftId)) {
-      void dispatch(requestGetDraft(draftId));
-    } else {
+    if (!draftIdIsValid) {
       goToPlantingSites();
     }
-  }, [dispatch, draftId, goToPlantingSites]);
+  }, [draftIdIsValid, goToPlantingSites]);
 
   useEffect(() => {
-    if (draftResult?.status === 'error') {
+    if (isError) {
       snackbar.toastError(strings.GENERIC_ERROR);
       goToPlantingSites();
     }
-  }, [draftResult?.status, goToPlantingSites, snackbar]);
+  }, [goToPlantingSites, isError, snackbar]);
 
   return useMemo<Response>(
     () => ({
-      status: draftResult?.status ?? 'pending',
-      site: draftResult?.data,
+      // an invalid id is redirecting away, so keep callers in their loading state
+      isLoading: isLoading || !draftIdIsValid,
+      site: currentData ? toDraft(currentData.site) : undefined,
     }),
-    [draftResult]
+    [currentData, draftIdIsValid, isLoading]
   );
 }
