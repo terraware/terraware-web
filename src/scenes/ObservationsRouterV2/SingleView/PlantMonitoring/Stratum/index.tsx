@@ -1,5 +1,5 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
@@ -30,6 +30,8 @@ const StratumDetails = (): JSX.Element => {
   const params = useParams<{ observationId: string; stratumName: string }>();
   const observationId = Number(params.observationId);
   const stratumName = params.stratumName;
+  const [searchParams] = useSearchParams();
+  const plantingSiteIdParam = searchParams.get('plantingSiteId');
 
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
@@ -55,7 +57,9 @@ const StratumDetails = (): JSX.Element => {
     const crumbsData: Crumb[] = [
       {
         name: strings.OBSERVATIONS,
-        to: APP_PATHS.OBSERVATIONS,
+        to: plantingSiteIdParam
+          ? `${APP_PATHS.OBSERVATIONS}?plantingSiteId=${plantingSiteIdParam}`
+          : APP_PATHS.OBSERVATIONS,
       },
     ];
 
@@ -71,7 +75,7 @@ const StratumDetails = (): JSX.Element => {
     }
 
     return crumbsData;
-  }, [activeLocale, observationId, plantingSite, results, strings.OBSERVATIONS]);
+  }, [activeLocale, observationId, plantingSite, plantingSiteIdParam, results, strings.OBSERVATIONS]);
 
   const title = (
     <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
