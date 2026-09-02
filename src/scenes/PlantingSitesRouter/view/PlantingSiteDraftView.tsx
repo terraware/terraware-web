@@ -56,6 +56,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
           <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: isMapView ? 1 : 0 }}>
             <PlantingSiteDetailsHeader
               editDisabled={!user || result.site.createdBy !== user.id}
+              isDraft
               onEdit={goToEditDraftPlantingSite}
               onDelete={() => setDeleteModalOpen(true)}
               plantingSite={plantingSite}
@@ -85,7 +86,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
               {plantingSite.boundary && !plantingSite.strata && (
                 <Grid container flexGrow={1}>
                   <Grid item xs={12} display='flex'>
-                    <SimplePlantingSite plantingSite={plantingSite} />
+                    <SimplePlantingSite isDraft plantingSite={plantingSite} />
                   </Grid>
                 </Grid>
               )}

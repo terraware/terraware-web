@@ -3,21 +3,38 @@ import React, { CSSProperties, type JSX, useMemo } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 
 import { PlantingSiteMap } from 'src/components/Map';
-import usePlantingSite from 'src/hooks/usePlantingSite';
+import { useGetDraftPlantingSiteQuery } from 'src/queries/generated/draftPlantingSites';
+import { useGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { MapService } from 'src/services';
+import { MinimalPlantingSite } from 'src/types/Tracking';
+import { toDraft } from 'src/utils/draftPlantingSiteUtils';
 
 type SimplePlantingSiteMapProps = {
-  plantingSiteId: number;
   hideAllControls?: boolean;
+  isDraft?: boolean;
+  plantingSiteId: number;
   style?: CSSProperties;
 };
 
 export default function SimplePlantingSiteMap({
-  plantingSiteId,
   hideAllControls,
+  isDraft,
+  plantingSiteId,
   style,
 }: SimplePlantingSiteMapProps): JSX.Element {
-  const { plantingSite } = usePlantingSite(plantingSiteId);
+  const plantingSiteResponse = useGetPlantingSiteQuery(
+    { id: plantingSiteId, includeZones: false },
+    { skip: isDraft === true }
+  );
+  const draftPlantingSiteResponse = useGetDraftPlantingSiteQuery(plantingSiteId, { skip: isDraft !== true });
+
+  const plantingSite = useMemo<MinimalPlantingSite | undefined>(() => {
+    if (isDraft) {
+      return draftPlantingSiteResponse.currentData ? toDraft(draftPlantingSiteResponse.currentData.site) : undefined;
+    }
+
+    return plantingSiteResponse.currentData?.site;
+  }, [draftPlantingSiteResponse.currentData, isDraft, plantingSiteResponse.currentData]);
 
   const mapData = useMemo(() => {
     if (!plantingSite?.boundary) {
@@ -27,10 +44,10 @@ export default function SimplePlantingSiteMap({
     return MapService.getMapDataFromPlantingSite(plantingSite);
   }, [plantingSite]);
 
-  if (plantingSite?.boundary) {
+  if (mapData) {
     return (
       <PlantingSiteMap
-        mapData={mapData!}
+        mapData={mapData}
         style={{ width: '100%', borderRadius: '24px', ...style }}
         layers={['Planting Site']}
         hideAllControls={hideAllControls}
