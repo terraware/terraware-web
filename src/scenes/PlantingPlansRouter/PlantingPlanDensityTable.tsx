@@ -155,7 +155,7 @@ const StratumRow = ({
         gridTemplateColumns={GRID_COLUMNS}
         gap={theme.spacing(2)}
         alignItems='center'
-        sx={{ padding: theme.spacing(2, 0.5) }}
+        sx={{ padding: theme.spacing(2, 2, 2, 0.5) }}
       >
         <Box display='flex' alignItems='center' gap={'5px'} minWidth={0}>
           <IconButton onClick={() => setExpanded((current) => !current)} size='small'>
