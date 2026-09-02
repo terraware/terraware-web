@@ -1250,8 +1250,7 @@ NAME_USED_BY_PROJECT,Nombre usado por proyecto,c2fdff8f
 NATIVE,Nativo,3ef34d4d
 NATIVE_CHECK,Verificación de especie nativa,474464e4
 NATIVE_CHECK_NO_UPDATES,No hay sugerencias para el estado nativo de las especies.,f9f543dc
-NATIVE_CHECK_NO_UPDATES_HINT,El estado individual de la especie puede cambiarse en la pantalla de detalles de la especie.,21f7b4fe
-NATIVE_CHECK_UPDATE_HINT,Seleccione las especies para modificar su estado listado o continúe sin cambiar los resultados.,1b67a440
+NATIVE_CHECK_UPDATE_HINT,"Seleccione las especies para modificar el estado sugerido, o déjelas sin seleccionar para usar el estado sugerido.",52738882
 NATIVE_ECOSYSTEM,Ecosistema autóctono,1a733f45
 NATIVE_ECOSYSTEM_TOOLTIP,"Indique el tipo de ecosistema en el cual se encuentra esta especie de forma natural; podría incluir detalles tales como el rango de elevación, pluviometría, etc.",188f8600
 NATIVE_FOREST,Bosque autóctono,bbd2ab56
@@ -2378,6 +2377,7 @@ SUCCESSIONAL_GROUP_EARLY_SECONDARY,Secundario temprano,25c1dd23
 SUCCESSIONAL_GROUP_LATE_SECONDARY,Secundario tardío,4817ea1d
 SUCCESSIONAL_GROUP_MATURE,Maduro,20bb27db
 SUCCESSIONAL_GROUP_PIONEER,Pionero,909ea222
+SUGGESTED_STATUS,Estado sugerido,5969ba86
 SUGGESTION,Sugerencia,9e30c163
 SUGGESTIONS,Sugerencias,d6f8e49f
 SUMMARY,Resumen,430d4ee5
