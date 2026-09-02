@@ -12,7 +12,7 @@ const ObservationSingleView = (): JSX.Element => {
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
 
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [, setSearchParams] = useSearchParams();
 
   const { data: observationResultsResponse, isLoading: observationResultsLoading } = useGetOneObservationResults({
     observationId,
@@ -20,17 +20,23 @@ const ObservationSingleView = (): JSX.Element => {
 
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
 
+  const plantingSiteId = results?.plantingSiteId;
   useEffect(() => {
-    const plantingSiteId = results?.plantingSiteId;
     if (plantingSiteId === undefined) {
       return;
     }
-    if (searchParams.get('plantingSiteId') !== plantingSiteId.toString()) {
-      const nextParams = new URLSearchParams(searchParams);
-      nextParams.set('plantingSiteId', plantingSiteId.toString());
-      setSearchParams(nextParams, { replace: true });
-    }
-  }, [results?.plantingSiteId, searchParams, setSearchParams]);
+    setSearchParams(
+      (prev) => {
+        if (prev.get('plantingSiteId') === plantingSiteId.toString()) {
+          return prev;
+        }
+        const nextParams = new URLSearchParams(prev);
+        nextParams.set('plantingSiteId', plantingSiteId.toString());
+        return nextParams;
+      },
+      { replace: true }
+    );
+  }, [plantingSiteId, setSearchParams]);
 
   if (observationResultsLoading || !results) {
     return <BusySpinner />;

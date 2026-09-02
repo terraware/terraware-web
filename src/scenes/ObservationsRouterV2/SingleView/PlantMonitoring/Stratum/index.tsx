@@ -70,7 +70,7 @@ const StratumDetails = (): JSX.Element => {
       const observationDate = getShortDate(completedDate ?? results.startDate, activeLocale);
       crumbsData.push({
         name: `${observationDate} (${plantingSite.name})`,
-        to: `/${observationId}`,
+        to: APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', `${observationId}`),
       });
     }
 
@@ -114,7 +114,7 @@ const StratumDetails = (): JSX.Element => {
   ];
 
   return (
-    <Page crumbs={crumbs} title={title}>
+    <Page crumbs={crumbs} title={title} hierarchicalCrumbs={false}>
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
       <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
       <Card radius='24px' style={{ width: '100%' }}>

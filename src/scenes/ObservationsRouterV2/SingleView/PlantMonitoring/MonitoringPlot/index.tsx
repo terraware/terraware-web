@@ -93,11 +93,14 @@ const MonitoringPlotDetails = (): JSX.Element => {
     if (!results?.isAdHoc && plantingSite && stratumName) {
       crumbsData.push({
         name: plantingSite.name,
-        to: `/${observationId}`,
+        to: APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', `${observationId}`),
       });
       crumbsData.push({
         name: stratumName,
-        to: `/stratum/${stratumName}`,
+        to: APP_PATHS.OBSERVATION_STRATUM_DETAILS_V2.replace(':observationId', `${observationId}`).replace(
+          ':stratumName',
+          stratumName
+        ),
       });
     }
 
@@ -189,7 +192,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
   }, [searchParams, setSearchParams]);
 
   return (
-    <Page crumbs={crumbs} title={title}>
+    <Page crumbs={crumbs} title={title} hierarchicalCrumbs={false}>
       {virtualWalkthroughFileId && monitoringPlot && results && (
         <VirtualWalkthroughModal
           observationId={observationId}
