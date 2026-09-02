@@ -50,17 +50,6 @@ export const accessionEventTarget = (
   }
 };
 
-export const findPhotoFilename = (fullText: string, photoFilenames: string[] | undefined): string | undefined =>
-  photoFilenames
-    // Match the whole filename, not any suffix: "Photo myIMG.jpg" must not match "IMG.jpg". Filenames
-    // can contain spaces, so where several still match, the longest is the real one.
-    ?.filter((filename) => {
-      const start = fullText.length - filename.length;
-
-      return fullText.endsWith(filename) && (start === 0 || fullText[start - 1] === ' ');
-    })
-    .sort((a, b) => b.length - a.length)[0];
-
 export const accessionPhotoUrl = (accessionId: number, filename: string): string =>
   API_PATHS.ACCESSION_PHOTO.replace('{accessionId}', String(accessionId)).replace(
     '{photoFilename}',

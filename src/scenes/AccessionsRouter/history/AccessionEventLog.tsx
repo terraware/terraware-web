@@ -13,6 +13,7 @@ import { useListAccessionEventsQuery } from 'src/queries/accessions/events';
 import { useGetViabilityTestQuery } from 'src/queries/generated/accessionsV2';
 import { type EventLogEntryPayload } from 'src/queries/generated/events';
 import { useListAccessionBatchNurseriesQuery } from 'src/queries/search/batches';
+import { findTrailingFilename } from 'src/utils/text';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import ViewViabilityTestModal from '../viabilityTesting/ViewViabilityTestModal';
@@ -21,7 +22,6 @@ import {
   type ChangedValueColors,
   accessionEventTarget,
   accessionPhotoUrl,
-  findPhotoFilename,
   findViabilityTestWithdrawals,
   isPairedViabilityTestEvent,
   renderAccessionEventDescription,
@@ -47,7 +47,7 @@ const AccessionEventLog = (): JSX.Element => {
   const { accession } = useAccession(accessionId);
 
   const openedPhotoFilename =
-    openedTarget?.kind === 'photo' ? findPhotoFilename(openedTarget.fullText, accession?.photoFilenames) : undefined;
+    openedTarget?.kind === 'photo' ? findTrailingFilename(openedTarget.fullText, accession?.photoFilenames) : undefined;
 
   const { currentData: viabilityTestData } = useGetViabilityTestQuery(
     {
@@ -97,7 +97,7 @@ const AccessionEventLog = (): JSX.Element => {
       const target = accessionEventTarget(event, viabilityTestWithdrawals);
 
       // A photo whose file is no longer on the accession has nothing to open.
-      if (!target || (target.kind === 'photo' && !findPhotoFilename(target.fullText, accession?.photoFilenames))) {
+      if (!target || (target.kind === 'photo' && !findTrailingFilename(target.fullText, accession?.photoFilenames))) {
         return description;
       }
 
