@@ -22,8 +22,6 @@ import { siteGoalPlants } from './plantingPlanGoals';
 
 type StratumDensities = { initialPlantingDensity: number; targetPlantDensity?: number };
 
-const PLACEHOLDER = '-';
-
 export type PlantingPlanSiteGoalsProps = {
   plantingSite: PlantingSitePayload;
 };
@@ -85,16 +83,17 @@ const PlantingPlanSiteGoals = ({ plantingSite }: PlantingPlanSiteGoalsProps): JS
 
   const stats = useMemo(() => {
     const plantsValue = (plants: number | undefined) =>
-      strings
-        .formatString(strings.X_PLANTS, plants === undefined ? PLACEHOLDER : numberFormatter.format(plants))
-        .toString();
+      plants === undefined
+        ? strings.NO_PLANTS
+        : strings.formatString(strings.X_PLANTS, numberFormatter.format(plants)).toString();
 
     return {
       initialGoal: plantsValue(siteGoalPlants(plantingSite, 'initial')),
       targetGoal: plantsValue(siteGoalPlants(plantingSite, 'target')),
-      species: strings
-        .formatString(strings.X_SPECIES, speciesCount === 0 ? PLACEHOLDER : numberFormatter.format(speciesCount))
-        .toString(),
+      species:
+        speciesCount === 0
+          ? strings.NO_SPECIES
+          : strings.formatString(strings.X_SPECIES, numberFormatter.format(speciesCount)).toString(),
     };
   }, [numberFormatter, plantingSite, speciesCount]);
 

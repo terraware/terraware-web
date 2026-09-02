@@ -38,16 +38,16 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
 
   const plantingGoalLabel = useMemo(() => {
     const plants = siteGoalPlants(plantingSite, 'initial');
-    return strings
-      .formatString(strings.X_PLANTS, plants === undefined ? PLACEHOLDER : numberFormatter.format(plants))
-      .toString();
+    return plants === undefined
+      ? strings.NO_PLANTS
+      : strings.formatString(strings.X_PLANTS, numberFormatter.format(plants)).toString();
   }, [numberFormatter, plantingSite]);
 
   const speciesLabel = useMemo(() => {
     const count = speciesTargetsData?.targets.length ?? 0;
-    return strings
-      .formatString(strings.X_SPECIES, count === 0 ? PLACEHOLDER : numberFormatter.format(count))
-      .toString();
+    return count === 0
+      ? strings.NO_SPECIES
+      : strings.formatString(strings.X_SPECIES, numberFormatter.format(count)).toString();
   }, [numberFormatter, speciesTargetsData]);
 
   const navigateToDetails = () =>
@@ -100,7 +100,7 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
         gap: theme.spacing(2),
         minWidth: '220px',
         padding: theme.spacing(4, 3),
-        width: '400px',
+        width: '410px',
         justifyContent: 'center',
       }}
     >
