@@ -1,4 +1,4 @@
-import React, { type JSX } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -16,6 +16,11 @@ const PlantingPlansView = (): JSX.Element => {
 
   const { isLoading, plantingSites } = useOrganizationPlantingSites({ full: true });
 
+  const sitesWithMap = useMemo(
+    () => plantingSites.filter((plantingSite) => plantingSite.boundary !== undefined),
+    [plantingSites]
+  );
+
   return (
     <Page
       title={strings.PLANTING_PLANS}
@@ -25,7 +30,7 @@ const PlantingPlansView = (): JSX.Element => {
     >
       {isLoading ? (
         <BusySpinner withSkrim={true} />
-      ) : plantingSites.length === 0 ? (
+      ) : sitesWithMap.length === 0 ? (
         <Card style={{ width: '100%' }} radius={theme.spacing(1)}>
           <Box
             sx={{
@@ -43,7 +48,7 @@ const PlantingPlansView = (): JSX.Element => {
         </Card>
       ) : (
         <Box sx={{ width: '100%' }}>
-          {plantingSites.map((plantingSite) => (
+          {sitesWithMap.map((plantingSite) => (
             <PlantingPlanBox key={plantingSite.id} plantingSite={plantingSite} />
           ))}
         </Box>
