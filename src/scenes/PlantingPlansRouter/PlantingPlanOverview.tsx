@@ -22,22 +22,26 @@ const PlantingPlanOverview = ({ plantingSite }: PlantingPlanOverviewProps): JSX.
   const numberFormatter = useNumberFormatter();
   const { data: speciesTargetsData } = useListPlantingSiteSpeciesTargetsQuery(plantingSite.id);
 
-  const speciesCount = speciesTargetsData?.targets.length ?? 0;
-
   const stats = useMemo(() => {
     const plantsValue = (plants: number | undefined) =>
-      strings
-        .formatString(strings.X_PLANTS, plants === undefined ? PLACEHOLDER : numberFormatter.format(plants))
-        .toString();
+      plants === undefined
+        ? strings.NO_PLANTS
+        : strings.formatString(strings.X_PLANTS, numberFormatter.format(plants)).toString();
+
+    const targets = speciesTargetsData?.targets;
+    const speciesValue =
+      targets === undefined
+        ? strings.formatString(strings.X_SPECIES, PLACEHOLDER).toString()
+        : targets.length === 0
+          ? strings.NO_SPECIES
+          : strings.formatString(strings.X_SPECIES, numberFormatter.format(targets.length)).toString();
 
     return {
       initialGoal: plantsValue(siteGoalPlants(plantingSite, 'initial')),
       targetGoal: plantsValue(siteGoalPlants(plantingSite, 'target')),
-      species: strings
-        .formatString(strings.X_SPECIES, speciesCount === 0 ? PLACEHOLDER : numberFormatter.format(speciesCount))
-        .toString(),
+      species: speciesValue,
     };
-  }, [numberFormatter, plantingSite, speciesCount]);
+  }, [numberFormatter, plantingSite, speciesTargetsData]);
 
   return (
     <Card

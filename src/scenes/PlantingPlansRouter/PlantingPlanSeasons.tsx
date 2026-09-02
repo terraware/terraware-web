@@ -12,8 +12,6 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import { siteGoalPlants } from './plantingPlanGoals';
 
-const PLACEHOLDER = '-';
-
 type PlantingPlanSeasonsProps = {
   plantingSite: PlantingSitePayload;
 };
@@ -58,9 +56,9 @@ const PlantingPlanSeasons = ({ plantingSite }: PlantingPlanSeasonsProps): JSX.El
 
   const initialGoalLabel = useMemo(() => {
     const plants = siteGoalPlants(plantingSite, 'initial');
-    return strings
-      .formatString(strings.X_PLANTS, plants === undefined ? PLACEHOLDER : numberFormatter.format(plants))
-      .toString();
+    return plants === undefined
+      ? strings.NO_PLANTS
+      : strings.formatString(strings.X_PLANTS, numberFormatter.format(plants)).toString();
   }, [numberFormatter, plantingSite, strings]);
 
   const isLoading = !organizationId || plantingSeasonsResult.isFetching || plantingSeasonsData === undefined;

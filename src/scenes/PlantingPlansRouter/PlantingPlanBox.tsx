@@ -44,10 +44,13 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
   }, [numberFormatter, plantingSite]);
 
   const speciesLabel = useMemo(() => {
-    const count = speciesTargetsData?.targets.length ?? 0;
-    return count === 0
+    const targets = speciesTargetsData?.targets;
+    if (targets === undefined) {
+      return strings.formatString(strings.X_SPECIES, PLACEHOLDER).toString();
+    }
+    return targets.length === 0
       ? strings.NO_SPECIES
-      : strings.formatString(strings.X_SPECIES, numberFormatter.format(count)).toString();
+      : strings.formatString(strings.X_SPECIES, numberFormatter.format(targets.length)).toString();
   }, [numberFormatter, speciesTargetsData]);
 
   const navigateToDetails = () =>
