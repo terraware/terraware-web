@@ -23,8 +23,9 @@ const PlantingSiteMapDrawer = ({ plantingSiteId, layerFeatureId }: PlantingSiteM
   const { activeLocale, strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { plantingSite } = usePlantingSite(plantingSiteId);
-  const { findSpeciesById } = useOrganizationSpecies();
-  const { currentData: speciesTargetsData } = useListPlantingSiteSpeciesTargetsQuery(plantingSiteId);
+  const { findSpeciesById, isLoading: speciesLoading } = useOrganizationSpecies();
+  const { currentData: speciesTargetsData, isSuccess: speciesTargetsLoaded } =
+    useListPlantingSiteSpeciesTargetsQuery(plantingSiteId);
 
   const data = useMemo(
     () => getPlantingSiteMapDrawerData(plantingSite, layerFeatureId, speciesTargetsData?.targets),
@@ -78,6 +79,9 @@ const PlantingSiteMapDrawer = ({ plantingSiteId, layerFeatureId }: PlantingSiteM
       .sort((a, b) => a.localeCompare(b, activeLocale || undefined));
   }, [activeLocale, data, findSpeciesById]);
 
+  const noSpeciesToPlant =
+    data?.type === 'stratum' && speciesTargetsLoaded && !speciesLoading && data.speciesIds.length === 0;
+
   if (!data) {
     return null;
   }
@@ -90,16 +94,17 @@ const PlantingSiteMapDrawer = ({ plantingSiteId, layerFeatureId }: PlantingSiteM
         rows={rows}
         stripedRows={data.type === 'site'}
       />
-      {data.type === 'stratum' && <SpeciesToPlant names={speciesNames} />}
+      {data.type === 'stratum' && <SpeciesToPlant names={speciesNames} showEmptyState={noSpeciesToPlant} />}
     </Box>
   );
 };
 
 type SpeciesToPlantProps = {
   names: string[];
+  showEmptyState: boolean;
 };
 
-const SpeciesToPlant = ({ names }: SpeciesToPlantProps): JSX.Element => {
+const SpeciesToPlant = ({ names, showEmptyState }: SpeciesToPlantProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
 
@@ -110,13 +115,21 @@ const SpeciesToPlant = ({ names }: SpeciesToPlantProps): JSX.Element => {
           {strings.SPECIES_TO_PLANT}
         </Typography>
       </Box>
-      {names.map((name) => (
-        <Box key={name} sx={{ padding: '4px' }}>
-          <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'} color={theme.palette.TwClrTxt}>
-            {name}
-          </Typography>
-        </Box>
-      ))}
+      {names.length > 0
+        ? names.map((name) => (
+            <Box key={name} sx={{ padding: '4px' }}>
+              <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'} color={theme.palette.TwClrTxt}>
+                {name}
+              </Typography>
+            </Box>
+          ))
+        : showEmptyState && (
+            <Box sx={{ padding: '4px' }}>
+              <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'} color={theme.palette.TwClrTxt}>
+                {strings.NO_SPECIES_TO_PLANT}
+              </Typography>
+            </Box>
+          )}
     </Box>
   );
 };

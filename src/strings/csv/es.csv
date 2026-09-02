@@ -1325,6 +1325,7 @@ NO_SPECIES,No hay especies,713e912e
 NO_SPECIES_CONTRIBUTOR_MSG,"Aún no hay especies en su lista de especies. Solo los administradores pueden añadir especies, así que por favor contacte con el suyo para que le ayude.",32a4f50e
 NO_SPECIES_DESCRIPTION,Parece que aún no ha añadido ninguna especie. Disponer de una lista maestra de especies ayuda a agilizar la introducción de datos sobre semillas y plantas en su organización. Puede añadir especies manual e individualmente o importar datos desde un CSV.,048a81f6
 NO_SPECIES_TARGETS_FOR_SUBSTRATUM,No se han establecido objetivos de especies para este sustrato.,53b1322b
+NO_SPECIES_TO_PLANT,No hay especies para plantar,b42ffe0b
 NO_STATUS,Sin estado,4d08c36e
 NO_SUB_LOCATIONS,Edite este banco de semillas para añadir sublocalizaciones.,963dba11
 NO_SUB_LOCATIONS_NURSERY,Edite este vivero para añadir sublocalizaciones.,8a939067
