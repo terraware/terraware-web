@@ -1,5 +1,5 @@
 import React, { type JSX, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
@@ -30,6 +30,8 @@ const StratumDetails = (): JSX.Element => {
   const params = useParams<{ observationId: string; stratumName: string }>();
   const observationId = Number(params.observationId);
   const stratumName = params.stratumName;
+  const [searchParams] = useSearchParams();
+  const plantingSiteIdParam = searchParams.get('plantingSiteId');
 
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
@@ -55,7 +57,9 @@ const StratumDetails = (): JSX.Element => {
     const crumbsData: Crumb[] = [
       {
         name: strings.OBSERVATIONS,
-        to: APP_PATHS.OBSERVATIONS,
+        to: plantingSiteIdParam
+          ? `${APP_PATHS.OBSERVATIONS}?plantingSiteId=${plantingSiteIdParam}`
+          : APP_PATHS.OBSERVATIONS,
       },
     ];
 
@@ -66,12 +70,12 @@ const StratumDetails = (): JSX.Element => {
       const observationDate = getShortDate(completedDate ?? results.startDate, activeLocale);
       crumbsData.push({
         name: `${observationDate} (${plantingSite.name})`,
-        to: `/${observationId}`,
+        to: APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', `${observationId}`),
       });
     }
 
     return crumbsData;
-  }, [activeLocale, observationId, plantingSite, results, strings.OBSERVATIONS]);
+  }, [activeLocale, observationId, plantingSite, plantingSiteIdParam, results, strings.OBSERVATIONS]);
 
   const title = (
     <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt}>
@@ -110,7 +114,7 @@ const StratumDetails = (): JSX.Element => {
   ];
 
   return (
-    <Page crumbs={crumbs} title={title}>
+    <Page crumbs={crumbs} title={title} hierarchicalCrumbs={false}>
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
       <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
       <Card radius='24px' style={{ width: '100%' }}>

@@ -1,5 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams, useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, IconTooltip } from '@terraware/web-components';
@@ -37,6 +37,8 @@ const SiteDetails = (): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
+  const [searchParams] = useSearchParams();
+  const plantingSiteIdParam = searchParams.get('plantingSiteId');
   const [pageMessageDismissed, setPageMessageDismissed] = useState(false);
   const [showMatchSpeciesModal, setShowMatchSpeciesModal] = useState(false);
   const [isMapVisible, setIsMapVisible] = useState(false);
@@ -51,12 +53,14 @@ const SiteDetails = (): JSX.Element => {
     const crumbsData: Crumb[] = [
       {
         name: strings.OBSERVATIONS,
-        to: APP_PATHS.OBSERVATIONS,
+        to: plantingSiteIdParam
+          ? `${APP_PATHS.OBSERVATIONS}?plantingSiteId=${plantingSiteIdParam}`
+          : APP_PATHS.OBSERVATIONS,
       },
     ];
 
     return crumbsData;
-  }, [strings.OBSERVATIONS]);
+  }, [plantingSiteIdParam, strings.OBSERVATIONS]);
 
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();

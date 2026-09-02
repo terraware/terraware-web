@@ -27,6 +27,8 @@ const MonitoringPlotDetails = (): JSX.Element => {
   const observationId = Number(params.observationId);
   const stratumName = params.stratumName;
   const monitoringPlotId = Number(params.monitoringPlotId);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const plantingSiteIdParam = searchParams.get('plantingSiteId');
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
@@ -82,23 +84,28 @@ const MonitoringPlotDetails = (): JSX.Element => {
     const crumbsData: Crumb[] = [
       {
         name: strings.OBSERVATIONS,
-        to: APP_PATHS.OBSERVATIONS,
+        to: plantingSiteIdParam
+          ? `${APP_PATHS.OBSERVATIONS}?plantingSiteId=${plantingSiteIdParam}`
+          : APP_PATHS.OBSERVATIONS,
       },
     ];
 
     if (!results?.isAdHoc && plantingSite && stratumName) {
       crumbsData.push({
         name: plantingSite.name,
-        to: `/${observationId}`,
+        to: APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', `${observationId}`),
       });
       crumbsData.push({
         name: stratumName,
-        to: `/stratum/${stratumName}`,
+        to: APP_PATHS.OBSERVATION_STRATUM_DETAILS_V2.replace(':observationId', `${observationId}`).replace(
+          ':stratumName',
+          stratumName
+        ),
       });
     }
 
     return crumbsData;
-  }, [observationId, plantingSite, results?.isAdHoc, stratumName, strings.OBSERVATIONS]);
+  }, [observationId, plantingSite, plantingSiteIdParam, results?.isAdHoc, stratumName, strings.OBSERVATIONS]);
 
   const title = useMemo(() => {
     const swCoordinatesLat = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
@@ -175,7 +182,6 @@ const MonitoringPlotDetails = (): JSX.Element => {
     viewIdentifier: 'monitoringPlotObservation',
   });
 
-  const [searchParams, setSearchParams] = useSearchParams();
   const virtualWalkthroughParam = searchParams.get('virtualWalkthrough');
   const virtualWalkthroughFileId = virtualWalkthroughParam ? Number(virtualWalkthroughParam) : undefined;
 
@@ -186,7 +192,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
   }, [searchParams, setSearchParams]);
 
   return (
-    <Page crumbs={crumbs} title={title}>
+    <Page crumbs={crumbs} title={title} hierarchicalCrumbs={false}>
       {virtualWalkthroughFileId && monitoringPlot && results && (
         <VirtualWalkthroughModal
           observationId={observationId}
