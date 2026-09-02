@@ -1249,8 +1249,7 @@ NAME_USED_BY_PROJECT,Nom utilisé par projet,c2fdff8f
 NATIVE,Indigène,3ef34d4d
 NATIVE_CHECK,Vérification du statut indigène,474464e4
 NATIVE_CHECK_NO_UPDATES,Aucune suggestion pour le statut d'origine des espèces.,f9f543dc
-NATIVE_CHECK_NO_UPDATES_HINT,Le statut individuel des espèces peut être modifié dans l’écran des détails de l’espèce.,21f7b4fe
-NATIVE_CHECK_UPDATE_HINT,Sélectionnez les espèces pour remplacer leur statut indiqué ou continuez sans modifier les résultats.,1b67a440
+NATIVE_CHECK_UPDATE_HINT,"Sélectionnez les espèces pour remplacer le statut suggéré, ou laissez décoché pour utiliser le statut suggéré.",52738882
 NATIVE_ECOSYSTEM,Écosystème indigène,1a733f45
 NATIVE_ECOSYSTEM_TOOLTIP,"Indiquez le type d'écosystème dans lequel cette espèce se trouve à l'état naturel ; vous pouvez inclure des détails tels que l'altitude, la pluviométrie, etc.",188f8600
 NATIVE_FOREST,Forêt indigène,bbd2ab56
@@ -2378,6 +2377,7 @@ SUCCESSIONAL_GROUP_EARLY_SECONDARY,Secondaire initial,25c1dd23
 SUCCESSIONAL_GROUP_LATE_SECONDARY,Secondaire tardif,4817ea1d
 SUCCESSIONAL_GROUP_MATURE,Mature,20bb27db
 SUCCESSIONAL_GROUP_PIONEER,Pionnier,909ea222
+SUGGESTED_STATUS,Statut suggéré,5969ba86
 SUGGESTION,Suggestion,9e30c163
 SUGGESTIONS,Suggestions,d6f8e49f
 SUMMARY,Résumé,430d4ee5

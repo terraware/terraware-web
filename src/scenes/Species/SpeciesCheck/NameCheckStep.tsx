@@ -45,7 +45,13 @@ const NameCheckStep = ({
 
   return (
     <Box display='flex' flexDirection='column' gap={theme.spacing(2)} textAlign='left'>
-      <Box sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: theme.spacing(0, 2) }}>
+      <Box
+        sx={{
+          backgroundColor: theme.palette.TwClrBgSecondary,
+          border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+          padding: theme.spacing(0, 2),
+        }}
+      >
         {summaries.map((summary, index) => (
           <Box
             key={summary.projectName}

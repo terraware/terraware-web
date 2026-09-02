@@ -60,87 +60,24 @@ const NativeCheckStep = ({
 }: NativeCheckStepProps): JSX.Element => {
   const theme = useTheme();
 
-  const hasPending = sections.some((section) => section.pending.length > 0);
-
-  if (mode === 'list' && !hasPending) {
-    return (
-      <Box display='flex' flexDirection='column' gap={theme.spacing(2)} textAlign='left'>
-        {sections.map((section) => (
-          <SummaryBox key={section.key} {...section.summary} />
-        ))}
-        <Box padding={theme.spacing(4)} textAlign='center'>
-          <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
-            {strings.NATIVE_CHECK_NO_UPDATES}
-          </Typography>
-          <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
-            {strings.NATIVE_CHECK_NO_UPDATES_HINT}
-          </Typography>
-        </Box>
-      </Box>
-    );
-  }
-
   const nativityOptions = NATIVITY_VALUES.map((value) => ({ label: getNativityLabel(value), value }));
 
-  return (
-    <Box display='flex' flexDirection='column' gap={theme.spacing(2)} textAlign='left'>
-      {sections.map((section) => {
-        const rows =
-          mode === 'override'
-            ? section.pending.filter((row) => selectedKeys.has(projectSpeciesKey(section.key, row.species.id)))
-            : section.pending;
+  if (mode === 'override') {
+    return (
+      <Box display='flex' flexDirection='column' gap={theme.spacing(2)} textAlign='left'>
+        {sections.map((section) => {
+          const rows = section.pending.filter((row) =>
+            selectedKeys.has(projectSpeciesKey(section.key, row.species.id))
+          );
 
-        if (rows.length === 0) {
-          return <SummaryBox key={section.key} {...section.summary} />;
-        }
+          if (rows.length === 0) {
+            return <SummaryBox key={section.key} {...section.summary} />;
+          }
 
-        return (
-          <Box key={section.key} display='flex' flexDirection='column' gap={theme.spacing(2)}>
-            <SummaryBox {...section.summary} />
-            {mode === 'list' ? (
-              <Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}`, overflow: 'hidden' }}>
-                <Box
-                  display='grid'
-                  gridTemplateColumns='48px 1fr auto'
-                  alignItems='center'
-                  padding={theme.spacing(1.5, 2)}
-                  sx={{ backgroundColor: theme.palette.TwClrBgSecondary }}
-                >
-                  <span />
-                  <Typography fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxt}>
-                    {strings.SPECIES}
-                  </Typography>
-                  <Typography fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxt} textAlign='right'>
-                    {strings.STATUS}
-                  </Typography>
-                </Box>
-                {rows.map((row) => {
-                  const key = projectSpeciesKey(section.key, row.species.id);
-                  return (
-                    <Box
-                      key={key}
-                      display='grid'
-                      gridTemplateColumns='48px 1fr auto'
-                      alignItems='center'
-                      padding={theme.spacing(1, 2, 1, 0)}
-                    >
-                      <Checkbox
-                        checked={selectedKeys.has(key)}
-                        onChange={() => onToggle(section.key, row.species.id)}
-                        sx={{ padding: 0 }}
-                      />
-                      <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
-                        {row.species.scientificName}
-                      </Typography>
-                      <Box display='flex' justifyContent='flex-end'>
-                        <SpeciesNativityBadge nativity={row.nativity} />
-                      </Box>
-                    </Box>
-                  );
-                })}
-              </Box>
-            ) : (
-              rows.map((row) => {
+          return (
+            <Box key={section.key} display='flex' flexDirection='column' gap={theme.spacing(2)}>
+              <SummaryBox {...section.summary} />
+              {rows.map((row) => {
                 const key = projectSpeciesKey(section.key, row.species.id);
                 const override = overrides[key] ?? {};
                 return (
@@ -180,7 +117,83 @@ const NativeCheckStep = ({
                     />
                   </Box>
                 );
-              })
+              })}
+            </Box>
+          );
+        })}
+      </Box>
+    );
+  }
+
+  return (
+    <Box display='flex' flexDirection='column' gap={theme.spacing(2)} textAlign='left'>
+      {sections.map((section) => {
+        const rows = section.pending;
+
+        return (
+          <Box
+            key={section.key}
+            sx={{
+              border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+              overflow: 'hidden',
+            }}
+          >
+            <SummaryBox {...section.summary} />
+            {rows.length > 0 ? (
+              <>
+                <Box
+                  display='grid'
+                  gridTemplateColumns='48px 1fr auto'
+                  alignItems='center'
+                  padding={theme.spacing(1.5, 2)}
+                  sx={{
+                    backgroundColor: theme.palette.TwClrBgSecondary,
+                    borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                  }}
+                >
+                  <span />
+                  <Typography fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxt}>
+                    {strings.SPECIES}
+                  </Typography>
+                  <Typography fontSize='14px' fontWeight={600} color={theme.palette.TwClrTxt} textAlign='right'>
+                    {strings.SUGGESTED_STATUS}
+                  </Typography>
+                </Box>
+                {rows.map((row) => {
+                  const key = projectSpeciesKey(section.key, row.species.id);
+                  return (
+                    <Box
+                      key={key}
+                      display='grid'
+                      gridTemplateColumns='48px 1fr auto'
+                      alignItems='center'
+                      padding={theme.spacing(1, 2, 1, 0)}
+                    >
+                      <Checkbox
+                        checked={selectedKeys.has(key)}
+                        onChange={() => onToggle(section.key, row.species.id)}
+                        sx={{ padding: 0 }}
+                      />
+                      <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
+                        {row.species.scientificName}
+                      </Typography>
+                      <Box display='flex' justifyContent='flex-end'>
+                        <SpeciesNativityBadge nativity={row.nativity} />
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </>
+            ) : (
+              <Box
+                padding={theme.spacing(3)}
+                textAlign='center'
+                sx={{ borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
+              >
+                <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
+                  {strings.NATIVE_CHECK_NO_UPDATES}
+                </Typography>
+              </Box>
             )}
           </Box>
         );
