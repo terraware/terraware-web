@@ -1,3 +1,4 @@
+84e192d3 SW-8848 Read legacy key names from persisted draft planting sites (#6361)
 bc65f7dd SW-7655 Add plantingSiteId to observation details view (#6358)
 f73458b7 Planting Goals Tab: Show spinner only on first load (#6345)
 819fa789 SW-8845 Planting Plans: Don't show Planting Site in list if it does not have a map (#6357)
