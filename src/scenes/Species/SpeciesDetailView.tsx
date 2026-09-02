@@ -2,7 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { useParams } from 'react-router';
 
 import { Box, Grid, GridProps, Typography, useTheme } from '@mui/material';
-import { BusySpinner } from '@terraware/web-components';
+import { Badge, BusySpinner } from '@terraware/web-components';
 import { Button, DropdownItem } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -10,6 +10,7 @@ import BackToLink from 'src/components/common/BackToLink';
 import Checkbox from 'src/components/common/Checkbox';
 import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import TooltipButton from 'src/components/common/button/TooltipButton';
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
@@ -368,19 +369,30 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
                   gap={theme.spacing(1)}
                   marginTop={theme.spacing(1)}
                 >
-                  <SpeciesNativityBadge nativity={orgNativity} />
+                  {orgNativity ? (
+                    <SpeciesNativityBadge nativity={orgNativity} />
+                  ) : (
+                    <Badge
+                      label={strings.NOT_SET}
+                      backgroundColor={theme.palette.TwClrBgSecondary}
+                      borderColor={theme.palette.TwClrBrdrSecondary}
+                      labelColor={theme.palette.TwClrTxtSecondary}
+                    />
+                  )}
                   <SpeciesDataSourceBadge
                     source={orgNativityElement?.calculatedNativitySource}
                     speciesId={species?.id}
                     fieldName='nativity'
                   />
-                  {orgNativity && userCanEdit && !orgIsOverridden && (
-                    <Button
+                  {userCanEdit && !orgIsOverridden && (
+                    <TooltipButton
                       id='override-org-nativity'
                       label={strings.OVERRIDE}
                       priority='secondary'
                       type='passive'
                       size='small'
+                      disabled={!orgNativity}
+                      tooltip={!orgNativity ? strings.OVERRIDE_STATUS_NOT_SET_TOOLTIP_ORG : undefined}
                       onClick={() => setOverrideModalOpen(true)}
                     />
                   )}
