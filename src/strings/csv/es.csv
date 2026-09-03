@@ -1321,7 +1321,7 @@ NO_REASSIGNMENTS,No hay reasignaciones.,8152a9dd
 NO_REASSIGNMENTS_TEXT,Seleccione un sustrato y una cantidad para reasignar para cada especie.,ff65d8d2
 NO_SEASON,Sin temporada,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de poder agregar y administrar sus accesiones, necesitará contar con un banco de semillas y especies dentro de Terraware. Solo los administradores pueden agregar bancos de semillas; contáctese con el suyo para obtener ayuda.",814348fe
-NO_SPECIES_ASSIGNED_TO_STRATUM,No hay especies asignadas a este estrato,bee32a83
+NO_SPECIES_ASSIGNED_TO_STRATUM,No hay especies objetivo asignadas a este estrato,7f008c4c
 NO_SPECIES_CONTRIBUTOR_MSG,"Aún no hay especies en su lista de especies. Solo los administradores pueden añadir especies, así que por favor contacte con el suyo para que le ayude.",32a4f50e
 NO_SPECIES_DESCRIPTION,Parece que aún no ha añadido ninguna especie. Disponer de una lista maestra de especies ayuda a agilizar la introducción de datos sobre semillas y plantas en su organización. Puede añadir especies manual e individualmente o importar datos desde un CSV.,048a81f6
 NO_SPECIES_SET,No se han establecido especies,c7b480a1

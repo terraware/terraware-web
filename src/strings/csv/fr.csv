@@ -1320,7 +1320,7 @@ NO_REASSIGNMENTS,Aucune réaffectation,8152a9dd
 NO_REASSIGNMENTS_TEXT,Sélectionnez un substrat et une quantité à réaffecter pour chaque espèce.,ff65d8d2
 NO_SEASON,Aucune saison,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer vos accessions, vous devez disposer d'une banque de semences et d'espèces dans Terraware. Seuls les administrateurs peuvent ajouter des banques de semences ; veuillez contacter le vôtre pour obtenir de l'aide.",814348fe
-NO_SPECIES_ASSIGNED_TO_STRATUM,Aucune espèce n'est attribuée à ce stratum,bee32a83
+NO_SPECIES_ASSIGNED_TO_STRATUM,Aucune espèce cible n'est attribuée à ce stratum,7f008c4c
 NO_SPECIES_CONTRIBUTOR_MSG,"Aucune espèce ne figure dans votre liste d'espèces pour le moment. Seuls les administrateurs peuvent ajouter des espèces, contactez donc le vôtre pour obtenir de l'aide.",32a4f50e
 NO_SPECIES_DESCRIPTION,"Il semble que vous n'ayez ajouté aucune espèce pour le moment. Le fait de disposer d'une liste principale des espèces permet de rationaliser la saisie des données relatives aux semences et aux plantes au sein de votre organisation. Vous pouvez ajouter des espèces manuellement et individuellement, ou importer des données à partir d'un fichier CSV.",048a81f6
 NO_SPECIES_SET,Aucune espèce définie,c7b480a1
