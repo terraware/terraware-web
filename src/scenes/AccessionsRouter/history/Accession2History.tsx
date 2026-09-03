@@ -87,7 +87,6 @@ const Accession2History = (): JSX.Element | null => {
 
   const accessionId = Number(accessionIdParam);
 
-  // Covers a missing, empty or non-numeric route param -- there is nothing to show a history for.
   if (!Number.isFinite(accessionId) || accessionId <= 0) {
     return null;
   }
