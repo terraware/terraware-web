@@ -39,7 +39,7 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
   const plantingGoalLabel = useMemo(() => {
     const plants = siteGoalPlants(plantingSite, 'initial');
     return plants === undefined
-      ? strings.NO_PLANTS
+      ? strings.NO_PLANTS_SET
       : strings.formatString(strings.X_PLANTS, numberFormatter.format(plants)).toString();
   }, [numberFormatter, plantingSite]);
 
@@ -49,7 +49,7 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
       return strings.formatString(strings.X_SPECIES, PLACEHOLDER).toString();
     }
     return targets.length === 0
-      ? strings.NO_SPECIES
+      ? strings.NO_SPECIES_SET
       : strings.formatString(strings.X_SPECIES, numberFormatter.format(targets.length)).toString();
   }, [numberFormatter, speciesTargetsData]);
 

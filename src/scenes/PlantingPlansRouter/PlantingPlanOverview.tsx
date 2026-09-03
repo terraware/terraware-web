@@ -25,7 +25,7 @@ const PlantingPlanOverview = ({ plantingSite }: PlantingPlanOverviewProps): JSX.
   const stats = useMemo(() => {
     const plantsValue = (plants: number | undefined) =>
       plants === undefined
-        ? strings.NO_PLANTS
+        ? strings.NO_PLANTS_SET
         : strings.formatString(strings.X_PLANTS, numberFormatter.format(plants)).toString();
 
     const targets = speciesTargetsData?.targets;
@@ -33,7 +33,7 @@ const PlantingPlanOverview = ({ plantingSite }: PlantingPlanOverviewProps): JSX.
       targets === undefined
         ? strings.formatString(strings.X_SPECIES, PLACEHOLDER).toString()
         : targets.length === 0
-          ? strings.NO_SPECIES
+          ? strings.NO_SPECIES_SET
           : strings.formatString(strings.X_SPECIES, numberFormatter.format(targets.length)).toString();
 
     return {

@@ -57,7 +57,7 @@ const PlantingPlanSeasons = ({ plantingSite }: PlantingPlanSeasonsProps): JSX.El
   const initialGoalLabel = useMemo(() => {
     const plants = siteGoalPlants(plantingSite, 'initial');
     return plants === undefined
-      ? strings.NO_PLANTS
+      ? strings.NO_PLANTS_SET
       : strings.formatString(strings.X_PLANTS, numberFormatter.format(plants)).toString();
   }, [numberFormatter, plantingSite, strings]);
 
