@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box, useTheme } from '@mui/material';
-import { Icon } from '@terraware/web-components';
-
 import ProjectAssignModal from 'src/components/ProjectAssignModal';
-import Link from 'src/components/common/Link';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import { useProjects } from 'src/hooks/useProjects';
 import { useOrganization } from 'src/providers';
@@ -27,7 +23,6 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
 }: OverviewItemCardProjectProps<T>) => {
   const { selectedOrganization } = useOrganization();
   const userCanEdit = isMember(selectedOrganization);
-  const theme = useTheme();
 
   const { availableProjects: projects } = useProjects();
   const entityProject = projects?.find((project) => project.id === entity?.projectId);
@@ -41,22 +36,7 @@ const ProjectOverviewItemCard = <T extends { id: number; projectId?: number }>({
       title={strings.PROJECT}
       contents={
         <>
-          {entityProject?.name ?? (
-            <Link onClick={() => setIsProjectAssignModalOpen(true)}>
-              <Box display='flex' alignItems='center'>
-                <Icon
-                  name='iconAdd'
-                  style={{
-                    fill: theme.palette.TwClrIcnBrand,
-                    height: '20px',
-                    width: '20px',
-                    marginRight: '5px',
-                  }}
-                />
-                {strings.ADD_TO_PROJECT}
-              </Box>
-            </Link>
-          )}
+          {entityProject?.name ?? undefined}
 
           <ProjectAssignModal<T>
             entity={entity}
