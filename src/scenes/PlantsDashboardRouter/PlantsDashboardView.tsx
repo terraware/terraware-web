@@ -7,7 +7,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import useStickyPlantingSiteId, { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
@@ -60,7 +59,6 @@ export default function PlantsDashboardView({
     () => (isAcceleratorRoute ? organizationId : undefined) ?? selectedOrganization?.id,
     [isAcceleratorRoute, organizationId, selectedOrganization?.id]
   );
-  const plantingGoalsEnabled = isEnabled('Planting Goals');
 
   // The header owns selection normalization; the view only needs `showAllSitesOption` to label the
   // totals section. The scoped query is shared (RTK cache) with the header.
@@ -208,15 +206,11 @@ export default function PlantsDashboardView({
             </Box>
           </Grid>
           <Grid item xs={12}>
-            <PlantingDensityCard
-              hasObservations={hasObservationResults}
-              plantingGoalsEnabled={plantingGoalsEnabled}
-              plantingSiteId={plantingSite.id}
-            />
+            <PlantingDensityCard hasObservations={hasObservationResults} plantingSiteId={plantingSite.id} />
           </Grid>
         </>
       ) : undefined,
-    [plantingSite, isMobile, hasObservationResults, plantingGoalsEnabled, strings, theme]
+    [plantingSite, isMobile, hasObservationResults, strings, theme]
   );
 
   const renderPlantingSiteTrends = useCallback(

@@ -14,12 +14,10 @@ import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 const MAX_STRATUM_NAME_LENGTH = 20;
 
 type PlantingDensityPerStratumCardProps = {
-  plantingGoalsEnabled: boolean;
   plantingSiteId: number;
 };
 
 export default function PlantingDensityPerStratumCard({
-  plantingGoalsEnabled,
   plantingSiteId,
 }: PlantingDensityPerStratumCardProps): JSX.Element {
   const theme = useTheme();
@@ -48,20 +46,16 @@ export default function PlantingDensityPerStratumCard({
       }
 
       const formattedValue = numberFormatter.format(numValue);
-      return plantingGoalsEnabled && tooltipItem.dataset.label
-        ? `${tooltipItem.dataset.label}: ${formattedValue}`
-        : formattedValue;
+      return tooltipItem.dataset.label ? `${tooltipItem.dataset.label}: ${formattedValue}` : formattedValue;
     },
-    [numberFormatter, plantingGoalsEnabled]
+    [numberFormatter]
   );
 
   const { labels, targets, actuals, tooltipTitles } = useMemo(() => {
     if (plantingSite) {
       const stratumDensities: Record<string, (number | null)[]> = {};
       plantingSite.strata?.forEach((stratum) => {
-        stratumDensities[stratum.name] = [
-          plantingGoalsEnabled ? stratum.targetPlantDensity ?? null : stratum.initialPlantingDensity,
-        ];
+        stratumDensities[stratum.name] = [stratum.targetPlantDensity ?? null];
 
         if (latestObservationResult) {
           const stratumFromObs = latestObservationResult.strata.find(
@@ -84,7 +78,7 @@ export default function PlantingDensityPerStratumCard({
         tooltipTitles: [] as string[],
       };
     }
-  }, [plantingSite, latestObservationResult, plantingGoalsEnabled]);
+  }, [plantingSite, latestObservationResult]);
 
   const chartData = useMemo(() => {
     if (!labels?.length || !targets?.length) {

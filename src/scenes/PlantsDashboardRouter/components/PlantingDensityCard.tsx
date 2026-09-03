@@ -12,13 +12,11 @@ import PlantingSiteDensityCard from './PlantingSiteDensityCard';
 
 type PlantingDensityCardProps = {
   hasObservations: boolean;
-  plantingGoalsEnabled: boolean;
   plantingSiteId: number;
 };
 
 export default function PlantingDensityCard({
   hasObservations,
-  plantingGoalsEnabled,
   plantingSiteId,
 }: PlantingDensityCardProps): JSX.Element {
   const theme = useTheme();
@@ -69,7 +67,7 @@ export default function PlantingDensityCard({
           </Tooltip>
         </Box>
         <Box paddingTop={1}>
-          <PlantingDensityPerStratumCard plantingGoalsEnabled={plantingGoalsEnabled} plantingSiteId={plantingSiteId} />
+          <PlantingDensityPerStratumCard plantingSiteId={plantingSiteId} />
         </Box>
       </Box>
     </Card>

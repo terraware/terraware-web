@@ -12,7 +12,6 @@ import NavSection from 'src/components/common/Navbar/NavSection';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import NewBadge from 'src/components/common/NewBadge';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -69,7 +68,6 @@ export default function NavBar({
   const isPlantsDashboardRoute = useMatch({ path: APP_PATHS.PLANTS_DASHBOARD + '/', end: false });
   const isPlantingPlansRoute = useMatch({ path: APP_PATHS.PLANTING_PLANS + '/', end: false });
   const isPlantingProgressRoute = useMatch({ path: APP_PATHS.PLANTING_PROGRESS + '/', end: false });
-  const isPlantingSeasonsRoute = useMatch({ path: APP_PATHS.PLANTING_SEASONS + '/', end: false });
   const isWithdrawalLogRoute = useMatch({ path: APP_PATHS.NURSERY_WITHDRAWALS + '/', end: false });
   const isReportsRoute = useMatch({ path: APP_PATHS.REPORTS + '/', end: false });
   const isSeedFundReportsRoute = useMatch({ path: APP_PATHS.SEED_FUND_REPORTS + '/', end: false });
@@ -412,7 +410,7 @@ export default function NavBar({
             id='plants-dashboard'
           />
 
-          {isEnabled('Planting Goals') && hasPlantingSites === true && hasSpecies === true && (
+          {hasPlantingSites === true && hasSpecies === true ? (
             <NavItem
               label={strings.PLANTING_PLANS}
               selected={!!isPlantingPlansRoute}
@@ -421,20 +419,12 @@ export default function NavBar({
               }}
               id='planting-plans'
             />
+          ) : (
+            <></>
           )}
 
           {hasPlantingSites === true ? (
             <>
-              {!isEnabled('Planting Goals') && (
-                <NavItem
-                  label={strings.PLANTING_SEASONS}
-                  selected={!!isPlantingSeasonsRoute}
-                  onClick={() => {
-                    closeAndNavigateTo(APP_PATHS.PLANTING_SEASONS);
-                  }}
-                  id='planting-seasons'
-                />
-              )}
               <NavItem
                 label={strings.PLANTING_PROGRESS}
                 selected={!!isPlantingProgressRoute}
