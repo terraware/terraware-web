@@ -330,7 +330,6 @@ CHANGE_TO,Cambiar a {0},8423817d
 CHANGED,Cambiado,f88927ec
 CHANGES,Cambios,47809a57
 CHANGES_SAVED,¡Cambios guardados!,709a9559
-CHECK_DATA,Comprobar datos,f99c93bc
 CHECK_DATA_DESCRIPTION,"Puede realizar una verificación de la base de datos para comparar la información de su especie con la que almacenada en la base de datos de GBIF. Esto marcará las entradas si el nombre científico de su especie está mal escrito, o falta en la base de datos. Esto puede tardar unos minutos y no se puede cancelar una vez que se inicia.",b5932faa
 CHECK_DATE,Fecha de evaluación,2e9f3043
 CHECK_DATE_REQUIRED,Fecha de evaluación *,f21d44e5
@@ -1311,7 +1310,7 @@ NO_PLANTING_DATES_SCHEDULED,No se han programado fechas de plantación.,92de1320
 NO_PLANTING_SITES_DESCRIPTION,Comience por añadir un sitio de plantación. Añadir un sitio de plantación le permitirá rastrear a dónde van las plantas de semillero al dejar el vivero.,b0104f6c
 NO_PLANTING_SITES_NON_ADMIN_MSG,"Solo los administradores pueden agregar sitios de plantación; por favor, comuníquese con el suyo para recibir asistencia.",8f016d3f
 NO_PLANTING_SITES_TITLE,"Solo un momento, añadamos un sitio de plantación primero.",801ba14c
-NO_PLANTS,No hay plantas,6f6d8610
+NO_PLANTS_SET,No se han establecido plantas,fa8fa11f
 NO_PROJECT,Sin proyectos,49f65c3d
 NO_PROJECT_SELECTED,No se seleccionó ningún proyecto,b1bb5cd3
 NO_PROJECT_SPECIFIC_METRICS_TO_SHOW,No hay métricas específicas del proyecto para mostrar.,99964e82
@@ -1321,11 +1320,11 @@ NO_REASSIGNMENTS,No hay reasignaciones.,8152a9dd
 NO_REASSIGNMENTS_TEXT,Seleccione un sustrato y una cantidad para reasignar para cada especie.,ff65d8d2
 NO_SEASON,Sin temporada,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de poder agregar y administrar sus accesiones, necesitará contar con un banco de semillas y especies dentro de Terraware. Solo los administradores pueden agregar bancos de semillas; contáctese con el suyo para obtener ayuda.",814348fe
-NO_SPECIES,No hay especies,713e912e
+NO_SPECIES_ASSIGNED_TO_STRATUM,No hay especies objetivo asignadas a este estrato,7f008c4c
 NO_SPECIES_CONTRIBUTOR_MSG,"Aún no hay especies en su lista de especies. Solo los administradores pueden añadir especies, así que por favor contacte con el suyo para que le ayude.",32a4f50e
 NO_SPECIES_DESCRIPTION,Parece que aún no ha añadido ninguna especie. Disponer de una lista maestra de especies ayuda a agilizar la introducción de datos sobre semillas y plantas en su organización. Puede añadir especies manual e individualmente o importar datos desde un CSV.,048a81f6
+NO_SPECIES_SET,No se han establecido especies,c7b480a1
 NO_SPECIES_TARGETS_FOR_SUBSTRATUM,No se han establecido objetivos de especies para este sustrato.,53b1322b
-NO_SPECIES_TO_PLANT,No hay especies para plantar,b42ffe0b
 NO_STATUS,Sin estado,4d08c36e
 NO_SUB_LOCATIONS,Edite este banco de semillas para añadir sublocalizaciones.,963dba11
 NO_SUB_LOCATIONS_NURSERY,Edite este vivero para añadir sublocalizaciones.,8a939067

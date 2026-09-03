@@ -1,4 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router';
 
 import { Box, CircularProgress, ClickAwayListener, IconButton, Popover, Tooltip, useTheme } from '@mui/material';
 import { Badge, DropdownItem, Message } from '@terraware/web-components';
@@ -24,7 +25,6 @@ import TfMain from 'src/components/common/TfMain';
 import Button from 'src/components/common/button/Button';
 import EmptyStatePage from 'src/components/emptyStatePages/EmptyStatePage';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -44,9 +44,7 @@ import {
 import { makeCsv } from 'src/utils/csv';
 import { isContributor } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-import useQuery from 'src/utils/useQuery';
 
-import CheckDataModal from './CheckDataModal';
 import ImportSpeciesModal from './ImportSpeciesModal';
 import ProblemTooltip from './ProblemTooltip';
 import SpeciesCheckModal, { SpeciesCheckEntry } from './SpeciesCheck/SpeciesCheckModal';
@@ -123,9 +121,8 @@ export default function SpeciesListView(): JSX.Element {
   const trackEvent = useTrackEvent();
   const updateUserPreferences = useUpdateUserPreferences();
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
-  const [checkDataModalOpen, setCheckDataModalOpen] = useState(false);
-  const query = useQuery();
   const navigate = useSyncNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { activeLocale } = useLocalization();
   const { availableProjects } = useProjects();
   const organizationId = selectedOrganization?.id;
@@ -142,9 +139,7 @@ export default function SpeciesListView(): JSX.Element {
   const [showProblemsColumn, setShowProblemsColumn] = useState<boolean>(false);
 
   const userCanEdit = !isContributor(selectedOrganization);
-  const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
 
-  const speciesCheckEnabled = speciesIntelligenceEnabled;
   const hasMultipleProjects = (availableProjects?.length ?? 0) > 1;
   const orgScopeKnown = availableProjects !== undefined && availableProjects.length <= 1;
   const { isMobile } = useDeviceInfo();
@@ -158,6 +153,18 @@ export default function SpeciesListView(): JSX.Element {
     setSpeciesCheckEntry(entry);
     setSpeciesCheckOpen(true);
   }, []);
+
+  useEffect(() => {
+    if (searchParams.get('checkData') === null) {
+      return;
+    }
+    if (userCanEdit) {
+      openSpeciesCheck('added');
+    }
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete('checkData');
+    setSearchParams(nextParams, { replace: true });
+  }, [searchParams, setSearchParams, userCanEdit, openSpeciesCheck]);
 
   const trackBannerShown = useCallback(
     (bannerType: SpeciesIntelligenceBannerType) => {
@@ -214,9 +221,8 @@ export default function SpeciesListView(): JSX.Element {
   const speciesAddedBannerDismissed =
     orgPreferences[PREF_DISMISSED_SPECIES_ADDED_BANNER] === true || addedBannerDismissed;
 
-  const showFirstTimeBanner = speciesCheckEnabled && noLocationSet && !setLocationBannerDismissed;
-  const showAddedBanner =
-    speciesCheckEnabled && !noLocationSet && uncheckedSpecies.length > 0 && !speciesAddedBannerDismissed;
+  const showFirstTimeBanner = userCanEdit && noLocationSet && !setLocationBannerDismissed;
+  const showAddedBanner = userCanEdit && !noLocationSet && uncheckedSpecies.length > 0 && !speciesAddedBannerDismissed;
 
   const firstTimeBannerImpressionRef = React.useRef(false);
   useEffect(() => {
@@ -308,7 +314,7 @@ export default function SpeciesListView(): JSX.Element {
   );
 
   const speciesCheckRan = species.some((sp) => resolveScopeNativities(sp).length > 0);
-  const showStatusColumn = speciesCheckEnabled && speciesCheckRan;
+  const showStatusColumn = speciesCheckRan;
 
   const statusBySpeciesId = useMemo(() => {
     const map = new Map<number, Nativity[]>();
@@ -345,17 +351,6 @@ export default function SpeciesListView(): JSX.Element {
       })),
     [species, acceleratorProjectNamesBySpeciesId]
   );
-
-  useEffect(() => {
-    const shouldCheckData = query.has('checkData');
-    if (shouldCheckData) {
-      query.delete('checkData');
-      if (!speciesCheckEnabled) {
-        setCheckDataModalOpen(true);
-      }
-      navigate({ pathname: APP_PATHS.SPECIES, search: query.toString() }, { replace: true });
-    }
-  }, [query, speciesCheckEnabled, setCheckDataModalOpen, navigate]);
 
   // Unique filter option values derived from results (client-side)
   const uniqueConservationCategories = useMemo(() => {
@@ -395,7 +390,7 @@ export default function SpeciesListView(): JSX.Element {
     [availableProjects]
   );
 
-  const showProjectColumn = speciesIntelligenceEnabled && hasMultipleProjects && !!availableProjects;
+  const showProjectColumn = hasMultipleProjects && !!availableProjects;
 
   const onNewSpecies = () => {
     navigate(APP_PATHS.SPECIES_NEW);
@@ -439,22 +434,10 @@ export default function SpeciesListView(): JSX.Element {
   const onCloseImportSpeciesModal = (completed: boolean) => {
     if (completed && reloadData) {
       void reloadData();
-      if (speciesCheckEnabled) {
-        openSpeciesCheck('added');
-      } else {
-        setCheckDataModalOpen(true);
-      }
+
+      openSpeciesCheck('added');
     }
     setImportSpeciesModalOpen(false);
-  };
-
-  const onCheckData = () => {
-    setCheckDataModalOpen(true);
-  };
-
-  const reviewErrorsHandler = (hasErrors: boolean) => {
-    setCheckDataModalOpen(false);
-    setShowProblemsColumn(hasErrors);
   };
 
   const reloadDataProblemsHandler = useCallback(async () => {
@@ -480,10 +463,6 @@ export default function SpeciesListView(): JSX.Element {
     switch (optionItem.value) {
       case 'runSpeciesCheck': {
         openSpeciesCheck('menu');
-        break;
-      }
-      case 'checkData': {
-        onCheckData();
         break;
       }
       case 'import': {
@@ -784,24 +763,15 @@ export default function SpeciesListView(): JSX.Element {
 
   return (
     <TfMain>
-      <CheckDataModal
-        open={checkDataModalOpen}
-        onClose={() => setCheckDataModalOpen(false)}
-        species={species}
-        reviewErrors={reviewErrorsHandler}
-        reloadData={() => void reloadData()}
-      />
       <ImportSpeciesModal open={importSpeciesModalOpen} onClose={onCloseImportSpeciesModal} />
-      {speciesCheckEnabled && (
-        <SpeciesCheckModal
-          open={speciesCheckOpen}
-          onClose={() => setSpeciesCheckOpen(false)}
-          species={species}
-          projects={hasMultipleProjects ? availableProjects ?? [] : []}
-          entry={speciesCheckEntry}
-          reloadSpecies={reloadData}
-        />
-      )}
+      <SpeciesCheckModal
+        open={speciesCheckOpen}
+        onClose={() => setSpeciesCheckOpen(false)}
+        species={species}
+        projects={hasMultipleProjects ? availableProjects ?? [] : []}
+        entry={speciesCheckEntry}
+        reloadSpecies={reloadData}
+      />
       {(showFirstTimeBanner || showAddedBanner) && (
         <Box marginBottom={theme.spacing(2)} paddingLeft={theme.spacing(3)} paddingRight={theme.spacing(3)}>
           {showFirstTimeBanner ? (
@@ -876,9 +846,7 @@ export default function SpeciesListView(): JSX.Element {
                 <OptionsMenu
                   onOptionItemClick={onOptionItemClick}
                   optionItems={[
-                    speciesCheckEnabled
-                      ? { label: strings.RUN_SPECIES_CHECK, value: 'runSpeciesCheck' }
-                      : { label: strings.CHECK_DATA, value: 'checkData' },
+                    { label: strings.RUN_SPECIES_CHECK, value: 'runSpeciesCheck' },
                     { label: strings.IMPORT, value: 'import' },
                   ]}
                 />
@@ -887,13 +855,11 @@ export default function SpeciesListView(): JSX.Element {
             {isMobile && userCanEdit && (
               <Box display='flex' alignItems='center' gap={theme.spacing(0.5)}>
                 <Button id='add-species' onClick={onNewSpecies} size='medium' icon='plus' style={{ marginRight: 0 }} />
-                {speciesCheckEnabled && (
-                  <OptionsMenu
-                    onOptionItemClick={onOptionItemClick}
-                    optionItems={[{ label: strings.RUN_SPECIES_CHECK, value: 'runSpeciesCheck' }]}
-                    sx={{ marginLeft: 0, '& button': { margin: 0 } }}
-                  />
-                )}
+                <OptionsMenu
+                  onOptionItemClick={onOptionItemClick}
+                  optionItems={[{ label: strings.RUN_SPECIES_CHECK, value: 'runSpeciesCheck' }]}
+                  sx={{ marginLeft: 0, '& button': { margin: 0 } }}
+                />
               </Box>
             )}
           </Box>

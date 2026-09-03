@@ -126,7 +126,7 @@ const SpeciesToPlant = ({ names, showEmptyState }: SpeciesToPlantProps): JSX.Ele
         : showEmptyState && (
             <Box sx={{ padding: '4px' }}>
               <Typography fontSize={'16px'} fontWeight={400} lineHeight={'24px'} color={theme.palette.TwClrTxt}>
-                {strings.NO_SPECIES_TO_PLANT}
+                {strings.NO_SPECIES_ASSIGNED_TO_STRATUM}
               </Typography>
             </Box>
           )}

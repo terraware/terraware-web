@@ -84,7 +84,7 @@ const PlantingPlanSiteGoals = ({ plantingSite }: PlantingPlanSiteGoalsProps): JS
   const stats = useMemo(() => {
     const plantsValue = (plants: number | undefined) =>
       plants === undefined
-        ? strings.NO_PLANTS
+        ? strings.NO_PLANTS_SET
         : strings.formatString(strings.X_PLANTS, numberFormatter.format(plants)).toString();
 
     return {
@@ -92,7 +92,7 @@ const PlantingPlanSiteGoals = ({ plantingSite }: PlantingPlanSiteGoalsProps): JS
       targetGoal: plantsValue(siteGoalPlants(plantingSite, 'target')),
       species:
         speciesCount === 0
-          ? strings.NO_SPECIES
+          ? strings.NO_SPECIES_SET
           : strings.formatString(strings.X_SPECIES, numberFormatter.format(speciesCount)).toString(),
     };
   }, [numberFormatter, plantingSite, speciesCount]);

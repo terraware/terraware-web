@@ -11,6 +11,7 @@ import {
   buildPersonSearchResult,
   buildUser,
   captureRequests,
+  dialogTitled,
   mockDelete,
   mockError,
   mockGet,
@@ -99,15 +100,6 @@ const rowFor = (email: string) => screen.getByText(email).closest('tr') as HTMLE
 
 /** The Remove button in the table's top bar, which only appears once rows are selected. */
 const topBarRemoveButton = () => screen.getByRole('button', { name: strings.REMOVE });
-
-/** The open dialog with this title */
-const dialogTitled = (title: string): HTMLElement => {
-  const box = screen.getByText(title).closest('.dialog-box');
-  if (!box) {
-    throw new Error(`No open dialog titled "${title}"`);
-  }
-  return box as HTMLElement;
-};
 
 describe('PeopleListView', () => {
   describe('permission gating', () => {

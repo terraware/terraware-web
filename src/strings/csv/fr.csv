@@ -329,7 +329,6 @@ CHANGE_TO,Passez à {0},8423817d
 CHANGED,Modifié,f88927ec
 CHANGES,Changements,47809a57
 CHANGES_SAVED,Changements sauvés !,709a9559
-CHECK_DATA,Vérifier les données,f99c93bc
 CHECK_DATA_DESCRIPTION,Vous pouvez effectuer une vérification de la base de données pour comparer vos informations sur les espèces avec celles qui sont stockées dans la base de données GBIF. Cette vérification vous signalera les entrées dont le nom scientifique est mal orthographié ou qui ne figurent pas dans la base de données. Cette opération peut prendre quelques minutes et vous ne pouvez pas l'annuler une fois qu'elle a commencé.,b5932faa
 CHECK_DATE,Date de contrôle,2e9f3043
 CHECK_DATE_REQUIRED,Date de vérification *,f21d44e5
@@ -1310,7 +1309,7 @@ NO_PLANTING_DATES_SCHEDULED,Aucune date de plantation n'a été planifiée.,92de
 NO_PLANTING_SITES_DESCRIPTION,Commencez par ajouter un site de plantation. L'ajout d'un site de plantation vous permettra de savoir où vont les semis après avoir quitté la pépinière.,b0104f6c
 NO_PLANTING_SITES_NON_ADMIN_MSG,Seuls les administrateurs peuvent ajouter des sites de plantation ; veuillez contacter le vôtre pour obtenir de l'aide.,8f016d3f
 NO_PLANTING_SITES_TITLE,"Un instant, ajoutons d'abord un site de plantation.",801ba14c
-NO_PLANTS,Aucune plante,6f6d8610
+NO_PLANTS_SET,Aucun plant défini,fa8fa11f
 NO_PROJECT,Pas de projet,49f65c3d
 NO_PROJECT_SELECTED,Aucun projet sélectionné,b1bb5cd3
 NO_PROJECT_SPECIFIC_METRICS_TO_SHOW,Aucun indicateur spécifique au projet à afficher.,99964e82
@@ -1320,11 +1319,11 @@ NO_REASSIGNMENTS,Aucune réaffectation,8152a9dd
 NO_REASSIGNMENTS_TEXT,Sélectionnez un substrat et une quantité à réaffecter pour chaque espèce.,ff65d8d2
 NO_SEASON,Aucune saison,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer vos accessions, vous devez disposer d'une banque de semences et d'espèces dans Terraware. Seuls les administrateurs peuvent ajouter des banques de semences ; veuillez contacter le vôtre pour obtenir de l'aide.",814348fe
-NO_SPECIES,Aucune espèce,713e912e
+NO_SPECIES_ASSIGNED_TO_STRATUM,Aucune espèce cible n'est attribuée à ce stratum,7f008c4c
 NO_SPECIES_CONTRIBUTOR_MSG,"Aucune espèce ne figure dans votre liste d'espèces pour le moment. Seuls les administrateurs peuvent ajouter des espèces, contactez donc le vôtre pour obtenir de l'aide.",32a4f50e
 NO_SPECIES_DESCRIPTION,"Il semble que vous n'ayez ajouté aucune espèce pour le moment. Le fait de disposer d'une liste principale des espèces permet de rationaliser la saisie des données relatives aux semences et aux plantes au sein de votre organisation. Vous pouvez ajouter des espèces manuellement et individuellement, ou importer des données à partir d'un fichier CSV.",048a81f6
+NO_SPECIES_SET,Aucune espèce définie,c7b480a1
 NO_SPECIES_TARGETS_FOR_SUBSTRATUM,Aucun objectif d’espèces n’a été défini pour ce substrat.,53b1322b
-NO_SPECIES_TO_PLANT,Aucune espèce à planter,b42ffe0b
 NO_STATUS,Aucun statut,4d08c36e
 NO_SUB_LOCATIONS,Modifiez cette banque de semences pour ajouter des sous-emplacements.,963dba11
 NO_SUB_LOCATIONS_NURSERY,Modifier cette pépinière pour ajouter des sous-emplacements.,8a939067

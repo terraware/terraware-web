@@ -6,7 +6,6 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import PageSnackbar from 'src/components/PageSnackbar';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import isEnabled from 'src/features';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization, useTimeZones } from 'src/providers/hooks';
@@ -27,7 +26,7 @@ export default function OrganizationView(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const { countries } = useLocalization();
   const { availableProjects } = useProjects();
-  const showBotanicalCountry = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) < 2;
+  const showBotanicalCountry = (availableProjects?.length ?? 0) < 2;
   const { getBotanicalCountryName } = useBotanicalCountries(!showBotanicalCountry);
   const timeZones = useTimeZones();
   const utcTimeZone = getUTC(timeZones);
