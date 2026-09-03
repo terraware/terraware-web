@@ -1,7 +1,11 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots' | 'Report Updates July 2026';
+export type FeatureName =
+  | 'Show Production View'
+  | 'Virtual Monitoring Plots'
+  | 'Report Updates July 2026'
+  | 'Handling plots located too far from planned location';
 
 export type Feature = {
   name: FeatureName;
@@ -51,6 +55,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Redesigned report tab for participants, accelerator admins, and funders.'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Handling plots located too far from planned location',
+    preferenceName: 'plotsTooFarFromPlannedLocation',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Support for explanation photos when a plot is recorded far from its planned location'],
     disclosure: ['This is a WIP'],
   },
 ];

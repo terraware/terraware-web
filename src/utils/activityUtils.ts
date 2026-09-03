@@ -1,7 +1,7 @@
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import { AdminActivityObservationMediaFilePayload } from 'src/queries/generated/activities';
 import defaultStrings from 'src/strings';
-import { getPositionLabel, getQuadratLabel } from 'src/types/Observations';
+import { getExplanationPhotoLabel, getPositionLabel, getQuadratLabel } from 'src/types/Observations';
 
 export type GroupedActivities = {
   quarter: string;
@@ -97,18 +97,23 @@ export const isUndeletableObservationPhoto = (media: { observation?: Observation
 
 /**
  * Returns true for media types whose captions are not editable per PRD: corner and quadrat photos.
- * Soil and plot-type photos have editable captions.
+ * Soil and plot-type photos have editable captions. Explanation photos carry a position but their
+ * caption holds the user's explanation, which stays editable.
  */
 export const isCaptionReadOnly = (media: { observation?: ObservationActivityMedia }): boolean => {
   if (!media.observation) {
     return false;
   }
-  return media.observation.position !== undefined || media.observation.type === 'Quadrat';
+  return (
+    (media.observation.position !== undefined && media.observation.type !== 'Explanation') ||
+    media.observation.type === 'Quadrat'
+  );
 };
 
 export const getObsPhotoTypeLabel = (
   media: { observation?: ObservationActivityMedia },
-  strings: typeof defaultStrings
+  strings: typeof defaultStrings,
+  includeExplanationPhotos = false
 ): string | undefined => {
   const obs = media.observation;
   if (!obs || !isUndeletableObservationPhoto(media)) {
@@ -123,6 +128,9 @@ export const getObsPhotoTypeLabel = (
   }
   if (obs.type === 'Soil') {
     return `${plotPrefix}${strings.SOIL}`;
+  }
+  if (obs.type === 'Explanation' && obs.position && includeExplanationPhotos) {
+    return getExplanationPhotoLabel(obs.position, `${obs.monitoringPlotNumber}`, strings);
   }
   return undefined;
 };

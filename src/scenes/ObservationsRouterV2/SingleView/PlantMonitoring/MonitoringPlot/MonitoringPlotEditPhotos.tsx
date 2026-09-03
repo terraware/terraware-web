@@ -8,6 +8,7 @@ import { isVideoFile } from 'src/components/ActivityLog/ActivityMediaForm';
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
@@ -33,6 +34,7 @@ const MonitoringPlotEditPhotos = () => {
   const observationId = Number(params.observationId);
   const monitoringPlotId = Number(params.monitoringPlotId);
   const stratumName = params.stratumName;
+  const explanationPhotosEnabled = isEnabled('Handling plots located too far from planned location');
   const [upload] = useUploadOtherPlotMediaMutation();
   const [update] = useUpdatePlotPhotoMutation();
   const [deleteQuery] = useDeletePlotPhotoMutation();
@@ -124,7 +126,11 @@ const MonitoringPlotEditPhotos = () => {
           substratum.monitoringPlots.forEach((plot) => {
             if (plot.monitoringPlotId === monitoringPlotId) {
               setMonitoringPlotResult(plot);
-              setMediaItems(plot.media.map((mediaElement) => ({ type: 'existing', data: mediaElement })));
+              setMediaItems(
+                plot.media
+                  .filter((mediaElement) => explanationPhotosEnabled || mediaElement.type !== 'Explanation')
+                  .map((mediaElement) => ({ type: 'existing', data: mediaElement }))
+              );
               return;
             }
           })
@@ -133,11 +139,13 @@ const MonitoringPlotEditPhotos = () => {
       if (observationResults.adHocPlot && observationResults.adHocPlot.monitoringPlotId === monitoringPlotId) {
         setMonitoringPlotResult(observationResults.adHocPlot);
         setMediaItems(
-          observationResults.adHocPlot.media.map((mediaElement) => ({ type: 'existing', data: mediaElement }))
+          observationResults.adHocPlot.media
+            .filter((mediaElement) => explanationPhotosEnabled || mediaElement.type !== 'Explanation')
+            .map((mediaElement) => ({ type: 'existing', data: mediaElement }))
         );
       }
     }
-  }, [observationResults, monitoringPlotId]);
+  }, [explanationPhotosEnabled, observationResults, monitoringPlotId]);
 
   const goToPhotosTab = useCallback(() => {
     if (stratumName) {

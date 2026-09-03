@@ -14,6 +14,7 @@ import {
 
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import { API_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers/hooks';
 import { ActivityMediaFile, AdminActivityMediaFile } from 'src/types/Activity';
@@ -93,6 +94,7 @@ const ActivityPhotoPreview = ({
   const { strings } = useLocalization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const theme = useTheme();
+  const explanationPhotosEnabled = isEnabled('Handling plots located too far from planned location');
 
   const [showPlaceholder, setShowPlaceholder] = useState<boolean | undefined>();
 
@@ -166,8 +168,11 @@ const ActivityPhotoPreview = ({
   }, [isUndeletable, mediaItem, strings]);
 
   const obsPhotoTypeLabel = useMemo(
-    () => (isUndeletable && mediaItem.type === 'existing' ? getObsPhotoTypeLabel(mediaItem.data, strings) : undefined),
-    [isUndeletable, mediaItem, strings]
+    () =>
+      isUndeletable && mediaItem.type === 'existing'
+        ? getObsPhotoTypeLabel(mediaItem.data, strings, explanationPhotosEnabled)
+        : undefined,
+    [explanationPhotosEnabled, isUndeletable, mediaItem, strings]
   );
 
   const obsMonitoringPlotNumber = useMemo(() => {

@@ -1422,6 +1422,7 @@ OBSERVATION_EVENT,Observation Event,
 OBSERVATION_EVENT_SCHEDULED,Observation event is scheduled for {0} for planting site(s):,"Example: Observation event is scheduled for June 1, 2023 for planting site(s): "
 OBSERVATION_EVENTS,Observation Events,
 OBSERVATION_EVENTS_TOOLTIP,Previous Observations are shown in decreased opacity.,
+OBSERVATION_EXPLANATION_PHOTO_LABEL,{0}: >20m location,
 OBSERVATION_PERIOD_WARN,Observation period cannot exceed two months.,
 OBSERVATION_PHOTO_CANNOT_DELETE_INFO,Plot corner photos cannot be deleted.,
 OBSERVATION_PHOTO_CANNOT_DELETE_TOOLTIP,This photo was captured during the observation and cannot be deleted.,

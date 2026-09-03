@@ -9,6 +9,7 @@ import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
 import { API_PATHS, APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useFunderPortal from 'src/hooks/useFunderPortal';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -58,6 +59,7 @@ const ActivityMediaItem = ({
 }: ActivityMediaItemProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const explanationPhotosEnabled = isEnabled('Handling plots located too far from planned location');
 
   const [isPreconditionFailedError, setIsPreconditionFailedError] = useState<boolean>(false);
 
@@ -204,7 +206,10 @@ const ActivityMediaItem = ({
     [mediaFile.fileId, setLightboxImageId]
   );
 
-  const obsPhotoTypeLabel = useMemo(() => getObsPhotoTypeLabel(mediaFile, strings), [mediaFile, strings]);
+  const obsPhotoTypeLabel = useMemo(
+    () => getObsPhotoTypeLabel(mediaFile, strings, explanationPhotosEnabled),
+    [explanationPhotosEnabled, mediaFile, strings]
+  );
 
   const handleImageError = useCallback(async () => {
     // only check for 412 error if this is a video

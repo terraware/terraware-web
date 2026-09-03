@@ -1421,6 +1421,7 @@ OBSERVATION_EVENT,Incidencia de observación,03d0c031
 OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para el {0} para el(los) terreno(s) de plantación:,da489f7e
 OBSERVATION_EVENTS,Incidencias de observación,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Observaciones previas se muestra con opacidad disminuida,03c6ea26
+OBSERVATION_EXPLANATION_PHOTO_LABEL,{0}: ubicación a más de 20 m,c1fe1bd5
 OBSERVATION_PERIOD_WARN,El periodo de observación no puede superar los dos meses.,364a36c6
 OBSERVATION_PHOTO_CANNOT_DELETE_INFO,No se pueden eliminar las fotos de las esquinas de la parcela.,f045e547
 OBSERVATION_PHOTO_CANNOT_DELETE_TOOLTIP,Esta foto fue tomada durante la observación y no se puede eliminar.,c127ed8e
