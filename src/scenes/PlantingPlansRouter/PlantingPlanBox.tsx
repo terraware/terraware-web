@@ -99,20 +99,22 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
         backgroundColor: theme.palette.TwClrBgSecondary,
         borderRadius: theme.spacing(1),
         display: 'flex',
-        flexWrap: 'wrap',
-        gap: theme.spacing(2),
+        flexDirection: 'column',
+        gap: theme.spacing(1),
         minWidth: '220px',
         padding: theme.spacing(4, 3),
         width: '410px',
         justifyContent: 'center',
       }}
     >
-      <Typography fontSize='16px' fontWeight={400} color={theme.palette.TwClrBaseBlack}>
-        {`${strings.PLANTING_GOAL}:`}
-      </Typography>
-      <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
-        {plantingGoalLabel}
-      </Typography>
+      <Box display='flex' flexWrap='wrap' gap={theme.spacing(2)} alignItems='center' justifyContent='center'>
+        <Typography fontSize='16px' fontWeight={400} color={theme.palette.TwClrBaseBlack}>
+          {`${strings.PLANTING_GOAL}:`}
+        </Typography>
+        <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
+          {plantingGoalLabel}
+        </Typography>
+      </Box>
       <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
         {speciesLabel}
       </Typography>
