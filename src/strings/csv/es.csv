@@ -330,7 +330,6 @@ CHANGE_TO,Cambiar a {0},8423817d
 CHANGED,Cambiado,f88927ec
 CHANGES,Cambios,47809a57
 CHANGES_SAVED,¡Cambios guardados!,709a9559
-CHECK_DATA,Comprobar datos,f99c93bc
 CHECK_DATA_DESCRIPTION,"Puede realizar una verificación de la base de datos para comparar la información de su especie con la que almacenada en la base de datos de GBIF. Esto marcará las entradas si el nombre científico de su especie está mal escrito, o falta en la base de datos. Esto puede tardar unos minutos y no se puede cancelar una vez que se inicia.",b5932faa
 CHECK_DATE,Fecha de evaluación,2e9f3043
 CHECK_DATE_REQUIRED,Fecha de evaluación *,f21d44e5

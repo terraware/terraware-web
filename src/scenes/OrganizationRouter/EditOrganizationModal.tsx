@@ -9,7 +9,6 @@ import UpdateLocationModal from 'src/components/UpdateLocationModal';
 import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import isEnabled from 'src/features';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useTimeZones } from 'src/providers';
@@ -49,7 +48,7 @@ export default function EditOrganizationModal({
   const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;
 
   const { availableProjects } = useProjects();
-  const showBotanicalCountry = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) < 2;
+  const showBotanicalCountry = (availableProjects?.length ?? 0) < 2;
   const { botanicalCountries } = useBotanicalCountries(!showBotanicalCountry);
   const botanicalCountryOptions: DropdownItem[] = organizationRecord.countryCode
     ? botanicalCountries

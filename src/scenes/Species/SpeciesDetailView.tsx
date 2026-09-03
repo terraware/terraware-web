@@ -12,16 +12,11 @@ import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import TooltipButton from 'src/components/common/button/TooltipButton';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useOrganization } from 'src/providers/hooks';
-import {
-  SpeciesDataSourcePayload,
-  useDeleteSpeciesMutation,
-  useLazyGetSpeciesQuery,
-} from 'src/queries/generated/species';
+import { useDeleteSpeciesMutation, useLazyGetSpeciesQuery } from 'src/queries/generated/species';
 import strings from 'src/strings';
 import {
   getConservationCategoryString,
@@ -64,8 +59,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
   const [statusDetailsOpen, setStatusDetailsOpen] = useState(false);
   const snackbar = useSnackbar();
   const { orgHasParticipants } = useParticipantData();
-  const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
-  const showOrgNativity = speciesIntelligenceEnabled && !hasMultipleProjects;
+  const showOrgNativity = !hasMultipleProjects;
 
   const [getSpecies, { currentData: speciesData, isError: getSpeciesError }] = useLazyGetSpeciesQuery();
   const species = speciesData?.species;
@@ -124,11 +118,6 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
       </Grid>
     ),
     [gridSize, theme]
-  );
-
-  const dataSource = useCallback(
-    (source?: SpeciesDataSourcePayload) => (speciesIntelligenceEnabled ? source : undefined),
-    [speciesIntelligenceEnabled]
   );
 
   const orgScopeKnown = availableProjects !== undefined && availableProjects.length <= 1;
@@ -208,7 +197,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             <SpeciesDataSourceField
               id='commonName'
               label={strings.COMMON_NAME}
-              source={dataSource(species?.commonNameSource)}
+              source={species?.commonNameSource}
               speciesId={species?.id}
               tooltipTitle={strings.TOOLTIP_COMMON_NAME}
               value={species?.commonName}
@@ -218,7 +207,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             <SpeciesDataSourceField
               id='family'
               label={strings.FAMILY}
-              source={dataSource(species?.familyNameSource)}
+              source={species?.familyNameSource}
               speciesId={species?.id}
               value={species?.familyName}
             />
@@ -406,7 +395,7 @@ export default function SpeciesDetailView({ reloadData }: SpeciesDetailViewProps
             </GridItemWrapper>
           )}
           {species && orgHasParticipants && <SpeciesProjectsTable speciesId={species.id} editMode={false} />}
-          {speciesIntelligenceEnabled && hasMultipleProjects && species && (
+          {hasMultipleProjects && species && (
             <Grid item xs={12} marginTop={theme.spacing(4)}>
               <SpeciesProjectsSection
                 speciesId={species.id}
