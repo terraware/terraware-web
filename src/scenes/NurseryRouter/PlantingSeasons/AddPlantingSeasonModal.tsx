@@ -66,6 +66,11 @@ const AddPlantingSeasonModal = ({
   const hasCurrentSiteSpeciesTargets =
     siteSpeciesTargetsResponse.originalArgs === record.plantingSiteId && siteSpeciesTargetsResponse.isSuccess;
 
+  const currentSiteSpeciesTargetsSettled =
+    siteSpeciesTargetsResponse.originalArgs === record.plantingSiteId &&
+    !siteSpeciesTargetsResponse.isFetching &&
+    (siteSpeciesTargetsResponse.isSuccess || siteSpeciesTargetsResponse.isError);
+
   const speciesCount = new Set(speciesTargets?.targets.map((t) => t.speciesId)).size;
   const substrataCount = new Set(speciesTargets?.targets.map((t) => t.substratumId)).size;
 
@@ -241,10 +246,7 @@ const AddPlantingSeasonModal = ({
           label={strings.CREATE_SEASON}
           onClick={() => void onCreate()}
           disabled={
-            isSubmitting ||
-            (!record.copyPrevious &&
-              !!record.plantingSiteId &&
-              (!hasCurrentSiteSpeciesTargets || siteSpeciesTargetsResponse.isFetching))
+            isSubmitting || (!record.copyPrevious && !!record.plantingSiteId && !currentSiteSpeciesTargetsSettled)
           }
         />,
       ]}

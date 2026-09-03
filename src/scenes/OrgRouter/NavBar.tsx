@@ -401,50 +401,50 @@ export default function NavBar({
       </NavItem>
       <NavItem label={strings.PLANTINGS} icon='iconRestorationSite' id='plants'>
         <SubNavbar>
-          <NavItem
-            label={strings.DASHBOARD}
-            selected={!!isPlantsDashboardRoute}
-            onClick={() => {
-              closeAndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
-            }}
-            id='plants-dashboard'
-          />
-
-          {hasPlantingSites === true && hasSpecies === true ? (
+          <>
             <NavItem
-              label={strings.PLANTING_PLANS}
-              selected={!!isPlantingPlansRoute}
+              label={strings.DASHBOARD}
+              selected={!!isPlantsDashboardRoute}
               onClick={() => {
-                closeAndNavigateTo(APP_PATHS.PLANTING_PLANS);
+                closeAndNavigateTo(APP_PATHS.PLANTS_DASHBOARD);
               }}
-              id='planting-plans'
+              id='plants-dashboard'
             />
-          ) : (
-            <></>
-          )}
 
-          {hasPlantingSites === true ? (
-            <>
+            {hasPlantingSites === true && hasSpecies === true && (
               <NavItem
-                label={strings.PLANTING_PROGRESS}
-                selected={!!isPlantingProgressRoute}
+                label={strings.PLANTING_PLANS}
+                selected={!!isPlantingPlansRoute}
                 onClick={() => {
-                  closeAndNavigateTo(APP_PATHS.PLANTING_PROGRESS);
+                  closeAndNavigateTo(APP_PATHS.PLANTING_PLANS);
                 }}
-                id='planting-progress'
+                id='planting-plans'
               />
-              <NavItem
-                label={strings.OBSERVATIONS}
-                selected={!!isObservationsRoute}
-                onClick={() => {
-                  closeAndNavigateTo(APP_PATHS.OBSERVATIONS);
-                }}
-                id='observations'
-              />
-            </>
-          ) : (
-            <></>
-          )}
+            )}
+
+            {hasPlantingSites === true ? (
+              <>
+                <NavItem
+                  label={strings.PLANTING_PROGRESS}
+                  selected={!!isPlantingProgressRoute}
+                  onClick={() => {
+                    closeAndNavigateTo(APP_PATHS.PLANTING_PROGRESS);
+                  }}
+                  id='planting-progress'
+                />
+                <NavItem
+                  label={strings.OBSERVATIONS}
+                  selected={!!isObservationsRoute}
+                  onClick={() => {
+                    closeAndNavigateTo(APP_PATHS.OBSERVATIONS);
+                  }}
+                  id='observations'
+                />
+              </>
+            ) : (
+              <></>
+            )}
+          </>
         </SubNavbar>
       </NavItem>
 
