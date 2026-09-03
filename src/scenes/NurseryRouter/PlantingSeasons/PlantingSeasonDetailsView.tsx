@@ -15,7 +15,6 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import PlantingSeasonNotificationBanners from 'src/components/common/PlantingSeasonNotificationBanners';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
@@ -83,10 +82,9 @@ const PlantingSeasonDetailsView = (): JSX.Element => {
   const [deletePlantingSeason, { isLoading: isDeleting }] = useDeletePlantingSeasonMutation();
   const [closePlantingSeason, { isLoading: isClosing }] = useClosePlantingSeasonMutation();
 
-  const backTo =
-    isEnabled('Planting Goals') && season?.plantingSiteId
-      ? APP_PATHS.PLANTING_PLANS_VIEW.replace(':plantingSiteId', String(season.plantingSiteId))
-      : APP_PATHS.PLANTING_SEASONS;
+  const backTo = season?.plantingSiteId
+    ? APP_PATHS.PLANTING_PLANS_VIEW.replace(':plantingSiteId', String(season.plantingSiteId))
+    : APP_PATHS.PLANTING_SEASONS;
 
   const onConfirmDelete = async () => {
     try {

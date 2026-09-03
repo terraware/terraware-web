@@ -8,7 +8,6 @@ import ProjectsRouter from 'src/components/Projects/Router';
 import SeedFundReportsRouter from 'src/components/SeedFundReports/Router';
 import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
@@ -211,9 +210,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
             <Route path={APP_PATHS.BATCH_WITHDRAW} element={<BatchBulkWithdrawView />} />
             <Route path={APP_PATHS.PLANTING_SITES + '/*'} element={<PlantingSites />} />
             <Route path={APP_PATHS.NURSERY + '/*'} element={<NurseryRouter />} />
-            {isEnabled('Planting Goals') && (
-              <Route path={APP_PATHS.PLANTING_PLANS + '/*'} element={<PlantingPlansRouter />} />
-            )}
+            <Route path={APP_PATHS.PLANTING_PLANS + '/*'} element={<PlantingPlansRouter />} />
             <Route path={APP_PATHS.PLANTING_PROGRESS} element={<PlantingProgressView />} />
             <Route path={APP_PATHS.PLANTING_SEASONS + '/*'} element={<PlantingSeasonsRouter />} />
             <Route path={APP_PATHS.INVENTORY_PLANNING + '/*'} element={<InventoryPlanningRouter />} />

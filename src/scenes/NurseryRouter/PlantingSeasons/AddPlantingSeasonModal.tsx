@@ -9,7 +9,6 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
@@ -49,7 +48,6 @@ const AddPlantingSeasonModal = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const markSubmitted = useTrackModalAbandonment('planting_season_add', true);
   const navigate = useSyncNavigate();
-  const plantingGoalsEnabled = isEnabled('Planting Goals');
 
   const [record, setRecord, onChange] = useForm<PlantingSeasonForm>({
     plantingSiteId: initialPlantingSiteId && initialPlantingSiteId > 0 ? initialPlantingSiteId : undefined,
@@ -67,6 +65,11 @@ const AddPlantingSeasonModal = ({
   const [listPlantingSiteSpeciesTargets, siteSpeciesTargetsResponse] = useLazyListPlantingSiteSpeciesTargetsQuery();
   const hasCurrentSiteSpeciesTargets =
     siteSpeciesTargetsResponse.originalArgs === record.plantingSiteId && siteSpeciesTargetsResponse.isSuccess;
+
+  const currentSiteSpeciesTargetsSettled =
+    siteSpeciesTargetsResponse.originalArgs === record.plantingSiteId &&
+    !siteSpeciesTargetsResponse.isFetching &&
+    (siteSpeciesTargetsResponse.isSuccess || siteSpeciesTargetsResponse.isError);
 
   const speciesCount = new Set(speciesTargets?.targets.map((t) => t.speciesId)).size;
   const substrataCount = new Set(speciesTargets?.targets.map((t) => t.substratumId)).size;
@@ -99,10 +102,10 @@ const AddPlantingSeasonModal = ({
   }, [listPlantingSeasons, record.plantingSiteId]);
 
   useEffect(() => {
-    if (plantingGoalsEnabled && record.plantingSiteId && !record.copyPrevious) {
+    if (record.plantingSiteId && !record.copyPrevious) {
       void listPlantingSiteSpeciesTargets(record.plantingSiteId, true);
     }
-  }, [listPlantingSiteSpeciesTargets, plantingGoalsEnabled, record.copyPrevious, record.plantingSiteId]);
+  }, [listPlantingSiteSpeciesTargets, record.copyPrevious, record.plantingSiteId]);
 
   useEffect(() => {
     if (siteSpeciesTargetsResponse.isError) {
@@ -193,7 +196,7 @@ const AddPlantingSeasonModal = ({
         startDate,
       }).unwrap();
 
-      if (response.id && plantingGoalsEnabled && !selectedSourceSeasonId) {
+      if (response.id && !selectedSourceSeasonId) {
         try {
           await Promise.all(
             defaultSpeciesTargets.map((target) =>
@@ -243,11 +246,7 @@ const AddPlantingSeasonModal = ({
           label={strings.CREATE_SEASON}
           onClick={() => void onCreate()}
           disabled={
-            isSubmitting ||
-            (plantingGoalsEnabled &&
-              !record.copyPrevious &&
-              !!record.plantingSiteId &&
-              (!hasCurrentSiteSpeciesTargets || siteSpeciesTargetsResponse.isFetching))
+            isSubmitting || (!record.copyPrevious && !!record.plantingSiteId && !currentSiteSpeciesTargetsSettled)
           }
         />,
       ]}

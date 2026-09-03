@@ -1,11 +1,7 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'Virtual Monitoring Plots'
-  | 'Planting Goals'
-  | 'Report Updates July 2026';
+export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots' | 'Report Updates July 2026';
 
 export type Feature = {
   name: FeatureName;
@@ -46,15 +42,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for virtual monitoring plots'],
-    disclosure: ['This is a WIP'],
-  },
-  {
-    name: 'Planting Goals',
-    preferenceName: 'plantingGoals',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Support for managing planting site goals'],
     disclosure: ['This is a WIP'],
   },
   {
