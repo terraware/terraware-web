@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1788458862055" clover="3.2.0">
-  <project timestamp="1788458862055" name="All files">
+<coverage generated="1788459389501" clover="3.2.0">
+  <project timestamp="1788459389501" name="All files">
     <metrics statements="5983" coveredstatements="2888" conditionals="2973" coveredconditionals="828" methods="2119" coveredmethods="627" elements="11075" coveredelements="4343" complexity="0" loc="5983" ncloc="5983" packages="76" files="320" classes="320"/>
     <package name="src">
       <metrics statements="220" coveredstatements="220" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
@@ -257,10 +257,10 @@
         <line num="23" count="125" type="stmt"/>
         <line num="24" count="19" type="cond" truecount="1" falsecount="1"/>
         <line num="26" count="125" type="stmt"/>
-        <line num="27" count="19" type="stmt"/>
+        <line num="27" count="20" type="stmt"/>
         <line num="30" count="125" type="stmt"/>
-        <line num="31" count="19" type="cond" truecount="1" falsecount="1"/>
-        <line num="33" count="19" type="stmt"/>
+        <line num="31" count="20" type="cond" truecount="1" falsecount="1"/>
+        <line num="33" count="20" type="stmt"/>
         <line num="37" count="125" type="stmt"/>
         <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="39" count="0" type="stmt"/>
@@ -618,11 +618,11 @@
       </file>
       <file name="Link.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0eb0870a4b34a3532-1/terraformation/terraware-web/src/components/common/Link.tsx">
         <metrics statements="6" coveredstatements="5" conditionals="10" coveredconditionals="7" methods="1" coveredmethods="1"/>
-        <line num="25" count="195" type="stmt"/>
-        <line num="27" count="195" type="stmt"/>
-        <line num="29" count="195" type="stmt"/>
-        <line num="41" count="195" type="cond" truecount="1" falsecount="1"/>
-        <line num="42" count="195" type="stmt"/>
+        <line num="25" count="201" type="stmt"/>
+        <line num="27" count="201" type="stmt"/>
+        <line num="29" count="201" type="stmt"/>
+        <line num="41" count="201" type="cond" truecount="1" falsecount="1"/>
+        <line num="42" count="201" type="stmt"/>
         <line num="56" count="0" type="stmt"/>
       </file>
       <file name="OptionsMenu.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0eb0870a4b34a3532-1/terraformation/terraware-web/src/components/common/OptionsMenu.tsx">
@@ -724,7 +724,7 @@
       <metrics statements="97" coveredstatements="65" conditionals="60" coveredconditionals="32" methods="41" coveredmethods="24"/>
       <file name="TableCellRenderer.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0eb0870a4b34a3532-1/terraformation/terraware-web/src/components/common/table/TableCellRenderer.tsx">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="12" count="845" type="stmt"/>
+        <line num="12" count="875" type="stmt"/>
       </file>
       <file name="TableSettingsButton.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0eb0870a4b34a3532-1/terraformation/terraware-web/src/components/common/table/TableSettingsButton.tsx">
         <metrics statements="19" coveredstatements="10" conditionals="14" coveredconditionals="4" methods="8" coveredmethods="2"/>
@@ -755,13 +755,13 @@
         <line num="17" count="12" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="25" count="2" type="stmt"/>
-        <line num="27" count="85" type="cond" truecount="2" falsecount="2"/>
+        <line num="27" count="84" type="cond" truecount="2" falsecount="2"/>
         <line num="29" count="15" type="stmt"/>
         <line num="32" count="14" type="stmt"/>
         <line num="35" count="0" type="stmt"/>
         <line num="42" count="0" type="stmt"/>
-        <line num="49" count="56" type="stmt"/>
-        <line num="52" count="66" type="stmt"/>
+        <line num="49" count="55" type="stmt"/>
+        <line num="52" count="65" type="stmt"/>
         <line num="53" count="19" type="stmt"/>
         <line num="61" count="85" type="stmt"/>
         <line num="63" count="85" type="stmt"/>
@@ -786,16 +786,16 @@
         <line num="123" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="124" count="0" type="stmt"/>
         <line num="129" count="85" type="stmt"/>
-        <line num="130" count="81" type="stmt"/>
-        <line num="131" count="81" type="cond" truecount="4" falsecount="0"/>
-        <line num="132" count="69" type="stmt"/>
+        <line num="130" count="82" type="stmt"/>
+        <line num="131" count="82" type="cond" truecount="4" falsecount="0"/>
+        <line num="132" count="70" type="stmt"/>
         <line num="134" count="12" type="stmt"/>
         <line num="135" count="12" type="cond" truecount="1" falsecount="1"/>
         <line num="138" count="0" type="stmt"/>
         <line num="142" count="0" type="stmt"/>
         <line num="143" count="0" type="stmt"/>
         <line num="145" count="12" type="stmt"/>
-        <line num="148" count="81" type="stmt"/>
+        <line num="148" count="82" type="stmt"/>
         <line num="151" count="85" type="stmt"/>
         <line num="155" count="0" type="stmt"/>
         <line num="174" count="85" type="stmt"/>
@@ -2524,9 +2524,9 @@
         <line num="28" count="7" type="stmt"/>
         <line num="51" count="7" type="stmt"/>
         <line num="56" count="7" type="stmt"/>
-        <line num="57" count="264" type="cond" truecount="2" falsecount="2"/>
+        <line num="57" count="265" type="cond" truecount="2" falsecount="2"/>
         <line num="62" count="0" type="stmt"/>
-        <line num="65" count="264" type="stmt"/>
+        <line num="65" count="265" type="stmt"/>
       </file>
       <file name="store.ts" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0eb0870a4b34a3532-1/terraformation/terraware-web/src/redux/store.ts">
         <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
@@ -3488,10 +3488,10 @@
         <line num="20" count="7" type="stmt"/>
         <line num="25" count="9" type="stmt"/>
         <line num="26" count="9" type="stmt"/>
-        <line num="29" count="19" type="stmt"/>
-        <line num="30" count="19" type="cond" truecount="1" falsecount="1"/>
+        <line num="29" count="20" type="stmt"/>
+        <line num="30" count="20" type="cond" truecount="1" falsecount="1"/>
         <line num="31" count="0" type="stmt"/>
-        <line num="36" count="19" type="stmt"/>
+        <line num="36" count="20" type="stmt"/>
         <line num="42" count="7" type="stmt"/>
         <line num="44" count="7" type="stmt"/>
       </file>
@@ -4105,13 +4105,13 @@
       </file>
       <file name="TableCellRenderer.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0eb0870a4b34a3532-1/terraformation/terraware-web/src/scenes/PeopleRouter/TableCellRenderer.tsx">
         <metrics statements="7" coveredstatements="7" conditionals="4" coveredconditionals="4" methods="2" coveredmethods="2"/>
-        <line num="10" count="845" type="stmt"/>
-        <line num="12" count="845" type="stmt"/>
-        <line num="13" count="155" type="stmt"/>
-        <line num="16" count="155" type="stmt"/>
-        <line num="23" count="845" type="cond" truecount="4" falsecount="0"/>
-        <line num="24" count="155" type="stmt"/>
-        <line num="29" count="690" type="stmt"/>
+        <line num="10" count="875" type="stmt"/>
+        <line num="12" count="875" type="stmt"/>
+        <line num="13" count="161" type="stmt"/>
+        <line num="16" count="161" type="stmt"/>
+        <line num="23" count="875" type="cond" truecount="4" falsecount="0"/>
+        <line num="24" count="161" type="stmt"/>
+        <line num="29" count="714" type="stmt"/>
       </file>
     </package>
     <package name="src.scenes.PlantingSitesRouter.edit.editor">
@@ -6664,7 +6664,7 @@
         <line num="32" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="35" count="9" type="stmt"/>
         <line num="36" count="4" type="stmt"/>
-        <line num="39" count="247" type="stmt"/>
+        <line num="39" count="253" type="stmt"/>
         <line num="41" count="9" type="stmt"/>
         <line num="42" count="47" type="stmt"/>
         <line num="45" count="9" type="stmt"/>
