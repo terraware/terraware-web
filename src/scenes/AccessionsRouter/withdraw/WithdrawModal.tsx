@@ -14,7 +14,7 @@ import useAccession from 'src/hooks/useAccession';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import {
   useCreateNurseryTransferWithdrawalMutation,
   useCreateViabilityTestMutation,
@@ -32,7 +32,7 @@ import { Facility } from 'src/types/Facility';
 import { SearchNodePayload } from 'src/types/Search';
 import { OrganizationUser, User } from 'src/types/User';
 import { UnitType, convertUnits } from 'src/units';
-import { getAllNurseries, getSeedBank, isContributor } from 'src/utils/organization';
+import { getAllNurseries, getSeedBank } from 'src/utils/organization';
 import { renderUser } from 'src/utils/renderUser';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -83,7 +83,8 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
   const [fieldsErrors, setFieldsErrors] = useState<{ [key: string]: string | undefined }>({});
   const theme = useTheme();
   const snackbar = useSnackbar();
-  const contributor = isContributor(selectedOrganization);
+  const { isAllowed } = useUser();
+  const cannotEdit = !isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
   const tz = useLocationTimeZone().get(selectedSeedBank);
   const [timeZone, setTimeZone] = useState(tz.id);
@@ -539,13 +540,13 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
   const isEqualUsers = useCallback((a: OrganizationUser, b: OrganizationUser) => a.id === b.id, []);
 
   const renderOptionUser = useCallback(
-    (option: OrganizationUser) => renderUser(option, user, contributor),
-    [user, contributor]
+    (option: OrganizationUser) => renderUser(option, user, cannotEdit),
+    [user, cannotEdit]
   );
 
   const displayLabelUser = useCallback(
-    (option: OrganizationUser) => renderUser(option, user, contributor),
-    [user, contributor]
+    (option: OrganizationUser) => renderUser(option, user, cannotEdit),
+    [user, cannotEdit]
   );
 
   const toTUser = useCallback(
@@ -718,7 +719,7 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
               selectedValue={users?.find((userSel) => userSel.id === record.withdrawnByUserId)}
               toT={toTUser}
               fullWidth={true}
-              disabled={contributor}
+              disabled={cannotEdit}
             />
           </Grid>
           {isNurseryTransfer ? (

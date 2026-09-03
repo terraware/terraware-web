@@ -1,4 +1,5 @@
 import { ProjectPayload } from 'src/queries/generated/projects';
+import { Accession } from 'src/types/Accession';
 import {
   GLOBAL_ROLE_ACCELERATOR_ADMIN,
   GLOBAL_ROLE_READ_ONLY,
@@ -11,7 +12,7 @@ import { Organization } from 'src/types/Organization';
 import { User, UserGlobalRole, UserGlobalRoles } from 'src/types/User';
 import { isArrayOfT } from 'src/types/utils';
 
-import { isAdmin, isManagerOrHigher, isMember } from './organization';
+import { isAdmin, isContributor, isManagerOrHigher, isMember } from './organization';
 
 /**
  * The main structure of the ACL functionality is a list of permissions with either an array of global roles
@@ -22,6 +23,12 @@ import { isAdmin, isManagerOrHigher, isMember } from './organization';
 /**
  * We split the permissions up loosely by the entity that the user is being authorized to interact with or view
  */
+type PermissionAccession =
+  | 'DELETE_ACCESSION'
+  | 'EDIT_ACCESSION'
+  | 'EDIT_ACCESSION_QUANTITY'
+  | 'EDIT_ACCESSION_STATE'
+  | 'EDIT_ACCESSION_VIABILITY';
 type PermissionAcceleratorReports =
   | 'EDIT_REPORTS'
   | 'PUBLISH_REPORTS'
@@ -64,6 +71,7 @@ type PermissionSurvivalRate = 'EDIT_SURVIVAL_RATE_SETTINGS';
 type PermissionVirtualWalkthrough = 'FREE_FLY_VIRTUAL_WALKTHROUGH';
 
 export type GlobalRolePermission =
+  | PermissionAccession
   | PermissionAcceleratorReports
   | PermissionActivities
   | PermissionApplication
@@ -304,6 +312,27 @@ const isAllowedCreatePlantingSite: PermissionCheckFn<CreatePlantingSiteMetadata>
 ) => isAcceleratorAdmin(user) || isAdmin(metadata?.organization);
 
 /**
+ * Functions related to create planting site, since the permission also applies to
+ * org roles, we need to check the passed-in organization
+ */
+type AccessionMetadata = { organization?: Organization; accession?: Accession };
+const isAllowedEditAccession: PermissionCheckFn<AccessionMetadata> = (_user, _permission, metadata) =>
+  isMember(metadata?.organization) && !isContributor(metadata?.organization);
+
+const isAllowedEditAccessionQuantity: PermissionCheckFn<AccessionMetadata> = (user, permission, metadata) =>
+  isAllowedEditAccession(user, permission, metadata) && metadata?.accession?.state !== 'Used Up';
+
+const isAllowedEditAccessionViability: PermissionCheckFn<AccessionMetadata> = (user, permission, metadata) =>
+  isAllowedEditAccession(user, permission, metadata) &&
+  metadata?.accession?.estimatedCount !== undefined &&
+  metadata?.accession?.state !== 'Used Up';
+
+const isAllowedEditAccessionState: PermissionCheckFn<AccessionMetadata> = (user, permission, metadata) =>
+  isAllowedEditAccession(user, permission, metadata) && metadata?.accession?.state !== 'Awaiting Check-In';
+
+const isAllowedDeleteAccession: PermissionCheckFn<AccessionMetadata> = isAllowedEditAccession;
+
+/**
  * This is the main ACL entrypoint where all permissions are indicated through a global role
  * array or a function that returns a boolean
  */
@@ -314,8 +343,13 @@ const ACL: Record<GlobalRolePermission, UserGlobalRoles | PermissionCheckFn> = {
   CREATE_DOCUMENTS: TFExpertPlus,
   CREATE_PLANTING_SITE: isAllowedCreatePlantingSite,
   CREATE_SUBMISSION: isAllowedCreateSubmission,
+  DELETE_ACCESSION: isAllowedDeleteAccession,
   DELETE_ACTIVITIES_NON_PUBLISHED: isAllowedDeleteNonPublishedActivities,
   DELETE_ACTIVITIES_PUBLISHED: AcceleratorAdminPlus,
+  EDIT_ACCESSION: isAllowedEditAccession,
+  EDIT_ACCESSION_QUANTITY: isAllowedEditAccessionQuantity,
+  EDIT_ACCESSION_STATE: isAllowedEditAccessionState,
+  EDIT_ACCESSION_VIABILITY: isAllowedEditAccessionViability,
   EDIT_ACTIVITIES: isAllowedEditActivities,
   EDIT_REPORTS: TFExpertPlus,
   EDIT_SURVIVAL_RATE_SETTINGS: isAllowedEditSurvivalRateSettings,
