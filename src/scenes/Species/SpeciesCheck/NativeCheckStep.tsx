@@ -71,11 +71,17 @@ const NativeCheckStep = ({
           );
 
           if (rows.length === 0) {
-            return <SummaryBox key={section.key} {...section.summary} />;
+            return null;
           }
 
           return (
-            <Box key={section.key} display='flex' flexDirection='column' gap={theme.spacing(2)}>
+            <Box
+              key={section.key}
+              sx={{
+                border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+                overflow: 'hidden',
+              }}
+            >
               <SummaryBox {...section.summary} />
               {rows.map((row) => {
                 const key = projectSpeciesKey(section.key, row.species.id);
@@ -84,8 +90,8 @@ const NativeCheckStep = ({
                   <Box
                     key={key}
                     sx={{
-                      border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
                       backgroundColor: theme.palette.TwClrBgWarningTertiary,
+                      borderTop: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
                       padding: theme.spacing(2),
                       display: 'flex',
                       flexDirection: 'column',
