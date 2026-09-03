@@ -1,4 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router';
 
 import { Box, CircularProgress, ClickAwayListener, IconButton, Popover, Tooltip, useTheme } from '@mui/material';
 import { Badge, DropdownItem, Message } from '@terraware/web-components';
@@ -121,6 +122,7 @@ export default function SpeciesListView(): JSX.Element {
   const updateUserPreferences = useUpdateUserPreferences();
   const [importSpeciesModalOpen, setImportSpeciesModalOpen] = useState(false);
   const navigate = useSyncNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { activeLocale } = useLocalization();
   const { availableProjects } = useProjects();
   const organizationId = selectedOrganization?.id;
@@ -151,6 +153,18 @@ export default function SpeciesListView(): JSX.Element {
     setSpeciesCheckEntry(entry);
     setSpeciesCheckOpen(true);
   }, []);
+
+  useEffect(() => {
+    if (searchParams.get('checkData') === null) {
+      return;
+    }
+    if (userCanEdit) {
+      openSpeciesCheck('added');
+    }
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete('checkData');
+    setSearchParams(nextParams, { replace: true });
+  }, [searchParams, setSearchParams, userCanEdit, openSpeciesCheck]);
 
   const trackBannerShown = useCallback(
     (bannerType: SpeciesIntelligenceBannerType) => {
@@ -207,8 +221,8 @@ export default function SpeciesListView(): JSX.Element {
   const speciesAddedBannerDismissed =
     orgPreferences[PREF_DISMISSED_SPECIES_ADDED_BANNER] === true || addedBannerDismissed;
 
-  const showFirstTimeBanner = noLocationSet && !setLocationBannerDismissed;
-  const showAddedBanner = !noLocationSet && uncheckedSpecies.length > 0 && !speciesAddedBannerDismissed;
+  const showFirstTimeBanner = userCanEdit && noLocationSet && !setLocationBannerDismissed;
+  const showAddedBanner = userCanEdit && !noLocationSet && uncheckedSpecies.length > 0 && !speciesAddedBannerDismissed;
 
   const firstTimeBannerImpressionRef = React.useRef(false);
   useEffect(() => {
