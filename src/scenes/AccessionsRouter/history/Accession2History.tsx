@@ -13,16 +13,15 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import AccessionEventLog from './AccessionEventLog';
 
-export default function Accession2History(): JSX.Element {
-  return isEnabled('Accession Event Log') ? <AccessionEventLog /> : <LegacyHistory />;
-}
+type AccessionHistoryProps = {
+  accessionId: number;
+};
 
-function LegacyHistory(): JSX.Element {
-  const { accessionId } = useParams<{ accessionId: string }>();
+const LegacyHistory = ({ accessionId }: AccessionHistoryProps): JSX.Element => {
   const theme = useTheme();
   const snackbar = useSnackbar();
 
-  const { currentData, isError } = useGetAccessionHistoryQuery(Number(accessionId), { skip: !accessionId });
+  const { currentData, isError } = useGetAccessionHistoryQuery(accessionId);
   const history: AccessionHistoryEntry[] | undefined = isError ? [] : currentData?.history;
 
   useEffect(() => {
@@ -81,4 +80,23 @@ function LegacyHistory(): JSX.Element {
       ))}
     </Box>
   );
-}
+};
+
+const Accession2History = (): JSX.Element | null => {
+  const { accessionId: accessionIdParam } = useParams<{ accessionId: string }>();
+
+  const accessionId = Number(accessionIdParam);
+
+  // Covers a missing, empty or non-numeric route param -- there is nothing to show a history for.
+  if (!Number.isFinite(accessionId) || accessionId <= 0) {
+    return null;
+  }
+
+  return isEnabled('Accession Event Log') ? (
+    <AccessionEventLog accessionId={accessionId} />
+  ) : (
+    <LegacyHistory accessionId={accessionId} />
+  );
+};
+
+export default Accession2History;

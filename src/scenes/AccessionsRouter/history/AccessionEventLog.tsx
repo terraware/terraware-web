@@ -1,5 +1,4 @@
 import React, { type JSX, type ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
 
 import { Box, CircularProgress, Link, Typography, useTheme } from '@mui/material';
 import { ViewPhotosDialog } from '@terraware/web-components';
@@ -27,21 +26,23 @@ import {
   renderAccessionEventDescription,
 } from './accessionEventDescription';
 
-const AccessionEventLog = (): JSX.Element => {
-  const { accessionId: accessionIdParam } = useParams<{ accessionId: string }>();
+type AccessionEventLogProps = {
+  accessionId: number;
+};
+
+const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element => {
   const { strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const snackbar = useSnackbar();
 
-  const accessionId = Number(accessionIdParam);
   const organizationId = selectedOrganization?.id;
 
   const [openedTarget, setOpenedTarget] = useState<AccessionEventTarget>();
 
   const { currentData: events, isError } = useListAccessionEventsQuery(
     { accessionId, organizationId: organizationId ?? -1 },
-    { skip: !accessionIdParam || organizationId === undefined }
+    { skip: organizationId === undefined }
   );
 
   const { accession } = useAccession(accessionId);
@@ -75,9 +76,7 @@ const AccessionEventLog = (): JSX.Element => {
 
   const viabilityTestWithdrawals = useMemo(() => findViabilityTestWithdrawals(events ?? []), [events]);
 
-  const { currentData: nurseryNames } = useListAccessionBatchNurseriesQuery(accessionId, {
-    skip: !accessionIdParam,
-  });
+  const { currentData: nurseryNames } = useListAccessionBatchNurseriesQuery(accessionId);
 
   // Drop the withdrawal row that points to the viability test event.
   const filterEvent = useCallback(
