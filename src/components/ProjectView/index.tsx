@@ -13,7 +13,6 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -35,7 +34,7 @@ export default function ProjectView(): JSX.Element {
   const { selectedOrganization } = useOrganization();
 
   const { availableProjects } = useProjects();
-  const showProjectLocation = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) > 1;
+  const showProjectLocation = (availableProjects?.length ?? 0) > 1;
   const { getBotanicalCountryName } = useBotanicalCountries(!showProjectLocation);
   const { allApplications } = useApplicationData();
   const pathParams = useParams<{ projectId: string }>();

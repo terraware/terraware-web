@@ -9,7 +9,6 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
@@ -70,7 +69,6 @@ export default function SpeciesEditView(): JSX.Element {
   const [assignSpeciesToProjects] = useAssignSpeciesToProjectsMutation();
   const [unassignSpeciesFromProjects] = useUnassignSpeciesFromProjectsMutation();
 
-  const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
   const [addedProjectIds, setAddedProjectIds] = useState<number[]>([]);
   const [removedProjectIds, setRemovedProjectIds] = useState<number[]>([]);
 
@@ -209,13 +207,13 @@ export default function SpeciesEditView(): JSX.Element {
         },
       }).unwrap();
 
-      if (speciesIntelligenceEnabled && addedProjectIds.length && speciesId) {
+      if (addedProjectIds.length && speciesId) {
         await assignSpeciesToProjects({
           species: [{ speciesId: Number(speciesId), projectIds: addedProjectIds }],
         }).unwrap();
       }
 
-      if (speciesIntelligenceEnabled && removedProjectIds.length && speciesId) {
+      if (removedProjectIds.length && speciesId) {
         await unassignSpeciesFromProjects({
           species: [{ speciesId: Number(speciesId), projectIds: removedProjectIds }],
         }).unwrap();
@@ -287,7 +285,7 @@ export default function SpeciesEditView(): JSX.Element {
             addedProjectsSpecies={addedProjectsSpecies}
             removedProjectsIds={removedProjectsIds}
           />
-          {speciesIntelligenceEnabled && hasMultipleProjects && species && (
+          {hasMultipleProjects && species && (
             <Box marginTop={theme.spacing(4)}>
               <SpeciesProjectsSection
                 speciesId={species.id}

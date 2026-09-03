@@ -5,7 +5,6 @@ import { Textfield } from '@terraware/web-components';
 
 import CountryAndBotanicalCountrySelect from 'src/components/CountryAndBotanicalCountrySelect';
 import PageForm from 'src/components/common/PageForm';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import strings from 'src/strings';
 import { CreateProjectRequest, UpdateProjectRequest } from 'src/types/Project';
@@ -27,7 +26,7 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
   const theme = useTheme();
 
   const { availableProjects } = useProjects();
-  const showProjectLocation = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) > 0;
+  const showProjectLocation = (availableProjects?.length ?? 0) > 0;
   const [localRecord, setLocalRecord] = useState<T>(project);
   const [validateFields, setValidateFields] = useState<boolean>(false);
 

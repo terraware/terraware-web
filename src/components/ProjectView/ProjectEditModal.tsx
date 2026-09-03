@@ -7,7 +7,6 @@ import UpdateLocationModal from 'src/components/UpdateLocationModal';
 import ScrollableDialogBox from 'src/components/common/ScrollableDialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
@@ -37,7 +36,7 @@ export default function ProjectEditModal({ open, onClose, project, reload }: Pro
 
   const { availableProjects } = useProjects();
   const trackEvent = useTrackEvent();
-  const showProjectLocation = isEnabled('Species Intelligence') && (availableProjects?.length ?? 0) > 1;
+  const showProjectLocation = (availableProjects?.length ?? 0) > 1;
 
   useEffect(() => {
     if (open) {

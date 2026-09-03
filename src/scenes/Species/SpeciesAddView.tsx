@@ -7,7 +7,6 @@ import { DateTime } from 'luxon';
 import PageForm from 'src/components/common/PageForm';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useOrganization } from 'src/providers/hooks';
@@ -48,7 +47,6 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const speciesIntelligenceEnabled = isEnabled('Species Intelligence');
   const [addedProjectIds, setAddedProjectIds] = useState<number[]>([]);
 
   const onAddProjectIds = useCallback((projectIds: number[]) => {
@@ -88,7 +86,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
         seedStorageBehavior: record.seedStorageBehavior,
         successionalGroups: record.successionalGroups,
       }).unwrap();
-      if (speciesIntelligenceEnabled && addedProjectIds.length) {
+      if (addedProjectIds.length) {
         await assignSpeciesToProjects({ species: [{ speciesId: id, projectIds: addedProjectIds }] }).unwrap();
       }
       reloadData();
@@ -141,7 +139,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
               nameFormatError={nameFormatError}
               setNameFormatError={setNameFormatError}
             />
-            {speciesIntelligenceEnabled && hasMultipleProjects && (
+            {hasMultipleProjects && (
               <Box marginTop={theme.spacing(4)} width='100%'>
                 <SpeciesProjectsSection
                   speciesId={record.id}

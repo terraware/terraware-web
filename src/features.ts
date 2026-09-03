@@ -5,7 +5,6 @@ export type FeatureName =
   | 'Show Production View'
   | 'Virtual Monitoring Plots'
   | 'Planting Goals'
-  | 'Species Intelligence'
   | 'Report Updates July 2026';
 
 export type Feature = {
@@ -56,15 +55,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for managing planting site goals'],
-    disclosure: ['This is a WIP'],
-  },
-  {
-    name: 'Species Intelligence',
-    preferenceName: 'speciesIntelligence',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Support for species suggestions'],
     disclosure: ['This is a WIP'],
   },
   {
