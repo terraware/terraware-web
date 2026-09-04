@@ -134,7 +134,7 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
       <Divider sx={{ marginY: theme.spacing(1), borderColor: theme.palette.TwClrBrdrTertiary }} />
       <Box display='flex' flexDirection='row' flexWrap='wrap' gap={theme.spacing(4)}>
         {namesColumn(strings.STRATA, strataNames)}
-        {namesColumn(strings.SUBSTRATA, substrataNames, true)}
+        {namesColumn(strings.SUBSTRATA, substrataNames, !isMobile)}
       </Box>
     </Box>
   );

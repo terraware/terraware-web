@@ -12,6 +12,7 @@ import useBoolean from 'src/hooks/useBoolean';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
 import AddPlantingSeasonModal from 'src/scenes/NurseryRouter/PlantingSeasons/AddPlantingSeasonModal';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import PlantingPlanOverview from './PlantingPlanOverview';
 import PlantingPlanSeasons from './PlantingPlanSeasons';
@@ -29,6 +30,7 @@ const readStoredSegment = (): PlantingPlanSegment => {
 const PlantingPlanDetailsView = (): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
 
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
@@ -106,6 +108,7 @@ const PlantingPlanDetailsView = (): JSX.Element => {
       label={strings.ADD_PLANTING_SEASON}
       onClick={openAddSeasonModal}
       size='medium'
+      style={isMobile ? { width: '100%' } : undefined}
     />
   ) : undefined;
 
