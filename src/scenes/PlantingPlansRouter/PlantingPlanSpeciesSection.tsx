@@ -21,6 +21,7 @@ import PlantingPlanAssignStrataModal from './PlantingPlanAssignStrataModal';
 import PlantingPlanPlantsChip from './PlantingPlanPlantsChip';
 
 const PLACEHOLDER = '-';
+const SPECIES_MIN_WIDTH = 440;
 
 export type PlantingPlanSpeciesSectionProps = {
   plantingSite: PlantingSitePayload;
@@ -117,53 +118,55 @@ const PlantingPlanSpeciesSection = ({ plantingSite, canEdit }: PlantingPlanSpeci
         </Box>
       </Box>
 
-      <Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}>
-        {targets.map((target) => (
-          <SpeciesRow
-            key={target.speciesId}
-            target={target}
-            name={findSpeciesById(target.speciesId)?.scientificName ?? `#${target.speciesId}`}
-            commonName={findSpeciesById(target.speciesId)?.commonName}
-            stratumName={stratumName}
-            onUpdateTarget={(targetPlants) => void upsertTarget(target.speciesId, target.stratumIds, targetPlants)}
-            onAssignStrata={() => setAssigningSpeciesId(target.speciesId)}
-            onDelete={() => void onDelete(target.speciesId)}
-            canEdit={canEdit}
-          />
-        ))}
-
-        {canEdit &&
-          (showAddSpeciesRow ? (
-            <AddSpeciesRow
-              options={availableOptions}
-              onCancel={targets.length > 0 ? () => setAddingSpecies(false) : undefined}
-              onAdd={async (speciesId, targetPlants) => {
-                const succeeded = await upsertTarget(speciesId, [], targetPlants);
-                if (succeeded) {
-                  setAddingSpecies(false);
-                }
-              }}
+      <Box sx={{ overflowX: 'auto' }}>
+        <Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}`, minWidth: `${SPECIES_MIN_WIDTH}px` }}>
+          {targets.map((target) => (
+            <SpeciesRow
+              key={target.speciesId}
+              target={target}
+              name={findSpeciesById(target.speciesId)?.scientificName ?? `#${target.speciesId}`}
+              commonName={findSpeciesById(target.speciesId)?.commonName}
+              stratumName={stratumName}
+              onUpdateTarget={(targetPlants) => void upsertTarget(target.speciesId, target.stratumIds, targetPlants)}
+              onAssignStrata={() => setAssigningSpeciesId(target.speciesId)}
+              onDelete={() => void onDelete(target.speciesId)}
+              canEdit={canEdit}
             />
-          ) : (
-            <Box padding={theme.spacing(1.5, 2)}>
-              <Button
-                icon='iconAdd'
-                label={strings.ADD_SPECIES}
-                onClick={() => setAddingSpecies(true)}
-                priority='ghost'
-                type='productive'
-                disabled={availableOptions.length === 0}
-              />
-            </Box>
           ))}
 
-        {!canEdit && targets.length === 0 && (
-          <Box padding={theme.spacing(1.5, 2)}>
-            <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
-              {PLACEHOLDER}
-            </Typography>
-          </Box>
-        )}
+          {canEdit &&
+            (showAddSpeciesRow ? (
+              <AddSpeciesRow
+                options={availableOptions}
+                onCancel={targets.length > 0 ? () => setAddingSpecies(false) : undefined}
+                onAdd={async (speciesId, targetPlants) => {
+                  const succeeded = await upsertTarget(speciesId, [], targetPlants);
+                  if (succeeded) {
+                    setAddingSpecies(false);
+                  }
+                }}
+              />
+            ) : (
+              <Box padding={theme.spacing(1.5, 2)}>
+                <Button
+                  icon='iconAdd'
+                  label={strings.ADD_SPECIES}
+                  onClick={() => setAddingSpecies(true)}
+                  priority='ghost'
+                  type='productive'
+                  disabled={availableOptions.length === 0}
+                />
+              </Box>
+            ))}
+
+          {!canEdit && targets.length === 0 && (
+            <Box padding={theme.spacing(1.5, 2)}>
+              <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
+                {PLACEHOLDER}
+              </Typography>
+            </Box>
+          )}
+        </Box>
       </Box>
     </Box>
   );
