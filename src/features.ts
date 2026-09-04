@@ -6,7 +6,7 @@ export type FeatureName =
   | 'Virtual Monitoring Plots'
   | 'Report Updates July 2026'
   | 'Accession Event Log'
-  | 'Handling plots located too far from planned location';
+  | 'Handle plots too far';
 
 export type Feature = {
   name: FeatureName;
@@ -68,8 +68,8 @@ export const OPT_IN_FEATURES: Feature[] = [
     disclosure: ['This is a WIP'],
   },
   {
-    name: 'Handling plots located too far from planned location',
-    preferenceName: 'plotsTooFarFromPlannedLocation',
+    name: 'Handle plots too far',
+    preferenceName: 'handlePlotsTooFar',
     active: true,
     enabled: false,
     allowInternalProduction: false,
