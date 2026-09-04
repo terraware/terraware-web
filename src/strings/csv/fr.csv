@@ -1676,6 +1676,7 @@ PLOT_DESCRIPTION,Description de la parcelle,67e5afa5
 PLOT_INFO,Informations sur la parcelle,38a9b59d
 PLOT_LIVE_PLANTS_TOOLTIP,Plantes vivantes correspond au nombre de plantes observées enregistrées comme vivantes. Les plantes enregistrées comme préexistantes ne sont pas incluses.,f7d2a77f
 PLOT_LOCATION,Emplacement de la placette,59f1374a
+PLOT_OBSERVATION_LOCATION_DEVIATION_INFO,Cette observation de parcelle a été réalisée à plus de 20 m de l'emplacement assigné. Exportez les données de la parcelle pour voir les coordonnées de localisation relevées sur le terrain.,32c9a47f
 PLOT_PLANT_DENSITY_TOOLTIP,La densité de plantes (plantes par hectare) est calculée en fonction du nombre de plantes observées enregistrées comme vivantes. Les plantes enregistrées comme préexistantes ne sont pas incluses.,32ced1ba
 PLOT_SELECTION,Sélection de parcelles,ba150031
 PLOT_SPECIES_TOOLTIP,"Espèces correspond au nombre d'espèces représentées par l'ensemble des plantes observées, y compris les plantes enregistrées comme préexistantes.",fd5ff6d0

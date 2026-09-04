@@ -1677,6 +1677,7 @@ PLOT_DESCRIPTION,Descripción de la parcela,67e5afa5
 PLOT_INFO,Información de la parcela,38a9b59d
 PLOT_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de plantas observadas registradas como vivas. No se incluyen las plantas registradas como preexistentes.,f7d2a77f
 PLOT_LOCATION,Ubicación de la parcela,59f1374a
+PLOT_OBSERVATION_LOCATION_DEVIATION_INFO,Esta observación de parcela se realizó a más de 20 m de la ubicación asignada. Exporte los datos de la parcela para ver las coordenadas de ubicación registradas en campo.,32c9a47f
 PLOT_PLANT_DENSITY_TOOLTIP,La densidad de plantas (plantas por hectárea) se calcula en función del número de plantas observadas registradas como vivas. No se incluyen las plantas registradas como preexistentes.,32ced1ba
 PLOT_SELECTION,Selección de parcela,ba150031
 PLOT_SPECIES_TOOLTIP,"Especies es el número de especies representadas por todas las plantas observadas, incluyendo las registradas como preexistentes.",fd5ff6d0
