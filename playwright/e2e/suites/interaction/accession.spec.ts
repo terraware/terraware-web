@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../../utils/userUtils';
-import { exactOptions, selectOrg, waitFor } from '../../utils/utils';
+import { exactOptions, openNavItem, selectOrg, waitFor } from '../../utils/utils';
 
 const yearId = new Date().getFullYear().toString().slice(-2);
 
@@ -18,8 +18,7 @@ test.describe('AccessionTests', () => {
   });
 
   test('Add An Accession', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Seeds' }).click();
-    await page.getByRole('button', { name: 'Accessions' }).click();
+    await openNavItem(page, 'Seeds', 'Accessions');
     await page.getByRole('button', { name: 'Add Accession' }).click();
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Coconut' }).locator('div').click();
@@ -139,8 +138,7 @@ test.describe('AccessionTests', () => {
   test.describe('Withdraw Tests', () => {
     test.describe.configure({ mode: 'default' });
     test('Withdraw to Nursery by seed count', async ({ page }, testInfo) => {
-      await page.getByRole('button', { name: 'Seeds' }).click();
-      await page.getByRole('button', { name: 'Accessions' }).click();
+      await openNavItem(page, 'Seeds', 'Accessions');
 
       const accessionRow = (await page.getByText(accessionId).evaluate((el) => el.closest('td')?.id ?? '')).replace(
         '-accessionNumber',
@@ -162,8 +160,7 @@ test.describe('AccessionTests', () => {
       await expect(page.getByLabel('History')).toContainText(
         'Super Admin withdrew 300 seeds for nurseryAdding some test notes here!'
       );
-      await page.getByRole('button', { name: 'Seedlings' }).click();
-      await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
+      await openNavItem(page, 'Seedlings', 'Inventory');
       await page.getByLabel('By Species').getByText('By Species').waitFor({ state: 'visible' });
       await page.getByText('Coconut', exactOptions).locator('..').waitFor({ state: 'visible' });
       const coconutRowNum = (
@@ -182,8 +179,7 @@ test.describe('AccessionTests', () => {
     });
 
     test('Withdraw to Plant', async ({ page }, testInfo) => {
-      await page.getByRole('button', { name: 'Seeds' }).click();
-      await page.getByRole('button', { name: 'Accessions' }).click();
+      await openNavItem(page, 'Seeds', 'Accessions');
 
       const accessionRow = (await page.getByText(accessionId).evaluate((el) => el.closest('td')?.id ?? '')).replace(
         '-accessionNumber',
@@ -203,8 +199,7 @@ test.describe('AccessionTests', () => {
     });
 
     test('Withdraw to Viability Test', async ({ page }, testInfo) => {
-      await page.getByRole('button', { name: 'Seeds' }).click();
-      await page.getByRole('button', { name: 'Accessions' }).click();
+      await openNavItem(page, 'Seeds', 'Accessions');
 
       const accessionRow = (await page.getByText(accessionId).evaluate((el) => el.closest('td')?.id ?? '')).replace(
         '-accessionNumber',
