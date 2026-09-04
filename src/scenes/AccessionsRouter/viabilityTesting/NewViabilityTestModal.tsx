@@ -21,7 +21,7 @@ import useAccession from 'src/hooks/useAccession';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
-import { useOrganization } from 'src/providers/hooks';
+import { useOrganization, useUser } from 'src/providers/hooks';
 import { useCreateViabilityTestMutation, useUpdateViabilityTestMutation } from 'src/queries/generated/accessionsV2';
 import { OrganizationUserService } from 'src/services';
 import { ViabilityTestPostRequest } from 'src/services/AccessionService';
@@ -31,7 +31,7 @@ import { TEST_TYPES, seedTypes, testMethods, treatments } from 'src/types/Access
 import { ViabilityTest } from 'src/types/Accession';
 import { Facility } from 'src/types/Facility';
 import { OrganizationUser, User } from 'src/types/User';
-import { getSeedBank, isContributor } from 'src/utils/organization';
+import { getSeedBank } from 'src/utils/organization';
 import { renderUser } from 'src/utils/renderUser';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -76,7 +76,8 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
   const [totalSeedsTested, setTotalSeedsTested] = useState(0);
   const [openViabilityResultModal, setOpenViabilityResultModal] = useState(false);
   const [savedRecord, setSavedRecord] = useState<ViabilityTest>();
-  const contributor = isContributor(selectedOrganization);
+  const { isAllowed } = useUser();
+  const cannotEdit = !isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
   const snackbar = useSnackbar();
   const theme = useTheme();
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -649,8 +650,8 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
               options={users}
               onChange={onChangeUser}
               isEqual={(a: OrganizationUser, b: OrganizationUser) => a.id === b.id}
-              renderOption={(option) => renderUser(option, user, contributor)}
-              displayLabel={(option) => renderUser(option, user, contributor)}
+              renderOption={(option) => renderUser(option, user, cannotEdit)}
+              displayLabel={(option) => renderUser(option, user, cannotEdit)}
               selectedValue={users?.find((userSel) => userSel.id === record?.withdrawnByUserId)}
               toT={(firstName: string) =>
                 ({
@@ -658,7 +659,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
                 }) as OrganizationUser
               }
               fullWidth={true}
-              disabled={contributor || readOnly}
+              disabled={cannotEdit || readOnly}
             />
           </Grid>
 
