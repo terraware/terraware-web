@@ -1,3 +1,4 @@
+7ae700bb SW-8829 Save expand/collapse state of nav items to preferences (#6374)
 df6daa15 SW-7604 Render the Accession History tab from the event log (#6343)
 eed7f325 SW-7604 Add event log tab support and accession event log flag (#6342)
 ff361f45 SW-8855 Mobile web issues (#6375)
