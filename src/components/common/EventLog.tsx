@@ -8,14 +8,11 @@ import { useLocalization } from 'src/providers';
 import { EventLogEntryPayload } from 'src/queries/generated/events';
 
 type EventLogProps = {
-  /** Renders the event list expanded on mount instead of collapsed. */
   defaultExpanded?: boolean;
-  /** Rendered in place of nothing when there are no events, e.g. for a standalone history tab. */
   emptyState?: ReactNode;
   events?: EventLogEntryPayload[];
   filterEvent?: (event: EventLogEntryPayload) => boolean;
   getUpdatedFieldLabel?: (event: EventLogEntryPayload) => ReactNode;
-  /** Hides the "last modified" line and the expand/collapse toggle, leaving just the event list. */
   hideToggle?: boolean;
   isLoading?: boolean;
   renderEventDescription?: (event: EventLogEntryPayload) => ReactNode;
