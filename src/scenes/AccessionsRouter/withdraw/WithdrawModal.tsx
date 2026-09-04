@@ -538,16 +538,6 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
 
   const isEqualUsers = useCallback((a: OrganizationUser, b: OrganizationUser) => a.id === b.id, []);
 
-  const renderOptionUser = useCallback(
-    (option: OrganizationUser) => renderUser(option, user, contributor),
-    [user, contributor]
-  );
-
-  const displayLabelUser = useCallback(
-    (option: OrganizationUser) => renderUser(option, user, contributor),
-    [user, contributor]
-  );
-
   const toTUser = useCallback(
     (firstName: string) =>
       ({
@@ -713,8 +703,8 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
               options={users}
               onChange={onChangeUser}
               isEqual={isEqualUsers}
-              renderOption={renderOptionUser}
-              displayLabel={displayLabelUser}
+              renderOption={renderUser}
+              displayLabel={renderUser}
               selectedValue={users?.find((userSel) => userSel.id === record.withdrawnByUserId)}
               toT={toTUser}
               fullWidth={true}
