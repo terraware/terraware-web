@@ -95,29 +95,28 @@ const PlantingPlanBox = ({ plantingSite }: PlantingPlanBoxProps): JSX.Element =>
   const plantingGoal = (
     <Box
       sx={{
-        alignItems: 'center',
+        alignItems: 'flex-start',
         backgroundColor: theme.palette.TwClrBgSecondary,
         borderRadius: theme.spacing(1),
         display: 'flex',
-        flexDirection: 'column',
-        gap: theme.spacing(1),
+        gap: theme.spacing(2),
         minWidth: '220px',
         padding: theme.spacing(4, 3),
         width: '410px',
         justifyContent: 'center',
       }}
     >
-      <Box display='flex' flexWrap='wrap' gap={theme.spacing(2)} alignItems='center' justifyContent='center'>
-        <Typography fontSize='16px' fontWeight={400} color={theme.palette.TwClrBaseBlack}>
-          {`${strings.PLANTING_GOAL}:`}
-        </Typography>
+      <Typography fontSize='16px' fontWeight={400} color={theme.palette.TwClrBaseBlack}>
+        {`${strings.PLANTING_GOAL}:`}
+      </Typography>
+      <Box display='flex' flexDirection='column' gap={theme.spacing(1)}>
         <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
           {plantingGoalLabel}
         </Typography>
+        <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
+          {speciesLabel}
+        </Typography>
       </Box>
-      <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrBaseBlack}>
-        {speciesLabel}
-      </Typography>
     </Box>
   );
 
