@@ -33,6 +33,10 @@ const rawBaseQuery = fetchBaseQuery({
   baseUrl: '',
   credentials: 'include',
   prepareHeaders: (headers) => {
+    if (!headers.has('Accept')) {
+      headers.set('Accept', 'application/json');
+    }
+
     // Send the active locale (kept in sync by LocalizationProvider) so RTK Query requests are
     // localized the same way axios requests are. Endpoints that set their own Accept-Language win.
     const locale = getQueryLocale();
