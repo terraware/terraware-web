@@ -1,3 +1,5 @@
+774e6141 SW-8430: Plant Monitoring Observations: Handling plots located too far from planned location (>20m) (#6372)
+e950316e Fix playwright results upload for CI (#6378)
 7ae700bb SW-8829 Save expand/collapse state of nav items to preferences (#6374)
 df6daa15 SW-7604 Render the Accession History tab from the event log (#6343)
 eed7f325 SW-7604 Add event log tab support and accession event log flag (#6342)
