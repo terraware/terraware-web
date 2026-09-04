@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef } from 'react';
 import { useMatch } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -99,12 +99,21 @@ export default function NavBar({
     [userPreferences]
   );
 
+  const navSectionsRef = useRef<Record<string, boolean>>({});
+  useEffect(() => {
+    const persisted = (userPreferences?.navSectionsExpanded as Record<string, boolean> | undefined) ?? {};
+    navSectionsRef.current = { ...persisted, ...navSectionsRef.current };
+  }, [userPreferences]);
+
+  const navSectionsWriteRef = useRef<Promise<unknown>>(Promise.resolve());
   const persistNavSection = useCallback(
     (id: string, open: boolean) => {
-      const sections = (userPreferences?.navSectionsExpanded as Record<string, boolean> | undefined) ?? {};
-      void updateUserPreferences({ navSectionsExpanded: { ...sections, [id]: open } });
+      navSectionsRef.current = { ...navSectionsRef.current, [id]: open };
+      navSectionsWriteRef.current = navSectionsWriteRef.current
+        .catch(() => undefined)
+        .then(() => updateUserPreferences({ navSectionsExpanded: { ...navSectionsRef.current } }));
     },
-    [userPreferences, updateUserPreferences]
+    [updateUserPreferences]
   );
 
   const [countNurseryWithdrawals, countNurseryWithdrawalsResponse] = useLazyCountNurseryWithdrawalsQuery();
