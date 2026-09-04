@@ -37,7 +37,7 @@ export default function NavBar({
   hasSpecies,
   setShowNavBar,
 }: NavBarProps): JSX.Element | null {
-  const { isAllowed } = useUser();
+  const { isAllowed, userPreferences, updateUserPreferences } = useUser();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { isDesktop, isMobile } = useDeviceInfo();
@@ -89,6 +89,22 @@ export default function NavBar({
       }
     },
     [closeNavBar, navigate]
+  );
+
+  const navSectionExpanded = useCallback(
+    (id: string, defaultExpanded: boolean): boolean => {
+      const sections = userPreferences?.navSectionsExpanded as Record<string, boolean> | undefined;
+      return sections?.[id] ?? defaultExpanded;
+    },
+    [userPreferences]
+  );
+
+  const persistNavSection = useCallback(
+    (id: string, open: boolean) => {
+      const sections = (userPreferences?.navSectionsExpanded as Record<string, boolean> | undefined) ?? {};
+      void updateUserPreferences({ navSectionsExpanded: { ...sections, [id]: open } });
+    },
+    [userPreferences, updateUserPreferences]
   );
 
   const [countNurseryWithdrawals, countNurseryWithdrawalsResponse] = useLazyCountNurseryWithdrawalsQuery();
@@ -376,7 +392,13 @@ export default function NavBar({
         </>
       )}
       <NavSection />
-      <NavItem label={strings.SEEDS} icon='seeds' id='seeds'>
+      <NavItem
+        label={strings.SEEDS}
+        icon='seeds'
+        id='seeds'
+        defaultOpen={navSectionExpanded('seeds', true)}
+        onClick={(open) => persistNavSection('seeds', !!open)}
+      >
         <SubNavbar>
           <NavItem
             label={strings.DASHBOARD}
@@ -396,10 +418,22 @@ export default function NavBar({
           />
         </SubNavbar>
       </NavItem>
-      <NavItem label={strings.SEEDLINGS} icon='iconSeedling' id='seedlings'>
+      <NavItem
+        label={strings.SEEDLINGS}
+        icon='iconSeedling'
+        id='seedlings'
+        defaultOpen={navSectionExpanded('seedlings', true)}
+        onClick={(open) => persistNavSection('seedlings', !!open)}
+      >
         <SubNavbar>{getSeedlingsMenuItems()}</SubNavbar>
       </NavItem>
-      <NavItem label={strings.PLANTINGS} icon='iconRestorationSite' id='plants'>
+      <NavItem
+        label={strings.PLANTINGS}
+        icon='iconRestorationSite'
+        id='plants'
+        defaultOpen={navSectionExpanded('plants', true)}
+        onClick={(open) => persistNavSection('plants', !!open)}
+      >
         <SubNavbar>
           <>
             <NavItem
@@ -451,7 +485,13 @@ export default function NavBar({
       {isManagerOrHigher(selectedOrganization) && (
         <>
           <NavSection />
-          <NavItem label={strings.LOCATIONS} icon='iconMyLocation' id='locations'>
+          <NavItem
+            label={strings.LOCATIONS}
+            icon='iconMyLocation'
+            id='locations'
+            defaultOpen={navSectionExpanded('locations', false)}
+            onClick={(open) => persistNavSection('locations', !!open)}
+          >
             <SubNavbar>
               <NavItem
                 label={strings.SEED_BANKS}
