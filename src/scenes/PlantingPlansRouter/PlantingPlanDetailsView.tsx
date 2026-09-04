@@ -38,12 +38,20 @@ const PlantingPlanDetailsView = (): JSX.Element => {
   const plantingSiteId = Number(params.plantingSiteId);
   const { plantingSite, isLoading } = usePlantingSite(plantingSiteId);
   const query = useQuery();
+  const requestedSection = query.get('section');
 
-  const [segment, setSegment] = useState<PlantingPlanSegment>(() => {
-    const requested = query.get('section');
-    return isSegment(requested) ? requested : readStoredSegment();
-  });
+  const [segment, setSegment] = useState<PlantingPlanSegment>(() =>
+    isSegment(requestedSection) ? requestedSection : readStoredSegment()
+  );
   const [addSeasonModalOpen, , openAddSeasonModal, closeAddSeasonModal] = useBoolean(false);
+
+  const [syncedSection, setSyncedSection] = useState(requestedSection);
+  if (requestedSection !== syncedSection) {
+    setSyncedSection(requestedSection);
+    if (isSegment(requestedSection)) {
+      setSegment(requestedSection);
+    }
+  }
 
   const selectSegment = useCallback((next: PlantingPlanSegment) => {
     setSegment(next);
