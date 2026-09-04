@@ -12,6 +12,7 @@ import useBoolean from 'src/hooks/useBoolean';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
 import AddPlantingSeasonModal from 'src/scenes/NurseryRouter/PlantingSeasons/AddPlantingSeasonModal';
+import useQuery from 'src/utils/useQuery';
 
 import PlantingPlanOverview from './PlantingPlanOverview';
 import PlantingPlanSeasons from './PlantingPlanSeasons';
@@ -21,9 +22,12 @@ type PlantingPlanSegment = 'overview' | 'siteGoals' | 'plantingSeasons';
 
 const SEGMENT_STORAGE_KEY = 'plantingPlanSegment';
 
+const isSegment = (value: string | null): value is PlantingPlanSegment =>
+  value === 'overview' || value === 'siteGoals' || value === 'plantingSeasons';
+
 const readStoredSegment = (): PlantingPlanSegment => {
   const stored = sessionStorage.getItem(SEGMENT_STORAGE_KEY);
-  return stored === 'siteGoals' || stored === 'plantingSeasons' ? stored : 'overview';
+  return isSegment(stored) ? stored : 'overview';
 };
 
 const PlantingPlanDetailsView = (): JSX.Element => {
@@ -33,9 +37,21 @@ const PlantingPlanDetailsView = (): JSX.Element => {
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
   const { plantingSite, isLoading } = usePlantingSite(plantingSiteId);
+  const query = useQuery();
+  const requestedSection = query.get('section');
 
-  const [segment, setSegment] = useState<PlantingPlanSegment>(readStoredSegment);
+  const [segment, setSegment] = useState<PlantingPlanSegment>(() =>
+    isSegment(requestedSection) ? requestedSection : readStoredSegment()
+  );
   const [addSeasonModalOpen, , openAddSeasonModal, closeAddSeasonModal] = useBoolean(false);
+
+  const [syncedSection, setSyncedSection] = useState(requestedSection);
+  if (requestedSection !== syncedSection) {
+    setSyncedSection(requestedSection);
+    if (isSegment(requestedSection)) {
+      setSegment(requestedSection);
+    }
+  }
 
   const selectSegment = useCallback((next: PlantingPlanSegment) => {
     setSegment(next);
