@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../../utils/userUtils';
-import { selectOrg, waitFor } from '../../utils/utils';
+import { openNavItem, selectOrg, waitFor } from '../../utils/utils';
 
 test.describe('ObservationsTests', () => {
   test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
@@ -12,8 +12,7 @@ test.describe('ObservationsTests', () => {
   });
 
   test('Schedule Observation', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Observations' }).click();
+    await openNavItem(page, 'Plantings', 'Observations');
 
     await page.getByRole('button', { name: 'Schedule Observation' }).click();
     await expect(page.getByText('Schedule Observation')).toBeVisible();
@@ -42,8 +41,7 @@ test.describe('ObservationsTests', () => {
   });
 
   test('Reschedule Observation', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Observations' }).click();
+    await openNavItem(page, 'Plantings', 'Observations');
 
     // wait for table rows to load
     await waitFor(page, '#row1');
@@ -81,8 +79,7 @@ test.describe('ObservationsTests', () => {
   });
 
   test('End Observation', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Observations' }).click();
+    await openNavItem(page, 'Plantings', 'Observations');
 
     // wait for table rows to load
     await waitFor(page, '#row1');
