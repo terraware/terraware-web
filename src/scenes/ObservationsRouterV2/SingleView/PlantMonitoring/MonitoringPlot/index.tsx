@@ -131,7 +131,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
 
     // where the plot was actually set up is recorded on the corner photos themselves; the southwest
     // corner is the one the assigned coordinates above are taken from, so it is the comparable pair
-    const fieldSwCoordinates = hasLocationDeviation
+    const fieldSwCoordinates = explanationPhotosEnabled
       ? monitoringPlot?.photos?.find(
           (photo) => photo.type === 'Plot' && photo.position === 'SouthwestCorner' && photo.gpsCoordinates
         )?.gpsCoordinates?.coordinates
@@ -166,13 +166,12 @@ const MonitoringPlotDetails = (): JSX.Element => {
                     : strings.TEMPORARY}
               </Typography>
               <Typography whiteSpace='nowrap'>
-                {fieldSwCoordinates ? strings.ASSIGNED_LOCATION : strings.LOCATION}: {swCoordinatesLat},{' '}
-                {swCoordinatesLng}
+                {strings.ASSIGNED_LOCATION}: {swCoordinatesLat}, {swCoordinatesLng}
               </Typography>
               {fieldSwCoordinates && (
                 <Typography whiteSpace='nowrap'>
-                  {strings.FIELD_LOCATION}: {fieldSwCoordinates[1]}, {fieldSwCoordinates[0]}{' '}
-                  {strings.MORE_THAN_20M_FROM_ASSIGNED_LOCATION}
+                  {strings.FIELD_LOCATION}: {fieldSwCoordinates[1]}, {fieldSwCoordinates[0]}
+                  {hasLocationDeviation ? ` ${strings.MORE_THAN_20M_FROM_ASSIGNED_LOCATION}` : ''}
                 </Typography>
               )}
               <Typography>
@@ -192,7 +191,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
         </Tooltip>
       </Box>
     );
-  }, [hasLocationDeviation, monitoringPlot, stratum?.name, strings, substratum?.name, theme]);
+  }, [explanationPhotosEnabled, hasLocationDeviation, monitoringPlot, stratum?.name, strings, substratum?.name, theme]);
 
   const tabs = useMemo(() => {
     return [
