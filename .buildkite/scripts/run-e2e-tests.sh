@@ -31,10 +31,11 @@ run_tests() {
   )
 
   echo "--- :playwright: ${label}"
-  if timeout 20m "${docker_cmd[@]}"; then
+  local exit_code=0
+  timeout 20m "${docker_cmd[@]}" || exit_code=$?
+  if [ "$exit_code" -eq 0 ]; then
     return 0
   fi
-  local exit_code=$?
 
   # Retry once on timeout.
   if [ "$exit_code" -eq 124 ]; then
