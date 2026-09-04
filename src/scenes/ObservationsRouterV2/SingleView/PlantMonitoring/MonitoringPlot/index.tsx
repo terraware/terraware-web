@@ -118,8 +118,8 @@ const MonitoringPlotDetails = (): JSX.Element => {
     return crumbsData;
   }, [observationId, plantingSite, plantingSiteIdParam, results?.isAdHoc, stratumName, strings.OBSERVATIONS]);
 
-  // the server exposes no deviation flag, so the explanation photo the field app is required to
-  // capture when a plot is set up >20m from its assigned location is the signal that it happened
+  // an explanation photo indicates a location deviation (when a plot is set up
+  // > 20m from its assigned location)
   const hasLocationDeviation = useMemo(
     () => explanationPhotosEnabled && !!monitoringPlot?.photos?.some((photo) => photo.type === 'Explanation'),
     [explanationPhotosEnabled, monitoringPlot?.photos]
