@@ -133,15 +133,22 @@ const renderFieldChange = (
     renderChangedValue(strings, colors.changedTo, changedTo)
   );
 
+export type AccessionEventDescriptionOptions = {
+  colors: ChangedValueColors;
+  /** Batch ID to the nursery it went to, for naming a transfer's destination. */
+  nurseryNames?: Map<number, string>;
+  /** Renders the photo subject, so a caller can make just the filename clickable. */
+  renderPhotoSubject?: (fullText: string) => JSX.Element | string;
+  strings: Strings;
+  viabilityTestWithdrawals?: ViabilityTestWithdrawals;
+};
+
 export const renderAccessionEventDescription = (
   event: EventLogEntryPayload,
-  strings: Strings,
-  colors: ChangedValueColors,
-  pairs?: ViabilityTestWithdrawals,
-  nurseryNames?: Map<number, string>
+  { colors, nurseryNames, renderPhotoSubject, strings, viabilityTestWithdrawals }: AccessionEventDescriptionOptions
 ): ReactNode => {
   const { action, subject } = event;
-  const forViabilityTest = isViabilityTestWithdrawal(event, pairs);
+  const forViabilityTest = isViabilityTestWithdrawal(event, viabilityTestWithdrawals);
 
   switch (subject.type) {
     case 'Accession':
@@ -163,19 +170,22 @@ export const renderAccessionEventDescription = (
           return null;
       }
 
-    case 'AccessionPhoto':
+    case 'AccessionPhoto': {
+      const photoSubject = renderPhotoSubject?.(subject.fullText) ?? subject.fullText;
+
       switch (action.type) {
         case 'Created':
-          return strings.formatString(strings.EVENT_ADDED, subject.fullText);
+          return strings.formatString<string | JSX.Element>(strings.EVENT_ADDED, photoSubject);
         case 'Deleted':
-          return strings.formatString(strings.EVENT_DELETED, subject.fullText);
+          return strings.formatString<string | JSX.Element>(strings.EVENT_DELETED, photoSubject);
         // Re-uploading over an existing filename is logged as an update whose values are the old and
         // new file IDs, so only the subject is worth showing.
         case 'FieldUpdated':
-          return strings.formatString(strings.ACCESSION_EVENT_PHOTO_REPLACED, subject.fullText);
+          return strings.formatString<string | JSX.Element>(strings.ACCESSION_EVENT_PHOTO_REPLACED, photoSubject);
         default:
           return null;
       }
+    }
 
     case 'Withdrawal':
       switch (action.type) {

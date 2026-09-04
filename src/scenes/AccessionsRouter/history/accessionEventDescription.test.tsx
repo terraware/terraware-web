@@ -91,11 +91,18 @@ const viabilityTest = (): EventLogEntryPayload['subject'] => ({
 
 const describeEvent = (
   entry: EventLogEntryPayload,
-  pairs?: ViabilityTestWithdrawals,
+  viabilityTestWithdrawals?: ViabilityTestWithdrawals,
   nurseryNames?: Map<number, string>
 ): string => {
   const { container } = render(
-    <>{renderAccessionEventDescription(entry, defaultStrings, colors, pairs, nurseryNames)}</>
+    <>
+      {renderAccessionEventDescription(entry, {
+        colors,
+        nurseryNames,
+        strings: defaultStrings,
+        viabilityTestWithdrawals,
+      })}
+    </>
   );
   return container.textContent ?? '';
 };

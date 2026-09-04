@@ -74,6 +74,32 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
 
   const closeModal = useCallback(() => setOpenedTarget(undefined), []);
 
+  // Only the filename opens the photo; the surrounding label and action read as plain text.
+  const renderPhotoSubject = useCallback(
+    (fullText: string): JSX.Element | string => {
+      const filename = findTrailingFilename(fullText, accession?.photoFilenames);
+
+      if (filename === undefined) {
+        return fullText;
+      }
+
+      return (
+        <>
+          {fullText.slice(0, fullText.length - filename.length)}
+          <Link
+            component='button'
+            onClick={() => setOpenedTarget({ kind: 'photo', accessionId, fullText })}
+            sx={{ verticalAlign: 'baseline' }}
+            underline='hover'
+          >
+            {filename}
+          </Link>
+        </>
+      );
+    },
+    [accession?.photoFilenames, accessionId]
+  );
+
   const viabilityTestWithdrawals = useMemo(() => findViabilityTestWithdrawals(events ?? []), [events]);
 
   const { currentData: nurseryNames } = useListAccessionBatchNurseriesQuery(accessionId);
@@ -86,17 +112,17 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
 
   const renderEventDescription = useCallback(
     (event: EventLogEntryPayload): ReactNode => {
-      const description = renderAccessionEventDescription(
-        event,
-        strings,
+      const description = renderAccessionEventDescription(event, {
         colors,
+        nurseryNames,
+        renderPhotoSubject,
+        strings,
         viabilityTestWithdrawals,
-        nurseryNames
-      );
+      });
       const target = accessionEventTarget(event, viabilityTestWithdrawals);
 
-      // A photo whose file is no longer on the accession has nothing to open.
-      if (!target || (target.kind === 'photo' && !findTrailingFilename(target.fullText, accession?.photoFilenames))) {
+      // Photo rows carry their own link around the filename, so the whole row is never wrapped.
+      if (!target || target.kind === 'photo') {
         return description;
       }
 
@@ -114,7 +140,7 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
         </Link>
       );
     },
-    [accession?.photoFilenames, colors, nurseryNames, strings, viabilityTestWithdrawals]
+    [colors, nurseryNames, renderPhotoSubject, strings, viabilityTestWithdrawals]
   );
 
   if (!events && !isError) {
