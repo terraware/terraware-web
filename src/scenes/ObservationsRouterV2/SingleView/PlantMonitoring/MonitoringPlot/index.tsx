@@ -118,9 +118,24 @@ const MonitoringPlotDetails = (): JSX.Element => {
     return crumbsData;
   }, [observationId, plantingSite, plantingSiteIdParam, results?.isAdHoc, stratumName, strings.OBSERVATIONS]);
 
+  // the server exposes no deviation flag, so the explanation photo the field app is required to
+  // capture when a plot is set up >20m from its assigned location is the signal that it happened
+  const hasLocationDeviation = useMemo(
+    () => explanationPhotosEnabled && !!monitoringPlot?.photos?.some((photo) => photo.type === 'Explanation'),
+    [explanationPhotosEnabled, monitoringPlot?.photos]
+  );
+
   const title = useMemo(() => {
     const swCoordinatesLat = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
     const swCoordinatesLng = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
+
+    // where the plot was actually set up is recorded on the corner photos themselves; the southwest
+    // corner is the one the assigned coordinates above are taken from, so it is the comparable pair
+    const fieldSwCoordinates = hasLocationDeviation
+      ? monitoringPlot?.photos?.find(
+          (photo) => photo.type === 'Plot' && photo.position === 'SouthwestCorner' && photo.gpsCoordinates
+        )?.gpsCoordinates?.coordinates
+      : undefined;
 
     return (
       <Box display='flex' alignItems={'end'}>
@@ -151,8 +166,15 @@ const MonitoringPlotDetails = (): JSX.Element => {
                     : strings.TEMPORARY}
               </Typography>
               <Typography whiteSpace='nowrap'>
-                {strings.LOCATION}: {swCoordinatesLat}, {swCoordinatesLng}
+                {fieldSwCoordinates ? strings.ASSIGNED_LOCATION : strings.LOCATION}: {swCoordinatesLat},{' '}
+                {swCoordinatesLng}
               </Typography>
+              {fieldSwCoordinates && (
+                <Typography whiteSpace='nowrap'>
+                  {strings.FIELD_LOCATION}: {fieldSwCoordinates[1]}, {fieldSwCoordinates[0]}{' '}
+                  {strings.MORE_THAN_20M_FROM_ASSIGNED_LOCATION}
+                </Typography>
+              )}
               <Typography>
                 {strings.ELEVATION}: {monitoringPlot?.elevationMeters} {strings.METERS}
               </Typography>
@@ -170,7 +192,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
         </Tooltip>
       </Box>
     );
-  }, [monitoringPlot, stratum?.name, strings, substratum?.name, theme]);
+  }, [hasLocationDeviation, monitoringPlot, stratum?.name, strings, substratum?.name, theme]);
 
   const tabs = useMemo(() => {
     return [
@@ -192,13 +214,6 @@ const MonitoringPlotDetails = (): JSX.Element => {
     tabs,
     viewIdentifier: 'monitoringPlotObservation',
   });
-
-  // the server exposes no deviation flag, so the explanation photo the field app is required to
-  // capture when a plot is set up >20m from its assigned location is the signal that it happened
-  const hasLocationDeviation = useMemo(
-    () => explanationPhotosEnabled && !!monitoringPlot?.photos?.some((photo) => photo.type === 'Explanation'),
-    [explanationPhotosEnabled, monitoringPlot?.photos]
-  );
 
   // a permanent plot is observed repeatedly, so the banner is scoped to this plot's observation
   const plotObservationKey = `${observationId}-${monitoringPlotId}`;
