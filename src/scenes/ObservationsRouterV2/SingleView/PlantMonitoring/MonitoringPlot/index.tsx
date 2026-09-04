@@ -32,7 +32,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
   const { orgPreferences, selectedOrganization } = useOrganization();
   const updateUserPreferences = useUpdateUserPreferences();
   const organizationId = selectedOrganization?.id;
-  const explanationPhotosEnabled = isEnabled('Handling plots located too far from planned location');
+  const explanationPhotosEnabled = isEnabled('Handle plots too far');
   const [dismissedPlotObservationKey, setDismissedPlotObservationKey] = useState<string>();
   const params = useParams<{ observationId: string; stratumName: string; monitoringPlotId: string }>();
   const observationId = Number(params.observationId);

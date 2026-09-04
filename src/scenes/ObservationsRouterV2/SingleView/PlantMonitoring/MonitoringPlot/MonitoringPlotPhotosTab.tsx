@@ -17,7 +17,7 @@ import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouterV2/Sin
 const MonitoringPlotPhotosTab = () => {
   const theme = useTheme();
   const { strings } = useLocalization();
-  const explanationPhotosEnabled = isEnabled('Handling plots located too far from planned location');
+  const explanationPhotosEnabled = isEnabled('Handle plots too far');
 
   const params = useParams<{ observationId: string; stratumName: string; monitoringPlotId: string }>();
   const stratumName = params.stratumName;

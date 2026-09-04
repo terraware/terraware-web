@@ -59,7 +59,7 @@ const ActivityMediaItem = ({
 }: ActivityMediaItemProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const explanationPhotosEnabled = isEnabled('Handling plots located too far from planned location');
+  const explanationPhotosEnabled = isEnabled('Handle plots too far');
 
   const [isPreconditionFailedError, setIsPreconditionFailedError] = useState<boolean>(false);
 

@@ -94,7 +94,7 @@ const ActivityPhotoPreview = ({
   const { strings } = useLocalization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const theme = useTheme();
-  const explanationPhotosEnabled = isEnabled('Handling plots located too far from planned location');
+  const explanationPhotosEnabled = isEnabled('Handle plots too far');
 
   const [showPlaceholder, setShowPlaceholder] = useState<boolean | undefined>();
 

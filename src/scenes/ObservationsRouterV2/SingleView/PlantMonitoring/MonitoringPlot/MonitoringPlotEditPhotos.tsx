@@ -34,7 +34,7 @@ const MonitoringPlotEditPhotos = () => {
   const observationId = Number(params.observationId);
   const monitoringPlotId = Number(params.monitoringPlotId);
   const stratumName = params.stratumName;
-  const explanationPhotosEnabled = isEnabled('Handling plots located too far from planned location');
+  const explanationPhotosEnabled = isEnabled('Handle plots too far');
   const [upload] = useUploadOtherPlotMediaMutation();
   const [update] = useUpdatePlotPhotoMutation();
   const [deleteQuery] = useDeletePlotPhotoMutation();
