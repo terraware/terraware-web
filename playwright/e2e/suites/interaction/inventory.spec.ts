@@ -2,7 +2,7 @@ import { Locator, expect, test } from '@playwright/test';
 import { Page } from 'playwright-core';
 
 import { changeToSuperAdmin } from '../../utils/userUtils';
-import { exactOptions, selectOrg, waitFor } from '../../utils/utils';
+import { exactOptions, openNavItem, selectOrg, waitFor } from '../../utils/utils';
 
 test.describe('InventoryTests', () => {
   test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
@@ -13,8 +13,7 @@ test.describe('InventoryTests', () => {
   });
 
   test('Add A Batch (no accession)', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Seedlings' }).click();
-    await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
+    await openNavItem(page, 'Seedlings', 'Inventory');
     await page.locator('#new-inventory').click();
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Banana' }).locator('div').click();
@@ -60,8 +59,7 @@ test.describe('InventoryTests', () => {
   });
 
   test('Add A Batch from an Accession', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Seedlings' }).click();
-    await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
+    await openNavItem(page, 'Seedlings', 'Inventory');
     await page.locator('#new-inventory').click();
     await page.getByPlaceholder('Search or Select...').click();
     await page.locator('li').filter({ hasText: 'Kousa Dogwood' }).locator('div').click();
@@ -100,8 +98,7 @@ test.describe('InventoryTests', () => {
   });
 
   test('Transition Status and Withdraw Dead', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Seedlings' }).click();
-    await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
+    await openNavItem(page, 'Seedlings', 'Inventory');
     await page.getByRole('tab', { name: 'By Batch' }).click();
     const batchNumber = await getBatchNumberBySpeciesAndNursery(page, 'Kousa Dogwood', 'Nursery');
     await page.getByRole('link', { name: batchNumber }).click();
@@ -152,8 +149,7 @@ test.describe('InventoryTests', () => {
   });
 
   test('Transfer Nurseries', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Seedlings' }).click();
-    await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
+    await openNavItem(page, 'Seedlings', 'Inventory');
     await page.getByRole('tab', { name: 'By Batch' }).click();
     const batchNumber = await getBatchNumberBySpeciesAndNursery(page, 'Banana', 'Nursery');
     await page.getByRole('link', { name: batchNumber }).click();
@@ -230,8 +226,7 @@ test.describe('InventoryTests', () => {
       console.log(message.text());
     });
 
-    await page.getByRole('button', { name: 'Seedlings' }).click();
-    await page.getByRole('button', { name: 'Inventory', ...exactOptions }).click();
+    await openNavItem(page, 'Seedlings', 'Inventory');
     await page.getByRole('tab', { name: 'By Batch' }).click();
 
     const batchNumber = await getBatchNumberBySpeciesAndNursery(page, 'Kousa Dogwood', 'Nursery');
@@ -258,8 +253,7 @@ test.describe('InventoryTests', () => {
     await page.locator('#acknowledge-button').click();
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.getByRole('cell', { name: 'Withdrawal - Planting' }).nth(0)).toBeVisible();
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Planting Progress' }).click();
+    await openNavItem(page, 'Plantings', 'Planting Progress');
     await expect(page.getByRole('cell', { name: 'Planting Site' })).toBeVisible();
     await expect(page.getByRole('cell', { name: '60' })).toBeVisible();
     await page.getByRole('link', { name: '60' }).click();
@@ -276,8 +270,7 @@ test.describe('InventoryTests', () => {
   });
 
   test('Plants dashboard after outplanting', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
     await page.getByPlaceholder('Select...').click();
     await page.getByText('Planting Site', { exact: true }).click();
     await expect(page.getByText('60')).toBeVisible();
@@ -287,8 +280,7 @@ test.describe('InventoryTests', () => {
   });
 
   test('Withdrawals after outplanting', async ({ page }, testInfo) => {
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Planting Progress' }).click();
+    await openNavItem(page, 'Plantings', 'Planting Progress');
     const mapTab = page.locator('p.MuiTypography-root').filter({ hasText: 'Map', hasNotText: 'show for this' });
     await mapTab.click();
 

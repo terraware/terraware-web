@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../../utils/userUtils';
-import { selectOrg, waitFor } from '../../utils/utils';
+import { openNavItem, selectOrg, waitFor } from '../../utils/utils';
 
 test.describe('ObservationDetailsTests', () => {
   test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
@@ -9,8 +9,7 @@ test.describe('ObservationDetailsTests', () => {
     await page.goto('/');
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Observations' }).click();
+    await openNavItem(page, 'Plantings', 'Observations');
 
     // wait for table rows to load
     await waitFor(page, '#row1');

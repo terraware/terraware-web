@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../../utils/userUtils';
-import { selectOrg, waitFor } from '../../utils/utils';
+import { openNavItem, selectOrg, waitFor } from '../../utils/utils';
 
 test.describe('LocationTests', () => {
   test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
@@ -14,8 +14,7 @@ test.describe('LocationTests', () => {
   test('Create a Seedbank', async ({ page }, testInfo) => {
     const newSeedBankName = `My New Seed Bank-${new Date().getTime()}`;
 
-    await page.getByRole('button', { name: 'Locations' }).click();
-    await page.getByRole('button', { name: 'Seed Banks' }).click();
+    await openNavItem(page, 'Locations', 'Seed Banks');
 
     await page.getByRole('button', { name: 'Add Seed Bank' }).click();
 
@@ -58,8 +57,7 @@ test.describe('LocationTests', () => {
   test('Create a Nursery', async ({ page }, testInfo) => {
     const newNurseryName = `My New Nursery-${new Date().getTime()}`;
 
-    await page.getByRole('button', { name: 'Locations' }).click();
-    await page.getByRole('button', { name: 'Nurseries' }).click();
+    await openNavItem(page, 'Locations', 'Nurseries');
     await page.getByRole('button', { name: 'Add Nursery' }).click();
     await page.locator('#name').getByRole('textbox').fill(newNurseryName);
     await page.locator('textarea').click();

@@ -186,8 +186,8 @@ test.describe('AccessionTests', () => {
         ''
       );
       await page.locator(`#${accessionRow}-accessionNumber`).getByText(accessionId).click();
-      await page.getByRole('button', { name: 'Withdraw' }).waitFor({ state: 'visible' });
-      await page.getByRole('button', { name: 'Withdraw' }).click();
+      await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).waitFor({ state: 'visible' });
+      await page.getByRole('button', { name: 'Withdraw', ...exactOptions }).click();
 
       await page.getByPlaceholder('Select...').first().click();
       await page.getByText('Planting', { exact: true }).click();

@@ -8,7 +8,7 @@ import {
   uploadObservationData,
 } from '../../utils/observationUtils';
 import { changeToSuperAdmin } from '../../utils/userUtils';
-import { selectOrg, waitFor } from '../../utils/utils';
+import { openNavItem, selectOrg, waitFor } from '../../utils/utils';
 
 test.describe('ObservationDataUploadTests', () => {
   test.beforeEach(async ({ context, baseURL }) => {
@@ -38,8 +38,7 @@ test.describe('ObservationDataUploadTests', () => {
     await page.goto('/');
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Observations' }).click();
+    await openNavItem(page, 'Plantings', 'Observations');
     await page.getByRole('textbox').first().click();
     await page.locator('li.select-value', { hasText: 'All Planting Sites' }).click();
 

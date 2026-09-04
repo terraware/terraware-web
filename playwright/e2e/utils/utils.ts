@@ -18,9 +18,13 @@ export const selectOrg = async (page: Page, orgName: string) => {
 };
 
 export const openNavItem = async (page: Page, parentName: string, childName: string) => {
-  const child = page.getByRole('button', { name: childName, exact: true });
+  const section = page
+    .locator('.nav-item--has-children')
+    .filter({ has: page.getByRole('button', { name: parentName, exact: true }) });
+  await section.getByRole('button', { name: parentName, exact: true }).waitFor({ state: 'visible' });
+  const child = section.getByRole('button', { name: childName, exact: true });
   if (!(await child.isVisible().catch(() => false))) {
-    await page.getByRole('button', { name: parentName, exact: true }).click();
+    await section.getByRole('button', { name: parentName, exact: true }).click();
     await child.waitFor({ state: 'visible' });
   }
   await child.click();
