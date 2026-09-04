@@ -13,7 +13,20 @@ ACCESSION,Accesión,6a1389cb
 ACCESSION_BY_STATUS,Accesión por Estado,8d5df55b
 ACCESSION_DETAIL,Detalle de la accesión,dab2431a
 ACCESSION_DETAILS,Detalle de las accesiones,1fa5df58
+ACCESSION_EVENT_PHOTO_REPLACED,{0} fue reemplazada,c87c5b4c
+ACCESSION_EVENT_VIABILITY_TEST_ADDED,se inició una prueba de viabilidad,1ec9a61e
+ACCESSION_EVENT_VIABILITY_TEST_DELETED,se eliminó una prueba de viabilidad,131c982f
+ACCESSION_EVENT_VIABILITY_TEST_STARTED,inició una prueba de viabilidad de {0},241121fa
+ACCESSION_EVENT_VIABILITY_TEST_UPDATED,La prueba de viabilidad {0} cambió de {1} a {2},630ab02f
+ACCESSION_EVENT_WITHDRAWAL_ADDED,se agregó un retiro,66861582
+ACCESSION_EVENT_WITHDRAWAL_ADDED_FOR,retiró {0} para {1},60701bb4
+ACCESSION_EVENT_WITHDRAWAL_ADDED_QUANTITY,retiró {0},fb83504c
+ACCESSION_EVENT_WITHDRAWAL_ADDED_TO,retiró {0} a {1},8c38cd96
+ACCESSION_EVENT_WITHDRAWAL_DELETED,se eliminó un retiro,2fa169b8
+ACCESSION_EVENT_WITHDRAWAL_DELETED_FOR_VIABILITY_TEST,se eliminó un retiro para prueba de viabilidad,d9b09155
+ACCESSION_EVENT_WITHDRAWAL_UPDATED,El retiro {0} cambió de {1} a {2},8dd1f01b
 ACCESSION_HISTORY,Historial de accesiones,1e6eaa37
+ACCESSION_HISTORY_NO_EVENTS,Aún no hay historial.,f8822669
 ACCESSION_ID,ID de accesión,a87726c0
 ACCESSION_NUMBER_CHECKED_IN,¡La accesión {0} se ha ingresado correctamente!,b78da03c
 ACCESSIONS,Accesiones,5f4f92e5

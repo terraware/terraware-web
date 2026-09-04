@@ -198,6 +198,30 @@ const injectedRtkApi = api.injectEndpoints({
       transformResponse: (response: SearchCountApiResponse) => response.count,
     }),
 
+    listAccessionBatchNurseries: build.query<Map<number, string>, number>({
+      query: (accessionId) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          prefix: 'batches',
+          fields: ['id', 'facility_name'],
+          search: {
+            operation: 'field',
+            field: 'accession_id',
+            values: [`${accessionId}`],
+          },
+          count: 0,
+        },
+      }),
+      providesTags: [{ type: QueryTagTypes.NurseryBatches, id: 'LIST' }],
+      transformResponse: (response: { results: { id: string; facility_name?: string }[] }) =>
+        new Map(
+          response.results
+            .filter((result) => result.facility_name !== undefined)
+            .map((result) => [Number(result.id), result.facility_name as string])
+        ),
+    }),
+
     listBatchesByIds: build.query<NurseryBatchesSearchResponseElement[], ListBatchesByIdsApiArg>({
       query: (args) => ({
         url: '/api/v1/search',
@@ -330,6 +354,7 @@ type BatchSearchResponse = {
 };
 
 export const {
+  useListAccessionBatchNurseriesQuery,
   useLazyCountAllBatchesQuery,
   useLazyListBatchesByIdsQuery,
   useLazyListAllBatchesQuery,
