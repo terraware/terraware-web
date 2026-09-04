@@ -6,6 +6,7 @@ import { Button } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
@@ -16,6 +17,7 @@ import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouterV2/Sin
 const MonitoringPlotPhotosTab = () => {
   const theme = useTheme();
   const { strings } = useLocalization();
+  const explanationPhotosEnabled = isEnabled('Handle plots too far');
 
   const params = useParams<{ observationId: string; stratumName: string; monitoringPlotId: string }>();
   const stratumName = params.stratumName;
@@ -65,10 +67,14 @@ const MonitoringPlotPhotosTab = () => {
   }, [observationId, stratumName, monitoringPlotId, monitoringPlot?.monitoringPlotId, navigate]);
 
   const plotCornerPhotos = useMemo(() => {
-    return monitoringPlot?.photos?.filter((photo) => photo.position !== undefined && photo.type === 'Plot');
-  }, [monitoringPlot?.photos]);
+    return monitoringPlot?.photos?.filter(
+      (photo) =>
+        photo.position !== undefined &&
+        (photo.type === 'Plot' || (explanationPhotosEnabled && photo.type === 'Explanation'))
+    );
+  }, [explanationPhotosEnabled, monitoringPlot?.photos]);
 
-  const otherPhotos = useMemo(() => {
+  const otherPlotPhotos = useMemo(() => {
     return monitoringPlot?.photos?.filter((photo) => photo.position === undefined && photo.type === 'Plot');
   }, [monitoringPlot?.photos]);
 
@@ -103,11 +109,11 @@ const MonitoringPlotPhotosTab = () => {
             {strings.PHOTOS_AND_VIDEOS}
           </Typography>
           <Box marginBottom={4}>
-            {(otherPhotos?.length || 0) > 0 ? (
+            {(otherPlotPhotos?.length || 0) > 0 ? (
               <MonitoringPlotPhotosWithActions
                 observationId={observationId}
                 monitoringPlotId={monitoringPlot.monitoringPlotId}
-                photos={otherPhotos}
+                photos={otherPlotPhotos}
                 plantingSiteName={plantingSite?.name}
               />
             ) : (

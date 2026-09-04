@@ -226,6 +226,7 @@ ASSIGN_OWNER,Attribuer un propriétaire,dc696cfa
 ASSIGN_OWNER_ELLIPSIS,Attribuer un propriétaire...,8053cd0e
 ASSIGN_STRATA,Attribuer des strates,43b7aa27
 ASSIGNED,Désigné,29aa3dd8
+ASSIGNED_LOCATION,Emplacement attribué,9e0b2077
 ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre de plants observés par espèce enregistrés comme vivants. Les plants enregistrés comme préexistants ou dont l'espèce est inconnue ne sont pas inclus.,526a70bc
 ASSIGNED_PLOT_OBSERVATION,Observation de parcelle attribuée,9175acf6
 ASSIGNED_PLOT_OBSERVATION_TOOLTIP,Sélectionnez une observation de parcelle attribuée pour afficher les données d'observation sur la carte.,2a1963a4
@@ -774,6 +775,7 @@ FEEDBACK,Commentaires,2510edcc
 FEEDBACK_SHARED_WITH_PROJECT,Commentaires (partagés avec le projet),d56b8ddb
 FERN,Fougère,35767f4d
 FIELD,Champ,dc19e415
+FIELD_LOCATION,Emplacement sur le terrain,009654a6
 FIELD_NOTES,Notes de terrain,1c50984e
 FIFTY_TO_SEVENTY_FIVE_PERCENT,50 % à 75 %,174fb41a
 FILE_NAME,Nom du fichier,fc9f4f98
@@ -1235,6 +1237,7 @@ MONTH_12,Décembre,dc3ea137
 MORE,Plus,58c3e1ca
 MORE_INFO,Plus d'informations,50ec3d8a
 MORE_OPTIONS,Autres options,40289137
+MORE_THAN_20M_FROM_ASSIGNED_LOCATION,(à plus de 20 m de l'emplacement attribué),f3b60390
 MORTALITY_RATE,Taux de mortalité,f1ef57f9
 MORTALITY_RATE_IN_FIELD,Taux de mortalité dans champ (%),48a2d543
 MORTALITY_RATE_IN_FIELD_REQUIRED,Taux de mortalité sur le terrain (%) *,cdddfe98
@@ -1433,6 +1436,7 @@ OBSERVATION_EVENT,Événement d'observation,03d0c031
 OBSERVATION_EVENT_SCHEDULED,Un événement d'observation est prévu pour le {0} pour le(s) site(s) de plantation :,da489f7e
 OBSERVATION_EVENTS,Événements d'observation,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Les observations antérieures apparaissent avec une opacité décroissante.,03c6ea26
+OBSERVATION_EXPLANATION_PHOTO_LABEL,{0} : emplacement >20 m,c1fe1bd5
 OBSERVATION_PERIOD_WARN,La période d'observation ne peut excéder deux mois.,364a36c6
 OBSERVATION_PHOTO_CANNOT_DELETE_INFO,Les photos des coins de la parcelle ne peuvent pas être supprimées.,f045e547
 OBSERVATION_PHOTO_CANNOT_DELETE_TOOLTIP,Cette photo a été prise lors de l'observation et ne peut pas être supprimée.,c127ed8e
@@ -1688,6 +1692,7 @@ PLOT_DESCRIPTION,Description de la parcelle,67e5afa5
 PLOT_INFO,Informations sur la parcelle,38a9b59d
 PLOT_LIVE_PLANTS_TOOLTIP,Plantes vivantes correspond au nombre de plantes observées enregistrées comme vivantes. Les plantes enregistrées comme préexistantes ne sont pas incluses.,f7d2a77f
 PLOT_LOCATION,Emplacement de la placette,59f1374a
+PLOT_OBSERVATION_LOCATION_DEVIATION_INFO,Cette observation de parcelle a été réalisée à plus de 20 m de l'emplacement assigné. Exportez les données de la parcelle pour voir les coordonnées de localisation relevées sur le terrain.,32c9a47f
 PLOT_PLANT_DENSITY_TOOLTIP,La densité de plantes (plantes par hectare) est calculée en fonction du nombre de plantes observées enregistrées comme vivantes. Les plantes enregistrées comme préexistantes ne sont pas incluses.,32ced1ba
 PLOT_SELECTION,Sélection de parcelles,ba150031
 PLOT_SPECIES_TOOLTIP,"Espèces correspond au nombre d'espèces représentées par l'ensemble des plantes observées, y compris les plantes enregistrées comme préexistantes.",fd5ff6d0

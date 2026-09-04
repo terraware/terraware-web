@@ -6,7 +6,12 @@ import { Button, Icon, Textfield } from '@terraware/web-components';
 import PhotoPreview from 'src/components/Photo/PhotoPreview';
 import { API_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers/hooks';
-import { MonitoringPlotMediaItem, getPositionLabel, getQuadratLabel } from 'src/types/Observations';
+import {
+  MonitoringPlotMediaItem,
+  getExplanationPhotoLabel,
+  getPositionLabel,
+  getQuadratLabel,
+} from 'src/types/Observations';
 import { shouldShowHeicPlaceholder } from 'src/utils/images';
 
 type MonitoringPlotPhotoPreviewProps = {
@@ -90,6 +95,11 @@ const MonitoringPlotPhotoPreview = ({
           {getQuadratLabel(mediaItem.data.position, strings)}
         </Typography>
       )}
+      {mediaItem.data.type === 'Explanation' && mediaItem.data.position && (
+        <Typography marginBottom={3} color={theme.palette.TwClrBaseBlack}>
+          {getExplanationPhotoLabel(mediaItem.data.position, monitoringPlotName, strings)}
+        </Typography>
+      )}
       <Box display='flex' flexDirection='column' gap={2}>
         <Box display='flex' gap={2}>
           <Box flexShrink={0} position='relative'>
@@ -140,7 +150,7 @@ const MonitoringPlotPhotoPreview = ({
                   fontWeight={400}
                   paddingLeft={theme.spacing(1)}
                 >
-                  {mediaItem.data.type === 'Plot'
+                  {mediaItem.data.type === 'Plot' || mediaItem.data.type === 'Explanation'
                     ? strings.PLOT_CORNER_PHOTOS_CANNOT_BE_DELETED
                     : mediaItem.data.type === 'Soil'
                       ? strings.SOIL_PHOTO_CANNOT_BE_DELETED

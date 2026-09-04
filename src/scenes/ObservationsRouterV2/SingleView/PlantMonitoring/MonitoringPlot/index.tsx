@@ -1,17 +1,19 @@
-import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams, useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Tabs, Tooltip } from '@terraware/web-components';
+import { Message, Tabs, Tooltip } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
-import { useLocalization } from 'src/providers';
+import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
+import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import VirtualWalkthroughModal from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughModal';
 import useStickyTabs from 'src/utils/useStickyTabs';
@@ -20,9 +22,18 @@ import MonitoringPlotObservationDataTab from './MonitoringPlotObservationDataTab
 import MonitoringPlotPhotosTab from './MonitoringPlotPhotosTab';
 import VirtualPlotData from './VirtualPlotData';
 
+// dismissals are tracked per plot observation, so one deviated plot being acknowledged doesn't
+// hide the notice on the next one
+const PREF_DISMISSED_LOCATION_DEVIATION_BANNERS = 'observations.dismissedPlotLocationDeviationBanners';
+
 const MonitoringPlotDetails = (): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
+  const { orgPreferences, selectedOrganization } = useOrganization();
+  const updateUserPreferences = useUpdateUserPreferences();
+  const organizationId = selectedOrganization?.id;
+  const explanationPhotosEnabled = isEnabled('Handle plots too far');
+  const [dismissedPlotObservationKey, setDismissedPlotObservationKey] = useState<string>();
   const params = useParams<{ observationId: string; stratumName: string; monitoringPlotId: string }>();
   const observationId = Number(params.observationId);
   const stratumName = params.stratumName;
@@ -107,9 +118,24 @@ const MonitoringPlotDetails = (): JSX.Element => {
     return crumbsData;
   }, [observationId, plantingSite, plantingSiteIdParam, results?.isAdHoc, stratumName, strings.OBSERVATIONS]);
 
+  // an explanation photo indicates a location deviation (when a plot is set up
+  // > 20m from its assigned location)
+  const hasLocationDeviation = useMemo(
+    () => explanationPhotosEnabled && !!monitoringPlot?.photos?.some((photo) => photo.type === 'Explanation'),
+    [explanationPhotosEnabled, monitoringPlot?.photos]
+  );
+
   const title = useMemo(() => {
     const swCoordinatesLat = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[1];
     const swCoordinatesLng = monitoringPlot?.boundary?.coordinates?.[0]?.[0]?.[0];
+
+    // where the plot was actually set up is recorded on the corner photos themselves; the southwest
+    // corner is the one the assigned coordinates above are taken from, so it is the comparable pair
+    const fieldSwCoordinates = explanationPhotosEnabled
+      ? monitoringPlot?.photos?.find(
+          (photo) => photo.type === 'Plot' && photo.position === 'SouthwestCorner' && photo.gpsCoordinates
+        )?.gpsCoordinates?.coordinates
+      : undefined;
 
     return (
       <Box display='flex' alignItems={'end'}>
@@ -140,8 +166,14 @@ const MonitoringPlotDetails = (): JSX.Element => {
                     : strings.TEMPORARY}
               </Typography>
               <Typography whiteSpace='nowrap'>
-                {strings.LOCATION}: {swCoordinatesLat}, {swCoordinatesLng}
+                {strings.ASSIGNED_LOCATION}: {swCoordinatesLat}, {swCoordinatesLng}
               </Typography>
+              {fieldSwCoordinates && (
+                <Typography whiteSpace='nowrap'>
+                  {strings.FIELD_LOCATION}: {fieldSwCoordinates[1]}, {fieldSwCoordinates[0]}
+                  {hasLocationDeviation ? ` ${strings.MORE_THAN_20M_FROM_ASSIGNED_LOCATION}` : ''}
+                </Typography>
+              )}
               <Typography>
                 {strings.ELEVATION}: {monitoringPlot?.elevationMeters} {strings.METERS}
               </Typography>
@@ -159,7 +191,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
         </Tooltip>
       </Box>
     );
-  }, [monitoringPlot, stratum?.name, strings, substratum?.name, theme]);
+  }, [explanationPhotosEnabled, hasLocationDeviation, monitoringPlot, stratum?.name, strings, substratum?.name, theme]);
 
   const tabs = useMemo(() => {
     return [
@@ -182,6 +214,29 @@ const MonitoringPlotDetails = (): JSX.Element => {
     viewIdentifier: 'monitoringPlotObservation',
   });
 
+  // a permanent plot is observed repeatedly, so the banner is scoped to this plot's observation
+  const plotObservationKey = `${observationId}-${monitoringPlotId}`;
+
+  const dismissedLocationDeviationBanners = useMemo(
+    () => (orgPreferences[PREF_DISMISSED_LOCATION_DEVIATION_BANNERS] as string[] | undefined) ?? [],
+    [orgPreferences]
+  );
+
+  const showLocationDeviationBanner =
+    hasLocationDeviation &&
+    !dismissedLocationDeviationBanners.includes(plotObservationKey) &&
+    dismissedPlotObservationKey !== plotObservationKey;
+
+  const dismissLocationDeviationBanner = useCallback(() => {
+    // remember which plot was dismissed rather than a bare flag: the route reuses this component
+    // when navigating between plots, so a boolean would carry over to the next plot
+    setDismissedPlotObservationKey(plotObservationKey);
+    if (organizationId !== undefined) {
+      const dismissed = Array.from(new Set([...dismissedLocationDeviationBanners, plotObservationKey]));
+      void updateUserPreferences({ [PREF_DISMISSED_LOCATION_DEVIATION_BANNERS]: dismissed }, organizationId);
+    }
+  }, [dismissedLocationDeviationBanners, organizationId, plotObservationKey, updateUserPreferences]);
+
   const virtualWalkthroughParam = searchParams.get('virtualWalkthrough');
   const virtualWalkthroughFileId = virtualWalkthroughParam ? Number(virtualWalkthroughParam) : undefined;
 
@@ -201,6 +256,17 @@ const MonitoringPlotDetails = (): JSX.Element => {
           onClose={handleCloseVirtualWalkthroughModal}
           belowComponent={<VirtualPlotData monitoringPlot={monitoringPlot} plantingSiteId={results.plantingSiteId} />}
         />
+      )}
+      {showLocationDeviationBanner && (
+        <Box marginBottom={theme.spacing(4)} width={'100%'}>
+          <Message
+            type='page'
+            priority='info'
+            body={strings.PLOT_OBSERVATION_LOCATION_DEVIATION_INFO}
+            showCloseButton
+            onClose={dismissLocationDeviationBanner}
+          />
+        </Box>
       )}
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
       <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />

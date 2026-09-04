@@ -7,15 +7,16 @@ import { Icon } from '@terraware/web-components';
 import ImageLightbox from 'src/components/common/ImageLightbox';
 import { useLocalization } from 'src/providers';
 import { useLazyGetObservationMediaStreamQuery } from 'src/queries/generated/observations';
-import { ObservationMonitoringPlotPosition } from 'src/types/Observations';
+import { ObservationMonitoringPlotMediaType, ObservationMonitoringPlotPosition } from 'src/types/Observations';
 
 export type MediaFile = {
   fileId: number;
   fileName: string;
   caption?: string;
+  // the kind of media, not the observation photo type -- see photoType
   type: 'Photo' | 'Video';
   position?: ObservationMonitoringPlotPosition;
-  isQuadrat: boolean;
+  photoType?: ObservationMonitoringPlotMediaType;
 };
 
 type MediaItemProps = {

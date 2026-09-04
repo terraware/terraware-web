@@ -42,6 +42,14 @@ describe('isCornerPhoto', () => {
     );
   });
 
+  // an explanation photo carries the corner it was taken from, so it reads as a corner photo --
+  // which is what makes it undeletable and gives it the corner "cannot be deleted" message
+  test('returns true for explanation photos', () => {
+    expect(
+      isCornerPhoto({ observation: { monitoringPlotNumber: 1, type: 'Explanation', position: 'SouthwestCorner' } })
+    ).toBe(true);
+  });
+
   test('returns false when position is absent', () => {
     expect(isCornerPhoto({ observation: { monitoringPlotNumber: 1, type: 'Plot' } })).toBe(false);
   });
@@ -64,6 +72,14 @@ describe('isUndeletableObservationPhoto', () => {
 
   test('returns true for soil photos', () => {
     expect(isUndeletableObservationPhoto({ observation: { monitoringPlotNumber: 1, type: 'Soil' } })).toBe(true);
+  });
+
+  test('returns true for explanation photos', () => {
+    expect(
+      isUndeletableObservationPhoto({
+        observation: { monitoringPlotNumber: 1, type: 'Explanation', position: 'SouthwestCorner' },
+      })
+    ).toBe(true);
   });
 
   test('returns false for plot photos without a corner position', () => {
@@ -94,6 +110,14 @@ describe('isCaptionReadOnly', () => {
     expect(isCaptionReadOnly({ observation: { monitoringPlotNumber: 1, type: 'Plot' } })).toBe(false);
   });
 
+  // the caption of an explanation photo is the user's explanation, so it stays editable even
+  // though the photo carries a corner position
+  test('returns false for explanation photos', () => {
+    expect(
+      isCaptionReadOnly({ observation: { monitoringPlotNumber: 1, type: 'Explanation', position: 'SouthwestCorner' } })
+    ).toBe(false);
+  });
+
   test('returns false when observation is absent', () => {
     expect(isCaptionReadOnly({})).toBe(false);
   });
@@ -105,12 +129,15 @@ describe('getObsPhotoTypeLabel', () => {
     NORTHWEST_CORNER: 'Northwest corner',
     SOUTHEAST_CORNER: 'Southeast corner',
     SOUTHWEST_CORNER: 'Southwest corner',
+    OBSERVATION_EXPLANATION_PHOTO_LABEL: '{0}: >20m location',
     PHOTO_NORTHEAST_QUADRAT: 'Northeast Quadrat',
     PHOTO_NORTHWEST_QUADRAT: 'Northwest Quadrat',
     PHOTO_SOUTHEAST_QUADRAT: 'Southeast Quadrat',
     PHOTO_SOUTHWEST_QUADRAT: 'Southwest Quadrat',
     SOIL: 'Soil',
-  } as Parameters<typeof getObsPhotoTypeLabel>[1];
+    formatString: (template: string, ...args: unknown[]) =>
+      template.replace(/\{(\d+)\}/g, (_match, index: string) => String(args[Number(index)])),
+  } as unknown as Parameters<typeof getObsPhotoTypeLabel>[1];
 
   test('returns undefined when observation is absent', () => {
     expect(getObsPhotoTypeLabel({}, strings)).toBeUndefined();
@@ -150,5 +177,31 @@ describe('getObsPhotoTypeLabel', () => {
 
   test('returns plot prefix + Soil for soil photos', () => {
     expect(getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 7, type: 'Soil' } }, strings)).toBe('7 Soil');
+  });
+
+  test.each([
+    ['NortheastCorner', '9 Northeast corner: >20m location'],
+    ['NorthwestCorner', '9 Northwest corner: >20m location'],
+    ['SoutheastCorner', '9 Southeast corner: >20m location'],
+    ['SouthwestCorner', '9 Southwest corner: >20m location'],
+  ] as const)('returns the >20m location label for explanation photo position %s', (position, expected) => {
+    expect(
+      getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 9, type: 'Explanation', position } }, strings, true)
+    ).toBe(expected);
+  });
+
+  test('returns undefined for explanation photos when the feature is off', () => {
+    expect(
+      getObsPhotoTypeLabel(
+        { observation: { monitoringPlotNumber: 9, type: 'Explanation', position: 'SouthwestCorner' } },
+        strings
+      )
+    ).toBeUndefined();
+  });
+
+  test('returns undefined for an explanation photo without a position', () => {
+    expect(
+      getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 9, type: 'Explanation' } }, strings, true)
+    ).toBeUndefined();
   });
 });
