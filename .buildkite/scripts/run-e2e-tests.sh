@@ -31,15 +31,19 @@ run_tests() {
   )
 
   echo "--- :playwright: ${label}"
+  if timeout 20m "${docker_cmd[@]}"; then
+    return 0
+  fi
+  local exit_code=$?
+
   # Retry once on timeout.
-  timeout 20m "${docker_cmd[@]}" || {
-    if [ $? -eq 124 ]; then
-      echo "Tests timed out, retrying once..."
-      timeout 20m "${docker_cmd[@]}"
-    else
-      exit 1
-    fi
-  }
+  if [ "$exit_code" -eq 124 ]; then
+    echo "Tests timed out, retrying once..."
+    timeout 20m "${docker_cmd[@]}"
+    return $?
+  fi
+
+  return "$exit_code"
 }
 
 # Run screenshot tests first so they see a clean DB state before other tests
@@ -54,6 +58,12 @@ run_tests() {
 
 # The shell inside Docker expands the glob to all spec files directly in the
 # suites directory, excluding the screenshots subdirectory.
-run_tests "Run remaining end-to-end tests" "playwright/e2e/suites/interaction"
+if run_tests "Run remaining end-to-end tests" "playwright/e2e/suites/interaction"; then
+  status=0
+else
+  status=1
+fi
 
 .buildkite/scripts/upload-playwright-results.sh
+
+exit $status
