@@ -8,23 +8,34 @@ import { useLocalization } from 'src/providers';
 import { EventLogEntryPayload } from 'src/queries/generated/events';
 
 type EventLogProps = {
+  /** Renders the event list expanded on mount instead of collapsed. */
+  defaultExpanded?: boolean;
+  /** Rendered in place of nothing when there are no events, e.g. for a standalone history tab. */
+  emptyState?: ReactNode;
   events?: EventLogEntryPayload[];
   filterEvent?: (event: EventLogEntryPayload) => boolean;
   getUpdatedFieldLabel?: (event: EventLogEntryPayload) => ReactNode;
+  /** Hides the "last modified" line and the expand/collapse toggle, leaving just the event list. */
+  hideToggle?: boolean;
   isLoading?: boolean;
   renderEventDescription?: (event: EventLogEntryPayload) => ReactNode;
 };
 
 const EventLog = ({
+  defaultExpanded,
+  emptyState,
   events,
   filterEvent,
   getUpdatedFieldLabel,
+  hideToggle,
   isLoading,
   renderEventDescription,
 }: EventLogProps): JSX.Element | null => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const [showEventLog, setShowEventLog] = useState(false);
+  const [showEventLog, setShowEventLog] = useState(defaultExpanded ?? false);
+  // Hiding the toggle removes the only way to expand, so that mode always shows the list.
+  const eventsVisible = hideToggle || showEventLog;
 
   const lastEvent = useMemo(() => events?.[0], [events]);
   const filteredEvents = useMemo(() => (filterEvent ? events?.filter(filterEvent) : events), [events, filterEvent]);
@@ -68,28 +79,30 @@ const EventLog = ({
   );
 
   if (!lastEvent) {
-    return null;
+    return emptyState && !isLoading ? <Box>{emptyState}</Box> : null;
   }
 
   return (
     <Box>
-      <Box display='flex' alignItems='center'>
-        <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrBaseBlack} marginRight='16px'>
-          {strings.formatString(
-            strings.LAST_MODIFIED_ON_BY,
-            DateTime.fromMillis(new Date(lastEvent.timestamp).getTime()).toFormat('yyyy-MM-dd'),
-            lastEvent.userName
-          )}
-        </Typography>
-        <Button
-          priority='ghost'
-          label={strings.CHANGE_HISTORY}
-          onClick={toggleEventLog}
-          sx={{ fontWeight: '400 !important', '&:focus': { outline: 'none !important' } }}
-          rightIcon={showEventLog ? 'chevronUp' : 'chevronDown'}
-        />
-      </Box>
-      {showEventLog && !isLoading && (
+      {!hideToggle && (
+        <Box display='flex' alignItems='center'>
+          <Typography fontSize='14px' fontWeight={400} color={theme.palette.TwClrBaseBlack} marginRight='16px'>
+            {strings.formatString(
+              strings.LAST_MODIFIED_ON_BY,
+              DateTime.fromMillis(new Date(lastEvent.timestamp).getTime()).toFormat('yyyy-MM-dd'),
+              lastEvent.userName
+            )}
+          </Typography>
+          <Button
+            priority='ghost'
+            label={strings.CHANGE_HISTORY}
+            onClick={toggleEventLog}
+            sx={{ fontWeight: '400 !important', '&:focus': { outline: 'none !important' } }}
+            rightIcon={showEventLog ? 'chevronUp' : 'chevronDown'}
+          />
+        </Box>
+      )}
+      {eventsVisible && !isLoading && (
         <Box>
           {filteredEvents?.map((event, index) => {
             const dateModified = DateTime.fromMillis(new Date(event.timestamp).getTime()).toFormat('yyyy-MM-dd');
