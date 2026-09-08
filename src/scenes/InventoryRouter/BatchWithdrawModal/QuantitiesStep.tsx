@@ -3,6 +3,7 @@ import React, { type JSX, useEffect, useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import { useLocalization, useOrganization } from 'src/providers';
+import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { SpeciesTargetForSubstratum } from 'src/queries/search/speciesTargetsForSubstratum';
 import { NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
@@ -35,12 +36,14 @@ const QuantitiesStep = ({ batches, draft, speciesTargets, setWithdrawByBatch }: 
     draft.substratumId !== undefined;
 
   const [listPlantingSites, { data: plantingSitesData }] = useLazyListPlantingSitesQuery();
+  const [listPlantingSeasons, { data: plantingSeasonsData }] = useLazyListPlantingSeasonsQuery();
 
   useEffect(() => {
     if (isPlanting && organizationId) {
       void listPlantingSites({ organizationId, full: true }, true);
+      void listPlantingSeasons({ organizationId }, true);
     }
-  }, [isPlanting, listPlantingSites, organizationId]);
+  }, [isPlanting, listPlantingSeasons, listPlantingSites, organizationId]);
 
   const plantingDestination = useMemo(() => {
     if (!isPlanting) {
@@ -55,6 +58,13 @@ const QuantitiesStep = ({ batches, draft, speciesTargets, setWithdrawByBatch }: 
       substratumName: substratum?.name,
     };
   }, [draft.plantingSiteId, draft.stratumId, draft.substratumId, isPlanting, plantingSitesData]);
+
+  const plantingSeasonName = useMemo(() => {
+    if (!isPlanting || draft.plantingSeasonId === undefined) {
+      return undefined;
+    }
+    return (plantingSeasonsData?.seasons ?? []).find((s) => s.id === draft.plantingSeasonId)?.name;
+  }, [draft.plantingSeasonId, isPlanting, plantingSeasonsData]);
 
   // Group batches by species so we can render one box per species, sorted by
   // scientific name for stable order.
@@ -80,25 +90,28 @@ const QuantitiesStep = ({ batches, draft, speciesTargets, setWithdrawByBatch }: 
   }, [draft.destinationFacilityId, isNurseryTransfer, selectedOrganization]);
 
   return (
-    <Box display='flex' flexDirection='column' gap={theme.spacing(3)}>
+    <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
       {plantingDestination?.siteName && (
-        <Box display='flex' flexWrap='wrap' columnGap={theme.spacing(4)} rowGap={theme.spacing(2)} textAlign='left'>
+        <Box
+          display='flex'
+          flexWrap='wrap'
+          columnGap={theme.spacing(4)}
+          rowGap={theme.spacing(2)}
+          textAlign='left'
+          paddingLeft={theme.spacing(2)}
+        >
           <Box>
             <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
               {strings.PLANTING_SITE}
             </Typography>
-            <Typography fontSize='16px' fontWeight={500}>
-              {plantingDestination.siteName}
-            </Typography>
+            <Typography fontSize='14px'>{plantingDestination.siteName}</Typography>
           </Box>
           {plantingDestination.stratumName && (
             <Box>
               <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
                 {strings.STRATUM}
               </Typography>
-              <Typography fontSize='16px' fontWeight={500}>
-                {plantingDestination.stratumName}
-              </Typography>
+              <Typography fontSize='14px'>{plantingDestination.stratumName}</Typography>
             </Box>
           )}
           {plantingDestination.substratumName && (
@@ -106,11 +119,18 @@ const QuantitiesStep = ({ batches, draft, speciesTargets, setWithdrawByBatch }: 
               <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
                 {strings.SUBSTRATUM}
               </Typography>
-              <Typography fontSize='16px' fontWeight={500}>
-                {plantingDestination.substratumName}
-              </Typography>
+              <Typography fontSize='14px'>{plantingDestination.substratumName}</Typography>
             </Box>
           )}
+        </Box>
+      )}
+
+      {plantingSeasonName && (
+        <Box textAlign='left' paddingLeft={theme.spacing(2)}>
+          <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+            {strings.PLANTING_SEASON}
+          </Typography>
+          <Typography fontSize='14px'>{plantingSeasonName}</Typography>
         </Box>
       )}
 
@@ -119,9 +139,7 @@ const QuantitiesStep = ({ batches, draft, speciesTargets, setWithdrawByBatch }: 
           <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
             {strings.NURSERY}
           </Typography>
-          <Typography fontSize='16px' fontWeight={500}>
-            {destinationNurseryName}
-          </Typography>
+          <Typography fontSize='14px'>{destinationNurseryName}</Typography>
         </Box>
       )}
 
