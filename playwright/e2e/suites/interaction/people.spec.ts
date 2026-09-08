@@ -7,15 +7,32 @@ import { exactOptions, selectOrg, waitFor } from '../../utils/utils';
 
 type OrganizationRoleLabel = 'Contributor' | 'Manager' | 'Admin';
 
-// Each run invites a brand new person so the tests don't depend on (or clobber) the seeded org members.
-const uniqueEmail = () => `e2e-person-${Date.now()}-${Math.round(Math.random() * 100000)}@terraformation.com`;
+const ORG_NAME = 'Empty Organization';
+const PERSON = {
+  email: 'contributor@terraformation.com',
+  firstName: 'Contributor',
+  lastName: 'User',
+};
 
 const personModal = (page: Page) => page.locator('.dialog-box');
 
 const displayedField = (page: Page, label: string) =>
   page.locator(`label.textfield-label:has-text("${label}") + p.textfield-value--display`);
 
-const personRow = (page: Page, email: string) => page.locator('#people-table').locator('tr').filter({ hasText: email });
+const personRow = (page: Page) => page.locator('#people-table').locator('tr').filter({ hasText: PERSON.email });
+
+const openPeopleList = async (page: Page) => {
+  await page.goto('/');
+  await waitFor(page, '#home');
+  await selectOrg(page, ORG_NAME);
+  await navigateToPeople(page);
+  await waitFor(page, '#row1');
+};
+
+const backToPeopleList = async (page: Page) => {
+  await page.locator('#back').click();
+  await waitFor(page, '#row1');
+};
 
 const selectRole = async (page: Page, role: OrganizationRoleLabel) => {
   const modal = personModal(page);
@@ -26,10 +43,10 @@ const selectRole = async (page: Page, role: OrganizationRoleLabel) => {
     .click();
 };
 
-// Invites a person from the People list and leaves the browser on their profile page.
-const addPerson = async (page: Page, email: string, role: OrganizationRoleLabel) => {
+// Adds the person from the People list and leaves the browser on their profile page.
+const addPerson = async (page: Page, role: OrganizationRoleLabel) => {
   await page.locator('#new-person').click();
-  await personModal(page).locator('#email').getByRole('textbox').fill(email);
+  await personModal(page).locator('#email').getByRole('textbox').fill(PERSON.email);
   await selectRole(page, role);
   await page.locator('#saveNewPerson').click();
 
@@ -37,43 +54,55 @@ const addPerson = async (page: Page, email: string, role: OrganizationRoleLabel)
   await expect(page).toHaveURL(/\/people\/\d+/);
 };
 
-const backToPeopleList = async (page: Page) => {
-  await page.locator('#back').click();
-  await waitFor(page, '#people-table');
+const removePerson = async (page: Page) => {
+  await personRow(page).getByRole('checkbox').check();
+  await page.getByRole('button', { name: 'Remove', ...exactOptions }).click();
+
+  await expect(page.getByText('Remove Person', exactOptions)).toBeVisible();
+  await page.locator('#removePeople').click();
+
+  await expect(page.getByText('Changes Saved!')).toBeVisible();
+  await expect(personRow(page)).toBeHidden();
+};
+
+const removePersonIfPresent = async (page: Page) => {
+  if (await personRow(page).isVisible()) {
+    await removePerson(page);
+  }
 };
 
 test.describe('PeopleTests', () => {
   test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
     await changeToSuperAdmin(context, baseURL);
-    await page.goto('/');
-    await waitFor(page, '#home');
-    await selectOrg(page, 'Terraformation (staging)');
-    await navigateToPeople(page);
+    await openPeopleList(page);
+    await removePersonIfPresent(page);
+  });
+
+  test.afterEach(async ({ page }, testInfo) => {
+    await openPeopleList(page);
+    await removePersonIfPresent(page);
   });
 
   test('Add a person to the organization', async ({ page }, testInfo) => {
-    const email = uniqueEmail();
+    await addPerson(page, 'Manager');
 
-    await addPerson(page, email, 'Manager');
-
-    // The profile of the person we just invited: no name yet, since they haven't accepted.
-    await expect(displayedField(page, 'Email')).toHaveText(email);
+    await expect(displayedField(page, 'Email')).toHaveText(PERSON.email);
+    await expect(displayedField(page, 'First Name')).toHaveText(PERSON.firstName);
+    await expect(displayedField(page, 'Last Name')).toHaveText(PERSON.lastName);
     await expect(displayedField(page, 'Role')).toHaveText('Manager');
 
     await backToPeopleList(page);
 
-    await expect(personRow(page, email)).toBeVisible();
-    await expect(personRow(page, email)).toContainText('Manager');
+    await expect(personRow(page)).toBeVisible();
+    await expect(personRow(page)).toContainText('Manager');
   });
 
   test("Update a person's role", async ({ page }, testInfo) => {
-    const email = uniqueEmail();
-
-    await addPerson(page, email, 'Contributor');
+    await addPerson(page, 'Contributor');
     await expect(displayedField(page, 'Role')).toHaveText('Contributor');
 
     await page.getByRole('button', { name: 'Edit Person', ...exactOptions }).click();
-    await expect(personModal(page).getByText(email, exactOptions)).toBeVisible();
+    await expect(personModal(page).getByText(PERSON.email, exactOptions)).toBeVisible();
     // The email of an existing person is fixed; only the role can be changed.
     await expect(personModal(page).locator('#email').getByRole('textbox')).toBeDisabled();
 
@@ -85,22 +114,14 @@ test.describe('PeopleTests', () => {
 
     await backToPeopleList(page);
 
-    await expect(personRow(page, email)).toContainText('Admin');
+    await expect(personRow(page)).toContainText('Admin');
   });
 
   test('Remove a person from the organization', async ({ page }, testInfo) => {
-    const email = uniqueEmail();
-
-    await addPerson(page, email, 'Contributor');
+    await addPerson(page, 'Contributor');
     await backToPeopleList(page);
+    await expect(personRow(page)).toBeVisible();
 
-    await personRow(page, email).getByRole('checkbox').check();
-    await page.getByRole('button', { name: 'Remove', ...exactOptions }).click();
-
-    await expect(page.getByText('Remove Person', exactOptions)).toBeVisible();
-    await page.locator('#removePeople').click();
-
-    await expect(page.getByText('Changes Saved!')).toBeVisible();
-    await expect(personRow(page, email)).toBeHidden();
+    await removePerson(page);
   });
 });
