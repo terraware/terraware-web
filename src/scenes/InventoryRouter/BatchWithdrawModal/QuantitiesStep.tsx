@@ -135,7 +135,14 @@ const QuantitiesStep = ({ batches, draft, speciesTargets, setWithdrawByBatch }: 
       )}
 
       {destinationNurseryName && (
-        <Box display='grid' gridTemplateColumns='110px 1fr' gap={theme.spacing(2)} alignItems='center' textAlign='left'>
+        <Box
+          display='grid'
+          gridTemplateColumns='110px 1fr'
+          gap={theme.spacing(2)}
+          alignItems='center'
+          textAlign='left'
+          paddingLeft={theme.spacing(2)}
+        >
           <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
             {strings.NURSERY}
           </Typography>
