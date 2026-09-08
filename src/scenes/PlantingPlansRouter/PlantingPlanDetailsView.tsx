@@ -34,7 +34,7 @@ const readStoredSegment = (): PlantingPlanSegment => {
 const PlantingPlanDetailsView = (): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
+  const { isDesktop, isMobile } = useDeviceInfo();
 
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
@@ -118,14 +118,25 @@ const PlantingPlanDetailsView = (): JSX.Element => {
   const showAddSeasonButton = segment === 'plantingSeasons';
 
   const rightComponent = showAddSeasonButton ? (
-    <Button
-      id='addPlantingSeason'
-      icon='plus'
-      label={strings.ADD_PLANTING_SEASON}
-      onClick={openAddSeasonModal}
-      size='medium'
-      style={isMobile ? { width: '100%' } : undefined}
-    />
+    <Box
+      sx={
+        isDesktop
+          ? undefined
+          : {
+              marginLeft: isMobile ? theme.spacing(-3) : 0,
+              paddingTop: theme.spacing(1),
+              textAlign: isMobile ? 'center' : 'right',
+            }
+      }
+    >
+      <Button
+        id='addPlantingSeason'
+        icon='plus'
+        label={strings.ADD_PLANTING_SEASON}
+        onClick={openAddSeasonModal}
+        size='medium'
+      />
+    </Box>
   ) : undefined;
 
   return (
