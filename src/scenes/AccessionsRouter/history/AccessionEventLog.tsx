@@ -74,7 +74,6 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
 
   const closeModal = useCallback(() => setOpenedTarget(undefined), []);
 
-  // Only the filename opens the photo; the surrounding label and action read as plain text.
   const renderPhotoSubject = useCallback(
     (fullText: string): JSX.Element | string => {
       const filename = findTrailingFilename(fullText, accession?.photoFilenames);
@@ -121,7 +120,6 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
       });
       const target = accessionEventTarget(event, viabilityTestWithdrawals);
 
-      // Photo rows carry their own link around the filename, so the whole row is never wrapped.
       if (!target || target.kind === 'photo') {
         return description;
       }
