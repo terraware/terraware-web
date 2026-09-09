@@ -9,7 +9,6 @@ import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
@@ -32,7 +31,6 @@ const MonitoringPlotDetails = (): JSX.Element => {
   const { orgPreferences, selectedOrganization } = useOrganization();
   const updateUserPreferences = useUpdateUserPreferences();
   const organizationId = selectedOrganization?.id;
-  const explanationPhotosEnabled = isEnabled('Handle plots too far');
   const [dismissedPlotObservationKey, setDismissedPlotObservationKey] = useState<string>();
   const params = useParams<{ observationId: string; stratumName: string; monitoringPlotId: string }>();
   const observationId = Number(params.observationId);
@@ -121,8 +119,8 @@ const MonitoringPlotDetails = (): JSX.Element => {
   // an explanation photo indicates a location deviation (when a plot is set up
   // > 20m from its assigned location)
   const hasLocationDeviation = useMemo(
-    () => explanationPhotosEnabled && !!monitoringPlot?.photos?.some((photo) => photo.type === 'Explanation'),
-    [explanationPhotosEnabled, monitoringPlot?.photos]
+    () => !!monitoringPlot?.photos?.some((photo) => photo.type === 'Explanation'),
+    [monitoringPlot?.photos]
   );
 
   const title = useMemo(() => {
@@ -131,11 +129,9 @@ const MonitoringPlotDetails = (): JSX.Element => {
 
     // where the plot was actually set up is recorded on the corner photos themselves; the southwest
     // corner is the one the assigned coordinates above are taken from, so it is the comparable pair
-    const fieldSwCoordinates = explanationPhotosEnabled
-      ? monitoringPlot?.photos?.find(
-          (photo) => photo.type === 'Plot' && photo.position === 'SouthwestCorner' && photo.gpsCoordinates
-        )?.gpsCoordinates?.coordinates
-      : undefined;
+    const fieldSwCoordinates = monitoringPlot?.photos?.find(
+      (photo) => photo.type === 'Plot' && photo.position === 'SouthwestCorner' && photo.gpsCoordinates
+    )?.gpsCoordinates?.coordinates;
 
     return (
       <Box display='flex' alignItems={'end'}>
@@ -191,7 +187,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
         </Tooltip>
       </Box>
     );
-  }, [explanationPhotosEnabled, hasLocationDeviation, monitoringPlot, stratum?.name, strings, substratum?.name, theme]);
+  }, [hasLocationDeviation, monitoringPlot, stratum?.name, strings, substratum?.name, theme]);
 
   const tabs = useMemo(() => {
     return [

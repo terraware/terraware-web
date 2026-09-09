@@ -112,8 +112,7 @@ export const isCaptionReadOnly = (media: { observation?: ObservationActivityMedi
 
 export const getObsPhotoTypeLabel = (
   media: { observation?: ObservationActivityMedia },
-  strings: typeof defaultStrings,
-  includeExplanationPhotos = false
+  strings: typeof defaultStrings
 ): string | undefined => {
   const obs = media.observation;
   if (!obs || !isUndeletableObservationPhoto(media)) {
@@ -129,7 +128,7 @@ export const getObsPhotoTypeLabel = (
   if (obs.type === 'Soil') {
     return `${plotPrefix}${strings.SOIL}`;
   }
-  if (obs.type === 'Explanation' && obs.position && includeExplanationPhotos) {
+  if (obs.type === 'Explanation' && obs.position) {
     return getExplanationPhotoLabel(obs.position, `${obs.monitoringPlotNumber}`, strings);
   }
   return undefined;

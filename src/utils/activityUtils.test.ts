@@ -186,22 +186,13 @@ describe('getObsPhotoTypeLabel', () => {
     ['SouthwestCorner', '9 Southwest corner: >20m location'],
   ] as const)('returns the >20m location label for explanation photo position %s', (position, expected) => {
     expect(
-      getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 9, type: 'Explanation', position } }, strings, true)
+      getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 9, type: 'Explanation', position } }, strings)
     ).toBe(expected);
-  });
-
-  test('returns undefined for explanation photos when the feature is off', () => {
-    expect(
-      getObsPhotoTypeLabel(
-        { observation: { monitoringPlotNumber: 9, type: 'Explanation', position: 'SouthwestCorner' } },
-        strings
-      )
-    ).toBeUndefined();
   });
 
   test('returns undefined for an explanation photo without a position', () => {
     expect(
-      getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 9, type: 'Explanation' } }, strings, true)
+      getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 9, type: 'Explanation' } }, strings)
     ).toBeUndefined();
   });
 });

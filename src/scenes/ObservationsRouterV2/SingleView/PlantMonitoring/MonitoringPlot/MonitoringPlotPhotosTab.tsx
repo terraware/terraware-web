@@ -6,7 +6,6 @@ import { Button } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
@@ -17,7 +16,6 @@ import MonitoringPlotPhotosWithActions from 'src/scenes/ObservationsRouterV2/Sin
 const MonitoringPlotPhotosTab = () => {
   const theme = useTheme();
   const { strings } = useLocalization();
-  const explanationPhotosEnabled = isEnabled('Handle plots too far');
 
   const params = useParams<{ observationId: string; stratumName: string; monitoringPlotId: string }>();
   const stratumName = params.stratumName;
@@ -68,11 +66,9 @@ const MonitoringPlotPhotosTab = () => {
 
   const plotCornerPhotos = useMemo(() => {
     return monitoringPlot?.photos?.filter(
-      (photo) =>
-        photo.position !== undefined &&
-        (photo.type === 'Plot' || (explanationPhotosEnabled && photo.type === 'Explanation'))
+      (photo) => photo.position !== undefined && (photo.type === 'Plot' || photo.type === 'Explanation')
     );
-  }, [explanationPhotosEnabled, monitoringPlot?.photos]);
+  }, [monitoringPlot?.photos]);
 
   const otherPlotPhotos = useMemo(() => {
     return monitoringPlot?.photos?.filter((photo) => photo.position === undefined && photo.type === 'Plot');

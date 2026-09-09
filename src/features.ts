@@ -5,8 +5,7 @@ export type FeatureName =
   | 'Show Production View'
   | 'Virtual Monitoring Plots'
   | 'Report Updates July 2026'
-  | 'Accession Event Log'
-  | 'Handle plots too far';
+  | 'Accession Event Log';
 
 export type Feature = {
   name: FeatureName;
@@ -65,15 +64,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Accession History tab backed by the generic event log.'],
-    disclosure: ['This is a WIP'],
-  },
-  {
-    name: 'Handle plots too far',
-    preferenceName: 'handlePlotsTooFar',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Support for explanation photos when a plot is recorded far from its planned location'],
     disclosure: ['This is a WIP'],
   },
 ];
