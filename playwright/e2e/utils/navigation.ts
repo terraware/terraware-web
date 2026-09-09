@@ -17,6 +17,13 @@ export const navigateToFundingEntities = async (page: Page) => {
   await page.getByRole('button', { name: 'Funding Entities' }).click();
 };
 
+export const navigateToPeople = async (page: Page) => {
+  await waitFor(page, '#settings-button');
+  await page.locator('#settings-button').click();
+  await page.getByRole('tab', { name: 'People', exact: true }).click();
+  await waitFor(page, '#people-table');
+};
+
 export const navigateHome = async (page: Page) => {
   await page.getByRole('button', { name: 'Home' }).click();
 };
