@@ -1,3 +1,4 @@
+10fed060 Bump joi from 18.1.2 to 18.2.8 (#6386)
 774e6141 SW-8430: Plant Monitoring Observations: Handling plots located too far from planned location (>20m) (#6372)
 e950316e Fix playwright results upload for CI (#6378)
 7ae700bb SW-8829 Save expand/collapse state of nav items to preferences (#6374)
