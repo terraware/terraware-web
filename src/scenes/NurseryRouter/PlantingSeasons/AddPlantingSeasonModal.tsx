@@ -129,6 +129,12 @@ const AddPlantingSeasonModal = ({
     [plantingSeasonsData, record.plantingSiteId]
   );
 
+  useEffect(() => {
+    if (record.copyPrevious && record.fromPlantingSeasonId === undefined && seasonsForSelectedSite.length === 1) {
+      setRecord((prev) => ({ ...prev, fromPlantingSeasonId: seasonsForSelectedSite[0].id }));
+    }
+  }, [record.copyPrevious, record.fromPlantingSeasonId, seasonsForSelectedSite, setRecord]);
+
   const seasonToCopyOptions = useMemo<DropdownItem[]>(
     () =>
       seasonsForSelectedSite.map((season) => ({
