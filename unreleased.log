@@ -1,3 +1,4 @@
+bf2cad5a SW-8454 When creating a Console person, multiple Global User roles can be selected in UI (#6382)
 87aef433 Update dependency chokidar to v5 (#6309)
 5d2d84ed Update dependency eslint-plugin-jsdoc to v64 (#6259)
 2db37568 Bump svgo from 3.3.4 to 3.3.5 (#6387)
