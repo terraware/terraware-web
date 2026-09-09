@@ -54,7 +54,7 @@ const ObservationListView = (): JSX.Element => {
     lastParamRef.current = plantingSiteIdParam;
 
     if (paramChangedExternally && plantingSiteIdParam) {
-      if (plantingSiteIdParam === ALL_PLANTING_SITES) {
+      if (plantingSiteIdParam === ALL_PLANTING_SITES && showAllSitesOption) {
         if (selectedPlantingSiteId !== ALL_PLANTING_SITES) {
           selectPlantingSite(ALL_PLANTING_SITES);
         }
