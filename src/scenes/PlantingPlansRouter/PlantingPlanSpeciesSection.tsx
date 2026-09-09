@@ -23,7 +23,7 @@ import PlantingPlanPlantsChip from './PlantingPlanPlantsChip';
 
 const PLACEHOLDER = '-';
 const SPECIES_MIN_WIDTH = 440;
-const SPECIES_MIN_WIDTH_MOBILE = 340;
+const SPECIES_MIN_WIDTH_MOBILE = 390;
 
 export type PlantingPlanSpeciesSectionProps = {
   plantingSite: PlantingSitePayload;
