@@ -11,7 +11,7 @@ import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/Surviv
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
-import useStickyPlantingSiteId, { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
+import useStickyPlantingSiteId, { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -42,6 +42,7 @@ const ObservationListView = (): JSX.Element => {
   const plantingSiteIdParam = searchParams.get('plantingSiteId');
 
   const plantingSiteIdFilter = selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId;
+  const showAllSitesOption = plantingSites.length > 1;
 
   const lastParamRef = useRef<string | null>(null);
   useEffect(() => {
@@ -69,6 +70,19 @@ const ObservationListView = (): JSX.Element => {
       }
     }
 
+    // Single-site orgs should defaut to that site instead of all sites
+    const isSelectedSiteInOrg = plantingSites.some((site) => site.id === selectedPlantingSiteId);
+    const isSelectionValid = showAllSitesOption
+      ? selectedPlantingSiteId === ALL_PLANTING_SITES || isSelectedSiteInOrg
+      : isSelectedSiteInOrg;
+    if (!isSelectionValid) {
+      const fallback: PlantingSiteId | undefined = showAllSitesOption ? ALL_PLANTING_SITES : plantingSites[0]?.id;
+      if (fallback !== undefined && fallback !== selectedPlantingSiteId) {
+        selectPlantingSite(fallback);
+        return;
+      }
+    }
+
     const desiredParam =
       typeof selectedPlantingSiteId === 'number' ? selectedPlantingSiteId.toString() : ALL_PLANTING_SITES;
     if (plantingSiteIdParam !== desiredParam) {
@@ -84,6 +98,7 @@ const ObservationListView = (): JSX.Element => {
     selectedPlantingSiteId,
     plantingSiteIdParam,
     selectPlantingSite,
+    showAllSitesOption,
   ]);
 
   // Poll for survival rate recalculation and refresh observation results when it completes.
@@ -101,18 +116,17 @@ const ObservationListView = (): JSX.Element => {
       }))
       .sort((a, b) => a.label.localeCompare(b.label));
 
-    const allSiteOptions =
-      plantingSites.length > 1
-        ? [
-            {
-              label: strings.ALL_PLANTING_SITES,
-              value: ALL_PLANTING_SITES,
-            },
-          ]
-        : [];
+    const allSiteOptions = showAllSitesOption
+      ? [
+          {
+            label: strings.ALL_PLANTING_SITES,
+            value: ALL_PLANTING_SITES,
+          },
+        ]
+      : [];
 
     return [...allSiteOptions, ...sitesOptions];
-  }, [plantingSites, strings]);
+  }, [plantingSites, showAllSitesOption, strings]);
 
   const PageHeaderPlantingSiteDropdown = useMemo(
     () => (
