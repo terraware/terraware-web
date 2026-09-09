@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Container, Grid, useTheme } from '@mui/material';
-import { MultiSelect, Textfield } from '@terraware/web-components';
+import { Dropdown, DropdownItem, MultiSelect, Textfield } from '@terraware/web-components';
 
 import Card from 'src/components/common/Card';
 import PageForm from 'src/components/common/PageForm';
@@ -49,20 +49,14 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
     return options;
   }, [activeLocale, activeUser]);
 
-  const globalRoleDropdownOptions = useMemo(() => {
-    const options = new Map<string, string>([]);
-
+  const globalRoleDropdownOptions = useMemo((): DropdownItem[] => {
     if (!activeLocale || !activeUser) {
-      return options;
+      return [];
     }
 
-    for (const globalRole of USER_GLOBAL_ROLES) {
-      if (isAllowed(activeUser, 'ASSIGN_GLOBAL_ROLE_TO_USER', { roleToSet: globalRole })) {
-        options.set(globalRole, getGlobalRole(globalRole));
-      }
-    }
-
-    return options;
+    return USER_GLOBAL_ROLES.filter((globalRole) =>
+      isAllowed(activeUser, 'ASSIGN_GLOBAL_ROLE_TO_USER', { roleToSet: globalRole })
+    ).map((globalRole) => ({ label: getGlobalRole(globalRole), value: globalRole }));
   }, [activeLocale, activeUser]);
 
   const updateField = useCallback((field: keyof UserWithGlobalRoles, value: any) => {
@@ -88,17 +82,10 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
     }));
   }, []);
 
-  const onAddGlobalRole = useCallback((globalRole: string) => {
+  const onChangeGlobalRole = useCallback((globalRole: string) => {
     setLocalRecord((prev) => ({
       ...prev,
-      globalRoles: [...(prev.globalRoles || []), globalRole as UserGlobalRole],
-    }));
-  }, []);
-
-  const onRemoveGlobalRole = useCallback((globalRole: string) => {
-    setLocalRecord((prev) => ({
-      ...prev,
-      globalRoles: (prev.globalRoles || []).filter((_globalRole) => _globalRole !== globalRole),
+      globalRoles: globalRole ? [globalRole as UserGlobalRole] : [],
     }));
   }, []);
 
@@ -171,15 +158,15 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
             />
           </Grid>
           <Grid item xs={12} sx={{ marginTop: theme.spacing(2) }}>
-            <MultiSelect<string, string>
+            <Dropdown
               fullWidth
-              onAdd={onAddGlobalRole}
-              onRemove={onRemoveGlobalRole}
+              required
+              id='globalRole'
+              onChange={onChangeGlobalRole}
               options={globalRoleDropdownOptions}
-              placeHolder={strings.SELECT}
-              valueRenderer={(v) => v}
-              selectedOptions={localRecord.globalRoles || []}
-              label={strings.ROLE_REQUIRED}
+              placeholder={strings.SELECT}
+              selectedValue={localRecord.globalRoles?.[0]}
+              label={strings.ROLE}
               errorText={roleError}
             />
           </Grid>
