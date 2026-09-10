@@ -194,7 +194,7 @@ const IndicatorProgressRow = ({
     () => [
       { label: strings.ACHIEVED, value: 'Achieved' },
       { label: strings.ON_TRACK, value: 'On-Track' },
-      { label: strings.UNLIKELY, value: 'Unlikely' },
+      { label: strings.AT_RISK, value: 'At Risk' },
       { label: strings.OFF_TRACK, value: 'Off-Track' },
     ],
     [strings]

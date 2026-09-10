@@ -35,7 +35,7 @@ export default function ProgressChart({
   const theme = useTheme();
 
   const fillColor =
-    status === 'Unlikely'
+    status === 'At Risk'
       ? theme.palette.TwClrTxtWarning
       : status === 'Off-Track'
         ? theme.palette.TwClrTxtDanger

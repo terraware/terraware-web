@@ -55,7 +55,7 @@ export type PublishedReportIndicatorPayload = {
   progressNotes?: string;
   projectsComments?: string;
   refId: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  status?: 'Achieved' | 'On-Track' | 'At Risk' | 'Off-Track';
   supportingDocumentUrl?: string;
   target?: number;
   unit?: string;

@@ -27,7 +27,7 @@ const isAutoCalculatedIndicator = (m: any): m is ReportAutoCalculatedIndicatorPa
 const isCommonOrProjectIndicator = (m: any): m is ReportCommonIndicatorPayload | ReportProjectIndicatorPayload =>
   m && typeof m.id === 'number';
 
-const indicatorStatusOptions: DropdownItem[] = (['Achieved', 'On-Track', 'Unlikely', 'Off-Track'] as const).map(
+const indicatorStatusOptions: DropdownItem[] = (['Achieved', 'On-Track', 'At Risk', 'Off-Track'] as const).map(
   (status) => ({ label: status, value: status })
 );
 

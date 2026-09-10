@@ -168,8 +168,8 @@ export const reportIndicatorStatusLabel = (
       return strings.OFF_TRACK;
     case 'On-Track':
       return strings.ON_TRACK;
-    case 'Unlikely':
-      return strings.UNLIKELY;
+    case 'At Risk':
+      return strings.AT_RISK;
     default:
       return '';
   }
@@ -183,7 +183,7 @@ export const reportIndicatorSeverity = (status: ReportIndicatorStatus | undefine
     case 'Achieved':
     case 'On-Track':
       return 'success';
-    case 'Unlikely':
+    case 'At Risk':
       return 'warning';
     case 'Off-Track':
       return 'danger';
