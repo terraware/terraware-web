@@ -1,4 +1,4 @@
-import { AcceleratorReportPayload, api } from '../generated/acceleratorReports';
+import { api } from '../generated/acceleratorReports';
 import {
   QueryTagTypes,
   acceleratorReportMediaTag,
@@ -6,41 +6,26 @@ import {
   projectAcceleratorReportConfigsTag,
   projectAcceleratorReportTag,
   projectAcceleratorReportTargetsTag,
-  projectAcceleratorReportYearTag,
 } from '../tags';
-
-const reportYear = (report: AcceleratorReportPayload) => Number(report.startDate.split('-')[0]);
 
 api.enhanceEndpoints({
   endpoints: {
     listAcceleratorReports: {
-      providesTags: (results, _error, args) => {
-        const years = new Set<number>(args.year === undefined ? [] : [args.year]);
-        results?.reports.forEach((report) => years.add(reportYear(report)));
-
-        return [
-          ...(results?.reports.map((report) => acceleratorReportTag(report.id)) ?? []),
-          projectAcceleratorReportTag(args.projectId),
-          ...[...years].map((year) => projectAcceleratorReportYearTag(args.projectId, year)),
-        ];
-      },
+      providesTags: (results, _error, args) => [
+        ...(results?.reports.map((report) => acceleratorReportTag(report.id)) ?? []),
+        projectAcceleratorReportTag(args.projectId),
+      ],
     },
     getAcceleratorReport: {
-      providesTags: (results, _error, args) => [
+      providesTags: (_results, _error, args) => [
         acceleratorReportTag(args.reportId),
         projectAcceleratorReportTag(args.projectId),
-        ...(results ? [projectAcceleratorReportYearTag(args.projectId, reportYear(results.report))] : []),
       ],
     },
     getOneAcceleratorReport: {
       providesTags: (results, _error, args) => [
         acceleratorReportTag(args.reportId),
-        ...(results
-          ? [
-              projectAcceleratorReportTag(results.report.projectId),
-              projectAcceleratorReportYearTag(results.report.projectId, reportYear(results.report)),
-            ]
-          : []),
+        ...(results ? [projectAcceleratorReportTag(results.report.projectId)] : []),
       ],
     },
 
@@ -81,19 +66,19 @@ api.enhanceEndpoints({
     updateAutoCalculatedIndicatorTarget: {
       invalidatesTags: (_results, _error, args) => [
         projectAcceleratorReportTargetsTag(args.projectId),
-        projectAcceleratorReportYearTag(args.projectId, args.updateAutoCalculatedIndicatorTargetRequestPayload.year),
+        projectAcceleratorReportTag(args.projectId),
       ],
     },
     updateCommonIndicatorTarget: {
       invalidatesTags: (_results, _error, args) => [
         projectAcceleratorReportTargetsTag(args.projectId),
-        projectAcceleratorReportYearTag(args.projectId, args.updateCommonIndicatorTargetRequestPayload.year),
+        projectAcceleratorReportTag(args.projectId),
       ],
     },
     updateProjectIndicatorTarget: {
       invalidatesTags: (_results, _error, args) => [
         projectAcceleratorReportTargetsTag(args.projectId),
-        projectAcceleratorReportYearTag(args.projectId, args.updateProjectIndicatorTargetRequestPayload.year),
+        projectAcceleratorReportTag(args.projectId),
       ],
     },
     updateAutoCalculatedIndicatorBaselineTarget: {
