@@ -116,22 +116,41 @@ api.enhanceEndpoints({
     },
 
     updateAcceleratorReportValues: {
-      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [
+        acceleratorReportTag(args.reportId),
+        projectAcceleratorReportTag(args.projectId),
+      ],
     },
     updateOneAcceleratorReportValues: {
-      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
+      // no projectId to scope by, so every mounted report refetches its rolled-up totals
+      invalidatesTags: (_results, _error, args) => [
+        acceleratorReportTag(args.reportId),
+        { type: QueryTagTypes.ProjectAcceleratorReport },
+      ],
     },
     refreshAcceleratorReportAutoCalculatedIndicators: {
-      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [
+        acceleratorReportTag(args.reportId),
+        projectAcceleratorReportTag(args.projectId),
+      ],
     },
     refreshOneAcceleratorReportAutoCalculatedIndicators: {
-      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [
+        acceleratorReportTag(args.reportId),
+        { type: QueryTagTypes.ProjectAcceleratorReport },
+      ],
     },
     reviewAcceleratorReportIndicators: {
-      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [
+        acceleratorReportTag(args.reportId),
+        projectAcceleratorReportTag(args.projectId),
+      ],
     },
     reviewOneAcceleratorReportIndicators: {
-      invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
+      invalidatesTags: (_results, _error, args) => [
+        acceleratorReportTag(args.reportId),
+        { type: QueryTagTypes.ProjectAcceleratorReport },
+      ],
     },
     reviewAcceleratorReport: {
       invalidatesTags: (_results, _error, args) => [acceleratorReportTag(args.reportId)],
