@@ -175,6 +175,23 @@ export const reportIndicatorStatusLabel = (
   }
 };
 
+export type ReportIndicatorSeverity = 'success' | 'warning' | 'danger' | 'none';
+
+// the one place that decides how bad a status is; each site maps the severity to its own color tokens
+export const reportIndicatorSeverity = (status: ReportIndicatorStatus | undefined): ReportIndicatorSeverity => {
+  switch (status) {
+    case 'Achieved':
+    case 'On-Track':
+      return 'success';
+    case 'Unlikely':
+      return 'warning';
+    case 'Off-Track':
+      return 'danger';
+    default:
+      return 'none';
+  }
+};
+
 export const indicatorCategoryLabel = (category: IndicatorCategory | undefined, strings: ILocalizedStrings): string => {
   switch (category) {
     case 'Biodiversity':

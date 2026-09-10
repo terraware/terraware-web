@@ -11,6 +11,7 @@ import {
   ProgressIndicator,
   getIndicatorCumulativeValue,
   indicatorClassLabel,
+  reportIndicatorSeverity,
 } from 'src/components/AcceleratorReports/utils';
 import Button from 'src/components/common/button/Button';
 import { useLocalization } from 'src/providers';
@@ -152,21 +153,21 @@ const IndicatorProgressRow = ({
     return { segments: barSegments, targetPercent: anchorPercent };
   }, [cumulativeValue, currentYearProgress, indicator.target, isCumulative, startingTotal, targetBehindOrigin]);
 
-  const fillColor =
-    indicator.status === 'Unlikely'
-      ? theme.palette.TwClrTxtDanger
-      : indicator.status === 'Off-Track'
-        ? theme.palette.TwClrTxtWarning
-        : theme.palette.TwClrBgBrand;
+  const severity = reportIndicatorSeverity(indicator.status);
 
-  const statusColor =
-    indicator.status === 'Unlikely'
-      ? theme.palette.TwClrTxtDanger
-      : indicator.status === 'Off-Track'
-        ? theme.palette.TwClrTxtWarning
-        : indicator.status === undefined
-          ? theme.palette.TwClrTxtBrand
-          : theme.palette.TwClrTxtSuccess;
+  const fillColor = {
+    danger: theme.palette.TwClrTxtDanger,
+    none: theme.palette.TwClrBaseGray300,
+    success: theme.palette.TwClrBgBrand,
+    warning: theme.palette.TwClrTxtWarning,
+  }[severity];
+
+  const statusColor = {
+    danger: theme.palette.TwClrTxtDanger,
+    none: theme.palette.TwClrTxtSecondary,
+    success: theme.palette.TwClrTxtSuccess,
+    warning: theme.palette.TwClrTxtWarning,
+  }[severity];
 
   const targetPercentComplete = useMemo(() => {
     const target = indicator.target;
