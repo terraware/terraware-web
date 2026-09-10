@@ -23,6 +23,7 @@ type TerrawarePath =
   | '/inventory/withdraw'
   | '/batch/withdraw'
   | '/nursery/withdrawals'
+  | '/nursery/withdrawals.*tab=requests'
   | '/plants/planting-progress'
   | '/observations'
   | '/observations.*tab=biomassMeasurements'
@@ -78,6 +79,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/batch/withdraw': 'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
     '/nursery/withdrawals':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
+    '/nursery/withdrawals.*tab=requests':
+      'https://knowledge.terraformation.com/hc/en-us/articles/51999881914772-Inventory-Withdrawals-for-Planting-Seasons',
     '/plants/planting-progress':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718249140372-Tracking-Planting-Progress',
     '/observations':
@@ -142,6 +145,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/batch/withdraw': 'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
     '/nursery/withdrawals':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
+    '/nursery/withdrawals.*tab=requests':
+      'https://knowledge.terraformation.com/hc/en-us/articles/51999881914772-Inventory-Withdrawals-for-Planting-Seasons',
     '/plants/planting-progress':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718249140372-Tracking-Planting-Progress',
     '/observations':
@@ -206,6 +211,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/batch/withdraw': 'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
     '/nursery/withdrawals':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
+    '/nursery/withdrawals.*tab=requests':
+      'https://knowledge.terraformation.com/hc/en-us/articles/51999881914772-Inventory-Withdrawals-for-Planting-Seasons',
     '/plants/planting-progress':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718249140372-Tracking-Planting-Progress',
     '/observations':
