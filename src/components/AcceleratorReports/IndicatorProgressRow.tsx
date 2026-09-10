@@ -415,7 +415,7 @@ const IndicatorProgressRow = ({
             </Box>
           )}
 
-          {targetPercentComplete !== undefined && (
+          {targetPercentComplete !== undefined && (expanded || printMode) && (
             <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' marginTop={theme.spacing(1)}>
               {strings.formatString(
                 isLifetime ? strings.X_OF_YEAR_CUMULATIVE_TARGET : strings.X_OF_YEAR_TARGET,
