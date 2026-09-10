@@ -144,20 +144,26 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
     [onChangeAmount, onUnitsUpdate, withdrawnQuantity]
   );
 
+  const withdrawAllWeight = useMemo(
+    () => (remainingWeight?.quantity && remainingWeight.units !== 'Seeds' ? remainingWeight : undefined),
+    [remainingWeight]
+  );
+
   const onSelectAll = useCallback(
     (withdrawAll: boolean) => {
       if (withdrawAll) {
-        if (remainingWeight?.quantity && remainingWeight.units !== 'Seeds') {
-          onUnitsUpdate(remainingWeight.units);
-          onChangeAmount(remainingWeight.quantity, remainingWeight.units);
+        if (!withdrawAllWeight) {
+          return;
         }
+        onUnitsUpdate(withdrawAllWeight.units);
+        onChangeAmount(withdrawAllWeight.quantity, withdrawAllWeight.units);
       } else {
         onChangeAmount(undefined, units);
       }
 
       setWithdrawAllSelected(withdrawAll);
     },
-    [onChangeAmount, onUnitsUpdate, remainingWeight, units]
+    [onChangeAmount, onUnitsUpdate, units, withdrawAllWeight]
   );
 
   const remainingLabel = useMemo(
@@ -233,6 +239,7 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
             label={strings.WITHDRAW_ALL}
             onChange={onSelectAll}
             value={withdrawAllSelected}
+            disabled={!withdrawAllWeight}
           />
         </Grid>
         {accession.subsetWeight?.quantity && accession.subsetCount ? (
