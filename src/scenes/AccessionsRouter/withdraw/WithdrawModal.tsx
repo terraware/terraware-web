@@ -31,7 +31,7 @@ import { NurseryTransfer } from 'src/types/Batch';
 import { Facility } from 'src/types/Facility';
 import { SearchNodePayload } from 'src/types/Search';
 import { OrganizationUser, User } from 'src/types/User';
-import { UnitType, convertUnits } from 'src/units';
+import { UnitType, convertWeightToSeedCount } from 'src/units';
 import { getAllNurseries, getSeedBank, isContributor } from 'src/utils/organization';
 import { renderUser } from 'src/utils/renderUser';
 import useForm from 'src/utils/useForm';
@@ -89,6 +89,13 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
   const [timeZone, setTimeZone] = useState(tz.id);
   const [isByWeight, setIsByWeight] = useState(accession.remainingQuantity?.units !== 'Seeds');
   const [withdrawalQty, setWithdrawalQty] = useState<number>(0);
+  const [withdrawalUnits, setWithdrawalUnits] = useState<UnitType>(() => {
+    const accessionUnits =
+      accession.remainingQuantity?.units === 'Seeds'
+        ? accession.estimatedWeight?.units
+        : accession.remainingQuantity?.units;
+    return accessionUnits && accessionUnits !== 'Seeds' ? accessionUnits : 'Grams';
+  });
   const [withdrawalValid, setWithdrawalValid] = useState<boolean>(false);
   const [withdrawalButtonEnabled, setWithdrawalButtonEnabled] = useState<boolean>(true);
   const [showDateWarning, setShowDateWarning] = useState<boolean>(false);
@@ -251,28 +258,11 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
   }, [record.purpose, isNurseryTransfer, isByWeight, setRecord]);
 
   const estimatedWithdrawalQty = useMemo(() => {
-    let estimated = 0;
-    if (isByWeight && accession.subsetCount && accession.subsetWeight) {
-      if (
-        accession.remainingQuantity?.units &&
-        accession.remainingQuantity?.units === 'Seeds' &&
-        accession.estimatedWeight?.units
-      ) {
-        estimated = Math.round(
-          convertUnits(withdrawalQty, accession.estimatedWeight?.units, accession.subsetWeight.units) *
-            (accession.subsetCount / accession.subsetWeight.quantity)
-        );
-      } else if (accession.remainingQuantity?.units) {
-        estimated = Math.round(
-          convertUnits(withdrawalQty, accession.remainingQuantity?.units, accession.subsetWeight.units) *
-            (accession.subsetCount / accession.subsetWeight.quantity)
-        );
-      }
-    } else if (!isByWeight) {
+    if (!isByWeight) {
       return withdrawalQty;
     }
-    return estimated;
-  }, [accession, isByWeight, withdrawalQty]);
+    return convertWeightToSeedCount(withdrawalQty, withdrawalUnits, accession.subsetWeight, accession.subsetCount);
+  }, [accession.subsetCount, accession.subsetWeight, isByWeight, withdrawalQty, withdrawalUnits]);
 
   const onChangeUser = useCallback(
     (newValue: OrganizationUser) => {
@@ -404,17 +394,7 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
               createViabilityTestRequestPayload: viabilityTesting,
             }).unwrap();
           } else {
-            let units: UnitType;
-            if (isByWeight) {
-              if (accession.remainingQuantity?.units === 'Seeds') {
-                units = 'Grams';
-              } else {
-                units = accession.remainingQuantity?.units || 'Grams';
-              }
-            } else {
-              units = 'Seeds';
-            }
-            record.withdrawnQuantity = { quantity: withdrawalQty, units };
+            record.withdrawnQuantity = { quantity: withdrawalQty, units: isByWeight ? withdrawalUnits : 'Seeds' };
             await createWithdrawal({
               accessionId: accession.id,
               createWithdrawalRequestPayload: record,
@@ -437,7 +417,6 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
     }
   }, [
     accession.id,
-    accession.remainingQuantity?.units,
     createNurseryTransferWithdrawal,
     createViabilityTest,
     createWithdrawal,
@@ -457,6 +436,7 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
     validateInventoryBatch,
     viabilityTesting,
     withdrawalQty,
+    withdrawalUnits,
   ]);
 
   const handleSaveWithdrawal = useCallback(() => {
@@ -690,6 +670,8 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
               <WeightWithdrawal
                 accession={accession}
                 purpose={isNurseryTransfer ? 'Nursery' : record.purpose}
+                units={withdrawalUnits}
+                onUnitsUpdate={setWithdrawalUnits}
                 onWithdrawCtUpdate={onWithdrawCtUpdate}
               />
             ) : (

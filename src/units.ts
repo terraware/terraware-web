@@ -205,6 +205,18 @@ export function convertUnits(value: number, unit: string, outputUnit: string) {
   }
 }
 
+export function convertWeightToSeedCount(
+  quantity: number,
+  units: string,
+  subsetWeight?: { quantity: number; units: string },
+  subsetCount?: number
+) {
+  if (!subsetCount || !subsetWeight?.quantity) {
+    return 0;
+  }
+  return Math.round(convertUnits(quantity, units, subsetWeight.units) * (subsetCount / subsetWeight.quantity));
+}
+
 export function isUnitInPreferredSystem(unit: string, system: string) {
   const units = getUnitsForSystem(system);
   const found = units.find((iUnit) => iUnit.value === unit);
