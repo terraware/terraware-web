@@ -1,9 +1,10 @@
 import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 
-import { Box, CircularProgress, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem, Tabs } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
+import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
@@ -245,12 +246,10 @@ export default function InventoryV2View(props: InventoryProps): JSX.Element {
 
   const navigateToInventoryCreateView = useCallback(() => goTo(APP_PATHS.INVENTORY_NEW), [goTo]);
 
-  if (speciesLoading) {
+  if (!selectedOrganization || speciesLoading) {
     return (
       <TfMain>
-        <Box sx={{ display: 'flex', justifyContent: 'center', paddingTop: '64px' }}>
-          <CircularProgress />
-        </Box>
+        <BlockingSpinner />
       </TfMain>
     );
   }

@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 
-import { Box, CircularProgress, ClickAwayListener, IconButton, Popover, Tooltip, useTheme } from '@mui/material';
+import { Box, ClickAwayListener, IconButton, Popover, Tooltip, useTheme } from '@mui/material';
 import { Badge, DropdownItem, Message } from '@terraware/web-components';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import {
@@ -16,6 +16,7 @@ import {
 } from 'material-react-table';
 
 import PageSnackbar from 'src/components/PageSnackbar';
+import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import OptionsMenu from 'src/components/common/OptionsMenu';
@@ -115,7 +116,7 @@ const ProblemsCellComponent = ({ row, reloadData, onRowClick }: ProblemsCellProp
 };
 
 export default function SpeciesListView(): JSX.Element {
-  const { selectedOrganization, orgPreferences } = useOrganization();
+  const { selectedOrganization, orgPreferences, bootstrapped: orgBootstrapped } = useOrganization();
   const { species, isLoading, refetch: reloadData } = useOrganizationSpecies({ preferCacheValue: false });
   const theme = useTheme();
   const trackEvent = useTrackEvent();
@@ -124,7 +125,7 @@ export default function SpeciesListView(): JSX.Element {
   const navigate = useSyncNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { activeLocale } = useLocalization();
-  const { availableProjects } = useProjects();
+  const { availableProjects, isLoading: projectsLoading } = useProjects();
   const organizationId = selectedOrganization?.id;
   const { data: acceleratorProjectNamesBySpeciesId = EMPTY_ACCELERATOR_PROJECT_NAMES_BY_SPECIES_ID } =
     useListSpeciesAcceleratorProjectsQuery(organizationId ?? -1, {
@@ -747,17 +748,15 @@ export default function SpeciesListView(): JSX.Element {
     EcosystemTypesCell,
   ]);
 
-  if (!species.length) {
-    if (isLoading) {
-      return (
-        <TfMain>
-          <Box sx={{ display: 'flex', justifyContent: 'center', paddingTop: '64px' }}>
-            <CircularProgress />
-          </Box>
-        </TfMain>
-      );
-    }
+  if (isLoading || projectsLoading || !orgBootstrapped) {
+    return (
+      <TfMain>
+        <BlockingSpinner />
+      </TfMain>
+    );
+  }
 
+  if (!species.length) {
     return <EmptyStatePage pageName={'Species'} reloadData={() => void reloadData()} />;
   }
 

@@ -7,12 +7,13 @@ import { selectedOrgHasFacilityType } from 'src/utils/organization';
 
 const AccessionsView = () => {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
-  const { species } = useOrganizationSpecies();
+  const { species, isLoading: speciesLoading } = useOrganizationSpecies();
 
   return (
     <Database
       hasSeedBanks={selectedOrganization ? selectedOrgHasFacilityType(selectedOrganization, 'Seed Bank') : false}
       hasSpecies={species.length > 0}
+      speciesLoading={speciesLoading}
       reloadData={() => void reloadOrganizations()}
     />
   );
