@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.42% </span>
+                <span class="strong">93.5% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>71/76</span>
+                <span class='fraction'>72/77</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">89.83% </span>
+                <span class="strong">90.16% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>53/59</span>
+                <span class='fraction'>55/61</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.85% </span>
+                <span class="strong">92.95% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>65/70</span>
+                <span class='fraction'>66/71</span>
             </div>
         
             
@@ -308,7 +308,17 @@
 <a name='L243'></a><a href='#L243'>243</a>
 <a name='L244'></a><a href='#L244'>244</a>
 <a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -443,10 +453,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -476,6 +493,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -485,6 +504,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -688,15 +708,22 @@ const renderFieldChange = (
     renderChangedValue(strings, colors.changedTo, changedTo)
   );
 &nbsp;
+export type AccessionEventDescriptionOptions = {
+  colors: ChangedValueColors;
+  /** Batch ID to the nursery it went to, for naming a transfer's destination. */
+  nurseryNames?: Map&lt;number, string&gt;;
+  /** Renders the photo subject, so a caller can make just the filename clickable. */
+  renderPhotoSubject?: (fullText: string) =&gt; JSX.Element | string;
+  strings: Strings;
+  viabilityTestWithdrawals?: ViabilityTestWithdrawals;
+};
+&nbsp;
 export const renderAccessionEventDescription = (
   event: EventLogEntryPayload,
-  strings: Strings,
-  colors: ChangedValueColors,
-  pairs?: ViabilityTestWithdrawals,
-  nurseryNames?: Map&lt;number, string&gt;
+  { colors, nurseryNames, renderPhotoSubject, strings, viabilityTestWithdrawals }: AccessionEventDescriptionOptions
 ): ReactNode =&gt; {
   const { action, subject } = event;
-  const forViabilityTest = isViabilityTestWithdrawal(event, pairs);
+  const forViabilityTest = isViabilityTestWithdrawal(event, viabilityTestWithdrawals);
 &nbsp;
   switch (subject.type) {
     case 'Accession':
@@ -718,19 +745,22 @@ export const renderAccessionEventDescription = (
 <span class="cstat-no" title="statement not covered" >          return null;</span>
       }
 &nbsp;
-    case 'AccessionPhoto':
+    case 'AccessionPhoto': {
+      const photoSubject = renderPhotoSubject?.(subject.fullText) ?? subject.fullText;
+&nbsp;
       switch (action.type) {
         case 'Created':
-          return strings.formatString(strings.EVENT_ADDED, subject.fullText);
+          return strings.formatString&lt;string | JSX.Element&gt;(strings.EVENT_ADDED, photoSubject);
         case 'Deleted':
-          return strings.formatString(strings.EVENT_DELETED, subject.fullText);
+          return strings.formatString&lt;string | JSX.Element&gt;(strings.EVENT_DELETED, photoSubject);
         // Re-uploading over an existing filename is logged as an update whose values are the old and
         // new file IDs, so only the subject is worth showing.
         case 'FieldUpdated':
-          return strings.formatString(strings.ACCESSION_EVENT_PHOTO_REPLACED, subject.fullText);
+          return strings.formatString&lt;string | JSX.Element&gt;(strings.ACCESSION_EVENT_PHOTO_REPLACED, photoSubject);
 <span class="branch-3 cbranch-no" title="branch not covered" >        default:</span>
 <span class="cstat-no" title="statement not covered" >          return null;</span>
       }
+    }
 &nbsp;
     case 'Withdrawal':
       switch (action.type) {
@@ -805,7 +835,7 @@ export const renderAccessionEventDescription = (
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-10T17:11:58.467Z
+                at 2026-09-10T18:32:07.901Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
