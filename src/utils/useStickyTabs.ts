@@ -41,8 +41,10 @@ const useStickyTabs = ({ defaultTab, tabs, viewIdentifier }: StickyTabsProps) =>
 
   const onChangeTab = useCallback(
     (newTab: string) => {
-      if (queryTab) {
-        navigate(getLocation(location.pathname, location), { replace: true });
+      if (queryTab !== newTab) {
+        const params = new URLSearchParams(location.search);
+        params.set('tab', newTab);
+        navigate(getLocation(location.pathname, location, `?${params.toString()}`), { replace: true });
       }
       setActiveTab(newTab);
       writeTabToSession(viewIdentifier, newTab);
@@ -54,7 +56,7 @@ const useStickyTabs = ({ defaultTab, tabs, viewIdentifier }: StickyTabsProps) =>
     if (!queryTab) {
       // If there is a "last viewed" tab in the session, use that, otherwise send to default
       const sessionTab = getTabFromSession(viewIdentifier);
-      if (sessionTab) {
+      if (sessionTab && tabs.some((data) => data.id === sessionTab)) {
         onChangeTab(sessionTab);
       }
 
