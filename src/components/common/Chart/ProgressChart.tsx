@@ -36,9 +36,9 @@ export default function ProgressChart({
 
   const fillColor =
     status === 'Unlikely'
-      ? theme.palette.TwClrTxtDanger
+      ? theme.palette.TwClrTxtWarning
       : status === 'Off-Track'
-        ? theme.palette.TwClrTxtWarning
+        ? theme.palette.TwClrTxtDanger
         : theme.palette.TwClrBgBrand;
 
   const hasLabels = reportLabel || (quarterlyProgress && quarterlyProgress.length > 0);
