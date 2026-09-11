@@ -7,7 +7,7 @@ import { selectedOrgHasFacilityType } from 'src/utils/organization';
 
 const AccessionsView = () => {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
-  const { species, isLoading: speciesLoading } = useOrganizationSpecies();
+  const { species, isInitialLoading: speciesLoading } = useOrganizationSpecies();
 
   return (
     <Database

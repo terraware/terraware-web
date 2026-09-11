@@ -117,7 +117,7 @@ const ProblemsCellComponent = ({ row, reloadData, onRowClick }: ProblemsCellProp
 
 export default function SpeciesListView(): JSX.Element {
   const { selectedOrganization, orgPreferences, bootstrapped: orgBootstrapped } = useOrganization();
-  const { species, isLoading, refetch: reloadData } = useOrganizationSpecies({ preferCacheValue: false });
+  const { species, isInitialLoading, refetch: reloadData } = useOrganizationSpecies({ preferCacheValue: false });
   const theme = useTheme();
   const trackEvent = useTrackEvent();
   const updateUserPreferences = useUpdateUserPreferences();
@@ -748,7 +748,7 @@ export default function SpeciesListView(): JSX.Element {
     EcosystemTypesCell,
   ]);
 
-  if (isLoading || projectsLoading || !orgBootstrapped) {
+  if (isInitialLoading || projectsLoading || !orgBootstrapped) {
     return (
       <TfMain>
         <BlockingSpinner />

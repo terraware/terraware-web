@@ -13,7 +13,7 @@ import { selectedOrgHasFacilityType } from 'src/utils/organization';
 
 const InventoryRouter = () => {
   const { selectedOrganization } = useOrganization();
-  const { species, isLoading: speciesLoading } = useOrganizationSpecies();
+  const { species, isInitialLoading: speciesLoading } = useOrganizationSpecies();
 
   return (
     <Routes>
