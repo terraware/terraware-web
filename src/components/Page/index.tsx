@@ -35,6 +35,7 @@ export type PageProps = {
   descriptionStyle?: SxProps<Theme>;
   leftComponentGridSize?: number;
   rightComponentGridSize?: number;
+  stickyHeader?: boolean;
 };
 
 /**
@@ -57,6 +58,7 @@ export default function Page({
   descriptionStyle,
   leftComponentGridSize,
   rightComponentGridSize,
+  stickyHeader,
 }: PageProps): JSX.Element {
   const contentRef = useRef(null);
   const theme = useTheme();
@@ -72,7 +74,7 @@ export default function Page({
 
   return (
     <TfMain style={containerStyles}>
-      <PageHeaderWrapper nextElement={contentRef.current}>
+      <PageHeaderWrapper alwaysVisible={stickyHeader} nextElement={contentRef.current}>
         <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
         <Grid
           container
