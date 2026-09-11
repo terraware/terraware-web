@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/services/HttpService.ts</title>
+    <title>Code coverage report for src/units.ts</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../prettify.css" />
-    <link rel="stylesheet" href="../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
+    <link rel="stylesheet" href="../prettify.css" />
+    <link rel="stylesheet" href="../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../sort-arrow-sprite.png);
+            background-image: url(../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/services</a> HttpService.ts</h1>
+        <h1><a href="../index.html">All files</a> / <a href="index.html">src</a> units.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75.43% </span>
+                <span class="strong">18.46% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>43/57</span>
+                <span class='fraction'>12/65</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.33% </span>
+                <span class="strong">21.56% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>11/15</span>
+                <span class='fraction'>11/51</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.52% </span>
+                <span class="strong">15.38% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>13/23</span>
+                <span class='fraction'>2/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">74.07% </span>
+                <span class="strong">18.75% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>40/54</span>
+                <span class='fraction'>12/64</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -280,7 +280,99 @@
 <a name='L215'></a><a href='#L215'>215</a>
 <a name='L216'></a><a href='#L216'>216</a>
 <a name='L217'></a><a href='#L217'>217</a>
-<a name='L218'></a><a href='#L218'>218</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L218'></a><a href='#L218'>218</a>
+<a name='L219'></a><a href='#L219'>219</a>
+<a name='L220'></a><a href='#L220'>220</a>
+<a name='L221'></a><a href='#L221'>221</a>
+<a name='L222'></a><a href='#L222'>222</a>
+<a name='L223'></a><a href='#L223'>223</a>
+<a name='L224'></a><a href='#L224'>224</a>
+<a name='L225'></a><a href='#L225'>225</a>
+<a name='L226'></a><a href='#L226'>226</a>
+<a name='L227'></a><a href='#L227'>227</a>
+<a name='L228'></a><a href='#L228'>228</a>
+<a name='L229'></a><a href='#L229'>229</a>
+<a name='L230'></a><a href='#L230'>230</a>
+<a name='L231'></a><a href='#L231'>231</a>
+<a name='L232'></a><a href='#L232'>232</a>
+<a name='L233'></a><a href='#L233'>233</a>
+<a name='L234'></a><a href='#L234'>234</a>
+<a name='L235'></a><a href='#L235'>235</a>
+<a name='L236'></a><a href='#L236'>236</a>
+<a name='L237'></a><a href='#L237'>237</a>
+<a name='L238'></a><a href='#L238'>238</a>
+<a name='L239'></a><a href='#L239'>239</a>
+<a name='L240'></a><a href='#L240'>240</a>
+<a name='L241'></a><a href='#L241'>241</a>
+<a name='L242'></a><a href='#L242'>242</a>
+<a name='L243'></a><a href='#L243'>243</a>
+<a name='L244'></a><a href='#L244'>244</a>
+<a name='L245'></a><a href='#L245'>245</a>
+<a name='L246'></a><a href='#L246'>246</a>
+<a name='L247'></a><a href='#L247'>247</a>
+<a name='L248'></a><a href='#L248'>248</a>
+<a name='L249'></a><a href='#L249'>249</a>
+<a name='L250'></a><a href='#L250'>250</a>
+<a name='L251'></a><a href='#L251'>251</a>
+<a name='L252'></a><a href='#L252'>252</a>
+<a name='L253'></a><a href='#L253'>253</a>
+<a name='L254'></a><a href='#L254'>254</a>
+<a name='L255'></a><a href='#L255'>255</a>
+<a name='L256'></a><a href='#L256'>256</a>
+<a name='L257'></a><a href='#L257'>257</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -293,6 +385,143 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -303,162 +532,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">64x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">64x</span>
-<span class="cline-any cline-yes">64x</span>
-<span class="cline-any cline-yes">61x</span>
-<span class="cline-any cline-yes">61x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">61x</span>
-<span class="cline-any cline-yes">61x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">58x</span>
-<span class="cline-any cline-yes">58x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">64x</span>
-<span class="cline-any cline-yes">64x</span>
-<span class="cline-any cline-yes">20x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">344x</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">344x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">344x</span>
-<span class="cline-any cline-yes">42x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">42x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">344x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">344x</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">3x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">344x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">344x</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">344x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">344x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -468,6 +567,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -475,245 +575,262 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">332x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import axios, { AxiosResponse } from './axios';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import strings from 'src/strings';
 &nbsp;
-/**
- * Bare bones http service over an underlying implementation.
- */
+import { useUser } from './providers';
 &nbsp;
-/**
- * Url replacements
- */
-type Replacements = Record&lt;string, string&gt;;
+export type UnitType = 'Grams' | 'Milligrams' | 'Kilograms' | 'Pounds' | 'Seeds' | 'Ounces';
 &nbsp;
-/**
- * Request types
- */
+export interface Unit {
+  label: string;
+  value: UnitType;
+}
 &nbsp;
-export type ServerData = { status?: 'ok' | 'error' };
+export function <span class="fstat-no" title="function not covered" >weightUnits(</span>) {
+<span class="cstat-no" title="statement not covered" >  return [</span>
+    { label: strings.G_GRAMS, value: 'Grams' },
+    { label: strings.MG_MILLIGRAMS, value: 'Milligrams' },
+    { label: strings.KG_KILOGRAMS, value: 'Kilograms' },
+    { label: strings.LB_POUNDS, value: 'Pounds' },
+    { label: strings.OZ_OUNCES, value: 'Ounces' },
+  ];
+}
 &nbsp;
-export type Params = Record&lt;string, string&gt;;
-&nbsp;
-type Request = {
-  url?: string; // override url to use
-  urlReplacements?: Replacements;
-  headers?: Record&lt;string, any&gt;;
-  params?: Params; // query params
-};
-&nbsp;
-type GetRequest = Request;
-&nbsp;
-type PostRequest = Request &amp; {
-  entity?: Record&lt;string, any&gt;;
-};
-&nbsp;
-type PutRequest = PostRequest;
-&nbsp;
-type DeleteRequest = PostRequest;
-&nbsp;
-/**
- * Response type
- */
-export type Response = {
-  e?: Error;
-  error?: string;
-  data?: any;
-  statusCode?: number;
-  requestSucceeded: boolean;
-};
-&nbsp;
-export type Response2&lt;T&gt; = {
-  e?: Error;
-  error?: string;
-  data?: T;
-  statusCode?: number;
-  requestSucceeded: boolean;
-};
-&nbsp;
-/**
- * Utility to populate an error string from server response
- */
-const addError = (source: any, destination: any) =&gt; {
-  destination.error = source.error?.message;
-};
-&nbsp;
-/**
- * Utility to process the response to an http request from the server
- */
-async function handleRequest&lt;I extends ServerData, O&gt;(
-  httpPromise: Promise&lt;AxiosResponse&lt;I&gt;&gt;,
-  transform: (i?: I) =&gt; O
-): Promise&lt;O &amp; Response&gt; {
-  const response: Response = {
-    requestSucceeded: false,
-  };
-&nbsp;
-  try {
-    const serverResponse: AxiosResponse&lt;I&gt; = await httpPromise;
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (serverResponse.status) {
-      response.statusCode = serverResponse.status;
-    }
-    const data: I = serverResponse.data;
-    if (data?.status === 'error' &amp;&amp; serverResponse.status !== 200) {
-      addError(data, response);
-    } else {
-      response.requestSucceeded = true;
-      return { ...response, ...transform(data) };
-    }
-  } catch (e: any) {
-    response.e = e;
-    addError(e?.response?.data || <span class="branch-1 cbranch-no" title="branch not covered" >{},</span> response);
-    response.statusCode = e?.response?.status;
+function <span class="fstat-no" title="function not covered" >weightUnitsV2(</span>unit?: string) {
+<span class="cstat-no" title="statement not covered" >  if (unit === 'imperial') {</span>
+<span class="cstat-no" title="statement not covered" >    return [</span>
+      { label: strings.OZ, value: 'Ounces' },
+      { label: strings.LB, value: 'Pounds' },
+      { label: strings.G, value: 'Grams' },
+      { label: strings.MG, value: 'Milligrams' },
+      { label: strings.KG, value: 'Kilograms' },
+    ];
   }
-&nbsp;
-  return { ...response, ...transform() };
+<span class="cstat-no" title="statement not covered" >  return [</span>
+    { label: strings.G, value: 'Grams' },
+    { label: strings.MG, value: 'Milligrams' },
+    { label: strings.KG, value: 'Kilograms' },
+    { label: strings.OZ, value: 'Ounces' },
+    { label: strings.LB, value: 'Pounds' },
+  ];
 }
 &nbsp;
-/**
- * Utility to replace placeholders with values in the url
- */
-const replace = (url: string, request: Request) =&gt; {
-  const replacements = request.urlReplacements || {};
-  return Object.keys(replacements).reduce((accumulator, key) =&gt; {
-    return accumulator.replaceAll(key, replacements[key]);
-  }, request.url || url);
-};
-&nbsp;
-/**
- * Service with bare bones http function calls
- */
-function RequestsHandler(url: string = '') {
-  const get = async &lt;I extends ServerData, O&gt;(request: GetRequest, transform: (i?: I) =&gt; O): Promise&lt;O &amp; Response&gt; =&gt; {
-    const { params, headers } = request;
-&nbsp;
-    return await handleRequest(axios.get&lt;I&gt;(replace(url, request), { params, headers }), transform);
-  };
-&nbsp;
-  const get2 = <span class="fstat-no" title="function not covered" >async &lt;T extends ServerData&gt;(request: GetRequest = {}): Promise&lt;Response2&lt;T&gt;&gt; =&gt; {</span>
-    const { params, headers } = <span class="cstat-no" title="statement not covered" >request;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return await handleRequest&lt;T, { data: T | undefined }&gt;(</span>
-      axios.get&lt;T&gt;(replace(url, request), { params, headers }),
-<span class="fstat-no" title="function not covered" >      (data: T | undefined) =&gt; <span class="cstat-no" title="statement not covered" >({ data })</span></span>
-    );
-  };
-&nbsp;
-  const post = async (request: PostRequest = {}): Promise&lt;Response&gt; =&gt; {
-    const { entity, params, headers } = request;
-&nbsp;
-    return await handleRequest(axios.post(replace(url, request), entity, { params, headers }), (data) =&gt; ({ data }));
-  };
-&nbsp;
-  const post2 = <span class="fstat-no" title="function not covered" >async &lt;T extends ServerData&gt;(request: PostRequest = {}): Promise&lt;Response2&lt;T&gt;&gt; =&gt; {</span>
-    const { entity, params, headers } = <span class="cstat-no" title="statement not covered" >request;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return await handleRequest&lt;T, { data: T | undefined }&gt;(</span>
-      axios.post&lt;T&gt;(replace(url, request), entity, { params, headers }),
-<span class="fstat-no" title="function not covered" >      (data: T | undefined) =&gt; <span class="cstat-no" title="statement not covered" >({ data })</span></span>
-    );
-  };
-&nbsp;
-  const put = async (request: PutRequest = {}): Promise&lt;Response&gt; =&gt; {
-    const { entity, params, headers } = request;
-&nbsp;
-    return await handleRequest(axios.put(replace(url, request), entity, { params, headers }), (data) =&gt; ({ data }));
-  };
-&nbsp;
-  const put2 = <span class="fstat-no" title="function not covered" >async &lt;T extends ServerData&gt;(request: PutRequest = {}): Promise&lt;Response2&lt;T&gt;&gt; =&gt; {</span>
-    const { entity, params, headers } = <span class="cstat-no" title="statement not covered" >request;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return await handleRequest&lt;T, { data: T | undefined }&gt;(</span>
-      axios.put&lt;T&gt;(replace(url, request), entity, { params, headers }),
-<span class="fstat-no" title="function not covered" >      (data: T | undefined) =&gt; <span class="cstat-no" title="statement not covered" >({ data })</span></span>
-    );
-  };
-&nbsp;
-  const _delete = async (request: DeleteRequest = {}): Promise&lt;Response&gt; =&gt; {
-    const { entity, params, headers } = request;
-&nbsp;
-    return await handleRequest(axios.delete(replace(url, request), { params, headers, data: entity }), (data) =&gt; ({
-      data,
-    }));
-  };
-&nbsp;
-  const delete2 = <span class="fstat-no" title="function not covered" >async &lt;T extends ServerData&gt;(request: DeleteRequest = {}): Promise&lt;Response2&lt;T&gt;&gt; =&gt; {</span>
-    const { entity, params, headers } = <span class="cstat-no" title="statement not covered" >request;</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >    return await handleRequest&lt;T, { data: T | undefined }&gt;(</span>
-      axios.delete&lt;T&gt;(replace(url, request), { params, headers, data: entity }),
-<span class="fstat-no" title="function not covered" >      (data: T | undefined) =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
-        data,
-      })
-    );
-  };
-&nbsp;
-  return { get, get2, post, post2, put, put2, delete: _delete, delete2 };
+export function <span class="fstat-no" title="function not covered" >usePreferredWeightUnits(</span>) {
+  const { userPreferences } = <span class="cstat-no" title="statement not covered" >useUser();</span>
+<span class="cstat-no" title="statement not covered" >  return weightUnitsV2(userPreferences.preferredWeightSystem as string);</span>
 }
 &nbsp;
-/**
- * Http utils
- */
-const HttpUtils = {
-  setDefaultHeaders: <span class="fstat-no" title="function not covered" >(headers: Record&lt;string, any&gt;) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    axios.defaults.headers = { ...axios.defaults.headers, ...headers };</span>
-  },
+export function <span class="fstat-no" title="function not covered" >weightSystems(</span>) {
+<span class="cstat-no" title="statement not covered" >  return [</span>
+    { label: strings.IMPERIAL_OZ_LB, value: 'imperial' },
+    { label: strings.METRIC_G_KG_MG, value: 'metric' },
+  ];
+}
 &nbsp;
-  getDefaultHeaders: <span class="fstat-no" title="function not covered" >(): Record&lt;string, any&gt; =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
-    ...(axios.defaults.headers || {}),
-  }),
+export function <span class="fstat-no" title="function not covered" >weightSystemsNames(</span>) {
+<span class="cstat-no" title="statement not covered" >  return [</span>
+    { label: strings.IMPERIAL, value: 'imperial' },
+    { label: strings.METRIC, value: 'metric' },
+  ];
+}
+&nbsp;
+export type InitializedUnits = {
+  units?: string;
+  unitsAcknowledgedOnMs?: number;
+  updated?: boolean;
 };
 &nbsp;
-/**
- * Http service that handles simple http requests and provides some utilities.
- *
- * Usage examples:
- *
- * // with url context
- * const someService = HttpService.root('/someapi');
- * someService.get({ params: { key: value }).then(...);
- * someService.post({ entity: { name: 'some name' } });
- *
- * // without url context
- * const genericService = HttpService;
- * genericService.post({ url: '/api/{id}', replacements: { '{id}': 123 }, entity: { name: 'some name' });
- *
- * // utils
- * HttpService.setDefaultHeaders({ header-name: &lt;header-value&gt; });
- */
-const HttpService = {
-  // http api, closure with url context
-  root: (url: string) =&gt; RequestsHandler(url),
+function <span class="fstat-no" title="function not covered" >getUnitsForSystem(</span>system: string) {
+<span class="cstat-no" title="statement not covered" >  if (system === 'imperial') {</span>
+<span class="cstat-no" title="statement not covered" >    return [</span>
+      { label: strings.LB_POUNDS, value: 'Pounds' },
+      { label: strings.OZ_OUNCES, value: 'Ounces' },
+    ];
+  }
+<span class="cstat-no" title="statement not covered" >  return [</span>
+    { label: strings.G_GRAMS, value: 'Grams' },
+    { label: strings.MG_MILLIGRAMS, value: 'Milligrams' },
+    { label: strings.KG_KILOGRAMS, value: 'Kilograms' },
+  ];
+}
 &nbsp;
-  // http api, no url context
-  ...RequestsHandler(),
+export function <span class="fstat-no" title="function not covered" >convertValue(</span>value: number, unit: string) {
+  // We are just switching between imperial and metric, but don't care about the output unit
+<span class="cstat-no" title="statement not covered" >  switch (unit) {</span>
+    case 'Grams': {
+<span class="cstat-no" title="statement not covered" >      return `${(value * 0.035274).toFixed(2)} ${getUnitName('Ounces')}`;</span>
+    }
+    case 'Kilograms': {
+<span class="cstat-no" title="statement not covered" >      return `${(value * 2.20462).toFixed(2)} ${getUnitName('Pounds')}`;</span>
+    }
+    case 'Milligrams': {
+<span class="cstat-no" title="statement not covered" >      return `${(value * 0.000035274).toFixed(2)} ${getUnitName('Ounces')}`;</span>
+    }
+    case 'Pounds': {
+<span class="cstat-no" title="statement not covered" >      return `${(value * 0.453592).toFixed(2)} ${getUnitName('Kilograms')}`;</span>
+    }
+    case 'Ounces': {
+<span class="cstat-no" title="statement not covered" >      return `${(value * 28.3495).toFixed(2)} ${getUnitName('Grams')}`;</span>
+    }
+    default: {
+<span class="cstat-no" title="statement not covered" >      return `${value} ${getUnitName(unit)}`;</span>
+    }
+  }
+}
 &nbsp;
-  // utils
-  ...HttpUtils,
-};
+export function convertUnits(value: number, unit: string, outputUnit: string) {
+  // We want to switch between specific units
+  switch (unit) {
+    case 'Grams': {
+      switch (outputUnit) {
+<span class="branch-0 cbranch-no" title="branch not covered" >        case 'Ounces': {</span>
+<span class="cstat-no" title="statement not covered" >          return value * 0.035274;</span>
+        }
+<span class="branch-1 cbranch-no" title="branch not covered" >        case 'Pounds': {</span>
+<span class="cstat-no" title="statement not covered" >          return value * 0.00220462;</span>
+        }
+<span class="branch-2 cbranch-no" title="branch not covered" >        case 'Milligrams': {</span>
+<span class="cstat-no" title="statement not covered" >          return value * 1000;</span>
+        }
+<span class="branch-3 cbranch-no" title="branch not covered" >        case 'Kilograms': {</span>
+<span class="cstat-no" title="statement not covered" >          return value * 0.001;</span>
+        }
+        default: {
+          return value;
+        }
+      }
+    }
+    case 'Kilograms': {
+      switch (outputUnit) {
+<span class="branch-0 cbranch-no" title="branch not covered" >        case 'Ounces': {</span>
+<span class="cstat-no" title="statement not covered" >          return value * 35.274;</span>
+        }
+<span class="branch-1 cbranch-no" title="branch not covered" >        case 'Pounds': {</span>
+<span class="cstat-no" title="statement not covered" >          return value * 2.20462;</span>
+        }
+<span class="branch-2 cbranch-no" title="branch not covered" >        case 'Milligrams': {</span>
+<span class="cstat-no" title="statement not covered" >          return value * 1000000;</span>
+        }
+        case 'Grams': {
+          return value * 1000;
+        }
+<span class="branch-4 cbranch-no" title="branch not covered" >        default: {</span>
+<span class="cstat-no" title="statement not covered" >          return value;</span>
+        }
+      }
+    }
+    case 'Milligrams': {
+      switch (outputUnit) {
+        case 'Ounces': {
+          return value * 0.000035274;
+        }
+<span class="branch-1 cbranch-no" title="branch not covered" >        case 'Pounds': {</span>
+<span class="cstat-no" title="statement not covered" >          return value * 2.20462e-6;</span>
+        }
+        case 'Grams': {
+          return value * 0.001;
+        }
+<span class="branch-3 cbranch-no" title="branch not covered" >        case 'Kilograms': {</span>
+<span class="cstat-no" title="statement not covered" >          return value * 0.000001;</span>
+        }
+<span class="branch-4 cbranch-no" title="branch not covered" >        default: {</span>
+<span class="cstat-no" title="statement not covered" >          return value;</span>
+        }
+      }
+    }
+<span class="branch-3 cbranch-no" title="branch not covered" >    case 'Pounds': {</span>
+<span class="cstat-no" title="statement not covered" >      switch (outputUnit) {</span>
+        case 'Ounces': {
+<span class="cstat-no" title="statement not covered" >          return value * 16;</span>
+        }
+        case 'Grams': {
+<span class="cstat-no" title="statement not covered" >          return value * 453.592;</span>
+        }
+        case 'Milligrams': {
+<span class="cstat-no" title="statement not covered" >          return value * 453592.000004704;</span>
+        }
+        case 'Kilograms': {
+<span class="cstat-no" title="statement not covered" >          return value * 0.453592;</span>
+        }
+        default: {
+<span class="cstat-no" title="statement not covered" >          return value;</span>
+        }
+      }
+    }
+<span class="branch-4 cbranch-no" title="branch not covered" >    case 'Ounces': {</span>
+<span class="cstat-no" title="statement not covered" >      switch (outputUnit) {</span>
+        case 'Grams': {
+<span class="cstat-no" title="statement not covered" >          return value * 28.3495;</span>
+        }
+        case 'Pounds': {
+<span class="cstat-no" title="statement not covered" >          return value * 0.0625;</span>
+        }
+        case 'Milligrams': {
+<span class="cstat-no" title="statement not covered" >          return value * 28349.5;</span>
+        }
+        case 'Kilograms': {
+<span class="cstat-no" title="statement not covered" >          return value * 0.0283495;</span>
+        }
+        default: {
+<span class="cstat-no" title="statement not covered" >          return value;</span>
+        }
+      }
+    }
+<span class="branch-5 cbranch-no" title="branch not covered" >    default: {</span>
+<span class="cstat-no" title="statement not covered" >      return 0;</span>
+    }
+  }
+}
 &nbsp;
-export default HttpService;
+export function convertWeightToSeedCount(
+  quantity: number,
+  units: string,
+  subsetWeight?: { quantity: number; units: string },
+  subsetCount?: number
+) {
+  if (!subsetCount || !subsetWeight?.quantity) {
+    return 0;
+  }
+  return Math.round(convertUnits(quantity, units, subsetWeight.units) * (subsetCount / subsetWeight.quantity));
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >isUnitInPreferredSystem(</span>unit: string, system: string) {
+  const units = <span class="cstat-no" title="statement not covered" >getUnitsForSystem(system);</span>
+  const found = units.find(<span class="fstat-no" title="function not covered" >(iUnit) =&gt; <span class="cstat-no" title="statement not covered" >iUnit.value === unit)</span></span>;
+<span class="cstat-no" title="statement not covered" >  return !!found;</span>
+}
+&nbsp;
+export function <span class="fstat-no" title="function not covered" >getUnitName(</span>unit: string) {
+<span class="cstat-no" title="statement not covered" >  switch (unit) {</span>
+    case 'Grams': {
+<span class="cstat-no" title="statement not covered" >      return strings.GRAMS;</span>
+    }
+    case 'Kilograms': {
+<span class="cstat-no" title="statement not covered" >      return strings.KILOGRAMS;</span>
+    }
+    case 'Milligrams': {
+<span class="cstat-no" title="statement not covered" >      return strings.MILLIGRAMS;</span>
+    }
+    case 'Pounds': {
+<span class="cstat-no" title="statement not covered" >      return strings.POUNDS;</span>
+    }
+    case 'Ounces': {
+<span class="cstat-no" title="statement not covered" >      return strings.OUNCES;</span>
+    }
+    default: {
+<span class="cstat-no" title="statement not covered" >      return '';</span>
+    }
+  }
+}
+&nbsp;
+export const unitAbbv = <span class="fstat-no" title="function not covered" >(): Record&lt;string, string&gt; =&gt; <span class="cstat-no" title="statement not covered" >({</span></span>
+  Seeds: strings.CT,
+  Grams: strings.G,
+  Milligrams: strings.MG,
+  Kilograms: strings.KG,
+  Ounces: strings.OZ,
+  Pounds: strings.LB,
+});
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -723,14 +840,14 @@ export default HttpService;
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
                 at 2026-09-11T17:52:51.104Z
             </div>
-        <script src="../../prettify.js"></script>
+        <script src="../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../sorter.js"></script>
-        <script src="../../block-navigation.js"></script>
+        <script src="../sorter.js"></script>
+        <script src="../block-navigation.js"></script>
     </body>
 </html>
     
