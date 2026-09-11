@@ -18,6 +18,7 @@ export type UseOrganizationSpeciesResult = {
   /** Resolves the fresh species record for an id, or undefined when the id is missing/unknown. */
   findSpeciesById: (speciesId?: number | null) => Species | undefined;
   isLoading: boolean;
+  isInitialLoading: boolean;
   refetch: () => Promise<void>;
 };
 
@@ -27,7 +28,7 @@ export const useOrganizationSpecies = (args?: UseOrganizationSpeciesArgs): UseOr
   const inUse = args?.inUse;
   const preferCacheValue = args?.preferCacheValue ?? true;
 
-  const [listSpecies, { currentData, isFetching, isUninitialized }] = useLazyListSpeciesQuery();
+  const [listSpecies, { currentData, isFetching, isLoading, isUninitialized }] = useLazyListSpeciesQuery();
 
   useEffect(() => {
     if (organizationId && organizationId > 0) {
@@ -60,8 +61,9 @@ export const useOrganizationSpecies = (args?: UseOrganizationSpeciesArgs): UseOr
       speciesById,
       findSpeciesById,
       isLoading: isUninitialized || isFetching,
+      isInitialLoading: isUninitialized || isLoading,
       refetch,
     }),
-    [species, speciesById, findSpeciesById, isFetching, isUninitialized, refetch]
+    [species, speciesById, findSpeciesById, isFetching, isLoading, isUninitialized, refetch]
   );
 };

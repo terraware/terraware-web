@@ -12,7 +12,7 @@ export const useProjects = (record?: { projectId?: number }) => {
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const organizationId = isAcceleratorRoute ? undefined : selectedOrganization?.id;
-  const { data } = useListProjectsQuery(organizationId, {
+  const { data, isLoading } = useListProjectsQuery(organizationId, {
     skip: !isAcceleratorRoute && selectedOrganization === undefined,
   });
 
@@ -38,5 +38,5 @@ export const useProjects = (record?: { projectId?: number }) => {
     [availableProjects, recordProjectId]
   );
 
-  return { availableProjects, getProjectName, selectedProject };
+  return { availableProjects, getProjectName, isLoading, selectedProject };
 };
