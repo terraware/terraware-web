@@ -96,7 +96,7 @@ const NameCheckStep = ({
 
             const outcome = !hasSuggestion ? (
               <Typography sx={{ ...bodyCell, textAlign: 'right', color: theme.palette.TwClrTxtSecondary }}>
-                {strings.SPECIES_CHECK_NO_CHANGE}
+                {strings.NO_CHANGE}
               </Typography>
             ) : isChecked ? (
               <Typography sx={{ ...bodyCell, textAlign: 'right' }}>

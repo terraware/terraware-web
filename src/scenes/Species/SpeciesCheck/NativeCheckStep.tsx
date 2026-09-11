@@ -140,7 +140,7 @@ const NativeCheckStep = ({
                               fontWeight={600}
                               color={theme.palette.TwClrBgWarningActive}
                             >
-                              {strings.SPECIES_CHECK_OVERRIDING}
+                              {strings.OVERRIDING}
                             </Typography>
                           </Box>
                         )}

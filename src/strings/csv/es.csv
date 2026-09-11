@@ -1303,6 +1303,7 @@ NO_BATCHES_TO_WITHDRAW_FROM,No hay lotes con cantidades disponibles.,dc94bdcc
 NO_BATCHES_WITH_INVENTORY,"Todos los lotes que tenían inventario ahora están vacíos. Para ver los lotes, especies y viveros que anteriormente tenían inventario, utilice los filtros “Mostrar lotes vacíos” y “Mostrar especies/viveros sin inventario”.",2c0612be
 NO_BATCHES_WITH_INVENTORY_MESSAGE,Ningún lote tiene inventario. Utilice el filtro “Mostrar lotes vacíos” para ver todos sus lotes vacíos.,c326ecab
 NO_CHALLENGES_AND_MITIGATION_PLANS_ADDED,No se han agregado desafíos ni planes de mitigación,f1d982d5
+NO_CHANGE,Sin cambios,d24105cc
 NO_COLUMNS_SELECTED,Sin columnas seleccionadas,ac8b2bbe
 NO_COMMENTS_ADDED,Ningún comentario añadido,7fd30c97
 NO_DATA_YET,Aún no hay datos.,f2a0be82
@@ -1523,6 +1524,7 @@ OVERRIDE,Anular,15bd0e63
 OVERRIDE_SPECIES,Anular especie,c8f09521
 OVERRIDE_STATUS_NOT_SET_TOOLTIP,"Después de establecer un estado, este puede ser anulado. Ejecute la función de Verificación de Especies para establecer un estado para la especie en este Proyecto.",15d7f709
 OVERRIDE_STATUS_NOT_SET_TOOLTIP_ORG,"Después de establecer un estado, este puede ser anulado. Ejecute la función de Verificación de Especies para asignar un estado a la especie.",c4738674
+OVERRIDING,Reemplazando,46e4d047
 OVERVIEW,Descripción,c7fd0e47
 OVERWRITE_TERRAWARE_TRACKING_DATA,Sobrescribir los datos de seguimiento de Terraware,1f5637ba
 OVERWRITTEN_ORIGINAL_VALUE,Sobrescrito - original: {0},c504c96d
@@ -2258,10 +2260,8 @@ SPECIES_CHECK,Verificación de especies,d7d0f200
 SPECIES_CHECK_ADDED_BANNER,"Se agregaron {0} especies nuevas ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",35e34395
 SPECIES_CHECK_ADDED_BANNER_ONE,"Se agregó {0} especie nueva ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",89f12eb5
 SPECIES_CHECK_KEEPS,Mantiene {0},16ce403f
-SPECIES_CHECK_NO_CHANGE,Sin cambios,d24105cc
 SPECIES_CHECK_OVERRIDE_JUSTIFICATION_PLACEHOLDER,¿Por qué esta especie difiere de la sugerencia?,b83db1e0
 SPECIES_CHECK_OVERRIDE_WARNING,Native Check sugirió {0} para esta especie. Registre el estado que desea en su lugar.,c75e6aa8
-SPECIES_CHECK_OVERRIDING,Anulando,46e4d047
 SPECIES_CHECK_SET_LOCATION_BANNER,"Para verificar qué especies son nativas, introducidas o invasoras, ejecute la Verificación de Especies. Deberá establecer la ubicación de sus proyectos.",49c844fd
 SPECIES_CHECK_SET_LOCATION_HINT,Seleccione un país y un país botánico para establecer la ubicación.,e7b413a8
 SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS,Seleccione un país y un país botánico para establecer la ubicación de cada proyecto.,8070772f

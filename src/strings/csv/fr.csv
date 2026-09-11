@@ -1302,6 +1302,7 @@ NO_BATCHES_TO_WITHDRAW_FROM,Il n'y a pas de lots dont les quantités peuvent êt
 NO_BATCHES_WITH_INVENTORY,"Tous les lots ayant eu un inventaire sont maintenant vides. Pour afficher les lots, espèces et pépinières qui avaient auparavant un inventaire, utilisez les filtres « Afficher les lots vides » et « Afficher les espèces/pépinières sans inventaire ».",2c0612be
 NO_BATCHES_WITH_INVENTORY_MESSAGE,Aucun lot ne possède d’inventaire. Utilisez le filtre « Afficher les lots vides » pour voir tous vos lots vides.,c326ecab
 NO_CHALLENGES_AND_MITIGATION_PLANS_ADDED,Aucun défi ni plan d’atténuation ajouté,f1d982d5
+NO_CHANGE,Aucun changement,d24105cc
 NO_COLUMNS_SELECTED,Aucune colonne sélectionnée,ac8b2bbe
 NO_COMMENTS_ADDED,Aucun commentaire ajouté,7fd30c97
 NO_DATA_YET,Pas encore de données,f2a0be82
@@ -1522,6 +1523,7 @@ OVERRIDE,Remplacer,15bd0e63
 OVERRIDE_SPECIES,Remplacer l’espèce,c8f09521
 OVERRIDE_STATUS_NOT_SET_TOOLTIP,"Une fois qu’un statut est défini, il peut être remplacé. Utilisez la fonctionnalité de vérification des espèces pour définir un statut pour l’espèce dans ce projet.",15d7f709
 OVERRIDE_STATUS_NOT_SET_TOOLTIP_ORG,"Une fois qu’un statut est défini, il peut être remplacé. Utilisez la fonctionnalité de vérification des espèces pour définir un statut pour l’espèce.",c4738674
+OVERRIDING,Remplacement,46e4d047
 OVERVIEW,Vue d’ensemble,c7fd0e47
 OVERWRITE_TERRAWARE_TRACKING_DATA,Écraser les données de suivi Terraware,1f5637ba
 OVERWRITTEN_ORIGINAL_VALUE,Remplacement – original : {0},c504c96d
@@ -2257,10 +2259,8 @@ SPECIES_CHECK,Vérification des espèces,d7d0f200
 SPECIES_CHECK_ADDED_BANNER,"{0} nouvelles espèces ont été ajoutées ({1}). Lancez la vérification des espèces pour voir lesquelles sont indigènes, introduites ou envahissantes.",35e34395
 SPECIES_CHECK_ADDED_BANNER_ONE,"{0} nouvelle espèce a été ajoutée ({1}). Lancez la vérification des espèces pour voir si elle est indigène, introduite ou envahissante.",89f12eb5
 SPECIES_CHECK_KEEPS,Conserve {0},16ce403f
-SPECIES_CHECK_NO_CHANGE,Aucun changement,d24105cc
 SPECIES_CHECK_OVERRIDE_JUSTIFICATION_PLACEHOLDER,Pourquoi cette espèce diffère-t-elle de la suggestion ?,b83db1e0
 SPECIES_CHECK_OVERRIDE_WARNING,Native Check a suggéré {0} pour cette espèce. Indiquez le statut que vous souhaitez à la place.,c75e6aa8
-SPECIES_CHECK_OVERRIDING,Remplacement en cours,46e4d047
 SPECIES_CHECK_SET_LOCATION_BANNER,"Pour vérifier quelles espèces sont indigènes, introduites ou envahissantes, lancez la Vérification des espèces. Vous devrez définir l’emplacement de vos projets.",49c844fd
 SPECIES_CHECK_SET_LOCATION_HINT,Sélectionnez un pays et un pays botanique pour définir l’emplacement.,e7b413a8
 SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS,Sélectionnez un pays et un pays botanique pour définir l’emplacement de chaque projet.,8070772f
