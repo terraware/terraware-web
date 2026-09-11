@@ -1,7 +1,11 @@
 import { CachedUserService } from 'src/services';
 import env from 'src/utils/useEnvironment';
 
-export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots' | 'Report Updates July 2026';
+export type FeatureName =
+  | 'Show Production View'
+  | 'Virtual Monitoring Plots'
+  | 'Report Updates July 2026'
+  | 'New Observation Filters';
 
 export type Feature = {
   name: FeatureName;
@@ -51,6 +55,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Redesigned report tab for participants, accelerator admins, and funders.'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'New Observation Filters',
+    preferenceName: 'newObservationFilters',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Redesigned filters for observation results.'],
     disclosure: ['This is a WIP'],
   },
 ];
