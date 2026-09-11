@@ -40,7 +40,13 @@ const trackReportFetches = (reports: Record<number, Record<string, unknown>>) =>
     }),
     http.post('/api/v1/accelerator/reports/:reportId', () => HttpResponse.json({ status: 'ok' })),
     http.post('/api/v1/accelerator/reports/:reportId/indicators/review', () => HttpResponse.json({ status: 'ok' })),
-    http.post('/api/v1/accelerator/reports/:reportId/indicators/refresh', () => HttpResponse.json({ status: 'ok' }))
+    http.post('/api/v1/accelerator/reports/:reportId/indicators/refresh', () => HttpResponse.json({ status: 'ok' })),
+    http.post('/api/v1/accelerator/projects/:projectId/reports/projectIndicatorTarget', () =>
+      HttpResponse.json({ status: 'ok' })
+    ),
+    http.post('/api/v1/accelerator/projects/:projectId/reports/projectIndicatorTarget/baseline', () =>
+      HttpResponse.json({ status: 'ok' })
+    )
   );
 
   return {
@@ -48,6 +54,12 @@ const trackReportFetches = (reports: Record<number, Record<string, unknown>>) =>
     fetches,
   };
 };
+
+/**
+ * A dropped subscription is not observable from the outside, so there is no condition for `waitFor`
+ * to poll; yield the event loop instead and let RTK Query's subscription bookkeeping settle.
+ */
+const yieldToStore = () => new Promise((resolve) => setTimeout(resolve, 0));
 
 describe('accelerator report cache invalidation', () => {
   it("refetches the project's other reports when one report's values are edited", async () => {
@@ -112,5 +124,86 @@ describe('accelerator report cache invalidation', () => {
     );
 
     await waitFor(() => expect(tracker.countFor(2)).toBe(2));
+  });
+  it('refetches a report when a yearly target it renders is updated', async () => {
+    const tracker = trackReportFetches({ 1: buildReport(1) });
+    const store = makeStore();
+
+    await store.dispatch(api.endpoints.getOneAcceleratorReport.initiate({ reportId: 1, includeIndicators: true }));
+
+    expect(tracker.countFor(1)).toBe(1);
+
+    await store.dispatch(
+      api.endpoints.updateProjectIndicatorTarget.initiate({
+        projectId: PROJECT_ID,
+        updateProjectIndicatorTargetRequestPayload: { indicatorId: 5, target: 10, year: 2026 },
+      })
+    );
+
+    await waitFor(() => expect(tracker.countFor(1)).toBe(2));
+  });
+
+  it('refetches a report whose yearly target was updated while the report had no subscribers', async () => {
+    const tracker = trackReportFetches({ 1: buildReport(1) });
+    const store = makeStore();
+
+    const subscription = store.dispatch(
+      api.endpoints.getOneAcceleratorReport.initiate({ reportId: 1, includeIndicators: true })
+    );
+    await subscription;
+
+    subscription.unsubscribe();
+    await yieldToStore();
+
+    await store.dispatch(
+      api.endpoints.updateProjectIndicatorTarget.initiate({
+        projectId: PROJECT_ID,
+        updateProjectIndicatorTargetRequestPayload: { indicatorId: 5, target: 10, year: 2026 },
+      })
+    );
+    await yieldToStore();
+
+    await store.dispatch(
+      api.endpoints.getOneAcceleratorReport.initiate(
+        { reportId: 1, includeIndicators: true },
+        { forceRefetch: false, subscribe: true }
+      )
+    );
+
+    await waitFor(() => expect(tracker.countFor(1)).toBe(2));
+  });
+
+  it('refetches a report from another year when a yearly target is updated', async () => {
+    const tracker = trackReportFetches({
+      1: buildReport(1, { endDate: '2027-03-31', startDate: '2027-01-01' }),
+    });
+    const store = makeStore();
+
+    await store.dispatch(api.endpoints.getOneAcceleratorReport.initiate({ reportId: 1, includeIndicators: true }));
+
+    await store.dispatch(
+      api.endpoints.updateProjectIndicatorTarget.initiate({
+        projectId: PROJECT_ID,
+        updateProjectIndicatorTargetRequestPayload: { indicatorId: 5, target: 10, year: 2026 },
+      })
+    );
+
+    await waitFor(() => expect(tracker.countFor(1)).toBe(2));
+  });
+
+  it('refetches a report when the end of project target it renders is updated', async () => {
+    const tracker = trackReportFetches({ 1: buildReport(1) });
+    const store = makeStore();
+
+    await store.dispatch(api.endpoints.getOneAcceleratorReport.initiate({ reportId: 1, includeIndicators: true }));
+
+    await store.dispatch(
+      api.endpoints.updateProjectIndicatorBaselineTarget.initiate({
+        projectId: PROJECT_ID,
+        updateProjectIndicatorBaselineTargetRequestPayload: { endOfProjectTarget: 500, indicatorId: 5 },
+      })
+    );
+
+    await waitFor(() => expect(tracker.countFor(1)).toBe(2));
   });
 });
