@@ -7,11 +7,11 @@ import { Button, Icon } from '@terraware/web-components';
 import PhotosList from 'src/components/common/PhotosList';
 import { API_PATHS } from 'src/constants';
 import useAccession from 'src/hooks/useAccession';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
 import strings from 'src/strings';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
-import { getSeedBank, isContributor } from 'src/utils/organization';
+import { getSeedBank } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -22,7 +22,8 @@ export default function DetailPanel(): JSX.Element {
   const { countries } = useLocalization();
   const { accessionId: accessionIdParam } = useParams<{ accessionId: string }>();
   const { accession } = useAccession(Number(accessionIdParam));
-  const userCanEdit = !isContributor(selectedOrganization);
+  const { isAllowed } = useUser();
+  const userCanEdit = isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const seedBank =
