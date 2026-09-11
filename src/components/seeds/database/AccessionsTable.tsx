@@ -618,7 +618,7 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
           ),
           muiTableBodyCellProps: ({ row, column, table }) => {
             const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
-            return { id: `row${visualIndex + 1}-${column.id}` };
+            return { id: `row${visualIndex + 1}-${column.id}`, sx: { fontSize: '16px' } };
           },
           muiTableBodyProps: {
             sx: {
