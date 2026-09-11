@@ -1,3 +1,4 @@
+7553fe1d SW-8779 Invalidate the project's reports when any yearly target changes (#6399)
 75eaa892 SW-8778 Rename the Unlikely indicator status to At Risk (#6402)
 e70e98f8 SW-8874 Accessions: Allow withdrawals to specify weight units (#6395)
 0f3ee767 SW-8776 Invalidate the project's reports when report values change (#6398)
