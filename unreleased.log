@@ -1,3 +1,4 @@
+0f3ee767 SW-8776 Invalidate the project's reports when report values change (#6398)
 a898a939 SW-8777/SW-8775 Correct the indicator status colors (#6401)
 656e3de5 SW-8878 Species Check UI/UX Updates (#6403)
 0c373111 SW-8626 Upon page refresh, empty state loads first in Species, Accessions, Inventory pages (#6397)
