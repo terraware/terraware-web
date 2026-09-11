@@ -230,6 +230,7 @@ ASSIGNED_LOCATION,Emplacement attribué,9e0b2077
 ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre de plants observés par espèce enregistrés comme vivants. Les plants enregistrés comme préexistants ou dont l'espèce est inconnue ne sont pas inclus.,526a70bc
 ASSIGNED_PLOT_OBSERVATION,Observation de parcelle attribuée,9175acf6
 ASSIGNED_PLOT_OBSERVATION_TOOLTIP,Sélectionnez une observation de parcelle attribuée pour afficher les données d'observation sur la carte.,2a1963a4
+AT_RISK,À risque,b2f3373a
 ATTACH_IMAGES_OR_VIDEOS,Joindre une (des) image(s) ou une (des) vidéo(s),c229aa87
 ATTACHMENT_DESCRIPTION,Joindre jusqu'à {0} fichiers. Chaque fichier a une taille maximale de {1}MB.,8ba18a63
 ATTACHMENT_LIMIT_REACHED,Limite de pièces jointes atteinte,9f9323bc
@@ -2638,7 +2639,6 @@ UNFAVORABLE_WEATHER,Météo défavorable,a11232d3
 UNIT,Unité,48d10134
 UNITS,Unités,ce3e3f06
 UNKNOWN,Inconnu,97ccc176
-UNLIKELY,Peu probable,961eba8d
 UNPIN_ALL,Désépingler tout,97a06369
 UNPUBLISHED_CHANGES,Modifications non publiées,44cc10b0
 UNPUBLISHED_CHANGES_WARNING,Ce rapport ne correspond PAS au rapport publié. Cela peut être dû à des modifications non publiées dans ce rapport.,f7c6bf21

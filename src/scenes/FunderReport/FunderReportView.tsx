@@ -107,7 +107,7 @@ const FunderReportView = ({ selectedProjectId, selectedReport }: FunderReportVie
             </Box>
             <Box display='flex' marginTop={3}>
               <Box flexBasis={'81px'} flexShrink={0} marginRight={1}>
-                <IndicatorStatusBadge status='Unlikely' />
+                <IndicatorStatusBadge status='At Risk' />
               </Box>
               <Typography>{strings.INDICATOR_STATUS_DESCRIPTION_UNLIKELY}</Typography>
             </Box>

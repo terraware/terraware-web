@@ -594,7 +594,7 @@ export type ReportAutoCalculatedIndicatorPayload = {
   progressNotes?: string;
   projectsComments?: string;
   refId: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  status?: 'Achieved' | 'On-Track' | 'At Risk' | 'Off-Track';
   supportingDocumentUrl?: string;
   systemTime?: string;
   systemValue?: number;
@@ -623,7 +623,7 @@ export type ReportCommonIndicatorPayload = {
   progressNotes?: string;
   projectsComments?: string;
   refId: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  status?: 'Achieved' | 'On-Track' | 'At Risk' | 'Off-Track';
   supportingDocumentUrl?: string;
   target?: number;
   unit?: string;
@@ -655,7 +655,7 @@ export type ReportProjectIndicatorPayload = {
   progressNotes?: string;
   projectsComments?: string;
   refId: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  status?: 'Achieved' | 'On-Track' | 'At Risk' | 'Off-Track';
   supportingDocumentUrl?: string;
   target?: number;
   unit?: string;
@@ -847,14 +847,14 @@ export type ReportAutoCalculatedIndicatorEntriesPayload = {
   overrideValue?: number;
   progressNotes?: string;
   projectsComments?: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  status?: 'Achieved' | 'On-Track' | 'At Risk' | 'Off-Track';
   supportingDocumentUrl?: string;
 };
 export type ReportCommonIndicatorEntriesPayload = {
   id: number;
   progressNotes?: string;
   projectsComments?: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  status?: 'Achieved' | 'On-Track' | 'At Risk' | 'Off-Track';
   supportingDocumentUrl?: string;
   value?: number;
 };
@@ -862,7 +862,7 @@ export type ReportProjectIndicatorEntriesPayload = {
   id: number;
   progressNotes?: string;
   projectsComments?: string;
-  status?: 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+  status?: 'Achieved' | 'On-Track' | 'At Risk' | 'Off-Track';
   supportingDocumentUrl?: string;
   value?: number;
 };
