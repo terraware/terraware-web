@@ -10,6 +10,7 @@ import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessa
 import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useStickyPlantingSiteId, { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
@@ -32,6 +33,7 @@ const ObservationListView = (): JSX.Element => {
   const navigate = useSyncNavigate();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const newFiltersEnabled = isEnabled('New Observation Filters');
 
   const observableSites = useObservablePlantingSites();
   const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites();
@@ -231,6 +233,7 @@ const ObservationListView = (): JSX.Element => {
       leftComponent={isMobile ? PageHeaderPlantingSiteDropdown : undefined}
       leftComponentGridSize={isMobile ? 7 : 0}
       rightComponentGridSize={4}
+      stickyHeader={newFiltersEnabled}
     >
       <ObservationsEventsNotification />
       {activeTab === 'plantMonitoring' && (
