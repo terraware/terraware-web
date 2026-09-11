@@ -512,9 +512,16 @@ const SpeciesCheckModal = ({
           });
         });
       }
-      // Checked rows keep the suggestion; acceptPendingNativities promotes the pending statuses.
-      if (selectedOrganization) {
-        await acceptPending({ organizationId: selectedOrganization.id }).unwrap();
+
+      const shownSections = nativeSections.filter((section) => section.pending.length > 0);
+      const shownProjectIds = shownSections
+        .map((section) => section.projectId)
+        .filter((projectId): projectId is number => projectId !== undefined);
+      if (selectedOrganization && shownSections.length > 0) {
+        await acceptPending({
+          organizationId: selectedOrganization.id,
+          projectIds: shownProjectIds.length > 0 ? shownProjectIds : undefined,
+        }).unwrap();
       }
       trackCheckCompleted(overrides);
       markSubmitted();
