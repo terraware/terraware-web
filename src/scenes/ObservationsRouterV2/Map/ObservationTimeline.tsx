@@ -10,17 +10,15 @@ import { ObservationResultsPayload } from 'src/queries/generated/observations';
 type ObservationClusterMode = 'Month' | 'Quarter' | 'Year';
 
 type ObservationTimelineProps = {
-  adHocObservationResults: ObservationResultsPayload[];
+  isAdHoc?: boolean;
   observationResults: ObservationResultsPayload[];
-  selectAdHocObservationResults: (adHocResults: ObservationResultsPayload[]) => void;
   selectObservationResults: (observationResults: ObservationResultsPayload[]) => void;
   timezone: string;
 };
 
 const ObservationTimeline = ({
-  adHocObservationResults,
+  isAdHoc,
   observationResults,
-  selectAdHocObservationResults,
   selectObservationResults,
   timezone,
 }: ObservationTimelineProps): JSX.Element => {
@@ -28,14 +26,14 @@ const ObservationTimeline = ({
   const theme = useTheme();
   const [selectedCluster, setSelectedCluster] = useState<string>();
   const observationDates = useMemo(() => {
-    return [...adHocObservationResults, ...observationResults].map((observation) => {
+    return observationResults.map((observation) => {
       const completedDate = observation.completedTime
         ? getDateDisplayValue(observation.completedTime, timezone)
         : undefined;
 
       return new Date(completedDate ?? observation.startDate);
     });
-  }, [adHocObservationResults, observationResults, timezone]);
+  }, [observationResults, timezone]);
 
   const earliestDate = useMemo(() => {
     if (observationDates.length > 1) {
@@ -162,31 +160,10 @@ const ObservationTimeline = ({
     return observationsByKeys;
   }, [getClusterKey, observationResults, timezone]);
 
-  const clusteredAdHocObservationIds = useMemo(() => {
-    const observationsByKeys = new Map<string, number[]>();
-
-    adHocObservationResults.forEach((observation) => {
-      const completedDate = observation.completedTime
-        ? getDateDisplayValue(observation.completedTime, timezone)
-        : undefined;
-
-      const observationDate = new Date(completedDate ?? observation.startDate);
-      const clusterKey = getClusterKey(observationDate);
-
-      if (!observationsByKeys.has(clusterKey)) {
-        observationsByKeys.set(clusterKey, []);
-      }
-
-      observationsByKeys.get(clusterKey)!.push(observation.observationId);
-    });
-
-    return observationsByKeys;
-  }, [adHocObservationResults, getClusterKey, timezone]);
-
-  const allClusterKeys = useMemo(() => {
-    const keySet = new Set([...clusteredAdHocObservationIds.keys(), ...clusteredObservationIds.keys()]);
-    return [...keySet].sort((a, b) => getClusterValue(a) - getClusterValue(b));
-  }, [clusteredAdHocObservationIds, clusteredObservationIds, getClusterValue]);
+  const allClusterKeys = useMemo(
+    () => [...clusteredObservationIds.keys()].sort((a, b) => getClusterValue(a) - getClusterValue(b)),
+    [clusteredObservationIds, getClusterValue]
+  );
 
   useEffect(() => {
     const today = new Date().valueOf();
@@ -210,19 +187,14 @@ const ObservationTimeline = ({
   const marks = useMemo((): TimelineSliderMark[] => {
     return allClusterKeys
       .map((key): TimelineSliderMark | undefined => {
-        const observationIds = clusteredObservationIds.get(key);
-        const adHocObservationIds = clusteredAdHocObservationIds.get(key);
         const selected = key === selectedCluster;
-
-        const observationsSize = observationIds?.length ?? 0;
-        const adHocObservationsSize = adHocObservationIds?.length ?? 0;
 
         const clusterColor = selected
           ? theme.palette.TwClrIcnSecondary
-          : observationsSize > 0
-            ? theme.palette.TwClrBgBrand
-            : theme.palette.TwClrBaseOrange300;
-        const clusterSize = observationsSize + adHocObservationsSize;
+          : isAdHoc
+            ? theme.palette.TwClrBaseOrange300
+            : theme.palette.TwClrBgBrand;
+        const clusterSize = clusteredObservationIds.get(key)?.length ?? 0;
 
         if (clusterSize === 1) {
           return {
@@ -246,9 +218,9 @@ const ObservationTimeline = ({
       .filter((mark): mark is TimelineSliderMark => mark !== undefined);
   }, [
     allClusterKeys,
-    clusteredAdHocObservationIds,
     clusteredObservationIds,
     getClusterValue,
+    isAdHoc,
     selectedCluster,
     theme.palette.TwClrBaseOrange300,
     theme.palette.TwClrBgBrand,
@@ -258,27 +230,11 @@ const ObservationTimeline = ({
   useEffect(() => {
     if (selectedCluster) {
       const observationIds = new Set(clusteredObservationIds.get(selectedCluster));
-      const adHocObservationIds = new Set(clusteredAdHocObservationIds.get(selectedCluster));
-
-      const filteredObservations = observationResults.filter((observation) =>
-        observationIds.has(observation.observationId)
+      selectObservationResults(
+        observationResults.filter((observation) => observationIds.has(observation.observationId))
       );
-      const filteredAdHocObservations = adHocObservationResults.filter((observation) =>
-        adHocObservationIds.has(observation.observationId)
-      );
-
-      selectObservationResults(filteredObservations);
-      selectAdHocObservationResults(filteredAdHocObservations);
     }
-  }, [
-    adHocObservationResults,
-    clusteredAdHocObservationIds,
-    clusteredObservationIds,
-    observationResults,
-    selectAdHocObservationResults,
-    selectObservationResults,
-    selectedCluster,
-  ]);
+  }, [clusteredObservationIds, observationResults, selectObservationResults, selectedCluster]);
 
   return (
     <TimelineSlider
