@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">28.57% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/6</span>
+                <span class='fraction'>2/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>0/13</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">28.57% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/6</span>
+                <span class='fraction'>2/7</span>
             </div>
         
             
@@ -143,7 +143,11 @@
 <a name='L78'></a><a href='#L78'>78</a>
 <a name='L79'></a><a href='#L79'>79</a>
 <a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -173,11 +177,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -250,12 +258,12 @@ const ProjectCheckSummary = <span class="fstat-no" title="function not covered" 
   countryName,
   botanicalCountryName,
   showLocation = true,
-  updates,
   updatesLabel,
   speciesChecked,
 }: ProjectCheckSummaryProps): JSX.Element =&gt; {
   const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
-  const showCounts = <span class="cstat-no" title="statement not covered" >updates !== undefined &amp;&amp; speciesChecked !== undefined;</span>
+  const showSpeciesChecked = <span class="cstat-no" title="statement not covered" >speciesChecked !== undefined;</span>
+  const showUpdatesLine = <span class="cstat-no" title="statement not covered" >updatesLabel !== undefined;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
     &lt;Box
@@ -288,14 +296,18 @@ const ProjectCheckSummary = <span class="fstat-no" title="function not covered" 
           &lt;/Box&gt;
         )}
       &lt;/Box&gt;
-      {showCounts &amp;&amp; (
+      {(showSpeciesChecked || showUpdatesLine) &amp;&amp; (
         &lt;Box textAlign='right' whiteSpace='nowrap'&gt;
-          &lt;Typography fontSize='16px' color={theme.palette.TwClrBaseBlack}&gt;
-            {strings.formatString(strings.SPECIES_CHECK_SPECIES_CHECKED, speciesChecked)}
-          &lt;/Typography&gt;
-          &lt;Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrBaseBlack}&gt;
-            {updatesLabel ?? strings.formatString(strings.SPECIES_CHECK_UPDATES, updates)}
-          &lt;/Typography&gt;
+          {showSpeciesChecked &amp;&amp; (
+            &lt;Typography fontSize='16px' color={theme.palette.TwClrBaseBlack}&gt;
+              {strings.formatString(strings.SPECIES_CHECK_SPECIES_CHECKED, speciesChecked)}
+            &lt;/Typography&gt;
+          )}
+          {showUpdatesLine &amp;&amp; (
+            &lt;Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrBaseBlack}&gt;
+              {updatesLabel}
+            &lt;/Typography&gt;
+          )}
         &lt;/Box&gt;
       )}
     &lt;/Box&gt;
@@ -310,7 +322,7 @@ export default ProjectCheckSummary;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-11T17:28:28.661Z
+                at 2026-09-11T17:42:04.574Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

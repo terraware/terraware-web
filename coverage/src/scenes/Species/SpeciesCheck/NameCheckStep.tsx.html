@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.5% </span>
+                <span class="strong">11.11% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>2/16</span>
+                <span class='fraction'>2/18</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">12.5% </span>
+                <span class="strong">11.11% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>2/16</span>
+                <span class='fraction'>2/18</span>
             </div>
         
             
@@ -190,7 +190,19 @@
 <a name='L125'></a><a href='#L125'>125</a>
 <a name='L126'></a><a href='#L126'>126</a>
 <a name='L127'></a><a href='#L127'>127</a>
-<a name='L128'></a><a href='#L128'>128</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -286,6 +298,12 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -299,6 +317,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -324,7 +348,7 @@ import { Box, Checkbox, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { Species, SpeciesProblemElement } from 'src/types/Species';
 &nbsp;
-import ProjectCheckSummary, { ProjectCheckSummaryProps, suggestionsCountLabel } from './ProjectCheckSummary';
+import ProjectCheckSummary, { ProjectCheckSummaryProps } from './ProjectCheckSummary';
 &nbsp;
 const issueLabel = <span class="fstat-no" title="function not covered" >(problem: SpeciesProblemElement): string =&gt; {</span>
 <span class="cstat-no" title="statement not covered" >  switch (problem.type) {</span>
@@ -379,7 +403,7 @@ const NameCheckStep = <span class="fstat-no" title="function not covered" >({</s
               borderTop: index &gt; 0 ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined,
             }}
           &gt;
-            &lt;ProjectCheckSummary {...summary} updatesLabel={suggestionsCountLabel(summary.updates ?? 0)} /&gt;
+            &lt;ProjectCheckSummary {...summary} /&gt;
           &lt;/Box&gt;
         ))}
       &lt;/Box&gt;
@@ -405,12 +429,28 @@ const NameCheckStep = <span class="fstat-no" title="function not covered" >({</s
             &lt;span /&gt;
             &lt;Typography sx={headerCell}&gt;{strings.SPECIES}&lt;/Typography&gt;
             &lt;Typography sx={headerCell}&gt;{strings.ISSUE}&lt;/Typography&gt;
-            &lt;Typography sx={{ ...headerCell, textAlign: 'right' }}&gt;{strings.SUGGESTION}&lt;/Typography&gt;
+            &lt;Typography sx={{ ...headerCell, textAlign: 'right' }}&gt;{strings.WHAT_WILL_HAPPEN}&lt;/Typography&gt;
           &lt;/Box&gt;
           {speciesWithProblems.map(<span class="fstat-no" title="function not covered" >(species) =&gt; {</span>
             const problem = <span class="cstat-no" title="statement not covered" >species.problems?.[0];</span>
             const hasSuggestion = <span class="cstat-no" title="statement not covered" >!!problem?.suggestedValue?.trim();</span>
-            const textColor = <span class="cstat-no" title="statement not covered" >hasSuggestion ? theme.palette.TwClrTxt : theme.palette.TwClrTxtSecondary;</span>
+            const isChecked = <span class="cstat-no" title="statement not covered" >hasSuggestion &amp;&amp; selectedSpeciesIds.has(species.id);</span>
+            const nameColor = <span class="cstat-no" title="statement not covered" >hasSuggestion ? theme.palette.TwClrTxt : theme.palette.TwClrTxtSecondary;</span>
+&nbsp;
+            const outcome = <span class="cstat-no" title="statement not covered" >!hasSuggestion ? (</span>
+              &lt;Typography sx={{ ...bodyCell, textAlign: 'right', color: theme.palette.TwClrTxtSecondary }}&gt;
+                {strings.NO_CHANGE}
+              &lt;/Typography&gt;
+            ) : isChecked ? (
+              &lt;Typography sx={{ ...bodyCell, textAlign: 'right' }}&gt;
+                {strings.formatString(strings.CHANGE_TO, &lt;b&gt;{problem?.suggestedValue}&lt;/b&gt;)}
+              &lt;/Typography&gt;
+            ) : (
+              &lt;Typography sx={{ ...bodyCell, textAlign: 'right', color: theme.palette.TwClrTxtSecondary }}&gt;
+                {strings.formatString(strings.SPECIES_CHECK_KEEPS, &lt;b&gt;{species.scientificName}&lt;/b&gt;)}
+              &lt;/Typography&gt;
+            );
+&nbsp;
 <span class="cstat-no" title="statement not covered" >            return (</span>
               &lt;Box
                 key={species.id}
@@ -420,20 +460,16 @@ const NameCheckStep = <span class="fstat-no" title="function not covered" >({</s
                 padding={theme.spacing(1, 2, 1, 0)}
               &gt;
                 &lt;Checkbox
-                  checked={hasSuggestion &amp;&amp; selectedSpeciesIds.has(species.id)}
+                  checked={isChecked}
                   onChange={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >onToggleSpecies(species.id)}</span></span>
                   disabled={!hasSuggestion}
                   sx={{ padding: 0 }}
                 /&gt;
-                &lt;Typography sx={{ ...bodyCell, color: textColor }}&gt;{species.scientificName}&lt;/Typography&gt;
+                &lt;Typography sx={{ ...bodyCell, color: nameColor }}&gt;{species.scientificName}&lt;/Typography&gt;
                 &lt;Typography sx={{ ...bodyCell, color: theme.palette.TwClrTxt }}&gt;
                   {problem ? issueLabel(problem) : ''}
                 &lt;/Typography&gt;
-                &lt;Typography sx={{ ...bodyCell, textAlign: 'right', color: textColor }}&gt;
-                  {problem?.suggestedValue
-                    ? strings.formatString(strings.CHANGE_TO, &lt;b&gt;{problem.suggestedValue}&lt;/b&gt;)
-                    : ''}
-                &lt;/Typography&gt;
+                {outcome}
               &lt;/Box&gt;
             );
           })}
@@ -451,7 +487,7 @@ export default NameCheckStep;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-11T17:28:28.661Z
+                at 2026-09-11T17:42:04.574Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

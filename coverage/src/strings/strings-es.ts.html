@@ -3324,8 +3324,24 @@
 <a name='L3259'></a><a href='#L3259'>3259</a>
 <a name='L3260'></a><a href='#L3260'>3260</a>
 <a name='L3261'></a><a href='#L3261'>3261</a>
-<a name='L3262'></a><a href='#L3262'>3262</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L3262'></a><a href='#L3262'>3262</a>
+<a name='L3263'></a><a href='#L3263'>3263</a>
+<a name='L3264'></a><a href='#L3264'>3264</a>
+<a name='L3265'></a><a href='#L3265'>3265</a>
+<a name='L3266'></a><a href='#L3266'>3266</a>
+<a name='L3267'></a><a href='#L3267'>3267</a>
+<a name='L3268'></a><a href='#L3268'>3268</a>
+<a name='L3269'></a><a href='#L3269'>3269</a>
+<a name='L3270'></a><a href='#L3270'>3270</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">33x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -8020,7 +8036,7 @@ export const strings = {
   NATIVE_CHECK: 'Verificación de especie nativa',
   NATIVE_CHECK_NO_UPDATES: 'No hay sugerencias para el estado nativo de las especies.',
   NATIVE_CHECK_UPDATE_HINT:
-    'Seleccione las especies para modificar el estado sugerido, o déjelas sin seleccionar para usar el estado sugerido.',
+    'Se aplicarán todas las sugerencias. Desmarque una especie para establecer su estado manualmente.',
   NATIVE_ECOSYSTEM: 'Ecosistema autóctono',
   NATIVE_ECOSYSTEM_TOOLTIP:
     'Indique el tipo de ecosistema en el cual se encuentra esta especie de forma natural; podría incluir detalles tales como el rango de elevación, pluviometría, etc.',
@@ -8063,6 +8079,7 @@ export const strings = {
   NO_BATCHES_WITH_INVENTORY_MESSAGE:
     'Ningún lote tiene inventario. Utilice el filtro “Mostrar lotes vacíos” para ver todos sus lotes vacíos.',
   NO_CHALLENGES_AND_MITIGATION_PLANS_ADDED: 'No se han agregado desafíos ni planes de mitigación',
+  NO_CHANGE: 'Sin cambios',
   NO_COLUMNS_SELECTED: 'Sin columnas seleccionadas',
   NO_COMMENTS_ADDED: 'Ningún comentario añadido',
   NO_DATA_YET: 'Aún no hay datos.',
@@ -8311,6 +8328,7 @@ export const strings = {
     'Después de establecer un estado, este puede ser anulado. Ejecute la función de Verificación de Especies para establecer un estado para la especie en este Proyecto.',
   OVERRIDE_STATUS_NOT_SET_TOOLTIP_ORG:
     'Después de establecer un estado, este puede ser anulado. Ejecute la función de Verificación de Especies para asignar un estado a la especie.',
+  OVERRIDING: 'Reemplazando',
   OVERVIEW: 'Descripción',
   OVERWRITE_TERRAWARE_TRACKING_DATA: 'Sobrescribir los datos de seguimiento de Terraware',
   OVERWRITTEN_ORIGINAL_VALUE: 'Sobrescrito - original: {0}',
@@ -9162,6 +9180,10 @@ export const strings = {
     'Se agregaron {0} especies nuevas ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.',
   SPECIES_CHECK_ADDED_BANNER_ONE:
     'Se agregó {0} especie nueva ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.',
+  SPECIES_CHECK_KEEPS: 'Mantiene {0}',
+  SPECIES_CHECK_OVERRIDE_JUSTIFICATION_PLACEHOLDER: '¿Por qué esta especie difiere de la sugerencia?',
+  SPECIES_CHECK_OVERRIDE_WARNING:
+    'Native Check sugirió {0} para esta especie. Registre el estado que desea en su lugar.',
   SPECIES_CHECK_SET_LOCATION_BANNER:
     'Para verificar qué especies son nativas, introducidas o invasoras, ejecute la Verificación de Especies. Deberá establecer la ubicación de sus proyectos.',
   SPECIES_CHECK_SET_LOCATION_HINT: 'Seleccione un país y un país botánico para establecer la ubicación.',
@@ -9170,8 +9192,9 @@ export const strings = {
   SPECIES_CHECK_SPECIES_CHECKED: '{0} especies verificadas',
   SPECIES_CHECK_SUGGESTION: '{0} sugerencia',
   SPECIES_CHECK_SUGGESTIONS: '{0} sugerencias',
+  SPECIES_CHECK_SUGGESTIONS_APPLIED: 'Se aplicarán {0} de {1} sugerencias',
   SPECIES_CHECK_UPDATE_HINT:
-    'Seleccione las especies que desea actualizar o continúe sin realizar actualizaciones. Las actualizaciones sobrescribirán los datos existentes.',
+    'Se aplicarán todas las sugerencias de nombres. Desmarque una especie para conservar el nombre que ingresó.',
   SPECIES_CHECK_UPDATES: '{0} actualizaciones',
   SPECIES_CLASSIFICATION: 'Clasificación de especies',
   SPECIES_DENSITY_WARNING_MESSAGE:
@@ -9765,6 +9788,7 @@ export const strings = {
   WELCOME: '¡Bienvenido!',
   WELCOME_PERSON: '¡Bienvenido, {0}!',
   WELCOME_TO_TERRAWARE_PERSON: '¡Bienvenido a Terraware, {0}!',
+  WHAT_WILL_HAPPEN: 'Qué sucederá',
   WILD: 'Silvestre',
   WILD_IN_SITU: 'Silvestre (in situ)',
   WILD_IN_SITU_DESCRIPTION:
@@ -9853,7 +9877,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-11T17:28:28.661Z
+                at 2026-09-11T17:42:04.574Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
