@@ -312,6 +312,9 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
               <MRT_ToggleFullScreenButton table={table} />
             </Box>
           ),
+          muiTableBodyCellProps: {
+            sx: { fontSize: '16px' },
+          },
           muiTableBodyProps: {
             sx: {
               '& tr:nth-of-type(odd) > td': {

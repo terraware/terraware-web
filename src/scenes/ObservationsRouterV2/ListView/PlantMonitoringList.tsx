@@ -633,6 +633,9 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       enableGrouping: false,
       enableColumnDragging: true,
       positionGlobalFilter: 'right' as const,
+      muiTableBodyCellProps: {
+        sx: { fontSize: '16px' },
+      },
       muiTableBodyProps: {
         sx: {
           '& tr:nth-of-type(odd) > td': {

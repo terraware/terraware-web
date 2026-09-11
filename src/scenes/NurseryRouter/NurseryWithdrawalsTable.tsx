@@ -913,7 +913,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
           },
           muiTableHeadCellProps: ({ column }) =>
             column.id === MENU_COLUMN_ID ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
-          muiTableBodyCellProps: ({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` }),
+          muiTableBodyCellProps: ({ row, column }) => ({
+            id: `row${row.index + 1}-${column.id}`,
+            sx: { fontSize: '16px' },
+          }),
           muiTableBodyRowProps: {
             sx: {
               '& td': {
