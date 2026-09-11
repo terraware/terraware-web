@@ -1,7 +1,7 @@
 import { Page, expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../../utils/userUtils';
-import { exactOptions, selectOrg, waitFor } from '../../utils/utils';
+import { openNavItem, selectOrg, waitFor } from '../../utils/utils';
 
 // For element-level screenshots (cards, tables) where content is uniform
 const SCREENSHOT_OPTIONS = {
@@ -60,8 +60,7 @@ test.describe('PlantsDashboardScreenshots', () => {
     await page.reload();
     await waitFor(page, '#home', 15000);
 
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
 
     await expect(page.getByText('To view data in this dashboard, add a planting site', { exact: true })).toBeVisible({
       timeout: 5000,
@@ -84,8 +83,7 @@ test.describe('PlantsDashboardScreenshots', () => {
   test('Plants Dashboard — project area totals with rolled-up view', async ({ page }) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
 
     await page.getByPlaceholder('No Project Selected').click();
     await page.getByText('Phase 1 Project', { exact: true }).click();
@@ -101,8 +99,7 @@ test.describe('PlantsDashboardScreenshots', () => {
   test('Plants Dashboard — planting site with no observations (plants and species card)', async ({ page }) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
 
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS1', { exact: true }).click();
@@ -116,8 +113,7 @@ test.describe('PlantsDashboardScreenshots', () => {
   test('Plants Dashboard — planting site with no observations (site map)', async ({ page }) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
 
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS1', { exact: true }).click();
@@ -134,8 +130,7 @@ test.describe('PlantsDashboardScreenshots', () => {
   test('Plants Dashboard — planting site with observations (full page)', async ({ page }) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
 
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();
@@ -152,8 +147,7 @@ test.describe('PlantsDashboardScreenshots', () => {
   test('Plants Dashboard — planting site with observations (stratum trends card)', async ({ page }) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
 
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();
@@ -168,8 +162,7 @@ test.describe('PlantsDashboardScreenshots', () => {
   test('Plants Dashboard — planting site with observations (plant density card)', async ({ page }) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
 
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();
@@ -183,8 +176,7 @@ test.describe('PlantsDashboardScreenshots', () => {
   test('Plants Dashboard — planting site with observations (site map)', async ({ page }) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
 
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();
@@ -201,8 +193,7 @@ test.describe('PlantsDashboardScreenshots', () => {
   test('Plants Dashboard — site map with observation events layer toggled on', async ({ page }) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
 
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();

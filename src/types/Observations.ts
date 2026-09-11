@@ -95,6 +95,7 @@ export type ObservationMonitoringPlotPhoto = ObservationMonitoringPlotMediaPaylo
 export type ObservationMonitoringPlotPhotoWithGps = Omit<ObservationMonitoringPlotPhoto, 'gpsCoordinates'> &
   Required<Pick<ObservationMonitoringPlotPhoto, 'gpsCoordinates'>>;
 export type ObservationMonitoringPlotPosition = ObservationMonitoringPlotMediaPayload['position'];
+export type ObservationMonitoringPlotMediaType = ObservationMonitoringPlotMediaPayload['type'];
 
 // species related observation statistics
 export type ObservationSpeciesResultsPayload = RtkObservationSpeciesResultsPayload;
@@ -198,3 +199,15 @@ export const getQuadratLabel = (
       return '';
   }
 };
+
+export const getExplanationPhotoLabel = (
+  position: ObservationMonitoringPlotPosition,
+  plotIdentifier: string | undefined,
+  strings: typeof defaultStrings
+): string =>
+  strings
+    .formatString(
+      strings.OBSERVATION_EXPLANATION_PHOTO_LABEL,
+      [plotIdentifier, getPositionLabel(position, strings)].filter(Boolean).join(' ')
+    )
+    .toString();

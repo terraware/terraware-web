@@ -1,7 +1,7 @@
 import { Page, expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../../utils/userUtils';
-import { selectOrg, waitFor } from '../../utils/utils';
+import { openNavItem, selectOrg, waitFor } from '../../utils/utils';
 
 // For element-level screenshots (tables, map containers) where content is uniform
 const SCREENSHOT_OPTIONS = {
@@ -53,8 +53,7 @@ test.describe('ObservationDetailsScreenshots', () => {
     await page.goto('/');
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Observations' }).click();
+    await openNavItem(page, 'Plantings', 'Observations');
     await waitFor(page, '#row1');
   });
 

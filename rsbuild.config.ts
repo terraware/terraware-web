@@ -16,6 +16,8 @@ const serverProxy = {
 
 const isDev = process.env.NODE_ENV === 'development';
 
+const csvDir = 'src/strings/csv';
+
 export default defineConfig({
   plugins: [
     pluginReact({
@@ -67,7 +69,7 @@ export default defineConfig({
   dev: {
     // CSV file watching with page reload
     watchFiles: {
-      paths: 'src/strings/csv/*.csv',
+      paths: `${csvDir}/*.csv`,
       type: 'reload-page',
     },
 
@@ -75,12 +77,19 @@ export default defineConfig({
     setupMiddlewares: [
       (middlewares) => {
         // CSV conversion function
-        const convert = () => convertAllLocales('src/strings/csv', 'src/strings');
+        const convert = () => convertAllLocales(csvDir, 'src/strings');
 
-        // Watch CSV files and convert on change
+        const convertIfCsv = (filePath: string) => {
+          if (filePath.endsWith('.csv')) {
+            convert();
+          }
+        };
+
+        // Watch the CSV directory and convert on change. Chokidar dropped glob support in v4,
+        // so we watch the directory itself and filter the events for CSV files.
         // The "add" event is fired when Chokidar first discovers each file,
         // which will cause JS to be generated as part of server initialization
-        chokidar.watch('src/strings/csv/*.csv').on('add', convert).on('change', convert);
+        chokidar.watch(csvDir, { depth: 0 }).on('add', convertIfCsv).on('change', convertIfCsv);
 
         return middlewares;
       },

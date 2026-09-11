@@ -12,7 +12,12 @@ import {
   useGenerateObservationSplatFileMutation,
   useListObservationSplatsQuery,
 } from 'src/queries/generated/observationSplats';
-import { ObservationMonitoringPlotPhoto, getPositionLabel, getQuadratLabel } from 'src/types/Observations';
+import {
+  ObservationMonitoringPlotPhoto,
+  getExplanationPhotoLabel,
+  getPositionLabel,
+  getQuadratLabel,
+} from 'src/types/Observations';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type MonitoringPlotPhotosWithActionsProps = {
@@ -67,7 +72,7 @@ export default function MonitoringPlotPhotosWithActions({
         caption: photo.caption,
         type: photo.mediaKind,
         position: photo.position,
-        isQuadrat: photo.type === 'Quadrat',
+        photoType: photo.type,
       })),
     [photos]
   );
@@ -130,14 +135,19 @@ export default function MonitoringPlotPhotosWithActions({
 
           return (
             <Box key={mediaFile.fileId} position='relative'>
-              {!!monitoringPlotName && mediaFile.position && (
+              {mediaFile.photoType === 'Plot' && mediaFile.position && !!monitoringPlotName && (
                 <Typography color={theme.palette.TwClrBaseBlack}>
                   {monitoringPlotName} {getPositionLabel(mediaFile.position, strings)}
                 </Typography>
               )}
-              {mediaFile.isQuadrat && (
+              {mediaFile.photoType === 'Quadrat' && mediaFile.position && (
                 <Typography color={theme.palette.TwClrBaseBlack}>
                   {getQuadratLabel(mediaFile.position, strings)}
+                </Typography>
+              )}
+              {mediaFile.photoType === 'Explanation' && mediaFile.position && (
+                <Typography color={theme.palette.TwClrBaseBlack}>
+                  {getExplanationPhotoLabel(mediaFile.position, monitoringPlotName, strings)}
                 </Typography>
               )}
               <MediaItem

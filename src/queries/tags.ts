@@ -44,7 +44,6 @@ export enum QueryTagTypes {
   ProjectAcceleratorReport = 'ProjectAcceleratorReport',
   ProjectAcceleratorReportConfigs = 'ProjectAcceleratorReportConfigs',
   ProjectAcceleratorReportTargets = 'ProjectAcceleratorReportTargets',
-  ProjectAcceleratorReportYear = 'ProjectAcceleratorReportYear',
   ProjectInternalUsers = 'ProjectInternalUsers',
   ProjectModules = 'ProjectModules',
   ProjectScores = 'ProjectScores',
@@ -85,9 +84,4 @@ export const projectAcceleratorReportConfigsTag = (projectId: number) => ({
 export const projectAcceleratorReportTargetsTag = (projectId: number) => ({
   type: QueryTagTypes.ProjectAcceleratorReportTargets,
   id: projectId,
-});
-
-export const projectAcceleratorReportYearTag = (projectId: number, year: number) => ({
-  type: QueryTagTypes.ProjectAcceleratorReportYear,
-  id: `${projectId}-${year}`,
 });

@@ -20,6 +20,7 @@ import {
 
 const PLACEHOLDER = '-';
 const GRID_COLUMNS = 'minmax(0, 1fr) 150px 90px';
+const GRID_MIN_WIDTH = 480;
 
 export type CommitStratumDensity = (
   stratumId: number,
@@ -80,44 +81,46 @@ const PlantingPlanDensityTable = ({
         <PlantingPlanPlantsChip plants={totalPlants} />
       </Box>
 
-      <Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}>
-        <Box
-          display='grid'
-          gridTemplateColumns={GRID_COLUMNS}
-          gap={theme.spacing(2)}
-          sx={{ padding: theme.spacing(1, 2), borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
-        >
-          {cellText(strings.STRATA, { secondary: true })}
-          {cellText(strings.DENSITY, { secondary: true, align: 'right' })}
-          {cellText(strings.PLANTS, { secondary: true, align: 'right' })}
-        </Box>
-
-        {strata.map((stratum) => (
-          <StratumRow
-            key={stratum.id}
-            stratum={stratum}
-            densityType={densityType}
-            areaLabel={areaLabel}
-            perHaLabel={perHaLabel}
-            plantsLabel={plantsLabel}
-            onCommitDensity={onCommitDensity}
-            canEdit={canEdit}
-          />
-        ))}
-
-        <Box
-          display='grid'
-          gridTemplateColumns={GRID_COLUMNS}
-          gap={theme.spacing(2)}
-          alignItems='center'
-          sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: theme.spacing(1.5, 2) }}
-        >
-          <Box display='flex' alignItems='baseline' gap={theme.spacing(1)} minWidth={0}>
-            {cellText(strings.SITE, { secondary: true })}
-            {plantingSite.areaHa !== undefined && cellText(areaLabel(plantingSite.areaHa), { secondary: true })}
+      <Box sx={{ overflowX: 'auto' }}>
+        <Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}`, minWidth: `${GRID_MIN_WIDTH}px` }}>
+          <Box
+            display='grid'
+            gridTemplateColumns={GRID_COLUMNS}
+            gap={theme.spacing(2)}
+            sx={{ padding: theme.spacing(1, 2), borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
+          >
+            {cellText(strings.STRATA, { secondary: true })}
+            {cellText(strings.DENSITY, { secondary: true, align: 'right' })}
+            {cellText(strings.PLANTS, { secondary: true, align: 'right' })}
           </Box>
-          {cellText(perHaLabel(siteDensity(plantingSite, densityType)), { secondary: true, align: 'right' })}
-          {cellText(plantsLabel(siteGoalPlants(plantingSite, densityType)), { bold: true, align: 'right' })}
+
+          {strata.map((stratum) => (
+            <StratumRow
+              key={stratum.id}
+              stratum={stratum}
+              densityType={densityType}
+              areaLabel={areaLabel}
+              perHaLabel={perHaLabel}
+              plantsLabel={plantsLabel}
+              onCommitDensity={onCommitDensity}
+              canEdit={canEdit}
+            />
+          ))}
+
+          <Box
+            display='grid'
+            gridTemplateColumns={GRID_COLUMNS}
+            gap={theme.spacing(2)}
+            alignItems='center'
+            sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: theme.spacing(1.5, 2) }}
+          >
+            <Box display='flex' alignItems='baseline' gap={theme.spacing(1)} minWidth={0}>
+              {cellText(strings.SITE, { secondary: true })}
+              {plantingSite.areaHa !== undefined && cellText(areaLabel(plantingSite.areaHa), { secondary: true })}
+            </Box>
+            {cellText(perHaLabel(siteDensity(plantingSite, densityType)), { secondary: true, align: 'right' })}
+            {cellText(plantsLabel(siteGoalPlants(plantingSite, densityType)), { bold: true, align: 'right' })}
+          </Box>
         </Box>
       </Box>
     </Box>

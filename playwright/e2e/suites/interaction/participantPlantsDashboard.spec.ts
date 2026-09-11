@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../../utils/userUtils';
-import { exactOptions, selectOrg, waitFor } from '../../utils/utils';
+import { openNavItem, selectOrg, waitFor } from '../../utils/utils';
 
 test.describe('ParticipantPlantsDashboardTests', () => {
   test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
@@ -13,8 +13,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
   test('Rolled-up dashboard for selected project', async ({ page }, testInfo) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
 
     await page.getByPlaceholder('No Project Selected').click();
     await page.getByText('Phase 1 Project', { exact: true }).click();
@@ -60,8 +59,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
   test('Planting site dashboard no observations', async ({ page }, testInfo) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
 
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS1', { exact: true }).click();
@@ -107,8 +105,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
   test('Planting site dashboard observations', async ({ page }, testInfo) => {
     await selectOrg(page, 'Terraformation (staging)');
 
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
 
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();
@@ -203,8 +200,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
     await page.reload();
 
     await waitFor(page, '#home');
-    await page.getByRole('button', { name: 'Plantings' }).click();
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
 
     await expect(page.getByText('To view data in this dashboard, add a planting site', { exact: true })).toBeVisible({
       timeout: 5000,

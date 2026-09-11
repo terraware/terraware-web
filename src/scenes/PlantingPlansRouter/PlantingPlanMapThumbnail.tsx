@@ -15,7 +15,7 @@ type PlantingPlanMapThumbnailProps = {
 const PlantingPlanMapThumbnail = ({
   plantingSiteId,
   width = 140,
-  height = 102,
+  height = 120,
   fillColor,
   strokeColor,
 }: PlantingPlanMapThumbnailProps): JSX.Element => {
@@ -34,6 +34,7 @@ const PlantingPlanMapThumbnail = ({
         height: `${height}px`,
         overflow: 'hidden',
         width: `${width}px`,
+        padding: 2,
       }}
     >
       {svgMarkup && !isError && (

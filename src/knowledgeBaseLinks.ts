@@ -23,6 +23,7 @@ type TerrawarePath =
   | '/inventory/withdraw'
   | '/batch/withdraw'
   | '/nursery/withdrawals'
+  | '/nursery/withdrawals.*tab=requests'
   | '/plants/planting-progress'
   | '/observations'
   | '/observations.*tab=biomassMeasurements'
@@ -40,7 +41,10 @@ type TerrawarePath =
   | '/activity-log'
   | '/seed-fund-reports'
   | '/help-support'
-  | '/seeds-dashboard';
+  | '/seeds-dashboard'
+  | '/planting-plans'
+  | '/plants/planting-seasons'
+  | '/inventory-planning';
 
 type KnowledgeBaseLink = Record<TerrawarePath, string>;
 
@@ -75,6 +79,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/batch/withdraw': 'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
     '/nursery/withdrawals':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
+    '/nursery/withdrawals.*tab=requests':
+      'https://knowledge.terraformation.com/hc/en-us/articles/51999881914772-Inventory-Withdrawals-for-Planting-Seasons',
     '/plants/planting-progress':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718249140372-Tracking-Planting-Progress',
     '/observations':
@@ -102,6 +108,12 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/help-support':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718438661140-Get-Help-Or-Provide-Feedback',
     '/seeds-dashboard': 'https://knowledge.terraformation.com/hc/en-us/articles/40308805688084-Seeds-Dashboard',
+    '/planting-plans':
+      'https://knowledge.terraformation.com/hc/en-us/articles/52000513271956-Planting-Planning-for-Planting-Sites',
+    '/plants/planting-seasons':
+      'https://knowledge.terraformation.com/hc/en-us/articles/52000513271956-Planting-Planning-for-Planting-Sites',
+    '/inventory-planning':
+      'https://knowledge.terraformation.com/hc/en-us/articles/52000413931540-Seedling-Inventory-Planning',
   },
   es: {
     '/home': 'https://knowledge.terraformation.com/hc/en-us/categories/19696828903700-Terraware',
@@ -133,6 +145,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/batch/withdraw': 'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
     '/nursery/withdrawals':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
+    '/nursery/withdrawals.*tab=requests':
+      'https://knowledge.terraformation.com/hc/en-us/articles/51999881914772-Inventory-Withdrawals-for-Planting-Seasons',
     '/plants/planting-progress':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718249140372-Tracking-Planting-Progress',
     '/observations':
@@ -160,6 +174,12 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/help-support':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718438661140-Get-Help-Or-Provide-Feedback',
     '/seeds-dashboard': 'https://knowledge.terraformation.com/hc/en-us/articles/40308805688084-Seeds-Dashboard',
+    '/planting-plans':
+      'https://knowledge.terraformation.com/hc/en-us/articles/52000513271956-Planting-Planning-for-Planting-Sites',
+    '/plants/planting-seasons':
+      'https://knowledge.terraformation.com/hc/en-us/articles/52000513271956-Planting-Planning-for-Planting-Sites',
+    '/inventory-planning':
+      'https://knowledge.terraformation.com/hc/en-us/articles/52000413931540-Seedling-Inventory-Planning',
   },
   fr: {
     '/home': 'https://knowledge.terraformation.com/hc/en-us/categories/19696828903700-Terraware',
@@ -191,6 +211,8 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/batch/withdraw': 'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
     '/nursery/withdrawals':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718189195156-Seedling-Withdrawals',
+    '/nursery/withdrawals.*tab=requests':
+      'https://knowledge.terraformation.com/hc/en-us/articles/51999881914772-Inventory-Withdrawals-for-Planting-Seasons',
     '/plants/planting-progress':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718249140372-Tracking-Planting-Progress',
     '/observations':
@@ -218,6 +240,12 @@ const KNOWLEDGE_BASE_LINKS: Record<SupportedLocaleId, KnowledgeBaseLink> = {
     '/help-support':
       'https://knowledge.terraformation.com/hc/en-us/articles/19718438661140-Get-Help-Or-Provide-Feedback',
     '/seeds-dashboard': 'https://knowledge.terraformation.com/hc/en-us/articles/40308805688084-Seeds-Dashboard',
+    '/planting-plans':
+      'https://knowledge.terraformation.com/hc/en-us/articles/52000513271956-Planting-Planning-for-Planting-Sites',
+    '/plants/planting-seasons':
+      'https://knowledge.terraformation.com/hc/en-us/articles/52000513271956-Planting-Planning-for-Planting-Sites',
+    '/inventory-planning':
+      'https://knowledge.terraformation.com/hc/en-us/articles/52000413931540-Seedling-Inventory-Planning',
   },
 };
 

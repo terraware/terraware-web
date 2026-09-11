@@ -14,6 +14,7 @@ import {
   useUpdatePlantingSiteSpeciesTargetMutation,
 } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -21,6 +22,8 @@ import PlantingPlanAssignStrataModal from './PlantingPlanAssignStrataModal';
 import PlantingPlanPlantsChip from './PlantingPlanPlantsChip';
 
 const PLACEHOLDER = '-';
+const SPECIES_MIN_WIDTH = 440;
+const SPECIES_MIN_WIDTH_MOBILE = 390;
 
 export type PlantingPlanSpeciesSectionProps = {
   plantingSite: PlantingSitePayload;
@@ -31,6 +34,7 @@ const PlantingPlanSpeciesSection = ({ plantingSite, canEdit }: PlantingPlanSpeci
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
   const snackbar = useSnackbar();
+  const { isMobile } = useDeviceInfo();
   const { species, findSpeciesById } = useOrganizationSpecies();
   const { data: speciesTargetsData } = useListPlantingSiteSpeciesTargetsQuery(plantingSite.id);
   const [updateSpeciesTarget] = useUpdatePlantingSiteSpeciesTargetMutation();
@@ -117,53 +121,60 @@ const PlantingPlanSpeciesSection = ({ plantingSite, canEdit }: PlantingPlanSpeci
         </Box>
       </Box>
 
-      <Box sx={{ border: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}>
-        {targets.map((target) => (
-          <SpeciesRow
-            key={target.speciesId}
-            target={target}
-            name={findSpeciesById(target.speciesId)?.scientificName ?? `#${target.speciesId}`}
-            commonName={findSpeciesById(target.speciesId)?.commonName}
-            stratumName={stratumName}
-            onUpdateTarget={(targetPlants) => void upsertTarget(target.speciesId, target.stratumIds, targetPlants)}
-            onAssignStrata={() => setAssigningSpeciesId(target.speciesId)}
-            onDelete={() => void onDelete(target.speciesId)}
-            canEdit={canEdit}
-          />
-        ))}
-
-        {canEdit &&
-          (showAddSpeciesRow ? (
-            <AddSpeciesRow
-              options={availableOptions}
-              onCancel={targets.length > 0 ? () => setAddingSpecies(false) : undefined}
-              onAdd={async (speciesId, targetPlants) => {
-                const succeeded = await upsertTarget(speciesId, [], targetPlants);
-                if (succeeded) {
-                  setAddingSpecies(false);
-                }
-              }}
+      <Box sx={{ overflowX: 'auto' }}>
+        <Box
+          sx={{
+            border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+            minWidth: `${isMobile ? SPECIES_MIN_WIDTH_MOBILE : SPECIES_MIN_WIDTH}px`,
+          }}
+        >
+          {targets.map((target) => (
+            <SpeciesRow
+              key={target.speciesId}
+              target={target}
+              name={findSpeciesById(target.speciesId)?.scientificName ?? `#${target.speciesId}`}
+              commonName={findSpeciesById(target.speciesId)?.commonName}
+              stratumName={stratumName}
+              onUpdateTarget={(targetPlants) => void upsertTarget(target.speciesId, target.stratumIds, targetPlants)}
+              onAssignStrata={() => setAssigningSpeciesId(target.speciesId)}
+              onDelete={() => void onDelete(target.speciesId)}
+              canEdit={canEdit}
             />
-          ) : (
-            <Box padding={theme.spacing(1.5, 2)}>
-              <Button
-                icon='iconAdd'
-                label={strings.ADD_SPECIES}
-                onClick={() => setAddingSpecies(true)}
-                priority='ghost'
-                type='productive'
-                disabled={availableOptions.length === 0}
-              />
-            </Box>
           ))}
 
-        {!canEdit && targets.length === 0 && (
-          <Box padding={theme.spacing(1.5, 2)}>
-            <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
-              {PLACEHOLDER}
-            </Typography>
-          </Box>
-        )}
+          {canEdit &&
+            (showAddSpeciesRow ? (
+              <AddSpeciesRow
+                options={availableOptions}
+                onCancel={targets.length > 0 ? () => setAddingSpecies(false) : undefined}
+                onAdd={async (speciesId, targetPlants) => {
+                  const succeeded = await upsertTarget(speciesId, [], targetPlants);
+                  if (succeeded) {
+                    setAddingSpecies(false);
+                  }
+                }}
+              />
+            ) : (
+              <Box padding={theme.spacing(1.5, 2)}>
+                <Button
+                  icon='iconAdd'
+                  label={strings.ADD_SPECIES}
+                  onClick={() => setAddingSpecies(true)}
+                  priority='ghost'
+                  type='productive'
+                  disabled={availableOptions.length === 0}
+                />
+              </Box>
+            ))}
+
+          {!canEdit && targets.length === 0 && (
+            <Box padding={theme.spacing(1.5, 2)}>
+              <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
+                {PLACEHOLDER}
+              </Typography>
+            </Box>
+          )}
+        </Box>
       </Box>
     </Box>
   );
@@ -192,6 +203,7 @@ const SpeciesRow = ({
 }: SpeciesRowProps): JSX.Element => {
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
+  const { isMobile } = useDeviceInfo();
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState('');
 
@@ -215,21 +227,37 @@ const SpeciesRow = ({
     <Box
       display='flex'
       alignItems='center'
-      gap={theme.spacing(2)}
+      gap={theme.spacing(isMobile ? 1 : 2)}
       sx={{ padding: theme.spacing(1.5, 2), borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}` }}
     >
-      <Box flex={1} minWidth={0}>
-        <Typography fontSize='16px' fontWeight={600} color={theme.palette.TwClrTxt}>
+      <Box flex={1} minWidth={0} marginRight={isMobile ? theme.spacing(1) : 0}>
+        <Typography
+          fontSize='16px'
+          fontWeight={600}
+          color={theme.palette.TwClrTxt}
+          sx={isMobile ? { overflowWrap: 'anywhere' } : undefined}
+        >
           {name}
         </Typography>
         {commonName && (
-          <Typography fontSize='14px' color={theme.palette.TwClrTxt}>
+          <Typography
+            fontSize='14px'
+            color={theme.palette.TwClrTxt}
+            sx={isMobile ? { overflowWrap: 'anywhere' } : undefined}
+          >
             {commonName}
           </Typography>
         )}
       </Box>
 
-      <Box display='flex' alignItems='center' gap={theme.spacing(0.5)} width='90px' justifyContent='flex-end'>
+      <Box
+        display='flex'
+        alignItems='center'
+        gap={theme.spacing(0.5)}
+        width={isMobile ? '84px' : '90px'}
+        flexShrink={0}
+        justifyContent='flex-end'
+      >
         {editing ? (
           <TextField
             id={`species-target-${target.speciesId}`}
@@ -268,7 +296,14 @@ const SpeciesRow = ({
         )}
       </Box>
 
-      <Box width='180px' textAlign='right'>
+      <Box
+        width={isMobile ? 'auto' : '180px'}
+        minWidth={0}
+        flexShrink={isMobile ? 'inherit' : 0}
+        textAlign={isMobile ? 'left' : 'right'}
+        sx={isMobile ? { overflowWrap: 'anywhere' } : undefined}
+        alignItems={isMobile ? 'flex-start' : 'flex-end'}
+      >
         {target.stratumIds.length === 0 ? (
           canEdit ? (
             <Link onClick={onAssignStrata}>{strings.ASSIGN_STRATA}</Link>
@@ -278,7 +313,7 @@ const SpeciesRow = ({
             </Typography>
           )
         ) : (
-          <Box display='flex' flexDirection='column' alignItems='flex-end'>
+          <Box display='flex' flexDirection='column' alignItems={isMobile ? 'flex-start' : 'flex-end'}>
             {target.stratumIds.map((stratumId) =>
               canEdit ? (
                 <Link key={stratumId} onClick={onAssignStrata} style={{ fontWeight: 400, textDecoration: 'underline' }}>
@@ -307,6 +342,7 @@ type AddSpeciesRowProps = {
 
 const AddSpeciesRow = ({ options, onCancel, onAdd }: AddSpeciesRowProps): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | undefined>();
   const [targetInput, setTargetInput] = useState('');
 
@@ -339,7 +375,7 @@ const AddSpeciesRow = ({ options, onCancel, onAdd }: AddSpeciesRowProps): JSX.El
           hideClearIcon
         />
       </Box>
-      <Box width='100px'>
+      <Box width={isMobile ? '66px' : '100px'} flexShrink={0}>
         <TextField
           id='add-species-target'
           type='number'

@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 
 import { changeToSuperAdmin } from '../../utils/userUtils';
-import { exactOptions, selectOrg, waitFor } from '../../utils/utils';
+import { openNavItem, selectOrg, waitFor } from '../../utils/utils';
 
 test.describe('SurvivalRateSettingsTests', () => {
   test.describe.configure({ timeout: 120000 });
@@ -16,10 +16,7 @@ test.describe('SurvivalRateSettingsTests', () => {
   test('Edit permanent plots T0 settings using observation data and verify survival rate on dashboard', async ({
     page,
   }) => {
-    if (!(await page.getByRole('button', { name: 'Observations' }).isVisible())) {
-      await page.getByRole('button', { name: 'Plantings' }).click();
-    }
-    await page.getByRole('button', { name: 'Observations' }).click();
+    await openNavItem(page, 'Plantings', 'Observations');
     await page.locator('.select').first().click();
     await page.getByRole('list').getByText('PS2', { exact: true }).click();
     await expect(page.getByRole('button', { name: 'Survival Rate Settings' })).toBeVisible({ timeout: 10000 });
@@ -39,10 +36,7 @@ test.describe('SurvivalRateSettingsTests', () => {
     await expect(page.getByText('t0 set for Permanent Plots')).toBeVisible({ timeout: 60000 });
 
     // Navigate to Dashboard
-    if (!(await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).isVisible())) {
-      await page.getByRole('button', { name: 'Plantings' }).click();
-    }
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();
 
@@ -50,10 +44,7 @@ test.describe('SurvivalRateSettingsTests', () => {
   });
 
   test('Edit one plot to manual density and verify new survival rate', async ({ page }) => {
-    if (!(await page.getByRole('button', { name: 'Observations' }).isVisible())) {
-      await page.getByRole('button', { name: 'Plantings' }).click();
-    }
-    await page.getByRole('button', { name: 'Observations' }).click();
+    await openNavItem(page, 'Plantings', 'Observations');
     await page.locator('.select').first().click();
     await page.getByRole('list').getByText('PS2', { exact: true }).click();
     await expect(page.getByRole('button', { name: 'Survival Rate Settings' })).toBeVisible({ timeout: 10000 });
@@ -82,10 +73,7 @@ test.describe('SurvivalRateSettingsTests', () => {
     await expect(page.getByText('t0 set for Permanent Plots')).toBeVisible({ timeout: 60000 });
 
     // Navigate to Dashboard
-    if (!(await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).isVisible())) {
-      await page.getByRole('button', { name: 'Plantings' }).click();
-    }
-    await page.getByRole('button', { name: 'Dashboard', ...exactOptions }).click();
+    await openNavItem(page, 'Plantings', 'Dashboard');
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();
 

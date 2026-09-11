@@ -650,8 +650,8 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
               options={users}
               onChange={onChangeUser}
               isEqual={(a: OrganizationUser, b: OrganizationUser) => a.id === b.id}
-              renderOption={(option) => renderUser(option, user, !userCanEdit)}
-              displayLabel={(option) => renderUser(option, user, !userCanEdit)}
+              renderOption={renderUser}
+              displayLabel={renderUser}
               selectedValue={users?.find((userSel) => userSel.id === record?.withdrawnByUserId)}
               toT={(firstName: string) =>
                 ({

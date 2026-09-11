@@ -166,17 +166,24 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
   }, [onClose, setValidateFields]);
 
   const submitBatch = useCallback(async () => {
-    if (record) {
-      if (hasErrors()) {
-        setValidateFields(true);
-        return;
-      }
+    if (!record) {
+      return;
+    }
 
-      if (batch === record) {
-        onCloseHandler();
-        return;
-      }
+    if (hasErrors()) {
+      setValidateFields(true);
+      return;
+    }
 
+    const batchChanged = batch !== record;
+    const photosChanged = newPhotos.length > 0 || photoIdsToRemove.length > 0;
+
+    if (!batchChanged && !photosChanged) {
+      onCloseHandler();
+      return;
+    }
+
+    if (batchChanged) {
       if (!selectedOrganization) {
         return;
       }
@@ -187,15 +194,19 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
         quantityNotes: quantityNotes.trim() || undefined,
       });
 
-      if (savedBatch) {
-        trackEvent(MIXPANEL_EVENTS.BATCH_QUANTITY_EDITED);
-        markSubmitted();
-        await updatePhotos();
-        onCloseHandler();
-      } else {
+      if (!savedBatch) {
         snackbar.toastError();
+        return;
       }
+
+      trackEvent(MIXPANEL_EVENTS.BATCH_QUANTITY_EDITED);
     }
+
+    markSubmitted();
+    if (photosChanged) {
+      await updatePhotos();
+    }
+    onCloseHandler();
   }, [
     record,
     hasErrors,
@@ -207,6 +218,8 @@ export default function BatchDetailsModal({ batch, onClose }: BatchDetailsModalP
     trackEvent,
     markSubmitted,
     batch,
+    newPhotos,
+    photoIdsToRemove,
     quantityNotes,
   ]);
 

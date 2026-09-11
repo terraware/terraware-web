@@ -3,6 +3,7 @@ import React, { type JSX } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 export type PlantingPlanStatsProps = {
   initialGoal: string;
@@ -18,6 +19,7 @@ type TileProps = {
 
 const PlantingPlanStats = ({ initialGoal, targetGoal, species }: PlantingPlanStatsProps): JSX.Element => {
   const theme = useTheme();
+  const { isDesktop } = useDeviceInfo();
 
   const tile = ({ value, subtitle, backgroundColor }: TileProps): JSX.Element => (
     <Box
@@ -39,7 +41,13 @@ const PlantingPlanStats = ({ initialGoal, targetGoal, species }: PlantingPlanSta
   );
 
   return (
-    <Box display='flex' alignItems='stretch' gap={theme.spacing(2)} flexWrap='wrap' width='100%'>
+    <Box
+      display='flex'
+      flexDirection={isDesktop ? 'row' : 'column'}
+      alignItems='stretch'
+      gap={theme.spacing(2)}
+      width='100%'
+    >
       {tile({
         value: initialGoal,
         subtitle: strings.BY_INITIAL_PLANTING_DENSITY,

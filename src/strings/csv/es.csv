@@ -13,7 +13,20 @@ ACCESSION,Accesión,6a1389cb
 ACCESSION_BY_STATUS,Accesión por Estado,8d5df55b
 ACCESSION_DETAIL,Detalle de la accesión,dab2431a
 ACCESSION_DETAILS,Detalle de las accesiones,1fa5df58
+ACCESSION_EVENT_PHOTO_REPLACED,{0} fue reemplazada,c87c5b4c
+ACCESSION_EVENT_VIABILITY_TEST_ADDED,se inició una prueba de viabilidad,1ec9a61e
+ACCESSION_EVENT_VIABILITY_TEST_DELETED,se eliminó una prueba de viabilidad,131c982f
+ACCESSION_EVENT_VIABILITY_TEST_STARTED,inició una prueba de viabilidad de {0},241121fa
+ACCESSION_EVENT_VIABILITY_TEST_UPDATED,La prueba de viabilidad {0} cambió de {1} a {2},630ab02f
+ACCESSION_EVENT_WITHDRAWAL_ADDED,se agregó un retiro,66861582
+ACCESSION_EVENT_WITHDRAWAL_ADDED_FOR,retiró {0} para {1},60701bb4
+ACCESSION_EVENT_WITHDRAWAL_ADDED_QUANTITY,retiró {0},fb83504c
+ACCESSION_EVENT_WITHDRAWAL_ADDED_TO,retiró {0} a {1},8c38cd96
+ACCESSION_EVENT_WITHDRAWAL_DELETED,se eliminó un retiro,2fa169b8
+ACCESSION_EVENT_WITHDRAWAL_DELETED_FOR_VIABILITY_TEST,se eliminó un retiro para prueba de viabilidad,d9b09155
+ACCESSION_EVENT_WITHDRAWAL_UPDATED,El retiro {0} cambió de {1} a {2},8dd1f01b
 ACCESSION_HISTORY,Historial de accesiones,1e6eaa37
+ACCESSION_HISTORY_NO_EVENTS,Aún no hay historial.,f8822669
 ACCESSION_ID,ID de accesión,a87726c0
 ACCESSION_NUMBER_CHECKED_IN,¡La accesión {0} se ha ingresado correctamente!,b78da03c
 ACCESSIONS,Accesiones,5f4f92e5
@@ -214,9 +227,11 @@ ASSIGN_OWNER,Asignar propietario,dc696cfa
 ASSIGN_OWNER_ELLIPSIS,Asignar propietario...,8053cd0e
 ASSIGN_STRATA,Asignar estratos,43b7aa27
 ASSIGNED,Asignada,29aa3dd8
+ASSIGNED_LOCATION,Ubicación asignada,9e0b2077
 ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El Número de Plantas Vivas por Especie muestra la cantidad de plantas observadas por especie registradas como vivas. No se incluyen las plantas registradas como preexistentes o cuya especie es desconocida.,526a70bc
 ASSIGNED_PLOT_OBSERVATION,Observación de Parcela Asignada,9175acf6
 ASSIGNED_PLOT_OBSERVATION_TOOLTIP,Seleccione una Observación Asignada de Parcela para ver los datos de la observación en el mapa.,2a1963a4
+AT_RISK,En riesgo,b2f3373a
 ATTACH_IMAGES_OR_VIDEOS,Adjunte imágenes o videos,c229aa87
 ATTACHMENT_DESCRIPTION,Adjunte hasta {0} archivos. Cada archivo tiene un tamaño máximo de {1} MB.,8ba18a63
 ATTACHMENT_LIMIT_REACHED,Se alcanzó el límite de archivos adjuntos,9f9323bc
@@ -762,6 +777,7 @@ FEEDBACK,Comentarios,2510edcc
 FEEDBACK_SHARED_WITH_PROJECT,Comentarios (compartidos con el proyecto),d56b8ddb
 FERN,Helecho,35767f4d
 FIELD,Campo,dc19e415
+FIELD_LOCATION,Ubicación en campo,009654a6
 FIELD_NOTES,Notas de campo,1c50984e
 FIFTY_TO_SEVENTY_FIVE_PERCENT,50% a 75%,174fb41a
 FILE_NAME,Nombre de archivo,fc9f4f98
@@ -1223,6 +1239,7 @@ MONTH_12,Diciembre,dc3ea137
 MORE,Más,58c3e1ca
 MORE_INFO,Más información,50ec3d8a
 MORE_OPTIONS,Más opciones,40289137
+MORE_THAN_20M_FROM_ASSIGNED_LOCATION,(a más de 20 m de la ubicación asignada),f3b60390
 MORTALITY_RATE,Tasa de mortalidad,f1ef57f9
 MORTALITY_RATE_IN_FIELD,Tasa de mortalidad en campo (%),48a2d543
 MORTALITY_RATE_IN_FIELD_REQUIRED,Tasa de mortalidad en el campo (%) *,cdddfe98
@@ -1249,7 +1266,7 @@ NAME_USED_BY_PROJECT,Nombre usado por proyecto,c2fdff8f
 NATIVE,Nativo,3ef34d4d
 NATIVE_CHECK,Verificación de especie nativa,474464e4
 NATIVE_CHECK_NO_UPDATES,No hay sugerencias para el estado nativo de las especies.,f9f543dc
-NATIVE_CHECK_UPDATE_HINT,"Seleccione las especies para modificar el estado sugerido, o déjelas sin seleccionar para usar el estado sugerido.",52738882
+NATIVE_CHECK_UPDATE_HINT,Se aplicarán todas las sugerencias. Desmarque una especie para establecer su estado manualmente.,3cda706f
 NATIVE_ECOSYSTEM,Ecosistema autóctono,1a733f45
 NATIVE_ECOSYSTEM_TOOLTIP,"Indique el tipo de ecosistema en el cual se encuentra esta especie de forma natural; podría incluir detalles tales como el rango de elevación, pluviometría, etc.",188f8600
 NATIVE_FOREST,Bosque autóctono,bbd2ab56
@@ -1287,6 +1304,7 @@ NO_BATCHES_TO_WITHDRAW_FROM,No hay lotes con cantidades disponibles.,dc94bdcc
 NO_BATCHES_WITH_INVENTORY,"Todos los lotes que tenían inventario ahora están vacíos. Para ver los lotes, especies y viveros que anteriormente tenían inventario, utilice los filtros “Mostrar lotes vacíos” y “Mostrar especies/viveros sin inventario”.",2c0612be
 NO_BATCHES_WITH_INVENTORY_MESSAGE,Ningún lote tiene inventario. Utilice el filtro “Mostrar lotes vacíos” para ver todos sus lotes vacíos.,c326ecab
 NO_CHALLENGES_AND_MITIGATION_PLANS_ADDED,No se han agregado desafíos ni planes de mitigación,f1d982d5
+NO_CHANGE,Sin cambios,d24105cc
 NO_COLUMNS_SELECTED,Sin columnas seleccionadas,ac8b2bbe
 NO_COMMENTS_ADDED,Ningún comentario añadido,7fd30c97
 NO_DATA_YET,Aún no hay datos.,f2a0be82
@@ -1421,6 +1439,7 @@ OBSERVATION_EVENT,Incidencia de observación,03d0c031
 OBSERVATION_EVENT_SCHEDULED,El evento de observación está programado para el {0} para el(los) terreno(s) de plantación:,da489f7e
 OBSERVATION_EVENTS,Incidencias de observación,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Observaciones previas se muestra con opacidad disminuida,03c6ea26
+OBSERVATION_EXPLANATION_PHOTO_LABEL,{0}: ubicación a más de 20 m,c1fe1bd5
 OBSERVATION_PERIOD_WARN,El periodo de observación no puede superar los dos meses.,364a36c6
 OBSERVATION_PHOTO_CANNOT_DELETE_INFO,No se pueden eliminar las fotos de las esquinas de la parcela.,f045e547
 OBSERVATION_PHOTO_CANNOT_DELETE_TOOLTIP,Esta foto fue tomada durante la observación y no se puede eliminar.,c127ed8e
@@ -1506,6 +1525,7 @@ OVERRIDE,Anular,15bd0e63
 OVERRIDE_SPECIES,Anular especie,c8f09521
 OVERRIDE_STATUS_NOT_SET_TOOLTIP,"Después de establecer un estado, este puede ser anulado. Ejecute la función de Verificación de Especies para establecer un estado para la especie en este Proyecto.",15d7f709
 OVERRIDE_STATUS_NOT_SET_TOOLTIP_ORG,"Después de establecer un estado, este puede ser anulado. Ejecute la función de Verificación de Especies para asignar un estado a la especie.",c4738674
+OVERRIDING,Reemplazando,46e4d047
 OVERVIEW,Descripción,c7fd0e47
 OVERWRITE_TERRAWARE_TRACKING_DATA,Sobrescribir los datos de seguimiento de Terraware,1f5637ba
 OVERWRITTEN_ORIGINAL_VALUE,Sobrescrito - original: {0},c504c96d
@@ -1676,6 +1696,7 @@ PLOT_DESCRIPTION,Descripción de la parcela,67e5afa5
 PLOT_INFO,Información de la parcela,38a9b59d
 PLOT_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de plantas observadas registradas como vivas. No se incluyen las plantas registradas como preexistentes.,f7d2a77f
 PLOT_LOCATION,Ubicación de la parcela,59f1374a
+PLOT_OBSERVATION_LOCATION_DEVIATION_INFO,Esta observación de parcela se realizó a más de 20 m de la ubicación asignada. Exporte los datos de la parcela para ver las coordenadas de ubicación registradas en campo.,32c9a47f
 PLOT_PLANT_DENSITY_TOOLTIP,La densidad de plantas (plantas por hectárea) se calcula en función del número de plantas observadas registradas como vivas. No se incluyen las plantas registradas como preexistentes.,32ced1ba
 PLOT_SELECTION,Selección de parcela,ba150031
 PLOT_SPECIES_TOOLTIP,"Especies es el número de especies representadas por todas las plantas observadas, incluyendo las registradas como preexistentes.",fd5ff6d0
@@ -2239,13 +2260,17 @@ SPECIES_CATEGORIES_TOOLTIP,"Categorías de especies muestra el porcentaje del to
 SPECIES_CHECK,Verificación de especies,d7d0f200
 SPECIES_CHECK_ADDED_BANNER,"Se agregaron {0} especies nuevas ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",35e34395
 SPECIES_CHECK_ADDED_BANNER_ONE,"Se agregó {0} especie nueva ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",89f12eb5
+SPECIES_CHECK_KEEPS,Mantiene {0},16ce403f
+SPECIES_CHECK_OVERRIDE_JUSTIFICATION_PLACEHOLDER,¿Por qué esta especie difiere de la sugerencia?,b83db1e0
+SPECIES_CHECK_OVERRIDE_WARNING,Native Check sugirió {0} para esta especie. Registre el estado que desea en su lugar.,c75e6aa8
 SPECIES_CHECK_SET_LOCATION_BANNER,"Para verificar qué especies son nativas, introducidas o invasoras, ejecute la Verificación de Especies. Deberá establecer la ubicación de sus proyectos.",49c844fd
 SPECIES_CHECK_SET_LOCATION_HINT,Seleccione un país y un país botánico para establecer la ubicación.,e7b413a8
 SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS,Seleccione un país y un país botánico para establecer la ubicación de cada proyecto.,8070772f
 SPECIES_CHECK_SPECIES_CHECKED,{0} especies verificadas,3a3237db
 SPECIES_CHECK_SUGGESTION,{0} sugerencia,5afe0690
 SPECIES_CHECK_SUGGESTIONS,{0} sugerencias,9154c212
-SPECIES_CHECK_UPDATE_HINT,Seleccione las especies que desea actualizar o continúe sin realizar actualizaciones. Las actualizaciones sobrescribirán los datos existentes.,6cfa3ed4
+SPECIES_CHECK_SUGGESTIONS_APPLIED,Se aplicarán {0} de {1} sugerencias,beacaf4b
+SPECIES_CHECK_UPDATE_HINT,Se aplicarán todas las sugerencias de nombres. Desmarque una especie para conservar el nombre que ingresó.,e5c27ee6
 SPECIES_CHECK_UPDATES,{0} actualizaciones,a1d89ade
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"No ha ingresado valores de densidad de plantas para todas las especies. Si no ingresa valores de densidad de plantas para todas las especies, las densidades de plantas para esta parcela no se establecerán y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una parcela.",5bcc0f2b
@@ -2614,7 +2639,6 @@ UNFAVORABLE_WEATHER,Clima desfavorable,a11232d3
 UNIT,Unidad,48d10134
 UNITS,Unidades,ce3e3f06
 UNKNOWN,Desconocido,97ccc176
-UNLIKELY,Poco probable,961eba8d
 UNPIN_ALL,Desanclar todas,97a06369
 UNPUBLISHED_CHANGES,Cambios no publicados,44cc10b0
 UNPUBLISHED_CHANGES_WARNING,Este informe NO coincide con el informe publicado. Esto puede deberse a cambios no publicados en este informe.,f7c6bf21
@@ -2744,6 +2768,7 @@ WEIGHTED_SURVIVAL_RATE_TOOLTIP,"La Tasa de Supervivencia Promedio por Estrato es
 WELCOME,¡Bienvenido!,09fd702c
 WELCOME_PERSON,"¡Bienvenido, {0}!",db783c9d
 WELCOME_TO_TERRAWARE_PERSON,"¡Bienvenido a Terraware, {0}!",0832a4dc
+WHAT_WILL_HAPPEN,Qué sucederá,ddd83f60
 WILD,Silvestre,77d2fd62
 WILD_IN_SITU,Silvestre (in situ),cf764f76
 WILD_IN_SITU_DESCRIPTION,Las plantas que crecen naturalmente en áreas silvestres y que no fueron sembradas por gente.,9b5b2102

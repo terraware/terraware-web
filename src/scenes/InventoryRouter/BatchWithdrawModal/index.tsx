@@ -228,6 +228,8 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
   }, [batches, draft.fromFacilityId]);
 
   const isPlanting = draft.purpose === NurseryWithdrawalRequestPurposes.OUTPLANT;
+  const isNurseryTransfer = draft.purpose === NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER;
+  const showsDestinationSummary = step === 1 && (isPlanting || isNurseryTransfer);
 
   const projectFilteredBatches = useMemo(() => {
     if (!displayedBatches) {
@@ -327,8 +329,6 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       return;
     }
 
-    const isNurseryTransfer = draft.purpose === NurseryWithdrawalRequestPurposes.NURSERY_TRANSFER;
-
     try {
       const response = await createBatchWithdrawal({
         batchWithdrawals,
@@ -396,7 +396,16 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
     } catch (e) {
       snackbar.toastError();
     }
-  }, [createBatchWithdrawal, draft, handleClose, quantityStepBatches, snackbar, strings, uploadWithdrawalPhoto]);
+  }, [
+    createBatchWithdrawal,
+    draft,
+    handleClose,
+    isNurseryTransfer,
+    quantityStepBatches,
+    snackbar,
+    strings,
+    uploadWithdrawalPhoto,
+  ]);
 
   const middleButtons: JSX.Element[] = useMemo(() => {
     const cancel = (
@@ -495,7 +504,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
 
           <Box
             sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: theme.spacing(2) }}
-            marginBottom={theme.spacing(3)}
+            marginBottom={showsDestinationSummary ? theme.spacing(1) : theme.spacing(3)}
           >
             {speciesSummary.map((s, i) => (
               <Box

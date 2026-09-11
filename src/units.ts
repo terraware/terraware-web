@@ -110,7 +110,7 @@ export function convertUnits(value: number, unit: string, outputUnit: string) {
           return value * 0.035274;
         }
         case 'Pounds': {
-          return value * 0.002204;
+          return value * 0.00220462;
         }
         case 'Milligrams': {
           return value * 1000;
@@ -145,7 +145,7 @@ export function convertUnits(value: number, unit: string, outputUnit: string) {
     case 'Milligrams': {
       switch (outputUnit) {
         case 'Ounces': {
-          return value * 0.035274;
+          return value * 0.000035274;
         }
         case 'Pounds': {
           return value * 2.20462e-6;
@@ -203,6 +203,18 @@ export function convertUnits(value: number, unit: string, outputUnit: string) {
       return 0;
     }
   }
+}
+
+export function convertWeightToSeedCount(
+  quantity: number,
+  units: string,
+  subsetWeight?: { quantity: number; units: string },
+  subsetCount?: number
+) {
+  if (!subsetCount || !subsetWeight?.quantity) {
+    return 0;
+  }
+  return Math.round(convertUnits(quantity, units, subsetWeight.units) * (subsetCount / subsetWeight.quantity));
 }
 
 export function isUnitInPreferredSystem(unit: string, system: string) {

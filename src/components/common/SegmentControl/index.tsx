@@ -4,6 +4,8 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import { IconName } from '@terraware/web-components/components/Icon/icons';
 
+import useDeviceInfo from 'src/utils/useDeviceInfo';
+
 export type SegmentOption<T extends string> = {
   id: T;
   label: string;
@@ -29,6 +31,7 @@ const SegmentControl = <T extends string>({
   minSegmentWidth = 150,
 }: SegmentControlProps<T>): JSX.Element => {
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
 
   return (
     <Box
@@ -36,9 +39,11 @@ const SegmentControl = <T extends string>({
       sx={{
         backgroundColor: theme.palette.TwClrBgSecondary,
         borderRadius: theme.spacing(1),
-        display: 'inline-flex',
+        display: isMobile ? 'flex' : 'inline-flex',
+        flexDirection: isMobile ? 'column' : 'row',
         gap: theme.spacing(0.5),
         padding: theme.spacing(0.5),
+        width: isMobile ? '100%' : 'auto',
       }}
     >
       {segments.map((segment) => {
@@ -69,8 +74,9 @@ const SegmentControl = <T extends string>({
               cursor: segment.disabled ? 'default' : 'pointer',
               display: 'flex',
               gap: theme.spacing(1),
-              justifyContent: 'center',
-              minWidth: `${minSegmentWidth}px`,
+              justifyContent: isMobile ? 'flex-start' : 'center',
+              minWidth: isMobile ? 0 : `${minSegmentWidth}px`,
+              width: isMobile ? '100%' : 'auto',
               opacity: segment.disabled ? 0.5 : 1,
               padding: theme.spacing(0.5, 2),
               '&:focus-visible': {

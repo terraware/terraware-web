@@ -8,6 +8,7 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import PlantingSeasonBox from 'src/scenes/NurseryRouter/PlantingSeasons/PlantingSeasonBox';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 import { siteGoalPlants } from './plantingPlanGoals';
@@ -21,6 +22,7 @@ const PlantingPlanSeasons = ({ plantingSite }: PlantingPlanSeasonsProps): JSX.El
   const { strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { selectedOrganization } = useOrganization();
+  const { isDesktop } = useDeviceInfo();
   const organizationId = selectedOrganization?.id;
 
   const [listPlantingSeasons, plantingSeasonsResult] = useLazyListPlantingSeasonsQuery();
@@ -66,7 +68,13 @@ const PlantingPlanSeasons = ({ plantingSite }: PlantingPlanSeasonsProps): JSX.El
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
       <Card style={{ width: '100%', padding: theme.spacing(3) }} radius={theme.spacing(1)}>
-        <Box display='flex' alignItems='stretch' gap={theme.spacing(2)} flexWrap='wrap' width='100%'>
+        <Box
+          display='flex'
+          flexDirection={isDesktop ? 'row' : 'column'}
+          alignItems='stretch'
+          gap={theme.spacing(2)}
+          width='100%'
+        >
           <Box
             sx={{
               backgroundColor: theme.palette.TwClrBgBrandTertiary,

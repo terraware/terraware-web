@@ -13,7 +13,20 @@ ACCESSION,Accession,6a1389cb
 ACCESSION_BY_STATUS,Accession par statut,8d5df55b
 ACCESSION_DETAIL,Détail de l'accès,dab2431a
 ACCESSION_DETAILS,Détails de l'accès,1fa5df58
+ACCESSION_EVENT_PHOTO_REPLACED,{0} a été remplacé,c87c5b4c
+ACCESSION_EVENT_VIABILITY_TEST_ADDED,a lancé un test de viabilité,1ec9a61e
+ACCESSION_EVENT_VIABILITY_TEST_DELETED,a supprimé un test de viabilité,131c982f
+ACCESSION_EVENT_VIABILITY_TEST_STARTED,a commencé un test de viabilité {0},241121fa
+ACCESSION_EVENT_VIABILITY_TEST_UPDATED,Le test de viabilité {0} a été modifié de {1} à {2},630ab02f
+ACCESSION_EVENT_WITHDRAWAL_ADDED,a ajouté un retrait,66861582
+ACCESSION_EVENT_WITHDRAWAL_ADDED_FOR,a retiré {0} pour {1},60701bb4
+ACCESSION_EVENT_WITHDRAWAL_ADDED_QUANTITY,a retiré {0},fb83504c
+ACCESSION_EVENT_WITHDRAWAL_ADDED_TO,a retiré {0} vers {1},8c38cd96
+ACCESSION_EVENT_WITHDRAWAL_DELETED,a supprimé un retrait,2fa169b8
+ACCESSION_EVENT_WITHDRAWAL_DELETED_FOR_VIABILITY_TEST,un retrait a été supprimé pour un test de viabilité,d9b09155
+ACCESSION_EVENT_WITHDRAWAL_UPDATED,Le retrait {0} a été modifié de {1} à {2},8dd1f01b
 ACCESSION_HISTORY,Historique de l'accession,1e6eaa37
+ACCESSION_HISTORY_NO_EVENTS,Aucun historique pour le moment.,f8822669
 ACCESSION_ID,Identifiant de l'accesion,a87726c0
 ACCESSION_NUMBER_CHECKED_IN,L'accesion {0} a été enregistrée avec succès !,b78da03c
 ACCESSIONS,Accessions,5f4f92e5
@@ -213,9 +226,11 @@ ASSIGN_OWNER,Attribuer un propriétaire,dc696cfa
 ASSIGN_OWNER_ELLIPSIS,Attribuer un propriétaire...,8053cd0e
 ASSIGN_STRATA,Attribuer des strates,43b7aa27
 ASSIGNED,Désigné,29aa3dd8
+ASSIGNED_LOCATION,Emplacement attribué,9e0b2077
 ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre de plants observés par espèce enregistrés comme vivants. Les plants enregistrés comme préexistants ou dont l'espèce est inconnue ne sont pas inclus.,526a70bc
 ASSIGNED_PLOT_OBSERVATION,Observation de parcelle attribuée,9175acf6
 ASSIGNED_PLOT_OBSERVATION_TOOLTIP,Sélectionnez une observation de parcelle attribuée pour afficher les données d'observation sur la carte.,2a1963a4
+AT_RISK,À risque,b2f3373a
 ATTACH_IMAGES_OR_VIDEOS,Joindre une (des) image(s) ou une (des) vidéo(s),c229aa87
 ATTACHMENT_DESCRIPTION,Joindre jusqu'à {0} fichiers. Chaque fichier a une taille maximale de {1}MB.,8ba18a63
 ATTACHMENT_LIMIT_REACHED,Limite de pièces jointes atteinte,9f9323bc
@@ -761,6 +776,7 @@ FEEDBACK,Commentaires,2510edcc
 FEEDBACK_SHARED_WITH_PROJECT,Commentaires (partagés avec le projet),d56b8ddb
 FERN,Fougère,35767f4d
 FIELD,Champ,dc19e415
+FIELD_LOCATION,Emplacement sur le terrain,009654a6
 FIELD_NOTES,Notes de terrain,1c50984e
 FIFTY_TO_SEVENTY_FIVE_PERCENT,50 % à 75 %,174fb41a
 FILE_NAME,Nom du fichier,fc9f4f98
@@ -1222,6 +1238,7 @@ MONTH_12,Décembre,dc3ea137
 MORE,Plus,58c3e1ca
 MORE_INFO,Plus d'informations,50ec3d8a
 MORE_OPTIONS,Autres options,40289137
+MORE_THAN_20M_FROM_ASSIGNED_LOCATION,(à plus de 20 m de l'emplacement attribué),f3b60390
 MORTALITY_RATE,Taux de mortalité,f1ef57f9
 MORTALITY_RATE_IN_FIELD,Taux de mortalité dans champ (%),48a2d543
 MORTALITY_RATE_IN_FIELD_REQUIRED,Taux de mortalité sur le terrain (%) *,cdddfe98
@@ -1248,7 +1265,7 @@ NAME_USED_BY_PROJECT,Nom utilisé par projet,c2fdff8f
 NATIVE,Indigène,3ef34d4d
 NATIVE_CHECK,Vérification du statut indigène,474464e4
 NATIVE_CHECK_NO_UPDATES,Aucune suggestion pour le statut d'origine des espèces.,f9f543dc
-NATIVE_CHECK_UPDATE_HINT,"Sélectionnez les espèces pour remplacer le statut suggéré, ou laissez décoché pour utiliser le statut suggéré.",52738882
+NATIVE_CHECK_UPDATE_HINT,Toutes les suggestions seront appliquées. Décochez une espèce pour définir son statut vous-même.,3cda706f
 NATIVE_ECOSYSTEM,Écosystème indigène,1a733f45
 NATIVE_ECOSYSTEM_TOOLTIP,"Indiquez le type d'écosystème dans lequel cette espèce se trouve à l'état naturel ; vous pouvez inclure des détails tels que l'altitude, la pluviométrie, etc.",188f8600
 NATIVE_FOREST,Forêt indigène,bbd2ab56
@@ -1286,6 +1303,7 @@ NO_BATCHES_TO_WITHDRAW_FROM,Il n'y a pas de lots dont les quantités peuvent êt
 NO_BATCHES_WITH_INVENTORY,"Tous les lots ayant eu un inventaire sont maintenant vides. Pour afficher les lots, espèces et pépinières qui avaient auparavant un inventaire, utilisez les filtres « Afficher les lots vides » et « Afficher les espèces/pépinières sans inventaire ».",2c0612be
 NO_BATCHES_WITH_INVENTORY_MESSAGE,Aucun lot ne possède d’inventaire. Utilisez le filtre « Afficher les lots vides » pour voir tous vos lots vides.,c326ecab
 NO_CHALLENGES_AND_MITIGATION_PLANS_ADDED,Aucun défi ni plan d’atténuation ajouté,f1d982d5
+NO_CHANGE,Aucun changement,d24105cc
 NO_COLUMNS_SELECTED,Aucune colonne sélectionnée,ac8b2bbe
 NO_COMMENTS_ADDED,Aucun commentaire ajouté,7fd30c97
 NO_DATA_YET,Pas encore de données,f2a0be82
@@ -1420,6 +1438,7 @@ OBSERVATION_EVENT,Événement d'observation,03d0c031
 OBSERVATION_EVENT_SCHEDULED,Un événement d'observation est prévu pour le {0} pour le(s) site(s) de plantation :,da489f7e
 OBSERVATION_EVENTS,Événements d'observation,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Les observations antérieures apparaissent avec une opacité décroissante.,03c6ea26
+OBSERVATION_EXPLANATION_PHOTO_LABEL,{0} : emplacement >20 m,c1fe1bd5
 OBSERVATION_PERIOD_WARN,La période d'observation ne peut excéder deux mois.,364a36c6
 OBSERVATION_PHOTO_CANNOT_DELETE_INFO,Les photos des coins de la parcelle ne peuvent pas être supprimées.,f045e547
 OBSERVATION_PHOTO_CANNOT_DELETE_TOOLTIP,Cette photo a été prise lors de l'observation et ne peut pas être supprimée.,c127ed8e
@@ -1505,6 +1524,7 @@ OVERRIDE,Remplacer,15bd0e63
 OVERRIDE_SPECIES,Remplacer l’espèce,c8f09521
 OVERRIDE_STATUS_NOT_SET_TOOLTIP,"Une fois qu’un statut est défini, il peut être remplacé. Utilisez la fonctionnalité de vérification des espèces pour définir un statut pour l’espèce dans ce projet.",15d7f709
 OVERRIDE_STATUS_NOT_SET_TOOLTIP_ORG,"Une fois qu’un statut est défini, il peut être remplacé. Utilisez la fonctionnalité de vérification des espèces pour définir un statut pour l’espèce.",c4738674
+OVERRIDING,Remplacement,46e4d047
 OVERVIEW,Vue d’ensemble,c7fd0e47
 OVERWRITE_TERRAWARE_TRACKING_DATA,Écraser les données de suivi Terraware,1f5637ba
 OVERWRITTEN_ORIGINAL_VALUE,Remplacement – original : {0},c504c96d
@@ -1675,6 +1695,7 @@ PLOT_DESCRIPTION,Description de la parcelle,67e5afa5
 PLOT_INFO,Informations sur la parcelle,38a9b59d
 PLOT_LIVE_PLANTS_TOOLTIP,Plantes vivantes correspond au nombre de plantes observées enregistrées comme vivantes. Les plantes enregistrées comme préexistantes ne sont pas incluses.,f7d2a77f
 PLOT_LOCATION,Emplacement de la placette,59f1374a
+PLOT_OBSERVATION_LOCATION_DEVIATION_INFO,Cette observation de parcelle a été réalisée à plus de 20 m de l'emplacement assigné. Exportez les données de la parcelle pour voir les coordonnées de localisation relevées sur le terrain.,32c9a47f
 PLOT_PLANT_DENSITY_TOOLTIP,La densité de plantes (plantes par hectare) est calculée en fonction du nombre de plantes observées enregistrées comme vivantes. Les plantes enregistrées comme préexistantes ne sont pas incluses.,32ced1ba
 PLOT_SELECTION,Sélection de parcelles,ba150031
 PLOT_SPECIES_TOOLTIP,"Espèces correspond au nombre d'espèces représentées par l'ensemble des plantes observées, y compris les plantes enregistrées comme préexistantes.",fd5ff6d0
@@ -2238,13 +2259,17 @@ SPECIES_CATEGORIES_TOOLTIP,Les catégories d'espèces indiquent le pourcentage d
 SPECIES_CHECK,Vérification des espèces,d7d0f200
 SPECIES_CHECK_ADDED_BANNER,"{0} nouvelles espèces ont été ajoutées ({1}). Lancez la vérification des espèces pour voir lesquelles sont indigènes, introduites ou envahissantes.",35e34395
 SPECIES_CHECK_ADDED_BANNER_ONE,"{0} nouvelle espèce a été ajoutée ({1}). Lancez la vérification des espèces pour voir si elle est indigène, introduite ou envahissante.",89f12eb5
+SPECIES_CHECK_KEEPS,Conserve {0},16ce403f
+SPECIES_CHECK_OVERRIDE_JUSTIFICATION_PLACEHOLDER,Pourquoi cette espèce diffère-t-elle de la suggestion ?,b83db1e0
+SPECIES_CHECK_OVERRIDE_WARNING,Native Check a suggéré {0} pour cette espèce. Indiquez le statut que vous souhaitez à la place.,c75e6aa8
 SPECIES_CHECK_SET_LOCATION_BANNER,"Pour vérifier quelles espèces sont indigènes, introduites ou envahissantes, lancez la Vérification des espèces. Vous devrez définir l’emplacement de vos projets.",49c844fd
 SPECIES_CHECK_SET_LOCATION_HINT,Sélectionnez un pays et un pays botanique pour définir l’emplacement.,e7b413a8
 SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS,Sélectionnez un pays et un pays botanique pour définir l’emplacement de chaque projet.,8070772f
 SPECIES_CHECK_SPECIES_CHECKED,{0} espèces vérifiées,3a3237db
 SPECIES_CHECK_SUGGESTION,{0} suggestion,5afe0690
 SPECIES_CHECK_SUGGESTIONS,{0} suggestions,9154c212
-SPECIES_CHECK_UPDATE_HINT,"Sélectionnez les espèces à mettre à jour, ou continuez sans effectuer de mise à jour. Les mises à jour remplaceront les données existantes.",6cfa3ed4
+SPECIES_CHECK_SUGGESTIONS_APPLIED,{0} sur {1} suggestions seront appliquées,beacaf4b
+SPECIES_CHECK_UPDATE_HINT,Toutes les suggestions de noms seront appliquées. Décochez une espèce pour conserver le nom que vous avez saisi.,e5c27ee6
 SPECIES_CHECK_UPDATES,{0} mises à jour,a1d89ade
 SPECIES_CLASSIFICATION,Classification des espèces,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"Vous n'avez pas saisi de valeurs de densité de plantation pour toutes les espèces. Si vous ne saisissez pas de valeurs de densité de plantation pour toutes les espèces, les densités de plantation pour cette parcelle ne seront pas définies et aucun taux de survie ne sera calculé pour cette espèce. Saisissez 0 pour toute espèce qui n'a pas été plantée dans une parcelle.",5bcc0f2b
@@ -2614,7 +2639,6 @@ UNFAVORABLE_WEATHER,Météo défavorable,a11232d3
 UNIT,Unité,48d10134
 UNITS,Unités,ce3e3f06
 UNKNOWN,Inconnu,97ccc176
-UNLIKELY,Peu probable,961eba8d
 UNPIN_ALL,Désépingler tout,97a06369
 UNPUBLISHED_CHANGES,Modifications non publiées,44cc10b0
 UNPUBLISHED_CHANGES_WARNING,Ce rapport ne correspond PAS au rapport publié. Cela peut être dû à des modifications non publiées dans ce rapport.,f7c6bf21
@@ -2744,6 +2768,7 @@ WEIGHTED_SURVIVAL_RATE_TOOLTIP,"Le taux de survie moyen pondéré par strate est
 WELCOME,Bienvenue !,09fd702c
 WELCOME_PERSON,"Bienvenue, {0} !",db783c9d
 WELCOME_TO_TERRAWARE_PERSON,"Bienvenue à Terraware, {0} !",0832a4dc
+WHAT_WILL_HAPPEN,Ce qui va se passer,ddd83f60
 WILD,Sauvage,77d2fd62
 WILD_IN_SITU,Sauvage (sur place),cf764f76
 WILD_IN_SITU_DESCRIPTION,Plantes qui se trouvent naturellement dans des zones sauvages et qui n'ont pas été plantées par l'homme.,9b5b2102

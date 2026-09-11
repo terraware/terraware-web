@@ -1,9 +1,10 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, CircularProgress, Container, Grid, useTheme } from '@mui/material';
+import { Container, Grid, useTheme } from '@mui/material';
 import { DropdownItem, Message, Tabs } from '@terraware/web-components';
 
 import PageHeader from 'src/components/PageHeader';
+import BlockingSpinner from 'src/components/common/BlockingSpinner';
 import EmptyMessage from 'src/components/common/EmptyMessage';
 import { downloadCsvTemplateHandler } from 'src/components/common/ImportModal';
 import OptionsMenu from 'src/components/common/OptionsMenu';
@@ -69,11 +70,12 @@ const ALL_ACCESSION_FIELDS = [
 type DatabaseProps = {
   hasSeedBanks: boolean;
   hasSpecies: boolean;
+  speciesLoading?: boolean;
   reloadData?: () => void;
 };
 
 export default function Database(props: DatabaseProps): JSX.Element {
-  const { hasSeedBanks, hasSpecies, reloadData } = props;
+  const { hasSeedBanks, hasSpecies, speciesLoading, reloadData } = props;
 
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
@@ -220,6 +222,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
     viewIdentifier: 'accessions-database',
   });
 
+  if (!selectedOrganization || speciesLoading) {
+    return (
+      <TfMain>
+        <BlockingSpinner />
+      </TfMain>
+    );
+  }
+
   return (
     <>
       {selectedFacility && (
@@ -292,36 +302,22 @@ export default function Database(props: DatabaseProps): JSX.Element {
           </PageHeader>
         </PageHeaderWrapper>
         <Container ref={contentRef} maxWidth={false} disableGutters sx={{ padding: 0 }}>
-          {selectedOrganization ? (
-            <>
-              {isOnboarded ? (
-                <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
-              ) : isAdmin(selectedOrganization) ? (
-                <Container maxWidth={false} sx={{ padding: '32px 0' }}>
-                  {!isMobile && emptyStateSpacer()}
-                  <EmptyMessage title={strings.ONBOARDING_ADMIN_TITLE} rowItems={getEmptyState()} sx={messageStyles} />
-                </Container>
-              ) : (
-                <Container maxWidth={false} sx={{ padding: '32px 0' }}>
-                  {!isMobile && emptyStateSpacer()}
-                  <EmptyMessage
-                    title={strings.REACH_OUT_TO_ADMIN_TITLE}
-                    text={strings.NO_SEEDBANKS_NON_ADMIN_MSG}
-                    sx={messageStyles}
-                  />
-                </Container>
-              )}
-            </>
+          {isOnboarded ? (
+            <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
+          ) : isAdmin(selectedOrganization) ? (
+            <Container maxWidth={false} sx={{ padding: '32px 0' }}>
+              {!isMobile && emptyStateSpacer()}
+              <EmptyMessage title={strings.ONBOARDING_ADMIN_TITLE} rowItems={getEmptyState()} sx={messageStyles} />
+            </Container>
           ) : (
-            <Box
-              sx={{
-                position: 'fixed',
-                top: '50%',
-                left: 'calc(50% + 100px)',
-              }}
-            >
-              <CircularProgress />
-            </Box>
+            <Container maxWidth={false} sx={{ padding: '32px 0' }}>
+              {!isMobile && emptyStateSpacer()}
+              <EmptyMessage
+                title={strings.REACH_OUT_TO_ADMIN_TITLE}
+                text={strings.NO_SEEDBANKS_NON_ADMIN_MSG}
+                sx={messageStyles}
+              />
+            </Container>
           )}
         </Container>
       </TfMain>

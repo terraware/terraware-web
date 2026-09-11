@@ -27,15 +27,15 @@ export const ProjectHealthBarContent = ({ indicators }: ProjectHealthBarContentP
       noStatus: indicators.filter((indicator) => !indicator.status).length,
       offTrack: countOf('Off-Track'),
       onTrack: countOf('On-Track'),
-      unlikely: countOf('Unlikely'),
+      atRisk: countOf('At Risk'),
     };
   }, [indicators]);
 
   const barSegments = useMemo(
     () => [
       { color: theme.palette.TwClrBgSuccess, count: counts.achieved + counts.onTrack, key: 'achievedOnTrack' },
-      { color: theme.palette.TwClrBgWarning, count: counts.offTrack, key: 'offTrack' },
-      { color: theme.palette.TwClrBgDanger, count: counts.unlikely, key: 'unlikely' },
+      { color: theme.palette.TwClrBgWarning, count: counts.atRisk, key: 'atRisk' },
+      { color: theme.palette.TwClrBgDanger, count: counts.offTrack, key: 'offTrack' },
       { color: theme.palette.TwClrBaseGray300, count: counts.noStatus, key: 'noStatus' },
     ],
     [counts, theme]
@@ -45,8 +45,8 @@ export const ProjectHealthBarContent = ({ indicators }: ProjectHealthBarContentP
     () => [
       { color: theme.palette.TwClrBgSuccess, count: counts.achieved, label: strings.ACHIEVED },
       { color: theme.palette.TwClrBgSuccess, count: counts.onTrack, label: strings.ON_TRACK },
-      { color: theme.palette.TwClrBgWarning, count: counts.offTrack, label: strings.OFF_TRACK },
-      { color: theme.palette.TwClrBgDanger, count: counts.unlikely, label: strings.UNLIKELY },
+      { color: theme.palette.TwClrBgWarning, count: counts.atRisk, label: strings.AT_RISK },
+      { color: theme.palette.TwClrBgDanger, count: counts.offTrack, label: strings.OFF_TRACK },
       { color: theme.palette.TwClrBaseGray300, count: counts.noStatus, label: strings.NO_STATUS },
     ],
     [counts, strings, theme]

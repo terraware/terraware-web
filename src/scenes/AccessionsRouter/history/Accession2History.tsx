@@ -5,17 +5,23 @@ import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useGetAccessionHistoryQuery } from 'src/queries/generated/accessionsV1';
 import { AccessionHistoryEntry } from 'src/services/AccessionService';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
-export default function Accession2History(): JSX.Element {
-  const { accessionId } = useParams<{ accessionId: string }>();
+import AccessionEventLog from './AccessionEventLog';
+
+type AccessionHistoryProps = {
+  accessionId: number;
+};
+
+const LegacyHistory = ({ accessionId }: AccessionHistoryProps): JSX.Element => {
   const theme = useTheme();
   const snackbar = useSnackbar();
 
-  const { currentData, isError } = useGetAccessionHistoryQuery(Number(accessionId), { skip: !accessionId });
+  const { currentData, isError } = useGetAccessionHistoryQuery(accessionId);
   const history: AccessionHistoryEntry[] | undefined = isError ? [] : currentData?.history;
 
   useEffect(() => {
@@ -74,4 +80,22 @@ export default function Accession2History(): JSX.Element {
       ))}
     </Box>
   );
-}
+};
+
+const Accession2History = (): JSX.Element | null => {
+  const { accessionId: accessionIdParam } = useParams<{ accessionId: string }>();
+
+  const accessionId = Number(accessionIdParam);
+
+  if (!Number.isFinite(accessionId) || accessionId <= 0) {
+    return null;
+  }
+
+  return isEnabled('Accession Event Log') ? (
+    <AccessionEventLog accessionId={accessionId} />
+  ) : (
+    <LegacyHistory accessionId={accessionId} />
+  );
+};
+
+export default Accession2History;

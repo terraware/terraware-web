@@ -65,10 +65,12 @@ const MonitoringPlotPhotosTab = () => {
   }, [observationId, stratumName, monitoringPlotId, monitoringPlot?.monitoringPlotId, navigate]);
 
   const plotCornerPhotos = useMemo(() => {
-    return monitoringPlot?.photos?.filter((photo) => photo.position !== undefined && photo.type === 'Plot');
+    return monitoringPlot?.photos?.filter(
+      (photo) => photo.position !== undefined && (photo.type === 'Plot' || photo.type === 'Explanation')
+    );
   }, [monitoringPlot?.photos]);
 
-  const otherPhotos = useMemo(() => {
+  const otherPlotPhotos = useMemo(() => {
     return monitoringPlot?.photos?.filter((photo) => photo.position === undefined && photo.type === 'Plot');
   }, [monitoringPlot?.photos]);
 
@@ -103,11 +105,11 @@ const MonitoringPlotPhotosTab = () => {
             {strings.PHOTOS_AND_VIDEOS}
           </Typography>
           <Box marginBottom={4}>
-            {(otherPhotos?.length || 0) > 0 ? (
+            {(otherPlotPhotos?.length || 0) > 0 ? (
               <MonitoringPlotPhotosWithActions
                 observationId={observationId}
                 monitoringPlotId={monitoringPlot.monitoringPlotId}
-                photos={otherPhotos}
+                photos={otherPlotPhotos}
                 plantingSiteName={plantingSite?.name}
               />
             ) : (

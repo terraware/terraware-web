@@ -12,6 +12,7 @@ import {
 import { useUpdateStratumMutation } from 'src/queries/generated/strata';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -31,6 +32,7 @@ const PlantingPlanSiteGoals = ({ plantingSite }: PlantingPlanSiteGoalsProps): JS
   const numberFormatter = useNumberFormatter();
   const snackbar = useSnackbar();
   const { selectedOrganization } = useOrganization();
+  const { isDesktop } = useDeviceInfo();
   const { data: speciesTargetsData } = useListPlantingSiteSpeciesTargetsQuery(plantingSite.id);
   const [updateStratum] = useUpdateStratumMutation();
 
@@ -105,8 +107,12 @@ const PlantingPlanSiteGoals = ({ plantingSite }: PlantingPlanSiteGoalsProps): JS
       <PlantingPlanStats initialGoal={stats.initialGoal} targetGoal={stats.targetGoal} species={stats.species} />
 
       <Stack
-        direction={{ xs: 'column', md: 'row' }}
-        divider={<Divider orientation='vertical' flexItem sx={{ borderColor: theme.palette.TwClrBrdrTertiary }} />}
+        direction={isDesktop ? 'row' : 'column'}
+        divider={
+          isDesktop ? (
+            <Divider orientation='vertical' flexItem sx={{ borderColor: theme.palette.TwClrBrdrTertiary }} />
+          ) : undefined
+        }
         spacing={3}
         marginTop={theme.spacing(3)}
       >

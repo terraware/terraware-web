@@ -2,6 +2,7 @@ import {
   AcceleratorReportPayload,
   NewAcceleratorReportConfigPayload,
   ReportChallengePayload,
+  ReportCommonIndicatorPayload,
   ReportPhotoPayload,
 } from 'src/queries/generated/acceleratorReports';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
@@ -23,7 +24,7 @@ export type IndicatorType = 'autoCalculated' | 'common' | 'project';
 
 export type ChallengeMitigation = ReportChallengePayload;
 
-export type ReportIndicatorStatus = 'Achieved' | 'On-Track' | 'Unlikely' | 'Off-Track';
+export type ReportIndicatorStatus = NonNullable<ReportCommonIndicatorPayload['status']>;
 
 export type PublishedReport = PublishedReportPayload;
 
