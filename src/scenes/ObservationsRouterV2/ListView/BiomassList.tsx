@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
@@ -20,11 +20,11 @@ import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useTableState from 'src/hooks/useTableState';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { useLazyListObservationResultsQuery } from 'src/queries/generated/observations';
+import { useLocalization } from 'src/providers/hooks';
 import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
 
 const STORAGE_KEY = 'biomass-measurement-table';
@@ -63,7 +63,6 @@ export type BiomassListProps = {
 export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.Element {
   const theme = useTheme();
   const { strings } = useLocalization();
-  const { selectedOrganization } = useOrganization();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { downloadBiomassObservationsCsv } = useObservationExports();
 
@@ -83,7 +82,11 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   } = useTableState(STORAGE_KEY, { persistFilters: true });
 
   const { plantingSites } = useOrganizationPlantingSites();
-  const [listAdHocObservationResults, adHocObservationsResultsResponse] = useLazyListObservationResultsQuery();
+  const { isFetching: isLoading, observations } = useFilteredObservationResults({
+    observationType: 'Biomass Measurements',
+    plantingSiteId,
+    plotType: 'adHoc',
+  });
 
   const plantingSitesNames = useMemo(
     () =>
@@ -97,29 +100,10 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     [plantingSites]
   );
 
-  useEffect(() => {
-    if (selectedOrganization) {
-      void listAdHocObservationResults(
-        {
-          plantingSiteId: plantingSiteId === ALL_PLANTING_SITES ? undefined : plantingSiteId,
-          organizationId: selectedOrganization.id,
-          depth: 'Plant',
-          isAdHoc: true,
-        },
-        true
-      );
-    }
-  }, [listAdHocObservationResults, selectedOrganization, plantingSiteId]);
-
-  const rows = useMemo((): BiomassRow[] => {
-    if (adHocObservationsResultsResponse.isSuccess) {
-      return adHocObservationsResultsResponse.data.observations
-        .filter(
-          (observation) =>
-            observation.type === 'Biomass Measurements' &&
-            observation.biomassMeasurements &&
-            observation.state !== 'Upcoming'
-        )
+  const rows = useMemo(
+    (): BiomassRow[] =>
+      observations
+        .filter((observation) => observation.biomassMeasurements)
         .map((observation) => ({
           observationId: observation.observationId,
           monitoringPlotNumber: observation.adHocPlot?.monitoringPlotNumber,
@@ -129,11 +113,9 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
           completedDate: observation.completedTime,
           totalPlants: observation.biomassMeasurements?.trees.length,
           totalSpecies: observation.biomassMeasurements?.treeSpeciesCount,
-        }));
-    } else {
-      return [];
-    }
-  }, [adHocObservationsResultsResponse, plantingSitesNames]);
+        })),
+    [observations, plantingSitesNames]
+  );
 
   const uniquePlantingSiteNames = useMemo(
     () => Array.from(new Set(rows.map((r) => r.plantingSiteName).filter((n): n is string => !!n))).sort(),
@@ -239,11 +221,6 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   const handleExportClick = useCallback(() => {
     void onExportBiomassObservations();
   }, [onExportBiomassObservations]);
-
-  const isLoading = useMemo(
-    () => adHocObservationsResultsResponse.isFetching,
-    [adHocObservationsResultsResponse.isFetching]
-  );
 
   if (!isLoading && rows.length === 0) {
     return (
