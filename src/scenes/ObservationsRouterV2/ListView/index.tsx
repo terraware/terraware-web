@@ -227,13 +227,14 @@ const ObservationListView = (): JSX.Element => {
       hasObservationsResults && (
         <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
           <ObservationMapWrapper
-            isBiomass={countedObservationType === 'Biomass Measurements'}
+            observationType={countedObservationType}
             plantingSiteId={plantingSiteIdFilter}
+            plotType={countedPlotType}
             selectPlantingSiteId={selectPlantingSite}
           />
         </Card>
       ),
-    [countedObservationType, hasObservationsResults, plantingSiteIdFilter, selectPlantingSite, theme]
+    [countedObservationType, countedPlotType, hasObservationsResults, plantingSiteIdFilter, selectPlantingSite, theme]
   );
 
   const mobileAppCard = useMemo(
