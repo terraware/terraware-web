@@ -1265,7 +1265,7 @@ NAME_USED_BY_PROJECT,Nombre usado por proyecto,c2fdff8f
 NATIVE,Nativo,3ef34d4d
 NATIVE_CHECK,Verificación de especie nativa,474464e4
 NATIVE_CHECK_NO_UPDATES,No hay sugerencias para el estado nativo de las especies.,f9f543dc
-NATIVE_CHECK_UPDATE_HINT,"Seleccione las especies para modificar el estado sugerido, o déjelas sin seleccionar para usar el estado sugerido.",52738882
+NATIVE_CHECK_UPDATE_HINT,Se aplicarán todas las sugerencias. Desmarque una especie para establecer su estado manualmente.,3cda706f
 NATIVE_ECOSYSTEM,Ecosistema autóctono,1a733f45
 NATIVE_ECOSYSTEM_TOOLTIP,"Indique el tipo de ecosistema en el cual se encuentra esta especie de forma natural; podría incluir detalles tales como el rango de elevación, pluviometría, etc.",188f8600
 NATIVE_FOREST,Bosque autóctono,bbd2ab56
@@ -1303,6 +1303,7 @@ NO_BATCHES_TO_WITHDRAW_FROM,No hay lotes con cantidades disponibles.,dc94bdcc
 NO_BATCHES_WITH_INVENTORY,"Todos los lotes que tenían inventario ahora están vacíos. Para ver los lotes, especies y viveros que anteriormente tenían inventario, utilice los filtros “Mostrar lotes vacíos” y “Mostrar especies/viveros sin inventario”.",2c0612be
 NO_BATCHES_WITH_INVENTORY_MESSAGE,Ningún lote tiene inventario. Utilice el filtro “Mostrar lotes vacíos” para ver todos sus lotes vacíos.,c326ecab
 NO_CHALLENGES_AND_MITIGATION_PLANS_ADDED,No se han agregado desafíos ni planes de mitigación,f1d982d5
+NO_CHANGE,Sin cambios,d24105cc
 NO_COLUMNS_SELECTED,Sin columnas seleccionadas,ac8b2bbe
 NO_COMMENTS_ADDED,Ningún comentario añadido,7fd30c97
 NO_DATA_YET,Aún no hay datos.,f2a0be82
@@ -1523,6 +1524,7 @@ OVERRIDE,Anular,15bd0e63
 OVERRIDE_SPECIES,Anular especie,c8f09521
 OVERRIDE_STATUS_NOT_SET_TOOLTIP,"Después de establecer un estado, este puede ser anulado. Ejecute la función de Verificación de Especies para establecer un estado para la especie en este Proyecto.",15d7f709
 OVERRIDE_STATUS_NOT_SET_TOOLTIP_ORG,"Después de establecer un estado, este puede ser anulado. Ejecute la función de Verificación de Especies para asignar un estado a la especie.",c4738674
+OVERRIDING,Reemplazando,46e4d047
 OVERVIEW,Descripción,c7fd0e47
 OVERWRITE_TERRAWARE_TRACKING_DATA,Sobrescribir los datos de seguimiento de Terraware,1f5637ba
 OVERWRITTEN_ORIGINAL_VALUE,Sobrescrito - original: {0},c504c96d
@@ -2257,13 +2259,17 @@ SPECIES_CATEGORIES_TOOLTIP,"Categorías de especies muestra el porcentaje del to
 SPECIES_CHECK,Verificación de especies,d7d0f200
 SPECIES_CHECK_ADDED_BANNER,"Se agregaron {0} especies nuevas ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",35e34395
 SPECIES_CHECK_ADDED_BANNER_ONE,"Se agregó {0} especie nueva ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",89f12eb5
+SPECIES_CHECK_KEEPS,Mantiene {0},16ce403f
+SPECIES_CHECK_OVERRIDE_JUSTIFICATION_PLACEHOLDER,¿Por qué esta especie difiere de la sugerencia?,b83db1e0
+SPECIES_CHECK_OVERRIDE_WARNING,Native Check sugirió {0} para esta especie. Registre el estado que desea en su lugar.,c75e6aa8
 SPECIES_CHECK_SET_LOCATION_BANNER,"Para verificar qué especies son nativas, introducidas o invasoras, ejecute la Verificación de Especies. Deberá establecer la ubicación de sus proyectos.",49c844fd
 SPECIES_CHECK_SET_LOCATION_HINT,Seleccione un país y un país botánico para establecer la ubicación.,e7b413a8
 SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS,Seleccione un país y un país botánico para establecer la ubicación de cada proyecto.,8070772f
 SPECIES_CHECK_SPECIES_CHECKED,{0} especies verificadas,3a3237db
 SPECIES_CHECK_SUGGESTION,{0} sugerencia,5afe0690
 SPECIES_CHECK_SUGGESTIONS,{0} sugerencias,9154c212
-SPECIES_CHECK_UPDATE_HINT,Seleccione las especies que desea actualizar o continúe sin realizar actualizaciones. Las actualizaciones sobrescribirán los datos existentes.,6cfa3ed4
+SPECIES_CHECK_SUGGESTIONS_APPLIED,Se aplicarán {0} de {1} sugerencias,beacaf4b
+SPECIES_CHECK_UPDATE_HINT,Se aplicarán todas las sugerencias de nombres. Desmarque una especie para conservar el nombre que ingresó.,e5c27ee6
 SPECIES_CHECK_UPDATES,{0} actualizaciones,a1d89ade
 SPECIES_CLASSIFICATION,Clasificación de especies,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"No ha ingresado valores de densidad de plantas para todas las especies. Si no ingresa valores de densidad de plantas para todas las especies, las densidades de plantas para esta parcela no se establecerán y no se calculará la tasa de supervivencia para esa especie. Ingrese 0 para cualquier especie que no haya sido plantada en una parcela.",5bcc0f2b
@@ -2762,6 +2768,7 @@ WEIGHTED_SURVIVAL_RATE_TOOLTIP,"La Tasa de Supervivencia Promedio por Estrato es
 WELCOME,¡Bienvenido!,09fd702c
 WELCOME_PERSON,"¡Bienvenido, {0}!",db783c9d
 WELCOME_TO_TERRAWARE_PERSON,"¡Bienvenido a Terraware, {0}!",0832a4dc
+WHAT_WILL_HAPPEN,Qué sucederá,ddd83f60
 WILD,Silvestre,77d2fd62
 WILD_IN_SITU,Silvestre (in situ),cf764f76
 WILD_IN_SITU_DESCRIPTION,Las plantas que crecen naturalmente en áreas silvestres y que no fueron sembradas por gente.,9b5b2102

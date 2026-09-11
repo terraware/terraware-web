@@ -29,6 +29,7 @@ import NativeCheckStep, { NativeCheckProjectSection } from './NativeCheckStep';
 import { ProjectCheckSummaryProps } from './ProjectCheckSummary';
 import SetLocationStep from './SetLocationStep';
 import SpeciesCheckStepper from './SpeciesCheckStepper';
+import SuggestionsAppliedCallout from './SuggestionsAppliedCallout';
 import { LocationEdit, LocationTarget, Nativity, ORG_TARGET_KEY, OverrideEdit, projectSpeciesKey } from './types';
 
 export type SpeciesCheckEntry = 'first-time' | 'menu' | 'added';
@@ -80,10 +81,9 @@ const SpeciesCheckModal = ({
   const [acceptPending] = useAcceptPendingNativitiesMutation();
 
   const [step, setStep] = useState(0);
-  const [nativeMode, setNativeMode] = useState<'list' | 'override'>('list');
   const [locationEdits, setLocationEdits] = useState<Record<number, LocationEdit>>({});
   const [nameSelected, setNameSelected] = useState<Set<number>>(new Set());
-  const [nativeSelected, setNativeSelected] = useState<Set<string>>(new Set());
+  const [nativeOverriding, setNativeOverriding] = useState<Set<string>>(new Set());
   const [overrideEdits, setOverrideEdits] = useState<Record<string, OverrideEdit>>({});
   const [showCancel, setShowCancel] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -145,9 +145,8 @@ const SpeciesCheckModal = ({
     setLocationEdits(initial);
     const locationsMissing = !targetsRef.current.every(hasCompleteLocation);
     setStep(locationsMissing ? 0 : 1);
-    setNativeMode('list');
     setNameSelected(new Set(speciesRef.current.filter(hasNameSuggestion).map((sp) => sp.id)));
-    setNativeSelected(new Set());
+    setNativeOverriding(new Set());
     setOverrideEdits({});
     setShowCancel(false);
     setShowUpdateLocation(false);
@@ -281,8 +280,6 @@ const SpeciesCheckModal = ({
     [buildSummary, checkedTargetData]
   );
 
-  const hasAnyPending = checkedTargetData.some((data) => data.pending.length > 0);
-
   const visibleNativeKeys = useMemo(() => {
     const keys = new Set<string>();
     nativeSections.forEach((section) => {
@@ -291,13 +288,13 @@ const SpeciesCheckModal = ({
     return keys;
   }, [nativeSections]);
 
-  const selectedVisibleNativeKeys = useMemo(
-    () => new Set([...nativeSelected].filter((key) => visibleNativeKeys.has(key))),
-    [nativeSelected, visibleNativeKeys]
+  const overridingVisibleKeys = useMemo(
+    () => new Set([...nativeOverriding].filter((key) => visibleNativeKeys.has(key))),
+    [nativeOverriding, visibleNativeKeys]
   );
 
   useEffect(() => {
-    setNativeSelected((previous) => {
+    setNativeOverriding((previous) => {
       const next = new Set([...previous].filter((key) => visibleNativeKeys.has(key)));
       return next.size === previous.size ? previous : next;
     });
@@ -306,6 +303,13 @@ const SpeciesCheckModal = ({
       return Object.keys(next).length === Object.keys(previous).length ? previous : next;
     });
   }, [visibleNativeKeys]);
+
+  const nativeSuggestionsTotal = visibleNativeKeys.size;
+  const nativeSuggestionsApplied = nativeSuggestionsTotal - overridingVisibleKeys.size;
+
+  const nameSuggestionSpecies = useMemo(() => speciesWithProblems.filter(hasNameSuggestion), [speciesWithProblems]);
+  const nameSuggestionsTotal = nameSuggestionSpecies.length;
+  const nameSuggestionsApplied = nameSuggestionSpecies.filter((sp) => nameSelected.has(sp.id)).length;
 
   const goToStep = useCallback((key: StepKey) => setStep(stepKeys.indexOf(key)), [stepKeys]);
 
@@ -331,7 +335,7 @@ const SpeciesCheckModal = ({
 
   const toggleNative = useCallback((targetKey: number, speciesId: number) => {
     const key = projectSpeciesKey(targetKey, speciesId);
-    setNativeSelected((previous) => {
+    setNativeOverriding((previous) => {
       const next = new Set(previous);
       if (next.has(key)) {
         next.delete(key);
@@ -480,47 +484,13 @@ const SpeciesCheckModal = ({
     [trackEvent]
   );
 
-  const finish = useCallback(async () => {
-    try {
-      if (selectedOrganization && hasAnyPending) {
-        // acceptPendingNativities invalidates the Species tag, so the list refetches.
-        await acceptPending({ organizationId: selectedOrganization.id }).unwrap();
-      }
-      trackCheckCompleted();
-      return true;
-    } catch {
-      trackSaveFailed(SAVE_FAILURE_ENTITY_TYPES.nativeCheck);
-      snackbar.toastError();
-      return false;
-    } finally {
-      void reloadSpecies();
-    }
-  }, [
-    acceptPending,
-    hasAnyPending,
-    reloadSpecies,
-    selectedOrganization,
-    snackbar,
-    trackCheckCompleted,
-    trackSaveFailed,
-  ]);
-
-  const onFinish = useCallback(async () => {
-    setBusy(true);
-    const succeeded = await finish();
-    if (succeeded) {
-      markSubmitted();
-    }
-    setBusy(false);
-    onClose();
-  }, [finish, markSubmitted, onClose]);
-
-  const onOverride = useCallback(async () => {
+  const onDone = useCallback(async () => {
     setBusy(true);
     try {
+      // Unchecked rows opt out of the suggestion and record the status the user chose instead.
       const overrides = nativeSections.flatMap((section) =>
         section.pending
-          .filter((row) => selectedVisibleNativeKeys.has(projectSpeciesKey(section.key, row.species.id)))
+          .filter((row) => overridingVisibleKeys.has(projectSpeciesKey(section.key, row.species.id)))
           .map((row) => {
             const key = projectSpeciesKey(section.key, row.species.id);
             const edit = overrideEdits[key] ?? {};
@@ -542,8 +512,16 @@ const SpeciesCheckModal = ({
           });
         });
       }
-      if (selectedOrganization) {
-        await acceptPending({ organizationId: selectedOrganization.id }).unwrap();
+
+      const shownSections = nativeSections.filter((section) => section.pending.length > 0);
+      const shownProjectIds = shownSections
+        .map((section) => section.projectId)
+        .filter((projectId): projectId is number => projectId !== undefined);
+      if (selectedOrganization && shownSections.length > 0) {
+        await acceptPending({
+          organizationId: selectedOrganization.id,
+          projectIds: shownProjectIds.length > 0 ? shownProjectIds : undefined,
+        }).unwrap();
       }
       trackCheckCompleted(overrides);
       markSubmitted();
@@ -558,7 +536,7 @@ const SpeciesCheckModal = ({
     acceptPending,
     onClose,
     nativeSections,
-    selectedVisibleNativeKeys,
+    overridingVisibleKeys,
     overrideEdits,
     overrideSpecies,
     selectedOrganization,
@@ -573,7 +551,7 @@ const SpeciesCheckModal = ({
     ? targets.some(isLocationComplete)
     : targets.every(isLocationComplete);
 
-  const allOverridesValid = [...selectedVisibleNativeKeys].every(
+  const allOverridesValid = [...overridingVisibleKeys].every(
     (key) => (overrideEdits[key]?.justification ?? '').trim().length > 0
   );
 
@@ -638,26 +616,6 @@ const SpeciesCheckModal = ({
       return [cancelButton, nameBackButton, namePrimary];
     }
 
-    if (nativeMode === 'override') {
-      return [
-        cancelButton,
-        <Button
-          key='back'
-          label={strings.BACK}
-          onClick={() => setNativeMode('list')}
-          priority='secondary'
-          type='passive'
-          disabled={busy}
-        />,
-        <Button
-          key='override'
-          label={strings.OVERRIDE}
-          onClick={() => void onOverride()}
-          disabled={busy || !allOverridesValid}
-        />,
-      ];
-    }
-
     const backButton = (
       <Button
         key='back'
@@ -668,13 +626,11 @@ const SpeciesCheckModal = ({
         disabled={busy}
       />
     );
-    const primary =
-      selectedVisibleNativeKeys.size > 0 ? (
-        <Button key='override' label={strings.OVERRIDE} onClick={() => setNativeMode('override')} disabled={busy} />
-      ) : (
-        <Button key='done' label={strings.DONE} onClick={() => void onFinish()} disabled={busy} />
-      );
-    return [cancelButton, backButton, primary];
+    return [
+      cancelButton,
+      backButton,
+      <Button key='done' label={strings.DONE} onClick={() => void onDone()} disabled={busy || !allOverridesValid} />,
+    ];
   }, [
     allOverridesValid,
     busy,
@@ -683,20 +639,14 @@ const SpeciesCheckModal = ({
     currentKey,
     goBackToLocationStep,
     goToStep,
-    nativeMode,
     onAcceptNames,
-    onFinish,
-    onOverride,
+    onDone,
     onSetLocations,
     requestCancel,
-    selectedVisibleNativeKeys.size,
     targets.length,
   ]);
 
-  const title =
-    currentKey === 'native' && nativeMode === 'override' && entry === 'menu'
-      ? strings.OVERRIDE_SPECIES
-      : strings.SPECIES_CHECK;
+  const title = strings.SPECIES_CHECK;
 
   return (
     <>
@@ -713,27 +663,35 @@ const SpeciesCheckModal = ({
         <SpeciesCheckStepper steps={stepLabels} activeStep={Math.min(step, stepLabels.length - 1)} />
 
         {currentKey === 'name' && (
-          <Typography
-            fontSize='16px'
-            color={theme.palette.TwClrTxt}
-            textAlign='left'
-            marginTop={theme.spacing(2)}
-            marginBottom={theme.spacing(2)}
-          >
-            {strings.SPECIES_CHECK_UPDATE_HINT}
-          </Typography>
+          <>
+            <Typography
+              fontSize='16px'
+              color={theme.palette.TwClrTxt}
+              textAlign='left'
+              marginTop={theme.spacing(2)}
+              marginBottom={theme.spacing(2)}
+            >
+              {strings.SPECIES_CHECK_UPDATE_HINT}
+            </Typography>
+            {nameSuggestionsTotal > 0 && (
+              <SuggestionsAppliedCallout applied={nameSuggestionsApplied} total={nameSuggestionsTotal} />
+            )}
+          </>
         )}
 
-        {currentKey === 'native' && nativeMode === 'list' && (
-          <Typography
-            fontSize='16px'
-            color={theme.palette.TwClrTxt}
-            textAlign='left'
-            marginTop={theme.spacing(2)}
-            marginBottom={theme.spacing(2)}
-          >
-            {strings.NATIVE_CHECK_UPDATE_HINT}
-          </Typography>
+        {currentKey === 'native' && nativeSuggestionsTotal > 0 && (
+          <>
+            <Typography
+              fontSize='16px'
+              color={theme.palette.TwClrTxt}
+              textAlign='left'
+              marginTop={theme.spacing(2)}
+              marginBottom={theme.spacing(2)}
+            >
+              {strings.NATIVE_CHECK_UPDATE_HINT}
+            </Typography>
+            <SuggestionsAppliedCallout applied={nativeSuggestionsApplied} total={nativeSuggestionsTotal} />
+          </>
         )}
 
         {currentKey === 'setLocation' && (
@@ -769,9 +727,8 @@ const SpeciesCheckModal = ({
         )}
         {currentKey === 'native' && (
           <NativeCheckStep
-            mode={nativeMode}
             sections={nativeSections}
-            selectedKeys={selectedVisibleNativeKeys}
+            overridingKeys={overridingVisibleKeys}
             onToggle={toggleNative}
             overrides={overrideEdits}
             onOverrideChange={(key, edit) => setOverrideEdits((previous) => ({ ...previous, [key]: edit }))}

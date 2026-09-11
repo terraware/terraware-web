@@ -67,6 +67,7 @@ export default function AddSpeciesToProjectModal({
       open={true}
       title={strings.ADD_TO_PROJECT}
       size='medium'
+      scrolled
       middleButtons={[
         <Button
           id='cancel'

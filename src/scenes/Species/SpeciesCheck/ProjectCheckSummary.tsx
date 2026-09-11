@@ -25,12 +25,12 @@ const ProjectCheckSummary = ({
   countryName,
   botanicalCountryName,
   showLocation = true,
-  updates,
   updatesLabel,
   speciesChecked,
 }: ProjectCheckSummaryProps): JSX.Element => {
   const theme = useTheme();
-  const showCounts = updates !== undefined && speciesChecked !== undefined;
+  const showSpeciesChecked = speciesChecked !== undefined;
+  const showUpdatesLine = updatesLabel !== undefined;
 
   return (
     <Box
@@ -63,14 +63,18 @@ const ProjectCheckSummary = ({
           </Box>
         )}
       </Box>
-      {showCounts && (
+      {(showSpeciesChecked || showUpdatesLine) && (
         <Box textAlign='right' whiteSpace='nowrap'>
-          <Typography fontSize='16px' color={theme.palette.TwClrBaseBlack}>
-            {strings.formatString(strings.SPECIES_CHECK_SPECIES_CHECKED, speciesChecked)}
-          </Typography>
-          <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrBaseBlack}>
-            {updatesLabel ?? strings.formatString(strings.SPECIES_CHECK_UPDATES, updates)}
-          </Typography>
+          {showSpeciesChecked && (
+            <Typography fontSize='16px' color={theme.palette.TwClrBaseBlack}>
+              {strings.formatString(strings.SPECIES_CHECK_SPECIES_CHECKED, speciesChecked)}
+            </Typography>
+          )}
+          {showUpdatesLine && (
+            <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrBaseBlack}>
+              {updatesLabel}
+            </Typography>
+          )}
         </Box>
       )}
     </Box>
