@@ -5,7 +5,7 @@ import { Box, Checkbox, Typography, useTheme } from '@mui/material';
 import strings from 'src/strings';
 import { Species, SpeciesProblemElement } from 'src/types/Species';
 
-import ProjectCheckSummary, { ProjectCheckSummaryProps, suggestionsCountLabel } from './ProjectCheckSummary';
+import ProjectCheckSummary, { ProjectCheckSummaryProps } from './ProjectCheckSummary';
 
 const issueLabel = (problem: SpeciesProblemElement): string => {
   switch (problem.type) {
@@ -60,7 +60,7 @@ const NameCheckStep = ({
               borderTop: index > 0 ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined,
             }}
           >
-            <ProjectCheckSummary {...summary} updatesLabel={suggestionsCountLabel(summary.updates ?? 0)} />
+            <ProjectCheckSummary {...summary} />
           </Box>
         ))}
       </Box>
@@ -86,12 +86,28 @@ const NameCheckStep = ({
             <span />
             <Typography sx={headerCell}>{strings.SPECIES}</Typography>
             <Typography sx={headerCell}>{strings.ISSUE}</Typography>
-            <Typography sx={{ ...headerCell, textAlign: 'right' }}>{strings.SUGGESTION}</Typography>
+            <Typography sx={{ ...headerCell, textAlign: 'right' }}>{strings.WHAT_WILL_HAPPEN}</Typography>
           </Box>
           {speciesWithProblems.map((species) => {
             const problem = species.problems?.[0];
             const hasSuggestion = !!problem?.suggestedValue?.trim();
-            const textColor = hasSuggestion ? theme.palette.TwClrTxt : theme.palette.TwClrTxtSecondary;
+            const isChecked = hasSuggestion && selectedSpeciesIds.has(species.id);
+            const nameColor = hasSuggestion ? theme.palette.TwClrTxt : theme.palette.TwClrTxtSecondary;
+
+            const outcome = !hasSuggestion ? (
+              <Typography sx={{ ...bodyCell, textAlign: 'right', color: theme.palette.TwClrTxtSecondary }}>
+                {strings.SPECIES_CHECK_NO_CHANGE}
+              </Typography>
+            ) : isChecked ? (
+              <Typography sx={{ ...bodyCell, textAlign: 'right' }}>
+                {strings.formatString(strings.CHANGE_TO, <b>{problem?.suggestedValue}</b>)}
+              </Typography>
+            ) : (
+              <Typography sx={{ ...bodyCell, textAlign: 'right', color: theme.palette.TwClrTxtSecondary }}>
+                {strings.formatString(strings.SPECIES_CHECK_KEEPS, <b>{species.scientificName}</b>)}
+              </Typography>
+            );
+
             return (
               <Box
                 key={species.id}
@@ -101,20 +117,16 @@ const NameCheckStep = ({
                 padding={theme.spacing(1, 2, 1, 0)}
               >
                 <Checkbox
-                  checked={hasSuggestion && selectedSpeciesIds.has(species.id)}
+                  checked={isChecked}
                   onChange={() => onToggleSpecies(species.id)}
                   disabled={!hasSuggestion}
                   sx={{ padding: 0 }}
                 />
-                <Typography sx={{ ...bodyCell, color: textColor }}>{species.scientificName}</Typography>
+                <Typography sx={{ ...bodyCell, color: nameColor }}>{species.scientificName}</Typography>
                 <Typography sx={{ ...bodyCell, color: theme.palette.TwClrTxt }}>
                   {problem ? issueLabel(problem) : ''}
                 </Typography>
-                <Typography sx={{ ...bodyCell, textAlign: 'right', color: textColor }}>
-                  {problem?.suggestedValue
-                    ? strings.formatString(strings.CHANGE_TO, <b>{problem.suggestedValue}</b>)
-                    : ''}
-                </Typography>
+                {outcome}
               </Box>
             );
           })}
