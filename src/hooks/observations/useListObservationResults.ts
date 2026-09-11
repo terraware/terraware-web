@@ -10,6 +10,7 @@ type UseListObservationResultsArgs = {
   organizationId: number | undefined;
   plantingSiteId?: PlantingSiteId;
   depth?: ObservationDepth;
+  isAdHoc?: boolean;
   state?: ObservationState[];
   limit?: number;
 };
@@ -18,6 +19,7 @@ const useListObservationResults = ({
   organizationId,
   plantingSiteId,
   depth,
+  isAdHoc,
   state,
   limit,
 }: UseListObservationResultsArgs) => {
@@ -28,9 +30,12 @@ const useListObservationResults = ({
 
   useEffect(() => {
     if (organizationId !== undefined) {
-      void listObservationResults({ organizationId, plantingSiteId: plantingSiteIdFilter, depth, state, limit }, true);
+      void listObservationResults(
+        { organizationId, plantingSiteId: plantingSiteIdFilter, depth, isAdHoc, state, limit },
+        true
+      );
     }
-  }, [depth, limit, listObservationResults, organizationId, plantingSiteIdFilter, state]);
+  }, [depth, isAdHoc, limit, listObservationResults, organizationId, plantingSiteIdFilter, state]);
 
   return result;
 };
