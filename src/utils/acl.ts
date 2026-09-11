@@ -312,7 +312,7 @@ const isAllowedCreatePlantingSite: PermissionCheckFn<CreatePlantingSiteMetadata>
 ) => isAcceleratorAdmin(user) || isAdmin(metadata?.organization);
 
 /**
- * Functions related to create planting site, since the permission also applies to
+ * Functions related to editing accessions, since the permission also applies to
  * org roles, we need to check the passed-in organization
  */
 type AccessionMetadata = { organization?: Organization; accession?: Accession };

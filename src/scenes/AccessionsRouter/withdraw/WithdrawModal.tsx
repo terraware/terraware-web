@@ -84,7 +84,7 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { isAllowed } = useUser();
-  const cannotEdit = !isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
+  const userCanEdit = isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
   const [selectedSeedBank, setSelectedSeedBank] = useState<Facility>();
   const tz = useLocationTimeZone().get(selectedSeedBank);
   const [timeZone, setTimeZone] = useState(tz.id);
@@ -540,13 +540,13 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
   const isEqualUsers = useCallback((a: OrganizationUser, b: OrganizationUser) => a.id === b.id, []);
 
   const renderOptionUser = useCallback(
-    (option: OrganizationUser) => renderUser(option, user, cannotEdit),
-    [user, cannotEdit]
+    (option: OrganizationUser) => renderUser(option, user, !userCanEdit),
+    [user, userCanEdit]
   );
 
   const displayLabelUser = useCallback(
-    (option: OrganizationUser) => renderUser(option, user, cannotEdit),
-    [user, cannotEdit]
+    (option: OrganizationUser) => renderUser(option, user, !userCanEdit),
+    [user, userCanEdit]
   );
 
   const toTUser = useCallback(
@@ -719,7 +719,7 @@ function WithdrawDialogForm(props: WithdrawDialogFormProps): JSX.Element {
               selectedValue={users?.find((userSel) => userSel.id === record.withdrawnByUserId)}
               toT={toTUser}
               fullWidth={true}
-              disabled={cannotEdit}
+              disabled={!userCanEdit}
             />
           </Grid>
           {isNurseryTransfer ? (

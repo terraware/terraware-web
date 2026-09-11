@@ -77,7 +77,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
   const [openViabilityResultModal, setOpenViabilityResultModal] = useState(false);
   const [savedRecord, setSavedRecord] = useState<ViabilityTest>();
   const { isAllowed } = useUser();
-  const cannotEdit = !isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
+  const userCanEdit = isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
   const snackbar = useSnackbar();
   const theme = useTheme();
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -650,8 +650,8 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
               options={users}
               onChange={onChangeUser}
               isEqual={(a: OrganizationUser, b: OrganizationUser) => a.id === b.id}
-              renderOption={(option) => renderUser(option, user, cannotEdit)}
-              displayLabel={(option) => renderUser(option, user, cannotEdit)}
+              renderOption={(option) => renderUser(option, user, !userCanEdit)}
+              displayLabel={(option) => renderUser(option, user, !userCanEdit)}
               selectedValue={users?.find((userSel) => userSel.id === record?.withdrawnByUserId)}
               toT={(firstName: string) =>
                 ({
@@ -659,7 +659,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
                 }) as OrganizationUser
               }
               fullWidth={true}
-              disabled={cannotEdit || readOnly}
+              disabled={!userCanEdit || readOnly}
             />
           </Grid>
 
