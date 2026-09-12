@@ -20,6 +20,7 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -40,6 +41,7 @@ import { exportAdHocObservationsResults } from '../exportAdHocObservations';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
 import { PlotType } from '../useObservationFilters';
+import SelectObservationButton from './SelectObservationButton';
 
 type PlantMonitoringRow = {
   adHocPlotNumber?: number;
@@ -133,6 +135,9 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
   const navigate = useSyncNavigate();
 
   const isAdHoc = plotType === 'adHoc';
+  const newFiltersEnabled = isEnabled('New Observation Filters');
+  // One observation cannot be shown on a map of every site, so the map link needs a single site.
+  const showSelectObservation = newFiltersEnabled && typeof plantingSiteId === 'number';
 
   const assignedTableState = useTableState(ASSIGNED_STORAGE_KEY, { persistFilters: true });
   const adHocTableState = useTableState(ADHOC_STORAGE_KEY, { persistFilters: true });
@@ -241,12 +246,15 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
       const row = cell.row.original;
       const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', row.observationId.toString());
       return (
-        <Link fontSize='16px' to={url}>
-          {row.observationDate ? getShortDate(row.observationDate, activeLocale) : null}
-        </Link>
+        <Box alignItems='center' display='flex' gap={1}>
+          <Link fontSize='16px' to={url}>
+            {row.observationDate ? getShortDate(row.observationDate, activeLocale) : null}
+          </Link>
+          {showSelectObservation && <SelectObservationButton observationId={row.observationId} />}
+        </Box>
       );
     },
-    [activeLocale]
+    [activeLocale, showSelectObservation]
   );
 
   const AdHocPlotNumberCell = useCallback(({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => {
@@ -291,7 +299,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
       {
         id: 'observationDate',
         header: strings.DATE,
-        size: 180,
+        size: showSelectObservation ? 230 : 180,
         accessorFn: (row) => {
           const dateStr = row.observationDate;
           if (!dateStr) {
@@ -399,6 +407,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
     strings,
     uniqueStatuses,
     uniquePlantingSiteNames,
+    showSelectObservation,
     scheduleObservationsEnabled,
     ObservationDateCell,
     StrataCell,
