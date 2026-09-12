@@ -22,6 +22,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ObservationMapWrapper from '../Map';
 import useObservablePlantingSites from '../Schedule/useObservablePlantingSites';
+import SelectedObservationProvider from '../SelectedObservationProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationFilters, { PlotType } from '../useObservationFilters';
 import BiomassList from './BiomassList';
@@ -29,7 +30,7 @@ import ObservationFilters from './ObservationFilters';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
 import PlantMonitoringList from './PlantMonitoringList';
 
-const ObservationListView = (): JSX.Element => {
+const ObservationListViewContent = (): JSX.Element => {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
   const navigate = useSyncNavigate();
@@ -313,5 +314,11 @@ const ObservationListView = (): JSX.Element => {
     </Page>
   );
 };
+
+const ObservationListView = (): JSX.Element => (
+  <SelectedObservationProvider>
+    <ObservationListViewContent />
+  </SelectedObservationProvider>
+);
 
 export default ObservationListView;
