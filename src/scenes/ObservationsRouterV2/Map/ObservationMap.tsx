@@ -4,6 +4,7 @@ import { useSearchParams } from 'react-router';
 
 import { Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
+import { MultiPolygon } from 'geojson';
 
 import MapComponent from 'src/components/NewMap';
 import { MapDrawerSize } from 'src/components/NewMap/MapDrawer';
@@ -28,7 +29,7 @@ import usePlantMarkersMapLegend from 'src/components/NewMap/usePlantMarkersMapLe
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
-import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
+import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
 import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
@@ -61,6 +62,11 @@ type LayerFeature = {
   layerFeatureId: MapLayerFeatureId;
 };
 
+// Leaves some of the surrounding site in frame instead of filling the canvas with one plot.
+const PLOT_FIT_PADDING = 150;
+
+const PLOT_LAYER_IDS = ['adHocPlots', 'permanentPlots', 'temporaryPlots'];
+
 /** A plot nobody finished observing, which the map draws with a dashed border. */
 const isPlotIncomplete = (plot: ObservationMonitoringPlotResultsPayload): boolean =>
   plot.completedTime === undefined || plot.status !== 'Completed';
@@ -88,7 +94,7 @@ const ObservationMap = ({
   const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { mapId, token } = useMapboxToken();
-  const dashIncompletePlots = isEnabled('New Observation Filters');
+  const newFiltersEnabled = isEnabled('New Observation Filters');
   const { fitBounds } = useMapUtils(mapRef);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [localDrawerOpen, setDrawerOpen] = useState<boolean>(false);
@@ -401,7 +407,7 @@ const ObservationMap = ({
             .map((adHocResults) => adHocResults.adHocPlot)
             .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined)
             .map((plot) => ({
-              dashedBorder: dashIncompletePlots && isPlotIncomplete(plot),
+              dashedBorder: newFiltersEnabled && isPlotIncomplete(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -421,7 +427,7 @@ const ObservationMap = ({
           features: monitoringPlots
             .filter((plot) => !plot.isPermanent)
             .map((plot) => ({
-              dashedBorder: dashIncompletePlots && isPlotIncomplete(plot),
+              dashedBorder: newFiltersEnabled && isPlotIncomplete(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -444,7 +450,7 @@ const ObservationMap = ({
           features: monitoringPlots
             .filter((plot) => plot.isPermanent)
             .map((plot) => ({
-              dashedBorder: dashIncompletePlots && isPlotIncomplete(plot),
+              dashedBorder: newFiltersEnabled && isPlotIncomplete(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -531,7 +537,7 @@ const ObservationMap = ({
   }, [
     adHocPlotsLayerStyle,
     adHocPlotsVisible,
-    dashIncompletePlots,
+    newFiltersEnabled,
     plantingSites,
     monitoringPlots,
     permanentPlotsLayerStyle,
@@ -1189,12 +1195,38 @@ const ObservationMap = ({
     }
   }, [plantingSiteId, observationResults, selectedAdHocResults, resetDrawerState, searchParams]);
 
+  const selectedPlotBoundary = useMemo((): MultiPolygon | undefined => {
+    const { layerId, featureId } = selectedFeature?.layerFeatureId ?? {};
+
+    if (layerId === undefined || featureId === undefined || !PLOT_LAYER_IDS.includes(layerId)) {
+      return undefined;
+    }
+
+    const monitoringPlotId = Number(featureId);
+    const plot =
+      layerId === 'adHocPlots'
+        ? selectedAdHocResults.find((result) => result.adHocPlot?.monitoringPlotId === monitoringPlotId)?.adHocPlot
+        : monitoringPlots.find((candidate) => candidate.monitoringPlotId === monitoringPlotId);
+
+    return plot?.boundary ? { type: 'MultiPolygon', coordinates: [plot.boundary.coordinates] } : undefined;
+  }, [monitoringPlots, selectedAdHocResults, selectedFeature]);
+
+  // Undefined for anything the map cannot centre on, which is what hides the drawer's button.
+  const viewSelectedPlotOnMap = useMemo(
+    () =>
+      newFiltersEnabled && selectedPlotBoundary
+        ? () => fitBounds(getBoundingBoxFromMultiPolygons([selectedPlotBoundary]), PLOT_FIT_PADDING)
+        : undefined,
+    [fitBounds, newFiltersEnabled, selectedPlotBoundary]
+  );
+
   const drawerContent = useMemo(() => {
     if (selectedFeature && selectedResults) {
       if (isBiomass) {
         return (
           <BiomassObservationStatsDrawer
             observationId={selectedResults.observationId}
+            onViewOnMap={viewSelectedPlotOnMap}
             plantingSiteId={selectedFeature.plantingSiteId}
           />
         );
@@ -1211,6 +1243,7 @@ const ObservationMap = ({
             <ObservationStatsDrawer
               layerFeatureId={selectedFeature.layerFeatureId}
               observationId={observationId}
+              onViewOnMap={viewSelectedPlotOnMap}
               plantingSiteId={selectedFeature.plantingSiteId}
             />
           );
@@ -1232,6 +1265,7 @@ const ObservationMap = ({
     plantDrawerContent,
     selectedAdHocResults,
     selectedFeature,
+    viewSelectedPlotOnMap,
     selectedPhotos.length,
     selectedPlants.length,
     selectedResults,
