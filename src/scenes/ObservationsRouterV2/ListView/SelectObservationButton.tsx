@@ -8,20 +8,26 @@ import { useLocalization } from 'src/providers';
 import { useSelectedObservation } from '../SelectedObservationProvider';
 
 export type SelectObservationButtonProps = {
+  // Ad-hoc rows also open the plot's drawer on the map.
+  adHocPlot?: { monitoringPlotId: number; plantingSiteId: number };
   observationId: number;
 };
 
 /** Points the map and timeline at one observation, and shows which one they are pointing at. */
-const SelectObservationButton = ({ observationId }: SelectObservationButtonProps): JSX.Element => {
+const SelectObservationButton = ({ adHocPlot, observationId }: SelectObservationButtonProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const { selectObservation, selectedObservationId } = useSelectedObservation();
+  const { selectAdHocPlot, selectObservation, selectedObservationId } = useSelectedObservation();
 
   const isSelected = selectedObservationId === observationId;
 
   const onClick = useCallback(() => {
-    selectObservation(observationId);
-  }, [observationId, selectObservation]);
+    if (adHocPlot) {
+      selectAdHocPlot({ ...adHocPlot, observationId });
+    } else {
+      selectObservation(observationId);
+    }
+  }, [adHocPlot, observationId, selectAdHocPlot, selectObservation]);
 
   return (
     <IconButton

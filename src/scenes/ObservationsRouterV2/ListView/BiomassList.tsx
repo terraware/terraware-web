@@ -17,6 +17,7 @@ import Link from 'src/components/common/Link';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useTableState from 'src/hooks/useTableState';
@@ -26,11 +27,13 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
+import SelectObservationButton from './SelectObservationButton';
 
 const STORAGE_KEY = 'biomass-measurement-table';
 
 type BiomassRow = {
   observationId: number;
+  monitoringPlotId?: number;
   monitoringPlotNumber?: number;
   monitoringPlotDescription?: string;
   plantingSiteId: number;
@@ -81,6 +84,9 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     showGlobalFilter,
   } = useTableState(STORAGE_KEY, { persistFilters: true });
 
+  // One observation cannot be shown on a map of every site, so the map link needs a single site.
+  const showSelectObservation = isEnabled('New Observation Filters') && typeof plantingSiteId === 'number';
+
   const { plantingSites } = useOrganizationPlantingSites();
   const { isFetching: isLoading, observations } = useFilteredObservationResults({
     observationType: 'Biomass Measurements',
@@ -106,6 +112,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         .filter((observation) => observation.biomassMeasurements)
         .map((observation) => ({
           observationId: observation.observationId,
+          monitoringPlotId: observation.adHocPlot?.monitoringPlotId,
           monitoringPlotNumber: observation.adHocPlot?.monitoringPlotNumber,
           monitoringPlotDescription: observation.biomassMeasurements?.description,
           plantingSiteId: observation.plantingSiteId,
@@ -122,15 +129,26 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     [rows]
   );
 
-  const PlotNumberCell = useCallback(({ cell }: { cell: MRT_Cell<BiomassRow> }) => {
-    const row = cell.row.original;
-    const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', row.observationId.toString());
-    return (
-      <Link fontSize='16px' to={url}>
-        {row.monitoringPlotNumber}
-      </Link>
-    );
-  }, []);
+  const PlotNumberCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<BiomassRow> }) => {
+      const row = cell.row.original;
+      const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', row.observationId.toString());
+      return (
+        <Box alignItems='center' display='flex' gap={1}>
+          <Link fontSize='16px' to={url}>
+            {row.monitoringPlotNumber}
+          </Link>
+          {showSelectObservation && row.monitoringPlotId !== undefined && (
+            <SelectObservationButton
+              adHocPlot={{ monitoringPlotId: row.monitoringPlotId, plantingSiteId: row.plantingSiteId }}
+              observationId={row.observationId}
+            />
+          )}
+        </Box>
+      );
+    },
+    [showSelectObservation]
+  );
 
   const CompletedDateCell = useCallback(
     ({ cell }: { cell: MRT_Cell<BiomassRow> }) => {
@@ -154,6 +172,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         header: strings.PLOT,
         accessorKey: 'monitoringPlotNumber',
         filterVariant: 'range',
+        size: showSelectObservation ? 160 : undefined,
         Cell: PlotNumberCell,
       },
       {
@@ -207,7 +226,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         Cell: ActionsMenuCell,
       },
     ],
-    [strings, uniquePlantingSiteNames, PlotNumberCell, CompletedDateCell, ActionsMenuCell]
+    [strings, showSelectObservation, uniquePlantingSiteNames, PlotNumberCell, CompletedDateCell, ActionsMenuCell]
   );
 
   const onExportBiomassObservations = useCallback(async () => {
