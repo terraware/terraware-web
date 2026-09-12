@@ -2161,6 +2161,7 @@ SHARED_WITH_FUNDER,Compartido con el financiador,f59b229b
 SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52
 SHOW_LESS,Mostrar menos,d753a0ed
 SHOW_MORE,Mostrar más,43cab9b7
+SHOW_OBSERVATION_ON_MAP,Mostrar en el mapa,2c88d696
 SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Mostrar especies con todas las accesiones agotadas,656a843d
 SHRUB,Arbusto,af50871c
 SHRUB_CROWN_DIAMETER_CM,Diámetro de la copa del arbusto (cm),61918163

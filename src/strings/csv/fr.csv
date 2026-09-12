@@ -2160,6 +2160,7 @@ SHARED_WITH_FUNDER,Partagé avec le bailleur de fonds,f59b229b
 SHOW_COLOR_KEY,Afficher la légende des couleurs,7ba69c52
 SHOW_LESS,Afficher moins,d753a0ed
 SHOW_MORE,Afficher plus,43cab9b7
+SHOW_OBSERVATION_ON_MAP,Afficher sur la carte,2c88d696
 SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Afficher les espèces dont toutes les accessions sont épuisées,656a843d
 SHRUB,Arbuste,af50871c
 SHRUB_CROWN_DIAMETER_CM,Diamètre de la couronne de l’arbuste (cm),61918163
