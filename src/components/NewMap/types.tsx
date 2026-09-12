@@ -42,6 +42,8 @@ export type MapFillComponentStyle = {
 
 // Each layer item will become a feature, with a property of id.
 export type MapLayerFeature = {
+  // Draws this feature's border dashed instead of solid.
+  dashedBorder?: boolean;
   featureId: string;
   geometry: MultiPolygon;
   label?: string;

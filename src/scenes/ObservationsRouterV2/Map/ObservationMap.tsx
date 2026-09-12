@@ -29,6 +29,7 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
+import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
@@ -60,6 +61,10 @@ type LayerFeature = {
   layerFeatureId: MapLayerFeatureId;
 };
 
+/** A plot nobody finished observing, which the map draws with a dashed border. */
+const isPlotIncomplete = (plot: ObservationMonitoringPlotResultsPayload): boolean =>
+  plot.completedTime === undefined || plot.status !== 'Completed';
+
 type ObservationMapProps = {
   adHocObservationResults: ObservationResultsPayload[];
   isBiomass?: boolean;
@@ -83,6 +88,7 @@ const ObservationMap = ({
   const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { mapId, token } = useMapboxToken();
+  const dashIncompletePlots = isEnabled('New Observation Filters');
   const { fitBounds } = useMapUtils(mapRef);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [localDrawerOpen, setDrawerOpen] = useState<boolean>(false);
@@ -395,6 +401,7 @@ const ObservationMap = ({
             .map((adHocResults) => adHocResults.adHocPlot)
             .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined)
             .map((plot) => ({
+              dashedBorder: dashIncompletePlots && isPlotIncomplete(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -414,6 +421,7 @@ const ObservationMap = ({
           features: monitoringPlots
             .filter((plot) => !plot.isPermanent)
             .map((plot) => ({
+              dashedBorder: dashIncompletePlots && isPlotIncomplete(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -436,6 +444,7 @@ const ObservationMap = ({
           features: monitoringPlots
             .filter((plot) => plot.isPermanent)
             .map((plot) => ({
+              dashedBorder: dashIncompletePlots && isPlotIncomplete(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -522,6 +531,7 @@ const ObservationMap = ({
   }, [
     adHocPlotsLayerStyle,
     adHocPlotsVisible,
+    dashIncompletePlots,
     plantingSites,
     monitoringPlots,
     permanentPlotsLayerStyle,
