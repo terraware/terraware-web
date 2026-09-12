@@ -230,18 +230,22 @@ const ObservationListView = (): JSX.Element => {
     }
   }, [countObservations, countedObservationType, selectedOrganization, plantingSiteIdFilter]);
 
+  // Biomass measurements only ever come from ad-hoc plots.
+  const mappedPlotType = countedObservationType === 'Biomass Measurements' ? 'adHoc' : plotType;
+
   const observationMapCard = useMemo(
     () =>
       hasObservationsResults && (
         <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
           <ObservationMapWrapper
-            isBiomass={countedObservationType === 'Biomass Measurements'}
+            observationType={countedObservationType}
             plantingSiteId={plantingSiteIdFilter}
+            plotType={mappedPlotType}
             selectPlantingSiteId={selectPlantingSite}
           />
         </Card>
       ),
-    [countedObservationType, hasObservationsResults, plantingSiteIdFilter, selectPlantingSite, theme]
+    [countedObservationType, hasObservationsResults, mappedPlotType, plantingSiteIdFilter, selectPlantingSite, theme]
   );
 
   const mobileAppCard = useMemo(
