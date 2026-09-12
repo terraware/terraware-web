@@ -51,6 +51,7 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import useMapboxToken from 'src/utils/useMapboxToken';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import { useSelectedObservation } from '../SelectedObservationProvider';
 import BiomassObservationStatsDrawer from './BiomassObservationStatsDrawer';
 import ObservationStatsDrawer from './ObservationStatsDrawer';
 
@@ -162,8 +163,17 @@ const ObservationMap = ({
     ];
   }, [adHocObservationResults, strings.ALL]);
 
-  const [selectedObservationId, setSelectedObservationId] = useState<number>();
   const [selectedAdHocObservationId, setSelectedAdHocObservationId] = useState<number | 'all'>('all');
+  const { selectObservation, selectedObservationId: requestedObservationId } = useSelectedObservation();
+
+  // The request can briefly sit outside the published results, so fall back instead of correcting it.
+  const selectedObservationId = useMemo(() => {
+    const observationIds = observationResultsOptions.map((option) => Number(option.value));
+    if (requestedObservationId !== undefined && observationIds.includes(requestedObservationId)) {
+      return requestedObservationId;
+    }
+    return observationIds[0];
+  }, [observationResultsOptions, requestedObservationId]);
 
   const getObservationResponse = useGetOneObservationResults({
     observationId: selectedObservationId,
@@ -175,15 +185,6 @@ const ObservationMap = ({
     setSelectedAdHocObservationId('all');
   }, [adHocObservationResults]);
 
-  useEffect(() => {
-    if (observationResultsOptions.length) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSelectedObservationId(Number(observationResultsOptions[0].value));
-    } else {
-      setSelectedObservationId(undefined);
-    }
-  }, [observationResultsOptions]);
-
   const observationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup => {
     return {
       title: strings.ASSIGNED_PLOT_OBSERVATION,
@@ -191,9 +192,9 @@ const ObservationMap = ({
       type: 'dropdown',
       items: observationResultsOptions,
       selectedValue: selectedObservationId !== undefined ? `${selectedObservationId}` : undefined,
-      setSelectedValue: (value: string | undefined) => setSelectedObservationId(value ? Number(value) : undefined),
+      setSelectedValue: (value: string | undefined) => selectObservation(value ? Number(value) : undefined),
     };
-  }, [observationResultsOptions, selectedObservationId, strings]);
+  }, [observationResultsOptions, selectObservation, selectedObservationId, strings]);
 
   const adHocObservationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup => {
     return {
