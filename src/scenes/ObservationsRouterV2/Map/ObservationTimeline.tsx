@@ -171,9 +171,10 @@ const ObservationTimeline = ({
   const selectCluster = useCallback(
     (clusterKey: string) => {
       setSelectedCluster(clusterKey);
-      selectObservation(clusteredObservationIds.get(clusterKey)?.[0]);
+      // An ad-hoc plot is only ever selected by hand, so a new cluster starts with none selected.
+      selectObservation(isAdHoc ? undefined : clusteredObservationIds.get(clusterKey)?.[0]);
     },
-    [clusteredObservationIds, selectObservation]
+    [clusteredObservationIds, isAdHoc, selectObservation]
   );
 
   // A selection made outside the timeline, such as from the list, pulls the cluster to it.
