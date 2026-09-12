@@ -34,12 +34,15 @@ type ObservationStatsProperties = {
 type ObservationStatsDrawerProps = {
   isBiomass?: boolean;
   layerFeatureId: MapLayerFeatureId;
+  // Passed only for features the map can centre on.
+  onViewOnMap?: () => void;
   plantingSiteId: number;
   observationId: number;
 };
 
 const ObservationStatsDrawer = ({
   layerFeatureId,
+  onViewOnMap,
   plantingSiteId,
   observationId,
 }: ObservationStatsDrawerProps): JSX.Element | undefined => {
@@ -378,8 +381,17 @@ const ObservationStatsDrawer = ({
       {properties && (
         <Box display={'flex'} width={'100%'} flexDirection={'column'} alignItems={'center'}>
           <MapDrawerTable header={properties.name} rows={rows} subheader={subheader} subheaderUrl={subheaderUrl} />
-          {actionButton && (
-            <Box display='flex' padding={theme.spacing(2)}>
+          {(onViewOnMap || actionButton) && (
+            <Box display='flex' flexWrap='wrap' gap={1} justifyContent='center' padding={theme.spacing(2)}>
+              {onViewOnMap && (
+                <Button
+                  id='viewPlotOnMap'
+                  label={strings.VIEW_ON_MAP}
+                  onClick={onViewOnMap}
+                  priority='secondary'
+                  type='passive'
+                />
+              )}
               {actionButton}
             </Box>
           )}
