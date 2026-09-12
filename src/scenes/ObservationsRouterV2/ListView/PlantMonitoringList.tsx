@@ -116,7 +116,9 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
 };
 
 type PlantMonitoringListProps = {
-  onPlotTypeChange: (plotType: PlotType) => void;
+  // The new filters put the plot type toggle in the page header, so the in-table selector is only
+  // rendered when a handler is passed.
+  onPlotTypeChange?: (plotType: PlotType) => void;
   plantingSiteId?: PlantingSiteId;
   plotType: PlotType;
 };
@@ -494,24 +496,28 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
   const plotSelectionToolbar = useMemo(
     () => (
       <Box display='flex' flexDirection='row' alignItems='center' gap={1}>
-        <Typography fontSize='16px' fontWeight={500}>
-          {strings.PLOT_SELECTION}
-        </Typography>
-        <Dropdown
-          id='plot-selection-selector'
-          onChange={(newValue) => onPlotTypeChange(newValue as PlotType)}
-          options={[
-            { label: strings.ASSIGNED, value: 'assigned' },
-            { label: strings.AD_HOC, value: 'adHoc' },
-          ]}
-          selectedValue={plotType}
-          selectStyles={{
-            inputContainer: { maxWidth: '160px' },
-            optionsContainer: { maxWidth: '160px' },
-          }}
-          fixedMenu
-          fullWidth
-        />
+        {onPlotTypeChange && (
+          <>
+            <Typography fontSize='16px' fontWeight={500}>
+              {strings.PLOT_SELECTION}
+            </Typography>
+            <Dropdown
+              id='plot-selection-selector'
+              onChange={(newValue) => onPlotTypeChange(newValue as PlotType)}
+              options={[
+                { label: strings.ASSIGNED, value: 'assigned' },
+                { label: strings.AD_HOC, value: 'adHoc' },
+              ]}
+              selectedValue={plotType}
+              selectStyles={{
+                inputContainer: { maxWidth: '160px' },
+                optionsContainer: { maxWidth: '160px' },
+              }}
+              fixedMenu
+              fullWidth
+            />
+          </>
+        )}
         {typeof plantingSiteId === 'number' && !isAdHoc && rows.length > 0 && (
           <Box display='flex' alignItems='center'>
             <Link
