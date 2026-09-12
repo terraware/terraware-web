@@ -171,9 +171,9 @@ const ObservationTimeline = ({
   const selectCluster = useCallback(
     (clusterKey: string) => {
       setSelectedCluster(clusterKey);
-      selectObservation(clusteredObservationIds.get(clusterKey)?.[0]);
+      selectObservation(isAdHoc ? undefined : clusteredObservationIds.get(clusterKey)?.[0]);
     },
-    [clusteredObservationIds, selectObservation]
+    [clusteredObservationIds, isAdHoc, selectObservation]
   );
 
   // A selection made outside the timeline, such as from the list, pulls the cluster to it.

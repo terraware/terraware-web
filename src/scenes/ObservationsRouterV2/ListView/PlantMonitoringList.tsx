@@ -45,7 +45,9 @@ import SelectObservationButton from './SelectObservationButton';
 
 type PlantMonitoringRow = {
   adHocPlotNumber?: number;
+  monitoringPlotId?: number;
   observationId: number;
+  plantingSiteId: number;
   observationDate?: string;
   observationState?: ObservationState;
   state: string;
@@ -199,7 +201,9 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
 
         return {
           adHocPlotNumber: observationResult.adHocPlot?.monitoringPlotNumber,
+          monitoringPlotId: observationResult.adHocPlot?.monitoringPlotId,
           observationId: observationResult.observationId,
+          plantingSiteId: observationResult.plantingSiteId,
           observationDate,
           observationState: observationResult.state,
           state: getStatus(observationResult.state, strings),
@@ -254,15 +258,26 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
     [activeLocale, showSelectObservation]
   );
 
-  const AdHocPlotNumberCell = useCallback(({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => {
-    const row = cell.row.original;
-    const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', row.observationId.toString());
-    return (
-      <Link fontSize='16px' to={url}>
-        {row.adHocPlotNumber}
-      </Link>
-    );
-  }, []);
+  const AdHocPlotNumberCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => {
+      const row = cell.row.original;
+      const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', row.observationId.toString());
+      return (
+        <Box alignItems='center' display='flex' gap={1}>
+          <Link fontSize='16px' to={url}>
+            {row.adHocPlotNumber}
+          </Link>
+          {showSelectObservation && row.monitoringPlotId !== undefined && (
+            <SelectObservationButton
+              adHocPlot={{ monitoringPlotId: row.monitoringPlotId, plantingSiteId: row.plantingSiteId }}
+              observationId={row.observationId}
+            />
+          )}
+        </Box>
+      );
+    },
+    [showSelectObservation]
+  );
 
   const StrataCell = useCallback(
     ({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => {
@@ -420,6 +435,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
         header: strings.PLOT,
         accessorKey: 'adHocPlotNumber',
         filterVariant: 'range',
+        size: showSelectObservation ? 160 : undefined,
         Cell: AdHocPlotNumberCell,
       },
       {
@@ -469,7 +485,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
         Cell: NumberCell,
       },
     ];
-  }, [strings, uniquePlantingSiteNames, AdHocPlotNumberCell, CompletedDateCell, NumberCell]);
+  }, [strings, showSelectObservation, uniquePlantingSiteNames, AdHocPlotNumberCell, CompletedDateCell, NumberCell]);
 
   const onExportAdHocObservationResults = useCallback(() => {
     const adHocResults = observationResults.filter((observation) => observation.adHocPlot);
