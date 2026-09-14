@@ -151,19 +151,18 @@ export default function WeightWithdrawal(props: WeightWithdrawalProps): JSX.Elem
 
   const onSelectAll = useCallback(
     (withdrawAll: boolean) => {
-      if (withdrawAll) {
-        if (!withdrawAllWeight) {
-          return;
-        }
-        onUnitsUpdate(withdrawAllWeight.units);
-        onChangeAmount(withdrawAllWeight.quantity, withdrawAllWeight.units);
-      } else {
-        onChangeAmount(undefined, units);
+      if (!withdrawAll) {
+        setWithdrawAllSelected(false);
+        return;
       }
-
-      setWithdrawAllSelected(withdrawAll);
+      if (!withdrawAllWeight) {
+        return;
+      }
+      onUnitsUpdate(withdrawAllWeight.units);
+      onChangeAmount(withdrawAllWeight.quantity, withdrawAllWeight.units);
+      setWithdrawAllSelected(true);
     },
-    [onChangeAmount, onUnitsUpdate, units, withdrawAllWeight]
+    [onChangeAmount, onUnitsUpdate, withdrawAllWeight]
   );
 
   const remainingLabel = useMemo(
