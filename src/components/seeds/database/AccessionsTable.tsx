@@ -267,7 +267,7 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
       <TextTruncated
         fontSize={16}
         stringList={list}
-        listSeparator={strings.LIST_SEPARATOR_SECONDARY}
+        listSeparator={strings.LIST_SEPARATOR}
         moreText={strings.TRUNCATED_TEXT_MORE_LINK}
       />
     ) : null;
