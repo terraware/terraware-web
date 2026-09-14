@@ -251,6 +251,7 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
     const list = value ? value.split(', ') : [];
     return list.length > 0 ? (
       <TextTruncated
+        fontSize={16}
         stringList={list}
         listSeparator={strings.LIST_SEPARATOR_SECONDARY}
         moreText={strings.TRUNCATED_TEXT_MORE_LINK}
@@ -618,7 +619,7 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
           ),
           muiTableBodyCellProps: ({ row, column, table }) => {
             const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
-            return { id: `row${visualIndex + 1}-${column.id}` };
+            return { id: `row${visualIndex + 1}-${column.id}`, sx: { fontSize: '16px' } };
           },
           muiTableBodyProps: {
             sx: {

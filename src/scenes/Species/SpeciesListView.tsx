@@ -489,7 +489,7 @@ export default function SpeciesListView(): JSX.Element {
     const list = value ? value.split(', ') : [];
     return (
       <TextTruncated
-        fontSize={14}
+        fontSize={16}
         stringList={list}
         width={150}
         listSeparator={strings.LIST_SEPARATOR_SECONDARY}
@@ -515,7 +515,7 @@ export default function SpeciesListView(): JSX.Element {
   const AcceleratorProjectsCell = useCallback(({ cell }: { cell: MRT_Cell<SpeciesSearchResultRow> }) => {
     const value = cell.getValue() as string | undefined;
     const list = value ? value.split(', ') : [];
-    return <TextTruncated fontSize={14} stringList={list} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />;
+    return <TextTruncated fontSize={16} stringList={list} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />;
   }, []);
 
   const ProjectCell = useCallback(({ cell }: { cell: MRT_Cell<SpeciesSearchResultRow> }) => {
@@ -523,7 +523,7 @@ export default function SpeciesListView(): JSX.Element {
     const list = value ? value.split(', ') : [];
     return (
       <TextTruncated
-        fontSize={14}
+        fontSize={16}
         stringList={list}
         width={150}
         listSeparator={strings.LIST_SEPARATOR_SECONDARY}
@@ -921,7 +921,7 @@ export default function SpeciesListView(): JSX.Element {
             ),
             muiTableBodyCellProps: ({ row, column, table }) => {
               const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
-              return { id: `row${visualIndex + 1}-${column.id}` };
+              return { id: `row${visualIndex + 1}-${column.id}`, sx: { fontSize: '16px' } };
             },
             muiTableBodyProps: {
               sx: {
