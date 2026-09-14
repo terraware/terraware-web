@@ -36,6 +36,25 @@ const autoCalculatedIndicator: ProgressIndicator = {
   type: 'autoCalculated',
 };
 
+const baselineOriginIndicator: ProgressIndicator = {
+  baseline: 100,
+  classId: 'Lifetime Cumulative',
+  currentYearProgress: [{ quarter: 'Q1', value: 50 }],
+  name: 'Trees planted',
+  previousYearCumulativeTotal: 200,
+  refId: '1.3',
+  target: 400,
+};
+
+const noPreviousYearIndicator: ProgressIndicator = {
+  baseline: 100,
+  classId: 'Lifetime Cumulative',
+  currentYearProgress: [{ quarter: 'Q1', value: 50 }],
+  name: 'Trees planted',
+  refId: '1.4',
+  target: 400,
+};
+
 const completionLine = (template: string) => {
   const expected = template.replace('{0}', PERCENT_COMPLETE);
   return (_content: string, element: Element | null) => element?.textContent === expected;
@@ -102,5 +121,20 @@ describe('IndicatorProgressRow', () => {
     await user.click(screen.getByRole('button'));
 
     expect(screen.getByRole('spinbutton')).toBeEnabled();
+  });
+
+  it('marks the previous year part of the way along a bar that opens at the baseline', () => {
+    renderWithProviders(<IndicatorProgressRow indicator={baselineOriginIndicator} year={2026} />);
+
+    const previousYearTick = screen.getByLabelText('2025');
+    const left = Number.parseFloat(getComputedStyle(previousYearTick).left);
+
+    expect(left).toBeCloseTo(33.33, 1);
+  });
+
+  it('leaves out the previous year mark when the indicator has no previous year total', () => {
+    renderWithProviders(<IndicatorProgressRow indicator={noPreviousYearIndicator} year={2026} />);
+
+    expect(screen.queryByLabelText('2025')).not.toBeInTheDocument();
   });
 });
