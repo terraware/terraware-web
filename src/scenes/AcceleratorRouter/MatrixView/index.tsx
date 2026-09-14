@@ -297,7 +297,6 @@ const MatrixView = () => {
           return {
             sx: {
               maxWidth: '150px',
-              fontSize: '16px',
               '& a': {
                 display: '-webkit-box',
                 WebkitLineClamp: 3,
@@ -307,7 +306,6 @@ const MatrixView = () => {
                 lineHeight: '1.2em',
                 maxHeight: '5.4em',
                 whiteSpace: 'normal',
-                fontSize: '16px',
               },
             },
             title: cell.getValue()?.toString() || '',
@@ -966,7 +964,6 @@ const MatrixView = () => {
     },
     muiTableBodyCellProps: {
       sx: {
-        fontSize: '16px',
         '&[data-pinned="true"]:before': {
           backgroundColor: 'transparent !important',
         },
