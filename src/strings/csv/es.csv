@@ -1267,6 +1267,7 @@ NAME_USED_BY_PROJECT,Nombre usado por proyecto,c2fdff8f
 NATIVE,Nativo,3ef34d4d
 NATIVE_CHECK,Verificación de especie nativa,474464e4
 NATIVE_CHECK_NO_UPDATES,No hay sugerencias para el estado nativo de las especies.,f9f543dc
+NATIVE_CHECK_NO_UPDATES_HINT,El estado de cada especie puede modificarse en la pantalla de detalles de la especie.,21f7b4fe
 NATIVE_CHECK_UPDATE_HINT,Se aplicarán las sugerencias de estado marcadas. Desmarque una especie para establecer su estado manualmente.,d2061ebe
 NATIVE_ECOSYSTEM,Ecosistema autóctono,1a733f45
 NATIVE_ECOSYSTEM_TOOLTIP,"Indique el tipo de ecosistema en el cual se encuentra esta especie de forma natural; podría incluir detalles tales como el rango de elevación, pluviometría, etc.",188f8600
