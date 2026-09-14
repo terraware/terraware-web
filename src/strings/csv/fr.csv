@@ -1265,7 +1265,7 @@ NAME_USED_BY_PROJECT,Nom utilisé par projet,c2fdff8f
 NATIVE,Indigène,3ef34d4d
 NATIVE_CHECK,Vérification du statut indigène,474464e4
 NATIVE_CHECK_NO_UPDATES,Aucune suggestion pour le statut d'origine des espèces.,f9f543dc
-NATIVE_CHECK_UPDATE_HINT,Toutes les suggestions seront appliquées. Décochez une espèce pour définir son statut vous-même.,3cda706f
+NATIVE_CHECK_UPDATE_HINT,Les suggestions d’état cochées seront appliquées. Décochez une espèce pour définir son état vous-même.,d2061ebe
 NATIVE_ECOSYSTEM,Écosystème indigène,1a733f45
 NATIVE_ECOSYSTEM_TOOLTIP,"Indiquez le type d'écosystème dans lequel cette espèce se trouve à l'état naturel ; vous pouvez inclure des détails tels que l'altitude, la pluviométrie, etc.",188f8600
 NATIVE_FOREST,Forêt indigène,bbd2ab56
@@ -2269,7 +2269,7 @@ SPECIES_CHECK_SPECIES_CHECKED,{0} espèces vérifiées,3a3237db
 SPECIES_CHECK_SUGGESTION,{0} suggestion,5afe0690
 SPECIES_CHECK_SUGGESTIONS,{0} suggestions,9154c212
 SPECIES_CHECK_SUGGESTIONS_APPLIED,{0} sur {1} suggestions seront appliquées,beacaf4b
-SPECIES_CHECK_UPDATE_HINT,Toutes les suggestions de noms seront appliquées. Décochez une espèce pour conserver le nom que vous avez saisi.,e5c27ee6
+SPECIES_CHECK_UPDATE_HINT,Les suggestions de nom cochées seront appliquées. Décochez une espèce pour conserver le nom que vous avez saisi.,4dc645f3
 SPECIES_CHECK_UPDATES,{0} mises à jour,a1d89ade
 SPECIES_CLASSIFICATION,Classification des espèces,2e8b4fb1
 SPECIES_DENSITY_WARNING_MESSAGE,"Vous n'avez pas saisi de valeurs de densité de plantation pour toutes les espèces. Si vous ne saisissez pas de valeurs de densité de plantation pour toutes les espèces, les densités de plantation pour cette parcelle ne seront pas définies et aucun taux de survie ne sera calculé pour cette espèce. Saisissez 0 pour toute espèce qui n'a pas été plantée dans une parcelle.",5bcc0f2b
