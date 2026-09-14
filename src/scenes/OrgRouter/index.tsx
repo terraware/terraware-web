@@ -65,7 +65,7 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
   const location = useStateLocation();
   const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const { species } = useOrganizationSpecies();
+  const { species, isInitialLoading: speciesInitialLoading } = useOrganizationSpecies();
   const { availableProjects: projects } = useProjects();
 
   const [countPlantingSites, countPlantingSitesResult] = useLazyCountPlantingSitesQuery();
@@ -170,7 +170,10 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
         <ErrorBoundary setShowNavBar={setShowNavBar}>
           <Routes>
             {/* Routes, in order of their appearance down the side NavBar */}
-            <Route path={APP_PATHS.HOME} element={<Home selectedOrgHasSpecies={selectedOrgHasSpecies} />} />
+            <Route
+              path={APP_PATHS.HOME}
+              element={<Home selectedOrgHasSpecies={selectedOrgHasSpecies} speciesLoading={speciesInitialLoading} />}
+            />
             <Route path={APP_PATHS.SEEDS_DASHBOARD} element={<SeedsDashboard />} />
             <Route path={APP_PATHS.CHECKIN} element={<CheckIn />} />
             <Route path={APP_PATHS.ACCESSIONS + '/*'} element={<AccessionsRouter />} />
