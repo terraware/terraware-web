@@ -66,6 +66,9 @@ const NativeCheckStep = ({
         <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
           {strings.NATIVE_CHECK_NO_UPDATES}
         </Typography>
+        <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
+          {strings.NATIVE_CHECK_NO_UPDATES_HINT}
+        </Typography>
       </Box>
     );
   }
