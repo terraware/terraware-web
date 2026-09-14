@@ -802,10 +802,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                       <MRT_ToggleFullScreenButton table={table} />
                     </Box>
                   ),
-                  muiTableBodyCellProps: ({ row, column }) => ({
-                    id: `row${row.index + 1}-${column.id}`,
-                    sx: { fontSize: '16px' },
-                  }),
+                  muiTableBodyCellProps: ({ row, column }) => ({ id: `row${row.index + 1}-${column.id}` }),
                   muiTableBodyProps: {
                     sx: {
                       '& tr:nth-of-type(odd) > td': {

@@ -921,7 +921,7 @@ export default function SpeciesListView(): JSX.Element {
             ),
             muiTableBodyCellProps: ({ row, column, table }) => {
               const visualIndex = table.getSortedRowModel().rows.findIndex((r) => r.id === row.id);
-              return { id: `row${visualIndex + 1}-${column.id}`, sx: { fontSize: '16px' } };
+              return { id: `row${visualIndex + 1}-${column.id}` };
             },
             muiTableBodyProps: {
               sx: {

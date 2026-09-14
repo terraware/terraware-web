@@ -420,9 +420,6 @@ export default function PlantingProgressList(): JSX.Element {
               <MRT_ToggleFullScreenButton table={table} />
             </Box>
           ),
-          muiTableBodyCellProps: {
-            sx: { fontSize: '16px' },
-          },
           muiTableBodyProps: {
             sx: {
               '& tr:nth-of-type(odd) > td': {
