@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 
 import IndicatorProgressRow from 'src/components/AcceleratorReports/IndicatorProgressRow';
 import { ProgressIndicator } from 'src/components/AcceleratorReports/utils';
@@ -25,6 +25,15 @@ const lifetimeIndicator: ProgressIndicator = {
   name: 'Trees planted',
   refId: '1.2',
   target: 100,
+};
+
+const autoCalculatedIndicator: ProgressIndicator = {
+  classId: 'Not Cumulative',
+  name: 'Hectares planted',
+  refId: '1.3',
+  systemValue: 40,
+  target: 100,
+  type: 'autoCalculated',
 };
 
 const completionLine = (template: string) => {
@@ -61,5 +70,37 @@ describe('IndicatorProgressRow', () => {
 
     expect(screen.getByText(completionLine(strings.X_OF_YEAR_CUMULATIVE_TARGET))).toBeVisible();
     expect(screen.queryByText(completionLine(strings.X_OF_YEAR_TARGET))).not.toBeInTheDocument();
+  });
+
+  it('keeps an auto-calculated value read-only for a project user', async () => {
+    const { user } = renderWithProviders(<IndicatorProgressRow editing indicator={autoCalculatedIndicator} />);
+
+    await user.click(screen.getByRole('button'));
+
+    expect(screen.getByRole('spinbutton')).toBeDisabled();
+    expect(screen.queryByLabelText(strings.OVERWRITE_TERRAWARE_TRACKING_DATA)).not.toBeInTheDocument();
+  });
+
+  it('lets the console overwrite an auto-calculated value on request', async () => {
+    const { user } = renderWithProviders(
+      <IndicatorProgressRow editing indicator={autoCalculatedIndicator} isConsoleView />
+    );
+
+    await user.click(screen.getByRole('button'));
+
+    expect(screen.getByRole('spinbutton')).toBeDisabled();
+
+    const overwrite = screen.getByLabelText(strings.OVERWRITE_TERRAWARE_TRACKING_DATA);
+    await user.click(within(overwrite).getByRole('button'));
+
+    expect(screen.getByRole('spinbutton')).toBeEnabled();
+  });
+
+  it('leaves a reported indicator editable for a project user', async () => {
+    const { user } = renderWithProviders(<IndicatorProgressRow editing indicator={indicator} />);
+
+    await user.click(screen.getByRole('button'));
+
+    expect(screen.getByRole('spinbutton')).toBeEnabled();
   });
 });
