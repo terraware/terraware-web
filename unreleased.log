@@ -1,4 +1,3 @@
-b789d0e4 SW-8884 Change collectors cells separator (#6427)
 c296ecff SW-8878 Show suggestions count in NameCheck step (#6425)
 185dedfa SW-7604 Remove the accession event log feature flag (#6426)
 444066ed Move accession permission checks into ACL (#6371)
