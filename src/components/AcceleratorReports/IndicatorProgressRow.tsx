@@ -25,6 +25,7 @@ const TICK_HOVER_WIDTH = 9;
 
 type IndicatorProgressRowProps = {
   editing?: boolean;
+  funderReportView?: boolean;
   indicator: ProgressIndicator;
   onChange?: (id: string, value: unknown) => void;
   printMode?: boolean;
@@ -35,6 +36,7 @@ type IndicatorProgressRowProps = {
 
 const IndicatorProgressRow = ({
   editing,
+  funderReportView,
   indicator,
   onChange,
   printMode,
@@ -546,35 +548,39 @@ const IndicatorProgressRow = ({
             </Box>
           ) : (
             <Box display='flex' flexWrap='wrap' gap={theme.spacing(3)} paddingTop={theme.spacing(2)}>
-              <Box flex='1 1 45%' minWidth={0}>
-                <Typography fontSize='14px' fontWeight={600}>
-                  {strings.PROJECTS_COMMENTS}
-                </Typography>
+              {!funderReportView && (
+                <Box flex='1 1 45%' minWidth={0}>
+                  <Typography fontSize='14px' fontWeight={600}>
+                    {strings.PROJECTS_COMMENTS}
+                  </Typography>
 
-                {indicator.projectsComments ? (
-                  <Typography fontSize='14px'>{indicator.projectsComments}</Typography>
-                ) : (
-                  <EmptyFieldPlaceholder text={strings.NO_COMMENTS_ADDED} />
-                )}
-              </Box>
+                  {indicator.projectsComments ? (
+                    <Typography fontSize='14px'>{indicator.projectsComments}</Typography>
+                  ) : (
+                    <EmptyFieldPlaceholder text={strings.NO_COMMENTS_ADDED} />
+                  )}
+                </Box>
+              )}
 
-              <Box flex='1 1 45%' minWidth={0}>
+              <Box flex={funderReportView ? '1 1 100%' : '1 1 45%'} minWidth={0}>
                 {progressNotes}
               </Box>
 
-              <Box flexBasis='100%'>
-                <Typography fontSize='14px' fontWeight={600}>
-                  {strings.LINK_TO_SUPPORTING_DOCUMENTS}
-                </Typography>
+              {!funderReportView && (
+                <Box flexBasis='100%'>
+                  <Typography fontSize='14px' fontWeight={600}>
+                    {strings.LINK_TO_SUPPORTING_DOCUMENTS}
+                  </Typography>
 
-                {indicator.supportingDocumentUrl ? (
-                  <Link href={indicator.supportingDocumentUrl} rel='noopener noreferrer' target='_blank'>
-                    <Typography fontSize='14px'>{strings.VIEW_DOCUMENTS}</Typography>
-                  </Link>
-                ) : (
-                  <EmptyFieldPlaceholder text={strings.NO_LINK_ADDED} />
-                )}
-              </Box>
+                  {indicator.supportingDocumentUrl ? (
+                    <Link href={indicator.supportingDocumentUrl} rel='noopener noreferrer' target='_blank'>
+                      <Typography fontSize='14px'>{strings.VIEW_DOCUMENTS}</Typography>
+                    </Link>
+                  ) : (
+                    <EmptyFieldPlaceholder text={strings.NO_LINK_ADDED} />
+                  )}
+                </Box>
+              )}
             </Box>
           )}
         </Collapse>
