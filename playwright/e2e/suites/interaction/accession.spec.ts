@@ -95,13 +95,17 @@ test.describe('AccessionTests', () => {
     await expect(page.getByRole('main')).toContainText('500 Grams');
     await expect(page.getByRole('main')).toContainText('~500 ct');
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.getByLabel('History')).toContainText('Super Admin created accession');
+    await expect(page.getByLabel('History')).toContainText('By Super Admin');
+    await expect(page.getByLabel('History')).toContainText(`Accession ${accessionId} created`);
     await expect(page.getByLabel('History')).toContainText(
-      'Super Admin checked in the accession and updated the status to Awaiting Processing'
+      'status changed from Awaiting Check-In to Awaiting Processing'
     );
-    await expect(page.getByLabel('History')).toContainText('Super Admin updated the status to Processing');
-    await expect(page.getByLabel('History')).toContainText('Super Admin updated the status to Drying');
-    await expect(page.getByLabel('History')).toContainText('Super Admin updated the quantity to 500 grams');
+    await expect(page.getByLabel('History')).toContainText('status changed from Awaiting Processing to Processing');
+    await expect(page.getByLabel('History')).toContainText('status changed from Processing to Drying');
+    await expect(page.getByLabel('History')).toContainText('quantity changed from None to 500 grams');
+    await expect(page.getByLabel('History')).toContainText('drying end date changed from None to 2034-01-31');
+    await expect(page.getByLabel('History')).toContainText('subset weight changed from None to 10 grams');
+    await expect(page.getByLabel('History')).toContainText('subset count changed from None to 10');
     await page.getByRole('tab', { name: 'Viability Tests' }).click();
     await page.getByRole('button', { name: 'Add Test' }).click();
     await page.locator('#seed-type').click();
@@ -157,9 +161,15 @@ test.describe('AccessionTests', () => {
       await expect(page.getByRole('main')).toContainText('195 Grams', { timeout: 30000 });
       await expect(page.getByRole('main')).toContainText('~195 ct');
       await page.getByRole('tab', { name: 'History' }).click();
+      // The event log does not render withdrawal notes, unlike the legacy history tab.
+      await expect(page.getByLabel('History')).toContainText('withdrew 300 seeds to Nursery');
+      await expect(page.getByLabel('History')).toContainText('withdrew 5 seeds for Viability Testing');
       await expect(page.getByLabel('History')).toContainText(
-        'Super Admin withdrew 300 seeds for nurseryAdding some test notes here!'
+        'Viability test total seeds germinated changed from 0 to 3'
       );
+      await expect(page.getByLabel('History')).toContainText('Viability test viability percent changed from 0 to 60');
+      // The end date is server-set to today, so assert the field change without the value.
+      await expect(page.getByLabel('History')).toContainText('Viability test end date changed from None to');
       await openNavItem(page, 'Seedlings', 'Inventory');
       await page.getByLabel('By Species').getByText('By Species').waitFor({ state: 'visible' });
       await page.getByText('Coconut', exactOptions).locator('..').waitFor({ state: 'visible' });
@@ -196,6 +206,8 @@ test.describe('AccessionTests', () => {
       await page.locator('#saveWithdraw').click();
       await expect(page.getByRole('main')).toContainText('95 Grams');
       await expect(page.getByRole('main')).toContainText('~95 ct');
+      await page.getByRole('tab', { name: 'History' }).click();
+      await expect(page.getByLabel('History')).toContainText('withdrew 100 seeds for Out-planting');
     });
 
     test('Withdraw to Viability Test', async ({ page }, testInfo) => {
@@ -243,6 +255,9 @@ test.describe('AccessionTests', () => {
       await page.getByRole('button', { name: 'Save' }).click();
       await page.getByRole('button', { name: 'Apply Result' }).click();
       await expect(page.locator('#row1-viabilityPercent')).toContainText('90%');
+      await page.getByRole('tab', { name: 'History' }).click();
+      await expect(page.getByLabel('History')).toContainText('withdrew 20 seeds for Viability Testing');
+      await expect(page.getByLabel('History')).toContainText('Viability test viability percent changed from 75 to 90');
     });
   });
 });

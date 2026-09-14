@@ -28,9 +28,6 @@ api.enhanceEndpoints({
         QueryTagTypes.SeedbankSummary,
       ],
     },
-    getAccessionHistory: {
-      providesTags: (_results, _error, id) => [{ type: QueryTagTypes.Accessions, id }],
-    },
     deleteApiV1SeedbankAccessionsById: {
       invalidatesTags: () => [{ type: QueryTagTypes.Accessions, id: 'LIST' }, QueryTagTypes.SeedbankSummary],
     },

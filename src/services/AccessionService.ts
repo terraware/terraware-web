@@ -7,15 +7,7 @@ import { ACCESSION_2_STATES, AccessionState, Geolocation } from 'src/types/Acces
  * Service for accessions related functionality
  */
 
-const ACCESSION_HISTORY_ENDPOINT = '/api/v1/seedbank/accessions/{id}/history';
 const VIABILITY_TESTS_ENDPOINT = '/api/v2/seedbank/accessions/{accessionId}/viabilityTests';
-
-type GetAccessionHistoryResponsePayload =
-  paths[typeof ACCESSION_HISTORY_ENDPOINT]['get']['responses'][200]['content']['application/json'];
-
-type AccessionHistory = GetAccessionHistoryResponsePayload['history'];
-
-export type AccessionHistoryEntry = Required<AccessionHistory>[0];
 
 export type ViabilityTestPostRequest =
   paths[typeof VIABILITY_TESTS_ENDPOINT]['post']['requestBody']['content']['application/json'];
