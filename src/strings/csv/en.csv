@@ -1780,6 +1780,7 @@ PROJECT_INTERNAL_USER_ROLE_SOCIAL_LEAD,Social Lead,
 PROJECT_LEAD,Project Lead,
 PROJECT_LINKS,Project Links,
 PROJECT_NAME,Project Name,
+PROJECT_NAME_IN_USE,"""{0}"" is already in use. Please provide a new name.",{0} is the project name.
 PROJECT_NATIVE_STATUS,Project Native Status,
 PROJECT_NOT_LISTED_PUBLISH,A project profile must be published to appear in this list.,
 PROJECT_NOTES,Additional Project Information Notes,
