@@ -57,11 +57,11 @@ const IndicatorProgressRow = ({
   const precision = indicator.precision ?? 0;
   const baselineValue = indicator.baseline ?? 0;
 
-  const startingTotal = isLifetime ? indicator.previousYearCumulativeTotal ?? baselineValue : 0;
-  const targetBehindOrigin = isLifetime && indicator.target !== undefined && indicator.target <= startingTotal;
+  const barOrigin = isLifetime ? baselineValue : 0;
+  const targetBehindOrigin = isLifetime && indicator.target !== undefined && indicator.target <= barOrigin;
 
-  const startingTotalLabel =
-    indicator.previousYearCumulativeTotal !== undefined && year !== undefined ? String(year - 1) : strings.BASELINE;
+  const previousYearTotal = isLifetime ? indicator.previousYearCumulativeTotal : undefined;
+  const previousYearLabel = year !== undefined ? String(year - 1) : '';
 
   const enteredValue = isAutoCalculated ? indicator.overrideValue ?? indicator.systemValue : indicator.value;
 
@@ -90,12 +90,11 @@ const IndicatorProgressRow = ({
   );
 
   // Pins an overshot target no further left than MIN_TARGET_PERCENT, so the bar past it stays visible.
-  const { segments, targetPercent } = useMemo(() => {
-    const barMin = startingTotal;
+  const { previousYearPercent, segments, targetPercent } = useMemo(() => {
     const total = cumulativeValue ?? 0;
     const target = indicator.target;
-    const barMax = Math.max(total, target ?? 0, barMin);
-    const range = barMax - barMin;
+    const barMax = Math.max(total, target ?? 0, barOrigin);
+    const range = barMax - barOrigin;
 
     // Pin target at start if origin is ahead of target
     const anchorPercent =
@@ -104,12 +103,12 @@ const IndicatorProgressRow = ({
         : targetBehindOrigin
           ? 0
           : range > 0
-            ? Math.max(MIN_TARGET_PERCENT, ((target - barMin) / range) * 100)
+            ? Math.max(MIN_TARGET_PERCENT, ((target - barOrigin) / range) * 100)
             : undefined;
 
     const toPercent = (value: number) => {
       // the origin is 0 by definition, whatever the scale does above it
-      if (value <= barMin) {
+      if (value <= barOrigin) {
         return 0;
       }
 
@@ -119,12 +118,12 @@ const IndicatorProgressRow = ({
 
       // with the target at the origin there is no piecewise split left to make
       if (target === undefined || anchorPercent === undefined || anchorPercent <= 0) {
-        return ((value - barMin) / range) * 100;
+        return ((value - barOrigin) / range) * 100;
       }
 
       if (value <= target) {
-        const belowTarget = target - barMin;
-        return belowTarget > 0 ? ((value - barMin) / belowTarget) * anchorPercent : 0;
+        const belowTarget = target - barOrigin;
+        return belowTarget > 0 ? ((value - barOrigin) / belowTarget) * anchorPercent : 0;
       }
 
       const aboveTarget = barMax - target;
@@ -133,27 +132,51 @@ const IndicatorProgressRow = ({
 
     // Show target met if origin is ahead of target
     if (targetBehindOrigin && range <= 0) {
-      return { segments: [{ key: 'total', quarter: undefined, startPercent: 0, widthPercent: 100 }], targetPercent: 0 };
+      return {
+        previousYearPercent: undefined,
+        segments: [{ key: 'total', quarter: undefined, startPercent: 0, widthPercent: 100 }],
+        targetPercent: 0,
+      };
     }
 
-    let runningTotal = barMin;
+    // the bar opens at the baseline, so earlier years fill the run up to where this year starts
+    const carriedIn = Math.max(barOrigin, previousYearTotal ?? barOrigin);
+    let runningTotal = carriedIn;
+
     const barSegments =
       isCumulative && currentYearProgress.length > 0
-        ? currentYearProgress.map((progress) => {
-            const startPercent = toPercent(runningTotal);
-            runningTotal += progress.value;
+        ? [
+            ...(carriedIn > barOrigin
+              ? [{ key: 'carriedIn', quarter: undefined, startPercent: 0, widthPercent: toPercent(carriedIn) }]
+              : []),
+            ...currentYearProgress.map((progress) => {
+              const startPercent = toPercent(runningTotal);
+              runningTotal += progress.value;
 
-            return {
-              key: progress.quarter,
-              quarter: progress.quarter,
-              startPercent,
-              widthPercent: toPercent(runningTotal) - startPercent,
-            };
-          })
+              return {
+                key: progress.quarter,
+                quarter: progress.quarter,
+                startPercent,
+                widthPercent: toPercent(runningTotal) - startPercent,
+              };
+            }),
+          ]
         : [{ key: 'total', quarter: undefined, startPercent: 0, widthPercent: toPercent(total) }];
 
-    return { segments: barSegments, targetPercent: anchorPercent };
-  }, [cumulativeValue, currentYearProgress, indicator.target, isCumulative, startingTotal, targetBehindOrigin]);
+    return {
+      previousYearPercent: previousYearTotal === undefined ? undefined : toPercent(previousYearTotal),
+      segments: barSegments,
+      targetPercent: anchorPercent,
+    };
+  }, [
+    cumulativeValue,
+    currentYearProgress,
+    indicator.target,
+    isCumulative,
+    previousYearTotal,
+    barOrigin,
+    targetBehindOrigin,
+  ]);
 
   const severity = reportIndicatorSeverity(indicator.status);
 
@@ -384,15 +407,17 @@ const IndicatorProgressRow = ({
                 </Tooltip>
               ))}
 
-              {isLifetime && (
-                <Tooltip title={printMode ? '' : startingTotalLabel}>
+              {previousYearPercent !== undefined && (
+                <Tooltip title={printMode ? '' : previousYearLabel}>
                   <Box
                     sx={{
                       display: 'flex',
                       height: `${BAR_HEIGHT + TICK_OVERHANG * 2}px`,
-                      left: 0,
+                      justifyContent: 'center',
+                      left: `${previousYearPercent}%`,
                       position: 'absolute',
                       top: `-${TICK_OVERHANG}px`,
+                      transform: 'translateX(-50%)',
                       width: `${TICK_HOVER_WIDTH}px`,
                     }}
                   >

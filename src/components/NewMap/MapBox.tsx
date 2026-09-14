@@ -523,6 +523,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
   );
 
   const markersComponents = useMemo(() => {
+    /* eslint-disable react-hooks/refs */
     const map = mapRef.current;
     // `zoom` is read here so the clusters recompute whenever the map is zoomed: cluster membership
     // is derived from the on-screen pixel distance between markers, which only changes with zoom.
@@ -580,6 +581,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
         }
       });
     });
+    /* eslint-enable react-hooks/refs */
   }, [clusterMarkers, markerGroups, mapRef, onMarkerClick, onMarkerClusterClick, theme, zoom]);
 
   const nameTagMarkers = useMemo(() => {
