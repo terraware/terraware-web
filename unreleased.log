@@ -1,3 +1,4 @@
+1dcb7537 Update Node.js to v24.21.0 (#6416)
 1a153e13 SW-8780 Show the target completion percentage only when a row is expanded (#6400)
 7553fe1d SW-8779 Invalidate the project's reports when any yearly target changes (#6399)
 75eaa892 SW-8778 Rename the Unlikely indicator status to At Risk (#6402)
