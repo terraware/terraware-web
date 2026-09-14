@@ -251,6 +251,7 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
     const list = value ? value.split(', ') : [];
     return list.length > 0 ? (
       <TextTruncated
+        fontSize={16}
         stringList={list}
         listSeparator={strings.LIST_SEPARATOR_SECONDARY}
         moreText={strings.TRUNCATED_TEXT_MORE_LINK}

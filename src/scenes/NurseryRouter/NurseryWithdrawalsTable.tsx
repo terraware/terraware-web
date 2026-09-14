@@ -439,7 +439,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const SpeciesNamesCell = useCallback(
     ({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
       const value = cell.getValue() as string[] | undefined;
-      return value ? <TextTruncated stringList={value} moreText={strings.TRUNCATED_TEXT_MORE_LINK} /> : null;
+      return value ? (
+        <TextTruncated fontSize={16} stringList={value} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />
+      ) : null;
     },
     [strings]
   );
@@ -447,7 +449,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
   const StratumNameCell = useCallback(
     ({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
       const value = cell.getValue() as string | undefined;
-      return value ? <TextTruncated stringList={[value]} moreText={strings.TRUNCATED_TEXT_MORE_LINK} /> : null;
+      return value ? (
+        <TextTruncated fontSize={16} stringList={[value]} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />
+      ) : null;
     },
     [strings]
   );
@@ -456,7 +460,7 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
     ({ cell }: { cell: MRT_Cell<SearchNurseryWithdrawalPayload> }) => {
       const value = cell.getValue();
       return value ? (
-        <TextTruncated stringList={[value as string]} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />
+        <TextTruncated fontSize={16} stringList={[value as string]} moreText={strings.TRUNCATED_TEXT_MORE_LINK} />
       ) : null;
     },
     [strings]
