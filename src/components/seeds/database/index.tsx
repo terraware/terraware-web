@@ -64,6 +64,8 @@ const ALL_ACCESSION_FIELDS = [
   'estimatedWeightPounds(raw)',
   'estimatedCount(raw)',
   'geolocations.coordinates',
+  'collectors.name',
+  'collectors.position',
   'plantId',
 ];
 
