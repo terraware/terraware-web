@@ -33,7 +33,7 @@ export default function PlantingProgressList(): JSX.Element {
   const { selectedOrganization } = useOrganization();
 
   const { availableProjects: projects } = useProjects();
-  const { plantingSites } = useOrganizationPlantingSites({ full: true });
+  const { plantingSites, isInitialLoading: plantingSitesInitialLoading } = useOrganizationPlantingSites({ full: true });
   const [listReportedPlants, listReportedPlantsResponse] = useLazyListPlantingSiteReportedPlantsQuery();
   const [updateSubstratum, { isLoading }] = useUpdateSubstrataMutation();
 
@@ -329,7 +329,10 @@ export default function PlantingProgressList(): JSX.Element {
     [selectedRows]
   );
 
-  if (!rows) {
+  const reportedPlantsInitialLoading =
+    listReportedPlantsResponse.isUninitialized || listReportedPlantsResponse.isLoading;
+
+  if (plantingSitesInitialLoading || reportedPlantsInitialLoading) {
     return <CircularProgress sx={{ margin: 'auto' }} />;
   }
 

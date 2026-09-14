@@ -39,6 +39,7 @@ const useOrganizationPlantingSites = (props?: UseOrganizationPlantingSitesProps)
 
   return {
     isLoading: listPlantingSitesResponse.isFetching,
+    isInitialLoading: listPlantingSitesResponse.isUninitialized || listPlantingSitesResponse.isLoading,
     isSuccess: listPlantingSitesResponse.isSuccess,
     plantingSites,
     reload,
