@@ -1,3 +1,4 @@
+d577b992 SW-8883 Table Type Size Increase: 16px (#6404)
 1dcb7537 Update Node.js to v24.21.0 (#6416)
 1a153e13 SW-8780 Show the target completion percentage only when a row is expanded (#6400)
 7553fe1d SW-8779 Invalidate the project's reports when any yearly target changes (#6399)
