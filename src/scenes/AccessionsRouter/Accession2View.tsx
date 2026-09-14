@@ -26,7 +26,7 @@ import { Accession } from 'src/types/Accession';
 import { ViabilityTest } from 'src/types/Accession';
 import { stateName } from 'src/types/Accession';
 import { getUnitName, isUnitInPreferredSystem } from 'src/units';
-import { getSeedBank, isContributor } from 'src/utils/organization';
+import { getSeedBank } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -47,7 +47,7 @@ import DetailPanel from './view/DetailPanel';
 import WithdrawModal from './withdraw/WithdrawModal';
 
 export default function Accession2View(): JSX.Element {
-  const { user } = useUser();
+  const { user, isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
   const { userPreferences } = useUser();
   const { accessionId } = useParams<{ accessionId: string }>();
@@ -66,7 +66,9 @@ export default function Accession2View(): JSX.Element {
   const [age, setAge] = useState<string | null>(null);
   const [dryingRelativeDate, setDryingRelativeDate] = useState<string | null>(null);
   const snackbar = useSnackbar();
-  const userCanEdit = !isContributor(selectedOrganization);
+  const accessionAcl = { organization: selectedOrganization, accession };
+  const userCanEdit = isAllowed('EDIT_ACCESSION', accessionAcl);
+  const canDelete = isAllowed('DELETE_ACCESSION', accessionAcl);
   const { isMobile, isTablet } = useDeviceInfo();
   const theme = useTheme();
   const themeObj = useTheme();
@@ -286,17 +288,23 @@ export default function Accession2View(): JSX.Element {
     return null;
   };
 
-  const renderActionMenuButton = () => (
-    <OptionsMenu
-      size='small'
-      onOptionItemClick={(item: DropdownItem) => {
-        if (item.value === 'delete-accession') {
-          setOpenDeleteAccession(true);
-        }
-      }}
-      optionItems={[{ label: strings.DELETE, value: 'delete-accession', type: 'destructive' }]}
-    />
-  );
+  const renderActionMenuButton = () => {
+    if (!canDelete) {
+      return null;
+    }
+
+    return (
+      <OptionsMenu
+        size='small'
+        onOptionItemClick={(item: DropdownItem) => {
+          if (item.value === 'delete-accession') {
+            setOpenDeleteAccession(true);
+          }
+        }}
+        optionItems={[{ label: strings.DELETE, value: 'delete-accession', type: 'destructive' }]}
+      />
+    );
+  };
 
   const overviewItemCount =
     (accession?.state ? 1 : 0) +
@@ -307,8 +315,9 @@ export default function Accession2View(): JSX.Element {
 
   const overviewGridSize = isMobile ? '100%' : isTablet ? '50%' : overviewItemCount <= 6 ? '33%' : '25%';
 
-  const quantityEditable = userCanEdit && accession?.state !== 'Used Up';
-  const viabilityEditable = userCanEdit && accession?.estimatedCount !== undefined && accession?.state !== 'Used Up';
+  const quantityEditable = isAllowed('EDIT_ACCESSION_QUANTITY', accessionAcl);
+  const viabilityEditable = isAllowed('EDIT_ACCESSION_VIABILITY', accessionAcl);
+  const stateEditable = isAllowed('EDIT_ACCESSION_STATE', accessionAcl);
   const isAwaitingCheckin = accession?.state === 'Awaiting Check-In';
 
   const tabs = useMemo(() => {
@@ -518,7 +527,7 @@ export default function Accession2View(): JSX.Element {
         {accession?.state && (
           <Grid item flexBasis={overviewGridSize} flexGrow={1}>
             <OverviewItemCard
-              isEditable={!(isAwaitingCheckin || !userCanEdit)}
+              isEditable={stateEditable}
               handleEdit={() => setOpenEditStateModal(true)}
               title={strings.STATUS}
               contents={

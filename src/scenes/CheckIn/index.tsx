@@ -11,14 +11,14 @@ import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useOrganization } from 'src/providers/hooks';
+import { useOrganization, useUser } from 'src/providers/hooks';
 import { useCheckInMutation } from 'src/queries/generated/accessionsV1';
 import { useLazyGetPendingAccessionsQuery } from 'src/queries/search/accessions';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
 import { SearchResponseElement } from 'src/types/Search';
 import { getDateTimeDisplayValue } from 'src/utils/dateFormatter';
-import { getAllSeedBanks, isContributor } from 'src/utils/organization';
+import { getAllSeedBanks } from 'src/utils/organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 import useStateLocation from 'src/utils/useStateLocation';
@@ -49,7 +49,8 @@ export default function CheckIn(): JSX.Element {
   const snackbar = useSnackbar();
   const [checkInAllConfirmationDialogOpen, setCheckInAllConfirmationDialogOpen] = useState(false);
   const [busy, setBusy] = useState(false);
-  const userCanEdit = !isContributor(selectedOrganization);
+  const { isAllowed } = useUser();
+  const userCanEdit = isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
 
   const [fetchPendingAccessions] = useLazyGetPendingAccessionsQuery();
   const [checkIn] = useCheckInMutation();
