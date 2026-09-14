@@ -12,7 +12,13 @@ import OnboardingHomeView from './OnboardingHomeView';
 import ParticipantHomeView from './ParticipantHomeView';
 import TerrawareHomeView from './TerrawareHomeView';
 
-export default function Home({ selectedOrgHasSpecies }: { selectedOrgHasSpecies: () => boolean }): JSX.Element {
+export default function Home({
+  selectedOrgHasSpecies,
+  speciesLoading,
+}: {
+  selectedOrgHasSpecies: () => boolean;
+  speciesLoading: boolean;
+}): JSX.Element {
   const { orgHasModules } = useParticipantData();
   const { selectedOrganization, orgPreferences } = useOrganization();
   const [people, setPeople] = useState<OrganizationUser[]>();
@@ -30,7 +36,7 @@ export default function Home({ selectedOrgHasSpecies }: { selectedOrgHasSpecies:
   }, [selectedOrganization]);
 
   const homeScreen = useMemo((): JSX.Element => {
-    if (orgHasModules === undefined) {
+    if (orgHasModules === undefined || speciesLoading) {
       return <Page isLoading={true} />;
     }
 
@@ -39,7 +45,7 @@ export default function Home({ selectedOrgHasSpecies }: { selectedOrgHasSpecies:
     } else {
       return orgHasModules && isManagerOrHigher(selectedOrganization) ? <ParticipantHomeView /> : <TerrawareHomeView />;
     }
-  }, [orgHasModules, people, selectedOrgHasSpecies, selectedOrganization, orgPreferences]);
+  }, [orgHasModules, speciesLoading, people, selectedOrgHasSpecies, selectedOrganization, orgPreferences]);
 
   return homeScreen;
 }
