@@ -77,6 +77,7 @@ const DEFAULT_COLUMN_ORDER = [
   'estimatedWeightOunces',
   'estimatedWeightPounds',
   'geolocations',
+  'collectors',
   'plantId',
 ];
 
@@ -247,6 +248,19 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
   );
 
   const GeolocationCell = useCallback(({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
+    const value = cell.getValue() as string;
+    const list = value ? value.split(', ') : [];
+    return list.length > 0 ? (
+      <TextTruncated
+        fontSize={16}
+        stringList={list}
+        listSeparator={strings.LIST_SEPARATOR_SECONDARY}
+        moreText={strings.TRUNCATED_TEXT_MORE_LINK}
+      />
+    ) : null;
+  }, []);
+
+  const CollectorsCell = useCallback(({ cell }: { cell: MRT_Cell<SearchResponseElementWithId> }) => {
     const value = cell.getValue() as string;
     const list = value ? value.split(', ') : [];
     return list.length > 0 ? (
@@ -500,6 +514,21 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
         Cell: GeolocationCell,
       },
       {
+        id: 'collectors',
+        header: strings.COLLECTORS_COLUMN,
+        accessorFn: (row) => {
+          const collectors = (row.collectors || []) as { name?: string; position?: string }[];
+          return collectors
+            .slice()
+            .sort((a, b) => Number(a.position ?? 0) - Number(b.position ?? 0))
+            .map((collector) => collector.name)
+            .filter(Boolean)
+            .join(', ');
+        },
+        filterVariant: 'text',
+        Cell: CollectorsCell,
+      },
+      {
         id: 'plantId',
         header: strings.PLANT_ID,
         accessorKey: 'plantId',
@@ -518,6 +547,7 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
     ViabilityCell,
     NumericCell,
     GeolocationCell,
+    CollectorsCell,
   ]);
 
   const downloadReportHandler = useCallback((table: MRT_TableInstance<SearchResponseElementWithId>) => {

@@ -43,7 +43,10 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
   const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(() => {
     try {
       const saved = localStorage.getItem(`${storageKey}-columnVisibility`);
-      return saved ? (JSON.parse(saved) as MRT_VisibilityState) : defaultColumnVisibility;
+      if (!saved) {
+        return defaultColumnVisibility;
+      }
+      return { ...defaultColumnVisibility, ...(JSON.parse(saved) as MRT_VisibilityState) };
     } catch {
       return defaultColumnVisibility;
     }
