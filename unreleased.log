@@ -1,3 +1,4 @@
+185dedfa SW-7604 Remove the accession event log feature flag (#6426)
 444066ed Move accession permission checks into ACL (#6371)
 8ce12f36 SW-8884 Add Collector(s) as an optional column for the accessions table (#6423)
 6739d04b SW-8874 Fix reseting when unchecking withdraw all (#6421)
