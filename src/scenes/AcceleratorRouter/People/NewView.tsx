@@ -8,7 +8,6 @@ import { UserWithInternalnterests } from 'src/scenes/AcceleratorRouter/People/Us
 import usePerson from 'src/scenes/AcceleratorRouter/People/usePerson';
 import useUpdatePerson from 'src/scenes/AcceleratorRouter/People/useUpdatePerson';
 import strings from 'src/strings';
-import useDebounce from 'src/utils/useDebounce';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import { isTerraformationEmail } from 'src/utils/user';
 
@@ -19,14 +18,16 @@ const NewView = () => {
   const location = useStateLocation();
   const updatePerson = useUpdatePerson();
 
-  const [userId, setUserId] = useState(-1);
-  const user = usePerson(userId);
   const [email, setEmail] = useState('');
+  const [lookupEmail, setLookupEmail] = useState('');
   const [emailError, setEmailError] = useState('');
   const [roleError, setRoleError] = useState('');
-  const debouncedEmail = useDebounce(email, 1000);
-  const isValidEmail = !!debouncedEmail && isTerraformationEmail(debouncedEmail);
-  const { currentData, isFetching, isError } = useSearchUsersQuery(debouncedEmail, { skip: !isValidEmail });
+  const isValidEmail = !!lookupEmail && isTerraformationEmail(lookupEmail) && email === lookupEmail;
+  const { currentData, isFetching } = useSearchUsersQuery(lookupEmail, { skip: !isValidEmail });
+  const matchingUser = isValidEmail && !isFetching ? currentData?.user : undefined;
+  const person = usePerson(matchingUser?.id ?? -1);
+  const user = matchingUser && person?.id === matchingUser.id ? person : undefined;
+  const lookupBusy = isValidEmail && isFetching;
 
   const goToPeople = useCallback(
     () => navigate(getLocation(APP_PATHS.ACCELERATOR_PEOPLE, location)),
@@ -39,48 +40,43 @@ const NewView = () => {
       if (!record.email) {
         setEmailError(strings.REQUIRED_FIELD);
         noErrors = false;
+      } else if (!isTerraformationEmail(record.email)) {
+        setEmailError(strings.EMAIL_REQUIREMENT_TERRAFORMATION);
+        noErrors = false;
       }
       if (!record.globalRoles || record.globalRoles.length < 1) {
         setRoleError(strings.REQUIRED_FIELD);
         noErrors = false;
       }
-      if (noErrors) {
-        if (currentData?.user) {
+      if (noErrors && record.email === lookupEmail && !lookupBusy) {
+        if (matchingUser && !user) {
+          return;
+        }
+        if (user && record.id === user.id) {
           updatePerson.update(record);
         } else {
           void updatePerson.invite(record);
         }
       }
     },
-    [currentData?.user, updatePerson]
+    [lookupEmail, lookupBusy, matchingUser, user, updatePerson]
   );
 
   const handleOnChange = useCallback(
     (record: UserWithInternalnterests) => {
-      if (record.email) {
-        setEmail(record.email);
+      const value = record.email || '';
+      if (value !== email) {
+        setLookupEmail('');
+        setEmail(value);
       }
     },
-    [setEmail]
+    [email]
   );
 
-  useEffect(() => {
-    // Email address must end in @terraformation.com
-    if (debouncedEmail && !isTerraformationEmail(debouncedEmail)) {
-      setEmailError(strings.EMAIL_REQUIREMENT_TERRAFORMATION);
-    }
-  }, [debouncedEmail]);
-
-  useEffect(() => {
-    if (!isValidEmail || isFetching) {
-      return;
-    }
-
-    setEmailError('');
-    if (currentData?.user) {
-      setUserId(currentData.user.id);
-    } // else if isError - new user, no op
-  }, [currentData, isError, isFetching, isValidEmail, setUserId]);
+  const handleOnEmailBlur = useCallback((value: string) => {
+    setLookupEmail(value);
+    setEmailError(value && !isTerraformationEmail(value) ? strings.EMAIL_REQUIREMENT_TERRAFORMATION : '');
+  }, []);
 
   useEffect(() => {
     if (updatePerson.succeeded) {
@@ -92,12 +88,14 @@ const NewView = () => {
     <Page title={strings.ADD_PERSON} contentStyle={{ display: 'flex', flexDirection: 'column' }}>
       <PersonForm
         busy={updatePerson.busy}
+        saveDisabled={lookupBusy}
         emailEnabled
         emailError={emailError}
         roleError={roleError}
         onSave={handleOnSave}
         onCancel={goToPeople}
         onChange={handleOnChange}
+        onEmailBlur={handleOnEmailBlur}
         user={user}
       />
     </Page>

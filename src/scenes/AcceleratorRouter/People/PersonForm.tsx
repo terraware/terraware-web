@@ -19,14 +19,17 @@ type PersonFormProps = {
   emailEnabled?: boolean;
   emailError?: string;
   roleError?: string;
+  saveDisabled?: boolean;
   user?: UserWithInternalnterests;
   onCancel: () => void;
   onChange?: (person: UserWithInternalnterests) => void;
+  onEmailBlur?: (email: string) => void;
   onSave: (person: UserWithInternalnterests) => void;
 };
 
 export default function PersonForm(props: PersonFormProps): JSX.Element {
-  const { busy, emailEnabled, emailError, roleError, user, onCancel, onChange, onSave } = props;
+  const { busy, emailEnabled, emailError, roleError, saveDisabled, user, onCancel, onChange, onEmailBlur, onSave } =
+    props;
 
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
@@ -61,7 +64,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
 
   const updateField = useCallback((field: keyof UserWithGlobalRoles, value: any) => {
     setLocalRecord((prev) => ({
-      ...prev,
+      ...(field === 'email' ? {} : prev),
       [field]: value,
     }));
   }, []);
@@ -100,10 +103,10 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
   };
 
   useEffect(() => {
-    if (user) {
-      setLocalRecord(user);
-    }
-  }, [user]);
+    setLocalRecord((prev) =>
+      user ? { ...user, email: emailEnabled ? prev.email : user.email } : { email: prev.email }
+    );
+  }, [emailEnabled, user]);
 
   useEffect(() => {
     if (onChange) {
@@ -112,7 +115,14 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
   }, [localRecord, onChange]);
 
   return (
-    <PageForm busy={busy} cancelID='cancelEditUser' onCancel={onCancel} onSave={onSaveHandler} saveID='saveUser'>
+    <PageForm
+      busy={busy}
+      cancelID='cancelEditUser'
+      onCancel={onCancel}
+      onSave={onSaveHandler}
+      saveDisabled={saveDisabled}
+      saveID='saveUser'
+    >
       <Container
         maxWidth={false}
         sx={{
@@ -131,6 +141,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
               id='email'
               label={strings.EMAIL}
               onChange={(value) => updateField('email', value)}
+              onBlur={() => onEmailBlur?.(localRecord.email || '')}
               type='text'
               value={localRecord.email}
               disabled={!emailEnabled}
