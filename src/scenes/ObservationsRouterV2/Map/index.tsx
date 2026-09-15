@@ -4,31 +4,35 @@ import { MapRef } from 'react-map-gl/mapbox';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { useGetOneObservationResults, useListObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
-import { useLocalization, useOrganization } from 'src/providers';
-import { ObservationResultsPayload, useLazyListObservationResultsQuery } from 'src/queries/generated/observations';
+import { useLocalization } from 'src/providers';
+import { ObservationResultsPayload } from 'src/queries/generated/observations';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import useFilteredObservationResults from '../useFilteredObservationResults';
+import { ObservationTypeFilter, PlotType } from '../useObservationFilters';
 import ObservationMap from './ObservationMap';
 import ObservationTimeline from './ObservationTimeline';
 
 type ObservationMapWrapperProps = {
-  isBiomass?: boolean;
   isMapVisible?: boolean;
   observationId?: number;
+  // The map and timeline show the same plots the list is filtered to.
+  observationType?: ObservationTypeFilter;
   plantingSiteId?: number;
+  plotType?: PlotType;
   selectPlantingSiteId?: (siteId: number) => void;
 };
 
 const ObservationMapWrapper = ({
-  isBiomass,
   isMapVisible,
   observationId,
+  observationType = 'Monitoring',
   plantingSiteId,
+  plotType = 'assigned',
   selectPlantingSiteId,
 }: ObservationMapWrapperProps): JSX.Element => {
-  const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
   const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
@@ -43,60 +47,27 @@ const ObservationMapWrapper = ({
     }
   }, [isMapVisible]);
 
-  const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListObservationResultsQuery();
   const [selectedObservationResults, setSelectedObservationResults] = useState<ObservationResultsPayload[]>([]);
-  const [selectedAdHocObservationResults, setSelectedAdHocObservationResults] = useState<ObservationResultsPayload[]>(
-    []
-  );
 
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
   const getObservationResultResponse = useGetOneObservationResults({ observationId });
 
-  const listObservationsResultsResponse = useListObservationResults({
-    organizationId: plantingSiteId !== undefined && !observationId && !isBiomass ? selectedOrganization?.id : undefined,
+  // A single observation's results are fetched by id; the list view fetches whatever its filters ask for.
+  const { observations } = useFilteredObservationResults({
+    enabled: plantingSiteId !== undefined && !observationId,
+    includeUpcoming: true,
+    observationType,
     plantingSiteId,
-    depth: 'Stratum',
+    plotType,
   });
 
-  useEffect(() => {
-    if (selectedOrganization && plantingSiteId !== undefined && !observationId) {
-      void listAdHocObservationResults(
-        {
-          organizationId: selectedOrganization.id,
-          plantingSiteId,
-          depth: 'Plant',
-          isAdHoc: true,
-        },
-        true
-      );
-    }
-  }, [listAdHocObservationResults, observationId, plantingSiteId, selectedOrganization]);
+  const isAdHoc = plotType === 'adHoc';
 
   const singleObservationResult = useMemo(
     () => getObservationResultResponse.data?.observation,
     [getObservationResultResponse.data?.observation]
   );
-
-  const adHocObservationResults = useMemo(() => {
-    if (listAdHocObservationResultsResponse.isSuccess) {
-      return listAdHocObservationResultsResponse.data.observations.filter(
-        (observation) => observation.type === (isBiomass ? 'Biomass Measurements' : 'Monitoring')
-      );
-    } else {
-      return [];
-    }
-  }, [isBiomass, listAdHocObservationResultsResponse]);
-
-  const observationResults = useMemo(() => {
-    if (listObservationsResultsResponse.isSuccess) {
-      return listObservationsResultsResponse.data.observations.filter(
-        (observation) => observation.type === (isBiomass ? 'Biomass Measurements' : 'Monitoring')
-      );
-    } else {
-      return [];
-    }
-  }, [isBiomass, listObservationsResultsResponse]);
 
   return (
     <Box
@@ -122,21 +93,24 @@ const ObservationMapWrapper = ({
           </Box>
           <Box display={'flex'} flexGrow={1} justifyContent={'flex-end'}>
             <ObservationTimeline
-              adHocObservationResults={adHocObservationResults}
-              observationResults={observationResults}
-              timezone={plantingSite?.timeZone ?? defaultTimezone}
-              selectAdHocObservationResults={setSelectedAdHocObservationResults}
+              isAdHoc={isAdHoc}
+              observationResults={observations}
               selectObservationResults={setSelectedObservationResults}
+              timezone={plantingSite?.timeZone ?? defaultTimezone}
             />
           </Box>
         </Box>
       )}
       <ObservationMap
-        adHocObservationResults={singleObservationResult ? [singleObservationResult] : selectedAdHocObservationResults}
-        isBiomass={isBiomass}
+        adHocObservationResults={
+          singleObservationResult ? [singleObservationResult] : isAdHoc ? selectedObservationResults : []
+        }
+        isBiomass={observationType === 'Biomass Measurements'}
         isSingleView={!!singleObservationResult}
         mapRef={mapRef}
-        observationResults={singleObservationResult ? [singleObservationResult] : selectedObservationResults}
+        observationResults={
+          singleObservationResult ? [singleObservationResult] : isAdHoc ? [] : selectedObservationResults
+        }
         plantingSiteId={plantingSiteId}
         selectPlantingSiteId={selectPlantingSiteId}
       />
