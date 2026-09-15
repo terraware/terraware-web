@@ -10,8 +10,8 @@ import { useLocalization } from 'src/providers';
 import { ObservationResultsPayload } from 'src/queries/generated/observations';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import { ObservationTypeFilter, PlotType } from '../ObservationFiltersProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
-import { ObservationTypeFilter, PlotType } from '../useObservationFilters';
 import ObservationMap from './ObservationMap';
 import ObservationTimeline from './ObservationTimeline';
 

@@ -37,10 +37,10 @@ import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { useAbandonObservationModal } from '../Abandon';
+import { PlotType } from '../ObservationFiltersProvider';
 import { exportAdHocObservationsResults } from '../exportAdHocObservations';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
-import { PlotType } from '../useObservationFilters';
 import SelectObservationButton from './SelectObservationButton';
 
 type PlantMonitoringRow = {
