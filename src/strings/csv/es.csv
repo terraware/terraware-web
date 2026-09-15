@@ -1227,6 +1227,7 @@ MONITORING_PLOT,Parcela de vigilancia,97de3243
 MONITORING_PLOT_REQUIRED,La parcela de monitoreo es obligatoria.,ba488e0f
 MONITORING_PLOT_TYPE,Tipo de parcela de vigilancia,5269e047
 MONITORING_PLOTS,Control de parcelas,42428fbb
+MONITORING_TYPE,Tipo de monitoreo,c6fa7c35
 MONITORS,Monitores,5783929b
 MONOCULTURE,Monocultivo,7499be9c
 MONTH_01,Enero,735450e1

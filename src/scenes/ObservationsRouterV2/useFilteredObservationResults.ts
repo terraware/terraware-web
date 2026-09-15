@@ -27,7 +27,7 @@ const useFilteredObservationResults = ({
   plotType,
 }: UseFilteredObservationResultsArgs) => {
   const { selectedOrganization } = useOrganization();
-  const { dateFilter, statusFilter, stratumFilter } = useObservationFilters();
+  const { dateFilter, plotNumberFilter, statusFilter, stratumFilter } = useObservationFilters();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const isAdHoc = plotType === 'adHoc';
   const isAssigned = !isAdHoc;
@@ -65,7 +65,13 @@ const useFilteredObservationResults = ({
       }
 
       if (!isAssigned) {
-        return true;
+        const plotNumber = observation.adHocPlot?.monitoringPlotNumber;
+        const belowMin =
+          plotNumberFilter.min !== undefined && (plotNumber === undefined || plotNumber < plotNumberFilter.min);
+        const aboveMax =
+          plotNumberFilter.max !== undefined && (plotNumber === undefined || plotNumber > plotNumberFilter.max);
+
+        return !belowMin && !aboveMax;
       }
 
       const matchesStratum = observation.strata.some(
@@ -74,7 +80,16 @@ const useFilteredObservationResults = ({
 
       return stratumFilter.length === 0 || matchesStratum;
     });
-  }, [dateFilter, defaultTimezone, isAssigned, observationType, response, statusFilter, stratumFilter]);
+  }, [
+    dateFilter,
+    defaultTimezone,
+    isAssigned,
+    observationType,
+    plotNumberFilter,
+    response,
+    statusFilter,
+    stratumFilter,
+  ]);
 
   return {
     isFetching: response.isFetching,

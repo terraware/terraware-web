@@ -1226,6 +1226,7 @@ MONITORING_PLOT,Placette de suivi,97de3243
 MONITORING_PLOT_REQUIRED,La parcelle de suivi est requise.,ba488e0f
 MONITORING_PLOT_TYPE,Type de placette de suivi,5269e047
 MONITORING_PLOTS,Placettes de suivi,42428fbb
+MONITORING_TYPE,Type de suivi,c6fa7c35
 MONITORS,Moniteurs,5783929b
 MONOCULTURE,Monoculture,7499be9c
 MONTH_01,Janvier,735450e1
