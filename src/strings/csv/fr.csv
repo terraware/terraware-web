@@ -29,6 +29,7 @@ ACCESSION_HISTORY,Historique de l'accession,1e6eaa37
 ACCESSION_HISTORY_NO_EVENTS,Aucun historique pour le moment.,f8822669
 ACCESSION_ID,Identifiant de l'accesion,a87726c0
 ACCESSION_NUMBER_CHECKED_IN,L'accesion {0} a été enregistrée avec succès !,b78da03c
+ACCESSION_WITHDRAW_SUCCESS,Semences retirées avec succès.,ed889590
 ACCESSIONS,Accessions,5f4f92e5
 ACCESSIONS_CARD_DESCRIPTION,"Collectez des semences, puis enregistrez et visualisez vos accessions. Les accessions de semences peuvent être visualisées et analisées par banque de semences.",04e1a86a
 ACCESSIONS_IMPORT_COMPLETE,L'importation des données d'accessions est terminée !,445187fe
@@ -298,6 +299,7 @@ BUDGET_NARRATIVE_SUMMARY_REQUIRED,Résumé narratif du budget *,e90de8c1
 BUG_REPORT,Rapport de bug,5fab1616
 BUG_REPORT_DESCRIPTION,Faites-nous part d'un problème que vous avez rencontré lors de l'utilisation de Terraware.,0030b91e
 BUG_REPORT_INSTRUCTIONS,Fournissez une description détaillée du problème rencontré. (Où le problème s'est-il produit ? Qu'avez-vous fait avant de rencontrer le problème ? À quoi vous attendiez-vous ?),b2ca26aa
+BULK_WITHDRAW_SPECIES_BANNER,"Un lot de pépinière est créé par espèce. Seules ""{0}"" accessions peuvent être ajoutées à ce retrait.",5b9cb2fe
 BY,Par,e8fbe470
 BY_ACCESSION,Par accession,61b8fb95
 BY_BATCH,Par lot,68c5092f
@@ -707,6 +709,7 @@ ERROR_LOAD_SUB_LOCATIONS,Impossible de charger les sous-emplacements pour l'inst
 ERROR_PROJECT_NAME_CONFLICT,Ce nom de projet est déjà utilisé dans l'organisation.,521631a8
 ERROR_PROJECT_SELECT,Ce projet n'est pas éligible à la sélection.,9c2b6c67
 ERROR_SUPPORT_NOTIFIED,Une erreur s’est produite : notre équipe d’assistance a été informée et travaille à la résolution du problème.,7f643888
+EST_COUNT,Nb estimé,87d4a3f4
 EST_READY_DATE,Date estimée de disponibilité,27e12633
 EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Est. total de plantes (densité de plantation × surface),311a283f
 ESTIMATED_BUDGET,Budget prévisionnel,23c1c02a
@@ -2382,6 +2385,8 @@ SUBMITTED_BY,Soumis par,3c23aee3
 SUBSET_COUNT,Nombre de sous-ensembles,8f4d7c8b
 SUBSET_COUNT_POSITIVE,Le nombre de sous-ensembles doit être un nombre positif.,f3cb9f62
 SUBSET_WEIGHT,Poids du sous-ensemble,6c11760f
+SUBSET_WEIGHT_COUNT,Poids/Nb du sous-ensemble,9dacedca
+SUBSET_WEIGHT_COUNT_TOOLTIP,Le nombre estimé de semences est déterminé par le poids et le nombre du sous-ensemble fournis pour la quantité d'accession.,313d34a6
 SUBSET_WEIGHT_ERROR,Le poids du sous-ensemble doit être inférieur à celui de la semence,90471b25
 SUBSET_WEIGHT_POSITIVE,Le poids du sous-ensemble doit être un nombre positif,8f1b1fed
 SUBSET_WEIGHT_REQUIRED,Vous devez saisir le poids et le nombre d'un sous-ensemble afin de déterminer le nombre approximatif de semences lorsque vous les retirez dans une pépinière. Vous pouvez le faire en éditant la quantité de cette accession.,18baf19c
@@ -2715,6 +2720,7 @@ VERSION_NAME,Nom de la version,66c1f794
 VERSION_PREVIEW,Aperçu de la version,9eb32b2d
 VERSIONS,Versions,9ef0d449
 VIABILITY,Viabilité,8ea0b3b5
+VIABILITY_NOT_AVAILABLE_BULK,Le test de viabilité n'est pas disponible pour les retraits en vrac.,2cc9593b
 VIABILITY_RATE,Taux de viabilité,bca4f47d
 VIABILITY_RESULT,Résultat de viabilité,e34f8436
 VIABILITY_TEST,Test de viabilité,1989cfb8
@@ -2782,12 +2788,15 @@ WILD_IN_SITU_DESCRIPTION,Plantes qui se trouvent naturellement dans des zones sa
 WITHDRAW,Retirer,3aeae714
 WITHDRAW_ALL,Retirer tout,cc50ccca
 WITHDRAW_BY,Prélèvement par,54fccc5e
+WITHDRAW_DATE,Date de retrait,67680899
 WITHDRAW_DATE_PREDATES_RECEIVED_DATE_WARNING,"La date indiquée pour ce retrait est antérieure à la date à laquelle la quantité actuelle d'accession a été fournie. Par conséquent, la quantité retirée ne sera pas soustraite de la quantité d'accession. Après l'enregistrement du retrait, la quantité peut être ajustée manuellement pour refléter la quantité retirée. Êtes-vous sûr de vouloir enregistrer ce retrait sans modification de la quantité ?",2283d4eb
 WITHDRAW_DATE_REQUIRED,Date de retrait *,86478a68
 WITHDRAW_FROM_BATCHES,Retirer des lots,184d96f3
 WITHDRAW_INSTRUCTIONS,Sélectionnez un but de retrait et saisissez les quantités de chaque lot à retirer.,1636e2b4
+WITHDRAW_PARTIAL_FAILURE,Certaines accessions n'ont pas pu être retirées : {0}.,de8adf80
 WITHDRAW_QUANTITY,Quantité retirée,021d677d
 WITHDRAW_QUANTITY_REQUIRED,Quantité retirée *,be02aa0c
+WITHDRAW_SAME_SPECIES_ONLY,Toutes les accessions sélectionnées doivent être de la même espèce.,633e7316
 WITHDRAW_SEEDS,Retirer des semences,02852ae6
 WITHDRAW_SINGLE_NURSERY,Vous ne pouvez effectuer des retraits en vrac qu'auprès d'une seule pépinière à la fois.,948ffd25
 WITHDRAWAL,Retrait,9845aaae
@@ -2813,6 +2822,8 @@ WORKERS_VOLUNTEERS,Volontaires *,339666d2
 WORKSHOP,Atelier,8092cd5c
 WORKSHOPS,Ateliers,1a6fc46c
 WOULD_YOU_LIKE_TO_CONTINUE,Souhaitez-vous continuer ?,9ca4c77f
+X_ACCESSION,{0} accession,cfd54196
+X_ACCESSIONS,{0} accessions,e8ccdbc4
 X_BATCH,{0} lot,9d74cde8
 X_BATCHES,{0} lots,a7a1d48d
 X_HA,{0} ha,8f68781b

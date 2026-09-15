@@ -14,6 +14,7 @@ import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useAccession from 'src/hooks/useAccession';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useUser } from 'src/providers';
@@ -45,6 +46,7 @@ import ViabilityTestingPanel from './viabilityTesting/ViabilityTestingPanel';
 import ViewViabilityTestModal from './viabilityTesting/ViewViabilityTestModal';
 import DetailPanel from './view/DetailPanel';
 import WithdrawModal from './withdraw/WithdrawModal';
+import WithdrawSeedsModal from './withdraw/WithdrawSeedsModal';
 
 export default function Accession2View(): JSX.Element {
   const { user, isAllowed } = useUser();
@@ -441,9 +443,19 @@ export default function Accession2View(): JSX.Element {
           {openDeleteAccession && (
             <DeleteAccessionModal open={openDeleteAccession} onClose={() => setOpenDeleteAccession(false)} />
           )}
-          {user && openWithdrawModal && (
-            <WithdrawModal open={openWithdrawModal} onClose={() => setOpenWithdrawModal(false)} user={user} />
-          )}
+          {user &&
+            openWithdrawModal &&
+            (isEnabled('Bulk Accession Withdraw', selectedOrganization?.id) && accession ? (
+              <WithdrawSeedsModal
+                open={openWithdrawModal}
+                onClose={() => setOpenWithdrawModal(false)}
+                accessionIds={[accession.id]}
+                user={user}
+                onWithdrawn={() => void refetchAccession()}
+              />
+            ) : (
+              <WithdrawModal open={openWithdrawModal} onClose={() => setOpenWithdrawModal(false)} user={user} />
+            ))}
           <QuantityModal
             open={openQuantityModal}
             onClose={() => setOpenQuantityModal(false)}
