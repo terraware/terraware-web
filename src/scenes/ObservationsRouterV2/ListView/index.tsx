@@ -23,6 +23,7 @@ import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ObservationMapWrapper from '../Map';
 import useObservablePlantingSites from '../Schedule/useObservablePlantingSites';
+import useObservationFilters from '../useObservationFilters';
 import BiomassList from './BiomassList';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
 import PlantMonitoringList from './PlantMonitoringList';
@@ -34,6 +35,8 @@ const ObservationListView = (): JSX.Element => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const newFiltersEnabled = isEnabled('New Observation Filters');
+
+  const { plotType, setPlotType } = useObservationFilters();
 
   const observableSites = useObservablePlantingSites();
   const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites();
@@ -162,7 +165,13 @@ const ObservationListView = (): JSX.Element => {
       {
         id: 'plantMonitoring',
         label: strings.PLANT_MONITORING,
-        children: <PlantMonitoringList plantingSiteId={selectedPlantingSiteId} />,
+        children: (
+          <PlantMonitoringList
+            onPlotTypeChange={setPlotType}
+            plantingSiteId={selectedPlantingSiteId}
+            plotType={plotType}
+          />
+        ),
       },
       {
         id: 'biomassMeasurements',
@@ -170,7 +179,7 @@ const ObservationListView = (): JSX.Element => {
         children: <BiomassList plantingSiteId={selectedPlantingSiteId} />,
       },
     ],
-    [selectedPlantingSiteId, strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]
+    [plotType, selectedPlantingSiteId, setPlotType, strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]
   );
 
   const { activeTab, onChangeTab } = useStickyTabs({
