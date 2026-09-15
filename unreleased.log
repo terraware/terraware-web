@@ -1,3 +1,4 @@
+4a83c457 SW-8890 Share one fetch for the observation list filters (#6408)
 3dfba7a9 SW-8893 Keep the internal indicator fields out of the funder report (#6430)
 40d1d2e9 SW-8892 Keep the report action bar visible while scrolling (#6431)
 a9209eac SW-8894 Show a single publish option in the report options menu (#6428)
