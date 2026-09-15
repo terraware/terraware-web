@@ -8,7 +8,6 @@ import { ObservationTypeFilter, PlotType, useObservationFilters } from './Observ
 
 type UseFilteredObservationResultsArgs = {
   enabled?: boolean;
-  includeUpcoming?: boolean;
   observationType: ObservationTypeFilter;
   plantingSiteId?: PlantingSiteId;
   plotType: PlotType;
@@ -20,14 +19,14 @@ type UseFilteredObservationResultsArgs = {
  */
 const useFilteredObservationResults = ({
   enabled = true,
-  includeUpcoming = false,
   observationType,
   plantingSiteId,
   plotType,
 }: UseFilteredObservationResultsArgs) => {
   const { selectedOrganization } = useOrganization();
-  const { dateFilter } = useObservationFilters();
+  const { dateFilter, statusFilter, stratumFilter, substratumFilter } = useObservationFilters();
   const isAdHoc = plotType === 'adHoc';
+  const isAssigned = !isAdHoc;
 
   const response = useListObservationResults({
     depth: isAdHoc ? 'Plant' : 'Stratum',
@@ -42,18 +41,43 @@ const useFilteredObservationResults = ({
     }
 
     return response.data.observations.filter((observation) => {
-      if (observation.type !== observationType || (!includeUpcoming && observation.state === 'Upcoming')) {
+      if (observation.type !== observationType) {
+        return false;
+      }
+
+      if (isAssigned && statusFilter.length > 0 && !statusFilter.includes(observation.state)) {
         return false;
       }
 
       const observationDate = (observation.completedTime ?? observation.startDate).substring(0, 10);
+      if (dateFilter.from !== undefined && observationDate < dateFilter.from) {
+        return false;
+      }
+      if (dateFilter.to !== undefined && observationDate > dateFilter.to) {
+        return false;
+      }
+
+      if (!isAssigned) {
+        return true;
+      }
+
+      const matchesStratum = observation.strata.some(
+        (stratum) => stratum.stratumId !== undefined && stratumFilter.includes(stratum.stratumId)
+      );
+      if (stratumFilter.length > 0 && !matchesStratum) {
+        return false;
+      }
 
       return (
-        (dateFilter.from === undefined || observationDate >= dateFilter.from) &&
-        (dateFilter.to === undefined || observationDate <= dateFilter.to)
+        substratumFilter.length === 0 ||
+        observation.strata
+          .flatMap((stratum) => stratum.substrata)
+          .some(
+            (substratum) => substratum.substratumId !== undefined && substratumFilter.includes(substratum.substratumId)
+          )
       );
     });
-  }, [dateFilter, includeUpcoming, observationType, response]);
+  }, [dateFilter, isAssigned, observationType, response, statusFilter, stratumFilter, substratumFilter]);
 
   return {
     isFetching: response.isFetching,

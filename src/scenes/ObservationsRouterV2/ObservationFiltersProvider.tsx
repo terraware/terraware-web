@@ -1,5 +1,7 @@
 import React, { createContext, useCallback, useContext, useMemo, useState } from 'react';
 
+import { ObservationState } from 'src/types/Observations';
+
 export type PlotType = 'assigned' | 'adHoc';
 export type ObservationTypeFilter = 'Monitoring' | 'Biomass Measurements';
 
@@ -17,6 +19,12 @@ interface ObservationFiltersContextType {
   setFiltersExpanded: (filtersExpanded: boolean) => void;
   setObservationType: (observationType: ObservationTypeFilter) => void;
   setPlotType: (plotType: PlotType) => void;
+  setStatusFilter: (statuses: ObservationState[]) => void;
+  setStratumFilter: (stratumIds: number[]) => void;
+  setSubstratumFilter: (substratumIds: number[]) => void;
+  statusFilter: ObservationState[];
+  stratumFilter: number[];
+  substratumFilter: number[];
 }
 
 const PLOT_TYPE_SESSION_KEY = 'plot-selection';
@@ -53,7 +61,13 @@ const ObservationFiltersContext = createContext<ObservationFiltersContextType>({
   setFiltersExpanded: () => {},
   setObservationType: () => {},
   setPlotType: () => {},
+  setStatusFilter: () => {},
+  setStratumFilter: () => {},
+  setSubstratumFilter: () => {},
   /* eslint-enable @typescript-eslint/no-empty-function */
+  statusFilter: [],
+  stratumFilter: [],
+  substratumFilter: [],
 });
 
 const ObservationFiltersProvider = ({ children }: { children: React.ReactNode }) => {
@@ -67,6 +81,9 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
     () => readSessionValue(FILTERS_EXPANDED_SESSION_KEY, ['true', 'false'], 'false') === 'true'
   );
   const [dateFilter, setDateFilter] = useState<ObservationDateFilter>({});
+  const [statusFilter, setStatusFilter] = useState<ObservationState[]>([]);
+  const [stratumFilter, setStratumFilter] = useState<number[]>([]);
+  const [substratumFilter, setSubstratumFilter] = useState<number[]>([]);
 
   const setPlotType = useCallback((nextPlotType: PlotType) => {
     setPlotTypeState(nextPlotType);
@@ -93,8 +110,25 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
       setFiltersExpanded,
       setObservationType,
       setPlotType,
+      setStatusFilter,
+      setStratumFilter,
+      setSubstratumFilter,
+      statusFilter,
+      stratumFilter,
+      substratumFilter,
     }),
-    [dateFilter, filtersExpanded, observationType, plotType, setFiltersExpanded, setObservationType, setPlotType]
+    [
+      dateFilter,
+      filtersExpanded,
+      observationType,
+      plotType,
+      setFiltersExpanded,
+      setObservationType,
+      setPlotType,
+      statusFilter,
+      stratumFilter,
+      substratumFilter,
+    ]
   );
 
   return <ObservationFiltersContext.Provider value={value}>{children}</ObservationFiltersContext.Provider>;

@@ -75,7 +75,7 @@ const ObservationFilters = ({
           type='passive'
         />
       </Box>
-      {filtersExpanded && <ObservationFilterPanel />}
+      {filtersExpanded && <ObservationFilterPanel plantingSiteId={plantingSiteId} />}
     </Box>
   );
 };
