@@ -2262,13 +2262,19 @@ SPECIES_CATEGORIES_TOOLTIP,"Categorías de especies muestra el porcentaje del to
 SPECIES_CHECK,Verificación de especies,d7d0f200
 SPECIES_CHECK_ADDED_BANNER,"Se agregaron {0} especies nuevas ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",35e34395
 SPECIES_CHECK_ADDED_BANNER_ONE,"Se agregó {0} especie nueva ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",89f12eb5
+SPECIES_CHECK_COMPLETE,Verificación de especies completada,bd10431c
+SPECIES_CHECK_COMPLETE_MESSAGE,Sus cambios han sido guardados.,3634c6e7
 SPECIES_CHECK_KEEPS,Mantiene {0},16ce403f
+SPECIES_CHECK_NAME_UPDATED,Nombre de {0} actualizado,646716c3
+SPECIES_CHECK_NAMES_UPDATED,Nombres de {0} actualizados,674747e2
 SPECIES_CHECK_OVERRIDE_JUSTIFICATION_PLACEHOLDER,¿Por qué esta especie difiere de la sugerencia?,b83db1e0
 SPECIES_CHECK_OVERRIDE_WARNING,Native Check sugirió {0} para esta especie. Registre el estado que desea en su lugar.,c75e6aa8
 SPECIES_CHECK_SET_LOCATION_BANNER,"Para verificar qué especies son nativas, introducidas o invasoras, ejecute la Verificación de Especies. Deberá establecer la ubicación de sus proyectos.",49c844fd
 SPECIES_CHECK_SET_LOCATION_HINT,Seleccione un país y un país botánico para establecer la ubicación.,e7b413a8
 SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS,Seleccione un país y un país botánico para establecer la ubicación de cada proyecto.,8070772f
 SPECIES_CHECK_SPECIES_CHECKED,{0} especies verificadas,3a3237db
+SPECIES_CHECK_STATUS_APPLIED,Estado sugerido de {0} aplicado,7d957583
+SPECIES_CHECK_STATUSES_APPLIED,Estados sugeridos de {0} aplicados,2abf8c71
 SPECIES_CHECK_SUGGESTION,{0} sugerencia,5afe0690
 SPECIES_CHECK_SUGGESTIONS,{0} sugerencias,9154c212
 SPECIES_CHECK_SUGGESTIONS_APPLIED,Se aplicarán {0} de {1} sugerencias,beacaf4b
