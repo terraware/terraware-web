@@ -4,12 +4,17 @@ import { Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
 import SegmentControl from 'src/components/common/SegmentControl';
+import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
 
 import { useObservationFilters } from '../ObservationFiltersProvider';
 import ObservationFilterPanel from './ObservationFilterPanel';
 
-const ObservationFilters = (): JSX.Element => {
+export type ObservationFiltersProps = {
+  plantingSiteId: PlantingSiteId;
+};
+
+const ObservationFilters = ({ plantingSiteId }: ObservationFiltersProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
   const { filtersExpanded, observationType, plotType, setFiltersExpanded, setObservationType, setPlotType } =
@@ -53,7 +58,7 @@ const ObservationFilters = (): JSX.Element => {
           type='passive'
         />
       </Box>
-      {filtersExpanded && <ObservationFilterPanel />}
+      {filtersExpanded && <ObservationFilterPanel plantingSiteId={plantingSiteId} />}
     </Box>
   );
 };

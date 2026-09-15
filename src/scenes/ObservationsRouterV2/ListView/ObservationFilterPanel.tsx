@@ -1,11 +1,14 @@
-import React, { type JSX, useCallback } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 
 import { Box, IconButton, Typography, useTheme } from '@mui/material';
-import { Icon } from '@terraware/web-components';
+import { Icon, MultiSelect } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import DatePicker from 'src/components/common/DatePicker';
+import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
+import { ObservationState, getStatus } from 'src/types/Observations';
 
 import { useObservationFilters } from '../ObservationFiltersProvider';
 
@@ -15,10 +18,54 @@ const datePickerStyles = {
   minWidth: '120px',
 };
 
-const ObservationFilterPanel = (): JSX.Element => {
+const multiSelectStyles = {
+  maxWidth: '260px',
+  minWidth: '260px',
+};
+
+const OBSERVATION_STATES: ObservationState[] = ['Upcoming', 'InProgress', 'Overdue', 'Completed', 'Abandoned'];
+
+export type ObservationFilterPanelProps = {
+  plantingSiteId: PlantingSiteId;
+};
+
+const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const { dateFilter, plotType, setDateFilter, setFiltersExpanded } = useObservationFilters();
+  const {
+    dateFilter,
+    plotType,
+    setDateFilter,
+    setFiltersExpanded,
+    setStatusFilter,
+    setStratumFilter,
+    statusFilter,
+    stratumFilter,
+  } = useObservationFilters();
+  const { plantingSites } = useOrganizationPlantingSites({ full: true });
+
+  const strata = useMemo(() => {
+    const sites =
+      plantingSiteId === ALL_PLANTING_SITES
+        ? plantingSites
+        : plantingSites.filter((site) => site.id === plantingSiteId);
+    return sites.flatMap((site) => site.strata ?? []);
+  }, [plantingSiteId, plantingSites]);
+
+  const stratumOptions = useMemo(() => new Map(strata.map((stratum) => [stratum.id, stratum.name])), [strata]);
+
+  const statusOptions = useMemo(
+    () => new Map(OBSERVATION_STATES.map((state) => [state, getStatus(state, strings)])),
+    [strings]
+  );
+
+  // Options are scoped to the selected site, so a site change can leave selections that match nothing.
+  useEffect(() => {
+    const availableStrata = stratumFilter.filter((id) => stratumOptions.has(id));
+    if (availableStrata.length !== stratumFilter.length) {
+      setStratumFilter(availableStrata);
+    }
+  }, [setStratumFilter, stratumFilter, stratumOptions]);
 
   const onFromChange = useCallback(
     (value?: DateTime) => setDateFilter((current) => ({ ...current, from: value?.toFormat('yyyy-MM-dd') })),
@@ -67,6 +114,34 @@ const ObservationFilterPanel = (): JSX.Element => {
           />
         </Box>
       </Box>
+      {plotType === 'assigned' && (
+        <>
+          <MultiSelect<number, string>
+            fullWidth
+            id='stratum-filter'
+            label={strings.STRATA}
+            onAdd={(id) => setStratumFilter([...stratumFilter, id])}
+            onRemove={(id) => setStratumFilter(stratumFilter.filter((selected) => selected !== id))}
+            options={stratumOptions}
+            placeHolder={strings.ALL_STRATA}
+            selectedOptions={stratumFilter}
+            sx={multiSelectStyles}
+            valueRenderer={(name) => name}
+          />
+          <MultiSelect<ObservationState, string>
+            fullWidth
+            id='status-filter'
+            label={strings.STATUS}
+            onAdd={(state) => setStatusFilter([...statusFilter, state])}
+            onRemove={(state) => setStatusFilter(statusFilter.filter((selected) => selected !== state))}
+            options={statusOptions}
+            placeHolder={strings.ALL_STATUSES}
+            selectedOptions={statusFilter}
+            sx={multiSelectStyles}
+            valueRenderer={(label) => label}
+          />
+        </>
+      )}
       <IconButton
         aria-label={strings.HIDE_FILTERS}
         id='close-observation-filters'

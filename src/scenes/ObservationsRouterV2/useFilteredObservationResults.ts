@@ -11,7 +11,6 @@ import { ObservationTypeFilter, PlotType, useObservationFilters } from './Observ
 
 type UseFilteredObservationResultsArgs = {
   enabled?: boolean;
-  includeUpcoming?: boolean;
   observationType: ObservationTypeFilter;
   plantingSiteId?: PlantingSiteId;
   plotType: PlotType;
@@ -23,15 +22,15 @@ type UseFilteredObservationResultsArgs = {
  */
 const useFilteredObservationResults = ({
   enabled = true,
-  includeUpcoming = false,
   observationType,
   plantingSiteId,
   plotType,
 }: UseFilteredObservationResultsArgs) => {
   const { selectedOrganization } = useOrganization();
-  const { dateFilter } = useObservationFilters();
+  const { dateFilter, statusFilter, stratumFilter } = useObservationFilters();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const isAdHoc = plotType === 'adHoc';
+  const isAssigned = !isAdHoc;
 
   const response = useListObservationResults({
     depth: isAdHoc ? 'Plant' : 'Stratum',
@@ -46,7 +45,11 @@ const useFilteredObservationResults = ({
     }
 
     return response.data.observations.filter((observation) => {
-      if (observation.type !== observationType || (!includeUpcoming && observation.state === 'Upcoming')) {
+      if (observation.type !== observationType) {
+        return false;
+      }
+
+      if (isAssigned && statusFilter.length > 0 && !statusFilter.includes(observation.state)) {
         return false;
       }
 
@@ -54,13 +57,24 @@ const useFilteredObservationResults = ({
       const observationDate = observation.completedTime
         ? getDateDisplayValue(observation.completedTime, defaultTimezone)
         : observation.startDate.substring(0, 10);
+      if (dateFilter.from !== undefined && observationDate < dateFilter.from) {
+        return false;
+      }
+      if (dateFilter.to !== undefined && observationDate > dateFilter.to) {
+        return false;
+      }
 
-      return (
-        (dateFilter.from === undefined || observationDate >= dateFilter.from) &&
-        (dateFilter.to === undefined || observationDate <= dateFilter.to)
+      if (!isAssigned) {
+        return true;
+      }
+
+      const matchesStratum = observation.strata.some(
+        (stratum) => stratum.stratumId !== undefined && stratumFilter.includes(stratum.stratumId)
       );
+
+      return stratumFilter.length === 0 || matchesStratum;
     });
-  }, [dateFilter, defaultTimezone, includeUpcoming, observationType, response]);
+  }, [dateFilter, defaultTimezone, isAssigned, observationType, response, statusFilter, stratumFilter]);
 
   return {
     isFetching: response.isFetching,
