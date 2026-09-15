@@ -10,12 +10,16 @@ import useDebounce from '../../utils/useDebounce';
 const TOP_BAR_HEIGHT = 64;
 const DEBOUNCE_TIME = 500;
 const LEFT_NAV_WIDTH = 220;
+// Matches the top padding of the main element, so a pinned header sits where it would in flow.
+const HEADER_TOP_GAP = 32;
 
 /**
+ * alwaysVisible Keep the header pinned below the top bar instead of hiding it while scrolling down
  * children The child component which is the page header
  * nextElement The HTMLElement immediately following the header element
  */
 interface Props {
+  alwaysVisible?: boolean;
   children?: React.ReactNode | React.ReactNode[];
   hasNav?: boolean;
   nextElement?: HTMLElement | null;
@@ -23,6 +27,7 @@ interface Props {
 }
 
 export default function PageHeaderWrapper({
+  alwaysVisible = false,
   children,
   hasNav = true,
   nextElement,
@@ -31,6 +36,7 @@ export default function PageHeaderWrapper({
   const theme = useTheme();
   const ref = useRef<HTMLDivElement>(null);
   const [sticky, setSticky] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const [scrollDown, setScrollDown] = useState(false);
   const [height, setHeight] = useState<number>(0);
   const [anim, setAnim] = useState<string | undefined>(undefined);
@@ -54,6 +60,7 @@ export default function PageHeaderWrapper({
     const handleScroll = () => {
       const delta = window.scrollY - lastScrollY;
       setScrollDown(delta > 0);
+      setScrolled(window.scrollY > 0);
 
       /*
        * If sticky was already set, and we are scrolling towards the top, don't unset it
@@ -72,11 +79,16 @@ export default function PageHeaderWrapper({
 
   useLayoutEffect(() => {
     if (nextElement) {
-      nextElement.style.marginTop = `${nextElementInitialMargin + (debouncedSticky ? height : 0)}px`;
+      nextElement.style.marginTop = `${nextElementInitialMargin + (alwaysVisible || debouncedSticky ? height : 0)}px`;
     }
-  }, [nextElement, height, debouncedSticky, nextElementInitialMargin]);
+  }, [alwaysVisible, nextElement, height, debouncedSticky, nextElementInitialMargin]);
 
   useLayoutEffect(() => {
+    if (alwaysVisible) {
+      setAnim(undefined);
+      return;
+    }
+
     const headerMotionIn = keyframes`
       from {
         top: ${TOP_BAR_HEIGHT - height}px;
@@ -107,24 +119,32 @@ export default function PageHeaderWrapper({
       setAnim(undefined);
     }
     lastDebouncedSticky.current = debouncedSticky;
-  }, [debouncedSticky, debouncedScrollDown, height]);
+  }, [alwaysVisible, debouncedSticky, debouncedScrollDown, height]);
+
+  const pinned = alwaysVisible || debouncedSticky;
+  // An always visible header is fixed from the top of the page, so it only takes on the sticky
+  // chrome (background, divider, gap filling padding) once content scrolls underneath it.
+  const stickyChrome = alwaysVisible ? scrolled : debouncedSticky;
+
+  const stickyTop = debouncedScrollDown ? `${TOP_BAR_HEIGHT - height}px` : `${TOP_BAR_HEIGHT}px`;
+  const alwaysVisibleTop = scrolled ? `${TOP_BAR_HEIGHT}px` : `${TOP_BAR_HEIGHT + HEADER_TOP_GAP}px`;
 
   const styles: Record<string, any> = {
-    background: debouncedSticky ? theme.palette.TwClrBaseGray025 : undefined,
-    borderBottom: debouncedSticky ? '1px solid' : '1px transparent',
-    borderImage: debouncedSticky
+    background: stickyChrome ? theme.palette.TwClrBaseGray025 : undefined,
+    borderBottom: stickyChrome ? '1px solid' : '1px transparent',
+    borderImage: stickyChrome
       ? `linear-gradient(to right, ${theme.palette.TwClrBaseGray300}00,` +
         `${theme.palette.TwClrBaseGray300}FF, ${theme.palette.TwClrBaseGray300}FF,` +
         `${theme.palette.TwClrBaseGray300}FF, ${theme.palette.TwClrBaseGray300}00) 1`
       : undefined,
     boxShadow: 'none',
-    paddingRight: debouncedSticky ? theme.spacing(4) : undefined,
-    paddingTop: debouncedSticky ? theme.spacing(4) : undefined,
-    position: debouncedSticky ? 'fixed' : undefined,
-    top: debouncedSticky ? (debouncedScrollDown ? `${TOP_BAR_HEIGHT - height}px` : `${TOP_BAR_HEIGHT}px`) : undefined,
-    visibility: debouncedSticky && debouncedScrollDown ? 'hidden' : 'visible',
+    paddingRight: pinned ? theme.spacing(4) : undefined,
+    paddingTop: stickyChrome ? theme.spacing(4) : undefined,
+    position: pinned ? 'fixed' : undefined,
+    top: alwaysVisible ? alwaysVisibleTop : debouncedSticky ? stickyTop : undefined,
+    visibility: !alwaysVisible && debouncedSticky && debouncedScrollDown ? 'hidden' : 'visible',
     animation: anim,
-    zIndex: debouncedSticky ? 100 : undefined,
+    zIndex: pinned ? 100 : undefined,
     width: '100%',
     maxWidth: isMobile || isTablet || !hasNav ? '100vw' : `calc(100vw - ${LEFT_NAV_WIDTH}px)`,
   };
