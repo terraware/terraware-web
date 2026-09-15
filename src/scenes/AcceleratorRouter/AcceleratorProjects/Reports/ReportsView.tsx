@@ -94,6 +94,7 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
         },
       ]}
       rightComponentGridSize={6}
+      stickyHeader={newReportTabEnabled}
       title={strings.REPORTS}
       titleStyle={{ paddingTop: '16px' }}
       rightComponent={

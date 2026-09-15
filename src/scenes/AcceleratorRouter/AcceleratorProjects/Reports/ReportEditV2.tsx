@@ -136,6 +136,7 @@ const ReportEditV2 = (): JSX.Element => {
       crumbs={pageCrumbs}
       hierarchicalCrumbs={false}
       rightComponent={rightComponent}
+      stickyHeader
       title={strings.REPORTS}
       titleStyle={{ paddingTop: '16px' }}
     >

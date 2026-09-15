@@ -105,7 +105,7 @@ const AcceleratorReportEditV2 = (): JSX.Element => {
   );
 
   return (
-    <Page hierarchicalCrumbs={false} rightComponent={rightComponent} title={strings.REPORTS}>
+    <Page hierarchicalCrumbs={false} rightComponent={rightComponent} stickyHeader title={strings.REPORTS}>
       <Box display='flex' flexDirection='column' flexGrow={1} width={'100%'}>
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(3) }}>
           <Box alignItems='center' display='flex' justifyContent='space-between' marginBottom={theme.spacing(3)}>
