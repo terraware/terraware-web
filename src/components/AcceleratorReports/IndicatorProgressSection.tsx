@@ -10,6 +10,7 @@ import { useLocalization } from 'src/providers';
 
 export type IndicatorProgressSectionContentProps = {
   editing?: boolean;
+  funderReportView?: boolean;
   indicators: ProgressIndicator[];
   onChangeIndicator?: (indicator: ProgressIndicator, id: string, value: unknown) => void;
   printMode?: boolean;
@@ -20,6 +21,7 @@ export type IndicatorProgressSectionContentProps = {
 
 export const IndicatorProgressSectionContent = ({
   editing,
+  funderReportView,
   indicators,
   onChangeIndicator,
   printMode,
@@ -74,6 +76,7 @@ export const IndicatorProgressSectionContent = ({
       {indicators.map((indicator, index) => (
         <IndicatorProgressRow
           editing={editing}
+          funderReportView={funderReportView}
           indicator={indicator}
           key={`${indicator.refId}-${index}`}
           onChange={(id, value) => onChangeIndicator?.(indicator, id, value)}

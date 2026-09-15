@@ -8,6 +8,9 @@ import strings from 'src/strings';
 import { renderWithProviders } from 'src/test-utils';
 
 const PERCENT_COMPLETE = '49%';
+const PROJECTS_COMMENT = 'Second nursery came online in March.';
+const PROGRESS_NOTE = 'Planting is ahead of schedule.';
+const SUPPORTING_DOCUMENT_URL = 'https://example.com/restoration-plan.pdf';
 
 const indicator: ProgressIndicator = {
   classId: 'Not Cumulative',
@@ -25,6 +28,17 @@ const lifetimeIndicator: ProgressIndicator = {
   name: 'Trees planted',
   refId: '1.2',
   target: 100,
+};
+
+const detailedIndicator: ProgressIndicator = {
+  classId: 'Not Cumulative',
+  name: 'Hectares under restoration',
+  progressNotes: PROGRESS_NOTE,
+  projectsComments: PROJECTS_COMMENT,
+  refId: '1.4',
+  supportingDocumentUrl: SUPPORTING_DOCUMENT_URL,
+  target: 100,
+  value: 49,
 };
 
 const autoCalculatedIndicator: ProgressIndicator = {
@@ -102,5 +116,31 @@ describe('IndicatorProgressRow', () => {
     await user.click(screen.getByRole('button'));
 
     expect(screen.getByRole('spinbutton')).toBeEnabled();
+  });
+
+  it("hides the project's comments and the supporting document link in the funder report view", async () => {
+    const { user } = renderWithProviders(<IndicatorProgressRow funderReportView indicator={detailedIndicator} />);
+
+    await user.click(screen.getByRole('button'));
+
+    expect(screen.queryByText(strings.PROJECTS_COMMENTS)).not.toBeInTheDocument();
+    expect(screen.queryByText(PROJECTS_COMMENT)).not.toBeInTheDocument();
+    expect(screen.queryByText(strings.LINK_TO_SUPPORTING_DOCUMENTS)).not.toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: strings.VIEW_DOCUMENTS })).not.toBeInTheDocument();
+
+    expect(screen.getByText(strings.PROGRESS_NOTES)).toBeVisible();
+    expect(screen.getByText(PROGRESS_NOTE)).toBeVisible();
+  });
+
+  it("shows the project's comments and the supporting document link outside the funder report view", async () => {
+    const { user } = renderWithProviders(<IndicatorProgressRow indicator={detailedIndicator} />);
+
+    await user.click(screen.getByRole('button'));
+
+    expect(screen.getByText(strings.PROJECTS_COMMENTS)).toBeVisible();
+    expect(screen.getByText(PROJECTS_COMMENT)).toBeVisible();
+    expect(screen.getByText(strings.LINK_TO_SUPPORTING_DOCUMENTS)).toBeVisible();
+    expect(screen.getByRole('link', { name: strings.VIEW_DOCUMENTS })).toHaveAttribute('href', SUPPORTING_DOCUMENT_URL);
+    expect(screen.getByText(strings.PROGRESS_NOTES)).toBeVisible();
   });
 });

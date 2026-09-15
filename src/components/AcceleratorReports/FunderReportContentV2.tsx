@@ -41,6 +41,7 @@ const FunderReportContentV2 = ({ header, indicators, projectId, report }: Funder
       <HighlightsBox key={reportKey} projectId={projectId} report={report} />
 
       <IndicatorProgressSectionContent
+        funderReportView
         indicators={indicators}
         quarter={report?.quarter}
         year={report?.startDate ? Number(report.startDate.split('-')[0]) : undefined}
