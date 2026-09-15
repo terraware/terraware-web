@@ -1,10 +1,11 @@
-import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, IconButton, Tooltip, useTheme } from '@mui/material';
-import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { EditableTable, EditableTableColumn, Icon, Message } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_ColumnFiltersState,
+  MRT_RowSelectionState,
   MRT_ShowHideColumnsButton,
   MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
@@ -16,10 +17,13 @@ import {
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
+import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import WithdrawSeedsModal from 'src/scenes/AccessionsRouter/withdraw/WithdrawSeedsModal';
 import strings from 'src/strings';
 import { ACCESSION_2_STATES } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
@@ -88,12 +92,48 @@ const DEFAULT_COLUMN_VISIBILITY = Object.fromEntries(
 type AccessionsTableProps = {
   searchResults: SearchResponseElementWithId[] | null | undefined;
   projects?: Project[];
+  reloadData?: () => void;
 };
 
-export default function AccessionsTable({ searchResults, projects }: AccessionsTableProps): JSX.Element {
+export default function AccessionsTable({ searchResults, projects, reloadData }: AccessionsTableProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const { user } = useUser();
   const theme = useTheme();
+  const bulkWithdrawEnabled = isEnabled('Bulk Accession Withdraw', selectedOrganization?.id);
+
+  const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+  const [withdrawAccessionIds, setWithdrawAccessionIds] = useState<number[]>();
+
+  const selectedRows = useMemo(
+    () =>
+      Object.keys(rowSelection)
+        .map((id) => (searchResults ?? []).find((row) => String(row.id) === id))
+        .filter((row): row is SearchResponseElementWithId => row !== undefined),
+    [rowSelection, searchResults]
+  );
+
+  const isSelectionBulkWithdrawable = useMemo(
+    () =>
+      selectedRows.length >= 1 &&
+      new Set(selectedRows.map((row) => row.species_id)).size === 1 &&
+      selectedRows.every((row) => row.state !== 'Used Up'),
+    [selectedRows]
+  );
+
+  const withdrawTooltip = isSelectionBulkWithdrawable ? undefined : strings.WITHDRAW_SAME_SPECIES_ONLY;
+
+  const bulkWithdrawSelectedRows = useCallback(() => {
+    const ids = selectedRows.map((row) => Number(row.id));
+    if (ids.length > 0) {
+      setWithdrawAccessionIds(ids);
+    }
+  }, [selectedRows]);
+
+  const onWithdrawn = useCallback(() => {
+    setRowSelection({});
+    reloadData?.();
+  }, [reloadData]);
   const locationTimeZone = useLocationTimeZone();
   const facilityNameToTz = useMemo(
     () =>
@@ -594,6 +634,26 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
 
   return (
     <Card>
+      {bulkWithdrawEnabled && selectedRows.length > 0 && isSelectionBulkWithdrawable && (
+        <Box paddingBottom={2}>
+          <Message
+            type='page'
+            priority='info'
+            body={strings
+              .formatString(strings.BULK_WITHDRAW_SPECIES_BANNER, String(selectedRows[0].speciesName ?? ''))
+              .toString()}
+          />
+        </Box>
+      )}
+      {bulkWithdrawEnabled && user && withdrawAccessionIds && (
+        <WithdrawSeedsModal
+          open={withdrawAccessionIds !== undefined}
+          onClose={() => setWithdrawAccessionIds(undefined)}
+          accessionIds={withdrawAccessionIds}
+          user={user}
+          onWithdrawn={onWithdrawn}
+        />
+      )}
       <EditableTable
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
         columns={editableColumns}
@@ -618,6 +678,7 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
             pagination,
             showColumnFilters,
             showGlobalFilter,
+            ...(bulkWithdrawEnabled ? { rowSelection } : {}),
           },
           onSortingChange: setSorting,
           onPaginationChange,
@@ -633,6 +694,28 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
           enableColumnDragging: true,
           positionGlobalFilter: 'right',
           getRowId: (row) => String(row.id),
+          ...(bulkWithdrawEnabled
+            ? {
+                enableRowSelection: true,
+                onRowSelectionChange: setRowSelection,
+                renderToolbarAlertBannerContent: ({ selectedAlert }: { selectedAlert: React.ReactNode }) => (
+                  <Box display='flex' gap={1} alignItems='center' justifyContent='space-between' width='100%'>
+                    {selectedAlert}
+                    <Tooltip title={withdrawTooltip || ''}>
+                      <span>
+                        <Button
+                          type='productive'
+                          onClick={bulkWithdrawSelectedRows}
+                          disabled={!isSelectionBulkWithdrawable}
+                          label={strings.WITHDRAW}
+                          priority='secondary'
+                        />
+                      </span>
+                    </Tooltip>
+                  </Box>
+                ),
+              }
+            : {}),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               <Tooltip title={strings.EXPORT}>

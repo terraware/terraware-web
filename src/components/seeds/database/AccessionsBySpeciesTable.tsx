@@ -1,9 +1,10 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, IconButton, Popover, Tooltip, Typography, useTheme } from '@mui/material';
-import { Button, Checkbox, EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { Button, Checkbox, EditableTable, EditableTableColumn, Message } from '@terraware/web-components';
 import {
   MRT_Cell,
+  MRT_RowSelectionState,
   MRT_ShowHideColumnsButton,
   MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
@@ -14,11 +15,14 @@ import {
 
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
+import TfButton from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
-import { useLocalization } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import WithdrawSeedsModal from 'src/scenes/AccessionsRouter/withdraw/WithdrawSeedsModal';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
@@ -36,6 +40,8 @@ type SpeciesRow = {
   inStorageSeeds: number;
   accessionCount: number;
   usedUpAccessionCount: number;
+  // Ids of this species' withdrawable (not used-up) accessions, for bulk withdrawal.
+  accessionIds: number[];
 };
 
 const TABLE_STATE_STORAGE_KEY = 'accessions-database-species-table-v4';
@@ -51,13 +57,23 @@ const DEFAULT_COLUMN_ORDER = [
 
 type AccessionsBySpeciesTableProps = {
   searchResults: SearchResponseElementWithId[] | null | undefined;
+  reloadData?: () => void;
 };
 
-export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBySpeciesTableProps): JSX.Element {
+export default function AccessionsBySpeciesTable({
+  searchResults,
+  reloadData,
+}: AccessionsBySpeciesTableProps): JSX.Element {
   const { activeLocale } = useLocalization();
+  const { selectedOrganization } = useOrganization();
+  const { user } = useUser();
   const theme = useTheme();
   const numberFormatter = useNumberFormatter();
   const { availableProjects: projects } = useProjects();
+  const bulkWithdrawEnabled = isEnabled('Bulk Accession Withdraw', selectedOrganization?.id);
+
+  const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+  const [withdrawAccessionIds, setWithdrawAccessionIds] = useState<number[]>();
 
   const uniqueProjectNames = useMemo(
     () =>
@@ -132,11 +148,14 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
       const isDrying = accession.state === 'Drying';
       const isInStorage = accession.state === 'In Storage';
       const projectName = (accession.project_name as string) ?? '';
+      const accessionId = accession.id !== undefined ? Number(accession.id) : undefined;
       if (existing) {
         existing.totalSeeds += seeds;
         existing.accessionCount += 1;
         if (isUsedUp) {
           existing.usedUpAccessionCount += 1;
+        } else if (accessionId !== undefined) {
+          existing.accessionIds.push(accessionId);
         }
         if (isDrying) {
           existing.dryingSeeds += seeds;
@@ -159,6 +178,7 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
           inStorageSeeds: isInStorage ? seeds : 0,
           accessionCount: 1,
           usedUpAccessionCount: isUsedUp ? 1 : 0,
+          accessionIds: !isUsedUp && accessionId !== undefined ? [accessionId] : [],
         });
       }
     }
@@ -172,6 +192,32 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
 
     return allSpeciesRows.filter((row) => row.usedUpAccessionCount < row.accessionCount);
   }, [allSpeciesRows, showAllUsedUp]);
+
+  const selectedSpeciesRows = useMemo(
+    () =>
+      Object.keys(rowSelection)
+        .map((id) => speciesRows.find((row) => row.id === id))
+        .filter((row): row is SpeciesRow => row !== undefined),
+    [rowSelection, speciesRows]
+  );
+
+  // A bulk withdrawal is single-species. Selecting one species row withdraws from all its
+  // (non-used-up) accessions; selecting two rows means two species, which is not allowed.
+  const isSelectionBulkWithdrawable =
+    selectedSpeciesRows.length === 1 && selectedSpeciesRows[0].accessionIds.length > 0;
+
+  const withdrawTooltip = isSelectionBulkWithdrawable ? undefined : strings.WITHDRAW_SAME_SPECIES_ONLY;
+
+  const bulkWithdrawSelectedRows = useCallback(() => {
+    if (selectedSpeciesRows.length === 1 && selectedSpeciesRows[0].accessionIds.length > 0) {
+      setWithdrawAccessionIds(selectedSpeciesRows[0].accessionIds);
+    }
+  }, [selectedSpeciesRows]);
+
+  const onWithdrawn = useCallback(() => {
+    setRowSelection({});
+    reloadData?.();
+  }, [reloadData]);
 
   const uniqueSpeciesNames = useMemo(
     () => Array.from(new Set(speciesRows.map((r) => r.speciesName).filter((name): name is string => !!name))).sort(),
@@ -305,6 +351,26 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
 
   return (
     <Card>
+      {bulkWithdrawEnabled && isSelectionBulkWithdrawable && (
+        <Box paddingBottom={2}>
+          <Message
+            type='page'
+            priority='info'
+            body={strings
+              .formatString(strings.BULK_WITHDRAW_SPECIES_BANNER, selectedSpeciesRows[0].speciesName)
+              .toString()}
+          />
+        </Box>
+      )}
+      {bulkWithdrawEnabled && user && withdrawAccessionIds && (
+        <WithdrawSeedsModal
+          open={withdrawAccessionIds !== undefined}
+          onClose={() => setWithdrawAccessionIds(undefined)}
+          accessionIds={withdrawAccessionIds}
+          user={user}
+          onWithdrawn={onWithdrawn}
+        />
+      )}
       <EditableTable
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
         columns={speciesColumns}
@@ -329,6 +395,7 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
             pagination,
             showColumnFilters,
             showGlobalFilter,
+            ...(bulkWithdrawEnabled ? { rowSelection } : {}),
           },
           onSortingChange: setSorting,
           onPaginationChange,
@@ -344,6 +411,28 @@ export default function AccessionsBySpeciesTable({ searchResults }: AccessionsBy
           enableColumnDragging: true,
           positionGlobalFilter: 'right',
           getRowId: (row) => row.id,
+          ...(bulkWithdrawEnabled
+            ? {
+                enableRowSelection: true,
+                onRowSelectionChange: setRowSelection,
+                renderToolbarAlertBannerContent: ({ selectedAlert }: { selectedAlert: React.ReactNode }) => (
+                  <Box display='flex' gap={1} alignItems='center' justifyContent='space-between' width='100%'>
+                    {selectedAlert}
+                    <Tooltip title={withdrawTooltip || ''}>
+                      <span>
+                        <TfButton
+                          type='productive'
+                          onClick={bulkWithdrawSelectedRows}
+                          disabled={!isSelectionBulkWithdrawable}
+                          label={strings.WITHDRAW}
+                          priority='secondary'
+                        />
+                      </span>
+                    </Tooltip>
+                  </Box>
+                ),
+              }
+            : {}),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               <Tooltip title={strings.EXPORT}>
