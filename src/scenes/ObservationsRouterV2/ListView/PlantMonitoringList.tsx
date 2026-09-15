@@ -33,7 +33,7 @@ import { AdHocObservationResults, ObservationState, getStatus } from 'src/types/
 import { MultiPolygon } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
-import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
+import { makeDateRangeFilterFn, stripColumnFilters } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { useAbandonObservationModal } from '../Abandon';
@@ -402,20 +402,22 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
       },
     ];
 
-    if (scheduleObservationsEnabled) {
-      return [
-        ...baseColumns,
-        {
-          id: 'actionsMenu',
-          header: '',
-          accessorFn: () => null,
-          enableHiding: false,
-          Cell: ActionsMenuCell,
-        },
-      ];
-    }
-    return baseColumns;
+    const columns = scheduleObservationsEnabled
+      ? [
+          ...baseColumns,
+          {
+            id: 'actionsMenu',
+            header: '',
+            accessorFn: () => null,
+            enableHiding: false,
+            Cell: ActionsMenuCell,
+          },
+        ]
+      : baseColumns;
+
+    return newFiltersEnabled ? stripColumnFilters(columns) : columns;
   }, [
+    newFiltersEnabled,
     strings,
     uniqueStatuses,
     uniquePlantingSiteNames,
@@ -429,7 +431,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
   ]);
 
   const adHocColumns = useMemo((): EditableTableColumn<PlantMonitoringRow>[] => {
-    return [
+    const columns: EditableTableColumn<PlantMonitoringRow>[] = [
       {
         id: 'adHocPlotNumber',
         header: strings.PLOT,
@@ -485,7 +487,16 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
         Cell: NumberCell,
       },
     ];
-  }, [strings, showSelectObservation, uniquePlantingSiteNames, AdHocPlotNumberCell, CompletedDateCell, NumberCell]);
+    return newFiltersEnabled ? stripColumnFilters(columns) : columns;
+  }, [
+    newFiltersEnabled,
+    strings,
+    showSelectObservation,
+    uniquePlantingSiteNames,
+    AdHocPlotNumberCell,
+    CompletedDateCell,
+    NumberCell,
+  ]);
 
   const onExportAdHocObservationResults = useCallback(() => {
     const adHocResults = observationResults.filter((observation) => observation.adHocPlot);
@@ -656,7 +667,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
           enableEditing={false}
           enableSorting={true}
           enableGlobalFilter={true}
-          enableColumnFilters={true}
+          enableColumnFilters={!newFiltersEnabled}
           enableColumnOrdering={true}
           storageKey={ASSIGNED_STORAGE_KEY}
           enablePagination={false}
@@ -684,7 +695,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
             renderToolbarInternalActions: ({ table }) => (
               <Box display='flex' gap={0.5}>
                 <MRT_ToggleGlobalFilterButton table={table} />
-                <MRT_ToggleFiltersButton table={table} />
+                {!newFiltersEnabled && <MRT_ToggleFiltersButton table={table} />}
                 <MRT_ShowHideColumnsButton table={table} />
                 <MRT_ToggleDensePaddingButton table={table} />
                 <MRT_ToggleFullScreenButton table={table} />
@@ -703,7 +714,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
           enableEditing={false}
           enableSorting={true}
           enableGlobalFilter={true}
-          enableColumnFilters={true}
+          enableColumnFilters={!newFiltersEnabled}
           enableColumnOrdering={true}
           storageKey={ADHOC_STORAGE_KEY}
           enablePagination={false}
@@ -738,7 +749,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
                   </Tooltip>
                 )}
                 <MRT_ToggleGlobalFilterButton table={table} />
-                <MRT_ToggleFiltersButton table={table} />
+                {!newFiltersEnabled && <MRT_ToggleFiltersButton table={table} />}
                 <MRT_ShowHideColumnsButton table={table} />
                 <MRT_ToggleDensePaddingButton table={table} />
                 <MRT_ToggleFullScreenButton table={table} />
