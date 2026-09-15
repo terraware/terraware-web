@@ -4,7 +4,7 @@ import { useListObservationResults } from 'src/hooks/observations';
 import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useOrganization } from 'src/providers';
 
-import { ObservationTypeFilter, PlotType } from './useObservationFilters';
+import { ObservationTypeFilter, PlotType, useObservationFilters } from './ObservationFiltersProvider';
 
 type UseFilteredObservationResultsArgs = {
   enabled?: boolean;
@@ -26,6 +26,7 @@ const useFilteredObservationResults = ({
   plotType,
 }: UseFilteredObservationResultsArgs) => {
   const { selectedOrganization } = useOrganization();
+  const { dateFilter } = useObservationFilters();
   const isAdHoc = plotType === 'adHoc';
 
   const response = useListObservationResults({
@@ -40,10 +41,19 @@ const useFilteredObservationResults = ({
       return [];
     }
 
-    return response.data.observations.filter(
-      (observation) => observation.type === observationType && (includeUpcoming || observation.state !== 'Upcoming')
-    );
-  }, [includeUpcoming, observationType, response]);
+    return response.data.observations.filter((observation) => {
+      if (observation.type !== observationType || (!includeUpcoming && observation.state === 'Upcoming')) {
+        return false;
+      }
+
+      const observationDate = (observation.completedTime ?? observation.startDate).substring(0, 10);
+
+      return (
+        (dateFilter.from === undefined || observationDate >= dateFilter.from) &&
+        (dateFilter.to === undefined || observationDate <= dateFilter.to)
+      );
+    });
+  }, [dateFilter, includeUpcoming, observationType, response]);
 
   return {
     isFetching: response.isFetching,

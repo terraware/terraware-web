@@ -1,35 +1,30 @@
 import React, { type JSX, useMemo } from 'react';
 
 import { Box, useTheme } from '@mui/material';
-import { Dropdown, DropdownItem } from '@terraware/web-components';
+import { Button, Dropdown, DropdownItem } from '@terraware/web-components';
 
 import SegmentControl from 'src/components/common/SegmentControl';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
 
-import { ObservationTypeFilter, PlotType } from '../useObservationFilters';
+import { useObservationFilters } from '../ObservationFiltersProvider';
+import ObservationFilterPanel from './ObservationFilterPanel';
 
 export type ObservationFiltersProps = {
-  observationType: ObservationTypeFilter;
-  onObservationTypeChange: (observationType: ObservationTypeFilter) => void;
   onPlantingSiteChange: (plantingSiteId: PlantingSiteId) => void;
-  onPlotTypeChange: (plotType: PlotType) => void;
   plantingSiteId: PlantingSiteId;
   plantingSiteOptions: DropdownItem[];
-  plotType: PlotType;
 };
 
 const ObservationFilters = ({
-  observationType,
-  onObservationTypeChange,
   onPlantingSiteChange,
-  onPlotTypeChange,
   plantingSiteId,
   plantingSiteOptions,
-  plotType,
 }: ObservationFiltersProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const { filtersExpanded, observationType, plotType, setFiltersExpanded, setObservationType, setPlotType } =
+    useObservationFilters();
 
   const plotTypeSegments = useMemo(
     () => [
@@ -48,32 +43,39 @@ const ObservationFilters = ({
   );
 
   return (
-    <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(2) }}>
-      <Dropdown
-        fullWidth
-        id='planting-site-selector'
-        onChange={(value: string) =>
-          onPlantingSiteChange(value === ALL_PLANTING_SITES ? ALL_PLANTING_SITES : Number(value))
-        }
-        options={plantingSiteOptions}
-        required
-        selectedValue={plantingSiteId}
-        sx={{ flex: '0 1 320px', maxWidth: '320px' }}
-      />
-      <SegmentControl
-        minSegmentWidth={130}
-        onChange={onPlotTypeChange}
-        segments={plotTypeSegments}
-        selected={plotType}
-      />
-      {plotType === 'adHoc' && (
-        <SegmentControl
-          minSegmentWidth={130}
-          onChange={onObservationTypeChange}
-          segments={observationTypeSegments}
-          selected={observationType}
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: theme.spacing(2) }}>
+      <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(2) }}>
+        <Dropdown
+          fullWidth
+          id='planting-site-selector'
+          onChange={(value: string) =>
+            onPlantingSiteChange(value === ALL_PLANTING_SITES ? ALL_PLANTING_SITES : Number(value))
+          }
+          options={plantingSiteOptions}
+          required
+          selectedValue={plantingSiteId}
+          sx={{ flex: '0 1 320px', maxWidth: '320px' }}
         />
-      )}
+        <SegmentControl minSegmentWidth={130} onChange={setPlotType} segments={plotTypeSegments} selected={plotType} />
+        {plotType === 'adHoc' && (
+          <SegmentControl
+            minSegmentWidth={130}
+            onChange={setObservationType}
+            segments={observationTypeSegments}
+            selected={observationType}
+          />
+        )}
+        <Button
+          icon='filter'
+          id='toggle-observation-filters'
+          label={filtersExpanded ? strings.HIDE_FILTERS : strings.SHOW_FILTERS}
+          onClick={() => setFiltersExpanded(!filtersExpanded)}
+          priority='secondary'
+          size='medium'
+          type='passive'
+        />
+      </Box>
+      {filtersExpanded && <ObservationFilterPanel />}
     </Box>
   );
 };

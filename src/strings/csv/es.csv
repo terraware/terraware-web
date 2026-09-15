@@ -899,6 +899,7 @@ HERBACEOUS_ABUNDANCE_SQUARE_COUNT,Abundancia de herbáceas (conteo por cuadrado)
 HERBACEOUS_COVER_PERCENT,Cobertura Herbácea %,e04acd60
 HERE,aquí,fae8bfa6
 HIDE_ALL,Ocultar todas,465040a6
+HIDE_FILTERS,Ocultar filtros,0fdbb60d
 HIDE_ON_MAP,Ocultar en el mapa,089ea8d7
 HIGH,Alto,cb1efe60
 HIGHEST,Más alta,5c2f89d6
@@ -2161,6 +2162,7 @@ SETTINGS,Ajustes,38560978
 SETTINGS_FOR,Configuración para {0},da07c7b6
 SHARED_WITH_FUNDER,Compartido con el financiador,f59b229b
 SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52
+SHOW_FILTERS,Mostrar filtros,d4143c37
 SHOW_LESS,Mostrar menos,d753a0ed
 SHOW_MORE,Mostrar más,43cab9b7
 SHOW_OBSERVATION_ON_MAP,Mostrar en el mapa,2c88d696
