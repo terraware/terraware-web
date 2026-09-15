@@ -5,15 +5,19 @@ import { Step, StepLabel, Stepper, useTheme } from '@mui/material';
 type SpeciesCheckStepperProps = {
   steps: string[];
   activeStep: number;
+  allComplete?: boolean;
 };
 
-const SpeciesCheckStepper = ({ steps, activeStep }: SpeciesCheckStepperProps): JSX.Element => {
+const SpeciesCheckStepper = ({ steps, activeStep, allComplete = false }: SpeciesCheckStepperProps): JSX.Element => {
   const theme = useTheme();
 
+  const effectiveActiveStep = allComplete ? steps.length : activeStep;
+  const boldIndex = allComplete ? steps.length - 1 : activeStep;
+
   return (
-    <Stepper activeStep={activeStep} sx={{ margin: theme.spacing(1, 0, 3) }}>
+    <Stepper activeStep={effectiveActiveStep} sx={{ margin: theme.spacing(1, 0, 3) }}>
       {steps.map((label, index) => (
-        <Step key={label}>
+        <Step key={label} completed={allComplete ? true : undefined}>
           <StepLabel
             sx={{
               '.MuiStepIcon-root': {
@@ -27,7 +31,7 @@ const SpeciesCheckStepper = ({ steps, activeStep }: SpeciesCheckStepperProps): J
               },
               '.MuiStepLabel-label': {
                 fontSize: '14px',
-                fontWeight: index === activeStep ? 600 : 400,
+                fontWeight: index === boldIndex ? 600 : 400,
                 color: theme.palette.TwClrTxt,
               },
             }}
