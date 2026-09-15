@@ -91,7 +91,7 @@ const SpeciesCheckModal = ({
   const [showUpdateLocation, setShowUpdateLocation] = useState(false);
   const [recalculatedTargetKeys, setRecalculatedTargetKeys] = useState<Set<number>>(new Set());
   const [showComplete, setShowComplete] = useState(false);
-  const [appliedNameCount, setAppliedNameCount] = useState(0);
+  const [acceptedNameIds, setAcceptedNameIds] = useState<Set<number>>(new Set());
   const [appliedStatusCount, setAppliedStatusCount] = useState(0);
 
   const targets = useMemo<LocationTarget[]>(() => {
@@ -156,7 +156,7 @@ const SpeciesCheckModal = ({
     setShowUpdateLocation(false);
     setRecalculatedTargetKeys(new Set());
     setShowComplete(false);
-    setAppliedNameCount(0);
+    setAcceptedNameIds(new Set());
     setAppliedStatusCount(0);
 
     runStartRef.current = Date.now();
@@ -318,6 +318,8 @@ const SpeciesCheckModal = ({
   const nameSuggestionsTotal = nameSuggestionSpecies.length;
   const nameSuggestionsApplied = nameSuggestionSpecies.filter((sp) => nameSelected.has(sp.id)).length;
 
+  const appliedNameCount = acceptedNameIds.size;
+
   const goToStep = useCallback((key: StepKey) => setStep(stepKeys.indexOf(key)), [stepKeys]);
 
   const goBackToLocationStep = useCallback(() => {
@@ -448,7 +450,8 @@ const SpeciesCheckModal = ({
           }
         }
       }
-      setAppliedNameCount(toAccept.length);
+
+      setAcceptedNameIds((previous) => new Set([...previous, ...toAccept.map((sp) => sp.id)]));
       goToStep('native');
     } catch {
       trackSaveFailed(SAVE_FAILURE_ENTITY_TYPES.nameCheck);
