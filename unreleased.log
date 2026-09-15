@@ -1,3 +1,7 @@
+40d1d2e9 SW-8892 Keep the report action bar visible while scrolling (#6431)
+a9209eac SW-8894 Show a single publish option in the report options menu (#6428)
+bca26262 SW-8891 Let only Console overwrite auto-calculated indicator values (#6429)
+87b3c131 SW-8887 Keep the observation list title bar visible while scrolling (#6406)
 480339c6 SW-5601 Add image for new welcome email (#6436)
 5bbb73a5 SW-8904 Species Check: Add confirmation screen (#6435)
 6bfc1b6d SW-8862 Add the New Observation Filters feature flag (#6405)
