@@ -210,8 +210,8 @@ const IndicatorProgressRow = ({
 
   const hasOverride = indicator.overrideValue !== undefined;
 
-  // an auto-calculated value comes from tracking data, so it only opens up on request
-  const valueDisabled = isAutoCalculated && !hasOverride && !overwriting;
+  const canOverwrite = isAutoCalculated && !!isConsoleView;
+  const valueDisabled = isAutoCalculated && (!canOverwrite || (!hasOverride && !overwriting));
 
   const onChangeValue = useCallback(
     (value: unknown) => {
@@ -467,7 +467,7 @@ const IndicatorProgressRow = ({
                     />
                   </Box>
 
-                  {isAutoCalculated &&
+                  {canOverwrite &&
                     (valueDisabled ? (
                       <Tooltip title={strings.OVERWRITE_TERRAWARE_TRACKING_DATA}>
                         <Box>
