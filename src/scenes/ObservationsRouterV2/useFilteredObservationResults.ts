@@ -8,7 +8,6 @@ import { ObservationTypeFilter, PlotType } from './useObservationFilters';
 
 type UseFilteredObservationResultsArgs = {
   enabled?: boolean;
-  // The map and timeline show observations that haven't been carried out yet; the tables don't.
   includeUpcoming?: boolean;
   observationType: ObservationTypeFilter;
   plantingSiteId?: PlantingSiteId;
