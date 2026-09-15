@@ -200,6 +200,12 @@ export default function Database(props: DatabaseProps): JSX.Element {
     width: '800px',
   };
 
+  const reloadAccessions = useCallback(() => {
+    if (selectedOrganization) {
+      void fetchAccessions({ organizationId: selectedOrganization.id, fields: ALL_ACCESSION_FIELDS });
+    }
+  }, [fetchAccessions, selectedOrganization]);
+
   const tabs = useMemo(() => {
     if (!activeLocale) {
       return [];
@@ -208,15 +214,15 @@ export default function Database(props: DatabaseProps): JSX.Element {
       {
         id: 'byAccession',
         label: strings.BY_ACCESSION,
-        children: <AccessionsTable searchResults={searchResults} projects={projects} />,
+        children: <AccessionsTable searchResults={searchResults} projects={projects} reloadData={reloadAccessions} />,
       },
       {
         id: 'bySpecies',
         label: strings.BY_SPECIES,
-        children: <AccessionsBySpeciesTable searchResults={searchResults} />,
+        children: <AccessionsBySpeciesTable searchResults={searchResults} reloadData={reloadAccessions} />,
       },
     ];
-  }, [activeLocale, searchResults, projects]);
+  }, [activeLocale, searchResults, projects, reloadAccessions]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'byAccession',
