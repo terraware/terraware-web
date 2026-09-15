@@ -7,6 +7,8 @@ import { getDateDisplayValue } from '@terraware/web-components/utils';
 import { useLocalization } from 'src/providers';
 import { ObservationResultsPayload } from 'src/queries/generated/observations';
 
+import { useSelectedObservation } from '../SelectedObservationProvider';
+
 type ObservationClusterMode = 'Month' | 'Quarter' | 'Year';
 
 type ObservationTimelineProps = {
@@ -23,6 +25,7 @@ const ObservationTimeline = ({
   timezone,
 }: ObservationTimelineProps): JSX.Element => {
   const { activeLocale } = useLocalization();
+  const { selectObservation, selectedObservationId } = useSelectedObservation();
   const theme = useTheme();
   const [selectedCluster, setSelectedCluster] = useState<string>();
   const observationDates = useMemo(() => {
@@ -165,6 +168,30 @@ const ObservationTimeline = ({
     [clusteredObservationIds, getClusterValue]
   );
 
+  const selectCluster = useCallback(
+    (clusterKey: string) => {
+      setSelectedCluster(clusterKey);
+      selectObservation(clusteredObservationIds.get(clusterKey)?.[0]);
+    },
+    [clusteredObservationIds, selectObservation]
+  );
+
+  // A selection made outside the timeline, such as from the list, pulls the cluster to it.
+  useEffect(() => {
+    if (selectedObservationId === undefined) {
+      return;
+    }
+
+    const [containingKey] =
+      [...clusteredObservationIds.entries()].find(([, observationIds]) =>
+        observationIds.includes(selectedObservationId)
+      ) ?? [];
+
+    if (containingKey !== undefined && containingKey !== selectedCluster) {
+      setSelectedCluster(containingKey);
+    }
+  }, [clusteredObservationIds, selectedCluster, selectedObservationId]);
+
   useEffect(() => {
     const today = new Date().valueOf();
 
@@ -179,10 +206,12 @@ const ObservationTimeline = ({
       }
     });
 
-    if (closestKey) {
-      setSelectedCluster(closestKey);
+    const hasStaleCluster = selectedCluster !== undefined && !allClusterKeys.includes(selectedCluster);
+
+    if (closestKey && (selectedCluster === undefined || hasStaleCluster)) {
+      selectCluster(closestKey);
     }
-  }, [allClusterKeys, getClusterValue]);
+  }, [allClusterKeys, getClusterValue, selectCluster, selectedCluster]);
 
   const marks = useMemo((): TimelineSliderMark[] => {
     return allClusterKeys
@@ -199,7 +228,7 @@ const ObservationTimeline = ({
         if (clusterSize === 1) {
           return {
             color: clusterColor?.toString() ?? '',
-            onClick: () => setSelectedCluster(key),
+            onClick: () => selectCluster(key),
             size: selected ? 'large' : 'small',
             value: getClusterValue(key),
           };
@@ -207,7 +236,7 @@ const ObservationTimeline = ({
           return {
             color: clusterColor?.toString() ?? '',
             labelTop: clusterSize.toString(),
-            onClick: () => setSelectedCluster(key),
+            onClick: () => selectCluster(key),
             size: selected ? 'large' : 'medium',
             value: getClusterValue(key),
           };
@@ -221,6 +250,7 @@ const ObservationTimeline = ({
     clusteredObservationIds,
     getClusterValue,
     isAdHoc,
+    selectCluster,
     selectedCluster,
     theme.palette.TwClrBaseOrange300,
     theme.palette.TwClrBgBrand,
