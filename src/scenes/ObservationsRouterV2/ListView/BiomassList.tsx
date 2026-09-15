@@ -7,7 +7,6 @@ import {
   MRT_Cell,
   MRT_ShowHideColumnsButton,
   MRT_ToggleDensePaddingButton,
-  MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
@@ -22,7 +21,6 @@ import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers/hooks';
-import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import useFilteredObservationResults from '../useFilteredObservationResults';
@@ -70,19 +68,15 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   const { downloadBiomassObservationsCsv } = useObservationExports();
 
   const {
-    columnFilters,
     columnOrder,
     columnVisibility,
     density,
     onDensityChange,
-    setColumnFilters,
     setColumnOrder,
     setColumnVisibility,
-    setShowColumnFilters,
     setShowGlobalFilter,
-    showColumnFilters,
     showGlobalFilter,
-  } = useTableState(STORAGE_KEY, { persistFilters: true });
+  } = useTableState(STORAGE_KEY);
 
   const showSelectObservation = isEnabled('New Observation Filters') && typeof plantingSiteId === 'number';
 
@@ -121,11 +115,6 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
           totalSpecies: observation.biomassMeasurements?.treeSpeciesCount,
         })),
     [observations, plantingSitesNames]
-  );
-
-  const uniquePlantingSiteNames = useMemo(
-    () => Array.from(new Set(rows.map((r) => r.plantingSiteName).filter((n): n is string => !!n))).sort(),
-    [rows]
   );
 
   const PlotNumberCell = useCallback(
@@ -170,7 +159,6 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         id: 'monitoringPlotNumber',
         header: strings.PLOT,
         accessorKey: 'monitoringPlotNumber',
-        filterVariant: 'range',
         size: showSelectObservation ? 160 : undefined,
         Cell: PlotNumberCell,
       },
@@ -178,14 +166,11 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         id: 'monitoringPlotDescription',
         header: strings.PLOT_DESCRIPTION,
         accessorKey: 'monitoringPlotDescription',
-        filterVariant: 'text',
       },
       {
         id: 'plantingSiteName',
         header: strings.PLANTING_SITE,
         accessorKey: 'plantingSiteName',
-        filterVariant: 'select',
-        filterSelectOptions: uniquePlantingSiteNames,
       },
       {
         id: 'completedDate',
@@ -201,21 +186,17 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
           }
           return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
         },
-        filterVariant: 'date-range',
-        filterFn: makeDateRangeFilterFn<BiomassRow>('completedDate'),
         Cell: CompletedDateCell,
       },
       {
         id: 'totalPlants',
         header: strings.TOTAL_PLANTS,
         accessorKey: 'totalPlants',
-        filterVariant: 'range',
       },
       {
         id: 'totalSpecies',
         header: strings.SPECIES,
         accessorKey: 'totalSpecies',
-        filterVariant: 'range',
       },
       {
         id: 'actionsMenu',
@@ -225,7 +206,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         Cell: ActionsMenuCell,
       },
     ],
-    [strings, showSelectObservation, uniquePlantingSiteNames, PlotNumberCell, CompletedDateCell, ActionsMenuCell]
+    [strings, showSelectObservation, PlotNumberCell, CompletedDateCell, ActionsMenuCell]
   );
 
   const onExportBiomassObservations = useCallback(async () => {
@@ -253,15 +234,15 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
 
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
-      <EditableTable
-        key='biomass-measurement-table'
+      <EditableTable<BiomassRow>
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+        key='biomass-measurement-table'
         columns={columns}
         data={rows}
         enableEditing={false}
         enableSorting={true}
         enableGlobalFilter={true}
-        enableColumnFilters={true}
+        enableColumnFilters={false}
         enableColumnOrdering={true}
         storageKey={STORAGE_KEY}
         enablePagination={false}
@@ -270,19 +251,15 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         initialSorting={[{ id: 'completedDate', desc: true }]}
         tableOptions={{
           state: {
-            columnFilters,
             columnOrder,
             columnVisibility,
             density,
-            showColumnFilters,
             showGlobalFilter,
             isLoading,
           },
-          onColumnFiltersChange: setColumnFilters,
           onColumnOrderChange: setColumnOrder,
           onColumnVisibilityChange: setColumnVisibility,
           onDensityChange,
-          onShowColumnFiltersChange: setShowColumnFilters,
           onShowGlobalFilterChange: setShowGlobalFilter,
           defaultColumn: { enableEditing: false },
           enableColumnPinning: true,
@@ -301,7 +278,6 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
                 </Tooltip>
               )}
               <MRT_ToggleGlobalFilterButton table={table} />
-              <MRT_ToggleFiltersButton table={table} />
               <MRT_ShowHideColumnsButton table={table} />
               <MRT_ToggleDensePaddingButton table={table} />
               <MRT_ToggleFullScreenButton table={table} />
