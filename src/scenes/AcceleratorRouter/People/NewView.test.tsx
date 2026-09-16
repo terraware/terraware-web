@@ -43,7 +43,7 @@ const setup = (returnedEmail = existingEmail) => {
   const rendered = renderWithProviders(<NewView />, {
     currentUser: { user: buildUser({ globalRoles: ['Super-Admin'] }) },
   });
-  return { ...rendered, searchedEmails, email: textbox('email') };
+  return { ...rendered, searchedEmails, existingUser, email: textbox('email') };
 };
 
 const expectEmptyPerson = () => {
@@ -54,6 +54,44 @@ const expectEmptyPerson = () => {
 };
 
 describe('NewView', () => {
+  it.each(['user details', 'internal interests'])(
+    'keeps Save disabled until the existing account’s %s finish loading',
+    async (pendingRequest) => {
+      const { user, email, existingUser } = setup();
+      let releaseResponse: () => void = () => undefined;
+      const pendingResponse = new Promise<void>((resolve) => {
+        releaseResponse = resolve;
+      });
+      let requestStarted = false;
+      const endpoint = pendingRequest === 'user details' ? '/api/v1/users/42' : '/api/v1/users/42/internalInterests';
+      server.use(
+        http.get(endpoint, async () => {
+          requestStarted = true;
+          await pendingResponse;
+          return HttpResponse.json({
+            status: 'ok',
+            ...(pendingRequest === 'user details' ? { user: existingUser } : { internalInterests: ['GIS'] }),
+          });
+        })
+      );
+
+      try {
+        await user.type(email, existingEmail);
+        await user.tab();
+        await waitFor(() => expect(requestStarted).toBe(true));
+        expect(screen.getByRole('button', { name: strings.SAVE })).toBeDisabled();
+      } finally {
+        releaseResponse();
+      }
+
+      await waitFor(() => expect(screen.getByRole('button', { name: strings.SAVE })).toBeEnabled());
+      expect(textbox('firstName')).toHaveValue('Ada');
+      expect(textbox('lastName')).toHaveValue('Lovelace');
+      expect(textbox('globalRole')).toHaveValue(strings.GLOBAL_ROLE_TF_EXPERT);
+      expect(screen.getByText(strings.GIS)).toBeInTheDocument();
+    }
+  );
+
   it('waits until email loses focus to look up and autofill the person', async () => {
     const { user, email, searchedEmails } = setup();
     await user.type(email, existingEmail);

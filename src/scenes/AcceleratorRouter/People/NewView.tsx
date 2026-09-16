@@ -27,7 +27,7 @@ const NewView = () => {
   const matchingUser = isValidEmail && !isFetching ? currentData?.user : undefined;
   const person = usePerson(matchingUser?.id ?? -1);
   const user = matchingUser && person?.id === matchingUser.id ? person : undefined;
-  const lookupBusy = isValidEmail && isFetching;
+  const lookupBusy = (isValidEmail && isFetching) || (!!matchingUser && !user);
 
   const goToPeople = useCallback(
     () => navigate(getLocation(APP_PATHS.ACCELERATOR_PEOPLE, location)),
