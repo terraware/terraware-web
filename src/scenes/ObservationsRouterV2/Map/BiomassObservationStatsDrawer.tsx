@@ -4,6 +4,7 @@ import { Box, CircularProgress } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
+import Button from 'src/components/common/button/Button';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
@@ -20,11 +21,13 @@ type BiomassObservationStatsProperties = {
 
 type BiomassObservationStatsDrawerProps = {
   observationId: number;
+  onViewOnMap?: () => void;
   plantingSiteId: number;
 };
 
 const BiomassObservationStatsDrawer = ({
   observationId,
+  onViewOnMap,
   plantingSiteId,
 }: BiomassObservationStatsDrawerProps): JSX.Element | undefined => {
   const { activeLocale, strings } = useLocalization();
@@ -82,8 +85,19 @@ const BiomassObservationStatsDrawer = ({
 
   return (
     properties && (
-      <Box display={'flex'} width={'100%'}>
+      <Box alignItems={'center'} display={'flex'} flexDirection={'column'} width={'100%'}>
         <MapDrawerTable header={properties.monitoringPlotName} rows={rows} />
+        {onViewOnMap && (
+          <Box display='flex' padding={2}>
+            <Button
+              id='viewBiomassPlotOnMap'
+              label={strings.VIEW_ON_MAP}
+              onClick={onViewOnMap}
+              priority='secondary'
+              type='passive'
+            />
+          </Box>
+        )}
       </Box>
     )
   );
