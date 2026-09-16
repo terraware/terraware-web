@@ -10,12 +10,19 @@ export type ObservationDateFilter = {
   to?: string;
 };
 
+export type PlotNumberFilter = {
+  max?: number;
+  min?: number;
+};
+
 interface ObservationFiltersContextType {
   dateFilter: ObservationDateFilter;
   filtersExpanded: boolean;
   observationType: ObservationTypeFilter;
+  plotNumberFilter: PlotNumberFilter;
   plotType: PlotType;
   setDateFilter: Dispatch<SetStateAction<ObservationDateFilter>>;
+  setPlotNumberFilter: Dispatch<SetStateAction<PlotNumberFilter>>;
   setFiltersExpanded: (filtersExpanded: boolean) => void;
   setObservationType: (observationType: ObservationTypeFilter) => void;
   setPlotType: (plotType: PlotType) => void;
@@ -53,10 +60,12 @@ const ObservationFiltersContext = createContext<ObservationFiltersContextType>({
   dateFilter: {},
   filtersExpanded: false,
   observationType: 'Monitoring',
+  plotNumberFilter: {},
   plotType: 'assigned',
   /* eslint-disable @typescript-eslint/no-empty-function */
   setDateFilter: () => {},
   setFiltersExpanded: () => {},
+  setPlotNumberFilter: () => {},
   setObservationType: () => {},
   setPlotType: () => {},
   setStatusFilter: () => {},
@@ -77,6 +86,7 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
     () => readSessionValue(FILTERS_EXPANDED_SESSION_KEY, ['true', 'false'], 'false') === 'true'
   );
   const [dateFilter, setDateFilter] = useState<ObservationDateFilter>({});
+  const [plotNumberFilter, setPlotNumberFilter] = useState<PlotNumberFilter>({});
   const [statusFilter, setStatusFilter] = useState<ObservationState[]>([]);
   const [stratumFilter, setStratumFilter] = useState<number[]>([]);
 
@@ -100,8 +110,10 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
       dateFilter,
       filtersExpanded,
       observationType: plotType === 'assigned' ? ('Monitoring' as const) : observationType,
+      plotNumberFilter,
       plotType,
       setDateFilter,
+      setPlotNumberFilter,
       setFiltersExpanded,
       setObservationType,
       setPlotType,
@@ -114,6 +126,7 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
       dateFilter,
       filtersExpanded,
       observationType,
+      plotNumberFilter,
       plotType,
       setFiltersExpanded,
       setObservationType,
