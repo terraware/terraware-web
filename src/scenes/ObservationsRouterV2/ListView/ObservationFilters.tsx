@@ -23,8 +23,7 @@ const ObservationFilters = ({
 }: ObservationFiltersProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const { filtersExpanded, observationType, plotType, setFiltersExpanded, setObservationType, setPlotType } =
-    useObservationFilters();
+  const { filtersExpanded, plotType, setFiltersExpanded, setPlotType } = useObservationFilters();
 
   const plotTypeSegments = useMemo(
     () => [
@@ -32,14 +31,6 @@ const ObservationFilters = ({
       { id: 'adHoc' as const, label: strings.AD_HOC_PLOTS },
     ],
     [strings.AD_HOC_PLOTS, strings.ASSIGNED_PLOTS]
-  );
-
-  const observationTypeSegments = useMemo(
-    () => [
-      { id: 'Monitoring' as const, label: strings.PLANT_MONITORING },
-      { id: 'Biomass Measurements' as const, label: strings.BIOMASS_MONITORING },
-    ],
-    [strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]
   );
 
   return (
@@ -57,14 +48,6 @@ const ObservationFilters = ({
           sx={{ flex: '0 1 320px', maxWidth: '320px' }}
         />
         <SegmentControl minSegmentWidth={130} onChange={setPlotType} segments={plotTypeSegments} selected={plotType} />
-        {plotType === 'adHoc' && (
-          <SegmentControl
-            minSegmentWidth={130}
-            onChange={setObservationType}
-            segments={observationTypeSegments}
-            selected={observationType}
-          />
-        )}
         <Button
           icon='filter'
           id='toggle-observation-filters'

@@ -5,6 +5,7 @@ import { MultiSelect } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import DatePicker from 'src/components/common/DatePicker';
+import SegmentControl from 'src/components/common/SegmentControl';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
@@ -33,8 +34,10 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
   const theme = useTheme();
   const {
     dateFilter,
+    observationType,
     plotType,
     setDateFilter,
+    setObservationType,
     setStatusFilter,
     setStratumFilter,
     setSubstratumFilter,
@@ -70,6 +73,14 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
     [strings]
   );
 
+  const observationTypeSegments = useMemo(
+    () => [
+      { id: 'Monitoring' as const, label: strings.PLANT_MONITORING },
+      { id: 'Biomass Measurements' as const, label: strings.BIOMASS_MONITORING },
+    ],
+    [strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]
+  );
+
   const onStrataChange = useCallback(
     (stratumIds: number[]) => {
       setStratumFilter(stratumIds);
@@ -95,6 +106,14 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
 
   return (
     <Box sx={{ alignItems: 'flex-end', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(2) }}>
+      {plotType === 'adHoc' && (
+        <SegmentControl
+          minSegmentWidth={130}
+          onChange={setObservationType}
+          segments={observationTypeSegments}
+          selected={observationType}
+        />
+      )}
       <Box>
         <Typography fontSize='14px' fontWeight={500} marginBottom={theme.spacing(0.5)}>
           {plotType === 'adHoc' ? strings.DATE_OBSERVED : strings.OBSERVATION_DATE}
