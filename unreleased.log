@@ -1,3 +1,4 @@
+84077776 Remove user info when changing email address (#6433)
 63518f87 SW-8895 Start a lifetime indicator's progress bar at the baseline (#6432)
 4a83c457 SW-8890 Share one fetch for the observation list filters (#6408)
 3dfba7a9 SW-8893 Keep the internal indicator fields out of the funder report (#6430)
