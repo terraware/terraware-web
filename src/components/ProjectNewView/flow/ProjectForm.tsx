@@ -6,7 +6,7 @@ import { Textfield } from '@terraware/web-components';
 import CountryAndBotanicalCountrySelect from 'src/components/CountryAndBotanicalCountrySelect';
 import PageForm from 'src/components/common/PageForm';
 import { useProjects } from 'src/hooks/useProjects';
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 import { CreateProjectRequest, UpdateProjectRequest } from 'src/types/Project';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -21,14 +21,17 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
   props: ProjectFormProps<T>
 ): JSX.Element {
   const { onNext, onCancel, saveText, project } = props;
-
+  const { strings } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const { availableProjects } = useProjects();
+  const { availableProjects, isLoading } = useProjects();
   const showProjectLocation = (availableProjects?.length ?? 0) > 0;
   const [localRecord, setLocalRecord] = useState<T>(project);
   const [validateFields, setValidateFields] = useState<boolean>(false);
+  const [blurredName, setBlurredName] = useState<string>();
+  const isNameInUse = availableProjects?.some(({ name }) => name === localRecord.name) ?? false;
+  const showNameInUse = blurredName === localRecord.name && isNameInUse;
 
   const updateField = (field: keyof T, value: any) => {
     setLocalRecord((prev) => ({
@@ -38,8 +41,13 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
   };
 
   const onNextHandler = () => {
+    setBlurredName(localRecord.name);
     if (!localRecord.name) {
       setValidateFields(true);
+      return;
+    }
+
+    if (isLoading || isNameInUse) {
       return;
     }
 
@@ -55,6 +63,7 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
       onCancel={onCancel}
       onSave={onNextHandler}
       saveButtonText={saveText}
+      saveDisabled={isLoading || showNameInUse}
     >
       <Container
         maxWidth={false}
@@ -81,9 +90,16 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
               id='name'
               value={localRecord.name}
               onChange={(value) => updateField('name', value)}
+              onBlur={() => setBlurredName(localRecord.name)}
               type='text'
               label={strings.NAME}
-              errorText={validateFields && !localRecord?.name ? strings.REQUIRED_FIELD : ''}
+              errorText={
+                validateFields && !localRecord.name
+                  ? strings.REQUIRED_FIELD
+                  : showNameInUse
+                    ? strings.formatString(strings.PROJECT_NAME_IN_USE, localRecord.name).toString()
+                    : ''
+              }
               required
             />
           </Grid>
