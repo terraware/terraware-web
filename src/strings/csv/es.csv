@@ -29,6 +29,7 @@ ACCESSION_HISTORY,Historial de accesiones,1e6eaa37
 ACCESSION_HISTORY_NO_EVENTS,Aún no hay historial.,f8822669
 ACCESSION_ID,ID de accesión,a87726c0
 ACCESSION_NUMBER_CHECKED_IN,¡La accesión {0} se ha ingresado correctamente!,b78da03c
+ACCESSION_WITHDRAW_SUCCESS,Semillas retiradas con éxito.,ed889590
 ACCESSIONS,Accesiones,5f4f92e5
 ACCESSIONS_CARD_DESCRIPTION,"Después de recolectar sus semillas, registre y visualice sus accesiones. Las accesiones de semillas se pueden ver y analizar por banco de semillas.",04e1a86a
 ACCESSIONS_IMPORT_COMPLETE,¡Se ha completado la importación de datos de accesiones!,445187fe
@@ -299,6 +300,7 @@ BUDGET_NARRATIVE_SUMMARY_REQUIRED,Resumen narrativo del presupuesto *,e90de8c1
 BUG_REPORT,Informe de errores,5fab1616
 BUG_REPORT_DESCRIPTION,Infórmenos sobre algún problema que haya detectado al utilizar Terraware.,0030b91e
 BUG_REPORT_INSTRUCTIONS,Describa detalladamente el problema que encontró (¿Dónde se produjo el problema? ¿Qué hizo antes de encontrarse con el problema? ¿Qué esperaba que ocurriera?).,b2ca26aa
+BULK_WITHDRAW_SPECIES_BANNER,"Se crea un lote de vivero por especie. Solo se pueden agregar ""{0}"" accesiones a este retiro.",5b9cb2fe
 BY,Por,e8fbe470
 BY_ACCESSION,Por accesión,61b8fb95
 BY_BATCH,Por lotes,68c5092f
@@ -708,6 +710,7 @@ ERROR_LOAD_SUB_LOCATIONS,No se pudieron cargar las sububicaciones para la instal
 ERROR_PROJECT_NAME_CONFLICT,Este nombre de proyecto ya está en uso en la organización.,521631a8
 ERROR_PROJECT_SELECT,No se puede seleccionar este proyecto.,9c2b6c67
 ERROR_SUPPORT_NOTIFIED,Se produjo un error: Nuestro equipo de asistencia técnica está al corriente y trabajando para solucionar el problema.,7f643888
+EST_COUNT,Cant. Estimada,87d4a3f4
 EST_READY_DATE,Fecha estimada de disponibilidad,27e12633
 EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Total estimado de plantas (Densidad de plantación x Área),311a283f
 ESTIMATED_BUDGET,Presupuesto estimado,23c1c02a
@@ -2377,6 +2380,8 @@ SUBMITTED_BY,Enviado por,3c23aee3
 SUBSET_COUNT,Recuento de subconjuntos,8f4d7c8b
 SUBSET_COUNT_POSITIVE,El recuento de subconjuntos debe ser un número positivo,f3cb9f62
 SUBSET_WEIGHT,Peso del subconjunto,6c11760f
+SUBSET_WEIGHT_COUNT,Peso/Cantidad del Subconjunto,9dacedca
+SUBSET_WEIGHT_COUNT_TOOLTIP,La Cantidad Estimada de Semillas se determina por el Peso y la Cantidad del Subconjunto proporcionados para la Cantidad de Accesión.,313d34a6
 SUBSET_WEIGHT_ERROR,El peso del subconjunto debe ser inferior al peso de las semillas,90471b25
 SUBSET_WEIGHT_POSITIVE,El peso del subconjunto tiene que ser un número positivo,8f1b1fed
 SUBSET_WEIGHT_REQUIRED,Usted debe introducir un peso y un recuento del subconjunto para determinar el recuento de semillas aproximado al extraerlas a un vivero. Esto puede hacerse editando la cantidad de esta accesión.,18baf19c
@@ -2709,6 +2714,7 @@ VERSION_NAME,Nombre de la versión,66c1f794
 VERSION_PREVIEW,Vista previa de la versión,9eb32b2d
 VERSIONS,Versiones,9ef0d449
 VIABILITY,Viabilidad,8ea0b3b5
+VIABILITY_NOT_AVAILABLE_BULK,La prueba de viabilidad no está disponible para retiros masivos.,2cc9593b
 VIABILITY_RATE,Tasa de viabilidad,bca4f47d
 VIABILITY_RESULT,Resultado de viabilidad,e34f8436
 VIABILITY_TEST,Prueba de viabilidad,1989cfb8
@@ -2776,12 +2782,15 @@ WILD_IN_SITU_DESCRIPTION,Las plantas que crecen naturalmente en áreas silvestre
 WITHDRAW,Retirar,3aeae714
 WITHDRAW_ALL,Extraer todas,cc50ccca
 WITHDRAW_BY,Extraídas por,54fccc5e
+WITHDRAW_DATE,Fecha de retiro,67680899
 WITHDRAW_DATE_PREDATES_RECEIVED_DATE_WARNING,"La fecha proporcionada para este retiro es anterior a la fecha en que se registró la cantidad actual de la accesión. Por lo tanto, la cantidad retirada no se restará de la cantidad de la accesión. Después de registrar el retiro, la cantidad puede ajustarse manualmente para reflejar la cantidad retirada. ¿Está seguro de que desea registrar este retiro sin cambios en la cantidad?",2283d4eb
 WITHDRAW_DATE_REQUIRED,Fecha de extracción *,86478a68
 WITHDRAW_FROM_BATCHES,Extraer de Lotes,184d96f3
 WITHDRAW_INSTRUCTIONS,Seleccionar propósito de extracción e ingresar las cantidades a extraer de cada lote.,1636e2b4
+WITHDRAW_PARTIAL_FAILURE,No se pudieron retirar algunas accesiones: {0}.,de8adf80
 WITHDRAW_QUANTITY,Extraer cantidad,021d677d
 WITHDRAW_QUANTITY_REQUIRED,Extraer cantidad *,be02aa0c
+WITHDRAW_SAME_SPECIES_ONLY,Todas las accesiones seleccionadas deben ser de la misma especie.,633e7316
 WITHDRAW_SEEDS,Extraer semillas,02852ae6
 WITHDRAW_SINGLE_NURSERY,Solo puede realizar una retirada en bloque de una incubadora a la vez.,948ffd25
 WITHDRAWAL,Retirada,9845aaae
@@ -2807,6 +2816,8 @@ WORKERS_VOLUNTEERS,Voluntarios *,339666d2
 WORKSHOP,Taller,8092cd5c
 WORKSHOPS,Talleres,1a6fc46c
 WOULD_YOU_LIKE_TO_CONTINUE,¿Desea continuar?,9ca4c77f
+X_ACCESSION,{0} Accesión,cfd54196
+X_ACCESSIONS,{0} Accesiones,e8ccdbc4
 X_BATCH,{0} lote,9d74cde8
 X_BATCHES,{0} lotes,a7a1d48d
 X_HA,{0} hectáreas,8f68781b
