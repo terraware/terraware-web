@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 
-import { Box, IconButton, Typography, useTheme } from '@mui/material';
-import { Dropdown, Icon, MultiSelect, Textfield } from '@terraware/web-components';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Button, Dropdown, MultiSelect, Textfield } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import DatePicker from 'src/components/common/DatePicker';
@@ -38,12 +38,13 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
   const { strings } = useLocalization();
   const theme = useTheme();
   const {
+    activeFilterCount,
+    clearFilters,
     dateFilter,
     observationType,
     plotNumberFilter,
     plotType,
     setDateFilter,
-    setFiltersExpanded,
     setObservationType,
     setPlotNumberFilter,
     setStatusFilter,
@@ -51,7 +52,7 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
     statusFilter,
     stratumFilter,
   } = useObservationFilters();
-  const { plantingSites } = useOrganizationPlantingSites({ full: true });
+  const { isSuccess: plantingSitesLoaded, plantingSites } = useOrganizationPlantingSites({ full: true });
 
   const strata = useMemo(() => {
     const sites =
@@ -70,11 +71,16 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
 
   const observationTypeOptions = useMemo(
     () => [
-      { label: strings.ALL, value: 'All' },
+      { label: strings.ALL_MONITORING_TYPES, value: 'All' },
       { label: strings.PLANT_MONITORING, value: 'Monitoring' },
       { label: strings.BIOMASS_MONITORING, value: 'Biomass Measurements' },
     ],
-    [strings.ALL, strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]
+    [strings.ALL_MONITORING_TYPES, strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]
+  );
+
+  const onObservationTypeChange = useCallback(
+    (value: string) => setObservationType((value || 'All') as ObservationTypeFilter),
+    [setObservationType]
   );
 
   const onPlotNumberChange = useCallback(
@@ -90,11 +96,14 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
 
   // Options are scoped to the selected site, so a site change can leave selections that match nothing.
   useEffect(() => {
+    if (!plantingSitesLoaded) {
+      return;
+    }
     const availableStrata = stratumFilter.filter((id) => stratumOptions.has(id));
     if (availableStrata.length !== stratumFilter.length) {
       setStratumFilter(availableStrata);
     }
-  }, [setStratumFilter, stratumFilter, stratumOptions]);
+  }, [plantingSitesLoaded, setStratumFilter, stratumFilter, stratumOptions]);
 
   const onFromChange = useCallback(
     (value?: DateTime) => setDateFilter((current) => ({ ...current, from: value?.toFormat('yyyy-MM-dd') })),
@@ -123,10 +132,10 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
         <Dropdown
           id='observation-type-filter'
           label={strings.MONITORING_TYPE}
-          onChange={(value: string) => setObservationType(value as ObservationTypeFilter)}
+          onChange={onObservationTypeChange}
           options={observationTypeOptions}
-          required
-          selectedValue={observationType}
+          placeholder={strings.ALL_MONITORING_TYPES}
+          selectedValue={observationType === 'All' ? undefined : observationType}
           sx={{ maxWidth: '220px', minWidth: '220px' }}
         />
       )}
@@ -212,15 +221,18 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
           />
         </>
       )}
-      <IconButton
-        aria-label={strings.HIDE_FILTERS}
-        id='close-observation-filters'
-        onClick={() => setFiltersExpanded(false)}
-        size='small'
-        sx={{ marginLeft: 'auto' }}
-      >
-        <Icon name='close' size='small' />
-      </IconButton>
+      {activeFilterCount > 0 && (
+        <Box sx={{ marginLeft: 'auto' }}>
+          <Button
+            id='clear-observation-filters'
+            label={strings.CLEAR_ALL_FILTERS}
+            onClick={clearFilters}
+            priority='ghost'
+            size='medium'
+            type='productive'
+          />
+        </Box>
+      )}
     </Box>
   );
 };

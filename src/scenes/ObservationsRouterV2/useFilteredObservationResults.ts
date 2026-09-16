@@ -27,7 +27,8 @@ const useFilteredObservationResults = ({
   plotType,
 }: UseFilteredObservationResultsArgs) => {
   const { selectedOrganization } = useOrganization();
-  const { dateFilter, plotNumberFilter, statusFilter, stratumFilter } = useObservationFilters();
+  const { filtersByPlotType } = useObservationFilters();
+  const { dateFilter, plotNumberFilter, statusFilter, stratumFilter } = filtersByPlotType[plotType];
   const defaultTimezone = useDefaultTimeZone().get().id;
   const isAdHoc = plotType === 'adHoc';
   const isAssigned = !isAdHoc;
