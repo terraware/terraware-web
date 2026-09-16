@@ -21,10 +21,10 @@ import { isAdmin } from 'src/utils/organization';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ObservationMapWrapper from '../Map';
+import ObservationFiltersProvider, { PlotType, useObservationFilters } from '../ObservationFiltersProvider';
 import useObservablePlantingSites from '../Schedule/useObservablePlantingSites';
 import SelectedObservationProvider from '../SelectedObservationProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
-import useObservationFilters, { PlotType } from '../useObservationFilters';
 import BiomassList from './BiomassList';
 import ObservationFilters from './ObservationFilters';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
@@ -38,7 +38,7 @@ const ObservationListViewContent = (): JSX.Element => {
   const { isMobile } = useDeviceInfo();
   const newFiltersEnabled = isEnabled('New Observation Filters');
 
-  const { observationType, plotType, setObservationType, setPlotType } = useObservationFilters();
+  const { observationType, plotType, setPlotType } = useObservationFilters();
 
   const observableSites = useObservablePlantingSites();
   const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites();
@@ -273,13 +273,9 @@ const ObservationListViewContent = (): JSX.Element => {
         stickyHeader
         subHeader={
           <ObservationFilters
-            observationType={observationType}
-            onObservationTypeChange={setObservationType}
             onPlantingSiteChange={selectPlantingSite}
-            onPlotTypeChange={setPlotType}
             plantingSiteId={selectedPlantingSiteId}
             plantingSiteOptions={plantingSiteOptions}
-            plotType={plotType}
           />
         }
         title={strings.OBSERVATIONS}
@@ -316,9 +312,11 @@ const ObservationListViewContent = (): JSX.Element => {
 };
 
 const ObservationListView = (): JSX.Element => (
-  <SelectedObservationProvider>
-    <ObservationListViewContent />
-  </SelectedObservationProvider>
+  <ObservationFiltersProvider>
+    <SelectedObservationProvider>
+      <ObservationListViewContent />
+    </SelectedObservationProvider>
+  </ObservationFiltersProvider>
 );
 
 export default ObservationListView;
