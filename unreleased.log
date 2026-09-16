@@ -1,3 +1,4 @@
+d2eafbb3 SW-8870 Add strata, substrata and status filters for assigned plots (#6440)
 8cacfbc6 SW-8864 Add a show/hide filters panel to the observations header (#6439)
 19e3a41a SW-8900 Add a View on Map button to the plot drawers (#6415)
 c27b672b SW-8872 Draw incomplete plots with a dashed border (#6414)
