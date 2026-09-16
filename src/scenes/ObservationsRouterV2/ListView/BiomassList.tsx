@@ -43,7 +43,7 @@ type BiomassRow = {
   totalSpecies?: number;
 };
 
-const BiomassActionsMenuContent = ({ observationId }: { observationId: number }): JSX.Element => {
+export const BiomassActionsMenuContent = ({ observationId }: { observationId: number }): JSX.Element => {
   const { strings } = useLocalization();
   const { downloadBiomassObservationDetails } = useObservationExports();
   return (

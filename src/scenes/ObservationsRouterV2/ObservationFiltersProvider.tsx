@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction, createContext, useCallback, useContext
 import { ObservationState } from 'src/types/Observations';
 
 export type PlotType = 'assigned' | 'adHoc';
-export type ObservationTypeFilter = 'Monitoring' | 'Biomass Measurements';
+export type ObservationTypeFilter = 'All' | 'Monitoring' | 'Biomass Measurements';
 
 export type ObservationDateFilter = {
   from?: string;
@@ -37,7 +37,7 @@ const OBSERVATION_TYPE_SESSION_KEY = 'observation-type';
 const FILTERS_EXPANDED_SESSION_KEY = 'observation-filters-expanded';
 
 const PLOT_TYPES: PlotType[] = ['assigned', 'adHoc'];
-const OBSERVATION_TYPES: ObservationTypeFilter[] = ['Monitoring', 'Biomass Measurements'];
+const OBSERVATION_TYPES: ObservationTypeFilter[] = ['All', 'Monitoring', 'Biomass Measurements'];
 
 const readSessionValue = <T extends string>(key: string, allowed: T[], fallback: T): T => {
   try {
@@ -59,7 +59,7 @@ const writeSessionValue = (key: string, value: string): void => {
 const ObservationFiltersContext = createContext<ObservationFiltersContextType>({
   dateFilter: {},
   filtersExpanded: false,
-  observationType: 'Monitoring',
+  observationType: 'All',
   plotNumberFilter: {},
   plotType: 'assigned',
   /* eslint-disable @typescript-eslint/no-empty-function */
@@ -80,7 +80,7 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
     readSessionValue(PLOT_TYPE_SESSION_KEY, PLOT_TYPES, 'assigned')
   );
   const [observationType, setObservationTypeState] = useState<ObservationTypeFilter>(() =>
-    readSessionValue(OBSERVATION_TYPE_SESSION_KEY, OBSERVATION_TYPES, 'Monitoring')
+    readSessionValue(OBSERVATION_TYPE_SESSION_KEY, OBSERVATION_TYPES, 'All')
   );
   const [filtersExpanded, setFiltersExpandedState] = useState(
     () => readSessionValue(FILTERS_EXPANDED_SESSION_KEY, ['true', 'false'], 'false') === 'true'

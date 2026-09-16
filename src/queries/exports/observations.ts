@@ -143,7 +143,7 @@ const injectedRtkApi = api.injectEndpoints({
       providesTags: (_results, _errors, observationId) => [{ type: QueryTagTypes.Observation, id: observationId }],
     }),
     exportBiomassObservationsCsv: build.query<string, ExportBiomassObservationsApiArg>({
-      query: ({ organizationId, plantingSiteId }) => ({
+      query: ({ observationIds, organizationId, plantingSiteId }) => ({
         url: '/api/v1/search',
         method: 'POST',
         headers: {
@@ -202,6 +202,16 @@ const injectedRtkApi = api.injectEndpoints({
                     field: 'monitoringPlot_plantingSite_organization_id',
                     values: [`${organizationId}`],
                   },
+              ...(observationIds && observationIds.length > 0
+                ? [
+                    {
+                      operation: 'field',
+                      type: 'Exact',
+                      field: 'observation_id',
+                      values: observationIds.map(String),
+                    },
+                  ]
+                : []),
             ],
           },
           count: 0,
@@ -213,6 +223,7 @@ const injectedRtkApi = api.injectEndpoints({
 });
 
 type ExportBiomassObservationsApiArg = {
+  observationIds?: number[];
   organizationId: number;
   plantingSiteId?: number;
 };

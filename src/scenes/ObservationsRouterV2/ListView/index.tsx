@@ -25,6 +25,7 @@ import ObservationFiltersProvider, { PlotType, useObservationFilters } from '../
 import useObservablePlantingSites from '../Schedule/useObservablePlantingSites';
 import SelectedObservationProvider from '../SelectedObservationProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
+import AdHocObservationsList from './AdHocObservationsList';
 import BiomassList from './BiomassList';
 import ObservationFilters from './ObservationFilters';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
@@ -281,8 +282,8 @@ const ObservationListViewContent = (): JSX.Element => {
         <ObservationsEventsNotification />
         {survivalRateMessages}
         {observationMapCard}
-        {observationType === 'Biomass Measurements' ? (
-          <BiomassList plantingSiteId={selectedPlantingSiteId} />
+        {plotType === 'adHoc' ? (
+          <AdHocObservationsList plantingSiteId={selectedPlantingSiteId} />
         ) : (
           <PlantMonitoringList plantingSiteId={selectedPlantingSiteId} plotType={plotType} />
         )}
