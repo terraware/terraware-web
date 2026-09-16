@@ -1,11 +1,12 @@
 import React from 'react';
 
 import { rstest } from '@rstest/core';
-import { screen } from '@testing-library/react';
+import { screen, waitFor } from '@testing-library/react';
+import { HttpResponse, http } from 'msw';
 
 import { AppStore } from 'src/redux/store';
 import strings from 'src/strings';
-import { captureRequests, mockPost, renderWithProviders } from 'src/test-utils';
+import { captureRequests, mockPost, renderWithProviders, server } from 'src/test-utils';
 
 import ProjectForm from './ProjectForm';
 
@@ -43,6 +44,49 @@ describe('ProjectForm', () => {
     );
     return { ...result, onNext };
   };
+
+  it.each(['New Project', 'Existing Project'])(
+    'waits for project names before advancing with %s',
+    async (projectName) => {
+      let finishLoading!: () => void;
+      const loading = new Promise<void>((resolve) => {
+        finishLoading = resolve;
+      });
+      server.use(
+        http.get('/api/v1/projects', async () => {
+          await loading;
+          return HttpResponse.json({
+            status: 'ok',
+            projects: [{ id: 1, name: 'Existing Project', organizationId: 1 }],
+          });
+        })
+      );
+
+      const { user, onNext } = renderForm();
+      const next = screen.getByRole('button', { name: strings.NEXT });
+      try {
+        await user.type(getNameInput(), projectName);
+        await user.keyboard('{Enter}');
+        await user.tab();
+        expect(next).toBeDisabled();
+        expect(onNext).not.toHaveBeenCalled();
+      } finally {
+        finishLoading();
+      }
+
+      if (projectName === 'Existing Project') {
+        expect(
+          await screen.findByText(strings.formatString(strings.PROJECT_NAME_IN_USE, projectName) as string)
+        ).toBeInTheDocument();
+        expect(next).toBeDisabled();
+        expect(onNext).not.toHaveBeenCalled();
+      } else {
+        await waitFor(() => expect(next).toBeEnabled());
+        await user.click(next);
+        expect(onNext).toHaveBeenCalledWith({ name: projectName, organizationId: 1 });
+      }
+    }
+  );
 
   it('reports a duplicate after blur and prevents advancing until the name is unique', async () => {
     const { user, onNext } = renderForm();

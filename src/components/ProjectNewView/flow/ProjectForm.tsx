@@ -25,7 +25,7 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const { availableProjects } = useProjects();
+  const { availableProjects, isLoading } = useProjects();
   const showProjectLocation = (availableProjects?.length ?? 0) > 0;
   const [localRecord, setLocalRecord] = useState<T>(project);
   const [validateFields, setValidateFields] = useState<boolean>(false);
@@ -47,7 +47,7 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
       return;
     }
 
-    if (isNameInUse) {
+    if (isLoading || isNameInUse) {
       return;
     }
 
@@ -63,7 +63,7 @@ export default function ProjectForm<T extends CreateProjectRequest | UpdateProje
       onCancel={onCancel}
       onSave={onNextHandler}
       saveButtonText={saveText}
-      saveDisabled={showNameInUse}
+      saveDisabled={isLoading || showNameInUse}
     >
       <Container
         maxWidth={false}
