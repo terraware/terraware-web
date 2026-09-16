@@ -56,7 +56,6 @@ const ObservationMapWrapper = ({
   // A single observation's results are fetched by id; the list view fetches whatever its filters ask for.
   const { observations } = useFilteredObservationResults({
     enabled: plantingSiteId !== undefined && !observationId,
-    includeUpcoming: true,
     observationType,
     plantingSiteId,
     plotType,

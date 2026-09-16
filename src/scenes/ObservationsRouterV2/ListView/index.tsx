@@ -274,7 +274,7 @@ const ObservationListViewContent = (): JSX.Element => {
         leftComponent={isMobile ? PageHeaderPlantingSiteDropdown : undefined}
         leftComponentGridSize={isMobile ? 7 : 0}
         rightComponentGridSize={4}
-        subHeader={<ObservationFilters />}
+        subHeader={<ObservationFilters plantingSiteId={selectedPlantingSiteId} />}
         title={isMobile ? strings.OBSERVATIONS : PageHeaderPlantingSiteDropdown}
       >
         <ObservationsEventsNotification />
