@@ -30,16 +30,17 @@ import BiomassList from './BiomassList';
 import ObservationFilters from './ObservationFilters';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
 import PlantMonitoringList from './PlantMonitoringList';
+import ViewModeToggle from './ViewModeToggle';
 
 const ObservationListViewContent = (): JSX.Element => {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
   const navigate = useSyncNavigate();
   const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
+  const { isDesktop, isMobile } = useDeviceInfo();
   const newFiltersEnabled = isEnabled('New Observation Filters');
 
-  const { observationType, plotType, setPlotType } = useObservationFilters();
+  const { observationType, plotType, setPlotType, viewMode } = useObservationFilters();
 
   const observableSites = useObservablePlantingSites();
   const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites();
@@ -135,14 +136,14 @@ const ObservationListViewContent = (): JSX.Element => {
 
   const PageHeaderPlantingSiteDropdown = useMemo(
     () => (
-      <Box sx={{ alignItems: 'center', display: 'flex', width: '100%' }}>
+      <Box sx={{ alignItems: 'center', display: 'flex', gap: theme.spacing(2), width: '100%' }}>
         {!isMobile && (
           <Typography fontSize='24px' fontWeight='600' paddingLeft={'24px'}>
             {strings.OBSERVATIONS}
           </Typography>
         )}
         <Separator height={'40px'} />
-        <Typography lineHeight={'40px'} marginRight={theme.spacing(1)} whiteSpace={'nowrap'}>
+        <Typography lineHeight={'40px'} whiteSpace={'nowrap'}>
           {strings.PLANTING_SITE}
         </Typography>
         <Dropdown
@@ -155,9 +156,19 @@ const ObservationListViewContent = (): JSX.Element => {
           }
           sx={{ flex: 1, maxWidth: '400px' }}
         />
+        {newFiltersEnabled && isDesktop && <ViewModeToggle />}
       </Box>
     ),
-    [isMobile, strings, theme, selectedPlantingSiteId, plantingSiteOptions, selectPlantingSite]
+    [
+      isMobile,
+      newFiltersEnabled,
+      strings,
+      theme,
+      selectedPlantingSiteId,
+      isDesktop,
+      plantingSiteOptions,
+      selectPlantingSite,
+    ]
   );
 
   const tabs = useMemo(
@@ -281,12 +292,13 @@ const ObservationListViewContent = (): JSX.Element => {
       >
         <ObservationsEventsNotification />
         {survivalRateMessages}
-        {observationMapCard}
-        {plotType === 'adHoc' ? (
-          <AdHocObservationsList plantingSiteId={selectedPlantingSiteId} />
-        ) : (
-          <PlantMonitoringList plantingSiteId={selectedPlantingSiteId} plotType={plotType} />
-        )}
+        {viewMode !== 'list' && observationMapCard}
+        {viewMode !== 'map' &&
+          (plotType === 'adHoc' ? (
+            <AdHocObservationsList plantingSiteId={selectedPlantingSiteId} />
+          ) : (
+            <PlantMonitoringList plantingSiteId={selectedPlantingSiteId} plotType={plotType} />
+          ))}
         {mobileAppCard}
       </Page>
     );

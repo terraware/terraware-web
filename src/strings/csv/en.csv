@@ -2342,6 +2342,7 @@ SPECIES_TOOLTIP,Species from which the plant densities will be used to calculate
 SPECIES_USAGE,Species Usage,
 SPECIES_VALUE_CHANGED_FROM_TO,Species {0} {1} value changed from {2} to {3},
 SPECIES_WITH_TARGETS_IN_SEASON_DESCRIPTION,Species with targets in the selected season and stratum/substratum,
+SPLIT,Split,
 STAFF,Staff,
 STAKEHOLDERS_AND_COMMUNITY_IMPACT,Stakeholders and Community Impact,
 STANDARD,Standard,
