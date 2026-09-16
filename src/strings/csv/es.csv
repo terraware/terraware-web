@@ -903,6 +903,7 @@ HERE,aquí,fae8bfa6
 HIDE_ALL,Ocultar todas,465040a6
 HIDE_FILTERS,Ocultar filtros,0fdbb60d
 HIDE_ON_MAP,Ocultar en el mapa,089ea8d7
+HIDE_TITLE_BAR,Ocultar barra de título,e9b3ee43
 HIGH,Alto,cb1efe60
 HIGHEST,Más alta,5c2f89d6
 HIGHLIGHTED_ACTIVITY,Actividad destacada,483c0ed0
@@ -2171,6 +2172,7 @@ SHOW_LESS,Mostrar menos,d753a0ed
 SHOW_MORE,Mostrar más,43cab9b7
 SHOW_OBSERVATION_ON_MAP,Mostrar en el mapa,2c88d696
 SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Mostrar especies con todas las accesiones agotadas,656a843d
+SHOW_TITLE_BAR,Mostrar barra de título,95b1ccfb
 SHRUB,Arbusto,af50871c
 SHRUB_CROWN_DIAMETER_CM,Diámetro de la copa del arbusto (cm),61918163
 SHRUBS,Arbustos,377018f6
