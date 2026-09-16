@@ -234,6 +234,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
           const properties: MapProperties = {
             id: feature.featureId,
             clickable: feature.onClick !== undefined,
+            dashedBorder: feature.dashedBorder ?? false,
             label: feature.label,
             layerFeatureId: `${group.layerId}/${feature.featureId}`,
             layerId: group.layerId,
@@ -258,8 +259,11 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
   }, [featureGroups]);
 
   const { borderLayers, fillLayers, textLayers } = useMemo(() => {
-    const _borderLayers = featureGroups?.map((group) => {
-      return (
+    // line-dasharray takes no data expression, so dashed borders need their own filtered layer.
+    const _borderLayers = featureGroups?.flatMap((group) => {
+      const groupFilter: FilterSpecification = ['==', ['get', 'layerId'], group.layerId];
+
+      return [
         <Layer
           key={`${group.layerId}-border`}
           id={`${group.layerId}-border`}
@@ -269,9 +273,21 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
             'line-color': group.style.borderColor,
             'line-width': 2,
           }}
-          filter={['==', ['get', 'layerId'], group.layerId]}
-        />
-      );
+          filter={['all', groupFilter, ['!=', ['get', 'dashedBorder'], true]]}
+        />,
+        <Layer
+          key={`${group.layerId}-border-dashed`}
+          id={`${group.layerId}-border-dashed`}
+          source={'mapData'}
+          type='line'
+          paint={{
+            'line-color': group.style.borderColor,
+            'line-dasharray': [2, 2],
+            'line-width': 2,
+          }}
+          filter={['all', groupFilter, ['==', ['get', 'dashedBorder'], true]]}
+        />,
+      ];
     });
 
     const _fillLayers = featureGroups?.flatMap((group) => {

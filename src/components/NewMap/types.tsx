@@ -42,6 +42,7 @@ export type MapFillComponentStyle = {
 
 // Each layer item will become a feature, with a property of id.
 export type MapLayerFeature = {
+  dashedBorder?: boolean;
   featureId: string;
   geometry: MultiPolygon;
   label?: string;
