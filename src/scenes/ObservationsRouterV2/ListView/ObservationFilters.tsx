@@ -10,6 +10,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { useObservationFilters } from '../ObservationFiltersProvider';
 import ObservationFilterPanel from './ObservationFilterPanel';
+import ObservationTimeline from './ObservationTimeline';
 import ViewModeToggle from './ViewModeToggle';
 
 export type ObservationFiltersProps = {
@@ -56,6 +57,7 @@ const ObservationFilters = ({ plantingSiteId }: ObservationFiltersProps): JSX.El
             type='passive'
           />
         </Badge>
+        {typeof plantingSiteId === 'number' && <ObservationTimeline plantingSiteId={plantingSiteId} />}
       </Box>
       {filtersExpanded && <ObservationFilterPanel plantingSiteId={plantingSiteId} />}
     </Box>
