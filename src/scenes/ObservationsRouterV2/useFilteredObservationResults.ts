@@ -1,10 +1,13 @@
 import { useMemo } from 'react';
 
+import { getDateDisplayValue } from '@terraware/web-components/utils';
+
 import { useListObservationResults } from 'src/hooks/observations';
 import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useOrganization } from 'src/providers';
+import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
-import { ObservationTypeFilter, PlotType } from './useObservationFilters';
+import { ObservationTypeFilter, PlotType, useObservationFilters } from './ObservationFiltersProvider';
 
 type UseFilteredObservationResultsArgs = {
   enabled?: boolean;
@@ -26,6 +29,8 @@ const useFilteredObservationResults = ({
   plotType,
 }: UseFilteredObservationResultsArgs) => {
   const { selectedOrganization } = useOrganization();
+  const { dateFilter } = useObservationFilters();
+  const defaultTimezone = useDefaultTimeZone().get().id;
   const isAdHoc = plotType === 'adHoc';
 
   const response = useListObservationResults({
@@ -40,10 +45,22 @@ const useFilteredObservationResults = ({
       return [];
     }
 
-    return response.data.observations.filter(
-      (observation) => observation.type === observationType && (includeUpcoming || observation.state !== 'Upcoming')
-    );
-  }, [includeUpcoming, observationType, response]);
+    return response.data.observations.filter((observation) => {
+      if (observation.type !== observationType || (!includeUpcoming && observation.state === 'Upcoming')) {
+        return false;
+      }
+
+      // The tables and timeline show completed times in a time zone, so compare the same date.
+      const observationDate = observation.completedTime
+        ? getDateDisplayValue(observation.completedTime, defaultTimezone)
+        : observation.startDate.substring(0, 10);
+
+      return (
+        (dateFilter.from === undefined || observationDate >= dateFilter.from) &&
+        (dateFilter.to === undefined || observationDate <= dateFilter.to)
+      );
+    });
+  }, [dateFilter, defaultTimezone, includeUpcoming, observationType, response]);
 
   return {
     isFetching: response.isFetching,

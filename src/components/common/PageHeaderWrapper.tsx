@@ -46,9 +46,22 @@ export default function PageHeaderWrapper({
   const { isMobile, isTablet } = useDeviceInfo();
 
   useLayoutEffect(() => {
-    if (ref.current) {
-      setHeight(ref.current.clientHeight);
+    const header = ref.current;
+    if (!header) {
+      return;
     }
+
+    setHeight(header.clientHeight);
+
+    // The header also changes height when its own content expands, such as a filters panel.
+    if (typeof ResizeObserver === 'undefined') {
+      return;
+    }
+
+    const observer = new ResizeObserver(() => setHeight(header.clientHeight));
+    observer.observe(header);
+
+    return () => observer.disconnect();
   }, [children, ref]);
 
   useLayoutEffect(() => {

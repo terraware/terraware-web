@@ -898,6 +898,7 @@ HERBACEOUS_ABUNDANCE_SQUARE_COUNT,Abondance herbacée (nombre de carrés),a075fc
 HERBACEOUS_COVER_PERCENT,Couverture herbacée (%),e04acd60
 HERE,ici,fae8bfa6
 HIDE_ALL,Tout masquer,465040a6
+HIDE_FILTERS,Masquer les filtres,0fdbb60d
 HIDE_ON_MAP,Masquer sur la carte,089ea8d7
 HIGH,Élevé,cb1efe60
 HIGHEST,Le plus élevé,5c2f89d6
@@ -2161,6 +2162,7 @@ SETTINGS,Paramètres,38560978
 SETTINGS_FOR,Paramètres pour {0},da07c7b6
 SHARED_WITH_FUNDER,Partagé avec le bailleur de fonds,f59b229b
 SHOW_COLOR_KEY,Afficher la légende des couleurs,7ba69c52
+SHOW_FILTERS,Afficher les filtres,d4143c37
 SHOW_LESS,Afficher moins,d753a0ed
 SHOW_MORE,Afficher plus,43cab9b7
 SHOW_OBSERVATION_ON_MAP,Afficher sur la carte,2c88d696
