@@ -65,8 +65,6 @@ export default function ViewPhotos({ reportId, onPhotoRemove, editable }: Photos
         open={photosModalOpened}
         onClose={closeHandler}
         initialSelectedSlide={selectedSlide}
-        nextButtonLabel={strings.NEXT}
-        prevButtonLabel={strings.PREVIOUS}
         title={strings.PHOTOS}
       />
       <Box display='flex' flexWrap='wrap' flexDirection='row'>

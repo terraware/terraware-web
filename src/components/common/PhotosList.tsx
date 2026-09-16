@@ -25,8 +25,6 @@ export default function PhotosList({ photoUrls, initialSlide, fillSpace }: Photo
         open={photosModalOpened}
         onClose={() => setPhotosModalOpened(false)}
         initialSelectedSlide={selectedSlide}
-        nextButtonLabel={strings.NEXT}
-        prevButtonLabel={strings.PREVIOUS}
         title={strings.PHOTOS}
       />
       <Box display='flex' flexDirection='row' flexWrap='wrap' marginBottom={2} minHeight={fillSpace ? 122 : 'auto'}>
