@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">39.22% </span>
+                <span class="strong">39.1% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>111/283</span>
+                <span class='fraction'>113/289</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">26.19% </span>
+                <span class="strong">25.88% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>44/168</span>
+                <span class='fraction'>44/170</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">41.66% </span>
+                <span class="strong">41.48% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>110/264</span>
+                <span class='fraction'>112/270</span>
             </div>
         
             
@@ -859,7 +859,20 @@
 <a name='L794'></a><a href='#L794'>794</a>
 <a name='L795'></a><a href='#L795'>795</a>
 <a name='L796'></a><a href='#L796'>796</a>
-<a name='L797'></a><a href='#L797'>797</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L797'></a><a href='#L797'>797</a>
+<a name='L798'></a><a href='#L798'>798</a>
+<a name='L799'></a><a href='#L799'>799</a>
+<a name='L800'></a><a href='#L800'>800</a>
+<a name='L801'></a><a href='#L801'>801</a>
+<a name='L802'></a><a href='#L802'>802</a>
+<a name='L803'></a><a href='#L803'>803</a>
+<a name='L804'></a><a href='#L804'>804</a>
+<a name='L805'></a><a href='#L805'>805</a>
+<a name='L806'></a><a href='#L806'>806</a>
+<a name='L807'></a><a href='#L807'>807</a>
+<a name='L808'></a><a href='#L808'>808</a>
+<a name='L809'></a><a href='#L809'>809</a>
+<a name='L810'></a><a href='#L810'>810</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -954,6 +967,8 @@
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">7x</span>
@@ -1007,6 +1022,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1403,14 +1420,18 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1537,6 +1558,11 @@
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1750,6 +1776,8 @@ const SpeciesCheckModal = ({
   const [showComplete, setShowComplete] = useState(false);
   const [acceptedNameIds, setAcceptedNameIds] = useState&lt;Set&lt;number&gt;&gt;(new Set());
   const [appliedStatusCount, setAppliedStatusCount] = useState(0);
+  const [nameHadSuggestions, setNameHadSuggestions] = useState(false);
+  const [nativeHadSuggestions, setNativeHadSuggestions] = useState(false);
 &nbsp;
   const targets = useMemo&lt;LocationTarget[]&gt;(() =&gt; {
     const orgCountryCode = selectedOrganization?.countryCode;
@@ -1815,6 +1843,8 @@ const SpeciesCheckModal = ({
 <span class="cstat-no" title="statement not covered" >    setShowComplete(false);</span>
 <span class="cstat-no" title="statement not covered" >    setAcceptedNameIds(new Set());</span>
 <span class="cstat-no" title="statement not covered" >    setAppliedStatusCount(0);</span>
+<span class="cstat-no" title="statement not covered" >    setNameHadSuggestions(false);</span>
+<span class="cstat-no" title="statement not covered" >    setNativeHadSuggestions(false);</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    runStartRef.current = Date.now();</span>
 <span class="cstat-no" title="statement not covered" >    trackEventRef.current(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_CHECK_RUN, {</span>
@@ -2196,6 +2226,8 @@ const SpeciesCheckModal = ({
 &nbsp;
       const statusesApplied = <span class="cstat-no" title="statement not covered" >nativeSuggestionsApplied + overrides.length;</span>
 <span class="cstat-no" title="statement not covered" >      setAppliedStatusCount(statusesApplied);</span>
+<span class="cstat-no" title="statement not covered" >      setNameHadSuggestions(nameSuggestionsTotal &gt; 0 || appliedNameCount &gt; 0);</span>
+<span class="cstat-no" title="statement not covered" >      setNativeHadSuggestions(nativeSuggestionsTotal &gt; 0);</span>
       const anyChange = <span class="cstat-no" title="statement not covered" >appliedNameCount &gt; 0 || statusesApplied &gt; 0;</span>
 <span class="cstat-no" title="statement not covered" >      if (anyChange) {</span>
 <span class="cstat-no" title="statement not covered" >        setShowComplete(true);</span>
@@ -2211,7 +2243,9 @@ const SpeciesCheckModal = ({
   }, [
     acceptPending,
     appliedNameCount,
+    nameSuggestionsTotal,
     nativeSuggestionsApplied,
+    nativeSuggestionsTotal,
     onClose,
     nativeSections,
     overridingVisibleKeys,
@@ -2351,7 +2385,12 @@ const SpeciesCheckModal = ({
         /&gt;
 &nbsp;
         {showComplete &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
-          &lt;SpeciesCheckCompleteStep namesUpdated={appliedNameCount} statusesApplied={appliedStatusCount} /&gt;
+          &lt;SpeciesCheckCompleteStep
+            namesUpdated={appliedNameCount}
+            statusesApplied={appliedStatusCount}
+            showNames={nameHadSuggestions}
+            showStatuses={nativeHadSuggestions}
+          /&gt;
         )}
 &nbsp;
         {!showComplete &amp;&amp; currentKey === 'name' &amp;&amp; (
@@ -2458,7 +2497,7 @@ export default SpeciesCheckModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-17T17:40:57.718Z
+                at 2026-09-17T19:26:23.194Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>

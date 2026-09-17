@@ -3349,8 +3349,34 @@
 <a name='L3284'></a><a href='#L3284'>3284</a>
 <a name='L3285'></a><a href='#L3285'>3285</a>
 <a name='L3286'></a><a href='#L3286'>3286</a>
-<a name='L3287'></a><a href='#L3287'>3287</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L3287'></a><a href='#L3287'>3287</a>
+<a name='L3288'></a><a href='#L3288'>3288</a>
+<a name='L3289'></a><a href='#L3289'>3289</a>
+<a name='L3290'></a><a href='#L3290'>3290</a>
+<a name='L3291'></a><a href='#L3291'>3291</a>
+<a name='L3292'></a><a href='#L3292'>3292</a>
+<a name='L3293'></a><a href='#L3293'>3293</a>
+<a name='L3294'></a><a href='#L3294'>3294</a>
+<a name='L3295'></a><a href='#L3295'>3295</a>
+<a name='L3296'></a><a href='#L3296'>3296</a>
+<a name='L3297'></a><a href='#L3297'>3297</a>
+<a name='L3298'></a><a href='#L3298'>3298</a>
+<a name='L3299'></a><a href='#L3299'>3299</a>
+<a name='L3300'></a><a href='#L3300'>3300</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -6671,6 +6697,7 @@ export const strings = {
   ACCESSION_HISTORY_NO_EVENTS: 'Aún no hay historial.',
   ACCESSION_ID: 'ID de accesión',
   ACCESSION_NUMBER_CHECKED_IN: '¡La accesión {0} se ha ingresado correctamente!',
+  ACCESSION_WITHDRAW_SUCCESS: 'Semillas retiradas con éxito.',
   ACCESSIONS: 'Accesiones',
   ACCESSIONS_CARD_DESCRIPTION:
     'Después de recolectar sus semillas, registre y visualice sus accesiones. Las accesiones de semillas se pueden ver y analizar por banco de semillas.',
@@ -6983,6 +7010,8 @@ export const strings = {
   BUG_REPORT_DESCRIPTION: 'Infórmenos sobre algún problema que haya detectado al utilizar Terraware.',
   BUG_REPORT_INSTRUCTIONS:
     'Describa detalladamente el problema que encontró (¿Dónde se produjo el problema? ¿Qué hizo antes de encontrarse con el problema? ¿Qué esperaba que ocurriera?).',
+  BULK_WITHDRAW_SPECIES_BANNER:
+    'Se crea un lote de vivero por especie. Solo se pueden agregar "{0}" accesiones a este retiro.',
   BY: 'Por',
   BY_ACCESSION: 'Por accesión',
   BY_BATCH: 'Por lotes',
@@ -7443,6 +7472,7 @@ export const strings = {
   ERROR_PROJECT_SELECT: 'No se puede seleccionar este proyecto.',
   ERROR_SUPPORT_NOTIFIED:
     'Se produjo un error: Nuestro equipo de asistencia técnica está al corriente y trabajando para solucionar el problema.',
+  EST_COUNT: 'Cant. Estimada',
   EST_READY_DATE: 'Fecha estimada de disponibilidad',
   EST_TOTAL_PLANTS_PLANT_DENSITY_AREA: 'Total estimado de plantas (Densidad de plantación x Área)',
   ESTIMATED_BUDGET: 'Presupuesto estimado',
@@ -9371,6 +9401,9 @@ export const strings = {
   SUBSET_COUNT: 'Recuento de subconjuntos',
   SUBSET_COUNT_POSITIVE: 'El recuento de subconjuntos debe ser un número positivo',
   SUBSET_WEIGHT: 'Peso del subconjunto',
+  SUBSET_WEIGHT_COUNT: 'Peso/Cantidad del Subconjunto',
+  SUBSET_WEIGHT_COUNT_TOOLTIP:
+    'La Cantidad Estimada de Semillas se determina por el Peso y la Cantidad del Subconjunto proporcionados para la Cantidad de Accesión.',
   SUBSET_WEIGHT_ERROR: 'El peso del subconjunto debe ser inferior al peso de las semillas',
   SUBSET_WEIGHT_POSITIVE: 'El peso del subconjunto tiene que ser un número positivo',
   SUBSET_WEIGHT_REQUIRED:
@@ -9771,6 +9804,7 @@ export const strings = {
   VERSION_PREVIEW: 'Vista previa de la versión',
   VERSIONS: 'Versiones',
   VIABILITY: 'Viabilidad',
+  VIABILITY_NOT_AVAILABLE_BULK: 'La prueba de viabilidad no está disponible para retiros masivos.',
   VIABILITY_RATE: 'Tasa de viabilidad',
   VIABILITY_RESULT: 'Resultado de viabilidad',
   VIABILITY_TEST: 'Prueba de viabilidad',
@@ -9847,13 +9881,16 @@ export const strings = {
   WITHDRAW: 'Retirar',
   WITHDRAW_ALL: 'Extraer todas',
   WITHDRAW_BY: 'Extraídas por',
+  WITHDRAW_DATE: 'Fecha de retiro',
   WITHDRAW_DATE_PREDATES_RECEIVED_DATE_WARNING:
     'La fecha proporcionada para este retiro es anterior a la fecha en que se registró la cantidad actual de la accesión. Por lo tanto, la cantidad retirada no se restará de la cantidad de la accesión. Después de registrar el retiro, la cantidad puede ajustarse manualmente para reflejar la cantidad retirada. ¿Está seguro de que desea registrar este retiro sin cambios en la cantidad?',
   WITHDRAW_DATE_REQUIRED: 'Fecha de extracción *',
   WITHDRAW_FROM_BATCHES: 'Extraer de Lotes',
   WITHDRAW_INSTRUCTIONS: 'Seleccionar propósito de extracción e ingresar las cantidades a extraer de cada lote.',
+  WITHDRAW_PARTIAL_FAILURE: 'No se pudieron retirar algunas accesiones: {0}.',
   WITHDRAW_QUANTITY: 'Extraer cantidad',
   WITHDRAW_QUANTITY_REQUIRED: 'Extraer cantidad *',
+  WITHDRAW_SAME_SPECIES_ONLY: 'Todas las accesiones seleccionadas deben ser de la misma especie.',
   WITHDRAW_SEEDS: 'Extraer semillas',
   WITHDRAW_SINGLE_NURSERY: 'Solo puede realizar una retirada en bloque de una incubadora a la vez.',
   WITHDRAWAL: 'Retirada',
@@ -9880,6 +9917,8 @@ export const strings = {
   WORKSHOP: 'Taller',
   WORKSHOPS: 'Talleres',
   WOULD_YOU_LIKE_TO_CONTINUE: '¿Desea continuar?',
+  X_ACCESSION: '{0} Accesión',
+  X_ACCESSIONS: '{0} Accesiones',
   X_BATCH: '{0} lote',
   X_BATCHES: '{0} lotes',
   X_HA: '{0} hectáreas',
@@ -9928,7 +9967,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-17T17:40:57.718Z
+                at 2026-09-17T19:26:23.194Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

@@ -3369,8 +3369,34 @@
 <a name='L3304'></a><a href='#L3304'>3304</a>
 <a name='L3305'></a><a href='#L3305'>3305</a>
 <a name='L3306'></a><a href='#L3306'>3306</a>
-<a name='L3307'></a><a href='#L3307'>3307</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L3307'></a><a href='#L3307'>3307</a>
+<a name='L3308'></a><a href='#L3308'>3308</a>
+<a name='L3309'></a><a href='#L3309'>3309</a>
+<a name='L3310'></a><a href='#L3310'>3310</a>
+<a name='L3311'></a><a href='#L3311'>3311</a>
+<a name='L3312'></a><a href='#L3312'>3312</a>
+<a name='L3313'></a><a href='#L3313'>3313</a>
+<a name='L3314'></a><a href='#L3314'>3314</a>
+<a name='L3315'></a><a href='#L3315'>3315</a>
+<a name='L3316'></a><a href='#L3316'>3316</a>
+<a name='L3317'></a><a href='#L3317'>3317</a>
+<a name='L3318'></a><a href='#L3318'>3318</a>
+<a name='L3319'></a><a href='#L3319'>3319</a>
+<a name='L3320'></a><a href='#L3320'>3320</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">39x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -6711,6 +6737,7 @@ export const strings = {
   ACCESSION_HISTORY_NO_EVENTS: 'Aucun historique pour le moment.',
   ACCESSION_ID: "Identifiant de l'accesion",
   ACCESSION_NUMBER_CHECKED_IN: "L'accesion {0} a été enregistrée avec succès !",
+  ACCESSION_WITHDRAW_SUCCESS: 'Semences retirées avec succès.',
   ACCESSIONS: 'Accessions',
   ACCESSIONS_CARD_DESCRIPTION:
     'Collectez des semences, puis enregistrez et visualisez vos accessions. Les accessions de semences peuvent être visualisées et analisées par banque de semences.',
@@ -7025,6 +7052,8 @@ export const strings = {
   BUG_REPORT_DESCRIPTION: "Faites-nous part d'un problème que vous avez rencontré lors de l'utilisation de Terraware.",
   BUG_REPORT_INSTRUCTIONS:
     "Fournissez une description détaillée du problème rencontré. (Où le problème s'est-il produit ? Qu'avez-vous fait avant de rencontrer le problème ? À quoi vous attendiez-vous ?)",
+  BULK_WITHDRAW_SPECIES_BANNER:
+    'Un lot de pépinière est créé par espèce. Seules "{0}" accessions peuvent être ajoutées à ce retrait.',
   BY: 'Par',
   BY_ACCESSION: 'Par accession',
   BY_BATCH: 'Par lot',
@@ -7487,6 +7516,7 @@ export const strings = {
   ERROR_PROJECT_SELECT: "Ce projet n'est pas éligible à la sélection.",
   ERROR_SUPPORT_NOTIFIED:
     'Une erreur s’est produite : notre équipe d’assistance a été informée et travaille à la résolution du problème.',
+  EST_COUNT: 'Nb estimé',
   EST_READY_DATE: 'Date estimée de disponibilité',
   EST_TOTAL_PLANTS_PLANT_DENSITY_AREA: 'Est. total de plantes (densité de plantation × surface)',
   ESTIMATED_BUDGET: 'Budget prévisionnel',
@@ -9432,6 +9462,9 @@ export const strings = {
   SUBSET_COUNT: 'Nombre de sous-ensembles',
   SUBSET_COUNT_POSITIVE: 'Le nombre de sous-ensembles doit être un nombre positif.',
   SUBSET_WEIGHT: 'Poids du sous-ensemble',
+  SUBSET_WEIGHT_COUNT: 'Poids/Nb du sous-ensemble',
+  SUBSET_WEIGHT_COUNT_TOOLTIP:
+    "Le nombre estimé de semences est déterminé par le poids et le nombre du sous-ensemble fournis pour la quantité d'accession.",
   SUBSET_WEIGHT_ERROR: 'Le poids du sous-ensemble doit être inférieur à celui de la semence',
   SUBSET_WEIGHT_POSITIVE: 'Le poids du sous-ensemble doit être un nombre positif',
   SUBSET_WEIGHT_REQUIRED:
@@ -9831,6 +9864,7 @@ export const strings = {
   VERSION_PREVIEW: 'Aperçu de la version',
   VERSIONS: 'Versions',
   VIABILITY: 'Viabilité',
+  VIABILITY_NOT_AVAILABLE_BULK: "Le test de viabilité n'est pas disponible pour les retraits en vrac.",
   VIABILITY_RATE: 'Taux de viabilité',
   VIABILITY_RESULT: 'Résultat de viabilité',
   VIABILITY_TEST: 'Test de viabilité',
@@ -9908,13 +9942,16 @@ export const strings = {
   WITHDRAW: 'Retirer',
   WITHDRAW_ALL: 'Retirer tout',
   WITHDRAW_BY: 'Prélèvement par',
+  WITHDRAW_DATE: 'Date de retrait',
   WITHDRAW_DATE_PREDATES_RECEIVED_DATE_WARNING:
     "La date indiquée pour ce retrait est antérieure à la date à laquelle la quantité actuelle d'accession a été fournie. Par conséquent, la quantité retirée ne sera pas soustraite de la quantité d'accession. Après l'enregistrement du retrait, la quantité peut être ajustée manuellement pour refléter la quantité retirée. Êtes-vous sûr de vouloir enregistrer ce retrait sans modification de la quantité ?",
   WITHDRAW_DATE_REQUIRED: 'Date de retrait *',
   WITHDRAW_FROM_BATCHES: 'Retirer des lots',
   WITHDRAW_INSTRUCTIONS: 'Sélectionnez un but de retrait et saisissez les quantités de chaque lot à retirer.',
+  WITHDRAW_PARTIAL_FAILURE: "Certaines accessions n'ont pas pu être retirées : {0}.",
   WITHDRAW_QUANTITY: 'Quantité retirée',
   WITHDRAW_QUANTITY_REQUIRED: 'Quantité retirée *',
+  WITHDRAW_SAME_SPECIES_ONLY: 'Toutes les accessions sélectionnées doivent être de la même espèce.',
   WITHDRAW_SEEDS: 'Retirer des semences',
   WITHDRAW_SINGLE_NURSERY: "Vous ne pouvez effectuer des retraits en vrac qu'auprès d'une seule pépinière à la fois.",
   WITHDRAWAL: 'Retrait',
@@ -9940,6 +9977,8 @@ export const strings = {
   WORKSHOP: 'Atelier',
   WORKSHOPS: 'Ateliers',
   WOULD_YOU_LIKE_TO_CONTINUE: 'Souhaitez-vous continuer ?',
+  X_ACCESSION: '{0} accession',
+  X_ACCESSIONS: '{0} accessions',
   X_BATCH: '{0} lot',
   X_BATCHES: '{0} lots',
   X_HA: '{0} ha',
@@ -9988,7 +10027,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-17T17:40:57.718Z
+                at 2026-09-17T19:26:23.194Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
