@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">27.27% </span>
+                <span class="strong">72.72% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/11</span>
+                <span class='fraction'>8/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/10</span>
+                <span class='fraction'>8/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">27.27% </span>
+                <span class="strong">72.72% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/11</span>
+                <span class='fraction'>8/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -94,24 +94,24 @@
 <a name='L29'></a><a href='#L29'>29</a>
 <a name='L30'></a><a href='#L30'>30</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">43x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">15x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">15x</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">43x</span>
+<span class="cline-any cline-yes">43x</span>
+<span class="cline-any cline-yes">43x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">43x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -123,8 +123,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { APP_PATHS } from 'src/constants';
 &nbsp;
-const isForcedProductionView = <span class="fstat-no" title="function not covered" >() =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >  return sessionStorage !== undefined &amp;&amp; Boolean(sessionStorage.getItem('productionView'));</span>
+const isForcedProductionView = () =&gt; {
+  return sessionStorage !== undefined &amp;&amp; Boolean(sessionStorage.getItem('productionView'));
 };
 &nbsp;
 const forceProductionView = <span class="fstat-no" title="function not covered" >(val: boolean) =&gt; {</span>
@@ -135,12 +135,12 @@ const forceProductionView = <span class="fstat-no" title="function not covered" 
 };
 &nbsp;
 // Get web app environment
-const useEnvironment = <span class="fstat-no" title="function not covered" >() =&gt; {</span>
-  const isProduction = <span class="cstat-no" title="statement not covered" >isForcedProductionView() || !!window.location.origin.match(/^https:\/\/(www.)?terraware.io/);</span>
-  const isStaging = <span class="cstat-no" title="statement not covered" >!isProduction &amp;&amp; !!window.location.origin.match(/^https:\/\/(www.)?staging.terraware.io/);</span>
-  const isDev = <span class="cstat-no" title="statement not covered" >!(isProduction || isStaging);</span>
+const useEnvironment = () =&gt; {
+  const isProduction = isForcedProductionView() || !!window.location.origin.match(/^https:\/\/(www.)?terraware.io/);
+  const isStaging = !isProduction &amp;&amp; !!window.location.origin.match(/^https:\/\/(www.)?staging.terraware.io/);
+  const isDev = !(isProduction || isStaging);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return {</span>
+  return {
     isProduction,
     isStaging,
     isDev,
@@ -157,7 +157,7 @@ export default useEnvironment;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-17T20:05:07.577Z
+                at 2026-09-17T20:08:24.193Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
