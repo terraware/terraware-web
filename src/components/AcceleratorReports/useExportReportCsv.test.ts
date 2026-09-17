@@ -180,6 +180,18 @@ describe('getIndicatorCsvColumns', () => {
     expect(getIndicatorCsvColumns('participant')).toContain('overrideValue');
   });
 
+  test('keeps the internal indicator fields out of a funder export', () => {
+    expect(getIndicatorCsvColumns('funder')).not.toContain('projectsComments');
+    expect(getIndicatorCsvColumns('funder')).not.toContain('supportingDocumentUrl');
+    expect(getIndicatorCsvColumns('funder')).toContain('progressNotes');
+
+    (['participant', 'console'] as ReportCsvAudience[]).forEach((audience) => {
+      expect(getIndicatorCsvColumns(audience)).toContain('projectsComments');
+      expect(getIndicatorCsvColumns(audience)).toContain('supportingDocumentUrl');
+      expect(getIndicatorCsvColumns(audience)).toContain('progressNotes');
+    });
+  });
+
   test('reports which indicators reach funders only in the console export', () => {
     expect(getIndicatorCsvColumns('console')).toContain('isPublishable');
     expect(getIndicatorCsvColumns('participant')).not.toContain('isPublishable');

@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
@@ -17,20 +17,23 @@ import Link from 'src/components/common/Link';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useTableState from 'src/hooks/useTableState';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { useLazyListObservationResultsQuery } from 'src/queries/generated/observations';
-import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
+import { useLocalization } from 'src/providers/hooks';
+import { makeDateRangeFilterFn, stripColumnFilters } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
+import SelectObservationButton from './SelectObservationButton';
 
 const STORAGE_KEY = 'biomass-measurement-table';
 
 type BiomassRow = {
   observationId: number;
+  monitoringPlotId?: number;
   monitoringPlotNumber?: number;
   monitoringPlotDescription?: string;
   plantingSiteId: number;
@@ -63,7 +66,6 @@ export type BiomassListProps = {
 export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.Element {
   const theme = useTheme();
   const { strings } = useLocalization();
-  const { selectedOrganization } = useOrganization();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { downloadBiomassObservationsCsv } = useObservationExports();
 
@@ -82,8 +84,15 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     showGlobalFilter,
   } = useTableState(STORAGE_KEY, { persistFilters: true });
 
+  const newFiltersEnabled = isEnabled('New Observation Filters');
+  const showSelectObservation = newFiltersEnabled && typeof plantingSiteId === 'number';
+
   const { plantingSites } = useOrganizationPlantingSites();
-  const [listAdHocObservationResults, adHocObservationsResultsResponse] = useLazyListObservationResultsQuery();
+  const { isFetching: isLoading, observations } = useFilteredObservationResults({
+    observationType: 'Biomass Measurements',
+    plantingSiteId,
+    plotType: 'adHoc',
+  });
 
   const plantingSitesNames = useMemo(
     () =>
@@ -97,31 +106,13 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     [plantingSites]
   );
 
-  useEffect(() => {
-    if (selectedOrganization) {
-      void listAdHocObservationResults(
-        {
-          plantingSiteId: plantingSiteId === ALL_PLANTING_SITES ? undefined : plantingSiteId,
-          organizationId: selectedOrganization.id,
-          depth: 'Plant',
-          isAdHoc: true,
-        },
-        true
-      );
-    }
-  }, [listAdHocObservationResults, selectedOrganization, plantingSiteId]);
-
-  const rows = useMemo((): BiomassRow[] => {
-    if (adHocObservationsResultsResponse.isSuccess) {
-      return adHocObservationsResultsResponse.data.observations
-        .filter(
-          (observation) =>
-            observation.type === 'Biomass Measurements' &&
-            observation.biomassMeasurements &&
-            observation.state !== 'Upcoming'
-        )
+  const rows = useMemo(
+    (): BiomassRow[] =>
+      observations
+        .filter((observation) => observation.biomassMeasurements)
         .map((observation) => ({
           observationId: observation.observationId,
+          monitoringPlotId: observation.adHocPlot?.monitoringPlotId,
           monitoringPlotNumber: observation.adHocPlot?.monitoringPlotNumber,
           monitoringPlotDescription: observation.biomassMeasurements?.description,
           plantingSiteId: observation.plantingSiteId,
@@ -129,26 +120,35 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
           completedDate: observation.completedTime,
           totalPlants: observation.biomassMeasurements?.trees.length,
           totalSpecies: observation.biomassMeasurements?.treeSpeciesCount,
-        }));
-    } else {
-      return [];
-    }
-  }, [adHocObservationsResultsResponse, plantingSitesNames]);
+        })),
+    [observations, plantingSitesNames]
+  );
 
   const uniquePlantingSiteNames = useMemo(
     () => Array.from(new Set(rows.map((r) => r.plantingSiteName).filter((n): n is string => !!n))).sort(),
     [rows]
   );
 
-  const PlotNumberCell = useCallback(({ cell }: { cell: MRT_Cell<BiomassRow> }) => {
-    const row = cell.row.original;
-    const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', row.observationId.toString());
-    return (
-      <Link fontSize='16px' to={url}>
-        {row.monitoringPlotNumber}
-      </Link>
-    );
-  }, []);
+  const PlotNumberCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<BiomassRow> }) => {
+      const row = cell.row.original;
+      const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', row.observationId.toString());
+      return (
+        <Box alignItems='center' display='flex' gap={1}>
+          <Link fontSize='16px' to={url}>
+            {row.monitoringPlotNumber}
+          </Link>
+          {showSelectObservation && row.monitoringPlotId !== undefined && (
+            <SelectObservationButton
+              adHocPlot={{ monitoringPlotId: row.monitoringPlotId, plantingSiteId: row.plantingSiteId }}
+              observationId={row.observationId}
+            />
+          )}
+        </Box>
+      );
+    },
+    [showSelectObservation]
+  );
 
   const CompletedDateCell = useCallback(
     ({ cell }: { cell: MRT_Cell<BiomassRow> }) => {
@@ -165,13 +165,14 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     []
   );
 
-  const columns = useMemo<EditableTableColumn<BiomassRow>[]>(
-    () => [
+  const columns = useMemo<EditableTableColumn<BiomassRow>[]>(() => {
+    const biomassColumns: EditableTableColumn<BiomassRow>[] = [
       {
         id: 'monitoringPlotNumber',
         header: strings.PLOT,
         accessorKey: 'monitoringPlotNumber',
         filterVariant: 'range',
+        size: showSelectObservation ? 160 : undefined,
         Cell: PlotNumberCell,
       },
       {
@@ -224,9 +225,18 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         enableHiding: false,
         Cell: ActionsMenuCell,
       },
-    ],
-    [strings, uniquePlantingSiteNames, PlotNumberCell, CompletedDateCell, ActionsMenuCell]
-  );
+    ];
+
+    return newFiltersEnabled ? stripColumnFilters(biomassColumns) : biomassColumns;
+  }, [
+    newFiltersEnabled,
+    strings,
+    showSelectObservation,
+    uniquePlantingSiteNames,
+    PlotNumberCell,
+    CompletedDateCell,
+    ActionsMenuCell,
+  ]);
 
   const onExportBiomassObservations = useCallback(async () => {
     const siteName =
@@ -239,11 +249,6 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   const handleExportClick = useCallback(() => {
     void onExportBiomassObservations();
   }, [onExportBiomassObservations]);
-
-  const isLoading = useMemo(
-    () => adHocObservationsResultsResponse.isFetching,
-    [adHocObservationsResultsResponse.isFetching]
-  );
 
   if (!isLoading && rows.length === 0) {
     return (
@@ -266,7 +271,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
         enableEditing={false}
         enableSorting={true}
         enableGlobalFilter={true}
-        enableColumnFilters={true}
+        enableColumnFilters={!newFiltersEnabled}
         enableColumnOrdering={true}
         storageKey={STORAGE_KEY}
         enablePagination={false}
@@ -306,7 +311,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
                 </Tooltip>
               )}
               <MRT_ToggleGlobalFilterButton table={table} />
-              <MRT_ToggleFiltersButton table={table} />
+              {!newFiltersEnabled && <MRT_ToggleFiltersButton table={table} />}
               <MRT_ShowHideColumnsButton table={table} />
               <MRT_ToggleDensePaddingButton table={table} />
               <MRT_ToggleFullScreenButton table={table} />

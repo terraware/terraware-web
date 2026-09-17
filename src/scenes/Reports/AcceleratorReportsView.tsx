@@ -149,6 +149,7 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
       hierarchicalCrumbs={false}
       leftComponent={PageHeaderLeftComponent}
       rightComponent={rightComponent}
+      stickyHeader={newReportTabEnabled}
       title={strings.REPORTS}
     >
       {printing && selectedReportId !== undefined && (

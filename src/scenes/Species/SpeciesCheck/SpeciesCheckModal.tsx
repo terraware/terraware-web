@@ -28,6 +28,7 @@ import NameCheckStep from './NameCheckStep';
 import NativeCheckStep, { NativeCheckProjectSection } from './NativeCheckStep';
 import { ProjectCheckSummaryProps } from './ProjectCheckSummary';
 import SetLocationStep from './SetLocationStep';
+import SpeciesCheckCompleteStep from './SpeciesCheckCompleteStep';
 import SpeciesCheckStepper from './SpeciesCheckStepper';
 import SuggestionsAppliedCallout from './SuggestionsAppliedCallout';
 import { LocationEdit, LocationTarget, Nativity, ORG_TARGET_KEY, OverrideEdit, projectSpeciesKey } from './types';
@@ -89,6 +90,11 @@ const SpeciesCheckModal = ({
   const [busy, setBusy] = useState(false);
   const [showUpdateLocation, setShowUpdateLocation] = useState(false);
   const [recalculatedTargetKeys, setRecalculatedTargetKeys] = useState<Set<number>>(new Set());
+  const [showComplete, setShowComplete] = useState(false);
+  const [acceptedNameIds, setAcceptedNameIds] = useState<Set<number>>(new Set());
+  const [appliedStatusCount, setAppliedStatusCount] = useState(0);
+  const [nameHadSuggestions, setNameHadSuggestions] = useState(false);
+  const [nativeHadSuggestions, setNativeHadSuggestions] = useState(false);
 
   const targets = useMemo<LocationTarget[]>(() => {
     const orgCountryCode = selectedOrganization?.countryCode;
@@ -151,6 +157,11 @@ const SpeciesCheckModal = ({
     setShowCancel(false);
     setShowUpdateLocation(false);
     setRecalculatedTargetKeys(new Set());
+    setShowComplete(false);
+    setAcceptedNameIds(new Set());
+    setAppliedStatusCount(0);
+    setNameHadSuggestions(false);
+    setNativeHadSuggestions(false);
 
     runStartRef.current = Date.now();
     trackEventRef.current(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_CHECK_RUN, {
@@ -311,6 +322,8 @@ const SpeciesCheckModal = ({
   const nameSuggestionsTotal = nameSuggestionSpecies.length;
   const nameSuggestionsApplied = nameSuggestionSpecies.filter((sp) => nameSelected.has(sp.id)).length;
 
+  const appliedNameCount = acceptedNameIds.size;
+
   const goToStep = useCallback((key: StepKey) => setStep(stepKeys.indexOf(key)), [stepKeys]);
 
   const goBackToLocationStep = useCallback(() => {
@@ -433,7 +446,7 @@ const SpeciesCheckModal = ({
   const onAcceptNames = useCallback(async () => {
     setBusy(true);
     try {
-      const toAccept = speciesWithProblems.filter((sp) => nameSelected.has(sp.id));
+      const toAccept = speciesWithProblems.filter((sp) => nameSelected.has(sp.id) && hasNameSuggestion(sp));
       for (const sp of toAccept) {
         for (const problem of sp.problems ?? []) {
           if (hasSuggestedValue(problem.suggestedValue)) {
@@ -441,6 +454,8 @@ const SpeciesCheckModal = ({
           }
         }
       }
+
+      setAcceptedNameIds((previous) => new Set([...previous, ...toAccept.map((sp) => sp.id)]));
       goToStep('native');
     } catch {
       trackSaveFailed(SAVE_FAILURE_ENTITY_TYPES.nameCheck);
@@ -525,7 +540,17 @@ const SpeciesCheckModal = ({
       }
       trackCheckCompleted(overrides);
       markSubmitted();
-      onClose();
+
+      const statusesApplied = nativeSuggestionsApplied + overrides.length;
+      setAppliedStatusCount(statusesApplied);
+      setNameHadSuggestions(nameSuggestionsTotal > 0 || appliedNameCount > 0);
+      setNativeHadSuggestions(nativeSuggestionsTotal > 0);
+      const anyChange = appliedNameCount > 0 || statusesApplied > 0;
+      if (anyChange) {
+        setShowComplete(true);
+      } else {
+        onClose();
+      }
     } catch {
       trackSaveFailed(SAVE_FAILURE_ENTITY_TYPES.nativeCheck);
       snackbar.toastError();
@@ -534,6 +559,10 @@ const SpeciesCheckModal = ({
     }
   }, [
     acceptPending,
+    appliedNameCount,
+    nameSuggestionsTotal,
+    nativeSuggestionsApplied,
+    nativeSuggestionsTotal,
     onClose,
     nativeSections,
     overridingVisibleKeys,
@@ -568,6 +597,10 @@ const SpeciesCheckModal = ({
   }, [currentKey, markSubmitted, onClose, projects.length, trackEvent]);
 
   const middleButtons = useMemo<JSX.Element[]>(() => {
+    if (showComplete) {
+      return [<Button key='close' id='closeSpeciesCheck' label={strings.CLOSE} onClick={onClose} />];
+    }
+
     const cancelButton = (
       <Button
         key='cancel'
@@ -640,9 +673,11 @@ const SpeciesCheckModal = ({
     goBackToLocationStep,
     goToStep,
     onAcceptNames,
+    onClose,
     onDone,
     onSetLocations,
     requestCancel,
+    showComplete,
     targets.length,
   ]);
 
@@ -653,16 +688,29 @@ const SpeciesCheckModal = ({
       {busy && <BusySpinner withSkrim />}
       <DialogBox
         open={open}
-        onClose={requestCancel}
+        onClose={showComplete ? onClose : requestCancel}
         title={title}
         size='x-large'
         scrolled
         skrim
         middleButtons={middleButtons}
       >
-        <SpeciesCheckStepper steps={stepLabels} activeStep={Math.min(step, stepLabels.length - 1)} />
+        <SpeciesCheckStepper
+          steps={stepLabels}
+          activeStep={Math.min(step, stepLabels.length - 1)}
+          allComplete={showComplete}
+        />
 
-        {currentKey === 'name' && (
+        {showComplete && (
+          <SpeciesCheckCompleteStep
+            namesUpdated={appliedNameCount}
+            statusesApplied={appliedStatusCount}
+            showNames={nameHadSuggestions}
+            showStatuses={nativeHadSuggestions}
+          />
+        )}
+
+        {!showComplete && currentKey === 'name' && (
           <>
             <Typography
               fontSize='16px'
@@ -679,7 +727,7 @@ const SpeciesCheckModal = ({
           </>
         )}
 
-        {currentKey === 'native' && nativeSuggestionsTotal > 0 && (
+        {!showComplete && currentKey === 'native' && nativeSuggestionsTotal > 0 && (
           <>
             <Typography
               fontSize='16px'
@@ -694,7 +742,7 @@ const SpeciesCheckModal = ({
           </>
         )}
 
-        {currentKey === 'setLocation' && (
+        {!showComplete && currentKey === 'setLocation' && (
           <>
             <Typography
               fontSize='16px'
@@ -717,7 +765,7 @@ const SpeciesCheckModal = ({
             />
           </>
         )}
-        {currentKey === 'name' && (
+        {!showComplete && currentKey === 'name' && (
           <NameCheckStep
             summaries={nameSummaries}
             speciesWithProblems={speciesWithProblems}
@@ -725,7 +773,7 @@ const SpeciesCheckModal = ({
             onToggleSpecies={toggleName}
           />
         )}
-        {currentKey === 'native' && (
+        {!showComplete && currentKey === 'native' && (
           <NativeCheckStep
             sections={nativeSections}
             overridingKeys={overridingVisibleKeys}

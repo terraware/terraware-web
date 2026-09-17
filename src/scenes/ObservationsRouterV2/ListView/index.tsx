@@ -10,28 +10,35 @@ import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessa
 import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useStickyPlantingSiteId, { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useLazyCountObservationsQuery } from 'src/queries/search/observations';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import { isAdmin } from 'src/utils/organization';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ObservationMapWrapper from '../Map';
+import ObservationFiltersProvider, { PlotType, useObservationFilters } from '../ObservationFiltersProvider';
 import useObservablePlantingSites from '../Schedule/useObservablePlantingSites';
+import SelectedObservationProvider from '../SelectedObservationProvider';
+import useFilteredObservationResults from '../useFilteredObservationResults';
 import BiomassList from './BiomassList';
+import ObservationFilters from './ObservationFilters';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
 import PlantMonitoringList from './PlantMonitoringList';
 
-const ObservationListView = (): JSX.Element => {
+const ObservationListViewContent = (): JSX.Element => {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
   const navigate = useSyncNavigate();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
+  const newFiltersEnabled = isEnabled('New Observation Filters');
+
+  const { observationType, plotType, setPlotType } = useObservationFilters();
 
   const observableSites = useObservablePlantingSites();
   const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites();
@@ -105,9 +112,6 @@ const ObservationListView = (): JSX.Element => {
   const { inProgress: survivalRateRecalculationInProgress } =
     useSurvivalRateCalculationInProgress(plantingSiteIdFilter);
 
-  const [countObservations, countObservationsResult] = useLazyCountObservationsQuery();
-  const hasObservationsResults = useMemo(() => !!countObservationsResult.data, [countObservationsResult]);
-
   const plantingSiteOptions = useMemo((): DropdownItem[] => {
     const sitesOptions = plantingSites
       .map((site) => ({
@@ -160,7 +164,13 @@ const ObservationListView = (): JSX.Element => {
       {
         id: 'plantMonitoring',
         label: strings.PLANT_MONITORING,
-        children: <PlantMonitoringList plantingSiteId={selectedPlantingSiteId} />,
+        children: (
+          <PlantMonitoringList
+            onPlotTypeChange={setPlotType}
+            plantingSiteId={selectedPlantingSiteId}
+            plotType={plotType}
+          />
+        ),
       },
       {
         id: 'biomassMeasurements',
@@ -168,7 +178,7 @@ const ObservationListView = (): JSX.Element => {
         children: <BiomassList plantingSiteId={selectedPlantingSiteId} />,
       },
     ],
-    [selectedPlantingSiteId, strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]
+    [plotType, selectedPlantingSiteId, setPlotType, strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]
   );
 
   const { activeTab, onChangeTab } = useStickyTabs({
@@ -198,58 +208,38 @@ const ObservationListView = (): JSX.Element => {
     }
   }, [navigate, scheduleObservationEnabled, strings.SCHEDULE_OBSERVATION]);
 
-  useEffect(() => {
-    if (selectedOrganization) {
-      if (activeTab === 'biomassMeasurements') {
-        void countObservations(
-          {
-            organizationId: selectedOrganization.id,
-            observationType: 'Biomass Measurements',
-            plantingSiteId: plantingSiteIdFilter,
-            state: ['Abandoned', 'Completed', 'InProgress', 'Overdue'],
-          },
-          true
-        );
-      } else if (activeTab === 'plantMonitoring') {
-        void countObservations(
-          {
-            organizationId: selectedOrganization.id,
-            observationType: 'Monitoring',
-            plantingSiteId: plantingSiteIdFilter,
-            state: ['Abandoned', 'Completed', 'InProgress', 'Overdue'],
-          },
-          true
-        );
-      }
-    }
-  }, [activeTab, countObservations, selectedOrganization, plantingSiteIdFilter]);
+  const countedObservationType = newFiltersEnabled
+    ? observationType
+    : isBiomass
+      ? 'Biomass Measurements'
+      : 'Monitoring';
 
-  return (
-    <Page
-      title={isMobile ? strings.OBSERVATIONS : PageHeaderPlantingSiteDropdown}
-      rightComponent={scheduleObservationButton}
-      leftComponent={isMobile ? PageHeaderPlantingSiteDropdown : undefined}
-      leftComponentGridSize={isMobile ? 7 : 0}
-      rightComponentGridSize={4}
-    >
-      <ObservationsEventsNotification />
-      {activeTab === 'plantMonitoring' && (
-        <>
-          <SurvivalRateMessageV2 selectedPlantingSiteId={plantingSiteIdFilter} />
-          <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
-        </>
-      )}
-      <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs}>
-        {hasObservationsResults && (
-          <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
-            <ObservationMapWrapper
-              isBiomass={isBiomass}
-              plantingSiteId={plantingSiteIdFilter}
-              selectPlantingSiteId={selectPlantingSite}
-            />
-          </Card>
-        )}
-      </Tabs>
+  const countedPlotType: PlotType = countedObservationType === 'Biomass Measurements' ? 'adHoc' : plotType;
+
+  const { observations: filteredObservations } = useFilteredObservationResults({
+    observationType: countedObservationType,
+    plantingSiteId: selectedPlantingSiteId,
+    plotType: countedPlotType,
+  });
+  const hasObservationsResults = filteredObservations.length > 0;
+
+  const observationMapCard = useMemo(
+    () =>
+      hasObservationsResults && (
+        <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
+          <ObservationMapWrapper
+            observationType={countedObservationType}
+            plantingSiteId={plantingSiteIdFilter}
+            plotType={countedPlotType}
+            selectPlantingSiteId={selectPlantingSite}
+          />
+        </Card>
+      ),
+    [countedObservationType, countedPlotType, hasObservationsResults, plantingSiteIdFilter, selectPlantingSite, theme]
+  );
+
+  const mobileAppCard = useMemo(
+    () => (
       <Box marginTop={'24px'} width={'100%'}>
         <MobileAppCard
           description={strings.OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION}
@@ -261,8 +251,70 @@ const ObservationListView = (): JSX.Element => {
           dismissPreferenceId='dismissObservationsMobileAppCard'
         />
       </Box>
+    ),
+    [strings]
+  );
+
+  const survivalRateMessages = useMemo(
+    () =>
+      countedObservationType === 'Monitoring' && (
+        <>
+          <SurvivalRateMessageV2 selectedPlantingSiteId={plantingSiteIdFilter} />
+          <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
+        </>
+      ),
+    [countedObservationType, plantingSiteIdFilter, survivalRateRecalculationInProgress]
+  );
+
+  if (newFiltersEnabled) {
+    return (
+      <Page
+        collapsibleHeader
+        rightComponent={scheduleObservationButton}
+        stickyHeader
+        leftComponent={isMobile ? PageHeaderPlantingSiteDropdown : undefined}
+        leftComponentGridSize={isMobile ? 7 : 0}
+        rightComponentGridSize={4}
+        subHeader={<ObservationFilters plantingSiteId={selectedPlantingSiteId} />}
+        title={isMobile ? strings.OBSERVATIONS : PageHeaderPlantingSiteDropdown}
+      >
+        <ObservationsEventsNotification />
+        {survivalRateMessages}
+        {observationMapCard}
+        {observationType === 'Biomass Measurements' ? (
+          <BiomassList plantingSiteId={selectedPlantingSiteId} />
+        ) : (
+          <PlantMonitoringList plantingSiteId={selectedPlantingSiteId} plotType={plotType} />
+        )}
+        {mobileAppCard}
+      </Page>
+    );
+  }
+
+  return (
+    <Page
+      title={isMobile ? strings.OBSERVATIONS : PageHeaderPlantingSiteDropdown}
+      rightComponent={scheduleObservationButton}
+      leftComponent={isMobile ? PageHeaderPlantingSiteDropdown : undefined}
+      leftComponentGridSize={isMobile ? 7 : 0}
+      rightComponentGridSize={4}
+    >
+      <ObservationsEventsNotification />
+      {survivalRateMessages}
+      <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs}>
+        {observationMapCard}
+      </Tabs>
+      {mobileAppCard}
     </Page>
   );
 };
+
+const ObservationListView = (): JSX.Element => (
+  <ObservationFiltersProvider>
+    <SelectedObservationProvider>
+      <ObservationListViewContent />
+    </SelectedObservationProvider>
+  </ObservationFiltersProvider>
+);
 
 export default ObservationListView;

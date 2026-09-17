@@ -48,4 +48,16 @@ const makeDateRangeFilterFn =
     return true;
   };
 
-export { makeDateRangeFilterFn };
+/** Drops the per-column filter configuration, for tables whose filtering lives outside the table. */
+const stripColumnFilters = <T extends { filterFn?: unknown; filterSelectOptions?: unknown; filterVariant?: unknown }>(
+  columns: T[]
+): T[] =>
+  columns.map((column) => {
+    const stripped = { ...column };
+    delete stripped.filterFn;
+    delete stripped.filterSelectOptions;
+    delete stripped.filterVariant;
+    return stripped;
+  });
+
+export { makeDateRangeFilterFn, stripColumnFilters };

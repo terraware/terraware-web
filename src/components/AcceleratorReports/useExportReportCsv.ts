@@ -178,9 +178,10 @@ export const getIndicatorCsvColumns = (audience: ReportCsvAudience): IndicatorCs
   'cumulativeValue',
   'target',
   'endOfProjectTarget',
-  'projectsComments',
+  // the project's own comments and reference material are for internal readers
+  ...(audience === 'funder' ? [] : (['projectsComments'] as IndicatorCsvColumn[])),
   'progressNotes',
-  'supportingDocumentUrl',
+  ...(audience === 'funder' ? [] : (['supportingDocumentUrl'] as IndicatorCsvColumn[])),
   // the published payload has no Terraware-calculated values to report on
   ...(audience === 'funder' ? [] : (['systemValue', 'overrideValue'] as IndicatorCsvColumn[])),
   // only the console shows which indicators reach funders

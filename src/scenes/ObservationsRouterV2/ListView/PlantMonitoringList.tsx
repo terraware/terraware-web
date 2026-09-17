@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
 import { Box, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
 import { Dropdown, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
@@ -20,13 +20,12 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
-import { useListObservationResults } from 'src/hooks/observations';
+import isEnabled from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
-import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
+import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
-import { useLazyListObservationResultsQuery } from 'src/queries/generated/observations';
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { useLazyGetAllT0SiteDataSetQuery } from 'src/queries/generated/t0';
 import { useLazyGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
@@ -34,18 +33,21 @@ import { AdHocObservationResults, ObservationState, getStatus } from 'src/types/
 import { MultiPolygon } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { isAdmin } from 'src/utils/organization';
-import { makeDateRangeFilterFn } from 'src/utils/tableFilters';
+import { makeDateRangeFilterFn, stripColumnFilters } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { useAbandonObservationModal } from '../Abandon';
+import { PlotType } from '../ObservationFiltersProvider';
 import { exportAdHocObservationsResults } from '../exportAdHocObservations';
+import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
-
-type PlotSelectionType = 'assigned' | 'adHoc';
+import SelectObservationButton from './SelectObservationButton';
 
 type PlantMonitoringRow = {
   adHocPlotNumber?: number;
+  monitoringPlotId?: number;
   observationId: number;
+  plantingSiteId: number;
   observationDate?: string;
   observationState?: ObservationState;
   state: string;
@@ -118,10 +120,12 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
 };
 
 type PlantMonitoringListProps = {
+  onPlotTypeChange?: (plotType: PlotType) => void;
   plantingSiteId?: PlantingSiteId;
+  plotType: PlotType;
 };
 
-const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
+const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: PlantMonitoringListProps) => {
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
   const defaultTimezone = useDefaultTimeZone().get().id;
@@ -130,38 +134,19 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const { isMobile } = useDeviceInfo();
   const navigate = useSyncNavigate();
 
-  const getPlotSelectionFromSession = (): PlotSelectionType => {
-    try {
-      return (sessionStorage.getItem('plot-selection') || 'assigned') as PlotSelectionType;
-    } catch (e) {
-      return 'assigned';
-    }
-  };
-
-  const writePlotSelectionToSession = (selection: PlotSelectionType): void => {
-    try {
-      sessionStorage.setItem('plot-selection', selection);
-    } catch (e) {
-      /* empty */
-    }
-  };
-
-  const [selectedPlotSelection, setSelectedPlotSelection] = useState<PlotSelectionType>(getPlotSelectionFromSession);
-  const makePlotSelection = useCallback((selection: PlotSelectionType) => {
-    setSelectedPlotSelection(selection);
-    writePlotSelectionToSession(selection);
-  }, []);
+  const isAdHoc = plotType === 'adHoc';
+  const newFiltersEnabled = isEnabled('New Observation Filters');
+  const showSelectObservation = newFiltersEnabled && typeof plantingSiteId === 'number';
 
   const assignedTableState = useTableState(ASSIGNED_STORAGE_KEY, { persistFilters: true });
   const adHocTableState = useTableState(ADHOC_STORAGE_KEY, { persistFilters: true });
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
-  const listObservationsResultsResponse = useListObservationResults({
-    organizationId: selectedPlotSelection !== 'adHoc' ? selectedOrganization?.id : undefined,
+  const { isLoading, observations: observationResults } = useFilteredObservationResults({
+    observationType: 'Monitoring',
     plantingSiteId,
-    depth: 'Stratum',
+    plotType,
   });
-  const [listAdHocObservationResults, listAdHocObservationResultsResponse] = useLazyListObservationResultsQuery();
   const [getT0SiteDataSet, getT0SiteDataSetResponse] = useLazyGetAllT0SiteDataSetQuery();
   const [getPlotsWithObservations, getPlotsWithObservationsResponse] = useLazyGetPlotsWithObservationsQuery();
 
@@ -169,11 +154,6 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const plotsWithObservations = useMemo(
     () => getPlotsWithObservationsResponse.data ?? [],
     [getPlotsWithObservationsResponse.data]
-  );
-
-  const isLoading = useMemo(
-    () => listObservationsResultsResponse.isLoading || listAdHocObservationResultsResponse.isLoading,
-    [listAdHocObservationResultsResponse.isLoading, listObservationsResultsResponse.isLoading]
   );
 
   const plantingSitesById = useMemo(
@@ -189,45 +169,11 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   );
 
   useEffect(() => {
-    if (selectedOrganization && selectedPlotSelection === 'adHoc') {
-      void listAdHocObservationResults(
-        {
-          organizationId: selectedOrganization.id,
-          plantingSiteId: plantingSiteId === ALL_PLANTING_SITES ? undefined : plantingSiteId,
-          depth: 'Plant',
-          isAdHoc: true,
-        },
-        true
-      );
-    }
-  }, [listAdHocObservationResults, selectedPlotSelection, selectedOrganization, plantingSiteId]);
-
-  useEffect(() => {
     if (typeof plantingSiteId === 'number') {
       void getT0SiteDataSet(plantingSiteId, true);
       void getPlotsWithObservations(plantingSiteId, true);
     }
   }, [getPlotsWithObservations, getT0SiteDataSet, plantingSiteId]);
-
-  const observationResults = useMemo(() => {
-    if (selectedPlotSelection === 'adHoc') {
-      if (listAdHocObservationResultsResponse.isSuccess) {
-        return listAdHocObservationResultsResponse.data.observations.filter(
-          (observation) => observation.type === 'Monitoring' && observation.state !== 'Upcoming'
-        );
-      } else {
-        return [];
-      }
-    } else {
-      if (listObservationsResultsResponse.isSuccess) {
-        return listObservationsResultsResponse.data.observations.filter(
-          (observation) => observation.type === 'Monitoring' && observation.state !== 'Upcoming'
-        );
-      } else {
-        return [];
-      }
-    }
-  }, [listAdHocObservationResultsResponse, listObservationsResultsResponse, selectedPlotSelection]);
 
   const rows = useMemo(
     () =>
@@ -244,20 +190,20 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         const completedDate = observationResult.completedTime ?? undefined;
         const observationDate = completedDate ?? observationResult.startDate;
         const adHocPlot = observationResult.adHocPlot;
-        const species = selectedPlotSelection === 'adHoc' ? adHocPlot?.species ?? [] : observationResult.species;
+        const species = isAdHoc ? adHocPlot?.species ?? [] : observationResult.species;
         const totalLive =
           species.length > 0
             ? species.reduce((total, plantSpecies) => (total += plantSpecies.totalLive), 0)
             : undefined;
 
-        const totalPlants =
-          selectedPlotSelection === 'adHoc' ? adHocPlot?.totalPlants ?? 0 : observationResult.totalPlants;
-        const totalSpecies =
-          selectedPlotSelection === 'adHoc' ? adHocPlot?.totalSpecies ?? 0 : observationResult.totalSpecies;
+        const totalPlants = isAdHoc ? adHocPlot?.totalPlants ?? 0 : observationResult.totalPlants;
+        const totalSpecies = isAdHoc ? adHocPlot?.totalSpecies ?? 0 : observationResult.totalSpecies;
 
         return {
           adHocPlotNumber: observationResult.adHocPlot?.monitoringPlotNumber,
+          monitoringPlotId: observationResult.adHocPlot?.monitoringPlotId,
           observationId: observationResult.observationId,
+          plantingSiteId: observationResult.plantingSiteId,
           observationDate,
           observationState: observationResult.state,
           state: getStatus(observationResult.state, strings),
@@ -271,7 +217,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           completedDate,
         };
       }),
-    [observationResults, plantingSitesById, selectedPlotSelection, strings]
+    [isAdHoc, observationResults, plantingSitesById, strings]
   );
 
   const uniqueStatuses = useMemo(
@@ -301,23 +247,37 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       const row = cell.row.original;
       const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', row.observationId.toString());
       return (
-        <Link fontSize='16px' to={url}>
-          {row.observationDate ? getShortDate(row.observationDate, activeLocale) : null}
-        </Link>
+        <Box alignItems='center' display='flex' gap={1}>
+          <Link fontSize='16px' to={url}>
+            {row.observationDate ? getShortDate(row.observationDate, activeLocale) : null}
+          </Link>
+          {showSelectObservation && <SelectObservationButton observationId={row.observationId} />}
+        </Box>
       );
     },
-    [activeLocale]
+    [activeLocale, showSelectObservation]
   );
 
-  const AdHocPlotNumberCell = useCallback(({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => {
-    const row = cell.row.original;
-    const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', row.observationId.toString());
-    return (
-      <Link fontSize='16px' to={url}>
-        {row.adHocPlotNumber}
-      </Link>
-    );
-  }, []);
+  const AdHocPlotNumberCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => {
+      const row = cell.row.original;
+      const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', row.observationId.toString());
+      return (
+        <Box alignItems='center' display='flex' gap={1}>
+          <Link fontSize='16px' to={url}>
+            {row.adHocPlotNumber}
+          </Link>
+          {showSelectObservation && row.monitoringPlotId !== undefined && (
+            <SelectObservationButton
+              adHocPlot={{ monitoringPlotId: row.monitoringPlotId, plantingSiteId: row.plantingSiteId }}
+              observationId={row.observationId}
+            />
+          )}
+        </Box>
+      );
+    },
+    [showSelectObservation]
+  );
 
   const StrataCell = useCallback(
     ({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => {
@@ -351,7 +311,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       {
         id: 'observationDate',
         header: strings.DATE,
-        size: 180,
+        size: showSelectObservation ? 230 : 180,
         accessorFn: (row) => {
           const dateStr = row.observationDate;
           if (!dateStr) {
@@ -442,23 +402,26 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       },
     ];
 
-    if (scheduleObservationsEnabled) {
-      return [
-        ...baseColumns,
-        {
-          id: 'actionsMenu',
-          header: '',
-          accessorFn: () => null,
-          enableHiding: false,
-          Cell: ActionsMenuCell,
-        },
-      ];
-    }
-    return baseColumns;
+    const columns = scheduleObservationsEnabled
+      ? [
+          ...baseColumns,
+          {
+            id: 'actionsMenu',
+            header: '',
+            accessorFn: () => null,
+            enableHiding: false,
+            Cell: ActionsMenuCell,
+          },
+        ]
+      : baseColumns;
+
+    return newFiltersEnabled ? stripColumnFilters(columns) : columns;
   }, [
+    newFiltersEnabled,
     strings,
     uniqueStatuses,
     uniquePlantingSiteNames,
+    showSelectObservation,
     scheduleObservationsEnabled,
     ObservationDateCell,
     StrataCell,
@@ -468,12 +431,13 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   ]);
 
   const adHocColumns = useMemo((): EditableTableColumn<PlantMonitoringRow>[] => {
-    return [
+    const columns: EditableTableColumn<PlantMonitoringRow>[] = [
       {
         id: 'adHocPlotNumber',
         header: strings.PLOT,
         accessorKey: 'adHocPlotNumber',
         filterVariant: 'range',
+        size: showSelectObservation ? 160 : undefined,
         Cell: AdHocPlotNumberCell,
       },
       {
@@ -523,16 +487,19 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         Cell: NumberCell,
       },
     ];
-  }, [strings, uniquePlantingSiteNames, AdHocPlotNumberCell, CompletedDateCell, NumberCell]);
+    return newFiltersEnabled ? stripColumnFilters(columns) : columns;
+  }, [
+    newFiltersEnabled,
+    strings,
+    showSelectObservation,
+    uniquePlantingSiteNames,
+    AdHocPlotNumberCell,
+    CompletedDateCell,
+    NumberCell,
+  ]);
 
   const onExportAdHocObservationResults = useCallback(() => {
-    if (!listAdHocObservationResultsResponse.isSuccess) {
-      return;
-    }
-
-    const adHocResults = listAdHocObservationResultsResponse.data.observations.filter(
-      (observation) => observation.type === 'Monitoring' && observation.state !== 'Upcoming' && observation.adHocPlot
-    );
+    const adHocResults = observationResults.filter((observation) => observation.adHocPlot);
 
     if (adHocResults.length === 0) {
       return;
@@ -557,30 +524,34 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
     const selectedSite = typeof plantingSiteId === 'number' ? plantingSitesById[plantingSiteId] : undefined;
     void exportAdHocObservationsResults({ adHocObservationsResults, plantingSite: selectedSite });
-  }, [defaultTimezone, listAdHocObservationResultsResponse, plantingSiteId, plantingSitesById]);
+  }, [defaultTimezone, observationResults, plantingSiteId, plantingSitesById]);
 
   const plotSelectionToolbar = useMemo(
     () => (
       <Box display='flex' flexDirection='row' alignItems='center' gap={1}>
-        <Typography fontSize='16px' fontWeight={500}>
-          {strings.PLOT_SELECTION}
-        </Typography>
-        <Dropdown
-          id='plot-selection-selector'
-          onChange={(newValue) => makePlotSelection(newValue as PlotSelectionType)}
-          options={[
-            { label: strings.ASSIGNED, value: 'assigned' },
-            { label: strings.AD_HOC, value: 'adHoc' },
-          ]}
-          selectedValue={selectedPlotSelection}
-          selectStyles={{
-            inputContainer: { maxWidth: '160px' },
-            optionsContainer: { maxWidth: '160px' },
-          }}
-          fixedMenu
-          fullWidth
-        />
-        {typeof plantingSiteId === 'number' && selectedPlotSelection === 'assigned' && rows.length > 0 && (
+        {onPlotTypeChange && (
+          <>
+            <Typography fontSize='16px' fontWeight={500}>
+              {strings.PLOT_SELECTION}
+            </Typography>
+            <Dropdown
+              id='plot-selection-selector'
+              onChange={(newValue) => onPlotTypeChange(newValue as PlotType)}
+              options={[
+                { label: strings.ASSIGNED, value: 'assigned' },
+                { label: strings.AD_HOC, value: 'adHoc' },
+              ]}
+              selectedValue={plotType}
+              selectStyles={{
+                inputContainer: { maxWidth: '160px' },
+                optionsContainer: { maxWidth: '160px' },
+              }}
+              fixedMenu
+              fullWidth
+            />
+          </>
+        )}
+        {typeof plantingSiteId === 'number' && !isAdHoc && rows.length > 0 && (
           <Box display='flex' alignItems='center'>
             <Link
               onClick={navigateToSurvivalRateSettings}
@@ -608,13 +579,14 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
       </Box>
     ),
     [
+      isAdHoc,
       isMobile,
       navigateToSurvivalRateSettings,
+      onPlotTypeChange,
       plantingSiteId,
       plotsWithObservations.length,
+      plotType,
       rows.length,
-      selectedPlotSelection,
-      makePlotSelection,
       strings.AD_HOC,
       strings.ASSIGNED,
       strings.PLOT_SELECTION,
@@ -675,9 +647,9 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
         <EmptyStateContent
           title={''}
           subtitle={
-            selectedPlotSelection === 'assigned'
-              ? [strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
-              : [strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
+            isAdHoc
+              ? [strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
+              : [strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
           }
         />
       </Card>
@@ -686,7 +658,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
 
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
-      {selectedPlotSelection === 'assigned' && (
+      {!isAdHoc && (
         <EditableTable
           key='assigned-plant-monitoring-table'
           clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
@@ -695,7 +667,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           enableEditing={false}
           enableSorting={true}
           enableGlobalFilter={true}
-          enableColumnFilters={true}
+          enableColumnFilters={!newFiltersEnabled}
           enableColumnOrdering={true}
           storageKey={ASSIGNED_STORAGE_KEY}
           enablePagination={false}
@@ -723,7 +695,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
             renderToolbarInternalActions: ({ table }) => (
               <Box display='flex' gap={0.5}>
                 <MRT_ToggleGlobalFilterButton table={table} />
-                <MRT_ToggleFiltersButton table={table} />
+                {!newFiltersEnabled && <MRT_ToggleFiltersButton table={table} />}
                 <MRT_ShowHideColumnsButton table={table} />
                 <MRT_ToggleDensePaddingButton table={table} />
                 <MRT_ToggleFullScreenButton table={table} />
@@ -733,7 +705,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           sx={{ padding: 0 }}
         />
       )}
-      {selectedPlotSelection === 'adHoc' && (
+      {isAdHoc && (
         <EditableTable
           key='ad-hoc-plant-monitoring-table'
           clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
@@ -742,7 +714,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
           enableEditing={false}
           enableSorting={true}
           enableGlobalFilter={true}
-          enableColumnFilters={true}
+          enableColumnFilters={!newFiltersEnabled}
           enableColumnOrdering={true}
           storageKey={ADHOC_STORAGE_KEY}
           enablePagination={false}
@@ -777,7 +749,7 @@ const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
                   </Tooltip>
                 )}
                 <MRT_ToggleGlobalFilterButton table={table} />
-                <MRT_ToggleFiltersButton table={table} />
+                {!newFiltersEnabled && <MRT_ToggleFiltersButton table={table} />}
                 <MRT_ShowHideColumnsButton table={table} />
                 <MRT_ToggleDensePaddingButton table={table} />
                 <MRT_ToggleFullScreenButton table={table} />

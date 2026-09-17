@@ -168,6 +168,8 @@ ALL_PROJECTS,Todos los proyectos,4eb0ec5d
 ALL_SECTIONS,Todas las secciones,d3d73b24
 ALL_SITES,Todos los sitios,8c420082
 ALL_SPECIES,Todas las especies,5622801f
+ALL_STATUSES,Todos los estados,81aeaa55
+ALL_STRATA,Todos los estratos,acfdca71
 ALL_VARIABLES,Todas las variables,1fe9cddb
 ALLOCATED,Asignado,1105670f
 ALLOCATED_FOR_TARGET,Asignado al objetivo,b2860a99
@@ -232,6 +234,7 @@ ASSIGNED_LOCATION,Ubicación asignada,9e0b2077
 ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El Número de Plantas Vivas por Especie muestra la cantidad de plantas observadas por especie registradas como vivas. No se incluyen las plantas registradas como preexistentes o cuya especie es desconocida.,526a70bc
 ASSIGNED_PLOT_OBSERVATION,Observación de Parcela Asignada,9175acf6
 ASSIGNED_PLOT_OBSERVATION_TOOLTIP,Seleccione una Observación Asignada de Parcela para ver los datos de la observación en el mapa.,2a1963a4
+ASSIGNED_PLOTS,Parcelas asignadas,f3fc5925
 AT_RISK,En riesgo,b2f3373a
 ATTACH_IMAGES_OR_VIDEOS,Adjunte imágenes o videos,c229aa87
 ATTACHMENT_DESCRIPTION,Adjunte hasta {0} archivos. Cada archivo tiene un tamaño máximo de {1} MB.,8ba18a63
@@ -902,7 +905,9 @@ HERBACEOUS_ABUNDANCE_SQUARE_COUNT,Abundancia de herbáceas (conteo por cuadrado)
 HERBACEOUS_COVER_PERCENT,Cobertura Herbácea %,e04acd60
 HERE,aquí,fae8bfa6
 HIDE_ALL,Ocultar todas,465040a6
+HIDE_FILTERS,Ocultar filtros,0fdbb60d
 HIDE_ON_MAP,Ocultar en el mapa,089ea8d7
+HIDE_TITLE_BAR,Ocultar barra de título,e9b3ee43
 HIGH,Alto,cb1efe60
 HIGHEST,Más alta,5c2f89d6
 HIGHLIGHTED_ACTIVITY,Actividad destacada,483c0ed0
@@ -1227,6 +1232,7 @@ MONITORING_PLOT,Parcela de vigilancia,97de3243
 MONITORING_PLOT_REQUIRED,La parcela de monitoreo es obligatoria.,ba488e0f
 MONITORING_PLOT_TYPE,Tipo de parcela de vigilancia,5269e047
 MONITORING_PLOTS,Control de parcelas,42428fbb
+MONITORING_TYPE,Tipo de monitoreo,c6fa7c35
 MONITORS,Monitores,5783929b
 MONOCULTURE,Monocultivo,7499be9c
 MONTH_01,Enero,735450e1
@@ -1783,6 +1789,7 @@ PROJECT_INTERNAL_USER_ROLE_SOCIAL_LEAD,Responsable social,87aa1342
 PROJECT_LEAD,Jefe de proyecto,abaeba3a
 PROJECT_LINKS,Enlaces del proyecto,b34cdb0e
 PROJECT_NAME,Nombre del proyecto,17451aa2
+PROJECT_NAME_IN_USE,"""{0}"" ya está en uso. Por favor, proporcione un nuevo nombre.",4f57826b
 PROJECT_NATIVE_STATUS,Estado nativo del proyecto,40cf628a
 PROJECT_NOT_LISTED_PUBLISH,Debe publicarse un perfil de proyecto para que aparezca en esta lista.,0d9b8c84
 PROJECT_NOTES,Notas informativas adicionales sobre el proyecto,0c985c39
@@ -2164,9 +2171,12 @@ SETTINGS,Ajustes,38560978
 SETTINGS_FOR,Configuración para {0},da07c7b6
 SHARED_WITH_FUNDER,Compartido con el financiador,f59b229b
 SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52
+SHOW_FILTERS,Mostrar filtros,d4143c37
 SHOW_LESS,Mostrar menos,d753a0ed
 SHOW_MORE,Mostrar más,43cab9b7
+SHOW_OBSERVATION_ON_MAP,Mostrar en el mapa,2c88d696
 SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Mostrar especies con todas las accesiones agotadas,656a843d
+SHOW_TITLE_BAR,Mostrar barra de título,95b1ccfb
 SHRUB,Arbusto,af50871c
 SHRUB_CROWN_DIAMETER_CM,Diámetro de la copa del arbusto (cm),61918163
 SHRUBS,Arbustos,377018f6
@@ -2266,13 +2276,19 @@ SPECIES_CATEGORIES_TOOLTIP,"Categorías de especies muestra el porcentaje del to
 SPECIES_CHECK,Verificación de especies,d7d0f200
 SPECIES_CHECK_ADDED_BANNER,"Se agregaron {0} especies nuevas ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",35e34395
 SPECIES_CHECK_ADDED_BANNER_ONE,"Se agregó {0} especie nueva ({1}). Ejecute la verificación de especies para ver cuáles son nativas, introducidas o invasoras.",89f12eb5
+SPECIES_CHECK_COMPLETE,Verificación de especies completada,bd10431c
+SPECIES_CHECK_COMPLETE_MESSAGE,Sus cambios han sido guardados.,3634c6e7
 SPECIES_CHECK_KEEPS,Mantiene {0},16ce403f
+SPECIES_CHECK_NAME_UPDATED,Nombre de {0} actualizado,646716c3
+SPECIES_CHECK_NAMES_UPDATED,Nombres de {0} actualizados,674747e2
 SPECIES_CHECK_OVERRIDE_JUSTIFICATION_PLACEHOLDER,¿Por qué esta especie difiere de la sugerencia?,b83db1e0
 SPECIES_CHECK_OVERRIDE_WARNING,Native Check sugirió {0} para esta especie. Registre el estado que desea en su lugar.,c75e6aa8
 SPECIES_CHECK_SET_LOCATION_BANNER,"Para verificar qué especies son nativas, introducidas o invasoras, ejecute la Verificación de Especies. Deberá establecer la ubicación de sus proyectos.",49c844fd
 SPECIES_CHECK_SET_LOCATION_HINT,Seleccione un país y un país botánico para establecer la ubicación.,e7b413a8
 SPECIES_CHECK_SET_LOCATION_HINT_PROJECTS,Seleccione un país y un país botánico para establecer la ubicación de cada proyecto.,8070772f
 SPECIES_CHECK_SPECIES_CHECKED,{0} especies verificadas,3a3237db
+SPECIES_CHECK_STATUS_APPLIED,Estado sugerido de {0} aplicado,7d957583
+SPECIES_CHECK_STATUSES_APPLIED,Estados sugeridos de {0} aplicados,2abf8c71
 SPECIES_CHECK_SUGGESTION,{0} sugerencia,5afe0690
 SPECIES_CHECK_SUGGESTIONS,{0} sugerencias,9154c212
 SPECIES_CHECK_SUGGESTIONS_APPLIED,Se aplicarán {0} de {1} sugerencias,beacaf4b
@@ -2742,6 +2758,7 @@ VIEW_IN_MAP,Ver en el Mapa,510d8388
 VIEW_INTERNAL_REPORT_FORM,Ver el formulario de informe interno,67f51c8a
 VIEW_MAP,Ver mapa,8ef1dcc4
 VIEW_OBSERVATION,Ver observación,9edac640
+VIEW_ON_MAP,Ver en el mapa,fb873a55
 VIEW_PLANTING_PROGRESS,Ver el progreso de la siembra,f5a4c1f5
 VIEW_PRESCREEN_SUBMISSION,Ver envío previo a la pantalla,7dadf2e6
 VIEW_PUBLISHED_FUNDER_REPORT,Ver el informe de financiación publicado,8dbc3bb4

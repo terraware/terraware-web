@@ -62,11 +62,15 @@ const ReportOptionsMenu = ({ projectId, reportId }: ReportOptionsMenuProps): JSX
 
   const optionItems = useMemo(
     (): DropdownItem[] => [
-      {
-        disabled: report?.status !== 'Approved' || isLoading,
-        label: strings.PUBLISH,
-        value: 'publish',
-      },
+      ...(canPublish
+        ? [
+            {
+              disabled: report?.status !== 'Approved' || isLoading,
+              label: strings.PUBLISH,
+              value: 'publish',
+            },
+          ]
+        : []),
       {
         label: strings.PREVIEW_FUNDER_REPORT,
         value: 'preview',
@@ -84,15 +88,6 @@ const ReportOptionsMenu = ({ projectId, reportId }: ReportOptionsMenuProps): JSX
         label: strings.PRINT_REPORT,
         value: 'print',
       },
-      ...(canPublish
-        ? [
-            {
-              disabled: report?.status !== 'Approved',
-              label: strings.PUBLISH,
-              value: 'publish',
-            },
-          ]
-        : []),
     ],
     [canPublish, isLoading, isPublished, report?.status, strings]
   );

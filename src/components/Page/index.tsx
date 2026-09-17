@@ -1,6 +1,6 @@
 import React, { CSSProperties, type JSX, useRef } from 'react';
 
-import { CircularProgress, Grid, SxProps, Theme, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Grid, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import { Button, IconName } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -35,6 +35,10 @@ export type PageProps = {
   descriptionStyle?: SxProps<Theme>;
   leftComponentGridSize?: number;
   rightComponentGridSize?: number;
+  collapsibleHeader?: boolean;
+  stickyHeader?: boolean;
+  // Rendered on its own row under the title, inside the header wrapper.
+  subHeader?: React.ReactNode;
 };
 
 /**
@@ -57,6 +61,9 @@ export default function Page({
   descriptionStyle,
   leftComponentGridSize,
   rightComponentGridSize,
+  collapsibleHeader,
+  stickyHeader,
+  subHeader,
 }: PageProps): JSX.Element {
   const contentRef = useRef(null);
   const theme = useTheme();
@@ -72,7 +79,7 @@ export default function Page({
 
   return (
     <TfMain style={containerStyles}>
-      <PageHeaderWrapper nextElement={contentRef.current}>
+      <PageHeaderWrapper alwaysVisible={stickyHeader} collapsible={collapsibleHeader} nextElement={contentRef.current}>
         <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
         <Grid
           container
@@ -155,6 +162,11 @@ export default function Page({
             </Grid>
           )}
         </Grid>
+        {subHeader && (
+          <Grid item xs={12} marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle}>
+            <Box sx={{ paddingLeft: theme.spacing(3) }}>{subHeader}</Box>
+          </Grid>
+        )}
         {description ? (
           <Grid item xs={12} marginBottom={theme.spacing(2)} paddingX={theme.spacing(2)} sx={titleContainerStyle}>
             <Typography

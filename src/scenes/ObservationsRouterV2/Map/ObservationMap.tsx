@@ -3,7 +3,8 @@ import { MapMouseEvent, MapRef, Point } from 'react-map-gl/mapbox';
 import { useSearchParams } from 'react-router';
 
 import { Typography, useTheme } from '@mui/material';
-import { getDateDisplayValue } from '@terraware/web-components/utils';
+import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
+import { MultiPolygon } from 'geojson';
 
 import MapComponent from 'src/components/NewMap';
 import { MapDrawerSize } from 'src/components/NewMap/MapDrawer';
@@ -28,7 +29,8 @@ import usePlantMarkersMapLegend from 'src/components/NewMap/usePlantMarkersMapLe
 import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLegend';
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
-import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
+import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
+import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
@@ -51,6 +53,7 @@ import { getShortDate } from 'src/utils/dateFormatter';
 import useMapboxToken from 'src/utils/useMapboxToken';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import { useSelectedObservation } from '../SelectedObservationProvider';
 import BiomassObservationStatsDrawer from './BiomassObservationStatsDrawer';
 import ObservationStatsDrawer from './ObservationStatsDrawer';
 
@@ -58,6 +61,13 @@ type LayerFeature = {
   plantingSiteId: number;
   layerFeatureId: MapLayerFeatureId;
 };
+
+const PLOT_FIT_PADDING = 150;
+
+const PLOT_LAYER_IDS = ['adHocPlots', 'permanentPlots', 'temporaryPlots'];
+
+const isPlotIncomplete = (plot: ObservationMonitoringPlotResultsPayload): boolean =>
+  plot.completedTime === undefined || plot.status !== 'Completed';
 
 type ObservationMapProps = {
   adHocObservationResults: ObservationResultsPayload[];
@@ -82,9 +92,11 @@ const ObservationMap = ({
   const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { mapId, token } = useMapboxToken();
+  const { isDesktop } = useDeviceInfo();
+  const newFiltersEnabled = isEnabled('New Observation Filters');
   const { fitBounds } = useMapUtils(mapRef);
   const [mapLoaded, setMapLoaded] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+  const [localDrawerOpen, setDrawerOpen] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
 
   const orgFeatures = useOrganizationFeatures();
@@ -121,7 +133,7 @@ const ObservationMap = ({
     deadPlantStyle,
   } = useMapFeatureStyles();
 
-  const [selectedFeature, setSelectedFeature] = useState<LayerFeature>();
+  const [localSelectedFeature, setLocalSelectedFeature] = useState<LayerFeature>();
   const { treeDrawerContent, treeDrawerHeader, treeDrawerSize, selectedTrees, selectTrees } = useMapTreeDrawer();
   const { plantDrawerContent, plantDrawerHeader, plantDrawerSize, selectedPlants, selectPlants } = useMapPlantDrawer();
   const { photoDrawerContent, photoDrawerHeader, photoDrawerSize, selectedPhotos, selectPhotos } = useMapPhotoDrawer();
@@ -162,8 +174,22 @@ const ObservationMap = ({
     ];
   }, [adHocObservationResults, strings.ALL]);
 
-  const [selectedObservationId, setSelectedObservationId] = useState<number>();
   const [selectedAdHocObservationId, setSelectedAdHocObservationId] = useState<number | 'all'>('all');
+  const {
+    clearAdHocPlot,
+    selectAdHocPlot,
+    selectObservation,
+    selectedAdHocPlot,
+    selectedObservationId: requestedObservationId,
+  } = useSelectedObservation();
+
+  const selectedObservationId = useMemo(() => {
+    const observationIds = observationResultsOptions.map((option) => Number(option.value));
+    if (requestedObservationId !== undefined && observationIds.includes(requestedObservationId)) {
+      return requestedObservationId;
+    }
+    return observationIds[0];
+  }, [observationResultsOptions, requestedObservationId]);
 
   const getObservationResponse = useGetOneObservationResults({
     observationId: selectedObservationId,
@@ -175,15 +201,6 @@ const ObservationMap = ({
     setSelectedAdHocObservationId('all');
   }, [adHocObservationResults]);
 
-  useEffect(() => {
-    if (observationResultsOptions.length) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSelectedObservationId(Number(observationResultsOptions[0].value));
-    } else {
-      setSelectedObservationId(undefined);
-    }
-  }, [observationResultsOptions]);
-
   const observationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup => {
     return {
       title: strings.ASSIGNED_PLOT_OBSERVATION,
@@ -191,9 +208,9 @@ const ObservationMap = ({
       type: 'dropdown',
       items: observationResultsOptions,
       selectedValue: selectedObservationId !== undefined ? `${selectedObservationId}` : undefined,
-      setSelectedValue: (value: string | undefined) => setSelectedObservationId(value ? Number(value) : undefined),
+      setSelectedValue: (value: string | undefined) => selectObservation(value ? Number(value) : undefined),
     };
-  }, [observationResultsOptions, selectedObservationId, strings]);
+  }, [observationResultsOptions, selectObservation, selectedObservationId, strings]);
 
   const adHocObservationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup => {
     return {
@@ -213,6 +230,24 @@ const ObservationMap = ({
       return adHocObservationResults.filter((result) => selectedAdHocObservationId === result.observationId);
     }
   }, [adHocObservationResults, selectedAdHocObservationId]);
+
+  const selectedAdHocPlotFeature = useMemo((): LayerFeature | undefined => {
+    if (
+      selectedAdHocPlot === undefined ||
+      !selectedAdHocResults.some((result) => result.adHocPlot?.monitoringPlotId === selectedAdHocPlot.monitoringPlotId)
+    ) {
+      return undefined;
+    }
+
+    return {
+      layerFeatureId: { layerId: 'adHocPlots', featureId: `${selectedAdHocPlot.monitoringPlotId}` },
+      plantingSiteId: selectedAdHocPlot.plantingSiteId,
+    };
+  }, [selectedAdHocPlot, selectedAdHocResults]);
+
+  const hasMarkerSelection = selectedPhotos.length > 0 || selectedPlants.length > 0 || selectedTrees.length > 0;
+  const selectedFeature = (hasMarkerSelection ? undefined : selectedAdHocPlotFeature) ?? localSelectedFeature;
+  const drawerOpen = localDrawerOpen || selectedAdHocPlotFeature !== undefined;
 
   const selectedResults = useMemo(() => {
     if (selectedObservationId) {
@@ -282,12 +317,29 @@ const ObservationMap = ({
 
   const selectFeature = useCallback(
     (_plantingSiteId: number) => (layerId: string, featureId: string) => () => {
-      setSelectedFeature({ layerFeatureId: { layerId, featureId }, plantingSiteId: _plantingSiteId });
       selectPhotos([]);
       selectPlants([]);
+
+      const adHocObservationId =
+        layerId === 'adHocPlots'
+          ? selectedAdHocResults.find((result) => result.adHocPlot?.monitoringPlotId === Number(featureId))
+              ?.observationId
+          : undefined;
+
+      if (adHocObservationId !== undefined) {
+        setLocalSelectedFeature(undefined);
+        selectAdHocPlot({
+          monitoringPlotId: Number(featureId),
+          observationId: adHocObservationId,
+          plantingSiteId: _plantingSiteId,
+        });
+        return;
+      }
+
+      setLocalSelectedFeature({ layerFeatureId: { layerId, featureId }, plantingSiteId: _plantingSiteId });
       setDrawerOpen(true);
     },
-    [selectPhotos, selectPlants]
+    [selectAdHocPlot, selectPhotos, selectPlants, selectedAdHocResults]
   );
 
   const selectClickableFeature = useCallback(
@@ -354,6 +406,7 @@ const ObservationMap = ({
             .map((adHocResults) => adHocResults.adHocPlot)
             .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined)
             .map((plot) => ({
+              dashedBorder: newFiltersEnabled && isPlotIncomplete(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -373,6 +426,7 @@ const ObservationMap = ({
           features: monitoringPlots
             .filter((plot) => !plot.isPermanent)
             .map((plot) => ({
+              dashedBorder: newFiltersEnabled && isPlotIncomplete(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -395,6 +449,7 @@ const ObservationMap = ({
           features: monitoringPlots
             .filter((plot) => plot.isPermanent)
             .map((plot) => ({
+              dashedBorder: newFiltersEnabled && isPlotIncomplete(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -481,6 +536,7 @@ const ObservationMap = ({
   }, [
     adHocPlotsLayerStyle,
     adHocPlotsVisible,
+    newFiltersEnabled,
     plantingSites,
     monitoringPlots,
     permanentPlotsLayerStyle,
@@ -636,7 +692,7 @@ const ObservationMap = ({
       selectPhotos([{ kind: 'plot-photo', monitoringPlotId, observationId, photo }]);
       selectPlants([]);
       selectTrees([]);
-      setSelectedFeature(undefined);
+      setLocalSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants, selectTrees]
@@ -657,7 +713,7 @@ const ObservationMap = ({
       selectPhotos(photos);
       selectPlants([]);
       selectTrees([]);
-      setSelectedFeature(undefined);
+      setLocalSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants, selectTrees]
@@ -678,7 +734,7 @@ const ObservationMap = ({
       selectPhotos(photos);
       selectPlants([]);
       selectTrees([]);
-      setSelectedFeature(undefined);
+      setLocalSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants, selectTrees]
@@ -689,7 +745,7 @@ const ObservationMap = ({
       selectPhotos([]);
       selectPlants([{ monitoringPlotId, observationId, plant }]);
       selectTrees([]);
-      setSelectedFeature(undefined);
+      setLocalSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants, selectTrees]
@@ -710,7 +766,7 @@ const ObservationMap = ({
       selectPhotos([]);
       selectPlants(plants);
       selectTrees([]);
-      setSelectedFeature(undefined);
+      setLocalSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants, selectTrees]
@@ -721,7 +777,7 @@ const ObservationMap = ({
       selectPhotos([]);
       selectPlants([]);
       selectTrees([{ observationId, tree }]);
-      setSelectedFeature(undefined);
+      setLocalSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants, selectTrees]
@@ -741,7 +797,7 @@ const ObservationMap = ({
       selectPhotos([]);
       selectPlants([]);
       selectTrees(trees);
-      setSelectedFeature(undefined);
+      setLocalSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants, selectTrees]
@@ -810,7 +866,7 @@ const ObservationMap = ({
     (monitoringPlotId: number, observationId: number, splat: ObservationSplatPayload) => () => {
       selectPhotos([{ kind: 'plot-splat', monitoringPlotId, observationId, splat }]);
       selectPlants([]);
-      setSelectedFeature(undefined);
+      setLocalSelectedFeature(undefined);
       setDrawerOpen(true);
     },
     [selectPhotos, selectPlants]
@@ -895,7 +951,7 @@ const ObservationMap = ({
         ]);
         selectPlants([]);
         // eslint-disable-next-line react-hooks/set-state-in-effect
-        setSelectedFeature(undefined);
+        setLocalSelectedFeature(undefined);
         setDrawerOpen(true);
       }
     }
@@ -1108,19 +1164,25 @@ const ObservationMap = ({
     survivalRateLegendGroup,
   ]);
 
+  const resetDrawerState = useCallback(() => {
+    setDrawerOpen(false);
+    setLocalSelectedFeature(undefined);
+    selectPhotos([]);
+    selectPlants([]);
+    selectTrees([]);
+  }, [selectPhotos, selectPlants, selectTrees]);
+
   const setDrawerOpenCallback = useCallback(
     (open: boolean) => {
       if (open) {
         setDrawerOpen(true);
       } else {
-        setDrawerOpen(false);
-        setSelectedFeature(undefined);
-        selectPhotos([]);
-        selectPlants([]);
-        selectTrees([]);
+        // Closing by hand drops the shared selection; a plot that just went away does not.
+        resetDrawerState();
+        clearAdHocPlot();
       }
     },
-    [selectPhotos, selectPlants, selectTrees]
+    [clearAdHocPlot, resetDrawerState]
   );
 
   useEffect(() => {
@@ -1128,32 +1190,66 @@ const ObservationMap = ({
     const virtualWalkthroughParam = searchParams.get('virtualWalkthrough');
     if (!virtualWalkthroughParam) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
-      setDrawerOpenCallback(false);
+      resetDrawerState();
     }
-  }, [plantingSiteId, observationResults, selectedAdHocResults, setDrawerOpenCallback, searchParams]);
+  }, [plantingSiteId, observationResults, selectedAdHocResults, resetDrawerState, searchParams]);
+
+  const selectedPlotBoundary = useMemo((): MultiPolygon | undefined => {
+    const { layerId, featureId } = selectedFeature?.layerFeatureId ?? {};
+
+    if (layerId === undefined || featureId === undefined || !PLOT_LAYER_IDS.includes(layerId)) {
+      return undefined;
+    }
+
+    const monitoringPlotId = Number(featureId);
+    const plot =
+      layerId === 'adHocPlots'
+        ? selectedAdHocResults.find((result) => result.adHocPlot?.monitoringPlotId === monitoringPlotId)?.adHocPlot
+        : monitoringPlots.find((candidate) => candidate.monitoringPlotId === monitoringPlotId);
+
+    return plot?.boundary ? { type: 'MultiPolygon', coordinates: [plot.boundary.coordinates] } : undefined;
+  }, [monitoringPlots, selectedAdHocResults, selectedFeature]);
+
+  // Undefined for anything the map cannot centre on, which is what hides the drawer's button.
+  const viewSelectedPlotOnMap = useMemo(() => {
+    if (!newFiltersEnabled || !selectedPlotBoundary) {
+      return undefined;
+    }
+
+    return () => {
+      // Smaller layouts hide the map while the drawer is open, so there would be nothing to see.
+      if (!isDesktop) {
+        setDrawerOpenCallback(false);
+      }
+      fitBounds(getBoundingBoxFromMultiPolygons([selectedPlotBoundary]), PLOT_FIT_PADDING);
+    };
+  }, [fitBounds, isDesktop, newFiltersEnabled, selectedPlotBoundary, setDrawerOpenCallback]);
 
   const drawerContent = useMemo(() => {
     if (selectedFeature && selectedResults) {
+      const adHocObservationId =
+        selectedFeature.layerFeatureId.layerId === 'adHocPlots'
+          ? selectedAdHocResults.find(
+              (result) => result.adHocPlot?.monitoringPlotId === Number(selectedFeature.layerFeatureId.featureId)
+            )?.observationId
+          : undefined;
+      const observationId = adHocObservationId ?? selectedResults.observationId;
+
       if (isBiomass) {
         return (
           <BiomassObservationStatsDrawer
-            observationId={selectedResults.observationId}
+            observationId={observationId}
+            onViewOnMap={viewSelectedPlotOnMap}
             plantingSiteId={selectedFeature.plantingSiteId}
           />
         );
       } else {
-        const observationId =
-          selectedFeature.layerFeatureId.layerId === 'adHocPlots'
-            ? selectedAdHocResults.find(
-                (result) => result.adHocPlot?.monitoringPlotId === Number(selectedFeature.layerFeatureId.featureId)
-              )?.observationId
-            : selectedResults.observationId;
-
         if (observationId) {
           return (
             <ObservationStatsDrawer
               layerFeatureId={selectedFeature.layerFeatureId}
               observationId={observationId}
+              onViewOnMap={viewSelectedPlotOnMap}
               plantingSiteId={selectedFeature.plantingSiteId}
             />
           );
@@ -1175,6 +1271,7 @@ const ObservationMap = ({
     plantDrawerContent,
     selectedAdHocResults,
     selectedFeature,
+    viewSelectedPlotOnMap,
     selectedPhotos.length,
     selectedPlants.length,
     selectedResults,
