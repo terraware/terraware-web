@@ -28,11 +28,7 @@ import {
   requestAddManyAcceleratorProjectSpecies,
   requestDeleteManyAcceleratorProjectSpecies,
 } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
-import {
-  selectAcceleratorProjectSpeciesAddManyRequest,
-  selectAcceleratorProjectSpeciesDeleteManyRequest,
-} from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useAppDispatch } from 'src/redux/store';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
 import { CreateAcceleratorProjectSpeciesRequestPayload } from 'src/services/AcceleratorProjectSpeciesService';
 import strings from 'src/strings';
@@ -125,23 +121,19 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
   const species = speciesData?.species;
 
   const [deleteSpecies, { isLoading: isDeleting }] = useDeleteSpeciesMutation();
-  const [updateSpecies, { isLoading: isSaving }] = useUpdateSpeciesMutation();
+  const [updateSpecies] = useUpdateSpeciesMutation();
   const [assignSpeciesToProjects] = useAssignSpeciesToProjectsMutation();
   const [unassignSpeciesFromProjects] = useUnassignSpeciesFromProjectsMutation();
 
   const [record, setRecord, , onChangeCallback] = useForm<Species>(initSpecies());
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
+  const [saving, setSaving] = useState(false);
 
   const [addedProjectIds, setAddedProjectIds] = useState<number[]>([]);
   const [removedProjectIds, setRemovedProjectIds] = useState<number[]>([]);
   const [addedProjectsSpecies, setAddedProjectsSpecies] = useState<ProjectSpecies[]>();
   const [removedProjectsIds, setRemovedProjectsIds] = useState<number[]>();
 
-  const [addRequestId, setAddRequestId] = useState<string>('');
-  const [removeRequestId, setRemoveRequestId] = useState<string>('');
-  const [awaitingProjectThunks, setAwaitingProjectThunks] = useState(false);
-  const addedResult = useAppSelector(selectAcceleratorProjectSpeciesAddManyRequest(addRequestId));
-  const removedResult = useAppSelector(selectAcceleratorProjectSpeciesDeleteManyRequest(removeRequestId));
   const dispatch = useAppDispatch();
 
   const reloadSpecies = useCallback(() => {
@@ -251,26 +243,6 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
     exitEditMode();
   }, [clearProjectStaging, exitEditMode, reloadData, reloadSpecies, snackbar]);
 
-  // The accelerator project species add/remove requests complete asynchronously via redux; finish
-  // the save once every request dispatched by this save has settled.
-  useEffect(() => {
-    if (!awaitingProjectThunks) {
-      return;
-    }
-    if (addedResult?.status === 'error' || removedResult?.status === 'error') {
-      setAwaitingProjectThunks(false);
-      snackbar.toastError();
-      finishSave();
-      return;
-    }
-    const addDone = !addRequestId || addedResult?.status === 'success';
-    const removeDone = !removeRequestId || removedResult?.status === 'success';
-    if (addDone && removeDone) {
-      setAwaitingProjectThunks(false);
-      finishSave();
-    }
-  }, [awaitingProjectThunks, addRequestId, removeRequestId, addedResult, removedResult, finishSave, snackbar]);
-
   const saveSpecies = async () => {
     if (!selectedOrganization) {
       return;
@@ -280,6 +252,7 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
       return;
     }
 
+    setSaving(true);
     try {
       await updateSpecies({
         speciesId: record.id,
@@ -320,11 +293,10 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
         }).unwrap();
       }
 
-      let awaiting = false;
+      // These accelerator project species mutations are awaited too, so a failure lands in the catch
+      // below with the staged changes still intact for the user to retry.
       if (removedProjectsIds?.length) {
-        const request = dispatch(requestDeleteManyAcceleratorProjectSpecies(removedProjectsIds));
-        setRemoveRequestId(request.requestId);
-        awaiting = true;
+        await dispatch(requestDeleteManyAcceleratorProjectSpecies(removedProjectsIds)).unwrap();
       }
       if (addedProjectsSpecies?.length && speciesId) {
         const createRequests = addedProjectsSpecies.map(
@@ -335,23 +307,22 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
               speciesNativeCategory: aPS.nativeCategory,
             }) as CreateAcceleratorProjectSpeciesRequestPayload
         );
-        const request = dispatch(requestAddManyAcceleratorProjectSpecies(createRequests));
-        setAddRequestId(request.requestId);
-        awaiting = true;
-      }
-
-      if (awaiting) {
-        setAwaitingProjectThunks(true);
-      } else {
-        finishSave();
+        await dispatch(requestAddManyAcceleratorProjectSpecies(createRequests)).unwrap();
       }
     } catch (e) {
+      // Keep the staged edits and stay in edit mode so nothing is lost and the user can retry.
       if ((e as { status?: number })?.status === 409) {
         snackbar.toastError(strings.formatString(strings.EXISTING_SPECIES_MSG, record.scientificName));
       } else {
         snackbar.toastError();
       }
+      return;
+    } finally {
+      setSaving(false);
     }
+
+    // Reached only when every requested mutation succeeded.
+    finishSave();
   };
 
   const onOptionItemClick = (optionItem: DropdownItem) => {
@@ -412,7 +383,7 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
   const rightComponent = editing ? (
     <Box alignItems='center' display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
       <Button
-        disabled={isSaving || awaitingProjectThunks}
+        disabled={saving}
         id='cancelEditSpecies'
         label={strings.CANCEL}
         onClick={onCancel}
@@ -421,7 +392,7 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
         type='passive'
       />
       <Button
-        disabled={!isDirty || isSaving || awaitingProjectThunks}
+        disabled={!isDirty || saving}
         id='saveEditSpecies'
         label={strings.SAVE}
         onClick={() => void saveSpecies()}
@@ -453,7 +424,7 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
       stickyHeaderElevated={editing && isDirty}
       title={title}
     >
-      {(isDeleting || isSaving || awaitingProjectThunks) && <BusySpinner withSkrim={true} />}
+      {(isDeleting || saving) && <BusySpinner withSkrim={true} />}
       <Box
         sx={{
           backgroundColor: theme.palette.TwClrBg,
