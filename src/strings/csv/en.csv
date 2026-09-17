@@ -1472,6 +1472,7 @@ OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION,"You will need the Terraware Mobil
 Scan the QR codes with your device to download on the App Store or Google Play.",
 OBSERVED_BY_ON,Observed by {0} on {1} at {2},
 OBSERVED_GPS_COORDINATES,Observed GPS Coordinates,
+OBSERVED_ON,Observed on,
 OBSERVED_PLANTS,Observed Plants,
 OBSERVED_SPECIES,Observed Species,
 OBSERVER,Observer,

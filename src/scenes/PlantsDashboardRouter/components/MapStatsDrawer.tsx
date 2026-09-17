@@ -4,11 +4,13 @@ import { Box, CircularProgress } from '@mui/material';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
-import { useLatestSiteObservationResult } from 'src/hooks/observations';
+import { APP_PATHS } from 'src/constants';
+import { useSiteObservationStats } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import usePlantingSiteReportedPlants from 'src/hooks/usePlantingSiteReportedPlants';
 import { useLocalization } from 'src/providers';
+import { getMediumDate } from 'src/utils/dateFormatter';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
 type MapStatsProperties = {
@@ -16,6 +18,8 @@ type MapStatsProperties = {
   name: string | undefined;
   survivalRate: number | undefined;
   observed: boolean;
+  observationId: number | undefined;
+  completedTime: string | undefined;
   observedPlants: number | undefined;
   observedSpecies: number | undefined;
   plantedPlants: number | undefined;
@@ -36,7 +40,7 @@ const MapStatsDrawer = ({
   plantingSiteId,
   plantingSiteHistoryId,
 }: MapStatsDrawerProps): JSX.Element | undefined => {
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { plantingSiteReportedPlants, isLoading: isLoadingPlantingSiteReportedPlants } =
     usePlantingSiteReportedPlants(plantingSiteId);
@@ -45,10 +49,7 @@ const MapStatsDrawer = ({
     plantingSiteHistoryId,
   });
   const { plantingSite, isLoading: isLoadingPlantingSite } = usePlantingSite(plantingSiteId);
-  const { observation: latestObservationResult, isLoading: isLoadingObservation } = useLatestSiteObservationResult(
-    plantingSiteId,
-    'Plot'
-  );
+  const { stats, strataById, substrataById, isLoading: isLoadingObservation } = useSiteObservationStats(plantingSiteId);
 
   const isLoading = useMemo(
     () => isLoadingPlantingSiteReportedPlants || isLoadingPlantingSite || isLoadingSiteHistory || isLoadingObservation,
@@ -130,21 +131,23 @@ const MapStatsDrawer = ({
       return {
         type: strings.SITE,
         areaHa: plantingSiteHistory?.areaHa ?? plantingSite?.areaHa,
-        survivalRate: latestObservationResult?.survivalRate,
+        survivalRate: stats?.survivalRate,
         name: plantingSite?.name,
-        observed: latestObservationResult !== undefined,
-        observedPlants: latestObservationResult?.totalPlants,
-        observedSpecies: latestObservationResult?.totalSpecies,
+        observed: stats?.observationId !== undefined,
+        observationId: stats?.observationId,
+        completedTime: stats?.completedTime,
+        observedPlants: stats?.totalPlants,
+        observedSpecies: stats?.totalSpecies,
         plantedPlants: plantingSiteReportedPlants?.totalPlants,
         plantedSpecies: plantingSiteReportedPlants?.species.length,
-        plantingDensity: latestObservationResult?.plantingDensity,
+        plantingDensity: stats?.plantingDensity,
       };
     } else if (layerFeatureId.layerId === 'strata') {
       const stratumHistory = plantingSiteHistory?.strata?.find(
         (_stratumHistory) => _stratumHistory.name === layerFeatureId.featureId
       );
       const stratum = findStratum();
-      const stratumSummary = latestObservationResult?.strata.find((_stratum) => _stratum.stratumId === stratum?.id);
+      const stratumSummary = stratum ? strataById.get(stratum.id) : undefined;
       const stratumStats = plantingSiteReportedPlants?.strata.find((_stratum) => _stratum.id === stratum?.id);
 
       return {
@@ -152,7 +155,9 @@ const MapStatsDrawer = ({
         areaHa: stratumHistory?.areaHa ?? stratum?.areaHa,
         survivalRate: stratumSummary?.survivalRate,
         name: stratumHistory?.name ?? stratum?.name,
-        observed: stratumSummary !== undefined,
+        observed: stratumSummary?.observationId !== undefined,
+        observationId: stratumSummary?.observationId,
+        completedTime: stratumSummary?.completedTime,
         observedPlants: stratumSummary?.totalPlants,
         observedSpecies: stratumSummary?.totalSpecies,
         plantedPlants: stratumStats?.totalPlants,
@@ -170,9 +175,7 @@ const MapStatsDrawer = ({
 
       const stratum = findStratum();
       const substratum = findSubstratum();
-      const substratumSummary = latestObservationResult?.strata
-        .flatMap((_stratum) => _stratum.substrata)
-        .find((_substratum) => _substratum.substratumId === substratum?.id);
+      const substratumSummary = substratum ? substrataById.get(substratum.id) : undefined;
       const substratumStats = plantingSiteReportedPlants?.strata
         .flatMap((_stratum) => _stratum.substrata)
         .find((_substratum) => _substratum.id === substratum?.id);
@@ -182,7 +185,9 @@ const MapStatsDrawer = ({
         areaHa: substratumHistory?.areaHa ?? substratum?.areaHa,
         survivalRate: substratumSummary?.survivalRate,
         name: substratumHistory?.name ?? substratum?.name,
-        observed: substratumSummary !== undefined,
+        observed: substratumSummary?.observationId !== undefined,
+        observationId: substratumSummary?.observationId,
+        completedTime: substratumSummary?.completedTime,
         observedPlants: substratumSummary?.totalPlants,
         observedSpecies: substratumSummary?.totalSpecies,
         plantedPlants: substratumStats?.totalPlants,
@@ -196,18 +201,28 @@ const MapStatsDrawer = ({
   }, [
     findStratum,
     findSubstratum,
-    latestObservationResult,
     layerFeatureId,
     plantingSite,
     plantingSiteHistory,
     plantingSiteReportedPlants,
+    stats,
+    strataById,
     strings,
+    substrataById,
   ]);
 
   const rows = useMemo((): MapDrawerTableRow[] => {
     const results: MapDrawerTableRow[] = [];
 
     if (properties) {
+      if (properties.observationId !== undefined && properties.completedTime !== undefined) {
+        results.push({
+          key: strings.OBSERVED_ON,
+          value: getMediumDate(properties.completedTime, activeLocale),
+          url: APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', `${properties.observationId}`),
+        });
+      }
+
       results.push({
         key: strings.TYPE,
         value: properties.type,
@@ -270,7 +285,7 @@ const MapStatsDrawer = ({
     }
 
     return results;
-  }, [numberFormatter, properties, strings]);
+  }, [activeLocale, numberFormatter, properties, strings]);
 
   if (delayedLoading) {
     return (

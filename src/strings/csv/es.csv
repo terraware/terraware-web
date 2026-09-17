@@ -1471,6 +1471,7 @@ OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION,"Necesitará la aplicación móvil
 Escanee los códigos QR con su dispositivo para descargarla en App Store o Google Play.",13be06be
 OBSERVED_BY_ON,Observado por {0} el {1} a las {2},c8b41186
 OBSERVED_GPS_COORDINATES,Coordenadas GPS observadas,efbe8b32
+OBSERVED_ON,Observado el,8c876825
 OBSERVED_PLANTS,Plantas observadas,375e69c3
 OBSERVED_SPECIES,Especies observadas,922020f2
 OBSERVER,Observador,89ceb806
