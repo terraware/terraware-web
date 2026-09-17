@@ -2340,6 +2340,7 @@ SPECIES_TOOLTIP,Espèces dont les densités de plantation seront utilisées pour
 SPECIES_USAGE,Utilisation des espèces,0669cb85
 SPECIES_VALUE_CHANGED_FROM_TO,La valeur {1} de l'espèce {0} a été modifiée de {2} à {3},e3330648
 SPECIES_WITH_TARGETS_IN_SEASON_DESCRIPTION,Espèces avec des objectifs dans la saison et le stratum/substratum sélectionnés,466cff52
+SPLIT,Diviser,9184c603
 STAFF,Personnel,6b242686
 STAKEHOLDERS_AND_COMMUNITY_IMPACT,Parties prenantes et impact communautaire,a0af66ae
 STANDARD,Norme,88d7d08c

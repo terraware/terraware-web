@@ -6,9 +6,11 @@ import { Button } from '@terraware/web-components';
 import SegmentControl from 'src/components/common/SegmentControl';
 import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { useObservationFilters } from '../ObservationFiltersProvider';
 import ObservationFilterPanel from './ObservationFilterPanel';
+import ViewModeToggle from './ViewModeToggle';
 
 export type ObservationFiltersProps = {
   plantingSiteId: PlantingSiteId;
@@ -17,6 +19,7 @@ export type ObservationFiltersProps = {
 const ObservationFilters = ({ plantingSiteId }: ObservationFiltersProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const { isDesktop } = useDeviceInfo();
   const { activeFilterCount, filtersExpanded, plotType, setFiltersExpanded, setPlotType } = useObservationFilters();
 
   const plotTypeSegments = useMemo(
@@ -31,6 +34,7 @@ const ObservationFilters = ({ plantingSiteId }: ObservationFiltersProps): JSX.El
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: theme.spacing(2) }}>
       <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(2) }}>
         <SegmentControl minSegmentWidth={130} onChange={setPlotType} segments={plotTypeSegments} selected={plotType} />
+        {!isDesktop && <ViewModeToggle />}
         <Badge
           badgeContent={activeFilterCount}
           id='active-filter-count'
