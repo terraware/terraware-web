@@ -22,21 +22,37 @@ export default function Home({
   const { orgHasModules } = useParticipantData();
   const { selectedOrganization, orgPreferences } = useOrganization();
   const [people, setPeople] = useState<OrganizationUser[]>();
+  const [peopleOrgId, setPeopleOrgId] = useState<number>();
 
   useEffect(() => {
+    if (!selectedOrganization) {
+      return;
+    }
+    const orgId = selectedOrganization.id;
+    let cancelled = false;
     const populatePeople = async () => {
+      let users: OrganizationUser[] | undefined;
       if (isAdmin(selectedOrganization)) {
-        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
+        const response = await OrganizationUserService.getOrganizationUsers(orgId);
         if (response.requestSucceeded) {
-          setPeople(response.users);
+          users = response.users;
         }
+      }
+      if (!cancelled) {
+        setPeople(users);
+        setPeopleOrgId(orgId);
       }
     };
     void populatePeople();
+    return () => {
+      cancelled = true;
+    };
   }, [selectedOrganization]);
 
   const homeScreen = useMemo((): JSX.Element => {
-    if (orgHasModules === undefined || speciesLoading) {
+    const peopleLoaded = peopleOrgId === selectedOrganization?.id;
+
+    if (orgHasModules === undefined || speciesLoading || !peopleLoaded) {
       return <Page isLoading={true} />;
     }
 
@@ -45,7 +61,7 @@ export default function Home({
     } else {
       return orgHasModules && isManagerOrHigher(selectedOrganization) ? <ParticipantHomeView /> : <TerrawareHomeView />;
     }
-  }, [orgHasModules, speciesLoading, people, selectedOrgHasSpecies, selectedOrganization, orgPreferences]);
+  }, [orgHasModules, speciesLoading, peopleOrgId, people, selectedOrgHasSpecies, selectedOrganization, orgPreferences]);
 
   return homeScreen;
 }
