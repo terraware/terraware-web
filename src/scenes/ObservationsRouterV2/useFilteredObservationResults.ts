@@ -9,6 +9,8 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { ObservationTypeFilter, PlotType, useObservationFilters } from './ObservationFiltersProvider';
 
+export type ObservationsEmptyState = 'noObservations' | 'noFilterMatches';
+
 type UseFilteredObservationResultsArgs = {
   enabled?: boolean;
   observationType: ObservationTypeFilter;
@@ -92,7 +94,15 @@ const useFilteredObservationResults = ({
     stratumFilter,
   ]);
 
+  const emptyState = useMemo((): ObservationsEmptyState | undefined => {
+    if (!response.isSuccess || observations.length > 0) {
+      return undefined;
+    }
+    return response.data.observations.length === 0 ? 'noObservations' : 'noFilterMatches';
+  }, [observations.length, response]);
+
   return {
+    emptyState,
     isFetching: response.isFetching,
     isLoading: response.isLoading,
     observations,

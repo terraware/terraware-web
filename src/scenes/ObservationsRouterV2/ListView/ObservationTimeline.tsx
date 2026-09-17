@@ -11,8 +11,10 @@ import { getNumericDate } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { useObservationFilters } from '../ObservationFiltersProvider';
+import ObservationsEmptyOverlay from '../ObservationsEmptyOverlay';
 import { useSelectedObservation } from '../SelectedObservationProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
+import useObservationsEmptyMessages from '../useObservationsEmptyMessages';
 
 export type ObservationTimelineProps = {
   plantingSiteId: number;
@@ -26,7 +28,8 @@ const ObservationTimeline = ({ plantingSiteId }: ObservationTimelineProps): JSX.
   const { plantingSite } = usePlantingSite(plantingSiteId);
   const { selectAdHocPlot, selectObservation, selectedAdHocPlot, selectedObservationId } = useSelectedObservation();
 
-  const { observations } = useFilteredObservationResults({ observationType, plantingSiteId, plotType });
+  const { emptyState, observations } = useFilteredObservationResults({ observationType, plantingSiteId, plotType });
+  const emptyMessages = useObservationsEmptyMessages(emptyState);
 
   const isAdHoc = plotType === 'adHoc';
   const timezone = plantingSite?.timeZone ?? defaultTimezone;
@@ -117,7 +120,7 @@ const ObservationTimeline = ({ plantingSiteId }: ObservationTimelineProps): JSX.
     selectObservation((latestPast ?? sortedObservations[0]).observationId);
   }, [isAdHoc, observationDate, selectObservation, selectedObservationId, sortedObservations]);
 
-  if (marks.length === 0) {
+  if (marks.length === 0 && emptyMessages === undefined) {
     return null;
   }
 
@@ -130,6 +133,7 @@ const ObservationTimeline = ({ plantingSiteId }: ObservationTimelineProps): JSX.
         '& .timeline-v2-container': { maxWidth: 'none' },
         flex: 1,
         minWidth: '240px',
+        position: 'relative',
       }}
     >
       <TimelineSliderV2
@@ -139,6 +143,7 @@ const ObservationTimeline = ({ plantingSiteId }: ObservationTimelineProps): JSX.
         onSelect={onSelect}
         selectedMarkId={selectedMarkId}
       />
+      {emptyMessages && <ObservationsEmptyOverlay message={emptyMessages[0]} />}
     </Box>
   );
 };

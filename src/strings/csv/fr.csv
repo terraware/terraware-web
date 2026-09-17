@@ -146,6 +146,7 @@ ADDITIONAL_NURSERY_NOTES,Notes supplémentaires sur les pépinières,db29c13a
 ADDITIONAL_PLANTING_SITES_NOTES,Notes supplémentaires sur le site de plantation,364dcb50
 ADDITIONAL_RESOURCES,Ressources supplémentaires,13e85f73
 ADDITIONAL_SPECIES_DATA,Données supplémentaires sur les espèces (usage interne uniquement),9368c322
+ADJUST_FILTERS_TO_SEE_OBSERVATIONS,Essayez de modifier ou de réinitialiser les filtres pour afficher les observations.,7f44e9be
 ADMIN,Administrateur,cb1c89ab
 ADMIN_INFO,"Un administrateur peut effectuer les opérations ci-dessus, ainsi que modifier le profil de l'organisation, gérer les utilisateurs de l'organisation, et gérer les banques de semences.",714c9b37
 AGAR,Gélose,d794be5b
@@ -1334,6 +1335,7 @@ NO_NOTIFICATIONS,Aucune notification à afficher,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer votre inventaire de pépinières, vous devez avoir une pépinière et des espèces dans Terraware. Seuls les administrateurs peuvent ajouter des pépinières ; veuillez contacter le vôtre pour obtenir de l'aide.",93c44729
 NO_NURSERIES_WITH_REQUESTED_SPECIES,Aucune pépinière ne dispose de quantités Prêtes à Planter pour les espèces demandées.,cbc1672d
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,Aucune observation n'a été planifiée,c05456cd
+NO_OBSERVATIONS_MATCH_FILTERS,Aucune observation ne correspond aux filtres.,217eb7a1
 NO_PENDING_REQUESTS,Il n'y a aucune demande en attente.,89bea434
 NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE,Il n'y a aucune demande en attente pour le site de plantation sélectionné.,10a348ac
 NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,Il n’y a aucune Observation terminée incluant des placettes permanentes.,e52e1b0d

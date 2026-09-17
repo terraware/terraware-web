@@ -146,6 +146,7 @@ ADDITIONAL_NURSERY_NOTES,Notas adicionales sobre el vivero,db29c13a
 ADDITIONAL_PLANTING_SITES_NOTES,Notas adicionales sobre el sitio de plantación,364dcb50
 ADDITIONAL_RESOURCES,Recursos adicionales,13e85f73
 ADDITIONAL_SPECIES_DATA,Datos adicionales de especie (solo para uso interno),9368c322
+ADJUST_FILTERS_TO_SEE_OBSERVATIONS,Intente cambiar o borrar los filtros para ver observaciones.,7f44e9be
 ADMIN,Admin,cb1c89ab
 ADMIN_INFO,"Un admin puede hacer lo anterior, así como editar el perfil de organización, administrar usuarios en la organización y administrar los bancos de semillas.",714c9b37
 AGAR,Agar,d794be5b
@@ -1335,6 +1336,7 @@ NO_NOTIFICATIONS,No hay notificaciones que mostrar.,3bd06d30
 NO_NURSERIES_NON_ADMIN_MSG,"Antes de poder agregar y administrar el inventario de su vivero, necesitará contar con un vivero y especies dentro de Terraware. Solo los administradores pueden agregar viveros; contáctese con el suyo para obtener ayuda.",93c44729
 NO_NURSERIES_WITH_REQUESTED_SPECIES,Ningún vivero tiene cantidades de la especie solicitada listas para plantar.,cbc1672d
 NO_OBSERVATIONS_HAVE_BEEN_SCHEDULED,No se han programado observaciones,c05456cd
+NO_OBSERVATIONS_MATCH_FILTERS,Ninguna observación coincide con los filtros.,217eb7a1
 NO_PENDING_REQUESTS,No hay solicitudes pendientes.,89bea434
 NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE,No hay solicitudes pendientes para el Sitio de Plantación seleccionado.,10a348ac
 NO_PERMANENT_PLOTS_FOR_SURVIVAL_RATE_CALCULATION,No hay Observaciones completadas que incluyan parcelas permanentes.,e52e1b0d

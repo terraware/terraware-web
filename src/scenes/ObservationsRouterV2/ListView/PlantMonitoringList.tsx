@@ -41,6 +41,7 @@ import { PlotType } from '../ObservationFiltersProvider';
 import { exportAdHocObservationsResults } from '../exportAdHocObservations';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
+import useObservationsEmptyMessages from '../useObservationsEmptyMessages';
 import SelectObservationButton from './SelectObservationButton';
 
 type PlantMonitoringRow = {
@@ -142,11 +143,16 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
   const adHocTableState = useTableState(ADHOC_STORAGE_KEY, { persistFilters: true });
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
-  const { isLoading, observations: observationResults } = useFilteredObservationResults({
+  const {
+    emptyState,
+    isLoading,
+    observations: observationResults,
+  } = useFilteredObservationResults({
     observationType: 'Monitoring',
     plantingSiteId,
     plotType,
   });
+  const emptyMessages = useObservationsEmptyMessages(emptyState);
   const [getT0SiteDataSet, getT0SiteDataSetResponse] = useLazyGetAllT0SiteDataSetQuery();
   const [getPlotsWithObservations, getPlotsWithObservationsResponse] = useLazyGetPlotsWithObservationsQuery();
 
@@ -598,6 +604,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
 
   const commonTableOptions = useMemo(
     () => ({
+      renderEmptyRowsFallback: () => (emptyMessages ? <EmptyStateContent subtitle={emptyMessages} title={''} /> : null),
       defaultColumn: { enableEditing: false },
       enableColumnPinning: true,
       enableColumnActions: true,
@@ -637,10 +644,10 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
         },
       }),
     }),
-    [theme]
+    [emptyMessages, theme]
   );
 
-  if (!isLoading && rows.length === 0) {
+  if (!newFiltersEnabled && !isLoading && rows.length === 0) {
     return (
       <Card radius={'8px'} style={{ width: '100%' }}>
         {plotSelectionToolbar}
