@@ -31,6 +31,14 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
+    getSiteObservationStats: build.query<GetSiteObservationStatsApiResponse, GetSiteObservationStatsApiArg>({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/observations/results/stats`,
+        params: {
+          plantingSiteId: queryArg,
+        },
+      }),
+    }),
     getObservation: build.query<GetObservationApiResponse, GetObservationApiArg>({
       query: (queryArg) => ({ url: `/api/v1/tracking/observations/${queryArg}` }),
     }),
@@ -202,6 +210,8 @@ export type ListObservationResultsApiArg = {
   /** If true, return results of ad-hoc observations instead of scheduled ones. */
   isAdHoc?: boolean;
 };
+export type GetSiteObservationStatsApiResponse = /** status 200 OK */ GetSiteObservationStatsResponsePayload;
+export type GetSiteObservationStatsApiArg = number;
 export type GetObservationApiResponse = /** status 200 OK */ GetObservationResponsePayload;
 export type GetObservationApiArg = number;
 export type RescheduleObservationApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
@@ -798,6 +808,54 @@ export type ListObservationResultsResponsePayload = {
   observations: ObservationResultsPayload[];
   status: SuccessOrError;
 };
+export type ObservationSubstratumStatsPayload = {
+  completedTime?: string;
+  /** Which observation these statistics came from. This can differ between substrata. */
+  observationId?: number;
+  /** Estimated planting density for the substratum based on the observed planting densities of monitoring plots. */
+  plantingDensity?: number;
+  substratumId: number;
+  /** Percentage of plants of all species in this substratum's permanent monitoring plots that have survived since the t0 point. */
+  survivalRate?: number;
+  /** Total number of plants recorded, regardless of live/dead status or species. */
+  totalPlants?: number;
+  /** Total number of species observed, not counting dead plants. Each distinct user-supplied name for a species of Other certainty counts separately. */
+  totalSpecies?: number;
+};
+export type ObservationStratumStatsPayload = {
+  completedTime?: string;
+  /** Which observation these statistics came from. This can differ between strata. */
+  observationId?: number;
+  /** Estimated planting density for the stratum based on the observed planting densities of monitoring plots. */
+  plantingDensity?: number;
+  stratumId: number;
+  substrata: ObservationSubstratumStatsPayload[];
+  /** Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point. */
+  survivalRate?: number;
+  /** Total number of plants recorded, regardless of live/dead status or species. */
+  totalPlants?: number;
+  /** Total number of species observed, not counting dead plants. Each distinct user-supplied name for a species of Other certainty counts separately. */
+  totalSpecies?: number;
+};
+export type ObservationSiteStatsPayload = {
+  completedTime?: string;
+  /** Which observation these site-level statistics came from. */
+  observationId?: number;
+  /** Estimated planting density for the site based on the observed planting densities of monitoring plots. */
+  plantingDensity?: number;
+  plantingSiteId: number;
+  strata: ObservationStratumStatsPayload[];
+  /** Percentage of plants of all species in the site's permanent monitoring plots that have survived since the t0 point. */
+  survivalRate?: number;
+  /** Total number of plants recorded, regardless of live/dead status or species. */
+  totalPlants?: number;
+  /** Total number of species observed, not counting dead plants. Each distinct user-supplied name for a species of Other certainty counts separately. */
+  totalSpecies?: number;
+};
+export type GetSiteObservationStatsResponsePayload = {
+  stats: ObservationSiteStatsPayload;
+  status: SuccessOrError;
+};
 export type GetObservationResponsePayload = {
   observation: ObservationPayload;
   status: SuccessOrError;
@@ -1109,6 +1167,8 @@ export const {
   useCompleteAdHocObservationMutation,
   useListObservationResultsQuery,
   useLazyListObservationResultsQuery,
+  useGetSiteObservationStatsQuery,
+  useLazyGetSiteObservationStatsQuery,
   useGetObservationQuery,
   useLazyGetObservationQuery,
   useRescheduleObservationMutation,

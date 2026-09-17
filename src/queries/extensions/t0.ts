@@ -22,6 +22,10 @@ api.enhanceEndpoints({
           type: QueryTagTypes.PlantingSiteSurvivalRate,
           id: payload.plantingSiteId,
         },
+        {
+          type: QueryTagTypes.PlantingSiteObservation,
+          id: payload.plantingSiteId,
+        },
         { type: QueryTagTypes.TrackingStats },
       ],
     },
@@ -30,6 +34,10 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.T0, id: payload.plantingSiteId },
         {
           type: QueryTagTypes.PlantingSiteSurvivalRate,
+          id: payload.plantingSiteId,
+        },
+        {
+          type: QueryTagTypes.PlantingSiteObservation,
           id: payload.plantingSiteId,
         },
         { type: QueryTagTypes.TrackingStats },
