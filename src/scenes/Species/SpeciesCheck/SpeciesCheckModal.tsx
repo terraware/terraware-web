@@ -93,6 +93,8 @@ const SpeciesCheckModal = ({
   const [showComplete, setShowComplete] = useState(false);
   const [acceptedNameIds, setAcceptedNameIds] = useState<Set<number>>(new Set());
   const [appliedStatusCount, setAppliedStatusCount] = useState(0);
+  const [nameHadSuggestions, setNameHadSuggestions] = useState(false);
+  const [nativeHadSuggestions, setNativeHadSuggestions] = useState(false);
 
   const targets = useMemo<LocationTarget[]>(() => {
     const orgCountryCode = selectedOrganization?.countryCode;
@@ -158,6 +160,8 @@ const SpeciesCheckModal = ({
     setShowComplete(false);
     setAcceptedNameIds(new Set());
     setAppliedStatusCount(0);
+    setNameHadSuggestions(false);
+    setNativeHadSuggestions(false);
 
     runStartRef.current = Date.now();
     trackEventRef.current(MIXPANEL_EVENTS.SPECIES_INTELLIGENCE_CHECK_RUN, {
@@ -539,6 +543,8 @@ const SpeciesCheckModal = ({
 
       const statusesApplied = nativeSuggestionsApplied + overrides.length;
       setAppliedStatusCount(statusesApplied);
+      setNameHadSuggestions(nameSuggestionsTotal > 0 || appliedNameCount > 0);
+      setNativeHadSuggestions(nativeSuggestionsTotal > 0);
       const anyChange = appliedNameCount > 0 || statusesApplied > 0;
       if (anyChange) {
         setShowComplete(true);
@@ -554,7 +560,9 @@ const SpeciesCheckModal = ({
   }, [
     acceptPending,
     appliedNameCount,
+    nameSuggestionsTotal,
     nativeSuggestionsApplied,
+    nativeSuggestionsTotal,
     onClose,
     nativeSections,
     overridingVisibleKeys,
@@ -694,7 +702,12 @@ const SpeciesCheckModal = ({
         />
 
         {showComplete && (
-          <SpeciesCheckCompleteStep namesUpdated={appliedNameCount} statusesApplied={appliedStatusCount} />
+          <SpeciesCheckCompleteStep
+            namesUpdated={appliedNameCount}
+            statusesApplied={appliedStatusCount}
+            showNames={nameHadSuggestions}
+            showStatuses={nativeHadSuggestions}
+          />
         )}
 
         {!showComplete && currentKey === 'name' && (
