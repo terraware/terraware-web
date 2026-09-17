@@ -31,8 +31,93 @@ const injectedRtkApi = api.injectEndpoints({
         ...(results ? results.map((result) => ({ type: QueryTagTypes.PlantingSites, id: result.id })) : []),
       ],
     }),
+
+    getLatestSubstrataObservationResults: build.query<
+      LatestSubstratumObservationResult[],
+      LatestSubstrataObservationResultsArgs
+    >({
+      query: ({ plantingSiteIds }) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          prefix: 'observationSubstratumResult',
+          fields: ['substratum_id', 'observation_id', 'observation_completedTime', 'survivalRate(raw)'],
+          search: {
+            operation: 'and',
+            children: [
+              {
+                operation: 'field',
+                field: 'substratum.plantingSite.id',
+                values: plantingSiteIds.map((plantingSiteId) => `${plantingSiteId}`),
+              },
+              {
+                operation: 'field',
+                field: 'observation_state',
+                values: ['Completed', 'Abandoned'],
+              },
+            ],
+          },
+          sortOrder: [{ field: 'observation_completedTime' }],
+          count: 0,
+        },
+      }),
+      transformResponse: (response: GetLatestSubstrataObservationResultsApiResponse) => {
+        const latestBySubstratumId = new Map<number, LatestSubstratumObservationResult>();
+
+        response.results.forEach((result) => {
+          if (result.substratum_id === undefined) {
+            return;
+          }
+
+          const substratumId = Number(result.substratum_id);
+          const completedTime = result.observation_completedTime;
+          const survivalRate = result['survivalRate(raw)'];
+          const current = latestBySubstratumId.get(substratumId);
+
+          if (current === undefined || completedTime > current.completedTime) {
+            latestBySubstratumId.set(substratumId, {
+              substratumId,
+              observationId: Number(result.observation_id),
+              completedTime,
+              survivalRate: survivalRate === undefined ? undefined : Number(survivalRate),
+            });
+          }
+        });
+
+        return [...latestBySubstratumId.values()];
+      },
+      providesTags: (_results, _error, args) => [
+        { type: QueryTagTypes.Observation, id: 'LIST' },
+        ...args.plantingSiteIds.map((plantingSiteId) => ({
+          type: QueryTagTypes.PlantingSiteSurvivalRate,
+          id: plantingSiteId,
+        })),
+      ],
+    }),
   }),
 });
+
+export type LatestSubstrataObservationResultsArgs = {
+  plantingSiteIds: number[];
+};
+
+type LatestSubstrataObservationResultsApiResult = {
+  substratum_id?: string;
+  observation_id: string;
+  observation_completedTime: string;
+  'survivalRate(raw)'?: string;
+};
+
+type GetLatestSubstrataObservationResultsApiResponse = {
+  results: LatestSubstrataObservationResultsApiResult[];
+};
+
+export type LatestSubstratumObservationResult = {
+  substratumId: number;
+  observationId: number;
+  completedTime: string;
+  survivalRate?: number;
+};
 
 type ListSubstrataApiResult = {
   id: string;
@@ -54,4 +139,4 @@ export type SubstratumPayload = {
   stratumName: string;
 };
 
-export const { useLazyListSubstrataQuery } = injectedRtkApi;
+export const { useLazyGetLatestSubstrataObservationResultsQuery, useLazyListSubstrataQuery } = injectedRtkApi;

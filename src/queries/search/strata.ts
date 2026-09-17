@@ -115,8 +115,93 @@ const injectedRtkApi = api.injectEndpoints({
         })),
       providesTags: [{ type: QueryTagTypes.Observation }],
     }),
+
+    getLatestStrataObservationResults: build.query<
+      LatestStratumObservationResult[],
+      LatestStrataObservationResultsArgs
+    >({
+      query: ({ plantingSiteIds }) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          prefix: 'observationStratumResult',
+          fields: ['stratum_id', 'observation_id', 'observation_completedTime', 'survivalRate(raw)'],
+          search: {
+            operation: 'and',
+            children: [
+              {
+                operation: 'field',
+                field: 'stratum.plantingSite.id',
+                values: plantingSiteIds.map((plantingSiteId) => `${plantingSiteId}`),
+              },
+              {
+                operation: 'field',
+                field: 'observation_state',
+                values: ['Completed', 'Abandoned'],
+              },
+            ],
+          },
+          sortOrder: [{ field: 'observation_completedTime' }],
+          count: 0,
+        },
+      }),
+      transformResponse: (response: GetLatestStrataObservationResultsApiResponse) => {
+        const latestByStratumId = new Map<number, LatestStratumObservationResult>();
+
+        response.results.forEach((result) => {
+          if (result.stratum_id === undefined) {
+            return;
+          }
+
+          const stratumId = Number(result.stratum_id);
+          const completedTime = result.observation_completedTime;
+          const survivalRate = result['survivalRate(raw)'];
+          const current = latestByStratumId.get(stratumId);
+
+          if (current === undefined || completedTime > current.completedTime) {
+            latestByStratumId.set(stratumId, {
+              stratumId,
+              observationId: Number(result.observation_id),
+              completedTime,
+              survivalRate: survivalRate === undefined ? undefined : Number(survivalRate),
+            });
+          }
+        });
+
+        return [...latestByStratumId.values()];
+      },
+      providesTags: (_results, _error, args) => [
+        { type: QueryTagTypes.Observation, id: 'LIST' },
+        ...args.plantingSiteIds.map((plantingSiteId) => ({
+          type: QueryTagTypes.PlantingSiteSurvivalRate,
+          id: plantingSiteId,
+        })),
+      ],
+    }),
   }),
 });
+
+export type LatestStrataObservationResultsArgs = {
+  plantingSiteIds: number[];
+};
+
+type LatestStrataObservationResultsApiResult = {
+  stratum_id?: string;
+  observation_id: string;
+  observation_completedTime: string;
+  'survivalRate(raw)'?: string;
+};
+
+type GetLatestStrataObservationResultsApiResponse = {
+  results: LatestStrataObservationResultsApiResult[];
+};
+
+export type LatestStratumObservationResult = {
+  stratumId: number;
+  observationId: number;
+  completedTime: string;
+  survivalRate?: number;
+};
 
 type ListStrataArgs = {
   organizationId: number;
@@ -176,6 +261,7 @@ type StratumSurvivalRate = {
 };
 
 export const {
+  useLazyGetLatestStrataObservationResultsQuery,
   useLazyListStrataQuery,
   useLazyGetStratumPlantDensityTrendQuery,
   useLazyGetStratumSurvivalRateTrendQuery,
