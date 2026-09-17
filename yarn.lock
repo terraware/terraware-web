@@ -6478,10 +6478,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.11.2.tgz#00409e743ac4eea9afe5b7708594d5fcebb00212"
   integrity sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==
 
-"@terraware/web-components@^v5.0.8":
-  version "5.0.8"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-5.0.8.tgz#48d4f27a24e28f42e59e030f257b44e25cb0bb53"
-  integrity sha512-Hc8QhhqiSqsskByxufI6T244yOEjwfXujEIOI+92PFTKQ+rXb8fkhT5/B6ZIYzXziD+hUzzWKzNWaWG4CiNDPA==
+"@terraware/web-components@^v5.0.14":
+  version "5.0.14"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-5.0.14.tgz#2f93ef8a70e745ad8944778ec6d37e796cb820ab"
+  integrity sha512-yGOqSk8cN/DxLSGavJKefTWHJyN/AGiO7Y9wSsMu0yfO4/+yNF0RgDxYWRX9hc2CMmKg9g9JZv1H3c/9cPDR0A==
   dependencies:
     "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^10.0.0"
@@ -6494,6 +6494,7 @@
     "@playcanvas/react" "0.11.5"
     classnames "^2.3.2"
     csv-parse "^5.5.5"
+    embla-carousel-react "^8.6.0"
     geojson "^0.5.0"
     luxon "^3.3.0"
     marked "^16.2.1"
@@ -6501,7 +6502,6 @@
     playcanvas "2.21.3"
     prettier "^3.8.1"
     react-intersection-observer "^9.5.2"
-    react-multi-carousel "^2.8.2"
     react-responsive "^9.0.2"
     sass "^1.75.0"
     tinycolor2 "^1.6.0"
@@ -9806,6 +9806,24 @@ electron-to-chromium@^1.5.402:
   version "1.5.420"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.420.tgz#fc66d26a722d6f227e2092acdf38dd55b198cb44"
   integrity sha512-2yD6XreGusOfNV+dUcvipJEXc3n/n7fgr7996aszTG+YY5E4mqM4tOq/3uhP129cazL9YHbVWSpc79ePotWtPA==
+
+embla-carousel-react@^8.6.0:
+  version "8.6.0"
+  resolved "https://registry.yarnpkg.com/embla-carousel-react/-/embla-carousel-react-8.6.0.tgz#b737042a32761c38d6614593653b3ac619477bd1"
+  integrity sha512-0/PjqU7geVmo6F734pmPqpyHqiM99olvyecY7zdweCw+6tKEXnrE90pBiBbMMU8s5tICemzpQ3hi5EpxzGW+JA==
+  dependencies:
+    embla-carousel "8.6.0"
+    embla-carousel-reactive-utils "8.6.0"
+
+embla-carousel-reactive-utils@8.6.0:
+  version "8.6.0"
+  resolved "https://registry.yarnpkg.com/embla-carousel-reactive-utils/-/embla-carousel-reactive-utils-8.6.0.tgz#607f1d8ab9921c906a555c206251b2c6db687223"
+  integrity sha512-fMVUDUEx0/uIEDM0Mz3dHznDhfX+znCCDCeIophYb1QGVM7YThSWX+wz11zlYwWFOr74b4QLGg0hrGPJeG2s4A==
+
+embla-carousel@8.6.0:
+  version "8.6.0"
+  resolved "https://registry.yarnpkg.com/embla-carousel/-/embla-carousel-8.6.0.tgz#abcedff2bff36992ea8ac27cd30080ca5b6a3f58"
+  integrity sha512-SjWyZBHJPbqxHOzckOfo8lHisEaJWmwd23XppYFYVh10bU66/Pn5tkVkbkCMZVdbUE5eTCI2nD8OyIP4Z+uwkA==
 
 emittery@^0.13.1:
   version "0.13.1"
@@ -15567,11 +15585,6 @@ react-mixpanel-browser@^4.1.0:
   integrity sha512-ShHQQslGi240VTAo685keDtKKe3B3w3yURi/jCwdtCAk6+OQnm1MdhuDC3SFADJ10VvdNb3240t1nKn7uPnTRQ==
   dependencies:
     mixpanel-browser "^2.47.0"
-
-react-multi-carousel@^2.8.2:
-  version "2.8.5"
-  resolved "https://registry.yarnpkg.com/react-multi-carousel/-/react-multi-carousel-2.8.5.tgz#033e35426ee2d2ddd46a5b3967a654cd901a80d1"
-  integrity sha512-C5DAvJkfzR2JK9YixZ3oyF9x6R4LW6nzTpIXrl9Oujxi4uqP9SzVVCjl+JLM3tSdqdjAx/oWZK3dTVBSR73Q+w==
 
 react-redux@^9.0.0:
   version "9.1.2"
