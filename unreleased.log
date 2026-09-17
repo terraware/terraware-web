@@ -1,3 +1,4 @@
+5880fce3 SW-8888 Add an ear to hide and show the observations title bar (#6446)
 4405b9d8 SW-8864 Remove the per-column filters from the observation tables (#6442)
 762746cd SW-8871 Move the monitoring type control into the filters panel (#6441)
 d2eafbb3 SW-8870 Add strata, substrata and status filters for assigned plots (#6440)
