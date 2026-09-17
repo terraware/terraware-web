@@ -70,10 +70,11 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
 
   const observationTypeOptions = useMemo(
     () => [
+      { label: strings.ALL, value: 'All' },
       { label: strings.PLANT_MONITORING, value: 'Monitoring' },
       { label: strings.BIOMASS_MONITORING, value: 'Biomass Measurements' },
     ],
-    [strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]
+    [strings.ALL, strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]
   );
 
   const onPlotNumberChange = useCallback(

@@ -45,7 +45,7 @@ const useFilteredObservationResults = ({
     }
 
     return response.data.observations.filter((observation) => {
-      if (observation.type !== observationType) {
+      if (observationType !== 'All' && observation.type !== observationType) {
         return false;
       }
 
