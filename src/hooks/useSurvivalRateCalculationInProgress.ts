@@ -34,6 +34,7 @@ const useSurvivalRateCalculationInProgress = (plantingSiteId: number | undefined
       dispatch(
         baseApi.util.invalidateTags([
           { type: QueryTagTypes.PlantingSiteSurvivalRate, id: plantingSiteId },
+          { type: QueryTagTypes.PlantingSiteObservation, id: plantingSiteId },
           { type: QueryTagTypes.TrackingStats },
         ])
       );
