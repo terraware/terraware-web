@@ -57,7 +57,7 @@ const ObservationFilters = ({ plantingSiteId }: ObservationFiltersProps): JSX.El
             type='passive'
           />
         </Badge>
-        {typeof plantingSiteId === 'number' && <ObservationTimeline plantingSiteId={plantingSiteId} />}
+        {plantingSiteId !== 'all' && <ObservationTimeline plantingSiteId={plantingSiteId} />}
       </Box>
       {filtersExpanded && <ObservationFilterPanel plantingSiteId={plantingSiteId} />}
     </Box>

@@ -551,7 +551,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
             />
           </>
         )}
-        {typeof plantingSiteId === 'number' && !isAdHoc && rows.length > 0 && (
+        {plantingSiteId !== 'all' && !isAdHoc && rows.length > 0 && (
           <Box display='flex' alignItems='center'>
             <Link
               onClick={navigateToSurvivalRateSettings}
