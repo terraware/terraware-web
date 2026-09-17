@@ -269,6 +269,7 @@ const ObservationListViewContent = (): JSX.Element => {
   if (newFiltersEnabled) {
     return (
       <Page
+        collapsibleHeader
         rightComponent={scheduleObservationButton}
         stickyHeader
         leftComponent={isMobile ? PageHeaderPlantingSiteDropdown : undefined}

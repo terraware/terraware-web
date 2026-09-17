@@ -35,6 +35,7 @@ export type PageProps = {
   descriptionStyle?: SxProps<Theme>;
   leftComponentGridSize?: number;
   rightComponentGridSize?: number;
+  collapsibleHeader?: boolean;
   stickyHeader?: boolean;
   // Rendered on its own row under the title, inside the header wrapper.
   subHeader?: React.ReactNode;
@@ -60,6 +61,7 @@ export default function Page({
   descriptionStyle,
   leftComponentGridSize,
   rightComponentGridSize,
+  collapsibleHeader,
   stickyHeader,
   subHeader,
 }: PageProps): JSX.Element {
@@ -77,7 +79,7 @@ export default function Page({
 
   return (
     <TfMain style={containerStyles}>
-      <PageHeaderWrapper alwaysVisible={stickyHeader} nextElement={contentRef.current}>
+      <PageHeaderWrapper alwaysVisible={stickyHeader} collapsible={collapsibleHeader} nextElement={contentRef.current}>
         <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
         <Grid
           container
