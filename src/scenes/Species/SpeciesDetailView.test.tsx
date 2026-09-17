@@ -106,6 +106,27 @@ const openDeleteDialog = async (user: ReturnType<typeof renderDetailView>['user'
   await screen.findByText(strings.DELETE_SPECIES);
 };
 
+const enterEditMode = async (user: ReturnType<typeof renderDetailView>['user']) => {
+  await user.click(screen.getByRole('button', { name: strings.EDIT_SPECIES }));
+};
+
+/**
+ * The Family field is a plain text input, so editing it dirties the record without kicking off the
+ * scientific-name lookup flow. Its input carries no accessible name of its own, so the id on its
+ * wrapper is the only handle a test has on it.
+ */
+const familyInput = (): HTMLInputElement => {
+  const input = document.querySelector<HTMLInputElement>('#family input');
+  if (!input) {
+    throw new Error('No family input');
+  }
+  return input;
+};
+
+const editButton = () => screen.queryByRole('button', { name: strings.EDIT_SPECIES });
+const saveButton = () => screen.getByRole('button', { name: strings.SAVE });
+const cancelButton = () => screen.getByRole('button', { name: strings.CANCEL });
+
 describe('SpeciesDetailView', () => {
   describe('permission gating', () => {
     it('gives a contributor no way to edit or delete the species', async () => {
@@ -209,6 +230,83 @@ describe('SpeciesDetailView', () => {
         })
       );
       expect(wasReloaded()).toBe(false);
+    });
+  });
+
+  describe('editing in place', () => {
+    it('swaps the read view for the editable form and header without navigating', async () => {
+      const { user } = renderDetailView({ organization: buildOrganization({ role: 'Manager' }) });
+
+      await waitForSpecies();
+      expect(editButton()).toBeInTheDocument();
+
+      await enterEditMode(user);
+
+      // The header now offers Cancel and Save instead of Edit, and the record has become editable.
+      expect(editButton()).not.toBeInTheDocument();
+      expect(saveButton()).toBeInTheDocument();
+      expect(cancelButton()).toBeInTheDocument();
+      expect(familyInput()).toBeInTheDocument();
+
+      // Toggling into edit mode happens in place — the URL stays on the same species.
+      expect(currentPath()).toBe(`/species/${SPECIES_ID}`);
+    });
+
+    it('keeps Save disabled until an edit is made, then flags the unsaved changes', async () => {
+      const { user } = renderDetailView({ organization: buildOrganization({ role: 'Manager' }) });
+
+      await waitForSpecies();
+      await enterEditMode(user);
+
+      expect(saveButton()).toBeDisabled();
+      expect(cancelButton()).toBeEnabled();
+      expect(screen.queryByText(strings.UNSAVED_CHANGES)).not.toBeInTheDocument();
+
+      await user.type(familyInput(), 'Malvaceae');
+
+      await waitFor(() => expect(saveButton()).toBeEnabled());
+      expect(screen.getByText(strings.UNSAVED_CHANGES)).toBeInTheDocument();
+    });
+
+    it('discards edits and returns to the read view on cancel, sending no update', async () => {
+      const updates = captureRequests('put', `${SPECIES_URL}/:speciesId`);
+
+      const { user } = renderDetailView({ organization: buildOrganization({ role: 'Manager' }) });
+
+      await waitForSpecies();
+      await enterEditMode(user);
+      await user.type(familyInput(), 'Malvaceae');
+      await waitFor(() => expect(saveButton()).toBeEnabled());
+
+      await user.click(cancelButton());
+
+      await waitFor(() => expect(editButton()).toBeInTheDocument());
+      expect(screen.queryByText(strings.UNSAVED_CHANGES)).not.toBeInTheDocument();
+      expect(updates).toHaveLength(0);
+      expect(currentPath()).toBe(`/species/${SPECIES_ID}`);
+    });
+
+    it('sends the update and returns to the read view on save', async () => {
+      const updates = captureRequests('put', `${SPECIES_URL}/:speciesId`);
+
+      const { user, wasReloaded } = renderDetailView({ organization: buildOrganization({ role: 'Manager' }) });
+
+      await waitForSpecies();
+      await enterEditMode(user);
+      await user.type(familyInput(), 'Malvaceae');
+      await waitFor(() => expect(saveButton()).toBeEnabled());
+
+      await user.click(saveButton());
+
+      await waitFor(() => expect(updates).toHaveLength(1));
+      expect(new URL(updates[0].url).pathname).toBe(`${SPECIES_URL}/${SPECIES_ID}`);
+      expect(await updates[0].json()).toMatchObject({
+        familyName: 'Malvaceae',
+        scientificName: SPECIES.scientificName,
+      });
+
+      await waitFor(() => expect(editButton()).toBeInTheDocument());
+      expect(wasReloaded()).toBe(true);
     });
   });
 });

@@ -4,7 +4,6 @@ import { Route, Routes } from 'react-router';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import SpeciesAddView from 'src/scenes/Species/SpeciesAddView';
 import SpeciesDetailView from 'src/scenes/Species/SpeciesDetailView';
-import SpeciesEditView from 'src/scenes/Species/SpeciesEditView';
 import SpeciesListView from 'src/scenes/Species/SpeciesListView';
 
 const SpeciesAddRoute = (): JSX.Element => {
@@ -12,9 +11,9 @@ const SpeciesAddRoute = (): JSX.Element => {
   return <SpeciesAddView reloadData={() => void refetch()} />;
 };
 
-const SpeciesDetailRoute = (): JSX.Element => {
+const SpeciesDetailRoute = ({ initialEditing }: { initialEditing?: boolean }): JSX.Element => {
   const { refetch } = useOrganizationSpecies();
-  return <SpeciesDetailView reloadData={() => void refetch()} />;
+  return <SpeciesDetailView initialEditing={initialEditing} reloadData={() => void refetch()} />;
 };
 
 const SpeciesRouter = () => {
@@ -22,7 +21,7 @@ const SpeciesRouter = () => {
     <Routes>
       <Route path={'/new'} element={<SpeciesAddRoute />} />
       <Route path={'/:speciesId'} element={<SpeciesDetailRoute />} />
-      <Route path={'/:speciesId/edit'} element={<SpeciesEditView />} />
+      <Route path={'/:speciesId/edit'} element={<SpeciesDetailRoute initialEditing />} />
       <Route path={'/*'} element={<SpeciesListView />} />
     </Routes>
   );

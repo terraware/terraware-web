@@ -36,6 +36,7 @@ export type PageProps = {
   leftComponentGridSize?: number;
   rightComponentGridSize?: number;
   stickyHeader?: boolean;
+  stickyHeaderElevated?: boolean;
   // Rendered on its own row under the title, inside the header wrapper.
   subHeader?: React.ReactNode;
 };
@@ -61,6 +62,7 @@ export default function Page({
   leftComponentGridSize,
   rightComponentGridSize,
   stickyHeader,
+  stickyHeaderElevated,
   subHeader,
 }: PageProps): JSX.Element {
   const contentRef = useRef(null);
@@ -77,7 +79,7 @@ export default function Page({
 
   return (
     <TfMain style={containerStyles}>
-      <PageHeaderWrapper alwaysVisible={stickyHeader} nextElement={contentRef.current}>
+      <PageHeaderWrapper alwaysVisible={stickyHeader} elevated={stickyHeaderElevated} nextElement={contentRef.current}>
         <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
         <Grid
           container

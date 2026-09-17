@@ -16,11 +16,14 @@ const HEADER_TOP_GAP = 32;
 /**
  * alwaysVisible Keep the header pinned below the top bar instead of hiding it while scrolling down
  * children The child component which is the page header
+ * elevated Give the header a persistent divider and soft drop shadow, regardless of scroll,
+ *   to signal it holds pending actions (such as unsaved edits)
  * nextElement The HTMLElement immediately following the header element
  */
 interface Props {
   alwaysVisible?: boolean;
   children?: React.ReactNode | React.ReactNode[];
+  elevated?: boolean;
   hasNav?: boolean;
   nextElement?: HTMLElement | null;
   nextElementInitialMargin?: number;
@@ -29,6 +32,7 @@ interface Props {
 export default function PageHeaderWrapper({
   alwaysVisible = false,
   children,
+  elevated = false,
   hasNav = true,
   nextElement,
   nextElementInitialMargin = 0,
@@ -138,19 +142,22 @@ export default function PageHeaderWrapper({
   // An always visible header is fixed from the top of the page, so it only takes on the sticky
   // chrome (background, divider, gap filling padding) once content scrolls underneath it.
   const stickyChrome = alwaysVisible ? scrolled : debouncedSticky;
+  // An elevated header keeps its divider (and gains a soft shadow) at all times, so pending
+  // actions read as raised off the page even before the user scrolls.
+  const showDivider = elevated || stickyChrome;
 
   const stickyTop = debouncedScrollDown ? `${TOP_BAR_HEIGHT - height}px` : `${TOP_BAR_HEIGHT}px`;
   const alwaysVisibleTop = scrolled ? `${TOP_BAR_HEIGHT}px` : `${TOP_BAR_HEIGHT + HEADER_TOP_GAP}px`;
 
   const styles: Record<string, any> = {
     background: stickyChrome ? theme.palette.TwClrBaseGray025 : undefined,
-    borderBottom: stickyChrome ? '1px solid' : '1px transparent',
-    borderImage: stickyChrome
+    borderBottom: showDivider ? '1px solid' : '1px transparent',
+    borderImage: showDivider
       ? `linear-gradient(to right, ${theme.palette.TwClrBaseGray300}00,` +
         `${theme.palette.TwClrBaseGray300}FF, ${theme.palette.TwClrBaseGray300}FF,` +
         `${theme.palette.TwClrBaseGray300}FF, ${theme.palette.TwClrBaseGray300}00) 1`
       : undefined,
-    boxShadow: 'none',
+    boxShadow: elevated ? `0px 4px 8px ${theme.palette.TwClrBaseGray300}66` : 'none',
     paddingRight: pinned ? theme.spacing(4) : undefined,
     paddingTop: stickyChrome ? theme.spacing(4) : undefined,
     position: pinned ? 'fixed' : undefined,
