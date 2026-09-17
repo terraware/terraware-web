@@ -16,21 +16,17 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingDens
   const theme = useTheme();
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
-  const { observation: latestObservationResult, isLoading } = useLatestSiteObservationResult(plantingSiteId, 'Plot');
+  // Site-level plantingDensity needs no nested data; 'Stratum' reuses SurvivalRateCard's cache entry.
+  const { observation: latestObservationResult, isLoading } = useLatestSiteObservationResult(plantingSiteId, 'Stratum');
 
-  const everySubstratumHasObservation = useMemo(() => {
-    if (!latestObservationResult || !plantingSite) {
-      return true;
-    }
-
-    const allSubstrata = plantingSite.strata?.flatMap((stratum) => stratum.substrata);
-    const allSubstrataObserved = latestObservationResult.strata.flatMap((stratum) => stratum.substrata);
-    return allSubstrata?.every((substratum) =>
-      allSubstrataObserved.find(
-        (substratumObv) => substratumObv.substratumId === substratum.id && substratumObv.monitoringPlots.length > 0
-      )
-    );
-  }, [latestObservationResult, plantingSite]);
+  // Coverage means ever observed, matching how plantingDensity carries data forward.
+  const everySubstratumHasObservation = useMemo(
+    () =>
+      (plantingSite?.strata ?? [])
+        .flatMap((stratum) => stratum.substrata)
+        .every((substratum) => substratum.latestObservationId !== undefined),
+    [plantingSite]
+  );
 
   if (isLoading) {
     return (

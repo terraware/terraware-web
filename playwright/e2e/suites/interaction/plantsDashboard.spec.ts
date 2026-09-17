@@ -183,16 +183,16 @@ test.describe('PlantsDashboardTests', () => {
     await expect(page.locator('#plantsPerHaChart')).toBeVisible();
     await expect(page.getByText('Survival Rate').first()).toBeVisible();
     await expect(page.locator('#survivalChart')).toBeVisible();
-    await expect(page.getByText('Plant Density', { exact: true })).toBeVisible();
+    await expect(page.getByText('Plant Density', { exact: true }).first()).toBeVisible();
     await expect(page.getByText('as of 2025-05-29 Observation').first()).toBeVisible();
     await expect(
       page
         .locator('div')
-        .filter({ hasText: /^Observed Density$/ })
+        .filter({ hasText: /^Site Plant Density$/ })
         .getByRole('paragraph')
     ).toBeVisible();
     await expect(page.getByText('1,014Plants/ha')).toBeVisible();
-    await expect(page.getByText('Observed Density Per Stratum')).toBeVisible();
+    await expect(page.getByText('Plant Density Per Stratum')).toBeVisible();
     await expect(page.locator('#plantingDensityByStratum')).toBeVisible();
     await expect(page.getByText('Survival Rate').nth(1)).toBeVisible();
     await expect(page.getByText('as of 2025-05-29 Observation').nth(1)).toBeVisible();

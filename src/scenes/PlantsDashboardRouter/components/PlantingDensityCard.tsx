@@ -40,9 +40,9 @@ export default function PlantingDensityCard({
           <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
             <Box display={'flex'} alignItems={'center'}>
               <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-                {strings.OBSERVED_DENSITY}
+                {strings.SITE_PLANT_DENSITY}
               </Typography>
-              <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
+              <Tooltip title={strings.PLANT_DENSITY_DASHBOARD_TOOLTIP}>
                 <Box display='flex'>
                   <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
                 </Box>
@@ -58,9 +58,9 @@ export default function PlantingDensityCard({
       <Box flexBasis='100%' marginTop={isDesktop ? 0 : 4}>
         <Box display={'flex'} alignItems={'center'}>
           <Typography fontSize={'20px'} fontWeight={600} marginRight={1}>
-            {strings.OBSERVED_DENSITY_PER_STRATUM}
+            {strings.PLANT_DENSITY_PER_STRATUM}
           </Typography>
-          <Tooltip title={strings.OBSERVED_DENSITY_TOOLTIP}>
+          <Tooltip title={strings.PLANT_DENSITY_DASHBOARD_TOOLTIP}>
             <Box display='flex'>
               <Icon fillColor={theme.palette.TwClrIcnInfo} name='info' size='small' />
             </Box>

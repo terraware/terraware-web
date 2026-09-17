@@ -1463,9 +1463,6 @@ OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION,"Necesitará la aplicación móvil
 
 Escanee los códigos QR con su dispositivo para descargarla en App Store o Google Play.",13be06be
 OBSERVED_BY_ON,Observado por {0} el {1} a las {2},c8b41186
-OBSERVED_DENSITY,Densidad constatada,c5003c27
-OBSERVED_DENSITY_PER_STRATUM,Densidad Observada por Estrato,db5f3cf7
-OBSERVED_DENSITY_TOOLTIP,La densidad observada se basa en el número de plantas observadas dentro de los estratos que fueron observados al menos una vez en esta Observación.,328dc9f7
 OBSERVED_GPS_COORDINATES,Coordenadas GPS observadas,efbe8b32
 OBSERVED_PLANTS,Plantas observadas,375e69c3
 OBSERVED_SPECIES,Especies observadas,922020f2
@@ -1579,8 +1576,10 @@ PHOTOS_VIDEOS,Fotos/Videos,5d533136
 PLACEHOLDER,Marcador de posición,e7c25185
 PLANT,plantar,9089fdf9
 PLANT_DENSITY,Densidad de plantación,feae2a2d
+PLANT_DENSITY_DASHBOARD_TOOLTIP,"La densidad de plantas se basa en la observación más reciente de cada estrato, utilizando los datos observados más recientes para los subestratos que no fueron observados.",d8d7b522
 PLANT_DENSITY_MISSING_TOOLTIP,"Cuando se completa una observación, la densidad de plantación calculada aparecerá aquí.",6e3830dd
 PLANT_DENSITY_OF_PLANTED_STRATA,Densidad de Plantas (de Estratos Plantados),db91b874
+PLANT_DENSITY_PER_STRATUM,Densidad de plantas por estrato,292277cd
 PLANT_DENSITY_TITLE_TOOLTIP,Ingrese manualmente la densidad de plantas para cada una de las especies plantadas. Esta densidad se utilizará para los cálculos de la Tasa de Supervivencia.,50547e3a
 PLANT_DENSITY_TOOLTIP,Densidades de plantas por especie que se utilizarán para calcular las tasas de supervivencia por parcela y por especie.,82b7af4f
 PLANT_DESCRIPTION,Notas sobre las plantas,0915d26a
@@ -2204,6 +2203,7 @@ SITE_GOALS,Objetivos del Sitio,345a7c04
 SITE_GOALS_DESCRIPTION,Gestione los objetivos del sitio para densidades de plantación y especies.,29421088
 SITE_LOCATION,Ubicación del sitio,e0a85b19
 SITE_MAP,Mapa del sitio,df2fc60a
+SITE_PLANT_DENSITY,Densidad de Plantas en el Sitio,a449ddcc
 SITE_STRATUM_BOUNDARIES,Límites de Estrato,418d687a
 SITE_STRATUM_BOUNDARIES_DESCRIPTION_0,"Un Estrato es una capa de vegetación del sitio de plantación donde las condiciones de plantación y crecimiento son similares. Cada sitio de plantación debe tener al menos un estrato y usualmente no más de cinco. Un ejemplo de Estrato es la pendiente de una colina orientada al este, donde las condiciones de luz solar y suelo son similares.",408485f9
 SITE_STRATUM_BOUNDARIES_DESCRIPTION_1,Dibuje las Estratas de su sitio de plantación a continuación. Use la herramienta de corte {0} para crear polígonos dentro de los límites del sitio para las Estratas. [Vea un tutorial] sobre cómo agregar límites de Estrata.,c6d2ac88

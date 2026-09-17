@@ -125,7 +125,13 @@ const injectedRtkApi = api.injectEndpoints({
         method: 'POST',
         body: {
           prefix: 'observationStratumResult',
-          fields: ['stratum_id', 'observation_id', 'observation_completedTime', 'survivalRate(raw)'],
+          fields: [
+            'stratum_id',
+            'observation_id',
+            'observation_completedTime',
+            'plantDensity(raw)',
+            'survivalRate(raw)',
+          ],
           search: {
             operation: 'and',
             children: [
@@ -155,6 +161,7 @@ const injectedRtkApi = api.injectEndpoints({
 
           const stratumId = Number(result.stratum_id);
           const completedTime = result.observation_completedTime;
+          const plantDensity = result['plantDensity(raw)'];
           const survivalRate = result['survivalRate(raw)'];
           const current = latestByStratumId.get(stratumId);
 
@@ -163,6 +170,7 @@ const injectedRtkApi = api.injectEndpoints({
               stratumId,
               observationId: Number(result.observation_id),
               completedTime,
+              plantDensity: plantDensity === undefined ? undefined : Number(plantDensity),
               survivalRate: survivalRate === undefined ? undefined : Number(survivalRate),
             });
           }
@@ -189,6 +197,7 @@ type LatestStrataObservationResultsApiResult = {
   stratum_id?: string;
   observation_id: string;
   observation_completedTime: string;
+  'plantDensity(raw)'?: string;
   'survivalRate(raw)'?: string;
 };
 
@@ -200,6 +209,7 @@ export type LatestStratumObservationResult = {
   stratumId: number;
   observationId: number;
   completedTime: string;
+  plantDensity?: number;
   survivalRate?: number;
 };
 
