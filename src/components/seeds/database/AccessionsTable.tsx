@@ -1,10 +1,12 @@
-import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, CircularProgress, IconButton, Tooltip, useTheme } from '@mui/material';
-import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { Box, Checkbox, CircularProgress, IconButton, Tooltip, useTheme } from '@mui/material';
+import { EditableTable, EditableTableColumn, Icon, Message } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_ColumnFiltersState,
+  MRT_Row,
+  MRT_RowSelectionState,
   MRT_ShowHideColumnsButton,
   MRT_TableInstance,
   MRT_ToggleDensePaddingButton,
@@ -16,12 +18,15 @@ import {
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
+import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
-import { useLocalization, useOrganization } from 'src/providers/hooks';
+import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import WithdrawSeedsModal from 'src/scenes/AccessionsRouter/withdraw/WithdrawSeedsModal';
 import strings from 'src/strings';
-import { ACCESSION_2_STATES } from 'src/types/Accession';
+import { ACCESSION_2_STATES, isWithdrawableAccessionState } from 'src/types/Accession';
 import { Project } from 'src/types/Project';
 import { SearchResponseElementWithId } from 'src/types/Search';
 import { makeCsv } from 'src/utils/csv';
@@ -88,12 +93,87 @@ const DEFAULT_COLUMN_VISIBILITY = Object.fromEntries(
 type AccessionsTableProps = {
   searchResults: SearchResponseElementWithId[] | null | undefined;
   projects?: Project[];
+  reloadData?: () => void;
 };
 
-export default function AccessionsTable({ searchResults, projects }: AccessionsTableProps): JSX.Element {
+export default function AccessionsTable({ searchResults, projects, reloadData }: AccessionsTableProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const { user, isAllowed } = useUser();
   const theme = useTheme();
+  // Contributors cannot edit accessions, so they must not reach the withdrawal flow (its mutation
+  // would be rejected). Gate the selection/withdraw entry point on the same permission the
+  // Accession Details withdraw button uses.
+  const bulkWithdrawEnabled =
+    isEnabled('Bulk Accession Withdraw') && isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
+
+  const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+  const [withdrawAccessionIds, setWithdrawAccessionIds] = useState<number[]>();
+
+  const selectedRows = useMemo(
+    () =>
+      Object.keys(rowSelection)
+        .map((id) => (searchResults ?? []).find((row) => String(row.id) === id))
+        .filter((row): row is SearchResponseElementWithId => row !== undefined),
+    [rowSelection, searchResults]
+  );
+
+  const isSelectionBulkWithdrawable = useMemo(
+    () =>
+      selectedRows.length >= 1 &&
+      new Set(selectedRows.map((row) => row.species_id)).size === 1 &&
+      selectedRows.every((row) => isWithdrawableAccessionState(row.state as string | undefined)),
+    [selectedRows]
+  );
+
+  // The species of the current selection; once a row is picked, other species can't be added.
+  const selectionSpeciesId = selectedRows.length > 0 ? selectedRows[0].species_id : undefined;
+
+  // Whether every selected row shares one species. Drives the info banner and is kept separate from
+  // isSelectionBulkWithdrawable, which additionally requires a withdrawable state for the button.
+  const oneSpeciesSelected = useMemo(
+    () => selectedRows.length > 0 && new Set(selectedRows.map((row) => row.species_id)).size === 1,
+    [selectedRows]
+  );
+
+  const withdrawTooltip = isSelectionBulkWithdrawable ? undefined : strings.WITHDRAW_SAME_SPECIES_ONLY;
+
+  // Custom select cell: a disabled (different-species) checkbox is wrapped in a tooltip explaining
+  // why it can't be selected (a nursery batch is single-species).
+  const SelectRowCheckboxCell = useCallback(
+    ({ row }: { row: MRT_Row<SearchResponseElementWithId> }) => {
+      const canSelect = selectionSpeciesId === undefined || row.original.species_id === selectionSpeciesId;
+      const checkbox = (
+        <Checkbox
+          size='small'
+          checked={row.getIsSelected()}
+          disabled={!canSelect}
+          onChange={row.getToggleSelectedHandler()}
+          inputProps={{ 'aria-label': 'Toggle select row' }}
+        />
+      );
+      return canSelect ? (
+        checkbox
+      ) : (
+        <Tooltip title={strings.BULK_WITHDRAW_ONE_SPECIES_TOOLTIP}>
+          <span>{checkbox}</span>
+        </Tooltip>
+      );
+    },
+    [selectionSpeciesId]
+  );
+
+  const bulkWithdrawSelectedRows = useCallback(() => {
+    const ids = selectedRows.map((row) => Number(row.id));
+    if (ids.length > 0) {
+      setWithdrawAccessionIds(ids);
+    }
+  }, [selectedRows]);
+
+  const onWithdrawn = useCallback(() => {
+    setRowSelection({});
+    reloadData?.();
+  }, [reloadData]);
   const locationTimeZone = useLocationTimeZone();
   const facilityNameToTz = useMemo(
     () =>
@@ -594,6 +674,26 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
 
   return (
     <Card>
+      {bulkWithdrawEnabled && oneSpeciesSelected && (
+        <Box paddingBottom={2}>
+          <Message
+            type='page'
+            priority='info'
+            body={strings
+              .formatString(strings.BULK_WITHDRAW_SPECIES_BANNER, String(selectedRows[0].speciesName ?? ''))
+              .toString()}
+          />
+        </Box>
+      )}
+      {bulkWithdrawEnabled && user && withdrawAccessionIds && (
+        <WithdrawSeedsModal
+          open={withdrawAccessionIds !== undefined}
+          onClose={() => setWithdrawAccessionIds(undefined)}
+          accessionIds={withdrawAccessionIds}
+          user={user}
+          onWithdrawn={onWithdrawn}
+        />
+      )}
       <EditableTable
         clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
         columns={editableColumns}
@@ -618,6 +718,7 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
             pagination,
             showColumnFilters,
             showGlobalFilter,
+            ...(bulkWithdrawEnabled ? { rowSelection } : {}),
           },
           onSortingChange: setSorting,
           onPaginationChange,
@@ -633,6 +734,30 @@ export default function AccessionsTable({ searchResults, projects }: AccessionsT
           enableColumnDragging: true,
           positionGlobalFilter: 'right',
           getRowId: (row) => String(row.id),
+          ...(bulkWithdrawEnabled
+            ? {
+                enableRowSelection: (row: MRT_Row<SearchResponseElementWithId>) =>
+                  selectionSpeciesId === undefined || row.original.species_id === selectionSpeciesId,
+                displayColumnDefOptions: { 'mrt-row-select': { Cell: SelectRowCheckboxCell } },
+                onRowSelectionChange: setRowSelection,
+                renderToolbarAlertBannerContent: ({ selectedAlert }: { selectedAlert: React.ReactNode }) => (
+                  <Box display='flex' gap={1} alignItems='center' justifyContent='space-between' width='100%'>
+                    {selectedAlert}
+                    <Tooltip title={withdrawTooltip || ''}>
+                      <span>
+                        <Button
+                          type='productive'
+                          onClick={bulkWithdrawSelectedRows}
+                          disabled={!isSelectionBulkWithdrawable}
+                          label={strings.WITHDRAW}
+                          priority='secondary'
+                        />
+                      </span>
+                    </Tooltip>
+                  </Box>
+                ),
+              }
+            : {}),
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
               <Tooltip title={strings.EXPORT}>

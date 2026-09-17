@@ -302,6 +302,7 @@ BUDGET_NARRATIVE_SUMMARY_REQUIRED,Résumé narratif du budget *,e90de8c1
 BUG_REPORT,Rapport de bug,5fab1616
 BUG_REPORT_DESCRIPTION,Faites-nous part d'un problème que vous avez rencontré lors de l'utilisation de Terraware.,0030b91e
 BUG_REPORT_INSTRUCTIONS,Fournissez une description détaillée du problème rencontré. (Où le problème s'est-il produit ? Qu'avez-vous fait avant de rencontrer le problème ? À quoi vous attendiez-vous ?),b2ca26aa
+BULK_WITHDRAW_ONE_SPECIES_TOOLTIP,Une seule espèce peut être ajoutée à un lot de pépinière. Désélectionnez l'espèce actuelle pour en choisir une autre.,c901d88e
 BULK_WITHDRAW_SPECIES_BANNER,"Un lot de pépinière est créé par espèce. Seules ""{0}"" accessions peuvent être ajoutées à ce retrait.",5b9cb2fe
 BY,Par,e8fbe470
 BY_ACCESSION,Par accession,61b8fb95
