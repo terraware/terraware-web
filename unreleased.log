@@ -1,3 +1,4 @@
+63d124d5 SW-8879 Incorrect welcome screen when changing orgs sometimes (#6454)
 dfefeb2b Update screenshots (#6455)
 5880fce3 SW-8888 Add an ear to hide and show the observations title bar (#6446)
 4405b9d8 SW-8864 Remove the per-column filters from the observation tables (#6442)
