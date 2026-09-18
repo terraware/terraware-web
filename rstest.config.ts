@@ -27,6 +27,15 @@ export default defineConfig({
         ],
       },
     },
+    swc: {
+      jsc: {
+        transform: {
+          react: {
+            runtime: 'automatic',
+          },
+        },
+      },
+    },
   },
   globals: true,
   coverage: {
