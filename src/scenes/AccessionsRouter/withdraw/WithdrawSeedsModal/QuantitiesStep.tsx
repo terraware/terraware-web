@@ -104,7 +104,7 @@ const QuantitiesStep = ({
           <TableRow>
             <TableCell>{strings.ACCESSION}</TableCell>
             <TableCell>{strings.REMAINING}</TableCell>
-            <TableCell>{strings.WITHDRAW}</TableCell>
+            <TableCell sx={{ width: '232px' }}>{strings.WITHDRAW}</TableCell>
             {withdrawByWeight && (
               <>
                 <TableCell>{strings.EST_COUNT}</TableCell>

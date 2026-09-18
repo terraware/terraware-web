@@ -305,8 +305,8 @@ BUDGET_NARRATIVE_SUMMARY_REQUIRED,Resumen narrativo del presupuesto *,e90de8c1
 BUG_REPORT,Informe de errores,5fab1616
 BUG_REPORT_DESCRIPTION,Infórmenos sobre algún problema que haya detectado al utilizar Terraware.,0030b91e
 BUG_REPORT_INSTRUCTIONS,Describa detalladamente el problema que encontró (¿Dónde se produjo el problema? ¿Qué hizo antes de encontrarse con el problema? ¿Qué esperaba que ocurriera?).,b2ca26aa
-BULK_WITHDRAW_ONE_SPECIES_TOOLTIP,Solo se puede agregar una especie a un lote de vivero. Desmarque la selección para elegir una especie diferente.,c901d88e
-BULK_WITHDRAW_SPECIES_BANNER,"Se crea un lote de vivero por especie. Solo se pueden agregar ""{0}"" accesiones a este retiro.",5b9cb2fe
+BULK_WITHDRAW_ONE_SPECIES_TOOLTIP,Solo se puede retirar una especie a la vez. Desmarque la selección para elegir una especie diferente.,3e36b01f
+BULK_WITHDRAW_SPECIES_BANNER,"Solo las accesiones con ""{0}"" pueden incluirse en este retiro.",28093622
 BY,Por,e8fbe470
 BY_ACCESSION,Por accesión,61b8fb95
 BY_BATCH,Por lotes,68c5092f
