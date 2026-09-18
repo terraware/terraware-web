@@ -1,4 +1,4 @@
-import React, { CSSProperties, type JSX, useRef } from 'react';
+import React, { CSSProperties, type JSX, useCallback, useState } from 'react';
 
 import { Box, CircularProgress, Grid, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import { Button, IconName } from '@terraware/web-components';
@@ -67,7 +67,12 @@ export default function Page({
   stickyHeaderElevated,
   subHeader,
 }: PageProps): JSX.Element {
-  const contentRef = useRef(null);
+  // A callback ref backed by state: when the content element mounts, Page re-renders and hands the
+  // real element to PageHeaderWrapper. A plain ref would leave nextElement null on the first paint,
+  // so a permanently fixed (sticky) header could not reserve its height and would overlap the first
+  // row until some unrelated re-render happened.
+  const [contentEl, setContentEl] = useState<HTMLElement | null>(null);
+  const contentRef = useCallback((node: HTMLElement | null) => setContentEl(node), []);
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
@@ -85,7 +90,7 @@ export default function Page({
         alwaysVisible={stickyHeader}
         collapsible={collapsibleHeader}
         elevated={stickyHeaderElevated}
-        nextElement={contentRef.current}
+        nextElement={contentEl}
       >
         <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
         <Grid
