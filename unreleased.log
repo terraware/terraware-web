@@ -1,3 +1,5 @@
+aea229cd SW-8910 Add Species (#6466)
+7698a7e4 SW-8920 Keep the map, timeline and table when there is nothing to show (#6458)
 ef17f815 Update dependency react-test-renderer to v19.3.0 (#6418)
 c0dff9d6 SW-8865 Put the observations timeline in the header (#6451)
 0fb17681 SW-8910 Species edit (#6456)

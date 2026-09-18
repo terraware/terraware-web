@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/6</span>
+                <span class='fraction'>6/7</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.33% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/6</span>
+                <span class='fraction'>6/7</span>
             </div>
         
             
@@ -263,7 +263,12 @@
 <a name='L198'></a><a href='#L198'>198</a>
 <a name='L199'></a><a href='#L199'>199</a>
 <a name='L200'></a><a href='#L200'>200</a>
-<a name='L201'></a><a href='#L201'>201</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L201'></a><a href='#L201'>201</a>
+<a name='L202'></a><a href='#L202'>202</a>
+<a name='L203'></a><a href='#L203'>203</a>
+<a name='L204'></a><a href='#L204'>204</a>
+<a name='L205'></a><a href='#L205'>205</a>
+<a name='L206'></a><a href='#L206'>206</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -332,11 +337,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">394x</span>
-<span class="cline-any cline-yes">394x</span>
-<span class="cline-any cline-yes">394x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">394x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">401x</span>
+<span class="cline-any cline-yes">36x</span>
+<span class="cline-any cline-yes">401x</span>
+<span class="cline-any cline-yes">401x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">401x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -344,7 +354,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">394x</span>
+<span class="cline-any cline-yes">401x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -463,7 +473,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { CSSProperties, type JSX, useRef } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { CSSProperties, type JSX, useCallback, useState } from 'react';
 &nbsp;
 import { Box, CircularProgress, Grid, SxProps, Theme, Typography, useTheme } from '@mui/material';
 import { Button, IconName } from '@terraware/web-components';
@@ -532,7 +542,12 @@ export default function Page({
   stickyHeaderElevated,
   subHeader,
 }: PageProps): JSX.Element {
-  const contentRef = useRef(null);
+  // A callback ref backed by state: when the content element mounts, Page re-renders and hands the
+  // real element to PageHeaderWrapper. A plain ref would leave nextElement null on the first paint,
+  // so a permanently fixed (sticky) header could not reserve its height and would overlap the first
+  // row until some unrelated re-render happened.
+  const [contentEl, setContentEl] = useState&lt;HTMLElement | null&gt;(null);
+  const contentRef = useCallback((node: HTMLElement | null) =&gt; setContentEl(node), []);
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 &nbsp;
@@ -550,7 +565,7 @@ export default function Page({
         alwaysVisible={stickyHeader}
         collapsible={collapsibleHeader}
         elevated={stickyHeaderElevated}
-        nextElement={contentRef.current}
+        nextElement={contentEl}
       &gt;
         &lt;&gt;{crumbs &amp;&amp; &lt;BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? <span class="branch-2 cbranch-no" title="branch not covered" >true}</span> /&gt;}&lt;/&gt;
         &lt;Grid
@@ -670,7 +685,7 @@ export default function Page({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-18T15:40:13.527Z
+                at 2026-09-18T15:49:56.830Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

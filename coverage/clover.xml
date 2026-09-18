@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1789746013709" clover="3.2.0">
-  <project timestamp="1789746013709" name="All files">
-    <metrics statements="8922" coveredstatements="4658" conditionals="5463" coveredconditionals="2163" methods="3067" coveredmethods="1168" elements="17452" coveredelements="7989" complexity="0" loc="8922" ncloc="8922" packages="95" files="412" classes="412"/>
+<coverage generated="1789746597018" clover="3.2.0">
+  <project timestamp="1789746597018" name="All files">
+    <metrics statements="8923" coveredstatements="4659" conditionals="5463" coveredconditionals="2163" methods="3068" coveredmethods="1169" elements="17454" coveredelements="7991" complexity="0" loc="8923" ncloc="8923" packages="95" files="412" classes="412"/>
     <package name="src">
       <metrics statements="307" coveredstatements="248" conditionals="69" coveredconditionals="20" methods="19" coveredmethods="7"/>
       <file name="constants.ts" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/constants.ts">
@@ -359,25 +359,25 @@
       </file>
       <file name="PageSnackbar.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/components/PageSnackbar.tsx">
         <metrics statements="19" coveredstatements="14" conditionals="16" coveredconditionals="5" methods="7" coveredmethods="5"/>
-        <line num="21" count="485" type="stmt"/>
-        <line num="22" count="485" type="stmt"/>
-        <line num="23" count="485" type="stmt"/>
+        <line num="21" count="493" type="stmt"/>
+        <line num="22" count="493" type="stmt"/>
+        <line num="23" count="493" type="stmt"/>
         <line num="24" count="31" type="cond" truecount="1" falsecount="1"/>
-        <line num="26" count="485" type="stmt"/>
+        <line num="26" count="493" type="stmt"/>
         <line num="27" count="32" type="stmt"/>
-        <line num="30" count="485" type="stmt"/>
+        <line num="30" count="493" type="stmt"/>
         <line num="31" count="32" type="cond" truecount="1" falsecount="1"/>
         <line num="33" count="32" type="stmt"/>
-        <line num="37" count="485" type="stmt"/>
+        <line num="37" count="493" type="stmt"/>
         <line num="38" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="39" count="0" type="stmt"/>
-        <line num="48" count="485" type="stmt"/>
+        <line num="48" count="493" type="stmt"/>
         <line num="49" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="50" count="0" type="stmt"/>
         <line num="51" count="0" type="stmt"/>
-        <line num="55" count="485" type="stmt"/>
-        <line num="69" count="485" type="stmt"/>
-        <line num="71" count="485" type="stmt"/>
+        <line num="55" count="493" type="stmt"/>
+        <line num="69" count="493" type="stmt"/>
+        <line num="71" count="493" type="stmt"/>
       </file>
       <file name="UpdateLocationModal.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/components/UpdateLocationModal.tsx">
         <metrics statements="1" coveredstatements="1" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
@@ -890,15 +890,16 @@
       </file>
     </package>
     <package name="src.components.Page">
-      <metrics statements="6" coveredstatements="5" conditionals="31" coveredconditionals="17" methods="1" coveredmethods="1"/>
+      <metrics statements="7" coveredstatements="6" conditionals="31" coveredconditionals="17" methods="2" coveredmethods="2"/>
       <file name="index.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/components/Page/index.tsx">
-        <metrics statements="6" coveredstatements="5" conditionals="31" coveredconditionals="17" methods="1" coveredmethods="1"/>
-        <line num="70" count="394" type="stmt"/>
-        <line num="71" count="394" type="stmt"/>
-        <line num="72" count="394" type="stmt"/>
-        <line num="74" count="394" type="cond" truecount="1" falsecount="1"/>
-        <line num="75" count="0" type="stmt"/>
-        <line num="82" count="394" type="stmt"/>
+        <metrics statements="7" coveredstatements="6" conditionals="31" coveredconditionals="17" methods="2" coveredmethods="2"/>
+        <line num="74" count="401" type="stmt"/>
+        <line num="75" count="36" type="stmt"/>
+        <line num="76" count="401" type="stmt"/>
+        <line num="77" count="401" type="stmt"/>
+        <line num="79" count="401" type="cond" truecount="1" falsecount="1"/>
+        <line num="80" count="0" type="stmt"/>
+        <line num="87" count="401" type="stmt"/>
       </file>
     </package>
     <package name="src.components.PageHeader">
@@ -958,10 +959,10 @@
       </file>
       <file name="Card.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/components/common/Card.tsx">
         <metrics statements="4" coveredstatements="4" conditionals="16" coveredconditionals="10" methods="1" coveredmethods="1"/>
-        <line num="28" count="673" type="stmt"/>
-        <line num="29" count="673" type="stmt"/>
-        <line num="30" count="673" type="cond" truecount="1" falsecount="1"/>
-        <line num="32" count="673" type="stmt"/>
+        <line num="28" count="674" type="stmt"/>
+        <line num="29" count="674" type="stmt"/>
+        <line num="30" count="674" type="cond" truecount="1" falsecount="1"/>
+        <line num="32" count="674" type="stmt"/>
       </file>
       <file name="Checkbox.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/components/common/Checkbox.tsx">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
@@ -979,14 +980,14 @@
       </file>
       <file name="DetectAppVersion.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/components/common/DetectAppVersion.tsx">
         <metrics statements="10" coveredstatements="7" conditionals="8" coveredconditionals="3" methods="3" coveredmethods="2"/>
-        <line num="15" count="529" type="stmt"/>
-        <line num="16" count="529" type="stmt"/>
-        <line num="17" count="529" type="stmt"/>
-        <line num="19" count="529" type="stmt"/>
+        <line num="15" count="530" type="stmt"/>
+        <line num="16" count="530" type="stmt"/>
+        <line num="17" count="530" type="stmt"/>
+        <line num="19" count="530" type="stmt"/>
         <line num="20" count="31" type="cond" truecount="2" falsecount="2"/>
         <line num="21" count="0" type="stmt"/>
-        <line num="25" count="529" type="cond" truecount="1" falsecount="1"/>
-        <line num="26" count="529" type="stmt"/>
+        <line num="25" count="530" type="cond" truecount="1" falsecount="1"/>
+        <line num="26" count="530" type="stmt"/>
         <line num="29" count="0" type="stmt"/>
         <line num="45" count="0" type="stmt"/>
       </file>
@@ -1195,51 +1196,51 @@
         <line num="14" count="4" type="stmt"/>
         <line num="16" count="4" type="stmt"/>
         <line num="17" count="4" type="stmt"/>
-        <line num="48" count="541" type="stmt"/>
-        <line num="49" count="541" type="stmt"/>
-        <line num="50" count="541" type="stmt"/>
-        <line num="51" count="541" type="stmt"/>
-        <line num="52" count="541" type="stmt"/>
-        <line num="53" count="541" type="stmt"/>
-        <line num="54" count="541" type="stmt"/>
-        <line num="55" count="541" type="stmt"/>
-        <line num="56" count="541" type="stmt"/>
-        <line num="57" count="541" type="stmt"/>
-        <line num="58" count="541" type="stmt"/>
-        <line num="59" count="541" type="stmt"/>
-        <line num="60" count="541" type="stmt"/>
-        <line num="62" count="541" type="stmt"/>
-        <line num="63" count="405" type="stmt"/>
-        <line num="64" count="405" type="cond" truecount="1" falsecount="1"/>
+        <line num="48" count="548" type="stmt"/>
+        <line num="49" count="548" type="stmt"/>
+        <line num="50" count="548" type="stmt"/>
+        <line num="51" count="548" type="stmt"/>
+        <line num="52" count="548" type="stmt"/>
+        <line num="53" count="548" type="stmt"/>
+        <line num="54" count="548" type="stmt"/>
+        <line num="55" count="548" type="stmt"/>
+        <line num="56" count="548" type="stmt"/>
+        <line num="57" count="548" type="stmt"/>
+        <line num="58" count="548" type="stmt"/>
+        <line num="59" count="548" type="stmt"/>
+        <line num="60" count="548" type="stmt"/>
+        <line num="62" count="548" type="stmt"/>
+        <line num="63" count="412" type="stmt"/>
+        <line num="64" count="412" type="cond" truecount="1" falsecount="1"/>
         <line num="65" count="0" type="stmt"/>
-        <line num="68" count="405" type="stmt"/>
-        <line num="71" count="405" type="cond" truecount="1" falsecount="1"/>
-        <line num="72" count="405" type="stmt"/>
+        <line num="68" count="412" type="stmt"/>
+        <line num="71" count="412" type="cond" truecount="1" falsecount="1"/>
+        <line num="72" count="412" type="stmt"/>
         <line num="75" count="0" type="stmt"/>
         <line num="76" count="0" type="stmt"/>
         <line num="78" count="0" type="stmt"/>
-        <line num="81" count="541" type="stmt"/>
-        <line num="82" count="409" type="cond" truecount="1" falsecount="1"/>
+        <line num="81" count="548" type="stmt"/>
+        <line num="82" count="416" type="cond" truecount="1" falsecount="1"/>
         <line num="83" count="0" type="stmt"/>
-        <line num="86" count="409" type="stmt"/>
-        <line num="87" count="409" type="stmt"/>
+        <line num="86" count="416" type="stmt"/>
+        <line num="87" count="416" type="stmt"/>
         <line num="88" count="4" type="stmt"/>
         <line num="89" count="4" type="stmt"/>
         <line num="90" count="4" type="stmt"/>
         <line num="96" count="4" type="cond" truecount="3" falsecount="1"/>
         <line num="98" count="4" type="stmt"/>
-        <line num="100" count="409" type="stmt"/>
-        <line num="102" count="409" type="stmt"/>
-        <line num="103" count="409" type="stmt"/>
-        <line num="107" count="541" type="stmt"/>
+        <line num="100" count="416" type="stmt"/>
+        <line num="102" count="416" type="stmt"/>
+        <line num="103" count="416" type="stmt"/>
+        <line num="107" count="548" type="stmt"/>
         <line num="108" count="31" type="cond" truecount="4" falsecount="0"/>
         <line num="110" count="1" type="stmt"/>
-        <line num="114" count="541" type="stmt"/>
+        <line num="114" count="548" type="stmt"/>
         <line num="115" count="46" type="cond" truecount="2" falsecount="0"/>
         <line num="116" count="19" type="cond" truecount="4" falsecount="0"/>
         <line num="117" count="19" type="cond" truecount="2" falsecount="2"/>
         <line num="118" count="19" type="stmt"/>
-        <line num="122" count="541" type="stmt"/>
+        <line num="122" count="548" type="stmt"/>
         <line num="123" count="23" type="cond" truecount="2" falsecount="0"/>
         <line num="124" count="15" type="stmt"/>
         <line num="125" count="15" type="stmt"/>
@@ -1252,21 +1253,21 @@
         <line num="153" count="0" type="stmt"/>
         <line num="155" count="0" type="stmt"/>
         <line num="157" count="8" type="stmt"/>
-        <line num="160" count="541" type="cond" truecount="2" falsecount="0"/>
-        <line num="161" count="541" type="cond" truecount="2" falsecount="0"/>
-        <line num="162" count="541" type="cond" truecount="2" falsecount="0"/>
-        <line num="165" count="541" type="cond" truecount="4" falsecount="0"/>
-        <line num="168" count="541" type="cond" truecount="2" falsecount="0"/>
-        <line num="170" count="541" type="cond" truecount="1" falsecount="1"/>
-        <line num="171" count="541" type="cond" truecount="4" falsecount="0"/>
-        <line num="173" count="541" type="stmt"/>
-        <line num="193" count="541" type="stmt"/>
+        <line num="160" count="548" type="cond" truecount="2" falsecount="0"/>
+        <line num="161" count="548" type="cond" truecount="2" falsecount="0"/>
+        <line num="162" count="548" type="cond" truecount="2" falsecount="0"/>
+        <line num="165" count="548" type="cond" truecount="4" falsecount="0"/>
+        <line num="168" count="548" type="cond" truecount="2" falsecount="0"/>
+        <line num="170" count="548" type="cond" truecount="1" falsecount="1"/>
+        <line num="171" count="548" type="cond" truecount="4" falsecount="0"/>
+        <line num="173" count="548" type="stmt"/>
+        <line num="193" count="548" type="stmt"/>
         <line num="201" count="3" type="stmt"/>
       </file>
       <file name="ScrollableDialogBox.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/components/common/ScrollableDialogBox.tsx">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
-        <line num="11" count="80" type="stmt"/>
-        <line num="12" count="80" type="stmt"/>
+        <line num="11" count="81" type="stmt"/>
+        <line num="12" count="81" type="stmt"/>
       </file>
       <file name="TextTruncated.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/components/common/TextTruncated.tsx">
         <metrics statements="3" coveredstatements="3" conditionals="10" coveredconditionals="8" methods="1" coveredmethods="1"/>
@@ -1290,8 +1291,8 @@
       </file>
       <file name="TfMain.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/components/common/TfMain.tsx">
         <metrics statements="2" coveredstatements="2" conditionals="2" coveredconditionals="1" methods="1" coveredmethods="1"/>
-        <line num="14" count="404" type="stmt"/>
-        <line num="16" count="404" type="stmt"/>
+        <line num="14" count="411" type="stmt"/>
+        <line num="16" count="411" type="stmt"/>
       </file>
       <file name="Timestamp.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/components/common/Timestamp.tsx">
         <metrics statements="6" coveredstatements="6" conditionals="4" coveredconditionals="3" methods="3" coveredmethods="3"/>
@@ -1379,24 +1380,24 @@
       </file>
       <file name="TableSettingsButton.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/components/common/table/TableSettingsButton.tsx">
         <metrics statements="19" coveredstatements="10" conditionals="14" coveredconditionals="4" methods="8" coveredmethods="2"/>
-        <line num="18" count="84" type="stmt"/>
-        <line num="19" count="84" type="stmt"/>
-        <line num="20" count="84" type="stmt"/>
-        <line num="22" count="84" type="stmt"/>
+        <line num="18" count="85" type="stmt"/>
+        <line num="19" count="85" type="stmt"/>
+        <line num="20" count="85" type="stmt"/>
+        <line num="22" count="85" type="stmt"/>
         <line num="23" count="0" type="stmt"/>
         <line num="27" count="12" type="stmt"/>
-        <line num="44" count="84" type="stmt"/>
+        <line num="44" count="85" type="stmt"/>
         <line num="45" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="46" count="0" type="stmt"/>
         <line num="48" count="0" type="cond" truecount="0" falsecount="2"/>
         <line num="49" count="0" type="stmt"/>
         <line num="52" count="0" type="stmt"/>
-        <line num="55" count="84" type="stmt"/>
-        <line num="57" count="84" type="stmt"/>
+        <line num="55" count="85" type="stmt"/>
+        <line num="57" count="85" type="stmt"/>
         <line num="58" count="0" type="stmt"/>
-        <line num="60" count="84" type="stmt"/>
+        <line num="60" count="85" type="stmt"/>
         <line num="61" count="0" type="stmt"/>
-        <line num="64" count="84" type="stmt"/>
+        <line num="64" count="85" type="stmt"/>
         <line num="69" count="0" type="cond" truecount="0" falsecount="2"/>
       </file>
       <file name="index.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/components/common/table/index.tsx">
@@ -1468,19 +1469,19 @@
       <file name="useTableDensity.ts" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/components/common/table/useTableDensity.ts">
         <metrics statements="14" coveredstatements="10" conditionals="6" coveredconditionals="5" methods="5" coveredmethods="3"/>
         <line num="16" count="2" type="stmt"/>
-        <line num="17" count="167" type="stmt"/>
-        <line num="19" count="167" type="stmt"/>
-        <line num="23" count="167" type="stmt"/>
+        <line num="17" count="168" type="stmt"/>
+        <line num="19" count="168" type="stmt"/>
+        <line num="23" count="168" type="stmt"/>
         <line num="25" count="0" type="stmt"/>
-        <line num="30" count="167" type="stmt"/>
+        <line num="30" count="168" type="stmt"/>
         <line num="32" count="24" type="cond" truecount="2" falsecount="0"/>
         <line num="33" count="24" type="cond" truecount="1" falsecount="1"/>
         <line num="34" count="0" type="stmt"/>
-        <line num="38" count="167" type="stmt"/>
+        <line num="38" count="168" type="stmt"/>
         <line num="40" count="0" type="stmt"/>
         <line num="41" count="0" type="stmt"/>
         <line num="47" count="24" type="stmt"/>
-        <line num="54" count="167" type="stmt"/>
+        <line num="54" count="168" type="stmt"/>
       </file>
     </package>
     <package name="src.components.emptyStatePages">
@@ -1913,9 +1914,9 @@
         <metrics statements="5" coveredstatements="5" conditionals="2" coveredconditionals="1" methods="2" coveredmethods="2"/>
         <line num="6" count="4" type="stmt"/>
         <line num="10" count="4" type="stmt"/>
-        <line num="11" count="529" type="stmt"/>
+        <line num="11" count="530" type="stmt"/>
         <line num="13" count="62" type="cond" truecount="1" falsecount="1"/>
-        <line num="15" count="529" type="stmt"/>
+        <line num="15" count="530" type="stmt"/>
       </file>
       <file name="useBotanicalCountries.ts" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/hooks/useBotanicalCountries.ts">
         <metrics statements="8" coveredstatements="8" conditionals="6" coveredconditionals="6" methods="7" coveredmethods="4"/>
@@ -2597,8 +2598,8 @@
         <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="6" coveredmethods="4"/>
         <line num="6" count="1430" type="stmt"/>
         <line num="8" count="195" type="stmt"/>
-        <line num="10" count="2453" type="stmt"/>
-        <line num="12" count="1337" type="stmt"/>
+        <line num="10" count="2461" type="stmt"/>
+        <line num="12" count="1338" type="stmt"/>
         <line num="14" count="21" type="stmt"/>
         <line num="16" count="21" type="stmt"/>
       </file>
@@ -3917,7 +3918,7 @@
         <line num="20" count="142" type="stmt"/>
         <line num="28" count="23" type="stmt"/>
         <line num="30" count="23" type="stmt"/>
-        <line num="38" count="1571" type="stmt"/>
+        <line num="38" count="1579" type="stmt"/>
         <line num="39" count="23" type="stmt"/>
       </file>
     </package>
@@ -4891,8 +4892,8 @@
       <metrics statements="12" coveredstatements="11" conditionals="2" coveredconditionals="1" methods="5" coveredmethods="5"/>
       <file name="snackbarSelectors.ts" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/redux/features/snackbar/snackbarSelectors.ts">
         <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="3" coveredmethods="3"/>
-        <line num="6" count="746" type="stmt"/>
-        <line num="8" count="491" type="stmt"/>
+        <line num="6" count="754" type="stmt"/>
+        <line num="8" count="499" type="stmt"/>
       </file>
       <file name="snackbarSlice.ts" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/redux/features/snackbar/snackbarSlice.ts">
         <metrics statements="10" coveredstatements="9" conditionals="2" coveredconditionals="1" methods="2" coveredmethods="2"/>
@@ -10144,8 +10145,8 @@
       </file>
       <file name="useDebounce.tsx" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/utils/useDebounce.tsx">
         <metrics statements="10" coveredstatements="7" conditionals="4" coveredconditionals="1" methods="4" coveredmethods="4"/>
-        <line num="5" count="1203" type="stmt"/>
-        <line num="6" count="1203" type="stmt"/>
+        <line num="5" count="1217" type="stmt"/>
+        <line num="6" count="1217" type="stmt"/>
         <line num="8" count="70" type="stmt"/>
         <line num="9" count="36" type="cond" truecount="1" falsecount="1"/>
         <line num="10" count="0" type="stmt"/>
@@ -10153,7 +10154,7 @@
         <line num="12" count="0" type="stmt"/>
         <line num="19" count="70" type="stmt"/>
         <line num="20" count="70" type="stmt"/>
-        <line num="23" count="1203" type="stmt"/>
+        <line num="23" count="1217" type="stmt"/>
       </file>
       <file name="useDeviceInfo.ts" path="/var/lib/buildkite-agent/builds/buildkite-x86-8core-ac5db0f8-i-0ac9c0b8023ef969f-1/terraformation/terraware-web/src/utils/useDeviceInfo.ts">
         <metrics statements="0" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
