@@ -158,11 +158,9 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
       {openedPhotoFilename && (
         <ViewPhotosDialog
           initialSelectedSlide={0}
-          nextButtonLabel={strings.NEXT}
           onClose={closeModal}
           open
           photos={[{ url: accessionPhotoUrl(accessionId, openedPhotoFilename) }]}
-          prevButtonLabel={strings.PREVIOUS}
           title={strings.PHOTOS}
         />
       )}

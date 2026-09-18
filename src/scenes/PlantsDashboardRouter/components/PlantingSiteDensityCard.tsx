@@ -4,8 +4,7 @@ import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import { useLatestSiteObservationResult } from 'src/hooks/observations';
-import usePlantingSite from 'src/hooks/usePlantingSite';
+import { useSiteObservationStats } from 'src/hooks/observations';
 import strings from 'src/strings';
 
 type PlantingDensityCardProps = {
@@ -14,23 +13,16 @@ type PlantingDensityCardProps = {
 
 export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingDensityCardProps): JSX.Element {
   const theme = useTheme();
-  const { plantingSite } = usePlantingSite(plantingSiteId);
+  const { stats, isLoading } = useSiteObservationStats(plantingSiteId);
 
-  const { observation: latestObservationResult, isLoading } = useLatestSiteObservationResult(plantingSiteId, 'Plot');
-
-  const everySubstratumHasObservation = useMemo(() => {
-    if (!latestObservationResult || !plantingSite) {
-      return true;
-    }
-
-    const allSubstrata = plantingSite.strata?.flatMap((stratum) => stratum.substrata);
-    const allSubstrataObserved = latestObservationResult.strata.flatMap((stratum) => stratum.substrata);
-    return allSubstrata?.every((substratum) =>
-      allSubstrataObserved.find(
-        (substratumObv) => substratumObv.substratumId === substratum.id && substratumObv.monitoringPlots.length > 0
-      )
-    );
-  }, [latestObservationResult, plantingSite]);
+  // Every substratum is returned; the ones never observed carry no observationId.
+  const everySubstratumHasObservation = useMemo(
+    () =>
+      (stats?.strata ?? [])
+        .flatMap((stratum) => stratum.substrata)
+        .every((substratum) => substratum.observationId !== undefined),
+    [stats]
+  );
 
   if (isLoading) {
     return (
@@ -43,7 +35,7 @@ export default function PlantingSiteDensityCard({ plantingSiteId }: PlantingDens
   return (
     <Box>
       <Typography fontSize='48px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
-        <FormattedNumber value={latestObservationResult?.plantingDensity ?? 0} />
+        <FormattedNumber value={stats?.plantingDensity ?? 0} />
       </Typography>
       <Typography fontSize='16px' fontWeight={600} lineHeight={1} marginBottom={theme.spacing(2)}>
         {`${strings.PLANTS_PER_HECTARE.charAt(0).toUpperCase()}${strings.PLANTS_PER_HECTARE.slice(1)}`}

@@ -38,6 +38,11 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.Observation, id: 'LIST' },
       ],
     },
+    getSiteObservationStats: {
+      providesTags: (_results, _error, plantingSiteId) => [
+        { type: QueryTagTypes.PlantingSiteObservation, id: plantingSiteId },
+      ],
+    },
     getObservation: {
       providesTags: (observation) =>
         observation ? [{ type: QueryTagTypes.Observation, id: observation.observation.id }] : [],
@@ -54,12 +59,14 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.Observation, id: 'LIST' },
         { type: QueryTagTypes.Activities },
         { type: QueryTagTypes.FunderActivities },
+        { type: QueryTagTypes.PlantingSiteObservation },
       ],
     },
     mergeOtherSpecies: {
       invalidatesTags: (_results, _error, payload) => [
         { type: QueryTagTypes.Observation, id: payload.observationId },
         { type: QueryTagTypes.Observation, id: 'LIST' },
+        { type: QueryTagTypes.PlantingSiteObservation },
       ],
     },
     listAssignedPlots: {
@@ -74,6 +81,7 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.Observation, id: 'LIST' },
         { type: QueryTagTypes.Activities },
         { type: QueryTagTypes.FunderActivities },
+        { type: QueryTagTypes.PlantingSiteObservation },
       ],
     },
     completePlotObservation: {
@@ -81,6 +89,7 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.Observation, id: payload.observationId },
         { type: QueryTagTypes.Activities },
         { type: QueryTagTypes.FunderActivities },
+        { type: QueryTagTypes.PlantingSiteObservation },
       ],
     },
     updatePlotObservation: {
@@ -88,6 +97,7 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.Observation, id: payload.observationId },
         { type: QueryTagTypes.Activities },
         { type: QueryTagTypes.FunderActivities },
+        { type: QueryTagTypes.PlantingSiteObservation },
       ],
     },
     claimMonitoringPlot: {
@@ -128,10 +138,16 @@ api.enhanceEndpoints({
       ],
     },
     releaseMonitoringPlot: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.Observation, id: payload.observationId },
+        { type: QueryTagTypes.PlantingSiteObservation },
+      ],
     },
     replaceObservationPlot: {
-      invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
+      invalidatesTags: (_results, _error, payload) => [
+        { type: QueryTagTypes.Observation, id: payload.observationId },
+        { type: QueryTagTypes.PlantingSiteObservation },
+      ],
     },
     getObservationResults: {
       providesTags: (observationResults) =>

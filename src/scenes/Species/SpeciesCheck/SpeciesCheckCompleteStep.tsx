@@ -8,9 +8,16 @@ import strings from 'src/strings';
 type SpeciesCheckCompleteStepProps = {
   namesUpdated: number;
   statusesApplied: number;
+  showNames: boolean;
+  showStatuses: boolean;
 };
 
-const SpeciesCheckCompleteStep = ({ namesUpdated, statusesApplied }: SpeciesCheckCompleteStepProps): JSX.Element => {
+const SpeciesCheckCompleteStep = ({
+  namesUpdated,
+  statusesApplied,
+  showNames,
+  showStatuses,
+}: SpeciesCheckCompleteStepProps): JSX.Element => {
   const theme = useTheme();
 
   const namesLabel = strings.formatString(
@@ -22,8 +29,17 @@ const SpeciesCheckCompleteStep = ({ namesUpdated, statusesApplied }: SpeciesChec
     statusesApplied
   );
 
+  const rows: { label: string; value: React.ReactNode }[] = [];
+  if (showNames) {
+    rows.push({ label: strings.NAME_CHECK, value: namesLabel });
+  }
+  if (showStatuses) {
+    rows.push({ label: strings.NATIVE_CHECK, value: statusesLabel });
+  }
+
   const summaryRow = (label: string, value: React.ReactNode, withBorder: boolean): JSX.Element => (
     <Box
+      key={label}
       sx={{
         alignItems: 'center',
         borderTop: withBorder ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined,
@@ -64,18 +80,19 @@ const SpeciesCheckCompleteStep = ({ namesUpdated, statusesApplied }: SpeciesChec
       <Typography fontSize='16px' color={theme.palette.TwClrTxtSecondary} marginTop={theme.spacing(1)}>
         {strings.SPECIES_CHECK_COMPLETE_MESSAGE}
       </Typography>
-      <Box
-        sx={{
-          border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
-          marginTop: theme.spacing(3),
-          overflow: 'hidden',
-          textAlign: 'left',
-          width: '60%',
-        }}
-      >
-        {summaryRow(strings.NAME_CHECK, namesLabel, false)}
-        {summaryRow(strings.NATIVE_CHECK, statusesLabel, true)}
-      </Box>
+      {rows.length > 0 && (
+        <Box
+          sx={{
+            border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+            marginTop: theme.spacing(3),
+            overflow: 'hidden',
+            textAlign: 'left',
+            width: '60%',
+          }}
+        >
+          {rows.map((row, index) => summaryRow(row.label, row.value, index > 0))}
+        </Box>
+      )}
     </Box>
   );
 };

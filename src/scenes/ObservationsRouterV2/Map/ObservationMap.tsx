@@ -966,9 +966,14 @@ const ObservationMap = ({
     isVirtualPlotsEnabled,
   ]);
 
+  const hasBiomassResults = useMemo(
+    () => adHocObservationResults.some((observation) => observation.type === 'Biomass Measurements'),
+    [adHocObservationResults]
+  );
+
   const treesMarkers = useCallback(
     (isDead: boolean): MapMarker[] => {
-      if (isBiomass) {
+      if (isBiomass || hasBiomassResults) {
         return selectedAdHocResults.flatMap((observation) => {
           const trees = observation.biomassMeasurements?.trees ?? [];
           return trees
@@ -996,7 +1001,7 @@ const ObservationMap = ({
         return [];
       }
     },
-    [isBiomass, selectTree, selectedAdHocResults, selectedTrees]
+    [hasBiomassResults, isBiomass, selectTree, selectedAdHocResults, selectedTrees]
   );
 
   const plantsMarkers = useCallback(
@@ -1234,8 +1239,13 @@ const ObservationMap = ({
             )?.observationId
           : undefined;
       const observationId = adHocObservationId ?? selectedResults.observationId;
+      const isBiomassObservation =
+        isBiomass ||
+        selectedAdHocResults.some(
+          (result) => result.observationId === observationId && result.type === 'Biomass Measurements'
+        );
 
-      if (isBiomass) {
+      if (isBiomassObservation) {
         return (
           <BiomassObservationStatsDrawer
             observationId={observationId}

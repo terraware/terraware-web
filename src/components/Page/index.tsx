@@ -35,6 +35,7 @@ export type PageProps = {
   descriptionStyle?: SxProps<Theme>;
   leftComponentGridSize?: number;
   rightComponentGridSize?: number;
+  collapsibleHeader?: boolean;
   stickyHeader?: boolean;
   stickyHeaderElevated?: boolean;
   // Rendered on its own row under the title, inside the header wrapper.
@@ -61,6 +62,7 @@ export default function Page({
   descriptionStyle,
   leftComponentGridSize,
   rightComponentGridSize,
+  collapsibleHeader,
   stickyHeader,
   stickyHeaderElevated,
   subHeader,
@@ -79,7 +81,12 @@ export default function Page({
 
   return (
     <TfMain style={containerStyles}>
-      <PageHeaderWrapper alwaysVisible={stickyHeader} elevated={stickyHeaderElevated} nextElement={contentRef.current}>
+      <PageHeaderWrapper
+        alwaysVisible={stickyHeader}
+        collapsible={collapsibleHeader}
+        elevated={stickyHeaderElevated}
+        nextElement={contentRef.current}
+      >
         <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
         <Grid
           container

@@ -29,6 +29,7 @@ ACCESSION_HISTORY,Historique de l'accession,1e6eaa37
 ACCESSION_HISTORY_NO_EVENTS,Aucun historique pour le moment.,f8822669
 ACCESSION_ID,Identifiant de l'accesion,a87726c0
 ACCESSION_NUMBER_CHECKED_IN,L'accesion {0} a été enregistrée avec succès !,b78da03c
+ACCESSION_WITHDRAW_SUCCESS,Semences retirées avec succès.,ed889590
 ACCESSIONS,Accessions,5f4f92e5
 ACCESSIONS_CARD_DESCRIPTION,"Collectez des semences, puis enregistrez et visualisez vos accessions. Les accessions de semences peuvent être visualisées et analisées par banque de semences.",04e1a86a
 ACCESSIONS_IMPORT_COMPLETE,L'importation des données d'accessions est terminée !,445187fe
@@ -159,6 +160,7 @@ AGROFORESTRY,Agroforesterie,0bd9987c
 ALL,Tout,832a8cf5
 ALL_ACCESSIONS_CHECKED_IN,Toutes les accessions ont été enregistrées avec succès !,cbdf5c0a
 ALL_MODULES,Tous les modules,b2571c5e
+ALL_MONITORING_TYPES,Tous les types de suivi,c27c58b4
 ALL_OBSERVATIONS,Toutes les observations,22e68887
 ALL_PLANTING_SEASONS,Toutes les saisons de plantation,7b594902
 ALL_PLANTING_SITES,Tous les sites de plantation,344a80c6
@@ -301,6 +303,8 @@ BUDGET_NARRATIVE_SUMMARY_REQUIRED,Résumé narratif du budget *,e90de8c1
 BUG_REPORT,Rapport de bug,5fab1616
 BUG_REPORT_DESCRIPTION,Faites-nous part d'un problème que vous avez rencontré lors de l'utilisation de Terraware.,0030b91e
 BUG_REPORT_INSTRUCTIONS,Fournissez une description détaillée du problème rencontré. (Où le problème s'est-il produit ? Qu'avez-vous fait avant de rencontrer le problème ? À quoi vous attendiez-vous ?),b2ca26aa
+BULK_WITHDRAW_ONE_SPECIES_TOOLTIP,Une seule espèce peut être ajoutée à un lot de pépinière. Désélectionnez l'espèce actuelle pour en choisir une autre.,c901d88e
+BULK_WITHDRAW_SPECIES_BANNER,"Un lot de pépinière est créé par espèce. Seules ""{0}"" accessions peuvent être ajoutées à ce retrait.",5b9cb2fe
 BY,Par,e8fbe470
 BY_ACCESSION,Par accession,61b8fb95
 BY_BATCH,Par lot,68c5092f
@@ -710,6 +714,7 @@ ERROR_LOAD_SUB_LOCATIONS,Impossible de charger les sous-emplacements pour l'inst
 ERROR_PROJECT_NAME_CONFLICT,Ce nom de projet est déjà utilisé dans l'organisation.,521631a8
 ERROR_PROJECT_SELECT,Ce projet n'est pas éligible à la sélection.,9c2b6c67
 ERROR_SUPPORT_NOTIFIED,Une erreur s’est produite : notre équipe d’assistance a été informée et travaille à la résolution du problème.,7f643888
+EST_COUNT,Nb estimé,87d4a3f4
 EST_READY_DATE,Date estimée de disponibilité,27e12633
 EST_TOTAL_PLANTS_PLANT_DENSITY_AREA,Est. total de plantes (densité de plantation × surface),311a283f
 ESTIMATED_BUDGET,Budget prévisionnel,23c1c02a
@@ -902,6 +907,7 @@ HERE,ici,fae8bfa6
 HIDE_ALL,Tout masquer,465040a6
 HIDE_FILTERS,Masquer les filtres,0fdbb60d
 HIDE_ON_MAP,Masquer sur la carte,089ea8d7
+HIDE_TITLE_BAR,Masquer la barre de titre,e9b3ee43
 HIGH,Élevé,cb1efe60
 HIGHEST,Le plus élevé,5c2f89d6
 HIGHLIGHTED_ACTIVITY,Activité mise en avant,483c0ed0
@@ -1141,6 +1147,7 @@ LIVE_PLANTS,Plantes vivantes,0124ea18
 LIVE_PLANTS_OBSERVED,Plantes vivantes observées,08f1dd26
 LIVE_SESSION,Session en direct,baf6b246
 LIVE_SESSIONS,Sessions en direct,4576d6c6
+LIVE_TREES_RECORDED,Arbres vivants enregistrés,a7632c0b
 LOADING,Chargement...,ccd47f3b
 LOCAL_USES_KNOWN,Utilisations locales connues,02a9f5ec
 LOCAL_USES_KNOWN_TOOLTIP,"Dressez la liste des utilisations traditionnelles, culturelles, sociales, économiques et des moyens de subsistance de l'espèce dans votre région.",e0632287
@@ -1462,10 +1469,8 @@ OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION,"Vous aurez besoin de l’applicat
 
 Scannez les codes QR avec votre appareil pour télécharger sur l’App Store ou Google Play.",13be06be
 OBSERVED_BY_ON,Observé par {0} le {1} à {2},c8b41186
-OBSERVED_DENSITY,Densité observée,c5003c27
-OBSERVED_DENSITY_PER_STRATUM,Densité observée par strate,db5f3cf7
-OBSERVED_DENSITY_TOOLTIP,La densité observée est basée sur le nombre de plants observés dans les strates qui ont été observées au moins une fois lors de cette observation.,328dc9f7
 OBSERVED_GPS_COORDINATES,Coordonnées GPS observées,efbe8b32
+OBSERVED_ON,Observé le,8c876825
 OBSERVED_PLANTS,Plantes observées,375e69c3
 OBSERVED_SPECIES,Espèces observées,922020f2
 OBSERVER,Observateur,89ceb806
@@ -1578,8 +1583,10 @@ PHOTOS_VIDEOS,Photos/Vidéos,5d533136
 PLACEHOLDER,Espace réservé,e7c25185
 PLANT,plante,9089fdf9
 PLANT_DENSITY,Densité de plantation,feae2a2d
+PLANT_DENSITY_DASHBOARD_TOOLTIP,"La densité de plantation est basée sur la dernière observation de chaque strate, en reportant la dernière donnée observée pour les sous-strates qui n'ont pas été observées.",d8d7b522
 PLANT_DENSITY_MISSING_TOOLTIP,"Lorsqu’une observation est terminée, la densité de plantation calculée apparaîtra ici.",6e3830dd
 PLANT_DENSITY_OF_PLANTED_STRATA,Densité de plantation (des strates plantées),db91b874
+PLANT_DENSITY_PER_STRATUM,Densité de plantation par strate,292277cd
 PLANT_DENSITY_TITLE_TOOLTIP,Saisissez manuellement la densité de plantation pour chacune des espèces plantées. Cette densité sera utilisée pour les calculs du taux de survie.,50547e3a
 PLANT_DENSITY_TOOLTIP,Densités de plantation par espèce qui seront utilisées pour calculer les taux de survie des parcelles et des espèces.,82b7af4f
 PLANT_DESCRIPTION,Notes sur la plante,0915d26a
@@ -2170,6 +2177,7 @@ SHOW_LESS,Afficher moins,d753a0ed
 SHOW_MORE,Afficher plus,43cab9b7
 SHOW_OBSERVATION_ON_MAP,Afficher sur la carte,2c88d696
 SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Afficher les espèces dont toutes les accessions sont épuisées,656a843d
+SHOW_TITLE_BAR,Afficher la barre de titre,95b1ccfb
 SHRUB,Arbuste,af50871c
 SHRUB_CROWN_DIAMETER_CM,Diamètre de la couronne de l’arbuste (cm),61918163
 SHRUBS,Arbustes,377018f6
@@ -2203,6 +2211,7 @@ SITE_GOALS,Objectifs du site,345a7c04
 SITE_GOALS_DESCRIPTION,Gérer les objectifs du site pour les densités de plantation et les espèces.,29421088
 SITE_LOCATION,Emplacement du site,e0a85b19
 SITE_MAP,Carte du site,df2fc60a
+SITE_PLANT_DENSITY,Densité de plantation du site,a449ddcc
 SITE_STRATUM_BOUNDARIES,Limites de la strate,418d687a
 SITE_STRATUM_BOUNDARIES_DESCRIPTION_0,"Une strate est une couche de végétation du site de plantation où les conditions de plantation et de croissance sont similaires. Chaque site de plantation doit comporter au moins une strate et généralement pas plus de cinq. Un exemple de strate est le versant d'une colline orientée à l'est, où l'ensoleillement et les conditions du sol sont similaires.",408485f9
 SITE_STRATUM_BOUNDARIES_DESCRIPTION_1,Dessinez les strates de votre site de plantation ci-dessous. Utilisez l’outil de découpe {0} pour créer des polygones représentant les strates à l’intérieur des limites du site. [Regardez un tutoriel] sur l’ajout de limites de strates.,c6d2ac88
@@ -2332,6 +2341,7 @@ SPECIES_TOOLTIP,Espèces dont les densités de plantation seront utilisées pour
 SPECIES_USAGE,Utilisation des espèces,0669cb85
 SPECIES_VALUE_CHANGED_FROM_TO,La valeur {1} de l'espèce {0} a été modifiée de {2} à {3},e3330648
 SPECIES_WITH_TARGETS_IN_SEASON_DESCRIPTION,Espèces avec des objectifs dans la saison et le stratum/substratum sélectionnés,466cff52
+SPLIT,Diviser,9184c603
 STAFF,Personnel,6b242686
 STAKEHOLDERS_AND_COMMUNITY_IMPACT,Parties prenantes et impact communautaire,a0af66ae
 STANDARD,Norme,88d7d08c
@@ -2390,6 +2400,8 @@ SUBMITTED_BY,Soumis par,3c23aee3
 SUBSET_COUNT,Nombre de sous-ensembles,8f4d7c8b
 SUBSET_COUNT_POSITIVE,Le nombre de sous-ensembles doit être un nombre positif.,f3cb9f62
 SUBSET_WEIGHT,Poids du sous-ensemble,6c11760f
+SUBSET_WEIGHT_COUNT,Poids/Nb du sous-ensemble,9dacedca
+SUBSET_WEIGHT_COUNT_TOOLTIP,Le nombre estimé de semences est déterminé par le poids et le nombre du sous-ensemble fournis pour la quantité d'accession.,313d34a6
 SUBSET_WEIGHT_ERROR,Le poids du sous-ensemble doit être inférieur à celui de la semence,90471b25
 SUBSET_WEIGHT_POSITIVE,Le poids du sous-ensemble doit être un nombre positif,8f1b1fed
 SUBSET_WEIGHT_REQUIRED,Vous devez saisir le poids et le nombre d'un sous-ensemble afin de déterminer le nombre approximatif de semences lorsque vous les retirez dans une pépinière. Vous pouvez le faire en éditant la quantité de cette accession.,18baf19c
@@ -2724,6 +2736,7 @@ VERSION_NAME,Nom de la version,66c1f794
 VERSION_PREVIEW,Aperçu de la version,9eb32b2d
 VERSIONS,Versions,9ef0d449
 VIABILITY,Viabilité,8ea0b3b5
+VIABILITY_NOT_AVAILABLE_BULK,Le test de viabilité n'est pas disponible pour les retraits en vrac.,2cc9593b
 VIABILITY_RATE,Taux de viabilité,bca4f47d
 VIABILITY_RESULT,Résultat de viabilité,e34f8436
 VIABILITY_TEST,Test de viabilité,1989cfb8
@@ -2792,12 +2805,15 @@ WILD_IN_SITU_DESCRIPTION,Plantes qui se trouvent naturellement dans des zones sa
 WITHDRAW,Retirer,3aeae714
 WITHDRAW_ALL,Retirer tout,cc50ccca
 WITHDRAW_BY,Prélèvement par,54fccc5e
+WITHDRAW_DATE,Date de retrait,67680899
 WITHDRAW_DATE_PREDATES_RECEIVED_DATE_WARNING,"La date indiquée pour ce retrait est antérieure à la date à laquelle la quantité actuelle d'accession a été fournie. Par conséquent, la quantité retirée ne sera pas soustraite de la quantité d'accession. Après l'enregistrement du retrait, la quantité peut être ajustée manuellement pour refléter la quantité retirée. Êtes-vous sûr de vouloir enregistrer ce retrait sans modification de la quantité ?",2283d4eb
 WITHDRAW_DATE_REQUIRED,Date de retrait *,86478a68
 WITHDRAW_FROM_BATCHES,Retirer des lots,184d96f3
 WITHDRAW_INSTRUCTIONS,Sélectionnez un but de retrait et saisissez les quantités de chaque lot à retirer.,1636e2b4
+WITHDRAW_PARTIAL_FAILURE,Certaines accessions n'ont pas pu être retirées : {0}.,de8adf80
 WITHDRAW_QUANTITY,Quantité retirée,021d677d
 WITHDRAW_QUANTITY_REQUIRED,Quantité retirée *,be02aa0c
+WITHDRAW_SAME_SPECIES_ONLY,Toutes les accessions sélectionnées doivent être de la même espèce.,633e7316
 WITHDRAW_SEEDS,Retirer des semences,02852ae6
 WITHDRAW_SINGLE_NURSERY,Vous ne pouvez effectuer des retraits en vrac qu'auprès d'une seule pépinière à la fois.,948ffd25
 WITHDRAWAL,Retrait,9845aaae
@@ -2823,6 +2839,8 @@ WORKERS_VOLUNTEERS,Volontaires *,339666d2
 WORKSHOP,Atelier,8092cd5c
 WORKSHOPS,Ateliers,1a6fc46c
 WOULD_YOU_LIKE_TO_CONTINUE,Souhaitez-vous continuer ?,9ca4c77f
+X_ACCESSION,{0} accession,cfd54196
+X_ACCESSIONS,{0} accessions,e8ccdbc4
 X_BATCH,{0} lot,9d74cde8
 X_BATCHES,{0} lots,a7a1d48d
 X_HA,{0} ha,8f68781b

@@ -12,7 +12,7 @@ interface ExportAdHocObservationsResultsParams {
   plantingSite?: PlantingSitePayload;
 }
 
-const makeAdHocObservationsCsv = (adHocObservations: AdHocObservationResults[]): Blob => {
+export const makeAdHocObservationsCsv = (adHocObservations: AdHocObservationResults[]): Blob => {
   const columnHeaders = [
     {
       key: 'monitoringPlotNumber',

@@ -5,7 +5,7 @@ import { ChartTypeRegistry, TooltipItem } from 'chart.js';
 
 import BarChart from 'src/components/common/Chart/BarChart';
 import { ChartDataset } from 'src/components/common/Chart/Chart';
-import { useLatestSiteObservationResult } from 'src/hooks/observations';
+import { useSiteObservationStats } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import strings from 'src/strings';
 import { truncate } from 'src/utils/text';
@@ -24,7 +24,7 @@ export default function PlantingDensityPerStratumCard({
   const numberFormatter = useNumberFormatter();
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
-  const { observation: latestObservationResult } = useLatestSiteObservationResult(plantingSiteId, 'Stratum');
+  const { strataById } = useSiteObservationStats(plantingSiteId);
 
   const tooltipRenderer = useCallback(
     (tooltipItem: TooltipItem<keyof ChartTypeRegistry>) => {
@@ -52,33 +52,15 @@ export default function PlantingDensityPerStratumCard({
   );
 
   const { labels, targets, actuals, tooltipTitles } = useMemo(() => {
-    if (plantingSite) {
-      const stratumDensities: Record<string, (number | null)[]> = {};
-      plantingSite.strata?.forEach((stratum) => {
-        stratumDensities[stratum.name] = [stratum.targetPlantDensity ?? null];
+    const strata = plantingSite?.strata ?? [];
 
-        if (latestObservationResult) {
-          const stratumFromObs = latestObservationResult.strata.find(
-            (obsStratum) => obsStratum.stratumId === stratum.id
-          );
-          stratumDensities[stratum.name].push(stratumFromObs?.plantingDensity ?? null);
-        }
-      });
-      return {
-        labels: Object.keys(stratumDensities).map((name) => truncate(name, MAX_STRATUM_NAME_LENGTH)),
-        targets: Object.values(stratumDensities).map((t) => t[0]),
-        actuals: Object.values(stratumDensities).map((t) => t[1]),
-        tooltipTitles: Object.keys(stratumDensities),
-      };
-    } else {
-      return {
-        labels: [] as string[],
-        targets: [] as (number | null)[],
-        actuals: [] as (number | null)[],
-        tooltipTitles: [] as string[],
-      };
-    }
-  }, [plantingSite, latestObservationResult]);
+    return {
+      labels: strata.map(({ name }) => truncate(name, MAX_STRATUM_NAME_LENGTH)),
+      targets: strata.map(({ targetPlantDensity }) => targetPlantDensity ?? null),
+      actuals: strata.map(({ id }) => strataById.get(id)?.plantingDensity ?? null),
+      tooltipTitles: strata.map(({ name }) => name),
+    };
+  }, [plantingSite, strataById]);
 
   const chartData = useMemo(() => {
     if (!labels?.length || !targets?.length) {
@@ -98,7 +80,7 @@ export default function PlantingDensityPerStratumCard({
 
     if (actuals && actuals?.length && !actuals?.every((val) => val === null)) {
       datasets.unshift({
-        label: strings.OBSERVED_DENSITY,
+        label: strings.PLANT_DENSITY,
         values: actuals,
         color: theme.palette.TwClrBaseLightGreen200,
         xAxisID: 'xAxisActual',

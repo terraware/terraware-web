@@ -20,6 +20,9 @@ export const ACCESSION_2_STATES: AccessionState[] = [
   'Used Up',
 ];
 
+export const isWithdrawableAccessionState = (state?: string): boolean =>
+  state !== undefined && state !== 'Awaiting Check-In' && state !== 'Used Up';
+
 export function stateName(state: AccessionState) {
   switch (state) {
     case 'Awaiting Check-In':

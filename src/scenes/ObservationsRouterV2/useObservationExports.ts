@@ -16,11 +16,13 @@ import {
 import { ObservationResultsPayload, useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getConditionString } from 'src/redux/features/observations/utils';
-import { getPlotStatus } from 'src/types/Observations';
+import { AdHocObservationResults, getPlotStatus } from 'src/types/Observations';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
 import { getShortDate } from 'src/utils/dateFormatter';
 import downloadZipFile from 'src/utils/downloadZipFile';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
+import { makeAdHocObservationsCsv } from './exportAdHocObservations';
 
 const useObservationExports = () => {
   const { activeLocale, strings } = useLocalization();
@@ -638,7 +640,62 @@ const useObservationExports = () => {
     [exportBiomassObservations, selectedOrganization, strings.BIOMASS_MONITORING]
   );
 
+  const downloadAdHocObservationsZip = useCallback(
+    async ({
+      adHocObservationsResults,
+      biomassObservationIds,
+      plantingSiteId,
+      siteName,
+    }: {
+      adHocObservationsResults: AdHocObservationResults[];
+      biomassObservationIds: number[];
+      plantingSiteId?: number;
+      siteName: string;
+    }) => {
+      if (!selectedOrganization) {
+        return;
+      }
+
+      const files: { fileName: string; content: Blob | string }[] = [];
+
+      if (adHocObservationsResults.length > 0) {
+        files.push({
+          content: makeAdHocObservationsCsv(adHocObservationsResults),
+          fileName: `${siteName}-${strings.AD_HOC_PLANT_MONITORING}`,
+        });
+      }
+
+      if (biomassObservationIds.length > 0) {
+        files.push({
+          content: await exportBiomassObservations(
+            { observationIds: biomassObservationIds, organizationId: selectedOrganization.id, plantingSiteId },
+            true
+          ).unwrap(),
+          fileName: `${siteName}-${strings.BIOMASS_MONITORING}`,
+        });
+      }
+
+      if (files.length === 0) {
+        return;
+      }
+
+      await downloadZipFile({
+        dirName: `${siteName}-${strings.AD_HOC_PLOTS}`,
+        files,
+        suffix: '.csv',
+      });
+    },
+    [
+      exportBiomassObservations,
+      selectedOrganization,
+      strings.AD_HOC_PLANT_MONITORING,
+      strings.AD_HOC_PLOTS,
+      strings.BIOMASS_MONITORING,
+    ]
+  );
+
   return {
+    downloadAdHocObservationsZip,
     downloadObservationResults,
     downloadObservationCsv,
     downloadObservationGpx,

@@ -1,8 +1,10 @@
 import React, { type JSX, useLayoutEffect, useRef, useState } from 'react';
 
-import { Box, useTheme } from '@mui/material';
+import { Box, IconButton, useTheme } from '@mui/material';
 import { keyframes } from '@mui/system';
+import { Icon } from '@terraware/web-components';
 
+import { useLocalization } from 'src/providers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import useDebounce from '../../utils/useDebounce';
@@ -12,18 +14,23 @@ const DEBOUNCE_TIME = 500;
 const LEFT_NAV_WIDTH = 220;
 // Matches the top padding of the main element, so a pinned header sits where it would in flow.
 const HEADER_TOP_GAP = 32;
+const EAR_HEIGHT = 24;
 
 /**
  * alwaysVisible Keep the header pinned below the top bar instead of hiding it while scrolling down
  * children The child component which is the page header
- * elevated Give the header a persistent divider and soft drop shadow, regardless of scroll,
- *   to signal it holds pending actions (such as unsaved edits)
+ * elevated Give the header a persistent divider and soft drop shadow, regardless of scroll, to
+ *   signal it holds pending actions (such as unsaved edits)
+ * collapsible Show an ear under the header that hides and shows it
+ * hasNav Whether the left navigation is present, used to compute the pinned header's max width
  * nextElement The HTMLElement immediately following the header element
+ * nextElementInitialMargin Base top margin kept on nextElement before the header's height is added
  */
 interface Props {
   alwaysVisible?: boolean;
   children?: React.ReactNode | React.ReactNode[];
   elevated?: boolean;
+  collapsible?: boolean;
   hasNav?: boolean;
   nextElement?: HTMLElement | null;
   nextElementInitialMargin?: number;
@@ -33,17 +40,20 @@ export default function PageHeaderWrapper({
   alwaysVisible = false,
   children,
   elevated = false,
+  collapsible = false,
   hasNav = true,
   nextElement,
   nextElementInitialMargin = 0,
 }: Props): JSX.Element {
   const theme = useTheme();
+  const { strings } = useLocalization();
   const ref = useRef<HTMLDivElement>(null);
   const [sticky, setSticky] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [scrollDown, setScrollDown] = useState(false);
   const [height, setHeight] = useState<number>(0);
   const [anim, setAnim] = useState<string | undefined>(undefined);
+  const [hidden, setHidden] = useState(false);
   const debouncedSticky = useDebounce(sticky, DEBOUNCE_TIME);
   const debouncedScrollDown = useDebounce(scrollDown, DEBOUNCE_TIME);
   const lastDebouncedSticky = useRef(false);
@@ -95,10 +105,19 @@ export default function PageHeaderWrapper({
   }, [children, nextElement, height, sticky]);
 
   useLayoutEffect(() => {
-    if (nextElement) {
-      nextElement.style.marginTop = `${nextElementInitialMargin + (alwaysVisible || debouncedSticky ? height : 0)}px`;
+    if (!scrolled && hidden) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setHidden(false);
     }
-  }, [alwaysVisible, nextElement, height, debouncedSticky, nextElementInitialMargin]);
+  }, [hidden, scrolled]);
+
+  useLayoutEffect(() => {
+    if (nextElement) {
+      const headerHeight = alwaysVisible || debouncedSticky ? height : 0;
+      const earHeight = collapsible && scrolled ? EAR_HEIGHT : 0;
+      nextElement.style.marginTop = `${nextElementInitialMargin + headerHeight + earHeight}px`;
+    }
+  }, [alwaysVisible, collapsible, nextElement, height, debouncedSticky, nextElementInitialMargin, scrolled]);
 
   useLayoutEffect(() => {
     if (alwaysVisible) {
@@ -138,16 +157,18 @@ export default function PageHeaderWrapper({
     lastDebouncedSticky.current = debouncedSticky;
   }, [alwaysVisible, debouncedSticky, debouncedScrollDown, height]);
 
+  const showEar = collapsible && scrolled;
+  const isHidden = showEar && hidden;
   const pinned = alwaysVisible || debouncedSticky;
   // An always visible header is fixed from the top of the page, so it only takes on the sticky
   // chrome (background, divider, gap filling padding) once content scrolls underneath it.
-  const stickyChrome = alwaysVisible ? scrolled : debouncedSticky;
+  const stickyChrome = (alwaysVisible ? scrolled : debouncedSticky) && !isHidden;
   // An elevated header keeps its divider (and gains a soft shadow) at all times, so pending
   // actions read as raised off the page even before the user scrolls.
   const showDivider = elevated || stickyChrome;
 
   const stickyTop = debouncedScrollDown ? `${TOP_BAR_HEIGHT - height}px` : `${TOP_BAR_HEIGHT}px`;
-  const alwaysVisibleTop = scrolled ? `${TOP_BAR_HEIGHT}px` : `${TOP_BAR_HEIGHT + HEADER_TOP_GAP}px`;
+  const alwaysVisibleTop = scrolled && !isHidden ? `${TOP_BAR_HEIGHT}px` : `${TOP_BAR_HEIGHT + HEADER_TOP_GAP}px`;
 
   const styles: Record<string, any> = {
     background: stickyChrome ? theme.palette.TwClrBaseGray025 : undefined,
@@ -171,7 +192,30 @@ export default function PageHeaderWrapper({
 
   return (
     <Box ref={ref} sx={styles}>
-      {children}
+      {!isHidden && children}
+      {showEar && (
+        <Box sx={{ left: theme.spacing(5), lineHeight: 0, position: 'absolute', top: '100%' }}>
+          <IconButton
+            aria-label={isHidden ? strings.SHOW_TITLE_BAR : strings.HIDE_TITLE_BAR}
+            id='toggle-title-bar'
+            onClick={() => setHidden(!hidden)}
+            sx={{
+              background: theme.palette.TwClrBaseGray025,
+              border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+              borderRadius: '0 0 8px 8px',
+              borderTop: 'none',
+              height: `${EAR_HEIGHT}px`,
+              padding: 0,
+              width: '48px',
+              '&:hover': {
+                background: theme.palette.TwClrBgSecondaryHover,
+              },
+            }}
+          >
+            <Icon name={isHidden ? 'chevronDown' : 'chevronUp'} size='small' />
+          </IconButton>
+        </Box>
+      )}
     </Box>
   );
 }
