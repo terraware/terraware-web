@@ -240,32 +240,35 @@ const PurposeStep = ({
         </>
       )}
 
-      <Grid item xs={12} sm={6}>
-        <SelectT<OrganizationUser>
-          label={strings.WITHDRAWN_BY}
-          placeholder={strings.SELECT}
-          options={users}
-          onChange={onChangeUser}
-          isEqual={isEqualUsers}
-          renderOption={renderUser}
-          displayLabel={renderUser}
-          selectedValue={users?.find((userSel) => userSel.id === draft.withdrawnByUserId)}
-          toT={toTUser}
-          fullWidth
-          disabled={!userCanEdit}
-        />
-      </Grid>
-
-      <Grid item xs={12} sm={6}>
-        <DatePicker
-          id='date'
-          label={strings.WITHDRAW_DATE}
-          aria-label={strings.WITHDRAW_DATE}
-          value={draft.date}
-          onChange={(value) => onChangeDate('date', value)}
-          errorText={fieldErrors.date}
-          defaultTimeZone={timeZone}
-        />
+      <Grid item xs={12}>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <DatePicker
+              id='date'
+              label={strings.WITHDRAW_DATE}
+              aria-label={strings.WITHDRAW_DATE}
+              value={draft.date}
+              onChange={(value) => onChangeDate('date', value)}
+              errorText={fieldErrors.date}
+              defaultTimeZone={timeZone}
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <SelectT<OrganizationUser>
+              label={strings.WITHDRAWN_BY}
+              placeholder={strings.SELECT}
+              options={users}
+              onChange={onChangeUser}
+              isEqual={isEqualUsers}
+              renderOption={renderUser}
+              displayLabel={renderUser}
+              selectedValue={users?.find((userSel) => userSel.id === draft.withdrawnByUserId)}
+              toT={toTUser}
+              fullWidth
+              disabled={!userCanEdit}
+            />
+          </Grid>
+        </Grid>
       </Grid>
 
       {isNursery && (
