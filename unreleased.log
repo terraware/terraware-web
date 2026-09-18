@@ -1,3 +1,4 @@
+b80f8188 Remove jsx warnings in unit tests (#6467)
 c540a3ef SW-8792 UI Improvements to Accession Bulk withdrawal (#6465)
 aea229cd SW-8910 Add Species (#6466)
 7698a7e4 SW-8920 Keep the map, timeline and table when there is nothing to show (#6458)
