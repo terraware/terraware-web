@@ -12,11 +12,14 @@ import { ObservationResultsPayload } from 'src/queries/generated/observations';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { ObservationTypeFilter, PlotType } from '../ObservationFiltersProvider';
-import useFilteredObservationResults from '../useFilteredObservationResults';
+import ObservationsEmptyOverlay from '../ObservationsEmptyOverlay';
+import useFilteredObservationResults, { ObservationsEmptyState } from '../useFilteredObservationResults';
+import useObservationsEmptyMessages from '../useObservationsEmptyMessages';
 import ObservationMap from './ObservationMap';
 import ObservationTimeline from './ObservationTimeline';
 
 type ObservationMapWrapperProps = {
+  emptyState?: ObservationsEmptyState;
   isMapVisible?: boolean;
   observationId?: number;
   // The map and timeline show the same plots the list is filtered to.
@@ -27,6 +30,7 @@ type ObservationMapWrapperProps = {
 };
 
 const ObservationMapWrapper = ({
+  emptyState: emptyStateProp,
   isMapVisible,
   observationId,
   observationType = 'Monitoring',
@@ -56,7 +60,7 @@ const ObservationMapWrapper = ({
   const getObservationResultResponse = useGetOneObservationResults({ observationId });
 
   // A single observation's results are fetched by id; the list view fetches whatever its filters ask for.
-  const { observations } = useFilteredObservationResults({
+  const { emptyState, observations } = useFilteredObservationResults({
     enabled: plantingSiteId !== undefined && !observationId,
     observationType,
     plantingSiteId,
@@ -64,6 +68,7 @@ const ObservationMapWrapper = ({
   });
 
   const isAdHoc = plotType === 'adHoc';
+  const emptyMessages = useObservationsEmptyMessages(observationId ? undefined : emptyState ?? emptyStateProp);
 
   const singleObservationResult = useMemo(
     () => getObservationResultResponse.data?.observation,
@@ -104,16 +109,19 @@ const ObservationMapWrapper = ({
           </Box>
         </Box>
       )}
-      <ObservationMap
-        adHocObservationResults={singleObservationResult ? [singleObservationResult] : isAdHoc ? mappedResults : []}
-        isAdHoc={isAdHoc}
-        isBiomass={observationType === 'Biomass Measurements'}
-        isSingleView={!!singleObservationResult}
-        mapRef={mapRef}
-        observationResults={singleObservationResult ? [singleObservationResult] : isAdHoc ? [] : mappedResults}
-        plantingSiteId={plantingSiteId}
-        selectPlantingSiteId={selectPlantingSiteId}
-      />
+      <Box sx={{ position: 'relative' }}>
+        <ObservationMap
+          adHocObservationResults={singleObservationResult ? [singleObservationResult] : isAdHoc ? mappedResults : []}
+          isAdHoc={isAdHoc}
+          isBiomass={observationType === 'Biomass Measurements'}
+          isSingleView={!!singleObservationResult}
+          mapRef={mapRef}
+          observationResults={singleObservationResult ? [singleObservationResult] : isAdHoc ? [] : mappedResults}
+          plantingSiteId={plantingSiteId}
+          selectPlantingSiteId={selectPlantingSiteId}
+        />
+        {newFiltersEnabled && emptyMessages && <ObservationsEmptyOverlay message={emptyMessages[0]} />}
+      </Box>
     </Box>
   );
 };

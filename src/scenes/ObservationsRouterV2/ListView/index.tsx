@@ -228,7 +228,7 @@ const ObservationListViewContent = (): JSX.Element => {
 
   const countedPlotType: PlotType = countedObservationType === 'Biomass Measurements' ? 'adHoc' : plotType;
 
-  const { observations: filteredObservations } = useFilteredObservationResults({
+  const { emptyState, observations: filteredObservations } = useFilteredObservationResults({
     observationType: countedObservationType,
     plantingSiteId: selectedPlantingSiteId,
     plotType: countedPlotType,
@@ -237,9 +237,10 @@ const ObservationListViewContent = (): JSX.Element => {
 
   const observationMapCard = useMemo(
     () =>
-      hasObservationsResults && (
+      (newFiltersEnabled || hasObservationsResults) && (
         <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
           <ObservationMapWrapper
+            emptyState={emptyState}
             observationType={countedObservationType}
             plantingSiteId={plantingSiteIdFilter}
             plotType={countedPlotType}
@@ -247,7 +248,16 @@ const ObservationListViewContent = (): JSX.Element => {
           />
         </Card>
       ),
-    [countedObservationType, countedPlotType, hasObservationsResults, plantingSiteIdFilter, selectPlantingSite, theme]
+    [
+      countedObservationType,
+      countedPlotType,
+      emptyState,
+      hasObservationsResults,
+      newFiltersEnabled,
+      plantingSiteIdFilter,
+      selectPlantingSite,
+      theme,
+    ]
   );
 
   const mobileAppCard = useMemo(

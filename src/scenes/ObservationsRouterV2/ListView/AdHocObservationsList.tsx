@@ -29,6 +29,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useObservationFilters } from '../ObservationFiltersProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
+import useObservationsEmptyMessages from '../useObservationsEmptyMessages';
 import { BiomassActionsMenuContent } from './BiomassList';
 import SelectObservationButton from './SelectObservationButton';
 
@@ -81,11 +82,16 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   const { downloadAdHocObservationsZip } = useObservationExports();
   const tableState = useTableState(STORAGE_KEY);
 
-  const { isFetching: isLoading, observations } = useFilteredObservationResults({
+  const {
+    emptyState,
+    isFetching: isLoading,
+    observations,
+  } = useFilteredObservationResults({
     observationType,
     plantingSiteId,
     plotType: 'adHoc',
   });
+  const emptyMessages = useObservationsEmptyMessages(emptyState);
 
   const { plantingSites } = useOrganizationPlantingSites();
 
@@ -264,20 +270,6 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
     strings.ALL_PLANTING_SITES,
   ]);
 
-  if (!isLoading && rows.length === 0) {
-    return (
-      <Card radius={'8px'} style={{ width: '100%' }}>
-        <EmptyStateContent
-          title={''}
-          subtitle={[
-            strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1,
-            strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2,
-          ]}
-        />
-      </Card>
-    );
-  }
-
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
       <EditableTable<AdHocRow>
@@ -321,6 +313,8 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
             column.id === 'actionsMenu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
           muiTablePaperProps: { elevation: 0 },
           positionGlobalFilter: 'right' as const,
+          renderEmptyRowsFallback: () =>
+            emptyMessages ? <EmptyStateContent subtitle={emptyMessages} title={''} /> : null,
           state: {
             columnOrder: tableState.columnOrder,
             columnVisibility: tableState.columnVisibility,

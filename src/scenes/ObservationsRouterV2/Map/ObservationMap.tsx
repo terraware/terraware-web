@@ -305,6 +305,23 @@ const ObservationMap = ({
       const bbox = getBoundingBoxFromPoints(points);
       fitBounds(bbox);
     }
+    if (plantingSiteId && !selectedHistory) {
+      const site = plantingSites.find((candidate) => candidate.id === plantingSiteId);
+      const points =
+        site?.boundary?.coordinates
+          .flat()
+          .flat()
+          .map(
+            ([lng, lat]): MapPoint => ({
+              lat,
+              lng,
+            })
+          ) ?? [];
+
+      if (points.length > 0) {
+        fitBounds(getBoundingBoxFromPoints(points));
+      }
+    }
     if (!plantingSiteId && plantingSites) {
       const points = plantingSites.flatMap(
         (site) =>
@@ -390,6 +407,59 @@ const ObservationMap = ({
     },
     [selectFeature, selectedAdHocResults, selectedResults]
   );
+
+  const siteLayers = useMemo((): MapLayer[] => {
+    const site = plantingSites.find((candidate) => candidate.id === plantingSiteId);
+    if (!site) {
+      return [];
+    }
+
+    const strata = site.strata ?? [];
+    return [
+      {
+        features: strata
+          .flatMap((stratum) => stratum.substrata)
+          .map((substratum) => ({
+            featureId: `${substratum.id}`,
+            geometry: {
+              type: 'MultiPolygon',
+              coordinates: substratum.boundary?.coordinates ?? [],
+            },
+            label: substratum.name,
+          })),
+        layerId: 'substrata',
+        style: substrataLayerStyle,
+        visible: selectedLayer === 'substrata',
+      },
+      {
+        features: strata.map((stratum) => ({
+          featureId: `${stratum.name}`,
+          geometry: {
+            type: 'MultiPolygon',
+            coordinates: stratum.boundary?.coordinates ?? [],
+          },
+          label: stratum.name,
+        })),
+        layerId: 'strata',
+        style: strataLayerStyle,
+        visible: selectedLayer === 'strata',
+      },
+      {
+        features: [
+          {
+            featureId: `${site.id}`,
+            geometry: {
+              type: 'MultiPolygon',
+              coordinates: site.boundary?.coordinates ?? [],
+            },
+          },
+        ],
+        layerId: 'sites',
+        style: sitesLayerStyle,
+        visible: selectedLayer === 'sites',
+      },
+    ];
+  }, [plantingSiteId, plantingSites, selectedLayer, sitesLayerStyle, strataLayerStyle, substrataLayerStyle]);
 
   const layers = useMemo((): MapLayer[] => {
     if (plantingSiteId === undefined) {
@@ -541,7 +611,7 @@ const ObservationMap = ({
         },
       ];
     }
-    return [];
+    return newFiltersEnabled ? siteLayers : [];
   }, [
     adHocPlotsLayerStyle,
     adHocPlotsVisible,
@@ -557,6 +627,7 @@ const ObservationMap = ({
     selectedFeature?.layerFeatureId.layerId,
     selectedHistory,
     selectedLayer,
+    siteLayers,
     sitesLayerStyle,
     substrataLayerStyle,
     temporaryPlotsLayerStyle,
