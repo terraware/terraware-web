@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { ObservationSiteStatsPayload, useLazyGetSiteObservationStatsQuery } from 'src/queries/generated/observations';
+import { ObservationSiteStatsPayload, useLazyGetObservationStatsQuery } from 'src/queries/generated/observations';
 import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 
 export type ProjectSiteObservationStats = {
@@ -23,7 +23,7 @@ const useProjectSiteObservationStats = (
   enabled = true
 ): ProjectSiteObservationStats[] => {
   const [listProjectSites, listProjectSitesResponse] = useLazyListPlantingSitesQuery();
-  const [getSiteObservationStats] = useLazyGetSiteObservationStatsQuery();
+  const [getObservationStats] = useLazyGetObservationStatsQuery();
   const [resolved, setResolved] = useState<ResolvedProjectStats>();
 
   useEffect(() => {
@@ -45,14 +45,14 @@ const useProjectSiteObservationStats = (
     void Promise.all(
       projectSites.map(async (site) => {
         try {
-          const response = await getSiteObservationStats(site.id, true).unwrap();
-          return { site, stats: response.stats };
+          const response = await getObservationStats({ plantingSiteId: site.id }, true).unwrap();
+          return { site, stats: response.stats.find(({ plantingSiteId }) => plantingSiteId === site.id) };
         } catch {
           return { site, stats: undefined };
         }
       })
     ).then((siteStats) => setResolved({ projectId, siteStats }));
-  }, [enabled, getSiteObservationStats, projectId, projectSites]);
+  }, [enabled, getObservationStats, projectId, projectSites]);
 
   return useMemo(
     () => (enabled && resolved !== undefined && resolved.projectId === projectId ? resolved.siteStats : []),

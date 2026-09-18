@@ -31,11 +31,12 @@ const injectedRtkApi = api.injectEndpoints({
         },
       }),
     }),
-    getSiteObservationStats: build.query<GetSiteObservationStatsApiResponse, GetSiteObservationStatsApiArg>({
+    getObservationStats: build.query<GetObservationStatsApiResponse, GetObservationStatsApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/tracking/observations/results/stats`,
         params: {
-          plantingSiteId: queryArg,
+          plantingSiteId: queryArg.plantingSiteId,
+          projectId: queryArg.projectId,
         },
       }),
     }),
@@ -210,8 +211,13 @@ export type ListObservationResultsApiArg = {
   /** If true, return results of ad-hoc observations instead of scheduled ones. */
   isAdHoc?: boolean;
 };
-export type GetSiteObservationStatsApiResponse = /** status 200 OK */ GetSiteObservationStatsResponsePayload;
-export type GetSiteObservationStatsApiArg = number;
+export type GetObservationStatsApiResponse = /** status 200 OK */ GetObservationStatsResponsePayload;
+export type GetObservationStatsApiArg = {
+  /** Limit results to a single planting site. */
+  plantingSiteId?: number;
+  /** Limit results to the planting sites of a project. Ignored if plantingSiteId is specified. */
+  projectId?: number;
+};
 export type GetObservationApiResponse = /** status 200 OK */ GetObservationResponsePayload;
 export type GetObservationApiArg = number;
 export type RescheduleObservationApiResponse = /** status 200 OK */ SimpleSuccessResponsePayload;
@@ -852,8 +858,8 @@ export type ObservationSiteStatsPayload = {
   /** Total number of species observed, not counting dead plants. Each distinct user-supplied name for a species of Other certainty counts separately. */
   totalSpecies?: number;
 };
-export type GetSiteObservationStatsResponsePayload = {
-  stats: ObservationSiteStatsPayload;
+export type GetObservationStatsResponsePayload = {
+  stats: ObservationSiteStatsPayload[];
   status: SuccessOrError;
 };
 export type GetObservationResponsePayload = {
@@ -1167,8 +1173,8 @@ export const {
   useCompleteAdHocObservationMutation,
   useListObservationResultsQuery,
   useLazyListObservationResultsQuery,
-  useGetSiteObservationStatsQuery,
-  useLazyGetSiteObservationStatsQuery,
+  useGetObservationStatsQuery,
+  useLazyGetObservationStatsQuery,
   useGetObservationQuery,
   useLazyGetObservationQuery,
   useRescheduleObservationMutation,

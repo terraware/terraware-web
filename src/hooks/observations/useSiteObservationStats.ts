@@ -4,7 +4,7 @@ import {
   ObservationSiteStatsPayload,
   ObservationStratumStatsPayload,
   ObservationSubstratumStatsPayload,
-  useLazyGetSiteObservationStatsQuery,
+  useLazyGetObservationStatsQuery,
 } from 'src/queries/generated/observations';
 
 export type SiteObservationStats = {
@@ -20,19 +20,19 @@ export type SiteObservationStats = {
  * never observed carry no observationId.
  */
 const useSiteObservationStats = (plantingSiteId: number | undefined): SiteObservationStats => {
-  const [getSiteObservationStats, response] = useLazyGetSiteObservationStatsQuery();
+  const [getObservationStats, response] = useLazyGetObservationStatsQuery();
 
   useEffect(() => {
     if (plantingSiteId !== undefined) {
-      void getSiteObservationStats(plantingSiteId, true);
+      void getObservationStats({ plantingSiteId }, true);
     }
-  }, [getSiteObservationStats, plantingSiteId]);
+  }, [getObservationStats, plantingSiteId]);
 
-  // Guard against rendering the previous site's numbers while a switch is in flight.
-  const stats = useMemo(() => {
-    const result = response.currentData?.stats;
-    return result?.plantingSiteId === plantingSiteId ? result : undefined;
-  }, [plantingSiteId, response.currentData]);
+  // Matching on id also guards against rendering the previous site's numbers mid-switch.
+  const stats = useMemo(
+    () => response.currentData?.stats.find((siteStats) => siteStats.plantingSiteId === plantingSiteId),
+    [plantingSiteId, response.currentData]
+  );
 
   const strataById = useMemo(
     () => new Map((stats?.strata ?? []).map((stratum) => [stratum.stratumId, stratum])),
