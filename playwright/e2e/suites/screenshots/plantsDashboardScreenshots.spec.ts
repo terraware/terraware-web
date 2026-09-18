@@ -137,7 +137,7 @@ test.describe('PlantsDashboardScreenshots', () => {
 
     await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
     await expect(page.getByText('Stratum Trends', { exact: true })).toBeVisible();
-    await expect(page.getByText('Observed Density', { exact: true }).first()).toBeVisible();
+    await expect(page.getByText('Site Plant Density', { exact: true })).toBeVisible();
     await expect(page.getByText('Survival Rate').first()).toBeVisible();
     await expect(page.getByText('Site Map', { exact: true })).toBeVisible();
 
@@ -167,7 +167,7 @@ test.describe('PlantsDashboardScreenshots', () => {
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();
 
-    await expect(page.getByText('Observed Density', { exact: true }).first()).toBeVisible();
+    await expect(page.getByText('Site Plant Density', { exact: true })).toBeVisible();
     await expect(page.locator('#plantingDensityByStratum')).toBeVisible();
 
     await expect(page).toHaveScreenshot('plants-dashboard-plant-density.png', FULL_PAGE_SCREENSHOT_OPTIONS);

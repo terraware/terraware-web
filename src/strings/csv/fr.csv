@@ -1469,9 +1469,6 @@ OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION,"Vous aurez besoin de l’applicat
 
 Scannez les codes QR avec votre appareil pour télécharger sur l’App Store ou Google Play.",13be06be
 OBSERVED_BY_ON,Observé par {0} le {1} à {2},c8b41186
-OBSERVED_DENSITY,Densité observée,c5003c27
-OBSERVED_DENSITY_PER_STRATUM,Densité observée par strate,db5f3cf7
-OBSERVED_DENSITY_TOOLTIP,La densité observée est basée sur le nombre de plants observés dans les strates qui ont été observées au moins une fois lors de cette observation.,328dc9f7
 OBSERVED_GPS_COORDINATES,Coordonnées GPS observées,efbe8b32
 OBSERVED_PLANTS,Plantes observées,375e69c3
 OBSERVED_SPECIES,Espèces observées,922020f2
@@ -1585,8 +1582,10 @@ PHOTOS_VIDEOS,Photos/Vidéos,5d533136
 PLACEHOLDER,Espace réservé,e7c25185
 PLANT,plante,9089fdf9
 PLANT_DENSITY,Densité de plantation,feae2a2d
+PLANT_DENSITY_DASHBOARD_TOOLTIP,"La densité de plantation est basée sur la dernière observation de chaque strate, en reportant la dernière donnée observée pour les sous-strates qui n'ont pas été observées.",d8d7b522
 PLANT_DENSITY_MISSING_TOOLTIP,"Lorsqu’une observation est terminée, la densité de plantation calculée apparaîtra ici.",6e3830dd
 PLANT_DENSITY_OF_PLANTED_STRATA,Densité de plantation (des strates plantées),db91b874
+PLANT_DENSITY_PER_STRATUM,Densité de plantation par strate,292277cd
 PLANT_DENSITY_TITLE_TOOLTIP,Saisissez manuellement la densité de plantation pour chacune des espèces plantées. Cette densité sera utilisée pour les calculs du taux de survie.,50547e3a
 PLANT_DENSITY_TOOLTIP,Densités de plantation par espèce qui seront utilisées pour calculer les taux de survie des parcelles et des espèces.,82b7af4f
 PLANT_DESCRIPTION,Notes sur la plante,0915d26a
@@ -2211,6 +2210,7 @@ SITE_GOALS,Objectifs du site,345a7c04
 SITE_GOALS_DESCRIPTION,Gérer les objectifs du site pour les densités de plantation et les espèces.,29421088
 SITE_LOCATION,Emplacement du site,e0a85b19
 SITE_MAP,Carte du site,df2fc60a
+SITE_PLANT_DENSITY,Densité de plantation du site,a449ddcc
 SITE_STRATUM_BOUNDARIES,Limites de la strate,418d687a
 SITE_STRATUM_BOUNDARIES_DESCRIPTION_0,"Une strate est une couche de végétation du site de plantation où les conditions de plantation et de croissance sont similaires. Chaque site de plantation doit comporter au moins une strate et généralement pas plus de cinq. Un exemple de strate est le versant d'une colline orientée à l'est, où l'ensoleillement et les conditions du sol sont similaires.",408485f9
 SITE_STRATUM_BOUNDARIES_DESCRIPTION_1,Dessinez les strates de votre site de plantation ci-dessous. Utilisez l’outil de découpe {0} pour créer des polygones représentant les strates à l’intérieur des limites du site. [Regardez un tutoriel] sur l’ajout de limites de strates.,c6d2ac88
