@@ -2805,6 +2805,7 @@ WILD,Silvestre,77d2fd62
 WILD_IN_SITU,Silvestre (in situ),cf764f76
 WILD_IN_SITU_DESCRIPTION,Las plantas que crecen naturalmente en áreas silvestres y que no fueron sembradas por gente.,9b5b2102
 WITHDRAW,Retirar,3aeae714
+WITHDRAW_ACCESSION_NOT_AVAILABLE,Esta accesión no está disponible para retiro.,501f0d9a
 WITHDRAW_ALL,Extraer todas,cc50ccca
 WITHDRAW_BY,Extraídas por,54fccc5e
 WITHDRAW_DATE,Fecha de retiro,67680899

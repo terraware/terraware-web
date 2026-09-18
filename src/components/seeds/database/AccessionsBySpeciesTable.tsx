@@ -10,7 +10,7 @@ import {
   Typography,
   useTheme,
 } from '@mui/material';
-import { Button, Checkbox, EditableTable, EditableTableColumn, Message } from '@terraware/web-components';
+import { Button, Checkbox, EditableTable, EditableTableColumn } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_Row,
@@ -240,7 +240,9 @@ export default function AccessionsBySpeciesTable({
   // disabled and wrapped in a tooltip (a nursery batch is single-species).
   const SelectRowCheckboxCell = useCallback(
     ({ row }: { row: MRT_Row<SpeciesRow> }) => {
-      const canSelect = selectedSpeciesRows.length === 0 || selectedSpeciesRows[0].id === row.original.id;
+      const hasWithdrawable = row.original.accessionIds.length > 0;
+      const sameSpecies = selectedSpeciesRows.length === 0 || selectedSpeciesRows[0].id === row.original.id;
+      const canSelect = hasWithdrawable && sameSpecies;
       const checkbox = (
         <MuiCheckbox
           size='small'
@@ -250,10 +252,14 @@ export default function AccessionsBySpeciesTable({
           inputProps={{ 'aria-label': 'Toggle select row' }}
         />
       );
-      return canSelect ? (
-        checkbox
-      ) : (
-        <Tooltip title={strings.BULK_WITHDRAW_ONE_SPECIES_TOOLTIP}>
+      if (canSelect) {
+        return checkbox;
+      }
+      const tooltip = !hasWithdrawable
+        ? strings.WITHDRAW_ACCESSION_NOT_AVAILABLE
+        : strings.BULK_WITHDRAW_ONE_SPECIES_TOOLTIP;
+      return (
+        <Tooltip title={tooltip}>
           <span>{checkbox}</span>
         </Tooltip>
       );
@@ -393,17 +399,6 @@ export default function AccessionsBySpeciesTable({
 
   return (
     <Card>
-      {bulkWithdrawEnabled && isSelectionBulkWithdrawable && (
-        <Box paddingBottom={2}>
-          <Message
-            type='page'
-            priority='info'
-            body={strings
-              .formatString(strings.BULK_WITHDRAW_SPECIES_BANNER, selectedSpeciesRows[0].speciesName)
-              .toString()}
-          />
-        </Box>
-      )}
       {bulkWithdrawEnabled && user && withdrawAccessionIds && (
         <WithdrawSeedsModal
           open={withdrawAccessionIds !== undefined}
@@ -456,25 +451,57 @@ export default function AccessionsBySpeciesTable({
           ...(bulkWithdrawEnabled
             ? {
                 enableRowSelection: (row: MRT_Row<SpeciesRow>) =>
-                  selectedSpeciesRows.length === 0 || selectedSpeciesRows[0].id === row.original.id,
+                  row.original.accessionIds.length > 0 &&
+                  (selectedSpeciesRows.length === 0 || selectedSpeciesRows[0].id === row.original.id),
                 displayColumnDefOptions: { 'mrt-row-select': { Cell: SelectRowCheckboxCell } },
                 onRowSelectionChange: setRowSelection,
                 renderToolbarAlertBannerContent: ({ selectedAlert }: { selectedAlert: React.ReactNode }) => (
-                  <Box display='flex' gap={1} alignItems='center' justifyContent='space-between' width='100%'>
-                    {selectedAlert}
-                    <Tooltip title={withdrawTooltip || ''}>
-                      <span>
-                        <TfButton
-                          type='productive'
-                          onClick={bulkWithdrawSelectedRows}
-                          disabled={!isSelectionBulkWithdrawable}
-                          label={strings.WITHDRAW}
-                          priority='secondary'
-                        />
-                      </span>
-                    </Tooltip>
+                  <Box display='flex' flexDirection='column' width='100%'>
+                    <Box
+                      display='flex'
+                      gap={1}
+                      alignItems='center'
+                      justifyContent='space-between'
+                      width='100%'
+                      padding={theme.spacing(1, 3)}
+                    >
+                      {selectedAlert}
+                      <Tooltip title={withdrawTooltip || ''}>
+                        <span>
+                          <TfButton
+                            type='productive'
+                            onClick={bulkWithdrawSelectedRows}
+                            disabled={!isSelectionBulkWithdrawable}
+                            label={strings.WITHDRAW}
+                            priority='secondary'
+                          />
+                        </span>
+                      </Tooltip>
+                    </Box>
+                    {isSelectionBulkWithdrawable && (
+                      <Box
+                        display='flex'
+                        alignItems='center'
+                        gap={1}
+                        sx={{ backgroundColor: theme.palette.TwClrBgSuccessTertiary, padding: theme.spacing(1.5, 3) }}
+                      >
+                        <Icon name='info' size='medium' fillColor={theme.palette.TwClrIcnSuccess} />
+                        <Typography fontSize='14px' color={theme.palette.TwClrTxtSuccess}>
+                          {strings
+                            .formatString(strings.BULK_WITHDRAW_SPECIES_BANNER, selectedSpeciesRows[0].speciesName)
+                            .toString()}
+                        </Typography>
+                      </Box>
+                    )}
                   </Box>
                 ),
+                muiToolbarAlertBannerProps: {
+                  sx: {
+                    backgroundColor: theme.palette.TwClrBaseGray050,
+                    padding: 0,
+                    '.MuiAlert-message': { padding: 0, flexGrow: 1, width: '100%', maxWidth: 'none' },
+                  },
+                },
               }
             : {}),
           renderToolbarInternalActions: ({ table }) => (

@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, TableCell, TableRow, Typography, useTheme } from '@mui/material';
-import { Textfield } from '@terraware/web-components';
+import { Icon, Textfield } from '@terraware/web-components';
 
 import WeightUnitsSelector from 'src/components/WeightUnitsSelector';
 import Link from 'src/components/common/Link';
@@ -86,24 +86,40 @@ const AccessionQuantityRow = ({
         <Typography fontSize='14px'>{remainingLabel}</Typography>
       </TableCell>
       <TableCell>
-        <Box display='flex' alignItems='flex-start' gap={1}>
-          <Box width='96px'>
-            <Textfield
-              label=''
-              id={`withdraw-${accession.id}`}
-              type='number'
-              value={value?.toString()}
-              onChange={onChangeValue}
-              errorText={error || undefined}
-            />
-          </Box>
-          {withdrawByWeight && (
-            <Box flexShrink={0} width='88px'>
-              <WeightUnitsSelector
-                id={`withdraw-units-${accession.id}`}
-                onChange={onChangeUnits}
-                selectedValue={units}
+        <Box display='flex' flexDirection='column'>
+          <Box display='flex' alignItems='flex-start' gap={1}>
+            <Box width='96px'>
+              <Textfield
+                label=''
+                id={`withdraw-${accession.id}`}
+                type='number'
+                value={value?.toString()}
+                onChange={onChangeValue}
+                errorText={error || undefined}
+                sx={{ '.textfield-label-container': { display: 'none !important' } }}
               />
+            </Box>
+            {withdrawByWeight && (
+              <Box flexShrink={0} width='88px' paddingTop='4px'>
+                <WeightUnitsSelector
+                  id={`withdraw-units-${accession.id}`}
+                  onChange={onChangeUnits}
+                  selectedValue={units}
+                />
+              </Box>
+            )}
+          </Box>
+          {error && (
+            <Box display='flex' alignItems='flex-start' gap={0.5} marginTop={0.5} width='192px'>
+              <Icon
+                name='error'
+                size='small'
+                fillColor={theme.palette.TwClrIcnDanger}
+                style={{ flexShrink: 0, marginTop: '2px' }}
+              />
+              <Typography fontSize='14px' lineHeight='20px' color={theme.palette.TwClrTxtDanger}>
+                {error}
+              </Typography>
             </Box>
           )}
         </Box>
