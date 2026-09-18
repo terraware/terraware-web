@@ -26,7 +26,7 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
-import { useGetOneObservationResults } from 'src/hooks/observations';
+import { useGetOneObservationResults, useSiteObservationStats } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import usePlantingSiteHistory from 'src/hooks/usePlantingSiteHistory';
 import useProjectPlantingSites from 'src/hooks/useProjectPlantingSites';
@@ -76,6 +76,8 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
     const results = getObservationResultResponse.currentData?.observation;
     return results?.plantingSiteId === plantingSiteId ? results : undefined;
   }, [getObservationResultResponse, plantingSiteId]);
+
+  const { stats, strataById, substrataById } = useSiteObservationStats(plantingSiteId);
 
   const { plantingSiteHistory } = usePlantingSiteHistory({
     plantingSiteId,
@@ -493,14 +495,6 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
     const lessThanSeventyFive: MapLayerFeatureId[] = [];
     const greaterThanSeventyFive: MapLayerFeatureId[] = [];
 
-    if (!latestObservationResult) {
-      return {
-        lessThanFifty,
-        lessThanSeventyFive,
-        greaterThanSeventyFive,
-      };
-    }
-
     const sortFeatureBySurvivalRate = (entityId: MapLayerFeatureId, survivalRate: number | undefined) => {
       if (survivalRate !== undefined) {
         if (survivalRate < 50) {
@@ -513,29 +507,31 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
       }
     };
 
-    const siteId = { layerId: 'sites', featureId: `${latestObservationResult?.plantingSiteId}` };
-    sortFeatureBySurvivalRate(siteId, latestObservationResult?.survivalRate);
+    if (stats) {
+      sortFeatureBySurvivalRate({ layerId: 'sites', featureId: `${stats.plantingSiteId}` }, stats.survivalRate);
+    }
 
-    latestObservationResult?.strata.forEach((stratum) => {
+    plantingSite?.strata?.forEach((stratum) => {
       const stratumHistory = plantingSiteHistory?.strata.find(
-        (thisStratumHistory) => thisStratumHistory.stratumId === stratum.stratumId
+        (thisStratumHistory) => thisStratumHistory.stratumId === stratum.id
       );
 
       const stratumId = stratumHistory
         ? { layerId: 'strata', featureId: `${stratumHistory.name}` }
-        : { layerId: 'strata', featureId: `${stratum.stratumId}` };
+        : { layerId: 'strata', featureId: `${stratum.id}` };
 
-      sortFeatureBySurvivalRate(stratumId, stratum.survivalRate);
+      sortFeatureBySurvivalRate(stratumId, strataById.get(stratum.id)?.survivalRate);
 
       stratum.substrata.forEach((substratum) => {
         const substratumHistory = plantingSiteHistory?.strata
           .flatMap((thisStratumHistory) => thisStratumHistory.substrata)
-          .find((thisSubstratumHistory) => thisSubstratumHistory.substratumId === substratum.substratumId);
+          .find((thisSubstratumHistory) => thisSubstratumHistory.substratumId === substratum.id);
 
         const substratumId = substratumHistory
           ? { layerId: 'substrata', featureId: `${substratumHistory.id}` }
-          : { layerId: 'substrata', featureId: `${substratum.substratumId}` };
-        sortFeatureBySurvivalRate(substratumId, substratum.survivalRate);
+          : { layerId: 'substrata', featureId: `${substratum.id}` };
+
+        sortFeatureBySurvivalRate(substratumId, substrataById.get(substratum.id)?.survivalRate);
       });
     });
 
@@ -544,7 +540,7 @@ const PlantDashboardMap = ({ plantingSiteId, projectId }: PlantDashboardMapProps
       lessThanSeventyFive,
       greaterThanSeventyFive,
     };
-  }, [latestObservationResult, plantingSiteHistory]);
+  }, [plantingSite, plantingSiteHistory, stats, strataById, substrataById]);
 
   const setDrawerOpenCallback = useCallback(
     (open: boolean) => {
