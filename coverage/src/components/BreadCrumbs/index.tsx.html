@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>3/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/6</span>
+                <span class='fraction'>4/6</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -135,22 +135,22 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">70x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">70x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">70x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">70x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -187,13 +187,13 @@ export type BreadCrumbsProps = {
   crumbs: Crumb[];
 };
 &nbsp;
-export default function <span class="fstat-no" title="function not covered" >BreadCrumbs(</span>{ hierarchical, crumbs }: BreadCrumbsProps): JSX.Element {
-  const theme = <span class="cstat-no" title="statement not covered" >useTheme();</span>
+export default function BreadCrumbs({ hierarchical, crumbs }: BreadCrumbsProps): JSX.Element {
+  const theme = useTheme();
   const breadCrumbs: Crumb[] =
-<span class="cstat-no" title="statement not covered" >    hierarchical !== true</span>
+    hierarchical !== true
       ? crumbs
       : // construct the absolute paths using concatenation of previous paths
-        crumbs.reduce(<span class="fstat-no" title="function not covered" >(acc, curr) =&gt; {</span>
+<span class="branch-1 cbranch-no" title="branch not covered" >        crumbs.reduce(<span class="fstat-no" title="function not covered" >(acc, curr) =&gt; {</span></span>
           const crumb = {
             name: curr.name,
             to: [...acc.map(<span class="fstat-no" title="function not covered" >(_, i) =&gt; <span class="cstat-no" title="statement not covered" >crumbs[i].to)</span></span>, curr.to].join(''),
@@ -201,18 +201,18 @@ export default function <span class="fstat-no" title="function not covered" >Bre
 <span class="cstat-no" title="statement not covered" >          return [...acc, crumb];</span>
         }, [] as Crumb[]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Box display='inline-flex' alignItems='center' flexWrap='wrap'&gt;
-      {breadCrumbs.map(<span class="fstat-no" title="function not covered" >(crumb: Crumb, index: number) =&gt; <span class="cstat-no" title="statement not covered" >(</span></span>
+      {breadCrumbs.map((crumb: Crumb, index: number) =&gt; (
         &lt;Box key={index} display='inline-flex' alignItems='center'&gt;
           {index === 0 ? (
             &lt;BackToLink id={`crumb_${index}`} to={crumb.to} onClick={crumb.onClick} name={crumb.name} /&gt;
-          ) : (
+          ) : <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
             &lt;Link id={`crumb_${index}`} to={crumb.to} onClick={crumb.onClick}&gt;
               {crumb.name}
             &lt;/Link&gt;
           )}
-          {index + 1 !== breadCrumbs.length &amp;&amp; (
+          {index + 1 !== breadCrumbs.length &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
             &lt;Typography fontSize='16px' fontWeight={500} lineHeight='24px' color={theme.palette.TwClrTxtTertiary}&gt;
               &amp;nbsp;/&amp;nbsp;
             &lt;/Typography&gt;
@@ -229,7 +229,7 @@ export default function <span class="fstat-no" title="function not covered" >Bre
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-18T00:59:06.567Z
+                at 2026-09-18T13:47:44.962Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>

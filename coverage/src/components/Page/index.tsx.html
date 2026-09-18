@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">38.7% </span>
+                <span class="strong">54.83% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>12/31</span>
+                <span class='fraction'>17/31</span>
             </div>
         
             
@@ -256,7 +256,14 @@
 <a name='L191'></a><a href='#L191'>191</a>
 <a name='L192'></a><a href='#L192'>192</a>
 <a name='L193'></a><a href='#L193'>193</a>
-<a name='L194'></a><a href='#L194'>194</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -323,11 +330,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">291x</span>
-<span class="cline-any cline-yes">291x</span>
-<span class="cline-any cline-yes">291x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">291x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">394x</span>
+<span class="cline-any cline-yes">394x</span>
+<span class="cline-any cline-yes">394x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">394x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -335,7 +344,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">291x</span>
+<span class="cline-any cline-yes">394x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -488,6 +502,7 @@ export type PageProps = {
   rightComponentGridSize?: number;
   collapsibleHeader?: boolean;
   stickyHeader?: boolean;
+  stickyHeaderElevated?: boolean;
   // Rendered on its own row under the title, inside the header wrapper.
   subHeader?: React.ReactNode;
 };
@@ -514,6 +529,7 @@ export default function Page({
   rightComponentGridSize,
   collapsibleHeader,
   stickyHeader,
+  stickyHeaderElevated,
   subHeader,
 }: PageProps): JSX.Element {
   const contentRef = useRef(null);
@@ -530,8 +546,13 @@ export default function Page({
 &nbsp;
   return (
     &lt;TfMain style={containerStyles}&gt;
-      &lt;PageHeaderWrapper alwaysVisible={stickyHeader} collapsible={collapsibleHeader} nextElement={contentRef.current}&gt;
-        &lt;&gt;{crumbs &amp;&amp; &lt;BreadCrumbs crumbs={crumbs} hierarchical={<span class="branch-1 cbranch-no" title="branch not covered" >hierarchicalCrumbs </span>?? <span class="branch-2 cbranch-no" title="branch not covered" >true}</span> /&gt;}&lt;/&gt;
+      &lt;PageHeaderWrapper
+        alwaysVisible={stickyHeader}
+        collapsible={collapsibleHeader}
+        elevated={stickyHeaderElevated}
+        nextElement={contentRef.current}
+      &gt;
+        &lt;&gt;{crumbs &amp;&amp; &lt;BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? <span class="branch-2 cbranch-no" title="branch not covered" >true}</span> /&gt;}&lt;/&gt;
         &lt;Grid
           container
           justifyContent='space-between'
@@ -543,9 +564,9 @@ export default function Page({
           {title &amp;&amp; typeof title !== 'string' &amp;&amp; (
             &lt;Grid
               item
-              xs={<span class="branch-2 cbranch-no" title="branch not covered" >leftComponentGridSize !== undefined </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >rightComponentGridSize !== undefined </span>? 12 : 8}
+              xs={leftComponentGridSize !== undefined &amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >rightComponentGridSize !== undefined </span>? 12 : 8}
               md={
-<span class="branch-4 cbranch-no" title="branch not covered" >                leftComponentGridSize !== undefined </span>&amp;&amp; <span class="branch-5 cbranch-no" title="branch not covered" >rightComponentGridSize !== undefined</span>
+                leftComponentGridSize !== undefined &amp;&amp; <span class="branch-5 cbranch-no" title="branch not covered" >rightComponentGridSize !== undefined</span>
                   ? 12 - (leftComponentGridSize + rightComponentGridSize)
                   : undefined
               }
@@ -588,7 +609,7 @@ export default function Page({
           {rightComponent &amp;&amp; (
             &lt;Grid
               item
-              md={<span class="branch-1 cbranch-no" title="branch not covered" >rightComponentGridSize </span>?? <span class="branch-2 cbranch-no" title="branch not covered" >4}</span>
+              md={rightComponentGridSize ?? 4}
               xs={12}
               sx={{ paddingLeft: isDesktop ? 0 : theme.spacing(3), textAlign: isDesktop ? 'right' : 'left' }}
             &gt;
@@ -649,7 +670,7 @@ export default function Page({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-18T00:59:06.567Z
+                at 2026-09-18T13:47:44.962Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
