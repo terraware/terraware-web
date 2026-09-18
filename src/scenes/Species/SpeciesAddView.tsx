@@ -1,11 +1,11 @@
-import React, { type JSX, useCallback, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
-import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
-import { BusySpinner } from '@terraware/web-components';
+import { Box, Typography, useTheme } from '@mui/material';
+import { BusySpinner, Button } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
-import PageForm from 'src/components/common/PageForm';
-import TfMain from 'src/components/common/TfMain';
+import Page from 'src/components/Page';
+import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import { APP_PATHS } from 'src/constants';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -30,6 +30,26 @@ function initSpecies(species?: Species): Species {
   );
 }
 
+const getComparableSpecies = (species?: Species): string =>
+  JSON.stringify({
+    commonName: species?.commonName ?? '',
+    conservationCategory: species?.conservationCategory ?? null,
+    ecologicalRoleKnown: species?.ecologicalRoleKnown ?? '',
+    ecosystemTypes: species?.ecosystemTypes ?? [],
+    familyName: species?.familyName ?? '',
+    growthForms: species?.growthForms ?? [],
+    localUsesKnown: species?.localUsesKnown ?? '',
+    nativeEcosystem: species?.nativeEcosystem ?? '',
+    otherFacts: species?.otherFacts ?? '',
+    plantMaterialSourcingMethods: species?.plantMaterialSourcingMethods ?? [],
+    rare: species?.rare ?? false,
+    scientificName: species?.scientificName ?? '',
+    seedStorageBehavior: species?.seedStorageBehavior ?? null,
+    successionalGroups: species?.successionalGroups ?? [],
+  });
+
+const EMPTY_SPECIES = getComparableSpecies();
+
 type SpeciesAddViewProps = {
   reloadData: () => void;
 };
@@ -41,8 +61,9 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
   const organizationId = selectedOrganization?.id || -1; // TODO: Add null check for selectedOrganization
   const [record, setRecord, , onChangeCallback] = useForm<Species>(initSpecies());
   const [nameFormatError, setNameFormatError] = useState<string | string[]>('');
-  const [createSpecies, { isLoading: isBusy }] = useCreateSpeciesMutation();
+  const [createSpecies] = useCreateSpeciesMutation();
   const [assignSpeciesToProjects] = useAssignSpeciesToProjectsMutation();
+  const [saving, setSaving] = useState(false);
   const navigate = useSyncNavigate();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -59,6 +80,11 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
 
   const newGridSize = isMobile ? 12 : 4;
 
+  const isDirty = useMemo(
+    () => getComparableSpecies(record) !== EMPTY_SPECIES || addedProjectIds.length > 0,
+    [record, addedProjectIds]
+  );
+
   const createNewSpecies = async () => {
     if (organizationId === -1) {
       return;
@@ -68,6 +94,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
       return;
     }
 
+    setSaving(true);
     try {
       const { id } = await createSpecies({
         organizationId,
@@ -96,64 +123,80 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
       if (errorMessage === SpeciesRequestError.PreexistingSpecies) {
         setNameFormatError(strings.formatString(strings.EXISTING_SPECIES_MSG, record.scientificName));
       }
+    } finally {
+      setSaving(false);
     }
   };
 
+  const title = (
+    <Box
+      alignItems='center'
+      display='flex'
+      flexWrap='wrap'
+      gap={theme.spacing(1.5)}
+      sx={{ paddingLeft: theme.spacing(3) }}
+    >
+      <Typography component='h2' fontSize='24px' fontWeight={600} margin={0}>
+        {strings.ADD_SPECIES}
+      </Typography>
+      {isDirty && <UnsavedChangesBadge />}
+    </Box>
+  );
+
+  const rightComponent = (
+    <Box alignItems='center' display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
+      <Button
+        disabled={saving}
+        id='cancelAddSpecies'
+        label={strings.CANCEL}
+        onClick={() => navigate(APP_PATHS.SPECIES)}
+        priority='secondary'
+        size='medium'
+        type='passive'
+      />
+      <Button
+        disabled={!isDirty || saving}
+        id='saveAddSpecies'
+        label={strings.SAVE}
+        onClick={() => void createNewSpecies()}
+        size='medium'
+      />
+    </Box>
+  );
+
   return (
-    <TfMain>
-      {isBusy && <BusySpinner withSkrim={true} />}
-      <PageForm
-        cancelID='cancelAddSpecies'
-        saveID='saveAddSpecies'
-        onCancel={() => navigate(APP_PATHS.SPECIES)}
-        onSave={() => void createNewSpecies()}
+    <Page rightComponent={rightComponent} stickyHeader stickyHeaderElevated={isDirty} title={title}>
+      {saving && <BusySpinner withSkrim={true} />}
+      <Box
+        sx={{
+          backgroundColor: theme.palette.TwClrBg,
+          borderRadius: '32px',
+          margin: 0,
+          padding: theme.spacing(3),
+          width: '100%',
+        }}
       >
-        <Typography variant='h2' sx={{ fontSize: '24px', fontWeight: 'bold', paddingLeft: theme.spacing(3) }}>
-          {strings.ADD_SPECIES}
-        </Typography>
-        <Container
-          maxWidth={false}
-          sx={{
-            display: 'flex',
-            margin: '0 auto',
-            width: '100%',
-            paddingLeft: theme.spacing(isMobile ? 0 : 4),
-            paddingRight: theme.spacing(isMobile ? 0 : 4),
-            paddingTop: theme.spacing(2),
-          }}
-        >
-          <Grid
-            container
-            width={'100%'}
-            sx={{
-              backgroundColor: theme.palette.TwClrBg,
-              borderRadius: theme.spacing(4),
-              padding: theme.spacing(3),
-            }}
-          >
-            <SpeciesDetailsForm
-              gridSize={newGridSize}
-              record={record}
-              onChange={onChangeCallback}
-              setRecord={setRecord}
-              nameFormatError={nameFormatError}
-              setNameFormatError={setNameFormatError}
+        <SpeciesDetailsForm
+          gridSize={newGridSize}
+          record={record}
+          onChange={onChangeCallback}
+          setRecord={setRecord}
+          nameFormatError={nameFormatError}
+          setNameFormatError={setNameFormatError}
+        />
+        {hasMultipleProjects && (
+          <Box marginTop={theme.spacing(4)} width='100%'>
+            <SpeciesProjectsSection
+              speciesId={record.id}
+              speciesName={record.scientificName}
+              editMode
+              addedProjectIds={addedProjectIds}
+              onAddProjectIds={onAddProjectIds}
+              onRemoveProjectIds={onRemoveProjectIds}
             />
-            {hasMultipleProjects && (
-              <Box marginTop={theme.spacing(4)} width='100%'>
-                <SpeciesProjectsSection
-                  speciesId={record.id}
-                  speciesName={record.scientificName}
-                  editMode
-                  addedProjectIds={addedProjectIds}
-                  onAddProjectIds={onAddProjectIds}
-                  onRemoveProjectIds={onRemoveProjectIds}
-                />
-              </Box>
-            )}
-          </Grid>
-        </Container>
-      </PageForm>
-    </TfMain>
+          </Box>
+        )}
+      </Box>
+    </Page>
   );
 }
