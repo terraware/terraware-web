@@ -252,7 +252,7 @@ export default function SpeciesDetailsForm({
           tooltipTitle={strings.TOOLTIP_SPECIES_GROWTH_FORM}
         />
       </Grid>
-      <Grid item xs={gridSize} sx={{ 'align-self': 'center' }}>
+      <Grid item xs={gridSize} sx={{ alignSelf: 'center' }}>
         <Checkbox
           id='Rare'
           name='rare'

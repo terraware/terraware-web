@@ -14,7 +14,7 @@ const defaultHandlers = [http.get('/build-version.txt', () => HttpResponse.text(
  * file registered.
  *
  * Started, reset, and stopped for you by `src/test-utils/msw/setup.ts`, which is wired into
- * `rstest.config.ts` as a setup file. Tests only need `mockGet` / `mockPost` / `server.use(...)`.
+ * `rstest.config.mts` as a setup file. Tests only need `mockGet` / `mockPost` / `server.use(...)`.
  *
  * `server.resetHandlers()` between tests restores this list rather than clearing it, and handlers
  * added with `server.use(...)` take precedence over it, so a test can still override any default.
