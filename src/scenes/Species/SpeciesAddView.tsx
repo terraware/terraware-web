@@ -136,7 +136,7 @@ export default function SpeciesAddView({ reloadData }: SpeciesAddViewProps): JSX
       gap={theme.spacing(1.5)}
       sx={{ paddingLeft: theme.spacing(3) }}
     >
-      <Typography fontSize='24px' fontWeight={600}>
+      <Typography component='h2' fontSize='24px' fontWeight={600} margin={0}>
         {strings.ADD_SPECIES}
       </Typography>
       {isDirty && <UnsavedChangesBadge />}
