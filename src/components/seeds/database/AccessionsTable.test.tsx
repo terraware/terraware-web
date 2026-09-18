@@ -77,9 +77,9 @@ describe('AccessionsTable bulk withdrawal', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('blocks withdrawal when a selected accession is not yet checked in', async () => {
+  it('disables the checkbox for an accession that is not yet checked in', () => {
     enableBulkWithdraw();
-    const { user } = renderTable([
+    renderTable([
       buildRow({ id: '1', accessionNumber: 'ACC-001', species_id: 10, speciesName: 'Acacia koa', state: 'In Storage' }),
       buildRow({
         id: '2',
@@ -90,10 +90,10 @@ describe('AccessionsTable bulk withdrawal', () => {
       }),
     ]);
 
-    await user.click(screen.getByRole('checkbox', { name: 'Toggle select all' }));
-
-    // Awaiting Check-In accessions offer Check In, not Withdraw, so the action is blocked.
-    expect(screen.getByRole('button', { name: strings.WITHDRAW })).toBeDisabled();
+    // Awaiting Check-In accessions can't be withdrawn, so their checkbox is disabled up front.
+    const rowCheckboxes = screen.getAllByRole('checkbox', { name: 'Toggle select row' });
+    expect(rowCheckboxes[0]).toBeEnabled();
+    expect(rowCheckboxes[1]).toBeDisabled();
   });
 
   it('disables different-species checkboxes once a row is selected', async () => {

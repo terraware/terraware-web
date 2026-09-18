@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Checkbox, CircularProgress, IconButton, Tooltip, useTheme } from '@mui/material';
-import { EditableTable, EditableTableColumn, Icon, Message } from '@terraware/web-components';
+import { Box, Checkbox, CircularProgress, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
+import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_ColumnFiltersState,
@@ -142,7 +142,9 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
   // why it can't be selected (a nursery batch is single-species).
   const SelectRowCheckboxCell = useCallback(
     ({ row }: { row: MRT_Row<SearchResponseElementWithId> }) => {
-      const canSelect = selectionSpeciesId === undefined || row.original.species_id === selectionSpeciesId;
+      const withdrawable = isWithdrawableAccessionState(row.original.state as string | undefined);
+      const sameSpecies = selectionSpeciesId === undefined || row.original.species_id === selectionSpeciesId;
+      const canSelect = withdrawable && sameSpecies;
       const checkbox = (
         <Checkbox
           size='small'
@@ -152,10 +154,14 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
           inputProps={{ 'aria-label': 'Toggle select row' }}
         />
       );
-      return canSelect ? (
-        checkbox
-      ) : (
-        <Tooltip title={strings.BULK_WITHDRAW_ONE_SPECIES_TOOLTIP}>
+      if (canSelect) {
+        return checkbox;
+      }
+      const tooltip = !withdrawable
+        ? strings.WITHDRAW_ACCESSION_NOT_AVAILABLE
+        : strings.BULK_WITHDRAW_ONE_SPECIES_TOOLTIP;
+      return (
+        <Tooltip title={tooltip}>
           <span>{checkbox}</span>
         </Tooltip>
       );
@@ -674,17 +680,6 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
 
   return (
     <Card>
-      {bulkWithdrawEnabled && oneSpeciesSelected && (
-        <Box paddingBottom={2}>
-          <Message
-            type='page'
-            priority='info'
-            body={strings
-              .formatString(strings.BULK_WITHDRAW_SPECIES_BANNER, String(selectedRows[0].speciesName ?? ''))
-              .toString()}
-          />
-        </Box>
-      )}
       {bulkWithdrawEnabled && user && withdrawAccessionIds && (
         <WithdrawSeedsModal
           open={withdrawAccessionIds !== undefined}
@@ -737,25 +732,60 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
           ...(bulkWithdrawEnabled
             ? {
                 enableRowSelection: (row: MRT_Row<SearchResponseElementWithId>) =>
-                  selectionSpeciesId === undefined || row.original.species_id === selectionSpeciesId,
+                  isWithdrawableAccessionState(row.original.state as string | undefined) &&
+                  (selectionSpeciesId === undefined || row.original.species_id === selectionSpeciesId),
                 displayColumnDefOptions: { 'mrt-row-select': { Cell: SelectRowCheckboxCell } },
                 onRowSelectionChange: setRowSelection,
                 renderToolbarAlertBannerContent: ({ selectedAlert }: { selectedAlert: React.ReactNode }) => (
-                  <Box display='flex' gap={1} alignItems='center' justifyContent='space-between' width='100%'>
-                    {selectedAlert}
-                    <Tooltip title={withdrawTooltip || ''}>
-                      <span>
-                        <Button
-                          type='productive'
-                          onClick={bulkWithdrawSelectedRows}
-                          disabled={!isSelectionBulkWithdrawable}
-                          label={strings.WITHDRAW}
-                          priority='secondary'
-                        />
-                      </span>
-                    </Tooltip>
+                  <Box display='flex' flexDirection='column' width='100%'>
+                    <Box
+                      display='flex'
+                      gap={1}
+                      alignItems='center'
+                      justifyContent='space-between'
+                      width='100%'
+                      padding={theme.spacing(1, 3)}
+                    >
+                      {selectedAlert}
+                      <Tooltip title={withdrawTooltip || ''}>
+                        <span>
+                          <Button
+                            type='productive'
+                            onClick={bulkWithdrawSelectedRows}
+                            disabled={!isSelectionBulkWithdrawable}
+                            label={strings.WITHDRAW}
+                            priority='secondary'
+                          />
+                        </span>
+                      </Tooltip>
+                    </Box>
+                    {oneSpeciesSelected && (
+                      <Box
+                        display='flex'
+                        alignItems='center'
+                        gap={1}
+                        sx={{ backgroundColor: theme.palette.TwClrBgSuccessTertiary, padding: theme.spacing(1.5, 3) }}
+                      >
+                        <Icon name='info' size='medium' fillColor={theme.palette.TwClrIcnSuccess} />
+                        <Typography fontSize='14px' color={theme.palette.TwClrTxtSuccess}>
+                          {strings
+                            .formatString(
+                              strings.BULK_WITHDRAW_SPECIES_BANNER,
+                              String(selectedRows[0].speciesName ?? '')
+                            )
+                            .toString()}
+                        </Typography>
+                      </Box>
+                    )}
                   </Box>
                 ),
+                muiToolbarAlertBannerProps: {
+                  sx: {
+                    backgroundColor: theme.palette.TwClrBaseGray050,
+                    padding: 0,
+                    '.MuiAlert-message': { padding: 0, flexGrow: 1, width: '100%', maxWidth: 'none' },
+                  },
+                },
               }
             : {}),
           renderToolbarInternalActions: ({ table }) => (

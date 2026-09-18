@@ -85,16 +85,12 @@ describe('AccessionsBySpeciesTable bulk withdrawal', () => {
     ).not.toBeInTheDocument();
   });
 
-  it('blocks withdrawal for a species whose accessions are all awaiting check-in', async () => {
+  it('disables the checkbox for a species whose accessions are all awaiting check-in', () => {
     enableBulkWithdraw();
-    const { user } = renderTable([
-      buildRow({ id: '1', species_id: 10, speciesName: 'Acacia koa', state: 'Awaiting Check-In' }),
-    ]);
+    renderTable([buildRow({ id: '1', species_id: 10, speciesName: 'Acacia koa', state: 'Awaiting Check-In' })]);
 
-    await user.click(screen.getByRole('checkbox', { name: 'Toggle select all' }));
-
-    // The species row is selectable, but it has no withdrawable (checked-in) accessions.
-    expect(screen.getByRole('button', { name: strings.WITHDRAW })).toBeDisabled();
+    // The species has no withdrawable (checked-in) accessions, so its row can't be selected.
+    expect(screen.getByRole('checkbox', { name: 'Toggle select row' })).toBeDisabled();
   });
 
   it('disables other species rows once one species row is selected', async () => {
