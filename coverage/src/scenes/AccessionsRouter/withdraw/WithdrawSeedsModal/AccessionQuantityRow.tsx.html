@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.62% </span>
+                <span class="strong">61.29% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>17/29</span>
+                <span class='fraction'>19/31</span>
             </div>
         
             
@@ -201,7 +201,23 @@
 <a name='L136'></a><a href='#L136'>136</a>
 <a name='L137'></a><a href='#L137'>137</a>
 <a name='L138'></a><a href='#L138'>138</a>
-<a name='L139'></a><a href='#L139'>139</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a>
+<a name='L143'></a><a href='#L143'>143</a>
+<a name='L144'></a><a href='#L144'>144</a>
+<a name='L145'></a><a href='#L145'>145</a>
+<a name='L146'></a><a href='#L146'>146</a>
+<a name='L147'></a><a href='#L147'>147</a>
+<a name='L148'></a><a href='#L148'>148</a>
+<a name='L149'></a><a href='#L149'>149</a>
+<a name='L150'></a><a href='#L150'>150</a>
+<a name='L151'></a><a href='#L151'>151</a>
+<a name='L152'></a><a href='#L152'>152</a>
+<a name='L153'></a><a href='#L153'>153</a>
+<a name='L154'></a><a href='#L154'>154</a>
+<a name='L155'></a><a href='#L155'>155</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -339,10 +355,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { type JSX, useCallback, useMemo } from 'react';
 &nbsp;
 import { Box, TableCell, TableRow, Typography, useTheme } from '@mui/material';
-import { Textfield } from '@terraware/web-components';
+import { Icon, Textfield } from '@terraware/web-components';
 &nbsp;
 import WeightUnitsSelector from 'src/components/WeightUnitsSelector';
 import Link from 'src/components/common/Link';
@@ -427,24 +459,40 @@ const AccessionQuantityRow = ({
         &lt;Typography fontSize='14px'&gt;{remainingLabel}&lt;/Typography&gt;
       &lt;/TableCell&gt;
       &lt;TableCell&gt;
-        &lt;Box display='flex' alignItems='flex-start' gap={1}&gt;
-          &lt;Box width='96px'&gt;
-            &lt;Textfield
-              label=''
-              id={`withdraw-${accession.id}`}
-              type='number'
-              value={value?.toString()}
-              onChange={onChangeValue}
-              errorText={error || undefined}
-            /&gt;
-          &lt;/Box&gt;
-          {withdrawByWeight &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
-            &lt;Box flexShrink={0} width='88px'&gt;
-              &lt;WeightUnitsSelector
-                id={`withdraw-units-${accession.id}`}
-                onChange={onChangeUnits}
-                selectedValue={units}
+        &lt;Box display='flex' flexDirection='column'&gt;
+          &lt;Box display='flex' alignItems='flex-start' gap={1}&gt;
+            &lt;Box width='96px'&gt;
+              &lt;Textfield
+                label=''
+                id={`withdraw-${accession.id}`}
+                type='number'
+                value={value?.toString()}
+                onChange={onChangeValue}
+                errorText={error || undefined}
+                sx={{ '.textfield-label-container': { display: 'none !important' } }}
               /&gt;
+            &lt;/Box&gt;
+            {withdrawByWeight &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
+              &lt;Box flexShrink={0} width='88px' paddingTop='4px'&gt;
+                &lt;WeightUnitsSelector
+                  id={`withdraw-units-${accession.id}`}
+                  onChange={onChangeUnits}
+                  selectedValue={units}
+                /&gt;
+              &lt;/Box&gt;
+            )}
+          &lt;/Box&gt;
+          {error &amp;&amp; (
+            &lt;Box display='flex' alignItems='flex-start' gap={0.5} marginTop={0.5} width='192px'&gt;
+              &lt;Icon
+                name='error'
+                size='small'
+                fillColor={theme.palette.TwClrIcnDanger}
+                style={{ flexShrink: 0, marginTop: '2px' }}
+              /&gt;
+              &lt;Typography fontSize='14px' lineHeight='20px' color={theme.palette.TwClrTxtDanger}&gt;
+                {error}
+              &lt;/Typography&gt;
             &lt;/Box&gt;
           )}
         &lt;/Box&gt;
@@ -484,7 +532,7 @@ export default AccessionQuantityRow;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-18T15:49:56.830Z
+                at 2026-09-18T16:02:50.795Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
