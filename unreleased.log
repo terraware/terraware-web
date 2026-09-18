@@ -1,3 +1,4 @@
+bff9c952 Show plant density per stratum from the site observation stats endpoint (#6461)
 4d445f0f Rank stratum survival from the site observation stats endpoint (#6460)
 2b33934f Add the site observation stats endpoint and its cache tag (#6459)
 a9575bd4 SW-8866 Add a Map/Split/List toggle to the observations header (#6450)
