@@ -71,6 +71,7 @@ const isPlotIncomplete = (plot: ObservationMonitoringPlotResultsPayload): boolea
 
 type ObservationMapProps = {
   adHocObservationResults: ObservationResultsPayload[];
+  isAdHoc?: boolean;
   isBiomass?: boolean;
   isSingleView?: boolean;
   mapRef: RefObject<MapRef | null>;
@@ -81,6 +82,7 @@ type ObservationMapProps = {
 
 const ObservationMap = ({
   adHocObservationResults,
+  isAdHoc,
   isBiomass,
   isSingleView,
   mapRef,
@@ -224,12 +226,12 @@ const ObservationMap = ({
   }, [adHocPlotOptions, selectedAdHocObservationId, strings.AD_HOC_PLOTS]);
 
   const selectedAdHocResults = useMemo(() => {
-    if (selectedAdHocObservationId === 'all') {
+    if (newFiltersEnabled || selectedAdHocObservationId === 'all') {
       return adHocObservationResults;
     } else {
       return adHocObservationResults.filter((result) => selectedAdHocObservationId === result.observationId);
     }
-  }, [adHocObservationResults, selectedAdHocObservationId]);
+  }, [adHocObservationResults, newFiltersEnabled, selectedAdHocObservationId]);
 
   const selectedAdHocPlotFeature = useMemo((): LayerFeature | undefined => {
     if (
@@ -270,9 +272,16 @@ const ObservationMap = ({
     }
   }, [selectedResults]);
 
+  const latestHistoryId = useMemo(() => {
+    const byDateDesc = [...adHocObservationResults].sort((a, b) =>
+      (b.completedTime ?? b.startDate).localeCompare(a.completedTime ?? a.startDate)
+    );
+    return byDateDesc.find((result) => result.plantingSiteHistoryId !== undefined)?.plantingSiteHistoryId;
+  }, [adHocObservationResults]);
+
   const { plantingSiteHistory: selectedHistory } = usePlantingSiteHistory({
     plantingSiteId,
-    plantingSiteHistoryId: selectedResults?.plantingSiteHistoryId,
+    plantingSiteHistoryId: newFiltersEnabled && isAdHoc ? latestHistoryId : selectedResults?.plantingSiteHistoryId,
   });
 
   useEffect(() => {
@@ -1142,10 +1151,14 @@ const ObservationMap = ({
         : plantingSiteLegendGroup;
 
     return [
-      ...(isBiomass || isSingleView || plantingSiteId === undefined || observationResults.length === 0
+      ...(newFiltersEnabled ||
+      isBiomass ||
+      isSingleView ||
+      plantingSiteId === undefined ||
+      observationResults.length === 0
         ? []
         : [observationDropdownLegendGroup]),
-      ...(isSingleView || plantingSiteId === undefined || adHocObservationResults.length <= 1
+      ...(newFiltersEnabled || isSingleView || plantingSiteId === undefined || adHocObservationResults.length <= 1
         ? []
         : [adHocObservationDropdownLegendGroup]),
       siteLegendGroup,
@@ -1164,6 +1177,7 @@ const ObservationMap = ({
     adHocObservationResults.length,
     adHocObservationDropdownLegendGroup,
     monitoringPlotsLegendGroup,
+    newFiltersEnabled,
     plotPhotosLegendGroup,
     plantMakersLegendGroup,
     survivalRateLegendGroup,
@@ -1197,7 +1211,7 @@ const ObservationMap = ({
       // eslint-disable-next-line react-hooks/set-state-in-effect
       resetDrawerState();
     }
-  }, [plantingSiteId, observationResults, selectedAdHocResults, resetDrawerState, searchParams]);
+  }, [plantingSiteId, observationResults, selectedAdHocResults, resetDrawerState, searchParams, selectedObservationId]);
 
   const selectedPlotBoundary = useMemo((): MultiPolygon | undefined => {
     const { layerId, featureId } = selectedFeature?.layerFeatureId ?? {};

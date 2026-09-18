@@ -10,6 +10,17 @@ export const getShortDate = (date: string, locale: string | undefined | null): s
   );
 
 /**
+ * Returns the locale's numeric date (eg. 07/01/2023 in en-US) from yyyy-mm-dd format
+ */
+export const getNumericDate = (date: string, locale: string | undefined | null): string =>
+  new Intl.DateTimeFormat(locale || 'en-US', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: 'UTC',
+  }).format(new Date(date));
+
+/**
  * Returns <Month> <Day>, <Year> (eg. July 1, 2023)
  */
 export const getLongDate = (date: string, locale: string | undefined | null): string =>

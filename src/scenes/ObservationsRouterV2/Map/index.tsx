@@ -4,6 +4,7 @@ import { MapRef } from 'react-map-gl/mapbox';
 import { Box, Typography, useTheme } from '@mui/material';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
+import isEnabled from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
@@ -37,6 +38,7 @@ const ObservationMapWrapper = ({
   const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const mapRef = useRef<MapRef | null>(null);
+  const newFiltersEnabled = isEnabled('New Observation Filters');
 
   useEffect(() => {
     if (isMapVisible) {
@@ -68,6 +70,8 @@ const ObservationMapWrapper = ({
     [getObservationResultResponse.data?.observation]
   );
 
+  const mappedResults = newFiltersEnabled ? observations : selectedObservationResults;
+
   return (
     <Box
       sx={{
@@ -79,7 +83,7 @@ const ObservationMapWrapper = ({
         gap: theme.spacing(3),
       }}
     >
-      {plantingSite && !singleObservationResult && (
+      {!newFiltersEnabled && plantingSite && !singleObservationResult && (
         <Box display={'flex'} flexDirection={'row'} width={'100%'} alignItems={'center'}>
           <Box marginRight={theme.spacing(2)}>
             <Typography fontSize='20px' fontWeight={600} lineHeight={'28px'}>
@@ -101,15 +105,12 @@ const ObservationMapWrapper = ({
         </Box>
       )}
       <ObservationMap
-        adHocObservationResults={
-          singleObservationResult ? [singleObservationResult] : isAdHoc ? selectedObservationResults : []
-        }
+        adHocObservationResults={singleObservationResult ? [singleObservationResult] : isAdHoc ? mappedResults : []}
+        isAdHoc={isAdHoc}
         isBiomass={observationType === 'Biomass Measurements'}
         isSingleView={!!singleObservationResult}
         mapRef={mapRef}
-        observationResults={
-          singleObservationResult ? [singleObservationResult] : isAdHoc ? [] : selectedObservationResults
-        }
+        observationResults={singleObservationResult ? [singleObservationResult] : isAdHoc ? [] : mappedResults}
         plantingSiteId={plantingSiteId}
         selectPlantingSiteId={selectPlantingSiteId}
       />
