@@ -139,8 +139,8 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
   const newFiltersEnabled = isEnabled('New Observation Filters');
   const showSelectObservation = newFiltersEnabled && typeof plantingSiteId === 'number';
 
-  const assignedTableState = useTableState(ASSIGNED_STORAGE_KEY, { persistFilters: true });
-  const adHocTableState = useTableState(ADHOC_STORAGE_KEY, { persistFilters: true });
+  const assignedTableState = useTableState(ASSIGNED_STORAGE_KEY, { persistFilters: !newFiltersEnabled });
+  const adHocTableState = useTableState(ADHOC_STORAGE_KEY, { persistFilters: !newFiltersEnabled });
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const {
