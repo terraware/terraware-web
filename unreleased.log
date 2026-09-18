@@ -1,3 +1,4 @@
+c0dff9d6 SW-8865 Put the observations timeline in the header (#6451)
 0fb17681 SW-8910 Species edit (#6456)
 bc7325e9 Shade the dashboard map and its drawer per stratum, and show the observation date (#6462)
 bff9c952 Show plant density per stratum from the site observation stats endpoint (#6461)
