@@ -1,3 +1,5 @@
+44d9f417 Update dependency @rstest/coverage-istanbul to ^0.12.0 (#6475)
+5cd4f4e7 Update dependency @rstest/core to ^0.12.0 (#6474)
 7c4e4aad Update dependency @babel/traverse to v8.0.5 (#6472)
 89dca93e SW-8792 Accessions: Bulk withdraw updates (#6468)
 b80f8188 Remove jsx warnings in unit tests (#6467)
