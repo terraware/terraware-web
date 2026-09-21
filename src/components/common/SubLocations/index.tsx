@@ -23,6 +23,7 @@ export type SublocationsProps = {
   facilityType: FacilityType;
   facilityId?: number;
   onEdit?: (subLocations: PartialSubLocation[]) => void;
+  onLoad?: (subLocations: PartialSubLocation[]) => void;
   renderLink?: (facilityId: number, subLocationName: string) => string;
 };
 
@@ -52,6 +53,7 @@ export default function SubLocations({
   facilityType,
   facilityId,
   onEdit,
+  onLoad,
   renderLink,
 }: SublocationsProps): JSX.Element | null {
   const isSeedbank = facilityType === 'seedbank';
@@ -76,7 +78,9 @@ export default function SubLocations({
       if (response.requestSucceeded) {
         if (activeLocale) {
           const collator = new Intl.Collator(activeLocale);
-          setSubLocations(response.subLocations.sort((a, b) => collator.compare(a.name, b.name)));
+          const sorted = response.subLocations.sort((a, b) => collator.compare(a.name, b.name));
+          setSubLocations(sorted);
+          onLoad?.(sorted);
         }
       }
     };
@@ -84,9 +88,11 @@ export default function SubLocations({
     if (facilityId) {
       void fetchSubLocations();
     } else if (isSeedbank) {
-      setSubLocations(DEFAULT_SUB_LOCATIONS().map((name, index) => subLocationWith(name, index, facilityType)));
+      const defaults = DEFAULT_SUB_LOCATIONS().map((name, index) => subLocationWith(name, index, facilityType));
+      setSubLocations(defaults);
+      onLoad?.(defaults);
     }
-  }, [facilityId, activeLocale, isSeedbank, facilityType]);
+  }, [facilityId, activeLocale, isSeedbank, facilityType, onLoad]);
 
   const getTopBarButtons = () => {
     const topBarButtons: TopBarButton[] = [
