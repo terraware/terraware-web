@@ -69,6 +69,8 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { downloadBiomassObservationsCsv } = useObservationExports();
 
+  const newFiltersEnabled = isEnabled('New Observation Filters');
+
   const {
     columnFilters,
     columnOrder,
@@ -82,9 +84,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(STORAGE_KEY, { persistFilters: true });
-
-  const newFiltersEnabled = isEnabled('New Observation Filters');
+  } = useTableState(STORAGE_KEY, { persistFilters: !newFiltersEnabled });
   const showSelectObservation = newFiltersEnabled && typeof plantingSiteId === 'number';
 
   const { plantingSites } = useOrganizationPlantingSites();

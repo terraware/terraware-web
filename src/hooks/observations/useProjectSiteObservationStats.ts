@@ -1,16 +1,11 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 
-import { ObservationSiteStatsPayload, useLazyGetSiteObservationStatsQuery } from 'src/queries/generated/observations';
+import { ObservationSiteStatsPayload, useLazyGetObservationStatsQuery } from 'src/queries/generated/observations';
 import { PlantingSitePayload, useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 
 export type ProjectSiteObservationStats = {
   site: PlantingSitePayload;
   stats?: ObservationSiteStatsPayload;
-};
-
-type ResolvedProjectStats = {
-  projectId: number;
-  siteStats: ProjectSiteObservationStats[];
 };
 
 /**
@@ -23,40 +18,28 @@ const useProjectSiteObservationStats = (
   enabled = true
 ): ProjectSiteObservationStats[] => {
   const [listProjectSites, listProjectSitesResponse] = useLazyListPlantingSitesQuery();
-  const [getSiteObservationStats] = useLazyGetSiteObservationStatsQuery();
-  const [resolved, setResolved] = useState<ResolvedProjectStats>();
+  const [getObservationStats, statsResponse] = useLazyGetObservationStatsQuery();
 
   useEffect(() => {
     if (enabled && projectId !== undefined) {
       void listProjectSites({ projectId, full: true, includeZones: false }, true);
+      void getObservationStats({ projectId }, true);
     }
-  }, [enabled, listProjectSites, projectId]);
+  }, [enabled, getObservationStats, listProjectSites, projectId]);
 
   const projectSites = useMemo(
     () => (enabled && projectId !== undefined ? listProjectSitesResponse.currentData?.sites ?? [] : []),
     [enabled, listProjectSitesResponse, projectId]
   );
 
-  useEffect(() => {
-    if (!enabled || projectId === undefined) {
-      return;
-    }
-
-    void Promise.all(
-      projectSites.map(async (site) => {
-        try {
-          const response = await getSiteObservationStats(site.id, true).unwrap();
-          return { site, stats: response.stats };
-        } catch {
-          return { site, stats: undefined };
-        }
-      })
-    ).then((siteStats) => setResolved({ projectId, siteStats }));
-  }, [enabled, getSiteObservationStats, projectId, projectSites]);
+  const statsBySiteId = useMemo(
+    () => new Map((statsResponse.currentData?.stats ?? []).map((siteStats) => [siteStats.plantingSiteId, siteStats])),
+    [statsResponse.currentData]
+  );
 
   return useMemo(
-    () => (enabled && resolved !== undefined && resolved.projectId === projectId ? resolved.siteStats : []),
-    [enabled, projectId, resolved]
+    () => projectSites.map((site) => ({ site, stats: statsBySiteId.get(site.id) })),
+    [projectSites, statsBySiteId]
   );
 };
 

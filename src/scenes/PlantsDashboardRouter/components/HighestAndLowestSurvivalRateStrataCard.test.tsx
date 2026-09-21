@@ -16,6 +16,8 @@ import {
 const PLANTING_SITE_ID = 1;
 const SITE_URL = `/api/v1/tracking/sites/${PLANTING_SITE_ID}`;
 const STATS_URL = '/api/v1/tracking/observations/results/stats';
+const SITES_URL = '/api/v1/tracking/sites';
+const PROJECT_ID = 99;
 
 const NORTH = buildStratum({ id: 10, name: 'North' });
 const SOUTH = buildStratum({ id: 20, name: 'South' });
@@ -25,7 +27,7 @@ const mockSite = (strata = [NORTH, SOUTH]) => {
 };
 
 const mockStats = (strata: ReturnType<typeof buildStratumStats>[]) => {
-  mockGet(STATS_URL, { stats: buildSiteObservationStats({ plantingSiteId: PLANTING_SITE_ID, strata }) });
+  mockGet(STATS_URL, { stats: [buildSiteObservationStats({ plantingSiteId: PLANTING_SITE_ID, strata })] });
 };
 
 describe('HighestAndLowestSurvivalRateStrataCard', () => {
@@ -103,5 +105,36 @@ describe('HighestAndLowestSurvivalRateStrataCard', () => {
 
     expect(await screen.findByText('North')).toBeInTheDocument();
     expect(screen.queryByText('10%')).not.toBeInTheDocument();
+  });
+  it('ranks across every site in a project from one stats request', async () => {
+    const north = buildStratum({ id: 10, name: 'North' });
+    const east = buildStratum({ id: 30, name: 'East' });
+
+    mockGet(SITES_URL, {
+      sites: [
+        buildPlantingSite({ id: 1, name: 'Site One', strata: [north] }),
+        buildPlantingSite({ id: 2, name: 'Site Two', strata: [east] }),
+      ],
+    });
+    // A projectId request returns every site of the project in a single response.
+    mockGet(STATS_URL, {
+      stats: [
+        buildSiteObservationStats({
+          plantingSiteId: 1,
+          strata: [buildStratumStats({ stratumId: north.id, survivalRate: 88 })],
+        }),
+        buildSiteObservationStats({
+          plantingSiteId: 2,
+          strata: [buildStratumStats({ stratumId: east.id, survivalRate: 41 })],
+        }),
+      ],
+    });
+
+    renderWithProviders(<HighestAndLowestSurvivalRateStrataCard projectId={PROJECT_ID} />);
+
+    expect(await screen.findByText('North (Site One)')).toBeInTheDocument();
+    expect(screen.getByText('88%')).toBeInTheDocument();
+    expect(screen.getByText('East (Site Two)')).toBeInTheDocument();
+    expect(screen.getByText('41%')).toBeInTheDocument();
   });
 });

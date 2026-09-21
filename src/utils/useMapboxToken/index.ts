@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from 'react';
 
+import { MAPBOX_TOKEN_REFRESH_SECONDS } from 'src/constants';
 import { useGetMapboxTokenQuery } from 'src/queries/generated/mapbox';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -23,9 +24,10 @@ interface MapboxToken {
 export default function useMapboxToken(): MapboxToken {
   const snackbar = useSnackbar();
 
-  // The cached token persists well beyond its 30 minute lifetime (see the extension's
-  // keepUnusedDataFor). refreshToken forces a new fetch when Mapbox rejects the token as invalid.
-  const { currentData, isError, fulfilledTimeStamp, refetch } = useGetMapboxTokenQuery();
+  const { currentData, isError, fulfilledTimeStamp, refetch } = useGetMapboxTokenQuery(undefined, {
+    pollingInterval: MAPBOX_TOKEN_REFRESH_SECONDS * 1000,
+    refetchOnMountOrArgChange: MAPBOX_TOKEN_REFRESH_SECONDS,
+  });
 
   useEffect(() => {
     if (isError) {

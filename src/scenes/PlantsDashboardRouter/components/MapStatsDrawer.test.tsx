@@ -26,7 +26,7 @@ const mockEndpoints = (strata: ReturnType<typeof buildStratumStats>[], siteOverr
   mockGet(SITE_URL, { site: buildPlantingSite({ id: PLANTING_SITE_ID, strata: [NORTH] }) });
   mockGet(REPORTED_PLANTS_URL, { site: { id: PLANTING_SITE_ID, totalPlants: 500, species: [], strata: [] } });
   mockGet(STATS_URL, {
-    stats: buildSiteObservationStats({ plantingSiteId: PLANTING_SITE_ID, strata, ...siteOverrides }),
+    stats: [buildSiteObservationStats({ plantingSiteId: PLANTING_SITE_ID, strata, ...siteOverrides })],
   });
 };
 
