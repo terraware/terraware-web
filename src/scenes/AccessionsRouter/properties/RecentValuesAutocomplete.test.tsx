@@ -50,6 +50,32 @@ describe('RecentValuesAutocomplete', () => {
     expect(within(options[0]).getByText(/ago/i)).toBeInTheDocument();
   });
 
+  it('labels only recent items that have a lastUsed timestamp, and never items in the all section', async () => {
+    const values: RecentValue[] = [
+      { value: 'Zara', lastUsed: DateTime.now().minus({ days: 2 }).toISO() ?? undefined }, // recent, labeled
+      { value: 'Yosef' }, // recent, no timestamp -> no label
+      { value: 'Xavier', lastUsed: DateTime.now().minus({ weeks: 3 }).toISO() ?? undefined }, // recent, labeled
+      { value: 'Wendy' },
+      { value: 'Victor' },
+      { value: 'Bob', lastUsed: DateTime.now().minus({ days: 1 }).toISO() ?? undefined }, // overflow -> all section
+      { value: 'Alice' },
+    ];
+
+    const { user } = renderWithProviders(
+      <RecentValuesAutocomplete id='collectors' onChange={() => undefined} values={values} allLabel={ALL_LABEL} />
+    );
+
+    const options = await openOptions(user);
+
+    expect(within(options[0]).getByText(/ago/i)).toBeInTheDocument();
+    expect(within(options[2]).getByText(/ago/i)).toBeInTheDocument();
+    expect(within(options[1]).queryByText(/ago/i)).not.toBeInTheDocument();
+
+    const bob = options.find((option) => within(option).queryByText('Bob'));
+    expect(bob).toBeDefined();
+    expect(within(bob as HTMLElement).queryByText(/ago/i)).not.toBeInTheDocument();
+  });
+
   it('shows a flat alphabetical list with no section headers once the user has typed', async () => {
     const values: RecentValue[] = [
       { value: 'Zara' },

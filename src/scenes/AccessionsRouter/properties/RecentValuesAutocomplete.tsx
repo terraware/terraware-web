@@ -10,6 +10,60 @@ import strings from 'src/strings';
 
 const NUM_RECENT = 5;
 
+type OptionProps = {
+  liProps: React.HTMLAttributes<HTMLLIElement>;
+  value: string;
+  allLabel: string;
+  showRecentHeader: boolean;
+  showAllHeader: boolean;
+  relativeTime?: string;
+};
+
+// Renders a single dropdown option, optionally preceded by a section header and followed by a
+// right-aligned relative-time label
+const RecentValueOption = ({
+  liProps,
+  value,
+  allLabel,
+  showRecentHeader,
+  showAllHeader,
+  relativeTime,
+}: OptionProps): JSX.Element => {
+  const theme = useTheme();
+
+  const headerSx = {
+    color: theme.palette.TwClrTxtSecondary,
+    fontSize: '12px',
+    fontWeight: 600,
+    padding: theme.spacing(1, 2),
+  };
+
+  return (
+    <>
+      {showRecentHeader && <Box sx={headerSx}>{strings.RECENT}</Box>}
+      {showAllHeader && <Box sx={headerSx}>{allLabel}</Box>}
+      <li {...liProps}>
+        <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+          <span>{value}</span>
+          {relativeTime && (
+            <Box
+              component='span'
+              sx={{
+                color: theme.palette.TwClrTxtSecondary,
+                fontSize: '14px',
+                marginLeft: 2,
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {relativeTime}
+            </Box>
+          )}
+        </Box>
+      </li>
+    </>
+  );
+};
+
 interface Props {
   id: string;
   label?: string;
@@ -34,7 +88,6 @@ export default function RecentValuesAutocomplete({
   allLabel,
   tooltipTitle,
 }: Props): JSX.Element {
-  const theme = useTheme();
   const { activeLocale } = useLocalization();
 
   const inputText = selected.trim();
@@ -66,20 +119,13 @@ export default function RecentValuesAutocomplete({
     return map;
   }, [recent]);
 
-  const formatRelative = (isoDate: string): string => {
+  const formatRelative = (isoDate: string): string | undefined => {
     if (!activeLocale) {
-      return '';
+      return undefined;
     }
     // luxon has no pseudo locales, use Korean for gibberish.
     const dateLocale = activeLocale === 'gx' ? 'ko' : activeLocale;
-    return DateTime.fromISO(isoDate).setLocale(dateLocale).toRelative() ?? '';
-  };
-
-  const headerSx = {
-    color: theme.palette.TwClrTxtSecondary,
-    fontSize: '12px',
-    fontWeight: 600,
-    padding: theme.spacing(1, 2),
+    return DateTime.fromISO(isoDate).setLocale(dateLocale).toRelative() ?? undefined;
   };
 
   return (
@@ -111,28 +157,15 @@ export default function RecentValuesAutocomplete({
         const lastUsed = grouped ? lastUsedByValue.get(value) : undefined;
 
         return (
-          <React.Fragment key={optionKey}>
-            {grouped && value === firstRecent && <Box sx={headerSx}>{strings.RECENT}</Box>}
-            {grouped && value === firstOther && <Box sx={headerSx}>{allLabel}</Box>}
-            <li {...liProps}>
-              <Box sx={{ alignItems: 'center', display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                <span>{value}</span>
-                {lastUsed && (
-                  <Box
-                    component='span'
-                    sx={{
-                      color: theme.palette.TwClrTxtSecondary,
-                      fontSize: '14px',
-                      marginLeft: 2,
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    {formatRelative(lastUsed)}
-                  </Box>
-                )}
-              </Box>
-            </li>
-          </React.Fragment>
+          <RecentValueOption
+            key={optionKey}
+            liProps={liProps}
+            value={value}
+            allLabel={allLabel}
+            showRecentHeader={grouped && value === firstRecent}
+            showAllHeader={grouped && value === firstOther}
+            relativeTime={lastUsed ? formatRelative(lastUsed) : undefined}
+          />
         );
       }}
     />
