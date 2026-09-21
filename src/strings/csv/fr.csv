@@ -160,6 +160,8 @@ AGE_YEARS,Âge (an),20890365
 AGROFORESTRY,Agroforesterie,0bd9987c
 ALL,Tout,832a8cf5
 ALL_ACCESSIONS_CHECKED_IN,Toutes les accessions ont été enregistrées avec succès !,cbdf5c0a
+ALL_COLLECTION_SITES,Tous les sites de collecte,4f727338
+ALL_COLLECTORS,Tous les collecteurs,c64a275f
 ALL_MODULES,Tous les modules,b2571c5e
 ALL_MONITORING_TYPES,Tous les types de suivi,c27c58b4
 ALL_OBSERVATIONS,Toutes les observations,22e68887
@@ -1883,6 +1885,7 @@ RECALCITRANT,Récalcitrant,f95e16a4
 RECEIVE_EMAIL_NOTIFICATIONS,Recevoir des notifications par e-mail,378f118d
 RECEIVED_DATE,Date de réception,9814318f
 RECEIVING_DATE_REQUIRED,Date de réception *,bd66283e
+RECENT,Récents,1e4a4bb6
 RECOMMENDED,Recommandé,74c8bc37
 RECORDED_SESSION,Session enregistrée,797dfcf5
 RECORDED_SESSIONS,Sessions enregistrées,60a9c3c7

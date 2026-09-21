@@ -4,9 +4,9 @@ import { Close } from '@mui/icons-material';
 import { Box, IconButton, useTheme } from '@mui/material';
 
 import AddLink from 'src/components/common/AddLink';
-import Autocomplete from 'src/components/common/Autocomplete';
 import { useOrganization } from 'src/providers/hooks';
 import { useLazyGetCollectorsQuery } from 'src/queries/search/accessions';
+import RecentValuesAutocomplete from 'src/scenes/AccessionsRouter/properties/RecentValuesAutocomplete';
 import strings from 'src/strings';
 import preventDefaultEvent from 'src/utils/preventDefaultEvent';
 
@@ -58,14 +58,14 @@ export default function Collectors2({ collectors = [''], onChange }: Props): JSX
     <>
       {collectorsList.map((collector, index) => (
         <Box key={index} mb={2} display='flex' alignItems='center' sx={{ display: 'block', position: 'relative' }}>
-          <Autocomplete
+          <RecentValuesAutocomplete
             id={`collector${index}`}
             selected={collector}
             onChange={(value) => onCollectorChange(value, index)}
             label={index === 0 ? strings.COLLECTORS : ''}
             placeholder={strings.COLLECTORS}
-            options={collectorsOpt || []}
-            freeSolo={true}
+            values={collectorsOpt || []}
+            allLabel={strings.ALL_COLLECTORS}
           />
           {index !== 0 && (
             <IconButton

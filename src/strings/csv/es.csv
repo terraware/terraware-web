@@ -160,6 +160,8 @@ AGE_YEARS,Edad (año),20890365
 AGROFORESTRY,Agrosilvicultura,0bd9987c
 ALL,Todo,832a8cf5
 ALL_ACCESSIONS_CHECKED_IN,¡Todas las accesiones se ingresaron correctamente!,cbdf5c0a
+ALL_COLLECTION_SITES,Todos los sitios de recolección,4f727338
+ALL_COLLECTORS,Todos los recolectores,c64a275f
 ALL_MODULES,Todos los módulos,b2571c5e
 ALL_MONITORING_TYPES,Todos los tipos de monitoreo,c27c58b4
 ALL_OBSERVATIONS,Todas las observaciones,22e68887
@@ -1884,6 +1886,7 @@ RECALCITRANT,Recalcitrante,f95e16a4
 RECEIVE_EMAIL_NOTIFICATIONS,Recibir notificaciones por correo electrónico,378f118d
 RECEIVED_DATE,Fecha de recepción,9814318f
 RECEIVING_DATE_REQUIRED,Fecha de recepción *,bd66283e
+RECENT,Recientes,1e4a4bb6
 RECOMMENDED,Recomendado,74c8bc37
 RECORDED_SESSION,Sesión grabada,797dfcf5
 RECORDED_SESSIONS,Sesiones grabadas,60a9c3c7
