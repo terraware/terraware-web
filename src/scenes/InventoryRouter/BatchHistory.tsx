@@ -13,6 +13,7 @@ import { useGetBatchHistoryQuery } from 'src/queries/generated/nurseryBatches';
 import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import {
+  BatchAccessionLink,
   BatchHistoryItem,
   BatchHistoryPayload,
   batchHistoryEventEnumToLocalized,
@@ -34,6 +35,10 @@ const columns = (): TableColumnType[] => [
 type BatchHistoryProps = {
   batchId: number;
   nurseryName?: string;
+  // The accessions the batch was created from (canonical `accessions` array, with the deprecated
+  // singular field as a fallback — see getBatchAccessions). Used to attribute the batch's creation
+  // event to the accession it came from.
+  accessions?: BatchAccessionLink[];
 };
 
 export type BatchHistoryItemForTable = BatchHistoryItem & {
@@ -41,6 +46,10 @@ export type BatchHistoryItemForTable = BatchHistoryItem & {
   previousEvent?: BatchHistoryItem;
   modifiedFields: string[];
   nurseryName?: string;
+  // Set on the batch's creation event when the batch was created from an accession, so it can be
+  // rendered like the "AddedFromAccession" events for accessions added later.
+  fromAccessionId?: number;
+  fromAccessionNumber?: string;
 };
 
 type FullQuantityHistoryItem = Extract<BatchHistoryItem, { type: 'QuantityEdited' | 'StatusChanged' }>;
@@ -224,7 +233,7 @@ export const getModifiedFields = (historyItem: BatchHistoryItem, previousEv?: Ba
   return changedFields;
 };
 
-export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps): JSX.Element {
+export default function BatchHistory({ batchId, nurseryName, accessions }: BatchHistoryProps): JSX.Element {
   const theme = useTheme();
   const [search, setSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
@@ -306,6 +315,33 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
     }
   }, [selectedOrganization]);
 
+  // A batch created from an accession records its initial quantities as a plain "QuantityEdited"
+  // event with no accession reference, while accessions added afterward come through as
+  // "AddedFromAccession". Attribute the batch's earliest quantity event to the one accession that
+  // has no "AddedFromAccession" event of its own (the accession the batch was created from)
+  const creationAttribution = useMemo((): { event: BatchHistoryItem; accession: BatchAccessionLink } | undefined => {
+    if (!batchHistory || !accessions?.length) {
+      return undefined;
+    }
+
+    const addedAccessionIds = new Set(
+      batchHistory.history
+        .filter((item): item is AddedFromAccessionHistoryItem => item.type === 'AddedFromAccession')
+        .map((item) => item.accessionId)
+    );
+    const creationAccession = accessions.find((accession) => !addedAccessionIds.has(accession.accessionId));
+    if (!creationAccession) {
+      return undefined;
+    }
+
+    const earliest = batchHistory.history
+      .filter((item): item is FullQuantityHistoryItem => item.type === 'QuantityEdited')
+      .reduce<
+        FullQuantityHistoryItem | undefined
+      >((min, item) => ((item.version ?? 0) < (min?.version ?? Infinity) ? item : min), undefined);
+    return earliest ? { event: earliest, accession: creationAccession } : undefined;
+  }, [accessions, batchHistory]);
+
   const filteredHistory = useMemo((): BatchHistoryItem[] | null => {
     if (!batchHistory || !users) {
       return null;
@@ -352,9 +388,15 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
           previousEvent: previousEv,
           modifiedFields: changedFields,
           nurseryName,
+          ...(historyItem === creationAttribution?.event
+            ? {
+                fromAccessionId: creationAttribution.accession.accessionId,
+                fromAccessionNumber: creationAttribution.accession.accessionNumber,
+              }
+            : {}),
         };
       });
-  }, [batchHistory?.history, filteredHistory, nurseryName, users]);
+  }, [batchHistory?.history, creationAttribution, filteredHistory, nurseryName, users]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onBatchSelected = (batch: any, fromColumn?: string) => {

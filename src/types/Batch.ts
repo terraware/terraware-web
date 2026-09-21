@@ -18,6 +18,28 @@ export type CreateBatchRequestPayload = GeneratedCreateBatchRequestPayload;
 export type NurseryWithdrawalPurpose = NurseryWithdrawalPayload['purpose'];
 export type BatchHistoryPayload = GeneratedBatchHistoryPayload;
 
+export type BatchAccessionLink = { accessionId: number; accessionNumber?: string };
+
+/**
+ * The accessions a batch was created from. Prefers the canonical `accessions` array and falls back
+ * to the deprecated singular `accessionId`/`accessionNumber` fields for older responses.
+ */
+export const getBatchAccessions = (batch: {
+  accessions?: { accessionId?: number; accessionNumber?: string }[];
+  accessionId?: number;
+  accessionNumber?: string;
+}): BatchAccessionLink[] => {
+  if (batch.accessions?.length) {
+    return batch.accessions.filter((accession): accession is BatchAccessionLink => accession.accessionId !== undefined);
+  }
+
+  if (batch.accessionId !== undefined) {
+    return [{ accessionId: batch.accessionId, accessionNumber: batch.accessionNumber }];
+  }
+
+  return [];
+};
+
 export const NurseryWithdrawalPurposes: { [key: string]: NurseryWithdrawalPurpose } = {
   OUTPLANT: 'Out Plant',
   NURSERY_TRANSFER: 'Nursery Transfer',

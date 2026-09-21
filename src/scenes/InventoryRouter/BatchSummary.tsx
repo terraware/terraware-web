@@ -9,7 +9,7 @@ import { APP_PATHS } from 'src/constants';
 import { useUpdateBatchMutation } from 'src/queries/generated/nurseryBatches';
 import OverviewItemCardSubLocations from 'src/scenes/InventoryRouter/view/OverviewItemCardSubLocations';
 import strings from 'src/strings';
-import { Batch } from 'src/types/Batch';
+import { Batch, getBatchAccessions } from 'src/types/Batch';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -26,20 +26,7 @@ export default function BatchSummary(props: BatchSummaryProps): JSX.Element {
   const numberFormatter = useNumberFormatter();
   const [updateBatch] = useUpdateBatchMutation();
 
-  const accessionLinks = useMemo(() => {
-    if (batch.accessions?.length) {
-      return batch.accessions.filter(
-        (accession): accession is { accessionId: number; accessionNumber?: string } =>
-          accession.accessionId !== undefined
-      );
-    }
-
-    if (batch.accessionId) {
-      return [{ accessionId: batch.accessionId, accessionNumber: batch.accessionNumber }];
-    }
-
-    return [];
-  }, [batch.accessionId, batch.accessionNumber, batch.accessions]);
+  const accessionLinks = useMemo(() => getBatchAccessions(batch), [batch]);
 
   const accessionLinkContents = useMemo(
     () =>
