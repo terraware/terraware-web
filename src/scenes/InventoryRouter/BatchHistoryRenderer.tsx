@@ -12,11 +12,22 @@ import CellRenderer, { TableRowType } from '../../components/common/table/TableC
 import { RendererProps } from '../../components/common/table/types';
 import { BatchHistoryItemForTable } from './BatchHistory';
 
+const accessionAttributionOf = (
+  item: BatchHistoryItemForTable
+): { id: number; accessionNumber: string } | undefined => {
+  if (item.type === 'AddedFromAccession') {
+    return { id: item.accessionId, accessionNumber: item.accessionNumber };
+  }
+  if (item.fromAccessionId !== undefined) {
+    return { id: item.fromAccessionId, accessionNumber: item.fromAccessionNumber ?? '' };
+  }
+  return undefined;
+};
+
 export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {
-  if (batchHistoryItem.type === 'AddedFromAccession') {
-    return strings
-      .formatString(strings.BATCH_QUANTITY_UPDATED_FROM_ACCESSION, batchHistoryItem.accessionNumber)
-      .toString();
+  const accession = accessionAttributionOf(batchHistoryItem);
+  if (accession) {
+    return strings.formatString(strings.BATCH_QUANTITY_UPDATED_FROM_ACCESSION, accession.accessionNumber).toString();
   }
   if (
     batchHistoryItem.type === 'DetailsEdited' ||
@@ -37,13 +48,14 @@ export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {
 const EventTypeCell = ({ row }: { row: BatchHistoryItemForTable }): JSX.Element => {
   const notes = row.type === 'QuantityEdited' ? row.notes : undefined;
 
-  if (row.type === 'AddedFromAccession') {
+  const accession = accessionAttributionOf(row);
+  if (accession) {
     return (
       <>
         {strings.formatString(
           strings.BATCH_QUANTITY_UPDATED_FROM_ACCESSION,
-          <Link fontSize='16px' to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${row.accessionId}`)}>
-            {row.accessionNumber}
+          <Link fontSize='16px' to={APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', `${accession.id}`)}>
+            {accession.accessionNumber}
           </Link>
         )}
       </>

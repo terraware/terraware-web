@@ -13,6 +13,7 @@ import { useGetBatchHistoryQuery } from 'src/queries/generated/nurseryBatches';
 import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import {
+  BatchAccessionLink,
   BatchHistoryItem,
   BatchHistoryPayload,
   batchHistoryEventEnumToLocalized,
@@ -34,8 +35,10 @@ const columns = (): TableColumnType[] => [
 type BatchHistoryProps = {
   batchId: number;
   nurseryName?: string;
-  accessionId?: number;
-  accessionNumber?: string;
+  // The accessions the batch was created from (canonical `accessions` array, with the deprecated
+  // singular field as a fallback — see getBatchAccessions). Used to attribute the batch's creation
+  // event to the accession it came from.
+  accessions?: BatchAccessionLink[];
 };
 
 export type BatchHistoryItemForTable = BatchHistoryItem & {
@@ -43,6 +46,10 @@ export type BatchHistoryItemForTable = BatchHistoryItem & {
   previousEvent?: BatchHistoryItem;
   modifiedFields: string[];
   nurseryName?: string;
+  // Set on the batch's creation event when the batch was created from an accession, so it can be
+  // rendered like the "AddedFromAccession" events for accessions added later.
+  fromAccessionId?: number;
+  fromAccessionNumber?: string;
 };
 
 type FullQuantityHistoryItem = Extract<BatchHistoryItem, { type: 'QuantityEdited' | 'StatusChanged' }>;
@@ -226,12 +233,7 @@ export const getModifiedFields = (historyItem: BatchHistoryItem, previousEv?: Ba
   return changedFields;
 };
 
-export default function BatchHistory({
-  batchId,
-  nurseryName,
-  accessionId,
-  accessionNumber,
-}: BatchHistoryProps): JSX.Element {
+export default function BatchHistory({ batchId, nurseryName, accessions }: BatchHistoryProps): JSX.Element {
   const theme = useTheme();
   const [search, setSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
@@ -315,48 +317,37 @@ export default function BatchHistory({
 
   // A batch created from an accession records its initial quantities as a plain "QuantityEdited"
   // event with no accession reference, while accessions added afterward come through as
-  // "AddedFromAccession". The batch itself carries that first accession, so relabel the batch's
-  // earliest quantity event as "AddedFromAccession" too, giving every accession the same UI.
-  const normalizedHistory = useMemo((): BatchHistoryItem[] | undefined => {
-    if (!batchHistory) {
+  // "AddedFromAccession". Attribute the batch's earliest quantity event to the one accession that
+  // has no "AddedFromAccession" event of its own (the accession the batch was created from)
+  const creationAttribution = useMemo((): { event: BatchHistoryItem; accession: BatchAccessionLink } | undefined => {
+    if (!batchHistory || !accessions?.length) {
       return undefined;
     }
-    if (accessionId === undefined) {
-      return batchHistory.history;
-    }
 
-    let creationEvent: FullQuantityHistoryItem | undefined;
-    batchHistory.history.forEach((item) => {
-      if (item.type === 'QuantityEdited' && (item.version ?? 0) < (creationEvent?.version ?? Infinity)) {
-        creationEvent = item;
-      }
-    });
-    if (!creationEvent) {
-      return batchHistory.history;
-    }
-
-    const created = creationEvent;
-    return batchHistory.history.map((item) =>
-      item === created
-        ? {
-            type: 'AddedFromAccession',
-            accessionId,
-            accessionNumber: accessionNumber ?? '',
-            germinatingQuantity: created.germinatingQuantity,
-            createdBy: created.createdBy,
-            createdTime: created.createdTime,
-            version: created.version,
-          }
-        : item
+    const addedAccessionIds = new Set(
+      batchHistory.history
+        .filter((item): item is AddedFromAccessionHistoryItem => item.type === 'AddedFromAccession')
+        .map((item) => item.accessionId)
     );
-  }, [accessionId, accessionNumber, batchHistory]);
+    const creationAccession = accessions.find((accession) => !addedAccessionIds.has(accession.accessionId));
+    if (!creationAccession) {
+      return undefined;
+    }
+
+    const earliest = batchHistory.history
+      .filter((item): item is FullQuantityHistoryItem => item.type === 'QuantityEdited')
+      .reduce<
+        FullQuantityHistoryItem | undefined
+      >((min, item) => ((item.version ?? 0) < (min?.version ?? Infinity) ? item : min), undefined);
+    return earliest ? { event: earliest, accession: creationAccession } : undefined;
+  }, [accessions, batchHistory]);
 
   const filteredHistory = useMemo((): BatchHistoryItem[] | null => {
-    if (!normalizedHistory || !users) {
+    if (!batchHistory || !users) {
       return null;
     }
 
-    let filtered = [...normalizedHistory];
+    let filtered = [...batchHistory.history];
 
     if (filters.type?.values) {
       filtered = filtered.filter((ev) => filters.type.values.indexOf(ev.type) > -1);
@@ -374,7 +365,7 @@ export default function BatchHistory({
     }
 
     return filtered;
-  }, [normalizedHistory, filters, search, users]);
+  }, [batchHistory, filters, search, users]);
 
   const results = useMemo((): BatchHistoryItemForTable[] | null => {
     if (!filteredHistory || !users) {
@@ -383,11 +374,13 @@ export default function BatchHistory({
 
     return filteredHistory
       .filter((historyItem) => {
-        return historyItem.type === 'DetailsEdited' ? findPreviousEvent(historyItem, normalizedHistory ?? null) : true;
+        return historyItem.type === 'DetailsEdited'
+          ? findPreviousEvent(historyItem, batchHistory?.history ?? null)
+          : true;
       })
       .map((historyItem) => {
         const userSelected = users[historyItem.createdBy];
-        const previousEv = findPreviousEvent(historyItem, normalizedHistory ?? null);
+        const previousEv = findPreviousEvent(historyItem, batchHistory?.history ?? null);
         const changedFields = getModifiedFields(historyItem, previousEv);
         return {
           ...historyItem,
@@ -395,9 +388,15 @@ export default function BatchHistory({
           previousEvent: previousEv,
           modifiedFields: changedFields,
           nurseryName,
+          ...(historyItem === creationAttribution?.event
+            ? {
+                fromAccessionId: creationAttribution.accession.accessionId,
+                fromAccessionNumber: creationAttribution.accession.accessionNumber,
+              }
+            : {}),
         };
       });
-  }, [normalizedHistory, filteredHistory, nurseryName, users]);
+  }, [batchHistory?.history, creationAttribution, filteredHistory, nurseryName, users]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onBatchSelected = (batch: any, fromColumn?: string) => {

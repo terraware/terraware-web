@@ -12,6 +12,7 @@ import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import { useGetBatchQuery } from 'src/queries/generated/nurseryBatches';
 import strings from 'src/strings';
+import { getBatchAccessions } from 'src/types/Batch';
 import { Facility } from 'src/types/Facility';
 import { Species } from 'src/types/Species';
 import { getNurseryById } from 'src/utils/organization';
@@ -117,8 +118,7 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
           <BatchHistory
             batchId={batch.id}
             nurseryName={inventoryNursery?.name}
-            accessionId={batch.accessionId}
-            accessionNumber={batch.accessionNumber}
+            accessions={getBatchAccessions(batch)}
           />
         ),
       },

@@ -92,7 +92,7 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('Total Quantity 50')).toBeVisible();
     await expect(page.getByText('Notes Adding some notes')).toBeVisible();
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.getByRole('cell', { name: 'Germination/Establishment Quantity, Active' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: 'Batch quantity updated from Accession 26-1-2-001' })).toBeVisible();
     await expect(page.locator('#row1-editedByName')).toContainText('Super Admin');
     await page.getByRole('tab', { name: 'Details' }).click();
   });
