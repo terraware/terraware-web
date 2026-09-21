@@ -17,6 +17,7 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
+import useScrollRestoration from 'src/hooks/useScrollRestoration';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
@@ -40,16 +41,17 @@ const ReportEditV2 = (): JSX.Element => {
   const snackbar = useSnackbar();
   const { isLoading: saving, reviewIndicators, reviewReport } = useAcceleratorReportActions(reportId);
 
-  const goToReport = useCallback(
-    () =>
-      navigate(
-        APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW.replace(':reportId', `${reportId}`).replace(
-          ':projectId',
-          `${projectId}`
-        )
-      ),
-    [navigate, projectId, reportId]
-  );
+  const { remember } = useScrollRestoration(reportId, report !== undefined);
+
+  const goToReport = useCallback(() => {
+    remember();
+    navigate(
+      APP_PATHS.ACCELERATOR_PROJECT_REPORTS_VIEW.replace(':reportId', `${reportId}`).replace(
+        ':projectId',
+        `${projectId}`
+      )
+    );
+  }, [navigate, projectId, remember, reportId]);
 
   const [edits, setEdits] = useState<Partial<AcceleratorReportPayload>>({});
   const [validate, setValidate] = useState(false);

@@ -14,6 +14,7 @@ import {
   reportIndicatorSeverity,
 } from 'src/components/AcceleratorReports/utils';
 import Button from 'src/components/common/button/Button';
+import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import { useLocalization } from 'src/providers';
 import { formatPrecision } from 'src/utils/numbers';
 
@@ -278,6 +279,7 @@ const IndicatorProgressRow = ({
       borderTop={`1px solid ${theme.palette.TwClrBgTertiary}`}
       className={printMode ? 'print-section' : undefined}
       padding={theme.spacing(2, 0)}
+      {...{ [SCROLL_ANCHOR]: indicator.refId }}
     >
       <Box display='flex'>
         <Box flexShrink={0} paddingRight={theme.spacing(2)} width={`${TITLE_COLUMN_WIDTH}px`}>
