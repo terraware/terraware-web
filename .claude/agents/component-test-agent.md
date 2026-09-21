@@ -81,7 +81,7 @@ handling, and the wiring between a fetch and what the user sees.
 
 ## Boundaries
 
-- Ask before changing anything in `src/test-utils` or `rstest.config.ts` — it is shared
+- Ask before changing anything in `src/test-utils` or `rstest.config.mts` — it is shared
   infrastructure and a change there affects every test
 - Never disable tests or loosen assertions to make them pass
 - Never modify application code solely to make a test easier to write unless explicitly asked
