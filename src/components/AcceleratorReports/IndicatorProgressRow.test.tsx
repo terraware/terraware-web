@@ -69,6 +69,14 @@ const noPreviousYearIndicator: ProgressIndicator = {
   target: 400,
 };
 
+const decimalIndicator: ProgressIndicator = {
+  classId: 'Not Cumulative',
+  name: 'Seedling survival rate',
+  refId: '1.5',
+  target: 100,
+  value: 84.7,
+};
+
 const completionLine = (template: string) => {
   const expected = template.replace('{0}', PERCENT_COMPLETE);
   return (_content: string, element: Element | null) => element?.textContent === expected;
@@ -212,5 +220,18 @@ describe('IndicatorProgressRow', () => {
     renderWithProviders(<IndicatorProgressRow indicator={noPreviousYearIndicator} year={2026} />);
 
     expect(screen.queryByLabelText('2025')).not.toBeInTheDocument();
+  });
+
+  it('renders a value at the precision the indicator declares', () => {
+    renderWithProviders(<IndicatorProgressRow indicator={{ ...decimalIndicator, precision: 1 }} />);
+
+    expect(screen.getByText('84.7')).toBeVisible();
+  });
+
+  it('rounds a value to the precision the indicator declares', () => {
+    renderWithProviders(<IndicatorProgressRow indicator={{ ...decimalIndicator, precision: 0 }} />);
+
+    expect(screen.getByText('85')).toBeVisible();
+    expect(screen.queryByText('84.7')).not.toBeInTheDocument();
   });
 });

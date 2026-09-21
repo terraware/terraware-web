@@ -50,6 +50,7 @@ export type PublishedReportIndicatorPayload = {
   endOfProjectTarget?: number;
   level: 'Process' | 'Output' | 'Outcome' | 'Goal';
   name: string;
+  precision: number;
   /** If the indicator is lifetime cumulative, the cumulative total at the end of the previous year. Always null for yearly cumulative indicators. */
   previousYearCumulativeTotal?: number;
   progressNotes?: string;
