@@ -495,7 +495,7 @@ const WithdrawSeedsForm = ({ open, onClose, accessions, user, onWithdrawn }: Wit
         open={open}
         onClose={handleClose}
         title={strings.WITHDRAW_SEEDS}
-        size='large'
+        size='x-large'
         middleButtons={middleButtons}
         scrolled
       >
