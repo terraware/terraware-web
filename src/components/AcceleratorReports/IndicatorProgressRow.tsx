@@ -575,7 +575,13 @@ const IndicatorProgressRow = ({
               </Box>
             </Box>
           ) : (
-            <Box display='flex' flexWrap='wrap' gap={theme.spacing(3)} paddingTop={theme.spacing(2)}>
+            <Box
+              display='flex'
+              flexWrap='wrap'
+              gap={theme.spacing(3)}
+              paddingLeft={funderReportView ? `${TITLE_COLUMN_WIDTH}px` : undefined}
+              paddingTop={theme.spacing(2)}
+            >
               {!funderReportView && (
                 <Box flex='1 1 45%' minWidth={0}>
                   <Typography fontSize='14px' fontWeight={600}>
