@@ -17,7 +17,7 @@ const STATS_URL = '/api/v1/tracking/observations/results/stats';
 
 const mockStats = (strata: ReturnType<typeof buildStratumStats>[], plantingDensity = 1014) => {
   mockGet(STATS_URL, {
-    stats: buildSiteObservationStats({ plantingSiteId: PLANTING_SITE_ID, plantingDensity, strata }),
+    stats: [buildSiteObservationStats({ plantingSiteId: PLANTING_SITE_ID, plantingDensity, strata })],
   });
 };
 

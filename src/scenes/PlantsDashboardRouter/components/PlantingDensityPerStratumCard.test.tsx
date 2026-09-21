@@ -50,7 +50,7 @@ const mockSite = () => {
 };
 
 const mockStats = (strata: ReturnType<typeof buildStratumStats>[]) => {
-  mockGet(STATS_URL, { stats: buildSiteObservationStats({ plantingSiteId: PLANTING_SITE_ID, strata }) });
+  mockGet(STATS_URL, { stats: [buildSiteObservationStats({ plantingSiteId: PLANTING_SITE_ID, strata })] });
 };
 
 const latestChart = () => chartRenders[chartRenders.length - 1];
