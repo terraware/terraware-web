@@ -38,9 +38,17 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.Observation, id: 'LIST' },
       ],
     },
-    getSiteObservationStats: {
-      providesTags: (_results, _error, plantingSiteId) => [
-        { type: QueryTagTypes.PlantingSiteObservation, id: plantingSiteId },
+    getObservationStats: {
+      // A project request covers many sites, so tag each one the response came back with. The
+      // requested site is tagged too, so an empty response is still invalidated later.
+      providesTags: (results, _error, args) => [
+        ...(args.plantingSiteId !== undefined
+          ? [{ type: QueryTagTypes.PlantingSiteObservation, id: args.plantingSiteId }]
+          : []),
+        ...(results?.stats ?? []).map(({ plantingSiteId }) => ({
+          type: QueryTagTypes.PlantingSiteObservation,
+          id: plantingSiteId,
+        })),
       ],
     },
     getObservation: {

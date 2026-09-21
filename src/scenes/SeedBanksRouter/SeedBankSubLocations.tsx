@@ -8,9 +8,10 @@ import { PartialSubLocation } from 'src/types/Facility';
 export type SeedBankSubLocationsProps = {
   seedBankId?: number;
   onEdit?: (subLocations: PartialSubLocation[]) => void;
+  onLoad?: (subLocations: PartialSubLocation[]) => void;
 };
 
-export default function SeedBankSubLocations({ seedBankId, onEdit }: SeedBankSubLocationsProps): JSX.Element {
+export default function SeedBankSubLocations({ seedBankId, onEdit, onLoad }: SeedBankSubLocationsProps): JSX.Element {
   const renderLink = useCallback((facilityId: number, locationName: string) => {
     return [
       `${APP_PATHS.ACCESSIONS}/?`,
@@ -20,5 +21,13 @@ export default function SeedBankSubLocations({ seedBankId, onEdit }: SeedBankSub
     ].join('&');
   }, []);
 
-  return <SubLocations facilityType='seedbank' facilityId={seedBankId} onEdit={onEdit} renderLink={renderLink} />;
+  return (
+    <SubLocations
+      facilityType='seedbank'
+      facilityId={seedBankId}
+      onEdit={onEdit}
+      onLoad={onLoad}
+      renderLink={renderLink}
+    />
+  );
 }
