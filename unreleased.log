@@ -1,3 +1,4 @@
+c999bbf4 SW-8911 Seed bank create/edit (#6476)
 961cfc3a Ignore saved column filters once the filter UI is gone (#6469)
 1d8c1b86 Fix test warnings (#6470)
 44d9f417 Update dependency @rstest/coverage-istanbul to ^0.12.0 (#6475)
