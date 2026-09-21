@@ -259,6 +259,9 @@ const IndicatorProgressRow = ({
     </Typography>
   ) : null;
 
+  // notes to funder are written in Console for funders to read, so the project view sees neither
+  const showProgressNotes = !!isConsoleView || !!funderReportView;
+
   const progressNotes = (
     <>
       <Typography fontSize='14px' fontWeight={600}>
@@ -475,7 +478,7 @@ const IndicatorProgressRow = ({
       </Box>
 
       {printMode ? (
-        <Box paddingTop={theme.spacing(2)}>{progressNotes}</Box>
+        showProgressNotes && <Box paddingTop={theme.spacing(2)}>{progressNotes}</Box>
       ) : (
         <Collapse in={expanded}>
           {editing ? (
@@ -587,9 +590,11 @@ const IndicatorProgressRow = ({
                 </Box>
               )}
 
-              <Box flex={funderReportView ? '1 1 100%' : '1 1 45%'} minWidth={0}>
-                {progressNotes}
-              </Box>
+              {showProgressNotes && (
+                <Box flex={funderReportView ? '1 1 100%' : '1 1 45%'} minWidth={0}>
+                  {progressNotes}
+                </Box>
+              )}
 
               {!funderReportView && (
                 <Box flexBasis='100%'>

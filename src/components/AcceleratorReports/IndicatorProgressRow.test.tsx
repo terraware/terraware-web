@@ -160,7 +160,43 @@ describe('IndicatorProgressRow', () => {
     expect(screen.getByText(PROJECTS_COMMENT)).toBeVisible();
     expect(screen.getByText(strings.LINK_TO_SUPPORTING_DOCUMENTS)).toBeVisible();
     expect(screen.getByRole('link', { name: strings.VIEW_DOCUMENTS })).toHaveAttribute('href', SUPPORTING_DOCUMENT_URL);
+  });
+
+  it('hides the progress notes in the project view', async () => {
+    const { user } = renderWithProviders(<IndicatorProgressRow indicator={detailedIndicator} />);
+
+    await user.click(screen.getByRole('button'));
+
+    expect(screen.queryByText(strings.PROGRESS_NOTES)).not.toBeInTheDocument();
+    expect(screen.queryByText(PROGRESS_NOTE)).not.toBeInTheDocument();
+
+    expect(screen.getByText(strings.PROJECTS_COMMENTS)).toBeVisible();
+    expect(screen.getByText(PROJECTS_COMMENT)).toBeVisible();
+  });
+
+  it('shows the progress notes in the console view', async () => {
+    const { user } = renderWithProviders(<IndicatorProgressRow indicator={detailedIndicator} isConsoleView />);
+
+    await user.click(screen.getByRole('button'));
+
     expect(screen.getByText(strings.PROGRESS_NOTES)).toBeVisible();
+    expect(screen.getByText(PROGRESS_NOTE)).toBeVisible();
+  });
+
+  it('hides the progress notes when the project view prints the report', () => {
+    renderWithProviders(<IndicatorProgressRow indicator={detailedIndicator} printMode />);
+
+    expect(screen.getByText(detailedIndicator.name)).toBeVisible();
+
+    expect(screen.queryByText(strings.PROGRESS_NOTES)).not.toBeInTheDocument();
+    expect(screen.queryByText(PROGRESS_NOTE)).not.toBeInTheDocument();
+  });
+
+  it('shows the progress notes when the funder report is printed', () => {
+    renderWithProviders(<IndicatorProgressRow funderReportView indicator={detailedIndicator} printMode />);
+
+    expect(screen.getByText(strings.PROGRESS_NOTES)).toBeVisible();
+    expect(screen.getByText(PROGRESS_NOTE)).toBeVisible();
   });
 
   it('marks the previous year part of the way along a bar that opens at the baseline', () => {

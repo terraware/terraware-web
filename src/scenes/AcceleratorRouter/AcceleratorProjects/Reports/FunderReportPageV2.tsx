@@ -89,7 +89,13 @@ const FunderReportPageV2 = ({
       titleStyle={{ paddingTop: '16px' }}
     >
       {printing && (
-        <ReportPrint indicators={indicators} onClose={stopPrinting} projectName={projectName} report={report} />
+        <ReportPrint
+          funderReportView
+          indicators={indicators}
+          onClose={stopPrinting}
+          projectName={projectName}
+          report={report}
+        />
       )}
 
       <Box display='flex' flexDirection='column' flexGrow={1} width={'100%'}>
