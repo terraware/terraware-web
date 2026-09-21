@@ -37,6 +37,9 @@ const getComparableFacility = (facility?: Facility): string =>
     timeZone: facility?.timeZone ?? null,
   });
 
+const normalizeSubLocations = (locations?: PartialSubLocation[]): string =>
+  JSON.stringify((locations ?? []).map(({ id, name }) => ({ id, name })).sort((a, b) => (a.id ?? 0) - (b.id ?? 0)));
+
 export default function SeedBankView(): JSX.Element {
   const { selectedOrganization, reloadOrganizations } = useOrganization();
   const theme = useTheme();
@@ -44,6 +47,7 @@ export default function SeedBankView(): JSX.Element {
   const [descriptionError, setDescriptionError] = useState('');
   const [validateDates, setValidateDates] = useState(false);
   const [editedSubLocations, setEditedSubLocations] = useState<PartialSubLocation[]>();
+  const [baselineSubLocations, setBaselineSubLocations] = useState<PartialSubLocation[]>();
   const [saving, setSaving] = useState(false);
   const snackbar = useSnackbar();
   const [navigateToSeedBank, setNavigateToSeedBank] = useState<NavigateToFacilityObject>({
@@ -102,10 +106,15 @@ export default function SeedBankView(): JSX.Element {
     });
   }, [selectedSeedBank, setRecord, selectedOrganization]);
 
-  const isDirty = useMemo(
-    () => getComparableFacility(record) !== getComparableFacility(selectedSeedBank) || editedSubLocations !== undefined,
-    [record, selectedSeedBank, editedSubLocations]
-  );
+  const onLoadSubLocations = useCallback((locations: PartialSubLocation[]) => setBaselineSubLocations(locations), []);
+
+  const isDirty = useMemo(() => {
+    const facilityDirty = getComparableFacility(record) !== getComparableFacility(selectedSeedBank);
+    const subLocationsDirty =
+      editedSubLocations !== undefined &&
+      normalizeSubLocations(editedSubLocations) !== normalizeSubLocations(baselineSubLocations);
+    return facilityDirty || subLocationsDirty;
+  }, [record, selectedSeedBank, editedSubLocations, baselineSubLocations]);
 
   const saveSeedBank = async () => {
     if (!selectedOrganization) {
@@ -333,6 +342,7 @@ export default function SeedBankView(): JSX.Element {
         <SeedBankSubLocations
           seedBankId={selectedSeedBank?.id === -1 ? undefined : selectedSeedBank?.id}
           onEdit={(locations) => setEditedSubLocations(locations)}
+          onLoad={onLoadSubLocations}
         />
       </Box>
     </Page>
