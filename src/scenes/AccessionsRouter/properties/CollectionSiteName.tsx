@@ -2,9 +2,9 @@ import React, { type JSX, useEffect } from 'react';
 
 import { Box } from '@mui/material';
 
-import Autocomplete from 'src/components/common/Autocomplete';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useLazyGetCollectionSiteNamesQuery } from 'src/queries/search/accessions';
+import RecentValuesAutocomplete from 'src/scenes/AccessionsRouter/properties/RecentValuesAutocomplete';
 import strings from 'src/strings';
 
 interface Props {
@@ -26,12 +26,12 @@ export default function CollectionSiteName({ collectionSiteName = '', onChange }
 
   return !activeLocale ? null : (
     <Box mb={2} display='flex' alignItems='center' sx={{ display: 'block', position: 'relative' }}>
-      <Autocomplete
-        freeSolo={true}
+      <RecentValuesAutocomplete
         id='collectionSiteName'
         label={strings.COLLECTION_SITE}
-        onChange={(value) => onChange('collectionSiteName', value as string)}
-        options={options || []}
+        onChange={(value) => onChange('collectionSiteName', value)}
+        values={options || []}
+        allLabel={strings.ALL_COLLECTION_SITES}
         selected={collectionSiteName}
         tooltipTitle={strings.TOOLTIP_ACCESSIONS_ADD_COLLECTING_SITE}
       />

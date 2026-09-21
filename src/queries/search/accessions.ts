@@ -43,8 +43,29 @@ type SearchResponse<T> = {
 };
 
 type SearchValuesResponse = {
-  results?: Record<string, { values: (string | null)[] }>;
+  results?: Record<string, { values: (string | null)[]; sortValues?: string[][] }>;
 };
+
+export type RecentValue = {
+  value: string;
+  lastUsed?: string;
+};
+
+const CREATED_TIME_DESC: SearchSortOrder = { field: 'createdTime', direction: 'Descending' };
+
+const transformRecentValues =
+  (field: string) =>
+  (response: SearchValuesResponse): RecentValue[] => {
+    const fieldResults = response?.results?.[field];
+    const sortValues = fieldResults?.sortValues ?? [];
+    const recentValues: RecentValue[] = [];
+    (fieldResults?.values ?? []).forEach((value, index) => {
+      if (value !== null) {
+        recentValues.push({ value, lastUsed: sortValues[index]?.[0] });
+      }
+    });
+    return recentValues;
+  };
 
 const SEARCH_FIELDS_ACCESSIONS = [
   'id',
@@ -127,7 +148,7 @@ const injectedRtkApi = api.injectEndpoints({
         { type: QueryTagTypes.Accessions, id: 'LIST' },
       ],
     }),
-    getCollectors: build.query<string[], GetCollectorsApiArg>({
+    getCollectors: build.query<RecentValue[], GetCollectorsApiArg>({
       query: (organizationId) => ({
         url: '/api/v1/search/values',
         method: 'POST',
@@ -135,14 +156,14 @@ const injectedRtkApi = api.injectEndpoints({
           prefix: 'accessions',
           fields: ['collectors_name'],
           search: buildOrgSearch(organizationId, []),
+          sortOrder: [CREATED_TIME_DESC],
           count: 1000,
         },
       }),
-      transformResponse: (response: SearchValuesResponse) =>
-        (response?.results?.collectors_name?.values ?? []).filter((v): v is string => v !== null),
+      transformResponse: transformRecentValues('collectors_name'),
       providesTags: [{ type: QueryTagTypes.Accessions, id: 'LIST' }],
     }),
-    getCollectionSiteNames: build.query<string[], GetCollectionSiteNamesApiArg>({
+    getCollectionSiteNames: build.query<RecentValue[], GetCollectionSiteNamesApiArg>({
       query: (organizationId) => ({
         url: '/api/v1/search/values',
         method: 'POST',
@@ -150,11 +171,11 @@ const injectedRtkApi = api.injectEndpoints({
           prefix: 'accessions',
           fields: ['collectionSiteName'],
           search: buildOrgSearch(organizationId, []),
+          sortOrder: [CREATED_TIME_DESC],
           count: 1000,
         },
       }),
-      transformResponse: (response: SearchValuesResponse) =>
-        (response?.results?.collectionSiteName?.values ?? []).filter((v): v is string => v !== null),
+      transformResponse: transformRecentValues('collectionSiteName'),
       providesTags: [{ type: QueryTagTypes.Accessions, id: 'LIST' }],
     }),
     getAccessionForSpecies: build.query<SearchResponseAccession[], GetAccessionForSpeciesApiArg>({
