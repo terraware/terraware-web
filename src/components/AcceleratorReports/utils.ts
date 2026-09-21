@@ -14,6 +14,9 @@ export const getReportName = (report: AcceleratorReportPayload | PublishedReport
   return report.quarter ? `${year}-${report.quarter}` : year;
 };
 
+export const reportExportPrefix = (inConsole: boolean, funderFacing: boolean): string =>
+  inConsole ? (funderFacing ? 'EXTERNAL_' : 'INTERNAL_') : '';
+
 export type IndicatorClass = ReportCommonIndicatorPayload['classId'];
 export type IndicatorCategory = ReportCommonIndicatorPayload['category'];
 export type IndicatorLevel = ReportCommonIndicatorPayload['level'];
