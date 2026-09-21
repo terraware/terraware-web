@@ -1,3 +1,5 @@
+e78b5bc3 Fetch project observation stats in one request (#6464)
+5f173ec5 Sync the observation stats endpoint now that it takes a projectId (#6463)
 c999bbf4 SW-8911 Seed bank create/edit (#6476)
 961cfc3a Ignore saved column filters once the filter UI is gone (#6469)
 1d8c1b86 Fix test warnings (#6470)

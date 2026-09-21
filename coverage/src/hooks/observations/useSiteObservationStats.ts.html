@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>13/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.5% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/8</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -140,28 +140,28 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-yes">55x</span>
+<span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">55x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">55x</span>
-<span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-yes">24x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">24x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">19x</span>
 <span class="cline-any cline-yes">21x</span>
@@ -169,7 +169,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">55x</span>
+<span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -179,7 +179,7 @@ import {
   ObservationSiteStatsPayload,
   ObservationStratumStatsPayload,
   ObservationSubstratumStatsPayload,
-  useLazyGetSiteObservationStatsQuery,
+  useLazyGetObservationStatsQuery,
 } from 'src/queries/generated/observations';
 &nbsp;
 export type SiteObservationStats = {
@@ -195,19 +195,19 @@ export type SiteObservationStats = {
  * never observed carry no observationId.
  */
 const useSiteObservationStats = (plantingSiteId: number | undefined): SiteObservationStats =&gt; {
-  const [getSiteObservationStats, response] = useLazyGetSiteObservationStatsQuery();
+  const [getObservationStats, response] = useLazyGetObservationStatsQuery();
 &nbsp;
   useEffect(() =&gt; {
-    <span class="missing-if-branch" title="else path not taken" >E</span>if (plantingSiteId !== undefined) {
-      void getSiteObservationStats(plantingSiteId, true);
+    if (plantingSiteId !== undefined) {
+      void getObservationStats({ plantingSiteId }, true);
     }
-  }, [getSiteObservationStats, plantingSiteId]);
+  }, [getObservationStats, plantingSiteId]);
 &nbsp;
-  // Guard against rendering the previous site's numbers while a switch is in flight.
-  const stats = useMemo(() =&gt; {
-    const result = response.currentData?.stats;
-    return result?.plantingSiteId === plantingSiteId ? result : undefined;
-  }, [plantingSiteId, response.currentData]);
+  // Matching on id also guards against rendering the previous site's numbers mid-switch.
+  const stats = useMemo(
+    () =&gt; response.currentData?.stats.find((siteStats) =&gt; siteStats.plantingSiteId === plantingSiteId),
+    [plantingSiteId, response.currentData]
+  );
 &nbsp;
   const strataById = useMemo(
     () =&gt; new Map((stats?.strata ?? []).map((stratum) =&gt; [stratum.stratumId, stratum])),
@@ -235,7 +235,7 @@ export default useSiteObservationStats;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-21T18:56:43.876Z
+                at 2026-09-21T19:24:16.970Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
