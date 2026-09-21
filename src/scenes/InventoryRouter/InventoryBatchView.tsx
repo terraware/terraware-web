@@ -113,7 +113,14 @@ export default function InventoryBatchView({ origin, species }: InventoryBatchPr
       {
         id: 'history',
         label: strings.HISTORY,
-        children: <BatchHistory batchId={batch.id} nurseryName={inventoryNursery?.name} />,
+        children: (
+          <BatchHistory
+            batchId={batch.id}
+            nurseryName={inventoryNursery?.name}
+            accessionId={batch.accessionId}
+            accessionNumber={batch.accessionNumber}
+          />
+        ),
       },
     ];
   }, [batch, inventoryNursery]);

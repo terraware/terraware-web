@@ -34,6 +34,8 @@ const columns = (): TableColumnType[] => [
 type BatchHistoryProps = {
   batchId: number;
   nurseryName?: string;
+  accessionId?: number;
+  accessionNumber?: string;
 };
 
 export type BatchHistoryItemForTable = BatchHistoryItem & {
@@ -224,7 +226,12 @@ export const getModifiedFields = (historyItem: BatchHistoryItem, previousEv?: Ba
   return changedFields;
 };
 
-export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps): JSX.Element {
+export default function BatchHistory({
+  batchId,
+  nurseryName,
+  accessionId,
+  accessionNumber,
+}: BatchHistoryProps): JSX.Element {
   const theme = useTheme();
   const [search, setSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
@@ -306,12 +313,50 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
     }
   }, [selectedOrganization]);
 
+  // A batch created from an accession records its initial quantities as a plain "QuantityEdited"
+  // event with no accession reference, while accessions added afterward come through as
+  // "AddedFromAccession". The batch itself carries that first accession, so relabel the batch's
+  // earliest quantity event as "AddedFromAccession" too, giving every accession the same UI.
+  const normalizedHistory = useMemo((): BatchHistoryItem[] | undefined => {
+    if (!batchHistory) {
+      return undefined;
+    }
+    if (accessionId === undefined) {
+      return batchHistory.history;
+    }
+
+    let creationEvent: FullQuantityHistoryItem | undefined;
+    batchHistory.history.forEach((item) => {
+      if (item.type === 'QuantityEdited' && (item.version ?? 0) < (creationEvent?.version ?? Infinity)) {
+        creationEvent = item;
+      }
+    });
+    if (!creationEvent) {
+      return batchHistory.history;
+    }
+
+    const created = creationEvent;
+    return batchHistory.history.map((item) =>
+      item === created
+        ? {
+            type: 'AddedFromAccession',
+            accessionId,
+            accessionNumber: accessionNumber ?? '',
+            germinatingQuantity: created.germinatingQuantity,
+            createdBy: created.createdBy,
+            createdTime: created.createdTime,
+            version: created.version,
+          }
+        : item
+    );
+  }, [accessionId, accessionNumber, batchHistory]);
+
   const filteredHistory = useMemo((): BatchHistoryItem[] | null => {
-    if (!batchHistory || !users) {
+    if (!normalizedHistory || !users) {
       return null;
     }
 
-    let filtered = [...batchHistory.history];
+    let filtered = [...normalizedHistory];
 
     if (filters.type?.values) {
       filtered = filtered.filter((ev) => filters.type.values.indexOf(ev.type) > -1);
@@ -329,7 +374,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
     }
 
     return filtered;
-  }, [batchHistory, filters, search, users]);
+  }, [normalizedHistory, filters, search, users]);
 
   const results = useMemo((): BatchHistoryItemForTable[] | null => {
     if (!filteredHistory || !users) {
@@ -338,13 +383,11 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
 
     return filteredHistory
       .filter((historyItem) => {
-        return historyItem.type === 'DetailsEdited'
-          ? findPreviousEvent(historyItem, batchHistory?.history ?? null)
-          : true;
+        return historyItem.type === 'DetailsEdited' ? findPreviousEvent(historyItem, normalizedHistory ?? null) : true;
       })
       .map((historyItem) => {
         const userSelected = users[historyItem.createdBy];
-        const previousEv = findPreviousEvent(historyItem, batchHistory?.history ?? null);
+        const previousEv = findPreviousEvent(historyItem, normalizedHistory ?? null);
         const changedFields = getModifiedFields(historyItem, previousEv);
         return {
           ...historyItem,
@@ -354,7 +397,7 @@ export default function BatchHistory({ batchId, nurseryName }: BatchHistoryProps
           nurseryName,
         };
       });
-  }, [batchHistory?.history, filteredHistory, nurseryName, users]);
+  }, [normalizedHistory, filteredHistory, nurseryName, users]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onBatchSelected = (batch: any, fromColumn?: string) => {
