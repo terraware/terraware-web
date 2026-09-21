@@ -104,6 +104,9 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
   });
 
   const [showColumnFilters, setShowColumnFilters] = useState<boolean>(() => {
+    if (!persistFilters) {
+      return false;
+    }
     try {
       const saved = localStorage.getItem(`${storageKey}_columnFilters`);
       if (saved) {
