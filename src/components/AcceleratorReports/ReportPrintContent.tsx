@@ -16,13 +16,22 @@ import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { isAcceleratorReport } from 'src/types/AcceleratorReport';
 
 export type ReportPrintContentProps = {
+  funderReportView?: boolean;
   indicators: ProgressIndicator[];
+  isConsoleView?: boolean;
   projectId: number;
   projectName?: string;
   report: AcceleratorReportPayload | PublishedReportPayload;
 };
 
-const ReportPrintContent = ({ indicators, projectId, projectName, report }: ReportPrintContentProps): JSX.Element => {
+const ReportPrintContent = ({
+  funderReportView,
+  indicators,
+  isConsoleView,
+  projectId,
+  projectName,
+  report,
+}: ReportPrintContentProps): JSX.Element => {
   const theme = useTheme();
 
   const year = report.startDate ? Number(report.startDate.split('-')[0]) : undefined;
@@ -63,7 +72,14 @@ const ReportPrintContent = ({ indicators, projectId, projectName, report }: Repo
       </Box>
 
       {/* each row marks itself as unbreakable, so the section as a whole is free to span pages */}
-      <IndicatorProgressSectionContent indicators={indicators} printMode quarter={report.quarter} year={year} />
+      <IndicatorProgressSectionContent
+        funderReportView={funderReportView}
+        indicators={indicators}
+        isConsoleView={isConsoleView}
+        printMode
+        quarter={report.quarter}
+        year={year}
+      />
 
       <Box className='print-section'>
         <AchievementsBox {...sectionProps} />

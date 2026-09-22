@@ -67,6 +67,7 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
     <>
       {printing && (
         <ReportPrint
+          funderReportView
           indicators={indicators}
           onClose={stopPrinting}
           projectName={selectedReport?.projectName}
