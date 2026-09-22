@@ -141,16 +141,14 @@ const PurposeStep = ({
   const isEqualUsers = useCallback((a: OrganizationUser, b: OrganizationUser) => a.id === b.id, []);
   const toTUser = useCallback((firstName: string) => ({ firstName }) as OrganizationUser, []);
 
-  const labelWithTooltip = (text: string, tooltip: string, showTooltip: boolean) => (
+  const labelWithTooltip = (text: string, tooltip: string) => (
     <Box display='flex' alignItems='center' gap={0.5}>
       {text}
-      {showTooltip && (
-        <Tooltip title={tooltip}>
-          <Box display='flex' alignItems='center'>
-            <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
-          </Box>
-        </Tooltip>
-      )}
+      <Tooltip title={tooltip}>
+        <Box display='flex' alignItems='center'>
+          <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+        </Box>
+      </Tooltip>
     </Box>
   );
 
@@ -165,9 +163,9 @@ const PurposeStep = ({
             const viabilityDisabled = option.value === 'Viability Testing' && isBulk;
             const nurseryDisabled = option.value === 'Nursery' && hasNoNurseries;
             const label = viabilityDisabled
-              ? labelWithTooltip(option.label, strings.VIABILITY_NOT_AVAILABLE_BULK, true)
+              ? labelWithTooltip(option.label, strings.VIABILITY_NOT_AVAILABLE_BULK)
               : nurseryDisabled
-                ? labelWithTooltip(option.label, strings.NURSERY_WITHDRAWAL_REQUIRES_NURSERY, true)
+                ? labelWithTooltip(option.label, strings.NURSERY_WITHDRAWAL_REQUIRES_NURSERY)
                 : option.label;
             return (
               <FormControlLabel
