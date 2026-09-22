@@ -137,15 +137,13 @@ export type AccessionEventDescriptionOptions = {
   colors: ChangedValueColors;
   /** Batch ID to the nursery it went to, for naming a transfer's destination. */
   nurseryNames?: Map<number, string>;
-  /** Renders the photo subject, so a caller can make just the filename clickable. */
-  renderPhotoSubject?: (fullText: string) => JSX.Element | string;
   strings: Strings;
   viabilityTestWithdrawals?: ViabilityTestWithdrawals;
 };
 
 export const renderAccessionEventDescription = (
   event: EventLogEntryPayload,
-  { colors, nurseryNames, renderPhotoSubject, strings, viabilityTestWithdrawals }: AccessionEventDescriptionOptions
+  { colors, nurseryNames, strings, viabilityTestWithdrawals }: AccessionEventDescriptionOptions
 ): ReactNode => {
   const { action, subject } = event;
   const forViabilityTest = isViabilityTestWithdrawal(event, viabilityTestWithdrawals);
@@ -170,22 +168,19 @@ export const renderAccessionEventDescription = (
           return null;
       }
 
-    case 'AccessionPhoto': {
-      const photoSubject = renderPhotoSubject?.(subject.fullText) ?? subject.fullText;
-
+    case 'AccessionPhoto':
       switch (action.type) {
         case 'Created':
-          return strings.formatString<string | JSX.Element>(strings.EVENT_ADDED, photoSubject);
+          return strings.PHOTO_ADDED;
         case 'Deleted':
-          return strings.formatString<string | JSX.Element>(strings.EVENT_DELETED, photoSubject);
+          return strings.PHOTO_DELETED;
         // Re-uploading over an existing filename is logged as an update whose values are the old and
-        // new file IDs, so only the subject is worth showing.
+        // new file IDs.
         case 'FieldUpdated':
-          return strings.formatString<string | JSX.Element>(strings.ACCESSION_EVENT_PHOTO_REPLACED, photoSubject);
+          return strings.ACCESSION_EVENT_PHOTO_REPLACED;
         default:
           return null;
       }
-    }
 
     case 'Withdrawal':
       switch (action.type) {
