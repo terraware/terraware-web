@@ -117,7 +117,13 @@ const ObservationMap = ({
     usePlotPhotosMapLegend({ disabled: plantingSiteId === undefined });
   const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(plantingSiteId === undefined);
   const { adHocPlotsVisible, permanentPlotsVisible, temporaryPlotsVisible, monitoringPlotsLegendGroup } =
-    useMonitoringPlotsMapLegend(plantingSiteId === undefined, isBiomass, isBiomass, false, true);
+    useMonitoringPlotsMapLegend(
+      plantingSiteId === undefined,
+      isBiomass || (newFiltersEnabled && isAdHoc),
+      isBiomass || (newFiltersEnabled && isAdHoc),
+      newFiltersEnabled && !isAdHoc && !isSingleView,
+      true
+    );
 
   const {
     sitesLayerStyle,
