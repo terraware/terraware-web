@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Checkbox, Icon, Tooltip } from '@terraware/web-components';
 
-import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -15,8 +14,21 @@ import { AssignSiteT0TempData, SpeciesPlot, StratumT0Data } from 'src/types/Trac
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { SurvivalRateFormRegistration } from './EditSurvivalRateSettings';
 import SpeciesDensityWarningMessage from './SpeciesDensityWarningMessage';
 import StratumT0EditBox from './StratumT0EditBox';
+
+const normalizeStrata = (strata?: StratumT0Data[]): string =>
+  JSON.stringify(
+    (strata ?? [])
+      .map((stratum) => ({
+        stratumId: stratum.stratumId,
+        densityData: (stratum.densityData ?? [])
+          .map((d) => ({ speciesId: d.speciesId, density: d.density ?? null, plotDensity: d.plotDensity ?? null }))
+          .sort((a, b) => a.speciesId - b.speciesId),
+      }))
+      .sort((a, b) => a.stratumId - b.stratumId)
+  );
 
 type EditTemporaryPlotsTabProps = {
   plantingSiteId: number;
@@ -24,6 +36,7 @@ type EditTemporaryPlotsTabProps = {
   withdrawnSpeciesPlots?: SpeciesPlot[];
   strata?: StratumT0Data[];
   alreadyIncluding?: boolean;
+  onRegister: (registration: SurvivalRateFormRegistration) => void;
 };
 
 const EditTemporaryPlotsTab = ({
@@ -32,6 +45,7 @@ const EditTemporaryPlotsTab = ({
   withdrawnSpeciesPlots,
   strata,
   alreadyIncluding,
+  onRegister,
 }: EditTemporaryPlotsTabProps) => {
   const { strings } = useLocalization();
   const [isTemporaryPlotsChecked, setIsTemporaryPlotsChecked] = useState(false);
@@ -60,6 +74,13 @@ const EditTemporaryPlotsTab = ({
       setRecord({ plantingSiteId, strata });
     }
   }, [plantingSiteId, setRecord, strata]);
+
+  const isDirty = useMemo(
+    () =>
+      normalizeStrata(record.strata) !== normalizeStrata(strata ?? []) ||
+      isTemporaryPlotsChecked !== !!alreadyIncluding,
+    [record.strata, strata, isTemporaryPlotsChecked, alreadyIncluding]
+  );
 
   const goToViewSettings = useCallback(() => {
     navigate(APP_PATHS.SURVIVAL_RATE_SETTINGS_V2.replace(':plantingSiteId', plantingSiteId.toString()));
@@ -180,6 +201,10 @@ const EditTemporaryPlotsTab = ({
     }
   }, [goToViewSettings, updateT0Result, snackbar]);
 
+  useEffect(() => {
+    onRegister({ isDirty, saving: updateT0Result.isLoading, save: saveSettings });
+  }, [onRegister, isDirty, updateT0Result.isLoading, saveSettings]);
+
   const cancelWarningHandler = useCallback(() => {
     setShowSpeciesDensityWarningMessage(false);
   }, []);
@@ -198,16 +223,7 @@ const EditTemporaryPlotsTab = ({
   }
 
   return (
-    <PageForm
-      cancelID='cancelSettings'
-      saveID='saveSettings'
-      onCancel={goToViewSettings}
-      onSave={saveSettings}
-      saveButtonText={strings.SAVE}
-      cancelButtonText={strings.CANCEL}
-      desktopOffset={'266px'}
-      busy={updateT0Result.isLoading}
-    >
+    <>
       {showSpeciesDensityWarningMessage && (
         <SpeciesDensityWarningMessage onClose={cancelWarningHandler} onSave={saveWithDefaultDensity} type='temporary' />
       )}
@@ -254,7 +270,7 @@ const EditTemporaryPlotsTab = ({
             );
           })}
       </Box>
-    </PageForm>
+    </>
   );
 };
 

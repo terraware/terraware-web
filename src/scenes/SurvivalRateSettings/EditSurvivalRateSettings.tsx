@@ -1,11 +1,12 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
-import { Box, useTheme } from '@mui/material';
-import { Tabs } from '@terraware/web-components';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Button, Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
+import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import { APP_PATHS } from 'src/constants';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -18,6 +19,12 @@ import ChangeTabWarningModal from './ChangeTabWarningModal';
 import EditPermanentPlotsTab from './EditPermanentPlotsTab';
 import EditTemporaryPlotsTab from './EditTemporaryPlotsTab';
 import SurvivalRateInstructions from './SurvivalRateInstructions';
+
+export type SurvivalRateFormRegistration = {
+  isDirty: boolean;
+  saving: boolean;
+  save: () => void;
+};
 
 const EditSurvivalRateSettings = () => {
   const { strings } = useLocalization();
@@ -42,6 +49,23 @@ const EditSurvivalRateSettings = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
   const navigate = useSyncNavigate();
+
+  const [formState, setFormState] = useState<{ isDirty: boolean; saving: boolean }>({
+    isDirty: false,
+    saving: false,
+  });
+
+  const saveRef = useRef<(() => void) | undefined>(undefined);
+
+  const registerFormState = useCallback(({ isDirty, saving, save }: SurvivalRateFormRegistration) => {
+    saveRef.current = save;
+    setFormState((prev) => (prev.isDirty === isDirty && prev.saving === saving ? prev : { isDirty, saving }));
+  }, []);
+
+  const goToViewSettings = useCallback(() => {
+    navigate(APP_PATHS.SURVIVAL_RATE_SETTINGS_V2.replace(':plantingSiteId', plantingSiteId.toString()));
+  }, [navigate, plantingSiteId]);
+
   const permanentPlots = useMemo(() => {
     return plotsWithObservations?.filter(
       (p) => !!p.permanentIndex && p.observationPlots.some((op) => op.isPermanent === 'true')
@@ -69,6 +93,7 @@ const EditSurvivalRateSettings = () => {
             plotsWithObservations={permanentPlots}
             t0Plots={t0SiteData?.plots}
             withdrawnSpeciesPlots={withdrawnSpeciesPlots}
+            onRegister={registerFormState}
           />
         ),
       },
@@ -85,6 +110,7 @@ const EditSurvivalRateSettings = () => {
             strata={t0SiteData?.strata}
             withdrawnSpeciesPlots={withdrawnSpeciesPlots}
             alreadyIncluding={t0SiteData?.survivalRateIncludesTempPlots}
+            onRegister={registerFormState}
           />
         ),
       });
@@ -95,6 +121,7 @@ const EditSurvivalRateSettings = () => {
     activeLocale,
     permanentPlots,
     plantingSiteId,
+    registerFormState,
     strings.PERMANENT_PLOTS,
     strings.TEMPORARY_PLOTS,
     t0SiteData?.plots,
@@ -133,8 +160,44 @@ const EditSurvivalRateSettings = () => {
     setShowChangeTabWarning(false);
   }, []);
 
+  const title = (
+    <Box
+      alignItems='center'
+      display='flex'
+      flexWrap='wrap'
+      gap={theme.spacing(1.5)}
+      sx={{ paddingLeft: theme.spacing(3) }}
+    >
+      <Typography fontSize='24px' fontWeight={600}>
+        {strings.formatString(strings.EDIT_SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}
+      </Typography>
+      {formState.isDirty && <UnsavedChangesBadge />}
+    </Box>
+  );
+
+  const rightComponent = (
+    <Box alignItems='center' display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
+      <Button
+        disabled={formState.saving}
+        id='cancelSettings'
+        label={strings.CANCEL}
+        onClick={goToViewSettings}
+        priority='secondary'
+        size='medium'
+        type='passive'
+      />
+      <Button
+        disabled={!formState.isDirty || formState.saving}
+        id='saveSettings'
+        label={strings.SAVE}
+        onClick={() => saveRef.current?.()}
+        size='medium'
+      />
+    </Box>
+  );
+
   return (
-    <Page title={strings.formatString(strings.EDIT_SURVIVAL_RATE_SETTINGS_FOR, plantingSite?.name || '')}>
+    <Page rightComponent={rightComponent} stickyHeader stickyHeaderElevated={formState.isDirty} title={title}>
       {showChangeTabWarning && (
         <ChangeTabWarningModal
           onClose={closeChangeTabWarning}
