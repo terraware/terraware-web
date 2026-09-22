@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button, Tabs } from '@terraware/web-components';
+import { BusySpinner, Button, Tabs } from '@terraware/web-components';
 
 import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
@@ -198,6 +198,7 @@ const EditSurvivalRateSettings = () => {
 
   return (
     <Page rightComponent={rightComponent} stickyHeader stickyHeaderElevated={formState.isDirty} title={title}>
+      {formState.saving && <BusySpinner withSkrim={true} />}
       {showChangeTabWarning && (
         <ChangeTabWarningModal
           onClose={closeChangeTabWarning}
