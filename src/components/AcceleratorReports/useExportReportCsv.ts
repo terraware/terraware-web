@@ -190,12 +190,7 @@ export const getIndicatorCsvColumns = (audience: ReportCsvAudience): IndicatorCs
 
 export type IndicatorCsvRow = Partial<Record<IndicatorCsvColumn, ReportCsvValue>>;
 
-/**
- * Indicator values stay numbers so a spreadsheet can still add them up, rounded to the precision the
- * screen rounds to. The published payload carries no precision at all, and falling back to zero
- * decimals there would quietly turn a survival rate into a whole number, so a value with no
- * precision is written as-is.
- */
+/** Values stay numbers so a spreadsheet can still add them up, rounded the way the screen rounds. */
 const indicatorNumber = (value: number | undefined, precision: number | undefined) => {
   if (value === undefined) {
     return undefined;
