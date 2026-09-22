@@ -24,7 +24,6 @@ import { getBiomassObservationDeadTreeCount, getBiomassObservationLiveTreeCount 
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import EditBiomassQualitativeDataModal, { BiomassQualitativeFormData } from './EditBiomassQualitativeDataModal';
-import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 
 const BiomassObservationDataTab = () => {
   const { strings } = useLocalization();
@@ -319,21 +318,9 @@ const BiomassObservationDataTab = () => {
           </Box>
         </Box>
       </Box>
-      <Box paddingTop={2}>
-        <Typography fontSize={'20px'} fontWeight={600}>
-          {strings.TREES_AND_SHRUBS}
-        </Typography>
-        <Box display='flex' alignItems={'center'} paddingTop={3}>
-          <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} size='medium' />
-          <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' paddingLeft={1}>
-            {strings.TREES_AND_SHRUBS_TABLE_INSTRUCTIONS}
-          </Typography>
-        </Box>
-        <TreesAndShrubsEditableTable />
-        {monitoringPlot?.monitoringPlotId && (
-          <EventLog observationId={observationId} plotId={monitoringPlot.monitoringPlotId} isBiomass />
-        )}
-      </Box>
+      {monitoringPlot?.monitoringPlotId && (
+        <EventLog observationId={observationId} plotId={monitoringPlot.monitoringPlotId} isBiomass />
+      )}
     </Card>
   );
 };

@@ -18,6 +18,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import BiomassObservationDataTab from './BiomassObservationDataTab';
 import BiomassPhotosTab from './BiomassPhotosTab';
 import InvasiveAndThreatenedSpeciesTab from './InvasiveAndThreatenedSpeciesTab';
+import WoodySpeciesTab from './WoodySpeciesTab';
 
 const BiomassMeasurementsDetails = (): JSX.Element => {
   const theme = useTheme();
@@ -103,12 +104,17 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
     return [
       {
         id: 'observationData',
-        label: strings.OBSERVATION_DATA,
+        label: strings.PLOT,
         children: <BiomassObservationDataTab />,
       },
       {
+        id: 'woodySpecies',
+        label: strings.WOODY_SPECIES,
+        children: <WoodySpeciesTab />,
+      },
+      {
         id: 'invasiveAndThreatenedSpecies',
-        label: strings.INVASIVE_AND_THREATENED_SPECIES,
+        label: strings.HERBACEOUS_SPECIES,
         children: <InvasiveAndThreatenedSpeciesTab />,
       },
       {
@@ -117,7 +123,7 @@ const BiomassMeasurementsDetails = (): JSX.Element => {
         children: <BiomassPhotosTab />,
       },
     ];
-  }, [strings.INVASIVE_AND_THREATENED_SPECIES, strings.OBSERVATION_DATA, strings.PHOTOS_AND_VIDEOS]);
+  }, [strings.HERBACEOUS_SPECIES, strings.PHOTOS_AND_VIDEOS, strings.PLOT, strings.WOODY_SPECIES]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'observationData',
