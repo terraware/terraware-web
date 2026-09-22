@@ -8,6 +8,7 @@ import {
   getProgressIndicators,
   getPublishedProgressIndicators,
   getReportName,
+  reportExportPrefix,
   unpublishedPropertyList,
 } from 'src/components/AcceleratorReports/utils';
 import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
@@ -54,6 +55,24 @@ describe('getReportName', () => {
 
   test('falls back to the year alone for an annual report', () => {
     expect(getReportName(acceleratorReport({ quarter: undefined }))).toBe('2026');
+  });
+});
+
+describe('reportExportPrefix', () => {
+  test('labels the export of the console reports view as internal', () => {
+    expect(reportExportPrefix(true, false)).toBe('INTERNAL_');
+  });
+
+  test('labels the export of a funder report previewed or published from the console as external', () => {
+    expect(reportExportPrefix(true, true)).toBe('EXTERNAL_');
+  });
+
+  test('leaves an export from the project view unlabelled', () => {
+    expect(reportExportPrefix(false, false)).toBe('');
+  });
+
+  test('leaves an export from the funder portal unlabelled', () => {
+    expect(reportExportPrefix(false, true)).toBe('');
   });
 });
 

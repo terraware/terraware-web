@@ -15,6 +15,7 @@ import {
   indicatorCategoryLabel,
   indicatorClassLabel,
   indicatorLevelLabel,
+  reportExportPrefix,
   reportIndicatorStatusLabel,
   unpublishedPropertyList,
 } from 'src/components/AcceleratorReports/utils';
@@ -383,10 +384,13 @@ const useExportReportCsv = () => {
         value: localizeValue(value),
       }));
 
+      const prefix = reportExportPrefix(isAcceleratorRoute, params.audience === 'funder');
+      const name = [params.projectName, getReportName(params.report), strings.REPORT].filter(Boolean).join('-');
+
       // `.csv` goes in the file name rather than in `suffix` because the blobs already carry the
       // UTF-8 BOM that Excel wants, and downloadZipFile adds a second one to anything suffixed `.csv`
       await downloadZipFile({
-        dirName: [params.projectName, getReportName(params.report), strings.REPORT].filter(Boolean).join('-'),
+        dirName: `${prefix}${name}`,
         files: [
           {
             fileName: `${strings.REPORT}.csv`,
@@ -419,7 +423,7 @@ const useExportReportCsv = () => {
         ],
       });
     },
-    [localizeValue, makeIndicatorsCsv, reportFieldLabels, strings]
+    [isAcceleratorRoute, localizeValue, makeIndicatorsCsv, reportFieldLabels, strings]
   );
 
   const exportAcceleratorReport = useCallback(

@@ -1,8 +1,9 @@
 import React, { type JSX } from 'react';
 
 import ReportPrintContent from 'src/components/AcceleratorReports/ReportPrintContent';
-import { type ProgressIndicator, getReportName } from 'src/components/AcceleratorReports/utils';
+import { type ProgressIndicator, getReportName, reportExportPrefix } from 'src/components/AcceleratorReports/utils';
 import PrintWindow from 'src/components/common/PrintWindow';
+import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useLocalization } from 'src/providers';
 import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
@@ -31,8 +32,13 @@ const ReportPrint = ({
   report,
 }: ReportPrintProps): JSX.Element => {
   const { strings } = useLocalization();
+  // the print window's title is what the browser offers as the PDF filename
+  const { isAcceleratorRoute } = useAcceleratorConsole();
 
-  const title = report ? [projectName, getReportName(report)].filter(Boolean).join(' ') : strings.REPORT;
+  const prefix = reportExportPrefix(isAcceleratorRoute, !!funderReportView);
+  const title = report
+    ? `${prefix}${[projectName, getReportName(report)].filter(Boolean).join(' ')}`
+    : `${prefix}${strings.REPORT}`;
 
   return (
     <PrintWindow onClose={onClose} ready={report !== undefined} title={title}>
