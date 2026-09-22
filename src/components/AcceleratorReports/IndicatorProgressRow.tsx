@@ -466,9 +466,9 @@ const IndicatorProgressRow = ({
         </Box>
 
         {!printMode && (
-          <Box flexShrink={0} paddingLeft={theme.spacing(1)} width={theme.spacing(5)}>
+          <Box flexShrink={0} paddingLeft={theme.spacing(1)} width={theme.spacing(7)}>
             <IconButton onClick={onToggle} size='small'>
-              <Icon name={expanded ? 'chevronUp' : 'chevronDown'} />
+              <Icon name={expanded ? 'chevronUp' : 'chevronDown'} size='large' />
             </IconButton>
           </Box>
         )}
