@@ -2647,8 +2647,8 @@ TREATMENT_AFTER,Tratamiento (después),47efd418
 TREATMENT_BEFORE,Tratamiento (antes),311905d8
 TREE,Árbol,786d8845
 TREE_CROWN_DIAMETER_CM,Diámetro de la copa del árbol (cm),f69d14ce
-TREES_AND_SHRUBS,Árboles y arbustos,e40ed4ab
-TREES_AND_SHRUBS_TABLE_INSTRUCTIONS,Haga clic en un número de la tabla para editarlo,0c733b0b
+TREES_AND_SHRUBS,Árboles y arbustos,28bb0333
+TREES_AND_SHRUBS_TABLE_INSTRUCTIONS,Haga clic en un valor de la tabla para editarlo.,68f6f90b
 TREES_PLANTED,Árboles plantados,cd803b87
 TREES_STEMS,Árboles/Tallos,1925e3b8
 TRUNCATED_TEXT_MORE_LINK,más,9c3efa68

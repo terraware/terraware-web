@@ -24,7 +24,7 @@ const WoodySpeciesTab = () => {
   return (
     <Card radius='24px'>
       <Typography fontSize={'20px'} fontWeight={600}>
-        {strings.WOODY_SPECIES}
+        {strings.TREES_AND_SHRUBS}
       </Typography>
       <Box display='flex' alignItems={'center'} paddingTop={3}>
         <Icon name='info' fillColor={theme.palette.TwClrIcnSecondary} size='medium' />
