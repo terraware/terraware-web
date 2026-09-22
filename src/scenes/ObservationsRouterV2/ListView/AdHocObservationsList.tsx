@@ -32,7 +32,21 @@ import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
 import { BiomassActionsMenuContent } from './BiomassList';
 import SelectObservationButton from './SelectObservationButton';
 
-const STORAGE_KEY = 'ad-hoc-observations-table';
+const STORAGE_KEY = 'observations-ad-hoc-table';
+
+const DEFAULT_COLUMN_ORDER = [
+  'monitoringPlotNumber',
+  'monitoringType',
+  'completedDate',
+  'liveTrees',
+  'totalPlants',
+  'totalSpecies',
+  'plotDescription',
+  'plantingSiteName',
+  'actionsMenu',
+];
+
+const DEFAULT_COLUMN_VISIBILITY = { plantingSiteName: false, plotDescription: false };
 
 type AdHocRow = {
   completedDate?: string;
@@ -79,7 +93,10 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { observationType } = useObservationFilters();
   const { downloadAdHocObservationsZip } = useObservationExports();
-  const tableState = useTableState(STORAGE_KEY);
+  const tableState = useTableState(STORAGE_KEY, {
+    defaultColumnOrder: DEFAULT_COLUMN_ORDER,
+    defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
+  });
 
   const {
     emptyState,
@@ -180,6 +197,11 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         Cell: PlotNumberCell,
       },
       {
+        id: 'monitoringType',
+        header: strings.MONITORING_TYPE,
+        accessorFn: (row) => (row.isBiomass ? strings.BIOMASS_MONITORING : strings.PLANT_MONITORING),
+      },
+      {
         id: 'plotDescription',
         header: strings.PLOT_DESCRIPTION,
         accessorKey: 'plotDescription',
@@ -197,7 +219,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
       },
       {
         id: 'liveTrees',
-        header: strings.LIVE_TREES_RECORDED,
+        header: strings.LIVE_PLANTS,
         accessorKey: 'liveTrees',
         Cell: NumberCell,
       },
