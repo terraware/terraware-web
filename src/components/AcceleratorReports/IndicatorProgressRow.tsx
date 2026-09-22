@@ -20,7 +20,6 @@ import { formatPrecision } from 'src/utils/numbers';
 const TITLE_COLUMN_WIDTH = 300;
 const BAR_HEIGHT = 12;
 const TICK_OVERHANG = 3;
-const MIN_TARGET_PERCENT = 90;
 const TICK_HOVER_WIDTH = 9;
 
 type IndicatorProgressRowProps = {
@@ -89,49 +88,15 @@ const IndicatorProgressRow = ({
     [currentYearProgress, isCumulative, quarter]
   );
 
-  // Pins an overshot target no further left than MIN_TARGET_PERCENT, so the bar past it stays visible.
   const { previousYearPercent, segments, targetPercent } = useMemo(() => {
     const total = cumulativeValue ?? 0;
     const target = indicator.target;
-    const barMax = Math.max(total, target ?? 0, barOrigin);
-    const range = barMax - barOrigin;
+    const range = (target ?? total) - barOrigin;
 
-    // Pin target at start if origin is ahead of target
-    const anchorPercent =
-      target === undefined
-        ? undefined
-        : targetBehindOrigin
-          ? 0
-          : range > 0
-            ? Math.max(MIN_TARGET_PERCENT, ((target - barOrigin) / range) * 100)
-            : undefined;
+    const toPercent = (value: number) =>
+      range <= 0 ? 100 : Math.min(100, Math.max(0, ((value - barOrigin) / range) * 100));
 
-    const toPercent = (value: number) => {
-      // the origin is 0 by definition, whatever the scale does above it
-      if (value <= barOrigin) {
-        return 0;
-      }
-
-      if (range <= 0) {
-        return 100;
-      }
-
-      // with the target at the origin there is no piecewise split left to make
-      if (target === undefined || anchorPercent === undefined || anchorPercent <= 0) {
-        return ((value - barOrigin) / range) * 100;
-      }
-
-      if (value <= target) {
-        const belowTarget = target - barOrigin;
-        return belowTarget > 0 ? ((value - barOrigin) / belowTarget) * anchorPercent : 0;
-      }
-
-      const aboveTarget = barMax - target;
-      return aboveTarget > 0 ? anchorPercent + ((value - target) / aboveTarget) * (100 - anchorPercent) : anchorPercent;
-    };
-
-    // Show target met if origin is ahead of target
-    if (targetBehindOrigin && range <= 0) {
+    if (range <= 0 || (target !== undefined && total > target)) {
       return {
         previousYearPercent: undefined,
         segments: [{ key: 'total', quarter: undefined, startPercent: 0, widthPercent: 100 }],
@@ -166,17 +131,9 @@ const IndicatorProgressRow = ({
     return {
       previousYearPercent: previousYearTotal === undefined ? undefined : toPercent(previousYearTotal),
       segments: barSegments,
-      targetPercent: anchorPercent,
+      targetPercent: target === undefined ? undefined : 100,
     };
-  }, [
-    cumulativeValue,
-    currentYearProgress,
-    indicator.target,
-    isCumulative,
-    previousYearTotal,
-    barOrigin,
-    targetBehindOrigin,
-  ]);
+  }, [barOrigin, cumulativeValue, currentYearProgress, indicator.target, isCumulative, previousYearTotal]);
 
   const severity = reportIndicatorSeverity(indicator.status);
 
@@ -344,11 +301,7 @@ const IndicatorProgressRow = ({
               color={theme.palette.TwClrTxtSecondary}
               fontSize='14px'
               position='absolute'
-              sx={
-                targetPercent !== undefined
-                  ? { left: `${targetPercent}%`, transform: 'translateX(-100%)' }
-                  : { right: 0 }
-              }
+              sx={{ right: 0 }}
               top={0}
               whiteSpace='nowrap'
             >

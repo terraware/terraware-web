@@ -222,6 +222,20 @@ describe('IndicatorProgressRow', () => {
     expect(screen.queryByLabelText('2025')).not.toBeInTheDocument();
   });
 
+  it('subdivides the bar into quarters while the target is out of reach', () => {
+    renderWithProviders(<IndicatorProgressRow indicator={baselineOriginIndicator} year={2026} />);
+
+    expect(screen.getByLabelText('Q1')).toBeInTheDocument();
+    expect(screen.getByLabelText('2025')).toBeInTheDocument();
+  });
+
+  it('collapses the bar to a single segment once the target is surpassed', () => {
+    renderWithProviders(<IndicatorProgressRow indicator={{ ...baselineOriginIndicator, target: 200 }} year={2026} />);
+
+    expect(screen.queryByLabelText('Q1')).not.toBeInTheDocument();
+    expect(screen.queryByLabelText('2025')).not.toBeInTheDocument();
+  });
+
   it('renders a value at the precision the indicator declares', () => {
     renderWithProviders(<IndicatorProgressRow indicator={{ ...decimalIndicator, precision: 1 }} />);
 
