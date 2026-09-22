@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.74% </span>
+                <span class="strong">64.15% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>32/51</span>
+                <span class='fraction'>34/53</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">67.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>24/36</span>
+                <span class='fraction'>27/40</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">40% </span>
+                <span class="strong">42.3% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>10/25</span>
+                <span class='fraction'>11/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64% </span>
+                <span class="strong">65.38% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>32/50</span>
+                <span class='fraction'>34/52</span>
             </div>
         
             
@@ -372,7 +372,9 @@
 <a name='L307'></a><a href='#L307'>307</a>
 <a name='L308'></a><a href='#L308'>308</a>
 <a name='L309'></a><a href='#L309'>309</a>
-<a name='L310'></a><a href='#L310'>310</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -515,9 +517,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">44x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -538,8 +538,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">176x</span>
 <span class="cline-any cline-yes">176x</span>
+<span class="cline-any cline-yes">176x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">176x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -824,16 +828,14 @@ const PurposeStep = ({
   const isEqualUsers = useCallback(<span class="fstat-no" title="function not covered" >(a: OrganizationUser, b: OrganizationUser) =&gt; <span class="cstat-no" title="statement not covered" >a.id === b.id,</span></span> []);
   const toTUser = useCallback(<span class="fstat-no" title="function not covered" >(firstName: string) =&gt; <span class="cstat-no" title="statement not covered" >({ firstName }) </span>as OrganizationUser,</span> []);
 &nbsp;
-  const viabilityLabel = (
+  const labelWithTooltip = (text: string, tooltip: string) =&gt; (
     &lt;Box display='flex' alignItems='center' gap={0.5}&gt;
-      {strings.VIABILITY_TESTING}
-      {isBulk &amp;&amp; (
-        &lt;Tooltip title={strings.VIABILITY_NOT_AVAILABLE_BULK}&gt;
-          &lt;Box display='flex' alignItems='center'&gt;
-            &lt;Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} /&gt;
-          &lt;/Box&gt;
-        &lt;/Tooltip&gt;
-      )}
+      {text}
+      &lt;Tooltip title={tooltip}&gt;
+        &lt;Box display='flex' alignItems='center'&gt;
+          &lt;Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} /&gt;
+        &lt;/Box&gt;
+      &lt;/Tooltip&gt;
     &lt;/Box&gt;
   );
 &nbsp;
@@ -845,14 +847,20 @@ const PurposeStep = ({
         &lt;/Typography&gt;
         &lt;RadioGroup row name='withdraw-purpose' value={draft.purpose} onChange={onChangePurpose}&gt;
           {withdrawalPurposes().map((option) =&gt; {
-            const disabled = option.value === 'Viability Testing' &amp;&amp; isBulk;
+            const viabilityDisabled = option.value === 'Viability Testing' &amp;&amp; isBulk;
+            const nurseryDisabled = option.value === 'Nursery' &amp;&amp; hasNoNurseries;
+            const label = viabilityDisabled
+              ? labelWithTooltip(option.label, strings.VIABILITY_NOT_AVAILABLE_BULK)
+              : nurseryDisabled
+                ? <span class="branch-0 cbranch-no" title="branch not covered" >labelWithTooltip(option.label, strings.NURSERY_WITHDRAWAL_REQUIRES_NURSERY)</span>
+                : option.label;
             return (
               &lt;FormControlLabel
                 key={option.value}
                 value={option.value}
                 control={&lt;Radio /&gt;}
-                disabled={disabled}
-                label={option.value === 'Viability Testing' ? viabilityLabel : option.label}
+                disabled={viabilityDisabled || nurseryDisabled}
+                label={label}
               /&gt;
             );
           })}
@@ -872,8 +880,6 @@ const PurposeStep = ({
               }))}
               onChange={onChangeDestination}
               errorText={fieldErrors.destinationFacilityId}
-              disabled={hasNoNurseries}
-              tooltipTitle={hasNoNurseries ? strings.NURSERY_WITHDRAWAL_REQUIRES_NURSERY : undefined}
               fullWidth
             /&gt;
           &lt;/Grid&gt;
@@ -997,7 +1003,7 @@ export default PurposeStep;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-22T20:23:35.411Z
+                at 2026-09-22T21:02:35.150Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

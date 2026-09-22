@@ -1,3 +1,4 @@
+816f232a SW-2967 Disable Nursery option when there are no nurseries (#6496)
 900c4930 SW-8933 Label reports exported from Console as internal or external (#6486)
 940a6045 SW-8929 End the progress bar's scale at the target (#6485)
 5317caf2 SW-8931 Take the funder report's decimal precision from the payload (#6484)
