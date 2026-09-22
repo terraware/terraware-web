@@ -67,12 +67,12 @@ export default function Page({
   stickyHeaderElevated,
   subHeader,
 }: PageProps): JSX.Element {
-  // A callback ref backed by state: when the content element mounts, Page re-renders and hands the
-  // real element to PageHeaderWrapper. A plain ref would leave nextElement null on the first paint,
-  // so a permanently fixed (sticky) header could not reserve its height and would overlap the first
-  // row until some unrelated re-render happened.
-  const [contentEl, setContentEl] = useState<HTMLElement | null>(null);
-  const contentRef = useCallback((node: HTMLElement | null) => setContentEl(node), []);
+  // A callback ref backed by state: when the row mounts, Page re-renders and hands the real element
+  // to PageHeaderWrapper. A plain ref would leave nextElement null on the first paint, so a
+  // permanently fixed (sticky) header could not reserve its height and would overlap the first row
+  // until some unrelated re-render happened.
+  const [firstRowEl, setFirstRowEl] = useState<HTMLElement | null>(null);
+  const firstRowRef = useCallback((node: HTMLElement | null) => setFirstRowEl(node), []);
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
@@ -90,7 +90,7 @@ export default function Page({
         alwaysVisible={stickyHeader}
         collapsible={collapsibleHeader}
         elevated={stickyHeaderElevated}
-        nextElement={contentEl}
+        nextElement={firstRowEl}
       >
         <>{crumbs && <BreadCrumbs crumbs={crumbs} hierarchical={hierarchicalCrumbs ?? true} />}</>
         <Grid
@@ -194,10 +194,10 @@ export default function Page({
           ''
         )}
       </PageHeaderWrapper>
-      <Grid item xs={12}>
+      <Grid item xs={12} ref={firstRowRef}>
         <PageSnackbar />
       </Grid>
-      <Grid container ref={contentRef} sx={contentStyle}>
+      <Grid container sx={contentStyle}>
         {children}
       </Grid>
     </TfMain>
