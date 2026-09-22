@@ -9,6 +9,7 @@ import strings from 'src/strings';
 export type OptionsMenuProps = {
   optionItems: DropdownItem[];
   onOptionItemClick?: (optionItem: DropdownItem) => void;
+  itemRenderer?: (optionItem: DropdownItem) => React.ReactNode;
   size?: 'medium' | 'small';
   onOpen?: () => void;
   onClose?: () => void;
@@ -21,6 +22,7 @@ export type OptionsMenuProps = {
 export default function OptionsMenu({
   optionItems,
   onOptionItemClick,
+  itemRenderer,
   size,
   onOpen,
   onClose,
@@ -70,6 +72,7 @@ export default function OptionsMenu({
       <Popover
         sections={[optionItems]}
         handleClick={onItemClick}
+        itemRenderer={itemRenderer}
         anchorElement={actionMenuAnchorEl}
         setAnchorElement={setActionMenuAnchorEl}
         onClose={onClose}
