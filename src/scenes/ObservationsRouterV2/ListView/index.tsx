@@ -1,5 +1,5 @@
 import React, { type JSX, useEffect, useMemo, useRef } from 'react';
-import { useSearchParams } from 'react-router';
+import { useMatch, useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Dropdown, DropdownItem, Separator, Tabs } from '@terraware/web-components';
@@ -49,6 +49,7 @@ const ObservationListViewContent = (): JSX.Element => {
 
   // The data layer treats `undefined` as "all planting sites", so translate the selection for queries.
   const [searchParams, setSearchParams] = useSearchParams();
+  const isListRoute = useMatch(APP_PATHS.OBSERVATIONS) !== null;
   const plantingSiteIdParam = searchParams.get('plantingSiteId');
 
   const plantingSiteIdFilter = selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId;
@@ -56,7 +57,7 @@ const ObservationListViewContent = (): JSX.Element => {
 
   const lastParamRef = useRef<string | null>(null);
   useEffect(() => {
-    if (!plantingSitesLoaded) {
+    if (!plantingSitesLoaded || !isListRoute) {
       return;
     }
 
@@ -96,14 +97,19 @@ const ObservationListViewContent = (): JSX.Element => {
     const desiredParam =
       typeof selectedPlantingSiteId === 'number' ? selectedPlantingSiteId.toString() : ALL_PLANTING_SITES;
     if (plantingSiteIdParam !== desiredParam) {
-      const params = new URLSearchParams(searchParams);
-      params.set('plantingSiteId', desiredParam);
-      setSearchParams(params, { replace: true });
+      setSearchParams(
+        (current) => {
+          const params = new URLSearchParams(current);
+          params.set('plantingSiteId', desiredParam);
+          return params;
+        },
+        { replace: true }
+      );
     }
   }, [
+    isListRoute,
     plantingSitesLoaded,
     plantingSites,
-    searchParams,
     setSearchParams,
     selectedPlantingSiteId,
     plantingSiteIdParam,
