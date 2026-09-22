@@ -52,6 +52,12 @@ const PurposeStep = ({
   const speciesId = accessions[0]?.speciesId;
   const destinationFacilityId = draft.destinationFacilityId ?? -1;
 
+  const nurseries = useMemo(
+    () => (selectedOrganization ? getAllNurseries(selectedOrganization) : []),
+    [selectedOrganization]
+  );
+  const hasNoNurseries = nurseries.length === 0;
+
   const shouldListInventoryBatches =
     !!selectedOrganization?.id && destinationFacilityId > 0 && !!speciesId && isNursery;
 
@@ -177,12 +183,14 @@ const PurposeStep = ({
               id='destinationFacilityId'
               label={strings.DESTINATION_REQUIRED}
               selectedValue={destinationFacilityId > 0 ? destinationFacilityId.toString() : ''}
-              options={(selectedOrganization ? getAllNurseries(selectedOrganization) : []).map((nursery) => ({
+              options={nurseries.map((nursery) => ({
                 label: nursery.name,
                 value: nursery.id.toString(),
               }))}
               onChange={onChangeDestination}
               errorText={fieldErrors.destinationFacilityId}
+              disabled={hasNoNurseries}
+              tooltipTitle={hasNoNurseries ? strings.NURSERY_WITHDRAWAL_REQUIRES_NURSERY : undefined}
               fullWidth
             />
           </Grid>

@@ -57,9 +57,12 @@ const AccessionQuantityRow = ({
     [accession, units, value, withdrawByWeight]
   );
 
-  const error = value !== undefined ? validateRow(accession, purpose, withdrawByWeight, value, units) : '';
-
   const hasSubsetData = !!accession.subsetWeight?.quantity && !!accession.subsetCount;
+
+  const subsetWeightNeeded = withdrawByWeight && remainingWeightOf(accession)?.quantity === undefined;
+
+  const error =
+    value !== undefined && !subsetWeightNeeded ? validateRow(accession, purpose, withdrawByWeight, value, units) : '';
 
   const onChangeValue = useCallback(
     (next: unknown) => {
@@ -83,7 +86,7 @@ const AccessionQuantityRow = ({
         </Link>
       </TableCell>
       <TableCell>
-        <Typography fontSize='14px'>{remainingLabel}</Typography>
+        <Typography fontSize='14px'>{subsetWeightNeeded ? '' : remainingLabel}</Typography>
       </TableCell>
       <TableCell>
         <Box display='flex' flexDirection='column'>
@@ -96,6 +99,7 @@ const AccessionQuantityRow = ({
                 value={value?.toString() ?? ''}
                 onChange={onChangeValue}
                 errorText={error || undefined}
+                disabled={subsetWeightNeeded}
                 sx={{ '.textfield-label-container': { display: 'none !important' } }}
               />
             </Box>
@@ -105,6 +109,7 @@ const AccessionQuantityRow = ({
                   id={`withdraw-units-${accession.id}`}
                   onChange={onChangeUnits}
                   selectedValue={units}
+                  disabled={subsetWeightNeeded}
                 />
               </Box>
             )}
@@ -130,7 +135,7 @@ const AccessionQuantityRow = ({
             <Typography fontSize='14px'>{`${strings.APPROX_SYMBOL}${estimatedCount}${strings.CT}`}</Typography>
           </TableCell>
           <TableCell>
-            {hasSubsetData && (
+            {hasSubsetData ? (
               <Box
                 sx={{
                   backgroundColor: theme.palette.TwClrBgSecondary,
@@ -143,6 +148,12 @@ const AccessionQuantityRow = ({
                   {`${accession.subsetWeight?.quantity} ${unitAbbv()[accession.subsetWeight?.units as UnitType]} ${strings.TO} ${accession.subsetCount} ${strings.CT}`}
                 </Typography>
               </Box>
+            ) : (
+              subsetWeightNeeded && (
+                <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+                  {strings.NOT_SET}
+                </Typography>
+              )
             )}
           </TableCell>
         </>
