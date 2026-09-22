@@ -105,10 +105,10 @@ export const batchHistoryEventEnumToLocalized = (batchHistoryType: BatchHistoryP
       return strings.BATCH_HISTORY_TYPE_OUTGOING_WITHDRAWAL;
     }
     case 'PhotoCreated': {
-      return strings.BATCH_HISTORY_TYPE_PHOTO_CREATED;
+      return strings.PHOTO_ADDED;
     }
     case 'PhotoDeleted': {
-      return strings.BATCH_HISTORY_TYPE_PHOTO_DELETED;
+      return strings.PHOTO_DELETED;
     }
     case 'QuantityEdited': {
       return strings.BATCH_HISTORY_TYPE_QUANTITY_EDITED;

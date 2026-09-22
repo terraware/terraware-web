@@ -74,31 +74,6 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
 
   const closeModal = useCallback(() => setOpenedTarget(undefined), []);
 
-  const renderPhotoSubject = useCallback(
-    (fullText: string): JSX.Element | string => {
-      const filename = findTrailingFilename(fullText, accession?.photoFilenames);
-
-      if (filename === undefined) {
-        return fullText;
-      }
-
-      return (
-        <>
-          {fullText.slice(0, fullText.length - filename.length)}
-          <Link
-            component='button'
-            onClick={() => setOpenedTarget({ kind: 'photo', accessionId, fullText })}
-            sx={{ verticalAlign: 'baseline' }}
-            underline='hover'
-          >
-            {filename}
-          </Link>
-        </>
-      );
-    },
-    [accession?.photoFilenames, accessionId]
-  );
-
   const viabilityTestWithdrawals = useMemo(() => findViabilityTestWithdrawals(events ?? []), [events]);
 
   const { currentData: nurseryNames } = useListAccessionBatchNurseriesQuery(accessionId);
@@ -114,14 +89,30 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
       const description = renderAccessionEventDescription(event, {
         colors,
         nurseryNames,
-        renderPhotoSubject,
         strings,
         viabilityTestWithdrawals,
       });
       const target = accessionEventTarget(event, viabilityTestWithdrawals);
 
-      if (!target || target.kind === 'photo') {
+      if (!target) {
         return description;
+      }
+
+      if (target.kind === 'photo') {
+        if (findTrailingFilename(target.fullText, accession?.photoFilenames) === undefined) {
+          return description;
+        }
+
+        return (
+          <Link
+            component='button'
+            onClick={() => setOpenedTarget(target)}
+            sx={{ color: theme.palette.TwClrTxtBrand, textAlign: 'left' }}
+            underline='hover'
+          >
+            {description}
+          </Link>
+        );
       }
 
       if (target.kind === 'batch') {
@@ -138,7 +129,7 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
         </Link>
       );
     },
-    [colors, nurseryNames, renderPhotoSubject, strings, viabilityTestWithdrawals]
+    [accession?.photoFilenames, colors, nurseryNames, strings, theme.palette.TwClrTxtBrand, viabilityTestWithdrawals]
   );
 
   if (!events && !isError) {

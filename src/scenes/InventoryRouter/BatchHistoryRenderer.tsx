@@ -1,12 +1,13 @@
-import React, { type JSX } from 'react';
+import React, { type JSX, useState } from 'react';
 
 import { Typography, useTheme } from '@mui/material';
+import { ViewPhotosDialog } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
-import { APP_PATHS } from 'src/constants';
+import { API_PATHS, APP_PATHS } from 'src/constants';
 import strings from 'src/strings';
-import { purposeLabel } from 'src/types/Batch';
+import { batchHistoryEventEnumToLocalized, purposeLabel } from 'src/types/Batch';
 
 import CellRenderer, { TableRowType } from '../../components/common/table/TableCellRenderer';
 import { RendererProps } from '../../components/common/table/types';
@@ -42,7 +43,49 @@ export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {
   if (batchHistoryItem.type === 'OutgoingWithdrawal') {
     return `${strings.WITHDRAWAL} - ${purposeLabel(batchHistoryItem.purpose)}`;
   }
+  if (batchHistoryItem.type === 'PhotoCreated' || batchHistoryItem.type === 'PhotoDeleted') {
+    return batchHistoryEventEnumToLocalized(batchHistoryItem.type) ?? batchHistoryItem.type;
+  }
   return batchHistoryItem.type;
+};
+
+const PhotoCreatedCell = ({ row }: { row: BatchHistoryItemForTable }): JSX.Element => {
+  const [viewingPhoto, setViewingPhoto] = useState(false);
+
+  const photoUrl =
+    row.type === 'PhotoCreated' && typeof row.fileId === 'number' && typeof row.batchId === 'number'
+      ? API_PATHS.NURSERY_BATCH_PHOTO.replace('{batchId}', row.batchId.toString()).replace(
+          '{photoId}',
+          row.fileId.toString()
+        )
+      : undefined;
+
+  if (!photoUrl) {
+    return <>{getEventType(row)}</>;
+  }
+
+  return (
+    <>
+      <Link
+        fontSize='16px'
+        onClick={(event) => {
+          event?.stopPropagation();
+          setViewingPhoto(true);
+        }}
+      >
+        {getEventType(row)}
+      </Link>
+      {viewingPhoto && (
+        <ViewPhotosDialog
+          initialSelectedSlide={0}
+          onClose={() => setViewingPhoto(false)}
+          open
+          photos={[{ url: photoUrl }]}
+          title={strings.PHOTOS}
+        />
+      )}
+    </>
+  );
 };
 
 const EventTypeCell = ({ row }: { row: BatchHistoryItemForTable }): JSX.Element => {
@@ -124,6 +167,16 @@ export default function BatchHistoryRenderer(props: RendererProps<TableRowType>)
               {getEventType(row as BatchHistoryItemForTable)}
             </Link>
           }
+          row={row}
+        />
+      );
+    }
+    if (row.type === 'PhotoCreated') {
+      return (
+        <CellRenderer
+          index={index}
+          column={column}
+          value={<PhotoCreatedCell row={row as BatchHistoryItemForTable} />}
           row={row}
         />
       );

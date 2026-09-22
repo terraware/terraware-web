@@ -13,7 +13,7 @@ ACCESSION,Accesión,6a1389cb
 ACCESSION_BY_STATUS,Accesión por Estado,8d5df55b
 ACCESSION_DETAIL,Detalle de la accesión,dab2431a
 ACCESSION_DETAILS,Detalle de las accesiones,1fa5df58
-ACCESSION_EVENT_PHOTO_REPLACED,{0} fue reemplazada,c87c5b4c
+ACCESSION_EVENT_PHOTO_REPLACED,Foto reemplazada,3349b427
 ACCESSION_EVENT_VIABILITY_TEST_ADDED,se inició una prueba de viabilidad,1ec9a61e
 ACCESSION_EVENT_VIABILITY_TEST_DELETED,se eliminó una prueba de viabilidad,131c982f
 ACCESSION_EVENT_VIABILITY_TEST_STARTED,inició una prueba de viabilidad de {0},241121fa
@@ -267,8 +267,6 @@ BATCH_HISTORY_TYPE_ADDED_FROM_ACCESSION,Agregado desde accesión,57b6054e
 BATCH_HISTORY_TYPE_DETAILS_EDITED,Detalles editados,4e7e4bd8
 BATCH_HISTORY_TYPE_INCOMING_WITHDRAWAL,Retiro entrante,e9ddca41
 BATCH_HISTORY_TYPE_OUTGOING_WITHDRAWAL,Retiro saliente,05f67246
-BATCH_HISTORY_TYPE_PHOTO_CREATED,Foto creada,b7242e85
-BATCH_HISTORY_TYPE_PHOTO_DELETED,Foto eliminada,a1951aa1
 BATCH_HISTORY_TYPE_QUANTITY_EDITED,Cantidad editada,0e759125
 BATCH_HISTORY_TYPE_STATUS_CHANGED,Estado cambiado,b151d962
 BATCH_NUMBER,Número de lote,4576c1c5
@@ -1577,7 +1575,9 @@ PESTS,Plagas,16b7eeed
 PH,pH,8e3a7381
 PHASE,Fase,f9d98417
 PHASE_PROJECT_REQUIRED_FIELDS_ERROR,"El nombre del archivo, el enlace de GDrive y la ruta de Dropbox son obligatorios cuando se selecciona una fase.",93c006c2
+PHOTO_ADDED,Foto agregada,0eea3641
 PHOTO_DATE_TIME,Fecha/Hora de la foto,22e81710
+PHOTO_DELETED,Foto eliminada,90c71645
 PHOTO_NORTHEAST_QUADRAT,Cuadrícula noreste,05b4f331
 PHOTO_NORTHWEST_QUADRAT,Cuadrícula noroeste,9af609f8
 PHOTO_SOUTHEAST_QUADRAT,Cuadrícula sudeste,cbfacb71
