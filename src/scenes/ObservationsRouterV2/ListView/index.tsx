@@ -134,6 +134,23 @@ const ObservationListViewContent = (): JSX.Element => {
     return [...allSiteOptions, ...sitesOptions];
   }, [plantingSites, showAllSitesOption, strings]);
 
+  const plantingSiteSelector = useMemo(
+    () => (
+      <Dropdown
+        fullWidth
+        id='planting-site-selector'
+        onChange={(value: string) =>
+          selectPlantingSite(value === ALL_PLANTING_SITES ? ALL_PLANTING_SITES : Number(value))
+        }
+        options={plantingSiteOptions}
+        required
+        selectedValue={selectedPlantingSiteId}
+        sx={{ maxWidth: '320px', minWidth: '220px' }}
+      />
+    ),
+    [plantingSiteOptions, selectPlantingSite, selectedPlantingSiteId]
+  );
+
   const PageHeaderPlantingSiteDropdown = useMemo(
     () => (
       <Box sx={{ alignItems: 'center', display: 'flex', gap: theme.spacing(2), width: '100%' }}>
@@ -294,11 +311,10 @@ const ObservationListViewContent = (): JSX.Element => {
         collapsibleHeader
         rightComponent={scheduleObservationButton}
         stickyHeader
-        leftComponent={isMobile ? PageHeaderPlantingSiteDropdown : undefined}
-        leftComponentGridSize={isMobile ? 7 : 0}
-        rightComponentGridSize={4}
-        subHeader={<ObservationFilters plantingSiteId={selectedPlantingSiteId} />}
-        title={isMobile ? strings.OBSERVATIONS : PageHeaderPlantingSiteDropdown}
+        subHeader={
+          <ObservationFilters plantingSiteId={selectedPlantingSiteId} plantingSiteSelector={plantingSiteSelector} />
+        }
+        title={strings.OBSERVATIONS}
       >
         <ObservationsEventsNotification />
         {survivalRateMessages}
