@@ -108,11 +108,13 @@ export default function BatchHistoryRenderer(props: RendererProps<TableRowType>)
   }
 
   if (column.key === 'type') {
+    const eventCellSx = { width: '100%', maxWidth: 0, '& > .MuiTypography-root': { maxWidth: '100%' } };
     if (row.type === 'OutgoingWithdrawal') {
       return (
         <CellRenderer
           index={index}
           column={column}
+          sx={eventCellSx}
           value={
             <Link
               fontSize='16px'
@@ -130,6 +132,7 @@ export default function BatchHistoryRenderer(props: RendererProps<TableRowType>)
       <CellRenderer
         index={index}
         column={column}
+        sx={eventCellSx}
         value={<EventTypeCell row={row as BatchHistoryItemForTable} />}
         row={row}
       />

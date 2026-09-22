@@ -1444,6 +1444,7 @@ NURSERY_SUMMARY,Résumé de la pépinière,b46357cf
 NURSERY_SUMMARY_TOOLTIP,Le résumé de la pépinière affiche la couverture des espèces dans la pépinière sélectionnée pour les espèces demandées à la date de plantation.,005fc84a
 NURSERY_TRANSFER,Transfert de pépinière,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Les transferts de pépinières nécessitent une pépinière d'origine et une pépinière de destination.,7fe70d84
+NURSERY_WITHDRAWAL_REQUIRES_NURSERY,Les retraits vers une pépinière sont possibles lorsqu'une pépinière a été créée pour votre organisation.,12c73bc3
 OBSERVATION,Observation,ac4f24f0
 OBSERVATION_ACTIVITY_AUTO_CREATED_INFO,Cette activité a été créée automatiquement à partir de l'observation {0}. Les données extraites de l'observation ne peuvent pas être modifiées ici.,785c7f71
 OBSERVATION_DATA,Données d’observation,7e9f4079
@@ -2406,7 +2407,7 @@ SUBSET_COUNT,Nombre de sous-ensembles,8f4d7c8b
 SUBSET_COUNT_POSITIVE,Le nombre de sous-ensembles doit être un nombre positif.,f3cb9f62
 SUBSET_WEIGHT,Poids du sous-ensemble,6c11760f
 SUBSET_WEIGHT_COUNT,Poids/Nb du sous-ensemble,9dacedca
-SUBSET_WEIGHT_COUNT_TOOLTIP,Le nombre estimé de semences est déterminé par le poids et le nombre du sous-ensemble fournis pour la quantité d'accession.,313d34a6
+SUBSET_WEIGHT_COUNT_TOOLTIP,Le poids du sous-ensemble doit être indiqué pour que la quantité d'accession puisse être retirée par poids. Le nombre estimé de semences est déterminé par le poids et le nombre du sous-ensemble.,ed2686ec
 SUBSET_WEIGHT_ERROR,Le poids du sous-ensemble doit être inférieur à celui de la semence,90471b25
 SUBSET_WEIGHT_POSITIVE,Le poids du sous-ensemble doit être un nombre positif,8f1b1fed
 SUBSET_WEIGHT_REQUIRED,Vous devez saisir le poids et le nombre d'un sous-ensemble afin de déterminer le nombre approximatif de semences lorsque vous les retirez dans une pépinière. Vous pouvez le faire en éditant la quantité de cette accession.,18baf19c

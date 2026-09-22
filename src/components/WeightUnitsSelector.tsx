@@ -12,10 +12,11 @@ export type WeightUnitsSelectorProps = {
   id?: string;
   label?: string;
   selectStyles?: SelectStyles;
+  disabled?: boolean;
 };
 
 export default function WeightUnitsSelector(props: WeightUnitsSelectorProps): JSX.Element {
-  const { onChange, selectedValue, id, label, selectStyles } = props;
+  const { onChange, selectedValue, id, label, selectStyles, disabled } = props;
   const preferredUnits = usePreferredWeightUnits();
 
   return (
@@ -28,6 +29,7 @@ export default function WeightUnitsSelector(props: WeightUnitsSelectorProps): JS
       selectedValue={selectedValue}
       fullWidth={true}
       selectStyles={selectStyles}
+      disabled={disabled}
     />
   );
 }
