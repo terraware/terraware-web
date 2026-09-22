@@ -139,12 +139,12 @@ describe('renderAccessionEventDescription', () => {
   });
 
   describe('accession photo', () => {
-    it('names the file when a photo is added', () => {
-      expect(describeEvent(event(photo(), created))).toBe('Photo IMG_1234.jpg added');
+    it('event when a photo is added', () => {
+      expect(describeEvent(event(photo(), created))).toBe('Photo added');
     });
 
-    it('names the file when a photo is deleted', () => {
-      expect(describeEvent(event(photo(), deleted))).toBe('Photo IMG_1234.jpg deleted');
+    it('event when a photo is deleted', () => {
+      expect(describeEvent(event(photo(), deleted))).toBe('Photo deleted');
     });
 
     // The server sends the old and new file IDs as the changed values; neither belongs on the page.
@@ -152,7 +152,7 @@ describe('renderAccessionEventDescription', () => {
       const entry = event(photo(), fieldUpdated('photo', ['987653'], ['987654']));
       const text = describeEvent(entry);
 
-      expect(text).toBe('Photo IMG_1234.jpg was replaced');
+      expect(text).toBe('Photo replaced');
       expect(text).not.toContain('987653');
       expect(text).not.toContain('987654');
     });
