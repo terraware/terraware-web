@@ -18,7 +18,7 @@ import {
 import { useCreateBatchPhotoMutation } from 'src/queries/generated/nurseryBatches';
 import { OrganizationUserService } from 'src/services';
 import { OrganizationUser, User } from 'src/types/User';
-import { getSeedBank } from 'src/utils/organization';
+import { getAllNurseries, getSeedBank } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -70,9 +70,14 @@ const WithdrawSeedsForm = ({ open, onClose, accessions, user, onWithdrawn }: Wit
     [accessions]
   );
 
+  const hasNurseries = useMemo(
+    () => (selectedOrganization ? getAllNurseries(selectedOrganization).length > 0 : false),
+    [selectedOrganization]
+  );
+
   const makeDefaultDraft = useCallback(
     (): WithdrawDraft => ({
-      purpose: 'Nursery',
+      purpose: hasNurseries ? 'Nursery' : 'Out-planting',
       testType: 'Lab',
       withdrawnByUserId: user.id,
       date: getTodaysDateFormatted(timeZone),
@@ -81,7 +86,7 @@ const WithdrawSeedsForm = ({ open, onClose, accessions, user, onWithdrawn }: Wit
       withdrawByAccession: {},
       photos: [],
     }),
-    [defaultWithdrawByWeight, timeZone, user.id]
+    [defaultWithdrawByWeight, hasNurseries, timeZone, user.id]
   );
 
   const [draft, setDraft] = useState<WithdrawDraft>(makeDefaultDraft);
