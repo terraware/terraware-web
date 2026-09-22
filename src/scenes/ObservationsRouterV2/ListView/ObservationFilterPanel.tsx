@@ -152,7 +152,7 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
             sx={datePickerStyles}
             value={dateFilter.from ?? null}
           />
-          <Typography>{'–'}</Typography>
+          <Typography sx={{ textTransform: 'lowercase' }}>{strings.TO}</Typography>
           <DatePicker
             aria-label={strings.END_DATE}
             id='observation-date-to'
@@ -179,7 +179,7 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
               type='number'
               value={plotNumberFilter.min ?? ''}
             />
-            <Typography>{'–'}</Typography>
+            <Typography sx={{ textTransform: 'lowercase' }}>{strings.TO}</Typography>
             <Textfield
               id='plot-number-max'
               label=''
