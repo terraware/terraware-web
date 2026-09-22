@@ -146,7 +146,6 @@ ADDITIONAL_NURSERY_NOTES,Notas adicionales sobre el vivero,db29c13a
 ADDITIONAL_PLANTING_SITES_NOTES,Notas adicionales sobre el sitio de plantación,364dcb50
 ADDITIONAL_RESOURCES,Recursos adicionales,13e85f73
 ADDITIONAL_SPECIES_DATA,Datos adicionales de especie (solo para uso interno),9368c322
-ADJUST_FILTERS_TO_SEE_OBSERVATIONS,Intente cambiar o borrar los filtros para ver observaciones.,7f44e9be
 ADMIN,Admin,cb1c89ab
 ADMIN_INFO,"Un admin puede hacer lo anterior, así como editar el perfil de organización, administrar usuarios en la organización y administrar los bancos de semillas.",714c9b37
 AGAR,Agar,d794be5b
@@ -1314,11 +1313,14 @@ NO_ACHIEVEMENTS_ADDED,No se han agregado logros,d69c8f4b
 NO_ACTIVE_PLANTING_SEASONS_FOR_FILTERS,No hay Temporadas de Plantación activas para el Sitio de Plantación seleccionado.,2f97b045
 NO_ACTIVE_SEASONS_FOR_SITE,No hay temporadas activas para el Sitio de Plantación seleccionado,7909d317
 NO_ACTIVITIES_TO_SHOW,No hay actividades para mostrar.,1b075899
+NO_AD_HOC_PLOT_OBSERVATIONS_RECORDED,No se han registrado observaciones ad hoc de parcelas.,915eeb22
 NO_ADDITIONAL_COMMENTS_ADDED,No se han agregado comentarios adicionales,d0c4bf68
+NO_ASSIGNED_PLOT_OBSERVATIONS_RECORDED,No se han registrado observaciones asignadas de parcelas.,1c748d8e
 NO_AVAILABLE_PROJECTS_FOR_SPECIES,No hay más proyectos disponibles para esta especie.,071c6205
 NO_BATCHES_TO_WITHDRAW_FROM,No hay lotes con cantidades disponibles.,dc94bdcc
 NO_BATCHES_WITH_INVENTORY,"Todos los lotes que tenían inventario ahora están vacíos. Para ver los lotes, especies y viveros que anteriormente tenían inventario, utilice los filtros “Mostrar lotes vacíos” y “Mostrar especies/viveros sin inventario”.",2c0612be
 NO_BATCHES_WITH_INVENTORY_MESSAGE,Ningún lote tiene inventario. Utilice el filtro “Mostrar lotes vacíos” para ver todos sus lotes vacíos.,c326ecab
+NO_BIOMASS_OBSERVATIONS_RECORDED,No se han registrado observaciones de biomasa.,d267e5ad
 NO_CHALLENGES_AND_MITIGATION_PLANS_ADDED,No se han agregado desafíos ni planes de mitigación,f1d982d5
 NO_CHANGE,Sin cambios,d24105cc
 NO_COLUMNS_SELECTED,Sin columnas seleccionadas,ac8b2bbe

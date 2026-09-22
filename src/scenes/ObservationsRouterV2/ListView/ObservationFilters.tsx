@@ -8,6 +8,7 @@ import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
 
 import { useObservationFilters } from '../ObservationFiltersProvider';
+import useFilteredObservationResults from '../useFilteredObservationResults';
 import ObservationFilterPanel from './ObservationFilterPanel';
 import ObservationTimeline from './ObservationTimeline';
 import ViewModeToggle from './ViewModeToggle';
@@ -20,7 +21,11 @@ export type ObservationFiltersProps = {
 const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: ObservationFiltersProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const { activeFilterCount, filtersExpanded, plotType, setFiltersExpanded, setPlotType } = useObservationFilters();
+  const { activeFilterCount, filtersExpanded, observationType, plotType, setFiltersExpanded, setPlotType } =
+    useObservationFilters();
+
+  const { emptyState } = useFilteredObservationResults({ observationType, plantingSiteId, plotType });
+  const panelOpen = filtersExpanded && emptyState !== 'noObservations';
 
   const plotTypeSegments = useMemo(
     () => [
@@ -47,9 +52,10 @@ const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: Observatio
           }}
         >
           <Button
+            disabled={emptyState === 'noObservations'}
             icon='filter'
             id='toggle-observation-filters'
-            label={filtersExpanded ? strings.HIDE_FILTERS : strings.SHOW_FILTERS}
+            label={panelOpen ? strings.HIDE_FILTERS : strings.SHOW_FILTERS}
             onClick={() => setFiltersExpanded(!filtersExpanded)}
             priority='secondary'
             size='medium'
@@ -60,7 +66,7 @@ const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: Observatio
           <ViewModeToggle />
         </Box>
       </Box>
-      {filtersExpanded && <ObservationFilterPanel plantingSiteId={plantingSiteId} />}
+      {panelOpen && <ObservationFilterPanel plantingSiteId={plantingSiteId} />}
       {plantingSiteId !== 'all' && <ObservationTimeline plantingSiteId={plantingSiteId} />}
     </Box>
   );

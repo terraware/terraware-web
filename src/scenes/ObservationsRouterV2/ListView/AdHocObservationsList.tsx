@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
-import { Box, IconButton, Tooltip, useTheme } from '@mui/material';
+import { Box, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
 import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 import {
@@ -15,7 +15,6 @@ import {
 import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
-import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
@@ -29,7 +28,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { useObservationFilters } from '../ObservationFiltersProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
-import useObservationsEmptyMessages from '../useObservationsEmptyMessages';
+import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
 import { BiomassActionsMenuContent } from './BiomassList';
 import SelectObservationButton from './SelectObservationButton';
 
@@ -91,7 +90,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
     plantingSiteId,
     plotType: 'adHoc',
   });
-  const emptyMessages = useObservationsEmptyMessages(emptyState);
+  const emptyMessage = useObservationsEmptyMessage(emptyState);
 
   const { plantingSites } = useOrganizationPlantingSites();
 
@@ -314,7 +313,11 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
           muiTablePaperProps: { elevation: 0 },
           positionGlobalFilter: 'right' as const,
           renderEmptyRowsFallback: () =>
-            emptyMessages ? <EmptyStateContent subtitle={emptyMessages} title={''} /> : null,
+            emptyMessage ? (
+              <Typography padding={theme.spacing(4)} textAlign='center'>
+                {emptyMessage}
+              </Typography>
+            ) : null,
           state: {
             columnOrder: tableState.columnOrder,
             columnVisibility: tableState.columnVisibility,
