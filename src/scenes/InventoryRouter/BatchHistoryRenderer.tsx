@@ -53,7 +53,7 @@ const PhotoCreatedCell = ({ row }: { row: BatchHistoryItemForTable }): JSX.Eleme
   const [viewingPhoto, setViewingPhoto] = useState(false);
 
   const photoUrl =
-    row.type === 'PhotoCreated' && row.fileId !== undefined && row.batchId !== undefined
+    row.type === 'PhotoCreated' && typeof row.fileId === 'number' && typeof row.batchId === 'number'
       ? API_PATHS.NURSERY_BATCH_PHOTO.replace('{batchId}', row.batchId.toString()).replace(
           '{photoId}',
           row.fileId.toString()
