@@ -141,16 +141,14 @@ const PurposeStep = ({
   const isEqualUsers = useCallback((a: OrganizationUser, b: OrganizationUser) => a.id === b.id, []);
   const toTUser = useCallback((firstName: string) => ({ firstName }) as OrganizationUser, []);
 
-  const viabilityLabel = (
+  const labelWithTooltip = (text: string, tooltip: string) => (
     <Box display='flex' alignItems='center' gap={0.5}>
-      {strings.VIABILITY_TESTING}
-      {isBulk && (
-        <Tooltip title={strings.VIABILITY_NOT_AVAILABLE_BULK}>
-          <Box display='flex' alignItems='center'>
-            <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
-          </Box>
-        </Tooltip>
-      )}
+      {text}
+      <Tooltip title={tooltip}>
+        <Box display='flex' alignItems='center'>
+          <Icon name='info' size='small' fillColor={theme.palette.TwClrIcnSecondary} />
+        </Box>
+      </Tooltip>
     </Box>
   );
 
@@ -162,14 +160,20 @@ const PurposeStep = ({
         </Typography>
         <RadioGroup row name='withdraw-purpose' value={draft.purpose} onChange={onChangePurpose}>
           {withdrawalPurposes().map((option) => {
-            const disabled = option.value === 'Viability Testing' && isBulk;
+            const viabilityDisabled = option.value === 'Viability Testing' && isBulk;
+            const nurseryDisabled = option.value === 'Nursery' && hasNoNurseries;
+            const label = viabilityDisabled
+              ? labelWithTooltip(option.label, strings.VIABILITY_NOT_AVAILABLE_BULK)
+              : nurseryDisabled
+                ? labelWithTooltip(option.label, strings.NURSERY_WITHDRAWAL_REQUIRES_NURSERY)
+                : option.label;
             return (
               <FormControlLabel
                 key={option.value}
                 value={option.value}
                 control={<Radio />}
-                disabled={disabled}
-                label={option.value === 'Viability Testing' ? viabilityLabel : option.label}
+                disabled={viabilityDisabled || nurseryDisabled}
+                label={label}
               />
             );
           })}
@@ -189,8 +193,6 @@ const PurposeStep = ({
               }))}
               onChange={onChangeDestination}
               errorText={fieldErrors.destinationFacilityId}
-              disabled={hasNoNurseries}
-              tooltipTitle={hasNoNurseries ? strings.NURSERY_WITHDRAWAL_REQUIRES_NURSERY : undefined}
               fullWidth
             />
           </Grid>
