@@ -46,6 +46,7 @@ export type BatchHistoryItemForTable = BatchHistoryItem & {
   previousEvent?: BatchHistoryItem;
   modifiedFields: string[];
   nurseryName?: string;
+  batchId?: number;
   // Set on the batch's creation event when the batch was created from an accession, so it can be
   // rendered like the "AddedFromAccession" events for accessions added later.
   fromAccessionId?: number;
@@ -388,6 +389,7 @@ export default function BatchHistory({ batchId, nurseryName, accessions }: Batch
           previousEvent: previousEv,
           modifiedFields: changedFields,
           nurseryName,
+          batchId,
           ...(historyItem === creationAttribution?.event
             ? {
                 fromAccessionId: creationAttribution.accession.accessionId,
@@ -396,7 +398,7 @@ export default function BatchHistory({ batchId, nurseryName, accessions }: Batch
             : {}),
         };
       });
-  }, [batchHistory?.history, creationAttribution, filteredHistory, nurseryName, users]);
+  }, [batchHistory?.history, batchId, creationAttribution, filteredHistory, nurseryName, users]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const onBatchSelected = (batch: any, fromColumn?: string) => {
