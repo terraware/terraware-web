@@ -906,6 +906,7 @@ HERB,Herbe,3cfc4d9e
 HERBACEOUS_ABUNDANCE_PERCENT,Abondance des plantes herbacées (%),d3693b6c
 HERBACEOUS_ABUNDANCE_SQUARE_COUNT,Abondance herbacée (nombre de carrés),a075fce2
 HERBACEOUS_COVER_PERCENT,Couverture herbacée (%),e04acd60
+HERBACEOUS_SPECIES,Espèces herbacées,37cec187
 HERE,ici,fae8bfa6
 HIDE_ALL,Tout masquer,465040a6
 HIDE_FILTERS,Masquer les filtres,0fdbb60d
@@ -2839,6 +2840,7 @@ WITHDRAWN_PLANTS,Plantes retirées,5d81e2ad
 WITHDRAWN_QUANTITY_ERROR,Dépasse la quantité restante,8c911341
 WITHDRAWN_QUANTITY_GREATER_THAN_ZERO_ERROR,La quantité retirée doit être supérieure à 0,75e6b589
 WOOD_DENSITY_LEVEL,Niveau de densité du bois,83a6a766
+WOODY_SPECIES,Espèces ligneuses,362f68d0
 WORDS,Mots,45f70926
 WORKERS_PAID_ENGAGED,Nombre total de travailleurs rémunérés engagés *,3576919b
 WORKERS_PAID_FEMALE,Travailleuses rémunérées *,0f4c8201
