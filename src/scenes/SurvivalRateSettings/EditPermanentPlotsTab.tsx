@@ -1,8 +1,7 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
-import PageForm from 'src/components/common/PageForm';
 import { APP_PATHS } from 'src/constants';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -13,14 +12,29 @@ import { AssignSiteT0Data, PlotT0Data, SpeciesPlot } from 'src/types/Tracking';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { SurvivalRateFormRegistration } from './EditSurvivalRateSettings';
 import PlotT0EditBox from './PlotT0EditBox';
 import SpeciesDensityWarningMessage from './SpeciesDensityWarningMessage';
+
+const normalizePlots = (plots?: PlotT0Data[]): string =>
+  JSON.stringify(
+    (plots ?? [])
+      .map((plot) => ({
+        monitoringPlotId: plot.monitoringPlotId,
+        observationId: plot.observationId ?? null,
+        densityData: (plot.densityData ?? [])
+          .map((d) => ({ speciesId: d.speciesId, density: d.density ?? null, plotDensity: d.plotDensity ?? null }))
+          .sort((a, b) => a.speciesId - b.speciesId),
+      }))
+      .sort((a, b) => a.monitoringPlotId - b.monitoringPlotId)
+  );
 
 type EditPermanentPlotsTabProps = {
   plantingSiteId: number;
   plotsWithObservations?: PlotsWithObservationsSearchResult[];
   t0Plots?: PlotT0Data[];
   withdrawnSpeciesPlots?: SpeciesPlot[];
+  onRegister: (registration: SurvivalRateFormRegistration) => void;
 };
 
 const EditPermanentPlotsTab = ({
@@ -28,6 +42,7 @@ const EditPermanentPlotsTab = ({
   plotsWithObservations,
   t0Plots,
   withdrawnSpeciesPlots,
+  onRegister,
 }: EditPermanentPlotsTabProps) => {
   const snackbar = useSnackbar();
   const [showSpeciesDensityWarningMessage, setShowSpeciesDensityWarningMessage] = useState(false);
@@ -46,6 +61,11 @@ const EditPermanentPlotsTab = ({
       setRecord({ plantingSiteId, plots: t0Plots });
     }
   }, [plantingSiteId, setRecord, t0Plots]);
+
+  const isDirty = useMemo(
+    () => normalizePlots(record.plots) !== normalizePlots(t0Plots ?? []),
+    [record.plots, t0Plots]
+  );
 
   const goToViewSettings = useCallback(() => {
     navigate(APP_PATHS.SURVIVAL_RATE_SETTINGS_V2.replace(':plantingSiteId', plantingSiteId.toString()));
@@ -113,6 +133,10 @@ const EditPermanentPlotsTab = ({
     }
   }, [goToViewSettings, updateT0Result, snackbar, reloadPlantingSiteData]);
 
+  useEffect(() => {
+    onRegister({ isDirty, saving: updateT0Result.isLoading, save: saveSettings });
+  }, [onRegister, isDirty, updateT0Result.isLoading, saveSettings]);
+
   const cancelWarningHandler = useCallback(() => {
     setShowSpeciesDensityWarningMessage(false);
   }, []);
@@ -124,16 +148,7 @@ const EditPermanentPlotsTab = ({
   }, [getFilteredPlots, record, updateT0]);
 
   return (
-    <PageForm
-      cancelID='cancelSettings'
-      saveID='saveSettings'
-      onCancel={goToViewSettings}
-      onSave={saveSettings}
-      saveButtonText={strings.SAVE}
-      cancelButtonText={strings.CANCEL}
-      desktopOffset={'266px'}
-      busy={updateT0Result.isLoading}
-    >
+    <>
       {showSpeciesDensityWarningMessage && (
         <SpeciesDensityWarningMessage onClose={cancelWarningHandler} onSave={saveWithDefaultDensity} />
       )}
@@ -157,7 +172,7 @@ const EditPermanentPlotsTab = ({
             )}
           />
         ))}
-    </PageForm>
+    </>
   );
 };
 
