@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.16% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>19/24</span>
+                <span class='fraction'>20/25</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">63.63% </span>
+                <span class="strong">64.1% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>21/33</span>
+                <span class='fraction'>25/39</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.16% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>19/24</span>
+                <span class='fraction'>20/25</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -217,7 +217,18 @@
 <a name='L152'></a><a href='#L152'>152</a>
 <a name='L153'></a><a href='#L153'>153</a>
 <a name='L154'></a><a href='#L154'>154</a>
-<a name='L155'></a><a href='#L155'>155</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L155'></a><a href='#L155'>155</a>
+<a name='L156'></a><a href='#L156'>156</a>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a>
+<a name='L160'></a><a href='#L160'>160</a>
+<a name='L161'></a><a href='#L161'>161</a>
+<a name='L162'></a><a href='#L162'>162</a>
+<a name='L163'></a><a href='#L163'>163</a>
+<a name='L164'></a><a href='#L164'>164</a>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -280,6 +291,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">45x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">45x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">45x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
@@ -291,6 +305,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">45x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -430,9 +452,12 @@ const AccessionQuantityRow = ({
     [accession, units, value, withdrawByWeight]
   );
 &nbsp;
-  const error = value !== undefined ? validateRow(accession, purpose, withdrawByWeight, value, units) : '';
-&nbsp;
   const hasSubsetData = !!accession.subsetWeight?.quantity &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!!accession.subsetCount;</span>
+&nbsp;
+  const subsetWeightNeeded = withdrawByWeight &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >remainingWeightOf(accession)?.quantity === undefined;</span>
+&nbsp;
+  const error =
+    value !== undefined &amp;&amp; !subsetWeightNeeded ? validateRow(accession, purpose, withdrawByWeight, value, units) : '';
 &nbsp;
   const onChangeValue = useCallback(
     (next: unknown) =&gt; {
@@ -456,7 +481,7 @@ const AccessionQuantityRow = ({
         &lt;/Link&gt;
       &lt;/TableCell&gt;
       &lt;TableCell&gt;
-        &lt;Typography fontSize='14px'&gt;{remainingLabel}&lt;/Typography&gt;
+        &lt;Typography fontSize='14px'&gt;{subsetWeightNeeded ? <span class="branch-0 cbranch-no" title="branch not covered" >'' </span>: remainingLabel}&lt;/Typography&gt;
       &lt;/TableCell&gt;
       &lt;TableCell&gt;
         &lt;Box display='flex' flexDirection='column'&gt;
@@ -469,6 +494,7 @@ const AccessionQuantityRow = ({
                 value={value?.toString() ?? ''}
                 onChange={onChangeValue}
                 errorText={error || undefined}
+                disabled={subsetWeightNeeded}
                 sx={{ '.textfield-label-container': { display: 'none !important' } }}
               /&gt;
             &lt;/Box&gt;
@@ -478,6 +504,7 @@ const AccessionQuantityRow = ({
                   id={`withdraw-units-${accession.id}`}
                   onChange={onChangeUnits}
                   selectedValue={units}
+                  disabled={subsetWeightNeeded}
                 /&gt;
               &lt;/Box&gt;
             )}
@@ -503,7 +530,7 @@ const AccessionQuantityRow = ({
             &lt;Typography fontSize='14px'&gt;{`${strings.APPROX_SYMBOL}${estimatedCount}${strings.CT}`}&lt;/Typography&gt;
           &lt;/TableCell&gt;
           &lt;TableCell&gt;
-            {<span class="branch-1 cbranch-no" title="branch not covered" >hasSubsetData </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >(</span>
+            {hasSubsetData ? (
               &lt;Box
                 sx={{
                   backgroundColor: theme.palette.TwClrBgSecondary,
@@ -516,6 +543,12 @@ const AccessionQuantityRow = ({
                   {`${accession.subsetWeight?.quantity} ${unitAbbv()[accession.subsetWeight?.units as UnitType]} ${strings.TO} ${accession.subsetCount} ${strings.CT}`}
                 &lt;/Typography&gt;
               &lt;/Box&gt;
+            ) : (
+<span class="branch-1 cbranch-no" title="branch not covered" >              subsetWeightNeeded </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >(</span>
+                &lt;Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}&gt;
+                  {strings.NOT_SET}
+                &lt;/Typography&gt;
+              )
             )}
           &lt;/TableCell&gt;
         &lt;/&gt;
@@ -532,7 +565,7 @@ export default AccessionQuantityRow;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-21T20:09:42.012Z
+                at 2026-09-22T16:10:05.561Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
