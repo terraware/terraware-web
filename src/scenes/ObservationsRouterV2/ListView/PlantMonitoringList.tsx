@@ -41,7 +41,7 @@ import { PlotType } from '../ObservationFiltersProvider';
 import { exportAdHocObservationsResults } from '../exportAdHocObservations';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
-import useObservationsEmptyMessages from '../useObservationsEmptyMessages';
+import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
 import SelectObservationButton from './SelectObservationButton';
 
 type PlantMonitoringRow = {
@@ -152,7 +152,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
     plantingSiteId,
     plotType,
   });
-  const emptyMessages = useObservationsEmptyMessages(emptyState);
+  const emptyMessage = useObservationsEmptyMessage(emptyState);
   const [getT0SiteDataSet, getT0SiteDataSetResponse] = useLazyGetAllT0SiteDataSetQuery();
   const [getPlotsWithObservations, getPlotsWithObservationsResponse] = useLazyGetPlotsWithObservationsQuery();
 
@@ -604,7 +604,12 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
 
   const commonTableOptions = useMemo(
     () => ({
-      renderEmptyRowsFallback: () => (emptyMessages ? <EmptyStateContent subtitle={emptyMessages} title={''} /> : null),
+      renderEmptyRowsFallback: () =>
+        emptyMessage ? (
+          <Typography padding={theme.spacing(4)} textAlign='center'>
+            {emptyMessage}
+          </Typography>
+        ) : null,
       defaultColumn: { enableEditing: false },
       enableColumnPinning: true,
       enableColumnActions: true,
@@ -644,7 +649,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
         },
       }),
     }),
-    [emptyMessages, theme]
+    [emptyMessage, theme]
   );
 
   if (!newFiltersEnabled && !isLoading && rows.length === 0) {

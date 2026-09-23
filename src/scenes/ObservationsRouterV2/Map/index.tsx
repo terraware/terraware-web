@@ -14,7 +14,7 @@ import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 import { ObservationTypeFilter, PlotType } from '../ObservationFiltersProvider';
 import ObservationsEmptyOverlay from '../ObservationsEmptyOverlay';
 import useFilteredObservationResults, { ObservationsEmptyState } from '../useFilteredObservationResults';
-import useObservationsEmptyMessages from '../useObservationsEmptyMessages';
+import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
 import ObservationMap from './ObservationMap';
 import ObservationTimeline from './ObservationTimeline';
 
@@ -68,7 +68,7 @@ const ObservationMapWrapper = ({
   });
 
   const isAdHoc = plotType === 'adHoc';
-  const emptyMessages = useObservationsEmptyMessages(observationId ? undefined : emptyState ?? emptyStateProp);
+  const emptyMessage = useObservationsEmptyMessage(observationId ? undefined : emptyState ?? emptyStateProp);
 
   const singleObservationResult = useMemo(
     () => getObservationResultResponse.data?.observation,
@@ -120,7 +120,7 @@ const ObservationMapWrapper = ({
           plantingSiteId={plantingSiteId}
           selectPlantingSiteId={selectPlantingSiteId}
         />
-        {newFiltersEnabled && emptyMessages && <ObservationsEmptyOverlay message={emptyMessages[0]} />}
+        {newFiltersEnabled && emptyMessage && <ObservationsEmptyOverlay message={emptyMessage} />}
       </Box>
     </Box>
   );

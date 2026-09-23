@@ -14,7 +14,7 @@ import { useObservationFilters } from '../ObservationFiltersProvider';
 import ObservationsEmptyOverlay from '../ObservationsEmptyOverlay';
 import { useSelectedObservation } from '../SelectedObservationProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
-import useObservationsEmptyMessages from '../useObservationsEmptyMessages';
+import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
 
 export type ObservationTimelineProps = {
   plantingSiteId: number;
@@ -29,7 +29,7 @@ const ObservationTimeline = ({ plantingSiteId }: ObservationTimelineProps): JSX.
   const { selectAdHocPlot, selectObservation, selectedAdHocPlot, selectedObservationId } = useSelectedObservation();
 
   const { emptyState, observations } = useFilteredObservationResults({ observationType, plantingSiteId, plotType });
-  const emptyMessages = useObservationsEmptyMessages(emptyState);
+  const emptyMessage = useObservationsEmptyMessage(emptyState);
 
   const isAdHoc = plotType === 'adHoc';
   const timezone = plantingSite?.timeZone ?? defaultTimezone;
@@ -120,7 +120,7 @@ const ObservationTimeline = ({ plantingSiteId }: ObservationTimelineProps): JSX.
     selectObservation((latestPast ?? sortedObservations[0]).observationId);
   }, [isAdHoc, observationDate, selectObservation, selectedObservationId, sortedObservations]);
 
-  if (marks.length === 0 && emptyMessages === undefined) {
+  if (marks.length === 0 && emptyMessage === undefined) {
     return null;
   }
 
@@ -143,7 +143,7 @@ const ObservationTimeline = ({ plantingSiteId }: ObservationTimelineProps): JSX.
         onSelect={onSelect}
         selectedMarkId={selectedMarkId}
       />
-      {emptyMessages && <ObservationsEmptyOverlay message={emptyMessages[0]} />}
+      {emptyMessage && <ObservationsEmptyOverlay message={emptyMessage} variant='pill' />}
     </Box>
   );
 };
