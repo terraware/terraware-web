@@ -44,14 +44,8 @@ const LifetimeProgressBar = ({
       return [];
     }
 
-    // Once the year's target is behind us it is no longer the thing to aim at, and marking it reads as
-    // a step backwards whenever the previous year's total is already past it. Mark where the year has
-    // actually reached instead.
-    const yearTargetMet = yearTarget !== undefined && currentProgress >= yearTarget;
-
-    const yearMark = yearTargetMet
-      ? { key: 'yearToDate', label: String(year), percent: toBarPercent(currentProgress) }
-      : yearTarget !== undefined
+    const yearMark =
+      yearTarget !== undefined
         ? {
             key: 'yearTarget',
             label: strings.formatString(strings.X_TARGET, String(year)).toString(),
@@ -83,7 +77,7 @@ const LifetimeProgressBar = ({
         return true;
       })
       .reverse();
-  }, [currentProgress, lifetimeSpan, previousYearCumulativeTotal, strings, toBarPercent, year, yearTarget]);
+  }, [lifetimeSpan, previousYearCumulativeTotal, strings, toBarPercent, year, yearTarget]);
 
   if (lifetimeSpan <= 0) {
     return null;
