@@ -1,11 +1,11 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Icon } from '@terraware/web-components';
+import { Icon, Message } from '@terraware/web-components';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import centroid from '@turf/centroid';
-import { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
 import _ from 'lodash';
 
 import { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
@@ -24,6 +24,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import UploadBoundaryModal from './UploadBoundaryModal';
+import UploadedBoundarySummary, { UploadedBoundaryFile } from './UploadedBoundarySummary';
 import { OnValidate } from './types';
 import { boundingAreaHectares, defaultStratumPayload, findErrors, stratumNameGenerator } from './utils';
 
@@ -62,6 +63,12 @@ const featureCollectionOf = (geometry: MultiPolygon | Polygon, id: number): Feat
   features: [toFeature(geometry, {}, id)],
 });
 
+// number of vertices across every ring of the boundary, which the parse response does not report
+const countPositions = (geometry: MultiPolygon | Polygon): number => {
+  const rings: Position[][] = geometry.type === 'MultiPolygon' ? geometry.coordinates.flat() : geometry.coordinates;
+  return rings.reduce((total, ring) => total + ring.length, 0);
+};
+
 // undo redo stack to capture site boundary and errors
 type Stack = {
   errorAnnotations?: Feature[];
@@ -85,6 +92,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
 
   const fileUploadEnabled = useFeatureEnabled('Boundary File Upload');
   const [method, setMethod] = useState<BoundaryMethod | undefined>();
+  const [uploadedFile, setUploadedFile] = useState<UploadedBoundaryFile | undefined>();
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
   // EditableMap only computes its view state on mount, so remount it to fit an uploaded boundary
   const [mapKey, setMapKey] = useState<number>(0);
@@ -234,6 +242,14 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     (parsed: ParseDraftPlantingSiteBoundaryResponsePayload) => {
       const geometry = parsed.geometry as MultiPolygon | Polygon;
 
+      setUploadedFile({
+        areaHa: parsed.areaHa,
+        boundingAreaHa: boundingAreaHectares(geometry),
+        filename: parsed.filename,
+        format: parsed.format,
+        numPoints: countPositions(geometry),
+        numPolygons: parsed.numPolygons,
+      });
       setMethod('upload');
       setShowUploadModal(false);
 
@@ -248,6 +264,14 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     },
     [onEditableBoundaryChanged, site.id]
   );
+
+  const onRemoveUploadedFile = useCallback(() => {
+    setUploadedFile(undefined);
+    setMethod(undefined);
+    void onEditableBoundaryChanged(undefined);
+  }, [onEditableBoundaryChanged]);
+
+  const onReplaceUploadedFile = useCallback(() => setShowUploadModal(true), []);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
@@ -268,6 +292,27 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
               {strings.SITE_BOUNDARY_MAX_BOUNDING_BOX}
             </Typography>
           </Box>
+          {uploadedFile && uploadedFile.numPolygons > 1 && (
+            <Box marginBottom={theme.spacing(2)}>
+              <Message
+                body={
+                  strings.formatString(
+                    strings.SITE_BOUNDARY_POLYGONS_COMBINED,
+                    uploadedFile.numPolygons
+                  ) as unknown as string
+                }
+                priority='info'
+                type='page'
+              />
+            </Box>
+          )}
+          {uploadedFile && (
+            <UploadedBoundarySummary
+              file={uploadedFile}
+              onRemove={onRemoveUploadedFile}
+              onReplace={onReplaceUploadedFile}
+            />
+          )}
         </>
       )}
       <Box display='flex' flexDirection='column' flexGrow={1} position='relative'>
