@@ -42,7 +42,6 @@ describe('AddPhotos', () => {
     const [photos] = onNext.mock.calls[0];
     expect(photos).toHaveLength(1);
     expect(photos[0]).toBeInstanceOf(File);
-    // The exact file the user chose reaches the parent, not merely "a file".
     expect(photos[0].name).toBe('photo.jpg');
   });
 
@@ -62,8 +61,6 @@ describe('AddPhotos', () => {
   });
 
   it('confirms with no photos when the user attaches none', async () => {
-    // Photos are optional for a withdrawal; confirming without one must still proceed rather than
-    // block, so the parent is handed an empty list.
     const onNext = rs.fn<(photos: File[]) => Promise<void>>(() => Promise.resolve());
     const { user } = renderWithProviders(
       <AddPhotos onNext={onNext} onCancel={() => undefined} saveText={strings.WITHDRAW} />

@@ -32,8 +32,8 @@ afterAll(() => {
   URL.revokeObjectURL = originalRevokeObjectURL;
 });
 
-// Endpoints the create form and its property fields fire on mount / while completing the form. They
-// aren't the subject of these tests, but an unmocked request fails the test, so they must be handled.
+// API endpoints called by the create form and its property fields while rendering and completing the form.
+// They aren't under test, but must be mocked because unhandled requests fail the test.
 const mockSupportingEndpoints = () => {
   // SpeciesSelector suggests species via the search endpoint.
   mockPost('/api/v1/search', { results: [{ id: '50', scientificName: 'Acacia koa' }] });
@@ -73,7 +73,6 @@ describe('Accession2CreateView', () => {
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
 
     await waitFor(() => expect(uploads).toHaveLength(1));
-    // The upload targets the id returned by the create call and carries the chosen file's name.
     expect(uploads[0].url).toContain(`/accessions/${NEW_ACCESSION_ID}/photos/photo.jpg`);
   });
 
@@ -89,7 +88,6 @@ describe('Accession2CreateView', () => {
     await selectSpecies(user);
     await user.click(screen.getByRole('button', { name: strings.SAVE }));
 
-    // The accession is created, but with no photo selected nothing is posted to the photos endpoint.
     await waitFor(() => expect(creates).toHaveLength(1));
     expect(uploads).toHaveLength(0);
   });

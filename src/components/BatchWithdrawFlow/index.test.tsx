@@ -89,7 +89,6 @@ describe('BatchWithdrawFlow photo upload', () => {
 
     const { user, container } = renderWithProviders(<BatchWithdrawFlow batchIds={[10]} />);
 
-    // Purpose step. Choose a purpose that needs neither a planting site nor a transfer nursery.
     await user.click(await screen.findByRole('radio', { name: strings.DEAD }));
 
     const readyInput = await waitFor(() => {
@@ -104,7 +103,6 @@ describe('BatchWithdrawFlow photo upload', () => {
 
     await user.click(screen.getByRole('button', { name: strings.NEXT }));
 
-    // Photos step: attach a file, then complete the withdrawal.
     const fileInput = container.querySelector('input[type="file"]') as HTMLInputElement;
     const file = new File(['x'], 'photo.jpg', { type: 'image/jpeg' });
     await user.upload(fileInput, file);
@@ -113,7 +111,6 @@ describe('BatchWithdrawFlow photo upload', () => {
 
     await waitFor(() => expect(uploads).toHaveLength(1));
 
-    // The upload targets the withdrawal that was just created, not some other id.
     expect(uploads[0].url).toContain(`/withdrawals/${WITHDRAWAL_ID}/photos`);
     expect(uploads[0].method).toBe('POST');
   });
@@ -148,7 +145,6 @@ describe('BatchWithdrawFlow photo upload', () => {
     await user.click(screen.getByRole('button', { name: strings.NEXT }));
     await user.click(await screen.findByRole('button', { name: strings.WITHDRAW }));
 
-    // The withdrawal itself must fire; only the photo upload should be absent.
     await waitFor(() => expect(withdrawals).toHaveLength(1));
     expect(uploads).toHaveLength(0);
   });

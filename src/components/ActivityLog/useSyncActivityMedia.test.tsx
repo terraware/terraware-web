@@ -81,6 +81,10 @@ describe('useSyncActivityMedia', () => {
 
     await waitFor(() => expect(uploads).toHaveLength(1));
     expect(uploads[0].method).toBe('POST');
+    const formData = await uploads[0].formData();
+    const uploadedFile = formData.get('file');
+    expect(typeof uploadedFile).not.toBe('string');
+    expect((uploadedFile as File).name).toBe('photo.jpg');
   });
 
   it('deletes a removed existing media item via the activity media endpoint', async () => {
@@ -126,6 +130,10 @@ describe('useSyncActivityMedia', () => {
 
     await waitFor(() => expect(obsUploads).toHaveLength(1));
     expect(obsUploads[0].url).toContain(`/api/v1/tracking/observations/${OBSERVATION_ID}/plots/${PLOT_ID}/otherMedia`);
+    const formData = await obsUploads[0].formData();
+    const uploadedFile = formData.get('file');
+    expect(typeof uploadedFile).not.toBe('string');
+    expect((uploadedFile as File).name).toBe('plot.jpg');
     expect(activityUploads).toHaveLength(0);
   });
 

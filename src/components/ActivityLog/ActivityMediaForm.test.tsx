@@ -88,7 +88,6 @@ describe('ActivityMediaForm', () => {
     expect(added.type === 'new' && added.data.fileName).toBe('photo.jpg');
     expect(added.type === 'new' && added.data.type).toBe('Photo');
 
-    // The added item is rendered for the user to act on (caption + delete controls).
     expect(await screen.findByRole('button', { name: strings.DELETE })).toBeInTheDocument();
   });
 
@@ -111,7 +110,6 @@ describe('ActivityMediaForm', () => {
       <Harness initialItems={[buildExistingMediaItem()]} onItemsChange={(items) => (latestItems = items)} />
     );
 
-    // The existing item starts visible with a delete control.
     const deleteButton = await screen.findByRole('button', { name: strings.DELETE });
     await user.click(deleteButton);
 
@@ -120,7 +118,6 @@ describe('ActivityMediaForm', () => {
       expect(item.type === 'existing' && item.isDeleted).toBe(true);
     });
 
-    // A deleted existing item is removed from the visible list, so its delete control is gone.
     expect(screen.queryByRole('button', { name: strings.DELETE })).not.toBeInTheDocument();
   });
 });

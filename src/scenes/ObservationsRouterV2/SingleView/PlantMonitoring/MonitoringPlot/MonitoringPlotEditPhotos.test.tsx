@@ -84,7 +84,6 @@ describe('MonitoringPlotEditPhotos', () => {
     const file = new File(['x'], 'photo.jpg', { type: 'image/jpeg' });
     selectFile(fileInput(), file);
 
-    // The newly chosen file is surfaced as an editable item (with a delete control) before saving.
     expect(await screen.findByRole('button', { name: strings.DELETE })).toBeInTheDocument();
 
     await saveChanges(user);
