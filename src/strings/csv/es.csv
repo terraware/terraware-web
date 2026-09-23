@@ -300,6 +300,10 @@ BOOLEAN_TRUE,verdadero,54415086
 BOTANICAL_COUNTRY,País botánico,7bd4e8de
 BOUNDARIES,Límites,e40b0600
 BOUNDARIES_AND_STRATA,Límites y Estratos,87db24b5
+BOUNDARY_METHOD_DRAW_DESCRIPTION,Trace el límite con la herramienta de dibujo del mapa.,b9ec7dc9
+BOUNDARY_METHOD_SWITCH_NOTE,Puede cambiar entre ambos en cualquier momento.,ce287561
+BOUNDARY_METHOD_TITLE,¿Cómo desea definir este límite?,68647cb4
+BOUNDARY_METHOD_UPLOAD_DESCRIPTION,"KML, KMZ, GeoJSON o shapefile comprimido. Hasta 10 MB.",ca458b98
 BUDGET_DOCUMENT_XLS,Documento presupuestario (.XLS),6eface4e
 BUDGET_NARRATIVE_SUMMARY,Resumen narrativo del presupuesto,075fcdb3
 BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS,"Proporcione una descripción de alto nivel de su presupuesto en relación con los datos reales, señalando cualquier discrepancia importante y enumerando a los contribuyentes. (Media página como máximo).",3a2e7928
@@ -2228,8 +2232,12 @@ SITE_BOUNDARY_DESCRIPTION_2,"El límite del lugar debe caber en un cuadro delimi
 SITE_BOUNDARY_DESCRIPTION_3,"Acerca el zoom a la ubicación del sitio de plantación. A continuación, haz clic en zonas del mapa para añadir puntos para el límite del sitio. Completa el límite haciendo doble clic o volviendo a hacer clic en el punto inicial.",14d699d1
 SITE_BOUNDARY_DESCRIPTION_4,"Para cambiar la forma del límite del lugar, haz clic en la forma para cambiar los puntos. Para eliminar la forma, haz clic en el botón {0}.",3fd2c49c
 SITE_BOUNDARY_ERRORS,Hay errores en los límites del terreno.,916536c6
+SITE_BOUNDARY_MAX_BOUNDING_BOX,"Caja delimitadora máxima: 20,000 ha. Si su sitio es más grande, divídalo en varios sitios de plantación.",315cceab
 SITE_BOUNDARY_POLYGON_TOO_SMALL,Los límites con una superficie de {0} hectáreas son menores que 100 m x 100 m.,e140c0c1
 SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Nota: Por defecto, los Sitios Simples incluirán solo un Estrato y un Subestrato que comprenden todo el sitio de plantación.",d866268c
+SITE_BOUNDARY_UPLOAD_DESCRIPTION,Defina el límite del sitio de su área de plantación a continuación. Todas las áreas plantables dentro de su proyecto deben estar contenidas dentro del límite del sitio.,7e619e7a
+SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,Los Sitios Simples incluyen un Estrato y un Subestrato que comprenden todo el sitio de plantación.,955accde
+SITE_BOUNDARY_UPLOAD_TUTORIAL,[Vea un tutorial] sobre cómo dibujar límites de sitios.,ba8fe625
 SITE_BOUNDING_AREA_TOO_LARGE,El área de delimitación de {0} hectáreas es demasiado grande.,d32baa28
 SITE_DETAIL,Detalle del sitio,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,El sitio de plantación actualmente es un borrador; solo el creador del sitio puede editarlo.,07fbd64b
@@ -2736,6 +2744,10 @@ UPLOAD_PHOTO_DESCR_LANDSCAPE_3_2,"Examine o arrastre y suelte un archivo (JPG, P
 UPLOAD_PHOTO_DESCRIPTION,"Busca o arrastra y coloca aquí un archivo (JPG, PNG).",9c8c3f2c
 UPLOAD_PHOTO_MOBILE_DESCRIPTION,"Buscar archivos (JPG, PNG).",761b20be
 UPLOAD_PHOTOS,Cargar foto(s),d20a4173
+UPLOAD_SITE_BOUNDARY,Cargar límite del sitio,f2e574f9
+UPLOAD_SITE_BOUNDARY_ACCEPTED_FORMATS,"Formatos aceptados: KML (.kml), KMZ (.kmz), GeoJSON (.geojson, .json), shapefile comprimido (.zip). Un shapefile comprimido debe contener un archivo .shp con sus archivos .shx, .dbf y .prj.",356359ac
+UPLOAD_SITE_BOUNDARY_DESCRIPTION,"Un archivo · KML, KMZ, GeoJSON o shapefile comprimido · máximo 10 MB",23ad001d
+UPLOAD_SITE_BOUNDARY_HELP_LINK,"Cómo exportar un límite desde Google Earth, QGIS o ArcGIS",3c5e592d
 UPLOAD_SPATIAL_FILES,Subir archivo(s) espacial(es),953e770a
 UPLOAD_VIDEO_DESCRIPTION_FORMATS,"Busque o arrastre y suelte un video (MP4, MOV)",02b875b2
 USD_PER_HECTARE,${0} por ha,d8525ed1
