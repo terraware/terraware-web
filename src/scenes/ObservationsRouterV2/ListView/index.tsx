@@ -30,6 +30,7 @@ import BiomassList from './BiomassList';
 import ObservationFilters from './ObservationFilters';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
 import PlantMonitoringList from './PlantMonitoringList';
+import SurvivalRateSettingsMenu from './SurvivalRateSettingsMenu';
 import ViewModeToggle from './ViewModeToggle';
 
 const ObservationListViewContent = (): JSX.Element => {
@@ -237,6 +238,18 @@ const ObservationListViewContent = (): JSX.Element => {
     }
   }, [navigate, scheduleObservationEnabled, strings.SCHEDULE_OBSERVATION]);
 
+  const headerActions = useMemo(
+    () => (
+      <Box sx={{ alignItems: 'center', display: 'flex', gap: theme.spacing(1), justifyContent: 'flex-end' }}>
+        {scheduleObservationButton}
+        {typeof selectedPlantingSiteId === 'number' && (
+          <SurvivalRateSettingsMenu plantingSiteId={selectedPlantingSiteId} />
+        )}
+      </Box>
+    ),
+    [scheduleObservationButton, selectedPlantingSiteId, theme]
+  );
+
   const countedObservationType = newFiltersEnabled
     ? observationType
     : isBiomass
@@ -309,7 +322,7 @@ const ObservationListViewContent = (): JSX.Element => {
     return (
       <Page
         collapsibleHeader
-        rightComponent={scheduleObservationButton}
+        rightComponent={headerActions}
         stickyHeader
         subHeader={
           <ObservationFilters plantingSiteId={selectedPlantingSiteId} plantingSiteSelector={plantingSiteSelector} />
@@ -317,7 +330,9 @@ const ObservationListViewContent = (): JSX.Element => {
         title={strings.OBSERVATIONS}
       >
         <ObservationsEventsNotification />
-        {survivalRateMessages}
+        {plotType === 'assigned' && (
+          <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
+        )}
         {viewMode !== 'list' && observationMapCard}
         {viewMode !== 'map' &&
           (plotType === 'adHoc' ? (
