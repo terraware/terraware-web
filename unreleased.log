@@ -1,3 +1,4 @@
+b1aff941 Remove bulk accessions withdrawals feature flag (#6507)
 1b41ae61 Name the planting site on rows when every site is selected (#6511)
 4924f863 Drop the map legend and empty state for every site at once (#6510)
 769c8d62 Always mark this year's target on the lifetime bar (#6508)
