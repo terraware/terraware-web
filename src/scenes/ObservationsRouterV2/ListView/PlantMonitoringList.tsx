@@ -22,7 +22,7 @@ import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent'
 import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
-import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
+import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -155,6 +155,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
   const isAdHoc = plotType === 'adHoc';
   const newFiltersEnabled = isEnabled('New Observation Filters');
   const showSelectObservation = newFiltersEnabled && typeof plantingSiteId === 'number';
+  const showSiteName = newFiltersEnabled && plantingSiteId === ALL_PLANTING_SITES;
 
   const assignedStorageKey = newFiltersEnabled ? NEW_ASSIGNED_STORAGE_KEY : ASSIGNED_STORAGE_KEY;
   const assignedTableState = useTableState(assignedStorageKey, {
@@ -275,15 +276,22 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
       const row = cell.row.original;
       const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', row.observationId.toString());
       return (
-        <Box alignItems='center' display='flex' gap={1}>
-          <Link fontSize='16px' to={url}>
-            {row.observationDate ? getShortDate(row.observationDate, activeLocale) : null}
-          </Link>
-          {showSelectObservation && <SelectObservationButton observationId={row.observationId} />}
+        <Box>
+          <Box alignItems='center' display='flex' gap={1}>
+            <Link fontSize='16px' to={url}>
+              {row.observationDate ? getShortDate(row.observationDate, activeLocale) : null}
+            </Link>
+            {showSelectObservation && <SelectObservationButton observationId={row.observationId} />}
+          </Box>
+          {showSiteName && (
+            <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+              {row.plantingSiteName}
+            </Typography>
+          )}
         </Box>
       );
     },
-    [activeLocale, showSelectObservation]
+    [activeLocale, showSelectObservation, showSiteName, theme]
   );
 
   const AdHocPlotNumberCell = useCallback(
