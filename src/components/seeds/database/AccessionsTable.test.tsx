@@ -62,6 +62,22 @@ describe('AccessionsTable bulk withdrawal', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('blocks withdrawal for different legacy species without species IDs', async () => {
+    const { user } = renderTable([
+      buildRow({ id: '1', accessionNumber: 'ACC-001', species_id: undefined, speciesName: 'Acacia koa' }),
+      buildRow({
+        id: '2',
+        accessionNumber: 'ACC-002',
+        species_id: undefined,
+        speciesName: 'Metrosideros polymorpha',
+      }),
+    ]);
+
+    await user.click(screen.getByRole('checkbox', { name: 'Toggle select all' }));
+
+    expect(screen.getByRole('button', { name: strings.WITHDRAW })).toBeDisabled();
+  });
+
   it('disables the checkbox for an accession that is not yet checked in', () => {
     renderTable([
       buildRow({ id: '1', accessionNumber: 'ACC-001', species_id: 10, speciesName: 'Acacia koa', state: 'In Storage' }),
@@ -94,6 +110,23 @@ describe('AccessionsTable bulk withdrawal', () => {
     // Same-species row stays selectable; the different-species row is disabled.
     expect(after[1]).toBeEnabled();
     expect(after[2]).toBeDisabled();
+  });
+
+  it('disables a different legacy species without a species ID once a row is selected', async () => {
+    const { user } = renderTable([
+      buildRow({ id: '1', accessionNumber: 'ACC-001', species_id: undefined, speciesName: 'Acacia koa' }),
+      buildRow({
+        id: '2',
+        accessionNumber: 'ACC-002',
+        species_id: undefined,
+        speciesName: 'Metrosideros polymorpha',
+      }),
+    ]);
+
+    const rowCheckboxes = screen.getAllByRole('checkbox', { name: 'Toggle select row' });
+    await user.click(rowCheckboxes[0]);
+
+    expect(screen.getAllByRole('checkbox', { name: 'Toggle select row' })[1]).toBeDisabled();
   });
 
   it('keeps the species banner while selecting additional same-species rows', async () => {
