@@ -77,8 +77,21 @@ const decimalIndicator: ProgressIndicator = {
   value: 84.7,
 };
 
+const yearlyIndicator: ProgressIndicator = {
+  classId: 'Yearly Cumulative',
+  currentYearProgress: [{ quarter: 'Q1', value: 49 }],
+  name: 'Seedlings distributed',
+  refId: '1.6',
+  target: 100,
+};
+
 const completionLine = (template: string) => {
   const expected = template.replace('{0}', PERCENT_COMPLETE);
+  return (_content: string, element: Element | null) => element?.textContent === expected;
+};
+
+const targetCaption = (label: string, target: string) => {
+  const expected = `${label} ${target}`;
   return (_content: string, element: Element | null) => element?.textContent === expected;
 };
 
@@ -111,6 +124,43 @@ describe('IndicatorProgressRow', () => {
 
     expect(screen.getByText(completionLine(strings.X_OF_YEAR_CUMULATIVE_TARGET))).toBeVisible();
     expect(screen.queryByText(completionLine(strings.X_OF_YEAR_TARGET))).not.toBeInTheDocument();
+  });
+
+  it('captions the target of a non-cumulative indicator without the year', () => {
+    renderWithProviders(<IndicatorProgressRow indicator={indicator} year={2026} />);
+
+    expect(screen.getByText(targetCaption(strings.TARGET, '100'))).toBeVisible();
+  });
+
+  it('captions the target of a yearly cumulative indicator with the year', () => {
+    renderWithProviders(<IndicatorProgressRow indicator={yearlyIndicator} year={2026} />);
+
+    const yearTarget = String(strings.formatString(strings.X_TARGET, '2026'));
+
+    expect(screen.getByText(targetCaption(yearTarget, '100'))).toBeVisible();
+    expect(screen.queryByText(targetCaption(strings.TARGET, '100'))).not.toBeInTheDocument();
+  });
+
+  it('captions the target of a lifetime cumulative indicator as the cumulative target for the year', () => {
+    renderWithProviders(<IndicatorProgressRow indicator={lifetimeIndicator} year={2026} />);
+
+    const yearCumulativeTarget = String(strings.formatString(strings.X_CUMULATIVE_TARGET, '2026'));
+    const yearTarget = String(strings.formatString(strings.X_TARGET, '2026'));
+
+    expect(screen.getByText(targetCaption(yearCumulativeTarget, '100'))).toBeVisible();
+    expect(screen.queryByText(targetCaption(yearTarget, '100'))).not.toBeInTheDocument();
+  });
+
+  it('falls back to an unqualified cumulative target when there is no year', () => {
+    renderWithProviders(<IndicatorProgressRow indicator={lifetimeIndicator} />);
+
+    expect(screen.getByText(targetCaption(strings.CUMULATIVE_TARGET, '100'))).toBeVisible();
+  });
+
+  it('falls back to an unqualified target for a yearly cumulative indicator with no year', () => {
+    renderWithProviders(<IndicatorProgressRow indicator={yearlyIndicator} />);
+
+    expect(screen.getByText(targetCaption(strings.TARGET, '100'))).toBeVisible();
   });
 
   it('keeps an auto-calculated value read-only for a project user', async () => {

@@ -2856,6 +2856,7 @@ X_ACCESSION,{0} Accession,
 X_ACCESSIONS,{0} Accessions,
 X_BATCH,{0} batch,
 X_BATCHES,{0} batches,
+X_CUMULATIVE_TARGET,{0} Cumulative Target,{0} is the year of the indicator
 X_HA,{0} ha,
 X_HA_IN_TOTAL_PLANTING_AREA, {0} ha in Total Planting Area,
 X_HECTARES,{0} hectares,
@@ -2866,7 +2867,7 @@ X_PER_HA,{0}/ha,
 X_PLANTS,{0} plants,
 X_SPECIES,{0} species,
 X_SPECIES_Y_PLANTS,"{0} species, {1} plants",
-X_TARGET,{0} target,
+X_TARGET,{0} Target,{0} is the year of the indicator
 X_THIS_QUARTER,{0} this quarter,
 XR_ERROR,An error occurred while enabling XR mode. Please refresh and try again, or try again another time.
 YEAR,Year,

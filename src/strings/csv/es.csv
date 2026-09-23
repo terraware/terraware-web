@@ -2855,6 +2855,7 @@ X_ACCESSION,{0} Accesión,cfd54196
 X_ACCESSIONS,{0} Accesiones,e8ccdbc4
 X_BATCH,{0} lote,9d74cde8
 X_BATCHES,{0} lotes,a7a1d48d
+X_CUMULATIVE_TARGET,Meta acumulada {0},25c175af
 X_HA,{0} hectáreas,8f68781b
 X_HA_IN_TOTAL_PLANTING_AREA,{0} ha en la Superficie total de plantación,586af003
 X_HECTARES,{0} hectáreas,6f24cf52
@@ -2865,7 +2866,7 @@ X_PER_HA,{0}/ha,0fe29eac
 X_PLANTS,{0} plantas,8cb7c65d
 X_SPECIES,{0} especies,42e62955
 X_SPECIES_Y_PLANTS,"{0} especies, {1} plantas",81dea858
-X_TARGET,Meta de {0},6f7826be
+X_TARGET,Meta {0},d8170b6e
 X_THIS_QUARTER,{0} este trimestre,6391f6a0
 XR_ERROR,"Se produjo un error al habilitar el modo XR. Por favor, actualice la página e intente nuevamente.",935ea96d
 YEAR,Año,484bf433
