@@ -144,26 +144,35 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   );
 
   const showSelectObservation = typeof plantingSiteId === 'number';
+  // The planting site column is hidden by default, so every site at once needs the name on the row.
+  const showSiteName = plantingSiteId === ALL_PLANTING_SITES;
 
   const PlotNumberCell = useCallback(
     ({ cell }: { cell: MRT_Cell<AdHocRow> }) => {
       const row = cell.row.original;
       const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', row.observationId.toString());
       return (
-        <Box alignItems='center' display='flex' gap={1}>
-          <Link fontSize='16px' to={url}>
-            {row.monitoringPlotNumber}
-          </Link>
-          {showSelectObservation && row.monitoringPlotId !== undefined && (
-            <SelectObservationButton
-              adHocPlot={{ monitoringPlotId: row.monitoringPlotId, plantingSiteId: row.plantingSiteId }}
-              observationId={row.observationId}
-            />
+        <Box>
+          <Box alignItems='center' display='flex' gap={1}>
+            <Link fontSize='16px' to={url}>
+              {row.monitoringPlotNumber}
+            </Link>
+            {showSelectObservation && row.monitoringPlotId !== undefined && (
+              <SelectObservationButton
+                adHocPlot={{ monitoringPlotId: row.monitoringPlotId, plantingSiteId: row.plantingSiteId }}
+                observationId={row.observationId}
+              />
+            )}
+          </Box>
+          {showSiteName && (
+            <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+              {row.plantingSiteName}
+            </Typography>
           )}
         </Box>
       );
     },
-    [showSelectObservation]
+    [showSelectObservation, showSiteName, theme]
   );
 
   const CompletedDateCell = useCallback(
