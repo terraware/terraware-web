@@ -2,6 +2,7 @@ import React, { type JSX, useCallback, useEffect } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
+import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import { useLocalization, useUser } from 'src/providers';
 import { AcceleratorReportPayload, useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import { AcceleratorReportStatus } from 'src/types/AcceleratorReport';
@@ -53,6 +54,7 @@ const ReportInternalComment = ({ projectId, report }: ReportInternalCommentProps
       borderRadius={theme.spacing(1)}
       marginBottom={theme.spacing(3)}
       padding={theme.spacing(2)}
+      {...{ [SCROLL_ANCHOR]: 'internalComment' }}
     >
       <InternalComment entity={report} update={onUpdateInternalComment} disabled={!isAllowed('EDIT_REPORTS')} />
     </Box>
