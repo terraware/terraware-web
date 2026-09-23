@@ -1,3 +1,4 @@
+848a0d24 SW-8930 Keep the reader's place when entering and leaving a report's edit form (#6487)
 e0e9cc2d SW-8792 Improve error message for 0 value (#6506)
 0c5aac19 SW-8923 Copy updates (#6497)
 f631daae SW-8901 Inventory Batch: Update convention for photo events in History (#6491)
