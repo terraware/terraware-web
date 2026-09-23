@@ -97,7 +97,7 @@ const IndicatorProgressRow = ({
     const toPercent = (value: number) =>
       range <= 0 ? 100 : Math.min(100, Math.max(0, ((value - barOrigin) / range) * 100));
 
-    if (range <= 0 || (target !== undefined && total > target)) {
+    if (range <= 0) {
       return {
         previousYearPercent: undefined,
         segments: [{ key: 'total', quarter: undefined, startPercent: 0, widthPercent: 100 }],
