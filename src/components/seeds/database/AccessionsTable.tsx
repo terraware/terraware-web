@@ -20,7 +20,6 @@ import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
@@ -96,6 +95,11 @@ type AccessionsTableProps = {
   reloadData?: () => void;
 };
 
+const speciesKey = (row: SearchResponseElementWithId): string =>
+  row.species_id !== undefined && row.species_id !== null
+    ? `id:${String(row.species_id)}`
+    : `name:${String(row.speciesName ?? '')}`;
+
 export default function AccessionsTable({ searchResults, projects, reloadData }: AccessionsTableProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
@@ -104,8 +108,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
   // Contributors cannot edit accessions, so they must not reach the withdrawal flow (its mutation
   // would be rejected). Gate the selection/withdraw entry point on the same permission the
   // Accession Details withdraw button uses.
-  const bulkWithdrawEnabled =
-    isEnabled('Bulk Accession Withdraw') && isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
+  const canWithdraw = isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
 
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [withdrawAccessionIds, setWithdrawAccessionIds] = useState<number[]>();
@@ -121,18 +124,18 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
   const isSelectionBulkWithdrawable = useMemo(
     () =>
       selectedRows.length >= 1 &&
-      new Set(selectedRows.map((row) => row.species_id)).size === 1 &&
+      new Set(selectedRows.map(speciesKey)).size === 1 &&
       selectedRows.every((row) => isWithdrawableAccessionState(row.state as string | undefined)),
     [selectedRows]
   );
 
   // The species of the current selection; once a row is picked, other species can't be added.
-  const selectionSpeciesId = selectedRows.length > 0 ? selectedRows[0].species_id : undefined;
+  const selectionSpeciesKey = selectedRows.length > 0 ? speciesKey(selectedRows[0]) : undefined;
 
   // Whether every selected row shares one species. Drives the info banner and is kept separate from
   // isSelectionBulkWithdrawable, which additionally requires a withdrawable state for the button.
   const oneSpeciesSelected = useMemo(
-    () => selectedRows.length > 0 && new Set(selectedRows.map((row) => row.species_id)).size === 1,
+    () => selectedRows.length > 0 && new Set(selectedRows.map(speciesKey)).size === 1,
     [selectedRows]
   );
 
@@ -143,7 +146,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
   const SelectRowCheckboxCell = useCallback(
     ({ row }: { row: MRT_Row<SearchResponseElementWithId> }) => {
       const withdrawable = isWithdrawableAccessionState(row.original.state as string | undefined);
-      const sameSpecies = selectionSpeciesId === undefined || row.original.species_id === selectionSpeciesId;
+      const sameSpecies = selectionSpeciesKey === undefined || speciesKey(row.original) === selectionSpeciesKey;
       const canSelect = withdrawable && sameSpecies;
       const checkbox = (
         <Checkbox
@@ -166,7 +169,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
         </Tooltip>
       );
     },
-    [selectionSpeciesId]
+    [selectionSpeciesKey]
   );
 
   const bulkWithdrawSelectedRows = useCallback(() => {
@@ -680,7 +683,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
 
   return (
     <Card>
-      {bulkWithdrawEnabled && user && withdrawAccessionIds && (
+      {canWithdraw && user && withdrawAccessionIds && (
         <WithdrawSeedsModal
           open={withdrawAccessionIds !== undefined}
           onClose={() => setWithdrawAccessionIds(undefined)}
@@ -713,7 +716,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
             pagination,
             showColumnFilters,
             showGlobalFilter,
-            ...(bulkWithdrawEnabled ? { rowSelection } : {}),
+            ...(canWithdraw ? { rowSelection } : {}),
           },
           onSortingChange: setSorting,
           onPaginationChange,
@@ -729,11 +732,11 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
           enableColumnDragging: true,
           positionGlobalFilter: 'right',
           getRowId: (row) => String(row.id),
-          ...(bulkWithdrawEnabled
+          ...(canWithdraw
             ? {
                 enableRowSelection: (row: MRT_Row<SearchResponseElementWithId>) =>
                   isWithdrawableAccessionState(row.original.state as string | undefined) &&
-                  (selectionSpeciesId === undefined || row.original.species_id === selectionSpeciesId),
+                  (selectionSpeciesKey === undefined || speciesKey(row.original) === selectionSpeciesKey),
                 displayColumnDefOptions: { 'mrt-row-select': { Cell: SelectRowCheckboxCell } },
                 onRowSelectionChange: setRowSelection,
                 renderToolbarAlertBannerContent: ({ selectedAlert }: { selectedAlert: React.ReactNode }) => (

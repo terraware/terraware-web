@@ -2,7 +2,6 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 
-import CachedUserService from 'src/services/CachedUserService';
 import strings from 'src/strings';
 import { buildOrganization, renderWithProviders } from 'src/test-utils';
 import { SearchResponseElementWithId } from 'src/types/Search';
@@ -10,10 +9,6 @@ import { SearchResponseElementWithId } from 'src/types/Search';
 import AccessionsTable from './AccessionsTable';
 
 const ORG_ID = 1;
-
-const enableBulkWithdraw = () => CachedUserService.setUserPreferences({ bulkAccessionWithdraw: true });
-
-afterEach(() => CachedUserService.setUserPreferences({}));
 
 const buildRow = (overrides: Partial<Record<string, unknown>> = {}): SearchResponseElementWithId =>
   ({
@@ -31,15 +26,7 @@ const renderTable = (searchResults: SearchResponseElementWithId[], role: 'Owner'
   });
 
 describe('AccessionsTable bulk withdrawal', () => {
-  it('shows no selection when the bulk-withdraw feature is off', () => {
-    renderTable([buildRow({ id: '1' }), buildRow({ id: '2', accessionNumber: 'ACC-002' })]);
-
-    expect(screen.queryAllByRole('checkbox')).toHaveLength(0);
-    expect(screen.queryByRole('button', { name: strings.WITHDRAW })).not.toBeInTheDocument();
-  });
-
-  it('shows no selection for a contributor even when the feature is on', () => {
-    enableBulkWithdraw();
+  it('shows no selection for a contributor', () => {
     // Contributors cannot edit accessions, so the withdrawal entry point must stay hidden.
     renderTable([buildRow({ id: '1' }), buildRow({ id: '2', accessionNumber: 'ACC-002' })], 'Contributor');
 
@@ -48,7 +35,6 @@ describe('AccessionsTable bulk withdrawal', () => {
   });
 
   it('shows the species banner and enables the Withdraw button when same-species rows are selected', async () => {
-    enableBulkWithdraw();
     const { user } = renderTable([
       buildRow({ id: '1', accessionNumber: 'ACC-001', species_id: 10, speciesName: 'Acacia koa' }),
       buildRow({ id: '2', accessionNumber: 'ACC-002', species_id: 10, speciesName: 'Acacia koa' }),
@@ -63,7 +49,6 @@ describe('AccessionsTable bulk withdrawal', () => {
   });
 
   it('blocks withdrawal when the selected rows are of different species', async () => {
-    enableBulkWithdraw();
     const { user } = renderTable([
       buildRow({ id: '1', accessionNumber: 'ACC-001', species_id: 10, speciesName: 'Acacia koa' }),
       buildRow({ id: '2', accessionNumber: 'ACC-002', species_id: 20, speciesName: 'Metrosideros polymorpha' }),
@@ -77,8 +62,23 @@ describe('AccessionsTable bulk withdrawal', () => {
     ).not.toBeInTheDocument();
   });
 
+  it('blocks withdrawal for different legacy species without species IDs', async () => {
+    const { user } = renderTable([
+      buildRow({ id: '1', accessionNumber: 'ACC-001', species_id: undefined, speciesName: 'Acacia koa' }),
+      buildRow({
+        id: '2',
+        accessionNumber: 'ACC-002',
+        species_id: undefined,
+        speciesName: 'Metrosideros polymorpha',
+      }),
+    ]);
+
+    await user.click(screen.getByRole('checkbox', { name: 'Toggle select all' }));
+
+    expect(screen.getByRole('button', { name: strings.WITHDRAW })).toBeDisabled();
+  });
+
   it('disables the checkbox for an accession that is not yet checked in', () => {
-    enableBulkWithdraw();
     renderTable([
       buildRow({ id: '1', accessionNumber: 'ACC-001', species_id: 10, speciesName: 'Acacia koa', state: 'In Storage' }),
       buildRow({
@@ -97,7 +97,6 @@ describe('AccessionsTable bulk withdrawal', () => {
   });
 
   it('disables different-species checkboxes once a row is selected', async () => {
-    enableBulkWithdraw();
     const { user } = renderTable([
       buildRow({ id: '1', accessionNumber: 'ACC-001', species_id: 10, speciesName: 'Acacia koa' }),
       buildRow({ id: '2', accessionNumber: 'ACC-002', species_id: 10, speciesName: 'Acacia koa' }),
@@ -113,8 +112,24 @@ describe('AccessionsTable bulk withdrawal', () => {
     expect(after[2]).toBeDisabled();
   });
 
+  it('disables a different legacy species without a species ID once a row is selected', async () => {
+    const { user } = renderTable([
+      buildRow({ id: '1', accessionNumber: 'ACC-001', species_id: undefined, speciesName: 'Acacia koa' }),
+      buildRow({
+        id: '2',
+        accessionNumber: 'ACC-002',
+        species_id: undefined,
+        speciesName: 'Metrosideros polymorpha',
+      }),
+    ]);
+
+    const rowCheckboxes = screen.getAllByRole('checkbox', { name: 'Toggle select row' });
+    await user.click(rowCheckboxes[0]);
+
+    expect(screen.getAllByRole('checkbox', { name: 'Toggle select row' })[1]).toBeDisabled();
+  });
+
   it('keeps the species banner while selecting additional same-species rows', async () => {
-    enableBulkWithdraw();
     const { user } = renderTable([
       buildRow({ id: '1', accessionNumber: 'ACC-001', species_id: 10, speciesName: 'Acacia koa' }),
       buildRow({ id: '2', accessionNumber: 'ACC-002', species_id: 10, speciesName: 'Acacia koa' }),

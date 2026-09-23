@@ -28,7 +28,6 @@ import Link from 'src/components/common/Link';
 import TfButton from 'src/components/common/button/Button';
 import Icon from 'src/components/common/icon/Icon';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useProjects } from 'src/hooks/useProjects';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
@@ -84,8 +83,7 @@ export default function AccessionsBySpeciesTable({
   // Contributors cannot edit accessions, so they must not reach the withdrawal flow (its mutation
   // would be rejected). Gate the selection/withdraw entry point on the same permission the
   // Accession Details withdraw button uses.
-  const bulkWithdrawEnabled =
-    isEnabled('Bulk Accession Withdraw') && isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
+  const canWithdraw = isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
 
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [withdrawAccessionIds, setWithdrawAccessionIds] = useState<number[]>();
@@ -399,7 +397,7 @@ export default function AccessionsBySpeciesTable({
 
   return (
     <Card>
-      {bulkWithdrawEnabled && user && withdrawAccessionIds && (
+      {canWithdraw && user && withdrawAccessionIds && (
         <WithdrawSeedsModal
           open={withdrawAccessionIds !== undefined}
           onClose={() => setWithdrawAccessionIds(undefined)}
@@ -432,7 +430,7 @@ export default function AccessionsBySpeciesTable({
             pagination,
             showColumnFilters,
             showGlobalFilter,
-            ...(bulkWithdrawEnabled ? { rowSelection } : {}),
+            ...(canWithdraw ? { rowSelection } : {}),
           },
           onSortingChange: setSorting,
           onPaginationChange,
@@ -448,7 +446,7 @@ export default function AccessionsBySpeciesTable({
           enableColumnDragging: true,
           positionGlobalFilter: 'right',
           getRowId: (row) => row.id,
-          ...(bulkWithdrawEnabled
+          ...(canWithdraw
             ? {
                 enableRowSelection: (row: MRT_Row<SpeciesRow>) =>
                   row.original.accessionIds.length > 0 &&
