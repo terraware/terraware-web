@@ -70,6 +70,10 @@ export const validateRow = (
   value: number | undefined,
   units: UnitType
 ): string => {
+  if (value === 0) {
+    return strings.WITHDRAWAL_QUANTITY_GREATER_THAN_ZERO_ERROR;
+  }
+
   if (withdrawByWeight) {
     if (
       requiresSubsetForCount(purpose) &&
@@ -79,10 +83,10 @@ export const validateRow = (
         ? strings.MISSING_SUBSET_WEIGHT_ERROR_NURSERY
         : strings.MISSING_SUBSET_WEIGHT_ERROR_VIABILITY_TEST;
     }
-    if (!value) {
+    if (value === undefined) {
       return strings.REQUIRED_FIELD;
     }
-    if (isNaN(value) || Number(value) <= 0) {
+    if (isNaN(value) || Number(value) < 0) {
       return strings.INVALID_VALUE;
     }
     const estimated = estimatedSeedCount(accession, true, value, units);
@@ -106,10 +110,10 @@ export const validateRow = (
     return '';
   }
 
-  if (!value) {
+  if (value === undefined) {
     return strings.REQUIRED_FIELD;
   }
-  if (isNaN(value) || Number(value) <= 0) {
+  if (isNaN(value) || Number(value) < 0) {
     return strings.INVALID_VALUE;
   }
   // Seed counts must be whole numbers; the server rejects fractional seed quantities.
