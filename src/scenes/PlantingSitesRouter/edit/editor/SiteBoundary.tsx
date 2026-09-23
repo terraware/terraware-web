@@ -269,9 +269,6 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
               {strings.SITE_BOUNDARY_MAX_BOUNDING_BOX}
             </Typography>
           </Box>
-          {showUploadModal && (
-            <UploadBoundaryModal onClose={onCloseUploadModal} onSuccess={onUploadSuccess} siteId={site.id} />
-          )}
         </>
       )}
       <Box display='flex' flexDirection='column' flexGrow={1} position='relative'>
@@ -286,6 +283,9 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
           showSearchBox
         />
         {fileUploadEnabled && !boundary && !method && <BoundaryMethodChooser onSelect={onSelectMethod} />}
+        {fileUploadEnabled && showUploadModal && (
+          <UploadBoundaryModal onClose={onCloseUploadModal} onSuccess={onUploadSuccess} siteId={site.id} />
+        )}
       </Box>
     </Box>
   );
