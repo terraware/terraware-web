@@ -1,3 +1,5 @@
+1b41ae61 Name the planting site on rows when every site is selected (#6511)
+4924f863 Drop the map legend and empty state for every site at once (#6510)
 769c8d62 Always mark this year's target on the lifetime bar (#6508)
 59619e54 SW-8929 Always span the cumulative bar from the baseline to the year's target (#6509)
 62f097ae SW-8875 Image attachment e2e tests (#6505)
