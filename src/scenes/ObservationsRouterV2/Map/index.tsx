@@ -68,7 +68,9 @@ const ObservationMapWrapper = ({
   });
 
   const isAdHoc = plotType === 'adHoc';
-  const emptyMessage = useObservationsEmptyMessage(observationId ? undefined : emptyState ?? emptyStateProp);
+  const emptyMessage = useObservationsEmptyMessage(
+    observationId || plantingSiteId === undefined ? undefined : emptyState ?? emptyStateProp
+  );
 
   const singleObservationResult = useMemo(
     () => getObservationResultResponse.data?.observation,
