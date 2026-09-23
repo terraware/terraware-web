@@ -2,6 +2,8 @@ import React, { Dispatch, SetStateAction, createContext, useCallback, useContext
 
 import { ObservationState } from 'src/types/Observations';
 
+import useStickyObservationsViewMode from './useStickyObservationsViewMode';
+
 export type PlotType = 'assigned' | 'adHoc';
 export type ObservationTypeFilter = 'All' | 'Monitoring' | 'Biomass Measurements';
 export type ViewMode = 'map' | 'split' | 'list';
@@ -48,7 +50,6 @@ interface ObservationFiltersContextType {
 const PLOT_TYPE_SESSION_KEY = 'plot-selection';
 const OBSERVATION_TYPE_SESSION_KEY = 'observation-type';
 const FILTERS_EXPANDED_SESSION_KEY = 'observation-filters-expanded';
-const VIEW_MODE_SESSION_KEY = 'observation-view-mode';
 
 const PLOT_TYPES: PlotType[] = ['assigned', 'adHoc'];
 
@@ -64,7 +65,6 @@ const EMPTY_FILTERS: Record<PlotType, PlotFilters> = {
   assigned: EMPTY_PLOT_FILTERS,
 };
 const OBSERVATION_TYPES: ObservationTypeFilter[] = ['All', 'Monitoring', 'Biomass Measurements'];
-const VIEW_MODES: ViewMode[] = ['map', 'split', 'list'];
 
 const readSessionValue = <T extends string>(key: string, allowed: T[], fallback: T): T => {
   try {
@@ -114,9 +114,7 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
   const [observationType, setObservationTypeState] = useState<ObservationTypeFilter>(() =>
     readSessionValue(OBSERVATION_TYPE_SESSION_KEY, OBSERVATION_TYPES, 'All')
   );
-  const [viewMode, setViewModeState] = useState<ViewMode>(() =>
-    readSessionValue(VIEW_MODE_SESSION_KEY, VIEW_MODES, 'split')
-  );
+  const { setViewMode, viewMode } = useStickyObservationsViewMode();
   const [filtersExpanded, setFiltersExpandedState] = useState(
     () => readSessionValue(FILTERS_EXPANDED_SESSION_KEY, ['true', 'false'], 'false') === 'true'
   );
@@ -184,11 +182,6 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
     plotType === 'assigned' && statusFilter.length > 0,
     plotType === 'assigned' && stratumFilter.length > 0,
   ].filter(Boolean).length;
-
-  const setViewMode = useCallback((nextViewMode: ViewMode) => {
-    setViewModeState(nextViewMode);
-    writeSessionValue(VIEW_MODE_SESSION_KEY, nextViewMode);
-  }, []);
 
   const setFiltersExpanded = useCallback((nextFiltersExpanded: boolean) => {
     setFiltersExpandedState(nextFiltersExpanded);
