@@ -13,6 +13,7 @@ import Card from 'src/components/common/Card';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
+import useScrollRestoration from 'src/hooks/useScrollRestoration';
 import { useLocalization } from 'src/providers';
 import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -29,7 +30,12 @@ const AcceleratorReportEditV2 = (): JSX.Element => {
   const snackbar = useSnackbar();
   const { isLoading, updateReportValues, updateReportValuesResponse } = useAcceleratorReportActions(reportId);
 
-  const goToReport = useCallback(() => goToAcceleratorReport(reportId), [goToAcceleratorReport, reportId]);
+  const { remember } = useScrollRestoration(reportId, report !== undefined);
+
+  const goToReport = useCallback(() => {
+    remember();
+    goToAcceleratorReport(reportId);
+  }, [goToAcceleratorReport, remember, reportId]);
 
   // the form is reachable by typing the path, and a report stops being editable once it is submitted
   useEffect(() => {

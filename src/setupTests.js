@@ -9,3 +9,14 @@ import './test-utils/msw/setup';
 // Load the string tables before anything renders, so components see real copy rather than
 // undefined. See src/test-utils/README.md.
 import './test-utils/setupStrings';
+
+// jsdom implements no IntersectionObserver. This stub is inert, so a test that needs intersections
+// to fire has to install its own.
+global.IntersectionObserver = class {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+  takeRecords() {
+    return [];
+  }
+};

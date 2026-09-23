@@ -17,6 +17,7 @@ import isEnabled from 'src/features';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
+import useScrollRestoration from 'src/hooks/useScrollRestoration';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
@@ -86,6 +87,15 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
 
   const { isLoading } = useAcceleratorReportActions(selectedReportId);
 
+  const { remember } = useScrollRestoration(selectedReportId, report !== undefined);
+
+  const goToEdit = useCallback(() => {
+    if (selectedReportId !== undefined) {
+      remember();
+      goToAcceleratorReportEdit(selectedReportId);
+    }
+  }, [goToAcceleratorReportEdit, remember, selectedReportId]);
+
   // a report can only be edited before it has been accepted
   const reportStatus = report?.status;
   const canEdit = reportStatus === 'Not Submitted' || reportStatus === 'Needs Update';
@@ -98,7 +108,7 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
             disabled={!canEdit || isLoading}
             icon='iconEdit'
             label={strings.EDIT}
-            onClick={() => goToAcceleratorReportEdit(selectedReportId)}
+            onClick={goToEdit}
             priority='secondary'
             size='medium'
           />
@@ -121,7 +131,7 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
       canEdit,
       currentAcceleratorProject?.name,
       exportAcceleratorReport,
-      goToAcceleratorReportEdit,
+      goToEdit,
       isLoading,
       newReportTabEnabled,
       selectedReportId,

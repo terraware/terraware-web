@@ -12,6 +12,8 @@ import { APP_PATHS } from 'src/constants';
 import isEnabled from 'src/features';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
+import useScrollRestoration from 'src/hooks/useScrollRestoration';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
 import useStickyTabs from 'src/utils/useStickyTabs';
@@ -72,6 +74,18 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
 
   const { isLoading } = useAcceleratorReportActions(selectedReportId);
 
+  // the tab below runs this same query, so this is a cache read
+  const { report } = useOneAcceleratorReport(selectedReportId);
+
+  const { remember } = useScrollRestoration(selectedReportId, report !== undefined);
+
+  const goToEdit = useCallback(() => {
+    if (selectedReportId !== undefined) {
+      remember();
+      goToAcceleratorProjectReportEdit(selectedReportId, Number(pathParams.projectId));
+    }
+  }, [goToAcceleratorProjectReportEdit, pathParams.projectId, remember, selectedReportId]);
+
   const reportsPath = APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', pathParams.projectId ?? '');
 
   const onChangePathTab = useCallback(
@@ -112,7 +126,7 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
                 disabled={isLoading}
                 icon='iconEdit'
                 label={strings.EDIT}
-                onClick={() => goToAcceleratorProjectReportEdit(selectedReportId, Number(pathParams.projectId))}
+                onClick={goToEdit}
                 priority='secondary'
                 size='medium'
               />
