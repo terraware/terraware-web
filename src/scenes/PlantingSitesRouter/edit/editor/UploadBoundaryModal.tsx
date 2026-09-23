@@ -4,6 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DialogBox, FileChooser } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
+import Icon from 'src/components/common/icon/Icon';
 import {
   ParseDraftPlantingSiteBoundaryResponsePayload,
   useParseDraftPlantingSiteBoundaryMutation,
@@ -100,7 +101,12 @@ export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBounda
           {strings.UPLOAD_SITE_BOUNDARY_ACCEPTED_FORMATS}
         </Typography>
         {/* TODO: point this at the real support article once the doc link exists. */}
-        <Link fontSize='13px' to=''>
+        <Link
+          fontSize='13px'
+          style={{ alignItems: 'center', alignSelf: 'center', display: 'inline-flex', gap: theme.spacing(0.5) }}
+          to=''
+        >
+          <Icon name='help' size='small' style={{ fill: theme.palette.TwClrIcnSuccess }} />
           {strings.UPLOAD_SITE_BOUNDARY_HELP_LINK}
         </Link>
       </Box>
