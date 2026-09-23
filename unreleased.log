@@ -1,3 +1,4 @@
+59619e54 SW-8929 Always span the cumulative bar from the baseline to the year's target (#6509)
 62f097ae SW-8875 Image attachment e2e tests (#6505)
 448f35c2 Remember the observations view mode per user (#6504)
 33343c4f Read range filters as "from to" rather than a dash (#6503)
