@@ -297,6 +297,10 @@ BOOLEAN_TRUE,vrai,54415086
 BOTANICAL_COUNTRY,Pays botanique,7bd4e8de
 BOUNDARIES,Limites,e40b0600
 BOUNDARIES_AND_STRATA,Limites et strates,87db24b5
+BOUNDARY_METHOD_DRAW_DESCRIPTION,Tracez la limite à l’aide de l’outil de dessin sur la carte.,b9ec7dc9
+BOUNDARY_METHOD_SWITCH_NOTE,Vous pouvez passer de l’un à l’autre à tout moment.,ce287561
+BOUNDARY_METHOD_TITLE,Comment souhaitez-vous définir cette limite ?,68647cb4
+BOUNDARY_METHOD_UPLOAD_DESCRIPTION,"KML, KMZ, GeoJSON ou shapefile compressé. Jusqu’à 10 Mo.",ca458b98
 BUDGET_DOCUMENT_XLS,Document budgétaire (.XLS),6eface4e
 BUDGET_NARRATIVE_SUMMARY,Résumé narratif du budget,075fcdb3
 BUDGET_NARRATIVE_SUMMARY_INSTRUCTIONS,"Fournissez une description de grande qualité de votre budget par rapport aux données réelles, en notant tout écart important et en énumérant tous les contributeurs. (Une demi-page au plus).",3a2e7928
@@ -2220,8 +2224,12 @@ SITE_BOUNDARY_DESCRIPTION_2,"Les limites du site doivent s'inscrire dans une bo�
 SITE_BOUNDARY_DESCRIPTION_3,Zoomez sur l'emplacement du site de plantation. Cliquez ensuite sur des zones de la carte pour ajouter des points à la limite du site. Complétez la limite en double-cliquant ou en cliquant à nouveau sur le point de départ.,14d699d1
 SITE_BOUNDARY_DESCRIPTION_4,"Pour modifier la forme de la limite du site, cliquez sur la forme pour modifier les points. Pour supprimer la forme, cliquez sur le bouton {0}.",3fd2c49c
 SITE_BOUNDARY_ERRORS,Il y a des erreurs dans les limites du site.,916536c6
+SITE_BOUNDARY_MAX_BOUNDING_BOX,"Boîte englobante maximale : 20 000 ha. Si votre site est plus grand, divisez-le en plusieurs sites de plantation.",315cceab
 SITE_BOUNDARY_POLYGON_TOO_SMALL,La limite de la zone {0} hectares est inférieure à 100 m x 100 m.,e140c0c1
 SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Remarque : Par défaut, les sites simples incluent une seule strate et une seule sous-strate qui composent l'ensemble du site de plantation.",d866268c
+SITE_BOUNDARY_UPLOAD_DESCRIPTION,Définissez ci-dessous la limite du site de votre zone de plantation. Toutes les zones plantables de votre projet doivent être incluses dans la limite du site.,7e619e7a
+SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,Les Sites simples comprennent une Strate et un Sous-strate qui couvrent l’ensemble du site de plantation.,955accde
+SITE_BOUNDARY_UPLOAD_TUTORIAL,[Regardez un tutoriel] sur la façon de dessiner les limites d’un site.,ba8fe625
 SITE_BOUNDING_AREA_TOO_LARGE,La zone délimitée {0} hectares est trop grande.,d32baa28
 SITE_DETAIL,Détail du site,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,Le site de plantation est actuellement un brouillon – seul le créateur du site peut le modifier.,07fbd64b
@@ -2729,6 +2737,10 @@ UPLOAD_PHOTO_DESCR_LANDSCAPE_3_2,"Parcourez ou glissez-déposez un fichier (JPG,
 UPLOAD_PHOTO_DESCRIPTION,"Parcourir ou glisser-déposer un fichier (JPG, PNG).",9c8c3f2c
 UPLOAD_PHOTO_MOBILE_DESCRIPTION,"Parcourir les fichiers (JPG, PNG).",761b20be
 UPLOAD_PHOTOS,Téléverser une (des) photo(s),d20a4173
+UPLOAD_SITE_BOUNDARY,Téléverser la limite du site,f2e574f9
+UPLOAD_SITE_BOUNDARY_ACCEPTED_FORMATS,"Formats acceptés : KML (.kml), KMZ (.kmz), GeoJSON (.geojson, .json), shapefile compressé (.zip). Un shapefile compressé doit contenir un fichier .shp avec ses fichiers .shx, .dbf et .prj.",356359ac
+UPLOAD_SITE_BOUNDARY_DESCRIPTION,"Un fichier · KML, KMZ, GeoJSON ou shapefile compressé · 10 Mo max",23ad001d
+UPLOAD_SITE_BOUNDARY_HELP_LINK,"Comment exporter une limite depuis Google Earth, QGIS ou ArcGIS",3c5e592d
 UPLOAD_SPATIAL_FILES,Envoyer de(s) fichier(s) spatial(aux),953e770a
 UPLOAD_VIDEO_DESCRIPTION_FORMATS,"Parcourez ou faites glisser et déposez une vidéo (MP4, MOV)",02b875b2
 USD_PER_HECTARE,$ {0} per ha,d8525ed1
