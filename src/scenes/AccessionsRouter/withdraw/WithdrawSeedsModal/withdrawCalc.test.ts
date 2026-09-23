@@ -128,6 +128,12 @@ describe('validateRow (count mode)', () => {
     expect(validateRow(seedsAccession(), 'Other', false, undefined, 'Seeds')).toBe(strings.REQUIRED_FIELD);
   });
 
+  it('requires a withdrawal quantity greater than zero', () => {
+    expect(validateRow(seedsAccession(), 'Other', false, 0, 'Seeds')).toBe(
+      strings.WITHDRAWAL_QUANTITY_GREATER_THAN_ZERO_ERROR
+    );
+  });
+
   it('rejects a negative value as invalid', () => {
     expect(validateRow(seedsAccession(), 'Other', false, -5, 'Seeds')).toBe(strings.INVALID_VALUE);
   });
@@ -172,6 +178,15 @@ describe('validateRow (weight mode)', () => {
 
   it('requires a value', () => {
     expect(validateRow(weightAccession(), 'Other', true, undefined, 'Grams')).toBe(strings.REQUIRED_FIELD);
+  });
+
+  it('requires a withdrawal quantity greater than zero', () => {
+    expect(validateRow(weightAccession(), 'Other', true, 0, 'Grams')).toBe(
+      strings.WITHDRAWAL_QUANTITY_GREATER_THAN_ZERO_ERROR
+    );
+    expect(validateRow(weightNoSubsetAccession(), 'Nursery', true, 0, 'Grams')).toBe(
+      strings.WITHDRAWAL_QUANTITY_GREATER_THAN_ZERO_ERROR
+    );
   });
 
   it('rejects a negative value as invalid', () => {
