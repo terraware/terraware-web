@@ -12,7 +12,7 @@ import {
   ParseDraftPlantingSiteBoundaryResponsePayload,
   useParseDraftPlantingSiteBoundaryMutation,
 } from 'src/queries/generated/draftPlantingSites';
-import strings from 'src/strings';
+import defaultStrings from 'src/strings';
 
 export const BOUNDARY_FILE_EXTENSIONS = '.kml,.kmz,.geojson,.json,.zip';
 
@@ -21,7 +21,7 @@ const BYTES_PER_MB = 1024 * 1024;
 // the limit the server enforces with a 413; also quoted in UPLOAD_SITE_BOUNDARY_DESCRIPTION
 const MAX_FILE_SIZE_MB = 10;
 
-const fileSizeText = (bytes: number): string =>
+const fileSizeText = (strings: typeof defaultStrings, bytes: number): string =>
   bytes < BYTES_PER_MB
     ? (strings.formatString(strings.FILE_SIZE_KB, `${Math.round(bytes / BYTES_PER_KB)}`) as string)
     : (strings.formatString(strings.FILE_SIZE_MB, (bytes / BYTES_PER_MB).toFixed(1)) as string);
@@ -45,7 +45,7 @@ export type UploadBoundaryModalProps = {
 const isPayloadTooLarge = (error: unknown): boolean =>
   typeof error === 'object' && error !== null && (error as FetchBaseQueryError).status === 413;
 
-const errorMessageFor = (error: BoundaryUploadError, fileSizeMb: number): string => {
+const errorMessageFor = (strings: typeof defaultStrings, error: BoundaryUploadError, fileSizeMb: number): string => {
   switch (error) {
     case 'FileTooLarge':
       return strings.formatString(
@@ -76,18 +76,15 @@ const errorMessageFor = (error: BoundaryUploadError, fileSizeMb: number): string
   }
 };
 
-const parsedBoundaryOf = (parsed: ParseDraftPlantingSiteBoundaryResponsePayload): ParsedBoundary | undefined =>
-  parsed.areaHa !== undefined &&
-  parsed.format !== undefined &&
-  parsed.geometry !== undefined &&
-  parsed.numPolygons !== undefined
-    ? {
-        areaHa: parsed.areaHa,
-        filename: parsed.filename,
-        format: parsed.format,
-        geometry: parsed.geometry,
-        numPolygons: parsed.numPolygons,
-      }
+const parsedBoundaryOf = ({
+  areaHa,
+  filename,
+  format,
+  geometry,
+  numPolygons,
+}: ParseDraftPlantingSiteBoundaryResponsePayload): ParsedBoundary | undefined =>
+  areaHa !== undefined && format !== undefined && geometry !== undefined && numPolygons !== undefined
+    ? { areaHa, filename, format, geometry, numPolygons }
     : undefined;
 
 /**
@@ -95,27 +92,23 @@ const parsedBoundaryOf = (parsed: ParseDraftPlantingSiteBoundaryResponsePayload)
  */
 export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBoundaryModalProps): JSX.Element {
   const theme = useTheme();
-  const { activeLocale } = useLocalization();
+  const { strings } = useLocalization();
   const [files, setFiles] = useState<File[]>([]);
   const [error, setError] = useState<BoundaryUploadError | undefined>();
   const [parseBoundary, { isLoading }] = useParseDraftPlantingSiteBoundaryMutation();
 
   const selectedFileText = useMemo<string | undefined>(
-    () => (files[0] ? fileSizeText(files[0].size) : undefined),
-    [files]
+    () => (files[0] ? fileSizeText(strings, files[0].size) : undefined),
+    [files, strings]
   );
 
   const errorMessage = useMemo<string | undefined>(
-    // an error only ever describes the file that is still selected, since picking another clears it
-    () => (activeLocale && error ? errorMessageFor(error, (files[0]?.size ?? 0) / BYTES_PER_MB) : undefined),
-    [activeLocale, error, files]
+    () => (error ? errorMessageFor(strings, error, (files[0]?.size ?? 0) / BYTES_PER_MB) : undefined),
+    [error, files, strings]
   );
 
-  // the size is known at selection time, so say so before spending a round trip on a 413
   const tooLarge = useMemo<boolean>(() => (files[0]?.size ?? 0) > MAX_FILE_SIZE_MB * BYTES_PER_MB, [files]);
 
-  // FileChooser appends to the current selection, so keep the newest file to make choosing again a
-  // replacement. Capping it with maxFiles instead would drop the new file and disable its button.
   const onSelectFiles = useCallback((selected: File[]) => {
     const file = selected[selected.length - 1];
     setError((file?.size ?? 0) > MAX_FILE_SIZE_MB * BYTES_PER_MB ? 'FileTooLarge' : undefined);
