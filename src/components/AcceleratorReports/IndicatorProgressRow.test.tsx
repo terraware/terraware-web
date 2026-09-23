@@ -229,11 +229,14 @@ describe('IndicatorProgressRow', () => {
     expect(screen.getByLabelText('2025')).toBeInTheDocument();
   });
 
-  it('collapses the bar to a single segment once the target is surpassed', () => {
+  it('keeps the quarters and clamps the marks to the target once the target is surpassed', () => {
     renderWithProviders(<IndicatorProgressRow indicator={{ ...baselineOriginIndicator, target: 200 }} year={2026} />);
 
-    expect(screen.queryByLabelText('Q1')).not.toBeInTheDocument();
-    expect(screen.queryByLabelText('2025')).not.toBeInTheDocument();
+    const quarterTick = screen.getByLabelText('Q1');
+    const previousYearTick = screen.getByLabelText('2025');
+
+    expect(Number.parseFloat(getComputedStyle(quarterTick).left)).toBe(100);
+    expect(Number.parseFloat(getComputedStyle(previousYearTick).left)).toBe(100);
   });
 
   it('renders a value at the precision the indicator declares', () => {
