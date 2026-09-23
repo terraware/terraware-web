@@ -5,6 +5,18 @@ const STORAGE_PREFIX = 'scrollRestoration:';
 /** Mark an element with a stable id to have it restored by name rather than by pixel offset. */
 export const SCROLL_ANCHOR = 'data-scroll-anchor';
 
+/** Mark an element that pins itself over the top of the viewport, so anchors can be placed clear of it. */
+export const SCROLL_OBSTRUCTION = 'data-scroll-obstruction';
+
+/**
+ * How far down the viewport whatever is pinned at the top currently reaches. Measured rather than
+ * assumed: the page header grows when it wraps, so any constant is wrong on some layout.
+ */
+const obstructedTop = (): number =>
+  [...document.querySelectorAll(`[${SCROLL_OBSTRUCTION}]`)]
+    .filter((element) => ['fixed', 'sticky'].includes(getComputedStyle(element).position))
+    .reduce((lowest, element) => Math.max(lowest, element.getBoundingClientRect().bottom), 0);
+
 type RememberedPosition = {
   anchor?: string;
   offset: number;
@@ -17,13 +29,13 @@ const applyOffset = (offset: number) => {
   window.scrollTo(0, offset);
 };
 
-/** The anchor the reader is looking at: the first one below the top edge, else the one straddling it. */
-const topmost = (elements: Set<Element>): Element | undefined => {
+/** The anchor the reader is looking at: the first one clear of the header, else the one behind it. */
+const topmost = (elements: Set<Element>, clearance: number): Element | undefined => {
   const byTop = [...elements]
     .map((element) => ({ element, top: element.getBoundingClientRect().top }))
     .sort((a, b) => a.top - b.top);
 
-  return (byTop.find(({ top }) => top >= 0) ?? byTop.at(-1))?.element;
+  return (byTop.find(({ top }) => top >= clearance) ?? byTop.at(-1))?.element;
 };
 
 /**
@@ -65,7 +77,7 @@ const useScrollRestoration = (key: string | number | undefined, ready: boolean) 
       return;
     }
 
-    const anchor = topmost(visible.current)?.getAttribute(SCROLL_ANCHOR) ?? undefined;
+    const anchor = topmost(visible.current, obstructedTop())?.getAttribute(SCROLL_ANCHOR) ?? undefined;
 
     sessionStorage.setItem(storageKey, JSON.stringify({ anchor, offset: readOffset() } satisfies RememberedPosition));
   }, [storageKey]);
@@ -95,7 +107,8 @@ const useScrollRestoration = (key: string | number | undefined, ready: boolean) 
       const anchor = position.anchor ? document.querySelector(`[${SCROLL_ANCHOR}="${position.anchor}"]`) : null;
 
       if (anchor) {
-        anchor.scrollIntoView({ block: 'center' });
+        // scrolled rather than scrollIntoView'd, so the measured header replaces a scrollMarginTop
+        applyOffset(readOffset() + anchor.getBoundingClientRect().top - obstructedTop());
       } else {
         applyOffset(position.offset);
       }

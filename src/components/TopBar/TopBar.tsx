@@ -5,6 +5,7 @@ import { AppBar, Box, Toolbar, useTheme } from '@mui/material';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import useFunderPortal from 'src/hooks/useFunderPortal';
+import { SCROLL_OBSTRUCTION } from 'src/hooks/useScrollRestoration';
 import { useUser } from 'src/providers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -34,6 +35,7 @@ export default function TopBar(props: TopBarProps): JSX.Element {
   return (
     <AppBar
       position='fixed'
+      {...{ [SCROLL_OBSTRUCTION]: '' }}
       sx={{
         background: theme.palette.TwClrBaseGray025,
         color: theme.palette.TwClrTxt,
