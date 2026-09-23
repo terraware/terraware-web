@@ -144,7 +144,6 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   );
 
   const showSelectObservation = typeof plantingSiteId === 'number';
-  // The planting site column is hidden by default, so every site at once needs the name on the row.
   const showSiteName = plantingSiteId === ALL_PLANTING_SITES;
 
   const PlotNumberCell = useCallback(
