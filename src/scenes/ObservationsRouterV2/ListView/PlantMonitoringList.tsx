@@ -155,7 +155,6 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
   const isAdHoc = plotType === 'adHoc';
   const newFiltersEnabled = isEnabled('New Observation Filters');
   const showSelectObservation = newFiltersEnabled && typeof plantingSiteId === 'number';
-  // The planting site column is hidden by default, so every site at once needs the name on the row.
   const showSiteName = newFiltersEnabled && plantingSiteId === ALL_PLANTING_SITES;
 
   const assignedStorageKey = newFiltersEnabled ? NEW_ASSIGNED_STORAGE_KEY : ASSIGNED_STORAGE_KEY;
