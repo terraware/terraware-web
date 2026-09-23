@@ -211,6 +211,18 @@ const IndicatorProgressRow = ({
     closeResetModal();
   }, [closeResetModal, onChange]);
 
+  const targetLabel = useMemo(() => {
+    if (year === undefined) {
+      return isLifetime ? strings.CUMULATIVE_TARGET : strings.TARGET;
+    }
+
+    if (isLifetime) {
+      return strings.formatString(strings.X_CUMULATIVE_TARGET, String(year)).toString();
+    }
+
+    return isYearly ? strings.formatString(strings.X_TARGET, String(year)).toString() : strings.TARGET;
+  }, [isLifetime, isYearly, strings, year]);
+
   const unitSuffix = indicator.unit ? (
     <Typography component='span' color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontWeight={400}>
       {` ${indicator.unit}`}
@@ -309,7 +321,7 @@ const IndicatorProgressRow = ({
             >
               {indicator.target !== undefined && (
                 <>
-                  {`${isLifetime ? strings.CUMULATIVE_TARGET : strings.TARGET} `}
+                  {`${targetLabel} `}
                   <Typography component='span' fontSize='14px' fontWeight={600}>
                     {formatPrecision(indicator.target, precision)}
                   </Typography>
