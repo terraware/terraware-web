@@ -1,11 +1,14 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Button, DialogBox, FileChooser } from '@terraware/web-components';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { BusySpinner, Button, DialogBox, FileChooser, Message } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
+import { useLocalization } from 'src/providers';
 import {
+  GeometryFileErrorCode,
   ParseDraftPlantingSiteBoundaryResponsePayload,
   useParseDraftPlantingSiteBoundaryMutation,
 } from 'src/queries/generated/draftPlantingSites';
@@ -15,23 +18,86 @@ export const BOUNDARY_FILE_EXTENSIONS = '.kml,.kmz,.geojson,.json,.zip';
 
 const BYTES_PER_KB = 1024;
 const BYTES_PER_MB = 1024 * 1024;
+// the limit the server enforces with a 413; also quoted in UPLOAD_SITE_BOUNDARY_DESCRIPTION
+const MAX_FILE_SIZE_MB = 10;
 
 const fileSizeText = (bytes: number): string =>
   bytes < BYTES_PER_MB
     ? (strings.formatString(strings.FILE_SIZE_KB, `${Math.round(bytes / BYTES_PER_KB)}`) as string)
     : (strings.formatString(strings.FILE_SIZE_MB, (bytes / BYTES_PER_MB).toFixed(1)) as string);
 
+/** A parse response that actually carries a boundary; the payload leaves those fields off on failure. */
+export type ParsedBoundary = Required<
+  Pick<ParseDraftPlantingSiteBoundaryResponsePayload, 'areaHa' | 'filename' | 'format' | 'geometry' | 'numPolygons'>
+>;
+
+/**
+ * Server-reported problem, or a stand-in for a request that never got far enough to report one:
+ * a 413 when the file exceeds the upload limit, and anything else that failed outright.
+ */
+type BoundaryUploadError = GeometryFileErrorCode | 'FileTooLarge' | 'Unknown';
+
 export type UploadBoundaryModalProps = {
   onClose: () => void;
-  onSuccess: (parsed: ParseDraftPlantingSiteBoundaryResponsePayload) => void;
+  onSuccess: (parsed: ParsedBoundary) => void;
 };
+
+const isPayloadTooLarge = (error: unknown): boolean =>
+  typeof error === 'object' && error !== null && (error as FetchBaseQueryError).status === 413;
+
+const errorMessageFor = (error: BoundaryUploadError, fileSizeMb: number): string => {
+  switch (error) {
+    case 'FileTooLarge':
+      return strings.formatString(
+        strings.UPLOAD_SITE_BOUNDARY_ERROR_FILE_TOO_LARGE,
+        fileSizeMb.toFixed(1),
+        `${MAX_FILE_SIZE_MB}`
+      ) as string;
+    case 'UnsupportedFormat':
+      return strings.UPLOAD_SITE_BOUNDARY_ERROR_UNSUPPORTED_FORMAT;
+    case 'InvalidFile':
+      return strings.UPLOAD_SITE_BOUNDARY_ERROR_INVALID_FILE;
+    case 'NoKmlInArchive':
+      return strings.UPLOAD_SITE_BOUNDARY_ERROR_NO_KML_IN_ARCHIVE;
+    case 'NoShapefile':
+      return strings.UPLOAD_SITE_BOUNDARY_ERROR_NO_SHAPEFILE;
+    case 'MultipleShapefiles':
+      return strings.UPLOAD_SITE_BOUNDARY_ERROR_MULTIPLE_SHAPEFILES;
+    case 'UnknownCoordinateSystem':
+      return strings.UPLOAD_SITE_BOUNDARY_ERROR_UNKNOWN_COORDINATE_SYSTEM;
+    case 'NoPolygons':
+      return strings.UPLOAD_SITE_BOUNDARY_ERROR_NO_POLYGONS;
+    case 'InvalidGeometry':
+      return strings.UPLOAD_SITE_BOUNDARY_ERROR_INVALID_GEOMETRY;
+    case 'TooManyVertices':
+      return strings.UPLOAD_SITE_BOUNDARY_ERROR_TOO_MANY_VERTICES;
+    default:
+      return strings.UPLOAD_SITE_BOUNDARY_ERROR_GENERIC;
+  }
+};
+
+const parsedBoundaryOf = (parsed: ParseDraftPlantingSiteBoundaryResponsePayload): ParsedBoundary | undefined =>
+  parsed.areaHa !== undefined &&
+  parsed.format !== undefined &&
+  parsed.geometry !== undefined &&
+  parsed.numPolygons !== undefined
+    ? {
+        areaHa: parsed.areaHa,
+        filename: parsed.filename,
+        format: parsed.format,
+        geometry: parsed.geometry,
+        numPolygons: parsed.numPolygons,
+      }
+    : undefined;
 
 /**
  * Dialog to pick a spatial file and have the server parse it into a site boundary.
  */
 export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBoundaryModalProps): JSX.Element {
   const theme = useTheme();
+  const { activeLocale } = useLocalization();
   const [files, setFiles] = useState<File[]>([]);
+  const [error, setError] = useState<BoundaryUploadError | undefined>();
   const [parseBoundary, { isLoading }] = useParseDraftPlantingSiteBoundaryMutation();
 
   const selectedFileText = useMemo<string | undefined>(
@@ -39,19 +105,56 @@ export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBounda
     [files]
   );
 
+  const errorMessage = useMemo<string | undefined>(
+    // an error only ever describes the file that is still selected, since picking another clears it
+    () => (activeLocale && error ? errorMessageFor(error, (files[0]?.size ?? 0) / BYTES_PER_MB) : undefined),
+    [activeLocale, error, files]
+  );
+
+  // the size is known at selection time, so say so before spending a round trip on a 413
+  const tooLarge = useMemo<boolean>(() => (files[0]?.size ?? 0) > MAX_FILE_SIZE_MB * BYTES_PER_MB, [files]);
+
+  // FileChooser appends to the current selection, so keep the newest file to make choosing again a
+  // replacement. Capping it with maxFiles instead would drop the new file and disable its button.
+  const onSelectFiles = useCallback((selected: File[]) => {
+    const file = selected[selected.length - 1];
+    setError((file?.size ?? 0) > MAX_FILE_SIZE_MB * BYTES_PER_MB ? 'FileTooLarge' : undefined);
+    setFiles(file ? [file] : []);
+  }, []);
+
   const onUpload = useCallback(() => {
     const file = files[0];
-    if (!file) {
+    if (!file || tooLarge) {
       return;
     }
 
     const upload = async () => {
-      const parsed = await parseBoundary({ file }).unwrap();
-      onSuccess(parsed);
+      setError(undefined);
+
+      try {
+        const parsed = await parseBoundary({ file }).unwrap();
+
+        // the endpoint reports content validation problems with a 200 and no geometry
+        const problem = parsed.problems?.[0];
+        if (problem) {
+          setError(problem.code);
+          return;
+        }
+
+        const boundary = parsedBoundaryOf(parsed);
+        if (!boundary) {
+          setError('Unknown');
+          return;
+        }
+
+        onSuccess(boundary);
+      } catch (e) {
+        setError(isPayloadTooLarge(e) ? 'FileTooLarge' : 'Unknown');
+      }
     };
 
     void upload();
-  }, [files, onSuccess, parseBoundary]);
+  }, [files, onSuccess, parseBoundary, tooLarge]);
 
   return (
     <DialogBox
@@ -74,7 +177,7 @@ export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBounda
           id='confirm-upload-boundary'
           label={strings.UPLOAD}
           onClick={onUpload}
-          disabled={files.length === 0 || isLoading}
+          disabled={files.length === 0 || isLoading || tooLarge}
           key='button-2'
         />,
       ]}
@@ -86,11 +189,16 @@ export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBounda
           chooseFileText={strings.CHOOSE_FILE}
           files={files}
           fileSelectedText={selectedFileText}
-          maxFiles={1}
-          setFiles={setFiles}
+          replaceFileText={strings.REPLACE_FILE}
+          setFiles={onSelectFiles}
           uploadDescription={strings.UPLOAD_SITE_BOUNDARY_DESCRIPTION}
           uploadText={strings.UPLOAD_SITE_BOUNDARY}
         />
+        {errorMessage && (
+          <Box marginTop={theme.spacing(1.75)}>
+            <Message body={errorMessage} priority='critical' type='page' />
+          </Box>
+        )}
         <Typography
           fontSize='12px'
           fontWeight={400}

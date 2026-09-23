@@ -2753,6 +2753,17 @@ UPLOAD_PHOTOS,Cargar foto(s),d20a4173
 UPLOAD_SITE_BOUNDARY,Cargar límite del sitio,f2e574f9
 UPLOAD_SITE_BOUNDARY_ACCEPTED_FORMATS,"Formatos aceptados: KML (.kml), KMZ (.kmz, .zip), GeoJSON (.geojson, .json), shapefile comprimido (.zip). Un shapefile comprimido debe contener un archivo .shp junto con sus archivos .shx, .dbf y .prj.",2fceb157
 UPLOAD_SITE_BOUNDARY_DESCRIPTION,"Un archivo · KML, KMZ, GeoJSON o shapefile comprimido · máximo 10 MB",23ad001d
+UPLOAD_SITE_BOUNDARY_ERROR_FILE_TOO_LARGE,Este archivo tiene {0} MB. El tamaño máximo permitido es de {1} MB.,38c59697
+UPLOAD_SITE_BOUNDARY_ERROR_GENERIC,Ocurrió un error y no se pudo cargar este archivo. Su límite no fue modificado. Intente nuevamente.,edff4f94
+UPLOAD_SITE_BOUNDARY_ERROR_INVALID_FILE,"No se pudo leer este archivo. Cargue un archivo KML, KMZ, GeoJSON o un shapefile comprimido en zip.",3af7802e
+UPLOAD_SITE_BOUNDARY_ERROR_INVALID_GEOMETRY,"Esta forma se cruza a sí misma. Corrija la geometría en la herramienta de origen y vuelva a cargar, o dibuje el límite directamente en el mapa.",308e76e7
+UPLOAD_SITE_BOUNDARY_ERROR_MULTIPLE_SHAPEFILES,Este archivo zip contiene más de un shapefile. Comprima un solo shapefile a la vez y vuelva a cargar.,9c760ed3
+UPLOAD_SITE_BOUNDARY_ERROR_NO_KML_IN_ARCHIVE,No se encontró ningún archivo KML en este archivo comprimido. Cargue un archivo KMZ o zip que contenga un archivo .kml.,e2814c3d
+UPLOAD_SITE_BOUNDARY_ERROR_NO_POLYGONS,Este archivo no contiene formas de límite. Solo se encontraron puntos y líneas. Cargue un archivo que contenga al menos un polígono.,2e542f74
+UPLOAD_SITE_BOUNDARY_ERROR_NO_SHAPEFILE,"No se encontró ningún archivo .shp en este archivo zip. Incluya el archivo .shp junto con sus archivos .shx, .dbf y .prj.",4685bd08
+UPLOAD_SITE_BOUNDARY_ERROR_TOO_MANY_VERTICES,Este límite tiene demasiados puntos. Simplifique las formas en la herramienta de origen y vuelva a cargar.,f320128d
+UPLOAD_SITE_BOUNDARY_ERROR_UNKNOWN_COORDINATE_SYSTEM,El sistema de coordenadas de este archivo es desconocido. Exporte nuevamente el shapefile con un archivo .prj y vuelva a cargar.,ffc80d97
+UPLOAD_SITE_BOUNDARY_ERROR_UNSUPPORTED_FORMAT,"Este tipo de archivo no es compatible. Cargue un archivo KML, KMZ, GeoJSON o un shapefile comprimido en zip.",35cbd64d
 UPLOAD_SITE_BOUNDARY_HELP_LINK,"Cómo exportar un límite desde Google Earth, QGIS o ArcGIS",3c5e592d
 UPLOAD_SPATIAL_FILES,Subir archivo(s) espacial(es),953e770a
 UPLOAD_VIDEO_DESCRIPTION_FORMATS,"Busque o arrastre y suelte un video (MP4, MOV)",02b875b2
