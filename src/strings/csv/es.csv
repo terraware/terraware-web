@@ -2751,7 +2751,7 @@ UPLOAD_PHOTO_DESCRIPTION,"Busca o arrastra y coloca aquí un archivo (JPG, PNG).
 UPLOAD_PHOTO_MOBILE_DESCRIPTION,"Buscar archivos (JPG, PNG).",761b20be
 UPLOAD_PHOTOS,Cargar foto(s),d20a4173
 UPLOAD_SITE_BOUNDARY,Cargar límite del sitio,f2e574f9
-UPLOAD_SITE_BOUNDARY_ACCEPTED_FORMATS,"Formatos aceptados: KML (.kml), KMZ (.kmz), GeoJSON (.geojson, .json), shapefile comprimido (.zip). Un shapefile comprimido debe contener un archivo .shp con sus archivos .shx, .dbf y .prj.",356359ac
+UPLOAD_SITE_BOUNDARY_ACCEPTED_FORMATS,"Formatos aceptados: KML (.kml), KMZ (.kmz, .zip), GeoJSON (.geojson, .json), shapefile comprimido (.zip). Un shapefile comprimido debe contener un archivo .shp junto con sus archivos .shx, .dbf y .prj.",2fceb157
 UPLOAD_SITE_BOUNDARY_DESCRIPTION,"Un archivo · KML, KMZ, GeoJSON o shapefile comprimido · máximo 10 MB",23ad001d
 UPLOAD_SITE_BOUNDARY_HELP_LINK,"Cómo exportar un límite desde Google Earth, QGIS o ArcGIS",3c5e592d
 UPLOAD_SPATIAL_FILES,Subir archivo(s) espacial(es),953e770a
