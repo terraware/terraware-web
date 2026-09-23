@@ -63,6 +63,23 @@ type PlantMonitoringRow = {
 };
 
 const ASSIGNED_STORAGE_KEY = 'plant-monitoring-assigned-table';
+const NEW_ASSIGNED_STORAGE_KEY = 'observations-assigned-table';
+
+const DEFAULT_ASSIGNED_COLUMN_ORDER = [
+  'observationDate',
+  'completedDate',
+  'totalLive',
+  'totalPlants',
+  'totalSpecies',
+  'plantingDensity',
+  'survivalRate',
+  'state',
+  'plantingSiteName',
+  'strata',
+  'actionsMenu',
+];
+
+const DEFAULT_ASSIGNED_COLUMN_VISIBILITY = { plantingSiteName: false, state: false, strata: false };
 const ADHOC_STORAGE_KEY = 'plant-monitoring-adhoc-table';
 
 const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow }) => {
@@ -139,7 +156,12 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
   const newFiltersEnabled = isEnabled('New Observation Filters');
   const showSelectObservation = newFiltersEnabled && typeof plantingSiteId === 'number';
 
-  const assignedTableState = useTableState(ASSIGNED_STORAGE_KEY, { persistFilters: !newFiltersEnabled });
+  const assignedStorageKey = newFiltersEnabled ? NEW_ASSIGNED_STORAGE_KEY : ASSIGNED_STORAGE_KEY;
+  const assignedTableState = useTableState(assignedStorageKey, {
+    defaultColumnOrder: newFiltersEnabled ? DEFAULT_ASSIGNED_COLUMN_ORDER : undefined,
+    defaultColumnVisibility: newFiltersEnabled ? DEFAULT_ASSIGNED_COLUMN_VISIBILITY : undefined,
+    persistFilters: !newFiltersEnabled,
+  });
   const adHocTableState = useTableState(ADHOC_STORAGE_KEY, { persistFilters: !newFiltersEnabled });
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
@@ -316,7 +338,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
     const baseColumns: EditableTableColumn<PlantMonitoringRow>[] = [
       {
         id: 'observationDate',
-        header: strings.DATE,
+        header: newFiltersEnabled ? strings.OBSERVATION : strings.DATE,
         size: showSelectObservation ? 230 : 180,
         accessorFn: (row) => {
           const dateStr = row.observationDate;
@@ -681,7 +703,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
           enableGlobalFilter={true}
           enableColumnFilters={!newFiltersEnabled}
           enableColumnOrdering={true}
-          storageKey={ASSIGNED_STORAGE_KEY}
+          storageKey={assignedStorageKey}
           enablePagination={false}
           enableTopToolbar={true}
           enableBottomToolbar={false}
