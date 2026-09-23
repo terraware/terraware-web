@@ -1519,6 +1519,8 @@ const ObservationMap = ({
     }
   }, [showHoverLocation, strings.AREA_NOT_OBSERVED, theme.palette.TwClrBaseBlack]);
 
+  const showLegends = !newFiltersEnabled || plantingSiteId !== undefined;
+
   return (
     <MapComponent
       additionalComponent={unclickableHoverTag}
@@ -1527,7 +1529,7 @@ const ObservationMap = ({
       drawerHeader={drawerHeader}
       drawerOpen={drawerOpen}
       drawerSize={drawerSize}
-      legends={legends}
+      legends={showLegends ? legends : undefined}
       mapHighlights={highlights}
       mapMarkers={markers}
       mapId={mapId}
