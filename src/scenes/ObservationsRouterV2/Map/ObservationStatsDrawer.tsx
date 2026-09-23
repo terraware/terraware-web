@@ -254,10 +254,12 @@ const ObservationStatsDrawer = ({
         value: properties.observedDensity ? `${properties.observedDensity}` : strings.NO_DATA_YET,
       });
 
-      drawerRows.push({
-        key: strings.SURVIVAL_RATE,
-        value: properties.survivalRate ? `${properties.survivalRate}%` : strings.NO_DATA_YET,
-      });
+      if (properties.plotType !== 'adHoc') {
+        drawerRows.push({
+          key: strings.SURVIVAL_RATE,
+          value: properties.survivalRate ? `${properties.survivalRate}%` : strings.NO_DATA_YET,
+        });
+      }
     }
 
     return drawerRows;
