@@ -20,7 +20,6 @@ import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
@@ -104,8 +103,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
   // Contributors cannot edit accessions, so they must not reach the withdrawal flow (its mutation
   // would be rejected). Gate the selection/withdraw entry point on the same permission the
   // Accession Details withdraw button uses.
-  const bulkWithdrawEnabled =
-    isEnabled('Bulk Accession Withdraw') && isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
+  const canWithdraw = isAllowed('EDIT_ACCESSION', { organization: selectedOrganization });
 
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [withdrawAccessionIds, setWithdrawAccessionIds] = useState<number[]>();
@@ -680,7 +678,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
 
   return (
     <Card>
-      {bulkWithdrawEnabled && user && withdrawAccessionIds && (
+      {canWithdraw && user && withdrawAccessionIds && (
         <WithdrawSeedsModal
           open={withdrawAccessionIds !== undefined}
           onClose={() => setWithdrawAccessionIds(undefined)}
@@ -713,7 +711,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
             pagination,
             showColumnFilters,
             showGlobalFilter,
-            ...(bulkWithdrawEnabled ? { rowSelection } : {}),
+            ...(canWithdraw ? { rowSelection } : {}),
           },
           onSortingChange: setSorting,
           onPaginationChange,
@@ -729,7 +727,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
           enableColumnDragging: true,
           positionGlobalFilter: 'right',
           getRowId: (row) => String(row.id),
-          ...(bulkWithdrawEnabled
+          ...(canWithdraw
             ? {
                 enableRowSelection: (row: MRT_Row<SearchResponseElementWithId>) =>
                   isWithdrawableAccessionState(row.original.state as string | undefined) &&

@@ -2,7 +2,6 @@ import React from 'react';
 
 import { screen } from '@testing-library/react';
 
-import CachedUserService from 'src/services/CachedUserService';
 import strings from 'src/strings';
 import { buildOrganization, mockGet, renderWithProviders } from 'src/test-utils';
 import { SearchResponseElementWithId } from 'src/types/Search';
@@ -10,10 +9,6 @@ import { SearchResponseElementWithId } from 'src/types/Search';
 import AccessionsBySpeciesTable from './AccessionsBySpeciesTable';
 
 const ORG_ID = 1;
-
-const enableBulkWithdraw = () => CachedUserService.setUserPreferences({ bulkAccessionWithdraw: true });
-
-afterEach(() => CachedUserService.setUserPreferences({}));
 
 const buildRow = (overrides: Partial<Record<string, unknown>> = {}): SearchResponseElementWithId =>
   ({
@@ -35,18 +30,7 @@ const renderTable = (searchResults: SearchResponseElementWithId[], role: 'Owner'
 };
 
 describe('AccessionsBySpeciesTable bulk withdrawal', () => {
-  it('shows no selection when the bulk-withdraw feature is off', () => {
-    renderTable([
-      buildRow({ id: '1', species_id: 10, speciesName: 'Acacia koa' }),
-      buildRow({ id: '2', species_id: 20, speciesName: 'Metrosideros polymorpha' }),
-    ]);
-
-    expect(screen.queryAllByRole('checkbox')).toHaveLength(0);
-    expect(screen.queryByRole('button', { name: strings.WITHDRAW })).not.toBeInTheDocument();
-  });
-
-  it('shows no selection for a contributor even when the feature is on', () => {
-    enableBulkWithdraw();
+  it('shows no selection for a contributor', () => {
     // Contributors cannot edit accessions, so the withdrawal entry point must stay hidden.
     renderTable([buildRow({ id: '1', species_id: 10, speciesName: 'Acacia koa' })], 'Contributor');
 
@@ -55,7 +39,6 @@ describe('AccessionsBySpeciesTable bulk withdrawal', () => {
   });
 
   it('enables withdrawal when exactly one species row is selected', async () => {
-    enableBulkWithdraw();
     const { user } = renderTable([
       buildRow({ id: '1', species_id: 10, speciesName: 'Acacia koa' }),
       buildRow({ id: '2', species_id: 20, speciesName: 'Metrosideros polymorpha' }),
@@ -71,7 +54,6 @@ describe('AccessionsBySpeciesTable bulk withdrawal', () => {
   });
 
   it('blocks withdrawal when two species rows are selected', async () => {
-    enableBulkWithdraw();
     const { user } = renderTable([
       buildRow({ id: '1', species_id: 10, speciesName: 'Acacia koa' }),
       buildRow({ id: '2', species_id: 20, speciesName: 'Metrosideros polymorpha' }),
@@ -86,7 +68,6 @@ describe('AccessionsBySpeciesTable bulk withdrawal', () => {
   });
 
   it('disables the checkbox for a species whose accessions are all awaiting check-in', () => {
-    enableBulkWithdraw();
     renderTable([buildRow({ id: '1', species_id: 10, speciesName: 'Acacia koa', state: 'Awaiting Check-In' })]);
 
     // The species has no withdrawable (checked-in) accessions, so its row can't be selected.
@@ -94,7 +75,6 @@ describe('AccessionsBySpeciesTable bulk withdrawal', () => {
   });
 
   it('disables other species rows once one species row is selected', async () => {
-    enableBulkWithdraw();
     const { user } = renderTable([
       buildRow({ id: '1', species_id: 10, speciesName: 'Acacia koa' }),
       buildRow({ id: '2', species_id: 20, speciesName: 'Metrosideros polymorpha' }),
