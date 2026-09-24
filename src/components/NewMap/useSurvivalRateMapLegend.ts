@@ -10,6 +10,9 @@ const useSurvivalRateMapLegend = (disabled?: boolean) => {
   const [survivalRateVisible, setSurvivalRateVisible] = useState<boolean>(false);
   const { survivalRateLessThan50, survivalRate50To75, survivalRateMoreThan75 } = useMapFeatureStyles();
 
+  // A view that cannot use survival rate draws none, so its switch reads off rather than lying.
+  const visible = !disabled && survivalRateVisible;
+
   const survivalRateLegendGroup = useMemo((): MapGroupToggleLegendGroup => {
     return {
       disabled,
@@ -30,7 +33,7 @@ const useSurvivalRateMapLegend = (disabled?: boolean) => {
       title: strings.SURVIVAL_RATE,
       type: 'group-toggle',
       setVisible: setSurvivalRateVisible,
-      visible: survivalRateVisible,
+      visible,
     };
   }, [
     disabled,
@@ -41,13 +44,13 @@ const useSurvivalRateMapLegend = (disabled?: boolean) => {
     survivalRate50To75,
     survivalRateLessThan50,
     survivalRateMoreThan75,
-    survivalRateVisible,
+    visible,
   ]);
 
   return {
     setSurvivalRateVisible,
     survivalRateLegendGroup,
-    survivalRateVisible,
+    survivalRateVisible: visible,
   };
 };
 
