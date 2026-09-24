@@ -21,7 +21,7 @@ test.describe('PlantsDashboardTests', () => {
     await expect(
       page.getByText('To view the dashboard, you need to have a planting site.', { exact: true })
     ).toBeVisible();
-    await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
+    await expect(page.getByText('Planted Totals', { exact: true })).toBeVisible();
     await expect(
       page
         .locator('div')
@@ -109,7 +109,7 @@ test.describe('PlantsDashboardTests', () => {
     await page.getByText('PS1').click();
     await expect(page.getByText('Total Planting Area', { exact: true })).toBeVisible();
     await expect(page.getByText('6,793.5 ha').first()).toBeVisible();
-    await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
+    await expect(page.getByText('Planted Totals', { exact: true })).toBeVisible();
     await expect(
       page
         .locator('div')
@@ -159,7 +159,7 @@ test.describe('PlantsDashboardTests', () => {
         { exact: true }
       )
     ).toBeVisible();
-    await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
+    await expect(page.getByText('Planted Totals', { exact: true })).toBeVisible();
     await expect(
       page
         .locator('div')

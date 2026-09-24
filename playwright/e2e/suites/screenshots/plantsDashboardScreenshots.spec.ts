@@ -73,7 +73,7 @@ test.describe('PlantsDashboardScreenshots', () => {
     await selectOrg(page, 'Terraformation (staging)');
     await page.goto('/plants/dashboard/1');
 
-    await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
+    await expect(page.getByText('Planted Totals', { exact: true })).toBeVisible();
     await page.waitForLoadState('networkidle');
     await waitForMapIdle(page);
 
@@ -104,7 +104,7 @@ test.describe('PlantsDashboardScreenshots', () => {
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS1', { exact: true }).click();
 
-    await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
+    await expect(page.getByText('Planted Totals', { exact: true })).toBeVisible();
     await expect(page.getByText('Site Map', { exact: true })).toBeVisible();
 
     await expect(page).toHaveScreenshot('plants-dashboard-no-observations.png', FULL_PAGE_SCREENSHOT_OPTIONS);
@@ -135,7 +135,7 @@ test.describe('PlantsDashboardScreenshots', () => {
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();
 
-    await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
+    await expect(page.getByText('Planted Totals', { exact: true })).toBeVisible();
     await expect(page.getByText('Stratum Trends', { exact: true })).toBeVisible();
     await expect(page.getByText('Site Plant Density', { exact: true })).toBeVisible();
     await expect(page.getByText('Survival Rate').first()).toBeVisible();
@@ -219,7 +219,7 @@ test.describe('PlantsDashboardScreenshots', () => {
     await selectOrg(page, 'Terraformation (staging)');
     await page.goto('/plants/dashboard/1');
 
-    await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
+    await expect(page.getByText('Planted Totals', { exact: true })).toBeVisible();
     await waitForMapIdle(page);
 
     await expect(page.locator('.map-container').first()).toHaveScreenshot(
