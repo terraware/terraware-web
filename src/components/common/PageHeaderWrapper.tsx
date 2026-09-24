@@ -4,6 +4,7 @@ import { Box, IconButton, useTheme } from '@mui/material';
 import { keyframes } from '@mui/system';
 import { Icon } from '@terraware/web-components';
 
+import { SCROLL_OBSTRUCTION } from 'src/hooks/useScrollRestoration';
 import { useLocalization } from 'src/providers';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -191,7 +192,7 @@ export default function PageHeaderWrapper({
   };
 
   return (
-    <Box ref={ref} sx={styles}>
+    <Box ref={ref} sx={styles} {...{ [SCROLL_OBSTRUCTION]: '' }}>
       {!isHidden && children}
       {showEar && (
         <Box sx={{ left: theme.spacing(5), lineHeight: 0, position: 'absolute', top: '100%' }}>

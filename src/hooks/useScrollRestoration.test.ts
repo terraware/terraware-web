@@ -1,7 +1,7 @@
 import { rstest } from '@rstest/core';
 import { renderHook } from '@testing-library/react';
 
-import useScrollRestoration, { SCROLL_ANCHOR } from './useScrollRestoration';
+import useScrollRestoration, { SCROLL_ANCHOR, SCROLL_OBSTRUCTION } from './useScrollRestoration';
 
 type Remembered = {
   anchor?: string;
@@ -15,17 +15,15 @@ const remembered = (key: string | number): Remembered | null =>
 
 /**
  * jsdom has no layout, so nothing ever really scrolls: `window.scrollTo` is unimplemented and
- * neither `Element.prototype.scrollTo` nor `Element.prototype.scrollIntoView` exists at all. These
- * stubs stand in for the scroll calls so the choice `restore` makes is observable -- the assertions
- * below are about which target the hook hands the position to, never about the page actually moving.
+ * `Element.prototype.scrollTo` does not exist at all. These stubs stand in for the scroll calls so
+ * the position `restore` computes is observable -- the assertions below are about the offset the
+ * hook hands to each target, never about the page actually moving.
  */
 let windowScrollTo: ReturnType<typeof rstest.fn>;
 let containerScrollTo: ReturnType<typeof rstest.fn>;
-let scrollIntoView: ReturnType<typeof rstest.fn>;
 let originalWindowScrollTo: typeof window.scrollTo;
 let originalRequestAnimationFrame: typeof window.requestAnimationFrame;
 
-const originalScrollIntoView = Object.getOwnPropertyDescriptor(Element.prototype, 'scrollIntoView');
 const originalIntersectionObserver = globalThis.IntersectionObserver;
 
 /**
@@ -61,13 +59,13 @@ const intersect = (...elements: Element[]) =>
     elements.map((target) => ({ isIntersecting: true, target }) as unknown as IntersectionObserverEntry)
   );
 
-const rectAt = (top: number): DOMRect => ({
+const rect = (top: number, bottom = top): DOMRect => ({
   top,
-  bottom: top,
+  bottom,
   left: 0,
   right: 0,
   width: 0,
-  height: 0,
+  height: bottom - top,
   x: 0,
   y: top,
   toJSON: () => ({}),
@@ -77,7 +75,18 @@ const rectAt = (top: number): DOMRect => ({
 const addAnchor = (name: string, top: number) => {
   const element = document.createElement('div');
   element.setAttribute(SCROLL_ANCHOR, name);
-  element.getBoundingClientRect = () => rectAt(top);
+  element.getBoundingClientRect = () => rect(top);
+  document.body.appendChild(element);
+
+  return element;
+};
+
+/** Stands in for whatever a view pins over the top of the viewport. */
+const addObstruction = (bottom: number, position = 'fixed') => {
+  const element = document.createElement('div');
+  element.setAttribute(SCROLL_OBSTRUCTION, '');
+  element.style.position = position;
+  element.getBoundingClientRect = () => rect(0, bottom);
   document.body.appendChild(element);
 
   return element;
@@ -102,7 +111,6 @@ beforeEach(() => {
 
   windowScrollTo = rstest.fn();
   containerScrollTo = rstest.fn();
-  scrollIntoView = rstest.fn();
   intersectionCallback = undefined;
   observed = [];
 
@@ -115,11 +123,6 @@ beforeEach(() => {
     return 0;
   }) as typeof window.requestAnimationFrame;
 
-  Object.defineProperty(Element.prototype, 'scrollIntoView', {
-    value: scrollIntoView,
-    configurable: true,
-    writable: true,
-  });
   globalThis.IntersectionObserver = ControllableIntersectionObserver as unknown as typeof IntersectionObserver;
 });
 
@@ -127,12 +130,6 @@ afterEach(() => {
   window.scrollTo = originalWindowScrollTo;
   window.requestAnimationFrame = originalRequestAnimationFrame;
   globalThis.IntersectionObserver = originalIntersectionObserver;
-
-  if (originalScrollIntoView) {
-    Object.defineProperty(Element.prototype, 'scrollIntoView', originalScrollIntoView);
-  } else {
-    delete (Element.prototype as Partial<Element>).scrollIntoView;
-  }
 
   setWindowScrollY(0);
   sessionStorage.clear();
@@ -143,14 +140,17 @@ describe('useScrollRestoration', () => {
   describe('remember', () => {
     test('should store the anchor the reader is looking at alongside the pixel offset', () => {
       addScrollContainer(240);
-      const onScreen = addAnchor('metric-2', 40);
-      const furtherDown = addAnchor('metric-3', 900);
+      addObstruction(180);
+      // intersecting, but the pinned header covers it, so the reader cannot see it
+      const behindTheHeader = addAnchor('metric-2', 80);
+      // the first one the header leaves visible, right on the boundary
+      const clearOfTheHeader = addAnchor('metric-3', 180);
 
       const { result } = renderHook(() => useScrollRestoration(7, true));
-      intersect(onScreen, furtherDown);
+      intersect(behindTheHeader, clearOfTheHeader);
       result.current.remember();
 
-      expect(remembered(7)).toEqual({ anchor: 'metric-2', offset: 240 });
+      expect(remembered(7)).toEqual({ anchor: 'metric-3', offset: 240 });
     });
 
     test('should observe every anchor in the document once the content is ready', () => {
@@ -162,25 +162,99 @@ describe('useScrollRestoration', () => {
       expect(observed).toEqual([first, second]);
     });
 
-    test('should pick the first anchor below the top edge over one scrolled above it', () => {
+    test('should pick the first anchor clear of the header over one scrolled above the top edge', () => {
       addScrollContainer(240);
+      addObstruction(180);
       const straddlingTheTopEdge = addAnchor('metric-1', -120);
-      const justBelowTheTopEdge = addAnchor('metric-2', 80);
+      const clearOfTheHeader = addAnchor('metric-2', 240);
 
       const { result } = renderHook(() => useScrollRestoration(7, true));
-      intersect(straddlingTheTopEdge, justBelowTheTopEdge);
+      intersect(straddlingTheTopEdge, clearOfTheHeader);
       result.current.remember();
 
       expect(remembered(7)?.anchor).toBe('metric-2');
     });
 
-    test('should pick the least negative anchor when every one of them is above the top edge', () => {
+    test('should pick the lowest anchor when every one of them is behind the header', () => {
       addScrollContainer(240);
-      const wellAbove = addAnchor('metric-1', -300);
-      const justAbove = addAnchor('metric-2', -40);
+      addObstruction(180);
+      const aboveTheTopEdge = addAnchor('metric-1', -300);
+      const behindTheHeader = addAnchor('metric-2', 160);
 
       const { result } = renderHook(() => useScrollRestoration(7, true));
-      intersect(wellAbove, justAbove);
+      intersect(aboveTheTopEdge, behindTheHeader);
+      result.current.remember();
+
+      expect(remembered(7)?.anchor).toBe('metric-2');
+    });
+
+    test('should resolve one anchor layout two ways as the header grows, which is why it is measured', () => {
+      addScrollContainer(240);
+      const header = addObstruction(80);
+      const first = addAnchor('metric-1', 100);
+      const second = addAnchor('metric-2', 300);
+
+      const { result } = renderHook(() => useScrollRestoration(7, true));
+      intersect(first, second);
+      result.current.remember();
+
+      expect(remembered(7)?.anchor).toBe('metric-1');
+
+      // on a narrow layout the header wraps onto further rows and swallows the first anchor
+      header.getBoundingClientRect = () => rect(0, 220);
+      result.current.remember();
+
+      expect(remembered(7)?.anchor).toBe('metric-2');
+    });
+
+    test('should measure down to the lowest edge when more than one element is pinned', () => {
+      addScrollContainer(240);
+      addObstruction(64);
+      addObstruction(200);
+      const behindTheHeader = addAnchor('metric-1', 150);
+      const clearOfTheHeader = addAnchor('metric-2', 260);
+
+      const { result } = renderHook(() => useScrollRestoration(7, true));
+      intersect(behindTheHeader, clearOfTheHeader);
+      result.current.remember();
+
+      expect(remembered(7)?.anchor).toBe('metric-2');
+    });
+
+    test('should treat the top of the viewport as clear when nothing is pinned over it', () => {
+      addScrollContainer(240);
+      const aboveTheTopEdge = addAnchor('metric-1', -40);
+      const atTheTopEdge = addAnchor('metric-2', 0);
+      addAnchor('metric-3', 120);
+
+      const { result } = renderHook(() => useScrollRestoration(7, true));
+      intersect(aboveTheTopEdge, atTheTopEdge);
+      result.current.remember();
+
+      expect(remembered(7)?.anchor).toBe('metric-2');
+    });
+
+    test('should ignore a marked element that scrolls with the page rather than pinning itself', () => {
+      addScrollContainer(240);
+      addObstruction(400, 'relative');
+      const atTheTopEdge = addAnchor('metric-1', 0);
+      const belowIt = addAnchor('metric-2', 500);
+
+      const { result } = renderHook(() => useScrollRestoration(7, true));
+      intersect(atTheTopEdge, belowIt);
+      result.current.remember();
+
+      expect(remembered(7)?.anchor).toBe('metric-1');
+    });
+
+    test('should count a sticky element as pinned', () => {
+      addScrollContainer(240);
+      addObstruction(180, 'sticky');
+      const behindTheHeader = addAnchor('metric-1', 20);
+      const clearOfTheHeader = addAnchor('metric-2', 300);
+
+      const { result } = renderHook(() => useScrollRestoration(7, true));
+      intersect(behindTheHeader, clearOfTheHeader);
       result.current.remember();
 
       expect(remembered(7)?.anchor).toBe('metric-2');
@@ -218,28 +292,40 @@ describe('useScrollRestoration', () => {
   });
 
   describe('restore', () => {
-    test('should centre the remembered anchor and leave the pixel offset unused', () => {
+    test('should scroll the remembered anchor to just below the pinned header, leaving the offset unused', () => {
       sessionStorage.setItem(storageKeyFor(7), JSON.stringify({ anchor: 'metric-2', offset: 240 }));
-      addScrollContainer(0);
-      const anchor = addAnchor('metric-2', 900);
+      addScrollContainer(500);
+      addObstruction(70);
+      addAnchor('metric-2', 120);
 
       renderHook(() => useScrollRestoration(7, true));
 
-      expect(scrollIntoView).toHaveBeenCalledTimes(1);
-      expect(scrollIntoView).toHaveBeenCalledWith({ block: 'center' });
-      expect(scrollIntoView.mock.contexts[0]).toBe(anchor);
-      expect(containerScrollTo).not.toHaveBeenCalled();
-      expect(windowScrollTo).not.toHaveBeenCalled();
+      // where it sits now (500 + 120) less the band the header covers
+      expect(containerScrollTo).toHaveBeenCalledTimes(1);
+      expect(containerScrollTo).toHaveBeenCalledWith(0, 550);
+      expect(windowScrollTo).toHaveBeenCalledTimes(1);
+      expect(windowScrollTo).toHaveBeenCalledWith(0, 550);
+    });
+
+    test('should scroll an anchor already above the top edge back down to the header', () => {
+      sessionStorage.setItem(storageKeyFor(7), JSON.stringify({ anchor: 'metric-2', offset: 240 }));
+      setWindowScrollY(800);
+      addObstruction(70);
+      addAnchor('metric-2', -130);
+
+      renderHook(() => useScrollRestoration(7, true));
+
+      expect(windowScrollTo).toHaveBeenCalledWith(0, 600);
     });
 
     test('should fall back to the pixel offset when the remembered anchor is gone from the page', () => {
       sessionStorage.setItem(storageKeyFor(7), JSON.stringify({ anchor: 'metric-2', offset: 240 }));
-      addScrollContainer(0);
-      addAnchor('some-other-metric', 900);
+      addScrollContainer(500);
+      addObstruction(70);
+      addAnchor('some-other-metric', 120);
 
       renderHook(() => useScrollRestoration(7, true));
 
-      expect(scrollIntoView).not.toHaveBeenCalled();
       expect(containerScrollTo).toHaveBeenCalledWith(0, 240);
       expect(windowScrollTo).toHaveBeenCalledWith(0, 240);
     });
@@ -257,45 +343,49 @@ describe('useScrollRestoration', () => {
 
     test('should wait for the content to be ready before restoring', () => {
       sessionStorage.setItem(storageKeyFor(7), JSON.stringify({ anchor: 'metric-2', offset: 240 }));
-      addScrollContainer(0);
+      addScrollContainer(500);
+      addObstruction(70);
 
       const { rerender } = renderHook(({ ready }: { ready: boolean }) => useScrollRestoration(7, ready), {
         initialProps: { ready: false },
       });
 
-      expect(scrollIntoView).not.toHaveBeenCalled();
+      expect(containerScrollTo).not.toHaveBeenCalled();
       expect(windowScrollTo).not.toHaveBeenCalled();
 
-      addAnchor('metric-2', 900);
+      addAnchor('metric-2', 120);
       rerender({ ready: true });
 
-      expect(scrollIntoView).toHaveBeenCalledWith({ block: 'center' });
+      expect(containerScrollTo).toHaveBeenCalledWith(0, 550);
+      expect(windowScrollTo).toHaveBeenCalledWith(0, 550);
     });
 
     test('should not restore a second time, since the first mount consumed the stored position', () => {
       sessionStorage.setItem(storageKeyFor(7), JSON.stringify({ anchor: 'metric-2', offset: 240 }));
-      addScrollContainer(0);
-      addAnchor('metric-2', 900);
+      addScrollContainer(500);
+      addObstruction(70);
+      addAnchor('metric-2', 120);
 
       renderHook(() => useScrollRestoration(7, true));
 
-      expect(scrollIntoView).toHaveBeenCalledTimes(1);
-      scrollIntoView.mockClear();
+      expect(containerScrollTo).toHaveBeenCalledTimes(1);
+      expect(windowScrollTo).toHaveBeenCalledTimes(1);
+      containerScrollTo.mockClear();
+      windowScrollTo.mockClear();
 
       renderHook(() => useScrollRestoration(7, true));
 
-      expect(scrollIntoView).not.toHaveBeenCalled();
       expect(containerScrollTo).not.toHaveBeenCalled();
       expect(windowScrollTo).not.toHaveBeenCalled();
     });
 
     test('should do nothing when arriving with nothing stored for the key', () => {
-      addScrollContainer(0);
-      addAnchor('metric-2', 900);
+      addScrollContainer(500);
+      addObstruction(70);
+      addAnchor('metric-2', 120);
 
       renderHook(() => useScrollRestoration(7, true));
 
-      expect(scrollIntoView).not.toHaveBeenCalled();
       expect(containerScrollTo).not.toHaveBeenCalled();
       expect(windowScrollTo).not.toHaveBeenCalled();
     });
@@ -310,7 +400,6 @@ describe('useScrollRestoration', () => {
 
       renderHook(() => useScrollRestoration(2, true));
 
-      expect(scrollIntoView).not.toHaveBeenCalled();
       expect(containerScrollTo).not.toHaveBeenCalled();
       expect(windowScrollTo).not.toHaveBeenCalled();
       expect(remembered(1)).toEqual({ anchor: 'metric-2', offset: 240 });
@@ -330,7 +419,6 @@ describe('useScrollRestoration', () => {
 
     expect(sessionStorage.getItem(storageKeyFor('undefined'))).toBe(untouched);
     expect(sessionStorage.length).toBe(1);
-    expect(scrollIntoView).not.toHaveBeenCalled();
     expect(containerScrollTo).not.toHaveBeenCalled();
     expect(windowScrollTo).not.toHaveBeenCalled();
   });
