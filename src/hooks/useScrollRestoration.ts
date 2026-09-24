@@ -105,13 +105,15 @@ const useScrollRestoration = (key: string | number | undefined, ready: boolean) 
 
     requestAnimationFrame(() => {
       const anchor = position.anchor ? document.querySelector(`[${SCROLL_ANCHOR}="${position.anchor}"]`) : null;
+      const wasAtTop = position.offset === 0;
 
-      if (anchor) {
-        // scrolled rather than scrollIntoView'd, so the measured header replaces a scrollMarginTop
-        applyOffset(readOffset() + anchor.getBoundingClientRect().top - obstructedTop());
-      } else {
+      if (wasAtTop || anchor === null) {
         applyOffset(position.offset);
+        return;
       }
+
+      // scrolled rather than scrollIntoView'd, so the measured header replaces a scrollMarginTop
+      applyOffset(readOffset() + anchor.getBoundingClientRect().top - obstructedTop());
     });
   }, [storageKey]);
 
