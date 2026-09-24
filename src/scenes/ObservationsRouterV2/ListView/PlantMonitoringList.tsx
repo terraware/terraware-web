@@ -587,7 +587,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
             />
           </>
         )}
-        {plantingSiteId !== 'all' && !isAdHoc && rows.length > 0 && (
+        {!newFiltersEnabled && plantingSiteId !== 'all' && !isAdHoc && rows.length > 0 && (
           <Box display='flex' alignItems='center'>
             <Link
               onClick={navigateToSurvivalRateSettings}
@@ -618,6 +618,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
       isAdHoc,
       isMobile,
       navigateToSurvivalRateSettings,
+      newFiltersEnabled,
       onPlotTypeChange,
       plantingSiteId,
       plotsWithObservations.length,
