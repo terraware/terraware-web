@@ -266,6 +266,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
 
   return (
     <EditableReportBox
+      anchorId='challenges'
       name={newReportTabEnabled ? strings.CHALLENGES_AND_MITIGATION_PLAN : ''}
       canEdit={!!canEdit}
       editing={isEditing}

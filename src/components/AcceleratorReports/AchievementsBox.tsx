@@ -171,6 +171,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
 
   return (
     <EditableReportBox
+      anchorId='achievements'
       name={funderReportView ? '' : strings.ACHIEVEMENTS}
       canEdit={!!canEdit}
       editing={isEditing}

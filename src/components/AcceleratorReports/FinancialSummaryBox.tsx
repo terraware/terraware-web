@@ -71,6 +71,7 @@ const FinancialSummariesBox = (props: ReportBoxProps) => {
 
   return (
     <EditableReportBox
+      anchorId='financialSummaries'
       name={funderReportView ? '' : strings.FINANCIAL_SUMMARIES}
       canEdit={!!canEdit}
       editing={isEditing}

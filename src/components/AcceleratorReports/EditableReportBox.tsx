@@ -3,9 +3,12 @@ import React, { type JSX, ReactNode } from 'react';
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import Button from 'src/components/common/button/Button';
+import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import strings from 'src/strings';
 
 type EditableReportBoxProps = {
+  /** a stable id, so scroll restoration can bring the reader back to this section */
+  anchorId?: string;
   name: string;
   description?: string;
   canEdit: boolean;
@@ -21,6 +24,7 @@ type EditableReportBoxProps = {
 };
 
 const EditableReportBox = ({
+  anchorId,
   editing,
   name,
   description,
@@ -39,8 +43,8 @@ const EditableReportBox = ({
   return (
     <>
       <Box
-        sx={{ scrollMarginTop: '50vh' }}
         borderBottom={includeBorder ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''}
+        {...(anchorId === undefined ? {} : { [SCROLL_ANCHOR]: anchorId })}
       >
         <Box
           sx={{

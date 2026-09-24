@@ -74,6 +74,7 @@ const AdditionalCommentsBox = (props: ReportBoxProps) => {
 
   return (
     <EditableReportBox
+      anchorId='additionalComments'
       name={funderReportView ? '' : strings.ADDITIONAL_COMMENTS}
       canEdit={!!canEdit}
       editing={isEditing}

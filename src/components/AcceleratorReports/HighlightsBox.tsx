@@ -86,6 +86,7 @@ const HighlightsBox = (props: ReportBoxProps) => {
 
   return (
     <EditableReportBox
+      anchorId='highlights'
       name={funderReportView ? '' : strings.HIGHLIGHTS}
       canEdit={!!canEdit}
       editing={isEditing}
