@@ -2189,6 +2189,7 @@ SHOW_MORE,Afficher plus,43cab9b7
 SHOW_OBSERVATION_ON_MAP,Afficher sur la carte,2c88d696
 SHOW_SPECIES_WITH_ALL_ACCESSIONS_USED_UP,Afficher les espèces dont toutes les accessions sont épuisées,656a843d
 SHOW_TITLE_BAR,Afficher la barre de titre,95b1ccfb
+SHOWING_OBSERVATION_ON_MAP,Affichage de {0} sur la carte,3f167717
 SHRUB,Arbuste,af50871c
 SHRUB_CROWN_DIAMETER_CM,Diamètre de la couronne de l’arbuste (cm),61918163
 SHRUBS,Arbustes,377018f6
