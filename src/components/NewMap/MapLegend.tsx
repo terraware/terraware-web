@@ -7,7 +7,13 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { MapFillComponentStyle, MapIconComponentStyle } from './types';
 
+export type MapLegendAnnotation = {
+  border: 'dashed' | 'solid';
+  label: string;
+};
+
 type BaseMapLegendGroup = {
+  annotations?: MapLegendAnnotation[];
   disabled?: boolean;
   title: string;
   tooltip?: string;
@@ -331,6 +337,30 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
               </Box>
 
               {!collapsed && itemComponents}
+
+              {!collapsed &&
+                legend.annotations?.map((annotation) => (
+                  <Box
+                    alignItems='center'
+                    display='flex'
+                    key={annotation.label}
+                    paddingLeft={theme.spacing(1)}
+                    paddingTop={'3px'}
+                  >
+                    <Box
+                      sx={{
+                        border: `1px ${annotation.border} ${theme.palette.TwClrBrdrSecondary}`,
+                        height: '13px',
+                        marginRight: theme.spacing(1),
+                        minWidth: '13px',
+                        width: '13px',
+                      }}
+                    />
+                    <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+                      {annotation.label}
+                    </Typography>
+                  </Box>
+                ))}
             </Box>
           </Box>
         );

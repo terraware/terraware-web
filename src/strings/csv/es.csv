@@ -1476,6 +1476,7 @@ OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Las observaciones con parcelas asignadas pued
 OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION,"Necesitará la aplicación móvil de Terraware para completar sus observaciones.
 
 Escanee los códigos QR con su dispositivo para descargarla en App Store o Google Play.",13be06be
+OBSERVED,Observado,a2ab2643
 OBSERVED_BY_ON,Observado por {0} el {1} a las {2},c8b41186
 OBSERVED_GPS_COORDINATES,Coordenadas GPS observadas,efbe8b32
 OBSERVED_ON,Observado el,8c876825

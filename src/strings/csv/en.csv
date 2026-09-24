@@ -1477,6 +1477,7 @@ OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Observations with assigned plots can be sched
 OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION,"You will need the Terraware Mobile App to complete your observations.
 
 Scan the QR codes with your device to download on the App Store or Google Play.",
+OBSERVED,Observed,
 OBSERVED_BY_ON,Observed by {0} on {1} at {2},
 OBSERVED_GPS_COORDINATES,Observed GPS Coordinates,
 OBSERVED_ON,Observed on,

@@ -1220,6 +1220,20 @@ const ObservationMap = ({
     virtualPlotVisible,
   ]);
 
+  const plotStatusLegendGroup = useMemo(
+    (): MapLegendGroup =>
+      newFiltersEnabled
+        ? {
+            ...monitoringPlotsLegendGroup,
+            annotations: [
+              { border: 'solid', label: strings.OBSERVED },
+              { border: 'dashed', label: strings.NOT_OBSERVED },
+            ],
+          }
+        : monitoringPlotsLegendGroup,
+    [monitoringPlotsLegendGroup, newFiltersEnabled, strings.NOT_OBSERVED, strings.OBSERVED]
+  );
+
   const legends = useMemo((): MapLegendGroup[] => {
     const siteLegendGroup =
       plantingSiteId === undefined
@@ -1241,7 +1255,7 @@ const ObservationMap = ({
         ? []
         : [adHocObservationDropdownLegendGroup]),
       siteLegendGroup,
-      monitoringPlotsLegendGroup,
+      plotStatusLegendGroup,
       plotPhotosLegendGroup,
       plantMakersLegendGroup,
       ...(!newFiltersEnabled && isBiomass ? [] : [survivalRateLegendGroup]),
@@ -1255,8 +1269,8 @@ const ObservationMap = ({
     observationDropdownLegendGroup,
     adHocObservationResults.length,
     adHocObservationDropdownLegendGroup,
-    monitoringPlotsLegendGroup,
     newFiltersEnabled,
+    plotStatusLegendGroup,
     plotPhotosLegendGroup,
     plantMakersLegendGroup,
     survivalRateLegendGroup,
