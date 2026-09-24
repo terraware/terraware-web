@@ -1,3 +1,6 @@
+ac7d9e57 SW-8930 Anchor on the section half clear of the header, not the first whole one (#6528)
+9a8fe3ff SW-8930 Restore the top of the report as the top (#6527)
+f88ebc51 SW-8930 Anchor the report's title row so the top of the page stays put (#6526)
 558d5858 Remember which legend sections a reader shut (#6525)
 f040c5e1 Drop the survival rate settings link above the table (#6524)
 e247117d Say which observation the map is drawing (#6523)
