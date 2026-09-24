@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
 import { AntSwitch, Dropdown, Icon } from '@terraware/web-components';
@@ -81,9 +81,28 @@ type MapLegendProps = {
   legends: MapLegendGroup[];
 };
 
+const summaryFor = (legend: MapLegendGroup): string | undefined => {
+  switch (legend.type) {
+    case 'single-select':
+      return legend.items.find((item) => item.id === legend.selectedLayer)?.label;
+    case 'multi-select':
+      return `${legend.items.filter((item) => item.visible).length}/${legend.items.length}`;
+    case 'dropdown':
+      return legend.items.find((item) => item.value === legend.selectedValue)?.label;
+    case 'group-toggle':
+      return undefined;
+  }
+};
+
 const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
   const theme = useTheme();
-  const { isMobile, isDesktop } = useDeviceInfo();
+  const { isDesktop } = useDeviceInfo();
+  const [collapsedTitles, setCollapsedTitles] = useState<Record<string, boolean>>({});
+
+  const toggleCollapsed = useCallback(
+    (title: string) => setCollapsedTitles((current) => ({ ...current, [title]: !current[title] })),
+    []
+  );
 
   const onClick = useCallback((legend: MapLegendGroup, item: MapLegendItem) => {
     return legend.disabled
@@ -110,13 +129,7 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
           ) : undefined;
 
         const titleComponent = (
-          <Typography
-            fontSize='16px'
-            fontWeight={600}
-            width={isMobile ? '100%' : undefined}
-            marginRight={isMobile ? 0 : theme.spacing(4)}
-            paddingLeft={switchComponent ? theme.spacing(1) : theme.spacing(0)}
-          >
+          <Typography fontSize='16px' fontWeight={600} paddingLeft={theme.spacing(1)}>
             {legend.title}
             {legend.tooltip && (
               <Tooltip
@@ -182,7 +195,7 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
                       sx={{
                         border: `2px solid ${item.style.borderColor ?? theme.palette.TwClrBaseGreen300}`,
                         opacity: disabled ? 0.7 : 1.0,
-                        height: '16px',
+                        height: '13px',
                         width: '24px',
                         minWidth: '24px',
                         marginRight: theme.spacing(1),
@@ -242,7 +255,7 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
                     cursor: itemOnClck ? 'pointer' : 'default',
                     background: selected ? theme.palette.TwClrBgSecondary : 'none',
                     borderRadius: theme.spacing(1),
-                    padding: theme.spacing(1, 1),
+                    padding: '3px 8px',
                     opacity: disabled ? '0.5' : 1,
                     marginBottom: itemIsLast ? 0 : '3px',
                   }}
@@ -261,24 +274,68 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
             })
           );
 
+        const collapsed = !!collapsedTitles[legend.title];
+        const summary = collapsed ? summaryFor(legend) : undefined;
+
         return (
           <Box
             key={legend.title}
             sx={{ opacity: legend.disabled ? 0.7 : 1 }}
             borderBottom={isLast ? 'none' : `1px solid ${theme.palette.TwClrBrdrTertiary}`}
           >
-            <Box paddingBottom={2} paddingTop={isFirst ? 0 : 2} flexDirection={'column'}>
-              <Box display='flex' alignItems={'center'} paddingLeft={theme.spacing(1)}>
-                {switchComponent}
-                {titleComponent}
+            <Box paddingBottom={'5px'} paddingTop={isFirst ? 0 : '5px'} flexDirection={'column'}>
+              <Box
+                aria-expanded={!collapsed}
+                onClick={() => toggleCollapsed(legend.title)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    toggleCollapsed(legend.title);
+                  }
+                }}
+                role='button'
+                tabIndex={0}
+                sx={{
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  paddingLeft: theme.spacing(1),
+                  '&:focus-visible': {
+                    outline: `2px solid ${theme.palette.TwClrBrdrBrand}`,
+                    outlineOffset: '-2px',
+                  },
+                }}
+              >
+                <Box display='flex' alignItems='center'>
+                  <Icon
+                    fillColor={theme.palette.TwClrIcnSecondary}
+                    name={collapsed ? 'caretRight' : 'caretDown'}
+                    size='small'
+                    style={{ height: '12px', width: '12px' }}
+                  />
+                  {titleComponent}
+                </Box>
+                <Box alignItems='center' display='flex' paddingLeft={theme.spacing(1)}>
+                  {summary && (
+                    <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' whiteSpace='nowrap'>
+                      {summary}
+                    </Typography>
+                  )}
+                  {switchComponent && (
+                    <Box display='flex' onClick={(event) => event.stopPropagation()}>
+                      {switchComponent}
+                    </Box>
+                  )}
+                </Box>
               </Box>
 
-              {itemComponents}
+              {!collapsed && itemComponents}
             </Box>
           </Box>
         );
       }),
-    [isMobile, legends, onClick, theme]
+    [collapsedTitles, legends, onClick, theme, toggleCollapsed]
   );
 
   return (
