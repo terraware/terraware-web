@@ -1,3 +1,5 @@
+630d07ba SW-8930 Anchor the report's narrative sections, not just the indicators (#6514)
+6d692c5d SW-8930 Restore the remembered anchor to the top of the view (#6513)
 454bbfde SW-8897 Update report target copy (#6516)
 b1aff941 Remove bulk accessions withdrawals feature flag (#6507)
 1b41ae61 Name the planting site on rows when every site is selected (#6511)
