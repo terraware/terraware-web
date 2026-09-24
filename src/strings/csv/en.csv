@@ -799,6 +799,8 @@ FIELD_NOTES,Field Notes,
 FIFTY_TO_SEVENTY_FIVE_PERCENT,50% to 75%,
 FILE_NAME,File Name,
 FILE_NAMING,File Naming,Describes a piece of text that is used when naming new files; this isn't just the name of a particular file.
+FILE_SIZE_KB,{0} KB,Size of a file in kilobytes; {0} is the number.
+FILE_SIZE_MB,{0} MB,Size of a file in megabytes; {0} is the number.
 FILE_TOO_LARGE,File {0} too large. Maximum size is {1}MB.,
 FILTER,Filter,
 FILTER_BY_PROJECT,Filter by Project,

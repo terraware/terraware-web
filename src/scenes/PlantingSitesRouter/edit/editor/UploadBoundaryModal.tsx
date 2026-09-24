@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DialogBox, FileChooser } from '@terraware/web-components';
@@ -11,6 +11,14 @@ import {
 import strings from 'src/strings';
 
 export const BOUNDARY_FILE_EXTENSIONS = '.kml,.kmz,.geojson,.json,.zip';
+
+const BYTES_PER_KB = 1024;
+const BYTES_PER_MB = 1024 * 1024;
+
+const fileSizeText = (bytes: number): string =>
+  bytes < BYTES_PER_MB
+    ? (strings.formatString(strings.FILE_SIZE_KB, `${Math.round(bytes / BYTES_PER_KB)}`) as string)
+    : (strings.formatString(strings.FILE_SIZE_MB, (bytes / BYTES_PER_MB).toFixed(1)) as string);
 
 export type UploadBoundaryModalProps = {
   onClose: () => void;
@@ -25,6 +33,11 @@ export default function UploadBoundaryModal({ onClose, onSuccess, siteId }: Uplo
   const theme = useTheme();
   const [files, setFiles] = useState<File[]>([]);
   const [parseBoundary, { isLoading }] = useParseDraftPlantingSiteBoundaryMutation();
+
+  const selectedFileText = useMemo<string | undefined>(
+    () => (files[0] ? fileSizeText(files[0].size) : undefined),
+    [files]
+  );
 
   const onUpload = useCallback(() => {
     const file = files[0];
@@ -72,6 +85,7 @@ export default function UploadBoundaryModal({ onClose, onSuccess, siteId }: Uplo
           acceptFileType={BOUNDARY_FILE_EXTENSIONS}
           chooseFileText={strings.CHOOSE_FILE}
           files={files}
+          fileSelectedText={selectedFileText}
           maxFiles={1}
           setFiles={setFiles}
           uploadDescription={strings.UPLOAD_SITE_BOUNDARY_DESCRIPTION}
