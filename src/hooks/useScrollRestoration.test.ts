@@ -59,6 +59,9 @@ const intersect = (...elements: Element[]) =>
     elements.map((target) => ({ isIntersecting: true, target }) as unknown as IntersectionObserverEntry)
   );
 
+/** Sections have height, and how much of one clears the header decides whether it is picked. */
+const ANCHOR_HEIGHT = 40;
+
 const rect = (top: number, bottom = top): DOMRect => ({
   top,
   bottom,
@@ -72,10 +75,10 @@ const rect = (top: number, bottom = top): DOMRect => ({
 });
 
 /** jsdom's `getBoundingClientRect` is all zeroes, so each anchor is told where it sits. */
-const addAnchor = (name: string, top: number) => {
+const addAnchor = (name: string, top: number, bottom = top + ANCHOR_HEIGHT) => {
   const element = document.createElement('div');
   element.setAttribute(SCROLL_ANCHOR, name);
-  element.getBoundingClientRect = () => rect(top);
+  element.getBoundingClientRect = () => rect(top, bottom);
   document.body.appendChild(element);
 
   return element;
@@ -207,6 +210,34 @@ describe('useScrollRestoration', () => {
       expect(remembered(7)?.anchor).toBe('metric-2');
     });
 
+    test('should keep a section with more than half of it clear of the header', () => {
+      addScrollContainer(240);
+      addObstruction(180);
+      // 24 of its 40 show below the header
+      const mostlyShowing = addAnchor('metric-1', 164, 204);
+      const below = addAnchor('metric-2', 300);
+
+      const { result } = renderHook(() => useScrollRestoration(7, true));
+      intersect(mostlyShowing, below);
+      result.current.remember();
+
+      expect(remembered(7)?.anchor).toBe('metric-1');
+    });
+
+    test('should pass over a section with less than half of it clear of the header', () => {
+      addScrollContainer(240);
+      addObstruction(180);
+      // only 16 of its 40 show below the header
+      const mostlyHidden = addAnchor('metric-1', 156, 196);
+      const below = addAnchor('metric-2', 300);
+
+      const { result } = renderHook(() => useScrollRestoration(7, true));
+      intersect(mostlyHidden, below);
+      result.current.remember();
+
+      expect(remembered(7)?.anchor).toBe('metric-2');
+    });
+
     test('should measure down to the lowest edge when more than one element is pinned', () => {
       addScrollContainer(240);
       addObstruction(64);
@@ -237,7 +268,7 @@ describe('useScrollRestoration', () => {
     test('should ignore a marked element that scrolls with the page rather than pinning itself', () => {
       addScrollContainer(240);
       addObstruction(400, 'relative');
-      const atTheTopEdge = addAnchor('metric-1', 0);
+      const atTheTopEdge = addAnchor('metric-1', 0, 40);
       const belowIt = addAnchor('metric-2', 500);
 
       const { result } = renderHook(() => useScrollRestoration(7, true));

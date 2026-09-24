@@ -29,13 +29,22 @@ const applyOffset = (offset: number) => {
   window.scrollTo(0, offset);
 };
 
-/** The anchor the reader is looking at: the first one clear of the header, else the one behind it. */
+/** How much of a section has to clear the header before it counts as the one being read. */
+const VISIBLE_FRACTION = 0.5;
+
+const shownBelow = (rect: DOMRect, clearance: number): number => {
+  const height = rect.bottom - rect.top;
+
+  return height <= 0 ? 0 : (rect.bottom - Math.max(rect.top, clearance)) / height;
+};
+
+/** The anchor the reader is looking at: the topmost one at least half clear of the header. */
 const topmost = (elements: Set<Element>, clearance: number): Element | undefined => {
   const byTop = [...elements]
-    .map((element) => ({ element, top: element.getBoundingClientRect().top }))
-    .sort((a, b) => a.top - b.top);
+    .map((element) => ({ element, rect: element.getBoundingClientRect() }))
+    .sort((a, b) => a.rect.top - b.rect.top);
 
-  return (byTop.find(({ top }) => top >= clearance) ?? byTop.at(-1))?.element;
+  return (byTop.find(({ rect }) => shownBelow(rect, clearance) >= VISIBLE_FRACTION) ?? byTop.at(-1))?.element;
 };
 
 /**
