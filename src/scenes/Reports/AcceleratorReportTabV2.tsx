@@ -18,6 +18,7 @@ import { getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
+import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/acceleratorReports';
@@ -93,7 +94,13 @@ const AcceleratorReportTabV2 = ({ active }: AcceleratorReportTabV2Props): JSX.El
         <ReportEmptyState />
       ) : (
         <>
-          <Box alignItems='center' display='flex' justifyContent='space-between' marginBottom={theme.spacing(3)}>
+          <Box
+            alignItems='center'
+            display='flex'
+            justifyContent='space-between'
+            marginBottom={theme.spacing(3)}
+            {...{ [SCROLL_ANCHOR]: 'reportTitle' }}
+          >
             <ReportDropdown onChange={selectReport} reports={reports} selectedReportId={resolvedReportId} />
 
             {selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}

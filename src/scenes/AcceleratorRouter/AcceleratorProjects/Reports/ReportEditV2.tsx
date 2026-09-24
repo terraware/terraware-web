@@ -17,6 +17,7 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
+import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import useScrollRestoration from 'src/hooks/useScrollRestoration';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
@@ -144,7 +145,13 @@ const ReportEditV2 = (): JSX.Element => {
     >
       <Box display='flex' flexDirection='column' flexGrow={1} width={'100%'}>
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(3) }}>
-          <Box alignItems='center' display='flex' justifyContent='space-between' marginBottom={theme.spacing(3)}>
+          <Box
+            alignItems='center'
+            display='flex'
+            justifyContent='space-between'
+            marginBottom={theme.spacing(3)}
+            {...{ [SCROLL_ANCHOR]: 'reportTitle' }}
+          >
             <Typography sx={REPORT_TITLE_STYLE}>{report ? getReportName(report) : ''}</Typography>
 
             {report && <AcceleratorReportStatusBadge status={report.status} />}
