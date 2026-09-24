@@ -13,6 +13,7 @@ import Card from 'src/components/common/Card';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
+import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import useScrollRestoration from 'src/hooks/useScrollRestoration';
 import { useLocalization } from 'src/providers';
 import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
@@ -114,7 +115,13 @@ const AcceleratorReportEditV2 = (): JSX.Element => {
     <Page hierarchicalCrumbs={false} rightComponent={rightComponent} stickyHeader title={strings.REPORTS}>
       <Box display='flex' flexDirection='column' flexGrow={1} width={'100%'}>
         <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(3) }}>
-          <Box alignItems='center' display='flex' justifyContent='space-between' marginBottom={theme.spacing(3)}>
+          <Box
+            alignItems='center'
+            display='flex'
+            justifyContent='space-between'
+            marginBottom={theme.spacing(3)}
+            {...{ [SCROLL_ANCHOR]: 'reportTitle' }}
+          >
             <Typography sx={REPORT_TITLE_STYLE}>{report ? getReportName(report) : ''}</Typography>
 
             {report && <AcceleratorReportStatusBadge status={report.status} />}

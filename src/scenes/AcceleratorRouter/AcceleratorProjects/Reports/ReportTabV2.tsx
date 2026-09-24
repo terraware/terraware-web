@@ -18,6 +18,7 @@ import ReportMessages from 'src/components/AcceleratorReports/ReportMessages';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useListAcceleratorReportsQuery } from 'src/queries/generated/acceleratorReports';
@@ -94,7 +95,7 @@ const ReportTabV2 = ({ active }: ReportTabV2Props): JSX.Element => {
         <ReportEmptyState />
       ) : (
         <>
-          <Box marginBottom={theme.spacing(3)}>
+          <Box marginBottom={theme.spacing(3)} {...{ [SCROLL_ANCHOR]: 'reportTitle' }}>
             <Box alignItems='center' display='flex' justifyContent='space-between'>
               <ReportDropdown onChange={selectReport} reports={reports} selectedReportId={resolvedReportId} />
 
