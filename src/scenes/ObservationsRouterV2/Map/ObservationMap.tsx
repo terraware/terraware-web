@@ -213,6 +213,7 @@ const ObservationMap = ({
 
   const observationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup => {
     return {
+      id: 'assignedObservation',
       title: strings.ASSIGNED_PLOT_OBSERVATION,
       tooltip: strings.ASSIGNED_PLOT_OBSERVATION_TOOLTIP,
       type: 'dropdown',
@@ -224,6 +225,7 @@ const ObservationMap = ({
 
   const adHocObservationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup => {
     return {
+      id: 'adHocObservation',
       title: strings.AD_HOC_PLOTS,
       type: 'dropdown',
       items: adHocPlotOptions,
@@ -1545,6 +1547,7 @@ const ObservationMap = ({
       drawerHeader={drawerHeader}
       drawerOpen={drawerOpen}
       drawerSize={drawerSize}
+      legendKey='observations'
       legends={showLegends ? legends : undefined}
       mapHighlights={highlights}
       mapMarkers={markers}

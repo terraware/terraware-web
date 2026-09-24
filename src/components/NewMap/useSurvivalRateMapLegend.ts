@@ -30,6 +30,7 @@ const useSurvivalRateMapLegend = (disabled?: boolean) => {
           style: survivalRateMoreThan75,
         },
       ],
+      id: 'survivalRate',
       title: strings.SURVIVAL_RATE,
       type: 'group-toggle',
       setVisible: setSurvivalRateVisible,

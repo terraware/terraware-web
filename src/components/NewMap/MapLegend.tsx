@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, Tooltip, Typography, useTheme } from '@mui/material';
 import { AntSwitch, Dropdown, Icon } from '@terraware/web-components';
@@ -6,6 +6,7 @@ import { AntSwitch, Dropdown, Icon } from '@terraware/web-components';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { MapFillComponentStyle, MapIconComponentStyle } from './types';
+import useStickyLegendSections from './useStickyLegendSections';
 
 export type MapLegendAnnotation = {
   border: 'dashed' | 'solid';
@@ -15,6 +16,8 @@ export type MapLegendAnnotation = {
 type BaseMapLegendGroup = {
   annotations?: MapLegendAnnotation[];
   disabled?: boolean;
+  /** Stable across locales, so a remembered section survives a language change. */
+  id?: string;
   title: string;
   tooltip?: string;
 };
@@ -85,6 +88,8 @@ type MapLegendItem =
 
 type MapLegendProps = {
   legends: MapLegendGroup[];
+  /** Names the map, so each one remembers its own sections. */
+  legendKey?: string;
 };
 
 const summaryFor = (legend: MapLegendGroup): string | undefined => {
@@ -100,15 +105,10 @@ const summaryFor = (legend: MapLegendGroup): string | undefined => {
   }
 };
 
-const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
+const MapLegend = ({ legends, legendKey }: MapLegendProps): JSX.Element => {
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
-  const [collapsedTitles, setCollapsedTitles] = useState<Record<string, boolean>>({});
-
-  const toggleCollapsed = useCallback(
-    (title: string) => setCollapsedTitles((current) => ({ ...current, [title]: !current[title] })),
-    []
-  );
+  const { isCollapsed, toggleSection } = useStickyLegendSections(legendKey);
 
   const onClick = useCallback((legend: MapLegendGroup, item: MapLegendItem) => {
     return legend.disabled
@@ -280,7 +280,8 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
             })
           );
 
-        const collapsed = !!collapsedTitles[legend.title];
+        const sectionKey = legend.id ?? legend.title;
+        const collapsed = isCollapsed(sectionKey);
         const summary = collapsed ? summaryFor(legend) : undefined;
 
         return (
@@ -292,11 +293,11 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
             <Box paddingBottom={'5px'} paddingTop={isFirst ? 0 : '5px'} flexDirection={'column'}>
               <Box
                 aria-expanded={!collapsed}
-                onClick={() => toggleCollapsed(legend.title)}
+                onClick={() => toggleSection(sectionKey)}
                 onKeyDown={(event) => {
                   if (event.key === 'Enter' || event.key === ' ') {
                     event.preventDefault();
-                    toggleCollapsed(legend.title);
+                    toggleSection(sectionKey);
                   }
                 }}
                 role='button'
@@ -365,7 +366,7 @@ const MapLegend = ({ legends }: MapLegendProps): JSX.Element => {
           </Box>
         );
       }),
-    [collapsedTitles, legends, onClick, theme, toggleCollapsed]
+    [isCollapsed, legends, onClick, theme, toggleSection]
   );
 
   return (

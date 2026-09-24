@@ -52,6 +52,7 @@ const useMonitoringPlotsMapLegend = (
           visible: adHocVisible,
         },
       ],
+      id: 'monitoringPlots',
       title: strings.MONITORING_PLOTS,
       type: 'multi-select',
     };
