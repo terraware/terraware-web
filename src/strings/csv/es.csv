@@ -381,7 +381,8 @@ CLOSE_SEASON,Cerrar temporada,72b4448a
 CLOSED,Cerrado,7b8d0429
 COLLECTED_FROM,Recolectado de,ffc6ad60
 COLLECTING_SITE,Lugar de recolección,7491b42b
-COLLECTION_SITE,Nombre del lugar de recolección,32b625d7
+COLLECTION_SITE,Sitio de recolección,aa9fea76
+COLLECTION_SITE_NAME,Nombre del lugar de recolección,32b625d7
 COLLECTION_SOURCE,Tipo de fuente de la planta,292a47fa
 COLLECTION_TIME,Hora de recolección,71a111d9
 COLLECTION_TIME_REQUIRED,Hora de recolección *,5c57b5c3

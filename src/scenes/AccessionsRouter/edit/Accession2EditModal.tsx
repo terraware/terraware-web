@@ -236,7 +236,11 @@ function Accession2EditModalForm({ accession, open, onClose }: Accession2EditMod
             <Typography>{strings.SITE_DETAIL} </Typography>
           </Grid>
           <Grid item xs={12}>
-            <CollectionSiteName onChange={onChange} collectionSiteName={record?.collectionSiteName} />
+            <CollectionSiteName
+              onChange={onChange}
+              collectionSiteName={record?.collectionSiteName}
+              label={strings.COLLECTION_SITE}
+            />
           </Grid>
 
           <Grid item xs={12}>

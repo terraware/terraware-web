@@ -150,13 +150,6 @@ export default function DetailPanel(): JSX.Element {
             </Grid>
             <Grid item xs={gridRightSide} sx={valueStyle}>
               {accession.collectionSiteName}
-              {accession.collectionSiteLandowner ? (
-                <Typography color={theme.palette.TwClrTxtSecondary}>
-                  ({strings.OWNER}: {accession.collectionSiteLandowner})
-                </Typography>
-              ) : (
-                ''
-              )}
               {getCollectionSiteAddress()}
 
               {accession.collectionSiteNotes && (
@@ -185,6 +178,14 @@ export default function DetailPanel(): JSX.Element {
               ) : (
                 ''
               )}
+            </Grid>
+          </Grid>
+          <Grid item xs={12} sx={gridRowStyle}>
+            <Grid item xs={gridLeftSide} sx={categoryStyle}>
+              {strings.LANDOWNER}
+            </Grid>
+            <Grid item xs={gridRightSide} sx={valueStyle}>
+              {accession.collectionSiteLandowner}
             </Grid>
           </Grid>
           <Grid item xs={12} sx={gridRowStyle}>

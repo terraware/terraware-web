@@ -51,7 +51,9 @@ test.describe('AccessionTests', () => {
     accessionId = (await page.getByText(accessionPrefix).textContent()) as string;
 
     await expect(page.getByLabel('Accession Details')).toContainText('Alex');
-    await expect(page.getByLabel('Accession Details').getByRole('paragraph')).toContainText('(Owner: Ashtyn)');
+    await expect(
+      page.getByLabel('Accession Details').getByText('Landowner', { exact: true }).locator('..')
+    ).toContainText('Ashtyn');
     await expect(page.getByLabel('Accession Details')).toContainText('Collected from plants');
     await page.getByRole('button', { name: 'Check In' }).click();
     await expect(page.getByRole('main')).toContainText('Awaiting Processing');

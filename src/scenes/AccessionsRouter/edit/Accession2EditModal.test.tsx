@@ -63,6 +63,17 @@ const renderModal = () =>
     path: '/accessions/:accessionId',
   });
 
+describe('Accession2EditModal collection site fields', () => {
+  it('uses the Collection Site label and shows Landowner separately', async () => {
+    mockDependencies(buildAccession({ collectionSiteName: 'Ridgewood', collectionSiteLandowner: 'Jennifer Yim' }));
+    renderModal();
+
+    expect(await screen.findByLabelText(strings.COLLECTION_SITE)).toHaveValue('Ridgewood');
+    expect(screen.getByText(strings.LANDOWNER)).toBeVisible();
+    expect(screen.getByDisplayValue('Jennifer Yim')).toBeVisible();
+  });
+});
+
 describe('Accession2EditModal photos', () => {
   it('uploads a newly selected photo when the accession is saved', async () => {
     mockDependencies(buildAccession());
