@@ -62,7 +62,7 @@ const columns = (): TableColumnType[] => [
     type: 'string',
   },
   { key: 'collectedTime', name: strings.COLLECTION_TIME, type: 'string' },
-  { key: 'collectionSiteName', name: strings.COLLECTION_SITE, type: 'string' },
+  { key: 'collectionSiteName', name: strings.COLLECTION_SITE_NAME, type: 'string' },
 ];
 
 const SEARCH_FIELDS_ACCESSIONS: (keyof SearchResponseAccession)[] = [

@@ -9,10 +9,15 @@ import strings from 'src/strings';
 
 interface Props {
   collectionSiteName?: string;
+  label?: string;
   onChange: (id: string, value: string) => void;
 }
 
-export default function CollectionSiteName({ collectionSiteName = '', onChange }: Props): JSX.Element | null {
+export default function CollectionSiteName({
+  collectionSiteName = '',
+  label = strings.COLLECTION_SITE_NAME,
+  onChange,
+}: Props): JSX.Element | null {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
 
@@ -28,7 +33,7 @@ export default function CollectionSiteName({ collectionSiteName = '', onChange }
     <Box mb={2} display='flex' alignItems='center' sx={{ display: 'block', position: 'relative' }}>
       <RecentValuesAutocomplete
         id='collectionSiteName'
-        label={strings.COLLECTION_SITE}
+        label={label}
         onChange={(value) => onChange('collectionSiteName', value)}
         values={options || []}
         allLabel={strings.ALL_COLLECTION_SITES}

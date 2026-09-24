@@ -380,7 +380,8 @@ CLOSE_SEASON,Clore la saison,72b4448a
 CLOSED,Fermé,7b8d0429
 COLLECTED_FROM,Collecté à partir de,ffc6ad60
 COLLECTING_SITE,Site de collecte,7491b42b
-COLLECTION_SITE,Nom du site de collection,32b625d7
+COLLECTION_SITE,Site de collecte,aa9fea76
+COLLECTION_SITE_NAME,Nom du site de collection,32b625d7
 COLLECTION_SOURCE,Type de source végétale,292a47fa
 COLLECTION_TIME,Heure de collecte,71a111d9
 COLLECTION_TIME_REQUIRED,Heure de collecte *,5c57b5c3
