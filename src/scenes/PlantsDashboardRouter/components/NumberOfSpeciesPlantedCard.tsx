@@ -61,12 +61,14 @@ type NumberOfSpeciesPlantedCardProps = {
   plantingSiteId?: number;
   projectId?: number | 'all';
   organizationId?: number;
+  stratumId?: number;
 };
 
 export default function NumberOfSpeciesPlantedCard({
   plantingSiteId,
   projectId,
   organizationId,
+  stratumId,
 }: NumberOfSpeciesPlantedCardProps): JSX.Element | undefined {
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
   const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse]);
@@ -82,7 +84,9 @@ export default function NumberOfSpeciesPlantedCard({
   } else if (plantingSite && !plantingSite?.strata?.length) {
     return <SiteWithoutStrataCard plantingSiteId={plantingSite.id} organizationId={organizationId} />;
   } else if (plantingSite && plantingSite?.strata?.length) {
-    return <SiteWithStrataCard plantingSiteId={plantingSite.id} organizationId={organizationId} />;
+    return (
+      <SiteWithStrataCard plantingSiteId={plantingSite.id} organizationId={organizationId} stratumId={stratumId} />
+    );
   } else {
     return <ChartData labels={[]} values={[]} />;
   }
@@ -212,23 +216,32 @@ const SiteWithoutStrataCard = ({
 const SiteWithStrataCard = ({
   plantingSiteId,
   organizationId,
+  stratumId,
 }: {
   plantingSiteId: number;
   organizationId?: number;
+  stratumId?: number;
 }): JSX.Element => {
   const { strings } = useLocalization();
   const plantingsResponse = useGetPlantingSiteReportedPlantsQuery(plantingSiteId);
   const plantingSiteReportedPlants = useMemo(() => plantingsResponse.data?.site, [plantingsResponse.data?.site]);
+  const reportedPlants = useMemo(
+    () =>
+      stratumId === undefined
+        ? plantingSiteReportedPlants
+        : plantingSiteReportedPlants?.strata.find((stratum) => stratum.id === stratumId),
+    [plantingSiteReportedPlants, stratumId]
+  );
   const { species: orgSpecies } = useOrganizationSpecies({ organizationId });
 
-  const totalSpecies = useMemo(() => plantingSiteReportedPlants?.species.length ?? 0, [plantingSiteReportedPlants]);
+  const totalSpecies = useMemo(() => reportedPlants?.species.length ?? 0, [reportedPlants]);
 
   const { labels, values, rareSpecies } = useMemo(() => {
-    if (plantingSiteReportedPlants?.species && orgSpecies) {
+    if (reportedPlants?.species && orgSpecies) {
       const categoryTotals: Record<string, number> = {};
       let totalRare = 0;
 
-      plantingSiteReportedPlants.species.forEach((reportedSpecies) => {
+      reportedPlants.species.forEach((reportedSpecies) => {
         const species = orgSpecies.find((s) => s.id === reportedSpecies.id);
         if (species) {
           if (species.rare) {
@@ -260,7 +273,7 @@ const SiteWithStrataCard = ({
       };
     }
     return { labels: undefined, values: undefined, rareSpecies: undefined };
-  }, [plantingSiteReportedPlants, orgSpecies, totalSpecies, strings]);
+  }, [reportedPlants, orgSpecies, totalSpecies, strings]);
 
   return <ChartData labels={labels} values={values} rareSpecies={rareSpecies} />;
 };

@@ -2,6 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Dropdown } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
@@ -32,6 +33,7 @@ type PlantsDashboardViewProps = {
 };
 
 type ProjectId = number | 'all';
+type TotalsStratumId = number | 'all';
 
 const PREFERENCE_NAME = 'plants.dashboard.lastVisitedPlantingSite';
 
@@ -47,6 +49,7 @@ export default function PlantsDashboardView({
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const [projectId, setProjectId] = useState<ProjectId>(acceleratorProjectId ?? 'all');
+  const [totalsStratumId, setTotalsStratumId] = useState<TotalsStratumId>('all');
   const isProjectSelected = typeof projectId === 'number';
 
   const { plantingSiteId: plantingSiteIdParam } = useParams<{ plantingSiteId: string }>();
@@ -93,6 +96,18 @@ export default function PlantsDashboardView({
   const { plantingSite } = usePlantingSite(
     selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId
   );
+
+  const totalsStratumOptions = useMemo(
+    () => [
+      { label: strings.ALL_STRATA, value: 'all' },
+      ...(plantingSite?.strata?.map((stratum) => ({ label: stratum.name, value: stratum.id })) ?? []),
+    ],
+    [plantingSite?.strata, strings.ALL_STRATA]
+  );
+
+  useEffect(() => {
+    setTotalsStratumId('all');
+  }, [plantingSite?.id]);
 
   // Poll for survival rate recalculation and refresh observation results when it completes.
   const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(plantingSite?.id);
@@ -168,8 +183,17 @@ export default function PlantsDashboardView({
           <Typography fontWeight={600} fontSize={'20px'} paddingRight={1}>
             {selectedPlantingSiteId === ALL_PLANTING_SITES && showAllSitesOption
               ? strings.PROJECT_AREA_TOTALS
-              : strings.PLANTING_SITE_TOTALS}
+              : strings.PLANTED_TOTALS}
           </Typography>
+          {plantingSite?.strata?.length ? (
+            <Dropdown
+              id='planting-site-totals-stratum'
+              options={totalsStratumOptions}
+              onChange={(newValue) => setTotalsStratumId(newValue === 'all' ? 'all' : Number(newValue))}
+              selectedValue={totalsStratumId}
+              sx={{ minWidth: '240px' }}
+            />
+          ) : null}
         </Box>
       </Grid>
       <Grid item xs={12}>
@@ -177,6 +201,7 @@ export default function PlantsDashboardView({
           plantingSiteId={selectedPlantingSiteId !== ALL_PLANTING_SITES ? plantingSite?.id : undefined}
           projectId={projectId}
           organizationId={dashboardOrganizationId}
+          stratumId={totalsStratumId === 'all' ? undefined : totalsStratumId}
         />
       </Grid>
     </>

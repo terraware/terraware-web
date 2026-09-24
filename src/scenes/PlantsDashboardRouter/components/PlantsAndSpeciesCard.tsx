@@ -23,10 +23,12 @@ export default function PlantsAndSpeciesCard({
   plantingSiteId,
   projectId,
   organizationId,
+  stratumId,
 }: {
   plantingSiteId?: number;
   projectId?: number | 'all';
   organizationId?: number;
+  stratumId?: number;
 }): JSX.Element {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -49,6 +51,16 @@ export default function PlantsAndSpeciesCard({
   }, [getPlantingSite, listPlantingSiteReportedPlants, listPlantingSites, plantingSiteId, projectId]);
 
   const plantingSite = useMemo(() => getPlantingSiteResponse.currentData?.site, [getPlantingSiteResponse]);
+
+  const selectedStratum = useMemo(
+    () => plantingSite?.strata?.find((candidate) => candidate.id === stratumId),
+    [plantingSite?.strata, stratumId]
+  );
+
+  const stratumReportedPlants = useMemo(
+    () => plantingSiteReportedPlants?.strata.find((candidate) => candidate.id === stratumId),
+    [plantingSiteReportedPlants?.strata, stratumId]
+  );
 
   const projectPlantingSites = useMemo(
     () => listPlantingSitesResponse.currentData?.sites ?? [],
@@ -77,10 +89,12 @@ export default function PlantsAndSpeciesCard({
   const totalArea = useMemo(() => {
     if (typeof projectId === 'number' && plantingSiteId === undefined) {
       return totalAreaRolledUp;
+    } else if (stratumId !== undefined) {
+      return selectedStratum?.areaHa ?? 0;
     } else {
       return plantingSite?.areaHa ?? 0;
     }
-  }, [plantingSite, plantingSiteId, projectId, totalAreaRolledUp]);
+  }, [plantingSite, plantingSiteId, projectId, selectedStratum, stratumId, totalAreaRolledUp]);
 
   const calculatePlantingSitePlantedArea = (site: PlantingSite) => {
     return (
@@ -98,12 +112,19 @@ export default function PlantsAndSpeciesCard({
   const totalPlantedArea = useMemo(() => {
     if (typeof projectId === 'number' && plantingSiteId === undefined) {
       return projectTotalPlanted;
+    } else if (stratumId !== undefined) {
+      return (
+        selectedStratum?.substrata.reduce(
+          (total, substratum) => (substratum.plantingCompleted ? total + Number(substratum.areaHa) : total),
+          0
+        ) ?? 0
+      );
     } else if (plantingSiteId && plantingSite) {
       return calculatePlantingSitePlantedArea(plantingSite);
     } else {
       return 0;
     }
-  }, [plantingSite, plantingSiteId, projectId, projectTotalPlanted]);
+  }, [plantingSite, plantingSiteId, projectId, projectTotalPlanted, selectedStratum, stratumId]);
 
   const percentagePlanted = useMemo(() => {
     return totalArea > 0 ? Math.round(((totalPlantedArea || 0) / totalArea) * 100) : 0;
@@ -170,7 +191,13 @@ export default function PlantsAndSpeciesCard({
                     value={projectReportedPlants.reduce((sum, sitePlants) => sum + sitePlants.totalPlants, 0)}
                   />
                 ) : (
-                  <FormattedNumber value={plantingSiteReportedPlants?.totalPlants ?? 0} />
+                  <FormattedNumber
+                    value={
+                      stratumId === undefined
+                        ? plantingSiteReportedPlants?.totalPlants ?? 0
+                        : stratumReportedPlants?.totalPlants ?? 0
+                    }
+                  />
                 )}{' '}
                 {strings.PLANTS}
               </Typography>
@@ -198,7 +225,13 @@ export default function PlantsAndSpeciesCard({
                 {typeof projectId === 'number' && plantingSiteId === undefined ? (
                   <FormattedNumber value={projectTotalSpecies} />
                 ) : (
-                  <FormattedNumber value={plantingSiteReportedPlants?.species?.length ?? 0} />
+                  <FormattedNumber
+                    value={
+                      stratumId === undefined
+                        ? plantingSiteReportedPlants?.species?.length ?? 0
+                        : stratumReportedPlants?.totalSpecies ?? 0
+                    }
+                  />
                 )}{' '}
                 {strings.SPECIES}
               </Typography>
@@ -230,6 +263,7 @@ export default function PlantsAndSpeciesCard({
               plantingSiteId={plantingSiteId}
               projectId={projectId}
               organizationId={organizationId}
+              stratumId={stratumId}
             />
           </Box>
           <div
@@ -246,6 +280,7 @@ export default function PlantsAndSpeciesCard({
               plantingSiteId={plantingSiteId}
               projectId={projectId}
               organizationId={organizationId}
+              stratumId={stratumId}
             />
           </Box>
         </Card>
