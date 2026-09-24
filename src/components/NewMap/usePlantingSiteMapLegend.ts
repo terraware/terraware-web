@@ -35,6 +35,7 @@ const usePlantingSiteMapLegend = (defaultLayer?: PlantingSiteMapLayer, disabled?
           style: substrataLayerStyle,
         },
       ],
+      id: 'boundaries',
       title: strings.BOUNDARIES,
       type: 'single-select',
       selectedLayer,

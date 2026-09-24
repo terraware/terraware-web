@@ -61,6 +61,7 @@ const usePlotPhotosMapLegend = (options: UsePlotPhotosMapLegendOptions = {}) => 
     return {
       disabled,
       items,
+      id: 'photos',
       title: strings.PHOTOS_VIDEOS,
       type: 'multi-select',
     };

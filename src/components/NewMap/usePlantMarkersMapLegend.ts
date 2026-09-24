@@ -30,6 +30,7 @@ const usePlantMarkersMapLegend = (disabled?: boolean) => {
           visible: deadPlantsVisible,
         },
       ],
+      id: 'plants',
       title: strings.PLANTS,
       type: 'multi-select',
     };

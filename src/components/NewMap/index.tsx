@@ -36,6 +36,7 @@ type MapComponentProps = {
   hideZoomControl?: boolean;
   initialViewState?: MapViewState;
   legends?: MapLegendGroup[];
+  legendKey?: string;
   mapContainerId?: string;
   mapHighlights?: MapHighlightGroup[];
   mapId?: string;
@@ -78,6 +79,7 @@ const MapComponent = (props: MapComponentProps) => {
     hideZoomControl,
     initialViewState,
     legends,
+    legendKey,
     mapContainerId,
     mapHighlights,
     mapId,
@@ -226,7 +228,7 @@ const MapComponent = (props: MapComponentProps) => {
       }
       drawerOpen={drawerOpen}
       hideBorder={hideBorder}
-      legend={legends && <MapLegend legends={legends} />}
+      legend={legends && <MapLegend legendKey={legendKey} legends={legends} />}
       map={map}
       style={containerStyle}
     />
