@@ -7,23 +7,31 @@ import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingS
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { SpeciesTargetForSubstratum } from 'src/queries/search/speciesTargetsForSubstratum';
 import { NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
+import { getMediumDate } from 'src/utils/dateFormatter';
 
 import SeedlingBatchBox from './SeedlingBatchBox';
 import SpeciesTargetsTable from './SpeciesTargetsTable';
-import { BatchInfo, BatchWithdrawDraft, BatchWithdrawQuantities } from './types';
+import { BatchInfo, BatchWithdrawDraft, BatchWithdrawQuantities, PlantingDateForWithdrawal } from './types';
 
 type QuantitiesStepProps = {
   batches: BatchInfo[];
   draft: BatchWithdrawDraft;
+  selectedPlantingDate?: PlantingDateForWithdrawal;
   speciesTargets?: SpeciesTargetForSubstratum[];
   setWithdrawByBatch: (
     updater: (prev: Record<number, BatchWithdrawQuantities>) => Record<number, BatchWithdrawQuantities>
   ) => void;
 };
 
-const QuantitiesStep = ({ batches, draft, speciesTargets, setWithdrawByBatch }: QuantitiesStepProps): JSX.Element => {
+const QuantitiesStep = ({
+  batches,
+  draft,
+  selectedPlantingDate,
+  speciesTargets,
+  setWithdrawByBatch,
+}: QuantitiesStepProps): JSX.Element => {
   const theme = useTheme();
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const organizationId = selectedOrganization?.id;
 
@@ -69,18 +77,33 @@ const QuantitiesStep = ({ batches, draft, speciesTargets, setWithdrawByBatch }: 
   // Group batches by species so we can render one box per species, sorted by
   // scientific name for stable order.
   const batchesBySpecies = useMemo(() => {
-    const map = new Map<number, { speciesName: string; batches: BatchInfo[] }>();
+    const map = new Map<number, { speciesId: number; speciesName: string; batches: BatchInfo[] }>();
     batches.forEach((b) => {
       const existing = map.get(b.speciesId);
       const speciesName = b.scientificName + (b.commonName ? ` (${b.commonName})` : '');
       if (existing) {
         existing.batches.push(b);
       } else {
-        map.set(b.speciesId, { speciesName, batches: [b] });
+        map.set(b.speciesId, { speciesId: b.speciesId, speciesName, batches: [b] });
       }
     });
     return [...map.values()].sort((a, b) => a.speciesName.localeCompare(b.speciesName));
   }, [batches]);
+
+  const remainingToWithdrawBySpecies = useMemo(() => {
+    if (!selectedPlantingDate || draft.substratumId === undefined) {
+      return undefined;
+    }
+    const selectedSubstratum = selectedPlantingDate.substrata.find(
+      (substratum) => substratum.substratumId === draft.substratumId
+    );
+    return new Map(
+      selectedSubstratum?.species.map((species) => [
+        species.speciesId,
+        Math.max(0, species.quantity - species.withdrawnQuantity),
+      ]) ?? []
+    );
+  }, [draft.substratumId, selectedPlantingDate]);
 
   const destinationNurseryName = useMemo(() => {
     if (!isNurseryTransfer) {
@@ -134,6 +157,15 @@ const QuantitiesStep = ({ batches, draft, speciesTargets, setWithdrawByBatch }: 
         </Box>
       )}
 
+      {selectedPlantingDate && (
+        <Box textAlign='left' paddingLeft={theme.spacing(2)}>
+          <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+            {strings.PLANTING_DATE}
+          </Typography>
+          <Typography fontSize='14px'>{getMediumDate(selectedPlantingDate.date, activeLocale)}</Typography>
+        </Box>
+      )}
+
       {destinationNurseryName && (
         <Box
           display='grid'
@@ -159,6 +191,9 @@ const QuantitiesStep = ({ batches, draft, speciesTargets, setWithdrawByBatch }: 
           speciesName={group.speciesName}
           batches={group.batches}
           isPlanting={isPlanting}
+          remainingToWithdraw={
+            remainingToWithdrawBySpecies ? remainingToWithdrawBySpecies.get(group.speciesId) ?? 0 : undefined
+          }
           withdrawByBatch={draft.withdrawByBatch}
           setWithdrawByBatch={setWithdrawByBatch}
         />

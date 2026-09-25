@@ -14,7 +14,9 @@ import {
   useCreateBatchWithdrawalMutation,
   useUploadWithdrawalPhotoMutation,
 } from 'src/queries/generated/nurseryWithdrawals';
+import { ScheduledDatePayload, useGetScheduledPlantingDatesQuery } from 'src/queries/generated/plantingSeasons';
 import { useLazyListBatchesByIdsQuery } from 'src/queries/search/batches';
+import { PlantingDateRequestRow, useLazyListPlantingDateRequestsQuery } from 'src/queries/search/plantingDateRequests';
 import { useLazyListSpeciesTargetsForSubstratumQuery } from 'src/queries/search/speciesTargetsForSubstratum';
 import { NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 import { isContributor } from 'src/utils/organization';
@@ -23,7 +25,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 import AddPhotosStep from './AddPhotosStep';
 import PurposeAndDestinationStep from './PurposeAndDestinationStep';
 import QuantitiesStep from './QuantitiesStep';
-import { BatchInfo, BatchWithdrawDraft, BatchWithdrawQuantities } from './types';
+import { BatchInfo, BatchWithdrawDraft, BatchWithdrawQuantities, PlantingDateForWithdrawal } from './types';
 
 type BatchWithdrawModalProps = {
   open: boolean;
@@ -59,6 +61,24 @@ const batchQuantityForField = (batch: BatchInfo, field: keyof BatchWithdrawQuant
   return 0;
 };
 
+const scheduledDateSpeciesKey = ({ quantity, speciesId, substratumId }: ScheduledDatePayload['species'][0]) =>
+  `${substratumId}-${speciesId}-${quantity}`;
+
+const requestSpeciesKey = (substratumId: number, species: PlantingDateRequestRow['substrata'][0]['species'][0]) =>
+  `${substratumId}-${species.speciesId}-${species.quantity}`;
+
+const scheduledDateMatchesRequest = (scheduledDate: ScheduledDatePayload, request: PlantingDateRequestRow): boolean => {
+  const scheduledSpeciesKeys = scheduledDate.species.map(scheduledDateSpeciesKey).sort();
+  const requestSpeciesKeys = request.substrata
+    .flatMap((substratum) => substratum.species.map((species) => requestSpeciesKey(substratum.substratumId, species)))
+    .sort();
+
+  return (
+    scheduledSpeciesKeys.length === requestSpeciesKeys.length &&
+    scheduledSpeciesKeys.every((key, index) => key === requestSpeciesKeys[index])
+  );
+};
+
 const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps): JSX.Element => {
   const theme = useTheme();
   const { strings } = useLocalization();
@@ -71,6 +91,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
 
   const [listBatchesByIds, { currentData: searchedBatches }] = useLazyListBatchesByIdsQuery();
   const [listSpeciesTargets, speciesTargetsResult] = useLazyListSpeciesTargetsForSubstratumQuery();
+  const [listPlantingDateRequests, plantingDateRequestsResult] = useLazyListPlantingDateRequestsQuery();
   const [createBatchWithdrawal, { isLoading: isCreating }] = useCreateBatchWithdrawalMutation();
   const [uploadWithdrawalPhoto] = useUploadWithdrawalPhotoMutation();
 
@@ -89,6 +110,9 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
 
   const [draft, setDraft] = useState<BatchWithdrawDraft>(defaultDraft);
   const [hasWithdrawn, setHasWithdrawn] = useState(false);
+  const { currentData: scheduledDatesData } = useGetScheduledPlantingDatesQuery(draft.plantingSeasonId ?? 0, {
+    skip: !open || draft.plantingSeasonId === undefined,
+  });
 
   useEffect(() => {
     if (selectedOrganization && batchIds.length > 0) {
@@ -145,6 +169,10 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       const purposeChangedAwayFromPlanting =
         purposeChanged && nextPurpose !== NurseryWithdrawalRequestPurposes.OUTPLANT;
       const resetPlantingTargets = nurseryChanged || purposeChangedAwayFromPlanting;
+      const plantingSeasonChanged = 'plantingSeasonId' in next && next.plantingSeasonId !== prev.plantingSeasonId;
+      const plantingDateChanged =
+        'scheduledPlantingDateRequestId' in next &&
+        next.scheduledPlantingDateRequestId !== prev.scheduledPlantingDateRequestId;
       return {
         ...prev,
         ...next,
@@ -154,10 +182,13 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
           ? {
               plantingSiteId: undefined,
               plantingSeasonId: undefined,
+              scheduledPlantingDateRequestId: undefined,
               stratumId: undefined,
               substratumId: undefined,
             }
           : {}),
+        ...(plantingSeasonChanged ? { scheduledPlantingDateRequestId: undefined } : {}),
+        ...(plantingDateChanged ? { stratumId: undefined, substratumId: undefined } : {}),
       };
     });
   }, []);
@@ -191,6 +222,44 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
       void listSpeciesTargets(selectedSpeciesTargetArgs, true);
     }
   }, [listSpeciesTargets, selectedSpeciesTargetArgs]);
+
+  useEffect(() => {
+    if (open && selectedOrganization && draft.plantingSeasonId !== undefined) {
+      void listPlantingDateRequests(
+        { organizationId: selectedOrganization.id, plantingSeasonId: draft.plantingSeasonId },
+        true
+      );
+    }
+  }, [draft.plantingSeasonId, listPlantingDateRequests, open, selectedOrganization]);
+
+  const plantingDates = useMemo<PlantingDateForWithdrawal[]>(() => {
+    if (draft.plantingSeasonId === undefined) {
+      return [];
+    }
+    const requestArgs = plantingDateRequestsResult.originalArgs;
+    if (requestArgs?.plantingSeasonId !== draft.plantingSeasonId) {
+      return [];
+    }
+
+    return (plantingDateRequestsResult.currentData ?? []).flatMap((request) => {
+      const dateMatches = (scheduledDatesData?.scheduledDates ?? []).filter(
+        (candidate) => candidate.date === request.date
+      );
+      const scheduledDate =
+        dateMatches.length === 1
+          ? dateMatches[0]
+          : dateMatches.find((candidate) => scheduledDateMatchesRequest(candidate, request));
+      return scheduledDate ? [{ ...request, scheduledPlantingDateId: scheduledDate.scheduledPlantingDateId }] : [];
+    });
+  }, [draft.plantingSeasonId, plantingDateRequestsResult, scheduledDatesData]);
+
+  const selectedPlantingDate = useMemo(
+    () =>
+      plantingDates.find(
+        (plantingDate) => plantingDate.scheduledPlantingDateId === draft.scheduledPlantingDateRequestId
+      ),
+    [draft.scheduledPlantingDateRequestId, plantingDates]
+  );
 
   const visibleSpeciesTargets = useMemo(() => {
     if (!selectedSpeciesTargetArgs) {
@@ -336,6 +405,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
         purpose: draft.purpose as Exclude<typeof draft.purpose, 'Undo'>,
         plantingSiteId: isOutPlant ? draft.plantingSiteId : undefined,
         plantingSeasonId: isOutPlant ? draft.plantingSeasonId : undefined,
+        scheduledPlantingDateRequestId: isOutPlant ? draft.scheduledPlantingDateRequestId : undefined,
         substratumId: isOutPlant ? draft.substratumId : undefined,
         destinationFacilityId: isNurseryTransfer ? draft.destinationFacilityId : undefined,
         notes: draft.notes ? draft.notes : undefined,
@@ -554,6 +624,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
               batches={batches}
               contributor={contributor}
               draft={draft}
+              plantingDates={plantingDates}
               speciesTargets={visibleSpeciesTargets}
               onChange={updateDraft}
             />
@@ -562,6 +633,7 @@ const BatchWithdrawModal = ({ open, onClose, batchIds }: BatchWithdrawModalProps
             <QuantitiesStep
               batches={quantityStepBatches}
               draft={draft}
+              selectedPlantingDate={selectedPlantingDate}
               speciesTargets={visibleSpeciesTargets}
               setWithdrawByBatch={setWithdrawByBatch}
             />

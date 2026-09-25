@@ -13,6 +13,7 @@ type SeedlingBatchBoxProps = {
   speciesName: string;
   batches: BatchInfo[];
   isPlanting: boolean;
+  remainingToWithdraw?: number;
   withdrawByBatch: Record<number, BatchWithdrawQuantities>;
   setWithdrawByBatch: (
     updater: (prev: Record<number, BatchWithdrawQuantities>) => Record<number, BatchWithdrawQuantities>
@@ -30,6 +31,7 @@ const SeedlingBatchBox = ({
   speciesName,
   batches,
   isPlanting,
+  remainingToWithdraw,
   withdrawByBatch,
   setWithdrawByBatch,
 }: SeedlingBatchBoxProps): JSX.Element => {
@@ -97,9 +99,21 @@ const SeedlingBatchBox = ({
           borderBottom: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
         }}
       >
-        <Typography fontSize='16px' fontWeight={400} textAlign='left'>
-          {speciesName}
-        </Typography>
+        <Box display='flex' justifyContent='space-between' alignItems='center' gap={theme.spacing(2)}>
+          <Typography fontSize='16px' fontWeight={400} textAlign='left'>
+            {speciesName}
+          </Typography>
+          {remainingToWithdraw !== undefined && (
+            <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
+              <Typography fontSize='14px' fontWeight={600}>
+                {strings.REMAINING_TO_WITHDRAW}:
+              </Typography>
+              <Typography fontSize='16px' fontWeight={600}>
+                {remainingToWithdraw.toLocaleString()}
+              </Typography>
+            </Box>
+          )}
+        </Box>
       </Box>
       <Box
         display='grid'
