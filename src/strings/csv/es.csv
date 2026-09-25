@@ -1942,6 +1942,8 @@ REMOVE_PERSON,Eliminar persona,c7c8903c
 REMOVE_PERSON_DESC,"¿Está seguro de que desea eliminar a {0}? Al eliminar a {0}, ya no tendrá acceso a los datos de su organización.",000a6493
 REMOVE_PROJECT,Eliminar proyecto,3e32288a
 REMOVE_SPECIES,Borrar especies,bbc8f149
+REMOVE_VIRTUAL_WALKTHROUGH,Eliminar Recorrido Virtual,19cd7395
+REMOVE_VIRTUAL_WALKTHROUGH_CONFIRM,¿Está seguro de que desea eliminar este Recorrido Virtual? Esta acción no se puede deshacer.,d5c769f1
 REMOVING_ORG_WARNING,"Al eliminarse a sí mismo de {0}, ya no tendrá acceso a los datos de esta organización. ¿Está seguro de que desea guardar los cambios?",767a2892
 REPLACE,Reemplazar,f6e3faed
 REPLACE_BOUNDARY,Cambiar lindero,f20d140b
