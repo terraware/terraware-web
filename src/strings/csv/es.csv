@@ -1622,6 +1622,7 @@ PLANT_MONITORING,Monitoreo de plantas,21ade0c5
 PLANTED_PLANTS,Plantas plantadas,c3ba4493
 PLANTED_SPECIES,Especies plantadas,0dd1f725
 PLANTED_SPECIES_TOOLTIP,"Las ""Especies plantadas"" indican el porcentaje de cada especie plantada. Se nombran las cuatro especies más comunes y el resto se agrupa en ""Otras especies"".",f4a01a11
+PLANTED_TOTALS,Totales Plantados,4a3edf5a
 PLANTING,Plantación,3fabf341
 PLANTING_COMPLETE,¿Plantación completa?,e348c8a4
 PLANTING_COMPLETE_AREA,Área total de plantación,25dc3dab

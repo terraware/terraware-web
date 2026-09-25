@@ -24,6 +24,7 @@ type PlantsReportedPerSpeciesCardProps = {
   plantingSiteId?: number;
   projectId?: number | 'all';
   organizationId?: number;
+  stratumId?: number;
 };
 
 export default function PlantsReportedPerSpeciesCard({
@@ -31,6 +32,7 @@ export default function PlantsReportedPerSpeciesCard({
   plantingSiteId,
   projectId,
   organizationId,
+  stratumId,
 }: PlantsReportedPerSpeciesCardProps): JSX.Element | undefined {
   const [getPlantingSite, getPlantingSiteResponse] = useLazyGetPlantingSiteQuery();
   const plantingSite = useMemo(() => getPlantingSiteResponse.data?.site, [getPlantingSiteResponse]);
@@ -49,7 +51,12 @@ export default function PlantsReportedPerSpeciesCard({
     );
   } else if (plantingSite && plantingSite?.strata?.length) {
     return (
-      <SiteWithStrataCard plantingSiteId={plantingSite.id} newVersion={newVersion} organizationId={organizationId} />
+      <SiteWithStrataCard
+        plantingSiteId={plantingSite.id}
+        newVersion={newVersion}
+        organizationId={organizationId}
+        stratumId={stratumId}
+      />
     );
   } else {
     return (
@@ -170,21 +177,30 @@ const SiteWithStrataCard = ({
   plantingSiteId,
   newVersion,
   organizationId,
+  stratumId,
 }: {
   plantingSiteId: number;
   newVersion?: boolean;
   organizationId?: number;
+  stratumId?: number;
 }): JSX.Element => {
   const plantingSiteReportedPlantsResponse = useGetPlantingSiteReportedPlantsQuery(plantingSiteId);
   const plantingSiteReportedPlants = useMemo(
     () => plantingSiteReportedPlantsResponse.data?.site,
     [plantingSiteReportedPlantsResponse]
   );
+  const reportedPlants = useMemo(
+    () =>
+      stratumId === undefined
+        ? plantingSiteReportedPlants
+        : plantingSiteReportedPlants?.strata.find((stratum) => stratum.id === stratumId),
+    [plantingSiteReportedPlants, stratumId]
+  );
   const { species: orgSpecies } = useOrganizationSpecies({ organizationId });
 
   const speciesQuantities = useMemo(() => {
-    if (plantingSiteReportedPlants && orgSpecies) {
-      const transformedPlantings = plantingSiteReportedPlants.species
+    if (reportedPlants && orgSpecies) {
+      const transformedPlantings = reportedPlants.species
         .map((population) => {
           const speciesName = orgSpecies.find((species) => species.id === population.id)?.scientificName ?? '';
           return {
@@ -197,7 +213,7 @@ const SiteWithStrataCard = ({
     } else {
       return [];
     }
-  }, [plantingSiteReportedPlants, orgSpecies, newVersion]);
+  }, [reportedPlants, orgSpecies, newVersion]);
 
   const labels = useMemo(
     () => Object.keys(speciesQuantities).map((name) => truncate(name, MAX_SPECIES_NAME_LENGTH)),
@@ -208,7 +224,7 @@ const SiteWithStrataCard = ({
 
   return (
     <ChartData
-      plantingSiteId={plantingSiteId}
+      plantingSiteId={stratumId ?? plantingSiteId}
       tooltipTitles={tooltipTitles}
       labels={labels}
       values={values}

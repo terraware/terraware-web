@@ -1621,6 +1621,7 @@ PLANT_MONITORING,Surveillance des végétaux,21ade0c5
 PLANTED_PLANTS,Plantes semées,c3ba4493
 PLANTED_SPECIES,Espèces plantées,0dd1f725
 PLANTED_SPECIES_TOOLTIP,La rubrique « Espèces plantées » indique les pourcentages de chacune des espèces plantées. Les quatre premières espèces sont nommées et les autres sont incluses dans la rubrique « Autres espèces ».,f4a01a11
+PLANTED_TOTALS,Totaux plantés,4a3edf5a
 PLANTING,Plantation,3fabf341
 PLANTING_COMPLETE,Plantation terminée ?,e348c8a4
 PLANTING_COMPLETE_AREA,Zone de plantation complète,25dc3dab

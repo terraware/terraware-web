@@ -56,7 +56,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
 
     await expect(page.getByText('Total Planting Area', { exact: true })).toBeVisible();
     await expect(page.getByText('6,793.5 ha').first()).toBeVisible();
-    await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
+    await expect(page.getByText('Planted Totals', { exact: true })).toBeVisible();
     await expect(
       page
         .locator('div')
@@ -97,7 +97,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
         { exact: true }
       )
     ).toBeVisible();
-    await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
+    await expect(page.getByText('Planted Totals', { exact: true })).toBeVisible();
     await expect(
       page
         .locator('div')
@@ -186,7 +186,7 @@ test.describe('ParticipantPlantsDashboardTests', () => {
       )
     ).toBeVisible();
     await expect(page.getByRole('button', { name: 'Add a Planting Site' })).toBeVisible();
-    await expect(page.getByText('Planting Site Totals', { exact: true })).toBeVisible();
+    await expect(page.getByText('Planted Totals', { exact: true })).toBeVisible();
     await expect(
       page
         .locator('div')
