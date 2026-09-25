@@ -1,4 +1,9 @@
+import { PlantingDateRequestRow } from 'src/queries/search/plantingDateRequests';
 import { NurseryWithdrawalPurpose } from 'src/types/Batch';
+
+export type PlantingDateForWithdrawal = PlantingDateRequestRow & {
+  scheduledPlantingDateId: number;
+};
 
 export type BatchInfo = {
   batchId: number;
@@ -24,6 +29,7 @@ export type BatchWithdrawDraft = {
   projectId?: number;
   plantingSiteId?: number;
   plantingSeasonId?: number;
+  scheduledPlantingDateRequestId?: number;
   stratumId?: number;
   substratumId?: number;
   withdrawnDate: string;

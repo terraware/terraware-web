@@ -14,9 +14,10 @@ import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSit
 import { SpeciesTargetForSubstratum } from 'src/queries/search/speciesTargetsForSubstratum';
 import { NurseryWithdrawalPurpose, NurseryWithdrawalRequestPurposes } from 'src/types/Batch';
 import { Project } from 'src/types/Project';
+import { getMediumDate } from 'src/utils/dateFormatter';
 
 import SpeciesTargetsTable from './SpeciesTargetsTable';
-import { BatchInfo, BatchWithdrawDraft } from './types';
+import { BatchInfo, BatchWithdrawDraft, PlantingDateForWithdrawal } from './types';
 
 const NO_PLANTING_SEASON_VALUE = 'no-planting-season';
 
@@ -24,6 +25,7 @@ type PurposeAndDestinationStepProps = {
   batches: BatchInfo[];
   contributor: boolean;
   draft: BatchWithdrawDraft;
+  plantingDates: PlantingDateForWithdrawal[];
   speciesTargets?: SpeciesTargetForSubstratum[];
   onChange: (next: Partial<BatchWithdrawDraft>) => void;
 };
@@ -32,6 +34,7 @@ const PurposeAndDestinationStep = ({
   batches,
   contributor,
   draft,
+  plantingDates,
   speciesTargets,
   onChange,
 }: PurposeAndDestinationStepProps): JSX.Element => {
@@ -152,10 +155,36 @@ const PurposeAndDestinationStep = ({
     [selectableSeasonsForSite, draft.plantingSeasonId]
   );
 
+  const selectedPlantingDate = useMemo(
+    () =>
+      plantingDates.find(
+        (plantingDate) => plantingDate.scheduledPlantingDateId === draft.scheduledPlantingDateRequestId
+      ),
+    [draft.scheduledPlantingDateRequestId, plantingDates]
+  );
+
+  const plantingDateOptions = useMemo<DropdownItem[]>(
+    () =>
+      plantingDates
+        .toSorted((a, b) => a.date.localeCompare(b.date))
+        .map((plantingDate) => ({
+          label: getMediumDate(plantingDate.date, activeLocale),
+          value: plantingDate.scheduledPlantingDateId,
+        })),
+    [activeLocale, plantingDates]
+  );
+  const plantingDateOptionalLabel = `${strings.PLANTING_DATE} (${strings.OPTIONAL.toLocaleLowerCase(
+    activeLocale || undefined
+  )})`;
+
   const { stratumOptions, substratumOptions } = useMemo(() => {
     const allStrata = selectedPlantingSite?.strata ?? [];
-    if (selectedSeason) {
-      const allowedSubstratumIds = new Set(selectedSeason.speciesTargets.map((t) => t.substratumId));
+    if (selectedPlantingDate || selectedSeason) {
+      const allowedSubstratumIds = new Set(
+        selectedPlantingDate
+          ? selectedPlantingDate.substrata.map((substratum) => substratum.substratumId)
+          : selectedSeason?.speciesTargets.map((target) => target.substratumId)
+      );
       const filteredStrata = allStrata
         .map((str) => ({
           ...str,
@@ -176,7 +205,7 @@ const PurposeAndDestinationStep = ({
         allStrata.find((s) => s.id === draft.stratumId)?.substrata.map((sub) => ({ label: sub.name, value: sub.id })) ??
         [],
     };
-  }, [selectedPlantingSite, selectedSeason, draft.stratumId]);
+  }, [selectedPlantingDate, selectedPlantingSite, selectedSeason, draft.stratumId]);
 
   // Default From: Nursery to the batches' nursery if they all share one.
   useEffect(() => {
@@ -335,6 +364,7 @@ const PurposeAndDestinationStep = ({
                 onChange({
                   plantingSiteId: value !== undefined ? Number(value) : undefined,
                   plantingSeasonId: undefined,
+                  scheduledPlantingDateRequestId: undefined,
                   stratumId: undefined,
                   substratumId: undefined,
                 })
@@ -375,6 +405,7 @@ const PurposeAndDestinationStep = ({
                       value !== undefined && value !== '' && value !== NO_PLANTING_SEASON_VALUE
                         ? Number(value)
                         : undefined,
+                    scheduledPlantingDateRequestId: undefined,
                     stratumId: undefined,
                     substratumId: undefined,
                   })
@@ -384,6 +415,23 @@ const PurposeAndDestinationStep = ({
               />
             )}
           </Box>
+          {draft.plantingSeasonId !== undefined && plantingDates.length > 0 && (
+            <Box sx={fieldCellSx}>
+              <Dropdown
+                id='planting-date'
+                label={plantingDateOptionalLabel}
+                options={plantingDateOptions}
+                selectedValue={draft.scheduledPlantingDateRequestId}
+                onChange={(value) =>
+                  onChange({
+                    scheduledPlantingDateRequestId: value !== undefined && value !== '' ? Number(value) : undefined,
+                  })
+                }
+                fullWidth
+                sx={{ textAlign: 'left' }}
+              />
+            </Box>
+          )}
         </Box>
       )}
 
