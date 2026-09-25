@@ -3,7 +3,7 @@ import { useSearchParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import MuxPlayer from '@mux/mux-player-react';
-import { EditableTable, EditableTableColumn } from '@terraware/web-components';
+import { Confirm, EditableTable, EditableTableColumn } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_ShowHideColumnsButton,
@@ -51,6 +51,7 @@ export default function VirtualWalkthroughsTable({
     useLazyGetOrganizationMediaFileStreamQuery();
   const [getObsMediaStream, { data: obsStreamData, isFetching: obsFetching }] = useLazyGetObservationMediaStreamQuery();
   const [selectedVideoFile, setSelectedVideoFile] = useState<OrganizationVirtualWalkthrough | undefined>(undefined);
+  const [splatToRemove, setSplatToRemove] = useState<OrganizationVirtualWalkthrough | undefined>(undefined);
   const {
     columnFilters,
     setColumnFilters,
@@ -231,6 +232,13 @@ export default function VirtualWalkthroughsTable({
     [deleteObservationSplat, deleteOrganizationSplat, organizationId]
   );
 
+  const confirmRemoveSplat = useCallback(() => {
+    if (splatToRemove) {
+      deleteSplat(splatToRemove);
+      setSplatToRemove(undefined);
+    }
+  }, [deleteSplat, splatToRemove]);
+
   const FlagCell = useCallback(
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
       const file = cell.row.original;
@@ -274,12 +282,12 @@ export default function VirtualWalkthroughsTable({
     ({ cell }: { cell: MRT_Cell<OrganizationVirtualWalkthrough> }) => {
       const file = cell.row.original;
       return (
-        <Link onClick={() => deleteSplat(file)} style={{ color: theme.palette.TwClrTxtDanger }}>
+        <Link onClick={() => setSplatToRemove(file)} style={{ color: theme.palette.TwClrTxtDanger }}>
           {strings.REMOVE}
         </Link>
       );
     },
-    [theme.palette.TwClrTxtDanger, strings.REMOVE, deleteSplat]
+    [theme.palette.TwClrTxtDanger, strings.REMOVE]
   );
 
   const columns = useMemo((): EditableTableColumn<OrganizationVirtualWalkthrough>[] => {
@@ -376,6 +384,19 @@ export default function VirtualWalkthroughsTable({
         imageSrc=''
         isOpen={!!selectedVideoFile}
         onClose={handleCloseLightbox}
+      />
+
+      <Confirm
+        closeButtonId='cancelRemoveVirtualWalkthrough'
+        closeButtonText={strings.CANCEL}
+        confirmButtonId='confirmRemoveVirtualWalkthrough'
+        confirmButtonText={strings.REMOVE}
+        confirmButtonType='destructive'
+        message={strings.REMOVE_VIRTUAL_WALKTHROUGH_CONFIRM}
+        onClose={() => setSplatToRemove(undefined)}
+        onConfirm={confirmRemoveSplat}
+        open={splatToRemove !== undefined}
+        title={strings.REMOVE_VIRTUAL_WALKTHROUGH}
       />
     </>
   );
