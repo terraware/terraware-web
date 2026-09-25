@@ -136,18 +136,18 @@ export default function MonitoringPlotPhotosWithActions({
           return (
             <Box key={mediaFile.fileId} position='relative'>
               {mediaFile.photoType === 'Plot' && mediaFile.position && !!monitoringPlotName && (
-                <Typography color={theme.palette.TwClrBaseBlack}>
-                  {monitoringPlotName} {getPositionLabel(mediaFile.position, strings)}
+                <Typography color={theme.palette.TwClrBaseBlack} fontSize={14}>
+                  {getPositionLabel(mediaFile.position, strings)}
                 </Typography>
               )}
               {mediaFile.photoType === 'Quadrat' && mediaFile.position && (
-                <Typography color={theme.palette.TwClrBaseBlack}>
+                <Typography color={theme.palette.TwClrBaseBlack} fontSize={14}>
                   {getQuadratLabel(mediaFile.position, strings)}
                 </Typography>
               )}
               {mediaFile.photoType === 'Explanation' && mediaFile.position && (
-                <Typography color={theme.palette.TwClrBaseBlack}>
-                  {getExplanationPhotoLabel(mediaFile.position, monitoringPlotName, strings)}
+                <Typography color={theme.palette.TwClrBaseBlack} fontSize={14}>
+                  {getExplanationPhotoLabel(mediaFile.position, undefined, strings)}
                 </Typography>
               )}
               <MediaItem

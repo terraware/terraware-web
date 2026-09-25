@@ -112,13 +112,14 @@ export const isCaptionReadOnly = (media: { observation?: ObservationActivityMedi
 
 export const getObsPhotoTypeLabel = (
   media: { observation?: ObservationActivityMedia },
-  strings: typeof defaultStrings
+  strings: typeof defaultStrings,
+  showPlotNumber = false
 ): string | undefined => {
   const obs = media.observation;
   if (!obs || !isUndeletableObservationPhoto(media)) {
     return undefined;
   }
-  const plotPrefix = `${obs.monitoringPlotNumber} `;
+  const plotPrefix = showPlotNumber ? `${obs.monitoringPlotNumber} ` : '';
   if (obs.type === 'Plot' && obs.position) {
     return `${plotPrefix}${getPositionLabel(obs.position, strings)}`;
   }
@@ -129,7 +130,7 @@ export const getObsPhotoTypeLabel = (
     return `${plotPrefix}${strings.SOIL}`;
   }
   if (obs.type === 'Explanation' && obs.position) {
-    return getExplanationPhotoLabel(obs.position, `${obs.monitoringPlotNumber}`, strings);
+    return getExplanationPhotoLabel(obs.position, `${showPlotNumber ? obs.monitoringPlotNumber : ''}`, strings);
   }
   return undefined;
 };
