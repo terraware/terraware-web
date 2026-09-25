@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Step, StepLabel, Stepper, Tooltip, Typography, useTheme } from '@mui/material';
-import { Dropdown, DropdownItem, Icon, IconTooltip } from '@terraware/web-components';
+import { Dropdown, DropdownItem, Icon } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
@@ -347,6 +347,15 @@ const WithdrawFromBatchesModal = ({
   }, [handleClose, isSaving, step, canGoNextFromStep2, canGoNextFromStep1, onSubmit, scheduledPlantingDateId]);
 
   const stepLabels = [strings.PURPOSE, strings.QUANTITIES, strings.PHOTOS];
+  const stratumNames = [...new Set(request.substrata.map((substratum) => substratum.stratumName))].join(', ');
+  const substratumNames = [...new Set(request.substrata.map((substratum) => substratum.substratumName))].join(', ');
+  const plantingDetails = [
+    { label: strings.PLANTING_SITE, value: request.plantingSiteName },
+    { label: strings.STRATUM, value: stratumNames },
+    { label: strings.SUBSTRATUM, value: substratumNames },
+    { label: strings.PLANTING_SEASON, value: request.plantingSeasonName },
+    { label: strings.PLANTING_DATE, value: getMediumDate(request.date, activeLocale) },
+  ];
 
   return (
     <DialogBox
@@ -382,16 +391,20 @@ const WithdrawFromBatchesModal = ({
       <Box
         display='grid'
         gridTemplateColumns='repeat(3, minmax(0, 1fr))'
-        alignItems='center'
         columnGap={theme.spacing(3)}
+        rowGap={theme.spacing(2)}
         marginBottom={theme.spacing(3)}
-        color={theme.palette.TwClrTxtSecondary}
+        paddingLeft={theme.spacing(2)}
+        textAlign='left'
       >
-        <Typography textAlign='center'>{request.plantingSiteName}</Typography>
-        <Typography textAlign='center'>{request.plantingSeasonName}</Typography>
-        <Typography textAlign='center' sx={{ whiteSpace: 'nowrap' }}>
-          {getMediumDate(request.date, activeLocale)}
-        </Typography>
+        {plantingDetails.map(({ label, value }) => (
+          <Box key={label}>
+            <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+              {label}
+            </Typography>
+            <Typography fontSize='14px'>{value}</Typography>
+          </Box>
+        ))}
       </Box>
 
       {step === 0 && (
@@ -471,18 +484,6 @@ const Step1Content = ({
 
   return (
     <Box display='flex' flexDirection='column' gap={theme.spacing(2)}>
-      <Box display='grid' gridTemplateColumns='66px 1fr' gap={theme.spacing(3)} maxWidth='320px' alignItems={'center'}>
-        <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary} textAlign='left'>
-          {strings.PURPOSE_REQUIRED}
-        </Typography>
-        <Box display={'flex'}>
-          <Typography fontSize='16px' fontWeight={500} color={theme.palette.TwClrTxt} textAlign='left'>
-            {strings.PLANTING}
-          </Typography>
-          <IconTooltip placement='top' title={strings.PLANTINGS_REQUIRE_READY_TO_PLANT_SEEDLINGS} />
-        </Box>
-      </Box>
-
       <Box maxWidth='320px'>
         <DatePicker
           id='withdraw-date'
