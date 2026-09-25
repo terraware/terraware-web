@@ -97,17 +97,20 @@ export default function PlantsDashboardView({
     selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId
   );
 
-  const totalsStratumOptions = useMemo(
-    () => [
-      { label: strings.ALL_STRATA, value: 'all' },
-      ...(plantingSite?.strata?.map((stratum) => ({ label: stratum.name, value: stratum.id })) ?? []),
-    ],
-    [plantingSite?.strata, strings.ALL_STRATA]
-  );
+  const onlyStratumId = plantingSite?.strata?.length === 1 ? plantingSite.strata[0].id : undefined;
+  const activeTotalsStratumId = onlyStratumId ?? totalsStratumId;
+
+  const totalsStratumOptions = useMemo(() => {
+    const stratumOptions = plantingSite?.strata?.map((stratum) => ({ label: stratum.name, value: stratum.id })) ?? [];
+
+    return stratumOptions.length === 1
+      ? stratumOptions
+      : [{ label: strings.ALL_STRATA, value: 'all' }, ...stratumOptions];
+  }, [plantingSite?.strata, strings.ALL_STRATA]);
 
   useEffect(() => {
-    setTotalsStratumId('all');
-  }, [plantingSite?.id]);
+    setTotalsStratumId(onlyStratumId ?? 'all');
+  }, [onlyStratumId, plantingSite?.id]);
 
   // Poll for survival rate recalculation and refresh observation results when it completes.
   const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(plantingSite?.id);
@@ -190,7 +193,7 @@ export default function PlantsDashboardView({
               id='planting-site-totals-stratum'
               options={totalsStratumOptions}
               onChange={(newValue) => setTotalsStratumId(newValue === 'all' ? 'all' : Number(newValue))}
-              selectedValue={totalsStratumId}
+              selectedValue={activeTotalsStratumId}
               sx={{ minWidth: '240px' }}
             />
           ) : null}
@@ -201,7 +204,7 @@ export default function PlantsDashboardView({
           plantingSiteId={selectedPlantingSiteId !== ALL_PLANTING_SITES ? plantingSite?.id : undefined}
           projectId={projectId}
           organizationId={dashboardOrganizationId}
-          stratumId={totalsStratumId === 'all' ? undefined : totalsStratumId}
+          stratumId={activeTotalsStratumId === 'all' ? undefined : activeTotalsStratumId}
         />
       </Grid>
     </>
