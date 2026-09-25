@@ -4,13 +4,19 @@ import { rstest } from '@rstest/core';
 import { screen, waitFor } from '@testing-library/react';
 
 import PlantsDashboardView from 'src/scenes/PlantsDashboardRouter/PlantsDashboardView';
-import { buildPlantingSite, buildStratum, buildSubstratum, renderWithProviders } from 'src/test-utils';
+import { renderWithProviders } from 'src/test-utils';
 
 type PlantsAndSpeciesCardProps = {
   stratumId?: number;
 };
 
 const selectedPlantingSite = rstest.hoisted(() => ({ value: 1 as number | 'all' }));
+const siteStrata = rstest.hoisted(() => ({
+  value: [
+    { id: 10, name: 'North', substrata: [{ id: 100 }] },
+    { id: 20, name: 'South', substrata: [{ id: 200 }] },
+  ],
+}));
 const plantsAndSpeciesCardProps = rstest.hoisted(() => [] as PlantsAndSpeciesCardProps[]);
 
 rstest.mock('@terraware/web-components', () => ({
@@ -52,14 +58,13 @@ rstest.mock('src/hooks/usePlantingSite', () => ({
     plantingSite:
       selectedPlantingSite.value === 'all'
         ? undefined
-        : buildPlantingSite({
+        : {
             id: 1,
+            areaHa: 10,
+            boundary: { coordinates: [] },
             latestObservationId: undefined,
-            strata: [
-              buildStratum({ id: 10, name: 'North', substrata: [buildSubstratum({ id: 100 })] }),
-              buildStratum({ id: 20, name: 'South', substrata: [buildSubstratum({ id: 200 })] }),
-            ],
-          }),
+            strata: siteStrata.value,
+          },
   }),
 }));
 
@@ -132,10 +137,14 @@ rstest.mock('src/scenes/PlantsDashboardRouter/components/SurvivalRateCard', () =
 describe('PlantsDashboardView planting site totals stratum filter', () => {
   beforeEach(() => {
     selectedPlantingSite.value = 1;
+    siteStrata.value = [
+      { id: 10, name: 'North', substrata: [{ id: 100 }] },
+      { id: 20, name: 'South', substrata: [{ id: 200 }] },
+    ];
     plantsAndSpeciesCardProps.length = 0;
   });
 
-  it('shows all site strata and passes the selected stratum to the totals card', async () => {
+  it('defaults to All Strata for a site with multiple strata and passes a selected stratum to the totals card', async () => {
     const { user } = renderWithProviders(<PlantsDashboardView />);
 
     const dropdown = screen.getByRole('combobox', { name: 'planting-site-totals-stratum' });
@@ -147,6 +156,18 @@ describe('PlantsDashboardView planting site totals stratum filter', () => {
 
     await user.selectOptions(dropdown, '10');
 
+    await waitFor(() => expect(plantsAndSpeciesCardProps.at(-1)).toMatchObject({ stratumId: 10 }));
+  });
+
+  it('defaults to the only stratum and omits All Strata for a site with one stratum', async () => {
+    siteStrata.value = [{ id: 10, name: 'North', substrata: [{ id: 100 }] }];
+
+    renderWithProviders(<PlantsDashboardView />);
+
+    const dropdown = screen.getByRole('combobox', { name: 'planting-site-totals-stratum' });
+    expect(screen.queryByRole('option', { name: 'All Strata' })).not.toBeInTheDocument();
+    expect(screen.getByRole('option', { name: 'North' })).toBeInTheDocument();
+    expect(dropdown).toHaveValue('10');
     await waitFor(() => expect(plantsAndSpeciesCardProps.at(-1)).toMatchObject({ stratumId: 10 }));
   });
 
