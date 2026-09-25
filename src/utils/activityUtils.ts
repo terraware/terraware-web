@@ -130,7 +130,7 @@ export const getObsPhotoTypeLabel = (
     return `${plotPrefix}${strings.SOIL}`;
   }
   if (obs.type === 'Explanation' && obs.position) {
-    return getExplanationPhotoLabel(obs.position, `${showPlotNumber ? obs.monitoringPlotNumber : ''}`, strings);
+    return getExplanationPhotoLabel(obs.position, strings, `${showPlotNumber ? obs.monitoringPlotNumber : ''}`);
   }
   return undefined;
 };

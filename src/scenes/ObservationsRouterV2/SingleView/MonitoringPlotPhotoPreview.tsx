@@ -97,7 +97,7 @@ const MonitoringPlotPhotoPreview = ({
       )}
       {mediaItem.data.type === 'Explanation' && mediaItem.data.position && (
         <Typography marginBottom={3} color={theme.palette.TwClrBaseBlack}>
-          {getExplanationPhotoLabel(mediaItem.data.position, undefined, strings)}
+          {getExplanationPhotoLabel(mediaItem.data.position, strings)}
         </Typography>
       )}
       <Box display='flex' flexDirection='column' gap={2}>

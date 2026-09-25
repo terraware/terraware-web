@@ -147,7 +147,7 @@ export default function MonitoringPlotPhotosWithActions({
               )}
               {mediaFile.photoType === 'Explanation' && mediaFile.position && (
                 <Typography color={theme.palette.TwClrBaseBlack} fontSize={14}>
-                  {getExplanationPhotoLabel(mediaFile.position, undefined, strings)}
+                  {getExplanationPhotoLabel(mediaFile.position, strings)}
                 </Typography>
               )}
               <MediaItem
