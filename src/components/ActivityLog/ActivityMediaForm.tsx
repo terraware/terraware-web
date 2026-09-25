@@ -166,7 +166,8 @@ const ActivityPhotoPreview = ({
   }, [isUndeletable, mediaItem, strings]);
 
   const obsPhotoTypeLabel = useMemo(
-    () => (isUndeletable && mediaItem.type === 'existing' ? getObsPhotoTypeLabel(mediaItem.data, strings) : undefined),
+    () =>
+      isUndeletable && mediaItem.type === 'existing' ? getObsPhotoTypeLabel(mediaItem.data, strings, true) : undefined,
     [isUndeletable, mediaItem, strings]
   );
 

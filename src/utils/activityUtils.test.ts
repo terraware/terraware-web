@@ -148,22 +148,22 @@ describe('getObsPhotoTypeLabel', () => {
   });
 
   test.each([
-    ['NortheastCorner', '5 Northeast corner'],
-    ['NorthwestCorner', '5 Northwest corner'],
-    ['SoutheastCorner', '5 Southeast corner'],
-    ['SouthwestCorner', '5 Southwest corner'],
-  ] as const)('returns plot prefix + corner label for position %s', (position, expected) => {
+    ['NortheastCorner', 'Northeast corner'],
+    ['NorthwestCorner', 'Northwest corner'],
+    ['SoutheastCorner', 'Southeast corner'],
+    ['SouthwestCorner', 'Southwest corner'],
+  ] as const)('returns corner label for position %s', (position, expected) => {
     expect(
       getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 5, type: 'Plot', position } }, strings)
     ).toBe(expected);
   });
 
   test.each([
-    ['NortheastCorner', '2 Northeast Quadrat'],
-    ['NorthwestCorner', '2 Northwest Quadrat'],
-    ['SoutheastCorner', '2 Southeast Quadrat'],
-    ['SouthwestCorner', '2 Southwest Quadrat'],
-  ] as const)('returns plot prefix + quadrat label for quadrat position %s', (position, expected) => {
+    ['NortheastCorner', 'Northeast Quadrat'],
+    ['NorthwestCorner', 'Northwest Quadrat'],
+    ['SoutheastCorner', 'Southeast Quadrat'],
+    ['SouthwestCorner', 'Southwest Quadrat'],
+  ] as const)('returns quadrat label for quadrat position %s', (position, expected) => {
     expect(
       getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 2, type: 'Quadrat', position } }, strings)
     ).toBe(expected);
@@ -175,19 +175,57 @@ describe('getObsPhotoTypeLabel', () => {
     ).toBeUndefined();
   });
 
-  test('returns plot prefix + Soil for soil photos', () => {
-    expect(getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 7, type: 'Soil' } }, strings)).toBe('7 Soil');
+  test('returns Soil for soil photos', () => {
+    expect(getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 7, type: 'Soil' } }, strings)).toBe('Soil');
   });
 
   test.each([
-    ['NortheastCorner', '9 Northeast corner: >20m location'],
-    ['NorthwestCorner', '9 Northwest corner: >20m location'],
-    ['SoutheastCorner', '9 Southeast corner: >20m location'],
-    ['SouthwestCorner', '9 Southwest corner: >20m location'],
+    ['NortheastCorner', 'Northeast corner: >20m location'],
+    ['NorthwestCorner', 'Northwest corner: >20m location'],
+    ['SoutheastCorner', 'Southeast corner: >20m location'],
+    ['SouthwestCorner', 'Southwest corner: >20m location'],
   ] as const)('returns the >20m location label for explanation photo position %s', (position, expected) => {
     expect(
       getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 9, type: 'Explanation', position } }, strings)
     ).toBe(expected);
+  });
+
+  describe('with showPlotNumber', () => {
+    test('returns plot prefix + corner label for plot photos', () => {
+      expect(
+        getObsPhotoTypeLabel(
+          { observation: { monitoringPlotNumber: 5, type: 'Plot', position: 'NortheastCorner' } },
+          strings,
+          true
+        )
+      ).toBe('5 Northeast corner');
+    });
+
+    test('returns plot prefix + quadrat label for quadrat photos', () => {
+      expect(
+        getObsPhotoTypeLabel(
+          { observation: { monitoringPlotNumber: 2, type: 'Quadrat', position: 'SouthwestCorner' } },
+          strings,
+          true
+        )
+      ).toBe('2 Southwest Quadrat');
+    });
+
+    test('returns plot prefix + Soil for soil photos', () => {
+      expect(getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 7, type: 'Soil' } }, strings, true)).toBe(
+        '7 Soil'
+      );
+    });
+
+    test('returns plot prefix in the >20m location label for explanation photos', () => {
+      expect(
+        getObsPhotoTypeLabel(
+          { observation: { monitoringPlotNumber: 9, type: 'Explanation', position: 'NorthwestCorner' } },
+          strings,
+          true
+        )
+      ).toBe('9 Northwest corner: >20m location');
+    });
   });
 
   test('returns undefined for an explanation photo without a position', () => {

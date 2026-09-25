@@ -202,8 +202,8 @@ export const getQuadratLabel = (
 
 export const getExplanationPhotoLabel = (
   position: ObservationMonitoringPlotPosition,
-  plotIdentifier: string | undefined,
-  strings: typeof defaultStrings
+  strings: typeof defaultStrings,
+  plotIdentifier?: string
 ): string =>
   strings
     .formatString(
