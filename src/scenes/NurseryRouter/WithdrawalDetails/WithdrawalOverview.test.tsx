@@ -52,10 +52,16 @@ describe('WithdrawalOverview', () => {
     expect(screen.getByText('2026-10-15')).toBeInTheDocument();
   });
 
-  it('shows a fallback when the withdrawal has a planting season but no planting date', () => {
+  it.each([
+    ['has no planting date request', { ...withdrawal, plantingSeasonId: 3 }],
+    [
+      'has a planting date request whose date is unavailable',
+      { ...withdrawal, plantingSeasonId: 3, scheduledPlantingDateRequestId: 4 },
+    ],
+  ])('shows a fallback when the withdrawal %s', (_description, withdrawalWithSeason) => {
     renderWithProviders(
       <WithdrawalOverview
-        withdrawal={{ ...withdrawal, plantingSeasonId: 3 }}
+        withdrawal={withdrawalWithSeason}
         withdrawalSummary={{ ...withdrawalSummary, plantingSeasonName: 'Fall 2026' }}
       />
     );

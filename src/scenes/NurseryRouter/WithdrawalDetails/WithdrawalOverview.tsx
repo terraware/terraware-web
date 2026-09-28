@@ -28,9 +28,7 @@ export default function WithdrawalOverview({ withdrawal, withdrawalSummary }: Wi
         },
         {
           title: strings.PLANTING_DATE,
-          data: withdrawal?.scheduledPlantingDateRequestId
-            ? withdrawalSummary?.plantingDate ?? ''
-            : strings.NOT_WITHDRAWN_TO_DATE,
+          data: withdrawalSummary?.plantingDate ?? strings.NOT_WITHDRAWN_TO_DATE,
         },
       ]
     : [];
