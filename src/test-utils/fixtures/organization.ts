@@ -1,8 +1,10 @@
-import { Facility } from 'src/types/Facility';
+import { FacilityPayload } from 'src/queries/generated/organizations';
 import { Organization } from 'src/types/Organization';
 
-export const buildFacility = (overrides: Partial<Facility> = {}): Facility => ({
+export const buildFacility = (overrides: Partial<FacilityPayload> = {}): FacilityPayload => ({
   id: 100,
+  createdTime: '2024-01-01T00:00:00Z',
+  facilityNumber: 1,
   name: 'Test Nursery',
   organizationId: 1,
   type: 'Nursery',
@@ -11,7 +13,7 @@ export const buildFacility = (overrides: Partial<Facility> = {}): Facility => ({
   ...overrides,
 });
 
-export const buildSeedBank = (overrides: Partial<Facility> = {}): Facility =>
+export const buildSeedBank = (overrides: Partial<FacilityPayload> = {}): FacilityPayload =>
   buildFacility({ id: 101, name: 'Test Seed Bank', type: 'Seed Bank', ...overrides });
 
 /**
@@ -27,6 +29,7 @@ export const buildOrganization = (overrides: Partial<Organization> = {}): Organi
   countryCode: 'US',
   timeZone: 'America/Los_Angeles',
   canSubmitReports: false,
+  createdTime: '2024-01-01T00:00:00Z',
   facilities: [buildFacility()],
   ...overrides,
 });
