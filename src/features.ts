@@ -1,5 +1,7 @@
-import { CachedUserService } from 'src/services';
+import { useGetUserPreferencesQuery } from 'src/queries/generated/preferences';
+import { useGetMyselfQuery } from 'src/queries/generated/users';
 import env from 'src/utils/useEnvironment';
+import { isTerraformationEmail } from 'src/utils/user';
 
 export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots' | 'New Observation Filters';
 
@@ -65,11 +67,14 @@ OPT_IN_FEATURES.forEach((feature) => {
 });
 
 /**
- * Utility function to check if a feature is enabled
+ * Hook to check if a feature is enabled
  */
-export default function isEnabled(name: FeatureName, organizationId?: number) {
+export const useFeatureEnabled = (name: FeatureName): boolean => {
   const { isProduction } = env();
   const feature = FEATURE_MAP[name];
+
+  const { currentData: preferencesData } = useGetUserPreferencesQuery(undefined);
+  const { currentData: userData } = useGetMyselfQuery();
 
   if (!feature) {
     return false;
@@ -84,14 +89,8 @@ export default function isEnabled(name: FeatureName, organizationId?: number) {
   }
 
   if (!isProduction) {
-    const preferences =
-      organizationId !== undefined
-        ? CachedUserService.getUserOrgPreferences(organizationId)
-        : CachedUserService.getUserPreferences();
-    const preferenceName = feature.preferenceName;
-
-    return preferences && preferences[preferenceName] === true;
+    return preferencesData?.preferences?.[feature.preferenceName] === true;
   }
 
-  return feature.allowInternalProduction && CachedUserService.getUser().isTerraformation;
-}
+  return feature.allowInternalProduction && isTerraformationEmail(userData?.user.email);
+};

@@ -10,7 +10,7 @@ import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessa
 import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useStickyPlantingSiteId, { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
@@ -39,7 +39,7 @@ const ObservationListViewContent = (): JSX.Element => {
   const navigate = useSyncNavigate();
   const theme = useTheme();
   const { isDesktop, isMobile } = useDeviceInfo();
-  const newFiltersEnabled = isEnabled('New Observation Filters');
+  const newFiltersEnabled = useFeatureEnabled('New Observation Filters');
 
   const { observationType, plotType, setPlotType, viewMode } = useObservationFilters();
 
