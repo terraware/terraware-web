@@ -189,7 +189,7 @@
     "babel-plugin-named-exports-order": "^0.0.2",
     "chokidar": "^5.0.0",
     "csv": "^6.2.8",
-    "dotenv": "^17.2.1",
+    "dotenv": "^18.0.0",
     "eslint": "^9.6.0",
     "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-jest-react": "^0.1.0",
@@ -227,7 +227,7 @@
     "webpack-dev-middleware": "^8.0.0"
   },
   "resolutions": {
-    "@babel/traverse": "8.0.5",
+    "@babel/traverse": "8.0.6",
     "axios": "^1.15.0",
     "brace-expansion": "^2.0.3",
     "fork-ts-checker-webpack-plugin": "^9.0.0",
@@ -237,10 +237,10 @@
     "postcss": "^8.5.25",
     "serialize-javascript": "^7.0.5",
     "simple-git": "^3.32.3",
-    "string-width": "8.2.2",
+    "string-width": "8.3.0",
     "strip-ansi": "6.0.1",
     "tmp": "^0.2.6",
-    "wrap-ansi": "10.0.1",
+    "wrap-ansi": "10.0.2",
     "ws": "^8.21.1"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
