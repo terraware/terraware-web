@@ -21,7 +21,6 @@ type MonitoringPlotPhotoPreviewProps = {
   observationId?: number;
   onDelete: () => void;
   setCaption: (caption: string) => void;
-  monitoringPlotName?: string;
 };
 
 const MonitoringPlotPhotoPreview = ({
@@ -31,7 +30,6 @@ const MonitoringPlotPhotoPreview = ({
   observationId,
   onDelete,
   setCaption,
-  monitoringPlotName,
 }: MonitoringPlotPhotoPreviewProps) => {
   const { strings } = useLocalization();
   const theme = useTheme();
@@ -87,7 +85,7 @@ const MonitoringPlotPhotoPreview = ({
     >
       {mediaItem.data.type === 'Plot' && mediaItem.data.position && (
         <Typography marginBottom={3} color={theme.palette.TwClrBaseBlack}>
-          {monitoringPlotName} {getPositionLabel(mediaItem.data.position, strings)}
+          {getPositionLabel(mediaItem.data.position, strings)}
         </Typography>
       )}
       {mediaItem.data.type === 'Quadrat' && mediaItem.data.position && (
@@ -97,7 +95,7 @@ const MonitoringPlotPhotoPreview = ({
       )}
       {mediaItem.data.type === 'Explanation' && mediaItem.data.position && (
         <Typography marginBottom={3} color={theme.palette.TwClrBaseBlack}>
-          {getExplanationPhotoLabel(mediaItem.data.position, monitoringPlotName, strings)}
+          {getExplanationPhotoLabel(mediaItem.data.position, strings)}
         </Typography>
       )}
       <Box display='flex' flexDirection='column' gap={2}>

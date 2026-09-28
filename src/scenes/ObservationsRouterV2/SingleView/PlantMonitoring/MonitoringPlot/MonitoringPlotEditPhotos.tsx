@@ -287,7 +287,6 @@ const MonitoringPlotEditPhotos = () => {
                     observationId={observationId}
                     onDelete={getDeletePhoto(index)}
                     setCaption={getUpdatePhotoCaption(index)}
-                    monitoringPlotName={monitoringPlotResult?.monitoringPlotName}
                   />
                 );
               })}
