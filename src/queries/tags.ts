@@ -34,6 +34,8 @@ export enum QueryTagTypes {
   Observation = 'Observation',
   ObservationMedia = 'ObservationMedia',
   OrganizationMedia = 'OrganizationMedia',
+  OrganizationRoles = 'OrganizationRoles',
+  Organizations = 'Organizations',
   Splats = 'Splats',
   PlantingDateRequests = 'PlantingDateRequests',
   PlantingSeasonDates = 'PlantingSeasonDates',

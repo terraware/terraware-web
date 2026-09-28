@@ -13,9 +13,10 @@ import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import { useDeleteOrganizationMutation, useLazyListOrganizationRolesQuery } from 'src/queries/generated/organizations';
 import AssignNewOwnerDialog from 'src/scenes/MyAccountRouter/AssignNewOwnerModal';
 import DeleteOrgDialog from 'src/scenes/MyAccountRouter/DeleteOrgModal';
-import { OrganizationService, OrganizationUserService, Response, SearchService } from 'src/services';
+import { OrganizationUserService, Response, SearchService } from 'src/services';
 import { OrganizationRole } from 'src/types/Organization';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { OrganizationUser } from 'src/types/User';
@@ -54,6 +55,8 @@ export default function PeopleListView(): JSX.Element {
   const [resultsWithLeadRoles, setResultsWithLeadRoles] = useState<OrganizationUser[]>([]);
   const [totalUsers, setTotalUsers] = useState<number>(0);
   const snackbar = useSnackbar();
+  const [listOrganizationRoles] = useLazyListOrganizationRolesQuery();
+  const [deleteOrganization] = useDeleteOrganizationMutation();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const { activeLocale, strings } = useLocalization();
@@ -263,8 +266,8 @@ export default function PeopleListView(): JSX.Element {
       } else {
         const selectedOwners = selectedPeopleRows.filter((selectedPerson) => selectedPerson.role === 'Owner');
         if (selectedOwners.length > 0 && selectedOrganization) {
-          const organizationRoles = await OrganizationService.getOrganizationRoles(selectedOrganization?.id);
-          const totalOwners = organizationRoles.roles?.find((role) => role.role === 'Owner');
+          const organizationRoles = await listOrganizationRoles(selectedOrganization.id);
+          const totalOwners = organizationRoles.data?.roles.find((role) => role.role === 'Owner');
           if (selectedOwners.length === totalOwners?.totalUsers) {
             setOrgPeople(
               results?.filter((person) => {
@@ -354,8 +357,8 @@ export default function PeopleListView(): JSX.Element {
           }
         });
       }
-      const deleteOrgResponse = await OrganizationService.deleteOrganization(selectedOrganization?.id);
-      if (allRemoved && deleteOrgResponse.requestSucceeded) {
+      const deleteOrgResponse = await deleteOrganization(selectedOrganization.id);
+      if (allRemoved && !('error' in deleteOrgResponse)) {
         if (reloadOrganizations) {
           void reloadOrganizations();
         }
