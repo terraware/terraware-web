@@ -1290,6 +1290,7 @@ NATIVE_NON_NATIVE,Nativo/No nativo,4ce0ad21
 NATIVE_SPECIES_TO_BE_PLANTED,Especies nativas que se plantarán,7a13ce14
 NATIVE_STATUS,Estado nativo,a3b2178c
 NATURAL_REGENERATION_WOODY,Regeneración natural leñosa,26fe4ab1
+NE_CORNER,Esquina NE,db9232a3
 NEEDS_ATTENTION,Requiere atención,95ec1cac
 NEEDS_TRANSLATION,Necesita traducción,ce38bfa9
 NEW_ACCESSION,Añadir accesión,6d0d1602
@@ -1376,12 +1377,10 @@ NO_WITHDRAWABLE_QUANTITIES_FOUND,No se encontraron cantidades retirables,ab95517
 NON_NATIVE,No nativo,572d9365
 NONE,Ninguno,8cff1f65
 NONE_SELECTED,Ninguno seleccionado,61621b35
-NORTHEAST_CORNER,Esquina noreste,da4ddbf6
 NORTHEAST_CORNER_FIELD_LATITUDE,Latitud del campo en la esquina noreste,8ac09e53
 NORTHEAST_CORNER_FIELD_LONGITUDE,Longitud del campo en la esquina noreste,5a1a38ab
 NORTHEAST_CORNER_LATITUDE,Latitud de la esquina noreste,b20d2d02
 NORTHEAST_CORNER_LONGITUDE,Longitud de la esquina noreste,36173800
-NORTHWEST_CORNER,Esquina noroeste,2c0842da
 NORTHWEST_CORNER_FIELD_LATITUDE,Latitud del campo en la esquina noroeste,b5ffb64a
 NORTHWEST_CORNER_FIELD_LONGITUDE,Longitud del campo en la esquina noroeste,8221fbe1
 NORTHWEST_CORNER_LATITUDE,Latitud de la esquina noroeste,bef5fb10
@@ -1449,6 +1448,7 @@ NURSERY_SUMMARY_TOOLTIP,El Resumen del Vivero muestra la cobertura de especies e
 NURSERY_TRANSFER,Traslado de vivero,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Las transferencias de vivero requieren de un vivero fuente y uno meta.,7fe70d84
 NURSERY_WITHDRAWAL_REQUIRES_NURSERY,Los retiros a un vivero están disponibles cuando se ha creado un Vivero para su Organización.,12c73bc3
+NW_CORNER,Esquina NO,dfd0b15b
 OBSERVATION,Observación,ac4f24f0
 OBSERVATION_ACTIVITY_AUTO_CREATED_INFO,Esta actividad fue creada automáticamente a partir de la observación {0}. Los datos extraídos de la observación no se pueden editar aquí.,785c7f71
 OBSERVATION_DATA,Datos de observación,7e9f4079
@@ -1583,10 +1583,14 @@ PHASE_PROJECT_REQUIRED_FIELDS_ERROR,"El nombre del archivo, el enlace de GDrive 
 PHOTO_ADDED,Foto agregada,0eea3641
 PHOTO_DATE_TIME,Fecha/Hora de la foto,22e81710
 PHOTO_DELETED,Foto eliminada,90c71645
+PHOTO_NE_QUADRAT,Cuadrícula NE,3904f4d1
 PHOTO_NORTHEAST_QUADRAT,Cuadrícula noreste,05b4f331
 PHOTO_NORTHWEST_QUADRAT,Cuadrícula noroeste,9af609f8
+PHOTO_NW_QUADRAT,Cuadrícula NO,d30b8b7a
+PHOTO_SE_QUADRAT,Cuadrícula SE,2b662388
 PHOTO_SOUTHEAST_QUADRAT,Cuadrícula sudeste,cbfacb71
 PHOTO_SOUTHWEST_QUADRAT,Cuadrícula suroeste,9afd74aa
+PHOTO_SW_QUADRAT,Cuadrícula SO,bcd5bc8c
 PHOTOS,Fotos,a440be46
 PHOTOS_AND_VIDEOS,Fotos y videos,754d8e11
 PHOTOS_TO_UPLOAD,Fotos a subir,2735bfdb
@@ -2094,6 +2098,7 @@ SDG_14,14. Vida debajo del agua,5a61ee21
 SDG_15,15. Vida en la tierra,773d6151
 SDG_16,"16. Paz, Justicia e Instituciones Sólidas.",e0e9a0ba
 SDG_17,17. Alianzas para los Objetivos,3b9b74f8
+SE_CORNER,Esquina SE,3e70b5c7
 SEARCH,Búsqueda,9f30c236
 SEARCH_OR_SELECT,Busque o Seleccione,cbd7f4ed
 SEASON_NAME,Nombre de la temporada,74218855
@@ -2277,12 +2282,10 @@ SOMETHING_WENT_WRONG,Algo no salió como se esperaba.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si usted está teniendo problemas con Terraware, infórmenos sobre los mismos y los corregiremos.",c506e77d
 SOMETHING_WENT_WRONG_TITLE,Algo no salió como se esperaba...,bf2e66a4
 SOURCING,Contratación,dc1a071d
-SOUTHEAST_CORNER,Esquina sureste,cdf375aa
 SOUTHEAST_CORNER_FIELD_LATITUDE,Latitud del campo en la esquina sureste,52ac9fd0
 SOUTHEAST_CORNER_FIELD_LONGITUDE,Longitud del campo en la esquina sureste,d652fece
 SOUTHEAST_CORNER_LATITUDE,Latitud de la esquina sureste,25510ec5
 SOUTHEAST_CORNER_LONGITUDE,Longitud de la esquina sureste,a15c5f33
-SOUTHWEST_CORNER,Esquina suroeste,4d23e84b
 SOUTHWEST_CORNER_FIELD_LATITUDE,Latitud del campo en la esquina suroeste,973b5a2d
 SOUTHWEST_CORNER_FIELD_LONGITUDE,Longitud del campo en la esquina suroeste,409e6323
 SOUTHWEST_CORNER_LATITUDE,Latitud de la esquina suroeste,11768ce8
@@ -2472,6 +2475,7 @@ SURVIVAL_RATES_UNAVAILABLE_BODY,Ingrese los datos en el {0} y obtenga más infor
 SURVIVAL_RATES_UNAVAILABLE_TITLE,No es posible calcular las tasas de supervivencia porque no se han ingresado todos los datos requeridos.,3a990e77
 SUSTAINABLE_DEVELOPMENT_GOALS,Objetivos de Desarrollo Sostenible,905bfc54
 SUSTAINABLE_TIMBER,Madera sostenible,b9574821
+SW_CORNER,Esquina SO,225bf8b3
 SYSTEM_METRICS,Métricas del sistema,c19498b7
 T0_DATA_IS_SET,Los datos t0 están establecidos,cf4c95a7
 T0_NOT_SET_FOR_PERMANENT_PLOTS,t0 no establecido para Parcelas Permanentes,d1ad09a9

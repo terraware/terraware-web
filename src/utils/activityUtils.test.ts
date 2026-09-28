@@ -125,15 +125,15 @@ describe('isCaptionReadOnly', () => {
 
 describe('getObsPhotoTypeLabel', () => {
   const strings = {
-    NORTHEAST_CORNER: 'Northeast corner',
-    NORTHWEST_CORNER: 'Northwest corner',
-    SOUTHEAST_CORNER: 'Southeast corner',
-    SOUTHWEST_CORNER: 'Southwest corner',
+    NE_CORNER: 'NE corner',
+    NW_CORNER: 'NW corner',
+    SE_CORNER: 'SE corner',
+    SW_CORNER: 'SW corner',
     OBSERVATION_EXPLANATION_PHOTO_LABEL: '{0}: >20m location',
-    PHOTO_NORTHEAST_QUADRAT: 'Northeast Quadrat',
-    PHOTO_NORTHWEST_QUADRAT: 'Northwest Quadrat',
-    PHOTO_SOUTHEAST_QUADRAT: 'Southeast Quadrat',
-    PHOTO_SOUTHWEST_QUADRAT: 'Southwest Quadrat',
+    PHOTO_NE_QUADRAT: 'NE Quadrat',
+    PHOTO_NW_QUADRAT: 'NW Quadrat',
+    PHOTO_SE_QUADRAT: 'SE Quadrat',
+    PHOTO_SW_QUADRAT: 'SW Quadrat',
     SOIL: 'Soil',
     formatString: (template: string, ...args: unknown[]) =>
       template.replace(/\{(\d+)\}/g, (_match, index: string) => String(args[Number(index)])),
@@ -148,10 +148,10 @@ describe('getObsPhotoTypeLabel', () => {
   });
 
   test.each([
-    ['NortheastCorner', 'Northeast corner'],
-    ['NorthwestCorner', 'Northwest corner'],
-    ['SoutheastCorner', 'Southeast corner'],
-    ['SouthwestCorner', 'Southwest corner'],
+    ['NortheastCorner', 'NE corner'],
+    ['NorthwestCorner', 'NW corner'],
+    ['SoutheastCorner', 'SE corner'],
+    ['SouthwestCorner', 'SW corner'],
   ] as const)('returns corner label for position %s', (position, expected) => {
     expect(
       getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 5, type: 'Plot', position } }, strings)
@@ -159,10 +159,10 @@ describe('getObsPhotoTypeLabel', () => {
   });
 
   test.each([
-    ['NortheastCorner', 'Northeast Quadrat'],
-    ['NorthwestCorner', 'Northwest Quadrat'],
-    ['SoutheastCorner', 'Southeast Quadrat'],
-    ['SouthwestCorner', 'Southwest Quadrat'],
+    ['NortheastCorner', 'NE Quadrat'],
+    ['NorthwestCorner', 'NW Quadrat'],
+    ['SoutheastCorner', 'SE Quadrat'],
+    ['SouthwestCorner', 'SW Quadrat'],
   ] as const)('returns quadrat label for quadrat position %s', (position, expected) => {
     expect(
       getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 2, type: 'Quadrat', position } }, strings)
@@ -180,10 +180,10 @@ describe('getObsPhotoTypeLabel', () => {
   });
 
   test.each([
-    ['NortheastCorner', 'Northeast corner: >20m location'],
-    ['NorthwestCorner', 'Northwest corner: >20m location'],
-    ['SoutheastCorner', 'Southeast corner: >20m location'],
-    ['SouthwestCorner', 'Southwest corner: >20m location'],
+    ['NortheastCorner', 'NE corner: >20m location'],
+    ['NorthwestCorner', 'NW corner: >20m location'],
+    ['SoutheastCorner', 'SE corner: >20m location'],
+    ['SouthwestCorner', 'SW corner: >20m location'],
   ] as const)('returns the >20m location label for explanation photo position %s', (position, expected) => {
     expect(
       getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 9, type: 'Explanation', position } }, strings)
@@ -198,7 +198,7 @@ describe('getObsPhotoTypeLabel', () => {
           strings,
           true
         )
-      ).toBe('5 Northeast corner');
+      ).toBe('5 NE corner');
     });
 
     test('returns plot prefix + quadrat label for quadrat photos', () => {
@@ -208,7 +208,7 @@ describe('getObsPhotoTypeLabel', () => {
           strings,
           true
         )
-      ).toBe('2 Southwest Quadrat');
+      ).toBe('2 SW Quadrat');
     });
 
     test('returns plot prefix + Soil for soil photos', () => {
@@ -224,7 +224,7 @@ describe('getObsPhotoTypeLabel', () => {
           strings,
           true
         )
-      ).toBe('9 Northwest corner: >20m location');
+      ).toBe('9 NW corner: >20m location');
     });
   });
 

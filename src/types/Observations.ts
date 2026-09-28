@@ -170,13 +170,13 @@ export const getPositionLabel = (
 ): string => {
   switch (position) {
     case 'NortheastCorner':
-      return strings.NORTHEAST_CORNER;
+      return strings.NE_CORNER;
     case 'NorthwestCorner':
-      return strings.NORTHWEST_CORNER;
+      return strings.NW_CORNER;
     case 'SoutheastCorner':
-      return strings.SOUTHEAST_CORNER;
+      return strings.SE_CORNER;
     case 'SouthwestCorner':
-      return strings.SOUTHWEST_CORNER;
+      return strings.SW_CORNER;
     default:
       return '';
   }
@@ -195,6 +195,24 @@ export const getQuadratLabel = (
       return strings.PHOTO_SOUTHEAST_QUADRAT;
     case 'SouthwestCorner':
       return strings.PHOTO_SOUTHWEST_QUADRAT;
+    default:
+      return '';
+  }
+};
+
+export const getQuadratPhotoLabel = (
+  position: ObservationMonitoringPlotPosition,
+  strings: typeof defaultStrings
+): string => {
+  switch (position) {
+    case 'NortheastCorner':
+      return strings.PHOTO_NE_QUADRAT;
+    case 'NorthwestCorner':
+      return strings.PHOTO_NW_QUADRAT;
+    case 'SoutheastCorner':
+      return strings.PHOTO_SE_QUADRAT;
+    case 'SouthwestCorner':
+      return strings.PHOTO_SW_QUADRAT;
     default:
       return '';
   }
