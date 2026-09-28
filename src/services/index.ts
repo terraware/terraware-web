@@ -2,7 +2,6 @@ import AccessionService from './AccessionService';
 import FacilityService from './FacilityService';
 import HttpService from './HttpService';
 import MapService from './MapService';
-import OrganizationUserService from './OrganizationUserService';
 import SearchService from './SearchService';
 import SpeciesService from './SpeciesService';
 import SubLocationService from './SubLocationService';
@@ -15,7 +14,6 @@ export {
   FacilityService,
   HttpService,
   MapService,
-  OrganizationUserService,
   SearchService,
   SpeciesService,
   SubLocationService,

@@ -94,6 +94,9 @@ const config: ConfigFile = {
         operation.path === '/api/v1/organizations/{organizationId}' ||
         operation.path === '/api/v1/organizations/{organizationId}/roles',
     },
+    './src/queries/generated/organizationUsers.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/organizations/{organizationId}/users'),
+    },
     './src/queries/generated/organizationFeatures.ts': {
       filterEndpoints: (_, operation) => operation.path === '/api/v1/organizations/{organizationId}/features',
     },
