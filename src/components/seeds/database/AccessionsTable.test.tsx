@@ -17,6 +17,7 @@ const buildRow = (overrides: Partial<Record<string, unknown>> = {}): SearchRespo
     speciesName: 'Acacia koa',
     species_id: 10,
     state: 'In Storage',
+    'remainingQuantity(raw)': '100',
     ...overrides,
   }) as unknown as SearchResponseElementWithId;
 
@@ -78,8 +79,8 @@ describe('AccessionsTable bulk withdrawal', () => {
     expect(screen.getByRole('button', { name: strings.WITHDRAW })).toBeDisabled();
   });
 
-  it('disables the checkbox for an accession that is not yet checked in', () => {
-    renderTable([
+  it('explains that an accession is unavailable until it is checked in', async () => {
+    const { user } = renderTable([
       buildRow({ id: '1', accessionNumber: 'ACC-001', species_id: 10, speciesName: 'Acacia koa', state: 'In Storage' }),
       buildRow({
         id: '2',
@@ -94,6 +95,56 @@ describe('AccessionsTable bulk withdrawal', () => {
     const rowCheckboxes = screen.getAllByRole('checkbox', { name: 'Toggle select row' });
     expect(rowCheckboxes[0]).toBeEnabled();
     expect(rowCheckboxes[1]).toBeDisabled();
+
+    await user.hover(screen.getByLabelText(strings.WITHDRAW_ACCESSION_AWAITING_CHECK_IN));
+
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(strings.WITHDRAW_ACCESSION_AWAITING_CHECK_IN);
+  });
+
+  it('explains that a checked-in accession without quantity is unavailable', async () => {
+    const { user } = renderTable([
+      buildRow({
+        id: '1',
+        accessionNumber: 'ACC-001',
+        state: 'In Storage',
+        'remainingQuantity(raw)': undefined,
+      }),
+    ]);
+
+    const checkbox = screen.getByRole('checkbox', { name: 'Toggle select row' });
+    expect(checkbox).toBeDisabled();
+
+    await user.hover(screen.getByLabelText(strings.WITHDRAW_ACCESSION_NO_QUANTITY));
+
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(strings.WITHDRAW_ACCESSION_NO_QUANTITY);
+  });
+
+  it('explains that a checked-in accession with zero remaining quantity is unavailable', async () => {
+    const { user } = renderTable([
+      buildRow({
+        id: '1',
+        accessionNumber: 'ACC-001',
+        state: 'In Storage',
+        'remainingQuantity(raw)': '0',
+      }),
+    ]);
+
+    expect(screen.getByRole('checkbox', { name: 'Toggle select row' })).toBeDisabled();
+
+    await user.hover(screen.getByLabelText(strings.WITHDRAW_ACCESSION_NO_QUANTITY));
+
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(strings.WITHDRAW_ACCESSION_NO_QUANTITY);
+  });
+
+  it('explains that a used-up accession is unavailable', async () => {
+    const { user } = renderTable([buildRow({ id: '1', accessionNumber: 'ACC-001', state: 'Used Up' })]);
+
+    const checkbox = screen.getByRole('checkbox', { name: 'Toggle select row' });
+    expect(checkbox).toBeDisabled();
+
+    await user.hover(screen.getByLabelText(strings.WITHDRAW_ACCESSION_USED_UP));
+
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(strings.WITHDRAW_ACCESSION_USED_UP);
   });
 
   it('disables different-species checkboxes once a row is selected', async () => {

@@ -63,6 +63,7 @@ const ALL_ACCESSION_FIELDS = [
   'estimatedWeightOunces(raw)',
   'estimatedWeightPounds(raw)',
   'estimatedCount(raw)',
+  'remainingQuantity(raw)',
   'geolocations.coordinates',
   'collectors.name',
   'collectors.position',

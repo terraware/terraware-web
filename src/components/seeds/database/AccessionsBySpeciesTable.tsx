@@ -50,7 +50,7 @@ type SpeciesRow = {
   inStorageSeeds: number;
   accessionCount: number;
   usedUpAccessionCount: number;
-  // Ids of this species' withdrawable (not used-up) accessions, for bulk withdrawal.
+  // Ids of this species' checked-in accessions that have a quantity available for withdrawal.
   accessionIds: number[];
 };
 
@@ -158,7 +158,9 @@ export default function AccessionsBySpeciesTable({
       const existing = grouped.get(key);
       const seeds = Number(accession['estimatedCount(raw)'] ?? 0) || 0;
       const isUsedUp = accession.state === 'Used Up';
-      const isWithdrawable = isWithdrawableAccessionState(accession.state as string | undefined);
+      const hasWithdrawableQuantity = Number(accession['remainingQuantity(raw)']) > 0;
+      const isWithdrawable =
+        isWithdrawableAccessionState(accession.state as string | undefined) && hasWithdrawableQuantity;
       const isDrying = accession.state === 'Drying';
       const isInStorage = accession.state === 'In Storage';
       const projectName = (accession.project_name as string) ?? '';
@@ -217,7 +219,7 @@ export default function AccessionsBySpeciesTable({
   );
 
   // A bulk withdrawal is single-species. Selecting one species row withdraws from all its
-  // (non-used-up) accessions; selecting two rows means two species, which is not allowed.
+  // eligible accessions; selecting two rows means two species, which is not allowed.
   const isSelectionBulkWithdrawable =
     selectedSpeciesRows.length === 1 && selectedSpeciesRows[0].accessionIds.length > 0;
 

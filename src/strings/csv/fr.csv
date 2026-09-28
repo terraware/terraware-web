@@ -2818,7 +2818,10 @@ WILD,Sauvage,77d2fd62
 WILD_IN_SITU,Sauvage (sur place),cf764f76
 WILD_IN_SITU_DESCRIPTION,Plantes qui se trouvent naturellement dans des zones sauvages et qui n'ont pas été plantées par l'homme.,9b5b2102
 WITHDRAW,Retirer,3aeae714
+WITHDRAW_ACCESSION_AWAITING_CHECK_IN,Cette accession n'est pas disponible pour le retrait tant qu'elle n'a pas été enregistrée.,2f4b6d44
+WITHDRAW_ACCESSION_NO_QUANTITY,Cette accession n'est pas disponible pour le retrait car elle n'a aucune quantité.,168cc8bc
 WITHDRAW_ACCESSION_NOT_AVAILABLE,Cette accession n'est pas disponible pour le retrait.,501f0d9a
+WITHDRAW_ACCESSION_USED_UP,Cette accession n'est pas disponible pour le retrait car elle est épuisée.,6d81c97b
 WITHDRAW_ALL,Retirer tout,cc50ccca
 WITHDRAW_BY,Prélèvement par,54fccc5e
 WITHDRAW_DATE,Date de retrait,67680899
