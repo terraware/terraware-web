@@ -11,7 +11,6 @@ type MyAccountProps = {
   edit: boolean;
   hasNav?: boolean;
   organizations?: Organization[];
-  reloadData?: () => void;
   includeHeader?: boolean;
 };
 
