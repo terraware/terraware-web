@@ -20,6 +20,18 @@ export default function WithdrawalOverview({ withdrawal, withdrawalSummary }: Wi
   const { isMobile } = useDeviceInfo();
 
   const facilityName = selectedOrganization?.facilities?.find((f) => f.id === withdrawal?.facilityId)?.name;
+  const plantingSeasonData = withdrawal?.plantingSeasonId
+    ? [
+        {
+          title: strings.PLANTING_SEASON,
+          data: withdrawalSummary?.plantingSeasonName ?? '',
+        },
+        {
+          title: strings.PLANTING_DATE,
+          data: withdrawalSummary?.plantingDate ?? strings.NOT_WITHDRAWN_TO_DATE,
+        },
+      ]
+    : [];
   const overviewCardData = [
     {
       title: strings.DATE,
@@ -49,6 +61,7 @@ export default function WithdrawalOverview({ withdrawal, withdrawalSummary }: Wi
       title: strings.TO_SUBSTRATUM,
       data: withdrawalSummary?.substratumShortName ?? '',
     },
+    ...plantingSeasonData,
     {
       title: strings.NOTES,
       data: withdrawal?.notes ?? '',
