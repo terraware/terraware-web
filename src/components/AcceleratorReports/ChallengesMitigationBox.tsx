@@ -6,7 +6,7 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import { useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
@@ -42,7 +42,7 @@ const ChallengeMitigationPlan = ({
 }) => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+  const newReportTabEnabled = useFeatureEnabled('Report Updates July 2026');
 
   const setChallenge = useCallback(
     (value: any) => setChallengeMitigation({ ...challengeMitigation, challenge: value }),
@@ -157,7 +157,7 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+  const newReportTabEnabled = useFeatureEnabled('Report Updates July 2026');
   const snackbar = useSnackbar();
 
   const { isMobile } = useDeviceInfo();

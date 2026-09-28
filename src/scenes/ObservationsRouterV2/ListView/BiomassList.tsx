@@ -17,7 +17,7 @@ import Link from 'src/components/common/Link';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useTableState from 'src/hooks/useTableState';
@@ -69,7 +69,7 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { downloadBiomassObservationsZip } = useObservationExports();
 
-  const newFiltersEnabled = isEnabled('New Observation Filters');
+  const newFiltersEnabled = useFeatureEnabled('New Observation Filters');
 
   const {
     columnFilters,

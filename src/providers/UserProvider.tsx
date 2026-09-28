@@ -8,7 +8,6 @@ import { QueryTagTypes } from 'src/queries/tags';
 import { selectUserAnalytics } from 'src/redux/features/user/userAnalyticsSelectors';
 import { updateGtmInstrumented } from 'src/redux/features/user/userAnalyticsSlice';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { CachedUserService } from 'src/services';
 import { GlobalRolePermission, isAllowed as isAllowedACL } from 'src/utils/acl';
 import { isTerraformationEmail } from 'src/utils/user';
 
@@ -83,18 +82,6 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
     }),
     [reloadUser, user, preferencesLoaded, userPreferences, updateUserCookieConsent, updateUserPreferences, isAllowed]
   );
-
-  useEffect(() => {
-    if (userPreferences) {
-      CachedUserService.setUserPreferences(userPreferences);
-    }
-  }, [userPreferences]);
-
-  useEffect(() => {
-    if (user) {
-      CachedUserService.setUser(user);
-    }
-  }, [user]);
 
   useEffect(() => {
     if (user && !userAnalyticsState?.gtmInstrumented && (window as any).INIT_GTAG) {

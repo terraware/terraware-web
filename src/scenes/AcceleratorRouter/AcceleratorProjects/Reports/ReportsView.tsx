@@ -9,7 +9,7 @@ import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/Acc
 import AcceleratorReportsTable from 'src/components/AcceleratorReports/AcceleratorReportsTable';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
@@ -37,7 +37,7 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
   const pathParams = useParams<{ projectId: string; reportId?: string }>();
   const { isAllowed } = useUser();
 
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+  const newReportTabEnabled = useFeatureEnabled('Report Updates July 2026');
   const pathActiveTab = tab ?? 'reports';
 
   const tabs = useMemo(() => {

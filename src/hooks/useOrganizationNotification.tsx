@@ -16,7 +16,8 @@ import { featureNotificationExpired } from 'src/utils/featureNotifications';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 
 export default function useOrganizationNotification(): ClientNotification | null {
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const { selectedOrganization, orgPreferences, reloadOrganizations } = useOrganization();
+  const orgTimeZoneAcknowledgedOnMs = orgPreferences.timeZoneAcknowledgedOnMs as number | undefined;
 
   const [timeZoneOrgNotification, setTimeZoneOrgNotification] = useState(false);
   const [timeZoneOrgNotificationRead, setTimeZoneOrgNotificationRead] = useState(false);
@@ -55,7 +56,11 @@ export default function useOrganizationNotification(): ClientNotification | null
       let orgTz: InitializedTimeZone = {};
 
       if (selectedOrganization) {
-        orgTz = await OrganizationService.initializeTimeZone(selectedOrganization, userTz.timeZone);
+        orgTz = await OrganizationService.initializeTimeZone(
+          selectedOrganization,
+          userTz.timeZone,
+          orgTimeZoneAcknowledgedOnMs
+        );
       }
 
       if (orgTz.updated) {
@@ -68,7 +73,7 @@ export default function useOrganizationNotification(): ClientNotification | null
     };
 
     void initializeTimeZones();
-  }, [userTz, reloadOrganizations, selectedOrganization, getTimeZoneById]);
+  }, [userTz, reloadOrganizations, selectedOrganization, orgTimeZoneAcknowledgedOnMs, getTimeZoneById]);
 
   return useMemo(() => {
     if (timeZoneOrgNotification && selectedOrganization) {

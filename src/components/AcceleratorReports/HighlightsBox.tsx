@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import { useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
@@ -20,7 +20,7 @@ const COLLAPSED_MAX_HEIGHT = 120;
 const HighlightsBox = (props: ReportBoxProps) => {
   const { report, projectId, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView, printMode } =
     props;
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+  const newReportTabEnabled = useFeatureEnabled('Report Updates July 2026');
   const theme = useTheme();
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [highlights, setHighlights] = useState<string | undefined>(report?.highlights);

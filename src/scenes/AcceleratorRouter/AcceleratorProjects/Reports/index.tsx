@@ -2,7 +2,7 @@ import React from 'react';
 import { Navigate, Route, Routes, useParams } from 'react-router';
 
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import { useUser } from 'src/providers';
 
 import EditSettings from './EditSettings';
@@ -19,7 +19,7 @@ const ReportsRouter = () => {
 
   const { isAllowed } = useUser();
 
-  const newReportViewEnabled = isEnabled('Report Updates July 2026');
+  const newReportViewEnabled = useFeatureEnabled('Report Updates July 2026');
 
   if (newReportViewEnabled) {
     return (

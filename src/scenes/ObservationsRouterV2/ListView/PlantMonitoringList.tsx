@@ -20,7 +20,7 @@ import TextTruncated from 'src/components/common/TextTruncated';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -153,7 +153,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
   const navigate = useSyncNavigate();
 
   const isAdHoc = plotType === 'adHoc';
-  const newFiltersEnabled = isEnabled('New Observation Filters');
+  const newFiltersEnabled = useFeatureEnabled('New Observation Filters');
   const showSelectObservation = newFiltersEnabled && typeof plantingSiteId === 'number';
   const showSiteName = newFiltersEnabled && plantingSiteId === ALL_PLANTING_SITES;
 
