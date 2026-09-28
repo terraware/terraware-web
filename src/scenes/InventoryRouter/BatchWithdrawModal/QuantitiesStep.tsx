@@ -148,21 +148,31 @@ const QuantitiesStep = ({
         </Box>
       )}
 
-      {plantingSeasonName && (
-        <Box textAlign='left' paddingLeft={theme.spacing(2)}>
-          <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
-            {strings.PLANTING_SEASON}
-          </Typography>
-          <Typography fontSize='14px'>{plantingSeasonName}</Typography>
-        </Box>
-      )}
-
-      {selectedPlantingDate && (
-        <Box textAlign='left' paddingLeft={theme.spacing(2)}>
-          <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
-            {strings.PLANTING_DATE}
-          </Typography>
-          <Typography fontSize='14px'>{getMediumDate(selectedPlantingDate.date, activeLocale)}</Typography>
+      {(plantingSeasonName || selectedPlantingDate) && (
+        <Box
+          display='flex'
+          flexWrap='wrap'
+          columnGap={theme.spacing(4)}
+          rowGap={theme.spacing(2)}
+          textAlign='left'
+          paddingLeft={theme.spacing(2)}
+        >
+          {plantingSeasonName && (
+            <Box>
+              <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+                {strings.PLANTING_SEASON}
+              </Typography>
+              <Typography fontSize='14px'>{plantingSeasonName}</Typography>
+            </Box>
+          )}
+          {selectedPlantingDate && (
+            <Box>
+              <Typography fontSize='14px' color={theme.palette.TwClrTxtSecondary}>
+                {strings.PLANTING_DATE}
+              </Typography>
+              <Typography fontSize='14px'>{getMediumDate(selectedPlantingDate.date, activeLocale)}</Typography>
+            </Box>
+          )}
         </Box>
       )}
 
