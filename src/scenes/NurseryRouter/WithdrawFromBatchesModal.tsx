@@ -351,8 +351,8 @@ const WithdrawFromBatchesModal = ({
   const substratumNames = [...new Set(request.substrata.map((substratum) => substratum.substratumName))].join(', ');
   const plantingDetails = [
     { label: strings.PLANTING_SITE, value: request.plantingSiteName },
-    { label: strings.STRATUM, value: stratumNames },
-    { label: strings.SUBSTRATUM, value: substratumNames },
+    { label: strings.STRATA, value: stratumNames },
+    { label: strings.SUBSTRATA, value: substratumNames },
     { label: strings.PLANTING_SEASON, value: request.plantingSeasonName },
     { label: strings.PLANTING_DATE, value: getMediumDate(request.date, activeLocale) },
   ];
