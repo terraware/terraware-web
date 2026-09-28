@@ -18,6 +18,7 @@ const buildRow = (overrides: Partial<Record<string, unknown>> = {}): SearchRespo
     species_id: 10,
     state: 'In Storage',
     'estimatedCount(raw)': '100',
+    'remainingQuantity(raw)': '100',
     ...overrides,
   }) as unknown as SearchResponseElementWithId;
 
@@ -71,6 +72,20 @@ describe('AccessionsBySpeciesTable bulk withdrawal', () => {
     renderTable([buildRow({ id: '1', species_id: 10, speciesName: 'Acacia koa', state: 'Awaiting Check-In' })]);
 
     // The species has no withdrawable (checked-in) accessions, so its row can't be selected.
+    expect(screen.getByRole('checkbox', { name: 'Toggle select row' })).toBeDisabled();
+  });
+
+  it('disables the checkbox for a checked-in species whose accessions have no quantity', () => {
+    renderTable([
+      buildRow({
+        id: '1',
+        species_id: 10,
+        speciesName: 'Acacia koa',
+        state: 'In Storage',
+        'remainingQuantity(raw)': undefined,
+      }),
+    ]);
+
     expect(screen.getByRole('checkbox', { name: 'Toggle select row' })).toBeDisabled();
   });
 

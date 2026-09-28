@@ -100,6 +100,27 @@ const speciesKey = (row: SearchResponseElementWithId): string =>
     ? `id:${String(row.species_id)}`
     : `name:${String(row.speciesName ?? '')}`;
 
+const hasQuantity = (row: SearchResponseElementWithId): boolean => {
+  const remainingQuantity = row['remainingQuantity(raw)'];
+  return remainingQuantity !== undefined && remainingQuantity !== null && remainingQuantity !== '';
+};
+
+const isWithdrawable = (row: SearchResponseElementWithId): boolean =>
+  isWithdrawableAccessionState(row.state as string | undefined) && hasQuantity(row);
+
+const unavailableTooltip = (row: SearchResponseElementWithId): string => {
+  if (row.state === 'Awaiting Check-In') {
+    return strings.WITHDRAW_ACCESSION_AWAITING_CHECK_IN;
+  }
+  if (row.state === 'Used Up') {
+    return strings.WITHDRAW_ACCESSION_USED_UP;
+  }
+  if (!hasQuantity(row)) {
+    return strings.WITHDRAW_ACCESSION_NO_QUANTITY;
+  }
+  return strings.WITHDRAW_ACCESSION_NOT_AVAILABLE;
+};
+
 export default function AccessionsTable({ searchResults, projects, reloadData }: AccessionsTableProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
@@ -125,7 +146,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
     () =>
       selectedRows.length >= 1 &&
       new Set(selectedRows.map(speciesKey)).size === 1 &&
-      selectedRows.every((row) => isWithdrawableAccessionState(row.state as string | undefined)),
+      selectedRows.every(isWithdrawable),
     [selectedRows]
   );
 
@@ -145,7 +166,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
   // why it can't be selected (a nursery batch is single-species).
   const SelectRowCheckboxCell = useCallback(
     ({ row }: { row: MRT_Row<SearchResponseElementWithId> }) => {
-      const withdrawable = isWithdrawableAccessionState(row.original.state as string | undefined);
+      const withdrawable = isWithdrawable(row.original);
       const sameSpecies = selectionSpeciesKey === undefined || speciesKey(row.original) === selectionSpeciesKey;
       const canSelect = withdrawable && sameSpecies;
       const checkbox = (
@@ -160,9 +181,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
       if (canSelect) {
         return checkbox;
       }
-      const tooltip = !withdrawable
-        ? strings.WITHDRAW_ACCESSION_NOT_AVAILABLE
-        : strings.BULK_WITHDRAW_ONE_SPECIES_TOOLTIP;
+      const tooltip = !withdrawable ? unavailableTooltip(row.original) : strings.BULK_WITHDRAW_ONE_SPECIES_TOOLTIP;
       return (
         <Tooltip title={tooltip}>
           <span>{checkbox}</span>
@@ -735,7 +754,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
           ...(canWithdraw
             ? {
                 enableRowSelection: (row: MRT_Row<SearchResponseElementWithId>) =>
-                  isWithdrawableAccessionState(row.original.state as string | undefined) &&
+                  isWithdrawable(row.original) &&
                   (selectionSpeciesKey === undefined || speciesKey(row.original) === selectionSpeciesKey),
                 displayColumnDefOptions: { 'mrt-row-select': { Cell: SelectRowCheckboxCell } },
                 onRowSelectionChange: setRowSelection,
