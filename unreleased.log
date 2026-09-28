@@ -1,3 +1,4 @@
+1dc7d736 Update dependency @babel/traverse to v8.0.6 (#6535)
 16bdd226 SW-8849 Add confirm dialog to delete Virtual Walkthroughs (#6533)
 4c1f49ce SW-8924 Ability to withdraw to Planting Dates in regular withdrawal flow (#6531)
 50498c65 SW-8907 Select stratum by default for single stratum site (#6532)
