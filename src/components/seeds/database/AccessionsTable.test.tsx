@@ -119,6 +119,23 @@ describe('AccessionsTable bulk withdrawal', () => {
     expect(await screen.findByRole('tooltip')).toHaveTextContent(strings.WITHDRAW_ACCESSION_NO_QUANTITY);
   });
 
+  it('explains that a checked-in accession with zero remaining quantity is unavailable', async () => {
+    const { user } = renderTable([
+      buildRow({
+        id: '1',
+        accessionNumber: 'ACC-001',
+        state: 'In Storage',
+        'remainingQuantity(raw)': '0',
+      }),
+    ]);
+
+    expect(screen.getByRole('checkbox', { name: 'Toggle select row' })).toBeDisabled();
+
+    await user.hover(screen.getByLabelText(strings.WITHDRAW_ACCESSION_NO_QUANTITY));
+
+    expect(await screen.findByRole('tooltip')).toHaveTextContent(strings.WITHDRAW_ACCESSION_NO_QUANTITY);
+  });
+
   it('explains that a used-up accession is unavailable', async () => {
     const { user } = renderTable([buildRow({ id: '1', accessionNumber: 'ACC-001', state: 'Used Up' })]);
 

@@ -100,13 +100,11 @@ const speciesKey = (row: SearchResponseElementWithId): string =>
     ? `id:${String(row.species_id)}`
     : `name:${String(row.speciesName ?? '')}`;
 
-const hasQuantity = (row: SearchResponseElementWithId): boolean => {
-  const remainingQuantity = row['remainingQuantity(raw)'];
-  return remainingQuantity !== undefined && remainingQuantity !== null && remainingQuantity !== '';
-};
+const hasWithdrawableQuantity = (row: SearchResponseElementWithId): boolean =>
+  Number(row['remainingQuantity(raw)']) > 0;
 
 const isWithdrawable = (row: SearchResponseElementWithId): boolean =>
-  isWithdrawableAccessionState(row.state as string | undefined) && hasQuantity(row);
+  isWithdrawableAccessionState(row.state as string | undefined) && hasWithdrawableQuantity(row);
 
 const unavailableTooltip = (row: SearchResponseElementWithId): string => {
   if (row.state === 'Awaiting Check-In') {
@@ -115,7 +113,7 @@ const unavailableTooltip = (row: SearchResponseElementWithId): string => {
   if (row.state === 'Used Up') {
     return strings.WITHDRAW_ACCESSION_USED_UP;
   }
-  if (!hasQuantity(row)) {
+  if (!hasWithdrawableQuantity(row)) {
     return strings.WITHDRAW_ACCESSION_NO_QUANTITY;
   }
   return strings.WITHDRAW_ACCESSION_NOT_AVAILABLE;

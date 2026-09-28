@@ -158,9 +158,9 @@ export default function AccessionsBySpeciesTable({
       const existing = grouped.get(key);
       const seeds = Number(accession['estimatedCount(raw)'] ?? 0) || 0;
       const isUsedUp = accession.state === 'Used Up';
-      const remainingQuantity = accession['remainingQuantity(raw)'];
-      const hasQuantity = remainingQuantity !== undefined && remainingQuantity !== null && remainingQuantity !== '';
-      const isWithdrawable = isWithdrawableAccessionState(accession.state as string | undefined) && hasQuantity;
+      const hasWithdrawableQuantity = Number(accession['remainingQuantity(raw)']) > 0;
+      const isWithdrawable =
+        isWithdrawableAccessionState(accession.state as string | undefined) && hasWithdrawableQuantity;
       const isDrying = accession.state === 'Drying';
       const isInStorage = accession.state === 'In Storage';
       const projectName = (accession.project_name as string) ?? '';
