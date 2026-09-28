@@ -28,12 +28,10 @@ export default function OrganizationsDropdown(): JSX.Element {
   }, [activeLocale, organizations]);
 
   const selectOrganization = (newlySelectedOrg: Organization) => {
-    setSelectedOrganization((currentlySelectedOrg: Organization | undefined) => {
-      if (newlySelectedOrg.id !== currentlySelectedOrg?.id) {
-        navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${newlySelectedOrg.id}` });
-      }
-      return newlySelectedOrg;
-    });
+    if (newlySelectedOrg.id !== selectedOrganization?.id) {
+      navigate({ pathname: APP_PATHS.HOME, search: `organizationId=${newlySelectedOrg.id}` });
+    }
+    setSelectedOrganization(newlySelectedOrg);
   };
 
   const onCloseCreateOrganizationModal = () => {

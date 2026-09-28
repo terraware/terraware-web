@@ -1,4 +1,5 @@
 import { ProjectPayload } from 'src/queries/generated/projects';
+import { buildOrganization } from 'src/test-utils/fixtures/organization';
 import { ACCESSION_2_STATES, Accession, AccessionState } from 'src/types/Accession';
 import {
   GLOBAL_ROLE_ACCELERATOR_ADMIN,
@@ -116,7 +117,8 @@ describe('isAllowed', () => {
       globalRoles: [],
       userType: 'Individual',
     };
-    const org = (id: number): Organization => ({ id, name: `Org ${id}`, totalUsers: 1 });
+    const org = (id: number): Organization =>
+      buildOrganization({ id, name: `Org ${id}`, role: undefined, facilities: undefined });
     const project = (organizationId: number) => ({ id: 1, name: 'Project', organizationId }) as ProjectPayload;
 
     // Non-accelerator route: always allowed regardless of org membership
@@ -178,7 +180,7 @@ describe('isAllowed', () => {
       userType: 'Individual',
     };
 
-    const org = (role: OrganizationRole): Organization => ({ id: 1, name: 'Org 1', totalUsers: 1, role });
+    const org = (role: OrganizationRole): Organization => buildOrganization({ name: 'Org 1', role });
     const accession = (state: AccessionState, estimatedCount?: number) => ({ state, estimatedCount }) as Accession;
 
     /** Every organization role that is not Contributor. */
