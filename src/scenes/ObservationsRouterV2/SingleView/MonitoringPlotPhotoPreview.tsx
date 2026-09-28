@@ -21,7 +21,6 @@ type MonitoringPlotPhotoPreviewProps = {
   observationId?: number;
   onDelete: () => void;
   setCaption: (caption: string) => void;
-  monitoringPlotName?: string;
 };
 
 const MonitoringPlotPhotoPreview = ({
@@ -31,7 +30,6 @@ const MonitoringPlotPhotoPreview = ({
   observationId,
   onDelete,
   setCaption,
-  monitoringPlotName,
 }: MonitoringPlotPhotoPreviewProps) => {
   const { strings } = useLocalization();
   const theme = useTheme();
