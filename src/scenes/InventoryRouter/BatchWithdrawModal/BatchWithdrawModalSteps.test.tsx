@@ -209,7 +209,7 @@ describe('PurposeAndDestinationStep planting date', () => {
 });
 
 describe('QuantitiesStep planting date', () => {
-  it('shows remaining quantities for both requested and unrequested withdrawal species', () => {
+  it('shows the planting season and date in the same responsive row with species remainders', async () => {
     mockPlantingDestinations();
     const acacia = batch();
     const ficus = batch({
@@ -229,6 +229,12 @@ describe('QuantitiesStep planting date', () => {
     );
 
     expect(screen.getByText('Feb 10, 2027')).toBeInTheDocument();
+    await screen.findByText('Wet Season');
+    const plantingSeasonField = screen.getByText(strings.PLANTING_SEASON).parentElement;
+    const plantingDateField = screen.getByText(strings.PLANTING_DATE).parentElement;
+    expect(plantingSeasonField?.parentElement).toBe(plantingDateField?.parentElement);
+    expect(plantingSeasonField?.parentElement).toHaveStyle({ display: 'flex', flexWrap: 'wrap' });
+
     const acaciaHeader = screen.getByText('Acacia koa').parentElement as HTMLElement;
     expect(within(acaciaHeader).getByText(strings.REMAINING_TO_WITHDRAW + ':')).toBeInTheDocument();
     expect(within(acaciaHeader).getByText('25')).toBeInTheDocument();
