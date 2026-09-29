@@ -1,4 +1,4 @@
-import { components } from 'src/api/types/generated-schema';
+import { ModuleEvent as ModuleEventPayload } from 'src/queries/generated/moduleEvents';
 import { ModuleDeliverablePayload, ModulePayload } from 'src/queries/generated/modules';
 import { ProjectModulePayload } from 'src/queries/generated/projectModules';
 import strings from 'src/strings';
@@ -8,15 +8,15 @@ export type Module = ModulePayload;
 
 export type ModuleDeliverable = ModuleDeliverablePayload;
 
-export type ModuleEvent = components['schemas']['ModuleEvent'];
-export type ModuleEventPartial = Omit<Partial<components['schemas']['ModuleEvent']>, 'projects'> & {
+export type ModuleEvent = ModuleEventPayload;
+export type ModuleEventPartial = Omit<Partial<ModuleEvent>, 'projects'> & {
   projects?: ModuleEventProject[];
   feId?: symbol;
 };
-export type ModuleEventProject = Partial<NonNullable<components['schemas']['ModuleEvent']['projects']>[0]>;
+export type ModuleEventProject = Partial<NonNullable<ModuleEvent['projects']>[0]>;
 export type ModuleEventWithStartTime = Omit<ModuleEvent, 'startTime'> & { startTime: string };
 
-export type ModuleEventStatus = components['schemas']['ModuleEvent']['status'];
+export type ModuleEventStatus = ModuleEvent['status'];
 export type ModuleEventType = ModuleEvent['type'];
 
 export const getEventType = (input: ModuleEventType): string => {
