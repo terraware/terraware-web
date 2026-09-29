@@ -1,13 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { skipToken } from '@reduxjs/toolkit/query';
 import { TableColumnType } from '@terraware/web-components';
 
 import TableWithSearchFilters from 'src/components/TableWithSearchFilters';
 import { FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
 import { useLocalization } from 'src/providers';
-import { requestListApplications } from 'src/redux/features/application/applicationAsyncThunks';
-import { selectApplicationList } from 'src/redux/features/application/applicationSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useListApplicationsQuery } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 import { Application, ApplicationStatus, ApplicationStatusOrder } from 'src/types/Application';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -68,13 +67,19 @@ type ApplicationListTabProps = {
 };
 
 const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
-  const dispatch = useAppDispatch();
   const { activeLocale, countries } = useLocalization();
   const snackbar = useSnackbar();
 
-  const [requestId, setRequestId] = useState<string>('');
-  const result = useAppSelector(selectApplicationList(requestId));
-  const [applications, setApplications] = useState<ApplicationRow[]>([]);
+  const [searchRequest, setSearchRequest] = useState<{
+    locale: string;
+    search: SearchNodePayload;
+    sortOrder: SearchSortOrder;
+  }>();
+  const {
+    currentData: applicationsData,
+    isFetching,
+    isError,
+  } = useListApplicationsQuery(searchRequest ? { listAll: true } : skipToken);
 
   const allFilterValues = useMemo((): ApplicationStatus[] => {
     if (isPrescreen) {
@@ -120,28 +125,10 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
   }, [activeLocale, countries, allFilterValues]);
 
   useEffect(() => {
-    if (result?.status === 'error') {
+    if (isError) {
       snackbar.toastError();
-      return;
     }
-    if (result?.data) {
-      setApplications(
-        result.data
-          .filter((application) => allFilterValues.includes(application.status))
-          .map((application) => ({
-            countryCode: application?.countryCode,
-            countryName:
-              application?.countryCode && countries ? getCountryByCode(countries, application.countryCode)?.name : '',
-            id: application.id,
-            // TODO: only use internal name once the column becomes mandatory
-            internalName: application.internalName ?? application.projectName,
-            modifiedTime: application.modifiedTime,
-            organizationName: application.organizationName,
-            status: application.status,
-          }))
-      );
-    }
-  }, [result, setApplications, allFilterValues, snackbar, countries]);
+  }, [isError, snackbar]);
 
   const searchAndSort: SearchAndSortFn<Application> = useCallback(
     (results: Application[], search?: SearchNodePayload, sortOrderConfig?: SearchOrderConfig) => {
@@ -166,22 +153,43 @@ const ApplicationListTab = ({ isPrescreen }: ApplicationListTabProps) => {
     []
   );
 
+  const applications = useMemo<ApplicationRow[]>(() => {
+    if (!applicationsData || !searchRequest) {
+      return [];
+    }
+    const sortOrderConfig = {
+      locale: 'en',
+      sortOrder: searchRequest.sortOrder,
+      numberFields: ['id', 'participantIds'],
+    };
+    return searchAndSort(applicationsData.applications, searchRequest.search, sortOrderConfig)
+      .filter((application) => allFilterValues.includes(application.status))
+      .map((application) => ({
+        countryCode: application?.countryCode,
+        countryName:
+          application?.countryCode && countries ? getCountryByCode(countries, application.countryCode)?.name : '',
+        id: application.id,
+        // TODO: only use internal name once the column becomes mandatory
+        internalName: application.internalName ?? application.projectName,
+        modifiedTime: application.modifiedTime,
+        organizationName: application.organizationName,
+        status: application.status,
+      }));
+  }, [allFilterValues, applicationsData, countries, searchAndSort, searchRequest]);
+
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
       if (!locale) {
         return;
       }
-      const request = dispatch(
-        requestListApplications({ listAll: true, locale: 'en', search, searchSortOrder, searchAndSort })
-      );
-      setRequestId(request.requestId);
+      setSearchRequest({ locale, search, sortOrder: searchSortOrder });
     },
-    [dispatch, searchAndSort]
+    []
   );
 
   return (
     <TableWithSearchFilters
-      busy={result?.status === 'pending'}
+      busy={isFetching}
       columns={columns}
       defaultSearchOrder={defaultSearchOrder}
       dispatchSearchRequest={dispatchSearchRequest}

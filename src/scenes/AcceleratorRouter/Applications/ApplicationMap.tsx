@@ -10,13 +10,14 @@ import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
-import ApplicationService from 'src/services/ApplicationService';
+import { useLazyGetApplicationGeoJsonQuery } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 import { downloadGeoJson } from 'src/utils/csv';
 
 const ApplicationMap = () => {
   const { activeLocale } = useLocalization();
   const { selectedApplication, setSelectedApplication } = useApplicationData();
+  const [getApplicationGeoJson] = useLazyGetApplicationGeoJsonQuery();
 
   const pathParams = useParams<{ applicationId: string }>();
 
@@ -57,13 +58,13 @@ const ApplicationMap = () => {
     if (!selectedApplication) {
       return;
     }
-    const response = await ApplicationService.exportBoundary(selectedApplication.id);
-    if (response !== null) {
+    const response = await getApplicationGeoJson(selectedApplication.id);
+    if (response.data !== undefined) {
       const dataString = JSON.stringify(response.data);
       const filename = `${selectedApplication.internalName}`;
       downloadGeoJson(filename, dataString);
     }
-  }, [selectedApplication]);
+  }, [getApplicationGeoJson, selectedApplication]);
 
   const exportButton = useMemo(() => {
     if (!activeLocale || !selectedApplication) {
