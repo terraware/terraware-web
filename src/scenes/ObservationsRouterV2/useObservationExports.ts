@@ -8,7 +8,6 @@ import { APP_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
-  useLazyExportBiomassObservationsCsvQuery,
   useLazyExportBiomassPlotsCsvQuery,
   useLazyExportBiomassSpeciesCsvQuery,
   useLazyExportBiomassTreesShrubsCsvQuery,
@@ -17,13 +16,11 @@ import {
 import { ObservationResultsPayload, useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getConditionString } from 'src/redux/features/observations/utils';
-import { AdHocObservationResults, getPlotStatus } from 'src/types/Observations';
+import { getPlotStatus } from 'src/types/Observations';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
 import { getShortDate } from 'src/utils/dateFormatter';
 import downloadZipFile from 'src/utils/downloadZipFile';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
-
-import { makeAdHocObservationsCsv } from './exportAdHocObservations';
 
 const useObservationExports = () => {
   const { activeLocale, strings } = useLocalization();
@@ -33,7 +30,6 @@ const useObservationExports = () => {
   const [exportBiomassPlots] = useLazyExportBiomassPlotsCsvQuery();
   const [exportBiomassSpecies] = useLazyExportBiomassSpeciesCsvQuery();
   const [exportBiomassTreesShrubs] = useLazyExportBiomassTreesShrubsCsvQuery();
-  const [exportBiomassObservations] = useLazyExportBiomassObservationsCsvQuery();
   const [exportObservationGpx] = useLazyExportObservationGpxQuery();
   const [getPlantingSite] = useLazyGetPlantingSiteQuery();
 
@@ -637,57 +633,22 @@ const useObservationExports = () => {
   );
 
   const downloadAdHocObservationsZip = useCallback(
-    async ({
-      adHocObservationsResults,
-      biomassObservationIds,
-      plantingSiteId,
-      siteName,
-    }: {
-      adHocObservationsResults: AdHocObservationResults[];
-      biomassObservationIds: number[];
-      plantingSiteId?: number;
-      siteName: string;
-    }) => {
-      if (!selectedOrganization) {
+    async ({ observations, siteName }: { observations: { observationId: number }[]; siteName: string }) => {
+      if (observations.length === 0) {
         return;
       }
 
-      const files: { fileName: string; content: Blob | string }[] = [];
-
-      if (adHocObservationsResults.length > 0) {
-        files.push({
-          content: makeAdHocObservationsCsv(adHocObservationsResults),
-          fileName: `${siteName}-${strings.AD_HOC_PLANT_MONITORING}`,
-        });
-      }
-
-      if (biomassObservationIds.length > 0) {
-        files.push({
-          content: await exportBiomassObservations(
-            { observationIds: biomassObservationIds, organizationId: selectedOrganization.id, plantingSiteId },
-            true
-          ).unwrap(),
-          fileName: `${siteName}-${strings.BIOMASS_MONITORING}`,
-        });
-      }
-
-      if (files.length === 0) {
-        return;
-      }
-
+      const fileNamePrefix = `${siteName}-${strings.AD_HOC_PLOTS}`;
       await downloadZipFile({
-        dirName: `${siteName}-${strings.AD_HOC_PLOTS}`,
-        files,
+        dirName: fileNamePrefix,
+        files: await makeBiomassCsvFiles(
+          observations.map(({ observationId }) => observationId),
+          fileNamePrefix
+        ),
         suffix: '.csv',
       });
     },
-    [
-      exportBiomassObservations,
-      selectedOrganization,
-      strings.AD_HOC_PLANT_MONITORING,
-      strings.AD_HOC_PLOTS,
-      strings.BIOMASS_MONITORING,
-    ]
+    [makeBiomassCsvFiles, strings.AD_HOC_PLOTS]
   );
 
   return {

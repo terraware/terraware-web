@@ -53,21 +53,10 @@ const injectedRtkApi = api.injectEndpoints({
           ],
           sortOrder: [{ field: 'monitoringPlot_plotNumber', direction: 'Descending' }],
           search: {
-            operation: 'and',
-            children: [
-              {
-                operation: 'field',
-                type: 'Exact',
-                field: 'observation_type(raw)',
-                values: ['Biomass Measurements'],
-              },
-              {
-                operation: 'field',
-                type: 'Exact',
-                field: 'observation_id',
-                values: observationIds.map(String),
-              },
-            ],
+            operation: 'field',
+            type: 'Exact',
+            field: 'observation_id',
+            values: observationIds.map(String),
           },
           count: 0,
         },

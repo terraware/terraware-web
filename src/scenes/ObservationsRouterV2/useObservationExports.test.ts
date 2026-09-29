@@ -18,6 +18,7 @@ rstest.mock('src/providers', () => ({
     activeLocale: 'en',
     strings: {
       BIOMASS_OBSERVATION_FILENAME_PREFIX: 'Biomass Monitoring',
+      AD_HOC_PLOTS: 'Ad Hoc Plots',
       PLOT: 'Plot',
       SPECIES_CLASSIFICATION: 'Species',
       TREES_AND_SHRUBS: 'Trees',
@@ -118,5 +119,40 @@ describe('downloadBiomassObservationDetails', () => {
         { fileName: 'Site-2026-09-01-Biomass Monitoring-Trees', content: 'trees 42' },
       ],
     });
+  });
+});
+
+describe('downloadAdHocObservationsZip', () => {
+  test('exports every visible observation in three combined CSV files', async () => {
+    const { result } = renderHook(useObservationExports);
+    const observations = [{ observationId: 11 }, { observationId: 7 }, { observationId: 24 }];
+    await result.current.downloadAdHocObservationsZip({ observations, siteName: 'Site' });
+
+    for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
+      expect(trigger).toHaveBeenCalledTimes(1);
+      expect(trigger).toHaveBeenCalledWith([11, 7, 24], true);
+    }
+    expect(mocks.observation).not.toHaveBeenCalled();
+    expect(mocks.site).not.toHaveBeenCalled();
+    expect(downloadZipFile).toHaveBeenCalledTimes(1);
+    expect(downloadZipFile).toHaveBeenCalledWith({
+      dirName: 'Site-Ad Hoc Plots',
+      suffix: '.csv',
+      files: [
+        { fileName: expect.stringMatching(/-Plot$/), content: 'plot 11,7,24' },
+        { fileName: expect.stringMatching(/-Species$/), content: 'species 11,7,24' },
+        { fileName: expect.stringMatching(/-Trees$/), content: 'trees 11,7,24' },
+      ],
+    });
+  });
+
+  test('does not request or download files when no observations are visible', async () => {
+    const { result } = renderHook(useObservationExports);
+    await result.current.downloadAdHocObservationsZip({ observations: [], siteName: 'Site' });
+
+    for (const trigger of Object.values(mocks)) {
+      expect(trigger).not.toHaveBeenCalled();
+    }
+    expect(downloadZipFile).not.toHaveBeenCalled();
   });
 });
