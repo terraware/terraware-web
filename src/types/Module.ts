@@ -1,10 +1,12 @@
 import { components } from 'src/api/types/generated-schema';
+import { ModuleDeliverablePayload, ModulePayload } from 'src/queries/generated/modules';
+import { ProjectModulePayload } from 'src/queries/generated/projectModules';
 import strings from 'src/strings';
 
-export type ProjectModule = components['schemas']['ProjectModulePayload'];
-export type Module = components['schemas']['ModulePayload'];
+export type ProjectModule = ProjectModulePayload;
+export type Module = ModulePayload;
 
-export type ModuleDeliverable = components['schemas']['ModuleDeliverablePayload'];
+export type ModuleDeliverable = ModuleDeliverablePayload;
 
 export type ModuleEvent = components['schemas']['ModuleEvent'];
 export type ModuleEventPartial = Omit<Partial<components['schemas']['ModuleEvent']>, 'projects'> & {
@@ -32,28 +34,6 @@ export const getEventType = (input: ModuleEventType): string => {
   }
 };
 
-export type ModuleProjectSearchResult = {
-  id: number;
-  projectModules?: {
-    module_id: string;
-  }[];
-};
-
-export type ModuleProjectsSearchResult = {
-  projectModules?: {
-    title: string;
-    startDate: string;
-    endDate: string;
-    project_id: number;
-    project_name: string;
-  }[];
-};
-
-export type ProjectInModule = Omit<
-  NonNullable<ModuleProjectsSearchResult['projectModules']>[0],
-  'title' | 'startDate' | 'endDate'
->;
-
 export const getEventStatus = (status: ModuleEventStatus) => {
   switch (status) {
     case 'Not Started': {
@@ -74,11 +54,3 @@ export const getEventStatus = (status: ModuleEventStatus) => {
 };
 
 export type ModuleContentType = keyof Pick<Module, 'additionalResources' | 'preparationMaterials'>;
-
-export type ModuleSearchResult = {
-  id: number;
-  name: string;
-  phaseId: string;
-  projectsQuantity: number;
-  deliverablesQuantity: number;
-};

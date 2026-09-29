@@ -5,7 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import Link from 'src/components/common/Link';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { useOrganization } from 'src/providers/hooks';
-import { ImportModuleResponsePayload } from 'src/services/ModuleService';
+import { ImportModuleResponsePayload } from 'src/queries/generated/modules';
 import strings from 'src/strings';
 import { Facility } from 'src/types/Facility';
 import { GetUploadStatusResponsePayload, ResolveResponse, UploadFileResponse, UploadResponse } from 'src/types/File';
