@@ -672,6 +672,7 @@ EDIT_STANDARD_METRIC_CONFIRMATION,Las ediciones a esta métrica estándar se apl
 EDIT_STATUS,Editar estado,6b9a2791
 EDIT_SURVIVAL_RATE_SETTINGS_FOR,Editar configuración de la tasa de supervivencia para {0},669ad74c
 EDIT_TEMPORARY_PLOTS,Editar Parcelas Temporales,3df84c06
+EDIT_VALUE,Editar valor,cb718eec
 EDIT_VIABILITY,Editar viabilidad,019e694b
 EDIT_VIABILITY_TEST,Editar prueba de viabilidad,71da108b
 EDIT_VOTES,Editar votos,8d6f6fe1
@@ -1026,6 +1027,7 @@ JOIN_EVENT_NAME,Únase {0},14c4bd8e
 JUST_SAVED,Guardado recientemente,d426eaa3
 JUSTIFICATION,Justificación,88588c24
 KEEP_ORIGINAL,Conservar original,21773616
+KEEP_VALUE,Conservar valor,092210f9
 KEY,Clave,b46ab088
 KEY_LESSONS,Lecciones clave aprendidas,24ee85f1
 KEY_LESSONS_INSTRUCTIONS,"Proporcione detalles de las lecciones clave aprendidas durante el periodo de presentación de informes del proyecto, incluidas las consecuencias no intencionadas tanto positivas como negativas, de ser el caso. (Media página como máximo)",e6cf7202
@@ -2677,6 +2679,7 @@ UNDO_PLANTING_COMPLETE,Deshacer plantación completa,05a90be7
 UNDO_WITHDRAWAL,Deshacer retiro,eba70c5e
 UNDO_WITHDRAWAL_CONFIRMATION,¿Está seguro de que quiere deshacer este retiro?,7f65365c
 UNDONE_WITHDRAWAL_MESSAGE,Esta retirada se deshizo y las cantidades se restablecieron al lote original.,5bfaca81
+UNEXPECTED_BIOMASS_MEASUREMENT,"El valor {0} que ingresó para {1} es inesperado. Por favor, verifique que haya ingresado el número correcto.",191ca823
 UNEXPECTED_ERROR,Ha ocurrido un error inesperado.,ba88e4cb
 UNFAVORABLE_WEATHER,Clima desfavorable,a11232d3
 UNIT,Unidad,48d10134
