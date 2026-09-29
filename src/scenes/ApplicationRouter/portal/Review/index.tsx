@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -9,13 +9,12 @@ import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
-import { selectApplicationSubmit } from 'src/redux/features/application/applicationSelectors';
-import { useAppSelector } from 'src/redux/store';
+import { useSubmitApplicationMutation } from 'src/queries/generated/applications';
 import ApplicationPage from 'src/scenes/ApplicationRouter/portal/ApplicationPage';
 import strings from 'src/strings';
 import { Application } from 'src/types/Application';
 
-import ReviewCard from './ReviewCard';
+import ReviewCard, { SUBMIT_APPLICATION_MUTATION_KEY } from './ReviewCard';
 
 type ApplicationStatusProps = {
   body: string;
@@ -68,9 +67,7 @@ const ReviewView = () => {
   const { applicationSections, selectedApplication } = useApplicationData();
   const { activeLocale } = useLocalization();
 
-  const [requestId, setRequestId] = useState<string>('');
-  const request = useAppSelector(selectApplicationSubmit(requestId));
-  const isLoading = useMemo(() => request?.status === 'pending', [request]);
+  const [, { isLoading }] = useSubmitApplicationMutation({ fixedCacheKey: SUBMIT_APPLICATION_MUTATION_KEY });
 
   const selectedApplicationId = selectedApplication?.id;
 
@@ -108,7 +105,7 @@ const ReviewView = () => {
       case 'Accepted':
         return <ApplicationStatusInReview />;
       default:
-        return <ReviewCard requestId={requestId} sections={nonPrescreenSections} setRequestId={setRequestId} />;
+        return <ReviewCard sections={nonPrescreenSections} />;
     }
   };
 

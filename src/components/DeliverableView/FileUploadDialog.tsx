@@ -3,8 +3,6 @@ import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { Box, CircularProgress, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 
-import useApplicationPortal from 'src/hooks/useApplicationPortal';
-import { useApplicationData } from 'src/providers/Application/Context';
 import { useUploadDeliverableDocumentMutation } from 'src/queries/generated/deliverables';
 import strings from 'src/strings';
 import { DeliverableWithOverdue } from 'src/types/Deliverables';
@@ -17,8 +15,6 @@ export type FileUploadDialogProps = {
 };
 
 export default function FileUploadDialog({ deliverable, files, onClose }: FileUploadDialogProps): JSX.Element {
-  const { isApplicationPortal } = useApplicationPortal();
-  const { reload } = useApplicationData();
   const [validate, setValidate] = useState<boolean>(false);
   const [uploading, setUploading] = useState(false);
   const [description, setDescription] = useState<string[]>(files.map(() => ''));
@@ -51,20 +47,7 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
     }
     // close the modal even in case of error, there may have been partial successes
     onClose();
-    if (isApplicationPortal) {
-      reload();
-    }
-  }, [
-    deliverable.id,
-    deliverable.projectId,
-    description,
-    files,
-    isApplicationPortal,
-    onClose,
-    reload,
-    snackbar,
-    uploadDeliverableDocument,
-  ]);
+  }, [deliverable.id, deliverable.projectId, description, files, onClose, snackbar, uploadDeliverableDocument]);
 
   const changeDescription = (index: number, val: string) => {
     setDescription((prev) => {

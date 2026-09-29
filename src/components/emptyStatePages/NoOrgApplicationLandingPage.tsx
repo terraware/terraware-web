@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useState } from 'react';
 
 import { Box, Container, useTheme } from '@mui/material';
 import { BusySpinner } from '@terraware/web-components';
@@ -6,12 +6,10 @@ import { BusySpinner } from '@terraware/web-components';
 import AddNewOrganizationModal from 'src/components/AddNewOrganizationModal';
 import PageSnackbar from 'src/components/PageSnackbar';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
+import useCreateApplication from 'src/hooks/useCreateApplication';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useOrganization } from 'src/providers/hooks';
-import { requestCreateProjectApplication } from 'src/redux/features/application/applicationAsyncThunks';
-import { selectApplicationCreateProject } from 'src/redux/features/application/applicationSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -29,37 +27,32 @@ export default function NoOrgApplicationLandingPage(): JSX.Element {
   const { isMobile } = useDeviceInfo();
   const activeLocale = useLocalization();
   const theme = useTheme();
-  const dispatch = useAppDispatch();
   const [isOrgModalOpen, setIsOrgModalOpen] = useState<boolean>(false);
   const { goToApplication } = useNavigateTo();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const { toastSuccess } = useSnackbar();
+  const { toastError, toastSuccess } = useSnackbar();
+  const { createWithNewProject } = useCreateApplication();
 
   const { reloadOrganizations } = useOrganization();
 
-  const [requestId, setRequestId] = useState<string>('');
-  const result = useAppSelector(selectApplicationCreateProject(requestId));
-
   const onOrgCreated = useCallback(
     (organization: Organization) => {
-      const dispatched = dispatch(
-        requestCreateProjectApplication({ projectName: organization.name, organizationId: organization.id })
-      );
-      setRequestId(dispatched.requestId);
       setIsLoading(true);
+      void createWithNewProject(organization.name, organization.id)
+        .then((applicationId) => {
+          if (activeLocale) {
+            toastSuccess(strings.SUCCESS);
+          }
+          goToApplication(applicationId);
+          void reloadOrganizations();
+        })
+        .catch(() => {
+          setIsLoading(false);
+          toastError();
+        });
     },
-    [dispatch, setRequestId, setIsLoading]
+    [activeLocale, createWithNewProject, goToApplication, reloadOrganizations, toastError, toastSuccess]
   );
-
-  useEffect(() => {
-    if (result && result.status === 'success' && result.data) {
-      if (activeLocale) {
-        toastSuccess(strings.SUCCESS);
-      }
-      goToApplication(result.data);
-      void reloadOrganizations();
-    }
-  }, [activeLocale, result, goToApplication, reloadOrganizations, toastSuccess]);
 
   return (
     <Box

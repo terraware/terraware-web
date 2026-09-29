@@ -1,14 +1,18 @@
 import { Theme } from '@mui/material';
 import { Property } from 'csstype';
 
-import { components } from 'src/api/types/generated-schema';
+import {
+  ApplicationDeliverablePayload,
+  ApplicationModulePayload,
+  ApplicationPayload,
+  ReviewApplicationRequestPayload,
+} from 'src/queries/generated/applications';
 
-export type Application = components['schemas']['ApplicationPayload'];
-export type ApplicationHistory = components['schemas']['ApplicationHistoryPayload'];
+export type Application = ApplicationPayload;
 export type ApplicationStatus = Application['status'];
-export type ApplicationModule = components['schemas']['ApplicationModulePayload'];
-export type ApplicationDeliverable = components['schemas']['ApplicationDeliverablePayload'];
-export type ApplicationReview = components['schemas']['ReviewApplicationRequestPayload'];
+export type ApplicationModule = ApplicationModulePayload;
+export type ApplicationDeliverable = ApplicationDeliverablePayload;
+export type ApplicationReview = ReviewApplicationRequestPayload;
 export type ApplicationReviewStatus = ApplicationReview['status'];
 
 export type ApplicationDeliverableWithBoundaryFlag = ApplicationDeliverable & { isBoundary?: boolean };
