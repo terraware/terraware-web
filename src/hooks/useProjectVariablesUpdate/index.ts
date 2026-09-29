@@ -2,15 +2,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { PhotoWithAttributes } from 'src/components/DocumentProducer/EditImagesModal/PhotoSelector';
 import { VariableTableCell, getInitialCellValues } from 'src/components/DocumentProducer/EditableTableModal/helpers';
-import {
-  selectUpdateVariableValues,
-  selectUploadImageValue,
-} from 'src/redux/features/documentProducer/values/valuesSelector';
-import {
-  requestUpdateVariableValues,
-  requestUploadManyImageValues,
-} from 'src/redux/features/documentProducer/values/valuesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import useUploadImageValues from 'src/hooks/variables/useUploadImageValues';
+import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
 import strings from 'src/strings';
 import { TableVariableWithValues, Variable, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
@@ -45,7 +38,8 @@ export const useProjectVariablesUpdate = (
   projectId: number,
   variablesWithValues: VariableWithValues[]
 ): ProjectVariablesUpdate => {
-  const dispatch = useAppDispatch();
+  const [updateProjectVariableValues, updateResult] = useUpdateProjectVariableValuesMutation();
+  const { uploadImageValues, status: uploadStatus } = useUploadImageValues();
   const snackbar = useSnackbar();
 
   const [pendingCellValues, setPendingCellValues] = useState<Map<number, VariableTableCell[][]>>(new Map());
@@ -55,11 +49,6 @@ export const useProjectVariablesUpdate = (
   const [pendingVariableValues, setPendingVariableValues] = useState<Map<number, VariableValueValue[]>>(new Map());
   const [removedVariableValues, setRemovedVariableValues] = useState<Map<number, VariableValueValue>>(new Map());
   const [variableHasErrorMap, setVariableHasErrorMap] = useState<Map<Variable['id'], boolean>>(new Map());
-
-  const [updateVariableRequestId, setUpdateVariableRequestId] = useState<string>('');
-  const [uploadRequestId, setUploadRequestId] = useState<string>('');
-  const updateResult = useAppSelector(selectUpdateVariableValues(updateVariableRequestId));
-  const uploadResult = useAppSelector(selectUploadImageValue(uploadRequestId));
 
   const [noOp, setNoOp] = useState(false);
 
@@ -229,20 +218,14 @@ export const useProjectVariablesUpdate = (
         });
       });
       if (imageValuesToUpload.length > 0) {
-        const request = dispatch(requestUploadManyImageValues(imageValuesToUpload));
-        setUploadRequestId(request.requestId);
+        void uploadImageValues(imageValuesToUpload);
       }
 
       if (operations.length > 0) {
-        const request = dispatch(
-          requestUpdateVariableValues({
-            operations,
-            projectId,
-            updateStatuses,
-          })
-        );
-
-        setUpdateVariableRequestId(request.requestId);
+        void updateProjectVariableValues({
+          projectId,
+          updateVariableValuesRequestPayload: { operations, updateStatuses: updateStatuses ?? true },
+        });
       } else {
         // if there are no pending changes, set flag to true to fake success & exit
         setNoOp(true);
@@ -251,7 +234,6 @@ export const useProjectVariablesUpdate = (
       return operations.length > 0 || imageValuesToUpload.length > 0;
     },
     [
-      dispatch,
       pendingCellValues,
       pendingDeletedImages,
       pendingImages,
@@ -260,23 +242,25 @@ export const useProjectVariablesUpdate = (
       projectId,
       removedVariableValues,
       snackbar,
+      updateProjectVariableValues,
+      uploadImageValues,
       variablesWithValues,
     ]
   );
 
   useEffect(() => {
-    if (updateResult?.status === 'success') {
+    if (updateResult.isSuccess) {
       snackbar.toastSuccess(strings.CHANGES_SAVED);
-    } else if (updateResult?.status === 'error') {
+    } else if (updateResult.isError) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [projectId, snackbar, updateResult]);
+  }, [snackbar, updateResult.isError, updateResult.isSuccess]);
 
-  const updateSuccess = useMemo(() => noOp || updateResult?.status === 'success', [noOp, updateResult]);
+  const updateSuccess = noOp || updateResult.isSuccess;
 
   const uploadSuccess = useMemo(
-    () => (Object.keys(pendingNewImages).length === 0 ? true : uploadResult?.status === 'success'),
-    [pendingNewImages, uploadResult]
+    () => (Object.keys(pendingNewImages).length === 0 ? true : uploadStatus === 'success'),
+    [pendingNewImages, uploadStatus]
   );
 
   // Is there at least one variable with an error
