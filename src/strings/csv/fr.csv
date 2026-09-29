@@ -755,7 +755,7 @@ EXPANSION_POTENTIAL,Potentiel d'expansion,cfcbb501
 EXPANSION_POTENTIAL_DESCRIPTION,"Terrain éligible non encore sécurisé par des accords, mais nous pensons qu’il peut l’être.",60ac9586
 EXPANSION_POTENTIAL_HA,Potentiel d'expansion (ha),eb119de5
 EXPORT,Exporter,54546641
-EXPORT_BIOMASS_MONITORING_DETAILS_CSV,Exporter les Détails de la Surveillance de la Biomasse (CSV),eb24aa11
+EXPORT_BIOMASS_MONITORING_DETAILS_CSV,Exporter les données (fichiers CSV dans une archive .zip),cea921b1
 EXPORT_CSV,Exporter CSV,7070c8c7
 EXPORT_DATA,Exporter les données,3fc16ad5
 EXPORT_LOCATIONS,Exporter les emplacements,1e075828
