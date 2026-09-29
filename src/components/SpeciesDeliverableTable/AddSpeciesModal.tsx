@@ -10,10 +10,10 @@ import { useDocLinks } from 'src/docLinks';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { requestCreateAcceleratorProjectSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
-import { selectAcceleratorProjectSpeciesCreateRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { CreateAcceleratorProjectSpeciesRequestPayload } from 'src/services/AcceleratorProjectSpeciesService';
+import {
+  CreateParticipantProjectSpeciesPayload,
+  useCreateParticipantProjectSpeciesMutation,
+} from 'src/queries/generated/acceleratorProjectSpecies';
 import strings from 'src/strings';
 import { SpeciesForAcceleratorProject, getSpeciesNativeCategoryOptions } from 'src/types/AcceleratorProjectSpecies';
 import { Species } from 'src/types/Species';
@@ -28,13 +28,11 @@ export interface AddSpeciesModalProps {
   onClose: () => void;
   acceleratorProjectSpecies: SpeciesForAcceleratorProject[];
   projectId: number;
-  reload: () => void;
 }
 
 export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Element {
-  const { hasActiveDeliverable, hasRecentDeliverable, onClose, acceleratorProjectSpecies, reload, projectId } = props;
+  const { hasActiveDeliverable, hasRecentDeliverable, onClose, acceleratorProjectSpecies, projectId } = props;
 
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { currentAcceleratorProject } = useParticipantData();
   const theme = useTheme();
@@ -42,8 +40,7 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
 
   const { species } = useOrganizationSpecies();
 
-  const [requestId, setRequestId] = useState<string>('');
-  const result = useAppSelector(selectAcceleratorProjectSpeciesCreateRequest(requestId));
+  const [createParticipantProjectSpecies] = useCreateParticipantProjectSpeciesMutation();
 
   const [error, setError] = useState<string>('');
 
@@ -55,19 +52,10 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     );
   }, [species, acceleratorProjectSpecies]);
 
-  const [record, setRecord, , onChangeCallback] = useForm<Partial<CreateAcceleratorProjectSpeciesRequestPayload>>({
+  const [record, setRecord, , onChangeCallback] = useForm<Partial<CreateParticipantProjectSpeciesPayload>>({
     projectId: -1,
   });
   const { activeLocale } = useLocalization();
-
-  useEffect(() => {
-    if (result?.status === 'error') {
-      snackbar.toastError();
-    } else if (result?.status === 'success') {
-      reload();
-      onClose();
-    }
-  }, [result, snackbar, onClose, reload]);
 
   useEffect(() => {
     setRecord((prev) => ({
@@ -77,9 +65,9 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
   }, [projectId, setRecord]);
 
   const save = () => {
-    const payload: CreateAcceleratorProjectSpeciesRequestPayload = {
+    const payload: CreateParticipantProjectSpeciesPayload = {
       ...record,
-    } as CreateAcceleratorProjectSpeciesRequestPayload;
+    } as CreateParticipantProjectSpeciesPayload;
 
     if (!payload || !payload.projectId || !payload.rationale || !payload.speciesId || !payload.speciesNativeCategory) {
       setError(strings.REQUIRED_FIELD);
@@ -87,8 +75,10 @@ export default function AddSpeciesModal(props: AddSpeciesModalProps): JSX.Elemen
     }
 
     setError('');
-    const request = dispatch(requestCreateAcceleratorProjectSpecies(payload));
-    setRequestId(request.requestId);
+    void createParticipantProjectSpecies(payload)
+      .unwrap()
+      .then(onClose)
+      .catch(() => snackbar.toastError());
   };
 
   const onChangeSpecies = (newSpecies: Species) => {

@@ -1,19 +1,13 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
+import { skipToken } from '@reduxjs/toolkit/query';
 import _ from 'lodash';
 
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useUpdateAcceleratorProjectSpecies from 'src/hooks/useUpdateAcceleratorProjectSpecies';
+import { useGetParticipantProjectSpeciesQuery } from 'src/queries/generated/acceleratorProjectSpecies';
 import { useLazyGetSpeciesQuery, useUpdateSpeciesMutation } from 'src/queries/generated/species';
-import {
-  requestGetAcceleratorProjectSpecies,
-  requestUpdateAcceleratorProjectSpecies,
-} from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
-import {
-  selectAcceleratorProjectSpeciesGetRequest,
-  selectAcceleratorProjectSpeciesUpdateRequest,
-} from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { AcceleratorProjectSpecies } from 'src/types/AcceleratorProjectSpecies';
 import { Species } from 'src/types/Species';
@@ -39,7 +33,6 @@ const isEqual = (a: AcceleratorProjectSpecies | undefined, b: AcceleratorProject
   );
 
 const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
   const { currentDeliverable, deliverableId } = useDeliverableData();
   const { projectId } = useProjectData();
@@ -47,34 +40,32 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
   const params = useParams<{ acceleratorProjectSpeciesId?: string }>();
 
   const acceleratorProjectSpeciesId = Number(params.acceleratorProjectSpeciesId);
-  const [currentAcceleratorProjectSpecies, setCurrentAcceleratorProjectSpecies] = useState<AcceleratorProjectSpecies>();
   const [currentSpecies, setCurrentSpecies] = useState<Species>();
 
-  const [getPPSRequestId, setGetPPSRequestId] = useState('');
-  const getPPSResponse = useAppSelector(selectAcceleratorProjectSpeciesGetRequest(getPPSRequestId));
+  const {
+    currentData: ppsData,
+    isError: getPPSFailed,
+    refetch: refetchPPS,
+  } = useGetParticipantProjectSpeciesQuery(
+    isNaN(acceleratorProjectSpeciesId) ? skipToken : acceleratorProjectSpeciesId
+  );
+  const currentAcceleratorProjectSpecies = ppsData?.participantProjectSpecies;
 
   const [getSpecies, getSpeciesResponse] = useLazyGetSpeciesQuery();
 
-  const [updatePPSRequestId, setUpdatePPSRequestId] = useState('');
-  const updatePPSResponse = useAppSelector(selectAcceleratorProjectSpeciesUpdateRequest(updatePPSRequestId));
+  const { update: updateAcceleratorProjectSpecies, isLoading: isUpdatingPPS } = useUpdateAcceleratorProjectSpecies();
 
   const [updateSpecies, updateSpeciesResponse] = useUpdateSpeciesMutation();
-
-  const [newStatus, setNewStatus] = useState('');
-  const [ppsNeedsReload, setPpsNeedsReload] = useState(true);
 
   const goToAcceleratorProjectSpecies = useCallback(() => {
     _goToAcceleratorProjectSpecies(deliverableId, projectId, acceleratorProjectSpeciesId);
   }, [_goToAcceleratorProjectSpecies, deliverableId, projectId, acceleratorProjectSpeciesId]);
 
   const reloadPPS = useCallback(() => {
-    if (isNaN(acceleratorProjectSpeciesId)) {
-      return;
+    if (!isNaN(acceleratorProjectSpeciesId)) {
+      void refetchPPS();
     }
-
-    const request = dispatch(requestGetAcceleratorProjectSpecies(acceleratorProjectSpeciesId));
-    setGetPPSRequestId(request.requestId);
-  }, [dispatch, acceleratorProjectSpeciesId]);
+  }, [acceleratorProjectSpeciesId, refetchPPS]);
 
   const reloadSpecies = useCallback(() => {
     if (!(currentAcceleratorProjectSpecies?.speciesId && currentDeliverable?.organizationId)) {
@@ -98,16 +89,23 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
   const update = useCallback(
     (species?: Species, acceleratorProjectSpecies?: AcceleratorProjectSpecies) => {
       if (acceleratorProjectSpecies && !isEqual(acceleratorProjectSpecies, currentAcceleratorProjectSpecies)) {
-        // If the request is successful, and the status was changed, we will want to use the snackbar to tell the user it was approved
-        if (
+        const approved =
           currentAcceleratorProjectSpecies?.submissionStatus !== 'Approved' &&
-          acceleratorProjectSpecies.submissionStatus === 'Approved'
-        ) {
-          setNewStatus('Approved');
-        }
+          acceleratorProjectSpecies.submissionStatus === 'Approved';
 
-        const updatePPSRequest = dispatch(requestUpdateAcceleratorProjectSpecies({ acceleratorProjectSpecies }));
-        setUpdatePPSRequestId(updatePPSRequest.requestId);
+        void updateAcceleratorProjectSpecies(acceleratorProjectSpecies)
+          .then(() => {
+            if (approved && currentSpecies) {
+              snackbar.pageSuccess(
+                strings.formatString(strings.YOU_APPROVED_SPECIES, currentSpecies.scientificName).toString(),
+                strings.SPECIES_APPROVED
+              );
+            } else if (currentSpecies) {
+              snackbar.toastSuccess(strings.CHANGES_SAVED);
+            }
+            goToAcceleratorProjectSpecies();
+          })
+          .catch(() => snackbar.toastError(strings.GENERIC_ERROR));
       } else {
         // If there are no changes, just send them back to the single view
         goToAcceleratorProjectSpecies();
@@ -141,14 +139,14 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
           },
         });
       }
-      setPpsNeedsReload(true);
     },
     [
       currentDeliverable,
       currentAcceleratorProjectSpecies,
       currentSpecies,
-      dispatch,
       goToAcceleratorProjectSpecies,
+      snackbar,
+      updateAcceleratorProjectSpecies,
       updateSpecies,
     ]
   );
@@ -157,7 +155,7 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
     () => ({
       currentAcceleratorProjectSpecies,
       currentSpecies,
-      isBusy: updatePPSResponse?.status === 'pending' || updateSpeciesResponse.isLoading,
+      isBusy: isUpdatingPPS || updateSpeciesResponse.isLoading,
       acceleratorProjectSpeciesId,
       reload,
       update,
@@ -168,46 +166,10 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
       acceleratorProjectSpeciesId,
       reload,
       update,
-      updatePPSResponse,
+      isUpdatingPPS,
       updateSpeciesResponse,
     ]
   );
-
-  useEffect(() => {
-    if (!updatePPSResponse) {
-      return;
-    }
-
-    if (updatePPSResponse.status === 'success' && ppsNeedsReload) {
-      reloadPPS();
-      setPpsNeedsReload(false);
-
-      if (currentAcceleratorProjectSpecies && currentSpecies) {
-        if (newStatus === 'Approved') {
-          snackbar.pageSuccess(
-            strings.formatString(strings.YOU_APPROVED_SPECIES, currentSpecies.scientificName).toString(),
-            strings.SPECIES_APPROVED
-          );
-          setNewStatus('');
-        } else {
-          snackbar.toastSuccess(strings.CHANGES_SAVED);
-        }
-      }
-
-      goToAcceleratorProjectSpecies();
-    } else if (updatePPSResponse.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    }
-  }, [
-    currentAcceleratorProjectSpecies,
-    currentSpecies,
-    goToAcceleratorProjectSpecies,
-    newStatus,
-    ppsNeedsReload,
-    reloadPPS,
-    snackbar,
-    updatePPSResponse,
-  ]);
 
   useEffect(() => {
     if (updateSpeciesResponse.isSuccess) {
@@ -219,16 +181,10 @@ const AcceleratorProjectSpeciesProvider = ({ children }: Props) => {
   }, [reloadSpecies, snackbar, updateSpeciesResponse.isSuccess, updateSpeciesResponse.isError]);
 
   useEffect(() => {
-    if (!getPPSResponse) {
-      return;
-    }
-
-    if (getPPSResponse.status === 'success' && getPPSResponse.data) {
-      setCurrentAcceleratorProjectSpecies(getPPSResponse.data);
-    } else if (getPPSResponse.status === 'error') {
+    if (getPPSFailed) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [getPPSResponse, snackbar]);
+  }, [getPPSFailed, snackbar]);
 
   useEffect(() => {
     if (getSpeciesResponse.isSuccess && getSpeciesResponse.currentData?.species) {

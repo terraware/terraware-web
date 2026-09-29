@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useState } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -7,10 +7,8 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
+import useUpdateAcceleratorProjectSpecies from 'src/hooks/useUpdateAcceleratorProjectSpecies';
 import { useLocalization } from 'src/providers';
-import { requestUpdateAcceleratorProjectSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
-import { selectAcceleratorProjectSpeciesUpdateRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import {
   SpeciesForAcceleratorProject,
@@ -24,30 +22,18 @@ import Link from '../common/Link';
 
 export interface EditSpeciesModalProps {
   onClose: () => void;
-  reload: () => void;
   projectSpecies: SpeciesForAcceleratorProject;
 }
 
 export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Element {
-  const { onClose, reload, projectSpecies } = props;
+  const { onClose, projectSpecies } = props;
   const theme = useTheme();
-  const [requestId, setRequestId] = useState<string>('');
-  const dispatch = useAppDispatch();
-  const result = useAppSelector(selectAcceleratorProjectSpeciesUpdateRequest(requestId));
+  const { update } = useUpdateAcceleratorProjectSpecies();
   const snackbar = useSnackbar();
 
   const [error, setError] = useState('');
   const [record, setRecord] = useForm<SpeciesForAcceleratorProject>(projectSpecies);
   const { activeLocale } = useLocalization();
-
-  useEffect(() => {
-    if (result?.status === 'error') {
-      snackbar.toastError();
-    } else if (result?.status === 'success') {
-      reload();
-      onClose();
-    }
-  }, [result, snackbar, onClose, reload]);
 
   const save = () => {
     if (!record.participantProjectSpecies.rationale || !record?.participantProjectSpecies.speciesNativeCategory) {
@@ -55,12 +41,9 @@ export default function EditSpeciesModal(props: EditSpeciesModalProps): JSX.Elem
       return;
     }
 
-    const request = dispatch(
-      requestUpdateAcceleratorProjectSpecies({
-        acceleratorProjectSpecies: record.participantProjectSpecies,
-      })
-    );
-    setRequestId(request.requestId);
+    void update(record.participantProjectSpecies)
+      .then(onClose)
+      .catch(() => snackbar.toastError());
   };
 
   const onChangeRationale = (rationale: unknown) => {

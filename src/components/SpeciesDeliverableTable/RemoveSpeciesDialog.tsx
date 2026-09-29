@@ -1,15 +1,13 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback } from 'react';
 
 import { Button, DialogBox } from '@terraware/web-components';
 
-import { requestDeleteManyAcceleratorProjectSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
-import { selectAcceleratorProjectSpeciesDeleteManyRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useDeleteParticipantProjectSpeciesMutation } from 'src/queries/generated/acceleratorProjectSpecies';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export interface RemoveSpeciesDialogProps {
-  onClose: (reload?: boolean) => void;
+  onClose: () => void;
   onSubmit?: () => void;
   open: boolean;
   speciesToRemove: number[];
@@ -18,34 +16,20 @@ export interface RemoveSpeciesDialogProps {
 export default function RemoveSpeciesDialog(props: RemoveSpeciesDialogProps): JSX.Element | null {
   const { onClose, open, speciesToRemove } = props;
 
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
-
-  const [requestId, setRequestId] = useState('');
-  const deleteRequest = useAppSelector(selectAcceleratorProjectSpeciesDeleteManyRequest(requestId));
+  const [deleteParticipantProjectSpecies] = useDeleteParticipantProjectSpeciesMutation();
 
   const removeSelectedSpeciesFromAcceleratorProject = useCallback(() => {
     if (!speciesToRemove?.length) {
       return;
     }
 
-    const request = dispatch(requestDeleteManyAcceleratorProjectSpecies(speciesToRemove));
-    setRequestId(request.requestId);
-  }, [dispatch, speciesToRemove]);
-
-  useEffect(() => {
-    if (!deleteRequest) {
-      return;
-    }
-
-    if (deleteRequest.status === 'success') {
-      snackbar.toastSuccess(strings.CHANGES_SAVED);
-      onClose(true);
-    } else {
-      snackbar.toastError(strings.GENERIC_ERROR);
-      onClose();
-    }
-  }, [deleteRequest, onClose, snackbar]);
+    void deleteParticipantProjectSpecies({ participantProjectSpeciesIds: speciesToRemove })
+      .unwrap()
+      .then(() => snackbar.toastSuccess(strings.CHANGES_SAVED))
+      .catch(() => snackbar.toastError(strings.GENERIC_ERROR))
+      .finally(() => onClose());
+  }, [deleteParticipantProjectSpecies, onClose, snackbar, speciesToRemove]);
 
   if (!open) {
     return null;

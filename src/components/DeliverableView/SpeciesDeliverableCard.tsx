@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect } from 'react';
+import React, { type JSX, useEffect, useMemo } from 'react';
 
 import { Box } from '@mui/material';
 
@@ -6,32 +6,25 @@ import Metadata from 'src/components/DeliverableView/Metadata';
 import { EditProps } from 'src/components/DeliverableView/types';
 import SpeciesDeliverableTable from 'src/components/SpeciesDeliverableTable';
 import Card from 'src/components/common/Card';
-import { requestListAcceleratorProjectSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
-import { selectAcceleratorProjectSpeciesListRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetSpeciesForProjectQuery } from 'src/queries/generated/acceleratorProjectSpecies';
 
 import SpeciesDeliverableStatusMessage from './SpeciesDeliverableStatusMessage';
 
 const SpeciesDeliverableCard = (props: EditProps): JSX.Element => {
   const { deliverable, setSubmitButtonDisabled } = props;
-  const dispatch = useAppDispatch();
-
-  const ppsSearchResults = useAppSelector(selectAcceleratorProjectSpeciesListRequest(deliverable.projectId));
+  const { currentData } = useGetSpeciesForProjectQuery(deliverable.projectId);
+  const projectSpecies = useMemo(() => currentData?.speciesForParticipantProjects ?? [], [currentData]);
 
   useEffect(() => {
     const disabled =
-      !ppsSearchResults?.data?.length ||
-      ppsSearchResults?.data?.every((species) => species.participantProjectSpecies.submissionStatus === 'Approved');
+      !projectSpecies.length ||
+      projectSpecies.every((species) => species.participantProjectSpecies.submissionStatus === 'Approved');
     setSubmitButtonDisabled?.(disabled);
-  }, [ppsSearchResults, setSubmitButtonDisabled]);
-
-  useEffect(() => {
-    void dispatch(requestListAcceleratorProjectSpecies(deliverable.projectId));
-  }, [deliverable.projectId, dispatch]);
+  }, [projectSpecies, setSubmitButtonDisabled]);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
-      <SpeciesDeliverableStatusMessage deliverable={deliverable} species={ppsSearchResults?.data || []} />
+      <SpeciesDeliverableStatusMessage deliverable={deliverable} species={projectSpecies} />
       <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
         <Metadata deliverable={deliverable} />
         <SpeciesDeliverableTable deliverable={deliverable} />
