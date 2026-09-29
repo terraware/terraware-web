@@ -1,13 +1,11 @@
-import React, { type JSX, useEffect, useMemo } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { BusySpinner } from '@terraware/web-components';
 
 import { BaseTable as Table } from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { useLocalization } from 'src/providers';
-import { selectVariableHistory } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestGetVariableHistory } from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetVariableWorkflowHistoryQuery } from 'src/queries/generated/documentProducerVariables';
 import strings from 'src/strings';
 import { SelectOptionPayload } from 'src/types/documentProducer/Variable';
 import {
@@ -41,7 +39,6 @@ type VariableHistoryTableProps = {
 
 export const VariableHistoryTable = ({ projectId, variableId }: VariableHistoryTableProps): JSX.Element => {
   const activeLocale = useLocalization();
-  const dispatch = useAppDispatch();
 
   const columns = useMemo((): TableColumnType[] => {
     return activeLocale
@@ -65,20 +62,16 @@ export const VariableHistoryTable = ({ projectId, variableId }: VariableHistoryT
       : [];
   }, [activeLocale]);
 
-  const historyResponse = useAppSelector((state) => selectVariableHistory(state, variableId, projectId));
-
-  useEffect(() => {
-    void dispatch(requestGetVariableHistory({ projectId, variableId }));
-  }, [dispatch, projectId, variableId]);
+  const { currentData: historyData, isError } = useGetVariableWorkflowHistoryQuery({ projectId, variableId });
 
   const rows: VariableHistoryTableRow[] = useMemo(() => {
-    if (!historyResponse || historyResponse.status !== 'success' || !historyResponse.data) {
+    if (!historyData) {
       return [];
     }
 
     // Most recent first
-    const variableHistory = historyResponse.data.history;
-    const variable = historyResponse.data.variable;
+    const variableHistory = historyData.history;
+    const variable = historyData.variable;
 
     const reversedVariableHistory = variableHistory.toReversed();
 
@@ -269,9 +262,9 @@ export const VariableHistoryTable = ({ projectId, variableId }: VariableHistoryT
         return newRows;
       })
       .toReversed();
-  }, [historyResponse]);
+  }, [historyData]);
 
-  if (!historyResponse || historyResponse.status === 'pending') {
+  if (!historyData && !isError) {
     return <BusySpinner />;
   }
 

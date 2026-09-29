@@ -16,20 +16,9 @@ import OptionsMenu from 'src/components/common/OptionsMenu';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useProjectVariableWorklow } from 'src/hooks/useProjectVariableWorkflow';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
+import useDeliverableVariablesWithValues from 'src/hooks/variables/useDeliverableVariablesWithValues';
+import useSpecificVariablesWithValues from 'src/hooks/variables/useSpecificVariablesWithValues';
 import { useLocalization, useUser } from 'src/providers';
-import {
-  requestListDeliverableVariablesValues,
-  requestListSpecificVariablesValues,
-} from 'src/redux/features/documentProducer/values/valuesThunks';
-import {
-  selectDeliverableVariablesWithValues,
-  selectSpecificVariablesWithValues,
-} from 'src/redux/features/documentProducer/variables/variablesSelector';
-import {
-  requestListDeliverableVariables,
-  requestListSpecificVariables,
-} from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { UpdateVariableWorkflowDetailsPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
@@ -91,11 +80,12 @@ const QuestionBox = ({
     initialInternalCommnet,
   } = useProjectVariableWorklow(projectId, variable);
 
-  const [workflowDetails, , , onChangeCallback] = useForm<UpdateVariableWorkflowDetailsPayload>({
-    feedback: initialFeedback,
-    internalComment: initialInternalCommnet,
-    status: initialStatus,
-  });
+  const currentWorkflowDetails = useMemo<UpdateVariableWorkflowDetailsPayload>(
+    () => ({ feedback: initialFeedback, internalComment: initialInternalCommnet, status: initialStatus }),
+    [initialFeedback, initialInternalCommnet, initialStatus]
+  );
+  const [workflowDetails, setWorkflowDetails, , onChangeCallback] =
+    useForm<UpdateVariableWorkflowDetailsPayload>(currentWorkflowDetails);
 
   const pendingValues: VariableValueValue[] | undefined = useMemo(
     () => pendingVariableValues.get(variable.id),
@@ -107,8 +97,9 @@ const QuestionBox = ({
   const isAllowedUpdateDeliverable = isAllowed('UPDATE_DELIVERABLE');
 
   const onEditItem = useCallback(() => {
+    setWorkflowDetails(currentWorkflowDetails);
     setEditingId(variable.id);
-  }, [setEditingId, variable]);
+  }, [currentWorkflowDetails, setEditingId, setWorkflowDetails, variable]);
 
   const waitAndReload = useCallback(() => {
     setTimeout(() => reload(), 500);
@@ -121,6 +112,7 @@ const QuestionBox = ({
   }, [setUpdatePendingId, variable.id, waitAndReload, snackbar]);
 
   const rejectCallback = useCallback(() => {
+    setShowRejectDialog(false);
     setUpdatePendingId(variable.id);
     waitAndReload();
     snackbar.toastSuccess(strings.UPDATE_REQUESTED);
@@ -132,21 +124,21 @@ const QuestionBox = ({
   }, [setUpdatePendingId, variable.id, waitAndReload]);
 
   const approveItem = useCallback(() => {
-    updateWorkflow('Approved', undefined, workflowDetails.internalComment, approveCallback);
-  }, [workflowDetails, updateWorkflow, approveCallback]);
+    updateWorkflow('Approved', undefined, currentWorkflowDetails.internalComment, approveCallback);
+  }, [currentWorkflowDetails, updateWorkflow, approveCallback]);
 
   const rejectItem = useCallback(
     (feedback: string) => {
-      updateWorkflow('Rejected', feedback, workflowDetails.internalComment, rejectCallback);
+      updateWorkflow('Rejected', feedback, currentWorkflowDetails.internalComment, rejectCallback);
     },
-    [workflowDetails, updateWorkflow, rejectCallback]
+    [currentWorkflowDetails, updateWorkflow, rejectCallback]
   );
 
   const onUpdateInternalComment = useCallback(
     (internalComment: string) => {
-      updateWorkflow(workflowDetails.status, workflowDetails.feedback, internalComment, updateCallback);
+      updateWorkflow(currentWorkflowDetails.status, currentWorkflowDetails.feedback, internalComment, updateCallback);
     },
-    [workflowDetails, updateWorkflow, updateCallback]
+    [currentWorkflowDetails, updateWorkflow, updateCallback]
   );
 
   const onSave = useCallback(() => {
@@ -161,14 +153,19 @@ const QuestionBox = ({
         case 'needs_translation': {
           updateWorkflow(
             'Needs Translation',
-            workflowDetails.feedback,
-            workflowDetails.internalComment,
+            currentWorkflowDetails.feedback,
+            currentWorkflowDetails.internalComment,
             updateCallback
           );
           break;
         }
         case 'not_needed': {
-          updateWorkflow('Not Needed', workflowDetails.feedback, workflowDetails.internalComment, updateCallback);
+          updateWorkflow(
+            'Not Needed',
+            currentWorkflowDetails.feedback,
+            currentWorkflowDetails.internalComment,
+            updateCallback
+          );
           break;
         }
         case 'view_history': {
@@ -177,7 +174,7 @@ const QuestionBox = ({
         }
       }
     },
-    [workflowDetails, updateCallback, updateWorkflow]
+    [currentWorkflowDetails, updateCallback, updateWorkflow]
   );
 
   const optionItems = useMemo(
@@ -187,12 +184,12 @@ const QuestionBox = ({
             {
               label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NEEDS_TRANSLATION) as string,
               value: 'needs_translation',
-              disabled: workflowDetails.status === 'Needs Translation',
+              disabled: currentWorkflowDetails.status === 'Needs Translation',
             },
             {
               label: strings.formatString(strings.STATUS_WITH_STATUS, strings.NOT_NEEDED) as string,
               value: 'not_needed',
-              disabled: workflowDetails.status === 'Not Needed',
+              disabled: currentWorkflowDetails.status === 'Not Needed',
             },
             {
               label: strings.VIEW_HISTORY,
@@ -200,7 +197,7 @@ const QuestionBox = ({
             },
           ]
         : [],
-    [activeLocale, workflowDetails.status]
+    [activeLocale, currentWorkflowDetails.status]
   );
 
   return (
@@ -377,7 +374,7 @@ const QuestionBox = ({
           </Grid>
         )}
 
-        {workflowDetails.internalComment && !editing && (
+        {currentWorkflowDetails.internalComment && !editing && (
           <VariableInternalComment
             editing={editing}
             sx={{ marginY: theme.spacing(2) }}
@@ -385,13 +382,13 @@ const QuestionBox = ({
             variable={variable}
           />
         )}
-        {workflowDetails.status === 'Rejected' && workflowDetails.feedback && !editing && (
+        {currentWorkflowDetails.status === 'Rejected' && currentWorkflowDetails.feedback && !editing && (
           <Box marginY={theme.spacing(2)} display='flex' alignItems='center'>
             <Message
               body={
                 <Typography>
                   <span style={{ fontWeight: 600 }}>{strings.FEEDBACK_SHARED_WITH_PROJECT}</span>{' '}
-                  {workflowDetails.feedback}
+                  {currentWorkflowDetails.feedback}
                 </Typography>
               }
               priority='critical'
@@ -430,51 +427,19 @@ const QuestionBox = ({
 
 const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
   const { deliverable, hideStatusBadge }: EditProps = props;
-  const dispatch = useAppDispatch();
 
   const [editingId, setEditingId] = useState<number | undefined>();
   const [updatePendingId, setUpdatePendingId] = useState<number | undefined>();
 
-  const reload = () => {
-    void dispatch(requestListDeliverableVariables(deliverable.id));
-    void dispatch(
-      requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
-    );
-  };
-
-  useEffect(() => {
-    if (!deliverable) {
-      return;
-    }
-
-    void dispatch(requestListDeliverableVariables(deliverable.id));
-    void dispatch(
-      requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
-    );
-  }, [deliverable, dispatch]);
-
-  const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
-    selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
+  const { variablesWithValues, refetch: reload } = useDeliverableVariablesWithValues(
+    deliverable.id,
+    deliverable.projectId
   );
 
   const dependentVariableStableIds = useMemo(
     () => getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues),
     [variablesWithValues]
   );
-
-  useEffect(() => {
-    if (!(deliverable && dependentVariableStableIds && dependentVariableStableIds.length > 0)) {
-      return;
-    }
-
-    void dispatch(requestListSpecificVariables(dependentVariableStableIds));
-    void dispatch(
-      requestListSpecificVariablesValues({
-        projectId: deliverable.projectId,
-        variablesStableIds: dependentVariableStableIds,
-      })
-    );
-  }, [deliverable, dependentVariableStableIds, dispatch]);
 
   useEffect(() => {
     if (variablesWithValues.length && updatePendingId) {
@@ -486,8 +451,9 @@ const QuestionsDeliverableCard = (props: EditProps): JSX.Element => {
     }
   }, [updatePendingId, variablesWithValues]);
 
-  const dependentVariablesWithValues = useAppSelector((state) =>
-    selectSpecificVariablesWithValues(state, dependentVariableStableIds, deliverable.projectId)
+  const { variablesWithValues: dependentVariablesWithValues } = useSpecificVariablesWithValues(
+    dependentVariableStableIds,
+    deliverable.projectId
   );
 
   const allDependentVariablesWithValues = useMemo(

@@ -1,71 +1,8 @@
 import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
-import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
-import { specificVariablesCompositeKeyFn } from '../variables/variablesSlice';
-import {
-  requestListDeliverableVariablesValues,
-  requestListSpecificVariablesValues,
-  requestListVariablesValues,
-  requestUpdateVariableValues,
-  requestUploadImageValue,
-  requestUploadManyImageValues,
-} from './valuesThunks';
-
-/**
- * Variable Values List
- */
-type VariableValuesListState = Record<string, StatusT<VariableValue[]>>;
-
-type VariableListArg = { projectId: number; maxValueId?: number };
-type DeliverableProjectIdArg = { deliverableId: number; projectId: number };
-export const deliverableCompositeKeyFn = (arg: unknown): string => {
-  const castArg = arg as DeliverableProjectIdArg;
-  if (!(castArg.deliverableId && castArg.projectId)) {
-    return '';
-  }
-
-  return `d${castArg.deliverableId}-p${castArg.projectId}`;
-};
-
-export const variableListCompositeKeyFn = (arg: unknown): string => {
-  const castArg = arg as VariableListArg;
-  if (!castArg.projectId) {
-    return '';
-  }
-
-  return `p${castArg.projectId}-mv${castArg.maxValueId || -1}`;
-};
-
-const initialVariableValuesListState: VariableValuesListState = {};
-
-const deliverableVariableValuesListSlice = createSlice({
-  name: 'deliverableVariableValuesListSlice',
-  initialState: initialVariableValuesListState,
-  reducers: {},
-  extraReducers: (builder: ActionReducerMapBuilder<VariableValuesListState>) => {
-    buildReducers(requestListDeliverableVariablesValues, true, deliverableCompositeKeyFn)(builder);
-  },
-});
-
-const variableValuesListSlice = createSlice({
-  name: 'variableValuesListSlice',
-  initialState: initialVariableValuesListState,
-  reducers: {},
-  extraReducers: (builder: ActionReducerMapBuilder<VariableValuesListState>) => {
-    buildReducers(requestListVariablesValues, true, variableListCompositeKeyFn)(builder);
-  },
-});
-
-const specificVariableValuesListSlice = createSlice({
-  name: 'specificVariableValuesListSlice',
-  initialState: initialVariableValuesListState,
-  reducers: {},
-  extraReducers: (builder: ActionReducerMapBuilder<VariableValuesListState>) => {
-    buildReducers(requestListSpecificVariablesValues, true, specificVariablesCompositeKeyFn)(builder);
-  },
-});
+import { requestUpdateVariableValues, requestUploadImageValue, requestUploadManyImageValues } from './valuesThunks';
 
 /**
  * Variable Values Update
@@ -101,9 +38,6 @@ const variableValuesImageUploadSlice = createSlice({
 });
 
 export const documentProducerVariableValuesReducers = {
-  documentProducerDeliverableVariableValues: deliverableVariableValuesListSlice.reducer,
   documentProducerVariableValuesImageUpload: variableValuesImageUploadSlice.reducer,
-  documentProducerVariableValuesList: variableValuesListSlice.reducer,
-  documentProducerSpecificVariableValues: specificVariableValuesListSlice.reducer,
   documentProducerVariableValuesUpdate: variableValuesUpdateSlice.reducer,
 };

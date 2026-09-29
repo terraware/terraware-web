@@ -1,34 +1,26 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
+import { skipToken } from '@reduxjs/toolkit/query';
 import { BusySpinner } from '@terraware/web-components';
 import _ from 'lodash';
 
+import useDocumentVariablesWithValues from 'src/hooks/variables/useDocumentVariablesWithValues';
+import useProjectVariablesWithValues from 'src/hooks/variables/useProjectVariablesWithValues';
+import { useListVariableOwnersQuery } from 'src/queries/generated/documentProducerVariables';
 import { selectDocumentTemplate } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesSelector';
 import { requestListDocumentTemplates } from 'src/redux/features/documentProducer/documentTemplates/documentTemplatesThunks';
 import { selectGetDocument } from 'src/redux/features/documentProducer/documents/documentsSelector';
 import { requestGetDocument } from 'src/redux/features/documentProducer/documents/documentsThunks';
-import { requestListVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import {
-  selectAllVariablesWithValues,
-  selectDocumentVariablesWithValues,
-  selectVariablesOwners,
-} from 'src/redux/features/documentProducer/variables/variablesSelector';
-import {
-  requestListAllVariables,
-  requestListDocumentVariables,
-  requestListVariablesOwners,
-} from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { useMultiSelectorProcessor } from 'src/redux/hooks/useMultiSelectorProcessor';
-import { RootState } from 'src/redux/rootReducer';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import strings from 'src/strings';
 import { Document as DocumentType } from 'src/types/documentProducer/Document';
 import {
   SectionVariableWithValues,
-  VariableOwners,
   VariableWithValues,
   isSectionVariableWithValues,
 } from 'src/types/documentProducer/Variable';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import { DocumentProducerContext, DocumentProducerData } from './Context';
 import { getContainingSections } from './util';
@@ -48,73 +40,83 @@ const DocumentProducerProvider = ({ children }: Props) => {
   const documentTemplateId = document?.documentTemplateId ?? -1;
   const documentTemplate = useAppSelector((state) => selectDocumentTemplate(state, documentTemplateId));
 
-  const { status, data } = useMultiSelectorProcessor([
-    ['allVariables', (state: RootState) => selectAllVariablesWithValues(state, projectId)],
-    ['document', selectGetDocument(documentId), { onData: setDocument }],
-    ['documentVariables', (state: RootState) => selectDocumentVariablesWithValues(state, documentId, projectId)],
-    ['variablesOwners', (state: RootState) => selectVariablesOwners(state, projectId)],
-  ]);
+  const snackbar = useSnackbar();
+  const documentResult = useAppSelector(selectGetDocument(documentId));
+  useEffect(() => {
+    if (documentResult?.status === 'success') {
+      setDocument(documentResult.data);
+    } else if (documentResult?.status === 'error') {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [documentResult, snackbar]);
 
-  const documentVariables = data.documentVariables as VariableWithValues[];
-  const variablesOwners = data.variablesOwners as VariableOwners[];
+  const hasDocument = documentId !== -1;
+  const hasProject = projectId !== -1;
+
+  const projectVariables = useProjectVariablesWithValues(hasProject ? projectId : undefined);
+  const documentVariablesResult = useDocumentVariablesWithValues(
+    hasDocument ? documentId : undefined,
+    hasProject ? projectId : undefined
+  );
+  const ownersQuery = useListVariableOwnersQuery(hasProject ? projectId : skipToken);
+
+  const documentVariables = documentVariablesResult.variablesWithValues as VariableWithValues[] | undefined;
+  const variablesOwners = ownersQuery.currentData?.variables;
+
+  useEffect(() => {
+    if (projectVariables.isError || documentVariablesResult.isError || ownersQuery.isError) {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [documentVariablesResult.isError, ownersQuery.isError, projectVariables.isError, snackbar]);
 
   // Document variables may contain out-dated variables that are injected into sections within the document
   // They need to be added into the `allVariables` array so consumers can access out of date variables easily
   const allVariables = useMemo(() => {
-    const _allVariables = ((data.allVariables || []) as VariableWithValues[]).concat(documentVariables || []);
+    const _allVariables = (projectVariables.variablesWithValues ?? []).concat(documentVariables || []);
     return _.uniqBy(_allVariables, (variable: VariableWithValues) => variable.id);
-  }, [data.allVariables, documentVariables]);
+  }, [projectVariables.variablesWithValues, documentVariables]);
 
   const documentSectionVariables = useMemo(
     () => (documentVariables || []).filter(isSectionVariableWithValues) as SectionVariableWithValues[],
     [documentVariables]
   );
 
-  const isLoading = status === 'pending';
+  const isLoading =
+    (hasDocument && !document && documentResult?.status !== 'error') ||
+    (hasProject && projectVariables.variablesWithValues === undefined && !projectVariables.isError) ||
+    (hasProject && variablesOwners === undefined && !ownersQuery.isError) ||
+    (hasDocument && hasProject && documentVariables === undefined && !documentVariablesResult.isError);
 
   useEffect(() => {
     void dispatch(requestListDocumentTemplates());
-    void dispatch(requestListAllVariables());
   }, [dispatch]);
 
   const reloadDocument = useCallback(() => {
-    if (documentId !== -1) {
+    if (hasDocument) {
       void dispatch(requestGetDocument(documentId));
     }
-  }, [dispatch, documentId]);
-
-  const loadDocument = useCallback(() => {
-    if (documentId !== -1) {
-      void dispatch(requestGetDocument(documentId));
-      void dispatch(requestListDocumentVariables(documentId));
-    }
-  }, [dispatch, documentId]);
+  }, [dispatch, documentId, hasDocument]);
 
   useEffect(() => {
-    loadDocument();
-  }, [loadDocument]);
+    reloadDocument();
+  }, [reloadDocument]);
 
-  const loadVariables = useCallback(() => {
-    if (projectId !== -1) {
-      void dispatch(requestListVariablesOwners(projectId));
-      void dispatch(requestListVariablesValues({ projectId }));
-    }
-  }, [dispatch, projectId]);
-
-  useEffect(() => {
-    loadVariables();
-  }, [loadVariables]);
-
-  const reload = useCallback(() => {
-    loadDocument();
-    loadVariables();
-  }, [loadDocument, loadVariables]);
+  const { refetch: refetchProjectVariables } = projectVariables;
+  const { refetch: refetchDocumentVariables } = documentVariablesResult;
+  const { refetch: refetchOwners } = ownersQuery;
 
   const reloadVariables = useCallback(() => {
-    if (projectId !== -1) {
-      void dispatch(requestListVariablesValues({ projectId }));
+    refetchProjectVariables();
+    refetchDocumentVariables();
+  }, [refetchDocumentVariables, refetchProjectVariables]);
+
+  const reload = useCallback(() => {
+    reloadDocument();
+    reloadVariables();
+    if (hasProject) {
+      void refetchOwners();
     }
-  }, [dispatch, projectId]);
+  }, [hasProject, refetchOwners, reloadDocument, reloadVariables]);
 
   const getUsedSections = useCallback(
     (variableId: number) => documentSectionVariables.reduce(getContainingSections(variableId), []),
