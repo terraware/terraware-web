@@ -1,15 +1,9 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useMemo } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
-import { useLazyGetDeliveryQuery } from 'src/queries/generated/deliveries';
-import {
-  BatchPayload,
-  DeliveryPayload,
-  NurseryWithdrawalPayload,
-  PlantingPayload,
-} from 'src/queries/generated/nurseryWithdrawals';
+import { BatchPayload, DeliveryPayload, NurseryWithdrawalPayload } from 'src/queries/generated/nurseryWithdrawals';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
@@ -22,50 +16,25 @@ type ReassignmentTabPanelContentProps = {
   withdrawal?: NurseryWithdrawalPayload;
   delivery?: DeliveryPayload;
   batches?: BatchPayload[];
+  reassignmentDeliveries?: DeliveryPayload[];
 };
 
 export default function ReassignmentTabPanelContent({
   species,
   withdrawal,
   delivery,
+  reassignmentDeliveries = [],
 }: ReassignmentTabPanelContentProps): JSX.Element {
   const numberFormatter = useNumberFormatter();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
 
-  const [getDelivery] = useLazyGetDeliveryQuery();
-  const [linkedPlantings, setLinkedPlantings] = useState<PlantingPayload[]>([]);
-
-  const reassignmentDeliveryIds = delivery?.reassignmentDeliveryIds;
-
-  useEffect(() => {
-    const ids = reassignmentDeliveryIds ?? [];
-    if (ids.length === 0) {
-      setLinkedPlantings([]);
-      return;
-    }
-
-    let cancelled = false;
-    void Promise.all(ids.map((id) => getDelivery(id, true).unwrap()))
-      .then((responses) => {
-        if (!cancelled) {
-          setLinkedPlantings(responses.flatMap((response) => response.delivery.plantings));
-        }
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setLinkedPlantings([]);
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [getDelivery, reassignmentDeliveryIds]);
-
   const combinedPlantings = useMemo(
-    () => [...(delivery?.plantings ?? []), ...linkedPlantings],
-    [delivery?.plantings, linkedPlantings]
+    () =>
+      [delivery, ...reassignmentDeliveries].flatMap((item) =>
+        item ? item.plantings.map((planting) => ({ ...planting, plantingSiteId: item.plantingSiteId })) : []
+      ),
+    [delivery, reassignmentDeliveries]
   );
 
   const quantity = combinedPlantings

@@ -829,6 +829,7 @@ FROM,De,3b922b12
 FROM_GIS_DATABASE,(à partir de la base de données SIG),7b29f44f
 FROM_NURSERY,De : Pépinière,21226e82
 FROM_NURSERY_REQUIRED,De : Pépinière *,4bcef7f8
+FROM_PLANTING_SITE,De : Site de plantation,ac7278e5
 FROM_SUBSTRATUM,De : Substrat,d8e74cd4
 FUNDER,Bailleurs de fonds,a66356e6
 FUNDER_ADDED,Bailleur de fonds ajouté,cdcddbaf
@@ -1874,6 +1875,9 @@ REASSIGN,Réaffecter,48e98f3f
 REASSIGN_SEEDLINGS,Réaffecter les semis,99d4391c
 REASSIGN_SEEDLINGS_DESCRIPTION,"Saisissez la nouvelle sous-strate, la nouvelle quantité et les notes pour l'espèce pour laquelle vous souhaitez réaffecter des plants. Les plants des lignes laissées vides ne seront pas réaffectés.",1a8cfcc9
 REASSIGN_SEEDLINGS_MODAL_DESCRIPTION,Sélectionnez un nouvel emplacement et une quantité de semis à réaffecter pour chaque espèce.,fa53fb3b
+REASSIGNED_TO_NO_DATE,"{0}, réaffecté sans date",4ca9dd12
+REASSIGNED_TO_NO_SEASON,"{0}, réaffecté sans saison",353d0581
+REASSIGNED_VALUE,"{0}, réaffecté à {1}",81ba84e8
 REASSIGNMENT,Réaffectation,79a8c3fe
 REASSIGNMENT_DURATION,Durée de la réaffectation,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,Aucune parcelle ne sera ajoutée.,ebf0fa62
@@ -2542,6 +2546,7 @@ TO,À,0ec3d25a
 TO_NURSERY,Vers : pépinière,ef613421
 TO_NURSERY_REQUIRED,Vers : Pépinière *,e9bd2c95
 TO_PLANT,à planter,13c6274a
+TO_PLANTING_SITE,À : Site de plantation,d004f5f5
 TO_PLANTING_SITE_REQUIRED,Vers : Site de plantation *,b92a92f0
 TO_STRATUM,À : Strate,31a7e652
 TO_SUBSTRATUM,À : Substrat,f8e40ecb
