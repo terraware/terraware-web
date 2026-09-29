@@ -684,6 +684,7 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                   enableColumnDragging: true,
                   enableColumnOrdering: true,
                   positionGlobalFilter: 'right',
+                  positionToolbarAlertBanner: selectedRows.length > 0 ? 'top' : 'none',
                   getRowId: (row, index) => String(index),
                   renderToolbarAlertBannerContent: ({ selectedAlert }) => (
                     <Box display='flex' gap={1} alignItems='center' justifyContent='space-between' width='100%'>
