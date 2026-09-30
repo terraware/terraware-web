@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
@@ -17,6 +17,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextWithLink from 'src/components/common/TextWithLink';
 import TextField from 'src/components/common/Textfield/Textfield';
 import TitleDescription from 'src/components/common/TitleDescription';
+import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
@@ -116,7 +117,9 @@ const MyAccountForm = ({
   const updateUserPreferences = useUpdateUserPreferences();
   const snackbar = useSnackbar();
   const docLinks = useDocLinks();
-  const contentRef = useRef(null);
+  const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
+  const contentRef = useCallback((node: HTMLElement | null) => setContentElement(node), []);
+  const [saving, setSaving] = useState(false);
   const { countries, selectedLocale, setSelectedLocale } = useLocalization();
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
@@ -127,6 +130,17 @@ const MyAccountForm = ({
 
   const [localeSelected, setLocaleSelected] = useState(selectedLocale);
   const [countryCodeSelected, setCountryCodeSelected] = useState(user?.countryCode);
+
+  const isDirty =
+    (record.firstName ?? '') !== (user.firstName ?? '') ||
+    (record.lastName ?? '') !== (user.lastName ?? '') ||
+    record.timeZone !== user.timeZone ||
+    record.emailNotificationsEnabled !== user.emailNotificationsEnabled ||
+    record.cookiesConsented !== user.cookiesConsented ||
+    countryCodeSelected !== user.countryCode ||
+    localeSelected !== selectedLocale ||
+    preferredWeightSystemSelected !== ((userPreferences?.preferredWeightSystem as string) || 'metric') ||
+    removedOrg !== undefined;
 
   const openDisclaimer = useCallback(() => {
     setOpenDisclaimerModal(true);
@@ -150,10 +164,8 @@ const MyAccountForm = ({
 
   useEffect(() => {
     setRecord(user);
-    if (!countryCodeSelected) {
-      setCountryCodeSelected(user.countryCode);
-    }
-  }, [user, setRecord, countryCodeSelected, setCountryCodeSelected]);
+    setCountryCodeSelected(user.countryCode);
+  }, [user, setRecord]);
 
   useEffect(() => {
     const populatePeople = async () => {
@@ -190,7 +202,8 @@ const MyAccountForm = ({
     setPreferredWeightSystemSelected((userPreferences?.preferredWeightSystem as string) || 'metric');
     setLocaleSelected(selectedLocale);
     setSelectedRows([]);
-    onChange('cookiesConsented', user.cookiesConsented);
+    setRecord(user);
+    setCountryCodeSelected(user.countryCode);
     if (backToView) {
       backToView();
     } else {
@@ -199,40 +212,48 @@ const MyAccountForm = ({
   };
 
   const saveChanges = async () => {
-    if (removedOrg) {
-      if (removedOrg.role !== 'Owner') {
-        setLeaveOrganizationModalOpened(true);
-      } else if (assignNewOwnerModalOpened) {
-        setAssignNewOwnerModalOpened(false);
-        setLeaveOrganizationModalOpened(true);
-      } else if (removedOrg.totalUsers > 1) {
-        const organizationRoles = OrganizationService.getOrganizationRoles(removedOrg.id);
-        const owners = (await organizationRoles).roles?.find((role) => role.role === 'Owner');
-        if (owners?.totalUsers === 1) {
-          setAssignNewOwnerModalOpened(true);
-        } else {
+    if (saving) {
+      return;
+    }
+    setSaving(true);
+    try {
+      if (removedOrg) {
+        if (removedOrg.role !== 'Owner') {
           setLeaveOrganizationModalOpened(true);
+        } else if (assignNewOwnerModalOpened) {
+          setAssignNewOwnerModalOpened(false);
+          setLeaveOrganizationModalOpened(true);
+        } else if (removedOrg.totalUsers > 1) {
+          const organizationRoles = OrganizationService.getOrganizationRoles(removedOrg.id);
+          const owners = (await organizationRoles).roles?.find((role) => role.role === 'Owner');
+          if (owners?.totalUsers === 1) {
+            setAssignNewOwnerModalOpened(true);
+          } else {
+            setLeaveOrganizationModalOpened(true);
+          }
+        } else {
+          setCannotRemoveOrgModalOpened(true);
         }
       } else {
-        setCannotRemoveOrgModalOpened(true);
-      }
-    } else {
-      await updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
+        await updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
 
-      const lastLocale = selectedLocale;
-      setSelectedLocale(localeSelected);
-      const succeeded = await saveProfileChanges();
-      if (succeeded) {
-        snackbar.toastSuccess(strings.CHANGES_SAVED);
-      } else {
-        setSelectedLocale(lastLocale);
-        snackbar.toastError();
+        const lastLocale = selectedLocale;
+        setSelectedLocale(localeSelected);
+        const succeeded = await saveProfileChanges();
+        if (succeeded) {
+          snackbar.toastSuccess(strings.CHANGES_SAVED);
+        } else {
+          setSelectedLocale(lastLocale);
+          snackbar.toastError();
+        }
+        if (backToView) {
+          backToView();
+        } else {
+          navigate(APP_PATHS.MY_ACCOUNT);
+        }
       }
-      if (backToView) {
-        backToView();
-      } else {
-        navigate(APP_PATHS.MY_ACCOUNT);
-      }
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -331,7 +352,9 @@ const MyAccountForm = ({
       saveID='saveAccountChange'
       onCancel={onCancel}
       onSave={() => void saveChanges()}
-      hideEdit={!edit}
+      hideEdit={!!includeHeader || !edit}
+      busy={saving}
+      saveDisabled={!isDirty}
       desktopOffset={desktopOffset}
     >
       {removedOrg && (
@@ -378,15 +401,41 @@ const MyAccountForm = ({
         <DisclaimerModal content={disclaimer?.content} open={openDisclaimerModal} setOpen={setOpenDisclaimerModal} />
       )}
       {includeHeader && (
-        <PageHeaderWrapper nextElement={contentRef.current} hasNav={hasNav}>
+        <PageHeaderWrapper nextElement={contentElement} hasNav={hasNav} alwaysVisible={edit} elevated={edit && isDirty}>
           <Box
             display='flex'
             justifyContent='space-between'
+            alignItems='center'
+            flexWrap='wrap'
+            gap={theme.spacing(1.5)}
             marginBottom={theme.spacing(2)}
             padding={hasNav === false ? theme.spacing(0, 5) : theme.spacing(0, 0, 0, 3)}
-            marginTop={organizations && organizations.length > 0 ? 0 : theme.spacing(12)}
+            marginTop={edit || (organizations && organizations.length > 0) ? 0 : theme.spacing(12)}
           >
-            <TitleDescription title={strings.MY_ACCOUNT} style={{ padding: 0 }} />
+            <Box alignItems='center' display='flex' flexWrap='wrap' gap={theme.spacing(1.5)}>
+              <TitleDescription title={strings.MY_ACCOUNT} style={{ padding: 0 }} />
+              {edit && isDirty && <UnsavedChangesBadge />}
+            </Box>
+            {edit && (
+              <Box alignItems='center' display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
+                <Button
+                  disabled={saving}
+                  id='cancelAccountChange'
+                  label={strings.CANCEL}
+                  onClick={onCancel}
+                  priority='secondary'
+                  size='medium'
+                  type='passive'
+                />
+                <Button
+                  disabled={!isDirty || saving}
+                  id='saveAccountChange'
+                  label={strings.SAVE}
+                  onClick={() => void saveChanges()}
+                  size='medium'
+                />
+              </Box>
+            )}
             {!edit && (
               <Box display='flex' height='fit-content'>
                 <Button
