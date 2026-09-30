@@ -1,3 +1,4 @@
+4ada2360 Bump webpack-dev-middleware from 8.0.2 to 8.3.0 (#6556)
 6211470a Update dependency undici to v8.10.2 [SECURITY] (#6566)
 617c8b0b Bump ip-address from 10.4.0 to 10.7.2 (#6551)
 61743602 SW-8919 Include current (sub)stratum names in observation CSV (#6552)
