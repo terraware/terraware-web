@@ -69,10 +69,11 @@ const countPositions = (geometry: MultiPolygon | Polygon): number => {
   return rings.reduce((total, ring) => total + ring.length, 0);
 };
 
-// undo redo stack to capture site boundary and errors
+// undo redo stack to capture site boundary, errors, and the file the boundary came from
 type Stack = {
   errorAnnotations?: Feature[];
   siteBoundary?: FeatureCollection;
+  uploadedFile?: UploadedBoundaryFile;
 };
 
 export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBoundaryProps): JSX.Element {
@@ -92,10 +93,13 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
 
   const fileUploadEnabled = useFeatureEnabled('Boundary File Upload');
   const [method, setMethod] = useState<BoundaryMethod | undefined>();
-  const [uploadedFile, setUploadedFile] = useState<UploadedBoundaryFile | undefined>();
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
   // EditableMap only computes its view state on mount, so remount it to fit an uploaded boundary
   const [mapKey, setMapKey] = useState<number>(0);
+
+  const uploadedFile = siteBoundaryData?.uploadedFile;
+  // undoing past an upload drops the file, which should bring back the method chooser
+  const activeMethod = method === 'upload' && !uploadedFile && !showUploadModal ? undefined : method;
 
   // construct union of multipolygons
   const boundary = useMemo<MultiPolygon | undefined>(
@@ -204,7 +208,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
    * Check for errors and mark annotations.
    */
   const onEditableBoundaryChanged = useCallback(
-    async (editableBoundary?: FeatureCollection) => {
+    async (editableBoundary?: FeatureCollection, file?: UploadedBoundaryFile) => {
       const newBoundary = (editableBoundary && unionMultiPolygons(editableBoundary)) || undefined;
       const stratum = createStratumWith(newBoundary);
       const strata = stratum ? [stratum] : [];
@@ -221,11 +225,13 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       setSiteBoundaryData({
         errorAnnotations: errors,
         siteBoundary: editableBoundary,
+        // edits to an uploaded boundary keep its file, but clearing the boundary drops it
+        uploadedFile: newBoundary ? file ?? siteBoundaryData?.uploadedFile : undefined,
       });
     },
     // setSiteBoundaryData is not stable: it closes over the undo/redo stack index, so a callback
     // that pins an older copy will push onto a truncated stack and leave the index out of range
-    [setSiteBoundaryData, site]
+    [setSiteBoundaryData, site, siteBoundaryData?.uploadedFile]
   );
 
   const onSelectMethod = useCallback((selected: BoundaryMethod) => {
@@ -247,21 +253,21 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       }
       const geometry = parsed.geometry as MultiPolygon | Polygon;
 
-      setUploadedFile({
+      const file: UploadedBoundaryFile = {
         areaHa,
         boundingAreaHa: boundingAreaHectares(geometry),
         filename: parsed.filename,
         format,
         numPoints: countPositions(geometry),
         numPolygons,
-      });
+      };
       setMethod('upload');
       setShowUploadModal(false);
 
       // the remount has to wait for the boundary, since EditableMap fits its bounds on mount and
       // applying the boundary is async
       const apply = async () => {
-        await onEditableBoundaryChanged(featureCollectionOf(geometry, site.id));
+        await onEditableBoundaryChanged(featureCollectionOf(geometry, site.id), file);
         setMapKey((current) => current + 1);
       };
 
@@ -271,7 +277,6 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   );
 
   const onRemoveUploadedFile = useCallback(() => {
-    setUploadedFile(undefined);
     setMethod(undefined);
     void onEditableBoundaryChanged(undefined);
   }, [onEditableBoundaryChanged]);
@@ -318,7 +323,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
               onReplace={onOpenUploadModal}
             />
           )}
-          {!uploadedFile && method === 'draw' && <DrawingBoundaryStatus onUploadInstead={onOpenUploadModal} />}
+          {!uploadedFile && activeMethod === 'draw' && <DrawingBoundaryStatus onUploadInstead={onOpenUploadModal} />}
         </>
       )}
       <Box display='flex' flexDirection='column' flexGrow={1} position='relative'>
@@ -332,7 +337,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
           setMode={setMode}
           showSearchBox
         />
-        {fileUploadEnabled && !boundary && !method && <BoundaryMethodChooser onSelect={onSelectMethod} />}
+        {fileUploadEnabled && !boundary && !activeMethod && <BoundaryMethodChooser onSelect={onSelectMethod} />}
         {fileUploadEnabled && showUploadModal && (
           <UploadBoundaryModal onClose={onCloseUploadModal} onSuccess={onUploadSuccess} />
         )}
