@@ -2,10 +2,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import MuxPlayer from '@mux/mux-player-react';
-import { ViewPhotosDialog } from '@terraware/web-components';
+import { DialogBox, ViewPhotosDialog } from '@terraware/web-components';
 
 import EventLogView from 'src/components/common/EventLog';
-import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
 import { API_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
@@ -25,6 +24,22 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
   const { species } = useOrganizationSpecies();
   const [openedMedia, setOpenedMedia] = useState<ObservationPlotMediaSubjectPayload>();
   const closeViewer = useCallback(() => setOpenedMedia(undefined), []);
+
+  useEffect(() => {
+    if (openedMedia?.mediaKind !== 'Video') {
+      return;
+    }
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        closeViewer();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [closeViewer, openedMedia?.mediaKind]);
+
   const {
     currentData: mediaStream,
     error: mediaStreamError,
@@ -45,6 +60,19 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
       : undefined;
 
   const [list, { data: events, isLoading }] = useLazyListObservationEventsQuery();
+  const deletedVideoIds = useMemo(
+    () =>
+      new Set(
+        (events ?? []).flatMap((event) =>
+          event.action.type === 'Deleted' &&
+          event.subject.type === 'ObservationPlotMedia' &&
+          event.subject.mediaKind === 'Video'
+            ? [event.subject.fileId]
+            : []
+        )
+      ),
+    [events]
+  );
 
   const MangroveFields = useMemo(
     () => ['pH', 'salinity (ppt)', 'tide', 'tide measurement time', 'water depth (cm)'],
@@ -127,7 +155,11 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         )}
         {event.action.type === 'Created' && (
           <Box>
-            {event.subject.type === 'ObservationPlotMedia' ? (
+            {event.subject.type === 'ObservationPlotMedia' &&
+            event.subject.mediaKind === 'Video' &&
+            deletedVideoIds.has(event.subject.fileId) ? (
+              strings.formatString(strings.EVENT_ADDED, event.subject.fullText)
+            ) : event.subject.type === 'ObservationPlotMedia' ? (
               <Link
                 fontSize='16px'
                 onClick={() => {
@@ -148,7 +180,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         )}
       </Box>
     ),
-    [getSpeciesName, strings, theme.palette.TwClrTxtSuccess, theme.palette.TwClrTxtWarning]
+    [deletedVideoIds, getSpeciesName, strings, theme.palette.TwClrTxtSuccess, theme.palette.TwClrTxtWarning]
   );
 
   return (
@@ -163,15 +195,12 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         />
       )}
       {openedMedia?.mediaKind === 'Video' && (
-        <ImageLightbox
-          isOpen
-          onClose={closeViewer}
-          imageSrc=''
-          altComponent={
-            isStreamLoading ? (
+        <DialogBox open onClose={closeViewer} title={openedMedia.fullText} size='large' scrolled>
+          <Box display='flex' alignItems='center' justifyContent='center' sx={{ aspectRatio: '16 / 9' }}>
+            {isStreamLoading ? (
               <CircularProgress />
             ) : mediaStreamError ? (
-              <Typography color='white'>
+              <Typography>
                 {'status' in mediaStreamError && mediaStreamError.status === 412
                   ? strings.VIDEO_PROCESSING
                   : strings.GENERIC_ERROR}
@@ -184,13 +213,13 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
                 metadata={{ video_title: `Media video (File ID: ${openedMedia.fileId})` }}
                 playbackId={mediaStream.playbackId}
                 playbackToken={mediaStream.playbackToken}
-                style={{ aspectRatio: 16 / 9, height: '80vh', maxWidth: '80vw', width: 'auto' }}
+                style={{ aspectRatio: 16 / 9, width: '100%' }}
               />
             ) : (
               <CircularProgress />
-            )
-          }
-        />
+            )}
+          </Box>
+        </DialogBox>
       )}
       <EventLogView
         events={events}
