@@ -630,6 +630,10 @@ export type ObservationMonitoringPlotResultsPayload = {
   )[];
   /** Observed coordinates, if any, up to one per position. */
   coordinates: ObservationMonitoringPlotCoordinatesPayload[];
+  /** ID of the stratum the monitoring plot is currently located in, if any. This may differ from the stratum it was in at the time of the observation. */
+  currentStratumId?: number;
+  /** ID of the substratum the monitoring plot is currently located in, if any. This may differ from the substratum it was in at the time of the observation. */
+  currentSubstratumId?: number;
   elevationMeters?: number;
   isAdHoc: boolean;
   /** True if this was a permanent monitoring plot in this observation. Clients should not assume that the set of permanent monitoring plots is the same in all observations; the number of permanent monitoring plots can be adjusted over time based on observation results. */
