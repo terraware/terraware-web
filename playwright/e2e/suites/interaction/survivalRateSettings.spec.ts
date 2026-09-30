@@ -76,6 +76,9 @@ test.describe('SurvivalRateSettingsTests', () => {
     await page.locator('#saveSettings').click();
     await expect(page.getByText('t0 set for Permanent Plots')).toBeVisible({ timeout: 60000 });
 
+    // wait for survival rate to be recalculated
+    await page.waitForTimeout(10000);
+
     // Navigate to Dashboard
     await openNavItem(page, 'Plantings', 'Dashboard');
     await page.getByPlaceholder('Select...').click();
