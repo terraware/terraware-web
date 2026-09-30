@@ -209,12 +209,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
       observationResults.map((observationResult): PlantMonitoringRow => {
         const plantingSite = plantingSitesById[observationResult.plantingSiteId];
 
-        const strataNames = observationResult.strata
-          .map((stratumResult) => {
-            const observedStratum = plantingSite?.strata?.find((stratum) => stratum.id === stratumResult.stratumId);
-            return observedStratum?.name;
-          })
-          .filter((stratumName): stratumName is string => stratumName !== undefined);
+        const strataNames = observationResult.strata.map((stratumResult) => stratumResult.name);
 
         const completedDate = observationResult.completedTime ?? undefined;
         const observationDate = completedDate ?? observationResult.startDate;
