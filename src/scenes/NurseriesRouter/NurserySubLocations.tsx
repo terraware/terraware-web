@@ -6,10 +6,15 @@ import { PartialSubLocation } from 'src/types/Facility';
 
 export type NurserySubLocationsProps = {
   nurseryId?: number;
+  onLoad?: (subLocations: PartialSubLocation[]) => void;
   onEdit?: (subLocations: PartialSubLocation[]) => void;
 };
 
-export default function NurserySubLocations({ nurseryId, onEdit }: NurserySubLocationsProps): JSX.Element | null {
+export default function NurserySubLocations({
+  nurseryId,
+  onEdit,
+  onLoad,
+}: NurserySubLocationsProps): JSX.Element | null {
   const renderLink = useCallback((facilityId: number, locationName: string) => {
     return [
       `${APP_PATHS.INVENTORY}/?`,
@@ -19,5 +24,13 @@ export default function NurserySubLocations({ nurseryId, onEdit }: NurserySubLoc
     ].join('&');
   }, []);
 
-  return <SubLocations facilityType='nursery' facilityId={nurseryId} onEdit={onEdit} renderLink={renderLink} />;
+  return (
+    <SubLocations
+      facilityType='nursery'
+      facilityId={nurseryId}
+      onEdit={onEdit}
+      onLoad={onLoad}
+      renderLink={renderLink}
+    />
+  );
 }
