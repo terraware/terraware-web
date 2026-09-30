@@ -1,7 +1,7 @@
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import { AdminActivityObservationMediaFilePayload } from 'src/queries/generated/activities';
 import defaultStrings from 'src/strings';
-import { getExplanationPhotoLabel, getPositionLabel, getQuadratLabel } from 'src/types/Observations';
+import { getExplanationPhotoLabel, getPositionLabel, getQuadratPhotoLabel } from 'src/types/Observations';
 
 export type GroupedActivities = {
   quarter: string;
@@ -124,7 +124,7 @@ export const getObsPhotoTypeLabel = (
     return `${plotPrefix}${getPositionLabel(obs.position, strings)}`;
   }
   if (obs.type === 'Quadrat' && obs.position) {
-    return `${plotPrefix}${getQuadratLabel(obs.position, strings)}`;
+    return `${plotPrefix}${getQuadratPhotoLabel(obs.position, strings)}`;
   }
   if (obs.type === 'Soil') {
     return `${plotPrefix}${strings.SOIL}`;

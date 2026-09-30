@@ -1293,6 +1293,7 @@ NATIVE_NON_NATIVE,Indigène/non-indigène,4ce0ad21
 NATIVE_SPECIES_TO_BE_PLANTED,Espèces indigènes à planter,7a13ce14
 NATIVE_STATUS,Statut autochtone,a3b2178c
 NATURAL_REGENERATION_WOODY,Régénération naturelle ligneuse,26fe4ab1
+NE_CORNER,Coin NE,db9232a3
 NEEDS_ATTENTION,Nécessite une attention,95ec1cac
 NEEDS_TRANSLATION,Nécessite une traduction,ce38bfa9
 NEW_ACCESSION,Ajouter une adhésion,6d0d1602
@@ -1379,12 +1380,10 @@ NO_WITHDRAWABLE_QUANTITIES_FOUND,Aucune quantité retirable n'a été trouvée,a
 NON_NATIVE,Non-autochtone,572d9365
 NONE,Aucun,8cff1f65
 NONE_SELECTED,Aucun·e sélectionné·e,61621b35
-NORTHEAST_CORNER,Coin nord-est,da4ddbf6
 NORTHEAST_CORNER_FIELD_LATITUDE,Latitude du coin nord-est du champ,8ac09e53
 NORTHEAST_CORNER_FIELD_LONGITUDE,Longitude du coin nord-est du champ,5a1a38ab
 NORTHEAST_CORNER_LATITUDE,Latitude de l’angle nord-est,b20d2d02
 NORTHEAST_CORNER_LONGITUDE,Longitude de l’angle nord-est,36173800
-NORTHWEST_CORNER,Coin nord-ouest,2c0842da
 NORTHWEST_CORNER_FIELD_LATITUDE,Latitude du coin nord-ouest du champ,b5ffb64a
 NORTHWEST_CORNER_FIELD_LONGITUDE,Longitude du coin nord-ouest du champ,8221fbe1
 NORTHWEST_CORNER_LATITUDE,Latitude de l’angle nord-ouest,bef5fb10
@@ -1452,6 +1451,7 @@ NURSERY_SUMMARY_TOOLTIP,Le résumé de la pépinière affiche la couverture des 
 NURSERY_TRANSFER,Transfert de pépinière,7b6b8d82
 NURSERY_TRANSFERS_REQUIRE_DESTINATIONS,Les transferts de pépinières nécessitent une pépinière d'origine et une pépinière de destination.,7fe70d84
 NURSERY_WITHDRAWAL_REQUIRES_NURSERY,Les retraits vers une pépinière sont possibles lorsqu'une pépinière a été créée pour votre organisation.,12c73bc3
+NW_CORNER,Coin NO,dfd0b15b
 OBSERVATION,Observation,ac4f24f0
 OBSERVATION_ACTIVITY_AUTO_CREATED_INFO,Cette activité a été créée automatiquement à partir de l'observation {0}. Les données extraites de l'observation ne peuvent pas être modifiées ici.,785c7f71
 OBSERVATION_DATA,Données d’observation,7e9f4079
@@ -1587,10 +1587,14 @@ PHASE_PROJECT_REQUIRED_FIELDS_ERROR,"Le nom du fichier, le lien GDrive et le che
 PHOTO_ADDED,Photo ajoutée,0eea3641
 PHOTO_DATE_TIME,Date/heure de la photo,22e81710
 PHOTO_DELETED,Photo supprimée,90c71645
+PHOTO_NE_QUADRAT,Quadrat NE,3904f4d1
 PHOTO_NORTHEAST_QUADRAT,Quadrat nord-est,05b4f331
 PHOTO_NORTHWEST_QUADRAT,Quadrat nord-ouest,9af609f8
+PHOTO_NW_QUADRAT,Quadrat NO,d30b8b7a
+PHOTO_SE_QUADRAT,Quadrat SE,2b662388
 PHOTO_SOUTHEAST_QUADRAT,Quadrat sud-est,cbfacb71
 PHOTO_SOUTHWEST_QUADRAT,Quadrat sud-ouest,9afd74aa
+PHOTO_SW_QUADRAT,Quadrat SO,bcd5bc8c
 PHOTOS,Photos,a440be46
 PHOTOS_AND_VIDEOS,Photos et vidéos,754d8e11
 PHOTOS_TO_UPLOAD,Photos à télécharger,2735bfdb
@@ -2102,6 +2106,7 @@ SDG_14,14. La vie sous l'eau,5a61ee21
 SDG_15,15. La vie sur terre,773d6151
 SDG_16,"16. Paix, justice et institutions fortes.",e0e9a0ba
 SDG_17,17. Partenariats pour les objectifs,3b9b74f8
+SE_CORNER,Coin SE,3e70b5c7
 SEARCH,Recherche,9f30c236
 SEARCH_OR_SELECT,Rechercher ou sélectionner...,cbd7f4ed
 SEASON_NAME,Nom de la saison,74218855
@@ -2285,12 +2290,10 @@ SOMETHING_WENT_WRONG,Une erreur s'est produite.,53066e12
 SOMETHING_WENT_WRONG_MESSAGE,"Si vous avez des difficultés à utiliser Terraware, veuillez nous signaler tout problème que vous rencontrez et nous ferons le nécessaire pour y remédier.",c506e77d
 SOMETHING_WENT_WRONG_TITLE,Une erreur s'est produite...,bf2e66a4
 SOURCING,Source,dc1a071d
-SOUTHEAST_CORNER,Coin sud-est,cdf375aa
 SOUTHEAST_CORNER_FIELD_LATITUDE,Latitude du coin sud-est du champ,52ac9fd0
 SOUTHEAST_CORNER_FIELD_LONGITUDE,Longitude du coin sud-est du champ,d652fece
 SOUTHEAST_CORNER_LATITUDE,Latitude de l’angle sud-est,25510ec5
 SOUTHEAST_CORNER_LONGITUDE,Longitude de l’angle sud-est,a15c5f33
-SOUTHWEST_CORNER,Coin sud-ouest,4d23e84b
 SOUTHWEST_CORNER_FIELD_LATITUDE,Latitude du coin sud-ouest du champ,973b5a2d
 SOUTHWEST_CORNER_FIELD_LONGITUDE,Longitude du coin sud-ouest du champ,409e6323
 SOUTHWEST_CORNER_LATITUDE,Latitude de l’angle sud-ouest,11768ce8
@@ -2483,6 +2486,7 @@ SURVIVAL_RATES_UNAVAILABLE_BODY,Saisissez les données dans le {0} et apprenez-e
 SURVIVAL_RATES_UNAVAILABLE_TITLE,Les taux de survie ne peuvent pas être calculés car toutes les données requises n'ont pas été saisies.,3a990e77
 SUSTAINABLE_DEVELOPMENT_GOALS,Objectifs de développement durable,905bfc54
 SUSTAINABLE_TIMBER,Bois durable,b9574821
+SW_CORNER,Coin SO,225bf8b3
 SYSTEM_METRICS,Mesures du système,c19498b7
 T0_DATA_IS_SET,Les données t0 sont définies,cf4c95a7
 T0_NOT_SET_FOR_PERMANENT_PLOTS,t0 non défini pour les Placettes permanentes,d1ad09a9

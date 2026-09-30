@@ -10,7 +10,7 @@ import {
   MonitoringPlotMediaItem,
   getExplanationPhotoLabel,
   getPositionLabel,
-  getQuadratLabel,
+  getQuadratPhotoLabel,
 } from 'src/types/Observations';
 import { shouldShowHeicPlaceholder } from 'src/utils/images';
 
@@ -90,7 +90,7 @@ const MonitoringPlotPhotoPreview = ({
       )}
       {mediaItem.data.type === 'Quadrat' && mediaItem.data.position && (
         <Typography marginBottom={3} color={theme.palette.TwClrBaseBlack}>
-          {getQuadratLabel(mediaItem.data.position, strings)}
+          {getQuadratPhotoLabel(mediaItem.data.position, strings)}
         </Typography>
       )}
       {mediaItem.data.type === 'Explanation' && mediaItem.data.position && (

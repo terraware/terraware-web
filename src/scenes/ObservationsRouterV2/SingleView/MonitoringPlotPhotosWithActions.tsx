@@ -16,7 +16,7 @@ import {
   ObservationMonitoringPlotPhoto,
   getExplanationPhotoLabel,
   getPositionLabel,
-  getQuadratLabel,
+  getQuadratPhotoLabel,
 } from 'src/types/Observations';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -142,7 +142,7 @@ export default function MonitoringPlotPhotosWithActions({
               )}
               {mediaFile.photoType === 'Quadrat' && mediaFile.position && (
                 <Typography color={theme.palette.TwClrBaseBlack} fontSize={14}>
-                  {getQuadratLabel(mediaFile.position, strings)}
+                  {getQuadratPhotoLabel(mediaFile.position, strings)}
                 </Typography>
               )}
               {mediaFile.photoType === 'Explanation' && mediaFile.position && (
