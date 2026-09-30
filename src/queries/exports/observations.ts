@@ -83,7 +83,11 @@ const injectedRtkApi = api.injectEndpoints({
             'isInvasive',
             'isThreatened',
           ],
-          sortOrder: [{ field: 'name' }, { field: 'quadratSpecies_position' }],
+          sortOrder: [
+            { field: 'monitoringPlot_plotNumber', direction: 'Descending' },
+            { field: 'name' },
+            { field: 'quadratSpecies_position' },
+          ],
           search: {
             operation: 'and',
             children: [

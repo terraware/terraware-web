@@ -7,6 +7,7 @@ type QueryDefinition = {
     body: {
       prefix: string;
       search: unknown;
+      sortOrder: { field: string; direction?: string }[];
     };
   };
 };
@@ -40,4 +41,15 @@ describe('observation plot CSV query', () => {
       values: ['11', '7', '24'],
     });
   });
+});
+
+describe('CSV plot sorting', () => {
+  test('groups species by descending plot number while retaining species and quadrat order', () => {
+    expect(definitions.exportBiomassSpeciesCsv.query([1]).body.sortOrder).toEqual([
+      { field: 'monitoringPlot_plotNumber', direction: 'Descending' },
+      { field: 'name' },
+      { field: 'quadratSpecies_position' },
+    ]);
+  });
+
 });
