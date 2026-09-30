@@ -21,6 +21,8 @@ import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlan
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers';
 import { ObservationResultsPayload } from 'src/queries/generated/observations';
+import { AdHocObservationResults } from 'src/types/Observations';
+import { MultiPolygon } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { useObservationFilters } from '../ObservationFiltersProvider';
@@ -246,9 +248,43 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         typeof plantingSiteId === 'number'
           ? plantingSiteNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
           : strings.ALL_PLANTING_SITES;
-      await downloadAdHocObservationsZip({ observations: filteredRows, siteName });
+      const visibleIds = new Set(filteredRows.map((row) => row.observationId));
+      const monitoringResults = observations
+        .filter(
+          (observation) =>
+            visibleIds.has(observation.observationId) &&
+            observation.type !== 'Biomass Measurements' &&
+            observation.adHocPlot
+        )
+        .map((observation): AdHocObservationResults => {
+          const adHocPlot = observation.adHocPlot!;
+          const site = plantingSites.find(({ id }) => id === observation.plantingSiteId);
+          return {
+            ...observation,
+            adHocPlot,
+            boundary: adHocPlot.boundary as unknown as MultiPolygon,
+            plantingSiteName: site?.name ?? '',
+            strata: observation.strata as AdHocObservationResults['strata'],
+            timeZone: site?.timeZone ?? defaultTimezone,
+            totalLive: observation.species.reduce((total, species) => total + species.totalLive, 0),
+            totalPlants: observation.totalPlants,
+          };
+        });
+      await downloadAdHocObservationsZip({
+        adHocObservationsResults: monitoringResults,
+        biomassObservationIds: filteredRows.filter((row) => row.isBiomass).map((row) => row.observationId),
+        siteName,
+      });
     },
-    [downloadAdHocObservationsZip, plantingSiteId, plantingSiteNames, strings.ALL_PLANTING_SITES]
+    [
+      defaultTimezone,
+      downloadAdHocObservationsZip,
+      observations,
+      plantingSiteId,
+      plantingSiteNames,
+      plantingSites,
+      strings.ALL_PLANTING_SITES,
+    ]
   );
 
   return (

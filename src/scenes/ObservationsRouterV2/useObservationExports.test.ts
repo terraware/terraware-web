@@ -1,6 +1,7 @@
 import { rstest } from '@rstest/core';
 import { renderHook } from '@testing-library/react';
 
+import { AdHocObservationResults } from 'src/types/Observations';
 import downloadZipFile from 'src/utils/downloadZipFile';
 
 import useObservationExports from './useObservationExports';
@@ -11,6 +12,7 @@ const mocks = rstest.hoisted(() => ({
   plots: rstest.fn(),
   species: rstest.fn(),
   trees: rstest.fn(),
+  monitoringCsv: rstest.fn(),
 }));
 
 rstest.mock('src/providers', () => ({
@@ -19,6 +21,8 @@ rstest.mock('src/providers', () => ({
     strings: {
       BIOMASS_OBSERVATION_FILENAME_PREFIX: 'Biomass Monitoring',
       AD_HOC_PLOTS: 'Ad Hoc Plots',
+      AD_HOC_PLANT_MONITORING: 'Plant Monitoring',
+      BIOMASS_MONITORING: 'Biomass Monitoring',
       PLOT: 'Plot',
       SPECIES_CLASSIFICATION: 'Species',
       TREES_AND_SHRUBS: 'Trees',
@@ -41,8 +45,11 @@ rstest.mock('src/queries/exports/observations', () => ({
 }));
 rstest.mock('src/utils/downloadZipFile', () => ({ default: rstest.fn() }));
 
+rstest.mock('./exportAdHocObservations', () => ({ makeAdHocObservationsCsv: mocks.monitoringCsv }));
+
 beforeEach(() => {
   rstest.resetAllMocks();
+  mocks.monitoringCsv.mockReturnValue('monitoring CSV');
   mocks.observation.mockImplementation(({ observationId }: { observationId: number }) => ({
     unwrap: () => Promise.resolve({ observation: { plantingSiteId: 1, observationId, startDate: '2026-09-01' } }),
   }));
@@ -123,32 +130,83 @@ describe('downloadBiomassObservationDetails', () => {
 });
 
 describe('downloadAdHocObservationsZip', () => {
-  test('exports every visible observation in three combined CSV files', async () => {
+  const monitoringResults = [{ observationId: 11 }] as AdHocObservationResults[];
+  const biomassFiles = [
+    { fileName: expect.stringMatching(/-Plot$/), content: 'plot 7,24' },
+    { fileName: expect.stringMatching(/-Species$/), content: 'species 7,24' },
+    { fileName: expect.stringMatching(/-Trees$/), content: 'trees 7,24' },
+  ];
+  const monitoringFile = { fileName: 'Site-Plant Monitoring', content: 'monitoring CSV' };
+
+  test('exports mixed observations in three biomass CSVs and one monitoring CSV', async () => {
     const { result } = renderHook(useObservationExports);
-    const observations = [{ observationId: 11 }, { observationId: 7 }, { observationId: 24 }];
-    await result.current.downloadAdHocObservationsZip({ observations, siteName: 'Site' });
+    await result.current.downloadAdHocObservationsZip({
+      adHocObservationsResults: monitoringResults,
+      biomassObservationIds: [7, 24],
+      siteName: 'Site',
+    });
 
     for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
       expect(trigger).toHaveBeenCalledTimes(1);
-      expect(trigger).toHaveBeenCalledWith([11, 7, 24], true);
+      expect(trigger).toHaveBeenCalledWith([7, 24], true);
     }
-    expect(mocks.observation).not.toHaveBeenCalled();
-    expect(mocks.site).not.toHaveBeenCalled();
+    expect(mocks.monitoringCsv).toHaveBeenCalledWith(monitoringResults);
+    expect(downloadZipFile).toHaveBeenCalledTimes(1);
+    const archive = rstest.mocked(downloadZipFile).mock.calls[0][0];
+    expect(archive.dirName).toBe('Site-Ad Hoc Plots_filtered');
+    expect(archive.suffix).toBe('.csv');
+    expect(archive.files).toHaveLength(4);
+    expect(archive.files).toEqual(expect.arrayContaining([monitoringFile, ...biomassFiles]));
+  });
+
+  test('exports monitoring-only observations in one CSV without biomass requests', async () => {
+    const { result } = renderHook(useObservationExports);
+    await result.current.downloadAdHocObservationsZip({
+      adHocObservationsResults: monitoringResults,
+      biomassObservationIds: [],
+      siteName: 'Site',
+    });
+
+    for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
+      expect(trigger).not.toHaveBeenCalled();
+    }
+    expect(mocks.monitoringCsv).toHaveBeenCalledWith(monitoringResults);
     expect(downloadZipFile).toHaveBeenCalledTimes(1);
     expect(downloadZipFile).toHaveBeenCalledWith({
-      dirName: 'Site-Ad Hoc Plots',
+      dirName: 'Site-Ad Hoc Plots_filtered',
       suffix: '.csv',
-      files: [
-        { fileName: expect.stringMatching(/-Plot$/), content: 'plot 11,7,24' },
-        { fileName: expect.stringMatching(/-Species$/), content: 'species 11,7,24' },
-        { fileName: expect.stringMatching(/-Trees$/), content: 'trees 11,7,24' },
-      ],
+      files: [monitoringFile],
+    });
+  });
+
+  test('exports biomass-only observations in three CSVs without a monitoring CSV', async () => {
+    const { result } = renderHook(useObservationExports);
+    await result.current.downloadAdHocObservationsZip({
+      adHocObservationsResults: [],
+      biomassObservationIds: [7, 24],
+      siteName: 'Site',
+    });
+
+    for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
+      expect(trigger).toHaveBeenCalledTimes(1);
+      expect(trigger).toHaveBeenCalledWith([7, 24], true);
+    }
+    expect(mocks.monitoringCsv).not.toHaveBeenCalled();
+    expect(downloadZipFile).toHaveBeenCalledTimes(1);
+    expect(downloadZipFile).toHaveBeenCalledWith({
+      dirName: 'Site-Ad Hoc Plots_filtered',
+      suffix: '.csv',
+      files: biomassFiles,
     });
   });
 
   test('does not request or download files when no observations are visible', async () => {
     const { result } = renderHook(useObservationExports);
-    await result.current.downloadAdHocObservationsZip({ observations: [], siteName: 'Site' });
+    await result.current.downloadAdHocObservationsZip({
+      adHocObservationsResults: [],
+      biomassObservationIds: [],
+      siteName: 'Site',
+    });
 
     for (const trigger of Object.values(mocks)) {
       expect(trigger).not.toHaveBeenCalled();

@@ -16,11 +16,13 @@ import {
 import { ObservationResultsPayload, useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
 import { PlantingSitePayload, useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getConditionString } from 'src/redux/features/observations/utils';
-import { getPlotStatus } from 'src/types/Observations';
+import { AdHocObservationResults, getPlotStatus } from 'src/types/Observations';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
 import { getShortDate } from 'src/utils/dateFormatter';
 import downloadZipFile from 'src/utils/downloadZipFile';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
+
+import { makeAdHocObservationsCsv } from './exportAdHocObservations';
 
 const useObservationExports = () => {
   const { activeLocale, strings } = useLocalization();
@@ -652,22 +654,38 @@ const useObservationExports = () => {
   );
 
   const downloadAdHocObservationsZip = useCallback(
-    async ({ observations, siteName }: { observations: { observationId: number }[]; siteName: string }) => {
-      if (observations.length === 0) {
+    async ({
+      adHocObservationsResults,
+      biomassObservationIds,
+      siteName,
+    }: {
+      adHocObservationsResults: AdHocObservationResults[];
+      biomassObservationIds: number[];
+      siteName: string;
+    }) => {
+      const fileNamePrefix = `${siteName}-${strings.AD_HOC_PLOTS}`;
+      const files: { fileName: string; content: Blob | string }[] = [];
+
+      if (adHocObservationsResults.length > 0) {
+        files.push({
+          fileName: `${siteName}-${strings.AD_HOC_PLANT_MONITORING}`,
+          content: makeAdHocObservationsCsv(adHocObservationsResults),
+        });
+      }
+      if (biomassObservationIds.length > 0) {
+        files.push(...(await makeBiomassCsvFiles(biomassObservationIds, fileNamePrefix)));
+      }
+      if (files.length === 0) {
         return;
       }
 
-      const fileNamePrefix = `${siteName}-${strings.AD_HOC_PLOTS}`;
       await downloadZipFile({
-        dirName: fileNamePrefix,
-        files: await makeBiomassCsvFiles(
-          observations.map(({ observationId }) => observationId),
-          fileNamePrefix
-        ),
+        dirName: `${fileNamePrefix}_filtered`,
+        files,
         suffix: '.csv',
       });
     },
-    [makeBiomassCsvFiles, strings.AD_HOC_PLOTS]
+    [makeBiomassCsvFiles, strings.AD_HOC_PLOTS, strings.AD_HOC_PLANT_MONITORING]
   );
 
   return {
