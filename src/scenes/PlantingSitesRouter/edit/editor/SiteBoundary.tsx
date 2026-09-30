@@ -74,7 +74,6 @@ type Stack = {
   errorAnnotations?: Feature[];
   siteBoundary?: FeatureCollection;
   uploadedFile?: UploadedBoundaryFile;
-  // distinguishes uploads, so the map can refit whenever undo/redo moves to a different file
   uploadId?: number;
 };
 
@@ -99,7 +98,6 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   const lastUploadId = useRef<number>(0);
 
   const uploadedFile = siteBoundaryData?.uploadedFile;
-  // EditableMap only computes its view state on mount, so remount it to fit the current file's boundary
   const mapKey = siteBoundaryData?.uploadId ?? 0;
 
   // construct union of multipolygons
