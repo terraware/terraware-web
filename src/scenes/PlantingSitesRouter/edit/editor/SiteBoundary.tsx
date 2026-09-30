@@ -233,15 +233,20 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
 
   const onUploadSuccess = useCallback(
     (parsed: ParseDraftPlantingSiteBoundaryResponsePayload) => {
+      const { areaHa, format, numPolygons } = parsed;
+      // these are only populated when the file parsed successfully
+      if (!parsed.geometry || areaHa === undefined || !format || numPolygons === undefined) {
+        return;
+      }
       const geometry = parsed.geometry as MultiPolygon | Polygon;
 
       setUploadedFile({
-        areaHa: parsed.areaHa,
+        areaHa,
         boundingAreaHa: boundingAreaHectares(geometry),
         filename: parsed.filename,
-        format: parsed.format,
+        format,
         numPoints: countPositions(geometry),
-        numPolygons: parsed.numPolygons,
+        numPolygons,
       });
       setMethod('upload');
       setShowUploadModal(false);
