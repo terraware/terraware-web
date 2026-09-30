@@ -23,13 +23,12 @@ const fileSizeText = (bytes: number): string =>
 export type UploadBoundaryModalProps = {
   onClose: () => void;
   onSuccess: (parsed: ParseDraftPlantingSiteBoundaryResponsePayload) => void;
-  siteId: number;
 };
 
 /**
  * Dialog to pick a spatial file and have the server parse it into a site boundary.
  */
-export default function UploadBoundaryModal({ onClose, onSuccess, siteId }: UploadBoundaryModalProps): JSX.Element {
+export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBoundaryModalProps): JSX.Element {
   const theme = useTheme();
   const [files, setFiles] = useState<File[]>([]);
   const [parseBoundary, { isLoading }] = useParseDraftPlantingSiteBoundaryMutation();
@@ -46,12 +45,12 @@ export default function UploadBoundaryModal({ onClose, onSuccess, siteId }: Uplo
     }
 
     const upload = async () => {
-      const parsed = await parseBoundary({ id: siteId, body: { file } }).unwrap();
+      const parsed = await parseBoundary({ file }).unwrap();
       onSuccess(parsed);
     };
 
     void upload();
-  }, [files, onSuccess, parseBoundary, siteId]);
+  }, [files, onSuccess, parseBoundary]);
 
   return (
     <DialogBox
