@@ -224,7 +224,7 @@
     "typescript-eslint": "^7.15.0",
     "undici": "^8.9.0",
     "wait-on": "^9.0.5",
-    "webpack-dev-middleware": "^8.0.0"
+    "webpack-dev-middleware": "^8.3.0"
   },
   "resolutions": {
     "@babel/traverse": "8.0.6",
