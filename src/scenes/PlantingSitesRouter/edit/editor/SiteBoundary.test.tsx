@@ -28,8 +28,7 @@ rstest.mock('src/components/Map/EditableMapV2', () => ({
   },
 }));
 
-const SITE_ID = 7;
-const PARSE_URL = `/api/v1/tracking/draftSites/${SITE_ID}/boundaryFile`;
+const PARSE_URL = '/api/v1/tracking/draftSites/boundaryFile';
 
 // ~2.2km on a side: large enough to clear the minimum polygon size, small enough to stay under
 // the 20,000 ha bounding box limit, so neither error path interferes.
@@ -46,7 +45,7 @@ const GEOMETRY: Polygon = {
   ],
 };
 
-const site = buildDraftPlantingSite({ id: SITE_ID });
+const site = buildDraftPlantingSite();
 
 const renderSiteBoundary = () =>
   renderWithProviders(<SiteBoundary site={site} />, {
