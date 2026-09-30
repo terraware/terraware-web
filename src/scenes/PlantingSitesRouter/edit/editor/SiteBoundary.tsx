@@ -25,8 +25,7 @@ import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import UploadBoundaryModal from './UploadBoundaryModal';
 import { OnValidate } from './types';
-import { boundingAreaHectares, defaultStratumPayload, stratumNameGenerator } from './utils';
-import { findErrors } from './utils';
+import { boundingAreaHectares, defaultStratumPayload, findErrors, stratumNameGenerator } from './utils';
 
 export type SiteBoundaryProps = {
   onValidate?: OnValidate;
