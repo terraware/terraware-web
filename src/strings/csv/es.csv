@@ -1636,6 +1636,7 @@ PLANTING_COMPLETE_ROLLED_UP_DASHBOARD_TOOLTIP,"Porcentaje de ""Plantación compl
 PLANTING_COMPLETE_TOOLTIP,¿Se ha completado la plantación en este sustrato?,a6bfac66
 PLANTING_DATE,Fecha de plantación,544c699c
 PLANTING_DATE_ADDED,Fecha de plantación agregada: {0}.,187cb611
+PLANTING_DATE_ALREADY_SCHEDULED,Esa fecha de plantación ya está programada.,b4006cc0
 PLANTING_DATE_DELETED,Fecha de plantación eliminada: {0}.,6a287532
 PLANTING_DATE_QUANTITY_NOT_SET_TITLE,Cantidad no establecida,58200f42
 PLANTING_DATE_QUANTITY_NOT_SET_WARNING,"Hay al menos una especie para la cual la Cantidad a Plantar aún no ha sido establecida. Para guardar la Fecha de Plantación, agregue cantidades para todas las especies o elimine especies de la fecha.",e4b3a94c

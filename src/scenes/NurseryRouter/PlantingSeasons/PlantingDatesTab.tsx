@@ -457,6 +457,16 @@ const PlantingDateForm = ({
     return drafts;
   });
   const [validate, setValidate] = useState(false);
+  const isDuplicateDate = useMemo(
+    () =>
+      !!date &&
+      scheduledDates.some(
+        (scheduledDate) =>
+          scheduledDate.date === date &&
+          scheduledDate.scheduledPlantingDateId !== editingScheduledDate?.scheduledPlantingDateId
+      ),
+    [date, scheduledDates, editingScheduledDate]
+  );
   const [notifyModalOpen, setNotifyModalOpen] = useState(false);
   const [notSetWarningOpen, setNotSetWarningOpen] = useState(false);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
@@ -549,6 +559,9 @@ const PlantingDateForm = ({
       setValidate(true);
       return false;
     }
+    if (isDuplicateDate) {
+      return false;
+    }
     const speciesPayload = buildPayloadSpecies();
     const payload = {
       date,
@@ -575,7 +588,11 @@ const PlantingDateForm = ({
       }
       return true;
     } catch (e) {
-      snackbar.toastError();
+      if ((e as { status?: number })?.status === 409) {
+        snackbar.toastError(strings.PLANTING_DATE_ALREADY_SCHEDULED);
+      } else {
+        snackbar.toastError();
+      }
       return false;
     }
   };
@@ -656,7 +673,9 @@ const PlantingDateForm = ({
           label=''
           value={date}
           onDateChange={(value?: DateTime) => setDate(value?.toISODate() ?? '')}
-          errorText={validate && !date ? strings.REQUIRED_FIELD : ''}
+          errorText={
+            validate && !date ? strings.REQUIRED_FIELD : isDuplicateDate ? strings.PLANTING_DATE_ALREADY_SCHEDULED : ''
+          }
           defaultTimeZone={timeZoneId}
         />
       </Box>
@@ -720,7 +739,7 @@ const PlantingDateForm = ({
               onClick={() => void onSave()}
               priority='secondary'
               type={isMobile ? 'passive' : 'productive'}
-              disabled={isSaving}
+              disabled={isSaving || isDuplicateDate}
               size={isMobile ? 'medium' : undefined}
               sx={mobileFooterButtonSx}
             />
@@ -731,7 +750,7 @@ const PlantingDateForm = ({
             <Button
               label={strings.SAVE_AND_REQUEST}
               onClick={onSaveAndRequest}
-              disabled={isSaving || !date || !hasAnySpeciesWithQuantity}
+              disabled={isSaving || !date || isDuplicateDate || !hasAnySpeciesWithQuantity}
               priority={isMobile ? 'secondary' : 'primary'}
               size={isMobile ? 'medium' : undefined}
               sx={mobileFooterButtonSx}
