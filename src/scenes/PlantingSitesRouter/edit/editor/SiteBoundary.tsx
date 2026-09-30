@@ -91,14 +91,16 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
   const [mapKey, setMapKey] = useState<number>(0);
 
   const uploadedFile = siteBoundaryData?.uploadedFile;
-  // undoing past an upload drops the file, which should bring back the method chooser
-  const activeMethod = method === 'upload' && !uploadedFile && !showUploadModal ? undefined : method;
 
   // construct union of multipolygons
   const boundary = useMemo<MultiPolygon | undefined>(
     () => (siteBoundaryData?.siteBoundary && unionMultiPolygons(siteBoundaryData?.siteBoundary)) || undefined,
     [siteBoundaryData?.siteBoundary]
   );
+
+  // undoing past an upload drops the file, leaving either a drawn boundary or nothing to choose from
+  const activeMethod =
+    method === 'upload' && !uploadedFile && !showUploadModal ? (boundary ? 'draw' : undefined) : method;
 
   const boundingArea = useMemo<number>(() => (boundary ? boundingAreaHectares(boundary) : 0), [boundary]);
 
