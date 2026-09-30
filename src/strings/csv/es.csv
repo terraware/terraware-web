@@ -11,6 +11,8 @@ ACCEPT_AND_NEXT,Aceptar y continuar,9ba59ea5
 ACCEPTED,Aceptada,2dee58ee
 ACCESSION,Accesión,6a1389cb
 ACCESSION_BY_STATUS,Accesión por Estado,8d5df55b
+ACCESSION_CREATED_PHOTOS_NOT_UPLOADED,"Accesión creada, pero no se pudieron cargar {0} fotos. Puede agregarlas desde la página de la accesión.",93432bb0
+ACCESSION_CREATED_PHOTOS_NOT_UPLOADED_ONE,"Accesión creada, pero no se pudo cargar {0} foto. Puede agregarla desde la página de la accesión.",6d6a59a7
 ACCESSION_DETAIL,Detalle de la accesión,dab2431a
 ACCESSION_DETAILS,Detalle de las accesiones,1fa5df58
 ACCESSION_EVENT_PHOTO_REPLACED,Foto reemplazada,3349b427

@@ -102,9 +102,7 @@ export default function CreateAccession(): JSX.Element | null {
     [onChange]
   );
 
-  // If there's only 1 project, auto apply it. Applied at most once, when the projects arrive:
-  // re-applying would put the project back every time the reader chose "No Project", since the
-  // dropdown clears to `undefined` and nothing distinguishes that from a field never touched.
+  // If there's only 1 project, auto apply it, at most once.
   useEffect(() => {
     if (singleProjectApplied.current || availableProjects?.length !== 1) {
       return;
@@ -133,9 +131,7 @@ export default function CreateAccession(): JSX.Element | null {
     setTimeZone(tz.id);
   }, [tz]);
 
-  // The default received date follows the seed bank's zone, which resolves after the first render.
-  // Only while the reader hasn't set a date themselves: otherwise picking a seed bank in another
-  // zone would overwrite the date they entered.
+  // The default received date follows the seed bank's zone, until the reader sets a date themselves.
   useEffect(() => {
     if (receivedDateEdited.current) {
       return;
