@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { rstest } from '@rstest/core';
 import { screen, waitFor } from '@testing-library/react';
-import { FeatureCollection, Polygon } from 'geojson';
+import { FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 
 import type { EditableMapProps } from 'src/components/Map/EditableMapV2';
 import type { FeatureName } from 'src/features';
@@ -17,15 +17,19 @@ rstest.mock('src/features', () => ({
   useFeatureEnabled: (name: FeatureName) => name === 'Boundary File Upload' && flags.boundaryFileUpload,
 }));
 
-// Mapbox needs a real GL context, so stand in for the map, record the boundary handed to it, and
-// expose its undo, redo, and edit controls as plain buttons.
+// Mapbox needs a real GL context, so stand in for the map, record the boundary handed to it on
+// every render and on every mount, and expose its controls as plain buttons.
 const mapBoundaries = rstest.hoisted(() => [] as (FeatureCollection | undefined)[]);
+const mapMounts = rstest.hoisted(() => [] as (FeatureCollection | undefined)[]);
 const mapEdit = rstest.hoisted(() => ({ boundary: undefined as FeatureCollection | undefined }));
 
-rstest.mock('src/components/Map/EditableMapV2', () => ({
-  __esModule: true,
-  default: ({ editableBoundary, onEditableBoundaryChanged, onRedo, onUndo }: EditableMapProps) => {
+rstest.mock('src/components/Map/EditableMapV2', () => {
+  const MockEditableMap = ({ editableBoundary, onEditableBoundaryChanged, onRedo, onUndo }: EditableMapProps) => {
     mapBoundaries.push(editableBoundary);
+    useEffect(() => {
+      mapMounts.push(editableBoundary);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
     return (
       <div>
         <button disabled={!onUndo} onClick={() => onUndo?.()}>
@@ -38,8 +42,10 @@ rstest.mock('src/components/Map/EditableMapV2', () => ({
         <button onClick={() => onEditableBoundaryChanged(mapEdit.boundary)}>map edit boundary</button>
       </div>
     );
-  },
-}));
+  };
+
+  return { __esModule: true, default: MockEditableMap };
+});
 
 const PARSE_URL = '/api/v1/tracking/draftSites/boundaryFile';
 
@@ -80,6 +86,10 @@ const EDITED_BOUNDARY: FeatureCollection = {
 
 const site = buildDraftPlantingSite();
 
+const lastMountedGeometry = () => mapMounts[mapMounts.length - 1]?.features[0]?.geometry;
+
+const onMap = (polygon: Polygon): MultiPolygon => ({ type: 'MultiPolygon', coordinates: [polygon.coordinates] });
+
 const polygonsCombinedBanner = (numPolygons: number) =>
   strings.formatString(strings.SITE_BOUNDARY_POLYGONS_COMBINED, numPolygons) as string;
 
@@ -111,6 +121,7 @@ describe('SiteBoundary', () => {
   beforeEach(() => {
     flags.boundaryFileUpload = false;
     mapBoundaries.length = 0;
+    mapMounts.length = 0;
     mapEdit.boundary = EDITED_BOUNDARY;
   });
 
@@ -440,5 +451,108 @@ describe('SiteBoundary', () => {
     expect(screen.getByText(/site\.geojson/)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: strings.REPLACE_FILE })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: strings.REMOVE })).toBeInTheDocument();
+  });
+
+  describe('refitting the map to the uploaded file', () => {
+    const uploadThenReplace = async (user: ReturnType<typeof renderSiteBoundary>['user']) => {
+      mockPost(PARSE_URL, {
+        areaHa: 480,
+        filename: 'site.geojson',
+        format: 'GeoJSON',
+        geometry: GEOMETRY,
+        numPolygons: 1,
+      });
+      await uploadBoundaryFile(user, 'site.geojson');
+      expect(await screen.findByText(/site\.geojson/)).toBeInTheDocument();
+
+      mockPost(PARSE_URL, {
+        areaHa: 500,
+        filename: 'replacement.geojson',
+        format: 'GeoJSON',
+        geometry: OTHER_GEOMETRY,
+        numPolygons: 1,
+      });
+      await user.click(screen.getByRole('button', { name: strings.REPLACE_FILE }));
+      await submitUploadModal(user, 'replacement.geojson');
+      expect(await screen.findByText(/replacement\.geojson/)).toBeInTheDocument();
+      await waitFor(() => expect(lastMountedGeometry()).toEqual(onMap(OTHER_GEOMETRY)));
+    };
+
+    it('refits the map to the earlier file when undo goes back past a replacement', async () => {
+      flags.boundaryFileUpload = true;
+      const { user } = renderSiteBoundary();
+
+      await uploadThenReplace(user);
+      const mountsBeforeUndo = mapMounts.length;
+
+      await user.click(screen.getByRole('button', { name: 'map undo' }));
+
+      expect(await screen.findByText(/site\.geojson/)).toBeInTheDocument();
+      await waitFor(() => expect(mapMounts.length).toBeGreaterThan(mountsBeforeUndo));
+      expect(lastMountedGeometry()).toEqual(onMap(GEOMETRY));
+    });
+
+    it('refits the map to the replacement file when the undone replacement is redone', async () => {
+      flags.boundaryFileUpload = true;
+      const { user } = renderSiteBoundary();
+
+      await uploadThenReplace(user);
+      await user.click(screen.getByRole('button', { name: 'map undo' }));
+      await waitFor(() => expect(lastMountedGeometry()).toEqual(onMap(GEOMETRY)));
+      const mountsBeforeRedo = mapMounts.length;
+
+      await user.click(screen.getByRole('button', { name: 'map redo' }));
+
+      expect(await screen.findByText(/replacement\.geojson/)).toBeInTheDocument();
+      await waitFor(() => expect(mapMounts.length).toBeGreaterThan(mountsBeforeRedo));
+      expect(lastMountedGeometry()).toEqual(onMap(OTHER_GEOMETRY));
+    });
+
+    it('does not refit the map when the user edits the uploaded boundary on the map', async () => {
+      flags.boundaryFileUpload = true;
+      mockPost(PARSE_URL, {
+        areaHa: 480,
+        filename: 'site.geojson',
+        format: 'GeoJSON',
+        geometry: GEOMETRY,
+        numPolygons: 1,
+      });
+      const { user } = renderSiteBoundary();
+
+      await uploadBoundaryFile(user, 'site.geojson');
+      await waitFor(() => expect(lastMountedGeometry()).toEqual(onMap(GEOMETRY)));
+      const mountsBeforeEdit = mapMounts.length;
+
+      await user.click(screen.getByRole('button', { name: 'map edit boundary' }));
+
+      await waitFor(() => expect(mapBoundaries[mapBoundaries.length - 1]).toEqual(EDITED_BOUNDARY));
+      expect(mapMounts).toHaveLength(mountsBeforeEdit);
+    });
+
+    it('does not refit the map when undoing an edit made to the same uploaded file', async () => {
+      flags.boundaryFileUpload = true;
+      mockPost(PARSE_URL, {
+        areaHa: 480,
+        filename: 'site.geojson',
+        format: 'GeoJSON',
+        geometry: GEOMETRY,
+        numPolygons: 1,
+      });
+      const { user } = renderSiteBoundary();
+
+      await uploadBoundaryFile(user, 'site.geojson');
+      await waitFor(() => expect(lastMountedGeometry()).toEqual(onMap(GEOMETRY)));
+      await user.click(screen.getByRole('button', { name: 'map edit boundary' }));
+      await waitFor(() => expect(mapBoundaries[mapBoundaries.length - 1]).toEqual(EDITED_BOUNDARY));
+      const mountsBeforeUndo = mapMounts.length;
+
+      await user.click(screen.getByRole('button', { name: 'map undo' }));
+
+      await waitFor(() =>
+        expect(mapBoundaries[mapBoundaries.length - 1]?.features[0]?.geometry).toEqual(onMap(GEOMETRY))
+      );
+      expect(screen.getByText(/site\.geojson/)).toBeInTheDocument();
+      expect(mapMounts).toHaveLength(mountsBeforeUndo);
+    });
   });
 });
