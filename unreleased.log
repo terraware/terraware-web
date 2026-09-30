@@ -1,3 +1,4 @@
+6211470a Update dependency undici to v8.10.2 [SECURITY] (#6566)
 617c8b0b Bump ip-address from 10.4.0 to 10.7.2 (#6551)
 61743602 SW-8919 Include current (sub)stratum names in observation CSV (#6552)
 345929cd Change values for survival rates (#6571)
