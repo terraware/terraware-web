@@ -21,6 +21,7 @@ import { MinimalStratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
+import DrawingBoundaryStatus from './DrawingBoundaryStatus';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import UploadBoundaryModal, { ParsedBoundary } from './UploadBoundaryModal';
 import UploadedBoundarySummary, { UploadedBoundaryFile } from './UploadedBoundarySummary';
@@ -268,7 +269,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
     void onEditableBoundaryChanged(undefined);
   }, [onEditableBoundaryChanged]);
 
-  const onReplaceUploadedFile = useCallback(() => setShowUploadModal(true), []);
+  const onOpenUploadModal = useCallback(() => setShowUploadModal(true), []);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
@@ -307,9 +308,10 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
             <UploadedBoundarySummary
               file={uploadedFile}
               onRemove={onRemoveUploadedFile}
-              onReplace={onReplaceUploadedFile}
+              onReplace={onOpenUploadModal}
             />
           )}
+          {!uploadedFile && method === 'draw' && <DrawingBoundaryStatus onUploadInstead={onOpenUploadModal} />}
         </>
       )}
       <Box display='flex' flexDirection='column' flexGrow={1} position='relative'>
