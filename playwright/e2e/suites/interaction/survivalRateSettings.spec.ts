@@ -64,7 +64,7 @@ test.describe('SurvivalRateSettingsTests', () => {
       .locator('tr')
       .filter({ hasText: /banana/i })
       .first();
-    await bananaRow.locator('input[type="number"]').fill('400');
+    await bananaRow.locator('input[type="number"]').fill('800');
 
     // Set all remaining plots to observation data
     for (let i = 1; i < plotCount; i++) {
@@ -76,11 +76,14 @@ test.describe('SurvivalRateSettingsTests', () => {
     await page.locator('#saveSettings').click();
     await expect(page.getByText('t0 set for Permanent Plots')).toBeVisible({ timeout: 60000 });
 
+    // wait for survival rate to be recalculated
+    await page.waitForTimeout(10000);
+
     // Navigate to Dashboard
     await openNavItem(page, 'Plantings', 'Dashboard');
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();
 
-    await expect(page.getByTestId('survival-rate-value')).toHaveText('90%');
+    await expect(page.getByTestId('survival-rate-value')).toHaveText('88%');
   });
 });
