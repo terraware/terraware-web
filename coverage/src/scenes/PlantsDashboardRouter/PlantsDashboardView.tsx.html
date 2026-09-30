@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.31% </span>
+                <span class="strong">84.44% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>43/51</span>
+                <span class='fraction'>38/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.93% </span>
+                <span class="strong">58.03% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>66/118</span>
+                <span class='fraction'>65/112</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.31% </span>
+                <span class="strong">84.44% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>43/51</span>
+                <span class='fraction'>38/45</span>
             </div>
         
             
@@ -449,17 +449,7 @@
 <a name='L384'></a><a href='#L384'>384</a>
 <a name='L385'></a><a href='#L385'>385</a>
 <a name='L386'></a><a href='#L386'>386</a>
-<a name='L387'></a><a href='#L387'>387</a>
-<a name='L388'></a><a href='#L388'>388</a>
-<a name='L389'></a><a href='#L389'>389</a>
-<a name='L390'></a><a href='#L390'>390</a>
-<a name='L391'></a><a href='#L391'>391</a>
-<a name='L392'></a><a href='#L392'>392</a>
-<a name='L393'></a><a href='#L393'>393</a>
-<a name='L394'></a><a href='#L394'>394</a>
-<a name='L395'></a><a href='#L395'>395</a>
-<a name='L396'></a><a href='#L396'>396</a>
-<a name='L397'></a><a href='#L397'>397</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L387'></a><a href='#L387'>387</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -514,11 +504,6 @@
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -548,9 +533,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -558,9 +540,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -856,7 +836,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
-import { useMatch, useParams, useSearchParams } from 'react-router';
+import { useParams } from 'react-router';
 &nbsp;
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -910,11 +890,6 @@ export default function PlantsDashboardView({
   const isProjectSelected = typeof projectId === 'number';
 &nbsp;
   const { plantingSiteId: plantingSiteIdParam } = useParams&lt;{ plantingSiteId: string }&gt;();
-  const [searchParams] = useSearchParams();
-  const plantsDashboardMatch = useMatch(APP_PATHS.PLANTS_DASHBOARD);
-  const plantingSiteDashboardMatch = useMatch(APP_PATHS.PLANTING_SITE_DASHBOARD);
-  const isDashboardRoute = plantsDashboardMatch !== null || plantingSiteDashboardMatch !== null;
-  const urlOrganizationId = searchParams.get('organizationId');
 &nbsp;
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId(PREFERENCE_NAME);
 &nbsp;
@@ -945,20 +920,15 @@ export default function PlantsDashboardView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plantingSiteIdParam]);
 &nbsp;
-  const isUrlForSelectedOrganization =
-    urlOrganizationId === null || <span class="branch-1 cbranch-no" title="branch not covered" >Number(urlOrganizationId) === selectedOrganization?.id;</span>
-&nbsp;
   useEffect(() =&gt; {
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (
+    if (
       orgMode &amp;&amp;
-      isDashboardRoute &amp;&amp;
-<span class="branch-2 cbranch-no" title="branch not covered" >      isUrlForSelectedOrganization </span>&amp;&amp;
-<span class="branch-3 cbranch-no" title="branch not covered" >      typeof selectedPlantingSiteId === 'number' </span>&amp;&amp;
-<span class="branch-4 cbranch-no" title="branch not covered" >      Number(plantingSiteIdParam) !== selectedPlantingSiteId</span>
+      typeof selectedPlantingSiteId === 'number' &amp;&amp;
+      Number(plantingSiteIdParam) !== selectedPlantingSiteId
     ) {
-<span class="cstat-no" title="statement not covered" >      navigate(APP_PATHS.PLANTING_SITE_DASHBOARD.replace(':plantingSiteId', selectedPlantingSiteId.toString()));</span>
+      navigate(APP_PATHS.PLANTING_SITE_DASHBOARD.replace(':plantingSiteId', selectedPlantingSiteId.toString()));
     }
-  }, [isDashboardRoute, isUrlForSelectedOrganization, navigate, orgMode, plantingSiteIdParam, selectedPlantingSiteId]);
+  }, [navigate, orgMode, plantingSiteIdParam, selectedPlantingSiteId]);
 &nbsp;
   const { plantingSite } = usePlantingSite(
     selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId
@@ -1258,7 +1228,7 @@ export default function PlantsDashboardView({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-30T18:20:35.084Z
+                at 2026-09-30T18:20:43.401Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
