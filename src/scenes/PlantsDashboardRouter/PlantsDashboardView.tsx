@@ -1,5 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
+import { useMatch, useParams, useSearchParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -53,6 +53,11 @@ export default function PlantsDashboardView({
   const isProjectSelected = typeof projectId === 'number';
 
   const { plantingSiteId: plantingSiteIdParam } = useParams<{ plantingSiteId: string }>();
+  const [searchParams] = useSearchParams();
+  const plantsDashboardMatch = useMatch(APP_PATHS.PLANTS_DASHBOARD);
+  const plantingSiteDashboardMatch = useMatch(APP_PATHS.PLANTING_SITE_DASHBOARD);
+  const isDashboardRoute = plantsDashboardMatch !== null || plantingSiteDashboardMatch !== null;
+  const urlOrganizationId = searchParams.get('organizationId');
 
   const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId(PREFERENCE_NAME);
 
@@ -83,15 +88,20 @@ export default function PlantsDashboardView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plantingSiteIdParam]);
 
+  const isUrlForSelectedOrganization =
+    urlOrganizationId === null || Number(urlOrganizationId) === selectedOrganization?.id;
+
   useEffect(() => {
     if (
       orgMode &&
+      isDashboardRoute &&
+      isUrlForSelectedOrganization &&
       typeof selectedPlantingSiteId === 'number' &&
       Number(plantingSiteIdParam) !== selectedPlantingSiteId
     ) {
       navigate(APP_PATHS.PLANTING_SITE_DASHBOARD.replace(':plantingSiteId', selectedPlantingSiteId.toString()));
     }
-  }, [navigate, orgMode, plantingSiteIdParam, selectedPlantingSiteId]);
+  }, [isDashboardRoute, isUrlForSelectedOrganization, navigate, orgMode, plantingSiteIdParam, selectedPlantingSiteId]);
 
   const { plantingSite } = usePlantingSite(
     selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId
