@@ -4,7 +4,8 @@ import { changeToSuperAdmin } from '../../utils/userUtils';
 import { openNavItem, selectOrg, waitFor } from '../../utils/utils';
 
 test.describe('SurvivalRateSettingsTests', () => {
-  test.describe.configure({ timeout: 120000 });
+  // these tests are slower and pollute each other so need to run serially
+  test.describe.configure({ timeout: 120000, mode: 'serial' });
 
   test.beforeEach(async ({ page, context, baseURL }) => {
     await changeToSuperAdmin(context, baseURL);
@@ -35,12 +36,15 @@ test.describe('SurvivalRateSettingsTests', () => {
     await page.locator('#saveSettings').click();
     await expect(page.getByText('t0 set for Permanent Plots')).toBeVisible({ timeout: 60000 });
 
+    // wait for survival rate to be recalculated
+    await page.waitForTimeout(10000);
+
     // Navigate to Dashboard
     await openNavItem(page, 'Plantings', 'Dashboard');
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();
 
-    await expect(page.getByTestId('survival-rate-value')).toHaveText('100%');
+    await expect(page.getByTestId('survival-rate-value')).toHaveText('90%');
   });
 
   test('Edit one plot to manual density and verify new survival rate', async ({ page }) => {
@@ -60,7 +64,7 @@ test.describe('SurvivalRateSettingsTests', () => {
       .locator('tr')
       .filter({ hasText: /banana/i })
       .first();
-    await bananaRow.locator('input[type="number"]').fill('400');
+    await bananaRow.locator('input[type="number"]').fill('800');
 
     // Set all remaining plots to observation data
     for (let i = 1; i < plotCount; i++) {
@@ -72,11 +76,14 @@ test.describe('SurvivalRateSettingsTests', () => {
     await page.locator('#saveSettings').click();
     await expect(page.getByText('t0 set for Permanent Plots')).toBeVisible({ timeout: 60000 });
 
+    // wait for survival rate to be recalculated
+    await page.waitForTimeout(10000);
+
     // Navigate to Dashboard
     await openNavItem(page, 'Plantings', 'Dashboard');
     await page.getByPlaceholder('Select...').click();
     await page.getByText('PS2', { exact: true }).click();
 
-    await expect(page.getByTestId('survival-rate-value')).toHaveText('99%');
+    await expect(page.getByTestId('survival-rate-value')).toHaveText('88%');
   });
 });

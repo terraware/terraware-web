@@ -1541,6 +1541,7 @@ OTHERS,Otros,9a598a95
 OUNCES,Onzas,4ae3cfe8
 OUTDOORS,En el exterior,38de141f
 OUTPLANT,Replantar en el exterior,47a0a210
+OUTSIDE_CURRENT_SITE,Fuera del sitio actual,07671fdb
 OVER_WORD_LIMIT,Sobre el límite de palabras,8e2d9bd4
 OVERALL_SCORE,Puntaje total,1d6cdabe
 OVERDUE,Atrasado,90d8f429
@@ -2394,6 +2395,7 @@ STRATA_LABEL,Estratos,3149f6f8
 STRATIFICATION,Estratificación,f19a442c
 STRATUM,Estrato,79b6bcfe
 STRATUM_BOUNDARIES,Límites del estrato,418d687a
+STRATUM_CURRENT,Estrato (actual),5ad69b38
 STRATUM_GEOMETRY_CHANGED,La geometría para {0} cambió el {1},9eec74cc
 STRATUM_NAME_IN_USE,El nombre del estrato ya está en uso.,a4170ff3
 STRATUM_NAME_MAXIMUM_LENGTH,El nombre del estrato debe tener 15 caracteres o menos.,905761e0
@@ -2433,6 +2435,7 @@ SUBSTRATE_BEFORE,Sustrato (antes),34fc5273
 SUBSTRATE_NOTES,Notas de sustrato,c0562901
 SUBSTRATUM,Subestrato,2b98a6d5
 SUBSTRATUM_BOUNDARIES,Límites del subestrato,71b65a41
+SUBSTRATUM_CURRENT,Subestrato (actual),f7635ca6
 SUBSTRATUM_NAME_IN_USE,El nombre del subestrato ya está en uso.,831365cd
 SUBSTRATUM_PLANTING_COMPLETED_SUCCESS,Subestratos marcados como Plantación Completa.,e10cc879
 SUBSTRATUM_PLANTING_UNCOMPLETED_SUCCESS,Subestratos marcados como Plantación Incompleta.,7478695b
