@@ -54,7 +54,6 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
   } = useObservationFilters();
   const { selectedOrganization } = useOrganization();
 
-  // Same arguments as useFilteredObservationResults, so the options come from the list's cache entry.
   const observationResultsResponse = useListObservationResults({
     depth: 'Stratum',
     organizationId: plotType === 'assigned' ? selectedOrganization?.id : undefined,
