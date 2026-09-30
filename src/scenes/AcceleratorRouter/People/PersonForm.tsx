@@ -17,6 +17,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 type PersonFormProps = {
   busy?: boolean;
   emailEnabled?: boolean;
+  hideEdit?: boolean;
   emailError?: string;
   roleError?: string;
   saveDisabled?: boolean;
@@ -28,8 +29,19 @@ type PersonFormProps = {
 };
 
 export default function PersonForm(props: PersonFormProps): JSX.Element {
-  const { busy, emailEnabled, emailError, roleError, saveDisabled, user, onCancel, onChange, onEmailBlur, onSave } =
-    props;
+  const {
+    busy,
+    emailEnabled,
+    hideEdit,
+    emailError,
+    roleError,
+    saveDisabled,
+    user,
+    onCancel,
+    onChange,
+    onEmailBlur,
+    onSave,
+  } = props;
 
   const { isMobile } = useDeviceInfo();
   const { activeLocale } = useLocalization();
@@ -117,6 +129,7 @@ export default function PersonForm(props: PersonFormProps): JSX.Element {
   return (
     <PageForm
       busy={busy}
+      hideEdit={hideEdit}
       cancelID='cancelEditUser'
       onCancel={onCancel}
       onSave={onSaveHandler}
