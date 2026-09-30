@@ -107,18 +107,18 @@ export default function WithdrawalOverview({
     {
       title: strings.TO_STRATUM,
       data: reassignedValue(
-        (hasSiteReassignment && delivery ? locationNames([delivery], 'stratum') : '') ||
-          withdrawalSummary?.stratumName ||
-          '',
+        hasSiteReassignment
+          ? locationNames(delivery ? [delivery] : [], 'stratum')
+          : withdrawalSummary?.stratumName ?? '',
         locationNames(crossSiteDeliveries, 'stratum')
       ),
     },
     {
       title: strings.TO_SUBSTRATUM,
       data: reassignedValue(
-        (hasSiteReassignment && delivery ? locationNames([delivery], 'substratum') : '') ||
-          withdrawalSummary?.substratumShortName ||
-          '',
+        hasSiteReassignment
+          ? locationNames(delivery ? [delivery] : [], 'substratum')
+          : withdrawalSummary?.substratumShortName ?? '',
         locationNames(crossSiteDeliveries, 'substratum')
       ),
     },
