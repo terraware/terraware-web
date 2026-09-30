@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.37% </span>
+                <span class="strong">4.81% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>5/93</span>
+                <span class='fraction'>4/83</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">4.34% </span>
+                <span class="strong">5.88% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/23</span>
+                <span class='fraction'>1/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.26% </span>
+                <span class="strong">5.35% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/57</span>
+                <span class='fraction'>3/56</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">5.37% </span>
+                <span class="strong">4.81% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>5/93</span>
+                <span class='fraction'>4/83</span>
             </div>
         
             
@@ -416,22 +416,7 @@
 <a name='L351'></a><a href='#L351'>351</a>
 <a name='L352'></a><a href='#L352'>352</a>
 <a name='L353'></a><a href='#L353'>353</a>
-<a name='L354'></a><a href='#L354'>354</a>
-<a name='L355'></a><a href='#L355'>355</a>
-<a name='L356'></a><a href='#L356'>356</a>
-<a name='L357'></a><a href='#L357'>357</a>
-<a name='L358'></a><a href='#L358'>358</a>
-<a name='L359'></a><a href='#L359'>359</a>
-<a name='L360'></a><a href='#L360'>360</a>
-<a name='L361'></a><a href='#L361'>361</a>
-<a name='L362'></a><a href='#L362'>362</a>
-<a name='L363'></a><a href='#L363'>363</a>
-<a name='L364'></a><a href='#L364'>364</a>
-<a name='L365'></a><a href='#L365'>365</a>
-<a name='L366'></a><a href='#L366'>366</a>
-<a name='L367'></a><a href='#L367'>367</a>
-<a name='L368'></a><a href='#L368'>368</a>
-<a name='L369'></a><a href='#L369'>369</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L354'></a><a href='#L354'>354</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -441,21 +426,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
 <span class="cline-any cline-yes">5x</span>
@@ -810,21 +780,6 @@ import { useSyncNavigate } from './useSyncNavigate';
 export default function useNavigateTo() {
   const navigate = useSyncNavigate();
 &nbsp;
-  const searchParamsWithMapViewState = <span class="fstat-no" title="function not covered" >() =&gt; {</span>
-    const params = <span class="cstat-no" title="statement not covered" >new URLSearchParams(location.search);</span>
-    const newParams = <span class="cstat-no" title="statement not covered" >new URLSearchParams();</span>
-<span class="cstat-no" title="statement not covered" >    if (params.has('lat')) {</span>
-<span class="cstat-no" title="statement not covered" >      newParams.set('lat', params.get('lat')!);</span>
-    }
-<span class="cstat-no" title="statement not covered" >    if (params.has('lng')) {</span>
-<span class="cstat-no" title="statement not covered" >      newParams.set('lng', params.get('lng')!);</span>
-    }
-<span class="cstat-no" title="statement not covered" >    if (params.has('zoom')) {</span>
-<span class="cstat-no" title="statement not covered" >      newParams.set('zoom', params.get('zoom')!);</span>
-    }
-<span class="cstat-no" title="statement not covered" >    return newParams;</span>
-  };
-&nbsp;
   return useMemo(
     () =&gt; ({
       goToAccelerator: <span class="fstat-no" title="function not covered" >() =&gt; {</span>
@@ -832,7 +787,7 @@ export default function useNavigateTo() {
       },
 &nbsp;
       goToAcceleratorActivityCreate: <span class="fstat-no" title="function not covered" >(projectId: number) =&gt; {</span>
-        const params = <span class="cstat-no" title="statement not covered" >searchParamsWithMapViewState();</span>
+        const params = <span class="cstat-no" title="statement not covered" >new URLSearchParams();</span>
 <span class="cstat-no" title="statement not covered" >        params.set('source', window.location.pathname);</span>
 <span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
@@ -841,7 +796,7 @@ export default function useNavigateTo() {
       },
 &nbsp;
       goToAcceleratorActivityEdit: <span class="fstat-no" title="function not covered" >(projectId: number, activityId: number) =&gt; {</span>
-        const params = <span class="cstat-no" title="statement not covered" >searchParamsWithMapViewState();</span>
+        const params = <span class="cstat-no" title="statement not covered" >new URLSearchParams();</span>
 <span class="cstat-no" title="statement not covered" >        params.set('source', window.location.pathname);</span>
 <span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.ACCELERATOR_ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`).replace(
@@ -853,7 +808,7 @@ export default function useNavigateTo() {
       },
 &nbsp;
       goToAcceleratorActivityLog: <span class="fstat-no" title="function not covered" >(activityId?: number) =&gt; {</span>
-        const params = <span class="cstat-no" title="statement not covered" >searchParamsWithMapViewState();</span>
+        const params = <span class="cstat-no" title="statement not covered" >new URLSearchParams();</span>
 <span class="cstat-no" title="statement not covered" >        if (activityId !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >          params.set('activityId', activityId.toString());</span>
         }
@@ -883,7 +838,7 @@ export default function useNavigateTo() {
       },
 &nbsp;
       goToAcceleratorProject: <span class="fstat-no" title="function not covered" >(projectId: number, activityId?: number, tab?: string) =&gt; {</span>
-        const params = <span class="cstat-no" title="statement not covered" >searchParamsWithMapViewState();</span>
+        const params = <span class="cstat-no" title="statement not covered" >new URLSearchParams();</span>
 <span class="cstat-no" title="statement not covered" >        if (activityId !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >          params.set('activityId', activityId.toString());</span>
 <span class="cstat-no" title="statement not covered" >          if (tab) {</span>
@@ -957,7 +912,7 @@ export default function useNavigateTo() {
 <span class="cstat-no" title="statement not covered" >        navigate({ pathname: APP_PATHS.REPORTS_EDIT.replace(':reportId', `${reportId}`) }),</span>
 &nbsp;
       goToActivityCreate: <span class="fstat-no" title="function not covered" >(projectId: number) =&gt; {</span>
-        const params = <span class="cstat-no" title="statement not covered" >searchParamsWithMapViewState();</span>
+        const params = <span class="cstat-no" title="statement not covered" >new URLSearchParams();</span>
 <span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.ACTIVITY_LOG_NEW.replace(':projectId', `${projectId}`),
           search: params.toString(),
@@ -965,7 +920,7 @@ export default function useNavigateTo() {
       },
 &nbsp;
       goToActivityEdit: <span class="fstat-no" title="function not covered" >(projectId: number, activityId: number) =&gt; {</span>
-        const params = <span class="cstat-no" title="statement not covered" >searchParamsWithMapViewState();</span>
+        const params = <span class="cstat-no" title="statement not covered" >new URLSearchParams();</span>
 <span class="cstat-no" title="statement not covered" >        navigate({</span>
           pathname: APP_PATHS.ACTIVITY_LOG_EDIT.replace(':projectId', `${projectId}`).replace(
             ':activityId',
@@ -976,7 +931,7 @@ export default function useNavigateTo() {
       },
 &nbsp;
       goToActivityLog: <span class="fstat-no" title="function not covered" >(activityId?: number) =&gt; {</span>
-        const params = <span class="cstat-no" title="statement not covered" >searchParamsWithMapViewState();</span>
+        const params = <span class="cstat-no" title="statement not covered" >new URLSearchParams();</span>
 <span class="cstat-no" title="statement not covered" >        if (activityId !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >          params.set('activityId', activityId.toString());</span>
         }
@@ -1174,7 +1129,7 @@ export default function useNavigateTo() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-09-30T18:04:52.253Z
+                at 2026-09-30T18:20:35.084Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
