@@ -255,7 +255,7 @@ AVERAGE_STRATA_SURVIVAL_RATE,Taux moyen de survie des strates,1aab76e2
 AVERAGE_WOOD_DENSITY,Densité moyenne du bois (kb/m3),b413c9a9
 AWAITING_CHECK_IN,En attente d'enregistrement,11dee61b
 AWAITING_PROCESSING,En attente de traitement,802b73ca
-BACK,Retour,2e8211b0
+BACK,Précédent,2e8211b0
 BACK_TO_TERRAWARE,Retour à Terraware,a22174ad
 BAG_ID,Identifiant du sac,1eaa1440
 BASELINE,Référence,332af00e
@@ -284,8 +284,8 @@ BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR,Veuillez sélectionner au moins un
 BI_ANNUAL,Semestriel,76d69272
 BIODIVERSITY,Biodiversité,fa436482
 BIOMASS_EMPTY_STATE_MESSAGE_1,Il n'y a pas d'Observations ad hoc de parcelles pour le moment.,7dd9cdf0
-BIOMASS_EMPTY_STATE_MESSAGE_2,Les observations pour la surveillance de la biomasse peuvent être enregistrées par le biais d'observations ad hoc sur les parcelles dans l'application mobile.,e9184a63
-BIOMASS_MONITORING,Surveillance de la biomasse,c249c88e
+BIOMASS_EMPTY_STATE_MESSAGE_2,Les observations pour le suivi de la biomasse peuvent être enregistrées par le biais d'observations ad hoc sur les parcelles dans l'application mobile.,e9184a63
+BIOMASS_MONITORING,Suivi de la biomasse,c249c88e
 BIOMASS_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre d'espèces d'arbres et d'arbustes observées et enregistrées comme vivantes.,cb7c376f
 BIOMASS_OBSERVATION_FILENAME_PREFIX,Observation-de-biomasse,15aec1fa
 BIOMASS_PLOT_DEAD_PLANTS_TOOLTIP,Plantes mortes correspond au nombre d’arbres et d’arbustes observés et enregistrés comme morts. Cela n’inclut pas les plantes enregistrées dans les quadrats ni d’autres espèces envahissantes ou menacées supplémentaires.,ea814e7f
@@ -913,7 +913,7 @@ HIDE_ALL,Tout masquer,465040a6
 HIDE_FILTERS,Masquer les filtres,0fdbb60d
 HIDE_ON_MAP,Masquer sur la carte,089ea8d7
 HIDE_TITLE_BAR,Masquer la barre de titre,e9b3ee43
-HIGH,Élevé,cb1efe60
+HIGH,Haute,cb1efe60
 HIGHEST,Le plus élevé,5c2f89d6
 HIGHLIGHTED_ACTIVITY,Activité mise en avant,483c0ed0
 HIGHLIGHTS,Points forts,a76b6c49
@@ -1169,7 +1169,7 @@ LOGGING,Exploitation forestière,b34b2e6e
 LONG_TERM_PERMANENT,Long terme/Permanent,566657d6
 LONGITUDE,Longitude,bec9ea21
 LOSS_RATE,Taux de perte,544aa2af
-LOW,Faible,ddedeca3
+LOW,Basse,ddedeca3
 LOWEST,Les plus faibles,b651e8a7
 MAKE_HIGHLIGHT,Créer une mise en avant,c3fda88f
 MANAGE_COLUMNS,Gérer les colonnes,1dba3733
@@ -1203,7 +1203,7 @@ MATCH_SPECIES_MODAL_DESCRIPTION,"Sélectionnez les correspondances pour les esp�
 MATCH_UNRECOGNIZED_SPECIES,Associez les espèces non reconnues,e8523786
 MATRIX_VIEW,Vue matricielle,0aeb01d3
 MAX,Max,7b696111
-MEASUREMENT_TIME,Temps de mesure,002a568f
+MEASUREMENT_TIME,Heure de mesure,002a568f
 MEDIA,Médias,933a1eee
 MEDIA_MIX,Mix média,699d2d86
 MEETING_URL,URL de la réunion,933a0ae3
@@ -1382,13 +1382,13 @@ NONE_SELECTED,Aucun·e sélectionné·e,61621b35
 NORTHEAST_CORNER,Coin nord-est,da4ddbf6
 NORTHEAST_CORNER_FIELD_LATITUDE,Latitude du coin nord-est du champ,8ac09e53
 NORTHEAST_CORNER_FIELD_LONGITUDE,Longitude du coin nord-est du champ,5a1a38ab
-NORTHEAST_CORNER_LATITUDE,Latitude de l’angle nord-est,b20d2d02
-NORTHEAST_CORNER_LONGITUDE,Longitude de l’angle nord-est,36173800
+NORTHEAST_CORNER_LATITUDE,Latitude du coin nord-est,b20d2d02
+NORTHEAST_CORNER_LONGITUDE,Longitude du coin nord-est,36173800
 NORTHWEST_CORNER,Coin nord-ouest,2c0842da
 NORTHWEST_CORNER_FIELD_LATITUDE,Latitude du coin nord-ouest du champ,b5ffb64a
 NORTHWEST_CORNER_FIELD_LONGITUDE,Longitude du coin nord-ouest du champ,8221fbe1
-NORTHWEST_CORNER_LATITUDE,Latitude de l’angle nord-ouest,bef5fb10
-NORTHWEST_CORNER_LONGITUDE,Longitude de l’angle nord-ouest,355e9d22
+NORTHWEST_CORNER_LATITUDE,Latitude du coin nord-ouest,bef5fb10
+NORTHWEST_CORNER_LONGITUDE,Longitude du coin nord-ouest,355e9d22
 NOT_ACCEPTED,Non accepté,c3102621
 NOT_APPLICABLE_FOR_AD_HOC_PLOTS,Non applicable aux parcelles ad hoc,3e9df420
 NOT_CALCULATED_FOR_TEMPORARY_PLOTS,Non calculé pour les parcelles temporaires.,ca983c30
@@ -1502,7 +1502,7 @@ OPPORTUNITIES_REQUIRED,Opportunités *,8d418e65
 OPT_IN,Fonctionnalités Opt-In,cbb9300b
 OPTIONAL,Facultatif,9f75363c
 OPTIONAL_GPS_COORDINATES_OF_PLOT,Optionnel : coordonnées GPS de la parcelle,c15f1313
-OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,Indiquez les coordonnées GPS de l’angle sud-ouest si la zone observée ne correspond pas à l’emplacement initial de la parcelle.,d5180b23
+OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,Indiquez les coordonnées GPS du coin sud-ouest si la zone observée ne correspond pas à l’emplacement initial de la parcelle.,d5180b23
 OPTIONAL_LATITUDE_OF_PLOT,Optionnel : Latitude de la parcelle,9de4497b
 OPTIONAL_LONGITUDE_OF_PLOT,Optionnel : Longitude de la parcelle,124fa9fb
 OR,OU,38d8953d
@@ -2288,13 +2288,13 @@ SOURCING,Source,dc1a071d
 SOUTHEAST_CORNER,Coin sud-est,cdf375aa
 SOUTHEAST_CORNER_FIELD_LATITUDE,Latitude du coin sud-est du champ,52ac9fd0
 SOUTHEAST_CORNER_FIELD_LONGITUDE,Longitude du coin sud-est du champ,d652fece
-SOUTHEAST_CORNER_LATITUDE,Latitude de l’angle sud-est,25510ec5
-SOUTHEAST_CORNER_LONGITUDE,Longitude de l’angle sud-est,a15c5f33
+SOUTHEAST_CORNER_LATITUDE,Latitude du coin sud-est,25510ec5
+SOUTHEAST_CORNER_LONGITUDE,Longitude du coin sud-est,a15c5f33
 SOUTHWEST_CORNER,Coin sud-ouest,4d23e84b
 SOUTHWEST_CORNER_FIELD_LATITUDE,Latitude du coin sud-ouest du champ,973b5a2d
 SOUTHWEST_CORNER_FIELD_LONGITUDE,Longitude du coin sud-ouest du champ,409e6323
-SOUTHWEST_CORNER_LATITUDE,Latitude de l’angle sud-ouest,11768ce8
-SOUTHWEST_CORNER_LONGITUDE,Longitude de l’angle sud-ouest,170c539d
+SOUTHWEST_CORNER_LATITUDE,Latitude du coin sud-ouest,11768ce8
+SOUTHWEST_CORNER_LONGITUDE,Longitude du coin sud-ouest,170c539d
 SPECIES,Espèces,bb344d18
 SPECIES_APPROVED,Espèces approuvées,448567d6
 SPECIES_CARD_DESCRIPTION,Voir les espèces qui sont référencées par vos entrées de semences et de plantes.,834fb3c8
@@ -2541,7 +2541,7 @@ THIS_PROJECT_HAS_NO_ACTIVITIES,Ce projet n’a aucune activité,cb693792
 THIS_REPORT_HAS_BEEN_APPROVED,Ce rapport a été approuvé.,030064cb
 THREATENED,Menacée,57ca76f3
 THUMBNAIL,Vignette,3196d372
-TIDE,Courant,9dd490e9
+TIDE,Marée,9dd490e9
 TIME,Temps,2132441e
 TIME_ZONE,Fuseau horaire,abc27841
 TIME_ZONE_REQUIRED,Fuseau horaire *,f1ee0610
@@ -2907,7 +2907,7 @@ YOU_ARE_ABOUT_TO_SUBMIT_THIS_SPECIES_DELIVERABLE,Voulez-vous vraiment soumettre 
 YOU_ARE_HERE,Vous êtes ici,183a5491
 YOU_CAN_NOW_CREATE_VIRTUAL_WALKTHROUGHS,Vous pouvez désormais créer des Visites Virtuelles dans Terraware. Consultez notre {0} pour plus de détails.,769f02b1
 YOU_HAVE_NOT_UPLOADED_ANY_PHOTOS_OR_VIDEOS,Vous n'avez téléchargé aucune photo ni vidéo.,f83261aa
-YOU_HAVE_NOT_UPLOADED_ANY_PLOT_CORNER_PHOTOS,Vous n'avez téléchargé aucune photo d'angle de parcelle.,4f10d7d3
+YOU_HAVE_NOT_UPLOADED_ANY_PLOT_CORNER_PHOTOS,Vous n'avez téléchargé aucune photo de coin de parcelle.,4f10d7d3
 YOU_HAVE_UNPUBLISHED_CHANGES,Vous avez des modifications non publiées,1825c403
 YOU_HAVE_X_VIRTUAL_WALKTHROUGHS,Vous avez {0} visites virtuelles,566e4d75
 YOUR_APPLICATIONS,Vos candidatures,7da0f423
