@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Message } from '@terraware/web-components';
@@ -73,6 +73,8 @@ type Stack = {
   errorAnnotations?: Feature[];
   siteBoundary?: FeatureCollection;
   uploadedFile?: UploadedBoundaryFile;
+  // distinguishes uploads, so the map can refit whenever undo/redo moves to a different file
+  uploadId?: number;
 };
 
 export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): JSX.Element {
@@ -87,10 +89,11 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
   const fileUploadEnabled = isEnabled('Boundary File Upload');
   const [method, setMethod] = useState<BoundaryMethod | undefined>();
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
-  // EditableMap only computes its view state on mount, so remount it to fit an uploaded boundary
-  const [mapKey, setMapKey] = useState<number>(0);
+  const lastUploadId = useRef<number>(0);
 
   const uploadedFile = siteBoundaryData?.uploadedFile;
+  // EditableMap only computes its view state on mount, so remount it to fit the current file's boundary
+  const mapKey = siteBoundaryData?.uploadId ?? 0;
 
   // construct union of multipolygons
   const boundary = useMemo<MultiPolygon | undefined>(
@@ -203,7 +206,7 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
    * Check for errors and mark annotations.
    */
   const onEditableBoundaryChanged = useCallback(
-    async (editableBoundary?: FeatureCollection, file?: UploadedBoundaryFile) => {
+    async (editableBoundary?: FeatureCollection, upload?: Pick<Stack, 'uploadedFile' | 'uploadId'>) => {
       const newBoundary = (editableBoundary && unionMultiPolygons(editableBoundary)) || undefined;
       const stratum = createStratumWith(newBoundary);
       const strata = stratum ? [stratum] : [];
@@ -221,12 +224,12 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
         errorAnnotations: errors,
         siteBoundary: editableBoundary,
         // edits to an uploaded boundary keep its file, but clearing the boundary drops it
-        uploadedFile: newBoundary ? file ?? siteBoundaryData?.uploadedFile : undefined,
+        ...(newBoundary ? upload ?? _.pick(siteBoundaryData, ['uploadedFile', 'uploadId']) : {}),
       });
     },
     // setSiteBoundaryData is not stable: it closes over the undo/redo stack index, so a callback
     // that pins an older copy will push onto a truncated stack and leave the index out of range
-    [setSiteBoundaryData, site, siteBoundaryData?.uploadedFile]
+    [setSiteBoundaryData, site, siteBoundaryData]
   );
 
   const onSelectMethod = useCallback((selected: BoundaryMethod) => {
@@ -259,14 +262,11 @@ export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): J
       setMethod('upload');
       setShowUploadModal(false);
 
-      // the remount has to wait for the boundary, since EditableMap fits its bounds on mount and
-      // applying the boundary is async
-      const apply = async () => {
-        await onEditableBoundaryChanged(featureCollectionOf(geometry, site.id), file);
-        setMapKey((current) => current + 1);
-      };
-
-      void apply();
+      lastUploadId.current += 1;
+      void onEditableBoundaryChanged(featureCollectionOf(geometry, site.id), {
+        uploadedFile: file,
+        uploadId: lastUploadId.current,
+      });
     },
     [onEditableBoundaryChanged, site.id]
   );
