@@ -371,6 +371,7 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
       const validSubstrates = getSubstratesAccordingToType(record.testType);
       if (!validSubstrates.find((substrate) => substrate.value === record.substrate)) {
         record.substrate = undefined;
+        record.substrateNotes = undefined;
       }
       const isCreate = record.id === -1;
       try {
@@ -593,31 +594,6 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
             <>
               <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
                 <Dropdown
-                  id={'substrate'}
-                  label={strings.SUBSTRATE}
-                  placeholder={strings.SELECT}
-                  options={getSubstratesAccordingToType(record?.testType)}
-                  onChange={onChangeCallback('substrate')}
-                  selectedValue={record?.substrate}
-                  fullWidth={true}
-                  disabled={readOnly}
-                  tooltipTitle={
-                    <>
-                      {strings.TOOLTIP_VIABILITY_TEST_SUBSTRATE}
-                      <LearnMoreLink
-                        onClick={() =>
-                          openTooltipLearnMoreModal({
-                            title: strings.SUBSTRATE,
-                            content: <LearnMoreModalContentSubstrate />,
-                          })
-                        }
-                      />
-                    </>
-                  }
-                />
-              </Grid>
-              <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
-                <Dropdown
                   id={'treatment'}
                   label={strings.TREATMENT}
                   placeholder={strings.SELECT}
@@ -641,6 +617,44 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
                   }
                 />
               </Grid>
+              <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+                <Dropdown
+                  id={'substrate'}
+                  label={strings.SUBSTRATE}
+                  placeholder={strings.SELECT}
+                  options={getSubstratesAccordingToType(record?.testType)}
+                  onChange={onChangeCallback('substrate')}
+                  selectedValue={record?.substrate}
+                  fullWidth={true}
+                  disabled={readOnly}
+                  tooltipTitle={
+                    <>
+                      {strings.TOOLTIP_VIABILITY_TEST_SUBSTRATE}
+                      <LearnMoreLink
+                        onClick={() =>
+                          openTooltipLearnMoreModal({
+                            title: strings.SUBSTRATE,
+                            content: <LearnMoreModalContentSubstrate />,
+                          })
+                        }
+                      />
+                    </>
+                  }
+                />
+              </Grid>
+              {record?.substrate && (
+                <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>
+                  <Textfield
+                    id='substrateNotes'
+                    label={strings.SUBSTRATE_NOTES}
+                    value={record.substrateNotes}
+                    onChange={onChangeCallback('substrateNotes')}
+                    type='textarea'
+                    styles={{ textarea: { height: 'calc(3lh + 16px)' } }}
+                    disabled={readOnly}
+                  />
+                </Grid>
+              )}
             </>
           )}
           <Grid item padding={theme.spacing(1, 3, 1, 5)} xs={12}>

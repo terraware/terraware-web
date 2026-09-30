@@ -152,16 +152,16 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
           {!isMobile && viabilityTest.testType !== 'Cut' && (
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
-                {strings.SUBSTRATE}
+                {strings.TREATMENT}
                 <IconTooltip
                   title={
                     <>
-                      {strings.TOOLTIP_VIABILITY_TEST_SUBSTRATE}
+                      {strings.TOOLTIP_VIABILITY_TEST_TREATMENT}
                       <LearnMoreLink
                         onClick={() =>
                           openTooltipLearnMoreModal({
-                            title: strings.SUBSTRATE,
-                            content: <LearnMoreModalContentSubstrate />,
+                            title: strings.TREATMENT,
+                            content: <LearnMoreModalContentTreatment />,
                           })
                         }
                       />
@@ -169,35 +169,12 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
                   }
                 />
               </Grid>
-              <Grid xs={12}>{viabilityTest.substrate}</Grid>
+              <Grid xs={12}>{viabilityTest.treatment}</Grid>
             </Grid>
           )}
         </Grid>
         <Grid item xs={12} display='flex'>
           {isMobile && viabilityTest.testType !== 'Cut' && (
-            <Grid xs={smallColumn}>
-              <Grid xs={12} sx={titleStyle}>
-                {strings.SUBSTRATE}
-                <IconTooltip
-                  title={
-                    <>
-                      {strings.TOOLTIP_VIABILITY_TEST_SUBSTRATE}
-                      <LearnMoreLink
-                        onClick={() =>
-                          openTooltipLearnMoreModal({
-                            title: strings.SUBSTRATE,
-                            content: <LearnMoreModalContentSubstrate />,
-                          })
-                        }
-                      />
-                    </>
-                  }
-                />
-              </Grid>
-              <Grid xs={12}>{viabilityTest.substrate}</Grid>
-            </Grid>
-          )}
-          {viabilityTest.testType !== 'Cut' && (
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
                 {strings.TREATMENT}
@@ -220,6 +197,29 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
               <Grid xs={12}>{viabilityTest.treatment}</Grid>
             </Grid>
           )}
+          {viabilityTest.testType !== 'Cut' && (
+            <Grid xs={smallColumn}>
+              <Grid xs={12} sx={titleStyle}>
+                {strings.SUBSTRATE}
+                <IconTooltip
+                  title={
+                    <>
+                      {strings.TOOLTIP_VIABILITY_TEST_SUBSTRATE}
+                      <LearnMoreLink
+                        onClick={() =>
+                          openTooltipLearnMoreModal({
+                            title: strings.SUBSTRATE,
+                            content: <LearnMoreModalContentSubstrate />,
+                          })
+                        }
+                      />
+                    </>
+                  }
+                />
+              </Grid>
+              <Grid xs={12}>{viabilityTest.substrate}</Grid>
+            </Grid>
+          )}
           {!isMobile && viabilityTest.testType !== 'Cut' && (
             <Grid xs={smallColumn}>
               <Grid xs={12} sx={titleStyle}>
@@ -236,6 +236,16 @@ export default function ViewViabilityTestModal(props: ViewViabilityTestModalProp
                 {strings.STAFF}
               </Grid>
               <Grid xs={12}>{viabilityTest.withdrawnByName}</Grid>
+            </Grid>
+          </Grid>
+        )}
+        {viabilityTest.substrateNotes && (
+          <Grid item xs={12}>
+            <Grid xs={12} sx={titleStyle}>
+              {strings.SUBSTRATE_NOTES}
+            </Grid>
+            <Grid xs={12} sx={{ whiteSpace: 'pre-wrap' }}>
+              {viabilityTest.substrateNotes}
             </Grid>
           </Grid>
         )}
