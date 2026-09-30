@@ -14,12 +14,6 @@ api.enhanceEndpoints({
     markAllRead: {
       invalidatesTags: [{ type: QueryTagTypes.Notifications, id: 'LIST' }],
     },
-    count: {
-      providesTags: [{ type: QueryTagTypes.Notifications, id: 'LIST' }],
-    },
-    read: {
-      providesTags: (_results, _error, id) => [{ type: QueryTagTypes.Notifications, id }],
-    },
     markRead: {
       invalidatesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Notifications, id: payload.id }],
     },

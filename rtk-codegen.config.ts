@@ -26,9 +26,6 @@ const config: ConfigFile = {
           !operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports/indicators')) ||
         operation.path.startsWith('/api/v1/accelerator/reports/{reportId}'),
     },
-    './src/queries/generated/clock.ts': {
-      filterEndpoints: (_, operation) => operation.path === '/api/v1/seedbank/clock',
-    },
     './src/queries/generated/countryBoundary.ts': {
       filterEndpoints: (_, operation) => operation.path === '/api/v1/countries/{countryCode}/boundary',
     },
@@ -103,7 +100,9 @@ const config: ConfigFile = {
         operation.path.startsWith('/api/v1/tracking/observations/{observationId}/splats'),
     },
     './src/queries/generated/plantingSites.ts': {
-      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/sites'),
+      filterEndpoints: (_, operation) =>
+        operation.path.startsWith('/api/v1/tracking/sites') &&
+        !operation.path.startsWith('/api/v1/tracking/sites/{id}/thumbnail'),
     },
     './src/queries/generated/preferences.ts': {
       filterEndpoints: (_, operation) =>

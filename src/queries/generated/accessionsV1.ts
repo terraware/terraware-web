@@ -129,6 +129,7 @@ export type GetViabilityTestPayload = {
     | 'Moss'
     | 'Perlite/Vermiculite'
     | 'None';
+  substrateNotes?: string;
   testResults?: ViabilityTestResultPayload[];
   testType: 'Lab' | 'Nursery' | 'Cut';
   totalSeedsGerminated?: number;
