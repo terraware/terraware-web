@@ -1,8 +1,11 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { ViewPhotosDialog } from '@terraware/web-components';
 
 import EventLogView from 'src/components/common/EventLog';
+import Link from 'src/components/common/Link';
+import { API_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
 import { EventLogEntryPayload } from 'src/queries/generated/events';
@@ -17,6 +20,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
   const { species } = useOrganizationSpecies();
+  const [openedPhotoUrl, setOpenedPhotoUrl] = useState<string>();
 
   const [list, { data: events, isLoading }] = useLazyListObservationEventsQuery();
 
@@ -100,7 +104,29 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
           </Box>
         )}
         {event.action.type === 'Created' && (
-          <Box>{strings.formatString(strings.EVENT_CREATED, event.subject.fullText)}</Box>
+          <Box>
+            {event.subject.type === 'ObservationPlotMedia' && event.subject.mediaKind === 'Photo' ? (
+              <Link
+                fontSize='16px'
+                onClick={() => {
+                  if (event.subject.type === 'ObservationPlotMedia') {
+                    setOpenedPhotoUrl(
+                      API_PATHS.OBSERVATION_PLOT_PHOTO.replace(
+                        '{observationId}',
+                        event.subject.observationId.toString()
+                      )
+                        .replace('{monitoringPlotId}', event.subject.monitoringPlotId.toString())
+                        .replace('{fileId}', event.subject.fileId.toString())
+                    );
+                  }
+                }}
+              >
+                {strings.formatString(strings.EVENT_ADDED, event.subject.fullText)}
+              </Link>
+            ) : (
+              strings.formatString(strings.EVENT_CREATED, event.subject.fullText)
+            )}
+          </Box>
         )}
         {event.action.type === 'Deleted' && (
           <Box>{strings.formatString(strings.EVENT_DELETED, event.subject.fullText)}</Box>
@@ -111,12 +137,23 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
   );
 
   return (
-    <EventLogView
-      events={events}
-      filterEvent={filterEvent}
-      isLoading={isLoading}
-      renderEventDescription={renderEventDescription}
-    />
+    <>
+      {openedPhotoUrl && (
+        <ViewPhotosDialog
+          initialSelectedSlide={0}
+          onClose={() => setOpenedPhotoUrl(undefined)}
+          open
+          photos={[{ url: openedPhotoUrl }]}
+          title={strings.PHOTOS}
+        />
+      )}
+      <EventLogView
+        events={events}
+        filterEvent={filterEvent}
+        isLoading={isLoading}
+        renderEventDescription={renderEventDescription}
+      />
+    </>
   );
 };
 
