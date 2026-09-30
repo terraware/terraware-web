@@ -672,6 +672,7 @@ EDIT_STANDARD_METRIC_CONFIRMATION,Edits to this standard metric will be applied 
 EDIT_STATUS,Edit Status,
 EDIT_SURVIVAL_RATE_SETTINGS_FOR,Edit Survival Rate Settings for {0},
 EDIT_TEMPORARY_PLOTS,Edit Temporary Plots,
+EDIT_VALUE,Edit value,Button to dismiss a measurement warning and return to editing the table.
 EDIT_VIABILITY,Edit Viability,
 EDIT_VIABILITY_TEST,Edit Viability Test,
 EDIT_VOTES,Edit Votes,
@@ -1028,6 +1029,7 @@ JOIN_EVENT_NAME,Join {0},
 JUST_SAVED,Just saved
 JUSTIFICATION,Justification,
 KEEP_ORIGINAL,Keep Original,
+KEEP_VALUE,Keep value,Button to confirm and save an unexpected measurement.
 KEY,Key,
 KEY_LESSONS,Key Lessons Learned,
 KEY_LESSONS_INSTRUCTIONS,"Provide details of key lessons learned during the project reporting period, including both positive and negative unintended consequences if applicable. (One-half page maximum.)",
@@ -2686,6 +2688,7 @@ UNDO_PLANTING_COMPLETE,Undo Planting Complete,
 UNDO_WITHDRAWAL,Undo Withdrawal,
 UNDO_WITHDRAWAL_CONFIRMATION,Are you sure you want to undo this withdrawal?,
 UNDONE_WITHDRAWAL_MESSAGE,This withdrawal was undone and the quantities were restored to the original batch.,
+UNEXPECTED_BIOMASS_MEASUREMENT,The value {0} you entered for {1} is unexpected. Please check that you entered the correct number.,Warning for an unexpected biomass measurement. {0} is the entered value and {1} is the field name including units.
 UNEXPECTED_ERROR,An unexpected error occurred.,
 UNFAVORABLE_WEATHER,Unfavorable Weather,
 UNIT,Unit,

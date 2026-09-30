@@ -2,7 +2,7 @@ import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { IconButton, useTheme } from '@mui/material';
-import { EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
+import { Button, DialogBox, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
 
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
@@ -25,6 +25,23 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   const { findSpeciesById } = useOrganizationSpecies();
   const params = useParams<{ observationId: string }>();
   const { strings } = useLocalization();
+  const [pendingMeasurement, setPendingMeasurement] = useState<{
+    fieldId: string;
+    row: TreeRow;
+    value: string;
+    label: string;
+  }>();
+
+  const measurementRanges = useMemo<Record<string, { max: number; label: string }>>(
+    () => ({
+      diameterAtBreastHeight: { max: 100, label: strings.DBH_CM },
+      pointOfMeasurement: { max: 2, label: strings.POM_M },
+      height: { max: 45, label: strings.HEIGHT_M },
+      treeCrownDiameter: { max: 1500, label: strings.CROWN_DIAMETER_CM },
+      shrubDiameter: { max: 300, label: strings.CROWN_DIAMETER_CM },
+    }),
+    [strings]
+  );
 
   const observationId = Number(params.observationId);
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
@@ -33,6 +50,12 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
 
   const [update] = useUpdateCompletedObservationPlotMutation();
   const [optimisticValues, setOptimisticValues] = useState<Record<number, Partial<TreeRow>>>({});
+
+  const dismissMeasurementWarning = useCallback(() => {
+    setPendingMeasurement(undefined);
+    // Refresh table data to discard the cell value cached by the table on blur.
+    setOptimisticValues((prev) => ({ ...prev }));
+  }, []);
 
   const updateObservation = useCallback(
     (updatePayload: UpdateObservationRequestPayload) => {
@@ -48,7 +71,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [observationId, results, update]
   );
 
-  const saveRecordedTree = useCallback(
+  const commitRecordedTree = useCallback(
     (fieldId: string, row: TreeRow, value: any, optimisticValue: any = value) => {
       if (value !== undefined) {
         setOptimisticValues((prev) => ({
@@ -64,6 +87,18 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       }
     },
     [updateObservation]
+  );
+
+  const saveRecordedTree = useCallback(
+    (fieldId: string, row: TreeRow, value: any, optimisticValue: any = value) => {
+      const range = measurementRanges[fieldId];
+      if (range && Number(value) > range.max) {
+        setPendingMeasurement({ fieldId, row, value: String(value), label: range.label });
+        return;
+      }
+      commitRecordedTree(fieldId, row, value, optimisticValue);
+    },
+    [commitRecordedTree, measurementRanges]
   );
 
   const saveBiomassSpecies = useCallback(
@@ -282,6 +317,39 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
 
   return (
     <>
+      {pendingMeasurement && (
+        <DialogBox
+          open={true}
+          title={pendingMeasurement.label}
+          size='medium'
+          onClose={dismissMeasurementWarning}
+          middleButtons={[
+            <Button
+              key='edit-value'
+              id='editMeasurementValue'
+              label={strings.EDIT_VALUE}
+              priority='secondary'
+              onClick={dismissMeasurementWarning}
+            />,
+            <Button
+              key='keep-value'
+              id='keepMeasurementValue'
+              label={strings.KEEP_VALUE}
+              type={'destructive'}
+              onClick={() => {
+                commitRecordedTree(pendingMeasurement.fieldId, pendingMeasurement.row, pendingMeasurement.value);
+                setPendingMeasurement(undefined);
+              }}
+            />,
+          ]}
+        >
+          {strings.formatString(
+            strings.UNEXPECTED_BIOMASS_MEASUREMENT,
+            pendingMeasurement.value,
+            pendingMeasurement.label
+          )}
+        </DialogBox>
+      )}
       {noteModalRow && (
         <TreeNoteModal
           description={noteModalRow.description ?? ''}
