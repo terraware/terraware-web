@@ -348,6 +348,32 @@ describe('SiteBoundary', () => {
     expect(screen.queryByRole('button', { name: strings.REMOVE })).not.toBeInTheDocument();
   });
 
+  it('returns to drawing when undoing an upload that replaced a drawn boundary', async () => {
+    flags.boundaryFileUpload = true;
+    mockPost(PARSE_URL, {
+      areaHa: 480,
+      filename: 'site.geojson',
+      format: 'GeoJSON',
+      geometry: GEOMETRY,
+      numPolygons: 1,
+    });
+    const { user } = renderSiteBoundary();
+
+    await user.click(methodTile(strings.DRAW_BOUNDARY_WITHIN_MAP));
+    await user.click(screen.getByRole('button', { name: 'map edit boundary' }));
+    await waitFor(() => expect(mapBoundaries[mapBoundaries.length - 1]).toEqual(EDITED_BOUNDARY));
+    await user.click(screen.getByRole('button', { name: strings.UPLOAD_A_FILE_INSTEAD }));
+    await submitUploadModal(user, 'site.geojson');
+    expect(await screen.findByText(/site\.geojson/)).toBeInTheDocument();
+
+    await user.click(screen.getByRole('button', { name: 'map undo' }));
+
+    expect(await screen.findByText(strings.SITE_BOUNDARY_DRAWING_ON_MAP)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: strings.UPLOAD_A_FILE_INSTEAD })).toBeInTheDocument();
+    expect(screen.queryByText(/site\.geojson/)).not.toBeInTheDocument();
+    expect(mapBoundaries[mapBoundaries.length - 1]).toEqual(EDITED_BOUNDARY);
+  });
+
   it('restores the uploaded file summary when an undone upload is redone', async () => {
     flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
