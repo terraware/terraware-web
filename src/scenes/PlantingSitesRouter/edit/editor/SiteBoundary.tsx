@@ -284,7 +284,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
         />
         {fileUploadEnabled && !boundary && !method && <BoundaryMethodChooser onSelect={onSelectMethod} />}
         {fileUploadEnabled && showUploadModal && (
-          <UploadBoundaryModal onClose={onCloseUploadModal} onSuccess={onUploadSuccess} siteId={site.id} />
+          <UploadBoundaryModal onClose={onCloseUploadModal} onSuccess={onUploadSuccess} />
         )}
       </Box>
     </Box>
