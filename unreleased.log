@@ -1,3 +1,4 @@
+9139f4f5 SW-8952 Don't let user add duplicate planting dates (#6577)
 2b81943f SW-8926 Warn users when they enter unexpected values in number fields (#6553)
 3299eef3 SW-8979 Update convention for photo events in Change History (#6579)
 01661ee3 SW-8969 Withdrawal Reassignment to new Planting Site does not remove assignment to Planting Season/Planting date (#6554)
