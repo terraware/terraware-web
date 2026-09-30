@@ -14,7 +14,7 @@ import {
   useLazyExportObservationGpxQuery,
 } from 'src/queries/exports/observations';
 import { ObservationResultsPayload, useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
-import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { PlantingSitePayload, useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import { AdHocObservationResults, getPlotStatus } from 'src/types/Observations';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
@@ -51,7 +51,7 @@ const useObservationExports = () => {
   );
 
   const makeObservationCsv = useCallback(
-    (observationResults: ObservationResultsPayload, timezone?: string) => {
+    (observationResults: ObservationResultsPayload, plantingSite: PlantingSitePayload, timezone?: string) => {
       const columnHeaders = [
         {
           key: 'monitoringPlotNumber',
@@ -186,6 +186,14 @@ const useObservationExports = () => {
           displayLabel: strings.OPTIONAL_LONGITUDE_OF_PLOT,
         },
         {
+          key: 'currentStratumName',
+          displayLabel: strings.STRATUM_CURRENT,
+        },
+        {
+          key: 'currentSubstratumName',
+          displayLabel: strings.SUBSTRATUM_CURRENT,
+        },
+        {
           key: 'detailsLink',
           displayLabel: strings.LINK_TO_PLOT_OBSERVATION_DETAILS,
         },
@@ -260,8 +268,19 @@ const useObservationExports = () => {
               .map((condition) => getConditionString(condition))
               .join(', ');
 
+            const currentStratum =
+              monitoringPlot.currentStratumId !== undefined
+                ? plantingSite.strata?.find((s) => s.id === monitoringPlot.currentStratumId)
+                : undefined;
+            const currentSubstratum =
+              currentStratum !== undefined && monitoringPlot.currentSubstratumId !== undefined
+                ? currentStratum.substrata?.find((ss) => ss.id === monitoringPlot.currentSubstratumId)
+                : undefined;
+
             return {
               conditions: plotConditions,
+              currentStratumName: currentStratum?.name ?? strings.OUTSIDE_CURRENT_SITE,
+              currentSubstratumName: currentSubstratum?.name ?? strings.OUTSIDE_CURRENT_SITE,
               dateObserved,
               detailsLink,
               gpsFieldNortheastLatitude: gpsFieldNortheast?.[1],
@@ -287,6 +306,7 @@ const useObservationExports = () => {
               southwestLatitude: plotCoordinates[0][1],
               southwestLongitude: plotCoordinates[0][0],
               status: getPlotStatus(monitoringPlot.status, strings),
+              stratumName: stratum.name,
               substratumName: substratum.name,
               survivalRate: monitoringPlot.survivalRate,
               totalDead,
@@ -294,7 +314,6 @@ const useObservationExports = () => {
               totalLive,
               totalPlants,
               totalSpecies: monitoringPlot.totalSpecies,
-              stratumName: stratum.name,
             };
           })
         )
@@ -474,7 +493,7 @@ const useObservationExports = () => {
         files: [
           {
             fileName: dirName,
-            content: makeObservationCsv(observationResults, site.timeZone ?? selectedOrganization?.timeZone),
+            content: makeObservationCsv(observationResults, site, site.timeZone ?? selectedOrganization?.timeZone),
           },
           {
             fileName: `${prefix}-${strings.SPECIES}`,

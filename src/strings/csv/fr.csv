@@ -1539,6 +1539,7 @@ OTHERS,Autres,9a598a95
 OUNCES,Onces,4ae3cfe8
 OUTDOORS,Extérieur,38de141f
 OUTPLANT,Transplanter,47a0a210
+OUTSIDE_CURRENT_SITE,En dehors du site actuel,07671fdb
 OVER_WORD_LIMIT,Dépasser la limite de mots,8e2d9bd4
 OVERALL_SCORE,Note globale,1d6cdabe
 OVERDUE,En retard,90d8f429
@@ -2395,6 +2396,7 @@ STRATA_LABEL,Strate,3149f6f8
 STRATIFICATION,Stratification,f19a442c
 STRATUM,Strate,79b6bcfe
 STRATUM_BOUNDARIES,Limites de la strate,418d687a
+STRATUM_CURRENT,Strate (actuelle),5ad69b38
 STRATUM_GEOMETRY_CHANGED,La géométrie de {0} a changé sur {1},9eec74cc
 STRATUM_NAME_IN_USE,Ce nom de strate est déjà utilisé.,a4170ff3
 STRATUM_NAME_MAXIMUM_LENGTH,Le nom de la strate doit comporter 15 caractères ou moins.,905761e0
@@ -2435,6 +2437,7 @@ SUBSTRATE_BEFORE,Substrat (avant),34fc5273
 SUBSTRATE_NOTES,Notes sur le substrat,c0562901
 SUBSTRATUM,Sous-strate,2b98a6d5
 SUBSTRATUM_BOUNDARIES,Limites de la sous-strate,71b65a41
+SUBSTRATUM_CURRENT,Sous-strate (actuelle),f7635ca6
 SUBSTRATUM_NAME_IN_USE,Ce nom de sous-strate est déjà utilisé.,831365cd
 SUBSTRATUM_PLANTING_COMPLETED_SUCCESS,Sous-strates marquées comme Plantation terminée.,e10cc879
 SUBSTRATUM_PLANTING_UNCOMPLETED_SUCCESS,Sous-strates marquées comme Plantation incomplète.,7478695b
