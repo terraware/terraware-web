@@ -1,14 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
+import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
+import MuxPlayer from '@mux/mux-player-react';
 import { ViewPhotosDialog } from '@terraware/web-components';
 
 import EventLogView from 'src/components/common/EventLog';
+import ImageLightbox from 'src/components/common/ImageLightbox';
 import Link from 'src/components/common/Link';
 import { API_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
-import { EventLogEntryPayload } from 'src/queries/generated/events';
+import { EventLogEntryPayload, ObservationPlotMediaSubjectPayload } from 'src/queries/generated/events';
+import { useGetObservationMediaStreamQuery } from 'src/queries/generated/observations';
 import { ListObservationEventsArgs, useLazyListObservationEventsQuery } from 'src/queries/observations/observations';
 
 type EventLogProps = {
@@ -20,7 +23,26 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
   const { species } = useOrganizationSpecies();
-  const [openedPhotoUrl, setOpenedPhotoUrl] = useState<string>();
+  const [openedMedia, setOpenedMedia] = useState<ObservationPlotMediaSubjectPayload>();
+  const closeViewer = useCallback(() => setOpenedMedia(undefined), []);
+  const {
+    currentData: mediaStream,
+    error: mediaStreamError,
+    isFetching: isStreamLoading,
+  } = useGetObservationMediaStreamQuery(
+    {
+      observationId: openedMedia?.observationId ?? observationId,
+      plotId: openedMedia?.monitoringPlotId ?? plotId,
+      fileId: openedMedia?.fileId ?? -1,
+    },
+    { skip: openedMedia?.mediaKind !== 'Video', refetchOnMountOrArgChange: true }
+  );
+  const photoUrl =
+    openedMedia?.mediaKind === 'Photo'
+      ? API_PATHS.OBSERVATION_PLOT_PHOTO.replace('{observationId}', openedMedia.observationId.toString())
+          .replace('{monitoringPlotId}', openedMedia.monitoringPlotId.toString())
+          .replace('{fileId}', openedMedia.fileId.toString())
+      : undefined;
 
   const [list, { data: events, isLoading }] = useLazyListObservationEventsQuery();
 
@@ -105,19 +127,12 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         )}
         {event.action.type === 'Created' && (
           <Box>
-            {event.subject.type === 'ObservationPlotMedia' && event.subject.mediaKind === 'Photo' ? (
+            {event.subject.type === 'ObservationPlotMedia' ? (
               <Link
                 fontSize='16px'
                 onClick={() => {
                   if (event.subject.type === 'ObservationPlotMedia') {
-                    setOpenedPhotoUrl(
-                      API_PATHS.OBSERVATION_PLOT_PHOTO.replace(
-                        '{observationId}',
-                        event.subject.observationId.toString()
-                      )
-                        .replace('{monitoringPlotId}', event.subject.monitoringPlotId.toString())
-                        .replace('{fileId}', event.subject.fileId.toString())
-                    );
+                    setOpenedMedia(event.subject);
                   }
                 }}
               >
@@ -138,13 +153,43 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
 
   return (
     <>
-      {openedPhotoUrl && (
+      {photoUrl && (
         <ViewPhotosDialog
           initialSelectedSlide={0}
-          onClose={() => setOpenedPhotoUrl(undefined)}
+          onClose={closeViewer}
           open
-          photos={[{ url: openedPhotoUrl }]}
+          photos={[{ url: photoUrl }]}
           title={strings.PHOTOS}
+        />
+      )}
+      {openedMedia?.mediaKind === 'Video' && (
+        <ImageLightbox
+          isOpen
+          onClose={closeViewer}
+          imageSrc=''
+          altComponent={
+            isStreamLoading ? (
+              <CircularProgress />
+            ) : mediaStreamError ? (
+              <Typography color='white'>
+                {'status' in mediaStreamError && mediaStreamError.status === 412
+                  ? strings.VIDEO_PROCESSING
+                  : strings.GENERIC_ERROR}
+              </Typography>
+            ) : mediaStream ? (
+              <MuxPlayer
+                key={openedMedia.fileId}
+                accentColor={theme.palette.TwClrBgBrand}
+                autoPlay
+                metadata={{ video_title: `Media video (File ID: ${openedMedia.fileId})` }}
+                playbackId={mediaStream.playbackId}
+                playbackToken={mediaStream.playbackToken}
+                style={{ aspectRatio: 16 / 9, height: '80vh', maxWidth: '80vw', width: 'auto' }}
+              />
+            ) : (
+              <CircularProgress />
+            )
+          }
         />
       )}
       <EventLogView
