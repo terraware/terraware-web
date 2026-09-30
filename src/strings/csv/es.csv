@@ -830,6 +830,7 @@ FROM,De,3b922b12
 FROM_GIS_DATABASE,(de la base de datos GIS),7b29f44f
 FROM_NURSERY,De: Vivero,21226e82
 FROM_NURSERY_REQUIRED,De: Vivero *,4bcef7f8
+FROM_PLANTING_SITE,De: Sitio de plantación,ac7278e5
 FROM_SUBSTRATUM,De: Sustrato,d8e74cd4
 FUNDER,Financiador,a66356e6
 FUNDER_ADDED,Financiador agregado,cdcddbaf
@@ -1876,6 +1877,9 @@ REASSIGN,Reasignar,48e98f3f
 REASSIGN_SEEDLINGS,Reasignar plántulas,99d4391c
 REASSIGN_SEEDLINGS_DESCRIPTION,"Ingrese el nuevo subestrato, la nueva cantidad y las notas para la especie a la que desea reasignar plántulas. Las plántulas de las filas que deje vacías no serán reasignadas.",1a8cfcc9
 REASSIGN_SEEDLINGS_MODAL_DESCRIPTION,Seleccione una nueva ubicación y la cantidad de plántulas a reasignar de cada especie.,fa53fb3b
+REASSIGNED_TO_NO_DATE,"{0}, reasignado sin fecha",4ca9dd12
+REASSIGNED_TO_NO_SEASON,"{0}, reasignado sin temporada",353d0581
+REASSIGNED_VALUE,"{0}, reasignado a {1}",81ba84e8
 REASSIGNMENT,Reasignación,79a8c3fe
 REASSIGNMENT_DURATION,Duración de la reasignación,3dec5f19
 REASSIGNMENT_REQUEST_NO_PLOTS_ADDED,No se añadirán parcelas.,ebf0fa62
@@ -2545,6 +2549,7 @@ TO,A,0ec3d25a
 TO_NURSERY,Para: vivero,ef613421
 TO_NURSERY_REQUIRED,Para: Guardería *,e9bd2c95
 TO_PLANT,a plantar,13c6274a
+TO_PLANTING_SITE,A: Sitio de plantación,d004f5f5
 TO_PLANTING_SITE_REQUIRED,Para: Sitio de plantación *,b92a92f0
 TO_STRATUM,A: Estrato,31a7e652
 TO_SUBSTRATUM,A: Subestrato,f8e40ecb
