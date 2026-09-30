@@ -253,6 +253,7 @@ export type GetViabilityTestPayload = {
     | 'Moss'
     | 'Perlite/Vermiculite'
     | 'None';
+  substrateNotes?: string;
   testResults?: ViabilityTestResultPayload[];
   testType: 'Lab' | 'Nursery' | 'Cut';
   totalSeedsGerminated?: number;
@@ -623,6 +624,7 @@ export type CreateViabilityTestRequestPayload = {
     | 'Moss'
     | 'Perlite/Vermiculite'
     | 'None';
+  substrateNotes?: string;
   testResults?: ViabilityTestResultPayload[];
   testType: 'Lab' | 'Nursery' | 'Cut';
   treatment?: 'Soak' | 'Scarify' | 'Chemical' | 'Stratification' | 'Other' | 'Light';
@@ -653,6 +655,7 @@ export type UpdateViabilityTestRequestPayload = {
     | 'Moss'
     | 'Perlite/Vermiculite'
     | 'None';
+  substrateNotes?: string;
   testResults?: ViabilityTestResultPayload[];
   treatment?: 'Soak' | 'Scarify' | 'Chemical' | 'Stratification' | 'Other' | 'Light';
   /** ID of user who withdrew seeds to perform the test. If non-null, the current user must have permission to see the referenced user's membership details in the organization. If absent or null, the existing value is left unchanged. */

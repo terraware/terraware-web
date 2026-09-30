@@ -110,6 +110,8 @@ export type UploadOrganizationMediaResponsePayload = {
 };
 export type UploadOrganizationMediaRequestPayload = {
   caption?: string;
+  /** Store the file with this content type rather than the one declared by the upload. */
+  contentType?: string;
   fileBatchId?: number;
 };
 export type SimpleSuccessResponsePayload = {
