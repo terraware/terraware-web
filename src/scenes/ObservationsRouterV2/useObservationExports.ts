@@ -636,13 +636,13 @@ const useObservationExports = () => {
   );
 
   const downloadBiomassObservationsZip = useCallback(
-    async (siteName: string, observations: { observationId: number }[]) => {
+    async (siteName: string, observations: { observationId: number }[], hasFilters = false) => {
       if (observations.length === 0) {
         return;
       }
 
       const downloadDate = DateTime.now().setZone(defaultTimeZone).toFormat('yyyy-MM-dd');
-      const fileNamePrefix = `${siteName}_Ad Hoc Biomass Monitoring plots_${downloadDate}_filtered`;
+      const fileNamePrefix = `${siteName}_Ad Hoc Biomass Monitoring plots_${downloadDate}${hasFilters ? '_filtered' : ''}`;
       const observationIds = observations.map(({ observationId }) => observationId);
       await downloadZipFile({
         dirName: fileNamePrefix,
@@ -657,10 +657,12 @@ const useObservationExports = () => {
     async ({
       adHocObservationsResults,
       biomassObservationIds,
+      hasFilters = false,
       siteName,
     }: {
       adHocObservationsResults: AdHocObservationResults[];
       biomassObservationIds: number[];
+      hasFilters?: boolean;
       siteName: string;
     }) => {
       const fileNamePrefix = `${siteName}-${strings.AD_HOC_PLOTS}`;
@@ -680,7 +682,7 @@ const useObservationExports = () => {
       }
 
       await downloadZipFile({
-        dirName: `${fileNamePrefix}_filtered`,
+        dirName: `${fileNamePrefix}${hasFilters ? '_filtered' : ''}`,
         files,
         suffix: '.csv',
       });
