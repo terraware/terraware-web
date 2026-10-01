@@ -246,9 +246,8 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     () =>
       activeLocale
         ? [
-            { text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_0 },
             {
-              text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_1,
+              text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,
               hasTutorial: true,
               handlePrefix: (prefix: string) =>
                 strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
