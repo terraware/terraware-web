@@ -25,6 +25,7 @@ import { findErrors } from './utils';
 
 export type SiteBoundaryProps = {
   onValidate?: OnValidate;
+  onDirtyChange?: (isDirty: boolean) => void;
   site: DraftPlantingSite;
 };
 
@@ -57,10 +58,16 @@ type Stack = {
   siteBoundary?: FeatureCollection;
 };
 
-export default function SiteBoundary({ onValidate, site }: SiteBoundaryProps): JSX.Element {
+export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBoundaryProps): JSX.Element {
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>({
     siteBoundary: featureSiteBoundary(site.id, site.boundary),
   });
+  const geometrySnapshot = JSON.stringify({ siteBoundary: siteBoundaryData?.siteBoundary });
+  const [initialGeometry] = useState(geometrySnapshot);
+  useEffect(() => {
+    onDirtyChange?.(geometrySnapshot !== initialGeometry);
+  }, [geometrySnapshot, initialGeometry, onDirtyChange]);
+
   const [mode, setMode] = useState<MapEditorMode>();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();

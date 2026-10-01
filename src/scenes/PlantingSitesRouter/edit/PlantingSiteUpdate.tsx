@@ -1,11 +1,11 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
+import { BusySpinner, Button } from '@terraware/web-components';
 
-import PageSnackbar from 'src/components/PageSnackbar';
+import Page from 'src/components/Page';
 import Card from 'src/components/common/Card';
-import PageForm from 'src/components/common/PageForm';
-import TfMain from 'src/components/common/TfMain';
+import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import {
@@ -71,47 +71,68 @@ export default function UpdatePlantingSite({ plantingSiteId }: UpdatePlantingSit
     }
   }, [goBack, plantingSiteId, snackbar, strings.CHANGES_SAVED, updateResult]);
 
+  const isDirty =
+    !!plantingSite &&
+    (record.name !== plantingSite.name ||
+      (record.description ?? '') !== (plantingSite.description ?? '') ||
+      (record.timeZone ?? null) !== (plantingSite.timeZone ?? null) ||
+      (record.projectId ?? null) !== (plantingSite.projectId ?? null));
+
+  const title = (
+    <Box
+      alignItems='center'
+      display='flex'
+      flexWrap='wrap'
+      gap={theme.spacing(1.5)}
+      sx={{ paddingLeft: theme.spacing(3) }}
+    >
+      <Typography fontSize='24px' fontWeight={600}>
+        {plantingSite?.name}
+      </Typography>
+      {isDirty && <UnsavedChangesBadge />}
+    </Box>
+  );
+  const rightComponent = (
+    <Box alignItems='center' display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
+      <Button
+        id='cancelCreatePlantingSite'
+        label={strings.CANCEL}
+        onClick={goBack}
+        disabled={updateResult.isLoading}
+        priority='secondary'
+        type='passive'
+        size='medium'
+      />
+      <Button
+        id='saveCreatePlantingSite'
+        label={strings.SAVE}
+        onClick={savePlantingSite}
+        disabled={!isDirty || updateResult.isLoading}
+        size='medium'
+      />
+    </Box>
+  );
+
   return (
-    <TfMain>
-      <PageForm
-        cancelID='cancelCreatePlantingSite'
-        saveID='saveCreatePlantingSite'
-        onCancel={goBack}
-        onSave={savePlantingSite}
-        style={{
-          display: 'flex',
-          flexGrow: 1,
-        }}
-      >
-        <Container maxWidth={false} sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1, paddingRight: 0 }}>
-          {!isLoading && plantingSite && (
-            <>
-              <Grid spacing={3} flexGrow={0} display='flex' flexDirection='column' marginTop={theme.spacing(3)}>
-                <Box
-                  paddingLeft={theme.spacing(3)}
-                  marginBottom={theme.spacing(2)}
-                  display='flex'
-                  flexDirection='column'
-                >
-                  <Typography fontSize={plantingSite ? '20px' : '24px'} fontWeight={600} margin={theme.spacing(1, 0)}>
-                    {plantingSite?.name}
-                  </Typography>
-                </Box>
-                <PageSnackbar />
-                <Card flushMobile style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-                  <DetailsInputForm
-                    onChange={onChange}
-                    onValidate={setHasErrors}
-                    plantingSiteId={plantingSiteId}
-                    record={record}
-                    setRecord={setRecord}
-                  />
-                </Card>
-              </Grid>
-            </>
-          )}
-        </Container>
-      </PageForm>
-    </TfMain>
+    <Page
+      title={title}
+      rightComponent={rightComponent}
+      stickyHeader
+      stickyHeaderElevated={isDirty}
+      isLoading={isLoading}
+    >
+      {updateResult.isLoading && <BusySpinner withSkrim={true} />}
+      {plantingSite && (
+        <Card flushMobile style={{ width: '100%' }}>
+          <DetailsInputForm
+            onChange={onChange}
+            onValidate={setHasErrors}
+            plantingSiteId={plantingSiteId}
+            record={record}
+            setRecord={setRecord}
+          />
+        </Card>
+      )}
+    </Page>
   );
 }
