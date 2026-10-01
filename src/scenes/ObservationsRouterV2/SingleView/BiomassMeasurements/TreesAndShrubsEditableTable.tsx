@@ -131,9 +131,15 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
   );
 
   const GrowthFormCell = useCallback(
-    ({ row }: { row: { original: TreeRow } }) => (
-      <>{row.original.treeGrowthForm === 'Shrub' ? strings.SHRUB : strings.TREE}</>
-    ),
+    ({ row }: { row: { original: TreeRow } }) => {
+      switch (row.original.treeGrowthForm) {
+        case 'Tree':
+        case 'Trunk':
+          return <>{strings.TREE}</>;
+        case 'Shrub':
+          return <>{strings.SHRUB}</>;
+      }
+    },
     [strings]
   );
 
