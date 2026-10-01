@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, Message } from '@terraware/web-components';
@@ -8,6 +8,7 @@ import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextWithLink from 'src/components/common/TextWithLink';
 import TfMain from 'src/components/common/TfMain';
+import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -67,7 +68,8 @@ export default function Editor(props: EditorProps): JSX.Element {
   const { site } = props;
   const { siteEditStep, siteType } = site;
   const { activeLocale } = useLocalization();
-  const contentRef = useRef(null);
+  const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
+  const contentRef = useCallback((node: HTMLElement | null) => setContentElement(node), []);
   const navigate = useSyncNavigate();
   const { goToPlantingSiteView } = useNavigateTo();
   const theme = useTheme();
@@ -81,6 +83,8 @@ export default function Editor(props: EditorProps): JSX.Element {
   const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<OptionalSiteEditStep, boolean>>(
     initializeOptionalStepsStatus(site)
   );
+  const [baselineSite, setBaselineSite] = useState(site);
+  const [mapDirty, setMapDirty] = useState(false);
   const [plantingSite, setPlantingSite, onChange] = useForm({ ...site });
 
   const onFinalizeSuccess = useCallback(
@@ -105,6 +109,8 @@ export default function Editor(props: EditorProps): JSX.Element {
   useEffect(() => {
     if (createdDraft) {
       setPlantingSite(createdDraft.draft);
+      setBaselineSite(createdDraft.draft);
+      setMapDirty(false);
       setCurrentStep(createdDraft.nextStep);
       onFinishCreate();
     }
@@ -114,6 +120,8 @@ export default function Editor(props: EditorProps): JSX.Element {
   useEffect(() => {
     if (updatedDraft) {
       setPlantingSite(updatedDraft.draft);
+      setBaselineSite(updatedDraft.draft);
+      setMapDirty(false);
       setCurrentStep(updatedDraft.nextStep);
       if (updatedDraft.optionalSteps) {
         setCompletedOptionalSteps(updatedDraft.optionalSteps);
@@ -286,19 +294,78 @@ export default function Editor(props: EditorProps): JSX.Element {
     }
   }, [currentStep, isSimpleSite, showPageMessage]);
 
+  const isDirty =
+    mapDirty ||
+    plantingSite.name !== baselineSite.name ||
+    (plantingSite.description ?? '') !== (baselineSite.description ?? '') ||
+    (plantingSite.timeZone ?? null) !== (baselineSite.timeZone ?? null) ||
+    (plantingSite.projectId ?? null) !== (baselineSite.projectId ?? null);
+  const busy = isCreating || isUpdating || isPending || !!onValidate;
+  const isFinalStep = currentStep === steps[steps.length - 1]?.type;
+
   return (
     <TfMain>
       {isPending && <BusySpinner withSkrim={true} />}
       {(isCreating || isUpdating) && <BusySpinner />}
       {showStartOver && <StartOverConfirmation onClose={onCloseStartOver} onConfirm={onStartOver} />}
-      <PageHeaderWrapper nextElement={contentRef.current}>
-        <Box sx={{ padding: theme.spacing(0, 0, 2, 3), display: 'flex' }}>
-          <Typography fontSize='24px' fontWeight={600}>
-            {strings.ADD_PLANTING_SITE}
-          </Typography>
+      <PageHeaderWrapper alwaysVisible={!isMobile} elevated={!isMobile && isDirty} nextElement={contentElement}>
+        <Box
+          padding={theme.spacing(0, 0, 2, 3)}
+          display='flex'
+          alignItems='center'
+          justifyContent='space-between'
+          flexWrap='wrap'
+          gap={theme.spacing(1.5)}
+        >
+          <Box display='flex' alignItems='center' flexWrap='wrap' gap={theme.spacing(1.5)}>
+            <Typography fontSize='24px' fontWeight={600}>
+              {strings.ADD_PLANTING_SITE}
+            </Typography>
+            {isDirty && <UnsavedChangesBadge />}
+          </Box>
+          {!isMobile && (
+            <Box display='flex' alignItems='center' flexWrap='wrap' justifyContent='flex-end' gap={theme.spacing(1)}>
+              <Button
+                id='cancel-planting-site-create'
+                label={strings.CANCEL}
+                onClick={onCancel}
+                disabled={busy}
+                priority='secondary'
+                type='passive'
+                size='medium'
+              />
+              {isFinalStep && (
+                <Button
+                  id='start-over'
+                  label={strings.START_OVER}
+                  onClick={onOpenStartOver}
+                  disabled={busy}
+                  priority='secondary'
+                  type='passive'
+                  size='medium'
+                />
+              )}
+              <Button
+                id='save-and-close'
+                label={strings.SAVE_AND_CLOSE}
+                onClick={onSave(true)}
+                disabled={busy || !isDirty}
+                priority='secondary'
+                type='passive'
+                size='medium'
+              />
+              <Button
+                id='save-planting-site-create'
+                label={isFinalStep ? strings.SAVE : strings.SAVE_AND_NEXT}
+                onClick={onSave(false)}
+                disabled={busy || (plantingSite.id === -1 && !isDirty)}
+                size='medium'
+              />
+            </Box>
+          )}
         </Box>
       </PageHeaderWrapper>
-      <Grid item xs={12}>
+      <Grid item xs={12} ref={contentRef}>
         <PageSnackbar />
       </Grid>
       {isMobile && (
@@ -321,10 +388,6 @@ export default function Editor(props: EditorProps): JSX.Element {
       {!isMobile && (
         <Form
           currentStep={currentStep}
-          onCancel={onCancel}
-          onSaveAndNext={onSave(false)}
-          onSaveAndClose={onSave(true)}
-          onStartOver={onOpenStartOver}
           steps={steps}
           style={{
             display: 'flex',
@@ -353,10 +416,18 @@ export default function Editor(props: EditorProps): JSX.Element {
                 site={plantingSite}
               />
             )}
-            {currentStep === 'site_boundary' && <SiteBoundary onValidate={onValidate} site={plantingSite} />}
-            {currentStep === 'exclusion_areas' && <Exclusions onValidate={onValidate} site={plantingSite} />}
-            {currentStep === 'stratum_boundaries' && <Strata onValidate={onValidate} site={plantingSite} />}
-            {currentStep === 'substratum_boundaries' && <Substrata onValidate={onValidate} site={plantingSite} />}
+            {currentStep === 'site_boundary' && (
+              <SiteBoundary onDirtyChange={setMapDirty} onValidate={onValidate} site={plantingSite} />
+            )}
+            {currentStep === 'exclusion_areas' && (
+              <Exclusions onDirtyChange={setMapDirty} onValidate={onValidate} site={plantingSite} />
+            )}
+            {currentStep === 'stratum_boundaries' && (
+              <Strata onDirtyChange={setMapDirty} onValidate={onValidate} site={plantingSite} />
+            )}
+            {currentStep === 'substratum_boundaries' && (
+              <Substrata onDirtyChange={setMapDirty} onValidate={onValidate} site={plantingSite} />
+            )}
           </Card>
         </Form>
       )}

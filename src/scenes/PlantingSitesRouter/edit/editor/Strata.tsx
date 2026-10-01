@@ -39,6 +39,7 @@ import {
 
 export type StrataProps = {
   onValidate?: OnValidate;
+  onDirtyChange?: (isDirty: boolean) => void;
   site: DraftPlantingSite;
 };
 
@@ -81,12 +82,21 @@ type Stack = {
   fixedBoundaries?: FeatureCollection;
 };
 
-export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
+export default function Strata({ onValidate, onDirtyChange, site }: StrataProps): JSX.Element {
   const [strataData, setStrataData, undo, redo] = useUndoRedoState<Stack>({
     editableBoundary: emptyBoundary(),
     errorAnnotations: [],
     fixedBoundaries: featureSiteStrata(site),
   });
+  const geometrySnapshot = JSON.stringify({
+    editableBoundary: strataData?.editableBoundary,
+    fixedBoundaries: strataData?.fixedBoundaries,
+  });
+  const [initialGeometry] = useState(geometrySnapshot);
+  useEffect(() => {
+    onDirtyChange?.(geometrySnapshot !== initialGeometry);
+  }, [geometrySnapshot, initialGeometry, onDirtyChange]);
+
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const theme = useTheme();
   const mapStyles = useMapStyle(theme);

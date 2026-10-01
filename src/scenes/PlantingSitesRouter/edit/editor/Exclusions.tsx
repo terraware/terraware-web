@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useMemo } from 'react';
+import React, { type JSX, useEffect, useMemo, useState } from 'react';
 
 import { Box } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';
@@ -20,6 +20,7 @@ import { findErrors } from './utils';
 
 export type ExclusionsProps = {
   onValidate?: OnValidate;
+  onDirtyChange?: (isDirty: boolean) => void;
   site: DraftPlantingSite;
 };
 
@@ -40,10 +41,16 @@ type Stack = {
   exclusions?: FeatureCollection;
 };
 
-export default function Exclusions({ onValidate, site }: ExclusionsProps): JSX.Element {
+export default function Exclusions({ onValidate, onDirtyChange, site }: ExclusionsProps): JSX.Element {
   const [exclusionsData, setExclusionsData, undo, redo] = useUndoRedoState<Stack>({
     exclusions: featureSiteExclusions(site),
   });
+  const geometrySnapshot = JSON.stringify({ exclusions: exclusionsData?.exclusions });
+  const [initialGeometry] = useState(geometrySnapshot);
+  useEffect(() => {
+    onDirtyChange?.(geometrySnapshot !== initialGeometry);
+  }, [geometrySnapshot, initialGeometry, onDirtyChange]);
+
   const getRenderAttributes = useRenderAttributes();
   const { activeLocale } = useLocalization();
   const snackbar = useSnackbar();

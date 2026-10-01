@@ -41,6 +41,7 @@ import {
 
 export type SubstrataProps = {
   onValidate?: OnValidate;
+  onDirtyChange?: (isDirty: boolean) => void;
   site: DraftPlantingSite;
 };
 
@@ -103,7 +104,7 @@ type Stack = {
   fixedBoundaries?: Record<number, FeatureCollection>;
 };
 
-export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Element {
+export default function Substrata({ onValidate, onDirtyChange, site }: SubstrataProps): JSX.Element {
   const [selectedStratum, setSelectedStratum] = useState<number | undefined>(site.strata?.[0]?.id);
 
   // map of stratum id to substrata
@@ -112,6 +113,15 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
     errorAnnotations: [],
     fixedBoundaries: featureSiteSubstrata(site),
   });
+  const geometrySnapshot = JSON.stringify({
+    editableBoundary: substrataData?.editableBoundary,
+    fixedBoundaries: substrataData?.fixedBoundaries,
+  });
+  const [initialGeometry] = useState(geometrySnapshot);
+  useEffect(() => {
+    onDirtyChange?.(geometrySnapshot !== initialGeometry);
+  }, [geometrySnapshot, initialGeometry, onDirtyChange]);
+
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const theme = useTheme();
   const mapStyles = useMapStyle(theme);
