@@ -1,3 +1,4 @@
+72769395 Extend accession create view component test (#6586)
 68e8a642 SW-8979 Remove video link from history if video was deleted (#6583)
 fbbd7e5b SW-8915 New save/cancel header for People edit (#6584)
 2df3c406 SW-8954 In species csv sort plots in descending order by plot number (#6582)
