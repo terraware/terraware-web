@@ -14,7 +14,7 @@ unit tests.
 ## Running tests
 
 | Command               | What it does                                                   |
-|-----------------------|----------------------------------------------------------------|
+| --------------------- | -------------------------------------------------------------- |
 | `yarn test`           | Runs all Rstest unit and component tests in watch mode         |
 | `yarn test <path>`    | Runs the tests in one file                                     |
 | `yarn test-coverage`  | Runs the tests with coverage                                   |
