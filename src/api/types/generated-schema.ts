@@ -7210,6 +7210,7 @@ export interface components {
             startDate?: string;
             /** @enum {string} */
             substrate?: "Nursery Media" | "Agar" | "Paper" | "Other" | "Sand" | "Media Mix" | "Soil" | "Moss" | "Perlite/Vermiculite" | "None";
+            substrateNotes?: string;
             testResults?: components["schemas"]["ViabilityTestResultPayload"][];
             /** @enum {string} */
             testType: "Lab" | "Nursery" | "Cut";
@@ -8593,6 +8594,7 @@ export interface components {
             startDate?: string;
             /** @enum {string} */
             substrate?: "Nursery Media" | "Agar" | "Paper" | "Other" | "Sand" | "Media Mix" | "Soil" | "Moss" | "Perlite/Vermiculite" | "None";
+            substrateNotes?: string;
             testResults?: components["schemas"]["ViabilityTestResultPayload"][];
             /** @enum {string} */
             testType: "Lab" | "Nursery" | "Cut";
@@ -12815,6 +12817,7 @@ export interface components {
             startDate?: string;
             /** @enum {string} */
             substrate?: "Nursery Media" | "Agar" | "Paper" | "Other" | "Sand" | "Media Mix" | "Soil" | "Moss" | "Perlite/Vermiculite" | "None";
+            substrateNotes?: string;
             testResults?: components["schemas"]["ViabilityTestResultPayload"][];
             /** @enum {string} */
             treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
