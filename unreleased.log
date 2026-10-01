@@ -1,3 +1,4 @@
+39af8e0b Remove the local docker volume for postgres (#6572)
 07e9a69e Remove CLAUDE.md (#6603)
 dc554c1a Delete generated files before regenerating (#6585)
 3d32385f SW-1569 Add substrate notes field to viability tests (#6596)
