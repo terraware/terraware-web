@@ -132,9 +132,9 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
 
   const GrowthFormCell = useCallback(
     ({ row }: { row: { original: TreeRow } }) => (
-      <>{row.original.treeGrowthForm === 'Trunk' ? 'Tree' : row.original.treeGrowthForm}</>
+      <>{row.original.treeGrowthForm === 'Shrub' ? strings.SHRUB : strings.TREE}</>
     ),
-    []
+    [strings]
   );
 
   const IsInvasiveCell = useCallback(
