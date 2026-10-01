@@ -1,3 +1,4 @@
+fbbd7e5b SW-8915 New save/cancel header for People edit (#6584)
 2df3c406 SW-8954 In species csv sort plots in descending order by plot number (#6582)
 06b2ceeb SW-8955 Use stratum name instead of looking up by ID for observation list (#6574)
 958114ca SW-8913 Save/cancel buttons for My Account edit (#6580)
