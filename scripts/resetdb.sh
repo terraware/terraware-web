@@ -12,7 +12,6 @@ restore_dump() {
     fi
 }
 
-sudo rm -rf $HOME/docker/volumes/postgres/data
 docker compose --profile prod down --volumes
 docker compose up -d postgres
 
