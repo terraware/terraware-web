@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react';
 
 import { Box, Container, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -91,23 +91,34 @@ export default function CreateAccession(): JSX.Element | null {
     useForm<CreateAccessionRequestPayloadV2Write>(defaultAccession());
 
   const { availableProjects } = useProjects();
+  const singleProjectApplied = useRef(false);
+  const receivedDateEdited = useRef(false);
 
-  // If there's only 1 project, and the record's `projectId` is not explicitly set to `null`, auto apply it
+  const onReceivedDateChange = useCallback(
+    (id: string, value: string | null) => {
+      receivedDateEdited.current = true;
+      onChange(id, value);
+    },
+    [onChange]
+  );
+
+  // If there's only 1 project, auto apply it, at most once.
   useEffect(() => {
-    if (record.projectId === null) {
-      return;
-    } else if (!availableProjects || availableProjects.length !== 1) {
+    if (singleProjectApplied.current || availableProjects?.length !== 1) {
       return;
     }
 
     const projectId = availableProjects[0].id;
-    if (projectId && record.projectId !== projectId) {
-      setRecord({
-        ...record,
-        projectId,
+    if (projectId) {
+      singleProjectApplied.current = true;
+      setRecord((previousRecord: CreateAccessionRequestPayloadV2Write): CreateAccessionRequestPayloadV2Write => {
+        return {
+          ...previousRecord,
+          projectId,
+        };
       });
     }
-  }, [record, availableProjects, setRecord]);
+  }, [availableProjects, setRecord]);
 
   useEffect(() => {
     if (record.facilityId && selectedOrganization) {
@@ -120,7 +131,11 @@ export default function CreateAccession(): JSX.Element | null {
     setTimeZone(tz.id);
   }, [tz]);
 
+  // The default received date follows the seed bank's zone, until the reader sets a date themselves.
   useEffect(() => {
+    if (receivedDateEdited.current) {
+      return;
+    }
     setRecord((previousRecord: CreateAccessionRequestPayloadV2Write): CreateAccessionRequestPayloadV2Write => {
       return {
         ...previousRecord,
@@ -163,40 +178,54 @@ export default function CreateAccession(): JSX.Element | null {
       return;
     }
     setIsSaving(true);
+    let accessionId: number;
     try {
       const response = await createAccession(record).unwrap();
-      const accessionId = response.accession.id;
-      if (photos.length) {
-        // upload photos
-        await Promise.all(
-          photos.map((photo) =>
-            uploadPhoto({ id: accessionId, photoFilename: photo.name, body: { file: photo } }).unwrap()
-          )
-        );
-      }
-
-      trackEvent(MIXPANEL_EVENTS.ACCESSION_CREATED, {
-        species_id: record.speciesId,
-        initial_state: record.state,
-        has_photos: photos.length > 0,
-        has_project_assigned: record.projectId !== null && record.projectId !== undefined,
-      });
-
-      navigate(
-        {
-          pathname: APP_PATHS.ACCESSIONS,
-        },
-        { replace: true }
-      );
-      navigate({
-        pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', accessionId.toString()),
-      });
+      accessionId = response.accession.id;
     } catch {
       trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'accession' });
       snackbar.toastError();
-    } finally {
       setIsSaving(false);
+      return;
     }
+
+    // The accession exists from here on, so a failed photo must not send the reader back to the
+    // form: saving again would create a second accession. allSettled so one bad photo doesn't
+    // abandon the others.
+    const photoResults = await Promise.allSettled(
+      photos.map((photo) => uploadPhoto({ id: accessionId, photoFilename: photo.name, body: { file: photo } }).unwrap())
+    );
+    const failedPhotoCount = photoResults.filter((result) => result.status === 'rejected').length;
+
+    trackEvent(MIXPANEL_EVENTS.ACCESSION_CREATED, {
+      species_id: record.speciesId,
+      initial_state: record.state,
+      has_photos: photos.length > 0,
+      has_project_assigned: record.projectId !== null && record.projectId !== undefined,
+      failed_photo_count: failedPhotoCount,
+    });
+
+    if (failedPhotoCount) {
+      snackbar.toastWarning(
+        strings.formatString(
+          failedPhotoCount === 1
+            ? strings.ACCESSION_CREATED_PHOTOS_NOT_UPLOADED_ONE
+            : strings.ACCESSION_CREATED_PHOTOS_NOT_UPLOADED,
+          failedPhotoCount
+        ) as string
+      );
+    }
+
+    setIsSaving(false);
+    navigate(
+      {
+        pathname: APP_PATHS.ACCESSIONS,
+      },
+      { replace: true }
+    );
+    navigate({
+      pathname: APP_PATHS.ACCESSIONS2_ITEM.replace(':accessionId', accessionId.toString()),
+    });
   }, [
     collectedTimeError,
     createAccession,
@@ -299,7 +328,7 @@ export default function CreateAccession(): JSX.Element | null {
 
           <Grid container>
             <CollectedReceivedDate2
-              onChange={onChange}
+              onChange={onReceivedDateChange}
               validate={validateFields}
               timeZone={timeZone}
               value={record.receivedDate}
