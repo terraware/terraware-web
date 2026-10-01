@@ -19,4 +19,3 @@ Both tools also read `AGENTS.md` at the project root for shared configuration (t
 ## Shared instructions
 
 Both tools read [AGENTS.md](../AGENTS.md) at the repo root for shared configuration (tech stack, code style, workflow).
-[CLAUDE.md](../CLAUDE.md) is a thin pointer that re-exports `AGENTS.md` for Claude Code.
