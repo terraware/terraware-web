@@ -2,16 +2,24 @@ import React from 'react';
 
 import { rstest } from '@rstest/core';
 import * as webComponents from '@terraware/web-components' with { rstest: 'importActual' };
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import { HttpResponse, http } from 'msw';
 
 import { EventLogEntryPayload } from 'src/queries/generated/events';
 import strings from 'src/strings';
-import { mockError, mockGet, mockPost, renderWithProviders, server } from 'src/test-utils';
+import {
+  captureRequests,
+  dialogTitled,
+  mockError,
+  mockGet,
+  mockPost,
+  renderWithProviders,
+  server,
+} from 'src/test-utils';
 
 import EventLog from './EventLog';
 
-// jsdom cannot play Mux streams; expose the player inputs while exercising the real query and lightbox.
+// jsdom cannot play Mux streams; expose the player inputs while exercising the real query and dialog.
 rstest.mock('@mux/mux-player-react', () => ({
   default: ({ playbackId, playbackToken }: { playbackId: string; playbackToken: string }) => (
     <div data-testid='video-player' data-playback-id={playbackId} data-playback-token={playbackToken} />
@@ -75,7 +83,33 @@ describe('Observation EventLog media', () => {
     expect(document.querySelector('img[src*="/observations/1/plots/2/photos/7599"]')).toBeInTheDocument();
   });
 
-  it('shows loading, plays the selected numbered video, and closes with Escape', async () => {
+  it.each(['oldest first', 'newest first'])(
+    'shows a deleted-video message without requesting a stream with events %s',
+    async (order) => {
+      const added = mediaEvent('Video', 7590);
+      const deleted = { ...mediaEvent('Video', 7590, { type: 'Deleted' }), timestamp: '2026-06-16T12:00:00Z' };
+      const events = [added, deleted, mediaEvent('Video', 7592)];
+      const deletedStreamRequests = captureRequests('get', STREAM_URL.replace('/7592/', '/7590/'));
+      mockGet(STREAM_URL, { playbackId: 'live-video', playbackToken: 'live-token' });
+      const { user } = await renderHistory(order === 'oldest first' ? events : [...events].reverse());
+
+      expect(screen.getByText('Video 7590 deleted').closest('button, a')).toBeNull();
+      await user.click(screen.getByRole('button', { name: 'Video 7590 added' }));
+      const deletedVideoDialog = dialogTitled('Video 7590');
+      expect(within(deletedVideoDialog).getByText(strings.VIDEO_HAS_BEEN_DELETED)).toBeInTheDocument();
+      expect(screen.queryByTestId('video-player')).not.toBeInTheDocument();
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+      await user.click(within(deletedVideoDialog).getByRole('button'));
+      expect(screen.queryByText('Video 7590')).not.toBeInTheDocument();
+      expect(deletedStreamRequests).toHaveLength(0);
+
+      await user.click(screen.getByRole('button', { name: 'Video 7592 added' }));
+      expect(dialogTitled('Video 7592')).toBeInTheDocument();
+      expect(await screen.findByTestId('video-player')).toHaveAttribute('data-playback-id', 'live-video');
+    }
+  );
+
+  it('shows loading, plays the selected numbered video, and closes its titled dialog', async () => {
     let resolveStream: (() => void) | undefined;
     const pending = new Promise<void>((resolve) => {
       resolveStream = resolve;
@@ -89,12 +123,15 @@ describe('Observation EventLog media', () => {
     const { user } = await renderHistory();
     expect(screen.queryByTestId('video-player')).not.toBeInTheDocument();
     await user.click(screen.getByText('Video 7592 added'));
-    expect(await screen.findByRole('progressbar')).toBeInTheDocument();
+    const dialog = dialogTitled('Video 7592');
+    expect(dialog).toHaveClass('dialog-box--large');
+    expect(await within(dialog).findByRole('progressbar')).toBeInTheDocument();
     resolveStream?.();
     const player = await screen.findByTestId('video-player');
     expect(player).toHaveAttribute('data-playback-id', 'playback-7592');
     expect(player).toHaveAttribute('data-playback-token', 'token-7592');
-    await user.keyboard('{Escape}');
+    await user.click(within(dialogTitled('Video 7592')).getByRole('button'));
+    expect(screen.queryByText('Video 7592')).not.toBeInTheDocument();
     expect(screen.queryByTestId('video-player')).not.toBeInTheDocument();
   });
 
@@ -107,6 +144,7 @@ describe('Observation EventLog media', () => {
     ).toBeInTheDocument();
     expect(screen.queryByTestId('video-player')).not.toBeInTheDocument();
     await user.keyboard('{Escape}');
+    expect(screen.queryByText('Video 7592')).not.toBeInTheDocument();
     expect(
       screen.queryByText(status === 412 ? strings.VIDEO_PROCESSING : strings.GENERIC_ERROR)
     ).not.toBeInTheDocument();
