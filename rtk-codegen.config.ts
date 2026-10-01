@@ -1,4 +1,6 @@
 import type { ConfigFile } from '@rtk-query/codegen-openapi';
+import { readdirSync, rmSync } from 'fs';
+import path from 'path';
 
 require('dotenv').config();
 
@@ -180,5 +182,13 @@ const config: ConfigFile = {
   prettierConfigFile: '.prettierrc',
   flattenArg: true,
 };
+
+const generatedDir = './src/queries/generated';
+// search.ts is excluded while its generation is disabled above.
+const preservedFiles = ['search.ts'];
+
+readdirSync(generatedDir)
+  .filter((file) => !preservedFiles.includes(file))
+  .forEach((file) => rmSync(path.join(generatedDir, file), { force: true }));
 
 export default config;
