@@ -7,7 +7,15 @@ import { HttpResponse, http } from 'msw';
 
 import { EventLogEntryPayload } from 'src/queries/generated/events';
 import strings from 'src/strings';
-import { dialogTitled, mockError, mockGet, mockPost, renderWithProviders, server } from 'src/test-utils';
+import {
+  captureRequests,
+  dialogTitled,
+  mockError,
+  mockGet,
+  mockPost,
+  renderWithProviders,
+  server,
+} from 'src/test-utils';
 
 import EventLog from './EventLog';
 
@@ -75,25 +83,31 @@ describe('Observation EventLog media', () => {
     expect(document.querySelector('img[src*="/observations/1/plots/2/photos/7599"]')).toBeInTheDocument();
   });
 
-  it.each(['oldest first', 'newest first'])('keeps deleted video history unlinked with events %s', async (order) => {
-    const added = mediaEvent('Video', 7590);
-    const deleted = { ...mediaEvent('Video', 7590, { type: 'Deleted' }), timestamp: '2026-06-16T12:00:00Z' };
-    const events = [added, deleted, mediaEvent('Video', 7592)];
-    mockGet(STREAM_URL, { playbackId: 'live-video', playbackToken: 'live-token' });
-    const { user } = await renderHistory(order === 'oldest first' ? events : [...events].reverse());
+  it.each(['oldest first', 'newest first'])(
+    'shows a deleted-video message without requesting a stream with events %s',
+    async (order) => {
+      const added = mediaEvent('Video', 7590);
+      const deleted = { ...mediaEvent('Video', 7590, { type: 'Deleted' }), timestamp: '2026-06-16T12:00:00Z' };
+      const events = [added, deleted, mediaEvent('Video', 7592)];
+      const deletedStreamRequests = captureRequests('get', STREAM_URL.replace('/7592/', '/7590/'));
+      mockGet(STREAM_URL, { playbackId: 'live-video', playbackToken: 'live-token' });
+      const { user } = await renderHistory(order === 'oldest first' ? events : [...events].reverse());
 
-    for (const label of ['Video 7590 added', 'Video 7590 deleted']) {
-      const text = screen.getByText(label);
-      expect(text).toBeInTheDocument();
-      expect(text.closest('button, a')).toBeNull();
-      await user.click(text);
+      expect(screen.getByText('Video 7590 deleted').closest('button, a')).toBeNull();
+      await user.click(screen.getByRole('button', { name: 'Video 7590 added' }));
+      const deletedVideoDialog = dialogTitled('Video 7590');
+      expect(within(deletedVideoDialog).getByText(strings.VIDEO_HAS_BEEN_DELETED)).toBeInTheDocument();
+      expect(screen.queryByTestId('video-player')).not.toBeInTheDocument();
+      expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
+      await user.click(within(deletedVideoDialog).getByRole('button'));
       expect(screen.queryByText('Video 7590')).not.toBeInTheDocument();
-    }
+      expect(deletedStreamRequests).toHaveLength(0);
 
-    await user.click(screen.getByRole('button', { name: 'Video 7592 added' }));
-    expect(dialogTitled('Video 7592')).toBeInTheDocument();
-    expect(await screen.findByTestId('video-player')).toHaveAttribute('data-playback-id', 'live-video');
-  });
+      await user.click(screen.getByRole('button', { name: 'Video 7592 added' }));
+      expect(dialogTitled('Video 7592')).toBeInTheDocument();
+      expect(await screen.findByTestId('video-player')).toHaveAttribute('data-playback-id', 'live-video');
+    }
+  );
 
   it('shows loading, plays the selected numbered video, and closes its titled dialog', async () => {
     let resolveStream: (() => void) | undefined;

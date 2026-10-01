@@ -40,25 +40,6 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [closeViewer, openedMedia?.mediaKind]);
 
-  const {
-    currentData: mediaStream,
-    error: mediaStreamError,
-    isFetching: isStreamLoading,
-  } = useGetObservationMediaStreamQuery(
-    {
-      observationId: openedMedia?.observationId ?? observationId,
-      plotId: openedMedia?.monitoringPlotId ?? plotId,
-      fileId: openedMedia?.fileId ?? -1,
-    },
-    { skip: openedMedia?.mediaKind !== 'Video', refetchOnMountOrArgChange: true }
-  );
-  const photoUrl =
-    openedMedia?.mediaKind === 'Photo'
-      ? API_PATHS.OBSERVATION_PLOT_PHOTO.replace('{observationId}', openedMedia.observationId.toString())
-          .replace('{monitoringPlotId}', openedMedia.monitoringPlotId.toString())
-          .replace('{fileId}', openedMedia.fileId.toString())
-      : undefined;
-
   const [list, { data: events, isLoading }] = useLazyListObservationEventsQuery();
   const deletedVideoIds = useMemo(
     () =>
@@ -73,6 +54,27 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
       ),
     [events]
   );
+
+  const isOpenedVideoDeleted = openedMedia?.mediaKind === 'Video' && deletedVideoIds.has(openedMedia.fileId);
+
+  const {
+    currentData: mediaStream,
+    error: mediaStreamError,
+    isFetching: isStreamLoading,
+  } = useGetObservationMediaStreamQuery(
+    {
+      observationId: openedMedia?.observationId ?? observationId,
+      plotId: openedMedia?.monitoringPlotId ?? plotId,
+      fileId: openedMedia?.fileId ?? -1,
+    },
+    { skip: openedMedia?.mediaKind !== 'Video' || isOpenedVideoDeleted, refetchOnMountOrArgChange: true }
+  );
+  const photoUrl =
+    openedMedia?.mediaKind === 'Photo'
+      ? API_PATHS.OBSERVATION_PLOT_PHOTO.replace('{observationId}', openedMedia.observationId.toString())
+          .replace('{monitoringPlotId}', openedMedia.monitoringPlotId.toString())
+          .replace('{fileId}', openedMedia.fileId.toString())
+      : undefined;
 
   const MangroveFields = useMemo(
     () => ['pH', 'salinity (ppt)', 'tide', 'tide measurement time', 'water depth (cm)'],
@@ -155,11 +157,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         )}
         {event.action.type === 'Created' && (
           <Box>
-            {event.subject.type === 'ObservationPlotMedia' &&
-            event.subject.mediaKind === 'Video' &&
-            deletedVideoIds.has(event.subject.fileId) ? (
-              strings.formatString(strings.EVENT_ADDED, event.subject.fullText)
-            ) : event.subject.type === 'ObservationPlotMedia' ? (
+            {event.subject.type === 'ObservationPlotMedia' ? (
               <Link
                 fontSize='16px'
                 onClick={() => {
@@ -180,7 +178,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         )}
       </Box>
     ),
-    [deletedVideoIds, getSpeciesName, strings, theme.palette.TwClrTxtSuccess, theme.palette.TwClrTxtWarning]
+    [getSpeciesName, strings, theme.palette.TwClrTxtSuccess, theme.palette.TwClrTxtWarning]
   );
 
   return (
@@ -197,7 +195,9 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
       {openedMedia?.mediaKind === 'Video' && (
         <DialogBox open onClose={closeViewer} title={openedMedia.fullText} size='large' scrolled>
           <Box display='flex' alignItems='center' justifyContent='center' sx={{ aspectRatio: '16 / 9' }}>
-            {isStreamLoading ? (
+            {isOpenedVideoDeleted ? (
+              <Typography>{strings.VIDEO_HAS_BEEN_DELETED}</Typography>
+            ) : isStreamLoading ? (
               <CircularProgress />
             ) : mediaStreamError ? (
               <Typography>

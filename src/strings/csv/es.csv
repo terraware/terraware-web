@@ -2774,6 +2774,7 @@ VIABILITY_TEST_START_DATE_ERROR,Esto no debería ser antes de la fecha de recole
 VIABILITY_TESTING,Ensayo de viabilidad,cb87d231
 VIABILITY_TESTING_EMPTY_MESSAGE,El Ensayo de viabilidad te ayuda a monitorear la calidad de la semilla. Realizar una prueba de germinación en vivero o laboratorio o una prueba de corte en sus semillas.,d0729b19
 VIABILITY_TESTS,Pruebas de viabilidad,097a958c
+VIDEO_HAS_BEEN_DELETED,El video ha sido eliminado.,4f346d8f
 VIDEO_LINK,Enlace de video,2546979d
 VIDEO_MAX_DURATION_EXCEEDED,El video debe tener menos de 6 minutos.,0704b995
 VIDEO_PROCESSING,Procesamiento de video,998e847c
