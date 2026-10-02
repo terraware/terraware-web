@@ -54,7 +54,10 @@ api.enhanceEndpoints({
       invalidatesTags: (_result, _error, applicationId) => applicationWriteTags(applicationId),
     },
     reviewApplication: {
-      invalidatesTags: (_result, _error, arg) => [{ type: QueryTagTypes.Applications, id: arg.applicationId }],
+      invalidatesTags: (_result, _error, arg) => [
+        { type: QueryTagTypes.Applications, id: arg.applicationId },
+        { type: QueryTagTypes.Projects, id: 'LIST' },
+      ],
     },
   },
 });

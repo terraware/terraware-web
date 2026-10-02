@@ -6,19 +6,11 @@ import { BusySpinner, Dropdown, DropdownItem } from '@terraware/web-components';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
+import useCreateApplication from 'src/hooks/useCreateApplication';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useProjects } from 'src/hooks/useProjects';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { useLocalization, useOrganization } from 'src/providers';
-import {
-  requestCreateApplication,
-  requestCreateProjectApplication,
-} from 'src/redux/features/application/applicationAsyncThunks';
-import {
-  selectApplicationCreate,
-  selectApplicationCreateProject,
-} from 'src/redux/features/application/applicationSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -42,8 +34,7 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
   const { availableProjects } = useProjects();
   const { selectedOrganization } = useOrganization();
   const { allApplications } = useApplicationData();
-  const dispatch = useAppDispatch();
-  const { toastSuccess } = useSnackbar();
+  const { toastError, toastSuccess } = useSnackbar();
   const { goToApplication } = useNavigateTo();
   const markSubmitted = useTrackModalAbandonment('application_create', open);
 
@@ -52,13 +43,7 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
   const [projectSelectError, setProjectSelectError] = useState<string>('');
   const [projectOptions, setProjectOptions] = useState<DropdownItem[]>([]);
 
-  const [createProjectApplicationRequestId, setCreateProjectApplicationRequestId] = useState<string>('');
-  const [createApplicationRequestId, setCreateApplicationRequestId] = useState<string>('');
-
-  const createProjectApplicationResult = useAppSelector(
-    selectApplicationCreateProject(createProjectApplicationRequestId)
-  );
-  const createApplicationResult = useAppSelector(selectApplicationCreate(createApplicationRequestId));
+  const { createForProject, createWithNewProject } = useCreateApplication();
 
   const [newApplication, setNewApplication, onChange] = useForm<NewApplication>({
     projectType: 'New',
@@ -120,49 +105,6 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
     }
   }, [onClose, isLoading]);
 
-  const onSave = useCallback(() => {
-    if (selectedOrganization?.id) {
-      let error = '';
-      if (newApplication.projectType === 'New') {
-        if ((error = validateProjectName(newApplication.projectName ?? ''))) {
-          setProjectNameError(error);
-          return;
-        }
-
-        const createProjectApplicationRequest = dispatch(
-          requestCreateProjectApplication({
-            projectName: newApplication.projectName ?? '',
-            organizationId: selectedOrganization?.id,
-          })
-        );
-        setCreateProjectApplicationRequestId(createProjectApplicationRequest.requestId);
-        setIsLoading(true);
-      } else {
-        if ((error = validateProjectSelect(newApplication.projectId))) {
-          setProjectSelectError(error);
-          return;
-        }
-
-        const createApplicationRequest = dispatch(
-          requestCreateApplication({ projectId: newApplication.projectId ?? -1 })
-        );
-        setCreateApplicationRequestId(createApplicationRequest.requestId);
-        setIsLoading(true);
-      }
-    }
-  }, [
-    dispatch,
-    newApplication,
-    selectedOrganization,
-    validateProjectName,
-    validateProjectSelect,
-    setProjectNameError,
-    setProjectSelectError,
-    setCreateApplicationRequestId,
-    setCreateProjectApplicationRequestId,
-    setIsLoading,
-  ]);
-
   const onApplicationCreated = useCallback(
     (applicationId: number) => {
       if (activeLocale) {
@@ -174,24 +116,58 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
     [activeLocale, goToApplication, markSubmitted, toastSuccess]
   );
 
-  useEffect(() => {
-    if (createApplicationResult && createApplicationResult.status === 'success' && createApplicationResult.data) {
+  const onCreated = useCallback(
+    (applicationId: number) => {
       setIsLoading(false);
-      onApplicationCreated(createApplicationResult.data);
+      onApplicationCreated(applicationId);
       onClose();
-      return;
+    },
+    [onApplicationCreated, onClose]
+  );
+
+  const onCreateFailed = useCallback(() => {
+    setIsLoading(false);
+    toastError();
+  }, [toastError]);
+
+  const onSave = useCallback(() => {
+    if (selectedOrganization?.id) {
+      let error = '';
+      if (newApplication.projectType === 'New') {
+        if ((error = validateProjectName(newApplication.projectName ?? ''))) {
+          setProjectNameError(error);
+          return;
+        }
+
+        setIsLoading(true);
+        void createWithNewProject(newApplication.projectName ?? '', selectedOrganization.id)
+          .then(onCreated)
+          .catch(onCreateFailed);
+      } else {
+        if ((error = validateProjectSelect(newApplication.projectId))) {
+          setProjectSelectError(error);
+          return;
+        }
+
+        setIsLoading(true);
+        void createForProject(newApplication.projectId ?? -1)
+          .then(onCreated)
+          .catch(onCreateFailed);
+      }
     }
-    if (
-      createProjectApplicationResult &&
-      createProjectApplicationResult.status === 'success' &&
-      createProjectApplicationResult.data
-    ) {
-      setIsLoading(false);
-      onApplicationCreated(createProjectApplicationResult.data);
-      onClose();
-      return;
-    }
-  }, [createApplicationResult, createProjectApplicationResult, onApplicationCreated, onClose, setIsLoading]);
+  }, [
+    createForProject,
+    createWithNewProject,
+    newApplication,
+    onCreated,
+    onCreateFailed,
+    selectedOrganization,
+    validateProjectName,
+    validateProjectSelect,
+    setProjectNameError,
+    setProjectSelectError,
+    setIsLoading,
+  ]);
 
   return (
     <>

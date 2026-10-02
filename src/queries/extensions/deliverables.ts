@@ -11,6 +11,8 @@ const submissionTag = ({ deliverableId, projectId }: SubmissionArg) => ({
 const submissionWriteTags = (arg: SubmissionArg) => [
   submissionTag(arg),
   { type: QueryTagTypes.Deliverables, id: 'LIST' },
+  QueryTagTypes.ApplicationDeliverables,
+  QueryTagTypes.ApplicationModules,
 ];
 
 api.enhanceEndpoints({

@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -6,9 +6,7 @@ import { Button } from '@terraware/web-components';
 import ProjectFieldTextAreaDisplay from 'src/components/ProjectField/TextAreaDisplay';
 import useBoolean from 'src/hooks/useBoolean';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUser } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
 import strings from 'src/strings';
 import { Application, getApplicationStatusColor } from 'src/types/Application';
 
@@ -26,24 +24,12 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
   const canUpdateInternalComments = isAllowed('UPDATE_APPLICATION_INTERNAL_COMMENTS');
   const color = getApplicationStatusColor(application.status, theme);
 
-  const { reload } = useApplicationData();
-  const navigate = useSyncNavigate();
-
   const [isReviewModalOpen, , openReviewModal, closeReviewModal] = useBoolean(false);
-
-  const onReviewSubmitted = useCallback(() => {
-    reload(() => navigate(0));
-  }, [reload, navigate]);
 
   return (
     <>
       {isReviewModalOpen && (
-        <ApplicationReviewModal
-          application={application}
-          open={isReviewModalOpen}
-          onClose={closeReviewModal}
-          onSuccess={onReviewSubmitted}
-        />
+        <ApplicationReviewModal application={application} open={isReviewModalOpen} onClose={closeReviewModal} />
       )}
       <Box
         borderRadius={theme.spacing(1)}

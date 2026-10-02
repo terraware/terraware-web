@@ -1,7 +1,5 @@
 import { useCallback, useMemo } from 'react';
 
-import useApplicationPortal from 'src/hooks/useApplicationPortal';
-import { useApplicationData } from 'src/providers/Application/Context';
 import { useCompleteSubmissionMutation, useIncompleteSubmissionMutation } from 'src/queries/generated/deliverables';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import strings from 'src/strings';
@@ -23,20 +21,11 @@ export default function useCompleteDeliverable(): Response {
   const [completeSubmission, completeResult] = useCompleteSubmissionMutation();
   const [incompleteSubmission, incompleteResult] = useIncompleteSubmissionMutation();
 
-  const { isApplicationConsole, isApplicationPortal } = useApplicationPortal();
-  const { reload } = useApplicationData();
-
   const run = useCallback(
     (request: Promise<unknown>) => {
-      void request
-        .then(() => {
-          if (isApplicationConsole || isApplicationPortal) {
-            reload();
-          }
-        })
-        .catch(() => snackbar.toastError(strings.GENERIC_ERROR));
+      void request.catch(() => snackbar.toastError(strings.GENERIC_ERROR));
     },
-    [isApplicationConsole, isApplicationPortal, reload, snackbar]
+    [snackbar]
   );
 
   const complete = useCallback(
