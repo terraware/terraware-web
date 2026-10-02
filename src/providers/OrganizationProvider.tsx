@@ -3,9 +3,9 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useListOrganizationsQuery } from 'src/queries/generated/organizations';
 import { useGetUserPreferencesQuery } from 'src/queries/generated/preferences';
 import { store } from 'src/redux/store';
-import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
 import { Organization } from 'src/types/Organization';
 import useEnvironment from 'src/utils/useEnvironment';
@@ -20,17 +20,8 @@ export type OrganizationProviderProps = {
   children?: React.ReactNode;
 };
 
-enum APIRequestStatus {
-  'AWAITING',
-  'FAILED',
-  'FAILED_NO_AUTH',
-  'SUCCEEDED',
-}
-
 export default function OrganizationProvider({ children }: OrganizationProviderProps): JSX.Element {
-  const [selectedOrganization, setSelectedOrganization] = useState<Organization>();
-  const [orgAPIRequestStatus, setOrgAPIRequestStatus] = useState<APIRequestStatus>(APIRequestStatus.AWAITING);
-  const [organizations, setOrganizations] = useState<Organization[]>();
+  const [selectedOrganizationId, setSelectedOrganizationId] = useState<number>();
   const navigate = useSyncNavigate();
   const query = useQuery();
   const location = useStateLocation();
@@ -38,29 +29,34 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const { isDev, isStaging } = useEnvironment();
 
-  const reloadOrganizations = useCallback(async (selectedOrgId?: number) => {
-    const populateOrganizations = async () => {
-      const response = await OrganizationService.getOrganizations();
-      if (!response.error) {
-        setOrgAPIRequestStatus(APIRequestStatus.SUCCEEDED);
-        setOrganizations(response.organizations);
-        if (selectedOrgId) {
-          const orgToSelect = response.organizations.find((org) => org.id === selectedOrgId);
-          if (orgToSelect) {
-            setSelectedOrganization(orgToSelect);
-          }
-        }
-      } else if (response.error === 'NotAuthenticated') {
-        setOrgAPIRequestStatus(APIRequestStatus.FAILED_NO_AUTH);
-      } else {
-        // eslint-disable-next-line no-console
-        console.error('Failed org fetch', response);
-        setOrgAPIRequestStatus(APIRequestStatus.FAILED);
-      }
-    };
+  const {
+    currentData: organizationsData,
+    error: organizationsError,
+    isFetching: isFetchingOrganizations,
+    refetch: refetchOrganizations,
+  } = useListOrganizationsQuery('Facility');
+  const organizations = organizationsData?.organizations;
+  const organizationsFailed =
+    organizationsError !== undefined && !('status' in organizationsError && organizationsError.status === 401);
 
-    await populateOrganizations();
+  const selectedOrganization = useMemo(
+    () => organizations?.find((organization) => organization.id === selectedOrganizationId),
+    [organizations, selectedOrganizationId]
+  );
+
+  const setSelectedOrganization = useCallback((organization: Organization) => {
+    setSelectedOrganizationId(organization.id);
   }, []);
+
+  const reloadOrganizations = useCallback(
+    async (selectedOrgId?: number) => {
+      const { data } = await refetchOrganizations();
+      if (selectedOrgId && data?.organizations.some((organization) => organization.id === selectedOrgId)) {
+        setSelectedOrganizationId(selectedOrgId);
+      }
+    },
+    [refetchOrganizations]
+  );
 
   // Subscribe to the selected org's preferences rather than mirroring them into local state. Writes
   // invalidate the Preferences tag, so the refetch flows back through this subscription on its own —
@@ -85,27 +81,16 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   );
 
   useEffect(() => {
-    void reloadOrganizations();
-  }, [reloadOrganizations]);
-
-  useEffect(() => {
-    setOrganizationData((prev) => ({
-      ...prev,
-      redirectAndNotify,
-      selectedOrganization,
-      organizations: organizations ?? [],
-      orgPreferences,
-      bootstrapped,
-    }));
-  }, [selectedOrganization, organizations, orgPreferences, bootstrapped, redirectAndNotify]);
-
-  useEffect(() => {
     if (userBootstrapped && userPreferences && organizations && !isAcceleratorRoute && user?.userType !== 'Funder') {
       const queryOrganizationId = query.get('organizationId');
       let orgToUse;
       if (organizations.length) {
         const querySelectionOrg =
           queryOrganizationId && organizations.find((org) => org.id === parseInt(queryOrganizationId, 10));
+        if (queryOrganizationId && !querySelectionOrg && isFetchingOrganizations) {
+          // a just-created org isn't in the stale list yet; don't overwrite the URL before the refetch lands
+          return;
+        }
         orgToUse = querySelectionOrg || organizations.find((org) => org.id === selectedOrganization?.id);
         if (!orgToUse && userPreferences.lastVisitedOrg) {
           orgToUse = organizations.find((org) => org.id === userPreferences.lastVisitedOrg);
@@ -115,7 +100,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
         }
         if (orgToUse) {
           if (selectedOrganization?.id !== orgToUse.id) {
-            setSelectedOrganization(orgToUse);
+            setSelectedOrganizationId(orgToUse.id);
           }
           if (queryOrganizationId !== orgToUse.id.toString()) {
             query.set('organizationId', orgToUse.id.toString());
@@ -132,6 +117,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
     }
   }, [
     organizations,
+    isFetchingOrganizations,
     selectedOrganization,
     query,
     location,
@@ -154,7 +140,7 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
   }, [selectedOrganization?.id]);
 
   useEffect(() => {
-    if (orgAPIRequestStatus === APIRequestStatus.FAILED) {
+    if (organizationsFailed) {
       if (isDev || isStaging) {
         if (confirm(strings.DEV_SERVER_ERROR)) {
           window.location.reload();
@@ -163,17 +149,28 @@ export default function OrganizationProvider({ children }: OrganizationProviderP
         navigate(APP_PATHS.ERROR_FAILED_TO_FETCH_ORG_DATA);
       }
     }
-  }, [orgAPIRequestStatus, isDev, isStaging, navigate]);
+  }, [organizationsFailed, isDev, isStaging, navigate]);
 
-  const [organizationData, setOrganizationData] = useState<ProvidedOrganizationData>({
-    selectedOrganization,
-    setSelectedOrganization,
-    organizations: organizations ?? [],
-    orgPreferences,
-    redirectAndNotify,
-    reloadOrganizations,
-    bootstrapped,
-  });
+  const organizationData = useMemo<ProvidedOrganizationData>(
+    () => ({
+      selectedOrganization,
+      setSelectedOrganization,
+      organizations: organizations ?? [],
+      orgPreferences,
+      redirectAndNotify,
+      reloadOrganizations,
+      bootstrapped,
+    }),
+    [
+      selectedOrganization,
+      setSelectedOrganization,
+      organizations,
+      orgPreferences,
+      redirectAndNotify,
+      reloadOrganizations,
+      bootstrapped,
+    ]
+  );
 
   return <OrganizationContext.Provider value={organizationData}>{children}</OrganizationContext.Provider>;
 }

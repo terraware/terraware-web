@@ -19,7 +19,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 
 export default function OrganizationView(): JSX.Element {
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const [people, setPeople] = useState<OrganizationUser[]>();
   const [editModalOpen, setEditModalOpen] = useState(false);
@@ -83,7 +83,6 @@ export default function OrganizationView(): JSX.Element {
           organization={selectedOrganization}
           open={editModalOpen}
           onClose={() => setEditModalOpen(false)}
-          reloadOrganizationData={reloadOrganizations}
         />
       )}
       <Grid

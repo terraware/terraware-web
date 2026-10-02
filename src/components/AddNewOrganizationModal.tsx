@@ -10,7 +10,7 @@ import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers/hooks';
-import { useCreateOrganizationMutation } from 'src/queries/generated/organizations';
+import { CreateOrganizationRequestPayload, useCreateOrganizationMutation } from 'src/queries/generated/organizations';
 import strings from 'src/strings';
 import {
   ManagedLocationType,
@@ -53,11 +53,8 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const [organizationTypeDetailsError, setOrganizationTypeDetailsError] = useState('');
   const [locationTypes, setLocationTypes] = useState<LocationTypesSelected>({} as LocationTypesSelected);
   const [hasStates, setHasStates] = useState<boolean>(false);
-  const [newOrganization, setNewOrganization, onChange, onChangeCallback] = useForm<Organization>({
-    id: -1,
+  const [newOrganization, setNewOrganization, onChange, onChangeCallback] = useForm<CreateOrganizationRequestPayload>({
     name: '',
-    role: 'Owner',
-    totalUsers: 0,
   });
 
   const managedLocationTypeOptions = useMemo(() => {
@@ -83,12 +80,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   }, [activeLocale]);
 
   useEffect(() => {
-    setNewOrganization({
-      id: -1,
-      name: '',
-      role: 'Owner',
-      totalUsers: 0,
-    });
+    setNewOrganization({ name: '' });
     setLocationTypes(
       ManagedLocationTypes.reduce(
         (acc: LocationTypesSelected, location: ManagedLocationType) => ({ ...acc, [location]: false }),
@@ -240,7 +232,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
           selectedCountryCode={newOrganization.countryCode}
           selectedCountrySubdivisionCode={newOrganization.countrySubdivisionCode}
           onChangeCountryCode={(countryCode: string, hasSubdivisions: boolean) => {
-            setNewOrganization((previousNewOrganization: Organization): Organization => {
+            setNewOrganization((previousNewOrganization) => {
               return { ...previousNewOrganization, countryCode, countrySubdivisionCode: undefined };
             });
             setCountryError('');

@@ -1,8 +1,6 @@
 import { OrganizationPayload } from 'src/queries/generated/organizations';
 import strings from 'src/strings';
 
-import { Facility } from './Facility';
-
 export type ManagedLocationType = 'SeedBank' | 'Nursery' | 'PlantingSite';
 
 export const ManagedLocationTypes: ManagedLocationType[] = ['SeedBank', 'Nursery', 'PlantingSite'];
@@ -18,23 +16,7 @@ export const OrganizationTypes: OrganizationType[] = [
   'Other',
 ];
 
-export type Organization = {
-  canSubmitReports?: boolean;
-  botanicalCountryCode?: string;
-  countryCode?: string;
-  countrySubdivisionCode?: string;
-  createdTime?: string;
-  description?: string;
-  facilities?: Facility[];
-  id: number;
-  name: string;
-  organizationType?: OrganizationType;
-  organizationTypeDetails?: string;
-  role?: OrganizationRole;
-  totalUsers: number;
-  timeZone?: string;
-  website?: string;
-};
+export type Organization = OrganizationPayload;
 
 type HighOrganizationRoles = 'Admin' | 'Owner' | 'Terraformation Contact';
 
