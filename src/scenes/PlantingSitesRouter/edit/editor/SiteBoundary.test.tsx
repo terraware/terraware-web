@@ -45,7 +45,24 @@ const GEOMETRY: Polygon = {
   ],
 };
 
+// a second, visibly different boundary of the same safe size, for the replace/remove flows
+const OTHER_GEOMETRY: Polygon = {
+  type: 'Polygon',
+  coordinates: [
+    [
+      [1, 1],
+      [1, 1.02],
+      [1.02, 1.02],
+      [1.02, 1],
+      [1, 1],
+    ],
+  ],
+};
+
 const site = buildDraftPlantingSite();
+
+const polygonsCombinedBanner = (numPolygons: number) =>
+  strings.formatString(strings.SITE_BOUNDARY_POLYGONS_COMBINED, numPolygons) as string;
 
 const renderSiteBoundary = () =>
   renderWithProviders(<SiteBoundary site={site} />, {
@@ -115,7 +132,7 @@ describe('SiteBoundary', () => {
     expect(screen.getByRole('button', { name: strings.UPLOAD })).toBeInTheDocument();
   });
 
-  it('replaces the chooser with the uploaded boundary on the map', async () => {
+  it('replaces the chooser with a summary of the uploaded file and puts its boundary on the map', async () => {
     flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 480,
@@ -128,8 +145,98 @@ describe('SiteBoundary', () => {
 
     await uploadBoundaryFile(user, 'site.geojson');
 
-    await waitFor(() => expect(mapBoundaries[mapBoundaries.length - 1]?.features).toHaveLength(1));
+    expect(await screen.findByText(/site\.geojson/)).toBeInTheDocument();
     expect(screen.queryByText(strings.BOUNDARY_METHOD_TITLE)).not.toBeInTheDocument();
-    expect(screen.queryByText(strings.UPLOAD_SITE_BOUNDARY_DESCRIPTION)).not.toBeInTheDocument();
+    expect(screen.queryByText(polygonsCombinedBanner(1))).not.toBeInTheDocument();
+    await waitFor(() => expect(mapBoundaries[mapBoundaries.length - 1]?.features).toHaveLength(1));
+  });
+
+  it('warns that multiple polygons were combined into one boundary', async () => {
+    flags.boundaryFileUpload = true;
+    mockPost(PARSE_URL, {
+      areaHa: 480,
+      filename: 'site.geojson',
+      format: 'GeoJSON',
+      geometry: GEOMETRY,
+      numPolygons: 2,
+    });
+    const { user } = renderSiteBoundary();
+
+    await uploadBoundaryFile(user, 'site.geojson');
+
+    expect(await screen.findByText(polygonsCombinedBanner(2))).toBeInTheDocument();
+  });
+
+  it('brings back the chooser when the uploaded file is removed', async () => {
+    flags.boundaryFileUpload = true;
+    mockPost(PARSE_URL, {
+      areaHa: 480,
+      filename: 'site.geojson',
+      format: 'GeoJSON',
+      geometry: GEOMETRY,
+      numPolygons: 1,
+    });
+    const { user } = renderSiteBoundary();
+
+    await uploadBoundaryFile(user, 'site.geojson');
+    await user.click(await screen.findByRole('button', { name: strings.REMOVE }));
+
+    expect(screen.getByText(strings.BOUNDARY_METHOD_TITLE)).toBeInTheDocument();
+    expect(screen.queryByText(/site\.geojson/)).not.toBeInTheDocument();
+  });
+
+  it('keeps the new boundary on the map when the uploaded file is replaced', async () => {
+    flags.boundaryFileUpload = true;
+    mockPost(PARSE_URL, {
+      areaHa: 480,
+      filename: 'site.geojson',
+      format: 'GeoJSON',
+      geometry: GEOMETRY,
+      numPolygons: 1,
+    });
+    const { user } = renderSiteBoundary();
+
+    await uploadBoundaryFile(user, 'site.geojson');
+    expect(await screen.findByText(/site\.geojson/)).toBeInTheDocument();
+
+    mockPost(PARSE_URL, {
+      areaHa: 500,
+      filename: 'replacement.geojson',
+      format: 'GeoJSON',
+      geometry: OTHER_GEOMETRY,
+      numPolygons: 1,
+    });
+    await user.click(screen.getByRole('button', { name: strings.REPLACE_FILE }));
+    await submitUploadModal(user, 'replacement.geojson');
+
+    expect(await screen.findByText(/replacement\.geojson/)).toBeInTheDocument();
+    await waitFor(() => expect(mapBoundaries[mapBoundaries.length - 1]?.features).toHaveLength(1));
+  });
+
+  it('keeps the boundary on the map when a file is removed and a new one uploaded', async () => {
+    flags.boundaryFileUpload = true;
+    mockPost(PARSE_URL, {
+      areaHa: 480,
+      filename: 'site.geojson',
+      format: 'GeoJSON',
+      geometry: GEOMETRY,
+      numPolygons: 1,
+    });
+    const { user } = renderSiteBoundary();
+
+    await uploadBoundaryFile(user, 'site.geojson');
+    await user.click(await screen.findByRole('button', { name: strings.REMOVE }));
+
+    mockPost(PARSE_URL, {
+      areaHa: 500,
+      filename: 'replacement.geojson',
+      format: 'GeoJSON',
+      geometry: OTHER_GEOMETRY,
+      numPolygons: 1,
+    });
+    await uploadBoundaryFile(user, 'replacement.geojson');
+
+    expect(await screen.findByText(/replacement\.geojson/)).toBeInTheDocument();
+    await waitFor(() => expect(mapBoundaries[mapBoundaries.length - 1]?.features).toHaveLength(1));
   });
 });
