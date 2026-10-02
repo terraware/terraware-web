@@ -13,7 +13,7 @@ import useExportReportCsv from 'src/components/AcceleratorReports/useExportRepor
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
@@ -45,7 +45,7 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
   const startPrinting = useCallback(() => setPrinting(true), []);
   const stopPrinting = useCallback(() => setPrinting(false), []);
 
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+  const newReportTabEnabled = useFeatureEnabled('Report Updates July 2026');
   const pathActiveTab = tab ?? 'reports';
 
   const tabs = useMemo(() => {

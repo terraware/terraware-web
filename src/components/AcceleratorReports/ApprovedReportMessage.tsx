@@ -3,7 +3,7 @@ import React, { type JSX } from 'react';
 import { Box, useTheme } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import { useLocalization } from 'src/providers/hooks';
 import { AcceleratorReportPayload } from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
@@ -15,7 +15,7 @@ type ApprovedReportMessageProps = {
 const ApprovedReportMessage = ({ report }: ApprovedReportMessageProps): JSX.Element | null => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+  const newReportTabEnabled = useFeatureEnabled('Report Updates July 2026');
 
   if (!(activeLocale && report?.status === 'Approved')) {
     return null;

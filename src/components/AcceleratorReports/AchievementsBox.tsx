@@ -5,7 +5,7 @@ import { Button, Textfield } from '@terraware/web-components';
 
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import { useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
@@ -79,7 +79,7 @@ const AchievementsBox = (props: ReportBoxProps) => {
   const { report, projectId, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView } = props;
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [achievements, setAchievements] = useState<string[]>(report?.achievements || []);
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+  const newReportTabEnabled = useFeatureEnabled('Report Updates July 2026');
   const snackbar = useSnackbar();
 
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();

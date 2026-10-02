@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Grid } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import { useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
@@ -22,7 +22,7 @@ const FinancialSummariesBox = (props: ReportBoxProps) => {
   const [financialSummaries, setFinancialSummaries] = useState<string | undefined>(report?.financialSummaries);
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
 
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+  const newReportTabEnabled = useFeatureEnabled('Report Updates July 2026');
   const snackbar = useSnackbar();
 
   useEffect(() => setFinancialSummaries(report?.financialSummaries), [report?.financialSummaries]);

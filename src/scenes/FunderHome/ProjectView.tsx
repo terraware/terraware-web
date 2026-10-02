@@ -9,7 +9,7 @@ import ActivityHighlightsContent, { QuarterDropdownData } from 'src/components/A
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import TfMain from 'src/components/common/TfMain';
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useFunderListActivitiesQuery } from 'src/queries/generated/funderActivities';
@@ -52,7 +52,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
   const [selectedReport, setSelectedReport] = useState<PublishedReportPayload>();
   const [quarterDropdownData, setQuarterDropdownData] = useState<QuarterDropdownData | undefined>(undefined);
 
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
+  const newReportTabEnabled = useFeatureEnabled('Report Updates July 2026');
 
   useEffect(() => {
     // FunderReportTabV2 lists its own reports and consumes the reportId param itself
