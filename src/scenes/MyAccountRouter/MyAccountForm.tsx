@@ -27,7 +27,8 @@ import useUpdateCurrentUser from 'src/hooks/useUpdateCurrentUser';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useLocalization, useTimeZones, useUser } from 'src/providers';
 import { useGetDisclaimerQuery } from 'src/queries/generated/disclaimer';
-import { OrganizationService, OrganizationUserService } from 'src/services';
+import { useDeleteOrganizationMutation, useLazyListOrganizationRolesQuery } from 'src/queries/generated/organizations';
+import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
 import { Organization, roleName } from 'src/types/Organization';
@@ -116,6 +117,8 @@ const MyAccountForm = ({
   const { userPreferences } = useUser();
   const updateUserPreferences = useUpdateUserPreferences();
   const snackbar = useSnackbar();
+  const [listOrganizationRoles] = useLazyListOrganizationRolesQuery();
+  const [deleteOrganization] = useDeleteOrganizationMutation();
   const docLinks = useDocLinks();
   const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
   const contentRef = useCallback((node: HTMLElement | null) => setContentElement(node), []);
@@ -224,8 +227,8 @@ const MyAccountForm = ({
           setAssignNewOwnerModalOpened(false);
           setLeaveOrganizationModalOpened(true);
         } else if (removedOrg.totalUsers > 1) {
-          const organizationRoles = OrganizationService.getOrganizationRoles(removedOrg.id);
-          const owners = (await organizationRoles).roles?.find((role) => role.role === 'Owner');
+          const organizationRoles = await listOrganizationRoles(removedOrg.id);
+          const owners = organizationRoles.data?.roles.find((role) => role.role === 'Owner');
           if (owners?.totalUsers === 1) {
             setAssignNewOwnerModalOpened(true);
           } else {
@@ -310,9 +313,9 @@ const MyAccountForm = ({
 
   const deleteOrgHandler = async () => {
     if (removedOrg) {
-      const deleterOrgReponse = await OrganizationService.deleteOrganization(removedOrg.id);
+      const deleteOrgResponse = await deleteOrganization(removedOrg.id);
       const succeeded = await saveProfileChanges();
-      if (succeeded && deleterOrgReponse.requestSucceeded) {
+      if (succeeded && !('error' in deleteOrgResponse)) {
         if (reloadData) {
           reloadData();
         }
