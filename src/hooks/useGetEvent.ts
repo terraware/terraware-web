@@ -1,35 +1,20 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
-import { requestGetEvent } from 'src/redux/features/events/eventsAsyncThunks';
-import { selectEventRequest } from 'src/redux/features/events/eventsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useLazyGetEventQuery } from 'src/queries/generated/moduleEvents';
 
 const useGetEvent = () => {
-  const dispatch = useAppDispatch();
-
-  const [requestId, setRequestId] = useState<string>('');
-  const getEventResponse = useAppSelector(selectEventRequest(requestId));
+  const [getEventQuery, getEventResult] = useLazyGetEventQuery();
 
   const getEvent = useCallback(
     (eventId: number) => {
-      const dispatched = dispatch(requestGetEvent(eventId));
-      setRequestId(dispatched.requestId);
+      void getEventQuery(eventId, true);
     },
-    [dispatch, setRequestId]
-  );
-
-  const event = useMemo(
-    () => (getEventResponse?.status === 'success' ? getEventResponse.data : undefined),
-    [getEventResponse]
+    [getEventQuery]
   );
 
   return useMemo(
-    () => ({
-      event,
-      status: getEventResponse?.status,
-      getEvent,
-    }),
-    [event, getEventResponse?.status, getEvent]
+    () => ({ event: getEventResult.currentData?.event, getEvent }),
+    [getEventResult.currentData, getEvent]
   );
 };
 
