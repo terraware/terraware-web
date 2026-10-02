@@ -144,7 +144,15 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
                   <Typography display='inline' textTransform='capitalize'>
                     {event.subject.type === 'ObservationPlotMedia'
                       ? `${event.subject.fileId} ${event.subject.mediaKind} ${event.action.fieldName}`
-                      : event.action.fieldName}
+                      : event.subject.type === 'RecordedTree'
+                        ? `${event.subject.fullText} ${
+                            event.action.fieldName
+                              .toLocaleLowerCase()
+                              .startsWith(`${event.subject.shortText.toLocaleLowerCase()} `)
+                              ? event.action.fieldName.slice(event.subject.shortText.length + 1)
+                              : event.action.fieldName
+                          }`
+                        : event.action.fieldName}
                   </Typography>,
                   <Typography display='inline' color={theme.palette.TwClrTxtWarning} fontWeight={600}>
                     {event.action.changedFrom?.toString() || strings.NONE}
