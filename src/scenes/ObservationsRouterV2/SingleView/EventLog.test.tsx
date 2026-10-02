@@ -68,6 +68,105 @@ const renderHistory = async (events = [mediaEvent('Video', 7592)]) => {
   return rendered;
 };
 
+const speciesCountEvent = (
+  speciesName: string,
+  fieldName: string,
+  changedFrom: string,
+  changedTo: string,
+  timestamp: string
+): EventLogEntryPayload => ({
+  action: { type: 'FieldUpdated', fieldName, changedFrom: [changedFrom], changedTo: [changedTo] },
+  subject: {
+    type: 'MonitoringSpecies',
+    scientificName: speciesName,
+    monitoringPlotId: 2,
+    observationId: 1,
+    plantingSiteId: 3,
+    fullText: speciesName,
+    shortText: speciesName,
+  },
+  timestamp,
+  userId: 1,
+  userName: 'Jennifer Yim',
+});
+
+describe('Observation EventLog species changes', () => {
+  it('reports an all-zero starting point as the species being added', async () => {
+    const at = '2026-06-15T12:00:00.100Z';
+    await renderHistory([
+      speciesCountEvent('Acacia koa', 'live count', '0', '6', at),
+      speciesCountEvent('Acacia koa', 'existing count', '0', '2', at),
+    ]);
+
+    expect(
+      screen.getByText(strings.formatString(strings.EVENT_SPECIES_ADDED, 'Acacia koa') as string)
+    ).toBeInTheDocument();
+    // The individual count lines are replaced by the one message, not shown alongside it.
+    expect(screen.queryByText(/existing count/)).not.toBeInTheDocument();
+  });
+
+  it('reports an all-zero result as the species being removed', async () => {
+    const at = '2026-06-15T12:00:00.100Z';
+    await renderHistory([
+      speciesCountEvent('Unknown', 'live count', '2', '0', at),
+      speciesCountEvent('Unknown', 'dead count', '1', '0', at),
+    ]);
+
+    expect(
+      screen.getByText(strings.formatString(strings.EVENT_SPECIES_REMOVED, 'Unknown') as string)
+    ).toBeInTheDocument();
+  });
+
+  it('reports a removal next to an addition as the species being changed', async () => {
+    await renderHistory([
+      speciesCountEvent('Duosperma angolense', 'live count', '6', '0', '2026-06-15T12:00:00.100Z'),
+      speciesCountEvent('Abutilon eremitopetalum', 'live count', '0', '6', '2026-06-15T12:00:00.101Z'),
+    ]);
+
+    expect(
+      screen.getByText(
+        strings.formatString(strings.EVENT_SPECIES_CHANGED, 'Duosperma angolense', 'Abutilon eremitopetalum') as string
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(strings.formatString(strings.EVENT_SPECIES_REMOVED, 'Duosperma angolense') as string)
+    ).not.toBeInTheDocument();
+  });
+
+  it('names the plot unknown species the way the plant count table does', async () => {
+    const at = '2026-06-15T12:00:00.100Z';
+    const unknown: EventLogEntryPayload = {
+      action: { type: 'FieldUpdated', fieldName: 'live count', changedFrom: ['2'], changedTo: ['0'] },
+      // An unknown species carries neither a name nor an id; shortText is just the word "Species".
+      subject: {
+        type: 'MonitoringSpecies',
+        monitoringPlotId: 2,
+        observationId: 1,
+        plantingSiteId: 3,
+        fullText: 'Species Unknown',
+        shortText: 'Species',
+      },
+      timestamp: at,
+      userId: 1,
+      userName: 'Jennifer Yim',
+    };
+    await renderHistory([unknown]);
+
+    expect(
+      screen.getByText(strings.formatString(strings.EVENT_SPECIES_REMOVED, strings.UNKNOWN) as string)
+    ).toBeInTheDocument();
+  });
+
+  it('still reports an ordinary count edit as a value change', async () => {
+    await renderHistory([speciesCountEvent('Acacia koa', 'live count', '4', '9', '2026-06-15T12:00:00.100Z')]);
+
+    expect(screen.getByText(/Acacia koa/)).toBeInTheDocument();
+    expect(
+      screen.queryByText(strings.formatString(strings.EVENT_SPECIES_ADDED, 'Acacia koa') as string)
+    ).not.toBeInTheDocument();
+  });
+});
+
 describe('Observation EventLog media', () => {
   it('preserves photo numbers and opens the photo viewer while leaving deleted and original media unlinked', async () => {
     const { user } = await renderHistory([

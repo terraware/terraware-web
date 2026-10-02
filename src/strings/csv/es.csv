@@ -742,6 +742,9 @@ EVENT_NAME_RECORDING,Grabación de {0},6c589671
 EVENT_NAME_SLIDES,Diapositivas de {0},a06fe761
 EVENT_RECORDED_SESSION_DESCRIPTION_1,Puedes ver esta sesión grabada cuando quieras y las veces que necesites.,1fe65a8a
 EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Altavoces o auriculares: integrados, con conexión USB o inalámbricos con tecnología Bluetooth.",b87be889
+EVENT_SPECIES_ADDED,La especie {0} fue añadida a la observación de la parcela,aa4a81d7
+EVENT_SPECIES_CHANGED,La especie {0} fue cambiada a {1},f6856fa8
+EVENT_SPECIES_REMOVED,La especie {0} fue eliminada de la observación de la parcela,1ea70793
 EVENTS,Eventos,a18b73bc
 EXCEEDS_AVAILABLE_X,Supera lo disponible ({0}),4391f9df
 EXCEEDS_READY_TO_PLANT,El total retirado ({0}) en todos los sustratos supera la cantidad Lista para Transplantar ({1}) en este lote,3e3cd4a4
