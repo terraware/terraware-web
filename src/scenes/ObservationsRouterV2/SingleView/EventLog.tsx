@@ -7,6 +7,7 @@ import { DialogBox, ViewPhotosDialog } from '@terraware/web-components';
 import EventLogView from 'src/components/common/EventLog';
 import Link from 'src/components/common/Link';
 import { API_PATHS } from 'src/constants';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
@@ -17,7 +18,7 @@ import {
 import { useGetObservationMediaStreamQuery } from 'src/queries/generated/observations';
 import { ListObservationEventsArgs, useLazyListObservationEventsQuery } from 'src/queries/observations/observations';
 
-import { summarizeMonitoringSpeciesEvents } from './monitoringSpeciesEvents';
+import { getMonitoringSpeciesKey, summarizeMonitoringSpeciesEvents } from './monitoringSpeciesEvents';
 
 type EventLogProps = {
   observationId: number;
@@ -46,6 +47,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [closeViewer, openedMedia?.mediaKind]);
 
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [list, { data: events, isLoading }] = useLazyListObservationEventsQuery();
   const deletedVideoIds = useMemo(
     () =>
@@ -119,9 +121,33 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
     [getSpeciesName, strings.UNKNOWN]
   );
 
+  // Replaying the log needs a starting point, so the plot's species are read as they stand now.
+  const monitoringPlot = useMemo(() => {
+    const results = observationResultsResponse?.observation;
+    return results?.isAdHoc
+      ? results.adHocPlot
+      : results?.strata
+          .flatMap((stratum) => stratum.substrata)
+          ?.flatMap((substratum) => substratum?.monitoringPlots)
+          .find((plot) => plot.monitoringPlotId === plotId);
+  }, [observationResultsResponse?.observation, plotId]);
+
+  const currentSpeciesTotals = useMemo(() => {
+    const totals = new Map<string, number>();
+    [...(monitoringPlot?.species ?? []), ...(monitoringPlot?.unknownSpecies ? [monitoringPlot.unknownSpecies] : [])]
+      // A species the plot no longer records is simply absent, which counts as zero.
+      .forEach((plotSpecies) =>
+        totals.set(
+          getMonitoringSpeciesKey(plotSpecies.speciesId, plotSpecies.speciesName),
+          (plotSpecies.totalExisting ?? 0) + (plotSpecies.totalLive ?? 0) + (plotSpecies.totalDead ?? 0)
+        )
+      );
+    return totals;
+  }, [monitoringPlot]);
+
   const { summaries: speciesSummaries, redundant: redundantSpeciesEntries } = useMemo(
-    () => summarizeMonitoringSpeciesEvents(events, resolveSpeciesName),
-    [events, resolveSpeciesName]
+    () => summarizeMonitoringSpeciesEvents(events, resolveSpeciesName, currentSpeciesTotals),
+    [currentSpeciesTotals, events, resolveSpeciesName]
   );
 
   const filterEvent = useCallback(
