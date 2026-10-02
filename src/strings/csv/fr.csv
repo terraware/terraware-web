@@ -350,6 +350,9 @@ CHANGE_DEFAULT_WEIGHT_SYSTEM,Vous pouvez changer votre système de poids par dé
 CHANGE_GERMINATION_ESTABLISHMENT_STATUS,Changer l'état de germination/établissement,61f76f62
 CHANGE_HARDENING_OFF_STATUS,Modifier le statut d’acclimatation,b734dbd7
 CHANGE_HISTORY,Historique des modifications,3aa8d940
+CHANGE_SPECIES,Changer d'espèce,0c459473
+CHANGE_SPECIES_CONFIRMATION,Changer d'espèce ?,014eca39
+CHANGE_SPECIES_CONFIRMATION_MESSAGE,Les valeurs enregistrées pour {0} seront transférées à {1}.,6c77f2aa
 CHANGE_TO,Passez à {0},8423817d
 CHANGED,Modifié,f88927ec
 CHANGES,Changements,47809a57
@@ -1953,6 +1956,9 @@ REMOVE_PERSON,Supprimer la personne,c7c8903c
 REMOVE_PERSON_DESC,Êtes-vous sûr de vouloir retirer {0} ? Retirer {0} signifie qu'il n'aura plus accès aux données de votre organisation.,000a6493
 REMOVE_PROJECT,Supprimer un projet,3e32288a
 REMOVE_SPECIES,Supprimer des espèces,bbc8f149
+REMOVE_SPECIES_CONFIRMATION,Supprimer {0} ?,f8a2aaba
+REMOVE_SPECIES_CONFIRMATION_MESSAGE,Cette espèce possède des valeurs enregistrées. La supprimer effacera ces valeurs de cette observation.,ef81715f
+REMOVE_SPECIES_NAMED,Supprimer {0},d6f8d76c
 REMOVE_VIRTUAL_WALKTHROUGH,Supprimer la visite virtuelle,19cd7395
 REMOVE_VIRTUAL_WALKTHROUGH_CONFIRM,Êtes-vous sûr de vouloir supprimer cette visite virtuelle ? Cette action est irréversible.,d5c769f1
 REMOVING_ORG_WARNING,"En vous retirant de {0}, vous n'aurez plus accès aux données de cette organisation. Êtes-vous sûr de vouloir enregistrer vos modifications ?",767a2892
@@ -2106,6 +2112,7 @@ SDG_16,"16. Paix, justice et institutions fortes.",e0e9a0ba
 SDG_17,17. Partenariats pour les objectifs,3b9b74f8
 SEARCH,Recherche,9f30c236
 SEARCH_OR_SELECT,Rechercher ou sélectionner...,cbd7f4ed
+SEARCH_SPECIES,Rechercher une espèce,5167bc5e
 SEASON_NAME,Nom de la saison,74218855
 SEASON_NAME_REQUIRED,Nom de la saison *,809a9261
 SEASON_TO_COPY,Saison à copier,fd2a6498
@@ -2357,8 +2364,8 @@ SPECIES_SURVIVAL,Survie des espèces,20e77844
 SPECIES_SURVIVAL_BREAKDOWN,Répartition de la survie des espèces,837eaa3b
 SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,La répartition de la survie indique le pourcentage de plants par espèce qui sont encore vivants depuis la plantation initiale.,adb3d43d
 SPECIES_SURVIVAL_TOOLTIP,La survie des espèces affiche les espèces ayant les taux de survie les plus élevés et les plus faibles parmi les strates observées.,5dde50a6
-SPECIES_TABLE_INSTRUCTIONS,Cliquez sur un nombre dans le tableau pour le modifier.,7f5a3f3e
-SPECIES_TABLE_INSTRUCTIONS_NOTE,"REMARQUE : Lorsque les nombres sont modifiés, les nombres et emplacements d'origine des plantes observées ne seront pas mis à jour sur les cartes. Veuillez modifier les nombres avec discernement.",3d4cd792
+SPECIES_TABLE_INSTRUCTIONS,Cliquez sur une espèce ou un nombre dans le tableau pour le modifier.,fe17562a
+SPECIES_TABLE_INSTRUCTIONS_NOTE,"REMARQUE : Lorsque des nombres ou des espèces sont modifiés, ajoutés ou supprimés, les nombres et emplacements d'origine des plants observés ne seront pas mis à jour sur les cartes. Veuillez effectuer les modifications avec discernement.",915b4150
 SPECIES_TARGET_ADDED,Objectif d'espèce ajouté : {0} dans {1}.,024829c9
 SPECIES_TARGET_DELETED,Objectif d'espèce supprimé : {0} dans {1}.,fd85928a
 SPECIES_TARGET_UPDATED,Objectif d'espèce mis à jour : {0} dans {1} modifié de {2} à {3}.,f14397fe
