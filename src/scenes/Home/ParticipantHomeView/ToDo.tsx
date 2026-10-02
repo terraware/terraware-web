@@ -4,12 +4,12 @@ import { Box, useTheme } from '@mui/material';
 
 import strings from 'src/strings';
 
-import { useToDoData } from './ToDoProvider/Context';
 import ToDoSection from './ToDoSection';
+import useProjectToDos from './useProjectToDos';
 
 const ToDo = () => {
   const theme = useTheme();
-  const { toDoItems, upcomingItems } = useToDoData();
+  const { toDoItems, upcomingItems } = useProjectToDos();
 
   return (
     <>
