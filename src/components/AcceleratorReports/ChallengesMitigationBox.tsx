@@ -6,7 +6,6 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
-import isEnabled from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import { useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
@@ -42,7 +41,6 @@ const ChallengeMitigationPlan = ({
 }) => {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
 
   const setChallenge = useCallback(
     (value: any) => setChallengeMitigation({ ...challengeMitigation, challenge: value }),
@@ -56,31 +54,6 @@ const ChallengeMitigationPlan = ({
 
   return (
     <Grid item xs={12} marginBottom={1}>
-      {!newReportTabEnabled && !(funderReportView && !isMobile) && (
-        <Box
-          sx={{ scrollMarginTop: '50vh' }}
-          borderBottom={funderReportView ? 'none' : `1px solid ${theme.palette.TwClrBrdrSecondary}`}
-          width={'100%'}
-        >
-          <Grid container marginBottom={1}>
-            <Grid item xs={funderReportView && isMobile ? 12 : editing ? 5.75 : 6}>
-              <Typography fontWeight={600} fontSize={funderReportView ? '20px' : '16px'}>
-                {strings.CHALLENGE}
-                {editing && ' *'}
-              </Typography>
-            </Grid>
-            {!(funderReportView && isMobile) && (
-              <Grid item xs={editing ? 5.75 : 6}>
-                <Typography fontWeight={600}>
-                  {strings.MITIGATION_PLAN}
-                  {editing && ' *'}
-                </Typography>
-              </Grid>
-            )}
-          </Grid>
-        </Box>
-      )}
-
       <Grid
         container
         borderBottom={includeBorder && !editing ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''}
@@ -157,10 +130,8 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
   const [challengeMitigations, setChallengeMitigations] = useState<ChallengeMitigation[]>(report?.challenges || []);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
   const snackbar = useSnackbar();
 
-  const { isMobile } = useDeviceInfo();
   const isEditing = useMemo(() => editing || internalEditing, [editing, internalEditing]);
 
   const nonEmptyChallenges = useMemo(() => {
@@ -262,21 +233,20 @@ const ChallengesMitigationBox = (props: ReportBoxProps) => {
     []
   );
 
-  const isEmpty = newReportTabEnabled && (isEditing ? challengeMitigations : nonEmptyChallenges).length === 0;
+  const isEmpty = (isEditing ? challengeMitigations : nonEmptyChallenges).length === 0;
 
   return (
     <EditableReportBox
       anchorId='challenges'
-      name={newReportTabEnabled ? strings.CHALLENGES_AND_MITIGATION_PLAN : ''}
+      name={strings.CHALLENGES_AND_MITIGATION_PLAN}
       canEdit={!!canEdit}
       editing={isEditing}
       onEdit={setInternalEditingTrue}
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
-      includeBorder={!newReportTabEnabled && !funderReportView}
     >
-      {!isEmpty && (newReportTabEnabled || (funderReportView && !isMobile)) && (
+      {!isEmpty && (
         <Box width={'100%'}>
           <Grid container marginBottom={1}>
             <Grid item xs={6}>

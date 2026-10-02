@@ -37,7 +37,7 @@ export default function EditSettings(): JSX.Element {
   const snackbar = useSnackbar();
 
   const goToProjectReports = useCallback(() => {
-    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?tab=settings`);
+    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}/indicators`);
   }, [navigate, projectId]);
 
   useEffect(() => {

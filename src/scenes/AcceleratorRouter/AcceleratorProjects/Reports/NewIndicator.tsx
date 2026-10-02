@@ -42,7 +42,7 @@ export default function NewIndicator(): JSX.Element {
   const [indicatorKind, setIndicatorKind] = useState<IndicatorKind>('common');
 
   const goToProjectReports = useCallback(() => {
-    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}?tab=settings`);
+    navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', projectId.toString())}/indicators`);
   }, [navigate, projectId]);
 
   const [createCommonIndicator, createCommonIndicatorResponse] = useCreateCommonIndicatorMutation();

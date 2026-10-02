@@ -7,13 +7,11 @@ import Tabs from '@terraware/web-components/components/Tabs';
 
 import AcceleratorReportPrint from 'src/components/AcceleratorReports/AcceleratorReportPrint';
 import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/AcceleratorReportTargetsTable';
-import AcceleratorReportsTable from 'src/components/AcceleratorReports/AcceleratorReportsTable';
 import ReportExportMenu from 'src/components/AcceleratorReports/ReportExportMenu';
 import useExportReportCsv from 'src/components/AcceleratorReports/useExportReportCsv';
 import Page from 'src/components/Page';
 import PageHeaderProjectFilter from 'src/components/PageHeader/PageHeaderProjectFilter';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
@@ -21,7 +19,6 @@ import useScrollRestoration from 'src/hooks/useScrollRestoration';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import useStickyTabs from 'src/utils/useStickyTabs';
 
 import AcceleratorReportTabV2 from './AcceleratorReportTabV2';
 import ReportSubmitButton from './ReportSubmitButton';
@@ -45,19 +42,14 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
   const startPrinting = useCallback(() => setPrinting(true), []);
   const stopPrinting = useCallback(() => setPrinting(false), []);
 
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
-  const pathActiveTab = tab ?? 'reports';
+  const activeTab = tab ?? 'reports';
 
   const tabs = useMemo(() => {
     return [
       {
         id: 'reports',
         label: strings.REPORTS,
-        children: newReportTabEnabled ? (
-          <AcceleratorReportTabV2 active={pathActiveTab === 'reports'} />
-        ) : (
-          <AcceleratorReportsTable />
-        ),
+        children: <AcceleratorReportTabV2 active={activeTab === 'reports'} />,
       },
       {
         id: 'targets',
@@ -65,21 +57,12 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
         children: <AcceleratorReportTargetsTable />,
       },
     ];
-  }, [newReportTabEnabled, pathActiveTab, strings]);
+  }, [activeTab, strings]);
 
-  const { activeTab: stickyActiveTab, onChangeTab: onChangeStickyTab } = useStickyTabs({
-    defaultTab: 'reports',
-    tabs,
-    viewIdentifier: 'accelerator-reports',
-  });
-
-  const onChangePathTab = useCallback(
+  const onChangeTab = useCallback(
     (newTab: string) => navigate(newTab === 'reports' ? APP_PATHS.REPORTS : `${APP_PATHS.REPORTS}/${newTab}`),
     [navigate]
   );
-
-  const activeTab = newReportTabEnabled ? tab ?? 'reports' : stickyActiveTab;
-  const onChangeTab = newReportTabEnabled ? onChangePathTab : onChangeStickyTab;
 
   const selectedReportId = Number(pathParams.reportId) || undefined;
 
@@ -102,7 +85,7 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
 
   const rightComponent = useMemo(
     () =>
-      newReportTabEnabled && activeTab === 'reports' && selectedReportId !== undefined ? (
+      activeTab === 'reports' && selectedReportId !== undefined ? (
         <Box display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
           <Button
             disabled={!canEdit || isLoading}
@@ -133,7 +116,6 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
       exportAcceleratorReport,
       goToEdit,
       isLoading,
-      newReportTabEnabled,
       selectedReportId,
       startPrinting,
       strings.EDIT,
@@ -159,7 +141,7 @@ const AcceleratorReportsView = ({ tab }: AcceleratorReportsViewProps) => {
       hierarchicalCrumbs={false}
       leftComponent={PageHeaderLeftComponent}
       rightComponent={rightComponent}
-      stickyHeader={newReportTabEnabled}
+      stickyHeader
       title={strings.REPORTS}
     >
       {printing && selectedReportId !== undefined && (

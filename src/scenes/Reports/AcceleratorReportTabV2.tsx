@@ -20,6 +20,8 @@ import { APP_PATHS } from 'src/constants';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLazyListAcceleratorReportsQuery } from 'src/queries/generated/acceleratorReports';
 
@@ -29,6 +31,7 @@ type AcceleratorReportTabV2Props = {
 
 const AcceleratorReportTabV2 = ({ active }: AcceleratorReportTabV2Props): JSX.Element => {
   const theme = useTheme();
+  const trackEvent = useTrackEvent();
   const { allAcceleratorProjects, currentAcceleratorProject, setCurrentAcceleratorProject } = useParticipantData();
   const navigate = useSyncNavigate();
   const pathParams = useParams<{ reportId?: string }>();
@@ -85,6 +88,12 @@ const AcceleratorReportTabV2 = ({ active }: AcceleratorReportTabV2Props): JSX.El
       selectReport(resolvedReportId, true);
     }
   }, [active, pathReportId, resolvedReportId, selectReport]);
+
+  useEffect(() => {
+    if (active && resolvedReportId !== undefined) {
+      trackEvent(MIXPANEL_EVENTS.REPORT_VIEWED, { viewer_persona: 'forester' });
+    }
+  }, [active, resolvedReportId, trackEvent]);
 
   const isEmpty = listReportsResponse.currentData !== undefined && reports.length === 0;
 
