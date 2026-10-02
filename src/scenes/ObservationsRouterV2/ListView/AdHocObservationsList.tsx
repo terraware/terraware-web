@@ -29,7 +29,6 @@ import { useObservationFilters } from '../ObservationFiltersProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
 import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
-import { BiomassActionsMenuContent } from './BiomassList';
 import SelectObservationButton from './SelectObservationButton';
 
 const STORAGE_KEY = 'observations-ad-hoc-table';
@@ -43,7 +42,6 @@ const DEFAULT_COLUMN_ORDER = [
   'totalSpecies',
   'plotDescription',
   'plantingSiteName',
-  'actionsMenu',
 ];
 
 const DEFAULT_COLUMN_VISIBILITY = { plantingSiteName: false, plotDescription: false };
@@ -175,14 +173,6 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
     return typeof value === 'number' ? <FormattedNumber value={value} /> : null;
   }, []);
 
-  const ActionsMenuCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<AdHocRow> }) =>
-      cell.row.original.isBiomass ? (
-        <BiomassActionsMenuContent observationId={cell.row.original.observationId} />
-      ) : null,
-    []
-  );
-
   const columns = useMemo(
     (): EditableTableColumn<AdHocRow>[] => [
       {
@@ -231,15 +221,8 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         accessorKey: 'totalSpecies',
         Cell: NumberCell,
       },
-      {
-        id: 'actionsMenu',
-        header: '',
-        accessorFn: () => null,
-        enableHiding: false,
-        Cell: ActionsMenuCell,
-      },
     ],
-    [strings, showSelectObservation, PlotNumberCell, CompletedDateCell, NumberCell, ActionsMenuCell]
+    [strings, showSelectObservation, PlotNumberCell, CompletedDateCell, NumberCell]
   );
 
   const onExport = useCallback(
@@ -326,8 +309,6 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
               },
             },
           }),
-          muiTableHeadCellProps: ({ column }: { column: { id: string } }) =>
-            column.id === 'actionsMenu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
           muiTablePaperProps: { elevation: 0 },
           positionGlobalFilter: 'right' as const,
           renderEmptyRowsFallback: () =>
