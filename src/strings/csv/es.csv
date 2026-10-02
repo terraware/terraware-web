@@ -351,6 +351,9 @@ CHANGE_DEFAULT_WEIGHT_SYSTEM,Puede cambiar el sistema de peso por defecto de {0}
 CHANGE_GERMINATION_ESTABLISHMENT_STATUS,Cambiar estado de germinación/establecimiento,61f76f62
 CHANGE_HARDENING_OFF_STATUS,Cambiar estado de aclimatación,b734dbd7
 CHANGE_HISTORY,Historial de cambios,3aa8d940
+CHANGE_SPECIES,Cambiar especie,0c459473
+CHANGE_SPECIES_CONFIRMATION,¿Cambiar especie?,014eca39
+CHANGE_SPECIES_CONFIRMATION_MESSAGE,Los valores registrados para {0} se trasladarán a {1}.,6c77f2aa
 CHANGE_TO,Cambiar a {0},8423817d
 CHANGED,Cambiado,f88927ec
 CHANGES,Cambios,47809a57
@@ -1954,6 +1957,9 @@ REMOVE_PERSON,Eliminar persona,c7c8903c
 REMOVE_PERSON_DESC,"¿Está seguro de que desea eliminar a {0}? Al eliminar a {0}, ya no tendrá acceso a los datos de su organización.",000a6493
 REMOVE_PROJECT,Eliminar proyecto,3e32288a
 REMOVE_SPECIES,Borrar especies,bbc8f149
+REMOVE_SPECIES_CONFIRMATION,¿Eliminar {0}?,f8a2aaba
+REMOVE_SPECIES_CONFIRMATION_MESSAGE,"Esta especie tiene valores registrados. Al eliminarla, estos valores se borrarán de esta observación.",ef81715f
+REMOVE_SPECIES_NAMED,Eliminar {0},d6f8d76c
 REMOVE_VIRTUAL_WALKTHROUGH,Eliminar Recorrido Virtual,19cd7395
 REMOVE_VIRTUAL_WALKTHROUGH_CONFIRM,¿Está seguro de que desea eliminar este Recorrido Virtual? Esta acción no se puede deshacer.,d5c769f1
 REMOVING_ORG_WARNING,"Al eliminarse a sí mismo de {0}, ya no tendrá acceso a los datos de esta organización. ¿Está seguro de que desea guardar los cambios?",767a2892
@@ -2107,6 +2113,7 @@ SDG_16,"16. Paz, Justicia e Instituciones Sólidas.",e0e9a0ba
 SDG_17,17. Alianzas para los Objetivos,3b9b74f8
 SEARCH,Búsqueda,9f30c236
 SEARCH_OR_SELECT,Busque o Seleccione,cbd7f4ed
+SEARCH_SPECIES,Buscar especie,5167bc5e
 SEASON_NAME,Nombre de la temporada,74218855
 SEASON_NAME_REQUIRED,Nombre de la temporada *,809a9261
 SEASON_TO_COPY,Temporada a copiar,fd2a6498
@@ -2358,8 +2365,8 @@ SPECIES_SURVIVAL,Supervivencia de Especies,20e77844
 SPECIES_SURVIVAL_BREAKDOWN,Desglose de Supervivencia de Especies,837eaa3b
 SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,El desglose de supervivencia muestra el porcentaje de plantas por especie que siguen vivas desde la plantación inicial.,adb3d43d
 SPECIES_SURVIVAL_TOOLTIP,"Supervivencia de especies muestra las especies con las tasas de supervivencia más altas y más bajas, entre las estratas que fueron observadas.",5dde50a6
-SPECIES_TABLE_INSTRUCTIONS,Haga clic en un número de la tabla para editarlo.,7f5a3f3e
-SPECIES_TABLE_INSTRUCTIONS_NOTE,"NOTA: Cuando se cambian los números, los números originales y las ubicaciones de las plantas observadas no se actualizarán en los mapas. Por favor, cambie los números con discreción.",3d4cd792
+SPECIES_TABLE_INSTRUCTIONS,Haga clic en una especie o número en la tabla para editarlo.,fe17562a
+SPECIES_TABLE_INSTRUCTIONS_NOTE,"NOTA: Cuando se cambian, agregan o eliminan números o especies, los números originales y las ubicaciones de las plantas observadas no se actualizarán en los mapas. Por favor, realice los cambios con discreción.",915b4150
 SPECIES_TARGET_ADDED,Meta de especie agregada: {0} en {1}.,024829c9
 SPECIES_TARGET_DELETED,Meta de especie eliminada: {0} en {1}.,fd85928a
 SPECIES_TARGET_UPDATED,Meta de especie actualizada: {0} en {1} cambió de {2} a {3}.,f14397fe
