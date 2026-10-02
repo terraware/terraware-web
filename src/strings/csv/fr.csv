@@ -2748,6 +2748,17 @@ UPLOAD_PHOTOS,Téléverser une (des) photo(s),d20a4173
 UPLOAD_SITE_BOUNDARY,Téléverser la limite du site,f2e574f9
 UPLOAD_SITE_BOUNDARY_ACCEPTED_FORMATS,"Formats acceptés : KML (.kml), KMZ (.kmz, .zip), GeoJSON (.geojson, .json), shapefile compressé (.zip). Un shapefile compressé doit contenir un fichier .shp accompagné de ses fichiers .shx, .dbf et .prj.",2fceb157
 UPLOAD_SITE_BOUNDARY_DESCRIPTION,"Un fichier · KML, KMZ, GeoJSON ou shapefile compressé · 10 Mo max",23ad001d
+UPLOAD_SITE_BOUNDARY_ERROR_FILE_TOO_LARGE,Ce fichier fait {0} Mo. La taille maximale autorisée est de {1} Mo.,38c59697
+UPLOAD_SITE_BOUNDARY_ERROR_GENERIC,Une erreur s'est produite et ce fichier n'a pas pu être téléversé. Votre limite n'a pas été modifiée. Veuillez réessayer.,edff4f94
+UPLOAD_SITE_BOUNDARY_ERROR_INVALID_FILE,"Ce fichier n'a pas pu être lu. Téléversez un fichier KML, KMZ, GeoJSON ou un shapefile compressé (zip).",3af7802e
+UPLOAD_SITE_BOUNDARY_ERROR_INVALID_GEOMETRY,"Cette forme se croise elle-même. Corrigez la géométrie dans l'outil source puis téléversez à nouveau, ou dessinez la limite directement sur la carte.",308e76e7
+UPLOAD_SITE_BOUNDARY_ERROR_MULTIPLE_SHAPEFILES,Ce fichier zip contient plus d'un shapefile. Compressez un seul shapefile à la fois et téléversez à nouveau.,9c760ed3
+UPLOAD_SITE_BOUNDARY_ERROR_NO_KML_IN_ARCHIVE,Aucun fichier KML n'a été trouvé dans cette archive. Téléversez un fichier KMZ ou zip contenant un fichier .kml.,e2814c3d
+UPLOAD_SITE_BOUNDARY_ERROR_NO_POLYGONS,Ce fichier ne contient aucune forme de limite. Seuls des points et des lignes ont été trouvés. Téléversez un fichier contenant au moins un polygone.,2e542f74
+UPLOAD_SITE_BOUNDARY_ERROR_NO_SHAPEFILE,"Aucun fichier .shp n'a été trouvé dans ce fichier zip. Incluez le fichier .shp ainsi que les fichiers .shx, .dbf et .prj.",4685bd08
+UPLOAD_SITE_BOUNDARY_ERROR_TOO_MANY_VERTICES,Cette limite comporte trop de points. Simplifiez les formes dans l'outil source puis téléversez à nouveau.,f320128d
+UPLOAD_SITE_BOUNDARY_ERROR_UNKNOWN_COORDINATE_SYSTEM,Le système de coordonnées de ce fichier est inconnu. Réexportez le shapefile avec un fichier .prj puis téléversez à nouveau.,ffc80d97
+UPLOAD_SITE_BOUNDARY_ERROR_UNSUPPORTED_FORMAT,"Ce type de fichier n'est pas pris en charge. Téléversez un fichier KML, KMZ, GeoJSON ou un shapefile compressé (zip).",35cbd64d
 UPLOAD_SITE_BOUNDARY_HELP_LINK,"Comment exporter une limite depuis Google Earth, QGIS ou ArcGIS",3c5e592d
 UPLOAD_SPATIAL_FILES,Envoyer de(s) fichier(s) spatial(aux),953e770a
 UPLOAD_VIDEO_DESCRIPTION_FORMATS,"Parcourez ou faites glisser et déposez une vidéo (MP4, MOV)",02b875b2

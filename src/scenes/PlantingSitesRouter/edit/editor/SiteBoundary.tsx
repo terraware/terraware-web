@@ -15,7 +15,6 @@ import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import isEnabled from 'src/features';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
-import { ParseDraftPlantingSiteBoundaryResponsePayload } from 'src/queries/generated/draftPlantingSites';
 import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum } from 'src/types/Tracking';
@@ -23,7 +22,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
 import StepTitleDescription, { Description } from './StepTitleDescription';
-import UploadBoundaryModal from './UploadBoundaryModal';
+import UploadBoundaryModal, { ParsedBoundary } from './UploadBoundaryModal';
 import UploadedBoundarySummary, { UploadedBoundaryFile } from './UploadedBoundarySummary';
 import { OnValidate } from './types';
 import { boundingAreaHectares, defaultStratumPayload, findErrors, stratumNameGenerator } from './utils';
@@ -239,7 +238,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   }, []);
 
   const onUploadSuccess = useCallback(
-    (parsed: ParseDraftPlantingSiteBoundaryResponsePayload) => {
+    (parsed: ParsedBoundary) => {
       const { areaHa, format, numPolygons } = parsed;
       // these are only populated when the file parsed successfully
       if (!parsed.geometry || areaHa === undefined || !format || numPolygons === undefined) {
