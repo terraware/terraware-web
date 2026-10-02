@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { skipToken } from '@reduxjs/toolkit/query';
+
 import useListProjectModules from 'src/hooks/useListProjectModules';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
-import { requestListOrgProjectsAndModules } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleOrgProjects } from 'src/redux/features/modules/modulesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useListProjectIdsWithModulesQuery } from 'src/queries/search/modules';
 import { Project } from 'src/types/Project';
 
 import { ParticipantContext, ParticipantData } from './ParticipantContext';
@@ -15,7 +15,6 @@ type Props = {
 };
 
 const ParticipantProvider = ({ children }: Props) => {
-  const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
   const { activeLocale } = useLocalization();
 
@@ -25,9 +24,8 @@ const ParticipantProvider = ({ children }: Props) => {
   const [orgHasModules, setOrgHasModules] = useState<boolean | undefined>(undefined);
   const [orgHasParticipants, setOrgHasParticipants] = useState<boolean | undefined>(undefined);
 
-  const [listModuleProjectsRequestId, setListModuleProjectsRequestId] = useState<string>('');
-
-  const moduleProjectsListRequest = useAppSelector(selectModuleOrgProjects(listModuleProjectsRequestId));
+  const { currentData: projectIdsWithModules, isFetching: projectIdsWithModulesFetching } =
+    useListProjectIdsWithModulesQuery(selectedOrganization?.id ?? skipToken);
   const { availableProjects: projects } = useProjects();
 
   const { listProjectModules, projectModules, isLoading: listModulesIsLoading } = useListProjectModules();
@@ -42,7 +40,7 @@ const ParticipantProvider = ({ children }: Props) => {
   const participantData = useMemo<ParticipantData>(
     () => ({
       currentAcceleratorProject,
-      isLoading: moduleProjectsListRequest?.status === 'pending' || listModulesIsLoading,
+      isLoading: projectIdsWithModulesFetching || listModulesIsLoading,
       projectsWithModules: moduleProjects,
       modules: projectModules,
       allAcceleratorProjects: acceleratorProjects,
@@ -55,7 +53,7 @@ const ParticipantProvider = ({ children }: Props) => {
       listModulesIsLoading,
       projectModules,
       moduleProjects,
-      moduleProjectsListRequest,
+      projectIdsWithModulesFetching,
       orgHasModules,
       orgHasParticipants,
       acceleratorProjects,
@@ -80,21 +78,14 @@ const ParticipantProvider = ({ children }: Props) => {
   }, [projects]);
 
   useEffect(() => {
-    if (selectedOrganization) {
-      const request = dispatch(requestListOrgProjectsAndModules(selectedOrganization.id));
-      setListModuleProjectsRequestId(request.requestId);
-    }
-  }, [selectedOrganization, dispatch]);
-
-  useEffect(() => {
     if (currentAcceleratorProject && currentAcceleratorProject.id) {
       void listProjectModules(currentAcceleratorProject.id);
     }
   }, [currentAcceleratorProject, listProjectModules]);
 
   useEffect(() => {
-    if (moduleProjectsListRequest && moduleProjectsListRequest.status === 'success' && moduleProjectsListRequest.data) {
-      const nextModuleProjects = moduleProjectsListRequest.data
+    if (projectIdsWithModules) {
+      const nextModuleProjects = projectIdsWithModules
         .map((id) => acceleratorProjects.find((project) => project.id === id))
         .filter((project): project is Project => !!project)
         .sort((a, b) => a.name.localeCompare(b.name));
@@ -107,7 +98,7 @@ const ParticipantProvider = ({ children }: Props) => {
         setCurrentAcceleratorProject(nextModuleProjects[0]);
       }
     }
-  }, [moduleProjectsListRequest, currentAcceleratorProject, acceleratorProjects]);
+  }, [projectIdsWithModules, currentAcceleratorProject, acceleratorProjects]);
 
   return <ParticipantContext.Provider value={participantData}>{children}</ParticipantContext.Provider>;
 };
