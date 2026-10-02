@@ -69,7 +69,7 @@ const renderHistory = async (events = [mediaEvent('Video', 7592)]) => {
 };
 
 const speciesCountEvent = (
-  speciesName: string,
+  speciesName: string | undefined,
   fieldName: string,
   changedFrom: string,
   changedTo: string,
@@ -82,21 +82,36 @@ const speciesCountEvent = (
     monitoringPlotId: 2,
     observationId: 1,
     plantingSiteId: 3,
-    fullText: speciesName,
-    shortText: speciesName,
+    fullText: `Species ${speciesName ?? 'Unknown'}`,
+    // The API sends just the word "Species" here, so it cannot stand in for the name.
+    shortText: 'Species',
   },
   timestamp,
   userId: 1,
   userName: 'Jennifer Yim',
 });
 
+/**
+ * The entries one plant count edit produces, given its existing/live/dead counts before and after.
+ * The API reports only the counts that changed, and only an edit reporting all three can be read
+ * as an addition or a removal.
+ */
+const speciesEdit = (
+  speciesName: string | undefined,
+  from: [number, number, number],
+  to: [number, number, number],
+  timestamp: string
+): EventLogEntryPayload[] =>
+  ['existing count', 'live count', 'dead count']
+    .map((fieldName, position) => ({ after: to[position], before: from[position], fieldName }))
+    .filter(({ after, before }) => after !== before)
+    .map(({ after, before, fieldName }) =>
+      speciesCountEvent(speciesName, fieldName, String(before), String(after), timestamp)
+    );
+
 describe('Observation EventLog species changes', () => {
-  it('reports an all-zero starting point as the species being added', async () => {
-    const at = '2026-06-15T12:00:00.100Z';
-    await renderHistory([
-      speciesCountEvent('Acacia koa', 'live count', '0', '6', at),
-      speciesCountEvent('Acacia koa', 'existing count', '0', '2', at),
-    ]);
+  it('reports an edit that raised every count from zero as the species being added', async () => {
+    await renderHistory(speciesEdit('Acacia koa', [0, 0, 0], [2, 6, 1], '2026-06-15T12:00:00.100Z'));
 
     expect(
       screen.getByText(strings.formatString(strings.EVENT_SPECIES_ADDED, 'Acacia koa') as string)
@@ -105,22 +120,18 @@ describe('Observation EventLog species changes', () => {
     expect(screen.queryByText(/existing count/)).not.toBeInTheDocument();
   });
 
-  it('reports an all-zero result as the species being removed', async () => {
-    const at = '2026-06-15T12:00:00.100Z';
-    await renderHistory([
-      speciesCountEvent('Unknown', 'live count', '2', '0', at),
-      speciesCountEvent('Unknown', 'dead count', '1', '0', at),
-    ]);
+  it('reports an edit that dropped every count to zero as the species being removed', async () => {
+    await renderHistory(speciesEdit('Dracaena acuminata', [2, 6, 1], [0, 0, 0], '2026-06-15T12:00:00.100Z'));
 
     expect(
-      screen.getByText(strings.formatString(strings.EVENT_SPECIES_REMOVED, 'Unknown') as string)
+      screen.getByText(strings.formatString(strings.EVENT_SPECIES_REMOVED, 'Dracaena acuminata') as string)
     ).toBeInTheDocument();
   });
 
-  it('reports a removal next to an addition as the species being changed', async () => {
+  it('reports a removal next to an addition of the same counts as the species being changed', async () => {
     await renderHistory([
-      speciesCountEvent('Duosperma angolense', 'live count', '6', '0', '2026-06-15T12:00:00.100Z'),
-      speciesCountEvent('Abutilon eremitopetalum', 'live count', '0', '6', '2026-06-15T12:00:00.101Z'),
+      ...speciesEdit('Duosperma angolense', [2, 6, 1], [0, 0, 0], '2026-06-15T12:00:00.100Z'),
+      ...speciesEdit('Abutilon eremitopetalum', [0, 0, 0], [2, 6, 1], '2026-06-15T12:00:00.101Z'),
     ]);
 
     expect(
@@ -134,33 +145,28 @@ describe('Observation EventLog species changes', () => {
   });
 
   it('names the plot unknown species the way the plant count table does', async () => {
-    const at = '2026-06-15T12:00:00.100Z';
-    const unknown: EventLogEntryPayload = {
-      action: { type: 'FieldUpdated', fieldName: 'live count', changedFrom: ['2'], changedTo: ['0'] },
-      // An unknown species carries neither a name nor an id; shortText is just the word "Species".
-      subject: {
-        type: 'MonitoringSpecies',
-        monitoringPlotId: 2,
-        observationId: 1,
-        plantingSiteId: 3,
-        fullText: 'Species Unknown',
-        shortText: 'Species',
-      },
-      timestamp: at,
-      userId: 1,
-      userName: 'Jennifer Yim',
-    };
-    await renderHistory([unknown]);
+    // An unknown species carries neither a name nor an id.
+    await renderHistory(speciesEdit(undefined, [2, 6, 1], [0, 0, 0], '2026-06-15T12:00:00.100Z'));
 
     expect(
       screen.getByText(strings.formatString(strings.EVENT_SPECIES_REMOVED, strings.UNKNOWN) as string)
     ).toBeInTheDocument();
   });
 
-  it('still reports an ordinary count edit as a value change', async () => {
-    await renderHistory([speciesCountEvent('Acacia koa', 'live count', '4', '9', '2026-06-15T12:00:00.100Z')]);
+  it('still reports an edit of a single count as a value change', async () => {
+    // Only the dead count changed, so this says nothing about whether the species was added.
+    await renderHistory(speciesEdit('Acacia koa', [0, 4, 0], [0, 4, 2], '2026-06-15T12:00:00.100Z'));
 
-    expect(screen.getByText(/Acacia koa/)).toBeInTheDocument();
+    expect(screen.getByText(/dead count/)).toBeInTheDocument();
+    expect(
+      screen.queryByText(strings.formatString(strings.EVENT_SPECIES_ADDED, 'Acacia koa') as string)
+    ).not.toBeInTheDocument();
+  });
+
+  it('still reports an ordinary count edit as a value change', async () => {
+    await renderHistory(speciesEdit('Acacia koa', [1, 4, 1], [2, 9, 3], '2026-06-15T12:00:00.100Z'));
+
+    expect(screen.getByText(/live count/)).toBeInTheDocument();
     expect(
       screen.queryByText(strings.formatString(strings.EVENT_SPECIES_ADDED, 'Acacia koa') as string)
     ).not.toBeInTheDocument();

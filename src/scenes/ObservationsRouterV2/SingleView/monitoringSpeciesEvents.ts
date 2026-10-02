@@ -4,6 +4,12 @@ import {
   MonitoringSpeciesSubjectPayload,
 } from 'src/queries/generated/events';
 
+/**
+ * Dead, existing and live: the only fields a MonitoringSpecies subject reports. Their localized
+ * names vary, so they are counted rather than matched by name.
+ */
+const COUNT_FIELDS_PER_SPECIES = 3;
+
 export type MonitoringSpeciesEventSummary =
   | { kind: 'added' | 'removed'; speciesName: string }
   | { kind: 'changed'; speciesName: string; toSpeciesName: string };
@@ -105,6 +111,14 @@ export const summarizeMonitoringSpeciesEvents = (
     const actions = entries
       .map(({ entry }) => entry.action)
       .filter((action): action is FieldUpdatedActionPayload => action.type === 'FieldUpdated');
+    // An edit only reports the counts that changed, so a group that covers fewer than all three
+    // says nothing about the ones it leaves out. Raising a count from 0 on a species that still
+    // has plants in another count would otherwise read as the species being added, and dropping
+    // one to 0 as it being removed. Without every count's before and after, leave the entries to
+    // render as the plain field changes they are.
+    if (new Set(actions.map((action) => action.fieldName)).size !== COUNT_FIELDS_PER_SPECIES) {
+      return;
+    }
     const fromAllZero = actions.every((action) => isZero(action.changedFrom));
     const toAllZero = actions.every((action) => isZero(action.changedTo));
     // Zero on both sides changed nothing worth summarizing; leave it to the default rendering.
