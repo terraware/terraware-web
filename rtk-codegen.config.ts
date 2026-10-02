@@ -52,6 +52,17 @@ const config: ConfigFile = {
         operation.path === '/api/v1/users/me' ||
         operation.path === '/api/v1/users/{userId}',
     },
+    './src/queries/generated/documentProducerValues.ts': {
+      filterEndpoints: (_, operation) =>
+        operation.path.startsWith('/api/v1/document-producer/projects/{projectId}/values') ||
+        operation.path.startsWith('/api/v1/document-producer/projects/{projectId}/images'),
+    },
+    './src/queries/generated/documentProducerVariables.ts': {
+      filterEndpoints: (_, operation) =>
+        operation.path === '/api/v1/document-producer/variables' ||
+        operation.path.startsWith('/api/v1/document-producer/projects/{projectId}/owners') ||
+        operation.path.startsWith('/api/v1/document-producer/projects/{projectId}/workflow'),
+    },
     './src/queries/generated/draftPlantingSites.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/draftSites'),
     },

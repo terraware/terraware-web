@@ -8,51 +8,6 @@ import {
 const VALUES_ENDPOINT = '/api/v1/document-producer/projects/{projectId}/values';
 const IMAGES_ENDPOINT = '/api/v1/document-producer/projects/{projectId}/images';
 
-const getDeliverableValues = async (params: {
-  deliverableId: number;
-  projectId: number;
-}): Promise<Response2<VariableValuesListResponse>> => {
-  const result = await HttpService.root(
-    VALUES_ENDPOINT.replace('{projectId}', `${params.projectId}`)
-  ).get2<VariableValuesListResponse>({
-    params: {
-      deliverableId: `${params.deliverableId}`,
-    },
-  });
-
-  if (result.data?.values) {
-    return {
-      ...result,
-      data: {
-        ...result.data,
-        values: result.data.values.map((value) => ({
-          // Set default values for workflow details if they do not exist
-          internalComment: undefined,
-          feedback: undefined,
-          status: undefined,
-          ...value,
-        })),
-      },
-    };
-  } else {
-    return result;
-  }
-};
-
-const getValues = (projectId: number, maxValueId?: number): Promise<Response2<VariableValuesListResponse>> =>
-  HttpService.root(VALUES_ENDPOINT.replace('{projectId}', projectId.toString())).get2({
-    params: maxValueId ? { maxValueId: maxValueId.toString() } : {},
-  });
-
-const getSpecificValues = (params: {
-  projectId: number;
-  variablesStableIds: string[];
-}): Promise<Response2<VariableValuesListResponse>> => {
-  return HttpService.root(VALUES_ENDPOINT.replace('{projectId}', params.projectId.toString())).get2({
-    params: { stableId: params.variablesStableIds.toString() },
-  });
-};
-
 const updateValue = (
   projectId: number,
   operations: Operation[],
@@ -82,9 +37,6 @@ const uploadImageValue = (
 };
 
 const VariableService = {
-  getDeliverableValues,
-  getValues,
-  getSpecificValues,
   updateValue,
   uploadImageValue,
 };
