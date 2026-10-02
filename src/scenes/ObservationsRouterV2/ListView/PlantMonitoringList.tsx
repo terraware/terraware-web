@@ -165,7 +165,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
   });
   const adHocTableState = useTableState(ADHOC_STORAGE_KEY, { persistFilters: !newFiltersEnabled });
 
-  const { plantingSites } = useOrganizationPlantingSites({ full: true });
+  const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites({ full: true });
   const {
     emptyState,
     isLoading,
@@ -554,7 +554,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
     });
 
     const selectedSite = typeof plantingSiteId === 'number' ? plantingSitesById[plantingSiteId] : undefined;
-    void exportAdHocObservationsResults({ adHocObservationsResults, plantingSite: selectedSite });
+    void exportAdHocObservationsResults({ adHocObservationsResults, plantingSite: selectedSite, plantingSitesById });
   }, [defaultTimezone, observationResults, plantingSiteId, plantingSitesById]);
 
   const plotSelectionToolbar = useMemo(
@@ -779,7 +779,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
             renderTopToolbarCustomActions: () => plotSelectionToolbar,
             renderToolbarInternalActions: ({ table }) => (
               <Box display='flex' gap={0.5}>
-                {rows.length > 0 && (
+                {plantingSitesLoaded && rows.length > 0 && (
                   <Tooltip title={strings.EXPORT}>
                     <IconButton onClick={onExportAdHocObservationResults}>
                       <Icon name='iconExport' size='medium' />

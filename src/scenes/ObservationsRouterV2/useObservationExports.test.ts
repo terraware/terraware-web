@@ -148,6 +148,7 @@ describe('downloadAdHocObservationsZip', () => {
       biomassObservationIds: [7],
       siteName: 'Site',
       hasFilters,
+      plantingSitesById: {},
     });
 
     expect(downloadZipFile).toHaveBeenCalledTimes(1);
@@ -169,13 +170,14 @@ describe('downloadAdHocObservationsZip', () => {
       biomassObservationIds: [7, 24],
       siteName: 'Site',
       hasFilters: true,
+      plantingSitesById: {},
     });
 
     for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
       expect(trigger).toHaveBeenCalledTimes(1);
       expect(trigger).toHaveBeenCalledWith([7, 24], true);
     }
-    expect(mocks.monitoringCsv).toHaveBeenCalledWith(monitoringResults);
+    expect(mocks.monitoringCsv).toHaveBeenCalledWith(monitoringResults, {});
     expect(downloadZipFile).toHaveBeenCalledTimes(1);
     const archive = rstest.mocked(downloadZipFile).mock.calls[0][0];
     expect(archive.dirName).toBe('Site-Ad Hoc Plots_filtered');
@@ -191,12 +193,13 @@ describe('downloadAdHocObservationsZip', () => {
       biomassObservationIds: [],
       siteName: 'Site',
       hasFilters: true,
+      plantingSitesById: {},
     });
 
     for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
       expect(trigger).not.toHaveBeenCalled();
     }
-    expect(mocks.monitoringCsv).toHaveBeenCalledWith(monitoringResults);
+    expect(mocks.monitoringCsv).toHaveBeenCalledWith(monitoringResults, {});
     expect(downloadZipFile).toHaveBeenCalledTimes(1);
     expect(downloadZipFile).toHaveBeenCalledWith({
       dirName: 'Site-Ad Hoc Plots_filtered',
@@ -212,6 +215,7 @@ describe('downloadAdHocObservationsZip', () => {
       biomassObservationIds: [7, 24],
       siteName: 'Site',
       hasFilters: true,
+      plantingSitesById: {},
     });
 
     for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
@@ -234,6 +238,7 @@ describe('downloadAdHocObservationsZip', () => {
       biomassObservationIds: [],
       siteName: 'Site',
       hasFilters: true,
+      plantingSitesById: {},
     });
 
     for (const trigger of Object.values(mocks)) {

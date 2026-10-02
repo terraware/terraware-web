@@ -6039,12 +6039,12 @@ export interface components {
              * @deprecated
              * @description Use substratumName instead
              */
-            plantingSubzoneName: string;
+            plantingSubzoneName?: string;
             /**
              * @deprecated
              * @description Use stratumName instead
              */
-            plantingZoneName: string;
+            plantingZoneName?: string;
             /** Format: int64 */
             plotId: number;
             plotName: string;
@@ -6055,10 +6055,10 @@ export interface components {
              * @description Length of each edge of the monitoring plot in meters.
              */
             sizeMeters: number;
-            stratumName: string;
+            stratumName?: string;
             /** Format: int64 */
             substratumId?: number;
-            substratumName: string;
+            substratumName?: string;
         };
         AutoCalculatedIndicatorPayload: {
             active: boolean;
@@ -9744,6 +9744,20 @@ export interface components {
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /** @enum {string} */
             status: "Unclaimed" | "Claimed" | "Completed" | "Not Observed";
+            /**
+             * Format: int64
+             * @description ID of the stratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a stratum or if the stratum has since been deleted.
+             */
+            stratumId?: number;
+            /** @description Name of the stratum the monitoring plot was in at the time of the observation, if any. */
+            stratumName?: string;
+            /**
+             * Format: int64
+             * @description ID of the substratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a substratum or if the substratum has since been deleted.
+             */
+            substratumId?: number;
+            /** @description Full name of the substratum the monitoring plot was in at the time of the observation, if any. */
+            substratumName?: string;
             /**
              * Format: int32
              * @description If this is a permanent monitoring plot in this observation, percentage of plants that have survived since t0 data.

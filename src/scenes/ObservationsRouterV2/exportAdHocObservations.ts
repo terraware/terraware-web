@@ -10,9 +10,13 @@ import { downloadCsv, makeCsv } from 'src/utils/csv';
 interface ExportAdHocObservationsResultsParams {
   adHocObservationsResults: AdHocObservationResults[];
   plantingSite?: PlantingSitePayload;
+  plantingSitesById: Record<number, PlantingSitePayload>;
 }
 
-export const makeAdHocObservationsCsv = (adHocObservations: AdHocObservationResults[]): Blob => {
+export const makeAdHocObservationsCsv = (
+  adHocObservations: AdHocObservationResults[],
+  plantingSitesById: Record<number, PlantingSitePayload>
+): Blob => {
   const columnHeaders = [
     {
       key: 'monitoringPlotNumber',
@@ -82,6 +86,22 @@ export const makeAdHocObservationsCsv = (adHocObservations: AdHocObservationResu
       key: 'notes',
       displayLabel: strings.FIELD_NOTES,
     },
+    {
+      key: 'stratum',
+      displayLabel: strings.STRATUM,
+    },
+    {
+      key: 'substratum',
+      displayLabel: strings.SUBSTRATUM,
+    },
+    {
+      key: 'currentStratum',
+      displayLabel: strings.STRATUM_CURRENT,
+    },
+    {
+      key: 'currentSubstratum',
+      displayLabel: strings.SUBSTRATUM_CURRENT,
+    },
   ];
 
   const data = adHocObservations.map((adHocObservation: AdHocObservationResults) => {
@@ -105,6 +125,16 @@ export const makeAdHocObservationsCsv = (adHocObservations: AdHocObservationResu
 
     const plotBoundaryCoordinates = adHocObservation.adHocPlot.boundary.coordinates[0];
 
+    const plantingSite = plantingSitesById[adHocObservation.plantingSiteId];
+    const currentStratum =
+      adHocObservation.adHocPlot?.currentStratumId !== undefined
+        ? plantingSite?.strata?.find((s) => s.id === adHocObservation.adHocPlot.currentStratumId)
+        : undefined;
+    const currentSubstratum =
+      adHocObservation.adHocPlot?.currentSubstratumId !== undefined && currentStratum !== undefined
+        ? currentStratum.substrata.find((ss) => ss.id === adHocObservation.adHocPlot.currentSubstratumId)
+        : undefined;
+
     return {
       monitoringPlotNumber: adHocObservation.adHocPlot.monitoringPlotNumber,
       plantingSiteName: adHocObservation.plantingSiteName,
@@ -126,6 +156,10 @@ export const makeAdHocObservationsCsv = (adHocObservations: AdHocObservationResu
       conditions:
         adHocObservation.adHocPlot?.conditions.map((condition) => getConditionString(condition)).join(', ') || '',
       notes: adHocObservation.adHocPlot?.notes || '',
+      stratum: adHocObservation.adHocPlot?.stratumName ?? strings.OUTSIDE_CURRENT_SITE,
+      substratum: adHocObservation.adHocPlot?.substratumName ?? strings.OUTSIDE_CURRENT_SITE,
+      currentStratum: currentStratum?.name ?? strings.OUTSIDE_CURRENT_SITE,
+      currentSubstratum: currentSubstratum?.name ?? strings.OUTSIDE_CURRENT_SITE,
     };
   });
 
@@ -135,11 +169,12 @@ export const makeAdHocObservationsCsv = (adHocObservations: AdHocObservationResu
 export const exportAdHocObservationsResults = async ({
   adHocObservationsResults,
   plantingSite,
+  plantingSitesById,
 }: ExportAdHocObservationsResultsParams) => {
   const plantingSiteName = plantingSite?.name || strings.ALL_PLANTING_SITES;
   const filename = sanitize(`${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`);
 
-  const fileBlob = makeAdHocObservationsCsv(adHocObservationsResults);
+  const fileBlob = makeAdHocObservationsCsv(adHocObservationsResults, plantingSitesById);
   const fileContent = await fileBlob.text();
 
   downloadCsv(filename, fileContent);
