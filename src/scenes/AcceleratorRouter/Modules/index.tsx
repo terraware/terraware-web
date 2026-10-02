@@ -35,7 +35,7 @@ export default function ModuleContentView() {
   const [openUploadModal, setOpenUploadModal] = useState(false);
   const [searchArgs, setSearchArgs] = useState<{ search: SearchNodePayload; sortOrder: SearchSortOrder }>();
   // `data` keeps the previous rows on screen while a new search is in flight
-  const { data: modules, refetch } = useSearchModulesQuery(searchArgs ?? skipToken);
+  const { data: modules } = useSearchModulesQuery(searchArgs ?? skipToken);
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
@@ -69,17 +69,9 @@ export default function ModuleContentView() {
     },
   };
 
-  const reloadData = useCallback(() => {
-    if (searchArgs) {
-      void refetch();
-    }
-  }, [refetch, searchArgs]);
-
   return (
     <>
-      {openUploadModal && (
-        <UploadModulesModal open={openUploadModal} onClose={() => setOpenUploadModal(false)} reloadData={reloadData} />
-      )}
+      {openUploadModal && <UploadModulesModal open={openUploadModal} onClose={() => setOpenUploadModal(false)} />}
       <PageListView {...listViewProps} />
     </>
   );

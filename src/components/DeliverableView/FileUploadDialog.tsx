@@ -1,18 +1,13 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, CircularProgress, useTheme } from '@mui/material';
 import { Button, DialogBox, Textfield } from '@terraware/web-components';
 
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import { useApplicationData } from 'src/providers/Application/Context';
-import {
-  requestGetDeliverable,
-  requestUploadDeliverableDocument,
-} from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useUploadDeliverableDocumentMutation } from 'src/queries/generated/deliverables';
 import strings from 'src/strings';
-import { DeliverableWithOverdue, UploadDeliverableDocumentRequest } from 'src/types/Deliverables';
+import { DeliverableWithOverdue } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type FileUploadDialogProps = {
@@ -25,58 +20,51 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
   const { isApplicationPortal } = useApplicationPortal();
   const { reload } = useApplicationData();
   const [validate, setValidate] = useState<boolean>(false);
-  const [requestId, setRequestId] = useState<string>('');
+  const [uploading, setUploading] = useState(false);
   const [description, setDescription] = useState<string[]>(files.map(() => ''));
   const theme = useTheme();
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
-  const uploadResult = useAppSelector(selectDeliverablesEditRequest(requestId));
+  const [uploadDeliverableDocument] = useUploadDeliverableDocumentMutation();
 
-  useEffect(() => {
-    if (!uploadResult?.status || uploadResult?.status === 'pending') {
+  const submit = useCallback(async () => {
+    setValidate(true);
+    if (description.some((d) => !d.trim())) {
       return;
     }
-    if (uploadResult?.status === 'error') {
-      if (typeof uploadResult?.data === 'string') {
-        snackbar.toastError(uploadResult.data);
-      } else {
-        snackbar.toastError();
-      }
+
+    setUploading(true);
+    const results = await Promise.all(
+      files.map((file, index) =>
+        uploadDeliverableDocument({
+          deliverableId: deliverable.id,
+          body: { description: description[index], file, projectId: `${deliverable.projectId}` },
+        })
+      )
+    );
+    setUploading(false);
+
+    const errors = results.flatMap((result) => ('error' in result ? [result.error] : []));
+    if (errors.some((error) => 'status' in error && error.status === 507)) {
+      snackbar.toastError(strings.ERROR_SUPPORT_NOTIFIED);
+    } else if (errors.length > 0) {
+      snackbar.toastError(strings.GENERIC_ERROR);
     }
-    // close the modal and refresh deliverable even in case of error, there may have been partial successes
+    // close the modal even in case of error, there may have been partial successes
     onClose();
-    if (!isApplicationPortal) {
-      void dispatch(requestGetDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId }));
-    } else {
+    if (isApplicationPortal) {
       reload();
     }
   }, [
     deliverable.id,
     deliverable.projectId,
-    dispatch,
+    description,
+    files,
     isApplicationPortal,
     onClose,
     reload,
     snackbar,
-    uploadResult?.data,
-    uploadResult?.status,
+    uploadDeliverableDocument,
   ]);
-
-  const submit = useCallback(() => {
-    setValidate(true);
-    if (description.some((d) => !d.trim())) {
-      return;
-    }
-    const documents = files.map(
-      (file, index): UploadDeliverableDocumentRequest => ({
-        description: description[index],
-        file,
-        projectId: deliverable.projectId,
-      })
-    );
-    const request = dispatch(requestUploadDeliverableDocument({ deliverableId: deliverable.id, documents }));
-    setRequestId(request.requestId);
-  }, [deliverable.id, deliverable.projectId, description, dispatch, files]);
 
   const changeDescription = (index: number, val: string) => {
     setDescription((prev) => {
@@ -97,11 +85,11 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
 
   return (
     <DialogBox
-      onClose={() => uploadResult?.status !== 'pending' && onClose()}
+      onClose={() => !uploading && onClose()}
       open={true}
       middleButtons={[
         <Button
-          disabled={uploadResult?.status === 'pending'}
+          disabled={uploading}
           id='cancel'
           key='button-1'
           label={strings.CANCEL}
@@ -110,11 +98,11 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
           type='passive'
         />,
         <Button
-          disabled={uploadResult?.status === 'pending'}
+          disabled={uploading}
           id='submit'
           key='button-2'
           label={strings.SUBMIT}
-          onClick={submit}
+          onClick={() => void submit()}
           priority='primary'
         />,
       ]}
@@ -123,7 +111,7 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
       title={strings.SUBMIT_DOCUMENT}
     >
       <Box display='flex' flexDirection='column'>
-        {uploadResult?.status === 'pending' && (
+        {uploading && (
           <CircularProgress
             size='100'
             sx={{

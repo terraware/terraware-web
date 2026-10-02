@@ -3,9 +3,9 @@ import React, { type JSX, useCallback, useState } from 'react';
 import { Box, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
 
 import ImportModal from 'src/components/common/ImportModal';
+import { useImportDeliverablesMutation } from 'src/queries/generated/deliverables';
 import { ImportModuleResponsePayload, useImportModulesMutation } from 'src/queries/generated/modules';
 import { SpeciesService } from 'src/services';
-import DeliverablesService from 'src/services/DeliverablesService';
 import strings from 'src/strings';
 
 export type UploadModulesModalProps = {
@@ -13,23 +13,23 @@ export type UploadModulesModalProps = {
   onClose: (saved: boolean, snackbarMessage?: string) => void;
   onError?: (snackbarMessage: string) => void;
   setCheckDataModalOpen?: React.Dispatch<React.SetStateAction<boolean>>;
-  reloadData: () => void;
 };
 
 export default function UploadModulesModal(props: UploadModulesModalProps): JSX.Element {
-  const { open, onClose, reloadData } = props;
+  const { open, onClose } = props;
   const [uploadingDeliverables, setUploadingDeliverables] = useState(false);
-  const [importModulesMutation] = useImportModulesMutation();
+  const [importModules] = useImportModulesMutation();
+  const [importDeliverables] = useImportDeliverablesMutation();
 
-  const importModules = useCallback(
+  const importFile = useCallback(
     async (file: File): Promise<ImportModuleResponsePayload | null> => {
-      const result = await importModulesMutation({ file });
+      const result = await (uploadingDeliverables ? importDeliverables({ file }) : importModules({ file }));
       if ('data' in result) {
         return result.data ?? null;
       }
       return (result.error as { data?: ImportModuleResponsePayload }).data ?? null;
     },
-    [importModulesMutation]
+    [importDeliverables, importModules, uploadingDeliverables]
   );
 
   const handleTypeChange = (_: React.ChangeEvent<HTMLInputElement>, value: string) => {
@@ -53,8 +53,7 @@ export default function UploadModulesModal(props: UploadModulesModalProps): JSX.
       }
       importingLabel={uploadingDeliverables ? strings.IMPORTING_DELIVERABLES : strings.IMPORTING_MODULES}
       duplicatedLabel={strings.DUPLICATED_SPECIES}
-      simpleUploadApi={uploadingDeliverables ? DeliverablesService.importDeliverables : importModules}
-      reloadData={reloadData}
+      simpleUploadApi={importFile}
     >
       <Box textAlign='center'>
         <RadioGroup

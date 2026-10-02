@@ -3,7 +3,6 @@ import { ActionReducerMapBuilder, createSlice } from '@reduxjs/toolkit';
 import { StatusT, buildReducers } from 'src/redux/features/asyncUtils';
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
-import { deliverableCompositeKeyFn } from '../../deliverables/deliverablesSlice';
 import { specificVariablesCompositeKeyFn } from '../variables/variablesSlice';
 import {
   requestListDeliverableVariablesValues,
@@ -20,6 +19,16 @@ import {
 type VariableValuesListState = Record<string, StatusT<VariableValue[]>>;
 
 type VariableListArg = { projectId: number; maxValueId?: number };
+type DeliverableProjectIdArg = { deliverableId: number; projectId: number };
+export const deliverableCompositeKeyFn = (arg: unknown): string => {
+  const castArg = arg as DeliverableProjectIdArg;
+  if (!(castArg.deliverableId && castArg.projectId)) {
+    return '';
+  }
+
+  return `d${castArg.deliverableId}-p${castArg.projectId}`;
+};
+
 export const variableListCompositeKeyFn = (arg: unknown): string => {
   const castArg = arg as VariableListArg;
   if (!castArg.projectId) {
