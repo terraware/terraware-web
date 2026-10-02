@@ -89,7 +89,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   const theme = useTheme();
   const { strings } = useLocalization();
   const defaultTimezone = useDefaultTimeZone().get().id;
-  const { observationType } = useObservationFilters();
+  const { activeFilterCount, observationType } = useObservationFilters();
   const { downloadAdHocObservationsZip } = useObservationExports();
   const tableState = useTableState(STORAGE_KEY, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
@@ -226,7 +226,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   );
 
   const onExport = useCallback(
-    async (filteredRows: AdHocRow[]) => {
+    async (filteredRows: AdHocRow[], hasTableFilters: boolean) => {
       const siteName =
         typeof plantingSiteId === 'number'
           ? plantingSiteNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
@@ -255,11 +255,13 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         });
       await downloadAdHocObservationsZip({
         adHocObservationsResults: monitoringResults,
+        hasFilters: activeFilterCount > 0 || hasTableFilters,
         biomassObservationIds: filteredRows.filter((row) => row.isBiomass).map((row) => row.observationId),
         siteName,
       });
     },
     [
+      activeFilterCount,
       defaultTimezone,
       downloadAdHocObservationsZip,
       observations,
@@ -334,7 +336,12 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
                 <Tooltip title={strings.EXPORT}>
                   <IconButton
                     disabled={table.getFilteredRowModel().rows.length === 0}
-                    onClick={() => void onExport(table.getFilteredRowModel().rows.map((row) => row.original))}
+                    onClick={() =>
+                      void onExport(
+                        table.getFilteredRowModel().rows.map((row) => row.original),
+                        table.getState().columnFilters.length > 0 || Boolean(table.getState().globalFilter)
+                      )
+                    }
                   >
                     <Icon name='iconExport' size='medium' />
                   </IconButton>
