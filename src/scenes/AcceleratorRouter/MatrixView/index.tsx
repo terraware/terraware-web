@@ -36,9 +36,8 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useUser } from 'src/providers';
+import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
 import { useListVariablesQuery } from 'src/queries/generated/documentProducerVariables';
-import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
-import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectProjectsWithVariables } from 'src/redux/features/matrixView/matrixViewSelectors';
 import {
   ProjectsWithVariablesSearchResult,
@@ -81,8 +80,7 @@ const MatrixView = () => {
     () => allVariablesData?.variables.filter((v) => v.type !== 'Table' && v.type !== 'Image'),
     [allVariablesData]
   );
-  const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
-  const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
+  const [updateProjectVariableValues, updateVariableValuesResult] = useUpdateProjectVariableValuesMutation();
   const [loading, setLoading] = useState(false);
   const theme = useTheme();
   const snackbar = useSnackbar();
@@ -223,32 +221,30 @@ const MatrixView = () => {
       if (newValue) {
         setLoading(true);
         if (valueIdToUpdate.toString() !== '-1') {
-          const request = dispatch(
-            requestUpdateVariableValues({
+          void updateProjectVariableValues({
+            projectId,
+            updateVariableValuesRequestPayload: {
               operations: [
                 { operation: 'Update', valueId: valueIdToUpdate, value: newValue, existingValueId: valueIdToUpdate },
               ],
-              projectId,
               updateStatuses: false,
-            })
-          );
-          setUpdateVariableValuesRequestId(request.requestId);
+            },
+          });
         } else {
           const varId = variable.id;
           if (varId) {
-            const request = dispatch(
-              requestUpdateVariableValues({
+            void updateProjectVariableValues({
+              projectId,
+              updateVariableValuesRequestPayload: {
                 operations: [{ operation: 'Append', variableId: Number(varId), value: newValue }],
-                projectId,
                 updateStatuses: false,
-              })
-            );
-            setUpdateVariableValuesRequestId(request.requestId);
+              },
+            });
           }
         }
       }
     },
-    [dispatch]
+    [updateProjectVariableValues]
   );
 
   const columnsMRT = useMemo<MRT_ColumnDef<ProjectsWithVariablesSearchResult>[]>(() => {
@@ -1119,14 +1115,14 @@ const MatrixView = () => {
   }, [dispatch, dataForMaterialReactTable, dataForMaterialReactTable?.getState()?.columnVisibility, currentView]);
 
   useEffect(() => {
-    if (updateVariableValuesRequest?.status === 'success') {
+    if (updateVariableValuesResult.isSuccess) {
       reloadTable();
     }
-    if (updateVariableValuesRequest?.status === 'error') {
+    if (updateVariableValuesResult.isError) {
       snackbar.toastError();
       setLoading(false);
     }
-  }, [reloadTable, snackbar, updateVariableValuesRequest]);
+  }, [reloadTable, snackbar, updateVariableValuesResult.isError, updateVariableValuesResult.isSuccess]);
 
   useEffect(() => {
     reloadTable();

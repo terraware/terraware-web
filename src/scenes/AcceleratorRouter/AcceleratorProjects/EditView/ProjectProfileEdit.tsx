@@ -21,6 +21,7 @@ import PageForm from 'src/components/common/PageForm';
 import Icon from 'src/components/common/icon/Icon';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useSpecificVariablesWithValues from 'src/hooks/variables/useSpecificVariablesWithValues';
+import useUploadImageValues from 'src/hooks/variables/useUploadImageValues';
 import { useLocalization, useUser } from 'src/providers';
 import { useUpdateProjectAcceleratorDetailsMutation } from 'src/queries/generated/acceleratorProjects';
 import { useListGlobalRolesQuery } from 'src/queries/generated/globalRoles';
@@ -30,9 +31,6 @@ import {
   useGetInternalUsersQuery,
   useUpdateInternalUserMutation,
 } from 'src/queries/generated/projectInternalUsers';
-import { selectUploadImageValue } from 'src/redux/features/documentProducer/values/valuesSelector';
-import { requestUploadManyImageValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { AcceleratorProject, LAND_USE_MODEL_TYPES } from 'src/types/AcceleratorProject';
 import { PhaseType } from 'src/types/Phase';
 import { ProjectInternalUserRole, getProjectInternalUserRoleString, projectInternalUserRoles } from 'src/types/Project';
@@ -72,7 +70,6 @@ const EXTERNAL_LINK_KEYS = [
 ] as const;
 
 const ProjectProfileEdit = () => {
-  const dispatch = useAppDispatch();
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { acceleratorProject, projectId, organization, reload } = useAcceleratorProjectData();
@@ -99,8 +96,7 @@ const ProjectProfileEdit = () => {
 
   const { data: globalRolesUsersData } = useListGlobalRolesQuery();
   const [internalUsers, setInternalUsers] = useState<InternalUserItem[]>([]);
-  const [uploadImagesRequestId, setUploadImagesRequestId] = useState('');
-  const uploadImagesResponse = useAppSelector(selectUploadImageValue(uploadImagesRequestId));
+  const { uploadImageValues, status: uploadImagesStatus, reset: resetUploadImages } = useUploadImageValues();
 
   const { variablesWithValues: variableValues } = useSpecificVariablesWithValues(variableStableIds, projectId);
   const stableToVariable = useMemo<Record<string, VariableWithValues> | undefined>(
@@ -163,26 +159,27 @@ const ProjectProfileEdit = () => {
       !wasInitiated || _response.isSuccess || _response.isError;
 
     if (
-      isComplete(uploadImagesResponse?.status, initiatedRequests.uploadImages) &&
+      isComplete(uploadImagesStatus, initiatedRequests.uploadImages) &&
       isCompleteRtk(updateAcceleratorProjectResponse, initiatedRequests.acceleratorProject) &&
       isCompleteRtk(updateInternalUsersResponse, initiatedRequests.updateInternalUsers)
     ) {
       setRequestsInProgress(false);
 
       if (
-        uploadImagesResponse?.status === 'error' ||
+        uploadImagesStatus === 'error' ||
         updateAcceleratorProjectResponse.isError ||
         updateInternalUsersResponse.isError
       ) {
         snackbar.toastError();
-        setUploadImagesRequestId('');
+        resetUploadImages();
       } else {
         redirectToProjectView();
       }
     }
   }, [
     updateAcceleratorProjectResponse,
-    uploadImagesResponse,
+    uploadImagesStatus,
+    resetUploadImages,
     requestsInProgress,
     initiatedRequests,
     redirectToProjectView,
@@ -199,13 +196,13 @@ const ProjectProfileEdit = () => {
   }, [updateInternalUsersResponse, snackbar]);
 
   useEffect(() => {
-    if (uploadImagesResponse?.status === 'success') {
+    if (uploadImagesStatus === 'success') {
       redirectToProjectView();
-    } else if (uploadImagesResponse?.status === 'error') {
+    } else if (uploadImagesStatus === 'error') {
       snackbar.toastError();
-      setUploadImagesRequestId('');
+      resetUploadImages();
     }
-  }, [uploadImagesResponse, redirectToProjectView, snackbar]);
+  }, [uploadImagesStatus, redirectToProjectView, resetUploadImages, snackbar]);
 
   useEffect(() => {
     if (globalRolesUsersData) {
@@ -341,8 +338,7 @@ const ProjectProfileEdit = () => {
           projectId,
         });
       }
-      const dispatched = dispatch(requestUploadManyImageValues(imageValues));
-      setUploadImagesRequestId(dispatched.requestId);
+      void uploadImageValues(imageValues);
       newInitiatedRequests.uploadImages = true;
     }
 
@@ -354,7 +350,6 @@ const ProjectProfileEdit = () => {
 
     setInitiatedRequests(newInitiatedRequests);
   }, [
-    dispatch,
     mainPhoto,
     mapPhoto,
     acceleratorProjectRecord,
@@ -362,6 +357,7 @@ const ProjectProfileEdit = () => {
     redirectToProjectView,
     saveInternalUsers,
     stableToVariable,
+    uploadImageValues,
     updateAcceleratorProject,
   ]);
 
@@ -551,7 +547,7 @@ const ProjectProfileEdit = () => {
       )}
       <PageForm
         busy={
-          uploadImagesResponse?.status === 'pending' ||
+          uploadImagesStatus === 'pending' ||
           updateAcceleratorProjectResponse.isLoading ||
           updateInternalUsersResponse.isLoading
         }

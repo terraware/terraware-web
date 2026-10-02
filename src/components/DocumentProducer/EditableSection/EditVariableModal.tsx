@@ -17,7 +17,7 @@ type EditVariableModalProps = {
   onCancel: () => void;
   onSectionClicked?: (sectionNumber: string) => void;
   projectId: number;
-  setUpdateWorkflowRequestId?: (requestId: string) => void;
+  showWorkflowToast?: boolean;
   showVariableHistory: () => void;
 };
 
@@ -27,7 +27,7 @@ export default function EditVariableModal({
   onFinish,
   onSectionClicked,
   projectId,
-  setUpdateWorkflowRequestId,
+  showWorkflowToast,
   showVariableHistory,
   variable,
 }: EditVariableModalProps) {
@@ -69,7 +69,7 @@ export default function EditVariableModal({
           onSectionClicked={onSectionClicked}
           projectId={projectId}
           sectionsUsed={getUsedSections(variable.id)}
-          setUpdateWorkflowRequestId={setUpdateWorkflowRequestId}
+          showWorkflowToast={showWorkflowToast}
           showVariableHistory={showVariableHistory}
           variable={variable}
         />

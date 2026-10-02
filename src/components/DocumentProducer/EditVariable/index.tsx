@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Grid } from '@mui/material';
 import { Button, DropdownItem } from '@terraware/web-components';
@@ -7,11 +7,8 @@ import PageDialog from 'src/components/DocumentProducer/PageDialog';
 import VariableDetailsInput from 'src/components/DocumentProducer/VariableDetailsInput';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useLocalization, useUser } from 'src/providers';
-import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
-import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
+import { useUpdateVariableWorkflowDetailsMutation } from 'src/queries/generated/documentProducerVariables';
 import strings from 'src/strings';
 import { UpdateVariableWorkflowDetailsPayload, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
@@ -31,6 +28,8 @@ import {
   VariableValueTextValue,
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
+import { toWorkflowState } from 'src/utils/mutationStatus';
+import useSnackbar from 'src/utils/useSnackbar';
 
 type EditVariableProps = {
   display?: boolean;
@@ -39,7 +38,7 @@ type EditVariableProps = {
   variable: VariableWithValues;
   sectionsUsed?: string[];
   onSectionClicked?: (sectionNumber: string) => void;
-  setUpdateWorkflowRequestId?: (requestId: string) => void;
+  showWorkflowToast?: boolean;
   showVariableHistory: () => void;
 };
 
@@ -50,12 +49,14 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
     onSectionClicked,
     projectId,
     sectionsUsed,
-    setUpdateWorkflowRequestId,
+    showWorkflowToast,
     showVariableHistory,
     variable,
   } = props;
 
-  const dispatch = useAppDispatch();
+  const snackbar = useSnackbar();
+  const [updateProjectVariableValues, updateValuesResult] = useUpdateProjectVariableValuesMutation();
+  const [updateVariableWorkflowDetails, updateWorkflowResult] = useUpdateVariableWorkflowDetailsMutation();
 
   const variableValues = variable?.variableValues || [];
 
@@ -78,40 +79,33 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
   const [display, setDisplay] = useState<boolean>(displayProp);
   const [validate, setValidate] = useState<boolean>(false);
   const [hasErrors, setHasErrors] = useState<boolean>(false);
-  const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
   const [values, setValues] = useState<VariableValueValue[]>(variable.values);
   const [removedValues, setRemovedValues] = useState<VariableValueValue[]>();
 
-  const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
-
-  const [updateVariableWorkflowDetailsRequestId, setUpdateVariableWorkflowDetailsRequestId] = useState<string>('');
-  const updateVariableWorkflowDetailsRequest = useAppSelector(
-    selectUpdateVariableWorkflowDetails(updateVariableWorkflowDetailsRequestId)
-  );
-
-  useEffect(() => {
-    if (updateVariableValuesRequest?.status === 'success' && !updateVariableWorkflowDetailsRequestId) {
-      const request = dispatch(
-        requestUpdateVariableWorkflowDetails({
+  const saveValues = async (operationLists: Operation[][]) => {
+    try {
+      for (const operations of operationLists) {
+        await updateProjectVariableValues({
+          projectId,
+          updateVariableValuesRequestPayload: { operations, updateStatuses: false },
+        }).unwrap();
+      }
+      await updateVariableWorkflowDetails({
+        projectId,
+        variableId: variable.id,
+        updateVariableWorkflowDetailsRequestPayload: {
           feedback: variableWorkflowDetails?.feedback,
           internalComment: variableWorkflowDetails?.internalComment,
-          projectId,
           status: variableWorkflowDetails.status,
-          variableId: variable.id,
-        })
-      );
-      setUpdateVariableWorkflowDetailsRequestId(request.requestId);
-      setUpdateWorkflowRequestId?.(request.requestId);
+        },
+      }).unwrap();
+      if (showWorkflowToast) {
+        snackbar.toastSuccess(strings.CHANGES_SAVED);
+      }
+    } catch {
+      return;
     }
-  }, [
-    dispatch,
-    projectId,
-    setUpdateWorkflowRequestId,
-    updateVariableValuesRequest,
-    updateVariableWorkflowDetailsRequestId,
-    variable.id,
-    variableWorkflowDetails,
-  ]);
+  };
 
   const save = () => {
     setValidate(true);
@@ -120,6 +114,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
     }
 
     if (values.length) {
+      const operationLists: Operation[][] = [];
       let newValue:
         | NewDateValuePayload
         | NewEmailValuePayload
@@ -168,25 +163,11 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
       }
       if (newValue) {
         if (values[0].id !== -1) {
-          const request = dispatch(
-            requestUpdateVariableValues({
-              operations: [
-                { operation: 'Update', valueId: valueIdToUpdate, value: newValue, existingValueId: valueIdToUpdate },
-              ],
-              projectId,
-              updateStatuses: false,
-            })
-          );
-          setUpdateVariableValuesRequestId(request.requestId);
+          operationLists.push([
+            { operation: 'Update', valueId: valueIdToUpdate, value: newValue, existingValueId: valueIdToUpdate },
+          ]);
         } else {
-          const request = dispatch(
-            requestUpdateVariableValues({
-              operations: [{ operation: 'Append', variableId: variable.id, value: newValue }],
-              projectId,
-              updateStatuses: false,
-            })
-          );
-          setUpdateVariableValuesRequestId(request.requestId);
+          operationLists.push([{ operation: 'Append', variableId: variable.id, value: newValue }]);
         }
       }
       if (newValues) {
@@ -214,21 +195,15 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
             });
           });
         }
-        const request = dispatch(
-          requestUpdateVariableValues({
-            operations,
-            projectId,
-            updateStatuses: false,
-          })
-        );
-        setUpdateVariableValuesRequestId(request.requestId);
+        if (operations.length > 0) {
+          operationLists.push(operations);
+        }
       }
+      void saveValues(operationLists);
     }
   };
 
   const onCancel = useCallback(() => {
-    setUpdateVariableValuesRequestId('');
-    setUpdateVariableWorkflowDetailsRequestId('');
     onFinish(false);
   }, [onFinish]);
 
@@ -274,9 +249,7 @@ const EditVariable = (props: EditVariableProps): JSX.Element => {
   return (
     <PageDialog
       workflowState={
-        updateVariableValuesRequest?.status === 'success'
-          ? updateVariableWorkflowDetailsRequest
-          : updateVariableValuesRequest
+        updateValuesResult.isSuccess ? toWorkflowState(updateWorkflowResult) : toWorkflowState(updateValuesResult)
       }
       onSuccess={onSuccess}
       onClose={onCancel}
