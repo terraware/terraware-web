@@ -10,7 +10,8 @@ export type SpeciesSearchSelectProps = {
   /** Species already recorded in the table. They are keyed by species, so a second row can't exist. */
   excludedSpeciesIds?: number[];
   id: string;
-  onChange: (species: Species) => void;
+  /** Called with the picked species, or with undefined once the field no longer names one. */
+  onChange: (species: Species | undefined) => void;
   placeholder: string;
 };
 
@@ -48,9 +49,7 @@ export default function SpeciesSearchSelect({
   const onChangeHandler = useCallback(
     (value: Species) => {
       setSelectedValue(value);
-      if (value?.id) {
-        onChange(value);
-      }
+      onChange(value?.id === undefined ? undefined : value);
     },
     [onChange]
   );

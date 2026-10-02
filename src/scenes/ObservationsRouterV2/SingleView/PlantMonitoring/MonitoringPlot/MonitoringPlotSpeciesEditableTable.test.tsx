@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { screen, waitFor, within } from '@testing-library/react';
+import { UserEvent } from '@testing-library/user-event';
 import { HttpResponse, http } from 'msw';
 
 import strings from 'src/strings';
@@ -22,7 +23,7 @@ type MockSpecies = {
   totalLive: number;
 };
 
-const setup = () => {
+const setup = ({ gateFirstUpdate = false } = {}) => {
   mockGet('/api/v1/species', { species: [ACACIA, DUOSPERMA, ABUTILON] });
 
   // The results endpoint is stateful so that the refetch an update triggers reflects the change,
@@ -37,6 +38,12 @@ const setup = () => {
   };
 
   const requests: Request[] = [];
+  // The executor runs synchronously, so this is assigned before anything can call it.
+  let releaseFirstUpdate!: () => void;
+  const firstUpdateGate = new Promise<void>((resolve) => {
+    releaseFirstUpdate = resolve;
+  });
+
   server.use(
     http.get('/api/v1/tracking/observations/7/results', () =>
       HttpResponse.json({
@@ -51,6 +58,11 @@ const setup = () => {
     http.patch(UPDATE_URL, async ({ request }) => {
       requests.push(request.clone());
       const { updates } = (await request.json()) as { updates: (MockSpecies & { type: string })[] };
+      // Holding the first response open keeps that update in flight, so a second request that was
+      // not queued behind it would reach the API — and apply its changes — first.
+      if (requests.length === 1 && gateFirstUpdate) {
+        await firstUpdateGate;
+      }
       updates.forEach((operation) => {
         const target =
           operation.certainty === 'Unknown'
@@ -102,7 +114,7 @@ const setup = () => {
       })
     );
 
-  return { user, requests, rowFor, openSpeciesList, pickSpecies, clickRemoveIn };
+  return { user, requests, rowFor, openSpeciesList, pickSpecies, clickRemoveIn, releaseFirstUpdate };
 };
 
 describe('MonitoringPlotSpeciesEditableTable', () => {
@@ -160,6 +172,30 @@ describe('MonitoringPlotSpeciesEditableTable', () => {
     expect(requests).toHaveLength(0);
   });
 
+  it.each([
+    ['typing over it', async (user: UserEvent, input: HTMLElement) => await user.type(input, 'xyz')],
+    ['clearing it', async (user: UserEvent, input: HTMLElement) => await user.clear(input)],
+  ])('drops a picked species when the search field stops naming it by %s', async (_name, editField) => {
+    const { user, requests, openSpeciesList, pickSpecies } = setup();
+
+    await user.click(await screen.findByRole('button', { name: strings.ADD_SPECIES }));
+    const input = screen.getByPlaceholderText(strings.SEARCH_SPECIES);
+    await openSpeciesList(input);
+    await pickSpecies(ABUTILON.scientificName);
+
+    const counts = screen.getAllByPlaceholderText(strings.REQUIRED);
+    await user.type(counts[0], '2');
+    await user.type(counts[1], '6');
+    await user.type(counts[2], '0');
+    const submit = screen.getByRole('button', { name: strings.ADD_SPECIES });
+    expect(submit).toBeEnabled();
+
+    // The field no longer shows the species that was picked, so it must not be what gets added.
+    await editField(user, input);
+    expect(submit).toBeDisabled();
+    expect(requests).toHaveLength(0);
+  });
+
   it('zeroes a species out when its removal is confirmed', async () => {
     const { user, requests, rowFor, clickRemoveIn } = setup();
 
@@ -184,6 +220,41 @@ describe('MonitoringPlotSpeciesEditableTable', () => {
     });
     // The row leaves the table as soon as it has nothing recorded against it.
     await waitFor(() => expect(screen.queryByRole('cell', { name: strings.UNKNOWN })).not.toBeInTheDocument());
+  });
+
+  it('does not let an in-flight count edit overtake the removal that supersedes it', async () => {
+    const { user, requests, rowFor, clickRemoveIn, releaseFirstUpdate } = setup({ gateFirstUpdate: true });
+
+    const row = await rowFor(ACACIA.scientificName);
+    await user.dblClick(within(row).getByRole('cell', { name: '4' }));
+    await user.clear(screen.getByRole('spinbutton'));
+    await user.type(screen.getByRole('spinbutton'), '9');
+    await user.tab();
+    await waitFor(() => expect(requests).toHaveLength(1));
+
+    // Confirm the removal while the count edit is still in flight.
+    await clickRemoveIn(await rowFor(ACACIA.scientificName), ACACIA.scientificName);
+    await user.click(screen.getByRole('button', { name: strings.REMOVE }));
+
+    // The removal waits its turn rather than racing the edit it supersedes.
+    expect(requests).toHaveLength(1);
+
+    releaseFirstUpdate();
+    await waitFor(() => expect(requests).toHaveLength(2));
+    expect(await requests[1].json()).toEqual({
+      updates: [
+        {
+          type: 'MonitoringSpecies',
+          certainty: 'Known',
+          speciesId: ACACIA.id,
+          totalExisting: 0,
+          totalLive: 0,
+          totalDead: 0,
+        },
+      ],
+    });
+    // The zeroes are the last word, so the species stays gone after the refetch.
+    await waitFor(() => expect(screen.queryByRole('cell', { name: ACACIA.scientificName })).not.toBeInTheDocument());
   });
 
   it('leaves the species alone when a removal is cancelled', async () => {

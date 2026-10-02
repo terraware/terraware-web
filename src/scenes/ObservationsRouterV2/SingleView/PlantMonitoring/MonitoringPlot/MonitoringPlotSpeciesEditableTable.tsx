@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, IconButton, TextField, useTheme } from '@mui/material';
@@ -98,17 +98,30 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
     });
   }, []);
 
+  /**
+   * Sends one request per edit, but never more than one at a time.
+   *
+   * A count edit is fired and forgotten as the cell loses focus, so confirming a removal or a
+   * species change right afterwards would otherwise race it. If the count landed last it would put
+   * a value back on a species that was just zeroed out, bringing the row back on the next refetch —
+   * and leaving a species change with counts against both species. Queueing keeps the API applying
+   * the edits in the order they were made.
+   */
+  const pendingUpdates = useRef<Promise<unknown>>(Promise.resolve());
+
   const updateObservation = useCallback(
-    async (updates: MonitoringSpeciesUpdateOperationPayload[]) => {
+    (updates: MonitoringSpeciesUpdateOperationPayload[]): Promise<unknown> => {
       if (!monitoringPlot) {
-        return;
+        return pendingUpdates.current;
       }
       const mainPayload: UpdateCompletedObservationPlotApiArg = {
         observationId,
         plotId: monitoringPlot.monitoringPlotId,
         updateObservationRequestPayload: { updates },
       };
-      await update(mainPayload);
+      // A failed request must not strand everything queued behind it.
+      pendingUpdates.current = pendingUpdates.current.catch(() => undefined).then(() => update(mainPayload));
+      return pendingUpdates.current;
     },
     [observationId, monitoringPlot, update]
   );
@@ -259,8 +272,11 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
           excludedSpeciesIds={recordedSpeciesIds}
           id={`changeSpeciesName-${getRowKey(row.original)}`}
           onChange={(species) => {
-            setPendingSpeciesChange({ row: row.original, species });
-            table.setEditingCell(null);
+            // Typing a search term is not yet a change; only a picked species asks to confirm one.
+            if (species) {
+              setPendingSpeciesChange({ row: row.original, species });
+              table.setEditingCell(null);
+            }
           }}
           placeholder={row.original.speciesScientificName}
         />
