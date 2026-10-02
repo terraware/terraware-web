@@ -4,6 +4,7 @@ import {
   StratumResponsePayload,
   SubstratumResponsePayload,
 } from 'src/queries/generated/plantingSites';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
 
 /** Geometry is never rendered in jsdom, so any shape that type checks will do. */
 const boundary: MultiPolygon = {
@@ -56,5 +57,16 @@ export const buildPlantingSite = (overrides: Partial<PlantingSitePayload> = {}):
   name: 'Test Planting Site',
   organizationId: 1,
   strata: [buildStratum()],
+  ...overrides,
+});
+
+/** A draft site part way through the create/edit flow; no boundary has been defined yet. */
+export const buildDraftPlantingSite = (overrides: Partial<DraftPlantingSite> = {}): DraftPlantingSite => ({
+  createdBy: 1,
+  id: 1,
+  name: 'Draft Planting Site',
+  organizationId: 1,
+  siteEditStep: 'site_boundary',
+  siteType: 'detailed',
   ...overrides,
 });
