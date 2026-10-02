@@ -1,3 +1,4 @@
+e938d5ca Bump axios from 1.18.1 to 1.20.0 (#6607)
 29bb6b7d Update screenshot (#6601)
 1ba9cc0c SW-6842: Translate growth form in trees and shrubs table (#6605)
 39af8e0b Remove the local docker volume for postgres (#6572)
