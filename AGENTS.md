@@ -51,7 +51,8 @@ See `package.json` for the latest list of dependencies and versions.
 - Avoid comments that restate what the code already expresses
 - Prefer `const`-assigned arrow functions over function declarations
 - Prefer imperative present tense in commit titles and in the parts of commit bodies that say what is changing.
-- 
+-
+
 ## Workflow
 
 Check whether the current repo is using Jujutsu (jj) rather than plain git; if so, prefer jj commands for examining history and checkpointing your work.
@@ -69,7 +70,6 @@ Check whether the current repo is using Jujutsu (jj) rather than plain git; if s
 - After adding new strings:
   - Run `yarn alphabetize-strings`
   - Run `yarn translate`
-
 
 ## Pull Requests
 
