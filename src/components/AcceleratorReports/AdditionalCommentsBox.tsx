@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Grid } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
-import isEnabled from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import { useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
@@ -22,7 +21,6 @@ const AdditionalCommentsBox = (props: ReportBoxProps) => {
   const [additionalComments, setAdditionalComments] = useState<string | undefined>(report?.additionalComments);
 
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
   const snackbar = useSnackbar();
 
   useEffect(() => setAdditionalComments(report?.additionalComments), [report?.additionalComments]);
@@ -82,10 +80,9 @@ const AdditionalCommentsBox = (props: ReportBoxProps) => {
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
-      includeBorder={!newReportTabEnabled && !funderReportView}
     >
       <Grid item xs={12}>
-        {newReportTabEnabled && !isEditing && !additionalComments ? (
+        {!isEditing && !additionalComments ? (
           <EmptyFieldPlaceholder text={strings.NO_ADDITIONAL_COMMENTS_ADDED} />
         ) : (
           <Textfield

@@ -20,7 +20,6 @@ type EditableReportBoxProps = {
   onEdit: () => void;
   onCancel: () => void;
   onSave: () => void;
-  includeBorder?: boolean;
 };
 
 const EditableReportBox = ({
@@ -36,16 +35,12 @@ const EditableReportBox = ({
   onEdit,
   onCancel,
   onSave,
-  includeBorder = true,
 }: EditableReportBoxProps): JSX.Element => {
   const theme = useTheme();
 
   return (
     <>
-      <Box
-        borderBottom={includeBorder ? `1px solid ${theme.palette.TwClrBgTertiary}` : ''}
-        {...(anchorId === undefined ? {} : { [SCROLL_ANCHOR]: anchorId })}
-      >
+      <Box {...(anchorId === undefined ? {} : { [SCROLL_ANCHOR]: anchorId })}>
         <Box
           sx={{
             borderRadius: 2,

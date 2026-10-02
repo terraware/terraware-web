@@ -462,7 +462,6 @@ CULTIVATED,Cultivé,f0d960a4
 CULTIVATED_EX_SITU,Cultivé (ex situ),db8d3394
 CULTIVATED_EX_SITU_DESCRIPTION,"Plantes qui ont été cultivées dans une pépinière, une zone de production de semences ou une autre installation de propagation.",9b096972
 CUMULATIVE_PROGRESS,Progrès cumulé,fd7ffcac
-CUMULATIVE_PROGRESS_TOOLTIP,"Pour les indicateurs cumulatifs, le progrès total depuis le début du projet est affiché. Pour consulter le progrès trimestriel (réalisé trimestriel), développez cette section.",df7927bd
 CUMULATIVE_TARGET,Objectif cumulatif,82b48c14
 CURRENT_NEXT_OBSERVATION,Observation actuelle/prochaine,50735263
 CURRENT_TIMELINE,Étapes,2dcbaeeb
@@ -960,9 +959,6 @@ INDICATOR_LEVEL,Niveau d’indicateur,b128c992
 INDICATOR_NAME,Nom de l’indicateur,0d8b0613
 INDICATOR_NOT_VISIBLE_TO_FUNDER,Indicateur non visible par le financeur,d8aea360
 INDICATOR_OVERWRITTEN_ORIGINAL_VALUE,Remplacé – valeur d'origine : {0},c504c96d
-INDICATOR_STATUS_DESCRIPTION_ARCHIVED,Résultat déjà atteint,f3f4a3fa
-INDICATOR_STATUS_DESCRIPTION_ON_TRACK,Le résultat est en voie d'être atteint dans les délais prévus,fde2d530
-INDICATOR_STATUS_DESCRIPTION_UNLIKELY,Résultat peu susceptible d'être atteint dans les délais prévus,7be5d98c
 INDICATOR_TYPE,Type d’indicateur,d5e75bf1
 INDICATOR_TYPE_ACTIVITY,Activité,4e3914f0
 INDICATOR_TYPE_GOAL,Objectif,cb34c06e
@@ -1133,7 +1129,6 @@ LEAVING_SURVIVAL_RATE_EDIT_SCREEN_TEMPORARY_PLOTS,Vous quittez l’écran de mod
 LEFT_TO_PLANT,Restant à transplanter,30af8cf9
 LEFT_TO_PLANT_TOOLTIP,"Nombre de plants restant à planter, qui doivent encore être retirés pour atteindre l'objectif de l'espèce sur ce substrat.",ded53f18
 LEGAL,Juridique,dc8b5907
-LEGEND,Légende,d312e5fb
 LESS_THAN_FIFTY_PERCENT,< 50 %,d26d7627
 LIANA,Liane,812e082e
 LICHEN,Lichen,4f8de0bf
@@ -1555,7 +1550,6 @@ OVERRIDE_STATUS_NOT_SET_TOOLTIP_ORG,"Une fois qu’un statut est défini, il peu
 OVERRIDING,Remplacement,46e4d047
 OVERVIEW,Vue d’ensemble,c7fd0e47
 OVERWRITE_TERRAWARE_TRACKING_DATA,Écraser les données de suivi Terraware,1f5637ba
-OVERWRITTEN_ORIGINAL_VALUE,Remplacement – original : {0},c504c96d
 OVERWRITTEN_VALUE,Valeur remplacée,929e8eac
 OWNER,Propriétaire,f1db93f1
 OZ,oz,63ec7cc2
@@ -1980,7 +1974,6 @@ REPORT_NO_PLANTING_SITES,Le rapport n'inclut aucun site de plantation.,bbd3eaf4
 REPORT_NO_SEEDBANKS,Le rapport n'inclut aucune banque de semences.,8d098394
 REPORT_NOT_PUBLISHED_YET,Ce rapport n'a pas encore été publié sur le Portail des bailleurs.,6e8ab84b
 REPORT_NURSERY_CAPACITY_INFO,Veuillez indiquer le nombre total de plantes que la pépinière peut contenir selon les meilleures estimations.,daa9bfcc
-REPORT_PERIOD,Période du rapport : {0} - {1},b06927c6
 REPORT_PREVIEW,Aperçu du rapport,96417b29
 REPORT_PUBLISHED,Rapport publié,4ab6a36f
 REPORT_SAVE_AND_CLOSE,Enregistrer et fermer,aaa98fc6
@@ -2516,7 +2509,6 @@ TEMPORARY,Temporaire,4d5354bb
 TEMPORARY_PLOTS,Parcelles temporaires,7d9bceab
 TERRAFORMATION_CONTACT,Contact Terraformation,65846c70
 TERRAWARE_IS_SOFTWARE,"Terraware est un logiciel spécialisé, créé par [Terraformation], qui permet aux forestiers d'optimiser toutes les étapes de leurs projets forestiers, de la collecte des semences au calcul du carbone.",ca042b5f
-TERRAWARE_METRIC_MESSAGE,Cette mesure est tirée directement des données de suivi de Terraware.,cd131ec1
 TERRAWARE_MOBILE_APP_IMAGE_ALT,Illustration de l'application mobile Terraware sur un smartphone.,3e805068
 TERRAWARE_VALUE,Valeur Terraware,13163913
 TERRESTRIAL,Terrestre,25e86de2
@@ -2792,7 +2784,6 @@ VIEW_DOCUMENTS,Voir le(s) document(s),3925fe9c
 VIEW_FULL_DASHBOARD,Afficher le tableau de bord complet,25189646
 VIEW_HISTORY,Voir l'historique,a1dbe2ca
 VIEW_IN_MAP,Afficher sur la carte,510d8388
-VIEW_INTERNAL_REPORT_FORM,Afficher le formulaire de rapport interne,67f51c8a
 VIEW_MAP,Voir la carte,8ef1dcc4
 VIEW_OBSERVATION,Voir l'observation,9edac640
 VIEW_ON_MAP,Voir sur la carte,fb873a55
@@ -2895,7 +2886,6 @@ X_SPECIES_Y_PLANTS,"{0} espèces, {1} plants",81dea858
 X_TARGET,Objectif {0},d8170b6e
 X_THIS_QUARTER,{0} ce trimestre,6391f6a0
 XR_ERROR,Une erreur s'est produite lors de l'activation du mode XR. Veuillez actualiser la page et réessayer.,935ea96d
-YEAR,Année,484bf433
 YEARLY_CUMULATIVE,Cumulatif annuel,ed9a120d
 YES,Oui,d8b0d802
 YOU_ACCEPTED_THE_TERMS_ON,Vous avez accepté les conditions le {0}.,b2a20246
