@@ -10,7 +10,7 @@ import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers/hooks';
-import { OrganizationService } from 'src/services';
+import { useCreateOrganizationMutation } from 'src/queries/generated/organizations';
 import strings from 'src/strings';
 import {
   ManagedLocationType,
@@ -44,6 +44,7 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
   const snackbar = useSnackbar();
   const trackEvent = useTrackEvent();
   const markSubmitted = useTrackModalAbandonment('organization_create', open);
+  const [createOrganization] = useCreateOrganizationMutation();
   const [nameError, setNameError] = useState('');
   const [timeZoneError, setTimeZoneError] = useState('');
   const [countryError, setCountryError] = useState('');
@@ -153,15 +154,26 @@ export default function AddNewOrganizationModal(props: AddNewOrganizationModalPr
     const selectedLocationTypes = ManagedLocationTypes.filter(
       (locationType: ManagedLocationType) => locationTypes[locationType]
     );
-    const response = await OrganizationService.createOrganization(newOrganization, selectedLocationTypes);
-    if (response.requestSucceeded && response.organization) {
+    const response = await createOrganization({
+      name: newOrganization.name,
+      description: newOrganization.description,
+      countryCode: newOrganization.countryCode,
+      countrySubdivisionCode: newOrganization.countrySubdivisionCode,
+      managedLocationTypes: selectedLocationTypes,
+      organizationType: newOrganization.organizationType,
+      organizationTypeDetails: newOrganization.organizationTypeDetails,
+      timeZone: newOrganization.timeZone,
+      website: newOrganization.website,
+    });
+    const organization = 'data' in response ? response.data.organization : undefined;
+    if (organization) {
       trackEvent(MIXPANEL_EVENTS.ORGANIZATION_CREATED, {
         organization_type: newOrganization.organizationType,
         has_country_code: !!newOrganization.countryCode,
         num_managed_locations: selectedLocationTypes.length,
       });
       markSubmitted();
-      onSuccess(response.organization);
+      onSuccess(organization);
     } else {
       trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'organization' });
       snackbar.toastError(strings.GENERIC_ERROR, strings.ORGANIZATION_CREATE_FAILED);

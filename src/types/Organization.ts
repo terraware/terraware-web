@@ -1,4 +1,4 @@
-import { components } from 'src/api/types/generated-schema';
+import { OrganizationPayload } from 'src/queries/generated/organizations';
 import strings from 'src/strings';
 
 import { Facility } from './Facility';
@@ -7,7 +7,7 @@ export type ManagedLocationType = 'SeedBank' | 'Nursery' | 'PlantingSite';
 
 export const ManagedLocationTypes: ManagedLocationType[] = ['SeedBank', 'Nursery', 'PlantingSite'];
 
-export type OrganizationType = components['schemas']['OrganizationPayload']['organizationType'];
+export type OrganizationType = OrganizationPayload['organizationType'];
 
 export const OrganizationTypes: OrganizationType[] = [
   'Government',
@@ -61,11 +61,6 @@ export function roleName(role?: OrganizationRole) {
   }
 }
 
-export type OrganizationRoleInfo = {
-  role: OrganizationRole;
-  totalUsers: number;
-};
-
 export function managedLocationTypeLabel(managedLocationType: ManagedLocationType) {
   switch (managedLocationType) {
     case 'SeedBank':
@@ -93,8 +88,3 @@ export function organizationTypeLabel(organizationType: OrganizationType) {
       return strings.ORGANIZATION_TYPE_OTHER;
   }
 }
-
-export type UpdateOrganizationInternalTagsRequestPayload =
-  components['schemas']['UpdateOrganizationInternalTagsRequestPayload'];
-
-export type OrganizationWithInternalTags = components['schemas']['OrganizationInternalTagsPayload'];

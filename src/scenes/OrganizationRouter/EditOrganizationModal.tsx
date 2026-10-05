@@ -11,8 +11,8 @@ import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useProjects } from 'src/hooks/useProjects';
+import useUpdateOrganization from 'src/hooks/useUpdateOrganization';
 import { useLocalization, useTimeZones } from 'src/providers';
-import { OrganizationService } from 'src/services';
 import { Organization, OrganizationType, OrganizationTypes, organizationTypeLabel } from 'src/types/Organization';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 import useForm from 'src/utils/useForm';
@@ -44,6 +44,7 @@ export default function EditOrganizationModal({
   const [showUpdateLocation, setShowUpdateLocation] = useState(false);
   const [isSavingConfirmedLocationUpdate, setIsSavingConfirmedLocationUpdate] = useState(false);
   const snackbar = useSnackbar();
+  const updateOrganization = useUpdateOrganization();
   const timeZones = useTimeZones();
   const defaultTimeZone = useUserTimeZone()?.id || getUTC(timeZones).id;
 
@@ -146,8 +147,8 @@ export default function EditOrganizationModal({
         return;
       }
 
-      const response = await OrganizationService.updateOrganization(organizationRecord);
-      if (response.requestSucceeded) {
+      const succeeded = await updateOrganization(organizationRecord);
+      if (succeeded) {
         snackbar.toastSuccess(strings.CHANGES_SAVED);
         await reloadOrganizationData(organizationRecord.id);
         onClose();
@@ -156,7 +157,16 @@ export default function EditOrganizationModal({
         snackbar.toastError();
       }
     },
-    [organizationRecord, requireSubdivision, locationChanged, snackbar, strings, reloadOrganizationData, onClose]
+    [
+      organizationRecord,
+      requireSubdivision,
+      locationChanged,
+      updateOrganization,
+      snackbar,
+      strings,
+      reloadOrganizationData,
+      onClose,
+    ]
   );
 
   return (
