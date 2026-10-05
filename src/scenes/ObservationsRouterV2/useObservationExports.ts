@@ -667,11 +667,13 @@ const useObservationExports = () => {
       biomassObservationIds,
       hasFilters = false,
       siteName,
+      plantingSitesById,
     }: {
       adHocObservationsResults: AdHocObservationResults[];
       biomassObservationIds: number[];
       hasFilters?: boolean;
       siteName: string;
+      plantingSitesById: Record<number, PlantingSitePayload>;
     }) => {
       const fileNamePrefix = `${siteName}-${strings.AD_HOC_PLOTS}`;
       const files: { fileName: string; content: Blob | string }[] = [];
@@ -679,7 +681,7 @@ const useObservationExports = () => {
       if (adHocObservationsResults.length > 0) {
         files.push({
           fileName: `${siteName}-${strings.AD_HOC_PLANT_MONITORING}`,
-          content: makeAdHocObservationsCsv(adHocObservationsResults),
+          content: makeAdHocObservationsCsv(adHocObservationsResults, plantingSitesById),
         });
       }
       if (biomassObservationIds.length > 0) {

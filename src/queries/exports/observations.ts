@@ -50,6 +50,10 @@ const injectedRtkApi = api.injectEndpoints({
             'biomassDetails_numSpecies',
             'conditions.condition',
             'notes',
+            'monitoringPlotHistory_substratumHistory_stratumHistory_name',
+            'monitoringPlotHistory_substratumHistory_name',
+            'monitoringPlot_substratum_stratum_name',
+            'monitoringPlot_substratum_name',
           ],
           sortOrder: [{ field: 'monitoringPlot_plotNumber', direction: 'Descending' }],
           search: {

@@ -657,6 +657,14 @@ export type ObservationMonitoringPlotResultsPayload = {
   sizeMeters: number;
   species: ObservationSpeciesResultsPayload[];
   status: 'Unclaimed' | 'Claimed' | 'Completed' | 'Not Observed';
+  /** ID of the stratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a stratum or if the stratum has since been deleted. */
+  stratumId?: number;
+  /** Name of the stratum the monitoring plot was in at the time of the observation, if any. */
+  stratumName?: string;
+  /** ID of the substratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a substratum or if the substratum has since been deleted. */
+  substratumId?: number;
+  /** Full name of the substratum the monitoring plot was in at the time of the observation, if any. */
+  substratumName?: string;
   /** If this is a permanent monitoring plot in this observation, percentage of plants that have survived since t0 data. */
   survivalRate?: number;
   /** Total number of plants recorded. Includes all plants, regardless of live/dead status or species. */
@@ -948,17 +956,17 @@ export type AssignedPlotPayload = {
   /** Use substratumId instead */
   plantingSubzoneId?: number;
   /** Use substratumName instead */
-  plantingSubzoneName: string;
+  plantingSubzoneName?: string;
   /** Use stratumName instead */
-  plantingZoneName: string;
+  plantingZoneName?: string;
   plotId: number;
   plotName: string;
   plotNumber: number;
   /** Length of each edge of the monitoring plot in meters. */
   sizeMeters: number;
-  stratumName: string;
+  stratumName?: string;
   substratumId?: number;
-  substratumName: string;
+  substratumName?: string;
 };
 export type GetOneAssignedPlotResponsePayload = {
   plot: AssignedPlotPayload;
