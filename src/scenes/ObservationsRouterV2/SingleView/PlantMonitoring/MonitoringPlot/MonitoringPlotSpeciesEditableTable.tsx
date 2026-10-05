@@ -416,12 +416,12 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
     ({ table }: { table: MRT_TableInstance<ObservationSpeciesResults> }) =>
       draft === undefined ? (
         <Button
-          icon='plus'
+          icon='iconAdd'
           id='addSpecies'
           label={strings.ADD_SPECIES}
           onClick={() => startAdding(table)}
           priority='ghost'
-          size='medium'
+          type='productive'
         />
       ) : (
         <Box display='flex' flex={1} gap={1} justifyContent='flex-end'>
@@ -463,8 +463,10 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
       table: MRT_TableInstance<ObservationSpeciesResults>;
     }) => {
       const editingCell = table.getState().editingCell;
-      const hasOpenDropdown = row.id === DRAFT_ROW_ID || editingCell?.row.id === row.id;
+      const isDraftRow = row.id === DRAFT_ROW_ID;
+      const hasOpenDropdown = isDraftRow || editingCell?.row.id === row.id;
       return {
+        hover: !isDraftRow,
         sx: {
           cursor: 'default',
           '& td': { borderBottom: 'none' },
