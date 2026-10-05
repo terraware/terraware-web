@@ -1035,9 +1035,6 @@ LEAVE_ORGANIZATION,Salir de la organización,ce40fab6
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_PERMANENT_PLOTS,Está saliendo de la pantalla de edición de Parcelas Permanentes. Cualquier cambio no guardado en las Parcelas Permanentes no se guardará. ¿Está seguro de que desea salir?,3df033ef
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_TEMPORARY_PLOTS,Está saliendo de la pantalla de edición de Parcelas Temporales. Cualquier cambio no guardado en las Parcelas Temporales no se guardará. ¿Está seguro de que desea salir?,a4409ad0
 LEFT_TO_PLANT,Por plantar,30af8cf9
-LEFT_TO_PLANT_TOOLTIP,"Cantidad de plantas que quedan por plantar, es decir, que aún deben retirarse para plantar y cumplir el objetivo de la especie en este sustrato.",ded53f18
-LEGAL,Legal,dc8b5907
-LEGEND,Leyenda,d312e5fb
 LESS_THAN_FIFTY_PERCENT,< 50%,d26d7627
 LIANA,Liana,812e082e
 LICHEN,Liquen,4f8de0bf
@@ -2056,11 +2053,7 @@ SITE_GOALS_DESCRIPTION,Gestione los objetivos del sitio para densidades de plant
 SITE_LOCATION,Ubicación del sitio,e0a85b19
 SITE_MAP,Mapa del sitio,df2fc60a
 SITE_PLANT_DENSITY,Densidad de plantas del sitio,a449ddcc
-SITE_STRATUM_BOUNDARIES,Límites de Estrato,418d687a
 SITE_STRATUM_BOUNDARIES_DESCRIPTION,"Un estrato es una capa de vegetación del sitio de plantación donde las condiciones de plantación y crecimiento son similares, como la pendiente de una colina orientada al este. Cada sitio de plantación debe tener al menos un estrato y generalmente no más de cinco. Utilice la herramienta de corte {0} para dibujar polígonos de estratos dentro del límite del sitio a continuación. {1} [Vea un tutorial] sobre cómo agregar límites de estratos.",590f73b1
-SITE_STRATUM_BOUNDARIES_SIZE,Los estratos deben tener un tamaño mínimo de 100 m × 100 m.,d57abc90
-SITE_STRATUM_BOUNDARIES_DESCRIPTION_0,"Un Estrato es una capa de vegetación del sitio de plantación donde las condiciones de plantación y crecimiento son similares. Cada sitio de plantación debe tener al menos un estrato y usualmente no más de cinco. Un ejemplo de Estrato es la pendiente de una colina orientada al este, donde las condiciones de luz solar y suelo son similares.",408485f9
-SITE_STRATUM_BOUNDARIES_DESCRIPTION_1,Dibuje las Estratas de su sitio de plantación a continuación. Use la herramienta de corte {0} para crear polígonos dentro de los límites del sitio para las Estratas. [Vea un tutorial] sobre cómo agregar límites de Estrata.,c6d2ac88
 SITE_STRATUM_BOUNDARIES_SIZE,Las Estratas deben tener un tamaño mínimo de 100 m x 100 m.,d7c8579b
 SITE_STRATUM_BOUNDARIES_TOO_SMALL,Una o más estratas tienen un límite menor a 100 m x 100 m.,e53c42df
 SITE_STRATUM_BOUNDARY_TOO_SMALL,Límite de estrata menor a 100 m x 100 m.,d39bb72b
@@ -2672,8 +2665,6 @@ X_SPECIES,{0} especies,42e62955
 X_SPECIES_Y_PLANTS,"{0} especies, {1} plantas",81dea858
 X_TARGET,Meta {0},d8170b6e
 X_THIS_QUARTER,{0} este trimestre,6391f6a0
-XR_ERROR,"Se produjo un error al habilitar el modo XR. Por favor, actualice la página e intente nuevamente.",935ea96d
-YEAR,Año,484bf433
 YEARLY_CUMULATIVE,Acumulativo anual,ed9a120d
 YES,Sí,d8b0d802
 YOU_ACCEPTED_THE_TERMS_ON,Aceptaste los términos el {0}.,b2a20246

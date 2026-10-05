@@ -1034,9 +1034,6 @@ LEAVE_ORGANIZATION,Quitter l'organisation,ce40fab6
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_PERMANENT_PLOTS,Vous quittez l’écran de modification des Parcelles Permanentes. Toute modification non enregistrée des Parcelles Permanentes ne sera pas sauvegardée. Êtes-vous sûr de vouloir quitter ?,3df033ef
 LEAVING_SURVIVAL_RATE_EDIT_SCREEN_TEMPORARY_PLOTS,Vous quittez l’écran de modification des Parcelles Temporaires. Toute modification non enregistrée des Parcelles Temporaires ne sera pas sauvegardée. Êtes-vous sûr de vouloir quitter ?,a4409ad0
 LEFT_TO_PLANT,Restant à transplanter,30af8cf9
-LEFT_TO_PLANT_TOOLTIP,"Nombre de plants restant à planter, qui doivent encore être retirés pour atteindre l'objectif de l'espèce sur ce substrat.",ded53f18
-LEGAL,Juridique,dc8b5907
-LEGEND,Légende,d312e5fb
 LESS_THAN_FIFTY_PERCENT,< 50 %,d26d7627
 LIANA,Liane,812e082e
 LICHEN,Lichen,4f8de0bf
@@ -2055,11 +2052,7 @@ SITE_GOALS_DESCRIPTION,Gérer les objectifs du site pour les densités de planta
 SITE_LOCATION,Emplacement du site,e0a85b19
 SITE_MAP,Carte du site,df2fc60a
 SITE_PLANT_DENSITY,Densité de plantation du site,a449ddcc
-SITE_STRATUM_BOUNDARIES,Limites de la strate,418d687a
 SITE_STRATUM_BOUNDARIES_DESCRIPTION,"Une strate est une couche de végétation du site de plantation où les conditions de plantation et de croissance sont similaires, comme le versant d'une colline orientée à l'est. Chaque site de plantation doit comporter au moins une strate et généralement pas plus de cinq. Utilisez l’outil de découpe {0} pour dessiner les polygones des strates à l’intérieur des limites du site ci-dessous. {1} [Regardez un tutoriel] sur l’ajout de limites de strates.",590f73b1
-SITE_STRATUM_BOUNDARIES_SIZE,Les strates doivent avoir une taille minimale de 100 m × 100 m.,d57abc90
-SITE_STRATUM_BOUNDARIES_DESCRIPTION_0,"Une strate est une couche de végétation du site de plantation où les conditions de plantation et de croissance sont similaires. Chaque site de plantation doit comporter au moins une strate et généralement pas plus de cinq. Un exemple de strate est le versant d'une colline orientée à l'est, où l'ensoleillement et les conditions du sol sont similaires.",408485f9
-SITE_STRATUM_BOUNDARIES_DESCRIPTION_1,Dessinez les strates de votre site de plantation ci-dessous. Utilisez l’outil de découpe {0} pour créer des polygones représentant les strates à l’intérieur des limites du site. [Regardez un tutoriel] sur l’ajout de limites de strates.,c6d2ac88
 SITE_STRATUM_BOUNDARIES_SIZE,Les strates doivent avoir une taille minimale de 100 m x 100 m.,d7c8579b
 SITE_STRATUM_BOUNDARIES_TOO_SMALL,Une ou plusieurs strates ont une limite inférieure à 100 m x 100 m.,e53c42df
 SITE_STRATUM_BOUNDARY_TOO_SMALL,Limite de strate inférieure à 100 m x 100 m.,d39bb72b
@@ -2672,8 +2665,6 @@ X_SPECIES,{0} espèces,42e62955
 X_SPECIES_Y_PLANTS,"{0} espèces, {1} plants",81dea858
 X_TARGET,Objectif {0},d8170b6e
 X_THIS_QUARTER,{0} ce trimestre,6391f6a0
-XR_ERROR,Une erreur s'est produite lors de l'activation du mode XR. Veuillez actualiser la page et réessayer.,935ea96d
-YEAR,Année,484bf433
 YEARLY_CUMULATIVE,Cumulatif annuel,ed9a120d
 YES,Oui,d8b0d802
 YOU_ACCEPTED_THE_TERMS_ON,Vous avez accepté les conditions le {0}.,b2a20246
