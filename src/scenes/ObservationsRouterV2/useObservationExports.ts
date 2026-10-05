@@ -624,7 +624,9 @@ const useObservationExports = () => {
         { id: observationResults.plantingSiteId, includeZones: false },
         true
       ).unwrap();
-      const fileNamePrefix = `${siteResults.site.name}-${observationResults.startDate}-${strings.BIOMASS_OBSERVATION_FILENAME_PREFIX}`;
+      const plotNumber = observationResults.adHocPlot?.monitoringPlotNumber;
+      const plotNumberPrefix = plotNumber !== undefined ? `${plotNumber}-` : '';
+      const fileNamePrefix = `${plotNumberPrefix}${siteResults.site.name}-${observationResults.startDate}-${strings.BIOMASS_OBSERVATION_FILENAME_PREFIX}`;
 
       await downloadZipFile({
         dirName: sanitize(fileNamePrefix),
