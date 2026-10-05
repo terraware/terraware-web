@@ -2054,6 +2054,7 @@ SITE_BOUNDARY_DESCRIPTION_1,Utilisez l'outil de dessin {0} pour tracer les limit
 SITE_BOUNDARY_DESCRIPTION_2,"Les limites du site doivent s'inscrire dans une boîte de délimitation d'une superficie inférieure ou égale à 20 000 hectares. S'il est plus grand, envisagez de diviser le site en plusieurs sites de plantation.",6495bc67
 SITE_BOUNDARY_DESCRIPTION_3,Zoomez sur l'emplacement du site de plantation. Cliquez ensuite sur des zones de la carte pour ajouter des points à la limite du site. Complétez la limite en double-cliquant ou en cliquant à nouveau sur le point de départ.,14d699d1
 SITE_BOUNDARY_DESCRIPTION_4,"Pour modifier la forme de la limite du site, cliquez sur la forme pour modifier les points. Pour supprimer la forme, cliquez sur le bouton {0}.",3fd2c49c
+SITE_BOUNDARY_DRAWING_ON_MAP,Tracé de la limite sur la carte.,58e0ca26
 SITE_BOUNDARY_ERRORS,Il y a des erreurs dans les limites du site.,916536c6
 SITE_BOUNDARY_FILE_SUMMARY,{0} · {1} · {2} · {3} points · {4} ha · boîte englobante {5} ha,6e17740b
 SITE_BOUNDARY_MAX_BOUNDING_BOX,"Boîte englobante maximale : 20 000 ha. Si votre site est plus grand, divisez-le en plusieurs sites de plantation.",315cceab
@@ -2521,6 +2522,7 @@ UPDATE_NEEDED,Mise à jour nécessaire,7b391dc2
 UPDATE_REQUESTED,Mise à jour demandée,3c56b2c5
 UPDATE_STATUS_WARNING,Vous êtes sur le point de mettre à jour le statut,6ee652b9
 UPLOAD,Télécharger,07a29663
+UPLOAD_A_FILE_INSTEAD,Importer un fichier à la place,4423cae6
 UPLOAD_A_MAP_OF_THE_PROJECT_BOUNDARY,Envoyer une carte du périmètre du projet,843e2f43
 UPLOAD_CSV_FILE,Télécharger le fichier CSV,3a5fa609
 UPLOAD_DELIVERABLES,Télécharger les livrables,ed8d94f9

@@ -122,6 +122,72 @@ describe('SiteBoundary', () => {
     expect(screen.queryByText(strings.UPLOAD_SITE_BOUNDARY_DESCRIPTION)).not.toBeInTheDocument();
   });
 
+  it('does not show the drawing banner before a method is chosen', () => {
+    flags.boundaryFileUpload = true;
+
+    renderSiteBoundary();
+
+    expect(screen.getByText(strings.BOUNDARY_METHOD_TITLE)).toBeInTheDocument();
+    expect(screen.queryByText(strings.SITE_BOUNDARY_DRAWING_ON_MAP)).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: strings.UPLOAD_A_FILE_INSTEAD })).not.toBeInTheDocument();
+  });
+
+  it('tells the user they are drawing on the map once they choose to draw', async () => {
+    flags.boundaryFileUpload = true;
+    const { user } = renderSiteBoundary();
+
+    await user.click(methodTile(strings.DRAW_BOUNDARY_WITHIN_MAP));
+
+    expect(screen.getByText(strings.SITE_BOUNDARY_DRAWING_ON_MAP)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: strings.UPLOAD_A_FILE_INSTEAD })).toBeInTheDocument();
+  });
+
+  it('opens the upload modal when a user drawing the boundary chooses to upload a file instead', async () => {
+    flags.boundaryFileUpload = true;
+    const { user } = renderSiteBoundary();
+
+    await user.click(methodTile(strings.DRAW_BOUNDARY_WITHIN_MAP));
+    await user.click(screen.getByRole('button', { name: strings.UPLOAD_A_FILE_INSTEAD }));
+
+    expect(screen.getByText(strings.UPLOAD_SITE_BOUNDARY_DESCRIPTION)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: strings.UPLOAD })).toBeInTheDocument();
+  });
+
+  it('returns to drawing, not the method chooser, when the upload modal opened from drawing is cancelled', async () => {
+    flags.boundaryFileUpload = true;
+    const { user } = renderSiteBoundary();
+
+    await user.click(methodTile(strings.DRAW_BOUNDARY_WITHIN_MAP));
+    await user.click(screen.getByRole('button', { name: strings.UPLOAD_A_FILE_INSTEAD }));
+    await user.click(screen.getByRole('button', { name: strings.CANCEL }));
+
+    await waitFor(() => expect(screen.queryByText(strings.UPLOAD_SITE_BOUNDARY_DESCRIPTION)).not.toBeInTheDocument());
+    expect(screen.getByText(strings.SITE_BOUNDARY_DRAWING_ON_MAP)).toBeInTheDocument();
+    expect(screen.queryByText(strings.BOUNDARY_METHOD_TITLE)).not.toBeInTheDocument();
+  });
+
+  it('replaces the drawing banner with the uploaded file summary when a file is uploaded while drawing', async () => {
+    flags.boundaryFileUpload = true;
+    mockPost(PARSE_URL, {
+      areaHa: 480,
+      filename: 'site.geojson',
+      format: 'GeoJSON',
+      geometry: GEOMETRY,
+      numPolygons: 1,
+    });
+    const { user } = renderSiteBoundary();
+
+    await user.click(methodTile(strings.DRAW_BOUNDARY_WITHIN_MAP));
+    await user.click(screen.getByRole('button', { name: strings.UPLOAD_A_FILE_INSTEAD }));
+    await submitUploadModal(user, 'site.geojson');
+
+    expect(await screen.findByText(/site\.geojson/)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: strings.REPLACE_FILE })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: strings.REMOVE })).toBeInTheDocument();
+    expect(screen.queryByText(strings.SITE_BOUNDARY_DRAWING_ON_MAP)).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: strings.UPLOAD_A_FILE_INSTEAD })).not.toBeInTheDocument();
+  });
+
   it('opens the upload modal when the user chooses to upload a spatial file', async () => {
     flags.boundaryFileUpload = true;
     const { user } = renderSiteBoundary();
