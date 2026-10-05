@@ -2233,16 +2233,14 @@ SITE_LOCATION,Emplacement du site,e0a85b19
 SITE_MAP,Carte du site,df2fc60a
 SITE_PLANT_DENSITY,Densité de plantation du site,a449ddcc
 SITE_STRATUM_BOUNDARIES,Limites de la strate,418d687a
-SITE_STRATUM_BOUNDARIES_DESCRIPTION_0,"Une strate est une couche de végétation du site de plantation où les conditions de plantation et de croissance sont similaires. Chaque site de plantation doit comporter au moins une strate et généralement pas plus de cinq. Un exemple de strate est le versant d'une colline orientée à l'est, où l'ensoleillement et les conditions du sol sont similaires.",408485f9
-SITE_STRATUM_BOUNDARIES_DESCRIPTION_1,Dessinez les strates de votre site de plantation ci-dessous. Utilisez l’outil de découpe {0} pour créer des polygones représentant les strates à l’intérieur des limites du site. [Regardez un tutoriel] sur l’ajout de limites de strates.,c6d2ac88
-SITE_STRATUM_BOUNDARIES_SIZE,Les strates doivent avoir une taille minimale de 100 m x 100 m.,d7c8579b
+SITE_STRATUM_BOUNDARIES_DESCRIPTION,"Une strate est une couche de végétation du site de plantation où les conditions de plantation et de croissance sont similaires, comme le versant d'une colline orientée à l'est. Chaque site de plantation doit comporter au moins une strate et généralement pas plus de cinq. Utilisez l’outil de découpe {0} pour dessiner les polygones des strates à l’intérieur des limites du site ci-dessous. {1} [Regardez un tutoriel] sur l’ajout de limites de strates.",590f73b1
+SITE_STRATUM_BOUNDARIES_SIZE,Les strates doivent avoir une taille minimale de 100 m × 100 m.,d57abc90
 SITE_STRATUM_BOUNDARIES_TOO_SMALL,Une ou plusieurs strates ont une limite inférieure à 100 m x 100 m.,e53c42df
 SITE_STRATUM_BOUNDARY_TOO_SMALL,Limite de strate inférieure à 100 m x 100 m.,d39bb72b
 SITE_STRATUM_NAMES_MISSING,Une ou plusieurs strates n’ont pas de nom. Cliquez sur une strate pour modifier son nom.,dc003708
 SITE_SUBSTRATUM_BOUNDARIES,Limites des substrats,71b65a41
-SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_0,"Chaque strate de votre site de plantation est divisée en un ou plusieurs substrats. Un substrat est la plus petite zone à laquelle des plants peuvent être attribués lors de la plantation. Les substrats doivent être dimensionnés de manière à pouvoir être entièrement plantés au cours d’une seule saison de plantation. En général, les substrats font entre 50 et 200 hectares.",f7fdd3e2
-SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_1,Dessinez les substrats de votre site de plantation ci-dessous. Commencez par sélectionner un stratum dans lequel créer des substrats. Utilisez l’outil de découpe {0} pour créer des formes de substrat (polygones) à l’intérieur des strates. [Regardez un tutoriel] sur l’ajout de limites de substrat.,1053c80f
-SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,La strate {0} est actuellement sélectionnée pour la création de substrats.,140be362
+SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,"Chaque strate est divisée en un ou plusieurs substrats. Un substrat est la plus petite zone à laquelle des plants peuvent être attribués lors de la plantation, et doit être dimensionné de façon à pouvoir être planté en une seule saison de plantation, généralement de 50 à 200 hectares. Sélectionnez une strate, puis utilisez l’outil de découpe {0} pour dessiner les polygones des substrats à l’intérieur de celle-ci. [Regardez un tutoriel] sur l’ajout de limites de substrats.",d9d30ce0
+SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,{0} sélectionnée pour la création de substrats,8444578b
 SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL,Un ou plusieurs substrats ont une limite inférieure à 25 m x 25 m.,87f34c5b
 SITE_SUBSTRATUM_BOUNDARY_TOO_SMALL,Limite de substrat inférieure à 25 m x 25 m.,c014deff
 SITE_VISIT,Visite du site,01a6a6fc
