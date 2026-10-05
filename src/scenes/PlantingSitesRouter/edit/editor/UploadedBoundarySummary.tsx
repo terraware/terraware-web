@@ -3,7 +3,7 @@ import React, { type JSX, useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button, Icon } from '@terraware/web-components';
 
-import strings from 'src/strings';
+import { useLocalization } from 'src/providers';
 
 export type UploadedBoundaryFile = {
   areaHa: number;
@@ -29,6 +29,7 @@ export default function UploadedBoundarySummary({
   onReplace,
 }: UploadedBoundarySummaryProps): JSX.Element {
   const theme = useTheme();
+  const { strings } = useLocalization();
 
   const summary = useMemo<string>(() => {
     const polygons = strings.formatString(
@@ -45,7 +46,7 @@ export default function UploadedBoundarySummary({
       `${file.areaHa}`,
       `${file.boundingAreaHa}`
     ) as string;
-  }, [file]);
+  }, [file, strings]);
 
   return (
     <Box
