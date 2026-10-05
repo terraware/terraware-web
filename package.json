@@ -237,7 +237,7 @@
     "picomatch": "^4.0.4",
     "postcss": "^8.5.25",
     "serialize-javascript": "^7.0.5",
-    "simple-git": "^3.32.3",
+    "simple-git": "^4.0.0",
     "string-width": "8.3.0",
     "strip-ansi": "6.0.1",
     "tmp": "^0.2.6",
