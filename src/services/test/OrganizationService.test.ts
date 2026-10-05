@@ -1,4 +1,5 @@
-import { setHttpServiceMocks, clearHttpServiceMocks } from './HttpServiceMocks';
+import { clearHttpServiceMocks, setHttpServiceMocks } from './HttpServiceMocks';
+
 import OrganizationService from '../OrganizationService';
 
 const ORGANIZATIONS = [

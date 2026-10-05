@@ -3,7 +3,7 @@ import { makeDateRangeFilterFn } from './tableFilters';
 type TestRow = { date?: string; other?: string };
 
 // At runtime MRT wraps the row; simulate that here.
-const makeRow = (original: TestRow): TestRow => ({ original } as unknown as TestRow);
+const makeRow = (original: TestRow): TestRow => ({ original }) as unknown as TestRow;
 
 const filterFn = makeDateRangeFilterFn<TestRow>('date');
 
@@ -37,14 +37,24 @@ describe('makeDateRangeFilterFn', () => {
   });
 
   test('filters by both bounds (dayjs objects)', () => {
-    expect(filterFn(makeRow({ date: '2024-06-15' }), 'date', [dayjsLike('2024-06-01'), dayjsLike('2024-06-30')])).toBe(true);
-    expect(filterFn(makeRow({ date: '2024-05-31' }), 'date', [dayjsLike('2024-06-01'), dayjsLike('2024-06-30')])).toBe(false);
-    expect(filterFn(makeRow({ date: '2024-07-01' }), 'date', [dayjsLike('2024-06-01'), dayjsLike('2024-06-30')])).toBe(false);
+    expect(filterFn(makeRow({ date: '2024-06-15' }), 'date', [dayjsLike('2024-06-01'), dayjsLike('2024-06-30')])).toBe(
+      true
+    );
+    expect(filterFn(makeRow({ date: '2024-05-31' }), 'date', [dayjsLike('2024-06-01'), dayjsLike('2024-06-30')])).toBe(
+      false
+    );
+    expect(filterFn(makeRow({ date: '2024-07-01' }), 'date', [dayjsLike('2024-06-01'), dayjsLike('2024-06-30')])).toBe(
+      false
+    );
   });
 
   test('accepts ISO timestamp strings — only the date part is compared', () => {
-    expect(filterFn(makeRow({ date: '2024-03-15T10:30:00Z' }), 'date', [dayjsLike('2024-03-01'), dayjsLike('2024-03-31')])).toBe(true);
-    expect(filterFn(makeRow({ date: '2024-04-01T00:00:00Z' }), 'date', [dayjsLike('2024-03-01'), dayjsLike('2024-03-31')])).toBe(false);
+    expect(
+      filterFn(makeRow({ date: '2024-03-15T10:30:00Z' }), 'date', [dayjsLike('2024-03-01'), dayjsLike('2024-03-31')])
+    ).toBe(true);
+    expect(
+      filterFn(makeRow({ date: '2024-04-01T00:00:00Z' }), 'date', [dayjsLike('2024-03-01'), dayjsLike('2024-03-31')])
+    ).toBe(false);
   });
 
   test('accepts plain YYYY-MM-DD strings as filter bounds', () => {

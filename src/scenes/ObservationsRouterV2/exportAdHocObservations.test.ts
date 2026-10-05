@@ -154,9 +154,12 @@ describe('makeAdHocObservationsCsv', () => {
   });
 
   test('counts species without live or dead totals as zero', async () => {
-    const observation = makeAdHocObservation({}, {
-      species: [{ totalPlants: 5 }] as unknown as AdHocObservationResults['adHocPlot']['species'],
-    });
+    const observation = makeAdHocObservation(
+      {},
+      {
+        species: [{ totalPlants: 5 }] as unknown as AdHocObservationResults['adHocPlot']['species'],
+      }
+    );
 
     const rows = await readCsvRows(makeAdHocObservationsCsv([observation]));
 
