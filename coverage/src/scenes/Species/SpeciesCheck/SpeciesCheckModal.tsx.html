@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">39.1% </span>
+                <span class="strong">39.72% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>113/289</span>
+                <span class='fraction'>114/287</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25.88% </span>
+                <span class="strong">26.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>44/170</span>
+                <span class='fraction'>44/166</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">29.8% </span>
+                <span class="strong">30.09% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>31/104</span>
+                <span class='fraction'>31/103</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">41.48% </span>
+                <span class="strong">42% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>112/270</span>
+                <span class='fraction'>113/269</span>
             </div>
         
             
@@ -870,9 +870,7 @@
 <a name='L805'></a><a href='#L805'>805</a>
 <a name='L806'></a><a href='#L806'>806</a>
 <a name='L807'></a><a href='#L807'>807</a>
-<a name='L808'></a><a href='#L808'>808</a>
-<a name='L809'></a><a href='#L809'>809</a>
-<a name='L810'></a><a href='#L810'>810</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L808'></a><a href='#L808'>808</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -950,6 +948,7 @@
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-yes">9x</span>
@@ -1286,9 +1285,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1692,6 +1688,7 @@ import Button from 'src/components/common/button/Button';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
+import useUpdateOrganization from 'src/hooks/useUpdateOrganization';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useUpdateProjectMutation } from 'src/queries/generated/projects';
@@ -1700,7 +1697,6 @@ import {
   useAcceptProblemSuggestionMutation,
   useOverrideProjectSpeciesDataMutation,
 } from 'src/queries/generated/species';
-import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
 import { Species } from 'src/types/Species';
@@ -1754,12 +1750,13 @@ const SpeciesCheckModal = ({
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { countries } = useLocalization();
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const { botanicalCountries } = useBotanicalCountries(!open);
   const trackEvent = useTrackEvent();
   const markSubmitted = useTrackModalAbandonment('species_check', open);
 &nbsp;
   const [updateProject] = useUpdateProjectMutation();
+  const updateOrganization = useUpdateOrganization();
   const [acceptProblem] = useAcceptProblemSuggestionMutation();
   const [overrideSpecies] = useOverrideProjectSpeciesDataMutation();
   const [acceptPending] = useAcceptPendingNativitiesMutation();
@@ -2078,7 +2075,7 @@ const SpeciesCheckModal = ({
 <span class="cstat-no" title="statement not covered" >            if (!selectedOrganization) {</span>
 <span class="cstat-no" title="statement not covered" >              return Promise.resolve();</span>
             }
-<span class="cstat-no" title="statement not covered" >            return OrganizationService.updateOrganization({</span>
+<span class="cstat-no" title="statement not covered" >            return updateOrganization({</span>
               ...selectedOrganization,
               countryCode: edit.countryCode,
               botanicalCountryCode: edit.botanicalCountryCode,
@@ -2096,9 +2093,6 @@ const SpeciesCheckModal = ({
           }).unwrap();
         })
       );
-<span class="cstat-no" title="statement not covered" >      if (changedTargets.some(<span class="fstat-no" title="function not covered" >(target) =&gt; <span class="cstat-no" title="statement not covered" >target.isOrg)</span></span> &amp;&amp; selectedOrganization) {</span>
-<span class="cstat-no" title="statement not covered" >        await reloadOrganizations(selectedOrganization.id);</span>
-      }
 <span class="cstat-no" title="statement not covered" >      await reloadSpecies();</span>
 <span class="cstat-no" title="statement not covered" >      setRecalculatedTargetKeys(changedKeys);</span>
 <span class="cstat-no" title="statement not covered" >      setStep(1);</span>
@@ -2116,13 +2110,13 @@ const SpeciesCheckModal = ({
     changedTargets,
     locationForTarget,
     projects,
-    reloadOrganizations,
     reloadSpecies,
     selectedOrganization,
     snackbar,
     targets,
     trackEvent,
     trackSaveFailed,
+    updateOrganization,
     updateProject,
   ]);
 &nbsp;
@@ -2497,7 +2491,7 @@ export default SpeciesCheckModal;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-05T20:02:07.390Z
+                at 2026-10-05T21:01:14.281Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
