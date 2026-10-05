@@ -182,10 +182,8 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
         .filter((substratum) => !!substratum) as MinimalSubstratum[];
       return { ...stratum, substrata: newSubstrata };
     });
-    const numStrata = site.strata?.length ?? 0;
-    const numSubstrata = newStrata?.flatMap((stratum) => stratum.substrata)?.length ?? 0;
     const data = newStrata ? { strata: newStrata } : undefined;
-    onValidate.apply(newStrata === undefined, data, numSubstrata > numStrata);
+    onValidate.apply(newStrata === undefined, data);
   }, [substrataData?.errorAnnotations, onValidate, site, snackbar, substrata, strata]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {

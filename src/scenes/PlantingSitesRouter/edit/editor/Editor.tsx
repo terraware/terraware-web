@@ -33,6 +33,8 @@ import Strata from './Strata';
 import Substrata from './Substrata';
 import { OnValidate } from './types';
 
+type SaveAction = 'back' | 'draft' | 'next';
+
 export type EditorProps = {
   site: DraftPlantingSite;
 };
@@ -215,21 +217,30 @@ export default function Editor(props: EditorProps): JSX.Element {
   const onKeepEditing = useCallback(() => setShowCloseConfirmation(false), []);
 
   const onSave = useCallback(
-    (close: boolean) => () => {
+    (action: SaveAction) => () => {
       // wait for component to return
       if (onValidate) {
         return;
       }
+      const stepIndex = getCurrentStepIndex();
+      const isLastStep = stepIndex === steps.length - 1;
+      const isFinalizing = action === 'next' && isLastStep;
+      const redirect = action === 'draft' || isFinalizing;
+
+      const getNextStep = (): SiteEditStep => {
+        if (action === 'back') {
+          return steps[stepIndex - 1].type;
+        }
+        // if user saves a draft we want to bring user back to the same step in the flow on next visit
+        return redirect ? currentStep : steps[stepIndex + 1].type;
+      };
+
       setOnValidate({
-        isSaveAndClose: close,
-        apply: (hasErrors: boolean, data?: Partial<DraftPlantingSite>, isOptionalCompleted?: boolean) => {
+        allowIncomplete: action !== 'next',
+        apply: (hasErrors: boolean, data?: Partial<DraftPlantingSite>) => {
           setOnValidate(undefined);
           if (!hasErrors) {
-            const isLastStep = currentStep === steps[steps.length - 1].type;
-            const redirect = close || isLastStep;
-            // if user hits Save&Close we want to bring user back to the same step in the flow on next visit
-            const nextStep = redirect ? currentStep : steps[getCurrentStepIndex() + 1].type;
-
+            const nextStep = getNextStep();
             const draft: DraftPlantingSite = {
               ...plantingSite,
               ...(data ?? {}),
@@ -239,37 +250,30 @@ export default function Editor(props: EditorProps): JSX.Element {
             if (plantingSite.id === -1) {
               // new site
               createDraft({ draft, nextStep }, redirect);
-            } else if (isLastStep && !close) {
+            } else if (isFinalizing) {
               // user is done with create wizard, create the site and delete the draft
               finalize(draft);
             } else {
-              // update the draft
-              const optionalSteps =
-                isOptionalCompleted !== undefined
-                  ? { ...completedOptionalSteps, [currentStep]: isOptionalCompleted }
-                  : undefined;
-              updateDraft({ draft, nextStep, optionalSteps }, redirect);
+              updateDraft({ draft, nextStep, optionalSteps: initializeOptionalStepsStatus(draft) }, redirect);
             }
           }
         },
       });
     },
-    [
-      completedOptionalSteps,
-      createDraft,
-      currentStep,
-      finalize,
-      getCurrentStepIndex,
-      onValidate,
-      plantingSite,
-      steps,
-      updateDraft,
-    ]
+    [createDraft, currentStep, finalize, getCurrentStepIndex, onValidate, plantingSite, steps, updateDraft]
   );
+
+  const onBack = useCallback(() => {
+    if (isDirty) {
+      onSave('back')();
+    } else {
+      setCurrentStep(steps[getCurrentStepIndex() - 1].type);
+    }
+  }, [getCurrentStepIndex, isDirty, onSave, steps]);
 
   const onSaveAsDraft = useCallback(() => {
     setShowCloseConfirmation(false);
-    onSave(true)();
+    onSave('draft')();
   }, [onSave]);
 
   /**
@@ -367,10 +371,21 @@ export default function Editor(props: EditorProps): JSX.Element {
                   size='medium'
                 />
               )}
+              {currentStep !== 'details' && (
+                <Button
+                  id='back-planting-site-create'
+                  label={strings.BACK}
+                  onClick={onBack}
+                  disabled={busy}
+                  priority='secondary'
+                  type='passive'
+                  size='medium'
+                />
+              )}
               <Button
                 id='save-planting-site-create'
                 label={isFinalStep ? strings.CREATE_PLANTING_SITE : strings.NEXT}
-                onClick={onSave(false)}
+                onClick={onSave('next')}
                 disabled={busy}
                 size='medium'
               />
