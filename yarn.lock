@@ -6448,10 +6448,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/virtual-core/-/virtual-core-3.11.2.tgz#00409e743ac4eea9afe5b7708594d5fcebb00212"
   integrity sha512-vTtpNt7mKCiZ1pwU9hfKPhpdVO2sVzFQsxoVBGtOSHxlrRRzYr8iQ2TlwbAcRYCcEiZ9ECAM8kBzH0v2+VzfKw==
 
-"@terraware/web-components@^5.0.15":
-  version "5.0.15"
-  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-5.0.15.tgz#8f6366b06e9a712f9bb0087ee86976fba7e465ce"
-  integrity sha512-TXltlzGqqzjPUC7ELNXFfCjCfI7maUrQmMlKW93mclo54Vy+J4QaBpwd0pamB2j3wSYlP9DBOLMWhzbRFEZCIw==
+"@terraware/web-components@^5.0.20":
+  version "5.0.20"
+  resolved "https://registry.yarnpkg.com/@terraware/web-components/-/web-components-5.0.20.tgz#0f9c794112e1c5af26a3e44e4eeda0c55e13e4c4"
+  integrity sha512-vBpT+OPFMs+sp3q4qATL11ZzIP74I1NCx+C0PfjN3ohI5vQr+MN3vSOwk5LntihTLkYd6sbfDPKrhL2a7Ki3sQ==
   dependencies:
     "@dnd-kit/core" "^6.0.7"
     "@dnd-kit/sortable" "^10.0.0"
@@ -6463,7 +6463,7 @@
     "@mui/x-date-pickers" "^7.22.0"
     "@playcanvas/react" "0.11.5"
     classnames "^2.3.2"
-    csv-parse "^5.5.5"
+    csv-parse "^7.0.0"
     embla-carousel-react "^8.6.0"
     geojson "^0.5.0"
     luxon "^3.3.0"
@@ -6471,7 +6471,7 @@
     material-react-table "^3.2.1"
     playcanvas "2.21.3"
     prettier "^3.8.1"
-    react-intersection-observer "^9.5.2"
+    react-intersection-observer "^11.0.0"
     react-responsive "^9.0.2"
     sass "^1.75.0"
     tinycolor2 "^1.6.0"
@@ -9255,6 +9255,11 @@ csv-parse@^5.5.5:
   version "5.5.5"
   resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-5.5.5.tgz#68a271a9092877b830541805e14c8a80e6a22517"
   integrity sha512-erCk7tyU3yLWAhk6wvKxnyPtftuy/6Ak622gOO7BCJ05+TYffnPCJF905wmOQm+BpkX54OdAl8pveJwUdpnCXQ==
+
+csv-parse@^7.0.0:
+  version "7.0.3"
+  resolved "https://registry.yarnpkg.com/csv-parse/-/csv-parse-7.0.3.tgz#eece4221023f8f67029518af928a225a1ea3ccad"
+  integrity sha512-YFd3QM/yo17vH91L1IOZuvl09zM0zEEtdfTcOCKWcMdM++MNaQSyp09slXyFCLaPXvHstQFx/xC8myiFHSMUvw==
 
 csv-parser@^3.0.0:
   version "3.2.0"
@@ -15489,10 +15494,10 @@ react-error-boundary@^6.0.0:
   dependencies:
     "@babel/runtime" "^7.12.5"
 
-react-intersection-observer@^9.5.2:
-  version "9.16.0"
-  resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-9.16.0.tgz#7376d54edc47293300961010844d53b273ee0fb9"
-  integrity sha512-w9nJSEp+DrW9KmQmeWHQyfaP6b03v+TdXynaoA964Wxt7mdR3An11z4NNCQgL4gKSK7y1ver2Fq+JKH6CWEzUA==
+react-intersection-observer@^11.0.0:
+  version "11.0.1"
+  resolved "https://registry.yarnpkg.com/react-intersection-observer/-/react-intersection-observer-11.0.1.tgz#ee994e1320311ffcce01ee6497509e5155ef72a0"
+  integrity sha512-BIZ1M40GPSKDIT1MJbXK7SB0BwBaTKr84QfZCs5asKer7YMOYLzMi+RI1F4VStbZLGHoosJmd+aOQDDipUV1gA==
 
 react-is@18.1.0:
   version "18.1.0"
