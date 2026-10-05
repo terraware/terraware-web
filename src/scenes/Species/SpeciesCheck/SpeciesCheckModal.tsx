@@ -71,7 +71,7 @@ const SpeciesCheckModal = ({
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { countries } = useLocalization();
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const { botanicalCountries } = useBotanicalCountries(!open);
   const trackEvent = useTrackEvent();
   const markSubmitted = useTrackModalAbandonment('species_check', open);
@@ -414,9 +414,6 @@ const SpeciesCheckModal = ({
           }).unwrap();
         })
       );
-      if (changedTargets.some((target) => target.isOrg) && selectedOrganization) {
-        await reloadOrganizations(selectedOrganization.id);
-      }
       await reloadSpecies();
       setRecalculatedTargetKeys(changedKeys);
       setStep(1);
@@ -434,7 +431,6 @@ const SpeciesCheckModal = ({
     changedTargets,
     locationForTarget,
     projects,
-    reloadOrganizations,
     reloadSpecies,
     selectedOrganization,
     snackbar,

@@ -23,14 +23,12 @@ export type EditOrganizationModalProps = {
   organization: Organization;
   open: boolean;
   onClose: () => void;
-  reloadOrganizationData: (id: number) => Promise<void>;
 };
 
 export default function EditOrganizationModal({
   organization,
   open,
   onClose,
-  reloadOrganizationData,
 }: EditOrganizationModalProps): JSX.Element {
   const theme = useTheme();
   const { activeLocale, strings } = useLocalization();
@@ -150,23 +148,13 @@ export default function EditOrganizationModal({
       const succeeded = await updateOrganization(organizationRecord);
       if (succeeded) {
         snackbar.toastSuccess(strings.CHANGES_SAVED);
-        await reloadOrganizationData(organizationRecord.id);
         onClose();
       } else {
         setIsSavingConfirmedLocationUpdate(false);
         snackbar.toastError();
       }
     },
-    [
-      organizationRecord,
-      requireSubdivision,
-      locationChanged,
-      updateOrganization,
-      snackbar,
-      strings,
-      reloadOrganizationData,
-      onClose,
-    ]
+    [organizationRecord, requireSubdivision, locationChanged, updateOrganization, snackbar, strings, onClose]
   );
 
   return (

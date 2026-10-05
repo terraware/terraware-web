@@ -359,9 +359,6 @@ export default function PeopleListView(): JSX.Element {
       }
       const deleteOrgResponse = await deleteOrganization(selectedOrganization.id);
       if (allRemoved && !('error' in deleteOrgResponse)) {
-        if (reloadOrganizations) {
-          void reloadOrganizations();
-        }
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
         snackbar.toastError();
