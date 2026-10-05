@@ -396,7 +396,7 @@ export default function Editor(props: EditorProps): JSX.Element {
           }}
         >
           {pageMessage && (
-            <Box marginTop={theme.spacing(6)}>
+            <Box marginTop={theme.spacing(2)}>
               <Message
                 body={pageMessage}
                 onClose={onClosePageMessage}
@@ -407,7 +407,7 @@ export default function Editor(props: EditorProps): JSX.Element {
               />
             </Box>
           )}
-          <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(4) }}>
+          <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(2) }}>
             {currentStep === 'details' && (
               <Details
                 onChange={onChange}

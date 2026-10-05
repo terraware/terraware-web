@@ -134,7 +134,6 @@ export default function Exclusions({ onValidate, onDirtyChange, site }: Exclusio
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={description}
-        title={strings.SITE_EXCLUSION_AREAS_OPTIONAL}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_exclusions_boundary_instructions_video'
         tutorialTitle={strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE}
