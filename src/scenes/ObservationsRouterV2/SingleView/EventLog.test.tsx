@@ -133,7 +133,13 @@ const speciesHistory = (...edits: { from: Counts; name?: string; to: Counts }[])
   const bySpecies = new Map<string, PlotSpecies>();
   edits.forEach(({ from, name, to }, editIndex) => {
     const timestamp = `2026-06-15T12:00:00.${String(editIndex).padStart(3, '0')}Z`;
-    ['existing count', 'live count', 'dead count'].forEach((fieldName, position) => {
+    // The API reports counts in this order; the events query then reverses the whole list, so a
+    // message reads them out live, existing, dead.
+    [
+      { name: 'dead count', position: 2 },
+      { name: 'existing count', position: 0 },
+      { name: 'live count', position: 1 },
+    ].forEach(({ name: fieldName, position }) => {
       if (from[position] !== to[position]) {
         events.push(speciesCountEvent(name, fieldName, String(from[position]), String(to[position]), timestamp));
       }
@@ -148,6 +154,12 @@ const speciesHistory = (...edits: { from: Counts; name?: string; to: Counts }[])
   return { events, plotSpecies: [...bySpecies.values()] };
 };
 
+/** The parenthesised counts a message reads out, labelled the way the API named them. */
+const countsText = (...counts: [string, number][]) =>
+  counts
+    .map(([label, value]) => strings.formatString(strings.EVENT_SPECIES_COUNT, label, String(value)) as string)
+    .join(strings.LIST_SEPARATOR);
+
 describe('Observation EventLog species changes', () => {
   it('reports an add that left a count at zero as the species being added', async () => {
     // The real-world shape: pre-existing stays 0, so the edit reports only two counts.
@@ -155,7 +167,13 @@ describe('Observation EventLog species changes', () => {
     await renderHistory(events, plotSpecies);
 
     expect(
-      screen.getByText(strings.formatString(strings.EVENT_SPECIES_ADDED, 'Vigna owahuensis') as string)
+      screen.getByText(
+        strings.formatString(
+          strings.EVENT_SPECIES_ADDED,
+          'Vigna owahuensis',
+          countsText(['Live count', 2], ['Dead count', 1])
+        ) as string
+      )
     ).toBeInTheDocument();
     // The individual count lines are replaced by the one message, not shown alongside it.
     expect(screen.queryByText(/live count/)).not.toBeInTheDocument();
@@ -169,7 +187,13 @@ describe('Observation EventLog species changes', () => {
     await renderHistory(events, plotSpecies);
 
     expect(
-      screen.getByText(strings.formatString(strings.EVENT_SPECIES_REMOVED, 'Dracaena acuminata') as string)
+      screen.getByText(
+        strings.formatString(
+          strings.EVENT_SPECIES_REMOVED,
+          'Dracaena acuminata',
+          countsText(['Live count', 6], ['Existing count', 2], ['Dead count', 1])
+        ) as string
+      )
     ).toBeInTheDocument();
   });
 
@@ -183,11 +207,22 @@ describe('Observation EventLog species changes', () => {
 
     expect(
       screen.getByText(
-        strings.formatString(strings.EVENT_SPECIES_CHANGED, 'Duosperma angolense', 'Abutilon eremitopetalum') as string
+        strings.formatString(
+          strings.EVENT_SPECIES_CHANGED,
+          'Duosperma angolense',
+          'Abutilon eremitopetalum',
+          countsText(['Live count', 6], ['Existing count', 2], ['Dead count', 1])
+        ) as string
       )
     ).toBeInTheDocument();
     expect(
-      screen.queryByText(strings.formatString(strings.EVENT_SPECIES_REMOVED, 'Duosperma angolense') as string)
+      screen.queryByText(
+        strings.formatString(
+          strings.EVENT_SPECIES_REMOVED,
+          'Duosperma angolense',
+          countsText(['Live count', 6], ['Existing count', 2], ['Dead count', 1])
+        ) as string
+      )
     ).not.toBeInTheDocument();
   });
 
@@ -200,7 +235,13 @@ describe('Observation EventLog species changes', () => {
     await renderHistory(events, plotSpecies);
 
     expect(
-      screen.getByText(strings.formatString(strings.EVENT_SPECIES_REMOVED, strings.UNKNOWN) as string)
+      screen.getByText(
+        strings.formatString(
+          strings.EVENT_SPECIES_REMOVED,
+          strings.UNKNOWN,
+          countsText(['Live count', 6], ['Existing count', 2], ['Dead count', 1])
+        ) as string
+      )
     ).toBeInTheDocument();
   });
 
@@ -213,9 +254,11 @@ describe('Observation EventLog species changes', () => {
 
     expect(screen.getByText(/dead count/)).toBeInTheDocument();
     // Only the first edit added the species; the second just adjusted a count.
-    expect(screen.getAllByText(strings.formatString(strings.EVENT_SPECIES_ADDED, 'Acacia koa') as string)).toHaveLength(
-      1
-    );
+    expect(
+      screen.getAllByText(
+        strings.formatString(strings.EVENT_SPECIES_ADDED, 'Acacia koa', countsText(['Live count', 4])) as string
+      )
+    ).toHaveLength(1);
   });
 
   it('still reports an ordinary count edit as a value change', async () => {

@@ -4,9 +4,17 @@ import {
   MonitoringSpeciesSubjectPayload,
 } from 'src/queries/generated/events';
 
-export type MonitoringSpeciesEventSummary =
+/**
+ * The plants this edit put in or took out, one entry per count. The label is the one the API gave
+ * the count, which is already localized. Counts the edit left alone are absent, but those were
+ * zero on both sides, so nothing was added or removed under them.
+ */
+export type MonitoringSpeciesEventCount = { label: string; value: string };
+
+export type MonitoringSpeciesEventSummary = { counts: MonitoringSpeciesEventCount[] } & (
   | { kind: 'added' | 'removed'; speciesName: string }
-  | { kind: 'changed'; speciesName: string; toSpeciesName: string };
+  | { kind: 'changed'; speciesName: string; toSpeciesName: string }
+);
 
 export type MonitoringSpeciesEventSummaries = {
   /** The one entry of a collapsed group that should carry the summary message. */
@@ -50,6 +58,10 @@ const toCount = (value?: string[]): number => {
   const digits = (value ?? []).join('').replace(/\D/g, '');
   return digits === '' ? 0 : Number(digits);
 };
+
+/** The edit's counts in the order the log lists them, ready to read out in a message. */
+const toEventCounts = (group: SpeciesGroup): MonitoringSpeciesEventCount[] =>
+  [...group.counts].map(([label, value]) => ({ label, value }));
 
 const fieldUpdates = (group: SpeciesGroup): FieldUpdatedActionPayload[] =>
   group.entries
@@ -203,6 +215,8 @@ export const summarizeMonitoringSpeciesEvents = (
 
     const allEntries = [...group.entries, ...addition.entries].toSorted((a, b) => a.index - b.index);
     summaries.set(allEntries[0].entry, {
+      // Both sides hold the same plants, so either one describes what moved across.
+      counts: toEventCounts(group),
       kind: 'changed',
       speciesName: group.speciesName,
       toSpeciesName: addition.speciesName,
@@ -215,7 +229,11 @@ export const summarizeMonitoringSpeciesEvents = (
       return;
     }
     const allEntries = group.entries.toSorted((a, b) => a.index - b.index);
-    summaries.set(allEntries[0].entry, { kind: group.kind as 'added' | 'removed', speciesName: group.speciesName });
+    summaries.set(allEntries[0].entry, {
+      counts: toEventCounts(group),
+      kind: group.kind as 'added' | 'removed',
+      speciesName: group.speciesName,
+    });
     allEntries.slice(1).forEach(({ entry }) => redundant.add(entry));
   });
 

@@ -172,12 +172,21 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
       if (!summary) {
         return undefined;
       }
+      // The API names each count in lower case ("live count"), so only the first letter is raised,
+      // which keeps names that are more than one word readable in every language.
+      const counts = summary.counts
+        .map(({ label, value }) =>
+          strings.formatString(strings.EVENT_SPECIES_COUNT, label.charAt(0).toUpperCase() + label.slice(1), value)
+        )
+        .join(strings.LIST_SEPARATOR);
+
       if (summary.kind === 'changed') {
-        return strings.formatString(strings.EVENT_SPECIES_CHANGED, summary.speciesName, summary.toSpeciesName);
+        return strings.formatString(strings.EVENT_SPECIES_CHANGED, summary.speciesName, summary.toSpeciesName, counts);
       }
       return strings.formatString(
         summary.kind === 'added' ? strings.EVENT_SPECIES_ADDED : strings.EVENT_SPECIES_REMOVED,
-        summary.speciesName
+        summary.speciesName,
+        counts
       );
     },
     [speciesSummaries, strings]
