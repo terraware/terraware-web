@@ -1,6 +1,7 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useMemo, useState } from 'react';
 
 import { Grid, Typography, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { TableColumnType } from '@terraware/web-components';
 import { Option } from '@terraware/web-components/components/table/types';
 
@@ -10,7 +11,7 @@ import Search, { SearchProps } from 'src/components/common/SearchFiltersWrapper'
 import Table from 'src/components/common/table';
 import { useOrganization } from 'src/providers';
 import { useGetBatchHistoryQuery } from 'src/queries/generated/nurseryBatches';
-import { OrganizationUserService } from 'src/services';
+import { useListOrganizationUsersQuery } from 'src/queries/generated/organizationUsers';
 import strings from 'src/strings';
 import {
   BatchAccessionLink,
@@ -238,7 +239,15 @@ export default function BatchHistory({ batchId, nurseryName, accessions }: Batch
   const theme = useTheme();
   const [search, setSearch] = useState<string>('');
   const [filters, setFilters] = useState<Record<string, any>>({});
-  const [users, setUsers] = useState<Record<number, OrganizationUser> | undefined>({});
+  const { selectedOrganization } = useOrganization();
+  const { currentData: organizationUsersData } = useListOrganizationUsersQuery(selectedOrganization?.id ?? skipToken);
+  const users = useMemo(() => {
+    const usersById: Record<number, OrganizationUser> = {};
+    for (const user of organizationUsersData?.users ?? []) {
+      usersById[user.id] = user;
+    }
+    return usersById;
+  }, [organizationUsersData]);
   const { currentData: batchHistory } = useGetBatchHistoryQuery(batchId);
   const filterOptions = useMemo<FieldOptionsMap>(
     () => ({
@@ -253,7 +262,6 @@ export default function BatchHistory({ batchId, nurseryName, accessions }: Batch
     }),
     [users]
   );
-  const { selectedOrganization } = useOrganization();
   const [selectedEvent, setSelectedEvent] = useState<any>();
   const [openEventDetailsModal, setOpenEventDetailsModal] = useState<boolean>(false);
 
@@ -299,22 +307,6 @@ export default function BatchHistory({ batchId, nurseryName, accessions }: Batch
     }),
     [filters, filterColumns, filterOptions, search]
   );
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      const fetchUsers = async () => {
-        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-        if (response.requestSucceeded) {
-          const usersById: Record<number, OrganizationUser> = {};
-          for (const user of response.users ?? []) {
-            usersById[user.id] = user;
-          }
-          setUsers(usersById);
-        }
-      };
-      void fetchUsers();
-    }
-  }, [selectedOrganization]);
 
   // A batch created from an accession records its initial quantities as a plain "QuantityEdited"
   // event with no accession reference, while accessions added afterward come through as

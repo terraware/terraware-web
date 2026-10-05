@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Container, Grid, Typography } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { IconName } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
@@ -14,12 +15,11 @@ import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
+import { useListOrganizationUsersQuery } from 'src/queries/generated/organizationUsers';
 import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
 import CTACard from 'src/scenes/Home/CTACard';
 import OnboardingCard, { OnboardingCardRow } from 'src/scenes/Home/OnboardingHomeView/OnboardingCard';
-import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
-import { OrganizationUser } from 'src/types/User';
 import { isAdmin, isManagerOrHigher, isOwner } from 'src/utils/organization';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -31,7 +31,6 @@ const OnboardingHomeView = () => {
   const { isMobile, isDesktop } = useDeviceInfo();
   const trackEvent = useTrackEvent();
   const navigate = useSyncNavigate();
-  const [people, setPeople] = useState<OrganizationUser[]>();
   const showAcceleratorCard = orgPreferences.showAcceleratorCard !== false;
   const snackbar = useSnackbar();
   const query = useQuery();
@@ -47,17 +46,10 @@ const OnboardingHomeView = () => {
     }
   }, [snackbar, selectedOrganization, isDesktop, query]);
 
-  useEffect(() => {
-    const populatePeople = async () => {
-      if (isOwner(selectedOrganization)) {
-        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-        if (response.requestSucceeded) {
-          setPeople(response.users);
-        }
-      }
-    };
-    void populatePeople();
-  }, [selectedOrganization]);
+  const { currentData: peopleData } = useListOrganizationUsersQuery(
+    isOwner(selectedOrganization) ? selectedOrganization.id : skipToken
+  );
+  const people = peopleData?.users;
 
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 

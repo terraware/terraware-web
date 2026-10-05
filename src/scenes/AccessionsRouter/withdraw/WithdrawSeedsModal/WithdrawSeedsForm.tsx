@@ -1,6 +1,7 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Step, StepLabel, Stepper, Typography, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -16,8 +17,8 @@ import {
   useCreateWithdrawalMutation,
 } from 'src/queries/generated/accessionsV2';
 import { useCreateBatchPhotoMutation } from 'src/queries/generated/nurseryBatches';
-import { OrganizationUserService } from 'src/services';
-import { OrganizationUser, User } from 'src/types/User';
+import { useListOrganizationUsersQuery } from 'src/queries/generated/organizationUsers';
+import { User } from 'src/types/User';
 import { getAllNurseries, getSeedBank } from 'src/utils/organization';
 import useSnackbar from 'src/utils/useSnackbar';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -92,7 +93,8 @@ const WithdrawSeedsForm = ({ open, onClose, accessions, user, onWithdrawn }: Wit
   const [draft, setDraft] = useState<WithdrawDraft>(makeDefaultDraft);
   const [step, setStep] = useState<FlowStep>(0);
   const [fieldErrors, setFieldErrors] = useState<Record<string, string | undefined>>({});
-  const [users, setUsers] = useState<OrganizationUser[]>();
+  const { currentData: organizationUsersData } = useListOrganizationUsersQuery(selectedOrganization?.id ?? skipToken);
+  const users = organizationUsersData?.users;
   const [isCreating, setIsCreating] = useState(false);
   const [showDateWarning, setShowDateWarning] = useState(false);
   // Accessions already withdrawn in a prior (partial) submit are removed from the flow so a
@@ -107,16 +109,6 @@ const WithdrawSeedsForm = ({ open, onClose, accessions, user, onWithdrawn }: Wit
   const isNursery = draft.purpose === 'Nursery';
   const isViability = draft.purpose === 'Viability Testing';
   const showPhotosStep = PHOTOS_ENABLED_PURPOSES.includes(draft.purpose);
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      void OrganizationUserService.getOrganizationUsers(selectedOrganization.id).then((response) => {
-        if (response.requestSucceeded) {
-          setUsers(response.users);
-        }
-      });
-    }
-  }, [selectedOrganization]);
 
   const updateDraft = useCallback((next: Partial<WithdrawDraft>) => {
     setDraft((prev) => {
