@@ -13,9 +13,14 @@ import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS, DEFAULT_SEARCH_DEBOUNCE_MS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization, useUser } from 'src/providers/hooks';
+import {
+  useDeleteOrganizationUserMutation,
+  useUpdateOrganizationUserMutation,
+} from 'src/queries/generated/organizationUsers';
+import { useDeleteOrganizationMutation, useLazyListOrganizationRolesQuery } from 'src/queries/generated/organizations';
 import AssignNewOwnerDialog from 'src/scenes/MyAccountRouter/AssignNewOwnerModal';
 import DeleteOrgDialog from 'src/scenes/MyAccountRouter/DeleteOrgModal';
-import { OrganizationService, OrganizationUserService, Response, SearchService } from 'src/services';
+import { SearchService } from 'src/services';
 import { OrganizationRole } from 'src/types/Organization';
 import { OrNodePayload, SearchRequestPayload } from 'src/types/Search';
 import { OrganizationUser } from 'src/types/User';
@@ -34,7 +39,7 @@ import TableCellRenderer from './TableCellRenderer';
 type ProjectInternalUserRoles = Record<string, string[]>;
 
 export default function PeopleListView(): JSX.Element {
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
   const { user } = useUser();
   const navigate = useSyncNavigate();
@@ -54,6 +59,10 @@ export default function PeopleListView(): JSX.Element {
   const [resultsWithLeadRoles, setResultsWithLeadRoles] = useState<OrganizationUser[]>([]);
   const [totalUsers, setTotalUsers] = useState<number>(0);
   const snackbar = useSnackbar();
+  const [listOrganizationRoles] = useLazyListOrganizationRolesQuery();
+  const [deleteOrganization] = useDeleteOrganizationMutation();
+  const [updateOrganizationUser] = useUpdateOrganizationUserMutation();
+  const [deleteOrganizationUser] = useDeleteOrganizationUserMutation();
   const { isMobile } = useDeviceInfo();
   const contentRef = useRef(null);
   const { activeLocale, strings } = useLocalization();
@@ -263,8 +272,8 @@ export default function PeopleListView(): JSX.Element {
       } else {
         const selectedOwners = selectedPeopleRows.filter((selectedPerson) => selectedPerson.role === 'Owner');
         if (selectedOwners.length > 0 && selectedOrganization) {
-          const organizationRoles = await OrganizationService.getOrganizationRoles(selectedOrganization?.id);
-          const totalOwners = organizationRoles.roles?.find((role) => role.role === 'Owner');
+          const organizationRoles = await listOrganizationRoles(selectedOrganization.id, true);
+          const totalOwners = organizationRoles.data?.roles.find((role) => role.role === 'Owner');
           if (selectedOwners.length === totalOwners?.totalUsers) {
             setOrgPeople(
               results?.filter((person) => {
@@ -293,36 +302,28 @@ export default function PeopleListView(): JSX.Element {
 
   const removePeopleHandler = async () => {
     if (selectedOrganization) {
-      let assignNewOwnerResponse;
+      let assignedNewOwner = true;
       if (newOwner) {
-        assignNewOwnerResponse = await OrganizationUserService.updateOrganizationUser(
-          selectedOrganization?.id,
-          newOwner.id,
-          'Owner'
-        );
-      }
-      const promises: Promise<Response>[] = [];
-      if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
-        selectedPeopleRows.forEach((person) => {
-          promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization?.id, person.id));
+        const result = await updateOrganizationUser({
+          organizationId: selectedOrganization.id,
+          userId: newOwner.id,
+          updateOrganizationUserRequestPayload: { role: 'Owner' },
         });
+        assignedNewOwner = !('error' in result);
       }
-      const leaveOrgResponses = await Promise.all(promises);
-      let allRemoved = true;
-
-      leaveOrgResponses.forEach((resp) => {
-        if (!resp.requestSucceeded) {
-          allRemoved = false;
-        }
-      });
+      const leaveOrgResults = assignedNewOwner
+        ? await Promise.all(
+            selectedPeopleRows.map((person) =>
+              deleteOrganizationUser({ organizationId: selectedOrganization.id, userId: person.id })
+            )
+          )
+        : [];
+      const allRemoved = leaveOrgResults.every((result) => !('error' in result));
 
       if (allRemoved) {
         void refreshSearch();
         setRemovePeopleModalOpened(false);
         setSelectedPeopleRows([]);
-        if (reloadOrganizations) {
-          void reloadOrganizations();
-        }
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
         snackbar.toastError();
@@ -342,23 +343,15 @@ export default function PeopleListView(): JSX.Element {
           person.id.toString() !== keepOneOwnerId
       );
       if (otherUsers.length) {
-        const promises: Promise<Response>[] = [];
-        otherUsers.forEach((person) => {
-          promises.push(OrganizationUserService.deleteOrganizationUser(selectedOrganization?.id, person.id));
-        });
-        const leaveOrgResponses = await Promise.all(promises);
-
-        leaveOrgResponses.forEach((resp) => {
-          if (!resp.requestSucceeded) {
-            allRemoved = false;
-          }
-        });
+        const leaveOrgResults = await Promise.all(
+          otherUsers.map((person) =>
+            deleteOrganizationUser({ organizationId: selectedOrganization.id, userId: person.id })
+          )
+        );
+        allRemoved = leaveOrgResults.every((result) => !('error' in result));
       }
-      const deleteOrgResponse = await OrganizationService.deleteOrganization(selectedOrganization?.id);
-      if (allRemoved && deleteOrgResponse.requestSucceeded) {
-        if (reloadOrganizations) {
-          void reloadOrganizations();
-        }
+      const deleteOrgResponse = await deleteOrganization(selectedOrganization.id);
+      if (allRemoved && !('error' in deleteOrgResponse)) {
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
         snackbar.toastError();
@@ -420,11 +413,7 @@ export default function PeopleListView(): JSX.Element {
         </>
       )}
       {isAdmin(selectedOrganization) && (
-        <PersonModal
-          open={addPersonModalOpened}
-          onClose={() => setAddPersonModalOpened(false)}
-          reload={() => void refreshSearch()}
-        />
+        <PersonModal open={addPersonModalOpened} onClose={() => setAddPersonModalOpened(false)} />
       )}
       <PageSnackbar />
       <Card flushMobile radius={theme.spacing(1)} style={{ padding: theme.spacing(3, 4) }}>

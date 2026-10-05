@@ -6,17 +6,19 @@ import { getTodaysDateFormatted } from '@terraware/web-components/utils';
 import TextWithLink from 'src/components/common/TextWithLink';
 import { APP_PATHS } from 'src/constants';
 import useInitializeUserTimeZone from 'src/hooks/useInitializeUserTimeZone';
+import useUpdateOrganization from 'src/hooks/useUpdateOrganization';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useOrganization, useTimeZones } from 'src/providers';
-import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
 import { ClientNotification } from 'src/types/Notifications';
 import { InitializedTimeZone, TimeZoneDescription } from 'src/types/TimeZones';
 import { featureNotificationExpired } from 'src/utils/featureNotifications';
+import { isAdmin } from 'src/utils/organization';
 import { getTimeZone, getUTC } from 'src/utils/useTimeZoneUtils';
 
 export default function useOrganizationNotification(): ClientNotification | null {
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const { selectedOrganization, orgPreferences } = useOrganization();
+  const orgTimeZoneAcknowledgedOnMs = orgPreferences.timeZoneAcknowledgedOnMs as number | undefined;
 
   const [timeZoneOrgNotification, setTimeZoneOrgNotification] = useState(false);
   const [timeZoneOrgNotificationRead, setTimeZoneOrgNotificationRead] = useState(false);
@@ -24,6 +26,7 @@ export default function useOrganizationNotification(): ClientNotification | null
 
   const timeZones = useTimeZones();
   const updateUserPreferences = useUpdateUserPreferences();
+  const updateOrganization = useUpdateOrganization();
 
   const getTimeZoneById = useCallback(
     (id?: string): TimeZoneDescription => getTimeZone(timeZones, id) ?? getUTC(timeZones),
@@ -52,14 +55,18 @@ export default function useOrganizationNotification(): ClientNotification | null
         return;
       }
 
-      let orgTz: InitializedTimeZone = {};
+      const orgTz: InitializedTimeZone = { timeZoneAcknowledgedOnMs: orgTimeZoneAcknowledgedOnMs };
 
-      if (selectedOrganization) {
-        orgTz = await OrganizationService.initializeTimeZone(selectedOrganization, userTz.timeZone);
-      }
-
-      if (orgTz.updated) {
-        void reloadOrganizations();
+      if (selectedOrganization && isAdmin(selectedOrganization)) {
+        if (!selectedOrganization.timeZone) {
+          const timeZone = userTz.timeZone;
+          if (await updateOrganization({ ...selectedOrganization, timeZone })) {
+            orgTz.updated = true;
+            orgTz.timeZone = timeZone;
+          }
+        } else {
+          orgTz.timeZone = selectedOrganization.timeZone;
+        }
       }
 
       if (!orgTz.updated) {
@@ -68,7 +75,7 @@ export default function useOrganizationNotification(): ClientNotification | null
     };
 
     void initializeTimeZones();
-  }, [userTz, reloadOrganizations, selectedOrganization, getTimeZoneById]);
+  }, [userTz, selectedOrganization, orgTimeZoneAcknowledgedOnMs, updateOrganization, getTimeZoneById]);
 
   return useMemo(() => {
     if (timeZoneOrgNotification && selectedOrganization) {

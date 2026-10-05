@@ -1,7 +1,6 @@
 import { formatNumberScale, formatPrecision } from './numbers';
 
 describe('formatNumberScale', () => {
-
   test('not a number', () => {
     expect(formatNumberScale('not a number')).toBe('not a number');
     expect(formatNumberScale('')).toBe('');
@@ -24,11 +23,9 @@ describe('formatNumberScale', () => {
     expect(formatNumberScale(17123234332, 3)).toBe('17.123B');
     expect(formatNumberScale(171232343321128, 1)).toBe('171.2T');
   });
-
 });
 
 describe('formatPrecision', () => {
-
   test('rounds to the given precision, including a precision of zero', () => {
     expect(formatPrecision(84.7, 0)).toBe('85');
     expect(formatPrecision(84.74, 1)).toBe('84.7');
@@ -40,5 +37,4 @@ describe('formatPrecision', () => {
     expect(formatPrecision(5.25, 2)).toBe('5.25');
     expect(formatPrecision(5.5, 3)).toBe('5.5');
   });
-
 });

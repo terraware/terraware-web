@@ -1,13 +1,11 @@
-import { components } from 'src/api/types/generated-schema';
+import { OrganizationPayload } from 'src/queries/generated/organizations';
 import strings from 'src/strings';
-
-import { Facility } from './Facility';
 
 export type ManagedLocationType = 'SeedBank' | 'Nursery' | 'PlantingSite';
 
 export const ManagedLocationTypes: ManagedLocationType[] = ['SeedBank', 'Nursery', 'PlantingSite'];
 
-export type OrganizationType = components['schemas']['OrganizationPayload']['organizationType'];
+export type OrganizationType = OrganizationPayload['organizationType'];
 
 export const OrganizationTypes: OrganizationType[] = [
   'Government',
@@ -18,23 +16,7 @@ export const OrganizationTypes: OrganizationType[] = [
   'Other',
 ];
 
-export type Organization = {
-  canSubmitReports?: boolean;
-  botanicalCountryCode?: string;
-  countryCode?: string;
-  countrySubdivisionCode?: string;
-  createdTime?: string;
-  description?: string;
-  facilities?: Facility[];
-  id: number;
-  name: string;
-  organizationType?: OrganizationType;
-  organizationTypeDetails?: string;
-  role?: OrganizationRole;
-  totalUsers: number;
-  timeZone?: string;
-  website?: string;
-};
+export type Organization = OrganizationPayload;
 
 type HighOrganizationRoles = 'Admin' | 'Owner' | 'Terraformation Contact';
 
@@ -60,11 +42,6 @@ export function roleName(role?: OrganizationRole) {
       return '--';
   }
 }
-
-export type OrganizationRoleInfo = {
-  role: OrganizationRole;
-  totalUsers: number;
-};
 
 export function managedLocationTypeLabel(managedLocationType: ManagedLocationType) {
   switch (managedLocationType) {
@@ -93,8 +70,3 @@ export function organizationTypeLabel(organizationType: OrganizationType) {
       return strings.ORGANIZATION_TYPE_OTHER;
   }
 }
-
-export type UpdateOrganizationInternalTagsRequestPayload =
-  components['schemas']['UpdateOrganizationInternalTagsRequestPayload'];
-
-export type OrganizationWithInternalTags = components['schemas']['OrganizationInternalTagsPayload'];

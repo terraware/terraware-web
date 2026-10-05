@@ -9,6 +9,7 @@ import Button from 'src/components/common/button/Button';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
+import useUpdateOrganization from 'src/hooks/useUpdateOrganization';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useUpdateProjectMutation } from 'src/queries/generated/projects';
@@ -17,7 +18,6 @@ import {
   useAcceptProblemSuggestionMutation,
   useOverrideProjectSpeciesDataMutation,
 } from 'src/queries/generated/species';
-import { OrganizationService } from 'src/services';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
 import { Species } from 'src/types/Species';
@@ -71,12 +71,13 @@ const SpeciesCheckModal = ({
   const theme = useTheme();
   const snackbar = useSnackbar();
   const { countries } = useLocalization();
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const { botanicalCountries } = useBotanicalCountries(!open);
   const trackEvent = useTrackEvent();
   const markSubmitted = useTrackModalAbandonment('species_check', open);
 
   const [updateProject] = useUpdateProjectMutation();
+  const updateOrganization = useUpdateOrganization();
   const [acceptProblem] = useAcceptProblemSuggestionMutation();
   const [overrideSpecies] = useOverrideProjectSpeciesDataMutation();
   const [acceptPending] = useAcceptPendingNativitiesMutation();
@@ -395,7 +396,7 @@ const SpeciesCheckModal = ({
             if (!selectedOrganization) {
               return Promise.resolve();
             }
-            return OrganizationService.updateOrganization({
+            return updateOrganization({
               ...selectedOrganization,
               countryCode: edit.countryCode,
               botanicalCountryCode: edit.botanicalCountryCode,
@@ -413,9 +414,6 @@ const SpeciesCheckModal = ({
           }).unwrap();
         })
       );
-      if (changedTargets.some((target) => target.isOrg) && selectedOrganization) {
-        await reloadOrganizations(selectedOrganization.id);
-      }
       await reloadSpecies();
       setRecalculatedTargetKeys(changedKeys);
       setStep(1);
@@ -433,13 +431,13 @@ const SpeciesCheckModal = ({
     changedTargets,
     locationForTarget,
     projects,
-    reloadOrganizations,
     reloadSpecies,
     selectedOrganization,
     snackbar,
     targets,
     trackEvent,
     trackSaveFailed,
+    updateOrganization,
     updateProject,
   ]);
 

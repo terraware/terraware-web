@@ -3,6 +3,7 @@ import { useParams } from 'react-router';
 
 import { Close } from '@mui/icons-material';
 import { Box, Grid, IconButton, Typography, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Button, Checkbox, DialogBox, SelectT, Textfield } from '@terraware/web-components';
 import { Dropdown } from '@terraware/web-components';
 import { preventDefaultEvent, useDeviceInfo } from '@terraware/web-components/utils';
@@ -23,7 +24,7 @@ import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers/hooks';
 import { useCreateViabilityTestMutation, useUpdateViabilityTestMutation } from 'src/queries/generated/accessionsV2';
-import { OrganizationUserService } from 'src/services';
+import { useListOrganizationUsersQuery } from 'src/queries/generated/organizationUsers';
 import { ViabilityTestPostRequest } from 'src/services/AccessionService';
 import strings from 'src/strings';
 import { Accession } from 'src/types/Accession';
@@ -71,7 +72,8 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
   const [updateViabilityTest] = useUpdateViabilityTestMutation();
 
   const [record, setRecord, onChange, onChangeCallback] = useForm(viabilityTest);
-  const [users, setUsers] = useState<OrganizationUser[]>();
+  const { currentData: organizationUsersData } = useListOrganizationUsersQuery(selectedOrganization?.id ?? skipToken);
+  const users = organizationUsersData?.users;
   const [testCompleted, setTestCompleted] = useState<boolean>(false);
   const [totalSeedsTested, setTotalSeedsTested] = useState(0);
   const [openViabilityResultModal, setOpenViabilityResultModal] = useState(false);
@@ -108,18 +110,6 @@ function NewViabilityTestModalForm(props: NewViabilityTestModalFormProps): JSX.E
       setSelectedSeedBank(accessionSeedBank);
     }
   }, [selectedOrganization, accession.facilityId]);
-
-  useEffect(() => {
-    if (selectedOrganization) {
-      const getOrgUsers = async () => {
-        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-        if (response.requestSucceeded) {
-          setUsers(response.users);
-        }
-      };
-      void getOrgUsers();
-    }
-  }, [selectedOrganization]);
 
   useEffect(() => {
     const newViabilityTest: ViabilityTestPostRequest = {

@@ -1,5 +1,5 @@
-import { readData } from './utils';
 import MapService from '../MapService';
+import { readData } from './utils';
 
 describe('Map service', () => {
   describe('Geometry utilities', () => {

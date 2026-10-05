@@ -6,7 +6,7 @@
   "tabWidth": 2,
   "printWidth": 120,
   "plugins": ["@trivago/prettier-plugin-sort-imports"],
-  "importOrder": ["^react(.*)", "<THIRD_PARTY_MODULES>", "@/(.*)", "^src/(.*)$", "^[./]"],
+  "importOrder": ["Mocks", "^react(.*)", "<THIRD_PARTY_MODULES>", "@/(.*)", "^src/(.*)$", "^[./]"],
   "importOrderSeparation": true,
   "importOrderSortSpecifiers": true
 }

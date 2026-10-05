@@ -21,7 +21,7 @@ export type StepTitleDescriptionProps = {
   description: Description[];
   dontShowAgainPreferenceName?: string;
   minHeight?: string;
-  title: string;
+  title?: string;
   tutorialDescription?: string | JSX.Element[];
   tutorialDocLinkKey?: DocType;
   tutorialTitle?: string;
@@ -74,9 +74,11 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           title={titleWithPrefix}
         />
       )}
-      <Typography fontSize='20px' fontWeight={600} lineHeight='28px' color={theme.palette.TwClrTxt}>
-        {title}
-      </Typography>
+      {title && (
+        <Typography fontSize='20px' fontWeight={600} lineHeight='28px' color={theme.palette.TwClrTxt}>
+          {title}
+        </Typography>
+      )}
       {description.map((line: Description, index: number) => (
         <Typography
           display='inline'

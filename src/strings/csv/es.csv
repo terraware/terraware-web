@@ -327,6 +327,9 @@ CHANGE_ACTIVE_GROWTH_STATUS,Cambiar estado de crecimiento activo,969b83ab
 CHANGE_GERMINATION_ESTABLISHMENT_STATUS,Cambiar estado de germinación/establecimiento,61f76f62
 CHANGE_HARDENING_OFF_STATUS,Cambiar estado de aclimatación,b734dbd7
 CHANGE_HISTORY,Historial de cambios,3aa8d940
+CHANGE_SPECIES,Cambiar especie,0c459473
+CHANGE_SPECIES_CONFIRMATION,¿Cambiar especie?,014eca39
+CHANGE_SPECIES_CONFIRMATION_MESSAGE,Los valores registrados para {0} se trasladarán a {1}.,6c77f2aa
 CHANGE_TO,Cambiar a {0},8423817d
 CHANGES,Cambios,47809a57
 CHANGES_SAVED,¡Cambios guardados!,709a9559
@@ -762,6 +765,7 @@ FOR_LAB_AND_NURSERY_GERMINATION,Para laboratorio y germinación en vivero,a6d186
 FOR_LAB_GERMINATION,Para germinación en laboratorio,401f658e
 FOR_NURSERY_GERMINATION,Para germinación en vivero,ec2b91cc
 FORB,Hierba de hoja ancha,98c76e90
+FOREST_TYPE,Tipo de bosque,1e916fd0
 FREEZER_1,Congelador 1,953b9b90
 FREEZER_2,Congelador 2,8e57368e
 FREEZER_3,Congelador 3,333c5d1e
@@ -1134,6 +1138,7 @@ MODULES_FOR_PROJECT,Módulos para {0},5d950bb2
 MODULES_IMPORT_COMPLETE,¡Completada la importación de datos de los módulos!,76a99df8
 MONITORING,Monitoreo,c607ad35
 MONITORING_PLOT,Parcela de vigilancia,97de3243
+MONITORING_PLOT_NUMBER,Número de parcela de monitoreo,adc14d07
 MONITORING_PLOT_TYPE,Tipo de parcela de vigilancia,5269e047
 MONITORING_PLOTS,Control de parcelas,42428fbb
 MONITORING_TYPE,Tipo de monitoreo,c6fa7c35
@@ -1301,6 +1306,7 @@ NUMBER_OF_LIVE_PLANTS_PER_SPECIES,Número de plantas vivas por especie,82f354e1
 NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,El número de plantas vivas por especie muestra el número de plantas vivas por especie registradas. Este número solo incluye las plantas registradas como vivas. No incluye las plantas registradas como preexistentes ni las registradas como desconocidas.,6b3e7e54
 NUMBER_OF_NATIVE_SPECIES,Número de especies autóctonas,dd23ae36
 NUMBER_OF_PEOPLE,Número de personas,7fd030c1
+NUMBER_OF_PLANTS,Número de plantas,41fe8f14
 NUMBER_OF_PLOTS_IN_MOST_RECENT_OBSERVATION,Número de parcelas en la observación más reciente,ce786371
 NUMBER_OF_PLOTS_SET_FOR_PERMANENT_PLOTS,t0 establecido para {0} de {1} Parcelas Permanentes,8a4987bd
 NUMBER_OF_PLOTS_SET_FOR_TEMPORARY_PLOTS,t0 establecido para {0} de {1} estratos de parcelas temporales,9307eea1
@@ -1449,6 +1455,7 @@ PERSON,Persona,3c8a3d43
 PERSON_ADDED,Se ha añadido una persona,5bea0d6f
 PESTS,Plagas,16b7eeed
 PH,pH,8e3a7381
+PH_LEVEL,Nivel de pH,fd483700
 PHASE,Fase,f9d98417
 PHASE_PROJECT_REQUIRED_FIELDS_ERROR,"El nombre del archivo, el enlace de GDrive y la ruta de Dropbox son obligatorios cuando se selecciona una fase.",93c006c2
 PHOTO_ADDED,Foto agregada,0eea3641
@@ -1551,6 +1558,7 @@ PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE,Trazado de los límites de zo
 PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar la herramienta de dibujo {0} para dibujar el límite del lugar de plantación.,a539970b
 PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Trazar los límites del sitio,1200219a
 PLANTING_SITE_DELETED,¡Sitio de plantación borrado!,61c0d69a
+PLANTING_SITE_NAME,Nombre del sitio de plantación,f3cb062b
 PLANTING_SITE_SAVED,Sitio de plantación guardado,70f9ae14
 PLANTING_SITE_STRATUM_NAME_HELP,Los nombres legibles ayudarán al personal de campo a identificar las áreas cuando se encuentren sobre el terreno.,63445c3d
 PLANTING_SITES,Sitios de plantación,3799d2eb
@@ -1573,6 +1581,7 @@ PLAY_VIDEO,Reproducir video,56432671
 PLEASE_NOTE,Tenga en cuenta lo siguiente:,f37ff0f0
 PLOT,Parcela,8d3cefee
 PLOT_CAPTURED,Parcela capturada,4ad5f259
+PLOT_COMPLETED_TIME,Hora de finalización del lote,e615ae45
 PLOT_CONDITIONS,Condiciones de la parcela,2b615357
 PLOT_CORNER_PHOTOS,Fotos de las esquinas de la parcela,330ffad8
 PLOT_CORNER_PHOTOS_CANNOT_BE_DELETED,No se pueden eliminar las fotos de las esquinas de la parcela,f2f48bb3
@@ -1789,6 +1798,9 @@ REMOVE_PERSON,Eliminar persona,c7c8903c
 REMOVE_PERSON_DESC,"¿Está seguro de que desea eliminar a {0}? Al eliminar a {0}, ya no tendrá acceso a los datos de su organización.",000a6493
 REMOVE_PROJECT,Eliminar proyecto,3e32288a
 REMOVE_SPECIES,Borrar especies,bbc8f149
+REMOVE_SPECIES_CONFIRMATION,¿Eliminar {0}?,f8a2aaba
+REMOVE_SPECIES_CONFIRMATION_MESSAGE,"Esta especie tiene valores registrados. Al eliminarla, estos valores se borrarán de esta observación.",ef81715f
+REMOVE_SPECIES_NAMED,Eliminar {0},d6f8d76c
 REMOVE_VIRTUAL_WALKTHROUGH,Eliminar Recorrido Virtual,19cd7395
 REMOVE_VIRTUAL_WALKTHROUGH_CONFIRM,¿Está seguro de que desea eliminar este Recorrido Virtual? Esta acción no se puede deshacer.,d5c769f1
 REMOVING_ORG_WARNING,"Al eliminarse a sí mismo de {0}, ya no tendrá acceso a los datos de esta organización. ¿Está seguro de que desea guardar los cambios?",767a2892
@@ -1934,6 +1946,7 @@ SDG_16,"16. Paz, Justicia e Instituciones Sólidas.",e0e9a0ba
 SDG_17,17. Alianzas para los Objetivos,3b9b74f8
 SEARCH,Búsqueda,9f30c236
 SEARCH_OR_SELECT,Busque o Seleccione,cbd7f4ed
+SEARCH_SPECIES,Buscar especie,5167bc5e
 SEASON_NAME_REQUIRED,Nombre de la temporada *,809a9261
 SEASON_TO_COPY,Temporada a copiar,fd2a6498
 SECTION_OWNER_ASSIGNED,Sección asignada por el propietario,2756744b
@@ -2054,7 +2067,7 @@ SITE_LOCATION,Ubicación del sitio,e0a85b19
 SITE_MAP,Mapa del sitio,df2fc60a
 SITE_PLANT_DENSITY,Densidad de plantas del sitio,a449ddcc
 SITE_STRATUM_BOUNDARIES_DESCRIPTION,"Un estrato es una capa de vegetación del sitio de plantación donde las condiciones de plantación y crecimiento son similares, como la pendiente de una colina orientada al este. Cada sitio de plantación debe tener al menos un estrato y generalmente no más de cinco. Utilice la herramienta de corte {0} para dibujar polígonos de estratos dentro del límite del sitio a continuación. {1} [Vea un tutorial] sobre cómo agregar límites de estratos.",590f73b1
-SITE_STRATUM_BOUNDARIES_SIZE,Las Estratas deben tener un tamaño mínimo de 100 m x 100 m.,d7c8579b
+SITE_STRATUM_BOUNDARIES_SIZE,Los estratos deben tener un tamaño mínimo de 100 m × 100 m.,d57abc90
 SITE_STRATUM_BOUNDARIES_TOO_SMALL,Una o más estratas tienen un límite menor a 100 m x 100 m.,e53c42df
 SITE_STRATUM_BOUNDARY_TOO_SMALL,Límite de estrata menor a 100 m x 100 m.,d39bb72b
 SITE_STRATUM_NAMES_MISSING,Falta el nombre de una o más estratas. Haga clic en una estrata para editar su nombre.,dc003708
@@ -2069,6 +2082,8 @@ SKIP,Omitir,2198bbf5
 SLACK,Slack,c15b5d48
 SLACK_LINK,Enlace de Slack,45b022ae
 SLIDES_URL,URL de las diapositivas,2d6bb620
+SMALL_TREES_COUNT_HIGH,Cantidad de árboles pequeños (máximo),8bd57803
+SMALL_TREES_COUNT_LOW,Cantidad de árboles pequeños (mínimo),34682b74
 SOAK,Remojar,1eb78e7b
 SOCIAL_IMPACT,Impacto social,34c0ea7c
 SOCIAL_IMPACT_INSTRUCTIONS,"Indique los beneficios directos del proyecto para la comunidad local. Los beneficios específicos podrían incluir el impacto sobre el sustento; educación y entrenamiento para la comunidad; acceso a agua limpia; apoyo para los jóvenes, las mujeres y/o las minorías; así como otros beneficios socioeconómicos y comunitarios del proyecto. Incluya los indicadores específicos que utiliza para medir el impacto sobre la comunidad, así como los resultados que ha monitoreado a lo largo del tiempo (con una longitud de media página, como máximo).",08a8aaaa
@@ -2162,8 +2177,8 @@ SPECIES_SURVIVAL,Supervivencia de Especies,20e77844
 SPECIES_SURVIVAL_BREAKDOWN,Desglose de Supervivencia de Especies,837eaa3b
 SPECIES_SURVIVAL_BREAKDOWN_TOOLTIP,El desglose de supervivencia muestra el porcentaje de plantas por especie que siguen vivas desde la plantación inicial.,adb3d43d
 SPECIES_SURVIVAL_TOOLTIP,"Supervivencia de especies muestra las especies con las tasas de supervivencia más altas y más bajas, entre las estratas que fueron observadas.",5dde50a6
-SPECIES_TABLE_INSTRUCTIONS,Haga clic en un número de la tabla para editarlo.,7f5a3f3e
-SPECIES_TABLE_INSTRUCTIONS_NOTE,"NOTA: Cuando se cambian los números, los números originales y las ubicaciones de las plantas observadas no se actualizarán en los mapas. Por favor, cambie los números con discreción.",3d4cd792
+SPECIES_TABLE_INSTRUCTIONS,Haga clic en una especie o número en la tabla para editarlo.,fe17562a
+SPECIES_TABLE_INSTRUCTIONS_NOTE,"NOTA: Cuando se cambian, agregan o eliminan números o especies, los números originales y las ubicaciones de las plantas observadas no se actualizarán en los mapas. Por favor, realice los cambios con discreción.",915b4150
 SPECIES_TARGET_ADDED,Meta de especie agregada: {0} en {1}.,024829c9
 SPECIES_TARGET_DELETED,Meta de especie eliminada: {0} en {1}.,fd85928a
 SPECIES_TARGET_UPDATED,Meta de especie actualizada: {0} en {1} cambió de {2} a {3}.,f14397fe
@@ -2329,6 +2344,7 @@ THIS_REPORT_HAS_BEEN_APPROVED,Se aprobó este informe.,030064cb
 THREATENED,Amenazada,57ca76f3
 THUMBNAIL,Miniatura,3196d372
 TIDE,Marea,9dd490e9
+TIME_OF_TIDE_MEASUREMENT,Hora de la medición de la marea,08085281
 TIME_ZONE,Zona horaria,abc27841
 TIME_ZONE_REQUIRED,Zona horaria *,f1ee0610
 TIME_ZONE_SELECTED,Zona horaria: {0},4a5acdb1

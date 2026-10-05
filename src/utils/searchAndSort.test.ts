@@ -57,7 +57,9 @@ describe('splitTrigrams', () => {
      * {'  o',' ol','ee ',enf,fre,lyo,nfr,oly,oxe,ree,xen,yol,yox}
      * ```
      */
-    expect(splitTrigrams('olyolyoxenfree')).toEqual(new Set(['  o', ' ol', 'ee ', 'enf', 'fre', 'lyo', 'nfr', 'oly', 'oxe', 'ree', 'xen', 'yol', 'yox']));
+    expect(splitTrigrams('olyolyoxenfree')).toEqual(
+      new Set(['  o', ' ol', 'ee ', 'enf', 'fre', 'lyo', 'nfr', 'oly', 'oxe', 'ree', 'xen', 'yol', 'yox'])
+    );
 
     /**
      * ```
@@ -861,7 +863,6 @@ describe('searchAndSort', () => {
       },
     ];
 
-
     const search: SearchNodePayload = {
       operation: 'field',
       field: 'field.with.dots',
@@ -1204,8 +1205,7 @@ describe('searchAndSort', () => {
 
     expect(searchAndSort(results, undefined, searchOrderConfig)).toEqual(sortedResultsDescending);
   });
-})
-;
+});
 
 describe('modifySearchNode', () => {
   it('modifies nested search nodes as expected - with condition and append operation', () => {

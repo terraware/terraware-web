@@ -10,7 +10,7 @@ interface Props {
 }
 
 const MyAccountRouter = ({ className, hasNav }: Props) => {
-  const { organizations, reloadOrganizations } = useOrganization();
+  const { organizations } = useOrganization();
 
   return (
     <Routes>
@@ -23,7 +23,6 @@ const MyAccountRouter = ({ className, hasNav }: Props) => {
             edit={true}
             hasNav={hasNav}
             organizations={organizations}
-            reloadData={() => void reloadOrganizations()}
           />
         }
       />

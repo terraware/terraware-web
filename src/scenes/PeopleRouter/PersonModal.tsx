@@ -1,6 +1,7 @@
 import React, { type JSX, useEffect, useState } from 'react';
 
 import { Box, Grid, Typography } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Dropdown } from '@terraware/web-components';
 
 import ErrorBox from 'src/components/common/ErrorBox/ErrorBox';
@@ -12,7 +13,11 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization } from 'src/providers/hooks';
-import { OrganizationUserService } from 'src/services';
+import {
+  useAddOrganizationUserMutation,
+  useListOrganizationUsersQuery,
+  useUpdateOrganizationUserMutation,
+} from 'src/queries/generated/organizationUsers';
 import strings from 'src/strings';
 import { OrganizationUser } from 'src/types/User';
 import useForm from 'src/utils/useForm';
@@ -22,10 +27,11 @@ export type PersonModalProps = {
   open: boolean;
   onClose: () => void;
   person?: OrganizationUser;
-  reload: () => void;
 };
 
-const emptyPerson: OrganizationUser = {
+type PersonForm = Omit<OrganizationUser, 'addedTime'>;
+
+const emptyPerson: PersonForm = {
   id: -1,
   email: '',
   role: 'Contributor',
@@ -33,17 +39,22 @@ const emptyPerson: OrganizationUser = {
   lastName: '--',
 };
 
-export default function PersonModal({ open, onClose, person, reload }: PersonModalProps): JSX.Element {
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+export default function PersonModal({ open, onClose, person }: PersonModalProps): JSX.Element {
+  const { selectedOrganization } = useOrganization();
   const trackEvent = useTrackEvent();
   const navigate = useSyncNavigate();
   const snackbar = useSnackbar();
   const [emailError, setEmailError] = useState('');
   const [repeatedEmail, setRepeatedEmail] = useState('');
   const [pageError, setPageError] = useState<'REPEATED_EMAIL' | 'INVALID_EMAIL'>();
-  const [people, setPeople] = useState<OrganizationUser[]>();
+  const [addOrganizationUser] = useAddOrganizationUserMutation();
+  const [updateOrganizationUser] = useUpdateOrganizationUserMutation();
+  const { currentData: peopleData } = useListOrganizationUsersQuery(
+    open && !person && selectedOrganization ? selectedOrganization.id : skipToken
+  );
+  const people = peopleData?.users;
 
-  const [editedPerson, setEditedPerson, , onChangeCallback] = useForm<OrganizationUser>(emptyPerson);
+  const [editedPerson, setEditedPerson, , onChangeCallback] = useForm<PersonForm>(emptyPerson);
 
   useEffect(() => {
     if (open) {
@@ -63,18 +74,6 @@ export default function PersonModal({ open, onClose, person, reload }: PersonMod
       );
     }
   }, [open, person, setEditedPerson]);
-
-  useEffect(() => {
-    if (open && !person && selectedOrganization) {
-      const populatePeople = async () => {
-        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-        if (response.requestSucceeded) {
-          setPeople(response.users);
-        }
-      };
-      void populatePeople();
-    }
-  }, [open, person, selectedOrganization]);
 
   const saveUser = async () => {
     setPageError(undefined);
@@ -104,49 +103,55 @@ export default function PersonModal({ open, onClose, person, reload }: PersonMod
     let addedUserId = -1;
 
     if (person && selectedOrganization) {
-      const response = await OrganizationUserService.updateOrganizationUser(
-        selectedOrganization.id,
-        editedPerson.id,
-        editedPerson.role
-      );
-      if (response.requestSucceeded) {
+      const response = await updateOrganizationUser({
+        organizationId: selectedOrganization.id,
+        userId: editedPerson.id,
+        updateOrganizationUserRequestPayload: { role: editedPerson.role },
+      });
+      const succeeded = !('error' in response);
+      if (succeeded) {
         trackEvent(MIXPANEL_EVENTS.USER_ROLE_UPDATED, { new_role: editedPerson.role });
       } else {
         trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, { entity_type: 'user_role_update' });
       }
-      successMessage = response.requestSucceeded ? strings.CHANGES_SAVED : null;
+      successMessage = succeeded ? strings.CHANGES_SAVED : null;
     } else {
-      const response = await OrganizationUserService.createOrganizationUser(selectedOrganization?.id || -1, {
-        ...editedPerson,
-      });
-      if (!response.requestSucceeded) {
+      let errorDetails: 'PRE_EXISTING_USER' | 'INVALID_EMAIL' | undefined;
+      try {
+        const response = await addOrganizationUser({
+          organizationId: selectedOrganization?.id || -1,
+          addOrganizationUserRequestPayload: { email: editedPerson.email, role: editedPerson.role },
+        }).unwrap();
+        trackEvent(MIXPANEL_EVENTS.USER_INVITED, { role: editedPerson.role });
+        addedUserId = response.id;
+        successMessage = strings.PERSON_ADDED;
+      } catch (e) {
+        const error = e as { status?: number; data?: { error?: { message?: string } } };
+        if (error.status === 409) {
+          errorDetails = 'PRE_EXISTING_USER';
+        } else if (error.data?.error?.message === 'Field value has incorrect format: email') {
+          errorDetails = 'INVALID_EMAIL';
+        }
         trackEvent(MIXPANEL_EVENTS.SAVE_FAILED, {
           entity_type: 'user_invitation',
-          error_details: response.errorDetails,
+          error_details: errorDetails,
         });
-        if (response.errorDetails === 'PRE_EXISTING_USER') {
+        if (errorDetails === 'PRE_EXISTING_USER') {
           setRepeatedEmail(editedPerson.email);
           setPageError('REPEATED_EMAIL');
           setEmailError(strings.EMAIL_ALREADY_EXISTS);
           return;
-        } else if (response.errorDetails === 'INVALID_EMAIL') {
+        } else if (errorDetails === 'INVALID_EMAIL') {
           setPageError('INVALID_EMAIL');
           setEmailError(strings.INCORRECT_EMAIL_FORMAT);
           return;
         }
       }
-      if (response.requestSucceeded) {
-        trackEvent(MIXPANEL_EVENTS.USER_INVITED, { role: editedPerson.role });
-        addedUserId = response.userId;
-      }
-      successMessage = response.requestSucceeded ? strings.PERSON_ADDED : null;
     }
 
     if (successMessage) {
       snackbar.toastSuccess(successMessage);
-      void reloadOrganizations();
       if (person) {
-        reload();
         onClose();
       } else {
         navigate({ pathname: APP_PATHS.PEOPLE_VIEW.replace(':personId', addedUserId.toString()) });

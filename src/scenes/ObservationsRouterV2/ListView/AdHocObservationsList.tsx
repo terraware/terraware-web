@@ -21,6 +21,7 @@ import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlan
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers';
 import { ObservationResultsPayload } from 'src/queries/generated/observations';
+import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { AdHocObservationResults } from 'src/types/Observations';
 import { MultiPolygon } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -107,8 +108,19 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   });
   const emptyMessage = useObservationsEmptyMessage(emptyState);
 
-  const { plantingSites } = useOrganizationPlantingSites();
+  const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites({ full: true });
 
+  const plantingSitesById = useMemo(
+    () =>
+      plantingSites.reduce(
+        (sites, site) => {
+          sites[site.id] = site;
+          return sites;
+        },
+        {} as { [siteId: number]: PlantingSitePayload }
+      ),
+    [plantingSites]
+  );
   const plantingSiteNames = useMemo(
     () =>
       plantingSites.reduce(
@@ -258,6 +270,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         hasFilters: activeFilterCount > 0 || hasTableFilters,
         biomassObservationIds: filteredRows.filter((row) => row.isBiomass).map((row) => row.observationId),
         siteName,
+        plantingSitesById,
       });
     },
     [
@@ -268,6 +281,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
       plantingSiteId,
       plantingSiteNames,
       plantingSites,
+      plantingSitesById,
       strings.ALL_PLANTING_SITES,
     ]
   );
@@ -332,7 +346,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
           onShowGlobalFilterChange: tableState.setShowGlobalFilter,
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
-              {rows.length > 0 && (
+              {plantingSitesLoaded && rows.length > 0 && (
                 <Tooltip title={strings.EXPORT}>
                   <IconButton
                     disabled={table.getFilteredRowModel().rows.length === 0}

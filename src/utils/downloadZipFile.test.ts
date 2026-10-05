@@ -30,11 +30,12 @@ describe('createZipFile', () => {
       const bytes = await nestedFile.async('uint8array');
       expect(Array.from(bytes.slice(0, 4))).toEqual([0x50, 0x4b, 0x03, 0x04]);
       const plotArchive = await JSZip.loadAsync(bytes);
-      expect(plotArchive.file(/\.csv$/).map(({ name }) => name).sort()).toEqual([
-        'Plot 1/Details.csv',
-        'Plot 1/Species.csv',
-        'Plot 1/Trees.csv',
-      ]);
+      expect(
+        plotArchive
+          .file(/\.csv$/)
+          .map(({ name }) => name)
+          .sort()
+      ).toEqual(['Plot 1/Details.csv', 'Plot 1/Species.csv', 'Plot 1/Trees.csv']);
       expect(await plotArchive.file('Plot 1/Details.csv')?.async('string')).toBe('\uFEFFPlot,Name\n1,Árbol');
       expect(await plotArchive.file('Plot 1/Trees.csv')?.async('string')).toBe('\uFEFFSpecies,Diameter\nOak,12');
       expect(await plotArchive.file('Plot 1/Species.csv')?.async('string')).toBe('\uFEFFName\nOak');
@@ -55,7 +56,11 @@ describe('createZipFile', () => {
 
   test('rejects the archive when file generation returns null', async () => {
     await expect(
-      createZipFile({ dirName: 'Site', files: [{ fileName: 'Plot', content: () => Promise.resolve(null) }], suffix: '.zip' })
+      createZipFile({
+        dirName: 'Site',
+        files: [{ fileName: 'Plot', content: () => Promise.resolve(null) }],
+        suffix: '.zip',
+      })
     ).rejects.toThrow('Failed to generate content for file "Plot.zip"');
   });
 
