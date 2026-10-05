@@ -1,13 +1,7 @@
 import strings from 'src/strings';
 
 import { AccessionWithdrawInfo } from './types';
-import {
-  estimatedSeedCount,
-  remainingCountOf,
-  remainingWeightOf,
-  validateRow,
-  withdrawAllValue,
-} from './withdrawCalc';
+import { estimatedSeedCount, remainingCountOf, remainingWeightOf, validateRow, withdrawAllValue } from './withdrawCalc';
 
 // An accession whose remaining quantity is stored as a seed count.
 const seedsAccession = (overrides: Partial<AccessionWithdrawInfo> = {}): AccessionWithdrawInfo => ({

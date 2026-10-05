@@ -1,14 +1,5 @@
 import { Feature } from 'geojson';
-import strings from 'src/strings';
-import { GeometryFeature } from 'src/types/Map';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
-import {
-  alphabetName,
-  cutOverlappingBoundaries,
-  getLatestFeature,
-  substratumNameGenerator,
-  stratumNameGenerator,
-} from './utils';
+
 import {
   cutOnNoOverlapFeature,
   cutOnOverlapFeature,
@@ -18,6 +9,17 @@ import {
   featureCollection2,
   featureCollection3,
 } from 'src/components/Map/testdata';
+import strings from 'src/strings';
+import { GeometryFeature } from 'src/types/Map';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
+
+import {
+  alphabetName,
+  cutOverlappingBoundaries,
+  getLatestFeature,
+  stratumNameGenerator,
+  substratumNameGenerator,
+} from './utils';
 
 const createDraftSiteWith = (): DraftPlantingSite => {
   return {
@@ -33,7 +35,7 @@ const createDraftSiteWith = (): DraftPlantingSite => {
 describe('substratumNameGenerator', () => {
   const prefix = 'substratum';
 
-  test('should return \'A\' when there are no used names', () => {
+  test("should return 'A' when there are no used names", () => {
     const usedNames = new Set<string>();
     expect(substratumNameGenerator(usedNames, prefix)).toBe(`${prefix} A`);
   });
@@ -47,10 +49,9 @@ describe('substratumNameGenerator', () => {
     const asciiA = 'A'.charCodeAt(0);
     // A to Z, simpler to map from ascii to char here
     const usedNames = new Set<string>(
-      Array
-        .from({ length: 26 }, (_, index) => asciiA + index)
+      Array.from({ length: 26 }, (_, index) => asciiA + index)
         .map((ascii) => String.fromCharCode(ascii))
-        .map((name) => `${prefix} ${name}`),
+        .map((name) => `${prefix} ${name}`)
     );
     expect(substratumNameGenerator(usedNames, prefix)).toBe(`${prefix} AA`);
   });
@@ -65,11 +66,10 @@ describe('substratumNameGenerator', () => {
   });
 });
 
-
 describe('stratumNameGenerator', () => {
   const prefix = 'stratum';
 
-  test('should return \'01\' when there are no used names', () => {
+  test("should return '01' when there are no used names", () => {
     const usedNames = new Set<string>();
     expect(stratumNameGenerator(usedNames, prefix)).toBe(`${prefix} 01`);
   });
@@ -80,9 +80,7 @@ describe('stratumNameGenerator', () => {
   });
 
   test('should return with no padding in double digits', () => {
-    const usedNames = new Set<string>(
-      Array.from({ length: 9 }, (_, index) => `${prefix} 0${index + 1}`),
-    );
+    const usedNames = new Set<string>(Array.from({ length: 9 }, (_, index) => `${prefix} 0${index + 1}`));
     expect(stratumNameGenerator(usedNames, prefix)).toBe(`${prefix} 10`);
   });
 
@@ -159,7 +157,7 @@ describe('cutBoundaries', () => {
         source: featureCollection2,
       },
       onSuccess,
-      onError,
+      onError
     );
     expect(success).toBe(0);
     expect(cutBoundaries).toBe(0);
@@ -176,7 +174,7 @@ describe('cutBoundaries', () => {
         source: featureCollection2,
       },
       onSuccess,
-      onError,
+      onError
     );
     expect(success).toBe(1);
     expect(cutBoundaries).toBe(3);
@@ -251,7 +249,7 @@ describe('cutBoundaries', () => {
         source: featureCollection3,
       },
       onSuccess,
-      onError,
+      onError
     );
     expect(success).toBe(0);
     expect(cutBoundaries).toBe(0);

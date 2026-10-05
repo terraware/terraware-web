@@ -51,5 +51,4 @@ describe('CSV plot sorting', () => {
       { field: 'quadratSpecies_position' },
     ]);
   });
-
 });

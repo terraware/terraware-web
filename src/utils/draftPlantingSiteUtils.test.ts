@@ -1,5 +1,6 @@
-import { MultiPolygon, MinimalStratum } from 'src/types/Tracking';
 import { DraftPlantingSite, DraftPlantingSitePayload } from 'src/types/PlantingSite';
+import { MinimalStratum, MultiPolygon } from 'src/types/Tracking';
+
 import { fromDraft, toDraft } from './draftPlantingSiteUtils';
 
 const boundary: MultiPolygon = {

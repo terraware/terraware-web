@@ -1,5 +1,5 @@
-import CachedUserService from '../CachedUserService';
 import { User } from '../../types/User';
+import CachedUserService from '../CachedUserService';
 
 const USER = {
   id: 1,
