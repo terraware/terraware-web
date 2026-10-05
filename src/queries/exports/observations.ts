@@ -126,7 +126,12 @@ const injectedRtkApi = api.injectEndpoints({
             'isDead',
             'description',
           ],
-          sortOrder: [{ field: 'biomassSpecies_name' }, { field: 'treeNumber' }, { field: 'trunkNumber' }],
+          sortOrder: [
+            { field: 'monitoringPlot_plotNumber', direction: 'Descending' },
+            { field: 'biomassSpecies_name' },
+            { field: 'treeNumber' },
+            { field: 'trunkNumber' },
+          ],
           search: {
             operation: 'field',
             type: 'Exact',
