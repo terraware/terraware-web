@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react';
 
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useOrganization } from 'src/providers';
-import { CachedUserService } from 'src/services';
 
 // Selecting 'all' means "all planting sites" (no single site filter).
 export const ALL_PLANTING_SITES = 'all';
@@ -13,14 +12,13 @@ export type PlantingSiteId = number | typeof ALL_PLANTING_SITES;
 const LEGACY_ALL_PLANTING_SITES = -1;
 
 const useStickyPlantingSiteId = (preferenceName: string) => {
-  const { selectedOrganization } = useOrganization();
+  const { selectedOrganization, orgPreferences } = useOrganization();
   const updateUserPreferences = useUpdateUserPreferences();
 
   const [selectedPlantingSiteId, setSelectedPlantingSiteId] = useState<PlantingSiteId>(ALL_PLANTING_SITES);
   useEffect(() => {
     if (selectedOrganization) {
-      const response = CachedUserService.getUserOrgPreferences(selectedOrganization.id);
-      const stickyPlantingSite = response[preferenceName];
+      const stickyPlantingSite = orgPreferences[preferenceName] as { plantingSiteId?: PlantingSiteId } | undefined;
       if (stickyPlantingSite) {
         const storedPlantingSiteId = stickyPlantingSite.plantingSiteId;
         const isAllPlantingSites =
@@ -29,7 +27,7 @@ const useStickyPlantingSiteId = (preferenceName: string) => {
         setSelectedPlantingSiteId(isAllPlantingSites ? ALL_PLANTING_SITES : Number(storedPlantingSiteId));
       }
     }
-  }, [selectedOrganization, preferenceName]);
+  }, [selectedOrganization, orgPreferences, preferenceName]);
 
   const selectPlantingSite = useCallback(
     (nextPlantingSiteId: PlantingSiteId) => {

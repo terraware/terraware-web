@@ -1,5 +1,4 @@
 import AccessionService from './AccessionService';
-import CachedUserService from './CachedUserService';
 import FacilityService from './FacilityService';
 import HttpService from './HttpService';
 import MapService from './MapService';
@@ -14,7 +13,6 @@ export type { Response } from './HttpService';
 
 export {
   AccessionService,
-  CachedUserService,
   FacilityService,
   HttpService,
   MapService,
