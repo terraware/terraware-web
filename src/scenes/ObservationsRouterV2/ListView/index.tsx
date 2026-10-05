@@ -152,10 +152,10 @@ const ObservationListViewContent = (): JSX.Element => {
         options={plantingSiteOptions}
         required
         selectedValue={selectedPlantingSiteId}
-        sx={{ maxWidth: '320px', minWidth: '220px' }}
+        sx={isMobile ? undefined : { maxWidth: '320px', minWidth: '220px' }}
       />
     ),
-    [plantingSiteOptions, selectPlantingSite, selectedPlantingSiteId]
+    [isMobile, plantingSiteOptions, selectPlantingSite, selectedPlantingSiteId]
   );
 
   const PageHeaderPlantingSiteDropdown = useMemo(
@@ -237,23 +237,31 @@ const ObservationListViewContent = (): JSX.Element => {
           label={strings.SCHEDULE_OBSERVATION}
           onClick={() => navigate(APP_PATHS.SCHEDULE_OBSERVATION)}
           size='medium'
+          sx={newFiltersEnabled ? { flex: isMobile ? 1 : undefined, margin: 0, whiteSpace: 'nowrap' } : undefined}
         />
       );
     } else {
       return undefined;
     }
-  }, [navigate, scheduleObservationEnabled, strings.SCHEDULE_OBSERVATION]);
+  }, [isMobile, navigate, newFiltersEnabled, scheduleObservationEnabled, strings.SCHEDULE_OBSERVATION]);
 
   const headerActions = useMemo(
     () => (
-      <Box sx={{ alignItems: 'center', display: 'flex', gap: theme.spacing(1), justifyContent: 'flex-end' }}>
+      <Box
+        sx={{
+          alignItems: 'center',
+          display: 'flex',
+          gap: theme.spacing(1),
+          justifyContent: isDesktop ? 'flex-end' : 'flex-start',
+        }}
+      >
         {scheduleObservationButton}
         {typeof selectedPlantingSiteId === 'number' && (
           <SurvivalRateSettingsMenu plantingSiteId={selectedPlantingSiteId} />
         )}
       </Box>
     ),
-    [scheduleObservationButton, selectedPlantingSiteId, theme]
+    [isDesktop, scheduleObservationButton, selectedPlantingSiteId, theme]
   );
 
   const countedObservationType = newFiltersEnabled
