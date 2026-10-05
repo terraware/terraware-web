@@ -2058,7 +2058,6 @@ SITE_EDITOR_USE_DESKTOP,Cette fonction n’est disponible qu’à partir de l’
 SITE_EXCLUSION_AREAS_DESCRIPTION_0,"Les zones situées à l'intérieur des limites du site qui ne sont pas plantables doivent être exclues. Ces zones d'exclusion seront retirées des calculs de la surface plantable et ne seront pas contrôlées dans le cadre des observations régulières du site. Les routes, les étendues d'eau et les dépendances sont des exemples d'endroits à exclure.",6e688969
 SITE_EXCLUSION_AREAS_DESCRIPTION_1,Tracez ci-dessous les limites des zones d'exclusion du site de plantation. Utilisez l'outil de dessin {0} pour dessiner les zones d'exclusion du site de plantation. [Regardez un tutoriel] sur le tracé des zones d'exclusion. Sautez cette étape s'il n'y a pas de zones à exclure.,35dcbf47
 SITE_EXCLUSION_AREAS_DESCRIPTION_2,Excluez des zones du site de plantation en dessinant des formes à l'intérieur ou en chevauchant les limites du site de plantation. Complétez les formes de la zone d'exclusion en double-cliquant ou en cliquant à nouveau sur le point de départ.,e7b47271
-SITE_EXCLUSION_AREAS_OPTIONAL,Zones d'exclusion (facultatif),434ba2b3
 SITE_EXCLUSION_ERRORS,Il y a des erreurs dans la limite d’exclusion.,dc334f43
 SITE_GOALS,Objectifs du site,345a7c04
 SITE_GOALS_DESCRIPTION,Gérer les objectifs du site pour les densités de plantation et les espèces.,29421088
@@ -2070,7 +2069,6 @@ SITE_STRATUM_BOUNDARIES_SIZE,Les strates doivent avoir une taille minimale de 10
 SITE_STRATUM_BOUNDARIES_TOO_SMALL,Une ou plusieurs strates ont une limite inférieure à 100 m x 100 m.,e53c42df
 SITE_STRATUM_BOUNDARY_TOO_SMALL,Limite de strate inférieure à 100 m x 100 m.,d39bb72b
 SITE_STRATUM_NAMES_MISSING,Une ou plusieurs strates n’ont pas de nom. Cliquez sur une strate pour modifier son nom.,dc003708
-SITE_SUBSTRATUM_BOUNDARIES,Limites des substrats,71b65a41
 SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,"Chaque strate est divisée en un ou plusieurs substrats. Un substrat est la plus petite zone à laquelle des plants peuvent être attribués lors de la plantation, et doit être dimensionné de façon à pouvoir être planté en une seule saison de plantation, généralement de 50 à 200 hectares. Sélectionnez une strate, puis utilisez l’outil de découpe {0} pour dessiner les polygones des substrats à l’intérieur de celle-ci. [Regardez un tutoriel] sur l’ajout de limites de substrats.",d9d30ce0
 SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,{0} sélectionnée pour la création de substrats,8444578b
 SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL,Un ou plusieurs substrats ont une limite inférieure à 25 m x 25 m.,87f34c5b

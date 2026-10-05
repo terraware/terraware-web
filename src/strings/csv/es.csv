@@ -2059,7 +2059,6 @@ SITE_EDITOR_USE_DESKTOP,Esta función solo está disponible desde la aplicación
 SITE_EXCLUSION_AREAS_DESCRIPTION_0,"Deben excluirse las zonas dentro de los límites del terreno que no sean plantables. Estas zonas excluidas se eliminarán de los cálculos del área plantable y no se controlarán como parte de la observación rutinaria del terreno. Algunos ejemplos de lugares que deben excluirse son calles, masas de agua y dependencias.",6e688969
 SITE_EXCLUSION_AREAS_DESCRIPTION_1,Dibuja a continuación los límites de las zonas de exclusión del sitio de plantación. Utiliza la herramienta de dibujo {0} para dibujar las zonas de exclusión del sitio de plantación. [Ve un tutorial] sobre cómo dibujar zonas de exclusión. Omite este paso si no hay zonas que excluir.,35dcbf47
 SITE_EXCLUSION_AREAS_DESCRIPTION_2,Excluye zonas del sitio de plantación dibujando formas dentro o superpuestas al límite del sitio de plantación. Completa las formas de la zona de exclusión haciendo doble clic o volviendo a hacer clic en el punto de partida.,e7b47271
-SITE_EXCLUSION_AREAS_OPTIONAL,Zonas de exclusión (opcional),434ba2b3
 SITE_EXCLUSION_ERRORS,Hay errores en el límite de exclusión.,dc334f43
 SITE_GOALS,Objetivos del Sitio,345a7c04
 SITE_GOALS_DESCRIPTION,Gestione los objetivos del sitio para densidades de plantación y especies.,29421088
@@ -2071,7 +2070,6 @@ SITE_STRATUM_BOUNDARIES_SIZE,Los estratos deben tener un tamaño mínimo de 100 
 SITE_STRATUM_BOUNDARIES_TOO_SMALL,Una o más estratas tienen un límite menor a 100 m x 100 m.,e53c42df
 SITE_STRATUM_BOUNDARY_TOO_SMALL,Límite de estrata menor a 100 m x 100 m.,d39bb72b
 SITE_STRATUM_NAMES_MISSING,Falta el nombre de una o más estratas. Haga clic en una estrata para editar su nombre.,dc003708
-SITE_SUBSTRATUM_BOUNDARIES,Límites de Subestrato,71b65a41
 SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,"Cada estrato se divide en uno o más subestratos. Un subestrato es el área más pequeña a la que se pueden asignar plántulas durante la plantación, y debe tener un tamaño tal que pueda plantarse en una sola temporada de plantación, generalmente de 50 a 200 hectáreas. Seleccione un estrato y luego utilice la herramienta de corte {0} para dibujar polígonos de subestratos dentro de él. [Vea un tutorial] sobre cómo agregar límites de subestratos.",d9d30ce0
 SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,{0} seleccionado para crear subestratos,8444578b
 SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL,Uno o más Subestratos tienen un límite menor a 25 m x 25 m.,87f34c5b
