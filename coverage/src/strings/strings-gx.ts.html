@@ -3446,8 +3446,14 @@
 <a name='L3381'></a><a href='#L3381'>3381</a>
 <a name='L3382'></a><a href='#L3382'>3382</a>
 <a name='L3383'></a><a href='#L3383'>3383</a>
-<a name='L3384'></a><a href='#L3384'>3384</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">72x</span>
+<a name='L3384'></a><a href='#L3384'>3384</a>
+<a name='L3385'></a><a href='#L3385'>3385</a>
+<a name='L3386'></a><a href='#L3386'>3386</a>
+<a name='L3387'></a><a href='#L3387'>3387</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">73x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -7239,6 +7245,9 @@ export const strings = {
   CHANGE_GERMINATION_ESTABLISHMENT_STATUS: 'U3RhdHVz R2VybWluYXRpb24vRXN0YWJsaXNobWVudA Q2hhbmdl',
   CHANGE_HARDENING_OFF_STATUS: 'U3RhdHVz T2Zm SGFyZGVuaW5n Q2hhbmdl',
   CHANGE_HISTORY: 'SGlzdG9yeQ Q2hhbmdl',
+  CHANGE_SPECIES: 'c3BlY2llcw Q2hhbmdl',
+  CHANGE_SPECIES_CONFIRMATION: 'c3BlY2llcz8 Q2hhbmdl',
+  CHANGE_SPECIES_CONFIRMATION_MESSAGE: '{1}. dG8 bW92ZWQ YmU d2lsbA {0} Zm9y cmVjb3JkZWQ dmFsdWVz VGhl',
   CHANGE_TO: '{0} dG8 Q2hhbmdl',
   CHANGED: 'Q2hhbmdlZA',
   CHANGES: 'Q2hhbmdlcw',
@@ -9062,6 +9071,10 @@ export const strings = {
     'YW55bW9yZS4 ZGF0YQ b3JnYW5pemF0aW9u4oCZcw eW91cg dG8 YWNjZXNz aGF2ZQ d29u4oCZdA dGhleQ bWVhbnM {0} UmVtb3Zpbmc {0}? cmVtb3Zl dG8 d2FudA eW91 c3VyZQ eW91 QXJl',
   REMOVE_PROJECT: 'UHJvamVjdA UmVtb3Zl',
   REMOVE_SPECIES: 'U3BlY2llcw UmVtb3Zl',
+  REMOVE_SPECIES_CONFIRMATION: '{0}? UmVtb3Zl',
+  REMOVE_SPECIES_CONFIRMATION_MESSAGE:
+    'b2JzZXJ2YXRpb24u dGhpcw ZnJvbQ dmFsdWVz dGhlc2U ZGVsZXRlcw aXQ UmVtb3Zpbmc dmFsdWVzLg cmVjb3JkZWQ aGFz c3BlY2llcw VGhpcw',
+  REMOVE_SPECIES_NAMED: '{0} UmVtb3Zl',
   REMOVE_VIRTUAL_WALKTHROUGH: 'V2Fsa3Rocm91Z2g VmlydHVhbA UmVtb3Zl',
   REMOVE_VIRTUAL_WALKTHROUGH_CONFIRM:
     'dW5kb25lLg YmU Y2Fubm90 YWN0aW9u VGhpcw V2Fsa3Rocm91Z2g/ VmlydHVhbA dGhpcw cmVtb3Zl dG8 d2FudA eW91 c3VyZQ eW91 QXJl',
@@ -9244,6 +9257,7 @@ export const strings = {
   SDG_17: 'R29hbHM dGhl Zm9y UGFydG5lcnNoaXBz MTcu',
   SEARCH: 'U2VhcmNo',
   SEARCH_OR_SELECT: 'U2VsZWN0Li4u b3I U2VhcmNo',
+  SEARCH_SPECIES: 'c3BlY2llcw U2VhcmNo',
   SEASON_NAME: 'TmFtZQ U2Vhc29u',
   SEASON_NAME_REQUIRED: 'Kg TmFtZQ U2Vhc29u',
   SEASON_TO_COPY: 'Y29weQ dG8 U2Vhc29u',
@@ -9402,23 +9416,18 @@ export const strings = {
   SITE_MAP: 'TWFw U2l0ZQ',
   SITE_PLANT_DENSITY: 'RGVuc2l0eQ UGxhbnQ U2l0ZQ',
   SITE_STRATUM_BOUNDARIES: 'Qm91bmRhcmllcw U3RyYXR1bQ',
-  SITE_STRATUM_BOUNDARIES_DESCRIPTION_0:
-    'c2ltaWxhci4 YXJl Y29uZGl0aW9ucw c29pbA YW5k c3VubGlnaHQ d2hlcmU aGlsbCw ZWFzdC1mYWNpbmc YW4 b2Y c2xvcGU dGhl aXM U3RyYXR1bQ YQ b2Y ZXhhbXBsZQ QW4 Zml2ZS4 dGhhbg bW9yZQ bm8 dXN1YWxseQ YW5k c3RyYXR1bQ b25l bGVhc3Q YXQ aGF2ZQ bXVzdA c2l0ZQ cGxhbnRpbmc RWFjaA c2ltaWxhci4 YXJl Y29uZGl0aW9ucw Z3Jvd2luZw YW5k cGxhbnRpbmc d2hlcmU c2l0ZQ cGxhbnRpbmc dGhl b2Y bGF5ZXI dmVnZXRhdGlvbg YQ aXM U3RyYXR1bQ QQ',
-  SITE_STRATUM_BOUNDARIES_DESCRIPTION_1:
-    'Ym91bmRhcmllcy4 U3RyYXR1bQ YWRkaW5n YWJvdXQ dHV0b3JpYWxd YQ W1dhdGNo U3RyYXRhLg Zm9y Ym91bmRhcmllcw c2l0ZQ dGhl d2l0aGlu cG9seWdvbnM Y3JlYXRl dG8 {0} dG9vbA c2xpY2U dGhl VXNl YmVsb3cu c2l0ZQ cGxhbnRpbmc eW91cg b2Y U3RyYXRh dGhl RHJhdw',
-  SITE_STRATUM_BOUNDARIES_SIZE: 'MTAwbS4 eA MTAwbQ b2Y c2l6ZQ bWluaW11bQ YQ aGF2ZQ c2hvdWxk U3RyYXRh',
+  SITE_STRATUM_BOUNDARIES_DESCRIPTION:
+    'Ym91bmRhcmllcy4 U3RyYXR1bQ YWRkaW5n YWJvdXQ dHV0b3JpYWxd YQ W1dhdGNo {1} YmVsb3cu Ym91bmRhcnk c2l0ZQ dGhl d2l0aGlu cG9seWdvbnM U3RyYXR1bQ ZHJhdw dG8 {0} dG9vbA c2xpY2U dGhl VXNl Zml2ZS4 dGhhbg bW9yZQ bm8 dXN1YWxseQ YW5k U3RyYXR1bQ b25l bGVhc3Q YXQ aGF2ZQ bXVzdA c2l0ZQ cGxhbnRpbmc RWFjaA aGlsbC4 ZWFzdC1mYWNpbmc YW4 b2Y c2xvcGU dGhl YXM c3VjaA c2ltaWxhciw YXJl Y29uZGl0aW9ucw Z3Jvd2luZw YW5k cGxhbnRpbmc d2hlcmU c2l0ZQ cGxhbnRpbmc dGhl b2Y bGF5ZXI dmVnZXRhdGlvbg YQ aXM U3RyYXR1bQ QQ',
+  SITE_STRATUM_BOUNDARIES_SIZE: 'bS4 MTAw w5c bQ MTAw b2Y c2l6ZQ bWluaW11bQ YQ aGF2ZQ c2hvdWxk U3RyYXRh',
   SITE_STRATUM_BOUNDARIES_TOO_SMALL:
     'MTAwbQ eA MTAwbQ dGhhbg c21hbGxlcg Ym91bmRhcnk YQ aGF2ZQ c3RyYXRh bW9yZQ b3I T25l',
   SITE_STRATUM_BOUNDARY_TOO_SMALL: 'MTAwbQ eA MTAwbQ dGhhbg c21hbGxlcg Ym91bmRhcnk U3RyYXR1bQ',
   SITE_STRATUM_NAMES_MISSING:
     'bmFtZS4 aXRz ZWRpdA dG8 c3RyYXR1bQ YQ b24 Q2xpY2s bmFtZXMu bWlzc2luZw YXJl c3RyYXRh bW9yZQ b3I T25l',
   SITE_SUBSTRATUM_BOUNDARIES: 'Qm91bmRhcmllcw U3Vic3RyYXR1bQ',
-  SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_0:
-    'aGVjdGFyZXMu NTAtMjAw Z2VuZXJhbGx5 YXJl U3Vic3RyYXRh c2Vhc29uLg cGxhbnRpbmc c2luZ2xl YQ ZHVyaW5n cGxhbnRlZA YmU Y2Fu U3Vic3RyYXR1bQ dGhl b2Y ZW50aXJldHk dGhl dGhhdA c3VjaA c2l6ZWQ YmU c2hvdWxk U3Vic3RyYXRh cGxhbnRpbmcu ZHVyaW5n YWxsb2NhdGVk YmU Y2Fu c2VlZGxpbmdz d2hpY2g dG8 YXJlYQ c21hbGxlc3Q dGhl aXM U3Vic3RyYXR1bQ QQ U3Vic3RyYXRhLg bW9yZQ b3I b25l aW50bw ZGl2aWRlZA aXM c2l0ZQ cGxhbnRpbmc eW91cg b2Y U3RyYXR1bQ RWFjaA',
-  SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_1:
-    'Ym91bmRhcmllcy4 U3Vic3RyYXR1bQ YWRkaW5n YWJvdXQ dHV0b3JpYWxd YQ W1dhdGNo U3RyYXRhLg dGhl d2l0aGlu KHBvbHlnb25zKQ c2hhcGVz U3Vic3RyYXR1bQ Y3JlYXRl dG8 {0} dG9vbA c2xpY2U dGhl VXNl U3Vic3RyYXRhLg Y3JlYXRl dG8 d2hpY2g aW4 U3RyYXR1bQ YQ c2VsZWN0 Rmlyc3Qs YmVsb3cu c2l0ZQ cGxhbnRpbmc eW91cg b2Y U3Vic3RyYXRh dGhl RHJhdw',
-  SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM:
-    'U3Vic3RyYXRhLg Y3JlYXRpbmc Zm9y c2VsZWN0ZWQ Y3VycmVudGx5 aXM {0} U3RyYXR1bQ',
+  SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION:
+    'Ym91bmRhcmllcy4 U3Vic3RyYXR1bQ YWRkaW5n YWJvdXQ dHV0b3JpYWxd YQ W1dhdGNo aXQu d2l0aGlu cG9seWdvbnM U3Vic3RyYXR1bQ ZHJhdw dG8 {0} dG9vbA c2xpY2U dGhl dXNl dGhlbg U3RyYXR1bSw YQ U2VsZWN0 aGVjdGFyZXMu NTDigJMyMDA Z2VuZXJhbGx5 c2Vhc29uLA cGxhbnRpbmc c2luZ2xl YQ aW4 cGxhbnRlZA YmU Y2Fu aXQ c28 c2l6ZWQ YmU c2hvdWxk YW5k cGxhbnRpbmcs ZHVyaW5n YWxsb2NhdGVk YmU Y2Fu c2VlZGxpbmdz d2hpY2g dG8 YXJlYQ c21hbGxlc3Q dGhl aXM U3Vic3RyYXR1bQ QQ U3Vic3RyYXRhLg bW9yZQ b3I b25l aW50bw ZGl2aWRlZA aXM U3RyYXR1bQ RWFjaA',
+  SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM: 'U3Vic3RyYXRh Y3JlYXRpbmc Zm9y c2VsZWN0ZWQ {0}',
   SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL:
     'MjVt eA MjVt dGhhbg c21hbGxlcg Ym91bmRhcnk YQ aGF2ZQ U3Vic3RyYXRh bW9yZQ b3I T25l',
   SITE_SUBSTRATUM_BOUNDARY_TOO_SMALL: 'MjVt eA MjVt dGhhbg c21hbGxlcg Ym91bmRhcnk U3Vic3RyYXR1bQ',
@@ -9549,9 +9558,9 @@ export const strings = {
     'cGxhbnRpbmcu aW5pdGlhbA dGhl c2luY2U YWxpdmU c3RpbGw YXJl dGhhdA c3BlY2llcw cGVy cGxhbnRz b2Y cGVyY2VudGFnZQ dGhl c2hvd3M YnJlYWtkb3du U3Vydml2YWw',
   SPECIES_SURVIVAL_TOOLTIP:
     'b2JzZXJ2ZWQu d2VyZQ dGhhdA c3RyYXRh dGhl YW1vbmc cmF0ZXMs c3Vydml2YWw bG93ZXN0 YW5k aGlnaGVzdA dGhl d2l0aA c3BlY2llcw dGhl c2hvd3M U3Vydml2YWw U3BlY2llcw',
-  SPECIES_TABLE_INSTRUCTIONS: 'aXQu ZWRpdA dG8 dGFibGU dGhl aW4 bnVtYmVy YQ b24 Q2xpY2s',
+  SPECIES_TABLE_INSTRUCTIONS: 'aXQu ZWRpdA dG8 dGFibGU dGhl aW4 bnVtYmVy b3I c3BlY2llcw YQ b24 Q2xpY2s',
   SPECIES_TABLE_INSTRUCTIONS_NOTE:
-    'ZGlzY3JldGlvbi4 d2l0aA bnVtYmVycw dGhl Y2hhbmdl UGxlYXNl bWFwcy4 aW4 dXBkYXRlZA YmU bm90 d2lsbA cGxhbnRz b2JzZXJ2ZWQ b2Y bG9jYXRpb25z YW5k bnVtYmVycw b3JpZ2luYWw dGhl Y2hhbmdlZCw YXJl bnVtYmVycw V2hlbg Tk9URTo',
+    'ZGlzY3JldGlvbi4 d2l0aA Y2hhbmdlcw bWFrZQ UGxlYXNl bWFwcy4 aW4 dXBkYXRlZA YmU bm90 d2lsbA cGxhbnRz b2JzZXJ2ZWQ b2Y bG9jYXRpb25z YW5k bnVtYmVycw b3JpZ2luYWw dGhl cmVtb3ZlZCw b3I YWRkZWQ Y2hhbmdlZCw YXJl c3BlY2llcw b3I bnVtYmVycw V2hlbg Tk9URTo',
   SPECIES_TARGET_ADDED: '{1}. aW4 {0} YWRkZWQ6 dGFyZ2V0 U3BlY2llcw',
   SPECIES_TARGET_DELETED: '{1}. aW4 {0} ZGVsZXRlZDo dGFyZ2V0 U3BlY2llcw',
   SPECIES_TARGET_UPDATED: '{3}. dG8 {2} ZnJvbQ Y2hhbmdlZA {1} aW4 {0} dXBkYXRlZDo dGFyZ2V0 U3BlY2llcw',
@@ -10219,7 +10228,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-02T19:29:30.784Z
+                at 2026-10-05T20:02:07.390Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

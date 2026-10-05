@@ -3422,8 +3422,14 @@
 <a name='L3357'></a><a href='#L3357'>3357</a>
 <a name='L3358'></a><a href='#L3358'>3358</a>
 <a name='L3359'></a><a href='#L3359'>3359</a>
-<a name='L3360'></a><a href='#L3360'>3360</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">72x</span>
+<a name='L3360'></a><a href='#L3360'>3360</a>
+<a name='L3361'></a><a href='#L3361'>3361</a>
+<a name='L3362'></a><a href='#L3362'>3362</a>
+<a name='L3363'></a><a href='#L3363'>3363</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">73x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -7190,6 +7196,9 @@ export const strings = {
   CHANGE_GERMINATION_ESTABLISHMENT_STATUS: "Changer l'état de germination/établissement",
   CHANGE_HARDENING_OFF_STATUS: 'Modifier le statut d’acclimatation',
   CHANGE_HISTORY: 'Historique des modifications',
+  CHANGE_SPECIES: "Changer d'espèce",
+  CHANGE_SPECIES_CONFIRMATION: "Changer d'espèce ?",
+  CHANGE_SPECIES_CONFIRMATION_MESSAGE: 'Les valeurs enregistrées pour {0} seront transférées à {1}.',
   CHANGE_TO: 'Passez à {0}',
   CHANGED: 'Modifié',
   CHANGES: 'Changements',
@@ -9012,6 +9021,10 @@ export const strings = {
     "Êtes-vous sûr de vouloir retirer {0} ? Retirer {0} signifie qu'il n'aura plus accès aux données de votre organisation.",
   REMOVE_PROJECT: 'Supprimer un projet',
   REMOVE_SPECIES: 'Supprimer des espèces',
+  REMOVE_SPECIES_CONFIRMATION: 'Supprimer {0} ?',
+  REMOVE_SPECIES_CONFIRMATION_MESSAGE:
+    'Cette espèce possède des valeurs enregistrées. La supprimer effacera ces valeurs de cette observation.',
+  REMOVE_SPECIES_NAMED: 'Supprimer {0}',
   REMOVE_VIRTUAL_WALKTHROUGH: 'Supprimer la visite virtuelle',
   REMOVE_VIRTUAL_WALKTHROUGH_CONFIRM:
     'Êtes-vous sûr de vouloir supprimer cette visite virtuelle ? Cette action est irréversible.',
@@ -9191,6 +9204,7 @@ export const strings = {
   SDG_17: '17. Partenariats pour les objectifs',
   SEARCH: 'Recherche',
   SEARCH_OR_SELECT: 'Rechercher ou sélectionner...',
+  SEARCH_SPECIES: 'Rechercher une espèce',
   SEASON_NAME: 'Nom de la saison',
   SEASON_NAME_REQUIRED: 'Nom de la saison *',
   SEASON_TO_COPY: 'Saison à copier',
@@ -9349,22 +9363,17 @@ export const strings = {
   SITE_MAP: 'Carte du site',
   SITE_PLANT_DENSITY: 'Densité de plantation du site',
   SITE_STRATUM_BOUNDARIES: 'Limites de la strate',
-  SITE_STRATUM_BOUNDARIES_DESCRIPTION_0:
-    "Une strate est une couche de végétation du site de plantation où les conditions de plantation et de croissance sont similaires. Chaque site de plantation doit comporter au moins une strate et généralement pas plus de cinq. Un exemple de strate est le versant d'une colline orientée à l'est, où l'ensoleillement et les conditions du sol sont similaires.",
-  SITE_STRATUM_BOUNDARIES_DESCRIPTION_1:
-    'Dessinez les strates de votre site de plantation ci-dessous. Utilisez l’outil de découpe {0} pour créer des polygones représentant les strates à l’intérieur des limites du site. [Regardez un tutoriel] sur l’ajout de limites de strates.',
-  SITE_STRATUM_BOUNDARIES_SIZE: 'Les strates doivent avoir une taille minimale de 100 m x 100 m.',
+  SITE_STRATUM_BOUNDARIES_DESCRIPTION:
+    "Une strate est une couche de végétation du site de plantation où les conditions de plantation et de croissance sont similaires, comme le versant d'une colline orientée à l'est. Chaque site de plantation doit comporter au moins une strate et généralement pas plus de cinq. Utilisez l’outil de découpe {0} pour dessiner les polygones des strates à l’intérieur des limites du site ci-dessous. {1} [Regardez un tutoriel] sur l’ajout de limites de strates.",
+  SITE_STRATUM_BOUNDARIES_SIZE: 'Les strates doivent avoir une taille minimale de 100 m × 100 m.',
   SITE_STRATUM_BOUNDARIES_TOO_SMALL: 'Une ou plusieurs strates ont une limite inférieure à 100 m x 100 m.',
   SITE_STRATUM_BOUNDARY_TOO_SMALL: 'Limite de strate inférieure à 100 m x 100 m.',
   SITE_STRATUM_NAMES_MISSING:
     'Une ou plusieurs strates n’ont pas de nom. Cliquez sur une strate pour modifier son nom.',
   SITE_SUBSTRATUM_BOUNDARIES: 'Limites des substrats',
-  SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_0:
-    'Chaque strate de votre site de plantation est divisée en un ou plusieurs substrats. Un substrat est la plus petite zone à laquelle des plants peuvent être attribués lors de la plantation. Les substrats doivent être dimensionnés de manière à pouvoir être entièrement plantés au cours d’une seule saison de plantation. En général, les substrats font entre 50 et 200 hectares.',
-  SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_1:
-    'Dessinez les substrats de votre site de plantation ci-dessous. Commencez par sélectionner un stratum dans lequel créer des substrats. Utilisez l’outil de découpe {0} pour créer des formes de substrat (polygones) à l’intérieur des strates. [Regardez un tutoriel] sur l’ajout de limites de substrat.',
-  SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM:
-    'La strate {0} est actuellement sélectionnée pour la création de substrats.',
+  SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION:
+    'Chaque strate est divisée en un ou plusieurs substrats. Un substrat est la plus petite zone à laquelle des plants peuvent être attribués lors de la plantation, et doit être dimensionné de façon à pouvoir être planté en une seule saison de plantation, généralement de 50 à 200 hectares. Sélectionnez une strate, puis utilisez l’outil de découpe {0} pour dessiner les polygones des substrats à l’intérieur de celle-ci. [Regardez un tutoriel] sur l’ajout de limites de substrats.',
+  SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM: '{0} sélectionnée pour la création de substrats',
   SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL: 'Un ou plusieurs substrats ont une limite inférieure à 25 m x 25 m.',
   SITE_SUBSTRATUM_BOUNDARY_TOO_SMALL: 'Limite de substrat inférieure à 25 m x 25 m.',
   SITE_VISIT: 'Visite du site',
@@ -9492,9 +9501,9 @@ export const strings = {
     'La répartition de la survie indique le pourcentage de plants par espèce qui sont encore vivants depuis la plantation initiale.',
   SPECIES_SURVIVAL_TOOLTIP:
     'La survie des espèces affiche les espèces ayant les taux de survie les plus élevés et les plus faibles parmi les strates observées.',
-  SPECIES_TABLE_INSTRUCTIONS: 'Cliquez sur un nombre dans le tableau pour le modifier.',
+  SPECIES_TABLE_INSTRUCTIONS: 'Cliquez sur une espèce ou un nombre dans le tableau pour le modifier.',
   SPECIES_TABLE_INSTRUCTIONS_NOTE:
-    "REMARQUE : Lorsque les nombres sont modifiés, les nombres et emplacements d'origine des plantes observées ne seront pas mis à jour sur les cartes. Veuillez modifier les nombres avec discernement.",
+    "REMARQUE : Lorsque des nombres ou des espèces sont modifiés, ajoutés ou supprimés, les nombres et emplacements d'origine des plants observés ne seront pas mis à jour sur les cartes. Veuillez effectuer les modifications avec discernement.",
   SPECIES_TARGET_ADDED: "Objectif d'espèce ajouté : {0} dans {1}.",
   SPECIES_TARGET_DELETED: "Objectif d'espèce supprimé : {0} dans {1}.",
   SPECIES_TARGET_UPDATED: "Objectif d'espèce mis à jour : {0} dans {1} modifié de {2} à {3}.",
@@ -10147,7 +10156,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-02T19:29:30.784Z
+                at 2026-10-05T20:02:07.390Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
