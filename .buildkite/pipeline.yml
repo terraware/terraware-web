@@ -22,7 +22,7 @@ common:
         - secret-id: 'terraware_web_build_secrets'
 
   - &restore-dist
-    artifacts#v1.9.4:
+    artifacts#v1.10.0:
       download: 'dist'
       compressed: 'dist.tgz'
 
@@ -59,7 +59,7 @@ steps:
           save:
             - file
             - branch
-      - artifacts#v1.9.4:
+      - artifacts#v1.10.0:
           upload: 'dist'
           compressed: 'dist.tgz'
           s3-upload-acl: 'private'
