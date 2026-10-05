@@ -822,6 +822,7 @@ FOR_LAB_AND_NURSERY_GERMINATION,Para laboratorio y germinación en vivero,a6d186
 FOR_LAB_GERMINATION,Para germinación en laboratorio,401f658e
 FOR_NURSERY_GERMINATION,Para germinación en vivero,ec2b91cc
 FORB,Hierba de hoja ancha,98c76e90
+FOREST_TYPE,Tipo de bosque,1e916fd0
 FORESTRY,Silvicultura,e5cd15f6
 FREEZER,Congelador,18226170
 FREEZER_1,Congelador 1,953b9b90
@@ -1234,6 +1235,7 @@ MODULES_FOR_PROJECT,Módulos para {0},5d950bb2
 MODULES_IMPORT_COMPLETE,¡Completada la importación de datos de los módulos!,76a99df8
 MONITORING,Monitoreo,c607ad35
 MONITORING_PLOT,Parcela de vigilancia,97de3243
+MONITORING_PLOT_NUMBER,Número de parcela de monitoreo,adc14d07
 MONITORING_PLOT_REQUIRED,La parcela de monitoreo es obligatoria.,ba488e0f
 MONITORING_PLOT_TYPE,Tipo de parcela de vigilancia,5269e047
 MONITORING_PLOTS,Control de parcelas,42428fbb
@@ -1579,6 +1581,7 @@ PERSON,Persona,3c8a3d43
 PERSON_ADDED,Se ha añadido una persona,5bea0d6f
 PESTS,Plagas,16b7eeed
 PH,pH,8e3a7381
+PH_LEVEL,Nivel de pH,fd483700
 PHASE,Fase,f9d98417
 PHASE_PROJECT_REQUIRED_FIELDS_ERROR,"El nombre del archivo, el enlace de GDrive y la ruta de Dropbox son obligatorios cuando se selecciona una fase.",93c006c2
 PHOTO_ADDED,Foto agregada,0eea3641
@@ -1690,6 +1693,7 @@ PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar 
 PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE,Trazar los límites del sitio,1200219a
 PLANTING_SITE_CREATED,¡Se creó el sitio de plantación!,c8fad00a
 PLANTING_SITE_DELETED,¡Sitio de plantación borrado!,61c0d69a
+PLANTING_SITE_NAME,Nombre del sitio de plantación,f3cb062b
 PLANTING_SITE_SAVED,Sitio de plantación guardado,70f9ae14
 PLANTING_SITE_STRATUM_NAME_HELP,Los nombres legibles ayudarán al personal de campo a identificar las áreas cuando se encuentren sobre el terreno.,63445c3d
 PLANTING_SITE_TOTALS,Total de lugares de plantación,f37bb9d8
@@ -1716,6 +1720,7 @@ PLAY_VIDEO,Reproducir video,56432671
 PLEASE_NOTE,Tenga en cuenta lo siguiente:,f37ff0f0
 PLOT,Parcela,8d3cefee
 PLOT_CAPTURED,Parcela capturada,4ad5f259
+PLOT_COMPLETED_TIME,Hora de finalización del lote,e615ae45
 PLOT_CONDITIONS,Condiciones de la parcela,2b615357
 PLOT_CORNER_PHOTOS,Fotos de las esquinas de la parcela,330ffad8
 PLOT_CORNER_PHOTOS_CANNOT_BE_DELETED,No se pueden eliminar las fotos de las esquinas de la parcela,f2f48bb3
@@ -2250,6 +2255,8 @@ SKIP,Omitir,2198bbf5
 SLACK,Slack,c15b5d48
 SLACK_LINK,Enlace de Slack,45b022ae
 SLIDES_URL,URL de las diapositivas,2d6bb620
+SMALL_TREES_COUNT_HIGH,Cantidad de árboles pequeños (máximo),8bd57803
+SMALL_TREES_COUNT_LOW,Cantidad de árboles pequeños (mínimo),34682b74
 SOAK,Remojar,1eb78e7b
 SOCIAL_IMPACT,Impacto social,34c0ea7c
 SOCIAL_IMPACT_INSTRUCTIONS,"Indique los beneficios directos del proyecto para la comunidad local. Los beneficios específicos podrían incluir el impacto sobre el sustento; educación y entrenamiento para la comunidad; acceso a agua limpia; apoyo para los jóvenes, las mujeres y/o las minorías; así como otros beneficios socioeconómicos y comunitarios del proyecto. Incluya los indicadores específicos que utiliza para medir el impacto sobre la comunidad, así como los resultados que ha monitoreado a lo largo del tiempo (con una longitud de media página, como máximo).",08a8aaaa
@@ -2535,6 +2542,7 @@ THREATENED,Amenazada,57ca76f3
 THUMBNAIL,Miniatura,3196d372
 TIDE,Marea,9dd490e9
 TIME,Hora,2132441e
+TIME_OF_TIDE_MEASUREMENT,Hora de la medición de la marea,08085281
 TIME_ZONE,Zona horaria,abc27841
 TIME_ZONE_REQUIRED,Zona horaria *,f1ee0610
 TIME_ZONE_SELECTED,Zona horaria: {0},4a5acdb1
