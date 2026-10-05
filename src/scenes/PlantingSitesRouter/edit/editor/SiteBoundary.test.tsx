@@ -14,7 +14,7 @@ const flags = rstest.hoisted(() => ({ boundaryFileUpload: false }));
 
 rstest.mock('src/features', () => ({
   __esModule: true,
-  default: (name: FeatureName) => name === 'Boundary File Upload' && flags.boundaryFileUpload,
+  useFeatureEnabled: (name: FeatureName) => name === 'Boundary File Upload' && flags.boundaryFileUpload,
 }));
 
 // Mapbox needs a real GL context, so stand in for the map and record the boundary handed to it.
