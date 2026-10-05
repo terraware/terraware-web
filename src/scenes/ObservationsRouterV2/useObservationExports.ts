@@ -318,6 +318,8 @@ const useObservationExports = () => {
         )
       );
 
+      data.sort((a, b) => b.monitoringPlotNumber - a.monitoringPlotNumber);
+
       return makeCsv(columnHeaders, data, false);
     },
     [strings]
@@ -401,6 +403,8 @@ const useObservationExports = () => {
         )
       );
 
+      data.sort((a, b) => b.monitoringPlotNumber - a.monitoringPlotNumber);
+
       return makeCsv(columnHeaders, data, false);
     },
     [strings]
@@ -463,6 +467,8 @@ const useObservationExports = () => {
           })
         )
       );
+
+      data.sort((a, b) => b.monitoringPlot - a.monitoringPlot);
 
       return makeCsv(columnHeaders, data, false);
     },
