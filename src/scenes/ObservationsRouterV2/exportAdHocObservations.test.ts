@@ -98,6 +98,17 @@ const expectedHeaders = [
 ];
 
 describe('makeAdHocObservationsCsv', () => {
+  test('exports numeric plot numbers descending without reordering the input observations', async () => {
+    const observations = [2, 10, 100].map((monitoringPlotNumber) => makeAdHocObservation({}, { monitoringPlotNumber }));
+    const originalOrder = [...observations];
+
+    const rows = await readCsvRows(makeAdHocObservationsCsv(observations));
+
+    expect(rows.slice(1).map((row) => row[0])).toEqual(['100', '10', '2']);
+    expect(observations).toEqual(originalOrder);
+    expect(observations.map(({ adHocPlot }) => adHocPlot.monitoringPlotNumber)).toEqual([2, 10, 100]);
+  });
+
   test('starts with the ad-hoc plant monitoring column headers', async () => {
     const rows = await readCsvRows(makeAdHocObservationsCsv([makeAdHocObservation()]));
 

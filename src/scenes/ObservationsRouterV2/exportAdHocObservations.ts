@@ -84,7 +84,10 @@ export const makeAdHocObservationsCsv = (adHocObservations: AdHocObservationResu
     },
   ];
 
-  const data = adHocObservations.map((adHocObservation: AdHocObservationResults) => {
+  const sortedObservations = [...adHocObservations].sort(
+    (a, b) => b.adHocPlot.monitoringPlotNumber - a.adHocPlot.monitoringPlotNumber
+  );
+  const data = sortedObservations.map((adHocObservation: AdHocObservationResults) => {
     const aggregateSpeciesData = adHocObservation.adHocPlot.species.reduce(
       (acc, species) => {
         acc.cumulativeDead += species.totalDead || 0;
