@@ -144,7 +144,7 @@ describe('makeAdHocObservationsCsv', () => {
     const observations = [2, 10, 100].map((monitoringPlotNumber) => makeAdHocObservation({}, { monitoringPlotNumber }));
     const originalOrder = [...observations];
 
-    const rows = await readCsvRows(makeAdHocObservationsCsv(observations));
+    const rows = await readCsvRows(makeAdHocObservationsCsv(observations, makePlantingSitesById()));
 
     expect(rows.slice(1).map((row) => row[0])).toEqual(['100', '10', '2']);
     expect(observations).toEqual(originalOrder);
