@@ -1,27 +1,31 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Icon } from '@terraware/web-components';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import centroid from '@turf/centroid';
-import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 import _ from 'lodash';
 
 import { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
 import EditableMap from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
+import { useFeatureEnabled } from 'src/features';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
+import { ParseDraftPlantingSiteBoundaryResponsePayload } from 'src/queries/generated/draftPlantingSites';
 import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
 import StepTitleDescription, { Description } from './StepTitleDescription';
+import UploadBoundaryModal from './UploadBoundaryModal';
 import { OnValidate } from './types';
-import { boundingAreaHectares, defaultStratumPayload, stratumNameGenerator } from './utils';
-import { findErrors } from './utils';
+import { boundingAreaHectares, defaultStratumPayload, findErrors, stratumNameGenerator } from './utils';
 
 export type SiteBoundaryProps = {
   onValidate?: OnValidate;
@@ -52,6 +56,12 @@ const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollec
         features: [toFeature(boundary, {}, id)],
       };
 
+// the parse endpoint hands back a bare geometry; the map works in feature collections
+const featureCollectionOf = (geometry: MultiPolygon | Polygon, id: number): FeatureCollection => ({
+  type: 'FeatureCollection',
+  features: [toFeature(geometry, {}, id)],
+});
+
 // undo redo stack to capture site boundary and errors
 type Stack = {
   errorAnnotations?: Feature[];
@@ -70,7 +80,14 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
 
   const [mode, setMode] = useState<MapEditorMode>();
   const snackbar = useSnackbar();
+  const theme = useTheme();
   const { activeLocale } = useLocalization();
+
+  const fileUploadEnabled = useFeatureEnabled('Boundary File Upload');
+  const [method, setMethod] = useState<BoundaryMethod | undefined>();
+  const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
+  // EditableMap only computes its view state on mount, so remount it to fit an uploaded boundary
+  const [mapKey, setMapKey] = useState<number>(0);
 
   // construct union of multipolygons
   const boundary = useMemo<MultiPolygon | undefined>(
@@ -123,6 +140,19 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     if (!activeLocale) {
       return [];
     }
+
+    if (fileUploadEnabled) {
+      return [
+        {
+          text:
+            site.siteType === 'detailed'
+              ? strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION
+              : `${strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION} ${strings.SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE}`,
+        },
+        { text: strings.SITE_BOUNDARY_UPLOAD_TUTORIAL, hasTutorial: true },
+      ];
+    }
+
     const data: Description[] = [
       {
         text:
@@ -150,7 +180,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     }
 
     return data;
-  }, [activeLocale, mode, site.siteType]);
+  }, [activeLocale, fileUploadEnabled, mode, site.siteType]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {
@@ -165,45 +195,97 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   /**
    * Check for errors and mark annotations.
    */
-  const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) => {
-    const newBoundary = (editableBoundary && unionMultiPolygons(editableBoundary)) || undefined;
-    const stratum = createStratumWith(newBoundary);
-    const strata = stratum ? [stratum] : [];
-    const errors = await findErrors(
-      {
-        ...site,
-        boundary: newBoundary,
-        strata,
-      },
-      'site_boundary',
-      []
-    );
+  const onEditableBoundaryChanged = useCallback(
+    async (editableBoundary?: FeatureCollection) => {
+      const newBoundary = (editableBoundary && unionMultiPolygons(editableBoundary)) || undefined;
+      const stratum = createStratumWith(newBoundary);
+      const strata = stratum ? [stratum] : [];
+      const errors = await findErrors(
+        {
+          ...site,
+          boundary: newBoundary,
+          strata,
+        },
+        'site_boundary',
+        []
+      );
 
-    setSiteBoundaryData({
-      errorAnnotations: errors,
-      siteBoundary: editableBoundary,
-    });
-  };
+      setSiteBoundaryData({
+        errorAnnotations: errors,
+        siteBoundary: editableBoundary,
+      });
+    },
+    // setSiteBoundaryData is not stable: it closes over the undo/redo stack index, so a callback
+    // that pins an older copy will push onto a truncated stack and leave the index out of range
+    [setSiteBoundaryData, site]
+  );
+
+  const onSelectMethod = useCallback((selected: BoundaryMethod) => {
+    setMethod(selected);
+    setShowUploadModal(selected === 'upload');
+  }, []);
+
+  const onCloseUploadModal = useCallback(() => {
+    setShowUploadModal(false);
+    setMethod((current) => (current === 'upload' ? undefined : current));
+  }, []);
+
+  const onUploadSuccess = useCallback(
+    (parsed: ParseDraftPlantingSiteBoundaryResponsePayload) => {
+      const geometry = parsed.geometry as MultiPolygon | Polygon;
+
+      setMethod('upload');
+      setShowUploadModal(false);
+
+      // the remount has to wait for the boundary, since EditableMap fits its bounds on mount and
+      // applying the boundary is async
+      const apply = async () => {
+        await onEditableBoundaryChanged(featureCollectionOf(geometry, site.id));
+        setMapKey((current) => current + 1);
+      };
+
+      void apply();
+    },
+    [onEditableBoundaryChanged, site.id]
+  );
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
-        minHeight='152px'
+        minHeight={fileUploadEnabled ? '72px' : '152px'}
+        title={strings.SITE_BOUNDARY}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
         tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
       />
-      <EditableMap
-        editableBoundary={siteBoundaryData?.siteBoundary}
-        errorAnnotations={errorAnnotations}
-        onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
-        onRedo={redo}
-        onUndo={undo}
-        setMode={setMode}
-        showSearchBox
-      />
+      {fileUploadEnabled && (
+        <>
+          <Box display='flex' alignItems='center' gap={theme.spacing(0.75)} marginBottom={theme.spacing(2.5)}>
+            <Icon name='info' size='small' style={{ fill: theme.palette.TwClrIcnSecondary, flex: 'none' }} />
+            <Typography fontSize='12px' fontWeight={400} lineHeight='16px' color={theme.palette.TwClrTxtSecondary}>
+              {strings.SITE_BOUNDARY_MAX_BOUNDING_BOX}
+            </Typography>
+          </Box>
+        </>
+      )}
+      <Box display='flex' flexDirection='column' flexGrow={1} position='relative'>
+        <EditableMap
+          key={mapKey}
+          editableBoundary={siteBoundaryData?.siteBoundary}
+          errorAnnotations={errorAnnotations}
+          onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
+          onRedo={redo}
+          onUndo={undo}
+          setMode={setMode}
+          showSearchBox
+        />
+        {fileUploadEnabled && !boundary && !method && <BoundaryMethodChooser onSelect={onSelectMethod} />}
+        {fileUploadEnabled && showUploadModal && (
+          <UploadBoundaryModal onClose={onCloseUploadModal} onSuccess={onUploadSuccess} />
+        )}
+      </Box>
     </Box>
   );
 }
