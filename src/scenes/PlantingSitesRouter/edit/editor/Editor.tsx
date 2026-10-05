@@ -23,6 +23,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import CloseSetupConfirmation from './CloseSetupConfirmation';
 import Details from './Details';
 import Exclusions from './Exclusions';
 import Form, { PlantingSiteStep } from './Form';
@@ -86,6 +87,14 @@ export default function Editor(props: EditorProps): JSX.Element {
   const [baselineSite, setBaselineSite] = useState(site);
   const [mapDirty, setMapDirty] = useState(false);
   const [plantingSite, setPlantingSite, onChange] = useForm({ ...site });
+  const [showCloseConfirmation, setShowCloseConfirmation] = useState<boolean>(false);
+
+  const isDirty =
+    mapDirty ||
+    plantingSite.name !== baselineSite.name ||
+    (plantingSite.description ?? '') !== (baselineSite.description ?? '') ||
+    (plantingSite.timeZone ?? null) !== (baselineSite.timeZone ?? null) ||
+    (plantingSite.projectId ?? null) !== (baselineSite.projectId ?? null);
 
   const onFinalizeSuccess = useCallback(
     (plantingSiteId: number) => {
@@ -195,10 +204,15 @@ export default function Editor(props: EditorProps): JSX.Element {
     return stepIndex;
   }, [currentStep, steps]);
 
-  const onCancel = useCallback(() => {
-    // TODO: confirm with user?
-    goToPlantingSites();
-  }, [goToPlantingSites]);
+  const onClose = useCallback(() => {
+    if (isDirty) {
+      setShowCloseConfirmation(true);
+    } else {
+      goToPlantingSites();
+    }
+  }, [goToPlantingSites, isDirty]);
+
+  const onKeepEditing = useCallback(() => setShowCloseConfirmation(false), []);
 
   const onSave = useCallback(
     (close: boolean) => () => {
@@ -253,6 +267,11 @@ export default function Editor(props: EditorProps): JSX.Element {
     ]
   );
 
+  const onSaveAsDraft = useCallback(() => {
+    setShowCloseConfirmation(false);
+    onSave(true)();
+  }, [onSave]);
+
   /**
    * On start over, data is reset to clear all boundaries and only keep the details information.
    * Optional steps completion state is reset.
@@ -294,12 +313,6 @@ export default function Editor(props: EditorProps): JSX.Element {
     }
   }, [currentStep, isSimpleSite, showPageMessage]);
 
-  const isDirty =
-    mapDirty ||
-    plantingSite.name !== baselineSite.name ||
-    (plantingSite.description ?? '') !== (baselineSite.description ?? '') ||
-    (plantingSite.timeZone ?? null) !== (baselineSite.timeZone ?? null) ||
-    (plantingSite.projectId ?? null) !== (baselineSite.projectId ?? null);
   const busy = isCreating || isUpdating || isPending || !!onValidate;
   const isFinalStep = currentStep === steps[steps.length - 1]?.type;
 
@@ -308,6 +321,15 @@ export default function Editor(props: EditorProps): JSX.Element {
       {isPending && <BusySpinner withSkrim={true} />}
       {(isCreating || isUpdating) && <BusySpinner />}
       {showStartOver && <StartOverConfirmation onClose={onCloseStartOver} onConfirm={onStartOver} />}
+      {showCloseConfirmation && (
+        <CloseSetupConfirmation
+          isNewSite={plantingSite.id === -1}
+          onDiscard={goToPlantingSites}
+          onKeepEditing={onKeepEditing}
+          onSaveAsDraft={onSaveAsDraft}
+          siteName={plantingSite.name.trim()}
+        />
+      )}
       <PageHeaderWrapper alwaysVisible={!isMobile} elevated={!isMobile && isDirty} nextElement={contentElement}>
         <Box
           padding={theme.spacing(0, 0, 2, 3)}
@@ -328,7 +350,7 @@ export default function Editor(props: EditorProps): JSX.Element {
               <Button
                 id='close-planting-site-create'
                 label={strings.CLOSE}
-                onClick={onCancel}
+                onClick={onClose}
                 disabled={busy}
                 priority='secondary'
                 type='passive'

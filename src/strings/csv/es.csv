@@ -356,9 +356,12 @@ CLICK_UP_LINK,Enlace de ClickUp,787363a6
 CLIMATE,Clima,63ba44ee
 CLOSE,Cerrar,e6e3f022
 CLOSE_AND_EDIT,Cerrar y editar,1c3ea202
+CLOSE_DRAFT_SITE_SETUP_MESSAGE,Sus cambios en {0} no se han guardado. Guárdelos en su borrador o descártelos.,2fc3437d
+CLOSE_NEW_SITE_SETUP_MESSAGE,{0} aún no se ha guardado. Guárdelo como borrador para terminar la configuración más tarde o descártelo.,7ca714c3
 CLOSE_PLANTING_SEASON,Cerrar temporada de plantación,fc3b2abc
 CLOSE_PLANTING_SEASON_CONFIRM,"Está a punto de cerrar {0}. Al cerrar, la temporada se marcará como cerrada y no se podrán realizar más cambios. Esta acción no se puede deshacer.",ee1f53f1
 CLOSE_SEASON,Cerrar temporada,72b4448a
+CLOSE_SITE_SETUP,¿Cerrar la configuración del sitio?,1304ca0d
 CLOSED,Cerrado,7b8d0429
 COLLECTED_FROM,Recolectado de,ffc6ad60
 COLLECTING_SITE,Lugar de recolección,7491b42b
@@ -541,6 +544,9 @@ DETAILS,Detalles,c13bd424
 DEV_SERVER_ERROR,Servidor no disponible (se puede reiniciar con nuevos cambios en el código). ¿Volver a cargar?,d3be39f0
 DIAMETER_AT_BREAST_HEIGHT,Diámetro a la altura del pecho (DAP) en la madurez (cm),6b42a16f
 DIFFICULT_ACCESSIBILITY,Accesibilidad difícil,18c83274
+DISCARD,Descartar,51a7ed1d
+DISCARD_THIS_SITE,¿Descartar este sitio?,ed8d4636
+DISCARD_UNNAMED_SITE_MESSAGE,Este sitio no se puede guardar como borrador sin un nombre. Descarte lo que ha ingresado o continúe editando para agregar un nombre.,5f5bca5b
 DISMISS,Cerrar notificación,a56709f4
 DO_NOT_USE,No usar,6950f9e5
 DOC_PRODUCER,Productor de documentos,e40f8aa1
@@ -964,6 +970,7 @@ IUCN_VULNERABLE,Vulnerable (VU),ed5dcc89
 JOIN_EVENT_NAME,Únase {0},14c4bd8e
 JUST_SAVED,Guardado recientemente,d426eaa3
 JUSTIFICATION,Justificación,88588c24
+KEEP_EDITING,Seguir editando,9f4043c6
 KEEP_ORIGINAL,Conservar original,21773616
 KEEP_VALUE,Conservar valor,092210f9
 KEY,Clave,b46ab088
@@ -1912,6 +1919,7 @@ SAVE_AND_CLOSE,Guardar y cerrar,aaa98fc6
 SAVE_AND_NEXT,Guardar y Continuar,1ca9d40a
 SAVE_AND_REQUEST,Guardar y solicitar,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Guardar y Solicitar enviará una solicitud de retiro de plantas al Vivero para esta fecha de plantación.,9f9b8d4e
+SAVE_AS_DRAFT,Guardar como borrador,2fffd988
 SAVE_OBSERVATION_DATA,Guardar datos de observación,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Sus ediciones reemplazarán cualquier dato ingresado previamente. ¿Está seguro de que desea realizar estos cambios?,b1657c44
 SAVE_PHOTOS_AND_VIDEOS,Guardar fotos y videos,d38ce0cc
