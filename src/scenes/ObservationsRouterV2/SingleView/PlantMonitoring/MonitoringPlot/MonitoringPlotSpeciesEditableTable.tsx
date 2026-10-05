@@ -75,7 +75,7 @@ export default function MonitoringPlotSpeciesEditableTable(): JSX.Element {
   const [pendingRemoval, setPendingRemoval] = useState<ObservationSpeciesResults>();
 
   // Optimistic values are merged before the empty rows are dropped, so zeroing a species out takes
-  // it off the table right away instead of leaving a row of zeroes until the refetch lands.
+  // it off the table right away.
   const monitoringPlotSpecies = useMemo(
     () =>
       allMonitoringPlotSpecies
