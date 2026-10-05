@@ -1,7 +1,7 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { BusySpinner, Dropdown, SelectT, Tabs } from '@terraware/web-components';
+import { BusySpinner, Dropdown, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import ActivitiesListView from 'src/components/ActivityLog/ActivitiesListView';
@@ -9,19 +9,14 @@ import ActivityHighlightsContent, { QuarterDropdownData } from 'src/components/A
 import { TypedActivity } from 'src/components/ActivityLog/types';
 import BreadCrumbs, { Crumb } from 'src/components/BreadCrumbs';
 import TfMain from 'src/components/common/TfMain';
-import isEnabled from 'src/features';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
 import { useFunderListActivitiesQuery } from 'src/queries/generated/funderActivities';
 import { PublishedReportPayload } from 'src/queries/generated/publishedReports';
 import { FunderProjectDetails } from 'src/types/FunderProject';
-import useQuery from 'src/utils/useQuery';
-import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ProjectProfileView from '../AcceleratorRouter/AcceleratorProjects/ProjectProfileView';
 import FunderReportTabV2 from '../FunderReport/FunderReportTabV2';
-import FunderReportView from '../FunderReport/FunderReportView';
 
 const DEAL_NAME_COUNTRY_CODE_REGEX = /^[A-Z]{3}_/;
 
@@ -36,9 +31,6 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { strings } = useLocalization();
-  const query = useQuery();
-  const location = useStateLocation();
-  const navigate = useSyncNavigate();
   const { currentData: funderActivitiesData, isFetching } = useFunderListActivitiesQuery({
     projectId: projectDetails.projectId,
     includeMedia: true,
@@ -49,28 +41,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
     [funderActivitiesData]
   );
 
-  const [selectedReport, setSelectedReport] = useState<PublishedReportPayload>();
   const [quarterDropdownData, setQuarterDropdownData] = useState<QuarterDropdownData | undefined>(undefined);
-
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
-
-  useEffect(() => {
-    // FunderReportTabV2 lists its own reports and consumes the reportId param itself
-    if (newReportTabEnabled) {
-      return;
-    }
-
-    if (!selectedReport && publishedReports?.length) {
-      if (query.get('reportId')) {
-        const found = publishedReports?.find((r) => r.reportId.toString() === query.get('reportId'));
-        setSelectedReport(found || publishedReports[0]);
-        query.delete('reportId');
-        navigate(getLocation(location.pathname, location, query.toString()), { replace: true });
-      } else {
-        setSelectedReport(publishedReports[0]);
-      }
-    }
-  }, [location, navigate, newReportTabEnabled, query, publishedReports, selectedReport]);
 
   const projectDetailsDealName = projectDetails?.dealName;
 
@@ -94,11 +65,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
       {
         id: 'report',
         label: strings.REPORT,
-        children: newReportTabEnabled ? (
-          <FunderReportTabV2 selectedProjectId={projectDetails.projectId} />
-        ) : (
-          <FunderReportView selectedProjectId={projectDetails.projectId} selectedReport={selectedReport} />
-        ),
+        children: <FunderReportTabV2 selectedProjectId={projectDetails.projectId} />,
       },
       ...(activities.length > 0
         ? [
@@ -123,7 +90,7 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
           ]
         : []),
     ];
-  }, [projectDetails, publishedReports, newReportTabEnabled, selectedReport, strings, activities]);
+  }, [projectDetails, publishedReports, strings, activities]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',
@@ -165,27 +132,6 @@ const ProjectView = ({ projectDetails, includeCrumbs, goToAllProjects, published
             <Typography fontWeight={600} lineHeight={'40px'} fontSize={'24px'}>
               {strippedDealName}
             </Typography>
-            {!newReportTabEnabled && activeTab === 'report' && (publishedReports?.length ?? 0) > 0 && (
-              <SelectT<PublishedReportPayload>
-                id='report'
-                label={''}
-                placeholder={strings.SELECT}
-                options={publishedReports}
-                onChange={(_report: PublishedReportPayload) => {
-                  setSelectedReport(_report);
-                }}
-                selectedValue={selectedReport}
-                isEqual={(a: PublishedReportPayload, b: PublishedReportPayload) => a.reportId === b.reportId}
-                renderOption={(_report: PublishedReportPayload) =>
-                  `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`
-                }
-                displayLabel={(_report: PublishedReportPayload) =>
-                  `${_report?.startDate?.split('-')[0]} ${_report?.quarter}`
-                }
-                toT={(name: string) => ({ name }) as unknown as PublishedReportPayload}
-                selectStyles={{ inputContainer: { 'margin-top': isMobile ? theme.spacing(2) : 0 } }}
-              />
-            )}
             {activeTab === 'quarterlyHighlights' &&
               quarterDropdownData &&
               quarterDropdownData.dropdownOptions.length > 0 && (

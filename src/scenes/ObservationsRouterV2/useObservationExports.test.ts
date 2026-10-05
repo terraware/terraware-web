@@ -60,12 +60,23 @@ beforeEach(() => {
 });
 
 describe('downloadBiomassObservationsZip', () => {
+  test.each([false, undefined])('omits the filtered suffix when hasFilters is %s', async (hasFilters) => {
+    const { result } = renderHook(useObservationExports);
+    await result.current.downloadBiomassObservationsZip('Site', [{ observationId: 7 }], hasFilters);
+
+    expect(downloadZipFile).toHaveBeenCalledTimes(1);
+    expect(rstest.mocked(downloadZipFile).mock.calls[0][0].dirName).toMatch(
+      /^Site_Ad Hoc Biomass Monitoring plots_\d{4}-\d{2}-\d{2}$/
+    );
+  });
+
   test('exports all filtered IDs in three bulk CSV requests without per-row lookups', async () => {
     const { result } = renderHook(useObservationExports);
     const ids = [9, 3, 8, 1, 7, 2, 6];
     await result.current.downloadBiomassObservationsZip(
       'Site',
-      ids.map((observationId) => ({ observationId }))
+      ids.map((observationId) => ({ observationId })),
+      true
     );
 
     for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
@@ -130,6 +141,19 @@ describe('downloadBiomassObservationDetails', () => {
 });
 
 describe('downloadAdHocObservationsZip', () => {
+  test.each([false, undefined])('omits the filtered suffix when hasFilters is %s', async (hasFilters) => {
+    const { result } = renderHook(useObservationExports);
+    await result.current.downloadAdHocObservationsZip({
+      adHocObservationsResults: [],
+      biomassObservationIds: [7],
+      siteName: 'Site',
+      hasFilters,
+    });
+
+    expect(downloadZipFile).toHaveBeenCalledTimes(1);
+    expect(rstest.mocked(downloadZipFile).mock.calls[0][0].dirName).toBe('Site-Ad Hoc Plots');
+  });
+
   const monitoringResults = [{ observationId: 11 }] as AdHocObservationResults[];
   const biomassFiles = [
     { fileName: expect.stringMatching(/-Plot$/), content: 'plot 7,24' },
@@ -144,6 +168,7 @@ describe('downloadAdHocObservationsZip', () => {
       adHocObservationsResults: monitoringResults,
       biomassObservationIds: [7, 24],
       siteName: 'Site',
+      hasFilters: true,
     });
 
     for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
@@ -165,6 +190,7 @@ describe('downloadAdHocObservationsZip', () => {
       adHocObservationsResults: monitoringResults,
       biomassObservationIds: [],
       siteName: 'Site',
+      hasFilters: true,
     });
 
     for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
@@ -185,6 +211,7 @@ describe('downloadAdHocObservationsZip', () => {
       adHocObservationsResults: [],
       biomassObservationIds: [7, 24],
       siteName: 'Site',
+      hasFilters: true,
     });
 
     for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
@@ -206,6 +233,7 @@ describe('downloadAdHocObservationsZip', () => {
       adHocObservationsResults: [],
       biomassObservationIds: [],
       siteName: 'Site',
+      hasFilters: true,
     });
 
     for (const trigger of Object.values(mocks)) {

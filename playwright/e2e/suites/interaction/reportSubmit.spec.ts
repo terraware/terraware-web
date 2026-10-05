@@ -43,13 +43,12 @@ test.describe('ReportSubmitTests', () => {
     expect(listResponse.ok()).toBeTruthy();
 
     const listBody = await listResponse.json();
-    const reports: { id: number; status: string; startDate: string }[] = listBody.reports ?? [];
+    const reports: { id: number; status: string }[] = listBody.reports ?? [];
     expect(reports.length).toBeGreaterThan(0);
 
-    // Pick the first report (earliest quarter) with "Not Submitted" status.
-    const notSubmittedReport = reports.find((r) => r.status === 'Not Submitted');
-    expect(notSubmittedReport).toBeDefined();
-    reportId = notSubmittedReport!.id;
+    // Reports are listed latest first, and the reports pages open the latest report by default.
+    expect(reports[0].status).toBe('Not Submitted');
+    reportId = reports[0].id;
   });
 
   test('Navigate to Reports and view a Not Submitted report', async ({ page }) => {
@@ -58,15 +57,9 @@ test.describe('ReportSubmitTests', () => {
     await expect(page.getByRole('button', { name: 'Reports', ...exactOptions })).toBeVisible({ timeout: 10000 });
     await page.getByRole('button', { name: 'Reports', ...exactOptions }).click();
 
-    // The reports table should load and contain the report.
-    await expect(page.getByText('Not Submitted').first()).toBeVisible({ timeout: 10000 });
+    // The reports page opens the latest report.
+    await page.waitForURL(new RegExp(`/reports/${reportId}$`), { timeout: 10000 });
 
-    // Click the first report link to open the report detail view.
-    const reportLink = page.locator('a').filter({ hasText: /^2025/ }).first();
-    await expect(reportLink).toBeVisible();
-    await reportLink.click();
-
-    // Confirm we are on the report view page.
     await expect(page.getByRole('button', { name: 'Submit for Approval' })).toBeVisible({ timeout: 10000 });
     await expect(page.getByText('Not Submitted')).toBeVisible();
   });
@@ -122,18 +115,8 @@ test.describe('ReportSubmitTests', () => {
     await expect(page.getByRole('button', { name: 'View Reports' })).toBeVisible({ timeout: 10000 });
     await page.getByRole('button', { name: 'View Reports' }).click();
 
-    // The reports list should show the submitted report.
-    await expect(page.getByText('Submitted', exactOptions)).toBeVisible({ timeout: 10000 });
-
-    // Click the report link to open the console report view.
-    const reportLink = page
-      .locator('tr')
-      .filter({ has: page.getByText('Submitted', { exact: true }) })
-      .locator('a')
-      .filter({ hasText: /^2025/ });
-    await expect(reportLink).toBeVisible();
-    await reportLink.click();
-    await page.waitForURL(/\/reports\/\d+$/);
+    // The reports page opens the latest report.
+    await page.waitForURL(new RegExp(`/reports/${reportId}$`), { timeout: 10000 });
     await expect(page.getByText('Submitted', exactOptions)).toBeVisible({ timeout: 10000 });
     await expect(page.getByRole('button', { name: 'Approve' })).toBeVisible();
 
