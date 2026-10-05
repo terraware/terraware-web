@@ -190,8 +190,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       <StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
-        minHeight='180px'
-        title={strings.SITE_BOUNDARY}
+        minHeight='152px'
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
         tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}

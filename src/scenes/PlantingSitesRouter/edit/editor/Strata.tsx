@@ -362,7 +362,6 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
       <StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-stratum-boundaries-instructions'
-        title={strings.ADDING_STRATUM_BOUNDARIES}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_stratum_boundary_instructions_video'
         tutorialTitle={strings.ADDING_STRATUM_BOUNDARIES}
