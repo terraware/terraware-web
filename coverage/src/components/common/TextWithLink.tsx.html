@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">63.63% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>7/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>9/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>1/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">63.63% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/11</span>
+                <span class='fraction'>7/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -167,23 +167,23 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">88x</span>
+<span class="cline-any cline-yes">88x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">88x</span>
+<span class="cline-any cline-yes">88x</span>
+<span class="cline-any cline-yes">88x</span>
+<span class="cline-any cline-yes">88x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">88x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -225,7 +225,7 @@ export interface TextWithLinkProps {
  * @param href The location to link to.
  * @param isExternal Whether the href is an external url.
  */
-export default function <span class="fstat-no" title="function not covered" >TextWithLink(</span>{
+export default function TextWithLink({
   fontSize,
   handlePrefix,
   handleSuffix,
@@ -235,35 +235,35 @@ export default function <span class="fstat-no" title="function not covered" >Tex
   style,
   text,
 }: TextWithLinkProps): JSX.Element {
-  const linkStart = <span class="cstat-no" title="statement not covered" >text.indexOf('[');</span>
-  const linkEnd = <span class="cstat-no" title="statement not covered" >text.indexOf(']');</span>
+  const linkStart = text.indexOf('[');
+  const linkEnd = text.indexOf(']');
   let prefix: string;
   let linkText: string;
   let suffix: string;
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  if (linkStart &gt;= 0 &amp;&amp; linkEnd &gt;= 0 &amp;&amp; linkStart &lt; linkEnd) {</span>
-<span class="cstat-no" title="statement not covered" >    prefix = text.substring(0, linkStart);</span>
-<span class="cstat-no" title="statement not covered" >    linkText = text.substring(linkStart + 1, linkEnd);</span>
-<span class="cstat-no" title="statement not covered" >    suffix = text.substring(linkEnd + 1);</span>
+  <span class="missing-if-branch" title="else path not taken" >E</span>if (linkStart &gt;= 0 &amp;&amp; linkEnd &gt;= 0 &amp;&amp; linkStart &lt; linkEnd) {
+    prefix = text.substring(0, linkStart);
+    linkText = text.substring(linkStart + 1, linkEnd);
+    suffix = text.substring(linkEnd + 1);
   } else {
 <span class="cstat-no" title="statement not covered" >    prefix = '';</span>
 <span class="cstat-no" title="statement not covered" >    linkText = text;</span>
 <span class="cstat-no" title="statement not covered" >    suffix = '';</span>
   }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;&gt;
       {handlePrefix ? handlePrefix(prefix) : prefix}
-      {isExternal ? (
+      {isExternal ? <span class="branch-0 cbranch-no" title="branch not covered" >(</span>
         &lt;Link onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >window.open(href)}</span></span> fontSize={fontSize ?? '16px'} style={style}&gt;
           {linkText}
         &lt;/Link&gt;
       ) : (
-        &lt;Link to={href} onClick={onClick} fontSize={fontSize ?? '16px'} style={style}&gt;
+        &lt;Link to={href} onClick={onClick} fontSize={fontSize ?? <span class="branch-1 cbranch-no" title="branch not covered" >'16px'}</span> style={style}&gt;
           {linkText}
         &lt;/Link&gt;
       )}
-      {handleSuffix ? handleSuffix(suffix) : suffix}
+      {handleSuffix ? <span class="branch-0 cbranch-no" title="branch not covered" >handleSuffix(suffix) </span>: suffix}
     &lt;/&gt;
   );
 }
@@ -274,7 +274,7 @@ export default function <span class="fstat-no" title="function not covered" >Tex
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-05T23:01:36.438Z
+                at 2026-10-05T23:07:40.536Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
