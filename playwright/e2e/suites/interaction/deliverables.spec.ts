@@ -327,6 +327,7 @@ test.describe('DeliverableTests', () => {
     await selectSpeciesModalDropdown('Native/Non-Native', 'Non-Native', page);
     await fillSpeciesModalRationale('This is my other rationale.', page);
     await saveSpeciesModal(page);
+    await expect(page.getByRole('button', { name: 'Add to Project' })).toBeHidden();
 
     await deleteDeliverableSpecies('Coconut', page);
 
