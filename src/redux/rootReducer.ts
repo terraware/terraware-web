@@ -8,7 +8,6 @@ import acceleratorProjectSpeciesReducers from './features/acceleratorProjectSpec
 import applicationReducers from './features/application/applicationSlice';
 import deliverablesReducers from './features/deliverables/deliverablesSlice';
 import documentProducerReducers from './features/documentProducer';
-import eventReducers from './features/events/eventsSlice';
 import fundingEntitiesReducers from './features/funder/entities/fundingEntitiesSlice';
 import funderProjectsReducers from './features/funder/projects/funderProjectsSlice';
 import gisReducers from './features/gis/gisSlice';
@@ -28,7 +27,6 @@ const reducers = {
   ...applicationReducers,
   ...deliverablesReducers,
   ...documentProducerReducers,
-  ...eventReducers,
   ...funderProjectsReducers,
   ...fundingEntitiesReducers,
   ...gisReducers,
