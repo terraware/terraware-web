@@ -1890,6 +1890,7 @@ REQUIRED_QUESTION_MARK,¿Es obligatorio?,d99ba5a7
 RESCHEDULE,Reprogramar,2bb033c0
 RESCHEDULE_OBSERVATION,Reprogramar observación,b7403925
 RESET,Restablecer,d51ffc01
+RESET_BOUNDARY_SETUP,Restablecer configuración de límites,ef1aee2b
 RESET_COLUMNS,Restablecer columnas,871d2d56
 RESET_INDICATOR,Restablecer indicador,bb1f7ec8
 RESET_INDICATOR_CONFIRM,¿Está seguro de que desea restablecer este indicador? Será reemplazado con los datos de seguimiento actuales de Terraware.,9d1f1dfb

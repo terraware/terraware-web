@@ -65,8 +65,7 @@ export default function Exclusions({ onValidate, onDirtyChange, site }: Exclusio
         return;
       }
       const exclusion = exclusions ? unionMultiPolygons(exclusions) : null;
-      const data = exclusion ? { exclusion } : undefined;
-      onValidate.apply(false, data, !!data);
+      onValidate.apply(false, { exclusion: exclusion ?? undefined });
     }
   }, [exclusions, exclusionsData?.errorAnnotations, onValidate, snackbar]);
 

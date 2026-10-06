@@ -136,12 +136,15 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
 
   useEffect(() => {
     if (onValidate) {
-      if ((!boundary && !onValidate.isSaveAndClose) || errorAnnotations?.length) {
+      if ((!boundary && !onValidate.allowIncomplete) || errorAnnotations?.length) {
         snackbar.toastError(
           errorAnnotations?.length ? strings.SITE_BOUNDARY_ERRORS : strings.SITE_BOUNDARY_ABSENT_WARNING
         );
         onValidate.apply(true);
         return;
+      } else if (geometrySnapshot === initialGeometry && site.strata) {
+        // keep strata from later steps when the boundary is unchanged
+        onValidate.apply(false, { boundary });
       } else {
         // create one stratum per disjoint polygon in the site boundary
         const stratum = createStratumWith(boundary);
@@ -149,7 +152,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
         onValidate.apply(false, { boundary, strata });
       }
     }
-  }, [boundary, errorAnnotations, onValidate, site.id, snackbar]);
+  }, [boundary, errorAnnotations, geometrySnapshot, initialGeometry, onValidate, site.strata, snackbar]);
 
   const description = useMemo<Description[]>(() => {
     if (!activeLocale) {

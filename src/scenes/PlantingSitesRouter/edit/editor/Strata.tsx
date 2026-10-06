@@ -116,7 +116,7 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
       // check for missing stratum names
       const missingStratumNames =
         !missingStrata && strata.features.some((stratum) => !stratum?.properties?.name?.trim());
-      const missingData = (missingStrata || missingStratumNames) && !onValidate.isSaveAndClose;
+      const missingData = (missingStrata || missingStratumNames) && !onValidate.allowIncomplete;
 
       if (strataTooSmall || missingData) {
         snackbar.toastError(
@@ -133,26 +133,25 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
           const multiPolygon = toMultiPolygon(geometry);
 
           if (multiPolygon) {
-            return defaultStratumPayload({
-              boundary: multiPolygon,
-              id: properties?.id ?? index,
-              initialPlantingDensity: properties?.initialPlantingDensity ?? 1500,
-              name: properties?.name ?? '',
-            });
+            const id = properties?.id ?? index;
+            const initialPlantingDensity = properties?.initialPlantingDensity ?? 1500;
+            const name = properties?.name ?? '';
+            const existing = site.strata?.find((s) => s.id === id);
+            // keep substrata from later steps when the stratum boundary is unchanged
+            if (existing && JSON.stringify(existing.boundary) === JSON.stringify(multiPolygon)) {
+              return { ...existing, initialPlantingDensity, name };
+            }
+            return defaultStratumPayload({ boundary: multiPolygon, id, initialPlantingDensity, name });
           } else {
             return undefined;
           }
         })
         .filter((stratum) => !!stratum) as MinimalStratum[] | undefined;
 
-      const numStrata = _strata?.length ?? 0;
-
-      // callback with status of error and completion of this step
-      const completed = numStrata > 1;
       const data = _strata ? { strata: _strata } : undefined;
-      onValidate.apply(data === undefined, data, completed);
+      onValidate.apply(data === undefined, data);
     }
-  }, [onValidate, snackbar, strata, strataData?.errorAnnotations]);
+  }, [onValidate, site.strata, snackbar, strata, strataData?.errorAnnotations]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!strata?.features) {
