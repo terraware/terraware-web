@@ -13,10 +13,18 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyListPlantingSeasonsQuery } from 'src/queries/generated/plantingSeasons';
 import { useLazyListPlantingSitesQuery } from 'src/queries/generated/plantingSites';
 import { useLazyListBatchesForWithdrawQuery } from 'src/queries/search/batchesForWithdraw';
-import { PlantingDateRequestRow, useLazyListPlantingDateRequestsQuery } from 'src/queries/search/plantingDateRequests';
+import {
+  PlantingDateRequestRow,
+  PlantingDateRequestStatus,
+  useLazyListPlantingDateRequestsQuery,
+} from 'src/queries/search/plantingDateRequests';
 import { getMediumDate } from 'src/utils/dateFormatter';
 
 import WithdrawFromBatchesModal from './WithdrawFromBatchesModal';
+
+const ALL_OPEN_FILTER = 'allOpen';
+
+type StatusFilterValue = typeof ALL_OPEN_FILTER | PlantingDateRequestStatus;
 
 const PlantingDateRequestsTabContent = (): JSX.Element => {
   const theme = useTheme();
@@ -25,6 +33,7 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
   const { species } = useOrganizationSpecies();
   const organizationId = selectedOrganization?.id;
 
+  const [statusFilter, setStatusFilter] = useState<StatusFilterValue>(ALL_OPEN_FILTER);
   const [plantingSiteId, setPlantingSiteId] = useState<number | undefined>(undefined);
   const [plantingSeasonId, setPlantingSeasonId] = useState<number | undefined>(undefined);
   const [speciesId, setSpeciesId] = useState<number | undefined>(undefined);
@@ -75,11 +84,24 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
   useEffect(() => {
     if (organizationId) {
       void listPlantingDateRequests(
-        { organizationId, plantingSiteId, plantingSeasonId: effectivePlantingSeasonId, speciesId: effectiveSpeciesId },
+        {
+          organizationId,
+          plantingSiteId,
+          plantingSeasonId: effectivePlantingSeasonId,
+          speciesId: effectiveSpeciesId,
+          statuses: statusFilter === ALL_OPEN_FILTER ? undefined : [statusFilter],
+        },
         true
       );
     }
-  }, [listPlantingDateRequests, organizationId, plantingSiteId, effectivePlantingSeasonId, effectiveSpeciesId]);
+  }, [
+    listPlantingDateRequests,
+    organizationId,
+    plantingSiteId,
+    effectivePlantingSeasonId,
+    effectiveSpeciesId,
+    statusFilter,
+  ]);
 
   useEffect(() => {
     if (selectedPlantingSiteHasNoSeasons) {
@@ -89,6 +111,16 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
       setSpeciesId(undefined);
     }
   }, [selectedPlantingSiteHasNoSeasons, selectedSpeciesIsUnavailable]);
+
+  const statusOptions = useMemo<DropdownItem[]>(
+    () => [
+      { label: strings.ALL_OPEN, value: ALL_OPEN_FILTER },
+      { label: strings.NEW, value: 'Pending' },
+      { label: strings.PARTIALLY_FULFILLED, value: 'Partial' },
+      { label: strings.FULFILLED, value: 'Fulfilled' },
+    ],
+    [strings]
+  );
 
   const plantingSiteOptions = useMemo<DropdownItem[]>(
     () => [
@@ -127,7 +159,9 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
   const emptyStateMessage = selectedPlantingSiteHasNoSeasons
     ? strings.NO_PENDING_REQUESTS_FOR_SELECTED_PLANTING_SITE
     : hasNoRequests
-      ? strings.NO_PENDING_REQUESTS
+      ? statusFilter === ALL_OPEN_FILTER
+        ? strings.NO_PENDING_REQUESTS
+        : strings.NO_REQUESTS_FOR_SELECTED_FILTERS
       : undefined;
   const [withdrawRequest, setWithdrawRequest] = useState<PlantingDateRequestRow | undefined>(undefined);
   const [isPreparingWithdraw, setIsPreparingWithdraw] = useState(false);
@@ -158,6 +192,16 @@ const PlantingDateRequestsTabContent = (): JSX.Element => {
       </Typography>
 
       <Box display='flex' gap={theme.spacing(2)} flexWrap='wrap' marginBottom={theme.spacing(2)}>
+        <Box minWidth='220px'>
+          <Dropdown
+            id='filter-status'
+            label=''
+            options={statusOptions}
+            selectedValue={statusFilter}
+            onChange={(value) => setStatusFilter(value as StatusFilterValue)}
+            fullWidth
+          />
+        </Box>
         <Box minWidth='220px'>
           <Dropdown
             id='filter-planting-site'
@@ -366,21 +410,21 @@ const RequestStatusBadge = ({ status }: { status: string }): JSX.Element | null 
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
           labelColor: theme.palette.TwClrTxtWarning,
-          label: strings.REQUEST_PENDING,
+          label: strings.NEW,
         };
       case 'Partial':
         return {
           backgroundColor: theme.palette.TwClrBgWarningTertiary,
           borderColor: theme.palette.TwClrBrdrWarning,
           labelColor: theme.palette.TwClrTxtWarning,
-          label: strings.PARTIAL,
+          label: strings.PARTIALLY_FULFILLED,
         };
       case 'Fulfilled':
         return {
           backgroundColor: theme.palette.TwClrBgSuccessTertiary,
           borderColor: theme.palette.TwClrBrdrSuccess,
           labelColor: theme.palette.TwClrTxtSuccess,
-          label: strings.COMPLETED,
+          label: strings.FULFILLED,
         };
       default:
         return {

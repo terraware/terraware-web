@@ -1,4 +1,5 @@
-import { screen } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
+import { UserEvent } from '@testing-library/user-event';
 
 /**
  * The open dialog with this title, to scope queries to it — which matters when the same label
@@ -20,4 +21,13 @@ export const dialogTitled = (title: string): HTMLElement => {
     throw new Error(`No open dialog titled "${title}"`);
   }
   return box as HTMLElement;
+};
+
+export const selectDropdownOption = async (user: UserEvent, dropdownId: string, option: string): Promise<void> => {
+  const input = document.querySelector(`#${dropdownId} input`);
+  if (!input) {
+    throw new Error(`No dropdown with id "${dropdownId}"`);
+  }
+  await user.click(input);
+  await user.click(within(await screen.findByRole('list')).getByText(option));
 };

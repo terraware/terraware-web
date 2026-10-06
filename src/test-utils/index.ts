@@ -4,6 +4,6 @@ export type { RenderWithProvidersOptions, RenderWithProvidersResult } from './re
 export { server } from './msw/server';
 export { captureRequests, mockDelete, mockError, mockGet, mockPost, mockPut } from './msw/handlers';
 
-export { dialogTitled } from './queries';
+export { dialogTitled, selectDropdownOption } from './queries';
 
 export * from './fixtures';

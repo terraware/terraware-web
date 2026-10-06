@@ -155,6 +155,7 @@ ALL_COLLECTORS,Todos los recolectores,c64a275f
 ALL_MODULES,Todos los módulos,b2571c5e
 ALL_MONITORING_TYPES,Todos los tipos de monitoreo,c27c58b4
 ALL_OBSERVATIONS,Todas las observaciones,22e68887
+ALL_OPEN,Todas abiertas,5b849f22
 ALL_PLANTING_SEASONS,Todas las temporadas de plantación,7b594902
 ALL_PLANTING_SITES,Todos los terrenos de plantación,344a80c6
 ALL_PROJECT_ZONES,Todas las áreas del proyecto,4c578acc
@@ -782,6 +783,7 @@ FROM_NURSERY,De: Vivero,21226e82
 FROM_NURSERY_REQUIRED,De: Vivero *,4bcef7f8
 FROM_PLANTING_SITE,De: Sitio de plantación,ac7278e5
 FROM_SUBSTRATUM,De: Sustrato,d8e74cd4
+FULFILLED,Completado,9e0b0ecf
 FUNDER,Financiador,a66356e6
 FUNDER_ADDED,Financiador agregado,cdcddbaf
 FUNDER_DISCLAIMER_CHECKBOX,"Al marcar esta casilla, reconozco que he leído y comprendido el aviso legal de la plataforma Terraware para financiadores.",24f1c9ed
@@ -1255,6 +1257,7 @@ NO_PROJECT_SELECTED,No se seleccionó ningún proyecto,b1bb5cd3
 NO_PROJECTS_NON_ADMIN_MSG,"Solo los administradores pueden agregar proyectos. Por favor, comuníquese con el suyo para recibir asistencia.",e023cbd0
 NO_QUANTITY_SET,No se ha establecido una cantidad.,5922c859
 NO_REASSIGNMENTS_TEXT,Seleccione un sustrato y una cantidad para reasignar para cada especie.,ff65d8d2
+NO_REQUESTS_FOR_SELECTED_FILTERS,No hay solicitudes para los filtros seleccionados.,a6a641ac
 NO_SEASON,Sin temporada,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de poder agregar y administrar sus accesiones, necesitará contar con un banco de semillas y especies dentro de Terraware. Solo los administradores pueden agregar bancos de semillas; contáctese con el suyo para obtener ayuda.",814348fe
 NO_SPECIES_ASSIGNED_TO_STRATUM,No hay especies objetivo asignadas a este estrato,7f008c4c
@@ -1443,10 +1446,10 @@ PAGINATION_FOOTER_EMPTY,0 de 0,0ee978bd
 PAGINATION_FOOTER_RANGE,{0} para {1} de {2},ce14c917
 PAPER,Papel,df5f30a1
 PAPER_PETRI_DISH,Placa petri de papel,d478bf2a
-PARTIAL,Parcial,d8250603
 PARTIAL_ERRORS,Fallaron algunas de las solicitudes. Puede intentar de nuevo más tarde.,2d39959f
 PARTIAL_ERRORS_TITLE,Errores parciales,3fca63bf
 PARTIALLY_COVERED,Parcialmente Cubierto,0b41aed4
+PARTIALLY_FULFILLED,Parcialmente completado,14ffc92a
 PASSED_PRESCREEN,Prueba de preselección aprobada,fef6edd4
 PAST_END_DATE,Fecha de finalización pasada,b3c6f181
 PENDING,Pendiente,e95f9f79
@@ -1860,7 +1863,6 @@ REPORTS_SETTINGS_EDIT_SUBTITLE,"Los informes pueden generarse a nivel de organiz
 REPORTS_SETTINGS_GENERATE_FOR_ORG,Generar informes para {0},491ef6ab
 REPORTS_SETTINGS_GENERATE_FOR_PROJECT,Generar informe de proyecto para,91439ec3
 REPORTS_SETUP_CTA,Configure los informes.,389cb962
-REQUEST_PENDING,Solicitud pendiente,3255d145
 REQUEST_REASSIGNMENT,Solicitud de reasignación,9cc0038f
 REQUEST_REASSIGNMENT_DURATION_TOOLTIP,Seleccione “Temporal” si la reasignación debe aplicarse solo a esta Observación. Seleccione “A largo plazo/permanente” si la reasignación debe aplicarse a todas las Observaciones futuras; la parcela será eliminada del grupo de parcelas disponibles para asignación.,9b42a97e
 REQUEST_REASSIGNMENT_REASON_TOOLTIP,Proporcione una justificación para la reasignación de la ubicación de esta parcela.,0ecb1f62

@@ -155,6 +155,7 @@ ALL_COLLECTORS,Tous les collecteurs,c64a275f
 ALL_MODULES,Tous les modules,b2571c5e
 ALL_MONITORING_TYPES,Tous les types de suivi,c27c58b4
 ALL_OBSERVATIONS,Toutes les observations,22e68887
+ALL_OPEN,Toutes ouvertes,5b849f22
 ALL_PLANTING_SEASONS,Toutes les saisons de plantation,7b594902
 ALL_PLANTING_SITES,Tous les sites de plantation,344a80c6
 ALL_PROJECT_ZONES,Toutes les zones du projet,4c578acc
@@ -781,6 +782,7 @@ FROM_NURSERY,De : Pépinière,21226e82
 FROM_NURSERY_REQUIRED,De : Pépinière *,4bcef7f8
 FROM_PLANTING_SITE,De : Site de plantation,ac7278e5
 FROM_SUBSTRATUM,De : Substrat,d8e74cd4
+FULFILLED,Satisfait,9e0b0ecf
 FUNDER,Bailleurs de fonds,a66356e6
 FUNDER_ADDED,Bailleur de fonds ajouté,cdcddbaf
 FUNDER_DISCLAIMER_CHECKBOX,"En cochant cette case, je reconnais avoir lu et compris la clause de non-responsabilité de la plateforme Terraware pour les bailleurs de fonds.",24f1c9ed
@@ -1254,6 +1256,7 @@ NO_PROJECT_SELECTED,Aucun projet sélectionné,b1bb5cd3
 NO_PROJECTS_NON_ADMIN_MSG,Seuls les administrateurs peuvent ajouter des projets. Veuillez contacter le vôtre pour obtenir de l'aide.,e023cbd0
 NO_QUANTITY_SET,Pas de quantité définie,5922c859
 NO_REASSIGNMENTS_TEXT,Sélectionnez un substrat et une quantité à réaffecter pour chaque espèce.,ff65d8d2
+NO_REQUESTS_FOR_SELECTED_FILTERS,Aucune demande pour les filtres sélectionnés.,a6a641ac
 NO_SEASON,Aucune saison,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Avant de pouvoir ajouter et gérer vos accessions, vous devez disposer d'une banque de semences et d'espèces dans Terraware. Seuls les administrateurs peuvent ajouter des banques de semences ; veuillez contacter le vôtre pour obtenir de l'aide.",814348fe
 NO_SPECIES_ASSIGNED_TO_STRATUM,Aucune espèce cible n'est attribuée à ce stratum,7f008c4c
@@ -1442,10 +1445,10 @@ PAGINATION_FOOTER_EMPTY,0 sur 0,0ee978bd
 PAGINATION_FOOTER_RANGE,{0} à {1} sur {2},ce14c917
 PAPER,Papier,df5f30a1
 PAPER_PETRI_DISH,Boîte de Petri en papier,d478bf2a
-PARTIAL,Partiel,d8250603
 PARTIAL_ERRORS,Certaines demandes ont échoué. Vous pouvez réessayer plus tard.,2d39959f
 PARTIAL_ERRORS_TITLE,Erreurs partielles,3fca63bf
 PARTIALLY_COVERED,Partiellement couverte,0b41aed4
+PARTIALLY_FULFILLED,Partiellement satisfait,14ffc92a
 PASSED_PRESCREEN,Présélection réussie,fef6edd4
 PAST_END_DATE,Après la date de fin,b3c6f181
 PENDING,En attente,e95f9f79
@@ -1859,7 +1862,6 @@ REPORTS_SETTINGS_EDIT_SUBTITLE,"Les rapports peuvent être générés au niveau 
 REPORTS_SETTINGS_GENERATE_FOR_ORG,Générer un rapport pour {0},491ef6ab
 REPORTS_SETTINGS_GENERATE_FOR_PROJECT,Générer un rapport de projet pour,91439ec3
 REPORTS_SETUP_CTA,Configurer les rapports,389cb962
-REQUEST_PENDING,Demande en attente,3255d145
 REQUEST_REASSIGNMENT,Demander une réaffectation,9cc0038f
 REQUEST_REASSIGNMENT_DURATION_TOOLTIP,Sélectionnez « Temporaire » si la réaffectation doit concerner uniquement cette Observation. Sélectionnez « Long terme/Permanent » si la réaffectation doit s'appliquer à toutes les Observations futures ; la parcelle sera alors retirée du groupe de parcelles disponibles pour l'affectation.,9b42a97e
 REQUEST_REASSIGNMENT_REASON_TOOLTIP,Fournissez une justification pour la réaffectation de l'emplacement de cette parcelle.,0ecb1f62
