@@ -8,11 +8,8 @@ import VariableWorkflowDetails from 'src/components/DocumentProducer/VariableWor
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { NonSelectTableCellValue } from 'src/hooks/useProjectVariablesUpdate/util';
 import { useLocalization, useUser } from 'src/providers';
-import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
-import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
+import { useUpdateVariableWorkflowDetailsMutation } from 'src/queries/generated/documentProducerVariables';
 import strings from 'src/strings';
 import {
   TableColumn,
@@ -26,6 +23,8 @@ import {
   VariableValue,
   VariableValueSelectValue,
 } from 'src/types/documentProducer/VariableValue';
+import { toWorkflowState } from 'src/utils/mutationStatus';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import { VariableTableCell, cellValue, getInitialCellValues, newValueFromEntry } from './helpers';
 
@@ -35,7 +34,6 @@ type EditableTableEditProps = {
   projectId: number;
   onFinish: (edited: boolean) => void;
   onCancel: () => void;
-  setUpdateWorkflowRequestId?: (requestId: string) => void;
   showVariableHistory: () => void;
 };
 
@@ -45,7 +43,6 @@ const EditableTableEdit = ({
   projectId,
   onCancel,
   onFinish,
-  setUpdateWorkflowRequestId,
   showVariableHistory,
 }: EditableTableEditProps) => {
   const activeLocale = useLocalization();
@@ -55,14 +52,9 @@ const EditableTableEdit = ({
   const { isAllowed } = useUser();
   const [display, setDisplay] = useState<boolean>(displayProp);
 
-  const dispatch = useAppDispatch();
-  const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
-  const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
-
-  const [updateVariableWorkflowDetailsRequestId, setUpdateVariableWorkflowDetailsRequestId] = useState<string>('');
-  const updateVariableWorkflowDetailsRequest = useAppSelector(
-    selectUpdateVariableWorkflowDetails(updateVariableWorkflowDetailsRequestId)
-  );
+  const [updateProjectVariableValues, updateValuesResult] = useUpdateProjectVariableValuesMutation();
+  const [updateVariableWorkflowDetails, updateWorkflowResult] = useUpdateVariableWorkflowDetailsMutation();
+  const snackbar = useSnackbar();
 
   const variableValue: VariableValue | undefined = (variable?.variableValues || []).find(
     (value) => value.variableId === variable.id
@@ -73,30 +65,6 @@ const EditableTableEdit = ({
     internalComment: variableValue?.internalComment,
     status: variableValue?.status || 'Not Submitted',
   });
-
-  useEffect(() => {
-    if (updateVariableValuesRequest?.status === 'success' && !updateVariableWorkflowDetailsRequestId) {
-      const request = dispatch(
-        requestUpdateVariableWorkflowDetails({
-          feedback: variableWorkflowDetails?.feedback,
-          internalComment: variableWorkflowDetails?.internalComment,
-          projectId,
-          status: variableWorkflowDetails.status,
-          variableId: variable.id,
-        })
-      );
-      setUpdateVariableWorkflowDetailsRequestId(request.requestId);
-      setUpdateWorkflowRequestId?.(request.requestId);
-    }
-  }, [
-    dispatch,
-    projectId,
-    setUpdateWorkflowRequestId,
-    updateVariableValuesRequest,
-    updateVariableWorkflowDetailsRequestId,
-    variable.id,
-    variableWorkflowDetails,
-  ]);
 
   const addRow = useCallback(() => {
     const newRow: VariableTableCell[] = [];
@@ -200,10 +168,32 @@ const EditableTableEdit = ({
       });
     });
 
-    // dispatch
-    const request = dispatch(requestUpdateVariableValues(update));
-    setUpdateVariableValuesRequestId(request.requestId);
-  }, [initialCellValues, cellValues, columns.length, dispatch, projectId, variable.id]);
+    const { operations, updateStatuses = true } = update;
+    void updateProjectVariableValues({ projectId, updateVariableValuesRequestPayload: { operations, updateStatuses } })
+      .unwrap()
+      .then(() =>
+        updateVariableWorkflowDetails({
+          projectId,
+          variableId: variable.id,
+          updateVariableWorkflowDetailsRequestPayload: {
+            feedback: variableWorkflowDetails?.feedback,
+            internalComment: variableWorkflowDetails?.internalComment,
+            status: variableWorkflowDetails.status,
+          },
+        }).unwrap()
+      )
+      .catch(() => snackbar.toastError());
+  }, [
+    initialCellValues,
+    cellValues,
+    columns.length,
+    projectId,
+    snackbar,
+    updateProjectVariableValues,
+    updateVariableWorkflowDetails,
+    variable.id,
+    variableWorkflowDetails,
+  ]);
 
   const setCellValue = (rowNum: number, colNum: number, newValue: string | number) => {
     const newCellValues: VariableTableCell[][] = [];
@@ -262,9 +252,7 @@ const EditableTableEdit = ({
   return (
     <PageDialog
       workflowState={
-        updateVariableValuesRequest?.status === 'success'
-          ? updateVariableWorkflowDetailsRequest
-          : updateVariableValuesRequest
+        updateValuesResult.isSuccess ? toWorkflowState(updateWorkflowResult) : toWorkflowState(updateValuesResult)
       }
       onSuccess={onFinish}
       onClose={onCancel}
