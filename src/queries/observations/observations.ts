@@ -35,11 +35,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
       providesTags: (_results, _error, payload) => [{ type: QueryTagTypes.Observation, id: payload.observationId }],
       transformResponse: (results: ListEventLogEntriesApiResponse) =>
-        results.events
-          .map((event) => ({
-            ...event,
-          }))
-          .reverse(),
+        results.events.toSorted((a, b) => b.timestamp.localeCompare(a.timestamp)),
     }),
   }),
 });

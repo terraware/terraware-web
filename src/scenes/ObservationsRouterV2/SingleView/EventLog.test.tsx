@@ -133,12 +133,10 @@ const speciesHistory = (...edits: { from: Counts; name?: string; to: Counts }[])
   const bySpecies = new Map<string, PlotSpecies>();
   edits.forEach(({ from, name, to }, editIndex) => {
     const timestamp = `2026-06-15T12:00:00.${String(editIndex).padStart(3, '0')}Z`;
-    // The API reports counts in this order; the events query then reverses the whole list, so a
-    // message reads them out live, existing, dead.
     [
-      { name: 'dead count', position: 2 },
       { name: 'existing count', position: 0 },
       { name: 'live count', position: 1 },
+      { name: 'dead count', position: 2 },
     ].forEach(({ name: fieldName, position }) => {
       if (from[position] !== to[position]) {
         events.push(speciesCountEvent(name, fieldName, String(from[position]), String(to[position]), timestamp));
@@ -191,7 +189,7 @@ describe('Observation EventLog species changes', () => {
         strings.formatString(
           strings.EVENT_SPECIES_REMOVED,
           'Dracaena acuminata',
-          countsText(['Live count', 6], ['Existing count', 2], ['Dead count', 1])
+          countsText(['Existing count', 2], ['Live count', 6], ['Dead count', 1])
         ) as string
       )
     ).toBeInTheDocument();
@@ -211,7 +209,7 @@ describe('Observation EventLog species changes', () => {
           strings.EVENT_SPECIES_CHANGED,
           'Duosperma angolense',
           'Abutilon eremitopetalum',
-          countsText(['Live count', 6], ['Existing count', 2], ['Dead count', 1])
+          countsText(['Existing count', 2], ['Live count', 6], ['Dead count', 1])
         ) as string
       )
     ).toBeInTheDocument();
@@ -220,7 +218,7 @@ describe('Observation EventLog species changes', () => {
         strings.formatString(
           strings.EVENT_SPECIES_REMOVED,
           'Duosperma angolense',
-          countsText(['Live count', 6], ['Existing count', 2], ['Dead count', 1])
+          countsText(['Existing count', 2], ['Live count', 6], ['Dead count', 1])
         ) as string
       )
     ).not.toBeInTheDocument();
@@ -239,7 +237,7 @@ describe('Observation EventLog species changes', () => {
         strings.formatString(
           strings.EVENT_SPECIES_REMOVED,
           strings.UNKNOWN,
-          countsText(['Live count', 6], ['Existing count', 2], ['Dead count', 1])
+          countsText(['Existing count', 2], ['Live count', 6], ['Dead count', 1])
         ) as string
       )
     ).toBeInTheDocument();

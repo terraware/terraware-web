@@ -8,13 +8,14 @@ const EXISTING = 'existing count';
 const LIVE = 'live count';
 const DEAD = 'dead count';
 /**
- * The order the API reports counts in: `listUpdatedFields` emits dead, existing then live. The
- * position says which slot of a `Counts` tuple each one holds.
+ * The order the API reports counts in. `listUpdatedFields` emits existing, live then dead, which
+ * is the order the log is meant to read them out in. The position says which slot of a `Counts`
+ * tuple each one holds.
  */
 const COUNT_FIELDS: { name: string; position: number }[] = [
-  { name: DEAD, position: 2 },
   { name: EXISTING, position: 0 },
   { name: LIVE, position: 1 },
+  { name: DEAD, position: 2 },
 ];
 
 /** Plant counts in the order the fixtures below list them: existing, live, dead. */
@@ -278,9 +279,9 @@ describe('summarizeMonitoringSpeciesEvents', () => {
 
     const { summaries } = summarize(events, currentTotals);
     expect(summaries.get(events[0])?.counts).toEqual([
-      { label: DEAD, value: '5' },
       { label: EXISTING, value: '3' },
       { label: LIVE, value: '4' },
+      { label: DEAD, value: '5' },
     ]);
   });
 
@@ -293,8 +294,8 @@ describe('summarizeMonitoringSpeciesEvents', () => {
     // Pre-existing was zero throughout, so no plants were removed under it.
     const { summaries } = summarize(events, currentTotals);
     expect(summaries.get(events[2])?.counts).toEqual([
-      { label: DEAD, value: '1' },
       { label: LIVE, value: '4' },
+      { label: DEAD, value: '1' },
     ]);
   });
 
@@ -307,9 +308,9 @@ describe('summarizeMonitoringSpeciesEvents', () => {
 
     const { summaries } = summarize(events, currentTotals);
     expect(summaries.get(events[3])?.counts).toEqual([
-      { label: DEAD, value: '1' },
       { label: EXISTING, value: '2' },
       { label: LIVE, value: '6' },
+      { label: DEAD, value: '1' },
     ]);
   });
 
