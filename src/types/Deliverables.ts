@@ -1,10 +1,6 @@
 import { DateTime } from 'luxon';
 
-import {
-  DeliverablePayload,
-  ListDeliverablesElement,
-  ListDeliverablesResponsePayload,
-} from 'src/queries/generated/deliverables';
+import { DeliverablePayload, ListDeliverablesElement } from 'src/queries/generated/deliverables';
 import strings from 'src/strings';
 import { today } from 'src/utils/dateUtils';
 
@@ -47,14 +43,6 @@ export const DeliverableStatusesWithOverdue: DeliverableStatusTypeWithOverdue[] 
   'Not Needed',
   'Overdue',
 ];
-
-export type UploadDeliverableDocumentRequest = {
-  description: string;
-  file: File;
-  projectId: number;
-};
-
-export type { ListDeliverablesElement, ListDeliverablesResponsePayload };
 
 export type DeliverableWithOverdue = Omit<Deliverable, 'status'> & {
   status: DeliverableStatusTypeWithOverdue;
