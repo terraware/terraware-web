@@ -158,6 +158,7 @@ const injectedRtkApi = api.injectEndpoints({
             'height',
             'treeCrownDiameter',
             'shrubDiameter',
+            'boleHeight',
             'biomassSpecies_isInvasive',
             'biomassSpecies_isThreatened',
             'isDead',

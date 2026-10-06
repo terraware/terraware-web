@@ -279,6 +279,7 @@ BIOMASS_PLOT_DEAD_PLANTS_TOOLTIP,Plantas muertas es el número de árboles y arb
 BIOMASS_PLOT_LIVE_PLANTS_TOOLTIP,Plantas vivas es el número de árboles y arbustos observados registrados como vivos. No incluye plantas registradas en los cuadrantes ni otras especies invasoras o amenazadas adicionales.,d69a1ca7
 BIOMASS_PLOT_SPECIES_TOOLTIP,Especies es el número de especies representadas por los árboles y arbustos observados. No incluye plantas registradas en los cuadrantes ni otras especies invasoras o amenazadas adicionales.,f520363a
 BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantas totales es el número de todos los árboles y arbustos observados, incluyendo árboles y arbustos vivos y muertos. No incluye plantas registradas en los cuadrantes ni otras especies invasoras o amenazadas adicionales.",d020f12c
+BOLE_HEIGHT_M,Altura del fuste (m),c0a1fe7f
 BOTANICAL_COUNTRY,País botánico,7bd4e8de
 BOUNDARIES,Límites,e40b0600
 BOUNDARIES_AND_STRATA,Límites y Estratos,87db24b5

@@ -279,6 +279,7 @@ BIOMASS_PLOT_DEAD_PLANTS_TOOLTIP,Dead Plants is the number of observed trees and
 BIOMASS_PLOT_LIVE_PLANTS_TOOLTIP,Live Plants is the number of observed trees and shrubs recorded as live. It does not include plants recorded in the quadrats or other additional invasive or threatened species.,
 BIOMASS_PLOT_SPECIES_TOOLTIP,Species is the number of species represented by the observed trees and shrubs. It does not include plants recorded in the quadrats or other additional invasive or threatened species.,
 BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,"Total Plants is the number of all observed trees and shrubs, including live and dead trees and shrubs. It does not include plants recorded in the quadrats or other additional invasive or threatened species.",
+BOLE_HEIGHT_M,Bole Height (m),
 BOTANICAL_COUNTRY,Botanical Country,
 BOUNDARIES,Boundaries,
 BOUNDARIES_AND_STRATA,Boundaries and Strata,
