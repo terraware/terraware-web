@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { baseApi } from 'src/queries/baseApi';
+import { QueryTagTypes } from 'src/queries/tags';
 import DeliverablesService, { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
 import { Response } from 'src/services/HttpService';
 import strings from 'src/strings';
@@ -49,11 +51,12 @@ export const requestGetDeliverable = createAsyncThunk(
 
 export const requestUpdateDeliverable = createAsyncThunk(
   'deliverables/update',
-  async (request: { deliverable: Deliverable }, { rejectWithValue }) => {
+  async (request: { deliverable: Deliverable }, { dispatch, rejectWithValue }) => {
     const { deliverable } = request;
 
     const response: Response = await DeliverablesService.update(deliverable);
     if (response && response.requestSucceeded) {
+      dispatch(baseApi.util.invalidateTags([QueryTagTypes.Deliverables]));
       return deliverable.id;
     }
 
@@ -63,10 +66,14 @@ export const requestUpdateDeliverable = createAsyncThunk(
 
 export const requestUploadDeliverableDocument = createAsyncThunk(
   'deliverables/upload',
-  async (request: { deliverableId: number; documents: UploadDeliverableDocumentRequest[] }, { rejectWithValue }) => {
+  async (
+    request: { deliverableId: number; documents: UploadDeliverableDocumentRequest[] },
+    { dispatch, rejectWithValue }
+  ) => {
     const { deliverableId, documents } = request;
 
     const responses = await DeliverablesService.upload(deliverableId, documents);
+    dispatch(baseApi.util.invalidateTags([QueryTagTypes.Deliverables]));
     if (responses.every((response) => response?.requestSucceeded === true)) {
       return deliverableId;
     }
@@ -81,11 +88,12 @@ export const requestUploadDeliverableDocument = createAsyncThunk(
 
 export const requestSubmitDeliverable = createAsyncThunk(
   'deliverables/submit',
-  async (request: { deliverableId: number; projectId: number }, { rejectWithValue }) => {
+  async (request: { deliverableId: number; projectId: number }, { dispatch, rejectWithValue }) => {
     const { deliverableId, projectId } = request;
 
     const response = await DeliverablesService.submit(deliverableId, projectId);
     if (response && response.requestSucceeded) {
+      dispatch(baseApi.util.invalidateTags([QueryTagTypes.Deliverables]));
       return deliverableId;
     }
 
@@ -95,11 +103,12 @@ export const requestSubmitDeliverable = createAsyncThunk(
 
 export const requestCompleteDeliverable = createAsyncThunk(
   'deliverables/complete',
-  async (request: { deliverableId: number; projectId: number }, { rejectWithValue }) => {
+  async (request: { deliverableId: number; projectId: number }, { dispatch, rejectWithValue }) => {
     const { deliverableId, projectId } = request;
 
     const response = await DeliverablesService.complete(deliverableId, projectId);
     if (response && response.requestSucceeded) {
+      dispatch(baseApi.util.invalidateTags([QueryTagTypes.Deliverables]));
       return deliverableId;
     }
 
@@ -109,11 +118,12 @@ export const requestCompleteDeliverable = createAsyncThunk(
 
 export const requestIncompleteDeliverable = createAsyncThunk(
   'deliverables/incomplete',
-  async (request: { deliverableId: number; projectId: number }, { rejectWithValue }) => {
+  async (request: { deliverableId: number; projectId: number }, { dispatch, rejectWithValue }) => {
     const { deliverableId, projectId } = request;
 
     const response = await DeliverablesService.incomplete(deliverableId, projectId);
     if (response && response.requestSucceeded) {
+      dispatch(baseApi.util.invalidateTags([QueryTagTypes.Deliverables]));
       return deliverableId;
     }
 

@@ -25,13 +25,9 @@ import {
 import { Button, DialogBox } from '@terraware/web-components';
 import { MRT_TableInstance } from 'material-react-table';
 
-import { useLocalization } from 'src/providers';
-import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
+import useDeliverablesWithOverdue from 'src/hooks/useDeliverablesWithOverdue';
 import { ProjectsWithVariablesSearchResult } from 'src/redux/features/matrixView/matrixViewThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 import { VariableUnion } from 'src/types/documentProducer/Variable';
 
 type ColumnsModalProps = {
@@ -58,29 +54,11 @@ export default function ColumnsModal(props: ColumnsModalProps): JSX.Element {
   const [selectedDeliverables, setSelectedDeliverables] = useState(new Set());
   const [selectedColumns, setSelectedColumns] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState('');
-  const { activeLocale } = useLocalization();
-  const deliverablesResult = useAppSelector(selectDeliverablesSearchRequest(requestId));
-  const [deliverables, setDeliverables] = useState<ListDeliverablesElementWithOverdue[]>();
+  const { deliverables } = useDeliverablesWithOverdue({});
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const theme = useTheme();
   const baseColumnsIds = baseColumns().map((c) => c.id);
 
-  useEffect(() => {
-    const request = dispatch(
-      requestListDeliverables({
-        locale: activeLocale,
-      })
-    );
-    setRequestId(request.requestId);
-  }, [dispatch, activeLocale]);
-
-  useEffect(() => {
-    if (deliverablesResult?.status === 'success') {
-      setDeliverables(deliverablesResult.data);
-    }
-  }, [deliverablesResult]);
   const filteredVariables = useMemo(() => {
     if (!searchTerm) {
       return allVariables;
