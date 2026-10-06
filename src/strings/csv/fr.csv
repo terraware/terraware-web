@@ -254,6 +254,7 @@ BATCH_HISTORY_TYPE_OUTGOING_WITHDRAWAL,Retrait sortant,05f67246
 BATCH_HISTORY_TYPE_QUANTITY_EDITED,Quantité modifiée,0e759125
 BATCH_HISTORY_TYPE_STATUS_CHANGED,Statut modifié,b151d962
 BATCH_NUMBER,Numéro de lot,4576c1c5
+BATCH_QUANTITY_NOT_UPDATED_EXPLANATION,La quantité du lot n'a pas été affectée par ce retrait car la date de retrait est antérieure à la date de la dernière modification de la quantité du lot.,862fe785
 BATCH_QUANTITY_UPDATED_FROM_ACCESSION,Quantité du lot mise à jour depuis l'accession {0}.,ada0b88f
 BATCH_WITHDRAW_SUCCESS,{0} {1} pour un total de {2} {3} retirés.,12e46db6
 BATCHES,Lots,9a63f6cf
