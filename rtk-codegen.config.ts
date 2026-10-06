@@ -16,6 +16,12 @@ const config: ConfigFile = {
         operation.path === '/api/v1/accelerator/projects' ||
         operation.path === '/api/v1/accelerator/projects/{projectId}',
     },
+    './src/queries/generated/acceleratorProjectSpecies.ts': {
+      filterEndpoints: (_, operation) =>
+        operation.path.startsWith('/api/v1/accelerator/projects/species') ||
+        operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/species') ||
+        operation.path === '/api/v1/accelerator/species/{speciesId}/projects',
+    },
     './src/queries/generated/acceleratorReportIndicators.ts': {
       filterEndpoints: (_, operation) =>
         operation.path.startsWith('/api/v1/accelerator/projects/{projectId}/reports/indicators') ||
