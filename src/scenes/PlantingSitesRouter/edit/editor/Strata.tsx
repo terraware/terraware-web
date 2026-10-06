@@ -133,12 +133,15 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
           const multiPolygon = toMultiPolygon(geometry);
 
           if (multiPolygon) {
-            return defaultStratumPayload({
-              boundary: multiPolygon,
-              id: properties?.id ?? index,
-              initialPlantingDensity: properties?.initialPlantingDensity ?? 1500,
-              name: properties?.name ?? '',
-            });
+            const id = properties?.id ?? index;
+            const initialPlantingDensity = properties?.initialPlantingDensity ?? 1500;
+            const name = properties?.name ?? '';
+            const existing = site.strata?.find((s) => s.id === id);
+            // keep substrata from later steps when the stratum boundary is unchanged
+            if (existing && JSON.stringify(existing.boundary) === JSON.stringify(multiPolygon)) {
+              return { ...existing, initialPlantingDensity, name };
+            }
+            return defaultStratumPayload({ boundary: multiPolygon, id, initialPlantingDensity, name });
           } else {
             return undefined;
           }
@@ -148,7 +151,7 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
       const data = _strata ? { strata: _strata } : undefined;
       onValidate.apply(data === undefined, data);
     }
-  }, [onValidate, snackbar, strata, strataData?.errorAnnotations]);
+  }, [onValidate, site.strata, snackbar, strata, strataData?.errorAnnotations]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!strata?.features) {
