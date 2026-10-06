@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
+import { skipToken } from '@reduxjs/toolkit/query';
 import { DateTime } from 'luxon';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -10,11 +11,11 @@ import { APP_PATHS } from 'src/constants';
 import useGetProjectModule from 'src/hooks/useGetProjectModule';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectModuleDeliverables from 'src/hooks/useProjectModuleDeliverables';
-import useProjectModuleEvents from 'src/hooks/useProjectModuleEvents';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { useListEventsQuery } from 'src/queries/generated/moduleEvents';
 import strings from 'src/strings';
 
 import ModuleViewTitle from './ModuleViewTitle';
@@ -37,15 +38,17 @@ const ModuleView = () => {
 
   const { projectModule, getProjectModule } = useGetProjectModule();
   const { deliverables, listProjectModuleDeliverables } = useProjectModuleDeliverables();
-  const { events, listProjectModuleEvents } = useProjectModuleEvents();
+  const { currentData: eventsData } = useListEventsQuery(
+    currentAcceleratorProject?.id ? { moduleId, projectId: currentAcceleratorProject.id } : skipToken
+  );
+  const events = eventsData?.events;
 
   useEffect(() => {
     if (currentAcceleratorProject && currentAcceleratorProject.id) {
       void getProjectModule({ moduleId, projectId: currentAcceleratorProject.id });
       void listProjectModuleDeliverables({ moduleId, projectId: currentAcceleratorProject.id });
-      void listProjectModuleEvents({ moduleId, projectId: currentAcceleratorProject.id });
     }
-  }, [currentAcceleratorProject, moduleId, getProjectModule, listProjectModuleDeliverables, listProjectModuleEvents]);
+  }, [currentAcceleratorProject, moduleId, getProjectModule, listProjectModuleDeliverables]);
 
   const deliverableDetails = useMemo(
     () =>
