@@ -33,6 +33,11 @@ import PlantMonitoringList from './PlantMonitoringList';
 import SurvivalRateSettingsMenu from './SurvivalRateSettingsMenu';
 import ViewModeToggle from './ViewModeToggle';
 
+const scheduleButtonStyles = { flexShrink: 0, margin: 0, whiteSpace: 'nowrap' };
+
+// Longer translations wrap instead of pushing the menu beside the button off screen.
+const mobileScheduleButtonStyles = { flex: 1, margin: 0, minWidth: 0 };
+
 const ObservationListViewContent = (): JSX.Element => {
   const { selectedOrganization } = useOrganization();
   const { strings } = useLocalization();
@@ -237,7 +242,7 @@ const ObservationListViewContent = (): JSX.Element => {
           label={strings.SCHEDULE_OBSERVATION}
           onClick={() => navigate(APP_PATHS.SCHEDULE_OBSERVATION)}
           size='medium'
-          sx={newFiltersEnabled ? { flex: isMobile ? 1 : undefined, margin: 0, whiteSpace: 'nowrap' } : undefined}
+          sx={newFiltersEnabled ? (isMobile ? mobileScheduleButtonStyles : scheduleButtonStyles) : undefined}
         />
       );
     } else {
@@ -252,7 +257,7 @@ const ObservationListViewContent = (): JSX.Element => {
           alignItems: 'center',
           display: 'flex',
           gap: theme.spacing(1),
-          justifyContent: isDesktop ? 'flex-end' : 'flex-start',
+          justifyContent: { md: 'flex-end', xs: 'flex-start' },
         }}
       >
         {scheduleObservationButton}
@@ -261,7 +266,7 @@ const ObservationListViewContent = (): JSX.Element => {
         )}
       </Box>
     ),
-    [isDesktop, scheduleObservationButton, selectedPlantingSiteId, theme]
+    [scheduleObservationButton, selectedPlantingSiteId, theme]
   );
 
   const countedObservationType = newFiltersEnabled
@@ -333,16 +338,37 @@ const ObservationListViewContent = (): JSX.Element => {
   );
 
   if (newFiltersEnabled) {
+    const observationFilters = (
+      <ObservationFilters plantingSiteId={selectedPlantingSiteId} plantingSiteSelector={plantingSiteSelector} />
+    );
+
+    // The stacked mobile controls can outgrow the screen, which a pinned header can't scroll.
     return (
       <Page
-        collapsibleHeader
-        rightComponent={headerActions}
-        stickyHeader
-        subHeader={
-          <ObservationFilters plantingSiteId={selectedPlantingSiteId} plantingSiteSelector={plantingSiteSelector} />
-        }
+        collapsibleHeader={!isMobile}
+        leftComponentGridSize={0}
+        rightComponent={isMobile ? undefined : headerActions}
+        rightComponentGridSize={6}
+        stickyHeader={!isMobile}
+        subHeader={isMobile ? undefined : observationFilters}
         title={strings.OBSERVATIONS}
+        titleContainerStyle={isMobile ? { paddingX: 0 } : undefined}
+        titleStyle={isMobile ? { paddingLeft: 0 } : undefined}
       >
+        {isMobile && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: theme.spacing(2),
+              marginBottom: theme.spacing(3),
+              width: '100%',
+            }}
+          >
+            {headerActions}
+            {observationFilters}
+          </Box>
+        )}
         <ObservationsEventsNotification />
         {plotType === 'assigned' && (
           <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
