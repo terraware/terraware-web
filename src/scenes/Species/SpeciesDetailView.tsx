@@ -18,19 +18,18 @@ import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useOrganization } from 'src/providers/hooks';
 import {
+  CreateParticipantProjectSpeciesPayload,
+  useCreateParticipantProjectSpeciesMutation,
+  useDeleteParticipantProjectSpeciesMutation,
+} from 'src/queries/generated/acceleratorProjectSpecies';
+import {
   useAssignSpeciesToProjectsMutation,
   useDeleteSpeciesMutation,
   useLazyGetSpeciesQuery,
   useUnassignSpeciesFromProjectsMutation,
   useUpdateSpeciesMutation,
 } from 'src/queries/generated/species';
-import {
-  requestAddManyAcceleratorProjectSpecies,
-  requestDeleteManyAcceleratorProjectSpecies,
-} from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
-import { useAppDispatch } from 'src/redux/store';
 import SpeciesDetailsForm from 'src/scenes/Species/SpeciesDetailsForm';
-import { CreateAcceleratorProjectSpeciesRequestPayload } from 'src/services/AcceleratorProjectSpeciesService';
 import strings from 'src/strings';
 import {
   Species,
@@ -121,6 +120,8 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
   const species = speciesData?.species;
 
   const [deleteSpecies, { isLoading: isDeleting }] = useDeleteSpeciesMutation();
+  const [createParticipantProjectSpecies] = useCreateParticipantProjectSpeciesMutation();
+  const [deleteParticipantProjectSpecies] = useDeleteParticipantProjectSpeciesMutation();
   const [updateSpecies] = useUpdateSpeciesMutation();
   const [assignSpeciesToProjects] = useAssignSpeciesToProjectsMutation();
   const [unassignSpeciesFromProjects] = useUnassignSpeciesFromProjectsMutation();
@@ -133,8 +134,6 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
   const [removedProjectIds, setRemovedProjectIds] = useState<number[]>([]);
   const [addedProjectsSpecies, setAddedProjectsSpecies] = useState<ProjectSpecies[]>();
   const [removedProjectsIds, setRemovedProjectsIds] = useState<number[]>();
-
-  const dispatch = useAppDispatch();
 
   const reloadSpecies = useCallback(() => {
     if (selectedOrganization && speciesId) {
@@ -296,7 +295,7 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
       // These accelerator project species mutations are awaited too, so a failure lands in the catch
       // below with the staged changes still intact for the user to retry.
       if (removedProjectsIds?.length) {
-        await dispatch(requestDeleteManyAcceleratorProjectSpecies(removedProjectsIds)).unwrap();
+        await deleteParticipantProjectSpecies({ participantProjectSpeciesIds: removedProjectsIds }).unwrap();
       }
       if (addedProjectsSpecies?.length && speciesId) {
         const createRequests = addedProjectsSpecies.map(
@@ -305,9 +304,9 @@ export default function SpeciesDetailView({ initialEditing = false, reloadData }
               projectId: aPS.project.id,
               speciesId: Number(speciesId),
               speciesNativeCategory: aPS.nativeCategory,
-            }) as CreateAcceleratorProjectSpeciesRequestPayload
+            }) as CreateParticipantProjectSpeciesPayload
         );
-        await dispatch(requestAddManyAcceleratorProjectSpecies(createRequests)).unwrap();
+        await Promise.all(createRequests.map((request) => createParticipantProjectSpecies(request).unwrap()));
       }
     } catch (e) {
       // Keep the staged edits and stay in edit mode so nothing is lost and the user can retry.
