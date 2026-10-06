@@ -15,11 +15,6 @@ export type SpeciesSearchSelectProps = {
   placeholder: string;
 };
 
-/**
- * Typeahead over the organization's species list. The caller gets a species only once the user
- * picks one from the list; free text is treated as a search term, since an observation can only
- * record species the organization already has.
- */
 export default function SpeciesSearchSelect({
   excludedSpeciesIds,
   id,
@@ -27,8 +22,6 @@ export default function SpeciesSearchSelect({
   placeholder,
 }: SpeciesSearchSelectProps): JSX.Element {
   const { species: organizationSpecies } = useOrganizationSpecies();
-  // SelectT's input is controlled by `selectedValue`, so it holds the typed term as well as a
-  // picked species; otherwise nothing the user types would be displayed back to them.
   const [selectedValue, setSelectedValue] = useState<Species>();
 
   const options = useMemo(() => {
@@ -44,8 +37,6 @@ export default function SpeciesSearchSelect({
       .toSorted((a, b) => a.scientificName.localeCompare(b.scientificName));
   }, [excludedSpeciesIds, organizationSpecies, selectedValue]);
 
-  // SelectT hands back either a picked option or `toT()` of whatever was typed. Only the former
-  // carries an id, so the latter narrows the list instead of selecting anything.
   const onChangeHandler = useCallback(
     (value: Species) => {
       setSelectedValue(value);

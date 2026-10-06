@@ -62,7 +62,9 @@ describe('isCornerPhoto', () => {
 describe('isUndeletableObservationPhoto', () => {
   test('returns true for corner photos', () => {
     expect(
-      isUndeletableObservationPhoto({ observation: { monitoringPlotNumber: 1, type: 'Plot', position: 'NortheastCorner' } })
+      isUndeletableObservationPhoto({
+        observation: { monitoringPlotNumber: 1, type: 'Plot', position: 'NortheastCorner' },
+      })
     ).toBe(true);
   });
 
@@ -153,9 +155,9 @@ describe('getObsPhotoTypeLabel', () => {
     ['SoutheastCorner', 'Southeast corner'],
     ['SouthwestCorner', 'Southwest corner'],
   ] as const)('returns corner label for position %s', (position, expected) => {
-    expect(
-      getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 5, type: 'Plot', position } }, strings)
-    ).toBe(expected);
+    expect(getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 5, type: 'Plot', position } }, strings)).toBe(
+      expected
+    );
   });
 
   test.each([
@@ -164,9 +166,9 @@ describe('getObsPhotoTypeLabel', () => {
     ['SoutheastCorner', 'Southeast Quadrat'],
     ['SouthwestCorner', 'Southwest Quadrat'],
   ] as const)('returns quadrat label for quadrat position %s', (position, expected) => {
-    expect(
-      getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 2, type: 'Quadrat', position } }, strings)
-    ).toBe(expected);
+    expect(getObsPhotoTypeLabel({ observation: { monitoringPlotNumber: 2, type: 'Quadrat', position } }, strings)).toBe(
+      expected
+    );
   });
 
   test('returns undefined for quadrat photo without a position', () => {

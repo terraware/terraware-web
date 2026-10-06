@@ -201,16 +201,17 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
     () =>
       activeLocale
         ? [
-            { text: strings.SITE_STRATUM_BOUNDARIES_DESCRIPTION_0 },
             {
-              text: strings.SITE_STRATUM_BOUNDARIES_DESCRIPTION_1,
+              text: strings.SITE_STRATUM_BOUNDARIES_DESCRIPTION,
               hasTutorial: true,
               handlePrefix: (prefix: string) =>
-                strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
-            },
-            {
-              text: strings.SITE_STRATUM_BOUNDARIES_SIZE,
-              isBold: true,
+                strings.formatString(
+                  prefix,
+                  <MapIcon centerAligned={true} icon='slice' />,
+                  <Typography component='span' fontSize='inherit' fontWeight={600}>
+                    {strings.SITE_STRATUM_BOUNDARIES_SIZE}
+                  </Typography>
+                ) as JSX.Element[],
             },
           ]
         : [],
@@ -362,7 +363,6 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
       <StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-stratum-boundaries-instructions'
-        title={strings.ADDING_STRATUM_BOUNDARIES}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_stratum_boundary_instructions_video'
         tutorialTitle={strings.ADDING_STRATUM_BOUNDARIES}

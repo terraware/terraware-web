@@ -30,7 +30,7 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
@@ -95,7 +95,7 @@ const ObservationMap = ({
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { mapId, token } = useMapboxToken();
   const { isDesktop } = useDeviceInfo();
-  const newFiltersEnabled = isEnabled('New Observation Filters');
+  const newFiltersEnabled = useFeatureEnabled('New Observation Filters');
   const { fitBounds } = useMapUtils(mapRef);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [localDrawerOpen, setDrawerOpen] = useState<boolean>(false);

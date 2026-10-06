@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { Grid, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 
-import isEnabled from 'src/features';
 import useBoolean from 'src/hooks/useBoolean';
 import { useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
 import strings from 'src/strings';
@@ -20,7 +19,6 @@ const COLLAPSED_MAX_HEIGHT = 120;
 const HighlightsBox = (props: ReportBoxProps) => {
   const { report, projectId, isConsoleView, onChange, editing, onEditChange, canEdit, funderReportView, printMode } =
     props;
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
   const theme = useTheme();
   const [internalEditing, setInternalEditing, setInternalEditingTrue] = useBoolean(false);
   const [highlights, setHighlights] = useState<string | undefined>(report?.highlights);
@@ -73,15 +71,12 @@ const HighlightsBox = (props: ReportBoxProps) => {
   }, []);
 
   const truncateConfig = useMemo(
-    () =>
-      newReportTabEnabled
-        ? {
-            maxHeight: COLLAPSED_MAX_HEIGHT,
-            showLessText: strings.SHOW_LESS,
-            showMoreText: strings.SHOW_MORE,
-          }
-        : undefined,
-    [newReportTabEnabled]
+    () => ({
+      maxHeight: COLLAPSED_MAX_HEIGHT,
+      showLessText: strings.SHOW_LESS,
+      showMoreText: strings.SHOW_MORE,
+    }),
+    []
   );
 
   return (
@@ -94,10 +89,9 @@ const HighlightsBox = (props: ReportBoxProps) => {
       onCancel={onCancel}
       onSave={onSave}
       isConsoleView={isConsoleView}
-      includeBorder={!newReportTabEnabled && !funderReportView}
     >
       <Grid item xs={12}>
-        {newReportTabEnabled && !isEditing && !highlights ? (
+        {!isEditing && !highlights ? (
           <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' fontStyle='italic'>
             {strings.NO_HIGHLIGHTS_ADDED}
           </Typography>

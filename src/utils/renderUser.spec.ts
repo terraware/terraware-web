@@ -3,6 +3,7 @@ import { renderUser } from 'src/utils/renderUser';
 
 describe('renderUser', () => {
   const baseUser: OrganizationUser = {
+    addedTime: '2024-01-01T00:00:00Z',
     email: 'jane.doe@terraformation.com',
     id: 1,
     role: 'Contributor',

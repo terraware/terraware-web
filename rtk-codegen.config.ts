@@ -88,6 +88,15 @@ const config: ConfigFile = {
         operation.path.startsWith('/api/v1/tracking/observations') &&
         !operation.path.includes('{observationId}/splats'),
     },
+    './src/queries/generated/organizations.ts': {
+      filterEndpoints: (_, operation) =>
+        operation.path === '/api/v1/organizations' ||
+        operation.path === '/api/v1/organizations/{organizationId}' ||
+        operation.path === '/api/v1/organizations/{organizationId}/roles',
+    },
+    './src/queries/generated/organizationUsers.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/organizations/{organizationId}/users'),
+    },
     './src/queries/generated/organizationFeatures.ts': {
       filterEndpoints: (_, operation) => operation.path === '/api/v1/organizations/{organizationId}/features',
     },

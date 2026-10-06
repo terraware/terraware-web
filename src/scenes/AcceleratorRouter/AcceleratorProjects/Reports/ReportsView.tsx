@@ -6,17 +6,14 @@ import { Button } from '@terraware/web-components';
 import Tabs from '@terraware/web-components/components/Tabs';
 
 import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/AcceleratorReportTargetsTable';
-import AcceleratorReportsTable from 'src/components/AcceleratorReports/AcceleratorReportsTable';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
 import useScrollRestoration from 'src/hooks/useScrollRestoration';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useUser } from 'src/providers';
-import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 import ReportOptionsMenu from './ReportOptionsMenu';
@@ -37,19 +34,14 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
   const pathParams = useParams<{ projectId: string; reportId?: string }>();
   const { isAllowed } = useUser();
 
-  const newReportTabEnabled = isEnabled('Report Updates July 2026');
-  const pathActiveTab = tab ?? 'reports';
+  const activeTab = tab ?? 'reports';
 
   const tabs = useMemo(() => {
     return [
       {
         id: 'reports',
         label: strings.REPORTS,
-        children: newReportTabEnabled ? (
-          <ReportTabV2 active={pathActiveTab === 'reports'} />
-        ) : (
-          <AcceleratorReportsTable />
-        ),
+        children: <ReportTabV2 active={activeTab === 'reports'} />,
       },
       {
         id: 'targets',
@@ -62,13 +54,7 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
         children: <ReportsSettings />,
       },
     ];
-  }, [newReportTabEnabled, pathActiveTab, strings]);
-
-  const { activeTab: stickyActiveTab, onChangeTab: onChangeStickyTab } = useStickyTabs({
-    defaultTab: 'reports',
-    tabs,
-    viewIdentifier: 'project-reports',
-  });
+  }, [activeTab, strings]);
 
   const selectedReportId = Number(pathParams.reportId) || undefined;
 
@@ -88,14 +74,11 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
 
   const reportsPath = APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', pathParams.projectId ?? '');
 
-  const onChangePathTab = useCallback(
+  const onChangeTab = useCallback(
     (newTab: string) =>
       navigate(newTab === 'reports' ? reportsPath : `${reportsPath}/${newTab === 'settings' ? 'indicators' : newTab}`),
     [navigate, reportsPath]
   );
-
-  const activeTab = newReportTabEnabled ? pathActiveTab : stickyActiveTab;
-  const onChangeTab = newReportTabEnabled ? onChangePathTab : onChangeStickyTab;
 
   return (
     <Page
@@ -108,7 +91,7 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
         },
       ]}
       rightComponentGridSize={6}
-      stickyHeader={newReportTabEnabled}
+      stickyHeader
       title={strings.REPORTS}
       titleStyle={{ paddingTop: '16px' }}
       rightComponent={
@@ -119,7 +102,7 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
             size='medium'
             onClick={() => goToNewIndicator(pathParams.projectId ?? '')}
           />
-        ) : newReportTabEnabled && activeTab === 'reports' && selectedReportId !== undefined ? (
+        ) : activeTab === 'reports' && selectedReportId !== undefined ? (
           <Box display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
             {isAllowed('EDIT_REPORTS') && (
               <Button

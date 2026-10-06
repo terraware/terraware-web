@@ -246,9 +246,8 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     () =>
       activeLocale
         ? [
-            { text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_0 },
             {
-              text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_1,
+              text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,
               hasTutorial: true,
               handlePrefix: (prefix: string) =>
                 strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
@@ -437,7 +436,6 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={description}
-        title={strings.SITE_SUBSTRATUM_BOUNDARIES}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_substratum_boundary_instructions_video'
         tutorialTitle={strings.ADDING_SUBSTRATUM_BOUNDARIES}

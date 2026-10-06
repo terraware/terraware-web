@@ -1,6 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Button, DropdownItem } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
@@ -27,7 +28,12 @@ import useUpdateCurrentUser from 'src/hooks/useUpdateCurrentUser';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useLocalization, useTimeZones, useUser } from 'src/providers';
 import { useGetDisclaimerQuery } from 'src/queries/generated/disclaimer';
-import { OrganizationService, OrganizationUserService } from 'src/services';
+import {
+  useDeleteOrganizationUserMutation,
+  useListOrganizationUsersQuery,
+  useUpdateOrganizationUserMutation,
+} from 'src/queries/generated/organizationUsers';
+import { useDeleteOrganizationMutation, useLazyListOrganizationRolesQuery } from 'src/queries/generated/organizations';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
 import { Organization, roleName } from 'src/types/Organization';
@@ -50,7 +56,6 @@ export type MyAccountFormProps = {
   edit: boolean;
   hasNav?: boolean;
   organizations?: Organization[];
-  reloadData?: () => void;
   reloadUser: () => void;
   user: User;
   includeHeader?: boolean;
@@ -85,7 +90,6 @@ const MyAccountForm = ({
   edit,
   hasNav,
   organizations,
-  reloadData,
   reloadUser,
   user,
   includeHeader,
@@ -112,10 +116,13 @@ const MyAccountForm = ({
   const [cannotRemoveOrgModalOpened, setCannotRemoveOrgModalOpened] = useState(false);
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
-  const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const { userPreferences } = useUser();
   const updateUserPreferences = useUpdateUserPreferences();
   const snackbar = useSnackbar();
+  const [listOrganizationRoles] = useLazyListOrganizationRolesQuery();
+  const [deleteOrganization] = useDeleteOrganizationMutation();
+  const [updateOrganizationUser] = useUpdateOrganizationUserMutation();
+  const [deleteOrganizationUser] = useDeleteOrganizationUserMutation();
   const docLinks = useDocLinks();
   const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
   const contentRef = useCallback((node: HTMLElement | null) => setContentElement(node), []);
@@ -167,18 +174,11 @@ const MyAccountForm = ({
     setCountryCodeSelected(user.countryCode);
   }, [user, setRecord]);
 
-  useEffect(() => {
-    const populatePeople = async () => {
-      if (removedOrg) {
-        const response = await OrganizationUserService.getOrganizationUsers(removedOrg.id);
-        if (response.requestSucceeded) {
-          const otherUsers = response.users.filter((orgUser) => orgUser.id !== user.id);
-          setOrgPeople(otherUsers);
-        }
-      }
-    };
-    void populatePeople();
-  }, [removedOrg, user.id]);
+  const { currentData: removedOrgUsersData } = useListOrganizationUsersQuery(removedOrg?.id ?? skipToken);
+  const orgPeople = useMemo(
+    () => removedOrgUsersData?.users.filter((orgUser) => orgUser.id !== user.id),
+    [removedOrgUsersData, user.id]
+  );
 
   const removeSelectedOrgs = () => {
     if (organizations && personOrganizations) {
@@ -224,8 +224,8 @@ const MyAccountForm = ({
           setAssignNewOwnerModalOpened(false);
           setLeaveOrganizationModalOpened(true);
         } else if (removedOrg.totalUsers > 1) {
-          const organizationRoles = OrganizationService.getOrganizationRoles(removedOrg.id);
-          const owners = (await organizationRoles).roles?.find((role) => role.role === 'Owner');
+          const organizationRoles = await listOrganizationRoles(removedOrg.id, true);
+          const owners = organizationRoles.data?.roles.find((role) => role.role === 'Owner');
           if (owners?.totalUsers === 1) {
             setAssignNewOwnerModalOpened(true);
           } else {
@@ -275,26 +275,23 @@ const MyAccountForm = ({
 
   const leaveOrgHandler = async () => {
     const succeeded = await saveProfileChanges();
-    let leaveOrgResponse = {
-      requestSucceeded: true,
-    };
+    let leftOrg = true;
     if (removedOrg) {
-      let assignNewOwnerResponse;
+      let assignedNewOwner = true;
       if (newOwner) {
-        assignNewOwnerResponse = await OrganizationUserService.updateOrganizationUser(
-          removedOrg.id,
-          newOwner.id,
-          'Owner'
-        );
+        const result = await updateOrganizationUser({
+          organizationId: removedOrg.id,
+          userId: newOwner.id,
+          updateOrganizationUserRequestPayload: { role: 'Owner' },
+        });
+        assignedNewOwner = !('error' in result);
       }
-      if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
-        leaveOrgResponse = await OrganizationUserService.deleteOrganizationUser(removedOrg.id, user.id);
+      if (assignedNewOwner) {
+        const result = await deleteOrganizationUser({ organizationId: removedOrg.id, userId: user.id });
+        leftOrg = !('error' in result);
       }
     }
-    if (succeeded && leaveOrgResponse.requestSucceeded) {
-      if (reloadData) {
-        reloadData();
-      }
+    if (succeeded && leftOrg) {
       reloadUser();
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     } else {
@@ -310,12 +307,9 @@ const MyAccountForm = ({
 
   const deleteOrgHandler = async () => {
     if (removedOrg) {
-      const deleterOrgReponse = await OrganizationService.deleteOrganization(removedOrg.id);
+      const deleteOrgResponse = await deleteOrganization(removedOrg.id);
       const succeeded = await saveProfileChanges();
-      if (succeeded && deleterOrgReponse.requestSucceeded) {
-        if (reloadData) {
-          reloadData();
-        }
+      if (succeeded && !('error' in deleteOrgResponse)) {
         reloadUser();
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {

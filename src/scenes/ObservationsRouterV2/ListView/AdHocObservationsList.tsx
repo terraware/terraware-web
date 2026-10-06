@@ -21,6 +21,7 @@ import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlan
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers';
 import { ObservationResultsPayload } from 'src/queries/generated/observations';
+import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { AdHocObservationResults } from 'src/types/Observations';
 import { MultiPolygon } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -29,7 +30,6 @@ import { useObservationFilters } from '../ObservationFiltersProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
 import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
-import { BiomassActionsMenuContent } from './BiomassList';
 import SelectObservationButton from './SelectObservationButton';
 
 const STORAGE_KEY = 'observations-ad-hoc-table';
@@ -43,7 +43,6 @@ const DEFAULT_COLUMN_ORDER = [
   'totalSpecies',
   'plotDescription',
   'plantingSiteName',
-  'actionsMenu',
 ];
 
 const DEFAULT_COLUMN_VISIBILITY = { plantingSiteName: false, plotDescription: false };
@@ -91,7 +90,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   const theme = useTheme();
   const { strings } = useLocalization();
   const defaultTimezone = useDefaultTimeZone().get().id;
-  const { observationType } = useObservationFilters();
+  const { activeFilterCount, observationType } = useObservationFilters();
   const { downloadAdHocObservationsZip } = useObservationExports();
   const tableState = useTableState(STORAGE_KEY, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
@@ -109,8 +108,19 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   });
   const emptyMessage = useObservationsEmptyMessage(emptyState);
 
-  const { plantingSites } = useOrganizationPlantingSites();
+  const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites({ full: true });
 
+  const plantingSitesById = useMemo(
+    () =>
+      plantingSites.reduce(
+        (sites, site) => {
+          sites[site.id] = site;
+          return sites;
+        },
+        {} as { [siteId: number]: PlantingSitePayload }
+      ),
+    [plantingSites]
+  );
   const plantingSiteNames = useMemo(
     () =>
       plantingSites.reduce(
@@ -175,14 +185,6 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
     return typeof value === 'number' ? <FormattedNumber value={value} /> : null;
   }, []);
 
-  const ActionsMenuCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<AdHocRow> }) =>
-      cell.row.original.isBiomass ? (
-        <BiomassActionsMenuContent observationId={cell.row.original.observationId} />
-      ) : null,
-    []
-  );
-
   const columns = useMemo(
     (): EditableTableColumn<AdHocRow>[] => [
       {
@@ -231,19 +233,12 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         accessorKey: 'totalSpecies',
         Cell: NumberCell,
       },
-      {
-        id: 'actionsMenu',
-        header: '',
-        accessorFn: () => null,
-        enableHiding: false,
-        Cell: ActionsMenuCell,
-      },
     ],
-    [strings, showSelectObservation, PlotNumberCell, CompletedDateCell, NumberCell, ActionsMenuCell]
+    [strings, showSelectObservation, PlotNumberCell, CompletedDateCell, NumberCell]
   );
 
   const onExport = useCallback(
-    async (filteredRows: AdHocRow[]) => {
+    async (filteredRows: AdHocRow[], hasTableFilters: boolean) => {
       const siteName =
         typeof plantingSiteId === 'number'
           ? plantingSiteNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
@@ -272,17 +267,21 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         });
       await downloadAdHocObservationsZip({
         adHocObservationsResults: monitoringResults,
+        hasFilters: activeFilterCount > 0 || hasTableFilters,
         biomassObservationIds: filteredRows.filter((row) => row.isBiomass).map((row) => row.observationId),
         siteName,
+        plantingSitesById,
       });
     },
     [
+      activeFilterCount,
       defaultTimezone,
       downloadAdHocObservationsZip,
       observations,
       plantingSiteId,
       plantingSiteNames,
       plantingSites,
+      plantingSitesById,
       strings.ALL_PLANTING_SITES,
     ]
   );
@@ -326,8 +325,6 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
               },
             },
           }),
-          muiTableHeadCellProps: ({ column }: { column: { id: string } }) =>
-            column.id === 'actionsMenu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
           muiTablePaperProps: { elevation: 0 },
           positionGlobalFilter: 'right' as const,
           renderEmptyRowsFallback: () =>
@@ -349,11 +346,16 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
           onShowGlobalFilterChange: tableState.setShowGlobalFilter,
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
-              {rows.length > 0 && (
+              {plantingSitesLoaded && rows.length > 0 && (
                 <Tooltip title={strings.EXPORT}>
                   <IconButton
                     disabled={table.getFilteredRowModel().rows.length === 0}
-                    onClick={() => void onExport(table.getFilteredRowModel().rows.map((row) => row.original))}
+                    onClick={() =>
+                      void onExport(
+                        table.getFilteredRowModel().rows.map((row) => row.original),
+                        table.getState().columnFilters.length > 0 || Boolean(table.getState().globalFilter)
+                      )
+                    }
                   >
                     <Icon name='iconExport' size='medium' />
                   </IconButton>

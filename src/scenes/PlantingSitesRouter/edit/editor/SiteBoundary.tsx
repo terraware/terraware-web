@@ -1,16 +1,18 @@
-import React, { type JSX, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
+import { Icon, Message } from '@terraware/web-components';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import centroid from '@turf/centroid';
-import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
 import _ from 'lodash';
 
 import { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
 import EditableMap from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
+import { useFeatureEnabled } from 'src/features';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
@@ -18,10 +20,13 @@ import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
+import DrawingBoundaryStatus from './DrawingBoundaryStatus';
 import StepTitleDescription, { Description } from './StepTitleDescription';
+import UploadBoundaryModal, { ParsedBoundary } from './UploadBoundaryModal';
+import UploadedBoundarySummary, { UploadedBoundaryFile } from './UploadedBoundarySummary';
 import { OnValidate } from './types';
-import { boundingAreaHectares, defaultStratumPayload, stratumNameGenerator } from './utils';
-import { findErrors } from './utils';
+import { boundingAreaHectares, defaultStratumPayload, findErrors, stratumNameGenerator } from './utils';
 
 export type SiteBoundaryProps = {
   onValidate?: OnValidate;
@@ -52,10 +57,24 @@ const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollec
         features: [toFeature(boundary, {}, id)],
       };
 
-// undo redo stack to capture site boundary and errors
+// the parse endpoint hands back a bare geometry; the map works in feature collections
+const featureCollectionOf = (geometry: MultiPolygon | Polygon, id: number): FeatureCollection => ({
+  type: 'FeatureCollection',
+  features: [toFeature(geometry, {}, id)],
+});
+
+// number of vertices across every ring of the boundary, which the parse response does not report
+const countPositions = (geometry: MultiPolygon | Polygon): number => {
+  const rings: Position[][] = geometry.type === 'MultiPolygon' ? geometry.coordinates.flat() : geometry.coordinates;
+  return rings.reduce((total, ring) => total + ring.length, 0);
+};
+
+// undo redo stack to capture site boundary, errors, and the file the boundary came from
 type Stack = {
   errorAnnotations?: Feature[];
   siteBoundary?: FeatureCollection;
+  uploadedFile?: UploadedBoundaryFile;
+  uploadId?: number;
 };
 
 export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBoundaryProps): JSX.Element {
@@ -70,13 +89,26 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
 
   const [mode, setMode] = useState<MapEditorMode>();
   const snackbar = useSnackbar();
+  const theme = useTheme();
   const { activeLocale } = useLocalization();
+
+  const fileUploadEnabled = useFeatureEnabled('Boundary File Upload');
+  const [method, setMethod] = useState<BoundaryMethod | undefined>();
+  const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
+  const lastUploadId = useRef<number>(0);
+
+  const uploadedFile = siteBoundaryData?.uploadedFile;
+  const mapKey = siteBoundaryData?.uploadId ?? 0;
 
   // construct union of multipolygons
   const boundary = useMemo<MultiPolygon | undefined>(
     () => (siteBoundaryData?.siteBoundary && unionMultiPolygons(siteBoundaryData?.siteBoundary)) || undefined,
     [siteBoundaryData?.siteBoundary]
   );
+
+  // undoing past an upload drops the file, leaving either a drawn boundary or nothing to choose from
+  const activeMethod =
+    method === 'upload' && !uploadedFile && !showUploadModal ? (boundary ? 'draw' : undefined) : method;
 
   const boundingArea = useMemo<number>(() => (boundary ? boundingAreaHectares(boundary) : 0), [boundary]);
 
@@ -123,6 +155,19 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     if (!activeLocale) {
       return [];
     }
+
+    if (fileUploadEnabled) {
+      return [
+        {
+          text:
+            site.siteType === 'detailed'
+              ? strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION
+              : `${strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION} ${strings.SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE}`,
+        },
+        { text: strings.SITE_BOUNDARY_UPLOAD_TUTORIAL, hasTutorial: true },
+      ];
+    }
+
     const data: Description[] = [
       {
         text:
@@ -150,7 +195,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     }
 
     return data;
-  }, [activeLocale, mode, site.siteType]);
+  }, [activeLocale, fileUploadEnabled, mode, site.siteType]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {
@@ -165,46 +210,138 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   /**
    * Check for errors and mark annotations.
    */
-  const onEditableBoundaryChanged = async (editableBoundary?: FeatureCollection) => {
-    const newBoundary = (editableBoundary && unionMultiPolygons(editableBoundary)) || undefined;
-    const stratum = createStratumWith(newBoundary);
-    const strata = stratum ? [stratum] : [];
-    const errors = await findErrors(
-      {
-        ...site,
-        boundary: newBoundary,
-        strata,
-      },
-      'site_boundary',
-      []
-    );
+  const onEditableBoundaryChanged = useCallback(
+    async (editableBoundary?: FeatureCollection, upload?: Pick<Stack, 'uploadedFile' | 'uploadId'>) => {
+      const newBoundary = (editableBoundary && unionMultiPolygons(editableBoundary)) || undefined;
+      const stratum = createStratumWith(newBoundary);
+      const strata = stratum ? [stratum] : [];
+      const errors = await findErrors(
+        {
+          ...site,
+          boundary: newBoundary,
+          strata,
+        },
+        'site_boundary',
+        []
+      );
 
-    setSiteBoundaryData({
-      errorAnnotations: errors,
-      siteBoundary: editableBoundary,
-    });
-  };
+      setSiteBoundaryData({
+        errorAnnotations: errors,
+        siteBoundary: editableBoundary,
+        // edits to an uploaded boundary keep its file, but clearing the boundary drops it
+        ...(newBoundary ? upload ?? _.pick(siteBoundaryData, ['uploadedFile', 'uploadId']) : {}),
+      });
+    },
+    // setSiteBoundaryData is not stable: it closes over the undo/redo stack index, so a callback
+    // that pins an older copy will push onto a truncated stack and leave the index out of range
+    [setSiteBoundaryData, site, siteBoundaryData]
+  );
+
+  const onSelectMethod = useCallback((selected: BoundaryMethod) => {
+    setMethod(selected);
+    setShowUploadModal(selected === 'upload');
+  }, []);
+
+  const onCloseUploadModal = useCallback(() => {
+    setShowUploadModal(false);
+    setMethod((current) => (current === 'upload' ? undefined : current));
+  }, []);
+
+  const onUploadSuccess = useCallback(
+    (parsed: ParsedBoundary) => {
+      const { areaHa, format, numPolygons } = parsed;
+      // these are only populated when the file parsed successfully
+      if (!parsed.geometry || areaHa === undefined || !format || numPolygons === undefined) {
+        return;
+      }
+      const geometry = parsed.geometry as MultiPolygon | Polygon;
+
+      const file: UploadedBoundaryFile = {
+        areaHa,
+        boundingAreaHa: boundingAreaHectares(geometry),
+        filename: parsed.filename,
+        format,
+        numPoints: countPositions(geometry),
+        numPolygons,
+      };
+      setMethod('upload');
+      setShowUploadModal(false);
+
+      lastUploadId.current += 1;
+      void onEditableBoundaryChanged(featureCollectionOf(geometry, site.id), {
+        uploadedFile: file,
+        uploadId: lastUploadId.current,
+      });
+    },
+    [onEditableBoundaryChanged, site.id]
+  );
+
+  const onRemoveUploadedFile = useCallback(() => {
+    setMethod(undefined);
+    void onEditableBoundaryChanged(undefined);
+  }, [onEditableBoundaryChanged]);
+
+  const onOpenUploadModal = useCallback(() => setShowUploadModal(true), []);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
-        minHeight='180px'
+        minHeight={fileUploadEnabled ? '72px' : '152px'}
         title={strings.SITE_BOUNDARY}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
         tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
       />
-      <EditableMap
-        editableBoundary={siteBoundaryData?.siteBoundary}
-        errorAnnotations={errorAnnotations}
-        onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
-        onRedo={redo}
-        onUndo={undo}
-        setMode={setMode}
-        showSearchBox
-      />
+      {fileUploadEnabled && (
+        <>
+          <Box display='flex' alignItems='center' gap={theme.spacing(0.75)} marginBottom={theme.spacing(2.5)}>
+            <Icon name='info' size='small' style={{ fill: theme.palette.TwClrIcnSecondary, flex: 'none' }} />
+            <Typography fontSize='12px' fontWeight={400} lineHeight='16px' color={theme.palette.TwClrTxtSecondary}>
+              {strings.SITE_BOUNDARY_MAX_BOUNDING_BOX}
+            </Typography>
+          </Box>
+          {uploadedFile && uploadedFile.numPolygons > 1 && (
+            <Box marginBottom={theme.spacing(2)}>
+              <Message
+                body={
+                  strings.formatString(
+                    strings.SITE_BOUNDARY_POLYGONS_COMBINED,
+                    uploadedFile.numPolygons
+                  ) as unknown as string
+                }
+                priority='info'
+                type='page'
+              />
+            </Box>
+          )}
+          {uploadedFile && (
+            <UploadedBoundarySummary
+              file={uploadedFile}
+              onRemove={onRemoveUploadedFile}
+              onReplace={onOpenUploadModal}
+            />
+          )}
+          {!uploadedFile && activeMethod === 'draw' && <DrawingBoundaryStatus onUploadInstead={onOpenUploadModal} />}
+        </>
+      )}
+      <Box display='flex' flexDirection='column' flexGrow={1} position='relative'>
+        <EditableMap
+          key={mapKey}
+          editableBoundary={siteBoundaryData?.siteBoundary}
+          errorAnnotations={errorAnnotations}
+          onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
+          onRedo={redo}
+          onUndo={undo}
+          setMode={setMode}
+          showSearchBox
+        />
+        {fileUploadEnabled && !boundary && !activeMethod && <BoundaryMethodChooser onSelect={onSelectMethod} />}
+        {fileUploadEnabled && showUploadModal && (
+          <UploadBoundaryModal onClose={onCloseUploadModal} onSuccess={onUploadSuccess} />
+        )}
+      </Box>
     </Box>
   );
 }

@@ -41,7 +41,7 @@ export default function Form({ children, className, currentStep, steps, style }:
 
   return (
     <Box className={className} style={style}>
-      <Stepper activeStep={currentStepIndex} sx={{ margin: theme.spacing(0, 5) }}>
+      <Stepper activeStep={currentStepIndex} sx={{ margin: theme.spacing(3, 5, 0) }}>
         {steps.map((step: PlantingSiteStep, index: number) => {
           const stepProps: { completed?: boolean } = {};
           const labelProps: { optional?: React.ReactNode } = {};

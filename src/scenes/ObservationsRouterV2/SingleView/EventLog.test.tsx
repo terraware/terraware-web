@@ -5,7 +5,7 @@ import * as webComponents from '@terraware/web-components' with { rstest: 'impor
 import { screen, within } from '@testing-library/react';
 import { HttpResponse, http } from 'msw';
 
-import { EventLogEntryPayload } from 'src/queries/generated/events';
+import { EventLogEntryPayload, RecordedTreeSubjectPayload } from 'src/queries/generated/events';
 import strings from 'src/strings';
 import {
   captureRequests,
@@ -267,6 +267,70 @@ describe('Observation EventLog species changes', () => {
     await renderHistory(events, plotSpecies);
 
     expect(screen.getByText(/live count/)).toBeInTheDocument();
+  });
+});
+
+describe('Observation EventLog trees and shrubs', () => {
+  it.each([
+    {
+      fullText: 'Tree 1',
+      shortText: 'Tree',
+      treeGrowthForm: 'Tree',
+      treeNumber: 1,
+      trunkNumber: 1,
+      fieldName: 'DBH',
+      expectedLabel: 'Tree 1 DBH',
+    },
+    {
+      fullText: 'Tree 1_2',
+      shortText: 'Tree',
+      treeGrowthForm: 'Trunk',
+      treeNumber: 1,
+      trunkNumber: 2,
+      fieldName: 'tree crown diameter',
+      expectedLabel: 'Tree 1_2 crown diameter',
+    },
+    {
+      fullText: 'Shrub 2',
+      shortText: 'Shrub',
+      treeGrowthForm: 'Shrub',
+      treeNumber: 2,
+      trunkNumber: 1,
+      fieldName: 'Shrub Diameter',
+      expectedLabel: 'Shrub 2 Diameter',
+    },
+  ] satisfies (Pick<
+    RecordedTreeSubjectPayload,
+    'fullText' | 'shortText' | 'treeGrowthForm' | 'treeNumber' | 'trunkNumber'
+  > & {
+    fieldName: string;
+    expectedLabel: string;
+  })[])('identifies $fullText when its $fieldName changes', async ({ fieldName, expectedLabel, ...subject }) => {
+    await renderHistory([
+      {
+        action: {
+          type: 'FieldUpdated',
+          fieldName,
+          changedFrom: ['1,500'],
+          changedTo: ['1,499'],
+        },
+        subject: {
+          type: 'RecordedTree',
+          ...subject,
+          recordedTreeId: 123,
+          observationId: 1,
+          monitoringPlotId: 2,
+          plantingSiteId: 3,
+        },
+        timestamp: '2026-06-15T12:00:00Z',
+        userId: 1,
+        userName: 'Jennifer Yim',
+      },
+    ]);
+
+    expect(screen.getByText(expectedLabel)).toBeInTheDocument();
+    expect(screen.getByText('1,500')).toBeInTheDocument();
+    expect(screen.getByText('1,499')).toBeInTheDocument();
   });
 });
 

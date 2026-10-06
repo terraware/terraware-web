@@ -17,7 +17,7 @@ import Link from 'src/components/common/Link';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useTableState from 'src/hooks/useTableState';
@@ -25,6 +25,7 @@ import { useLocalization } from 'src/providers/hooks';
 import { makeDateRangeFilterFn, stripColumnFilters } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import { useObservationFilters } from '../ObservationFiltersProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
 import SelectObservationButton from './SelectObservationButton';
@@ -69,7 +70,8 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   const defaultTimezone = useDefaultTimeZone().get().id;
   const { downloadBiomassObservationsZip } = useObservationExports();
 
-  const newFiltersEnabled = isEnabled('New Observation Filters');
+  const { activeFilterCount } = useObservationFilters();
+  const newFiltersEnabled = useFeatureEnabled('New Observation Filters');
 
   const {
     columnFilters,
@@ -239,14 +241,25 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   ]);
 
   const onExportBiomassObservations = useCallback(
-    async (filteredRows: BiomassRow[]) => {
+    async (filteredRows: BiomassRow[], hasTableFilters: boolean) => {
       const siteName =
         typeof plantingSiteId === 'number'
           ? plantingSitesNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
           : strings.ALL_PLANTING_SITES;
-      await downloadBiomassObservationsZip(siteName, filteredRows);
+      await downloadBiomassObservationsZip(
+        siteName,
+        filteredRows,
+        hasTableFilters || (newFiltersEnabled && activeFilterCount > 0)
+      );
     },
-    [downloadBiomassObservationsZip, plantingSiteId, plantingSitesNames, strings.ALL_PLANTING_SITES]
+    [
+      activeFilterCount,
+      downloadBiomassObservationsZip,
+      newFiltersEnabled,
+      plantingSiteId,
+      plantingSitesNames,
+      strings.ALL_PLANTING_SITES,
+    ]
   );
 
   if (!isLoading && rows.length === 0) {
@@ -307,7 +320,10 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
                   <IconButton
                     disabled={table.getFilteredRowModel().rows.length === 0}
                     onClick={() =>
-                      void onExportBiomassObservations(table.getFilteredRowModel().rows.map((row) => row.original))
+                      void onExportBiomassObservations(
+                        table.getFilteredRowModel().rows.map((row) => row.original),
+                        table.getState().columnFilters.length > 0 || Boolean(table.getState().globalFilter)
+                      )
                     }
                   >
                     <Icon name='iconExport' size='medium' />

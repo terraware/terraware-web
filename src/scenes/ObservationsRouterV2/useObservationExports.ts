@@ -318,6 +318,8 @@ const useObservationExports = () => {
         )
       );
 
+      data.sort((a, b) => b.monitoringPlotNumber - a.monitoringPlotNumber);
+
       return makeCsv(columnHeaders, data, false);
     },
     [strings]
@@ -401,6 +403,8 @@ const useObservationExports = () => {
         )
       );
 
+      data.sort((a, b) => b.monitoringPlotNumber - a.monitoringPlotNumber);
+
       return makeCsv(columnHeaders, data, false);
     },
     [strings]
@@ -463,6 +467,8 @@ const useObservationExports = () => {
           })
         )
       );
+
+      data.sort((a, b) => b.monitoringPlot - a.monitoringPlot);
 
       return makeCsv(columnHeaders, data, false);
     },
@@ -624,7 +630,9 @@ const useObservationExports = () => {
         { id: observationResults.plantingSiteId, includeZones: false },
         true
       ).unwrap();
-      const fileNamePrefix = `${siteResults.site.name}-${observationResults.startDate}-${strings.BIOMASS_OBSERVATION_FILENAME_PREFIX}`;
+      const plotNumber = observationResults.adHocPlot?.monitoringPlotNumber;
+      const plotNumberPrefix = plotNumber !== undefined ? `${plotNumber}-` : '';
+      const fileNamePrefix = `${plotNumberPrefix}${siteResults.site.name}-${observationResults.startDate}-${strings.BIOMASS_OBSERVATION_FILENAME_PREFIX}`;
 
       await downloadZipFile({
         dirName: sanitize(fileNamePrefix),
@@ -636,13 +644,13 @@ const useObservationExports = () => {
   );
 
   const downloadBiomassObservationsZip = useCallback(
-    async (siteName: string, observations: { observationId: number }[]) => {
+    async (siteName: string, observations: { observationId: number }[], hasFilters = false) => {
       if (observations.length === 0) {
         return;
       }
 
       const downloadDate = DateTime.now().setZone(defaultTimeZone).toFormat('yyyy-MM-dd');
-      const fileNamePrefix = `${siteName}_Ad Hoc Biomass Monitoring plots_${downloadDate}_filtered`;
+      const fileNamePrefix = `${siteName}_Ad Hoc Biomass Monitoring plots_${downloadDate}${hasFilters ? '_filtered' : ''}`;
       const observationIds = observations.map(({ observationId }) => observationId);
       await downloadZipFile({
         dirName: fileNamePrefix,
@@ -657,11 +665,15 @@ const useObservationExports = () => {
     async ({
       adHocObservationsResults,
       biomassObservationIds,
+      hasFilters = false,
       siteName,
+      plantingSitesById,
     }: {
       adHocObservationsResults: AdHocObservationResults[];
       biomassObservationIds: number[];
+      hasFilters?: boolean;
       siteName: string;
+      plantingSitesById: Record<number, PlantingSitePayload>;
     }) => {
       const fileNamePrefix = `${siteName}-${strings.AD_HOC_PLOTS}`;
       const files: { fileName: string; content: Blob | string }[] = [];
@@ -669,7 +681,7 @@ const useObservationExports = () => {
       if (adHocObservationsResults.length > 0) {
         files.push({
           fileName: `${siteName}-${strings.AD_HOC_PLANT_MONITORING}`,
-          content: makeAdHocObservationsCsv(adHocObservationsResults),
+          content: makeAdHocObservationsCsv(adHocObservationsResults, plantingSitesById),
         });
       }
       if (biomassObservationIds.length > 0) {
@@ -680,7 +692,7 @@ const useObservationExports = () => {
       }
 
       await downloadZipFile({
-        dirName: `${fileNamePrefix}_filtered`,
+        dirName: `${fileNamePrefix}${hasFilters ? '_filtered' : ''}`,
         files,
         suffix: '.csv',
       });

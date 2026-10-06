@@ -6,6 +6,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { HttpResponse, http } from 'msw';
 
 import ToastSnackbar from 'src/components/ToastSnackbar';
+import { FacilityPayload } from 'src/queries/generated/organizations';
 import strings from 'src/strings';
 import {
   type RenderWithProvidersOptions,
@@ -18,7 +19,6 @@ import {
   renderWithProviders,
   server,
 } from 'src/test-utils';
-import { Facility } from 'src/types/Facility';
 import { Project } from 'src/types/Project';
 
 import Accession2CreateView from './Accession2CreateView';
@@ -86,7 +86,7 @@ const LocationProbe = () => {
 
 type CreateViewOptions = {
   /** Seed banks the organization offers. A single one auto-populates the required location. */
-  facilities?: Facility[];
+  facilities?: FacilityPayload[];
   /** The organization's own zone, which the form falls back to before a seed bank is known. */
   orgTimeZone?: string;
   localization?: RenderWithProvidersOptions['localization'];
