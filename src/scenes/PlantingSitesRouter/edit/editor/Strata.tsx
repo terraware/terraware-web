@@ -4,21 +4,15 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 
-import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
 import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
-import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import { leftMostFeature, toFeature, toMultiPolygon } from 'src/components/Map/utils';
+import EditableMap, { EditableMapBoundary, EditableMapClickedFeature } from 'src/components/NewMap/EditableMap';
+import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import {
-  GeometryFeature,
-  MapPopupRenderer,
-  MapSourceProperties,
-  PopupInfo,
-  RenderableReadOnlyBoundary,
-} from 'src/types/Map';
+import { GeometryFeature, MapPopupRenderer, MapSourceProperties, PopupInfo } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -101,7 +95,7 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
   const theme = useTheme();
   const mapStyles = useMapStyle(theme);
   const snackbar = useSnackbar();
-  const getRenderAttributes = useRenderAttributes();
+  const { exclusionsLayerStyle, sitesLayerStyle, strataLayerStyle } = useMapFeatureStyles();
   const activeLocale = useLocalization();
 
   const strata = useMemo<FeatureCollection | undefined>(
@@ -153,19 +147,19 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
     }
   }, [onValidate, site.strata, snackbar, strata, strataData?.errorAnnotations]);
 
-  const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
+  const readOnlyBoundary = useMemo<EditableMapBoundary[] | undefined>(() => {
     if (!strata?.features) {
       return undefined;
     }
 
     const idGenerator = IdGenerator(strata.features);
 
-    const exclusionsBoundary: RenderableReadOnlyBoundary[] = site.exclusion
+    const exclusionsBoundary: EditableMapBoundary[] = site.exclusion
       ? [
           {
             data: { type: 'FeatureCollection', features: [toFeature(site.exclusion, {}, 0)] },
             id: 'exclusions',
-            renderProperties: getRenderAttributes('exclusions'),
+            style: exclusionsLayerStyle,
           },
         ]
       : [];
@@ -175,7 +169,7 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
       {
         data: { type: 'FeatureCollection', features: [toFeature(site.boundary!, {}, site.id)] },
         id: 'site',
-        renderProperties: getRenderAttributes('site'),
+        style: sitesLayerStyle,
       },
       {
         data: {
@@ -184,17 +178,11 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
         },
         id: 'stratum',
         isInteractive: true,
-        renderProperties: {
-          ...getRenderAttributes('draft-stratum'),
-          annotation: {
-            textField: 'name',
-            textColor: theme.palette.TwClrBaseWhite as string,
-            textSize: 16,
-          },
-        },
+        labelProperty: 'name',
+        style: strataLayerStyle,
       },
     ];
-  }, [getRenderAttributes, site.boundary, site.exclusion, site.id, theme.palette.TwClrBaseWhite, strata]);
+  }, [exclusionsLayerStyle, site.boundary, site.exclusion, site.id, sitesLayerStyle, strata, strataLayerStyle]);
 
   const description = useMemo<Description[]>(
     () =>
@@ -301,7 +289,7 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
 
   // Pick the first stratum, we won't have overlapping strata.
   const featureSelectorOnClick = useCallback(
-    (features: LayerFeature[]) => features.find((feature) => feature.layer?.source === 'stratum'),
+    (features: EditableMapClickedFeature[]) => features.find((clicked) => clicked.boundaryId === 'stratum'),
     []
   );
 
