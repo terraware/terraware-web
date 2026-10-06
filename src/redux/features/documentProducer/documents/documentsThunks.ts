@@ -1,5 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
+import { baseApi } from 'src/queries/baseApi';
+import { QueryTagTypes } from 'src/queries/tags';
 import DocumentService from 'src/services/documentProducer/DocumentService';
 import strings from 'src/strings';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
@@ -80,9 +82,10 @@ export type UpgradeManifestRequest = {
 
 export const requestUpgradeManifest = createAsyncThunk(
   'updateDocument',
-  async ({ id, payload }: UpgradeManifestRequest, { rejectWithValue }) => {
+  async ({ id, payload }: UpgradeManifestRequest, { dispatch, rejectWithValue }) => {
     const response = await DocumentService.upgradeManifest(id, payload);
     if (response.requestSucceeded) {
+      dispatch(baseApi.util.invalidateTags([QueryTagTypes.Variables, QueryTagTypes.VariableValues]));
       return true;
     }
 

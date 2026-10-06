@@ -20,6 +20,7 @@ import Link from 'src/components/common/Link';
 import PageForm from 'src/components/common/PageForm';
 import Icon from 'src/components/common/icon/Icon';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useSpecificVariablesWithValues from 'src/hooks/variables/useSpecificVariablesWithValues';
 import { useLocalization, useUser } from 'src/providers';
 import { useUpdateProjectAcceleratorDetailsMutation } from 'src/queries/generated/acceleratorProjects';
 import { useListGlobalRolesQuery } from 'src/queries/generated/globalRoles';
@@ -30,12 +31,7 @@ import {
   useUpdateInternalUserMutation,
 } from 'src/queries/generated/projectInternalUsers';
 import { selectUploadImageValue } from 'src/redux/features/documentProducer/values/valuesSelector';
-import {
-  requestListSpecificVariablesValues,
-  requestUploadManyImageValues,
-} from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectSpecificVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestListSpecificVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
+import { requestUploadManyImageValues } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { AcceleratorProject, LAND_USE_MODEL_TYPES } from 'src/types/AcceleratorProject';
 import { PhaseType } from 'src/types/Phase';
@@ -106,9 +102,7 @@ const ProjectProfileEdit = () => {
   const [uploadImagesRequestId, setUploadImagesRequestId] = useState('');
   const uploadImagesResponse = useAppSelector(selectUploadImageValue(uploadImagesRequestId));
 
-  const variableValues = useAppSelector((state) =>
-    selectSpecificVariablesWithValues(state, variableStableIds, projectId)
-  );
+  const { variablesWithValues: variableValues } = useSpecificVariablesWithValues(variableStableIds, projectId);
   const stableToVariable = useMemo<Record<string, VariableWithValues> | undefined>(
     () =>
       variableValues.length > 0
@@ -212,16 +206,6 @@ const ProjectProfileEdit = () => {
       setUploadImagesRequestId('');
     }
   }, [uploadImagesResponse, redirectToProjectView, snackbar]);
-
-  useEffect(() => {
-    void dispatch(requestListSpecificVariables(variableStableIds));
-    void dispatch(
-      requestListSpecificVariablesValues({
-        projectId,
-        variablesStableIds: variableStableIds,
-      })
-    );
-  }, [dispatch, projectId]);
 
   useEffect(() => {
     if (globalRolesUsersData) {
