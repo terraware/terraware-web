@@ -1946,7 +1946,7 @@ SAMPLE_OBSERVED_DENSITY_WARNING,This calculation is based on a sample from less 
 SAND,Sand,
 SAND_PETRI_DISH,Sand Petri Dish,
 SATELLITE,Satellite,
-SAVE_AND_CLOSE,Save and close,
+SAVE_AND_CLOSE,Save and Close,
 SAVE_AND_NEXT,Save and Next,
 SAVE_AND_REQUEST,Save & Request,
 SAVE_AND_REQUEST_TOOLTIP,Save & Request will send a planting withdrawal request to the Nursery for this Planting Date.,

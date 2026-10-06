@@ -1945,7 +1945,7 @@ SAMPLE_OBSERVED_DENSITY_WARNING,Ce calcul est fondé sur un échantillon réalis
 SAND,Sable,5d54e2e8
 SAND_PETRI_DISH,Boîte de Petri avec sable,25b60fb2
 SATELLITE,Satellite,14d51868
-SAVE_AND_CLOSE,Enregistrer et fermer,8a1021f3
+SAVE_AND_CLOSE,Enregistrer et fermer,aaa98fc6
 SAVE_AND_NEXT,Sauvegarder et suivant,1ca9d40a
 SAVE_AND_REQUEST,Enregistrer et demander,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Enregistrer et demander enverra une demande de retrait de plants à la pépinière pour cette date de plantation.,9f9b8d4e

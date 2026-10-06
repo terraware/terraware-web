@@ -1945,7 +1945,7 @@ SAMPLE_OBSERVED_DENSITY_WARNING,Este cálculo se basa en una muestra menor a una
 SAND,Arena,5d54e2e8
 SAND_PETRI_DISH,Pula el Disco de Petri,25b60fb2
 SATELLITE,Satélite,14d51868
-SAVE_AND_CLOSE,Guardar y cerrar,8a1021f3
+SAVE_AND_CLOSE,Guardar y cerrar,aaa98fc6
 SAVE_AND_NEXT,Guardar y Continuar,1ca9d40a
 SAVE_AND_REQUEST,Guardar y solicitar,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Guardar y Solicitar enviará una solicitud de retiro de plantas al Vivero para esta fecha de plantación.,9f9b8d4e

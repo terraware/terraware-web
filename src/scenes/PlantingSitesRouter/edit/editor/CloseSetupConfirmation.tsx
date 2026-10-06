@@ -34,7 +34,7 @@ export default function CloseSetupConfirmation({
       onClose={onKeepEditing}
       open={true}
       title={canSave ? strings.CLOSE_SITE_SETUP : strings.DISCARD_THIS_SITE}
-      size='medium'
+      size='large'
       message={getMessage()}
       leftButton={
         <Button
