@@ -357,9 +357,12 @@ CLICK_UP_LINK,Lien ClickUp,787363a6
 CLIMATE,Climat,63ba44ee
 CLOSE,Fermer,e6e3f022
 CLOSE_AND_EDIT,Fermer et modifier,1c3ea202
+CLOSE_DRAFT_SITE_SETUP_MESSAGE,Vos modifications apportées à {0} n'ont pas été enregistrées. Enregistrez-les dans votre brouillon ou abandonnez-les.,2fc3437d
+CLOSE_NEW_SITE_SETUP_MESSAGE,"{0} n'a pas encore été enregistré. Enregistrez-le comme brouillon pour terminer la configuration plus tard, ou abandonnez-le.",7ca714c3
 CLOSE_PLANTING_SEASON,Clore la saison de plantation,fc3b2abc
 CLOSE_PLANTING_SEASON_CONFIRM,Vous êtes sur le point de clore {0}. La clôture marquera la saison comme terminée et empêchera toute modification ultérieure. Cette action est irréversible.,ee1f53f1
 CLOSE_SEASON,Clore la saison,72b4448a
+CLOSE_SITE_SETUP,Fermer la configuration du site ?,1304ca0d
 CLOSED,Fermé,7b8d0429
 COLLECTED_FROM,Collecté à partir de,ffc6ad60
 COLLECTING_SITE,Site de collecte,7491b42b
@@ -542,6 +545,9 @@ DETAILS,Détails,c13bd424
 DEV_SERVER_ERROR,Serveur non disponible (possibilité de redémarrage avec mise à jour du code). Redémarrer?,d3be39f0
 DIAMETER_AT_BREAST_HEIGHT,Diamètre à hauteur de poitrine (DHP) à maturité (cm),6b42a16f
 DIFFICULT_ACCESSIBILITY,Accessibilité difficile,18c83274
+DISCARD,Abandonner,51a7ed1d
+DISCARD_THIS_SITE,Abandonner ce site ?,ed8d4636
+DISCARD_UNNAMED_SITE_MESSAGE,Ce site ne peut pas être enregistré comme brouillon sans nom. Abandonnez ce que vous avez saisi ou continuez la modification pour ajouter un nom.,5f5bca5b
 DISMISS,Fermer,a56709f4
 DO_NOT_USE,Ne pas utiliser,6950f9e5
 DOC_PRODUCER,Producteur de docs,e40f8aa1
@@ -970,6 +976,7 @@ IUCN_VULNERABLE,Vulnérable (VU),ed5dcc89
 JOIN_EVENT_NAME,Rejoindre {0},14c4bd8e
 JUST_SAVED,Enregistré à l’instant,d426eaa3
 JUSTIFICATION,Justification,88588c24
+KEEP_EDITING,Continuer la modification,9f4043c6
 KEEP_ORIGINAL,Garder l'original,21773616
 KEEP_VALUE,Conserver la valeur,092210f9
 KEY,Légende,b46ab088
@@ -1918,6 +1925,7 @@ SAVE_AND_CLOSE,Enregistrer et fermer,aaa98fc6
 SAVE_AND_NEXT,Sauvegarder et suivant,1ca9d40a
 SAVE_AND_REQUEST,Enregistrer et demander,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Enregistrer et demander enverra une demande de retrait de plants à la pépinière pour cette date de plantation.,9f9b8d4e
+SAVE_AS_DRAFT,Enregistrer comme brouillon,2fffd988
 SAVE_OBSERVATION_DATA,Enregistrer les données d'observation,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Vos modifications remplaceront toutes les données saisies précédemment. Êtes-vous sûr de vouloir effectuer ces modifications ?,b1657c44
 SAVE_PHOTOS_AND_VIDEOS,Enregistrer les photos et vidéos,d38ce0cc
