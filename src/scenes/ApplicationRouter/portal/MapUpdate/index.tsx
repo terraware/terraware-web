@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, Card, Grid, useTheme } from '@mui/material';
 import { BusySpinner, Button } from '@terraware/web-components';
@@ -16,9 +16,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
-import { requestUpdateApplicationBoundary } from 'src/redux/features/application/applicationAsyncThunks';
-import { selectApplicationUpdateBoundary } from 'src/redux/features/application/applicationSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useUpdateApplicationBoundaryMutation } from 'src/queries/generated/applications';
 import StepTitleDescription, { Description } from 'src/scenes/PlantingSitesRouter/edit/editor/StepTitleDescription';
 import strings from 'src/strings';
 import { RenderableReadOnlyBoundary } from 'src/types/Map';
@@ -37,7 +35,6 @@ const MapUpdateView = () => {
   const theme = useTheme();
 
   const { activeLocale } = useLocalization();
-  const dispatch = useAppDispatch();
   const { selectedApplication, reload } = useApplicationData();
   const { goToApplicationPrescreen } = useNavigateTo();
   const { toastSuccess, toastError } = useSnackbar();
@@ -45,8 +42,7 @@ const MapUpdateView = () => {
 
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>();
 
-  const [requestId, setRequestId] = useState<string>('');
-  const result = useAppSelector(selectApplicationUpdateBoundary(requestId));
+  const [updateApplicationBoundary, { isLoading: isSaving }] = useUpdateApplicationBoundaryMutation();
   const countryBoundaryData = useCountryBoundary(selectedApplication?.countryCode);
 
   const countryBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
@@ -94,30 +90,33 @@ const MapUpdateView = () => {
   const onSave = useCallback(() => {
     if (selectedApplication) {
       if (boundary) {
-        const dispatched = dispatch(
-          requestUpdateApplicationBoundary({ applicationId: selectedApplication.id, boundary })
-        );
-        setRequestId(dispatched.requestId);
+        const applicationId = selectedApplication.id;
+        void updateApplicationBoundary({
+          applicationId,
+          updateApplicationBoundaryRequestPayload: { boundary },
+        })
+          .unwrap()
+          .then(() => {
+            if (activeLocale) {
+              toastSuccess(strings.PROPOSED_PROJECT_BOUNDARIES_ADDED);
+            }
+            return reload(() => goToApplicationPrescreen(applicationId));
+          })
+          .catch(() => undefined);
       } else {
         toastError(strings.APPLICATION_ERROR_NO_PROJECT_BOUNDARY);
       }
     }
-  }, [selectedApplication, boundary, dispatch, toastError]);
-
-  const navigateToApplicationPrescreen = useCallback(() => {
-    if (selectedApplication) {
-      goToApplicationPrescreen(selectedApplication.id);
-    }
-  }, [selectedApplication, goToApplicationPrescreen]);
-
-  useEffect(() => {
-    if (result && result.status === 'success') {
-      if (activeLocale) {
-        toastSuccess(strings.PROPOSED_PROJECT_BOUNDARIES_ADDED);
-      }
-      void reload(navigateToApplicationPrescreen);
-    }
-  }, [activeLocale, reload, result, toastSuccess, navigateToApplicationPrescreen]);
+  }, [
+    activeLocale,
+    boundary,
+    goToApplicationPrescreen,
+    reload,
+    selectedApplication,
+    toastError,
+    toastSuccess,
+    updateApplicationBoundary,
+  ]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {
@@ -161,7 +160,7 @@ const MapUpdateView = () => {
         marginTop: selectedApplication.status === 'Failed Pre-screen' ? theme.spacing(4) : 0,
       }}
     >
-      {result?.status === 'pending' && <BusySpinner withSkrim={true} />}
+      {isSaving && <BusySpinner withSkrim={true} />}
       <Grid container flexDirection={'row'} spacing={3} sx={{ padding: 0 }}>
         <Grid item xs={4}>
           <StepTitleDescription
