@@ -132,7 +132,7 @@ const useSyncActivityMedia = () => {
               const obsUploadResponse = await uploadOtherPlotMedia({
                 observationId,
                 plotId: item.data.monitoringPlotId,
-                body: { file: item.data.file, payload: {} },
+                body: { file: item.data.file, payload: { isOriginal: false } },
               }).unwrap();
               uploadedFileId = obsUploadResponse.fileId;
             } else {

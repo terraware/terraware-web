@@ -128,6 +128,7 @@ const injectedRtkApi = api.injectEndpoints({
         params: {
           caption: queryArg.caption,
           fileBatchId: queryArg.fileBatchId,
+          isOriginal: queryArg.isOriginal,
           position: queryArg.position,
           type: queryArg['type'],
         },
@@ -294,6 +295,7 @@ export type UploadOtherPlotMediaApiArg = {
   plotId: number;
   caption?: string;
   fileBatchId?: number;
+  isOriginal?: boolean;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
   type?: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
   body: {
@@ -1147,6 +1149,8 @@ export type UploadPlotMediaResponsePayload = {
 export type UploadPlotMediaRequestPayload = {
   caption?: string;
   fileBatchId?: number;
+  /** If true, this file should be considered part of the original observation. */
+  isOriginal?: boolean;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
   /** Type of subject the uploaded file depicts. */
   type?: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
