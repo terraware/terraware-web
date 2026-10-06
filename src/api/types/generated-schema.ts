@@ -12910,6 +12910,11 @@ export interface components {
             caption?: string;
             /** Format: int64 */
             fileBatchId?: number;
+            /**
+             * @description If true, this file should be considered part of the original observation.
+             * @default false
+             */
+            isOriginal: boolean;
             /** @enum {string} */
             position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
             /**
@@ -23079,6 +23084,7 @@ export interface operations {
             query?: {
                 caption?: string;
                 fileBatchId?: number;
+                isOriginal?: boolean;
                 position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
                 type?: "Plot" | "Quadrat" | "Soil" | "Explanation";
             };
