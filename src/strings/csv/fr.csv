@@ -624,6 +624,7 @@ EDIT_ACTIVITY,Modifier l’activité,5b6476f3
 EDIT_BATCH_DETAILS,Modifier les détails du lot,d2f2112a
 EDIT_COMMON_INDICATOR,Modifier l’indicateur commun,e14bc686
 EDIT_COMMON_INDICATOR_CONFIRMATION,Les modifications apportées à cet indicateur commun seront appliquées à TOUS les projets. Voulez-vous vraiment que ces mises à jour s’appliquent à tous les projets ?,8a103582
+EDIT_DETAILS,Modifier les détails,9711cdac
 EDIT_DOCUMENT_DETAILS,Modifier les détails du document,92155983
 EDIT_FEEDBACK,Modifier les commentaires,6b52e0e6
 EDIT_FUNDING_ENTITY,Modifier l'organisme de financement,f21be0e0

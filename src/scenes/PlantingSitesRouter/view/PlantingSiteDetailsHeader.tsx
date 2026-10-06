@@ -13,13 +13,11 @@ import { isAdmin } from 'src/utils/organization';
 
 export type PlantingSiteDetailsHeaderProps = {
   onDelete: () => void;
-  onEdit: () => void;
   plantingSite: MinimalPlantingSite;
 };
 
 export default function PlantingSiteDetailsHeader({
   onDelete,
-  onEdit,
   plantingSite,
 }: PlantingSiteDetailsHeaderProps): JSX.Element {
   const { isMobile } = useDeviceInfo();
@@ -36,7 +34,7 @@ export default function PlantingSiteDetailsHeader({
           {plantingSite.name}
         </Typography>
         {isAdmin(selectedOrganization) && (
-          <Box display='flex' alignItems='center' gap={theme.spacing(1.5)} marginLeft='auto'>
+          <Box marginLeft='auto'>
             <Button
               icon='iconTrashCan'
               id='delete-planting-site'
@@ -45,13 +43,6 @@ export default function PlantingSiteDetailsHeader({
               priority='secondary'
               size='medium'
               type='destructive'
-            />
-            <Button
-              icon='iconEdit'
-              label={isMobile ? undefined : strings.EDIT_PLANTING_SITE}
-              priority='primary'
-              size='medium'
-              onClick={onEdit}
             />
           </Box>
         )}
