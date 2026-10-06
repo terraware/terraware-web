@@ -3233,8 +3233,34 @@
 <a name='L3168'></a><a href='#L3168'>3168</a>
 <a name='L3169'></a><a href='#L3169'>3169</a>
 <a name='L3170'></a><a href='#L3170'>3170</a>
-<a name='L3171'></a><a href='#L3171'>3171</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L3171'></a><a href='#L3171'>3171</a>
+<a name='L3172'></a><a href='#L3172'>3172</a>
+<a name='L3173'></a><a href='#L3173'>3173</a>
+<a name='L3174'></a><a href='#L3174'>3174</a>
+<a name='L3175'></a><a href='#L3175'>3175</a>
+<a name='L3176'></a><a href='#L3176'>3176</a>
+<a name='L3177'></a><a href='#L3177'>3177</a>
+<a name='L3178'></a><a href='#L3178'>3178</a>
+<a name='L3179'></a><a href='#L3179'>3179</a>
+<a name='L3180'></a><a href='#L3180'>3180</a>
+<a name='L3181'></a><a href='#L3181'>3181</a>
+<a name='L3182'></a><a href='#L3182'>3182</a>
+<a name='L3183'></a><a href='#L3183'>3183</a>
+<a name='L3184'></a><a href='#L3184'>3184</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">75x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -6820,10 +6846,15 @@ export const strings = {
   CLIMATE: 'Climat',
   CLOSE: 'Fermer',
   CLOSE_AND_EDIT: 'Fermer et modifier',
+  CLOSE_DRAFT_SITE_SETUP_MESSAGE:
+    "Vos modifications apportées à {0} n'ont pas été enregistrées. Enregistrez-les dans votre brouillon ou abandonnez-les.",
+  CLOSE_NEW_SITE_SETUP_MESSAGE:
+    "{0} n'a pas encore été enregistré. Enregistrez-le comme brouillon pour terminer la configuration plus tard, ou abandonnez-le.",
   CLOSE_PLANTING_SEASON: 'Clore la saison de plantation',
   CLOSE_PLANTING_SEASON_CONFIRM:
     'Vous êtes sur le point de clore {0}. La clôture marquera la saison comme terminée et empêchera toute modification ultérieure. Cette action est irréversible.',
   CLOSE_SEASON: 'Clore la saison',
+  CLOSE_SITE_SETUP: 'Fermer la configuration du site ?',
   CLOSED: 'Fermé',
   COLLECTED_FROM: 'Collecté à partir de',
   COLLECTING_SITE: 'Site de collecte',
@@ -6893,6 +6924,7 @@ export const strings = {
   CREATE_ORGANIZATION_QUESTION_LOCATION_TYPES:
     "Votre organisation gère-t-elle l'un des éléments suivants ? Cochez toutes les cases correspondantes.",
   CREATE_ORGANIZATION_QUESTION_ORGANIZATION_TYPE: 'Lequel des éléments suivants décrit le mieux votre organisation ?',
+  CREATE_PLANTING_SITE: 'Créer un site de plantation',
   CREATE_SEASON: 'Créer une saison',
   CREATE_SPECIES_LIST: "Créer une liste d'espèces",
   CREATE_VIRTUAL_PLOT: 'Créer une parcelle virtuelle',
@@ -7032,6 +7064,10 @@ export const strings = {
   DEV_SERVER_ERROR: 'Serveur non disponible (possibilité de redémarrage avec mise à jour du code). Redémarrer?',
   DIAMETER_AT_BREAST_HEIGHT: 'Diamètre à hauteur de poitrine (DHP) à maturité (cm)',
   DIFFICULT_ACCESSIBILITY: 'Accessibilité difficile',
+  DISCARD: 'Abandonner',
+  DISCARD_THIS_SITE: 'Abandonner ce site ?',
+  DISCARD_UNNAMED_SITE_MESSAGE:
+    'Ce site ne peut pas être enregistré comme brouillon sans nom. Abandonnez ce que vous avez saisi ou continuez la modification pour ajouter un nom.',
   DISMISS: 'Fermer',
   DO_NOT_USE: 'Ne pas utiliser',
   DOC_PRODUCER: 'Producteur de docs',
@@ -7502,6 +7538,7 @@ export const strings = {
   JOIN_EVENT_NAME: 'Rejoindre {0}',
   JUST_SAVED: 'Enregistré à l’instant',
   JUSTIFICATION: 'Justification',
+  KEEP_EDITING: 'Continuer la modification',
   KEEP_ORIGINAL: "Garder l'original",
   KEEP_VALUE: 'Conserver la valeur',
   KEY: 'Légende',
@@ -8560,6 +8597,7 @@ export const strings = {
   RESCHEDULE: 'Reporter',
   RESCHEDULE_OBSERVATION: "Reporter l'observation",
   RESET: 'Réinitialisation',
+  RESET_BOUNDARY_SETUP: 'Réinitialiser la configuration des limites',
   RESET_COLUMNS: 'Réinitialiser les colonnes',
   RESET_INDICATOR: "Réinitialiser l'indicateur",
   RESET_INDICATOR_CONFIRM:
@@ -8603,6 +8641,7 @@ export const strings = {
   SAVE_AND_REQUEST: 'Enregistrer et demander',
   SAVE_AND_REQUEST_TOOLTIP:
     'Enregistrer et demander enverra une demande de retrait de plants à la pépinière pour cette date de plantation.',
+  SAVE_AS_DRAFT: 'Enregistrer comme brouillon',
   SAVE_OBSERVATION_DATA: "Enregistrer les données d'observation",
   SAVE_OBSERVATION_DATA_DESCRIPTION:
     'Vos modifications remplaceront toutes les données saisies précédemment. Êtes-vous sûr de vouloir effectuer ces modifications ?',
@@ -9580,7 +9619,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-06T21:13:32.791Z
+                at 2026-10-06T22:47:04.367Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
