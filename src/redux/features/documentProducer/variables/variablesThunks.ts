@@ -2,84 +2,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { baseApi } from 'src/queries/baseApi';
 import { QueryTagTypes } from 'src/queries/tags';
-import { Response2 } from 'src/services/HttpService';
 import VariableService from 'src/services/documentProducer/VariableService';
 import strings from 'src/strings';
-import {
-  UpdateVariableOwnerPayload,
-  UpdateVariableWorkflowDetailsPayload,
-  VariableListResponse,
-  VariableOwnersListResponse,
-} from 'src/types/documentProducer/Variable';
-
-export const requestListAllVariables = createAsyncThunk('listAllVariables', async (_, { rejectWithValue }) => {
-  const response: Response2<VariableListResponse> = await VariableService.getAllVariables();
-  if (response && response.requestSucceeded && response.data) {
-    return response.data.variables;
-  }
-
-  return rejectWithValue(response.error || strings.GENERIC_ERROR);
-});
-
-export const requestListDeliverableVariables = createAsyncThunk(
-  'listDeliverableVariables',
-  async (deliverableId: number, { rejectWithValue }) => {
-    const response: Response2<VariableListResponse> = await VariableService.getDeliverableVariables(deliverableId);
-    if (response && response.requestSucceeded && response.data) {
-      return response.data.variables;
-    }
-
-    return rejectWithValue(response.error || strings.GENERIC_ERROR);
-  }
-);
-
-export const requestListSpecificVariables = createAsyncThunk(
-  'listSpecificVariables',
-  async (variablesIds: string[], { rejectWithValue }) => {
-    const response: Response2<VariableListResponse> = await VariableService.getSpecificVariables(variablesIds);
-    if (response && response.requestSucceeded && response.data) {
-      return response.data.variables;
-    }
-
-    return rejectWithValue(response.error || strings.GENERIC_ERROR);
-  }
-);
-
-export const requestListDocumentVariables = createAsyncThunk(
-  'listDocumentVariables',
-  async (documentId: number, { rejectWithValue }) => {
-    const response: Response2<VariableListResponse> = await VariableService.getDocumentVariables(documentId);
-    if (response && response.requestSucceeded && response.data) {
-      return response.data.variables;
-    }
-
-    return rejectWithValue(response.error || strings.GENERIC_ERROR);
-  }
-);
-
-export const requestListVariablesOwners = createAsyncThunk(
-  'listVariablesOwners',
-  async (projectId: number, { rejectWithValue }) => {
-    const response: Response2<VariableOwnersListResponse> = await VariableService.getVariablesOwners(projectId);
-    if (response.requestSucceeded && response.data) {
-      return response.data.variables;
-    }
-
-    return rejectWithValue(response.error || strings.GENERIC_ERROR);
-  }
-);
-
-export const requestGetVariableHistory = createAsyncThunk(
-  'getVariableHistory',
-  async (request: { projectId: number; variableId: number }, { rejectWithValue }) => {
-    const response = await VariableService.getVariableHistory(request.projectId, request.variableId);
-    if (response.requestSucceeded && response.data) {
-      return response.data;
-    }
-
-    return rejectWithValue(response.error || strings.GENERIC_ERROR);
-  }
-);
+import { UpdateVariableOwnerPayload, UpdateVariableWorkflowDetailsPayload } from 'src/types/documentProducer/Variable';
 
 export const requestUpdateVariableWorkflowDetails = createAsyncThunk(
   'updateVariableWorkflowDetails',

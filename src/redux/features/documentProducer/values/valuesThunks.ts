@@ -2,52 +2,13 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { baseApi } from 'src/queries/baseApi';
 import { QueryTagTypes } from 'src/queries/tags';
-import { Response2 } from 'src/services/HttpService';
 import ValueService from 'src/services/documentProducer/ValueService';
 import strings from 'src/strings';
 import {
   ReplaceSectionValuesOperationPayloadWithProjectId,
   UpdateVariableValuesRequestWithProjectId,
   UploadImageValueRequestPayloadWithProjectId,
-  VariableValuesListResponse,
 } from 'src/types/documentProducer/VariableValue';
-
-export const requestListDeliverableVariablesValues = createAsyncThunk(
-  'listDeliverableVariablesValues',
-  async (params: { deliverableId: number; projectId: number }, { rejectWithValue }) => {
-    const response: Response2<VariableValuesListResponse> = await ValueService.getDeliverableValues(params);
-    if (response.requestSucceeded && response.data?.values) {
-      return response.data.values;
-    }
-
-    return rejectWithValue(response.error || strings.GENERIC_ERROR);
-  }
-);
-
-export const requestListVariablesValues = createAsyncThunk(
-  'listVariablesValues',
-  async ({ projectId, maxValueId }: { projectId: number; maxValueId?: number }, { rejectWithValue }) => {
-    const response: Response2<VariableValuesListResponse> = await ValueService.getValues(projectId, maxValueId);
-    if (response.requestSucceeded && response.data?.values) {
-      return response.data.values;
-    }
-
-    return rejectWithValue(response.error || strings.GENERIC_ERROR);
-  }
-);
-
-export const requestListSpecificVariablesValues = createAsyncThunk(
-  'listSpecificVariablesValues',
-  async (params: { projectId: number; variablesStableIds: string[] }, { rejectWithValue }) => {
-    const response: Response2<VariableValuesListResponse> = await ValueService.getSpecificValues(params);
-
-    if (response.requestSucceeded && response.data?.values) {
-      return response.data.values;
-    }
-
-    return rejectWithValue(response.error || strings.GENERIC_ERROR);
-  }
-);
 
 const valueWriteTags = (projectId: number) => [
   { type: QueryTagTypes.VariableValues, id: projectId },
