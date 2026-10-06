@@ -198,7 +198,7 @@ test.describe('DeliverableTests', () => {
     await requestUpdateQuestionnaire('You need to fix some stuff', page);
 
     await navigateConsoleToParticipant(page);
-    await verifyHomepageDeliverableStatus(deliverableName, 'Update Needed', false, 'Update Needed', page);
+    await verifyHomepageDeliverableStatus(deliverableName, 'Update Needed', true, 'Update Needed', page);
     await openTodoFromHome(deliverableName, page);
 
     await validateQuestionnaireUpdateComments('You need to fix some stuff', page);

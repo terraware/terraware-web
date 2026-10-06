@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect, useRef } from 'react';
+import React, { type JSX, useRef } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
@@ -19,7 +19,7 @@ import ModuleDetails from './ModuleDetails';
 export default function ModuleView(): JSX.Element {
   const contentRef = useRef(null);
   const { moduleId } = useParams<{ moduleId: string }>();
-  const { module, events, getModule } = useGetModule(Number(moduleId));
+  const { module, events } = useGetModule(Number(moduleId));
   const theme = useTheme();
 
   const tabs = moduleId
@@ -47,10 +47,6 @@ export default function ModuleView(): JSX.Element {
     tabs,
     viewIdentifier: 'accelerator-module',
   });
-
-  useEffect(() => {
-    getModule();
-  }, [getModule]);
 
   return (
     <TfMain>

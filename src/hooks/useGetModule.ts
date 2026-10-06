@@ -1,50 +1,29 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
+import { useGetModuleQuery } from 'src/queries/generated/modules';
 import { requestListEvents } from 'src/redux/features/events/eventsAsyncThunks';
 import { selectEventList } from 'src/redux/features/events/eventsSelectors';
-import { requestGetModule } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleRequest } from 'src/redux/features/modules/modulesSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Module, ModuleEvent } from 'src/types/Module';
+import { ModuleEvent } from 'src/types/Module';
 
 const useGetModule = (moduleId: number) => {
   const dispatch = useAppDispatch();
+  const { currentData: moduleData } = useGetModuleQuery(moduleId);
 
-  const [moduleRequestId, setModuleRequestId] = useState<string>('');
-  const [evenstRequestId, setEventsRequestId] = useState<string>('');
-
-  const getModuleResponse = useAppSelector(selectModuleRequest(moduleRequestId));
-  const listModuleEventsResponse = useAppSelector(selectEventList(evenstRequestId));
-
-  const getModule = useCallback(() => {
-    const moduleRequest = dispatch(requestGetModule({ moduleId }));
-    const eventsRequest = dispatch(requestListEvents({ moduleId }));
-    setModuleRequestId(moduleRequest.requestId);
-    setEventsRequestId(eventsRequest.requestId);
-  }, [dispatch, moduleId, setEventsRequestId, setModuleRequestId]);
+  const [eventsRequestId, setEventsRequestId] = useState<string>('');
+  const listModuleEventsResponse = useAppSelector(selectEventList(eventsRequestId));
 
   useEffect(() => {
-    getModule();
-  }, [getModule]);
-
-  const module = useMemo<Module | undefined>(
-    () => (getModuleResponse?.status === 'success' ? getModuleResponse.data : undefined),
-    [getModuleResponse]
-  );
+    const eventsRequest = dispatch(requestListEvents({ moduleId }));
+    setEventsRequestId(eventsRequest.requestId);
+  }, [dispatch, moduleId]);
 
   const events = useMemo<ModuleEvent[] | undefined>(
     () => (listModuleEventsResponse?.status === 'success' ? listModuleEventsResponse.data : undefined),
     [listModuleEventsResponse]
   );
 
-  return useMemo(
-    () => ({
-      module,
-      events,
-      getModule,
-    }),
-    [module, events, getModule]
-  );
+  return useMemo(() => ({ module: moduleData?.module, events }), [moduleData, events]);
 };
 
 export default useGetModule;
