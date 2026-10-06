@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography } from '@mui/material';
 import { DropdownItem, theme } from '@terraware/web-components';
@@ -6,16 +6,11 @@ import { DropdownItem, theme } from '@terraware/web-components';
 import CompleteIncompleteBadge from 'src/components/common/CompleteIncompleteBadge';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useLocalization } from 'src/providers';
+import {
+  useUpdateVariableOwnerMutation,
+  useUpdateVariableWorkflowDetailsMutation,
+} from 'src/queries/generated/documentProducerVariables';
 import { useGetUserQuery } from 'src/queries/generated/users';
-import {
-  selectUpdateVariableOwner,
-  selectUpdateVariableWorkflowDetails,
-} from 'src/redux/features/documentProducer/variables/variablesSelector';
-import {
-  requestUpdateVariableOwner,
-  requestUpdateVariableWorkflowDetails,
-} from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { VariableStatusType } from 'src/types/documentProducer/Variable';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -32,8 +27,6 @@ type MultiLineComponentNonEditableProps = {
   variableId: number;
   projectId: number;
   ownerId?: number;
-  reload: () => void;
-  reloadVariables: () => void;
 };
 
 export default function MultiLineComponentNonEditable({
@@ -44,56 +37,37 @@ export default function MultiLineComponentNonEditable({
   status,
   variableId,
   projectId,
-  reload,
   ownerId,
-  reloadVariables,
 }: MultiLineComponentNonEditableProps): JSX.Element {
   const { activeLocale } = useLocalization();
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
-  const [requestId, setRequestId] = useState('');
-  const [assignOwnerRequestId, setAssignOwnerRequestId] = useState('');
-  const updateWorkflowDetailsResponse = useAppSelector(selectUpdateVariableWorkflowDetails(requestId));
-  const updateOwnerResponse = useAppSelector(selectUpdateVariableOwner(assignOwnerRequestId));
+  const [updateVariableWorkflowDetails] = useUpdateVariableWorkflowDetailsMutation();
+  const [updateVariableOwner] = useUpdateVariableOwnerMutation();
   const { currentData: ownerData } = useGetUserQuery(ownerId ?? -1, { skip: !ownerId || ownerId === -1 });
   const ownedByUser = ownerData?.user;
   const [showAssignOwnerModal, setShowAssignOwnerModal] = useState(false);
   const [displayActionsHover, setDisplyActionsHover] = useState(false);
 
-  useEffect(() => {
-    if (updateWorkflowDetailsResponse?.status === 'success') {
-      reloadVariables();
-    }
-  }, [reloadVariables, updateWorkflowDetailsResponse]);
-
-  useEffect(() => {
-    if (updateOwnerResponse?.status === 'success') {
-      snackbar.toastSuccess(strings.SECTION_OWNER_ASSIGNED);
-      reload();
-    }
-    if (updateOwnerResponse?.status === 'error') {
-      snackbar.toastError();
-    }
-  }, [reload, snackbar, updateOwnerResponse]);
-
   const setStatus = useCallback(
     (_status: VariableStatusType) => {
-      const request = dispatch(requestUpdateVariableWorkflowDetails({ status: _status, variableId, projectId }));
-      setRequestId(request.requestId);
+      void updateVariableWorkflowDetails({
+        projectId,
+        variableId,
+        updateVariableWorkflowDetailsRequestPayload: { status: _status },
+      })
+        .unwrap()
+        .catch(() => snackbar.toastError(strings.GENERIC_ERROR));
     },
-    [dispatch, projectId, variableId]
+    [projectId, snackbar, updateVariableWorkflowDetails, variableId]
   );
 
   const assignOwner = (_ownerId?: string) => {
     if (_ownerId) {
-      let assignOwnerRequest;
-      if (_ownerId.toString() === '-1') {
-        assignOwnerRequest = dispatch(requestUpdateVariableOwner({ ownedBy: undefined, variableId, projectId }));
-      } else {
-        assignOwnerRequest = dispatch(requestUpdateVariableOwner({ ownedBy: Number(_ownerId), variableId, projectId }));
-      }
-
-      setAssignOwnerRequestId(assignOwnerRequest.requestId);
+      const ownedBy = _ownerId.toString() === '-1' ? undefined : Number(_ownerId);
+      void updateVariableOwner({ projectId, variableId, updateVariableOwnerRequestPayload: { ownedBy } })
+        .unwrap()
+        .then(() => snackbar.toastSuccess(strings.SECTION_OWNER_ASSIGNED))
+        .catch(() => snackbar.toastError(strings.GENERIC_ERROR));
       setShowAssignOwnerModal(false);
     }
   };
