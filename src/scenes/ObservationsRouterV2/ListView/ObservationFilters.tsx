@@ -12,6 +12,7 @@ import useFilteredObservationResults from '../useFilteredObservationResults';
 import ObservationFilterPanel from './ObservationFilterPanel';
 import ObservationTimeline from './ObservationTimeline';
 import ViewModeToggle from './ViewModeToggle';
+import { useDefaultObservationSelection } from './useTimelineObservations';
 
 export type ObservationFiltersProps = {
   plantingSiteId: PlantingSiteId;
@@ -26,6 +27,7 @@ const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: Observatio
 
   const { emptyState } = useFilteredObservationResults({ observationType, plantingSiteId, plotType });
   const panelOpen = filtersExpanded && emptyState !== 'noObservations';
+  useDefaultObservationSelection(plantingSiteId);
 
   const plotTypeSegments = useMemo(
     () => [
