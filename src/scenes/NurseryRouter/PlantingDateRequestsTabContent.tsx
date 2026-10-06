@@ -348,7 +348,9 @@ const PlantingDateRequestListItem = ({
       >
         <Box display='flex' alignItems='center' gap={theme.spacing(1)}>
           <RequestStatusBadge status={row.status} />
-          <Button label={strings.WITHDRAW} onClick={onWithdrawClick} priority='secondary' type='productive' />
+          {row.status !== 'Fulfilled' && (
+            <Button label={strings.WITHDRAW} onClick={onWithdrawClick} priority='secondary' type='productive' />
+          )}
         </Box>
         <Box display='flex' gap={theme.spacing(3)} alignItems='flex-start'>
           <NumberColumn label={strings.SPECIES} value={row.speciesCount} activeLocale={activeLocale} />

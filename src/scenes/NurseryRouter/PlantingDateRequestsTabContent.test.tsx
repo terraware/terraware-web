@@ -88,6 +88,19 @@ describe('PlantingDateRequestsTabContent', () => {
     expect(screen.getByText(strings.FULFILLED)).toBeInTheDocument();
   });
 
+  it('offers Withdraw on open requests but not on fulfilled ones', async () => {
+    searchResults = [
+      buildRequest({ status: 'Pending' }),
+      buildRequest({ date: '2026-06-11', status: 'Partial' }),
+      buildRequest({ date: '2026-06-22', status: 'Fulfilled' }),
+    ];
+
+    renderWithProviders(<PlantingDateRequestsTabContent />);
+
+    await screen.findByText(strings.FULFILLED);
+    expect(screen.getAllByRole('button', { name: strings.WITHDRAW })).toHaveLength(2);
+  });
+
   it('tells the user which empty list they are looking at', async () => {
     searchResults = [];
 
