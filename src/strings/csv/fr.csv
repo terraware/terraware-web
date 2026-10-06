@@ -1882,6 +1882,7 @@ REQUIRED_QUESTION_MARK,Obligatoire ?,d99ba5a7
 RESCHEDULE,Reporter,2bb033c0
 RESCHEDULE_OBSERVATION,Reporter l'observation,b7403925
 RESET,Réinitialisation,d51ffc01
+RESET_BOUNDARY_SETUP,Réinitialiser la configuration des limites,ef1aee2b
 RESET_COLUMNS,Réinitialiser les colonnes,871d2d56
 RESET_INDICATOR,Réinitialiser l'indicateur,bb1f7ec8
 RESET_INDICATOR_CONFIRM,Êtes-vous sûr de vouloir réinitialiser cet indicateur ? Il sera remplacé par les données de suivi actuelles de Terraware.,9d1f1dfb

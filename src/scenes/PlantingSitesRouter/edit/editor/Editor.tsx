@@ -363,7 +363,7 @@ export default function Editor(props: EditorProps): JSX.Element {
               {isFinalStep && (
                 <Button
                   id='start-over'
-                  label={strings.START_OVER}
+                  label={strings.RESET_BOUNDARY_SETUP}
                   onClick={onOpenStartOver}
                   disabled={busy}
                   priority='secondary'
