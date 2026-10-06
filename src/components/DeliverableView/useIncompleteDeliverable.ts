@@ -1,7 +1,5 @@
 import { useCallback, useMemo } from 'react';
 
-import useApplicationPortal from 'src/hooks/useApplicationPortal';
-import { useApplicationData } from 'src/providers/Application/Context';
 import { useIncompleteSubmissionMutation } from 'src/queries/generated/deliverables';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import strings from 'src/strings';
@@ -21,21 +19,13 @@ export default function useIncompleteDeliverable(): Response {
   const snackbar = useSnackbar();
   const [incompleteSubmission, result] = useIncompleteSubmissionMutation();
 
-  const { isApplicationConsole, isApplicationPortal } = useApplicationPortal();
-  const { reload } = useApplicationData();
-
   const incomplete = useCallback(
     (deliverable: DeliverableWithOverdue) => {
       void incompleteSubmission({ deliverableId: deliverable.id, projectId: deliverable.projectId })
         .unwrap()
-        .then(() => {
-          if (isApplicationConsole || isApplicationPortal) {
-            void reload();
-          }
-        })
         .catch(() => snackbar.toastError(strings.GENERIC_ERROR));
     },
-    [incompleteSubmission, isApplicationConsole, isApplicationPortal, reload, snackbar]
+    [incompleteSubmission, snackbar]
   );
 
   const status = mutationStatus(result);
