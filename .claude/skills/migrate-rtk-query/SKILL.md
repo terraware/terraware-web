@@ -20,6 +20,7 @@ Task Progress:
 - [ ] Remove the redux reducer if needed.
 - [ ] Remove the redux slice if needed.
 - [ ] Remove the redux store if needed.
+- [ ] Replace context providers that only fetch and share data with a `useSomeData` hook, if applicable (see below).
 - [ ] Remove the service methods used to do the old querying/mutating.
 - [ ] Reroute related type declarations in `src/types/*` to use the RTK Query generated types (import from `src/queries/generated/*`) instead of `generated-schema`.
 - [ ] Remove type declarations that become unused after the old service/redux code is deleted.
@@ -34,6 +35,24 @@ See [rtk-codegen.config.ts](../../../rtk-codegen.config.ts) for the configuratio
 For lazy fetches, generally prefer a cached value by passing `true` as the second argument.
 
 Only change one endpoint at a time in order to keep the changes small.
+
+### Simplify providers into hooks
+
+Context providers were used to fetch once and share the result so the data wasn't requested more than
+once. RTK Query already dedupes identical queries and caches the result, so a provider whose only job is
+fetching and deriving data is no longer needed. Replace it with a hook that calls the query hooks and
+derives the data (for example `useProjectToDos` in `src/scenes/Home/ParticipantHomeView/`):
+
+- Move the fetch and derivation into a `useSomeData` hook next to the feature, returning memoized values.
+- Each consumer calls the hook directly. Calling it from several components is a cache read, not another
+  request.
+- If a consumer only needs something the hook's inputs already provide (e.g. an id from another context),
+  read that directly instead of calling the hook.
+- Delete the provider, its context file, and where it wraps the tree.
+- Drop `reload` / refetch callbacks the provider exposed when tag invalidation already covers them.
+
+Keep the provider when it holds real client state (a user's selection, form or UI state) or is needed
+to scope a value to a subtree.
 
 ### Known flaky generation: `GeometryCollection`
 

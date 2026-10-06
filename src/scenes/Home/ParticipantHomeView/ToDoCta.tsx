@@ -7,24 +7,23 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import strings from 'src/strings';
 import { DeliverableToDoItem } from 'src/types/DeliverableToDoItem';
 import { EventToDoItem, ToDoItem } from 'src/types/ProjectToDo';
-
-import { useToDoData } from './ToDoProvider/Context';
 
 interface ToDoCtaProps {
   toDo: ToDoItem;
 }
 
 const ToDoCta = ({ toDo }: ToDoCtaProps) => {
-  const { projectId } = useToDoData();
+  const projectId = useParticipantData().currentAcceleratorProject?.id;
   const { goToDeliverable, goToModuleEventSession } = useNavigateTo();
   const { isMobile } = useDeviceInfo();
   const trackEvent = useTrackEvent();
 
   const handleOnClick = useCallback(() => {
-    if (projectId === -1) {
+    if (projectId === undefined) {
       return;
     }
     switch (toDo.getType()) {

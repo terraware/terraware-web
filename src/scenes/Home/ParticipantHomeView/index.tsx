@@ -12,7 +12,6 @@ import VirtualWalkthroughCard from '../TerrawareHomeView/VirtualWalkthroughCard'
 import CurrentModule from './CurrentModule';
 import Header from './Header';
 import ToDo from './ToDo';
-import ToDoProvider from './ToDoProvider';
 import WelcomeBanner from './WelcomeBanner';
 
 const ParticipantHomeView = () => {
@@ -44,9 +43,7 @@ const ParticipantHomeView = () => {
         </DismissibleWrapper>
 
         <Grid item marginTop={theme.spacing(2)}>
-          <ToDoProvider>
-            <ToDo />
-          </ToDoProvider>
+          <ToDo />
         </Grid>
 
         {virtualWalkthroughEnabled && (
