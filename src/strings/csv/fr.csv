@@ -556,6 +556,7 @@ DEV_SERVER_ERROR,Serveur non disponible (possibilité de redémarrage avec mise 
 DIAMETER_AT_BREAST_HEIGHT,Diamètre à hauteur de poitrine (DHP) à maturité (cm),6b42a16f
 DIFFICULT_ACCESSIBILITY,Accessibilité difficile,18c83274
 DISCARD,Abandonner,51a7ed1d
+DISCARD_CHANGES,Annuler les modifications,f79f534a
 DISCARD_THIS_SITE,Abandonner ce site ?,ed8d4636
 DISCARD_UNNAMED_SITE_MESSAGE,Ce site ne peut pas être enregistré comme brouillon sans nom. Abandonnez ce que vous avez saisi ou continuez la modification pour ajouter un nom.,5f5bca5b
 DISMISS,Fermer,a56709f4
@@ -1944,7 +1945,7 @@ SAMPLE_OBSERVED_DENSITY_WARNING,Ce calcul est fondé sur un échantillon réalis
 SAND,Sable,5d54e2e8
 SAND_PETRI_DISH,Boîte de Petri avec sable,25b60fb2
 SATELLITE,Satellite,14d51868
-SAVE_AND_CLOSE,Enregistrer et fermer,aaa98fc6
+SAVE_AND_CLOSE,Enregistrer et fermer,8a1021f3
 SAVE_AND_NEXT,Sauvegarder et suivant,1ca9d40a
 SAVE_AND_REQUEST,Enregistrer et demander,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Enregistrer et demander enverra une demande de retrait de plants à la pépinière pour cette date de plantation.,9f9b8d4e
