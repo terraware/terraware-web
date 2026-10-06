@@ -9,6 +9,7 @@ import { useListObservationResults } from 'src/hooks/observations';
 import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationState, getStatus } from 'src/types/Observations';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { ObservationTypeFilter, useObservationFilters } from '../ObservationFiltersProvider';
 
@@ -28,6 +29,24 @@ const multiSelectStyles = {
   minWidth: '260px',
 };
 
+const observationTypeStyles = {
+  maxWidth: '220px',
+  minWidth: '220px',
+};
+
+const mobileFieldStyles = {
+  maxWidth: 'none',
+  minWidth: 0,
+  width: '100%',
+};
+
+// The second field wraps under the first so both keep the same width.
+const mobileRangeStyles = {
+  alignItems: 'center',
+  display: 'grid',
+  gridTemplateColumns: '1fr auto',
+};
+
 const OBSERVATION_STATES: ObservationState[] = ['Upcoming', 'InProgress', 'Overdue', 'Completed', 'Abandoned'];
 
 export type ObservationFilterPanelProps = {
@@ -37,6 +56,7 @@ export type ObservationFilterPanelProps = {
 const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const {
     activeFilterCount,
     clearFilters,
@@ -122,14 +142,19 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
     [setDateFilter]
   );
 
+  const rangeStyles = isMobile
+    ? { ...mobileRangeStyles, gap: theme.spacing(1) }
+    : { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(1) };
+
   return (
     <Box
       sx={{
-        alignItems: 'flex-end',
+        alignItems: isMobile ? 'stretch' : 'flex-end',
         background: theme.palette.TwClrBgInfoTertiary,
         border: `1px solid ${theme.palette.TwClrBrdrInfo}`,
         borderRadius: '8px',
         display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
         flexWrap: 'wrap',
         gap: theme.spacing(2),
         padding: theme.spacing(2),
@@ -143,20 +168,20 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
           options={observationTypeOptions}
           placeholder={strings.ALL_MONITORING_TYPES}
           selectedValue={observationType === 'All' ? undefined : observationType}
-          sx={{ maxWidth: '220px', minWidth: '220px' }}
+          sx={isMobile ? mobileFieldStyles : observationTypeStyles}
         />
       )}
       <Box>
         <Typography fontSize='14px' fontWeight={500} marginBottom={theme.spacing(0.5)}>
           {plotType === 'adHoc' ? strings.DATE_OBSERVED : strings.OBSERVATION_DATE}
         </Typography>
-        <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(1) }}>
+        <Box sx={rangeStyles}>
           <DatePicker
             aria-label={strings.START_DATE}
             id='observation-date-from'
             label=''
             onDateChange={onFromChange}
-            sx={datePickerStyles}
+            sx={isMobile ? mobileFieldStyles : datePickerStyles}
             value={dateFilter.from ?? null}
           />
           <Typography sx={{ textTransform: 'lowercase' }}>{strings.TO}</Typography>
@@ -165,7 +190,7 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
             id='observation-date-to'
             label=''
             onDateChange={onToChange}
-            sx={datePickerStyles}
+            sx={isMobile ? mobileFieldStyles : datePickerStyles}
             value={dateFilter.to ?? null}
           />
         </Box>
@@ -175,14 +200,14 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
           <Typography fontSize='14px' fontWeight={500} marginBottom={theme.spacing(0.5)}>
             {strings.PLOT}
           </Typography>
-          <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(1) }}>
+          <Box sx={rangeStyles}>
             <Textfield
               id='plot-number-min'
               label=''
               min={0}
               onChange={onPlotNumberChange('min')}
               placeholder={strings.MIN}
-              sx={plotNumberStyles}
+              sx={isMobile ? mobileFieldStyles : plotNumberStyles}
               type='number'
               value={plotNumberFilter.min ?? ''}
             />
@@ -193,7 +218,7 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
               min={0}
               onChange={onPlotNumberChange('max')}
               placeholder={strings.MAX}
-              sx={plotNumberStyles}
+              sx={isMobile ? mobileFieldStyles : plotNumberStyles}
               type='number'
               value={plotNumberFilter.max ?? ''}
             />
@@ -211,7 +236,7 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
             options={stratumOptions}
             placeHolder={strings.ALL_STRATA}
             selectedOptions={stratumFilter}
-            sx={multiSelectStyles}
+            sx={isMobile ? mobileFieldStyles : multiSelectStyles}
             valueRenderer={(name) => name}
           />
           <MultiSelect<ObservationState, string>
@@ -223,13 +248,13 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
             options={statusOptions}
             placeHolder={strings.ALL_STATUSES}
             selectedOptions={statusFilter}
-            sx={multiSelectStyles}
+            sx={isMobile ? mobileFieldStyles : multiSelectStyles}
             valueRenderer={(label) => label}
           />
         </>
       )}
       {activeFilterCount > 0 && (
-        <Box sx={{ marginLeft: 'auto' }}>
+        <Box sx={{ marginLeft: isMobile ? 0 : 'auto' }}>
           <Button
             id='clear-observation-filters'
             label={strings.CLEAR_ALL_FILTERS}
