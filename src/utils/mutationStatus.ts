@@ -11,3 +11,8 @@ export const mutationStatus = ({ isLoading, isSuccess, isError }: MutationState)
   }
   return isSuccess ? 'success' : undefined;
 };
+
+export const toWorkflowState = <T>(state: MutationState & { data?: T }) => {
+  const status = mutationStatus(state);
+  return status ? { status, data: state.data } : undefined;
+};
