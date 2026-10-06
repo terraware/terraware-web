@@ -21,6 +21,7 @@ const withdrawalSummary: SearchNurseryWithdrawalPayload = {
   hasReassignments: false,
   nurseryName: 'Green Valley Nursery',
   purpose: 'Out Plant',
+  species: [],
   totalWithdrawn: 2,
   withdrawalId: withdrawal.id,
   withdrawnDate: withdrawal.withdrawnDate,

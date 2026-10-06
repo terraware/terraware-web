@@ -261,7 +261,11 @@ const parseSearchNurseryWithdrawalsArgs = (
     },
     count: args.limit,
     cursor: args.offset?.toString(),
-    sortOrder: [...(sortOrder ?? []), { field: 'id', direction: 'Descending' }],
+    sortOrder: [
+      ...(sortOrder ?? []),
+      { field: 'id', direction: 'Descending' },
+      { field: 'batchWithdrawals.batch_species_scientificName' },
+    ],
   };
 };
 
@@ -319,6 +323,10 @@ const injectedRtkApi = api.injectEndpoints({
             'hasReassignments',
             'batchWithdrawals.batch_project_name',
             'batchWithdrawals.batch_species_scientificName',
+            'batchWithdrawals.activeGrowthQuantityWithdrawn(raw)',
+            'batchWithdrawals.germinatingQuantityWithdrawn(raw)',
+            'batchWithdrawals.hardeningOffQuantityWithdrawn(raw)',
+            'batchWithdrawals.readyQuantityWithdrawn(raw)',
             'batchWithdrawals.destinationBatchProjectName',
             'plantingSeason_name',
             'plantingDateRequest_date',
@@ -336,8 +344,20 @@ const injectedRtkApi = api.injectEndpoints({
         { type: QueryTagTypes.NurseryWithdrawals, id: 'LIST' },
       ],
       transformResponse: (response: SearchNurseryWithdrawalApiResponse) =>
-        response.results.map(
-          (result): SearchNurseryWithdrawalPayload => ({
+        response.results.map((result): SearchNurseryWithdrawalPayload => {
+          const totalBySpecies: Record<string, number> = {};
+          result.batchWithdrawals?.forEach((batchWithdrawal) => {
+            const speciesName = batchWithdrawal.batch_species_scientificName;
+            const totalWithdrawn =
+              Number(batchWithdrawal['activeGrowthQuantityWithdrawn(raw)']) +
+              Number(batchWithdrawal['germinatingQuantityWithdrawn(raw)']) +
+              Number(batchWithdrawal['hardeningOffQuantityWithdrawn(raw)']) +
+              Number(batchWithdrawal['readyQuantityWithdrawn(raw)']);
+
+            totalBySpecies[speciesName] = (totalBySpecies[speciesName] ?? 0) + totalWithdrawn;
+          });
+          const species = Object.entries(totalBySpecies).map(([name, totalWithdrawn]) => ({ name, totalWithdrawn }));
+          return {
             withdrawalId: Number(result.id),
             deliveryId: result.delivery_id ? Number(result.delivery_id) : undefined,
             withdrawnDate: result.withdrawnDate,
@@ -359,19 +379,16 @@ const injectedRtkApi = api.injectEndpoints({
                   .filter((projectName): projectName is string => projectName !== undefined)
               )
             ).sort(),
-            speciesNames: Array.from(
-              new Set(
-                (result.batchWithdrawals ?? []).map((batchWithdrawal) => batchWithdrawal.batch_species_scientificName)
-              )
-            ).sort(),
+            species,
+            speciesNames: Array.from(new Set(species.map((s) => s.name))).sort(),
             plantingSeasonName: result.plantingSeason_name,
             plantingDate: result.plantingDateRequest_date,
             undoesWithdrawalDate: result.undoesWithdrawalDate,
             undoesWithdrawalId: result.undoesWithdrawalId ? Number(result.undoesWithdrawalId) : undefined,
 
             undoneByWithdrawalId: result.undoneByWithdrawalId ? Number(result.undoneByWithdrawalId) : undefined,
-          })
-        ),
+          };
+        }),
     }),
 
     countNurseryWithdrawals: build.query<number, SearchNurseryWithdrawalsApiArgs>({
@@ -491,9 +508,13 @@ export type SearchNurseryWithdrawalsApiArgs = {
 };
 
 type NurseryWithdrawalBatchApiResult = {
+  'activeGrowthQuantityWithdrawn(raw)': string;
   batch_project_name?: string;
   batch_species_scientificName: string;
   destinationBatchProjectName?: string;
+  'germinatingQuantityWithdrawn(raw)': string;
+  'hardeningOffQuantityWithdrawn(raw)': string;
+  'readyQuantityWithdrawn(raw)': string;
 };
 
 type NurseryWithdrawalApiResult = {
@@ -520,6 +541,11 @@ type SearchNurseryWithdrawalApiResponse = {
   results: NurseryWithdrawalApiResult[];
 };
 
+export type SearchNurseryWithdrawalSpecies = {
+  name: string;
+  totalWithdrawn: number;
+};
+
 export type SearchNurseryWithdrawalPayload = {
   withdrawalId: number;
   deliveryId?: number;
@@ -531,6 +557,7 @@ export type SearchNurseryWithdrawalPayload = {
   substratumName?: string;
   substratumShortName?: string;
   totalWithdrawn: number;
+  species: SearchNurseryWithdrawalSpecies[];
   speciesNames?: string[];
   projectNames?: string[];
   plantingSeasonName?: string;

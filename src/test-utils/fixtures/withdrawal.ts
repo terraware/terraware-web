@@ -13,6 +13,7 @@ export const buildWithdrawalRow = (
   nurseryName: 'Test Nursery',
   destinationName: 'Test Planting Site',
   totalWithdrawn: 250,
+  species: [{ name: 'Acacia koa', totalWithdrawn: 250 }],
   speciesNames: ['Acacia koa'],
   hasReassignments: false,
   ...overrides,
