@@ -60,7 +60,7 @@ const ReviewCard = ({ requestId, sections, setRequestId }: ReviewCardProps): JSX
     if (request && request.status === 'success' && request.data) {
       if (request.data.length === 0) {
         toastSuccess(strings.SUCCESS);
-        reload(refreshPage);
+        void reload(refreshPage);
       } else {
         toastWarning(`${strings.GENERIC_ERROR}: ${request.data.toString()}`);
       }

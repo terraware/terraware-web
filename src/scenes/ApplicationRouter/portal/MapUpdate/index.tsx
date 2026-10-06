@@ -115,7 +115,7 @@ const MapUpdateView = () => {
       if (activeLocale) {
         toastSuccess(strings.PROPOSED_PROJECT_BOUNDARIES_ADDED);
       }
-      reload(navigateToApplicationPrescreen);
+      void reload(navigateToApplicationPrescreen);
     }
   }, [activeLocale, reload, result, toastSuccess, navigateToApplicationPrescreen]);
 

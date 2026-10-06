@@ -52,7 +52,7 @@ export default function FileUploadDialog({ deliverable, files, onClose }: FileUp
     // close the modal even in case of error, there may have been partial successes
     onClose();
     if (isApplicationPortal) {
-      reload();
+      void reload();
     }
   }, [
     deliverable.id,

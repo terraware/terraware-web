@@ -9,7 +9,8 @@ export type ApplicationData = {
   getApplicationByProjectId: (projectId: number) => Application | undefined;
   selectedApplication?: Application;
   setSelectedApplication: (applicationId: number) => void;
-  reload: (onReload?: () => void) => void;
+  /** Resolves to whether the application list refreshed successfully; onReload only runs if it did. */
+  reload: (onReload?: () => void) => Promise<boolean>;
 };
 
 // default values pointing to nothing
@@ -20,8 +21,8 @@ export const ApplicationContext = createContext<ApplicationData>({
   getApplicationByProjectId: (projectId: number) => undefined,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
   setSelectedApplication: (applicationId: number) => {},
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars, @typescript-eslint/no-empty-function
-  reload: (onReload?: () => void) => {},
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  reload: (onReload?: () => void) => Promise.resolve(false),
 });
 
 export const useApplicationData = () => useContext(ApplicationContext);
