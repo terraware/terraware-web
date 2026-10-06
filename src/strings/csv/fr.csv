@@ -690,6 +690,10 @@ EVENT_NAME_RECORDING,{0} Enregistrement,6c589671
 EVENT_NAME_SLIDES,{0} Diapositives,a06fe761
 EVENT_RECORDED_SESSION_DESCRIPTION_1,"Regardez cette session enregistrée à tout moment. Vous pouvez regarder la session plus d’une fois, si nécessaire.",1fe65a8a
 EVENT_RECORDED_SESSION_REQUIREMENTS_SPEAKERS,"Haut-parleurs ou casque – intégré, branché sur le port USB ou sans fil Bluetooth",b87be889
+EVENT_SPECIES_ADDED,Ajouté {0} ({1}),34dfa577
+EVENT_SPECIES_CHANGED,Modifié {0} en {1} ({2}),f716fc50
+EVENT_SPECIES_COUNT,{0} {1},42918d30
+EVENT_SPECIES_REMOVED,Supprimé {0} ({1}),230fb90f
 EVENTS,Evénements,a18b73bc
 EXCEEDS_AVAILABLE_X,Dépasse le disponible ({0}),4391f9df
 EXCEEDS_READY_TO_PLANT,Le total retiré ({0}) pour tous les substrats dépasse le nombre Prêt à planter ({1}) dans ce lot,3e3cd4a4

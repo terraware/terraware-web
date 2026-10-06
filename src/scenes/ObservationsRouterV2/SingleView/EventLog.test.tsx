@@ -60,13 +60,199 @@ const mediaEvent = (
   userName: 'Jennifer Yim',
 });
 
-const renderHistory = async (events = [mediaEvent('Video', 7592)]) => {
+type PlotSpecies = { scientificName?: string; totalDead: number; totalExisting: number; totalLive: number };
+
+const renderHistory = async (
+  events = [mediaEvent('Video', 7592)],
+  plotSpecies: PlotSpecies[] = [],
+  { plotFound = true } = {}
+) => {
   mockGet('/api/v1/species', { species: [] });
   mockPost('/api/v1/events/list', { events });
+  // The replay starts from these, so they have to agree with the history the events describe.
+  mockGet('/api/v1/tracking/observations/1/results', {
+    observation: {
+      observationId: 1,
+      plantingSiteId: 3,
+      isAdHoc: false,
+      strata: [
+        {
+          substrata: [
+            {
+              monitoringPlots: [
+                {
+                  monitoringPlotId: plotFound ? 2 : 999,
+                  species: plotSpecies.map(({ scientificName, ...totals }) => ({
+                    certainty: scientificName ? 'Other' : 'Unknown',
+                    speciesName: scientificName,
+                    ...totals,
+                  })),
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    },
+  });
   const rendered = renderWithProviders(<EventLog observationId={1} plotId={2} />);
   await rendered.user.click(await screen.findByRole('button', { name: strings.CHANGE_HISTORY }));
   return rendered;
 };
+
+/** Plant counts in the order the fixtures list them: existing, live, dead. */
+type Counts = [number, number, number];
+
+const speciesCountEvent = (
+  speciesName: string | undefined,
+  fieldName: string,
+  changedFrom: string,
+  changedTo: string,
+  timestamp: string
+): EventLogEntryPayload => ({
+  action: { type: 'FieldUpdated', fieldName, changedFrom: [changedFrom], changedTo: [changedTo] },
+  subject: {
+    type: 'MonitoringSpecies',
+    scientificName: speciesName,
+    monitoringPlotId: 2,
+    observationId: 1,
+    plantingSiteId: 3,
+    fullText: `Species ${speciesName ?? 'Unknown'}`,
+    // The API sends just the word "Species" here, so it cannot stand in for the name.
+    shortText: 'Species',
+  },
+  timestamp,
+  userId: 1,
+  userName: 'Jennifer Yim',
+});
+
+/** A plot's history, oldest edit first. The API reports only the counts that changed. */
+const speciesHistory = (...edits: { from: Counts; name?: string; to: Counts }[]) => {
+  const events: EventLogEntryPayload[] = [];
+  const bySpecies = new Map<string, PlotSpecies>();
+  edits.forEach(({ from, name, to }, editIndex) => {
+    const timestamp = `2026-06-15T12:00:00.${String(editIndex).padStart(3, '0')}Z`;
+    [
+      { name: 'existing count', position: 0 },
+      { name: 'live count', position: 1 },
+      { name: 'dead count', position: 2 },
+    ].forEach(({ name: fieldName, position }) => {
+      if (from[position] !== to[position]) {
+        events.push(speciesCountEvent(name, fieldName, String(from[position]), String(to[position]), timestamp));
+      }
+    });
+    bySpecies.set(name ?? 'unknown', {
+      scientificName: name,
+      totalExisting: to[0],
+      totalLive: to[1],
+      totalDead: to[2],
+    });
+  });
+  return { events, plotSpecies: [...bySpecies.values()] };
+};
+
+const countsText = (...counts: [string, number][]) =>
+  counts
+    .map(([label, value]) => strings.formatString(strings.EVENT_SPECIES_COUNT, label, String(value)) as string)
+    .join(strings.LIST_SEPARATOR);
+
+describe('Observation EventLog species changes', () => {
+  it('reports an add that left a count at zero as the species being added', async () => {
+    // The real-world shape: pre-existing stays 0, so the edit reports only two counts.
+    const { events, plotSpecies } = speciesHistory({ name: 'Vigna owahuensis', from: [0, 0, 0], to: [0, 2, 1] });
+    await renderHistory(events, plotSpecies);
+
+    expect(
+      screen.getByText(
+        strings.formatString(
+          strings.EVENT_SPECIES_ADDED,
+          'Vigna owahuensis',
+          countsText(['Live count', 2], ['Dead count', 1])
+        ) as string
+      )
+    ).toBeInTheDocument();
+    // The individual count lines are replaced by the one message, not shown alongside it.
+    expect(screen.queryByText(/live count/)).not.toBeInTheDocument();
+  });
+
+  it('reports an edit that emptied the species as it being removed', async () => {
+    const { events, plotSpecies } = speciesHistory(
+      { name: 'Dracaena acuminata', from: [0, 0, 0], to: [2, 6, 1] },
+      { name: 'Dracaena acuminata', from: [2, 6, 1], to: [0, 0, 0] }
+    );
+    await renderHistory(events, plotSpecies);
+
+    expect(
+      screen.getByText(
+        strings.formatString(
+          strings.EVENT_SPECIES_REMOVED,
+          'Dracaena acuminata',
+          countsText(['Existing count', 2], ['Live count', 6], ['Dead count', 1])
+        ) as string
+      )
+    ).toBeInTheDocument();
+  });
+
+  it('reports a removal next to an addition of the same counts as the species being changed', async () => {
+    const { events, plotSpecies } = speciesHistory(
+      { name: 'Duosperma angolense', from: [0, 0, 0], to: [2, 6, 1] },
+      { name: 'Duosperma angolense', from: [2, 6, 1], to: [0, 0, 0] },
+      { name: 'Abutilon eremitopetalum', from: [0, 0, 0], to: [2, 6, 1] }
+    );
+    await renderHistory(events, plotSpecies);
+
+    expect(
+      screen.getByText(
+        strings.formatString(
+          strings.EVENT_SPECIES_CHANGED,
+          'Duosperma angolense',
+          'Abutilon eremitopetalum',
+          countsText(['Existing count', 2], ['Live count', 6], ['Dead count', 1])
+        ) as string
+      )
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByText(
+        strings.formatString(
+          strings.EVENT_SPECIES_REMOVED,
+          'Duosperma angolense',
+          countsText(['Existing count', 2], ['Live count', 6], ['Dead count', 1])
+        ) as string
+      )
+    ).not.toBeInTheDocument();
+  });
+
+  it('names the plot unknown species the way the plant count table does', async () => {
+    // An unknown species carries neither a name nor an id.
+    const { events, plotSpecies } = speciesHistory(
+      { from: [0, 0, 0], to: [2, 6, 1] },
+      { from: [2, 6, 1], to: [0, 0, 0] }
+    );
+    await renderHistory(events, plotSpecies);
+
+    expect(
+      screen.getByText(
+        strings.formatString(
+          strings.EVENT_SPECIES_REMOVED,
+          strings.UNKNOWN,
+          countsText(['Existing count', 2], ['Live count', 6], ['Dead count', 1])
+        ) as string
+      )
+    ).toBeInTheDocument();
+  });
+
+  it('describes nothing until the plot counts the replay starts from are available', async () => {
+    const { events } = speciesHistory({ name: 'Acacia koa', from: [0, 10, 0], to: [0, 7, 0] });
+    await renderHistory(events, [], { plotFound: false });
+    expect(
+      screen.queryByText(new RegExp(strings.EVENT_SPECIES_REMOVED.replace(/\{\d\}/g, '.*')))
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(new RegExp(strings.EVENT_SPECIES_ADDED.replace(/\{\d\}/g, '.*')))
+    ).not.toBeInTheDocument();
+    expect(screen.getAllByText(/live count/).length).toBeGreaterThan(0);
+  });
+});
 
 describe('Observation EventLog trees and shrubs', () => {
   it.each([

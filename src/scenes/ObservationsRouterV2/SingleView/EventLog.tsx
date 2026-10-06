@@ -7,11 +7,22 @@ import { DialogBox, ViewPhotosDialog } from '@terraware/web-components';
 import EventLogView from 'src/components/common/EventLog';
 import Link from 'src/components/common/Link';
 import { API_PATHS } from 'src/constants';
+import { useGetOneObservationResults } from 'src/hooks/observations';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
-import { EventLogEntryPayload, ObservationPlotMediaSubjectPayload } from 'src/queries/generated/events';
+import {
+  EventLogEntryPayload,
+  MonitoringSpeciesSubjectPayload,
+  ObservationPlotMediaSubjectPayload,
+} from 'src/queries/generated/events';
 import { useGetObservationMediaStreamQuery } from 'src/queries/generated/observations';
 import { ListObservationEventsArgs, useLazyListObservationEventsQuery } from 'src/queries/observations/observations';
+
+import {
+  NO_MONITORING_SPECIES_SUMMARIES,
+  getMonitoringSpeciesKey,
+  summarizeMonitoringSpeciesEvents,
+} from './monitoringSpeciesEvents';
 
 type EventLogProps = {
   observationId: number;
@@ -40,6 +51,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [closeViewer, openedMedia?.mediaKind]);
 
+  const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const [list, { data: events, isLoading }] = useLazyListObservationEventsQuery();
   const deletedVideoIds = useMemo(
     () =>
@@ -105,6 +117,46 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
     }
   }, [isBiomass, list, observationId, plotId, selectedOrganization]);
 
+  const resolveSpeciesName = useCallback(
+    // `shortText` is just the word "Species", so it cannot stand in for the name.
+    (subject: MonitoringSpeciesSubjectPayload) =>
+      subject.scientificName || getSpeciesName(subject.speciesId) || strings.UNKNOWN,
+    [getSpeciesName, strings.UNKNOWN]
+  );
+
+  // The replay starts from the counts the plot holds now.
+  const monitoringPlot = useMemo(() => {
+    const results = observationResultsResponse?.observation;
+    return results?.isAdHoc
+      ? results.adHocPlot
+      : results?.strata
+          .flatMap((stratum) => stratum.substrata)
+          ?.flatMap((substratum) => substratum?.monitoringPlots)
+          .find((plot) => plot.monitoringPlotId === plotId);
+  }, [observationResultsResponse?.observation, plotId]);
+
+  const currentSpeciesTotals = useMemo(() => {
+    const totals = new Map<string, number>();
+    [
+      ...(monitoringPlot?.species ?? []),
+      ...(monitoringPlot?.unknownSpecies ? [monitoringPlot.unknownSpecies] : []),
+    ].forEach((plotSpecies) =>
+      totals.set(
+        getMonitoringSpeciesKey(plotSpecies.speciesId, plotSpecies.speciesName),
+        (plotSpecies.totalExisting ?? 0) + (plotSpecies.totalLive ?? 0) + (plotSpecies.totalDead ?? 0)
+      )
+    );
+    return totals;
+  }, [monitoringPlot]);
+
+  const { summaries: speciesSummaries, redundant: redundantSpeciesEntries } = useMemo(
+    () =>
+      monitoringPlot
+        ? summarizeMonitoringSpeciesEvents(events, resolveSpeciesName, currentSpeciesTotals)
+        : NO_MONITORING_SPECIES_SUMMARIES,
+    [currentSpeciesTotals, events, monitoringPlot, resolveSpeciesName]
+  );
+
   const filterEvent = useCallback(
     (event: EventLogEntryPayload) =>
       !(
@@ -112,8 +164,37 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         MangroveFields.includes(event.action.fieldName) &&
         !event.action.changedTo
       ) &&
-      !(event.action.type === 'Created' && (event.subject.type !== 'ObservationPlotMedia' || event.subject.isOriginal)),
-    [MangroveFields]
+      !(
+        event.action.type === 'Created' &&
+        (event.subject.type !== 'ObservationPlotMedia' || event.subject.isOriginal)
+      ) &&
+      !redundantSpeciesEntries.has(event),
+    [MangroveFields, redundantSpeciesEntries]
+  );
+
+  const renderSpeciesSummary = useCallback(
+    (event: EventLogEntryPayload) => {
+      const summary = speciesSummaries.get(event);
+      if (!summary) {
+        return undefined;
+      }
+      // The API names counts in lower case, and some names are several words long.
+      const counts = summary.counts
+        .map(({ label, value }) =>
+          strings.formatString(strings.EVENT_SPECIES_COUNT, label.charAt(0).toUpperCase() + label.slice(1), value)
+        )
+        .join(strings.LIST_SEPARATOR);
+
+      if (summary.kind === 'changed') {
+        return strings.formatString(strings.EVENT_SPECIES_CHANGED, summary.speciesName, summary.toSpeciesName, counts);
+      }
+      return strings.formatString(
+        summary.kind === 'added' ? strings.EVENT_SPECIES_ADDED : strings.EVENT_SPECIES_REMOVED,
+        summary.speciesName,
+        counts
+      );
+    },
+    [speciesSummaries, strings]
   );
 
   const renderEventDescription = useCallback(
@@ -121,46 +202,47 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
       <Box>
         {event.action.type === 'FieldUpdated' && (
           <Box>
-            {event.subject.type === 'BiomassSpecies' ||
-            event.subject.type === 'BiomassQuadratSpecies' ||
-            event.subject.type === 'MonitoringSpecies'
-              ? strings.formatString(
-                  strings.SPECIES_VALUE_CHANGED_FROM_TO,
-                  <Typography display='inline' textTransform='capitalize'>
-                    {event.subject.scientificName || getSpeciesName(event.subject.speciesId)}
-                  </Typography>,
-                  <Typography display='inline' textTransform='capitalize'>
-                    {event.action.fieldName}
-                  </Typography>,
-                  <Typography display='inline' color={theme.palette.TwClrTxtWarning} fontWeight={600}>
-                    {event.action.changedFrom?.toString() || strings.NONE}
-                  </Typography>,
-                  <Typography display='inline' color={theme.palette.TwClrTxtSuccess} fontWeight={600}>
-                    {event.action.changedTo?.toString() || strings.NONE}
-                  </Typography>
-                )
-              : strings.formatString(
-                  strings.VALUE_CHANGED_FROM_TO,
-                  <Typography display='inline' textTransform='capitalize'>
-                    {event.subject.type === 'ObservationPlotMedia'
-                      ? `${event.subject.fileId} ${event.subject.mediaKind} ${event.action.fieldName}`
-                      : event.subject.type === 'RecordedTree'
-                        ? `${event.subject.fullText} ${
-                            event.action.fieldName
-                              .toLocaleLowerCase()
-                              .startsWith(`${event.subject.shortText.toLocaleLowerCase()} `)
-                              ? event.action.fieldName.slice(event.subject.shortText.length + 1)
-                              : event.action.fieldName
-                          }`
-                        : event.action.fieldName}
-                  </Typography>,
-                  <Typography display='inline' color={theme.palette.TwClrTxtWarning} fontWeight={600}>
-                    {event.action.changedFrom?.toString() || strings.NONE}
-                  </Typography>,
-                  <Typography display='inline' color={theme.palette.TwClrTxtSuccess} fontWeight={600}>
-                    {event.action.changedTo?.toString() || strings.NONE}
-                  </Typography>
-                )}
+            {renderSpeciesSummary(event) ??
+              (event.subject.type === 'BiomassSpecies' ||
+              event.subject.type === 'BiomassQuadratSpecies' ||
+              event.subject.type === 'MonitoringSpecies'
+                ? strings.formatString(
+                    strings.SPECIES_VALUE_CHANGED_FROM_TO,
+                    <Typography display='inline' textTransform='capitalize'>
+                      {event.subject.scientificName || getSpeciesName(event.subject.speciesId)}
+                    </Typography>,
+                    <Typography display='inline' textTransform='capitalize'>
+                      {event.action.fieldName}
+                    </Typography>,
+                    <Typography display='inline' color={theme.palette.TwClrTxtWarning} fontWeight={600}>
+                      {event.action.changedFrom?.toString() || strings.NONE}
+                    </Typography>,
+                    <Typography display='inline' color={theme.palette.TwClrTxtSuccess} fontWeight={600}>
+                      {event.action.changedTo?.toString() || strings.NONE}
+                    </Typography>
+                  )
+                : strings.formatString(
+                    strings.VALUE_CHANGED_FROM_TO,
+                    <Typography display='inline' textTransform='capitalize'>
+                      {event.subject.type === 'ObservationPlotMedia'
+                        ? `${event.subject.fileId} ${event.subject.mediaKind} ${event.action.fieldName}`
+                        : event.subject.type === 'RecordedTree'
+                          ? `${event.subject.fullText} ${
+                              event.action.fieldName
+                                .toLocaleLowerCase()
+                                .startsWith(`${event.subject.shortText.toLocaleLowerCase()} `)
+                                ? event.action.fieldName.slice(event.subject.shortText.length + 1)
+                                : event.action.fieldName
+                            }`
+                          : event.action.fieldName}
+                    </Typography>,
+                    <Typography display='inline' color={theme.palette.TwClrTxtWarning} fontWeight={600}>
+                      {event.action.changedFrom?.toString() || strings.NONE}
+                    </Typography>,
+                    <Typography display='inline' color={theme.palette.TwClrTxtSuccess} fontWeight={600}>
+                      {event.action.changedTo?.toString() || strings.NONE}
+                    </Typography>
+                  ))}
           </Box>
         )}
         {event.action.type === 'Created' && (
@@ -186,7 +268,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         )}
       </Box>
     ),
-    [getSpeciesName, strings, theme.palette.TwClrTxtSuccess, theme.palette.TwClrTxtWarning]
+    [getSpeciesName, renderSpeciesSummary, strings, theme.palette.TwClrTxtSuccess, theme.palette.TwClrTxtWarning]
   );
 
   return (
