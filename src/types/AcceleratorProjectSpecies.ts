@@ -1,13 +1,16 @@
 import { DropdownItem } from '@terraware/web-components';
 
-import { components } from 'src/api/types/generated-schema';
+import {
+  ParticipantProjectForSpeciesPayload,
+  ParticipantProjectSpeciesPayload,
+  SpeciesForParticipantProjectPayload,
+} from 'src/queries/generated/acceleratorProjectSpecies';
 import strings from 'src/strings';
 
-// These will all change when the BE is done, some of the props might even come from different models
-export type AcceleratorProjectSpecies = components['schemas']['ParticipantProjectSpeciesPayload'];
+export type AcceleratorProjectSpecies = ParticipantProjectSpeciesPayload;
 export type SpeciesNativeCategory = AcceleratorProjectSpecies['speciesNativeCategory'];
-export type AcceleratorProjectForSpecies = components['schemas']['ParticipantProjectForSpeciesPayload'];
-export type SpeciesForAcceleratorProject = components['schemas']['SpeciesForParticipantProjectPayload'];
+export type AcceleratorProjectForSpecies = ParticipantProjectForSpeciesPayload;
+export type SpeciesForAcceleratorProject = SpeciesForParticipantProjectPayload;
 
 const getSpeciesNativeCategoryLabel = (value: SpeciesNativeCategory): string => {
   switch (value) {
