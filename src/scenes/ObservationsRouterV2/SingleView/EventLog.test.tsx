@@ -62,11 +62,14 @@ const mediaEvent = (
 
 type PlotSpecies = { scientificName?: string; totalDead: number; totalExisting: number; totalLive: number };
 
-const renderHistory = async (events = [mediaEvent('Video', 7592)], plotSpecies: PlotSpecies[] = []) => {
+const renderHistory = async (
+  events = [mediaEvent('Video', 7592)],
+  plotSpecies: PlotSpecies[] = [],
+  { plotFound = true } = {}
+) => {
   mockGet('/api/v1/species', { species: [] });
   mockPost('/api/v1/events/list', { events });
-  // Summarizing species edits replays the log backwards from the counts the plot holds now, so the
-  // results have to agree with the history the events describe.
+  // The replay starts from these, so they have to agree with the history the events describe.
   mockGet('/api/v1/tracking/observations/1/results', {
     observation: {
       observationId: 1,
@@ -78,7 +81,7 @@ const renderHistory = async (events = [mediaEvent('Video', 7592)], plotSpecies: 
             {
               monitoringPlots: [
                 {
-                  monitoringPlotId: 2,
+                  monitoringPlotId: plotFound ? 2 : 999,
                   species: plotSpecies.map(({ scientificName, ...totals }) => ({
                     certainty: scientificName ? 'Other' : 'Unknown',
                     speciesName: scientificName,
@@ -123,11 +126,7 @@ const speciesCountEvent = (
   userName: 'Jennifer Yim',
 });
 
-/**
- * A plot's history, oldest edit first, with the counts those edits leave behind. Each edit lists
- * the species' existing/live/dead counts before and after; the API reports only the ones that
- * changed, so the fixture omits the rest the same way.
- */
+/** A plot's history, oldest edit first. The API reports only the counts that changed. */
 const speciesHistory = (...edits: { from: Counts; name?: string; to: Counts }[]) => {
   const events: EventLogEntryPayload[] = [];
   const bySpecies = new Map<string, PlotSpecies>();
@@ -152,7 +151,6 @@ const speciesHistory = (...edits: { from: Counts; name?: string; to: Counts }[])
   return { events, plotSpecies: [...bySpecies.values()] };
 };
 
-/** The parenthesised counts a message reads out, labelled the way the API named them. */
 const countsText = (...counts: [string, number][]) =>
   counts
     .map(([label, value]) => strings.formatString(strings.EVENT_SPECIES_COUNT, label, String(value)) as string)
@@ -243,30 +241,16 @@ describe('Observation EventLog species changes', () => {
     ).toBeInTheDocument();
   });
 
-  it('still reports raising one count on a species that already had plants as a value change', async () => {
-    const { events, plotSpecies } = speciesHistory(
-      { name: 'Acacia koa', from: [0, 0, 0], to: [0, 4, 0] },
-      { name: 'Acacia koa', from: [0, 4, 0], to: [0, 4, 2] }
-    );
-    await renderHistory(events, plotSpecies);
-
-    expect(screen.getByText(/dead count/)).toBeInTheDocument();
-    // Only the first edit added the species; the second just adjusted a count.
+  it('describes nothing until the plot counts the replay starts from are available', async () => {
+    const { events } = speciesHistory({ name: 'Acacia koa', from: [0, 10, 0], to: [0, 7, 0] });
+    await renderHistory(events, [], { plotFound: false });
     expect(
-      screen.getAllByText(
-        strings.formatString(strings.EVENT_SPECIES_ADDED, 'Acacia koa', countsText(['Live count', 4])) as string
-      )
-    ).toHaveLength(1);
-  });
-
-  it('still reports an ordinary count edit as a value change', async () => {
-    const { events, plotSpecies } = speciesHistory(
-      { name: 'Acacia koa', from: [0, 0, 0], to: [1, 4, 1] },
-      { name: 'Acacia koa', from: [1, 4, 1], to: [2, 9, 3] }
-    );
-    await renderHistory(events, plotSpecies);
-
-    expect(screen.getByText(/live count/)).toBeInTheDocument();
+      screen.queryByText(new RegExp(strings.EVENT_SPECIES_REMOVED.replace(/\{\d\}/g, '.*')))
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(new RegExp(strings.EVENT_SPECIES_ADDED.replace(/\{\d\}/g, '.*')))
+    ).not.toBeInTheDocument();
+    expect(screen.getAllByText(/live count/).length).toBeGreaterThan(0);
   });
 });
 

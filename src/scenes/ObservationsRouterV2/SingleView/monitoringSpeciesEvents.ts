@@ -4,11 +4,6 @@ import {
   MonitoringSpeciesSubjectPayload,
 } from 'src/queries/generated/events';
 
-/**
- * The plants this edit put in or took out, one entry per count. The label is the one the API gave
- * the count, which is already localized. Counts the edit left alone are absent, but those were
- * zero on both sides, so nothing was added or removed under them.
- */
 export type MonitoringSpeciesEventCount = { label: string; value: string };
 
 export type MonitoringSpeciesEventSummary = { counts: MonitoringSpeciesEventCount[] } & (
@@ -17,10 +12,13 @@ export type MonitoringSpeciesEventSummary = { counts: MonitoringSpeciesEventCoun
 );
 
 export type MonitoringSpeciesEventSummaries = {
-  /** The one entry of a collapsed group that should carry the summary message. */
   summaries: Map<EventLogEntryPayload, MonitoringSpeciesEventSummary>;
-  /** The remaining entries of a collapsed group, which the summary already accounts for. */
   redundant: Set<EventLogEntryPayload>;
+};
+
+export const NO_MONITORING_SPECIES_SUMMARIES: MonitoringSpeciesEventSummaries = {
+  redundant: new Set(),
+  summaries: new Map(),
 };
 
 type CountEntry = {
@@ -29,37 +27,26 @@ type CountEntry = {
 };
 
 type SpeciesGroup = {
-  /** What this edit added or removed, keyed by field, for comparing the two sides of a change. */
   counts: Map<string, string>;
-  /** How much the species' plant count changed, summed across the counts this edit reported. */
   delta: number;
   entries: CountEntry[];
   kind?: 'added' | 'removed';
   speciesKey: string;
   speciesName: string;
   timestamp: string;
-  /** The species' plant count before and after this edit, recovered by replaying the log. */
   total: { after: number; before: number };
   userId: number;
 };
 
-/**
- * Identifies the species an edit refers to. Observation results and event subjects name a species
- * the same way, so both sides of the replay can be keyed with this.
- */
 export const getMonitoringSpeciesKey = (speciesId?: number, speciesName?: string): string =>
   String(speciesId ?? speciesName ?? 'unknown');
 
-/**
- * Values arrive from the API localized. Plant counts are non-negative integers, so dropping
- * everything that is not a digit leaves the number itself, group separators and all.
- */
+/** Values arrive localized; counts are non-negative integers. */
 const toCount = (value?: string[]): number => {
   const digits = (value ?? []).join('').replace(/\D/g, '');
   return digits === '' ? 0 : Number(digits);
 };
 
-/** The edit's counts in the order the log lists them, ready to read out in a message. */
 const toEventCounts = (group: SpeciesGroup): MonitoringSpeciesEventCount[] =>
   [...group.counts].map(([label, value]) => ({ label, value }));
 
@@ -68,37 +55,20 @@ const fieldUpdates = (group: SpeciesGroup): FieldUpdatedActionPayload[] =>
     .map(({ entry }) => entry.action)
     .filter((action): action is FieldUpdatedActionPayload => action.type === 'FieldUpdated');
 
-/** Groups the entries of one edit together: one species, in one plot, edited by one person at once. */
 const getGroupKey = (entry: EventLogEntryPayload, subject: MonitoringSpeciesSubjectPayload): string =>
   [entry.timestamp, entry.userId, getMonitoringSpeciesKey(subject.speciesId, subject.scientificName)].join('|');
 
-/**
- * True when the two groups hold every entry between the first and the last of them, meaning nothing
- * else was logged in between.
- */
 const areAdjacent = (first: SpeciesGroup, second: SpeciesGroup): boolean => {
   const indexes = [...first.entries, ...second.entries].map(({ index }) => index);
   return Math.max(...indexes) - Math.min(...indexes) + 1 === indexes.length;
 };
 
-/**
- * True when what one group removed is exactly what the other added, count for count. Moving plants
- * from one species to another is how a species change is carried out, so the two sides mirror each
- * other; two unrelated edits that happen to sit next to each other almost never will.
- */
 const haveMirroredCounts = (removed: SpeciesGroup, added: SpeciesGroup): boolean =>
   removed.total.before === added.total.after &&
   removed.counts.size === added.counts.size &&
   [...removed.counts].every(([fieldName, value]) => added.counts.get(fieldName) === value);
 
-/**
- * Pairs a removal with an addition only when the two really do look like one species change: a
- * different species, the same plants moved across, nothing logged in between, and the same person.
- *
- * The API gives no transaction or request id to join the two events on, and their timestamps are
- * separate clock readings, so there is nothing authoritative to match on. Anything that fails these
- * checks renders as a separate removal and addition, which is still accurate.
- */
+/** Heuristic: the API gives no id joining the two events of a species change. */
 const isSpeciesChange = (removed: SpeciesGroup, added: SpeciesGroup): boolean =>
   removed.speciesKey !== added.speciesKey &&
   removed.userId === added.userId &&
@@ -106,32 +76,23 @@ const isSpeciesChange = (removed: SpeciesGroup, added: SpeciesGroup): boolean =>
   areAdjacent(removed, added);
 
 /**
- * Collapses the per-field entries of a plant count edit into one message when the edit added,
- * removed, or re-speciesed an entry.
+ * Collapses an edit's per-count entries into one added/removed/changed message.
  *
- * An edit reports only the counts that changed, so its entries never state what the untouched
- * counts were: raising one count from 0 looks exactly like adding a species whose other counts are
- * 0. The missing values are recovered instead by replaying the plot's history backwards from each
- * species' current plant count, which the API returns in full and unpaginated. Only the species'
- * total is needed, since every count being zero is the same as the total being zero — which also
- * avoids having to tell the localized count names apart.
- *
- * A total that replays to a negative value means something moved plants without logging an event —
- * merging species does this — so that species is left to render its plain field changes rather than
- * be described from a reconstruction known to be wrong.
+ * An edit reports only the counts that changed, so raising one count from 0 is indistinguishable
+ * from adding a species. The untouched values are recovered by replaying the plot's history
+ * backwards from `currentTotals`. A total replaying negative means something moved plants without
+ * logging an event (merging species does), so that species is left unsummarized.
  */
 export const summarizeMonitoringSpeciesEvents = (
   events: EventLogEntryPayload[] | undefined,
   resolveSpeciesName: (subject: MonitoringSpeciesSubjectPayload) => string,
-  /** Each species' current plant count, summed across every count, keyed by species. */
   currentTotals: Map<string, number>
 ): MonitoringSpeciesEventSummaries => {
   const summaries = new Map<EventLogEntryPayload, MonitoringSpeciesEventSummary>();
   const redundant = new Set<EventLogEntryPayload>();
 
   const entriesByGroup = new Map<string, { entries: CountEntry[]; subject: MonitoringSpeciesSubjectPayload }>();
-  // The three plant counts are the only fields a MonitoringSpecies subject reports, so every
-  // field update on one is a count. `fieldName` arrives localized and is no use for matching.
+  // `fieldName` arrives localized, so the subject type is all there is to match on.
   (events ?? []).forEach((entry, index) => {
     if (entry.action.type !== 'FieldUpdated' || entry.subject.type !== 'MonitoringSpecies') {
       return;
@@ -162,8 +123,7 @@ export const summarizeMonitoringSpeciesEvents = (
     groups.push(group);
   });
 
-  // Replay backwards from today's counts. Each edit's "before" is the running total less its delta,
-  // which is then the total the edit before it ended at.
+  // Each edit's "before" is the total the edit before it ended at.
   const runningTotals = new Map(currentTotals);
   const unreliableSpecies = new Set<string>();
   groups
@@ -215,7 +175,6 @@ export const summarizeMonitoringSpeciesEvents = (
 
     const allEntries = [...group.entries, ...addition.entries].toSorted((a, b) => a.index - b.index);
     summaries.set(allEntries[0].entry, {
-      // Both sides hold the same plants, so either one describes what moved across.
       counts: toEventCounts(group),
       kind: 'changed',
       speciesName: group.speciesName,

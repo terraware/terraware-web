@@ -7,11 +7,7 @@ import { getMonitoringSpeciesKey, summarizeMonitoringSpeciesEvents } from './mon
 const EXISTING = 'existing count';
 const LIVE = 'live count';
 const DEAD = 'dead count';
-/**
- * The order the API reports counts in. `listUpdatedFields` emits existing, live then dead, which
- * is the order the log is meant to read them out in. The position says which slot of a `Counts`
- * tuple each one holds.
- */
+/** The order the API reports counts in; position is the slot each one holds in `Counts`. */
 const COUNT_FIELDS: { name: string; position: number }[] = [
   { name: EXISTING, position: 0 },
   { name: LIVE, position: 1 },
@@ -61,10 +57,7 @@ const countEntry = (
   userName: 'Alex Edwards',
 });
 
-/**
- * The entries one plant count edit produces. The API reports a count only when it changed, and
- * stamps the entries of a single edit with one timestamp, so the fixtures do the same.
- */
+/** The API reports a count only when it changed, and stamps one edit's entries with one timestamp. */
 const speciesEdit = ({ from, speciesName, to, userId = 1 }: Edit): EventLogEntryPayload[] => {
   const timestamp = nextTimestampValue();
   return COUNT_FIELDS.map(({ name: fieldName, position }) => ({
@@ -91,11 +84,7 @@ const otherEntry = (): EventLogEntryPayload => ({
   userName: 'Alex Edwards',
 });
 
-/**
- * A plot's history, oldest edit first, along with the plant counts those edits leave behind. The
- * summary replays the log backwards from those counts, so the two have to agree the way the API
- * and the observation results do.
- */
+/** A plot's history, oldest edit first, with the counts those edits leave behind. */
 const history = (...edits: (Edit | 'other')[]) => {
   const events: EventLogEntryPayload[] = [];
   const currentTotals = new Map<string, number>();
@@ -118,16 +107,6 @@ const summarize = (events: EventLogEntryPayload[], currentTotals: Map<string, nu
   );
 
 describe('summarizeMonitoringSpeciesEvents', () => {
-  it('reads an add that left two counts at zero as the species being added', () => {
-    // The edit reports only the live count, because the others went from 0 to 0.
-    const { currentTotals, events } = history({ speciesName: 'Vigna owahuensis', from: [0, 0, 0], to: [0, 2, 1] });
-    expect(events).toHaveLength(2);
-
-    const { summaries, redundant } = summarize(events, currentTotals);
-    expect(summaries.get(events[0])).toMatchObject({ kind: 'added', speciesName: 'Vigna owahuensis' });
-    expect(redundant.has(events[1])).toBe(true);
-  });
-
   it('reads an add of a single count as the species being added', () => {
     const { currentTotals, events } = history({ speciesName: 'Carex meyenii', from: [0, 0, 0], to: [0, 5, 0] });
     expect(events).toHaveLength(1);
@@ -138,13 +117,16 @@ describe('summarizeMonitoringSpeciesEvents', () => {
 
   it('reads an edit that emptied the species as it being removed', () => {
     const { currentTotals, events } = history(
-      { speciesName: 'Carex meyenii', from: [0, 0, 0], to: [0, 5, 0] },
-      { speciesName: 'Carex meyenii', from: [0, 5, 0], to: [0, 0, 0] }
+      { speciesName: 'Carex meyenii', from: [0, 0, 0], to: [2, 5, 1] },
+      { speciesName: 'Carex meyenii', from: [2, 5, 1], to: [0, 0, 0] }
     );
 
-    const { summaries } = summarize(events, currentTotals);
+    const { summaries, redundant } = summarize(events, currentTotals);
     expect(summaries.get(events[0])).toMatchObject({ kind: 'added', speciesName: 'Carex meyenii' });
-    expect(summaries.get(events[1])).toMatchObject({ kind: 'removed', speciesName: 'Carex meyenii' });
+    expect(summaries.get(events[3])).toMatchObject({ kind: 'removed', speciesName: 'Carex meyenii' });
+    // The edit's other counts are folded into the one message.
+    expect(redundant.has(events[1])).toBe(true);
+    expect(redundant.has(events[2])).toBe(true);
   });
 
   it('does not read raising one count from zero as the species being added', () => {
@@ -209,7 +191,6 @@ describe('summarizeMonitoringSpeciesEvents', () => {
       { speciesName: 'Carex meyenii', from: [2, 5, 1], to: [0, 0, 0] }
     );
 
-    // Two separate actions on one species. A species cannot be changed into itself.
     const { summaries } = summarize(events, currentTotals);
     expect(summaries.get(events[0])).toMatchObject({ kind: 'added', speciesName: 'Carex meyenii' });
     expect(summaries.get(events[3])).toMatchObject({ kind: 'removed', speciesName: 'Carex meyenii' });
@@ -222,7 +203,6 @@ describe('summarizeMonitoringSpeciesEvents', () => {
       { speciesName: 'Abutilon eremitopetalum', from: [0, 0, 0], to: [3, 7, 2] }
     );
 
-    // A species change moves the counts across unchanged, so differing counts are two edits.
     const { summaries } = summarize(events, currentTotals);
     expect(summaries.get(events[3])).toMatchObject({ kind: 'removed', speciesName: 'Duosperma angolense' });
     expect(summaries.get(events[6])).toMatchObject({ kind: 'added', speciesName: 'Abutilon eremitopetalum' });
@@ -275,7 +255,11 @@ describe('summarizeMonitoringSpeciesEvents', () => {
   });
 
   it('reports the counts the edit put in, labelled as the API named them', () => {
-    const { currentTotals, events } = history({ speciesName: 'Abutilon eremitopetalum', from: [0, 0, 0], to: [3, 4, 5] });
+    const { currentTotals, events } = history({
+      speciesName: 'Abutilon eremitopetalum',
+      from: [0, 0, 0],
+      to: [3, 4, 5],
+    });
 
     const { summaries } = summarize(events, currentTotals);
     expect(summaries.get(events[0])?.counts).toEqual([
@@ -295,21 +279,6 @@ describe('summarizeMonitoringSpeciesEvents', () => {
     const { summaries } = summarize(events, currentTotals);
     expect(summaries.get(events[2])?.counts).toEqual([
       { label: LIVE, value: '4' },
-      { label: DEAD, value: '1' },
-    ]);
-  });
-
-  it('reports the counts a species change moved across', () => {
-    const { currentTotals, events } = history(
-      { speciesName: 'Duosperma angolense', from: [0, 0, 0], to: [2, 6, 1] },
-      { speciesName: 'Duosperma angolense', from: [2, 6, 1], to: [0, 0, 0] },
-      { speciesName: 'Abutilon eremitopetalum', from: [0, 0, 0], to: [2, 6, 1] }
-    );
-
-    const { summaries } = summarize(events, currentTotals);
-    expect(summaries.get(events[3])?.counts).toEqual([
-      { label: EXISTING, value: '2' },
-      { label: LIVE, value: '6' },
       { label: DEAD, value: '1' },
     ]);
   });

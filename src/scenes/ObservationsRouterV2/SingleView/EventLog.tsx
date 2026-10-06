@@ -18,7 +18,11 @@ import {
 import { useGetObservationMediaStreamQuery } from 'src/queries/generated/observations';
 import { ListObservationEventsArgs, useLazyListObservationEventsQuery } from 'src/queries/observations/observations';
 
-import { getMonitoringSpeciesKey, summarizeMonitoringSpeciesEvents } from './monitoringSpeciesEvents';
+import {
+  NO_MONITORING_SPECIES_SUMMARIES,
+  getMonitoringSpeciesKey,
+  summarizeMonitoringSpeciesEvents,
+} from './monitoringSpeciesEvents';
 
 type EventLogProps = {
   observationId: number;
@@ -114,14 +118,13 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
   }, [isBiomass, list, observationId, plotId, selectedOrganization]);
 
   const resolveSpeciesName = useCallback(
-    // A row with neither a name nor an id is the plot's unknown species, which is how the plant
-    // count table labels it too. `shortText` is just the word "Species", so it is no help here.
+    // `shortText` is just the word "Species", so it cannot stand in for the name.
     (subject: MonitoringSpeciesSubjectPayload) =>
       subject.scientificName || getSpeciesName(subject.speciesId) || strings.UNKNOWN,
     [getSpeciesName, strings.UNKNOWN]
   );
 
-  // Replaying the log needs a starting point, so the plot's species are read as they stand now.
+  // The replay starts from the counts the plot holds now.
   const monitoringPlot = useMemo(() => {
     const results = observationResultsResponse?.observation;
     return results?.isAdHoc
@@ -134,20 +137,24 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
 
   const currentSpeciesTotals = useMemo(() => {
     const totals = new Map<string, number>();
-    [...(monitoringPlot?.species ?? []), ...(monitoringPlot?.unknownSpecies ? [monitoringPlot.unknownSpecies] : [])]
-      // A species the plot no longer records is simply absent, which counts as zero.
-      .forEach((plotSpecies) =>
-        totals.set(
-          getMonitoringSpeciesKey(plotSpecies.speciesId, plotSpecies.speciesName),
-          (plotSpecies.totalExisting ?? 0) + (plotSpecies.totalLive ?? 0) + (plotSpecies.totalDead ?? 0)
-        )
-      );
+    [
+      ...(monitoringPlot?.species ?? []),
+      ...(monitoringPlot?.unknownSpecies ? [monitoringPlot.unknownSpecies] : []),
+    ].forEach((plotSpecies) =>
+      totals.set(
+        getMonitoringSpeciesKey(plotSpecies.speciesId, plotSpecies.speciesName),
+        (plotSpecies.totalExisting ?? 0) + (plotSpecies.totalLive ?? 0) + (plotSpecies.totalDead ?? 0)
+      )
+    );
     return totals;
   }, [monitoringPlot]);
 
   const { summaries: speciesSummaries, redundant: redundantSpeciesEntries } = useMemo(
-    () => summarizeMonitoringSpeciesEvents(events, resolveSpeciesName, currentSpeciesTotals),
-    [currentSpeciesTotals, events, resolveSpeciesName]
+    () =>
+      monitoringPlot
+        ? summarizeMonitoringSpeciesEvents(events, resolveSpeciesName, currentSpeciesTotals)
+        : NO_MONITORING_SPECIES_SUMMARIES,
+    [currentSpeciesTotals, events, monitoringPlot, resolveSpeciesName]
   );
 
   const filterEvent = useCallback(
@@ -161,7 +168,6 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         event.action.type === 'Created' &&
         (event.subject.type !== 'ObservationPlotMedia' || event.subject.isOriginal)
       ) &&
-      // The other count entries of an add, remove or species change are covered by its one message.
       !redundantSpeciesEntries.has(event),
     [MangroveFields, redundantSpeciesEntries]
   );
@@ -172,8 +178,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
       if (!summary) {
         return undefined;
       }
-      // The API names each count in lower case ("live count"), so only the first letter is raised,
-      // which keeps names that are more than one word readable in every language.
+      // The API names counts in lower case, and some names are several words long.
       const counts = summary.counts
         .map(({ label, value }) =>
           strings.formatString(strings.EVENT_SPECIES_COUNT, label.charAt(0).toUpperCase() + label.slice(1), value)
