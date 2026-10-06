@@ -212,6 +212,7 @@ ARE_YOU_SURE_DELETE,¿Está seguro de que desea eliminar?,a7f716f0
 ARE_YOU_SURE_DELETE_PLANTING_DATE,¿Está seguro de que desea eliminar esta Fecha de Plantación?,c9c72b70
 ARE_YOU_SURE_DELETE_TARGET,¿Está seguro de que desea eliminar este objetivo de especie?,8f7cb65e
 AREA_HA,Área (ha),8ab5d500
+AREA_IN_HA,{0} ha,8f68781b
 AREA_NOT_OBSERVED,Área no observada,9eeddab4
 AS_OF_X,desde {0},6d77dc0f
 ASSIGN,Asignar,d1afb440
@@ -586,6 +587,8 @@ DOWNLOAD_THE_TERRAWARE_MOBILE_APP,Descargar la aplicación móvil de Terraware,3
 DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION,"Obtenga la aplicación móvil y aproveche las funciones de Colección de semillas, Gestión de vivero y Monitoreo de plantas, las cuales puede usar con mayor flexibilidad ¡más allá de su escritorio!",94127206
 DRAFT,Borrador,f766b964
 DRAFT_PLANTING_SITES,Sitios de Plantación en Borrador,97403fcc
+DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE,"Este sitio es un borrador. La configuración del límite no está terminada, por lo que aún no puede usarse para plantaciones ni observaciones.",f001d82c
+DRAFT_SITE_BOUNDARY_NOT_STARTED_MESSAGE,"Este sitio es un borrador. El límite del sitio no ha sido configurado, por lo que aún no puede usarse para plantaciones ni observaciones.",742beca3
 DRAW_BOUNDARY_WITHIN_MAP,Trazar los límites dentro de un mapa,d1ee6da4
 DRAW_PROPOSED_PROJECT_BOUNDARY,Trazar el límite del proyecto propuesto,8b73e819
 DRONE_FLIGHT,Vuelo de dron,af8ec693
@@ -716,6 +719,7 @@ EVENTS,Eventos,a18b73bc
 EXCEEDS_AVAILABLE_X,Supera lo disponible ({0}),4391f9df
 EXCEEDS_READY_TO_PLANT,El total retirado ({0}) en todos los sustratos supera la cantidad Lista para Transplantar ({1}) en este lote,3e3cd4a4
 EXCLUSION_AREAS,Zonas de exclusión,08c7d391
+EXCLUSION_AREAS_SUMMARY,{0} · {1},6f088900
 EXISTING_PROJECT_ACCESSIONS_BODY,"Hay accesiones que ya se añadieron a un proyecto existente. Si selecciona dichas accesiones aquí, reemplazará el proyecto con {0} (en vez de crear una asociación adicional).",a23f695b
 EXISTING_PROJECT_ACCESSIONS_TITLE,Proyecto existente con accesiones,278f1f38
 EXISTING_PROJECT_BATCHES_BODY,"Hay lotes que ya se añadieron a un proyecto existente. Si selecciona dichos lotes aquí, reemplazará el proyecto con {0} (en vez de crear una asociación adicional).",426c8254
@@ -1283,6 +1287,8 @@ NO_REASSIGNMENTS_TEXT,Seleccione un sustrato y una cantidad para reasignar para 
 NO_REQUESTS_FOR_SELECTED_FILTERS,No hay solicitudes para los filtros seleccionados.,a6a641ac
 NO_SEASON,Sin temporada,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de poder agregar y administrar sus accesiones, necesitará contar con un banco de semillas y especies dentro de Terraware. Solo los administradores pueden agregar bancos de semillas; contáctese con el suyo para obtener ayuda.",814348fe
+NO_SITE_BOUNDARY_YET,Aún no hay límite del sitio,48cfe15e
+NO_SITE_BOUNDARY_YET_DESCRIPTION,Cargue un archivo espacial o dibuje el límite en un mapa para terminar de configurar este sitio.,888a80d2
 NO_SPECIES_ASSIGNED_TO_STRATUM,No hay especies objetivo asignadas a este estrato,7f008c4c
 NO_SPECIES_CONTRIBUTOR_MSG,"Aún no hay especies en su lista de especies. Solo los administradores pueden añadir especies, así que por favor contacte con el suyo para que le ayude.",32a4f50e
 NO_SPECIES_DESCRIPTION,Parece que aún no ha añadido ninguna especie. Disponer de una lista maestra de especies ayuda a agilizar la introducción de datos sobre semillas y plantas en su organización. Puede añadir especies manual e individualmente o importar datos desde un CSV.,048a81f6
@@ -2065,6 +2071,7 @@ SET_UP_NURSERY,Establecer vivero,25ab7370
 SET_UP_SEED_BANK,Establecer banco de semillas,6f047a89
 SETTINGS,Ajustes,38560978
 SETTINGS_FOR,Configuración para {0},da07c7b6
+SETUP_REMAINING,Configuración pendiente,368418af
 SHARED_WITH_FUNDER,Compartido con el financiador,f59b229b
 SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52
 SHOW_FILTERS,Mostrar filtros,d4143c37
@@ -2456,6 +2463,7 @@ TOOLTIP_VIABILITY_TEST_SUBSTRATE,"La superficie o el material del que un organis
 TOOLTIP_VIABILITY_TEST_TREATMENT,"Los agentes y técnicas biológicos, físicos y químicos utilizados para romper la latencia y/o acelerar la germinación.",560e95e8
 TOTAL,Total,ecba5453
 TOTAL_ACTIVE_ACCESSIONS,Total de accesiones activas,8950dbea
+TOTAL_AREA,Área total,2eefa842
 TOTAL_DENSITY_TOOLTIP,Densidad total de plantas (plantas/ha) de los valores ingresados arriba.,edb8e740
 TOTAL_DENSITY_VIEW_TOOLTIP,Total de las densidades de plantas de todas las especies listadas,04705106
 TOTAL_GOAL,Meta total,b6468a48
