@@ -41,11 +41,16 @@ export type PlantingDateRequestRow = {
   substrata: PlantingDateRequestSubstratum[];
 };
 
+export type PlantingDateRequestStatus = 'Pending' | 'Partial' | 'Fulfilled';
+
+const OPEN_PLANTING_DATE_REQUEST_STATUSES: PlantingDateRequestStatus[] = ['Pending', 'Partial'];
+
 type ListPlantingDateRequestsArgs = {
   organizationId: number;
   plantingSiteId?: number;
   plantingSeasonId?: number;
   speciesId?: number;
+  statuses?: PlantingDateRequestStatus[];
 };
 
 type ScheduledPlantingDateWithdrawalsArgs = {
@@ -76,7 +81,7 @@ const injectedRtkApi = api.injectEndpoints({
             operation: 'field',
             field: 'status(raw)',
             type: 'Exact',
-            values: ['Pending', 'Partial'],
+            values: args.statuses ?? OPEN_PLANTING_DATE_REQUEST_STATUSES,
           },
         ];
         if (args.plantingSiteId) {
