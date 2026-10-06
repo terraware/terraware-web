@@ -326,8 +326,8 @@ export default function Editor(props: EditorProps): JSX.Element {
           {!isMobile && (
             <Box display='flex' alignItems='center' flexWrap='wrap' justifyContent='flex-end' gap={theme.spacing(1)}>
               <Button
-                id='cancel-planting-site-create'
-                label={strings.CANCEL}
+                id='close-planting-site-create'
+                label={strings.CLOSE}
                 onClick={onCancel}
                 disabled={busy}
                 priority='secondary'
@@ -346,19 +346,10 @@ export default function Editor(props: EditorProps): JSX.Element {
                 />
               )}
               <Button
-                id='save-and-close'
-                label={strings.SAVE_AND_CLOSE}
-                onClick={onSave(true)}
-                disabled={busy || !isDirty}
-                priority='secondary'
-                type='passive'
-                size='medium'
-              />
-              <Button
                 id='save-planting-site-create'
-                label={isFinalStep ? strings.SAVE : strings.SAVE_AND_NEXT}
+                label={isFinalStep ? strings.CREATE_PLANTING_SITE : strings.NEXT}
                 onClick={onSave(false)}
-                disabled={busy || (plantingSite.id === -1 && !isDirty)}
+                disabled={busy}
                 size='medium'
               />
             </Box>
