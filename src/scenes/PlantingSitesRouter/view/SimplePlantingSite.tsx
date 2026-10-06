@@ -7,11 +7,10 @@ import strings from 'src/strings';
 import { MinimalPlantingSite } from 'src/types/Tracking';
 
 type SimplePlantingSiteProps = {
-  isDraft?: boolean;
   plantingSite: MinimalPlantingSite;
 };
 
-export default function SimplePlantingSite({ isDraft, plantingSite }: SimplePlantingSiteProps): JSX.Element {
+export default function SimplePlantingSite({ plantingSite }: SimplePlantingSiteProps): JSX.Element {
   const theme = useTheme();
 
   return (
@@ -20,7 +19,7 @@ export default function SimplePlantingSite({ isDraft, plantingSite }: SimplePlan
         <Typography fontSize='16px' fontWeight={600} margin={theme.spacing(3, 0)}>
           {strings.SITE_MAP}
         </Typography>
-        {plantingSite.boundary && <SimplePlantingSiteMap isDraft={isDraft} plantingSiteId={plantingSite.id} />}
+        {plantingSite.boundary && <SimplePlantingSiteMap plantingSiteId={plantingSite.id} />}
       </Box>
     </>
   );
