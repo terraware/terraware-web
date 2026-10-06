@@ -43,9 +43,10 @@ const DEFAULT_COLUMN_ORDER = [
   'totalSpecies',
   'plotDescription',
   'plantingSiteName',
+  'strata',
 ];
 
-const DEFAULT_COLUMN_VISIBILITY = { plantingSiteName: false, plotDescription: false };
+const DEFAULT_COLUMN_VISIBILITY = { plantingSiteName: false, plotDescription: false, strata: false };
 
 type AdHocRow = {
   completedDate?: string;
@@ -57,6 +58,7 @@ type AdHocRow = {
   plantingSiteId: number;
   plantingSiteName?: string;
   plotDescription?: string;
+  stratumName?: string;
   totalPlants?: number;
   totalSpecies?: number;
 };
@@ -77,6 +79,7 @@ const toRow = (observation: ObservationResultsPayload, plantingSiteName?: string
     plantingSiteId: observation.plantingSiteId,
     plantingSiteName,
     plotDescription: biomass?.description,
+    stratumName: adHocPlot?.stratumName,
     totalPlants: biomass ? biomass.trees.length : adHocPlot?.totalPlants,
     totalSpecies: biomass ? biomass.treeSpeciesCount : adHocPlot?.totalSpecies,
   };
@@ -185,6 +188,8 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
     return typeof value === 'number' ? <FormattedNumber value={value} /> : null;
   }, []);
 
+  const anyPlotHasStratum = useMemo(() => rows.some((row) => row.stratumName), [rows]);
+
   const columns = useMemo(
     (): EditableTableColumn<AdHocRow>[] => [
       {
@@ -209,6 +214,15 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         header: strings.PLANTING_SITE,
         accessorKey: 'plantingSiteName',
       },
+      ...(anyPlotHasStratum
+        ? ([
+            {
+              id: 'strata',
+              header: strings.STRATA,
+              accessorKey: 'stratumName',
+            },
+          ] as EditableTableColumn<AdHocRow>[])
+        : []),
       {
         id: 'completedDate',
         header: strings.DATE_OBSERVED,
@@ -234,7 +248,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         Cell: NumberCell,
       },
     ],
-    [strings, showSelectObservation, PlotNumberCell, CompletedDateCell, NumberCell]
+    [strings, anyPlotHasStratum, showSelectObservation, PlotNumberCell, CompletedDateCell, NumberCell]
   );
 
   const onExport = useCallback(

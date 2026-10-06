@@ -166,7 +166,7 @@ export const makeAdHocObservationsCsv = (
     };
   });
 
-  return makeCsv(columnHeaders, data);
+  return makeCsv(columnHeaders, data, false);
 };
 
 export const exportAdHocObservationsResults = async ({
