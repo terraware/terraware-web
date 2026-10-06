@@ -1,37 +1,54 @@
 import { isArray } from 'lodash';
 
 import { components } from 'src/api/types/generated-schema';
+import {
+  DateVariablePayload,
+  EmailVariablePayload,
+  GetVariableWorkflowHistoryResponsePayload,
+  ImageVariablePayload,
+  LinkVariablePayload,
+  ListVariableOwnersResponsePayload,
+  ListVariablesResponsePayload,
+  NumberVariablePayload,
+  SectionVariablePayload,
+  SelectOptionPayload,
+  SelectVariablePayload,
+  TableVariablePayload,
+  TextVariablePayload,
+  UpdateVariableOwnerRequestPayload,
+  UpdateVariableWorkflowDetailsRequestPayload,
+} from 'src/queries/generated/documentProducerVariables';
 
 import { VariableValue, VariableValueImageValue, VariableValueTableValue, VariableValueValue } from './VariableValue';
 
-export type VariableListResponse = components['schemas']['ListVariablesResponsePayload'];
+export type VariableListResponse = ListVariablesResponsePayload;
 
 export type Variable = VariableListResponse['variables'][0];
 
 export type VariableType = components['schemas']['ExistingValuePayload']['type'];
 
-type LinkVariable = components['schemas']['LinkVariablePayload'];
+type LinkVariable = LinkVariablePayload;
 
-type SectionVariable = components['schemas']['SectionVariablePayload'];
+type SectionVariable = SectionVariablePayload;
 
-type DateVariable = components['schemas']['DateVariablePayload'];
+type DateVariable = DateVariablePayload;
 
-type EmailVariable = components['schemas']['EmailVariablePayload'];
+type EmailVariable = EmailVariablePayload;
 
-export type TextVariable = components['schemas']['TextVariablePayload'];
+export type TextVariable = TextVariablePayload;
 export const isTextVariable = (input: unknown): input is TableVariable => (input as TextVariable).type === 'Text';
 
-export type ImageVariable = components['schemas']['ImageVariablePayload'];
+export type ImageVariable = ImageVariablePayload;
 export const isImageVariable = (input: unknown): input is ImageVariable => (input as ImageVariable).type === 'Image';
 
-export type TableVariable = components['schemas']['TableVariablePayload'];
+export type TableVariable = TableVariablePayload;
 export const isTableVariable = (input: unknown): input is TableVariable => (input as TableVariable).type === 'Table';
 
-export type TableColumn = components['schemas']['TableVariablePayload']['columns'][0];
+export type TableColumn = TableVariablePayload['columns'][0];
 
-type NumberVariable = components['schemas']['NumberVariablePayload'];
+type NumberVariable = NumberVariablePayload;
 
-export type SelectVariable = components['schemas']['SelectVariablePayload'];
+export type SelectVariable = SelectVariablePayload;
 export const isSelectVariable = (input: unknown): input is SelectVariable =>
   Array.isArray((input as SelectVariable).options);
 
@@ -46,9 +63,7 @@ export type VariableUnion =
   | LinkVariable
   | SectionVariable;
 
-export type Section = components['schemas']['SectionVariablePayload'];
-
-export type SelectOptionPayload = components['schemas']['SelectOptionPayload'];
+export type Section = SectionVariablePayload;
 
 export type TableColumnWithValues = Omit<TableColumn, 'variable'> & {
   variable: VariableWithValues;
@@ -87,13 +102,13 @@ export const isSectionVariableWithValues = (input: unknown): input is SectionVar
     isArray((input as SectionVariableWithValues).children)
   );
 
-export type GetVariableHistoryResponse = components['schemas']['GetVariableWorkflowHistoryResponsePayload'];
+export type GetVariableHistoryResponse = GetVariableWorkflowHistoryResponsePayload;
 
-export type UpdateVariableWorkflowDetailsPayload = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload'];
+export type UpdateVariableWorkflowDetailsPayload = UpdateVariableWorkflowDetailsRequestPayload;
 
-export type UpdateVariableOwnerPayload = components['schemas']['UpdateVariableOwnerRequestPayload'];
+export type UpdateVariableOwnerPayload = UpdateVariableOwnerRequestPayload;
 
-export type VariableStatusType = components['schemas']['UpdateVariableWorkflowDetailsRequestPayload']['status'];
+export type VariableStatusType = UpdateVariableWorkflowDetailsRequestPayload['status'];
 
 export const NonSectionVariableStatuses: VariableStatusType[] = [
   'Approved',
@@ -104,9 +119,11 @@ export const NonSectionVariableStatuses: VariableStatusType[] = [
   'Rejected',
 ];
 
-export type VariableOwnersListResponse = components['schemas']['ListVariableOwnersResponsePayload'];
+export type VariableOwnersListResponse = ListVariableOwnersResponsePayload;
 
-export type VariableOwners = components['schemas']['ListVariableOwnersResponsePayload']['variables'][0];
+export type VariableOwners = ListVariableOwnersResponsePayload['variables'][0];
 
 export type DependencyCondition = VariableWithValues['dependencyCondition'];
 export const DependencyConditions: DependencyCondition[] = ['gt', 'gte', 'lt', 'lte', 'eq', 'neq'];
+
+export type { SelectOptionPayload };
