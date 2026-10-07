@@ -4,21 +4,28 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { DateTime, Interval } from 'luxon';
 
 import Link from 'src/components/common/Link';
-import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers';
 import { ObservationPayload } from 'src/queries/generated/observations';
+
+import InlineRescheduleForm from './InlineRescheduleForm';
 
 const URGENT_WITHIN_DAYS = 7;
 
 type ScheduledObservationItemProps = {
   canReschedule: boolean;
+  isRescheduling: boolean;
   observation: ObservationPayload;
+  onRescheduleEnd: () => void;
+  onRescheduleStart: (observationId: number) => void;
   showSiteName: boolean;
 };
 
 const ScheduledObservationItem = ({
   canReschedule,
+  isRescheduling,
   observation,
+  onRescheduleEnd,
+  onRescheduleStart,
   showSiteName,
 }: ScheduledObservationItemProps): JSX.Element => {
   const { activeLocale, strings } = useLocalization();
@@ -67,17 +74,15 @@ const ScheduledObservationItem = ({
           </Typography>
         )}
       </Box>
-      {showSiteName && (
+      {isRescheduling && <InlineRescheduleForm observation={observation} onClose={onRescheduleEnd} />}
+      {showSiteName && !isRescheduling && (
         <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px' lineHeight='20px'>
           {dateRange}
         </Typography>
       )}
-      {canReschedule && (
+      {canReschedule && !isRescheduling && (
         <Box marginTop={theme.spacing(0.5)}>
-          <Link
-            fontSize='14px'
-            to={APP_PATHS.RESCHEDULE_OBSERVATION.replace(':observationId', observation.id.toString())}
-          >
+          <Link fontSize='14px' onClick={() => onRescheduleStart(observation.id)}>
             {strings.RESCHEDULE}
           </Link>
         </Box>
