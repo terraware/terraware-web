@@ -136,7 +136,7 @@ const renderFieldChange = (
 export type AccessionEventDescriptionOptions = {
   colors: ChangedValueColors;
   /** Batch ID to the nursery it went to, for naming a transfer's destination. */
-  nurseryNames?: Map<number, string>;
+  nurseryNames?: Record<number, string>;
   strings: Strings;
   viabilityTestWithdrawals?: ViabilityTestWithdrawals;
 };
@@ -193,7 +193,7 @@ export const renderAccessionEventDescription = (
 
           const purpose = createdField(action, 'purpose');
           const batchId = createdField(action, 'batchId');
-          const nursery = batchId === undefined ? undefined : nurseryNames?.get(Number(batchId));
+          const nursery = batchId === undefined ? undefined : nurseryNames?.[Number(batchId)];
 
           if (nursery !== undefined) {
             return strings.formatString(strings.ACCESSION_EVENT_WITHDRAWAL_ADDED_TO, quantity, nursery);
