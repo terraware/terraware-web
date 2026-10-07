@@ -1314,6 +1314,7 @@ NOT_SUBMITTED,No se ha enviado,e40a2b1d
 NOT_VERIFIED,No verificado,fbd9066a
 NOT_WITHDRAWN_TO_DATE,No retirado hasta la fecha,bbb78c00
 NOT_YET,Aún no,77976aa8
+NOT_YET_REQUESTED,Aún no solicitado,be16eae0
 NOT_YET_WITHDRAWN,Aún no retirado,3b0fb56f
 NOTE_ANY_ISSUES,¿Todo lo anterior parece correcto? Anote cualquier problema.,133db1c4
 NOTE_COLON,Nota:,00769bbe
@@ -1882,6 +1883,7 @@ REQUEST_REASSIGNMENT_REASON_TOOLTIP,Proporcione una justificación para la reasi
 REQUEST_UPDATE,Solicitar actualización,bce207eb
 REQUEST_UPDATE_ACTION,Solicitar actualización...,790ef713
 REQUEST_UPDATE_REASON,Indique el motivo por el que solicita la actualización.,52430788
+REQUESTED,Solicitado,17e828cc
 REQUESTED_PLANTS,Plantas solicitadas,4c4fac82
 REQUESTS_X,Solicitudes ({0}),b70edf58
 REQUIRED,Obligatorio,ede65856

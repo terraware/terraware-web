@@ -58,6 +58,10 @@ type ScheduledPlantingDateWithdrawalsArgs = {
   date: string;
 };
 
+type PlantingDateRequestStatusesArgs = {
+  plantingSeasonId: number;
+};
+
 const includedPlantingSeasonStatuses = ['Active', 'Upcoming', 'Past End Date'];
 
 const injectedRtkApi = api.injectEndpoints({
@@ -237,6 +241,33 @@ const injectedRtkApi = api.injectEndpoints({
           };
         }),
     }),
+    listPlantingDateRequestStatuses: build.query<
+      Record<string, PlantingDateRequestStatus>,
+      PlantingDateRequestStatusesArgs
+    >({
+      query: ({ plantingSeasonId }) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          prefix: 'plantingDateRequests',
+          fields: ['date', 'status(raw)'],
+          search: {
+            operation: 'field',
+            field: 'scheduledPlantingDate_plantingSeason_id',
+            type: 'Exact',
+            values: [`${plantingSeasonId}`],
+          },
+          count: 0,
+        },
+      }),
+      providesTags: [{ type: QueryTagTypes.PlantingDateRequests, id: 'LIST' }],
+      // A planting date request has a one-to-one relationship with a scheduled planting date, and
+      // dates are unique within a season, so the date is enough to key the statuses by.
+      transformResponse: (
+        response: PlantingDateRequestStatusesApiResponse
+      ): Record<string, PlantingDateRequestStatus> =>
+        Object.fromEntries((response.results ?? []).map((result) => [result.date, result['status(raw)']])),
+    }),
     getScheduledPlantingDateWithdrawnTotal: build.query<number, ScheduledPlantingDateWithdrawalsArgs>({
       query: ({ plantingSeasonId }) => ({
         url: '/api/v1/search',
@@ -307,5 +338,12 @@ type PlantingDateRequestsApiResponse = {
   results: PlantingDateRequestApiResult[];
 };
 
-export const { useLazyListPlantingDateRequestsQuery, useLazyGetScheduledPlantingDateWithdrawnTotalQuery } =
-  injectedRtkApi;
+type PlantingDateRequestStatusesApiResponse = {
+  results: { date: string; 'status(raw)': PlantingDateRequestStatus }[];
+};
+
+export const {
+  useLazyListPlantingDateRequestsQuery,
+  useLazyGetScheduledPlantingDateWithdrawnTotalQuery,
+  useListPlantingDateRequestStatusesQuery,
+} = injectedRtkApi;
