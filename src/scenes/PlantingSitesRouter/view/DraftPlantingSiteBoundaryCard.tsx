@@ -17,6 +17,8 @@ import { DetailField } from './DraftPlantingSiteDetailsCard';
 
 const stepLabel = (step: SiteEditStep): string => {
   switch (step) {
+    case 'details':
+      return strings.DETAILS;
     case 'exclusion_areas':
       return strings.EXCLUSION_AREAS;
     case 'stratum_boundaries':
