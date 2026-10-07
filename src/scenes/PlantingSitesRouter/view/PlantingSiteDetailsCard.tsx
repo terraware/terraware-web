@@ -128,7 +128,11 @@ export default function PlantingSiteDetailsCard({ plantingSite }: PlantingSiteDe
             >
               <DetailField label={strings.NAME} value={plantingSite.name} />
               <DetailField label={strings.DESCRIPTION} value={plantingSite.description} />
-              <DetailField label={strings.TIME_ZONE} value={tz.longName} />
+              <DetailField
+                label={strings.TIME_ZONE}
+                tooltipTitle={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
+                value={tz.longName}
+              />
               <DetailField label={strings.PROJECT} value={selectedProject?.name} />
             </Box>
             <Box marginTop={theme.spacing(3)}>
