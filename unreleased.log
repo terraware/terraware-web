@@ -1,3 +1,4 @@
+7dd6b0d6 SW-9049 Fix site filters not unfiltering on remove (#6687)
 bec03b9b SW-8925 Change column name from strata to stratum (#6675)
 82d6764e SW-8985 Make search batch nursery names seralizable (#6674)
 39d081d6 SW-8922: Observations: Update copy and font size of plot corner photos #6546
@@ -47,4 +48,3 @@ c66b8520 SW-8706 release report updates (#6614)
 1a52b775 SW-8954 Only add "filtered" if there are filters applied (#6600)
 4461fa7b SW-8982 Biomass Monitoring Observations: Change History should include Tree/Shrub IDs (#6610)
 774d7995 SW-8225 Biomass Monitoring: Remove kebab menu with download link from Observations table (#6609)
-e938d5ca Bump axios from 1.18.1 to 1.20.0 (#6607)
