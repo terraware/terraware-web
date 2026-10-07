@@ -319,6 +319,7 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   const busy = isCreating || isUpdating || isPending || !!onValidate;
   const isFinalStep = currentStep === steps[steps.length - 1]?.type;
+  const showStartOverButton = currentStep !== 'details' && (currentStep !== 'site_boundary' || !!plantingSite.boundary);
 
   return (
     <TfMain>
@@ -360,7 +361,7 @@ export default function Editor(props: EditorProps): JSX.Element {
                 type='passive'
                 size='medium'
               />
-              {isFinalStep && (
+              {showStartOverButton && (
                 <Button
                   id='start-over'
                   label={strings.RESET_BOUNDARY_SETUP}
