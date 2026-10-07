@@ -235,7 +235,13 @@ const ObservationListViewContent = (): JSX.Element => {
         <Button
           id={'schedule-observation'}
           label={strings.SCHEDULE_OBSERVATION}
-          onClick={() => navigate(APP_PATHS.SCHEDULE_OBSERVATION)}
+          onClick={() =>
+            navigate(
+              typeof selectedPlantingSiteId === 'number'
+                ? `${APP_PATHS.SCHEDULE_OBSERVATION}?plantingSiteId=${selectedPlantingSiteId}`
+                : APP_PATHS.SCHEDULE_OBSERVATION
+            )
+          }
           size='medium'
           sx={newFiltersEnabled ? { flex: isMobile ? 1 : undefined, margin: 0, whiteSpace: 'nowrap' } : undefined}
         />
@@ -243,7 +249,14 @@ const ObservationListViewContent = (): JSX.Element => {
     } else {
       return undefined;
     }
-  }, [isMobile, navigate, newFiltersEnabled, scheduleObservationEnabled, strings.SCHEDULE_OBSERVATION]);
+  }, [
+    isMobile,
+    navigate,
+    newFiltersEnabled,
+    scheduleObservationEnabled,
+    selectedPlantingSiteId,
+    strings.SCHEDULE_OBSERVATION,
+  ]);
 
   const headerActions = useMemo(
     () => (
