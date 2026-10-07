@@ -6,6 +6,7 @@ import { BusySpinner, Button, DialogBox, FileChooser, Message } from '@terraware
 
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
+import { useDocLinks } from 'src/docLinks';
 import { useLocalization } from 'src/providers';
 import {
   GeometryFileErrorCode,
@@ -13,8 +14,6 @@ import {
   useParseDraftPlantingSiteBoundaryMutation,
 } from 'src/queries/generated/draftPlantingSites';
 import defaultStrings from 'src/strings';
-
-import { useDocLinks } from '../../../../docLinks';
 
 export const BOUNDARY_FILE_EXTENSIONS = '.kml,.kmz,.geojson,.json,.zip';
 
