@@ -30,6 +30,7 @@ import BiomassList from './BiomassList';
 import ObservationFilters from './ObservationFilters';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
 import PlantMonitoringList from './PlantMonitoringList';
+import ScheduledObservationsMenu from './ScheduledObservations';
 import SurvivalRateSettingsMenu from './SurvivalRateSettingsMenu';
 import ViewModeToggle from './ViewModeToggle';
 
@@ -269,12 +270,16 @@ const ObservationListViewContent = (): JSX.Element => {
         }}
       >
         {scheduleObservationButton}
+        <ScheduledObservationsMenu
+          canReschedule={isAdmin(selectedOrganization)}
+          plantingSiteId={selectedPlantingSiteId}
+        />
         {typeof selectedPlantingSiteId === 'number' && (
           <SurvivalRateSettingsMenu plantingSiteId={selectedPlantingSiteId} />
         )}
       </Box>
     ),
-    [isDesktop, scheduleObservationButton, selectedPlantingSiteId, theme]
+    [isDesktop, scheduleObservationButton, selectedOrganization, selectedPlantingSiteId, theme]
   );
 
   const countedObservationType = newFiltersEnabled
@@ -356,7 +361,6 @@ const ObservationListViewContent = (): JSX.Element => {
         }
         title={strings.OBSERVATIONS}
       >
-        <ObservationsEventsNotification />
         {plotType === 'assigned' && (
           <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
         )}

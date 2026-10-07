@@ -1950,6 +1950,9 @@ SAVING,Enregistrement en cours...,d4ce4849
 SCARIFY,Scarification,b34359c6
 SCHEDULE_OBSERVATION,Planifier une observation,9d1a4cfc
 SCHEDULE_OBSERVATION_MESSAGE,Sélectionnez les strates et sous-strates à inclure dans l'observation :,3dc66640
+SCHEDULED_OBSERVATIONS,Observations planifiées,ae524d56
+SCHEDULED_OBSERVATIONS_ACROSS_SITES,{0} réparties sur {1} sites de plantation,4f269453
+SCHEDULED_OBSERVATIONS_AT_SITE,{0} à {1},b55477e7
 SCIENTIFIC_NAME,Nom scientifique,0273e7b9
 SCIENTIFIC_NAME_NOT_FOUND,"« {0} » n'apparaît pas dans notre base de données, mais vous pouvez toujours l'ajouter.",c9754752
 SCIENTIFIC_NAME_REQUIRED,Nom scientifique *,1d6383a2
@@ -2634,6 +2637,7 @@ VIDEO_UPLOAD_FAILED,Échec du téléversement de la vidéo,2406bea0
 VIDEO_UPLOAD_FAILED_DESCRIPTION,Le téléchargement de votre vidéo a échoué. {0}. Découvrez pourquoi votre vidéo a pu échouer en visitant le {1}.,839af7da
 VIEW,Voir,02cff17a
 VIEW_3D_MODEL,Voir le modèle 3D,fc2e2960
+VIEW_ALL_SCHEDULED_OBSERVATIONS,Voir les {0} observations planifiées,55cbbf44
 VIEW_APPLICATION,Voir la demande,bbdc193f
 VIEW_DOCUMENTS,Voir le(s) document(s),3925fe9c
 VIEW_FULL_DASHBOARD,Afficher le tableau de bord complet,25189646
