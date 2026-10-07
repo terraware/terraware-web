@@ -12,13 +12,14 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
 type DetailFieldProps = {
   label: string;
+  tooltipTitle?: string;
   value?: string;
 };
 
-export const DetailField = ({ label, value }: DetailFieldProps): JSX.Element => {
+export const DetailField = ({ label, tooltipTitle, value }: DetailFieldProps): JSX.Element => {
   const id = useId();
 
-  return <TextField display id={id} label={label} type='text' value={value || '—'} />;
+  return <TextField display id={id} label={label} tooltipTitle={tooltipTitle} type='text' value={value || '—'} />;
 };
 
 type DraftPlantingSiteDetailsCardProps = {
@@ -42,7 +43,11 @@ export default function DraftPlantingSiteDetailsCard({ plantingSite }: DraftPlan
       >
         <DetailField label={strings.NAME} value={plantingSite.name} />
         <DetailField label={strings.DESCRIPTION} value={plantingSite.description} />
-        <DetailField label={strings.TIME_ZONE} value={tz.longName} />
+        <DetailField
+          label={strings.TIME_ZONE}
+          tooltipTitle={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
+          value={tz.longName}
+        />
         <DetailField label={strings.PROJECT} value={selectedProject?.name} />
       </Box>
     </Card>
