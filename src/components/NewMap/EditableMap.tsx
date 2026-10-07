@@ -83,8 +83,10 @@ const EditableMap = ({
     return multiPolygons.length ? getBoundingBoxFromMultiPolygons(multiPolygons) : undefined;
   });
 
+  const hasFitInitialBounds = useRef(false);
   const onMapLoad = useCallback(() => {
-    if (initialBounds) {
+    if (initialBounds && !hasFitInitialBounds.current) {
+      hasFitInitialBounds.current = true;
       fitBounds(initialBounds, 25);
     }
   }, [fitBounds, initialBounds]);
