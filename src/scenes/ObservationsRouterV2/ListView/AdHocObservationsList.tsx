@@ -43,10 +43,10 @@ const DEFAULT_COLUMN_ORDER = [
   'totalSpecies',
   'plotDescription',
   'plantingSiteName',
-  'strata',
+  'stratum',
 ];
 
-const DEFAULT_COLUMN_VISIBILITY = { plantingSiteName: false, plotDescription: false, strata: false };
+const DEFAULT_COLUMN_VISIBILITY = { plantingSiteName: false, plotDescription: false, stratum: false };
 
 type AdHocRow = {
   completedDate?: string;
@@ -213,8 +213,8 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         accessorKey: 'plantingSiteName',
       },
       {
-        id: 'strata',
-        header: strings.STRATA,
+        id: 'stratum',
+        header: strings.STRATUM,
         accessorKey: 'stratumName',
       },
       {
