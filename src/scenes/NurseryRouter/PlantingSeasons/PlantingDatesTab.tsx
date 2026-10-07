@@ -525,6 +525,18 @@ const PlantingDateForm = ({
     return map;
   }, [substrataDrafts]);
 
+  const { draftSpeciesCount, draftTotalPlants } = useMemo(() => {
+    let speciesCount = 0;
+    let totalPlants = 0;
+    scheduledThisDateBySpecies.forEach((quantity) => {
+      if (quantity > 0) {
+        speciesCount += 1;
+        totalPlants += quantity;
+      }
+    });
+    return { draftSpeciesCount: speciesCount, draftTotalPlants: totalPlants };
+  }, [scheduledThisDateBySpecies]);
+
   const updateSubstratum = (substratumId: number, updater: (draft: SubstratumDraft) => SubstratumDraft) => {
     setSubstrataDrafts((prev) => ({
       ...prev,
@@ -708,55 +720,66 @@ const PlantingDateForm = ({
         display='flex'
         flexDirection={isMobile ? 'column' : 'row'}
         alignItems={isMobile ? 'stretch' : 'center'}
-        justifyContent='flex-end'
-        gap={isMobile ? theme.spacing(1.5) : theme.spacing(1)}
+        justifyContent='space-between'
+        gap={isMobile ? theme.spacing(1.5) : theme.spacing(2)}
         marginTop={theme.spacing(2)}
       >
-        {isEditing && (
+        <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
+          {strings.formatString(strings.X_SPECIES_Y_PLANTS, draftSpeciesCount, draftTotalPlants).toString()}
+        </Typography>
+        <Box
+          display='flex'
+          flexDirection={isMobile ? 'column' : 'row'}
+          alignItems={isMobile ? 'stretch' : 'center'}
+          justifyContent='flex-end'
+          gap={isMobile ? theme.spacing(1.5) : theme.spacing(1)}
+        >
+          {isEditing && (
+            <Button
+              label={strings.DELETE}
+              onClick={() => void openDeleteConfirmation()}
+              priority='secondary'
+              type='destructive'
+              disabled={isSaving || isCheckingWithdrawals}
+              size={isMobile ? 'medium' : undefined}
+              sx={mobileFooterButtonSx}
+            />
+          )}
           <Button
-            label={strings.DELETE}
-            onClick={() => void openDeleteConfirmation()}
+            label={strings.CANCEL}
+            onClick={onClose}
             priority='secondary'
-            type='destructive'
-            disabled={isSaving || isCheckingWithdrawals}
+            type='passive'
+            disabled={isSaving}
             size={isMobile ? 'medium' : undefined}
             sx={mobileFooterButtonSx}
           />
-        )}
-        <Button
-          label={strings.CANCEL}
-          onClick={onClose}
-          priority='secondary'
-          type='passive'
-          disabled={isSaving}
-          size={isMobile ? 'medium' : undefined}
-          sx={mobileFooterButtonSx}
-        />
-        <Tooltip title={strings.SAVE_TOOLTIP}>
-          <span style={tooltipButtonWrapperStyle}>
-            <Button
-              label={strings.SAVE}
-              onClick={() => void onSave()}
-              priority='secondary'
-              type={isMobile ? 'passive' : 'productive'}
-              disabled={isSaving || isDuplicateDate}
-              size={isMobile ? 'medium' : undefined}
-              sx={mobileFooterButtonSx}
-            />
-          </span>
-        </Tooltip>
-        <Tooltip title={strings.SAVE_AND_REQUEST_TOOLTIP} slotProps={{ tooltip: { sx: { maxWidth: '262px' } } }}>
-          <span style={tooltipButtonWrapperStyle}>
-            <Button
-              label={strings.SAVE_AND_REQUEST}
-              onClick={onSaveAndRequest}
-              disabled={isSaving || !date || isDuplicateDate || !hasAnySpeciesWithQuantity}
-              priority={isMobile ? 'secondary' : 'primary'}
-              size={isMobile ? 'medium' : undefined}
-              sx={mobileFooterButtonSx}
-            />
-          </span>
-        </Tooltip>
+          <Tooltip title={strings.SAVE_TOOLTIP}>
+            <span style={tooltipButtonWrapperStyle}>
+              <Button
+                label={strings.SAVE}
+                onClick={() => void onSave()}
+                priority='secondary'
+                type={isMobile ? 'passive' : 'productive'}
+                disabled={isSaving || isDuplicateDate}
+                size={isMobile ? 'medium' : undefined}
+                sx={mobileFooterButtonSx}
+              />
+            </span>
+          </Tooltip>
+          <Tooltip title={strings.SAVE_AND_REQUEST_TOOLTIP} slotProps={{ tooltip: { sx: { maxWidth: '262px' } } }}>
+            <span style={tooltipButtonWrapperStyle}>
+              <Button
+                label={strings.SAVE_AND_REQUEST}
+                onClick={onSaveAndRequest}
+                disabled={isSaving || !date || isDuplicateDate || !hasAnySpeciesWithQuantity}
+                priority={isMobile ? 'secondary' : 'primary'}
+                size={isMobile ? 'medium' : undefined}
+                sx={mobileFooterButtonSx}
+              />
+            </span>
+          </Tooltip>
+        </Box>
       </Box>
 
       {confirmingDelete && (
