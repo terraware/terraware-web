@@ -80,7 +80,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
     if (filters.projectIds?.length) {
       data.push({
         id: 'projectIds',
-        label: strings.NURSERY,
+        label: strings.PROJECT,
         value: filters.projectIds?.map((id) => (projects || []).find((p) => p.id === id)?.name).join(', ') ?? '',
         emptyValue: [],
       });

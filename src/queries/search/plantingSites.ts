@@ -47,7 +47,7 @@ const injectedRtkApi = api.injectEndpoints({
                 field: 'organization.id',
                 values: [`${queryArgs.organizationId}`],
               },
-              ...(queryArgs.projectIds
+              ...(queryArgs.projectIds?.length
                 ? [{ operation: 'field', field: 'project_id', type: 'Exact', values: queryArgs.projectIds }]
                 : []),
               ...(queryArgs.searchTerm && queryArgs.searchTerm.length
