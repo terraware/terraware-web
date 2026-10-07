@@ -41,7 +41,7 @@ export default function PlantingSiteView(): JSX.Element {
           <PageSnackbar />
         </Grid>
         <Box marginTop={theme.spacing(3)}>
-          <PlantingSiteDetailsCard plantingSite={plantingSite} />
+          <PlantingSiteDetailsCard key={plantingSite.id} plantingSite={plantingSite} />
         </Box>
         {plantingSite.boundary && (
           <Card
