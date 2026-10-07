@@ -188,8 +188,6 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
     return typeof value === 'number' ? <FormattedNumber value={value} /> : null;
   }, []);
 
-  const anyPlotHasStratum = useMemo(() => rows.some((row) => row.stratumName), [rows]);
-
   const columns = useMemo(
     (): EditableTableColumn<AdHocRow>[] => [
       {
@@ -214,15 +212,11 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         header: strings.PLANTING_SITE,
         accessorKey: 'plantingSiteName',
       },
-      ...(anyPlotHasStratum
-        ? ([
-            {
-              id: 'strata',
-              header: strings.STRATA,
-              accessorKey: 'stratumName',
-            },
-          ] as EditableTableColumn<AdHocRow>[])
-        : []),
+      {
+        id: 'strata',
+        header: strings.STRATA,
+        accessorKey: 'stratumName',
+      },
       {
         id: 'completedDate',
         header: strings.DATE_OBSERVED,
@@ -248,7 +242,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         Cell: NumberCell,
       },
     ],
-    [strings, anyPlotHasStratum, showSelectObservation, PlotNumberCell, CompletedDateCell, NumberCell]
+    [strings, showSelectObservation, PlotNumberCell, CompletedDateCell, NumberCell]
   );
 
   const onExport = useCallback(
