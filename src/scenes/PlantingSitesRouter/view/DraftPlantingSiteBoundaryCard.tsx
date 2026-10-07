@@ -64,21 +64,20 @@ export default function DraftPlantingSiteBoundaryCard({
       {boundary ? (
         <Box
           display='flex'
-          flexDirection={isMobile ? 'column' : 'row'}
+          flexWrap='wrap'
           alignItems='flex-start'
           gap={theme.spacing(3.5)}
           marginTop={theme.spacing(2)}
         >
-          <Box flex='none' width={isMobile ? '100%' : '520px'}>
+          <Box flex='1 1 360px' maxWidth={isMobile ? '100%' : '520px'}>
             <DraftPlantingSiteBoundaryMap boundary={boundary} plantingSite={plantingSite} />
           </Box>
           <Box
             display='grid'
-            flex={1}
+            flex='1 1 300px'
             gridTemplateColumns='repeat(2, minmax(0, 1fr))'
             columnGap={theme.spacing(4)}
             rowGap={theme.spacing(3)}
-            width='100%'
           >
             <DetailField label={strings.TOTAL_AREA} value={formatHectares(boundary)} />
             <DetailField label={strings.EXCLUSION_AREAS} value={exclusionSummary} />
