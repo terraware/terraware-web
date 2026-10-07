@@ -1,3 +1,5 @@
+6c87da41 SW-8992 In Planting Dates tab show requested status (#6667)
+5ce30a59 SW-8991 In Planting Date edit view show species and plants count (#6668)
 e732517d SW-8925 Fix strata column not appearing (#6669)
 fe709a22 SW-8925 Ad Hoc Plot Observations: Show the Stratum/Substratum, if plot is in the site (#6639)
 afb6f770 Lay out the observations controls for mobile and tablet (#6630)
