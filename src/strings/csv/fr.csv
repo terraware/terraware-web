@@ -278,6 +278,7 @@ BIOMASS_PLOT_DEAD_PLANTS_TOOLTIP,Plantes mortes correspond au nombre d’arbres 
 BIOMASS_PLOT_LIVE_PLANTS_TOOLTIP,Plantes vivantes correspond au nombre d’arbres et d’arbustes observés et enregistrés comme vivants. Cela n’inclut pas les plantes enregistrées dans les quadrats ni d’autres espèces envahissantes ou menacées supplémentaires.,d69a1ca7
 BIOMASS_PLOT_SPECIES_TOOLTIP,Espèces correspond au nombre d’espèces représentées par les arbres et arbustes observés. Cela n’inclut pas les plantes enregistrées dans les quadrats ni d’autres espèces envahissantes ou menacées supplémentaires.,f520363a
 BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantes totales correspond au nombre total d’arbres et d’arbustes observés, y compris les arbres et arbustes vivants et morts. Cela n’inclut pas les plantes enregistrées dans les quadrats ni d’autres espèces envahissantes ou menacées supplémentaires.",d020f12c
+BOLE_HEIGHT_M,Hauteur du tronc (m),c0a1fe7f
 BOTANICAL_COUNTRY,Pays botanique,7bd4e8de
 BOUNDARIES,Limites,e40b0600
 BOUNDARIES_AND_STRATA,Limites et strates,87db24b5

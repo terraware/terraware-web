@@ -10,20 +10,22 @@ import TreesAndShrubsEditableTable from './TreesAndShrubsEditableTable';
 
 const UPDATE_URL = '/api/v1/tracking/observations/7/plots/9';
 
-const setup = (treeGrowthForm = 'Tree') => {
+const setup = (treeGrowthForm = 'Tree', forestType = 'Mangrove', trunkNumber = 1) => {
   mockGet('/api/v1/species', { species: [] });
   mockGet('/api/v1/tracking/observations/7/results', {
     observation: {
       id: 7,
       adHocPlot: { monitoringPlotId: 9 },
       biomassMeasurements: {
-        forestType: 'Mangrove',
+        forestType,
         trees: [
           {
             id: 11,
             treeNumber: 1,
+            trunkNumber,
             treeGrowthForm,
             speciesName: 'Acacia koa',
+            boleHeight: 6,
             diameterAtBreastHeight: 25,
             height: 12,
             pointOfMeasurement: 1.3,
@@ -49,7 +51,9 @@ const setup = (treeGrowthForm = 'Tree') => {
     await user.dblClick(await screen.findByRole('cell', { name: oldValue }));
     const input = screen.getByRole('textbox');
     await user.clear(input);
-    await user.type(input, newValue);
+    if (newValue) {
+      await user.type(input, newValue);
+    }
     await user.tab();
   };
   return { user, requests, edit };
@@ -57,15 +61,16 @@ const setup = (treeGrowthForm = 'Tree') => {
 
 describe('TreesAndShrubsEditableTable', () => {
   it.each([
-    ['Tree', '25', '101', 'diameterAtBreastHeight', 'DBH_CM'],
-    ['Tree', '12', '50', 'height', 'HEIGHT_M'],
-    ['Tree', '1.3', '3', 'pointOfMeasurement', 'POM_M'],
-    ['Tree', '400', '1501', 'treeCrownDiameter', 'CROWN_DIAMETER_CM'],
-    ['Shrub', '150', '301', 'shrubDiameter', 'CROWN_DIAMETER_CM'],
+    ['Tree', '25', '101', 'diameterAtBreastHeight', 'DBH_CM', 'Mangrove'],
+    ['Tree', '12', '50', 'height', 'HEIGHT_M', 'Mangrove'],
+    ['Tree', '1.3', '3', 'pointOfMeasurement', 'POM_M', 'Mangrove'],
+    ['Tree', '400', '1501', 'treeCrownDiameter', 'CROWN_DIAMETER_CM', 'Mangrove'],
+    ['Shrub', '150', '301', 'shrubDiameter', 'CROWN_DIAMETER_CM', 'Mangrove'],
+    ['Tree', '6', '46', 'boleHeight', 'BOLE_HEIGHT_M', 'Terrestrial'],
   ] as const)(
     'requires confirmation before saving unexpected %s %s → %s',
-    async (growthForm, oldValue, value, field, label) => {
-      const { user, requests, edit } = setup(growthForm);
+    async (growthForm, oldValue, value, field, label, forestType) => {
+      const { user, requests, edit } = setup(growthForm, forestType);
       await edit(oldValue, value);
 
       const warning = strings.formatString(strings.UNEXPECTED_BIOMASS_MEASUREMENT, value, strings[label]) as string;
@@ -107,6 +112,38 @@ describe('TreesAndShrubsEditableTable', () => {
     expect(screen.queryByRole('button', { name: strings.KEEP_VALUE })).not.toBeInTheDocument();
     expect(await requests[0].json()).toEqual({
       updates: [{ type: 'RecordedTree', recordedTreeId: 11, height: '45' }],
+    });
+  });
+
+  describe('bole height', () => {
+    it('saves a bole height for a terrestrial tree', async () => {
+      const { requests, edit } = setup('Tree', 'Terrestrial');
+      await edit('6', '7.5');
+      await waitFor(() => expect(requests).toHaveLength(1));
+      expect(await requests[0].json()).toEqual({
+        updates: [{ type: 'RecordedTree', recordedTreeId: 11, boleHeight: '7.5' }],
+      });
+    });
+
+    it('clears a bole height by saving null', async () => {
+      const { requests, edit } = setup('Tree', 'Terrestrial');
+      await edit('6', '');
+      await waitFor(() => expect(requests).toHaveLength(1));
+      expect(await requests[0].json()).toEqual({
+        updates: [{ type: 'RecordedTree', recordedTreeId: 11, boleHeight: null }],
+      });
+    });
+
+    it('does not allow editing bole height on additional stems', async () => {
+      const { user } = setup('Trunk', 'Terrestrial', 2);
+      await user.dblClick(await screen.findByRole('cell', { name: '6' }));
+      expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+    });
+
+    it('hides bole height for mangrove forests', async () => {
+      setup('Tree', 'Mangrove');
+      expect(await screen.findByRole('cell', { name: '12' })).toBeVisible();
+      expect(screen.queryByRole('cell', { name: '6' })).not.toBeInTheDocument();
     });
   });
 });

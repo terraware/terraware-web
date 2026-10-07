@@ -37,6 +37,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       diameterAtBreastHeight: { max: 100, label: strings.DBH_CM },
       pointOfMeasurement: { max: 2, label: strings.POM_M },
       height: { max: 45, label: strings.HEIGHT_M },
+      boleHeight: { max: 45, label: strings.BOLE_HEIGHT_M },
       treeCrownDiameter: { max: 1500, label: strings.CROWN_DIAMETER_CM },
       shrubDiameter: { max: 300, label: strings.CROWN_DIAMETER_CM },
     }),
@@ -168,6 +169,13 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
     [forestType]
   );
 
+  const BoleHeightCell = useCallback(
+    ({ row }: { row: { original: TreeRow } }) => (
+      <>{row.original.treeGrowthForm !== 'Shrub' && forestType !== 'Mangrove' ? row.original.boleHeight ?? '' : ''}</>
+    ),
+    [forestType]
+  );
+
   const [noteModalRow, setNoteModalRow] = useState<TreeRow | undefined>(undefined);
 
   const DescriptionCell = useCallback(
@@ -242,6 +250,18 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
         },
       },
       {
+        id: 'boleHeight',
+        accessorKey: 'boleHeight',
+        header: strings.BOLE_HEIGHT_M,
+        Cell: BoleHeightCell,
+        // Bole height is only recorded for a tree's first stem.
+        enableEditing: (row) =>
+          row.original.treeGrowthForm !== 'Shrub' && row.original.trunkNumber === 1 && forestType !== 'Mangrove',
+        editConfig: {
+          onSave: (row, value) => saveRecordedTree('boleHeight', row, value === '' ? null : value),
+        },
+      },
+      {
         id: 'isInvasive',
         accessorFn: (row) => (row.isInvasive ? 'true' : 'false'),
         header: strings.INVASIVE,
@@ -301,6 +321,7 @@ export default function TreesAndShrubsEditableTable(): JSX.Element {
       TreeNumberCell,
       GrowthFormCell,
       CrownDiameterCell,
+      BoleHeightCell,
       IsInvasiveCell,
       IsThreatenedCell,
       IsDeadCell,
