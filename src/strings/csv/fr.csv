@@ -1313,6 +1313,7 @@ NOT_SUBMITTED,Non soumis,e40a2b1d
 NOT_VERIFIED,Non vérifié,fbd9066a
 NOT_WITHDRAWN_TO_DATE,Aucun retrait à ce jour,bbb78c00
 NOT_YET,Pas encore,77976aa8
+NOT_YET_REQUESTED,Pas encore demandé,be16eae0
 NOT_YET_WITHDRAWN,Pas encore retiré,3b0fb56f
 NOTE_ANY_ISSUES,Est-ce que tout ce qui précède vous semble correct ? Signalez tout problème.,133db1c4
 NOTE_COLON,Note :,00769bbe
@@ -1881,6 +1882,7 @@ REQUEST_REASSIGNMENT_REASON_TOOLTIP,Fournissez une justification pour la réaffe
 REQUEST_UPDATE,Demander une mise à jour,bce207eb
 REQUEST_UPDATE_ACTION,Demander une mise à jour...,790ef713
 REQUEST_UPDATE_REASON,Fournissez une raison pour demander la mise à jour.,52430788
+REQUESTED,Demandé,17e828cc
 REQUESTED_PLANTS,Plantes demandées,4c4fac82
 REQUESTS_X,Demandes ({0}),b70edf58
 REQUIRED,Requis,ede65856

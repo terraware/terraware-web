@@ -27,7 +27,11 @@ import {
   StratumResponsePayload,
   SubstratumResponsePayload,
 } from 'src/queries/generated/plantingSites';
-import { useLazyGetScheduledPlantingDateWithdrawnTotalQuery } from 'src/queries/search/plantingDateRequests';
+import {
+  PlantingDateRequestStatus,
+  useLazyGetScheduledPlantingDateWithdrawnTotalQuery,
+  useListPlantingDateRequestStatusesQuery,
+} from 'src/queries/search/plantingDateRequests';
 import { useGetPlantingSeasonSpeciesSummaryQuery } from 'src/queries/search/plantingSeasons';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
@@ -35,6 +39,7 @@ import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import DeletePlantingDateModal from './DeletePlantingDateModal';
+import PlantingDateRequestStatusBadge from './PlantingDateRequestStatusBadge';
 import PlantingSeasonEventLog from './PlantingSeasonEventLog';
 import SaveAndNotifyNurseryModal from './SaveAndNotifyNurseryModal';
 
@@ -62,6 +67,9 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
   const { data: scheduledDatesData } = useGetScheduledPlantingDatesQuery(plantingSeason.id);
   const { data: speciesTargetsData } = useGetSpeciesTargetsQuery(plantingSeason.id);
   const { data: speciesSummary } = useGetPlantingSeasonSpeciesSummaryQuery(plantingSeason.id);
+  const { data: requestStatusesByDate } = useListPlantingDateRequestStatusesQuery({
+    plantingSeasonId: plantingSeason.id,
+  });
 
   const [editing, setEditing] = useState<EditingState | undefined>();
 
@@ -146,6 +154,7 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
                     key={scheduledDate.scheduledPlantingDateId}
                     scheduledDate={scheduledDate}
                     plantingSite={plantingSite}
+                    requestStatus={requestStatusesByDate?.[scheduledDate.date]}
                     onEdit={() => setEditing({ mode: 'edit', scheduledDate })}
                     readOnly={readOnly}
                   />
@@ -217,6 +226,7 @@ const EmptyState = ({ onAdd, readOnly }: { onAdd: () => void; readOnly: boolean 
 type PlantingDateListItemProps = {
   scheduledDate: ScheduledDatePayload;
   plantingSite: PlantingSitePayload;
+  requestStatus?: PlantingDateRequestStatus;
   onEdit: () => void;
   readOnly: boolean;
 };
@@ -224,6 +234,7 @@ type PlantingDateListItemProps = {
 const PlantingDateListItem = ({
   scheduledDate,
   plantingSite,
+  requestStatus,
   onEdit,
   readOnly,
 }: PlantingDateListItemProps): JSX.Element => {
@@ -338,17 +349,26 @@ const PlantingDateListItem = ({
         </Typography>
         <Box>{locationNamesList(substrataNames, !isMobile)}</Box>
       </Box>
-      {!readOnly && (
-        <Button
-          icon='iconEdit'
-          label={strings.EDIT}
-          onClick={onEdit}
-          priority='secondary'
-          type='productive'
-          size={isMobile ? 'medium' : undefined}
-          sx={mobileEditButtonSx}
-        />
-      )}
+      <Box
+        display='flex'
+        flexDirection={isMobile ? 'column' : 'row'}
+        alignItems='flex-start'
+        width={isMobile ? '100%' : undefined}
+        gap={theme.spacing(isMobile ? 1.5 : 2)}
+      >
+        <PlantingDateRequestStatusBadge status={requestStatus} />
+        {!readOnly && (
+          <Button
+            icon='iconEdit'
+            label={strings.EDIT}
+            onClick={onEdit}
+            priority='secondary'
+            type='productive'
+            size={isMobile ? 'medium' : undefined}
+            sx={mobileEditButtonSx}
+          />
+        )}
+      </Box>
     </Box>
   );
 };
