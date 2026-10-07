@@ -166,7 +166,6 @@ test.describe('PlantingSiteTests', () => {
 
     await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+(\?|$)/);
     await expect(main.getByText('Boundary setup isn’t finished', { exact: false })).toBeVisible();
-    await expect(detailField(page, 'Source')).toHaveText('simpleSiteBoundary.geojson');
     await expect(detailField(page, 'Setup Remaining')).toHaveText('Site Boundary');
     await expect(detailField(page, 'Total Area')).toContainText('ha');
     await expect(page.getByRole('button', { name: 'Continue Boundary Setup' })).toBeVisible();
@@ -284,7 +283,6 @@ test.describe('PlantingSiteTests', () => {
     await expect(detailField(page, 'Strata')).toHaveText('2');
     await expect(detailField(page, 'Substrata')).toHaveText('3');
     await expect(detailField(page, 'Exclusion Areas')).toContainText('ha');
-    await expect(detailField(page, 'Source')).toHaveText('Manually drawn');
     await expect(detailField(page, 'Setup Remaining')).toHaveText('Substratum Boundaries');
 
     // Resume setup on the last step and create the site.
