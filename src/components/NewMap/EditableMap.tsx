@@ -1,5 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Layer, MapRef, Popup, Source } from 'react-map-gl/mapbox';
+import { GeolocateControl, Layer, MapRef, Popup, Source } from 'react-map-gl/mapbox';
 
 import { AddressAutofillFeatureSuggestion } from '@mapbox/search-js-core';
 import { Box, useTheme } from '@mui/material';
@@ -200,6 +200,12 @@ const EditableMap = ({
           setMode={setEditMode}
         />
         <UndoRedoControl onRedo={onRedo} onUndo={onUndo} />
+        <GeolocateControl
+          fitBoundsOptions={{ maxDuration: 1500 }}
+          position='bottom-right'
+          positionOptions={{ enableHighAccuracy: true }}
+          style={{ marginRight: theme.spacing(2) }}
+        />
         {popupInfo && popupRenderer && renderedPopup && (
           <Popup
             anchor={popupRenderer.anchor ?? 'top'}
