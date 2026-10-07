@@ -198,7 +198,7 @@ const injectedRtkApi = api.injectEndpoints({
       transformResponse: (response: SearchCountApiResponse) => response.count,
     }),
 
-    listAccessionBatchNurseries: build.query<Map<number, string>, number>({
+    listAccessionBatchNurseries: build.query<Record<number, string>, number>({
       query: (accessionId) => ({
         url: '/api/v1/search',
         method: 'POST',
@@ -215,7 +215,7 @@ const injectedRtkApi = api.injectEndpoints({
       }),
       providesTags: [{ type: QueryTagTypes.NurseryBatches, id: 'LIST' }],
       transformResponse: (response: { results: { id: string; facility_name?: string }[] }) =>
-        new Map(
+        Object.fromEntries(
           response.results
             .filter((result) => result.facility_name !== undefined)
             .map((result) => [Number(result.id), result.facility_name as string])

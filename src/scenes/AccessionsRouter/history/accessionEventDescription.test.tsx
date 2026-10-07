@@ -92,7 +92,7 @@ const viabilityTest = (): EventLogEntryPayload['subject'] => ({
 const describeEvent = (
   entry: EventLogEntryPayload,
   viabilityTestWithdrawals?: ViabilityTestWithdrawals,
-  nurseryNames?: Map<number, string>
+  nurseryNames?: Record<number, string>
 ): string => {
   const { container } = render(
     <>
@@ -300,7 +300,7 @@ describe('withdrawal creation copy', () => {
       withdrawal(493),
       createdWith({ withdrawnQuantity: QUANTITY_50, purpose: 'Nursery', batchId: '720' })
     );
-    const nurseries = new Map([[720, 'Bend Nursery']]);
+    const nurseries = { 720: 'Bend Nursery' };
 
     expect(describeEvent(entry, undefined, nurseries)).toBe('withdrew 50 Seeds to Bend Nursery');
   });
