@@ -19,6 +19,26 @@ type UseTableStateOptions = {
   persistSorting?: boolean;
 };
 
+const mergeColumnOrder = (
+  saved: MRT_ColumnOrderState,
+  defaultColumnOrder: MRT_ColumnOrderState
+): MRT_ColumnOrderState => {
+  const merged = [...saved];
+
+  defaultColumnOrder.forEach((id, index) => {
+    if (merged.includes(id)) {
+      return;
+    }
+    const precedingId = defaultColumnOrder
+      .slice(0, index)
+      .reverse()
+      .find((candidate) => merged.includes(candidate));
+    merged.splice(precedingId === undefined ? 0 : merged.indexOf(precedingId) + 1, 0, id);
+  });
+
+  return merged;
+};
+
 const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
   const {
     defaultColumnOrder = [],
@@ -34,7 +54,9 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
   const [columnOrder, setColumnOrder] = useState<MRT_ColumnOrderState>(() => {
     try {
       const saved = localStorage.getItem(`${storageKey}-columnOrder`);
-      return saved ? (JSON.parse(saved) as MRT_ColumnOrderState) : defaultColumnOrder;
+      return saved
+        ? mergeColumnOrder(JSON.parse(saved) as MRT_ColumnOrderState, defaultColumnOrder)
+        : defaultColumnOrder;
     } catch {
       return defaultColumnOrder;
     }

@@ -1,20 +1,16 @@
-import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import TimelineSliderV2, { TimelineSliderV2Mark } from '@terraware/web-components/components/TimelineSliderV2';
-import { getDateDisplayValue } from '@terraware/web-components/utils';
 
-import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
-import { ObservationResultsPayload } from 'src/queries/generated/observations';
 import { getNumericDate } from 'src/utils/dateFormatter';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { useObservationFilters } from '../ObservationFiltersProvider';
 import ObservationsEmptyOverlay from '../ObservationsEmptyOverlay';
 import { useSelectedObservation } from '../SelectedObservationProvider';
-import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
+import { useTimelineObservations } from './useTimelineObservations';
 
 export type ObservationTimelineProps = {
   plantingSiteId: number;
@@ -23,29 +19,13 @@ export type ObservationTimelineProps = {
 const ObservationTimeline = ({ plantingSiteId }: ObservationTimelineProps): JSX.Element | null => {
   const { activeLocale, strings } = useLocalization();
   const theme = useTheme();
-  const defaultTimezone = useDefaultTimeZone().get().id;
-  const { observationType, plotType } = useObservationFilters();
-  const { plantingSite } = usePlantingSite(plantingSiteId);
+  const { plotType } = useObservationFilters();
   const { selectAdHocPlot, selectObservation, selectedAdHocPlot, selectedObservationId } = useSelectedObservation();
 
-  const { emptyState, observations } = useFilteredObservationResults({ observationType, plantingSiteId, plotType });
+  const { emptyState, observationDate, sortedObservations } = useTimelineObservations(plantingSiteId);
   const emptyMessage = useObservationsEmptyMessage(emptyState);
 
   const isAdHoc = plotType === 'adHoc';
-  const timezone = plantingSite?.timeZone ?? defaultTimezone;
-
-  const observationDate = useCallback(
-    (observation: ObservationResultsPayload) =>
-      observation.completedTime
-        ? getDateDisplayValue(observation.completedTime, timezone)
-        : observation.startDate.substring(0, 10),
-    [timezone]
-  );
-
-  const sortedObservations = useMemo(
-    () => [...observations].sort((a, b) => observationDate(a).localeCompare(observationDate(b))),
-    [observationDate, observations]
-  );
 
   const marks = useMemo(
     (): TimelineSliderV2Mark[] =>
@@ -100,25 +80,6 @@ const ObservationTimeline = ({ plantingSiteId }: ObservationTimelineProps): JSX.
     },
     [isAdHoc, selectAdHocPlot, selectObservation, sortedObservations]
   );
-
-  useEffect(() => {
-    if (isAdHoc || sortedObservations.length === 0) {
-      return;
-    }
-
-    const isSelectionShown = sortedObservations.some(
-      (observation) => observation.observationId === selectedObservationId
-    );
-    if (isSelectionShown) {
-      return;
-    }
-
-    const today = new Date().valueOf();
-    const latestPast = sortedObservations.findLast(
-      (observation) => new Date(observationDate(observation)).valueOf() <= today
-    );
-    selectObservation((latestPast ?? sortedObservations[0]).observationId);
-  }, [isAdHoc, observationDate, selectObservation, selectedObservationId, sortedObservations]);
 
   if (marks.length === 0 && emptyMessage === undefined) {
     return null;

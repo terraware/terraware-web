@@ -41,6 +41,7 @@ import {
 
 export type SubstrataProps = {
   onValidate?: OnValidate;
+  onDirtyChange?: (isDirty: boolean) => void;
   site: DraftPlantingSite;
 };
 
@@ -103,7 +104,7 @@ type Stack = {
   fixedBoundaries?: Record<number, FeatureCollection>;
 };
 
-export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Element {
+export default function Substrata({ onValidate, onDirtyChange, site }: SubstrataProps): JSX.Element {
   const [selectedStratum, setSelectedStratum] = useState<number | undefined>(site.strata?.[0]?.id);
 
   // map of stratum id to substrata
@@ -112,6 +113,15 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
     errorAnnotations: [],
     fixedBoundaries: featureSiteSubstrata(site),
   });
+  const geometrySnapshot = JSON.stringify({
+    editableBoundary: substrataData?.editableBoundary,
+    fixedBoundaries: substrataData?.fixedBoundaries,
+  });
+  const [initialGeometry] = useState(geometrySnapshot);
+  useEffect(() => {
+    onDirtyChange?.(geometrySnapshot !== initialGeometry);
+  }, [geometrySnapshot, initialGeometry, onDirtyChange]);
+
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const theme = useTheme();
   const mapStyles = useMapStyle(theme);
@@ -172,10 +182,8 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
         .filter((substratum) => !!substratum) as MinimalSubstratum[];
       return { ...stratum, substrata: newSubstrata };
     });
-    const numStrata = site.strata?.length ?? 0;
-    const numSubstrata = newStrata?.flatMap((stratum) => stratum.substrata)?.length ?? 0;
     const data = newStrata ? { strata: newStrata } : undefined;
-    onValidate.apply(newStrata === undefined, data, numSubstrata > numStrata);
+    onValidate.apply(newStrata === undefined, data);
   }, [substrataData?.errorAnnotations, onValidate, site, snackbar, substrata, strata]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
@@ -236,9 +244,8 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
     () =>
       activeLocale
         ? [
-            { text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_0 },
             {
-              text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION_1,
+              text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,
               hasTutorial: true,
               handlePrefix: (prefix: string) =>
                 strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
@@ -427,7 +434,6 @@ export default function Substrata({ onValidate, site }: SubstrataProps): JSX.Ele
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={description}
-        title={strings.SITE_SUBSTRATUM_BOUNDARIES}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_substratum_boundary_instructions_video'
         tutorialTitle={strings.ADDING_SUBSTRATUM_BOUNDARIES}

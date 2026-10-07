@@ -1,6 +1,7 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, FormControlLabel, Grid, Radio, RadioGroup, Typography, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Button, DropdownItem } from '@terraware/web-components';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
@@ -17,6 +18,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextWithLink from 'src/components/common/TextWithLink';
 import TextField from 'src/components/common/Textfield/Textfield';
 import TitleDescription from 'src/components/common/TitleDescription';
+import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import Table from 'src/components/common/table';
 import { TableColumnType } from 'src/components/common/table/types';
 import { APP_PATHS } from 'src/constants';
@@ -26,7 +28,12 @@ import useUpdateCurrentUser from 'src/hooks/useUpdateCurrentUser';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useLocalization, useTimeZones, useUser } from 'src/providers';
 import { useGetDisclaimerQuery } from 'src/queries/generated/disclaimer';
-import { OrganizationService, OrganizationUserService } from 'src/services';
+import {
+  useDeleteOrganizationUserMutation,
+  useListOrganizationUsersQuery,
+  useUpdateOrganizationUserMutation,
+} from 'src/queries/generated/organizationUsers';
+import { useDeleteOrganizationMutation, useLazyListOrganizationRolesQuery } from 'src/queries/generated/organizations';
 import strings from 'src/strings';
 import { findLocaleDetails, useSupportedLocales } from 'src/strings/locales';
 import { Organization, roleName } from 'src/types/Organization';
@@ -49,7 +56,6 @@ export type MyAccountFormProps = {
   edit: boolean;
   hasNav?: boolean;
   organizations?: Organization[];
-  reloadData?: () => void;
   reloadUser: () => void;
   user: User;
   includeHeader?: boolean;
@@ -84,7 +90,6 @@ const MyAccountForm = ({
   edit,
   hasNav,
   organizations,
-  reloadData,
   reloadUser,
   user,
   includeHeader,
@@ -111,12 +116,17 @@ const MyAccountForm = ({
   const [cannotRemoveOrgModalOpened, setCannotRemoveOrgModalOpened] = useState(false);
   const [deleteOrgModalOpened, setDeleteOrgModalOpened] = useState(false);
   const [newOwner, setNewOwner] = useState<OrganizationUser>();
-  const [orgPeople, setOrgPeople] = useState<OrganizationUser[]>();
   const { userPreferences } = useUser();
   const updateUserPreferences = useUpdateUserPreferences();
   const snackbar = useSnackbar();
+  const [listOrganizationRoles] = useLazyListOrganizationRolesQuery();
+  const [deleteOrganization] = useDeleteOrganizationMutation();
+  const [updateOrganizationUser] = useUpdateOrganizationUserMutation();
+  const [deleteOrganizationUser] = useDeleteOrganizationUserMutation();
   const docLinks = useDocLinks();
-  const contentRef = useRef(null);
+  const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
+  const contentRef = useCallback((node: HTMLElement | null) => setContentElement(node), []);
+  const [saving, setSaving] = useState(false);
   const { countries, selectedLocale, setSelectedLocale } = useLocalization();
   const timeZones = useTimeZones();
   const tz = timeZones.find((timeZone) => timeZone.id === record.timeZone) || getUTC(timeZones);
@@ -127,6 +137,17 @@ const MyAccountForm = ({
 
   const [localeSelected, setLocaleSelected] = useState(selectedLocale);
   const [countryCodeSelected, setCountryCodeSelected] = useState(user?.countryCode);
+
+  const isDirty =
+    (record.firstName ?? '') !== (user.firstName ?? '') ||
+    (record.lastName ?? '') !== (user.lastName ?? '') ||
+    record.timeZone !== user.timeZone ||
+    record.emailNotificationsEnabled !== user.emailNotificationsEnabled ||
+    record.cookiesConsented !== user.cookiesConsented ||
+    countryCodeSelected !== user.countryCode ||
+    localeSelected !== selectedLocale ||
+    preferredWeightSystemSelected !== ((userPreferences?.preferredWeightSystem as string) || 'metric') ||
+    removedOrg !== undefined;
 
   const openDisclaimer = useCallback(() => {
     setOpenDisclaimerModal(true);
@@ -150,23 +171,14 @@ const MyAccountForm = ({
 
   useEffect(() => {
     setRecord(user);
-    if (!countryCodeSelected) {
-      setCountryCodeSelected(user.countryCode);
-    }
-  }, [user, setRecord, countryCodeSelected, setCountryCodeSelected]);
+    setCountryCodeSelected(user.countryCode);
+  }, [user, setRecord]);
 
-  useEffect(() => {
-    const populatePeople = async () => {
-      if (removedOrg) {
-        const response = await OrganizationUserService.getOrganizationUsers(removedOrg.id);
-        if (response.requestSucceeded) {
-          const otherUsers = response.users.filter((orgUser) => orgUser.id !== user.id);
-          setOrgPeople(otherUsers);
-        }
-      }
-    };
-    void populatePeople();
-  }, [removedOrg, user.id]);
+  const { currentData: removedOrgUsersData } = useListOrganizationUsersQuery(removedOrg?.id ?? skipToken);
+  const orgPeople = useMemo(
+    () => removedOrgUsersData?.users.filter((orgUser) => orgUser.id !== user.id),
+    [removedOrgUsersData, user.id]
+  );
 
   const removeSelectedOrgs = () => {
     if (organizations && personOrganizations) {
@@ -190,7 +202,8 @@ const MyAccountForm = ({
     setPreferredWeightSystemSelected((userPreferences?.preferredWeightSystem as string) || 'metric');
     setLocaleSelected(selectedLocale);
     setSelectedRows([]);
-    onChange('cookiesConsented', user.cookiesConsented);
+    setRecord(user);
+    setCountryCodeSelected(user.countryCode);
     if (backToView) {
       backToView();
     } else {
@@ -199,40 +212,48 @@ const MyAccountForm = ({
   };
 
   const saveChanges = async () => {
-    if (removedOrg) {
-      if (removedOrg.role !== 'Owner') {
-        setLeaveOrganizationModalOpened(true);
-      } else if (assignNewOwnerModalOpened) {
-        setAssignNewOwnerModalOpened(false);
-        setLeaveOrganizationModalOpened(true);
-      } else if (removedOrg.totalUsers > 1) {
-        const organizationRoles = OrganizationService.getOrganizationRoles(removedOrg.id);
-        const owners = (await organizationRoles).roles?.find((role) => role.role === 'Owner');
-        if (owners?.totalUsers === 1) {
-          setAssignNewOwnerModalOpened(true);
-        } else {
+    if (saving) {
+      return;
+    }
+    setSaving(true);
+    try {
+      if (removedOrg) {
+        if (removedOrg.role !== 'Owner') {
           setLeaveOrganizationModalOpened(true);
+        } else if (assignNewOwnerModalOpened) {
+          setAssignNewOwnerModalOpened(false);
+          setLeaveOrganizationModalOpened(true);
+        } else if (removedOrg.totalUsers > 1) {
+          const organizationRoles = await listOrganizationRoles(removedOrg.id, true);
+          const owners = organizationRoles.data?.roles.find((role) => role.role === 'Owner');
+          if (owners?.totalUsers === 1) {
+            setAssignNewOwnerModalOpened(true);
+          } else {
+            setLeaveOrganizationModalOpened(true);
+          }
+        } else {
+          setCannotRemoveOrgModalOpened(true);
         }
       } else {
-        setCannotRemoveOrgModalOpened(true);
-      }
-    } else {
-      await updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
+        await updateUserPreferences({ preferredWeightSystem: preferredWeightSystemSelected });
 
-      const lastLocale = selectedLocale;
-      setSelectedLocale(localeSelected);
-      const succeeded = await saveProfileChanges();
-      if (succeeded) {
-        snackbar.toastSuccess(strings.CHANGES_SAVED);
-      } else {
-        setSelectedLocale(lastLocale);
-        snackbar.toastError();
+        const lastLocale = selectedLocale;
+        setSelectedLocale(localeSelected);
+        const succeeded = await saveProfileChanges();
+        if (succeeded) {
+          snackbar.toastSuccess(strings.CHANGES_SAVED);
+        } else {
+          setSelectedLocale(lastLocale);
+          snackbar.toastError();
+        }
+        if (backToView) {
+          backToView();
+        } else {
+          navigate(APP_PATHS.MY_ACCOUNT);
+        }
       }
-      if (backToView) {
-        backToView();
-      } else {
-        navigate(APP_PATHS.MY_ACCOUNT);
-      }
+    } finally {
+      setSaving(false);
     }
   };
 
@@ -254,26 +275,23 @@ const MyAccountForm = ({
 
   const leaveOrgHandler = async () => {
     const succeeded = await saveProfileChanges();
-    let leaveOrgResponse = {
-      requestSucceeded: true,
-    };
+    let leftOrg = true;
     if (removedOrg) {
-      let assignNewOwnerResponse;
+      let assignedNewOwner = true;
       if (newOwner) {
-        assignNewOwnerResponse = await OrganizationUserService.updateOrganizationUser(
-          removedOrg.id,
-          newOwner.id,
-          'Owner'
-        );
+        const result = await updateOrganizationUser({
+          organizationId: removedOrg.id,
+          userId: newOwner.id,
+          updateOrganizationUserRequestPayload: { role: 'Owner' },
+        });
+        assignedNewOwner = !('error' in result);
       }
-      if ((assignNewOwnerResponse && assignNewOwnerResponse.requestSucceeded === true) || !assignNewOwnerResponse) {
-        leaveOrgResponse = await OrganizationUserService.deleteOrganizationUser(removedOrg.id, user.id);
+      if (assignedNewOwner) {
+        const result = await deleteOrganizationUser({ organizationId: removedOrg.id, userId: user.id });
+        leftOrg = !('error' in result);
       }
     }
-    if (succeeded && leaveOrgResponse.requestSucceeded) {
-      if (reloadData) {
-        reloadData();
-      }
+    if (succeeded && leftOrg) {
       reloadUser();
       snackbar.toastSuccess(strings.CHANGES_SAVED);
     } else {
@@ -289,12 +307,9 @@ const MyAccountForm = ({
 
   const deleteOrgHandler = async () => {
     if (removedOrg) {
-      const deleterOrgReponse = await OrganizationService.deleteOrganization(removedOrg.id);
+      const deleteOrgResponse = await deleteOrganization(removedOrg.id);
       const succeeded = await saveProfileChanges();
-      if (succeeded && deleterOrgReponse.requestSucceeded) {
-        if (reloadData) {
-          reloadData();
-        }
+      if (succeeded && !('error' in deleteOrgResponse)) {
         reloadUser();
         snackbar.toastSuccess(strings.CHANGES_SAVED);
       } else {
@@ -331,7 +346,9 @@ const MyAccountForm = ({
       saveID='saveAccountChange'
       onCancel={onCancel}
       onSave={() => void saveChanges()}
-      hideEdit={!edit}
+      hideEdit={!!includeHeader || !edit}
+      busy={saving}
+      saveDisabled={!isDirty}
       desktopOffset={desktopOffset}
     >
       {removedOrg && (
@@ -378,15 +395,41 @@ const MyAccountForm = ({
         <DisclaimerModal content={disclaimer?.content} open={openDisclaimerModal} setOpen={setOpenDisclaimerModal} />
       )}
       {includeHeader && (
-        <PageHeaderWrapper nextElement={contentRef.current} hasNav={hasNav}>
+        <PageHeaderWrapper nextElement={contentElement} hasNav={hasNav} alwaysVisible={edit} elevated={edit && isDirty}>
           <Box
             display='flex'
             justifyContent='space-between'
+            alignItems='center'
+            flexWrap='wrap'
+            gap={theme.spacing(1.5)}
             marginBottom={theme.spacing(2)}
             padding={hasNav === false ? theme.spacing(0, 5) : theme.spacing(0, 0, 0, 3)}
-            marginTop={organizations && organizations.length > 0 ? 0 : theme.spacing(12)}
+            marginTop={edit || (organizations && organizations.length > 0) ? 0 : theme.spacing(12)}
           >
-            <TitleDescription title={strings.MY_ACCOUNT} style={{ padding: 0 }} />
+            <Box alignItems='center' display='flex' flexWrap='wrap' gap={theme.spacing(1.5)}>
+              <TitleDescription title={strings.MY_ACCOUNT} style={{ padding: 0 }} />
+              {edit && isDirty && <UnsavedChangesBadge />}
+            </Box>
+            {edit && (
+              <Box alignItems='center' display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
+                <Button
+                  disabled={saving}
+                  id='cancelAccountChange'
+                  label={strings.CANCEL}
+                  onClick={onCancel}
+                  priority='secondary'
+                  size='medium'
+                  type='passive'
+                />
+                <Button
+                  disabled={!isDirty || saving}
+                  id='saveAccountChange'
+                  label={strings.SAVE}
+                  onClick={() => void saveChanges()}
+                  size='medium'
+                />
+              </Box>
+            )}
             {!edit && (
               <Box display='flex' height='fit-content'>
                 <Button

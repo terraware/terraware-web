@@ -28,7 +28,7 @@ type SpeciesRow = {
 type QuadratSpeciesEditableTableProps = {
   editable: boolean;
   species?: SpeciesRow[];
-  position: QuadratPosition;
+  position?: QuadratPosition;
 };
 
 const getRowKey = (row: SpeciesRow): string => String(row.speciesId ?? row.scientificName ?? row.speciesName ?? '');
@@ -64,6 +64,9 @@ export default function QuadratSpeciesEditableTable({
 
   const saveAbundance = useCallback(
     (row: SpeciesRow, numValue: number) => {
+      if (!position) {
+        return;
+      }
       setOptimisticValues((prev) => ({
         ...prev,
         [getRowKey(row)]: { ...prev[getRowKey(row)], abundanceCount: numValue },
@@ -108,6 +111,59 @@ export default function QuadratSpeciesEditableTable({
     [strings.YES, strings.NO]
   );
 
+  const abundanceColumns = useMemo<EditableTableColumn<SpeciesRow>[]>(
+    () =>
+      position
+        ? [
+            {
+              id: 'abundanceCount',
+              accessorKey: 'abundanceCount',
+              header: strings.HERBACEOUS_ABUNDANCE_SQUARE_COUNT,
+              editConfig: {
+                editVariant: 'custom',
+                customEditComponent: ({ row, table: iTable }) => (
+                  <TextField
+                    type='number'
+                    defaultValue={row.original.abundanceCount ?? ''}
+                    inputProps={{ min: 0, max: 25 }}
+                    onChange={(event) => {
+                      const val = event.target.value;
+                      if (val.length > 2) {
+                        event.target.value = val.slice(0, 2);
+                      }
+                      if (Number(event.target.value) > 25) {
+                        event.target.value = '25';
+                      }
+                    }}
+                    onBlur={(event) => {
+                      const numValue = Number(event.target.value);
+                      if (
+                        !isNaN(numValue) &&
+                        numValue >= 0 &&
+                        numValue <= 25 &&
+                        (row.original.speciesId || row.original.scientificName || row.original.speciesName)
+                      ) {
+                        saveAbundance(row.original, numValue);
+                      }
+                      iTable.setEditingCell(null);
+                    }}
+                    size='small'
+                    fullWidth
+                  />
+                ),
+              },
+            },
+            {
+              id: 'abundancePercentCalculated',
+              accessorFn: (row) => (row.abundanceCount !== undefined ? row.abundanceCount * 4 : undefined),
+              header: strings.HERBACEOUS_ABUNDANCE_PERCENT,
+              enableEditing: false,
+            },
+          ]
+        : [],
+    [position, strings, saveAbundance]
+  );
+
   const columns = useMemo<EditableTableColumn<SpeciesRow>[]>(
     () => [
       {
@@ -116,50 +172,7 @@ export default function QuadratSpeciesEditableTable({
         header: strings.SPECIES,
         enableEditing: false,
       },
-      {
-        id: 'abundanceCount',
-        accessorKey: 'abundanceCount',
-        header: strings.HERBACEOUS_ABUNDANCE_SQUARE_COUNT,
-        editConfig: {
-          editVariant: 'custom',
-          customEditComponent: ({ row, table: iTable }) => (
-            <TextField
-              type='number'
-              defaultValue={row.original.abundanceCount ?? ''}
-              inputProps={{ min: 0, max: 25 }}
-              onChange={(event) => {
-                const val = event.target.value;
-                if (val.length > 2) {
-                  event.target.value = val.slice(0, 2);
-                }
-                if (Number(event.target.value) > 25) {
-                  event.target.value = '25';
-                }
-              }}
-              onBlur={(event) => {
-                const numValue = Number(event.target.value);
-                if (
-                  !isNaN(numValue) &&
-                  numValue >= 0 &&
-                  numValue <= 25 &&
-                  (row.original.speciesId || row.original.scientificName || row.original.speciesName)
-                ) {
-                  saveAbundance(row.original, numValue);
-                }
-                iTable.setEditingCell(null);
-              }}
-              size='small'
-              fullWidth
-            />
-          ),
-        },
-      },
-      {
-        id: 'abundancePercentCalculated',
-        accessorFn: (row) => (row.abundanceCount !== undefined ? row.abundanceCount * 4 : undefined),
-        header: strings.HERBACEOUS_ABUNDANCE_PERCENT,
-        enableEditing: false,
-      },
+      ...abundanceColumns,
       {
         id: 'isInvasive',
         accessorFn: (row) => (row.isInvasive ? 'true' : 'false'),
@@ -189,7 +202,7 @@ export default function QuadratSpeciesEditableTable({
         },
       },
     ],
-    [strings, saveAbundance, saveBiomassSpecies, IsInvasiveCell, IsThreatenedCell]
+    [strings, abundanceColumns, saveBiomassSpecies, IsInvasiveCell, IsThreatenedCell]
   );
 
   const speciesWithData = useMemo(() => {

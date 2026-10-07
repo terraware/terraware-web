@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
@@ -10,6 +10,8 @@ import ReportPrint from 'src/components/AcceleratorReports/ReportPrint';
 import useExportReportCsv from 'src/components/AcceleratorReports/useExportReportCsv';
 import { getPublishedProgressIndicators, getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import useQuery from 'src/utils/useQuery';
 
@@ -19,6 +21,7 @@ type FunderReportTabV2Props = {
 
 const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.Element => {
   const theme = useTheme();
+  const trackEvent = useTrackEvent();
   const query = useQuery();
   const { exportFunderReport } = useExportReportCsv();
 
@@ -45,6 +48,12 @@ const FunderReportTabV2 = ({ selectedProjectId }: FunderReportTabV2Props): JSX.E
     () => reports.find((report) => report.reportId === selectedReportId)?.reportId ?? reports[0]?.reportId,
     [reports, selectedReportId]
   );
+
+  useEffect(() => {
+    if (resolvedReportId !== undefined) {
+      trackEvent(MIXPANEL_EVENTS.REPORT_VIEWED, { viewer_persona: 'funder' });
+    }
+  }, [resolvedReportId, trackEvent]);
 
   const selectedReport = useMemo(
     () => listPublishedReportsData?.reports.find((report) => report.reportId === resolvedReportId),

@@ -105,6 +105,7 @@ export type MixpanelEventPropertyMap = {
     initial_state?: string;
     has_photos: boolean;
     has_project_assigned: boolean;
+    failed_photo_count: number;
   };
   [MIXPANEL_EVENTS.ACCESSION_VIABILITY_TEST_RECORDED]: {
     test_type: string;

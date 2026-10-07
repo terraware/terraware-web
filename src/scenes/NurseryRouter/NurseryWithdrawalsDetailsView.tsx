@@ -1,4 +1,4 @@
-import React, { type JSX, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useRef, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -11,6 +11,7 @@ import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization } from 'src/providers/hooks';
+import { DeliveryPayload, useLazyGetDeliveryQuery } from 'src/queries/generated/deliveries';
 import { useGetNurseryWithdrawalQuery } from 'src/queries/generated/nurseryWithdrawals';
 import { useSearchNurseryWithdrawalsQuery } from 'src/queries/search/nurseries';
 import strings from 'src/strings';
@@ -46,6 +47,36 @@ export default function NurseryWithdrawalsDetailsView({ species }: NurseryWithdr
     () => getNurseryWithdrawalResponse.currentData?.delivery,
     [getNurseryWithdrawalResponse.currentData?.delivery]
   );
+  const [getDelivery] = useLazyGetDeliveryQuery();
+  const [reassignmentDeliveries, setReassignmentDeliveries] = useState<DeliveryPayload[]>([]);
+
+  const reassignmentDeliveryIds = delivery?.reassignmentDeliveryIds;
+
+  useEffect(() => {
+    const ids = reassignmentDeliveryIds ?? [];
+    if (ids.length === 0) {
+      setReassignmentDeliveries([]);
+      return;
+    }
+
+    let cancelled = false;
+    void Promise.all(ids.map((id) => getDelivery(id, true).unwrap()))
+      .then((responses) => {
+        if (!cancelled) {
+          setReassignmentDeliveries(responses.map((response) => response.delivery));
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setReassignmentDeliveries([]);
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [getDelivery, reassignmentDeliveryIds]);
+
   const batches = useMemo(
     () => getNurseryWithdrawalResponse.currentData?.batches,
     [getNurseryWithdrawalResponse.currentData?.batches]
@@ -96,6 +127,7 @@ export default function NurseryWithdrawalsDetailsView({ species }: NurseryWithdr
               withdrawal={withdrawal}
               withdrawalSummary={withdrawalSummary}
               delivery={delivery}
+              reassignmentDeliveries={reassignmentDeliveries}
               batches={batches}
             />
           </Box>
@@ -116,13 +148,24 @@ export default function NurseryWithdrawalsDetailsView({ species }: NurseryWithdr
               species={species}
               withdrawal={withdrawal}
               delivery={delivery}
+              reassignmentDeliveries={reassignmentDeliveries}
               batches={batches}
             />
           </Box>
         ),
       },
     ];
-  }, [activeLocale, batches, delivery, isMobile, species, theme, withdrawal, withdrawalSummary]);
+  }, [
+    activeLocale,
+    batches,
+    delivery,
+    reassignmentDeliveries,
+    isMobile,
+    species,
+    theme,
+    withdrawal,
+    withdrawalSummary,
+  ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'withdrawal',
@@ -207,6 +250,7 @@ export default function NurseryWithdrawalsDetailsView({ species }: NurseryWithdr
               withdrawal={withdrawal}
               withdrawalSummary={withdrawalSummary}
               delivery={delivery}
+              reassignmentDeliveries={reassignmentDeliveries}
               batches={batches}
             />
           </Box>

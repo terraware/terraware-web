@@ -7,6 +7,7 @@
 
 ## Testing
 
+- [Testing guidelines](testing.md)
 - [Playwright end-to-end tests](../playwright/README.md)
 - [Database dumps used by E2E tests](../dump/README.md)
 

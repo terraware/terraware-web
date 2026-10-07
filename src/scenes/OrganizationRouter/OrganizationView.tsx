@@ -1,6 +1,7 @@
-import React, { type JSX, useEffect, useState } from 'react';
+import React, { type JSX, useState } from 'react';
 
 import { Box, Grid, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -9,19 +10,17 @@ import Button from 'src/components/common/button/Button';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useProjects } from 'src/hooks/useProjects';
 import { useLocalization, useOrganization, useTimeZones } from 'src/providers/hooks';
+import { useListOrganizationUsersQuery } from 'src/queries/generated/organizationUsers';
 import EditOrganizationModal from 'src/scenes/OrganizationRouter/EditOrganizationModal';
-import { OrganizationUserService } from 'src/services';
 import strings from 'src/strings';
 import { organizationTypeLabel } from 'src/types/Organization';
-import { OrganizationUser } from 'src/types/User';
 import { getCountryByCode, getSubdivisionByCode } from 'src/utils/country';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { getUTC } from 'src/utils/useTimeZoneUtils';
 
 export default function OrganizationView(): JSX.Element {
-  const { selectedOrganization, reloadOrganizations } = useOrganization();
+  const { selectedOrganization } = useOrganization();
   const theme = useTheme();
-  const [people, setPeople] = useState<OrganizationUser[]>();
   const [editModalOpen, setEditModalOpen] = useState(false);
   const { isMobile } = useDeviceInfo();
   const { countries } = useLocalization();
@@ -32,17 +31,8 @@ export default function OrganizationView(): JSX.Element {
   const utcTimeZone = getUTC(timeZones);
   const currentTimeZone = timeZones.find((tz) => tz.id === selectedOrganization?.timeZone)?.longName;
 
-  useEffect(() => {
-    if (selectedOrganization) {
-      const populatePeople = async () => {
-        const response = await OrganizationUserService.getOrganizationUsers(selectedOrganization.id);
-        if (response.requestSucceeded) {
-          setPeople(response.users);
-        }
-      };
-      void populatePeople();
-    }
-  }, [selectedOrganization]);
+  const { currentData: organizationUsersData } = useListOrganizationUsersQuery(selectedOrganization?.id ?? skipToken);
+  const people = organizationUsersData?.users;
 
   const organizationState = () => {
     if (countries && selectedOrganization?.countryCode && selectedOrganization?.countrySubdivisionCode) {
@@ -83,7 +73,6 @@ export default function OrganizationView(): JSX.Element {
           organization={selectedOrganization}
           open={editModalOpen}
           onClose={() => setEditModalOpen(false)}
-          reloadOrganizationData={reloadOrganizations}
         />
       )}
       <Grid

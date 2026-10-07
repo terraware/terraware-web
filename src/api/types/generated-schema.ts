@@ -1504,29 +1504,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Gets the details of a single automation for a device or facility. */
-        get: operations["getAutomation"];
+        get?: never;
         /** Updates an existing automation for a device or facility. */
         put: operations["updateAutomation"];
         post?: never;
-        /** Deletes an existing automation from a device or facility. */
-        delete: operations["deleteAutomation"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/automations/{automationId}/trigger": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Reports that an automation has been triggered. */
-        post: operations["postAutomationTrigger"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1574,31 +1555,10 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Gets the configuration of a single device. */
-        get: operations["getDevice"];
+        get?: never;
         /** Updates the configuration of an existing device. */
         put: operations["updateDevice"];
         post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/devices/{id}/unresponsive": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /**
-         * Marks a device as unresponsive.
-         * @description Notifies the appropriate users so they can troubleshoot the problem.
-         */
-        post: operations["deviceUnresponsive"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2042,23 +2002,6 @@ export interface paths {
          * @description The sub-location must not be in use.
          */
         delete: operations["deleteSubLocation"];
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/facility/{facilityId}/devices": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Lists the configurations of all the devices at a facility. */
-        get: operations["listFacilityDevices_1"];
-        put?: never;
-        post?: never;
-        delete?: never;
         options?: never;
         head?: never;
         patch?: never;
@@ -2544,23 +2487,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/notifications/count": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** Retrieve notifications count by organization for current user. */
-        get: operations["count"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/notifications/{id}": {
         parameters: {
             query?: never;
@@ -2568,8 +2494,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        /** Retrieve a notification by its id. */
-        get: operations["read"];
+        get?: never;
         /** Update a single notification as read or unread */
         put: operations["markRead"];
         post?: never;
@@ -3846,43 +3771,6 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/api/v1/seedbank/clock": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /**
-         * Get the server's current date and time.
-         * @description In test environments, the clock can be advanced artificially, which will cause it to differ from the real-world date and time.
-         */
-        get: operations["getCurrentTime"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/api/v1/seedbank/log/{tag}": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get?: never;
-        put?: never;
-        /** Records a log message from a device at a seed bank. */
-        post: operations["recordLogMessage"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
     "/api/v1/seedbank/summary": {
         parameters: {
             query?: never;
@@ -4389,6 +4277,23 @@ export interface paths {
         };
         /** Gets a list of the results of observations. */
         get: operations["listObservationResults"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/observations/results/stats": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Gets the latest observation statistics for planting sites. */
+        get: operations["getObservationStats"];
         put?: never;
         post?: never;
         delete?: never;
@@ -5699,7 +5604,7 @@ export interface components {
             /** Format: date */
             dryingEndDate?: string;
             /**
-             * Format: int32
+             * Format: int64
              * @description Estimated number of seeds remaining. Absent if there isn't enough information to calculate an estimate.
              */
             estimatedCount?: number;
@@ -5757,7 +5662,7 @@ export interface components {
             /** @description Weight of subset of seeds. Units must be a weight measurement, not "Seeds". */
             subsetWeight?: components["schemas"]["SeedQuantityPayload"];
             /**
-             * Format: int32
+             * Format: int64
              * @description Total number of seeds withdrawn. If withdrawals are measured by weight, this is an estimate based on the accession's subset count and weight.
              */
             totalWithdrawnCount?: number;
@@ -6134,12 +6039,12 @@ export interface components {
              * @deprecated
              * @description Use substratumName instead
              */
-            plantingSubzoneName: string;
+            plantingSubzoneName?: string;
             /**
              * @deprecated
              * @description Use stratumName instead
              */
-            plantingZoneName: string;
+            plantingZoneName?: string;
             /** Format: int64 */
             plotId: number;
             plotName: string;
@@ -6150,10 +6055,10 @@ export interface components {
              * @description Length of each edge of the monitoring plot in meters.
              */
             sizeMeters: number;
-            stratumName: string;
+            stratumName?: string;
             /** Format: int64 */
             substratumId?: number;
-            substratumName: string;
+            substratumName?: string;
         };
         AutoCalculatedIndicatorPayload: {
             active: boolean;
@@ -6207,15 +6112,6 @@ export interface components {
             upperThreshold?: number;
             /** Format: int32 */
             verbosity: number;
-        };
-        AutomationTriggerRequestPayload: {
-            /** @description Default message to publish if the automation type isn't yet supported by the server. */
-            message?: string;
-            /**
-             * Format: double
-             * @description For automations that are triggered by changes to timeseries values, the value that triggered the automation.
-             */
-            timeseriesValue?: number;
         };
         /** @description If this batch was created via a seed withdrawal, the list of accessions it came from. */
         BatchAccessionPayload: {
@@ -6272,7 +6168,7 @@ export interface components {
             type: "DetailsEdited";
         };
         /** @description A nursery transfer withdrawal from another batch that added seedlings to this batch. */
-        BatchHistoryIncomingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
+        BatchHistoryIncomingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime"> & {
             /** Format: int32 */
             activeGrowthQuantityAdded: number;
             /** Format: int64 */
@@ -6299,7 +6195,7 @@ export interface components {
             type: "IncomingWithdrawal";
         };
         /** @description A withdrawal that removed seedlings from this batch. This does not include the full details of the withdrawal; they can be retrieved using the withdrawal ID. */
-        BatchHistoryOutgoingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime" | "version"> & {
+        BatchHistoryOutgoingWithdrawalPayload: WithRequired<components["schemas"]["BatchHistoryPayloadCommonProps"], "createdBy" | "createdTime"> & {
             /** Format: int32 */
             activeGrowthQuantityWithdrawn: number;
             /** Format: int32 */
@@ -7314,6 +7210,7 @@ export interface components {
             startDate?: string;
             /** @enum {string} */
             substrate?: "Nursery Media" | "Agar" | "Paper" | "Other" | "Sand" | "Media Mix" | "Soil" | "Moss" | "Perlite/Vermiculite" | "None";
+            substrateNotes?: string;
             testResults?: components["schemas"]["ViabilityTestResultPayload"][];
             /** @enum {string} */
             testType: "Lab" | "Nursery" | "Cut";
@@ -7512,18 +7409,6 @@ export interface components {
              * @description Level of diagnostic information to log.
              */
             verbosity?: number;
-        };
-        DeviceUnresponsiveRequestPayload: {
-            /**
-             * Format: int32
-             * @description The expected amount of time between updates from the device. Null or absent if there is no fixed update interval.
-             */
-            expectedIntervalSecs?: number;
-            /**
-             * Format: date-time
-             * @description When the device most recently responded. Null or absent if the device has never responded.
-             */
-            lastRespondedTime?: string;
         };
         DisclaimerPayload: {
             /** Format: date-time */
@@ -8078,6 +7963,8 @@ export interface components {
         FieldValuesPayload: {
             /** @description If true, the list of values is too long to return in its entirety and "values" is a partial list. */
             partial: boolean;
+            /** @description The values of the fields specified in the sortOrder of the request. Each element of this list corresponds to the element at the same position in the `values` list. Each element of the list is a list of values in the same order as the `sortOrder` list from the request. */
+            sortValues?: string[][];
             /** @description All the values this field could possibly have, whether or not any accessions have them. For fields that allow the user to enter arbitrary values, this is equivalent to querying the list of values without any filter criteria, that is, it's a list of all the user-entered values. */
             values: (string | null)[];
         };
@@ -8266,10 +8153,6 @@ export interface components {
             status: components["schemas"]["SuccessOrError"];
             targets: components["schemas"]["AutoCalculatedIndicatorTargetsPayload"][];
         };
-        GetAutomationResponsePayload: {
-            automation: components["schemas"]["AutomationPayload"];
-            status: components["schemas"]["SuccessOrError"];
-        };
         GetBatchHistoryResponsePayload: {
             history: components["schemas"]["BatchHistoryPayload"][];
             status: components["schemas"]["SuccessOrError"];
@@ -8282,21 +8165,12 @@ export interface components {
             border: components["schemas"]["MultiPolygon"];
             status: components["schemas"]["SuccessOrError"];
         };
-        GetCurrentTimeResponsePayload: {
-            /** Format: date-time */
-            currentTime: string;
-            status: components["schemas"]["SuccessOrError"];
-        };
         GetDeliverableResponsePayload: {
             deliverable: components["schemas"]["DeliverablePayload"];
             status: components["schemas"]["SuccessOrError"];
         };
         GetDeliveryResponsePayload: {
             delivery: components["schemas"]["DeliveryPayload"];
-            status: components["schemas"]["SuccessOrError"];
-        };
-        GetDeviceResponsePayload: {
-            device: components["schemas"]["DeviceConfig"];
             status: components["schemas"]["SuccessOrError"];
         };
         GetDisclaimerResponse: {
@@ -8352,14 +8226,6 @@ export interface components {
         GetMuxStreamResponsePayload: {
             playbackId: string;
             playbackToken: string;
-            status: components["schemas"]["SuccessOrError"];
-        };
-        GetNotificationResponsePayload: {
-            notification: components["schemas"]["NotificationPayload"];
-            status: components["schemas"]["SuccessOrError"];
-        };
-        GetNotificationsCountResponsePayload: {
-            notifications: components["schemas"]["NotificationCountPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         GetNotificationsResponsePayload: {
@@ -8419,6 +8285,10 @@ export interface components {
             originPosition?: components["schemas"]["CoordinatePayload"];
             sceneBounds?: components["schemas"]["CoordinatePayload"];
             skyColor?: string;
+            status: components["schemas"]["SuccessOrError"];
+        };
+        GetObservationStatsResponsePayload: {
+            stats: components["schemas"]["ObservationSiteStatsPayload"][];
             status: components["schemas"]["SuccessOrError"];
         };
         GetOneAssignedPlotResponsePayload: {
@@ -8724,6 +8594,7 @@ export interface components {
             startDate?: string;
             /** @enum {string} */
             substrate?: "Nursery Media" | "Agar" | "Paper" | "Other" | "Sand" | "Media Mix" | "Soil" | "Moss" | "Perlite/Vermiculite" | "None";
+            substrateNotes?: string;
             testResults?: components["schemas"]["ViabilityTestResultPayload"][];
             /** @enum {string} */
             testType: "Lab" | "Nursery" | "Cut";
@@ -8752,7 +8623,7 @@ export interface components {
             /** Format: date */
             date: string;
             /**
-             * Format: int32
+             * Format: int64
              * @description Number of seeds withdrawn. Calculated by server. This is an estimate if "withdrawnQuantity" is a weight quantity and the accession has subset weight and count data. Absent if "withdrawnQuantity" is a weight quantity and the accession has no subset weight and count.
              */
             estimatedCount?: number;
@@ -9684,12 +9555,6 @@ export interface components {
              */
             operation: "not";
         };
-        NotificationCountPayload: {
-            /** Format: int64 */
-            organizationId?: number;
-            /** Format: int32 */
-            unread: number;
-        };
         NotificationPayload: {
             body: string;
             /** Format: date-time */
@@ -9835,6 +9700,16 @@ export interface components {
             conditions: ("AnimalDamage" | "FastGrowth" | "FavorableWeather" | "Fungus" | "Pests" | "SeedProduction" | "UnfavorableWeather" | "NaturalRegenerationWoody" | "Logging" | "Fire" | "Mining" | "Grazing" | "Infrastructure" | "ElectricalLines" | "SoilErosion" | "DifficultAccessibility" | "Contamination" | "SteepSlope" | "WaterBodies")[];
             /** @description Observed coordinates, if any, up to one per position. */
             coordinates: components["schemas"]["ObservationMonitoringPlotCoordinatesPayload"][];
+            /**
+             * Format: int64
+             * @description ID of the stratum the monitoring plot is currently located in, if any. This may differ from the stratum it was in at the time of the observation.
+             */
+            currentStratumId?: number;
+            /**
+             * Format: int64
+             * @description ID of the substratum the monitoring plot is currently located in, if any. This may differ from the substratum it was in at the time of the observation.
+             */
+            currentSubstratumId?: number;
             elevationMeters?: number;
             isAdHoc: boolean;
             /** @description True if this was a permanent monitoring plot in this observation. Clients should not assume that the set of permanent monitoring plots is the same in all observations; the number of permanent monitoring plots can be adjusted over time based on observation results. */
@@ -9869,6 +9744,20 @@ export interface components {
             species: components["schemas"]["ObservationSpeciesResultsPayload"][];
             /** @enum {string} */
             status: "Unclaimed" | "Claimed" | "Completed" | "Not Observed";
+            /**
+             * Format: int64
+             * @description ID of the stratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a stratum or if the stratum has since been deleted.
+             */
+            stratumId?: number;
+            /** @description Name of the stratum the monitoring plot was in at the time of the observation, if any. */
+            stratumName?: string;
+            /**
+             * Format: int64
+             * @description ID of the substratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a substratum or if the substratum has since been deleted.
+             */
+            substratumId?: number;
+            /** @description Full name of the substratum the monitoring plot was in at the time of the observation, if any. */
+            substratumName?: string;
             /**
              * Format: int32
              * @description If this is a permanent monitoring plot in this observation, percentage of plants that have survived since t0 data.
@@ -10044,6 +9933,39 @@ export interface components {
             /** @enum {string} */
             type: "Monitoring" | "Biomass Measurements";
         };
+        /** @description Statistics for a planting site and each of its strata and substrata. Each area's statistics come from the most recent observation of that area, so different areas can come from different observations. Areas that haven't been observed yet are included without statistics. */
+        ObservationSiteStatsPayload: {
+            /** Format: date-time */
+            completedTime?: string;
+            /**
+             * Format: int64
+             * @description Which observation these site-level statistics came from.
+             */
+            observationId?: number;
+            /**
+             * Format: int32
+             * @description Estimated planting density for the site based on the observed planting densities of monitoring plots.
+             */
+            plantingDensity?: number;
+            /** Format: int64 */
+            plantingSiteId: number;
+            strata: components["schemas"]["ObservationStratumStatsPayload"][];
+            /**
+             * Format: int32
+             * @description Percentage of plants of all species in the site's permanent monitoring plots that have survived since the t0 point.
+             */
+            survivalRate?: number;
+            /**
+             * Format: int32
+             * @description Total number of plants recorded, regardless of live/dead status or species.
+             */
+            totalPlants?: number;
+            /**
+             * Format: int32
+             * @description Total number of species observed, not counting dead plants. Each distinct user-supplied name for a species of Other certainty counts separately.
+             */
+            totalSpecies?: number;
+        };
         ObservationSpeciesDensityPayload: {
             /** Format: date-time */
             observationCompletedTime: string;
@@ -10149,6 +10071,39 @@ export interface components {
              */
             totalSpecies?: number;
         };
+        /** @description Statistics for a stratum from the most recent observation of it. This can be a different observation than the ones the stratum's substrata came from. */
+        ObservationStratumStatsPayload: {
+            /** Format: date-time */
+            completedTime?: string;
+            /**
+             * Format: int64
+             * @description Which observation these statistics came from. This can differ between strata.
+             */
+            observationId?: number;
+            /**
+             * Format: int32
+             * @description Estimated planting density for the stratum based on the observed planting densities of monitoring plots.
+             */
+            plantingDensity?: number;
+            /** Format: int64 */
+            stratumId: number;
+            substrata: components["schemas"]["ObservationSubstratumStatsPayload"][];
+            /**
+             * Format: int32
+             * @description Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point.
+             */
+            survivalRate?: number;
+            /**
+             * Format: int32
+             * @description Total number of plants recorded, regardless of live/dead status or species.
+             */
+            totalPlants?: number;
+            /**
+             * Format: int32
+             * @description Total number of species observed, not counting dead plants. Each distinct user-supplied name for a species of Other certainty counts separately.
+             */
+            totalSpecies?: number;
+        };
         /** @description Percentage of plants of all species in this stratum's permanent monitoring plots that have survived since the t0 point. */
         ObservationSubstratumResultsPayload: {
             /** @description Area of this substratum in hectares. */
@@ -10188,6 +10143,38 @@ export interface components {
             /**
              * Format: int32
              * @description Total number of species observed, not counting dead plants. Includes plants with Known and Other certainties. In the case of Other, each distinct user-supplied species name is counted as a separate species for purposes of this total.
+             */
+            totalSpecies?: number;
+        };
+        /** @description Statistics for a substratum from the most recent observation of it. The statistics and the observation they came from are absent if the substratum hasn't been observed yet. */
+        ObservationSubstratumStatsPayload: {
+            /** Format: date-time */
+            completedTime?: string;
+            /**
+             * Format: int64
+             * @description Which observation these statistics came from. This can differ between substrata.
+             */
+            observationId?: number;
+            /**
+             * Format: int32
+             * @description Estimated planting density for the substratum based on the observed planting densities of monitoring plots.
+             */
+            plantingDensity?: number;
+            /** Format: int64 */
+            substratumId: number;
+            /**
+             * Format: int32
+             * @description Percentage of plants of all species in this substratum's permanent monitoring plots that have survived since the t0 point.
+             */
+            survivalRate?: number;
+            /**
+             * Format: int32
+             * @description Total number of plants recorded, regardless of live/dead status or species.
+             */
+            totalPlants?: number;
+            /**
+             * Format: int32
+             * @description Total number of species observed, not counting dead plants. Each distinct user-supplied name for a species of Other certainty counts separately.
              */
             totalSpecies?: number;
         };
@@ -10996,13 +10983,15 @@ export interface components {
             /** @enum {string} */
             level: "Process" | "Output" | "Outcome" | "Goal";
             name: string;
+            /** Format: int32 */
+            precision: number;
             /** @description If the indicator is lifetime cumulative, the cumulative total at the end of the previous year. Always null for yearly cumulative indicators. */
             previousYearCumulativeTotal?: number;
             progressNotes?: string;
             projectsComments?: string;
             refId: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            status?: "Achieved" | "On-Track" | "At Risk" | "Off-Track";
             /** Format: uri */
             supportingDocumentUrl?: string;
             target?: number;
@@ -11283,7 +11272,7 @@ export interface components {
             progressNotes?: string;
             projectsComments?: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            status?: "Achieved" | "On-Track" | "At Risk" | "Off-Track";
             /** Format: uri */
             supportingDocumentUrl?: string;
         };
@@ -11311,7 +11300,7 @@ export interface components {
             projectsComments?: string;
             refId: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            status?: "Achieved" | "On-Track" | "At Risk" | "Off-Track";
             /** Format: uri */
             supportingDocumentUrl?: string;
             /** Format: date-time */
@@ -11330,7 +11319,7 @@ export interface components {
             progressNotes?: string;
             projectsComments?: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            status?: "Achieved" | "On-Track" | "At Risk" | "Off-Track";
             /** Format: uri */
             supportingDocumentUrl?: string;
             value?: number;
@@ -11359,7 +11348,7 @@ export interface components {
             projectsComments?: string;
             refId: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            status?: "Achieved" | "On-Track" | "At Risk" | "Off-Track";
             /** Format: uri */
             supportingDocumentUrl?: string;
             target?: number;
@@ -11377,7 +11366,7 @@ export interface components {
             progressNotes?: string;
             projectsComments?: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            status?: "Achieved" | "On-Track" | "At Risk" | "Off-Track";
             /** Format: uri */
             supportingDocumentUrl?: string;
             value?: number;
@@ -11406,7 +11395,7 @@ export interface components {
             projectsComments?: string;
             refId: string;
             /** @enum {string} */
-            status?: "Achieved" | "On-Track" | "Unlikely" | "Off-Track";
+            status?: "Achieved" | "On-Track" | "At Risk" | "Off-Track";
             /** Format: uri */
             supportingDocumentUrl?: string;
             target?: number;
@@ -12842,6 +12831,7 @@ export interface components {
             startDate?: string;
             /** @enum {string} */
             substrate?: "Nursery Media" | "Agar" | "Paper" | "Other" | "Sand" | "Media Mix" | "Soil" | "Moss" | "Perlite/Vermiculite" | "None";
+            substrateNotes?: string;
             testResults?: components["schemas"]["ViabilityTestResultPayload"][];
             /** @enum {string} */
             treatment?: "Soak" | "Scarify" | "Chemical" | "Stratification" | "Other" | "Light";
@@ -12906,6 +12896,8 @@ export interface components {
         };
         UploadOrganizationMediaRequestPayload: {
             caption?: string;
+            /** @description Store the file with this content type rather than the one declared by the upload. */
+            contentType?: string;
             /** Format: int64 */
             fileBatchId?: number;
         };
@@ -12918,6 +12910,11 @@ export interface components {
             caption?: string;
             /** Format: int64 */
             fileBatchId?: number;
+            /**
+             * @description If true, this file should be considered part of the original observation.
+             * @default false
+             */
+            isOriginal: boolean;
             /** @enum {string} */
             position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
             /**
@@ -16671,28 +16668,6 @@ export interface operations {
             };
         };
     };
-    getAutomation: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                automationId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetAutomationResponsePayload"];
-                };
-            };
-        };
-    };
     updateAutomation: {
         parameters: {
             query?: never;
@@ -16705,54 +16680,6 @@ export interface operations {
         requestBody: {
             content: {
                 "application/json": components["schemas"]["UpdateAutomationRequestPayload"];
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-        };
-    };
-    deleteAutomation: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                automationId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-        };
-    };
-    postAutomationTrigger: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                automationId: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["AutomationTriggerRequestPayload"];
             };
         };
         responses: {
@@ -16813,37 +16740,6 @@ export interface operations {
             };
         };
     };
-    getDevice: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Device configuration retrieved. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetDeviceResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
     updateDevice: {
         parameters: {
             query?: never;
@@ -16860,41 +16756,6 @@ export interface operations {
         };
         responses: {
             /** @description Device configuration updated. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
-    deviceUnresponsive: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": components["schemas"]["DeviceUnresponsiveRequestPayload"];
-            };
-        };
-        responses: {
-            /** @description The requested operation succeeded. */
             200: {
                 headers: {
                     [name: string]: unknown;
@@ -17848,37 +17709,6 @@ export interface operations {
             };
         };
     };
-    listFacilityDevices_1: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                facilityId: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description Successfully listed the facility's devices. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ListDeviceConfigsResponse"];
-                };
-            };
-            /** @description The facility does not exist or is not accessible by the current user. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
-                };
-            };
-        };
-    };
     createFileBatch: {
         parameters: {
             query?: never;
@@ -18723,57 +18553,6 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["SimpleSuccessResponsePayload"];
-                };
-            };
-        };
-    };
-    count: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetNotificationsCountResponsePayload"];
-                };
-            };
-        };
-    };
-    read: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                id: number;
-            };
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetNotificationResponsePayload"];
-                };
-            };
-            /** @description The requested resource was not found. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
                 };
             };
         };
@@ -21727,56 +21506,6 @@ export interface operations {
             };
         };
     };
-    getCurrentTime: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["GetCurrentTimeResponsePayload"];
-                };
-            };
-        };
-    };
-    recordLogMessage: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path: {
-                /**
-                 * @description Source of the log message.
-                 * @example seedbank-app
-                 */
-                tag: string;
-            };
-            cookie?: never;
-        };
-        requestBody: {
-            content: {
-                "application/json": {
-                    [key: string]: Record<string, never>;
-                };
-            };
-        };
-        responses: {
-            /** @description OK */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
-            };
-        };
-    };
     getSeedBankSummary: {
         parameters: {
             query?: {
@@ -22932,6 +22661,31 @@ export interface operations {
             };
         };
     };
+    getObservationStats: {
+        parameters: {
+            query?: {
+                /** @description Limit results to a single planting site. */
+                plantingSiteId?: number;
+                /** @description Limit results to the planting sites of a project. Ignored if plantingSiteId is specified. */
+                projectId?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetObservationStatsResponsePayload"];
+                };
+            };
+        };
+    };
     getObservation: {
         parameters: {
             query?: never;
@@ -23330,6 +23084,7 @@ export interface operations {
             query?: {
                 caption?: string;
                 fileBatchId?: number;
+                isOriginal?: boolean;
                 position?: "SouthwestCorner" | "SoutheastCorner" | "NortheastCorner" | "NorthwestCorner";
                 type?: "Plot" | "Quadrat" | "Soil" | "Explanation";
             };
@@ -24255,9 +24010,11 @@ export interface operations {
     getAggregatedTrackingStats: {
         parameters: {
             query?: {
-                /** @description Organization ID to summarize. Ignored if projectId is supplied. */
+                /** @description Organization ID to summarize. Ignored if projectId or plantingSiteId is supplied. */
                 organizationId?: number;
+                /** @description Project ID to summarize. Ignored if plantingSiteId is supplied. */
                 projectId?: number;
+                plantingSiteId?: number;
             };
             header?: never;
             path?: never;

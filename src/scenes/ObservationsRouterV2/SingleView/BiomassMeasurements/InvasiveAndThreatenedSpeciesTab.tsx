@@ -11,6 +11,7 @@ import EventLog from 'src/scenes/ObservationsRouterV2/SingleView/EventLog';
 
 import EditNotesModal from './EditNotesModal';
 import QuadratComponent from './QuadratComponent';
+import QuadratSpeciesEditableTable from './QuadratSpeciesEditableTable';
 
 const InvasiveAndThreatenedSpeciesTab = () => {
   const theme = useTheme();
@@ -21,6 +22,10 @@ const InvasiveAndThreatenedSpeciesTab = () => {
   const { data: observationResultsResponse } = useGetOneObservationResults({ observationId });
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const monitoringPlot = useMemo(() => results?.adHocPlot, [results?.adHocPlot]);
+  const additionalSpecies = useMemo(
+    () => results?.biomassMeasurements?.additionalSpecies,
+    [results?.biomassMeasurements?.additionalSpecies]
+  );
 
   const [editNotesModalOpen, setEditNotesModalOpen] = useState(false);
 
@@ -55,6 +60,12 @@ const InvasiveAndThreatenedSpeciesTab = () => {
       <QuadratComponent position='NorthwestCorner' />
       <QuadratComponent position='NortheastCorner' />
       <QuadratComponent position='SoutheastCorner' />
+      <Box>
+        <Typography fontSize='20px' lineHeight='28px' fontWeight={600} color={theme.palette.TwClrTxt} paddingBottom={2}>
+          {strings.ADDITIONAL_INVASIVE_THREATENED_SPECIES}
+        </Typography>
+        <QuadratSpeciesEditableTable editable={true} species={additionalSpecies} />
+      </Box>
       {monitoringPlot?.monitoringPlotId && (
         <EventLog observationId={Number(observationId)} plotId={monitoringPlot.monitoringPlotId} isBiomass />
       )}

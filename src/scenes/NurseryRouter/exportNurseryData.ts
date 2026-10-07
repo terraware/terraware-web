@@ -77,6 +77,7 @@ const makeNurseryWithdrawalResultsCsv = ({
   nurseryWithdrawalResults: NurseryWithdrawalResults;
 }): Blob => {
   const columnHeaders = [
+    { key: 'withdrawalId', displayLabel: strings.WITHDRAWAL_ID },
     { key: 'withdrawnDate', displayLabel: strings.DATE },
     { key: 'purpose', displayLabel: strings.PURPOSE },
     { key: 'nurseryName', displayLabel: strings.FROM_NURSERY },
@@ -84,27 +85,30 @@ const makeNurseryWithdrawalResultsCsv = ({
     { key: 'projectNames', displayLabel: strings.PROJECTS },
     { key: 'stratumName', displayLabel: strings.TO_STRATUM },
     { key: 'substratumShortName', displayLabel: strings.TO_SUBSTRATUM },
-    { key: 'speciesNames', displayLabel: strings.SPECIES },
+    { key: 'species', displayLabel: strings.SPECIES },
     { key: 'totalWithdrawn', displayLabel: strings.TOTAL_QUANTITY },
     { key: 'withdrawalActive', displayLabel: strings.WITHDRAWAL_ACTIVE },
   ];
 
-  const data = nurseryWithdrawalResults.map((withdrawal) => ({
-    withdrawnDate: withdrawal.withdrawnDate,
-    purpose: purposeLabel(withdrawal.purpose),
-    nurseryName: withdrawal.nurseryName,
-    destinationName: withdrawal.destinationName,
-    projectNames: withdrawal.projectNames?.filter((name: string) => !!name).join(', '),
-    stratumName: withdrawal.stratumName,
-    substratumShortName: withdrawal.substratumShortName,
-    speciesNames: withdrawal.speciesNames?.join(', '),
-    totalWithdrawn: withdrawal.totalWithdrawn,
-    withdrawalActive: withdrawal.undoneByWithdrawalId
-      ? strings.NO
-      : withdrawal.purpose === 'Undo'
-        ? strings.NA
-        : strings.YES,
-  }));
+  const data = nurseryWithdrawalResults.flatMap((withdrawal) =>
+    withdrawal.species.map((species) => ({
+      withdrawalId: withdrawal.withdrawalId,
+      withdrawnDate: withdrawal.withdrawnDate,
+      purpose: purposeLabel(withdrawal.purpose),
+      nurseryName: withdrawal.nurseryName,
+      destinationName: withdrawal.destinationName,
+      projectNames: withdrawal.projectNames?.filter((name: string) => !!name).join(', '),
+      stratumName: withdrawal.stratumName,
+      substratumShortName: withdrawal.substratumShortName,
+      species: species.name,
+      totalWithdrawn: species.totalWithdrawn,
+      withdrawalActive: withdrawal.undoneByWithdrawalId
+        ? strings.NO
+        : withdrawal.purpose === 'Undo'
+          ? strings.NA
+          : strings.YES,
+    }))
+  );
 
   return makeCsv(columnHeaders, data);
 };

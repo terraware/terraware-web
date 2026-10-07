@@ -5,7 +5,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import FormattedNumber from 'src/components/common/FormattedNumber';
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
@@ -45,7 +45,7 @@ const ObservationMapWrapper = ({
   const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const mapRef = useRef<MapRef | null>(null);
-  const newFiltersEnabled = isEnabled('New Observation Filters');
+  const newFiltersEnabled = useFeatureEnabled('New Observation Filters');
 
   useEffect(() => {
     if (isMapVisible) {

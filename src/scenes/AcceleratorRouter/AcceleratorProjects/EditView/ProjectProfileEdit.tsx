@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { RequestStatusFlags } from '@reduxjs/toolkit/dist/query/core/apiState';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Button, Dropdown, DropdownItem, IconTooltip } from '@terraware/web-components';
 
 import PhotoSelectorWithPreview, { FileWithUrl } from 'src/components/Photo/PhotoSelectorWithPreview';
@@ -22,6 +23,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization, useUser } from 'src/providers';
 import { useUpdateProjectAcceleratorDetailsMutation } from 'src/queries/generated/acceleratorProjects';
 import { useListGlobalRolesQuery } from 'src/queries/generated/globalRoles';
+import { useListOrganizationUsersQuery } from 'src/queries/generated/organizationUsers';
 import {
   InternalUserPayload,
   useGetInternalUsersQuery,
@@ -34,13 +36,10 @@ import {
 } from 'src/redux/features/documentProducer/values/valuesThunks';
 import { selectSpecificVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
 import { requestListSpecificVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { requestListOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersAsyncThunks';
-import { selectOrganizationUsers } from 'src/redux/features/organizationUser/organizationUsersSelectors';
 import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import { AcceleratorProject, LAND_USE_MODEL_TYPES } from 'src/types/AcceleratorProject';
 import { PhaseType } from 'src/types/Phase';
 import { ProjectInternalUserRole, getProjectInternalUserRoleString, projectInternalUserRoles } from 'src/types/Project';
-import { OrganizationUser } from 'src/types/User';
 import { SelectVariable, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { getImagePath } from 'src/utils/images';
 import useForm from 'src/utils/useForm';
@@ -96,8 +95,6 @@ const ProjectProfileEdit = () => {
     uploadImages: false,
   });
 
-  const [organizationUsersRequestId, setOrganizationUsersRequestId] = useState<string>('');
-
   const { data: internalUsersData, isSuccess: isInternalUsersRequestSuccess } = useGetInternalUsersQuery(projectId, {
     skip: !projectId || projectId === -1,
   });
@@ -108,7 +105,6 @@ const ProjectProfileEdit = () => {
   const [internalUsers, setInternalUsers] = useState<InternalUserItem[]>([]);
   const [uploadImagesRequestId, setUploadImagesRequestId] = useState('');
   const uploadImagesResponse = useAppSelector(selectUploadImageValue(uploadImagesRequestId));
-  const response = useAppSelector(selectOrganizationUsers(organizationUsersRequestId));
 
   const variableValues = useAppSelector((state) =>
     selectSpecificVariablesWithValues(state, variableStableIds, projectId)
@@ -125,7 +121,6 @@ const ProjectProfileEdit = () => {
   );
   const { activeLocale, strings } = useLocalization();
   const [globalUsersOptions, setGlobalUsersOptions] = useState<DropdownItem[]>();
-  const [organizationUsers, setOrganizationUsers] = useState<OrganizationUser[]>();
   const [mainPhoto, setMainPhoto] = useState<FileWithUrl>();
   const [mapPhoto, setMapPhoto] = useState<FileWithUrl>();
   const [customUserRoles, setCustomUserRoles] = useState<string[]>([]);
@@ -397,12 +392,6 @@ const ProjectProfileEdit = () => {
   const handleOnCancel = useCallback(() => goToAcceleratorProject(projectId), [goToAcceleratorProject, projectId]);
 
   useEffect(() => {
-    if (response?.status === 'success') {
-      setOrganizationUsers(response.data?.users);
-    }
-  }, [response]);
-
-  useEffect(() => {
     if (acceleratorProject) {
       setAcceleratorProjectRecord(acceleratorProject);
     }
@@ -413,13 +402,6 @@ const ProjectProfileEdit = () => {
       goToAcceleratorProject(projectId);
     }
   }, [goToAcceleratorProject, isAllowedEdit, projectId]);
-
-  useEffect(() => {
-    if (organization?.id) {
-      const request = dispatch(requestListOrganizationUsers({ organizationId: organization.id }));
-      setOrganizationUsersRequestId(request.requestId);
-    }
-  }, [organization, dispatch]);
 
   const onChangeLandUseHectares = useCallback(
     (type: string, hectares: string) => {
@@ -512,7 +494,11 @@ const ProjectProfileEdit = () => {
     setAddInternalUserRoleModalOpen(false);
   }, [setAddInternalUserRoleModalOpen]);
 
-  const ownerId = useMemo(() => organizationUsers?.find((orgUsr) => orgUsr.role === 'Owner')?.id, [organizationUsers]);
+  const { currentData: organizationUsersData } = useListOrganizationUsersQuery(organization?.id ?? skipToken);
+  const ownerId = useMemo(
+    () => organizationUsersData?.users.find((orgUsr) => orgUsr.role === 'Owner')?.id,
+    [organizationUsersData]
+  );
 
   const getInternalUserOptions = useCallback(
     (userId?: number) => {

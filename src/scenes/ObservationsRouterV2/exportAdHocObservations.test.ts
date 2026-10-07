@@ -1,5 +1,6 @@
 import { describe, expect, test } from '@rstest/core';
 
+import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import strings from 'src/strings';
 import { AdHocObservationResults } from 'src/types/Observations';
 
@@ -15,6 +16,38 @@ const boundaryRing = [
   [-122.24, 37.44],
 ];
 
+const makePlantingSitesById: () => Record<number, PlantingSitePayload> = () => ({
+  1: {
+    adHocPlots: [],
+    id: 1,
+    name: 'planting site',
+    organizationId: 1,
+    strata: [
+      {
+        areaHa: 15,
+        boundary: { type: 'MultiPolygon', coordinates: [[boundaryRing]] },
+        boundaryModifiedTime: '2026-01-01T11:22:33Z',
+        id: 2,
+        initialPlantingDensity: 1,
+        name: 'stratum',
+        numPermanentPlots: 2,
+        numTemporaryPlots: 1,
+        substrata: [
+          {
+            areaHa: 15,
+            boundary: { type: 'MultiPolygon', coordinates: [[boundaryRing]] },
+            fullName: 'stratum-substratum',
+            id: 3,
+            monitoringPlots: [],
+            name: 'substratum',
+            plantingCompleted: true,
+          },
+        ],
+      },
+    ],
+  },
+});
+
 const makeAdHocObservation = (
   overrides: Partial<AdHocObservationResults> = {},
   plotOverrides: AdHocPlotOverrides = {}
@@ -24,6 +57,7 @@ const makeAdHocObservation = (
     // test suite runs in, so this pins the formatting to the observation's own time zone.
     completedTime: '2026-03-05T11:30:00Z',
     timeZone: 'Pacific/Auckland',
+    plantingSiteId: 1,
     plantingSiteName: 'Ridgeline Site',
     ...overrides,
     adHocPlot: {
@@ -37,6 +71,10 @@ const makeAdHocObservation = (
         { totalPlants: 9, totalLive: 7, totalDead: 2 },
         { totalPlants: 3, totalLive: 1, totalDead: 2 },
       ],
+      stratumName: 'old stratum',
+      substratumName: 'old substratum',
+      currentStratumId: 2,
+      currentSubstratumId: 3,
       ...plotOverrides,
     },
   }) as unknown as AdHocObservationResults;
@@ -95,17 +133,32 @@ const expectedHeaders = [
   strings.TOTAL_SPECIES_OBSERVED,
   strings.PLOT_CONDITIONS,
   strings.FIELD_NOTES,
+  strings.STRATUM,
+  strings.SUBSTRATUM,
+  strings.STRATUM_CURRENT,
+  strings.SUBSTRATUM_CURRENT,
 ];
 
 describe('makeAdHocObservationsCsv', () => {
+  test('exports numeric plot numbers descending without reordering the input observations', async () => {
+    const observations = [2, 10, 100].map((monitoringPlotNumber) => makeAdHocObservation({}, { monitoringPlotNumber }));
+    const originalOrder = [...observations];
+
+    const rows = await readCsvRows(makeAdHocObservationsCsv(observations, makePlantingSitesById()));
+
+    expect(rows.slice(1).map((row) => row[0])).toEqual(['100', '10', '2']);
+    expect(observations).toEqual(originalOrder);
+    expect(observations.map(({ adHocPlot }) => adHocPlot.monitoringPlotNumber)).toEqual([2, 10, 100]);
+  });
+
   test('starts with the ad-hoc plant monitoring column headers', async () => {
-    const rows = await readCsvRows(makeAdHocObservationsCsv([makeAdHocObservation()]));
+    const rows = await readCsvRows(makeAdHocObservationsCsv([makeAdHocObservation()], makePlantingSitesById()));
 
     expect(rows[0]).toEqual(expectedHeaders);
   });
 
   test('writes one row per observation with plot details in the header order', async () => {
-    const rows = await readCsvRows(makeAdHocObservationsCsv([makeAdHocObservation()]));
+    const rows = await readCsvRows(makeAdHocObservationsCsv([makeAdHocObservation()], makePlantingSitesById()));
 
     expect(rows).toHaveLength(2);
     expect(rows[1]).toEqual([
@@ -126,6 +179,10 @@ describe('makeAdHocObservationsCsv', () => {
       '3',
       `${strings.FUNGUS_DISEASE}, ${strings.ANIMAL_DAMAGE}`,
       'Standing water near the north edge',
+      'old stratum',
+      'old substratum',
+      'stratum',
+      'substratum',
     ]);
   });
 
@@ -141,7 +198,7 @@ describe('makeAdHocObservationsCsv', () => {
       }
     );
 
-    const rows = await readCsvRows(makeAdHocObservationsCsv([observation]));
+    const rows = await readCsvRows(makeAdHocObservationsCsv([observation], makePlantingSitesById()));
 
     const row = Object.fromEntries(expectedHeaders.map((header, index) => [header, rows[1][index]]));
     expect(row[strings.DATE_OBSERVED]).toBe('');
@@ -154,18 +211,21 @@ describe('makeAdHocObservationsCsv', () => {
   });
 
   test('counts species without live or dead totals as zero', async () => {
-    const observation = makeAdHocObservation({}, {
-      species: [{ totalPlants: 5 }] as unknown as AdHocObservationResults['adHocPlot']['species'],
-    });
+    const observation = makeAdHocObservation(
+      {},
+      {
+        species: [{ totalPlants: 5 }] as unknown as AdHocObservationResults['adHocPlot']['species'],
+      }
+    );
 
-    const rows = await readCsvRows(makeAdHocObservationsCsv([observation]));
+    const rows = await readCsvRows(makeAdHocObservationsCsv([observation], {}));
 
     expect(rows[1][expectedHeaders.indexOf(strings.LIVE_PLANTS_OBSERVED)]).toBe('0');
     expect(rows[1][expectedHeaders.indexOf(strings.DEAD_PLANTS_OBSERVED)]).toBe('0');
   });
 
   test('writes a header-only csv when there are no observations', async () => {
-    const rows = await readCsvRows(makeAdHocObservationsCsv([]));
+    const rows = await readCsvRows(makeAdHocObservationsCsv([], {}));
 
     expect(rows).toEqual([expectedHeaders]);
   });

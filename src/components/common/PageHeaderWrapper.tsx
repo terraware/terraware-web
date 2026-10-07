@@ -49,6 +49,8 @@ export default function PageHeaderWrapper({
   const theme = useTheme();
   const { strings } = useLocalization();
   const ref = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState<number>();
   const [sticky, setSticky] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [scrollDown, setScrollDown] = useState(false);
@@ -59,6 +61,24 @@ export default function PageHeaderWrapper({
   const debouncedScrollDown = useDebounce(scrollDown, DEBOUNCE_TIME);
   const lastDebouncedSticky = useRef(false);
   const { isMobile, isTablet } = useDeviceInfo();
+
+  useLayoutEffect(() => {
+    const container = containerRef.current;
+    if (!alwaysVisible || !container) {
+      return;
+    }
+
+    const updateWidth = () => setContainerWidth(container.getBoundingClientRect().width);
+    updateWidth();
+    window.addEventListener('resize', updateWidth);
+    const observer = typeof ResizeObserver === 'undefined' ? undefined : new ResizeObserver(updateWidth);
+    observer?.observe(container);
+
+    return () => {
+      window.removeEventListener('resize', updateWidth);
+      observer?.disconnect();
+    };
+  }, [alwaysVisible]);
 
   useLayoutEffect(() => {
     const header = ref.current;
@@ -180,18 +200,23 @@ export default function PageHeaderWrapper({
         `${theme.palette.TwClrBaseGray300}FF, ${theme.palette.TwClrBaseGray300}00) 1`
       : undefined,
     boxShadow: elevated ? `0px 4px 8px ${theme.palette.TwClrBaseGray300}66` : 'none',
-    paddingRight: pinned ? theme.spacing(4) : undefined,
+    paddingRight: pinned && !alwaysVisible ? theme.spacing(4) : undefined,
     paddingTop: stickyChrome ? theme.spacing(4) : undefined,
     position: pinned ? 'fixed' : undefined,
     top: alwaysVisible ? alwaysVisibleTop : debouncedSticky ? stickyTop : undefined,
     visibility: !alwaysVisible && debouncedSticky && debouncedScrollDown ? 'hidden' : 'visible',
     animation: anim,
     zIndex: pinned ? 100 : undefined,
-    width: '100%',
-    maxWidth: isMobile || isTablet || !hasNav ? '100vw' : `calc(100vw - ${LEFT_NAV_WIDTH}px)`,
+    boxSizing: 'border-box',
+    width: alwaysVisible ? containerWidth : '100%',
+    maxWidth: alwaysVisible
+      ? undefined
+      : isMobile || isTablet || !hasNav
+        ? '100vw'
+        : `calc(100vw - ${LEFT_NAV_WIDTH}px)`,
   };
 
-  return (
+  const headerContent = (
     <Box ref={ref} sx={styles} {...{ [SCROLL_OBSTRUCTION]: '' }}>
       {!isHidden && children}
       {showEar && (
@@ -218,5 +243,13 @@ export default function PageHeaderWrapper({
         </Box>
       )}
     </Box>
+  );
+
+  return alwaysVisible ? (
+    <Box ref={containerRef} sx={{ width: '100%', minWidth: 0 }}>
+      {headerContent}
+    </Box>
+  ) : (
+    headerContent
   );
 }

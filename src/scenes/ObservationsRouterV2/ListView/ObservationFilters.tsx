@@ -6,12 +6,14 @@ import { Button } from '@terraware/web-components';
 import SegmentControl from 'src/components/common/SegmentControl';
 import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { useObservationFilters } from '../ObservationFiltersProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import ObservationFilterPanel from './ObservationFilterPanel';
 import ObservationTimeline from './ObservationTimeline';
 import ViewModeToggle from './ViewModeToggle';
+import { useDefaultObservationSelection } from './useTimelineObservations';
 
 export type ObservationFiltersProps = {
   plantingSiteId: PlantingSiteId;
@@ -21,11 +23,13 @@ export type ObservationFiltersProps = {
 const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: ObservationFiltersProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const { activeFilterCount, filtersExpanded, observationType, plotType, setFiltersExpanded, setPlotType } =
     useObservationFilters();
 
   const { emptyState } = useFilteredObservationResults({ observationType, plantingSiteId, plotType });
   const panelOpen = filtersExpanded && emptyState !== 'noObservations';
+  useDefaultObservationSelection(plantingSiteId);
 
   const plotTypeSegments = useMemo(
     () => [
@@ -37,7 +41,15 @@ const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: Observatio
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: theme.spacing(2) }}>
-      <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(2) }}>
+      <Box
+        sx={{
+          alignItems: isMobile ? 'stretch' : 'center',
+          display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
+          flexWrap: 'wrap',
+          gap: theme.spacing(2),
+        }}
+      >
         {plantingSiteSelector}
         <SegmentControl minSegmentWidth={130} onChange={setPlotType} segments={plotTypeSegments} selected={plotType} />
         <Badge
@@ -59,15 +71,16 @@ const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: Observatio
             onClick={() => setFiltersExpanded(!filtersExpanded)}
             priority='secondary'
             size='medium'
+            sx={isMobile ? { margin: 0, width: '100%' } : undefined}
             type='passive'
           />
         </Badge>
-        <Box sx={{ marginLeft: 'auto' }}>
+        <Box sx={{ marginLeft: isMobile ? 0 : 'auto' }}>
           <ViewModeToggle />
         </Box>
       </Box>
       {panelOpen && <ObservationFilterPanel plantingSiteId={plantingSiteId} />}
-      {plantingSiteId !== 'all' && <ObservationTimeline plantingSiteId={plantingSiteId} />}
+      {plantingSiteId !== 'all' && !isMobile && <ObservationTimeline plantingSiteId={plantingSiteId} />}
     </Box>
   );
 };

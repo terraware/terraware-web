@@ -1,20 +1,20 @@
 import { useCallback, useMemo } from 'react';
 
 import { getDateDisplayValue } from '@terraware/web-components/utils';
+import { DateTime } from 'luxon';
 import sanitize from 'sanitize-filename';
 
 import { APP_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useLocalization, useOrganization } from 'src/providers';
 import {
-  useLazyExportBiomassObservationsCsvQuery,
   useLazyExportBiomassPlotsCsvQuery,
   useLazyExportBiomassSpeciesCsvQuery,
   useLazyExportBiomassTreesShrubsCsvQuery,
   useLazyExportObservationGpxQuery,
 } from 'src/queries/exports/observations';
 import { ObservationResultsPayload, useLazyGetObservationResultsQuery } from 'src/queries/generated/observations';
-import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
+import { PlantingSitePayload, useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import { AdHocObservationResults, getPlotStatus } from 'src/types/Observations';
 import { downloadCsv, makeCsv } from 'src/utils/csv';
@@ -32,7 +32,6 @@ const useObservationExports = () => {
   const [exportBiomassPlots] = useLazyExportBiomassPlotsCsvQuery();
   const [exportBiomassSpecies] = useLazyExportBiomassSpeciesCsvQuery();
   const [exportBiomassTreesShrubs] = useLazyExportBiomassTreesShrubsCsvQuery();
-  const [exportBiomassObservations] = useLazyExportBiomassObservationsCsvQuery();
   const [exportObservationGpx] = useLazyExportObservationGpxQuery();
   const [getPlantingSite] = useLazyGetPlantingSiteQuery();
 
@@ -51,7 +50,7 @@ const useObservationExports = () => {
   );
 
   const makeObservationCsv = useCallback(
-    (observationResults: ObservationResultsPayload, timezone?: string) => {
+    (observationResults: ObservationResultsPayload, plantingSite: PlantingSitePayload, timezone?: string) => {
       const columnHeaders = [
         {
           key: 'monitoringPlotNumber',
@@ -186,6 +185,14 @@ const useObservationExports = () => {
           displayLabel: strings.OPTIONAL_LONGITUDE_OF_PLOT,
         },
         {
+          key: 'currentStratumName',
+          displayLabel: strings.STRATUM_CURRENT,
+        },
+        {
+          key: 'currentSubstratumName',
+          displayLabel: strings.SUBSTRATUM_CURRENT,
+        },
+        {
           key: 'detailsLink',
           displayLabel: strings.LINK_TO_PLOT_OBSERVATION_DETAILS,
         },
@@ -260,8 +267,19 @@ const useObservationExports = () => {
               .map((condition) => getConditionString(condition))
               .join(', ');
 
+            const currentStratum =
+              monitoringPlot.currentStratumId !== undefined
+                ? plantingSite.strata?.find((s) => s.id === monitoringPlot.currentStratumId)
+                : undefined;
+            const currentSubstratum =
+              currentStratum !== undefined && monitoringPlot.currentSubstratumId !== undefined
+                ? currentStratum.substrata?.find((ss) => ss.id === monitoringPlot.currentSubstratumId)
+                : undefined;
+
             return {
               conditions: plotConditions,
+              currentStratumName: currentStratum?.name ?? strings.OUTSIDE_CURRENT_SITE,
+              currentSubstratumName: currentSubstratum?.name ?? strings.OUTSIDE_CURRENT_SITE,
               dateObserved,
               detailsLink,
               gpsFieldNortheastLatitude: gpsFieldNortheast?.[1],
@@ -287,6 +305,7 @@ const useObservationExports = () => {
               southwestLatitude: plotCoordinates[0][1],
               southwestLongitude: plotCoordinates[0][0],
               status: getPlotStatus(monitoringPlot.status, strings),
+              stratumName: stratum.name,
               substratumName: substratum.name,
               survivalRate: monitoringPlot.survivalRate,
               totalDead,
@@ -294,11 +313,12 @@ const useObservationExports = () => {
               totalLive,
               totalPlants,
               totalSpecies: monitoringPlot.totalSpecies,
-              stratumName: stratum.name,
             };
           })
         )
       );
+
+      data.sort((a, b) => b.monitoringPlotNumber - a.monitoringPlotNumber);
 
       return makeCsv(columnHeaders, data, false);
     },
@@ -383,6 +403,8 @@ const useObservationExports = () => {
         )
       );
 
+      data.sort((a, b) => b.monitoringPlotNumber - a.monitoringPlotNumber);
+
       return makeCsv(columnHeaders, data, false);
     },
     [strings]
@@ -446,6 +468,8 @@ const useObservationExports = () => {
         )
       );
 
+      data.sort((a, b) => b.monitoringPlot - a.monitoringPlot);
+
       return makeCsv(columnHeaders, data, false);
     },
     [scientificNamesById, strings]
@@ -474,7 +498,7 @@ const useObservationExports = () => {
         files: [
           {
             fileName: dirName,
-            content: makeObservationCsv(observationResults, site.timeZone ?? selectedOrganization?.timeZone),
+            content: makeObservationCsv(observationResults, site, site.timeZone ?? selectedOrganization?.timeZone),
           },
           {
             fileName: `${prefix}-${strings.SPECIES}`,
@@ -574,124 +598,106 @@ const useObservationExports = () => {
     ]
   );
 
-  const downloadBiomassObservationDetails = useCallback(
-    async (observationId: number) => {
-      const results = await getObservationResults({ observationId, depth: 'Plant' }, true).unwrap();
-      const observationResults = results.observation;
+  const makeBiomassCsvFiles = useCallback(
+    async (observationIds: number[], fileNamePrefix: string) => {
+      const [biomassPlots, biomassSpecies, biomassTreesShrubs] = await Promise.all([
+        exportBiomassPlots(observationIds, true).unwrap(),
+        exportBiomassSpecies(observationIds, true).unwrap(),
+        exportBiomassTreesShrubs(observationIds, true).unwrap(),
+      ]);
 
-      const siteResults = await getPlantingSite(
-        { id: observationResults.plantingSiteId, includeZones: false },
-        true
-      ).unwrap();
-      const site = siteResults.site;
-
-      const fileNamePrefix = `${site.name}-${observationResults.startDate}-${strings.BIOMASS_OBSERVATION_FILENAME_PREFIX}`;
-
-      const biomassPlots = await exportBiomassPlots(observationId, true).unwrap();
-      const biomassSpecies = await exportBiomassSpecies(observationId, true).unwrap();
-      const biomassTreesShrubs = await exportBiomassTreesShrubs(observationId, true).unwrap();
-
-      await downloadZipFile({
-        dirName: sanitize(fileNamePrefix),
-        files: [
-          {
-            fileName: `${fileNamePrefix}-${strings.PLOT}`,
-            content: biomassPlots,
-          },
-          {
-            fileName: `${fileNamePrefix}-${strings.SPECIES_CLASSIFICATION}`,
-            content: biomassSpecies,
-          },
-          {
-            fileName: `${fileNamePrefix}-${strings.TREES_AND_SHRUBS}`,
-            content: biomassTreesShrubs,
-          },
-        ],
-        suffix: '.csv',
-      });
+      return [
+        { fileName: `${fileNamePrefix}-${strings.PLOT}`, content: biomassPlots },
+        { fileName: `${fileNamePrefix}-${strings.SPECIES_CLASSIFICATION}`, content: biomassSpecies },
+        { fileName: `${fileNamePrefix}-${strings.TREES_AND_SHRUBS}`, content: biomassTreesShrubs },
+      ];
     },
     [
       exportBiomassPlots,
       exportBiomassSpecies,
       exportBiomassTreesShrubs,
-      getObservationResults,
-      getPlantingSite,
-      strings.BIOMASS_OBSERVATION_FILENAME_PREFIX,
       strings.PLOT,
       strings.SPECIES_CLASSIFICATION,
       strings.TREES_AND_SHRUBS,
     ]
   );
 
-  const downloadBiomassObservationsCsv = useCallback(
-    async (siteName: string, plantingSiteId?: number) => {
-      if (!selectedOrganization) {
+  const downloadBiomassObservationDetails = useCallback(
+    async (observationId: number) => {
+      const results = await getObservationResults({ observationId, depth: 'Plant' }, true).unwrap();
+      const observationResults = results.observation;
+      const siteResults = await getPlantingSite(
+        { id: observationResults.plantingSiteId, includeZones: false },
+        true
+      ).unwrap();
+      const plotNumber = observationResults.adHocPlot?.monitoringPlotNumber;
+      const plotNumberPrefix = plotNumber !== undefined ? `${plotNumber}-` : '';
+      const fileNamePrefix = `${plotNumberPrefix}${siteResults.site.name}-${observationResults.startDate}-${strings.BIOMASS_OBSERVATION_FILENAME_PREFIX}`;
+
+      await downloadZipFile({
+        dirName: sanitize(fileNamePrefix),
+        files: await makeBiomassCsvFiles([observationId], fileNamePrefix),
+        suffix: '.csv',
+      });
+    },
+    [getObservationResults, getPlantingSite, makeBiomassCsvFiles, strings.BIOMASS_OBSERVATION_FILENAME_PREFIX]
+  );
+
+  const downloadBiomassObservationsZip = useCallback(
+    async (siteName: string, observations: { observationId: number }[], hasFilters = false) => {
+      if (observations.length === 0) {
         return;
       }
 
-      const content = await exportBiomassObservations(
-        { organizationId: selectedOrganization.id, plantingSiteId },
-        true
-      ).unwrap();
-
-      const fileName = sanitize(`${siteName}-${strings.BIOMASS_MONITORING}`);
-      downloadCsv(fileName, content);
+      const downloadDate = DateTime.now().setZone(defaultTimeZone).toFormat('yyyy-MM-dd');
+      const fileNamePrefix = `${siteName}_Ad Hoc Biomass Monitoring plots_${downloadDate}${hasFilters ? '_filtered' : ''}`;
+      const observationIds = observations.map(({ observationId }) => observationId);
+      await downloadZipFile({
+        dirName: fileNamePrefix,
+        files: await makeBiomassCsvFiles(observationIds, fileNamePrefix),
+        suffix: '.csv',
+      });
     },
-    [exportBiomassObservations, selectedOrganization, strings.BIOMASS_MONITORING]
+    [defaultTimeZone, makeBiomassCsvFiles]
   );
 
   const downloadAdHocObservationsZip = useCallback(
     async ({
       adHocObservationsResults,
       biomassObservationIds,
-      plantingSiteId,
+      hasFilters = false,
       siteName,
+      plantingSitesById,
     }: {
       adHocObservationsResults: AdHocObservationResults[];
       biomassObservationIds: number[];
-      plantingSiteId?: number;
+      hasFilters?: boolean;
       siteName: string;
+      plantingSitesById: Record<number, PlantingSitePayload>;
     }) => {
-      if (!selectedOrganization) {
-        return;
-      }
-
+      const fileNamePrefix = `${siteName}-${strings.AD_HOC_PLOTS}`;
       const files: { fileName: string; content: Blob | string }[] = [];
 
       if (adHocObservationsResults.length > 0) {
         files.push({
-          content: makeAdHocObservationsCsv(adHocObservationsResults),
           fileName: `${siteName}-${strings.AD_HOC_PLANT_MONITORING}`,
+          content: makeAdHocObservationsCsv(adHocObservationsResults, plantingSitesById),
         });
       }
-
       if (biomassObservationIds.length > 0) {
-        files.push({
-          content: await exportBiomassObservations(
-            { observationIds: biomassObservationIds, organizationId: selectedOrganization.id, plantingSiteId },
-            true
-          ).unwrap(),
-          fileName: `${siteName}-${strings.BIOMASS_MONITORING}`,
-        });
+        files.push(...(await makeBiomassCsvFiles(biomassObservationIds, fileNamePrefix)));
       }
-
       if (files.length === 0) {
         return;
       }
 
       await downloadZipFile({
-        dirName: `${siteName}-${strings.AD_HOC_PLOTS}`,
+        dirName: `${fileNamePrefix}${hasFilters ? '_filtered' : ''}`,
         files,
         suffix: '.csv',
       });
     },
-    [
-      exportBiomassObservations,
-      selectedOrganization,
-      strings.AD_HOC_PLANT_MONITORING,
-      strings.AD_HOC_PLOTS,
-      strings.BIOMASS_MONITORING,
-    ]
+    [makeBiomassCsvFiles, strings.AD_HOC_PLOTS, strings.AD_HOC_PLANT_MONITORING]
   );
 
   return {
@@ -700,7 +706,7 @@ const useObservationExports = () => {
     downloadObservationCsv,
     downloadObservationGpx,
     downloadBiomassObservationDetails,
-    downloadBiomassObservationsCsv,
+    downloadBiomassObservationsZip,
   };
 };
 

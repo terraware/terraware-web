@@ -97,6 +97,16 @@ const BiomassObservationDataTab = () => {
   );
 
   const soilTypeLabel = biomassMeasurement?.soilType ? soilTypeLabels[biomassMeasurement.soilType] : undefined;
+
+  const tideLabels: Record<string, string> = useMemo(
+    () => ({
+      High: strings.HIGH,
+      Low: strings.LOW,
+    }),
+    [strings]
+  );
+
+  const tideLabel = biomassMeasurement?.tide ? tideLabels[biomassMeasurement.tide] : undefined;
   const items = [
     {
       label: strings.TOTAL_PLANTS,
@@ -158,7 +168,7 @@ const BiomassObservationDataTab = () => {
     },
     {
       label: strings.TIDE,
-      value: !hasWater ? strings.NO_WATER : biomassMeasurement?.tide,
+      value: !hasWater ? strings.NO_WATER : tideLabel,
     },
     {
       label: strings.MEASUREMENT_TIME,

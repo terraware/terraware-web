@@ -27,7 +27,11 @@ import {
   StratumResponsePayload,
   SubstratumResponsePayload,
 } from 'src/queries/generated/plantingSites';
-import { useLazyGetScheduledPlantingDateWithdrawnTotalQuery } from 'src/queries/search/plantingDateRequests';
+import {
+  PlantingDateRequestStatus,
+  useLazyGetScheduledPlantingDateWithdrawnTotalQuery,
+  useListPlantingDateRequestStatusesQuery,
+} from 'src/queries/search/plantingDateRequests';
 import { useGetPlantingSeasonSpeciesSummaryQuery } from 'src/queries/search/plantingSeasons';
 import strings from 'src/strings';
 import { Species } from 'src/types/Species';
@@ -35,6 +39,7 @@ import { getMediumDate } from 'src/utils/dateFormatter';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import DeletePlantingDateModal from './DeletePlantingDateModal';
+import PlantingDateRequestStatusBadge from './PlantingDateRequestStatusBadge';
 import PlantingSeasonEventLog from './PlantingSeasonEventLog';
 import SaveAndNotifyNurseryModal from './SaveAndNotifyNurseryModal';
 
@@ -62,6 +67,9 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
   const { data: scheduledDatesData } = useGetScheduledPlantingDatesQuery(plantingSeason.id);
   const { data: speciesTargetsData } = useGetSpeciesTargetsQuery(plantingSeason.id);
   const { data: speciesSummary } = useGetPlantingSeasonSpeciesSummaryQuery(plantingSeason.id);
+  const { data: requestStatusesByDate } = useListPlantingDateRequestStatusesQuery({
+    plantingSeasonId: plantingSeason.id,
+  });
 
   const [editing, setEditing] = useState<EditingState | undefined>();
 
@@ -146,6 +154,8 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
                     key={scheduledDate.scheduledPlantingDateId}
                     scheduledDate={scheduledDate}
                     plantingSite={plantingSite}
+                    requestStatus={requestStatusesByDate?.[scheduledDate.date]}
+                    requestStatusKnown={requestStatusesByDate !== undefined}
                     onEdit={() => setEditing({ mode: 'edit', scheduledDate })}
                     readOnly={readOnly}
                   />
@@ -217,6 +227,8 @@ const EmptyState = ({ onAdd, readOnly }: { onAdd: () => void; readOnly: boolean 
 type PlantingDateListItemProps = {
   scheduledDate: ScheduledDatePayload;
   plantingSite: PlantingSitePayload;
+  requestStatus?: PlantingDateRequestStatus;
+  requestStatusKnown: boolean;
   onEdit: () => void;
   readOnly: boolean;
 };
@@ -224,6 +236,8 @@ type PlantingDateListItemProps = {
 const PlantingDateListItem = ({
   scheduledDate,
   plantingSite,
+  requestStatus,
+  requestStatusKnown,
   onEdit,
   readOnly,
 }: PlantingDateListItemProps): JSX.Element => {
@@ -338,17 +352,26 @@ const PlantingDateListItem = ({
         </Typography>
         <Box>{locationNamesList(substrataNames, !isMobile)}</Box>
       </Box>
-      {!readOnly && (
-        <Button
-          icon='iconEdit'
-          label={strings.EDIT}
-          onClick={onEdit}
-          priority='secondary'
-          type='productive'
-          size={isMobile ? 'medium' : undefined}
-          sx={mobileEditButtonSx}
-        />
-      )}
+      <Box
+        display='flex'
+        flexDirection={isMobile ? 'column' : 'row'}
+        alignItems='flex-start'
+        width={isMobile ? '100%' : undefined}
+        gap={theme.spacing(isMobile ? 1.5 : 2)}
+      >
+        {requestStatusKnown && <PlantingDateRequestStatusBadge status={requestStatus} />}
+        {!readOnly && (
+          <Button
+            icon='iconEdit'
+            label={strings.EDIT}
+            onClick={onEdit}
+            priority='secondary'
+            type='productive'
+            size={isMobile ? 'medium' : undefined}
+            sx={mobileEditButtonSx}
+          />
+        )}
+      </Box>
     </Box>
   );
 };
@@ -457,6 +480,16 @@ const PlantingDateForm = ({
     return drafts;
   });
   const [validate, setValidate] = useState(false);
+  const isDuplicateDate = useMemo(
+    () =>
+      !!date &&
+      scheduledDates.some(
+        (scheduledDate) =>
+          scheduledDate.date === date &&
+          scheduledDate.scheduledPlantingDateId !== editingScheduledDate?.scheduledPlantingDateId
+      ),
+    [date, scheduledDates, editingScheduledDate]
+  );
   const [notifyModalOpen, setNotifyModalOpen] = useState(false);
   const [notSetWarningOpen, setNotSetWarningOpen] = useState(false);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
@@ -515,6 +548,18 @@ const PlantingDateForm = ({
     return map;
   }, [substrataDrafts]);
 
+  const { draftSpeciesCount, draftTotalPlants } = useMemo(() => {
+    let speciesCount = 0;
+    let totalPlants = 0;
+    scheduledThisDateBySpecies.forEach((quantity) => {
+      if (quantity > 0) {
+        speciesCount += 1;
+        totalPlants += quantity;
+      }
+    });
+    return { draftSpeciesCount: speciesCount, draftTotalPlants: totalPlants };
+  }, [scheduledThisDateBySpecies]);
+
   const updateSubstratum = (substratumId: number, updater: (draft: SubstratumDraft) => SubstratumDraft) => {
     setSubstrataDrafts((prev) => ({
       ...prev,
@@ -549,6 +594,9 @@ const PlantingDateForm = ({
       setValidate(true);
       return false;
     }
+    if (isDuplicateDate) {
+      return false;
+    }
     const speciesPayload = buildPayloadSpecies();
     const payload = {
       date,
@@ -575,7 +623,11 @@ const PlantingDateForm = ({
       }
       return true;
     } catch (e) {
-      snackbar.toastError();
+      if ((e as { status?: number })?.status === 409) {
+        snackbar.toastError(strings.PLANTING_DATE_ALREADY_SCHEDULED);
+      } else {
+        snackbar.toastError();
+      }
       return false;
     }
   };
@@ -656,7 +708,9 @@ const PlantingDateForm = ({
           label=''
           value={date}
           onDateChange={(value?: DateTime) => setDate(value?.toISODate() ?? '')}
-          errorText={validate && !date ? strings.REQUIRED_FIELD : ''}
+          errorText={
+            validate && !date ? strings.REQUIRED_FIELD : isDuplicateDate ? strings.PLANTING_DATE_ALREADY_SCHEDULED : ''
+          }
           defaultTimeZone={timeZoneId}
         />
       </Box>
@@ -689,55 +743,66 @@ const PlantingDateForm = ({
         display='flex'
         flexDirection={isMobile ? 'column' : 'row'}
         alignItems={isMobile ? 'stretch' : 'center'}
-        justifyContent='flex-end'
-        gap={isMobile ? theme.spacing(1.5) : theme.spacing(1)}
+        justifyContent='space-between'
+        gap={isMobile ? theme.spacing(1.5) : theme.spacing(2)}
         marginTop={theme.spacing(2)}
       >
-        {isEditing && (
+        <Typography fontSize='16px' color={theme.palette.TwClrTxt}>
+          {strings.formatString(strings.X_SPECIES_Y_PLANTS, draftSpeciesCount, draftTotalPlants).toString()}
+        </Typography>
+        <Box
+          display='flex'
+          flexDirection={isMobile ? 'column' : 'row'}
+          alignItems={isMobile ? 'stretch' : 'center'}
+          justifyContent='flex-end'
+          gap={isMobile ? theme.spacing(1.5) : theme.spacing(1)}
+        >
+          {isEditing && (
+            <Button
+              label={strings.DELETE}
+              onClick={() => void openDeleteConfirmation()}
+              priority='secondary'
+              type='destructive'
+              disabled={isSaving || isCheckingWithdrawals}
+              size={isMobile ? 'medium' : undefined}
+              sx={mobileFooterButtonSx}
+            />
+          )}
           <Button
-            label={strings.DELETE}
-            onClick={() => void openDeleteConfirmation()}
+            label={strings.CANCEL}
+            onClick={onClose}
             priority='secondary'
-            type='destructive'
-            disabled={isSaving || isCheckingWithdrawals}
+            type='passive'
+            disabled={isSaving}
             size={isMobile ? 'medium' : undefined}
             sx={mobileFooterButtonSx}
           />
-        )}
-        <Button
-          label={strings.CANCEL}
-          onClick={onClose}
-          priority='secondary'
-          type='passive'
-          disabled={isSaving}
-          size={isMobile ? 'medium' : undefined}
-          sx={mobileFooterButtonSx}
-        />
-        <Tooltip title={strings.SAVE_TOOLTIP}>
-          <span style={tooltipButtonWrapperStyle}>
-            <Button
-              label={strings.SAVE}
-              onClick={() => void onSave()}
-              priority='secondary'
-              type={isMobile ? 'passive' : 'productive'}
-              disabled={isSaving}
-              size={isMobile ? 'medium' : undefined}
-              sx={mobileFooterButtonSx}
-            />
-          </span>
-        </Tooltip>
-        <Tooltip title={strings.SAVE_AND_REQUEST_TOOLTIP} slotProps={{ tooltip: { sx: { maxWidth: '262px' } } }}>
-          <span style={tooltipButtonWrapperStyle}>
-            <Button
-              label={strings.SAVE_AND_REQUEST}
-              onClick={onSaveAndRequest}
-              disabled={isSaving || !date || !hasAnySpeciesWithQuantity}
-              priority={isMobile ? 'secondary' : 'primary'}
-              size={isMobile ? 'medium' : undefined}
-              sx={mobileFooterButtonSx}
-            />
-          </span>
-        </Tooltip>
+          <Tooltip title={strings.SAVE_TOOLTIP}>
+            <span style={tooltipButtonWrapperStyle}>
+              <Button
+                label={strings.SAVE}
+                onClick={() => void onSave()}
+                priority='secondary'
+                type={isMobile ? 'passive' : 'productive'}
+                disabled={isSaving || isDuplicateDate}
+                size={isMobile ? 'medium' : undefined}
+                sx={mobileFooterButtonSx}
+              />
+            </span>
+          </Tooltip>
+          <Tooltip title={strings.SAVE_AND_REQUEST_TOOLTIP} slotProps={{ tooltip: { sx: { maxWidth: '262px' } } }}>
+            <span style={tooltipButtonWrapperStyle}>
+              <Button
+                label={strings.SAVE_AND_REQUEST}
+                onClick={onSaveAndRequest}
+                disabled={isSaving || !date || isDuplicateDate || !hasAnySpeciesWithQuantity}
+                priority={isMobile ? 'secondary' : 'primary'}
+                size={isMobile ? 'medium' : undefined}
+                sx={mobileFooterButtonSx}
+              />
+            </span>
+          </Tooltip>
+        </Box>
       </Box>
 
       {confirmingDelete && (

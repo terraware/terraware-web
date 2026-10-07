@@ -1,11 +1,13 @@
-import { CachedUserService } from 'src/services';
+import { useGetUserPreferencesQuery } from 'src/queries/generated/preferences';
+import { useGetMyselfQuery } from 'src/queries/generated/users';
 import env from 'src/utils/useEnvironment';
+import { isTerraformationEmail } from 'src/utils/user';
 
 export type FeatureName =
   | 'Show Production View'
   | 'Virtual Monitoring Plots'
-  | 'Report Updates July 2026'
-  | 'New Observation Filters';
+  | 'New Observation Filters'
+  | 'Boundary File Upload';
 
 export type Feature = {
   name: FeatureName;
@@ -49,21 +51,23 @@ export const OPT_IN_FEATURES: Feature[] = [
     disclosure: ['This is a WIP'],
   },
   {
-    name: 'Report Updates July 2026',
-    preferenceName: 'reportUpdatesJuly2026',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Redesigned report tab for participants, accelerator admins, and funders.'],
-    disclosure: ['This is a WIP'],
-  },
-  {
     name: 'New Observation Filters',
     preferenceName: 'newObservationFilters',
     active: true,
     enabled: false,
     allowInternalProduction: false,
     description: ['Redesigned filters for observation results.'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Boundary File Upload',
+    preferenceName: 'boundaryFileUpload',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: [
+      'Define a planting site boundary by uploading a spatial file (KML, KMZ, GeoJSON, or zipped shapefile) instead of drawing it.',
+    ],
     disclosure: ['This is a WIP'],
   },
 ];
@@ -78,11 +82,14 @@ OPT_IN_FEATURES.forEach((feature) => {
 });
 
 /**
- * Utility function to check if a feature is enabled
+ * Hook to check if a feature is enabled
  */
-export default function isEnabled(name: FeatureName, organizationId?: number) {
+export const useFeatureEnabled = (name: FeatureName): boolean => {
   const { isProduction } = env();
   const feature = FEATURE_MAP[name];
+
+  const { currentData: preferencesData } = useGetUserPreferencesQuery(undefined);
+  const { currentData: userData } = useGetMyselfQuery();
 
   if (!feature) {
     return false;
@@ -97,14 +104,8 @@ export default function isEnabled(name: FeatureName, organizationId?: number) {
   }
 
   if (!isProduction) {
-    const preferences =
-      organizationId !== undefined
-        ? CachedUserService.getUserOrgPreferences(organizationId)
-        : CachedUserService.getUserPreferences();
-    const preferenceName = feature.preferenceName;
-
-    return preferences && preferences[preferenceName] === true;
+    return preferencesData?.preferences?.[feature.preferenceName] === true;
   }
 
-  return feature.allowInternalProduction && CachedUserService.getUser().isTerraformation;
-}
+  return feature.allowInternalProduction && isTerraformationEmail(userData?.user.email);
+};

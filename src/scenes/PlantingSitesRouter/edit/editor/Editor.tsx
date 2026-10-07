@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, Message } from '@terraware/web-components';
@@ -8,6 +8,7 @@ import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
 import TextWithLink from 'src/components/common/TextWithLink';
 import TfMain from 'src/components/common/TfMain';
+import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -22,6 +23,7 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import CloseSetupConfirmation from './CloseSetupConfirmation';
 import Details from './Details';
 import Exclusions from './Exclusions';
 import Form, { PlantingSiteStep } from './Form';
@@ -30,6 +32,8 @@ import StartOverConfirmation from './StartOverConfirmation';
 import Strata from './Strata';
 import Substrata from './Substrata';
 import { OnValidate } from './types';
+
+type SaveAction = 'back' | 'draft' | 'next';
 
 export type EditorProps = {
   site: DraftPlantingSite;
@@ -67,7 +71,8 @@ export default function Editor(props: EditorProps): JSX.Element {
   const { site } = props;
   const { siteEditStep, siteType } = site;
   const { activeLocale } = useLocalization();
-  const contentRef = useRef(null);
+  const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
+  const contentRef = useCallback((node: HTMLElement | null) => setContentElement(node), []);
   const navigate = useSyncNavigate();
   const { goToPlantingSiteView } = useNavigateTo();
   const theme = useTheme();
@@ -81,7 +86,17 @@ export default function Editor(props: EditorProps): JSX.Element {
   const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<OptionalSiteEditStep, boolean>>(
     initializeOptionalStepsStatus(site)
   );
+  const [baselineSite, setBaselineSite] = useState(site);
+  const [mapDirty, setMapDirty] = useState(false);
   const [plantingSite, setPlantingSite, onChange] = useForm({ ...site });
+  const [showCloseConfirmation, setShowCloseConfirmation] = useState<boolean>(false);
+
+  const isDirty =
+    mapDirty ||
+    plantingSite.name !== baselineSite.name ||
+    (plantingSite.description ?? '') !== (baselineSite.description ?? '') ||
+    (plantingSite.timeZone ?? null) !== (baselineSite.timeZone ?? null) ||
+    (plantingSite.projectId ?? null) !== (baselineSite.projectId ?? null);
 
   const onFinalizeSuccess = useCallback(
     (plantingSiteId: number) => {
@@ -105,6 +120,8 @@ export default function Editor(props: EditorProps): JSX.Element {
   useEffect(() => {
     if (createdDraft) {
       setPlantingSite(createdDraft.draft);
+      setBaselineSite(createdDraft.draft);
+      setMapDirty(false);
       setCurrentStep(createdDraft.nextStep);
       onFinishCreate();
     }
@@ -114,6 +131,8 @@ export default function Editor(props: EditorProps): JSX.Element {
   useEffect(() => {
     if (updatedDraft) {
       setPlantingSite(updatedDraft.draft);
+      setBaselineSite(updatedDraft.draft);
+      setMapDirty(false);
       setCurrentStep(updatedDraft.nextStep);
       if (updatedDraft.optionalSteps) {
         setCompletedOptionalSteps(updatedDraft.optionalSteps);
@@ -187,27 +206,41 @@ export default function Editor(props: EditorProps): JSX.Element {
     return stepIndex;
   }, [currentStep, steps]);
 
-  const onCancel = useCallback(() => {
-    // TODO: confirm with user?
-    goToPlantingSites();
-  }, [goToPlantingSites]);
+  const onClose = useCallback(() => {
+    if (isDirty) {
+      setShowCloseConfirmation(true);
+    } else {
+      goToPlantingSites();
+    }
+  }, [goToPlantingSites, isDirty]);
+
+  const onKeepEditing = useCallback(() => setShowCloseConfirmation(false), []);
 
   const onSave = useCallback(
-    (close: boolean) => () => {
+    (action: SaveAction) => () => {
       // wait for component to return
       if (onValidate) {
         return;
       }
+      const stepIndex = getCurrentStepIndex();
+      const isLastStep = stepIndex === steps.length - 1;
+      const isFinalizing = action === 'next' && isLastStep;
+      const redirect = action === 'draft' || isFinalizing;
+
+      const getNextStep = (): SiteEditStep => {
+        if (action === 'back') {
+          return steps[stepIndex - 1].type;
+        }
+        // if user saves a draft we want to bring user back to the same step in the flow on next visit
+        return redirect ? currentStep : steps[stepIndex + 1].type;
+      };
+
       setOnValidate({
-        isSaveAndClose: close,
-        apply: (hasErrors: boolean, data?: Partial<DraftPlantingSite>, isOptionalCompleted?: boolean) => {
+        allowIncomplete: action !== 'next',
+        apply: (hasErrors: boolean, data?: Partial<DraftPlantingSite>) => {
           setOnValidate(undefined);
           if (!hasErrors) {
-            const isLastStep = currentStep === steps[steps.length - 1].type;
-            const redirect = close || isLastStep;
-            // if user hits Save&Close we want to bring user back to the same step in the flow on next visit
-            const nextStep = redirect ? currentStep : steps[getCurrentStepIndex() + 1].type;
-
+            const nextStep = getNextStep();
             const draft: DraftPlantingSite = {
               ...plantingSite,
               ...(data ?? {}),
@@ -217,33 +250,31 @@ export default function Editor(props: EditorProps): JSX.Element {
             if (plantingSite.id === -1) {
               // new site
               createDraft({ draft, nextStep }, redirect);
-            } else if (isLastStep && !close) {
+            } else if (isFinalizing) {
               // user is done with create wizard, create the site and delete the draft
               finalize(draft);
             } else {
-              // update the draft
-              const optionalSteps =
-                isOptionalCompleted !== undefined
-                  ? { ...completedOptionalSteps, [currentStep]: isOptionalCompleted }
-                  : undefined;
-              updateDraft({ draft, nextStep, optionalSteps }, redirect);
+              updateDraft({ draft, nextStep, optionalSteps: initializeOptionalStepsStatus(draft) }, redirect);
             }
           }
         },
       });
     },
-    [
-      completedOptionalSteps,
-      createDraft,
-      currentStep,
-      finalize,
-      getCurrentStepIndex,
-      onValidate,
-      plantingSite,
-      steps,
-      updateDraft,
-    ]
+    [createDraft, currentStep, finalize, getCurrentStepIndex, onValidate, plantingSite, steps, updateDraft]
   );
+
+  const onBack = useCallback(() => {
+    if (isDirty) {
+      onSave('back')();
+    } else {
+      setCurrentStep(steps[getCurrentStepIndex() - 1].type);
+    }
+  }, [getCurrentStepIndex, isDirty, onSave, steps]);
+
+  const onSaveAsDraft = useCallback(() => {
+    setShowCloseConfirmation(false);
+    onSave('draft')();
+  }, [onSave]);
 
   /**
    * On start over, data is reset to clear all boundaries and only keep the details information.
@@ -286,19 +317,83 @@ export default function Editor(props: EditorProps): JSX.Element {
     }
   }, [currentStep, isSimpleSite, showPageMessage]);
 
+  const busy = isCreating || isUpdating || isPending || !!onValidate;
+  const isFinalStep = currentStep === steps[steps.length - 1]?.type;
+
   return (
     <TfMain>
       {isPending && <BusySpinner withSkrim={true} />}
       {(isCreating || isUpdating) && <BusySpinner />}
       {showStartOver && <StartOverConfirmation onClose={onCloseStartOver} onConfirm={onStartOver} />}
-      <PageHeaderWrapper nextElement={contentRef.current}>
-        <Box sx={{ padding: theme.spacing(0, 0, 2, 3), display: 'flex' }}>
-          <Typography fontSize='24px' fontWeight={600}>
-            {strings.ADD_PLANTING_SITE}
-          </Typography>
+      {showCloseConfirmation && (
+        <CloseSetupConfirmation
+          isNewSite={plantingSite.id === -1}
+          onDiscard={goToPlantingSites}
+          onKeepEditing={onKeepEditing}
+          onSaveAsDraft={onSaveAsDraft}
+          siteName={plantingSite.name.trim()}
+        />
+      )}
+      <PageHeaderWrapper alwaysVisible={!isMobile} elevated={!isMobile && isDirty} nextElement={contentElement}>
+        <Box
+          padding={theme.spacing(0, 0, 2, 3)}
+          display='flex'
+          alignItems='center'
+          justifyContent='space-between'
+          flexWrap='wrap'
+          gap={theme.spacing(1.5)}
+        >
+          <Box display='flex' alignItems='center' flexWrap='wrap' gap={theme.spacing(1.5)}>
+            <Typography fontSize='24px' fontWeight={600}>
+              {strings.ADD_PLANTING_SITE}
+            </Typography>
+            {isDirty && <UnsavedChangesBadge />}
+          </Box>
+          {!isMobile && (
+            <Box display='flex' alignItems='center' flexWrap='wrap' justifyContent='flex-end' gap={theme.spacing(1)}>
+              <Button
+                id='close-planting-site-create'
+                label={strings.CLOSE}
+                onClick={onClose}
+                disabled={busy}
+                priority='secondary'
+                type='passive'
+                size='medium'
+              />
+              {isFinalStep && (
+                <Button
+                  id='start-over'
+                  label={strings.RESET_BOUNDARY_SETUP}
+                  onClick={onOpenStartOver}
+                  disabled={busy}
+                  priority='secondary'
+                  type='passive'
+                  size='medium'
+                />
+              )}
+              {currentStep !== 'details' && (
+                <Button
+                  id='back-planting-site-create'
+                  label={strings.BACK}
+                  onClick={onBack}
+                  disabled={busy}
+                  priority='secondary'
+                  type='passive'
+                  size='medium'
+                />
+              )}
+              <Button
+                id='save-planting-site-create'
+                label={isFinalStep ? strings.CREATE_PLANTING_SITE : strings.NEXT}
+                onClick={onSave('next')}
+                disabled={busy}
+                size='medium'
+              />
+            </Box>
+          )}
         </Box>
       </PageHeaderWrapper>
-      <Grid item xs={12}>
+      <Grid item xs={12} ref={contentRef}>
         <PageSnackbar />
       </Grid>
       {isMobile && (
@@ -321,10 +416,6 @@ export default function Editor(props: EditorProps): JSX.Element {
       {!isMobile && (
         <Form
           currentStep={currentStep}
-          onCancel={onCancel}
-          onSaveAndNext={onSave(false)}
-          onSaveAndClose={onSave(true)}
-          onStartOver={onOpenStartOver}
           steps={steps}
           style={{
             display: 'flex',
@@ -333,7 +424,7 @@ export default function Editor(props: EditorProps): JSX.Element {
           }}
         >
           {pageMessage && (
-            <Box marginTop={theme.spacing(6)}>
+            <Box marginTop={theme.spacing(2)}>
               <Message
                 body={pageMessage}
                 onClose={onClosePageMessage}
@@ -344,7 +435,7 @@ export default function Editor(props: EditorProps): JSX.Element {
               />
             </Box>
           )}
-          <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(4) }}>
+          <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(2) }}>
             {currentStep === 'details' && (
               <Details
                 onChange={onChange}
@@ -353,10 +444,18 @@ export default function Editor(props: EditorProps): JSX.Element {
                 site={plantingSite}
               />
             )}
-            {currentStep === 'site_boundary' && <SiteBoundary onValidate={onValidate} site={plantingSite} />}
-            {currentStep === 'exclusion_areas' && <Exclusions onValidate={onValidate} site={plantingSite} />}
-            {currentStep === 'stratum_boundaries' && <Strata onValidate={onValidate} site={plantingSite} />}
-            {currentStep === 'substratum_boundaries' && <Substrata onValidate={onValidate} site={plantingSite} />}
+            {currentStep === 'site_boundary' && (
+              <SiteBoundary onDirtyChange={setMapDirty} onValidate={onValidate} site={plantingSite} />
+            )}
+            {currentStep === 'exclusion_areas' && (
+              <Exclusions onDirtyChange={setMapDirty} onValidate={onValidate} site={plantingSite} />
+            )}
+            {currentStep === 'stratum_boundaries' && (
+              <Strata onDirtyChange={setMapDirty} onValidate={onValidate} site={plantingSite} />
+            )}
+            {currentStep === 'substratum_boundaries' && (
+              <Substrata onDirtyChange={setMapDirty} onValidate={onValidate} site={plantingSite} />
+            )}
           </Card>
         </Form>
       )}

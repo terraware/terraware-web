@@ -128,6 +128,7 @@ const injectedRtkApi = api.injectEndpoints({
         params: {
           caption: queryArg.caption,
           fileBatchId: queryArg.fileBatchId,
+          isOriginal: queryArg.isOriginal,
           position: queryArg.position,
           type: queryArg['type'],
         },
@@ -294,6 +295,7 @@ export type UploadOtherPlotMediaApiArg = {
   plotId: number;
   caption?: string;
   fileBatchId?: number;
+  isOriginal?: boolean;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
   type?: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';
   body: {
@@ -630,6 +632,10 @@ export type ObservationMonitoringPlotResultsPayload = {
   )[];
   /** Observed coordinates, if any, up to one per position. */
   coordinates: ObservationMonitoringPlotCoordinatesPayload[];
+  /** ID of the stratum the monitoring plot is currently located in, if any. This may differ from the stratum it was in at the time of the observation. */
+  currentStratumId?: number;
+  /** ID of the substratum the monitoring plot is currently located in, if any. This may differ from the substratum it was in at the time of the observation. */
+  currentSubstratumId?: number;
   elevationMeters?: number;
   isAdHoc: boolean;
   /** True if this was a permanent monitoring plot in this observation. Clients should not assume that the set of permanent monitoring plots is the same in all observations; the number of permanent monitoring plots can be adjusted over time based on observation results. */
@@ -653,6 +659,14 @@ export type ObservationMonitoringPlotResultsPayload = {
   sizeMeters: number;
   species: ObservationSpeciesResultsPayload[];
   status: 'Unclaimed' | 'Claimed' | 'Completed' | 'Not Observed';
+  /** ID of the stratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a stratum or if the stratum has since been deleted. */
+  stratumId?: number;
+  /** Name of the stratum the monitoring plot was in at the time of the observation, if any. */
+  stratumName?: string;
+  /** ID of the substratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a substratum or if the substratum has since been deleted. */
+  substratumId?: number;
+  /** Full name of the substratum the monitoring plot was in at the time of the observation, if any. */
+  substratumName?: string;
   /** If this is a permanent monitoring plot in this observation, percentage of plants that have survived since t0 data. */
   survivalRate?: number;
   /** Total number of plants recorded. Includes all plants, regardless of live/dead status or species. */
@@ -944,17 +958,17 @@ export type AssignedPlotPayload = {
   /** Use substratumId instead */
   plantingSubzoneId?: number;
   /** Use substratumName instead */
-  plantingSubzoneName: string;
+  plantingSubzoneName?: string;
   /** Use stratumName instead */
-  plantingZoneName: string;
+  plantingZoneName?: string;
   plotId: number;
   plotName: string;
   plotNumber: number;
   /** Length of each edge of the monitoring plot in meters. */
   sizeMeters: number;
-  stratumName: string;
+  stratumName?: string;
   substratumId?: number;
-  substratumName: string;
+  substratumName?: string;
 };
 export type GetOneAssignedPlotResponsePayload = {
   plot: AssignedPlotPayload;
@@ -1135,6 +1149,8 @@ export type UploadPlotMediaResponsePayload = {
 export type UploadPlotMediaRequestPayload = {
   caption?: string;
   fileBatchId?: number;
+  /** If true, this file should be considered part of the original observation. */
+  isOriginal?: boolean;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
   /** Type of subject the uploaded file depicts. */
   type?: 'Plot' | 'Quadrat' | 'Soil' | 'Explanation';

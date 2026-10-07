@@ -58,12 +58,12 @@ function downloadBlob(fileName: string, content: Blob) {
 }
 
 /**
- * Generates and downloads a zip archive of a set of files.
+ * Generates a zip archive of a set of files.
  *
  * @throws Error The zipfile couldn't be constructed, e.g., because one of the content generation
  * functions returned null.
  */
-export default async function downloadZipFile(params: DownloadZipFileParams) {
+export const createZipFile = async (params: DownloadZipFileParams): Promise<Blob> => {
   const { dirName, files, suffix } = params;
   const sanitizedDirName = sanitize(dirName);
   const effectiveSuffix = suffix !== undefined ? suffix : '';
@@ -94,7 +94,10 @@ export default async function downloadZipFile(params: DownloadZipFileParams) {
 
   await Promise.all(contentPromises);
 
-  const zipContent = await zip.generateAsync({ type: 'blob' });
+  return zip.generateAsync({ type: 'blob' });
+};
 
-  downloadBlob(sanitizedDirName + '.zip', zipContent);
+export default async function downloadZipFile(params: DownloadZipFileParams) {
+  const zipContent = await createZipFile(params);
+  downloadBlob(sanitize(params.dirName) + '.zip', zipContent);
 }

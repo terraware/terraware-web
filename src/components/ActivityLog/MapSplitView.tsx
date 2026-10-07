@@ -1,6 +1,5 @@
-import React, { type JSX, MutableRefObject, useCallback, useEffect, useMemo, useState } from 'react';
-import { MapRef, ViewStateChangeEvent } from 'react-map-gl/mapbox';
-import { useSearchParams } from 'react-router';
+import React, { type JSX, MutableRefObject, useCallback, useEffect, useMemo } from 'react';
+import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, useTheme } from '@mui/material';
 import { useDeviceInfo } from '@terraware/web-components/utils';
@@ -14,7 +13,6 @@ import {
   MapMarkerGroup,
   MapNameTag,
   MapPoint,
-  MapViewState,
 } from 'src/components/NewMap/types';
 import useMapUtils from 'src/components/NewMap/useMapUtils';
 import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
@@ -52,8 +50,6 @@ export default function MapSplitView({
   const { mapId, refreshToken, token } = useMapboxToken();
   const { fitBounds } = useMapUtils(mapRef);
   const { plantingSites } = useProjectPlantingSites({ projectId });
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [previousProjectId, setPreviousProjectId] = useState(projectId);
 
   const onActivityMarkerClickCallback = useCallback(
     (activityId: number, fileId: number) => () => onActivityMarkerClick?.(activityId, fileId),
@@ -71,26 +67,6 @@ export default function MapSplitView({
     },
     [onActivityMarkerClick]
   );
-
-  const [initialMapViewState, setInitialMapViewState] = useState((): MapViewState | undefined => {
-    const latParam = searchParams.get('lat');
-    const lngParam = searchParams.get('lng');
-    const zoomParam = searchParams.get('zoom');
-
-    if (latParam && lngParam && zoomParam) {
-      const latitude = Number(latParam);
-      const longitude = Number(lngParam);
-      const zoom = Number(zoomParam);
-
-      if (!isNaN(latitude) && !isNaN(longitude) && !isNaN(zoom)) {
-        return {
-          latitude,
-          longitude,
-          zoom,
-        };
-      }
-    }
-  });
 
   const markerGroups = useMemo((): MapMarkerGroup[] => {
     if (!activities) {
@@ -188,30 +164,13 @@ export default function MapSplitView({
       .filter((nameTag): nameTag is MapNameTag => nameTag !== undefined);
   }, [fitBounds, plantingSites]);
 
-  if (projectId !== previousProjectId) {
-    setPreviousProjectId(projectId);
-    setInitialMapViewState(undefined);
-  }
-
   useEffect(() => {
-    if (!initialMapViewState && siteFeatures.length > 0) {
-      // If no map view state is provided, move map to features
+    if (siteFeatures.length > 0) {
       const multipolygons = siteFeatures.map((feature) => feature.geometry);
       const boundingBox = getBoundingBoxFromMultiPolygons(multipolygons);
       fitBounds(boundingBox);
     }
-  }, [fitBounds, initialMapViewState, siteFeatures]);
-
-  const onMapMoveCallback = useCallback(
-    (view: ViewStateChangeEvent) => {
-      const params = new URLSearchParams(searchParams);
-      params.set('lat', view.viewState.latitude.toString());
-      params.set('lng', view.viewState.longitude.toString());
-      params.set('zoom', view.viewState.zoom.toString());
-      setSearchParams(params, { replace: true });
-    },
-    [searchParams, setSearchParams]
-  );
+  }, [fitBounds, siteFeatures]);
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
@@ -233,13 +192,11 @@ export default function MapSplitView({
         drawerRef={drawerRef}
         drawerSize='large'
         hideBorder
-        initialViewState={initialMapViewState}
         mapRef={mapRef}
         mapMarkers={markerGroups}
         mapLayers={mapLayers}
         mapId={mapId}
         nameTags={nameTags}
-        onMapMove={onMapMoveCallback}
         onTokenExpired={refreshToken}
         token={token ?? ''}
         controlTopLeft={<ColorKeyControl />}

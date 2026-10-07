@@ -17,14 +17,15 @@ import Link from 'src/components/common/Link';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
 import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
-import isEnabled from 'src/features';
+import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
-import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
+import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers/hooks';
 import { makeDateRangeFilterFn, stripColumnFilters } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
+import { useObservationFilters } from '../ObservationFiltersProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
 import SelectObservationButton from './SelectObservationButton';
@@ -67,9 +68,10 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
   const theme = useTheme();
   const { strings } = useLocalization();
   const defaultTimezone = useDefaultTimeZone().get().id;
-  const { downloadBiomassObservationsCsv } = useObservationExports();
+  const { downloadBiomassObservationsZip } = useObservationExports();
 
-  const newFiltersEnabled = isEnabled('New Observation Filters');
+  const { activeFilterCount } = useObservationFilters();
+  const newFiltersEnabled = useFeatureEnabled('New Observation Filters');
 
   const {
     columnFilters,
@@ -238,17 +240,27 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
     ActionsMenuCell,
   ]);
 
-  const onExportBiomassObservations = useCallback(async () => {
-    const siteName =
-      typeof plantingSiteId === 'number'
-        ? plantingSitesNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
-        : strings.ALL_PLANTING_SITES;
-    await downloadBiomassObservationsCsv(siteName, plantingSiteId === ALL_PLANTING_SITES ? undefined : plantingSiteId);
-  }, [downloadBiomassObservationsCsv, plantingSiteId, plantingSitesNames, strings.ALL_PLANTING_SITES]);
-
-  const handleExportClick = useCallback(() => {
-    void onExportBiomassObservations();
-  }, [onExportBiomassObservations]);
+  const onExportBiomassObservations = useCallback(
+    async (filteredRows: BiomassRow[], hasTableFilters: boolean) => {
+      const siteName =
+        typeof plantingSiteId === 'number'
+          ? plantingSitesNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
+          : strings.ALL_PLANTING_SITES;
+      await downloadBiomassObservationsZip(
+        siteName,
+        filteredRows,
+        hasTableFilters || (newFiltersEnabled && activeFilterCount > 0)
+      );
+    },
+    [
+      activeFilterCount,
+      downloadBiomassObservationsZip,
+      newFiltersEnabled,
+      plantingSiteId,
+      plantingSitesNames,
+      strings.ALL_PLANTING_SITES,
+    ]
+  );
 
   if (!isLoading && rows.length === 0) {
     return (
@@ -305,7 +317,15 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
             <Box display='flex' gap={0.5}>
               {rows.length > 0 && (
                 <Tooltip title={strings.EXPORT}>
-                  <IconButton onClick={handleExportClick}>
+                  <IconButton
+                    disabled={table.getFilteredRowModel().rows.length === 0}
+                    onClick={() =>
+                      void onExportBiomassObservations(
+                        table.getFilteredRowModel().rows.map((row) => row.original),
+                        table.getState().columnFilters.length > 0 || Boolean(table.getState().globalFilter)
+                      )
+                    }
+                  >
                     <Icon name='iconExport' size='medium' />
                   </IconButton>
                 </Tooltip>

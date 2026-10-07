@@ -8,6 +8,7 @@ const injectedRtkApi = api.injectEndpoints({
         params: {
           organizationId: queryArg.organizationId,
           projectId: queryArg.projectId,
+          plantingSiteId: queryArg.plantingSiteId,
         },
       }),
     }),
@@ -17,9 +18,11 @@ const injectedRtkApi = api.injectEndpoints({
 export { injectedRtkApi as api };
 export type GetAggregatedTrackingStatsApiResponse = /** status 200 OK */ TrackingStatsResponsePayload;
 export type GetAggregatedTrackingStatsApiArg = {
-  /** Organization ID to summarize. Ignored if projectId is supplied. */
+  /** Organization ID to summarize. Ignored if projectId or plantingSiteId is supplied. */
   organizationId?: number;
+  /** Project ID to summarize. Ignored if plantingSiteId is supplied. */
   projectId?: number;
+  plantingSiteId?: number;
 };
 export type SuccessOrError = 'ok' | 'error';
 export type TrackingStatsResponsePayload = {

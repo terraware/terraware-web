@@ -10,6 +10,8 @@ import { DateTime } from 'luxon';
 import Card from 'src/components/common/Card';
 import DatePicker from 'src/components/common/DatePicker';
 import PageForm from 'src/components/common/PageForm';
+import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
+import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useAcceleratorProjects } from 'src/hooks/useAcceleratorProjects';
@@ -76,6 +78,23 @@ type SavableActivity = (CreateActivityRequestPayload | UpdateActivityRequestPayl
 
 type FormRecord = Partial<SavableActivity> | undefined;
 
+const getComparableActivity = (activity: FormRecord): string =>
+  JSON.stringify({
+    date: activity?.date ?? '',
+    description: activity?.description ?? '',
+    isHighlight: !!activity?.isHighlight,
+    status: activity?.status ?? null,
+    type: activity?.type ?? null,
+  });
+
+const getComparableMedia = (media: ExistingActivityMediaItem['data']): string =>
+  JSON.stringify({
+    caption: media.caption ?? '',
+    isCoverPhoto: !!media.isCoverPhoto,
+    isHiddenOnMap: !!media.isHiddenOnMap,
+    listPosition: media.listPosition,
+  });
+
 export default function ActivityDetailsForm({ activityId, projectId }: ActivityDetailsFormProps): JSX.Element {
   const { strings } = useLocalization();
   const { isAllowed } = useUser();
@@ -95,6 +114,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
 
   const [source, setSource] = useState<string | null>();
   const [record, setRecord, onChange, onChangeCallback] = useForm<FormRecord>(undefined);
+  const [baselineRecord, setBaselineRecord] = useState<FormRecord>();
+  const [contentElement, setContentElement] = useState<HTMLElement | null>(null);
+  const contentRef = useCallback((node: HTMLElement | null) => setContentElement(node), []);
   const [mediaItems, setMediaItems] = useState<ActivityMediaItem[]>([]);
   const [validateFields, setValidateFields] = useState<boolean>(false);
   const [busy, setBusy] = useState<boolean>(false);
@@ -467,6 +489,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     };
 
     setRecord({ ...newActivity });
+    setBaselineRecord({ ...newActivity });
   }, [isEditing, projectId, record, selectedOrganization, setRecord]);
 
   // show error if get activity fails
@@ -489,6 +512,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         type: activity.payload.type,
       };
       setRecord({ ...activityRecord });
+      setBaselineRecord({ ...activityRecord });
     }
   }, [isEditing, activity, setRecord, projectId]);
 
@@ -624,6 +648,59 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
     }
   }, [activity, mediaItems]);
 
+  const isDirty = useMemo(() => {
+    const fieldsChanged = getComparableActivity(record) !== getComparableActivity(baselineRecord);
+    const originalMedia = new Map(activity?.payload.media.map((media) => [media.fileId, media]) ?? []);
+    const mediaChanged = mediaItems.some((item) => {
+      if (item.type === 'new' || item.isDeleted) {
+        return true;
+      }
+      const original = originalMedia.get(item.data.fileId);
+      return !original || getComparableMedia(item.data) !== getComparableMedia(original);
+    });
+    return fieldsChanged || mediaChanged;
+  }, [record, baselineRecord, activity, mediaItems]);
+
+  const header = (
+    <Box
+      alignItems={isMobile ? 'flex-start' : 'center'}
+      display='flex'
+      flexWrap='wrap'
+      gap={theme.spacing(1.5)}
+      justifyContent='space-between'
+      marginBottom={isAcceleratorRoute ? theme.spacing(2) : '2px'}
+      marginTop='2px'
+      paddingLeft={theme.spacing(4)}
+    >
+      <Box alignItems='center' display='flex' flexWrap='wrap' gap={theme.spacing(1.5)}>
+        <Typography fontSize='24px' fontWeight={600} lineHeight='32px' variant='h1'>
+          {primaryHeader}
+        </Typography>
+        {isAcceleratorRoute && isDirty && <UnsavedChangesBadge />}
+      </Box>
+      {isAcceleratorRoute && (
+        <Box alignItems='center' display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
+          <Button
+            disabled={busy}
+            id='cancelSaveActivity'
+            label={strings.CANCEL}
+            onClick={() => navToActivityLog()}
+            priority='secondary'
+            size='medium'
+            type='passive'
+          />
+          <Button
+            disabled={!isDirty || busy}
+            id='saveActivity'
+            label={strings.SAVE}
+            onClick={() => void saveActivity()}
+            size='medium'
+          />
+        </Box>
+      )}
+    </Box>
+  );
+
   if (!record) {
     return <></>;
   }
@@ -631,6 +708,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   return (
     <PageForm
       busy={busy}
+      hideEdit={isAcceleratorRoute}
       cancelID='cancelSaveActivity'
       onCancel={navToActivityLog}
       onSave={() => void saveActivity()}
@@ -643,211 +721,208 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         onClose={handleCloseDeleteActivityModal}
         onSubmit={() => void dispatchDeleteActivityRequest()}
       />
-      <Box
-        alignItems={isMobile ? 'flex-start' : 'center'}
-        display='flex'
-        flexDirection={isMobile ? 'column' : 'row'}
-        justifyContent='space-between'
-        marginBottom='2px'
-        marginTop='2px'
-        paddingLeft={theme.spacing(4)}
-      >
-        <Typography fontSize='24px' fontWeight={600} lineHeight='32px' variant='h1'>
-          {primaryHeader}
-        </Typography>
-      </Box>
-
-      <Card
-        style={{
-          borderRadius: theme.spacing(1),
-          padding: theme.spacing(3),
-          width: '100%',
-        }}
-      >
-        <MapSplitView
-          activities={isEditing && activityWithMedia ? [activityWithMedia] : []}
-          activityMarkerHighlighted={activityMarkerHighlighted}
-          drawerRef={mapDrawerRef}
-          heightOffsetPx={264}
-          mapRef={mapRef}
-          projectId={projectId}
-          onActivityMarkerClick={onActivityMarkerClick}
+      {isAcceleratorRoute ? (
+        <PageHeaderWrapper alwaysVisible elevated={isDirty} nextElement={contentElement}>
+          {header}
+        </PageHeaderWrapper>
+      ) : (
+        header
+      )}
+      <Box ref={contentRef}>
+        <Card
+          style={{
+            borderRadius: theme.spacing(1),
+            padding: theme.spacing(3),
+            width: '100%',
+          }}
         >
-          <Grid container spacing={2} textAlign='left'>
-            <Grid item xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
-              {isEditing && activity && !isObsActivity && isAllowedDeleteActivitiesNonPublished && (
-                <Button
-                  label={strings.DELETE_ACTIVITY}
-                  onClick={handleDeleteActivity}
-                  priority='secondary'
-                  type='destructive'
-                  disabled={
-                    activity.type === 'admin' && !!activity.payload.publishedTime && !isAllowedDeleteActivitiesPublished
-                  }
-                />
-              )}
-            </Grid>
+          <MapSplitView
+            activities={isEditing && activityWithMedia ? [activityWithMedia] : []}
+            activityMarkerHighlighted={activityMarkerHighlighted}
+            drawerRef={mapDrawerRef}
+            heightOffsetPx={264}
+            mapRef={mapRef}
+            projectId={projectId}
+            onActivityMarkerClick={onActivityMarkerClick}
+          >
+            <Grid container spacing={2} textAlign='left'>
+              <Grid item xs={12} sx={{ textAlign: { xs: 'left', md: 'right' } }}>
+                {isEditing && activity && !isObsActivity && isAllowedDeleteActivitiesNonPublished && (
+                  <Button
+                    label={strings.DELETE_ACTIVITY}
+                    onClick={handleDeleteActivity}
+                    priority='secondary'
+                    type='destructive'
+                    disabled={
+                      activity.type === 'admin' &&
+                      !!activity.payload.publishedTime &&
+                      !isAllowedDeleteActivitiesPublished
+                    }
+                  />
+                )}
+              </Grid>
 
-            <Grid item xs={12}>
-              <Box
-                display='flex'
-                alignItems={isMobile ? 'start' : 'center'}
-                flexDirection={isMobile ? 'column' : 'row'}
-              >
-                <Typography fontSize='20px' fontWeight='bold' variant='h2'>
-                  {secondaryHeader}
-                </Typography>
-                {isAcceleratorRoute && isEditing && activity && (
-                  <Box display='flex' alignItems={'center'} paddingTop={isMobile ? theme.spacing(3) : 0}>
-                    <Box paddingLeft={isMobile ? 0 : theme.spacing(3)} paddingRight={theme.spacing(3)}>
-                      <ActivityStatusBadges activity={activity} />
+              <Grid item xs={12}>
+                <Box
+                  display='flex'
+                  alignItems={isMobile ? 'start' : 'center'}
+                  flexDirection={isMobile ? 'column' : 'row'}
+                >
+                  <Typography fontSize='20px' fontWeight='bold' variant='h2'>
+                    {secondaryHeader}
+                  </Typography>
+                  {isAcceleratorRoute && isEditing && activity && (
+                    <Box display='flex' alignItems={'center'} paddingTop={isMobile ? theme.spacing(3) : 0}>
+                      <Box paddingLeft={isMobile ? 0 : theme.spacing(3)} paddingRight={theme.spacing(3)}>
+                        <ActivityStatusBadges activity={activity} />
+                      </Box>
+                      {activity.payload.isHighlight && (
+                        <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
+                      )}
                     </Box>
-                    {activity.payload.isHighlight && (
-                      <Icon name='star' size='medium' fillColor={theme.palette.TwClrBaseYellow200} />
-                    )}
+                  )}
+                </Box>
+              </Grid>
+
+              {isObsActivity && obsMonthYear && (
+                <Grid item xs={12}>
+                  <Box display='flex' alignItems='flex-start' gap={1}>
+                    <Icon name='info' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
+                    <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
+                      {strings.formatString(strings.OBSERVATION_ACTIVITY_AUTO_CREATED_INFO, obsMonthYear)}
+                    </Typography>
+                  </Box>
+                </Grid>
+              )}
+
+              {isObsActivity && obsTitle && (
+                <Grid item xs={12}>
+                  <Typography fontSize='16px' fontWeight={500}>
+                    {obsTitle}
+                  </Typography>
+                </Grid>
+              )}
+
+              <Grid item lg={6} xs={12}>
+                {isObsActivity ? (
+                  <ActivityStatField
+                    title={strings.ACTIVITY_TYPE}
+                    contents={record.type ? activityTypeLabel(record.type, strings) : ''}
+                    isEditing
+                  />
+                ) : (
+                  <Box display='flex' alignItems='center' gap={1}>
+                    <Box flex={1} id='activity-type-field'>
+                      <Dropdown
+                        errorText={validateFields && !record?.type && !isObsActivity ? strings.REQUIRED_FIELD : ''}
+                        fullWidth
+                        label={strings.ACTIVITY_TYPE}
+                        onChange={onChangeActivityType}
+                        options={activityTypeOptions}
+                        required
+                        selectedValue={record.type}
+                      />
+                    </Box>
                   </Box>
                 )}
-              </Box>
-            </Grid>
-
-            {isObsActivity && obsMonthYear && (
-              <Grid item xs={12}>
-                <Box display='flex' alignItems='flex-start' gap={1}>
-                  <Icon name='info' fillColor={theme.palette.TwClrTxtSecondary} size='medium' />
-                  <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
-                    {strings.formatString(strings.OBSERVATION_ACTIVITY_AUTO_CREATED_INFO, obsMonthYear)}
-                  </Typography>
-                </Box>
               </Grid>
-            )}
 
-            {isObsActivity && obsTitle && (
-              <Grid item xs={12}>
-                <Typography fontSize='16px' fontWeight={500}>
-                  {obsTitle}
-                </Typography>
+              <Grid item lg={5} xs={12}>
+                {isObsActivity ? (
+                  <ActivityStatField title={strings.DATE} contents={record.date ?? ''} isEditing />
+                ) : (
+                  <Box display='flex' alignItems='center' gap={1}>
+                    <Box flex={1}>
+                      <DatePicker
+                        aria-label={strings.DATE}
+                        defaultTimeZone={userTimeZone?.id}
+                        errorText={validateFields && !record?.date ? strings.REQUIRED_FIELD : ''}
+                        id='date'
+                        label={strings.DATE_REQUIRED}
+                        onDateChange={onChangeDate}
+                        sx={{ '& .MuiInputBase-input': { paddingRight: 0 } }}
+                        value={record.date}
+                      />
+                    </Box>
+                  </Box>
+                )}
               </Grid>
-            )}
 
-            <Grid item lg={6} xs={12}>
-              {isObsActivity ? (
-                <ActivityStatField
-                  title={strings.ACTIVITY_TYPE}
-                  contents={record.type ? activityTypeLabel(record.type, strings) : ''}
+              {isObsActivity && (
+                <ObservationStatsPanel
                   isEditing
+                  livePlants={observationLivePlants}
+                  plantDensity={observationPlantDensity}
+                  survivalRate={observationSurvivalRate}
                 />
-              ) : (
-                <Box display='flex' alignItems='center' gap={1}>
-                  <Box flex={1} id='activity-type-field'>
-                    <Dropdown
-                      errorText={validateFields && !record?.type && !isObsActivity ? strings.REQUIRED_FIELD : ''}
-                      fullWidth
-                      label={strings.ACTIVITY_TYPE}
-                      onChange={onChangeActivityType}
-                      options={activityTypeOptions}
-                      required
-                      selectedValue={record.type}
-                    />
-                  </Box>
-                </Box>
               )}
-            </Grid>
 
-            <Grid item lg={5} xs={12}>
-              {isObsActivity ? (
-                <ActivityStatField title={strings.DATE} contents={record.date ?? ''} isEditing />
-              ) : (
-                <Box display='flex' alignItems='center' gap={1}>
-                  <Box flex={1}>
-                    <DatePicker
-                      aria-label={strings.DATE}
-                      defaultTimeZone={userTimeZone?.id}
-                      errorText={validateFields && !record?.date ? strings.REQUIRED_FIELD : ''}
-                      id='date'
-                      label={strings.DATE_REQUIRED}
-                      onDateChange={onChangeDate}
-                      sx={{ '& .MuiInputBase-input': { paddingRight: 0 } }}
-                      value={record.date}
-                    />
-                  </Box>
-                </Box>
-              )}
-            </Grid>
-
-            {isObsActivity && (
-              <ObservationStatsPanel
-                isEditing
-                livePlants={observationLivePlants}
-                plantDensity={observationPlantDensity}
-                survivalRate={observationSurvivalRate}
-              />
-            )}
-
-            <Grid item xs={12}>
-              <Textfield
-                errorText={validateFields && !record?.description && !isObsActivity ? strings.REQUIRED_FIELD : ''}
-                id='description'
-                label={strings.DESCRIPTION}
-                onChange={onChangeCallback('description')}
-                required={!isObsActivity}
-                sx={{ '& .textfield-value': { minHeight: '80px' } }}
-                type='textarea'
-                value={record?.description}
-              />
-            </Grid>
-
-            {isAcceleratorRoute && (
-              <Grid item xs={12} sm={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                <Dropdown
-                  required
-                  label={strings.STATUS}
-                  onChange={onChangeStatus}
-                  selectedValue={record?.status}
-                  options={activityStatusOptions}
-                  fullWidth
+              <Grid item xs={12}>
+                <Textfield
+                  errorText={validateFields && !record?.description && !isObsActivity ? strings.REQUIRED_FIELD : ''}
+                  id='description'
+                  label={strings.DESCRIPTION}
+                  onChange={onChangeCallback('description')}
+                  required={!isObsActivity}
+                  sx={{ '& .textfield-value': { minHeight: '80px' } }}
+                  type='textarea'
+                  value={record?.description}
                 />
               </Grid>
-            )}
 
-            {isAcceleratorRoute && (
-              <Grid
-                item
-                xs={12}
-                sm={6}
-                sx={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  marginTop: isMobile ? 0 : '8px',
-                }}
-              >
-                <Checkbox
-                  id='isHighlight'
-                  label={strings.MAKE_HIGHLIGHT}
-                  name='isHighlight'
-                  onChange={onChangeIsHighlight}
-                  value={record?.isHighlight}
-                />
-              </Grid>
-            )}
+              {isAcceleratorRoute && (
+                <Grid item xs={12} sm={6} sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                  <Dropdown
+                    required
+                    label={strings.STATUS}
+                    onChange={onChangeStatus}
+                    selectedValue={record?.status}
+                    options={activityStatusOptions}
+                    fullWidth
+                  />
+                </Grid>
+              )}
 
-            <ActivityMediaForm
-              activityId={activityId}
-              focusedFileId={focusedFileId}
-              isAdHoc={obsIsAdHoc}
-              mediaItems={mediaItems}
-              obsConfirmContext={
-                isObsActivity && obsMonthYear && projectName ? { monthYear: obsMonthYear, projectName } : undefined
-              }
-              observationId={activity?.payload.observation?.observationId}
-              plotOptions={obsPlotOptions}
-              onClickMediaItem={onFileClicked}
-              onChangeMediaItems={setMediaItems}
-              validateFields={validateFields}
-            />
-          </Grid>
-        </MapSplitView>
-      </Card>
+              {isAcceleratorRoute && (
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'center',
+                    marginTop: isMobile ? 0 : '8px',
+                  }}
+                >
+                  <Checkbox
+                    id='isHighlight'
+                    label={strings.MAKE_HIGHLIGHT}
+                    name='isHighlight'
+                    onChange={onChangeIsHighlight}
+                    value={record?.isHighlight}
+                  />
+                </Grid>
+              )}
+
+              <ActivityMediaForm
+                activityId={activityId}
+                focusedFileId={focusedFileId}
+                isAdHoc={obsIsAdHoc}
+                mediaItems={mediaItems}
+                obsConfirmContext={
+                  isObsActivity && obsMonthYear && projectName ? { monthYear: obsMonthYear, projectName } : undefined
+                }
+                observationId={activity?.payload.observation?.observationId}
+                plotOptions={obsPlotOptions}
+                onClickMediaItem={onFileClicked}
+                onChangeMediaItems={setMediaItems}
+                validateFields={validateFields}
+              />
+            </Grid>
+          </MapSplitView>
+        </Card>
+      </Box>
     </PageForm>
   );
 }

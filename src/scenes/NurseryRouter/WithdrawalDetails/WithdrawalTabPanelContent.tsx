@@ -18,6 +18,7 @@ type WithdrawalTabPanelContentProps = {
   withdrawalSummary?: SearchNurseryWithdrawalPayload;
   delivery?: DeliveryPayload;
   batches?: BatchPayload[];
+  reassignmentDeliveries?: DeliveryPayload[];
 };
 
 export default function WithdrawalTabPanelContent({
@@ -26,6 +27,7 @@ export default function WithdrawalTabPanelContent({
   withdrawalSummary,
   delivery,
   batches,
+  reassignmentDeliveries,
 }: WithdrawalTabPanelContentProps): JSX.Element {
   const theme = useTheme();
 
@@ -34,7 +36,12 @@ export default function WithdrawalTabPanelContent({
       <Typography fontSize='20px' fontWeight={600}>
         {strings.WITHDRAWAL}
       </Typography>
-      <WithdrawalOverview withdrawal={withdrawal} withdrawalSummary={withdrawalSummary} />
+      <WithdrawalOverview
+        withdrawal={withdrawal}
+        withdrawalSummary={withdrawalSummary}
+        delivery={delivery}
+        reassignmentDeliveries={reassignmentDeliveries}
+      />
       <Box marginTop={theme.spacing(3)}>
         <OutplantWithdrawalTable species={species} delivery={delivery} batches={batches} withdrawal={withdrawal} />
       </Box>

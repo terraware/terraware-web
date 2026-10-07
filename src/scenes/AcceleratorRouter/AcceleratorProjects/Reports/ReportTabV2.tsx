@@ -20,6 +20,8 @@ import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { useListAcceleratorReportsQuery } from 'src/queries/generated/acceleratorReports';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
@@ -33,6 +35,7 @@ type ReportTabV2Props = {
 const ReportTabV2 = ({ active }: ReportTabV2Props): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const trackEvent = useTrackEvent();
   const pathParams = useParams<{ projectId: string; reportId?: string }>();
   const navigate = useSyncNavigate();
 
@@ -69,6 +72,12 @@ const ReportTabV2 = ({ active }: ReportTabV2Props): JSX.Element => {
       selectReport(resolvedReportId, true);
     }
   }, [active, pathReportId, resolvedReportId, selectReport]);
+
+  useEffect(() => {
+    if (active && resolvedReportId !== undefined) {
+      trackEvent(MIXPANEL_EVENTS.REPORT_VIEWED, { viewer_persona: 'accelerator_admin' });
+    }
+  }, [active, resolvedReportId, trackEvent]);
 
   const selectedReport = useMemo(
     () => listReportsData?.reports.find((report) => report.id === resolvedReportId),

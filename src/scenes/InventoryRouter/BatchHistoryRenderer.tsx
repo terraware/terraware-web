@@ -165,6 +165,11 @@ export default function BatchHistoryRenderer(props: RendererProps<TableRowType>)
               style={linkStyles}
             >
               {getEventType(row as BatchHistoryItemForTable)}
+              {row.version === undefined && (
+                <Typography fontSize='14px' fontWeight={300}>
+                  {strings.BATCH_QUANTITY_NOT_UPDATED_EXPLANATION}
+                </Typography>
+              )}
             </Link>
           }
           row={row}

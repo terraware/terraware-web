@@ -22,7 +22,7 @@ export type PlotFilters = {
   dateFilter: ObservationDateFilter;
   plotNumberFilter: PlotNumberFilter;
   statusFilter: ObservationState[];
-  stratumFilter: number[];
+  stratumFilter: string[];
 };
 
 interface ObservationFiltersContextType {
@@ -40,10 +40,10 @@ interface ObservationFiltersContextType {
   setObservationType: (observationType: ObservationTypeFilter) => void;
   setPlotType: (plotType: PlotType) => void;
   setStatusFilter: (statuses: ObservationState[]) => void;
-  setStratumFilter: (stratumIds: number[]) => void;
+  setStratumFilter: (stratumNames: string[]) => void;
   setViewMode: (viewMode: ViewMode) => void;
   statusFilter: ObservationState[];
-  stratumFilter: number[];
+  stratumFilter: string[];
   viewMode: ViewMode;
 }
 
@@ -153,7 +153,7 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
   );
 
   const setStratumFilter = useCallback(
-    (stratumIds: number[]) => updateFilters((filters) => ({ ...filters, stratumFilter: stratumIds })),
+    (stratumNames: string[]) => updateFilters((filters) => ({ ...filters, stratumFilter: stratumNames })),
     [updateFilters]
   );
 

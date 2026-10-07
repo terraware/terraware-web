@@ -1,5 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router';
+import { useMatch, useParams, useSearchParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown } from '@terraware/web-components';
@@ -36,6 +36,7 @@ type ProjectId = number | 'all';
 type TotalsStratumId = number | 'all';
 
 const PREFERENCE_NAME = 'plants.dashboard.lastVisitedPlantingSite';
+const ACCELERATOR_PREFERENCE_NAME = 'accelerator.plants.dashboard.lastVisitedPlantingSite';
 
 export default function PlantsDashboardView({
   projectId: acceleratorProjectId,
@@ -53,8 +54,15 @@ export default function PlantsDashboardView({
   const isProjectSelected = typeof projectId === 'number';
 
   const { plantingSiteId: plantingSiteIdParam } = useParams<{ plantingSiteId: string }>();
+  const [searchParams] = useSearchParams();
+  const plantsDashboardMatch = useMatch(APP_PATHS.PLANTS_DASHBOARD);
+  const plantingSiteDashboardMatch = useMatch(APP_PATHS.PLANTING_SITE_DASHBOARD);
+  const isDashboardRoute = plantsDashboardMatch !== null || plantingSiteDashboardMatch !== null;
+  const urlOrganizationId = searchParams.get('organizationId');
 
-  const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId(PREFERENCE_NAME);
+  const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId(
+    isAcceleratorRoute ? ACCELERATOR_PREFERENCE_NAME : PREFERENCE_NAME
+  );
 
   // Effective organization for the dashboard: the accelerator project's org when on an accelerator
   // route, otherwise the selected org. Threaded down so species/planting-site queries target it.
@@ -65,7 +73,11 @@ export default function PlantsDashboardView({
 
   // The header owns selection normalization; the view only needs `showAllSitesOption` to label the
   // totals section. The scoped query is shared (RTK cache) with the header.
-  const { showAllSitesOption } = useDashboardPlantingSites(projectId, dashboardOrganizationId);
+  const {
+    plantingSites,
+    showAllSitesOption,
+    isSuccess: plantingSitesLoaded,
+  } = useDashboardPlantingSites(projectId, dashboardOrganizationId);
 
   // Keep the URL :plantingSiteId param in sync with the selection in org mode (no project selected),
   // so a specific site stays bookmarkable/deep-linkable.
@@ -83,15 +95,38 @@ export default function PlantsDashboardView({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plantingSiteIdParam]);
 
+  const isUrlForSelectedOrganization =
+    urlOrganizationId === null || Number(urlOrganizationId) === selectedOrganization?.id;
+
   useEffect(() => {
     if (
       orgMode &&
+      isDashboardRoute &&
+      isUrlForSelectedOrganization &&
       typeof selectedPlantingSiteId === 'number' &&
-      Number(plantingSiteIdParam) !== selectedPlantingSiteId
+      Number(plantingSiteIdParam) !== selectedPlantingSiteId &&
+      plantingSitesLoaded &&
+      plantingSites.some((site) => site.id === selectedPlantingSiteId)
     ) {
-      navigate(APP_PATHS.PLANTING_SITE_DASHBOARD.replace(':plantingSiteId', selectedPlantingSiteId.toString()));
+      navigate(
+        {
+          pathname: APP_PATHS.PLANTING_SITE_DASHBOARD.replace(':plantingSiteId', selectedPlantingSiteId.toString()),
+          search: searchParams.toString(),
+        },
+        { replace: true }
+      );
     }
-  }, [navigate, orgMode, plantingSiteIdParam, selectedPlantingSiteId]);
+  }, [
+    isDashboardRoute,
+    isUrlForSelectedOrganization,
+    navigate,
+    orgMode,
+    plantingSiteIdParam,
+    plantingSites,
+    plantingSitesLoaded,
+    searchParams,
+    selectedPlantingSiteId,
+  ]);
 
   const { plantingSite } = usePlantingSite(
     selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId

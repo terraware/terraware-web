@@ -1,6 +1,7 @@
 import { Mocked, rstest } from '@rstest/core';
-import axios from '../axios';
+
 import HttpService, { Response, ServerData } from '../HttpService';
+import axios from '../axios';
 
 rstest.mock('../axios', { mock: true });
 type DummyData = ServerData & {
@@ -52,7 +53,7 @@ describe('HttpService', () => {
         { headers: {}, params: {} },
         (data) => ({
           value: data?.status,
-        }),
+        })
       );
 
       expect(response.requestSucceeded).toBe(true);
@@ -182,10 +183,9 @@ describe('HttpService', () => {
     test('HttpService sets url replacements correctly', async () => {
       axiosGet.mockImplementation(() => Promise.resolve(DUMMY_DATA));
 
-      await HttpService.root('/url-name/{id}').get(
-        { urlReplacements: { '{id}': 'idvalue' } },
-        (data) => ({ value: data?.status }),
-      );
+      await HttpService.root('/url-name/{id}').get({ urlReplacements: { '{id}': 'idvalue' } }, (data) => ({
+        value: data?.status,
+      }));
 
       expect(axiosGet).toHaveBeenCalledWith('/url-name/idvalue', { headers: undefined, params: undefined });
     });

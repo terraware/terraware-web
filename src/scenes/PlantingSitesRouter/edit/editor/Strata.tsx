@@ -39,6 +39,7 @@ import {
 
 export type StrataProps = {
   onValidate?: OnValidate;
+  onDirtyChange?: (isDirty: boolean) => void;
   site: DraftPlantingSite;
 };
 
@@ -81,12 +82,21 @@ type Stack = {
   fixedBoundaries?: FeatureCollection;
 };
 
-export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
+export default function Strata({ onValidate, onDirtyChange, site }: StrataProps): JSX.Element {
   const [strataData, setStrataData, undo, redo] = useUndoRedoState<Stack>({
     editableBoundary: emptyBoundary(),
     errorAnnotations: [],
     fixedBoundaries: featureSiteStrata(site),
   });
+  const geometrySnapshot = JSON.stringify({
+    editableBoundary: strataData?.editableBoundary,
+    fixedBoundaries: strataData?.fixedBoundaries,
+  });
+  const [initialGeometry] = useState(geometrySnapshot);
+  useEffect(() => {
+    onDirtyChange?.(geometrySnapshot !== initialGeometry);
+  }, [geometrySnapshot, initialGeometry, onDirtyChange]);
+
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const theme = useTheme();
   const mapStyles = useMapStyle(theme);
@@ -106,7 +116,7 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
       // check for missing stratum names
       const missingStratumNames =
         !missingStrata && strata.features.some((stratum) => !stratum?.properties?.name?.trim());
-      const missingData = (missingStrata || missingStratumNames) && !onValidate.isSaveAndClose;
+      const missingData = (missingStrata || missingStratumNames) && !onValidate.allowIncomplete;
 
       if (strataTooSmall || missingData) {
         snackbar.toastError(
@@ -123,26 +133,25 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
           const multiPolygon = toMultiPolygon(geometry);
 
           if (multiPolygon) {
-            return defaultStratumPayload({
-              boundary: multiPolygon,
-              id: properties?.id ?? index,
-              initialPlantingDensity: properties?.initialPlantingDensity ?? 1500,
-              name: properties?.name ?? '',
-            });
+            const id = properties?.id ?? index;
+            const initialPlantingDensity = properties?.initialPlantingDensity ?? 1500;
+            const name = properties?.name ?? '';
+            const existing = site.strata?.find((s) => s.id === id);
+            // keep substrata from later steps when the stratum boundary is unchanged
+            if (existing && JSON.stringify(existing.boundary) === JSON.stringify(multiPolygon)) {
+              return { ...existing, initialPlantingDensity, name };
+            }
+            return defaultStratumPayload({ boundary: multiPolygon, id, initialPlantingDensity, name });
           } else {
             return undefined;
           }
         })
         .filter((stratum) => !!stratum) as MinimalStratum[] | undefined;
 
-      const numStrata = _strata?.length ?? 0;
-
-      // callback with status of error and completion of this step
-      const completed = numStrata > 1;
       const data = _strata ? { strata: _strata } : undefined;
-      onValidate.apply(data === undefined, data, completed);
+      onValidate.apply(data === undefined, data);
     }
-  }, [onValidate, snackbar, strata, strataData?.errorAnnotations]);
+  }, [onValidate, site.strata, snackbar, strata, strataData?.errorAnnotations]);
 
   const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
     if (!strata?.features) {
@@ -191,16 +200,17 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
     () =>
       activeLocale
         ? [
-            { text: strings.SITE_STRATUM_BOUNDARIES_DESCRIPTION_0 },
             {
-              text: strings.SITE_STRATUM_BOUNDARIES_DESCRIPTION_1,
+              text: strings.SITE_STRATUM_BOUNDARIES_DESCRIPTION,
               hasTutorial: true,
               handlePrefix: (prefix: string) =>
-                strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
-            },
-            {
-              text: strings.SITE_STRATUM_BOUNDARIES_SIZE,
-              isBold: true,
+                strings.formatString(
+                  prefix,
+                  <MapIcon centerAligned={true} icon='slice' />,
+                  <Typography component='span' fontSize='inherit' fontWeight={600}>
+                    {strings.SITE_STRATUM_BOUNDARIES_SIZE}
+                  </Typography>
+                ) as JSX.Element[],
             },
           ]
         : [],
@@ -352,7 +362,6 @@ export default function Strata({ onValidate, site }: StrataProps): JSX.Element {
       <StepTitleDescription
         description={description}
         dontShowAgainPreferenceName='dont-show-site-stratum-boundaries-instructions'
-        title={strings.ADDING_STRATUM_BOUNDARIES}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_stratum_boundary_instructions_video'
         tutorialTitle={strings.ADDING_STRATUM_BOUNDARIES}

@@ -164,6 +164,7 @@ const MonitoringPlotEditPhotos = () => {
                 file: mediaItem.data.file,
                 payload: {
                   caption: mediaItem.data.caption,
+                  isOriginal: false,
                 },
               },
             };

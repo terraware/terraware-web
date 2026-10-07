@@ -1,5 +1,6 @@
+import { ACCESSION_2_STATES, AccessionState } from 'src/types/Accession';
+
 import AccessionService from '../AccessionService';
-import { AccessionState, ACCESSION_2_STATES } from 'src/types/Accession';
 
 describe('Accession service', () => {
   describe('accession state utilities', () => {

@@ -21,6 +21,7 @@ import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlan
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization } from 'src/providers';
 import { ObservationResultsPayload } from 'src/queries/generated/observations';
+import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { AdHocObservationResults } from 'src/types/Observations';
 import { MultiPolygon } from 'src/types/Tracking';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -29,7 +30,6 @@ import { useObservationFilters } from '../ObservationFiltersProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
 import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
-import { BiomassActionsMenuContent } from './BiomassList';
 import SelectObservationButton from './SelectObservationButton';
 
 const STORAGE_KEY = 'observations-ad-hoc-table';
@@ -43,10 +43,10 @@ const DEFAULT_COLUMN_ORDER = [
   'totalSpecies',
   'plotDescription',
   'plantingSiteName',
-  'actionsMenu',
+  'strata',
 ];
 
-const DEFAULT_COLUMN_VISIBILITY = { plantingSiteName: false, plotDescription: false };
+const DEFAULT_COLUMN_VISIBILITY = { plantingSiteName: false, plotDescription: false, strata: false };
 
 type AdHocRow = {
   completedDate?: string;
@@ -58,6 +58,7 @@ type AdHocRow = {
   plantingSiteId: number;
   plantingSiteName?: string;
   plotDescription?: string;
+  stratumName?: string;
   totalPlants?: number;
   totalSpecies?: number;
 };
@@ -78,6 +79,7 @@ const toRow = (observation: ObservationResultsPayload, plantingSiteName?: string
     plantingSiteId: observation.plantingSiteId,
     plantingSiteName,
     plotDescription: biomass?.description,
+    stratumName: adHocPlot?.stratumName,
     totalPlants: biomass ? biomass.trees.length : adHocPlot?.totalPlants,
     totalSpecies: biomass ? biomass.treeSpeciesCount : adHocPlot?.totalSpecies,
   };
@@ -91,7 +93,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   const theme = useTheme();
   const { strings } = useLocalization();
   const defaultTimezone = useDefaultTimeZone().get().id;
-  const { observationType } = useObservationFilters();
+  const { activeFilterCount, observationType } = useObservationFilters();
   const { downloadAdHocObservationsZip } = useObservationExports();
   const tableState = useTableState(STORAGE_KEY, {
     defaultColumnOrder: DEFAULT_COLUMN_ORDER,
@@ -109,7 +111,7 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
   });
   const emptyMessage = useObservationsEmptyMessage(emptyState);
 
-  const { plantingSites } = useOrganizationPlantingSites();
+  const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites({ full: true });
 
   const plantingSitesById = useMemo(
     () =>
@@ -118,11 +120,10 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
           sites[site.id] = site;
           return sites;
         },
-        {} as { [siteId: number]: (typeof plantingSites)[number] }
+        {} as { [siteId: number]: PlantingSitePayload }
       ),
     [plantingSites]
   );
-
   const plantingSiteNames = useMemo(
     () =>
       plantingSites.reduce(
@@ -187,14 +188,6 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
     return typeof value === 'number' ? <FormattedNumber value={value} /> : null;
   }, []);
 
-  const ActionsMenuCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<AdHocRow> }) =>
-      cell.row.original.isBiomass ? (
-        <BiomassActionsMenuContent observationId={cell.row.original.observationId} />
-      ) : null,
-    []
-  );
-
   const columns = useMemo(
     (): EditableTableColumn<AdHocRow>[] => [
       {
@@ -220,6 +213,11 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         accessorKey: 'plantingSiteName',
       },
       {
+        id: 'strata',
+        header: strings.STRATA,
+        accessorKey: 'stratumName',
+      },
+      {
         id: 'completedDate',
         header: strings.DATE_OBSERVED,
         accessorKey: 'completedDate',
@@ -243,61 +241,58 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         accessorKey: 'totalSpecies',
         Cell: NumberCell,
       },
-      {
-        id: 'actionsMenu',
-        header: '',
-        accessorFn: () => null,
-        enableHiding: false,
-        Cell: ActionsMenuCell,
-      },
     ],
-    [strings, showSelectObservation, PlotNumberCell, CompletedDateCell, NumberCell, ActionsMenuCell]
+    [strings, showSelectObservation, PlotNumberCell, CompletedDateCell, NumberCell]
   );
 
-  // Both kinds of ad-hoc observation can be in view at once, so each gets a file in one zip.
-  const onExport = useCallback(async () => {
-    const siteName =
-      typeof plantingSiteId === 'number'
-        ? plantingSiteNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
-        : strings.ALL_PLANTING_SITES;
-
-    const monitoringResults = observations
-      .filter((observation) => observation.type !== 'Biomass Measurements' && observation.adHocPlot)
-      .map((observation): AdHocObservationResults => {
-        const adHocPlot = observation.adHocPlot!;
-        const site = plantingSitesById[observation.plantingSiteId];
-
-        return {
-          ...observation,
-          adHocPlot,
-          boundary: adHocPlot.boundary as unknown as MultiPolygon,
-          plantingSiteName: site?.name ?? '',
-          strata: observation.strata as AdHocObservationResults['strata'],
-          timeZone: site?.timeZone ?? defaultTimezone,
-          totalLive: observation.species.reduce((total, species) => total + species.totalLive, 0),
-          totalPlants: observation.totalPlants,
-        };
+  const onExport = useCallback(
+    async (filteredRows: AdHocRow[], hasTableFilters: boolean) => {
+      const siteName =
+        typeof plantingSiteId === 'number'
+          ? plantingSiteNames[plantingSiteId] ?? strings.ALL_PLANTING_SITES
+          : strings.ALL_PLANTING_SITES;
+      const visibleIds = new Set(filteredRows.map((row) => row.observationId));
+      const monitoringResults = observations
+        .filter(
+          (observation) =>
+            visibleIds.has(observation.observationId) &&
+            observation.type !== 'Biomass Measurements' &&
+            observation.adHocPlot
+        )
+        .map((observation): AdHocObservationResults => {
+          const adHocPlot = observation.adHocPlot!;
+          const site = plantingSites.find(({ id }) => id === observation.plantingSiteId);
+          return {
+            ...observation,
+            adHocPlot,
+            boundary: adHocPlot.boundary as unknown as MultiPolygon,
+            plantingSiteName: site?.name ?? '',
+            strata: observation.strata as AdHocObservationResults['strata'],
+            timeZone: site?.timeZone ?? defaultTimezone,
+            totalLive: observation.species.reduce((total, species) => total + species.totalLive, 0),
+            totalPlants: observation.totalPlants,
+          };
+        });
+      await downloadAdHocObservationsZip({
+        adHocObservationsResults: monitoringResults,
+        hasFilters: activeFilterCount > 0 || hasTableFilters,
+        biomassObservationIds: filteredRows.filter((row) => row.isBiomass).map((row) => row.observationId),
+        siteName,
+        plantingSitesById,
       });
-
-    const biomassObservationIds = observations
-      .filter((observation) => observation.type === 'Biomass Measurements')
-      .map((observation) => observation.observationId);
-
-    await downloadAdHocObservationsZip({
-      adHocObservationsResults: monitoringResults,
-      biomassObservationIds,
-      plantingSiteId: plantingSiteId === ALL_PLANTING_SITES ? undefined : plantingSiteId,
-      siteName,
-    });
-  }, [
-    defaultTimezone,
-    downloadAdHocObservationsZip,
-    observations,
-    plantingSiteId,
-    plantingSiteNames,
-    plantingSitesById,
-    strings.ALL_PLANTING_SITES,
-  ]);
+    },
+    [
+      activeFilterCount,
+      defaultTimezone,
+      downloadAdHocObservationsZip,
+      observations,
+      plantingSiteId,
+      plantingSiteNames,
+      plantingSites,
+      plantingSitesById,
+      strings.ALL_PLANTING_SITES,
+    ]
+  );
 
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
@@ -338,8 +333,6 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
               },
             },
           }),
-          muiTableHeadCellProps: ({ column }: { column: { id: string } }) =>
-            column.id === 'actionsMenu' ? { sx: { '& .Mui-TableHeadCell-Content': { display: 'none' } } } : {},
           muiTablePaperProps: { elevation: 0 },
           positionGlobalFilter: 'right' as const,
           renderEmptyRowsFallback: () =>
@@ -361,9 +354,17 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
           onShowGlobalFilterChange: tableState.setShowGlobalFilter,
           renderToolbarInternalActions: ({ table }) => (
             <Box display='flex' gap={0.5}>
-              {rows.length > 0 && (
+              {plantingSitesLoaded && rows.length > 0 && (
                 <Tooltip title={strings.EXPORT}>
-                  <IconButton onClick={() => void onExport()}>
+                  <IconButton
+                    disabled={table.getFilteredRowModel().rows.length === 0}
+                    onClick={() =>
+                      void onExport(
+                        table.getFilteredRowModel().rows.map((row) => row.original),
+                        table.getState().columnFilters.length > 0 || Boolean(table.getState().globalFilter)
+                      )
+                    }
+                  >
                     <Icon name='iconExport' size='medium' />
                   </IconButton>
                 </Tooltip>

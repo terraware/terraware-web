@@ -77,9 +77,7 @@ const useFilteredObservationResults = ({
         return !belowMin && !aboveMax;
       }
 
-      const matchesStratum = observation.strata.some(
-        (stratum) => stratum.stratumId !== undefined && stratumFilter.includes(stratum.stratumId)
-      );
+      const matchesStratum = observation.strata.some((stratum) => stratumFilter.includes(stratum.name));
 
       return stratumFilter.length === 0 || matchesStratum;
     });

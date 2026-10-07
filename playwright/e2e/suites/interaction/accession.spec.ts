@@ -82,7 +82,7 @@ test.describe('AccessionTests', () => {
       .locator('../..')
       .locator('.tw-icon') // edit icon
       .click();
-    await page.getByLabel('End-Drying Reminder').fill('2034-01-31');
+    await page.getByRole('textbox', { name: 'End-Drying Reminder' }).fill('2034-01-31');
     await page.getByRole('button', { name: 'Set Reminder' }).click();
     await page.getByRole('button', { name: 'Set Reminder' }).waitFor({ state: 'hidden', timeout: 10000 });
     await expect(page.getByRole('main')).toContainText('2034-01-31');

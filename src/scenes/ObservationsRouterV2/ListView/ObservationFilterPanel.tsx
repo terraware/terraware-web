@@ -5,10 +5,11 @@ import { Button, Dropdown, MultiSelect, Textfield } from '@terraware/web-compone
 import { DateTime } from 'luxon';
 
 import DatePicker from 'src/components/common/DatePicker';
-import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
-import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
-import { useLocalization } from 'src/providers';
+import { useListObservationResults } from 'src/hooks/observations';
+import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
+import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationState, getStatus } from 'src/types/Observations';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import { ObservationTypeFilter, useObservationFilters } from '../ObservationFiltersProvider';
 
@@ -28,6 +29,24 @@ const multiSelectStyles = {
   minWidth: '260px',
 };
 
+const observationTypeStyles = {
+  maxWidth: '220px',
+  minWidth: '220px',
+};
+
+const mobileFieldStyles = {
+  maxWidth: 'none',
+  minWidth: 0,
+  width: '100%',
+};
+
+// The second field wraps under the first so both keep the same width.
+const mobileRangeStyles = {
+  alignItems: 'center',
+  display: 'grid',
+  gridTemplateColumns: '1fr auto',
+};
+
 const OBSERVATION_STATES: ObservationState[] = ['Upcoming', 'InProgress', 'Overdue', 'Completed', 'Abandoned'];
 
 export type ObservationFilterPanelProps = {
@@ -35,8 +54,9 @@ export type ObservationFilterPanelProps = {
 };
 
 const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps): JSX.Element => {
-  const { strings } = useLocalization();
+  const { activeLocale, strings } = useLocalization();
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const {
     activeFilterCount,
     clearFilters,
@@ -52,17 +72,24 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
     statusFilter,
     stratumFilter,
   } = useObservationFilters();
-  const { isSuccess: plantingSitesLoaded, plantingSites } = useOrganizationPlantingSites({ full: true });
+  const { selectedOrganization } = useOrganization();
 
-  const strata = useMemo(() => {
-    const sites =
-      plantingSiteId === ALL_PLANTING_SITES
-        ? plantingSites
-        : plantingSites.filter((site) => site.id === plantingSiteId);
-    return sites.flatMap((site) => site.strata ?? []);
-  }, [plantingSiteId, plantingSites]);
+  const observationResultsResponse = useListObservationResults({
+    depth: 'Stratum',
+    organizationId: plotType === 'assigned' ? selectedOrganization?.id : undefined,
+    plantingSiteId,
+  });
+  const observationResultsLoaded = observationResultsResponse.isSuccess;
 
-  const stratumOptions = useMemo(() => new Map(strata.map((stratum) => [stratum.id, stratum.name])), [strata]);
+  const stratumOptions = useMemo(() => {
+    const names = new Set(
+      (observationResultsResponse.currentData?.observations ?? []).flatMap((observation) =>
+        observation.strata.map((stratum) => stratum.name)
+      )
+    );
+    const sortedNames = [...names].sort((a, b) => a.localeCompare(b, activeLocale ?? undefined));
+    return new Map(sortedNames.map((name) => [name, name]));
+  }, [activeLocale, observationResultsResponse.currentData]);
 
   const statusOptions = useMemo(
     () => new Map(OBSERVATION_STATES.map((state) => [state, getStatus(state, strings)])),
@@ -96,14 +123,14 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
 
   // Options are scoped to the selected site, so a site change can leave selections that match nothing.
   useEffect(() => {
-    if (!plantingSitesLoaded) {
+    if (!observationResultsLoaded) {
       return;
     }
-    const availableStrata = stratumFilter.filter((id) => stratumOptions.has(id));
+    const availableStrata = stratumFilter.filter((name) => stratumOptions.has(name));
     if (availableStrata.length !== stratumFilter.length) {
       setStratumFilter(availableStrata);
     }
-  }, [plantingSitesLoaded, setStratumFilter, stratumFilter, stratumOptions]);
+  }, [observationResultsLoaded, setStratumFilter, stratumFilter, stratumOptions]);
 
   const onFromChange = useCallback(
     (value?: DateTime) => setDateFilter((current) => ({ ...current, from: value?.toFormat('yyyy-MM-dd') })),
@@ -115,14 +142,19 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
     [setDateFilter]
   );
 
+  const rangeStyles = isMobile
+    ? { ...mobileRangeStyles, gap: theme.spacing(1) }
+    : { alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(1) };
+
   return (
     <Box
       sx={{
-        alignItems: 'flex-end',
+        alignItems: isMobile ? 'stretch' : 'flex-end',
         background: theme.palette.TwClrBgInfoTertiary,
         border: `1px solid ${theme.palette.TwClrBrdrInfo}`,
         borderRadius: '8px',
         display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
         flexWrap: 'wrap',
         gap: theme.spacing(2),
         padding: theme.spacing(2),
@@ -136,20 +168,20 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
           options={observationTypeOptions}
           placeholder={strings.ALL_MONITORING_TYPES}
           selectedValue={observationType === 'All' ? undefined : observationType}
-          sx={{ maxWidth: '220px', minWidth: '220px' }}
+          sx={isMobile ? mobileFieldStyles : observationTypeStyles}
         />
       )}
       <Box>
         <Typography fontSize='14px' fontWeight={500} marginBottom={theme.spacing(0.5)}>
           {plotType === 'adHoc' ? strings.DATE_OBSERVED : strings.OBSERVATION_DATE}
         </Typography>
-        <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(1) }}>
+        <Box sx={rangeStyles}>
           <DatePicker
             aria-label={strings.START_DATE}
             id='observation-date-from'
             label=''
             onDateChange={onFromChange}
-            sx={datePickerStyles}
+            sx={isMobile ? mobileFieldStyles : datePickerStyles}
             value={dateFilter.from ?? null}
           />
           <Typography sx={{ textTransform: 'lowercase' }}>{strings.TO}</Typography>
@@ -158,7 +190,7 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
             id='observation-date-to'
             label=''
             onDateChange={onToChange}
-            sx={datePickerStyles}
+            sx={isMobile ? mobileFieldStyles : datePickerStyles}
             value={dateFilter.to ?? null}
           />
         </Box>
@@ -168,14 +200,14 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
           <Typography fontSize='14px' fontWeight={500} marginBottom={theme.spacing(0.5)}>
             {strings.PLOT}
           </Typography>
-          <Box sx={{ alignItems: 'center', display: 'flex', flexWrap: 'wrap', gap: theme.spacing(1) }}>
+          <Box sx={rangeStyles}>
             <Textfield
               id='plot-number-min'
               label=''
               min={0}
               onChange={onPlotNumberChange('min')}
               placeholder={strings.MIN}
-              sx={plotNumberStyles}
+              sx={isMobile ? mobileFieldStyles : plotNumberStyles}
               type='number'
               value={plotNumberFilter.min ?? ''}
             />
@@ -186,7 +218,7 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
               min={0}
               onChange={onPlotNumberChange('max')}
               placeholder={strings.MAX}
-              sx={plotNumberStyles}
+              sx={isMobile ? mobileFieldStyles : plotNumberStyles}
               type='number'
               value={plotNumberFilter.max ?? ''}
             />
@@ -195,16 +227,16 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
       )}
       {plotType === 'assigned' && (
         <>
-          <MultiSelect<number, string>
+          <MultiSelect<string, string>
             fullWidth
             id='stratum-filter'
             label={strings.STRATA}
-            onAdd={(id) => setStratumFilter([...stratumFilter, id])}
-            onRemove={(id) => setStratumFilter(stratumFilter.filter((selected) => selected !== id))}
+            onAdd={(name) => setStratumFilter([...stratumFilter, name])}
+            onRemove={(name) => setStratumFilter(stratumFilter.filter((selected) => selected !== name))}
             options={stratumOptions}
             placeHolder={strings.ALL_STRATA}
             selectedOptions={stratumFilter}
-            sx={multiSelectStyles}
+            sx={isMobile ? mobileFieldStyles : multiSelectStyles}
             valueRenderer={(name) => name}
           />
           <MultiSelect<ObservationState, string>
@@ -216,13 +248,13 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
             options={statusOptions}
             placeHolder={strings.ALL_STATUSES}
             selectedOptions={statusFilter}
-            sx={multiSelectStyles}
+            sx={isMobile ? mobileFieldStyles : multiSelectStyles}
             valueRenderer={(label) => label}
           />
         </>
       )}
       {activeFilterCount > 0 && (
-        <Box sx={{ marginLeft: 'auto' }}>
+        <Box sx={{ marginLeft: isMobile ? 0 : 'auto' }}>
           <Button
             id='clear-observation-filters'
             label={strings.CLEAR_ALL_FILTERS}
