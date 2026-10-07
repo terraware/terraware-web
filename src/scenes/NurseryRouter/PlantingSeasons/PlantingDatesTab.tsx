@@ -155,6 +155,7 @@ const PlantingDatesTab = ({ plantingSeason, plantingSite }: PlantingDatesTabProp
                     scheduledDate={scheduledDate}
                     plantingSite={plantingSite}
                     requestStatus={requestStatusesByDate?.[scheduledDate.date]}
+                    requestStatusKnown={requestStatusesByDate !== undefined}
                     onEdit={() => setEditing({ mode: 'edit', scheduledDate })}
                     readOnly={readOnly}
                   />
@@ -227,6 +228,7 @@ type PlantingDateListItemProps = {
   scheduledDate: ScheduledDatePayload;
   plantingSite: PlantingSitePayload;
   requestStatus?: PlantingDateRequestStatus;
+  requestStatusKnown: boolean;
   onEdit: () => void;
   readOnly: boolean;
 };
@@ -235,6 +237,7 @@ const PlantingDateListItem = ({
   scheduledDate,
   plantingSite,
   requestStatus,
+  requestStatusKnown,
   onEdit,
   readOnly,
 }: PlantingDateListItemProps): JSX.Element => {
@@ -356,7 +359,7 @@ const PlantingDateListItem = ({
         width={isMobile ? '100%' : undefined}
         gap={theme.spacing(isMobile ? 1.5 : 2)}
       >
-        <PlantingDateRequestStatusBadge status={requestStatus} />
+        {requestStatusKnown && <PlantingDateRequestStatusBadge status={requestStatus} />}
         {!readOnly && (
           <Button
             icon='iconEdit'
