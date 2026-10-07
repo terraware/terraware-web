@@ -1,3 +1,4 @@
+39d081d6 SW-8922: Observations: Update copy and font size of plot corner photos #6546
 77d77ef9 SW-8031 Add bole height to biomass trees and shrubs (#6665)
 6c87da41 SW-8992 In Planting Dates tab show requested status (#6667)
 5ce30a59 SW-8991 In Planting Date edit view show species and plants count (#6668)
@@ -47,4 +48,3 @@ c66b8520 SW-8706 release report updates (#6614)
 e938d5ca Bump axios from 1.18.1 to 1.20.0 (#6607)
 29bb6b7d Update screenshot (#6601)
 1ba9cc0c SW-6842: Translate growth form in trees and shrubs table (#6605)
-39af8e0b Remove the local docker volume for postgres (#6572)
