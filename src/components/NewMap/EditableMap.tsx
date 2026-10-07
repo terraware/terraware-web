@@ -83,13 +83,13 @@ const EditableMap = ({
     return multiPolygons.length ? getBoundingBoxFromMultiPolygons(multiPolygons) : undefined;
   });
 
-  const hasFitInitialBounds = useRef(false);
+  const fittedMapId = useRef<string | null | undefined>(null);
   const onMapLoad = useCallback(() => {
-    if (initialBounds && !hasFitInitialBounds.current) {
-      hasFitInitialBounds.current = true;
+    if (initialBounds && fittedMapId.current !== mapId) {
+      fittedMapId.current = mapId;
       fitBounds(initialBounds, 25);
     }
-  }, [fitBounds, initialBounds]);
+  }, [fitBounds, initialBounds, mapId]);
 
   const clearPopupInfo = useCallback(() => setPopupInfo(null), []);
 
