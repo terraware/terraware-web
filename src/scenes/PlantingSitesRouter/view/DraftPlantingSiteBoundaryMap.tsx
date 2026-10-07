@@ -67,6 +67,7 @@ export default function DraftPlantingSiteBoundaryMap({
   return (
     <MapComponent
       containerStyle={{ borderRadius: '8px', height: '240px', minHeight: '240px', width: '100%' }}
+      fillContainerHeight
       hideFullScreenControl
       hideMapViewStyleControl
       mapId={mapId}

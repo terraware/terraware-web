@@ -47,6 +47,7 @@ type MapBoxProps = {
   disableDoubleClickZoom?: boolean;
   disableZoom?: boolean;
   drawerOpen?: boolean; // Used to trigger resize
+  fillContainerHeight?: boolean;
   hideFullScreenControl?: boolean;
   hideMapViewStyleControl?: boolean;
   hideZoomControl?: boolean;
@@ -86,6 +87,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
     disableDoubleClickZoom,
     disableZoom,
     drawerOpen,
+    fillContainerHeight,
     layers: featureGroups,
     hideFullScreenControl,
     hideMapViewStyleControl,
@@ -826,7 +828,11 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
       mapStyle={stylesUrl[mapViewStyle]}
       ref={mapRefCallback}
       scrollZoom={!disableZoom && focused}
-      style={{ width: 'auto', height: isDesktop ? 'auto' : '80vh', flexGrow: isDesktop ? 1 : undefined }}
+      style={{
+        width: 'auto',
+        height: isDesktop || fillContainerHeight ? 'auto' : '80vh',
+        flexGrow: isDesktop || fillContainerHeight ? 1 : undefined,
+      }}
       onClick={onMapClick}
       onError={onMapError}
       onMove={onMove}
