@@ -1950,6 +1950,11 @@ SAVING,Guardando...,d4ce4849
 SCARIFY,Escarificar,b34359c6
 SCHEDULE_OBSERVATION,Programar observación,9d1a4cfc
 SCHEDULE_OBSERVATION_MESSAGE,Seleccione los estratos y subestratos que desea incluir en la observación:,3dc66640
+SCHEDULE_OBSERVATION_PLOT_COUNTS_MESSAGE,Los conteos de parcelas junto a cada estrato son los números de parcelas permanentes y temporales que se asignarán.,08b6bb53
+SCHEDULE_OBSERVATION_PLOTS_ASSIGNED_STRATA,{0} - {1} temporales y {2} permanentes - se asignarán para los estratos seleccionados.,915dae4c
+SCHEDULE_OBSERVATION_PLOTS_ASSIGNED_STRATUM,{0} - {1} temporales y {2} permanentes - se asignarán para el estrato seleccionado.,46c02309
+SCHEDULE_OBSERVATION_SELECT_ALL_SUBSTRATA,Seleccione todos los subestratos en {0} para calcular cuántas de sus parcelas se asignarán.,0a64788a
+SCHEDULE_OBSERVATION_STRATUM_EXCLUDED,{0} no está incluido en este total porque solo algunos de sus subestratos están seleccionados.,93612c0b
 SCIENTIFIC_NAME,Nombre Científico,0273e7b9
 SCIENTIFIC_NAME_NOT_FOUND,"""{0}"" no fue encontrado en nuestra base de datos, pero puede seguir adicionado.",c9754752
 SCIENTIFIC_NAME_REQUIRED,Nombre Científico *,1d6383a2
@@ -2732,6 +2737,8 @@ X_OF_YEAR_CUMULATIVE_TARGET,{0} del objetivo acumulativo anual,6658988a
 X_OF_YEAR_TARGET,{0} del objetivo anual,c57dbf7a
 X_PER_HA,{0}/ha,0fe29eac
 X_PLANTS,{0} plantas,8cb7c65d
+X_PLOT,{0} parcela,69151ad1
+X_PLOTS,{0} parcelas,af2dd663
 X_SPECIES,{0} especies,42e62955
 X_SPECIES_Y_PLANTS,"{0} especies, {1} plantas",81dea858
 X_TARGET,Meta {0},d8170b6e
