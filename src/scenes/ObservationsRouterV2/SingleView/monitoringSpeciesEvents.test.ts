@@ -106,13 +106,18 @@ const summarize = (events: EventLogEntryPayload[], currentTotals: Map<string, nu
     currentTotals
   );
 
+const summariesOf = (result: ReturnType<typeof summarize>) =>
+  result.events.flatMap((entry) => result.summaries.get(entry) ?? []);
+
 describe('summarizeMonitoringSpeciesEvents', () => {
   it('reads an add of a single count as the species being added', () => {
     const { currentTotals, events } = history({ speciesName: 'Carex meyenii', from: [0, 0, 0], to: [0, 5, 0] });
     expect(events).toHaveLength(1);
 
-    const { summaries } = summarize(events, currentTotals);
-    expect(summaries.get(events[0])).toMatchObject({ kind: 'added', speciesName: 'Carex meyenii' });
+    const result = summarize(events, currentTotals);
+    expect(summariesOf(result)).toMatchObject([{ kind: 'added', speciesName: 'Carex meyenii' }]);
+    expect(result.redundant.size).toBe(0);
+    expect(result.events).toHaveLength(2);
   });
 
   it('reads an edit that emptied the species as it being removed', () => {
@@ -121,12 +126,13 @@ describe('summarizeMonitoringSpeciesEvents', () => {
       { speciesName: 'Carex meyenii', from: [2, 5, 1], to: [0, 0, 0] }
     );
 
-    const { summaries, redundant } = summarize(events, currentTotals);
-    expect(summaries.get(events[0])).toMatchObject({ kind: 'added', speciesName: 'Carex meyenii' });
-    expect(summaries.get(events[3])).toMatchObject({ kind: 'removed', speciesName: 'Carex meyenii' });
-    // The edit's other counts are folded into the one message.
-    expect(redundant.has(events[1])).toBe(true);
-    expect(redundant.has(events[2])).toBe(true);
+    const result = summarize(events, currentTotals);
+    expect(summariesOf(result)).toMatchObject([
+      { kind: 'added', speciesName: 'Carex meyenii' },
+      { kind: 'removed', speciesName: 'Carex meyenii' },
+    ]);
+    expect(result.events.indexOf(events[2])).toBeLessThan(result.events.length - 4);
+    expect(result.redundant.size).toBe(0);
   });
 
   it('does not read raising one count from zero as the species being added', () => {
@@ -136,9 +142,7 @@ describe('summarizeMonitoringSpeciesEvents', () => {
       { speciesName: 'Acacia koa', from: [0, 4, 0], to: [0, 4, 2] }
     );
 
-    const { summaries } = summarize(events, currentTotals);
-    expect(summaries.get(events[0])).toMatchObject({ kind: 'added', speciesName: 'Acacia koa' });
-    expect(summaries.get(events[1])).toBeUndefined();
+    expect(summariesOf(summarize(events, currentTotals))).toMatchObject([{ kind: 'added', speciesName: 'Acacia koa' }]);
   });
 
   it('does not read dropping one count to zero as the species being removed', () => {
@@ -147,8 +151,7 @@ describe('summarizeMonitoringSpeciesEvents', () => {
       { speciesName: 'Acacia koa', from: [0, 4, 2], to: [0, 4, 0] }
     );
 
-    const { summaries } = summarize(events, currentTotals);
-    expect(summaries.get(events[2])).toBeUndefined();
+    expect(summariesOf(summarize(events, currentTotals))).toMatchObject([{ kind: 'added', speciesName: 'Acacia koa' }]);
   });
 
   it('reads a removal next to an addition of the same counts as the species being changed', () => {
@@ -157,15 +160,12 @@ describe('summarizeMonitoringSpeciesEvents', () => {
       { speciesName: 'Duosperma angolense', from: [2, 6, 1], to: [0, 0, 0] },
       { speciesName: 'Abutilon eremitopetalum', from: [0, 0, 0], to: [2, 6, 1] }
     );
-    // The first edit is the original add; the change is the last two.
-    const changeEntries = events.slice(3);
-
-    const { summaries } = summarize(events, currentTotals);
-    expect(summaries.get(changeEntries[0])).toMatchObject({
-      kind: 'changed',
-      speciesName: 'Duosperma angolense',
-      toSpeciesName: 'Abutilon eremitopetalum',
-    });
+    const result = summarize(events, currentTotals);
+    expect(summariesOf(result)).toMatchObject([
+      { kind: 'added', speciesName: 'Duosperma angolense' },
+      { kind: 'changed', speciesName: 'Duosperma angolense', toSpeciesName: 'Abutilon eremitopetalum' },
+    ]);
+    expect(events.slice(3).every((entry) => result.redundant.has(entry))).toBe(true);
   });
 
   it('pairs a change the same way when the list runs newest first', () => {
@@ -176,8 +176,9 @@ describe('summarizeMonitoringSpeciesEvents', () => {
     );
 
     // The replay orders the log by timestamp itself, so display order does not affect it.
-    const { summaries } = summarize([...events].reverse(), currentTotals);
-    const changed = [...summaries.values()].find((summary) => summary.kind === 'changed');
+    const changed = summariesOf(summarize([...events].reverse(), currentTotals)).find(
+      (summary) => summary.kind === 'changed'
+    );
     expect(changed).toMatchObject({
       kind: 'changed',
       speciesName: 'Duosperma angolense',
@@ -191,9 +192,10 @@ describe('summarizeMonitoringSpeciesEvents', () => {
       { speciesName: 'Carex meyenii', from: [2, 5, 1], to: [0, 0, 0] }
     );
 
-    const { summaries } = summarize(events, currentTotals);
-    expect(summaries.get(events[0])).toMatchObject({ kind: 'added', speciesName: 'Carex meyenii' });
-    expect(summaries.get(events[3])).toMatchObject({ kind: 'removed', speciesName: 'Carex meyenii' });
+    expect(summariesOf(summarize(events, currentTotals))).toMatchObject([
+      { kind: 'added', speciesName: 'Carex meyenii' },
+      { kind: 'removed', speciesName: 'Carex meyenii' },
+    ]);
   });
 
   it('does not pair a removal with an addition that carries different counts', () => {
@@ -203,9 +205,11 @@ describe('summarizeMonitoringSpeciesEvents', () => {
       { speciesName: 'Abutilon eremitopetalum', from: [0, 0, 0], to: [3, 7, 2] }
     );
 
-    const { summaries } = summarize(events, currentTotals);
-    expect(summaries.get(events[3])).toMatchObject({ kind: 'removed', speciesName: 'Duosperma angolense' });
-    expect(summaries.get(events[6])).toMatchObject({ kind: 'added', speciesName: 'Abutilon eremitopetalum' });
+    expect(summariesOf(summarize(events, currentTotals))).toMatchObject([
+      { kind: 'added', speciesName: 'Duosperma angolense' },
+      { kind: 'removed', speciesName: 'Duosperma angolense' },
+      { kind: 'added', speciesName: 'Abutilon eremitopetalum' },
+    ]);
   });
 
   it('keeps a removal and an addition separate when something else was logged between them', () => {
@@ -216,9 +220,11 @@ describe('summarizeMonitoringSpeciesEvents', () => {
       { speciesName: 'Abutilon eremitopetalum', from: [0, 0, 0], to: [2, 6, 1] }
     );
 
-    const { summaries } = summarize(events, currentTotals);
-    expect(summaries.get(events[3])).toMatchObject({ kind: 'removed', speciesName: 'Duosperma angolense' });
-    expect(summaries.get(events[7])).toMatchObject({ kind: 'added', speciesName: 'Abutilon eremitopetalum' });
+    expect(summariesOf(summarize(events, currentTotals))).toMatchObject([
+      { kind: 'added', speciesName: 'Duosperma angolense' },
+      { kind: 'removed', speciesName: 'Duosperma angolense' },
+      { kind: 'added', speciesName: 'Abutilon eremitopetalum' },
+    ]);
   });
 
   it('does not pair edits made by different people', () => {
@@ -228,9 +234,11 @@ describe('summarizeMonitoringSpeciesEvents', () => {
       { speciesName: 'Abutilon eremitopetalum', from: [0, 0, 0], to: [2, 6, 1], userId: 2 }
     );
 
-    const { summaries } = summarize(events, currentTotals);
-    expect(summaries.get(events[3])).toMatchObject({ kind: 'removed', speciesName: 'Duosperma angolense' });
-    expect(summaries.get(events[6])).toMatchObject({ kind: 'added', speciesName: 'Abutilon eremitopetalum' });
+    expect(summariesOf(summarize(events, currentTotals))).toMatchObject([
+      { kind: 'added', speciesName: 'Duosperma angolense' },
+      { kind: 'removed', speciesName: 'Duosperma angolense' },
+      { kind: 'added', speciesName: 'Abutilon eremitopetalum' },
+    ]);
   });
 
   it('leaves an ordinary count edit to render as a value change', () => {
@@ -239,8 +247,7 @@ describe('summarizeMonitoringSpeciesEvents', () => {
       { speciesName: 'Acacia koa', from: [0, 4, 1], to: [0, 9, 1] }
     );
 
-    const { summaries } = summarize(events, currentTotals);
-    expect(summaries.get(events[2])).toBeUndefined();
+    expect(summariesOf(summarize(events, currentTotals))).toMatchObject([{ kind: 'added', speciesName: 'Acacia koa' }]);
   });
 
   it('says nothing about a species whose counts cannot be replayed', () => {
@@ -261,8 +268,8 @@ describe('summarizeMonitoringSpeciesEvents', () => {
       to: [3, 4, 5],
     });
 
-    const { summaries } = summarize(events, currentTotals);
-    expect(summaries.get(events[0])?.counts).toEqual([
+    const [summary] = summariesOf(summarize(events, currentTotals));
+    expect(summary.counts).toEqual([
       { label: EXISTING, value: '3' },
       { label: LIVE, value: '4' },
       { label: DEAD, value: '5' },
@@ -276,8 +283,8 @@ describe('summarizeMonitoringSpeciesEvents', () => {
     );
 
     // Pre-existing was zero throughout, so no plants were removed under it.
-    const { summaries } = summarize(events, currentTotals);
-    expect(summaries.get(events[2])?.counts).toEqual([
+    const removal = summariesOf(summarize(events, currentTotals)).find((item) => item.kind === 'removed');
+    expect(removal?.counts).toEqual([
       { label: LIVE, value: '4' },
       { label: DEAD, value: '1' },
     ]);
