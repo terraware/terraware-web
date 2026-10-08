@@ -30,6 +30,7 @@ import BiomassList from './BiomassList';
 import ObservationFilters from './ObservationFilters';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
 import PlantMonitoringList from './PlantMonitoringList';
+import ScheduledObservationsMenu from './ScheduledObservations';
 import SurvivalRateSettingsMenu from './SurvivalRateSettingsMenu';
 import ViewModeToggle from './ViewModeToggle';
 
@@ -235,7 +236,13 @@ const ObservationListViewContent = (): JSX.Element => {
         <Button
           id={'schedule-observation'}
           label={strings.SCHEDULE_OBSERVATION}
-          onClick={() => navigate(APP_PATHS.SCHEDULE_OBSERVATION)}
+          onClick={() =>
+            navigate(
+              typeof selectedPlantingSiteId === 'number'
+                ? `${APP_PATHS.SCHEDULE_OBSERVATION}?plantingSiteId=${selectedPlantingSiteId}`
+                : APP_PATHS.SCHEDULE_OBSERVATION
+            )
+          }
           size='medium'
           sx={newFiltersEnabled ? { flex: isMobile ? 1 : undefined, margin: 0, whiteSpace: 'nowrap' } : undefined}
         />
@@ -243,7 +250,14 @@ const ObservationListViewContent = (): JSX.Element => {
     } else {
       return undefined;
     }
-  }, [isMobile, navigate, newFiltersEnabled, scheduleObservationEnabled, strings.SCHEDULE_OBSERVATION]);
+  }, [
+    isMobile,
+    navigate,
+    newFiltersEnabled,
+    scheduleObservationEnabled,
+    selectedPlantingSiteId,
+    strings.SCHEDULE_OBSERVATION,
+  ]);
 
   const headerActions = useMemo(
     () => (
@@ -256,12 +270,16 @@ const ObservationListViewContent = (): JSX.Element => {
         }}
       >
         {scheduleObservationButton}
+        <ScheduledObservationsMenu
+          canReschedule={isAdmin(selectedOrganization)}
+          plantingSiteId={selectedPlantingSiteId}
+        />
         {typeof selectedPlantingSiteId === 'number' && (
           <SurvivalRateSettingsMenu plantingSiteId={selectedPlantingSiteId} />
         )}
       </Box>
     ),
-    [isDesktop, scheduleObservationButton, selectedPlantingSiteId, theme]
+    [isDesktop, scheduleObservationButton, selectedOrganization, selectedPlantingSiteId, theme]
   );
 
   const countedObservationType = newFiltersEnabled
@@ -343,7 +361,6 @@ const ObservationListViewContent = (): JSX.Element => {
         }
         title={strings.OBSERVATIONS}
       >
-        <ObservationsEventsNotification />
         {plotType === 'assigned' && (
           <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
         )}

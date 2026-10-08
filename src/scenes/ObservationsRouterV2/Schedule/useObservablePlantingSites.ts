@@ -12,7 +12,7 @@ const useObservablePlantingSites = () => {
 
   const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const allObservations = useMemo(
-    () => listObservationsResponse.currentData?.observations ?? [],
+    () => listObservationsResponse.currentData?.observations,
     [listObservationsResponse.currentData?.observations]
   );
 
@@ -37,7 +37,7 @@ const useObservablePlantingSites = () => {
   }, [allObservations, now]);
 
   const plantingSitesWithStrataAndNoUpcomingObservations = useMemo(() => {
-    if (!plantingSites || !allSitesReportedPlants) {
+    if (!plantingSites || !allSitesReportedPlants || !upcomingObservations) {
       return [];
     }
     return plantingSites.filter((site) => {
@@ -48,7 +48,7 @@ const useObservablePlantingSites = () => {
       if (!sitePlants?.totalPlants) {
         return false;
       }
-      const siteUpcomingObservations = upcomingObservations?.filter(
+      const siteUpcomingObservations = upcomingObservations.filter(
         (observation) => observation.plantingSiteId === site.id
       );
       if (siteUpcomingObservations.length > 0) {
