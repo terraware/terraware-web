@@ -1,3 +1,6 @@
+3dcf21a5 SW-8963 Reschedule observations inline from the scheduled flyout (#6672)
+419f14b6 SW-8963 Move scheduled observations from the banner to a calendar flyout (#6671)
+d3092a4a SW-8963 Pre-select planting site when scheduling observations (#6670)
 a39db3e5 SW-8916 New header for Activity log add (#6689)
 f5a3808a SW-8998 Add end-to-end tests for planting site creation (#6684)
 77895956 Use the shared Stepper in planting site setup (#6683)
