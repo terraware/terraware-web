@@ -89,7 +89,7 @@ export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChoose
           'linear-gradient(180deg, ' +
           `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)}, ` +
           `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.24)})`,
-        borderRadius: 'inherit',
+        borderRadius: theme.spacing(1),
         display: 'flex',
         inset: 0,
         justifyContent: 'center',
