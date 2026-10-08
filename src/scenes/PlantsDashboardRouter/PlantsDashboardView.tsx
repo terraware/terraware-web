@@ -8,13 +8,14 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { APP_PATHS } from 'src/constants';
+import { useLatestSiteObservationResult } from 'src/hooks/observations';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import useStickyPlantingSiteId, { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
-import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
+import { hasPendingResults } from 'src/utils/observation';
 
 import EmptyPlantingSiteMap from './components/EmptyPlantingSiteMap';
 import LatestObservationLink from './components/LatestObservationLink';
@@ -147,8 +148,8 @@ export default function PlantsDashboardView({
     setTotalsStratumId(onlyStratumId ?? 'all');
   }, [onlyStratumId, plantingSite?.id]);
 
-  // Poll for survival rate recalculation and refresh observation results when it completes.
-  const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(plantingSite?.id);
+  const { observation: latestObservationResult } = useLatestSiteObservationResult(plantingSite?.id, 'Stratum');
+  const survivalRateRecalculationInProgress = hasPendingResults(latestObservationResult);
   const hasObservationResults = useMemo(() => !!plantingSite?.latestObservationId, [plantingSite]);
 
   const sectionHeader = (title: string) => (

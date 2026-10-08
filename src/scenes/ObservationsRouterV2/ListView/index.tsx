@@ -7,13 +7,11 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
-import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useStickyPlantingSiteId, { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
-import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
@@ -117,10 +115,6 @@ const ObservationListViewContent = (): JSX.Element => {
     selectPlantingSite,
     showAllSitesOption,
   ]);
-
-  // Poll for survival rate recalculation and refresh observation results when it completes.
-  const { inProgress: survivalRateRecalculationInProgress } =
-    useSurvivalRateCalculationInProgress(plantingSiteIdFilter);
 
   const plantingSiteOptions = useMemo((): DropdownItem[] => {
     const sitesOptions = plantingSites
@@ -344,10 +338,9 @@ const ObservationListViewContent = (): JSX.Element => {
       countedObservationType === 'Monitoring' && (
         <>
           <SurvivalRateMessageV2 selectedPlantingSiteId={plantingSiteIdFilter} />
-          <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
         </>
       ),
-    [countedObservationType, plantingSiteIdFilter, survivalRateRecalculationInProgress]
+    [countedObservationType, plantingSiteIdFilter]
   );
 
   if (newFiltersEnabled) {
@@ -361,9 +354,6 @@ const ObservationListViewContent = (): JSX.Element => {
         }
         title={strings.OBSERVATIONS}
       >
-        {plotType === 'assigned' && (
-          <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
-        )}
         {viewMode !== 'list' && observationMapCard}
         {viewMode !== 'map' &&
           (plotType === 'adHoc' ? (

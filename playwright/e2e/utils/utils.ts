@@ -21,11 +21,11 @@ export const openNavItem = async (page: Page, parentName: string, childName: str
   const section = page
     .locator('.nav-item--has-children')
     .filter({ has: page.getByRole('button', { name: parentName, exact: true }) });
-  await section.getByRole('button', { name: parentName, exact: true }).waitFor({ state: 'visible' });
-  const child = section.getByRole('button', { name: childName, exact: true });
-  if (!(await child.isVisible().catch(() => false))) {
-    await section.getByRole('button', { name: parentName, exact: true }).click();
-    await child.waitFor({ state: 'visible' });
+  const parent = section.getByRole('button', { name: parentName, exact: true });
+  await parent.waitFor({ state: 'visible' });
+  // Some children render only after their data loads, so a missing child doesn't mean the section is closed.
+  if (!(await section.locator('.subnavbar').isVisible())) {
+    await parent.click();
   }
-  await child.click();
+  await section.getByRole('button', { name: childName, exact: true }).click();
 };
