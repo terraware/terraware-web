@@ -33,11 +33,13 @@ const renderModal = () => {
 };
 
 // building a multi-megabyte File would be wasteful, and only the reported size matters here
-const fileOfSize = (filename: string, sizeMb: number): File => {
+const fileOfBytes = (filename: string, bytes: number): File => {
   const file = new File(['{}'], filename, { type: 'application/json' });
-  Object.defineProperty(file, 'size', { value: Math.round(sizeMb * 1024 * 1024) });
+  Object.defineProperty(file, 'size', { value: bytes });
   return file;
 };
+
+const fileOfSize = (filename: string, sizeMb: number): File => fileOfBytes(filename, Math.round(sizeMb * 1024 * 1024));
 
 // FileChooser hides its input and drives it from the Choose File button, so there is no
 // accessible handle to query by.
@@ -106,6 +108,17 @@ describe('UploadBoundaryModal', () => {
     expect(screen.queryByText('survey-raw.zip')).not.toBeInTheDocument();
     expect(screen.queryByText(tooLargeMessage())).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: strings.UPLOAD })).toBeEnabled();
+  });
+
+  it.each([
+    [300, () => strings.formatString(strings.FILE_SIZE_BYTES, '300') as string],
+    [1024, () => strings.formatString(strings.FILE_SIZE_KB, '1') as string],
+  ])('describes a chosen file of %i bytes in the largest unit it fills', async (bytes, sizeText) => {
+    const { user } = renderModal();
+
+    await chooseFile(user, fileOfBytes('site.geojson', bytes));
+
+    expect(await screen.findByText(sizeText())).toBeInTheDocument();
   });
 
   it('reports the file size against the limit when the server rejects the upload as too large', async () => {
