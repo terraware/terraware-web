@@ -30,7 +30,7 @@ export const decorators = [
     const [activeLocale, setActiveLocale] = useState<string | null>(null);
 
     return (
-      <>
+      <Provider store={store}>
         <ThemeProvider theme={theme}>
           <LocalizationProvider
             selectedLocale={selectedLocale}
@@ -40,14 +40,12 @@ export const decorators = [
           >
             <StyledEngineProvider injectFirst>
               <MemoryRouter initialEntries={['/']}>
-                <Provider store={store}>
-                  <Story />
-                </Provider>
+                <Story />
               </MemoryRouter>
             </StyledEngineProvider>
           </LocalizationProvider>
         </ThemeProvider>
-      </>
+      </Provider>
     );
   },
 ];
