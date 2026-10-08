@@ -5,6 +5,7 @@ import { Icon } from '@terraware/web-components';
 import { IconName } from '@terraware/web-components/components/Icon/icons';
 
 import strings from 'src/strings';
+import { getRgbaFromHex } from 'src/utils/color';
 
 export type BoundaryMethod = 'upload' | 'draw';
 
@@ -73,7 +74,7 @@ export type BoundaryMethodChooserProps = {
 };
 
 /**
- * Overlay shown on top of the map while the site boundary is still undefined, letting the
+ * Overlay shown on top of the editor card while the site boundary is still undefined, letting the
  * user choose between uploading a spatial file and drawing the boundary by hand.
  */
 export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChooserProps): JSX.Element {
@@ -83,7 +84,12 @@ export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChoose
     <Box
       sx={{
         alignItems: 'center',
-        background: 'rgba(29, 27, 21, 0.28)',
+        backgroundColor: getRgbaFromHex(theme.palette.TwClrBaseGray025 as string, 0.6),
+        backgroundImage:
+          'linear-gradient(180deg, ' +
+          `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0)}, ` +
+          `${getRgbaFromHex(theme.palette.TwClrBaseGreen050 as string, 0.24)})`,
+        borderRadius: 'inherit',
         display: 'flex',
         inset: 0,
         justifyContent: 'center',
@@ -95,7 +101,7 @@ export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChoose
         sx={{
           alignItems: 'center',
           background: theme.palette.TwClrBg,
-          borderRadius: '16px',
+          borderRadius: '8px',
           boxShadow: '0 16px 32px 0 rgba(58, 68, 69, 0.2)',
           display: 'flex',
           flexDirection: 'column',

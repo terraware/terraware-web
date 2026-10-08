@@ -22,7 +22,7 @@ export default function DraftPlantingSiteDetailsCard({ plantingSite }: DraftPlan
   const { selectedProject } = useProjects(plantingSite);
 
   return (
-    <Card flushMobile radius={theme.spacing(2)} title={strings.DETAILS}>
+    <Card flushMobile radius={theme.spacing(1)} title={strings.DETAILS}>
       <Box
         display='grid'
         gridTemplateColumns={isMobile ? '1fr' : 'repeat(4, minmax(0, 1fr))'}

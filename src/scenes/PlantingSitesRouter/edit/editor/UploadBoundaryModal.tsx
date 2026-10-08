@@ -158,7 +158,7 @@ export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBounda
       title={strings.UPLOAD_SITE_BOUNDARY}
       size='large'
       skrim
-      style={{ position: 'absolute' }}
+      style={{ borderRadius: 'inherit', position: 'absolute' }}
       middleButtons={[
         <Button
           id='cancel-upload-boundary'

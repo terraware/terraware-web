@@ -46,7 +46,7 @@ export default function PlantingSiteView(): JSX.Element {
         {plantingSite.boundary && (
           <Card
             flushMobile
-            radius={theme.spacing(2)}
+            radius={theme.spacing(1)}
             style={{
               flexGrow: 1,
               display: 'flex',

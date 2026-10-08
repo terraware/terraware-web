@@ -60,7 +60,7 @@ export default function DraftPlantingSiteBoundaryCard({
     : undefined;
 
   return (
-    <Card flushMobile radius={theme.spacing(2)} title={strings.SITE_BOUNDARY}>
+    <Card flushMobile radius={theme.spacing(1)} title={strings.SITE_BOUNDARY}>
       {boundary ? (
         <Box
           display='flex'
