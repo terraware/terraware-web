@@ -1,6 +1,5 @@
 import React, { type JSX, useCallback } from 'react';
 
-import { Typography } from '@mui/material';
 import { BusySpinner, Button, DialogBox } from '@terraware/web-components';
 
 import { APP_PATHS } from 'src/constants';
@@ -41,7 +40,7 @@ export default function DeleteDraftPlantingSiteModal(props: Props): JSX.Element 
       <DialogBox
         onClose={onClose}
         open={true}
-        title={strings.DELETE_PLANTING_SITE}
+        title={strings.DELETE_THIS_DRAFT}
         size='medium'
         middleButtons={[
           <Button
@@ -56,15 +55,13 @@ export default function DeleteDraftPlantingSiteModal(props: Props): JSX.Element 
             id='saveDeletePlantingSite'
             onClick={deleteHandler}
             type='destructive'
-            label={strings.DELETE}
+            label={strings.DELETE_DRAFT}
             key='button-2'
           />,
         ]}
-        message={strings.formatString(strings.DELETE_PLANTING_SITE_MESSAGE, plantingSite.name)}
+        message={strings.formatString(strings.DELETE_DRAFT_MESSAGE, plantingSite.name)}
         skrim={true}
-      >
-        <Typography sx={{ paddingTop: 3 }}>{strings.ARE_YOU_SURE}</Typography>
-      </DialogBox>
+      />
     </>
   );
 }

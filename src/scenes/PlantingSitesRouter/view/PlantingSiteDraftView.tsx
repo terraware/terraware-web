@@ -15,9 +15,9 @@ import { useUser } from 'src/providers';
 import DeleteDraftPlantingSiteModal from 'src/scenes/PlantingSitesRouter/edit/DeleteDraftPlantingSiteModal';
 import useDraftPlantingSite from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteGet';
 
+import DraftPlantingSiteHeader from './DraftPlantingSiteHeader';
 import DraftPlantingSiteListMapView from './DraftPlantingSiteListMapView';
 import PlantingSiteDetailsCard from './PlantingSiteDetailsCard';
-import PlantingSiteDetailsHeader from './PlantingSiteDetailsHeader';
 import SimplePlantingSite from './SimplePlantingSite';
 
 export default function PlantingSiteDraftView(): JSX.Element {
@@ -54,9 +54,8 @@ export default function PlantingSiteDraftView(): JSX.Element {
         )}
         {plantingSite && (
           <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: isMapView ? 1 : 0 }}>
-            <PlantingSiteDetailsHeader
+            <DraftPlantingSiteHeader
               editDisabled={!user || result.site.createdBy !== user.id}
-              isDraft
               onEdit={goToEditDraftPlantingSite}
               onDelete={() => setDeleteModalOpen(true)}
               plantingSite={plantingSite}

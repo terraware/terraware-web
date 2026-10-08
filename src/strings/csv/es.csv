@@ -404,7 +404,12 @@ CONTENT_AND_MATERIALS,Contenidos y materiales,c0cf19c7
 CONTINUE,Continuar,b019a26b
 CONTINUE_AND_RESET_STATUS,Continuar y restablecer estado,5f35516c
 CONTINUE_APPLICATION,Continuar solicitud,bd87b380
+CONTINUE_BOUNDARY_SETUP,Continuar con la configuración de límites,13d17477
 CONTINUE_TO_APPLICATION,Continuar a la Solicitud,bc4ca333
+CONTINUE_WITH_DETAILS,Continuar con los detalles,f6430a6d
+CONTINUE_WITH_EXCLUSION_AREAS,Continuar con las áreas de exclusión,c263fd4c
+CONTINUE_WITH_STRATUM_BOUNDARIES,Continuar con los límites de estrato,f705c34f
+CONTINUE_WITH_SUBSTRATUM_BOUNDARIES,Continuar con los límites de subestrato,ab208dcb
 CONTRIBUTOR,Colaborador,79b43797
 CONTRIBUTOR_INFO,"Un colaborador puede añadir entradas de datos para semillas, gestionar el inventario de viveros (salvo los retiros de plantaciones, ver los retiros), gestionar las reasignaciones de viveros y visualizar las plantaciones de un sitio de plantación en un mapa geográfico.",2e98706c
 CONVERTED_VALUE_INFO,Este valor se calcula automáticamente con fines informativos.,d8d0d516
@@ -488,6 +493,8 @@ DELETE_ACCOUNT_ERROR,Ocurrió un error al eliminar su cuenta.,6105987b
 DELETE_ACTIVITY,Eliminar actividad,18958b95
 DELETE_ACTIVITY_CONFIRM,¿Está seguro de que desea eliminar esta actividad? Todos los datos de la actividad serán eliminados.,e64e17b5
 DELETE_CONFIRMATION_MODAL_MAIN_TEXT,¿Está seguro de que desea eliminar la especie?,43a238c7
+DELETE_DRAFT,Eliminar borrador,874e7f67
+DELETE_DRAFT_MESSAGE,{0} y todo lo configurado hasta ahora se eliminarán. Esta acción no se puede deshacer.,20949187
 DELETE_FUNDING_ENTITY,Eliminar entidad financiadora,7d8a1f95
 DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,Se eliminarán todos los financiadores asociados a esta entidad financiadora.,cedce711
 DELETE_FUNDING_ENTITY_MESSAGE,Va a eliminar {0}.,4a41e34f
@@ -515,6 +522,7 @@ DELETE_SEEDLINGS_BATCHES_MSG,"Eliminar lotes sin retiros los eliminará completa
 DELETE_SPECIES,Borrar Especie,b3dd3256
 DELETE_SPECIES_TARGET,Eliminar objetivo de especie,bffd4971
 DELETE_SPECIES_TARGET_CONFIRM,"Está a punto de eliminar la especie {0} como objetivo para este sustrato. La cantidad se eliminará del objetivo total de plantación para esta temporada y se notificará al vivero para que ajuste las plantas asignadas, si es necesario.",93b5a604
+DELETE_THIS_DRAFT,¿Eliminar este borrador?,9ecf4292
 DELETE_VIABILITY_TEST,Eliminar prueba de viabilidad,db53dffa
 DELETE_VIABILITY_TEST_MESSAGE,Está a punto de borrar la prueba de viabilidad {0}.,ceace778
 DELETED_SPECIES,<deleted species>,c397460c

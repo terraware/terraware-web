@@ -403,7 +403,12 @@ CONTENT_AND_MATERIALS,Contenu et matériel,c0cf19c7
 CONTINUE,Continuer,b019a26b
 CONTINUE_AND_RESET_STATUS,Continuer et réinitialiser le statut,5f35516c
 CONTINUE_APPLICATION,Continuer la candidature,bd87b380
+CONTINUE_BOUNDARY_SETUP,Continuer la configuration des limites,13d17477
 CONTINUE_TO_APPLICATION,Continuer vers la demande,bc4ca333
+CONTINUE_WITH_DETAILS,Continuer avec les détails,f6430a6d
+CONTINUE_WITH_EXCLUSION_AREAS,Continuer avec les zones d’exclusion,c263fd4c
+CONTINUE_WITH_STRATUM_BOUNDARIES,Continuer avec les limites de strates,f705c34f
+CONTINUE_WITH_SUBSTRATUM_BOUNDARIES,Continuer avec les limites de sous-strates,ab208dcb
 CONTRIBUTOR,Contributeur,79b43797
 CONTRIBUTOR_INFO,"Un contributeur peut ajouter des données sur les semences, gérer l'inventaire des pépinières à l'exception des retraits de plantation, visualiser les retraits, gérer les réaffectations de pépinières et visualiser les plantations d'un site de plantation sur une carte géographique.",2e98706c
 CONVERTED_VALUE_INFO,Cette valeur est calculée automatiquement à titre d'information.,d8d0d516
@@ -487,6 +492,8 @@ DELETE_ACCOUNT_ERROR,Une erreur s'est produite lors de la suppression de votre c
 DELETE_ACTIVITY,Supprimer l'activité,18958b95
 DELETE_ACTIVITY_CONFIRM,Êtes-vous sûr de vouloir supprimer cette activité ? Toutes les données associées à cette activité seront supprimées.,e64e17b5
 DELETE_CONFIRMATION_MODAL_MAIN_TEXT,Êtes-vous sûr de vouloir supprimer l'espèce ?,43a238c7
+DELETE_DRAFT,Supprimer le brouillon,874e7f67
+DELETE_DRAFT_MESSAGE,{0} et tout ce qui a été configuré jusqu'à présent seront supprimés. Cette action est irréversible.,20949187
 DELETE_FUNDING_ENTITY,Supprimer l’entité de financement,7d8a1f95
 DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,Tous les financeurs associés à cette entité de financement seront supprimés.,cedce711
 DELETE_FUNDING_ENTITY_MESSAGE,Vous êtes sur le point de supprimer {0}.,4a41e34f
@@ -514,6 +521,7 @@ DELETE_SEEDLINGS_BATCHES_MSG,"La suppression de lots sans retraits les supprimer
 DELETE_SPECIES,Supprimer l'espèce,b3dd3256
 DELETE_SPECIES_TARGET,Supprimer l'objectif d'espèce,bffd4971
 DELETE_SPECIES_TARGET_CONFIRM,"Vous êtes sur le point de supprimer l'espèce {0} en tant qu'objectif pour ce substrat. La quantité sera retirée de l'objectif total de plantation pour cette saison, et la pépinière sera informée afin d'ajuster les plants alloués, si nécessaire.",93b5a604
+DELETE_THIS_DRAFT,Supprimer ce brouillon ?,9ecf4292
 DELETE_VIABILITY_TEST,Supprimer le test de viabilité,db53dffa
 DELETE_VIABILITY_TEST_MESSAGE,Vous vous apprêtez à supprimer le test de viabilité {0}.,ceace778
 DELETED_SPECIES,<deleted species>,c397460c

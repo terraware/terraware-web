@@ -1,34 +1,28 @@
 import React, { type JSX } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
-import { DropdownItem } from '@terraware/web-components';
+import { Button, DropdownItem } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import BackToLink from 'src/components/common/BackToLink';
 import OptionsMenu from 'src/components/common/OptionsMenu';
-import TooltipButton from 'src/components/common/button/TooltipButton';
 import { APP_PATHS } from 'src/constants';
-import { useLocalization, useOrganization } from 'src/providers';
+import { useOrganization } from 'src/providers';
 import strings from 'src/strings';
 import { MinimalPlantingSite } from 'src/types/Tracking';
 import { isAdmin } from 'src/utils/organization';
 
 export type PlantingSiteDetailsHeaderProps = {
-  editDisabled?: boolean;
-  isDraft?: boolean;
   onDelete: () => void;
   onEdit: () => void;
   plantingSite: MinimalPlantingSite;
 };
 
 export default function PlantingSiteDetailsHeader({
-  editDisabled,
-  isDraft,
   onDelete,
   onEdit,
   plantingSite,
 }: PlantingSiteDetailsHeaderProps): JSX.Element {
-  const { activeLocale } = useLocalization();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
@@ -51,30 +45,26 @@ export default function PlantingSiteDetailsHeader({
         }}
       >
         <Typography fontSize='20px' fontWeight={600}>
-          {plantingSite?.name} {isDraft && activeLocale ? `(${strings.DRAFT})` : undefined}
+          {plantingSite?.name}
         </Typography>
         {isAdmin(selectedOrganization) && (
           <Box display='flex' alignItems='center'>
-            <TooltipButton
-              disabled={editDisabled}
+            <Button
               icon='iconEdit'
               label={isMobile ? undefined : strings.EDIT_PLANTING_SITE}
               priority='primary'
               size='medium'
-              tooltip={editDisabled ? strings.SITE_EDIT_DISABLED_TOOLTIP : undefined}
               onClick={onEdit}
             />
-            {editDisabled !== true && (
-              <OptionsMenu
-                size='small'
-                onOptionItemClick={(item: DropdownItem) => {
-                  if (item.value === 'delete-planting-site') {
-                    onDelete();
-                  }
-                }}
-                optionItems={[{ label: strings.DELETE, value: 'delete-planting-site', type: 'destructive' }]}
-              />
-            )}
+            <OptionsMenu
+              size='small'
+              onOptionItemClick={(item: DropdownItem) => {
+                if (item.value === 'delete-planting-site') {
+                  onDelete();
+                }
+              }}
+              optionItems={[{ label: strings.DELETE, value: 'delete-planting-site', type: 'destructive' }]}
+            />
           </Box>
         )}
       </Grid>
