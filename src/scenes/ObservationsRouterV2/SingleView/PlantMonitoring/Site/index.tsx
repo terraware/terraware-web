@@ -13,7 +13,6 @@ import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/Surviv
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
-import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import ObservationMapWrapper from 'src/scenes/ObservationsRouterV2/Map';
@@ -22,7 +21,11 @@ import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouterV2/Sing
 import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getShortDate } from 'src/utils/dateFormatter';
-import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
+import {
+  getObservationSpeciesDeadPlantsCount,
+  getObservationSpeciesLivePlantsCount,
+  hasPendingResults,
+} from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import ObservationDataNumbers from '../../BiomassMeasurements/ObservationDataNumbers';
@@ -67,11 +70,6 @@ const SiteDetails = (): JSX.Element => {
 
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
-
-  // Poll for survival rate recalculation and refresh observation results when it completes.
-  const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(
-    results?.plantingSiteId
-  );
 
   useEffect(() => {
     if (results?.plantingSiteId) {
@@ -163,7 +161,7 @@ const SiteDetails = (): JSX.Element => {
         />
       )}
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
-      <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
+      <SurvivalRateRecalculationMessage inProgress={hasPendingResults(results)} />
       <Card radius='24px' style={{ width: '100%' }}>
         <ObservationDataNumbers items={items} isCompleted={!!results?.completedTime} />
         <Box display='flex' gap={3} flexDirection={isDesktop ? 'row' : 'column'} flexWrap='wrap' marginBottom={3}>

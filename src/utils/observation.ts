@@ -1,4 +1,4 @@
-import { ExistingBiomassMeasurementPayload } from 'src/queries/generated/observations';
+import { ExistingBiomassMeasurementPayload, ObservationResultsPayload } from 'src/queries/generated/observations';
 import { ObservationSpeciesResults, ObservationSpeciesResultsPayload } from 'src/types/Observations';
 
 export const getObservationSpeciesLivePlantsCount = (
@@ -30,3 +30,14 @@ export const getBiomassObservationDeadTreeCount = (
   }
   return biomassMeasurement.trees.filter((tree) => tree.isDead).length;
 };
+
+export const hasPendingResults = (results: ObservationResultsPayload | undefined): boolean =>
+  !!results &&
+  (results.pending ||
+    results.strata.some(
+      (stratum) =>
+        stratum.pending ||
+        stratum.substrata.some(
+          (substratum) => substratum.pending || substratum.monitoringPlots.some((plot) => plot.pending)
+        )
+    ));
