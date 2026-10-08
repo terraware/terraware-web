@@ -557,6 +557,7 @@ DEV_SERVER_ERROR,Server unavailable (may be restarting with new code changes). R
 DIAMETER_AT_BREAST_HEIGHT,Diameter at Breast Height (DBH) at Maturity (cm),
 DIFFICULT_ACCESSIBILITY,Difficult Accessibility,
 DISCARD,Discard,
+DISCARD_CHANGES,Discard changes,
 DISCARD_THIS_SITE,Discard this site?,
 DISCARD_UNNAMED_SITE_MESSAGE,"This site can’t be saved as a draft without a name. Discard what you’ve entered, or keep editing to add a name.",
 DISMISS,Dismiss,

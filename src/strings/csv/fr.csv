@@ -556,6 +556,7 @@ DEV_SERVER_ERROR,Serveur non disponible (possibilité de redémarrage avec mise 
 DIAMETER_AT_BREAST_HEIGHT,Diamètre à hauteur de poitrine (DHP) à maturité (cm),6b42a16f
 DIFFICULT_ACCESSIBILITY,Accessibilité difficile,18c83274
 DISCARD,Abandonner,51a7ed1d
+DISCARD_CHANGES,Annuler les modifications,f79f534a
 DISCARD_THIS_SITE,Abandonner ce site ?,ed8d4636
 DISCARD_UNNAMED_SITE_MESSAGE,Ce site ne peut pas être enregistré comme brouillon sans nom. Abandonnez ce que vous avez saisi ou continuez la modification pour ajouter un nom.,5f5bca5b
 DISMISS,Fermer,a56709f4

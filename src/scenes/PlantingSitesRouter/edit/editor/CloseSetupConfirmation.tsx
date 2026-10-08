@@ -34,7 +34,7 @@ export default function CloseSetupConfirmation({
       onClose={onKeepEditing}
       open={true}
       title={canSave ? strings.CLOSE_SITE_SETUP : strings.DISCARD_THIS_SITE}
-      size='medium'
+      size='large'
       message={getMessage()}
       leftButton={
         <Button
@@ -49,7 +49,7 @@ export default function CloseSetupConfirmation({
         <Button
           id='discard-planting-site'
           key='discard'
-          label={strings.DISCARD}
+          label={isNewSite ? strings.DISCARD : strings.DISCARD_CHANGES}
           onClick={onDiscard}
           priority={canSave ? 'secondary' : 'primary'}
           type='destructive'
@@ -59,7 +59,7 @@ export default function CloseSetupConfirmation({
               <Button
                 id='save-planting-site-as-draft'
                 key='save'
-                label={strings.SAVE_AS_DRAFT}
+                label={isNewSite ? strings.SAVE_AS_DRAFT : strings.SAVE_AND_CLOSE}
                 onClick={onSaveAsDraft}
               />,
             ]

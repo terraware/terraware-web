@@ -557,6 +557,7 @@ DEV_SERVER_ERROR,Servidor no disponible (se puede reiniciar con nuevos cambios e
 DIAMETER_AT_BREAST_HEIGHT,Diámetro a la altura del pecho (DAP) en la madurez (cm),6b42a16f
 DIFFICULT_ACCESSIBILITY,Accesibilidad difícil,18c83274
 DISCARD,Descartar,51a7ed1d
+DISCARD_CHANGES,Descartar cambios,f79f534a
 DISCARD_THIS_SITE,¿Descartar este sitio?,ed8d4636
 DISCARD_UNNAMED_SITE_MESSAGE,Este sitio no se puede guardar como borrador sin un nombre. Descarte lo que ha ingresado o continúe editando para agregar un nombre.,5f5bca5b
 DISMISS,Cerrar notificación,a56709f4
