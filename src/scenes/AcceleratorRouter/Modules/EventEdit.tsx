@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -11,18 +11,13 @@ import { APP_PATHS } from 'src/constants';
 import useGetModule from 'src/hooks/useGetModule';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import {
-  requestCreateModuleEvent,
-  requestEventDeleteMany,
-  requestEventProjectsUpdate,
-  requestEventUpdate,
-} from 'src/redux/features/events/eventsAsyncThunks';
-import {
-  selectCreateModuleEvent,
-  selectDeleteManyEvents,
-  selectUpdateEvent,
-  selectUpdateEventProjects,
-} from 'src/redux/features/events/eventsSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+  CreateModuleEventRequestPayload,
+  useCreateEventMutation,
+  useDeleteEventMutation,
+  useLazyGetEventQuery,
+  useUpdateEventMutation,
+  useUpdateEventProjectsMutation,
+} from 'src/queries/generated/moduleEvents';
 import strings from 'src/strings';
 import { ModuleEventPartial } from 'src/types/Module';
 import useQuery from 'src/utils/useQuery';
@@ -41,55 +36,47 @@ export default function EventEditView(): JSX.Element {
   const eventType = query.get('type');
   const [eventsToAdd, setEventsToAdd] = useState<ModuleEventPartial[]>();
   const [eventsToDelete, setEventsToDelete] = useState<ModuleEventPartial[]>();
-  const [updateEventProjectsRequestId, setUpdateEventProjectsRequestId] = useState('');
-  const [createEventRequestId, setCreateEventRequestId] = useState('');
-  const [updateEventRequestId, setUpdateEventRequestId] = useState('');
-  const [deleteEventRequestId, setDeleteEventRequestId] = useState('');
-  const dispatch = useAppDispatch();
-  const responseProjects = useAppSelector(selectUpdateEventProjects(updateEventProjectsRequestId));
-  const reponseCreate = useAppSelector(selectCreateModuleEvent(createEventRequestId));
-  const reponseUpdate = useAppSelector(selectUpdateEvent(updateEventRequestId));
-  const responseDelete = useAppSelector(selectDeleteManyEvents(deleteEventRequestId));
+  const [createEvent] = useCreateEventMutation();
+  const [updateEvent] = useUpdateEventMutation();
+  const [deleteEvent] = useDeleteEventMutation();
+  const [updateEventProjects] = useUpdateEventProjectsMutation();
+  const [getEvent] = useLazyGetEventQuery();
   const snackbar = useSnackbar();
 
   const goToEvent = useCallback(() => {
     navigate(APP_PATHS.ACCELERATOR_MODULE_CONTENT.replace(':moduleId', moduleId || ''));
   }, [navigate, moduleId]);
 
-  useEffect(() => {
-    if (responseProjects?.status === 'error') {
-      snackbar.toastError();
-    }
-  }, [responseProjects, snackbar]);
+  const createEventWithProjects = useCallback(
+    async (event: CreateModuleEventRequestPayload, projectIds: number[], onCreated: () => void) => {
+      const { id } = await createEvent(event).unwrap();
+      onCreated();
+      if (projectIds.length > 0) {
+        await updateEventProjects({
+          eventId: id,
+          updateModuleEventProjectsRequestPayload: { addProjects: projectIds },
+        }).unwrap();
+      }
+    },
+    [createEvent, updateEventProjects]
+  );
 
-  useEffect(() => {
-    if (reponseCreate?.status === 'error') {
-      snackbar.toastError();
-    }
-    if (reponseCreate?.status === 'success') {
-      goToEvent();
-    }
-  }, [reponseCreate, goToEvent, snackbar]);
+  const setEventProjects = useCallback(
+    async (eventId: number, projectIds: number[]) => {
+      const { event } = await getEvent(eventId).unwrap();
+      const oldProjectIds = event.projects?.map((project) => project.projectId) ?? [];
+      await updateEventProjects({
+        eventId,
+        updateModuleEventProjectsRequestPayload: {
+          addProjects: projectIds.filter((projectId) => !oldProjectIds.includes(projectId)),
+          removeProjects: oldProjectIds.filter((projectId) => !projectIds.includes(projectId)),
+        },
+      }).unwrap();
+    },
+    [getEvent, updateEventProjects]
+  );
 
-  useEffect(() => {
-    if (reponseUpdate?.status === 'error') {
-      snackbar.toastError();
-    }
-    if (reponseUpdate?.status === 'success') {
-      goToEvent();
-    }
-  }, [reponseUpdate, goToEvent, snackbar]);
-
-  useEffect(() => {
-    if (responseDelete?.status === 'error') {
-      snackbar.toastError();
-    }
-    if (responseDelete?.status === 'success') {
-      goToEvent();
-    }
-  }, [responseDelete, goToEvent, snackbar]);
-
-  const save = () => {
+  const save = async () => {
     const allEventIdsToDelete = eventsToDelete?.map((etd) => etd.id);
     const eventIdsToDelete: number[] = allEventIdsToDelete?.filter((iid): iid is number => iid !== undefined) || [];
 
@@ -97,18 +84,19 @@ export default function EventEditView(): JSX.Element {
     const eventsToUpdateIds = eventsToAdd?.filter((eta) => eta.id?.toString() !== '-1').map((ev) => ev.id);
     const filteredIdsToDelete = eventIdsToDelete.filter((id) => !eventsToUpdateIds?.includes(id));
 
-    if (filteredIdsToDelete.length > 0) {
-      const request = dispatch(requestEventDeleteMany({ eventsId: filteredIdsToDelete }));
-      setDeleteEventRequestId(request.requestId);
-    }
+    let persisted = false;
+    const markPersisted = () => {
+      persisted = true;
+    };
+    const requests: Promise<unknown>[] = filteredIdsToDelete.map((id) => deleteEvent(id).unwrap().then(markPersisted));
 
     eventsToAdd?.forEach((evta) => {
       if (evta.id?.toString() === '-1') {
         const { projects, ...rest } = evta;
         if (moduleId && rest.startTime) {
-          const request = dispatch(
-            requestCreateModuleEvent({
-              event: {
+          requests.push(
+            createEventWithProjects(
+              {
                 eventType: getType(),
                 moduleId: Number(moduleId),
                 startTime: DateTime.fromISO(rest.startTime).toString(),
@@ -117,32 +105,48 @@ export default function EventEditView(): JSX.Element {
                 recordingUrl: rest.recordingUrl,
                 slidesUrl: rest.slidesUrl,
               },
-              projectsIds: projects?.map((p) => p.projectId || -1),
-            })
+              projects?.map((p) => p.projectId || -1) ?? [],
+              markPersisted
+            )
           );
-          setCreateEventRequestId(request.requestId);
         }
       } else {
         const { id, projects, ...rest } = evta;
         if (id && evta.startTime) {
-          const updateRequest = {
-            endTime: rest.endTime ? DateTime.fromISO(rest.endTime).toString() : undefined,
-            meetingUrl: rest.meetingUrl,
-            recordingUrl: rest.recordingUrl,
-            slidesUrl: rest.slidesUrl,
-            startTime: DateTime.fromISO(evta.startTime).toString(),
-          };
-          const request = dispatch(requestEventUpdate({ eventId: id, event: updateRequest }));
-          setUpdateEventRequestId(request.requestId);
+          requests.push(
+            updateEvent({
+              eventId: id,
+              updateModuleEventRequestPayload: {
+                endTime: rest.endTime ? DateTime.fromISO(rest.endTime).toString() : undefined,
+                meetingUrl: rest.meetingUrl,
+                recordingUrl: rest.recordingUrl,
+                slidesUrl: rest.slidesUrl,
+                startTime: DateTime.fromISO(evta.startTime).toString(),
+              },
+            })
+              .unwrap()
+              .then(markPersisted)
+          );
         }
         if (id && (projects?.length || 0) > 0) {
-          const request2 = dispatch(
-            requestEventProjectsUpdate({ eventId: id, projectIds: projects?.map((p) => p.projectId || -1) || [] })
-          );
-          setUpdateEventProjectsRequestId(request2.requestId);
+          requests.push(setEventProjects(id, projects?.map((p) => p.projectId || -1) || []).then(markPersisted));
         }
       }
     });
+
+    if (requests.length === 0) {
+      return;
+    }
+
+    const results = await Promise.allSettled(requests);
+    const failed = results.some((result) => result.status === 'rejected');
+    if (failed) {
+      snackbar.toastError();
+    }
+    // Staying on the form after a partial save would let a retry re-create the events that were already saved.
+    if (!failed || persisted) {
+      goToEvent();
+    }
   };
 
   const getTitleForType = () => {
@@ -201,7 +205,12 @@ export default function EventEditView(): JSX.Element {
 
   return (
     <TfMain>
-      <PageForm cancelID='cancelLiveSession' saveID='saveLiveSession' onCancel={() => goToEvent()} onSave={save}>
+      <PageForm
+        cancelID='cancelLiveSession'
+        saveID='saveLiveSession'
+        onCancel={() => goToEvent()}
+        onSave={() => void save()}
+      >
         <Box marginBottom={theme.spacing(4)} paddingLeft={theme.spacing(3)}>
           <Typography fontSize='24px' fontWeight={600}>
             {getTitleForType()}
