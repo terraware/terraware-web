@@ -1,14 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 
+import { skipToken } from '@reduxjs/toolkit/query';
 import { IconName, TableColumnType } from '@terraware/web-components';
 
 import PageListView, { PageListViewProps } from 'src/components/DocumentProducer/PageListView';
 import { useLocalization, useUser } from 'src/providers';
-import { requestSearchModules } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectSearchModules } from 'src/redux/features/modules/modulesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useSearchModulesQuery } from 'src/queries/search/modules';
 import strings from 'src/strings';
-import { ModuleSearchResult } from 'src/types/Module';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
 
 import ModulesCellRenderer from './ModulesCellRenderer';
@@ -35,28 +33,16 @@ export default function ModuleContentView() {
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const [openUploadModal, setOpenUploadModal] = useState(false);
-  const dispatch = useAppDispatch();
-  const [requestId, setRequestId] = useState('');
-  const modulesResponse = useAppSelector(selectSearchModules(requestId));
-  const [modules, setModules] = useState<ModuleSearchResult[]>([]);
+  const [searchArgs, setSearchArgs] = useState<{ search: SearchNodePayload; sortOrder: SearchSortOrder }>();
+  // `data` keeps the previous rows on screen while a new search is in flight
+  const { data: modules, refetch } = useSearchModulesQuery(searchArgs ?? skipToken);
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
-      const request = dispatch(requestSearchModules({ search, sortOrder: searchSortOrder }));
-      setRequestId(request.requestId);
+      setSearchArgs({ search, sortOrder: searchSortOrder });
     },
-    [dispatch]
+    []
   );
-
-  useEffect(() => {
-    if (!modulesResponse) {
-      return;
-    }
-
-    if (modulesResponse?.status === 'success' && modulesResponse?.data) {
-      setModules(modulesResponse.data);
-    }
-  }, [modulesResponse]);
 
   const showUploadModal = () => {
     setOpenUploadModal(true);
@@ -77,24 +63,17 @@ export default function ModuleContentView() {
       dispatchSearchRequest,
       fuzzySearchColumns,
       id: 'modules-list',
-      rows: modules,
+      rows: modules ?? [],
       Renderer: ModulesCellRenderer,
       clientSortedFields: ['projectsQuantity', 'deliverablesQuantity'],
     },
   };
 
-  const reloadData = useCallback(
-    () =>
-      dispatchSearchRequest(
-        activeLocale,
-        {
-          operation: 'and',
-          children: [],
-        },
-        defaultSearchOrder
-      ),
-    [activeLocale, dispatchSearchRequest]
-  );
+  const reloadData = useCallback(() => {
+    if (searchArgs) {
+      void refetch();
+    }
+  }, [refetch, searchArgs]);
 
   return (
     <>

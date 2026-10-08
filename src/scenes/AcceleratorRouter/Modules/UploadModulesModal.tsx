@@ -1,11 +1,11 @@
-import React, { type JSX, useState } from 'react';
+import React, { type JSX, useCallback, useState } from 'react';
 
 import { Box, FormControlLabel, Radio, RadioGroup, Typography } from '@mui/material';
 
 import ImportModal from 'src/components/common/ImportModal';
+import { ImportModuleResponsePayload, useImportModulesMutation } from 'src/queries/generated/modules';
 import { SpeciesService } from 'src/services';
 import DeliverablesService from 'src/services/DeliverablesService';
-import ModuleService from 'src/services/ModuleService';
 import strings from 'src/strings';
 
 export type UploadModulesModalProps = {
@@ -19,6 +19,18 @@ export type UploadModulesModalProps = {
 export default function UploadModulesModal(props: UploadModulesModalProps): JSX.Element {
   const { open, onClose, reloadData } = props;
   const [uploadingDeliverables, setUploadingDeliverables] = useState(false);
+  const [importModulesMutation] = useImportModulesMutation();
+
+  const importModules = useCallback(
+    async (file: File): Promise<ImportModuleResponsePayload | null> => {
+      const result = await importModulesMutation({ file });
+      if ('data' in result) {
+        return result.data ?? null;
+      }
+      return (result.error as { data?: ImportModuleResponsePayload }).data ?? null;
+    },
+    [importModulesMutation]
+  );
 
   const handleTypeChange = (_: React.ChangeEvent<HTMLInputElement>, value: string) => {
     if (value === 'deliverables') {
@@ -41,7 +53,7 @@ export default function UploadModulesModal(props: UploadModulesModalProps): JSX.
       }
       importingLabel={uploadingDeliverables ? strings.IMPORTING_DELIVERABLES : strings.IMPORTING_MODULES}
       duplicatedLabel={strings.DUPLICATED_SPECIES}
-      simpleUploadApi={uploadingDeliverables ? DeliverablesService.importDeliverables : ModuleService.importModules}
+      simpleUploadApi={uploadingDeliverables ? DeliverablesService.importDeliverables : importModules}
       reloadData={reloadData}
     >
       <Box textAlign='center'>

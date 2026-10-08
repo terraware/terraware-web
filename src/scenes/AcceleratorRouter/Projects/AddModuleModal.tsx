@@ -7,16 +7,15 @@ import { DateTime } from 'luxon';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import { ProjectModulePayload } from 'src/queries/generated/projectModules';
 import strings from 'src/strings';
 import { Module, ProjectModule } from 'src/types/Module';
 import useForm from 'src/utils/useForm';
 
 export interface AddModuleModalProps {
   onClose: () => void;
-  onSave: (projectModule: ProjectModule | ProjectModulePayload) => void;
-  selectedModule?: ProjectModule | ProjectModulePayload;
-  unusedModules: Module[] | ProjectModulePayload[];
+  onSave: (projectModule: ProjectModule) => void;
+  selectedModule?: ProjectModule;
+  unusedModules: Module[] | ProjectModule[];
 }
 
 export default function AddModuleModal(props: AddModuleModalProps): JSX.Element {
