@@ -1419,7 +1419,6 @@ ONE_OR_MORE_ANSWERS_NEEDED_UPDATES,Una o más respuestas necesitan actualizacion
 OPPORTUNITIES_INSTRUCTIONS,"Puede incluir oportunidades de expansión del proyecto, nuevos mercados, referencias, formación a otras organizaciones, etc. (Máximo un cuarto de página.)",98ba6999
 OPPORTUNITIES_REQUIRED,Oportunidades *,8d418e65
 OPT_IN,Funciones Opt-In,cbb9300b
-OPTIONAL,Opcional,9f75363c
 OPTIONAL_GPS_COORDINATES_OF_PLOT,Opcional: Coordenadas GPS de la parcela,c15f1313
 OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,"Proporcione las coordenadas GPS de la esquina suroeste, si el área observada no corresponde a la ubicación original de la parcela.",d5180b23
 OPTIONAL_LATITUDE_OF_PLOT,Opcional: Latitud de la parcela,9de4497b

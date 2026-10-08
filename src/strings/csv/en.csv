@@ -1420,7 +1420,6 @@ ONE_OR_MORE_ANSWERS_NEEDED_UPDATES,One or more answers needed updates. View them
 OPPORTUNITIES_INSTRUCTIONS,"This may include opportunities for project expansion, new markets, referrals, training to other organizations, etc. (One-quarter page maximum.)",
 OPPORTUNITIES_REQUIRED,Opportunities *,
 OPT_IN,Opt-In Features,
-OPTIONAL,Optional,
 OPTIONAL_GPS_COORDINATES_OF_PLOT,Optional: GPS Coordinates of Plot,
 OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,"Provide GPS coordinates of the Southwest corner, if the area observed was not at the original plot location.",
 OPTIONAL_LATITUDE_OF_PLOT,Optional: Latitude of Plot,
