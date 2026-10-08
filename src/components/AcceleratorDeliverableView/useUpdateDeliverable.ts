@@ -1,14 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
+import { useUpdateSubmissionMutation } from 'src/queries/generated/deliverables';
 import { Statuses } from 'src/redux/features/asyncUtils';
-import {
-  requestGetDeliverable,
-  requestUpdateDeliverable,
-} from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { Deliverable } from 'src/types/Deliverables';
+import { mutationStatus } from 'src/utils/mutationStatus';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
@@ -22,49 +18,36 @@ export type Response = {
  * Returns status on request and function to update status.
  */
 export default function useUpdateDeliverable(): Response {
-  const [lastRequest, setLastRequest] = useState<Deliverable>();
-  const [requestId, setRequestId] = useState<string>('');
   const snackbar = useSnackbar();
-  const dispatch = useAppDispatch();
-  const result = useAppSelector(selectDeliverablesEditRequest(requestId));
+  const [updateSubmission, updateResult] = useUpdateSubmissionMutation();
 
   const update = useCallback(
     (deliverable: Deliverable) => {
-      setLastRequest(undefined);
-      const dispatched = dispatch(requestUpdateDeliverable({ deliverable }));
-      setRequestId(dispatched.requestId);
-      setLastRequest(deliverable);
+      void updateSubmission({
+        deliverableId: deliverable.id,
+        projectId: deliverable.projectId,
+        updateSubmissionRequestPayload: {
+          status: deliverable.status,
+          ...(deliverable.internalComment ? { internalComment: deliverable.internalComment } : {}),
+          ...(deliverable.feedback ? { feedback: deliverable.feedback } : {}),
+        },
+      })
+        .unwrap()
+        .then(() => {
+          if (deliverable.status === 'Approved') {
+            snackbar.toastSuccess(strings.DELIVERABLE_APPROVED);
+          } else if (deliverable.status === 'Rejected') {
+            snackbar.toastWarning(strings.DELIVERABLE_UPDATE_REQUESTED);
+          } else if (deliverable.status === 'In Review') {
+            snackbar.toastSuccess(strings.DELIVERABLE_SUBMITTED_FOR_APPROVAL);
+          } else {
+            snackbar.toastInfo(strings.DELIVERABLE_STATUS_UPDATED);
+          }
+        })
+        .catch(() => snackbar.toastError(strings.GENERIC_ERROR));
     },
-    [dispatch]
+    [snackbar, updateSubmission]
   );
 
-  useEffect(() => {
-    if (!lastRequest) {
-      return;
-    }
-
-    if (result?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    } else if (result?.status === 'success') {
-      // refresh deliverable data in store
-      void dispatch(requestGetDeliverable({ deliverableId: lastRequest.id, projectId: lastRequest.projectId }));
-      if (lastRequest.status === 'Approved') {
-        snackbar.toastSuccess(strings.DELIVERABLE_APPROVED);
-      } else if (lastRequest.status === 'Rejected') {
-        snackbar.toastWarning(strings.DELIVERABLE_UPDATE_REQUESTED);
-      } else if (lastRequest.status === 'In Review') {
-        snackbar.toastSuccess(strings.DELIVERABLE_SUBMITTED_FOR_APPROVAL);
-      } else {
-        snackbar.toastInfo(strings.DELIVERABLE_STATUS_UPDATED);
-      }
-    }
-  }, [dispatch, lastRequest, result, snackbar]);
-
-  return useMemo<Response>(
-    () => ({
-      status: result?.status,
-      update,
-    }),
-    [result?.status, update]
-  );
+  return useMemo<Response>(() => ({ status: mutationStatus(updateResult), update }), [updateResult, update]);
 }

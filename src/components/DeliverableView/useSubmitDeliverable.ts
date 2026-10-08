@@ -1,14 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
+import { useSubmitSubmissionMutation } from 'src/queries/generated/deliverables';
 import { Statuses } from 'src/redux/features/asyncUtils';
-import {
-  requestGetDeliverable,
-  requestSubmitDeliverable,
-} from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DeliverableWithOverdue } from 'src/types/Deliverables';
+import { mutationStatus } from 'src/utils/mutationStatus';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
@@ -20,43 +16,18 @@ export type Response = {
  * Hook to submit a deliverable
  */
 export default function useSubmitDeliverable(): Response {
-  const [lastRequest, setLastRequest] = useState<DeliverableWithOverdue>();
-  const [requestId, setRequestId] = useState<string>('');
   const snackbar = useSnackbar();
-  const dispatch = useAppDispatch();
-  const result = useAppSelector(selectDeliverablesEditRequest(requestId));
+  const [submitSubmission, submitResult] = useSubmitSubmissionMutation();
 
   const submit = useCallback(
     (deliverable: DeliverableWithOverdue) => {
-      setLastRequest(undefined);
-      const dispatched = dispatch(
-        requestSubmitDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId })
-      );
-      setRequestId(dispatched.requestId);
-      setLastRequest(deliverable);
+      void submitSubmission({ deliverableId: deliverable.id, projectId: deliverable.projectId })
+        .unwrap()
+        .then(() => snackbar.toastSuccess(strings.DELIVERABLE_SUBMITTED))
+        .catch(() => snackbar.toastError(strings.GENERIC_ERROR));
     },
-    [dispatch]
+    [snackbar, submitSubmission]
   );
 
-  useEffect(() => {
-    if (!lastRequest) {
-      return;
-    }
-
-    if (result?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    } else if (result?.status === 'success') {
-      snackbar.toastSuccess(strings.DELIVERABLE_SUBMITTED);
-      // refresh deliverable data in store
-      void dispatch(requestGetDeliverable({ deliverableId: lastRequest.id, projectId: lastRequest.projectId }));
-    }
-  }, [dispatch, lastRequest, result, snackbar]);
-
-  return useMemo<Response>(
-    () => ({
-      status: result?.status,
-      submit,
-    }),
-    [result?.status, submit]
-  );
+  return useMemo<Response>(() => ({ status: mutationStatus(submitResult), submit }), [submitResult, submit]);
 }

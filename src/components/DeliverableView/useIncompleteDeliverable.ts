@@ -2,7 +2,7 @@ import { useCallback, useMemo } from 'react';
 
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import { useApplicationData } from 'src/providers/Application/Context';
-import { useCompleteSubmissionMutation } from 'src/queries/generated/deliverables';
+import { useIncompleteSubmissionMutation } from 'src/queries/generated/deliverables';
 import { Statuses } from 'src/redux/features/asyncUtils';
 import strings from 'src/strings';
 import { DeliverableWithOverdue } from 'src/types/Deliverables';
@@ -11,22 +11,22 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
   status?: Statuses;
-  complete: (deliverable: DeliverableWithOverdue) => void;
+  incomplete: (deliverable: DeliverableWithOverdue) => void;
 };
 
 /**
- * Hook to mark a deliverable as complete
+ * Hook to mark a deliverable as incomplete
  */
-export default function useCompleteDeliverable(): Response {
+export default function useIncompleteDeliverable(): Response {
   const snackbar = useSnackbar();
-  const [completeSubmission, result] = useCompleteSubmissionMutation();
+  const [incompleteSubmission, result] = useIncompleteSubmissionMutation();
 
   const { isApplicationConsole, isApplicationPortal } = useApplicationPortal();
   const { reload } = useApplicationData();
 
-  const complete = useCallback(
+  const incomplete = useCallback(
     (deliverable: DeliverableWithOverdue) => {
-      void completeSubmission({ deliverableId: deliverable.id, projectId: deliverable.projectId })
+      void incompleteSubmission({ deliverableId: deliverable.id, projectId: deliverable.projectId })
         .unwrap()
         .then(() => {
           if (isApplicationConsole || isApplicationPortal) {
@@ -35,10 +35,10 @@ export default function useCompleteDeliverable(): Response {
         })
         .catch(() => snackbar.toastError(strings.GENERIC_ERROR));
     },
-    [completeSubmission, isApplicationConsole, isApplicationPortal, reload, snackbar]
+    [incompleteSubmission, isApplicationConsole, isApplicationPortal, reload, snackbar]
   );
 
   const status = mutationStatus(result);
 
-  return useMemo<Response>(() => ({ status, complete }), [status, complete]);
+  return useMemo<Response>(() => ({ status, incomplete }), [status, incomplete]);
 }

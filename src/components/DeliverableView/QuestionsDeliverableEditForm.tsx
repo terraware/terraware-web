@@ -36,6 +36,7 @@ import useQuery from 'src/utils/useQuery';
 
 import { EditProps } from './types';
 import useCompleteDeliverable from './useCompleteDeliverable';
+import useIncompleteDeliverable from './useIncompleteDeliverable';
 
 type QuestionBoxProps = {
   addRemovedValue: (value: VariableValueValue) => void;
@@ -218,7 +219,8 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     missingFields,
   } = useProjectVariablesUpdate(deliverable.projectId, filteredVariablesWithValues);
 
-  const { complete, incomplete } = useCompleteDeliverable();
+  const { complete } = useCompleteDeliverable();
+  const { incomplete } = useIncompleteDeliverable();
 
   const allDependentVariablesWithValues = useMemo(
     () =>
