@@ -21,6 +21,7 @@ import SmallSiteWarningDialog from 'src/scenes/ObservationsRouterV2/Schedule/Sma
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import ObservationSubstratumSelector from './ObservationSubstratumSelector';
+import getObservationDateErrors from './getObservationDateErrors';
 import useObservablePlantingSites from './useObservablePlantingSites';
 
 const WARN_IF_SITE_LESS_THAN_HECTARES = 3.0;
@@ -124,29 +125,11 @@ export default function ScheduleObservationForm({
   const selectedSiteAreaHa = selectedSite?.areaHa;
 
   const findErrors = useCallback(() => {
-    let _startDateError: string = '';
-    let _endDateError: string = '';
+    const { startDateError: _startDateError = '', endDateError: _endDateError = '' } = getObservationDateErrors(
+      startDate,
+      endDate
+    );
     let _substratumError: string = '';
-    if (!startDate) {
-      _startDateError = strings.REQUIRED_FIELD;
-    }
-    if (!endDate) {
-      _endDateError = strings.REQUIRED_FIELD;
-    }
-    if (startDate && endDate) {
-      const today = DateTime.now().startOf('day');
-      const oneYearFromToday = today.plus({ years: 1 }).toMillis();
-      const start = new Date(startDate).getTime();
-      const end = new Date(endDate).getTime();
-      const twoMonthsFromStart = DateTime.fromMillis(start).plus({ months: 2 }).toMillis();
-      if (start < today.toMillis() || start > oneYearFromToday) {
-        // start should be between today and one year from today
-        _startDateError = strings.INVALID_DATE;
-      } else if (end <= start || end > twoMonthsFromStart) {
-        // end should be between start and two months from start
-        _endDateError = strings.INVALID_DATE;
-      }
-    }
 
     if (observationId === undefined) {
       if (!requestedSubstratumIds || requestedSubstratumIds?.length === 0) {
@@ -168,8 +151,6 @@ export default function ScheduleObservationForm({
     startDate,
     endDate,
     observationId,
-    strings.REQUIRED_FIELD,
-    strings.INVALID_DATE,
     strings.SELECT_AT_LEAST_ONE_SUBSTRATUM,
     requestedSubstratumIds,
     selectedSiteAreaHa,

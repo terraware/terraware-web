@@ -24,6 +24,8 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
 
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
+  const [reschedulingId, setReschedulingId] = useState<number>();
+  const endReschedule = useCallback(() => setReschedulingId(undefined), []);
 
   const siteNames = useMemo(
     () => [...new Set(observations.map((observation) => observation.plantingSiteName))],
@@ -42,16 +44,21 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
   }, [observations.length, siteNames, strings]);
 
   const onButtonClick = useCallback(
-    (event?: React.MouseEvent<HTMLElement>) =>
-      setAnchorEl((current) => (current ? null : event?.currentTarget ?? null)),
+    (event?: React.MouseEvent<HTMLElement>) => setAnchorEl(event?.currentTarget ?? null),
     []
   );
-  const closeFlyout = useCallback(() => setAnchorEl(null), []);
+  const closeFlyout = useCallback(() => {
+    setAnchorEl(null);
+    setReschedulingId(undefined);
+  }, []);
   const openPanel = useCallback(() => {
     setAnchorEl(null);
     setPanelOpen(true);
   }, []);
-  const closePanel = useCallback(() => setPanelOpen(false), []);
+  const closePanel = useCallback(() => {
+    setPanelOpen(false);
+    setReschedulingId(undefined);
+  }, []);
 
   const header = (onClose: () => void) => (
     <Box sx={{ alignItems: 'flex-start', display: 'flex', justifyContent: 'space-between' }}>
@@ -101,6 +108,7 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
       <Popover
         anchorEl={anchorEl}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        disableEnforceFocus
         onClose={closeFlyout}
         open={!!anchorEl}
         slotProps={{
@@ -123,7 +131,10 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
             <Box padding={theme.spacing(2)}>
               <ScheduledObservationItem
                 canReschedule={canReschedule}
+                isRescheduling={reschedulingId === observation.id}
                 observation={observation}
+                onRescheduleEnd={endReschedule}
+                onRescheduleStart={setReschedulingId}
                 showSiteName={showSiteName}
               />
             </Box>
@@ -143,6 +154,7 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
 
       <Drawer
         anchor='right'
+        disableEnforceFocus
         onClose={closePanel}
         open={panelOpen}
         PaperProps={{ sx: { maxWidth: '100vw', width: { sm: '480px', xs: '100%' } } }}
@@ -168,7 +180,10 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
             >
               <ScheduledObservationItem
                 canReschedule={canReschedule}
+                isRescheduling={reschedulingId === observation.id}
                 observation={observation}
+                onRescheduleEnd={endReschedule}
+                onRescheduleStart={setReschedulingId}
                 showSiteName={showSiteName}
               />
             </Box>
