@@ -4,7 +4,6 @@ import { Route, Routes, useParams } from 'react-router';
 import PlantingSiteDraftCreate from './edit/PlantingSiteDraftCreate';
 import PlantingSiteDraftEdit from './edit/PlantingSiteDraftEdit';
 import PlantingSiteUpdate from './edit/PlantingSiteUpdate';
-import PlantingSiteDraftStratumView from './view/PlantingSiteDraftStratumView';
 import PlantingSiteDraftView from './view/PlantingSiteDraftView';
 import PlantingSiteView from './view/PlantingSiteView';
 import PlantingSitesList from './view/PlantingSitesList';
@@ -36,7 +35,6 @@ function PlantingSitesRouter(): JSX.Element {
 function PlantingSitesDraftRouter(): JSX.Element {
   return (
     <Routes>
-      <Route path={'/:plantingSiteId/stratum/:stratumId'} element={<PlantingSiteDraftStratumView />} />
       <Route path={'/new'} element={<PlantingSiteDraftCreate />} />
       <Route path={'/:plantingSiteId/edit'} element={<PlantingSiteDraftEdit />} />
       <Route path={'/:plantingSiteId'} element={<PlantingSiteDraftView />} />
