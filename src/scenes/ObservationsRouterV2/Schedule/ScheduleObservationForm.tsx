@@ -1,4 +1,5 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router';
 
 import { Box, Divider, Grid, Typography, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
@@ -50,6 +51,8 @@ export default function ScheduleObservationForm({
   const [getObservation, getObservationResponse] = useLazyGetObservationQuery();
 
   const observableSites = useObservablePlantingSites();
+  const [searchParams] = useSearchParams();
+  const requestedPlantingSiteId = Number(searchParams.get('plantingSiteId'));
 
   const todayISO = useMemo(() => DateTime.now().startOf('day').toISODate(), []);
 
@@ -80,10 +83,15 @@ export default function ScheduleObservationForm({
   }, [getPlantingSite, targetObservation]);
 
   useEffect(() => {
-    if (!plantingSite && selectedPlantingSiteId === undefined && observableSites.length === 1) {
-      setSelectedPlantingSiteId(observableSites[0].id);
+    if (plantingSite || selectedPlantingSiteId !== undefined) {
+      return;
     }
-  }, [observableSites, plantingSite, selectedPlantingSiteId]);
+    if (observableSites.length === 1) {
+      setSelectedPlantingSiteId(observableSites[0].id);
+    } else if (observableSites.some((site) => site.id === requestedPlantingSiteId)) {
+      setSelectedPlantingSiteId(requestedPlantingSiteId);
+    }
+  }, [observableSites, plantingSite, requestedPlantingSiteId, selectedPlantingSiteId]);
 
   const [startDate, setStartDate] = useState<string>();
   const [endDate, setEndDate] = useState<string>();
