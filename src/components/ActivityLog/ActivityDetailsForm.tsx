@@ -170,6 +170,11 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   const observationSurvivalRate =
     observationResultsData?.observation.survivalRate ?? observationResultsData?.observation.adHocPlot?.survivalRate;
 
+  const observationSurvivalRatePending =
+    observationResultsData?.observation.survivalRate !== undefined
+      ? observationResultsData.observation.pending
+      : observationResultsData?.observation.adHocPlot?.pending;
+
   const { obsPlotNumberToIdMap, obsPlotOptions } = useMemo(() => {
     const plotNumberToIdMap: Record<number, number> = {};
     const plotOptions: { plotId: number; plotNumber: number }[] = [];
@@ -855,6 +860,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
                   livePlants={observationLivePlants}
                   plantDensity={observationPlantDensity}
                   survivalRate={observationSurvivalRate}
+                  survivalRatePending={observationSurvivalRatePending}
                 />
               )}
 

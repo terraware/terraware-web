@@ -4,6 +4,7 @@ import { Box, CircularProgress, useTheme } from '@mui/material';
 
 import MapDrawerTable, { MapDrawerTableRow } from 'src/components/MapDrawerTable';
 import { MapLayerFeatureId } from 'src/components/NewMap/types';
+import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
@@ -29,6 +30,7 @@ type ObservationStatsProperties = {
   plotStatus?: MonitoringPlotStatus;
   plotType?: 'permanent' | 'temporary' | 'adHoc';
   survivalRate: number | undefined;
+  survivalRatePending: boolean | undefined;
 };
 
 type ObservationStatsDrawerProps = {
@@ -86,6 +88,7 @@ const ObservationStatsDrawer = ({
         observedDensity: results?.observedDensity,
         observationState: results?.state,
         survivalRate: results?.survivalRate,
+        survivalRatePending: results?.pending,
         totalPermanentPlots,
         totalTemporaryPlots,
         observedPermanentPlots,
@@ -108,6 +111,7 @@ const ObservationStatsDrawer = ({
         observedSpecies: stratumResults?.totalSpecies,
         observedDensity: stratumResults?.observedDensity,
         survivalRate: stratumResults?.survivalRate,
+        survivalRatePending: stratumResults?.pending,
         totalPermanentPlots,
         totalTemporaryPlots,
         observedPermanentPlots,
@@ -136,6 +140,7 @@ const ObservationStatsDrawer = ({
         observedSpecies: substratumResults?.totalSpecies,
         observedDensity: substratumResults?.plantingDensity,
         survivalRate: substratumResults?.survivalRate,
+        survivalRatePending: substratumResults?.pending,
         totalPermanentPlots,
         totalTemporaryPlots,
         observedPermanentPlots,
@@ -168,6 +173,7 @@ const ObservationStatsDrawer = ({
         plotType,
         plotStatus,
         survivalRate: plotResults?.survivalRate,
+        survivalRatePending: plotResults?.pending,
       };
     } else {
       return undefined;
@@ -257,7 +263,13 @@ const ObservationStatsDrawer = ({
       if (properties.plotType !== 'adHoc') {
         drawerRows.push({
           key: strings.SURVIVAL_RATE,
-          value: properties.survivalRate ? `${properties.survivalRate}%` : strings.NO_DATA_YET,
+          value: properties.survivalRate ? (
+            <PendingSurvivalRate
+              pending={properties.survivalRatePending}
+            >{`${properties.survivalRate}%`}</PendingSurvivalRate>
+          ) : (
+            strings.NO_DATA_YET
+          ),
         });
       }
     }

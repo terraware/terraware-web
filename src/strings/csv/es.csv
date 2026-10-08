@@ -2331,6 +2331,7 @@ SUMMARY_OF_PROGRESS_DESCRIPTION,Haga un breve resumen de este proyecto.,c60ce682
 SUMMARY_OF_PROGRESS_REQUIRED,Resumen de progresos *,35c72f75
 SUPPLEMENTAL_FILES,Archivos suplementarios,b655103c
 SURVIVAL_RATE,Tasa de supervivencia,b1a831cf
+SURVIVAL_RATE_CALCULATION_IN_PROGRESS_TOOLTIP,Los cálculos de la tasa de supervivencia están en curso.,601b07f4
 SURVIVAL_RATE_COLUMN_TOOLTIP,"Las tasas de supervivencia se calculan en función de las densidades iniciales de plantas. Si no se establecen densidades iniciales de plantas para un Sitio de Plantación, la tasa de supervivencia no estará disponible.",426f186d
 SURVIVAL_RATE_IS_NOT_APPLICABLE_FOR_AD_HOC_PLOTS,La tasa de supervivencia no aplica para parcelas ad hoc,819c62f0
 SURVIVAL_RATE_NOT_CALCULATED_FOR_TEMPORARY_PLOTS,La tasa de supervivencia no se calcula para Parcelas Temporales.,2d32c87c

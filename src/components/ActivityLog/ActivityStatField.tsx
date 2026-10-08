@@ -1,10 +1,10 @@
-import React, { type JSX } from 'react';
+import React, { type JSX, type ReactNode } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
 type ActivityStatFieldProps = {
   title: string;
-  contents: string | null | undefined;
+  contents: ReactNode;
   isEditing?: boolean;
 };
 

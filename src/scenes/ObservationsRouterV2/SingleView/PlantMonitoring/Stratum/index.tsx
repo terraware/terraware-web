@@ -104,6 +104,7 @@ const StratumDetails = (): JSX.Element => {
       label: strings.SURVIVAL_RATE,
       tooltip: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
       value: hasObservedPermanentPlots ? `${stratumResult?.survivalRate ?? '-'}%` : '-',
+      pending: hasObservedPermanentPlots && stratumResult?.survivalRate !== undefined && stratumResult.pending,
     },
   ];
 

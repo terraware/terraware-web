@@ -14,6 +14,7 @@ import {
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
 
+import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Card from 'src/components/common/Card';
 import Link from 'src/components/common/Link';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
@@ -47,6 +48,7 @@ type MonitoringPlotRow = {
   totalSpecies?: number;
   plantingDensity?: number;
   survivalRate?: number;
+  survivalRatePending?: boolean;
 };
 
 const MonitoringPlotActionsMenuContent = ({ row }: { row: MonitoringPlotRow }): JSX.Element => {
@@ -138,6 +140,7 @@ export default function MonitoringPlotList(): JSX.Element {
             totalSpecies: plot.totalSpecies,
             plantingDensity: plot.plantingDensity,
             survivalRate: plot.survivalRate,
+            survivalRatePending: plot.pending,
           };
         })
       );
@@ -188,7 +191,9 @@ export default function MonitoringPlotList(): JSX.Element {
   const SurvivalRateCell = useCallback(({ cell }: { cell: MRT_Cell<MonitoringPlotRow> }) => {
     const value = cell.getValue() as number | undefined;
     return value !== undefined && value !== null ? (
-      <p style={{ margin: 0 }}>{`${value}%`}</p>
+      <p style={{ margin: 0 }}>
+        <PendingSurvivalRate pending={cell.row.original.survivalRatePending}>{`${value}%`}</PendingSurvivalRate>
+      </p>
     ) : (
       <p style={{ margin: 0 }}>{''}</p>
     );

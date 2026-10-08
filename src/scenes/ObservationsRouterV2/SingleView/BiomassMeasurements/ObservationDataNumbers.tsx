@@ -3,11 +3,12 @@ import React from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
 
+import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { useLocalization } from 'src/providers';
 
 type ObservationDataNumbersProps = {
-  items: { label: string; tooltip: string; value?: string | number }[];
+  items: { label: string; pending?: boolean; tooltip: string; value?: string | number }[];
   isCompleted: boolean;
 };
 
@@ -42,11 +43,9 @@ const ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersPr
                 fontSize={isTemporaryOrAdHocSurvivalRateItem ? '16px' : '24px'}
               >
                 {isCompleted || isTemporaryOrAdHocSurvivalRateItem ? (
-                  typeof item.value === 'number' ? (
-                    <FormattedNumber value={item.value} />
-                  ) : (
-                    item.value
-                  )
+                  <PendingSurvivalRate pending={item.pending}>
+                    {typeof item.value === 'number' ? <FormattedNumber value={item.value} /> : item.value}
+                  </PendingSurvivalRate>
                 ) : (
                   '-'
                 )}

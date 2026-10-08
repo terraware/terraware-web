@@ -8,6 +8,7 @@ import { LocationSectionProps } from 'src/components/SeedFundReports/LocationSel
 import { InfoField, infoCardStyles } from 'src/components/SeedFundReports/LocationSelection/InfoField';
 import PlantingSiteSpeciesCellRenderer from 'src/components/SeedFundReports/LocationSelection/PlantingSitesSpeciesCellRenderer';
 import { transformNumericValue } from 'src/components/SeedFundReports/LocationSelection/util';
+import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import OverviewItemCard from 'src/components/common/OverviewItemCard';
 import Table from 'src/components/common/table';
 import { useLatestSiteObservationResult } from 'src/hooks/observations';
@@ -386,7 +387,11 @@ const LocationSectionPlantingSite = (props: LocationSectionProps): JSX.Element =
             <OverviewItemCard
               isEditable={false}
               title={strings.SURVIVAL_RATE}
-              contents={latestObservationResult.survivalRate}
+              contents={
+                <PendingSurvivalRate pending={latestObservationResult.pending}>
+                  {latestObservationResult.survivalRate}
+                </PendingSurvivalRate>
+              }
               sx={infoCardStyles}
             />
           </Grid>

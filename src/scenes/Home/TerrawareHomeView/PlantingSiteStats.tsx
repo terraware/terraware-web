@@ -4,6 +4,7 @@ import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
+import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import AddLink from 'src/components/common/AddLink';
 import Link from 'src/components/common/Link';
 import PlantingSiteSelector from 'src/components/common/PlantingSiteSelector';
@@ -202,7 +203,15 @@ const PlantingSiteStats = () => {
               label={strings.SURVIVAL_RATE}
               showBorder={!isDesktop}
               showLink={false}
-              value={latestObservationResult?.survivalRate ? `${latestObservationResult.survivalRate}%` : ''}
+              value={
+                latestObservationResult?.survivalRate ? (
+                  <PendingSurvivalRate pending={latestObservationResult.pending}>
+                    {`${latestObservationResult.survivalRate}%`}
+                  </PendingSurvivalRate>
+                ) : (
+                  ''
+                )
+              }
             />
           </Grid>
 

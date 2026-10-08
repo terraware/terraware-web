@@ -442,6 +442,12 @@ const ActivityDetailView = ({
       ? funderObsPayload.survivalRate
       : observationResultsData?.observation.survivalRate ?? observationResultsData?.observation.adHocPlot?.survivalRate;
 
+  const obsSurvivalRatePending =
+    funderObsPayload === undefined &&
+    (observationResultsData?.observation.survivalRate !== undefined
+      ? observationResultsData.observation.pending
+      : observationResultsData?.observation.adHocPlot?.pending);
+
   const [lightboxMediaFileId, setLightboxMediaFileId] = useState<number | undefined>(undefined);
   const [publishActivityModalOpened, setPublishActivityModalOpened] = useState(false);
   const snackbar = useSnackbar();
@@ -663,6 +669,7 @@ const ActivityDetailView = ({
           livePlants={obsLivePlants}
           plantDensity={obsPlantDensity}
           survivalRate={obsSurvivalRate}
+          survivalRatePending={obsSurvivalRatePending}
         />
       )}
 
