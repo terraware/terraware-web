@@ -1,8 +1,8 @@
 import React, { CSSProperties, type JSX, useMemo } from 'react';
 
-import { Box, Step, StepLabel, Stepper, Typography, useTheme } from '@mui/material';
+import { Box, useTheme } from '@mui/material';
+import { Stepper } from '@terraware/web-components';
 
-import strings from 'src/strings';
 import { SiteEditStep } from 'src/types/PlantingSite';
 
 type OptionalStep = {
@@ -41,37 +41,7 @@ export default function Form({ children, className, currentStep, steps, style }:
 
   return (
     <Box className={className} style={style}>
-      <Stepper activeStep={currentStepIndex} sx={{ margin: theme.spacing(3, 5, 0) }}>
-        {steps.map((step: PlantingSiteStep, index: number) => {
-          const stepProps: { completed?: boolean } = {};
-          const labelProps: { optional?: React.ReactNode } = {};
-
-          if (step.optional) {
-            stepProps.completed = step.optional.completed;
-            labelProps.optional = <Typography variant='caption'>{strings.OPTIONAL}</Typography>;
-          }
-
-          return (
-            <Step key={index} {...stepProps}>
-              <StepLabel
-                {...labelProps}
-                sx={{
-                  '.MuiStepIcon-root.Mui-active, .MuiStepIcon-root.Mui-completed': {
-                    fill: theme.palette.TwClrTxtBrand,
-                  },
-                  '.MuiStepLabel-label': {
-                    fontSize: '16px',
-                    fontWeight: 400,
-                    color: theme.palette.TwClrTxt,
-                  },
-                }}
-              >
-                {step.label}
-              </StepLabel>
-            </Step>
-          );
-        })}
-      </Stepper>
+      <Stepper activeStep={currentStepIndex} steps={steps} sx={{ margin: theme.spacing(3, 5, 0) }} />
       {children}
     </Box>
   );

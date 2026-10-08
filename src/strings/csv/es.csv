@@ -212,6 +212,7 @@ ARE_YOU_SURE_DELETE,¿Está seguro de que desea eliminar?,a7f716f0
 ARE_YOU_SURE_DELETE_PLANTING_DATE,¿Está seguro de que desea eliminar esta Fecha de Plantación?,c9c72b70
 ARE_YOU_SURE_DELETE_TARGET,¿Está seguro de que desea eliminar este objetivo de especie?,8f7cb65e
 AREA_HA,Área (ha),8ab5d500
+AREA_IN_HA,{0} ha,8f68781b
 AREA_NOT_OBSERVED,Área no observada,9eeddab4
 AS_OF_X,desde {0},6d77dc0f
 ASSIGN,Asignar,d1afb440
@@ -404,7 +405,12 @@ CONTENT_AND_MATERIALS,Contenidos y materiales,c0cf19c7
 CONTINUE,Continuar,b019a26b
 CONTINUE_AND_RESET_STATUS,Continuar y restablecer estado,5f35516c
 CONTINUE_APPLICATION,Continuar solicitud,bd87b380
+CONTINUE_BOUNDARY_SETUP,Continuar con la configuración de límites,13d17477
 CONTINUE_TO_APPLICATION,Continuar a la Solicitud,bc4ca333
+CONTINUE_WITH_DETAILS,Continuar con los detalles,f6430a6d
+CONTINUE_WITH_EXCLUSION_AREAS,Continuar con las áreas de exclusión,c263fd4c
+CONTINUE_WITH_STRATUM_BOUNDARIES,Continuar con los límites de estrato,f705c34f
+CONTINUE_WITH_SUBSTRATUM_BOUNDARIES,Continuar con los límites de subestrato,ab208dcb
 CONTRIBUTOR,Colaborador,79b43797
 CONTRIBUTOR_INFO,"Un colaborador puede añadir entradas de datos para semillas, gestionar el inventario de viveros (salvo los retiros de plantaciones, ver los retiros), gestionar las reasignaciones de viveros y visualizar las plantaciones de un sitio de plantación en un mapa geográfico.",2e98706c
 CONVERTED_VALUE_INFO,Este valor se calcula automáticamente con fines informativos.,d8d0d516
@@ -488,6 +494,8 @@ DELETE_ACCOUNT_ERROR,Ocurrió un error al eliminar su cuenta.,6105987b
 DELETE_ACTIVITY,Eliminar actividad,18958b95
 DELETE_ACTIVITY_CONFIRM,¿Está seguro de que desea eliminar esta actividad? Todos los datos de la actividad serán eliminados.,e64e17b5
 DELETE_CONFIRMATION_MODAL_MAIN_TEXT,¿Está seguro de que desea eliminar la especie?,43a238c7
+DELETE_DRAFT,Eliminar borrador,874e7f67
+DELETE_DRAFT_MESSAGE,{0} y todo lo configurado hasta ahora se eliminarán. Esta acción no se puede deshacer.,20949187
 DELETE_FUNDING_ENTITY,Eliminar entidad financiadora,7d8a1f95
 DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE,Se eliminarán todos los financiadores asociados a esta entidad financiadora.,cedce711
 DELETE_FUNDING_ENTITY_MESSAGE,Va a eliminar {0}.,4a41e34f
@@ -515,6 +523,7 @@ DELETE_SEEDLINGS_BATCHES_MSG,"Eliminar lotes sin retiros los eliminará completa
 DELETE_SPECIES,Borrar Especie,b3dd3256
 DELETE_SPECIES_TARGET,Eliminar objetivo de especie,bffd4971
 DELETE_SPECIES_TARGET_CONFIRM,"Está a punto de eliminar la especie {0} como objetivo para este sustrato. La cantidad se eliminará del objetivo total de plantación para esta temporada y se notificará al vivero para que ajuste las plantas asignadas, si es necesario.",93b5a604
+DELETE_THIS_DRAFT,¿Eliminar este borrador?,9ecf4292
 DELETE_VIABILITY_TEST,Eliminar prueba de viabilidad,db53dffa
 DELETE_VIABILITY_TEST_MESSAGE,Está a punto de borrar la prueba de viabilidad {0}.,ceace778
 DELETED_SPECIES,<deleted species>,c397460c
@@ -548,6 +557,7 @@ DEV_SERVER_ERROR,Servidor no disponible (se puede reiniciar con nuevos cambios e
 DIAMETER_AT_BREAST_HEIGHT,Diámetro a la altura del pecho (DAP) en la madurez (cm),6b42a16f
 DIFFICULT_ACCESSIBILITY,Accesibilidad difícil,18c83274
 DISCARD,Descartar,51a7ed1d
+DISCARD_CHANGES,Descartar cambios,f79f534a
 DISCARD_THIS_SITE,¿Descartar este sitio?,ed8d4636
 DISCARD_UNNAMED_SITE_MESSAGE,Este sitio no se puede guardar como borrador sin un nombre. Descarte lo que ha ingresado o continúe editando para agregar un nombre.,5f5bca5b
 DISMISS,Cerrar notificación,a56709f4
@@ -578,6 +588,8 @@ DOWNLOAD_THE_TERRAWARE_MOBILE_APP,Descargar la aplicación móvil de Terraware,3
 DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION,"Obtenga la aplicación móvil y aproveche las funciones de Colección de semillas, Gestión de vivero y Monitoreo de plantas, las cuales puede usar con mayor flexibilidad ¡más allá de su escritorio!",94127206
 DRAFT,Borrador,f766b964
 DRAFT_PLANTING_SITES,Sitios de Plantación en Borrador,97403fcc
+DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE,"Este sitio es un borrador. La configuración del límite no está terminada, por lo que aún no puede usarse para plantaciones ni observaciones.",f001d82c
+DRAFT_SITE_BOUNDARY_NOT_STARTED_MESSAGE,"Este sitio es un borrador. El límite del sitio no ha sido configurado, por lo que aún no puede usarse para plantaciones ni observaciones.",742beca3
 DRAW_BOUNDARY_WITHIN_MAP,Trazar los límites dentro de un mapa,d1ee6da4
 DRAW_PROPOSED_PROJECT_BOUNDARY,Trazar el límite del proyecto propuesto,8b73e819
 DRONE_FLIGHT,Vuelo de dron,af8ec693
@@ -613,6 +625,7 @@ EDIT_ACTIVITY,Editar actividad,5b6476f3
 EDIT_BATCH_DETAILS,Editar detalles del lote,d2f2112a
 EDIT_COMMON_INDICATOR,Editar Indicador Común,e14bc686
 EDIT_COMMON_INDICATOR_CONFIRMATION,Las modificaciones a este indicador común se aplicarán en TODOS los proyectos. ¿Está seguro de que desea que estas actualizaciones se apliquen a todos los proyectos?,8a103582
+EDIT_DETAILS,Editar detalles,9711cdac
 EDIT_DOCUMENT_DETAILS,Editar detalles del documento,92155983
 EDIT_FEEDBACK,Editar retroalimentación,6b52e0e6
 EDIT_FUNDING_ENTITY,Editar entidad financiadora,f21be0e0
@@ -708,6 +721,7 @@ EVENTS,Eventos,a18b73bc
 EXCEEDS_AVAILABLE_X,Supera lo disponible ({0}),4391f9df
 EXCEEDS_READY_TO_PLANT,El total retirado ({0}) en todos los sustratos supera la cantidad Lista para Transplantar ({1}) en este lote,3e3cd4a4
 EXCLUSION_AREAS,Zonas de exclusión,08c7d391
+EXCLUSION_AREAS_SUMMARY,{0} · {1},6f088900
 EXISTING_PROJECT_ACCESSIONS_BODY,"Hay accesiones que ya se añadieron a un proyecto existente. Si selecciona dichas accesiones aquí, reemplazará el proyecto con {0} (en vez de crear una asociación adicional).",a23f695b
 EXISTING_PROJECT_ACCESSIONS_TITLE,Proyecto existente con accesiones,278f1f38
 EXISTING_PROJECT_BATCHES_BODY,"Hay lotes que ya se añadieron a un proyecto existente. Si selecciona dichos lotes aquí, reemplazará el proyecto con {0} (en vez de crear una asociación adicional).",426c8254
@@ -1275,6 +1289,8 @@ NO_REASSIGNMENTS_TEXT,Seleccione un sustrato y una cantidad para reasignar para 
 NO_REQUESTS_FOR_SELECTED_FILTERS,No hay solicitudes para los filtros seleccionados.,a6a641ac
 NO_SEASON,Sin temporada,a3ee8976
 NO_SEEDBANKS_NON_ADMIN_MSG,"Antes de poder agregar y administrar sus accesiones, necesitará contar con un banco de semillas y especies dentro de Terraware. Solo los administradores pueden agregar bancos de semillas; contáctese con el suyo para obtener ayuda.",814348fe
+NO_SITE_BOUNDARY_YET,Aún no hay límite del sitio,48cfe15e
+NO_SITE_BOUNDARY_YET_DESCRIPTION,Cargue un archivo espacial o dibuje el límite en un mapa para terminar de configurar este sitio.,888a80d2
 NO_SPECIES_ASSIGNED_TO_STRATUM,No hay especies objetivo asignadas a este estrato,7f008c4c
 NO_SPECIES_CONTRIBUTOR_MSG,"Aún no hay especies en su lista de especies. Solo los administradores pueden añadir especies, así que por favor contacte con el suyo para que le ayude.",32a4f50e
 NO_SPECIES_DESCRIPTION,Parece que aún no ha añadido ninguna especie. Disponer de una lista maestra de especies ayuda a agilizar la introducción de datos sobre semillas y plantas en su organización. Puede añadir especies manual e individualmente o importar datos desde un CSV.,048a81f6
@@ -1403,7 +1419,6 @@ ONE_OR_MORE_ANSWERS_NEEDED_UPDATES,Una o más respuestas necesitan actualizacion
 OPPORTUNITIES_INSTRUCTIONS,"Puede incluir oportunidades de expansión del proyecto, nuevos mercados, referencias, formación a otras organizaciones, etc. (Máximo un cuarto de página.)",98ba6999
 OPPORTUNITIES_REQUIRED,Oportunidades *,8d418e65
 OPT_IN,Funciones Opt-In,cbb9300b
-OPTIONAL,Opcional,9f75363c
 OPTIONAL_GPS_COORDINATES_OF_PLOT,Opcional: Coordenadas GPS de la parcela,c15f1313
 OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP,"Proporcione las coordenadas GPS de la esquina suroeste, si el área observada no corresponde a la ubicación original de la parcela.",d5180b23
 OPTIONAL_LATITUDE_OF_PLOT,Opcional: Latitud de la parcela,9de4497b
@@ -1955,6 +1970,9 @@ SCHEDULE_OBSERVATION_PLOTS_ASSIGNED_STRATA,{0} - {1} temporales y {2} permanente
 SCHEDULE_OBSERVATION_PLOTS_ASSIGNED_STRATUM,{0} - {1} temporales y {2} permanentes - se asignarán para el estrato seleccionado.,46c02309
 SCHEDULE_OBSERVATION_SELECT_ALL_SUBSTRATA,Seleccione todos los subestratos en {0} para calcular cuántas de sus parcelas se asignarán.,0a64788a
 SCHEDULE_OBSERVATION_STRATUM_EXCLUDED,{0} no está incluido en este total porque solo algunos de sus subestratos están seleccionados.,93612c0b
+SCHEDULED_OBSERVATIONS,Observaciones programadas,ae524d56
+SCHEDULED_OBSERVATIONS_ACROSS_SITES,{0} en {1} sitios de plantación,4f269453
+SCHEDULED_OBSERVATIONS_AT_SITE,{0} en {1},b55477e7
 SCIENTIFIC_NAME,Nombre Científico,0273e7b9
 SCIENTIFIC_NAME_NOT_FOUND,"""{0}"" no fue encontrado en nuestra base de datos, pero puede seguir adicionado.",c9754752
 SCIENTIFIC_NAME_REQUIRED,Nombre Científico *,1d6383a2
@@ -2062,6 +2080,7 @@ SET_UP_NURSERY,Establecer vivero,25ab7370
 SET_UP_SEED_BANK,Establecer banco de semillas,6f047a89
 SETTINGS,Ajustes,38560978
 SETTINGS_FOR,Configuración para {0},da07c7b6
+SETUP_REMAINING,Configuración pendiente,368418af
 SHARED_WITH_FUNDER,Compartido con el financiador,f59b229b
 SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52
 SHOW_FILTERS,Mostrar filtros,d4143c37
@@ -2453,6 +2472,7 @@ TOOLTIP_VIABILITY_TEST_SUBSTRATE,"La superficie o el material del que un organis
 TOOLTIP_VIABILITY_TEST_TREATMENT,"Los agentes y técnicas biológicos, físicos y químicos utilizados para romper la latencia y/o acelerar la germinación.",560e95e8
 TOTAL,Total,ecba5453
 TOTAL_ACTIVE_ACCESSIONS,Total de accesiones activas,8950dbea
+TOTAL_AREA,Área total,2eefa842
 TOTAL_DENSITY_TOOLTIP,Densidad total de plantas (plantas/ha) de los valores ingresados arriba.,edb8e740
 TOTAL_DENSITY_VIEW_TOOLTIP,Total de las densidades de plantas de todas las especies listadas,04705106
 TOTAL_GOAL,Meta total,b6468a48
@@ -2637,6 +2657,7 @@ VIDEO_UPLOAD_FAILED,Error al cargar el video,2406bea0
 VIDEO_UPLOAD_FAILED_DESCRIPTION,No se pudo cargar su video. {0}. Descubra por qué su video pudo haber fallado visitando el {1}.,839af7da
 VIEW,Ver,02cff17a
 VIEW_3D_MODEL,Ver modelo 3D,fc2e2960
+VIEW_ALL_SCHEDULED_OBSERVATIONS,Ver las {0} observaciones programadas,55cbbf44
 VIEW_APPLICATION,Ver solicitud,bbdc193f
 VIEW_DOCUMENTS,Ver documento(s),3925fe9c
 VIEW_FULL_DASHBOARD,Ver panel de control completo,25189646

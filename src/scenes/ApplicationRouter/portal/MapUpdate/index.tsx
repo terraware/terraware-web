@@ -6,7 +6,7 @@ import area from '@turf/area';
 import { Feature, FeatureCollection } from 'geojson';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import EditableMap from 'src/components/Map/EditableMapV2';
+import EditableMapV2 from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
 import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
@@ -174,7 +174,7 @@ const MapUpdateView = () => {
           />
         </Grid>
         <Grid item xs={8}>
-          <EditableMap
+          <EditableMapV2
             editableBoundary={siteBoundaryData?.siteBoundary}
             errorAnnotations={siteBoundaryData?.errorAnnotations}
             onEditableBoundaryChanged={onEditableBoundaryChanged}

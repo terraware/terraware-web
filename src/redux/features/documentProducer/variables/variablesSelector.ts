@@ -13,8 +13,7 @@ import {
 import { VariableValue } from 'src/types/documentProducer/VariableValue';
 
 import { AsyncRequest, AsyncRequestT, Statuses } from '../../asyncUtils';
-import { deliverableCompositeKeyFn } from '../../deliverables/deliverablesSlice';
-import { variableListCompositeKeyFn } from '../values/valuesSlice';
+import { deliverableCompositeKeyFn, variableListCompositeKeyFn } from '../values/valuesSlice';
 import { specificVariablesCompositeKeyFn, variableHistoryCompositeKeyFn } from './variablesSlice';
 
 const selectDocumentVariables = (state: RootState, documentId: number | undefined) =>

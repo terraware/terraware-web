@@ -1,12 +1,10 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
+import { skipToken } from '@reduxjs/toolkit/query';
+
+import useDeliverablesWithOverdue from 'src/hooks/useDeliverablesWithOverdue';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
-import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { DeliverableTypeType, ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
-
-import { useLocalization } from '../hooks';
+import { ListDeliverablesElementWithOverdue } from 'src/types/Deliverables';
 
 interface DeliverableSearch {
   deliverableSearchResults: ListDeliverablesElementWithOverdue[] | undefined;
@@ -24,23 +22,22 @@ interface DeliverableSearch {
  * @returns
  */
 export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
-  const dispatch = useAppDispatch();
-  const { activeLocale } = useLocalization();
-
   const { currentAcceleratorProject, isLoading: isParticipantDataLoading, modules } = useParticipantData();
 
-  const [recentDeliverableSearchRequestId, setRecentDeliverableSearchRequestId] = useState('');
-  const recentDeliverablesSearchRequest = useAppSelector(
-    selectDeliverablesSearchRequest(recentDeliverableSearchRequestId)
+  // We need to know the modules available to the participant before we can search for associated deliverables
+  const projectId = !isParticipantDataLoading && (modules ?? []).length > 0 ? currentAcceleratorProject?.id : undefined;
+  const { deliverables, isFetching, refetch } = useDeliverablesWithOverdue(
+    projectId !== undefined ? { projectId } : skipToken
   );
 
-  const activeModules = useMemo(() => (modules ?? []).filter((module) => module.isActive), [modules]);
   const speciesDeliverables = useMemo(() => {
-    if (recentDeliverablesSearchRequest?.status === 'success') {
-      return recentDeliverablesSearchRequest?.data || [];
-    }
-    return [];
-  }, [recentDeliverablesSearchRequest]);
+    const moduleIds = (modules ?? []).map((module) => module.id);
+    return (deliverables ?? []).filter(
+      (deliverable) => deliverable.type === 'Species' && moduleIds.includes(deliverable.moduleId)
+    );
+  }, [deliverables, modules]);
+
+  const activeModules = useMemo(() => (modules ?? []).filter((module) => module.isActive), [modules]);
 
   const activeDeliverables = useMemo(
     () =>
@@ -51,59 +48,19 @@ export const useSpeciesDeliverableSearch = (): DeliverableSearch => {
   );
 
   const reload = useCallback(() => {
-    const _modules = modules || [];
-
-    if (
-      isParticipantDataLoading ||
-      !currentAcceleratorProject ||
-      // We need to know the modules available to the participant before we
-      // can search for associated deliverables
-      _modules.length === 0
-    ) {
-      return;
+    if (projectId !== undefined) {
+      void refetch();
     }
-
-    const deliverableRequest = dispatch(
-      requestListDeliverables({
-        locale: activeLocale,
-        listRequest: {
-          projectId: currentAcceleratorProject.id,
-        },
-        search: {
-          operation: 'and',
-          children: [
-            {
-              operation: 'field',
-              field: 'type(raw)',
-              type: 'Exact',
-              values: ['Species' as DeliverableTypeType],
-            },
-            {
-              operation: 'field',
-              field: 'moduleId',
-              type: 'Exact',
-              values: [_modules.map((module) => module.id)],
-            },
-          ],
-        },
-      })
-    );
-    setRecentDeliverableSearchRequestId(deliverableRequest.requestId);
-  }, [currentAcceleratorProject, isParticipantDataLoading, modules, activeLocale, dispatch]);
-
-  // Initialize the hook
-  useEffect(() => {
-    reload();
-  }, [reload]);
+  }, [projectId, refetch]);
 
   return useMemo<DeliverableSearch>(
     () => ({
-      deliverableSearchResults: recentDeliverablesSearchRequest?.data,
+      deliverableSearchResults: deliverables ? speciesDeliverables : undefined,
       hasActiveDeliverable: activeDeliverables.length > 0,
       hasRecentDeliverable: speciesDeliverables.length > 0,
-      isLoading: recentDeliverablesSearchRequest?.status === 'pending' || isParticipantDataLoading,
+      isLoading: isFetching || isParticipantDataLoading,
       reload,
     }),
-    [recentDeliverablesSearchRequest, activeDeliverables, speciesDeliverables, reload, isParticipantDataLoading]
+    [deliverables, speciesDeliverables, activeDeliverables, isFetching, isParticipantDataLoading, reload]
   );
 };

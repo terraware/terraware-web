@@ -6,6 +6,7 @@ import { BusySpinner, Button, DialogBox, FileChooser, Message } from '@terraware
 
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
+import { useDocLinks } from 'src/docLinks';
 import { useLocalization } from 'src/providers';
 import {
   GeometryFileErrorCode,
@@ -93,6 +94,7 @@ const parsedBoundaryOf = ({
 export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBoundaryModalProps): JSX.Element {
   const theme = useTheme();
   const { strings } = useLocalization();
+  const docLinks = useDocLinks();
   const [files, setFiles] = useState<File[]>([]);
   const [error, setError] = useState<BoundaryUploadError | undefined>();
   const [parseBoundary, { isLoading }] = useParseDraftPlantingSiteBoundaryMutation();
@@ -201,11 +203,11 @@ export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBounda
         >
           {strings.UPLOAD_SITE_BOUNDARY_ACCEPTED_FORMATS}
         </Typography>
-        {/* TODO: point this at the real support article once the doc link exists. */}
         <Link
           fontSize='13px'
           style={{ alignItems: 'center', alignSelf: 'center', display: 'inline-flex', gap: theme.spacing(0.5) }}
-          to=''
+          to={docLinks.knowledge_base_stratification}
+          target='_blank'
         >
           <Icon name='help' size='small' style={{ fill: theme.palette.TwClrIcnSuccess }} />
           {strings.UPLOAD_SITE_BOUNDARY_HELP_LINK}

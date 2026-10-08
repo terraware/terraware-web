@@ -6,15 +6,12 @@ import { rtkReducers } from 'src/queries/reducers';
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
 import acceleratorProjectSpeciesReducers from './features/acceleratorProjectSpecies/acceleratorProjectSpeciesSlice';
 import applicationReducers from './features/application/applicationSlice';
-import deliverablesReducers from './features/deliverables/deliverablesSlice';
 import documentProducerReducers from './features/documentProducer';
-import eventReducers from './features/events/eventsSlice';
 import fundingEntitiesReducers from './features/funder/entities/fundingEntitiesSlice';
 import funderProjectsReducers from './features/funder/projects/funderProjectsSlice';
 import gisReducers from './features/gis/gisSlice';
 import matrixViewReducers from './features/matrixView/matrixViewSlice';
 import messageReducers from './features/message/messageSlice';
-import moduleReducers from './features/modules/modulesSlice';
 import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
 import projectToDoReducers from './features/projectToDo/projectToDoSlice';
 import snackbarReducers from './features/snackbar/snackbarSlice';
@@ -27,15 +24,12 @@ import userAnalyticsReducers from './features/user/userAnalyticsSlice';
 const reducers = {
   ...acceleratorReducers,
   ...applicationReducers,
-  ...deliverablesReducers,
   ...documentProducerReducers,
-  ...eventReducers,
   ...funderProjectsReducers,
   ...fundingEntitiesReducers,
   ...gisReducers,
   ...messageReducers,
   ...matrixViewReducers,
-  ...moduleReducers,
   ...acceleratorProjectSpeciesReducers,
   ...projectSpeciesReducers,
   ...projectToDoReducers,

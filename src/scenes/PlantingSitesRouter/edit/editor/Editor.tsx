@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, Message } from '@terraware/web-components';
@@ -82,6 +82,8 @@ export default function Editor(props: EditorProps): JSX.Element {
   const [showPageMessage, setShowPageMessage] = useState<boolean>(true);
   const [onValidate, setOnValidate] = useState<OnValidate | undefined>();
   const [showStartOver, setShowStartOver] = useState<boolean>(false);
+  const startOverDraft = useRef<DraftPlantingSite>(undefined);
+  const [startOverCount, setStartOverCount] = useState(0);
   const [currentStep, setCurrentStep] = useState<SiteEditStep>(siteEditStep);
   const [completedOptionalSteps, setCompletedOptionalSteps] = useState<Record<OptionalSiteEditStep, boolean>>(
     initializeOptionalStepsStatus(site)
@@ -136,6 +138,9 @@ export default function Editor(props: EditorProps): JSX.Element {
       setCurrentStep(updatedDraft.nextStep);
       if (updatedDraft.optionalSteps) {
         setCompletedOptionalSteps(updatedDraft.optionalSteps);
+      }
+      if (updatedDraft.draft === startOverDraft.current) {
+        setStartOverCount((count) => count + 1);
       }
       onFinishUpdate();
     }
@@ -297,6 +302,7 @@ export default function Editor(props: EditorProps): JSX.Element {
 
     const optionalSteps = initializeOptionalStepsStatus(draft);
 
+    startOverDraft.current = draft;
     updateDraft({ draft, nextStep, optionalSteps }, redirect);
     setShowStartOver(false);
   }, [plantingSite, updateDraft]);
@@ -319,6 +325,7 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   const busy = isCreating || isUpdating || isPending || !!onValidate;
   const isFinalStep = currentStep === steps[steps.length - 1]?.type;
+  const showStartOverButton = currentStep !== 'details' && (currentStep !== 'site_boundary' || !!plantingSite.boundary);
 
   return (
     <TfMain>
@@ -360,7 +367,7 @@ export default function Editor(props: EditorProps): JSX.Element {
                 type='passive'
                 size='medium'
               />
-              {isFinalStep && (
+              {showStartOverButton && (
                 <Button
                   id='start-over'
                   label={strings.RESET_BOUNDARY_SETUP}
@@ -445,7 +452,12 @@ export default function Editor(props: EditorProps): JSX.Element {
               />
             )}
             {currentStep === 'site_boundary' && (
-              <SiteBoundary onDirtyChange={setMapDirty} onValidate={onValidate} site={plantingSite} />
+              <SiteBoundary
+                key={startOverCount}
+                onDirtyChange={setMapDirty}
+                onValidate={onValidate}
+                site={plantingSite}
+              />
             )}
             {currentStep === 'exclusion_areas' && (
               <Exclusions onDirtyChange={setMapDirty} onValidate={onValidate} site={plantingSite} />

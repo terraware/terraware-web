@@ -1,85 +1,44 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import { useApplicationData } from 'src/providers/Application/Context';
+import { useCompleteSubmissionMutation } from 'src/queries/generated/deliverables';
 import { Statuses } from 'src/redux/features/asyncUtils';
-import {
-  requestCompleteDeliverable,
-  requestGetDeliverable,
-  requestIncompleteDeliverable,
-} from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import { selectDeliverablesEditRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DeliverableWithOverdue } from 'src/types/Deliverables';
+import { mutationStatus } from 'src/utils/mutationStatus';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Response = {
   status?: Statuses;
   complete: (deliverable: DeliverableWithOverdue) => void;
-  incomplete: (deliverable: DeliverableWithOverdue) => void;
 };
 
 /**
- * Hook to submit a deliverable
+ * Hook to mark a deliverable as complete
  */
 export default function useCompleteDeliverable(): Response {
-  const [lastRequest, setLastRequest] = useState<DeliverableWithOverdue>();
-  const [requestId, setRequestId] = useState<string>('');
   const snackbar = useSnackbar();
-  const dispatch = useAppDispatch();
-  const result = useAppSelector(selectDeliverablesEditRequest(requestId));
+  const [completeSubmission, result] = useCompleteSubmissionMutation();
 
   const { isApplicationConsole, isApplicationPortal } = useApplicationPortal();
   const { reload } = useApplicationData();
 
   const complete = useCallback(
     (deliverable: DeliverableWithOverdue) => {
-      setLastRequest(undefined);
-      const dispatched = dispatch(
-        requestCompleteDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId })
-      );
-      setRequestId(dispatched.requestId);
-      setLastRequest(deliverable);
+      void completeSubmission({ deliverableId: deliverable.id, projectId: deliverable.projectId })
+        .unwrap()
+        .then(() => {
+          if (isApplicationConsole || isApplicationPortal) {
+            reload();
+          }
+        })
+        .catch(() => snackbar.toastError(strings.GENERIC_ERROR));
     },
-    [dispatch]
+    [completeSubmission, isApplicationConsole, isApplicationPortal, reload, snackbar]
   );
 
-  const incomplete = useCallback(
-    (deliverable: DeliverableWithOverdue) => {
-      setLastRequest(undefined);
-      const dispatched = dispatch(
-        requestIncompleteDeliverable({ deliverableId: deliverable.id, projectId: deliverable.projectId })
-      );
-      setRequestId(dispatched.requestId);
-      setLastRequest(deliverable);
-    },
-    [dispatch]
-  );
+  const status = mutationStatus(result);
 
-  useEffect(() => {
-    if (!lastRequest) {
-      return;
-    }
-
-    if (result?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    } else if (result?.status === 'success') {
-      // refresh deliverable data in store
-      if (isApplicationConsole || isApplicationPortal) {
-        reload();
-      } else {
-        void dispatch(requestGetDeliverable({ deliverableId: lastRequest.id, projectId: lastRequest.projectId }));
-      }
-    }
-  }, [dispatch, isApplicationConsole, isApplicationPortal, lastRequest, reload, result, snackbar]);
-
-  return useMemo<Response>(
-    () => ({
-      status: result?.status,
-      complete,
-      incomplete,
-    }),
-    [result?.status, complete, incomplete]
-  );
+  return useMemo<Response>(() => ({ status, complete }), [status, complete]);
 }

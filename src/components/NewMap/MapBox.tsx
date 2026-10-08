@@ -47,6 +47,7 @@ type MapBoxProps = {
   disableDoubleClickZoom?: boolean;
   disableZoom?: boolean;
   drawerOpen?: boolean; // Used to trigger resize
+  fillContainerHeight?: boolean;
   hideFullScreenControl?: boolean;
   hideMapViewStyleControl?: boolean;
   hideZoomControl?: boolean;
@@ -86,6 +87,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
     disableDoubleClickZoom,
     disableZoom,
     drawerOpen,
+    fillContainerHeight,
     layers: featureGroups,
     hideFullScreenControl,
     hideMapViewStyleControl,
@@ -305,8 +307,8 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
       const selectedFilter: FilterSpecification = ['==', ['get', 'selected'], true];
       const notSelectedFilter: FilterSpecification = ['==', ['get', 'selected'], false];
 
-      const hoverFilter: FilterSpecification = ['==', ['get', 'id'], hoverFeatureId ?? null];
-      const notHoverFilter: FilterSpecification = ['!=', ['get', 'id'], hoverFeatureId ?? null];
+      const hoverFilter: FilterSpecification = ['==', ['get', 'layerFeatureId'], hoverFeatureId ?? null];
+      const notHoverFilter: FilterSpecification = ['!=', ['get', 'layerFeatureId'], hoverFeatureId ?? null];
 
       return [
         /* Base fill. This layer is clickable */
@@ -655,7 +657,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
           }, properties[0]);
 
           setCursor(cursorInteract ?? 'pointer');
-          setHoverFeatureId(topPriorityFeature.id);
+          setHoverFeatureId(topPriorityFeature.layerFeatureId);
 
           return;
         } else {
@@ -767,7 +769,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
             .find((group) => group.layerId === topPriorityFeature.layerId)
             ?.features.find((feature) => feature.featureId === `${topPriorityFeature.id}`);
           if (clickedItem && clickedItem.onClick) {
-            clickedItem.onClick();
+            clickedItem.onClick(event);
 
             return;
           }
@@ -826,7 +828,11 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
       mapStyle={stylesUrl[mapViewStyle]}
       ref={mapRefCallback}
       scrollZoom={!disableZoom && focused}
-      style={{ width: 'auto', height: isDesktop ? 'auto' : '80vh', flexGrow: isDesktop ? 1 : undefined }}
+      style={{
+        width: 'auto',
+        height: isDesktop || fillContainerHeight ? 'auto' : '80vh',
+        flexGrow: isDesktop || fillContainerHeight ? 1 : undefined,
+      }}
       onClick={onMapClick}
       onError={onMapError}
       onMove={onMove}

@@ -1,5 +1,6 @@
 import { IconName } from '@terraware/web-components';
 import { MultiPolygon } from 'geojson';
+import { MapMouseEvent } from 'mapbox-gl';
 
 export type MapBounds = { minLat: number; minLng: number; maxLat: number; maxLng: number };
 
@@ -46,7 +47,7 @@ export type MapLayerFeature = {
   featureId: string;
   geometry: MultiPolygon;
   label?: string;
-  onClick?: () => void;
+  onClick?: (event: MapMouseEvent) => void;
   priority?: number; // Items with higher priority will be clicked first
   selected?: boolean;
 };

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 
+import { skipToken } from '@reduxjs/toolkit/query';
 import { DateTime } from 'luxon';
 
 import ModuleDetailsCard from 'src/components/ModuleDetailsCard';
@@ -7,11 +8,11 @@ import useGetProjectModule from 'src/hooks/useGetProjectModule';
 import useListProjectModules from 'src/hooks/useListProjectModules';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectModuleDeliverables from 'src/hooks/useProjectModuleDeliverables';
-import useProjectModuleEvents from 'src/hooks/useProjectModuleEvents';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
+import { useListEventsQuery } from 'src/queries/generated/moduleEvents';
 import strings from 'src/strings';
 import { Project } from 'src/types/Project';
 
@@ -26,16 +27,16 @@ const ModuleDetailsCardWrapper = ({ moduleId, project }: ModuleDetailsCardWrappe
 
   const { getProjectModule, projectModule } = useGetProjectModule();
   const { deliverables, listProjectModuleDeliverables } = useProjectModuleDeliverables();
-  const { events, listProjectModuleEvents } = useProjectModuleEvents();
+  const { currentData: eventsData } = useListEventsQuery(project.id ? { moduleId, projectId: project.id } : skipToken);
+  const events = eventsData?.events;
   const trackEvent = useTrackEvent();
 
   useEffect(() => {
     if (project.id) {
       void getProjectModule({ moduleId, projectId: project.id });
       void listProjectModuleDeliverables({ moduleId, projectId: project.id });
-      void listProjectModuleEvents({ moduleId, projectId: project.id });
     }
-  }, [moduleId, project, getProjectModule, listProjectModuleDeliverables, listProjectModuleEvents]);
+  }, [moduleId, project, getProjectModule, listProjectModuleDeliverables]);
 
   const deliverableDetails = useMemo(
     () =>

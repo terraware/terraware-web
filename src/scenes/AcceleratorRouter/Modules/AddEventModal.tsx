@@ -7,11 +7,9 @@ import DatePicker from 'src/components/common/DatePicker';
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
-import { requestListModuleProjects } from 'src/redux/features/modules/modulesAsyncThunks';
-import { selectModuleProjects } from 'src/redux/features/modules/modulesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useGetModuleProjectsQuery } from 'src/queries/search/projectModules';
 import strings from 'src/strings';
-import { ModuleEventPartial, ProjectInModule } from 'src/types/Module';
+import { ModuleEventPartial } from 'src/types/Module';
 import useForm from 'src/utils/useForm';
 
 import MultiProjectsEdit from '../FundingEntities/MultiProjectsEdit';
@@ -27,9 +25,7 @@ export interface AddEventModalProps {
 
 export default function AddEventModal(props: AddEventModalProps): JSX.Element {
   const { onClose, onSave, eventToEdit, moduleId } = props;
-  const dispatch = useAppDispatch();
-  const result = useAppSelector(selectModuleProjects(moduleId.toString()));
-  const [availableProjects, setAvailableProjects] = useState<ProjectInModule[]>([]);
+  const { currentData: moduleProjects } = useGetModuleProjectsQuery({ moduleId });
   const [selectedProjects, setSelectedProjects] = useState<{ projectId: number; dealName?: string }[]>([]);
   const [dateError, setDateError] = useState(false);
 
@@ -40,18 +36,6 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
       );
     }
   }, [eventToEdit]);
-
-  useEffect(() => {
-    if (moduleId) {
-      void dispatch(requestListModuleProjects(moduleId.toString()));
-    }
-  }, [dispatch, moduleId]);
-
-  useEffect(() => {
-    if (result?.status === 'success' && availableProjects.length === 0) {
-      setAvailableProjects(result.data?.projectModules || []);
-    }
-  }, [result, availableProjects]);
 
   const theme = useTheme();
 
@@ -76,12 +60,14 @@ export default function AddEventModal(props: AddEventModalProps): JSX.Element {
     });
   };
 
-  const projectOptions = useMemo(() => {
-    return availableProjects.map((project) => ({
-      projectId: Number(project.project_id) || -1,
-      dealName: project.project_name,
-    }));
-  }, [availableProjects]);
+  const projectOptions = useMemo(
+    () =>
+      (moduleProjects ?? []).map((project) => ({
+        projectId: project.projectId || -1,
+        dealName: project.projectName,
+      })),
+    [moduleProjects]
+  );
 
   return (
     <DialogBox

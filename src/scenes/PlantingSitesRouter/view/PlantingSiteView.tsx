@@ -6,32 +6,22 @@ import { BusySpinner } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
-import { APP_PATHS } from 'src/constants';
 import usePlantingSite from 'src/hooks/usePlantingSite';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import SimplePlantingSiteMap from 'src/scenes/PlantsDashboardRouter/components/SimplePlantingSiteMap';
+import strings from 'src/strings';
 
 import DeletePlantingSiteModal from '../edit/DeletePlantingSiteModal';
 import PlantingSiteDetailsCard from './PlantingSiteDetailsCard';
 import PlantingSiteDetailsHeader from './PlantingSiteDetailsHeader';
 import PlantingSiteMapV2 from './PlantingSiteMapV2';
-import SimplePlantingSite from './SimplePlantingSite';
 
 export default function PlantingSiteView(): JSX.Element {
   const theme = useTheme();
-  const navigate = useSyncNavigate();
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
 
   const params = useParams<{ plantingSiteId: string }>();
   const plantingSiteId = Number(params.plantingSiteId);
   const { plantingSite, isLoading } = usePlantingSite(plantingSiteId);
-
-  const goToEditPlantingSite = useCallback(() => {
-    if (plantingSite) {
-      navigate({
-        pathname: APP_PATHS.PLANTING_SITES_EDIT.replace(':plantingSiteId', `${plantingSite.id}`),
-      });
-    }
-  }, [plantingSite, navigate]);
 
   const openModal = useCallback(() => setDeleteModalOpen(true), []);
   const closeModal = useCallback(() => setDeleteModalOpen(false), []);
@@ -46,29 +36,34 @@ export default function PlantingSiteView(): JSX.Element {
         <DeletePlantingSiteModal plantingSiteId={plantingSite.id} onClose={closeModal} />
       )}
       <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-        <PlantingSiteDetailsHeader onEdit={goToEditPlantingSite} onDelete={openModal} plantingSite={plantingSite} />
+        <PlantingSiteDetailsHeader onDelete={openModal} plantingSite={plantingSite} />
         <Grid item xs={12}>
           <PageSnackbar />
         </Grid>
-        <Card
-          flushMobile
-          style={{
-            flexGrow: plantingSite?.boundary ? 1 : 0,
-            display: 'flex',
-            flexDirection: 'column',
-            marginTop: theme.spacing(2),
-          }}
-        >
-          <PlantingSiteDetailsCard plantingSite={plantingSite} />
-          {plantingSite.boundary && plantingSite.strata && <PlantingSiteMapV2 plantingSiteId={plantingSite.id} />}
-          {plantingSite.boundary && !plantingSite.strata && (
-            <Grid container flexGrow={1}>
-              <Grid item xs={12} display='flex'>
-                <SimplePlantingSite plantingSite={plantingSite} />
-              </Grid>
-            </Grid>
-          )}
-        </Card>
+        <Box marginTop={theme.spacing(3)}>
+          <PlantingSiteDetailsCard key={plantingSite.id} plantingSite={plantingSite} />
+        </Box>
+        {plantingSite.boundary && (
+          <Card
+            flushMobile
+            radius={theme.spacing(2)}
+            style={{
+              flexGrow: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              marginTop: theme.spacing(2.5),
+            }}
+            title={strings.SITE_BOUNDARY}
+          >
+            {plantingSite.strata ? (
+              <PlantingSiteMapV2 plantingSiteId={plantingSite.id} />
+            ) : (
+              <Box display='flex' flexGrow={1}>
+                <SimplePlantingSiteMap plantingSiteId={plantingSite.id} />
+              </Box>
+            )}
+          </Card>
+        )}
       </Box>
     </>
   );
