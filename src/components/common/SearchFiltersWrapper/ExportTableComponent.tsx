@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { Button, Tooltip } from '@terraware/web-components';
-import { ColumnHeader } from 'export-to-csv/output/lib/types';
+import { ColumnHeader } from 'export-to-csv';
 
 import { StatusT } from 'src/redux/features/asyncUtils';
 import strings from 'src/strings';

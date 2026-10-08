@@ -1,5 +1,6 @@
-import { asBlob, generateCsv, mkConfig } from 'export-to-csv';
-import { AcceptedData, ColumnHeader } from 'export-to-csv/output/lib/types';
+import { ColumnHeader, asBlob, generateCsv, mkConfig } from 'export-to-csv';
+
+type AcceptedData = number | string | boolean | null | undefined;
 
 export type CsvData = { [k: string]: AcceptedData };
 
