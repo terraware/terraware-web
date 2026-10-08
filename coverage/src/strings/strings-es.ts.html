@@ -3233,8 +3233,48 @@
 <a name='L3168'></a><a href='#L3168'>3168</a>
 <a name='L3169'></a><a href='#L3169'>3169</a>
 <a name='L3170'></a><a href='#L3170'>3170</a>
-<a name='L3171'></a><a href='#L3171'>3171</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L3171'></a><a href='#L3171'>3171</a>
+<a name='L3172'></a><a href='#L3172'>3172</a>
+<a name='L3173'></a><a href='#L3173'>3173</a>
+<a name='L3174'></a><a href='#L3174'>3174</a>
+<a name='L3175'></a><a href='#L3175'>3175</a>
+<a name='L3176'></a><a href='#L3176'>3176</a>
+<a name='L3177'></a><a href='#L3177'>3177</a>
+<a name='L3178'></a><a href='#L3178'>3178</a>
+<a name='L3179'></a><a href='#L3179'>3179</a>
+<a name='L3180'></a><a href='#L3180'>3180</a>
+<a name='L3181'></a><a href='#L3181'>3181</a>
+<a name='L3182'></a><a href='#L3182'>3182</a>
+<a name='L3183'></a><a href='#L3183'>3183</a>
+<a name='L3184'></a><a href='#L3184'>3184</a>
+<a name='L3185'></a><a href='#L3185'>3185</a>
+<a name='L3186'></a><a href='#L3186'>3186</a>
+<a name='L3187'></a><a href='#L3187'>3187</a>
+<a name='L3188'></a><a href='#L3188'>3188</a>
+<a name='L3189'></a><a href='#L3189'>3189</a>
+<a name='L3190'></a><a href='#L3190'>3190</a>
+<a name='L3191'></a><a href='#L3191'>3191</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">75x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -6649,6 +6689,7 @@ export const strings = {
   ARE_YOU_SURE_DELETE_PLANTING_DATE: '¿Está seguro de que desea eliminar esta Fecha de Plantación?',
   ARE_YOU_SURE_DELETE_TARGET: '¿Está seguro de que desea eliminar este objetivo de especie?',
   AREA_HA: 'Área (ha)',
+  AREA_IN_HA: '{0} ha',
   AREA_NOT_OBSERVED: 'Área no observada',
   AS_OF_X: 'desde {0}',
   ASSIGN: 'Asignar',
@@ -6867,7 +6908,12 @@ export const strings = {
   CONTINUE: 'Continuar',
   CONTINUE_AND_RESET_STATUS: 'Continuar y restablecer estado',
   CONTINUE_APPLICATION: 'Continuar solicitud',
+  CONTINUE_BOUNDARY_SETUP: 'Continuar con la configuración de límites',
   CONTINUE_TO_APPLICATION: 'Continuar a la Solicitud',
+  CONTINUE_WITH_DETAILS: 'Continuar con los detalles',
+  CONTINUE_WITH_EXCLUSION_AREAS: 'Continuar con las áreas de exclusión',
+  CONTINUE_WITH_STRATUM_BOUNDARIES: 'Continuar con los límites de estrato',
+  CONTINUE_WITH_SUBSTRATUM_BOUNDARIES: 'Continuar con los límites de subestrato',
   CONTRIBUTOR: 'Colaborador',
   CONTRIBUTOR_INFO:
     'Un colaborador puede añadir entradas de datos para semillas, gestionar el inventario de viveros (salvo los retiros de plantaciones, ver los retiros), gestionar las reasignaciones de viveros y visualizar las plantaciones de un sitio de plantación en un mapa geográfico.',
@@ -6965,6 +7011,8 @@ export const strings = {
   DELETE_ACTIVITY_CONFIRM:
     '¿Está seguro de que desea eliminar esta actividad? Todos los datos de la actividad serán eliminados.',
   DELETE_CONFIRMATION_MODAL_MAIN_TEXT: '¿Está seguro de que desea eliminar la especie?',
+  DELETE_DRAFT: 'Eliminar borrador',
+  DELETE_DRAFT_MESSAGE: '{0} y todo lo configurado hasta ahora se eliminarán. Esta acción no se puede deshacer.',
   DELETE_FUNDING_ENTITY: 'Eliminar entidad financiadora',
   DELETE_FUNDING_ENTITY_FUNDERS_MESSAGE: 'Se eliminarán todos los financiadores asociados a esta entidad financiadora.',
   DELETE_FUNDING_ENTITY_MESSAGE: 'Va a eliminar {0}.',
@@ -6999,6 +7047,7 @@ export const strings = {
   DELETE_SPECIES_TARGET: 'Eliminar objetivo de especie',
   DELETE_SPECIES_TARGET_CONFIRM:
     'Está a punto de eliminar la especie {0} como objetivo para este sustrato. La cantidad se eliminará del objetivo total de plantación para esta temporada y se notificará al vivero para que ajuste las plantas asignadas, si es necesario.',
+  DELETE_THIS_DRAFT: '¿Eliminar este borrador?',
   DELETE_VIABILITY_TEST: 'Eliminar prueba de viabilidad',
   DELETE_VIABILITY_TEST_MESSAGE: 'Está a punto de borrar la prueba de viabilidad {0}.',
   DELETED_SPECIES: '&lt;deleted species&gt;',
@@ -7035,6 +7084,7 @@ export const strings = {
   DIAMETER_AT_BREAST_HEIGHT: 'Diámetro a la altura del pecho (DAP) en la madurez (cm)',
   DIFFICULT_ACCESSIBILITY: 'Accesibilidad difícil',
   DISCARD: 'Descartar',
+  DISCARD_CHANGES: 'Descartar cambios',
   DISCARD_THIS_SITE: '¿Descartar este sitio?',
   DISCARD_UNNAMED_SITE_MESSAGE:
     'Este sitio no se puede guardar como borrador sin un nombre. Descarte lo que ha ingresado o continúe editando para agregar un nombre.',
@@ -7069,6 +7119,10 @@ export const strings = {
     'Obtenga la aplicación móvil y aproveche las funciones de Colección de semillas, Gestión de vivero y Monitoreo de plantas, las cuales puede usar con mayor flexibilidad ¡más allá de su escritorio!',
   DRAFT: 'Borrador',
   DRAFT_PLANTING_SITES: 'Sitios de Plantación en Borrador',
+  DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE:
+    'Este sitio es un borrador. La configuración del límite no está terminada, por lo que aún no puede usarse para plantaciones ni observaciones.',
+  DRAFT_SITE_BOUNDARY_NOT_STARTED_MESSAGE:
+    'Este sitio es un borrador. El límite del sitio no ha sido configurado, por lo que aún no puede usarse para plantaciones ni observaciones.',
   DRAW_BOUNDARY_WITHIN_MAP: 'Trazar los límites dentro de un mapa',
   DRAW_PROPOSED_PROJECT_BOUNDARY: 'Trazar el límite del proyecto propuesto',
   DRONE_FLIGHT: 'Vuelo de dron',
@@ -7106,6 +7160,7 @@ export const strings = {
   EDIT_COMMON_INDICATOR: 'Editar Indicador Común',
   EDIT_COMMON_INDICATOR_CONFIRMATION:
     'Las modificaciones a este indicador común se aplicarán en TODOS los proyectos. ¿Está seguro de que desea que estas actualizaciones se apliquen a todos los proyectos?',
+  EDIT_DETAILS: 'Editar detalles',
   EDIT_DOCUMENT_DETAILS: 'Editar detalles del documento',
   EDIT_FEEDBACK: 'Editar retroalimentación',
   EDIT_FUNDING_ENTITY: 'Editar entidad financiadora',
@@ -7211,6 +7266,7 @@ export const strings = {
   EXCEEDS_READY_TO_PLANT:
     'El total retirado ({0}) en todos los sustratos supera la cantidad Lista para Transplantar ({1}) en este lote',
   EXCLUSION_AREAS: 'Zonas de exclusión',
+  EXCLUSION_AREAS_SUMMARY: '{0} · {1}',
   EXISTING_PROJECT_ACCESSIONS_BODY:
     'Hay accesiones que ya se añadieron a un proyecto existente. Si selecciona dichas accesiones aquí, reemplazará el proyecto con {0} (en vez de crear una asociación adicional).',
   EXISTING_PROJECT_ACCESSIONS_TITLE: 'Proyecto existente con accesiones',
@@ -7842,6 +7898,9 @@ export const strings = {
   NO_SEASON: 'Sin temporada',
   NO_SEEDBANKS_NON_ADMIN_MSG:
     'Antes de poder agregar y administrar sus accesiones, necesitará contar con un banco de semillas y especies dentro de Terraware. Solo los administradores pueden agregar bancos de semillas; contáctese con el suyo para obtener ayuda.',
+  NO_SITE_BOUNDARY_YET: 'Aún no hay límite del sitio',
+  NO_SITE_BOUNDARY_YET_DESCRIPTION:
+    'Cargue un archivo espacial o dibuje el límite en un mapa para terminar de configurar este sitio.',
   NO_SPECIES_ASSIGNED_TO_STRATUM: 'No hay especies objetivo asignadas a este estrato',
   NO_SPECIES_CONTRIBUTOR_MSG:
     'Aún no hay especies en su lista de especies. Solo los administradores pueden añadir especies, así que por favor contacte con el suyo para que le ayude.',
@@ -7984,7 +8043,6 @@ export const strings = {
     'Puede incluir oportunidades de expansión del proyecto, nuevos mercados, referencias, formación a otras organizaciones, etc. (Máximo un cuarto de página.)',
   OPPORTUNITIES_REQUIRED: 'Oportunidades *',
   OPT_IN: 'Funciones Opt-In',
-  OPTIONAL: 'Opcional',
   OPTIONAL_GPS_COORDINATES_OF_PLOT: 'Opcional: Coordenadas GPS de la parcela',
   OPTIONAL_GPS_COORDINATES_OF_PLOT_TOOLTIP:
     'Proporcione las coordenadas GPS de la esquina suroeste, si el área observada no corresponde a la ubicación original de la parcela.',
@@ -8739,6 +8797,7 @@ export const strings = {
   SET_UP_SEED_BANK: 'Establecer banco de semillas',
   SETTINGS: 'Ajustes',
   SETTINGS_FOR: 'Configuración para {0}',
+  SETUP_REMAINING: 'Configuración pendiente',
   SHARED_WITH_FUNDER: 'Compartido con el financiador',
   SHOW_COLOR_KEY: 'Mostrar clave de colores',
   SHOW_FILTERS: 'Mostrar filtros',
@@ -9227,6 +9286,7 @@ export const strings = {
     'Los agentes y técnicas biológicos, físicos y químicos utilizados para romper la latencia y/o acelerar la germinación.',
   TOTAL: 'Total',
   TOTAL_ACTIVE_ACCESSIONS: 'Total de accesiones activas',
+  TOTAL_AREA: 'Área total',
   TOTAL_DENSITY_TOOLTIP: 'Densidad total de plantas (plantas/ha) de los valores ingresados arriba.',
   TOTAL_DENSITY_VIEW_TOOLTIP: 'Total de las densidades de plantas de todas las especies listadas',
   TOTAL_GOAL: 'Meta total',
@@ -9580,7 +9640,7 @@ export const strings = {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-08T18:23:13.998Z
+                at 2026-10-08T18:49:22.154Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
