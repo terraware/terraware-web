@@ -1,3 +1,4 @@
+f5904200 Fix ability to delete strata (#6691)
 a1a93c35 SW-8971 Show survival rate recalculation from pending observation results (#6699)
 3dcf21a5 SW-8963 Reschedule observations inline from the scheduled flyout (#6672)
 419f14b6 SW-8963 Move scheduled observations from the banner to a calendar flyout (#6671)
