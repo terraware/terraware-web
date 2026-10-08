@@ -30,6 +30,7 @@ type MapComponentProps = {
   drawerOpen?: boolean;
   drawerRef?: MutableRefObject<HTMLDivElement | null>;
   drawerSize?: MapDrawerSize;
+  fillContainerHeight?: boolean;
   hideBorder?: boolean;
   hideFullScreenControl?: boolean;
   hideMapViewStyleControl?: boolean;
@@ -73,6 +74,7 @@ const MapComponent = (props: MapComponentProps) => {
     drawerOpen,
     drawerRef,
     drawerSize,
+    fillContainerHeight,
     hideBorder,
     hideFullScreenControl,
     hideMapViewStyleControl,
@@ -154,6 +156,7 @@ const MapComponent = (props: MapComponentProps) => {
         disableDoubleClickZoom={disableDoubleClickZoom}
         disableZoom={disableZoom}
         drawerOpen={drawerOpen}
+        fillContainerHeight={fillContainerHeight}
         hideFullScreenControl={hideFullScreenControl}
         hideMapViewStyleControl={hideMapViewStyleControl}
         hideZoomControl={hideZoomControl}
@@ -188,6 +191,7 @@ const MapComponent = (props: MapComponentProps) => {
     disableDoubleClickZoom,
     disableZoom,
     drawerOpen,
+    fillContainerHeight,
     hideFullScreenControl,
     hideMapViewStyleControl,
     hideZoomControl,
