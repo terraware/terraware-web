@@ -160,15 +160,15 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     }
 
     if (fileUploadEnabled) {
-      return [
-        {
-          text:
-            site.siteType === 'detailed'
-              ? strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION
-              : `${strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION} ${strings.SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE}`,
-        },
-        { text: strings.SITE_BOUNDARY_UPLOAD_TUTORIAL, hasTutorial: true },
-      ];
+      const sentences =
+        site.siteType === 'detailed'
+          ? [strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION, strings.SITE_BOUNDARY_UPLOAD_TUTORIAL]
+          : [
+              strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION,
+              strings.SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,
+              strings.SITE_BOUNDARY_UPLOAD_TUTORIAL,
+            ];
+      return [{ text: sentences.join(' '), hasTutorial: true }];
     }
 
     const data: Description[] = [
@@ -290,9 +290,8 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={description}
+        largeText
         dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
-        minHeight={fileUploadEnabled ? '72px' : '152px'}
-        title={strings.SITE_BOUNDARY}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
         tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}

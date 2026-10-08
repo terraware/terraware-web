@@ -349,6 +349,7 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={description}
+        largeText
         dontShowAgainPreferenceName='dont-show-site-stratum-boundaries-instructions'
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_stratum_boundary_instructions_video'

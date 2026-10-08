@@ -20,6 +20,7 @@ export type Description = {
 export type StepTitleDescriptionProps = {
   description: Description[];
   dontShowAgainPreferenceName?: string;
+  largeText?: boolean;
   minHeight?: string;
   title?: string;
   tutorialDescription?: string | JSX.Element[];
@@ -31,6 +32,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
   const {
     description,
     dontShowAgainPreferenceName,
+    largeText,
     minHeight,
     title,
     tutorialDescription,
@@ -47,6 +49,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
     () => !!dontShowAgainPreferenceName && userPreferences[dontShowAgainPreferenceName] !== true,
     [dontShowAgainPreferenceName, userPreferences]
   );
+  const fontSize = largeText ? '16px' : '14px';
   const [showModal, setShowModal] = useState<boolean>(userPreferenceControlled);
 
   const titleWithPrefix = useMemo(() => {
@@ -84,16 +87,16 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           display='inline'
           alignItems='center'
           key={index}
-          fontSize='14px'
+          fontSize={fontSize}
           fontWeight={line.isBold ? 600 : 400}
-          lineHeight='20px'
+          lineHeight={largeText ? '24px' : '20px'}
           color={line.isWarning ? theme.palette.TwClrIcnWarning : theme.palette.TwClrTxt}
           margin={theme.spacing(1, 0)}
           whiteSpace={'line-wrap'}
         >
           {line.hasTutorial ? (
             <TextWithLink
-              fontSize='14px'
+              fontSize={fontSize}
               handlePrefix={line.handlePrefix}
               handleSuffix={line.handleSuffix}
               onClick={() => setShowModal(true)}

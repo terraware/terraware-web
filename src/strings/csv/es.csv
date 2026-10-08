@@ -2115,9 +2115,7 @@ SITE_BOUNDING_AREA_TOO_LARGE,El área de delimitación de {0} hectáreas es dema
 SITE_DETAIL,Detalle del sitio,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,El sitio de plantación actualmente es un borrador; solo el creador del sitio puede editarlo.,07fbd64b
 SITE_EDITOR_USE_DESKTOP,Esta función solo está disponible desde la aplicación de escritorio.,1c4eb37d
-SITE_EXCLUSION_AREAS_DESCRIPTION_0,"Deben excluirse las zonas dentro de los límites del terreno que no sean plantables. Estas zonas excluidas se eliminarán de los cálculos del área plantable y no se controlarán como parte de la observación rutinaria del terreno. Algunos ejemplos de lugares que deben excluirse son calles, masas de agua y dependencias.",6e688969
-SITE_EXCLUSION_AREAS_DESCRIPTION_1,Dibuja a continuación los límites de las zonas de exclusión del sitio de plantación. Utiliza la herramienta de dibujo {0} para dibujar las zonas de exclusión del sitio de plantación. [Ve un tutorial] sobre cómo dibujar zonas de exclusión. Omite este paso si no hay zonas que excluir.,35dcbf47
-SITE_EXCLUSION_AREAS_DESCRIPTION_2,Excluye zonas del sitio de plantación dibujando formas dentro o superpuestas al límite del sitio de plantación. Completa las formas de la zona de exclusión haciendo doble clic o volviendo a hacer clic en el punto de partida.,e7b47271
+SITE_EXCLUSION_AREAS_DESCRIPTION,"Las áreas dentro del límite del sitio que no son plantables, como caminos, cuerpos de agua y edificaciones auxiliares, deben ser excluidas. Estas se eliminan de los cálculos de área plantable y no se monitorean durante la observación rutinaria del sitio. Utilice la herramienta de dibujo {0} para trazar figuras dentro o superpuestas al límite del sitio, y complete cada figura haciendo doble clic o haciendo clic nuevamente en el punto de inicio. [Vea un tutorial] sobre cómo dibujar áreas de exclusión. Omita este paso si no hay áreas que excluir.",4c2a45b1
 SITE_EXCLUSION_ERRORS,Hay errores en el límite de exclusión.,dc334f43
 SITE_GOALS,Objetivos del Sitio,345a7c04
 SITE_GOALS_DESCRIPTION,Gestione los objetivos del sitio para densidades de plantación y especies.,29421088

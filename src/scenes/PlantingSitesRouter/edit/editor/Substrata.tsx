@@ -407,6 +407,7 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
         description={description}
+        largeText
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_substratum_boundary_instructions_video'
         tutorialTitle={strings.ADDING_SUBSTRATUM_BOUNDARIES}
