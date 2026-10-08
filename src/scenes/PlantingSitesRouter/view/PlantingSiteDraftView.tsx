@@ -15,9 +15,9 @@ import { useUser } from 'src/providers';
 import DeleteDraftPlantingSiteModal from 'src/scenes/PlantingSitesRouter/edit/DeleteDraftPlantingSiteModal';
 import useDraftPlantingSite from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteGet';
 
+import DraftPlantingSiteDetailsCard from './DraftPlantingSiteDetailsCard';
 import DraftPlantingSiteHeader from './DraftPlantingSiteHeader';
 import DraftPlantingSiteListMapView from './DraftPlantingSiteListMapView';
-import PlantingSiteDetailsCard from './PlantingSiteDetailsCard';
 import SimplePlantingSite from './SimplePlantingSite';
 
 export default function PlantingSiteDraftView(): JSX.Element {
@@ -31,6 +31,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
   const [view, setView] = useState<View>('map');
 
   const plantingSite = useMemo(() => result.site, [result]);
+  const editDisabled = !user || result.site?.createdBy !== user.id;
 
   const isMapView = useMemo<boolean>(
     () => view === 'map' || (plantingSite?.boundary !== undefined && plantingSite?.strata === undefined),
@@ -55,7 +56,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
         {plantingSite && (
           <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: isMapView ? 1 : 0 }}>
             <DraftPlantingSiteHeader
-              editDisabled={!user || result.site.createdBy !== user.id}
+              editDisabled={editDisabled}
               onEdit={goToEditDraftPlantingSite}
               onDelete={() => setDeleteModalOpen(true)}
               plantingSite={plantingSite}
@@ -63,33 +64,37 @@ export default function PlantingSiteDraftView(): JSX.Element {
             <Grid item xs={12}>
               <PageSnackbar />
             </Grid>
-            <Card
-              flushMobile
-              style={{
-                flexGrow: plantingSite?.boundary ? 1 : 0,
-                display: 'flex',
-                flexDirection: 'column',
-                marginTop: theme.spacing(4),
-              }}
-            >
-              <PlantingSiteDetailsCard plantingSite={plantingSite} />
-              {plantingSite.boundary && plantingSite.strata && (
-                <DraftPlantingSiteListMapView
-                  plantingSite={plantingSite}
-                  search={search}
-                  setSearch={setSearch}
-                  setView={setView}
-                  view={view}
-                />
-              )}
-              {plantingSite.boundary && !plantingSite.strata && (
-                <Grid container flexGrow={1}>
-                  <Grid item xs={12} display='flex'>
-                    <SimplePlantingSite isDraft plantingSite={plantingSite} />
+            <Box marginTop={theme.spacing(3)}>
+              <DraftPlantingSiteDetailsCard plantingSite={plantingSite} />
+            </Box>
+            {plantingSite.boundary && (
+              <Card
+                flushMobile
+                style={{
+                  flexGrow: 1,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  marginTop: theme.spacing(2.5),
+                }}
+              >
+                {plantingSite.strata && (
+                  <DraftPlantingSiteListMapView
+                    plantingSite={plantingSite}
+                    search={search}
+                    setSearch={setSearch}
+                    setView={setView}
+                    view={view}
+                  />
+                )}
+                {!plantingSite.strata && (
+                  <Grid container flexGrow={1}>
+                    <Grid item xs={12} display='flex'>
+                      <SimplePlantingSite isDraft plantingSite={plantingSite} />
+                    </Grid>
                   </Grid>
-                </Grid>
-              )}
-            </Card>
+                )}
+              </Card>
+            )}
           </Box>
         )}
       </TfMain>
