@@ -625,6 +625,7 @@ EDIT_ACTIVITY,Editar actividad,5b6476f3
 EDIT_BATCH_DETAILS,Editar detalles del lote,d2f2112a
 EDIT_COMMON_INDICATOR,Editar Indicador Común,e14bc686
 EDIT_COMMON_INDICATOR_CONFIRMATION,Las modificaciones a este indicador común se aplicarán en TODOS los proyectos. ¿Está seguro de que desea que estas actualizaciones se apliquen a todos los proyectos?,8a103582
+EDIT_DETAILS,Editar detalles,9711cdac
 EDIT_DOCUMENT_DETAILS,Editar detalles del documento,92155983
 EDIT_FEEDBACK,Editar retroalimentación,6b52e0e6
 EDIT_FUNDING_ENTITY,Editar entidad financiadora,f21be0e0

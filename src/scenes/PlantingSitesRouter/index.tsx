@@ -1,9 +1,8 @@
 import React, { type JSX } from 'react';
-import { Route, Routes, useParams } from 'react-router';
+import { Route, Routes } from 'react-router';
 
 import PlantingSiteDraftCreate from './edit/PlantingSiteDraftCreate';
 import PlantingSiteDraftEdit from './edit/PlantingSiteDraftEdit';
-import PlantingSiteUpdate from './edit/PlantingSiteUpdate';
 import PlantingSiteDraftView from './view/PlantingSiteDraftView';
 import PlantingSiteView from './view/PlantingSiteView';
 import PlantingSitesList from './view/PlantingSitesList';
@@ -15,19 +14,8 @@ export default function PlantingSites(): JSX.Element {
   return (
     <Routes>
       <Route path={'/draft/*'} element={<PlantingSitesDraftRouter />} />
-      <Route path={'/:plantingSiteId/*'} element={<PlantingSitesRouter />} />
+      <Route path={'/:plantingSiteId/*'} element={<PlantingSiteView />} />
       <Route path={'*'} element={<PlantingSitesList />} />
-    </Routes>
-  );
-}
-
-function PlantingSitesRouter(): JSX.Element {
-  const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-
-  return (
-    <Routes>
-      <Route path={'/edit'} element={<PlantingSiteUpdate plantingSiteId={Number(plantingSiteId)} />} />
-      <Route path={'*'} element={<PlantingSiteView />} />
     </Routes>
   );
 }

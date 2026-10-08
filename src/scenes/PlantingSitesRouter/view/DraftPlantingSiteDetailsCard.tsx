@@ -1,7 +1,6 @@
-import React, { type JSX, useId } from 'react';
+import React, { type JSX } from 'react';
 
 import { Box, useTheme } from '@mui/material';
-import TextField from '@terraware/web-components/components/Textfield/Textfield';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
@@ -10,17 +9,7 @@ import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 
-type DetailFieldProps = {
-  label: string;
-  tooltipTitle?: string;
-  value?: string;
-};
-
-export const DetailField = ({ label, tooltipTitle, value }: DetailFieldProps): JSX.Element => {
-  const id = useId();
-
-  return <TextField display id={id} label={label} tooltipTitle={tooltipTitle} type='text' value={value || '—'} />;
-};
+import DetailField from './DetailField';
 
 type DraftPlantingSiteDetailsCardProps = {
   plantingSite: DraftPlantingSite;

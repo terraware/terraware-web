@@ -12,8 +12,8 @@ import strings from 'src/strings';
 import { DraftPlantingSite, SiteEditStep } from 'src/types/PlantingSite';
 import { useNumberFormatter } from 'src/utils/useNumberFormatter';
 
+import DetailField from './DetailField';
 import DraftPlantingSiteBoundaryMap from './DraftPlantingSiteBoundaryMap';
-import { DetailField } from './DraftPlantingSiteDetailsCard';
 
 const stepLabel = (step: SiteEditStep): string => {
   switch (step) {
