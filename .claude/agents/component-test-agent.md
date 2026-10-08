@@ -75,8 +75,8 @@ handling, and the wiring between a fetch and what the user sees.
 
 ## Commands
 
-- `yarn test <path>` while iterating on one file
-- `yarn test` for the full suite
+- `yarn test:ci <path>` while iterating on one file
+- `yarn test:ci` for the full suite
 - `yarn format`, `yarn ts`, and `yarn lint:dev` after changes
 
 ## Boundaries

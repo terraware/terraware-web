@@ -5,7 +5,8 @@
 - Build: `yarn build`
 - Run: `yarn start` (or `yarn start:dev` to skip the increased Node heap size)
 - Format code: `yarn format`
-- Run all unit tests: `yarn test`
+- Run all unit tests: `yarn test:ci` (`yarn test` runs in watch mode and never exits)
+- Run one test file: `yarn test:ci <path>`
 - TypeScript check: `yarn ts`
 - Run linter: `yarn lint:dev` (disables a few `react-hooks` and `react/jsx-no-bind` rules that are noisy during local
   development; CI runs the stricter `yarn lint`)
