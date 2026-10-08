@@ -6,7 +6,7 @@ import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 
 import MapIcon from 'src/components/Map/MapIcon';
 import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
-import { leftMostFeature, leftOrderedFeatures, toMultiPolygon } from 'src/components/Map/utils';
+import { leftMostFeature, leftOrderedFeatures, mergeIntoNeighbor, toMultiPolygon } from 'src/components/Map/utils';
 import EditableMap, { EditableMapBoundary, EditableMapClickedFeature } from 'src/components/NewMap/EditableMap';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
@@ -330,6 +330,23 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     return;
   };
 
+  const onDeleteFeature = useCallback(
+    (boundaryId: string, featureId: string | number) => {
+      if (boundaryId !== 'substratum' || !substrata || selectedStratum === undefined) {
+        return;
+      }
+      const merged = mergeIntoNeighbor(substrata[selectedStratum].features as GeometryFeature[], featureId);
+      if (merged) {
+        setOverridePopupInfo(undefined);
+        setSubstrataData((prev) => ({
+          ...prev,
+          fixedBoundaries: { ...substrata, [selectedStratum]: { type: 'FeatureCollection', features: merged } },
+        }));
+      }
+    },
+    [selectedStratum, setSubstrataData, substrata]
+  );
+
   // If we don't have a selected stratum or clicked stratum is not the last selected stratum, select the stratum.
   // Otherwise select the substratum.
   const featureSelectorOnClick = useCallback(
@@ -416,6 +433,7 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
         errorAnnotations={substrataData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}
         isSliceTool
+        onDeleteFeature={onDeleteFeature}
         onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
         onRedo={redo}
         onUndo={undo}
