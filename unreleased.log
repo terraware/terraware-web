@@ -1,3 +1,4 @@
+1de3a807 Revert "SW-9072 Show file sizes smaller than 1kb"
 8fa3c91f SW-9072 Show file sizes smaller than 1kb
 f5904200 Fix ability to delete strata (#6691)
 a1a93c35 SW-8971 Show survival rate recalculation from pending observation results (#6699)
