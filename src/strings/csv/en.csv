@@ -1951,6 +1951,11 @@ SAVING,Saving...,
 SCARIFY,Scarify,
 SCHEDULE_OBSERVATION,Schedule Observation,
 SCHEDULE_OBSERVATION_MESSAGE,Select the strata and substrata to include in observation:,
+SCHEDULE_OBSERVATION_PLOT_COUNTS_MESSAGE,Plot counts next to each stratum are the numbers of permanent and temporary plots to be assigned.,
+SCHEDULE_OBSERVATION_PLOTS_ASSIGNED_STRATA,{0} - {1} temporary and {2} permanent - will be assigned for the selected strata.,{0} is a plot count such as “26 plots”
+SCHEDULE_OBSERVATION_PLOTS_ASSIGNED_STRATUM,{0} - {1} temporary and {2} permanent - will be assigned for the selected stratum.,{0} is a plot count such as “14 plots”
+SCHEDULE_OBSERVATION_SELECT_ALL_SUBSTRATA,Select all substrata in {0} to calculate how many of its plots will be assigned.,{0} is a stratum name
+SCHEDULE_OBSERVATION_STRATUM_EXCLUDED,{0} is not included in this total because only some of its substrata are selected.,{0} is a stratum name
 SCIENTIFIC_NAME,Scientific Name,
 SCIENTIFIC_NAME_NOT_FOUND,"“{0}” was not found in our database, but you can still add it.",
 SCIENTIFIC_NAME_REQUIRED,Scientific Name *,
@@ -2733,6 +2738,8 @@ X_OF_YEAR_CUMULATIVE_TARGET,{0} of Year Cumulative Target,
 X_OF_YEAR_TARGET,{0} of Year Target,
 X_PER_HA,{0}/ha,
 X_PLANTS,{0} plants,
+X_PLOT,{0} plot,
+X_PLOTS,{0} plots,
 X_SPECIES,{0} species,
 X_SPECIES_Y_PLANTS,"{0} species, {1} plants",
 X_TARGET,{0} Target,{0} is the year of the indicator
