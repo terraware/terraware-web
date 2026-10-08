@@ -23,6 +23,7 @@ import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent'
 import { APP_PATHS } from 'src/constants';
 import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
+import usePollPendingSurvivalRates from 'src/hooks/usePollPendingSurvivalRates';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
@@ -33,6 +34,7 @@ import { useLazyGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
 import { AdHocObservationResults, ObservationState, getStatus } from 'src/types/Observations';
 import { MultiPolygon } from 'src/types/Tracking';
 import { getShortDate } from 'src/utils/dateFormatter';
+import { hasPendingResults } from 'src/utils/observation';
 import { isAdmin } from 'src/utils/organization';
 import { makeDateRangeFilterFn, stripColumnFilters } from 'src/utils/tableFilters';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
@@ -178,6 +180,11 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
     plotType,
   });
   const emptyMessage = useObservationsEmptyMessage(emptyState);
+
+  usePollPendingSurvivalRates(
+    typeof plantingSiteId === 'number' ? plantingSiteId : undefined,
+    observationResults.some(hasPendingResults)
+  );
   const [getT0SiteDataSet, getT0SiteDataSetResponse] = useLazyGetAllT0SiteDataSetQuery();
   const [getPlotsWithObservations, getPlotsWithObservationsResponse] = useLazyGetPlotsWithObservationsQuery();
 

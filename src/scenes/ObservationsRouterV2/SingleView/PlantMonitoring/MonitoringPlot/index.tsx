@@ -10,10 +10,12 @@ import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessa
 import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
+import usePollPendingSurvivalRates from 'src/hooks/usePollPendingSurvivalRates';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import VirtualWalkthroughModal from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughModal';
+import { hasPendingResults } from 'src/utils/observation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import MonitoringPlotObservationDataTab from './MonitoringPlotObservationDataTab';
@@ -41,6 +43,8 @@ const MonitoringPlotDetails = (): JSX.Element => {
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
+
+  usePollPendingSurvivalRates(results?.plantingSiteId, hasPendingResults(results) || !!results?.adHocPlot?.pending);
 
   const monitoringPlot = useMemo(
     () =>
