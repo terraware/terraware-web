@@ -10,6 +10,7 @@ export enum QueryTagTypes {
   AccessionWithdrawals = 'AccessionWithdrawals',
   Accessions = 'Accessions',
   Activities = 'Activities',
+  Deliverables = 'Deliverables',
   Deliveries = 'Deliveries',
   Disclaimer = 'Disclaimer',
   FunderActivities = 'FunderActivities',
