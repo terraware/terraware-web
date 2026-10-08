@@ -75,6 +75,16 @@ const useMapFeatureStyles = () => {
     [theme]
   );
 
+  const exclusionsLayerStyle = useMemo(
+    (): MapFillComponentStyle => ({
+      borderColor: theme.palette.TwClrBaseYellow300,
+      fillColor: theme.palette.TwClrBaseYellow300,
+      opacity: 0.2,
+      type: 'fill',
+    }),
+    [theme]
+  );
+
   const plotPhotoStyle = useMemo(
     (): MapIconComponentStyle => ({
       iconColor: '#CC79A7',
@@ -159,6 +169,7 @@ const useMapFeatureStyles = () => {
   return {
     adHocPlotsLayerStyle,
     deadPlantStyle,
+    exclusionsLayerStyle,
     livePlantStyle,
     nurseryLayerStyle,
     observationEventStyle,

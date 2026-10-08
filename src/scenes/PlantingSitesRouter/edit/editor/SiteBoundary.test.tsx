@@ -4,7 +4,7 @@ import { rstest } from '@rstest/core';
 import { screen, waitFor } from '@testing-library/react';
 import { FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 
-import type { EditableMapProps } from 'src/components/Map/EditableMapV2';
+import type { EditableMapProps } from 'src/components/NewMap/EditableMap';
 import type { FeatureName } from 'src/features';
 import SiteBoundary from 'src/scenes/PlantingSitesRouter/edit/editor/SiteBoundary';
 import strings from 'src/strings';
@@ -23,7 +23,7 @@ const mapBoundaries = rstest.hoisted(() => [] as (FeatureCollection | undefined)
 const mapMounts = rstest.hoisted(() => [] as (FeatureCollection | undefined)[]);
 const mapEdit = rstest.hoisted(() => ({ boundary: undefined as FeatureCollection | undefined }));
 
-rstest.mock('src/components/Map/EditableMapV2', () => {
+rstest.mock('src/components/NewMap/EditableMap', () => {
   const MockEditableMap = ({ editableBoundary, onEditableBoundaryChanged, onRedo, onUndo }: EditableMapProps) => {
     mapBoundaries.push(editableBoundary);
     useEffect(() => {

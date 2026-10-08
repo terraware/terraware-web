@@ -4,22 +4,15 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Textfield } from '@terraware/web-components';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 
-import EditableMap, { LayerFeature } from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
 import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
-import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import { leftMostFeature, leftOrderedFeatures, toMultiPolygon } from 'src/components/Map/utils';
+import EditableMap, { EditableMapBoundary, EditableMapClickedFeature } from 'src/components/NewMap/EditableMap';
+import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import {
-  GeometryFeature,
-  MapEntityOptions,
-  MapPopupRenderer,
-  MapSourceProperties,
-  PopupInfo,
-  RenderableReadOnlyBoundary,
-} from 'src/types/Map';
+import { GeometryFeature, MapPopupRenderer, MapSourceProperties, PopupInfo } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum, MinimalSubstratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
@@ -125,7 +118,7 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
   const [overridePopupInfo, setOverridePopupInfo] = useState<PopupInfo | undefined>();
   const theme = useTheme();
   const mapStyles = useMapStyle(theme);
-  const getRenderAttributes = useRenderAttributes();
+  const { strataLayerStyle, substrataLayerStyle } = useMapFeatureStyles();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
 
@@ -186,7 +179,7 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     onValidate.apply(newStrata === undefined, data);
   }, [substrataData?.errorAnnotations, onValidate, site, snackbar, substrata, strata]);
 
-  const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
+  const readOnlyBoundary = useMemo<EditableMapBoundary[] | undefined>(() => {
     if (!strata) {
       return undefined;
     }
@@ -196,7 +189,7 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
       site.id === -1 ? [] : Object.values(substrata ?? {}).flatMap((substratum) => substratum.features)
     );
 
-    const strataData: RenderableReadOnlyBoundary = {
+    const strataData: EditableMapBoundary = {
       data: {
         type: 'FeatureCollection',
         features: strata.features.map((feature: Feature) => toStratumFeature(feature, stratumIdGenerator)),
@@ -204,17 +197,11 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
       selectedId: selectedStratum,
       id: 'stratum',
       isInteractive: true,
-      renderProperties: {
-        ...getRenderAttributes('draft-stratum'),
-        annotation: {
-          textField: 'name',
-          textColor: theme.palette.TwClrBaseWhite as string,
-          textSize: 20,
-        },
-      },
+      labelProperty: 'name',
+      style: strataLayerStyle,
     };
 
-    const substrataBoundaries: RenderableReadOnlyBoundary = {
+    const substrataBoundaries: EditableMapBoundary = {
       data: {
         type: 'FeatureCollection',
         features: Object.keys(substrata ?? {}).flatMap((key: string) => {
@@ -227,18 +214,12 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
       },
       id: 'substratum',
       isInteractive: true,
-      renderProperties: {
-        ...getRenderAttributes('draft-substratum'),
-        annotation: {
-          textField: 'name',
-          textColor: theme.palette.TwClrBaseWhite as string,
-          textSize: 16,
-        },
-      },
+      labelProperty: 'name',
+      style: substrataLayerStyle,
     };
 
     return [strataData, substrataBoundaries];
-  }, [getRenderAttributes, selectedStratum, site.id, substrata, theme.palette.TwClrBaseWhite, strata]);
+  }, [selectedStratum, site.id, strata, strataLayerStyle, substrata, substrataLayerStyle]);
 
   const description = useMemo<Description[]>(
     () =>
@@ -352,9 +333,9 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
   // If we don't have a selected stratum or clicked stratum is not the last selected stratum, select the stratum.
   // Otherwise select the substratum.
   const featureSelectorOnClick = useCallback(
-    (features: LayerFeature[]) => {
-      const stratum = features.find((feature) => feature.layer?.source === 'stratum');
-      const substratum = features.find((feature) => feature.layer?.source === 'substratum');
+    (features: EditableMapClickedFeature[]) => {
+      const stratum = features.find((clicked) => clicked.boundaryId === 'stratum')?.feature;
+      const substratum = features.find((clicked) => clicked.boundaryId === 'substratum');
       if (!stratum || !stratum.properties) {
         return undefined;
       }
@@ -422,14 +403,6 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     [mapStyles.box, mapStyles.tooltip, selectedStratum, setSubstrataData, substrata]
   );
 
-  const activeContext = useMemo<MapEntityOptions | undefined>(() => {
-    if (selectedStratum !== undefined) {
-      return { select: [{ sourceId: 'stratum', id: selectedStratum }] };
-    } else {
-      return undefined;
-    }
-  }, [selectedStratum]);
-
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
@@ -439,7 +412,6 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
         tutorialTitle={strings.ADDING_SUBSTRATUM_BOUNDARIES}
       />
       <EditableMap
-        activeContext={activeContext}
         editableBoundary={substrataData?.editableBoundary}
         errorAnnotations={substrataData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}

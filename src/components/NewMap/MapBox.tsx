@@ -305,8 +305,8 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
       const selectedFilter: FilterSpecification = ['==', ['get', 'selected'], true];
       const notSelectedFilter: FilterSpecification = ['==', ['get', 'selected'], false];
 
-      const hoverFilter: FilterSpecification = ['==', ['get', 'id'], hoverFeatureId ?? null];
-      const notHoverFilter: FilterSpecification = ['!=', ['get', 'id'], hoverFeatureId ?? null];
+      const hoverFilter: FilterSpecification = ['==', ['get', 'layerFeatureId'], hoverFeatureId ?? null];
+      const notHoverFilter: FilterSpecification = ['!=', ['get', 'layerFeatureId'], hoverFeatureId ?? null];
 
       return [
         /* Base fill. This layer is clickable */
@@ -655,7 +655,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
           }, properties[0]);
 
           setCursor(cursorInteract ?? 'pointer');
-          setHoverFeatureId(topPriorityFeature.id);
+          setHoverFeatureId(topPriorityFeature.layerFeatureId);
 
           return;
         } else {
@@ -767,7 +767,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
             .find((group) => group.layerId === topPriorityFeature.layerId)
             ?.features.find((feature) => feature.featureId === `${topPriorityFeature.id}`);
           if (clickedItem && clickedItem.onClick) {
-            clickedItem.onClick();
+            clickedItem.onClick(event);
 
             return;
           }

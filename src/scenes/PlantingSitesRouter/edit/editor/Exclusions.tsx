@@ -3,14 +3,13 @@ import React, { type JSX, useEffect, useMemo, useState } from 'react';
 import { Box } from '@mui/material';
 import { Feature, FeatureCollection } from 'geojson';
 
-import EditableMap from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
-import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
+import EditableMap, { EditableMapBoundary } from 'src/components/NewMap/EditableMap';
+import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { RenderableReadOnlyBoundary } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -51,7 +50,7 @@ export default function Exclusions({ onValidate, onDirtyChange, site }: Exclusio
     onDirtyChange?.(geometrySnapshot !== initialGeometry);
   }, [geometrySnapshot, initialGeometry, onDirtyChange]);
 
-  const getRenderAttributes = useRenderAttributes();
+  const { sitesLayerStyle } = useMapFeatureStyles();
   const { activeLocale } = useLocalization();
   const snackbar = useSnackbar();
 
@@ -69,7 +68,7 @@ export default function Exclusions({ onValidate, onDirtyChange, site }: Exclusio
     }
   }, [exclusions, exclusionsData?.errorAnnotations, onValidate, snackbar]);
 
-  const readOnlyBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
+  const readOnlyBoundary = useMemo<EditableMapBoundary[] | undefined>(() => {
     if (!site.boundary) {
       return undefined;
     }
@@ -78,10 +77,10 @@ export default function Exclusions({ onValidate, onDirtyChange, site }: Exclusio
       {
         data: { type: 'FeatureCollection', features: [toFeature(site.boundary, {}, site.id)] },
         id: 'site',
-        renderProperties: getRenderAttributes('site'),
+        style: sitesLayerStyle,
       },
     ];
-  }, [getRenderAttributes, site.boundary, site.id]);
+  }, [site.boundary, site.id, sitesLayerStyle]);
 
   const description = useMemo<Description[]>(
     () =>

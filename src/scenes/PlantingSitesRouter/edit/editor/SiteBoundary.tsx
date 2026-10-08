@@ -9,9 +9,9 @@ import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geo
 import _ from 'lodash';
 
 import { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
-import EditableMap from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
+import EditableMap from 'src/components/NewMap/EditableMap';
 import { useFeatureEnabled } from 'src/features';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
