@@ -173,6 +173,7 @@ export enum API_PATHS {
   ACCELERATOR_REPORT_PHOTO = '/api/v1/accelerator/projects/{projectId}/reports/{reportId}/photos/{fileId}',
   ACCESSION_PHOTO = '/api/v1/seedbank/accessions/{accessionId}/photos/{photoFilename}',
   ACTIVITY_MEDIA_FILE = '/api/v1/accelerator/activities/{activityId}/media/{fileId}',
+  DELIVERABLE_DOCUMENT = '/api/v1/accelerator/deliverables/{deliverableId}/documents/{documentId}',
   DOCUMENT_PRODUCER_PROJECT_IMAGE = '/api/v1/document-producer/projects/{projectId}/images/{imageId}',
   FUNDER_ACTIVITY_MEDIA_FILE = '/api/v1/funder/activities/{activityId}/media/{fileId}',
   FUNDER_REPORT_PHOTO = '/api/v1/funder/reports/{reportId}/photos/{fileId}',

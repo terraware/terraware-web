@@ -1,17 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
+
+import { skipToken } from '@reduxjs/toolkit/query';
 
 import { APP_PATHS } from 'src/constants';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useGetDeliverableQuery } from 'src/queries/generated/deliverables';
 import { Statuses } from 'src/redux/features/asyncUtils';
-import { requestGetDeliverable } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import {
-  selectDeliverableData,
-  selectDeliverableFetchRequest,
-} from 'src/redux/features/deliverables/deliverablesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { DeliverableWithOverdue } from 'src/types/Deliverables';
+import { DeliverableWithOverdue, withOverdueStatus } from 'src/types/Deliverables';
 import useSnackbar from 'src/utils/useSnackbar';
 
 export type Props = {
@@ -32,47 +29,33 @@ export default function useFetchDeliverable({ deliverableId, projectId }: Props)
   const { isAcceleratorRoute } = useAcceleratorConsole();
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
-  const dispatch = useAppDispatch();
 
-  const [requestId, setRequestId] = useState('');
-  const [deliverable, setDeliverable] = useState<DeliverableWithOverdue>();
-
-  const deliverableResult = useAppSelector(selectDeliverableFetchRequest(requestId));
-  const deliverableData = useAppSelector(selectDeliverableData(deliverableId, projectId));
+  const { currentData, isError } = useGetDeliverableQuery(
+    isNaN(deliverableId) ? skipToken : { deliverableId, projectId }
+  );
 
   const goToDeliverables = useCallback(() => {
     navigate(isAcceleratorRoute ? APP_PATHS.ACCELERATOR_DELIVERABLES : APP_PATHS.DELIVERABLES);
   }, [navigate, isAcceleratorRoute]);
 
   useEffect(() => {
-    if (!isNaN(deliverableId)) {
-      const request = dispatch(requestGetDeliverable({ deliverableId, projectId }));
-      setRequestId(request.requestId);
-    } else {
+    if (isNaN(deliverableId)) {
       goToDeliverables();
     }
-  }, [dispatch, deliverableId, goToDeliverables, projectId]);
+  }, [deliverableId, goToDeliverables]);
 
   useEffect(() => {
-    if (deliverableResult?.status === 'error') {
+    if (isError) {
       snackbar.toastError(strings.GENERIC_ERROR);
       goToDeliverables();
-    } else if (deliverableResult?.status === 'success') {
-      setDeliverable(deliverableResult.data);
     }
-  }, [deliverableResult?.status, deliverableResult?.data, goToDeliverables, snackbar]);
-
-  useEffect(() => {
-    if (deliverableData) {
-      setDeliverable(deliverableData);
-    }
-  }, [deliverableData]);
+  }, [isError, goToDeliverables, snackbar]);
 
   return useMemo<Response>(
     () => ({
-      status: deliverableResult?.status ?? 'pending',
-      deliverable,
+      status: isError ? 'error' : currentData ? 'success' : 'pending',
+      deliverable: currentData?.deliverable ? withOverdueStatus(currentData.deliverable) : undefined,
     }),
-    [deliverableResult, deliverable]
+    [currentData, isError]
   );
 }

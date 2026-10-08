@@ -1,16 +1,15 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
+import { skipToken } from '@reduxjs/toolkit/query';
 import { TableColumnType } from '@terraware/web-components';
 
 import { FilterConfig, FilterConfigWithValues } from 'src/components/common/SearchFiltersWrapperV2';
+import useDeliverablesWithOverdue from 'src/hooks/useDeliverablesWithOverdue';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
-import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { ListDeliverablesRequestParams } from 'src/services/DeliverablesService';
+import { ListDeliverablesApiArg } from 'src/queries/generated/deliverables';
 import strings from 'src/strings';
 import {
   DeliverableCategories,
@@ -19,7 +18,7 @@ import {
   ListDeliverablesElementWithOverdue,
 } from 'src/types/Deliverables';
 import { SearchNodePayload, SearchSortOrder } from 'src/types/Search';
-import { SearchAndSortFn } from 'src/utils/searchAndSort';
+import { SearchAndSortFn, searchAndSort as genericSearchAndSort } from 'src/utils/searchAndSort';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 
@@ -118,14 +117,35 @@ const DeliverablesTable = ({
   projectId,
   maxItemsPerPage,
 }: DeliverablesTableProps) => {
-  const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const { isAllowed } = useUser();
   const { selectedOrganization } = useOrganization();
 
-  const [deliverables, setDeliverables] = useState<ListDeliverablesElementWithOverdue[]>([]);
-  const [deliverablesSearchRequestId, setDeliverablesSearchRequestId] = useState('');
-  const deliverablesSearchRequest = useAppSelector(selectDeliverablesSearchRequest(deliverablesSearchRequestId));
+  const [searchRequest, setSearchRequest] = useState<{
+    locale: string | null;
+    search: SearchNodePayload;
+    sortOrder: SearchSortOrder;
+  }>();
+
+  const listRequest = useMemo<ListDeliverablesApiArg>(() => {
+    if (projectId) {
+      return { projectId };
+    }
+    return organizationId !== -1 ? { organizationId } : {};
+  }, [organizationId, projectId]);
+  const { deliverables: allDeliverables } = useDeliverablesWithOverdue(searchRequest ? listRequest : skipToken);
+
+  const deliverables = useMemo<ListDeliverablesElementWithOverdue[]>(() => {
+    if (!allDeliverables || !searchRequest) {
+      return [];
+    }
+    const sortOrderConfig = {
+      locale: searchRequest.locale,
+      sortOrder: searchRequest.sortOrder,
+      numberFields: ['id', 'numDocuments', 'organizationId', 'projectId'],
+    };
+    return (searchAndSort ?? genericSearchAndSort)(allDeliverables, searchRequest.search, sortOrderConfig);
+  }, [allDeliverables, searchAndSort, searchRequest]);
   const query = useQuery();
   const projectParam = query.get('projectId');
   const navigate = useSyncNavigate();
@@ -214,25 +234,9 @@ const DeliverablesTable = ({
 
   const dispatchSearchRequest = useCallback(
     (locale: string | null, search: SearchNodePayload, searchSortOrder: SearchSortOrder) => {
-      const listRequest: ListDeliverablesRequestParams = {};
-      if (projectId) {
-        listRequest.projectId = projectId;
-      } else if (organizationId !== -1) {
-        listRequest.organizationId = organizationId;
-      }
-
-      const request = dispatch(
-        requestListDeliverables({
-          locale,
-          listRequest,
-          search,
-          searchSortOrder,
-          searchAndSort,
-        })
-      );
-      setDeliverablesSearchRequestId(request.requestId);
+      setSearchRequest({ locale, search, sortOrder: searchSortOrder });
     },
-    [dispatch, organizationId, projectId, searchAndSort]
+    []
   );
 
   const _deliverables = useMemo(
@@ -244,13 +248,6 @@ const DeliverablesTable = ({
       })),
     [deliverables, isAllowedReadDeliverable]
   );
-
-  useEffect(() => {
-    // TODO do something if the request has an error
-    if (deliverablesSearchRequest && deliverablesSearchRequest.status === 'success') {
-      setDeliverables(deliverablesSearchRequest.data ?? []);
-    }
-  }, [deliverablesSearchRequest]);
 
   const ofFilterAppliedHandler = (filter?: string, values?: (string | number | null)[]) => {
     if (values && values.length) {

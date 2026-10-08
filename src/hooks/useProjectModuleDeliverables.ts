@@ -1,45 +1,25 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 
-import { useLocalization } from 'src/providers/hooks';
-import { requestListDeliverables } from 'src/redux/features/deliverables/deliverablesAsyncThunks';
-import { selectDeliverablesSearchRequest } from 'src/redux/features/deliverables/deliverablesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useLazyListDeliverablesQuery } from 'src/queries/generated/deliverables';
+import { withOverdueStatus } from 'src/types/Deliverables';
 
 const useProjectModuleDeliverables = () => {
-  const { activeLocale } = useLocalization();
-  const dispatch = useAppDispatch();
-
-  const [deliverablesRequestId, setDeliverablesRequestId] = useState<string>('');
-
-  const listModuleDeliverablesResponse = useAppSelector(selectDeliverablesSearchRequest(deliverablesRequestId));
+  const [listDeliverablesQuery, listDeliverablesResult] = useLazyListDeliverablesQuery();
 
   const listProjectModuleDeliverables = useCallback(
     (request: { projectId: number; moduleId: number }) => {
-      const listModuleDeliverables = dispatch(
-        requestListDeliverables({
-          locale: activeLocale,
-          listRequest: {
-            moduleId: request.moduleId,
-            projectId: request.projectId,
-          },
-        })
-      );
-
-      setDeliverablesRequestId(listModuleDeliverables.requestId);
+      void listDeliverablesQuery({ moduleId: request.moduleId, projectId: request.projectId }, true);
     },
-    [dispatch, setDeliverablesRequestId, activeLocale]
+    [listDeliverablesQuery]
   );
 
   const deliverables = useMemo(
-    () => (listModuleDeliverablesResponse?.status === 'success' ? listModuleDeliverablesResponse.data : undefined),
-    [listModuleDeliverablesResponse]
+    () => listDeliverablesResult.currentData?.deliverables.map(withOverdueStatus),
+    [listDeliverablesResult.currentData]
   );
 
   return useMemo(
-    () => ({
-      deliverables,
-      listProjectModuleDeliverables,
-    }),
+    () => ({ deliverables, listProjectModuleDeliverables }),
     [listProjectModuleDeliverables, deliverables]
   );
 };
