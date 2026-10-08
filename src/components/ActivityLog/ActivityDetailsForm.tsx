@@ -252,6 +252,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   }, [query, location, navigate]);
 
   const isEditing = useMemo(() => activityId !== undefined, [activityId]);
+  const showHeaderActions = isAcceleratorRoute || !isEditing;
 
   const selectedAcceleratorProject = useMemo(() => {
     return acceleratorProjects.find((p) => p.projectId === projectId);
@@ -668,7 +669,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       flexWrap='wrap'
       gap={theme.spacing(1.5)}
       justifyContent='space-between'
-      marginBottom={isAcceleratorRoute ? theme.spacing(2) : '2px'}
+      marginBottom={showHeaderActions ? theme.spacing(2) : '2px'}
       marginTop='2px'
       paddingLeft={theme.spacing(4)}
     >
@@ -676,9 +677,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         <Typography fontSize='24px' fontWeight={600} lineHeight='32px' variant='h1'>
           {primaryHeader}
         </Typography>
-        {isAcceleratorRoute && isDirty && <UnsavedChangesBadge />}
+        {showHeaderActions && isDirty && <UnsavedChangesBadge />}
       </Box>
-      {isAcceleratorRoute && (
+      {showHeaderActions && (
         <Box alignItems='center' display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
           <Button
             disabled={busy}
@@ -708,7 +709,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   return (
     <PageForm
       busy={busy}
-      hideEdit={isAcceleratorRoute}
+      hideEdit={showHeaderActions}
       cancelID='cancelSaveActivity'
       onCancel={navToActivityLog}
       onSave={() => void saveActivity()}
@@ -721,7 +722,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         onClose={handleCloseDeleteActivityModal}
         onSubmit={() => void dispatchDeleteActivityRequest()}
       />
-      {isAcceleratorRoute ? (
+      {showHeaderActions ? (
         <PageHeaderWrapper alwaysVisible elevated={isDirty} nextElement={contentElement}>
           {header}
         </PageHeaderWrapper>
