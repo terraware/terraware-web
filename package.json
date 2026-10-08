@@ -207,6 +207,7 @@
     "license-report": "^6.0.0",
     "llm-autotranslate": "^1.0.0",
     "msw": "^2.15.0",
+    "msw-storybook-addon": "^3.0.3",
     "openapi-typescript": "^7.0.0",
     "patch-package": "^8.0.0",
     "playwright": "^1.62.1",
@@ -240,5 +241,10 @@
     "wrap-ansi": "10.0.2",
     "ws": "^8.21.1"
   },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e",
+  "msw": {
+    "workerDirectory": [
+      ".storybook/public"
+    ]
+  }
 }
