@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 
 import { Container, Grid } from '@mui/material';
-import { Story } from '@storybook/react';
+import { StoryFn } from '@storybook/react';
 
 import Card from 'src/components/common/Card';
 import SearchFiltersWrapperV2, { FilterConfig, SearchProps } from 'src/components/common/SearchFiltersWrapperV2';
 import TfMain from 'src/components/common/TfMain';
 
-const SearchFiltersWrapperV2Template: Story<SearchProps> = (args) => {
+const SearchFiltersWrapperV2Template: StoryFn<SearchProps> = (args) => {
   const [search, setSearch] = useState<string>(args.search);
   const [filters, setFilters] = useState<Record<string, any>>({});
 

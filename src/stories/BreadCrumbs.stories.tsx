@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Story } from '@storybook/react';
+import { StoryFn } from '@storybook/react';
 
 import BreadCrumbs, { BreadCrumbsProps } from 'src/components/BreadCrumbs';
 
-const BreadCrumbsTemplate: Story<BreadCrumbsProps> = (args: BreadCrumbsProps) => {
+const BreadCrumbsTemplate: StoryFn<BreadCrumbsProps> = (args: BreadCrumbsProps) => {
   return <BreadCrumbs {...args} />;
 };
 

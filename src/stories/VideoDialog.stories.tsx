@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
 import { Box } from '@mui/material';
-import { Story } from '@storybook/react';
+import { StoryFn } from '@storybook/react';
 
 import VideoDialog, { VideoDialogProps } from 'src/components/common/VideoDialog';
 
-const VideoDialogTemplate: Story<VideoDialogProps> = (args) => {
+const VideoDialogTemplate: StoryFn<VideoDialogProps> = (args) => {
   const [isOpen, setIsOpen] = useState<boolean>(true);
   const [isDontShowAgain, setIsDontShowAgain] = useState<boolean>(false);
 
