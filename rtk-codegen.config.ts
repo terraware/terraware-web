@@ -65,6 +65,9 @@ const config: ConfigFile = {
     './src/queries/generated/mapbox.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/tracking/mapbox'),
     },
+    './src/queries/generated/moduleEvents.ts': {
+      filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/events'),
+    },
     './src/queries/generated/modules.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/modules'),
     },
