@@ -5,6 +5,7 @@ import { Theme } from '@mui/material';
 import bbox from '@turf/bbox';
 import center from '@turf/center';
 import difference from '@turf/difference';
+import { feature as turfFeature, featureCollection as turfFeatureCollection } from '@turf/helpers';
 import intersect from '@turf/intersect';
 import union from '@turf/union';
 import { Feature, FeatureCollection, Geometry, MultiPolygon } from 'geojson';
@@ -40,7 +41,7 @@ export function unionMultiPolygons(featureCollection: FeatureCollection): MultiP
   }
 
   return polyArray.reduce((acc: MultiPolygon, curr: MultiPolygon): MultiPolygon => {
-    const unionResult = union(acc, curr);
+    const unionResult = union(turfFeatureCollection([turfFeature(acc), turfFeature(curr)]));
     const multiPolygon = unionResult ? toMultiPolygon(unionResult.geometry) : null;
     return multiPolygon || curr;
   });
@@ -205,7 +206,7 @@ export const overlayAndSubtract = (source: GeometryFeature[], newPolygon: Geomet
     return null;
   }
 
-  const intersections = source.map((poly) => intersect(newPolygon, poly));
+  const intersections = source.map((poly) => intersect(turfFeatureCollection([turfFeature(newPolygon), poly])));
 
   if (!intersections.some((f) => f !== null)) {
     return null;
@@ -218,7 +219,7 @@ export const overlayAndSubtract = (source: GeometryFeature[], newPolygon: Geomet
       if (acc === null) {
         return curr;
       } else {
-        return union(acc, curr);
+        return union(turfFeatureCollection([acc, curr]));
       }
     }
     return acc;
@@ -230,7 +231,7 @@ export const overlayAndSubtract = (source: GeometryFeature[], newPolygon: Geomet
 
     // If there is an overlap and existing feautre can be cut
     if (curr !== null && !originalFeature.properties?.isFixed) {
-      const subtracted = difference(originalFeature, curr);
+      const subtracted = difference(turfFeatureCollection([originalFeature, curr]));
       if (subtracted !== null) {
         const subtractedPolys = toMultiPolygon(subtracted.geometry);
         if (subtractedPolys !== null) {
@@ -282,7 +283,9 @@ export const mergeIntoNeighbor = (
     .filter((feature) => feature !== removed)
     .map((feature) => {
       const geometry = toMultiPolygon(feature.geometry);
-      const merged = geometry ? union(geometry, removedGeometry) : null;
+      const merged = geometry
+        ? union(turfFeatureCollection([turfFeature(geometry), turfFeature(removedGeometry)]))
+        : null;
       const mergedGeometry = merged ? toMultiPolygon(merged.geometry) : null;
       const polygonsJoined = mergedGeometry
         ? geometry!.coordinates.length + removedGeometry.coordinates.length - mergedGeometry.coordinates.length

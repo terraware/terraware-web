@@ -1,6 +1,7 @@
 import area from '@turf/area';
+import { featureCollection } from '@turf/helpers';
 import union from '@turf/union';
-import { Feature, FeatureCollection, Polygon } from 'geojson';
+import { Feature, FeatureCollection, MultiPolygon as GeoJsonMultiPolygon, Polygon } from 'geojson';
 import { DateTime } from 'luxon';
 
 import { MapBoundingBox, MapData, MapEntity, MapGeometry, MapSourceBaseData } from 'src/types/Map';
@@ -334,7 +335,7 @@ const processFeatures = (features: Feature<MultiPolygon>[], siteId?: string, sit
     // Only do expensive union when absolutely necessary
     unionedFeature = features[0] ?? undefined;
     for (let i = 1; i < features.length; i++) {
-      const result = union(unionedFeature, features[i]);
+      const result = union(featureCollection([unionedFeature, features[i] as Feature<GeoJsonMultiPolygon>]));
       if (result) {
         unionedFeature = result;
       }
