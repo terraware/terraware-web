@@ -23,11 +23,9 @@ const BYTES_PER_MB = 1024 * 1024;
 const MAX_FILE_SIZE_MB = 10;
 
 const fileSizeText = (strings: typeof defaultStrings, bytes: number): string =>
-  bytes < BYTES_PER_KB
-    ? (strings.formatString(strings.FILE_SIZE_BYTES, `${bytes}`) as string)
-    : bytes < BYTES_PER_MB
-      ? (strings.formatString(strings.FILE_SIZE_KB, `${Math.round(bytes / BYTES_PER_KB)}`) as string)
-      : (strings.formatString(strings.FILE_SIZE_MB, (bytes / BYTES_PER_MB).toFixed(1)) as string);
+  bytes < BYTES_PER_MB
+    ? (strings.formatString(strings.FILE_SIZE_KB, `${Math.round(bytes / BYTES_PER_KB)}`) as string)
+    : (strings.formatString(strings.FILE_SIZE_MB, (bytes / BYTES_PER_MB).toFixed(1)) as string);
 
 /** A parse response that actually carries a boundary; the payload leaves those fields off on failure. */
 export type ParsedBoundary = Required<
