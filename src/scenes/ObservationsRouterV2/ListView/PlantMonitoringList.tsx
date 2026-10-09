@@ -13,6 +13,7 @@ import {
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
 
+import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
@@ -59,6 +60,7 @@ type PlantMonitoringRow = {
   totalSpecies?: number;
   plantingDensity?: number;
   survivalRate?: number;
+  survivalRatePending?: boolean;
   completedDate?: string;
 };
 
@@ -238,6 +240,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
           totalSpecies,
           plantingDensity: observationResult.observedDensity,
           survivalRate: observationResult.survivalRate,
+          survivalRatePending: observationResult.pending,
           completedDate,
         };
       }),
@@ -327,6 +330,15 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
     return typeof value === 'number' ? <FormattedNumber value={value} /> : null;
   }, []);
 
+  const SurvivalRateCell = useCallback(
+    ({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => (
+      <PendingSurvivalRate pending={cell.row.original.survivalRatePending}>
+        {cell.getValue() as number | undefined}
+      </PendingSurvivalRate>
+    ),
+    []
+  );
+
   const CompletedDateCell = useCallback(({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => {
     const dateStr = cell.row.original.completedDate;
     return dateStr ? <span>{dateStr.substring(0, 10)}</span> : null;
@@ -412,6 +424,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
         header: strings.SURVIVAL_RATE,
         accessorKey: 'survivalRate',
         filterVariant: 'range',
+        Cell: SurvivalRateCell,
       },
       {
         id: 'completedDate',
@@ -457,6 +470,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
     ObservationDateCell,
     StrataCell,
     NumberCell,
+    SurvivalRateCell,
     CompletedDateCell,
     ActionsMenuCell,
   ]);

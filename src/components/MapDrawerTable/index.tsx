@@ -1,4 +1,4 @@
-import React, { type JSX } from 'react';
+import React, { type JSX, type ReactNode } from 'react';
 
 import { Typography } from '@mui/material';
 
@@ -7,7 +7,7 @@ import './styles.scss';
 
 export type MapDrawerTableRow = {
   key: string;
-  value: string;
+  value: ReactNode;
   url?: string;
 };
 

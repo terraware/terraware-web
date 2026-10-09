@@ -139,6 +139,7 @@ const SiteDetails = (): JSX.Element => {
       label: strings.SURVIVAL_RATE,
       tooltip: strings.SURVIVAL_RATE_COLUMN_TOOLTIP,
       value: hasObservedPermanentPlots ? `${results?.survivalRate ?? '-'}%` : '-',
+      pending: hasObservedPermanentPlots && results?.survivalRate !== undefined && results.pending,
     },
   ];
 

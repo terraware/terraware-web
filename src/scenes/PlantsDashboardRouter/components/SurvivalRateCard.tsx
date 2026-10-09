@@ -4,6 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Icon, Tooltip } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Card from 'src/components/common/Card';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
@@ -88,14 +89,11 @@ export default function SurvivalRateCard({
               ? trackingStatsResponse.currentData?.survivalRate
               : latestObservationResult?.survivalRate;
             return displayValue !== undefined ? (
-              <>
-                <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
-                  <FormattedNumber value={displayValue} />
-                </Typography>
-                <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
-                  %
-                </Typography>
-              </>
+              <Typography fontSize='48px' fontWeight={600} lineHeight={1}>
+                <PendingSurvivalRate pending={!isProjectView && latestObservationResult?.pending}>
+                  <FormattedNumber value={displayValue} />%
+                </PendingSurvivalRate>
+              </Typography>
             ) : (
               <Typography fontSize='20px' fontWeight={500}>
                 {strings.CANNOT_BE_CALCULATED}

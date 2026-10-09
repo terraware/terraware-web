@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { type ReactNode } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { IconTooltip } from '@terraware/web-components';
@@ -14,7 +14,7 @@ export type StatsCardItemProps = {
   showLink?: boolean;
   showTooltip?: boolean;
   tooltipText?: string;
-  value?: string;
+  value?: ReactNode;
 };
 
 const StatsCardItem = ({
@@ -65,7 +65,7 @@ const StatsCardItem = ({
           marginBottom: !isDesktop || showLink ? '8px' : 0,
           textWrap: 'wrap',
         }}
-        title={value}
+        title={typeof value === 'string' ? value : undefined}
       >
         {value || '-'}
       </Typography>

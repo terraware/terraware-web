@@ -114,6 +114,7 @@ const MonitoringPlotObservationDataTab = () => {
         : monitoringPlot?.isPermanent
           ? `${monitoringPlot.survivalRate ?? '-'}%`
           : strings.NOT_CALCULATED_FOR_TEMPORARY_PLOTS,
+      pending: monitoringPlot?.isPermanent && monitoringPlot.survivalRate !== undefined && monitoringPlot.pending,
     },
   ];
 

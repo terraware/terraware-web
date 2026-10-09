@@ -2,6 +2,7 @@ import React, { type JSX } from 'react';
 
 import { Grid } from '@mui/material';
 
+import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import { useLocalization } from 'src/providers/hooks';
 
 import ActivityStatField from './ActivityStatField';
@@ -11,6 +12,7 @@ type ObservationStatsPanelProps = {
   livePlants: number | null | undefined;
   plantDensity: number | undefined;
   survivalRate: number | undefined;
+  survivalRatePending?: boolean;
 };
 
 export default function ObservationStatsPanel({
@@ -18,6 +20,7 @@ export default function ObservationStatsPanel({
   livePlants,
   plantDensity,
   survivalRate,
+  survivalRatePending,
 }: ObservationStatsPanelProps): JSX.Element {
   const { strings } = useLocalization();
 
@@ -39,7 +42,11 @@ export default function ObservationStatsPanel({
       )}
       {typeof survivalRate === 'number' && (
         <Grid item xs={12} sm={4}>
-          <ActivityStatField title={strings.SURVIVAL_RATE} contents={`${survivalRate}%`} isEditing={isEditing} />
+          <ActivityStatField
+            title={strings.SURVIVAL_RATE}
+            contents={<PendingSurvivalRate pending={survivalRatePending}>{`${survivalRate}%`}</PendingSurvivalRate>}
+            isEditing={isEditing}
+          />
         </Grid>
       )}
     </>

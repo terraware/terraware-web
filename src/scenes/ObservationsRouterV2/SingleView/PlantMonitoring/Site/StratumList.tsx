@@ -14,6 +14,7 @@ import {
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
 
+import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
@@ -34,6 +35,7 @@ type StratumRow = {
   totalSpecies?: number;
   plantingDensity?: number;
   survivalRate?: number;
+  survivalRatePending?: boolean;
 };
 
 export default function StratumList(): JSX.Element {
@@ -83,6 +85,7 @@ export default function StratumList(): JSX.Element {
           totalSpecies: stratum.totalSpecies,
           plantingDensity: stratum.observedDensity,
           survivalRate: stratum.survivalRate,
+          survivalRatePending: stratum.pending,
         };
       });
     } else {
@@ -117,7 +120,9 @@ export default function StratumList(): JSX.Element {
   const SurvivalRateCell = useCallback(({ cell }: { cell: MRT_Cell<StratumRow> }) => {
     const value = cell.getValue() as number | undefined;
     return value !== undefined && value !== null ? (
-      <p style={{ margin: 0 }}>{`${value}%`}</p>
+      <p style={{ margin: 0 }}>
+        <PendingSurvivalRate pending={cell.row.original.survivalRatePending}>{`${value}%`}</PendingSurvivalRate>
+      </p>
     ) : (
       <p style={{ margin: 0 }}>{''}</p>
     );

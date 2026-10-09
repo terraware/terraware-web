@@ -2,6 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router';
 
 import { MapDrawerTableRow } from 'src/components/MapDrawerTable';
+import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import Button from 'src/components/common/button/Button';
 import { API_PATHS, APP_PATHS } from 'src/constants';
 import useBoolean from 'src/hooks/useBoolean';
@@ -129,7 +130,11 @@ const ObservationPhotoDrawerContent = ({
           ? [
               {
                 key: strings.SURVIVAL_RATE,
-                value: `${format(monitoringPlot.survivalRate)}%`,
+                value: (
+                  <PendingSurvivalRate pending={monitoringPlot.pending}>
+                    {`${format(monitoringPlot.survivalRate)}%`}
+                  </PendingSurvivalRate>
+                ),
               },
             ]
           : []),
