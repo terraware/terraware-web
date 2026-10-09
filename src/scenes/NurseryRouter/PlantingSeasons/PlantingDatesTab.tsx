@@ -420,6 +420,8 @@ const getSpeciesTableGridColumns = (isMobile: boolean): string =>
     ? '260px 120px minmax(132px, 1fr) minmax(132px, 1fr) 40px'
     : '260px 160px minmax(132px, 1fr) minmax(132px, 1fr) 40px';
 
+const getSpeciesTableMinWidth = (isMobile: boolean): string => (isMobile ? '780px' : '820px');
+
 const quantityTextFieldSx = {
   width: '100px',
   maxWidth: '100%',
@@ -1092,8 +1094,8 @@ const SpeciesTable = ({
   };
 
   return (
-    <Box sx={{ overflowX: isMobile ? 'auto' : 'visible', WebkitOverflowScrolling: 'touch' }}>
-      <Box minWidth={isMobile ? '760px' : undefined}>
+    <Box sx={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+      <Box minWidth={getSpeciesTableMinWidth(isMobile)}>
         <Box
           display='grid'
           gridTemplateColumns={getSpeciesTableGridColumns(isMobile)}
