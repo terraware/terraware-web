@@ -17,6 +17,10 @@ type UseTableStateOptions = {
   persistedMultiSelectColumnIds?: string[];
   persistFilters?: boolean;
   persistSorting?: boolean;
+  persistPageIndex?: {
+    isLoading?: boolean;
+    scope?: string;
+  };
 };
 
 const mergeColumnOrder = (
@@ -47,7 +51,21 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
     persistedMultiSelectColumnIds = [],
     persistFilters = false,
     persistSorting = false,
+    persistPageIndex,
   } = options ?? {};
+
+  const pageIndexStorageKey = persistPageIndex
+    ? `${storageKey}-pageIndex${persistPageIndex.scope ? `-${persistPageIndex.scope}` : ''}`
+    : undefined;
+
+  const readPageIndex = () => {
+    try {
+      const savedIndex = pageIndexStorageKey ? Number(sessionStorage.getItem(pageIndexStorageKey)) : 0;
+      return Number.isSafeInteger(savedIndex) && savedIndex > 0 ? savedIndex : 0;
+    } catch {
+      return 0;
+    }
+  };
 
   const persistedMultiSelectIds = new Set(persistedMultiSelectColumnIds);
 
@@ -148,13 +166,39 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
       const savedPageSize = localStorage.getItem(`${storageKey}-pageSize`);
       const parsedSize = savedPageSize ? Number(savedPageSize) : null;
       return {
-        pageIndex: 0,
+        pageIndex: readPageIndex(),
         pageSize: parsedSize && !isNaN(parsedSize) && parsedSize > 0 ? parsedSize : 10,
       };
     } catch {
-      return { pageIndex: 0, pageSize: 10 };
+      return { pageIndex: readPageIndex(), pageSize: 10 };
     }
   });
+
+  const [paginationStorageKey, setPaginationStorageKey] = useState(pageIndexStorageKey);
+  const [isRestoringPageIndex, setIsRestoringPageIndex] = useState(!!pageIndexStorageKey);
+  if (paginationStorageKey !== pageIndexStorageKey) {
+    setPaginationStorageKey(pageIndexStorageKey);
+    setIsRestoringPageIndex(!!pageIndexStorageKey);
+    setPagination((prev) => ({ ...prev, pageIndex: readPageIndex() }));
+  }
+
+  const isLoadingPage = persistPageIndex?.isLoading ?? false;
+  useEffect(() => {
+    if (!isLoadingPage) {
+      setIsRestoringPageIndex(false);
+    }
+  }, [pageIndexStorageKey, isLoadingPage]);
+
+  useEffect(() => {
+    if (!pageIndexStorageKey || isLoadingPage) {
+      return;
+    }
+    try {
+      sessionStorage.setItem(pageIndexStorageKey, String(pagination.pageIndex));
+    } catch {
+      // ignore
+    }
+  }, [pageIndexStorageKey, pagination.pageIndex, isLoadingPage]);
 
   const onPaginationChange = (updater: MRT_PaginationState | ((prev: MRT_PaginationState) => MRT_PaginationState)) => {
     setPagination((prev) => {
@@ -164,7 +208,7 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
       } catch {
         // ignore
       }
-      return next;
+      return isLoadingPage ? { ...next, pageIndex: prev.pageIndex } : next;
     });
   };
 
@@ -231,10 +275,12 @@ const useTableState = (storageKey: string, options?: UseTableStateOptions) => {
   };
 
   return {
+    autoResetPageIndex: pageIndexStorageKey ? !isRestoringPageIndex : undefined,
     columnFilters,
     columnOrder,
     columnVisibility,
     density,
+    isLoadingPage,
     onDensityChange,
     onPaginationChange,
     pagination,

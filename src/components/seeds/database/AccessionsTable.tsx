@@ -217,6 +217,8 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
   const numberFormatter = useNumberFormatter();
 
   const {
+    autoResetPageIndex,
+    isLoadingPage,
     columnFilters,
     columnOrder,
     columnVisibility,
@@ -240,6 +242,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
     persistedMultiSelectColumnIds: ['facility_name', 'project_name', 'state', 'subLocation_name', 'speciesName'],
     persistFilters: true,
     persistSorting: true,
+    persistPageIndex: { isLoading: !searchResults },
   });
 
   useEffect(() => {
@@ -719,12 +722,14 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
         enableColumnOrdering={true}
         storageKey={TABLE_STATE_STORAGE_KEY}
         tableOptions={{
+          autoResetPageIndex,
           defaultColumn: {
             enableEditing: false,
             filterVariant: 'text',
             sortUndefined: 'last',
           },
           state: {
+            isLoading: isLoadingPage,
             sorting,
             columnOrder,
             columnVisibility,

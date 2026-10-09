@@ -56,7 +56,7 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
 
   const { activeLocale, strings } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const { findSpeciesById } = useOrganizationSpecies();
+  const { findSpeciesById, isLoading: speciesLoading } = useOrganizationSpecies();
   const { availableProjects: projects } = useProjects();
   const { isMobile } = useDeviceInfo();
   const theme = useTheme();
@@ -66,7 +66,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const [deleteBatch] = useDeleteBatchMutation();
   const tableStorageKey = `inventorySeedlingsTable_${origin.toLowerCase()}`;
 
-  const [filteredBatches, setFilteredBatches] = useState<SearchResponseElement[]>([]);
   const [filters, setFilters] = useForm<InventoryFiltersUnion>({});
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [openDeleteModal, setOpenDeleteModal] = useState<boolean>(false);
@@ -76,14 +75,6 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     type: 'germinating',
     openChangeQuantityModal: false,
   });
-
-  const selectedRows = useMemo(
-    () =>
-      Object.keys(rowSelection)
-        .map((id) => filteredBatches.find((batch) => String(batch.id) === id))
-        .filter((row): row is SearchResponseElement => row !== undefined),
-    [rowSelection, filteredBatches]
-  );
 
   const filterEmptyBatches = useCallback(
     (unfiltered: SearchResponseElement[]) => {
@@ -136,12 +127,12 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   const isNurseryOrigin = origin === 'Nursery';
   const skipSearch = !originId || isNaN(originId) || !selectedOrganization || !activeLocale;
 
-  const { currentData: nurseryBatchResults } = useListBatchesForNurseryQuery(
+  const { currentData: nurseryBatchResults, isFetching: nurseryBatchesLoading } = useListBatchesForNurseryQuery(
     { organizationId: selectedOrganization?.id ?? -1, nurseryId: originId ?? -1, searchFields },
     { skip: skipSearch || !isNurseryOrigin }
   );
 
-  const { currentData: speciesBatchResults } = useListBatchesForSpeciesQuery(
+  const { currentData: speciesBatchResults, isFetching: speciesBatchesLoading } = useListBatchesForSpeciesQuery(
     { organizationId: selectedOrganization?.id ?? -1, speciesId: originId ?? -1, searchFields },
     { skip: skipSearch || isNurseryOrigin }
   );
@@ -207,9 +198,15 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     }
   }, [batches, navigate, openBatchNumber, origin, originId]);
 
-  useEffect(() => {
-    setFilteredBatches(filterEmptyBatches(batches));
-  }, [batches, filterEmptyBatches]);
+  const filteredBatches = useMemo(() => filterEmptyBatches(batches), [batches, filterEmptyBatches]);
+
+  const selectedRows = useMemo(
+    () =>
+      Object.keys(rowSelection)
+        .map((id) => filteredBatches.find((batch) => String(batch.id) === id))
+        .filter((row): row is SearchResponseElement => row !== undefined),
+    [rowSelection, filteredBatches]
+  );
 
   const addBatch = () => {
     setOpenNewBatchModal(true);
@@ -395,6 +392,8 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
   }, [columns, projects, filteredBatches, BatchNumberCell, WithdrawCell, QuantityCell, QuantitiesMenuCell]);
 
   const {
+    autoResetPageIndex,
+    isLoadingPage,
     columnOrder,
     columnVisibility,
     density,
@@ -407,7 +406,12 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(tableStorageKey);
+  } = useTableState(tableStorageKey, {
+    persistPageIndex: {
+      isLoading: skipSearch || speciesLoading || (isNurseryOrigin ? nurseryBatchesLoading : speciesBatchesLoading),
+      scope: String(originId),
+    },
+  });
 
   return (
     <>
@@ -489,7 +493,9 @@ export default function InventorySeedlingsTable(props: InventorySeedlingsTablePr
             enableTopToolbar={true}
             enableBottomToolbar={true}
             tableOptions={{
+              autoResetPageIndex,
               state: {
+                isLoading: isLoadingPage,
                 rowSelection,
                 columnOrder,
                 columnVisibility,

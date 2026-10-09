@@ -127,11 +127,13 @@ export default function SpeciesListView(): JSX.Element {
   const { activeLocale } = useLocalization();
   const { availableProjects, isLoading: projectsLoading } = useProjects();
   const organizationId = selectedOrganization?.id;
-  const { data: acceleratorProjectNamesBySpeciesId = EMPTY_ACCELERATOR_PROJECT_NAMES_BY_SPECIES_ID } =
-    useListSpeciesAcceleratorProjectsQuery(organizationId ?? -1, {
-      skip: !organizationId || species.length === 0,
-      refetchOnMountOrArgChange: true,
-    });
+  const {
+    data: acceleratorProjectNamesBySpeciesId = EMPTY_ACCELERATOR_PROJECT_NAMES_BY_SPECIES_ID,
+    isFetching: acceleratorProjectsLoading,
+  } = useListSpeciesAcceleratorProjectsQuery(organizationId ?? -1, {
+    skip: !organizationId || species.length === 0,
+    refetchOnMountOrArgChange: true,
+  });
 
   const contentRef = React.useRef(null);
 
@@ -258,6 +260,8 @@ export default function SpeciesListView(): JSX.Element {
   }, [organizationId, trackBannerDismissed, updateUserPreferences]);
 
   const {
+    autoResetPageIndex,
+    isLoadingPage,
     columnFilters,
     columnOrder,
     columnVisibility,
@@ -276,6 +280,9 @@ export default function SpeciesListView(): JSX.Element {
     sorting,
   } = useTableState(TABLE_STATE_STORAGE_KEY, {
     defaultSorting: [{ id: 'scientificName', desc: false }],
+    persistPageIndex: {
+      isLoading: isInitialLoading || projectsLoading || !orgBootstrapped || acceleratorProjectsLoading,
+    },
   });
 
   const selectedProjectIds = useMemo<Set<number>>(() => {
@@ -881,7 +888,9 @@ export default function SpeciesListView(): JSX.Element {
           enableTopToolbar={true}
           enableBottomToolbar={true}
           tableOptions={{
+            autoResetPageIndex,
             state: {
+              isLoading: isLoadingPage,
               sorting,
               columnFilters,
               columnOrder,
