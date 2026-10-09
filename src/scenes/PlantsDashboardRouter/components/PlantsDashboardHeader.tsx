@@ -27,6 +27,7 @@ import LatestObservationLink from './LatestObservationLink';
 
 export type PlantsDashboardHeaderProps = {
   children: React.ReactNode;
+  isRestoringPlantingSite?: boolean;
   selectedPlantingSiteId: PlantingSiteId;
   onSelectPlantingSite: (plantingSiteId: PlantingSiteId) => void;
   projectId: number | typeof ALL_PLANTING_SITES;
@@ -36,6 +37,7 @@ export type PlantsDashboardHeaderProps = {
 
 export default function PlantsDashboardHeader({
   children,
+  isRestoringPlantingSite,
   selectedPlantingSiteId,
   onSelectPlantingSite,
   projectId,
@@ -95,7 +97,7 @@ export default function PlantsDashboardHeader({
   // Normalize the selection to a valid option (co-located with the readiness check so they share the
   // same data): fall back to 'all' when it is offered, otherwise the first available site.
   useEffect(() => {
-    if (!isSuccess) {
+    if (!isSuccess || isRestoringPlantingSite) {
       return;
     }
     const validSiteIds = new Set(plantingSites.map((site) => site.id));
@@ -107,7 +109,14 @@ export default function PlantsDashboardHeader({
         onSelectPlantingSite(fallback);
       }
     }
-  }, [isSuccess, plantingSites, onSelectPlantingSite, selectedPlantingSiteId, showAllSitesOption]);
+  }, [
+    isRestoringPlantingSite,
+    isSuccess,
+    plantingSites,
+    onSelectPlantingSite,
+    selectedPlantingSiteId,
+    showAllSitesOption,
+  ]);
 
   const { plantingSite } = usePlantingSite(
     selectedPlantingSiteId === ALL_PLANTING_SITES ? undefined : selectedPlantingSiteId
@@ -296,13 +305,16 @@ export default function PlantsDashboardHeader({
                   <Dropdown
                     placeholder={strings.SELECT}
                     id='planting-site-selector'
-                    onChange={(newValue) =>
-                      onSelectPlantingSite(newValue === ALL_PLANTING_SITES ? ALL_PLANTING_SITES : Number(newValue))
-                    }
+                    onChange={(newValue) => {
+                      // Dropdown's disabled prop is only styling; it still opens and reports selections.
+                      if (!isRestoringPlantingSite) {
+                        onSelectPlantingSite(newValue === ALL_PLANTING_SITES ? ALL_PLANTING_SITES : Number(newValue));
+                      }
+                    }}
                     options={plantingSiteOptions}
                     selectedValue={selectedPlantingSiteId}
                     fullWidth
-                    disabled={isAcceleratorRoute && plantingSiteOptions.length === 0}
+                    disabled={isRestoringPlantingSite || (isAcceleratorRoute && plantingSiteOptions.length === 0)}
                     className='planting-site-selector-container'
                   />
                 </>
