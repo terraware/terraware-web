@@ -170,6 +170,7 @@ test.describe('DeliverableTests', () => {
     }
 
     await validateQuestionnaireOverallStatus('Test Questionnaire for Phase 1', 'Not Submitted', page);
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.getByRole('button', { name: 'Submit for Approval' }).click();
     await page.getByRole('button', { name: 'Submit', ...exactOptions }).click();
     await validateQuestionnaireOverallStatus('Test Questionnaire for Phase 1', 'In Review', page);
@@ -213,6 +214,7 @@ test.describe('DeliverableTests', () => {
       page
     );
 
+    await page.evaluate(() => window.scrollTo(0, 0));
     await page.getByRole('button', { name: 'Edit' }).click();
     await fillQuestionnaireInputField('What number of non-native species will you plant in this project?', '6', page);
     await page.getByRole('button', { name: 'Save' }).click();

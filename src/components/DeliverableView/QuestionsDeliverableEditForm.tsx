@@ -12,19 +12,8 @@ import Card from 'src/components/common/Card';
 import WrappedPageForm from 'src/components/common/PageForm';
 import useApplicationPortal from 'src/hooks/useApplicationPortal';
 import { useProjectVariablesUpdate } from 'src/hooks/useProjectVariablesUpdate';
-import {
-  requestListDeliverableVariablesValues,
-  requestListSpecificVariablesValues,
-} from 'src/redux/features/documentProducer/values/valuesThunks';
-import {
-  selectDeliverableVariablesWithValues,
-  selectSpecificVariablesWithValues,
-} from 'src/redux/features/documentProducer/variables/variablesSelector';
-import {
-  requestListDeliverableVariables,
-  requestListSpecificVariables,
-} from 'src/redux/features/documentProducer/variables/variablesThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import useDeliverableVariablesWithValues from 'src/hooks/variables/useDeliverableVariablesWithValues';
+import useSpecificVariablesWithValues from 'src/hooks/variables/useSpecificVariablesWithValues';
 import strings from 'src/strings';
 import { VariableStatusType, VariableWithValues } from 'src/types/documentProducer/Variable';
 import { VariableValue, VariableValueImageValue, VariableValueValue } from 'src/types/documentProducer/VariableValue';
@@ -155,7 +144,6 @@ type QuestionsDeliverableEditViewProps = EditProps & {
 };
 
 const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps): JSX.Element | null => {
-  const dispatch = useAppDispatch();
   const theme = useTheme();
   const query = useQuery();
   const { isApplicationPortal } = useApplicationPortal();
@@ -169,17 +157,16 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
     }
   }, []);
 
-  const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
-    selectDeliverableVariablesWithValues(state, deliverable.id, deliverable.projectId)
-  );
+  const { variablesWithValues } = useDeliverableVariablesWithValues(deliverable.id, deliverable.projectId);
 
   const dependentVariableStableIds = useMemo(
     () => getDependingVariablesStableIdsFromOtherDeliverable(variablesWithValues),
     [variablesWithValues]
   );
 
-  const dependentVariablesWithValues = useAppSelector((state) =>
-    selectSpecificVariablesWithValues(state, dependentVariableStableIds, deliverable.projectId)
+  const { variablesWithValues: dependentVariablesWithValues } = useSpecificVariablesWithValues(
+    dependentVariableStableIds,
+    deliverable.projectId
   );
 
   const filteredVariablesWithValues = useMemo(
@@ -229,31 +216,6 @@ const QuestionsDeliverableEditForm = (props: QuestionsDeliverableEditViewProps):
         : stagedVariableWithValues,
     [stagedVariableWithValues, dependentVariablesWithValues]
   );
-
-  useEffect(() => {
-    if (!deliverable) {
-      return;
-    }
-
-    void dispatch(requestListDeliverableVariables(deliverable.id));
-    void dispatch(
-      requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
-    );
-  }, [deliverable, dispatch]);
-
-  useEffect(() => {
-    if (!(deliverable && dependentVariableStableIds && dependentVariableStableIds.length > 0)) {
-      return;
-    }
-
-    void dispatch(requestListSpecificVariables(dependentVariableStableIds));
-    void dispatch(
-      requestListSpecificVariablesValues({
-        projectId: deliverable.projectId,
-        variablesStableIds: dependentVariableStableIds,
-      })
-    );
-  }, [deliverable, dependentVariableStableIds, dispatch]);
 
   useEffect(() => {
     if (updateSuccess && uploadSuccess) {

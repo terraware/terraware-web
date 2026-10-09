@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
@@ -11,12 +11,9 @@ import useSubmitDeliverable from 'src/components/DeliverableView/useSubmitDelive
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import useDeliverableVariablesWithValues from 'src/hooks/variables/useDeliverableVariablesWithValues';
 import { useLocalization } from 'src/providers';
-import { requestListDeliverableVariablesValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
-import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import { missingRequiredFields } from 'src/utils/documentProducer/variables';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -33,25 +30,18 @@ const DeliverableView = (): JSX.Element => {
 
   const [submitButtonDisabled, setSubmitButtonDisabled] = useState<boolean>(false);
   const [showSubmitDialog, setShowSubmitDialog] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
-  const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
-    selectDeliverableVariablesWithValues(state, deliverable?.id || -1, deliverable?.projectId)
+  const isQuestionsDeliverable = deliverable?.type === 'Questions';
+  const { variablesWithValues } = useDeliverableVariablesWithValues(
+    isQuestionsDeliverable ? deliverable.id : undefined,
+    deliverable?.projectId
   );
 
   const questionsAreLoading = useMemo(
     () => deliverable?.type === 'Questions' && !variablesWithValues.length,
     [deliverable?.type, variablesWithValues.length]
   );
-
-  useEffect(() => {
-    if (deliverable) {
-      void dispatch(
-        requestListDeliverableVariablesValues({ deliverableId: deliverable.id, projectId: deliverable.projectId })
-      );
-    }
-  }, [deliverable, dispatch]);
 
   const submitDeliverable = useCallback(() => {
     if (deliverable?.id !== undefined) {

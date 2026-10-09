@@ -13,13 +13,11 @@ import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import useDeliverableVariablesWithValues from 'src/hooks/variables/useDeliverableVariablesWithValues';
 import { useLocalization, useUser } from 'src/providers';
 import { useDeliverableData } from 'src/providers/Deliverable/DeliverableContext';
-import { selectDeliverableVariablesWithValues } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { DeliverableStatusType } from 'src/types/Deliverables';
-import { VariableWithValues } from 'src/types/documentProducer/Variable';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useQuery from 'src/utils/useQuery';
 import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
@@ -45,8 +43,10 @@ const DeliverableView = () => {
   const { activeLocale } = useLocalization();
   const { currentDeliverable: deliverable } = useDeliverableData();
 
-  const variablesWithValues: VariableWithValues[] = useAppSelector((state) =>
-    selectDeliverableVariablesWithValues(state, deliverable?.id || -1, deliverable?.projectId)
+  const isQuestionsDeliverable = deliverable?.type === 'Questions';
+  const { variablesWithValues } = useDeliverableVariablesWithValues(
+    isQuestionsDeliverable ? deliverable.id : undefined,
+    deliverable?.projectId
   );
 
   const questionsAreLoading = useMemo(
