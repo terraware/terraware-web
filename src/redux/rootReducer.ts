@@ -4,7 +4,6 @@ import { baseApi } from 'src/queries/baseApi';
 import { rtkReducers } from 'src/queries/reducers';
 
 import acceleratorReducers from './features/accelerator/acceleratorSlice';
-import acceleratorProjectSpeciesReducers from './features/acceleratorProjectSpecies/acceleratorProjectSpeciesSlice';
 import documentProducerReducers from './features/documentProducer';
 import fundingEntitiesReducers from './features/funder/entities/fundingEntitiesSlice';
 import funderProjectsReducers from './features/funder/projects/funderProjectsSlice';
@@ -27,7 +26,6 @@ const reducers = {
   ...gisReducers,
   ...messageReducers,
   ...matrixViewReducers,
-  ...acceleratorProjectSpeciesReducers,
   ...projectSpeciesReducers,
   ...snackbarReducers,
   ...speciesAsyncThunkReducers,
