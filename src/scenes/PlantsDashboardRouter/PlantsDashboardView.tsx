@@ -62,9 +62,11 @@ export default function PlantsDashboardView({
   const isDashboardRoute = plantsDashboardMatch !== null || plantingSiteDashboardMatch !== null;
   const urlOrganizationId = searchParams.get('organizationId');
 
-  const { selectPlantingSite, selectedPlantingSiteId } = useStickyPlantingSiteId(
-    isAcceleratorRoute ? ACCELERATOR_PREFERENCE_NAME : PREFERENCE_NAME
-  );
+  const {
+    isRestoring: isRestoringPlantingSite,
+    selectPlantingSite,
+    selectedPlantingSiteId,
+  } = useStickyPlantingSiteId(isAcceleratorRoute ? ACCELERATOR_PREFERENCE_NAME : PREFERENCE_NAME);
 
   // Effective organization for the dashboard: the accelerator project's org when on an accelerator
   // route, otherwise the selected org. Threaded down so species/planting-site queries target it.
@@ -382,6 +384,7 @@ export default function PlantsDashboardView({
 
   return (
     <PlantsDashboardHeader
+      isRestoringPlantingSite={isRestoringPlantingSite}
       selectedPlantingSiteId={selectedPlantingSiteId}
       onSelectPlantingSite={selectPlantingSite}
       projectId={projectId}
