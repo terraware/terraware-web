@@ -1,4 +1,4 @@
-import React, { type JSX, useEffect } from 'react';
+import React, { type JSX, createContext, useContext, useEffect } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
@@ -6,6 +6,14 @@ import { Button, Message } from '@terraware/web-components';
 import { useAppVersion } from 'src/hooks/useAppVersion';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
+
+const AppVersionBannerContext = createContext(false);
+
+export const AppVersionBannerProvider = ({ children }: { children?: React.ReactNode }): JSX.Element => (
+  <AppVersionBannerContext.Provider value={true}>{children}</AppVersionBannerContext.Provider>
+);
+
+export const useIsAppVersionBannerRendered = (): boolean => useContext(AppVersionBannerContext);
 
 type DetectAppVersionProps = {
   onNewVersion?: () => void;
@@ -32,7 +40,7 @@ export default function DetectAppVersion({ onNewVersion }: DetectAppVersionProps
         display: 'flex',
         justifyContent: 'center',
         width: '100%',
-        margin: `${theme.spacing(2)} auto`,
+        marginBottom: theme.spacing(2),
       }}
     >
       <Message

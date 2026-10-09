@@ -5,7 +5,7 @@ import { Box, Snackbar as SnackbarUI } from '@mui/material';
 import { Button, Message } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
-import DetectAppVersion from 'src/components/common/DetectAppVersion';
+import DetectAppVersion, { useIsAppVersionBannerRendered } from 'src/components/common/DetectAppVersion';
 import { sendMessage } from 'src/redux/features/message/messageSlice';
 import { selectSnackbar } from 'src/redux/features/snackbar/snackbarSelectors';
 import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
@@ -20,6 +20,7 @@ export type PageSnackbarProps = {
 export default function PageSnackbar({ pageKey }: PageSnackbarProps): JSX.Element {
   const { pathname } = useLocation();
   const dispatch = useAppDispatch();
+  const isAppVersionBannerRendered = useIsAppVersionBannerRendered();
   const snackbarData = useAppSelector(selectSnackbar('page'));
   const snackbar = useMemo(() => (snackbarData ? { ...snackbarData } : null), [snackbarData]);
 
@@ -54,7 +55,7 @@ export default function PageSnackbar({ pageKey }: PageSnackbarProps): JSX.Elemen
 
   return (
     <>
-      <DetectAppVersion />
+      {!isAppVersionBannerRendered && <DetectAppVersion />}
       <SnackbarMessage snack={snackbar} onClose={handleMessageClose} />
     </>
   );
