@@ -19,47 +19,46 @@ export type RedoFn<T> = (() => T | undefined) | undefined;
  * - redo is a callback function to redo last change, if function is 'undefined', redo is no longer possible (end of stack)
  */
 export default function useUndoRedoState<T>(initialValue?: T): [T | undefined, SetFn<T>, UndoFn<T>, RedoFn<T>] {
-  const [stack, setStack] = useState<(T | undefined)[]>([initialValue]);
-  const [stackIndex, setStackIndex] = useState<number>(0);
+  // kept in one state so that several changes in the same render each build on the previous one
+  const [{ stack, stackIndex }, setHistory] = useState<{ stack: (T | undefined)[]; stackIndex: number }>({
+    stack: [initialValue],
+    stackIndex: 0,
+  });
 
   const data = useMemo<T | undefined>(() => _.cloneDeep(stack[stackIndex]), [stackIndex, stack]);
 
-  const setData = useCallback(
-    (input: Func<T> | T) => {
-      const value = typeof input === 'function' ? (input as Func<T>)(data) : input;
-      setStack((curr: (T | undefined)[]) => {
-        const truncatedStack = curr.slice(0, stackIndex + 1);
-        truncatedStack.push(_.cloneDeep(value));
-        return truncatedStack;
-      });
-      setStackIndex((curr: number) => curr + 1);
-    },
-    [data, stackIndex, setStack]
-  );
+  const setData = useCallback((input: Func<T> | T) => {
+    setHistory((curr) => {
+      const value = typeof input === 'function' ? (input as Func<T>)(_.cloneDeep(curr.stack[curr.stackIndex])) : input;
+      const truncatedStack = curr.stack.slice(0, curr.stackIndex + 1);
+      truncatedStack.push(_.cloneDeep(value));
+      return { stack: truncatedStack, stackIndex: truncatedStack.length - 1 };
+    });
+  }, []);
 
   const undo = useMemo(() => {
     if (stackIndex > 0) {
       return () => {
         const undoneData = stack[stackIndex - 1];
-        setStackIndex((curr: number) => curr - 1);
+        setHistory((curr) => ({ ...curr, stackIndex: Math.max(curr.stackIndex - 1, 0) }));
         return _.cloneDeep(undoneData);
       };
     } else {
       return undefined;
     }
-  }, [stack, stackIndex, setStackIndex]);
+  }, [stack, stackIndex]);
 
   const redo = useMemo(() => {
     if (stackIndex < stack.length - 1) {
       return () => {
         const redoneData = stack[stackIndex + 1];
-        setStackIndex((curr: number) => curr + 1);
+        setHistory((curr) => ({ ...curr, stackIndex: Math.min(curr.stackIndex + 1, curr.stack.length - 1) }));
         return _.cloneDeep(redoneData);
       };
     } else {
       return undefined;
     }
-  }, [stack, stackIndex, setStackIndex]);
+  }, [stack, stackIndex]);
 
   return [data, setData, undo, redo];
 }
