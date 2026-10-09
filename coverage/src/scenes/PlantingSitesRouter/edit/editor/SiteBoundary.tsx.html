@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.79% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>79/99</span>
+                <span class='fraction'>80/100</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">67.39% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>62/92</span>
+                <span class='fraction'>60/90</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.16% </span>
+                <span class="strong">79.38% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>76/96</span>
+                <span class='fraction'>77/97</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -412,8 +412,7 @@
 <a name='L347'></a><a href='#L347'>347</a>
 <a name='L348'></a><a href='#L348'>348</a>
 <a name='L349'></a><a href='#L349'>349</a>
-<a name='L350'></a><a href='#L350'>350</a>
-<a name='L351'></a><a href='#L351'>351</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L350'></a><a href='#L350'>350</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -575,6 +574,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">23x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -582,8 +582,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">22x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -702,7 +701,6 @@
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">88x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -925,15 +923,15 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     }
 &nbsp;
     if (fileUploadEnabled) {
-      return [
-        {
-          text:
-            site.siteType === 'detailed'
-              ? strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION
-              : <span class="branch-1 cbranch-no" title="branch not covered" >`${strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION} ${strings.SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE}`,</span>
-        },
-        { text: strings.SITE_BOUNDARY_UPLOAD_TUTORIAL, hasTutorial: true },
-      ];
+      const sentences =
+        site.siteType === 'detailed'
+          ? [strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION, strings.SITE_BOUNDARY_UPLOAD_TUTORIAL]
+          : <span class="branch-1 cbranch-no" title="branch not covered" >[</span>
+              strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION,
+              strings.SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,
+              strings.SITE_BOUNDARY_UPLOAD_TUTORIAL,
+            ];
+      return [{ text: sentences.join(' '), hasTutorial: true }];
     }
 &nbsp;
     const data: Description[] = [
@@ -1055,9 +1053,8 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
       &lt;StepTitleDescription
         description={description}
+        largeText
         dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
-        minHeight={fileUploadEnabled ? '72px' : '152px'}
-        title={strings.SITE_BOUNDARY}
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
         tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
@@ -1094,7 +1091,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
           {!uploadedFile &amp;&amp; activeMethod === 'draw' &amp;&amp; &lt;DrawingBoundaryStatus onUploadInstead={onOpenUploadModal} /&gt;}
         &lt;/&gt;
       )}
-      &lt;Box display='flex' flexDirection='column' flexGrow={1} position='relative'&gt;
+      &lt;Box display='flex' flexDirection='column' flexGrow={1}&gt;
         &lt;EditableMap
           key={mapKey}
           editableBoundary={siteBoundaryData?.siteBoundary}
@@ -1120,7 +1117,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-09T12:53:43.316Z
+                at 2026-10-09T15:36:17.115Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>

@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.42% </span>
+                <span class="strong">70% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/19</span>
+                <span class='fraction'>14/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.72% </span>
+                <span class="strong">65.38% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>16/22</span>
+                <span class='fraction'>17/26</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.42% </span>
+                <span class="strong">70% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>13/19</span>
+                <span class='fraction'>14/20</span>
             </div>
         
             
@@ -174,7 +174,12 @@
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -224,6 +229,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">88x</span>
+<span class="cline-any cline-yes">88x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">88x</span>
 <span class="cline-any cline-yes">23x</span>
@@ -255,7 +261,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">178x</span>
+<span class="cline-any cline-yes">91x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -307,6 +313,7 @@ export type Description = {
 export type StepTitleDescriptionProps = {
   description: Description[];
   dontShowAgainPreferenceName?: string;
+  largeText?: boolean;
   minHeight?: string;
   title?: string;
   tutorialDescription?: string | JSX.Element[];
@@ -318,6 +325,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
   const {
     description,
     dontShowAgainPreferenceName,
+    largeText,
     minHeight,
     title,
     tutorialDescription,
@@ -334,6 +342,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
     () =&gt; !!dontShowAgainPreferenceName &amp;&amp; userPreferences[dontShowAgainPreferenceName] !== true,
     [dontShowAgainPreferenceName, userPreferences]
   );
+  const fontSize = largeText ? '16px' : <span class="branch-1 cbranch-no" title="branch not covered" >'14px';</span>
   const [showModal, setShowModal] = useState&lt;boolean&gt;(userPreferenceControlled);
 &nbsp;
   const titleWithPrefix = useMemo(() =&gt; {
@@ -361,7 +370,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           title={titleWithPrefix}
         /&gt;
       )}
-      {title &amp;&amp; (
+      {title &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >(</span>
         &lt;Typography fontSize='20px' fontWeight={600} lineHeight='28px' color={theme.palette.TwClrTxt}&gt;
           {title}
         &lt;/Typography&gt;
@@ -371,16 +380,16 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           display='inline'
           alignItems='center'
           key={index}
-          fontSize='14px'
+          fontSize={fontSize}
           fontWeight={line.isBold ? 600 : 400}
-          lineHeight='20px'
+          lineHeight={largeText ? '24px' : <span class="branch-1 cbranch-no" title="branch not covered" >'20px'}</span>
           color={line.isWarning ? <span class="branch-0 cbranch-no" title="branch not covered" >theme.palette.TwClrIcnWarning </span>: theme.palette.TwClrTxt}
           margin={theme.spacing(1, 0)}
           whiteSpace={'line-wrap'}
         &gt;
           {line.hasTutorial ? (
             &lt;TextWithLink
-              fontSize='14px'
+              fontSize={fontSize}
               handlePrefix={line.handlePrefix}
               handleSuffix={line.handleSuffix}
               onClick={<span class="fstat-no" title="function not covered" >() =&gt; <span class="cstat-no" title="statement not covered" >setShowModal(true)}</span></span>
@@ -403,7 +412,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-09T12:53:43.316Z
+                at 2026-10-09T15:36:17.115Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
