@@ -13,7 +13,6 @@ import gisReducers from './features/gis/gisSlice';
 import matrixViewReducers from './features/matrixView/matrixViewSlice';
 import messageReducers from './features/message/messageSlice';
 import projectSpeciesReducers from './features/projectSpecies/projectSpeciesSlice';
-import projectToDoReducers from './features/projectToDo/projectToDoSlice';
 import snackbarReducers from './features/snackbar/snackbarSlice';
 import speciesAsyncThunkReducers from './features/species/speciesSlice';
 import subLocationsReducers from './features/subLocations/subLocationsSlice';
@@ -32,7 +31,6 @@ const reducers = {
   ...matrixViewReducers,
   ...acceleratorProjectSpeciesReducers,
   ...projectSpeciesReducers,
-  ...projectToDoReducers,
   ...snackbarReducers,
   ...speciesAsyncThunkReducers,
   ...subLocationsReducers,
