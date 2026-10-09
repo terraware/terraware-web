@@ -71,32 +71,38 @@ const VirtualWalkthroughWrapper = ({
           String(fileId)
         );
 
+  const originPosition = data?.originPosition;
+  const dataCameraPosition = data?.cameraPosition;
+  const dataSceneBounds = data?.sceneBounds;
+  const dataGroundPlane = data?.groundPlane;
+  const dataAnnotations = data?.annotations;
+
   const origin = useMemo<[number, number, number] | undefined>(
-    () => (data?.originPosition ? [data.originPosition.x, data.originPosition.y, data.originPosition.z] : undefined),
-    [data?.originPosition]
+    () => (originPosition ? [originPosition.x, originPosition.y, originPosition.z] : undefined),
+    [originPosition]
   );
 
   const cameraPosition = useMemo<[number, number, number] | undefined>(
-    () => (data?.cameraPosition ? [data.cameraPosition.x, data.cameraPosition.y, data.cameraPosition.z] : undefined),
-    [data?.cameraPosition]
+    () => (dataCameraPosition ? [dataCameraPosition.x, dataCameraPosition.y, dataCameraPosition.z] : undefined),
+    [dataCameraPosition]
   );
 
   const sceneBounds = useMemo(
     () =>
-      data?.sceneBounds && data.sceneBounds.m !== undefined
-        ? { x: data.sceneBounds.x, y: data.sceneBounds.y, z: data.sceneBounds.z, m: data.sceneBounds.m }
+      dataSceneBounds && dataSceneBounds.m !== undefined
+        ? { x: dataSceneBounds.x, y: dataSceneBounds.y, z: dataSceneBounds.z, m: dataSceneBounds.m }
         : undefined,
-    [data?.sceneBounds]
+    [dataSceneBounds]
   );
 
   const groundPlane = useMemo<[number, number, number][]>(
-    () => (data?.groundPlane?.length === 3 ? data.groundPlane.map((p) => [p.x, p.y, p.z]) : []),
-    [data?.groundPlane]
+    () => (dataGroundPlane?.length === 3 ? dataGroundPlane.map((p) => [p.x, p.y, p.z]) : []),
+    [dataGroundPlane]
   );
 
   const annotations = useMemo<AnnotationProps[]>(
     () =>
-      data?.annotations?.map((annotation, index) => {
+      dataAnnotations?.map((annotation, index) => {
         const [firstMedia] = annotation.media;
         const icon: AnnotationIconType = !firstMedia
           ? 'text'
@@ -122,7 +128,7 @@ const VirtualWalkthroughWrapper = ({
             annotation.media.length > 0 ? [PLACEHOLDER_IMAGE_URLS[index % PLACEHOLDER_IMAGE_URLS.length]] : undefined,
         } as AnnotationProps;
       }) ?? [],
-    [data?.annotations]
+    [dataAnnotations]
   );
 
   const handleSaveAnnotations = useCallback(

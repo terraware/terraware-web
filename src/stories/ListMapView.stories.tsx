@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { Box, Typography } from '@mui/material';
-import { Story } from '@storybook/react';
+import { StoryFn } from '@storybook/react';
 
 import ListMapView, { ListMapViewProps } from 'src/components/ListMapView';
 
-const ListMapViewTemplate: Story<ListMapViewProps> = (args) => {
+const ListMapViewTemplate: StoryFn<ListMapViewProps> = (args) => {
   return (
     <Box display='flex' height='300px' padding='16px' style={{ backgroundColor: 'gray' }}>
       <ListMapView

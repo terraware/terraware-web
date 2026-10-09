@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 import { Grid } from '@mui/material';
-import { Story } from '@storybook/react';
+import { StoryFn } from '@storybook/react';
 
 import SearchFiltersWrapper, { SearchProps } from 'src/components/common/SearchFiltersWrapper';
 
-const SearchFiltersWrapperTemplate: Story<SearchProps> = (args) => {
+const SearchFiltersWrapperTemplate: StoryFn<SearchProps> = (args) => {
   const [search, setSearch] = useState<string>(args.search);
 
   useEffect(() => setSearch(args.search), [args.search]);
@@ -13,7 +13,7 @@ const SearchFiltersWrapperTemplate: Story<SearchProps> = (args) => {
   return <SearchFiltersWrapper {...args} search={search} onSearch={(val) => setSearch(val)} />;
 };
 
-const FiltersWrapperTemplate: Story<SearchProps> = (args) => {
+const FiltersWrapperTemplate: StoryFn<SearchProps> = (args) => {
   const [search, setSearch] = useState<string>(args.search);
   const [filters, setFilters] = useState<Record<string, any>>(args.filtersProps?.filters || {});
 

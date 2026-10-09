@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { Story } from '@storybook/react';
+import { StoryFn } from '@storybook/react';
 
 import Page, { PageProps } from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import Button from 'src/components/common/button/Button';
 
-const PageTemplate: Story<PageProps> = (args: PageProps) => {
+const PageTemplate: StoryFn<PageProps> = (args: PageProps) => {
   return <Page {...args} />;
 };
 
