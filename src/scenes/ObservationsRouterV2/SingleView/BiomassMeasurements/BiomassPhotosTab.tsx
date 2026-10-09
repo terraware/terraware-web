@@ -57,7 +57,7 @@ const BiomassPhotosTab = () => {
 
   return (
     <Card radius='24px'>
-      <Box display={'flex'} justifyContent='space-between' alignItems='center' marginBottom={2}>
+      <Box display={'flex'} justifyContent='space-between' alignItems='center' marginBottom={1}>
         <Typography fontSize={'20px'} fontWeight={600}>
           {strings.PLOT_CORNER_PHOTOS}
         </Typography>
@@ -82,8 +82,8 @@ const BiomassPhotosTab = () => {
               </Typography>
             )}
           </Box>
-          <Box>
-            <Typography fontSize={'20px'} fontWeight={600} marginBottom={2}>
+          <Box marginBottom={4}>
+            <Typography fontSize={'20px'} fontWeight={600} marginBottom={1}>
               {strings.QUADRAT_PHOTOS}
             </Typography>
             <MonitoringPlotPhotosWithActions
@@ -93,8 +93,8 @@ const BiomassPhotosTab = () => {
               plantingSiteName={plantingSite?.name}
             />
           </Box>
-          <Box>
-            <Typography fontSize={'20px'} fontWeight={600} marginBottom={2}>
+          <Box marginBottom={4}>
+            <Typography fontSize={'20px'} fontWeight={600} marginBottom={1}>
               {strings.SOIL_ASSESSMENT}
             </Typography>
             <MonitoringPlotPhotosWithActions
@@ -104,7 +104,7 @@ const BiomassPhotosTab = () => {
               plantingSiteName={plantingSite?.name}
             />
           </Box>
-          <Typography fontSize={'20px'} fontWeight={600} marginBottom={2}>
+          <Typography fontSize={'20px'} fontWeight={600} marginBottom={1}>
             {strings.PHOTOS_AND_VIDEOS}
           </Typography>
           <Box marginBottom={4}>
