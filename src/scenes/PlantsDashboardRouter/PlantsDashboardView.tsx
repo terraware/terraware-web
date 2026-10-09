@@ -168,11 +168,6 @@ export default function PlantsDashboardView({
     () =>
       plantingSite || isProjectSelected ? (
         <>
-          {survivalRateRecalculationInProgress && (
-            <Grid item xs={12}>
-              <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
-            </Grid>
-          )}
           <Grid item xs={12}>
             <Box
               sx={{
@@ -200,16 +195,7 @@ export default function PlantsDashboardView({
           </Grid>
         </>
       ) : undefined,
-    [
-      plantingSite,
-      isMobile,
-      hasObservationResults,
-      strings,
-      projectId,
-      isProjectSelected,
-      survivalRateRecalculationInProgress,
-      dashboardOrganizationId,
-    ]
+    [plantingSite, isMobile, hasObservationResults, strings, projectId, isProjectSelected, dashboardOrganizationId]
   );
 
   const renderTotalPlantsAndSpecies = () => (
@@ -392,6 +378,11 @@ export default function PlantsDashboardView({
       organizationId={dashboardOrganizationId}
     >
       <Grid container spacing={3} alignItems='flex-start' height='fit-content'>
+        {survivalRateRecalculationInProgress && (
+          <Grid item xs={12}>
+            <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
+          </Grid>
+        )}
         {renderTotalPlantsAndSpecies()}
         {hasObservationResults && selectedPlantingSiteId !== ALL_PLANTING_SITES && renderPlantingSiteTrends()}
         {selectedPlantingSiteId !== ALL_PLANTING_SITES && hasObservationResults && renderPlantingProgressAndDensity()}
