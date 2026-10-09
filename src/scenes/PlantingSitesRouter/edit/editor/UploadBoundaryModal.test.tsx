@@ -48,8 +48,8 @@ const chooseFile = async (user: ReturnType<typeof renderModal>['user'], file: Fi
   await user.upload(input, typeof file === 'string' ? new File(['{}'], file, { type: 'application/json' }) : file);
 };
 
-// Dropped files skip the input's accept filter, which user.upload honors, and user-event has no drop
-// API. The drop zone is the FileChooser box that wraps the hidden input.
+// Files added by drag and drop skip the input's accept filter, which user.upload honors, and user-event
+// has no drag and drop API. The drop zone is the FileChooser box that wraps the hidden input.
 const dropFile = (filename: string) => {
   const input = document.querySelector('input[type="file"]') as HTMLInputElement;
   const file = new File(['{}'], filename, { type: 'application/octet-stream' });
