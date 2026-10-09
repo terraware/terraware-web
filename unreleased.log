@@ -1,3 +1,4 @@
+2679e0f2 SW-8981 Ability to see an estimated number of plots for monitoring while scheduling observations (#6690)
 dcd43e73 Revert "SW-8967 Show single history log entries and also the summarized one (#6688)" (#6697)
 92a9c08d Update agent files to use test:ci (#6706)
 1de3a807 Revert "SW-9072 Show file sizes smaller than 1kb"
