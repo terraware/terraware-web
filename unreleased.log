@@ -1,3 +1,4 @@
+2002e53f Replace stepper with web-components version (#6726)
 a0fa49c2 Fix button size (#6724)
 5d6941dc SW-8971 Check recalculated survival rates in the settings e2e tests (#6721)
 7e49a84a SW-8971 Keep the last visited planting site when reopening the dashboard (#6720)
