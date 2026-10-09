@@ -3,17 +3,33 @@ import { Page, expect, test } from '@playwright/test';
 import { changeToSuperAdmin } from '../../utils/userUtils';
 import { openNavItem, selectOrg, waitFor } from '../../utils/utils';
 
-const verifySurvivalRatePendingOnDashboard = async (page: Page) => {
+const SURVIVAL_RATE_POLL_TIMEOUT = 90000;
+
+const verifySurvivalRateRecalculatedOnDashboard = async (page: Page, baseURL: string | undefined, expected: string) => {
   await openNavItem(page, 'Plantings', 'Dashboard');
   await page.getByPlaceholder('Select...').click();
   await page.getByText('PS2', { exact: true }).click();
 
-  await expect(page.getByText('Survival Rate Recalculation In-Progress')).toBeVisible();
+  const recalculationMessage = page.getByText('Survival Rate Recalculation In-Progress');
+  await expect(recalculationMessage).toBeVisible();
+
+  await page.waitForURL((url) => /^\/plants\/dashboard\/\d+$/.test(url.pathname));
+  const plantingSiteId = new URL(page.url()).pathname.split('/').pop();
+  const response = await page.request.post(
+    `${baseURL}/api/v1/tracking/sites/${plantingSiteId}/completeSurvivalRateCalculation`,
+    { timeout: 120000 }
+  );
+  expect(response.ok()).toBeTruthy();
+  expect((await response.json()).calculationInProgress).toBe(false);
+
+  // The dashboard picks up the recalculated values on its next calculation status poll.
+  await expect(recalculationMessage).toBeHidden({ timeout: SURVIVAL_RATE_POLL_TIMEOUT });
+  await expect(page.getByTestId('survival-rate-value')).toHaveText(expected);
 };
 
 test.describe('SurvivalRateSettingsTests', () => {
   // these tests are slower and pollute each other so need to run serially
-  test.describe.configure({ timeout: 120000, mode: 'serial' });
+  test.describe.configure({ timeout: 300000, mode: 'serial' });
 
   test.beforeEach(async ({ page, context, baseURL }) => {
     await changeToSuperAdmin(context, baseURL);
@@ -22,8 +38,9 @@ test.describe('SurvivalRateSettingsTests', () => {
     await selectOrg(page, 'Terraformation (staging)');
   });
 
-  test('Edit permanent plots T0 settings using observation data and verify survival rate is pending on dashboard', async ({
+  test('Edit permanent plots T0 settings using observation data and verify survival rate on dashboard', async ({
     page,
+    baseURL,
   }) => {
     await openNavItem(page, 'Plantings', 'Observations');
     await page.locator('.select').first().click();
@@ -44,10 +61,10 @@ test.describe('SurvivalRateSettingsTests', () => {
     await page.locator('#saveSettings').click();
     await expect(page.getByText('t0 set for Permanent Plots')).toBeVisible({ timeout: 60000 });
 
-    await verifySurvivalRatePendingOnDashboard(page);
+    await verifySurvivalRateRecalculatedOnDashboard(page, baseURL, '90%');
   });
 
-  test('Edit one plot to manual density and verify survival rate is pending', async ({ page }) => {
+  test('Edit one plot to manual density and verify new survival rate', async ({ page, baseURL }) => {
     await openNavItem(page, 'Plantings', 'Observations');
     await page.locator('.select').first().click();
     await page.getByRole('list').getByText('PS2', { exact: true }).click();
@@ -76,6 +93,6 @@ test.describe('SurvivalRateSettingsTests', () => {
     await page.locator('#saveSettings').click();
     await expect(page.getByText('t0 set for Permanent Plots')).toBeVisible({ timeout: 60000 });
 
-    await verifySurvivalRatePendingOnDashboard(page);
+    await verifySurvivalRateRecalculatedOnDashboard(page, baseURL, '88%');
   });
 });
