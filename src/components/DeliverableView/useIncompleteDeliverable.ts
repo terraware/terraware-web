@@ -30,7 +30,7 @@ export default function useIncompleteDeliverable(): Response {
         .unwrap()
         .then(() => {
           if (isApplicationConsole || isApplicationPortal) {
-            reload();
+            void reload();
           }
         })
         .catch(() => snackbar.toastError(strings.GENERIC_ERROR));

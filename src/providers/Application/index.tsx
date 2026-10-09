@@ -1,19 +1,17 @@
-import React, { ReactNode, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ReactNode, useCallback, useMemo, useState } from 'react';
+
+import { skipToken } from '@reduxjs/toolkit/query';
 
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import { useOrganization, useUser } from 'src/providers';
 import {
-  requestListApplicationDeliverables,
-  requestListApplicationModules,
-  requestListApplications,
-} from 'src/redux/features/application/applicationAsyncThunks';
-import {
-  selectApplicationDeliverableList,
-  selectApplicationList,
-  selectApplicationModuleList,
-} from 'src/redux/features/application/applicationSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
-import { Application, ApplicationDeliverable, ApplicationModule } from 'src/types/Application';
+  api,
+  useGetApplicationDeliverablesQuery,
+  useGetApplicationModulesQuery,
+  useListApplicationsQuery,
+} from 'src/queries/generated/applications';
+import { store } from 'src/redux/store';
+import { ApplicationDeliverable, ApplicationModule } from 'src/types/Application';
 import { isAllowed } from 'src/utils/acl';
 
 import { ApplicationContext, ApplicationData } from './Context';
@@ -22,76 +20,99 @@ type Props = {
   children?: ReactNode;
 };
 
+const NO_SECTIONS: ApplicationModule[] = [];
+const NO_DELIVERABLES: ApplicationDeliverable[] = [];
+
+type QueryStatusSelector = (state: ReturnType<typeof store.getState>) => { status: string };
+
+// A mutation's tag invalidation starts its refetch outside of initiate(), so a refetch() issued after the mutation is
+// deduped against it and resolves right away with the stale state. Watch the store until the queries settle instead.
+const waitForQueriesToSettle = (selectors: QueryStatusSelector[]) =>
+  new Promise<void>((resolve) => {
+    const settled = () => selectors.every((select) => select(store.getState()).status !== 'pending');
+    if (settled()) {
+      resolve();
+      return;
+    }
+    const unsubscribe = store.subscribe(() => {
+      if (settled()) {
+        unsubscribe();
+        resolve();
+      }
+    });
+  });
+
 const ApplicationProvider = ({ children }: Props) => {
-  const dispatch = useAppDispatch();
   const { selectedOrganization } = useOrganization();
-
-  const [allApplications, setAllApplications] = useState<Application[]>();
-  const [applicationSections, setApplicationSections] = useState<ApplicationModule[]>([]);
-  const [applicationDeliverables, setApplicationDeliverables] = useState<ApplicationDeliverable[]>([]);
-  const [selectedApplication, setSelectedApplication] = useState<Application>();
-
   const { user } = useUser();
   const isAllowedAllApplications = useMemo(() => (user ? isAllowed(user, 'READ_ALL_APPLICATIONS') : false), [user]);
-
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
-  const [listApplicationsRequest, setListApplicationRequest] = useState<string>('');
-  const listApplicationsResult = useAppSelector(selectApplicationList(listApplicationsRequest));
+  const [selectedApplicationId, setSelectedApplicationId] = useState<number>();
 
-  const [listApplicationDeliverablesRequest, setListApplicationDeliverablesRequest] = useState<string>('');
-  const listApplicationDeliverablesResult = useAppSelector(
-    selectApplicationDeliverableList(listApplicationDeliverablesRequest)
-  );
-
-  const [listApplicationModulesRequest, setListApplicationModulesRequest] = useState<string>('');
-  const listApplicationModulesResult = useAppSelector(selectApplicationModuleList(listApplicationModulesRequest));
-
-  const [reloadCallback, setReloadCallback] = useState<() => void>();
-
-  const _setSelectedApplication = useCallback(
-    (applicationId: string | number) => {
-      if (allApplications && allApplications.length > 0) {
-        const nextApplication = allApplications.find((application) => application.id === Number(applicationId));
-        setSelectedApplication(nextApplication);
-      }
-    },
-    [allApplications]
-  );
-
-  const loadApplications = useCallback(() => {
+  const organizationId = selectedOrganization?.id;
+  const listArg = useMemo(() => {
     if (isAcceleratorRoute && isAllowedAllApplications) {
-      const listAll = dispatch(requestListApplications({ listAll: true }));
-      setListApplicationRequest(listAll.requestId);
-    } else if (selectedOrganization) {
-      const listOrg = dispatch(requestListApplications({ organizationId: selectedOrganization.id }));
-      setListApplicationRequest(listOrg.requestId);
+      return { listAll: true };
     }
-  }, [dispatch, isAcceleratorRoute, isAllowedAllApplications, selectedOrganization, setListApplicationRequest]);
+    return organizationId !== undefined ? { organizationId, listAll: false } : skipToken;
+  }, [isAcceleratorRoute, isAllowedAllApplications, organizationId]);
+  const { currentData: applicationsData, refetch: refetchApplications } = useListApplicationsQuery(listArg);
+  const allApplications = applicationsData?.applications;
+
+  const selectedApplication = useMemo(
+    () => allApplications?.find((application) => application.id === selectedApplicationId),
+    [allApplications, selectedApplicationId]
+  );
+
+  const { currentData: modulesData, refetch: refetchModules } = useGetApplicationModulesQuery(
+    selectedApplication?.id ?? skipToken
+  );
+  const { currentData: deliverablesData, refetch: refetchDeliverables } = useGetApplicationDeliverablesQuery(
+    selectedApplication?.id ?? skipToken
+  );
+
+  const _setSelectedApplication = useCallback((applicationId: string | number) => {
+    setSelectedApplicationId(Number(applicationId));
+  }, []);
 
   const _reload = useCallback(
-    (onReload?: () => void) => {
-      setReloadCallback(onReload);
-      loadApplications();
+    async (onReload?: () => void) => {
+      if (listArg === skipToken) {
+        onReload?.();
+        return true;
+      }
+      const listSelector = api.endpoints.listApplications.select(listArg);
+      const selectors: QueryStatusSelector[] = [listSelector];
+      void refetchApplications();
+      if (selectedApplication) {
+        selectors.push(
+          api.endpoints.getApplicationModules.select(selectedApplication.id),
+          api.endpoints.getApplicationDeliverables.select(selectedApplication.id)
+        );
+        void refetchModules();
+        void refetchDeliverables();
+      }
+      await waitForQueriesToSettle(selectors);
+      const succeeded = listSelector(store.getState()).isSuccess;
+      if (succeeded) {
+        onReload?.();
+      }
+      return succeeded;
     },
-    [loadApplications, setReloadCallback]
+    [listArg, refetchApplications, refetchDeliverables, refetchModules, selectedApplication]
   );
 
   const _getApplicationByProjectId = useCallback(
-    (projectId: number) => {
-      if (!allApplications) {
-        return undefined;
-      }
-      return allApplications.find((application) => application.projectId === projectId);
-    },
+    (projectId: number) => allApplications?.find((application) => application.projectId === projectId),
     [allApplications]
   );
 
   const applicationData = useMemo<ApplicationData>(
     () => ({
       allApplications,
-      applicationDeliverables,
-      applicationSections,
+      applicationDeliverables: deliverablesData?.deliverables ?? NO_DELIVERABLES,
+      applicationSections: modulesData?.modules ?? NO_SECTIONS,
       getApplicationByProjectId: _getApplicationByProjectId,
       selectedApplication,
       setSelectedApplication: _setSelectedApplication,
@@ -99,52 +120,14 @@ const ApplicationProvider = ({ children }: Props) => {
     }),
     [
       allApplications,
-      applicationDeliverables,
-      applicationSections,
+      deliverablesData,
+      modulesData,
       _getApplicationByProjectId,
       selectedApplication,
       _setSelectedApplication,
       _reload,
     ]
   );
-
-  useEffect(() => {
-    if (selectedOrganization || isAcceleratorRoute) {
-      loadApplications();
-    }
-  }, [dispatch, selectedOrganization, isAcceleratorRoute, loadApplications]);
-
-  useEffect(() => {
-    if (listApplicationsResult && listApplicationsResult.status === 'success' && listApplicationsResult.data) {
-      setAllApplications(listApplicationsResult.data);
-      reloadCallback?.();
-      setReloadCallback(undefined);
-    }
-  }, [listApplicationsResult, setAllApplications, reloadCallback]);
-
-  useEffect(() => {
-    if (selectedApplication) {
-      const listModulesDispatched = dispatch(requestListApplicationModules({ applicationId: selectedApplication.id }));
-      setListApplicationModulesRequest(listModulesDispatched.requestId);
-
-      const listDeliverablesDispatched = dispatch(
-        requestListApplicationDeliverables({ applicationId: selectedApplication.id })
-      );
-      setListApplicationDeliverablesRequest(listDeliverablesDispatched.requestId);
-    }
-  }, [dispatch, selectedApplication, setListApplicationModulesRequest, setListApplicationDeliverablesRequest]);
-
-  useEffect(() => {
-    if (listApplicationDeliverablesResult?.status === 'success' && listApplicationDeliverablesResult.data) {
-      setApplicationDeliverables(listApplicationDeliverablesResult.data);
-    }
-  }, [listApplicationDeliverablesResult, setApplicationDeliverables]);
-
-  useEffect(() => {
-    if (listApplicationModulesResult?.status === 'success' && listApplicationModulesResult.data) {
-      setApplicationSections(listApplicationModulesResult.data);
-    }
-  }, [listApplicationModulesResult, setApplicationSections]);
 
   return <ApplicationContext.Provider value={applicationData}>{children}</ApplicationContext.Provider>;
 };

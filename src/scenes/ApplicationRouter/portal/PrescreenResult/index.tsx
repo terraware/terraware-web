@@ -69,7 +69,7 @@ const PrescreenResultView = ({
 
   useEffect(() => {
     if (restartResult && restartResult.status === 'success' && restartResult.data) {
-      reload(onReload);
+      void reload(onReload);
     }
   }, [restartResult, onReload, reload]);
 

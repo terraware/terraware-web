@@ -20,7 +20,9 @@ const SectionDeliverableEditView = () => {
     if (!(applicationId && deliverableId && sectionId)) {
       return;
     }
-    reload(() => goToApplicationSectionDeliverable(Number(applicationId), Number(sectionId), Number(deliverableId)));
+    void reload(() =>
+      goToApplicationSectionDeliverable(Number(applicationId), Number(sectionId), Number(deliverableId))
+    );
   }, [goToApplicationSectionDeliverable, applicationId, deliverableId, reload, sectionId]);
 
   const deliverable = applicationDeliverables.find((_deliverable) => _deliverable.id === Number(deliverableId));

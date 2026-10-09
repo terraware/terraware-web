@@ -35,7 +35,7 @@ const Metadata = (props: ViewProps): JSX.Element => {
       });
 
       if (isApplicationConsole) {
-        reload();
+        void reload();
       }
     },
     [update, deliverable, isApplicationConsole, reload]

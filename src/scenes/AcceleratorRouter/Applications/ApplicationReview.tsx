@@ -32,7 +32,7 @@ const ApplicationReview = ({ application }: ApplicationReviewProps) => {
   const [isReviewModalOpen, , openReviewModal, closeReviewModal] = useBoolean(false);
 
   const onReviewSubmitted = useCallback(() => {
-    reload(() => navigate(0));
+    void reload(() => navigate(0));
   }, [reload, navigate]);
 
   return (

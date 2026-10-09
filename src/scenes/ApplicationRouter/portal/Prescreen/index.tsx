@@ -113,7 +113,7 @@ const PrescreenView = () => {
   useEffect(() => {
     const submitResultSuccess = Boolean(submitResult && submitResult.status === 'success' && submitResult.data);
     if ((restartResult && restartResult.status === 'success' && restartResult.data) || submitResultSuccess) {
-      reload(() => onReload(submitResultSuccess));
+      void reload(() => onReload(submitResultSuccess));
     }
   }, [restartResult, submitResult, onReload, reload]);
 
