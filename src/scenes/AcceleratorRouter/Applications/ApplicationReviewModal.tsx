@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
@@ -7,7 +7,6 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useUser } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
 import { useReviewApplicationMutation } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 import {
@@ -30,10 +29,7 @@ const ApplicationReviewModal = ({ open, onClose, application }: ApplicationRevie
   const theme = useTheme();
   const { isAllowed } = useUser();
 
-  const { reload } = useApplicationData();
-  const [reviewApplication, { isLoading: reviewing }] = useReviewApplicationMutation();
-  const [reloading, setReloading] = useState(false);
-  const busy = reviewing || reloading;
+  const [reviewApplication, { isLoading: busy }] = useReviewApplicationMutation();
 
   const dropdownOptions: DropdownItem[] = ApplicationReviewStatuses.sort((a, b) => {
     return ApplicationStatusOrder[a] - ApplicationStatusOrder[b];
@@ -83,14 +79,10 @@ const ApplicationReviewModal = ({ open, onClose, application }: ApplicationRevie
     if (hasChange()) {
       void reviewApplication({ applicationId: application.id, reviewApplicationRequestPayload: applicationReview })
         .unwrap()
-        .then(() => {
-          setReloading(true);
-          return reload(onClose);
-        })
-        .catch(() => undefined)
-        .finally(() => setReloading(false));
+        .then(onClose)
+        .catch(() => undefined);
     }
-  }, [application, applicationReview, hasChange, onClose, reload, reviewApplication]);
+  }, [application, applicationReview, hasChange, onClose, reviewApplication]);
 
   return (
     <DialogBox

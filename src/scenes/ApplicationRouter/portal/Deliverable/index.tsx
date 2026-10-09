@@ -2,21 +2,31 @@ import React, { useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { Box } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Button } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import DeliverableViewCard from 'src/components/DeliverableView/DeliverableCard';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
 import { useLocalization } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
+import {
+  useGetApplicationDeliverablesQuery,
+  useGetApplicationModulesQuery,
+  useGetApplicationQuery,
+} from 'src/queries/generated/applications';
 import strings from 'src/strings';
 
 import ApplicationPage from '../ApplicationPage';
 
 const SectionDeliverableView = () => {
   const { deliverableId } = useParams<{ deliverableId: string }>();
-  const { selectedApplication, applicationDeliverables } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
+  const { currentData: deliverablesData } = useGetApplicationDeliverablesQuery(pathApplicationId ?? skipToken);
+  const applicationDeliverables = useMemo(() => deliverablesData?.deliverables ?? [], [deliverablesData]);
 
   const deliverable = applicationDeliverables.find((_deliverable) => _deliverable.id === Number(deliverableId));
 
@@ -47,7 +57,13 @@ const SectionDeliverableWrapper = () => {
   }>();
   const { activeLocale } = useLocalization();
   const { goToApplicationSectionDeliverableEdit } = useNavigateTo();
-  const { applicationDeliverables, applicationSections, selectedApplication } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
+  const { currentData: modulesData } = useGetApplicationModulesQuery(pathApplicationId ?? skipToken);
+  const applicationSections = useMemo(() => modulesData?.modules ?? [], [modulesData]);
+  const { currentData: deliverablesData } = useGetApplicationDeliverablesQuery(pathApplicationId ?? skipToken);
+  const applicationDeliverables = useMemo(() => deliverablesData?.deliverables ?? [], [deliverablesData]);
 
   const section = useMemo(
     () => applicationSections.find((_section) => _section.moduleId === Number(sectionId)),

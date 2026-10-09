@@ -2,17 +2,23 @@ import React, { type JSX, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import CompleteIncompleteBadge from 'src/components/common/CompleteIncompleteBadge';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useApplicationData } from 'src/providers/Application/Context';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
+import { useGetApplicationModulesQuery, useGetApplicationQuery } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 import { ApplicationModule } from 'src/types/Application';
 
 export default function ListModulesContent(): JSX.Element {
-  const { applicationSections, selectedApplication } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
+  const { currentData: modulesData } = useGetApplicationModulesQuery(pathApplicationId ?? skipToken);
+  const applicationSections = useMemo(() => modulesData?.modules ?? [], [modulesData]);
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const { goToApplicationPrescreen, goToApplicationSection } = useNavigateTo();

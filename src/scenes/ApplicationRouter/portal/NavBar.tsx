@@ -1,6 +1,7 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 import { matchPath, useMatch } from 'react-router';
 
+import { skipToken } from '@reduxjs/toolkit/query';
 import { NavSection, theme } from '@terraware/web-components';
 
 import LocaleSelector from 'src/components/LocaleSelector';
@@ -8,11 +9,11 @@ import NavFooter from 'src/components/common/Navbar/NavFooter';
 import NavItem from 'src/components/common/Navbar/NavItem';
 import Navbar from 'src/components/common/Navbar/Navbar';
 import { APP_PATHS } from 'src/constants';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
+import { useGetApplicationModulesQuery, useGetApplicationQuery } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
-
-import { useApplicationData } from '../../../providers/Application/Context';
 
 type NavBarProps = {
   backgroundTransparent?: boolean;
@@ -22,7 +23,11 @@ export default function NavBar({ backgroundTransparent, setShowNavBar }: NavBarP
   const { isDesktop } = useDeviceInfo();
   const navigate = useSyncNavigate();
 
-  const { applicationSections, selectedApplication } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
+  const { currentData: modulesData } = useGetApplicationModulesQuery(pathApplicationId ?? skipToken);
+  const applicationSections = useMemo(() => modulesData?.modules ?? [], [modulesData]);
 
   const isOverviewRoute = useMatch({ path: APP_PATHS.APPLICATION_OVERVIEW, end: true });
   const isReviewRoute = useMatch({ path: APP_PATHS.APPLICATION_REVIEW, end: true });

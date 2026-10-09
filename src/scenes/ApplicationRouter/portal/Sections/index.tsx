@@ -1,17 +1,28 @@
 import React, { useMemo } from 'react';
 import { useParams } from 'react-router';
 
+import { skipToken } from '@reduxjs/toolkit/query';
+
 import { Crumb } from 'src/components/BreadCrumbs';
 import { APP_PATHS } from 'src/constants';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
 import { useLocalization } from 'src/providers';
+import {
+  useGetApplicationDeliverablesQuery,
+  useGetApplicationModulesQuery,
+  useGetApplicationQuery,
+} from 'src/queries/generated/applications';
 import strings from 'src/strings';
 
-import { useApplicationData } from '../../../../providers/Application/Context';
 import ApplicationPage from '../ApplicationPage';
 import SectionView from './SectionView';
 
 const SectionViewWrapper = () => {
-  const { applicationSections, applicationDeliverables } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: modulesData } = useGetApplicationModulesQuery(pathApplicationId ?? skipToken);
+  const applicationSections = useMemo(() => modulesData?.modules ?? [], [modulesData]);
+  const { currentData: deliverablesData } = useGetApplicationDeliverablesQuery(pathApplicationId ?? skipToken);
+  const applicationDeliverables = useMemo(() => deliverablesData?.deliverables ?? [], [deliverablesData]);
 
   const pathParams = useParams<{ applicationId: string; sectionId: string }>();
   const sectionId = Number(pathParams.sectionId);
@@ -35,7 +46,9 @@ const SectionViewWrapper = () => {
 
 const SectionViewPage = () => {
   const { activeLocale } = useLocalization();
-  const { selectedApplication } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
 
   const selectedApplicationId = selectedApplication?.id;
 

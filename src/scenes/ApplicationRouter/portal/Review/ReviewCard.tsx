@@ -1,12 +1,12 @@
-import React, { type JSX, useCallback, useState } from 'react';
+import React, { type JSX, useCallback } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 
 import Card from 'src/components/common/Card';
 import Button from 'src/components/common/button/Button';
-import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useApplicationData } from 'src/providers/Application/Context';
-import { useSubmitApplicationMutation } from 'src/queries/generated/applications';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
+import { useGetApplicationQuery, useSubmitApplicationMutation } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -22,11 +22,13 @@ export const SUBMIT_APPLICATION_MUTATION_KEY = 'application-review-submit';
 const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
   const theme = useTheme();
 
-  const { selectedApplication, reload } = useApplicationData();
-  const { goToApplicationReview } = useNavigateTo();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData, isFetching: isFetchingApplication } = useGetApplicationQuery(
+    pathApplicationId ?? skipToken
+  );
+  const selectedApplication = applicationData?.application;
   const { toastSuccess, toastWarning } = useSnackbar();
 
-  const [submitted, setSubmitted] = useState(false);
   const [submitApplication, { isLoading }] = useSubmitApplicationMutation({
     fixedCacheKey: SUBMIT_APPLICATION_MUTATION_KEY,
   });
@@ -41,12 +43,6 @@ const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
     </Typography>
   );
 
-  const refreshPage = useCallback(() => {
-    if (selectedApplication) {
-      goToApplicationReview(selectedApplication.id);
-    }
-  }, [selectedApplication, goToApplicationReview]);
-
   const allSectionsCompleted = sections.every(({ status }) => status === 'Complete');
 
   const submit = useCallback(() => {
@@ -57,15 +53,13 @@ const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
       .unwrap()
       .then(({ problems }) => {
         if (problems.length === 0) {
-          setSubmitted(true);
           toastSuccess(strings.SUCCESS);
-          void reload(refreshPage);
         } else {
           toastWarning(`${strings.GENERIC_ERROR}: ${problems.toString()}`);
         }
       })
       .catch(() => undefined);
-  }, [refreshPage, reload, selectedApplication, submitApplication, toastSuccess, toastWarning]);
+  }, [selectedApplication, submitApplication, toastSuccess, toastWarning]);
 
   return (
     <Card
@@ -116,7 +110,7 @@ const ReviewCard = ({ sections }: ReviewCardProps): JSX.Element => {
       </Typography>
 
       <Button
-        disabled={!allSectionsCompleted || isLoading || submitted}
+        disabled={!allSectionsCompleted || isLoading || isFetchingApplication}
         label={strings.SUBMIT_APPLICATION}
         size='medium'
         onClick={() => submit()}

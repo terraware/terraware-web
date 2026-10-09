@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { Box, Container, Grid } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 import { DateTime } from 'luxon';
 
@@ -8,7 +9,7 @@ import ApplicationCard from 'src/components/Application/ApplicationCard';
 import PageHeader from 'src/components/PageHeader';
 import Button from 'src/components/common/button/Button';
 import { useOrganization } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
+import { useListApplicationsQuery } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 import { isAdmin } from 'src/utils/organization';
 
@@ -17,7 +18,10 @@ import NewApplicationModal from './NewApplicationModal';
 const ApplicationListView = () => {
   const { selectedOrganization } = useOrganization();
   const { isTablet, isMobile } = useDeviceInfo();
-  const { allApplications } = useApplicationData();
+  const { currentData: applicationsData } = useListApplicationsQuery(
+    selectedOrganization ? { organizationId: selectedOrganization.id } : skipToken
+  );
+  const allApplications = applicationsData?.applications;
   const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
   useEffect(() => {

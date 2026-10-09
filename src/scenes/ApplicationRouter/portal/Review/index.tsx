@@ -1,15 +1,20 @@
 import React, { useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Button } from '@terraware/web-components';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
 import { useLocalization } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
-import { useSubmitApplicationMutation } from 'src/queries/generated/applications';
+import {
+  useGetApplicationModulesQuery,
+  useGetApplicationQuery,
+  useSubmitApplicationMutation,
+} from 'src/queries/generated/applications';
 import ApplicationPage from 'src/scenes/ApplicationRouter/portal/ApplicationPage';
 import strings from 'src/strings';
 import { Application } from 'src/types/Application';
@@ -64,7 +69,11 @@ const ApplicationStatusInReview = () => {
 };
 
 const ReviewView = () => {
-  const { applicationSections, selectedApplication } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
+  const { currentData: modulesData } = useGetApplicationModulesQuery(pathApplicationId ?? skipToken);
+  const applicationSections = useMemo(() => modulesData?.modules ?? [], [modulesData]);
   const { activeLocale } = useLocalization();
 
   const [, { isLoading }] = useSubmitApplicationMutation({ fixedCacheKey: SUBMIT_APPLICATION_MUTATION_KEY });

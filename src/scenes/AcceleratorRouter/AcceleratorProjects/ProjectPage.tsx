@@ -10,7 +10,7 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
 import useVotingData from 'src/hooks/useVotingData';
 import { useLocalization, useUser } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
+import { useListApplicationsQuery } from 'src/queries/generated/applications';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import { requestPublishFunderProject } from 'src/redux/features/funder/projects/funderProjectsAsyncThunks';
 import { selectPublishFunderProject } from 'src/redux/features/funder/projects/funderProjectsSelectors';
@@ -35,7 +35,6 @@ const ProjectPage = () => {
   const { isAllowed } = useUser();
   const projectData = useAcceleratorProjectData();
   const { goToAcceleratorActivityCreate, goToDocumentNew, goToAcceleratorProjectEdit } = useNavigateTo();
-  const { getApplicationByProjectId } = useApplicationData();
   const { projectScore } = useProjectScore(projectData.projectId);
   const { phaseVotes } = useVotingData();
   const dispatch = useAppDispatch();
@@ -56,10 +55,8 @@ const ProjectPage = () => {
   }, [query]);
   const [highlightsModalOpen, setHighlightsModalOpen] = useState(false);
 
-  const projectApplication = useMemo(
-    () => getApplicationByProjectId(projectData.projectId),
-    [getApplicationByProjectId, projectData.projectId]
-  );
+  const { currentData: projectApplicationsData } = useListApplicationsQuery({ projectId: projectData.projectId });
+  const projectApplication = projectApplicationsData?.applications[0];
 
   const reportsResponse = useListPublishedReportsQuery(projectData.projectId);
   const publishedReports = useMemo(() => reportsResponse.data?.reports ?? [], [reportsResponse.data?.reports]);

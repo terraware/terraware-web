@@ -1,26 +1,26 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useParams } from 'react-router';
+
+import { skipToken } from '@reduxjs/toolkit/query';
 
 import AcceleratorDeliverableCard from 'src/components/AcceleratorDeliverableView/DeliverableCard';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
 import { useLocalization } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
+import { useGetApplicationDeliverablesQuery, useGetApplicationQuery } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 
 const ApplicationDeliverable = () => {
-  const { applicationId, deliverableId } = useParams<{
-    applicationId: string;
-    deliverableId: string;
-  }>();
+  const { deliverableId } = useParams<{ deliverableId: string }>();
   const { activeLocale } = useLocalization();
-  const { applicationDeliverables, selectedApplication, setSelectedApplication } = useApplicationData();
-
-  useEffect(() => {
-    setSelectedApplication(Number(applicationId ?? -1));
-  }, [setSelectedApplication, applicationId]);
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
+  const { currentData: deliverablesData } = useGetApplicationDeliverablesQuery(pathApplicationId ?? skipToken);
+  const applicationDeliverables = useMemo(() => deliverablesData?.deliverables ?? [], [deliverablesData]);
 
   const deliverable = useMemo(
     () => applicationDeliverables.find((_deliverable) => _deliverable.id === Number(deliverableId ?? -1)),

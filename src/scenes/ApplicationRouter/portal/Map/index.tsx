@@ -1,13 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 
+import { skipToken } from '@reduxjs/toolkit/query';
+
 import ApplicationMapCard from 'src/components/Application/ApplicationMapCard';
 import UpdateOrUploadBoundaryModal from 'src/components/Application/UpdateOrUploadBoundaryModal';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
 import { useLocalization } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
+import { useGetApplicationQuery } from 'src/queries/generated/applications';
 import ApplicationPage from 'src/scenes/ApplicationRouter/portal/ApplicationPage';
 import strings from 'src/strings';
 
@@ -15,7 +18,9 @@ import { PRESCREEN_BOUNDARY_DELIVERABLE_ID, PRESCREEN_MODULE_ID } from '../Presc
 
 const MapViewWrapper = () => {
   const { activeLocale } = useLocalization();
-  const { selectedApplication } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
 
   const { goToApplicationMapUpdate, goToApplicationPrescreen, goToApplicationSectionDeliverable } = useNavigateTo();
 

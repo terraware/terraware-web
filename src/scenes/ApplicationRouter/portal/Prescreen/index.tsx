@@ -1,13 +1,21 @@
 import React, { useCallback, useMemo, useState } from 'react';
 
+import { skipToken } from '@reduxjs/toolkit/query';
+
 import ConfirmModal from 'src/components/Application/ConfirmModal';
 import { Crumb } from 'src/components/BreadCrumbs';
 import Button from 'src/components/common/button/Button';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
 import { useLocalization } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
-import { useRestartApplicationMutation, useSubmitApplicationMutation } from 'src/queries/generated/applications';
+import {
+  useGetApplicationDeliverablesQuery,
+  useGetApplicationModulesQuery,
+  useGetApplicationQuery,
+  useRestartApplicationMutation,
+  useSubmitApplicationMutation,
+} from 'src/queries/generated/applications';
 import SectionView from 'src/scenes/ApplicationRouter/portal/Sections/SectionView';
 import strings from 'src/strings';
 
@@ -18,7 +26,13 @@ export const PRESCREEN_MODULE_ID = 2;
 
 const PrescreenView = () => {
   const { activeLocale } = useLocalization();
-  const { selectedApplication, applicationDeliverables, applicationSections, reload } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
+  const { currentData: modulesData } = useGetApplicationModulesQuery(pathApplicationId ?? skipToken);
+  const applicationSections = useMemo(() => modulesData?.modules ?? [], [modulesData]);
+  const { currentData: deliverablesData } = useGetApplicationDeliverablesQuery(pathApplicationId ?? skipToken);
+  const applicationDeliverables = useMemo(() => deliverablesData?.deliverables ?? [], [deliverablesData]);
   const { goToApplicationPrescreenResult } = useNavigateTo();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -73,30 +87,20 @@ const PrescreenView = () => {
       setIsLoading(true);
       void restartApplication(selectedApplication.id)
         .unwrap()
-        .then(() => reload(() => onDone(false)))
-        .then((reloaded) => {
-          if (!reloaded) {
-            setIsLoading(false);
-          }
-        })
+        .then(() => onDone(false))
         .catch(() => setIsLoading(false));
     }
-  }, [onDone, reload, restartApplication, selectedApplication, setIsLoading]);
+  }, [onDone, restartApplication, selectedApplication, setIsLoading]);
 
   const handleSubmit = useCallback(() => {
     if (selectedApplication) {
       setIsLoading(true);
       void submitApplication(selectedApplication.id)
         .unwrap()
-        .then(() => reload(() => onDone(true)))
-        .then((reloaded) => {
-          if (!reloaded) {
-            setIsLoading(false);
-          }
-        })
+        .then(() => onDone(true))
         .catch(() => setIsLoading(false));
     }
-  }, [onDone, reload, selectedApplication, setIsLoading, submitApplication]);
+  }, [onDone, selectedApplication, setIsLoading, submitApplication]);
 
   const handleConfirm = useCallback(() => {
     if (!selectedApplication) {
