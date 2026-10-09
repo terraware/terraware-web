@@ -11,6 +11,7 @@ import { APP_PATHS } from 'src/constants';
 import { useLatestSiteObservationResult } from 'src/hooks/observations';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
 import usePlantingSite from 'src/hooks/usePlantingSite';
+import usePollPendingSurvivalRates from 'src/hooks/usePollPendingSurvivalRates';
 import useStickyPlantingSiteId, { ALL_PLANTING_SITES } from 'src/hooks/useStickyPlantingSiteId';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
@@ -150,6 +151,7 @@ export default function PlantsDashboardView({
 
   const { observation: latestObservationResult } = useLatestSiteObservationResult(plantingSite?.id, 'Stratum');
   const survivalRateRecalculationInProgress = hasPendingResults(latestObservationResult);
+  usePollPendingSurvivalRates(plantingSite?.id, survivalRateRecalculationInProgress);
   const hasObservationResults = useMemo(() => !!plantingSite?.latestObservationId, [plantingSite]);
 
   const sectionHeader = (title: string) => (

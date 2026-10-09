@@ -13,6 +13,7 @@ import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/Surviv
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
+import usePollPendingSurvivalRates from 'src/hooks/usePollPendingSurvivalRates';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import ObservationMapWrapper from 'src/scenes/ObservationsRouterV2/Map';
@@ -70,6 +71,8 @@ const SiteDetails = (): JSX.Element => {
 
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
+
+  usePollPendingSurvivalRates(results?.plantingSiteId, hasPendingResults(results));
 
   useEffect(() => {
     if (results?.plantingSiteId) {

@@ -12,9 +12,11 @@ import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/Surviv
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
+import usePollPendingSurvivalRates from 'src/hooks/usePollPendingSurvivalRates';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getShortDate } from 'src/utils/dateFormatter';
+import { hasPendingResults } from 'src/utils/observation';
 import { getObservationSpeciesDeadPlantsCount, getObservationSpeciesLivePlantsCount } from 'src/utils/observation';
 
 import ObservationDataNumbers from '../../BiomassMeasurements/ObservationDataNumbers';
@@ -40,6 +42,8 @@ const StratumDetails = (): JSX.Element => {
     [results?.strata, stratumName]
   );
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
+
+  usePollPendingSurvivalRates(results?.plantingSiteId, hasPendingResults(results));
 
   useEffect(() => {
     if (results) {
