@@ -49,6 +49,7 @@ export default function useDraftPlantingSiteFinalize(
           trackEvent(MIXPANEL_EVENTS.PLANTING_SITE_CREATED, {
             num_strata: draft.strata?.length,
             has_boundary: draft.boundary !== undefined && draft.boundary !== null,
+            boundary_source: draft.boundarySource,
           });
 
           // the site exists at this point, so a failed draft cleanup must not read as a failed create

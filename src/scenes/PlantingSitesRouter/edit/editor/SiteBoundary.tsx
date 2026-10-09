@@ -13,17 +13,19 @@ import MapIcon from 'src/components/Map/MapIcon';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import EditableMap from 'src/components/NewMap/EditableMap';
 import { useFeatureEnabled } from 'src/features';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
+import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
-import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { BoundarySource, DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
 import DrawingBoundaryStatus from './DrawingBoundaryStatus';
 import StepTitleDescription, { Description } from './StepTitleDescription';
-import UploadBoundaryModal, { ParsedBoundary } from './UploadBoundaryModal';
+import UploadBoundaryModal, { ParsedBoundary, boundaryFileFormatOf, fileSizeKb } from './UploadBoundaryModal';
 import UploadedBoundarySummary, { UploadedBoundaryFile } from './UploadedBoundarySummary';
 import { OnValidate } from './types';
 import { boundingAreaHectares, defaultStratumPayload, findErrors, stratumNameGenerator } from './utils';
@@ -71,14 +73,20 @@ const countPositions = (geometry: MultiPolygon | Polygon): number => {
 
 // undo redo stack to capture site boundary, errors, and the file the boundary came from
 type Stack = {
+  boundarySource?: BoundarySource;
   errorAnnotations?: Feature[];
   siteBoundary?: FeatureCollection;
   uploadedFile?: UploadedBoundaryFile;
   uploadId?: number;
 };
 
+const editedBoundarySource = (previous?: BoundarySource): BoundarySource =>
+  previous === 'uploaded' || previous === 'uploaded_edited' ? 'uploaded_edited' : 'drawn';
+
 export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBoundaryProps): JSX.Element {
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>({
+    // drafts saved before the source was recorded could only have drawn boundaries
+    boundarySource: site.boundary ? site.boundarySource ?? 'drawn' : undefined,
     siteBoundary: featureSiteBoundary(site.id, site.boundary),
   });
   const geometrySnapshot = JSON.stringify({ siteBoundary: siteBoundaryData?.siteBoundary });
@@ -91,6 +99,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   const snackbar = useSnackbar();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
+  const trackEvent = useTrackEvent();
 
   const fileUploadEnabled = useFeatureEnabled('Boundary File Upload');
   const [method, setMethod] = useState<BoundaryMethod | undefined>();
@@ -134,6 +143,8 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     return undefined;
   }, [boundary, boundingArea, boundingAreaTooLarge, siteBoundaryData?.errorAnnotations]);
 
+  const boundarySource = boundary ? siteBoundaryData?.boundarySource : undefined;
+
   useEffect(() => {
     if (onValidate) {
       if ((!boundary && !onValidate.allowIncomplete) || errorAnnotations?.length) {
@@ -144,15 +155,24 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
         return;
       } else if (geometrySnapshot === initialGeometry && site.strata) {
         // keep strata from later steps when the boundary is unchanged
-        onValidate.apply(false, { boundary });
+        onValidate.apply(false, { boundary, boundarySource });
       } else {
         // create one stratum per disjoint polygon in the site boundary
         const stratum = createStratumWith(boundary);
         const strata = stratum ? [stratum] : [];
-        onValidate.apply(false, { boundary, strata });
+        onValidate.apply(false, { boundary, boundarySource, strata });
       }
     }
-  }, [boundary, errorAnnotations, geometrySnapshot, initialGeometry, onValidate, site.strata, snackbar]);
+  }, [
+    boundary,
+    boundarySource,
+    errorAnnotations,
+    geometrySnapshot,
+    initialGeometry,
+    onValidate,
+    site.strata,
+    snackbar,
+  ]);
 
   const description = useMemo<Description[]>(() => {
     if (!activeLocale) {
@@ -229,6 +249,11 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       );
 
       setSiteBoundaryData({
+        boundarySource: !newBoundary
+          ? undefined
+          : upload
+            ? 'uploaded'
+            : editedBoundarySource(siteBoundaryData?.boundarySource),
         errorAnnotations: errors,
         siteBoundary: editableBoundary,
         // edits to an uploaded boundary keep its file, but clearing the boundary drops it
@@ -251,7 +276,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   }, []);
 
   const onUploadSuccess = useCallback(
-    (parsed: ParsedBoundary) => {
+    (parsed: ParsedBoundary, uploaded: File) => {
       const { areaHa, format, numPolygons } = parsed;
       // these are only populated when the file parsed successfully
       if (!parsed.geometry || areaHa === undefined || !format || numPolygons === undefined) {
@@ -267,6 +292,14 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
         numPoints: countPositions(geometry),
         numPolygons,
       };
+      trackEvent(MIXPANEL_EVENTS.PLANTING_SITE_BOUNDARY_UPLOADED, {
+        format: boundaryFileFormatOf(format),
+        file_size_kb: fileSizeKb(uploaded.size),
+        num_polygons: numPolygons,
+        num_vertices: file.numPoints,
+        area_ha: Math.round(areaHa * 10) / 10,
+        replaced_existing: boundary !== undefined,
+      });
       setMethod('upload');
       setShowUploadModal(false);
 
@@ -276,7 +309,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
         uploadId: lastUploadId.current,
       });
     },
-    [onEditableBoundaryChanged, site.id]
+    [boundary, onEditableBoundaryChanged, site.id, trackEvent]
   );
 
   const onRemoveUploadedFile = useCallback(() => {
