@@ -416,11 +416,7 @@ const getTargetQuantityRemaining = (targetQuantity: number, scheduled: number): 
   Math.max(0, targetQuantity - scheduled);
 
 const getSpeciesTableGridColumns = (isMobile: boolean): string =>
-  isMobile
-    ? '260px 120px minmax(132px, 1fr) minmax(132px, 1fr) 40px'
-    : '260px 160px minmax(132px, 1fr) minmax(132px, 1fr) 40px';
-
-const getSpeciesTableMinWidth = (isMobile: boolean): string => (isMobile ? '780px' : '820px');
+  isMobile ? '260px 120px 176px minmax(132px, 1fr) 40px' : '260px 160px 176px minmax(132px, 1fr) 40px';
 
 const quantityTextFieldSx = {
   width: '100px',
@@ -1095,7 +1091,7 @@ const SpeciesTable = ({
 
   return (
     <Box sx={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-      <Box minWidth={getSpeciesTableMinWidth(isMobile)}>
+      <Box minWidth='max-content'>
         <Box
           display='grid'
           gridTemplateColumns={getSpeciesTableGridColumns(isMobile)}
