@@ -585,10 +585,8 @@ DOWNLOAD_TEMPLATE,Descargue una plantilla aquí.,03a423cf
 DOWNLOAD_THE_CSV_TEMPLATE,Descargar la plantilla CSV.,d5d98658
 DOWNLOAD_THE_TERRAWARE_MOBILE_APP,Descargar la aplicación móvil de Terraware,3eeed497
 DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION,"Obtenga la aplicación móvil y aproveche las funciones de Colección de semillas, Gestión de vivero y Monitoreo de plantas, las cuales puede usar con mayor flexibilidad ¡más allá de su escritorio!",94127206
-DRAFT,Borrador,f766b964
 DRAFT_PLANTING_SITES,Sitios de Plantación en Borrador,97403fcc
-DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE,"Este sitio es un borrador. La configuración del límite no está terminada, por lo que aún no puede usarse para plantaciones ni observaciones.",f001d82c
-DRAFT_SITE_BOUNDARY_NOT_STARTED_MESSAGE,"Este sitio es un borrador. El límite del sitio no ha sido configurado, por lo que aún no puede usarse para plantaciones ni observaciones.",742beca3
+DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE,"La configuración del límite no está terminada, por lo que este sitio aún no puede utilizarse para plantaciones ni observaciones.",be5b94c5
 DRAW_BOUNDARY_WITHIN_MAP,Trazar los límites dentro de un mapa,d1ee6da4
 DRAW_PROPOSED_PROJECT_BOUNDARY,Trazar el límite del proyecto propuesto,8b73e819
 DRONE_FLIGHT,Vuelo de dron,af8ec693
@@ -2097,7 +2095,7 @@ SINGLE_SPECIES_SURVIVAL_RATE_MESSAGE,"Actualmente solo hay una especie con una t
 SINGLE_STRATUM_SURVIVAL_RATE_MESSAGE,"El sitio tiene solo un estrato con una tasa de supervivencia. Cuando un sitio tiene más de un estrato con una tasa de supervivencia, se mostrará el estrato con la tasa de supervivencia más baja.",10007138
 SITE,Sitio,925ca15b
 SITE_BOUNDARY,Límite del sitio,ee9dc83f
-SITE_BOUNDARY_ABSENT_WARNING,Dibuje un límite para el sitio.,495ebdb5
+SITE_BOUNDARY_ABSENT_WARNING,"Por favor, defina un límite para el sitio.",215b60ab
 SITE_BOUNDARY_DESCRIPTION_0,Trace a continuación los límites de su sitio de plantación. Todas las zonas de su proyecto que sean aptas para la siembra deben estar dentro de los límites del terreno.,1eb2c82f
 SITE_BOUNDARY_DESCRIPTION_1,Use la herramienta de dibujo {0} para trazar el límite del sitio de plantación. [Vea un tutorial] sobre cómo trazar los límites del sitio.,8a4e2537
 SITE_BOUNDARY_DESCRIPTION_2,"El límite del lugar debe caber en un cuadro delimitador de menos o igual a 20 000 hectáreas. Si es mayor, considera la posibilidad de dividir el terreno en varios sitios de plantación.",6495bc67

@@ -378,13 +378,17 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
           onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
           onRedo={redo}
           onUndo={undo}
+          overlay={
+            <>
+              {fileUploadEnabled && !boundary && !activeMethod && <BoundaryMethodChooser onSelect={onSelectMethod} />}
+              {fileUploadEnabled && showUploadModal && (
+                <UploadBoundaryModal onClose={onCloseUploadModal} onSuccess={onUploadSuccess} />
+              )}
+            </>
+          }
           setMode={setMode}
           showSearchBox
         />
-        {fileUploadEnabled && !boundary && !activeMethod && <BoundaryMethodChooser onSelect={onSelectMethod} />}
-        {fileUploadEnabled && showUploadModal && (
-          <UploadBoundaryModal onClose={onCloseUploadModal} onSuccess={onUploadSuccess} />
-        )}
       </Box>
     </Box>
   );
