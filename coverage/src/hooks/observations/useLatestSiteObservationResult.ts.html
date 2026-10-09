@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.28% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">14.28% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/7</span>
+                <span class='fraction'>7/7</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -99,20 +99,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -127,20 +127,20 @@ import { ObservationDepth } from './types';
 import useGetOneObservationResults from './useOneObservationResults';
 &nbsp;
 /** Resolves a planting site's latest observation and returns that observation's results. */
-const useLatestSiteObservationResult = <span class="fstat-no" title="function not covered" >(plantingSiteId: number | undefined, depth: ObservationDepth = 'Plot') =&gt; {</span>
-  const { plantingSite, isLoading: isSiteLoading } = <span class="cstat-no" title="statement not covered" >usePlantingSite(plantingSiteId);</span>
+const useLatestSiteObservationResult = (plantingSiteId: number | undefined, depth: ObservationDepth = 'Plot') =&gt; {
+  const { plantingSite, isLoading: isSiteLoading } = usePlantingSite(plantingSiteId);
 &nbsp;
-  const observationResultsResponse = <span class="cstat-no" title="statement not covered" >useGetOneObservationResults({</span>
+  const observationResultsResponse = useGetOneObservationResults({
     observationId: plantingSite?.latestObservationId,
     depth,
   });
 &nbsp;
-  const observation = <span class="cstat-no" title="statement not covered" >useMemo(<span class="fstat-no" title="function not covered" >() =&gt; {</span></span>
-    const result = <span class="cstat-no" title="statement not covered" >observationResultsResponse.currentData?.observation;</span>
-<span class="cstat-no" title="statement not covered" >    return result?.plantingSiteId === plantingSiteId ? result : undefined;</span>
+  const observation = useMemo(() =&gt; {
+    const result = observationResultsResponse.currentData?.observation;
+    return result?.plantingSiteId === plantingSiteId ? <span class="branch-0 cbranch-no" title="branch not covered" >result </span>: undefined;
   }, [observationResultsResponse.currentData?.observation, plantingSiteId]);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return {</span>
+  return {
     observation,
     isLoading: isSiteLoading || observationResultsResponse.isFetching,
   };
@@ -154,7 +154,7 @@ export default useLatestSiteObservationResult;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-09T19:45:53.149Z
+                at 2026-10-09T20:04:07.678Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
