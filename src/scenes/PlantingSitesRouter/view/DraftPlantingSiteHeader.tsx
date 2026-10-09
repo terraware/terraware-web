@@ -53,12 +53,6 @@ export default function DraftPlantingSiteHeader({
         <Typography fontSize='24px' fontWeight={600} lineHeight='32px'>
           {plantingSite.name}
         </Typography>
-        <Badge
-          label={strings.DRAFT}
-          backgroundColor={theme.palette.TwClrBgWarningTertiary}
-          borderColor={theme.palette.TwClrBgWarningTertiary}
-          labelColor={theme.palette.TwClrTxtWarning}
-        />
         {isAdmin(selectedOrganization) && (
           <Box display='flex' alignItems='center' gap={theme.spacing(1.5)} marginLeft='auto'>
             {!editDisabled && (
