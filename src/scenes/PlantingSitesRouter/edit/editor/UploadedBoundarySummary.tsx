@@ -43,8 +43,9 @@ export default function UploadedBoundarySummary({
       file.format,
       polygons,
       `${file.numPoints}`,
-      `${file.areaHa}`,
-      `${file.boundingAreaHa}`
+      // areas vary with the projection used to compute them, so only show whole hectares
+      `${Math.round(file.areaHa)}`,
+      `${Math.round(file.boundingAreaHa)}`
     ) as string;
   }, [file, strings]);
 

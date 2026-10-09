@@ -2106,7 +2106,7 @@ SITE_BOUNDARY_DESCRIPTION_3,Zoomez sur l'emplacement du site de plantation. Cliq
 SITE_BOUNDARY_DESCRIPTION_4,"Pour modifier la forme de la limite du site, cliquez sur la forme pour modifier les points. Pour supprimer la forme, cliquez sur le bouton {0}.",3fd2c49c
 SITE_BOUNDARY_DRAWING_ON_MAP,Tracé de la limite sur la carte.,58e0ca26
 SITE_BOUNDARY_ERRORS,Il y a des erreurs dans les limites du site.,916536c6
-SITE_BOUNDARY_FILE_SUMMARY,{0} · {1} · {2} · {3} points · {4} ha · boîte englobante {5} ha,6e17740b
+SITE_BOUNDARY_FILE_SUMMARY,{0} · {1} · {2} · {3} points · ~{4} ha · boîte englobante ~{5} ha,0b5beef6
 SITE_BOUNDARY_MAX_BOUNDING_BOX,"Boîte englobante maximale : 20 000 ha. Si votre site est plus grand, divisez-le en plusieurs sites de plantation.",315cceab
 SITE_BOUNDARY_NUM_POLYGON,{0} polygone,a5b656b9
 SITE_BOUNDARY_NUM_POLYGONS,{0} polygones,67b049f1
@@ -2116,7 +2116,7 @@ SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Remarque : Par défaut, les sites simples inclue
 SITE_BOUNDARY_UPLOAD_DESCRIPTION,Définissez ci-dessous la limite du site de votre zone de plantation. Toutes les zones plantables de votre projet doivent être incluses dans la limite du site.,7e619e7a
 SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,Les Sites simples comprennent une Strate et un Sous-strate qui couvrent l’ensemble du site de plantation.,955accde
 SITE_BOUNDARY_UPLOAD_TUTORIAL,[Regardez un tutoriel] sur la façon de dessiner les limites d’un site.,ba8fe625
-SITE_BOUNDING_AREA_TOO_LARGE,La zone délimitée {0} hectares est trop grande.,d32baa28
+SITE_BOUNDING_AREA_TOO_LARGE,La zone délimitée d’environ {0} hectares est trop grande.,eb3c9a60
 SITE_DETAIL,Détail du site,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,Le site de plantation est actuellement un brouillon – seul le créateur du site peut le modifier.,07fbd64b
 SITE_EDITOR_USE_DESKTOP,Cette fonction n’est disponible qu’à partir de l’application de bureau.,1c4eb37d

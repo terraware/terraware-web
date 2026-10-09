@@ -2107,7 +2107,7 @@ SITE_BOUNDARY_DESCRIPTION_3,"Acerca el zoom a la ubicación del sitio de plantac
 SITE_BOUNDARY_DESCRIPTION_4,"Para cambiar la forma del límite del lugar, haz clic en la forma para cambiar los puntos. Para eliminar la forma, haz clic en el botón {0}.",3fd2c49c
 SITE_BOUNDARY_DRAWING_ON_MAP,Dibujando el límite en el mapa.,58e0ca26
 SITE_BOUNDARY_ERRORS,Hay errores en los límites del terreno.,916536c6
-SITE_BOUNDARY_FILE_SUMMARY,{0} · {1} · {2} · {3} puntos · {4} ha · caja delimitadora {5} ha,6e17740b
+SITE_BOUNDARY_FILE_SUMMARY,{0} · {1} · {2} · {3} puntos · ~{4} ha · caja delimitadora ~{5} ha,0b5beef6
 SITE_BOUNDARY_MAX_BOUNDING_BOX,"Caja delimitadora máxima: 20,000 ha. Si su sitio es más grande, divídalo en varios sitios de plantación.",315cceab
 SITE_BOUNDARY_NUM_POLYGON,{0} polígono,a5b656b9
 SITE_BOUNDARY_NUM_POLYGONS,{0} polígonos,67b049f1
@@ -2117,7 +2117,7 @@ SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Nota: Por defecto, los Sitios Simples incluirán
 SITE_BOUNDARY_UPLOAD_DESCRIPTION,Defina el límite del sitio de su área de plantación a continuación. Todas las áreas plantables dentro de su proyecto deben estar contenidas dentro del límite del sitio.,7e619e7a
 SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,Los Sitios Simples incluyen un Estrato y un Subestrato que comprenden todo el sitio de plantación.,955accde
 SITE_BOUNDARY_UPLOAD_TUTORIAL,[Vea un tutorial] sobre cómo dibujar límites de sitios.,ba8fe625
-SITE_BOUNDING_AREA_TOO_LARGE,El área de delimitación de {0} hectáreas es demasiado grande.,d32baa28
+SITE_BOUNDING_AREA_TOO_LARGE,El área delimitada de aproximadamente {0} hectáreas es demasiado grande.,eb3c9a60
 SITE_DETAIL,Detalle del sitio,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,El sitio de plantación actualmente es un borrador; solo el creador del sitio puede editarlo.,07fbd64b
 SITE_EDITOR_USE_DESKTOP,Esta función solo está disponible desde la aplicación de escritorio.,1c4eb37d
