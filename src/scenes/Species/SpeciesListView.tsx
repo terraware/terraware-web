@@ -117,7 +117,12 @@ const ProblemsCellComponent = ({ row, reloadData, onRowClick }: ProblemsCellProp
 
 export default function SpeciesListView(): JSX.Element {
   const { selectedOrganization, orgPreferences, bootstrapped: orgBootstrapped } = useOrganization();
-  const { species, isInitialLoading, refetch: reloadData } = useOrganizationSpecies({ preferCacheValue: false });
+  const {
+    species,
+    isInitialLoading,
+    isLoading: speciesLoading,
+    refetch: reloadData,
+  } = useOrganizationSpecies({ preferCacheValue: false });
   const theme = useTheme();
   const trackEvent = useTrackEvent();
   const updateUserPreferences = useUpdateUserPreferences();
@@ -281,7 +286,7 @@ export default function SpeciesListView(): JSX.Element {
   } = useTableState(TABLE_STATE_STORAGE_KEY, {
     defaultSorting: [{ id: 'scientificName', desc: false }],
     persistPageIndex: {
-      isLoading: isInitialLoading || projectsLoading || !orgBootstrapped || acceleratorProjectsLoading,
+      isLoading: speciesLoading || projectsLoading || !orgBootstrapped || acceleratorProjectsLoading,
     },
   });
 
@@ -891,6 +896,8 @@ export default function SpeciesListView(): JSX.Element {
             autoResetPageIndex,
             state: {
               isLoading: isLoadingPage,
+              showLoadingOverlay: false,
+              showSkeletons: false,
               sorting,
               columnFilters,
               columnOrder,

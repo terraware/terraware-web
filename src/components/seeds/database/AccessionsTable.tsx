@@ -91,6 +91,7 @@ const DEFAULT_COLUMN_VISIBILITY = Object.fromEntries(
 
 type AccessionsTableProps = {
   searchResults: SearchResponseElementWithId[] | null | undefined;
+  isFetching?: boolean;
   projects?: Project[];
   reloadData?: () => void;
 };
@@ -119,7 +120,12 @@ const unavailableTooltip = (row: SearchResponseElementWithId): string => {
   return strings.WITHDRAW_ACCESSION_NOT_AVAILABLE;
 };
 
-export default function AccessionsTable({ searchResults, projects, reloadData }: AccessionsTableProps): JSX.Element {
+export default function AccessionsTable({
+  searchResults,
+  isFetching = false,
+  projects,
+  reloadData,
+}: AccessionsTableProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { user, isAllowed } = useUser();
@@ -242,7 +248,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
     persistedMultiSelectColumnIds: ['facility_name', 'project_name', 'state', 'subLocation_name', 'speciesName'],
     persistFilters: true,
     persistSorting: true,
-    persistPageIndex: { isLoading: !searchResults },
+    persistPageIndex: { isLoading: isFetching || !searchResults },
   });
 
   useEffect(() => {
