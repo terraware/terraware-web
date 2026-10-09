@@ -2115,6 +2115,7 @@ SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Nota: Por defecto, los Sitios Simples incluirán
 SITE_BOUNDARY_UPLOAD_DESCRIPTION,Defina el límite del sitio de su área de plantación a continuación. Todas las áreas plantables dentro de su proyecto deben estar contenidas dentro del límite del sitio.,7e619e7a
 SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,Los Sitios Simples incluyen un Estrato y un Subestrato que comprenden todo el sitio de plantación.,955accde
 SITE_BOUNDARY_UPLOAD_TUTORIAL,[Vea un tutorial] sobre cómo dibujar límites de sitios.,ba8fe625
+SITE_BOUNDARY_UPLOADED_DESCRIPTION,Su archivo de límite del sitio se ha cargado correctamente y se muestra en el mapa a continuación. Aún puede editar cualquier parte del límite antes de continuar.,196684a0
 SITE_BOUNDING_AREA_TOO_LARGE,El área delimitada de aproximadamente {0} hectáreas es demasiado grande.,eb3c9a60
 SITE_DETAIL,Detalle del sitio,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,El sitio de plantación actualmente es un borrador; solo el creador del sitio puede editarlo.,07fbd64b

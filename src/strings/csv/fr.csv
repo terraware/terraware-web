@@ -2114,6 +2114,7 @@ SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Remarque : Par défaut, les sites simples inclue
 SITE_BOUNDARY_UPLOAD_DESCRIPTION,Définissez ci-dessous la limite du site de votre zone de plantation. Toutes les zones plantables de votre projet doivent être incluses dans la limite du site.,7e619e7a
 SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,Les Sites simples comprennent une Strate et un Sous-strate qui couvrent l’ensemble du site de plantation.,955accde
 SITE_BOUNDARY_UPLOAD_TUTORIAL,[Regardez un tutoriel] sur la façon de dessiner les limites d’un site.,ba8fe625
+SITE_BOUNDARY_UPLOADED_DESCRIPTION,Votre fichier de délimitation du site a été téléchargé avec succès et s'affiche sur la carte ci-dessous. Vous pouvez encore modifier n'importe quelle partie de la délimitation avant de continuer.,196684a0
 SITE_BOUNDING_AREA_TOO_LARGE,La zone délimitée d’environ {0} hectares est trop grande.,eb3c9a60
 SITE_DETAIL,Détail du site,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,Le site de plantation est actuellement un brouillon – seul le créateur du site peut le modifier.,07fbd64b
