@@ -130,6 +130,10 @@ export const clickMap = async (page: Page, point: MapPoint) => {
   await page.mouse.click(x, y);
 };
 
+export const deleteMapFeature = async (page: Page) => {
+  await page.locator('.mapbox-gl-draw_trash').click();
+};
+
 export const detailField = (page: Page, label: string) =>
   page.getByText(label, { exact: true }).locator('xpath=following-sibling::*[1]');
 

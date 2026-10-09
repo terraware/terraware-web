@@ -6,7 +6,7 @@ import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 
 import MapIcon from 'src/components/Map/MapIcon';
 import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
-import { leftMostFeature, toFeature, toMultiPolygon } from 'src/components/Map/utils';
+import { leftMostFeature, mergeIntoNeighbor, toFeature, toMultiPolygon } from 'src/components/Map/utils';
 import EditableMap, { EditableMapBoundary, EditableMapClickedFeature } from 'src/components/NewMap/EditableMap';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
@@ -287,6 +287,20 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
     return;
   };
 
+  const onDeleteFeature = useCallback(
+    (boundaryId: string, featureId: string | number) => {
+      if (boundaryId !== 'stratum' || !strata) {
+        return;
+      }
+      const merged = mergeIntoNeighbor(strata.features as GeometryFeature[], featureId);
+      if (merged) {
+        setOverridePopupInfo(undefined);
+        setStrataData((prev) => ({ ...prev, fixedBoundaries: { type: 'FeatureCollection', features: merged } }));
+      }
+    },
+    [setStrataData, strata]
+  );
+
   // Pick the first stratum, we won't have overlapping strata.
   const featureSelectorOnClick = useCallback(
     (features: EditableMapClickedFeature[]) => features.find((clicked) => clicked.boundaryId === 'stratum'),
@@ -359,6 +373,7 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
         errorAnnotations={strataData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}
         isSliceTool
+        onDeleteFeature={onDeleteFeature}
         onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
         onRedo={redo}
         onUndo={undo}

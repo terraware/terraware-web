@@ -12,7 +12,6 @@ import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/Surviv
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
-import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useLocalization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
 import { getShortDate } from 'src/utils/dateFormatter';
@@ -41,11 +40,6 @@ const StratumDetails = (): JSX.Element => {
     [results?.strata, stratumName]
   );
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
-
-  // Poll for survival rate recalculation and refresh observation results when it completes.
-  const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(
-    results?.plantingSiteId
-  );
 
   useEffect(() => {
     if (results) {
@@ -116,7 +110,7 @@ const StratumDetails = (): JSX.Element => {
   return (
     <Page crumbs={crumbs} title={title} hierarchicalCrumbs={false}>
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
-      <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
+      <SurvivalRateRecalculationMessage inProgress={!!stratumResult?.pending} />
       <Card radius='24px' style={{ width: '100%' }}>
         <ObservationDataNumbers items={items} isCompleted={!!stratumResult?.completedTime} />
         <Box display='flex' gap={3} flexDirection={isDesktop ? 'row' : 'column'} flexWrap='wrap' marginBottom={3}>

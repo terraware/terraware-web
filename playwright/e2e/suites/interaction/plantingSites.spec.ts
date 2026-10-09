@@ -3,6 +3,7 @@ import { expect, test } from '@playwright/test';
 import {
   BOUNDARY_FIXTURE,
   clickMap,
+  deleteMapFeature,
   descriptionField,
   detailField,
   drawPolygon,
@@ -245,6 +246,20 @@ test.describe('PlantingSiteTests', () => {
     await stratumNameInput.fill(stratumName);
     await page.getByRole('button', { name: 'Save', exact: true }).click();
     await expect(stratumNameInput).toBeHidden();
+
+    // Deleting a stratum merges it into the one it borders.
+    await drawPolygon(page, [
+      [-0.1, -0.02],
+      [0.2, -0.02],
+      [0.2, 1.02],
+      [-0.1, 1.02],
+    ]);
+    await expect(stratumNameInput).toBeVisible();
+    await deleteMapFeature(page);
+    await expect(stratumNameInput).toBeHidden();
+    await clickMap(page, [0.1, 0.5]);
+    await expect(stratumNameInput).toHaveValue(stratumName);
+    await page.getByRole('button', { name: 'Cancel', exact: true }).click();
     await editorButton(page, 'Next').click();
 
     // Substrata: slice the north half off the selected stratum.
@@ -263,6 +278,19 @@ test.describe('PlantingSiteTests', () => {
     await substratumNameInput.fill(substratumName);
     await page.getByRole('button', { name: 'Save', exact: true }).click();
     await expect(substratumNameInput).toBeHidden();
+
+    await drawPolygon(page, [
+      [-0.1, -0.02],
+      [1.1, -0.02],
+      [1.1, 0.2],
+      [-0.1, 0.2],
+    ]);
+    await expect(substratumNameInput).toBeVisible();
+    await deleteMapFeature(page);
+    await expect(substratumNameInput).toBeHidden();
+    await clickMap(page, [0.75, 0.1]);
+    await expect(substratumNameInput).toHaveValue(substratumName);
+    await page.getByRole('button', { name: 'Cancel', exact: true }).click();
 
     // Going back saves the substrata, and the strata step still has the named stratum.
     await editorButton(page, 'Back').click();

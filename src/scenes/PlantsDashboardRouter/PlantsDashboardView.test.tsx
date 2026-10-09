@@ -73,9 +73,9 @@ rstest.mock('src/hooks/useAcceleratorConsole', () => ({
   default: () => ({ isAcceleratorRoute: false }),
 }));
 
-rstest.mock('src/hooks/useSurvivalRateCalculationInProgress', () => ({
+rstest.mock('src/hooks/observations/useLatestSiteObservationResult', () => ({
   __esModule: true,
-  default: () => ({ inProgress: false }),
+  default: () => ({ observation: undefined, isLoading: false }),
 }));
 
 rstest.mock('src/hooks/useSyncNavigate', () => ({ useSyncNavigate: () => () => undefined }));
