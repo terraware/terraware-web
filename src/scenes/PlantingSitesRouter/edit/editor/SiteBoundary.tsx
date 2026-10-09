@@ -179,6 +179,15 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       return [];
     }
 
+    if (fileUploadEnabled && uploadedFile) {
+      return [
+        {
+          text: `${strings.SITE_BOUNDARY_UPLOADED_DESCRIPTION} ${strings.SITE_BOUNDARY_UPLOAD_TUTORIAL}`,
+          hasTutorial: true,
+        },
+      ];
+    }
+
     if (fileUploadEnabled) {
       const sentences =
         site.siteType === 'detailed'
@@ -218,7 +227,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     }
 
     return data;
-  }, [activeLocale, fileUploadEnabled, mode, site.siteType]);
+  }, [activeLocale, fileUploadEnabled, mode, site.siteType, uploadedFile]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {

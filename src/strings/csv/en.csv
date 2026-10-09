@@ -2116,6 +2116,7 @@ SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Note: By default, Simple Sites will include only
 SITE_BOUNDARY_UPLOAD_DESCRIPTION,Define the site boundary of your planting site below. All plantable areas within your project must be contained within the site boundary.,
 SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,Simple Sites include one Stratum and one Substratum that comprise the entire planting site.,
 SITE_BOUNDARY_UPLOAD_TUTORIAL,[Watch a tutorial] about drawing site boundaries.,
+SITE_BOUNDARY_UPLOADED_DESCRIPTION,Your site boundary file has been successfully uploaded and is shown on the map below. You can still edit any parts of the boundary before continuing.,
 SITE_BOUNDING_AREA_TOO_LARGE,Bounding area ~{0} hectares is too large.,
 SITE_DETAIL,Site Detail,
 SITE_EDIT_DISABLED_TOOLTIP,Planting site is currently a draft - only the site’s creator can edit.,
