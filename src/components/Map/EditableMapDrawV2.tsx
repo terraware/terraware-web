@@ -3,6 +3,7 @@ import { MapRef, useControl } from 'react-map-gl/mapbox';
 
 import MapboxDraw, {
   DrawCreateEvent,
+  DrawDeleteEvent,
   DrawMode,
   DrawModeChangeEvent,
   DrawSelectionChangeEvent,
@@ -69,6 +70,14 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
 
   return false;
 }
+
+// Mirrors the draw control's own validity check: a polygon needs at least 3 distinct points per ring.
+const hasValidRings = (feature: Feature): boolean => {
+  const { geometry } = feature;
+  const polygons =
+    geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.type === 'MultiPolygon' ? geometry.coordinates : [];
+  return polygons.every((rings) => rings.length > 0 && rings.every((ring) => ring.length > 3));
+};
 
 /**
  * Makes a parent ReactMapGL component editable. This is a wrapper around the MapboxDraw control.
@@ -156,12 +165,32 @@ export default function EditableMapDraw({
     [notify, onBoundaryCreated]
   );
 
+  // Removing a vertex can leave a polygon too small to keep. The draw control reports that update and
+  // then deletes the polygon, so skip the update and let the delete stand on its own.
   const onUpdate = useCallback(
-    (event: DrawUpdateEvent) => void notify(event.features, onBoundaryUpdated),
+    (event: DrawUpdateEvent) => {
+      if (event.features.every(hasValidRings)) {
+        notify(event.features, onBoundaryUpdated);
+      }
+    },
     [notify, onBoundaryUpdated]
   );
 
-  const onDelete = useCallback(() => onBoundaryDeleted && onBoundaryDeleted(undefined), [onBoundaryDeleted]);
+  const onDelete = useCallback(
+    (event: DrawDeleteEvent) => {
+      if (!onBoundaryDeleted) {
+        return;
+      }
+
+      const deletedIds = new Set(event.features.map((feature: Feature) => feature.id));
+      // deleting the last polygon switches to drawing mode, whose empty placeholder polygon isn't a boundary
+      const features = draw
+        .getAll()
+        .features.filter((feature: Feature) => !deletedIds.has(feature.id) && featureHasCoordinates(feature));
+      onBoundaryDeleted(features.length ? { type: 'FeatureCollection', features } : undefined);
+    },
+    [draw, onBoundaryDeleted]
+  );
 
   useEffect(() => {
     mapRef?.on('draw.create', onCreate);
