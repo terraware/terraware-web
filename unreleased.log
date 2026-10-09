@@ -1,3 +1,5 @@
+dfb7a273 Track planting site boundary uploads in Mixpanel (#6716)
+7e450100 Reject unsupported boundary file extensions before upload (#6715)
 ee3fb19d Add a GHA for auto-removing the gh stacks footer (#6718)
 9dd7c679 SW-9073 Show approximate boundary and bounding box areas (#6714)
 e726eb18 SW-8971 Refresh pending survival rates when their recalculation finishes (#6704)

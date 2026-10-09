@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.59% </span>
+                <span class="strong">92.85% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>25/27</span>
+                <span class='fraction'>26/28</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">85.71% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>12/14</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.66% </span>
+                <span class="strong">92% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>22/24</span>
+                <span class='fraction'>23/25</span>
             </div>
         
             
@@ -193,7 +193,13 @@
 <a name='L128'></a><a href='#L128'>128</a>
 <a name='L129'></a><a href='#L129'>129</a>
 <a name='L130'></a><a href='#L130'>130</a>
-<a name='L131'></a><a href='#L131'>131</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -222,10 +228,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -292,8 +300,10 @@
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-yes">13x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -324,6 +334,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import {
+  BoundarySource,
   CreatePlantingSiteRequestPayload,
   DraftPlantingSite,
   DraftPlantingSitePayload,
@@ -341,6 +352,7 @@ import { MinimalStratum, MinimalSubstratum, MultiPolygon } from 'src/types/Track
 export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload =&gt; {
   const {
     boundary,
+    boundarySource,
     createdBy,
     description,
     exclusion,
@@ -357,6 +369,7 @@ export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload =&g
   // as typed in BE, to support any types of data the client wants to persist
   const data: Record&lt;string, any&gt; = {
     boundary,
+    ...(boundarySource ? <span class="branch-0 cbranch-no" title="branch not covered" >{ boundarySource } </span>: {}),
     exclusion,
     strata,
     siteEditStep,
@@ -416,6 +429,7 @@ export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite =&
   const { createdBy, data, description, id, name, organizationId, projectId, timeZone } = payload;
 &nbsp;
   const boundary: MultiPolygon | undefined = data.boundary as MultiPolygon | undefined;
+  const boundarySource: BoundarySource | undefined = data.boundarySource as BoundarySource | undefined;
   const exclusion: MultiPolygon | undefined = data.exclusion as MultiPolygon | undefined;
   const persistedStrata = (data.strata ?? data.plantingZones) as PersistedStratum[] | undefined;
   const strata: MinimalStratum[] | undefined = persistedStrata?.map(toStratum);
@@ -425,6 +439,7 @@ export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite =&
 &nbsp;
   return {
     boundary,
+    ...(boundarySource ? <span class="branch-0 cbranch-no" title="branch not covered" >{ boundarySource } </span>: {}),
     createdBy,
     description,
     exclusion,
@@ -460,7 +475,7 @@ export const fromDraftToCreate = <span class="fstat-no" title="function not cove
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-09T18:56:58.420Z
+                at 2026-10-09T19:04:32.939Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
