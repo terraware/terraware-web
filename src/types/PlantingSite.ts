@@ -36,10 +36,14 @@ export type CreatePlantingSiteRequestPayload = CreatePlantingSiteRequestPayloadR
 
 export type PlantingSiteProblem = PlantingSiteValidationProblemPayload;
 
+/** How the site boundary was produced; only used for analytics. */
+export type BoundarySource = 'drawn' | 'uploaded' | 'uploaded_edited';
+
 /**
  * Client side draft planting site with first class properties.
  */
 export type DraftPlantingSite = MinimalPlantingSite & {
+  boundarySource?: BoundarySource;
   createdBy: number; // user that created this draft
   exclusion?: MultiPolygon;
   siteEditStep: SiteEditStep;

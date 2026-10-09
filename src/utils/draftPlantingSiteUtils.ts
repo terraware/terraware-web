@@ -1,4 +1,5 @@
 import {
+  BoundarySource,
   CreatePlantingSiteRequestPayload,
   DraftPlantingSite,
   DraftPlantingSitePayload,
@@ -16,6 +17,7 @@ import { MinimalStratum, MinimalSubstratum, MultiPolygon } from 'src/types/Track
 export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload => {
   const {
     boundary,
+    boundarySource,
     createdBy,
     description,
     exclusion,
@@ -32,6 +34,7 @@ export const fromDraft = (site: DraftPlantingSite): DraftPlantingSitePayload => 
   // as typed in BE, to support any types of data the client wants to persist
   const data: Record<string, any> = {
     boundary,
+    ...(boundarySource ? { boundarySource } : {}),
     exclusion,
     strata,
     siteEditStep,
@@ -91,6 +94,7 @@ export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite =>
   const { createdBy, data, description, id, name, organizationId, projectId, timeZone } = payload;
 
   const boundary: MultiPolygon | undefined = data.boundary as MultiPolygon | undefined;
+  const boundarySource: BoundarySource | undefined = data.boundarySource as BoundarySource | undefined;
   const exclusion: MultiPolygon | undefined = data.exclusion as MultiPolygon | undefined;
   const persistedStrata = (data.strata ?? data.plantingZones) as PersistedStratum[] | undefined;
   const strata: MinimalStratum[] | undefined = persistedStrata?.map(toStratum);
@@ -100,6 +104,7 @@ export const toDraft = (payload: DraftPlantingSitePayload): DraftPlantingSite =>
 
   return {
     boundary,
+    ...(boundarySource ? { boundarySource } : {}),
     createdBy,
     description,
     exclusion,

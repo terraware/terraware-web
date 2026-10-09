@@ -210,13 +210,16 @@ describe('UploadBoundaryModal', () => {
     await uploadFile(user);
 
     await waitFor(() =>
-      expect(onSuccess).toHaveBeenCalledWith({
-        areaHa: 480,
-        filename: 'site.geojson',
-        format: 'GeoJSON',
-        geometry: GEOMETRY,
-        numPolygons: 1,
-      })
+      expect(onSuccess).toHaveBeenCalledWith(
+        {
+          areaHa: 480,
+          filename: 'site.geojson',
+          format: 'GeoJSON',
+          geometry: GEOMETRY,
+          numPolygons: 1,
+        },
+        expect.any(File)
+      )
     );
     expect(screen.queryByText(strings.UPLOAD_SITE_BOUNDARY_ERROR_GENERIC)).not.toBeInTheDocument();
   });

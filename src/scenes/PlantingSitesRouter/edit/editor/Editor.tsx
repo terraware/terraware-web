@@ -295,6 +295,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       // start over only resets the polygonal information
       // edits to name, description, planting seasons and project are preserved
       boundary: undefined,
+      boundarySource: undefined,
       exclusion: undefined,
       strata: undefined,
       siteEditStep: nextStep,

@@ -1,3 +1,4 @@
+import { BoundarySource } from 'src/types/PlantingSite';
 import { User } from 'src/types/User';
 
 // Event names follow the convention "<Domain> <Object> <Past-tense Verb>"
@@ -21,6 +22,8 @@ export enum MIXPANEL_EVENTS {
 
   // --- Planting & plants ---
   PLANTING_SITE_CREATED = 'Planting Site Created',
+  PLANTING_SITE_BOUNDARY_UPLOADED = 'Planting Site Boundary Uploaded',
+  PLANTING_SITE_BOUNDARY_UPLOAD_FAILED = 'Planting Site Boundary Upload Failed',
 
   // --- Observations ---
   OBSERVATION_SCHEDULED = 'Observation Scheduled',
@@ -75,6 +78,8 @@ export enum MIXPANEL_EVENTS {
   SPECIES_AUTOFILL_FIELD_EDITED = 'Species Autofill Field Edited',
   SPECIES_INTELLIGENCE_SOURCE_ATTRIBUTION_HOVERED = 'Species Intelligence Source Attribution Hovered',
 }
+
+export type BoundaryFileFormat = 'geojson' | 'kml' | 'kmz' | 'shapefile';
 
 export type SpeciesIntelligenceBannerType = 'set_location' | 'species_added';
 
@@ -133,6 +138,20 @@ export type MixpanelEventPropertyMap = {
   [MIXPANEL_EVENTS.PLANTING_SITE_CREATED]: {
     num_strata?: number;
     has_boundary: boolean;
+    boundary_source?: BoundarySource;
+  };
+  [MIXPANEL_EVENTS.PLANTING_SITE_BOUNDARY_UPLOADED]: {
+    format: BoundaryFileFormat;
+    file_size_kb: number;
+    num_polygons: number;
+    num_vertices: number;
+    area_ha: number;
+    replaced_existing: boolean;
+  };
+  [MIXPANEL_EVENTS.PLANTING_SITE_BOUNDARY_UPLOAD_FAILED]: {
+    format: BoundaryFileFormat | 'unknown';
+    file_size_kb: number;
+    error_code: string;
   };
   [MIXPANEL_EVENTS.OBSERVATION_SCHEDULED]: {
     duration_days?: number;

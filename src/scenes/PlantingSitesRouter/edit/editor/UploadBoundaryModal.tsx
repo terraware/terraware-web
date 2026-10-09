@@ -7,6 +7,8 @@ import { BusySpinner, Button, DialogBox, FileChooser, Message } from '@terraware
 import Link from 'src/components/common/Link';
 import Icon from 'src/components/common/icon/Icon';
 import { useDocLinks } from 'src/docLinks';
+import { useTrackEvent } from 'src/hooks/useTrackEvent';
+import { BoundaryFileFormat, MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
 import {
   GeometryFileErrorCode,
@@ -33,6 +35,12 @@ const fileSizeText = (strings: typeof defaultStrings, bytes: number): string =>
       ? (strings.formatString(strings.FILE_SIZE_KB, `${Math.round(bytes / BYTES_PER_KB)}`) as string)
       : (strings.formatString(strings.FILE_SIZE_MB, (bytes / BYTES_PER_MB).toFixed(1)) as string);
 
+export const fileSizeKb = (bytes: number): number => Math.round(bytes / BYTES_PER_KB);
+
+export const boundaryFileFormatOf = (
+  format: NonNullable<ParseDraftPlantingSiteBoundaryResponsePayload['format']>
+): BoundaryFileFormat => format.toLowerCase() as BoundaryFileFormat;
+
 /** A parse response that actually carries a boundary; the payload leaves those fields off on failure. */
 export type ParsedBoundary = Required<
   Pick<ParseDraftPlantingSiteBoundaryResponsePayload, 'areaHa' | 'filename' | 'format' | 'geometry' | 'numPolygons'>
@@ -46,7 +54,7 @@ type BoundaryUploadError = GeometryFileErrorCode | 'FileTooLarge' | 'Unknown';
 
 export type UploadBoundaryModalProps = {
   onClose: () => void;
-  onSuccess: (parsed: ParsedBoundary) => void;
+  onSuccess: (parsed: ParsedBoundary, file: File) => void;
 };
 
 const isPayloadTooLarge = (error: unknown): boolean =>
@@ -104,6 +112,17 @@ export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBounda
   const [files, setFiles] = useState<File[]>([]);
   const [error, setError] = useState<BoundaryUploadError | undefined>();
   const [parseBoundary, { isLoading }] = useParseDraftPlantingSiteBoundaryMutation();
+  const trackEvent = useTrackEvent();
+
+  const trackFailure = useCallback(
+    (file: File, errorCode: string, format?: ParseDraftPlantingSiteBoundaryResponsePayload['format']) =>
+      trackEvent(MIXPANEL_EVENTS.PLANTING_SITE_BOUNDARY_UPLOAD_FAILED, {
+        format: format ? boundaryFileFormatOf(format) : 'unknown',
+        file_size_kb: fileSizeKb(file.size),
+        error_code: errorCode,
+      }),
+    [trackEvent]
+  );
 
   const selectedFileText = useMemo<string | undefined>(
     () => (files[0] ? fileSizeText(strings, files[0].size) : undefined),
@@ -121,15 +140,22 @@ export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBounda
     [files]
   );
 
-  const onSelectFiles = useCallback((selected: File[]) => {
-    const file = selected[selected.length - 1];
-    if (file && !hasBoundaryFileExtension(file.name)) {
-      setError('UnsupportedFormat');
-    } else {
-      setError((file?.size ?? 0) > MAX_FILE_SIZE_MB * BYTES_PER_MB ? 'FileTooLarge' : undefined);
-    }
-    setFiles(file ? [file] : []);
-  }, []);
+  const onSelectFiles = useCallback(
+    (selected: File[]) => {
+      const file = selected[selected.length - 1];
+      if (file && !hasBoundaryFileExtension(file.name)) {
+        trackFailure(file, 'client_extension');
+        setError('UnsupportedFormat');
+      } else if (file && file.size > MAX_FILE_SIZE_MB * BYTES_PER_MB) {
+        trackFailure(file, 'client_size');
+        setError('FileTooLarge');
+      } else {
+        setError(undefined);
+      }
+      setFiles(file ? [file] : []);
+    },
+    [trackFailure]
+  );
 
   const onUpload = useCallback(() => {
     const file = files[0];
@@ -146,24 +172,28 @@ export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBounda
         // the endpoint reports content validation problems with a 200 and no geometry
         const problem = parsed.problems?.[0];
         if (problem) {
+          trackFailure(file, problem.code, parsed.format);
           setError(problem.code);
           return;
         }
 
         const boundary = parsedBoundaryOf(parsed);
         if (!boundary) {
+          trackFailure(file, 'server_error', parsed.format);
           setError('Unknown');
           return;
         }
 
-        onSuccess(boundary);
+        onSuccess(boundary, file);
       } catch (e) {
-        setError(isPayloadTooLarge(e) ? 'FileTooLarge' : 'Unknown');
+        const payloadTooLarge = isPayloadTooLarge(e);
+        trackFailure(file, payloadTooLarge ? 'FileTooLarge' : 'server_error');
+        setError(payloadTooLarge ? 'FileTooLarge' : 'Unknown');
       }
     };
 
     void upload();
-  }, [files, onSuccess, parseBoundary, tooLarge, unsupportedExtension]);
+  }, [files, onSuccess, parseBoundary, tooLarge, trackFailure, unsupportedExtension]);
 
   return (
     <DialogBox
