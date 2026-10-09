@@ -12,7 +12,6 @@ import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useProjects } from 'src/hooks/useProjects';
 import { useOrganization } from 'src/providers';
-import ApplicationProvider from 'src/providers/Application';
 import ParticipantProvider from 'src/providers/Participant/ParticipantProvider';
 import { useLazyCountObservationsQuery } from 'src/queries/search/observations';
 import { useLazyCountPlantingSitesQuery } from 'src/queries/search/plantingSites';
@@ -242,11 +241,9 @@ const OrgRouter = ({ showNavBar, setShowNavBar }: OrgRouterProps) => {
 
 const OrgRouterWithProviders = (props: OrgRouterProps) => {
   return (
-    <ApplicationProvider>
-      <ParticipantProvider>
-        <OrgRouter {...props} />
-      </ParticipantProvider>
-    </ApplicationProvider>
+    <ParticipantProvider>
+      <OrgRouter {...props} />
+    </ParticipantProvider>
   );
 };
 

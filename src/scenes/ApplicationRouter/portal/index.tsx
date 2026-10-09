@@ -5,7 +5,6 @@ import { Box, Slide, useTheme } from '@mui/material';
 
 import ErrorBoundary from 'src/ErrorBoundary';
 import { APP_PATHS } from 'src/constants';
-import ApplicationProvider from 'src/providers/Application';
 import { getRgbaFromHex } from 'src/utils/color';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
@@ -55,7 +54,7 @@ const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPorta
   };
 
   return (
-    <ApplicationProvider>
+    <>
       {type !== 'desktop' ? (
         <Slide direction='right' in={showNavBar} mountOnEnter unmountOnExit>
           <Box sx={navBarOpened}>
@@ -87,7 +86,7 @@ const ApplicationPortalRouter = ({ showNavBar, setShowNavBar }: ApplicationPorta
           </Routes>
         </ErrorBoundary>
       </Box>
-    </ApplicationProvider>
+    </>
   );
 };
 
