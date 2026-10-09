@@ -588,7 +588,6 @@ DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION,"Obtenga la aplicación móvil y a
 DRAFT,Borrador,f766b964
 DRAFT_PLANTING_SITES,Sitios de Plantación en Borrador,97403fcc
 DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE,"La configuración del límite no está terminada, por lo que este sitio aún no puede utilizarse para plantaciones ni observaciones.",be5b94c5
-DRAFT_SITE_BOUNDARY_NOT_STARTED_MESSAGE,"Este sitio es un borrador. El límite del sitio no ha sido configurado, por lo que aún no puede usarse para plantaciones ni observaciones.",742beca3
 DRAW_BOUNDARY_WITHIN_MAP,Trazar los límites dentro de un mapa,d1ee6da4
 DRAW_PROPOSED_PROJECT_BOUNDARY,Trazar el límite del proyecto propuesto,8b73e819
 DRONE_FLIGHT,Vuelo de dron,af8ec693

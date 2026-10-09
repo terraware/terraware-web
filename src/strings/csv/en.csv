@@ -588,7 +588,6 @@ DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION,"Get the mobile app to take advant
 DRAFT,Draft,
 DRAFT_PLANTING_SITES,Draft Planting Sites,
 DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE,"Boundary setup isn’t finished, so this site can’t be used for planting or observations yet.",
-DRAFT_SITE_BOUNDARY_NOT_STARTED_MESSAGE,"This site is a draft. The site boundary hasn’t been set up, so the site can’t be used for planting or observations yet.",
 DRAW_BOUNDARY_WITHIN_MAP,Draw the boundary within a map,
 DRAW_PROPOSED_PROJECT_BOUNDARY,Draw Proposed Project Boundary,
 DRONE_FLIGHT,Drone Flight,
