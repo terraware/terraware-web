@@ -2373,6 +2373,8 @@ TARGET_HECTARES_PLANTED,Objetivo: {0} ha,8c7d580d
 TARGET_PLANT_DENSITY,Densidad objetivo de plantas,8654dc31
 TARGET_PLANTS,plantas objetivo,ff0517a3
 TARGET_QUANTITY,Cantidad objetivo,73c71da9
+TARGET_QUANTITY_REMAINING,Cantidad objetivo restante,35300271
+TARGET_QUANTITY_REMAINING_TOOLTIP,"Cantidad objetivo de esta especie en este sustrato menos el número de plantas programadas en Fechas de Plantación, incluyendo esta fecha.",6c01de12
 TARGETS,Objetivos,afd4bbf9
 TEMPLATE,Plantilla,28afe27c
 TEMPORARY,Temporal,4d5354bb
