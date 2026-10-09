@@ -28,12 +28,15 @@ DOCKER_BASE=(
   -v "$(pwd):/work" -w /work
   -e CI=true
   -e NODE_OPTIONS=--max-old-space-size=16384
+  -e PLAYWRIGHT_HTML_OPEN=never
+  -e PLAYWRIGHT_JSON_OUTPUT_FILE=playwright/screenshot-results.json
   "$PLAYWRIGHT_IMAGE"
 )
 
 echo "--- :camera_with_flash: Run screenshot regression tests"
 if "${DOCKER_BASE[@]}" sh -c "node_modules/.bin/wait-on -t 60000 http://localhost:3001 \
-         && node_modules/.bin/playwright test playwright/e2e/suites/screenshots --project=prod"
+         && node_modules/.bin/playwright test playwright/e2e/suites/screenshots --project=prod \
+         --reporter=github,html,json"
 then
     status=0
 else
@@ -41,5 +44,12 @@ else
 fi
 
 .buildkite/scripts/upload-playwright-results.sh
+
+if [[ $status -ne 0 && -f playwright/screenshot-results.json ]]; then
+    annotation=$(node .buildkite/scripts/screenshot-failures-annotation.mjs playwright/screenshot-results.json)
+    if [[ -n "$annotation" ]]; then
+        buildkite-agent annotate --style error --context screenshot-failures <<< "$annotation"
+    fi
+fi
 
 exit $status
