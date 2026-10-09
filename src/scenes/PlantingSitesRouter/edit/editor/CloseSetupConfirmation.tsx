@@ -42,6 +42,7 @@ export default function CloseSetupConfirmation({
           label={strings.KEEP_EDITING}
           onClick={onKeepEditing}
           priority='secondary'
+          size='medium'
           type='passive'
         />
       }
