@@ -3,7 +3,6 @@ import React, { type JSX, useEffect, useState } from 'react';
 import { Box, Grid, LinearProgress, Stack, Switch, useTheme } from '@mui/material';
 
 import Page from 'src/components/Page';
-import PageSnackbar from 'src/components/PageSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import { Feature, OPT_IN_FEATURES } from 'src/features';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
@@ -101,7 +100,6 @@ export default function OptInFeaturesView(): JSX.Element {
 
   return (
     <TfMain>
-      <PageSnackbar />
       {preferences === undefined ? (
         <LinearProgress color='success' />
       ) : (
