@@ -559,6 +559,8 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
   ]);
 
   const {
+    autoResetPageIndex,
+    isLoadingPage,
     columnOrder,
     columnVisibility,
     density,
@@ -571,7 +573,9 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
     setShowGlobalFilter,
     showColumnFilters,
     showGlobalFilter,
-  } = useTableState(tableStateStorageKey);
+  } = useTableState(tableStateStorageKey, {
+    persistPageIndex: {},
+  });
 
   const handleExport = useCallback(
     (table: MRT_TableInstance<SearchResponseElement>) => {
@@ -659,7 +663,9 @@ export default function InventoryTable(props: InventoryTableProps): JSX.Element 
                 enableTopToolbar={true}
                 enableBottomToolbar={true}
                 tableOptions={{
+                  autoResetPageIndex,
                   state: {
+                    isLoading: isLoadingPage,
                     rowSelection,
                     sorting,
                     columnOrder,
