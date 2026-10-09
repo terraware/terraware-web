@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { GeolocateControl, Layer, MapRef, Popup, Source } from 'react-map-gl/mapbox';
 
 import { AddressAutofillFeatureSuggestion } from '@mapbox/search-js-core';
@@ -44,6 +44,7 @@ export type EditableMapProps = {
   onEditableBoundaryChanged: (boundary?: FeatureCollection) => void;
   onRedo?: () => void;
   onUndo?: () => void;
+  overlay?: ReactNode;
   overridePopupInfo?: PopupInfo;
   popupRenderer?: MapPopupRenderer;
   readOnlyBoundary?: EditableMapBoundary[];
@@ -62,6 +63,7 @@ const EditableMap = ({
   onEditableBoundaryChanged,
   onRedo,
   onUndo,
+  overlay,
   overridePopupInfo,
   popupRenderer,
   readOnlyBoundary,
@@ -258,6 +260,7 @@ const EditableMap = ({
       display='flex'
       flexDirection='column'
       flexGrow={1}
+      position='relative'
       sx={
         isSliceTool
           ? {
@@ -293,6 +296,7 @@ const EditableMap = ({
         onTokenExpired={refreshToken}
         token={token ?? ''}
       />
+      {overlay}
     </Box>
   );
 };

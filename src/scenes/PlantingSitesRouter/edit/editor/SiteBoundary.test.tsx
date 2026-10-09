@@ -24,7 +24,13 @@ const mapMounts = rstest.hoisted(() => [] as (FeatureCollection | undefined)[]);
 const mapEdit = rstest.hoisted(() => ({ boundary: undefined as FeatureCollection | undefined }));
 
 rstest.mock('src/components/NewMap/EditableMap', () => {
-  const MockEditableMap = ({ editableBoundary, onEditableBoundaryChanged, onRedo, onUndo }: EditableMapProps) => {
+  const MockEditableMap = ({
+    editableBoundary,
+    onEditableBoundaryChanged,
+    onRedo,
+    onUndo,
+    overlay,
+  }: EditableMapProps) => {
     mapBoundaries.push(editableBoundary);
     useEffect(() => {
       mapMounts.push(editableBoundary);
@@ -40,6 +46,7 @@ rstest.mock('src/components/NewMap/EditableMap', () => {
         </button>
         <button onClick={() => onEditableBoundaryChanged(undefined)}>map clear boundary</button>
         <button onClick={() => onEditableBoundaryChanged(mapEdit.boundary)}>map edit boundary</button>
+        {overlay}
       </div>
     );
   };
