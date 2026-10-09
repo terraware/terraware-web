@@ -7,10 +7,8 @@ import { TableColumnType } from '@terraware/web-components/components/table/type
 import TooltipButton from 'src/components/common/button/TooltipButton';
 import Table from 'src/components/common/table';
 import { useProjects } from 'src/hooks/useProjects';
-import { useLocalization, useOrganization } from 'src/providers';
-import { requestGetProjectsForSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
-import { selectProjectsForSpeciesRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useLocalization } from 'src/providers';
+import { useGetProjectsForSpeciesQuery } from 'src/queries/generated/acceleratorProjectSpecies';
 import strings from 'src/strings';
 import { AcceleratorProjectForSpecies } from 'src/types/AcceleratorProjectSpecies';
 import { Project } from 'src/types/Project';
@@ -55,32 +53,24 @@ export default function SpeciesProjectsTable({
   removedProjectsIds,
 }: SpeciesProjectsTableProps): JSX.Element {
   const { activeLocale } = useLocalization();
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
-  const { selectedOrganization } = useOrganization();
   const { availableProjects: allProjects } = useProjects();
 
-  const [requestId, setRequestId] = useState('');
-  const projectsForSpeciesRequest = useAppSelector(selectProjectsForSpeciesRequest(requestId));
-
-  const [searchResults, setSearchResults] = useState<AcceleratorProjectForSpecies[] | null>();
+  const {
+    currentData: projectsForSpeciesData,
+    isError: projectsForSpeciesFailed,
+    refetch: refetchProjectsForSpecies,
+  } = useGetProjectsForSpeciesQuery(speciesId);
+  const searchResults = projectsForSpeciesData?.participantProjectsForSpecies;
   const [selectedRows, setSelectedRows] = useState<TableRowType[]>([]);
   const [showRemoveDialog, setShowRemoveDialog] = useState(false);
-  const [reload, setReload] = useState(false);
   const [openedAddToProjectModal, setOpenedAddToProjectModal] = useState(false);
 
   useEffect(() => {
-    const request = dispatch(requestGetProjectsForSpecies({ speciesId }));
-    setRequestId(request.requestId);
-  }, [dispatch, selectedOrganization, reload, speciesId]);
-
-  useEffect(() => {
-    if (projectsForSpeciesRequest?.status === 'success') {
-      setSearchResults(projectsForSpeciesRequest.data);
-    } else if (projectsForSpeciesRequest?.status === 'error') {
+    if (projectsForSpeciesFailed) {
       snackbar.toastError(strings.GENERIC_ERROR);
     }
-  }, [projectsForSpeciesRequest, snackbar]);
+  }, [projectsForSpeciesFailed, snackbar]);
 
   const filteredResults = useMemo<AcceleratorProjectForSpecies[]>(() => {
     let updatedResults = searchResults ?? [];
@@ -163,14 +153,14 @@ export default function SpeciesProjectsTable({
   const onCloseRemoveProjects = (shouldReload?: boolean) => {
     setShowRemoveDialog(false);
     if (shouldReload) {
-      setReload(true);
+      void refetchProjectsForSpecies();
     }
   };
 
   const onCloseAddToProject = (shouldReload?: boolean) => {
     setOpenedAddToProjectModal(false);
     if (shouldReload) {
-      setReload(true);
+      void refetchProjectsForSpecies();
     }
   };
 
