@@ -1,41 +1,30 @@
-import React, { type JSX, useCallback, useEffect, useState } from 'react';
+import React, { type JSX, useCallback, useState } from 'react';
 
 import { Button } from '@terraware/web-components';
 
-import RejectDialog from 'src/components/AcceleratorDeliverableView/RejectDialog';
 import DeliverableStatusBadge from 'src/components/DeliverableView/DeliverableStatusBadge';
 import Link from 'src/components/common/Link';
 import CellRenderer, { TableRowType } from 'src/components/common/table/TableCellRenderer';
 import { RendererProps } from 'src/components/common/table/types';
 import useAcceleratorConsole from 'src/hooks/useAcceleratorConsole';
+import useUpdateAcceleratorProjectSpecies from 'src/hooks/useUpdateAcceleratorProjectSpecies';
 import { useLocalization } from 'src/providers';
-import { requestUpdateAcceleratorProjectSpecies } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesAsyncThunks';
-import { selectAcceleratorProjectSpeciesUpdateRequest } from 'src/redux/features/acceleratorProjectSpecies/acceleratorProjectSpeciesSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { SpeciesForAcceleratorProject } from 'src/types/AcceleratorProjectSpecies';
 import { DeliverableStatusType } from 'src/types/Deliverables';
 
 import EditSpeciesModal from './EditSpeciesModal';
+import { useRejectSpeciesDialog } from './RejectSpeciesDialog/Context';
 
 export default function SpeciesDeliverableCellRenderer(props: RendererProps<TableRowType>): JSX.Element {
-  const { column, index, row, reloadData, onRowClick } = props;
+  const { column, index, row, onRowClick } = props;
 
-  const dispatch = useAppDispatch();
+  const { update } = useUpdateAcceleratorProjectSpecies();
+  const { openRejectDialog } = useRejectSpeciesDialog();
   const { activeLocale } = useLocalization();
   const { isAcceleratorRoute } = useAcceleratorConsole();
 
   const [openedEditSpeciesModal, setOpenedEditSpeciesModal] = useState(false);
-  const [showRejectDialog, setShowRejectDialog] = useState<boolean>(false);
-
-  const [requestId, setRequestId] = useState<string>('');
-  const result = useAppSelector(selectAcceleratorProjectSpeciesUpdateRequest(requestId));
-
-  useEffect(() => {
-    if (result?.status === 'success' && reloadData) {
-      reloadData();
-    }
-  }, [result, reloadData]);
 
   const createLinkToSpecies = (iValue: React.ReactNode | unknown[]) => {
     return (
@@ -65,12 +54,8 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
         row={row}
         value={
           <>
-            {openedEditSpeciesModal && reloadData && (
-              <EditSpeciesModal
-                onClose={closeEditSpeciesModal}
-                reload={reloadData}
-                projectSpecies={row as SpeciesForAcceleratorProject}
-              />
+            {openedEditSpeciesModal && (
+              <EditSpeciesModal onClose={closeEditSpeciesModal} projectSpecies={row as SpeciesForAcceleratorProject} />
             )}
             {isAcceleratorRoute
               ? createLinkToAcceleratorSpecies(row?.species_scientificName)
@@ -100,21 +85,6 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
   }
 
   if (column.key === 'reject') {
-    const rejectHandler = (feedback: string) => {
-      const request = dispatch(
-        requestUpdateAcceleratorProjectSpecies({
-          acceleratorProjectSpecies: {
-            ...row.participantProjectSpecies,
-            feedback,
-            submissionStatus: 'Rejected',
-          },
-        })
-      );
-      setRequestId(request.requestId);
-
-      setShowRejectDialog(false);
-    };
-
     return (
       <CellRenderer
         style={{ width: '50px' }}
@@ -123,10 +93,9 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
         row={row}
         value={
           <>
-            {showRejectDialog && <RejectDialog onClose={() => setShowRejectDialog(false)} onSubmit={rejectHandler} />}
             <Button
               label={strings.REQUEST_UPDATE}
-              onClick={() => setShowRejectDialog(true)}
+              onClick={() => openRejectDialog(row.participantProjectSpecies)}
               priority='secondary'
               type='destructive'
               disabled={
@@ -141,15 +110,7 @@ export default function SpeciesDeliverableCellRenderer(props: RendererProps<Tabl
 
   if (column.key === 'approve') {
     const approveHandler = () => {
-      const request = dispatch(
-        requestUpdateAcceleratorProjectSpecies({
-          acceleratorProjectSpecies: {
-            ...row.participantProjectSpecies,
-            submissionStatus: 'Approved',
-          },
-        })
-      );
-      setRequestId(request.requestId);
+      void update({ ...row.participantProjectSpecies, submissionStatus: 'Approved' }).catch(() => undefined);
     };
 
     return (
