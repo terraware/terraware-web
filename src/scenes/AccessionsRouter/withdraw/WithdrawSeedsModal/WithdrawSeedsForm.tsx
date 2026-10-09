@@ -1,7 +1,8 @@
 import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
-import { Box, Step, StepLabel, Stepper, Typography, useTheme } from '@mui/material';
+import { Box, Typography, useTheme } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { Stepper } from '@terraware/web-components';
 import getDateDisplayValue, { getTodaysDateFormatted, isInTheFuture } from '@terraware/web-components/utils/date';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -496,26 +497,7 @@ const WithdrawSeedsForm = ({ open, onClose, accessions, user, onWithdrawn }: Wit
         middleButtons={middleButtons}
         scrolled
       >
-        <Stepper activeStep={step} sx={{ margin: theme.spacing(1, 0, 3) }}>
-          {stepLabels.map((label, index) => (
-            <Step key={label}>
-              <StepLabel
-                sx={{
-                  '.MuiStepIcon-root': { fill: theme.palette.TwClrBgTertiary },
-                  '.MuiStepIcon-root.Mui-active': { fill: theme.palette.TwClrIcnSecondary },
-                  '.MuiStepIcon-root.Mui-completed': { fill: theme.palette.TwClrTxtBrand },
-                  '.MuiStepLabel-label': {
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    color: index === step ? theme.palette.TwClrTxt : theme.palette.TwClrTxtSecondary,
-                  },
-                }}
-              >
-                {label}
-              </StepLabel>
-            </Step>
-          ))}
-        </Stepper>
+        <Stepper activeStep={step} steps={stepLabels} sx={{ margin: theme.spacing(1, 0, 3) }} />
 
         <Box
           sx={{ backgroundColor: theme.palette.TwClrBgSecondary, padding: theme.spacing(2) }}
