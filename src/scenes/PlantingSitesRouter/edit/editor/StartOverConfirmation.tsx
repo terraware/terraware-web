@@ -22,7 +22,7 @@ export default function StartOverConfirmation(props: StartOverConfirmationProps)
       middleButtons={[
         <Button
           id='cancelStartOver'
-          label={strings.NO}
+          label={strings.CANCEL}
           type='passive'
           onClick={onClose}
           priority='secondary'
