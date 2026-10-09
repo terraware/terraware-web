@@ -22,6 +22,10 @@ const BYTES_PER_MB = 1024 * 1024;
 // the limit the server enforces with a 413; also quoted in UPLOAD_SITE_BOUNDARY_DESCRIPTION
 const MAX_FILE_SIZE_MB = 10;
 
+// dropped files bypass the file input's accept filter, so the extension is checked again here
+const hasBoundaryFileExtension = (filename: string): boolean =>
+  BOUNDARY_FILE_EXTENSIONS.split(',').some((extension) => filename.toLowerCase().endsWith(extension));
+
 const fileSizeText = (strings: typeof defaultStrings, bytes: number): string =>
   bytes < BYTES_PER_KB
     ? (strings.formatString(strings.FILE_SIZE_BYTES, `${bytes}`) as string)
@@ -112,16 +116,24 @@ export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBounda
   );
 
   const tooLarge = useMemo<boolean>(() => (files[0]?.size ?? 0) > MAX_FILE_SIZE_MB * BYTES_PER_MB, [files]);
+  const unsupportedExtension = useMemo<boolean>(
+    () => files[0] !== undefined && !hasBoundaryFileExtension(files[0].name),
+    [files]
+  );
 
   const onSelectFiles = useCallback((selected: File[]) => {
     const file = selected[selected.length - 1];
-    setError((file?.size ?? 0) > MAX_FILE_SIZE_MB * BYTES_PER_MB ? 'FileTooLarge' : undefined);
+    if (file && !hasBoundaryFileExtension(file.name)) {
+      setError('UnsupportedFormat');
+    } else {
+      setError((file?.size ?? 0) > MAX_FILE_SIZE_MB * BYTES_PER_MB ? 'FileTooLarge' : undefined);
+    }
     setFiles(file ? [file] : []);
   }, []);
 
   const onUpload = useCallback(() => {
     const file = files[0];
-    if (!file || tooLarge) {
+    if (!file || tooLarge || unsupportedExtension) {
       return;
     }
 
@@ -151,7 +163,7 @@ export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBounda
     };
 
     void upload();
-  }, [files, onSuccess, parseBoundary, tooLarge]);
+  }, [files, onSuccess, parseBoundary, tooLarge, unsupportedExtension]);
 
   return (
     <DialogBox
@@ -174,7 +186,7 @@ export default function UploadBoundaryModal({ onClose, onSuccess }: UploadBounda
           id='confirm-upload-boundary'
           label={strings.UPLOAD}
           onClick={onUpload}
-          disabled={files.length === 0 || isLoading || tooLarge}
+          disabled={files.length === 0 || isLoading || tooLarge || unsupportedExtension}
           key='button-2'
         />,
       ]}

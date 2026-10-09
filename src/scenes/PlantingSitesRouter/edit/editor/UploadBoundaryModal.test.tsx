@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { rstest } from '@rstest/core';
-import { screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { Polygon } from 'geojson';
 
 import { GeometryFileErrorCode } from 'src/queries/generated/draftPlantingSites';
@@ -46,6 +46,15 @@ const fileOfSize = (filename: string, sizeMb: number): File => fileOfBytes(filen
 const chooseFile = async (user: ReturnType<typeof renderModal>['user'], file: File | string) => {
   const input = document.querySelector('input[type="file"]') as HTMLInputElement;
   await user.upload(input, typeof file === 'string' ? new File(['{}'], file, { type: 'application/json' }) : file);
+};
+
+// Files added by drag and drop skip the input's accept filter, which user.upload honors, and user-event
+// has no drag and drop API. The drop zone is the FileChooser box that wraps the hidden input.
+const dropFile = (filename: string) => {
+  const input = document.querySelector('input[type="file"]') as HTMLInputElement;
+  const file = new File(['{}'], filename, { type: 'application/octet-stream' });
+  const files = { length: 1, item: (index: number) => (index === 0 ? file : null) };
+  fireEvent.drop(input.parentElement as HTMLElement, { dataTransfer: { files } });
 };
 
 const uploadFile = async (user: ReturnType<typeof renderModal>['user'], file: File | string = 'site.geojson') => {
@@ -107,6 +116,41 @@ describe('UploadBoundaryModal', () => {
     expect(await screen.findByText('site.geojson')).toBeInTheDocument();
     expect(screen.queryByText('survey-raw.zip')).not.toBeInTheDocument();
     expect(screen.queryByText(tooLargeMessage())).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: strings.UPLOAD })).toBeEnabled();
+  });
+
+  it('rejects a dropped file with an unsupported extension without uploading it', async () => {
+    const requests = captureRequests('post', PARSE_URL);
+    const { onSuccess } = renderModal();
+
+    dropFile('route.gpx');
+
+    expect(await screen.findByText(strings.UPLOAD_SITE_BOUNDARY_ERROR_UNSUPPORTED_FORMAT)).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: strings.UPLOAD })).toBeDisabled();
+    expect(requests).toHaveLength(0);
+    expect(onSuccess).not.toHaveBeenCalled();
+  });
+
+  it('accepts a supported extension regardless of case', async () => {
+    renderModal();
+
+    dropFile('SITE.KML');
+
+    expect(await screen.findByText('SITE.KML')).toBeInTheDocument();
+    expect(screen.queryByText(strings.UPLOAD_SITE_BOUNDARY_ERROR_UNSUPPORTED_FORMAT)).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: strings.UPLOAD })).toBeEnabled();
+  });
+
+  it('clears the unsupported-format error when a supported file is chosen', async () => {
+    const { user } = renderModal();
+
+    dropFile('route.gpx');
+    expect(await screen.findByText(strings.UPLOAD_SITE_BOUNDARY_ERROR_UNSUPPORTED_FORMAT)).toBeInTheDocument();
+
+    await chooseFile(user, 'site.geojson');
+
+    expect(await screen.findByText('site.geojson')).toBeInTheDocument();
+    expect(screen.queryByText(strings.UPLOAD_SITE_BOUNDARY_ERROR_UNSUPPORTED_FORMAT)).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: strings.UPLOAD })).toBeEnabled();
   });
 
