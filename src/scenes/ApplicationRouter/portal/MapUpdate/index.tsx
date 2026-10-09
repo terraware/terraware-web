@@ -1,6 +1,7 @@
 import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, Card, Grid, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { BusySpinner, Button } from '@terraware/web-components';
 import area from '@turf/area';
 import { Feature, FeatureCollection } from 'geojson';
@@ -13,10 +14,10 @@ import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
 import { useCountryBoundary } from 'src/hooks/useCountryBoundary';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
-import { useUpdateApplicationBoundaryMutation } from 'src/queries/generated/applications';
+import { useGetApplicationQuery, useUpdateApplicationBoundaryMutation } from 'src/queries/generated/applications';
 import StepTitleDescription, { Description } from 'src/scenes/PlantingSitesRouter/edit/editor/StepTitleDescription';
 import strings from 'src/strings';
 import { RenderableReadOnlyBoundary } from 'src/types/Map';
@@ -35,7 +36,9 @@ const MapUpdateView = () => {
   const theme = useTheme();
 
   const { activeLocale } = useLocalization();
-  const { selectedApplication, reload } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
   const { goToApplicationPrescreen } = useNavigateTo();
   const { toastSuccess, toastError } = useSnackbar();
   const getRenderAttributes = useRenderAttributes();
@@ -100,7 +103,7 @@ const MapUpdateView = () => {
             if (activeLocale) {
               toastSuccess(strings.PROPOSED_PROJECT_BOUNDARIES_ADDED);
             }
-            return reload(() => goToApplicationPrescreen(applicationId));
+            goToApplicationPrescreen(applicationId);
           })
           .catch(() => undefined);
       } else {
@@ -111,7 +114,6 @@ const MapUpdateView = () => {
     activeLocale,
     boundary,
     goToApplicationPrescreen,
-    reload,
     selectedApplication,
     toastError,
     toastSuccess,
@@ -193,7 +195,9 @@ const MapUpdateView = () => {
 
 const MapUpdateViewWrapper = () => {
   const { activeLocale } = useLocalization();
-  const { selectedApplication } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
 
   const selectedApplicationId = selectedApplication?.id;
 

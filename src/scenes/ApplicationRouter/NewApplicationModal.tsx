@@ -1,6 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useState } from 'react';
 
 import { FormControlLabel, Grid, Radio, RadioGroup, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { BusySpinner, Dropdown, DropdownItem } from '@terraware/web-components';
 
 import DialogBox from 'src/components/common/DialogBox/DialogBox';
@@ -11,11 +12,10 @@ import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useProjects } from 'src/hooks/useProjects';
 import { useTrackModalAbandonment } from 'src/hooks/useTrackModalAbandonment';
 import { useLocalization, useOrganization } from 'src/providers';
+import { useListApplicationsQuery } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 import useForm from 'src/utils/useForm';
 import useSnackbar from 'src/utils/useSnackbar';
-
-import { useApplicationData } from '../../providers/Application/Context';
 
 type NewApplication = {
   projectType: 'Existing' | 'New';
@@ -33,7 +33,10 @@ const NewApplicationModal = ({ open, onClose }: NewApplicationModalProps): JSX.E
   const { activeLocale } = useLocalization();
   const { availableProjects } = useProjects();
   const { selectedOrganization } = useOrganization();
-  const { allApplications } = useApplicationData();
+  const { currentData: applicationsData } = useListApplicationsQuery(
+    selectedOrganization ? { organizationId: selectedOrganization.id } : skipToken
+  );
+  const allApplications = applicationsData?.applications;
   const { toastError, toastSuccess } = useSnackbar();
   const { goToApplication } = useNavigateTo();
   const markSubmitted = useTrackModalAbandonment('application_create', open);

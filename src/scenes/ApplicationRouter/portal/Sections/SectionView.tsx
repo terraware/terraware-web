@@ -1,10 +1,13 @@
 import React, { ReactNode, useCallback, useMemo, useState } from 'react';
 
+import { skipToken } from '@reduxjs/toolkit/query';
+
 import UpdateOrUploadBoundaryModal from 'src/components/Application/UpdateOrUploadBoundaryModal';
 import ModuleDetailsCard, { DeliverableDetails } from 'src/components/ModuleDetailsCard';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
 import { useLocalization } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
+import { useGetApplicationQuery } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 import { ApplicationDeliverableWithBoundaryFlag, ApplicationModule } from 'src/types/Application';
 
@@ -18,7 +21,9 @@ type SectionViewProp = {
 
 const SectionView = ({ children, section, sectionDeliverables }: SectionViewProp) => {
   const { activeLocale } = useLocalization();
-  const { selectedApplication } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
   const { goToApplicationMap, goToApplicationSectionDeliverable, goToApplicationMapUpdate } = useNavigateTo();
 
   const [isMapModalOpen, setIsMapModalOpen] = useState<boolean>(false);

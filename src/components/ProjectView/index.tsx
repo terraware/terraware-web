@@ -2,6 +2,7 @@ import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'reac
 import { useParams } from 'react-router';
 
 import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { DropdownItem } from '@terraware/web-components';
 
 import CannotDeleteApplicationProject from 'src/components/ProjectView/CannotDeleteApplicationProject';
@@ -16,8 +17,8 @@ import { APP_PATHS } from 'src/constants';
 import { useBotanicalCountries } from 'src/hooks/useBotanicalCountries';
 import { useProjects } from 'src/hooks/useProjects';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useLocalization, useOrganization } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
+import { useLocalization, useOrganization, useUser } from 'src/providers';
+import { useListApplicationsQuery } from 'src/queries/generated/applications';
 import { useDeleteProjectMutation, useGetProjectQuery } from 'src/queries/generated/projects';
 import { getCountryByCode } from 'src/utils/country';
 import { isAdmin } from 'src/utils/organization';
@@ -32,11 +33,12 @@ export default function ProjectView(): JSX.Element {
   const location = useStateLocation();
   const { strings, countries } = useLocalization();
   const { selectedOrganization } = useOrganization();
+  const { user } = useUser();
+  const isFunder = user?.userType === 'Funder';
 
   const { availableProjects } = useProjects();
   const showProjectLocation = (availableProjects?.length ?? 0) > 1;
   const { getBotanicalCountryName } = useBotanicalCountries(!showProjectLocation);
-  const { allApplications } = useApplicationData();
   const pathParams = useParams<{ projectId: string }>();
   const projectId = Number(pathParams.projectId);
 
@@ -48,11 +50,10 @@ export default function ProjectView(): JSX.Element {
   const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState<boolean>(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
 
-  const projectHasApplication = useMemo(() => {
-    if (projectId && allApplications !== undefined) {
-      return !!allApplications.find((application) => application.projectId === projectId);
-    }
-  }, [allApplications, projectId]);
+  const { currentData: projectApplicationsData } = useListApplicationsQuery(
+    projectId && !isNaN(projectId) && !isFunder ? { projectId } : skipToken
+  );
+  const projectHasApplication = projectApplicationsData ? projectApplicationsData.applications.length > 0 : undefined;
 
   const onOptionItemClick = useCallback((optionItem: DropdownItem) => {
     switch (optionItem.value) {

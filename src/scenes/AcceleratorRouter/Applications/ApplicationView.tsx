@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router';
+import React, { useCallback, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { DateTime } from 'luxon';
 
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -10,8 +10,13 @@ import Card from 'src/components/common/Card';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
 import { useLocalization } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
+import {
+  useGetApplicationDeliverablesQuery,
+  useGetApplicationModulesQuery,
+  useGetApplicationQuery,
+} from 'src/queries/generated/applications';
 import strings from 'src/strings';
 
 import ApplicationDeliverableRow from './ApplicationDeliverableRow';
@@ -20,15 +25,17 @@ import ApplicationReview from './ApplicationReview';
 const ApplicationView = () => {
   const { activeLocale } = useLocalization();
   const theme = useTheme();
-  const { selectedApplication, setSelectedApplication, applicationSections, applicationDeliverables } =
-    useApplicationData();
-  const pathParams = useParams<{ applicationId: string }>();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData, isFetching: isFetchingApplication } = useGetApplicationQuery(
+    pathApplicationId ?? skipToken
+  );
+  const selectedApplication = applicationData?.application;
+  const { currentData: modulesData } = useGetApplicationModulesQuery(pathApplicationId ?? skipToken);
+  const applicationSections = useMemo(() => modulesData?.modules ?? [], [modulesData]);
+  const { currentData: deliverablesData } = useGetApplicationDeliverablesQuery(pathApplicationId ?? skipToken);
+  const applicationDeliverables = useMemo(() => deliverablesData?.deliverables ?? [], [deliverablesData]);
 
   const { goToAcceleratorApplicationDeliverable, goToAcceleratorApplicationMap } = useNavigateTo();
-
-  useEffect(() => {
-    setSelectedApplication(Number(pathParams.applicationId ?? -1));
-  }, [setSelectedApplication, pathParams]);
 
   const crumbs: Crumb[] = useMemo(
     () => [
@@ -69,6 +76,10 @@ const ApplicationView = () => {
     },
     [applicationDeliverables]
   );
+
+  if (isFetchingApplication) {
+    return <Page isLoading />;
+  }
 
   if (!selectedApplication || !prescreenSection || !nonPrescreenSections) {
     return undefined;

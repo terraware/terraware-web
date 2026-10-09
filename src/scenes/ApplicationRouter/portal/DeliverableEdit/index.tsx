@@ -1,9 +1,16 @@
 import React, { useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
+import { skipToken } from '@reduxjs/toolkit/query';
+
 import QuestionsDeliverableEditForm from 'src/components/DeliverableView/QuestionsDeliverableEditForm';
 import useNavigateTo from 'src/hooks/useNavigateTo';
-import { useApplicationData } from 'src/providers/Application/Context';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
+import {
+  useGetApplicationDeliverablesQuery,
+  useGetApplicationModulesQuery,
+  useGetApplicationQuery,
+} from 'src/queries/generated/applications';
 
 import ApplicationPage from '../ApplicationPage';
 
@@ -14,16 +21,18 @@ const SectionDeliverableEditView = () => {
     sectionId: string;
   }>();
   const { goToApplicationSectionDeliverable } = useNavigateTo();
-  const { selectedApplication, applicationDeliverables, reload } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
+  const { currentData: deliverablesData } = useGetApplicationDeliverablesQuery(pathApplicationId ?? skipToken);
+  const applicationDeliverables = useMemo(() => deliverablesData?.deliverables ?? [], [deliverablesData]);
 
   const exit = useCallback(() => {
     if (!(applicationId && deliverableId && sectionId)) {
       return;
     }
-    void reload(() =>
-      goToApplicationSectionDeliverable(Number(applicationId), Number(sectionId), Number(deliverableId))
-    );
-  }, [goToApplicationSectionDeliverable, applicationId, deliverableId, reload, sectionId]);
+    goToApplicationSectionDeliverable(Number(applicationId), Number(sectionId), Number(deliverableId));
+  }, [goToApplicationSectionDeliverable, applicationId, deliverableId, sectionId]);
 
   const deliverable = applicationDeliverables.find((_deliverable) => _deliverable.id === Number(deliverableId));
 
@@ -59,7 +68,13 @@ const SectionDeliverableEditWrapper = () => {
     sectionId: string;
   }>();
 
-  const { applicationDeliverables, applicationSections, selectedApplication } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
+  const { currentData: modulesData } = useGetApplicationModulesQuery(pathApplicationId ?? skipToken);
+  const applicationSections = useMemo(() => modulesData?.modules ?? [], [modulesData]);
+  const { currentData: deliverablesData } = useGetApplicationDeliverablesQuery(pathApplicationId ?? skipToken);
+  const applicationDeliverables = useMemo(() => deliverablesData?.deliverables ?? [], [deliverablesData]);
   const { goToApplicationSectionDeliverable } = useNavigateTo();
 
   const section = useMemo(

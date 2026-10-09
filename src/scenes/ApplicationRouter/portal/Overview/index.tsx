@@ -1,11 +1,13 @@
 import React, { useMemo } from 'react';
 
 import { Box, Card, Typography, useTheme } from '@mui/material';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Button } from '@terraware/web-components';
 
 import useNavigateTo from 'src/hooks/useNavigateTo';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
 import { useLocalization } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
+import { useGetApplicationQuery } from 'src/queries/generated/applications';
 import CurrentTimeline from 'src/scenes/ModulesRouter/CurrentTimeline';
 import strings from 'src/strings';
 
@@ -33,7 +35,9 @@ const applicationSteps = (activeLocale: string | null) =>
 const OverviewView = () => {
   const theme = useTheme();
   const { activeLocale } = useLocalization();
-  const { selectedApplication } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
 
   const timelineIndex = useMemo(() => {
     if (selectedApplication) {

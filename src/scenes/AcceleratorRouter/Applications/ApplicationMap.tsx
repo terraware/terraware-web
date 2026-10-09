@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router';
+import React, { useCallback, useMemo } from 'react';
 
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Button } from '@terraware/web-components';
 
 import ApplicationMapCard from 'src/components/Application/ApplicationMapCard';
@@ -8,22 +8,18 @@ import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
 import TitleBar from 'src/components/common/TitleBar';
 import { APP_PATHS } from 'src/constants';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
 import { useLocalization } from 'src/providers';
-import { useApplicationData } from 'src/providers/Application/Context';
-import { useLazyGetApplicationGeoJsonQuery } from 'src/queries/generated/applications';
+import { useGetApplicationQuery, useLazyGetApplicationGeoJsonQuery } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 import { downloadGeoJson } from 'src/utils/csv';
 
 const ApplicationMap = () => {
   const { activeLocale } = useLocalization();
-  const { selectedApplication, setSelectedApplication } = useApplicationData();
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData } = useGetApplicationQuery(pathApplicationId ?? skipToken);
+  const selectedApplication = applicationData?.application;
   const [getApplicationGeoJson] = useLazyGetApplicationGeoJsonQuery();
-
-  const pathParams = useParams<{ applicationId: string }>();
-
-  useEffect(() => {
-    setSelectedApplication(Number(pathParams.applicationId ?? -1));
-  }, [setSelectedApplication, pathParams]);
 
   const titleComponent = useMemo(() => {
     if (!selectedApplication || !activeLocale) {

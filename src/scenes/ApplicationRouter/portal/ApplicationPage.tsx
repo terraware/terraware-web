@@ -1,9 +1,11 @@
-import React, { ReactNode, useEffect } from 'react';
-import { useParams } from 'react-router';
+import React, { ReactNode } from 'react';
+
+import { skipToken } from '@reduxjs/toolkit/query';
 
 import { Crumb } from 'src/components/BreadCrumbs';
 import Page from 'src/components/Page';
-import { useApplicationData } from 'src/providers/Application/Context';
+import usePathApplicationId from 'src/hooks/usePathApplicationId';
+import { useGetApplicationQuery } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 
 import FeedbackMessage from './Prescreen/FeedbackMessage';
@@ -18,23 +20,18 @@ type Props = {
 };
 
 const ApplicationPage = ({ children, crumbs, hierarchicalCrumbs, isLoading, rightComponent, hideFeedback }: Props) => {
-  const { allApplications, selectedApplication, setSelectedApplication } = useApplicationData();
-
-  const pathParams = useParams<{ applicationId: string }>();
-  const applicationId = Number(pathParams.applicationId);
-
-  useEffect(() => {
-    if (allApplications) {
-      setSelectedApplication(applicationId);
-    }
-  }, [allApplications, applicationId, selectedApplication, setSelectedApplication]);
+  const pathApplicationId = usePathApplicationId();
+  const { currentData: applicationData, isFetching: isFetchingApplication } = useGetApplicationQuery(
+    pathApplicationId ?? skipToken
+  );
+  const selectedApplication = applicationData?.application;
 
   return (
     <Page
       crumbs={crumbs}
       rightComponent={rightComponent}
       hierarchicalCrumbs={hierarchicalCrumbs ?? true}
-      isLoading={isLoading}
+      isLoading={isLoading || isFetchingApplication}
       // TODO: replace "Project Name" placeholder with actual project name once available in application data
       title={strings.formatString(strings.APPLICATION_FOR_PROJECT, selectedApplication?.projectName ?? '')}
       titleStyle={{ marginTop: '24px' }}
