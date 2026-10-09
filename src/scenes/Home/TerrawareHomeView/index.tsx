@@ -1,27 +1,21 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import { IconName } from '@terraware/web-components';
 import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageHeader from 'src/components/PageHeader';
-import Link from 'src/components/common/Link';
 import PageCard from 'src/components/common/PageCard';
 import TfMain from 'src/components/common/TfMain';
-import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
+import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useOrgNurserySummary } from 'src/hooks/useOrgNurserySummary';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useSeedBankSummary } from 'src/hooks/useSeedBankSummary';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useTrackEvent } from 'src/hooks/useTrackEvent';
-import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
-import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization, useOrganization, useUser } from 'src/providers';
 import { useLazySearchPlantingSitesQuery } from 'src/queries/search/plantingSites';
-import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
-import CTACard from 'src/scenes/Home/CTACard';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import VirtualWalkthroughMessages from 'src/scenes/VirtualWalkthrough/VirtualWalkthroughMessages';
 import strings from 'src/strings';
@@ -35,20 +29,15 @@ const TerrawareHomeView = () => {
   const { activeLocale } = useLocalization();
   const numberFormatter = useNumberFormatter();
   const { user } = useUser();
-  const { selectedOrganization, orgPreferences } = useOrganization();
-  const updateUserPreferences = useUpdateUserPreferences();
-  const { isTablet, isMobile, isDesktop } = useDeviceInfo();
-  const trackEvent = useTrackEvent();
+  const { selectedOrganization } = useOrganization();
+  const { isTablet, isMobile } = useDeviceInfo();
   const navigate = useSyncNavigate();
   const { goToNewAccession } = useNavigateTo();
   const { species } = useOrganizationSpecies();
   const seedBankSummary = useSeedBankSummary();
   const orgNurserySummary = useOrgNurserySummary();
-  const showAcceleratorCard = orgPreferences.showAcceleratorCard !== false;
   const orgFeatures = useOrganizationFeatures();
   const virtualWalkthroughEnabled = !!orgFeatures?.virtualWalkthrough?.enabled;
-
-  const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
 
   const [search, { data: plantingSiteSummariesData }] = useLazySearchPlantingSitesQuery();
   const plantingSiteSummaries = useMemo(() => plantingSiteSummariesData ?? [], [plantingSiteSummariesData]);
@@ -83,12 +72,6 @@ const TerrawareHomeView = () => {
     }
     return 4;
   }, [isMobile, isTablet]);
-
-  const dismissAcceleratorCard = async () => {
-    if (selectedOrganization) {
-      await updateUserPreferences({ ['showAcceleratorCard']: false }, selectedOrganization.id);
-    }
-  };
 
   useEffect(() => {
     if (selectedOrganization) {
@@ -235,8 +218,6 @@ const TerrawareHomeView = () => {
 
   return (
     <TfMain>
-      <NewApplicationModal open={isNewApplicationModalOpen} onClose={() => setIsNewApplicationModalOpen(false)} />
-
       <Box
         component='main'
         sx={{
@@ -281,53 +262,6 @@ const TerrawareHomeView = () => {
                     title={strings.DOWNLOAD_THE_TERRAWARE_MOBILE_APP}
                   />
                 </Grid>
-
-                {isAdmin(selectedOrganization) && showAcceleratorCard && (
-                  <Grid item xs={12}>
-                    <CTACard
-                      buttonsContainerSx={{
-                        width: isMobile ? '100%' : 'auto',
-                      }}
-                      description={[
-                        <Box key={'element-1'} sx={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
-                          <Typography
-                            paddingRight={2}
-                            textAlign={isDesktop ? 'left' : 'center'}
-                            marginBottom={isDesktop ? 0 : 2}
-                          >
-                            {strings.formatString(
-                              strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
-                              <Link
-                                fontSize='16px'
-                                fontWeight={400}
-                                target='_blank'
-                                onClick={() => {
-                                  trackEvent(MIXPANEL_EVENTS.ACCELERATOR_TF_LINK_CLICKED);
-                                  window.open(ACCELERATOR_LINK, '_blank');
-                                }}
-                                style={{ verticalAlign: 'baseline' }}
-                              >
-                                {strings.HERE}
-                              </Link>
-                            )}
-                          </Typography>
-
-                          <Link fontSize='16px' fontWeight={400} onClick={() => void dismissAcceleratorCard()}>
-                            {strings.DISMISS}
-                          </Link>
-                        </Box>,
-                      ]}
-                      primaryButtonProps={{
-                        label: strings.APPLY_TO_ACCELERATOR,
-                        onClick: () => {
-                          trackEvent(MIXPANEL_EVENTS.ACCELERATOR_APPLY_BUTTON_CLICKED);
-                          setIsNewApplicationModalOpen(true);
-                        },
-                        type: 'productive',
-                      }}
-                    />
-                  </Grid>
-                )}
               </Grid>
             </Container>
           </Box>
@@ -387,36 +321,6 @@ const TerrawareHomeView = () => {
                     linkStyle={'plain'}
                   />
                 </Grid>
-                {isAdmin(selectedOrganization) && (
-                  <Grid item xs={secondaryGridSize}>
-                    <PageCard
-                      cardIsClickable={false}
-                      id='applicationHomeCard'
-                      name={strings.APPLY_TO_ACCELERATOR}
-                      icon='iconFile'
-                      description={strings.formatString(
-                        strings.APPLY_TO_ACCELERATOR_DESCRIPTION,
-                        <Link
-                          fontSize='16px'
-                          target='_blank'
-                          onClick={() => {
-                            trackEvent(MIXPANEL_EVENTS.ACCELERATOR_TF_LINK_CLICKED);
-                            window.open(ACCELERATOR_LINK, '_blank');
-                          }}
-                        >
-                          {strings.HERE}
-                        </Link>
-                      )}
-                      link={APP_PATHS.APPLICATIONS}
-                      linkText={strings.START_NEW_APPLICATION}
-                      linkStyle={'button-primary'}
-                      onClick={() => {
-                        trackEvent(MIXPANEL_EVENTS.ACCELERATOR_APPLY_BUTTON_CLICKED);
-                        setIsNewApplicationModalOpen(true);
-                      }}
-                    />
-                  </Grid>
-                )}
               </Grid>
             </Container>
           </Box>

@@ -1,26 +1,21 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 
-import { Box, Container, Grid, Typography } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { IconName } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import PageHeader from 'src/components/PageHeader';
-import Link from 'src/components/common/Link';
 import TfMain from 'src/components/common/TfMain';
-import { ACCELERATOR_LINK, APP_PATHS } from 'src/constants';
+import { APP_PATHS } from 'src/constants';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
-import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useOrganization, useUser } from 'src/providers';
 import { useListOrganizationUsersQuery } from 'src/queries/generated/organizationUsers';
-import NewApplicationModal from 'src/scenes/ApplicationRouter/NewApplicationModal';
-import CTACard from 'src/scenes/Home/CTACard';
 import OnboardingCard, { OnboardingCardRow } from 'src/scenes/Home/OnboardingHomeView/OnboardingCard';
 import strings from 'src/strings';
-import { isAdmin, isManagerOrHigher, isOwner } from 'src/utils/organization';
+import { isManagerOrHigher, isOwner } from 'src/utils/organization';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -29,9 +24,7 @@ const OnboardingHomeView = () => {
   const { selectedOrganization, orgPreferences } = useOrganization();
   const updateUserPreferences = useUpdateUserPreferences();
   const { isMobile, isDesktop } = useDeviceInfo();
-  const trackEvent = useTrackEvent();
   const navigate = useSyncNavigate();
-  const showAcceleratorCard = orgPreferences.showAcceleratorCard !== false;
   const snackbar = useSnackbar();
   const query = useQuery();
 
@@ -51,18 +44,10 @@ const OnboardingHomeView = () => {
   );
   const people = peopleData?.users;
 
-  const [isNewApplicationModalOpen, setIsNewApplicationModalOpen] = useState<boolean>(false);
-
   const isLoadingInitialData = useMemo(
     () => allSpecies === undefined || (isOwner(selectedOrganization) && people === undefined),
     [allSpecies, people, selectedOrganization]
   );
-
-  const dismissAcceleratorCard = async () => {
-    if (selectedOrganization) {
-      await updateUserPreferences({ ['showAcceleratorCard']: false }, selectedOrganization.id);
-    }
-  };
 
   const markAsComplete = useCallback(async () => {
     if (selectedOrganization) {
@@ -127,8 +112,6 @@ const OnboardingHomeView = () => {
 
   return (
     <TfMain>
-      <NewApplicationModal open={isNewApplicationModalOpen} onClose={() => setIsNewApplicationModalOpen(false)} />
-
       <Box
         component='main'
         sx={{
@@ -152,53 +135,6 @@ const OnboardingHomeView = () => {
                 <Grid item xs={12}>
                   <OnboardingCard rows={onboardingCardRows} />
                 </Grid>
-
-                {isAdmin(selectedOrganization) && showAcceleratorCard && (
-                  <Grid item xs={12}>
-                    <CTACard
-                      buttonsContainerSx={{
-                        width: isMobile ? '100%' : 'auto',
-                      }}
-                      description={[
-                        <Box key={'element-1'} sx={{ display: 'flex', flexDirection: isDesktop ? 'row' : 'column' }}>
-                          <Typography
-                            paddingRight={2}
-                            textAlign={isDesktop ? 'left' : 'center'}
-                            marginBottom={isDesktop ? 0 : 2}
-                          >
-                            {strings.formatString(
-                              strings.FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,
-                              <Link
-                                fontSize='16px'
-                                fontWeight={400}
-                                target='_blank'
-                                onClick={() => {
-                                  trackEvent(MIXPANEL_EVENTS.ACCELERATOR_TF_LINK_CLICKED);
-                                  window.open(ACCELERATOR_LINK, '_blank');
-                                }}
-                                style={{ verticalAlign: 'baseline' }}
-                              >
-                                {strings.HERE}
-                              </Link>
-                            )}
-                          </Typography>
-
-                          <Link fontSize='16px' fontWeight={400} onClick={() => void dismissAcceleratorCard()}>
-                            {strings.DISMISS}
-                          </Link>
-                        </Box>,
-                      ]}
-                      primaryButtonProps={{
-                        label: strings.APPLY_TO_ACCELERATOR,
-                        onClick: () => {
-                          trackEvent(MIXPANEL_EVENTS.ACCELERATOR_APPLY_BUTTON_CLICKED);
-                          setIsNewApplicationModalOpen(true);
-                        },
-                        type: 'productive',
-                      }}
-                    />
-                  </Grid>
-                )}
               </Grid>
             </Container>
           </Box>
