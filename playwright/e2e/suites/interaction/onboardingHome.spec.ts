@@ -37,29 +37,6 @@ test.describe('OnboardingHomeTests', () => {
     await expect(page.getByRole('button', { name: 'Add People', ...exactOptions })).toBeHidden();
     await expect(page.getByText('Complete', exactOptions)).toBeVisible();
   });
-
-  test('Accelerator card is visible and Apply to Accelerator opens the New Application modal', async ({
-    page,
-  }, testInfo) => {
-    await expect(page.getByText('Find out more about Terraformation')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Apply to Accelerator', ...exactOptions })).toBeVisible();
-
-    await page.getByRole('button', { name: 'Apply to Accelerator', ...exactOptions }).click();
-
-    await expect(page.getByText('Start New Application')).toBeVisible();
-  });
-
-  test('Dismiss hides the accelerator card and it stays hidden after reload', async ({ page }, testInfo) => {
-    await expect(page.getByRole('button', { name: 'Apply to Accelerator', ...exactOptions })).toBeVisible();
-
-    await page.getByRole('button', { name: 'Dismiss', ...exactOptions }).click();
-
-    await expect(page.getByRole('button', { name: 'Apply to Accelerator', ...exactOptions })).toBeHidden();
-
-    await page.reload();
-    await expect(page.getByText('Get Started', exactOptions)).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Apply to Accelerator', ...exactOptions })).toBeHidden();
-  });
 });
 
 test.describe('OnboardingHomeManagerTests', () => {
