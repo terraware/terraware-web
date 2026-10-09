@@ -2,7 +2,6 @@ import React, { type JSX, useCallback, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 
-import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { useLatestSiteObservationResult } from 'src/hooks/observations';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
@@ -93,9 +92,7 @@ export default function HighestAndLowestSurvivalRateSpeciesCard({
               {highestSpeciesName}
             </Typography>
             <Typography fontSize='24px' fontWeight={600}>
-              <PendingSurvivalRate pending={latestObservationResult?.pending}>
-                <FormattedNumber value={highestSurvivalRate} />%
-              </PendingSurvivalRate>
+              <FormattedNumber value={highestSurvivalRate} />%
             </Typography>
           </Box>
           {(!lowestSpeciesName || lowestSpeciesName === highestSpeciesName) && (
@@ -120,9 +117,7 @@ export default function HighestAndLowestSurvivalRateSpeciesCard({
             {lowestSpeciesName}
           </Typography>
           <Typography fontSize='24px' fontWeight={600}>
-            <PendingSurvivalRate pending={latestObservationResult?.pending}>
-              <FormattedNumber value={lowestSurvivalRate || 0} />%
-            </PendingSurvivalRate>
+            <FormattedNumber value={lowestSurvivalRate || 0} />%
           </Typography>
         </Box>
       )}
