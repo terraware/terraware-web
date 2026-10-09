@@ -269,8 +269,6 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
         ...(newBoundary ? upload ?? _.pick(siteBoundaryData, ['uploadedFile', 'uploadId']) : {}),
       });
     },
-    // setSiteBoundaryData is not stable: it closes over the undo/redo stack index, so a callback
-    // that pins an older copy will push onto a truncated stack and leave the index out of range
     [setSiteBoundaryData, site, siteBoundaryData]
   );
 
