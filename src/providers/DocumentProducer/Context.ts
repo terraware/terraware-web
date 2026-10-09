@@ -16,7 +16,6 @@ export type DocumentProducerData = {
   projectId: number;
   reload: () => void;
   variablesOwners?: VariableOwners[];
-  reloadVariables: () => void;
   reloadDocument: () => void;
 };
 
@@ -28,7 +27,6 @@ export const DocumentProducerContext = createContext<DocumentProducerData>({
   projectId: -1,
   /* eslint-disable @typescript-eslint/no-empty-function */
   reload: () => {},
-  reloadVariables: () => {},
   reloadDocument: () => {},
   /* eslint-enable @typescript-eslint/no-empty-function */
 });
