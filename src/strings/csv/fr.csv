@@ -201,7 +201,6 @@ APPLY,Appliquer,6c0f6e36
 APPLY_RESULT,Appliquer le résultat,f9c062f6
 APPLY_RESULT_QUESTION,Voulez-vous appliquer ce résultat à l'adhésion ?,36949b1c
 APPLY_TO_ACCELERATOR,Postuler à l'accélérateur,d74e3756
-APPLY_TO_ACCELERATOR_DESCRIPTION,Postulez à notre Accélérateur De La Semence à la Forêt ! Pour en savoir plus {0} ou cliquez sur le bouton ci-dessous pour postuler.,54a5f1c0
 APPROVE,Approuver,913a9927
 APPROVE_DELIVERABLE,Approuver le livrable,7efd4b07
 APPROVED,Approuvé,b279ed0b
@@ -786,7 +785,6 @@ FILTERS_APPLIED,Filtres appliqués,75d4dd7e
 FINAL_QTY,Qté finale,47530c05
 FINANCIAL_SUMMARIES,Synthèses financières,d26c4f56
 FINANCIAL_VIABILITY,Viabilité financière,50706753
-FIND_OUT_MORE_ABOUT_ACCELERATOR_AND_APPLY,En savoir plus sur l’Accélérateur De La Semence à la Forêt de Terraformation {0} et postulez !,e49d8596
 FIRE,Incendie,3daefdd1
 FIRST_ADD_PLANTING_SITE,"Pour afficher le tableau de bord, vous devez détenir un site de plantation.",29adc97e
 FIRST_NAME,Prénom,4728037d
