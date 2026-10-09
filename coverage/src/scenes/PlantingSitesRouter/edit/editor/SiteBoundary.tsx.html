@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80.95% </span>
+                <span class="strong">81.3% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>85/105</span>
+                <span class='fraction'>87/107</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.26% </span>
+                <span class="strong">69.44% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>71/104</span>
+                <span class='fraction'>75/108</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80.39% </span>
+                <span class="strong">80.76% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>82/102</span>
+                <span class='fraction'>84/104</span>
             </div>
         
             
@@ -445,7 +445,16 @@
 <a name='L380'></a><a href='#L380'>380</a>
 <a name='L381'></a><a href='#L381'>381</a>
 <a name='L382'></a><a href='#L382'>382</a>
-<a name='L383'></a><a href='#L383'>383</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a>
+<a name='L385'></a><a href='#L385'>385</a>
+<a name='L386'></a><a href='#L386'>386</a>
+<a name='L387'></a><a href='#L387'>387</a>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -622,20 +631,29 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">88x</span>
-<span class="cline-any cline-yes">23x</span>
+<span class="cline-any cline-yes">56x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">23x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">22x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">56x</span>
+<span class="cline-any cline-yes">27x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">22x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">28x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1008,6 +1026,15 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
 <span class="cstat-no" title="statement not covered" >      return [];</span>
     }
 &nbsp;
+    if (fileUploadEnabled &amp;&amp; uploadedFile) {
+      return [
+        {
+          text: `${strings.SITE_BOUNDARY_UPLOADED_DESCRIPTION} ${strings.SITE_BOUNDARY_UPLOAD_TUTORIAL}`,
+          hasTutorial: true,
+        },
+      ];
+    }
+&nbsp;
     if (fileUploadEnabled) {
       const sentences =
         site.siteType === 'detailed'
@@ -1047,7 +1074,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     }
 &nbsp;
     return data;
-  }, [activeLocale, fileUploadEnabled, mode, site.siteType]);
+  }, [activeLocale, fileUploadEnabled, mode, site.siteType, uploadedFile]);
 &nbsp;
   const tutorialDescription = useMemo(() =&gt; {
     <span class="missing-if-branch" title="if path not taken" >I</span>if (!activeLocale) {
@@ -1216,7 +1243,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-09T19:04:32.939Z
+                at 2026-10-09T19:45:53.149Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
