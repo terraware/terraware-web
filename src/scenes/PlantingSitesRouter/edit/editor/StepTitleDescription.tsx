@@ -91,7 +91,6 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           fontWeight={line.isBold ? 600 : 400}
           lineHeight={largeText ? '24px' : '20px'}
           color={line.isWarning ? theme.palette.TwClrIcnWarning : theme.palette.TwClrTxt}
-          margin={theme.spacing(1, 0)}
           whiteSpace={'line-wrap'}
         >
           {line.hasTutorial ? (
