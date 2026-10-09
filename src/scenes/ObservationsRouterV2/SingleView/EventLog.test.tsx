@@ -171,18 +171,8 @@ describe('Observation EventLog species changes', () => {
         ) as string
       )
     ).toBeInTheDocument();
-    // The count lines stay, with the summary added after them.
-    expect(screen.getByText(/live count/)).toBeInTheDocument();
-    expect(screen.getByText(/dead count/)).toBeInTheDocument();
-  });
-
-  it('puts the summary after the counts it describes', async () => {
-    const { events, plotSpecies } = speciesHistory({ name: 'Vigna owahuensis', from: [0, 0, 0], to: [0, 2, 1] });
-    await renderHistory(events, plotSpecies);
-
-    const rendered = screen.getAllByText(/live count|dead count|was added|Added Vigna/).map((el) => el.textContent);
-    const summaryAt = rendered.findIndex((text) => text?.includes('Added Vigna owahuensis'));
-    expect(summaryAt).toBe(rendered.length - 1);
+    // The individual count lines are replaced by the one message, not shown alongside it.
+    expect(screen.queryByText(/live count/)).not.toBeInTheDocument();
   });
 
   it('reports an edit that emptied the species as it being removed', async () => {

@@ -149,15 +149,11 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
     return totals;
   }, [monitoringPlot]);
 
-  const {
-    events: loggedEvents,
-    summaries: speciesSummaries,
-    redundant: redundantSpeciesEntries,
-  } = useMemo(
+  const { summaries: speciesSummaries, redundant: redundantSpeciesEntries } = useMemo(
     () =>
       monitoringPlot
         ? summarizeMonitoringSpeciesEvents(events, resolveSpeciesName, currentSpeciesTotals)
-        : { ...NO_MONITORING_SPECIES_SUMMARIES, events: events ?? [] },
+        : NO_MONITORING_SPECIES_SUMMARIES,
     [currentSpeciesTotals, events, monitoringPlot, resolveSpeciesName]
   );
 
@@ -316,7 +312,7 @@ const EventLog = ({ observationId, plotId, isBiomass }: EventLogProps) => {
         </DialogBox>
       )}
       <EventLogView
-        events={loggedEvents}
+        events={events}
         filterEvent={filterEvent}
         isLoading={isLoading}
         renderEventDescription={renderEventDescription}

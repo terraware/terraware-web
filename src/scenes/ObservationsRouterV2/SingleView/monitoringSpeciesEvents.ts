@@ -12,14 +12,13 @@ export type MonitoringSpeciesEventSummary = { counts: MonitoringSpeciesEventCoun
 );
 
 export type MonitoringSpeciesEventSummaries = {
-  events: EventLogEntryPayload[];
   summaries: Map<EventLogEntryPayload, MonitoringSpeciesEventSummary>;
   redundant: Set<EventLogEntryPayload>;
 };
 
-export const NO_MONITORING_SPECIES_SUMMARIES = {
-  redundant: new Set<EventLogEntryPayload>(),
-  summaries: new Map<EventLogEntryPayload, MonitoringSpeciesEventSummary>(),
+export const NO_MONITORING_SPECIES_SUMMARIES: MonitoringSpeciesEventSummaries = {
+  redundant: new Set(),
+  summaries: new Map(),
 };
 
 type CountEntry = {
@@ -159,14 +158,6 @@ export const summarizeMonitoringSpeciesEvents = (
     );
   });
 
-  const addSummary = (entries: CountEntry[], summary: MonitoringSpeciesEventSummary) => {
-    const ordered = entries.toSorted((a, b) => a.index - b.index);
-    const entry = { ...ordered[0].entry };
-    summaries.set(entry, summary);
-    summaryEntriesByIndex.set(ordered[ordered.length - 1].index, entry);
-  };
-
-  const summaryEntriesByIndex = new Map<number, EventLogEntryPayload>();
   const summarized = groups.filter((group) => group.kind !== undefined);
   const paired = new Set<SpeciesGroup>();
   summarized.forEach((group) => {
@@ -182,35 +173,28 @@ export const summarizeMonitoringSpeciesEvents = (
     paired.add(group);
     paired.add(addition);
 
-    const allEntries = [...group.entries, ...addition.entries];
-    addSummary(allEntries, {
+    const allEntries = [...group.entries, ...addition.entries].toSorted((a, b) => a.index - b.index);
+    summaries.set(allEntries[0].entry, {
       counts: toEventCounts(group),
       kind: 'changed',
       speciesName: group.speciesName,
       toSpeciesName: addition.speciesName,
     });
-    allEntries.forEach(({ entry }) => redundant.add(entry));
+    allEntries.slice(1).forEach(({ entry }) => redundant.add(entry));
   });
 
   summarized.forEach((group) => {
     if (paired.has(group)) {
       return;
     }
-    addSummary(group.entries, {
+    const allEntries = group.entries.toSorted((a, b) => a.index - b.index);
+    summaries.set(allEntries[0].entry, {
       counts: toEventCounts(group),
       kind: group.kind as 'added' | 'removed',
       speciesName: group.speciesName,
     });
+    allEntries.slice(1).forEach(({ entry }) => redundant.add(entry));
   });
 
-  const withSummaries: EventLogEntryPayload[] = [];
-  (events ?? []).forEach((entry, index) => {
-    withSummaries.push(entry);
-    const summaryEntry = summaryEntriesByIndex.get(index);
-    if (summaryEntry) {
-      withSummaries.push(summaryEntry);
-    }
-  });
-
-  return { events: withSummaries, summaries, redundant };
+  return { summaries, redundant };
 };
