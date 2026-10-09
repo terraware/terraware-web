@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import ConfirmModal from 'src/components/Application/ConfirmModal';
 import { Crumb } from 'src/components/BreadCrumbs';
@@ -7,12 +7,7 @@ import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
 import { useApplicationData } from 'src/providers/Application/Context';
-import {
-  requestRestartApplication,
-  requestSubmitApplication,
-} from 'src/redux/features/application/applicationAsyncThunks';
-import { selectApplicationRestart, selectApplicationSubmit } from 'src/redux/features/application/applicationSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useRestartApplicationMutation, useSubmitApplicationMutation } from 'src/queries/generated/applications';
 import SectionView from 'src/scenes/ApplicationRouter/portal/Sections/SectionView';
 import strings from 'src/strings';
 
@@ -26,13 +21,9 @@ const PrescreenView = () => {
   const { selectedApplication, applicationDeliverables, applicationSections, reload } = useApplicationData();
   const { goToApplicationPrescreenResult } = useNavigateTo();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
 
-  const [restartRequestId, setRestartRequestId] = useState<string>('');
-  const [submitRequestId, setSubmitRequestId] = useState<string>('');
-
-  const restartResult = useAppSelector(selectApplicationRestart(restartRequestId));
-  const submitResult = useAppSelector(selectApplicationSubmit(submitRequestId));
+  const [restartApplication, restartResult] = useRestartApplicationMutation();
+  const [submitApplication, submitResult] = useSubmitApplicationMutation();
 
   const prescreenSection = useMemo(
     () => applicationSections.find((section) => section.phase === 'Pre-Screen'),
@@ -63,21 +54,49 @@ const PrescreenView = () => {
 
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
 
+  const onDone = useCallback(
+    (submit: boolean) => {
+      if (!selectedApplication) {
+        return;
+      }
+      setIsLoading(false);
+      setIsConfirmModalOpen(false);
+      if (submit) {
+        goToApplicationPrescreenResult(selectedApplication.id);
+      }
+    },
+    [selectedApplication, goToApplicationPrescreenResult, setIsLoading, setIsConfirmModalOpen]
+  );
+
   const handleRestart = useCallback(() => {
     if (selectedApplication) {
       setIsLoading(true);
-      const dispatched = dispatch(requestRestartApplication({ applicationId: selectedApplication.id }));
-      setRestartRequestId(dispatched.requestId);
+      void restartApplication(selectedApplication.id)
+        .unwrap()
+        .then(() => reload(() => onDone(false)))
+        .then((reloaded) => {
+          if (!reloaded) {
+            setIsLoading(false);
+          }
+        })
+        .catch(() => setIsLoading(false));
     }
-  }, [dispatch, selectedApplication, setIsLoading, setRestartRequestId]);
+  }, [onDone, reload, restartApplication, selectedApplication, setIsLoading]);
 
   const handleSubmit = useCallback(() => {
     if (selectedApplication) {
       setIsLoading(true);
-      const dispatched = dispatch(requestSubmitApplication({ applicationId: selectedApplication.id }));
-      setSubmitRequestId(dispatched.requestId);
+      void submitApplication(selectedApplication.id)
+        .unwrap()
+        .then(() => reload(() => onDone(true)))
+        .then((reloaded) => {
+          if (!reloaded) {
+            setIsLoading(false);
+          }
+        })
+        .catch(() => setIsLoading(false));
     }
-  }, [dispatch, selectedApplication, setIsLoading]);
+  }, [onDone, reload, selectedApplication, setIsLoading, submitApplication]);
 
   const handleConfirm = useCallback(() => {
     if (!selectedApplication) {
@@ -92,30 +111,6 @@ const PrescreenView = () => {
       handleRestart();
     }
   }, [selectedApplication, handleRestart, handleSubmit]);
-
-  const onReload = useCallback(
-    (submit: boolean) => {
-      if (!selectedApplication) {
-        return;
-      }
-      setIsLoading(false);
-      setIsConfirmModalOpen(false);
-      if (submit) {
-        setSubmitRequestId('');
-        goToApplicationPrescreenResult(selectedApplication.id);
-      } else {
-        setRestartRequestId('');
-      }
-    },
-    [selectedApplication, goToApplicationPrescreenResult, setIsLoading, setIsConfirmModalOpen]
-  );
-
-  useEffect(() => {
-    const submitResultSuccess = Boolean(submitResult && submitResult.status === 'success' && submitResult.data);
-    if ((restartResult && restartResult.status === 'success' && restartResult.data) || submitResultSuccess) {
-      void reload(() => onReload(submitResultSuccess));
-    }
-  }, [restartResult, submitResult, onReload, reload]);
 
   const { modalTitle, modalBody } = useMemo(() => {
     if (!activeLocale || !selectedApplication) {
@@ -156,10 +151,7 @@ const PrescreenView = () => {
   );
 
   return (
-    <ApplicationPage
-      crumbs={crumbs}
-      isLoading={submitResult?.status === 'pending' || restartResult?.status === 'pending'}
-    >
+    <ApplicationPage crumbs={crumbs} isLoading={submitResult.isLoading || restartResult.isLoading}>
       {!selectedApplication || !prescreenSection ? null : (
         <>
           <ConfirmModal

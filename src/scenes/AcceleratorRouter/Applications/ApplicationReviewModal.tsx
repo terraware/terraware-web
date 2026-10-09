@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { type JSX, useCallback, useMemo, useState } from 'react';
 
 import { Grid, useTheme } from '@mui/material';
 import { Dropdown, DropdownItem } from '@terraware/web-components';
@@ -7,9 +7,8 @@ import DialogBox from 'src/components/common/DialogBox/DialogBox';
 import TextField from 'src/components/common/Textfield/Textfield';
 import Button from 'src/components/common/button/Button';
 import { useUser } from 'src/providers';
-import { requestReviewApplication } from 'src/redux/features/application/applicationAsyncThunks';
-import { selectApplicationReview } from 'src/redux/features/application/applicationSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useApplicationData } from 'src/providers/Application/Context';
+import { useReviewApplicationMutation } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 import {
   Application,
@@ -24,23 +23,17 @@ import useForm from 'src/utils/useForm';
 type ApplicationReviewModalProps = {
   open: boolean;
   onClose: () => void;
-  onSuccess: () => void;
   application: Application;
 };
 
-const ApplicationReviewModal = ({
-  open,
-  onClose,
-  onSuccess,
-  application,
-}: ApplicationReviewModalProps): JSX.Element => {
+const ApplicationReviewModal = ({ open, onClose, application }: ApplicationReviewModalProps): JSX.Element => {
   const theme = useTheme();
   const { isAllowed } = useUser();
 
-  const dispatch = useAppDispatch();
-
-  const [requestId, setRequestId] = useState<string>('');
-  const result = useAppSelector(selectApplicationReview(requestId));
+  const { reload } = useApplicationData();
+  const [reviewApplication, { isLoading: reviewing }] = useReviewApplicationMutation();
+  const [reloading, setReloading] = useState(false);
+  const busy = reviewing || reloading;
 
   const dropdownOptions: DropdownItem[] = ApplicationReviewStatuses.sort((a, b) => {
     return ApplicationStatusOrder[a] - ApplicationStatusOrder[b];
@@ -73,10 +66,10 @@ const ApplicationReviewModal = ({
   );
 
   const onCloseWrapper = useCallback(() => {
-    if (!(result?.status === 'pending')) {
+    if (!busy) {
       onClose();
     }
-  }, [onClose, result?.status]);
+  }, [busy, onClose]);
 
   const hasChange = useCallback(() => {
     const originalReview: ApplicationReview = {
@@ -88,22 +81,16 @@ const ApplicationReviewModal = ({
 
   const onSave = useCallback(() => {
     if (hasChange()) {
-      const dispatched = dispatch(
-        requestReviewApplication({ applicationId: application.id, review: applicationReview })
-      );
-      setRequestId(dispatched.requestId);
+      void reviewApplication({ applicationId: application.id, reviewApplicationRequestPayload: applicationReview })
+        .unwrap()
+        .then(() => {
+          setReloading(true);
+          return reload(onClose);
+        })
+        .catch(() => undefined)
+        .finally(() => setReloading(false));
     }
-  }, [dispatch, application, applicationReview, hasChange, setRequestId]);
-
-  useEffect(() => {
-    if (result && result.status === 'success') {
-      onSuccess();
-      onClose();
-      return;
-    }
-  }, [result, onSuccess, onClose]);
-
-  const busy = useMemo(() => result?.status === 'pending', [result]);
+  }, [application, applicationReview, hasChange, onClose, reload, reviewApplication]);
 
   return (
     <DialogBox

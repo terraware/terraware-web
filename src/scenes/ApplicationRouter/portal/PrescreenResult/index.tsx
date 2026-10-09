@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
@@ -10,9 +10,7 @@ import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useLocalization } from 'src/providers';
-import { requestRestartApplication } from 'src/redux/features/application/applicationAsyncThunks';
-import { selectApplicationRestart } from 'src/redux/features/application/applicationSelectors';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useRestartApplicationMutation } from 'src/queries/generated/applications';
 import strings from 'src/strings';
 
 import { useApplicationData } from '../../../../providers/Application/Context';
@@ -21,18 +19,13 @@ import ApplicationPage from '../ApplicationPage';
 type ResultViewProp = {
   isFailure: boolean;
   feedback?: string;
-  requestId: string;
-  setRequestId: (requestId: string) => void;
 };
 
-const PrescreenResultView = ({
-  isFailure,
-  feedback,
-  requestId: restartRequestId,
-  setRequestId: setRestartRequestId,
-}: ResultViewProp) => {
+const RESTART_MUTATION_KEY = 'prescreen-result-restart';
+
+const PrescreenResultView = ({ isFailure, feedback }: ResultViewProp) => {
   const theme = useTheme();
-  const dispatch = useAppDispatch();
+  const [restartApplication] = useRestartApplicationMutation({ fixedCacheKey: RESTART_MUTATION_KEY });
   const [isConfirmModalOpen, setIsConfirmModalOpen] = useState<boolean>(false);
 
   const { goToApplicationPrescreen, goToApplication } = useNavigateTo();
@@ -49,29 +42,20 @@ const PrescreenResultView = ({
     }
   }, [selectedApplication, setIsConfirmModalOpen, goToApplication, isFailure]);
 
-  const restartResult = useAppSelector(selectApplicationRestart(restartRequestId));
-
   const handleRestart = useCallback(() => {
-    if (selectedApplication) {
-      const dispatched = dispatch(requestRestartApplication({ applicationId: selectedApplication.id }));
-      setRestartRequestId(dispatched.requestId);
-    }
-  }, [dispatch, selectedApplication, setRestartRequestId]);
-
-  const onReload = useCallback(() => {
     if (!selectedApplication) {
       return;
     }
-
-    setIsConfirmModalOpen(false);
-    goToApplicationPrescreen(selectedApplication.id);
-  }, [selectedApplication, setIsConfirmModalOpen, goToApplicationPrescreen]);
-
-  useEffect(() => {
-    if (restartResult && restartResult.status === 'success' && restartResult.data) {
-      void reload(onReload);
-    }
-  }, [restartResult, onReload, reload]);
+    void restartApplication(selectedApplication.id)
+      .unwrap()
+      .then(() =>
+        reload(() => {
+          setIsConfirmModalOpen(false);
+          goToApplicationPrescreen(selectedApplication.id);
+        })
+      )
+      .catch(() => undefined);
+  }, [goToApplicationPrescreen, reload, restartApplication, selectedApplication]);
 
   if (!selectedApplication) {
     return;
@@ -147,9 +131,7 @@ const PrescreenResultViewWrapper = () => {
   const { activeLocale } = useLocalization();
   const { selectedApplication } = useApplicationData();
 
-  const [requestId, setRequestId] = useState<string>('');
-  const request = useAppSelector(selectApplicationRestart(requestId));
-  const isLoading = useMemo(() => request?.status === 'pending', [request]);
+  const [, { isLoading }] = useRestartApplicationMutation({ fixedCacheKey: RESTART_MUTATION_KEY });
 
   const selectedApplicationId = selectedApplication?.id;
 
@@ -171,8 +153,6 @@ const PrescreenResultViewWrapper = () => {
       <PrescreenResultView
         feedback={selectedApplication?.feedback}
         isFailure={!!selectedApplication && selectedApplication.status === 'Failed Pre-screen'}
-        requestId={requestId}
-        setRequestId={setRequestId}
       />
     </ApplicationPage>
   );
