@@ -442,7 +442,16 @@ export default function Editor(props: EditorProps): JSX.Element {
               />
             </Box>
           )}
-          <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(2) }}>
+          <Card
+            radius={theme.spacing(1)}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              flexGrow: 1,
+              marginTop: theme.spacing(2),
+              position: 'relative',
+            }}
+          >
             {currentStep === 'details' && (
               <Details
                 onChange={onChange}

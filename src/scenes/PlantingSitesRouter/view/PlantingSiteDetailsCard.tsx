@@ -105,7 +105,7 @@ export default function PlantingSiteDetailsCard({ plantingSite }: PlantingSiteDe
     <Card
       busy={isSaving}
       flushMobile
-      radius={theme.spacing(2)}
+      radius={theme.spacing(1)}
       rightComponent={isAdmin(selectedOrganization) ? actions : undefined}
       title={strings.DETAILS}
     >

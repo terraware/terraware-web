@@ -97,7 +97,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
   );
 
   return (
-    <Card flushMobile>
+    <Card flushMobile radius={theme.spacing(1)}>
       <Box display='flex' flexDirection='row' alignItems='center' gap={theme.spacing(1)}>
         <Box width='300px'>
           <Textfield

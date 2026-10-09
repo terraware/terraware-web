@@ -328,7 +328,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
           {!uploadedFile && activeMethod === 'draw' && <DrawingBoundaryStatus onUploadInstead={onOpenUploadModal} />}
         </>
       )}
-      <Box display='flex' flexDirection='column' flexGrow={1} position='relative'>
+      <Box display='flex' flexDirection='column' flexGrow={1}>
         <EditableMap
           key={mapKey}
           editableBoundary={siteBoundaryData?.siteBoundary}
