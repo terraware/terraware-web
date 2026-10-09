@@ -40,6 +40,7 @@ export type EditableMapProps = {
   errorAnnotations?: Feature[];
   featureSelectorOnClick?: FeatureSelectorOnClick;
   isSliceTool?: boolean;
+  onDeleteFeature?: (boundaryId: string, featureId: string | number) => void;
   onEditableBoundaryChanged: (boundary?: FeatureCollection) => void;
   onRedo?: () => void;
   onUndo?: () => void;
@@ -57,6 +58,7 @@ const EditableMap = ({
   errorAnnotations,
   featureSelectorOnClick,
   isSliceTool,
+  onDeleteFeature,
   onEditableBoundaryChanged,
   onRedo,
   onUndo,
@@ -109,6 +111,13 @@ const EditableMap = ({
       setMode?.(editMode);
     }
   }, [editMode, setMode]);
+
+  const onTrashWithoutSelection = useCallback(() => {
+    if (popupInfo?.id !== undefined && onDeleteFeature) {
+      onDeleteFeature(popupInfo.sourceId, popupInfo.id);
+      clearPopupInfo();
+    }
+  }, [clearPopupInfo, onDeleteFeature, popupInfo]);
 
   const onFeatureClick = useCallback(
     (event: MapMouseEvent) => {
@@ -197,6 +206,7 @@ const EditableMap = ({
           onBoundaryCreated={onEditableBoundaryChanged}
           onBoundaryDeleted={onEditableBoundaryChanged}
           onBoundaryUpdated={onEditableBoundaryChanged}
+          onTrashWithoutSelection={onTrashWithoutSelection}
           setMode={setEditMode}
         />
         <UndoRedoControl onRedo={onRedo} onUndo={onUndo} />
@@ -228,6 +238,7 @@ const EditableMap = ({
     errorAnnotations,
     onEditableBoundaryChanged,
     onRedo,
+    onTrashWithoutSelection,
     onUndo,
     popupInfo,
     popupRenderer,

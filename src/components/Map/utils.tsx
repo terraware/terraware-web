@@ -260,6 +260,53 @@ export const overlayAndSubtract = (source: GeometryFeature[], newPolygon: Geomet
 };
 
 /**
+ * Remove a feature and merge its area into a neighboring feature, preserving the property that the features span
+ * the entire boundary. Prefers the neighbor that shares a border with the removed feature.
+ *
+ * @returns
+ *  The resulting list of features.
+ *  Null if the feature wasn't found or is the only feature.
+ */
+export const mergeIntoNeighbor = (
+  features: GeometryFeature[],
+  featureId: string | number
+): GeometryFeature[] | null => {
+  const idOf = (feature: GeometryFeature) => `${feature.properties?.id ?? feature.id}`;
+  const removed = features.find((feature) => idOf(feature) === `${featureId}`);
+  const removedGeometry = removed ? toMultiPolygon(removed.geometry) : null;
+  if (!removedGeometry || features.length < 2) {
+    return null;
+  }
+
+  const candidates = features
+    .filter((feature) => feature !== removed)
+    .map((feature) => {
+      const geometry = toMultiPolygon(feature.geometry);
+      const merged = geometry ? union(geometry, removedGeometry) : null;
+      const mergedGeometry = merged ? toMultiPolygon(merged.geometry) : null;
+      const polygonsJoined = mergedGeometry
+        ? geometry!.coordinates.length + removedGeometry.coordinates.length - mergedGeometry.coordinates.length
+        : -1;
+      return { feature, mergedGeometry, polygonsJoined };
+    })
+    .filter((candidate) => candidate.mergedGeometry !== null);
+
+  if (!candidates.length) {
+    return null;
+  }
+
+  const target = candidates.reduce((best, candidate) =>
+    candidate.polygonsJoined > best.polygonsJoined ? candidate : best
+  );
+
+  return features
+    .filter((feature) => feature !== removed)
+    .map((feature) =>
+      feature === target.feature ? ({ ...feature, geometry: target.mergedGeometry } as GeometryFeature) : feature
+    );
+};
+
+/**
  * Returns left most feature with it's center point.
  * @param features
  *   The features' geometries to consider.

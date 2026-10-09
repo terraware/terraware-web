@@ -10,7 +10,6 @@ import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessa
 import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import { APP_PATHS } from 'src/constants';
 import { useGetOneObservationResults } from 'src/hooks/observations';
-import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { useLocalization, useOrganization } from 'src/providers';
 import { useLazyGetPlantingSiteQuery } from 'src/queries/generated/plantingSites';
@@ -42,11 +41,6 @@ const MonitoringPlotDetails = (): JSX.Element => {
   const [getPlantingSite, getPlantingSiteResult] = useLazyGetPlantingSiteQuery();
   const results = useMemo(() => observationResultsResponse?.observation, [observationResultsResponse?.observation]);
   const plantingSite = useMemo(() => getPlantingSiteResult.data?.site, [getPlantingSiteResult.data?.site]);
-
-  // Poll for survival rate recalculation and refresh observation results when it completes.
-  const { inProgress: survivalRateRecalculationInProgress } = useSurvivalRateCalculationInProgress(
-    results?.plantingSiteId
-  );
 
   const monitoringPlot = useMemo(
     () =>
@@ -265,7 +259,7 @@ const MonitoringPlotDetails = (): JSX.Element => {
         </Box>
       )}
       <SurvivalRateMessageV2 selectedPlantingSiteId={results?.plantingSiteId} />
-      <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
+      <SurvivalRateRecalculationMessage inProgress={!!monitoringPlot?.pending} />
       <Box width='100%'>
         <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>

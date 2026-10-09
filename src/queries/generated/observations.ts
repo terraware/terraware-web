@@ -651,6 +651,8 @@ export type ObservationMonitoringPlotResultsPayload = {
   overlappedByPlotIds: number[];
   /** IDs of any older monitoring plots this one overlaps with. */
   overlapsWithPlotIds: number[];
+  /** True if the numbers in these results are stale and will be updated shortly. The values shown are the most recently calculated ones. */
+  pending: boolean;
   photos: ObservationMonitoringPlotMediaPayload[];
   /** Number of live plants per hectare. */
   plantingDensity?: number;
@@ -760,6 +762,8 @@ export type ObservationSubstratumResultsPayload = {
   /** Percentage of plants of all species that were dead in this substratum's permanent monitoring plots. */
   monitoringPlots: ObservationMonitoringPlotResultsPayload[];
   name: string;
+  /** True if the numbers in these results are stale and will be updated shortly. The values shown are the most recently calculated ones. */
+  pending: boolean;
   /** Estimated planting density for the substratum based on the observed planting densities of monitoring plots. */
   plantingDensity?: number;
   plantingDensityStdDev?: number;
@@ -782,6 +786,8 @@ export type ObservationStratumResultsPayload = {
   name: string;
   /** Planting density for the stratum based only on the plots observed in this observation, without carrying forward last-observed data for substrata that weren't observed. In contrast to plantingDensity, which uses each substratum's most recent observation. */
   observedDensity?: number;
+  /** True if the numbers in these results are stale and will be updated shortly. The values shown are the most recently calculated ones. */
+  pending: boolean;
   /** Estimated planting density for the stratum based on the observed planting densities of monitoring plots. */
   plantingDensity?: number;
   plantingDensityStdDev?: number;
@@ -809,6 +815,8 @@ export type ObservationResultsPayload = {
   observationId: number;
   /** Planting density for the site based only on the plots observed in this observation, without carrying forward last-observed data for substrata that weren't observed. In contrast to plantingDensity, which uses each substratum's most recent observation. */
   observedDensity?: number;
+  /** True if the numbers in these results are stale and will be updated shortly. The values shown are the most recently calculated ones. */
+  pending: boolean;
   /** Estimated planting density for the site, based on the observed planting densities of monitoring plots. */
   plantingDensity?: number;
   plantingDensityStdDev?: number;

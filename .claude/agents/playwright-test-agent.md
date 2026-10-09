@@ -51,7 +51,7 @@ screens. Everything else belongs in a unit or component test.
 
 ## Commands
 
-- `yarn test` for unit tests
+- `yarn test:ci` for unit tests
 - `yarn playwright:run` for Playwright E2E
 - `yarn server:reset` to reset E2E test data (execute before each run of the E2E tests)
 - `yarn format` after changes

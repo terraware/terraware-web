@@ -7,13 +7,11 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
 import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
-import SurvivalRateRecalculationMessage from 'src/components/SurvivalRate/SurvivalRateRecalculationMessage';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
 import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useStickyPlantingSiteId, { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
-import useSurvivalRateCalculationInProgress from 'src/hooks/useSurvivalRateCalculationInProgress';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
@@ -30,6 +28,7 @@ import BiomassList from './BiomassList';
 import ObservationFilters from './ObservationFilters';
 import ObservationsEventsNotification from './ObservationsEventsNotification';
 import PlantMonitoringList from './PlantMonitoringList';
+import ScheduledObservationsMenu from './ScheduledObservations';
 import SurvivalRateSettingsMenu from './SurvivalRateSettingsMenu';
 import ViewModeToggle from './ViewModeToggle';
 
@@ -116,10 +115,6 @@ const ObservationListViewContent = (): JSX.Element => {
     selectPlantingSite,
     showAllSitesOption,
   ]);
-
-  // Poll for survival rate recalculation and refresh observation results when it completes.
-  const { inProgress: survivalRateRecalculationInProgress } =
-    useSurvivalRateCalculationInProgress(plantingSiteIdFilter);
 
   const plantingSiteOptions = useMemo((): DropdownItem[] => {
     const sitesOptions = plantingSites
@@ -235,7 +230,13 @@ const ObservationListViewContent = (): JSX.Element => {
         <Button
           id={'schedule-observation'}
           label={strings.SCHEDULE_OBSERVATION}
-          onClick={() => navigate(APP_PATHS.SCHEDULE_OBSERVATION)}
+          onClick={() =>
+            navigate(
+              typeof selectedPlantingSiteId === 'number'
+                ? `${APP_PATHS.SCHEDULE_OBSERVATION}?plantingSiteId=${selectedPlantingSiteId}`
+                : APP_PATHS.SCHEDULE_OBSERVATION
+            )
+          }
           size='medium'
           sx={newFiltersEnabled ? { flex: isMobile ? 1 : undefined, margin: 0, whiteSpace: 'nowrap' } : undefined}
         />
@@ -243,7 +244,14 @@ const ObservationListViewContent = (): JSX.Element => {
     } else {
       return undefined;
     }
-  }, [isMobile, navigate, newFiltersEnabled, scheduleObservationEnabled, strings.SCHEDULE_OBSERVATION]);
+  }, [
+    isMobile,
+    navigate,
+    newFiltersEnabled,
+    scheduleObservationEnabled,
+    selectedPlantingSiteId,
+    strings.SCHEDULE_OBSERVATION,
+  ]);
 
   const headerActions = useMemo(
     () => (
@@ -256,12 +264,16 @@ const ObservationListViewContent = (): JSX.Element => {
         }}
       >
         {scheduleObservationButton}
+        <ScheduledObservationsMenu
+          canReschedule={isAdmin(selectedOrganization)}
+          plantingSiteId={selectedPlantingSiteId}
+        />
         {typeof selectedPlantingSiteId === 'number' && (
           <SurvivalRateSettingsMenu plantingSiteId={selectedPlantingSiteId} />
         )}
       </Box>
     ),
-    [isDesktop, scheduleObservationButton, selectedPlantingSiteId, theme]
+    [isDesktop, scheduleObservationButton, selectedOrganization, selectedPlantingSiteId, theme]
   );
 
   const countedObservationType = newFiltersEnabled
@@ -326,10 +338,9 @@ const ObservationListViewContent = (): JSX.Element => {
       countedObservationType === 'Monitoring' && (
         <>
           <SurvivalRateMessageV2 selectedPlantingSiteId={plantingSiteIdFilter} />
-          <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
         </>
       ),
-    [countedObservationType, plantingSiteIdFilter, survivalRateRecalculationInProgress]
+    [countedObservationType, plantingSiteIdFilter]
   );
 
   if (newFiltersEnabled) {
@@ -343,10 +354,6 @@ const ObservationListViewContent = (): JSX.Element => {
         }
         title={strings.OBSERVATIONS}
       >
-        <ObservationsEventsNotification />
-        {plotType === 'assigned' && (
-          <SurvivalRateRecalculationMessage inProgress={survivalRateRecalculationInProgress} />
-        )}
         {viewMode !== 'list' && observationMapCard}
         {viewMode !== 'map' &&
           (plotType === 'adHoc' ? (

@@ -33,6 +33,7 @@ export type MapEditorProps = ConstructorParameters<typeof MapboxDraw>[0] & {
   onBoundaryCreated?: BoundaryCallback;
   onBoundaryDeleted?: BoundaryCallback;
   onBoundaryUpdated?: BoundaryCallback;
+  onTrashWithoutSelection?: () => void;
   setMode?: (mode: MapEditorMode) => void;
 };
 
@@ -88,6 +89,7 @@ export default function EditableMapDraw({
   onBoundaryCreated,
   onBoundaryDeleted,
   onBoundaryUpdated,
+  onTrashWithoutSelection,
   setMode,
   ...otherProps
 }: MapEditorProps) {
@@ -176,6 +178,24 @@ export default function EditableMapDraw({
       mapRef?.off('draw.update', onUpdate);
     };
   }, [mapRef, onCreate, onDelete, onModeChange, onSelectionChange, onUpdate]);
+
+  useEffect(() => {
+    const container = mapRef?.getContainer();
+    if (!container || !onTrashWithoutSelection) {
+      return;
+    }
+
+    // Capture phase so the draw control's state is inspected before its own click handler deletes anything.
+    const onClick = (event: MouseEvent) => {
+      const isTrashButton = (event.target as Element | null)?.closest?.('.mapbox-gl-draw_trash');
+      if (isTrashButton && draw.getMode() !== 'draw_polygon' && !draw.getSelectedIds().length) {
+        onTrashWithoutSelection();
+      }
+    };
+
+    container.addEventListener('click', onClick, true);
+    return () => container.removeEventListener('click', onClick, true);
+  }, [draw, mapRef, onTrashWithoutSelection]);
 
   useEffect(() => {
     if (setMode && initializedGeometry) {
