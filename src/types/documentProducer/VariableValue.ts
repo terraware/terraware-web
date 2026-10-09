@@ -1,43 +1,72 @@
-import { components, operations } from 'src/api/types/generated-schema';
+import { operations } from 'src/api/types/generated-schema';
+import {
+  AppendValueOperationPayload,
+  DeleteValueOperationPayload,
+  ListVariableValuesResponsePayload,
+  NewDateValuePayload,
+  NewEmailValuePayload,
+  NewLinkValuePayload,
+  NewNumberValuePayload,
+  NewSectionTextValuePayload,
+  NewSectionVariableValuePayload,
+  NewSelectValuePayload,
+  NewTextValuePayload,
+  ReplaceValuesOperationPayload,
+  UpdateValueOperationPayload,
+  UpdateVariableValuesRequestPayload,
+} from 'src/queries/generated/documentProducerValues';
+import {
+  ExistingDateValuePayload,
+  ExistingDeletedValuePayload,
+  ExistingEmailValuePayload,
+  ExistingImageValuePayload,
+  ExistingLinkValuePayload,
+  ExistingNumberValuePayload,
+  ExistingSectionTextValuePayload,
+  ExistingSectionVariableValuePayload,
+  ExistingSelectValuePayload,
+  ExistingTableValuePayload,
+  ExistingTextValuePayload,
+} from 'src/queries/generated/documentProducerVariables';
 
-export type VariableValuesListResponse = components['schemas']['ListVariableValuesResponsePayload'];
+export type VariableValuesListResponse = ListVariableValuesResponsePayload;
 
 export type VariableValue = VariableValuesListResponse['values'][0];
 
 export type VariableValueValue = VariableValuesListResponse['values'][0]['values'][0];
 
-export type DateVariableValue = components['schemas']['ExistingDateValuePayload'];
+export type DateVariableValue = ExistingDateValuePayload;
 export const isDateVariableValue = (input: unknown): input is DateVariableValue =>
   !!(input as DateVariableValue)?.dateValue;
 
-export type DeletedVariableValue = components['schemas']['ExistingDeletedValuePayload'];
+export type DeletedVariableValue = ExistingDeletedValuePayload;
 
-type EmailVariableValue = components['schemas']['ExistingEmailValuePayload'];
+type EmailVariableValue = ExistingEmailValuePayload;
 
-export type ImageVariableValue = components['schemas']['ExistingImageValuePayload'];
+export type ImageVariableValue = ExistingImageValuePayload;
 
-export type LinkVariableValue = components['schemas']['ExistingLinkValuePayload'];
+export type LinkVariableValue = ExistingLinkValuePayload;
 export const isLinkVariableValue = (input: unknown): input is LinkVariableValue => !!(input as LinkVariableValue)?.url;
 
-export type NumberVariableValue = components['schemas']['ExistingNumberValuePayload'];
+export type NumberVariableValue = ExistingNumberValuePayload;
 export const isNumberVariableValue = (input: unknown): input is NumberVariableValue =>
   (input as NumberVariableValue)?.numberValue !== undefined;
 
-export type SectionTextVariableValue = components['schemas']['ExistingSectionTextValuePayload'];
+export type SectionTextVariableValue = ExistingSectionTextValuePayload;
 export const isSectionTextVariableValue = (input: unknown): input is SectionTextVariableValue =>
   (input as SectionTextVariableValue)?.type === 'SectionText';
 
-export type SectionVariableVariableValue = components['schemas']['ExistingSectionVariableValuePayload'];
+export type SectionVariableVariableValue = ExistingSectionVariableValuePayload;
 export const isSectionVariableVariableValue = (input: unknown): input is SectionVariableVariableValue =>
   (input as SectionVariableVariableValue)?.type === 'SectionVariable';
 
-export type SelectVariableValue = components['schemas']['ExistingSelectValuePayload'];
+export type SelectVariableValue = ExistingSelectValuePayload;
 export const isSelectVariableValue = (input: unknown): input is SelectVariableValue =>
   !!(input as SelectVariableValue)?.optionValues;
 
-export type TableVariableValue = components['schemas']['ExistingTableValuePayload'];
+export type TableVariableValue = ExistingTableValuePayload;
 
-export type TextVariableValue = components['schemas']['ExistingTextValuePayload'];
+export type TextVariableValue = ExistingTextValuePayload;
 export const isTextVariableValue = (input: unknown): input is TextVariableValue =>
   !!(input as TextVariableValue)?.textValue;
 
@@ -85,49 +114,35 @@ export type CombinedInjectedValue = {
   usageType?: 'Injection' | 'Reference';
 };
 
-export type VariableValueTextValue = components['schemas']['ExistingTextValuePayload'];
+export type VariableValueTextValue = ExistingTextValuePayload;
 
-export type VariableValueNumberValue = components['schemas']['ExistingNumberValuePayload'];
+export type VariableValueNumberValue = ExistingNumberValuePayload;
 
-export type VariableValueImageValue = components['schemas']['ExistingImageValuePayload'];
+export type VariableValueImageValue = ExistingImageValuePayload;
 
-export type VariableValueTableValue = components['schemas']['ExistingTableValuePayload'];
+export type VariableValueTableValue = ExistingTableValuePayload;
 
-export type UpdateVariableValueOperation = components['schemas']['UpdateValueOperationPayload'];
+export type UpdateVariableValueOperation = UpdateValueOperationPayload;
 
-export type VariableValueSelectValue = components['schemas']['ExistingSelectValuePayload'];
+export type VariableValueSelectValue = ExistingSelectValuePayload;
 
-export type VariableValueDateValue = components['schemas']['ExistingDateValuePayload'];
+export type VariableValueDateValue = ExistingDateValuePayload;
 
-export type VariableValueEmailValue = components['schemas']['ExistingEmailValuePayload'];
+export type VariableValueEmailValue = ExistingEmailValuePayload;
 
-export type VariableValueLinkValue = components['schemas']['ExistingLinkValuePayload'];
-
-export type NewTextValuePayload = components['schemas']['NewTextValuePayload'];
-
-export type NewNumberValuePayload = components['schemas']['NewNumberValuePayload'];
-
-export type NewSelectValuePayload = components['schemas']['NewSelectValuePayload'];
-
-export type NewDateValuePayload = components['schemas']['NewDateValuePayload'];
-
-export type NewEmailValuePayload = components['schemas']['NewEmailValuePayload'];
-
-export type NewLinkValuePayload = components['schemas']['NewLinkValuePayload'];
+export type VariableValueLinkValue = ExistingLinkValuePayload;
 
 export type UpdateVariableValuesRequestWithProjectId = UpdateVariableValuesRequestPayload & {
   projectId: number;
 };
 
-export type DeleteVariableValueOperation = components['schemas']['DeleteValueOperationPayload'];
-
-export type UpdateVariableValuesRequestPayload = components['schemas']['UpdateVariableValuesRequestPayload'];
+export type DeleteVariableValueOperation = DeleteValueOperationPayload;
 
 export type Operation =
-  | components['schemas']['AppendValueOperationPayload']
-  | components['schemas']['DeleteValueOperationPayload']
-  | components['schemas']['ReplaceValuesOperationPayload']
-  | components['schemas']['UpdateValueOperationPayload'];
+  | AppendValueOperationPayload
+  | DeleteValueOperationPayload
+  | ReplaceValuesOperationPayload
+  | UpdateValueOperationPayload;
 
 type OriginalUploadImageValue = Required<
   operations['uploadProjectImageValue']
@@ -140,18 +155,23 @@ export type UploadImageValueRequestPayloadWithProjectId = UploadImageValueReques
   projectId: number;
 };
 
-export type AppendVariableValueOperation = Omit<components['schemas']['AppendValueOperationPayload'], 'value'> & {
+export type AppendVariableValueOperation = Omit<AppendValueOperationPayload, 'value'> & {
   value: NewNonSectionValuePayloadUnion;
 };
 
-export type NewSectionTextValuePayload = components['schemas']['NewSectionTextValuePayload'];
-
-export type NewSectionVariableValuePayload = components['schemas']['NewSectionVariableValuePayload'];
-
-export type ReplaceSectionValuesOperationPayloadWithProjectId = Omit<
-  components['schemas']['ReplaceValuesOperationPayload'],
-  'values'
-> & {
+export type ReplaceSectionValuesOperationPayloadWithProjectId = Omit<ReplaceValuesOperationPayload, 'values'> & {
   projectId: number;
   values: (NewSectionTextValuePayload | NewSectionVariableValuePayload)[];
+};
+
+export type {
+  NewTextValuePayload,
+  NewNumberValuePayload,
+  NewSelectValuePayload,
+  NewDateValuePayload,
+  NewEmailValuePayload,
+  NewLinkValuePayload,
+  UpdateVariableValuesRequestPayload,
+  NewSectionTextValuePayload,
+  NewSectionVariableValuePayload,
 };
