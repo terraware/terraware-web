@@ -117,7 +117,7 @@
     "sanitize-filename": "^1.6.3",
     "slate": "^0.126.0",
     "slate-dom": "^0.126.0",
-    "slate-react": "^0.127.0",
+    "slate-react": "^0.128.0",
     "swiper": "^14.0.0",
     "web-vitals": "^6.0.0"
   },
