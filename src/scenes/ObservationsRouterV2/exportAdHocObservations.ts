@@ -1,17 +1,10 @@
 import getDateDisplayValue from '@terraware/web-components/utils/date';
-import sanitize from 'sanitize-filename';
 
 import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
 import { getConditionString } from 'src/redux/features/observations/utils';
 import strings from 'src/strings';
 import { AdHocObservationResults } from 'src/types/Observations';
-import { downloadCsv, makeCsv } from 'src/utils/csv';
-
-interface ExportAdHocObservationsResultsParams {
-  adHocObservationsResults: AdHocObservationResults[];
-  plantingSite?: PlantingSitePayload;
-  plantingSitesById: Record<number, PlantingSitePayload>;
-}
+import { makeCsv } from 'src/utils/csv';
 
 export const makeAdHocObservationsCsv = (
   adHocObservations: AdHocObservationResults[],
@@ -167,18 +160,4 @@ export const makeAdHocObservationsCsv = (
   });
 
   return makeCsv(columnHeaders, data, false);
-};
-
-export const exportAdHocObservationsResults = async ({
-  adHocObservationsResults,
-  plantingSite,
-  plantingSitesById,
-}: ExportAdHocObservationsResultsParams) => {
-  const plantingSiteName = plantingSite?.name || strings.ALL_PLANTING_SITES;
-  const filename = sanitize(`${plantingSiteName}-${strings.AD_HOC_PLANT_MONITORING}`);
-
-  const fileBlob = makeAdHocObservationsCsv(adHocObservationsResults, plantingSitesById);
-  const fileContent = await fileBlob.text();
-
-  downloadCsv(filename, fileContent);
 };

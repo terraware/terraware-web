@@ -71,65 +71,6 @@ beforeEach(() => {
   mocks.trees.mockImplementation((ids: number[]) => ({ unwrap: () => Promise.resolve(`trees ${ids.join(',')}`) }));
 });
 
-describe('downloadBiomassObservationsZip', () => {
-  test.each([false, undefined])('omits the filtered suffix when hasFilters is %s', async (hasFilters) => {
-    const { result } = renderHook(useObservationExports);
-    await result.current.downloadBiomassObservationsZip('Site', [{ observationId: 7 }], hasFilters);
-
-    expect(downloadZipFile).toHaveBeenCalledTimes(1);
-    expect(rstest.mocked(downloadZipFile).mock.calls[0][0].dirName).toMatch(
-      /^Site_Ad Hoc Biomass Monitoring plots_\d{4}-\d{2}-\d{2}$/
-    );
-  });
-
-  test('exports all filtered IDs in three bulk CSV requests without per-row lookups', async () => {
-    const { result } = renderHook(useObservationExports);
-    const ids = [9, 3, 8, 1, 7, 2, 6];
-    await result.current.downloadBiomassObservationsZip(
-      'Site',
-      ids.map((observationId) => ({ observationId })),
-      true
-    );
-
-    for (const trigger of [mocks.plots, mocks.species, mocks.trees]) {
-      expect(trigger).toHaveBeenCalledTimes(1);
-      expect(trigger).toHaveBeenCalledWith(ids, true);
-    }
-    expect(mocks.observation).not.toHaveBeenCalled();
-    expect(mocks.site).not.toHaveBeenCalled();
-    expect(downloadZipFile).toHaveBeenCalledTimes(1);
-    const archive = rstest.mocked(downloadZipFile).mock.calls[0][0];
-    expect(archive.dirName).toMatch(/^Site_Ad Hoc Biomass Monitoring plots_\d{4}-\d{2}-\d{2}_filtered$/);
-    expect(archive.suffix).toBe('.csv');
-    expect(archive.files).toEqual([
-      { fileName: expect.stringMatching(/-Plot$/), content: 'plot 9,3,8,1,7,2,6' },
-      { fileName: expect.stringMatching(/-Species$/), content: 'species 9,3,8,1,7,2,6' },
-      { fileName: expect.stringMatching(/-Trees$/), content: 'trees 9,3,8,1,7,2,6' },
-    ]);
-  });
-
-  test('does not request or download files when the filtered table is empty', async () => {
-    const { result } = renderHook(useObservationExports);
-    await result.current.downloadBiomassObservationsZip('Site', []);
-
-    for (const trigger of Object.values(mocks)) {
-      expect(trigger).not.toHaveBeenCalled();
-    }
-    expect(downloadZipFile).not.toHaveBeenCalled();
-  });
-
-  test('does not download a partial archive when a bulk CSV request fails', async () => {
-    const error = new Error('CSV export failed');
-    mocks.species.mockReturnValue({ unwrap: () => Promise.reject(error) });
-    const { result } = renderHook(useObservationExports);
-
-    await expect(
-      result.current.downloadBiomassObservationsZip('Site', [{ observationId: 1 }, { observationId: 2 }])
-    ).rejects.toBe(error);
-    expect(downloadZipFile).not.toHaveBeenCalled();
-  });
-});
-
 describe('downloadBiomassObservationDetails', () => {
   test('keeps the individual observation export as three CSV files', async () => {
     const { result } = renderHook(useObservationExports);
@@ -256,6 +197,22 @@ describe('downloadAdHocObservationsZip', () => {
     for (const trigger of Object.values(mocks)) {
       expect(trigger).not.toHaveBeenCalled();
     }
+    expect(downloadZipFile).not.toHaveBeenCalled();
+  });
+
+  test('does not download a partial archive when a bulk CSV request fails', async () => {
+    const error = new Error('CSV export failed');
+    mocks.species.mockReturnValue({ unwrap: () => Promise.reject(error) });
+    const { result } = renderHook(useObservationExports);
+
+    await expect(
+      result.current.downloadAdHocObservationsZip({
+        adHocObservationsResults: [],
+        biomassObservationIds: [1, 2],
+        siteName: 'Site',
+        plantingSitesById: {},
+      })
+    ).rejects.toBe(error);
     expect(downloadZipFile).not.toHaveBeenCalled();
   });
 });

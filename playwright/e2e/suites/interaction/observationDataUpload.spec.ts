@@ -39,7 +39,7 @@ test.describe('ObservationDataUploadTests', () => {
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
     await openNavItem(page, 'Plantings', 'Observations');
-    await page.getByRole('textbox').first().click();
+    await page.locator('#planting-site-selector').click();
     await page.locator('li.select-value', { hasText: 'All Planting Sites' }).click();
 
     const observationLink = page.locator(`a[href="/observations/${observationId}"]`);

@@ -1,22 +1,19 @@
 import React, { type JSX, useEffect, useMemo, useRef } from 'react';
 import { useMatch, useSearchParams } from 'react-router';
 
-import { Box, Typography, useTheme } from '@mui/material';
-import { Button, Dropdown, DropdownItem, Separator, Tabs } from '@terraware/web-components';
+import { Box, useTheme } from '@mui/material';
+import { Button, Dropdown, DropdownItem } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Page from 'src/components/Page';
-import SurvivalRateMessageV2 from 'src/components/SurvivalRate/SurvivalRateMessageV2';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
-import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import useStickyPlantingSiteId, { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers';
 import MobileAppCard from 'src/scenes/Home/MobileAppCard';
 import { isAdmin } from 'src/utils/organization';
-import useStickyTabs from 'src/utils/useStickyTabs';
 
 import ObservationMapWrapper from '../Map';
 import ObservationFiltersProvider, { PlotType, useObservationFilters } from '../ObservationFiltersProvider';
@@ -24,13 +21,10 @@ import useObservablePlantingSites from '../Schedule/useObservablePlantingSites';
 import SelectedObservationProvider from '../SelectedObservationProvider';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import AdHocObservationsList from './AdHocObservationsList';
-import BiomassList from './BiomassList';
 import ObservationFilters from './ObservationFilters';
-import ObservationsEventsNotification from './ObservationsEventsNotification';
 import PlantMonitoringList from './PlantMonitoringList';
 import ScheduledObservationsMenu from './ScheduledObservations';
 import SurvivalRateSettingsMenu from './SurvivalRateSettingsMenu';
-import ViewModeToggle from './ViewModeToggle';
 
 const ObservationListViewContent = (): JSX.Element => {
   const { selectedOrganization } = useOrganization();
@@ -38,9 +32,8 @@ const ObservationListViewContent = (): JSX.Element => {
   const navigate = useSyncNavigate();
   const theme = useTheme();
   const { isDesktop, isMobile } = useDeviceInfo();
-  const newFiltersEnabled = useFeatureEnabled('New Observation Filters');
 
-  const { observationType, plotType, setPlotType, viewMode } = useObservationFilters();
+  const { observationType, plotType, viewMode } = useObservationFilters();
 
   const observableSites = useObservablePlantingSites();
   const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites();
@@ -153,72 +146,6 @@ const ObservationListViewContent = (): JSX.Element => {
     [isMobile, plantingSiteOptions, selectPlantingSite, selectedPlantingSiteId]
   );
 
-  const PageHeaderPlantingSiteDropdown = useMemo(
-    () => (
-      <Box sx={{ alignItems: 'center', display: 'flex', gap: theme.spacing(2), width: '100%' }}>
-        {!isMobile && (
-          <Typography fontSize='24px' fontWeight='600' paddingLeft={'24px'}>
-            {strings.OBSERVATIONS}
-          </Typography>
-        )}
-        <Separator height={'40px'} />
-        <Typography lineHeight={'40px'} whiteSpace={'nowrap'}>
-          {strings.PLANTING_SITE}
-        </Typography>
-        <Dropdown
-          fullWidth
-          required
-          selectedValue={selectedPlantingSiteId}
-          options={plantingSiteOptions}
-          onChange={(value: string) =>
-            selectPlantingSite(value === ALL_PLANTING_SITES ? ALL_PLANTING_SITES : Number(value))
-          }
-          sx={{ flex: 1, maxWidth: '400px' }}
-        />
-        {newFiltersEnabled && isDesktop && <ViewModeToggle />}
-      </Box>
-    ),
-    [
-      isMobile,
-      newFiltersEnabled,
-      strings,
-      theme,
-      selectedPlantingSiteId,
-      isDesktop,
-      plantingSiteOptions,
-      selectPlantingSite,
-    ]
-  );
-
-  const tabs = useMemo(
-    () => [
-      {
-        id: 'plantMonitoring',
-        label: strings.PLANT_MONITORING,
-        children: (
-          <PlantMonitoringList
-            onPlotTypeChange={setPlotType}
-            plantingSiteId={selectedPlantingSiteId}
-            plotType={plotType}
-          />
-        ),
-      },
-      {
-        id: 'biomassMeasurements',
-        label: strings.BIOMASS_MONITORING,
-        children: <BiomassList plantingSiteId={selectedPlantingSiteId} />,
-      },
-    ],
-    [plotType, selectedPlantingSiteId, setPlotType, strings.BIOMASS_MONITORING, strings.PLANT_MONITORING]
-  );
-
-  const { activeTab, onChangeTab } = useStickyTabs({
-    defaultTab: 'plantMonitoring',
-    tabs,
-    viewIdentifier: 'observations',
-  });
-
-  const isBiomass = useMemo(() => activeTab === 'biomassMeasurements', [activeTab]);
   const scheduleObservationEnabled = useMemo(
     () => observableSites && isAdmin(selectedOrganization),
     [observableSites, selectedOrganization]
@@ -238,24 +165,13 @@ const ObservationListViewContent = (): JSX.Element => {
             )
           }
           size='medium'
-          sx={
-            newFiltersEnabled
-              ? { '&.button': { margin: 0 }, flex: isMobile ? '1 0 auto' : undefined, whiteSpace: 'nowrap' }
-              : undefined
-          }
+          sx={{ '&.button': { margin: 0 }, flex: isMobile ? '1 0 auto' : undefined, whiteSpace: 'nowrap' }}
         />
       );
     } else {
       return undefined;
     }
-  }, [
-    isMobile,
-    navigate,
-    newFiltersEnabled,
-    scheduleObservationEnabled,
-    selectedPlantingSiteId,
-    strings.SCHEDULE_OBSERVATION,
-  ]);
+  }, [isMobile, navigate, scheduleObservationEnabled, selectedPlantingSiteId, strings.SCHEDULE_OBSERVATION]);
 
   const headerActions = useMemo(
     () => (
@@ -283,51 +199,34 @@ const ObservationListViewContent = (): JSX.Element => {
     [isDesktop, scheduleObservationButton, selectedOrganization, selectedPlantingSiteId, theme]
   );
 
-  const countedObservationType = newFiltersEnabled
-    ? observationType
-    : isBiomass
-      ? 'Biomass Measurements'
-      : 'Monitoring';
+  const countedPlotType: PlotType = observationType === 'Biomass Measurements' ? 'adHoc' : plotType;
 
-  const countedPlotType: PlotType = countedObservationType === 'Biomass Measurements' ? 'adHoc' : plotType;
-
-  const { emptyState, observations: filteredObservations } = useFilteredObservationResults({
-    observationType: countedObservationType,
+  const { emptyState } = useFilteredObservationResults({
+    observationType,
     plantingSiteId: selectedPlantingSiteId,
     plotType: countedPlotType,
   });
-  const hasObservationsResults = filteredObservations.length > 0;
 
   const observationMapCard = useMemo(
-    () =>
-      (newFiltersEnabled || hasObservationsResults) && (
-        <Card
-          radius={'8px'}
-          style={{
-            marginBottom: theme.spacing(3),
-            paddingTop: newFiltersEnabled ? theme.spacing(1) : undefined,
-            width: '100%',
-          }}
-        >
-          <ObservationMapWrapper
-            emptyState={emptyState}
-            observationType={countedObservationType}
-            plantingSiteId={plantingSiteIdFilter}
-            plotType={countedPlotType}
-            selectPlantingSiteId={selectPlantingSite}
-          />
-        </Card>
-      ),
-    [
-      countedObservationType,
-      countedPlotType,
-      emptyState,
-      hasObservationsResults,
-      newFiltersEnabled,
-      plantingSiteIdFilter,
-      selectPlantingSite,
-      theme,
-    ]
+    () => (
+      <Card
+        radius={'8px'}
+        style={{
+          marginBottom: theme.spacing(3),
+          paddingTop: theme.spacing(1),
+          width: '100%',
+        }}
+      >
+        <ObservationMapWrapper
+          emptyState={emptyState}
+          observationType={observationType}
+          plantingSiteId={plantingSiteIdFilter}
+          plotType={countedPlotType}
+          selectPlantingSiteId={selectPlantingSite}
+        />
+      </Card>
+    ),
+    [countedPlotType, emptyState, observationType, plantingSiteIdFilter, selectPlantingSite, theme]
   );
 
   const mobileAppCard = useMemo(
@@ -347,52 +246,23 @@ const ObservationListViewContent = (): JSX.Element => {
     [strings]
   );
 
-  const survivalRateMessages = useMemo(
-    () =>
-      countedObservationType === 'Monitoring' && (
-        <>
-          <SurvivalRateMessageV2 selectedPlantingSiteId={plantingSiteIdFilter} />
-        </>
-      ),
-    [countedObservationType, plantingSiteIdFilter]
-  );
-
-  if (newFiltersEnabled) {
-    return (
-      <Page
-        collapsibleHeader
-        rightComponent={headerActions}
-        stickyHeader
-        subHeader={
-          <ObservationFilters plantingSiteId={selectedPlantingSiteId} plantingSiteSelector={plantingSiteSelector} />
-        }
-        title={strings.OBSERVATIONS}
-      >
-        {viewMode !== 'list' && observationMapCard}
-        {viewMode !== 'map' &&
-          (plotType === 'adHoc' ? (
-            <AdHocObservationsList plantingSiteId={selectedPlantingSiteId} />
-          ) : (
-            <PlantMonitoringList plantingSiteId={selectedPlantingSiteId} plotType={plotType} />
-          ))}
-        {mobileAppCard}
-      </Page>
-    );
-  }
-
   return (
     <Page
-      title={isMobile ? strings.OBSERVATIONS : PageHeaderPlantingSiteDropdown}
-      rightComponent={scheduleObservationButton}
-      leftComponent={isMobile ? PageHeaderPlantingSiteDropdown : undefined}
-      leftComponentGridSize={isMobile ? 7 : 0}
-      rightComponentGridSize={4}
+      collapsibleHeader
+      rightComponent={headerActions}
+      stickyHeader
+      subHeader={
+        <ObservationFilters plantingSiteId={selectedPlantingSiteId} plantingSiteSelector={plantingSiteSelector} />
+      }
+      title={strings.OBSERVATIONS}
     >
-      <ObservationsEventsNotification />
-      {survivalRateMessages}
-      <Tabs activeTab={activeTab} onChangeTab={onChangeTab} tabs={tabs}>
-        {observationMapCard}
-      </Tabs>
+      {viewMode !== 'list' && observationMapCard}
+      {viewMode !== 'map' &&
+        (plotType === 'adHoc' ? (
+          <AdHocObservationsList plantingSiteId={selectedPlantingSiteId} />
+        ) : (
+          <PlantMonitoringList plantingSiteId={selectedPlantingSiteId} />
+        ))}
       {mobileAppCard}
     </Page>
   );

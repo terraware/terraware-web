@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react';
 
 import { getDateDisplayValue } from '@terraware/web-components/utils';
-import { DateTime } from 'luxon';
 import sanitize from 'sanitize-filename';
 
 import { APP_PATHS } from 'src/constants';
@@ -643,24 +642,6 @@ const useObservationExports = () => {
     [getObservationResults, getPlantingSite, makeBiomassCsvFiles, strings.BIOMASS_OBSERVATION_FILENAME_PREFIX]
   );
 
-  const downloadBiomassObservationsZip = useCallback(
-    async (siteName: string, observations: { observationId: number }[], hasFilters = false) => {
-      if (observations.length === 0) {
-        return;
-      }
-
-      const downloadDate = DateTime.now().setZone(defaultTimeZone).toFormat('yyyy-MM-dd');
-      const fileNamePrefix = `${siteName}_Ad Hoc Biomass Monitoring plots_${downloadDate}${hasFilters ? '_filtered' : ''}`;
-      const observationIds = observations.map(({ observationId }) => observationId);
-      await downloadZipFile({
-        dirName: fileNamePrefix,
-        files: await makeBiomassCsvFiles(observationIds, fileNamePrefix),
-        suffix: '.csv',
-      });
-    },
-    [defaultTimeZone, makeBiomassCsvFiles]
-  );
-
   const downloadAdHocObservationsZip = useCallback(
     async ({
       adHocObservationsResults,
@@ -706,7 +687,6 @@ const useObservationExports = () => {
     downloadObservationCsv,
     downloadObservationGpx,
     downloadBiomassObservationDetails,
-    downloadBiomassObservationsZip,
   };
 };
 

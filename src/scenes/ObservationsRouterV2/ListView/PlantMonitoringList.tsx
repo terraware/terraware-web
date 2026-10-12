@@ -1,14 +1,12 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
-import { Box, IconButton, Tooltip, Typography, useTheme } from '@mui/material';
-import { Dropdown, EditableTable, EditableTableColumn, Icon } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { Box, Typography, useTheme } from '@mui/material';
+import { EditableTable, EditableTableColumn } from '@terraware/web-components';
 import {
   MRT_Cell,
   MRT_Row,
   MRT_ShowHideColumnsButton,
   MRT_ToggleDensePaddingButton,
-  MRT_ToggleFiltersButton,
   MRT_ToggleFullScreenButton,
   MRT_ToggleGlobalFilterButton,
 } from 'material-react-table';
@@ -19,39 +17,26 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import TextTruncated from 'src/components/common/TextTruncated';
 import TableRowPopupMenu from 'src/components/common/table/TableRowPopupMenu';
-import EmptyStateContent from 'src/components/emptyStatePages/EmptyStateContent';
 import { APP_PATHS } from 'src/constants';
-import { useFeatureEnabled } from 'src/features';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
 import usePollPendingSurvivalRates from 'src/hooks/usePollPendingSurvivalRates';
 import { ALL_PLANTING_SITES, type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useTableState from 'src/hooks/useTableState';
 import { useLocalization, useOrganization } from 'src/providers';
-import { PlantingSitePayload } from 'src/queries/generated/plantingSites';
-import { useLazyGetAllT0SiteDataSetQuery } from 'src/queries/generated/t0';
-import { useLazyGetPlotsWithObservationsQuery } from 'src/queries/search/t0';
-import { AdHocObservationResults, ObservationState, getStatus } from 'src/types/Observations';
-import { MultiPolygon } from 'src/types/Tracking';
+import { ObservationState, getStatus } from 'src/types/Observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { hasPendingResults } from 'src/utils/observation';
 import { isAdmin } from 'src/utils/organization';
-import { makeDateRangeFilterFn, stripColumnFilters } from 'src/utils/tableFilters';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { useAbandonObservationModal } from '../Abandon';
-import { PlotType } from '../ObservationFiltersProvider';
-import { exportAdHocObservationsResults } from '../exportAdHocObservations';
 import useFilteredObservationResults from '../useFilteredObservationResults';
 import useObservationExports from '../useObservationExports';
 import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
 import SelectObservationButton from './SelectObservationButton';
 
 type PlantMonitoringRow = {
-  adHocPlotNumber?: number;
-  monitoringPlotId?: number;
   observationId: number;
-  plantingSiteId: number;
   observationDate?: string;
   observationState?: ObservationState;
   state: string;
@@ -66,10 +51,9 @@ type PlantMonitoringRow = {
   completedDate?: string;
 };
 
-const ASSIGNED_STORAGE_KEY = 'plant-monitoring-assigned-table';
-const NEW_ASSIGNED_STORAGE_KEY = 'observations-assigned-table';
+const STORAGE_KEY = 'observations-assigned-table';
 
-const DEFAULT_ASSIGNED_COLUMN_ORDER = [
+const DEFAULT_COLUMN_ORDER = [
   'observationDate',
   'completedDate',
   'totalLive',
@@ -83,8 +67,12 @@ const DEFAULT_ASSIGNED_COLUMN_ORDER = [
   'actionsMenu',
 ];
 
-const DEFAULT_ASSIGNED_COLUMN_VISIBILITY = { plantingSiteName: false, state: false, strata: false };
-const ADHOC_STORAGE_KEY = 'plant-monitoring-adhoc-table';
+const DEFAULT_COLUMN_VISIBILITY = { plantingSiteName: false, state: false, strata: false };
+
+const toLocalDate = (dateStr?: string) => {
+  const match = dateStr?.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return match ? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : null;
+};
 
 const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow }) => {
   const { strings } = useLocalization();
@@ -142,34 +130,24 @@ const PlantMonitoringActionsMenuContent = ({ row }: { row: PlantMonitoringRow })
 };
 
 type PlantMonitoringListProps = {
-  onPlotTypeChange?: (plotType: PlotType) => void;
   plantingSiteId?: PlantingSiteId;
-  plotType: PlotType;
 };
 
-const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: PlantMonitoringListProps) => {
+const PlantMonitoringList = ({ plantingSiteId }: PlantMonitoringListProps) => {
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
-  const defaultTimezone = useDefaultTimeZone().get().id;
   const scheduleObservationsEnabled = isAdmin(selectedOrganization);
   const { activeLocale, strings } = useLocalization();
-  const { isMobile } = useDeviceInfo();
-  const navigate = useSyncNavigate();
 
-  const isAdHoc = plotType === 'adHoc';
-  const newFiltersEnabled = useFeatureEnabled('New Observation Filters');
-  const showSelectObservation = newFiltersEnabled && typeof plantingSiteId === 'number';
-  const showSiteName = newFiltersEnabled && plantingSiteId === ALL_PLANTING_SITES;
+  const showSelectObservation = typeof plantingSiteId === 'number';
+  const showSiteName = plantingSiteId === ALL_PLANTING_SITES;
 
-  const assignedStorageKey = newFiltersEnabled ? NEW_ASSIGNED_STORAGE_KEY : ASSIGNED_STORAGE_KEY;
-  const assignedTableState = useTableState(assignedStorageKey, {
-    defaultColumnOrder: newFiltersEnabled ? DEFAULT_ASSIGNED_COLUMN_ORDER : undefined,
-    defaultColumnVisibility: newFiltersEnabled ? DEFAULT_ASSIGNED_COLUMN_VISIBILITY : undefined,
-    persistFilters: !newFiltersEnabled,
+  const tableState = useTableState(STORAGE_KEY, {
+    defaultColumnOrder: DEFAULT_COLUMN_ORDER,
+    defaultColumnVisibility: DEFAULT_COLUMN_VISIBILITY,
   });
-  const adHocTableState = useTableState(ADHOC_STORAGE_KEY, { persistFilters: !newFiltersEnabled });
 
-  const { plantingSites, isSuccess: plantingSitesLoaded } = useOrganizationPlantingSites({ full: true });
+  const { plantingSites } = useOrganizationPlantingSites({ full: true });
   const {
     emptyState,
     isLoading,
@@ -177,7 +155,7 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
   } = useFilteredObservationResults({
     observationType: 'Monitoring',
     plantingSiteId,
-    plotType,
+    plotType: 'assigned',
   });
   const emptyMessage = useObservationsEmptyMessage(emptyState);
 
@@ -185,97 +163,37 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
     typeof plantingSiteId === 'number' ? plantingSiteId : undefined,
     observationResults.some(hasPendingResults)
   );
-  const [getT0SiteDataSet, getT0SiteDataSetResponse] = useLazyGetAllT0SiteDataSetQuery();
-  const [getPlotsWithObservations, getPlotsWithObservationsResponse] = useLazyGetPlotsWithObservationsQuery();
 
-  const survivalRateSet = useMemo(() => getT0SiteDataSetResponse.data?.allSet, [getT0SiteDataSetResponse.data?.allSet]);
-  const plotsWithObservations = useMemo(
-    () => getPlotsWithObservationsResponse.data ?? [],
-    [getPlotsWithObservationsResponse.data]
-  );
-
-  const plantingSitesById = useMemo(
-    () =>
-      plantingSites.reduce(
-        (sites, site) => {
-          sites[site.id] = site;
-          return sites;
-        },
-        {} as { [siteId: number]: PlantingSitePayload }
-      ),
-    [plantingSites]
-  );
-
-  useEffect(() => {
-    if (typeof plantingSiteId === 'number') {
-      void getT0SiteDataSet(plantingSiteId, true);
-      void getPlotsWithObservations(plantingSiteId, true);
-    }
-  }, [getPlotsWithObservations, getT0SiteDataSet, plantingSiteId]);
+  const plantingSiteNames = useMemo(() => new Map(plantingSites.map((site) => [site.id, site.name])), [plantingSites]);
 
   const rows = useMemo(
     () =>
       observationResults.map((observationResult): PlantMonitoringRow => {
-        const plantingSite = plantingSitesById[observationResult.plantingSiteId];
-
-        const strataNames = observationResult.strata.map((stratumResult) => stratumResult.name);
-
         const completedDate = observationResult.completedTime ?? undefined;
-        const observationDate = completedDate ?? observationResult.startDate;
-        const adHocPlot = observationResult.adHocPlot;
-        const species = isAdHoc ? adHocPlot?.species ?? [] : observationResult.species;
         const totalLive =
-          species.length > 0
-            ? species.reduce((total, plantSpecies) => (total += plantSpecies.totalLive), 0)
+          observationResult.species.length > 0
+            ? observationResult.species.reduce((total, plantSpecies) => total + plantSpecies.totalLive, 0)
             : undefined;
 
-        const totalPlants = isAdHoc ? adHocPlot?.totalPlants ?? 0 : observationResult.totalPlants;
-        const totalSpecies = isAdHoc ? adHocPlot?.totalSpecies ?? 0 : observationResult.totalSpecies;
-
         return {
-          adHocPlotNumber: observationResult.adHocPlot?.monitoringPlotNumber,
-          monitoringPlotId: observationResult.adHocPlot?.monitoringPlotId,
           observationId: observationResult.observationId,
-          plantingSiteId: observationResult.plantingSiteId,
-          observationDate,
+          observationDate: completedDate ?? observationResult.startDate,
           observationState: observationResult.state,
           state: getStatus(observationResult.state, strings),
-          plantingSiteName: plantingSite?.name,
-          strata: strataNames.join('\r'),
+          plantingSiteName: plantingSiteNames.get(observationResult.plantingSiteId),
+          strata: observationResult.strata.map((stratumResult) => stratumResult.name).join('\r'),
           totalLive,
-          totalPlants,
-          totalSpecies,
+          totalPlants: observationResult.totalPlants,
+          totalSpecies: observationResult.totalSpecies,
           plantingDensity: observationResult.observedDensity,
           survivalRate: observationResult.survivalRate,
           survivalRatePending: observationResult.pending,
           completedDate,
         };
       }),
-    [isAdHoc, observationResults, plantingSitesById, strings]
+    [observationResults, plantingSiteNames, strings]
   );
 
-  const uniqueStatuses = useMemo(
-    () =>
-      Array.from(new Set(rows.map((r) => r.state)))
-        .filter(Boolean)
-        .sort(),
-    [rows]
-  );
-
-  const uniquePlantingSiteNames = useMemo(
-    () => Array.from(new Set(rows.map((r) => r.plantingSiteName).filter((n): n is string => !!n))).sort(),
-    [rows]
-  );
-
-  const navigateToSurvivalRateSettings = useCallback(() => {
-    if (typeof plantingSiteId === 'number') {
-      navigate({
-        pathname: APP_PATHS.SURVIVAL_RATE_SETTINGS_V2.replace(':plantingSiteId', plantingSiteId.toString()),
-      });
-    }
-  }, [navigate, plantingSiteId]);
-
-  // Cell components
   const ObservationDateCell = useCallback(
     ({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => {
       const row = cell.row.original;
@@ -297,27 +215,6 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
       );
     },
     [activeLocale, showSelectObservation, showSiteName, theme]
-  );
-
-  const AdHocPlotNumberCell = useCallback(
-    ({ cell }: { cell: MRT_Cell<PlantMonitoringRow> }) => {
-      const row = cell.row.original;
-      const url = APP_PATHS.OBSERVATION_DETAILS_V2.replace(':observationId', row.observationId.toString());
-      return (
-        <Box alignItems='center' display='flex' gap={1}>
-          <Link fontSize='16px' to={url}>
-            {row.adHocPlotNumber}
-          </Link>
-          {showSelectObservation && row.monitoringPlotId !== undefined && (
-            <SelectObservationButton
-              adHocPlot={{ monitoringPlotId: row.monitoringPlotId, plantingSiteId: row.plantingSiteId }}
-              observationId={row.observationId}
-            />
-          )}
-        </Box>
-      );
-    },
-    [showSelectObservation]
   );
 
   const StrataCell = useCallback(
@@ -356,104 +253,32 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
     []
   );
 
-  const assignedColumns = useMemo((): EditableTableColumn<PlantMonitoringRow>[] => {
+  const columns = useMemo((): EditableTableColumn<PlantMonitoringRow>[] => {
     const baseColumns: EditableTableColumn<PlantMonitoringRow>[] = [
       {
         id: 'observationDate',
-        header: newFiltersEnabled ? strings.OBSERVATION : strings.DATE,
+        header: strings.OBSERVATION,
         size: showSelectObservation ? 230 : 180,
-        accessorFn: (row) => {
-          const dateStr = row.observationDate;
-          if (!dateStr) {
-            return null;
-          }
-          const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
-          if (!match) {
-            return null;
-          }
-          return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
-        },
-        filterVariant: 'date-range',
-        filterFn: makeDateRangeFilterFn<PlantMonitoringRow>('observationDate'),
+        accessorFn: (row) => toLocalDate(row.observationDate),
         Cell: ObservationDateCell,
       },
-      {
-        id: 'state',
-        header: strings.STATUS,
-        accessorKey: 'state',
-        filterVariant: 'select',
-        filterSelectOptions: uniqueStatuses,
-      },
-      {
-        id: 'plantingSiteName',
-        header: strings.PLANTING_SITE,
-        accessorKey: 'plantingSiteName',
-        filterVariant: 'select',
-        filterSelectOptions: uniquePlantingSiteNames,
-      },
-      {
-        id: 'strata',
-        header: strings.STRATA,
-        accessorKey: 'strata',
-        filterVariant: 'text',
-        Cell: StrataCell,
-      },
-      {
-        id: 'totalLive',
-        header: strings.LIVE_PLANTS,
-        accessorKey: 'totalLive',
-        filterVariant: 'range',
-        Cell: NumberCell,
-      },
-      {
-        id: 'totalPlants',
-        header: strings.TOTAL_PLANTS,
-        accessorKey: 'totalPlants',
-        filterVariant: 'range',
-        Cell: NumberCell,
-      },
-      {
-        id: 'totalSpecies',
-        header: strings.SPECIES,
-        accessorKey: 'totalSpecies',
-        filterVariant: 'range',
-        Cell: NumberCell,
-      },
-      {
-        id: 'plantingDensity',
-        header: strings.PLANT_DENSITY,
-        accessorKey: 'plantingDensity',
-        filterVariant: 'range',
-        Cell: NumberCell,
-      },
-      {
-        id: 'survivalRate',
-        header: strings.SURVIVAL_RATE,
-        accessorKey: 'survivalRate',
-        filterVariant: 'range',
-        Cell: SurvivalRateCell,
-      },
+      { id: 'state', header: strings.STATUS, accessorKey: 'state' },
+      { id: 'plantingSiteName', header: strings.PLANTING_SITE, accessorKey: 'plantingSiteName' },
+      { id: 'strata', header: strings.STRATA, accessorKey: 'strata', Cell: StrataCell },
+      { id: 'totalLive', header: strings.LIVE_PLANTS, accessorKey: 'totalLive', Cell: NumberCell },
+      { id: 'totalPlants', header: strings.TOTAL_PLANTS, accessorKey: 'totalPlants', Cell: NumberCell },
+      { id: 'totalSpecies', header: strings.SPECIES, accessorKey: 'totalSpecies', Cell: NumberCell },
+      { id: 'plantingDensity', header: strings.PLANT_DENSITY, accessorKey: 'plantingDensity', Cell: NumberCell },
+      { id: 'survivalRate', header: strings.SURVIVAL_RATE, accessorKey: 'survivalRate', Cell: SurvivalRateCell },
       {
         id: 'completedDate',
         header: strings.DATE_OBSERVED,
-        accessorFn: (row) => {
-          const dateStr = row.completedDate;
-          if (!dateStr) {
-            return null;
-          }
-          const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
-          if (!match) {
-            return null;
-          }
-          return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
-        },
-        filterVariant: 'date-range',
-        filterFn: makeDateRangeFilterFn<PlantMonitoringRow>('completedDate'),
+        accessorFn: (row) => toLocalDate(row.completedDate),
         Cell: CompletedDateCell,
       },
     ];
 
-    const columns = scheduleObservationsEnabled
+    return scheduleObservationsEnabled
       ? [
           ...baseColumns,
           {
@@ -465,13 +290,8 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
           },
         ]
       : baseColumns;
-
-    return newFiltersEnabled ? stripColumnFilters(columns) : columns;
   }, [
-    newFiltersEnabled,
     strings,
-    uniqueStatuses,
-    uniquePlantingSiteNames,
     showSelectObservation,
     scheduleObservationsEnabled,
     ObservationDateCell,
@@ -481,173 +301,6 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
     CompletedDateCell,
     ActionsMenuCell,
   ]);
-
-  const adHocColumns = useMemo((): EditableTableColumn<PlantMonitoringRow>[] => {
-    const columns: EditableTableColumn<PlantMonitoringRow>[] = [
-      {
-        id: 'adHocPlotNumber',
-        header: strings.PLOT,
-        accessorKey: 'adHocPlotNumber',
-        filterVariant: 'range',
-        size: showSelectObservation ? 160 : undefined,
-        Cell: AdHocPlotNumberCell,
-      },
-      {
-        id: 'plantingSiteName',
-        header: strings.PLANTING_SITE,
-        accessorKey: 'plantingSiteName',
-        filterVariant: 'select',
-        filterSelectOptions: uniquePlantingSiteNames,
-      },
-      {
-        id: 'completedDate',
-        header: strings.DATE_OBSERVED,
-        accessorFn: (row) => {
-          const dateStr = row.completedDate;
-          if (!dateStr) {
-            return null;
-          }
-          const match = dateStr.match(/^(\d{4})-(\d{2})-(\d{2})/);
-          if (!match) {
-            return null;
-          }
-          return new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]));
-        },
-        filterVariant: 'date-range',
-        filterFn: makeDateRangeFilterFn<PlantMonitoringRow>('completedDate'),
-        Cell: CompletedDateCell,
-      },
-      {
-        id: 'totalLive',
-        header: strings.LIVE_PLANTS,
-        accessorKey: 'totalLive',
-        filterVariant: 'range',
-        Cell: NumberCell,
-      },
-      {
-        id: 'totalPlants',
-        header: strings.TOTAL_PLANTS,
-        accessorKey: 'totalPlants',
-        filterVariant: 'range',
-        Cell: NumberCell,
-      },
-      {
-        id: 'totalSpecies',
-        header: strings.SPECIES,
-        accessorKey: 'totalSpecies',
-        filterVariant: 'range',
-        Cell: NumberCell,
-      },
-    ];
-    return newFiltersEnabled ? stripColumnFilters(columns) : columns;
-  }, [
-    newFiltersEnabled,
-    strings,
-    showSelectObservation,
-    uniquePlantingSiteNames,
-    AdHocPlotNumberCell,
-    CompletedDateCell,
-    NumberCell,
-  ]);
-
-  const onExportAdHocObservationResults = useCallback(() => {
-    const adHocResults = observationResults.filter((observation) => observation.adHocPlot);
-
-    if (adHocResults.length === 0) {
-      return;
-    }
-
-    const adHocObservationsResults: AdHocObservationResults[] = adHocResults.map((observation) => {
-      const adHocPlot = observation.adHocPlot!;
-      const site = plantingSitesById[observation.plantingSiteId];
-      const timeZone = site?.timeZone ?? defaultTimezone;
-
-      return {
-        ...observation,
-        adHocPlot,
-        boundary: adHocPlot.boundary as unknown as MultiPolygon,
-        plantingSiteName: site?.name ?? '',
-        strata: observation.strata as AdHocObservationResults['strata'],
-        timeZone,
-        totalLive: observation.species.reduce((total, s) => total + s.totalLive, 0),
-        totalPlants: observation.totalPlants,
-      };
-    });
-
-    const selectedSite = typeof plantingSiteId === 'number' ? plantingSitesById[plantingSiteId] : undefined;
-    void exportAdHocObservationsResults({ adHocObservationsResults, plantingSite: selectedSite, plantingSitesById });
-  }, [defaultTimezone, observationResults, plantingSiteId, plantingSitesById]);
-
-  const plotSelectionToolbar = useMemo(
-    () => (
-      <Box display='flex' flexDirection='row' alignItems='center' gap={1}>
-        {onPlotTypeChange && (
-          <>
-            <Typography fontSize='16px' fontWeight={500}>
-              {strings.PLOT_SELECTION}
-            </Typography>
-            <Dropdown
-              id='plot-selection-selector'
-              onChange={(newValue) => onPlotTypeChange(newValue as PlotType)}
-              options={[
-                { label: strings.ASSIGNED, value: 'assigned' },
-                { label: strings.AD_HOC, value: 'adHoc' },
-              ]}
-              selectedValue={plotType}
-              selectStyles={{
-                inputContainer: { maxWidth: '160px' },
-                optionsContainer: { maxWidth: '160px' },
-              }}
-              fixedMenu
-              fullWidth
-            />
-          </>
-        )}
-        {!newFiltersEnabled && plantingSiteId !== 'all' && !isAdHoc && rows.length > 0 && (
-          <Box display='flex' alignItems='center'>
-            <Link
-              onClick={navigateToSurvivalRateSettings}
-              fontSize='16px'
-              style={{
-                paddingLeft: isMobile ? 0 : theme.spacing(2),
-                paddingRight: theme.spacing(0.5),
-                paddingTop: isMobile ? theme.spacing(1) : 0,
-              }}
-              disabled={plotsWithObservations.length === 0}
-            >
-              {strings.SURVIVAL_RATE_SETTINGS}
-            </Link>
-            {!!plotsWithObservations.length && (
-              <>
-                {survivalRateSet ? (
-                  <Icon name='success' fillColor={theme.palette.TwClrBgSuccess} />
-                ) : (
-                  <Icon name='iconUnavailable' fillColor={theme.palette.TwClrBgDanger} />
-                )}
-              </>
-            )}
-          </Box>
-        )}
-      </Box>
-    ),
-    [
-      isAdHoc,
-      isMobile,
-      navigateToSurvivalRateSettings,
-      newFiltersEnabled,
-      onPlotTypeChange,
-      plantingSiteId,
-      plotsWithObservations.length,
-      plotType,
-      rows.length,
-      strings.AD_HOC,
-      strings.ASSIGNED,
-      strings.PLOT_SELECTION,
-      strings.SURVIVAL_RATE_SETTINGS,
-      survivalRateSet,
-      theme,
-    ]
-  );
 
   const commonTableOptions = useMemo(
     () => ({
@@ -699,125 +352,46 @@ const PlantMonitoringList = ({ onPlotTypeChange, plantingSiteId, plotType }: Pla
     [emptyMessage, theme]
   );
 
-  if (!newFiltersEnabled && !isLoading && rows.length === 0) {
-    return (
-      <Card radius={'8px'} style={{ width: '100%' }}>
-        {plotSelectionToolbar}
-        <EmptyStateContent
-          title={''}
-          subtitle={
-            isAdHoc
-              ? [strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
-              : [strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_1, strings.OBSERVATIONS_EMPTY_STATE_MESSAGE_2]
-          }
-        />
-      </Card>
-    );
-  }
-
   return (
     <Card radius={'8px'} style={{ width: '100%' }}>
-      {!isAdHoc && (
-        <EditableTable
-          key='assigned-plant-monitoring-table'
-          clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-          columns={assignedColumns}
-          data={rows}
-          enableEditing={false}
-          enableSorting={true}
-          enableGlobalFilter={true}
-          enableColumnFilters={!newFiltersEnabled}
-          enableColumnOrdering={true}
-          storageKey={assignedStorageKey}
-          enablePagination={false}
-          enableTopToolbar={true}
-          enableBottomToolbar={false}
-          initialSorting={[{ id: 'observationDate', desc: true }]}
-          tableOptions={{
-            ...commonTableOptions,
-            state: {
-              columnFilters: assignedTableState.columnFilters,
-              columnOrder: assignedTableState.columnOrder,
-              columnVisibility: assignedTableState.columnVisibility,
-              density: assignedTableState.density,
-              showColumnFilters: assignedTableState.showColumnFilters,
-              showGlobalFilter: assignedTableState.showGlobalFilter,
-              isLoading,
-            },
-            onColumnFiltersChange: assignedTableState.setColumnFilters,
-            onColumnOrderChange: assignedTableState.setColumnOrder,
-            onColumnVisibilityChange: assignedTableState.setColumnVisibility,
-            onDensityChange: assignedTableState.onDensityChange,
-            onShowColumnFiltersChange: assignedTableState.setShowColumnFilters,
-            onShowGlobalFilterChange: assignedTableState.setShowGlobalFilter,
-            renderTopToolbarCustomActions: () => plotSelectionToolbar,
-            renderToolbarInternalActions: ({ table }) => (
-              <Box display='flex' gap={0.5}>
-                <MRT_ToggleGlobalFilterButton table={table} />
-                {!newFiltersEnabled && <MRT_ToggleFiltersButton table={table} />}
-                <MRT_ShowHideColumnsButton table={table} />
-                <MRT_ToggleDensePaddingButton table={table} />
-                <MRT_ToggleFullScreenButton table={table} />
-              </Box>
-            ),
-          }}
-          sx={{ padding: 0 }}
-        />
-      )}
-      {isAdHoc && (
-        <EditableTable
-          key='ad-hoc-plant-monitoring-table'
-          clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
-          columns={adHocColumns}
-          data={rows}
-          enableEditing={false}
-          enableSorting={true}
-          enableGlobalFilter={true}
-          enableColumnFilters={!newFiltersEnabled}
-          enableColumnOrdering={true}
-          storageKey={ADHOC_STORAGE_KEY}
-          enablePagination={false}
-          enableTopToolbar={true}
-          enableBottomToolbar={false}
-          initialSorting={[{ id: 'adHocPlotNumber', desc: false }]}
-          tableOptions={{
-            ...commonTableOptions,
-            state: {
-              columnFilters: adHocTableState.columnFilters,
-              columnOrder: adHocTableState.columnOrder,
-              columnVisibility: adHocTableState.columnVisibility,
-              density: adHocTableState.density,
-              showColumnFilters: adHocTableState.showColumnFilters,
-              showGlobalFilter: adHocTableState.showGlobalFilter,
-              isLoading,
-            },
-            onColumnFiltersChange: adHocTableState.setColumnFilters,
-            onColumnOrderChange: adHocTableState.setColumnOrder,
-            onColumnVisibilityChange: adHocTableState.setColumnVisibility,
-            onDensityChange: adHocTableState.onDensityChange,
-            onShowColumnFiltersChange: adHocTableState.setShowColumnFilters,
-            onShowGlobalFilterChange: adHocTableState.setShowGlobalFilter,
-            renderTopToolbarCustomActions: () => plotSelectionToolbar,
-            renderToolbarInternalActions: ({ table }) => (
-              <Box display='flex' gap={0.5}>
-                {plantingSitesLoaded && rows.length > 0 && (
-                  <Tooltip title={strings.EXPORT}>
-                    <IconButton onClick={onExportAdHocObservationResults}>
-                      <Icon name='iconExport' size='medium' />
-                    </IconButton>
-                  </Tooltip>
-                )}
-                <MRT_ToggleGlobalFilterButton table={table} />
-                {!newFiltersEnabled && <MRT_ToggleFiltersButton table={table} />}
-                <MRT_ShowHideColumnsButton table={table} />
-                <MRT_ToggleDensePaddingButton table={table} />
-                <MRT_ToggleFullScreenButton table={table} />
-              </Box>
-            ),
-          }}
-          sx={{ padding: 0 }}
-        />
-      )}
+      <EditableTable
+        clearAllFiltersLabel={strings.CLEAR_ALL_FILTERS}
+        columns={columns}
+        data={rows}
+        enableEditing={false}
+        enableSorting={true}
+        enableGlobalFilter={true}
+        enableColumnFilters={false}
+        enableColumnOrdering={true}
+        storageKey={STORAGE_KEY}
+        enablePagination={false}
+        enableTopToolbar={true}
+        enableBottomToolbar={false}
+        initialSorting={[{ id: 'observationDate', desc: true }]}
+        tableOptions={{
+          ...commonTableOptions,
+          state: {
+            columnOrder: tableState.columnOrder,
+            columnVisibility: tableState.columnVisibility,
+            density: tableState.density,
+            showGlobalFilter: tableState.showGlobalFilter,
+            isLoading,
+          },
+          onColumnOrderChange: tableState.setColumnOrder,
+          onColumnVisibilityChange: tableState.setColumnVisibility,
+          onDensityChange: tableState.onDensityChange,
+          onShowGlobalFilterChange: tableState.setShowGlobalFilter,
+          renderToolbarInternalActions: ({ table }) => (
+            <Box display='flex' gap={0.5}>
+              <MRT_ToggleGlobalFilterButton table={table} />
+              <MRT_ShowHideColumnsButton table={table} />
+              <MRT_ToggleDensePaddingButton table={table} />
+              <MRT_ToggleFullScreenButton table={table} />
+            </Box>
+          ),
+        }}
+        sx={{ padding: 0 }}
+      />
     </Card>
   );
 };

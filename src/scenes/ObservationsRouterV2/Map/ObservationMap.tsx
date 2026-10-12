@@ -3,12 +3,12 @@ import { MapMouseEvent, MapRef, Point } from 'react-map-gl/mapbox';
 import { useSearchParams } from 'react-router';
 
 import { Typography, useTheme } from '@mui/material';
-import { getDateDisplayValue, useDeviceInfo } from '@terraware/web-components/utils';
+import { useDeviceInfo } from '@terraware/web-components/utils';
 import { MultiPolygon } from 'geojson';
 
 import MapComponent from 'src/components/NewMap';
 import { MapDrawerSize } from 'src/components/NewMap/MapDrawer';
-import { MapDropdownLegendGroup, MapDropdownLegendItem, MapLegendGroup } from 'src/components/NewMap/MapLegend';
+import { MapLegendGroup } from 'src/components/NewMap/MapLegend';
 import {
   MapHighlightGroup,
   MapLayer,
@@ -30,7 +30,6 @@ import usePlantingSiteMapLegend from 'src/components/NewMap/usePlantingSiteMapLe
 import usePlotPhotosMapLegend from 'src/components/NewMap/usePlotPhotosMapLegend';
 import useSurvivalRateMapLegend from 'src/components/NewMap/useSurvivalRateMapLegend';
 import { getBoundingBoxFromMultiPolygons, getBoundingBoxFromPoints } from 'src/components/NewMap/utils';
-import { useFeatureEnabled } from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import useOrganizationFeatures from 'src/hooks/useOrganizationFeatures';
 import useOrganizationPlantingSites from 'src/hooks/useOrganizationPlantingSites';
@@ -49,9 +48,7 @@ import {
   RecordedPlant,
   RecordedPlantStatus,
 } from 'src/types/Observations';
-import { getShortDate } from 'src/utils/dateFormatter';
 import useMapboxToken from 'src/utils/useMapboxToken';
-import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import { useSelectedObservation } from '../SelectedObservationProvider';
 import BiomassObservationStatsDrawer from './BiomassObservationStatsDrawer';
@@ -90,12 +87,10 @@ const ObservationMap = ({
   plantingSiteId,
   selectPlantingSiteId,
 }: ObservationMapProps) => {
-  const { activeLocale, strings } = useLocalization();
+  const { strings } = useLocalization();
   const theme = useTheme();
-  const defaultTimezone = useDefaultTimeZone().get().id;
   const { mapId, token } = useMapboxToken();
   const { isDesktop } = useDeviceInfo();
-  const newFiltersEnabled = useFeatureEnabled('New Observation Filters');
   const { fitBounds } = useMapUtils(mapRef);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [localDrawerOpen, setDrawerOpen] = useState<boolean>(false);
@@ -116,14 +111,14 @@ const ObservationMap = ({
   const { plotPhotosVisible, plotPhotosLegendGroup, virtualPlotVisible, setVirtualPlotVisible } =
     usePlotPhotosMapLegend({ disabled: plantingSiteId === undefined });
   const { survivalRateVisible, survivalRateLegendGroup } = useSurvivalRateMapLegend(
-    plantingSiteId === undefined || (newFiltersEnabled && (isAdHoc || isBiomass))
+    plantingSiteId === undefined || isAdHoc || isBiomass
   );
   const { adHocPlotsVisible, permanentPlotsVisible, temporaryPlotsVisible, monitoringPlotsLegendGroup } =
     useMonitoringPlotsMapLegend(
       plantingSiteId === undefined,
-      isBiomass || (newFiltersEnabled && isAdHoc),
-      isBiomass || (newFiltersEnabled && isAdHoc),
-      newFiltersEnabled && !isAdHoc && !isSingleView,
+      isBiomass || isAdHoc,
+      isBiomass || isAdHoc,
+      !isAdHoc && !isSingleView,
       true
     );
 
@@ -153,100 +148,32 @@ const ObservationMap = ({
 
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
-  const observationResultsOptions = useMemo((): MapDropdownLegendItem[] => {
-    return observationResults.map((observation): MapDropdownLegendItem => {
-      const completedDate = observation.completedTime
-        ? getDateDisplayValue(observation.completedTime, plantingSite?.timeZone ?? defaultTimezone)
-        : undefined;
-      const observationDate = getShortDate(completedDate ?? observation.startDate, activeLocale);
-
-      return {
-        label: observationDate,
-        value: `${observation.observationId}`,
-      };
-    });
-  }, [activeLocale, defaultTimezone, observationResults, plantingSite?.timeZone]);
-
-  const adHocPlotOptions = useMemo((): MapDropdownLegendItem[] => {
-    const plotOptions = adHocObservationResults.map((observation): MapDropdownLegendItem => {
-      return {
-        label: `${observation.adHocPlot?.monitoringPlotNumber}`,
-        value: `${observation.observationId}`,
-      };
-    });
-
-    return [
-      {
-        label: strings.ALL,
-        value: 'all',
-      },
-      ...plotOptions,
-    ];
-  }, [adHocObservationResults, strings.ALL]);
-
-  const [selectedAdHocObservationId, setSelectedAdHocObservationId] = useState<number | 'all'>('all');
   const {
     clearAdHocPlot,
     selectAdHocPlot,
-    selectObservation,
     selectedAdHocPlot,
     selectedObservationId: requestedObservationId,
   } = useSelectedObservation();
 
   const selectedObservationId = useMemo(() => {
-    const observationIds = observationResultsOptions.map((option) => Number(option.value));
+    const observationIds = observationResults.map((observation) => observation.observationId);
     if (requestedObservationId !== undefined && observationIds.includes(requestedObservationId)) {
       return requestedObservationId;
     }
     return observationIds[0];
-  }, [observationResultsOptions, requestedObservationId]);
+  }, [observationResults, requestedObservationId]);
 
   const getObservationResponse = useGetOneObservationResults({
     observationId: selectedObservationId,
     depth: 'Plant',
   });
 
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setSelectedAdHocObservationId('all');
-  }, [adHocObservationResults]);
-
-  const observationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup => {
-    return {
-      id: 'assignedObservation',
-      title: strings.ASSIGNED_PLOT_OBSERVATION,
-      tooltip: strings.ASSIGNED_PLOT_OBSERVATION_TOOLTIP,
-      type: 'dropdown',
-      items: observationResultsOptions,
-      selectedValue: selectedObservationId !== undefined ? `${selectedObservationId}` : undefined,
-      setSelectedValue: (value: string | undefined) => selectObservation(value ? Number(value) : undefined),
-    };
-  }, [observationResultsOptions, selectObservation, selectedObservationId, strings]);
-
-  const adHocObservationDropdownLegendGroup = useMemo((): MapDropdownLegendGroup => {
-    return {
-      id: 'adHocObservation',
-      title: strings.AD_HOC_PLOTS,
-      type: 'dropdown',
-      items: adHocPlotOptions,
-      selectedValue: `${selectedAdHocObservationId}`,
-      setSelectedValue: (value: string | undefined) =>
-        setSelectedAdHocObservationId(value === 'all' ? value : Number(value)),
-    };
-  }, [adHocPlotOptions, selectedAdHocObservationId, strings.AD_HOC_PLOTS]);
-
-  const selectedAdHocResults = useMemo(() => {
-    if (newFiltersEnabled || selectedAdHocObservationId === 'all') {
-      return adHocObservationResults;
-    } else {
-      return adHocObservationResults.filter((result) => selectedAdHocObservationId === result.observationId);
-    }
-  }, [adHocObservationResults, newFiltersEnabled, selectedAdHocObservationId]);
-
   const selectedAdHocPlotFeature = useMemo((): LayerFeature | undefined => {
     if (
       selectedAdHocPlot === undefined ||
-      !selectedAdHocResults.some((result) => result.adHocPlot?.monitoringPlotId === selectedAdHocPlot.monitoringPlotId)
+      !adHocObservationResults.some(
+        (result) => result.adHocPlot?.monitoringPlotId === selectedAdHocPlot.monitoringPlotId
+      )
     ) {
       return undefined;
     }
@@ -255,7 +182,7 @@ const ObservationMap = ({
       layerFeatureId: { layerId: 'adHocPlots', featureId: `${selectedAdHocPlot.monitoringPlotId}` },
       plantingSiteId: selectedAdHocPlot.plantingSiteId,
     };
-  }, [selectedAdHocPlot, selectedAdHocResults]);
+  }, [selectedAdHocPlot, adHocObservationResults]);
 
   const hasMarkerSelection = selectedPhotos.length > 0 || selectedPlants.length > 0 || selectedTrees.length > 0;
   const selectedFeature = (hasMarkerSelection ? undefined : selectedAdHocPlotFeature) ?? localSelectedFeature;
@@ -265,12 +192,12 @@ const ObservationMap = ({
     if (selectedObservationId) {
       const results = getObservationResponse.currentData?.observation;
       return results?.plantingSiteId === plantingSiteId ? results : undefined;
-    } else if (selectedAdHocResults.length) {
-      return selectedAdHocResults[0];
+    } else if (adHocObservationResults.length) {
+      return adHocObservationResults[0];
     } else {
       return undefined;
     }
-  }, [getObservationResponse, plantingSiteId, selectedAdHocResults, selectedObservationId]);
+  }, [getObservationResponse, plantingSiteId, adHocObservationResults, selectedObservationId]);
 
   const monitoringPlots = useMemo(() => {
     if (selectedResults) {
@@ -291,7 +218,7 @@ const ObservationMap = ({
 
   const { plantingSiteHistory: selectedHistory } = usePlantingSiteHistory({
     plantingSiteId,
-    plantingSiteHistoryId: newFiltersEnabled && isAdHoc ? latestHistoryId : selectedResults?.plantingSiteHistoryId,
+    plantingSiteHistoryId: isAdHoc ? latestHistoryId : selectedResults?.plantingSiteHistoryId,
   });
 
   useEffect(() => {
@@ -358,7 +285,7 @@ const ObservationMap = ({
 
       const adHocObservationId =
         layerId === 'adHocPlots'
-          ? selectedAdHocResults.find((result) => result.adHocPlot?.monitoringPlotId === Number(featureId))
+          ? adHocObservationResults.find((result) => result.adHocPlot?.monitoringPlotId === Number(featureId))
               ?.observationId
           : undefined;
 
@@ -375,7 +302,7 @@ const ObservationMap = ({
       setLocalSelectedFeature({ layerFeatureId: { layerId, featureId }, plantingSiteId: _plantingSiteId });
       setDrawerOpen(true);
     },
-    [selectAdHocPlot, selectPhotos, selectPlants, selectedAdHocResults]
+    [selectAdHocPlot, selectPhotos, selectPlants, adHocObservationResults]
   );
 
   const selectClickableFeature = useCallback(
@@ -404,7 +331,7 @@ const ObservationMap = ({
       }
 
       if (layerId === 'adHocPlots') {
-        if (selectedAdHocResults.find((result) => result.adHocPlot?.monitoringPlotId === Number(featureId))) {
+        if (adHocObservationResults.find((result) => result.adHocPlot?.monitoringPlotId === Number(featureId))) {
           observed = true;
         }
       }
@@ -415,7 +342,7 @@ const ObservationMap = ({
         return undefined;
       }
     },
-    [selectFeature, selectedAdHocResults, selectedResults]
+    [selectFeature, adHocObservationResults, selectedResults]
   );
 
   const siteLayers = useMemo((): MapLayer[] => {
@@ -491,11 +418,11 @@ const ObservationMap = ({
     } else if (selectedHistory) {
       return [
         {
-          features: selectedAdHocResults
+          features: adHocObservationResults
             .map((adHocResults) => adHocResults.adHocPlot)
             .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined)
             .map((plot) => ({
-              dashedBorder: newFiltersEnabled && isPlotIncomplete(plot),
+              dashedBorder: isPlotIncomplete(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -515,7 +442,7 @@ const ObservationMap = ({
           features: monitoringPlots
             .filter((plot) => !plot.isPermanent)
             .map((plot) => ({
-              dashedBorder: newFiltersEnabled && isPlotIncomplete(plot),
+              dashedBorder: isPlotIncomplete(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -538,7 +465,7 @@ const ObservationMap = ({
           features: monitoringPlots
             .filter((plot) => plot.isPermanent)
             .map((plot) => ({
-              dashedBorder: newFiltersEnabled && isPlotIncomplete(plot),
+              dashedBorder: isPlotIncomplete(plot),
               featureId: `${plot.monitoringPlotId}`,
               geometry: {
                 type: 'MultiPolygon',
@@ -621,17 +548,16 @@ const ObservationMap = ({
         },
       ];
     }
-    return newFiltersEnabled ? siteLayers : [];
+    return siteLayers;
   }, [
     adHocPlotsLayerStyle,
     adHocPlotsVisible,
-    newFiltersEnabled,
     plantingSites,
     monitoringPlots,
     permanentPlotsLayerStyle,
     permanentPlotsVisible,
     plantingSiteId,
-    selectedAdHocResults,
+    adHocObservationResults,
     selectClickableFeature,
     selectedFeature?.layerFeatureId.featureId,
     selectedFeature?.layerFeatureId.layerId,
@@ -901,7 +827,7 @@ const ObservationMap = ({
     const hasGpsCoordinates = (photo: ObservationMonitoringPlotPhoto): photo is ObservationMonitoringPlotPhotoWithGps =>
       !!photo.gpsCoordinates;
 
-    const adHocPlotPhotos = selectedAdHocResults.flatMap((adHocResults) => {
+    const adHocPlotPhotos = adHocObservationResults.flatMap((adHocResults) => {
       const adHocPlot = adHocResults.adHocPlot;
       if (adHocPlot) {
         return adHocPlot.photos.filter(hasGpsCoordinates).map((photo) => {
@@ -950,7 +876,7 @@ const ObservationMap = ({
       );
 
     return [...adHocPlotPhotos, ...monitoringPlotPhotos];
-  }, [selectedAdHocResults, selectPhoto, selectedPhotos, selectedResults]);
+  }, [adHocObservationResults, selectPhoto, selectedPhotos, selectedResults]);
 
   const selectSplat = useCallback(
     (monitoringPlotId: number, observationId: number, splat: ObservationSplatPayload) => () => {
@@ -967,7 +893,7 @@ const ObservationMap = ({
       return [];
     }
 
-    const adHocPlots = selectedAdHocResults
+    const adHocPlots = adHocObservationResults
       .map((adHocResults) => adHocResults.adHocPlot)
       .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined);
 
@@ -1014,7 +940,7 @@ const ObservationMap = ({
         };
       })
       .filter((marker): marker is MapMarker => marker !== undefined);
-  }, [listObservationSplatsResult.data, selectSplat, selectedAdHocResults, selectedPhotos, selectedResults]);
+  }, [listObservationSplatsResult.data, selectSplat, adHocObservationResults, selectedPhotos, selectedResults]);
 
   useEffect(() => {
     const virtualWalkthroughParam = searchParams.get('virtualWalkthrough');
@@ -1064,7 +990,7 @@ const ObservationMap = ({
   const treesMarkers = useCallback(
     (isDead: boolean): MapMarker[] => {
       if (isBiomass || hasBiomassResults) {
-        return selectedAdHocResults.flatMap((observation) => {
+        return adHocObservationResults.flatMap((observation) => {
           const trees = observation.biomassMeasurements?.trees ?? [];
           return trees
             .filter((tree) => tree.isDead === isDead)
@@ -1091,7 +1017,7 @@ const ObservationMap = ({
         return [];
       }
     },
-    [hasBiomassResults, isBiomass, selectTree, selectedAdHocResults, selectedTrees]
+    [hasBiomassResults, isBiomass, selectTree, adHocObservationResults, selectedTrees]
   );
 
   const plantsMarkers = useCallback(
@@ -1125,7 +1051,7 @@ const ObservationMap = ({
             }
           });
 
-        const adHocPlots = selectedAdHocResults
+        const adHocPlots = adHocObservationResults
           .map((adHocResults) => adHocResults.adHocPlot)
           .filter((plot): plot is ObservationMonitoringPlotResultsPayload => plot !== undefined);
         const adHocPlotPlants = adHocPlots.flatMap((plot): MapMarker[] => {
@@ -1155,7 +1081,7 @@ const ObservationMap = ({
         return [];
       }
     },
-    [isBiomass, selectPlant, selectedAdHocResults, selectedPlants, selectedResults]
+    [isBiomass, selectPlant, adHocObservationResults, selectedPlants, selectedResults]
   );
 
   const markers = useMemo((): MapMarkerGroup[] => {
@@ -1223,17 +1149,14 @@ const ObservationMap = ({
   ]);
 
   const plotStatusLegendGroup = useMemo(
-    (): MapLegendGroup =>
-      newFiltersEnabled
-        ? {
-            ...monitoringPlotsLegendGroup,
-            annotations: [
-              { border: 'solid', label: strings.OBSERVED },
-              { border: 'dashed', label: strings.NOT_OBSERVED },
-            ],
-          }
-        : monitoringPlotsLegendGroup,
-    [monitoringPlotsLegendGroup, newFiltersEnabled, strings.NOT_OBSERVED, strings.OBSERVED]
+    (): MapLegendGroup => ({
+      ...monitoringPlotsLegendGroup,
+      annotations: [
+        { border: 'solid', label: strings.OBSERVED },
+        { border: 'dashed', label: strings.NOT_OBSERVED },
+      ],
+    }),
+    [monitoringPlotsLegendGroup, strings.NOT_OBSERVED, strings.OBSERVED]
   );
 
   const legends = useMemo((): MapLegendGroup[] => {
@@ -1246,32 +1169,15 @@ const ObservationMap = ({
         : plantingSiteLegendGroup;
 
     return [
-      ...(newFiltersEnabled ||
-      isBiomass ||
-      isSingleView ||
-      plantingSiteId === undefined ||
-      observationResults.length === 0
-        ? []
-        : [observationDropdownLegendGroup]),
-      ...(newFiltersEnabled || isSingleView || plantingSiteId === undefined || adHocObservationResults.length <= 1
-        ? []
-        : [adHocObservationDropdownLegendGroup]),
       siteLegendGroup,
       plotStatusLegendGroup,
       plotPhotosLegendGroup,
       plantMakersLegendGroup,
-      ...(!newFiltersEnabled && isBiomass ? [] : [survivalRateLegendGroup]),
+      survivalRateLegendGroup,
     ];
   }, [
     plantingSiteId,
     plantingSiteLegendGroup,
-    isBiomass,
-    isSingleView,
-    observationResults.length,
-    observationDropdownLegendGroup,
-    adHocObservationResults.length,
-    adHocObservationDropdownLegendGroup,
-    newFiltersEnabled,
     plotStatusLegendGroup,
     plotPhotosLegendGroup,
     plantMakersLegendGroup,
@@ -1306,7 +1212,14 @@ const ObservationMap = ({
       // eslint-disable-next-line react-hooks/set-state-in-effect
       resetDrawerState();
     }
-  }, [plantingSiteId, observationResults, selectedAdHocResults, resetDrawerState, searchParams, selectedObservationId]);
+  }, [
+    plantingSiteId,
+    observationResults,
+    adHocObservationResults,
+    resetDrawerState,
+    searchParams,
+    selectedObservationId,
+  ]);
 
   const selectedPlotBoundary = useMemo((): MultiPolygon | undefined => {
     const { layerId, featureId } = selectedFeature?.layerFeatureId ?? {};
@@ -1318,15 +1231,15 @@ const ObservationMap = ({
     const monitoringPlotId = Number(featureId);
     const plot =
       layerId === 'adHocPlots'
-        ? selectedAdHocResults.find((result) => result.adHocPlot?.monitoringPlotId === monitoringPlotId)?.adHocPlot
+        ? adHocObservationResults.find((result) => result.adHocPlot?.monitoringPlotId === monitoringPlotId)?.adHocPlot
         : monitoringPlots.find((candidate) => candidate.monitoringPlotId === monitoringPlotId);
 
     return plot?.boundary ? { type: 'MultiPolygon', coordinates: [plot.boundary.coordinates] } : undefined;
-  }, [monitoringPlots, selectedAdHocResults, selectedFeature]);
+  }, [monitoringPlots, adHocObservationResults, selectedFeature]);
 
   // Undefined for anything the map cannot centre on, which is what hides the drawer's button.
   const viewSelectedPlotOnMap = useMemo(() => {
-    if (!newFiltersEnabled || !selectedPlotBoundary) {
+    if (!selectedPlotBoundary) {
       return undefined;
     }
 
@@ -1337,20 +1250,20 @@ const ObservationMap = ({
       }
       fitBounds(getBoundingBoxFromMultiPolygons([selectedPlotBoundary]), PLOT_FIT_PADDING);
     };
-  }, [fitBounds, isDesktop, newFiltersEnabled, selectedPlotBoundary, setDrawerOpenCallback]);
+  }, [fitBounds, isDesktop, selectedPlotBoundary, setDrawerOpenCallback]);
 
   const drawerContent = useMemo(() => {
     if (selectedFeature && selectedResults) {
       const adHocObservationId =
         selectedFeature.layerFeatureId.layerId === 'adHocPlots'
-          ? selectedAdHocResults.find(
+          ? adHocObservationResults.find(
               (result) => result.adHocPlot?.monitoringPlotId === Number(selectedFeature.layerFeatureId.featureId)
             )?.observationId
           : undefined;
       const observationId = adHocObservationId ?? selectedResults.observationId;
       const isBiomassObservation =
         isBiomass ||
-        selectedAdHocResults.some(
+        adHocObservationResults.some(
           (result) => result.observationId === observationId && result.type === 'Biomass Measurements'
         );
 
@@ -1388,7 +1301,7 @@ const ObservationMap = ({
     isBiomass,
     photoDrawerContent,
     plantDrawerContent,
-    selectedAdHocResults,
+    adHocObservationResults,
     selectedFeature,
     viewSelectedPlotOnMap,
     selectedPhotos.length,
@@ -1537,7 +1450,7 @@ const ObservationMap = ({
     }
   }, [showHoverLocation, strings.AREA_NOT_OBSERVED, theme.palette.TwClrBaseBlack]);
 
-  const showLegends = !newFiltersEnabled || plantingSiteId !== undefined;
+  const showLegends = plantingSiteId !== undefined;
 
   return (
     <MapComponent
