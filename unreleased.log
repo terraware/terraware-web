@@ -1,3 +1,4 @@
+66104a70 Bump joi from 18.2.8 to 18.2.9 (#6748)
 40f1bb86 Rename EditableMapDrawV2 to EditableMapDraw (#6746)
 f3e06c6c Remove the old editable map (#6745)
 2a4d2aa8 SW-9055 Use the new map in the application flow (#6744)
