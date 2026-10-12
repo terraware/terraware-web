@@ -1,3 +1,6 @@
+40f1bb86 Rename EditableMapDrawV2 to EditableMapDraw (#6746)
+f3e06c6c Remove the old editable map (#6745)
+2a4d2aa8 SW-9055 Use the new map in the application flow (#6744)
 ccf3c9c8 Mock API requests in Storybook (#6735)
 860e1729 Upgrade Storybook to 10 on Rsbuild (#6734)
 35e85b53 Upgrade turf to 7 and use bundler module resolution (#6733)
