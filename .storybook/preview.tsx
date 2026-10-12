@@ -5,12 +5,22 @@ import { MemoryRouter } from 'react-router';
 
 import { StyledEngineProvider, ThemeProvider } from '@mui/material';
 import type { Preview } from '@storybook/react';
+import { mswLoader } from 'msw-storybook-addon/csf3';
+import { setupWorker } from 'msw/browser';
 
 import { LocalizationProvider } from '../src/providers';
 import { store } from '../src/redux/store';
 import theme from '../src/theme';
+import { mswHandlers } from './mswHandlers';
 
 const preview: Preview = {
+  loaders: [
+    mswLoader(async () => {
+      const worker = setupWorker(...mswHandlers);
+      await worker.start({ onUnhandledRequest: 'bypass', quiet: true });
+      return worker;
+    }),
+  ],
   parameters: {
     actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {

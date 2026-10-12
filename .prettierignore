@@ -14,6 +14,7 @@ nginx
 # Generated Code
 build
 style-dictionary-dist
+.storybook/public/mockServiceWorker.js
 tsconfig.json
 
 # Data
