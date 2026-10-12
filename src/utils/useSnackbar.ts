@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 import { sendSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
 import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
-import { Message, OnCloseMessage, Priority, Title, Type } from 'src/types/Snackbar';
+import { Message, OnCloseMessage, Priority, Title, ToastOptions, Type } from 'src/types/Snackbar';
 
 /**
  * The snackbar will send a message to the message feature when an action is taken on a page message. The message key
@@ -17,15 +17,26 @@ import { Message, OnCloseMessage, Priority, Title, Type } from 'src/types/Snackb
 export const SNACKBAR_PAGE_CLOSE_KEY = 'snackbarPageMessageClose';
 
 function snackbarFns(dispatch: Dispatch) {
-  const snack = (msg: Message, title: Title, priority: Priority, type: Type, onCloseMessage?: OnCloseMessage) => {
-    dispatch(sendSnackbar({ msg, title, priority, type, onCloseMessage }));
+  const snack = (
+    msg: Message,
+    title: Title,
+    priority: Priority,
+    type: Type,
+    onCloseMessage?: OnCloseMessage,
+    options?: ToastOptions
+  ) => {
+    dispatch(sendSnackbar({ msg, title, priority, type, onCloseMessage, ...options }));
   };
 
   // toast helpers
-  const toastInfo = (msg: Message, title?: Title) => snack(msg, title, 'info', 'toast');
-  const toastWarning = (msg: Message, title?: Title) => snack(msg, title, 'warning', 'toast');
-  const toastSuccess = (msg: Message, title?: Title) => snack(msg, title, 'success', 'toast');
-  const toastError = (msg?: Message, title?: Title) => snack(msg || strings.GENERIC_ERROR, title, 'critical', 'toast');
+  const toastInfo = (msg: Message, title?: Title, options?: ToastOptions) =>
+    snack(msg, title, 'info', 'toast', undefined, options);
+  const toastWarning = (msg: Message, title?: Title, options?: ToastOptions) =>
+    snack(msg, title, 'warning', 'toast', undefined, options);
+  const toastSuccess = (msg: Message, title?: Title, options?: ToastOptions) =>
+    snack(msg, title, 'success', 'toast', undefined, options);
+  const toastError = (msg?: Message, title?: Title, options?: ToastOptions) =>
+    snack(msg || strings.GENERIC_ERROR, title, 'critical', 'toast', undefined, options);
 
   // page helpers
   const pageInfo = (msg: Message, title?: Title, closeMessage?: OnCloseMessage) =>

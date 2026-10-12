@@ -1,6 +1,6 @@
-import React, { type JSX, useMemo } from 'react';
+import React, { type JSX, SyntheticEvent, useMemo } from 'react';
 
-import { Box, Snackbar as SnackbarUI } from '@mui/material';
+import { Box, SnackbarCloseReason, Snackbar as SnackbarUI } from '@mui/material';
 import { Message } from '@terraware/web-components';
 
 import { selectSnackbar } from 'src/redux/features/snackbar/snackbarSelectors';
@@ -25,7 +25,12 @@ export default function ToastSnackbar(): JSX.Element {
 
   const toastContainerStyles = { width: '100%' };
 
-  const handleClose = () => {
+  const persistent = snackbar?.autoHideDuration === null;
+
+  const handleClose = (_event?: SyntheticEvent | Event, reason?: SnackbarCloseReason) => {
+    if (persistent && reason === 'clickaway') {
+      return;
+    }
     dispatch(clearSnackbar({ type: 'toast' }));
   };
 
@@ -34,12 +39,21 @@ export default function ToastSnackbar(): JSX.Element {
       anchorOrigin={{ vertical: isMobile ? 'bottom' : 'top', horizontal: 'center' }}
       open={Boolean(snackbar)}
       onClose={handleClose}
-      autoHideDuration={5000}
+      autoHideDuration={snackbar?.autoHideDuration !== undefined ? snackbar.autoHideDuration : 5000}
       id='snackbar'
       sx={mainSnackbarStyles}
     >
       <Box sx={toastContainerStyles}>
-        {snackbar && <Message type='toast' title={snackbar.title} body={snackbar.msg} priority={snackbar.priority} />}
+        {snackbar && (
+          <Message
+            type='toast'
+            title={snackbar.title}
+            body={snackbar.msg}
+            priority={snackbar.priority}
+            showCloseButton={persistent}
+            onClose={handleClose}
+          />
+        )}
       </Box>
     </SnackbarUI>
   );

@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Icon, Message } from '@terraware/web-components';
+import { Icon } from '@terraware/web-components';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import centroid from '@turf/centroid';
@@ -310,13 +310,24 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       setMethod('upload');
       setShowUploadModal(false);
 
+      if (numPolygons > 1) {
+        const combinedMessage = strings.formatString(strings.SITE_BOUNDARY_POLYGONS_COMBINED, numPolygons) as string;
+        snackbar.toastInfo(
+          site.siteType === 'simple'
+            ? `${combinedMessage} ${strings.SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED}`
+            : combinedMessage,
+          undefined,
+          { autoHideDuration: null }
+        );
+      }
+
       lastUploadId.current += 1;
       void onEditableBoundaryChanged(featureCollectionOf(geometry, site.id), {
         uploadedFile: file,
         uploadId: lastUploadId.current,
       });
     },
-    [boundary, onEditableBoundaryChanged, site.id, trackEvent]
+    [boundary, onEditableBoundaryChanged, site.id, site.siteType, snackbar, trackEvent]
   );
 
   const onRemoveUploadedFile = useCallback(() => {
@@ -325,10 +336,6 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   }, [onEditableBoundaryChanged]);
 
   const onOpenUploadModal = useCallback(() => setShowUploadModal(true), []);
-
-  const polygonsCombinedMessage = uploadedFile
-    ? (strings.formatString(strings.SITE_BOUNDARY_POLYGONS_COMBINED, uploadedFile.numPolygons) as string)
-    : '';
 
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
@@ -348,19 +355,6 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
               {strings.SITE_BOUNDARY_MAX_BOUNDING_BOX}
             </Typography>
           </Box>
-          {uploadedFile && uploadedFile.numPolygons > 1 && (
-            <Box marginBottom={theme.spacing(2)}>
-              <Message
-                body={
-                  site.siteType === 'simple'
-                    ? `${polygonsCombinedMessage} ${strings.SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED}`
-                    : polygonsCombinedMessage
-                }
-                priority='info'
-                type='page'
-              />
-            </Box>
-          )}
           {uploadedFile && (
             <UploadedBoundarySummary
               file={uploadedFile}

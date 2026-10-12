@@ -9,8 +9,11 @@ export type OnCloseMessage = {
   payload?: string | number | boolean | object;
 };
 export type Type = 'page' | 'toast';
+export type ToastOptions = {
+  autoHideDuration?: number | null;
+};
 
-export interface Snackbar {
+export interface Snackbar extends ToastOptions {
   title?: Title;
   msg: Message;
   priority: Priority;
