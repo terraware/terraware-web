@@ -88,6 +88,8 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
               color: theme.palette.TwClrTxtInverse,
               fontWeight: 600,
               pointerEvents: 'none',
+              right: 0,
+              top: '10px',
             },
           }}
         >
@@ -98,7 +100,7 @@ const ScheduledObservationsMenu = ({ canReschedule, plantingSiteId }: ScheduledO
             priority='secondary'
             size='medium'
             sx={{
-              margin: 0,
+              '&.button': { margin: 0 },
               ...(anchorEl ? { backgroundColor: theme.palette.TwClrBgBrandTertiary } : {}),
             }}
           />
