@@ -6,7 +6,7 @@ import { Box, useTheme } from '@mui/material';
 import { Feature, FeatureCollection, MultiPolygon } from 'geojson';
 import { MapMouseEvent } from 'mapbox-gl';
 
-import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
+import EditableMapDraw, { MapEditorMode } from 'src/components/Map/EditableMapDraw';
 import MapSearchBox from 'src/components/Map/MapSearchBox';
 import UndoRedoControl from 'src/components/Map/UndoRedoControl';
 import { getMapErrorLayer, toMultiPolygon } from 'src/components/Map/utils';

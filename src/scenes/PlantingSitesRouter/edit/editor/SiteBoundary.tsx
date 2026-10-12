@@ -8,7 +8,7 @@ import centroid from '@turf/centroid';
 import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
 import _ from 'lodash';
 
-import { MapEditorMode } from 'src/components/Map/EditableMapDrawV2';
+import { MapEditorMode } from 'src/components/Map/EditableMapDraw';
 import MapIcon from 'src/components/Map/MapIcon';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import EditableMap from 'src/components/NewMap/EditableMap';
