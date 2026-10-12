@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button, Dropdown, MultiSelect, Textfield } from '@terraware/web-components';
+import { Dropdown, MultiSelect, Textfield } from '@terraware/web-components';
 import { DateTime } from 'luxon';
 
 import DatePicker from 'src/components/common/DatePicker';
@@ -55,8 +55,6 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const {
-    activeFilterCount,
-    clearFilters,
     dateFilter,
     observationType,
     plotNumberFilter,
@@ -249,18 +247,6 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
             valueRenderer={(label) => label}
           />
         </>
-      )}
-      {activeFilterCount > 0 && (
-        <Box sx={{ marginLeft: isMobile ? 0 : 'auto' }}>
-          <Button
-            id='clear-observation-filters'
-            label={strings.CLEAR_ALL_FILTERS}
-            onClick={clearFilters}
-            priority='ghost'
-            size='medium'
-            type='productive'
-          />
-        </Box>
       )}
     </Box>
   );

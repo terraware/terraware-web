@@ -3,6 +3,7 @@ import React, { type JSX, useMemo } from 'react';
 import { Badge, Box, useTheme } from '@mui/material';
 import { Button } from '@terraware/web-components';
 
+import Link from 'src/components/common/Link';
 import SegmentControl from 'src/components/common/SegmentControl';
 import { type PlantingSiteId } from 'src/hooks/useStickyPlantingSiteId';
 import { useLocalization } from 'src/providers';
@@ -24,8 +25,15 @@ const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: Observatio
   const { strings } = useLocalization();
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
-  const { activeFilterCount, filtersExpanded, observationType, plotType, setFiltersExpanded, setPlotType } =
-    useObservationFilters();
+  const {
+    activeFilterCount,
+    clearFilters,
+    filtersExpanded,
+    observationType,
+    plotType,
+    setFiltersExpanded,
+    setPlotType,
+  } = useObservationFilters();
 
   const { emptyState } = useFilteredObservationResults({ observationType, plantingSiteId, plotType });
   const panelOpen = filtersExpanded && emptyState !== 'noObservations';
@@ -52,29 +60,43 @@ const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: Observatio
       >
         {plantingSiteSelector}
         <SegmentControl minSegmentWidth={130} onChange={setPlotType} segments={plotTypeSegments} selected={plotType} />
-        <Badge
-          badgeContent={activeFilterCount}
-          id='active-filter-count'
+        <Box
           sx={{
-            '& .MuiBadge-badge': {
-              background: theme.palette.TwClrBgBrand,
-              color: theme.palette.TwClrTxtInverse,
-              fontWeight: 600,
-            },
+            alignItems: isMobile ? 'stretch' : 'center',
+            display: 'flex',
+            flexDirection: isMobile ? 'column' : 'row',
+            gap: theme.spacing(isMobile ? 2 : 1),
           }}
         >
-          <Button
-            disabled={emptyState === 'noObservations'}
-            icon='filter'
-            id='toggle-observation-filters'
-            label={panelOpen ? strings.HIDE_FILTERS : strings.SHOW_FILTERS}
-            onClick={() => setFiltersExpanded(!filtersExpanded)}
-            priority='secondary'
-            size='medium'
-            sx={isMobile ? { margin: 0, width: '100%' } : undefined}
-            type='passive'
-          />
-        </Badge>
+          <Badge
+            badgeContent={activeFilterCount}
+            id='active-filter-count'
+            sx={{
+              '& .MuiBadge-badge': {
+                background: theme.palette.TwClrBgBrand,
+                color: theme.palette.TwClrTxtInverse,
+                fontWeight: 600,
+              },
+            }}
+          >
+            <Button
+              disabled={emptyState === 'noObservations'}
+              icon='filter'
+              id='toggle-observation-filters'
+              label={panelOpen ? strings.HIDE_FILTERS : strings.SHOW_FILTERS}
+              onClick={() => setFiltersExpanded(!filtersExpanded)}
+              priority='secondary'
+              size='medium'
+              sx={isMobile ? { margin: 0, width: '100%' } : undefined}
+              type='passive'
+            />
+          </Badge>
+          {activeFilterCount > 0 && (
+            <Link fontSize='16px' id='clear-observation-filters' onClick={clearFilters}>
+              {strings.CLEAR_ALL_FILTERS}
+            </Link>
+          )}
+        </Box>
         <Box sx={{ marginLeft: isMobile ? 0 : 'auto' }}>
           <ViewModeToggle />
         </Box>

@@ -147,7 +147,7 @@ const ObservationListViewContent = (): JSX.Element => {
         options={plantingSiteOptions}
         required
         selectedValue={selectedPlantingSiteId}
-        sx={isMobile ? undefined : { maxWidth: '320px', minWidth: '220px' }}
+        sx={isMobile ? undefined : { flex: '1 1 180px', maxWidth: '240px', minWidth: '180px' }}
       />
     ),
     [isMobile, plantingSiteOptions, selectPlantingSite, selectedPlantingSiteId]
