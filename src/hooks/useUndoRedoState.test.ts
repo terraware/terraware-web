@@ -113,6 +113,26 @@ describe('useUndoRedoState', () => {
     expect(redoWith(result)).toBeUndefined();
   });
 
+  test('should keep both changes when data is set twice from the same render', () => {
+    const { result } = renderHook(() => useUndoRedoState<Person>({ name: 'bugs', age: 25 }));
+    const [, setData] = result.current;
+
+    act(() => {
+      setData({ name: 'bunny', age: 5 });
+      setData({ name: 'roadrunner', age: 35 });
+    });
+    expect(dataWith(result)).toEqual({ name: 'roadrunner', age: 35 });
+
+    act(() => void setDataWith(result)({ name: 'wiley', age: 55 }));
+    expect(dataWith(result)).toEqual({ name: 'wiley', age: 55 });
+
+    act(() => void undoWith(result)());
+    expect(dataWith(result)).toEqual({ name: 'roadrunner', age: 35 });
+
+    act(() => void undoWith(result)());
+    expect(dataWith(result)).toEqual({ name: 'bunny', age: 5 });
+  });
+
   test('should set data using callback function', () => {
     const { result } = renderHook(() => useUndoRedoState<Person>({ name: 'bugs', age: 25 }));
     const [, setData] = result.current;
