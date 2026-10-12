@@ -191,7 +191,7 @@ describe('fromDraft', () => {
       id: 1,
       name: 'draft site',
       organizationId: 3,
-      siteEditStep: 'details',
+      siteEditStep: 'site_boundary',
       siteType: 'simple',
     };
 
@@ -202,7 +202,7 @@ describe('fromDraft', () => {
         boundary: undefined,
         exclusion: undefined,
         strata: undefined,
-        siteEditStep: 'details',
+        siteEditStep: 'site_boundary',
         siteType: 'simple',
       },
       id: 1,
@@ -260,7 +260,7 @@ describe('toDraft', () => {
         boundary: undefined,
         exclusion: undefined,
         strata: undefined,
-        siteEditStep: 'details',
+        siteEditStep: 'site_boundary',
         siteType: 'simple',
       },
       id: 1,
@@ -282,7 +282,7 @@ describe('toDraft', () => {
       organizationId: 3,
       strata: undefined,
       projectId: undefined,
-      siteEditStep: 'details',
+      siteEditStep: 'site_boundary',
       siteType: 'simple',
       timeZone: undefined,
     });
@@ -456,6 +456,21 @@ describe('toDraft', () => {
     const payload: DraftPlantingSitePayload = {
       createdBy: 5,
       data: {
+        siteEditStep: 'exclusion_areas',
+        siteType: 'simple',
+      },
+      id: 1,
+      name: 'draft site',
+      organizationId: 3,
+    };
+
+    expect(toDraft(payload).siteEditStep).toStrictEqual('exclusion_areas');
+  });
+
+  test('should map the retired details edit step to the site boundary step', () => {
+    const payload: DraftPlantingSitePayload = {
+      createdBy: 5,
+      data: {
         siteEditStep: 'details',
         siteType: 'simple',
       },
@@ -464,7 +479,7 @@ describe('toDraft', () => {
       organizationId: 3,
     };
 
-    expect(toDraft(payload).siteEditStep).toStrictEqual('details');
+    expect(toDraft(payload).siteEditStep).toStrictEqual('site_boundary');
   });
 
   // `MinimalStratum.initialPlantingDensity` is a required number, so a blob saved without any

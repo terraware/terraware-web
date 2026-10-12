@@ -8,10 +8,16 @@ import PageSnackbar from 'src/components/PageSnackbar';
 import TfMain from 'src/components/common/TfMain';
 import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { useUser } from 'src/providers';
+import { useOrganization, useUser } from 'src/providers';
+import { useUpdateDraftPlantingSiteMutation } from 'src/queries/generated/draftPlantingSites';
 import DeleteDraftPlantingSiteModal from 'src/scenes/PlantingSitesRouter/edit/DeleteDraftPlantingSiteModal';
+import DraftSiteDetailsModal from 'src/scenes/PlantingSitesRouter/edit/DraftSiteDetailsModal';
 import useDraftPlantingSite from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteGet';
 import strings from 'src/strings';
+import { DraftPlantingSite } from 'src/types/PlantingSite';
+import { fromDraft } from 'src/utils/draftPlantingSiteUtils';
+import { isAdmin } from 'src/utils/organization';
+import useSnackbar from 'src/utils/useSnackbar';
 
 import DraftPlantingSiteBoundaryCard from './DraftPlantingSiteBoundaryCard';
 import DraftPlantingSiteDetailsCard from './DraftPlantingSiteDetailsCard';
@@ -20,12 +26,17 @@ import DraftPlantingSiteHeader from './DraftPlantingSiteHeader';
 export default function PlantingSiteDraftView(): JSX.Element {
   const theme = useTheme();
   const { user } = useUser();
+  const { selectedOrganization } = useOrganization();
+  const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
   const { site: plantingSite } = useDraftPlantingSite({ draftId: Number(plantingSiteId) });
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [detailsModalOpen, setDetailsModalOpen] = useState<boolean>(false);
+  const [updateDraftPlantingSite, { isLoading: isUpdating }] = useUpdateDraftPlantingSiteMutation();
 
   const editDisabled = !user || plantingSite?.createdBy !== user.id;
+  const canEditDetails = isAdmin(selectedOrganization) && !editDisabled;
 
   const goToEditDraftPlantingSite = useCallback(() => {
     if (plantingSiteId) {
@@ -35,6 +46,28 @@ export default function PlantingSiteDraftView(): JSX.Element {
 
   const openDeleteModal = useCallback(() => setDeleteModalOpen(true), []);
   const closeDeleteModal = useCallback(() => setDeleteModalOpen(false), []);
+  const openDetailsModal = useCallback(() => setDetailsModalOpen(true), []);
+  const closeDetailsModal = useCallback(() => setDetailsModalOpen(false), []);
+
+  const saveDetails = useCallback(
+    (draft: DraftPlantingSite) => {
+      const save = async () => {
+        try {
+          await updateDraftPlantingSite({
+            id: draft.id,
+            updateDraftPlantingSiteRequestPayload: fromDraft(draft),
+          }).unwrap();
+          snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
+          setDetailsModalOpen(false);
+        } catch {
+          snackbar.toastError(strings.GENERIC_ERROR);
+        }
+      };
+
+      void save();
+    },
+    [snackbar, updateDraftPlantingSite]
+  );
 
   if (!plantingSite) {
     return <BusySpinner withSkrim={true} />;
@@ -43,6 +76,16 @@ export default function PlantingSiteDraftView(): JSX.Element {
   return (
     <TfMain>
       {deleteModalOpen && <DeleteDraftPlantingSiteModal plantingSite={plantingSite} onClose={closeDeleteModal} />}
+      {detailsModalOpen && (
+        <DraftSiteDetailsModal
+          busy={isUpdating}
+          onClose={closeDetailsModal}
+          onSave={saveDetails}
+          saveLabel={strings.SAVE}
+          site={plantingSite}
+          title={strings.EDIT_DETAILS}
+        />
+      )}
       <DraftPlantingSiteHeader
         editDisabled={editDisabled}
         onDelete={openDeleteModal}
@@ -54,7 +97,10 @@ export default function PlantingSiteDraftView(): JSX.Element {
       </Grid>
       <Box display='flex' flexDirection='column' gap={theme.spacing(2.5)} marginTop={theme.spacing(3)}>
         <Message body={strings.DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE} priority='warning' type='page' />
-        <DraftPlantingSiteDetailsCard plantingSite={plantingSite} />
+        <DraftPlantingSiteDetailsCard
+          onEdit={canEditDetails ? openDetailsModal : undefined}
+          plantingSite={plantingSite}
+        />
         <DraftPlantingSiteBoundaryCard plantingSite={plantingSite} />
       </Box>
     </TfMain>

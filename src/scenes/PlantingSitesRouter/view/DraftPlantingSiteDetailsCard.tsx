@@ -1,6 +1,7 @@
 import React, { type JSX } from 'react';
 
 import { Box, useTheme } from '@mui/material';
+import { Button } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
 import Card from 'src/components/common/Card';
@@ -12,17 +13,37 @@ import { useLocationTimeZone } from 'src/utils/useTimeZoneUtils';
 import DetailField from './DetailField';
 
 type DraftPlantingSiteDetailsCardProps = {
+  onEdit?: () => void;
   plantingSite: DraftPlantingSite;
 };
 
-export default function DraftPlantingSiteDetailsCard({ plantingSite }: DraftPlantingSiteDetailsCardProps): JSX.Element {
+export default function DraftPlantingSiteDetailsCard({
+  onEdit,
+  plantingSite,
+}: DraftPlantingSiteDetailsCardProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const tz = useLocationTimeZone().get(plantingSite);
   const { selectedProject } = useProjects(plantingSite);
 
   return (
-    <Card flushMobile radius={theme.spacing(1)} title={strings.DETAILS}>
+    <Card
+      flushMobile
+      radius={theme.spacing(1)}
+      title={strings.DETAILS}
+      rightComponent={
+        onEdit && (
+          <Button
+            icon='iconEdit'
+            id='edit-draft-planting-site-details'
+            label={isMobile ? undefined : strings.EDIT}
+            onClick={onEdit}
+            priority='secondary'
+            size='medium'
+          />
+        )
+      }
+    >
       <Box
         display='grid'
         gridTemplateColumns={isMobile ? '1fr' : 'repeat(4, minmax(0, 1fr))'}

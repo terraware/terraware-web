@@ -131,7 +131,6 @@ export enum APP_PATHS {
   PLANTING_SITE_DASHBOARD = '/plants/dashboard/:plantingSiteId',
   PLANTING_SITES = '/planting-sites',
   PLANTING_SITES_DRAFT_EDIT = '/planting-sites/draft/:plantingSiteId/edit',
-  PLANTING_SITES_DRAFT_NEW = '/planting-sites/draft/new',
   PLANTING_SITES_DRAFT_VIEW = '/planting-sites/draft/:plantingSiteId',
   PLANTING_SITES_VIEW = '/planting-sites/:plantingSiteId',
   PROJECT_MODULE = '/projects/:projectId/modules/:moduleId',
