@@ -441,6 +441,7 @@ CREATE_VIRTUAL_WALKTHROUGH_DESCRIPTION,"Téléchargez une vidéo à utiliser pou
 CREATE_VIRTUAL_WALKTHROUGH_STEP2_DESCRIPTION,"La vidéo sélectionnée sera utilisée pour une visite virtuelle. Une fois la visite virtuelle traitée, elle apparaîtra sur la carte. Le traitement peut prendre jusqu'à 12 heures.",ac22da52
 CREATED,Créée,cc1462ae
 CREATED_ON,Créé le,f66518dc
+CREATOR,Créateur,f2ca5017
 CROWN_DIAMETER_CM,Diamètre de la couronne (cm),4bc3fb02
 CSV_FILE,Fichier CSV,f496cfaa
 CT,ct,7b04a9d2

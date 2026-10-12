@@ -442,6 +442,7 @@ CREATE_VIRTUAL_WALKTHROUGH_DESCRIPTION,"Suba un video para usar en un Recorrido 
 CREATE_VIRTUAL_WALKTHROUGH_STEP2_DESCRIPTION,"El video seleccionado se utilizará para un Recorrido Virtual. Una vez que el Recorrido Virtual haya sido procesado, aparecerá en el mapa. El procesamiento puede tardar hasta 12 horas.",ac22da52
 CREATED,Creado,cc1462ae
 CREATED_ON,Creado el,f66518dc
+CREATOR,Creador,f2ca5017
 CROWN_DIAMETER_CM,Diámetro de la copa (cm),4bc3fb02
 CSV_FILE,Archivo CSV,f496cfaa
 CT,ct,7b04a9d2

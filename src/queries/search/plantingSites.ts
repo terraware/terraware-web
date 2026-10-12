@@ -228,6 +228,7 @@ type SearchPlantingSiteSummariesApiArgs = {
 };
 
 export type PlantingSiteSummary = {
+  createdByName?: string;
   createdTime: string;
   description: string;
   id: number;
