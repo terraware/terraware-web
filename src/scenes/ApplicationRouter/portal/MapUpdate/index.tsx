@@ -7,10 +7,9 @@ import area from '@turf/area';
 import { Feature, FeatureCollection } from 'geojson';
 
 import { Crumb } from 'src/components/BreadCrumbs';
-import EditableMapV2 from 'src/components/Map/EditableMapV2';
 import MapIcon from 'src/components/Map/MapIcon';
-import useRenderAttributes from 'src/components/Map/useRenderAttributes';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
+import EditableMap, { EditableMapBoundary } from 'src/components/NewMap/EditableMap';
 import { APP_PATHS, SQ_M_TO_HECTARES } from 'src/constants';
 import { useCountryBoundary } from 'src/hooks/useCountryBoundary';
 import useNavigateTo from 'src/hooks/useNavigateTo';
@@ -20,7 +19,6 @@ import { useLocalization } from 'src/providers';
 import { useGetApplicationQuery, useUpdateApplicationBoundaryMutation } from 'src/queries/generated/applications';
 import StepTitleDescription, { Description } from 'src/scenes/PlantingSitesRouter/edit/editor/StepTitleDescription';
 import strings from 'src/strings';
-import { RenderableReadOnlyBoundary } from 'src/types/Map';
 import { MultiPolygon } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
@@ -41,14 +39,13 @@ const MapUpdateView = () => {
   const selectedApplication = applicationData?.application;
   const { goToApplicationPrescreen } = useNavigateTo();
   const { toastSuccess, toastError } = useSnackbar();
-  const getRenderAttributes = useRenderAttributes();
 
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>();
 
   const [updateApplicationBoundary, { isLoading: isSaving }] = useUpdateApplicationBoundaryMutation();
   const countryBoundaryData = useCountryBoundary(selectedApplication?.countryCode);
 
-  const countryBoundary = useMemo<RenderableReadOnlyBoundary[] | undefined>(() => {
+  const countryBoundary = useMemo<EditableMapBoundary[] | undefined>(() => {
     if (!countryBoundaryData) {
       return undefined;
     }
@@ -57,10 +54,11 @@ const MapUpdateView = () => {
       {
         data: { type: 'FeatureCollection', features: [toFeature(countryBoundaryData, {}, 'countryBoundary')] },
         id: 'countryBoundary',
-        renderProperties: getRenderAttributes('boundary'),
+        // outline only
+        style: { borderColor: theme.palette.TwClrBaseGreen300, opacity: 0, type: 'fill' },
       },
     ];
-  }, [getRenderAttributes, countryBoundaryData]);
+  }, [countryBoundaryData, theme]);
 
   const findErrors = (boundaryToCheck: MultiPolygon) => {
     const boundaryAreaHa = parseFloat((area(boundaryToCheck) * SQ_M_TO_HECTARES).toFixed(2));
@@ -175,7 +173,9 @@ const MapUpdateView = () => {
           />
         </Grid>
         <Grid item xs={8}>
-          <EditableMapV2
+          <EditableMap
+            // the map only fits to its initial boundaries, so remount once the country boundary loads
+            key={countryBoundary ? 'country' : 'none'}
             editableBoundary={siteBoundaryData?.siteBoundary}
             errorAnnotations={siteBoundaryData?.errorAnnotations}
             onEditableBoundaryChanged={onEditableBoundaryChanged}
