@@ -91,8 +91,6 @@ export type MapSourceRenderProperties = {
   patternFill?: MapPatternFill;
   opacity?: number | Expression;
   selectFillColor?: string;
-  selectLineColor?: string;
-  selectLineWidth?: number;
 };
 
 export type MapSource = MapSourceBaseData & MapSourceRenderProperties;
@@ -172,13 +170,7 @@ export const MapViewStyles: Record<MapViewStyle, string> = {
 };
 
 // TODO: integrate exclusions as a first class MapObject (not there yet)
-export type RenderableObject =
-  | MapObject
-  | 'exclusions'
-  | 'draft-stratum'
-  | 'draft-substratum'
-  | 'countryBoundary'
-  | 'strataBoundary';
+export type RenderableObject = MapObject | 'exclusions' | 'countryBoundary' | 'strataBoundary';
 
 export type MapDrawingLayer = {
   id: string;
