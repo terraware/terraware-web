@@ -13,6 +13,8 @@ import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css';
 import { Feature, FeatureCollection } from 'geojson';
 import _ from 'lodash';
 
+import { directSelectMode } from './directSelectMode';
+
 /**
  * Flattened representation of the editor's current state. This is based on a combination of factors
  * such as the draw mode, the presence of an existing boundary, and the currently-selected feature.
@@ -44,6 +46,7 @@ const defaultProps = {
     trash: true,
   },
   displayControlsDefault: false,
+  modes: { ...MapboxDraw.modes, direct_select: directSelectMode },
 };
 
 /**
@@ -70,14 +73,6 @@ function featureHasCoordinates(feature: Feature | undefined): boolean {
 
   return false;
 }
-
-// Mirrors the draw control's own validity check: a polygon needs at least 3 distinct points per ring.
-const hasValidRings = (feature: Feature): boolean => {
-  const { geometry } = feature;
-  const polygons =
-    geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.type === 'MultiPolygon' ? geometry.coordinates : [];
-  return polygons.every((rings) => rings.length > 0 && rings.every((ring) => ring.length > 3));
-};
 
 /**
  * Makes a parent ReactMapGL component editable. This is a wrapper around the MapboxDraw control.
@@ -165,14 +160,8 @@ export default function EditableMapDraw({
     [notify, onBoundaryCreated]
   );
 
-  // Removing a vertex can leave a polygon too small to keep. The draw control reports that update and
-  // then deletes the polygon, so skip the update and let the delete stand on its own.
   const onUpdate = useCallback(
-    (event: DrawUpdateEvent) => {
-      if (event.features.every(hasValidRings)) {
-        notify(event.features, onBoundaryUpdated);
-      }
-    },
+    (event: DrawUpdateEvent) => void notify(event.features, onBoundaryUpdated),
     [notify, onBoundaryUpdated]
   );
 
