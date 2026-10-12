@@ -1,5 +1,5 @@
+import { ChartConfiguration, ChartConfigurationCustomTypesPerDataset, ChartItem } from 'chart.js';
 import { Chart, ChartType, DefaultDataPoint, ScaleOptionsByType } from 'chart.js/auto';
-import { ChartConfiguration, ChartConfigurationCustomTypesPerDataset, ChartItem } from 'chart.js/dist/types';
 import 'chartjs-adapter-luxon';
 
 // eslint-disable-next-line @typescript-eslint/require-await

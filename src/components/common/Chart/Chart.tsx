@@ -2,19 +2,15 @@ import React, { type JSX, useCallback, useEffect, useRef, useState } from 'react
 
 import { useTheme } from '@mui/material';
 import {
-  CartesianScaleTypeRegistry,
   Chart as ChartJS,
+  ChartOptions,
   ChartTypeRegistry,
-  PluginOptionsByType,
-  ScaleOptionsByType,
   ScaleType,
   TimeUnit,
   TooltipItem,
   TooltipModel,
 } from 'chart.js';
-import { _DeepPartialObject } from 'chart.js/dist/types/utils';
-import annotationPlugin from 'chartjs-plugin-annotation';
-import { AnnotationPluginOptions } from 'chartjs-plugin-annotation/types/options';
+import annotationPlugin, { AnnotationPluginOptions } from 'chartjs-plugin-annotation';
 
 import { useLocalization } from 'src/providers';
 import { htmlLegendPlugin } from 'src/scenes/PlantsDashboardRouter/components/htmlLegendPlugin';
@@ -62,16 +58,14 @@ export type BaseChartProps = {
   xAxisType?: ScaleType;
   lineColor?: string;
   pointRadius?: number;
-  customScales?: _DeepPartialObject<{
-    [key: string]: ScaleOptionsByType<'radialLinear' | keyof CartesianScaleTypeRegistry>;
-  }>;
+  customScales?: ChartOptions['scales'];
   customTooltipLabel?: (
     this: TooltipModel<keyof ChartTypeRegistry>,
     tooltipItem: TooltipItem<keyof ChartTypeRegistry>
   ) => string | void | string[];
   customLegend?: boolean;
   customLegendContainerId?: string;
-  pluginsOptions?: _DeepPartialObject<PluginOptionsByType<keyof ChartTypeRegistry>> & {
+  pluginsOptions?: ChartOptions['plugins'] & {
     emptyDoughnut?: {
       color?: string;
       radiusDecrease?: number;
