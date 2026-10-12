@@ -4,7 +4,7 @@ import { Box, useTheme } from '@mui/material';
 import TimelineSliderV2, { TimelineSliderV2Mark } from '@terraware/web-components/components/TimelineSliderV2';
 
 import { useLocalization } from 'src/providers';
-import { getNumericDate } from 'src/utils/dateFormatter';
+import { getNumericDate, getShortDate } from 'src/utils/dateFormatter';
 
 import { useObservationFilters } from '../ObservationFiltersProvider';
 import ObservationsEmptyOverlay from '../ObservationsEmptyOverlay';
@@ -31,14 +31,15 @@ const ObservationTimeline = ({ plantingSiteId }: ObservationTimelineProps): JSX.
     (): TimelineSliderV2Mark[] =>
       sortedObservations.map((observation): TimelineSliderV2Mark => {
         const date = observationDate(observation);
-        const label = getNumericDate(date, activeLocale) ?? date;
+        const numericDate = getNumericDate(date, activeLocale) ?? date;
         const plotNumber = observation.adHocPlot?.monitoringPlotNumber;
 
         return {
-          ariaLabel: isAdHoc && plotNumber !== undefined ? `${strings.PLOT} ${plotNumber}, ${label}` : label,
+          ariaLabel:
+            isAdHoc && plotNumber !== undefined ? `${strings.PLOT} ${plotNumber}, ${numericDate}` : numericDate,
           color: (isAdHoc ? theme.palette.TwClrBaseOrange300 : theme.palette.TwClrBgBrand)?.toString() ?? '',
           id: `${observation.observationId}`,
-          label: isAdHoc ? undefined : label,
+          label: isAdHoc ? undefined : getShortDate(date, activeLocale),
           value: new Date(date).valueOf(),
         };
       }),
