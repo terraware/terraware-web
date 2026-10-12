@@ -79,16 +79,6 @@ export default function useRenderAttributes(): (type: RenderableObject) => MapSo
             lineWidth: 2,
             selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseOrange300 as string, 0.6),
           };
-        case 'boundary':
-          // Only highlight border
-          return {
-            fillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
-            hoverFillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
-            selectFillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
-            highlightFillColor: getRgbaFromHex(theme.palette.TwClrBaseWhite as string, 0),
-            lineColor: theme.palette.TwClrBaseGreen300 as string,
-            lineWidth: 2,
-          };
         case 'strataBoundary':
           return {
             fillColor: getRgbaFromHex(theme.palette.TwClrBaseOrange400 as string, 0.2),

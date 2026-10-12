@@ -1,16 +1,10 @@
 import area from '@turf/area';
-import { Feature, MultiPolygon } from 'geojson';
+import { MultiPolygon } from 'geojson';
 
-import { GeometryFeature, ReadOnlyBoundary, RenderableReadOnlyBoundary } from 'src/types/Map';
+import { GeometryFeature } from 'src/types/Map';
 
 import { cutOnNoOverlap, cutWithOverlap, feature1, feature2, feature3 } from './testdata';
-import {
-  boundariesToViewState,
-  leftMostFeature,
-  mergeIntoNeighbor,
-  overlayAndSubtract,
-  readOnlyBoundariesToMapLayers,
-} from './utils';
+import { leftMostFeature, mergeIntoNeighbor, overlayAndSubtract } from './utils';
 
 const rectangle = (id: string, minX: number, minY: number, maxX: number, maxY: number): GeometryFeature => ({
   type: 'Feature',
@@ -189,103 +183,6 @@ describe('Map utils', () => {
       expect(result?.[0].properties?.id).toBe('A');
       expect(result?.[0].geometry.type).toBe('MultiPolygon');
       expect((result?.[0].geometry as MultiPolygon).coordinates).toHaveLength(2);
-    });
-  });
-
-  describe('boundariesToViewState', () => {
-    test('should view the earth when there are no boundaries', () => {
-      expect(boundariesToViewState([])).toEqual({
-        bounds: [Infinity, Infinity, -Infinity, -Infinity],
-        fitBoundsOptions: {
-          animate: false,
-          padding: 25,
-        },
-      });
-    });
-
-    test('has the correct bounds', () => {
-      const boundaries: ReadOnlyBoundary[] = [
-        {
-          data: {
-            type: 'FeatureCollection',
-            features: [
-              {
-                type: 'Feature',
-                geometry: {
-                  type: 'MultiPolygon',
-                  coordinates: [
-                    [
-                      [
-                        [32.81043714, 2.24535757],
-                        [33.02329606, 2.64270388],
-                        [33.22495188, 2.5084025],
-                        [33.05130381, 2.29573331],
-                        [32.81043714, 2.24535757],
-                      ],
-                    ],
-                  ],
-                },
-                properties: { id: 'applicationBoundary' },
-                id: 'applicationBoundary',
-              },
-            ],
-          },
-          id: 'applicationBoundary',
-        },
-      ];
-      expect(boundariesToViewState(boundaries)).toEqual({
-        bounds: [32.81043714, 2.24535757, 33.22495188, 2.64270388],
-        fitBoundsOptions: {
-          animate: false,
-          padding: 25,
-        },
-      });
-    });
-  });
-
-  describe('readOnlyBoundariesToMapLayers', () => {
-    test("should return null when there aren't any boundaries", () => {
-      expect(readOnlyBoundariesToMapLayers([])).toBeNull();
-      expect(readOnlyBoundariesToMapLayers(undefined)).toBeNull();
-    });
-
-    test('generates map layers from boundaries', () => {
-      const boundary: Feature = {
-        geometry: {
-          type: 'MultiPolygon',
-          coordinates: [
-            [
-              [
-                [32.81043714, 2.24535757],
-                [33.02329606, 2.64270388],
-                [33.22495188, 2.5084025],
-                [33.05130381, 2.29573331],
-                [32.81043714, 2.24535757],
-              ],
-            ],
-          ],
-        },
-        id: 'countryBoundary',
-        properties: { id: 'countryBoundary' },
-        type: 'Feature',
-      };
-      const boundaries: RenderableReadOnlyBoundary[] = [
-        {
-          id: '1',
-          data: {
-            type: 'FeatureCollection',
-            features: [boundary],
-          },
-          renderProperties: {
-            isInteractive: false,
-            fillColor: 'highlight',
-            lineColor: 'blue',
-            lineWidth: 1,
-          },
-        },
-      ];
-
-      expect(JSON.stringify(readOnlyBoundariesToMapLayers(boundaries))).toMatchSnapshot();
     });
   });
 });
