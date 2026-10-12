@@ -1,3 +1,6 @@
+ccf3c9c8 Mock API requests in Storybook (#6735)
+860e1729 Upgrade Storybook to 10 on Rsbuild (#6734)
+35e85b53 Upgrade turf to 7 and use bundler module resolution (#6733)
 6af81fae SW-9082 Remove only the invalid hole or polygon when deleting vertices (#6731)
 008010b0 SW-9082 Delete only the removed polygon from the map editor (#6730)
 f34547a3 SW-9082 Keep undo/redo state valid across back-to-back changes (#6729)
