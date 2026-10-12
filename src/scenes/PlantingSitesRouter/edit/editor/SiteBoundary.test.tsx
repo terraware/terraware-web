@@ -100,8 +100,8 @@ const onMap = (polygon: Polygon): MultiPolygon => ({ type: 'MultiPolygon', coord
 const polygonsCombinedBanner = (numPolygons: number) =>
   strings.formatString(strings.SITE_BOUNDARY_POLYGONS_COMBINED, numPolygons) as string;
 
-const renderSiteBoundary = () =>
-  renderWithProviders(<SiteBoundary site={site} />, {
+const renderSiteBoundary = (siteToRender = site) =>
+  renderWithProviders(<SiteBoundary site={siteToRender} />, {
     // the step's tutorial dialog opens on mount otherwise, and covers the map
     currentUser: { userPreferences: { 'dont-show-site-boundary-instructions': true } },
   });
@@ -269,6 +269,29 @@ describe('SiteBoundary', () => {
     await uploadBoundaryFile(user, 'site.geojson');
 
     expect(await screen.findByText(polygonsCombinedBanner(2))).toBeInTheDocument();
+    expect(
+      screen.queryByText(strings.SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED, { exact: false })
+    ).not.toBeInTheDocument();
+  });
+
+  it('tells a simple site that combining polygons requires a detailed site', async () => {
+    flags.boundaryFileUpload = true;
+    mockPost(PARSE_URL, {
+      areaHa: 480,
+      filename: 'site.geojson',
+      format: 'GeoJSON',
+      geometry: GEOMETRY,
+      numPolygons: 2,
+    });
+    const { user } = renderSiteBoundary(buildDraftPlantingSite({ siteType: 'simple' }));
+
+    await uploadBoundaryFile(user, 'site.geojson');
+
+    expect(
+      await screen.findByText(
+        `${polygonsCombinedBanner(2)} ${strings.SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED}`
+      )
+    ).toBeInTheDocument();
   });
 
   it('brings back the chooser when the uploaded file is removed', async () => {

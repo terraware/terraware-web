@@ -326,6 +326,10 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
 
   const onOpenUploadModal = useCallback(() => setShowUploadModal(true), []);
 
+  const polygonsCombinedMessage = uploadedFile
+    ? (strings.formatString(strings.SITE_BOUNDARY_POLYGONS_COMBINED, uploadedFile.numPolygons) as string)
+    : '';
+
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
       <StepTitleDescription
@@ -348,10 +352,9 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
             <Box marginBottom={theme.spacing(2)}>
               <Message
                 body={
-                  strings.formatString(
-                    strings.SITE_BOUNDARY_POLYGONS_COMBINED,
-                    uploadedFile.numPolygons
-                  ) as unknown as string
+                  site.siteType === 'simple'
+                    ? `${polygonsCombinedMessage} ${strings.SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED}`
+                    : polygonsCombinedMessage
                 }
                 priority='info'
                 type='page'

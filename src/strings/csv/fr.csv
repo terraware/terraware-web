@@ -2108,7 +2108,8 @@ SITE_BOUNDARY_MAX_BOUNDING_BOX,"Boîte englobante maximale : 20 000 ha. Si votre
 SITE_BOUNDARY_NUM_POLYGON,{0} polygone,a5b656b9
 SITE_BOUNDARY_NUM_POLYGONS,{0} polygones,67b049f1
 SITE_BOUNDARY_POLYGON_TOO_SMALL,La limite de la zone {0} hectares est inférieure à 100 m x 100 m.,e140c0c1
-SITE_BOUNDARY_POLYGONS_COMBINED,"Les {0} polygones de ce fichier ont été combinés en une seule limite de site couvrant l’ensemble. Si vous souhaitez que chacun soit son propre Strate, un Site détaillé est requis.",de2e99bf
+SITE_BOUNDARY_POLYGONS_COMBINED,Les {0} polygones de ce fichier ont été combinés en une seule limite de site couvrant l'ensemble.,e94fad22
+SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED,"Si vous souhaitez que chacun soit un Strate distincte, un Site détaillé est requis.",c58dd98d
 SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Remarque : Par défaut, les sites simples incluent une seule strate et une seule sous-strate qui composent l'ensemble du site de plantation.",d866268c
 SITE_BOUNDARY_UPLOAD_DESCRIPTION,Définissez ci-dessous la limite du site de votre zone de plantation. Toutes les zones plantables de votre projet doivent être incluses dans la limite du site.,7e619e7a
 SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,Les Sites simples comprennent une Strate et un Sous-strate qui couvrent l’ensemble du site de plantation.,955accde
