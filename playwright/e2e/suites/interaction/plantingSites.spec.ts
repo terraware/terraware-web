@@ -12,6 +12,7 @@ import {
   expectActiveStep,
   goToPlantingSites,
   openDraftPlantingSite,
+  polygonTool,
   searchMapLocation,
   selectSiteType,
   startNewPlantingSite,
@@ -217,6 +218,33 @@ test.describe('PlantingSiteTests', () => {
       [0.9, 0.9],
       [0.1, 0.9],
     ]);
+
+    // Deleting one of several boundary polygons removes only that one. Once none are left, the editor
+    // switches back to drawing mode.
+    await drawPolygon(page, [
+      [1.05, 0.1],
+      [1.15, 0.1],
+      [1.15, 0.2],
+      [1.05, 0.2],
+    ]);
+    // A newly drawn polygon starts out selected, and clicking a selected polygon edits its vertices.
+    await clickMap(page, [1.1, 0.5]);
+    await clickMap(page, [1.1, 0.15]);
+    await deleteMapFeature(page);
+    await expect(polygonTool(page)).not.toHaveClass(/active/);
+
+    // Removing a vertex from a triangle leaves an invalid ring, so Mapbox Draw deletes the polygon.
+    await drawPolygon(page, [
+      [1.05, 0.3],
+      [1.2, 0.3],
+      [1.125, 0.42],
+    ]);
+    await clickMap(page, [1.1, 0.5]);
+    await clickMap(page, [1.125, 0.34]);
+    await clickMap(page, [1.125, 0.34]);
+    await clickMap(page, [1.05, 0.3]);
+    await deleteMapFeature(page);
+    await expect(polygonTool(page)).not.toHaveClass(/active/);
     await editorButton(page, 'Next').click();
 
     // Exclusions: the map is now fitted to the site boundary.

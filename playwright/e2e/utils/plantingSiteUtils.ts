@@ -51,6 +51,8 @@ export const editorButton = (page: Page, name: 'Close' | 'Back' | 'Next' | 'Crea
 
 const mapCanvas = (page: Page) => page.locator('.mapboxgl-canvas');
 
+export const polygonTool = (page: Page) => page.getByRole('button', { name: 'Polygon tool (p)' });
+
 export const expectActiveStep = async (page: Page, label: string) => {
   await expect(page.locator('.MuiStepLabel-label.Mui-active')).toHaveText(label);
 };
@@ -65,7 +67,7 @@ export const waitForMap = async (page: Page) => {
     await canvas.hover({ position: { x: 10, y: 10 } });
     await expect(page.locator('.mapboxgl-map[class*="mouse-"]')).toBeVisible({ timeout: 500 });
   }).toPass();
-  await expect(page.getByRole('button', { name: 'Polygon tool (p)' })).toBeVisible();
+  await expect(polygonTool(page)).toBeVisible();
 };
 
 // Flying to a search result is marked essential, so it animates even with reduced motion.
@@ -117,7 +119,7 @@ const toPagePixels = async (page: Page): Promise<(point: MapPoint) => MapPoint> 
 // Pressing Enter finishes the polygon without having to hit its first vertex exactly.
 export const drawPolygon = async (page: Page, points: MapPoint[]) => {
   const toPixels = await toPagePixels(page);
-  await page.getByRole('button', { name: 'Polygon tool (p)' }).click();
+  await polygonTool(page).click();
   for (const point of points) {
     const [x, y] = toPixels(point);
     await page.mouse.click(x, y);
