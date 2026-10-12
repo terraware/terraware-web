@@ -1,3 +1,4 @@
+466e7583 Update dependency @babel/traverse to v8.0.7 (#6741)
 e18db417 SW-7737 Delete ApplicationProvider (#6709)
 742ac0c8 SW-7737 Read applications from queries instead of ApplicationProvider (#6708)
 6b63741b SW-7737 Delete the application thunks and ApplicationService (#6651)
