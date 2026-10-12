@@ -18,6 +18,7 @@ import { Project } from 'src/types/Project';
 import PlantingSitesCellRenderer from './PlantingSitesCellRenderer';
 
 interface PlantingSitesTableProps {
+  isDraft?: boolean;
   results: PlantingSiteSummary[];
   temporalSearchValue: string;
   setTemporalSearchValue: React.Dispatch<React.SetStateAction<string>>;
@@ -31,7 +32,7 @@ type PillListItemWithEmptyValue = Omit<PillListItem<string>, 'id'> & {
   emptyValue: number[];
 };
 
-const columns = (): TableColumnType[] => [
+const columns = (isDraft?: boolean): TableColumnType[] => [
   {
     key: 'name',
     name: strings.NAME,
@@ -49,11 +50,13 @@ const columns = (): TableColumnType[] => [
   },
   { key: 'numStrata', name: strings.STRATA, type: 'number' },
   { key: 'numSubstrata', name: strings.SUBSTRATA, type: 'number' },
+  ...(isDraft ? [{ key: 'createdByName', name: strings.CREATOR, type: 'string' } as TableColumnType] : []),
   { key: 'timeZoneId', name: strings.TIME_ZONE, type: 'string' },
 ];
 
 export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.Element {
-  const { results, setTemporalSearchValue, temporalSearchValue, setSearchSortOrder, filters, setFilters } = props;
+  const { isDraft, results, setTemporalSearchValue, temporalSearchValue, setSearchSortOrder, filters, setFilters } =
+    props;
 
   const theme = useTheme();
 
@@ -61,16 +64,18 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
 
   const [isPresorted, setIsPresorted] = useState<boolean>(true);
 
+  const tableColumns = useCallback(() => columns(isDraft), [isDraft]);
+
   const onSortChange = useCallback(
     (order: SortOrder, orderBy: string) => {
-      const isTimeZone = orderBy === 'timeZoneId';
-      if (!isTimeZone) {
+      const isClientSorted = orderBy === 'timeZoneId' || orderBy === 'createdByName';
+      if (!isClientSorted) {
         setSearchSortOrder({
           field: orderBy === 'projectName' ? 'project_name' : orderBy,
           direction: order === 'asc' ? 'Ascending' : 'Descending',
         });
       }
-      setIsPresorted(!isTimeZone);
+      setIsPresorted(!isClientSorted);
     },
     [setSearchSortOrder]
   );
@@ -135,7 +140,7 @@ export default function PlantingSitesTable(props: PlantingSitesTableProps): JSX.
             <Grid item xs={12}>
               <Table
                 id='planting-sites-table'
-                columns={columns}
+                columns={tableColumns}
                 rows={results}
                 orderBy='name'
                 Renderer={PlantingSitesCellRenderer}

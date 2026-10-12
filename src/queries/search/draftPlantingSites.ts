@@ -1,3 +1,5 @@
+import { getUserDisplayName } from 'src/utils/user';
+
 import { baseApi as api } from '../baseApi';
 import { SearchCountApiResponse, SearchSortOrderElement } from '../generated/search';
 import { QueryTagTypes } from '../tags';
@@ -30,6 +32,9 @@ const injectedRtkApi = api.injectEndpoints({
         body: {
           prefix: 'draftPlantingSites',
           fields: [
+            'createdBy.email',
+            'createdBy.firstName',
+            'createdBy.lastName',
             'createdTime',
             'description',
             'id',
@@ -74,6 +79,7 @@ const injectedRtkApi = api.injectEndpoints({
       ],
       transformResponse: (results: ListDraftPlantingSiteSummariesApiResponse) =>
         results.results.map((result) => ({
+          createdByName: getUserDisplayName(result.createdBy),
           createdTime: result.createdTime,
           description: result.description,
           id: Number(result.id),
@@ -90,6 +96,11 @@ const injectedRtkApi = api.injectEndpoints({
 });
 
 type DraftPlantingSiteSummaryApiResult = {
+  createdBy?: {
+    email?: string;
+    firstName?: string;
+    lastName?: string;
+  };
   createdTime: string;
   description: string;
   id: string;

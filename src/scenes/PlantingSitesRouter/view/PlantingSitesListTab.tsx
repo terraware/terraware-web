@@ -76,6 +76,7 @@ export default function PlantingSitesListTab({ isDraft }: PlantingSitesListTabPr
   return !isLoading ? (
     <Box display='flex' flexDirection='column'>
       <PlantingSitesTable
+        isDraft={isDraft}
         results={combinedSites}
         temporalSearchValue={temporalSearchValue}
         setTemporalSearchValue={setTemporalSearchValue}
