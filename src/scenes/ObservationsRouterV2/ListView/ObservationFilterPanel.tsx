@@ -14,9 +14,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { OBSERVATION_STATES, ObservationTypeFilter, useObservationFilters } from '../ObservationFiltersProvider';
 
 const datePickerStyles = {
-  flex: '1 1 140px',
-  maxWidth: '180px',
-  minWidth: '120px',
+  maxWidth: '200px',
+  minWidth: '200px',
 };
 
 const plotNumberStyles = {
@@ -171,7 +170,7 @@ const ObservationFilterPanel = ({ plantingSiteId }: ObservationFilterPanelProps)
       )}
       <Box>
         <Typography fontSize='14px' fontWeight={500} marginBottom={theme.spacing(0.5)}>
-          {plotType === 'adHoc' ? strings.DATE_OBSERVED : strings.OBSERVATION_DATE}
+          {strings.DATE_OBSERVED}
         </Typography>
         <Box sx={rangeStyles}>
           <DatePicker

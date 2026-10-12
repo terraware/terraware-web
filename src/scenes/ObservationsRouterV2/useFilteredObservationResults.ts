@@ -56,15 +56,18 @@ const useFilteredObservationResults = ({
         return false;
       }
 
-      // The tables and timeline show completed times in a time zone, so compare the same date.
-      const observationDate = observation.completedTime
-        ? getDateDisplayValue(observation.completedTime, defaultTimezone)
-        : observation.startDate.substring(0, 10);
-      if (dateFilter.from !== undefined && observationDate < dateFilter.from) {
-        return false;
-      }
-      if (dateFilter.to !== undefined && observationDate > dateFilter.to) {
-        return false;
+      if (dateFilter.from !== undefined || dateFilter.to !== undefined) {
+        if (!observation.completedTime) {
+          return false;
+        }
+        // The tables and timeline show completed times in a time zone, so compare the same date.
+        const dateObserved = getDateDisplayValue(observation.completedTime, defaultTimezone);
+        if (dateFilter.from !== undefined && dateObserved < dateFilter.from) {
+          return false;
+        }
+        if (dateFilter.to !== undefined && dateObserved > dateFilter.to) {
+          return false;
+        }
       }
 
       if (!isAssigned) {
