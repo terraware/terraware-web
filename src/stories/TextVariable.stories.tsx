@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { Story } from '@storybook/react';
+import { StoryFn } from '@storybook/react';
 
 import TextVariable, { TextVariableProps } from 'src/components/DocumentProducer/EditableSection/TextVariable';
 
-const TextVariableTemplate: Story<TextVariableProps> = (args: TextVariableProps) => {
+const TextVariableTemplate: StoryFn<TextVariableProps> = (args: TextVariableProps) => {
   return <TextVariable {...args} />;
 };
 
