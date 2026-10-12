@@ -3,7 +3,7 @@ import React, { type JSX } from 'react';
 import { LayerProps } from 'react-map-gl/mapbox';
 
 import { SxProps } from '@mui/material';
-import { Feature, FeatureCollection, GeoJsonProperties, MultiPolygon, Polygon } from 'geojson';
+import { Feature, GeoJsonProperties, MultiPolygon, Polygon } from 'geojson';
 import mapboxgl, { Expression } from 'mapbox-gl';
 
 export type GeometryFeature = Feature<Polygon | MultiPolygon, GeoJsonProperties>;
@@ -91,8 +91,6 @@ export type MapSourceRenderProperties = {
   patternFill?: MapPatternFill;
   opacity?: number | Expression;
   selectFillColor?: string;
-  selectLineColor?: string;
-  selectLineWidth?: number;
 };
 
 export type MapSource = MapSourceBaseData & MapSourceRenderProperties;
@@ -171,26 +169,8 @@ export const MapViewStyles: Record<MapViewStyle, string> = {
   Dark: 'mapbox://styles/mapbox/dark-v11?optimize=true',
 };
 
-export type ReadOnlyBoundary = {
-  data: FeatureCollection;
-  selectedId?: number;
-  id: string;
-  isInteractive?: boolean;
-};
-
-export type RenderableReadOnlyBoundary = ReadOnlyBoundary & {
-  renderProperties: MapSourceRenderProperties;
-};
-
 // TODO: integrate exclusions as a first class MapObject (not there yet)
-export type RenderableObject =
-  | MapObject
-  | 'exclusions'
-  | 'draft-stratum'
-  | 'draft-substratum'
-  | 'boundary'
-  | 'countryBoundary'
-  | 'strataBoundary';
+export type RenderableObject = MapObject | 'exclusions' | 'countryBoundary' | 'strataBoundary';
 
 export type MapDrawingLayer = {
   id: string;
