@@ -21,6 +21,8 @@ const renderHeader = (collapsible: boolean) =>
   );
 
 describe('PageHeaderWrapper', () => {
+  beforeEach(() => scrollTo(0));
+
   it('has no ear unless the header is collapsible', () => {
     renderHeader(false);
     scrollTo(400);
