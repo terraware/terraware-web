@@ -78,7 +78,7 @@ const toRow = (observation: ObservationResultsPayload, plantingSiteName?: string
     completedDate: observation.completedTime,
     isBiomass: observation.type === 'Biomass Measurements',
     liveTrees: biomass
-      ? biomass.trees.filter((tree) => !tree.isDead).length
+      ? biomass.totalLive
       : (adHocPlot?.species ?? []).reduce((total, species) => total + species.totalLive, 0),
     monitoringPlotId: adHocPlot?.monitoringPlotId,
     monitoringPlotNumber: adHocPlot?.monitoringPlotNumber,
@@ -88,7 +88,7 @@ const toRow = (observation: ObservationResultsPayload, plantingSiteName?: string
     plotDescription: biomass?.description,
     stratumName: adHocPlot?.stratumName,
     substratumName: adHocPlot?.substratumName,
-    totalPlants: biomass ? biomass.trees.length : adHocPlot?.totalPlants,
+    totalPlants: biomass ? biomass.totalLive + biomass.totalDead : adHocPlot?.totalPlants,
     totalSpecies: biomass ? biomass.treeSpeciesCount : adHocPlot?.totalSpecies,
   };
 };

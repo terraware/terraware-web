@@ -20,7 +20,6 @@ import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouterV2/Sing
 import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
-import { getBiomassObservationDeadTreeCount, getBiomassObservationLiveTreeCount } from 'src/utils/observation';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import EditBiomassQualitativeDataModal, { BiomassQualitativeFormData } from './EditBiomassQualitativeDataModal';
@@ -111,17 +110,17 @@ const BiomassObservationDataTab = () => {
     {
       label: strings.TOTAL_PLANTS,
       tooltip: strings.BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,
-      value: biomassMeasurement?.trees.length,
+      value: biomassMeasurement ? biomassMeasurement.totalLive + biomassMeasurement.totalDead : undefined,
     },
     {
       label: strings.LIVE_PLANTS,
       tooltip: strings.BIOMASS_PLOT_LIVE_PLANTS_TOOLTIP,
-      value: getBiomassObservationLiveTreeCount(biomassMeasurement),
+      value: biomassMeasurement?.totalLive ?? 0,
     },
     {
       label: strings.DEAD_PLANTS,
       tooltip: strings.BIOMASS_PLOT_DEAD_PLANTS_TOOLTIP,
-      value: getBiomassObservationDeadTreeCount(biomassMeasurement),
+      value: biomassMeasurement?.totalDead ?? 0,
     },
     {
       label: strings.SPECIES,
@@ -250,7 +249,7 @@ const BiomassObservationDataTab = () => {
         </Tooltip>
       </Box>
       <Box height='300px'>
-        <LiveTreesPerSpecies trees={biomassMeasurement?.trees} />
+        <LiveTreesPerSpecies treeSpecies={biomassMeasurement?.treeSpecies} />
       </Box>
       <Box
         display={'flex'}

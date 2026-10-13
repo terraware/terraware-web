@@ -2,42 +2,42 @@ import React, { type JSX, useMemo } from 'react';
 
 import BarChart from 'src/components/common/Chart/BarChart';
 import { useOrganizationSpecies } from 'src/hooks/useOrganizationSpecies';
-import { ExistingTreePayload } from 'src/types/Observations';
+import { BiomassTreeSpeciesResultsPayload } from 'src/queries/generated/observations';
 
 export type LiveTreesPerSpeciesProps = {
-  trees?: ExistingTreePayload[];
+  treeSpecies?: BiomassTreeSpeciesResultsPayload[];
 };
 
-export default function LiveTreesPerSpecies({ trees }: LiveTreesPerSpeciesProps): JSX.Element {
+export default function LiveTreesPerSpecies({ treeSpecies }: LiveTreesPerSpeciesProps): JSX.Element {
   const { species: availableSpecies } = useOrganizationSpecies();
 
-  const treeSpecies = useMemo(() => {
-    const _treeSpecies: Record<string | number, number> = {};
-    trees?.forEach((tree) => {
-      if (!tree.isDead) {
-        if (tree.speciesId) {
-          _treeSpecies[tree.speciesId] = (_treeSpecies[tree.speciesId] || 0) + 1;
-        } else if (tree.speciesName) {
-          _treeSpecies[tree.speciesName] = (_treeSpecies[tree.speciesName] || 0) + 1;
+  const liveTreesBySpecies = useMemo(() => {
+    const counts: Record<string | number, number> = {};
+    treeSpecies?.forEach((species) => {
+      if (species.totalLive > 0) {
+        if (species.speciesId) {
+          counts[species.speciesId] = species.totalLive;
+        } else if (species.speciesName) {
+          counts[species.speciesName] = species.totalLive;
         }
       }
     });
-    return _treeSpecies;
-  }, [trees]);
+    return counts;
+  }, [treeSpecies]);
 
   const chartData = useMemo(
     () => ({
-      labels: Object.keys(treeSpecies).map(
+      labels: Object.keys(liveTreesBySpecies).map(
         (speciesId) =>
           availableSpecies?.find((sp) => sp.id.toString() === speciesId.toString())?.scientificName || speciesId
       ),
       datasets: [
         {
-          values: Object.values(treeSpecies),
+          values: Object.values(liveTreesBySpecies),
         },
       ],
     }),
-    [availableSpecies, treeSpecies]
+    [availableSpecies, liveTreesBySpecies]
   );
 
   return <BarChart chartId='liveTreeSpecies' chartData={chartData} barWidth={0} minHeight='300px' />;

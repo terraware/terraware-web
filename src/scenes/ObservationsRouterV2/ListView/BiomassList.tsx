@@ -120,7 +120,8 @@ export default function BiomassList({ plantingSiteId }: BiomassListProps): JSX.E
           plantingSiteId: observation.plantingSiteId,
           plantingSiteName: plantingSitesNames[observation.plantingSiteId],
           completedDate: observation.completedTime,
-          totalPlants: observation.biomassMeasurements?.trees.length,
+          totalPlants:
+            (observation.biomassMeasurements?.totalLive ?? 0) + (observation.biomassMeasurements?.totalDead ?? 0),
           totalSpecies: observation.biomassMeasurements?.treeSpeciesCount,
         })),
     [observations, plantingSitesNames]
