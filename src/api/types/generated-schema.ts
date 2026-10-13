@@ -6497,6 +6497,22 @@ export interface components {
              */
             type: "BiomassSpecies";
         };
+        BiomassTreeSpeciesResultsPayload: {
+            /** Format: int64 */
+            speciesId?: number;
+            /** @description Scientific name of the species. Only set for species that were recorded by name rather than by species ID. */
+            speciesName?: string;
+            /**
+             * Format: int32
+             * @description Number of dead recorded trees, trunks, and shrubs of this species.
+             */
+            totalDead: number;
+            /**
+             * Format: int32
+             * @description Number of live recorded trees, trunks, and shrubs of this species.
+             */
+            totalLive: number;
+        };
         BiomassUpdateOperationPayload: Omit<components["schemas"]["ObservationUpdateOperationPayload"], "type"> & {
             description?: string | null;
             /** @enum {string} */
@@ -7642,6 +7658,18 @@ export interface components {
              * @description Time when tide is observed. Only valid for Mangrove forests. A null value indicates that there was no water.
              */
             tideTime?: string;
+            /**
+             * Format: int32
+             * @description Number of dead recorded trees, trunks, and shrubs across all species.
+             */
+            totalDead: number;
+            /**
+             * Format: int32
+             * @description Number of live recorded trees, trunks, and shrubs across all species.
+             */
+            totalLive: number;
+            /** @description Live and dead plant counts per recorded species. */
+            treeSpecies: components["schemas"]["BiomassTreeSpeciesResultsPayload"][];
             /** Format: int32 */
             treeSpeciesCount: number;
             trees: components["schemas"]["ExistingTreePayload"][];

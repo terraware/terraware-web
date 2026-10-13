@@ -692,6 +692,15 @@ export type ExistingBiomassQuadratPayload = {
   position: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
   species: ExistingBiomassQuadratSpeciesPayload[];
 };
+export type BiomassTreeSpeciesResultsPayload = {
+  speciesId?: number;
+  /** Scientific name of the species. Only set for species that were recorded by name rather than by species ID. */
+  speciesName?: string;
+  /** Number of dead recorded trees, trunks, and shrubs of this species. */
+  totalDead: number;
+  /** Number of live recorded trees, trunks, and shrubs of this species. */
+  totalLive: number;
+};
 export type ExistingTreePayload = {
   /** Measured in meters. */
   boleHeight?: number;
@@ -748,6 +757,12 @@ export type ExistingBiomassMeasurementPayload = {
   tide?: 'Low' | 'High';
   /** Time when tide is observed. Only valid for Mangrove forests. A null value indicates that there was no water. */
   tideTime?: string;
+  /** Number of dead recorded trees, trunks, and shrubs across all species. */
+  totalDead: number;
+  /** Number of live recorded trees, trunks, and shrubs across all species. */
+  totalLive: number;
+  /** Live and dead plant counts per recorded species. */
+  treeSpecies: BiomassTreeSpeciesResultsPayload[];
   treeSpeciesCount: number;
   trees: ExistingTreePayload[];
   /** Measured in centimeters. Only valid for Mangrove forests. A null value indicates that there was no water. */
