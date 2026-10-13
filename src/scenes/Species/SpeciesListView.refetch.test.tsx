@@ -50,6 +50,10 @@ describe('SpeciesListView refetch behaviour', () => {
       results: [{ id: 21, participantProjectSpecies: [{ project: { name: 'Accelerator response complete' } }] }],
     });
     const organization = buildOrganization();
+    const requests: string[] = [];
+    server.events.on('request:start', ({ request }) => {
+      requests.push(`${request.method} ${new URL(request.url).pathname}`);
+    });
     const { store, rerender } = renderWithProviders(<></>, {
       organization: { selectedOrganization: organization },
     });
@@ -80,6 +84,17 @@ describe('SpeciesListView refetch behaviour', () => {
               pageButtons: screen
                 .queryAllByRole('button', { name: /Go to/ })
                 .map((el) => `${el.getAttribute('aria-label')}=${(el as HTMLButtonElement).disabled}`),
+              speciesCalls: calls,
+              requests,
+              queries: Object.entries(
+                (store.getState() as unknown as Record<string, { queries?: Record<string, unknown> }>)['rtk-query']
+                  ?.queries ?? {}
+              ).map(([key, value]) => {
+                const entry = value as { status?: string; error?: unknown; data?: unknown };
+                return `${key}|${entry?.status}|${entry?.error ? 'ERR' : 'ok'}|${
+                  entry?.data === undefined ? 'nodata' : JSON.stringify(entry.data).slice(0, 80)
+                }`;
+              }),
             })
         );
       }
@@ -95,6 +110,7 @@ describe('SpeciesListView refetch behaviour', () => {
       expect(screen.queryByRole('link', { name: 'Species 001 refreshed' })).not.toBeInTheDocument();
       expect(sessionStorage.getItem(pageIndexKey)).toBe('2');
     } finally {
+      server.events.removeAllListeners('request:start');
       releaseRefetch();
       sessionStorage.removeItem(pageIndexKey);
       localStorage.removeItem(pageSizeKey);
