@@ -41,7 +41,12 @@ export default function Form({ children, className, currentStep, steps, style }:
 
   return (
     <Box className={className} style={style}>
-      <Stepper activeStep={currentStepIndex} steps={steps} sx={{ margin: theme.spacing(3, 5, 0) }} />
+      <Stepper
+        activeStep={currentStepIndex}
+        optionalPlacement='inline'
+        steps={steps}
+        sx={{ margin: theme.spacing(2, 5, 0) }}
+      />
       {children}
     </Box>
   );
