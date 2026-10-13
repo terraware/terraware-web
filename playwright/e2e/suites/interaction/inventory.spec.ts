@@ -4,6 +4,8 @@ import { Page } from 'playwright-core';
 import { changeToSuperAdmin } from '../../utils/userUtils';
 import { exactOptions, openNavItem, selectOrg, waitFor } from '../../utils/utils';
 
+const withdrawalEvent = (purpose: string) => new RegExp(`Withdrawal on \\d{4}-\\d{2}-\\d{2} - ${purpose}`);
+
 test.describe('InventoryTests', () => {
   test.beforeEach(async ({ page, context, baseURL }, testInfo) => {
     await changeToSuperAdmin(context, baseURL);
@@ -133,8 +135,8 @@ test.describe('InventoryTests', () => {
     await expect(page.getByRole('main')).toContainText('Total Withdrawn 15');
     await page.getByRole('tab', { name: 'History' }).click();
     await expect(page.locator('#row1-editedByName')).toContainText('Super Admin');
-    await expect(page.getByRole('cell', { name: 'Withdrawal - Dead' })).toBeVisible();
-    await page.getByRole('link', { name: 'Withdrawal - Dead' }).click();
+    await expect(page.getByRole('cell', { name: withdrawalEvent('Dead') })).toBeVisible();
+    await page.getByRole('link', { name: withdrawalEvent('Dead') }).click();
     await expect(page.getByText('Purpose Dead')).toBeVisible();
     await expect(page.getByText('Quantity 15')).toBeVisible();
     await expect(page.getByRole('link', { name: batchNumber })).toBeVisible();
@@ -188,7 +190,7 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('Ready to Plant Quantity 50', exactOptions)).toBeVisible();
     await expect(page.getByText('Total Quantity 100')).toBeVisible();
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.getByRole('cell', { name: 'Withdrawal - Nursery Transfer' })).toBeVisible();
+    await expect(page.getByRole('cell', { name: withdrawalEvent('Nursery Transfer') })).toBeVisible();
     await expect(page.locator('#row1-editedByName')).toBeVisible();
     await page.getByRole('link', { name: 'Inventory / Batches of Banana' }).click();
     await page.locator('#row1-germinatingQuantity').click();
@@ -252,7 +254,7 @@ test.describe('InventoryTests', () => {
     await expect(page.getByText('1 batch for a total of 60')).toBeVisible();
     await page.locator('#acknowledge-button').click();
     await page.getByRole('tab', { name: 'History' }).click();
-    await expect(page.getByRole('cell', { name: 'Withdrawal - Planting' }).nth(0)).toBeVisible();
+    await expect(page.getByRole('cell', { name: withdrawalEvent('Planting') }).nth(0)).toBeVisible();
     await openNavItem(page, 'Plantings', 'Planting Progress');
     await expect(page.getByRole('cell', { name: 'Planting Site' })).toBeVisible();
     await expect(page.getByRole('cell', { name: '60' })).toBeVisible();

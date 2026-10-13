@@ -41,7 +41,13 @@ export const getEventType = (batchHistoryItem: BatchHistoryItemForTable) => {
     return strings.NURSERY_TRANSFER;
   }
   if (batchHistoryItem.type === 'OutgoingWithdrawal') {
-    return `${strings.WITHDRAWAL} - ${purposeLabel(batchHistoryItem.purpose)}`;
+    return strings
+      .formatString(
+        strings.BATCH_HISTORY_WITHDRAWAL_ON_DATE,
+        getDateDisplayValue(batchHistoryItem.withdrawnDate),
+        purposeLabel(batchHistoryItem.purpose)
+      )
+      .toString();
   }
   if (batchHistoryItem.type === 'PhotoCreated' || batchHistoryItem.type === 'PhotoDeleted') {
     return batchHistoryEventEnumToLocalized(batchHistoryItem.type) ?? batchHistoryItem.type;
@@ -159,11 +165,7 @@ export default function BatchHistoryRenderer(props: RendererProps<TableRowType>)
           column={column}
           sx={eventCellSx}
           value={
-            <Link
-              fontSize='16px'
-              to={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(':withdrawalId', row.withdrawalId)}
-              style={linkStyles}
-            >
+            <Link fontSize='16px' to={APP_PATHS.NURSERY_WITHDRAWALS_DETAILS.replace(':withdrawalId', row.withdrawalId)}>
               {getEventType(row as BatchHistoryItemForTable)}
               {row.version === undefined && (
                 <Typography fontSize='14px' fontWeight={300}>
