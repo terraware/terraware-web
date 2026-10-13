@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.75% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>11/16</span>
+                <span class='fraction'>12/16</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.33% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>7/12</span>
+                <span class='fraction'>8/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64.28% </span>
+                <span class="strong">71.42% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/14</span>
+                <span class='fraction'>10/14</span>
             </div>
         
             
@@ -118,7 +118,18 @@
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
 <a name='L55'></a><a href='#L55'>55</a>
-<a name='L56'></a><a href='#L56'>56</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -137,14 +148,25 @@
 <span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">124x</span>
-<span class="cline-any cline-yes">24x</span>
+<span class="cline-any cline-yes">125x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">26x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">13x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -157,7 +179,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">124x</span>
+<span class="cline-any cline-yes">125x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -170,8 +192,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1397x</span>
-<span class="cline-any cline-yes">1397x</span>
+<span class="cline-any cline-yes">1402x</span>
+<span class="cline-any cline-yes">1402x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useMemo } from 'react';
 &nbsp;
@@ -180,7 +202,7 @@ import { Dispatch } from 'redux';
 import { sendSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
 import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
-import { Message, OnCloseMessage, Priority, Title, Type } from 'src/types/Snackbar';
+import { Message, OnCloseMessage, Priority, Title, ToastOptions, Type } from 'src/types/Snackbar';
 &nbsp;
 /**
  * The snackbar will send a message to the message feature when an action is taken on a page message. The message key
@@ -192,15 +214,26 @@ import { Message, OnCloseMessage, Priority, Title, Type } from 'src/types/Snackb
 export const SNACKBAR_PAGE_CLOSE_KEY = 'snackbarPageMessageClose';
 &nbsp;
 function snackbarFns(dispatch: Dispatch) {
-  const snack = (msg: Message, title: Title, priority: Priority, type: Type, onCloseMessage?: OnCloseMessage) =&gt; {
-    dispatch(sendSnackbar({ msg, title, priority, type, onCloseMessage }));
+  const snack = (
+    msg: Message,
+    title: Title,
+    priority: Priority,
+    type: Type,
+    onCloseMessage?: OnCloseMessage,
+    options?: ToastOptions
+  ) =&gt; {
+    dispatch(sendSnackbar({ msg, title, priority, type, onCloseMessage, ...options }));
   };
 &nbsp;
   // toast helpers
-  const toastInfo = <span class="fstat-no" title="function not covered" >(msg: Message, title?: Title) =&gt; <span class="cstat-no" title="statement not covered" >snack(msg, title, 'info', 'toast');</span></span>
-  const toastWarning = (msg: Message, title?: Title) =&gt; snack(msg, title, 'warning', 'toast');
-  const toastSuccess = (msg: Message, title?: Title) =&gt; snack(msg, title, 'success', 'toast');
-  const toastError = (msg?: Message, title?: Title) =&gt; snack(msg || strings.GENERIC_ERROR, title, 'critical', 'toast');
+  const toastInfo = (msg: Message, title?: Title, options?: ToastOptions) =&gt;
+    snack(msg, title, 'info', 'toast', undefined, options);
+  const toastWarning = (msg: Message, title?: Title, options?: ToastOptions) =&gt;
+    snack(msg, title, 'warning', 'toast', undefined, options);
+  const toastSuccess = (msg: Message, title?: Title, options?: ToastOptions) =&gt;
+    snack(msg, title, 'success', 'toast', undefined, options);
+  const toastError = (msg?: Message, title?: Title, options?: ToastOptions) =&gt;
+    snack(msg || strings.GENERIC_ERROR, title, 'critical', 'toast', undefined, options);
 &nbsp;
   // page helpers
   const pageInfo = <span class="fstat-no" title="function not covered" >(msg: Message, title?: Title, closeMessage?: OnCloseMessage) =&gt;</span>
@@ -235,7 +268,7 @@ export default function useSnackbar() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-13T17:40:38.139Z
+                at 2026-10-13T18:42:30.151Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
