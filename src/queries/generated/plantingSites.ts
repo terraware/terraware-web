@@ -57,6 +57,18 @@ const injectedRtkApi = api.injectEndpoints({
     >({
       query: (queryArg) => ({ url: `/api/v1/tracking/sites/${queryArg}/calculationInProgress` }),
     }),
+    completeSurvivalRateCalculation: build.mutation<
+      CompleteSurvivalRateCalculationApiResponse,
+      CompleteSurvivalRateCalculationApiArg
+    >({
+      query: (queryArg) => ({
+        url: `/api/v1/tracking/sites/${queryArg.id}/completeSurvivalRateCalculation`,
+        method: 'POST',
+        params: {
+          maxWaitSeconds: queryArg.maxWaitSeconds,
+        },
+      }),
+    }),
     getPlantingSiteHistory: build.query<GetPlantingSiteHistoryApiResponse, GetPlantingSiteHistoryApiArg>({
       query: (queryArg) => ({
         url: `/api/v1/tracking/sites/${queryArg.id}/history/${queryArg.historyId}`,
@@ -138,6 +150,13 @@ export type UpdatePlantingSiteApiArg = {
 export type GetSurvivalRateCalculationInProgressApiResponse =
   /** status 200 OK */ GetSurvivalRateCalculationInProgressResponsePayload;
 export type GetSurvivalRateCalculationInProgressApiArg = number;
+export type CompleteSurvivalRateCalculationApiResponse =
+  /** status 200 OK */ GetSurvivalRateCalculationInProgressResponsePayload;
+export type CompleteSurvivalRateCalculationApiArg = {
+  id: number;
+  /** Maximum number of seconds to wait for the recalculation to finish. Defaults to 600. */
+  maxWaitSeconds?: number;
+};
 export type GetPlantingSiteHistoryApiResponse = /** status 200 OK */ GetPlantingSiteHistoryResponsePayload;
 export type GetPlantingSiteHistoryApiArg = {
   id: number;
@@ -469,6 +488,7 @@ export const {
   useUpdatePlantingSiteMutation,
   useGetSurvivalRateCalculationInProgressQuery,
   useLazyGetSurvivalRateCalculationInProgressQuery,
+  useCompleteSurvivalRateCalculationMutation,
   useGetPlantingSiteHistoryQuery,
   useLazyGetPlantingSiteHistoryQuery,
   useGetPlantingSiteReportedPlantsQuery,

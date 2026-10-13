@@ -667,7 +667,7 @@ export type ObservationMonitoringPlotResultsPayload = {
   stratumName?: string;
   /** ID of the substratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a substratum or if the substratum has since been deleted. */
   substratumId?: number;
-  /** Full name of the substratum the monitoring plot was in at the time of the observation, if any. */
+  /** Name of the substratum the monitoring plot was in at the time of the observation, if any. */
   substratumName?: string;
   /** If this is a permanent monitoring plot in this observation, percentage of plants that have survived since t0 data. */
   survivalRate?: number;
@@ -1172,7 +1172,7 @@ export type UploadPlotMediaResponsePayload = {
 export type UploadPlotMediaRequestPayload = {
   caption?: string;
   fileBatchId?: number;
-  /** If true, this file should be considered part of the original observation. */
+  /** If false, this file is not considered part of the original observation. */
   isOriginal?: boolean;
   position?: 'SouthwestCorner' | 'SoutheastCorner' | 'NortheastCorner' | 'NorthwestCorner';
   /** Type of subject the uploaded file depicts. */

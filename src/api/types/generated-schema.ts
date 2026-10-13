@@ -4194,6 +4194,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/tracking/draftSites/boundaryFile": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Parses a boundary file for a draft planting site.
+         * @description Accepts KML (.kml), KMZ (.kmz), GeoJSON (.geojson or .json), or a ZIP containing one shapefile with matching .shp, .shx, .dbf, and .prj files. Returns the parsed geometry, original filename, detected format, number of separate polygons, and area in hectares on success. Content validation failures also return HTTP 200, with status error and a problems list instead of geometry.
+         */
+        post: operations["parseDraftPlantingSiteBoundary"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/tracking/draftSites/{id}": {
         parameters: {
             query?: never;
@@ -4771,6 +4791,26 @@ export interface paths {
         get: operations["getSurvivalRateCalculationInProgress"];
         put?: never;
         post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/tracking/sites/{id}/completeSurvivalRateCalculation": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Completes any pending survival rate recalculation for a planting site
+         * @description Recalculates all of the planting site's observation results that are pending recalculation, and waits for the recalculation to finish. If a recalculation is already running, waits for it and then recalculates anything still pending. This can take a while for large planting sites.
+         */
+        post: operations["completeSurvivalRateCalculation"];
         delete?: never;
         options?: never;
         head?: never;
@@ -6541,6 +6581,10 @@ export interface components {
              */
             type: "Biomass";
         };
+        /** @description One content validation problem. Omitted on success; clients translate the code into a message in the user's language. */
+        BoundaryFileProblemPayload: {
+            code: components["schemas"]["GeometryFileErrorCode"];
+        };
         /** @description Coordinate reference system used for X and Y coordinates in this geometry. By default, coordinates are in WGS 84, with longitude and latitude in degrees. In that case, this element is not present. Otherwise, it specifies which coordinate system to use. */
         CRS: {
             properties: components["schemas"]["CRSProperties"];
@@ -8134,6 +8178,8 @@ export interface components {
              */
             type: "GeometryCollection";
         };
+        /** @enum {string} */
+        GeometryFileErrorCode: "UnsupportedFormat" | "InvalidFile" | "NoKmlInArchive" | "NoShapefile" | "MultipleShapefiles" | "UnknownCoordinateSystem" | "NoPolygons" | "InvalidGeometry" | "TooManyVertices";
         GetAcceleratorReportResponsePayload: {
             report: components["schemas"]["AcceleratorReportPayload"];
             status: components["schemas"]["SuccessOrError"];
@@ -9757,6 +9803,8 @@ export interface components {
             overlappedByPlotIds: number[];
             /** @description IDs of any older monitoring plots this one overlaps with. */
             overlapsWithPlotIds: number[];
+            /** @description True if the numbers in these results are stale and will be updated shortly. The values shown are the most recently calculated ones. */
+            pending: boolean;
             photos: components["schemas"]["ObservationMonitoringPlotMediaPayload"][];
             /**
              * Format: int32
@@ -9784,7 +9832,7 @@ export interface components {
              * @description ID of the substratum the monitoring plot was in at the time of the observation, if any. Null if the plot wasn't in a substratum or if the substratum has since been deleted.
              */
             substratumId?: number;
-            /** @description Full name of the substratum the monitoring plot was in at the time of the observation, if any. */
+            /** @description Name of the substratum the monitoring plot was in at the time of the observation, if any. */
             substratumName?: string;
             /**
              * Format: int32
@@ -9933,6 +9981,8 @@ export interface components {
              * @description Planting density for the site based only on the plots observed in this observation, without carrying forward last-observed data for substrata that weren't observed. In contrast to plantingDensity, which uses each substratum's most recent observation.
              */
             observedDensity?: number;
+            /** @description True if the numbers in these results are stale and will be updated shortly. The values shown are the most recently calculated ones. */
+            pending: boolean;
             /**
              * Format: int32
              * @description Estimated planting density for the site, based on the observed planting densities of monitoring plots.
@@ -10069,6 +10119,8 @@ export interface components {
              * @description Planting density for the stratum based only on the plots observed in this observation, without carrying forward last-observed data for substrata that weren't observed. In contrast to plantingDensity, which uses each substratum's most recent observation.
              */
             observedDensity?: number;
+            /** @description True if the numbers in these results are stale and will be updated shortly. The values shown are the most recently calculated ones. */
+            pending: boolean;
             /**
              * Format: int32
              * @description Estimated planting density for the stratum based on the observed planting densities of monitoring plots.
@@ -10146,6 +10198,8 @@ export interface components {
             /** @description Percentage of plants of all species that were dead in this substratum's permanent monitoring plots. */
             monitoringPlots: components["schemas"]["ObservationMonitoringPlotResultsPayload"][];
             name: string;
+            /** @description True if the numbers in these results are stale and will be updated shortly. The values shown are the most recently calculated ones. */
+            pending: boolean;
             /**
              * Format: int32
              * @description Estimated planting density for the substratum based on the observed planting densities of monitoring plots.
@@ -10365,6 +10419,27 @@ export interface components {
         };
         OverrideSpeciesProjectDataRequestPayload: {
             overrides: components["schemas"]["OverrideSpeciesProjectDataElement"][];
+        };
+        /** @description A parsed boundary or a content validation failure. Geometry and metadata are present only when status is ok; problems are present only when status is error. */
+        ParseDraftPlantingSiteBoundaryResponsePayload: {
+            /** @description Area of the returned polygons in hectares, excluding holes. */
+            areaHa?: number;
+            /** @description Original filename of the uploaded file, or empty if no filename was supplied. */
+            filename: string;
+            /**
+             * @description Detected format of the parsed contents. A ZIP containing KML is reported as KMZ; a ZIP containing a shapefile is reported as Shapefile.
+             * @enum {string}
+             */
+            format?: "GeoJSON" | "KML" | "KMZ" | "Shapefile";
+            geometry?: components["schemas"]["Geometry"];
+            /**
+             * Format: int32
+             * @description Number of separate polygons after overlapping polygons are combined.
+             */
+            numPolygons?: number;
+            /** @description One content validation problem. Omitted on success; clients translate the code into a message in the user's language. */
+            problems?: components["schemas"]["BoundaryFileProblemPayload"][];
+            status: components["schemas"]["SuccessOrError"];
         };
         ParticipantProjectForSpeciesPayload: {
             /**
@@ -12939,8 +13014,8 @@ export interface components {
             /** Format: int64 */
             fileBatchId?: number;
             /**
-             * @description If true, this file should be considered part of the original observation.
-             * @default false
+             * @description If false, this file is not considered part of the original observation.
+             * @default true
              */
             isOriginal: boolean;
             /** @enum {string} */
@@ -22477,6 +22552,42 @@ export interface operations {
             };
         };
     };
+    parseDraftPlantingSiteBoundary: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description The file was processed. Check status for a parsed boundary or content validation problems. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ParseDraftPlantingSiteBoundaryResponsePayload"];
+                };
+            };
+            /** @description The file exceeds the 10 MB limit. */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimpleErrorResponsePayload"];
+                };
+            };
+        };
+    };
     getDraftPlantingSite: {
         parameters: {
             query?: never;
@@ -23827,6 +23938,31 @@ export interface operations {
     getSurvivalRateCalculationInProgress: {
         parameters: {
             query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GetSurvivalRateCalculationInProgressResponsePayload"];
+                };
+            };
+        };
+    };
+    completeSurvivalRateCalculation: {
+        parameters: {
+            query?: {
+                /** @description Maximum number of seconds to wait for the recalculation to finish. Defaults to 600. */
+                maxWaitSeconds?: number;
+            };
             header?: never;
             path: {
                 id: number;

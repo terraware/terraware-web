@@ -31,9 +31,6 @@ const config: ConfigFile = {
     './src/queries/generated/applications.ts': {
       filterEndpoints: (_, operation) => operation.path.startsWith('/api/v1/accelerator/applications'),
     },
-    './src/queries/generated/clock.ts': {
-      filterEndpoints: (_, operation) => operation.path === '/api/v1/seedbank/clock',
-    },
     './src/queries/generated/countryBoundary.ts': {
       filterEndpoints: (_, operation) => operation.path === '/api/v1/countries/{countryCode}/boundary',
     },
