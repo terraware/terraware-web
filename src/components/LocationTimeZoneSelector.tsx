@@ -14,6 +14,7 @@ type TimeZoneEntity = {
 };
 
 type LocationTimeZoneSelectorProps = {
+  centerDropdown?: boolean;
   onChangeTimeZone: (tzSelected: TimeZoneDescription | undefined) => void;
   /**
    * Called with  the time zone that will be used for the location. If the location has no time
@@ -27,7 +28,7 @@ type LocationTimeZoneSelectorProps = {
 
 export default function LocationTimeZoneSelector(props: LocationTimeZoneSelectorProps): JSX.Element {
   const timeZoneFetcher = useLocationTimeZone();
-  const { onChangeTimeZone, onEffectiveTimeZone, location, tooltip } = props;
+  const { centerDropdown, onChangeTimeZone, onEffectiveTimeZone, location, tooltip } = props;
   const [lastSelected, setLastSelected] = useState<TimeZoneEntity>(location);
   const [orgTZChecked, setOrgTZChecked] = useState<boolean>(!!location.timeZone);
   const [timeZone, setTimeZone] = useState<TimeZoneDescription>(timeZoneFetcher.get(lastSelected));
@@ -79,6 +80,7 @@ export default function LocationTimeZoneSelector(props: LocationTimeZoneSelector
   return (
     <>
       <TimeZoneSelector
+        centerDropdown={centerDropdown}
         selectedTimeZone={timeZone.id}
         onTimeZoneSelected={(value) => {
           setTimeZone(value);

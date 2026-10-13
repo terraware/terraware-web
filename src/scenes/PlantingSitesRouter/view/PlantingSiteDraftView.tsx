@@ -50,23 +50,34 @@ export default function PlantingSiteDraftView(): JSX.Element {
   const closeDetailsModal = useCallback(() => setDetailsModalOpen(false), []);
 
   const saveDetails = useCallback(
-    (draft: DraftPlantingSite) => {
-      const save = async () => {
-        try {
-          await updateDraftPlantingSite({
-            id: draft.id,
-            updateDraftPlantingSiteRequestPayload: fromDraft(draft),
-          }).unwrap();
-          snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
-          setDetailsModalOpen(false);
-        } catch {
-          snackbar.toastError(strings.GENERIC_ERROR);
-        }
-      };
-
-      void save();
+    async (draft: DraftPlantingSite): Promise<boolean> => {
+      try {
+        await updateDraftPlantingSite({
+          id: draft.id,
+          updateDraftPlantingSiteRequestPayload: fromDraft(draft),
+        }).unwrap();
+        snackbar.toastSuccess(strings.PLANTING_SITE_SAVED);
+        return true;
+      } catch {
+        snackbar.toastError(strings.GENERIC_ERROR);
+        return false;
+      }
     },
     [snackbar, updateDraftPlantingSite]
+  );
+
+  const saveDetailsAndClose = useCallback(
+    (draft: DraftPlantingSite) => {
+      void saveDetails(draft).then((saved) => saved && setDetailsModalOpen(false));
+    },
+    [saveDetails]
+  );
+
+  const saveDetailsAndContinue = useCallback(
+    (draft: DraftPlantingSite) => {
+      void saveDetails(draft).then((saved) => saved && goToEditDraftPlantingSite());
+    },
+    [goToEditDraftPlantingSite, saveDetails]
   );
 
   if (!plantingSite) {
@@ -80,8 +91,9 @@ export default function PlantingSiteDraftView(): JSX.Element {
         <DraftSiteDetailsModal
           busy={isUpdating}
           onClose={closeDetailsModal}
-          onSave={saveDetails}
-          saveLabel={strings.SAVE}
+          onSave={saveDetailsAndContinue}
+          onSaveAndClose={saveDetailsAndClose}
+          saveLabel={strings.SAVE_AND_CONTINUE}
           site={plantingSite}
           title={strings.EDIT_DETAILS}
         />
