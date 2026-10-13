@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { screen } from '@testing-library/react';
+import { act, screen } from '@testing-library/react';
 
 import strings from 'src/strings';
 import { buildOrganization, renderWithProviders } from 'src/test-utils';
@@ -25,6 +25,37 @@ const renderTable = (searchResults: SearchResponseElementWithId[], role: 'Owner'
   renderWithProviders(<AccessionsTable searchResults={searchResults} />, {
     organization: { selectedOrganization: buildOrganization({ id: ORG_ID, role }) },
   });
+
+describe('AccessionsTable saved page', () => {
+  const pageIndexKey = 'accessions-database-table-pageIndex';
+  const pageSizeKey = 'accessions-database-table-pageSize';
+
+  afterEach(() => {
+    sessionStorage.removeItem(pageIndexKey);
+    localStorage.removeItem(pageSizeKey);
+  });
+
+  it('keeps the saved page when cached search results are refreshed', async () => {
+    sessionStorage.setItem(pageIndexKey, '2');
+    localStorage.setItem(pageSizeKey, '10');
+    const cachedRows = Array.from({ length: 30 }, (_, index) =>
+      buildRow({ id: String(index + 1), accessionNumber: `ACC-${String(index + 1).padStart(3, '0')}` })
+    );
+    const { rerender } = renderWithProviders(<AccessionsTable searchResults={cachedRows} isFetching />, {
+      organization: { selectedOrganization: buildOrganization({ id: ORG_ID, role: 'Owner' }) },
+    });
+
+    await act(async () => {
+      rerender(<AccessionsTable searchResults={cachedRows.map((row) => ({ ...row }))} isFetching={false} />);
+      await Promise.resolve();
+    });
+
+    expect(screen.getByRole('link', { name: 'ACC-021' })).toBeVisible();
+    expect(screen.getByRole('link', { name: 'ACC-030' })).toBeVisible();
+    expect(screen.queryByRole('link', { name: 'ACC-001' })).not.toBeInTheDocument();
+    expect(sessionStorage.getItem(pageIndexKey)).toBe('2');
+  });
+});
 
 describe('AccessionsTable bulk withdrawal', () => {
   it('shows no selection for a contributor', () => {

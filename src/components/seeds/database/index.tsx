@@ -215,7 +215,14 @@ export default function Database(props: DatabaseProps): JSX.Element {
       {
         id: 'byAccession',
         label: strings.BY_ACCESSION,
-        children: <AccessionsTable searchResults={searchResults} projects={projects} reloadData={reloadAccessions} />,
+        children: (
+          <AccessionsTable
+            searchResults={searchResults}
+            isFetching={searchAccessionsResult.isFetching}
+            projects={projects}
+            reloadData={reloadAccessions}
+          />
+        ),
       },
       {
         id: 'bySpecies',
@@ -223,7 +230,7 @@ export default function Database(props: DatabaseProps): JSX.Element {
         children: <AccessionsBySpeciesTable searchResults={searchResults} reloadData={reloadAccessions} />,
       },
     ];
-  }, [activeLocale, searchResults, projects, reloadAccessions]);
+  }, [activeLocale, searchResults, searchAccessionsResult.isFetching, projects, reloadAccessions]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'byAccession',

@@ -91,6 +91,7 @@ const DEFAULT_COLUMN_VISIBILITY = Object.fromEntries(
 
 type AccessionsTableProps = {
   searchResults: SearchResponseElementWithId[] | null | undefined;
+  isFetching?: boolean;
   projects?: Project[];
   reloadData?: () => void;
 };
@@ -119,7 +120,12 @@ const unavailableTooltip = (row: SearchResponseElementWithId): string => {
   return strings.WITHDRAW_ACCESSION_NOT_AVAILABLE;
 };
 
-export default function AccessionsTable({ searchResults, projects, reloadData }: AccessionsTableProps): JSX.Element {
+export default function AccessionsTable({
+  searchResults,
+  isFetching = false,
+  projects,
+  reloadData,
+}: AccessionsTableProps): JSX.Element {
   const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
   const { user, isAllowed } = useUser();
@@ -217,6 +223,8 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
   const numberFormatter = useNumberFormatter();
 
   const {
+    autoResetPageIndex,
+    isLoadingPage,
     columnFilters,
     columnOrder,
     columnVisibility,
@@ -240,6 +248,7 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
     persistedMultiSelectColumnIds: ['facility_name', 'project_name', 'state', 'subLocation_name', 'speciesName'],
     persistFilters: true,
     persistSorting: true,
+    persistPageIndex: { isLoading: isFetching || !searchResults },
   });
 
   useEffect(() => {
@@ -719,12 +728,14 @@ export default function AccessionsTable({ searchResults, projects, reloadData }:
         enableColumnOrdering={true}
         storageKey={TABLE_STATE_STORAGE_KEY}
         tableOptions={{
+          autoResetPageIndex,
           defaultColumn: {
             enableEditing: false,
             filterVariant: 'text',
             sortUndefined: 'last',
           },
           state: {
+            isLoading: isLoadingPage,
             sorting,
             columnOrder,
             columnVisibility,
