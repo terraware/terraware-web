@@ -286,8 +286,7 @@ export default function SpeciesListView(): JSX.Element {
   } = useTableState(TABLE_STATE_STORAGE_KEY, {
     defaultSorting: [{ id: 'scientificName', desc: false }],
     persistPageIndex: {
-      isLoading:
-        speciesLoading || projectsLoading || !orgBootstrapped || acceleratorProjectsLoading || species.length === 0,
+      isLoading: speciesLoading || projectsLoading || !orgBootstrapped || acceleratorProjectsLoading,
     },
   });
 
