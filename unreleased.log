@@ -1,3 +1,4 @@
+9782d9ad Move draft planting site details into a dialog (#6761)
 281f6375 SW-9099 Use server-generated biomass plant counts (#6767)
 3e047fcc SW-9053 Fix Refresh Terraware Alert showing in wrong place in some pages (#6764)
 a31cd376 SW-8997 Species check E2E test (#6766)

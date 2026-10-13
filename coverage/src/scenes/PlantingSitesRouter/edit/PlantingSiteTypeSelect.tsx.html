@@ -25,28 +25,28 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/7</span>
+                <span class='fraction'>0/8</span>
             </div>
         
             
@@ -97,7 +97,23 @@
 <a name='L32'></a><a href='#L32'>32</a>
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L35'></a><a href='#L35'>35</a>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a>
+<a name='L38'></a><a href='#L38'>38</a>
+<a name='L39'></a><a href='#L39'>39</a>
+<a name='L40'></a><a href='#L40'>40</a>
+<a name='L41'></a><a href='#L41'>41</a>
+<a name='L42'></a><a href='#L42'>42</a>
+<a name='L43'></a><a href='#L43'>43</a>
+<a name='L44'></a><a href='#L44'>44</a>
+<a name='L45'></a><a href='#L45'>45</a>
+<a name='L46'></a><a href='#L46'>46</a>
+<a name='L47'></a><a href='#L47'>47</a>
+<a name='L48'></a><a href='#L48'>48</a>
+<a name='L49'></a><a href='#L49'>49</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -112,7 +128,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -121,22 +136,37 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { type JSX } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { type JSX, useMemo, useState } from 'react';
 &nbsp;
-import { APP_PATHS } from 'src/constants';
-import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
-import { SiteType } from 'src/types/PlantingSite';
+import { useOrganization } from 'src/providers';
+import useDraftPlantingSiteCreate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteCreate';
+import strings from 'src/strings';
+import { DraftPlantingSite, SiteType } from 'src/types/PlantingSite';
 &nbsp;
+import DraftSiteDetailsModal from './DraftSiteDetailsModal';
 import PlantingSiteSelectTypeModal2 from './PlantingSiteSelectTypeModal2';
 &nbsp;
 export type PlantingSiteTypeSelectProps = {
@@ -145,23 +175,35 @@ export type PlantingSiteTypeSelectProps = {
 &nbsp;
 export default function <span class="fstat-no" title="function not covered" >PlantingSiteTypeSelect(</span>props: PlantingSiteTypeSelectProps): JSX.Element {
   const { onClose } = <span class="cstat-no" title="statement not covered" >props;</span>
-  const navigate = <span class="cstat-no" title="statement not covered" >useSyncNavigate();</span>
+  const { selectedOrganization } = <span class="cstat-no" title="statement not covered" >useOrganization();</span>
+  const [siteType, setSiteType] = <span class="cstat-no" title="statement not covered" >useState&lt;SiteType&gt;();</span>
+  const { createDraft, isCreating } = <span class="cstat-no" title="statement not covered" >useDraftPlantingSiteCreate();</span>
 &nbsp;
-  const goTo = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(appPath: string, search?: string) =&gt; {</span></span>
-    const appPathLocation = <span class="cstat-no" title="statement not covered" >{</span>
-      pathname: appPath,
-      search,
-    };
-<span class="cstat-no" title="statement not covered" >    navigate(appPathLocation);</span>
-  };
+  const site = useMemo&lt;DraftPlantingSite | undefined&gt;(
+<span class="fstat-no" title="function not covered" >    () =&gt;</span>
+<span class="cstat-no" title="statement not covered" >      siteType &amp;&amp; {</span>
+        createdBy: -1,
+        id: -1,
+        name: '',
+        organizationId: selectedOrganization?.id || -1,
+        siteEditStep: 'site_boundary',
+        siteType,
+      },
+    [selectedOrganization, siteType]
+  );
+&nbsp;
+<span class="cstat-no" title="statement not covered" >  if (!site) {</span>
+<span class="cstat-no" title="statement not covered" >    return &lt;PlantingSiteSelectTypeModal2 open onNext={setSiteType} onClose={onClose} /&gt;;</span>
+  }
 &nbsp;
 <span class="cstat-no" title="statement not covered" >  return (</span>
-    &lt;PlantingSiteSelectTypeModal2
-      open
-      onNext={<span class="fstat-no" title="function not covered" >(siteType: SiteType) =&gt;</span>
-<span class="cstat-no" title="statement not covered" >        void goTo(APP_PATHS.PLANTING_SITES_DRAFT_NEW, siteType === 'detailed' ? '?detailed' : '')</span>
-      }
+    &lt;DraftSiteDetailsModal
+      busy={isCreating}
       onClose={onClose}
+      onSave={createDraft}
+      saveLabel={strings.NEXT}
+      site={site}
+      title={strings.ADD_PLANTING_SITE}
     /&gt;
   );
 }
@@ -172,7 +214,7 @@ export default function <span class="fstat-no" title="function not covered" >Pla
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-13T21:34:43.734Z
+                at 2026-10-13T23:08:07.816Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
