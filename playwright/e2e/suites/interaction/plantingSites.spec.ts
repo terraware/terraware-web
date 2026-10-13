@@ -28,7 +28,7 @@ const SITE_ADDRESS = '1600 Pennsylvania Avenue NW, Washington, DC';
 // Search results open at zoom 10; zoom 14 makes a few hundred pixels a few kilometers across.
 const ZOOM_IN_AFTER_SEARCH = 4;
 
-test.describe.only('PlantingSiteTests', () => {
+test.describe('PlantingSiteTests', () => {
   test.use({ viewport: { width: 1600, height: 1200 } });
   test.describe.configure({ timeout: 120000 });
 
