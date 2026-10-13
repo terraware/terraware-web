@@ -347,7 +347,7 @@ test.describe('PlantingSiteTests', () => {
     await editorButton(page, 'Create Planting Site').click();
 
     await expect(page).toHaveURL(/\/planting-sites\/\d+(\?|$)/);
-    await expect(page.getByRole('button', { name: 'Delete Planting Site' })).toBeVisible();
+    await expect(page.locator('#more-options')).toBeVisible();
     await expect(detailField(page, 'Name')).toHaveText(siteName);
     await expect(page.getByText('Boundary setup isn’t finished', { exact: false })).toBeHidden();
     await expect(page.getByRole('button', { name: 'Continue with Substratum Boundaries' })).toBeHidden();
@@ -360,11 +360,13 @@ test.describe('PlantingSiteTests', () => {
     await page.getByRole('link', { name: siteName }).click();
 
     // Delete the created site: cancel once, then confirm.
-    await page.getByRole('button', { name: 'Delete Planting Site' }).click();
+    await page.locator('#more-options').click();
+    await page.getByRole('menuitem', { name: 'Delete' }).click();
     await expect(page.getByText('Are you sure?')).toBeVisible();
     await page.locator('#cancelDeletePlantingSite').click();
     await expect(page.getByText('Are you sure?')).toBeHidden();
-    await page.getByRole('button', { name: 'Delete Planting Site' }).click();
+    await page.locator('#more-options').click();
+    await page.getByRole('menuitem', { name: 'Delete' }).click();
     await page.locator('#saveDeletePlantingSite').click();
 
     await expect(page).toHaveURL(/\/planting-sites(\?|$)/);
