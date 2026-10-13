@@ -2136,14 +2136,24 @@ SITE_GOALS_DESCRIPTION,Gestione los objetivos del sitio para densidades de plant
 SITE_LOCATION,Ubicación del sitio,e0a85b19
 SITE_MAP,Mapa del sitio,df2fc60a
 SITE_PLANT_DENSITY,Densidad de plantas del sitio,a449ddcc
+SITE_STRATUM_BOUNDARIES_ABOUT,Acerca de los Estratos,5cedc6ad
+SITE_STRATUM_BOUNDARIES_DEFINITION,"Un Estrato es una capa de vegetación del sitio de plantación donde las condiciones de plantación y crecimiento son similares, como la pendiente de una colina orientada al este. Cada sitio de plantación debe tener al menos un Estrato y generalmente no más de cinco.",075e75b3
 SITE_STRATUM_BOUNDARIES_DESCRIPTION,"Un estrato es una capa de vegetación del sitio de plantación donde las condiciones de plantación y crecimiento son similares, como la pendiente de una colina orientada al este. Cada sitio de plantación debe tener al menos un estrato y generalmente no más de cinco. Utilice la herramienta de corte {0} para dibujar polígonos de estratos dentro del límite del sitio a continuación. {1} [Vea un tutorial] sobre cómo agregar límites de estratos.",590f73b1
+SITE_STRATUM_BOUNDARIES_DRAWING_DESCRIPTION,Utilice la herramienta de corte {0} para dibujar polígonos de Estrato dentro del límite del sitio.,9c529093
+SITE_STRATUM_BOUNDARIES_LEARN_MORE,Más información sobre los límites de Estrato,57e34afe
 SITE_STRATUM_BOUNDARIES_SIZE,Los estratos deben tener un tamaño mínimo de 100 m × 100 m.,d57abc90
 SITE_STRATUM_BOUNDARIES_TOO_SMALL,Una o más estratas tienen un límite menor a 100 m x 100 m.,e53c42df
+SITE_STRATUM_BOUNDARIES_WATCH_TUTORIAL,Ver un tutorial sobre cómo agregar límites de Estrato,e58ac7c1
 SITE_STRATUM_BOUNDARY_TOO_SMALL,Límite de estrata menor a 100 m x 100 m.,d39bb72b
 SITE_STRATUM_NAMES_MISSING,Falta el nombre de una o más estratas. Haga clic en una estrata para editar su nombre.,dc003708
+SITE_SUBSTRATUM_BOUNDARIES_ABOUT,Acerca de los Subestratos,990c2316
+SITE_SUBSTRATUM_BOUNDARIES_DEFINITION,"Cada Estrato se divide en uno o más Subestratos. Un Subestrato es el área más pequeña a la que se pueden asignar plántulas durante la plantación, y debe tener un tamaño que permita plantarlo en una sola temporada de plantación, generalmente entre 50 y 200 hectáreas.",bbec5d99
 SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,"Cada estrato se divide en uno o más subestratos. Un subestrato es el área más pequeña a la que se pueden asignar plántulas durante la plantación, y debe tener un tamaño tal que pueda plantarse en una sola temporada de plantación, generalmente de 50 a 200 hectáreas. Seleccione un estrato y luego utilice la herramienta de corte {0} para dibujar polígonos de subestratos dentro de él. [Vea un tutorial] sobre cómo agregar límites de subestratos.",d9d30ce0
+SITE_SUBSTRATUM_BOUNDARIES_DRAWING_DESCRIPTION,Seleccione un Estrato y luego utilice la herramienta de corte {0} para dibujar polígonos de Subestrato dentro de él.,34666a7a
+SITE_SUBSTRATUM_BOUNDARIES_LEARN_MORE,Más información sobre los límites de Subestrato,db9c8dc6
 SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,{0} seleccionado para crear subestratos,8444578b
 SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL,Uno o más Subestratos tienen un límite menor a 25 m x 25 m.,87f34c5b
+SITE_SUBSTRATUM_BOUNDARIES_WATCH_TUTORIAL,Ver un tutorial sobre cómo agregar límites de Subestrato,8707c136
 SITE_SUBSTRATUM_BOUNDARY_TOO_SMALL,Límite de Subestrato menor a 25 m x 25 m.,c014deff
 SITE_VISIT,Visita al sitio,01a6a6fc
 SITE_WITH_NAME_EXISTS,Ya existe un sitio con este nombre.,8a2a38fc
