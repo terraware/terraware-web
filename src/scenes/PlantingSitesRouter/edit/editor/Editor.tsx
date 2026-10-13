@@ -13,6 +13,8 @@ import { APP_PATHS } from 'src/constants';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization } from 'src/providers';
+import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
+import { useAppDispatch } from 'src/redux/store';
 import useDraftPlantingSiteCreate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteCreate';
 import useDraftPlantingSiteFinalize from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteFinalize';
 import useDraftPlantingSiteUpdate from 'src/scenes/PlantingSitesRouter/hooks/useDraftPlantingSiteUpdate';
@@ -78,6 +80,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   const theme = useTheme();
   const { isMobile } = useDeviceInfo();
   const snackbar = useSnackbar();
+  const dispatch = useAppDispatch();
 
   const [showPageMessage, setShowPageMessage] = useState<boolean>(true);
   const [onValidate, setOnValidate] = useState<OnValidate | undefined>();
@@ -311,6 +314,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   const onOpenStartOver = useCallback(() => setShowStartOver(true), []);
   const onCloseStartOver = useCallback(() => setShowStartOver(false), []);
   const onClosePageMessage = useCallback(() => setShowPageMessage(false), []);
+  const onHeaderButtonClick = useCallback(() => dispatch(clearSnackbar({ type: 'toast' })), [dispatch]);
 
   const pageMessage = useMemo<JSX.Element | null>(() => {
     if (showPageMessage && !isSimpleSite && currentStep === 'details') {
@@ -358,7 +362,14 @@ export default function Editor(props: EditorProps): JSX.Element {
             {isDirty && <UnsavedChangesBadge />}
           </Box>
           {!isMobile && (
-            <Box display='flex' alignItems='center' flexWrap='wrap' justifyContent='flex-end' gap={theme.spacing(1)}>
+            <Box
+              display='flex'
+              alignItems='center'
+              flexWrap='wrap'
+              justifyContent='flex-end'
+              gap={theme.spacing(1)}
+              onClickCapture={onHeaderButtonClick}
+            >
               <Button
                 id='close-planting-site-create'
                 label={strings.CLOSE}
