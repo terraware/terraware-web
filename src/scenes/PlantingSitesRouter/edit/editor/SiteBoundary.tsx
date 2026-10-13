@@ -25,7 +25,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
 import DrawingBoundaryStatus from './DrawingBoundaryStatus';
-import SiteBoundaryHelp from './SiteBoundaryHelp';
+import StepHelp from './StepHelp';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import UploadBoundaryModal, { ParsedBoundary, boundaryFileFormatOf, fileSizeKb } from './UploadBoundaryModal';
 import UploadedBoundarySummary, { UploadedBoundaryFile } from './UploadedBoundarySummary';
@@ -199,7 +199,19 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
                 strings.SITE_BOUNDARY_DRAWING_DESCRIPTION,
                 <MapIcon centerAligned={true} icon='polygon' />
               )}
-              <SiteBoundaryHelp isSimpleSite={site.siteType !== 'detailed'} onWatchTutorial={onWatchTutorial} />
+              <StepHelp
+                id='site-boundary-learn-more'
+                label={strings.SITE_BOUNDARY_LEARN_MORE}
+                onWatchTutorial={onWatchTutorial}
+                paragraphs={[
+                  site.siteType === 'detailed'
+                    ? strings.SITE_BOUNDARY_PLANTABLE_AREAS
+                    : `${strings.SITE_BOUNDARY_PLANTABLE_AREAS} ${strings.SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE}`,
+                  strings.SITE_BOUNDARY_BOUNDING_BOX_LIMIT,
+                ]}
+                title={strings.SITE_BOUNDARY_ABOUT}
+                tutorialLabel={strings.SITE_BOUNDARY_WATCH_TUTORIAL}
+              />
             </>
           ),
         },

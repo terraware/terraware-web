@@ -2123,7 +2123,13 @@ SITE_BOUNDING_AREA_TOO_LARGE,El área delimitada de aproximadamente {0} hectáre
 SITE_DETAIL,Detalle del sitio,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,El sitio de plantación actualmente es un borrador; solo el creador del sitio puede editarlo.,07fbd64b
 SITE_EDITOR_USE_DESKTOP,Esta función solo está disponible desde la aplicación de escritorio.,1c4eb37d
+SITE_EXCLUSION_AREAS_ABOUT,Acerca de las áreas de exclusión,d1ac9b17
 SITE_EXCLUSION_AREAS_DESCRIPTION,"Las áreas dentro del límite del sitio que no son plantables, como caminos, cuerpos de agua y edificaciones auxiliares, deben ser excluidas. Estas se eliminan de los cálculos de área plantable y no se monitorean durante la observación rutinaria del sitio. Utilice la herramienta de dibujo {0} para trazar figuras dentro o superpuestas al límite del sitio, y complete cada figura haciendo doble clic o haciendo clic nuevamente en el punto de inicio. [Vea un tutorial] sobre cómo dibujar áreas de exclusión. Omita este paso si no hay áreas que excluir.",4c2a45b1
+SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,Utilice la herramienta de dibujo {0} para trazar formas dentro o superpuestas al límite del sitio. Haga doble clic o haga clic nuevamente en el punto de inicio para finalizar cada forma.,5d0aacd1
+SITE_EXCLUSION_AREAS_LEARN_MORE,Más información sobre las áreas de exclusión,de9ea030
+SITE_EXCLUSION_AREAS_NOT_PLANTABLE,"Las áreas dentro del límite del sitio que no son plantables, como caminos, cuerpos de agua y edificaciones auxiliares, deben ser excluidas. Estas se eliminan de los cálculos de área plantable y no se monitorean durante la observación rutinaria del sitio.",07c3bf13
+SITE_EXCLUSION_AREAS_SKIP,Omitir este paso si no hay áreas que excluir.,0baeb923
+SITE_EXCLUSION_AREAS_WATCH_TUTORIAL,Ver un tutorial sobre cómo dibujar áreas de exclusión,afa1bccf
 SITE_EXCLUSION_ERRORS,Hay errores en el límite de exclusión.,dc334f43
 SITE_GOALS,Objetivos del Sitio,345a7c04
 SITE_GOALS_DESCRIPTION,Gestione los objetivos del sitio para densidades de plantación y especies.,29421088

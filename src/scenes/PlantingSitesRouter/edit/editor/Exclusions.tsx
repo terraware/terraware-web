@@ -7,12 +7,14 @@ import MapIcon from 'src/components/Map/MapIcon';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import EditableMap, { EditableMapBoundary } from 'src/components/NewMap/EditableMap';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
+import { useFeatureEnabled } from 'src/features';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import StepHelp from './StepHelp';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
 import { findErrors } from './utils';
@@ -53,6 +55,7 @@ export default function Exclusions({ onValidate, onDirtyChange, site }: Exclusio
   const { sitesLayerStyle } = useMapFeatureStyles();
   const { activeLocale } = useLocalization();
   const snackbar = useSnackbar();
+  const fileUploadEnabled = useFeatureEnabled('Boundary File Upload');
 
   const exclusions = exclusionsData?.exclusions;
 
@@ -82,20 +85,42 @@ export default function Exclusions({ onValidate, onDirtyChange, site }: Exclusio
     ];
   }, [site.boundary, site.id, sitesLayerStyle]);
 
-  const description = useMemo<Description[]>(
-    () =>
-      activeLocale
-        ? [
-            {
-              text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION,
-              hasTutorial: true,
-              handlePrefix: (prefix: string) =>
-                strings.formatString(prefix, <MapIcon icon='polygon' />) as JSX.Element[],
-            },
-          ]
-        : [],
-    [activeLocale]
-  );
+  const description = useMemo<Description[]>(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    if (fileUploadEnabled) {
+      return [
+        {
+          render: (onWatchTutorial: () => void) => (
+            <>
+              {strings.formatString(
+                strings.SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,
+                <MapIcon centerAligned={true} icon='polygon' />
+              )}
+              <StepHelp
+                id='exclusion-areas-learn-more'
+                label={strings.SITE_EXCLUSION_AREAS_LEARN_MORE}
+                onWatchTutorial={onWatchTutorial}
+                paragraphs={[strings.SITE_EXCLUSION_AREAS_NOT_PLANTABLE, strings.SITE_EXCLUSION_AREAS_SKIP]}
+                title={strings.SITE_EXCLUSION_AREAS_ABOUT}
+                tutorialLabel={strings.SITE_EXCLUSION_AREAS_WATCH_TUTORIAL}
+              />
+            </>
+          ),
+        },
+      ];
+    }
+
+    return [
+      {
+        text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION,
+        hasTutorial: true,
+        handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='polygon' />) as JSX.Element[],
+      },
+    ];
+  }, [activeLocale, fileUploadEnabled]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {

@@ -2122,7 +2122,13 @@ SITE_BOUNDING_AREA_TOO_LARGE,La zone délimitée d’environ {0} hectares est tr
 SITE_DETAIL,Détail du site,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,Le site de plantation est actuellement un brouillon – seul le créateur du site peut le modifier.,07fbd64b
 SITE_EDITOR_USE_DESKTOP,Cette fonction n’est disponible qu’à partir de l’application de bureau.,1c4eb37d
+SITE_EXCLUSION_AREAS_ABOUT,À propos des zones d’exclusion,d1ac9b17
 SITE_EXCLUSION_AREAS_DESCRIPTION,"Les zones situées à l'intérieur des limites du site qui ne sont pas plantables, telles que les routes, les plans d'eau et les dépendances, doivent être exclues. Elles sont retirées des calculs de surface plantable et ne sont pas surveillées lors des observations de routine du site. Utilisez l'outil de dessin {0} pour tracer des formes à l'intérieur ou à cheval sur la limite du site, et terminez chaque forme en double-cliquant ou en cliquant à nouveau sur le point de départ. [Regardez un tutoriel] sur la façon de dessiner des zones d'exclusion. Passez cette étape s'il n'y a aucune zone à exclure.",4c2a45b1
+SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,Utilisez l’outil de dessin {0} pour tracer des formes à l’intérieur ou en chevauchement avec la limite du site. Double-cliquez ou cliquez de nouveau sur le point de départ pour terminer chaque forme.,5d0aacd1
+SITE_EXCLUSION_AREAS_LEARN_MORE,En savoir plus sur les zones d’exclusion,de9ea030
+SITE_EXCLUSION_AREAS_NOT_PLANTABLE,"Les zones à l’intérieur de la limite du site qui ne sont pas plantables, telles que les routes, les plans d’eau et les dépendances, doivent être exclues. Elles sont retirées des calculs de surface plantable et ne sont pas surveillées lors de l’observation de routine du site.",07c3bf13
+SITE_EXCLUSION_AREAS_SKIP,Passez cette étape s’il n’y a aucune zone à exclure.,0baeb923
+SITE_EXCLUSION_AREAS_WATCH_TUTORIAL,Regarder un tutoriel sur le dessin des zones d’exclusion,afa1bccf
 SITE_EXCLUSION_ERRORS,Il y a des erreurs dans la limite d’exclusion.,dc334f43
 SITE_GOALS,Objectifs du site,345a7c04
 SITE_GOALS_DESCRIPTION,Gérer les objectifs du site pour les densités de plantation et les espèces.,29421088

@@ -6,12 +6,23 @@ import { Icon } from '@terraware/web-components';
 import Link from 'src/components/common/Link';
 import strings from 'src/strings';
 
-export type SiteBoundaryHelpProps = {
-  isSimpleSite: boolean;
+export type StepHelpProps = {
+  id: string;
+  label: string;
   onWatchTutorial: () => void;
+  paragraphs: string[];
+  title: string;
+  tutorialLabel: string;
 };
 
-export default function SiteBoundaryHelp({ isSimpleSite, onWatchTutorial }: SiteBoundaryHelpProps): JSX.Element {
+export default function StepHelp({
+  id,
+  label,
+  onWatchTutorial,
+  paragraphs,
+  title,
+  tutorialLabel,
+}: StepHelpProps): JSX.Element {
   const theme = useTheme();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
@@ -25,7 +36,7 @@ export default function SiteBoundaryHelp({ isSimpleSite, onWatchTutorial }: Site
   return (
     <>
       <ButtonBase
-        id='site-boundary-learn-more'
+        id={id}
         onClick={onOpen}
         sx={{
           alignItems: 'center',
@@ -39,7 +50,7 @@ export default function SiteBoundaryHelp({ isSimpleSite, onWatchTutorial }: Site
       >
         <Icon name='iconIdea' size='small' style={{ fill: theme.palette.TwClrIcnWarning }} />
         <Typography fontSize='14px' fontWeight={500} lineHeight='20px' color={theme.palette.TwClrTxtBrand}>
-          {strings.SITE_BOUNDARY_LEARN_MORE}
+          {label}
         </Typography>
       </ButtonBase>
       <Popover
@@ -63,21 +74,24 @@ export default function SiteBoundaryHelp({ isSimpleSite, onWatchTutorial }: Site
         <Box display='flex' alignItems='center' gap={theme.spacing(1)} marginBottom={theme.spacing(1.5)}>
           <Icon name='iconIdea' size='small' style={{ fill: theme.palette.TwClrIcnWarning }} />
           <Typography fontSize='16px' fontWeight={600} lineHeight='24px' color={theme.palette.TwClrTxt} flexGrow={1}>
-            {strings.SITE_BOUNDARY_ABOUT}
+            {title}
           </Typography>
           <IconButton aria-label={strings.CLOSE} onClick={onClose} size='small'>
             <Icon name='close' size='small' style={{ fill: theme.palette.TwClrIcn }} />
           </IconButton>
         </Box>
-        <Typography fontSize='14px' lineHeight='20px' color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1.5)}>
-          {isSimpleSite
-            ? `${strings.SITE_BOUNDARY_PLANTABLE_AREAS} ${strings.SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE}`
-            : strings.SITE_BOUNDARY_PLANTABLE_AREAS}
-        </Typography>
-        <Typography fontSize='14px' lineHeight='20px' color={theme.palette.TwClrTxt} marginBottom={theme.spacing(1.5)}>
-          {strings.SITE_BOUNDARY_BOUNDING_BOX_LIMIT}
-        </Typography>
-        <Link onClick={onClickTutorial}>{strings.SITE_BOUNDARY_WATCH_TUTORIAL}</Link>
+        {paragraphs.map((paragraph, index) => (
+          <Typography
+            key={index}
+            fontSize='14px'
+            lineHeight='20px'
+            color={theme.palette.TwClrTxt}
+            marginBottom={theme.spacing(1.5)}
+          >
+            {paragraph}
+          </Typography>
+        ))}
+        <Link onClick={onClickTutorial}>{tutorialLabel}</Link>
       </Popover>
     </>
   );
