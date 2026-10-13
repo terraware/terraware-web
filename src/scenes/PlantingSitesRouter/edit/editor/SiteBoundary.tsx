@@ -1,7 +1,7 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Icon, Message } from '@terraware/web-components';
+import { Icon } from '@terraware/web-components';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import centroid from '@turf/centroid';
@@ -17,6 +17,8 @@ import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
+import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
+import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import { BoundarySource, DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum } from 'src/types/Tracking';
@@ -97,6 +99,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
 
   const [mode, setMode] = useState<MapEditorMode>();
   const snackbar = useSnackbar();
+  const dispatch = useAppDispatch();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const trackEvent = useTrackEvent();
@@ -310,19 +313,33 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       setMethod('upload');
       setShowUploadModal(false);
 
+      if (numPolygons > 1) {
+        const combinedMessage = strings.formatString(strings.SITE_BOUNDARY_POLYGONS_COMBINED, numPolygons) as string;
+        snackbar.toastInfo(
+          site.siteType === 'simple'
+            ? `${combinedMessage} ${strings.SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED}`
+            : combinedMessage,
+          undefined,
+          { autoHideDuration: null }
+        );
+      } else {
+        dispatch(clearSnackbar({ type: 'toast' }));
+      }
+
       lastUploadId.current += 1;
       void onEditableBoundaryChanged(featureCollectionOf(geometry, site.id), {
         uploadedFile: file,
         uploadId: lastUploadId.current,
       });
     },
-    [boundary, onEditableBoundaryChanged, site.id, trackEvent]
+    [boundary, dispatch, onEditableBoundaryChanged, site.id, site.siteType, snackbar, trackEvent]
   );
 
   const onRemoveUploadedFile = useCallback(() => {
     setMethod(undefined);
+    dispatch(clearSnackbar({ type: 'toast' }));
     void onEditableBoundaryChanged(undefined);
-  }, [onEditableBoundaryChanged]);
+  }, [dispatch, onEditableBoundaryChanged]);
 
   const onOpenUploadModal = useCallback(() => setShowUploadModal(true), []);
 
@@ -344,20 +361,6 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
               {strings.SITE_BOUNDARY_MAX_BOUNDING_BOX}
             </Typography>
           </Box>
-          {uploadedFile && uploadedFile.numPolygons > 1 && (
-            <Box marginBottom={theme.spacing(2)}>
-              <Message
-                body={
-                  strings.formatString(
-                    strings.SITE_BOUNDARY_POLYGONS_COMBINED,
-                    uploadedFile.numPolygons
-                  ) as unknown as string
-                }
-                priority='info'
-                type='page'
-              />
-            </Box>
-          )}
           {uploadedFile && (
             <UploadedBoundarySummary
               file={uploadedFile}

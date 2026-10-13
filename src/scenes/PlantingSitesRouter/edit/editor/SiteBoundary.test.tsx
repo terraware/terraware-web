@@ -5,6 +5,7 @@ import { screen, waitFor } from '@testing-library/react';
 import { FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 
 import type { EditableMapProps } from 'src/components/NewMap/EditableMap';
+import ToastSnackbar from 'src/components/ToastSnackbar';
 import type { FeatureName } from 'src/features';
 import SiteBoundary from 'src/scenes/PlantingSitesRouter/edit/editor/SiteBoundary';
 import strings from 'src/strings';
@@ -97,14 +98,20 @@ const lastMountedGeometry = () => mapMounts[mapMounts.length - 1]?.features[0]?.
 
 const onMap = (polygon: Polygon): MultiPolygon => ({ type: 'MultiPolygon', coordinates: [polygon.coordinates] });
 
-const polygonsCombinedBanner = (numPolygons: number) =>
+const polygonsCombinedMessage = (numPolygons: number) =>
   strings.formatString(strings.SITE_BOUNDARY_POLYGONS_COMBINED, numPolygons) as string;
 
-const renderSiteBoundary = () =>
-  renderWithProviders(<SiteBoundary site={site} />, {
-    // the step's tutorial dialog opens on mount otherwise, and covers the map
-    currentUser: { userPreferences: { 'dont-show-site-boundary-instructions': true } },
-  });
+const renderSiteBoundary = (siteToRender = site) =>
+  renderWithProviders(
+    <>
+      <ToastSnackbar />
+      <SiteBoundary site={siteToRender} />
+    </>,
+    {
+      // the step's tutorial dialog opens on mount otherwise, and covers the map
+      currentUser: { userPreferences: { 'dont-show-site-boundary-instructions': true } },
+    }
+  );
 
 // each chooser tile's accessible name is its label followed by its description, so match on the
 // label the tile leads with rather than the whole run-on string
@@ -251,7 +258,7 @@ describe('SiteBoundary', () => {
 
     expect(await screen.findByText(/site\.geojson/)).toBeInTheDocument();
     expect(screen.queryByText(strings.BOUNDARY_METHOD_TITLE)).not.toBeInTheDocument();
-    expect(screen.queryByText(polygonsCombinedBanner(1))).not.toBeInTheDocument();
+    expect(screen.queryByText(polygonsCombinedMessage(1))).not.toBeInTheDocument();
     await waitFor(() => expect(mapBoundaries[mapBoundaries.length - 1]?.features).toHaveLength(1));
   });
 
@@ -268,7 +275,30 @@ describe('SiteBoundary', () => {
 
     await uploadBoundaryFile(user, 'site.geojson');
 
-    expect(await screen.findByText(polygonsCombinedBanner(2))).toBeInTheDocument();
+    expect(await screen.findByText(polygonsCombinedMessage(2))).toBeInTheDocument();
+    expect(
+      screen.queryByText(strings.SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED, { exact: false })
+    ).not.toBeInTheDocument();
+  });
+
+  it('tells a simple site that combining polygons requires a detailed site', async () => {
+    flags.boundaryFileUpload = true;
+    mockPost(PARSE_URL, {
+      areaHa: 480,
+      filename: 'site.geojson',
+      format: 'GeoJSON',
+      geometry: GEOMETRY,
+      numPolygons: 2,
+    });
+    const { user } = renderSiteBoundary(buildDraftPlantingSite({ siteType: 'simple' }));
+
+    await uploadBoundaryFile(user, 'site.geojson');
+
+    expect(
+      await screen.findByText(
+        `${polygonsCombinedMessage(2)} ${strings.SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED}`
+      )
+    ).toBeInTheDocument();
   });
 
   it('brings back the chooser when the uploaded file is removed', async () => {
