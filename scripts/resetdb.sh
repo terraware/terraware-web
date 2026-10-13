@@ -69,6 +69,20 @@ WHERE module_id = 1000;
 UPDATE users
 SET cookies_consented = true,
     cookies_consented_time = DATE_TRUNC('year', CURRENT_DATE) + TIME '20:12:54.827407+00';
+
+-- Botanical countries are imported from the TDWG GeoJSON dataset, which the dump doesn't carry.
+-- Seed a few, with placeholder boundaries, so species nativity can be exercised in tests.
+INSERT INTO public.botanical_countries (name, level3_code, level2_code, level1_code, boundary)
+VALUES ('Colombia', 'CLM', 83, 8, public.ST_GeomFromText('POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))', 4326)),
+       ('Costa Rica', 'COS', 80, 8, public.ST_GeomFromText('POLYGON((2 0, 3 0, 3 1, 2 1, 2 0))', 4326)),
+       ('Guatemala', 'GUA', 80, 8, public.ST_GeomFromText('POLYGON((4 0, 5 0, 5 1, 4 1, 4 0))', 4326)),
+       ('Kenya', 'KEN', 25, 2, public.ST_GeomFromText('POLYGON((6 0, 7 0, 7 1, 6 1, 6 0))', 4326)),
+       ('Philippines', 'PHI', 42, 4, public.ST_GeomFromText('POLYGON((8 0, 9 0, 9 1, 8 1, 8 0))', 4326))
+ON CONFLICT (level3_code) DO NOTHING;
+
+INSERT INTO public.country_botanical_countries (country_code, botanical_country_code)
+VALUES ('CO', 'CLM'), ('CR', 'COS'), ('GT', 'GUA'), ('KE', 'KEN'), ('PH', 'PHI')
+ON CONFLICT DO NOTHING;
 "
 docker compose exec postgres psql -d terraware -U postgres -c "$UPDATE_STRING"
 
