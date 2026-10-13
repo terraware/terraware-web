@@ -111,20 +111,13 @@ export default function DraftSiteDetailsInputForm({
       </Grid>
       <Grid item xs={12}>
         <LocationTimeZoneSelector
-          centerDropdown
           location={record}
           onChangeTimeZone={onChangeTimeZone}
           tooltip={strings.TOOLTIP_TIME_ZONE_PLANTING_SITE}
         />
       </Grid>
       <Grid item xs={12}>
-        <ProjectsDropdown
-          availableProjects={availableProjects}
-          centerDropdown
-          record={record}
-          setRecord={setRecord}
-          allowUnselect
-        />
+        <ProjectsDropdown availableProjects={availableProjects} record={record} setRecord={setRecord} allowUnselect />
       </Grid>
     </Grid>
   );

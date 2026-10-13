@@ -1,5 +1,6 @@
 import React, { type JSX, useCallback, useState } from 'react';
 
+import { Box } from '@mui/material';
 import { Button, DialogBox } from '@terraware/web-components';
 
 import strings from 'src/strings';
@@ -55,7 +56,7 @@ const DraftSiteDetailsModal = ({
       open={true}
       title={title}
       size={onSaveAndClose ? 'large' : 'medium'}
-      leftButton={
+      middleButtons={[
         <Button
           disabled={busy}
           id='cancel-draft-site-details'
@@ -65,9 +66,7 @@ const DraftSiteDetailsModal = ({
           onClick={onClose}
           priority='secondary'
           type='passive'
-        />
-      }
-      rightButtons={[
+        />,
         ...(onSaveAndClose
           ? [
               <Button
@@ -83,7 +82,9 @@ const DraftSiteDetailsModal = ({
         <Button disabled={busy} id='save-draft-site-details' key='save' label={saveLabel} onClick={handleSave} />,
       ]}
     >
-      <DraftSiteDetailsInputForm onChange={onChange} onValidate={onValidate} record={record} setRecord={setRecord} />
+      <Box textAlign='left'>
+        <DraftSiteDetailsInputForm onChange={onChange} onValidate={onValidate} record={record} setRecord={setRecord} />
+      </Box>
     </DialogBox>
   );
 };

@@ -16,7 +16,6 @@ type ProjectsDropdownProps<T extends { projectId?: number | string } | undefined
   allowUnselect?: boolean;
   autoComplete?: boolean;
   availableProjects: ProjectDropdownOption[] | undefined;
-  centerDropdown?: boolean;
   label?: string | undefined;
   tooltip?: string;
   record: T;
@@ -32,7 +31,6 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
   allowUnselect,
   autoComplete,
   availableProjects,
-  centerDropdown,
   label,
   tooltip,
   record,
@@ -92,7 +90,6 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
       sx={{
         backgroundColor: '#fff',
         minWidth: isDesktop ? '240px' : 'auto',
-        ...(centerDropdown && { '& input': { textAlign: 'center' } }),
       }}
       placeholder={placeholder}
     />

@@ -7,7 +7,6 @@ import strings from 'src/strings';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 
 export type TimeZoneSelectorProps = {
-  centerDropdown?: boolean;
   onTimeZoneSelected: (tzSelected: TimeZoneDescription) => void;
   selectedTimeZone?: string;
   countryCode?: string;
@@ -18,8 +17,7 @@ export type TimeZoneSelectorProps = {
 };
 
 export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Element {
-  const { centerDropdown, onTimeZoneSelected, selectedTimeZone, countryCode, disabled, label, tooltip, errorText } =
-    props;
+  const { onTimeZoneSelected, selectedTimeZone, countryCode, disabled, label, tooltip, errorText } = props;
   const timeZones = useTimeZones();
 
   const tzToDropdownItem = (tz?: TimeZoneDescription) =>
@@ -76,7 +74,6 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
       label={label || ''}
       display={true}
       tooltipTitle={tooltip}
-      sx={centerDropdown ? { '& .textfield-value--display': { textAlign: 'center', width: '100%' } } : undefined}
     />
   ) : (
     <Autocomplete
@@ -91,7 +88,6 @@ export default function TimeZoneSelector(props: TimeZoneSelectorProps): JSX.Elem
       label={label || ''}
       tooltipTitle={tooltip}
       errorText={errorText}
-      sx={centerDropdown ? { '& input': { textAlign: 'center' } } : undefined}
     />
   );
 }
