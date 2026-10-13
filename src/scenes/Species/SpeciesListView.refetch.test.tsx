@@ -61,7 +61,29 @@ describe('SpeciesListView refetch behaviour', () => {
 
     try {
       rerender(<SpeciesListView />);
-      expect(await screen.findByText('Accelerator response complete')).toBeVisible();
+      try {
+        await screen.findByText('Accelerator response complete');
+      } catch {
+        const links = screen.queryAllByRole('link').map((el) => el.textContent);
+        throw new Error(
+          'DIAG ' +
+            JSON.stringify({
+              savedPageIndex: sessionStorage.getItem(pageIndexKey),
+              savedPageSize: localStorage.getItem(pageSizeKey),
+              bodyRowCount: document.querySelectorAll('tbody tr').length,
+              linkCount: links.length,
+              firstLinks: links.slice(0, 4),
+              lastLinks: links.slice(-2),
+              progressbars: screen.queryAllByRole('progressbar').length,
+              noRecords: Boolean(screen.queryByText('No records to display')),
+              emptyStatePage: Boolean(screen.queryByText(/Add Species to get started/i)),
+              pageButtons: screen
+                .queryAllByRole('button', { name: /Go to/ })
+                .map((el) => `${el.getAttribute('aria-label')}=${(el as HTMLButtonElement).disabled}`),
+            })
+        );
+      }
+      expect(screen.getByText('Accelerator response complete')).toBeVisible();
       expect(screen.getByRole('link', { name: 'Species 021' })).toBeVisible();
 
       await act(async () => {
