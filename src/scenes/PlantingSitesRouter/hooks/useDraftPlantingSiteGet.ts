@@ -13,8 +13,8 @@ export type Props = {
 };
 
 export type Response = {
+  isFetching: boolean;
   isLoading: boolean;
-  refetch: () => Promise<unknown>;
   site?: DraftPlantingSite;
 };
 
@@ -28,7 +28,9 @@ export default function useDraftPlantingSiteGet({ draftId }: Props): Response {
 
   const draftIdIsValid = useMemo(() => !isNaN(draftId), [draftId]);
 
-  const { currentData, isError, isLoading, refetch } = useGetDraftPlantingSiteQuery(draftId, { skip: !draftIdIsValid });
+  const { currentData, isError, isFetching, isLoading } = useGetDraftPlantingSiteQuery(draftId, {
+    skip: !draftIdIsValid,
+  });
 
   const goToPlantingSites = useCallback(() => {
     navigate(APP_PATHS.PLANTING_SITES);
@@ -49,11 +51,11 @@ export default function useDraftPlantingSiteGet({ draftId }: Props): Response {
 
   return useMemo<Response>(
     () => ({
+      isFetching,
       // an invalid id is redirecting away, so keep callers in their loading state
       isLoading: isLoading || !draftIdIsValid,
-      refetch,
       site: currentData ? toDraft(currentData.site) : undefined,
     }),
-    [currentData, draftIdIsValid, isLoading, refetch]
+    [currentData, draftIdIsValid, isFetching, isLoading]
   );
 }
