@@ -47,13 +47,9 @@ describe('SpeciesListView refetch behaviour', () => {
     );
     mockGet('/api/v1/projects', { projects: [] });
     mockPost('/api/v1/search', {
-      results: [{ id: 21, participantProjectSpecies: [{ project: { name: 'Accelerator response complete' } }] }],
+      results: [{ id: 21, participantProjectSpecies: [{ project: { name: 'Accel OK' } }] }],
     });
     const organization = buildOrganization();
-    const requests: string[] = [];
-    server.events.on('request:start', ({ request }) => {
-      requests.push(`${request.method} ${new URL(request.url).pathname}`);
-    });
     const { store, rerender } = renderWithProviders(<></>, {
       organization: { selectedOrganization: organization },
     });
@@ -65,40 +61,7 @@ describe('SpeciesListView refetch behaviour', () => {
 
     try {
       rerender(<SpeciesListView />);
-      try {
-        await screen.findByText('Accelerator response complete');
-      } catch {
-        const links = screen.queryAllByRole('link').map((el) => el.textContent);
-        throw new Error(
-          'DIAG ' +
-            JSON.stringify({
-              savedPageIndex: sessionStorage.getItem(pageIndexKey),
-              savedPageSize: localStorage.getItem(pageSizeKey),
-              bodyRowCount: document.querySelectorAll('tbody tr').length,
-              linkCount: links.length,
-              firstLinks: links.slice(0, 4),
-              lastLinks: links.slice(-2),
-              progressbars: screen.queryAllByRole('progressbar').length,
-              noRecords: Boolean(screen.queryByText('No records to display')),
-              emptyStatePage: Boolean(screen.queryByText(/Add Species to get started/i)),
-              pageButtons: screen
-                .queryAllByRole('button', { name: /Go to/ })
-                .map((el) => `${el.getAttribute('aria-label')}=${(el as HTMLButtonElement).disabled}`),
-              speciesCalls: calls,
-              requests,
-              queries: Object.entries(
-                (store.getState() as unknown as Record<string, { queries?: Record<string, unknown> }>)['rtk-query']
-                  ?.queries ?? {}
-              ).map(([key, value]) => {
-                const entry = value as { status?: string; error?: unknown; data?: unknown };
-                return `${key}|${entry?.status}|${entry?.error ? 'ERR' : 'ok'}|${
-                  entry?.data === undefined ? 'nodata' : JSON.stringify(entry.data).slice(0, 80)
-                }`;
-              }),
-            })
-        );
-      }
-      expect(screen.getByText('Accelerator response complete')).toBeVisible();
+      expect(await screen.findByText('Accel OK')).toBeVisible();
       expect(screen.getByRole('link', { name: 'Species 021' })).toBeVisible();
 
       await act(async () => {
@@ -110,7 +73,6 @@ describe('SpeciesListView refetch behaviour', () => {
       expect(screen.queryByRole('link', { name: 'Species 001 refreshed' })).not.toBeInTheDocument();
       expect(sessionStorage.getItem(pageIndexKey)).toBe('2');
     } finally {
-      server.events.removeAllListeners('request:start');
       releaseRefetch();
       sessionStorage.removeItem(pageIndexKey);
       localStorage.removeItem(pageSizeKey);
