@@ -2,6 +2,10 @@ import React, { CSSProperties, type JSX } from 'react';
 
 import { Box } from '@mui/material';
 
+import DetectAppVersion, {
+  AppVersionBannerProvider,
+  useIsAppVersionBannerRendered,
+} from 'src/components/common/DetectAppVersion';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 interface Props {
@@ -12,6 +16,7 @@ interface Props {
 
 export default function TfMain({ children, style }: Props): JSX.Element {
   const { isMobile } = useDeviceInfo();
+  const isAppVersionBannerRendered = useIsAppVersionBannerRendered();
 
   return (
     <Box
@@ -26,7 +31,8 @@ export default function TfMain({ children, style }: Props): JSX.Element {
         ...style,
       }}
     >
-      {children}
+      {!isAppVersionBannerRendered && <DetectAppVersion />}
+      <AppVersionBannerProvider>{children}</AppVersionBannerProvider>
     </Box>
   );
 }
