@@ -30,7 +30,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
   const snackbar = useSnackbar();
   const navigate = useSyncNavigate();
   const { plantingSiteId } = useParams<{ plantingSiteId: string }>();
-  const { site: plantingSite } = useDraftPlantingSite({ draftId: Number(plantingSiteId) });
+  const { refetch, site: plantingSite } = useDraftPlantingSite({ draftId: Number(plantingSiteId) });
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [detailsModalOpen, setDetailsModalOpen] = useState<boolean>(false);
   const [updateDraftPlantingSite, { isLoading: isUpdating }] = useUpdateDraftPlantingSiteMutation();
@@ -75,9 +75,17 @@ export default function PlantingSiteDraftView(): JSX.Element {
 
   const saveDetailsAndContinue = useCallback(
     (draft: DraftPlantingSite) => {
-      void saveDetails(draft).then((saved) => saved && goToEditDraftPlantingSite());
+      const saveAndContinue = async () => {
+        if (await saveDetails(draft)) {
+          // the editor initializes from the cached draft, so make sure it has the saved details
+          await refetch();
+          goToEditDraftPlantingSite();
+        }
+      };
+
+      void saveAndContinue();
     },
-    [goToEditDraftPlantingSite, saveDetails]
+    [goToEditDraftPlantingSite, refetch, saveDetails]
   );
 
   if (!plantingSite) {
