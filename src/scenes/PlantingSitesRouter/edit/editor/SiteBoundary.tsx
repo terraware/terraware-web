@@ -1,7 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
-import { Icon } from '@terraware/web-components';
+import { Box } from '@mui/material';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import centroid from '@turf/centroid';
@@ -26,6 +25,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
 import DrawingBoundaryStatus from './DrawingBoundaryStatus';
+import SiteBoundaryHelp from './SiteBoundaryHelp';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import UploadBoundaryModal, { ParsedBoundary, boundaryFileFormatOf, fileSizeKb } from './UploadBoundaryModal';
 import UploadedBoundarySummary, { UploadedBoundaryFile } from './UploadedBoundarySummary';
@@ -100,7 +100,6 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   const [mode, setMode] = useState<MapEditorMode>();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
-  const theme = useTheme();
   const { activeLocale } = useLocalization();
   const trackEvent = useTrackEvent();
 
@@ -191,6 +190,22 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       ];
     }
 
+    if (fileUploadEnabled && activeMethod === 'draw') {
+      return [
+        {
+          render: (onWatchTutorial: () => void) => (
+            <>
+              {strings.formatString(
+                strings.SITE_BOUNDARY_DRAWING_DESCRIPTION,
+                <MapIcon centerAligned={true} icon='polygon' />
+              )}
+              <SiteBoundaryHelp isSimpleSite={site.siteType !== 'detailed'} onWatchTutorial={onWatchTutorial} />
+            </>
+          ),
+        },
+      ];
+    }
+
     if (fileUploadEnabled) {
       const sentences =
         site.siteType === 'detailed'
@@ -230,7 +245,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     }
 
     return data;
-  }, [activeLocale, fileUploadEnabled, mode, site.siteType, uploadedFile]);
+  }, [activeLocale, activeMethod, fileUploadEnabled, mode, site.siteType, uploadedFile]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {
@@ -355,12 +370,6 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       />
       {fileUploadEnabled && (
         <>
-          <Box display='flex' alignItems='center' gap={theme.spacing(0.75)} marginBottom={theme.spacing(2.5)}>
-            <Icon name='info' size='small' style={{ fill: theme.palette.TwClrIcnSecondary, flex: 'none' }} />
-            <Typography fontSize='12px' fontWeight={400} lineHeight='16px' color={theme.palette.TwClrTxtSecondary}>
-              {strings.SITE_BOUNDARY_MAX_BOUNDING_BOX}
-            </Typography>
-          </Box>
           {uploadedFile && (
             <UploadedBoundarySummary
               file={uploadedFile}

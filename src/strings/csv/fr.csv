@@ -2092,18 +2092,23 @@ SINGLE_SPECIES_SURVIVAL_RATE_MESSAGE,"Il n’y a actuellement qu’une seule esp
 SINGLE_STRATUM_SURVIVAL_RATE_MESSAGE,"Le site ne comporte qu'une seule strate avec un taux de survie. Lorsqu'un site comporte plusieurs strates avec un taux de survie, la strate ayant le taux de survie le plus bas sera affichée.",10007138
 SITE,Site,925ca15b
 SITE_BOUNDARY,Limite du site,ee9dc83f
+SITE_BOUNDARY_ABOUT,À propos des limites du site,75d7fa14
 SITE_BOUNDARY_ABSENT_WARNING,Veuillez définir une limite de site.,215b60ab
+SITE_BOUNDARY_BOUNDING_BOX_LIMIT,"La boîte englobante du site peut atteindre 20 000 ha. Si votre site est plus grand, divisez-le en plusieurs sites de plantation.",5ae05b46
 SITE_BOUNDARY_DESCRIPTION_0,Dessinez ci-dessous les limites de votre site de plantation. Toutes les zones plantables de votre projet doivent être contenues dans les limites du site.,1eb2c82f
 SITE_BOUNDARY_DESCRIPTION_1,Utilisez l'outil de dessin {0} pour tracer les limites du site de plantation. [Regardez un tutoriel] sur le tracé des limites du site.,8a4e2537
 SITE_BOUNDARY_DESCRIPTION_2,"Les limites du site doivent s'inscrire dans une boîte de délimitation d'une superficie inférieure ou égale à 20 000 hectares. S'il est plus grand, envisagez de diviser le site en plusieurs sites de plantation.",6495bc67
 SITE_BOUNDARY_DESCRIPTION_3,Zoomez sur l'emplacement du site de plantation. Cliquez ensuite sur des zones de la carte pour ajouter des points à la limite du site. Complétez la limite en double-cliquant ou en cliquant à nouveau sur le point de départ.,14d699d1
 SITE_BOUNDARY_DESCRIPTION_4,"Pour modifier la forme de la limite du site, cliquez sur la forme pour modifier les points. Pour supprimer la forme, cliquez sur le bouton {0}.",3fd2c49c
+SITE_BOUNDARY_DRAWING_DESCRIPTION,Utilisez l’outil de dessin {0} pour délimiter le site. Double-cliquez ou cliquez de nouveau sur le premier point pour terminer.,bbab6c3b
 SITE_BOUNDARY_DRAWING_ON_MAP,Tracé de la limite sur la carte.,58e0ca26
 SITE_BOUNDARY_ERRORS,Il y a des erreurs dans les limites du site.,916536c6
 SITE_BOUNDARY_FILE_SUMMARY,{0} · {1} · {2} · {3} points · ~{4} ha · boîte englobante ~{5} ha,0b5beef6
+SITE_BOUNDARY_LEARN_MORE,En savoir plus sur les limites du site,7ec206b8
 SITE_BOUNDARY_MAX_BOUNDING_BOX,"Boîte englobante maximale : 20 000 ha. Si votre site est plus grand, divisez-le en plusieurs sites de plantation.",315cceab
 SITE_BOUNDARY_NUM_POLYGON,{0} polygone,a5b656b9
 SITE_BOUNDARY_NUM_POLYGONS,{0} polygones,67b049f1
+SITE_BOUNDARY_PLANTABLE_AREAS,Toutes les zones plantables de votre projet doivent être incluses dans la limite du site.,99a3973c
 SITE_BOUNDARY_POLYGON_TOO_SMALL,La limite de la zone {0} hectares est inférieure à 100 m x 100 m.,e140c0c1
 SITE_BOUNDARY_POLYGONS_COMBINED,Les {0} polygones de ce fichier ont été combinés en une seule limite de site couvrant l'ensemble.,e94fad22
 SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED,"Si vous souhaitez que chacun soit un Strate distincte, un Site détaillé est requis.",c58dd98d
@@ -2112,6 +2117,7 @@ SITE_BOUNDARY_UPLOAD_DESCRIPTION,Définissez ci-dessous la limite du site de vot
 SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,Les Sites simples comprennent une Strate et un Sous-strate qui couvrent l’ensemble du site de plantation.,955accde
 SITE_BOUNDARY_UPLOAD_TUTORIAL,[Regardez un tutoriel] sur la façon de dessiner les limites d’un site.,ba8fe625
 SITE_BOUNDARY_UPLOADED_DESCRIPTION,Votre fichier de délimitation du site a été téléchargé avec succès et s'affiche sur la carte ci-dessous. Vous pouvez encore modifier n'importe quelle partie de la délimitation avant de continuer.,196684a0
+SITE_BOUNDARY_WATCH_TUTORIAL,Regarder un tutoriel sur la délimitation des limites du site,56270457
 SITE_BOUNDING_AREA_TOO_LARGE,La zone délimitée d’environ {0} hectares est trop grande.,eb3c9a60
 SITE_DETAIL,Détail du site,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,Le site de plantation est actuellement un brouillon – seul le créateur du site peut le modifier.,07fbd64b
