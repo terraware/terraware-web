@@ -87,7 +87,10 @@ function ProjectsDropdown<T extends { projectId?: number | string } | undefined>
       }}
       fullWidth
       required={required}
-      sx={{ backgroundColor: '#fff', minWidth: isDesktop ? '240px' : 'auto' }}
+      sx={{
+        backgroundColor: '#fff',
+        minWidth: isDesktop ? '240px' : 'auto',
+      }}
       placeholder={placeholder}
     />
   );

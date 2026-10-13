@@ -43,8 +43,19 @@ export const startNewPlantingSite = async (page: Page, siteType: 'Simple Site' |
   await page.getByRole('button', { name: 'Add Planting Site' }).click();
   await selectSiteType(page, siteType);
   await page.locator('#next').click();
-  await expect(page).toHaveURL(/\/planting-sites\/draft\/new/);
+  await expect(detailsDialogButton(page, 'Save')).toBeVisible();
 };
+
+export const detailsDialogButton = (page: Page, button: 'Cancel' | 'Save' | 'Save and Close') => {
+  const ids = {
+    Cancel: '#cancel-draft-site-details',
+    Save: '#save-draft-site-details',
+    'Save and Close': '#save-and-close-draft-site-details',
+  };
+  return page.locator(ids[button]);
+};
+
+export const editDraftDetailsButton = (page: Page) => page.locator('#edit-draft-planting-site-details');
 
 export const editorButton = (page: Page, name: 'Close' | 'Back' | 'Next' | 'Create Planting Site') =>
   page.getByRole('button', { name, exact: true });

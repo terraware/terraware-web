@@ -6,7 +6,9 @@ import {
   deleteMapFeature,
   descriptionField,
   detailField,
+  detailsDialogButton,
   drawPolygon,
+  editDraftDetailsButton,
   editorButton,
   enableSiteEditorPreferences,
   expectActiveStep,
@@ -40,7 +42,9 @@ test.describe('PlantingSiteTests', () => {
     await goToPlantingSites(page);
   });
 
-  test('Simple site: draw and upload a boundary, save, edit, and delete the draft', async ({ page }) => {
+  test('Simple site: enter and edit details, draw and upload a boundary, save, and delete the draft', async ({
+    page,
+  }) => {
     const siteName = `Simple Site ${Date.now()}`;
 
     await page.getByRole('button', { name: 'Add Planting Site' }).click();
@@ -51,37 +55,48 @@ test.describe('PlantingSiteTests', () => {
     await page.locator('#cancel').click();
     await expect(page.getByText('Select Planting Site Type')).toBeHidden();
 
-    // Closing an untouched site leaves without asking.
+    // Cancelling the details dialog doesn't create a draft.
     await startNewPlantingSite(page, 'Simple Site');
-    await editorButton(page, 'Close').click();
-    await expect(page).toHaveURL(/\/planting-sites(\?|$)/);
-
-    // Closing an unnamed site offers only to discard it.
-    await startNewPlantingSite(page, 'Simple Site');
-    await descriptionField(page).fill('Never saved');
-    await editorButton(page, 'Close').click();
-    await expect(page.getByText('Discard this site?')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Save as draft' })).toBeHidden();
-    await page.getByRole('button', { name: 'Keep editing' }).click();
-    await expect(page.getByText('Discard this site?')).toBeHidden();
-
+    await expect(detailsDialogButton(page, 'Save and Close')).toBeHidden();
     await page.locator('#name input').fill(siteName);
-    await editorButton(page, 'Close').click();
-    await expect(page.getByText('Close site setup?')).toBeVisible();
-    await page.getByRole('button', { name: 'Keep editing' }).click();
-    await expect(page.locator('#name input')).toHaveValue(siteName);
-    await editorButton(page, 'Close').click();
-    await page.getByRole('button', { name: 'Discard', exact: true }).click();
+    await detailsDialogButton(page, 'Cancel').click();
+    await expect(detailsDialogButton(page, 'Save')).toBeHidden();
     await expect(page).toHaveURL(/\/planting-sites(\?|$)/);
     await page.getByRole('tab', { name: 'Draft Planting Sites' }).click();
     await expect(page.getByRole('link', { name: siteName })).toBeHidden();
 
-    // Save as a draft from the close confirmation.
+    // Next validates the name before creating the draft.
     await startNewPlantingSite(page, 'Simple Site');
+    await detailsDialogButton(page, 'Save').click();
+    await expect(page.getByText('Required Field')).toBeVisible();
     await page.locator('#name input').fill(siteName);
     await descriptionField(page).fill('First description');
+    await detailsDialogButton(page, 'Save').click();
+
+    await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+\/edit(\?|$)/);
+    await expectActiveStep(page, 'Site Boundary');
+    await expect(editorButton(page, 'Back')).toBeHidden();
+    await expect(page.getByRole('button', { name: 'Reset Boundary Setup' })).toBeHidden();
+
+    // Closing with an unsaved boundary asks first; discarding it leaves the draft without a boundary.
+    await page.locator('#choose-draw-boundary').click();
+    await waitForMap(page);
+    await searchMapLocation(page, SITE_ADDRESS);
+    await zoomMapIn(page, ZOOM_IN_AFTER_SEARCH);
+    await drawPolygon(page, [
+      [0.25, 0.25],
+      [0.75, 0.25],
+      [0.75, 0.75],
+      [0.25, 0.75],
+    ]);
+    await expect(page.getByText('Unsaved changes')).toBeVisible();
     await editorButton(page, 'Close').click();
-    await page.getByRole('button', { name: 'Save as draft' }).click();
+    await expect(page.getByText('Close site setup?')).toBeVisible();
+    await page.getByRole('button', { name: 'Keep editing' }).click();
+    await expect(page.getByText('Close site setup?')).toBeHidden();
+    await expect(page.getByText('Unsaved changes')).toBeVisible();
+    await editorButton(page, 'Close').click();
+    await page.getByRole('button', { name: 'Discard changes' }).click();
 
     await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+(\?|$)/);
     const main = page.getByRole('main');
@@ -92,20 +107,30 @@ test.describe('PlantingSiteTests', () => {
     await expect(detailField(page, 'Description')).toHaveText('First description');
     await expect(main.getByText('No site boundary yet')).toBeVisible();
 
-    await expect(page.getByRole('button', { name: 'Edit Details' })).toBeHidden();
+    // Edit the details from the draft: cancel once, then save and close.
+    await editDraftDetailsButton(page).click();
+    await expect(descriptionField(page)).toHaveValue('First description');
+    await descriptionField(page).fill('Cancelled description');
+    await detailsDialogButton(page, 'Cancel').click();
+    await expect(detailsDialogButton(page, 'Save')).toBeHidden();
+    await expect(detailField(page, 'Description')).toHaveText('First description');
 
-    // Resume setup at the Details step, where it was saved, and edit the description.
-    await page.getByRole('button', { name: 'Continue with Details' }).click();
-    await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+\/edit(\?|$)/);
-    await expectActiveStep(page, 'Details');
-    await expect(page.getByRole('button', { name: 'Reset Boundary Setup' })).toBeHidden();
+    await editDraftDetailsButton(page).click();
     await expect(descriptionField(page)).toHaveValue('First description');
     await descriptionField(page).fill('Edited description');
-    await editorButton(page, 'Next').click();
+    await detailsDialogButton(page, 'Save and Close').click();
+    await expect(detailsDialogButton(page, 'Save')).toBeHidden();
+    await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+(\?|$)/);
+    await expect(detailField(page, 'Description')).toHaveText('Edited description');
+
+    // Save and Continue resumes boundary setup.
+    await editDraftDetailsButton(page).click();
+    await descriptionField(page).fill('Final description');
+    await detailsDialogButton(page, 'Save').click();
+    await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+\/edit(\?|$)/);
 
     // Draw the boundary on the map.
     await expectActiveStep(page, 'Site Boundary');
-    await expect(editorButton(page, 'Back')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Reset Boundary Setup' })).toBeHidden();
     await expect(page.getByText('How do you want to define this boundary?')).toBeVisible();
     await page.locator('#choose-draw-boundary').click();
@@ -173,7 +198,7 @@ test.describe('PlantingSiteTests', () => {
 
     await openDraftPlantingSite(page, siteName);
     await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+(\?|$)/);
-    await expect(detailField(page, 'Description')).toHaveText('Edited description');
+    await expect(detailField(page, 'Description')).toHaveText('Final description');
 
     // Delete the draft: cancel once, then confirm.
     await page.getByRole('button', { name: 'Delete Draft' }).click();
@@ -195,18 +220,14 @@ test.describe('PlantingSiteTests', () => {
     const substratumName = 'North';
 
     await startNewPlantingSite(page, 'Detailed Site');
-    await expect(page.getByText('Detailed Planting Site Map')).toBeVisible();
-    await expect(page.getByText('Stratum Boundaries', { exact: true })).toBeVisible();
-    await expect(page.getByText('Substratum Boundaries', { exact: true })).toBeVisible();
-
-    // Next validates the name before creating the draft.
-    await editorButton(page, 'Next').click();
-    await expect(page.getByText('Required Field')).toBeVisible();
     await page.locator('#name input').fill(siteName);
-    await editorButton(page, 'Next').click();
+    await detailsDialogButton(page, 'Save').click();
 
     await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+\/edit(\?|$)/);
     await expectActiveStep(page, 'Site Boundary');
+    await expect(page.getByText('Detailed Planting Site Map')).toBeVisible();
+    await expect(page.getByText('Stratum Boundaries', { exact: true })).toBeVisible();
+    await expect(page.getByText('Substratum Boundaries', { exact: true })).toBeVisible();
     await page.locator('#choose-draw-boundary').click();
     await waitForMap(page);
     await searchMapLocation(page, SITE_ADDRESS);

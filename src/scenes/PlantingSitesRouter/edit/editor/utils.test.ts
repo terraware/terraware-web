@@ -27,7 +27,7 @@ const createDraftSiteWith = (): DraftPlantingSite => {
     id: 1,
     name: 'test',
     organizationId: 2,
-    siteEditStep: 'details',
+    siteEditStep: 'site_boundary',
     siteType: 'simple',
   };
 };

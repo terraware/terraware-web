@@ -14,8 +14,6 @@ import { isAdmin } from 'src/utils/organization';
 
 const continueSetupLabel = (step: SiteEditStep): string => {
   switch (step) {
-    case 'details':
-      return strings.CONTINUE_WITH_DETAILS;
     case 'exclusion_areas':
       return strings.CONTINUE_WITH_EXCLUSION_AREAS;
     case 'stratum_boundaries':

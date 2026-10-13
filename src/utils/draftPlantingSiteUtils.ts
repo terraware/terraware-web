@@ -75,6 +75,7 @@ type PersistedStratum = Omit<MinimalStratum, 'initialPlantingDensity' | 'substra
 const DEFAULT_INITIAL_PLANTING_DENSITY = 1500;
 
 const LEGACY_SITE_EDIT_STEPS: Record<string, SiteEditStep> = {
+  details: 'site_boundary',
   subzone_boundaries: 'substratum_boundaries',
   zone_boundaries: 'stratum_boundaries',
 };
