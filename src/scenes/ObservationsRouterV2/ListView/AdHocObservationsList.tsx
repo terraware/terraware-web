@@ -44,9 +44,15 @@ const DEFAULT_COLUMN_ORDER = [
   'plotDescription',
   'plantingSiteName',
   'stratum',
+  'substratum',
 ];
 
-const DEFAULT_COLUMN_VISIBILITY = { plantingSiteName: false, plotDescription: false, stratum: false };
+const DEFAULT_COLUMN_VISIBILITY = {
+  plantingSiteName: false,
+  plotDescription: false,
+  stratum: false,
+  substratum: false,
+};
 
 type AdHocRow = {
   completedDate?: string;
@@ -59,6 +65,7 @@ type AdHocRow = {
   plantingSiteName?: string;
   plotDescription?: string;
   stratumName?: string;
+  substratumName?: string;
   totalPlants?: number;
   totalSpecies?: number;
 };
@@ -80,6 +87,7 @@ const toRow = (observation: ObservationResultsPayload, plantingSiteName?: string
     plantingSiteName,
     plotDescription: biomass?.description,
     stratumName: adHocPlot?.stratumName,
+    substratumName: adHocPlot?.substratumName,
     totalPlants: biomass ? biomass.trees.length : adHocPlot?.totalPlants,
     totalSpecies: biomass ? biomass.treeSpeciesCount : adHocPlot?.totalSpecies,
   };
@@ -216,6 +224,11 @@ const AdHocObservationsList = ({ plantingSiteId }: AdHocObservationsListProps): 
         id: 'stratum',
         header: strings.STRATUM,
         accessorKey: 'stratumName',
+      },
+      {
+        id: 'substratum',
+        header: strings.SUBSTRATUM,
+        accessorKey: 'substratumName',
       },
       {
         id: 'completedDate',
