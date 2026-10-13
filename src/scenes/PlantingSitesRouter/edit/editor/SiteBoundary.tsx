@@ -17,6 +17,8 @@ import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useLocalization } from 'src/providers';
+import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
+import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import { BoundarySource, DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum } from 'src/types/Tracking';
@@ -97,6 +99,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
 
   const [mode, setMode] = useState<MapEditorMode>();
   const snackbar = useSnackbar();
+  const dispatch = useAppDispatch();
   const theme = useTheme();
   const { activeLocale } = useLocalization();
   const trackEvent = useTrackEvent();
@@ -319,6 +322,8 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
           undefined,
           { autoHideDuration: null }
         );
+      } else {
+        dispatch(clearSnackbar({ type: 'toast' }));
       }
 
       lastUploadId.current += 1;
@@ -327,13 +332,14 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
         uploadId: lastUploadId.current,
       });
     },
-    [boundary, onEditableBoundaryChanged, site.id, site.siteType, snackbar, trackEvent]
+    [boundary, dispatch, onEditableBoundaryChanged, site.id, site.siteType, snackbar, trackEvent]
   );
 
   const onRemoveUploadedFile = useCallback(() => {
     setMethod(undefined);
+    dispatch(clearSnackbar({ type: 'toast' }));
     void onEditableBoundaryChanged(undefined);
-  }, [onEditableBoundaryChanged]);
+  }, [dispatch, onEditableBoundaryChanged]);
 
   const onOpenUploadModal = useCallback(() => setShowUploadModal(true), []);
 
