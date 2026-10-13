@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">53.84% </span>
+                <span class="strong">92.3% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/13</span>
+                <span class='fraction'>12/13</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">37.5% </span>
+                <span class="strong">87.5% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/8</span>
+                <span class='fraction'>7/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.54% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/11</span>
+                <span class='fraction'>11/11</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -147,17 +147,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -183,8 +183,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -210,12 +210,12 @@ type SpeciesAcceleratorProjectsSearchResponse = {
   results: SpeciesAcceleratorProjectsSearchResult[];
 };
 &nbsp;
-const getAcceleratorProjectNames = <span class="fstat-no" title="function not covered" >(result: SpeciesAcceleratorProjectsSearchResult): string[] =&gt; {</span>
-  const projectSpecies = <span class="cstat-no" title="statement not covered" >[...(result.participantProjectSpecies ?? []), ...(result.acceleratorProjectSpecies ?? [])];</span>
+const getAcceleratorProjectNames = (result: SpeciesAcceleratorProjectsSearchResult): string[] =&gt; {
+  const projectSpecies = [...(result.participantProjectSpecies ?? <span class="branch-1 cbranch-no" title="branch not covered" >[])</span>, ...(result.acceleratorProjectSpecies ?? [])];
   const names = projectSpecies
-    .map(<span class="fstat-no" title="function not covered" >(projectSpeciesEntry) =&gt; <span class="cstat-no" title="statement not covered" >projectSpeciesEntry.project?.name)</span></span>
-    .filter(<span class="fstat-no" title="function not covered" >(name): name is string =&gt; <span class="cstat-no" title="statement not covered" >Boolean(name))</span></span>;
-<span class="cstat-no" title="statement not covered" >  return Array.from(new Set(names)).sort(<span class="fstat-no" title="function not covered" >(a, b) =&gt; <span class="cstat-no" title="statement not covered" >a.localeCompare(b))</span></span>;</span>
+    .map((projectSpeciesEntry) =&gt; projectSpeciesEntry.project?.name)
+    .filter((name): name is string =&gt; Boolean(name));
+  return Array.from(new Set(names)).sort(<span class="fstat-no" title="function not covered" >(a, b) =&gt; <span class="cstat-no" title="statement not covered" >a.localeCompare(b))</span></span>;
 };
 &nbsp;
 const injectedRtkApi = api.injectEndpoints({
@@ -248,7 +248,7 @@ const injectedRtkApi = api.injectEndpoints({
       ],
       transformResponse: (response: SpeciesAcceleratorProjectsSearchResponse): Record&lt;number, string[]&gt; =&gt;
         Object.fromEntries(
-          response.results.map(<span class="fstat-no" title="function not covered" >(result) =&gt; <span class="cstat-no" title="statement not covered" >[Number(result.id), getAcceleratorProjectNames(result)])</span></span>
+          response.results.map((result) =&gt; [Number(result.id), getAcceleratorProjectNames(result)])
         ) as Record&lt;number, string[]&gt;,
     }),
   }),
@@ -262,7 +262,7 @@ export const { useListSpeciesAcceleratorProjectsQuery } = injectedRtkApi;
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-13T12:53:13.866Z
+                at 2026-10-13T14:29:28.320Z
             </div>
         <script src="../../../prettify.js"></script>
         <script>
