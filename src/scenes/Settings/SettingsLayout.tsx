@@ -3,6 +3,7 @@ import React, { type JSX, useCallback, useMemo } from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
 import { Tab, Tabs } from '@terraware/web-components';
 
+import DetectAppVersion, { AppVersionBannerProvider } from 'src/components/common/DetectAppVersion';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 
@@ -53,6 +54,9 @@ const SettingsLayout = ({ activeSection, children }: SettingsLayoutProps): JSX.E
   // (empty) panels are hidden since the section content is provided via children.
   return (
     <Box>
+      <Box paddingRight={theme.spacing(4)}>
+        <DetectAppVersion />
+      </Box>
       <Box sx={{ '& .MuiTabPanel-root': { display: 'none' } }}>
         <Typography fontSize='24px' fontWeight={600} margin={theme.spacing(0, 4, 2)}>
           {selectedOrganization
@@ -61,7 +65,7 @@ const SettingsLayout = ({ activeSection, children }: SettingsLayoutProps): JSX.E
         </Typography>
         <Tabs activeTab={activeSection} onChangeTab={onChangeTab} tabs={tabs} />
       </Box>
-      {children}
+      <AppVersionBannerProvider>{children}</AppVersionBannerProvider>
     </Box>
   );
 };

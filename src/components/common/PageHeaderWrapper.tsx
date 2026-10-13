@@ -52,7 +52,7 @@ export default function PageHeaderWrapper({
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>();
   const [sticky, setSticky] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [scrolled, setScrolled] = useState(() => window.scrollY > 0);
   const [scrollDown, setScrollDown] = useState(false);
   const [height, setHeight] = useState<number>(0);
   const [anim, setAnim] = useState<string | undefined>(undefined);
@@ -134,7 +134,7 @@ export default function PageHeaderWrapper({
 
   useLayoutEffect(() => {
     if (nextElement) {
-      const headerHeight = alwaysVisible || debouncedSticky ? height : 0;
+      const headerHeight = (alwaysVisible ? scrolled : debouncedSticky) ? height : 0;
       const earHeight = collapsible && scrolled ? EAR_HEIGHT : 0;
       nextElement.style.marginTop = `${nextElementInitialMargin + headerHeight + earHeight}px`;
     }
@@ -180,10 +180,10 @@ export default function PageHeaderWrapper({
 
   const showEar = collapsible && scrolled;
   const isHidden = showEar && hidden;
-  const pinned = alwaysVisible || debouncedSticky;
-  // An always visible header is fixed from the top of the page, so it only takes on the sticky
-  // chrome (background, divider, gap filling padding) once content scrolls underneath it.
-  const stickyChrome = (alwaysVisible ? scrolled : debouncedSticky) && !isHidden;
+  const pinned = alwaysVisible ? scrolled : debouncedSticky;
+  // A pinned header takes on the sticky chrome (background, divider, gap filling padding) so the
+  // content scrolling underneath it stays readable.
+  const stickyChrome = pinned && !isHidden;
   // An elevated header keeps its divider (and gains a soft shadow) at all times, so pending
   // actions read as raised off the page even before the user scrolls.
   const showDivider = elevated || stickyChrome;
@@ -208,7 +208,7 @@ export default function PageHeaderWrapper({
     animation: anim,
     zIndex: pinned ? 100 : undefined,
     boxSizing: 'border-box',
-    width: alwaysVisible ? containerWidth : '100%',
+    width: alwaysVisible && pinned ? containerWidth : '100%',
     maxWidth: alwaysVisible
       ? undefined
       : isMobile || isTablet || !hasNav
