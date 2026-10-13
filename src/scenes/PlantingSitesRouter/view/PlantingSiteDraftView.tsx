@@ -53,15 +53,7 @@ export default function PlantingSiteDraftView(): JSX.Element {
         <PageSnackbar />
       </Grid>
       <Box display='flex' flexDirection='column' gap={theme.spacing(2.5)} marginTop={theme.spacing(3)}>
-        <Message
-          body={
-            plantingSite.boundary
-              ? strings.DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE
-              : strings.DRAFT_SITE_BOUNDARY_NOT_STARTED_MESSAGE
-          }
-          priority='warning'
-          type='page'
-        />
+        <Message body={strings.DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE} priority='warning' type='page' />
         <DraftPlantingSiteDetailsCard plantingSite={plantingSite} />
         <DraftPlantingSiteBoundaryCard plantingSite={plantingSite} />
       </Box>

@@ -87,9 +87,8 @@ test.describe('PlantingSiteTests', () => {
     const main = page.getByRole('main');
     await expect(main.getByText(siteName, { exact: true }).first()).toBeVisible();
     await expect(detailField(page, 'Name')).toHaveText(siteName);
-    await expect(main.getByText('Draft', { exact: true })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Delete Draft' })).toBeVisible();
-    await expect(main.getByText('The site boundary hasn’t been set up', { exact: false })).toBeVisible();
+    await expect(main.getByText('Boundary setup isn’t finished', { exact: false })).toBeVisible();
     await expect(detailField(page, 'Description')).toHaveText('First description');
     await expect(main.getByText('No site boundary yet')).toBeVisible();
 
@@ -334,7 +333,7 @@ test.describe('PlantingSiteTests', () => {
     // Nothing is unsaved, so closing goes straight to the draft.
     await editorButton(page, 'Close').click();
     await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+(\?|$)/);
-    await expect(page.getByRole('main').getByText('Draft', { exact: true })).toBeVisible();
+    await expect(page.getByRole('main').getByText('Boundary setup isn’t finished', { exact: false })).toBeVisible();
     await expect(detailField(page, 'Name')).toHaveText(siteName);
     await expect(detailField(page, 'Strata')).toHaveText('2');
     await expect(detailField(page, 'Substrata')).toHaveText('3');
@@ -350,7 +349,7 @@ test.describe('PlantingSiteTests', () => {
     await expect(page).toHaveURL(/\/planting-sites\/\d+(\?|$)/);
     await expect(page.getByRole('button', { name: 'Delete Planting Site' })).toBeVisible();
     await expect(detailField(page, 'Name')).toHaveText(siteName);
-    await expect(page.getByText('Draft', { exact: true })).toBeHidden();
+    await expect(page.getByText('Boundary setup isn’t finished', { exact: false })).toBeHidden();
     await expect(page.getByRole('button', { name: 'Continue with Substratum Boundaries' })).toBeHidden();
 
     await goToPlantingSites(page);

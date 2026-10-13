@@ -4,6 +4,7 @@ import { Box, Typography, useTheme } from '@mui/material';
 import { Icon } from '@terraware/web-components';
 import { IconName } from '@terraware/web-components/components/Icon/icons';
 
+import { MAP_VIEW_STYLE_CONTROL_Z_INDEX } from 'src/components/NewMap/MapViewStyleControl';
 import strings from 'src/strings';
 import { getRgbaFromHex } from 'src/utils/color';
 
@@ -94,7 +95,7 @@ export default function BoundaryMethodChooser({ onSelect }: BoundaryMethodChoose
         inset: 0,
         justifyContent: 'center',
         position: 'absolute',
-        zIndex: 2,
+        zIndex: MAP_VIEW_STYLE_CONTROL_Z_INDEX + 1,
       }}
     >
       <Box
