@@ -278,15 +278,23 @@ export default function Editor(props: EditorProps): JSX.Element {
   const onHeaderButtonClick = useCallback(() => dispatch(clearSnackbar({ type: 'toast' })), [dispatch]);
 
   const busy = isUpdating || isPending || !!onValidate;
+  const onStepperBack = useCallback(() => {
+    dispatch(clearSnackbar({ type: 'toast' }));
+    onBack();
+  }, [dispatch, onBack]);
+  const onStepperNext = useCallback(() => {
+    dispatch(clearSnackbar({ type: 'toast' }));
+    onSave('next')();
+  }, [dispatch, onSave]);
   const stepperContext = useMemo(
     () => ({
       busy,
       currentStep,
-      onBack,
-      onNext: onSave('next'),
+      onBack: onStepperBack,
+      onNext: onStepperNext,
       steps,
     }),
-    [busy, currentStep, onBack, onSave, steps]
+    [busy, currentStep, onStepperBack, onStepperNext, steps]
   );
   const showStartOverButton = currentStep !== 'site_boundary' || !!plantingSite.boundary;
 
