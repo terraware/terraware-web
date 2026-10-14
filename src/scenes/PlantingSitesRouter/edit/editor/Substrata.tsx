@@ -18,7 +18,6 @@ import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum, MinimalSubstratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import StepHelp from './StepHelp';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
 import useMapStyle from './useMapStyle';
@@ -240,22 +239,10 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     if (fileUploadEnabled) {
       return [
         {
-          render: (onWatchTutorial: () => void) => (
-            <>
-              {strings.formatString(
-                strings.SITE_SUBSTRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
-                <MapIcon centerAligned={true} icon='slice' />
-              )}
-              <StepHelp
-                id='substratum-boundaries-learn-more'
-                label={strings.SITE_SUBSTRATUM_BOUNDARIES_LEARN_MORE}
-                onWatchTutorial={onWatchTutorial}
-                paragraphs={[strings.SITE_SUBSTRATUM_BOUNDARIES_DEFINITION]}
-                title={strings.SITE_SUBSTRATUM_BOUNDARIES_ABOUT}
-                tutorialLabel={strings.SITE_SUBSTRATUM_BOUNDARIES_WATCH_TUTORIAL}
-              />
-            </>
-          ),
+          text: strings.SITE_SUBSTRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
+          hasTutorial: true,
+          handlePrefix: (prefix: string) =>
+            strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
         },
         selectedStratumLine,
       ];

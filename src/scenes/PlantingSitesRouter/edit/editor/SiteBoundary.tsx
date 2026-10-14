@@ -25,7 +25,6 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
 import DrawingBoundaryStatus from './DrawingBoundaryStatus';
-import StepHelp from './StepHelp';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import UploadBoundaryModal, { ParsedBoundary, boundaryFileFormatOf, fileSizeKb } from './UploadBoundaryModal';
 import UploadedBoundarySummary, { UploadedBoundaryFile } from './UploadedBoundarySummary';
@@ -184,37 +183,24 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     if (fileUploadEnabled && uploadedFile) {
       return [
         {
-          text: `${strings.SITE_BOUNDARY_UPLOADED_DESCRIPTION} ${strings.SITE_BOUNDARY_UPLOAD_TUTORIAL}`,
+          text: strings.SITE_BOUNDARY_UPLOADED_DESCRIPTION,
           hasTutorial: true,
+          handlePrefix: (prefix: string) =>
+            strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
         },
+        { text: strings.SITE_BOUNDARY_BOUNDING_BOX_LIMIT },
       ];
     }
 
     if (fileUploadEnabled && activeMethod === 'draw') {
       return [
         {
-          render: (onWatchTutorial: () => void) => (
-            <>
-              {strings.formatString(
-                strings.SITE_BOUNDARY_DRAWING_DESCRIPTION,
-                <MapIcon centerAligned={true} icon='polygon' />
-              )}
-              <StepHelp
-                id='site-boundary-learn-more'
-                label={strings.SITE_BOUNDARY_LEARN_MORE}
-                onWatchTutorial={onWatchTutorial}
-                paragraphs={[
-                  site.siteType === 'detailed'
-                    ? strings.SITE_BOUNDARY_PLANTABLE_AREAS
-                    : `${strings.SITE_BOUNDARY_PLANTABLE_AREAS} ${strings.SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE}`,
-                  strings.SITE_BOUNDARY_BOUNDING_BOX_LIMIT,
-                ]}
-                title={strings.SITE_BOUNDARY_ABOUT}
-                tutorialLabel={strings.SITE_BOUNDARY_WATCH_TUTORIAL}
-              />
-            </>
-          ),
+          text: strings.SITE_BOUNDARY_DRAWING_DESCRIPTION,
+          hasTutorial: true,
+          handlePrefix: (prefix: string) =>
+            strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
         },
+        { text: strings.SITE_BOUNDARY_BOUNDING_BOX_LIMIT },
       ];
     }
 

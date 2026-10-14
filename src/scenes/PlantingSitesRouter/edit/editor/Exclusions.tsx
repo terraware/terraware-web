@@ -14,7 +14,6 @@ import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import StepHelp from './StepHelp';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
 import { findErrors } from './utils';
@@ -93,22 +92,10 @@ export default function Exclusions({ onValidate, onDirtyChange, site }: Exclusio
     if (fileUploadEnabled) {
       return [
         {
-          render: (onWatchTutorial: () => void) => (
-            <>
-              {strings.formatString(
-                strings.SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,
-                <MapIcon centerAligned={true} icon='polygon' />
-              )}
-              <StepHelp
-                id='exclusion-areas-learn-more'
-                label={strings.SITE_EXCLUSION_AREAS_LEARN_MORE}
-                onWatchTutorial={onWatchTutorial}
-                paragraphs={[strings.SITE_EXCLUSION_AREAS_NOT_PLANTABLE, strings.SITE_EXCLUSION_AREAS_SKIP]}
-                title={strings.SITE_EXCLUSION_AREAS_ABOUT}
-                tutorialLabel={strings.SITE_EXCLUSION_AREAS_WATCH_TUTORIAL}
-              />
-            </>
-          ),
+          text: strings.SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,
+          hasTutorial: true,
+          handlePrefix: (prefix: string) =>
+            strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
         },
       ];
     }

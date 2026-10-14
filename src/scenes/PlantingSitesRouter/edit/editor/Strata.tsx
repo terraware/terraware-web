@@ -18,7 +18,6 @@ import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
-import StepHelp from './StepHelp';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
 import useMapStyle from './useMapStyle';
@@ -195,22 +194,16 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
     if (fileUploadEnabled) {
       return [
         {
-          render: (onWatchTutorial: () => void) => (
-            <>
-              {strings.formatString(
-                strings.SITE_STRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
-                <MapIcon centerAligned={true} icon='slice' />
-              )}
-              <StepHelp
-                id='stratum-boundaries-learn-more'
-                label={strings.SITE_STRATUM_BOUNDARIES_LEARN_MORE}
-                onWatchTutorial={onWatchTutorial}
-                paragraphs={[strings.SITE_STRATUM_BOUNDARIES_DEFINITION, strings.SITE_STRATUM_BOUNDARIES_SIZE]}
-                title={strings.SITE_STRATUM_BOUNDARIES_ABOUT}
-                tutorialLabel={strings.SITE_STRATUM_BOUNDARIES_WATCH_TUTORIAL}
-              />
-            </>
-          ),
+          text: strings.SITE_STRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
+          hasTutorial: true,
+          handlePrefix: (prefix: string) =>
+            strings.formatString(
+              prefix,
+              <MapIcon centerAligned={true} icon='slice' />,
+              <Typography component='span' fontSize='inherit' fontWeight={600}>
+                {strings.SITE_STRATUM_BOUNDARIES_SIZE}
+              </Typography>
+            ) as JSX.Element[],
         },
       ];
     }

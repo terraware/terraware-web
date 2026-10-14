@@ -14,8 +14,7 @@ export type Description = {
   hasTutorial?: boolean;
   isWarning?: boolean;
   isBold?: boolean;
-  render?: (onWatchTutorial: () => void) => React.ReactNode;
-  text?: string | JSX.Element[];
+  text: string | JSX.Element[];
 };
 
 export type StepTitleDescriptionProps = {
@@ -94,9 +93,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           color={line.isWarning ? theme.palette.TwClrIcnWarning : theme.palette.TwClrTxt}
           whiteSpace={'line-wrap'}
         >
-          {line.render ? (
-            line.render(() => setShowModal(true))
-          ) : line.hasTutorial ? (
+          {line.hasTutorial ? (
             <TextWithLink
               fontSize={fontSize}
               handlePrefix={line.handlePrefix}
