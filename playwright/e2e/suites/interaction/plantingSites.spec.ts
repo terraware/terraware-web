@@ -9,6 +9,7 @@ import {
   detailsDialogButton,
   drawPolygon,
   editDraftDetailsButton,
+  editPolygonVertices,
   editorButton,
   enableSiteEditorPreferences,
   expectActiveStep,
@@ -272,8 +273,7 @@ test.describe('PlantingSiteTests', () => {
       [1.125, 0.42],
     ]);
     await clickMap(page, [1.1, 0.5]);
-    await clickMap(page, [1.125, 0.34]);
-    await clickMap(page, [1.125, 0.34]);
+    await editPolygonVertices(page, [1.125, 0.34]);
     await clickMap(page, [1.05, 0.3]);
     await deleteMapFeature(page);
     await expect(polygonTool(page)).not.toHaveClass(/active/);

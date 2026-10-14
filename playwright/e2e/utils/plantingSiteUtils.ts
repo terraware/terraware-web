@@ -155,6 +155,18 @@ export const clickMap = async (page: Page, point: MapPoint) => {
   await page.mouse.click(x, y);
 };
 
+// The first click on a polygon selects it and the second edits its vertices, but the editor can reset the
+// selection while it syncs a newly drawn polygon, so keep clicking until vertex editing starts. Mapbox Draw
+// only updates the mode class on the map container on the next mouse event.
+export const editPolygonVertices = async (page: Page, point: MapPoint) => {
+  await expect(async () => {
+    await clickMap(page, point);
+    const [x, y] = (await toPagePixels(page))(point);
+    await page.mouse.move(x + 1, y);
+    await expect(page.locator('.mapboxgl-map.mode-direct_select')).toBeVisible({ timeout: 500 });
+  }).toPass();
+};
+
 export const deleteMapFeature = async (page: Page) => {
   await page.locator('.mapbox-gl-draw_trash').click();
 };
