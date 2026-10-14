@@ -68,6 +68,18 @@ export const expectActiveStep = async (page: Page, label: string) => {
   await expect(page.locator('.MuiStepLabel-label.Mui-active')).toHaveText(label);
 };
 
+const editorStep = (page: Page, label: string) =>
+  page.locator('.MuiStep-root').filter({ has: page.locator('.MuiStepLabel-label').getByText(label, { exact: true }) });
+
+export const expectOptionalSteps = async (page: Page, required: string[], optional: string[]) => {
+  for (const label of required) {
+    await expect(editorStep(page, label)).not.toContainText('Optional');
+  }
+  for (const label of optional) {
+    await expect(editorStep(page, label)).toContainText('Optional');
+  }
+};
+
 // The draw control ignores clicks until the map has loaded. Once it is listening, moving the mouse over
 // the map makes it tag the map container with a "mouse-" class.
 export const waitForMap = async (page: Page) => {

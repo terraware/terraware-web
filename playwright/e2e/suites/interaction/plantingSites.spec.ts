@@ -12,6 +12,7 @@ import {
   editorButton,
   enableSiteEditorPreferences,
   expectActiveStep,
+  expectOptionalSteps,
   goToPlantingSites,
   openDraftPlantingSite,
   polygonTool,
@@ -28,8 +29,8 @@ const SITE_ADDRESS = '1600 Pennsylvania Avenue NW, Washington, DC';
 // Search results open at zoom 10; zoom 14 makes a few hundred pixels a few kilometers across.
 const ZOOM_IN_AFTER_SEARCH = 4;
 
-test.describe.skip('PlantingSiteTests', () => {
-  test.use({ viewport: { width: 1600, height: 1200 } });
+test.describe('PlantingSiteTests', () => {
+  test.use({ viewport: { width: 1920, height: 1200 } });
   test.describe.configure({ timeout: 120000 });
 
   test.beforeEach(async ({ page, context, baseURL }) => {
@@ -75,6 +76,7 @@ test.describe.skip('PlantingSiteTests', () => {
 
     await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+\/edit(\?|$)/);
     await expectActiveStep(page, 'Site Boundary');
+    await expectOptionalSteps(page, ['Site Boundary'], ['Exclusion Areas']);
     await expect(editorButton(page, 'Back')).toBeHidden();
     await expect(page.getByRole('button', { name: 'Reset Boundary Setup' })).toBeHidden();
 
@@ -137,6 +139,7 @@ test.describe.skip('PlantingSiteTests', () => {
     await expect(page.getByText('How do you want to define this boundary?')).toBeVisible();
     await page.locator('#choose-draw-boundary').click();
     await expect(page.getByText('Drawing the boundary on the map.')).toBeVisible();
+    await expect(page.getByText('Define a Planting Site boundary', { exact: false })).toBeVisible();
     await waitForMap(page);
     await searchMapLocation(page, SITE_ADDRESS);
     await zoomMapIn(page, ZOOM_IN_AFTER_SEARCH);
@@ -187,6 +190,7 @@ test.describe.skip('PlantingSiteTests', () => {
     await page.locator('input[type="file"]').setInputFiles(BOUNDARY_FIXTURE);
     await page.locator('#confirm-upload-boundary').click();
     await expect(page.getByText('simpleSiteBoundary.geojson', { exact: false })).toBeVisible();
+    await expect(page.getByText('You can edit the site boundary.', { exact: false })).toBeVisible();
     await expect(page.locator('#remove-boundary-file')).toBeVisible();
 
     await editorButton(page, 'Close').click();
@@ -230,9 +234,12 @@ test.describe.skip('PlantingSiteTests', () => {
 
     await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+\/edit(\?|$)/);
     await expectActiveStep(page, 'Site Boundary');
-    await expect(page.getByText('Detailed Planting Site Map')).toBeVisible();
-    await expect(page.getByText('Stratum Boundaries', { exact: true })).toBeVisible();
-    await expect(page.getByText('Substratum Boundaries', { exact: true })).toBeVisible();
+    await expect(page.getByText('Detailed Planting Site Map')).toBeHidden();
+    await expectOptionalSteps(
+      page,
+      ['Site Boundary'],
+      ['Exclusion Areas', 'Stratum Boundaries', 'Substratum Boundaries']
+    );
     await page.locator('#choose-draw-boundary').click();
     await waitForMap(page);
     await searchMapLocation(page, SITE_ADDRESS);
@@ -319,6 +326,18 @@ test.describe.skip('PlantingSiteTests', () => {
     await expectActiveStep(page, 'Substratum Boundaries');
     await expect(page.getByText('Unsaved changes')).toBeHidden();
     await expect(editorButton(page, 'Create Planting Site')).toBeEnabled();
+
+    // Collapsing the instructions keeps the selected stratum visible.
+    const substrataInstructions = page.getByText('Define substrata', { exact: false });
+    const selectedStratum = page.getByText('selected for creating Substrata', { exact: false });
+    await expect(substrataInstructions).toBeVisible();
+    await expect(selectedStratum).toBeVisible();
+    await page.getByRole('button', { name: 'Hide Instructions' }).click();
+    await expect(substrataInstructions).toBeHidden();
+    await expect(selectedStratum).toBeVisible();
+    await expect(editorButton(page, 'Create Planting Site')).toBeEnabled();
+    await page.getByRole('button', { name: 'Show Instructions' }).click();
+    await expect(substrataInstructions).toBeVisible();
     await waitForMap(page);
     await drawPolygon(page, [
       [-0.1, -0.02],
