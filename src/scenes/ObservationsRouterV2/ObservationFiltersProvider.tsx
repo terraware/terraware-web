@@ -1,4 +1,13 @@
-import React, { Dispatch, SetStateAction, createContext, useCallback, useContext, useMemo, useState } from 'react';
+import React, {
+  Dispatch,
+  SetStateAction,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { ObservationState } from 'src/types/Observations';
 
@@ -50,8 +59,10 @@ interface ObservationFiltersContextType {
 const PLOT_TYPE_SESSION_KEY = 'plot-selection';
 const OBSERVATION_TYPE_SESSION_KEY = 'observation-type';
 const FILTERS_EXPANDED_SESSION_KEY = 'observation-filters-expanded';
+const FILTERS_SESSION_KEY = 'observation-filters';
 
 const PLOT_TYPES: PlotType[] = ['assigned', 'adHoc'];
+export const OBSERVATION_STATES: ObservationState[] = ['Upcoming', 'InProgress', 'Overdue', 'Completed', 'Abandoned'];
 
 const EMPTY_PLOT_FILTERS: PlotFilters = {
   dateFilter: {},
@@ -72,6 +83,42 @@ const readSessionValue = <T extends string>(key: string, allowed: T[], fallback:
     return allowed.includes(stored as T) ? (stored as T) : fallback;
   } catch (e) {
     return fallback;
+  }
+};
+
+const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === 'object' && value !== null;
+
+const asString = (value: unknown): string | undefined => (typeof value === 'string' ? value : undefined);
+
+const asNumber = (value: unknown): number | undefined => (typeof value === 'number' ? value : undefined);
+
+const asArray = (value: unknown): unknown[] => (Array.isArray(value) ? value : []);
+
+const parsePlotFilters = (value: unknown): PlotFilters => {
+  if (!isRecord(value)) {
+    return EMPTY_PLOT_FILTERS;
+  }
+  const dateFilter = isRecord(value.dateFilter) ? value.dateFilter : {};
+  const plotNumberFilter = isRecord(value.plotNumberFilter) ? value.plotNumberFilter : {};
+  return {
+    dateFilter: { from: asString(dateFilter.from), to: asString(dateFilter.to) },
+    plotNumberFilter: { max: asNumber(plotNumberFilter.max), min: asNumber(plotNumberFilter.min) },
+    statusFilter: asArray(value.statusFilter).filter((state): state is ObservationState =>
+      OBSERVATION_STATES.includes(state as ObservationState)
+    ),
+    stratumFilter: asArray(value.stratumFilter).filter((name): name is string => typeof name === 'string'),
+  };
+};
+
+const readSessionFilters = (): Record<PlotType, PlotFilters> => {
+  try {
+    const stored: unknown = JSON.parse(sessionStorage.getItem(FILTERS_SESSION_KEY) ?? 'null');
+    if (!isRecord(stored)) {
+      return EMPTY_FILTERS;
+    }
+    return { adHoc: parsePlotFilters(stored.adHoc), assigned: parsePlotFilters(stored.assigned) };
+  } catch (e) {
+    return EMPTY_FILTERS;
   }
 };
 
@@ -119,7 +166,11 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
     () => readSessionValue(FILTERS_EXPANDED_SESSION_KEY, ['true', 'false'], 'false') === 'true'
   );
   // Assigned and ad-hoc plots are filtered on different fields, so each keeps its own filters.
-  const [filtersByPlotType, setFiltersByPlotType] = useState<Record<PlotType, PlotFilters>>(EMPTY_FILTERS);
+  const [filtersByPlotType, setFiltersByPlotType] = useState<Record<PlotType, PlotFilters>>(readSessionFilters);
+
+  useEffect(() => {
+    writeSessionValue(FILTERS_SESSION_KEY, JSON.stringify(filtersByPlotType));
+  }, [filtersByPlotType]);
 
   const { dateFilter, plotNumberFilter, statusFilter, stratumFilter } = filtersByPlotType[plotType];
 

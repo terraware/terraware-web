@@ -11,7 +11,7 @@ import { useLocalization, useOrganization } from 'src/providers';
 import { ObservationState, getStatus } from 'src/types/Observations';
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
-import { ObservationTypeFilter, useObservationFilters } from '../ObservationFiltersProvider';
+import { OBSERVATION_STATES, ObservationTypeFilter, useObservationFilters } from '../ObservationFiltersProvider';
 
 const datePickerStyles = {
   flex: '1 1 140px',
@@ -46,8 +46,6 @@ const mobileRangeStyles = {
   display: 'grid',
   gridTemplateColumns: '1fr auto',
 };
-
-const OBSERVATION_STATES: ObservationState[] = ['Upcoming', 'InProgress', 'Overdue', 'Completed', 'Abandoned'];
 
 export type ObservationFilterPanelProps = {
   plantingSiteId: PlantingSiteId;
