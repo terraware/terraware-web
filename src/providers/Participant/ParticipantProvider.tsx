@@ -19,16 +19,19 @@ const ParticipantProvider = ({ children }: Props) => {
   const { activeLocale } = useLocalization();
 
   const [currentAcceleratorProject, setCurrentAcceleratorProject] = useState<Project>();
-  const [acceleratorProjects, setAcceleratorProjects] = useState<Project[]>([]);
   const [moduleProjects, setModuleProjects] = useState<Project[]>([]);
   const [orgHasModules, setOrgHasModules] = useState<boolean | undefined>(undefined);
-  const [orgHasParticipants, setOrgHasParticipants] = useState<boolean | undefined>(undefined);
+
+  const organizationId = selectedOrganization?.id;
 
   const { currentData: projectIdsWithModules, isFetching: projectIdsWithModulesFetching } =
-    useListProjectIdsWithModulesQuery(selectedOrganization?.id ?? skipToken);
+    useListProjectIdsWithModulesQuery(organizationId ?? skipToken);
   const { availableProjects: projects } = useProjects();
 
   const { listProjectModules, projectModules, isLoading: listModulesIsLoading } = useListProjectModules();
+
+  const acceleratorProjects = useMemo(() => (projects ?? []).filter((project) => !!project.phase), [projects]);
+  const orgHasParticipants = projects === undefined ? undefined : acceleratorProjects.length > 0;
 
   const _setCurrentAcceleratorProject = useCallback(
     (projectId: string | number) => {
@@ -62,20 +65,12 @@ const ParticipantProvider = ({ children }: Props) => {
   );
 
   useEffect(() => {
-    if (selectedOrganization && activeLocale) {
+    if (organizationId && activeLocale) {
       setCurrentAcceleratorProject(undefined);
       setModuleProjects([]);
       setOrgHasModules(undefined);
-      setOrgHasParticipants(undefined);
-      setAcceleratorProjects([]);
     }
-  }, [activeLocale, selectedOrganization]);
-
-  useEffect(() => {
-    const nextAcceleratorProjects = (projects || []).filter((project) => !!project.phase);
-    setAcceleratorProjects(nextAcceleratorProjects);
-    setOrgHasParticipants(nextAcceleratorProjects.length > 0);
-  }, [projects]);
+  }, [activeLocale, organizationId]);
 
   useEffect(() => {
     if (currentAcceleratorProject && currentAcceleratorProject.id) {
