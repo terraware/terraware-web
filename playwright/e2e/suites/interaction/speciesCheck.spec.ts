@@ -1,6 +1,6 @@
 import { Locator, Page, expect, test } from '@playwright/test';
 
-import { SeededOrganization, deleteOrganization, seedOrganization } from '../../utils/speciesCheckUtils';
+import { SeededOrganization, deleteOrganization, seedOrganization } from '../../utils/orgSeedUtils';
 import { changeToSuperAdmin } from '../../utils/userUtils';
 import { exactOptions, waitFor } from '../../utils/utils';
 
