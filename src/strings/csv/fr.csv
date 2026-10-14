@@ -200,7 +200,6 @@ APPLICATIONS,Demandes,97e75e41
 APPLY,Appliquer,6c0f6e36
 APPLY_RESULT,Appliquer le résultat,f9c062f6
 APPLY_RESULT_QUESTION,Voulez-vous appliquer ce résultat à l'adhésion ?,36949b1c
-APPLY_TO_ACCELERATOR,Postuler à l'accélérateur,d74e3756
 APPROVE,Approuver,913a9927
 APPROVE_DELIVERABLE,Approuver le livrable,7efd4b07
 APPROVED,Approuvé,b279ed0b
@@ -282,7 +281,6 @@ BIOMASS_PLOT_TOTAL_PLANTS_TOOLTIP,"Plantes totales correspond au nombre total d�
 BOLE_HEIGHT_M,Hauteur du tronc (m),c0a1fe7f
 BOTANICAL_COUNTRY,Pays botanique,7bd4e8de
 BOUNDARIES,Limites,e40b0600
-BOUNDARIES_AND_STRATA,Limites et strates,87db24b5
 BOUNDARY_METHOD_DRAW_DESCRIPTION,Tracez la limite à l’aide de l’outil de dessin sur la carte.,b9ec7dc9
 BOUNDARY_METHOD_SWITCH_NOTE,Vous pouvez passer de l’un à l’autre à tout moment.,ce287561
 BOUNDARY_METHOD_TITLE,Comment souhaitez-vous définir cette limite ?,68647cb4
@@ -638,7 +636,6 @@ EDIT_PERMANENT_PLOTS,Modifier les parcelles permanentes,b78a9922
 EDIT_PERSON,Modifier la personne,5ec719a6
 EDIT_PHOTOS_AND_VIDEOS,Modifier les photos et vidéos,d87a88ba
 EDIT_PLANTING_SEASON,Modifier la saison de plantation,b9eeb92a
-EDIT_PLANTING_SITE,Modifier le site de plantation,71f7ea28
 EDIT_PROJECT,Modifier le projet,88eb63cb
 EDIT_QUANTITY,Modifier la quantité,1d60ca38
 EDIT_QUANTITY_DISABLED,La quantité ne peut pas être modifiée lorsque le statut est « Épuisé ».,e04bdf0b
@@ -880,7 +877,6 @@ HERBACEOUS_ABUNDANCE_PERCENT,Abondance des plantes herbacées (%),d3693b6c
 HERBACEOUS_ABUNDANCE_SQUARE_COUNT,Abondance herbacée (nombre de carrés),a075fce2
 HERBACEOUS_COVER_PERCENT,Couverture herbacée (%),e04acd60
 HERBACEOUS_SPECIES,Espèces herbacées,37cec187
-HERE,ici,fae8bfa6
 HIDE_ALL,Tout masquer,465040a6
 HIDE_FILTERS,Masquer les filtres,0fdbb60d
 HIDE_ON_MAP,Masquer sur la carte,089ea8d7
@@ -1728,7 +1724,6 @@ PROJECT_SUMMARY_REQUIRED,Résumé du projet *,7225ff45
 PROJECT_UPDATED,Projet mis à jour,ea06b396
 PROJECT_ZONE_FIGURE,Figure de la zone de projet,7b0c1adc
 PROJECT_ZONE_FIGURE_VARIABLE,Variable de figure de la zone du projet,12181fad
-PROJECT_ZONES,Zones du projet,0b21c99c
 PROJECTS,Projets,07b3b475
 PROJECTS_COMMENTS,Commentaires du projet,96175bc7
 PROPOSED_PROJECT_BOUNDARIES_ADDED,Ajout des limites du projet proposé,2787f20d
@@ -2352,7 +2347,6 @@ SURVIVAL_RATES_UNAVAILABLE_TITLE,Les taux de survie ne peuvent pas être calcul�
 SUSTAINABLE_DEVELOPMENT_GOALS,Objectifs de développement durable,905bfc54
 SUSTAINABLE_TIMBER,Bois durable,b9574821
 SW_CORNER,Coin SO,225bf8b3
-SYSTEM_METRICS,Mesures du système,c19498b7
 T0_DATA_IS_SET,Les données t0 sont définies,cf4c95a7
 T0_NOT_SET_FOR_PERMANENT_PLOTS,t0 non défini pour les Placettes permanentes,d1ad09a9
 T0_NOT_SET_FOR_TEMPORARY_PLOTS,t0 non défini pour les Placettes temporaires,6fc5b12c
