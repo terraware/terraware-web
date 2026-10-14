@@ -2627,6 +2627,7 @@ VARIABLE_ERROR_NUMBER_NAN,El valor no es un número,35fecae0
 VARIABLE_HISTORY,Historial variable,62d3bc75
 VARIABLE_STATUS,Estado de variable,dd3169c3
 VARIABLES,Variables,9902c54b
+VARIABLES_FOR_PROJECT,Variables para {0},8ed080a2
 VERIFIED,Verificado,17f92e17
 VERIFIED_BY,Verificado por {0},c5e1ef69
 VERRA,Verra,b73695a0
