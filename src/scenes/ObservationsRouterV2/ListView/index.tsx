@@ -238,7 +238,11 @@ const ObservationListViewContent = (): JSX.Element => {
             )
           }
           size='medium'
-          sx={newFiltersEnabled ? { flex: isMobile ? 1 : undefined, margin: 0, whiteSpace: 'nowrap' } : undefined}
+          sx={
+            newFiltersEnabled
+              ? { '&.button': { margin: 0 }, flex: isMobile ? '1 0 auto' : undefined, whiteSpace: 'nowrap' }
+              : undefined
+          }
         />
       );
     } else {
@@ -259,18 +263,21 @@ const ObservationListViewContent = (): JSX.Element => {
         sx={{
           alignItems: 'center',
           display: 'flex',
-          gap: theme.spacing(1),
+          flexWrap: 'wrap',
+          gap: theme.spacing(2),
           justifyContent: isDesktop ? 'flex-end' : 'flex-start',
         }}
       >
         {scheduleObservationButton}
-        <ScheduledObservationsMenu
-          canReschedule={isAdmin(selectedOrganization)}
-          plantingSiteId={selectedPlantingSiteId}
-        />
-        {typeof selectedPlantingSiteId === 'number' && (
-          <SurvivalRateSettingsMenu plantingSiteId={selectedPlantingSiteId} />
-        )}
+        <Box sx={{ alignItems: 'center', display: 'flex', gap: theme.spacing(2) }}>
+          <ScheduledObservationsMenu
+            canReschedule={isAdmin(selectedOrganization)}
+            plantingSiteId={selectedPlantingSiteId}
+          />
+          {typeof selectedPlantingSiteId === 'number' && (
+            <SurvivalRateSettingsMenu plantingSiteId={selectedPlantingSiteId} />
+          )}
+        </Box>
       </Box>
     ),
     [isDesktop, scheduleObservationButton, selectedOrganization, selectedPlantingSiteId, theme]

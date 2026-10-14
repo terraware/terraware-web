@@ -66,6 +66,7 @@ const SurvivalRateSettingsMenu = ({ plantingSiteId }: SurvivalRateSettingsMenuPr
         onOptionItemClick={onOptionItemClick}
         optionItems={optionItems}
         size='medium'
+        sx={{ display: 'flex', marginLeft: 0, '& .button': { margin: 0 } }}
       />
       {needsSettings && (
         <Box sx={{ position: 'absolute', right: '4px', top: '4px' }}>
