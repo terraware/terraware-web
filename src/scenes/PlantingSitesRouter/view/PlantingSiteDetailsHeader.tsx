@@ -1,10 +1,10 @@
 import React, { type JSX } from 'react';
 
 import { Box, Typography, useTheme } from '@mui/material';
-import { Button } from '@terraware/web-components';
-import { useDeviceInfo } from '@terraware/web-components/utils';
+import { DropdownItem } from '@terraware/web-components';
 
 import BackToLink from 'src/components/common/BackToLink';
+import OptionsMenu from 'src/components/common/OptionsMenu';
 import { APP_PATHS } from 'src/constants';
 import { useOrganization } from 'src/providers';
 import strings from 'src/strings';
@@ -20,7 +20,6 @@ export default function PlantingSiteDetailsHeader({
   onDelete,
   plantingSite,
 }: PlantingSiteDetailsHeaderProps): JSX.Element {
-  const { isMobile } = useDeviceInfo();
   const theme = useTheme();
   const { selectedOrganization } = useOrganization();
 
@@ -35,14 +34,14 @@ export default function PlantingSiteDetailsHeader({
         </Typography>
         {isAdmin(selectedOrganization) && (
           <Box marginLeft='auto'>
-            <Button
-              icon='iconTrashCan'
-              id='delete-planting-site'
-              label={isMobile ? undefined : strings.DELETE_PLANTING_SITE}
-              onClick={onDelete}
-              priority='secondary'
-              size='medium'
-              type='destructive'
+            <OptionsMenu
+              size='small'
+              onOptionItemClick={(item: DropdownItem) => {
+                if (item.value === 'delete-planting-site') {
+                  onDelete();
+                }
+              }}
+              optionItems={[{ label: strings.DELETE, value: 'delete-planting-site', type: 'destructive' }]}
             />
           </Box>
         )}
