@@ -14,6 +14,7 @@ import type {
   ProvidedUserData,
   ProvidedUserFundingEntityData,
 } from 'src/providers/DataTypes';
+import { ParticipantContext, type ParticipantData } from 'src/providers/Participant/ParticipantContext';
 import {
   LocalizationContext,
   OrganizationContext,
@@ -42,6 +43,8 @@ export type RenderWithProvidersOptions = {
   localization?: Partial<ProvidedLocalizationData>;
   /** Overrides for the funding entity context (`useUserFundingEntity()`). */
   fundingEntity?: Partial<ProvidedUserFundingEntityData>;
+  /** Overrides for the participant context (`useParticipantData()`). */
+  participant?: Partial<ParticipantData>;
   /** Initial redux state, for components that read from a legacy feature slice. */
   preloadedState?: Partial<RootState>;
   /** Supply a store when a test needs to dispatch before rendering, or share one across renders. */
@@ -114,6 +117,16 @@ const buildFundingEntityContext = (
   ...overrides,
 });
 
+const buildParticipantContext = (overrides: Partial<ParticipantData> = {}): ParticipantData => ({
+  allAcceleratorProjects: [],
+  isLoading: false,
+  orgHasModules: false,
+  orgHasParticipants: false,
+  projectsWithModules: [],
+  setCurrentAcceleratorProject: () => undefined,
+  ...overrides,
+});
+
 /**
  * Render a component inside the same provider stack the app uses, with everything already
  * bootstrapped.
@@ -139,6 +152,7 @@ export const renderWithProviders = (
     organization,
     localization,
     fundingEntity,
+    participant,
     preloadedState,
     store = makeStore(preloadedState),
     route = '/',
@@ -150,6 +164,7 @@ export const renderWithProviders = (
   const organizationContext = buildOrganizationContext(organization);
   const localizationContext = buildLocalizationContext(localization);
   const fundingEntityContext = buildFundingEntityContext(fundingEntity);
+  const participantContext = buildParticipantContext(participant);
 
   // Keep the string tables in step with the locale the context claims. Without this the context
   // would report French while `strings.SOMETHING` still returned English, which is a state the
@@ -161,15 +176,17 @@ export const renderWithProviders = (
       <UserContext.Provider value={userContext}>
         <OrganizationContext.Provider value={organizationContext}>
           <UserFundingEntityContext.Provider value={fundingEntityContext}>
-            <LocalizationContext.Provider value={localizationContext}>
-              <ThemeProvider theme={theme}>
-                <MuiLocalizationProvider dateAdapter={AdapterDayjs}>
-                  <MemoryRouter initialEntries={[route]}>
-                    {path ? <Routes>{<Route path={path} element={children} />}</Routes> : children}
-                  </MemoryRouter>
-                </MuiLocalizationProvider>
-              </ThemeProvider>
-            </LocalizationContext.Provider>
+            <ParticipantContext.Provider value={participantContext}>
+              <LocalizationContext.Provider value={localizationContext}>
+                <ThemeProvider theme={theme}>
+                  <MuiLocalizationProvider dateAdapter={AdapterDayjs}>
+                    <MemoryRouter initialEntries={[route]}>
+                      {path ? <Routes>{<Route path={path} element={children} />}</Routes> : children}
+                    </MemoryRouter>
+                  </MuiLocalizationProvider>
+                </ThemeProvider>
+              </LocalizationContext.Provider>
+            </ParticipantContext.Provider>
           </UserFundingEntityContext.Provider>
         </OrganizationContext.Provider>
       </UserContext.Provider>

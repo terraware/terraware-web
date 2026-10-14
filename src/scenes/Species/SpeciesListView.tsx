@@ -33,6 +33,7 @@ import useTableState from 'src/hooks/useTableState';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import useUpdateUserPreferences from 'src/hooks/useUpdateUserPreferences';
 import { MIXPANEL_EVENTS, type SpeciesIntelligenceBannerType } from 'src/mixpanelEvents';
+import { useParticipantData } from 'src/providers/Participant/ParticipantContext';
 import { useLocalization, useOrganization } from 'src/providers/hooks';
 import { useListSpeciesAcceleratorProjectsQuery } from 'src/queries/search/species';
 import strings from 'src/strings';
@@ -131,12 +132,15 @@ export default function SpeciesListView(): JSX.Element {
   const [searchParams, setSearchParams] = useSearchParams();
   const { activeLocale } = useLocalization();
   const { availableProjects, isLoading: projectsLoading } = useProjects();
+  const { orgHasParticipants } = useParticipantData();
   const organizationId = selectedOrganization?.id;
+  const participantDataKnown = orgHasParticipants !== undefined;
+  const showAcceleratorProjectsColumn = !!orgHasParticipants;
   const {
     data: acceleratorProjectNamesBySpeciesId = EMPTY_ACCELERATOR_PROJECT_NAMES_BY_SPECIES_ID,
     isFetching: acceleratorProjectsLoading,
   } = useListSpeciesAcceleratorProjectsQuery(organizationId ?? -1, {
-    skip: !organizationId || species.length === 0,
+    skip: !organizationId || species.length === 0 || !showAcceleratorProjectsColumn,
     refetchOnMountOrArgChange: true,
   });
 
@@ -286,7 +290,8 @@ export default function SpeciesListView(): JSX.Element {
   } = useTableState(TABLE_STATE_STORAGE_KEY, {
     defaultSorting: [{ id: 'scientificName', desc: false }],
     persistPageIndex: {
-      isLoading: speciesLoading || projectsLoading || !orgBootstrapped || acceleratorProjectsLoading,
+      isLoading:
+        speciesLoading || projectsLoading || !orgBootstrapped || !participantDataKnown || acceleratorProjectsLoading,
     },
   });
 
@@ -677,16 +682,20 @@ export default function SpeciesListView(): JSX.Element {
             },
           ]
         : []),
-      {
-        id: 'acceleratorProjects',
-        header: strings.ACCELERATOR_PROJECTS,
-        accessorFn: (row: SpeciesSearchResultRow) => (row.acceleratorProjects ?? []).join(', '),
-        enableEditing: false,
-        filterVariant: 'multi-select' as const,
-        filterSelectOptions: uniqueAcceleratorProjects,
-        sortUndefined: 'last' as const,
-        Cell: AcceleratorProjectsCell,
-      },
+      ...(showAcceleratorProjectsColumn
+        ? [
+            {
+              id: 'acceleratorProjects',
+              header: strings.ACCELERATOR_PROJECTS,
+              accessorFn: (row: SpeciesSearchResultRow) => (row.acceleratorProjects ?? []).join(', '),
+              enableEditing: false,
+              filterVariant: 'multi-select' as const,
+              filterSelectOptions: uniqueAcceleratorProjects,
+              sortUndefined: 'last' as const,
+              Cell: AcceleratorProjectsCell,
+            },
+          ]
+        : []),
       {
         id: 'conservationCategory',
         header: strings.CONSERVATION_CATEGORY,
@@ -742,6 +751,7 @@ export default function SpeciesListView(): JSX.Element {
     showProblemsColumn,
     showStatusColumn,
     showProjectColumn,
+    showAcceleratorProjectsColumn,
     availableProjectNames,
     projectNamesBySpeciesId,
     statusBySpeciesId,
@@ -760,7 +770,7 @@ export default function SpeciesListView(): JSX.Element {
     EcosystemTypesCell,
   ]);
 
-  if (isInitialLoading || projectsLoading || !orgBootstrapped) {
+  if (isInitialLoading || projectsLoading || !orgBootstrapped || !participantDataKnown) {
     return (
       <TfMain>
         <BlockingSpinner />

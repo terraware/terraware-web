@@ -52,6 +52,7 @@ describe('SpeciesListView refetch behaviour', () => {
     const organization = buildOrganization();
     const { store, rerender } = renderWithProviders(<></>, {
       organization: { selectedOrganization: organization },
+      participant: { orgHasParticipants: true },
     });
     const cachedQuery = store.dispatch(speciesApi.endpoints.listSpecies.initiate({ organizationId: organization.id }));
     await cachedQuery.unwrap();
