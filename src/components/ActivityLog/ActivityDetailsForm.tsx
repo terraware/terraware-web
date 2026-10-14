@@ -257,7 +257,6 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   }, [query, location, navigate]);
 
   const isEditing = useMemo(() => activityId !== undefined, [activityId]);
-  const showHeaderActions = isAcceleratorRoute || !isEditing;
 
   const selectedAcceleratorProject = useMemo(() => {
     return acceleratorProjects.find((p) => p.projectId === projectId);
@@ -674,7 +673,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
       flexWrap='wrap'
       gap={theme.spacing(1.5)}
       justifyContent='space-between'
-      marginBottom={showHeaderActions ? theme.spacing(2) : '2px'}
+      marginBottom={theme.spacing(2)}
       marginTop='2px'
       paddingLeft={theme.spacing(4)}
     >
@@ -682,28 +681,26 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         <Typography fontSize='24px' fontWeight={600} lineHeight='32px' variant='h1'>
           {primaryHeader}
         </Typography>
-        {showHeaderActions && isDirty && <UnsavedChangesBadge />}
+        {isDirty && <UnsavedChangesBadge />}
       </Box>
-      {showHeaderActions && (
-        <Box alignItems='center' display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
-          <Button
-            disabled={busy}
-            id='cancelSaveActivity'
-            label={strings.CANCEL}
-            onClick={() => navToActivityLog()}
-            priority='secondary'
-            size='medium'
-            type='passive'
-          />
-          <Button
-            disabled={!isDirty || busy}
-            id='saveActivity'
-            label={strings.SAVE}
-            onClick={() => void saveActivity()}
-            size='medium'
-          />
-        </Box>
-      )}
+      <Box alignItems='center' display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
+        <Button
+          disabled={busy}
+          id='cancelSaveActivity'
+          label={strings.CANCEL}
+          onClick={() => navToActivityLog()}
+          priority='secondary'
+          size='medium'
+          type='passive'
+        />
+        <Button
+          disabled={!isDirty || busy}
+          id='saveActivity'
+          label={strings.SAVE}
+          onClick={() => void saveActivity()}
+          size='medium'
+        />
+      </Box>
     </Box>
   );
 
@@ -714,7 +711,7 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
   return (
     <PageForm
       busy={busy}
-      hideEdit={showHeaderActions}
+      hideEdit
       cancelID='cancelSaveActivity'
       onCancel={navToActivityLog}
       onSave={() => void saveActivity()}
@@ -727,13 +724,9 @@ export default function ActivityDetailsForm({ activityId, projectId }: ActivityD
         onClose={handleCloseDeleteActivityModal}
         onSubmit={() => void dispatchDeleteActivityRequest()}
       />
-      {showHeaderActions ? (
-        <PageHeaderWrapper alwaysVisible elevated={isDirty} nextElement={contentElement}>
-          {header}
-        </PageHeaderWrapper>
-      ) : (
-        header
-      )}
+      <PageHeaderWrapper alwaysVisible elevated={isDirty} nextElement={contentElement}>
+        {header}
+      </PageHeaderWrapper>
       <Box ref={contentRef}>
         <Card
           style={{
