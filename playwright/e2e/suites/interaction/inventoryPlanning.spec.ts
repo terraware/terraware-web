@@ -13,7 +13,7 @@ import {
   seedSpeciesTarget,
 } from '../../utils/orgSeedUtils';
 import { changeToSuperAdmin } from '../../utils/userUtils';
-import { exactOptions, waitFor } from '../../utils/utils';
+import { exactOptions, openNavItem, waitFor } from '../../utils/utils';
 
 const ALPHA_AVAILABLE = 750;
 const BETA_AVAILABLE = 100;
@@ -92,8 +92,9 @@ const seedFixture = async (page: Page): Promise<Fixture> => {
 };
 
 const openInventoryPlanning = async (page: Page, organization: SeededOrganization) => {
-  await page.goto(`/inventory-planning?organizationId=${organization.id}`);
+  await page.goto(`/?organizationId=${organization.id}`);
   await waitFor(page, '#home');
+  await openNavItem(page, 'Seedlings', 'Inventory Planning');
   await expect(page.getByText('Allocate inventory for Planting Season species targets.')).toBeVisible();
 };
 

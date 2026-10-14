@@ -10,7 +10,7 @@ import {
   seedSiteSpeciesTarget,
 } from '../../utils/orgSeedUtils';
 import { changeToSuperAdmin } from '../../utils/userUtils';
-import { exactOptions, waitFor } from '../../utils/utils';
+import { exactOptions, openNavItem, waitFor } from '../../utils/utils';
 
 const PLANTED_INITIAL_DENSITY = 1500;
 const PLANTED_TARGET_DENSITY = 2000;
@@ -58,12 +58,17 @@ const seedFixture = async (page: Page): Promise<Fixture> => {
   return { organization, plantedSite, bareSite };
 };
 
-const openPlantingPlans = async (page: Page, organization: SeededOrganization) => {
-  await page.goto(`/planting-plans?organizationId=${organization.id}`);
-  await waitFor(page, '#home');
+const expectPlantingPlansPage = async (page: Page) => {
   await expect(
     page.getByText('Manage planting plans for Planting Sites, including site goals and planting seasons.')
   ).toBeVisible();
+};
+
+const openPlantingPlans = async (page: Page, organization: SeededOrganization) => {
+  await page.goto(`/?organizationId=${organization.id}`);
+  await waitFor(page, '#home');
+  await openNavItem(page, 'Plantings', 'Planting Plans');
+  await expectPlantingPlansPage(page);
 };
 
 const planBox = (page: Page, siteName: string) => page.getByRole('button', { name: new RegExp(siteName) });
@@ -117,8 +122,8 @@ test.describe('PlantingPlansTests', () => {
     const { organization, plantedSite } = await seedFixture(page);
     organizationId = organization.id;
 
-    await page.goto(`/planting-plans/${plantedSite.id}?organizationId=${organization.id}`);
-    await waitFor(page, '#home');
+    await openPlantingPlans(page, organization);
+    await planBox(page, plantedSite.name).click();
 
     await expect(page.getByText(plantsLabel(plantedSite, PLANTED_INITIAL_DENSITY))).toBeVisible();
     await expect(page.getByText('by initial planting density')).toBeVisible();
@@ -164,8 +169,11 @@ test.describe('PlantingPlansTests', () => {
     });
     organizationId = organization.id;
 
-    await openPlantingPlans(page, organization);
+    await page.goto(`/planting-plans?organizationId=${organization.id}`);
+    await waitFor(page, '#home');
+    await expectPlantingPlansPage(page);
 
     await expect(page.getByText('There are no Planting Plans.')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Planting Plans', ...exactOptions })).toBeHidden();
   });
 });
