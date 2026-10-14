@@ -73,7 +73,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   const navigate = useSyncNavigate();
   const { goToPlantingSiteView } = useNavigateTo();
   const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
+  const { isDesktop } = useDeviceInfo();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
 
@@ -303,7 +303,7 @@ export default function Editor(props: EditorProps): JSX.Element {
           siteName={plantingSite.name.trim()}
         />
       )}
-      <PageHeaderWrapper alwaysVisible={!isMobile} elevated={!isMobile && isDirty} nextElement={contentElement}>
+      <PageHeaderWrapper alwaysVisible={isDesktop} elevated={isDesktop && isDirty} nextElement={contentElement}>
         <Box
           padding={theme.spacing(0, 0, 2, 3)}
           display='flex'
@@ -318,7 +318,7 @@ export default function Editor(props: EditorProps): JSX.Element {
             </Typography>
             {isDirty && <UnsavedChangesBadge />}
           </Box>
-          {!isMobile && (
+          {isDesktop && (
             <Box
               display='flex'
               alignItems='center'
@@ -354,7 +354,7 @@ export default function Editor(props: EditorProps): JSX.Element {
       <Grid item xs={12} ref={contentRef}>
         <PageSnackbar />
       </Grid>
-      {isMobile && (
+      {!isDesktop && (
         <Message
           body={strings.SITE_EDITOR_USE_DESKTOP}
           priority='info'
@@ -371,7 +371,7 @@ export default function Editor(props: EditorProps): JSX.Element {
           ]}
         />
       )}
-      {!isMobile && (
+      {isDesktop && (
         <EditorStepperContext.Provider value={stepperContext}>
           <Card
             radius={theme.spacing(1)}
