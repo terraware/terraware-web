@@ -22,8 +22,8 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import CloseSetupConfirmation from './CloseSetupConfirmation';
+import { EditorStepperContext, PlantingSiteStep } from './EditorStepper';
 import Exclusions from './Exclusions';
-import Form, { PlantingSiteStep } from './Form';
 import SiteBoundary from './SiteBoundary';
 import StartOverConfirmation from './StartOverConfirmation';
 import Strata from './Strata';
@@ -278,8 +278,16 @@ export default function Editor(props: EditorProps): JSX.Element {
   const onHeaderButtonClick = useCallback(() => dispatch(clearSnackbar({ type: 'toast' })), [dispatch]);
 
   const busy = isUpdating || isPending || !!onValidate;
-  const isFirstStep = currentStep === steps[0]?.type;
-  const isFinalStep = currentStep === steps[steps.length - 1]?.type;
+  const stepperContext = useMemo(
+    () => ({
+      busy,
+      currentStep,
+      onBack,
+      onNext: onSave('next'),
+      steps,
+    }),
+    [busy, currentStep, onBack, onSave, steps]
+  );
   const showStartOverButton = currentStep !== 'site_boundary' || !!plantingSite.boundary;
 
   return (
@@ -339,24 +347,6 @@ export default function Editor(props: EditorProps): JSX.Element {
                   size='medium'
                 />
               )}
-              {!isFirstStep && (
-                <Button
-                  id='back-planting-site-create'
-                  label={strings.BACK}
-                  onClick={onBack}
-                  disabled={busy}
-                  priority='secondary'
-                  type='passive'
-                  size='medium'
-                />
-              )}
-              <Button
-                id='save-planting-site-create'
-                label={isFinalStep ? strings.CREATE_PLANTING_SITE : strings.NEXT}
-                onClick={onSave('next')}
-                disabled={busy}
-                size='medium'
-              />
             </Box>
           )}
         </Box>
@@ -382,15 +372,7 @@ export default function Editor(props: EditorProps): JSX.Element {
         />
       )}
       {!isMobile && (
-        <Form
-          currentStep={currentStep}
-          steps={steps}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: 1,
-          }}
-        >
+        <EditorStepperContext.Provider value={stepperContext}>
           <Card
             radius={theme.spacing(1)}
             style={{
@@ -419,7 +401,7 @@ export default function Editor(props: EditorProps): JSX.Element {
               <Substrata onDirtyChange={setIsDirty} onValidate={onValidate} site={plantingSite} />
             )}
           </Card>
-        </Form>
+        </EditorStepperContext.Provider>
       )}
     </TfMain>
   );

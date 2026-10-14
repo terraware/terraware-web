@@ -18,6 +18,7 @@ import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum, MinimalSubstratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { useEditorStepperDrawer } from './EditorStepper';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
 import useMapStyle from './useMapStyle';
@@ -436,16 +437,19 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     [mapStyles.box, mapStyles.tooltip, selectedStratum, setSubstrataData, substrata]
   );
 
+  const drawerProps = useEditorStepperDrawer(
+    <StepTitleDescription
+      description={description}
+      tutorialDescription={tutorialDescription}
+      tutorialDocLinkKey='planting_site_create_substratum_boundary_instructions_video'
+      tutorialTitle={strings.ADDING_SUBSTRATUM_BOUNDARIES}
+    />
+  );
+
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
-      <StepTitleDescription
-        description={description}
-        largeText
-        tutorialDescription={tutorialDescription}
-        tutorialDocLinkKey='planting_site_create_substratum_boundary_instructions_video'
-        tutorialTitle={strings.ADDING_SUBSTRATUM_BOUNDARIES}
-      />
       <EditableMap
+        {...drawerProps}
         editableBoundary={substrataData?.editableBoundary}
         errorAnnotations={substrataData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}

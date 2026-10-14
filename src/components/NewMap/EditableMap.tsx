@@ -15,6 +15,7 @@ import { getRgbaFromHex } from 'src/utils/color';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import MapComponent from '.';
+import { MapDrawerSize } from './MapDrawer';
 import { MapFillComponentStyle, MapLayer, MapProperties } from './types';
 import useMapUtils from './useMapUtils';
 import { getBoundingBoxFromMultiPolygons } from './utils';
@@ -36,6 +37,8 @@ export type EditableMapClickedFeature = {
 type FeatureSelectorOnClick = (features: EditableMapClickedFeature[]) => EditableMapClickedFeature | undefined;
 
 export type EditableMapProps = {
+  drawer?: ReactNode;
+  drawerSize?: MapDrawerSize;
   editableBoundary?: FeatureCollection;
   errorAnnotations?: Feature[];
   featureSelectorOnClick?: FeatureSelectorOnClick;
@@ -55,6 +58,8 @@ export type EditableMapProps = {
 const featureIdOf = (feature: Feature): string => `${feature.properties?.id ?? feature.id}`;
 
 const EditableMap = ({
+  drawer,
+  drawerSize,
   editableBoundary,
   errorAnnotations,
   featureSelectorOnClick,
@@ -289,6 +294,10 @@ const EditableMap = ({
       <MapComponent
         additionalComponent={additionalComponent}
         containerStyle={{ flexGrow: 1, height: 'auto', maxHeight: 'none', minHeight: '640px' }}
+        drawerChildren={drawer}
+        drawerHideHeader
+        drawerOpen={!!drawer}
+        drawerSize={drawerSize}
         mapId={mapId}
         mapLayers={mapLayers}
         mapRef={mapRef}
