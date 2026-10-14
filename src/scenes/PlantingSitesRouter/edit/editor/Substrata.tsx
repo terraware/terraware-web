@@ -229,14 +229,6 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
       return [];
     }
 
-    const selectedStratumLine: Description = {
-      text: strings.formatString(
-        strings.SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,
-        strata?.features?.find((f) => f.id === selectedStratum)?.properties?.name ?? ''
-      ),
-      isBold: true,
-    };
-
     if (fileUploadEnabled) {
       return [
         {
@@ -245,7 +237,6 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
           handlePrefix: (prefix: string) =>
             strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
         },
-        selectedStratumLine,
       ];
     }
 
@@ -256,9 +247,8 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
         handlePrefix: (prefix: string) =>
           strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
       },
-      selectedStratumLine,
     ];
-  }, [activeLocale, fileUploadEnabled, selectedStratum, strata]);
+  }, [activeLocale, fileUploadEnabled]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {
@@ -443,7 +433,13 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
       tutorialDescription={tutorialDescription}
       tutorialDocLinkKey='planting_site_create_substratum_boundary_instructions_video'
       tutorialTitle={strings.ADDING_SUBSTRATUM_BOUNDARIES}
-    />
+    />,
+    <Typography fontSize='14px' fontWeight={600} lineHeight='20px' color={theme.palette.TwClrTxt}>
+      {strings.formatString(
+        strings.SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,
+        strata?.features?.find((f) => f.id === selectedStratum)?.properties?.name ?? ''
+      )}
+    </Typography>
   );
 
   return (

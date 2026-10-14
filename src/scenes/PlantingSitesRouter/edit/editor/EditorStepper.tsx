@@ -1,7 +1,7 @@
 import React, { type JSX, ReactNode, createContext, useContext } from 'react';
 
-import { Box, useTheme } from '@mui/material';
-import { Button, Stepper } from '@terraware/web-components';
+import { Box, ButtonBase, useTheme } from '@mui/material';
+import { Button, Icon, Stepper } from '@terraware/web-components';
 
 import type { EditableMapProps } from 'src/components/NewMap/EditableMap';
 import strings from 'src/strings';
@@ -20,9 +20,12 @@ export type PlantingSiteStep = {
 
 type EditorStepperContextValue = {
   busy: boolean;
+  collapsed: boolean;
   currentStep: SiteEditStep;
   onBack: () => void;
   onNext: () => void;
+  onStartOver?: () => void;
+  onToggleCollapsed: () => void;
   steps: PlantingSiteStep[];
 };
 
@@ -30,15 +33,40 @@ export const EditorStepperContext = createContext<EditorStepperContextValue | un
 
 type EditorStepperProps = EditorStepperContextValue & {
   description: ReactNode;
+  status?: ReactNode;
 };
 
-const EditorStepper = ({ busy, currentStep, description, onBack, onNext, steps }: EditorStepperProps): JSX.Element => {
+const EditorStepper = ({
+  busy,
+  collapsed,
+  currentStep,
+  description,
+  onBack,
+  onNext,
+  onStartOver,
+  status,
+  steps,
+}: EditorStepperProps): JSX.Element => {
   const theme = useTheme();
   const currentStepIndex = Math.max(
     steps.findIndex((step) => step.type === currentStep),
     0
   );
   const isFinalStep = currentStepIndex === steps.length - 1;
+
+  const buttonSize = collapsed ? 'small' : 'medium';
+
+  const activeStepContent = (
+    <>
+      {!collapsed && description}
+      {status && (
+        // zero width keeps the status from widening the collapsed drawer
+        <Box minWidth='100%' width={0}>
+          {status}
+        </Box>
+      )}
+    </>
+  );
 
   return (
     <Box display='flex' flexDirection='column' height='100%'>
@@ -49,10 +77,21 @@ const EditorStepper = ({ busy, currentStep, description, onBack, onNext, steps }
           orientation='vertical'
           steps={steps.map((step, index) => ({
             ...step,
-            description: index === currentStepIndex ? description : undefined,
+            description: index === currentStepIndex ? activeStepContent : undefined,
           }))}
           sx={{ padding: theme.spacing(1, 0) }}
         />
+        {onStartOver && (
+          <Button
+            id='start-over'
+            label={strings.RESET_BOUNDARY_SETUP}
+            onClick={onStartOver}
+            disabled={busy}
+            priority='secondary'
+            type='passive'
+            size={buttonSize}
+          />
+        )}
       </Box>
       <Box
         display='flex'
@@ -69,25 +108,58 @@ const EditorStepper = ({ busy, currentStep, description, onBack, onNext, steps }
             disabled={busy}
             priority='secondary'
             type='passive'
-            size='medium'
+            size={buttonSize}
           />
         )}
-        <Button
-          id='save-planting-site-create'
-          label={isFinalStep ? strings.CREATE_PLANTING_SITE : strings.NEXT}
-          onClick={onNext}
-          disabled={busy}
-          size='medium'
-        />
+        {!isFinalStep && (
+          <Button
+            id='next-planting-site-create'
+            label={strings.NEXT}
+            onClick={onNext}
+            disabled={busy}
+            size={buttonSize}
+          />
+        )}
       </Box>
     </Box>
   );
 };
 
+type EditorStepperEarProps = {
+  collapsed: boolean;
+  onToggleCollapsed: () => void;
+};
+
+const EditorStepperEar = ({ collapsed, onToggleCollapsed }: EditorStepperEarProps): JSX.Element => {
+  const theme = useTheme();
+
+  return (
+    <ButtonBase
+      aria-label={collapsed ? strings.SHOW_INSTRUCTIONS : strings.HIDE_INSTRUCTIONS}
+      id='toggle-planting-site-create-instructions'
+      onClick={onToggleCollapsed}
+      sx={{
+        background: theme.palette.TwClrBaseWhite,
+        border: `1px solid ${theme.palette.TwClrBrdrTertiary}`,
+        borderRight: 'none',
+        borderRadius: '8px 0 0 8px',
+        height: '48px',
+        width: '24px',
+      }}
+    >
+      <Icon name={collapsed ? 'caretLeft' : 'caretRight'} size='small' style={{ fill: theme.palette.TwClrIcn }} />
+    </ButtonBase>
+  );
+};
+
 /**
- * Map drawer props for an editor step, showing the steps with the given description under the current one.
+ * Map props for an editor step's drawer, showing the steps with the given description under the current one. The status
+ * stays visible when the drawer is collapsed.
  */
-export const useEditorStepperDrawer = (description: ReactNode): Pick<EditableMapProps, 'drawer' | 'drawerSize'> => {
+export const useEditorStepperDrawer = (
+  description: ReactNode,
+  status?: ReactNode
+): Pick<EditableMapProps, 'drawer' | 'drawerEar' | 'drawerSize' | 'drawerStyle' | 'minHeight'> => {
   const context = useContext(EditorStepperContext);
 
   if (!context) {
@@ -95,7 +167,10 @@ export const useEditorStepperDrawer = (description: ReactNode): Pick<EditableMap
   }
 
   return {
-    drawer: <EditorStepper {...context} description={description} />,
-    drawerSize: 'medium',
+    drawer: <EditorStepper {...context} description={description} status={status} />,
+    drawerEar: <EditorStepperEar collapsed={context.collapsed} onToggleCollapsed={context.onToggleCollapsed} />,
+    drawerSize: context.collapsed ? 'fit-content' : 'medium',
+    drawerStyle: context.collapsed ? undefined : { minWidth: '330px', width: '330px' },
+    minHeight: '570px',
   };
 };

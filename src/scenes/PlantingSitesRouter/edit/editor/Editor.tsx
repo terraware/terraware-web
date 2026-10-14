@@ -1,6 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, Grid, Typography, useTheme } from '@mui/material';
+import { Box, Grid, Typography, useMediaQuery, useTheme } from '@mui/material';
 import { BusySpinner, Button, Message } from '@terraware/web-components';
 
 import PageSnackbar from 'src/components/PageSnackbar';
@@ -74,6 +74,8 @@ export default function Editor(props: EditorProps): JSX.Element {
   const { goToPlantingSiteView } = useNavigateTo();
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
+  const isNarrowPortrait = useMediaQuery('(min-width: 768px) and (max-width: 1439px) and (orientation: portrait)');
+  const isEditorAvailable = isDesktop && !isNarrowPortrait;
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
 
@@ -88,6 +90,7 @@ export default function Editor(props: EditorProps): JSX.Element {
   const [isDirty, setIsDirty] = useState(false);
   const [plantingSite, setPlantingSite] = useState(site);
   const [showCloseConfirmation, setShowCloseConfirmation] = useState<boolean>(false);
+  const [stepperCollapsed, setStepperCollapsed] = useState<boolean>(false);
 
   const onFinalizeSuccess = useCallback(
     (plantingSiteId: number) => {
@@ -273,30 +276,49 @@ export default function Editor(props: EditorProps): JSX.Element {
     setShowStartOver(false);
   }, [plantingSite, updateDraft]);
 
-  const onOpenStartOver = useCallback(() => setShowStartOver(true), []);
+  const onOpenStartOver = useCallback(() => {
+    dispatch(clearSnackbar({ type: 'toast' }));
+    setShowStartOver(true);
+  }, [dispatch]);
   const onCloseStartOver = useCallback(() => setShowStartOver(false), []);
   const onHeaderButtonClick = useCallback(() => dispatch(clearSnackbar({ type: 'toast' })), [dispatch]);
+  const onToggleStepperCollapsed = useCallback(() => setStepperCollapsed((collapsed) => !collapsed), []);
 
   const busy = isUpdating || isPending || !!onValidate;
+  const onFinalStep = getCurrentStepIndex() === steps.length - 1;
+  const onNext = useMemo(() => onSave('next'), [onSave]);
+  const showStartOverButton = currentStep !== 'site_boundary' || !!plantingSite.boundary;
   const onStepperBack = useCallback(() => {
     dispatch(clearSnackbar({ type: 'toast' }));
     onBack();
   }, [dispatch, onBack]);
   const onStepperNext = useCallback(() => {
     dispatch(clearSnackbar({ type: 'toast' }));
-    onSave('next')();
-  }, [dispatch, onSave]);
+    onNext();
+  }, [dispatch, onNext]);
   const stepperContext = useMemo(
     () => ({
       busy,
+      collapsed: stepperCollapsed,
       currentStep,
       onBack: onStepperBack,
       onNext: onStepperNext,
+      onStartOver: showStartOverButton ? onOpenStartOver : undefined,
+      onToggleCollapsed: onToggleStepperCollapsed,
       steps,
     }),
-    [busy, currentStep, onStepperBack, onStepperNext, steps]
+    [
+      busy,
+      currentStep,
+      onOpenStartOver,
+      onStepperBack,
+      onStepperNext,
+      onToggleStepperCollapsed,
+      showStartOverButton,
+      stepperCollapsed,
+      steps,
+    ]
   );
-  const showStartOverButton = currentStep !== 'site_boundary' || !!plantingSite.boundary;
 
   return (
     <TfMain>
@@ -311,7 +333,11 @@ export default function Editor(props: EditorProps): JSX.Element {
           siteName={plantingSite.name.trim()}
         />
       )}
-      <PageHeaderWrapper alwaysVisible={isDesktop} elevated={isDesktop && isDirty} nextElement={contentElement}>
+      <PageHeaderWrapper
+        alwaysVisible={isEditorAvailable}
+        elevated={isEditorAvailable && isDirty}
+        nextElement={contentElement}
+      >
         <Box
           padding={theme.spacing(0, 0, 2, 3)}
           display='flex'
@@ -326,7 +352,7 @@ export default function Editor(props: EditorProps): JSX.Element {
             </Typography>
             {isDirty && <UnsavedChangesBadge />}
           </Box>
-          {isDesktop && (
+          {isEditorAvailable && (
             <Box
               display='flex'
               alignItems='center'
@@ -344,17 +370,13 @@ export default function Editor(props: EditorProps): JSX.Element {
                 type='passive'
                 size='medium'
               />
-              {showStartOverButton && (
-                <Button
-                  id='start-over'
-                  label={strings.RESET_BOUNDARY_SETUP}
-                  onClick={onOpenStartOver}
-                  disabled={busy}
-                  priority='secondary'
-                  type='passive'
-                  size='medium'
-                />
-              )}
+              <Button
+                id='save-planting-site-create'
+                label={strings.CREATE_PLANTING_SITE}
+                onClick={onNext}
+                disabled={busy || !onFinalStep}
+                size='medium'
+              />
             </Box>
           )}
         </Box>
@@ -362,9 +384,9 @@ export default function Editor(props: EditorProps): JSX.Element {
       <Grid item xs={12} ref={contentRef}>
         <PageSnackbar />
       </Grid>
-      {!isDesktop && (
+      {!isEditorAvailable && (
         <Message
-          body={strings.SITE_EDITOR_USE_DESKTOP}
+          body={isNarrowPortrait ? strings.SITE_EDITOR_USE_TABLET_LANDSCAPE : strings.SITE_EDITOR_USE_DESKTOP}
           priority='info'
           type='page'
           pageButtons={[
@@ -379,7 +401,7 @@ export default function Editor(props: EditorProps): JSX.Element {
           ]}
         />
       )}
-      {isDesktop && (
+      {isEditorAvailable && (
         <EditorStepperContext.Provider value={stepperContext}>
           <Card
             radius={theme.spacing(1)}

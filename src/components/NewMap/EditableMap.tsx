@@ -1,4 +1,13 @@
-import React, { type JSX, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  type CSSProperties,
+  type JSX,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { GeolocateControl, Layer, MapRef, Popup, Source } from 'react-map-gl/mapbox';
 
 import { AddressAutofillFeatureSuggestion } from '@mapbox/search-js-core';
@@ -38,11 +47,14 @@ type FeatureSelectorOnClick = (features: EditableMapClickedFeature[]) => Editabl
 
 export type EditableMapProps = {
   drawer?: ReactNode;
+  drawerEar?: ReactNode;
   drawerSize?: MapDrawerSize;
+  drawerStyle?: CSSProperties;
   editableBoundary?: FeatureCollection;
   errorAnnotations?: Feature[];
   featureSelectorOnClick?: FeatureSelectorOnClick;
   isSliceTool?: boolean;
+  minHeight?: string;
   onDeleteFeature?: (boundaryId: string, featureId: string | number) => void;
   onEditableBoundaryChanged: (boundary?: FeatureCollection) => void;
   onRedo?: () => void;
@@ -59,11 +71,14 @@ const featureIdOf = (feature: Feature): string => `${feature.properties?.id ?? f
 
 const EditableMap = ({
   drawer,
+  drawerEar,
   drawerSize,
+  drawerStyle,
   editableBoundary,
   errorAnnotations,
   featureSelectorOnClick,
   isSliceTool,
+  minHeight = '640px',
   onDeleteFeature,
   onEditableBoundaryChanged,
   onRedo,
@@ -293,11 +308,13 @@ const EditableMap = ({
       )}
       <MapComponent
         additionalComponent={additionalComponent}
-        containerStyle={{ flexGrow: 1, height: 'auto', maxHeight: 'none', minHeight: '640px' }}
+        containerStyle={{ flexGrow: 1, height: 'auto', maxHeight: 'none', minHeight }}
         drawerChildren={drawer}
+        drawerEar={drawerEar}
         drawerHideHeader
         drawerOpen={!!drawer}
         drawerSize={drawerSize}
+        drawerStyle={drawerStyle}
         mapId={mapId}
         mapLayers={mapLayers}
         mapRef={mapRef}
