@@ -294,7 +294,14 @@ const ObservationListViewContent = (): JSX.Element => {
   const observationMapCard = useMemo(
     () =>
       (newFiltersEnabled || hasObservationsResults) && (
-        <Card radius={'8px'} style={{ marginBottom: theme.spacing(3), width: '100%' }}>
+        <Card
+          radius={'8px'}
+          style={{
+            marginBottom: theme.spacing(3),
+            paddingTop: newFiltersEnabled ? theme.spacing(1) : undefined,
+            width: '100%',
+          }}
+        >
           <ObservationMapWrapper
             emptyState={emptyState}
             observationType={countedObservationType}
