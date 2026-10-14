@@ -48,6 +48,7 @@ ACTIVE_GROWTH_QUANTITY_BEFORE,Quantité de croissance active (avant),9f4e51b1
 ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La quantité de croissance active ne peut être inférieure à 0,d7703445
 ACTIVE_GROWTH_QUANTITY_REMAINING,Quantité de croissance active ({0} restant),66b0930c
 ACTIVE_GROWTH_QUANTITY_REQUIRED,Quantité de croissance active *,b8c156d3
+ACTIVITY,Activité,4e3914f0
 ACTIVITY_DELETED,Activité supprimée,e2df95fd
 ACTIVITY_LOG,Journal d'activité,112b2d64
 ACTIVITY_PUBLISHED,Activité publiée,6ce064cc
@@ -1662,6 +1663,7 @@ PROBLEMS_WITH_ENTRIES,Il y a eu un problème avec certaines saisies dans ce form
 PROCESSING,Traitement en cours,36f06d3a
 PROCESSING_STATUS_REQUIRED,Statut du traitement *,ac173883
 PROCESSING_VIDEO,Traitement de la vidéo,9a3838de
+PROFILE,Profil,3da1dc58
 PROGRESS,Progrès,c07f21ce
 PROGRESS_NOTES,Notes sur l'état d'avancement,5e670e4a
 PROGRESS_NOTES_DESCRIPTION,Fournissez des informations qui peuvent être publiées à l'intention des bailleurs de fonds.,a42ffda7

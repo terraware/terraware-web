@@ -7,7 +7,8 @@ export type FeatureName =
   | 'Show Production View'
   | 'Virtual Monitoring Plots'
   | 'New Observation Filters'
-  | 'Boundary File Upload';
+  | 'Boundary File Upload'
+  | 'Clean Up Console Tabs';
 
 export type Feature = {
   name: FeatureName;
@@ -68,6 +69,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     description: [
       'Define a planting site boundary by uploading a spatial file (KML, KMZ, GeoJSON, or zipped shapefile) instead of drawing it.',
     ],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Clean Up Console Tabs',
+    preferenceName: 'cleanUpConsoleTabs',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Streamlined set of tabs on the console project profile, highlighting the most-used features.'],
     disclosure: ['This is a WIP'],
   },
 ];

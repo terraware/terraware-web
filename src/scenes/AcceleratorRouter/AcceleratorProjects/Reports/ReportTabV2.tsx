@@ -30,9 +30,11 @@ import ReportInternalComment from './ReportInternalComment';
 
 type ReportTabV2Props = {
   active?: boolean;
+  onSelectReport?: (reportId: number) => void;
+  selectedReportId?: number;
 };
 
-const ReportTabV2 = ({ active }: ReportTabV2Props): JSX.Element => {
+const ReportTabV2 = ({ active, onSelectReport, selectedReportId }: ReportTabV2Props): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
   const trackEvent = useTrackEvent();
@@ -40,14 +42,20 @@ const ReportTabV2 = ({ active }: ReportTabV2Props): JSX.Element => {
   const navigate = useSyncNavigate();
 
   const projectId = Number(pathParams.projectId);
-  const pathReportId = Number(pathParams.reportId) || undefined;
+  const currentReportId = onSelectReport ? selectedReportId : Number(pathParams.reportId) || undefined;
 
   const selectReport = useCallback(
-    (reportId: number, replace = false) =>
+    (reportId: number, replace = false) => {
+      if (onSelectReport) {
+        onSelectReport(reportId);
+        return;
+      }
+
       navigate(`${APP_PATHS.ACCELERATOR_PROJECT_REPORTS.replace(':projectId', `${projectId}`)}/${reportId}`, {
         replace,
-      }),
-    [navigate, projectId]
+      });
+    },
+    [navigate, onSelectReport, projectId]
   );
 
   const { currentData: listReportsData } = useListAcceleratorReportsQuery({ projectId });
@@ -62,16 +70,16 @@ const ReportTabV2 = ({ active }: ReportTabV2Props): JSX.Element => {
   );
 
   const resolvedReportId = useMemo(
-    () => reports.find((report) => report.reportId === pathReportId)?.reportId ?? reports[0]?.reportId,
-    [pathReportId, reports]
+    () => reports.find((report) => report.reportId === currentReportId)?.reportId ?? reports[0]?.reportId,
+    [currentReportId, reports]
   );
 
   // the reports path has no report of its own, so send it to the latest one
   useEffect(() => {
-    if (active && resolvedReportId !== undefined && pathReportId !== resolvedReportId) {
+    if (active && resolvedReportId !== undefined && currentReportId !== resolvedReportId) {
       selectReport(resolvedReportId, true);
     }
-  }, [active, pathReportId, resolvedReportId, selectReport]);
+  }, [active, currentReportId, resolvedReportId, selectReport]);
 
   useEffect(() => {
     if (active && resolvedReportId !== undefined) {
