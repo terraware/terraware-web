@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import type { Page } from 'playwright-core';
+import type { Locator, Page } from 'playwright-core';
 
 import { openNavItem } from './utils';
 
@@ -153,6 +153,15 @@ export const drawPolygon = async (page: Page, points: MapPoint[]) => {
 export const clickMap = async (page: Page, point: MapPoint) => {
   const [x, y] = (await toPagePixels(page))(point);
   await page.mouse.click(x, y);
+};
+
+// Clicks can land before the map has wired up a feature that was just added or merged, so keep clicking until the
+// feature's popup opens.
+export const openFeaturePopup = async (page: Page, point: MapPoint, popupField: Locator) => {
+  await expect(async () => {
+    await clickMap(page, point);
+    await expect(popupField).toBeVisible({ timeout: 1000 });
+  }).toPass();
 };
 
 // The editor can reset the selection while it syncs a newly drawn polygon, so keep selecting until it sticks.

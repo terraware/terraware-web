@@ -16,6 +16,7 @@ import {
   expectOptionalSteps,
   goToPlantingSites,
   openDraftPlantingSite,
+  openFeaturePopup,
   polygonTool,
   searchMapLocation,
   selectPolygon,
@@ -295,10 +296,10 @@ test.describe('PlantingSiteTests', () => {
     await expect(page.getByText('Unsaved changes')).toBeHidden();
     await waitForMap(page);
     await drawPolygon(page, [
-      [-0.1, -0.02],
+      [-0.02, -0.02],
       [0.5, -0.02],
       [0.5, 1.02],
-      [-0.1, 1.02],
+      [-0.02, 1.02],
     ]);
     const stratumNameInput = page.locator('#stratum-name input');
     await expect(stratumNameInput).toBeVisible();
@@ -308,15 +309,15 @@ test.describe('PlantingSiteTests', () => {
 
     // Deleting a stratum merges it into the one it borders.
     await drawPolygon(page, [
-      [-0.1, -0.02],
+      [-0.02, -0.02],
       [0.2, -0.02],
       [0.2, 1.02],
-      [-0.1, 1.02],
+      [-0.02, 1.02],
     ]);
     await expect(stratumNameInput).toBeVisible();
     await deleteMapFeature(page);
     await expect(stratumNameInput).toBeHidden();
-    await clickMap(page, [0.1, 0.5]);
+    await openFeaturePopup(page, [0.1, 0.5], stratumNameInput);
     await expect(stratumNameInput).toHaveValue(stratumName);
     await page.getByRole('button', { name: 'Cancel', exact: true }).click();
     await editorButton(page, 'Next').click();
@@ -339,10 +340,10 @@ test.describe('PlantingSiteTests', () => {
     await expect(substrataInstructions).toBeVisible();
     await waitForMap(page);
     await drawPolygon(page, [
-      [-0.1, -0.02],
-      [1.1, -0.02],
-      [1.1, 0.5],
-      [-0.1, 0.5],
+      [-0.02, -0.02],
+      [1.02, -0.02],
+      [1.02, 0.5],
+      [-0.02, 0.5],
     ]);
     const substratumNameInput = page.locator('#substratum-name input');
     await expect(substratumNameInput).toBeVisible();
@@ -351,15 +352,15 @@ test.describe('PlantingSiteTests', () => {
     await expect(substratumNameInput).toBeHidden();
 
     await drawPolygon(page, [
-      [-0.1, -0.02],
-      [1.1, -0.02],
-      [1.1, 0.2],
-      [-0.1, 0.2],
+      [-0.02, -0.02],
+      [1.02, -0.02],
+      [1.02, 0.2],
+      [-0.02, 0.2],
     ]);
     await expect(substratumNameInput).toBeVisible();
     await deleteMapFeature(page);
     await expect(substratumNameInput).toBeHidden();
-    await clickMap(page, [0.75, 0.1]);
+    await openFeaturePopup(page, [0.75, 0.1], substratumNameInput);
     await expect(substratumNameInput).toHaveValue(substratumName);
     await page.getByRole('button', { name: 'Cancel', exact: true }).click();
 
@@ -368,7 +369,7 @@ test.describe('PlantingSiteTests', () => {
     await expectActiveStep(page, 'Stratum Boundaries');
     await expect(page.getByText('Unsaved changes')).toBeHidden();
     await waitForMap(page);
-    await clickMap(page, [0.25, 0.5]);
+    await openFeaturePopup(page, [0.25, 0.5], stratumNameInput);
     await expect(stratumNameInput).toHaveValue(stratumName);
     await page.getByRole('button', { name: 'Cancel', exact: true }).click();
     await editorButton(page, 'Next').click();
