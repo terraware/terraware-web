@@ -117,7 +117,11 @@ const AccessionEventLog = ({ accessionId }: AccessionEventLogProps): JSX.Element
 
       if (target.kind === 'batch') {
         return (
-          <RouterLink to={APP_PATHS.INVENTORY_BATCH.replace(':batchId', String(target.batchId))}>
+          <RouterLink
+            fontSize='16px'
+            lineHeight='24px'
+            to={APP_PATHS.INVENTORY_BATCH.replace(':batchId', String(target.batchId))}
+          >
             {description}
           </RouterLink>
         );

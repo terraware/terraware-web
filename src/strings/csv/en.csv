@@ -17,12 +17,13 @@ ACCESSION_EVENT_VIABILITY_TEST_DELETED,deleted a viability test,
 ACCESSION_EVENT_VIABILITY_TEST_STARTED,started a {0} viability test,
 ACCESSION_EVENT_VIABILITY_TEST_UPDATED,Viability test {0} changed from {1} to {2},
 ACCESSION_EVENT_WITHDRAWAL_ADDED,added a withdrawal,
-ACCESSION_EVENT_WITHDRAWAL_ADDED_FOR,withdrew {0} for {1},
-ACCESSION_EVENT_WITHDRAWAL_ADDED_QUANTITY,withdrew {0},
-ACCESSION_EVENT_WITHDRAWAL_ADDED_TO,withdrew {0} to {1},
+ACCESSION_EVENT_WITHDRAWAL_ADDED_FOR,{0} withdrawn for {1},{0} is the quantity withdrawn and {1} the purpose it was withdrawn for
+ACCESSION_EVENT_WITHDRAWAL_ADDED_QUANTITY,{0} withdrawn,{0} is the quantity withdrawn
+ACCESSION_EVENT_WITHDRAWAL_ADDED_TO,{0} withdrawn to {1},{0} is the quantity withdrawn and {1} the nursery it went to
 ACCESSION_EVENT_WITHDRAWAL_DELETED,deleted a withdrawal,
 ACCESSION_EVENT_WITHDRAWAL_DELETED_FOR_VIABILITY_TEST,deleted a withdrawal for viability test,
-ACCESSION_EVENT_WITHDRAWAL_QUANTITY_ESTIMATED,{0} ({1}),A withdrawal by weight in the accession history log: {0} is the weight withdrawn and {1} the estimated number of seeds it amounts to
+ACCESSION_EVENT_WITHDRAWAL_ON_DATE,{0} on {1},"Adds the withdrawal date to an accession history log entry: {0} is the rest of the entry, such as ""96 seeds (~2 g) withdrawn for Nursery"", and {1} is the date"
+ACCESSION_EVENT_WITHDRAWAL_QUANTITY_ESTIMATED,{0} (~{1}),"A withdrawn quantity in the accession history log: {0} is the quantity the user entered and {1} the server's estimate of the same amount in the other unit, so a weight is followed by a seed count and a seed count by a weight"
 ACCESSION_EVENT_WITHDRAWAL_UPDATED,Withdrawal {0} changed from {1} to {2},
 ACCESSION_HISTORY_NO_EVENTS,No history yet.,
 ACCESSION_ID,Accession ID,
