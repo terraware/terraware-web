@@ -43,17 +43,14 @@ test.describe('ObservationsTests', () => {
   test('Reschedule Observation', async ({ page }, testInfo) => {
     await openNavItem(page, 'Plantings', 'Observations');
 
-    // wait for table rows to load
+    // show only overdue observations
+    await page.locator('#toggle-observation-filters').click();
+    await page.locator('#status-filter').click();
+    await page.locator('li.select-value', { hasText: 'Overdue' }).click();
     await waitFor(page, '#row1');
 
     // open action menu
-    await page
-      .locator('tr')
-      .filter({ hasText: 'Overdue' })
-      .first()
-      .getByLabel('More Options')
-      .getByRole('button')
-      .click();
+    await page.locator('#row1').getByLabel('More Options').getByRole('button').click();
 
     // click reschedule
     await page.getByRole('menuitem', { name: 'Reschedule' }).click();
@@ -81,17 +78,14 @@ test.describe('ObservationsTests', () => {
   test('End Observation', async ({ page }, testInfo) => {
     await openNavItem(page, 'Plantings', 'Observations');
 
-    // wait for table rows to load
+    // show only overdue observations
+    await page.locator('#toggle-observation-filters').click();
+    await page.locator('#status-filter').click();
+    await page.locator('li.select-value', { hasText: 'Overdue' }).click();
     await waitFor(page, '#row1');
 
     // open action menu
-    await page
-      .locator('tr')
-      .filter({ hasText: 'Overdue' })
-      .first()
-      .getByLabel('More Options')
-      .getByRole('button')
-      .click();
+    await page.locator('#row1').getByLabel('More Options').getByRole('button').click();
 
     // click reschedule
     await page.getByRole('menuitem', { name: 'End Observation' }).click();

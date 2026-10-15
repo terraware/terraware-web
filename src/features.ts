@@ -3,11 +3,7 @@ import { useGetMyselfQuery } from 'src/queries/generated/users';
 import env from 'src/utils/useEnvironment';
 import { isTerraformationEmail } from 'src/utils/user';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'Virtual Monitoring Plots'
-  | 'New Observation Filters'
-  | 'Boundary File Upload';
+export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots' | 'Boundary File Upload';
 
 export type Feature = {
   name: FeatureName;
@@ -48,15 +44,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for virtual monitoring plots'],
-    disclosure: ['This is a WIP'],
-  },
-  {
-    name: 'New Observation Filters',
-    preferenceName: 'newObservationFilters',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: ['Redesigned filters for observation results.'],
     disclosure: ['This is a WIP'],
   },
   {

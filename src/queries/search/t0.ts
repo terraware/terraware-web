@@ -97,4 +97,4 @@ type PlotsWithObservations = {
   permanentIndex?: string;
 };
 
-export const { useGetPlotsWithObservationsQuery, useLazyGetPlotsWithObservationsQuery } = injectedRtkApi;
+export const { useGetPlotsWithObservationsQuery } = injectedRtkApi;
