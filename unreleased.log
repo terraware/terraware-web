@@ -1,1 +1,5 @@
+4090884c Update playwright tests for planting site UI updates (#6774)
+bf292784 Make the site editor drawer collapsible and refine its layout (#6773)
+4e06a68a SW-9108 Move the site editor stepper into a map drawer (#6765)
+b9d0a080 SW-9098 Update site creation step descriptions (#6762)
 40fcf93a SW-9114 Reenable polyfills (#6779)
