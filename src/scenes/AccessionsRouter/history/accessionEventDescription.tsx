@@ -185,11 +185,21 @@ export const renderAccessionEventDescription = (
     case 'Withdrawal':
       switch (action.type) {
         case 'Created': {
-          const quantity = createdField(action, 'withdrawnQuantity');
+          const withdrawnQuantity = createdField(action, 'withdrawnQuantity');
 
-          if (quantity === undefined) {
+          if (withdrawnQuantity === undefined) {
             return strings.ACCESSION_EVENT_WITHDRAWAL_ADDED;
           }
+
+          const estimatedCount = createdField(action, 'estimatedCount');
+          const quantity =
+            estimatedCount === undefined
+              ? withdrawnQuantity
+              : (strings.formatString(
+                  strings.ACCESSION_EVENT_WITHDRAWAL_QUANTITY_ESTIMATED,
+                  withdrawnQuantity,
+                  estimatedCount
+                ) as string);
 
           const purpose = createdField(action, 'purpose');
           const batchId = createdField(action, 'batchId');
