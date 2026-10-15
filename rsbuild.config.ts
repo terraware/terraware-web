@@ -45,6 +45,7 @@ export default defineConfig({
   output: {
     // Clean output directory before build
     cleanDistPath: true,
+    polyfill: 'usage',
     // Asset prefix (equivalent to PUBLIC_URL)
     assetPrefix: process.env.PUBLIC_URL || '/',
     // Generate source maps for easier debugging
