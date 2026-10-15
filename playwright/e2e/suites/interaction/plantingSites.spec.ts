@@ -147,11 +147,12 @@ test.describe.skip('PlantingSiteTests', () => {
       [0.25, 0.75],
     ]);
     await expect(page.getByText('Unsaved changes')).toBeVisible();
+    await expect(editorButton(page, 'Create Planting Site')).toBeDisabled();
 
     await editorButton(page, 'Next').click();
     await expectActiveStep(page, 'Exclusion Areas');
     await expect(page.getByText('Unsaved changes')).toBeHidden();
-    await expect(editorButton(page, 'Create Planting Site')).toBeVisible();
+    await expect(editorButton(page, 'Create Planting Site')).toBeEnabled();
 
     // Going back keeps the drawn boundary, so the method chooser stays hidden.
     await editorButton(page, 'Back').click();
@@ -160,7 +161,7 @@ test.describe.skip('PlantingSiteTests', () => {
     await expect(page.getByText('How do you want to define this boundary?')).toBeHidden();
     await expect(page.getByRole('button', { name: 'Reset Boundary Setup' })).toBeVisible();
     await editorButton(page, 'Next').click();
-    await expect(editorButton(page, 'Create Planting Site')).toBeVisible();
+    await expect(editorButton(page, 'Create Planting Site')).toBeEnabled();
 
     // Start over: dismiss once, then confirm.
     await page.getByRole('button', { name: 'Reset Boundary Setup' }).click();
@@ -170,7 +171,7 @@ test.describe.skip('PlantingSiteTests', () => {
       })
     ).toBeVisible();
     await page.locator('#cancelStartOver').click();
-    await expect(editorButton(page, 'Create Planting Site')).toBeVisible();
+    await expect(editorButton(page, 'Create Planting Site')).toBeEnabled();
     await page.getByRole('button', { name: 'Reset Boundary Setup' }).click();
     await page.locator('#confirmStartOver').click();
     await expectActiveStep(page, 'Site Boundary');
@@ -317,7 +318,7 @@ test.describe.skip('PlantingSiteTests', () => {
     // Substrata: slice the north half off the selected stratum.
     await expectActiveStep(page, 'Substratum Boundaries');
     await expect(page.getByText('Unsaved changes')).toBeHidden();
-    await expect(editorButton(page, 'Create Planting Site')).toBeVisible();
+    await expect(editorButton(page, 'Create Planting Site')).toBeEnabled();
     await waitForMap(page);
     await drawPolygon(page, [
       [-0.1, -0.02],

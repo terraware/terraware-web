@@ -872,6 +872,7 @@ HERBACEOUS_COVER_PERCENT,Couverture herbacée (%),e04acd60
 HERBACEOUS_SPECIES,Espèces herbacées,37cec187
 HIDE_ALL,Tout masquer,465040a6
 HIDE_FILTERS,Masquer les filtres,0fdbb60d
+HIDE_INSTRUCTIONS,Masquer les instructions,21ebb7e7
 HIDE_ON_MAP,Masquer sur la carte,089ea8d7
 HIDE_TITLE_BAR,Masquer la barre de titre,e9b3ee43
 HIGH,Haute,cb1efe60
@@ -2067,6 +2068,7 @@ SETUP_REMAINING,Configuration restante,368418af
 SHARED_WITH_FUNDER,Partagé avec le bailleur de fonds,f59b229b
 SHOW_COLOR_KEY,Afficher la légende des couleurs,7ba69c52
 SHOW_FILTERS,Afficher les filtres,d4143c37
+SHOW_INSTRUCTIONS,Afficher les instructions,81469448
 SHOW_LESS,Afficher moins,d753a0ed
 SHOW_MORE,Afficher plus,43cab9b7
 SHOW_OBSERVATION_ON_MAP,Afficher sur la carte,2c88d696
@@ -2107,6 +2109,7 @@ SITE_BOUNDING_AREA_TOO_LARGE,La zone délimitée d’environ {0} hectares est tr
 SITE_DETAIL,Détail du site,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,Le site de plantation est actuellement un brouillon – seul le créateur du site peut le modifier.,07fbd64b
 SITE_EDITOR_USE_DESKTOP,Cette fonction n’est disponible qu’à partir de l’application de bureau.,1c4eb37d
+SITE_EDITOR_USE_TABLET_LANDSCAPE,Cette fonctionnalité est uniquement disponible en mode paysage sur une tablette.,8710d7e6
 SITE_EXCLUSION_AREAS_DESCRIPTION,"Les zones situées à l'intérieur des limites du site qui ne sont pas plantables, telles que les routes, les plans d'eau et les dépendances, doivent être exclues. Elles sont retirées des calculs de surface plantable et ne sont pas surveillées lors des observations de routine du site. Utilisez l'outil de dessin {0} pour tracer des formes à l'intérieur ou à cheval sur la limite du site, et terminez chaque forme en double-cliquant ou en cliquant à nouveau sur le point de départ. [Regardez un tutoriel] sur la façon de dessiner des zones d'exclusion. Passez cette étape s'il n'y a aucune zone à exclure.",4c2a45b1
 SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,"Définissez les zones à l’intérieur de la limite du site qui ne sont pas plantables, telles que les routes, plans d’eau et bâtiments annexes. Elles seront exclues des calculs de surface plantable et des Observations. Utilisez l’outil de dessin {0} pour tracer des formes à l’intérieur ou en chevauchement avec la limite du site. Passez cette étape s’il n’y a aucune zone à exclure. [Regardez un tutoriel] sur la délimitation des zones d’exclusion.",d22ed290
 SITE_EXCLUSION_ERRORS,Il y a des erreurs dans la limite d’exclusion.,dc334f43

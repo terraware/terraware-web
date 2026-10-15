@@ -7,11 +7,13 @@ import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import './styles.scss';
 
-export type MapDrawerSize = 'small' | 'medium' | 'large';
+export type MapDrawerSize = 'fit-content' | 'small' | 'medium' | 'large';
 
 type MapDrawerProp = {
   children?: ReactNode;
   drawerRef?: MutableRefObject<HTMLDivElement | null>;
+  // tab attached to the drawer's left edge, outside of the drawer
+  ear?: ReactNode;
   headerComponent?: ReactNode;
   hideBorder?: boolean;
   hideCloseButton?: boolean;
@@ -23,8 +25,19 @@ type MapDrawerProp = {
 };
 
 const MapDrawer = (props: MapDrawerProp) => {
-  const { children, drawerRef, headerComponent, hideBorder, hideCloseButton, hideHeader, onClose, open, size, style } =
-    props;
+  const {
+    children,
+    drawerRef,
+    ear,
+    headerComponent,
+    hideBorder,
+    hideCloseButton,
+    hideHeader,
+    onClose,
+    open,
+    size,
+    style,
+  } = props;
   const theme = useTheme();
   const { isDesktop } = useDeviceInfo();
 
@@ -33,8 +46,14 @@ const MapDrawer = (props: MapDrawerProp) => {
       className={`map-drawer map-drawer${isDesktop ? `--${size}` : '--mobile'}`}
       borderLeft={isDesktop && !hideBorder ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined}
       borderRight={isDesktop && !hideBorder ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : undefined}
+      position={ear ? 'relative' : undefined}
       style={style}
     >
+      {ear && (
+        <Box position='absolute' left={0} top='50%' zIndex={1} sx={{ transform: 'translate(-100%, -50%)' }}>
+          {ear}
+        </Box>
+      )}
       {!hideHeader && (
         <Box className='map-drawer--header'>
           {!hideCloseButton && (

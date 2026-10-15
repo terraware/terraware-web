@@ -873,6 +873,7 @@ HERBACEOUS_COVER_PERCENT,Cobertura Herbácea %,e04acd60
 HERBACEOUS_SPECIES,Especies herbáceas,37cec187
 HIDE_ALL,Ocultar todas,465040a6
 HIDE_FILTERS,Ocultar filtros,0fdbb60d
+HIDE_INSTRUCTIONS,Ocultar instrucciones,21ebb7e7
 HIDE_ON_MAP,Ocultar en el mapa,089ea8d7
 HIDE_TITLE_BAR,Ocultar barra de título,e9b3ee43
 HIGH,Alto,cb1efe60
@@ -2068,6 +2069,7 @@ SETUP_REMAINING,Configuración pendiente,368418af
 SHARED_WITH_FUNDER,Compartido con el financiador,f59b229b
 SHOW_COLOR_KEY,Mostrar clave de colores,7ba69c52
 SHOW_FILTERS,Mostrar filtros,d4143c37
+SHOW_INSTRUCTIONS,Mostrar instrucciones,81469448
 SHOW_LESS,Mostrar menos,d753a0ed
 SHOW_MORE,Mostrar más,43cab9b7
 SHOW_OBSERVATION_ON_MAP,Mostrar en el mapa,2c88d696
@@ -2108,6 +2110,7 @@ SITE_BOUNDING_AREA_TOO_LARGE,El área delimitada de aproximadamente {0} hectáre
 SITE_DETAIL,Detalle del sitio,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,El sitio de plantación actualmente es un borrador; solo el creador del sitio puede editarlo.,07fbd64b
 SITE_EDITOR_USE_DESKTOP,Esta función solo está disponible desde la aplicación de escritorio.,1c4eb37d
+SITE_EDITOR_USE_TABLET_LANDSCAPE,Esta función solo está disponible en la vista horizontal en una tableta.,8710d7e6
 SITE_EXCLUSION_AREAS_DESCRIPTION,"Las áreas dentro del límite del sitio que no son plantables, como caminos, cuerpos de agua y edificaciones auxiliares, deben ser excluidas. Estas se eliminan de los cálculos de área plantable y no se monitorean durante la observación rutinaria del sitio. Utilice la herramienta de dibujo {0} para trazar figuras dentro o superpuestas al límite del sitio, y complete cada figura haciendo doble clic o haciendo clic nuevamente en el punto de inicio. [Vea un tutorial] sobre cómo dibujar áreas de exclusión. Omita este paso si no hay áreas que excluir.",4c2a45b1
 SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,"Defina las áreas dentro del límite del sitio que no son plantables, como caminos, cuerpos de agua y edificaciones auxiliares. Estas áreas serán excluidas de los cálculos de superficie plantable y de las Observaciones. Utilice la herramienta de dibujo {0} para trazar formas dentro o superpuestas al límite del sitio. Omita este paso si no hay áreas que excluir. [Vea un tutorial] sobre cómo dibujar áreas de exclusión.",d22ed290
 SITE_EXCLUSION_ERRORS,Hay errores en el límite de exclusión.,dc334f43
