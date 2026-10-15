@@ -7,7 +7,7 @@ export type MapPoint = [number, number];
 
 export const BOUNDARY_FIXTURE = 'playwright/data/simpleSiteBoundary.geojson';
 
-// Turns on the boundary file upload flag and suppresses the tutorial videos for this page only,
+// Suppresses the tutorial videos for this page only,
 // without writing the preferences back to the server.
 export const enableSiteEditorPreferences = async (page: Page) => {
   await page.route(
@@ -21,7 +21,6 @@ export const enableSiteEditorPreferences = async (page: Page) => {
       const json = await response.json();
       json.preferences = {
         ...json.preferences,
-        boundaryFileUpload: true,
         'dont-show-site-boundary-instructions': true,
         'dont-show-site-stratum-boundaries-instructions': true,
       };
