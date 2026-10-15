@@ -18,6 +18,7 @@ import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { useEditorStepperDrawer } from './EditorStepper';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
 import useMapStyle from './useMapStyle';
@@ -378,17 +379,20 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
     [mapStyles.box, mapStyles.tooltip, setStrataData, strata]
   );
 
+  const drawerProps = useEditorStepperDrawer(
+    <StepTitleDescription
+      description={description}
+      dontShowAgainPreferenceName='dont-show-site-stratum-boundaries-instructions'
+      tutorialDescription={tutorialDescription}
+      tutorialDocLinkKey='planting_site_create_stratum_boundary_instructions_video'
+      tutorialTitle={strings.ADDING_STRATUM_BOUNDARIES}
+    />
+  );
+
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
-      <StepTitleDescription
-        description={description}
-        largeText
-        dontShowAgainPreferenceName='dont-show-site-stratum-boundaries-instructions'
-        tutorialDescription={tutorialDescription}
-        tutorialDocLinkKey='planting_site_create_stratum_boundary_instructions_video'
-        tutorialTitle={strings.ADDING_STRATUM_BOUNDARIES}
-      />
       <EditableMap
+        {...drawerProps}
         editableBoundary={strataData?.editableBoundary}
         errorAnnotations={strataData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}

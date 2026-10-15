@@ -25,6 +25,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
 import DrawingBoundaryStatus from './DrawingBoundaryStatus';
+import { useEditorStepperDrawer } from './EditorStepper';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import UploadBoundaryModal, { ParsedBoundary, boundaryFileFormatOf, fileSizeKb } from './UploadBoundaryModal';
 import UploadedBoundarySummary, { UploadedBoundaryFile } from './UploadedBoundarySummary';
@@ -356,11 +357,10 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
 
   const onOpenUploadModal = useCallback(() => setShowUploadModal(true), []);
 
-  return (
-    <Box display='flex' flexDirection='column' flexGrow={1}>
+  const drawerProps = useEditorStepperDrawer(
+    <>
       <StepTitleDescription
         description={description}
-        largeText
         dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
@@ -378,9 +378,15 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
           {!uploadedFile && activeMethod === 'draw' && <DrawingBoundaryStatus onUploadInstead={onOpenUploadModal} />}
         </>
       )}
+    </>
+  );
+
+  return (
+    <Box display='flex' flexDirection='column' flexGrow={1}>
       <Box display='flex' flexDirection='column' flexGrow={1}>
         <EditableMap
           key={mapKey}
+          {...drawerProps}
           editableBoundary={siteBoundaryData?.siteBoundary}
           errorAnnotations={errorAnnotations}
           onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}

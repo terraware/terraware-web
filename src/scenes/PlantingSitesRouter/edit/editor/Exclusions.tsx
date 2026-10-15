@@ -14,6 +14,7 @@ import strings from 'src/strings';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { useEditorStepperDrawer } from './EditorStepper';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
 import { findErrors } from './utils';
@@ -138,16 +139,19 @@ export default function Exclusions({ onValidate, onDirtyChange, site }: Exclusio
     });
   };
 
+  const drawerProps = useEditorStepperDrawer(
+    <StepTitleDescription
+      description={description}
+      tutorialDescription={tutorialDescription}
+      tutorialDocLinkKey='planting_site_create_exclusions_boundary_instructions_video'
+      tutorialTitle={strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE}
+    />
+  );
+
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
-      <StepTitleDescription
-        description={description}
-        largeText
-        tutorialDescription={tutorialDescription}
-        tutorialDocLinkKey='planting_site_create_exclusions_boundary_instructions_video'
-        tutorialTitle={strings.PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE}
-      />
       <EditableMap
+        {...drawerProps}
         editableBoundary={exclusions}
         errorAnnotations={exclusionsData?.errorAnnotations}
         onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}
