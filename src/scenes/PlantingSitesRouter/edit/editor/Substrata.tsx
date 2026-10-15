@@ -9,6 +9,7 @@ import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
 import { leftMostFeature, leftOrderedFeatures, mergeIntoNeighbor, toMultiPolygon } from 'src/components/Map/utils';
 import EditableMap, { EditableMapBoundary, EditableMapClickedFeature } from 'src/components/NewMap/EditableMap';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
+import { useFeatureEnabled } from 'src/features';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
@@ -121,6 +122,7 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
   const { strataLayerStyle, substrataLayerStyle } = useMapFeatureStyles();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
+  const fileUploadEnabled = useFeatureEnabled('Boundary File Upload');
 
   // expose substrata as a constant for easier use
   const substrata = useMemo<Record<number, FeatureCollection> | undefined>(
@@ -221,27 +223,41 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     return [strataData, substrataBoundaries];
   }, [selectedStratum, site.id, strata, strataLayerStyle, substrata, substrataLayerStyle]);
 
-  const description = useMemo<Description[]>(
-    () =>
-      activeLocale
-        ? [
-            {
-              text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,
-              hasTutorial: true,
-              handlePrefix: (prefix: string) =>
-                strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
-            },
-            {
-              text: strings.formatString(
-                strings.SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,
-                strata?.features?.find((f) => f.id === selectedStratum)?.properties?.name ?? ''
-              ),
-              isBold: true,
-            },
-          ]
-        : [],
-    [activeLocale, selectedStratum, strata]
-  );
+  const description = useMemo<Description[]>(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    const selectedStratumLine: Description = {
+      text: strings.formatString(
+        strings.SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,
+        strata?.features?.find((f) => f.id === selectedStratum)?.properties?.name ?? ''
+      ),
+      isBold: true,
+    };
+
+    if (fileUploadEnabled) {
+      return [
+        {
+          text: strings.SITE_SUBSTRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
+          hasTutorial: true,
+          handlePrefix: (prefix: string) =>
+            strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
+        },
+        selectedStratumLine,
+      ];
+    }
+
+    return [
+      {
+        text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,
+        hasTutorial: true,
+        handlePrefix: (prefix: string) =>
+          strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
+      },
+      selectedStratumLine,
+    ];
+  }, [activeLocale, fileUploadEnabled, selectedStratum, strata]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {

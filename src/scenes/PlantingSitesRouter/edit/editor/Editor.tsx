@@ -6,7 +6,6 @@ import { BusySpinner, Button, Message } from '@terraware/web-components';
 import PageSnackbar from 'src/components/PageSnackbar';
 import Card from 'src/components/common/Card';
 import PageHeaderWrapper from 'src/components/common/PageHeaderWrapper';
-import TextWithLink from 'src/components/common/TextWithLink';
 import TfMain from 'src/components/common/TfMain';
 import UnsavedChangesBadge from 'src/components/common/UnsavedChangesBadge';
 import { APP_PATHS } from 'src/constants';
@@ -78,7 +77,6 @@ export default function Editor(props: EditorProps): JSX.Element {
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
 
-  const [showPageMessage, setShowPageMessage] = useState<boolean>(true);
   const [onValidate, setOnValidate] = useState<OnValidate | undefined>();
   const [showStartOver, setShowStartOver] = useState<boolean>(false);
   const startOverDraft = useRef<DraftPlantingSite>(undefined);
@@ -277,20 +275,7 @@ export default function Editor(props: EditorProps): JSX.Element {
 
   const onOpenStartOver = useCallback(() => setShowStartOver(true), []);
   const onCloseStartOver = useCallback(() => setShowStartOver(false), []);
-  const onClosePageMessage = useCallback(() => setShowPageMessage(false), []);
   const onHeaderButtonClick = useCallback(() => dispatch(clearSnackbar({ type: 'toast' })), [dispatch]);
-
-  const pageMessage = useMemo<JSX.Element | null>(() => {
-    if (showPageMessage && !isSimpleSite && currentStep === 'site_boundary') {
-      return (
-        <Box>
-          <TextWithLink href={APP_PATHS.HELP_SUPPORT} text={strings.PLANTING_SITE_CREATE_DETAILED_HELP} />
-        </Box>
-      );
-    } else {
-      return null;
-    }
-  }, [currentStep, isSimpleSite, showPageMessage]);
 
   const busy = isUpdating || isPending || !!onValidate;
   const isFirstStep = currentStep === steps[0]?.type;
@@ -406,18 +391,6 @@ export default function Editor(props: EditorProps): JSX.Element {
             flexGrow: 1,
           }}
         >
-          {pageMessage && (
-            <Box marginTop={theme.spacing(2)}>
-              <Message
-                body={pageMessage}
-                onClose={onClosePageMessage}
-                priority='info'
-                showCloseButton
-                title={strings.PLANTING_SITE_CREATE_DETAILED_TITLE}
-                type='page'
-              />
-            </Box>
-          )}
           <Card
             radius={theme.spacing(1)}
             style={{

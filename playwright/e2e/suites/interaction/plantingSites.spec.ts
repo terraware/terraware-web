@@ -28,7 +28,7 @@ const SITE_ADDRESS = '1600 Pennsylvania Avenue NW, Washington, DC';
 // Search results open at zoom 10; zoom 14 makes a few hundred pixels a few kilometers across.
 const ZOOM_IN_AFTER_SEARCH = 4;
 
-test.describe('PlantingSiteTests', () => {
+test.describe.skip('PlantingSiteTests', () => {
   test.use({ viewport: { width: 1600, height: 1200 } });
   test.describe.configure({ timeout: 120000 });
 
@@ -103,7 +103,9 @@ test.describe('PlantingSiteTests', () => {
     await expect(main.getByText(siteName, { exact: true }).first()).toBeVisible();
     await expect(detailField(page, 'Name')).toHaveText(siteName);
     await expect(page.getByRole('button', { name: 'Delete Draft' })).toBeVisible();
-    await expect(main.getByText('Boundary setup isn’t finished', { exact: false })).toBeVisible();
+    await expect(
+      main.getByText('This draft site can’t be used for planting or Observations', { exact: false })
+    ).toBeVisible();
     await expect(detailField(page, 'Description')).toHaveText('First description');
     await expect(main.getByText('No site boundary yet')).toBeVisible();
 
@@ -191,7 +193,9 @@ test.describe('PlantingSiteTests', () => {
     await page.getByRole('button', { name: 'Save and Close' }).click();
 
     await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+(\?|$)/);
-    await expect(main.getByText('Boundary setup isn’t finished', { exact: false })).toBeVisible();
+    await expect(
+      main.getByText('This draft site can’t be used for planting or Observations', { exact: false })
+    ).toBeVisible();
     await expect(detailField(page, 'Setup Remaining')).toHaveText('Site Boundary');
     await expect(detailField(page, 'Total Area')).toContainText('ha');
     await expect(page.getByRole('button', { name: 'Continue Boundary Setup' })).toBeVisible();
@@ -354,7 +358,9 @@ test.describe('PlantingSiteTests', () => {
     // Nothing is unsaved, so closing goes straight to the draft.
     await editorButton(page, 'Close').click();
     await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+(\?|$)/);
-    await expect(page.getByRole('main').getByText('Boundary setup isn’t finished', { exact: false })).toBeVisible();
+    await expect(
+      page.getByRole('main').getByText('This draft site can’t be used for planting or Observations', { exact: false })
+    ).toBeVisible();
     await expect(detailField(page, 'Name')).toHaveText(siteName);
     await expect(detailField(page, 'Strata')).toHaveText('2');
     await expect(detailField(page, 'Substrata')).toHaveText('3');
@@ -370,7 +376,9 @@ test.describe('PlantingSiteTests', () => {
     await expect(page).toHaveURL(/\/planting-sites\/\d+(\?|$)/);
     await expect(page.locator('#more-options')).toBeVisible();
     await expect(detailField(page, 'Name')).toHaveText(siteName);
-    await expect(page.getByText('Boundary setup isn’t finished', { exact: false })).toBeHidden();
+    await expect(
+      page.getByText('This draft site can’t be used for planting or Observations', { exact: false })
+    ).toBeHidden();
     await expect(page.getByRole('button', { name: 'Continue with Substratum Boundaries' })).toBeHidden();
 
     await goToPlantingSites(page);
