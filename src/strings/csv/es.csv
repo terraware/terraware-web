@@ -958,7 +958,7 @@ INVENTORY_PLANNING,Planificación de inventario,2e1d8c1f
 INVENTORY_PLANNING_ALLOCATED_TOOLTIP,Cantidad de plantas de esta especie planificadas para cumplir los objetivos dentro de las temporadas de plantación.,8ae090b0
 INVENTORY_PLANNING_AVAILABLE_TOOLTIP,Cantidad de plántulas de esta especie que se encuentran en las fases de crecimiento de Aclimatación y Listas para plantar.,94c83729
 INVENTORY_PLANNING_DESCRIPTION,Asigne inventario para los objetivos de especies de la Temporada de Plantación.,0496b829
-INVENTORY_PLANNING_TARGET_TOOLTIP,Cantidad de plantas de esta especie establecidas como objetivo dentro de las temporadas de plantación.,724d5222
+INVENTORY_PLANNING_TARGET_TOOLTIP,Cantidad de plantas objetivo de esta especie en la Temporada de Plantación que aún quedan por plantar.,a05fc008
 INVENTORY_WITHDRAWALS,Retiros de Inventario,cefda57f
 INVESTMENT_COMMITTEE_VOTES,Votos del Comité de inversión,a7c64c6c
 INVITATION_PENDING,Invitación pendiente,6b64d319
