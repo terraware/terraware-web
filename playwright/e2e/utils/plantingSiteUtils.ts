@@ -155,6 +155,19 @@ export const clickMap = async (page: Page, point: MapPoint) => {
   await page.mouse.click(x, y);
 };
 
+// The editor can reset the selection while it syncs a newly drawn polygon, so keep selecting until it sticks.
+// Clicking a selected polygon edits its vertices instead, so each attempt clears the selection first by clicking an
+// empty point. Hovering a selected polygon gives the map container a "mouse-move" class.
+export const selectPolygon = async (page: Page, point: MapPoint, emptyPoint: MapPoint) => {
+  await expect(async () => {
+    await clickMap(page, emptyPoint);
+    await clickMap(page, point);
+    const [x, y] = (await toPagePixels(page))(point);
+    await page.mouse.move(x + 1, y);
+    await expect(page.locator('.mapboxgl-map.mode-simple_select.mouse-move')).toBeVisible({ timeout: 500 });
+  }).toPass();
+};
+
 // The first click on a polygon selects it and the second edits its vertices, but the editor can reset the
 // selection while it syncs a newly drawn polygon, so keep clicking until vertex editing starts. Mapbox Draw
 // only updates the mode class on the map container on the next mouse event.

@@ -18,6 +18,7 @@ import {
   openDraftPlantingSite,
   polygonTool,
   searchMapLocation,
+  selectPolygon,
   selectSiteType,
   startNewPlantingSite,
   waitForMap,
@@ -260,9 +261,7 @@ test.describe('PlantingSiteTests', () => {
       [1.15, 0.2],
       [1.05, 0.2],
     ]);
-    // A newly drawn polygon starts out selected, and clicking a selected polygon edits its vertices.
-    await clickMap(page, [1.1, 0.5]);
-    await clickMap(page, [1.1, 0.15]);
+    await selectPolygon(page, [1.1, 0.15], [1.1, 0.5]);
     await deleteMapFeature(page);
     await expect(polygonTool(page)).not.toHaveClass(/active/);
 
