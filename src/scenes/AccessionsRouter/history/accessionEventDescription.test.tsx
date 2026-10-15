@@ -323,6 +323,27 @@ describe('withdrawal creation copy', () => {
     expect(describeEvent(entry)).toBe('withdrew 50 Seeds');
   });
 
+  it('shows the estimated seed count alongside a withdrawal by weight', () => {
+    const entry = event(
+      withdrawal(495),
+      createdWith({ withdrawnQuantity: '2 kg', estimatedCount: '30 seeds', purpose: 'Out-planting' })
+    );
+    expect(describeEvent(entry)).toBe('withdrew 2 kg (30 seeds) for Out-planting');
+  });
+
+  it('shows the estimated seed count for a transfer to a nursery', () => {
+    const entry = event(
+      withdrawal(496),
+      createdWith({ withdrawnQuantity: '2 kg', estimatedCount: '30 seeds', purpose: 'Nursery', batchId: '720' })
+    );
+    expect(describeEvent(entry, undefined, { 720: 'Bend Nursery' })).toBe('withdrew 2 kg (30 seeds) to Bend Nursery');
+  });
+
+  it('shows the estimated seed count when there is no purpose', () => {
+    const entry = event(withdrawal(497), createdWith({ withdrawnQuantity: '2 kg', estimatedCount: '30 seeds' }));
+    expect(describeEvent(entry)).toBe('withdrew 2 kg (30 seeds)');
+  });
+
   it('falls back to the bare wording when the event carries no fields', () => {
     expect(describeEvent(event(withdrawal(493), created))).toBe('added a withdrawal');
   });
