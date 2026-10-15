@@ -10,6 +10,7 @@ import React, {
 } from 'react';
 
 import { ObservationState } from 'src/types/Observations';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 import useStickyObservationsViewMode from './useStickyObservationsViewMode';
 
@@ -161,7 +162,9 @@ const ObservationFiltersProvider = ({ children }: { children: React.ReactNode })
   const [observationType, setObservationTypeState] = useState<ObservationTypeFilter>(() =>
     readSessionValue(OBSERVATION_TYPE_SESSION_KEY, OBSERVATION_TYPES, 'All')
   );
-  const { setViewMode, viewMode } = useStickyObservationsViewMode();
+  const { isMobile } = useDeviceInfo();
+  const { setViewMode, viewMode: storedViewMode } = useStickyObservationsViewMode();
+  const viewMode = isMobile ? 'split' : storedViewMode;
   const [filtersExpanded, setFiltersExpandedState] = useState(
     () => readSessionValue(FILTERS_EXPANDED_SESSION_KEY, ['true', 'false'], 'false') === 'true'
   );
