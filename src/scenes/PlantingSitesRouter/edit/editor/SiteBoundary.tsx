@@ -9,7 +9,7 @@ import _ from 'lodash';
 
 import { MapEditorMode } from 'src/components/Map/EditableMapDraw';
 import MapIcon from 'src/components/Map/MapIcon';
-import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
+import { unionMultiPolygons } from 'src/components/Map/utils';
 import EditableMap from 'src/components/NewMap/EditableMap';
 import { useFeatureEnabled } from 'src/features';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
@@ -53,19 +53,22 @@ const createStratumWith = (boundary?: MultiPolygon): MinimalStratum | undefined 
   });
 };
 
-const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollection | undefined =>
-  !boundary
-    ? undefined
-    : {
-        type: 'FeatureCollection',
-        features: [toFeature(boundary, {}, id)],
-      };
+// one feature per polygon
+const featureCollectionOf = (geometry: MultiPolygon | Polygon, id: number): FeatureCollection => {
+  const polygons = geometry.type === 'MultiPolygon' ? geometry.coordinates : [geometry.coordinates];
+  return {
+    type: 'FeatureCollection',
+    features: polygons.map((coordinates, index) => ({
+      type: 'Feature',
+      geometry: { type: 'Polygon', coordinates },
+      properties: {},
+      id: `${id}-${index}`,
+    })),
+  };
+};
 
-// the parse endpoint hands back a bare geometry; the map works in feature collections
-const featureCollectionOf = (geometry: MultiPolygon | Polygon, id: number): FeatureCollection => ({
-  type: 'FeatureCollection',
-  features: [toFeature(geometry, {}, id)],
-});
+const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollection | undefined =>
+  boundary ? featureCollectionOf(boundary, id) : undefined;
 
 // number of vertices across every ring of the boundary, which the parse response does not report
 const countPositions = (geometry: MultiPolygon | Polygon): number => {

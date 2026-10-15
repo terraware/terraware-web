@@ -9,6 +9,7 @@ import ToastSnackbar from 'src/components/ToastSnackbar';
 import type { FeatureName } from 'src/features';
 import { EditorStepperContext } from 'src/scenes/PlantingSitesRouter/edit/editor/EditorStepper';
 import SiteBoundary from 'src/scenes/PlantingSitesRouter/edit/editor/SiteBoundary';
+import type { OnValidate } from 'src/scenes/PlantingSitesRouter/edit/editor/types';
 import strings from 'src/strings';
 import { buildDraftPlantingSite, mockPost, renderWithProviders } from 'src/test-utils';
 
@@ -89,6 +90,25 @@ const OTHER_GEOMETRY: Polygon = {
   ],
 };
 
+// close enough to GEOMETRY that a boundary made of both stays under the bounding box limit
+const NEARBY_GEOMETRY: Polygon = {
+  type: 'Polygon',
+  coordinates: [
+    [
+      [0.03, 0],
+      [0.03, 0.02],
+      [0.05, 0.02],
+      [0.05, 0],
+      [0.03, 0],
+    ],
+  ],
+};
+
+const TWO_POLYGONS: MultiPolygon = {
+  type: 'MultiPolygon',
+  coordinates: [GEOMETRY.coordinates, NEARBY_GEOMETRY.coordinates],
+};
+
 // what the map hands back when the user reshapes the boundary instead of uploading it
 const EDITED_BOUNDARY: FeatureCollection = {
   type: 'FeatureCollection',
@@ -98,8 +118,6 @@ const EDITED_BOUNDARY: FeatureCollection = {
 const site = buildDraftPlantingSite();
 
 const lastMountedGeometry = () => mapMounts[mapMounts.length - 1]?.features[0]?.geometry;
-
-const onMap = (polygon: Polygon): MultiPolygon => ({ type: 'MultiPolygon', coordinates: [polygon.coordinates] });
 
 const polygonsCombinedMessage = (numPolygons: number) =>
   strings.formatString(strings.SITE_BOUNDARY_POLYGONS_COMBINED, numPolygons) as string;
@@ -114,11 +132,11 @@ const stepperContext = {
   steps: [{ type: 'site_boundary' as const, label: 'Site Boundary' }],
 };
 
-const renderSiteBoundary = (siteToRender = site) =>
+const renderSiteBoundary = (siteToRender = site, onValidate?: OnValidate) =>
   renderWithProviders(
     <EditorStepperContext.Provider value={stepperContext}>
       <ToastSnackbar />
-      <SiteBoundary site={siteToRender} />
+      <SiteBoundary onValidate={onValidate} site={siteToRender} />
     </EditorStepperContext.Provider>,
     {
       // the step's tutorial dialog opens on mount otherwise, and covers the map
@@ -502,6 +520,55 @@ describe('SiteBoundary', () => {
     expect(screen.getByRole('button', { name: strings.REMOVE })).toBeInTheDocument();
   });
 
+  it('puts each polygon of an uploaded multipolygon on the map as its own feature', async () => {
+    flags.boundaryFileUpload = true;
+    mockPost(PARSE_URL, {
+      areaHa: 960,
+      filename: 'site.geojson',
+      format: 'GeoJSON',
+      geometry: TWO_POLYGONS,
+      numPolygons: 2,
+    });
+    const { user } = renderSiteBoundary();
+
+    await uploadBoundaryFile(user, 'site.geojson');
+
+    await waitFor(() =>
+      expect(mapBoundaries[mapBoundaries.length - 1]?.features.map((feature) => feature.geometry)).toEqual([
+        GEOMETRY,
+        NEARBY_GEOMETRY,
+      ])
+    );
+    const ids = mapBoundaries[mapBoundaries.length - 1]?.features.map((feature) => feature.id);
+    expect(new Set(ids).size).toBe(2);
+  });
+
+  it('opens a saved multipolygon boundary with each polygon as its own feature', () => {
+    renderSiteBoundary(buildDraftPlantingSite({ boundary: TWO_POLYGONS }));
+
+    expect(mapMounts[0]?.features.map((feature) => feature.geometry)).toEqual([GEOMETRY, NEARBY_GEOMETRY]);
+    const ids = mapMounts[0]?.features.map((feature) => feature.id);
+    expect(new Set(ids).size).toBe(2);
+  });
+
+  it('drops a polygon deleted on the map from the validated site boundary', async () => {
+    const onValidate = { allowIncomplete: true, apply: rstest.fn() };
+    const { user } = renderSiteBoundary(buildDraftPlantingSite({ boundary: TWO_POLYGONS }), onValidate);
+    const remaining = mapMounts[0]!.features[1];
+    mapEdit.boundary = { type: 'FeatureCollection', features: [remaining] };
+
+    await user.click(screen.getByRole('button', { name: 'map edit boundary' }));
+
+    await waitFor(() =>
+      expect(onValidate.apply).toHaveBeenLastCalledWith(
+        false,
+        expect.objectContaining({
+          boundary: { type: 'MultiPolygon', coordinates: [NEARBY_GEOMETRY.coordinates] },
+        })
+      )
+    );
+  });
+
   describe('refitting the map to the uploaded file', () => {
     const uploadThenReplace = async (user: ReturnType<typeof renderSiteBoundary>['user']) => {
       mockPost(PARSE_URL, {
@@ -524,7 +591,7 @@ describe('SiteBoundary', () => {
       await user.click(screen.getByRole('button', { name: strings.REPLACE_FILE }));
       await submitUploadModal(user, 'replacement.geojson');
       expect(await screen.findByText(/replacement\.geojson/)).toBeInTheDocument();
-      await waitFor(() => expect(lastMountedGeometry()).toEqual(onMap(OTHER_GEOMETRY)));
+      await waitFor(() => expect(lastMountedGeometry()).toEqual(OTHER_GEOMETRY));
     };
 
     it('refits the map to the earlier file when undo goes back past a replacement', async () => {
@@ -538,7 +605,7 @@ describe('SiteBoundary', () => {
 
       expect(await screen.findByText(/site\.geojson/)).toBeInTheDocument();
       await waitFor(() => expect(mapMounts.length).toBeGreaterThan(mountsBeforeUndo));
-      expect(lastMountedGeometry()).toEqual(onMap(GEOMETRY));
+      expect(lastMountedGeometry()).toEqual(GEOMETRY);
     });
 
     it('refits the map to the replacement file when the undone replacement is redone', async () => {
@@ -547,14 +614,14 @@ describe('SiteBoundary', () => {
 
       await uploadThenReplace(user);
       await user.click(screen.getByRole('button', { name: 'map undo' }));
-      await waitFor(() => expect(lastMountedGeometry()).toEqual(onMap(GEOMETRY)));
+      await waitFor(() => expect(lastMountedGeometry()).toEqual(GEOMETRY));
       const mountsBeforeRedo = mapMounts.length;
 
       await user.click(screen.getByRole('button', { name: 'map redo' }));
 
       expect(await screen.findByText(/replacement\.geojson/)).toBeInTheDocument();
       await waitFor(() => expect(mapMounts.length).toBeGreaterThan(mountsBeforeRedo));
-      expect(lastMountedGeometry()).toEqual(onMap(OTHER_GEOMETRY));
+      expect(lastMountedGeometry()).toEqual(OTHER_GEOMETRY);
     });
 
     it('does not refit the map when the user edits the uploaded boundary on the map', async () => {
@@ -569,7 +636,7 @@ describe('SiteBoundary', () => {
       const { user } = renderSiteBoundary();
 
       await uploadBoundaryFile(user, 'site.geojson');
-      await waitFor(() => expect(lastMountedGeometry()).toEqual(onMap(GEOMETRY)));
+      await waitFor(() => expect(lastMountedGeometry()).toEqual(GEOMETRY));
       const mountsBeforeEdit = mapMounts.length;
 
       await user.click(screen.getByRole('button', { name: 'map edit boundary' }));
@@ -590,16 +657,14 @@ describe('SiteBoundary', () => {
       const { user } = renderSiteBoundary();
 
       await uploadBoundaryFile(user, 'site.geojson');
-      await waitFor(() => expect(lastMountedGeometry()).toEqual(onMap(GEOMETRY)));
+      await waitFor(() => expect(lastMountedGeometry()).toEqual(GEOMETRY));
       await user.click(screen.getByRole('button', { name: 'map edit boundary' }));
       await waitFor(() => expect(mapBoundaries[mapBoundaries.length - 1]).toEqual(EDITED_BOUNDARY));
       const mountsBeforeUndo = mapMounts.length;
 
       await user.click(screen.getByRole('button', { name: 'map undo' }));
 
-      await waitFor(() =>
-        expect(mapBoundaries[mapBoundaries.length - 1]?.features[0]?.geometry).toEqual(onMap(GEOMETRY))
-      );
+      await waitFor(() => expect(mapBoundaries[mapBoundaries.length - 1]?.features[0]?.geometry).toEqual(GEOMETRY));
       expect(screen.getByText(/site\.geojson/)).toBeInTheDocument();
       expect(mapMounts).toHaveLength(mountsBeforeUndo);
     });
