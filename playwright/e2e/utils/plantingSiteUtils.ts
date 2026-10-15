@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import type { Page } from 'playwright-core';
+import type { Locator, Page } from 'playwright-core';
 
 import { openNavItem } from './utils';
 
@@ -66,6 +66,18 @@ export const polygonTool = (page: Page) => page.getByRole('button', { name: 'Pol
 
 export const expectActiveStep = async (page: Page, label: string) => {
   await expect(page.locator('.MuiStepLabel-label.Mui-active')).toHaveText(label);
+};
+
+const editorStep = (page: Page, label: string) =>
+  page.locator('.MuiStep-root').filter({ has: page.locator('.MuiStepLabel-label').getByText(label, { exact: true }) });
+
+export const expectOptionalSteps = async (page: Page, required: string[], optional: string[]) => {
+  for (const label of required) {
+    await expect(editorStep(page, label)).not.toContainText('Optional');
+  }
+  for (const label of optional) {
+    await expect(editorStep(page, label)).toContainText('Optional');
+  }
 };
 
 // The draw control ignores clicks until the map has loaded. Once it is listening, moving the mouse over
@@ -141,6 +153,40 @@ export const drawPolygon = async (page: Page, points: MapPoint[]) => {
 export const clickMap = async (page: Page, point: MapPoint) => {
   const [x, y] = (await toPagePixels(page))(point);
   await page.mouse.click(x, y);
+};
+
+// Clicks can land before the map has wired up a feature that was just added or merged, so keep clicking until the
+// feature's popup opens.
+export const openFeaturePopup = async (page: Page, point: MapPoint, popupField: Locator) => {
+  await expect(async () => {
+    await clickMap(page, point);
+    await expect(popupField).toBeVisible({ timeout: 1000 });
+  }).toPass();
+};
+
+// The editor can reset the selection while it syncs a newly drawn polygon, so keep selecting until it sticks.
+// Clicking a selected polygon edits its vertices instead, so each attempt clears the selection first by clicking an
+// empty point. Hovering a selected polygon gives the map container a "mouse-move" class.
+export const selectPolygon = async (page: Page, point: MapPoint, emptyPoint: MapPoint) => {
+  await expect(async () => {
+    await clickMap(page, emptyPoint);
+    await clickMap(page, point);
+    const [x, y] = (await toPagePixels(page))(point);
+    await page.mouse.move(x + 1, y);
+    await expect(page.locator('.mapboxgl-map.mode-simple_select.mouse-move')).toBeVisible({ timeout: 500 });
+  }).toPass();
+};
+
+// The first click on a polygon selects it and the second edits its vertices, but the editor can reset the
+// selection while it syncs a newly drawn polygon, so keep clicking until vertex editing starts. Mapbox Draw
+// only updates the mode class on the map container on the next mouse event.
+export const editPolygonVertices = async (page: Page, point: MapPoint) => {
+  await expect(async () => {
+    await clickMap(page, point);
+    const [x, y] = (await toPagePixels(page))(point);
+    await page.mouse.move(x + 1, y);
+    await expect(page.locator('.mapboxgl-map.mode-direct_select')).toBeVisible({ timeout: 500 });
+  }).toPass();
 };
 
 export const deleteMapFeature = async (page: Page) => {
