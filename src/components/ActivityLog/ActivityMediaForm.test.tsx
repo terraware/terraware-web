@@ -12,19 +12,6 @@ import { ActivityMediaFile } from 'src/types/Activity';
 
 const ACTIVITY_ID = 42;
 
-// jsdom does not implement object URLs, and ActivityPhotoPreview creates one to preview a newly
-// added file. Provide a stub so rendering a new media item does not throw.
-const originalCreateObjectURL = URL.createObjectURL.bind(URL);
-const originalRevokeObjectURL = URL.revokeObjectURL.bind(URL);
-beforeAll(() => {
-  URL.createObjectURL = () => 'blob:stub';
-  URL.revokeObjectURL = () => undefined;
-});
-afterAll(() => {
-  URL.createObjectURL = originalCreateObjectURL;
-  URL.revokeObjectURL = originalRevokeObjectURL;
-});
-
 const fileInput = (container: HTMLElement): HTMLInputElement =>
   container.querySelector('input[type="file"]') as HTMLInputElement;
 
