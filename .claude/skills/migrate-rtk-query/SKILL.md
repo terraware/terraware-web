@@ -67,18 +67,14 @@ to scope a value to a subtree.
 Incorrect (flaky) output:
 
 ```ts
-export type MergeOtherSpeciesRequestPayload = {
-  /* ... */
-};
+export type MergeOtherSpeciesRequestPayload = {/* ... */};
 export type GeometryCollection = {
   type: 'GeometryCollection';
 } & GeometryBase & {
     geometries: object[];
     type: 'GeometryCollection';
   };
-export type LineString = {
-  /* ... */
-};
+export type LineString = {/* ... */};
 // ... MultiPolygon ends here, and GeometryCollection is NO LONGER between it and Geometry ...
 export type Geometry = GeometryCollection | LineString | MultiLineString | MultiPoint | MultiPolygon | Point | Polygon;
 ```

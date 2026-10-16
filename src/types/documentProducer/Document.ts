@@ -24,9 +24,7 @@ export type DocumentHistoryEditedPayload = components['schemas']['DocumentHistor
 export type DocumentHistorySavedPayload = components['schemas']['DocumentHistorySavedPayload'];
 
 export type DocumentHistoryEvent = (
-  | DocumentHistoryCreatedPayload
-  | DocumentHistoryEditedPayload
-  | DocumentHistorySavedPayload
+  DocumentHistoryCreatedPayload | DocumentHistoryEditedPayload | DocumentHistorySavedPayload
 ) & {
   docId: number;
 };

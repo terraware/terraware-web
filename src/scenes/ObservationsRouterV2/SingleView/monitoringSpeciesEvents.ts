@@ -7,8 +7,7 @@ import {
 export type MonitoringSpeciesEventCount = { label: string; value: string };
 
 export type MonitoringSpeciesEventSummary = { counts: MonitoringSpeciesEventCount[] } & (
-  | { kind: 'added' | 'removed'; speciesName: string }
-  | { kind: 'changed'; speciesName: string; toSpeciesName: string }
+  { kind: 'added' | 'removed'; speciesName: string } | { kind: 'changed'; speciesName: string; toSpeciesName: string }
 );
 
 export type MonitoringSpeciesEventSummaries = {

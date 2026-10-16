@@ -107,15 +107,13 @@ export default function MapSplitView({
 
   const siteFeatures = useMemo((): MapLayerFeature[] => {
     return (
-      plantingSites?.map(
-        (site): MapLayerFeature => ({
-          featureId: `${site.id}`,
-          geometry: {
-            type: 'MultiPolygon',
-            coordinates: site.boundary?.coordinates ?? [],
-          },
-        })
-      ) ?? []
+      plantingSites?.map((site): MapLayerFeature => ({
+        featureId: `${site.id}`,
+        geometry: {
+          type: 'MultiPolygon',
+          coordinates: site.boundary?.coordinates ?? [],
+        },
+      })) ?? []
     );
   }, [plantingSites]);
 
@@ -142,12 +140,10 @@ export default function MapSplitView({
           const points = site.boundary.coordinates
             .flat()
             .flat()
-            .map(
-              ([lng, lat]): MapPoint => ({
-                lat,
-                lng,
-              })
-            );
+            .map(([lng, lat]): MapPoint => ({
+              lat,
+              lng,
+            }));
 
           const bbox = getBoundingBoxFromPoints(points);
           const latitude = (bbox.maxLat + bbox.minLat) / 2;

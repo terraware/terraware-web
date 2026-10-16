@@ -8,8 +8,10 @@ import InventorySeedlingsTable, {
 } from 'src/scenes/InventoryRouter/view/InventorySeedlingsTable';
 import { SearchResponseElement } from 'src/types/Search';
 
-interface InventorySeedlingsTableForSpeciesProps
-  extends Omit<InventorySeedlingsTableProps, 'columns' | 'isSelectionBulkWithdrawable'> {
+interface InventorySeedlingsTableForSpeciesProps extends Omit<
+  InventorySeedlingsTableProps,
+  'columns' | 'isSelectionBulkWithdrawable'
+> {
   speciesId: number;
 }
 

@@ -211,7 +211,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
           id: 'facilityIds',
           label: strings.NURSERY,
           value: selectedOrganization
-            ? filters.facilityIds?.map((id) => getNurseryName(id, selectedOrganization))?.join(', ') ?? ''
+            ? (filters.facilityIds?.map((id) => getNurseryName(id, selectedOrganization))?.join(', ') ?? '')
             : '',
           emptyValue: [],
         });
@@ -232,7 +232,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
       data.push({
         id: 'projectIds',
         label: strings.PROJECTS,
-        value: notPresentFilter ? strings.NO_PROJECT : filters.projectIds?.map(getProjectName).join(', ') ?? '',
+        value: notPresentFilter ? strings.NO_PROJECT : (filters.projectIds?.map(getProjectName).join(', ') ?? ''),
         emptyValue: [],
       });
     }
@@ -402,7 +402,7 @@ export default function Search(props: SearchProps): JSX.Element | null {
             label={strings.PROJECT}
             filterKey='projectIds'
             options={(projects || []).map((n: Project) => n.id)}
-            renderOption={(id: string | number) => (id ? (projects || []).find((n) => n.id === id)?.name ?? '' : '')}
+            renderOption={(id: string | number) => (id ? ((projects || []).find((n) => n.id === id)?.name ?? '') : '')}
             notPresentFilterShown
             notPresentFilterLabel={strings.NO_PROJECT}
           />

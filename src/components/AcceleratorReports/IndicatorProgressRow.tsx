@@ -63,7 +63,7 @@ const IndicatorProgressRow = ({
   const previousYearTotal = isLifetime ? indicator.previousYearCumulativeTotal : undefined;
   const previousYearLabel = year !== undefined ? String(year - 1) : '';
 
-  const enteredValue = isAutoCalculated ? indicator.overrideValue ?? indicator.systemValue : indicator.value;
+  const enteredValue = isAutoCalculated ? (indicator.overrideValue ?? indicator.systemValue) : indicator.value;
 
   const currentYearProgress = useMemo(() => {
     const progress = indicator.currentYearProgress ?? [];
@@ -359,7 +359,7 @@ const IndicatorProgressRow = ({
               </Box>
 
               {segments.map((segment) => (
-                <Tooltip key={`tick-${segment.key}`} title={printMode ? '' : segment.quarter ?? ''}>
+                <Tooltip key={`tick-${segment.key}`} title={printMode ? '' : (segment.quarter ?? '')}>
                   <Box
                     sx={{
                       display: 'flex',

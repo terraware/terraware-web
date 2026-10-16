@@ -232,12 +232,10 @@ const ObservationMap = ({
       const points = selectedHistory.boundary.coordinates
         .flat()
         .flat()
-        .map(
-          ([lng, lat]): MapPoint => ({
-            lat,
-            lng,
-          })
-        );
+        .map(([lng, lat]): MapPoint => ({
+          lat,
+          lng,
+        }));
 
       const bbox = getBoundingBoxFromPoints(points);
       fitBounds(bbox);
@@ -248,12 +246,10 @@ const ObservationMap = ({
         site?.boundary?.coordinates
           .flat()
           .flat()
-          .map(
-            ([lng, lat]): MapPoint => ({
-              lat,
-              lng,
-            })
-          ) ?? [];
+          .map(([lng, lat]): MapPoint => ({
+            lat,
+            lng,
+          })) ?? [];
 
       if (points.length > 0) {
         fitBounds(getBoundingBoxFromPoints(points));
@@ -265,12 +261,10 @@ const ObservationMap = ({
           site.boundary?.coordinates
             .flat()
             .flat()
-            .map(
-              ([lng, lat]): MapPoint => ({
-                lat,
-                lng,
-              })
-            ) ?? []
+            .map(([lng, lat]): MapPoint => ({
+              lat,
+              lng,
+            })) ?? []
       );
 
       const bbox = getBoundingBoxFromPoints(points);
@@ -579,12 +573,10 @@ const ObservationMap = ({
             const points = site.boundary.coordinates
               .flat()
               .flat()
-              .map(
-                ([lng, lat]): MapPoint => ({
-                  lat,
-                  lng,
-                })
-              );
+              .map(([lng, lat]): MapPoint => ({
+                lat,
+                lng,
+              }));
 
             const bbox = getBoundingBoxFromPoints(points);
             const latitude = (bbox.maxLat + bbox.minLat) / 2;
@@ -605,12 +597,10 @@ const ObservationMap = ({
       const points = plantingSite.boundary.coordinates
         .flat()
         .flat()
-        .map(
-          ([lng, lat]): MapPoint => ({
-            lat,
-            lng,
-          })
-        );
+        .map(([lng, lat]): MapPoint => ({
+          lat,
+          lng,
+        }));
 
       const bbox = getBoundingBoxFromPoints(points);
       const latitude = (bbox.maxLat + bbox.minLat) / 2;
@@ -912,12 +902,10 @@ const ObservationMap = ({
           return undefined;
         }
 
-        const points = plot.boundary.coordinates[0].map(
-          ([lng, lat]): MapPoint => ({
-            lat,
-            lng,
-          })
-        );
+        const points = plot.boundary.coordinates[0].map(([lng, lat]): MapPoint => ({
+          lat,
+          lng,
+        }));
 
         const bbox = getBoundingBoxFromPoints(points);
         const latitude = (bbox.maxLat + bbox.minLat) / 2;
@@ -1032,20 +1020,18 @@ const ObservationMap = ({
           .flatMap((plot): MapMarker[] => {
             if (plot.plants) {
               const filteredPlants = plot.plants.filter((plant) => plant.status === status);
-              return filteredPlants.map(
-                (plant): MapMarker => ({
-                  id: `plants/${plant.id}`,
-                  longitude: plant.gpsCoordinates.coordinates[0],
-                  latitude: plant.gpsCoordinates.coordinates[1],
-                  onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
-                  selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
-                  properties: {
-                    monitoringPlotId: plot.monitoringPlotId,
-                    observationId: selectedResults.observationId,
-                    plant,
-                  },
-                })
-              );
+              return filteredPlants.map((plant): MapMarker => ({
+                id: `plants/${plant.id}`,
+                longitude: plant.gpsCoordinates.coordinates[0],
+                latitude: plant.gpsCoordinates.coordinates[1],
+                onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
+                selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
+                properties: {
+                  monitoringPlotId: plot.monitoringPlotId,
+                  observationId: selectedResults.observationId,
+                  plant,
+                },
+              }));
             } else {
               return [];
             }
@@ -1057,20 +1043,18 @@ const ObservationMap = ({
         const adHocPlotPlants = adHocPlots.flatMap((plot): MapMarker[] => {
           if (plot.plants) {
             const filteredPlants = plot.plants.filter((plant) => plant.status === status);
-            return filteredPlants.map(
-              (plant): MapMarker => ({
-                id: `plants/${plant.id}`,
-                longitude: plant.gpsCoordinates.coordinates[0],
-                latitude: plant.gpsCoordinates.coordinates[1],
-                onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
-                selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
-                properties: {
-                  monitoringPlotId: plot.monitoringPlotId,
-                  observationId: selectedResults.observationId,
-                  plant,
-                },
-              })
-            );
+            return filteredPlants.map((plant): MapMarker => ({
+              id: `plants/${plant.id}`,
+              longitude: plant.gpsCoordinates.coordinates[0],
+              latitude: plant.gpsCoordinates.coordinates[1],
+              onClick: selectPlant(plot.monitoringPlotId, selectedResults.observationId, plant),
+              selected: selectedPlants.find((selected) => selected.plant.id === plant.id) !== undefined,
+              properties: {
+                monitoringPlotId: plot.monitoringPlotId,
+                observationId: selectedResults.observationId,
+                plant,
+              },
+            }));
           } else {
             return [];
           }

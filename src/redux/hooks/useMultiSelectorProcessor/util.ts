@@ -7,10 +7,11 @@ import { SelectorConfig, SelectorResultConfig } from '.';
 
 export const createCombinedSelector = (selectors: SelectorConfig[]) =>
   createSelector(
-    selectors.map(
-      ([identifier, selector, config]) =>
-        (state: RootState): SelectorResultConfig => [identifier, selector(state), config]
-    ),
+    selectors.map(([identifier, selector, config]) => (state: RootState): SelectorResultConfig => [
+      identifier,
+      selector(state),
+      config,
+    ]),
     // Extracted values are passed to the result function for recalculation
     (...results) => results
   );
