@@ -292,7 +292,7 @@ const getMapEntityGeometry = (entity: MapEntity): MapGeometry => {
       }
       return geom;
     })
-    .filter((geom) => !!geom) as number[][][][];
+    .filter((geom) => !!geom);
 
   return multiPolygons;
 };
