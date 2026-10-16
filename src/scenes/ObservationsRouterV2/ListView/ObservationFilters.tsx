@@ -24,7 +24,7 @@ export type ObservationFiltersProps = {
 const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: ObservationFiltersProps): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
-  const { isMobile } = useDeviceInfo();
+  const { isMobile, isTablet } = useDeviceInfo();
   const {
     activeFilterCount,
     clearFilters,
@@ -60,6 +60,7 @@ const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: Observatio
       >
         {plantingSiteSelector}
         <SegmentControl minSegmentWidth={130} onChange={setPlotType} segments={plotTypeSegments} selected={plotType} />
+        {isTablet && <Box sx={{ flexBasis: '100%' }} />}
         <Box
           sx={{
             alignItems: isMobile ? 'stretch' : 'center',
@@ -97,9 +98,11 @@ const ObservationFilters = ({ plantingSiteId, plantingSiteSelector }: Observatio
             </Link>
           )}
         </Box>
-        <Box sx={{ marginLeft: isMobile ? 0 : 'auto' }}>
-          <ViewModeToggle />
-        </Box>
+        {!isMobile && (
+          <Box sx={{ marginLeft: 'auto' }}>
+            <ViewModeToggle />
+          </Box>
+        )}
       </Box>
       {panelOpen && <ObservationFilterPanel plantingSiteId={plantingSiteId} />}
       {plantingSiteId !== 'all' && !isMobile && <ObservationTimeline plantingSiteId={plantingSiteId} />}

@@ -181,7 +181,7 @@ const ObservationListViewContent = (): JSX.Element => {
           display: 'flex',
           flexWrap: 'wrap',
           gap: theme.spacing(2),
-          justifyContent: isDesktop ? 'flex-end' : 'flex-start',
+          justifyContent: { md: 'flex-end', xs: 'flex-start' },
         }}
       >
         {scheduleObservationButton}
@@ -196,7 +196,7 @@ const ObservationListViewContent = (): JSX.Element => {
         </Box>
       </Box>
     ),
-    [isDesktop, scheduleObservationButton, selectedOrganization, selectedPlantingSiteId, theme]
+    [scheduleObservationButton, selectedOrganization, selectedPlantingSiteId, theme]
   );
 
   const countedPlotType: PlotType = observationType === 'Biomass Measurements' ? 'adHoc' : plotType;
@@ -248,9 +248,10 @@ const ObservationListViewContent = (): JSX.Element => {
 
   return (
     <Page
-      collapsibleHeader
+      collapsibleHeader={isDesktop}
       rightComponent={headerActions}
-      stickyHeader
+      rightComponentGridSize={6}
+      stickyHeader={isDesktop}
       subHeader={
         <ObservationFilters plantingSiteId={selectedPlantingSiteId} plantingSiteSelector={plantingSiteSelector} />
       }
