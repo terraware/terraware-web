@@ -10,6 +10,7 @@ import ProjectProfileEdit from './EditView/ProjectProfileEdit';
 import ProjectModulesEditView from './Modules/ProjectModulesEditView';
 import ProjectPage from './ProjectPage';
 import ProjectProfileGisMaps from './ProjectProfileGisMaps';
+import ProjectVariablesPage from './ProjectVariablesPage';
 import Reports from './Reports';
 import Scoring from './Scoring';
 import Voting from './Voting';
@@ -27,6 +28,7 @@ const AcceleratorProjectsRouter = () => {
             <Route path={'votes/*'} element={<Voting />} />
             <Route path={'scores/*'} element={<Scoring />} />
             <Route path={'reports/*'} element={<Reports />} />
+            <Route path={'variables'} element={<ProjectVariablesPage />} />
             <Route path={'*'} element={<Navigate to={APP_PATHS.ACCELERATOR_PROJECTS} />} />
           </Routes>
         </DocumentProducerProvider>

@@ -3,7 +3,7 @@ import { useGetMyselfQuery } from 'src/queries/generated/users';
 import env from 'src/utils/useEnvironment';
 import { isTerraformationEmail } from 'src/utils/user';
 
-export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots';
+export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots' | 'Clean Up Console Tabs';
 
 export type Feature = {
   name: FeatureName;
@@ -44,6 +44,15 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for virtual monitoring plots'],
+    disclosure: ['This is a WIP'],
+  },
+  {
+    name: 'Clean Up Console Tabs',
+    preferenceName: 'cleanUpConsoleTabs',
+    active: true,
+    enabled: false,
+    allowInternalProduction: false,
+    description: ['Streamlined set of tabs on the console project profile, highlighting the most-used features.'],
     disclosure: ['This is a WIP'],
   },
 ];

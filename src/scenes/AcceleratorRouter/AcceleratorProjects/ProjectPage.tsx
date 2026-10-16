@@ -4,12 +4,18 @@ import { Box, CircularProgress, Typography, useTheme } from '@mui/material';
 import { BusySpinner, Button, DropdownItem, Tabs } from '@terraware/web-components';
 import { useDeviceInfo } from '@terraware/web-components/utils';
 
+import ActivityHighlightsContent from 'src/components/ActivityLog/ActivityHighlightsContent';
+import { TypedActivity } from 'src/components/ActivityLog/types';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
+import { useFeatureEnabled } from 'src/features';
+import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useVotingData from 'src/hooks/useVotingData';
 import { useLocalization, useUser } from 'src/providers';
+import { useAdminListActivitiesQuery } from 'src/queries/generated/activities';
 import { useListApplicationsQuery } from 'src/queries/generated/applications';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 import { requestPublishFunderProject } from 'src/redux/features/funder/projects/funderProjectsAsyncThunks';
@@ -19,6 +25,7 @@ import PlantsDashboardView from 'src/scenes/PlantsDashboardRouter/PlantsDashboar
 import { FunderProjectDetails } from 'src/types/FunderProject';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useAcceleratorProjectData } from './AcceleratorProjectContext';
@@ -28,13 +35,21 @@ import ProjectDocumentsView from './ProjectDocumentsView';
 import ProjectProfileView from './ProjectProfileView';
 import ProjectVariablesView from './ProjectVariablesView';
 import PublishModal from './Reports/PublishModal';
+import ReportOptionsMenu from './Reports/ReportOptionsMenu';
+import ReportReviewButtons from './Reports/ReportReviewButtons';
+import ReportTabV2 from './Reports/ReportTabV2';
 
 const ProjectPage = () => {
   const { strings } = useLocalization();
   const theme = useTheme();
   const { isAllowed } = useUser();
   const projectData = useAcceleratorProjectData();
-  const { goToAcceleratorActivityCreate, goToDocumentNew, goToAcceleratorProjectEdit } = useNavigateTo();
+  const {
+    goToAcceleratorActivityCreate,
+    goToAcceleratorProjectEdit,
+    goToAcceleratorProjectReportEdit,
+    goToDocumentNew,
+  } = useNavigateTo();
   const { projectScore } = useProjectScore(projectData.projectId);
   const { phaseVotes } = useVotingData();
   const dispatch = useAppDispatch();
@@ -44,6 +59,23 @@ const ProjectPage = () => {
   const publishProfileResponse = useAppSelector(selectPublishFunderProject(publishRequestId));
   const snackbar = useSnackbar();
   const { isDesktop, isMobile } = useDeviceInfo();
+  const cleanUpTabsEnabled = useFeatureEnabled('Clean Up Console Tabs');
+  const location = useStateLocation();
+  const navigate = useSyncNavigate();
+
+  const selectedReportId = useMemo(() => {
+    const reportId = query.get('reportId');
+    return reportId ? Number(reportId) : undefined;
+  }, [query]);
+
+  const onSelectReport = useCallback(
+    (reportId: number, replace = false) => {
+      const params = new URLSearchParams(location.search);
+      params.set('reportId', `${reportId}`);
+      navigate(getLocation(location.pathname, location, `?${params.toString()}`), { replace });
+    },
+    [location, navigate]
+  );
 
   const isAllowedEdit = isAllowed('UPDATE_ACCELERATOR_PROJECT');
   const isAllowedPublish = isAllowed('PUBLISH_PROJECT_DETAILS');
@@ -61,34 +93,86 @@ const ProjectPage = () => {
   const reportsResponse = useListPublishedReportsQuery(projectData.projectId);
   const publishedReports = useMemo(() => reportsResponse.data?.reports ?? [], [reportsResponse.data?.reports]);
 
+  const {
+    currentData: activitiesData,
+    isError: activitiesError,
+    isFetching: activitiesFetching,
+  } = useAdminListActivitiesQuery({ projectId: projectData.projectId, depth: 'All' }, { skip: !cleanUpTabsEnabled });
+  const activities = useMemo<TypedActivity[]>(
+    () => activitiesData?.activities?.map((payload) => ({ type: 'admin' as const, payload })) ?? [],
+    [activitiesData]
+  );
+
+  const { isLoading: isReportLoading } = useAcceleratorReportActions(selectedReportId);
+
   const tabs = useMemo(() => {
+    const profileTab = {
+      id: 'projectProfile',
+      label: cleanUpTabsEnabled ? strings.PROFILE : strings.PROJECT_PROFILE,
+      children: (
+        <ProjectProfileView
+          {...projectData}
+          projectDetails={projectData.acceleratorProject}
+          projectApplication={projectApplication}
+          projectScore={projectScore}
+          phaseVotes={phaseVotes}
+          publishedReports={publishedReports || []}
+        />
+      ),
+    };
+
+    const activityTab = {
+      id: 'activityLog',
+      label: cleanUpTabsEnabled ? strings.ACTIVITY : strings.PROJECT_ACTIVITY,
+      children: (
+        <ProjectActivityLogView
+          highlightsModalOpen={highlightsModalOpen}
+          projectDealName={projectData.acceleratorProject?.dealName}
+          projectId={projectData.projectId}
+          setHighlightsModalOpen={setHighlightsModalOpen}
+        />
+      ),
+    };
+
+    const plantsDashboardTab = {
+      id: 'plantsDashboard',
+      label: strings.PLANTS_DASHBOARD,
+      children: (
+        <PlantsDashboardView
+          projectId={projectData.projectId}
+          organizationId={projectData?.project?.organizationId || projectApplication?.organizationId}
+        />
+      ),
+    };
+
+    if (cleanUpTabsEnabled) {
+      return [
+        profileTab,
+        {
+          id: 'reports',
+          label: strings.REPORTS,
+          // Tabs unmounts the panels it isn't showing, so this only renders while the tab is selected
+          children: <ReportTabV2 active onSelectReport={onSelectReport} selectedReportId={selectedReportId} />,
+        },
+        activityTab,
+        {
+          id: 'quarterlyHighlights',
+          label: strings.QUARTERLY_HIGHLIGHTS,
+          children: (
+            <ActivityHighlightsContent
+              activities={activities}
+              busy={activitiesFetching}
+              projectId={projectData.projectId}
+            />
+          ),
+        },
+        plantsDashboardTab,
+      ];
+    }
+
     return [
-      {
-        id: 'projectProfile',
-        label: strings.PROJECT_PROFILE,
-        children: (
-          <ProjectProfileView
-            {...projectData}
-            projectDetails={projectData.acceleratorProject}
-            projectApplication={projectApplication}
-            projectScore={projectScore}
-            phaseVotes={phaseVotes}
-            publishedReports={publishedReports || []}
-          />
-        ),
-      },
-      {
-        id: 'activityLog',
-        label: strings.PROJECT_ACTIVITY,
-        children: (
-          <ProjectActivityLogView
-            highlightsModalOpen={highlightsModalOpen}
-            projectDealName={projectData.acceleratorProject?.dealName}
-            projectId={projectData.projectId}
-            setHighlightsModalOpen={setHighlightsModalOpen}
-          />
-        ),
-      },
+      profileTab,
+      activityTab,
       {
         id: 'deliverables',
         label: strings.DELIVERABLES,
@@ -104,18 +188,22 @@ const ProjectPage = () => {
         label: strings.VARIABLES,
         children: <ProjectVariablesView projectId={projectData.projectId} />,
       },
-      {
-        id: 'plantsDashboard',
-        label: strings.PLANTS_DASHBOARD,
-        children: (
-          <PlantsDashboardView
-            projectId={projectData.projectId}
-            organizationId={projectData?.project?.organizationId || projectApplication?.organizationId}
-          />
-        ),
-      },
+      plantsDashboardTab,
     ];
-  }, [strings, projectData, projectApplication, projectScore, phaseVotes, publishedReports, highlightsModalOpen]);
+  }, [
+    activities,
+    activitiesFetching,
+    cleanUpTabsEnabled,
+    highlightsModalOpen,
+    onSelectReport,
+    phaseVotes,
+    projectApplication,
+    projectData,
+    projectScore,
+    publishedReports,
+    selectedReportId,
+    strings,
+  ]);
 
   const { activeTab, onChangeTab } = useStickyTabs({
     defaultTab: 'projectProfile',
@@ -140,6 +228,12 @@ const ProjectPage = () => {
     () => goToAcceleratorProjectEdit(projectData.projectId),
     [goToAcceleratorProjectEdit, projectData.projectId]
   );
+
+  const goToReportEdit = useCallback(() => {
+    if (selectedReportId !== undefined) {
+      goToAcceleratorProjectReportEdit(selectedReportId, projectData.projectId);
+    }
+  }, [goToAcceleratorProjectReportEdit, projectData.projectId, selectedReportId]);
 
   const goToProjectActivityCreate = useCallback(() => {
     goToAcceleratorActivityCreate(projectData.projectId);
@@ -170,6 +264,12 @@ const ProjectPage = () => {
       setOpenPublishDialog(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (activitiesError) {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [activitiesError, snackbar, strings.GENERIC_ERROR]);
 
   useEffect(() => {
     if (publishProfileResponse?.status === 'error') {
@@ -246,6 +346,25 @@ const ProjectPage = () => {
             </Box>
           )}
 
+          {activeTab === 'reports' && selectedReportId !== undefined && (
+            <Box display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
+              {isAllowed('EDIT_REPORTS') && (
+                <Button
+                  disabled={isReportLoading}
+                  icon='iconEdit'
+                  label={strings.EDIT}
+                  onClick={goToReportEdit}
+                  priority='secondary'
+                  size='medium'
+                />
+              )}
+
+              <ReportReviewButtons reportId={selectedReportId} />
+
+              <ReportOptionsMenu projectId={projectData.projectId} reportId={selectedReportId} />
+            </Box>
+          )}
+
           {activeTab === 'documents' && (
             <Button
               icon='plus'
@@ -267,13 +386,18 @@ const ProjectPage = () => {
       goToDocumentNew,
       goToProjectActivityCreate,
       goToProjectEdit,
+      goToReportEdit,
+      isAllowed,
       isAllowedCreateActivities,
       isAllowedEdit,
       isAllowedPublish,
       isDesktop,
       isMobile,
+      isReportLoading,
       onOptionItemClick,
       openActivityHighlightsPreview,
+      projectData.projectId,
+      selectedReportId,
       strings,
       theme,
     ]
