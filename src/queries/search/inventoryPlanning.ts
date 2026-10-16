@@ -89,6 +89,8 @@ const injectedRtkApi = api.injectEndpoints({
               'speciesTargets.quantity(raw)',
               'allocatedSpecies.species_id',
               'allocatedSpecies.quantity(raw)',
+              'withdrawals.batchWithdrawals_readyQuantityWithdrawn(raw)',
+              'withdrawals.batchWithdrawals_batch_species_id',
             ],
             search: {
               operation: 'and',
@@ -166,6 +168,11 @@ type InventoryPlanningAllocatedSpeciesSearch = {
   'quantity(raw)': string;
 };
 
+type InventoryPlanningWithdrawalSearch = {
+  'batchWithdrawals_readyQuantityWithdrawn(raw)': string;
+  batchWithdrawals_batch_species_id: string;
+};
+
 export type InventoryPlanningSeasonSearch = {
   id: string;
   name: string;
@@ -176,6 +183,7 @@ export type InventoryPlanningSeasonSearch = {
   plantingSite_name: string;
   speciesTargets?: InventoryPlanningSpeciesTargetSearch[];
   allocatedSpecies?: InventoryPlanningAllocatedSpeciesSearch[];
+  withdrawals?: InventoryPlanningWithdrawalSearch[];
 };
 
 type InventoryPlanningSeasonSearchResponse = {
@@ -225,10 +233,18 @@ export const aggregateInventoryPlanningRows = (
     (season.allocatedSpecies ?? []).forEach((entry) => {
       allocatedBySpecies.set(Number(entry.species_id), Number(entry['quantity(raw)']));
     });
+    const withdrawnBySpecies = new Map<number, number>();
+    (season.withdrawals ?? []).forEach((entry) => {
+      const speciesId = Number(entry.batchWithdrawals_batch_species_id);
+      withdrawnBySpecies.set(
+        speciesId,
+        (withdrawnBySpecies.get(speciesId) ?? 0) + Number(entry['batchWithdrawals_readyQuantityWithdrawn(raw)'])
+      );
+    });
 
     const speciesIdsInSeason = new Set<number>([...targetsBySpecies.keys(), ...allocatedBySpecies.keys()]);
     speciesIdsInSeason.forEach((speciesId) => {
-      const target = targetsBySpecies.get(speciesId) ?? 0;
+      const target = Math.max(0, (targetsBySpecies.get(speciesId) ?? 0) - (withdrawnBySpecies.get(speciesId) ?? 0));
       const allocated = allocatedBySpecies.get(speciesId) ?? 0;
 
       let acc = speciesAcc.get(speciesId);
