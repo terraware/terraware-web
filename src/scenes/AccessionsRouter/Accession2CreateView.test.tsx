@@ -1,7 +1,6 @@
 import React from 'react';
 import { useLocation } from 'react-router';
 
-import { afterAll, beforeAll } from '@rstest/core';
 import { screen, waitFor } from '@testing-library/react';
 import { HttpResponse, http } from 'msw';
 
@@ -37,17 +36,6 @@ const SPECIES_ID = 50;
 const TOKYO = { id: 'Asia/Tokyo', longName: 'Japan Standard Time' };
 const KOLKATA = { id: 'Asia/Kolkata', longName: 'India Standard Time' };
 const LOS_ANGELES = { id: 'America/Los_Angeles', longName: 'Pacific Time' };
-
-const originalCreateObjectURL = URL.createObjectURL.bind(URL);
-const originalRevokeObjectURL = URL.revokeObjectURL.bind(URL);
-beforeAll(() => {
-  URL.createObjectURL = () => 'blob:stub';
-  URL.revokeObjectURL = () => undefined;
-});
-afterAll(() => {
-  URL.createObjectURL = originalCreateObjectURL;
-  URL.revokeObjectURL = originalRevokeObjectURL;
-});
 
 // API endpoints called by the create form and its property fields while rendering and completing the form.
 // They aren't under test, but must be mocked because unhandled requests fail the test.

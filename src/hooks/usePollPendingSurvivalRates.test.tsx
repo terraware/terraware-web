@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { rs } from '@rstest/core';
-import { screen, waitFor } from '@testing-library/react';
+import { act, screen, waitFor } from '@testing-library/react';
 import { HttpResponse, delay, http } from 'msw';
 
 import { API_PULL_INTERVAL } from 'src/constants';
@@ -71,7 +71,12 @@ const SurvivalRate = () => {
   );
 };
 
-const advancePastPollInterval = () => rs.advanceTimersByTimeAsync(API_PULL_INTERVAL + 1000);
+const advanceTimers = (ms: number) =>
+  act(async () => {
+    await rs.advanceTimersByTimeAsync(ms);
+  });
+
+const advancePastPollInterval = () => advanceTimers(API_PULL_INTERVAL + 1000);
 
 describe('usePollPendingSurvivalRates', () => {
   beforeEach(() => {
@@ -138,7 +143,7 @@ describe('usePollPendingSurvivalRates', () => {
     await waitFor(() => expect(statusRequests.count).toBe(1));
 
     // Give an erroneous refetch a chance to happen before asserting it didn't.
-    await rs.advanceTimersByTimeAsync(1000);
+    await advanceTimers(1000);
     expect(resultsRequests.count).toBe(1);
     expect(screen.getByText('Recalculating')).toBeInTheDocument();
 

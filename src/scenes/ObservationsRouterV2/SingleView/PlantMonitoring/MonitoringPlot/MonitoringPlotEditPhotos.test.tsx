@@ -1,4 +1,5 @@
 import React from 'react';
+import { Route, Routes, useLocation } from 'react-router';
 
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 
@@ -13,19 +14,6 @@ const FILE_ID = 555;
 const RESULTS_URL = '/api/v1/tracking/observations/:observationId/results';
 const UPLOAD_URL = '/api/v1/tracking/observations/:observationId/plots/:plotId/otherMedia';
 const DELETE_URL = '/api/v1/tracking/observations/:observationId/plots/:plotId/photos/:fileId';
-
-// jsdom does not implement object URLs, and the photo preview creates one to render a newly added
-// file. Provide a stub so rendering a new media item does not throw.
-const originalCreateObjectURL = URL.createObjectURL.bind(URL);
-const originalRevokeObjectURL = URL.revokeObjectURL.bind(URL);
-beforeAll(() => {
-  URL.createObjectURL = () => 'blob:stub';
-  URL.revokeObjectURL = () => undefined;
-});
-afterAll(() => {
-  URL.createObjectURL = originalCreateObjectURL;
-  URL.revokeObjectURL = originalRevokeObjectURL;
-});
 
 // The component finds the plot under edit inside the observation results tree. An ad-hoc plot keeps
 // the fixture flat: no stratum/substratum nesting is needed to reach it.
@@ -52,11 +40,25 @@ const buildResults = (media: Record<string, unknown>[] = []) => ({
   },
 });
 
+const LocationProbe = () => {
+  const location = useLocation();
+  return <div data-testid='location'>{location.pathname}</div>;
+};
+
 const renderEditPhotos = () =>
-  renderWithProviders(<MonitoringPlotEditPhotos />, {
-    route: `/observations/${OBSERVATION_ID}/plots/${PLOT_ID}/edit-photos`,
-    path: '/observations/:observationId/plots/:monitoringPlotId/edit-photos',
-  });
+  renderWithProviders(
+    <>
+      <Routes>
+        <Route
+          path='/observations/:observationId/plots/:monitoringPlotId/edit-photos'
+          element={<MonitoringPlotEditPhotos />}
+        />
+        <Route path='/observations/:observationId' element={<div />} />
+      </Routes>
+      <LocationProbe />
+    </>,
+    { route: `/observations/${OBSERVATION_ID}/plots/${PLOT_ID}/edit-photos` }
+  );
 
 const fileInput = () => document.querySelector('input[type="file"]') as HTMLInputElement;
 
@@ -91,6 +93,7 @@ describe('MonitoringPlotEditPhotos', () => {
     await waitFor(() => expect(requests).toHaveLength(1));
     expect(requests[0].method).toBe('POST');
     expect(requests[0].url).toContain(`/observations/${OBSERVATION_ID}/plots/${PLOT_ID}/otherMedia`);
+    await waitFor(() => expect(screen.getByTestId('location').textContent).toBe(`/observations/${OBSERVATION_ID}`));
   });
 
   it('deletes an existing plot photo when its delete control is used and the change is saved', async () => {
@@ -117,5 +120,6 @@ describe('MonitoringPlotEditPhotos', () => {
     await waitFor(() => expect(requests).toHaveLength(1));
     expect(requests[0].method).toBe('DELETE');
     expect(requests[0].url).toContain(`/observations/${OBSERVATION_ID}/plots/${PLOT_ID}/photos/${FILE_ID}`);
+    await waitFor(() => expect(screen.getByTestId('location').textContent).toBe(`/observations/${OBSERVATION_ID}`));
   });
 });
