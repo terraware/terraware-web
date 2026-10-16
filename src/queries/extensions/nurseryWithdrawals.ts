@@ -20,6 +20,7 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.NurserySummary },
         { type: QueryTagTypes.NurserySpeciesSummary },
         { type: QueryTagTypes.NurseryOrganizationSummary },
+        { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
       ],
     },
     getNurseryWithdrawal: {
@@ -55,6 +56,7 @@ api.enhanceEndpoints({
         { type: QueryTagTypes.NurserySummary },
         { type: QueryTagTypes.NurserySpeciesSummary },
         { type: QueryTagTypes.NurseryOrganizationSummary },
+        { type: QueryTagTypes.InventoryPlanning, id: 'LIST' },
       ],
     },
   },

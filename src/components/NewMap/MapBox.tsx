@@ -18,6 +18,7 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 
 import useDeviceInfo from 'src/utils/useDeviceInfo';
 
+import { MapDrawerSize } from './MapDrawer';
 import MapViewStyleControl from './MapViewStyleControl';
 import {
   MapCursor,
@@ -47,6 +48,7 @@ type MapBoxProps = {
   disableDoubleClickZoom?: boolean;
   disableZoom?: boolean;
   drawerOpen?: boolean; // Used to trigger resize
+  drawerSize?: MapDrawerSize; // Used to trigger resize
   fillContainerHeight?: boolean;
   hideFullScreenControl?: boolean;
   hideMapViewStyleControl?: boolean;
@@ -87,6 +89,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
     disableDoubleClickZoom,
     disableZoom,
     drawerOpen,
+    drawerSize,
     fillContainerHeight,
     layers: featureGroups,
     hideFullScreenControl,
@@ -699,7 +702,7 @@ const MapBox = (props: MapBoxProps): JSX.Element | null => {
       // See note on the ResizeObserver effect above: Mapbox can throw if its
       // internal transform is mid-swap when resize() runs.
     }
-  }, [drawerOpen, mapRef]);
+  }, [drawerOpen, drawerSize, mapRef]);
 
   // Handle clicks outside the map to unfocus
   useEffect(() => {

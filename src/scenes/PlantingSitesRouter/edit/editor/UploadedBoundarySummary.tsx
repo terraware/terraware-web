@@ -52,36 +52,38 @@ export default function UploadedBoundarySummary({
   return (
     <Box
       sx={{
-        alignItems: 'center',
+        alignItems: 'flex-start',
         background: theme.palette.TwClrBgSecondary,
         borderRadius: '8px',
         display: 'flex',
         gap: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
-        padding: theme.spacing(1.25, 1.25, 1.25, 2),
+        padding: theme.spacing(1.25, 2),
       }}
     >
       <Icon name='iconFile' style={{ fill: theme.palette.TwClrIcnSecondary, flex: 'none' }} />
-      <Typography fontSize='14px' fontWeight={400} lineHeight='20px' color={theme.palette.TwClrTxt}>
-        {summary}
-      </Typography>
-      <Box display='flex' gap={theme.spacing(1)} marginLeft='auto' flex='none'>
-        <Button
-          id='replace-boundary-file'
-          label={strings.REPLACE_FILE}
-          onClick={onReplace}
-          priority='secondary'
-          size='small'
-          type='passive'
-        />
-        <Button
-          id='remove-boundary-file'
-          label={strings.REMOVE}
-          onClick={onRemove}
-          priority='ghost'
-          size='small'
-          type='passive'
-        />
+      <Box display='flex' flexDirection='column' gap={theme.spacing(1)}>
+        <Typography fontSize='14px' fontWeight={400} lineHeight='20px' color={theme.palette.TwClrTxt}>
+          {summary}
+        </Typography>
+        <Box display='flex' gap={theme.spacing(1)}>
+          <Button
+            id='replace-boundary-file'
+            label={strings.REPLACE_FILE}
+            onClick={onReplace}
+            priority='secondary'
+            size='small'
+            type='passive'
+          />
+          <Button
+            id='remove-boundary-file'
+            label={strings.REMOVE}
+            onClick={onRemove}
+            priority='ghost'
+            size='small'
+            type='passive'
+          />
+        </Box>
       </Box>
     </Box>
   );

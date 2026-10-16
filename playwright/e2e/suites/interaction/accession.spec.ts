@@ -169,8 +169,8 @@ test.describe('AccessionTests', () => {
       await expect(page.getByRole('main')).toContainText('~195 ct');
       await page.getByRole('tab', { name: 'History' }).click();
       // The event log does not render withdrawal notes, unlike the legacy history tab.
-      await expect(page.getByLabel('History')).toContainText('withdrew 300 seeds to Nursery');
-      await expect(page.getByLabel('History')).toContainText('withdrew 5 seeds for Viability Testing');
+      await expect(page.getByLabel('History')).toContainText(WITHDRAWAL_ENTRY('300 seeds', 'to Nursery'));
+      await expect(page.getByLabel('History')).toContainText(WITHDRAWAL_ENTRY('5 seeds', 'for Viability Testing'));
       await expect(page.getByLabel('History')).toContainText(
         'Viability test total seeds germinated changed from 0 to 3'
       );
@@ -211,7 +211,7 @@ test.describe('AccessionTests', () => {
       await expect(page.getByRole('main')).toContainText('95 Grams');
       await expect(page.getByRole('main')).toContainText('~95 ct');
       await page.getByRole('tab', { name: 'History' }).click();
-      await expect(page.getByLabel('History')).toContainText('withdrew 100 seeds for Out-planting');
+      await expect(page.getByLabel('History')).toContainText(WITHDRAWAL_ENTRY('100 seeds', 'for Out-planting'));
     });
 
     test('Withdraw to Viability Test', async ({ page }, testInfo) => {
@@ -262,11 +262,14 @@ test.describe('AccessionTests', () => {
       await page.getByRole('button', { name: 'Apply Result' }).click();
       await expect(page.locator('#row1-viabilityPercent')).toContainText('90%');
       await page.getByRole('tab', { name: 'History' }).click();
-      await expect(page.getByLabel('History')).toContainText('withdrew 20 seeds for Viability Testing');
+      await expect(page.getByLabel('History')).toContainText(WITHDRAWAL_ENTRY('20 seeds', 'for Viability Testing'));
       await expect(page.getByLabel('History')).toContainText('Viability test viability percent changed from 75 to 90');
     });
   });
 });
+
+const WITHDRAWAL_ENTRY = (quantity: string, destination: string): RegExp =>
+  new RegExp(`${quantity}( \\(~[^)]+\\))? withdrawn ${destination} on \\d{4}-\\d{2}-\\d{2}`);
 
 const getSpeciesGerminatingQuantity = async (page: Page, species: string) => {
   await expect(page.getByRole('table')).toBeVisible({ timeout: 30000 });

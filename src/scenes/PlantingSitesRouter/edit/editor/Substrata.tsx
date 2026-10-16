@@ -9,6 +9,7 @@ import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
 import { leftMostFeature, leftOrderedFeatures, mergeIntoNeighbor, toMultiPolygon } from 'src/components/Map/utils';
 import EditableMap, { EditableMapBoundary, EditableMapClickedFeature } from 'src/components/NewMap/EditableMap';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
+import { useFeatureEnabled } from 'src/features';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
@@ -17,6 +18,7 @@ import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum, MinimalSubstratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { useEditorStepperDrawer } from './EditorStepper';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
 import useMapStyle from './useMapStyle';
@@ -121,6 +123,7 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
   const { strataLayerStyle, substrataLayerStyle } = useMapFeatureStyles();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
+  const fileUploadEnabled = useFeatureEnabled('Boundary File Upload');
 
   // expose substrata as a constant for easier use
   const substrata = useMemo<Record<number, FeatureCollection> | undefined>(
@@ -221,27 +224,31 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     return [strataData, substrataBoundaries];
   }, [selectedStratum, site.id, strata, strataLayerStyle, substrata, substrataLayerStyle]);
 
-  const description = useMemo<Description[]>(
-    () =>
-      activeLocale
-        ? [
-            {
-              text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,
-              hasTutorial: true,
-              handlePrefix: (prefix: string) =>
-                strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
-            },
-            {
-              text: strings.formatString(
-                strings.SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,
-                strata?.features?.find((f) => f.id === selectedStratum)?.properties?.name ?? ''
-              ),
-              isBold: true,
-            },
-          ]
-        : [],
-    [activeLocale, selectedStratum, strata]
-  );
+  const description = useMemo<Description[]>(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    if (fileUploadEnabled) {
+      return [
+        {
+          text: strings.SITE_SUBSTRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
+          hasTutorial: true,
+          handlePrefix: (prefix: string) =>
+            strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
+        },
+      ];
+    }
+
+    return [
+      {
+        text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,
+        hasTutorial: true,
+        handlePrefix: (prefix: string) =>
+          strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
+      },
+    ];
+  }, [activeLocale, fileUploadEnabled]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {
@@ -420,16 +427,25 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
     [mapStyles.box, mapStyles.tooltip, selectedStratum, setSubstrataData, substrata]
   );
 
+  const drawerProps = useEditorStepperDrawer(
+    <StepTitleDescription
+      description={description}
+      tutorialDescription={tutorialDescription}
+      tutorialDocLinkKey='planting_site_create_substratum_boundary_instructions_video'
+      tutorialTitle={strings.ADDING_SUBSTRATUM_BOUNDARIES}
+    />,
+    <Typography fontSize='14px' fontWeight={600} lineHeight='20px' color={theme.palette.TwClrTxt}>
+      {strings.formatString(
+        strings.SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,
+        strata?.features?.find((f) => f.id === selectedStratum)?.properties?.name ?? ''
+      )}
+    </Typography>
+  );
+
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
-      <StepTitleDescription
-        description={description}
-        largeText
-        tutorialDescription={tutorialDescription}
-        tutorialDocLinkKey='planting_site_create_substratum_boundary_instructions_video'
-        tutorialTitle={strings.ADDING_SUBSTRATUM_BOUNDARIES}
-      />
       <EditableMap
+        {...drawerProps}
         editableBoundary={substrataData?.editableBoundary}
         errorAnnotations={substrataData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}

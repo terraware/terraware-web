@@ -1,4 +1,13 @@
-import React, { type JSX, type ReactNode, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  type CSSProperties,
+  type JSX,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { GeolocateControl, Layer, MapRef, Popup, Source } from 'react-map-gl/mapbox';
 
 import { AddressAutofillFeatureSuggestion } from '@mapbox/search-js-core';
@@ -15,6 +24,7 @@ import { getRgbaFromHex } from 'src/utils/color';
 import useMapboxToken from 'src/utils/useMapboxToken';
 
 import MapComponent from '.';
+import { MapDrawerSize } from './MapDrawer';
 import { MapFillComponentStyle, MapLayer, MapProperties } from './types';
 import useMapUtils from './useMapUtils';
 import { getBoundingBoxFromMultiPolygons } from './utils';
@@ -36,10 +46,15 @@ export type EditableMapClickedFeature = {
 type FeatureSelectorOnClick = (features: EditableMapClickedFeature[]) => EditableMapClickedFeature | undefined;
 
 export type EditableMapProps = {
+  drawer?: ReactNode;
+  drawerEar?: ReactNode;
+  drawerSize?: MapDrawerSize;
+  drawerStyle?: CSSProperties;
   editableBoundary?: FeatureCollection;
   errorAnnotations?: Feature[];
   featureSelectorOnClick?: FeatureSelectorOnClick;
   isSliceTool?: boolean;
+  minHeight?: string;
   onDeleteFeature?: (boundaryId: string, featureId: string | number) => void;
   onEditableBoundaryChanged: (boundary?: FeatureCollection) => void;
   onRedo?: () => void;
@@ -55,10 +70,15 @@ export type EditableMapProps = {
 const featureIdOf = (feature: Feature): string => `${feature.properties?.id ?? feature.id}`;
 
 const EditableMap = ({
+  drawer,
+  drawerEar,
+  drawerSize,
+  drawerStyle,
   editableBoundary,
   errorAnnotations,
   featureSelectorOnClick,
   isSliceTool,
+  minHeight = '640px',
   onDeleteFeature,
   onEditableBoundaryChanged,
   onRedo,
@@ -288,7 +308,13 @@ const EditableMap = ({
       )}
       <MapComponent
         additionalComponent={additionalComponent}
-        containerStyle={{ flexGrow: 1, height: 'auto', maxHeight: 'none', minHeight: '640px' }}
+        containerStyle={{ flexGrow: 1, height: 'auto', maxHeight: 'none', minHeight }}
+        drawerChildren={drawer}
+        drawerEar={drawerEar}
+        drawerHideHeader
+        drawerOpen={!!drawer}
+        drawerSize={drawerSize}
+        drawerStyle={drawerStyle}
         mapId={mapId}
         mapLayers={mapLayers}
         mapRef={mapRef}

@@ -32,10 +32,9 @@ test.describe('AdHocObservationDataUploadTests', () => {
     await waitFor(page, '#home');
     await selectOrg(page, 'Terraformation (staging)');
     await openNavItem(page, 'Plantings', 'Observations');
-    await page.getByRole('textbox').first().click();
+    await page.locator('#planting-site-selector').click();
     await page.locator('li.select-value', { hasText: 'All Planting Sites' }).click();
-    await page.locator('#plot-selection-selector').click();
-    await page.locator('li.select-value', { hasText: 'Ad Hoc' }).click();
+    await page.getByRole('tab', { name: 'Ad Hoc Plots' }).click();
     const observationLink = page.locator(`a[href="/observations/${observation.observationId}"]`);
     await expect(observationLink.first()).toBeVisible({ timeout: 30000 });
 

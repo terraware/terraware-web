@@ -7,6 +7,7 @@ import { FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 import type { EditableMapProps } from 'src/components/NewMap/EditableMap';
 import ToastSnackbar from 'src/components/ToastSnackbar';
 import type { FeatureName } from 'src/features';
+import { EditorStepperContext } from 'src/scenes/PlantingSitesRouter/edit/editor/EditorStepper';
 import SiteBoundary from 'src/scenes/PlantingSitesRouter/edit/editor/SiteBoundary';
 import strings from 'src/strings';
 import { buildDraftPlantingSite, mockPost, renderWithProviders } from 'src/test-utils';
@@ -26,6 +27,7 @@ const mapEdit = rstest.hoisted(() => ({ boundary: undefined as FeatureCollection
 
 rstest.mock('src/components/NewMap/EditableMap', () => {
   const MockEditableMap = ({
+    drawer,
     editableBoundary,
     onEditableBoundaryChanged,
     onRedo,
@@ -47,6 +49,7 @@ rstest.mock('src/components/NewMap/EditableMap', () => {
         </button>
         <button onClick={() => onEditableBoundaryChanged(undefined)}>map clear boundary</button>
         <button onClick={() => onEditableBoundaryChanged(mapEdit.boundary)}>map edit boundary</button>
+        {drawer}
         {overlay}
       </div>
     );
@@ -101,12 +104,22 @@ const onMap = (polygon: Polygon): MultiPolygon => ({ type: 'MultiPolygon', coord
 const polygonsCombinedMessage = (numPolygons: number) =>
   strings.formatString(strings.SITE_BOUNDARY_POLYGONS_COMBINED, numPolygons) as string;
 
+const stepperContext = {
+  busy: false,
+  collapsed: false,
+  currentStep: 'site_boundary' as const,
+  onBack: rstest.fn(),
+  onNext: rstest.fn(),
+  onToggleCollapsed: rstest.fn(),
+  steps: [{ type: 'site_boundary' as const, label: 'Site Boundary' }],
+};
+
 const renderSiteBoundary = (siteToRender = site) =>
   renderWithProviders(
-    <>
+    <EditorStepperContext.Provider value={stepperContext}>
       <ToastSnackbar />
       <SiteBoundary site={siteToRender} />
-    </>,
+    </EditorStepperContext.Provider>,
     {
       // the step's tutorial dialog opens on mount otherwise, and covers the map
       currentUser: { userPreferences: { 'dont-show-site-boundary-instructions': true } },
@@ -153,7 +166,6 @@ describe('SiteBoundary', () => {
 
     expect(screen.getByText(strings.BOUNDARY_METHOD_TITLE)).toBeInTheDocument();
     expect(screen.getByText(strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION, { exact: false })).toBeInTheDocument();
-    expect(screen.getByText(strings.SITE_BOUNDARY_MAX_BOUNDING_BOX)).toBeInTheDocument();
     expect(screen.queryByText(strings.SITE_BOUNDARY_DESCRIPTION_0)).not.toBeInTheDocument();
   });
 

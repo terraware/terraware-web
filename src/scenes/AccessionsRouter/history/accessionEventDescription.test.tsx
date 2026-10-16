@@ -35,6 +35,7 @@ const createdWith = (fields: Record<string, string>): CreatedActionPayload => ({
   fields: Object.entries(fields).map(([fieldName, value]) => ({ fieldName, value: [value] })),
 });
 const QUANTITY_50 = '50 Seeds';
+const WITHDRAWN_ON = '2026-08-12';
 const deleted: DeletedActionPayload = { type: 'Deleted' };
 const fieldUpdated = (fieldName: string, changedFrom?: string[], changedTo?: string[]): FieldUpdatedActionPayload => ({
   type: 'FieldUpdated',
@@ -298,29 +299,74 @@ describe('withdrawal creation copy', () => {
   it('names the destination nursery for a transfer', () => {
     const entry = event(
       withdrawal(493),
-      createdWith({ withdrawnQuantity: QUANTITY_50, purpose: 'Nursery', batchId: '720' })
+      createdWith({ withdrawnQuantity: QUANTITY_50, purpose: 'Nursery', batchId: '720', date: WITHDRAWN_ON })
     );
     const nurseries = { 720: 'Bend Nursery' };
 
-    expect(describeEvent(entry, undefined, nurseries)).toBe('withdrew 50 Seeds to Bend Nursery');
+    expect(describeEvent(entry, undefined, nurseries)).toBe('50 Seeds withdrawn to Bend Nursery on 2026-08-12');
   });
 
   it('falls back to the purpose until the nursery name resolves', () => {
     const entry = event(
       withdrawal(493),
-      createdWith({ withdrawnQuantity: QUANTITY_50, purpose: 'Nursery', batchId: '720' })
+      createdWith({ withdrawnQuantity: QUANTITY_50, purpose: 'Nursery', batchId: '720', date: WITHDRAWN_ON })
     );
-    expect(describeEvent(entry)).toBe('withdrew 50 Seeds for Nursery');
+    expect(describeEvent(entry)).toBe('50 Seeds withdrawn for Nursery on 2026-08-12');
   });
 
   it('uses the purpose when there is no batch', () => {
-    const entry = event(withdrawal(494), createdWith({ withdrawnQuantity: QUANTITY_50, purpose: 'Viability Testing' }));
-    expect(describeEvent(entry)).toBe('withdrew 50 Seeds for Viability Testing');
+    const entry = event(
+      withdrawal(494),
+      createdWith({ withdrawnQuantity: QUANTITY_50, purpose: 'Viability Testing', date: WITHDRAWN_ON })
+    );
+    expect(describeEvent(entry)).toBe('50 Seeds withdrawn for Viability Testing on 2026-08-12');
   });
 
   it('reports the quantity alone when there is no purpose', () => {
-    const entry = event(withdrawal(493), createdWith({ withdrawnQuantity: QUANTITY_50 }));
-    expect(describeEvent(entry)).toBe('withdrew 50 Seeds');
+    const entry = event(withdrawal(493), createdWith({ withdrawnQuantity: QUANTITY_50, date: WITHDRAWN_ON }));
+    expect(describeEvent(entry)).toBe('50 Seeds withdrawn on 2026-08-12');
+  });
+
+  it('leaves the date off an event that carries none', () => {
+    const entry = event(withdrawal(493), createdWith({ withdrawnQuantity: QUANTITY_50, purpose: 'Other' }));
+    expect(describeEvent(entry)).toBe('50 Seeds withdrawn for Other');
+  });
+
+  it('shows the estimated seed count alongside a withdrawal by weight', () => {
+    const entry = event(
+      withdrawal(495),
+      createdWith({
+        withdrawnQuantity: '429 milligrams',
+        estimatedCount: '13 seeds',
+        purpose: 'Out-planting',
+        date: WITHDRAWN_ON,
+      })
+    );
+    expect(describeEvent(entry)).toBe('429 milligrams (~13 seeds) withdrawn for Out-planting on 2026-08-12');
+  });
+
+  it('shows the estimated weight alongside a withdrawal by seed count', () => {
+    const entry = event(
+      withdrawal(496),
+      createdWith({
+        withdrawnQuantity: '96 seeds',
+        estimatedWeight: '2 grams',
+        purpose: 'Nursery',
+        batchId: '720',
+        date: WITHDRAWN_ON,
+      })
+    );
+    expect(describeEvent(entry, undefined, { 720: 'Bend Nursery' })).toBe(
+      '96 seeds (~2 grams) withdrawn to Bend Nursery on 2026-08-12'
+    );
+  });
+
+  it('shows the estimate when there is no purpose', () => {
+    const entry = event(
+      withdrawal(497),
+      createdWith({ withdrawnQuantity: '2 kg', estimatedCount: '30 seeds', date: WITHDRAWN_ON })
+    );
+    expect(describeEvent(entry)).toBe('2 kg (~30 seeds) withdrawn on 2026-08-12');
   });
 
   it('falls back to the bare wording when the event carries no fields', () => {

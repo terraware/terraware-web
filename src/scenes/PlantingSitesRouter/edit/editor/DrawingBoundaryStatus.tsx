@@ -15,20 +15,20 @@ export default function DrawingBoundaryStatus({ onUploadInstead }: DrawingBounda
   return (
     <Box
       sx={{
-        alignItems: 'center',
+        alignItems: 'flex-start',
         background: theme.palette.TwClrBgSecondary,
         borderRadius: '8px',
         display: 'flex',
         gap: theme.spacing(1.5),
         marginBottom: theme.spacing(2),
-        padding: theme.spacing(1.25, 1.25, 1.25, 2),
+        padding: theme.spacing(1.25, 2),
       }}
     >
       <Icon name='iconEdit' style={{ fill: theme.palette.TwClrIcnSecondary, flex: 'none' }} />
-      <Typography fontSize='14px' fontWeight={400} lineHeight='20px' color={theme.palette.TwClrTxt}>
-        {strings.SITE_BOUNDARY_DRAWING_ON_MAP}
-      </Typography>
-      <Box marginLeft='auto' flex='none'>
+      <Box display='flex' flexDirection='column' alignItems='flex-start' gap={theme.spacing(1)}>
+        <Typography fontSize='14px' fontWeight={400} lineHeight='20px' color={theme.palette.TwClrTxt}>
+          {strings.SITE_BOUNDARY_DRAWING_ON_MAP}
+        </Typography>
         <Button
           id='upload-boundary-file-instead'
           label={strings.UPLOAD_A_FILE_INSTEAD}

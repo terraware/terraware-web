@@ -24,12 +24,14 @@ type MapComponentProps = {
   disableDoubleClickZoom?: boolean;
   disableZoom?: boolean;
   drawerChildren?: ReactNode;
+  drawerEar?: ReactNode;
   drawerHeader?: ReactNode;
   drawerHideCloseButton?: boolean;
   drawerHideHeader?: boolean;
   drawerOpen?: boolean;
   drawerRef?: MutableRefObject<HTMLDivElement | null>;
   drawerSize?: MapDrawerSize;
+  drawerStyle?: CSSProperties;
   fillContainerHeight?: boolean;
   hideBorder?: boolean;
   hideFullScreenControl?: boolean;
@@ -68,12 +70,14 @@ const MapComponent = (props: MapComponentProps) => {
     disableDoubleClickZoom,
     disableZoom,
     drawerChildren,
+    drawerEar,
     drawerHeader,
     drawerHideCloseButton,
     drawerHideHeader,
     drawerOpen,
     drawerRef,
     drawerSize,
+    drawerStyle,
     fillContainerHeight,
     hideBorder,
     hideFullScreenControl,
@@ -156,6 +160,7 @@ const MapComponent = (props: MapComponentProps) => {
         disableDoubleClickZoom={disableDoubleClickZoom}
         disableZoom={disableZoom}
         drawerOpen={drawerOpen}
+        drawerSize={drawerSize}
         fillContainerHeight={fillContainerHeight}
         hideFullScreenControl={hideFullScreenControl}
         hideMapViewStyleControl={hideMapViewStyleControl}
@@ -191,6 +196,7 @@ const MapComponent = (props: MapComponentProps) => {
     disableDoubleClickZoom,
     disableZoom,
     drawerOpen,
+    drawerSize,
     fillContainerHeight,
     hideFullScreenControl,
     hideMapViewStyleControl,
@@ -219,6 +225,7 @@ const MapComponent = (props: MapComponentProps) => {
       drawer={
         <MapDrawer
           drawerRef={drawerRef}
+          ear={drawerEar}
           headerComponent={drawerHeader}
           hideBorder={hideBorder}
           hideCloseButton={drawerHideCloseButton}
@@ -226,6 +233,7 @@ const MapComponent = (props: MapComponentProps) => {
           open={drawerOpen ?? false}
           onClose={closeDrawer}
           size={drawerSize ?? 'small'}
+          style={drawerStyle}
         >
           {drawerChildren}
         </MapDrawer>

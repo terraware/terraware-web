@@ -65,32 +65,37 @@ test.describe('ObservationDetailsScreenshots', () => {
     });
   });
 
-  test('Observation list map — monitoring plots and survival rate', async ({ page }) => {
-    await page.locator('.select').first().click();
-    await page.getByRole('list').getByText('PS2', { exact: true }).click();
+  test.describe('list map', () => {
+    // Tall enough that the map fits without scrolling, so the sticky header stays clear of it.
+    test.use({ viewport: { width: 1280, height: 1200 } });
 
-    await waitForMapIdle(page);
+    test('Observation list map — monitoring plots and survival rate', async ({ page }) => {
+      await page.locator('#planting-site-selector').click();
+      await page.getByRole('list').getByText('PS2', { exact: true }).click();
 
-    await expect(page.locator('.map-container').first()).toHaveScreenshot(
-      'observation-list-map.png',
-      MAP_SCREENSHOT_OPTIONS
-    );
-  });
+      await waitForMapIdle(page);
 
-  test('Observation list map — survival rate legend toggled on', async ({ page }) => {
-    await page.locator('.select').first().click();
-    await page.getByRole('list').getByText('PS2', { exact: true }).click();
+      await expect(page.locator('.map-container').first()).toHaveScreenshot(
+        'observation-list-map.png',
+        MAP_SCREENSHOT_OPTIONS
+      );
+    });
 
-    await waitForMapIdle(page);
+    test('Observation list map — survival rate legend toggled on', async ({ page }) => {
+      await page.locator('#planting-site-selector').click();
+      await page.getByRole('list').getByText('PS2', { exact: true }).click();
 
-    // Toggle the survival rate layer on via the map legend
-    await page.locator('.map-container').getByText('Survival Rate', { exact: true }).click();
-    await waitForMapIdle(page);
+      await waitForMapIdle(page);
 
-    await expect(page.locator('.map-container').first()).toHaveScreenshot(
-      'observation-list-map-survival-rate.png',
-      MAP_SCREENSHOT_OPTIONS
-    );
+      // Toggle the survival rate layer on via the map legend
+      await page.locator('.map-container').getByRole('checkbox').click();
+      await waitForMapIdle(page);
+
+      await expect(page.locator('.map-container').first()).toHaveScreenshot(
+        'observation-list-map-survival-rate.png',
+        MAP_SCREENSHOT_OPTIONS
+      );
+    });
   });
 
   test('Observation level detail view — stats and charts', async ({ page }) => {
@@ -200,22 +205,22 @@ test.describe('ObservationDetailsScreenshots', () => {
   });
 
   test('Survival rate settings view', async ({ page }) => {
-    await page.locator('.select').first().click();
+    await page.locator('#planting-site-selector').click();
     await page.getByRole('list').getByText('PS2', { exact: true }).click();
 
-    await expect(page.getByRole('button', { name: 'Survival Rate Settings' })).toBeVisible();
-    await page.getByRole('button', { name: 'Survival Rate Settings' }).click();
+    await page.locator('#more-options').click();
+    await page.getByRole('menuitem', { name: 'Survival Rate Settings' }).click();
     await waitFor(page, '#home');
 
     await expect(page).toHaveScreenshot('survival-rate-settings.png', FULL_PAGE_SCREENSHOT_OPTIONS);
   });
 
   test('Edit survival rate settings view', async ({ page }) => {
-    await page.locator('.select').first().click();
+    await page.locator('#planting-site-selector').click();
     await page.getByRole('list').getByText('PS2', { exact: true }).click();
 
-    await expect(page.getByRole('button', { name: 'Survival Rate Settings' })).toBeVisible();
-    await page.getByRole('button', { name: 'Survival Rate Settings' }).click();
+    await page.locator('#more-options').click();
+    await page.getByRole('menuitem', { name: 'Survival Rate Settings' }).click();
     await waitFor(page, '#home');
 
     await page.getByRole('button', { name: 'Edit Permanent Plots' }).click();

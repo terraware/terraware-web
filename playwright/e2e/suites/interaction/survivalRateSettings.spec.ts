@@ -43,10 +43,10 @@ test.describe('SurvivalRateSettingsTests', () => {
     baseURL,
   }) => {
     await openNavItem(page, 'Plantings', 'Observations');
-    await page.locator('.select').first().click();
+    await page.locator('#planting-site-selector').click();
     await page.getByRole('list').getByText('PS2', { exact: true }).click();
-    await expect(page.getByRole('button', { name: 'Survival Rate Settings' })).toBeVisible({ timeout: 10000 });
-    await page.getByRole('button', { name: 'Survival Rate Settings' }).click();
+    await page.locator('#more-options').click();
+    await page.getByRole('menuitem', { name: 'Survival Rate Settings' }).click();
     await page.getByRole('button', { name: 'Edit Permanent Plots' }).click();
 
     // On the Edit Survival Rate Settings page select 'Use Observation data' for each permanent plot
@@ -66,10 +66,10 @@ test.describe('SurvivalRateSettingsTests', () => {
 
   test('Edit one plot to manual density and verify new survival rate', async ({ page, baseURL }) => {
     await openNavItem(page, 'Plantings', 'Observations');
-    await page.locator('.select').first().click();
+    await page.locator('#planting-site-selector').click();
     await page.getByRole('list').getByText('PS2', { exact: true }).click();
-    await expect(page.getByRole('button', { name: 'Survival Rate Settings' })).toBeVisible({ timeout: 10000 });
-    await page.getByRole('button', { name: 'Survival Rate Settings' }).click();
+    await page.locator('#more-options').click();
+    await page.getByRole('menuitem', { name: 'Survival Rate Settings' }).click();
     await page.getByRole('button', { name: 'Edit Permanent Plots' }).click();
     await expect(page.getByLabel('Use Observation data').first()).toBeVisible();
 

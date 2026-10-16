@@ -1,7 +1,6 @@
 import React, { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { Box, Typography, useTheme } from '@mui/material';
-import { Icon } from '@terraware/web-components';
+import { Box } from '@mui/material';
 import bbox from '@turf/bbox';
 import bboxPolygon from '@turf/bbox-polygon';
 import centroid from '@turf/centroid';
@@ -26,6 +25,7 @@ import useSnackbar from 'src/utils/useSnackbar';
 
 import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
 import DrawingBoundaryStatus from './DrawingBoundaryStatus';
+import { useEditorStepperDrawer } from './EditorStepper';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import UploadBoundaryModal, { ParsedBoundary, boundaryFileFormatOf, fileSizeKb } from './UploadBoundaryModal';
 import UploadedBoundarySummary, { UploadedBoundaryFile } from './UploadedBoundarySummary';
@@ -100,7 +100,6 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   const [mode, setMode] = useState<MapEditorMode>();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
-  const theme = useTheme();
   const { activeLocale } = useLocalization();
   const trackEvent = useTrackEvent();
 
@@ -185,9 +184,24 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     if (fileUploadEnabled && uploadedFile) {
       return [
         {
-          text: `${strings.SITE_BOUNDARY_UPLOADED_DESCRIPTION} ${strings.SITE_BOUNDARY_UPLOAD_TUTORIAL}`,
+          text: strings.SITE_BOUNDARY_UPLOADED_DESCRIPTION,
           hasTutorial: true,
+          handlePrefix: (prefix: string) =>
+            strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
         },
+        { text: strings.SITE_BOUNDARY_BOUNDING_BOX_LIMIT },
+      ];
+    }
+
+    if (fileUploadEnabled && activeMethod === 'draw') {
+      return [
+        {
+          text: strings.SITE_BOUNDARY_DRAWING_DESCRIPTION,
+          hasTutorial: true,
+          handlePrefix: (prefix: string) =>
+            strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
+        },
+        { text: strings.SITE_BOUNDARY_BOUNDING_BOX_LIMIT },
       ];
     }
 
@@ -230,7 +244,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     }
 
     return data;
-  }, [activeLocale, fileUploadEnabled, mode, site.siteType, uploadedFile]);
+  }, [activeLocale, activeMethod, fileUploadEnabled, mode, site.siteType, uploadedFile]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {
@@ -343,11 +357,10 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
 
   const onOpenUploadModal = useCallback(() => setShowUploadModal(true), []);
 
-  return (
-    <Box display='flex' flexDirection='column' flexGrow={1}>
+  const drawerProps = useEditorStepperDrawer(
+    <>
       <StepTitleDescription
         description={description}
-        largeText
         dontShowAgainPreferenceName='dont-show-site-boundary-instructions'
         tutorialDescription={tutorialDescription}
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
@@ -355,12 +368,6 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       />
       {fileUploadEnabled && (
         <>
-          <Box display='flex' alignItems='center' gap={theme.spacing(0.75)} marginBottom={theme.spacing(2.5)}>
-            <Icon name='info' size='small' style={{ fill: theme.palette.TwClrIcnSecondary, flex: 'none' }} />
-            <Typography fontSize='12px' fontWeight={400} lineHeight='16px' color={theme.palette.TwClrTxtSecondary}>
-              {strings.SITE_BOUNDARY_MAX_BOUNDING_BOX}
-            </Typography>
-          </Box>
           {uploadedFile && (
             <UploadedBoundarySummary
               file={uploadedFile}
@@ -371,9 +378,15 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
           {!uploadedFile && activeMethod === 'draw' && <DrawingBoundaryStatus onUploadInstead={onOpenUploadModal} />}
         </>
       )}
+    </>
+  );
+
+  return (
+    <Box display='flex' flexDirection='column' flexGrow={1}>
       <Box display='flex' flexDirection='column' flexGrow={1}>
         <EditableMap
           key={mapKey}
+          {...drawerProps}
           editableBoundary={siteBoundaryData?.siteBoundary}
           errorAnnotations={errorAnnotations}
           onEditableBoundaryChanged={(editableBoundary) => void onEditableBoundaryChanged(editableBoundary)}

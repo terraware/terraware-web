@@ -1,15 +1,12 @@
-import React, { type JSX, useEffect, useMemo, useRef, useState } from 'react';
+import React, { type JSX, useEffect, useMemo, useRef } from 'react';
 import { MapRef } from 'react-map-gl/mapbox';
 
 import { Box, Typography, useTheme } from '@mui/material';
 import { getDateDisplayValue } from '@terraware/web-components/utils';
 
-import FormattedNumber from 'src/components/common/FormattedNumber';
-import { useFeatureEnabled } from 'src/features';
 import { useGetOneObservationResults } from 'src/hooks/observations';
 import usePlantingSite from 'src/hooks/usePlantingSite';
 import { useLocalization } from 'src/providers';
-import { ObservationResultsPayload } from 'src/queries/generated/observations';
 import { getShortDate } from 'src/utils/dateFormatter';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
@@ -19,7 +16,6 @@ import { useSelectedObservation } from '../SelectedObservationProvider';
 import useFilteredObservationResults, { ObservationsEmptyState } from '../useFilteredObservationResults';
 import useObservationsEmptyMessage from '../useObservationsEmptyMessage';
 import ObservationMap from './ObservationMap';
-import ObservationTimeline from './ObservationTimeline';
 
 type ObservationMapWrapperProps = {
   emptyState?: ObservationsEmptyState;
@@ -45,7 +41,6 @@ const ObservationMapWrapper = ({
   const theme = useTheme();
   const defaultTimezone = useDefaultTimeZone().get().id;
   const mapRef = useRef<MapRef | null>(null);
-  const newFiltersEnabled = useFeatureEnabled('New Observation Filters');
 
   useEffect(() => {
     if (isMapVisible) {
@@ -55,8 +50,6 @@ const ObservationMapWrapper = ({
       return () => cancelAnimationFrame(raf);
     }
   }, [isMapVisible]);
-
-  const [selectedObservationResults, setSelectedObservationResults] = useState<ObservationResultsPayload[]>([]);
 
   const { plantingSite } = usePlantingSite(plantingSiteId);
 
@@ -80,11 +73,9 @@ const ObservationMapWrapper = ({
     [getObservationResultResponse.data?.observation]
   );
 
-  const mappedResults = newFiltersEnabled ? observations : selectedObservationResults;
-
   const { selectedObservationId } = useSelectedObservation();
   const mappedObservationDate = useMemo(() => {
-    if (!newFiltersEnabled || isAdHoc) {
+    if (isAdHoc) {
       return undefined;
     }
 
@@ -98,15 +89,7 @@ const ObservationMapWrapper = ({
       ? getDateDisplayValue(observation.completedTime, timezone)
       : observation.startDate;
     return getShortDate(date, activeLocale);
-  }, [
-    activeLocale,
-    defaultTimezone,
-    isAdHoc,
-    newFiltersEnabled,
-    observations,
-    plantingSite?.timeZone,
-    selectedObservationId,
-  ]);
+  }, [activeLocale, defaultTimezone, isAdHoc, observations, plantingSite?.timeZone, selectedObservationId]);
 
   return (
     <Box
@@ -119,27 +102,6 @@ const ObservationMapWrapper = ({
         gap: theme.spacing(3),
       }}
     >
-      {!newFiltersEnabled && plantingSite && !singleObservationResult && (
-        <Box display={'flex'} flexDirection={'row'} width={'100%'} alignItems={'center'}>
-          <Box marginRight={theme.spacing(2)}>
-            <Typography fontSize='20px' fontWeight={600} lineHeight={'28px'}>
-              {plantingSite?.areaHa !== undefined &&
-                strings.formatString(
-                  strings.X_HA_IN_TOTAL_PLANTING_AREA,
-                  <FormattedNumber decimals={1} value={plantingSite.areaHa} />
-                )}
-            </Typography>
-          </Box>
-          <Box display={'flex'} flexGrow={1} justifyContent={'flex-end'}>
-            <ObservationTimeline
-              isAdHoc={isAdHoc}
-              observationResults={observations}
-              selectObservationResults={setSelectedObservationResults}
-              timezone={plantingSite?.timeZone ?? defaultTimezone}
-            />
-          </Box>
-        </Box>
-      )}
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: theme.spacing(0.5) }}>
         {mappedObservationDate && (
           <Typography color={theme.palette.TwClrTxtSecondary} fontSize='14px'>
@@ -148,16 +110,16 @@ const ObservationMapWrapper = ({
         )}
         <Box sx={{ position: 'relative' }}>
           <ObservationMap
-            adHocObservationResults={singleObservationResult ? [singleObservationResult] : isAdHoc ? mappedResults : []}
+            adHocObservationResults={singleObservationResult ? [singleObservationResult] : isAdHoc ? observations : []}
             isAdHoc={isAdHoc}
             isBiomass={observationType === 'Biomass Measurements'}
             isSingleView={!!singleObservationResult}
             mapRef={mapRef}
-            observationResults={singleObservationResult ? [singleObservationResult] : isAdHoc ? [] : mappedResults}
+            observationResults={singleObservationResult ? [singleObservationResult] : isAdHoc ? [] : observations}
             plantingSiteId={plantingSiteId}
             selectPlantingSiteId={selectPlantingSiteId}
           />
-          {newFiltersEnabled && emptyMessage && <ObservationsEmptyOverlay message={emptyMessage} />}
+          {emptyMessage && <ObservationsEmptyOverlay message={emptyMessage} />}
         </Box>
       </Box>
     </Box>

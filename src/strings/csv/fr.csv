@@ -17,11 +17,13 @@ ACCESSION_EVENT_VIABILITY_TEST_DELETED,a supprimé un test de viabilité,131c982
 ACCESSION_EVENT_VIABILITY_TEST_STARTED,a commencé un test de viabilité {0},241121fa
 ACCESSION_EVENT_VIABILITY_TEST_UPDATED,Le test de viabilité {0} a été modifié de {1} à {2},630ab02f
 ACCESSION_EVENT_WITHDRAWAL_ADDED,a ajouté un retrait,66861582
-ACCESSION_EVENT_WITHDRAWAL_ADDED_FOR,a retiré {0} pour {1},60701bb4
-ACCESSION_EVENT_WITHDRAWAL_ADDED_QUANTITY,a retiré {0},fb83504c
-ACCESSION_EVENT_WITHDRAWAL_ADDED_TO,a retiré {0} vers {1},8c38cd96
+ACCESSION_EVENT_WITHDRAWAL_ADDED_FOR,{0} retiré pour {1},70e4ecc1
+ACCESSION_EVENT_WITHDRAWAL_ADDED_QUANTITY,{0} retiré,473854c3
+ACCESSION_EVENT_WITHDRAWAL_ADDED_TO,{0} retiré vers {1},f2bd4039
 ACCESSION_EVENT_WITHDRAWAL_DELETED,a supprimé un retrait,2fa169b8
 ACCESSION_EVENT_WITHDRAWAL_DELETED_FOR_VIABILITY_TEST,un retrait a été supprimé pour un test de viabilité,d9b09155
+ACCESSION_EVENT_WITHDRAWAL_ON_DATE,{0} le {1},e6e61cb5
+ACCESSION_EVENT_WITHDRAWAL_QUANTITY_ESTIMATED,{0} (~{1}),0afe1bef
 ACCESSION_EVENT_WITHDRAWAL_UPDATED,Le retrait {0} a été modifié de {1} à {2},8dd1f01b
 ACCESSION_HISTORY_NO_EVENTS,Aucun historique pour le moment.,f8822669
 ACCESSION_ID,Identifiant de l'accesion,a87726c0
@@ -56,8 +58,6 @@ ACTIVITY_TYPE,Type d’activité,5f057b66
 ACTUAL,Réel,1235cf68
 AD_HOC,Ad Hoc,2acaf742
 AD_HOC_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre de plants observés par espèce enregistrés comme vivants. Les plants dont l'espèce est inconnue ne sont pas inclus.,15817386
-AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_1,Il n’y a actuellement aucune observation de parcelle ad hoc.,9ae089fc
-AD_HOC_OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Les observations utilisant des parcelles ad hoc pour le suivi des plantes peuvent être enregistrées via les Observations de parcelles ad hoc dans l’application mobile.,f0775160
 AD_HOC_PLANT_MONITORING,Suivi ponctuel des plantes,589a6d6c
 AD_HOC_PLOT_LIVE_PLANTS_TOOLTIP,Plantes vivantes correspond au nombre de plantes observées enregistrées comme vivantes.,b0ec7f7f
 AD_HOC_PLOT_PLANT_DENSITY_TOOLTIP,La densité de plantes (plantes par hectare) est calculée en fonction du nombre de plantes observées.,142e44c5
@@ -219,11 +219,8 @@ ASSIGN_NEW_OWNER_DESC,"Pour supprimer le propriétaire actuel, vous devez lui at
 ASSIGN_OWNER,Attribuer un propriétaire,dc696cfa
 ASSIGN_OWNER_ELLIPSIS,Attribuer un propriétaire...,8053cd0e
 ASSIGN_STRATA,Attribuer des strates,43b7aa27
-ASSIGNED,Désigné,29aa3dd8
 ASSIGNED_LOCATION,Emplacement attribué,9e0b2077
 ASSIGNED_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre de plants observés par espèce enregistrés comme vivants. Les plants enregistrés comme préexistants ou dont l'espèce est inconnue ne sont pas inclus.,526a70bc
-ASSIGNED_PLOT_OBSERVATION,Observation de parcelle attribuée,9175acf6
-ASSIGNED_PLOT_OBSERVATION_TOOLTIP,Sélectionnez une observation de parcelle attribuée pour afficher les données d'observation sur la carte.,2a1963a4
 ASSIGNED_PLOTS,Parcelles attribuées,f3fc5925
 AT_RISK,À risque,b2f3373a
 ATTACH_IMAGES_OR_VIDEOS,Joindre une (des) image(s) ou une (des) vidéo(s),c229aa87
@@ -270,8 +267,6 @@ BEST_MONTHS_FOR_OBSERVATIONS_INSTRUCTIONS,Il s'agit des saisons où cela a le pl
 BEST_MONTHS_FOR_OBSERVATIONS_VALIDATION_ERROR,Veuillez sélectionner au moins un mois.,999b9492
 BI_ANNUAL,Semestriel,76d69272
 BIODIVERSITY,Biodiversité,fa436482
-BIOMASS_EMPTY_STATE_MESSAGE_1,Il n'y a pas d'Observations ad hoc de parcelles pour le moment.,7dd9cdf0
-BIOMASS_EMPTY_STATE_MESSAGE_2,Les observations pour le suivi de la biomasse peuvent être enregistrées par le biais d'observations ad hoc sur les parcelles dans l'application mobile.,e9184a63
 BIOMASS_MONITORING,Suivi de la biomasse,c249c88e
 BIOMASS_NUMBER_OF_LIVE_PLANTS_PER_SPECIES_TOOLTIP,Le nombre de plants vivants par espèce indique le nombre d'espèces d'arbres et d'arbustes observées et enregistrées comme vivantes.,cb7c376f
 BIOMASS_OBSERVATION_FILENAME_PREFIX,Observation-de-biomasse,15aec1fa
@@ -586,7 +581,7 @@ DOWNLOAD_THE_CSV_TEMPLATE,Téléchargez le modèle CSV.,d5d98658
 DOWNLOAD_THE_TERRAWARE_MOBILE_APP,Télécharger l'application mobile Terraware,3eeed497
 DOWNLOAD_THE_TERRAWARE_MOBILE_APP_DESCRIPTION,"Obtenez l'application mobile pour profiter des fonctionnalités de collecte de semences, de gestion des pépinières et de surveillance des plantes, que vous pouvez utiliser avec plus de flexibilité que depuis votre ordinateur de bureau !",94127206
 DRAFT_PLANTING_SITES,Sites de plantation en brouillon,97403fcc
-DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE,"La délimitation du site n'est pas terminée, ce site ne peut donc pas encore être utilisé pour la plantation ou les observations.",be5b94c5
+DRAFT_SITE_BOUNDARY_IN_PROGRESS_MESSAGE,Ce site provisoire ne peut pas être utilisé pour la plantation ou les observations tant que la délimitation du site n’a pas été entièrement configurée.,48195727
 DRAW_BOUNDARY_WITHIN_MAP,Tracer les limites sur une carte,d1ee6da4
 DRAW_PROPOSED_PROJECT_BOUNDARY,Tracer les limites du projet proposé,8b73e819
 DRONE_FLIGHT,Vol de drone,af8ec693
@@ -734,7 +729,6 @@ EXPANSION_POTENTIAL,Potentiel d'expansion,cfcbb501
 EXPANSION_POTENTIAL_DESCRIPTION,"Terrain éligible non encore sécurisé par des accords, mais nous pensons qu’il peut l’être.",60ac9586
 EXPANSION_POTENTIAL_HA,Potentiel d'expansion (ha),eb119de5
 EXPORT,Exporter,54546641
-EXPORT_BIOMASS_MONITORING_DETAILS_CSV,Exporter les données (fichiers CSV dans une archive .zip),cea921b1
 EXPORT_CSV,Exporter CSV,7070c8c7
 EXPORT_DATA,Exporter les données,3fc16ad5
 EXPORT_LOCATIONS,Exporter les emplacements,1e075828
@@ -880,6 +874,7 @@ HERBACEOUS_COVER_PERCENT,Couverture herbacée (%),e04acd60
 HERBACEOUS_SPECIES,Espèces herbacées,37cec187
 HIDE_ALL,Tout masquer,465040a6
 HIDE_FILTERS,Masquer les filtres,0fdbb60d
+HIDE_INSTRUCTIONS,Masquer les instructions,21ebb7e7
 HIDE_ON_MAP,Masquer sur la carte,089ea8d7
 HIDE_TITLE_BAR,Masquer la barre de titre,e9b3ee43
 HIGH,Haute,cb1efe60
@@ -965,7 +960,7 @@ INVENTORY_PLANNING,Planification des stocks,2e1d8c1f
 INVENTORY_PLANNING_ALLOCATED_TOOLTIP,Nombre de plants de cette espèce prévus pour atteindre les objectifs des saisons de plantation.,8ae090b0
 INVENTORY_PLANNING_AVAILABLE_TOOLTIP,Nombre de semis de cette espèce en phase d'acclimatation et prêts à être plantés.,94c83729
 INVENTORY_PLANNING_DESCRIPTION,Allouer l'inventaire pour les objectifs d'espèces de la Saison de plantation.,0496b829
-INVENTORY_PLANNING_TARGET_TOOLTIP,Nombre de plants de cette espèce définis comme objectifs pour les saisons de plantation.,724d5222
+INVENTORY_PLANNING_TARGET_TOOLTIP,Nombre de plants cibles de cette espèce pour la saison de plantation restant à planter.,a05fc008
 INVENTORY_WITHDRAWALS,Retraits d'inventaire,cefda57f
 INVESTMENT_COMMITTEE_VOTES,Votes du comité d'investissement,a7c64c6c
 INVITATION_PENDING,Invitation en attente,6b64d319
@@ -1379,7 +1374,6 @@ OBSERVATION_DATE,Date de l’observation,62a4f110
 OBSERVATION_END_DATE,Date de fin de l'observation,7997df5c
 OBSERVATION_ENDED,Observation terminée,dc4f5f65
 OBSERVATION_ENDED_MESSAGE,L'observation {0} est terminée.,95cf320e
-OBSERVATION_EVENT_SCHEDULED,Un événement d'observation est prévu pour le {0} pour le(s) site(s) de plantation :,da489f7e
 OBSERVATION_EVENTS,Événements d'observation,564648b0
 OBSERVATION_EVENTS_TOOLTIP,Les observations antérieures apparaissent avec une opacité décroissante.,03c6ea26
 OBSERVATION_EXPLANATION_PHOTO_LABEL,{0} : emplacement >20 m,c1fe1bd5
@@ -1391,8 +1385,6 @@ OBSERVATION_SCHEDULED,Observation programmée !,2022ad09
 OBSERVATION_SMALL_SITE_WARNING,Vous planifiez une observation pour un site potentiellement trop petit pour l'attribution de parcelles de surveillance. Vous serez averti·e si l'attribution de parcelles de surveillance et le début de l'observation posent des problèmes. Vous pouvez également effectuer une observation ad hoc des parcelles pour ce site.,5fa79765
 OBSERVATION_START_DATE,Date de début de l'observation,b1807781
 OBSERVATIONS,Observations,8169f17c
-OBSERVATIONS_EMPTY_STATE_MESSAGE_1,Il n'y a actuellement aucune observation relative à une parcelle désignée.,90adba3a
-OBSERVATIONS_EMPTY_STATE_MESSAGE_2,Des observations avec des parcelles désignées peuvent être programmées pour les sites de plantations desquelles des végétaux furent précédemment alloués par le biais de retraits d'inventaire.,535c7f37
 OBSERVATIONS_TERRAWARE_MOBILE_APP_DESCRIPTION,"Vous aurez besoin de l’application mobile Terraware pour compléter vos observations.
 
 Scannez les codes QR avec votre appareil pour télécharger sur l’App Store ou Google Play.",13be06be
@@ -1629,7 +1621,6 @@ PLOT_INFO,Informations sur la parcelle,38a9b59d
 PLOT_LIVE_PLANTS_TOOLTIP,Plantes vivantes correspond au nombre de plantes observées enregistrées comme vivantes. Les plantes enregistrées comme préexistantes ne sont pas incluses.,f7d2a77f
 PLOT_OBSERVATION_LOCATION_DEVIATION_INFO,Cette observation de parcelle a été réalisée à plus de 20 m de l'emplacement assigné. Exportez les données de la parcelle pour voir les coordonnées de localisation relevées sur le terrain.,32c9a47f
 PLOT_PLANT_DENSITY_TOOLTIP,La densité de plantes (plantes par hectare) est calculée en fonction du nombre de plantes observées enregistrées comme vivantes. Les plantes enregistrées comme préexistantes ne sont pas incluses.,32ced1ba
-PLOT_SELECTION,Sélection de parcelles,ba150031
 PLOT_SPECIES_TOOLTIP,"Espèces correspond au nombre d'espèces représentées par l'ensemble des plantes observées, y compris les plantes enregistrées comme préexistantes.",fd5ff6d0
 PLOT_SURVIVAL_RATE_TOOLTIP,"Le taux de survie est calculé en fonction de la densité initiale de plantes spécifiée et du nombre de plantes observées enregistrées comme vivantes. Les plantes enregistrées comme préexistantes, dont l'espèce est inconnue ou qui ne figurent pas dans la liste des espèces, ne sont pas incluses.",4e745c92
 PLOT_TOTAL_PLANTS_TOOLTIP,"Plantes totales correspond au nombre total de plantes observées, y compris les plantes enregistrées comme vivantes et mortes. Les plantes enregistrées comme préexistantes ne sont pas incluses.",244fd18c
@@ -2080,6 +2071,7 @@ SETUP_REMAINING,Configuration restante,368418af
 SHARED_WITH_FUNDER,Partagé avec le bailleur de fonds,f59b229b
 SHOW_COLOR_KEY,Afficher la légende des couleurs,7ba69c52
 SHOW_FILTERS,Afficher les filtres,d4143c37
+SHOW_INSTRUCTIONS,Afficher les instructions,81469448
 SHOW_LESS,Afficher moins,d753a0ed
 SHOW_MORE,Afficher plus,43cab9b7
 SHOW_OBSERVATION_ON_MAP,Afficher sur la carte,2c88d696
@@ -2095,11 +2087,13 @@ SINGLE_STRATUM_SURVIVAL_RATE_MESSAGE,"Le site ne comporte qu'une seule strate av
 SITE,Site,925ca15b
 SITE_BOUNDARY,Limite du site,ee9dc83f
 SITE_BOUNDARY_ABSENT_WARNING,Veuillez définir une limite de site.,215b60ab
+SITE_BOUNDARY_BOUNDING_BOX_LIMIT,"La boîte englobante du site peut atteindre 20 000 ha. Si votre site est plus grand, divisez-le en plusieurs sites de plantation.",5ae05b46
 SITE_BOUNDARY_DESCRIPTION_0,Dessinez ci-dessous les limites de votre site de plantation. Toutes les zones plantables de votre projet doivent être contenues dans les limites du site.,1eb2c82f
 SITE_BOUNDARY_DESCRIPTION_1,Utilisez l'outil de dessin {0} pour tracer les limites du site de plantation. [Regardez un tutoriel] sur le tracé des limites du site.,8a4e2537
 SITE_BOUNDARY_DESCRIPTION_2,"Les limites du site doivent s'inscrire dans une boîte de délimitation d'une superficie inférieure ou égale à 20 000 hectares. S'il est plus grand, envisagez de diviser le site en plusieurs sites de plantation.",6495bc67
 SITE_BOUNDARY_DESCRIPTION_3,Zoomez sur l'emplacement du site de plantation. Cliquez ensuite sur des zones de la carte pour ajouter des points à la limite du site. Complétez la limite en double-cliquant ou en cliquant à nouveau sur le point de départ.,14d699d1
 SITE_BOUNDARY_DESCRIPTION_4,"Pour modifier la forme de la limite du site, cliquez sur la forme pour modifier les points. Pour supprimer la forme, cliquez sur le bouton {0}.",3fd2c49c
+SITE_BOUNDARY_DRAWING_DESCRIPTION,"Définissez une limite de site de plantation qui englobe toutes les zones plantables du projet. Utilisez l’outil de dessin {0} pour tracer des formes, et terminez chaque forme en double-cliquant ou en cliquant à nouveau sur le point de départ. [Regardez un tutoriel] sur la délimitation des sites de plantation.",cf856b43
 SITE_BOUNDARY_DRAWING_ON_MAP,Tracé de la limite sur la carte.,58e0ca26
 SITE_BOUNDARY_ERRORS,Il y a des erreurs dans les limites du site.,916536c6
 SITE_BOUNDARY_FILE_SUMMARY,{0} · {1} · {2} · {3} points · ~{4} ha · boîte englobante ~{5} ha,0b5beef6
@@ -2110,15 +2104,17 @@ SITE_BOUNDARY_POLYGON_TOO_SMALL,La limite de la zone {0} hectares est inférieur
 SITE_BOUNDARY_POLYGONS_COMBINED,Les {0} polygones de ce fichier ont été combinés en une seule limite de site couvrant l'ensemble.,e94fad22
 SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED,"Si vous souhaitez que chacun soit un Strate distincte, un Site détaillé est requis.",c58dd98d
 SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Remarque : Par défaut, les sites simples incluent une seule strate et une seule sous-strate qui composent l'ensemble du site de plantation.",d866268c
-SITE_BOUNDARY_UPLOAD_DESCRIPTION,Définissez ci-dessous la limite du site de votre zone de plantation. Toutes les zones plantables de votre projet doivent être incluses dans la limite du site.,7e619e7a
+SITE_BOUNDARY_UPLOAD_DESCRIPTION,Définissez une limite de site de plantation qui englobe toutes les zones plantables du projet.,992243f8
 SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,Les Sites simples comprennent une Strate et un Sous-strate qui couvrent l’ensemble du site de plantation.,955accde
 SITE_BOUNDARY_UPLOAD_TUTORIAL,[Regardez un tutoriel] sur la façon de dessiner les limites d’un site.,ba8fe625
-SITE_BOUNDARY_UPLOADED_DESCRIPTION,Votre fichier de délimitation du site a été téléchargé avec succès et s'affiche sur la carte ci-dessous. Vous pouvez encore modifier n'importe quelle partie de la délimitation avant de continuer.,196684a0
+SITE_BOUNDARY_UPLOADED_DESCRIPTION,Définissez une limite de site de plantation qui englobe toutes les zones plantables du projet. Vous pouvez modifier la limite du site. Utilisez l’outil de dessin {0} pour ajouter d’autres formes. [Regardez un tutoriel] sur la délimitation des sites de plantation.,aaddab79
 SITE_BOUNDING_AREA_TOO_LARGE,La zone délimitée d’environ {0} hectares est trop grande.,eb3c9a60
 SITE_DETAIL,Détail du site,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,Le site de plantation est actuellement un brouillon – seul le créateur du site peut le modifier.,07fbd64b
 SITE_EDITOR_USE_DESKTOP,Cette fonction n’est disponible qu’à partir de l’application de bureau.,1c4eb37d
+SITE_EDITOR_USE_TABLET_LANDSCAPE,Cette fonctionnalité est uniquement disponible en mode paysage sur une tablette.,8710d7e6
 SITE_EXCLUSION_AREAS_DESCRIPTION,"Les zones situées à l'intérieur des limites du site qui ne sont pas plantables, telles que les routes, les plans d'eau et les dépendances, doivent être exclues. Elles sont retirées des calculs de surface plantable et ne sont pas surveillées lors des observations de routine du site. Utilisez l'outil de dessin {0} pour tracer des formes à l'intérieur ou à cheval sur la limite du site, et terminez chaque forme en double-cliquant ou en cliquant à nouveau sur le point de départ. [Regardez un tutoriel] sur la façon de dessiner des zones d'exclusion. Passez cette étape s'il n'y a aucune zone à exclure.",4c2a45b1
+SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,"Définissez les zones à l’intérieur de la limite du site qui ne sont pas plantables, telles que les routes, plans d’eau et bâtiments annexes. Elles seront exclues des calculs de surface plantable et des Observations. Utilisez l’outil de dessin {0} pour tracer des formes à l’intérieur ou en chevauchement avec la limite du site. Passez cette étape s’il n’y a aucune zone à exclure. [Regardez un tutoriel] sur la délimitation des zones d’exclusion.",d22ed290
 SITE_EXCLUSION_ERRORS,Il y a des erreurs dans la limite d’exclusion.,dc334f43
 SITE_GOALS,Objectifs du site,345a7c04
 SITE_GOALS_DESCRIPTION,Gérer les objectifs du site pour les densités de plantation et les espèces.,29421088
@@ -2126,11 +2122,13 @@ SITE_LOCATION,Emplacement du site,e0a85b19
 SITE_MAP,Carte du site,df2fc60a
 SITE_PLANT_DENSITY,Densité de plantation du site,a449ddcc
 SITE_STRATUM_BOUNDARIES_DESCRIPTION,"Une strate est une couche de végétation du site de plantation où les conditions de plantation et de croissance sont similaires, comme le versant d'une colline orientée à l'est. Chaque site de plantation doit comporter au moins une strate et généralement pas plus de cinq. Utilisez l’outil de découpe {0} pour dessiner les polygones des strates à l’intérieur des limites du site ci-dessous. {1} [Regardez un tutoriel] sur l’ajout de limites de strates.",590f73b1
+SITE_STRATUM_BOUNDARIES_DRAWING_DESCRIPTION,"Définissez les strates – couches de végétation du site de plantation où les conditions de plantation et de croissance sont similaires, comme la pente d’une colline orientée à l’est. Chaque site de plantation comporte une Strate par défaut. Utilisez l’outil de découpe {0} pour dessiner des polygones de Strate à l’intérieur de la limite du site. {1} [Regardez un tutoriel] sur l’ajout de limites de Strate.",7b32eb6c
 SITE_STRATUM_BOUNDARIES_SIZE,Les strates doivent avoir une taille minimale de 100 m × 100 m.,d57abc90
 SITE_STRATUM_BOUNDARIES_TOO_SMALL,Une ou plusieurs strates ont une limite inférieure à 100 m x 100 m.,e53c42df
 SITE_STRATUM_BOUNDARY_TOO_SMALL,Limite de strate inférieure à 100 m x 100 m.,d39bb72b
 SITE_STRATUM_NAMES_MISSING,Une ou plusieurs strates n’ont pas de nom. Cliquez sur une strate pour modifier son nom.,dc003708
 SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,"Chaque strate est divisée en un ou plusieurs substrats. Un substrat est la plus petite zone à laquelle des plants peuvent être attribués lors de la plantation, et doit être dimensionné de façon à pouvoir être planté en une seule saison de plantation, généralement de 50 à 200 hectares. Sélectionnez une strate, puis utilisez l’outil de découpe {0} pour dessiner les polygones des substrats à l’intérieur de celle-ci. [Regardez un tutoriel] sur l’ajout de limites de substrats.",d9d30ce0
+SITE_SUBSTRATUM_BOUNDARIES_DRAWING_DESCRIPTION,"Définissez les substrats – la plus petite zone dans laquelle des semis peuvent être plantés au cours d’une seule saison de plantation (par exemple, 50 à 200 hectares). Chaque Strate comporte un Substrat par défaut. Sélectionnez une Strate, puis utilisez l’outil de découpe {0} pour dessiner des polygones de Substrat à l’intérieur de celle-ci. [Regardez un tutoriel] sur l’ajout de limites de Substrat.",f6bf6047
 SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,{0} sélectionnée pour la création de substrats,8444578b
 SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL,Un ou plusieurs substrats ont une limite inférieure à 25 m x 25 m.,87f34c5b
 SITE_SUBSTRATUM_BOUNDARY_TOO_SMALL,Limite de substrat inférieure à 25 m x 25 m.,c014deff

@@ -9,13 +9,17 @@ import {
   detailsDialogButton,
   drawPolygon,
   editDraftDetailsButton,
+  editPolygonVertices,
   editorButton,
   enableSiteEditorPreferences,
   expectActiveStep,
+  expectOptionalSteps,
   goToPlantingSites,
   openDraftPlantingSite,
+  openFeaturePopup,
   polygonTool,
   searchMapLocation,
+  selectPolygon,
   selectSiteType,
   startNewPlantingSite,
   waitForMap,
@@ -29,7 +33,7 @@ const SITE_ADDRESS = '1600 Pennsylvania Avenue NW, Washington, DC';
 const ZOOM_IN_AFTER_SEARCH = 4;
 
 test.describe('PlantingSiteTests', () => {
-  test.use({ viewport: { width: 1600, height: 1200 } });
+  test.use({ viewport: { width: 1920, height: 1200 } });
   test.describe.configure({ timeout: 120000 });
 
   test.beforeEach(async ({ page, context, baseURL }) => {
@@ -75,6 +79,7 @@ test.describe('PlantingSiteTests', () => {
 
     await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+\/edit(\?|$)/);
     await expectActiveStep(page, 'Site Boundary');
+    await expectOptionalSteps(page, ['Site Boundary'], ['Exclusion Areas']);
     await expect(editorButton(page, 'Back')).toBeHidden();
     await expect(page.getByRole('button', { name: 'Reset Boundary Setup' })).toBeHidden();
 
@@ -103,7 +108,9 @@ test.describe('PlantingSiteTests', () => {
     await expect(main.getByText(siteName, { exact: true }).first()).toBeVisible();
     await expect(detailField(page, 'Name')).toHaveText(siteName);
     await expect(page.getByRole('button', { name: 'Delete Draft' })).toBeVisible();
-    await expect(main.getByText('Boundary setup isn’t finished', { exact: false })).toBeVisible();
+    await expect(
+      main.getByText('This draft site can’t be used for planting or Observations', { exact: false })
+    ).toBeVisible();
     await expect(detailField(page, 'Description')).toHaveText('First description');
     await expect(main.getByText('No site boundary yet')).toBeVisible();
 
@@ -135,6 +142,7 @@ test.describe('PlantingSiteTests', () => {
     await expect(page.getByText('How do you want to define this boundary?')).toBeVisible();
     await page.locator('#choose-draw-boundary').click();
     await expect(page.getByText('Drawing the boundary on the map.')).toBeVisible();
+    await expect(page.getByText('Define a Planting Site boundary', { exact: false })).toBeVisible();
     await waitForMap(page);
     await searchMapLocation(page, SITE_ADDRESS);
     await zoomMapIn(page, ZOOM_IN_AFTER_SEARCH);
@@ -145,11 +153,12 @@ test.describe('PlantingSiteTests', () => {
       [0.25, 0.75],
     ]);
     await expect(page.getByText('Unsaved changes')).toBeVisible();
+    await expect(editorButton(page, 'Create Planting Site')).toBeDisabled();
 
     await editorButton(page, 'Next').click();
     await expectActiveStep(page, 'Exclusion Areas');
     await expect(page.getByText('Unsaved changes')).toBeHidden();
-    await expect(editorButton(page, 'Create Planting Site')).toBeVisible();
+    await expect(editorButton(page, 'Create Planting Site')).toBeEnabled();
 
     // Going back keeps the drawn boundary, so the method chooser stays hidden.
     await editorButton(page, 'Back').click();
@@ -158,7 +167,7 @@ test.describe('PlantingSiteTests', () => {
     await expect(page.getByText('How do you want to define this boundary?')).toBeHidden();
     await expect(page.getByRole('button', { name: 'Reset Boundary Setup' })).toBeVisible();
     await editorButton(page, 'Next').click();
-    await expect(editorButton(page, 'Create Planting Site')).toBeVisible();
+    await expect(editorButton(page, 'Create Planting Site')).toBeEnabled();
 
     // Start over: dismiss once, then confirm.
     await page.getByRole('button', { name: 'Reset Boundary Setup' }).click();
@@ -168,7 +177,7 @@ test.describe('PlantingSiteTests', () => {
       })
     ).toBeVisible();
     await page.locator('#cancelStartOver').click();
-    await expect(editorButton(page, 'Create Planting Site')).toBeVisible();
+    await expect(editorButton(page, 'Create Planting Site')).toBeEnabled();
     await page.getByRole('button', { name: 'Reset Boundary Setup' }).click();
     await page.locator('#confirmStartOver').click();
     await expectActiveStep(page, 'Site Boundary');
@@ -184,6 +193,7 @@ test.describe('PlantingSiteTests', () => {
     await page.locator('input[type="file"]').setInputFiles(BOUNDARY_FIXTURE);
     await page.locator('#confirm-upload-boundary').click();
     await expect(page.getByText('simpleSiteBoundary.geojson', { exact: false })).toBeVisible();
+    await expect(page.getByText('You can edit the site boundary.', { exact: false })).toBeVisible();
     await expect(page.locator('#remove-boundary-file')).toBeVisible();
 
     await editorButton(page, 'Close').click();
@@ -191,7 +201,9 @@ test.describe('PlantingSiteTests', () => {
     await page.getByRole('button', { name: 'Save and Close' }).click();
 
     await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+(\?|$)/);
-    await expect(main.getByText('Boundary setup isn’t finished', { exact: false })).toBeVisible();
+    await expect(
+      main.getByText('This draft site can’t be used for planting or Observations', { exact: false })
+    ).toBeVisible();
     await expect(detailField(page, 'Setup Remaining')).toHaveText('Site Boundary');
     await expect(detailField(page, 'Total Area')).toContainText('ha');
     await expect(page.getByRole('button', { name: 'Continue Boundary Setup' })).toBeVisible();
@@ -225,9 +237,12 @@ test.describe('PlantingSiteTests', () => {
 
     await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+\/edit(\?|$)/);
     await expectActiveStep(page, 'Site Boundary');
-    await expect(page.getByText('Detailed Planting Site Map')).toBeVisible();
-    await expect(page.getByText('Stratum Boundaries', { exact: true })).toBeVisible();
-    await expect(page.getByText('Substratum Boundaries', { exact: true })).toBeVisible();
+    await expect(page.getByText('Detailed Planting Site Map')).toBeHidden();
+    await expectOptionalSteps(
+      page,
+      ['Site Boundary'],
+      ['Exclusion Areas', 'Stratum Boundaries', 'Substratum Boundaries']
+    );
     await page.locator('#choose-draw-boundary').click();
     await waitForMap(page);
     await searchMapLocation(page, SITE_ADDRESS);
@@ -247,9 +262,7 @@ test.describe('PlantingSiteTests', () => {
       [1.15, 0.2],
       [1.05, 0.2],
     ]);
-    // A newly drawn polygon starts out selected, and clicking a selected polygon edits its vertices.
-    await clickMap(page, [1.1, 0.5]);
-    await clickMap(page, [1.1, 0.15]);
+    await selectPolygon(page, [1.1, 0.15], [1.1, 0.5]);
     await deleteMapFeature(page);
     await expect(polygonTool(page)).not.toHaveClass(/active/);
 
@@ -260,8 +273,7 @@ test.describe('PlantingSiteTests', () => {
       [1.125, 0.42],
     ]);
     await clickMap(page, [1.1, 0.5]);
-    await clickMap(page, [1.125, 0.34]);
-    await clickMap(page, [1.125, 0.34]);
+    await editPolygonVertices(page, [1.125, 0.34]);
     await clickMap(page, [1.05, 0.3]);
     await deleteMapFeature(page);
     await expect(polygonTool(page)).not.toHaveClass(/active/);
@@ -284,10 +296,10 @@ test.describe('PlantingSiteTests', () => {
     await expect(page.getByText('Unsaved changes')).toBeHidden();
     await waitForMap(page);
     await drawPolygon(page, [
-      [-0.1, -0.02],
+      [-0.02, -0.02],
       [0.5, -0.02],
       [0.5, 1.02],
-      [-0.1, 1.02],
+      [-0.02, 1.02],
     ]);
     const stratumNameInput = page.locator('#stratum-name input');
     await expect(stratumNameInput).toBeVisible();
@@ -297,15 +309,15 @@ test.describe('PlantingSiteTests', () => {
 
     // Deleting a stratum merges it into the one it borders.
     await drawPolygon(page, [
-      [-0.1, -0.02],
+      [-0.02, -0.02],
       [0.2, -0.02],
       [0.2, 1.02],
-      [-0.1, 1.02],
+      [-0.02, 1.02],
     ]);
     await expect(stratumNameInput).toBeVisible();
     await deleteMapFeature(page);
     await expect(stratumNameInput).toBeHidden();
-    await clickMap(page, [0.1, 0.5]);
+    await openFeaturePopup(page, [0.1, 0.5], stratumNameInput);
     await expect(stratumNameInput).toHaveValue(stratumName);
     await page.getByRole('button', { name: 'Cancel', exact: true }).click();
     await editorButton(page, 'Next').click();
@@ -313,13 +325,25 @@ test.describe('PlantingSiteTests', () => {
     // Substrata: slice the north half off the selected stratum.
     await expectActiveStep(page, 'Substratum Boundaries');
     await expect(page.getByText('Unsaved changes')).toBeHidden();
-    await expect(editorButton(page, 'Create Planting Site')).toBeVisible();
+    await expect(editorButton(page, 'Create Planting Site')).toBeEnabled();
+
+    // Collapsing the instructions keeps the selected stratum visible.
+    const substrataInstructions = page.getByText('Define substrata', { exact: false });
+    const selectedStratum = page.getByText('selected for creating Substrata', { exact: false });
+    await expect(substrataInstructions).toBeVisible();
+    await expect(selectedStratum).toBeVisible();
+    await page.getByRole('button', { name: 'Hide Instructions' }).click();
+    await expect(substrataInstructions).toBeHidden();
+    await expect(selectedStratum).toBeVisible();
+    await expect(editorButton(page, 'Create Planting Site')).toBeEnabled();
+    await page.getByRole('button', { name: 'Show Instructions' }).click();
+    await expect(substrataInstructions).toBeVisible();
     await waitForMap(page);
     await drawPolygon(page, [
-      [-0.1, -0.02],
-      [1.1, -0.02],
-      [1.1, 0.5],
-      [-0.1, 0.5],
+      [-0.02, -0.02],
+      [1.02, -0.02],
+      [1.02, 0.5],
+      [-0.02, 0.5],
     ]);
     const substratumNameInput = page.locator('#substratum-name input');
     await expect(substratumNameInput).toBeVisible();
@@ -328,15 +352,15 @@ test.describe('PlantingSiteTests', () => {
     await expect(substratumNameInput).toBeHidden();
 
     await drawPolygon(page, [
-      [-0.1, -0.02],
-      [1.1, -0.02],
-      [1.1, 0.2],
-      [-0.1, 0.2],
+      [-0.02, -0.02],
+      [1.02, -0.02],
+      [1.02, 0.2],
+      [-0.02, 0.2],
     ]);
     await expect(substratumNameInput).toBeVisible();
     await deleteMapFeature(page);
     await expect(substratumNameInput).toBeHidden();
-    await clickMap(page, [0.75, 0.1]);
+    await openFeaturePopup(page, [0.75, 0.1], substratumNameInput);
     await expect(substratumNameInput).toHaveValue(substratumName);
     await page.getByRole('button', { name: 'Cancel', exact: true }).click();
 
@@ -345,7 +369,7 @@ test.describe('PlantingSiteTests', () => {
     await expectActiveStep(page, 'Stratum Boundaries');
     await expect(page.getByText('Unsaved changes')).toBeHidden();
     await waitForMap(page);
-    await clickMap(page, [0.25, 0.5]);
+    await openFeaturePopup(page, [0.25, 0.5], stratumNameInput);
     await expect(stratumNameInput).toHaveValue(stratumName);
     await page.getByRole('button', { name: 'Cancel', exact: true }).click();
     await editorButton(page, 'Next').click();
@@ -354,7 +378,9 @@ test.describe('PlantingSiteTests', () => {
     // Nothing is unsaved, so closing goes straight to the draft.
     await editorButton(page, 'Close').click();
     await expect(page).toHaveURL(/\/planting-sites\/draft\/\d+(\?|$)/);
-    await expect(page.getByRole('main').getByText('Boundary setup isn’t finished', { exact: false })).toBeVisible();
+    await expect(
+      page.getByRole('main').getByText('This draft site can’t be used for planting or Observations', { exact: false })
+    ).toBeVisible();
     await expect(detailField(page, 'Name')).toHaveText(siteName);
     await expect(detailField(page, 'Strata')).toHaveText('2');
     await expect(detailField(page, 'Substrata')).toHaveText('3');
@@ -370,7 +396,9 @@ test.describe('PlantingSiteTests', () => {
     await expect(page).toHaveURL(/\/planting-sites\/\d+(\?|$)/);
     await expect(page.locator('#more-options')).toBeVisible();
     await expect(detailField(page, 'Name')).toHaveText(siteName);
-    await expect(page.getByText('Boundary setup isn’t finished', { exact: false })).toBeHidden();
+    await expect(
+      page.getByText('This draft site can’t be used for planting or Observations', { exact: false })
+    ).toBeHidden();
     await expect(page.getByRole('button', { name: 'Continue with Substratum Boundaries' })).toBeHidden();
 
     await goToPlantingSites(page);

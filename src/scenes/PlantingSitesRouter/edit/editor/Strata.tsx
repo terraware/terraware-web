@@ -9,6 +9,7 @@ import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
 import { leftMostFeature, mergeIntoNeighbor, toFeature, toMultiPolygon } from 'src/components/Map/utils';
 import EditableMap, { EditableMapBoundary, EditableMapClickedFeature } from 'src/components/NewMap/EditableMap';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
+import { useFeatureEnabled } from 'src/features';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
@@ -17,6 +18,7 @@ import { DraftPlantingSite } from 'src/types/PlantingSite';
 import { MinimalStratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
+import { useEditorStepperDrawer } from './EditorStepper';
 import StepTitleDescription, { Description } from './StepTitleDescription';
 import { OnValidate } from './types';
 import useMapStyle from './useMapStyle';
@@ -97,6 +99,7 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
   const snackbar = useSnackbar();
   const { exclusionsLayerStyle, sitesLayerStyle, strataLayerStyle } = useMapFeatureStyles();
   const activeLocale = useLocalization();
+  const fileUploadEnabled = useFeatureEnabled('Boundary File Upload');
 
   const strata = useMemo<FeatureCollection | undefined>(
     () => strataData?.fixedBoundaries,
@@ -184,26 +187,43 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
     ];
   }, [exclusionsLayerStyle, site.boundary, site.exclusion, site.id, sitesLayerStyle, strata, strataLayerStyle]);
 
-  const description = useMemo<Description[]>(
-    () =>
-      activeLocale
-        ? [
-            {
-              text: strings.SITE_STRATUM_BOUNDARIES_DESCRIPTION,
-              hasTutorial: true,
-              handlePrefix: (prefix: string) =>
-                strings.formatString(
-                  prefix,
-                  <MapIcon centerAligned={true} icon='slice' />,
-                  <Typography component='span' fontSize='inherit' fontWeight={600}>
-                    {strings.SITE_STRATUM_BOUNDARIES_SIZE}
-                  </Typography>
-                ) as JSX.Element[],
-            },
-          ]
-        : [],
-    [activeLocale]
-  );
+  const description = useMemo<Description[]>(() => {
+    if (!activeLocale) {
+      return [];
+    }
+
+    if (fileUploadEnabled) {
+      return [
+        {
+          text: strings.SITE_STRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
+          hasTutorial: true,
+          handlePrefix: (prefix: string) =>
+            strings.formatString(
+              prefix,
+              <MapIcon centerAligned={true} icon='slice' />,
+              <Typography component='span' fontSize='inherit' fontWeight={600}>
+                {strings.SITE_STRATUM_BOUNDARIES_SIZE}
+              </Typography>
+            ) as JSX.Element[],
+        },
+      ];
+    }
+
+    return [
+      {
+        text: strings.SITE_STRATUM_BOUNDARIES_DESCRIPTION,
+        hasTutorial: true,
+        handlePrefix: (prefix: string) =>
+          strings.formatString(
+            prefix,
+            <MapIcon centerAligned={true} icon='slice' />,
+            <Typography component='span' fontSize='inherit' fontWeight={600}>
+              {strings.SITE_STRATUM_BOUNDARIES_SIZE}
+            </Typography>
+          ) as JSX.Element[],
+      },
+    ];
+  }, [activeLocale, fileUploadEnabled]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {
@@ -359,17 +379,20 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
     [mapStyles.box, mapStyles.tooltip, setStrataData, strata]
   );
 
+  const drawerProps = useEditorStepperDrawer(
+    <StepTitleDescription
+      description={description}
+      dontShowAgainPreferenceName='dont-show-site-stratum-boundaries-instructions'
+      tutorialDescription={tutorialDescription}
+      tutorialDocLinkKey='planting_site_create_stratum_boundary_instructions_video'
+      tutorialTitle={strings.ADDING_STRATUM_BOUNDARIES}
+    />
+  );
+
   return (
     <Box display='flex' flexDirection='column' flexGrow={1}>
-      <StepTitleDescription
-        description={description}
-        largeText
-        dontShowAgainPreferenceName='dont-show-site-stratum-boundaries-instructions'
-        tutorialDescription={tutorialDescription}
-        tutorialDocLinkKey='planting_site_create_stratum_boundary_instructions_video'
-        tutorialTitle={strings.ADDING_STRATUM_BOUNDARIES}
-      />
       <EditableMap
+        {...drawerProps}
         editableBoundary={strataData?.editableBoundary}
         errorAnnotations={strataData?.errorAnnotations}
         featureSelectorOnClick={featureSelectorOnClick}

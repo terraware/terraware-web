@@ -1,6 +1,7 @@
 import React, { type JSX, type ReactNode } from 'react';
 
 import { Typography } from '@mui/material';
+import { getDateDisplayValue } from '@terraware/web-components/utils';
 
 import { API_PATHS } from 'src/constants';
 import type { ProvidedLocalizationData } from 'src/providers';
@@ -185,23 +186,49 @@ export const renderAccessionEventDescription = (
     case 'Withdrawal':
       switch (action.type) {
         case 'Created': {
-          const quantity = createdField(action, 'withdrawnQuantity');
+          const withdrawnQuantity = createdField(action, 'withdrawnQuantity');
 
-          if (quantity === undefined) {
+          if (withdrawnQuantity === undefined) {
             return strings.ACCESSION_EVENT_WITHDRAWAL_ADDED;
           }
+
+          const estimate = createdField(action, 'estimatedCount') ?? createdField(action, 'estimatedWeight');
+          const quantity =
+            estimate === undefined
+              ? withdrawnQuantity
+              : (strings.formatString(
+                  strings.ACCESSION_EVENT_WITHDRAWAL_QUANTITY_ESTIMATED,
+                  withdrawnQuantity,
+                  estimate
+                ) as string);
 
           const purpose = createdField(action, 'purpose');
           const batchId = createdField(action, 'batchId');
           const nursery = batchId === undefined ? undefined : nurseryNames?.[Number(batchId)];
 
+          let description: string;
+
           if (nursery !== undefined) {
-            return strings.formatString(strings.ACCESSION_EVENT_WITHDRAWAL_ADDED_TO, quantity, nursery);
+            description = strings.formatString(
+              strings.ACCESSION_EVENT_WITHDRAWAL_ADDED_TO,
+              quantity,
+              nursery
+            ) as string;
+          } else if (purpose !== undefined) {
+            description = strings.formatString(
+              strings.ACCESSION_EVENT_WITHDRAWAL_ADDED_FOR,
+              quantity,
+              purpose
+            ) as string;
+          } else {
+            description = strings.formatString(strings.ACCESSION_EVENT_WITHDRAWAL_ADDED_QUANTITY, quantity) as string;
           }
 
-          return purpose === undefined
-            ? strings.formatString(strings.ACCESSION_EVENT_WITHDRAWAL_ADDED_QUANTITY, quantity)
-            : strings.formatString(strings.ACCESSION_EVENT_WITHDRAWAL_ADDED_FOR, quantity, purpose);
+          const date = createdField(action, 'date');
+
+          return date === undefined
+            ? description
+            : strings.formatString(strings.ACCESSION_EVENT_WITHDRAWAL_ON_DATE, description, getDateDisplayValue(date));
         }
         case 'Deleted':
           return forViabilityTest

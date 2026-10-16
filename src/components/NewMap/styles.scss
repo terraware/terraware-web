@@ -47,6 +47,10 @@
     width: stretch;
   }
 
+  &--fit-content {
+    min-width: max-content;
+    width: max-content;
+  }
   &--small {
     min-width: 280px;
     width: 280px;
