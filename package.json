@@ -207,7 +207,7 @@
     "knip": "^6.41.0",
     "license-report": "^6.8.6",
     "llm-autotranslate": "^1.1.1",
-    "msw": "^2.15.0",
+    "msw": "^3.0.0",
     "msw-storybook-addon": "^3.0.3",
     "openapi-typescript": "^7.13.0",
     "patch-package": "^8.0.1",
