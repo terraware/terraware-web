@@ -217,15 +217,13 @@ export default function EditOrganizationModal({
             selectedCountrySubdivisionCode={organizationRecord.countrySubdivisionCode}
             onChangeCountryCode={(countryCode: string, hasSubdivisions: boolean) => {
               setRequireSubdivisions(hasSubdivisions);
-              setOrganizationRecord(
-                (previousOrganizationRecord: Organization): Organization => ({
-                  ...previousOrganizationRecord,
-                  countryCode,
-                  countrySubdivisionCode: undefined,
-                  // Changing the country clears the botanical country, which may no longer be valid.
-                  botanicalCountryCode: undefined,
-                })
-              );
+              setOrganizationRecord((previousOrganizationRecord: Organization): Organization => ({
+                ...previousOrganizationRecord,
+                countryCode,
+                countrySubdivisionCode: undefined,
+                // Changing the country clears the botanical country, which may no longer be valid.
+                botanicalCountryCode: undefined,
+              }));
               setCountryError('');
             }}
             onChangeCountrySubdivisionCode={(countrySubdivisionCode: string) => {

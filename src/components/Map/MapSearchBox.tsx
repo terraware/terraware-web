@@ -29,12 +29,10 @@ const MapSearchBox = ({ onSelect, style }: MapSearchBoxProp) => {
     if (suggestResult) {
       setLoading(false);
       setOptions(
-        suggestResult.map(
-          (result): DropdownItem => ({
-            label: `${result.feature_name}, ${result.full_address}`,
-            value: result,
-          })
-        )
+        suggestResult.map((result): DropdownItem => ({
+          label: `${result.feature_name}, ${result.full_address}`,
+          value: result,
+        }))
       );
     }
   }, [suggestResult]);

@@ -28,7 +28,7 @@ const useProjectSiteObservationStats = (
   }, [enabled, getObservationStats, listProjectSites, projectId]);
 
   const projectSites = useMemo(
-    () => (enabled && projectId !== undefined ? listProjectSitesResponse.currentData?.sites ?? [] : []),
+    () => (enabled && projectId !== undefined ? (listProjectSitesResponse.currentData?.sites ?? []) : []),
     [enabled, listProjectSitesResponse, projectId]
   );
 

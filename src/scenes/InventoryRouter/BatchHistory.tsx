@@ -286,13 +286,11 @@ export default function BatchHistory({ batchId, nurseryName, accessions }: Batch
             return;
           }
 
-          return fieldValues[filterName].values.map(
-            (value): Option => ({
-              label: batchHistoryEventEnumToLocalized((value as BatchHistoryPayload['type']) || '') || '',
-              value,
-              disabled: false,
-            })
-          );
+          return fieldValues[filterName].values.map((value): Option => ({
+            label: batchHistoryEventEnumToLocalized((value as BatchHistoryPayload['type']) || '') || '',
+            value,
+            disabled: false,
+          }));
         },
         pillValuesRenderer: (filterName: string, values: unknown[]): string | undefined => {
           if (filterName !== 'type') {
@@ -329,9 +327,10 @@ export default function BatchHistory({ batchId, nurseryName, accessions }: Batch
 
     const earliest = batchHistory.history
       .filter((item): item is FullQuantityHistoryItem => item.type === 'QuantityEdited')
-      .reduce<
-        FullQuantityHistoryItem | undefined
-      >((min, item) => ((item.version ?? 0) < (min?.version ?? Infinity) ? item : min), undefined);
+      .reduce<FullQuantityHistoryItem | undefined>(
+        (min, item) => ((item.version ?? 0) < (min?.version ?? Infinity) ? item : min),
+        undefined
+      );
     return earliest ? { event: earliest, accession: creationAccession } : undefined;
   }, [accessions, batchHistory]);
 

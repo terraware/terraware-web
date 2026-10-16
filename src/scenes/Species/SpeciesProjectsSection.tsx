@@ -77,7 +77,7 @@ export default function SpeciesProjectsSection({
   const [detailsProjectId, setDetailsProjectId] = useState<number>();
 
   const rows = useMemo<ProjectRow[]>(() => {
-    const removed = editMode ? removedProjectIds ?? [] : [];
+    const removed = editMode ? (removedProjectIds ?? []) : [];
     const existingRows: ProjectRow[] = (speciesProjects ?? [])
       .filter((project): project is SpeciesProjectElement & { projectId: number } => project.projectId !== undefined)
       .filter((project) => !removed.includes(project.projectId))
@@ -94,7 +94,7 @@ export default function SpeciesProjectsSection({
         isNew: false,
       }));
 
-    const addedRows: ProjectRow[] = (editMode ? addedProjectIds ?? [] : []).map((projectId) => ({
+    const addedRows: ProjectRow[] = (editMode ? (addedProjectIds ?? []) : []).map((projectId) => ({
       projectId,
       projectName: getProjectName(projectId),
       overridden: false,

@@ -372,8 +372,8 @@ const PlotT0EditBox = ({
     const preExisting = newSpeciesRows.filter((row) => initialNewSpeciesIds.has(row.id));
     const sessionAdded = newSpeciesRows.filter((row) => !initialNewSpeciesIds.has(row.id));
     const sorted = [...preExisting].sort((a, b) => {
-      const nameA = a.speciesId !== undefined ? speciesById[a.speciesId]?.scientificName ?? '' : '\uffff';
-      const nameB = b.speciesId !== undefined ? speciesById[b.speciesId]?.scientificName ?? '' : '\uffff';
+      const nameA = a.speciesId !== undefined ? (speciesById[a.speciesId]?.scientificName ?? '') : '\uffff';
+      const nameB = b.speciesId !== undefined ? (speciesById[b.speciesId]?.scientificName ?? '') : '\uffff';
       return nameA.localeCompare(nameB, activeLocale ?? undefined);
     });
     return [...sorted, ...sessionAdded];

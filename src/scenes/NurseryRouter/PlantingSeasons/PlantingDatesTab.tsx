@@ -1193,19 +1193,19 @@ const AddSpeciesRow = ({
   const [quantityFocused, setQuantityFocused] = useState(false);
   const selectedSpeciesId = draft.speciesId;
   const allocated =
-    selectedSpeciesId === undefined ? 0 : draft.allocatedQuantity ?? allocatedBySpecies.get(selectedSpeciesId) ?? 0;
-  const scheduledOther = selectedSpeciesId === undefined ? 0 : scheduledOtherBySpecies.get(selectedSpeciesId) ?? 0;
+    selectedSpeciesId === undefined ? 0 : (draft.allocatedQuantity ?? allocatedBySpecies.get(selectedSpeciesId) ?? 0);
+  const scheduledOther = selectedSpeciesId === undefined ? 0 : (scheduledOtherBySpecies.get(selectedSpeciesId) ?? 0);
   const quantity = draft.quantityInput ?? draft.quantity.toString();
   const parsedQuantity = getSpeciesDraftQuantity(draft);
   const quantityToValidate = Number.isNaN(parsedQuantity) ? 0 : parsedQuantity;
   const scheduledThisDate =
-    selectedSpeciesId === undefined ? 0 : scheduledThisDateBySpecies.get(selectedSpeciesId) ?? 0;
+    selectedSpeciesId === undefined ? 0 : (scheduledThisDateBySpecies.get(selectedSpeciesId) ?? 0);
   const scheduledThisDateExcludingRow = Math.max(0, scheduledThisDate - quantityToValidate);
   const availableToSchedule = getAvailableToSchedule(allocated, scheduledOther + scheduledThisDate);
   const availableForValidation = getAvailableToSchedule(allocated, scheduledOther + scheduledThisDateExcludingRow);
-  const targetQuantity = selectedSpeciesId === undefined ? 0 : targetQuantityBySpecies.get(selectedSpeciesId) ?? 0;
+  const targetQuantity = selectedSpeciesId === undefined ? 0 : (targetQuantityBySpecies.get(selectedSpeciesId) ?? 0);
   const scheduledOtherInSubstratum =
-    selectedSpeciesId === undefined ? 0 : scheduledOtherInSubstratumBySpecies.get(selectedSpeciesId) ?? 0;
+    selectedSpeciesId === undefined ? 0 : (scheduledOtherInSubstratumBySpecies.get(selectedSpeciesId) ?? 0);
   const targetQuantityRemaining = getTargetQuantityRemaining(
     targetQuantity,
     scheduledOtherInSubstratum + quantityToValidate

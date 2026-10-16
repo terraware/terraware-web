@@ -27,7 +27,7 @@ export default function UserProvider({ children }: UserProviderProps): JSX.Eleme
 
   const { currentData: preferencesData } = useGetUserPreferencesQuery(undefined);
   const userPreferences = useMemo<PreferencesType | undefined>(
-    () => (preferencesData ? preferencesData.preferences ?? {} : undefined),
+    () => (preferencesData ? (preferencesData.preferences ?? {}) : undefined),
     [preferencesData]
   );
   const preferencesLoaded = preferencesData !== undefined;

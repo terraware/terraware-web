@@ -88,7 +88,7 @@ const editedBoundarySource = (previous?: BoundarySource): BoundarySource =>
 export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBoundaryProps): JSX.Element {
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>({
     // drafts saved before the source was recorded could only have drawn boundaries
-    boundarySource: site.boundary ? site.boundarySource ?? 'drawn' : undefined,
+    boundarySource: site.boundary ? (site.boundarySource ?? 'drawn') : undefined,
     siteBoundary: featureSiteBoundary(site.id, site.boundary),
   });
   const geometrySnapshot = JSON.stringify({ siteBoundary: siteBoundaryData?.siteBoundary });
@@ -283,7 +283,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
         errorAnnotations: errors,
         siteBoundary: editableBoundary,
         // edits to an uploaded boundary keep its file, but clearing the boundary drops it
-        ...(newBoundary ? upload ?? _.pick(siteBoundaryData, ['uploadedFile', 'uploadId']) : {}),
+        ...(newBoundary ? (upload ?? _.pick(siteBoundaryData, ['uploadedFile', 'uploadId'])) : {}),
       });
     },
     [setSiteBoundaryData, site, siteBoundaryData]

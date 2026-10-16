@@ -64,7 +64,7 @@ export default function PlantingProgressList(): JSX.Element {
                       initialPlantingDensity: stratum?.initialPlantingDensity,
                       plantingCompleted: substratum?.plantingCompleted,
                       projectName: site?.projectId
-                        ? projects?.find((project) => project.id === site.projectId)?.name ?? ''
+                        ? (projects?.find((project) => project.id === site.projectId)?.name ?? '')
                         : '',
                       siteId: site?.id,
                       siteName: site?.name,
@@ -82,7 +82,7 @@ export default function PlantingProgressList(): JSX.Element {
             return [
               {
                 projectName: site?.projectId
-                  ? projects?.find((project) => project.id === site.projectId)?.name ?? ''
+                  ? (projects?.find((project) => project.id === site.projectId)?.name ?? '')
                   : '',
                 siteId: site?.id,
                 siteName: site?.name,

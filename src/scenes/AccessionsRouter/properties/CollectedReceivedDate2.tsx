@@ -62,7 +62,7 @@ export default function CollectedReceivedDate2({
   const changeDateTime = (newValue?: DateTime) => {
     const formattedValue = newValue
       ? includeTime
-        ? newValue.toUTC().toISO() ?? undefined
+        ? (newValue.toUTC().toISO() ?? undefined)
         : getDateDisplayValue(newValue.toMillis(), timeZone)
       : undefined;
 

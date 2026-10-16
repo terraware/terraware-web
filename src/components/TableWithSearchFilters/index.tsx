@@ -19,8 +19,10 @@ import useDebounce from 'src/utils/useDebounce';
 
 import { defaultSearchNodeCreator } from '../common/SearchFiltersWrapperV2/FeaturedFilters';
 
-export interface TableWithSearchFiltersProps
-  extends Omit<OrderPreservedTablePropsFull<TableRowType>, 'columns' | 'orderBy'> {
+export interface TableWithSearchFiltersProps extends Omit<
+  OrderPreservedTablePropsFull<TableRowType>,
+  'columns' | 'orderBy'
+> {
   busy?: boolean;
   columns: TableColumnType[] | ((activeLocale: string | null) => TableColumnType[]);
   defaultSearchOrder: SearchSortOrder;
@@ -85,14 +87,12 @@ const TableWithSearchFilters = (props: TableWithSearchFiltersProps) => {
     // Apply search field to search API payload
     if (debouncedSearchTerm && fuzzySearchColumns) {
       const { type, values } = parseSearchTerm(debouncedSearchTerm);
-      const fuzzySearchValueChildren = fuzzySearchColumns.map(
-        (field: string): FieldNodePayload => ({
-          field,
-          operation: 'field',
-          type,
-          values,
-        })
-      );
+      const fuzzySearchValueChildren = fuzzySearchColumns.map((field: string): FieldNodePayload => ({
+        field,
+        operation: 'field',
+        type,
+        values,
+      }));
 
       searchNodeChildren.push({
         operation: 'or',

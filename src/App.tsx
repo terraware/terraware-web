@@ -36,7 +36,7 @@ const MIXPANEL_TOKEN = import.meta.env.PUBLIC_MIXPANEL_TOKEN;
 const MIXPANEL_CONFIG = {
   opt_out_persistence_by_default: true,
   opt_out_tracking_by_default: true,
-  track_pageview: 'url-with-path',
+  track_pageview: 'url-with-path' as const,
 };
 
 function AppContent() {
@@ -69,7 +69,7 @@ function AppContent() {
           is_internal_user: user.globalRoles.length > 0,
         };
         mixpanel.opt_in_tracking();
-        mixpanel.identify(user.id);
+        mixpanel.identify(String(user.id));
         mixpanel.people.set(profile);
         // Capture the current page: the auto-pageview from SDK init was dropped
         // because we were opted out at the time. Subsequent SPA route changes

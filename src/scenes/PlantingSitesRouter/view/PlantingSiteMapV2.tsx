@@ -137,12 +137,10 @@ const PlantingSiteMapV2 = ({ plantingSiteId }: PlantingSiteMapV2Props): JSX.Elem
       const points = plantingSite.boundary.coordinates
         .flat()
         .flat()
-        .map(
-          ([lng, lat]): MapPoint => ({
-            lat,
-            lng,
-          })
-        );
+        .map(([lng, lat]): MapPoint => ({
+          lat,
+          lng,
+        }));
 
       const bbox = getBoundingBoxFromPoints(points);
       const latitude = (bbox.maxLat + bbox.minLat) / 2;
@@ -168,12 +166,10 @@ const PlantingSiteMapV2 = ({ plantingSiteId }: PlantingSiteMapV2Props): JSX.Elem
       const points = plantingSite.boundary.coordinates
         .flat()
         .flat()
-        .map(
-          ([lng, lat]): MapPoint => ({
-            lat,
-            lng,
-          })
-        );
+        .map(([lng, lat]): MapPoint => ({
+          lat,
+          lng,
+        }));
 
       const bbox = getBoundingBoxFromPoints(points);
       const latitude = (bbox.maxLat + bbox.minLat) / 2;

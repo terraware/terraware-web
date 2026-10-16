@@ -202,7 +202,7 @@ const QuantitiesStep = ({
           batches={group.batches}
           isPlanting={isPlanting}
           remainingToWithdraw={
-            remainingToWithdrawBySpecies ? remainingToWithdrawBySpecies.get(group.speciesId) ?? 0 : undefined
+            remainingToWithdrawBySpecies ? (remainingToWithdrawBySpecies.get(group.speciesId) ?? 0) : undefined
           }
           withdrawByBatch={draft.withdrawByBatch}
           setWithdrawByBatch={setWithdrawByBatch}

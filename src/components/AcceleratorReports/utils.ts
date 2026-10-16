@@ -117,7 +117,7 @@ export const getIndicatorCumulativeValue = (
   }
 
   // a yearly indicator restarts at zero each year, so it carries neither the baseline nor a prior total
-  const startingTotal = isLifetime ? indicator.previousYearCumulativeTotal ?? indicator.baseline ?? 0 : 0;
+  const startingTotal = isLifetime ? (indicator.previousYearCumulativeTotal ?? indicator.baseline ?? 0) : 0;
 
   return currentYearProgress.reduce((total, progress) => total + progress.value, startingTotal);
 };
