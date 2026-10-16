@@ -210,8 +210,8 @@ const MonitoringPlotObservationDataTab = () => {
         />
       )}
       <ObservationDataNumbers items={items} isCompleted={!!monitoringPlot?.completedTime} />
-      <Box display='flex' gap={3} flexDirection={isDesktop ? 'row' : 'column'} flexWrap='wrap'>
-        <Box flex={1} minWidth='500px'>
+      <Box display='flex' gap={3} flexDirection={isDesktop ? 'row' : 'column'} flexWrap={isDesktop ? 'wrap' : 'nowrap'}>
+        <Box flex={1} minWidth={isDesktop ? '500px' : 0}>
           <Box display='flex' alignContent={'center'}>
             <Typography fontSize={'20px'} fontWeight={600}>
               {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
@@ -234,7 +234,7 @@ const MonitoringPlotObservationDataTab = () => {
           </Box>
         </Box>
 
-        <Box flex={1} minWidth='500px'>
+        <Box flex={1} minWidth={isDesktop ? '500px' : 0}>
           <Box display='flex' alignItems={'center'}>
             <Typography fontSize={'20px'} fontWeight={600}>
               {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}

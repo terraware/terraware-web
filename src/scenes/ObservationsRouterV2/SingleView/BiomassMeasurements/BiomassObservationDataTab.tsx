@@ -20,6 +20,7 @@ import UnrecognizedSpeciesPageMessage from 'src/scenes/ObservationsRouterV2/Sing
 import useObservationExports from 'src/scenes/ObservationsRouterV2/useObservationExports';
 import { useOnSaveMergedSpeciesRtk } from 'src/scenes/ObservationsRouterV2/useOnSaveMergedSpeciesRtk';
 import { getDateTimeDisplayValue, getShortTime } from 'src/utils/dateFormatter';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 import { useDefaultTimeZone } from 'src/utils/useTimeZoneUtils';
 
 import EditBiomassQualitativeDataModal, { BiomassQualitativeFormData } from './EditBiomassQualitativeDataModal';
@@ -27,6 +28,7 @@ import EditBiomassQualitativeDataModal, { BiomassQualitativeFormData } from './E
 const BiomassObservationDataTab = () => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const { isMobile } = useDeviceInfo();
   const params = useParams<{ observationId: string }>();
   const observationId = Number(params.observationId);
 
@@ -253,6 +255,7 @@ const BiomassObservationDataTab = () => {
       </Box>
       <Box
         display={'flex'}
+        flexWrap={'wrap'}
         justifyContent={'end'}
         borderBottom={`1px solid ${theme.palette.TwClrBrdrTertiary}`}
         paddingBottom={1.5}
@@ -304,7 +307,7 @@ const BiomassObservationDataTab = () => {
         <Typography fontSize={'20px'} fontWeight={600}>
           {strings.SOIL_ASSESSMENT}
         </Typography>
-        <Box display='grid' gap='16px' gridTemplateColumns={'repeat(3,1fr)'} justifyItems={'start'}>
+        <Box display='grid' gap='16px' gridTemplateColumns={isMobile ? '1fr' : 'repeat(3,1fr)'} justifyItems={'start'}>
           {soilPhoto && (
             <MonitoringPlotPhotosWithActions
               observationId={Number(observationId)}
