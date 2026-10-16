@@ -30,7 +30,7 @@ import ReportInternalComment from './ReportInternalComment';
 
 type ReportTabV2Props = {
   active?: boolean;
-  onSelectReport?: (reportId: number) => void;
+  onSelectReport?: (reportId: number, replace?: boolean) => void;
   selectedReportId?: number;
 };
 
@@ -47,7 +47,7 @@ const ReportTabV2 = ({ active, onSelectReport, selectedReportId }: ReportTabV2Pr
   const selectReport = useCallback(
     (reportId: number, replace = false) => {
       if (onSelectReport) {
-        onSelectReport(reportId);
+        onSelectReport(reportId, replace);
         return;
       }
 

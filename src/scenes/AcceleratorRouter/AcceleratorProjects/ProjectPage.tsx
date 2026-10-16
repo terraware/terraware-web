@@ -12,6 +12,7 @@ import { useFeatureEnabled } from 'src/features';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
+import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import useVotingData from 'src/hooks/useVotingData';
 import { useLocalization, useUser } from 'src/providers';
 import { useAdminListActivitiesQuery } from 'src/queries/generated/activities';
@@ -24,6 +25,7 @@ import PlantsDashboardView from 'src/scenes/PlantsDashboardRouter/PlantsDashboar
 import { FunderProjectDetails } from 'src/types/FunderProject';
 import useQuery from 'src/utils/useQuery';
 import useSnackbar from 'src/utils/useSnackbar';
+import useStateLocation, { getLocation } from 'src/utils/useStateLocation';
 import useStickyTabs from 'src/utils/useStickyTabs';
 
 import { useAcceleratorProjectData } from './AcceleratorProjectContext';
@@ -58,7 +60,22 @@ const ProjectPage = () => {
   const snackbar = useSnackbar();
   const { isDesktop, isMobile } = useDeviceInfo();
   const cleanUpTabsEnabled = useFeatureEnabled('Clean Up Console Tabs');
-  const [selectedReportId, setSelectedReportId] = useState<number | undefined>(undefined);
+  const location = useStateLocation();
+  const navigate = useSyncNavigate();
+
+  const selectedReportId = useMemo(() => {
+    const reportId = query.get('reportId');
+    return reportId ? Number(reportId) : undefined;
+  }, [query]);
+
+  const onSelectReport = useCallback(
+    (reportId: number, replace = false) => {
+      const params = new URLSearchParams(location.search);
+      params.set('reportId', `${reportId}`);
+      navigate(getLocation(location.pathname, location, `?${params.toString()}`), { replace });
+    },
+    [location, navigate]
+  );
 
   const isAllowedEdit = isAllowed('UPDATE_ACCELERATOR_PROJECT');
   const isAllowedPublish = isAllowed('PUBLISH_PROJECT_DETAILS');
@@ -76,10 +93,11 @@ const ProjectPage = () => {
   const reportsResponse = useListPublishedReportsQuery(projectData.projectId);
   const publishedReports = useMemo(() => reportsResponse.data?.reports ?? [], [reportsResponse.data?.reports]);
 
-  const { currentData: activitiesData } = useAdminListActivitiesQuery(
-    { projectId: projectData.projectId, depth: 'All' },
-    { skip: !cleanUpTabsEnabled }
-  );
+  const {
+    currentData: activitiesData,
+    isError: activitiesError,
+    isFetching: activitiesFetching,
+  } = useAdminListActivitiesQuery({ projectId: projectData.projectId, depth: 'All' }, { skip: !cleanUpTabsEnabled });
   const activities = useMemo<TypedActivity[]>(
     () => activitiesData?.activities?.map((payload) => ({ type: 'admin' as const, payload })) ?? [],
     [activitiesData]
@@ -134,14 +152,18 @@ const ProjectPage = () => {
           id: 'reports',
           label: strings.REPORTS,
           // Tabs unmounts the panels it isn't showing, so this only renders while the tab is selected
-          children: <ReportTabV2 active onSelectReport={setSelectedReportId} selectedReportId={selectedReportId} />,
+          children: <ReportTabV2 active onSelectReport={onSelectReport} selectedReportId={selectedReportId} />,
         },
         activityTab,
         {
           id: 'quarterlyHighlights',
           label: strings.QUARTERLY_HIGHLIGHTS,
           children: (
-            <ActivityHighlightsContent activities={activities} busy={false} projectId={projectData.projectId} />
+            <ActivityHighlightsContent
+              activities={activities}
+              busy={activitiesFetching}
+              projectId={projectData.projectId}
+            />
           ),
         },
         plantsDashboardTab,
@@ -170,8 +192,10 @@ const ProjectPage = () => {
     ];
   }, [
     activities,
+    activitiesFetching,
     cleanUpTabsEnabled,
     highlightsModalOpen,
+    onSelectReport,
     phaseVotes,
     projectApplication,
     projectData,
@@ -240,6 +264,12 @@ const ProjectPage = () => {
       setOpenPublishDialog(true);
     }
   }, []);
+
+  useEffect(() => {
+    if (activitiesError) {
+      snackbar.toastError(strings.GENERIC_ERROR);
+    }
+  }, [activitiesError, snackbar, strings.GENERIC_ERROR]);
 
   useEffect(() => {
     if (publishProfileResponse?.status === 'error') {
