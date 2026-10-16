@@ -1,4 +1,4 @@
-import React, { type JSX, useCallback, useEffect, useMemo } from 'react';
+import React, { type JSX, type ReactNode, useCallback, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 
 import { Box, Typography, useTheme } from '@mui/material';
@@ -18,6 +18,7 @@ import ReportMessages from 'src/components/AcceleratorReports/ReportMessages';
 import { getReportName } from 'src/components/AcceleratorReports/utils';
 import Card from 'src/components/common/Card';
 import { APP_PATHS } from 'src/constants';
+import { useFeatureEnabled } from 'src/features';
 import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
@@ -26,17 +27,20 @@ import { useLocalization } from 'src/providers';
 import { useListAcceleratorReportsQuery } from 'src/queries/generated/acceleratorReports';
 import { useListPublishedReportsQuery } from 'src/queries/generated/publishedReports';
 
+import ReportActions from './ReportActions';
 import ReportInternalComment from './ReportInternalComment';
 
 type ReportTabV2Props = {
   active?: boolean;
+  header?: ReactNode;
   onSelectReport?: (reportId: number, replace?: boolean) => void;
   selectedReportId?: number;
 };
 
-const ReportTabV2 = ({ active, onSelectReport, selectedReportId }: ReportTabV2Props): JSX.Element => {
+const ReportTabV2 = ({ active, header, onSelectReport, selectedReportId }: ReportTabV2Props): JSX.Element => {
   const { strings } = useLocalization();
   const theme = useTheme();
+  const cleanUpTabsEnabled = useFeatureEnabled('Clean Up Console Tabs');
   const trackEvent = useTrackEvent();
   const pathParams = useParams<{ projectId: string; reportId?: string }>();
   const navigate = useSyncNavigate();
@@ -107,7 +111,16 @@ const ReportTabV2 = ({ active, onSelectReport, selectedReportId }: ReportTabV2Pr
   const isEmpty = listReportsData !== undefined && reports.length === 0;
 
   return (
-    <Card style={{ display: 'flex', flexDirection: 'column', flexGrow: 1, marginTop: theme.spacing(3) }}>
+    <Card
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1,
+        marginTop: cleanUpTabsEnabled ? 0 : theme.spacing(3),
+      }}
+    >
+      {header && <Box marginBottom={theme.spacing(3)}>{header}</Box>}
+
       {isEmpty ? (
         <ReportEmptyState />
       ) : (
@@ -116,7 +129,9 @@ const ReportTabV2 = ({ active, onSelectReport, selectedReportId }: ReportTabV2Pr
             <Box alignItems='center' display='flex' justifyContent='space-between'>
               <ReportDropdown onChange={selectReport} reports={reports} selectedReportId={resolvedReportId} />
 
-              {selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
+              {cleanUpTabsEnabled
+                ? resolvedReportId !== undefined && <ReportActions projectId={projectId} reportId={resolvedReportId} />
+                : selectedReport && <AcceleratorReportStatusBadge status={selectedReport.status} />}
             </Box>
 
             {lastPublished && (

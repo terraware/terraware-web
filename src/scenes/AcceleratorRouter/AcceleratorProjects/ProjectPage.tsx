@@ -9,7 +9,6 @@ import { TypedActivity } from 'src/components/ActivityLog/types';
 import Page from 'src/components/Page';
 import OptionsMenu from 'src/components/common/OptionsMenu';
 import { useFeatureEnabled } from 'src/features';
-import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useProjectScore from 'src/hooks/useProjectScore';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
@@ -35,21 +34,14 @@ import ProjectDocumentsView from './ProjectDocumentsView';
 import ProjectProfileView from './ProjectProfileView';
 import ProjectVariablesView from './ProjectVariablesView';
 import PublishModal from './Reports/PublishModal';
-import ReportOptionsMenu from './Reports/ReportOptionsMenu';
-import ReportReviewButtons from './Reports/ReportReviewButtons';
-import ReportTabV2 from './Reports/ReportTabV2';
+import ReportsContent, { ReportsSegment } from './Reports/ReportsContent';
 
 const ProjectPage = () => {
   const { strings } = useLocalization();
   const theme = useTheme();
   const { isAllowed } = useUser();
   const projectData = useAcceleratorProjectData();
-  const {
-    goToAcceleratorActivityCreate,
-    goToAcceleratorProjectEdit,
-    goToAcceleratorProjectReportEdit,
-    goToDocumentNew,
-  } = useNavigateTo();
+  const { goToAcceleratorActivityCreate, goToAcceleratorProjectEdit, goToDocumentNew } = useNavigateTo();
   const { projectScore } = useProjectScore(projectData.projectId);
   const { phaseVotes } = useVotingData();
   const dispatch = useAppDispatch();
@@ -63,18 +55,33 @@ const ProjectPage = () => {
   const location = useStateLocation();
   const navigate = useSyncNavigate();
 
+  const setQueryParam = useCallback(
+    (key: string, value: string, replace = false) => {
+      const params = new URLSearchParams(location.search);
+      params.set(key, value);
+      navigate(getLocation(location.pathname, location, `?${params.toString()}`), { replace });
+    },
+    [location, navigate]
+  );
+
   const selectedReportId = useMemo(() => {
     const reportId = query.get('reportId');
     return reportId ? Number(reportId) : undefined;
   }, [query]);
 
   const onSelectReport = useCallback(
-    (reportId: number, replace = false) => {
-      const params = new URLSearchParams(location.search);
-      params.set('reportId', `${reportId}`);
-      navigate(getLocation(location.pathname, location, `?${params.toString()}`), { replace });
-    },
-    [location, navigate]
+    (reportId: number, replace = false) => setQueryParam('reportId', `${reportId}`, replace),
+    [setQueryParam]
+  );
+
+  const reportsSegment = useMemo((): ReportsSegment => {
+    const segment = query.get('reportsSegment');
+    return segment === 'targets' || segment === 'indicators' ? segment : 'reports';
+  }, [query]);
+
+  const onChangeReportsSegment = useCallback(
+    (segment: ReportsSegment) => setQueryParam('reportsSegment', segment, true),
+    [setQueryParam]
   );
 
   const isAllowedEdit = isAllowed('UPDATE_ACCELERATOR_PROJECT');
@@ -103,8 +110,6 @@ const ProjectPage = () => {
     [activitiesData]
   );
 
-  const { isLoading: isReportLoading } = useAcceleratorReportActions(selectedReportId);
-
   const tabs = useMemo(() => {
     const profileTab = {
       id: 'projectProfile',
@@ -117,6 +122,7 @@ const ProjectPage = () => {
           projectScore={projectScore}
           phaseVotes={phaseVotes}
           publishedReports={publishedReports || []}
+          reportsPath={cleanUpTabsEnabled ? `${location.pathname}?tab=reports` : undefined}
         />
       ),
     };
@@ -151,8 +157,14 @@ const ProjectPage = () => {
         {
           id: 'reports',
           label: strings.REPORTS,
-          // Tabs unmounts the panels it isn't showing, so this only renders while the tab is selected
-          children: <ReportTabV2 active onSelectReport={onSelectReport} selectedReportId={selectedReportId} />,
+          children: (
+            <ReportsContent
+              onChangeSegment={onChangeReportsSegment}
+              onSelectReport={onSelectReport}
+              segment={reportsSegment}
+              selectedReportId={selectedReportId}
+            />
+          ),
         },
         activityTab,
         {
@@ -194,13 +206,16 @@ const ProjectPage = () => {
     activities,
     activitiesFetching,
     cleanUpTabsEnabled,
+    location.pathname,
     highlightsModalOpen,
+    onChangeReportsSegment,
     onSelectReport,
     phaseVotes,
     projectApplication,
     projectData,
     projectScore,
     publishedReports,
+    reportsSegment,
     selectedReportId,
     strings,
   ]);
@@ -228,12 +243,6 @@ const ProjectPage = () => {
     () => goToAcceleratorProjectEdit(projectData.projectId),
     [goToAcceleratorProjectEdit, projectData.projectId]
   );
-
-  const goToReportEdit = useCallback(() => {
-    if (selectedReportId !== undefined) {
-      goToAcceleratorProjectReportEdit(selectedReportId, projectData.projectId);
-    }
-  }, [goToAcceleratorProjectReportEdit, projectData.projectId, selectedReportId]);
 
   const goToProjectActivityCreate = useCallback(() => {
     goToAcceleratorActivityCreate(projectData.projectId);
@@ -346,25 +355,6 @@ const ProjectPage = () => {
             </Box>
           )}
 
-          {activeTab === 'reports' && selectedReportId !== undefined && (
-            <Box display='flex' gap={theme.spacing(1)} justifyContent='flex-end'>
-              {isAllowed('EDIT_REPORTS') && (
-                <Button
-                  disabled={isReportLoading}
-                  icon='iconEdit'
-                  label={strings.EDIT}
-                  onClick={goToReportEdit}
-                  priority='secondary'
-                  size='medium'
-                />
-              )}
-
-              <ReportReviewButtons reportId={selectedReportId} />
-
-              <ReportOptionsMenu projectId={projectData.projectId} reportId={selectedReportId} />
-            </Box>
-          )}
-
           {activeTab === 'documents' && (
             <Button
               icon='plus'
@@ -386,18 +376,13 @@ const ProjectPage = () => {
       goToDocumentNew,
       goToProjectActivityCreate,
       goToProjectEdit,
-      goToReportEdit,
-      isAllowed,
       isAllowedCreateActivities,
       isAllowedEdit,
       isAllowedPublish,
       isDesktop,
       isMobile,
-      isReportLoading,
       onOptionItemClick,
       openActivityHighlightsPreview,
-      projectData.projectId,
-      selectedReportId,
       strings,
       theme,
     ]

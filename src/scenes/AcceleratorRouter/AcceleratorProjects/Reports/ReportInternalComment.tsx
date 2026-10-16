@@ -2,6 +2,8 @@ import React, { type JSX, useCallback, useEffect } from 'react';
 
 import { Box, useTheme } from '@mui/material';
 
+import AcceleratorReportStatusBadge from 'src/components/AcceleratorReports/AcceleratorReportStatusBadge';
+import { useFeatureEnabled } from 'src/features';
 import { SCROLL_ANCHOR } from 'src/hooks/useScrollRestoration';
 import { useLocalization, useUser } from 'src/providers';
 import { AcceleratorReportPayload, useReviewAcceleratorReportMutation } from 'src/queries/generated/acceleratorReports';
@@ -19,6 +21,7 @@ const ReportInternalComment = ({ projectId, report }: ReportInternalCommentProps
   const theme = useTheme();
   const { strings } = useLocalization();
   const { isAllowed } = useUser();
+  const cleanUpTabsEnabled = useFeatureEnabled('Clean Up Console Tabs');
   const snackbar = useSnackbar();
 
   const [reviewReport, reviewReportResponse] = useReviewAcceleratorReportMutation();
@@ -56,7 +59,13 @@ const ReportInternalComment = ({ projectId, report }: ReportInternalCommentProps
       padding={theme.spacing(2)}
       {...{ [SCROLL_ANCHOR]: 'internalComment' }}
     >
-      <InternalComment entity={report} update={onUpdateInternalComment} disabled={!isAllowed('EDIT_REPORTS')} />
+      <Box alignItems='flex-start' display='flex' gap={theme.spacing(2)} justifyContent='space-between'>
+        <Box flexGrow={1}>
+          <InternalComment entity={report} update={onUpdateInternalComment} disabled={!isAllowed('EDIT_REPORTS')} />
+        </Box>
+
+        {cleanUpTabsEnabled && <AcceleratorReportStatusBadge status={report.status} />}
+      </Box>
     </Box>
   );
 };
