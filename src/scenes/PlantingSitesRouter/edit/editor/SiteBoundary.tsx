@@ -7,11 +7,9 @@ import centroid from '@turf/centroid';
 import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geojson';
 import _ from 'lodash';
 
-import { MapEditorMode } from 'src/components/Map/EditableMapDraw';
 import MapIcon from 'src/components/Map/MapIcon';
-import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
+import { unionMultiPolygons } from 'src/components/Map/utils';
 import EditableMap from 'src/components/NewMap/EditableMap';
-import { useFeatureEnabled } from 'src/features';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
@@ -53,19 +51,22 @@ const createStratumWith = (boundary?: MultiPolygon): MinimalStratum | undefined 
   });
 };
 
-const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollection | undefined =>
-  !boundary
-    ? undefined
-    : {
-        type: 'FeatureCollection',
-        features: [toFeature(boundary, {}, id)],
-      };
+// one feature per polygon
+const featureCollectionOf = (geometry: MultiPolygon | Polygon, id: number): FeatureCollection => {
+  const polygons = geometry.type === 'MultiPolygon' ? geometry.coordinates : [geometry.coordinates];
+  return {
+    type: 'FeatureCollection',
+    features: polygons.map((coordinates, index) => ({
+      type: 'Feature',
+      geometry: { type: 'Polygon', coordinates },
+      properties: {},
+      id: `${id}-${index}`,
+    })),
+  };
+};
 
-// the parse endpoint hands back a bare geometry; the map works in feature collections
-const featureCollectionOf = (geometry: MultiPolygon | Polygon, id: number): FeatureCollection => ({
-  type: 'FeatureCollection',
-  features: [toFeature(geometry, {}, id)],
-});
+const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollection | undefined =>
+  boundary ? featureCollectionOf(boundary, id) : undefined;
 
 // number of vertices across every ring of the boundary, which the parse response does not report
 const countPositions = (geometry: MultiPolygon | Polygon): number => {
@@ -97,13 +98,11 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
     onDirtyChange?.(geometrySnapshot !== initialGeometry);
   }, [geometrySnapshot, initialGeometry, onDirtyChange]);
 
-  const [mode, setMode] = useState<MapEditorMode>();
   const snackbar = useSnackbar();
   const dispatch = useAppDispatch();
   const { activeLocale } = useLocalization();
   const trackEvent = useTrackEvent();
 
-  const fileUploadEnabled = useFeatureEnabled('Boundary File Upload');
   const [method, setMethod] = useState<BoundaryMethod | undefined>();
   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
   const lastUploadId = useRef<number>(0);
@@ -181,7 +180,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       return [];
     }
 
-    if (fileUploadEnabled && uploadedFile) {
+    if (uploadedFile) {
       return [
         {
           text: strings.SITE_BOUNDARY_UPLOADED_DESCRIPTION,
@@ -193,7 +192,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       ];
     }
 
-    if (fileUploadEnabled && activeMethod === 'draw') {
+    if (activeMethod === 'draw') {
       return [
         {
           text: strings.SITE_BOUNDARY_DRAWING_DESCRIPTION,
@@ -205,46 +204,16 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
       ];
     }
 
-    if (fileUploadEnabled) {
-      const sentences =
-        site.siteType === 'detailed'
-          ? [strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION, strings.SITE_BOUNDARY_UPLOAD_TUTORIAL]
-          : [
-              strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION,
-              strings.SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,
-              strings.SITE_BOUNDARY_UPLOAD_TUTORIAL,
-            ];
-      return [{ text: sentences.join(' '), hasTutorial: true }];
-    }
-
-    const data: Description[] = [
-      {
-        text:
-          site.siteType === 'detailed'
-            ? strings.SITE_BOUNDARY_DESCRIPTION_0
-            : `${strings.SITE_BOUNDARY_DESCRIPTION_0} ${strings.SITE_BOUNDARY_SIMPLE_SITE_NOTE}`,
-      },
-      {
-        text: strings.SITE_BOUNDARY_DESCRIPTION_1,
-        hasTutorial: true,
-        handlePrefix: (prefix: string) =>
-          strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
-      },
-      { text: strings.SITE_BOUNDARY_DESCRIPTION_2, isBold: true },
-    ];
-
-    if (!mode) {
-      data.push({ text: strings.LOADING });
-    } else if (mode === 'CreatingBoundary') {
-      data.push({ text: strings.SITE_BOUNDARY_DESCRIPTION_3 });
-    } else if (mode === 'EditingBoundary' || mode === 'BoundarySelected') {
-      data.push({
-        text: strings.formatString(strings.SITE_BOUNDARY_DESCRIPTION_4, <MapIcon icon='trash' />) as JSX.Element[],
-      });
-    }
-
-    return data;
-  }, [activeLocale, activeMethod, fileUploadEnabled, mode, site.siteType, uploadedFile]);
+    const sentences =
+      site.siteType === 'detailed'
+        ? [strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION, strings.SITE_BOUNDARY_UPLOAD_TUTORIAL]
+        : [
+            strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION,
+            strings.SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,
+            strings.SITE_BOUNDARY_UPLOAD_TUTORIAL,
+          ];
+    return [{ text: sentences.join(' '), hasTutorial: true }];
+  }, [activeLocale, activeMethod, site.siteType, uploadedFile]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {
@@ -366,18 +335,10 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
         tutorialDocLinkKey='planting_site_create_boundary_instructions_video'
         tutorialTitle={strings.PLANTING_SITE_CREATE_INSTRUCTIONS_TITLE}
       />
-      {fileUploadEnabled && (
-        <>
-          {uploadedFile && (
-            <UploadedBoundarySummary
-              file={uploadedFile}
-              onRemove={onRemoveUploadedFile}
-              onReplace={onOpenUploadModal}
-            />
-          )}
-          {!uploadedFile && activeMethod === 'draw' && <DrawingBoundaryStatus onUploadInstead={onOpenUploadModal} />}
-        </>
+      {uploadedFile && (
+        <UploadedBoundarySummary file={uploadedFile} onRemove={onRemoveUploadedFile} onReplace={onOpenUploadModal} />
       )}
+      {!uploadedFile && activeMethod === 'draw' && <DrawingBoundaryStatus onUploadInstead={onOpenUploadModal} />}
     </>
   );
 
@@ -394,13 +355,10 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
           onUndo={undo}
           overlay={
             <>
-              {fileUploadEnabled && !boundary && !activeMethod && <BoundaryMethodChooser onSelect={onSelectMethod} />}
-              {fileUploadEnabled && showUploadModal && (
-                <UploadBoundaryModal onClose={onCloseUploadModal} onSuccess={onUploadSuccess} />
-              )}
+              {!boundary && !activeMethod && <BoundaryMethodChooser onSelect={onSelectMethod} />}
+              {showUploadModal && <UploadBoundaryModal onClose={onCloseUploadModal} onSuccess={onUploadSuccess} />}
             </>
           }
-          setMode={setMode}
           showSearchBox
         />
       </Box>

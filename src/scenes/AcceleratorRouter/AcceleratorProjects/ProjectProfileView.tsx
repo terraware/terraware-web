@@ -568,6 +568,12 @@ const ProjectProfileView = ({
                     label={strings.DELIVERABLES}
                   />
                 )}
+                {project && (
+                  <ProjectFieldLink
+                    value={APP_PATHS.ACCELERATOR_PROJECT_VARIABLES.replace(':projectId', project.id.toString())}
+                    label={strings.VARIABLES}
+                  />
+                )}
                 {project && isAllowedViewScoreAndVoting && (
                   <ProjectFieldLink
                     value={APP_PATHS.ACCELERATOR_PROJECT_SCORES.replace(':projectId', project.id.toString())}

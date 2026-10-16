@@ -7,7 +7,6 @@ import MapIcon from 'src/components/Map/MapIcon';
 import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
 import EditableMap, { EditableMapBoundary } from 'src/components/NewMap/EditableMap';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
-import { useFeatureEnabled } from 'src/features';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
@@ -55,7 +54,6 @@ export default function Exclusions({ onValidate, onDirtyChange, site }: Exclusio
   const { sitesLayerStyle } = useMapFeatureStyles();
   const { activeLocale } = useLocalization();
   const snackbar = useSnackbar();
-  const fileUploadEnabled = useFeatureEnabled('Boundary File Upload');
 
   const exclusions = exclusionsData?.exclusions;
 
@@ -90,25 +88,15 @@ export default function Exclusions({ onValidate, onDirtyChange, site }: Exclusio
       return [];
     }
 
-    if (fileUploadEnabled) {
-      return [
-        {
-          text: strings.SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,
-          hasTutorial: true,
-          handlePrefix: (prefix: string) =>
-            strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
-        },
-      ];
-    }
-
     return [
       {
-        text: strings.SITE_EXCLUSION_AREAS_DESCRIPTION,
+        text: strings.SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,
         hasTutorial: true,
-        handlePrefix: (prefix: string) => strings.formatString(prefix, <MapIcon icon='polygon' />) as JSX.Element[],
+        handlePrefix: (prefix: string) =>
+          strings.formatString(prefix, <MapIcon centerAligned={true} icon='polygon' />) as JSX.Element[],
       },
     ];
-  }, [activeLocale, fileUploadEnabled]);
+  }, [activeLocale]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {

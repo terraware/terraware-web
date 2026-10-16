@@ -6,6 +6,7 @@ import { Icon, Tooltip } from '@terraware/web-components';
 import PendingSurvivalRate from 'src/components/SurvivalRate/PendingSurvivalRate';
 import FormattedNumber from 'src/components/common/FormattedNumber';
 import { useLocalization } from 'src/providers';
+import useDeviceInfo from 'src/utils/useDeviceInfo';
 
 type ObservationDataNumbersProps = {
   items: { label: string; pending?: boolean; tooltip: string; value?: string | number }[];
@@ -15,8 +16,10 @@ type ObservationDataNumbersProps = {
 const ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersProps) => {
   const theme = useTheme();
   const { strings } = useLocalization();
+  const { isMobile } = useDeviceInfo();
+  const columns = isMobile ? Math.min(items.length, 2) : items.length;
   return (
-    <Box display='grid' paddingBottom={3} gridTemplateColumns={`repeat(${items.length}, 1fr)`} gap={2}>
+    <Box display='grid' paddingBottom={3} gridTemplateColumns={`repeat(${columns}, minmax(0, 1fr))`} gap={2}>
       {items.map((item, index) => {
         const isTemporaryOrAdHocSurvivalRateItem =
           item.label === strings.SURVIVAL_RATE &&
@@ -25,7 +28,7 @@ const ObservationDataNumbers = ({ items, isCompleted }: ObservationDataNumbersPr
         return (
           <Box
             key={index}
-            borderLeft={index !== 0 ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : 'none'}
+            borderLeft={index % columns !== 0 ? `1px solid ${theme.palette.TwClrBrdrTertiary}` : 'none'}
             paddingLeft={2}
             paddingBottom={2}
           >

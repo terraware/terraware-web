@@ -50,6 +50,7 @@ ACTIVE_GROWTH_QUANTITY_BEFORE,Quantité de croissance active (avant),9f4e51b1
 ACTIVE_GROWTH_QUANTITY_CANNOT_BE_LESS_THAN_ZERO,La quantité de croissance active ne peut être inférieure à 0,d7703445
 ACTIVE_GROWTH_QUANTITY_REMAINING,Quantité de croissance active ({0} restant),66b0930c
 ACTIVE_GROWTH_QUANTITY_REQUIRED,Quantité de croissance active *,b8c156d3
+ACTIVITY,Activité,4e3914f0
 ACTIVITY_DELETED,Activité supprimée,e2df95fd
 ACTIVITY_LOG,Journal d'activité,112b2d64
 ACTIVITY_PUBLISHED,Activité publiée,6ce064cc
@@ -353,7 +354,6 @@ CLIMATE,Climat,63ba44ee
 CLOSE,Fermer,e6e3f022
 CLOSE_AND_EDIT,Fermer et modifier,1c3ea202
 CLOSE_DRAFT_SITE_SETUP_MESSAGE,Vos modifications apportées à {0} n'ont pas été enregistrées. Enregistrez-les dans votre brouillon ou abandonnez-les.,2fc3437d
-CLOSE_NEW_SITE_SETUP_MESSAGE,"{0} n'a pas encore été enregistré. Enregistrez-le comme brouillon pour terminer la configuration plus tard, ou abandonnez-le.",7ca714c3
 CLOSE_PLANTING_SEASON,Clore la saison de plantation,fc3b2abc
 CLOSE_PLANTING_SEASON_CONFIRM,Vous êtes sur le point de clore {0}. La clôture marquera la saison comme terminée et empêchera toute modification ultérieure. Cette action est irréversible.,ee1f53f1
 CLOSE_SEASON,Clore la saison,72b4448a
@@ -399,7 +399,6 @@ CONTINUE_AND_RESET_STATUS,Continuer et réinitialiser le statut,5f35516c
 CONTINUE_APPLICATION,Continuer la candidature,bd87b380
 CONTINUE_BOUNDARY_SETUP,Continuer la configuration des limites,13d17477
 CONTINUE_TO_APPLICATION,Continuer vers la demande,bc4ca333
-CONTINUE_WITH_DETAILS,Continuer avec les détails,f6430a6d
 CONTINUE_WITH_EXCLUSION_AREAS,Continuer avec les zones d’exclusion,c263fd4c
 CONTINUE_WITH_STRATUM_BOUNDARIES,Continuer avec les limites de strates,f705c34f
 CONTINUE_WITH_SUBSTRATUM_BOUNDARIES,Continuer avec les limites de sous-strates,ab208dcb
@@ -549,10 +548,7 @@ DETAILS,Détails,c13bd424
 DEV_SERVER_ERROR,Serveur non disponible (possibilité de redémarrage avec mise à jour du code). Redémarrer?,d3be39f0
 DIAMETER_AT_BREAST_HEIGHT,Diamètre à hauteur de poitrine (DHP) à maturité (cm),6b42a16f
 DIFFICULT_ACCESSIBILITY,Accessibilité difficile,18c83274
-DISCARD,Abandonner,51a7ed1d
 DISCARD_CHANGES,Annuler les modifications,f79f534a
-DISCARD_THIS_SITE,Abandonner ce site ?,ed8d4636
-DISCARD_UNNAMED_SITE_MESSAGE,Ce site ne peut pas être enregistré comme brouillon sans nom. Abandonnez ce que vous avez saisi ou continuez la modification pour ajouter un nom.,5f5bca5b
 DISMISS,Fermer,a56709f4
 DO_NOT_USE,Ne pas utiliser,6950f9e5
 DOC_PRODUCER,Producteur de docs,e40f8aa1
@@ -1580,8 +1576,6 @@ PLANTING_SEASON_OPTIONAL_TOOLTIP,Sélectionnez une saison de plantation parmi le
 PLANTING_SEASONS,Saisons de plantation,58d50e9a
 PLANTING_SITE,Site de plantation,ee55d884
 PLANTING_SITE_AREA,Zone du site de plantation,53766ba3
-PLANTING_SITE_CREATE_DETAILED_HELP,"Si vous êtes un partenaire de Terraformation ou un participant à l'accélérateur, vous pouvez [nous contacter] pour travailler ensemble sur un site de plantation détaillé.",26cde7ca
-PLANTING_SITE_CREATE_DETAILED_TITLE,Carte détaillée du site de plantation,9adc9d50
 PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l'outil de dessin {0} pour dessiner les zones d'exclusion du site de plantation.,340da36f
 PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE,Dessiner les limites des zones d'exclusion,84651b2d
 PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Cette vidéo montre comment utiliser l'outil de dessin {0} pour tracer les limites du site de plantation.,a539970b
@@ -1653,6 +1647,7 @@ PROBLEMS_WITH_ENTRIES,Il y a eu un problème avec certaines saisies dans ce form
 PROCESSING,Traitement en cours,36f06d3a
 PROCESSING_STATUS_REQUIRED,Statut du traitement *,ac173883
 PROCESSING_VIDEO,Traitement de la vidéo,9a3838de
+PROFILE,Profil,3da1dc58
 PROGRESS,Progrès,c07f21ce
 PROGRESS_NOTES,Notes sur l'état d'avancement,5e670e4a
 PROGRESS_NOTES_DESCRIPTION,Fournissez des informations qui peuvent être publiées à l'intention des bailleurs de fonds.,a42ffda7
@@ -1934,7 +1929,6 @@ SAVE_AND_CONTINUE,Enregistrer et continuer,a900547e
 SAVE_AND_NEXT,Sauvegarder et suivant,1ca9d40a
 SAVE_AND_REQUEST,Enregistrer et demander,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Enregistrer et demander enverra une demande de retrait de plants à la pépinière pour cette date de plantation.,9f9b8d4e
-SAVE_AS_DRAFT,Enregistrer comme brouillon,2fffd988
 SAVE_OBSERVATION_DATA,Enregistrer les données d'observation,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Vos modifications remplaceront toutes les données saisies précédemment. Êtes-vous sûr de vouloir effectuer ces modifications ?,b1657c44
 SAVE_PHOTOS_AND_VIDEOS,Enregistrer les photos et vidéos,d38ce0cc
@@ -2088,20 +2082,15 @@ SITE_BOUNDARY_ABSENT_WARNING,Veuillez définir une limite de site.,215b60ab
 SITE_BOUNDARY_BOUNDING_BOX_LIMIT,"La boîte englobante du site peut atteindre 20 000 ha. Si votre site est plus grand, divisez-le en plusieurs sites de plantation.",5ae05b46
 SITE_BOUNDARY_DESCRIPTION_0,Dessinez ci-dessous les limites de votre site de plantation. Toutes les zones plantables de votre projet doivent être contenues dans les limites du site.,1eb2c82f
 SITE_BOUNDARY_DESCRIPTION_1,Utilisez l'outil de dessin {0} pour tracer les limites du site de plantation. [Regardez un tutoriel] sur le tracé des limites du site.,8a4e2537
-SITE_BOUNDARY_DESCRIPTION_2,"Les limites du site doivent s'inscrire dans une boîte de délimitation d'une superficie inférieure ou égale à 20 000 hectares. S'il est plus grand, envisagez de diviser le site en plusieurs sites de plantation.",6495bc67
-SITE_BOUNDARY_DESCRIPTION_3,Zoomez sur l'emplacement du site de plantation. Cliquez ensuite sur des zones de la carte pour ajouter des points à la limite du site. Complétez la limite en double-cliquant ou en cliquant à nouveau sur le point de départ.,14d699d1
-SITE_BOUNDARY_DESCRIPTION_4,"Pour modifier la forme de la limite du site, cliquez sur la forme pour modifier les points. Pour supprimer la forme, cliquez sur le bouton {0}.",3fd2c49c
 SITE_BOUNDARY_DRAWING_DESCRIPTION,"Définissez une limite de site de plantation qui englobe toutes les zones plantables du projet. Utilisez l’outil de dessin {0} pour tracer des formes, et terminez chaque forme en double-cliquant ou en cliquant à nouveau sur le point de départ. [Regardez un tutoriel] sur la délimitation des sites de plantation.",cf856b43
 SITE_BOUNDARY_DRAWING_ON_MAP,Tracé de la limite sur la carte.,58e0ca26
 SITE_BOUNDARY_ERRORS,Il y a des erreurs dans les limites du site.,916536c6
 SITE_BOUNDARY_FILE_SUMMARY,{0} · {1} · {2} · {3} points · ~{4} ha · boîte englobante ~{5} ha,0b5beef6
-SITE_BOUNDARY_MAX_BOUNDING_BOX,"Boîte englobante maximale : 20 000 ha. Si votre site est plus grand, divisez-le en plusieurs sites de plantation.",315cceab
 SITE_BOUNDARY_NUM_POLYGON,{0} polygone,a5b656b9
 SITE_BOUNDARY_NUM_POLYGONS,{0} polygones,67b049f1
 SITE_BOUNDARY_POLYGON_TOO_SMALL,La limite de la zone {0} hectares est inférieure à 100 m x 100 m.,e140c0c1
 SITE_BOUNDARY_POLYGONS_COMBINED,Les {0} polygones de ce fichier ont été combinés en une seule limite de site couvrant l'ensemble.,e94fad22
 SITE_BOUNDARY_POLYGONS_COMBINED_DETAILED_SITE_REQUIRED,"Si vous souhaitez que chacun soit un Strate distincte, un Site détaillé est requis.",c58dd98d
-SITE_BOUNDARY_SIMPLE_SITE_NOTE,"Remarque : Par défaut, les sites simples incluent une seule strate et une seule sous-strate qui composent l'ensemble du site de plantation.",d866268c
 SITE_BOUNDARY_UPLOAD_DESCRIPTION,Définissez une limite de site de plantation qui englobe toutes les zones plantables du projet.,992243f8
 SITE_BOUNDARY_UPLOAD_SIMPLE_SITE_NOTE,Les Sites simples comprennent une Strate et un Sous-strate qui couvrent l’ensemble du site de plantation.,955accde
 SITE_BOUNDARY_UPLOAD_TUTORIAL,[Regardez un tutoriel] sur la façon de dessiner les limites d’un site.,ba8fe625
@@ -2111,7 +2100,6 @@ SITE_DETAIL,Détail du site,c7f1672e
 SITE_EDIT_DISABLED_TOOLTIP,Le site de plantation est actuellement un brouillon – seul le créateur du site peut le modifier.,07fbd64b
 SITE_EDITOR_USE_DESKTOP,Cette fonction n’est disponible qu’à partir de l’application de bureau.,1c4eb37d
 SITE_EDITOR_USE_TABLET_LANDSCAPE,Cette fonctionnalité est uniquement disponible en mode paysage sur une tablette.,8710d7e6
-SITE_EXCLUSION_AREAS_DESCRIPTION,"Les zones situées à l'intérieur des limites du site qui ne sont pas plantables, telles que les routes, les plans d'eau et les dépendances, doivent être exclues. Elles sont retirées des calculs de surface plantable et ne sont pas surveillées lors des observations de routine du site. Utilisez l'outil de dessin {0} pour tracer des formes à l'intérieur ou à cheval sur la limite du site, et terminez chaque forme en double-cliquant ou en cliquant à nouveau sur le point de départ. [Regardez un tutoriel] sur la façon de dessiner des zones d'exclusion. Passez cette étape s'il n'y a aucune zone à exclure.",4c2a45b1
 SITE_EXCLUSION_AREAS_DRAWING_DESCRIPTION,"Définissez les zones à l’intérieur de la limite du site qui ne sont pas plantables, telles que les routes, plans d’eau et bâtiments annexes. Elles seront exclues des calculs de surface plantable et des Observations. Utilisez l’outil de dessin {0} pour tracer des formes à l’intérieur ou en chevauchement avec la limite du site. Passez cette étape s’il n’y a aucune zone à exclure. [Regardez un tutoriel] sur la délimitation des zones d’exclusion.",d22ed290
 SITE_EXCLUSION_ERRORS,Il y a des erreurs dans la limite d’exclusion.,dc334f43
 SITE_GOALS,Objectifs du site,345a7c04
@@ -2119,13 +2107,11 @@ SITE_GOALS_DESCRIPTION,Gérer les objectifs du site pour les densités de planta
 SITE_LOCATION,Emplacement du site,e0a85b19
 SITE_MAP,Carte du site,df2fc60a
 SITE_PLANT_DENSITY,Densité de plantation du site,a449ddcc
-SITE_STRATUM_BOUNDARIES_DESCRIPTION,"Une strate est une couche de végétation du site de plantation où les conditions de plantation et de croissance sont similaires, comme le versant d'une colline orientée à l'est. Chaque site de plantation doit comporter au moins une strate et généralement pas plus de cinq. Utilisez l’outil de découpe {0} pour dessiner les polygones des strates à l’intérieur des limites du site ci-dessous. {1} [Regardez un tutoriel] sur l’ajout de limites de strates.",590f73b1
 SITE_STRATUM_BOUNDARIES_DRAWING_DESCRIPTION,"Définissez les strates – couches de végétation du site de plantation où les conditions de plantation et de croissance sont similaires, comme la pente d’une colline orientée à l’est. Chaque site de plantation comporte une Strate par défaut. Utilisez l’outil de découpe {0} pour dessiner des polygones de Strate à l’intérieur de la limite du site. {1} [Regardez un tutoriel] sur l’ajout de limites de Strate.",7b32eb6c
 SITE_STRATUM_BOUNDARIES_SIZE,Les strates doivent avoir une taille minimale de 100 m × 100 m.,d57abc90
 SITE_STRATUM_BOUNDARIES_TOO_SMALL,Une ou plusieurs strates ont une limite inférieure à 100 m x 100 m.,e53c42df
 SITE_STRATUM_BOUNDARY_TOO_SMALL,Limite de strate inférieure à 100 m x 100 m.,d39bb72b
 SITE_STRATUM_NAMES_MISSING,Une ou plusieurs strates n’ont pas de nom. Cliquez sur une strate pour modifier son nom.,dc003708
-SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,"Chaque strate est divisée en un ou plusieurs substrats. Un substrat est la plus petite zone à laquelle des plants peuvent être attribués lors de la plantation, et doit être dimensionné de façon à pouvoir être planté en une seule saison de plantation, généralement de 50 à 200 hectares. Sélectionnez une strate, puis utilisez l’outil de découpe {0} pour dessiner les polygones des substrats à l’intérieur de celle-ci. [Regardez un tutoriel] sur l’ajout de limites de substrats.",d9d30ce0
 SITE_SUBSTRATUM_BOUNDARIES_DRAWING_DESCRIPTION,"Définissez les substrats – la plus petite zone dans laquelle des semis peuvent être plantés au cours d’une seule saison de plantation (par exemple, 50 à 200 hectares). Chaque Strate comporte un Substrat par défaut. Sélectionnez une Strate, puis utilisez l’outil de découpe {0} pour dessiner des polygones de Substrat à l’intérieur de celle-ci. [Regardez un tutoriel] sur l’ajout de limites de Substrat.",f6bf6047
 SITE_SUBSTRATUM_BOUNDARIES_SELECTED_STRATUM,{0} sélectionnée pour la création de substrats,8444578b
 SITE_SUBSTRATUM_BOUNDARIES_TOO_SMALL,Un ou plusieurs substrats ont une limite inférieure à 25 m x 25 m.,87f34c5b
@@ -2623,6 +2609,7 @@ VARIABLE_ERROR_NUMBER_NAN,La valeur n'est pas un nombre,35fecae0
 VARIABLE_HISTORY,Historique des variables,62d3bc75
 VARIABLE_STATUS,Statut de la variable,dd3169c3
 VARIABLES,Variables,9902c54b
+VARIABLES_FOR_PROJECT,Variables pour {0},8ed080a2
 VERIFIED,Vérifié,17f92e17
 VERIFIED_BY,Vérifié par {0},c5e1ef69
 VERRA,Verra,b73695a0
