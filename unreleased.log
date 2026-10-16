@@ -1,3 +1,4 @@
+2a439ab1 SW-9105 Add Withdrawal date for withdrawals in history log  (#6780)
 c9cbc361 SW-9112 Inventory Planning: Change the numbers in the "Target" column to reflect "Left to Plant" numbers (#6781)
 4090884c Update playwright tests for planting site UI updates (#6774)
 bf292784 Make the site editor drawer collapsible and refine its layout (#6773)
