@@ -354,7 +354,6 @@ CLIMATE,Clima,63ba44ee
 CLOSE,Cerrar,e6e3f022
 CLOSE_AND_EDIT,Cerrar y editar,1c3ea202
 CLOSE_DRAFT_SITE_SETUP_MESSAGE,Sus cambios en {0} no se han guardado. Guárdelos en su borrador o descártelos.,2fc3437d
-CLOSE_NEW_SITE_SETUP_MESSAGE,{0} aún no se ha guardado. Guárdelo como borrador para terminar la configuración más tarde o descártelo.,7ca714c3
 CLOSE_PLANTING_SEASON,Cerrar temporada de plantación,fc3b2abc
 CLOSE_PLANTING_SEASON_CONFIRM,"Está a punto de cerrar {0}. Al cerrar, la temporada se marcará como cerrada y no se podrán realizar más cambios. Esta acción no se puede deshacer.",ee1f53f1
 CLOSE_SEASON,Cerrar temporada,72b4448a
@@ -400,7 +399,6 @@ CONTINUE_AND_RESET_STATUS,Continuar y restablecer estado,5f35516c
 CONTINUE_APPLICATION,Continuar solicitud,bd87b380
 CONTINUE_BOUNDARY_SETUP,Continuar con la configuración de límites,13d17477
 CONTINUE_TO_APPLICATION,Continuar a la Solicitud,bc4ca333
-CONTINUE_WITH_DETAILS,Continuar con los detalles,f6430a6d
 CONTINUE_WITH_EXCLUSION_AREAS,Continuar con las áreas de exclusión,c263fd4c
 CONTINUE_WITH_STRATUM_BOUNDARIES,Continuar con los límites de estrato,f705c34f
 CONTINUE_WITH_SUBSTRATUM_BOUNDARIES,Continuar con los límites de subestrato,ab208dcb
@@ -550,10 +548,7 @@ DETAILS,Detalles,c13bd424
 DEV_SERVER_ERROR,Servidor no disponible (se puede reiniciar con nuevos cambios en el código). ¿Volver a cargar?,d3be39f0
 DIAMETER_AT_BREAST_HEIGHT,Diámetro a la altura del pecho (DAP) en la madurez (cm),6b42a16f
 DIFFICULT_ACCESSIBILITY,Accesibilidad difícil,18c83274
-DISCARD,Descartar,51a7ed1d
 DISCARD_CHANGES,Descartar cambios,f79f534a
-DISCARD_THIS_SITE,¿Descartar este sitio?,ed8d4636
-DISCARD_UNNAMED_SITE_MESSAGE,Este sitio no se puede guardar como borrador sin un nombre. Descarte lo que ha ingresado o continúe editando para agregar un nombre.,5f5bca5b
 DISMISS,Cerrar notificación,a56709f4
 DO_NOT_USE,No usar,6950f9e5
 DOC_PRODUCER,Productor de documentos,e40f8aa1
@@ -1581,8 +1576,6 @@ PLANTING_SEASON_OPTIONAL_TOOLTIP,Seleccione una temporada de plantación de las 
 PLANTING_SEASONS,Temporadas de plantación,58d50e9a
 PLANTING_SITE,Sitio de plantación,ee55d884
 PLANTING_SITE_AREA,Área de la zona de plantación,53766ba3
-PLANTING_SITE_CREATE_DETAILED_HELP,"Si usted es un socio o participante acelerador de Terraformation, puede [contactarnos] para colaborar en un sitio de plantación detallado.",26cde7ca
-PLANTING_SITE_CREATE_DETAILED_TITLE,Mapa detallado del sitio de plantación,9adc9d50
 PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar la herramienta de dibujo {0} para dibujar las zonas de exclusión del lugar de plantación.,340da36f
 PLANTING_SITE_CREATE_EXCLUSIONS_INSTRUCTIONS_TITLE,Trazado de los límites de zonas de exclusión,84651b2d
 PLANTING_SITE_CREATE_INSTRUCTIONS_DESCRIPTION,Este video muestra cómo utilizar la herramienta de dibujo {0} para dibujar el límite del lugar de plantación.,a539970b
@@ -1935,7 +1928,6 @@ SAVE_AND_CONTINUE,Guardar y continuar,a900547e
 SAVE_AND_NEXT,Guardar y Continuar,1ca9d40a
 SAVE_AND_REQUEST,Guardar y solicitar,fa423722
 SAVE_AND_REQUEST_TOOLTIP,Guardar y Solicitar enviará una solicitud de retiro de plantas al Vivero para esta fecha de plantación.,9f9b8d4e
-SAVE_AS_DRAFT,Guardar como borrador,2fffd988
 SAVE_OBSERVATION_DATA,Guardar datos de observación,e308c5cd
 SAVE_OBSERVATION_DATA_DESCRIPTION,Sus ediciones reemplazarán cualquier dato ingresado previamente. ¿Está seguro de que desea realizar estos cambios?,b1657c44
 SAVE_PHOTOS_AND_VIDEOS,Guardar fotos y videos,d38ce0cc
@@ -2096,7 +2088,6 @@ SITE_BOUNDARY_DRAWING_DESCRIPTION,Defina un límite de Sitio de Plantación que 
 SITE_BOUNDARY_DRAWING_ON_MAP,Dibujando el límite en el mapa.,58e0ca26
 SITE_BOUNDARY_ERRORS,Hay errores en los límites del terreno.,916536c6
 SITE_BOUNDARY_FILE_SUMMARY,{0} · {1} · {2} · {3} puntos · ~{4} ha · caja delimitadora ~{5} ha,0b5beef6
-SITE_BOUNDARY_MAX_BOUNDING_BOX,"Caja delimitadora máxima: 20,000 ha. Si su sitio es más grande, divídalo en varios sitios de plantación.",315cceab
 SITE_BOUNDARY_NUM_POLYGON,{0} polígono,a5b656b9
 SITE_BOUNDARY_NUM_POLYGONS,{0} polígonos,67b049f1
 SITE_BOUNDARY_POLYGON_TOO_SMALL,Los límites con una superficie de {0} hectáreas son menores que 100 m x 100 m.,e140c0c1
