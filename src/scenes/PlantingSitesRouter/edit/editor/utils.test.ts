@@ -1,4 +1,4 @@
-import { Feature } from 'geojson';
+import { Feature, MultiPolygon } from 'geojson';
 
 import {
   cutOnNoOverlapFeature,
@@ -10,15 +10,18 @@ import {
   featureCollection3,
 } from 'src/components/Map/testdata';
 import strings from 'src/strings';
+import { buildDraftPlantingSite, buildStratum } from 'src/test-utils/fixtures';
 import { GeometryFeature } from 'src/types/Map';
 import { DraftPlantingSite } from 'src/types/PlantingSite';
 
 import {
   alphabetName,
+  createDefaultStrata,
   cutOverlappingBoundaries,
   getLatestFeature,
   stratumNameGenerator,
   substratumNameGenerator,
+  withDefaultStrata,
 } from './utils';
 
 const createDraftSiteWith = (): DraftPlantingSite => {
@@ -295,5 +298,66 @@ describe('cutBoundaries', () => {
         id: 2,
       },
     ]);
+  });
+});
+
+const siteBoundary: MultiPolygon = {
+  type: 'MultiPolygon',
+  coordinates: [
+    [
+      [
+        [0, 0],
+        [0, 2],
+        [2, 2],
+        [2, 0],
+        [0, 0],
+      ],
+    ],
+  ],
+};
+
+describe('createDefaultStrata', () => {
+  test('should return no strata when there is no boundary', () => {
+    expect(createDefaultStrata()).toEqual([]);
+  });
+
+  test('should return a single stratum and substratum covering the boundary', () => {
+    const strata = createDefaultStrata(siteBoundary);
+
+    expect(strata).toHaveLength(1);
+    expect(strata[0]).toMatchObject({
+      boundary: siteBoundary,
+      id: 0,
+      initialPlantingDensity: 1500,
+      name: `${strings.STRATUM} 01`,
+    });
+    expect(strata[0].substrata).toHaveLength(1);
+    expect(strata[0].substrata[0]).toMatchObject({ boundary: siteBoundary, id: 0 });
+  });
+});
+
+describe('withDefaultStrata', () => {
+  test('should derive strata from the boundary for a simple site without strata', () => {
+    const site = buildDraftPlantingSite({ siteType: 'simple', boundary: siteBoundary, strata: undefined });
+
+    expect(withDefaultStrata(site)).toEqual({ ...site, strata: createDefaultStrata(siteBoundary) });
+  });
+
+  test('should replace stale strata for a simple site', () => {
+    const site = buildDraftPlantingSite({ siteType: 'simple', boundary: siteBoundary, strata: [buildStratum()] });
+
+    expect(withDefaultStrata(site).strata).toEqual(createDefaultStrata(siteBoundary));
+  });
+
+  test('should return no strata for a simple site without a boundary', () => {
+    const site = buildDraftPlantingSite({ siteType: 'simple', strata: [buildStratum()] });
+
+    expect(withDefaultStrata(site).strata).toEqual([]);
+  });
+
+  test('should leave a detailed site unchanged', () => {
+    const site = buildDraftPlantingSite({ siteType: 'detailed', boundary: siteBoundary, strata: [buildStratum()] });
+
+    expect(withDefaultStrata(site)).toBe(site);
   });
 });
