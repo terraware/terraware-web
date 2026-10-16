@@ -2,7 +2,6 @@ import React from 'react';
 
 import {
   SectionVariableWithValues,
-  SelectVariable,
   VariableUnion,
   isSelectVariable,
   isTableVariable,
@@ -47,7 +46,7 @@ const selectVariablePreview = (
     const columnsVariables = tableColumns.map((col) => col.variable);
     const selectVariables = columnsVariables.filter((col) => col.type === 'Select');
     if (selectVariables && selectVariables.length) {
-      const allOptions = selectVariables.flatMap((selVar) => (selVar as SelectVariable).options);
+      const allOptions = selectVariables.flatMap((selVar) => selVar.options);
       return variableValue.optionValues
         .map((optionValue: number) => {
           const foundOption = allOptions.find((sourceVariableOption) => sourceVariableOption.id === optionValue);

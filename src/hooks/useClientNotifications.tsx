@@ -15,7 +15,7 @@ export default function useClientNotifications(): ClientNotification[] {
         // add all notifications here
         userNotification,
         orgNotification,
-      ].filter((notification) => notification !== null) as ClientNotification[],
+      ].filter((notification) => notification !== null),
     [
       // add all notification dependencies here
       userNotification,

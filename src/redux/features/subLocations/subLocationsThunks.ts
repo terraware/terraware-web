@@ -12,7 +12,7 @@ export const requestSubLocations = (facilityIds: number[]) => {
         const resultPromises = facilityIds.map((f) => SubLocationService.getSubLocations(f));
         const results = await Promise.all(resultPromises);
         const subLocations = results.flatMap((r) => r.subLocations);
-        const errors = results.flatMap((r) => r.error).filter((e) => e !== undefined) as string[];
+        const errors = results.flatMap((r) => r.error).filter((e) => e !== undefined);
 
         dispatch(setSubLocationsAction({ errors, subLocations }));
       } else {

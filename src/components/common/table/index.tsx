@@ -108,9 +108,7 @@ function OrderPreserveableTable<T extends TableRowType>(
 
   const getTableColumns = useCallback(
     (columnNames: string[]): TableColumnType[] =>
-      columnNames
-        .map((columnName) => columns.find((column) => column.key === columnName))
-        .filter((column) => !!column) as TableColumnType[],
+      columnNames.map((columnName) => columns.find((column) => column.key === columnName)).filter((column) => !!column),
     [columns]
   );
 
@@ -182,7 +180,7 @@ export default function OrderPreservedTable<T extends TableRowType>(
       .map((tableColumn: TableColumnType) =>
         sourceColumns.find((sourceColumn: TableColumnType) => sourceColumn.key === tableColumn.key)
       )
-      .filter((tableColumn?: TableColumnType) => !!tableColumn) as TableColumnType[];
+      .filter((tableColumn?: TableColumnType) => !!tableColumn);
 
     if (!_.isEqual(tableColumns, refreshedColumns)) {
       setTableColumns(refreshedColumns);
