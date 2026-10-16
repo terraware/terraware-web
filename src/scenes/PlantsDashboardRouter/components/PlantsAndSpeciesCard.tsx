@@ -194,8 +194,8 @@ export default function PlantsAndSpeciesCard({
                   <FormattedNumber
                     value={
                       stratumId === undefined
-                        ? plantingSiteReportedPlants?.totalPlants ?? 0
-                        : stratumReportedPlants?.totalPlants ?? 0
+                        ? (plantingSiteReportedPlants?.totalPlants ?? 0)
+                        : (stratumReportedPlants?.totalPlants ?? 0)
                     }
                   />
                 )}{' '}
@@ -228,8 +228,8 @@ export default function PlantsAndSpeciesCard({
                   <FormattedNumber
                     value={
                       stratumId === undefined
-                        ? plantingSiteReportedPlants?.species?.length ?? 0
-                        : stratumReportedPlants?.totalSpecies ?? 0
+                        ? (plantingSiteReportedPlants?.species?.length ?? 0)
+                        : (stratumReportedPlants?.totalSpecies ?? 0)
                     }
                   />
                 )}{' '}

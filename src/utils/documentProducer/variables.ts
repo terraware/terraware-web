@@ -21,9 +21,11 @@ import {
 import { isArrayOfT, isNumber } from 'src/types/utils';
 
 export const variableDependencyMet = (variable: VariableWithValues, allVariables: VariableWithValues[]): boolean => {
-  if (
-    !(variable.dependencyCondition && variable.dependencyVariableStableId && variable.dependencyValue !== undefined)
-  ) {
+  if (!(
+    variable.dependencyCondition &&
+    variable.dependencyVariableStableId &&
+    variable.dependencyValue !== undefined
+  )) {
     return true;
   }
 

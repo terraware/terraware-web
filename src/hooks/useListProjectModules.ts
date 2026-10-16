@@ -13,7 +13,7 @@ const useListProjectModules = () => {
   );
 
   const projectModules = useMemo(
-    () => (listModulesResult.isSuccess ? listModulesResult.data.modules ?? [] : []),
+    () => (listModulesResult.isSuccess ? (listModulesResult.data.modules ?? []) : []),
     [listModulesResult.isSuccess, listModulesResult.data]
   );
 

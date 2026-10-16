@@ -31,15 +31,13 @@ const IconFilters = ({ filters, setCurrentFilters, currentFilters, noScroll }: I
 
   const fields = useMemo(
     (): FilterField[] =>
-      filters.map(
-        (filter: FilterConfig): FilterField => ({
-          name: filter.field,
-          label: filter.label,
-          showLabel: filter.showLabel,
-          type: filter.type || 'multiple_selection',
-          pillValueRenderer: filter.pillValueRenderer,
-        })
-      ),
+      filters.map((filter: FilterConfig): FilterField => ({
+        name: filter.field,
+        label: filter.label,
+        showLabel: filter.showLabel,
+        type: filter.type || 'multiple_selection',
+        pillValueRenderer: filter.pillValueRenderer,
+      })),
     [filters]
   );
 

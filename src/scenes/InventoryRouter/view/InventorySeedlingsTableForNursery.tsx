@@ -7,8 +7,10 @@ import InventorySeedlingsTable, {
   InventorySeedlingsTableProps,
 } from 'src/scenes/InventoryRouter/view/InventorySeedlingsTable';
 
-interface InventorySeedlingsTableForNurseryProps
-  extends Omit<InventorySeedlingsTableProps, 'columns' | 'isSelectionBulkWithdrawable'> {
+interface InventorySeedlingsTableForNurseryProps extends Omit<
+  InventorySeedlingsTableProps,
+  'columns' | 'isSelectionBulkWithdrawable'
+> {
   nurseryId: number;
 }
 

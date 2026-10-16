@@ -65,7 +65,7 @@ export default function WithdrawalOverview({
               ? strings
                   .formatString(strings.REASSIGNED_TO_NO_SEASON, withdrawalSummary?.plantingSeasonName ?? '')
                   .toString()
-              : withdrawalSummary?.plantingSeasonName ?? '',
+              : (withdrawalSummary?.plantingSeasonName ?? ''),
           },
           {
             title: strings.PLANTING_DATE,
@@ -76,7 +76,7 @@ export default function WithdrawalOverview({
                     withdrawalSummary?.plantingDate ?? strings.NOT_WITHDRAWN_TO_DATE
                   )
                   .toString()
-              : withdrawalSummary?.plantingDate ?? strings.NOT_WITHDRAWN_TO_DATE,
+              : (withdrawalSummary?.plantingDate ?? strings.NOT_WITHDRAWN_TO_DATE),
           },
         ]
       : [];
@@ -109,7 +109,7 @@ export default function WithdrawalOverview({
       data: reassignedValue(
         hasSiteReassignment
           ? locationNames(delivery ? [delivery] : [], 'stratum')
-          : withdrawalSummary?.stratumName ?? '',
+          : (withdrawalSummary?.stratumName ?? ''),
         locationNames(crossSiteDeliveries, 'stratum')
       ),
     },
@@ -118,7 +118,7 @@ export default function WithdrawalOverview({
       data: reassignedValue(
         hasSiteReassignment
           ? locationNames(delivery ? [delivery] : [], 'substratum')
-          : withdrawalSummary?.substratumShortName ?? '',
+          : (withdrawalSummary?.substratumShortName ?? ''),
         locationNames(crossSiteDeliveries, 'substratum')
       ),
     },

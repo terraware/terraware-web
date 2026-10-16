@@ -25,7 +25,7 @@ export default function SpeciesSearchSelect({
   const [selectedValue, setSelectedValue] = useState<Species>();
 
   const options = useMemo(() => {
-    const term = (selectedValue?.id === undefined ? selectedValue?.scientificName ?? '' : '').trim().toLowerCase();
+    const term = (selectedValue?.id === undefined ? (selectedValue?.scientificName ?? '') : '').trim().toLowerCase();
     return organizationSpecies
       .filter((species) => !excludedSpeciesIds?.includes(species.id))
       .filter(
