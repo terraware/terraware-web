@@ -1,3 +1,7 @@
+189e9640 Fix merge issue after feature flag removal (#6792)
+ac42b8d2 SW-9103 Keep observation details within the screen on mobile (#6784)
+6a146c0a SW-9103 Simplify the observations controls on mobile and tablet (#6783)
+f5181030 SW-9104 Allow each sit boundary polygon to be deleted (#6786)
 1774046e Remove unused strings (#6787)
 91f0dc89 SW-9117 Remove File Upload Feature Flag (#6782)
 2a439ab1 SW-9105 Add Withdrawal date for withdrawals in history log  (#6780)
