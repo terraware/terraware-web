@@ -18,6 +18,7 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 
 export type DetailsInputFormProps = {
   onChange: (id: string, value: unknown) => void;
+  onLoadingChange?: (isLoading: boolean) => void;
   onValidate?: (hasErrors: boolean) => void;
   plantingSiteId?: number;
   record: UpdatePlantingSiteRequestPayload;
@@ -26,6 +27,7 @@ export type DetailsInputFormProps = {
 
 export default function DetailsInputForm({
   onChange,
+  onLoadingChange,
   onValidate,
   plantingSiteId,
   record,
@@ -42,10 +44,15 @@ export default function DetailsInputForm({
   const [searchDraftPlantingSites, { currentData: draftSites }] = useLazySearchDraftPlantingSitesQuery();
 
   const usedNames = useMemo(() => {
-    const allSites = [...(plantingSites || []), ...(draftSites || [])];
-    const otherSiteNames = allSites.filter((site) => Number(site.id) !== plantingSiteId).map((site) => site.name);
-    return new Set(otherSiteNames);
+    const otherPlantingSites = (plantingSites || []).filter((site) => site.id !== plantingSiteId);
+    return new Set([...otherPlantingSites, ...(draftSites || [])].map((site) => site.name));
   }, [draftSites, plantingSiteId, plantingSites]);
+
+  const isLoading = !plantingSites || !draftSites;
+
+  useEffect(() => {
+    onLoadingChange?.(isLoading);
+  }, [isLoading, onLoadingChange]);
 
   const checkErrors = useCallback(() => {
     if (!record.name) {
