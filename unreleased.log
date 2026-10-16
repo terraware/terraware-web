@@ -1,3 +1,4 @@
+c9cbc361 SW-9112 Inventory Planning: Change the numbers in the "Target" column to reflect "Left to Plant" numbers (#6781)
 4090884c Update playwright tests for planting site UI updates (#6774)
 bf292784 Make the site editor drawer collapsible and refine its layout (#6773)
 4e06a68a SW-9108 Move the site editor stepper into a map drawer (#6765)
