@@ -980,17 +980,7 @@
 <a name='L915'></a><a href='#L915'>915</a>
 <a name='L916'></a><a href='#L916'>916</a>
 <a name='L917'></a><a href='#L917'>917</a>
-<a name='L918'></a><a href='#L918'>918</a>
-<a name='L919'></a><a href='#L919'>919</a>
-<a name='L920'></a><a href='#L920'>920</a>
-<a name='L921'></a><a href='#L921'>921</a>
-<a name='L922'></a><a href='#L922'>922</a>
-<a name='L923'></a><a href='#L923'>923</a>
-<a name='L924'></a><a href='#L924'>924</a>
-<a name='L925'></a><a href='#L925'>925</a>
-<a name='L926'></a><a href='#L926'>926</a>
-<a name='L927'></a><a href='#L927'>927</a>
-<a name='L928'></a><a href='#L928'>928</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L918'></a><a href='#L918'>918</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1375,17 +1365,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2302,27 +2282,17 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             (!isOutplant || <span class="branch-2 cbranch-no" title="branch not covered" >Number(batch['readyQuantity(raw)']) &gt; 0)</span>
           );
         })
-        .map(
-          (batch: SearchResponseElement): BatchWithdrawalPayload =&gt; ({
-            batchId: Number(batch.id),
-            germinatingQuantityWithdrawn: isSingleOutplant ? <span class="branch-0 cbranch-no" title="branch not covered" >0 </span>: isSingleBatch ? germinatingQuantityWithdrawn || 0 : <span class="branch-1 cbranch-no" title="branch not covered" >0,</span>
-            activeGrowthQuantityWithdrawn: isSingleOutplant
-              ? <span class="branch-0 cbranch-no" title="branch not covered" >0</span>
-              : isSingleBatch
-                ? activeGrowthQuantityWithdrawn || 0
-                : <span class="branch-1 cbranch-no" title="branch not covered" >0,</span>
-            hardeningOffQuantityWithdrawn: isSingleOutplant
-              ? <span class="branch-0 cbranch-no" title="branch not covered" >0</span>
-              : isSingleBatch
-                ? hardeningOffQuantityWithdrawn || 0
-                : <span class="branch-1 cbranch-no" title="branch not covered" >0,</span>
-            readyQuantityWithdrawn: isSingleOutplant
-              ? <span class="branch-0 cbranch-no" title="branch not covered" >withdrawnQuantity || 0</span>
-              : isSingleBatch
-                ? readyQuantityWithdrawn || <span class="branch-1 cbranch-no" title="branch not covered" >0</span>
-                : <span class="branch-1 cbranch-no" title="branch not covered" >0,</span>
-          })
-        ),
+        .map((batch: SearchResponseElement): BatchWithdrawalPayload =&gt; ({
+          batchId: Number(batch.id),
+          germinatingQuantityWithdrawn: isSingleOutplant ? <span class="branch-0 cbranch-no" title="branch not covered" >0 </span>: isSingleBatch ? germinatingQuantityWithdrawn || 0 : <span class="branch-1 cbranch-no" title="branch not covered" >0,</span>
+          activeGrowthQuantityWithdrawn: isSingleOutplant ? <span class="branch-0 cbranch-no" title="branch not covered" >0 </span>: isSingleBatch ? activeGrowthQuantityWithdrawn || 0 : <span class="branch-1 cbranch-no" title="branch not covered" >0,</span>
+          hardeningOffQuantityWithdrawn: isSingleOutplant ? <span class="branch-0 cbranch-no" title="branch not covered" >0 </span>: isSingleBatch ? hardeningOffQuantityWithdrawn || 0 : <span class="branch-1 cbranch-no" title="branch not covered" >0,</span>
+          readyQuantityWithdrawn: isSingleOutplant
+            ? <span class="branch-0 cbranch-no" title="branch not covered" >withdrawnQuantity || 0</span>
+            : isSingleBatch
+              ? readyQuantityWithdrawn || <span class="branch-1 cbranch-no" title="branch not covered" >0</span>
+              : <span class="branch-1 cbranch-no" title="branch not covered" >0,</span>
+        })),
     });
   };
 &nbsp;
@@ -2851,7 +2821,7 @@ export default function SelectPurposeForm(props: SelectPurposeFormProps): JSX.El
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-16T18:07:25.766Z
+                at 2026-10-16T20:05:49.890Z
             </div>
         <script src="../../../../prettify.js"></script>
         <script>
