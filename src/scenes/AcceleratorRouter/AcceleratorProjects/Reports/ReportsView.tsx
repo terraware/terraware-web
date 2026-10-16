@@ -8,6 +8,7 @@ import Tabs from '@terraware/web-components/components/Tabs';
 import AcceleratorReportTargetsTable from 'src/components/AcceleratorReports/AcceleratorReportTargetsTable';
 import Page from 'src/components/Page';
 import { APP_PATHS } from 'src/constants';
+import { useFeatureEnabled } from 'src/features';
 import useAcceleratorReportActions from 'src/hooks/useAcceleratorReportActions';
 import useNavigateTo from 'src/hooks/useNavigateTo';
 import useOneAcceleratorReport from 'src/hooks/useOneAcceleratorReport';
@@ -19,13 +20,14 @@ import { useAcceleratorProjectData } from '../AcceleratorProjectContext';
 import ReportOptionsMenu from './ReportOptionsMenu';
 import ReportReviewButtons from './ReportReviewButtons';
 import ReportTabV2 from './ReportTabV2';
+import ReportsSegmentedView from './ReportsSegmentedView';
 import ReportsSettings from './ReportsSettings';
 
 type ReportsViewProps = {
   tab?: string;
 };
 
-const ReportsView = ({ tab }: ReportsViewProps) => {
+const ReportsViewLegacy = ({ tab }: ReportsViewProps) => {
   const { crumbs, acceleratorProject, project } = useAcceleratorProjectData();
   const navigate = useSyncNavigate();
   const { strings } = useLocalization();
@@ -127,6 +129,12 @@ const ReportsView = ({ tab }: ReportsViewProps) => {
       </Box>
     </Page>
   );
+};
+
+const ReportsView = ({ tab }: ReportsViewProps) => {
+  const cleanUpTabsEnabled = useFeatureEnabled('Clean Up Console Tabs');
+
+  return cleanUpTabsEnabled ? <ReportsSegmentedView tab={tab} /> : <ReportsViewLegacy tab={tab} />;
 };
 
 export default ReportsView;
