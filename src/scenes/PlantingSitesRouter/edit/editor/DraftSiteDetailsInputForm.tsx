@@ -17,6 +17,7 @@ import { TimeZoneDescription } from 'src/types/TimeZones';
 
 export type DraftSiteDetailsInputFormProps = {
   onChange: (id: string, value: unknown) => void;
+  onLoadingChange?: (isLoading: boolean) => void;
   onValidate?: (hasErrors: boolean) => void;
   record: DraftPlantingSite;
   setRecord: (setFn: (previousValue: DraftPlantingSite) => DraftPlantingSite) => void;
@@ -24,6 +25,7 @@ export type DraftSiteDetailsInputFormProps = {
 
 export default function DraftSiteDetailsInputForm({
   onChange,
+  onLoadingChange,
   onValidate,
   record,
   setRecord,
@@ -38,10 +40,15 @@ export default function DraftSiteDetailsInputForm({
   const [searchDraftPlantingSites, { currentData: draftSites }] = useLazySearchDraftPlantingSitesQuery();
 
   const usedNames = useMemo(() => {
-    const allSites = [...(plantingSites || []), ...(draftSites || [])];
-    const otherSiteNames = allSites.filter((site) => Number(site.id) !== record.id).map((site) => site.name);
-    return new Set(otherSiteNames);
+    const otherDraftSites = (draftSites || []).filter((site) => Number(site.id) !== record.id);
+    return new Set([...(plantingSites || []), ...otherDraftSites].map((site) => site.name));
   }, [draftSites, plantingSites, record.id]);
+
+  const isLoading = !plantingSites || !draftSites;
+
+  useEffect(() => {
+    onLoadingChange?.(isLoading);
+  }, [isLoading, onLoadingChange]);
 
   const checkErrors = useCallback(() => {
     if (!record.name) {

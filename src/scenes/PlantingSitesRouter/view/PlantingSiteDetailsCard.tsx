@@ -45,11 +45,13 @@ export default function PlantingSiteDetailsCard({ plantingSite }: PlantingSiteDe
   const [updatePlantingSite, { isLoading: isSaving }] = useUpdatePlantingSiteMutation();
 
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoadingNames, setIsLoadingNames] = useState(true);
   const [onValidate, setOnValidate] = useState<((hasErrors: boolean) => void) | undefined>();
   const [record, setRecord, onChange] = useForm<UpdatePlantingSiteRequestPayload>(toRecord(plantingSite));
 
   const onEdit = useCallback(() => {
     setRecord(toRecord(plantingSite));
+    setIsLoadingNames(true);
     setIsEditing(true);
   }, [plantingSite, setRecord]);
 
@@ -87,7 +89,13 @@ export default function PlantingSiteDetailsCard({ plantingSite }: PlantingSiteDe
         size='medium'
         type='passive'
       />
-      <Button disabled={isSaving} id='save-site-details' label={strings.SAVE} onClick={onSave} size='medium' />
+      <Button
+        disabled={isSaving || isLoadingNames}
+        id='save-site-details'
+        label={strings.SAVE}
+        onClick={onSave}
+        size='medium'
+      />
     </Box>
   ) : (
     <Button
@@ -113,6 +121,7 @@ export default function PlantingSiteDetailsCard({ plantingSite }: PlantingSiteDe
         {isEditing ? (
           <DetailsInputForm
             onChange={onChange}
+            onLoadingChange={setIsLoadingNames}
             onValidate={onValidate}
             plantingSiteId={plantingSite.id}
             record={record}
