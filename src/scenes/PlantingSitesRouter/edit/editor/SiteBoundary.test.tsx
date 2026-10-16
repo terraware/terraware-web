@@ -483,7 +483,6 @@ describe('SiteBoundary', () => {
   });
 
   it('puts each polygon of an uploaded multipolygon on the map as its own feature', async () => {
-    flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 960,
       filename: 'site.geojson',
