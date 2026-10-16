@@ -18,7 +18,6 @@ import { clearSnackbar } from 'src/redux/features/snackbar/snackbarSlice';
 import { useAppDispatch } from 'src/redux/store';
 import strings from 'src/strings';
 import { BoundarySource, DraftPlantingSite } from 'src/types/PlantingSite';
-import { MinimalStratum } from 'src/types/Tracking';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import BoundaryMethodChooser, { BoundaryMethod } from './BoundaryMethodChooser';
@@ -28,27 +27,12 @@ import StepTitleDescription, { Description } from './StepTitleDescription';
 import UploadBoundaryModal, { ParsedBoundary, boundaryFileFormatOf, fileSizeKb } from './UploadBoundaryModal';
 import UploadedBoundarySummary, { UploadedBoundaryFile } from './UploadedBoundarySummary';
 import { OnValidate } from './types';
-import { boundingAreaHectares, defaultStratumPayload, findErrors, stratumNameGenerator } from './utils';
+import { boundingAreaHectares, createDefaultStrata, findErrors } from './utils';
 
 export type SiteBoundaryProps = {
   onValidate?: OnValidate;
   onDirtyChange?: (isDirty: boolean) => void;
   site: DraftPlantingSite;
-};
-
-// create default strata off the site boundary
-const createStratumWith = (boundary?: MultiPolygon): MinimalStratum | undefined => {
-  if (!boundary) {
-    return undefined;
-  }
-  const stratumBoundary: MultiPolygon = { type: 'MultiPolygon', coordinates: boundary.coordinates };
-  const stratumName = stratumNameGenerator(new Set<string>(), strings.STRATUM);
-  return defaultStratumPayload({
-    boundary: stratumBoundary,
-    id: 0,
-    name: stratumName,
-    initialPlantingDensity: 1500,
-  });
 };
 
 // one feature per polygon
@@ -159,9 +143,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
         onValidate.apply(false, { boundary, boundarySource });
       } else {
         // create one stratum per disjoint polygon in the site boundary
-        const stratum = createStratumWith(boundary);
-        const strata = stratum ? [stratum] : [];
-        onValidate.apply(false, { boundary, boundarySource, strata });
+        onValidate.apply(false, { boundary, boundarySource, strata: createDefaultStrata(boundary) });
       }
     }
   }, [
@@ -231,8 +213,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
   const onEditableBoundaryChanged = useCallback(
     async (editableBoundary?: FeatureCollection, upload?: Pick<Stack, 'uploadedFile' | 'uploadId'>) => {
       const newBoundary = (editableBoundary && unionMultiPolygons(editableBoundary)) || undefined;
-      const stratum = createStratumWith(newBoundary);
-      const strata = stratum ? [stratum] : [];
+      const strata = createDefaultStrata(newBoundary);
       const errors = await findErrors(
         {
           ...site,

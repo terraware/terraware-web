@@ -146,6 +146,25 @@ export const stratumNameGenerator = (usedNames?: Set<string>, prefix?: string): 
   return nextName;
 };
 
+export const createDefaultStrata = (boundary?: MultiPolygon): MinimalStratum[] => {
+  if (!boundary) {
+    return [];
+  }
+
+  return [
+    defaultStratumPayload({
+      boundary: { type: 'MultiPolygon', coordinates: boundary.coordinates },
+      id: 0,
+      name: stratumNameGenerator(new Set<string>(), strings.STRATUM),
+      initialPlantingDensity: 1500,
+    }),
+  ];
+};
+
+// the BE doesn't persist strata for simple sites, so they're derived from the site boundary
+export const withDefaultStrata = (site: DraftPlantingSite): DraftPlantingSite =>
+  site.siteType === 'simple' ? { ...site, strata: createDefaultStrata(site.boundary) } : site;
+
 /**
  * Get area of bbox of polygon in hectares
  */

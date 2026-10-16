@@ -4,6 +4,7 @@ import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import { MIXPANEL_EVENTS } from 'src/mixpanelEvents';
 import { useDeleteDraftPlantingSiteMutation } from 'src/queries/generated/draftPlantingSites';
 import { useCreatePlantingSiteMutation, useValidatePlantingSiteMutation } from 'src/queries/generated/plantingSites';
+import { withDefaultStrata } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
 import strings from 'src/strings';
 import { DraftPlantingSite, PlantingSiteProblem } from 'src/types/PlantingSite';
 import { fromDraftToCreate } from 'src/utils/draftPlantingSiteUtils';
@@ -34,7 +35,7 @@ export default function useDraftPlantingSiteFinalize(
   const finalize = useCallback(
     (draft: DraftPlantingSite) => {
       const createFromDraft = async () => {
-        const site = fromDraftToCreate(draft);
+        const site = fromDraftToCreate(withDefaultStrata(draft));
 
         try {
           const validation = await validatePlantingSite(site).unwrap();
@@ -47,7 +48,7 @@ export default function useDraftPlantingSiteFinalize(
           const { id } = await createPlantingSite(site).unwrap();
 
           trackEvent(MIXPANEL_EVENTS.PLANTING_SITE_CREATED, {
-            num_strata: draft.strata?.length,
+            num_strata: site.strata?.length,
             has_boundary: draft.boundary !== undefined && draft.boundary !== null,
             boundary_source: draft.boundarySource,
           });

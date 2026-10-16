@@ -4,6 +4,7 @@ import { APP_PATHS } from 'src/constants';
 import { useSyncNavigate } from 'src/hooks/useSyncNavigate';
 import { useUpdateDraftPlantingSiteMutation } from 'src/queries/generated/draftPlantingSites';
 import { useValidatePlantingSiteMutation } from 'src/queries/generated/plantingSites';
+import { withDefaultStrata } from 'src/scenes/PlantingSitesRouter/edit/editor/utils';
 import strings from 'src/strings';
 import { DraftPlantingSite, OptionalSiteEditStep, SiteEditStep } from 'src/types/PlantingSite';
 import { fromDraft, fromDraftToCreate } from 'src/utils/draftPlantingSiteUtils';
@@ -51,7 +52,7 @@ export default function useDraftPlantingSiteUpdate(): Response {
       const update = async () => {
         try {
           // a draft is allowed to still have validation problems, so only the request has to succeed
-          await validatePlantingSite(fromDraftToCreate(request.draft)).unwrap();
+          await validatePlantingSite(fromDraftToCreate(withDefaultStrata(request.draft))).unwrap();
 
           await updateDraftPlantingSite({
             id: request.draft.id,
