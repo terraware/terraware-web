@@ -49,7 +49,7 @@ const getParsedCoords = (coordsStr: string[]): Geolocation[] => {
         return null;
       }
     })
-    .filter((coords) => coords !== null) as Geolocation[];
+    .filter((coords) => coords !== null);
 };
 
 /**
