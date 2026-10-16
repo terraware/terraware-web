@@ -85,6 +85,30 @@ const injectedRtkApi = api.injectEndpoints({
         })),
     }),
 
+    searchPlantingSiteNames: build.query<PlantingSiteName[], number>({
+      query: (organizationId) => ({
+        url: '/api/v1/search',
+        method: 'POST',
+        body: {
+          prefix: 'plantingSites',
+          fields: ['id', 'name'],
+          search: {
+            operation: 'field',
+            field: 'organization.id',
+            values: [`${organizationId}`],
+          },
+          sortOrder: [{ field: 'id' }],
+          count: 0,
+        },
+      }),
+      providesTags: (results) => [
+        ...(results?.map((result) => ({ type: QueryTagTypes.PlantingSites, id: result.id })) ?? []),
+        { type: QueryTagTypes.PlantingSites, id: 'LIST' },
+      ],
+      transformResponse: (results: ListPlantingSiteNamesApiResponse) =>
+        results.results.map((result) => ({ id: Number(result.id), name: result.name })),
+    }),
+
     searchPlantingSiteProjects: build.query<number[], number>({
       query: (organizationId) => ({
         url: '/api/v1/search/values',
@@ -212,6 +236,15 @@ type ListPlantingSiteSummariesApiResponse = {
   results: PlantingSiteSummaryApiResult[];
 };
 
+type ListPlantingSiteNamesApiResponse = {
+  results: { id: string; name: string }[];
+};
+
+export type PlantingSiteName = {
+  id: number;
+  name: string;
+};
+
 type ListPlantingSiteProjectsApiResult = {
   results: {
     project_id: {
@@ -281,6 +314,7 @@ type ObservationDatesSearchResult = {
 export const {
   useLazyCountPlantingSitesQuery,
   useLazySearchPlantingSitesQuery,
+  useLazySearchPlantingSiteNamesQuery,
   useLazySearchPlantingSiteProjectsQuery,
   useSearchMonitoringPlotsQuery,
   useLazySearchMonitoringPlotsQuery,

@@ -7,12 +7,10 @@ import { useDeviceInfo } from '@terraware/web-components/utils';
 import LocationTimeZoneSelector from 'src/components/LocationTimeZoneSelector';
 import ProjectsDropdown from 'src/components/ProjectsDropdown';
 import { useProjects } from 'src/hooks/useProjects';
-import { useLocalization, useOrganization } from 'src/providers';
+import { useOrganization } from 'src/providers';
 import { UpdatePlantingSiteRequestPayload } from 'src/queries/generated/plantingSites';
 import { useLazySearchDraftPlantingSitesQuery } from 'src/queries/search/draftPlantingSites';
-import { selectPlantingSites } from 'src/redux/features/tracking/trackingSelectors';
-import { requestPlantingSites } from 'src/redux/features/tracking/trackingThunks';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
+import { useLazySearchPlantingSiteNamesQuery } from 'src/queries/search/plantingSites';
 import strings from 'src/strings';
 import { TimeZoneDescription } from 'src/types/TimeZones';
 
@@ -37,18 +35,18 @@ export default function DetailsInputForm({
   const [validateInput, setValidateInput] = useState<boolean>(false);
   const [nameError, setNameError] = useState('');
   const { availableProjects } = useProjects(record);
-  const { activeLocale } = useLocalization();
   const { selectedOrganization } = useOrganization();
-  const dispatch = useAppDispatch();
-  const plantingSites = useAppSelector(selectPlantingSites);
-  const [searchDraftPlantingSites, { currentData: draftSites }] = useLazySearchDraftPlantingSitesQuery();
+  const [searchPlantingSiteNames, { currentData: plantingSites, isFetching: isFetchingPlantingSites }] =
+    useLazySearchPlantingSiteNamesQuery();
+  const [searchDraftPlantingSites, { currentData: draftSites, isFetching: isFetchingDraftSites }] =
+    useLazySearchDraftPlantingSitesQuery();
 
   const usedNames = useMemo(() => {
     const otherPlantingSites = (plantingSites || []).filter((site) => site.id !== plantingSiteId);
     return new Set([...otherPlantingSites, ...(draftSites || [])].map((site) => site.name));
   }, [draftSites, plantingSiteId, plantingSites]);
 
-  const isLoading = !plantingSites || !draftSites;
+  const isLoading = isFetchingPlantingSites || isFetchingDraftSites || !plantingSites || !draftSites;
 
   useEffect(() => {
     onLoadingChange?.(isLoading);
@@ -68,16 +66,11 @@ export default function DetailsInputForm({
   }, [record.name, usedNames]);
 
   useEffect(() => {
-    if (!plantingSites && selectedOrganization) {
-      void dispatch(requestPlantingSites(selectedOrganization.id));
-    }
-  }, [activeLocale, dispatch, plantingSites, selectedOrganization]);
-
-  useEffect(() => {
     if (selectedOrganization) {
+      void searchPlantingSiteNames(selectedOrganization.id, true);
       void searchDraftPlantingSites({ organizationId: selectedOrganization.id }, true);
     }
-  }, [searchDraftPlantingSites, selectedOrganization]);
+  }, [searchDraftPlantingSites, searchPlantingSiteNames, selectedOrganization]);
 
   useEffect(() => {
     if (!onValidate) {
