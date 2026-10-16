@@ -9,7 +9,6 @@ import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
 import { leftMostFeature, mergeIntoNeighbor, toFeature, toMultiPolygon } from 'src/components/Map/utils';
 import EditableMap, { EditableMapBoundary, EditableMapClickedFeature } from 'src/components/NewMap/EditableMap';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
-import { useFeatureEnabled } from 'src/features';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
@@ -99,7 +98,6 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
   const snackbar = useSnackbar();
   const { exclusionsLayerStyle, sitesLayerStyle, strataLayerStyle } = useMapFeatureStyles();
   const activeLocale = useLocalization();
-  const fileUploadEnabled = useFeatureEnabled('Boundary File Upload');
 
   const strata = useMemo<FeatureCollection | undefined>(
     () => strataData?.fixedBoundaries,
@@ -192,26 +190,9 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
       return [];
     }
 
-    if (fileUploadEnabled) {
-      return [
-        {
-          text: strings.SITE_STRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
-          hasTutorial: true,
-          handlePrefix: (prefix: string) =>
-            strings.formatString(
-              prefix,
-              <MapIcon centerAligned={true} icon='slice' />,
-              <Typography component='span' fontSize='inherit' fontWeight={600}>
-                {strings.SITE_STRATUM_BOUNDARIES_SIZE}
-              </Typography>
-            ) as JSX.Element[],
-        },
-      ];
-    }
-
     return [
       {
-        text: strings.SITE_STRATUM_BOUNDARIES_DESCRIPTION,
+        text: strings.SITE_STRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
         hasTutorial: true,
         handlePrefix: (prefix: string) =>
           strings.formatString(
@@ -223,7 +204,7 @@ export default function Strata({ onValidate, onDirtyChange, site }: StrataProps)
           ) as JSX.Element[],
       },
     ];
-  }, [activeLocale, fileUploadEnabled]);
+  }, [activeLocale]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {

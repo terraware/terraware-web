@@ -3,11 +3,7 @@ import { useGetMyselfQuery } from 'src/queries/generated/users';
 import env from 'src/utils/useEnvironment';
 import { isTerraformationEmail } from 'src/utils/user';
 
-export type FeatureName =
-  | 'Show Production View'
-  | 'Virtual Monitoring Plots'
-  | 'Boundary File Upload'
-  | 'Clean Up Console Tabs';
+export type FeatureName = 'Show Production View' | 'Virtual Monitoring Plots' | 'Clean Up Console Tabs';
 
 export type Feature = {
   name: FeatureName;
@@ -48,17 +44,6 @@ export const OPT_IN_FEATURES: Feature[] = [
     enabled: false,
     allowInternalProduction: false,
     description: ['Support for virtual monitoring plots'],
-    disclosure: ['This is a WIP'],
-  },
-  {
-    name: 'Boundary File Upload',
-    preferenceName: 'boundaryFileUpload',
-    active: true,
-    enabled: false,
-    allowInternalProduction: false,
-    description: [
-      'Define a planting site boundary by uploading a spatial file (KML, KMZ, GeoJSON, or zipped shapefile) instead of drawing it.',
-    ],
     disclosure: ['This is a WIP'],
   },
   {
