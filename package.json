@@ -117,9 +117,9 @@
     "react-redux": "^9.3.0",
     "react-router": "^7.18.4",
     "sanitize-filename": "^1.6.4",
-    "slate": "^0.132.0",
-    "slate-dom": "^0.126.0",
-    "slate-react": "^0.132.0",
+    "slate": "^0.142.1",
+    "slate-dom": "^0.142.0",
+    "slate-react": "^0.142.0",
     "swiper": "^14.3.0",
     "web-vitals": "^6.2.3"
   },
