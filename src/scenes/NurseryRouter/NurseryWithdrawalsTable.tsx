@@ -660,7 +660,9 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
         : undefined;
 
     const plantingSeasonIdsForFilter =
-      typeof plantingSeasonFilterValue === 'string' ? plantingSeasonNameToIds.get(plantingSeasonFilterValue) ?? [] : [];
+      typeof plantingSeasonFilterValue === 'string'
+        ? (plantingSeasonNameToIds.get(plantingSeasonFilterValue) ?? [])
+        : [];
     const shouldUseLinkedPlantingSeasonIds =
       linkedPlantingSeasonIds.length > 0 &&
       (typeof plantingSeasonFilterValue !== 'string' ||
@@ -668,12 +670,10 @@ export default function NurseryWithdrawalsTable(): JSX.Element {
 
     const sortOrder =
       sorting.length > 0
-        ? sorting.map(
-            (sortingOption): SearchSortOrderElement => ({
-              field: sortingOption.id,
-              direction: sortingOption.desc ? 'Descending' : 'Ascending',
-            })
-          )
+        ? sorting.map((sortingOption): SearchSortOrderElement => ({
+            field: sortingOption.id,
+            direction: sortingOption.desc ? 'Descending' : 'Ascending',
+          }))
         : DEFAULT_SORT_ORDER;
 
     return {

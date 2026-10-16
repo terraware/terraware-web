@@ -295,7 +295,7 @@ const WithdrawSeedsForm = ({ open, onClose, accessions, user, onWithdrawn }: Wit
             withdrawnByUserId: draft.withdrawnByUserId,
             withdrawnQuantity: {
               quantity: quantity?.value ?? 0,
-              units: draft.withdrawByWeight ? quantity?.units ?? 'Grams' : 'Seeds',
+              units: draft.withdrawByWeight ? (quantity?.units ?? 'Grams') : 'Seeds',
             },
           },
         }).unwrap()

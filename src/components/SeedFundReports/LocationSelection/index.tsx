@@ -148,7 +148,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           id={`${location.id}-workers-paid-engaged`}
           label={strings.WORKERS_PAID_ENGAGED}
           editable={editable}
-          value={editable ? paidWorkers ?? '' : location.workers.paidWorkers?.toString() ?? ''}
+          value={editable ? (paidWorkers ?? '') : (location.workers.paidWorkers?.toString() ?? '')}
           minNum={0}
           onChange={(value) => {
             const newValue = transformNumericValue(value, { min: 0 });
@@ -167,7 +167,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           id={`${location.id}-${locationType}-paid-female`}
           label={strings.WORKERS_PAID_FEMALE}
           editable={editable}
-          value={editable ? femalePaidWorkers ?? '' : location.workers.femalePaidWorkers?.toString() ?? ''}
+          value={editable ? (femalePaidWorkers ?? '') : (location.workers.femalePaidWorkers?.toString() ?? '')}
           minNum={0}
           onChange={(value) => {
             const newValue = transformNumericValue(value, { min: 0 });
@@ -186,7 +186,7 @@ export default function LocationSection(props: LocationSectionProps): JSX.Elemen
           id={`${location.id}-${locationType}-volunteer`}
           label={strings.WORKERS_VOLUNTEERS}
           editable={editable}
-          value={editable ? volunteers ?? '' : location.workers.volunteers?.toString() ?? ''}
+          value={editable ? (volunteers ?? '') : (location.workers.volunteers?.toString() ?? '')}
           minNum={0}
           onChange={(value) => {
             const newValue = transformNumericValue(value, { min: 0 });

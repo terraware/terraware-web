@@ -29,14 +29,12 @@ const injectedRtkApi = api.injectEndpoints({
       // Country lists are effectively static; keep them cached for the whole session.
       keepUnusedDataFor: Infinity,
       transformResponse: (response: ListCountriesApiResponse) =>
-        response.results.map(
-          (result): Country => ({
-            code: result.code,
-            name: result.name,
-            region: result.region,
-            subdivisions: result.subdivisions,
-          })
-        ),
+        response.results.map((result): Country => ({
+          code: result.code,
+          name: result.name,
+          region: result.region,
+          subdivisions: result.subdivisions,
+        })),
     }),
   }),
 });

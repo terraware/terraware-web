@@ -168,8 +168,14 @@ const SiteDetails = (): JSX.Element => {
       <SurvivalRateRecalculationMessage inProgress={hasPendingResults(results)} />
       <Card radius='24px' style={{ width: '100%' }}>
         <ObservationDataNumbers items={items} isCompleted={!!results?.completedTime} />
-        <Box display='flex' gap={3} flexDirection={isDesktop ? 'row' : 'column'} flexWrap='wrap' marginBottom={3}>
-          <Box flex={1} minWidth='500px'>
+        <Box
+          display='flex'
+          gap={3}
+          flexDirection={isDesktop ? 'row' : 'column'}
+          flexWrap={isDesktop ? 'wrap' : 'nowrap'}
+          marginBottom={3}
+        >
+          <Box flex={1} minWidth={isDesktop ? '500px' : 0}>
             <Box display='flex' alignItems='center'>
               <Typography fontSize='20px' fontWeight={600}>
                 {strings.NUMBER_OF_LIVE_PLANTS_PER_SPECIES}
@@ -180,7 +186,7 @@ const SiteDetails = (): JSX.Element => {
               <SpeciesTotalPlantsChart chartId='observationSpeciesTotalChart' minHeight='245px' species={species} />
             </Box>
           </Box>
-          <Box flex={1} minWidth='500px'>
+          <Box flex={1} minWidth={isDesktop ? '500px' : 0}>
             <Box display='flex' alignItems='center'>
               <Typography fontSize='20px' fontWeight={600}>
                 {strings.SURVIVAL_RATE_PER_SPECIES_AS_OF_THIS_OBSERVATION}

@@ -8,7 +8,7 @@ import { Feature, FeatureCollection, MultiPolygon, Polygon, Position } from 'geo
 import _ from 'lodash';
 
 import MapIcon from 'src/components/Map/MapIcon';
-import { toFeature, unionMultiPolygons } from 'src/components/Map/utils';
+import { unionMultiPolygons } from 'src/components/Map/utils';
 import EditableMap from 'src/components/NewMap/EditableMap';
 import { useTrackEvent } from 'src/hooks/useTrackEvent';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
@@ -51,19 +51,22 @@ const createStratumWith = (boundary?: MultiPolygon): MinimalStratum | undefined 
   });
 };
 
-const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollection | undefined =>
-  !boundary
-    ? undefined
-    : {
-        type: 'FeatureCollection',
-        features: [toFeature(boundary, {}, id)],
-      };
+// one feature per polygon
+const featureCollectionOf = (geometry: MultiPolygon | Polygon, id: number): FeatureCollection => {
+  const polygons = geometry.type === 'MultiPolygon' ? geometry.coordinates : [geometry.coordinates];
+  return {
+    type: 'FeatureCollection',
+    features: polygons.map((coordinates, index) => ({
+      type: 'Feature',
+      geometry: { type: 'Polygon', coordinates },
+      properties: {},
+      id: `${id}-${index}`,
+    })),
+  };
+};
 
-// the parse endpoint hands back a bare geometry; the map works in feature collections
-const featureCollectionOf = (geometry: MultiPolygon | Polygon, id: number): FeatureCollection => ({
-  type: 'FeatureCollection',
-  features: [toFeature(geometry, {}, id)],
-});
+const featureSiteBoundary = (id: number, boundary?: MultiPolygon): FeatureCollection | undefined =>
+  boundary ? featureCollectionOf(boundary, id) : undefined;
 
 // number of vertices across every ring of the boundary, which the parse response does not report
 const countPositions = (geometry: MultiPolygon | Polygon): number => {
@@ -86,7 +89,7 @@ const editedBoundarySource = (previous?: BoundarySource): BoundarySource =>
 export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBoundaryProps): JSX.Element {
   const [siteBoundaryData, setSiteBoundaryData, undo, redo] = useUndoRedoState<Stack>({
     // drafts saved before the source was recorded could only have drawn boundaries
-    boundarySource: site.boundary ? site.boundarySource ?? 'drawn' : undefined,
+    boundarySource: site.boundary ? (site.boundarySource ?? 'drawn') : undefined,
     siteBoundary: featureSiteBoundary(site.id, site.boundary),
   });
   const geometrySnapshot = JSON.stringify({ siteBoundary: siteBoundaryData?.siteBoundary });
@@ -249,7 +252,7 @@ export default function SiteBoundary({ onValidate, onDirtyChange, site }: SiteBo
         errorAnnotations: errors,
         siteBoundary: editableBoundary,
         // edits to an uploaded boundary keep its file, but clearing the boundary drops it
-        ...(newBoundary ? upload ?? _.pick(siteBoundaryData, ['uploadedFile', 'uploadId']) : {}),
+        ...(newBoundary ? (upload ?? _.pick(siteBoundaryData, ['uploadedFile', 'uploadId'])) : {}),
       });
     },
     [setSiteBoundaryData, site, siteBoundaryData]

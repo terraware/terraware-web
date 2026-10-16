@@ -50,31 +50,28 @@ const SectionView = ({ children, section, sectionDeliverables }: SectionViewProp
       return [];
     }
 
-    const deliverables = sectionDeliverables.map(
-      (deliverable): DeliverableDetails =>
-        deliverable.isBoundary
-          ? {
-              name: strings.PROPOSED_PROJECT_BOUNDARY,
-              onClick: () => {
-                if (deliverable.status === 'Completed') {
-                  // User has previously uploaded a shapefile
-                  goToApplicationSectionDeliverable(selectedApplication.id, section.moduleId, deliverable.id);
-                } else if (selectedApplication.boundary) {
-                  // User has previously drawn a map boundary
-                  goToApplicationMap(selectedApplication.id);
-                } else {
-                  setIsMapModalOpen(true);
-                }
-              },
-              status:
-                deliverable.status === 'Completed' || selectedApplication.boundary ? 'Completed' : 'Not Submitted',
-            }
-          : {
-              name: deliverable.name,
-              onClick: () =>
-                goToApplicationSectionDeliverable(selectedApplication.id, section.moduleId, deliverable.id),
-              status: deliverable.status,
-            }
+    const deliverables = sectionDeliverables.map((deliverable): DeliverableDetails =>
+      deliverable.isBoundary
+        ? {
+            name: strings.PROPOSED_PROJECT_BOUNDARY,
+            onClick: () => {
+              if (deliverable.status === 'Completed') {
+                // User has previously uploaded a shapefile
+                goToApplicationSectionDeliverable(selectedApplication.id, section.moduleId, deliverable.id);
+              } else if (selectedApplication.boundary) {
+                // User has previously drawn a map boundary
+                goToApplicationMap(selectedApplication.id);
+              } else {
+                setIsMapModalOpen(true);
+              }
+            },
+            status: deliverable.status === 'Completed' || selectedApplication.boundary ? 'Completed' : 'Not Submitted',
+          }
+        : {
+            name: deliverable.name,
+            onClick: () => goToApplicationSectionDeliverable(selectedApplication.id, section.moduleId, deliverable.id),
+            status: deliverable.status,
+          }
     );
 
     return deliverables;

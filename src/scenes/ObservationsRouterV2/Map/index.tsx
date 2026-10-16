@@ -65,7 +65,7 @@ const ObservationMapWrapper = ({
 
   const isAdHoc = plotType === 'adHoc';
   const emptyMessage = useObservationsEmptyMessage(
-    observationId || plantingSiteId === undefined ? undefined : emptyState ?? emptyStateProp
+    observationId || plantingSiteId === undefined ? undefined : (emptyState ?? emptyStateProp)
   );
 
   const singleObservationResult = useMemo(
