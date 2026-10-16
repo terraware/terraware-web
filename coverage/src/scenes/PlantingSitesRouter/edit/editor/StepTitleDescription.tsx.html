@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.38% </span>
+                <span class="strong">61.53% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>17/26</span>
+                <span class='fraction'>16/26</span>
             </div>
         
             
@@ -216,51 +216,51 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">93x</span>
-<span class="cline-any cline-yes">93x</span>
-<span class="cline-any cline-yes">93x</span>
-<span class="cline-any cline-yes">93x</span>
-<span class="cline-any cline-yes">93x</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">92x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">54x</span>
+<span class="cline-any cline-yes">53x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">93x</span>
-<span class="cline-any cline-yes">93x</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">92x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">93x</span>
-<span class="cline-any cline-yes">54x</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-yes">53x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">54x</span>
+<span class="cline-any cline-yes">53x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">93x</span>
+<span class="cline-any cline-yes">92x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">93x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">92x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">142x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">138x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -379,7 +379,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
           alignItems='center'
           key={index}
           fontSize={fontSize}
-          fontWeight={line.isBold ? 600 : 400}
+          fontWeight={line.isBold ? <span class="branch-0 cbranch-no" title="branch not covered" >600 </span>: 400}
           lineHeight={largeText ? <span class="branch-0 cbranch-no" title="branch not covered" >'24px' </span>: '20px'}
           color={line.isWarning ? <span class="branch-0 cbranch-no" title="branch not covered" >theme.palette.TwClrIcnWarning </span>: theme.palette.TwClrTxt}
           whiteSpace={'line-wrap'}
@@ -409,7 +409,7 @@ export default function StepTitleDescription(props: StepTitleDescriptionProps): 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-10-16T11:43:06.316Z
+                at 2026-10-16T15:40:10.946Z
             </div>
         <script src="../../../../../prettify.js"></script>
         <script>
