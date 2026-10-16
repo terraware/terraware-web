@@ -6,18 +6,10 @@ import { FeatureCollection, MultiPolygon, Polygon } from 'geojson';
 
 import type { EditableMapProps } from 'src/components/NewMap/EditableMap';
 import ToastSnackbar from 'src/components/ToastSnackbar';
-import type { FeatureName } from 'src/features';
 import { EditorStepperContext } from 'src/scenes/PlantingSitesRouter/edit/editor/EditorStepper';
 import SiteBoundary from 'src/scenes/PlantingSitesRouter/edit/editor/SiteBoundary';
 import strings from 'src/strings';
 import { buildDraftPlantingSite, mockPost, renderWithProviders } from 'src/test-utils';
-
-const flags = rstest.hoisted(() => ({ boundaryFileUpload: false }));
-
-rstest.mock('src/features', () => ({
-  __esModule: true,
-  useFeatureEnabled: (name: FeatureName) => name === 'Boundary File Upload' && flags.boundaryFileUpload,
-}));
 
 // Mapbox needs a real GL context, so stand in for the map, record the boundary handed to it on
 // every render and on every mount, and expose its controls as plain buttons.
@@ -146,31 +138,19 @@ const uploadBoundaryFile = async (user: ReturnType<typeof renderSiteBoundary>['u
 
 describe('SiteBoundary', () => {
   beforeEach(() => {
-    flags.boundaryFileUpload = false;
     mapBoundaries.length = 0;
     mapMounts.length = 0;
     mapEdit.boundary = EDITED_BOUNDARY;
   });
 
-  it('keeps the drawing instructions and shows no method chooser when file upload is off', () => {
-    renderSiteBoundary();
-
-    expect(screen.getByText(strings.SITE_BOUNDARY_DESCRIPTION_0)).toBeInTheDocument();
-    expect(screen.queryByText(strings.BOUNDARY_METHOD_TITLE)).not.toBeInTheDocument();
-  });
-
-  it('offers a choice of upload or drawing when file upload is on and the site has no boundary', () => {
-    flags.boundaryFileUpload = true;
-
+  it('offers a choice of upload or drawing when the site has no boundary', () => {
     renderSiteBoundary();
 
     expect(screen.getByText(strings.BOUNDARY_METHOD_TITLE)).toBeInTheDocument();
     expect(screen.getByText(strings.SITE_BOUNDARY_UPLOAD_DESCRIPTION, { exact: false })).toBeInTheDocument();
-    expect(screen.queryByText(strings.SITE_BOUNDARY_DESCRIPTION_0)).not.toBeInTheDocument();
   });
 
   it('dismisses the chooser without opening the upload modal when the user chooses to draw', async () => {
-    flags.boundaryFileUpload = true;
     const { user } = renderSiteBoundary();
 
     await user.click(methodTile(strings.DRAW_BOUNDARY_WITHIN_MAP));
@@ -180,8 +160,6 @@ describe('SiteBoundary', () => {
   });
 
   it('does not show the drawing banner before a method is chosen', () => {
-    flags.boundaryFileUpload = true;
-
     renderSiteBoundary();
 
     expect(screen.getByText(strings.BOUNDARY_METHOD_TITLE)).toBeInTheDocument();
@@ -190,7 +168,6 @@ describe('SiteBoundary', () => {
   });
 
   it('tells the user they are drawing on the map once they choose to draw', async () => {
-    flags.boundaryFileUpload = true;
     const { user } = renderSiteBoundary();
 
     await user.click(methodTile(strings.DRAW_BOUNDARY_WITHIN_MAP));
@@ -200,7 +177,6 @@ describe('SiteBoundary', () => {
   });
 
   it('opens the upload modal when a user drawing the boundary chooses to upload a file instead', async () => {
-    flags.boundaryFileUpload = true;
     const { user } = renderSiteBoundary();
 
     await user.click(methodTile(strings.DRAW_BOUNDARY_WITHIN_MAP));
@@ -211,7 +187,6 @@ describe('SiteBoundary', () => {
   });
 
   it('returns to drawing, not the method chooser, when the upload modal opened from drawing is cancelled', async () => {
-    flags.boundaryFileUpload = true;
     const { user } = renderSiteBoundary();
 
     await user.click(methodTile(strings.DRAW_BOUNDARY_WITHIN_MAP));
@@ -224,7 +199,6 @@ describe('SiteBoundary', () => {
   });
 
   it('replaces the drawing banner with the uploaded file summary when a file is uploaded while drawing', async () => {
-    flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 480,
       filename: 'site.geojson',
@@ -246,7 +220,6 @@ describe('SiteBoundary', () => {
   });
 
   it('opens the upload modal when the user chooses to upload a spatial file', async () => {
-    flags.boundaryFileUpload = true;
     const { user } = renderSiteBoundary();
 
     await user.click(methodTile(strings.UPLOAD_SPATIAL_FILES));
@@ -256,7 +229,6 @@ describe('SiteBoundary', () => {
   });
 
   it('replaces the chooser with a summary of the uploaded file and puts its boundary on the map', async () => {
-    flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 480,
       filename: 'site.geojson',
@@ -275,7 +247,6 @@ describe('SiteBoundary', () => {
   });
 
   it('warns that multiple polygons were combined into one boundary', async () => {
-    flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 480,
       filename: 'site.geojson',
@@ -294,7 +265,6 @@ describe('SiteBoundary', () => {
   });
 
   it('tells a simple site that combining polygons requires a detailed site', async () => {
-    flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 480,
       filename: 'site.geojson',
@@ -314,7 +284,6 @@ describe('SiteBoundary', () => {
   });
 
   it('brings back the chooser when the uploaded file is removed', async () => {
-    flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 480,
       filename: 'site.geojson',
@@ -332,7 +301,6 @@ describe('SiteBoundary', () => {
   });
 
   it('keeps the new boundary on the map when the uploaded file is replaced', async () => {
-    flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 480,
       filename: 'site.geojson',
@@ -360,7 +328,6 @@ describe('SiteBoundary', () => {
   });
 
   it('keeps the boundary on the map when a file is removed and a new one uploaded', async () => {
-    flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 480,
       filename: 'site.geojson',
@@ -387,7 +354,6 @@ describe('SiteBoundary', () => {
   });
 
   it('removes the uploaded file summary and brings back the chooser when the upload is undone', async () => {
-    flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 480,
       filename: 'site.geojson',
@@ -409,7 +375,6 @@ describe('SiteBoundary', () => {
   });
 
   it('returns to drawing when undoing an upload that replaced a drawn boundary', async () => {
-    flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 480,
       filename: 'site.geojson',
@@ -435,7 +400,6 @@ describe('SiteBoundary', () => {
   });
 
   it('restores the uploaded file summary when an undone upload is redone', async () => {
-    flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 480,
       filename: 'site.geojson',
@@ -460,7 +424,6 @@ describe('SiteBoundary', () => {
   });
 
   it('removes the uploaded file summary when the map clears the boundary', async () => {
-    flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 480,
       filename: 'site.geojson',
@@ -481,7 +444,6 @@ describe('SiteBoundary', () => {
   });
 
   it('keeps the uploaded file summary when the map edits the boundary without clearing it', async () => {
-    flags.boundaryFileUpload = true;
     mockPost(PARSE_URL, {
       areaHa: 480,
       filename: 'site.geojson',
@@ -528,7 +490,6 @@ describe('SiteBoundary', () => {
     };
 
     it('refits the map to the earlier file when undo goes back past a replacement', async () => {
-      flags.boundaryFileUpload = true;
       const { user } = renderSiteBoundary();
 
       await uploadThenReplace(user);
@@ -542,7 +503,6 @@ describe('SiteBoundary', () => {
     });
 
     it('refits the map to the replacement file when the undone replacement is redone', async () => {
-      flags.boundaryFileUpload = true;
       const { user } = renderSiteBoundary();
 
       await uploadThenReplace(user);
@@ -558,7 +518,6 @@ describe('SiteBoundary', () => {
     });
 
     it('does not refit the map when the user edits the uploaded boundary on the map', async () => {
-      flags.boundaryFileUpload = true;
       mockPost(PARSE_URL, {
         areaHa: 480,
         filename: 'site.geojson',
@@ -579,7 +538,6 @@ describe('SiteBoundary', () => {
     });
 
     it('does not refit the map when undoing an edit made to the same uploaded file', async () => {
-      flags.boundaryFileUpload = true;
       mockPost(PARSE_URL, {
         areaHa: 480,
         filename: 'site.geojson',

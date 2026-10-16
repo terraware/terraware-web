@@ -9,7 +9,6 @@ import { MapTooltipDialog } from 'src/components/Map/MapRenderUtils';
 import { leftMostFeature, leftOrderedFeatures, mergeIntoNeighbor, toMultiPolygon } from 'src/components/Map/utils';
 import EditableMap, { EditableMapBoundary, EditableMapClickedFeature } from 'src/components/NewMap/EditableMap';
 import useMapFeatureStyles from 'src/components/NewMap/useMapFeatureStyles';
-import { useFeatureEnabled } from 'src/features';
 import useUndoRedoState from 'src/hooks/useUndoRedoState';
 import { useLocalization } from 'src/providers';
 import strings from 'src/strings';
@@ -123,7 +122,6 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
   const { strataLayerStyle, substrataLayerStyle } = useMapFeatureStyles();
   const snackbar = useSnackbar();
   const { activeLocale } = useLocalization();
-  const fileUploadEnabled = useFeatureEnabled('Boundary File Upload');
 
   // expose substrata as a constant for easier use
   const substrata = useMemo<Record<number, FeatureCollection> | undefined>(
@@ -229,26 +227,15 @@ export default function Substrata({ onValidate, onDirtyChange, site }: Substrata
       return [];
     }
 
-    if (fileUploadEnabled) {
-      return [
-        {
-          text: strings.SITE_SUBSTRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
-          hasTutorial: true,
-          handlePrefix: (prefix: string) =>
-            strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
-        },
-      ];
-    }
-
     return [
       {
-        text: strings.SITE_SUBSTRATUM_BOUNDARIES_DESCRIPTION,
+        text: strings.SITE_SUBSTRATUM_BOUNDARIES_DRAWING_DESCRIPTION,
         hasTutorial: true,
         handlePrefix: (prefix: string) =>
           strings.formatString(prefix, <MapIcon centerAligned={true} icon='slice' />) as JSX.Element[],
       },
     ];
-  }, [activeLocale, fileUploadEnabled]);
+  }, [activeLocale]);
 
   const tutorialDescription = useMemo(() => {
     if (!activeLocale) {
