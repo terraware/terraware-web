@@ -103,14 +103,6 @@ const DocumentProducerProvider = ({ children }: Props) => {
     reloadDocument();
   }, [reloadDocument]);
 
-  const { refetch: refetchProjectVariables } = projectVariables;
-  const { refetch: refetchDocumentVariables } = documentVariablesResult;
-
-  const reloadVariables = useCallback(() => {
-    refetchProjectVariables();
-    refetchDocumentVariables();
-  }, [refetchDocumentVariables, refetchProjectVariables]);
-
   const getUsedSections = useCallback(
     (variableId: number) => documentSectionVariables.reduce(getContainingSections(variableId), []),
     [documentSectionVariables]
@@ -129,7 +121,6 @@ const DocumentProducerProvider = ({ children }: Props) => {
       projectId,
       reload: reloadDocument,
       variablesOwners,
-      reloadVariables,
       reloadDocument,
     }),
     [
@@ -143,7 +134,6 @@ const DocumentProducerProvider = ({ children }: Props) => {
       isLoading,
       projectId,
       variablesOwners,
-      reloadVariables,
       reloadDocument,
     ]
   );

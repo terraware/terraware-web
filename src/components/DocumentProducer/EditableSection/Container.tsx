@@ -7,12 +7,9 @@ import TextField from '@terraware/web-components/components/Textfield/Textfield'
 import VariableHistoryModal from 'src/components/Variables/VariableHistoryModal';
 import VariableInternalComment from 'src/components/Variables/VariableInternalComment';
 import { useUser } from 'src/providers';
-import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
-import { requestUpdateSectionVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestUpdateVariableWorkflowDetails } from 'src/redux/features/documentProducer/variables/variablesThunks';
+import { useUpdateProjectVariableValuesMutation } from 'src/queries/generated/documentProducerValues';
+import { useUpdateVariableWorkflowDetailsMutation } from 'src/queries/generated/documentProducerVariables';
 import useWorkflowSuccess from 'src/redux/hooks/useWorkflowSuccess';
-import { useAppDispatch, useAppSelector } from 'src/redux/store';
 import strings from 'src/strings';
 import { SectionVariableWithValues, VariableWithValues } from 'src/types/documentProducer/Variable';
 import {
@@ -22,6 +19,7 @@ import {
   VariableValueValue,
 } from 'src/types/documentProducer/VariableValue';
 import { NonUndefined } from 'src/types/utils';
+import { toWorkflowState } from 'src/utils/mutationStatus';
 import useSnackbar from 'src/utils/useSnackbar';
 
 import Display from './Display';
@@ -34,7 +32,6 @@ type EditableSectionProps = {
   projectId: number;
   section: SectionVariableWithValues;
   allVariables: VariableWithValues[];
-  onUpdate: () => void;
   onEdit: (editing: boolean) => void;
 };
 
@@ -44,10 +41,8 @@ export default function EditableSectionContainer({
   projectId,
   section,
   allVariables,
-  onUpdate,
   onEdit,
 }: EditableSectionProps): JSX.Element {
-  const dispatch = useAppDispatch();
   const snackbar = useSnackbar();
 
   const [sectionValues, setSectionValues] = useState<VariableValueValue[] | undefined>(section.values);
@@ -72,28 +67,16 @@ export default function EditableSectionContainer({
   const [internalComment, setInternalComment] = useState(variableValue?.internalComment || '');
 
   const [editing, setEditing] = useState(false);
-  const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
-  const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
-
-  const [updateInternalCommentRequestId, setUpdateInternalCommentRequestId] = useState<string>('');
-  const updateInternalCommentRequest = useAppSelector(
-    selectUpdateVariableWorkflowDetails(updateInternalCommentRequestId)
-  );
-
-  const [updateVariableWorkflowDetailsRequestId, setUpdateVariableWorkflowDetailsRequestId] = useState<string>('');
-  const updateVariableWorkflowDetailsRequest = useAppSelector(
-    selectUpdateVariableWorkflowDetails(updateVariableWorkflowDetailsRequestId)
-  );
+  const [updateProjectVariableValues, updateValuesResult] = useUpdateProjectVariableValuesMutation();
+  const [updateVariableWorkflowDetails] = useUpdateVariableWorkflowDetailsMutation();
 
   useWorkflowSuccess({
-    workflowState: updateVariableValuesRequest,
+    workflowState: toWorkflowState(updateValuesResult),
     onSuccess: () => {
       setEditing(false);
       onEdit(false);
       setSectionValues(editSectionValues);
-      setUpdateVariableValuesRequestId('');
-      setUpdateVariableWorkflowDetailsRequestId('');
-      onUpdate();
+      updateValuesResult.reset();
     },
   });
 
@@ -112,16 +95,20 @@ export default function EditableSectionContainer({
   };
 
   const onSaveHandler = useCallback(() => {
-    const request = dispatch(
-      requestUpdateSectionVariableValues({
-        operation: 'Replace',
-        variableId: section.id,
-        values: (editSectionValues as (NewSectionTextValuePayload | NewSectionVariableValuePayload)[]) ?? [],
-        projectId,
-      })
-    );
-    setUpdateVariableValuesRequestId(request.requestId);
-  }, [dispatch, projectId, section.id, editSectionValues]);
+    void updateProjectVariableValues({
+      projectId,
+      updateVariableValuesRequestPayload: {
+        operations: [
+          {
+            operation: 'Replace',
+            variableId: section.id,
+            values: (editSectionValues as (NewSectionTextValuePayload | NewSectionVariableValuePayload)[]) ?? [],
+          },
+        ],
+        updateStatuses: true,
+      },
+    });
+  }, [editSectionValues, projectId, section.id, updateProjectVariableValues]);
 
   const onCancelHandler = () => {
     setEditing(false);
@@ -136,12 +123,16 @@ export default function EditableSectionContainer({
     const status = firstVariableValue?.status || ('Not Submitted' as NonUndefined<VariableValue['status']>);
     const feedback = firstVariableValue?.feedback || '';
 
-    const request = dispatch(
-      requestUpdateVariableWorkflowDetails({ status, feedback, internalComment, projectId, variableId: section.id })
-    );
-    setUpdateInternalCommentRequestId(request.requestId);
+    void updateVariableWorkflowDetails({
+      projectId,
+      variableId: section.id,
+      updateVariableWorkflowDetailsRequestPayload: { status, feedback, internalComment },
+    })
+      .unwrap()
+      .then(() => snackbar.toastSuccess(strings.CHANGES_SAVED))
+      .catch(() => snackbar.toastError(strings.GENERIC_ERROR));
     setOpenEditCommenteModal(false);
-  }, [section.variableValues, section.id, dispatch, internalComment, projectId]);
+  }, [section.variableValues, section.id, internalComment, projectId, snackbar, updateVariableWorkflowDetails]);
 
   const onEditVariableValue = (variable?: VariableWithValues) => {
     if (variable === undefined) {
@@ -151,32 +142,9 @@ export default function EditableSectionContainer({
     setOpenEditVariableModal(true);
   };
 
-  const variableUpdated = useCallback(
-    (edited: boolean) => {
-      if (edited) {
-        onUpdate();
-      }
-      setOpenEditVariableModal(false);
-    },
-    [onUpdate]
-  );
-
-  useEffect(() => {
-    if (updateInternalCommentRequest?.status === 'success') {
-      snackbar.toastSuccess(strings.CHANGES_SAVED);
-      onUpdate();
-    } else if (updateInternalCommentRequest?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    }
-  }, [snackbar, updateInternalCommentRequest, onUpdate]);
-
-  useEffect(() => {
-    if (updateVariableWorkflowDetailsRequest?.status === 'success') {
-      snackbar.toastSuccess(strings.CHANGES_SAVED);
-    } else if (updateVariableWorkflowDetailsRequest?.status === 'error') {
-      snackbar.toastError(strings.GENERIC_ERROR);
-    }
-  }, [snackbar, updateVariableWorkflowDetailsRequest]);
+  const variableUpdated = useCallback(() => {
+    setOpenEditVariableModal(false);
+  }, []);
 
   const nameAndDescription = useMemo(() => {
     return (
@@ -253,7 +221,7 @@ export default function EditableSectionContainer({
           onCancel={() => setOpenEditVariableModal(false)}
           onFinish={variableUpdated}
           projectId={projectId}
-          setUpdateWorkflowRequestId={setUpdateVariableWorkflowDetailsRequestId}
+          showWorkflowToast
           showVariableHistory={() => setOpenVariableHistoryModal(true)}
           variable={clickedVariable}
         />
