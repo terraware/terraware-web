@@ -1,7 +1,7 @@
 import React, { type JSX } from 'react';
 
 import ExportCsvModal from 'src/components/common/ExportCsvModal';
-import AcceleratorProjectSpeciesService from 'src/services/AcceleratorProjectSpeciesService';
+import { useLazyGetParticipantProjectSpeciesSnapshotQuery } from 'src/queries/generated/acceleratorProjectSpecies';
 
 interface DownloadSpeciesSnapshotModalProps {
   deliverableId: number;
@@ -13,8 +13,11 @@ interface DownloadSpeciesSnapshotModalProps {
 export default function DownloadSpeciesSnapshotModal(props: DownloadSpeciesSnapshotModalProps): JSX.Element {
   const { deliverableId, open, onClose, projectId } = props;
 
+  const [getSnapshot] = useLazyGetParticipantProjectSpeciesSnapshotQuery();
+
   const onExport = async () => {
-    return await AcceleratorProjectSpeciesService.downloadSnapshot(deliverableId, projectId);
+    const result = await getSnapshot({ deliverableId, projectId });
+    return result.data;
   };
 
   return <ExportCsvModal open={open} onExport={onExport} onClose={onClose} />;
