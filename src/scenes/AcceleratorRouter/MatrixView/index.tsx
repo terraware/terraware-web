@@ -36,10 +36,9 @@ import FormattedNumber from 'src/components/common/FormattedNumber';
 import Link from 'src/components/common/Link';
 import { APP_PATHS } from 'src/constants';
 import { useLocalization, useUser } from 'src/providers';
+import { useListVariablesQuery } from 'src/queries/generated/documentProducerVariables';
 import { selectUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesSelector';
 import { requestUpdateVariableValues } from 'src/redux/features/documentProducer/values/valuesThunks';
-import { selectAllVariables } from 'src/redux/features/documentProducer/variables/variablesSelector';
-import { requestListAllVariables } from 'src/redux/features/documentProducer/variables/variablesThunks';
 import { selectProjectsWithVariables } from 'src/redux/features/matrixView/matrixViewSelectors';
 import {
   ProjectsWithVariablesSearchResult,
@@ -74,12 +73,14 @@ type ViewOption = 'noFilter' | 'acceleratorProjects' | 'applicants';
 
 const MatrixView = () => {
   const [requestId, setRequestId] = useState<string>('');
-  const [requestVarsId, setRequestVarsId] = useState<string>('');
   const result = useAppSelector(selectProjectsWithVariables(requestId));
-  const allVariablesResponse = useAppSelector(selectAllVariables(requestVarsId));
+  const { currentData: allVariablesData } = useListVariablesQuery({});
   const [projects, setProjects] = useState<ProjectsWithVariablesSearchResult[]>([]);
   const [showColumnsModal, setShowColumnsModal] = useState(false);
-  const [allVariables, setAllVariables] = useState<VariableUnion[]>();
+  const allVariables = useMemo<VariableUnion[] | undefined>(
+    () => allVariablesData?.variables.filter((v) => v.type !== 'Table' && v.type !== 'Image'),
+    [allVariablesData]
+  );
   const [updateVariableValuesRequestId, setUpdateVariableValuesRequestId] = useState<string>('');
   const updateVariableValuesRequest = useAppSelector(selectUpdateVariableValues(updateVariableValuesRequestId));
   const [loading, setLoading] = useState(false);
@@ -141,18 +142,6 @@ const MatrixView = () => {
   useEffect(() => {
     saveToLocalStorage(STORAGE_KEYS.COLUMN_ORDER, columnOrder);
   }, [columnOrder]);
-
-  useEffect(() => {
-    if (allVariablesResponse?.status === 'success') {
-      const noTablePhotoVariables = allVariablesResponse.data?.filter((v) => v.type !== 'Table' && v.type !== 'Image');
-      setAllVariables(noTablePhotoVariables);
-    }
-  }, [allVariablesResponse]);
-
-  useEffect(() => {
-    const request = dispatch(requestListAllVariables());
-    setRequestVarsId(request.requestId);
-  }, [dispatch]);
 
   const uniqueVariableIds = useMemo(
     () =>
